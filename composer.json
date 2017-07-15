@@ -1,0 +1,34 @@
+{
+    "name": "rector/rector",
+    "description": "Tool that reconstructs your legacy code to modern codebase.",
+    "license": "MIT",
+    "authors": [
+        { "name": "Tomas Votruba", "email": "tomas.vot@gmail.com", "homepage": "https://tomasvotruba.com" },
+        { "name": "Rector Contributors", "homepage": "https://github.com/TomasVotruba/Rector/graphs/contributors" }
+    ],
+    "require": {
+        "php": "^7.1",
+        "symfony/console": "^3.3",
+        "symfony/dependency-injection": "^3.3",
+        "nikic/php-parser": "^3.0",
+        "ocramius/code-generator-utils": "^0.4.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^6.2",
+        "tracy/tracy": "^2.4",
+        "symplify/easy-coding-standard": "^2.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Rector\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Rector\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "phpstan": "phpstan analyse src tests --level 7"
+    }
+}

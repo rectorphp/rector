@@ -1,0 +1,20 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    # PSR-4 autodiscovery
+    Rector\:
+        resource: '../../src'
+
+    # 3rd party services
+    Symfony\Component\Console\Application:
+        arguments:
+            $name: "Rector"
+    PhpParser\Parser:
+        factory: ['@Rector\Parser\ParserFactory', 'create']
+    PhpParser\BuilderFactory: ~
+    PhpParser\PrettyPrinter\Standard: ~
+
+# $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
+# $statements = $parser->parse(file_get_contents(__DIR__ . '/../source/ClassWithInjects

@@ -1,0 +1,16 @@
+<phpunit
+    bootstrap="vendor/autoload.php"
+    colors="true"
+    verbose="true"
+>
+    <!-- tests directories to run -->
+    <testsuite>
+        <directory>tests</directory>
+    </testsuite>
+    <!-- source to check coverage for -->
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">src</directory>
+        </whitelist>
+    </filter>
+</phpunit>
