@@ -16,7 +16,8 @@
     "require-dev": {
         "phpunit/phpunit": "^6.2",
         "tracy/tracy": "^2.4",
-        "symplify/easy-coding-standard": "^2.1"
+        "symplify/easy-coding-standard": "^2.1",
+        "phpstan/phpstan": "^0.7.0"
     },
     "autoload": {
         "psr-4": {
