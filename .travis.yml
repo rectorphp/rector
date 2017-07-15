@@ -15,10 +15,10 @@ script:
   # run tests
   - vendor/bin/phpunit $PHPUNIT_FLAGS
   # check coding standard (defined in composer.json "scripts" section)
-  # if this fails, run "composer fix-cs" to fix all fixable issues
-  # - composer check-cs
+  # if this fails, run "composer fs" to fix all fixable issues
+  - composer cs
   # check with phpstan (defined in composer.json "scripts" section)
-  - composer phpstan
+  - composer ps
 
 after_script:
   # upload coverage.xml file to Coveralls to analyze it

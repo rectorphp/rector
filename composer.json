@@ -29,6 +29,9 @@
         }
     },
     "scripts": {
-        "phpstan": "phpstan analyse src tests --level 7"
+        "all": ["phpunit", "@cs", "@ps"],
+        "cs": "ecs check src tests",
+        "fs": "ecs check src tests --fix",
+        "ps": "phpstan analyse src tests --level 7"
     }
 }
