@@ -3,7 +3,7 @@
 namespace Rector\Tests\Reconstructor\DependencyInjection;
 
 use Rector\Reconstructor\DependencyInjection\InjectAnnotationToConstructorReconstructor;
-use Rector\Tests\AbstractReconstructorTestCase;
+use Rector\Testing\PHPUnit\AbstractReconstructorTestCase;
 
 final class InjectAnnotationToConstructorReconstructorTest extends AbstractReconstructorTestCase
 {
