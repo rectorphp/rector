@@ -1,6 +1,6 @@
 <?php declare (strict_types=1);
 
-class ClassWitNamedService
+class ClassWitNamedService extends Controller
 {
     public function render()
     {

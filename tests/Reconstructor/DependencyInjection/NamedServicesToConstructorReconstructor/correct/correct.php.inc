@@ -1,5 +1,5 @@
 <?php declare (strict_types=1);
-class ClassWitNamedService
+class ClassWitNamedService extends Controller
 {
     /**
      * @var stdClass

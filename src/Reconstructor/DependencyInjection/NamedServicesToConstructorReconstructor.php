@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Analyzer\ClassAnalyzer;
 use Rector\Builder\ConstructorMethodBuilder;
 use Rector\Builder\Naming\NameResolver;
 use Rector\Builder\PropertyBuilder;
@@ -36,24 +37,36 @@ final class NamedServicesToConstructorReconstructor implements ReconstructorInte
      */
     private $nameResolver;
 
+    /**
+     * @var ClassAnalyzer
+     */
+    private $classAnalyzer;
+
     public function __construct(
         ConstructorMethodBuilder $constructorMethodBuilder,
         PropertyBuilder $propertyBuilder,
-        NameResolver $nameResolver
+        NameResolver $nameResolver,
+        ClassAnalyzer $classAnalyzer
     ) {
         $this->constructorMethodBuilder = $constructorMethodBuilder;
         $this->propertyBuilder = $propertyBuilder;
         $this->nameResolver = $nameResolver;
+        $this->classAnalyzer = $classAnalyzer;
     }
 
     public function isCandidate(Node $node): bool
     {
-        // @todo: limit to only 2 cases:
-        // - SomeClass extends Controller
-        // - SomeClass implements ContainerAwareInterface
-
         // OR? Maybe listen on MethodCall... $this-> +get('...')
-        return $node instanceof Class_;
+
+        if ($this->classAnalyzer->isControllerClassNode($node)) {
+            return true;
+        }
+
+        if ($this->classAnalyzer->isContainerAwareClassNode($node)) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -171,21 +184,22 @@ final class NamedServicesToConstructorReconstructor implements ReconstructorInte
 
     private function processMethodCallNode(Class_ $classNode, MethodCall $methodCall): ?PropertyFetch
     {
-        // 1. Get service type
+        // Get service type
         $serviceType = $this->resolveServiceTypeFromMethodCall($methodCall);
         if ($serviceType === null) {
             return null;
         }
 
-        // 2. Property name
+        // Get property name
         $propertyName = $this->nameResolver->resolvePropertyNameFromType($serviceType);
 
-        // 4. Add property assignment to constructor
+        // Add property assignment to constructor
         $this->constructorMethodBuilder->addPropertyAssignToClass($classNode, $serviceType, $propertyName);
 
         // 5. Add property to class
         $this->propertyBuilder->addPropertyToClass($classNode, $serviceType, $propertyName);
 
+        // creates "$this->propertyName"
         return new PropertyFetch(
             new Variable('this', [
                 'name' => $propertyName
