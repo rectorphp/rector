@@ -17,7 +17,7 @@
         "phpunit/phpunit": "^6.2",
         "tracy/tracy": "^2.4",
         "symplify/easy-coding-standard": "^2.1",
-        "phpstan/phpstan": "^0.7.0"
+        "phpstan/phpstan": "^0.7"
     },
     "autoload": {
         "psr-4": {
@@ -33,6 +33,6 @@
         "all": ["phpunit", "@cs", "@ps"],
         "cs": "ecs check src tests",
         "fs": "ecs check src tests --fix",
-        "ps": "phpstan analyse src tests --level 7"
+        "ps": "phpstan analyse src tests --level 7 -c phpstan.neon"
     }
 }

@@ -2,7 +2,6 @@
 
 namespace Rector\Reconstructor\DependencyInjection;
 
-use PhpCsFixer\DocBlock\Annotation;
 use PhpCsFixer\DocBlock\DocBlock;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
@@ -29,7 +28,7 @@ final class InjectAnnotationToConstructorReconstructor implements ReconstructorI
     }
 
     /**
-     * @param Class_|Node $classNode
+     * @param Class_ $classNode
      */
     public function reconstruct(Node $classNode): void
     {
@@ -39,40 +38,36 @@ final class InjectAnnotationToConstructorReconstructor implements ReconstructorI
             }
             $propertyNode = $classElementStatement;
 
-            $propertyDocBlock = $this->createDocBlock($propertyNode);
+            $propertyDocBlock = $this->createDocBlockFromProperty($propertyNode);
             $injectAnnotations = $propertyDocBlock->getAnnotationsOfType('inject');
             if (! $injectAnnotations) {
                 continue;
             }
 
-            $this->removeInjectAnnotation($injectAnnotations, $propertyNode, $propertyDocBlock);
+            $this->removeInjectAnnotationFromProperty($propertyNode, $propertyDocBlock);
             $this->makePropertyPrivate($propertyNode);
 
-            $propertyType = $propertyDocBlock->getAnnotationsOfType('var')[0]->getTypes()[0];
+            $propertyType = $propertyDocBlock->getAnnotationsOfType('var')[0]
+                ->getTypes()[0];
             $propertyName = $propertyNode->props[0]->name;
             $this->constructorMethodBuilder->addPropertyAssignToClass($classNode, $propertyType, $propertyName);
         }
     }
 
-    private function createDocBlock(Property $propertyNode): DocBlock
+    private function createDocBlockFromProperty(Property $propertyNode): DocBlock
     {
         return new DocBlock($propertyNode->getDocComment());
     }
 
-    /**
-     * @param $propertyNode
-     * @return int
-     */
-    private function makePropertyPrivate($propertyNode): int
+    private function makePropertyPrivate(Property $propertyNode): void
     {
-        return $propertyNode->flags = Class_::MODIFIER_PRIVATE;
+        $propertyNode->flags = Class_::MODIFIER_PRIVATE;
     }
 
-    /**
-     * @param Annotation[] $injectAnnotations
-     */
-    private function removeInjectAnnotation(array $injectAnnotations, Property $propertyNode, DocBlock $propertyDocBlock): void
+    private function removeInjectAnnotationFromProperty(Property $propertyNode, DocBlock $propertyDocBlock): void
     {
+        $injectAnnotations = $propertyDocBlock->getAnnotationsOfType('inject');
+
         foreach ($injectAnnotations as $injectAnnotation) {
             $injectAnnotation->remove();
         }
