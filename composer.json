@@ -11,7 +11,8 @@
         "symfony/console": "^3.3",
         "symfony/dependency-injection": "^3.3",
         "nikic/php-parser": "^3.0",
-        "ocramius/code-generator-utils": "^0.4.1"
+        "ocramius/code-generator-utils": "^0.4",
+        "nette/utils": "^2.4"
     },
     "require-dev": {
         "phpunit/phpunit": "^6.2",

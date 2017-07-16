@@ -2,6 +2,7 @@
 
 namespace Rector\Builder;
 
+use Nette\Utils\Arrays;
 use PhpParser\Builder\Method;
 use PhpParser\Builder\Param;
 use PhpParser\BuilderFactory;
@@ -49,7 +50,7 @@ final class ConstructorMethodBuilder
             ->addParam($this->createParameter($propertyType, $propertyName))
             ->addStmts($assign);
 
-        $classNode->stmts[] = $constructorMethod->getNode();
+        $this->addAsFirstMethod($classNode, $constructorMethod);
     }
 
     private function createParameter(string $propertyType, string $propertyName): Param
@@ -68,5 +69,22 @@ final class ConstructorMethodBuilder
             $propertyName,
             $propertyName
         ));
+    }
+
+    private function addAsFirstMethod(Class_ $classNode, Method $constructorMethod): void
+    {
+        foreach ($classNode->stmts as $key => $classElementNode) {
+            if ($classElementNode instanceof ClassMethod) {
+                Arrays::insertBefore(
+                    $classNode->stmts,
+                    $key,
+                    [$constructorMethod->getNode()]
+                );
+
+                return;
+            }
+        }
+
+        $classNode->stmts[] = $constructorMethod->getNode();
     }
 }
