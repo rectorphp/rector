@@ -50,7 +50,7 @@ final class ConstructorMethodBuilder
             ->addParam($this->createParameter($propertyType, $propertyName))
             ->addStmts($assign);
 
-        $this->addAsFirstMethod($classNode, $constructorMethod);
+        $this->addAsFirstMethod($classNode, $constructorMethod->getNode());
     }
 
     private function createParameter(string $propertyType, string $propertyName): Param
@@ -71,20 +71,20 @@ final class ConstructorMethodBuilder
         ));
     }
 
-    private function addAsFirstMethod(Class_ $classNode, Method $constructorMethod): void
+    private function addAsFirstMethod(Class_ $classNode, ClassMethod $constructorMethod): void
     {
         foreach ($classNode->stmts as $key => $classElementNode) {
             if ($classElementNode instanceof ClassMethod) {
                 Arrays::insertBefore(
                     $classNode->stmts,
                     $key,
-                    [$constructorMethod->getNode()]
+                    ['before_' . $key => $constructorMethod]
                 );
 
                 return;
             }
         }
 
-        $classNode->stmts[] = $constructorMethod->getNode();
+        $classNode->stmts[] = $constructorMethod;
     }
 }

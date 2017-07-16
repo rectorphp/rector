@@ -2,15 +2,15 @@
 class ClassWitNamedService
 {
     /**
-     * @var SomeClass
+     * @var stdClass
      */
-    private $someClass;
-    public function __construct(SomeClass $someClass)
+    private $stdClass;
+    public function __construct(stdClass $stdClass)
     {
-        $this->someClass = $someClass;
+        $this->stdClass = $stdClass;
     }
     public function render()
     {
-        $this->someClass->render();
+        $this->stdClass->render();
     }
 }
