@@ -80,10 +80,11 @@ final class NamedServicesToConstructorReconstructor implements ReconstructorInte
                 continue;
             }
 
-            $methodNode = $insideClassNode;
 
+            $methodNode = $insideClassNode;
             foreach ($methodNode->stmts as $insideMethodNode) {
-                // A. Find $this->get('...')->someCall()
+                $insideMethodNode = $insideMethodNode->expr;
+
                 if ($insideMethodNode instanceof MethodCall && $insideMethodNode->var instanceof MethodCall) {
                     $this->processOnServiceMethodCall($classNode, $insideMethodNode);
 
@@ -151,7 +152,7 @@ final class NamedServicesToConstructorReconstructor implements ReconstructorInte
             return false;
         }
 
-        if ($methodCall->name !== 'get') {
+        if ((string) $methodCall->name !== 'get') {
             return false;
         }
 

@@ -10,7 +10,7 @@
         "php": "^7.1",
         "symfony/console": "^3.3",
         "symfony/dependency-injection": "^3.3",
-        "nikic/php-parser": "^3.0",
+        "nikic/php-parser": "4.0.x-dev as 3.0.2",
         "ocramius/code-generator-utils": "^0.4",
         "nette/utils": "^2.4"
     },

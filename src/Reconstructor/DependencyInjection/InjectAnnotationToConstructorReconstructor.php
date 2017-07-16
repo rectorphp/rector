@@ -49,7 +49,8 @@ final class InjectAnnotationToConstructorReconstructor implements ReconstructorI
 
             $propertyType = $propertyDocBlock->getAnnotationsOfType('var')[0]
                 ->getTypes()[0];
-            $propertyName = $propertyNode->props[0]->name;
+            $propertyName = (string) $propertyNode->props[0]->name;
+
             $this->constructorMethodBuilder->addPropertyAssignToClass($classNode, $propertyType, $propertyName);
         }
     }
