@@ -33,6 +33,6 @@
         "all": ["phpunit", "@cs", "@ps"],
         "cs": "ecs check src tests",
         "fs": "ecs check src tests --fix",
-        "ps": "phpstan analyse src tests --level 7 -c phpstan.neon"
+        "ps": "phpstan analyse src tests --level 7 --configuration phpstan.neon"
     }
 }
