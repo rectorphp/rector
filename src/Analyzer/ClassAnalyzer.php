@@ -28,11 +28,9 @@ final class ClassAnalyzer
             return false;
         }
 
-        if (is_array($node->implements)) {
-            foreach ($node->implements as $nameNode) {
-                if (Strings::endsWith($nameNode->getLast(), 'ContainerAwareInterface')) {
-                    return true;
-                }
+        foreach ($node->implements as $nameNode) {
+            if (Strings::endsWith($nameNode->getLast(), 'ContainerAwareInterface')) {
+                return true;
             }
         }
 
