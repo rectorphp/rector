@@ -2,9 +2,6 @@
 
 namespace Rector\Reconstructor\DependencyInjection;
 
-use Nette\Utils\Arrays;
-use PhpParser\BuilderFactory;
-use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -12,8 +9,8 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Property;
 use Rector\Builder\ConstructorMethodBuilder;
+use Rector\Builder\PropertyBuilder;
 use Rector\Contract\Dispatcher\ReconstructorInterface;
 use Rector\Tests\Reconstructor\DependencyInjection\NamedServicesToConstructorReconstructor\Source\LocalKernel;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -27,14 +24,14 @@ final class NamedServicesToConstructorReconstructor implements ReconstructorInte
     private $constructorMethodBuilder;
 
     /**
-     * @var BuilderFactory
+     * @var PropertyBuilder
      */
-    private $builderFactory;
+    private $propertyBuilder;
 
-    public function __construct(ConstructorMethodBuilder $constructorMethodBuilder, BuilderFactory $builderFactory)
+    public function __construct(ConstructorMethodBuilder $constructorMethodBuilder, PropertyBuilder $propertyBuilder)
     {
         $this->constructorMethodBuilder = $constructorMethodBuilder;
-        $this->builderFactory = $builderFactory;
+        $this->propertyBuilder = $propertyBuilder;
     }
 
     public function isCandidate(Node $node): bool
@@ -46,7 +43,7 @@ final class NamedServicesToConstructorReconstructor implements ReconstructorInte
     }
 
     /**
-     * @param Class_|Node $classNode
+     * @param Class_ $classNode
      */
     public function reconstruct(Node $classNode): void
     {
@@ -116,13 +113,8 @@ final class NamedServicesToConstructorReconstructor implements ReconstructorInte
                 // 8. add this property to constructor
                 $this->constructorMethodBuilder->addPropertyAssignToClass($classNode, $serviceType, $propertyName);
 
-                // 9. add a property
-                $propertyBuilder = $this->builderFactory->property($propertyName)
-                    ->makePrivate()
-                    ->setDocComment(new Doc('/**' . PHP_EOL . ' * @var ' . $serviceType . PHP_EOL . ' */'));
-
-                $propertyNode = $propertyBuilder->getNode();
-                $this->addProperty($classNode, $propertyNode);
+                // 9. add a property to class
+                $this->propertyBuilder->addPropertyToClass($classNode, $serviceType, $propertyName);
             }
         }
     }
@@ -148,22 +140,5 @@ final class NamedServicesToConstructorReconstructor implements ReconstructorInte
         $lastNamePart = array_pop($serviceNameParts);
 
         return lcfirst($lastNamePart);
-    }
-
-    private function addProperty(Class_ $classNode, Property $propertyNode): void
-    {
-        foreach ($classNode->stmts as $key => $classElementNode) {
-            if ($classElementNode instanceof Property || $classElementNode instanceof ClassMethod) {
-                Arrays::insertBefore(
-                    $classNode->stmts,
-                    $key,
-                    ['before_' . $key => $propertyNode]
-                );
-
-                return;
-            }
-        }
-
-        $classNode->stmts[] = $propertyNode;
     }
 }
