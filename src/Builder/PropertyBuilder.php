@@ -23,18 +23,11 @@ final class PropertyBuilder
 
     public function addPropertyToClass(Class_ $classNode, string $propertyType, string $propertyName): void
     {
-        // 9. add a property
-        $propertyBuilder = $this->builderFactory->property($propertyName)
-            ->makePrivate()
-            ->setDocComment(new Doc('/**' . PHP_EOL . ' * @var ' . $propertyType . PHP_EOL . ' */'));
+        $propertyNode = $this->buildPrivatePropertyNode($propertyType, $propertyName);
 
-        $this->addProperty($classNode, $propertyBuilder->getNode());
-    }
-
-    private function addProperty(Class_ $classNode, Property $propertyNode): void
-    {
+        // add before first method
         foreach ($classNode->stmts as $key => $classElementNode) {
-            if ($classElementNode instanceof Property || $classElementNode instanceof ClassMethod) {
+            if ($classElementNode instanceof ClassMethod) {
                 Arrays::insertBefore(
                     $classNode->stmts,
                     $key,
@@ -45,6 +38,40 @@ final class PropertyBuilder
             }
         }
 
+        // or after last property
+        $previousElement = null;
+        foreach ($classNode->stmts as $key => $classElementNode) {
+            if ($previousElement instanceof Property && ! $classElementNode instanceof Property) {
+                Arrays::insertBefore(
+                    $classNode->stmts,
+                    $key,
+                    ['before_' . $key => $propertyNode]
+                );
+
+                return;
+            }
+
+            $previousElement = $classElementNode;
+        }
+
         $classNode->stmts[] = $propertyNode;
+    }
+
+    private function buildPrivatePropertyNode(string $propertyType, string $propertyName): Property
+    {
+        $docComment = $this->createDocWithVarAnnotation($propertyType);
+
+        $propertyBuilder = $this->builderFactory->property($propertyName)
+            ->makePrivate()
+            ->setDocComment($docComment);
+
+        return $propertyBuilder->getNode();
+    }
+
+    private function createDocWithVarAnnotation(string $propertyType): Doc
+    {
+        return new Doc('/**'
+            . PHP_EOL . ' * @var ' . $propertyType
+            . PHP_EOL . ' */');
     }
 }
