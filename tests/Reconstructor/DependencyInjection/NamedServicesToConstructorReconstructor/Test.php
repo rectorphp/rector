@@ -13,6 +13,11 @@ final class Test extends AbstractReconstructorTestCase
             __DIR__ . '/wrong/wrong.php.inc',
             __DIR__ . '/correct/correct.php.inc'
         );
+
+        $this->doTestFileMatchesExpectedContent(
+            __DIR__ . '/wrong/wrong2.php.inc',
+            __DIR__ . '/correct/correct2.php.inc'
+        );
     }
 
     protected function getReconstructorClass(): string

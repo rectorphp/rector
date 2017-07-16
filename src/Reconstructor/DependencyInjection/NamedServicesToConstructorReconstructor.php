@@ -3,6 +3,7 @@
 namespace Rector\Reconstructor\DependencyInjection;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
@@ -10,6 +11,7 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Builder\ConstructorMethodBuilder;
+use Rector\Builder\Naming\NameResolver;
 use Rector\Builder\PropertyBuilder;
 use Rector\Contract\Dispatcher\ReconstructorInterface;
 use Rector\Tests\Reconstructor\DependencyInjection\NamedServicesToConstructorReconstructor\Source\LocalKernel;
@@ -28,10 +30,16 @@ final class NamedServicesToConstructorReconstructor implements ReconstructorInte
      */
     private $propertyBuilder;
 
-    public function __construct(ConstructorMethodBuilder $constructorMethodBuilder, PropertyBuilder $propertyBuilder)
+    /**
+     * @var NameResolver
+     */
+    private $nameResolver;
+
+    public function __construct(ConstructorMethodBuilder $constructorMethodBuilder, PropertyBuilder $propertyBuilder, NameResolver $nameResolver)
     {
         $this->constructorMethodBuilder = $constructorMethodBuilder;
         $this->propertyBuilder = $propertyBuilder;
+        $this->nameResolver = $nameResolver;
     }
 
     public function isCandidate(Node $node): bool
@@ -39,6 +47,8 @@ final class NamedServicesToConstructorReconstructor implements ReconstructorInte
         // @todo: limit to only 2 cases:
         // - SomeClass extends Controller
         // - SomeClass implements ContainerAwareInterface
+
+        // OR? Maybe listen on MethodCall... $this-> +get('...')
         return $node instanceof Class_;
     }
 
@@ -47,61 +57,23 @@ final class NamedServicesToConstructorReconstructor implements ReconstructorInte
      */
     public function reconstruct(Node $classNode): void
     {
-        foreach ($classNode->stmts as $classElementStatement) {
+        foreach ($classNode->stmts as $insideClassNode) {
             // 1. Detect method
-            if (! $classElementStatement instanceof ClassMethod) {
+            if (! $insideClassNode instanceof ClassMethod) {
                 continue;
             }
 
-            $classMethodNode = $classElementStatement;
+            $methodNode = $insideClassNode;
 
-            foreach ($classMethodNode->stmts as $classMethodStatement) {
-                // 2. Find ->get('...') call in it
-                if (! $classMethodStatement instanceof MethodCall) {
-                    continue;
+            foreach ($methodNode->stmts as $insideMethodNode) {
+                // A. Find $this->get('...')->someCall()
+                if ($insideMethodNode instanceof MethodCall && $insideMethodNode->var instanceof MethodCall) {
+                    $this->processOnServiceMethodCall($classNode, $insideMethodNode);
+
+                // B. Find $var = $this->get('...');
+                } elseif ($insideMethodNode instanceof Assign) {
+                    $this->processAssignment($classNode, $insideMethodNode);
                 }
-
-                $methodCallNode = $classMethodStatement;
-                // A. Find ->get('...')->someCall()
-                /**
-                 * @todo: process also $var = $this->get('...');
-                 * not a MethodCall on service, but Assign/PropertyFetch
-                 */
-                if (! $methodCallNode->var instanceof MethodCall) {
-                    continue;
-                }
-
-                // 3. Accept only "$this->get()"
-                if ($methodCallNode->var->name !== 'get') {
-                    continue;
-                }
-
-                // 4. Accept only strings in "$this->get('string')"
-                $serviceName = $this->getServiceNameFromGetCall($methodCallNode->var);
-                $container = $this->getContainerFromKernelClass();
-                if (! $container->has($serviceName)) {
-                    // service name could not be found
-                    continue;
-                }
-
-                $service = $container->get($serviceName);
-
-                // 6. Save Services
-                $serviceType = get_class($service);
-                $propertyName = $this->createPropertyNameFromClass($serviceType);
-
-                // 7. Replace "$this->get()->" => "$this->$propertyName->"
-                $methodCallNode->var = new PropertyFetch(
-                    new Variable('this', [
-                        'name' => $propertyName
-                    ]), $propertyName
-                );
-
-                // 8. add this property to constructor
-                $this->constructorMethodBuilder->addPropertyAssignToClass($classNode, $serviceType, $propertyName);
-
-                // 9. add a property to class
-                $this->propertyBuilder->addPropertyToClass($classNode, $serviceType, $propertyName);
             }
         }
     }
@@ -121,22 +93,105 @@ final class NamedServicesToConstructorReconstructor implements ReconstructorInte
         return $kernel->getContainer();
     }
 
-    private function createPropertyNameFromClass(string $serviceType): string
+    private function processOnServiceMethodCall(Class_ $classNode, MethodCall $methodCallNode): void
     {
-        $serviceNameParts = explode('\\', $serviceType);
-        $lastNamePart = array_pop($serviceNameParts);
+        if (! $this->isContainerGetCall($methodCallNode)) {
+            return;
+        }
 
-        return lcfirst($lastNamePart);
+        // 1. Get service type
+        $serviceType = $this->resolveServiceTypeFromMethodCall($methodCallNode->var);
+        if ($serviceType === null) {
+            return;
+        }
+
+        // 2. Property name
+        $propertyName = $this->nameResolver->resolvePropertyNameFromType($serviceType);
+
+        // 3. Replace "$this->get()->" => "$this->$propertyName->"
+        $methodCallNode->var = new PropertyFetch(
+            new Variable('this', [
+                'name' => $propertyName
+            ]), $propertyName
+        );
+
+        // 4. Add property assignment to constructor
+        $this->constructorMethodBuilder->addPropertyAssignToClass($classNode, $serviceType, $propertyName);
+
+        // 5. Add property to class
+        $this->propertyBuilder->addPropertyToClass($classNode, $serviceType, $propertyName);
     }
 
-    private function getServiceNameFromGetCall(MethodCall $methodCallNode): ?string
+    private function processAssignment(Class_ $classNode, Assign $assignNode): void
     {
+        if (! $this->isContainerGetCall($assignNode)) {
+            return;
+        }
+
+        // 1. Get service type
+        $serviceType = $this->resolveServiceTypeFromMethodCall($assignNode->expr);
+        if ($serviceType === null) {
+            return;
+        }
+
+        // 2. Property name
+        $propertyName = $this->nameResolver->resolvePropertyNameFromType($serviceType);
+
+        $assignNode->expr = new PropertyFetch(
+            new Variable('this', [
+                'name' => $propertyName
+            ]), $propertyName
+        );
+
+        // 4. Add property assignment to constructor
+        $this->constructorMethodBuilder->addPropertyAssignToClass($classNode, $serviceType, $propertyName);
+
+        // 5. Add property to class
+        $this->propertyBuilder->addPropertyToClass($classNode, $serviceType, $propertyName);
+    }
+
+    /**
+     * Accept only "$this->get('string')" statements.
+     */
+    private function isContainerGetCall(Node $node): bool
+    {
+        if ($node instanceof Assign && $node->expr instanceof MethodCall) {
+            $methodCall = $node->expr;
+        } elseif ($node instanceof MethodCall && $node->var instanceof MethodCall) {
+            $methodCall = $node->var;
+        } else {
+            return false;
+        }
+
+        if ($methodCall->var->name !== 'this') {
+            return false;
+        }
+
+        if ($methodCall->name !== 'get') {
+            return false;
+        }
+
+        if (! $methodCall->args[0]->value instanceof String_) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private function resolveServiceTypeFromMethodCall(MethodCall $methodCallNode): ?string
+    {
+        /** @var String_ $argument */
         $argument = $methodCallNode->args[0]->value;
-        if (! $methodCallNode->args[0]->value instanceof String_) {
+        $serviceName = $argument->value;
+
+        $container = $this->getContainerFromKernelClass();
+        if (! $container->has($serviceName)) {
+            // service name could not be found
             return null;
         }
 
-        /** @var String_ $argument */
-        return $argument->value;
+        $service = $container->get($serviceName);
+
+        return get_class($service);
     }
 }
