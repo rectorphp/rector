@@ -1,3 +1,4 @@
 parameters:
     ignoreErrors:
-        - '#should return PhpParser\\Node\[\] but returns PhpParser\\Node\[\]\|null#'
+        - '#Internal error#'
+#        - '#should return PhpParser\\Node\[\] but returns PhpParser\\Node\[\]\|null#'

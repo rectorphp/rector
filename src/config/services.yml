@@ -13,5 +13,7 @@ services:
             $name: "Rector"
     PhpParser\Parser:
         factory: ['@Rector\Parser\ParserFactory', 'create']
+    PhpParser\Lexer:
+        factory: ['@Rector\Parser\LexerFactory', 'create']
     PhpParser\BuilderFactory: ~
     PhpParser\PrettyPrinter\Standard: ~

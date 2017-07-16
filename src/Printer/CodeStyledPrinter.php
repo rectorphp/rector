@@ -27,8 +27,8 @@ final class CodeStyledPrinter
         // @todo: run ecs with minimal set to code look nice
     }
 
-    public function printToString(array $newNodes): string
+    public function printToString(array $oldStmts, array $newStmts, array $oldTokens): string
     {
-        return '<?php ' . $this->prettyPrinter->prettyPrint($newNodes);
+        return $this->prettyPrinter->printFormatPreserving($oldStmts, $newStmts, $oldTokens);
     }
 }
