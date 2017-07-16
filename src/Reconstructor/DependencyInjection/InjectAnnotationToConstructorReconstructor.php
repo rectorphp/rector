@@ -2,32 +2,25 @@
 
 namespace Rector\Reconstructor\DependencyInjection;
 
+use PhpCsFixer\DocBlock\Annotation;
 use PhpCsFixer\DocBlock\DocBlock;
-use PhpParser\Builder\Method;
-use PhpParser\BuilderFactory;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
-use PhpParser\Parser;
+use Rector\Builder\ConstructorMethodBuilder;
 use Rector\Contract\Dispatcher\ReconstructorInterface;
 
 final class InjectAnnotationToConstructorReconstructor implements ReconstructorInterface
 {
     /**
-     * @var BuilderFactory
+     * @var ConstructorMethodBuilder
      */
-    private $builderFactory;
-    /**
-     * @var Parser
-     */
-    private $parser;
+    private $constructorMethodBuilder;
 
-    public function __construct(BuilderFactory $builderFactory, Parser $parser)
+    public function __construct(ConstructorMethodBuilder $constructorMethodBuilder)
     {
-        $this->builderFactory = $builderFactory;
-        $this->parser = $parser;
+        $this->constructorMethodBuilder = $constructorMethodBuilder;
     }
 
     public function isCandidate(Node $node): bool
@@ -52,50 +45,38 @@ final class InjectAnnotationToConstructorReconstructor implements ReconstructorI
                 continue;
             }
 
+            $this->removeInjectAnnotation($injectAnnotations, $propertyNode, $propertyDocBlock);
+            $this->makePropertyPrivate($propertyNode);
+
             $propertyType = $propertyDocBlock->getAnnotationsOfType('var')[0]->getTypes()[0];
-
-            // 1. remove @inject annotation
-            foreach ($injectAnnotations as $injectAnnotation) {
-                $injectAnnotation->remove();
-            }
-            $propertyNode->setDocComment(new Doc($propertyDocBlock->getContent()));
-
-            // 2. make public property private
-            $propertyNode->flags = Class_::MODIFIER_PRIVATE;
             $propertyName = $propertyNode->props[0]->name;
-
-            // build assignment for constructor method body
-            /** @var Node[] $assign */
-            $assign = $this->parser->parse(sprintf(
-                '<?php $this->%s = $%s;',
-                $propertyName,
-                $propertyName
-            ));
-
-            $constructorMethod = $classNode->getMethod('__construct') ?: null;
-
-            /** @var ClassMethod $constructorMethod */
-            if ($constructorMethod) {
-                $constructorMethod->params[] = $this->builderFactory->param($propertyName)
-                    ->setTypeHint($propertyType)->getNode();
-
-                $constructorMethod->stmts[] = $assign[0];
-            } else {
-                /** @var Method $constructorMethod */
-                $constructorMethod = $this->builderFactory->method('__construct')
-                    ->makePublic()
-                    ->addParam($this->builderFactory->param($propertyName)
-                        ->setTypeHint($propertyType)
-                    )
-                    ->addStmts($assign);
-
-                $classNode->stmts[] = $constructorMethod->getNode();
-            }
+            $this->constructorMethodBuilder->addPropertyAssignToClass($classNode, $propertyType, $propertyName);
         }
     }
 
     private function createDocBlock(Property $propertyNode): DocBlock
     {
         return new DocBlock($propertyNode->getDocComment());
+    }
+
+    /**
+     * @param $propertyNode
+     * @return int
+     */
+    private function makePropertyPrivate($propertyNode): int
+    {
+        return $propertyNode->flags = Class_::MODIFIER_PRIVATE;
+    }
+
+    /**
+     * @param Annotation[] $injectAnnotations
+     */
+    private function removeInjectAnnotation(array $injectAnnotations, Property $propertyNode, DocBlock $propertyDocBlock): void
+    {
+        foreach ($injectAnnotations as $injectAnnotation) {
+            $injectAnnotation->remove();
+        }
+
+        $propertyNode->setDocComment(new Doc($propertyDocBlock->getContent()));
     }
 }

@@ -15,6 +15,3 @@ services:
         factory: ['@Rector\Parser\ParserFactory', 'create']
     PhpParser\BuilderFactory: ~
     PhpParser\PrettyPrinter\Standard: ~
-
-# $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
-# $statements = $parser->parse(file_get_contents(__DIR__ . '/../source/ClassWithInjects
