@@ -3,6 +3,7 @@
 namespace Rector\Reconstructor\DependencyInjection;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -155,7 +156,7 @@ final class NamedServicesToConstructorReconstructor implements ReconstructorInte
      */
     private function isContainerGetCall(Node $node): bool
     {
-        if ($node instanceof Assign && $node->expr instanceof MethodCall) {
+        if ($node instanceof Assign && ($node->expr instanceof MethodCall || $node->var instanceof MethodCall)) {
             $methodCall = $node->expr;
         } elseif ($node instanceof MethodCall && $node->var instanceof MethodCall) {
             $methodCall = $node->var;
@@ -178,7 +179,10 @@ final class NamedServicesToConstructorReconstructor implements ReconstructorInte
         return true;
     }
 
-    private function resolveServiceTypeFromMethodCall(MethodCall $methodCallNode): ?string
+    /**
+     * @param MethodCall|Expr $methodCallNode
+     */
+    private function resolveServiceTypeFromMethodCall($methodCallNode): ?string
     {
         /** @var String_ $argument */
         $argument = $methodCallNode->args[0]->value;
