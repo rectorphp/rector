@@ -36,8 +36,11 @@ final class NamedServicesToConstructorReconstructor implements ReconstructorInte
      */
     private $nameResolver;
 
-    public function __construct(ConstructorMethodBuilder $constructorMethodBuilder, PropertyBuilder $propertyBuilder, NameResolver $nameResolver)
-    {
+    public function __construct(
+        ConstructorMethodBuilder $constructorMethodBuilder,
+        PropertyBuilder $propertyBuilder,
+        NameResolver $nameResolver
+    ) {
         $this->constructorMethodBuilder = $constructorMethodBuilder;
         $this->propertyBuilder = $propertyBuilder;
         $this->nameResolver = $nameResolver;
@@ -79,6 +82,30 @@ final class NamedServicesToConstructorReconstructor implements ReconstructorInte
         }
     }
 
+    private function processOnServiceMethodCall(Class_ $classNode, MethodCall $methodCallNode): void
+    {
+        if (! $this->isContainerGetCall($methodCallNode)) {
+            return;
+        }
+
+        $refactoredMethodCall = $this->processMethodCallNode($classNode, $methodCallNode->var);
+        if ($refactoredMethodCall) {
+            $methodCallNode->var = $refactoredMethodCall;
+        }
+    }
+
+    private function processAssignment(Class_ $classNode, Assign $assignNode): void
+    {
+        if (!$this->isContainerGetCall($assignNode)) {
+            return;
+        }
+
+        $refactoredMethodCall = $this->processMethodCallNode($classNode, $assignNode->expr);
+        if ($refactoredMethodCall) {
+            $assignNode->expr = $refactoredMethodCall;
+        }
+    }
+
     /**
      * @todo extract to helper service, LocalKernelProvider::get...()
      */
@@ -92,63 +119,6 @@ final class NamedServicesToConstructorReconstructor implements ReconstructorInte
         // @todo: call only loadBundles() and initializeContainer() methods
 
         return $kernel->getContainer();
-    }
-
-    private function processOnServiceMethodCall(Class_ $classNode, MethodCall $methodCallNode): void
-    {
-        if (! $this->isContainerGetCall($methodCallNode)) {
-            return;
-        }
-
-        // 1. Get service type
-        $serviceType = $this->resolveServiceTypeFromMethodCall($methodCallNode->var);
-        if ($serviceType === null) {
-            return;
-        }
-
-        // 2. Property name
-        $propertyName = $this->nameResolver->resolvePropertyNameFromType($serviceType);
-
-        // 3. Replace "$this->get()->" => "$this->$propertyName->"
-        $methodCallNode->var = new PropertyFetch(
-            new Variable('this', [
-                'name' => $propertyName
-            ]), $propertyName
-        );
-
-        // 4. Add property assignment to constructor
-        $this->constructorMethodBuilder->addPropertyAssignToClass($classNode, $serviceType, $propertyName);
-
-        // 5. Add property to class
-        $this->propertyBuilder->addPropertyToClass($classNode, $serviceType, $propertyName);
-    }
-
-    private function processAssignment(Class_ $classNode, Assign $assignNode): void
-    {
-        if (! $this->isContainerGetCall($assignNode)) {
-            return;
-        }
-
-        // 1. Get service type
-        $serviceType = $this->resolveServiceTypeFromMethodCall($assignNode->expr);
-        if ($serviceType === null) {
-            return;
-        }
-
-        // 2. Property name
-        $propertyName = $this->nameResolver->resolvePropertyNameFromType($serviceType);
-
-        $assignNode->expr = new PropertyFetch(
-            new Variable('this', [
-                'name' => $propertyName
-            ]), $propertyName
-        );
-
-        // 4. Add property assignment to constructor
-        $this->constructorMethodBuilder->addPropertyAssignToClass($classNode, $serviceType, $propertyName);
-
-        // 5. Add property to class
-        $this->propertyBuilder->addPropertyToClass($classNode, $serviceType, $propertyName);
     }
 
     /**
@@ -197,5 +167,30 @@ final class NamedServicesToConstructorReconstructor implements ReconstructorInte
         $service = $container->get($serviceName);
 
         return get_class($service);
+    }
+
+    private function processMethodCallNode(Class_ $classNode, MethodCall $methodCall): ?PropertyFetch
+    {
+        // 1. Get service type
+        $serviceType = $this->resolveServiceTypeFromMethodCall($methodCall);
+        if ($serviceType === null) {
+            return null;
+        }
+
+        // 2. Property name
+        $propertyName = $this->nameResolver->resolvePropertyNameFromType($serviceType);
+
+        // 4. Add property assignment to constructor
+        $this->constructorMethodBuilder->addPropertyAssignToClass($classNode, $serviceType, $propertyName);
+
+        // 5. Add property to class
+        $this->propertyBuilder->addPropertyToClass($classNode, $serviceType, $propertyName);
+
+        return new PropertyFetch(
+            new Variable('this', [
+                'name' => $propertyName
+            ]), $propertyName
+        );
+
     }
 }
