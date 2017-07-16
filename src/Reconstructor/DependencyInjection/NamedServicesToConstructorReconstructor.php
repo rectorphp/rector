@@ -71,22 +71,13 @@ final class NamedServicesToConstructorReconstructor implements ReconstructorInte
                     continue;
                 }
 
-                $methodCallNode = $methodCallNode->var;
-
                 // 3. Accept only "$this->get()"
-                if ($methodCallNode->name !== 'get') {
+                if ($methodCallNode->var->name !== 'get') {
                     continue;
                 }
 
                 // 4. Accept only strings in "$this->get('string')"
-                $argument = $methodCallNode->args[0]->value;
-                if (! $methodCallNode->args[0]->value instanceof String_) {
-                    continue;
-                }
-
-                /** @var String_ $argument */
-                $serviceName = $argument->value;
-
+                $serviceName = $this->getServiceNameFromGetCall($methodCallNode->var);
                 $container = $this->getContainerFromKernelClass();
                 if (! $container->has($serviceName)) {
                     // service name could not be found
@@ -98,12 +89,8 @@ final class NamedServicesToConstructorReconstructor implements ReconstructorInte
                 // 6. Save Services
                 $serviceType = get_class($service);
                 $propertyName = $this->createPropertyNameFromClass($serviceType);
-                $collectedServices[$propertyName] = $serviceType;
 
-                // 7. Replace "$this->get()" => "$this->{$propertyName}"
-                // A.
-
-                // 7.1 Replace "$this" with "$this->propertyName"
+                // 7. Replace "$this->get()->" => "$this->$propertyName->"
                 $methodCallNode->var = new PropertyFetch(
                     new Variable('this', [
                         'name' => $propertyName
@@ -140,5 +127,16 @@ final class NamedServicesToConstructorReconstructor implements ReconstructorInte
         $lastNamePart = array_pop($serviceNameParts);
 
         return lcfirst($lastNamePart);
+    }
+
+    private function getServiceNameFromGetCall(MethodCall $methodCallNode): ?string
+    {
+        $argument = $methodCallNode->args[0]->value;
+        if (! $methodCallNode->args[0]->value instanceof String_) {
+            return null;
+        }
+
+        /** @var String_ $argument */
+        return $argument->value;
     }
 }
