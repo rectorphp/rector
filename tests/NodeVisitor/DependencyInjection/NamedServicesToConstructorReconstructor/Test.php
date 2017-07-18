@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Reconstructor\DependencyInjection\NamedServicesToConstructorReconstructor;
+namespace Rector\Tests\NodeVisitor\DependencyInjection\NamedServicesToConstructorReconstructor;
 
-use Rector\Reconstructor\DependencyInjection\NamedServicesToConstructorReconstructor;
+use Rector\NodeVisitor\DependencyInjection\NamedServicesToConstructorNodeVisitor;
 use Rector\Testing\PHPUnit\AbstractReconstructorTestCase;
 
 final class Test extends AbstractReconstructorTestCase
@@ -17,6 +17,6 @@ final class Test extends AbstractReconstructorTestCase
 
     protected function getReconstructorClass(): string
     {
-        return NamedServicesToConstructorReconstructor::class;
+        return NamedServicesToConstructorNodeVisitor::class;
     }
 }

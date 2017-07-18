@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Reconstructor\DependencyInjection;
+namespace Rector\NodeVisitor\DependencyInjection;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
@@ -11,16 +11,16 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\NodeVisitorAbstract;
 use Rector\Analyzer\ClassAnalyzer;
 use Rector\Builder\ConstructorMethodBuilder;
 use Rector\Builder\Naming\NameResolver;
 use Rector\Builder\PropertyBuilder;
-use Rector\Contract\Dispatcher\ReconstructorInterface;
-use Rector\Tests\Reconstructor\DependencyInjection\NamedServicesToConstructorReconstructor\Source\LocalKernel;
+use Rector\Tests\NodeVisitor\DependencyInjection\NamedServicesToConstructorReconstructor\Source\LocalKernel;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Kernel;
 
-final class NamedServicesToConstructorReconstructor implements ReconstructorInterface
+final class NamedServicesToConstructorNodeVisitor extends NodeVisitorAbstract
 {
     /**
      * @var ConstructorMethodBuilder
@@ -54,7 +54,7 @@ final class NamedServicesToConstructorReconstructor implements ReconstructorInte
         $this->classAnalyzer = $classAnalyzer;
     }
 
-    public function isCandidate(Node $node): bool
+    private function isCandidate(Node $node): bool
     {
         // OR? Maybe listen on MethodCall... $this-> +get('...')
 
@@ -207,5 +207,27 @@ final class NamedServicesToConstructorReconstructor implements ReconstructorInte
             ]), $propertyName
         );
 
+    }
+
+    /**
+     * Called when entering a node.
+     *
+     * Return value semantics:
+     *  * null
+     *        => $node stays as-is
+     *  * NodeTraverser::DONT_TRAVERSE_CHILDREN
+     *        => Children of $node are not traversed. $node stays as-is
+     *  * NodeTraverser::STOP_TRAVERSAL
+     *        => Traversal is aborted. $node stays as-is
+     *  * otherwise
+     *        => $node is set to the return value
+     *
+     * @param Node $node Node
+     *
+     * @return null|int|Node Replacement node (or special return value)
+     */
+    public function enterNode(Node $node)
+    {
+        return $this->isCandidate($node);
     }
 }

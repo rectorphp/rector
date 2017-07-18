@@ -2,6 +2,7 @@
 
 namespace Rector\Testing\PHPUnit;
 
+use PhpParser\NodeVisitor;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Rector\Contract\Dispatcher\ReconstructorInterface;
@@ -38,7 +39,7 @@ abstract class AbstractReconstructorTestCase extends TestCase
 
     abstract protected function getReconstructorClass(): string;
 
-    private function getReconstructor(): ReconstructorInterface
+    private function getReconstructor(): NodeVisitor
     {
         return $this->container->get($this->getReconstructorClass());
     }

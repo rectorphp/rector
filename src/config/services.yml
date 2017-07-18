@@ -16,4 +16,9 @@ services:
     PhpParser\Lexer:
         factory: ['@Rector\Parser\LexerFactory', 'create']
     PhpParser\BuilderFactory: ~
+
+    # Traverser
+    PhpParser\NodeTraverser: ~
+    # Printer
+    PhpParser\NodeVisitor\CloningVisitor: ~
     PhpParser\PrettyPrinter\Standard: ~

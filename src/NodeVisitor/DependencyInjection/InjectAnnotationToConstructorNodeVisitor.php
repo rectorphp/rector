@@ -1,16 +1,17 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Reconstructor\DependencyInjection;
+namespace Rector\NodeVisitor\DependencyInjection;
 
 use PhpCsFixer\DocBlock\DocBlock;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
+use PhpParser\NodeTraverser;
+use PhpParser\NodeVisitorAbstract;
 use Rector\Builder\ConstructorMethodBuilder;
-use Rector\Contract\Dispatcher\ReconstructorInterface;
 
-final class InjectAnnotationToConstructorReconstructor implements ReconstructorInterface
+final class InjectAnnotationToConstructorNodeVisitor extends NodeVisitorAbstract
 {
     /**
      * @var ConstructorMethodBuilder
@@ -74,5 +75,54 @@ final class InjectAnnotationToConstructorReconstructor implements ReconstructorI
         }
 
         $propertyNode->setDocComment(new Doc($propertyDocBlock->getContent()));
+    }
+
+    /**
+     * Called when entering a node.
+     *
+     * Return value semantics:
+     *  * null
+     *        => $node stays as-is
+     *  * NodeTraverser::DONT_TRAVERSE_CHILDREN
+     *        => Children of $node are not traversed. $node stays as-is
+     *  * NodeTraverser::STOP_TRAVERSAL
+     *        => Traversal is aborted. $node stays as-is
+     *  * otherwise
+     *        => $node is set to the return value
+     *
+     * @return null|int|Node Replacement node (or special return value)
+     */
+    public function enterNode(Node $node)
+    {
+        if ($node instanceof Class_) {
+            $this->reconstruct($node);
+            return $node;
+        }
+
+        return NodeTraverser::DONT_TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Called when leaving a node.
+     *
+     * Return value semantics:
+     *  * null
+     *        => $node stays as-is
+     *  * NodeTraverser::REMOVE_NODE
+     *        => $node is removed from the parent array
+     *  * NodeTraverser::STOP_TRAVERSAL
+     *        => Traversal is aborted. $node stays as-is
+     *  * array (of Nodes)
+     *        => The return value is merged into the parent array (at the position of the $node)
+     *  * otherwise
+     *        => $node is set to the return value
+     *
+     * @param Node $node Node
+     *
+     * @return null|int|Node|Node[] Replacement node (or special return value)
+     */
+    public function leaveNode(Node $node)
+    {
+        // TODO: Implement leaveNode() method.
     }
 }

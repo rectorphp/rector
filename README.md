@@ -9,8 +9,8 @@ This tool will *reconstruct* (change) your code - **run it only in a new clean g
 
 ## All Reconstructors
 
-- `InjectAnnotationToConstructorReconstructor` ([Nette](https://github.com/nette/))
-- `NamedServicesToConstructorReconstructor` ([Symfony](https://github.com/symfony/))
+- `InjectAnnotationToConstructorNodeTraverser` ([Nette](https://github.com/nette/))
+- `NamedServicesToConstructorNodeTraverser` ([Symfony](https://github.com/symfony/))
 
 
 ## Install

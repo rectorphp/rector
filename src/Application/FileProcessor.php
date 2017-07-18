@@ -2,8 +2,8 @@
 
 namespace Rector\Application;
 
+use PhpParser\NodeTraverser;
 use PhpParser\Parser;
-use Rector\Dispatcher\NodeDispatcher;
 use Rector\Printer\CodeStyledPrinter;
 use SplFileInfo;
 
@@ -15,20 +15,20 @@ final class FileProcessor
     private $parser;
 
     /**
-     * @var NodeDispatcher
-     */
-    private $nodeDispatcher;
-
-    /**
      * @var CodeStyledPrinter
      */
     private $codeStyledPrinter;
 
-    public function __construct(Parser $parser, CodeStyledPrinter $codeStyledPrinter, NodeDispatcher $nodeDispatcher)
+    /**
+     * @var NodeTraverser
+     */
+    private $nodeTraverser;
+
+    public function __construct(Parser $parser, CodeStyledPrinter $codeStyledPrinter, NodeTraverser $nodeTraverser)
     {
         $this->parser = $parser;
-        $this->nodeDispatcher = $nodeDispatcher;
         $this->codeStyledPrinter = $codeStyledPrinter;
+        $this->nodeTraverser = $nodeTraverser;
     }
 
     /**
@@ -51,9 +51,9 @@ final class FileProcessor
 
         $originalNodes = $this->cloneArrayOfObjects($nodes);
 
-        foreach ($nodes as $node) {
-            $this->nodeDispatcher->dispatch($node);
-        }
+
+        $this->nodeTraverser->traverse($nodes);
+
 
         $this->codeStyledPrinter->printToFile($file, $originalNodes, $nodes);
     }

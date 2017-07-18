@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Reconstructor\DependencyInjection\NamedServicesToConstructorReconstructor\Source;
+namespace Rector\Tests\NodeVisitor\DependencyInjection\NamedServicesToConstructorReconstructor\Source;
 
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
