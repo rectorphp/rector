@@ -4,8 +4,6 @@ namespace Rector\DependencyInjection\CompilerPass;
 
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor;
-use Rector\Contract\Dispatcher\ReconstructorInterface;
-use Rector\Dispatcher\NodeDispatcher;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;

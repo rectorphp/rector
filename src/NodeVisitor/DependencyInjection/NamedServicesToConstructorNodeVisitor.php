@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Analyzer\ClassAnalyzer;
 use Rector\Builder\ConstructorMethodBuilder;
@@ -228,6 +229,11 @@ final class NamedServicesToConstructorNodeVisitor extends NodeVisitorAbstract
      */
     public function enterNode(Node $node)
     {
-        return $this->isCandidate($node);
+        if ($this->isCandidate($node)) {
+            $this->reconstruct($node);
+            return;
+        }
+
+        return NodeTraverser::DONT_TRAVERSE_CHILDREN;
     }
 }

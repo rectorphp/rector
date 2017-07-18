@@ -101,28 +101,4 @@ final class InjectAnnotationToConstructorNodeVisitor extends NodeVisitorAbstract
 
         return NodeTraverser::DONT_TRAVERSE_CHILDREN;
     }
-
-    /**
-     * Called when leaving a node.
-     *
-     * Return value semantics:
-     *  * null
-     *        => $node stays as-is
-     *  * NodeTraverser::REMOVE_NODE
-     *        => $node is removed from the parent array
-     *  * NodeTraverser::STOP_TRAVERSAL
-     *        => Traversal is aborted. $node stays as-is
-     *  * array (of Nodes)
-     *        => The return value is merged into the parent array (at the position of the $node)
-     *  * otherwise
-     *        => $node is set to the return value
-     *
-     * @param Node $node Node
-     *
-     * @return null|int|Node|Node[] Replacement node (or special return value)
-     */
-    public function leaveNode(Node $node)
-    {
-        // TODO: Implement leaveNode() method.
-    }
 }
