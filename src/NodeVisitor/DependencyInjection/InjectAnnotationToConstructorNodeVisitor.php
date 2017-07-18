@@ -99,6 +99,6 @@ final class InjectAnnotationToConstructorNodeVisitor extends NodeVisitorAbstract
             return $node;
         }
 
-        return NodeTraverser::DONT_TRAVERSE_CHILDREN;
+        return null;
     }
 }

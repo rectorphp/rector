@@ -15,7 +15,7 @@ final class Test extends AbstractReconstructorTestCase
 //        $this->doTestFileMatchesExpectedContent(__DIR__ . '/wrong/wrong3.php.inc', __DIR__ . '/correct/correct3.php.inc');
     }
 
-    protected function getReconstructorClass(): string
+    protected function getNodeVisitorClass(): string
     {
         return NamedServicesToConstructorNodeVisitor::class;
     }

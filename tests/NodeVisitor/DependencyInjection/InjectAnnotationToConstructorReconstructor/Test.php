@@ -15,7 +15,7 @@ final class Test extends AbstractReconstructorTestCase
         );
     }
 
-    protected function getReconstructorClass(): string
+    protected function getNodeVisitorClass(): string
     {
         return InjectAnnotationToConstructorNodeVisitor::class;
     }

@@ -57,10 +57,9 @@ final class ReconstructCommand extends Command
     }
 
     /**
-     * @param string[] $directories
      * @return SplFileInfo[] array
      */
-    private function findPhpFilesInDirectories(array $directories): array
+    private function findPhpFilesInDirectories(string ...$directories): array
     {
         $finder = Finder::find('*.php')
             ->in($directories);

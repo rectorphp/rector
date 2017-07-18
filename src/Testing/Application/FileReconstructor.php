@@ -40,14 +40,12 @@ final class FileReconstructor
     }
 
     # ref: https://github.com/nikic/PHP-Parser/issues/344#issuecomment-298162516
-    public function processFileWithReconstructor(SplFileInfo $file, NodeVisitor $nodeVisitor): string
+    public function processFileWithNodeVisitor(SplFileInfo $file, NodeVisitor $nodeVisitor): string
     {
         $fileContent = file_get_contents($file->getRealPath());
 
         /** @var Node[] $nodes */
         $oldStmts = $this->parser->parse($fileContent);
-
-        // before recontruct event?
 
         // keep format printer
         $oldTokens = $this->lexer->getTokens();

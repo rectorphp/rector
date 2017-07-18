@@ -5,7 +5,6 @@ namespace Rector\Testing\PHPUnit;
 use PhpParser\NodeVisitor;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
-use Rector\Contract\Dispatcher\ReconstructorInterface;
 use Rector\DependencyInjection\ContainerFactory;
 use Rector\Testing\Application\FileReconstructor;
 use SplFileInfo;
@@ -30,17 +29,17 @@ abstract class AbstractReconstructorTestCase extends TestCase
 
     protected function doTestFileMatchesExpectedContent(string $file, string $reconstructedFile): void
     {
-        $reconstructedFileContent = $this->fileReconstructor->processFileWithReconstructor(
-            new SplFileInfo($file), $this->getReconstructor()
+        $reconstructedFileContent = $this->fileReconstructor->processFileWithNodeVisitor(
+            new SplFileInfo($file), $this->getNodeVisitor()
         );
 
         $this->assertStringEqualsFile($reconstructedFile, $reconstructedFileContent);
     }
 
-    abstract protected function getReconstructorClass(): string;
+    abstract protected function getNodeVisitorClass(): string;
 
-    private function getReconstructor(): NodeVisitor
+    private function getNodeVisitor(): NodeVisitor
     {
-        return $this->container->get($this->getReconstructorClass());
+        return $this->container->get($this->getNodeVisitorClass());
     }
 }

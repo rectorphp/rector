@@ -13,7 +13,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
-use Rector\Analyzer\ClassAnalyzer;
 use Rector\Builder\ConstructorMethodBuilder;
 use Rector\Builder\Naming\NameResolver;
 use Rector\Builder\PropertyBuilder;
@@ -38,36 +37,19 @@ final class NamedServicesToConstructorNodeVisitor extends NodeVisitorAbstract
      */
     private $nameResolver;
 
-    /**
-     * @var ClassAnalyzer
-     */
-    private $classAnalyzer;
-
     public function __construct(
         ConstructorMethodBuilder $constructorMethodBuilder,
         PropertyBuilder $propertyBuilder,
-        NameResolver $nameResolver,
-        ClassAnalyzer $classAnalyzer
+        NameResolver $nameResolver
     ) {
         $this->constructorMethodBuilder = $constructorMethodBuilder;
         $this->propertyBuilder = $propertyBuilder;
         $this->nameResolver = $nameResolver;
-        $this->classAnalyzer = $classAnalyzer;
     }
 
     private function isCandidate(Node $node): bool
     {
-        // OR? Maybe listen on MethodCall... $this-> +get('...')
-
-        if ($this->classAnalyzer->isControllerClassNode($node)) {
-            return true;
-        }
-
-        if ($this->classAnalyzer->isContainerAwareClassNode($node)) {
-            return true;
-        }
-
-        return false;
+        return $node instanceof Class_;
     }
 
     /**
