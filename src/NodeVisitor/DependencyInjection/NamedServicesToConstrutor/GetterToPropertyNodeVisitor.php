@@ -124,27 +124,15 @@ final class GetterToPropertyNodeVisitor extends NodeVisitorAbstract
         return true;
     }
 
-    /**
-     * @param MethodCall|Expr $methodCallNode
-     */
-    private function resolveServiceTypeFromMethodCall($methodCallNode): ?string
-    {
-        /** @var String_ $argument */
-        $argument = $methodCallNode->args[0]->value;
-        $serviceName = $argument->value;
-
-        return $this->serviceFromKernelResolver->resolveServiceClassByNameFromKernel(
-            $serviceName, LocalKernel::class
-        );
-    }
-
     private function processMethodCallNode(MethodCall $methodCall): ?PropertyFetch
     {
-        // Get service type
-        $serviceType = $this->resolveServiceTypeFromMethodCall($methodCall);
-        if ($serviceType === null) {
-            return null;
-        }
+        /** @var String_ $argument */
+        $argument = $methodCall->args[0]->value;
+        $serviceName = $argument->value;
+
+        $serviceType = $this->serviceFromKernelResolver->resolveServiceClassByNameFromKernel(
+            $serviceName, LocalKernel::class
+        );
 
         // Get property name
         $propertyName = $this->nameResolver->resolvePropertyNameFromType($serviceType);

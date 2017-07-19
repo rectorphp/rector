@@ -137,24 +137,16 @@ final class NamedServicesToConstructorNodeVisitor extends NodeVisitorAbstract
         return true;
     }
 
-    /**
-     * @param MethodCall|Expr $methodCallNode
-     */
-    private function resolveServiceTypeFromMethodCall($methodCallNode): ?string
-    {
-        /** @var String_ $argument */
-        $argument = $methodCallNode->args[0]->value;
-        $serviceName = $argument->value;
-
-        return $this->serviceFromKernelResolver->resolveServiceClassByNameFromKernel(
-            $serviceName, LocalKernel::class
-        );
-    }
-
     private function processMethodCallNode(Class_ $classNode, MethodCall $methodCall): ?PropertyFetch
     {
-        // Get service type
-        $serviceType = $this->resolveServiceTypeFromMethodCall($methodCall);
+        /** @var String_ $argument */
+        $argument = $methodCall->args[0]->value;
+        $serviceName = $argument->value;
+
+        $serviceType = $this->serviceFromKernelResolver->resolveServiceClassByNameFromKernel(
+            $serviceName, LocalKernel::class
+        );
+
         if ($serviceType === null) {
             return null;
         }
