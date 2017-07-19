@@ -11,7 +11,6 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Builder\ConstructorMethodBuilder;
 use Rector\Builder\Naming\NameResolver;
@@ -96,10 +95,12 @@ final class NamedServicesToConstructorNodeVisitor extends NodeVisitorAbstract
             return;
         }
 
-        $refactoredMethodCall = $this->processMethodCallNode($classNode, $assignNode->expr);
-        if ($refactoredMethodCall) {
-            $assignNode->expr = $refactoredMethodCall;
-        }
+        $this->processMethodCallNode($classNode, $assignNode->expr);
+
+        /*$refactoredMethodCall = */
+//        if ($refactoredMethodCall) {
+//            $assignNode->expr = $refactoredMethodCall;
+//        }
     }
 
     /**
@@ -212,9 +213,8 @@ final class NamedServicesToConstructorNodeVisitor extends NodeVisitorAbstract
     {
         if ($this->isCandidate($node)) {
             $this->reconstruct($node);
-            return;
         }
 
-        return NodeTraverser::DONT_TRAVERSE_CHILDREN;
+        return null;
     }
 }

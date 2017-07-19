@@ -7,12 +7,12 @@ use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
-use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Builder\ConstructorMethodBuilder;
 
 final class InjectAnnotationToConstructorNodeVisitor extends NodeVisitorAbstract
 {
+    const ANNOTATION_INJECT = 'inject';
     /**
      * @var ConstructorMethodBuilder
      */
@@ -40,7 +40,7 @@ final class InjectAnnotationToConstructorNodeVisitor extends NodeVisitorAbstract
             $propertyNode = $classElementStatement;
 
             $propertyDocBlock = $this->createDocBlockFromProperty($propertyNode);
-            $injectAnnotations = $propertyDocBlock->getAnnotationsOfType('inject');
+            $injectAnnotations = $propertyDocBlock->getAnnotationsOfType(self::ANNOTATION_INJECT);
             if (! $injectAnnotations) {
                 continue;
             }
@@ -68,7 +68,7 @@ final class InjectAnnotationToConstructorNodeVisitor extends NodeVisitorAbstract
 
     private function removeInjectAnnotationFromProperty(Property $propertyNode, DocBlock $propertyDocBlock): void
     {
-        $injectAnnotations = $propertyDocBlock->getAnnotationsOfType('inject');
+        $injectAnnotations = $propertyDocBlock->getAnnotationsOfType(self::ANNOTATION_INJECT);
 
         foreach ($injectAnnotations as $injectAnnotation) {
             $injectAnnotation->remove();

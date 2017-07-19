@@ -38,8 +38,6 @@ final class ReconstructCommand extends Command
     {
         $this->setName(self::NAME);
         $this->setDescription('Reconstruct set of your code.');
-
-        // @todo: use modular configure from ApiGen
         $this->addArgument(
             self::ARGUMENT_SOURCE_NAME,
             InputArgument::REQUIRED | InputArgument::IS_ARRAY,
@@ -57,9 +55,10 @@ final class ReconstructCommand extends Command
     }
 
     /**
+     * @param string[] $directories
      * @return SplFileInfo[] array
      */
-    private function findPhpFilesInDirectories(string ...$directories): array
+    private function findPhpFilesInDirectories(array $directories): array
     {
         $finder = Finder::find('*.php')
             ->in($directories);
