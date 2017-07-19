@@ -63,7 +63,6 @@ final class NamedServicesToConstructorNodeVisitor extends NodeVisitorAbstract
                 continue;
             }
 
-
             $methodNode = $insideClassNode;
             foreach ($methodNode->stmts as $insideMethodNode) {
                 $insideMethodNode = $insideMethodNode->expr;
