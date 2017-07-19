@@ -13,11 +13,10 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Builder\ConstructorMethodBuilder;
+use Rector\Builder\Kernel\ServiceFromKernelResolver;
 use Rector\Builder\Naming\NameResolver;
 use Rector\Builder\PropertyBuilder;
 use Rector\Tests\NodeVisitor\DependencyInjection\NamedServicesToConstructorReconstructor\Source\LocalKernel;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpKernel\Kernel;
 
 final class NamedServicesToConstructorNodeVisitor extends NodeVisitorAbstract
 {
@@ -36,14 +35,21 @@ final class NamedServicesToConstructorNodeVisitor extends NodeVisitorAbstract
      */
     private $nameResolver;
 
+    /**
+     * @var ServiceFromKernelResolver
+     */
+    private $serviceFromKernelResolver;
+
     public function __construct(
         ConstructorMethodBuilder $constructorMethodBuilder,
         PropertyBuilder $propertyBuilder,
-        NameResolver $nameResolver
+        NameResolver $nameResolver,
+        ServiceFromKernelResolver $serviceFromKernelResolver
     ) {
         $this->constructorMethodBuilder = $constructorMethodBuilder;
         $this->propertyBuilder = $propertyBuilder;
         $this->nameResolver = $nameResolver;
+        $this->serviceFromKernelResolver = $serviceFromKernelResolver;
     }
 
     private function isCandidate(Node $node): bool
@@ -104,21 +110,6 @@ final class NamedServicesToConstructorNodeVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @todo extract to helper service, LocalKernelProvider::get...()
-     */
-    private function getContainerFromKernelClass(): ContainerInterface
-    {
-        /** @var Kernel $kernel */
-        $kernel = new LocalKernel('dev', true);
-        $kernel->boot();
-
-        // @todo: initialize without creating cache or log directory
-        // @todo: call only loadBundles() and initializeContainer() methods
-
-        return $kernel->getContainer();
-    }
-
-    /**
      * Accept only "$this->get('string')" statements.
      */
     private function isContainerGetCall(Node $node): bool
@@ -155,15 +146,9 @@ final class NamedServicesToConstructorNodeVisitor extends NodeVisitorAbstract
         $argument = $methodCallNode->args[0]->value;
         $serviceName = $argument->value;
 
-        $container = $this->getContainerFromKernelClass();
-        if (! $container->has($serviceName)) {
-            // service name could not be found
-            return null;
-        }
-
-        $service = $container->get($serviceName);
-
-        return get_class($service);
+        return $this->serviceFromKernelResolver->resolveServiceClassByNameFromKernel(
+            $serviceName, LocalKernel::class
+        );
     }
 
     private function processMethodCallNode(Class_ $classNode, MethodCall $methodCall): ?PropertyFetch

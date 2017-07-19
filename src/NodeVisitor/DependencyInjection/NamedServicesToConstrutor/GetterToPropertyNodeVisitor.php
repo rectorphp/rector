@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\NodeVisitorAbstract;
+use Rector\Builder\Kernel\ServiceFromKernelResolver;
 use Rector\Builder\Naming\NameResolver;
 use Rector\Tests\NodeVisitor\DependencyInjection\NamedServicesToConstructorReconstructor\Source\LocalKernel;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -25,6 +26,22 @@ use Symfony\Component\HttpKernel\Kernel;
  */
 final class GetterToPropertyNodeVisitor extends NodeVisitorAbstract
 {
+    /**
+     * @var NameResolver
+     */
+    private $nameResolver;
+
+    /**
+     * @var ServiceFromKernelResolver
+     */
+    private $serviceFromKernelResolver;
+
+    public function __construct(NameResolver $nameResolver, ServiceFromKernelResolver $serviceFromKernelResolver)
+    {
+        $this->nameResolver = $nameResolver;
+        $this->serviceFromKernelResolver = $serviceFromKernelResolver;
+    }
+
     /**
      * Return value semantics:
      *  * null
@@ -48,13 +65,13 @@ final class GetterToPropertyNodeVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @var NameResolver
+     * @param Assign|MethodCall $assignOrMethodCallNode
      */
-    private $nameResolver;
-
-    public function __construct(NameResolver $nameResolver)
+    public function reconstruct(Node $assignOrMethodCallNode): void
     {
-        $this->nameResolver = $nameResolver;
+        if ($assignOrMethodCallNode instanceof Assign) {
+            $this->processAssignment($assignOrMethodCallNode);
+        }
     }
 
     private function isCandidate(Node $node): bool
@@ -79,37 +96,12 @@ final class GetterToPropertyNodeVisitor extends NodeVisitorAbstract
         return false;
     }
 
-    /**
-     * @param Assign|MethodCall $assignOrMethodCallNode
-     */
-    public function reconstruct(Node $assignOrMethodCallNode): void
-    {
-        if ($assignOrMethodCallNode instanceof Assign) {
-            $this->processAssignment($assignOrMethodCallNode);
-        }
-    }
-
     private function processAssignment(Assign $assignNode): void
     {
         $refactoredMethodCall = $this->processMethodCallNode($assignNode->expr);
         if ($refactoredMethodCall) {
             $assignNode->expr = $refactoredMethodCall;
         }
-    }
-
-    /**
-     * @todo extract to helper service, LocalKernelProvider::get...()
-     */
-    private function getContainerFromKernelClass(): ContainerInterface
-    {
-        /** @var Kernel $kernel */
-        $kernel = new LocalKernel('dev', true);
-        $kernel->boot();
-
-        // @todo: initialize without creating cache or log directory
-        // @todo: call only loadBundles() and initializeContainer() methods
-
-        return $kernel->getContainer();
     }
 
     /**
@@ -141,15 +133,9 @@ final class GetterToPropertyNodeVisitor extends NodeVisitorAbstract
         $argument = $methodCallNode->args[0]->value;
         $serviceName = $argument->value;
 
-        $container = $this->getContainerFromKernelClass();
-        if (! $container->has($serviceName)) {
-            // service name could not be found
-            return null;
-        }
-
-        $service = $container->get($serviceName);
-
-        return get_class($service);
+        return $this->serviceFromKernelResolver->resolveServiceClassByNameFromKernel(
+            $serviceName, LocalKernel::class
+        );
     }
 
     private function processMethodCallNode(MethodCall $methodCall): ?PropertyFetch
