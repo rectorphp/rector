@@ -29,17 +29,8 @@ abstract class AbstractReconstructorTestCase extends TestCase
 
     protected function doTestFileMatchesExpectedContent(string $file, string $reconstructedFile): void
     {
-        $reconstructedFileContent = $this->fileReconstructor->processFileWithNodeVisitor(
-            new SplFileInfo($file), $this->getNodeVisitor()
-        );
+        $reconstructedFileContent = $this->fileReconstructor->processFile(new SplFileInfo($file));
 
         $this->assertStringEqualsFile($reconstructedFile, $reconstructedFileContent);
-    }
-
-    abstract protected function getNodeVisitorClass(): string;
-
-    private function getNodeVisitor(): NodeVisitor
-    {
-        return $this->container->get($this->getNodeVisitorClass());
     }
 }

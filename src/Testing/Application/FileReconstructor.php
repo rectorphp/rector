@@ -5,7 +5,6 @@ namespace Rector\Testing\Application;
 use PhpParser\Lexer;
 use PhpParser\Node;
 use PhpParser\NodeTraverser;
-use PhpParser\NodeVisitor;
 use PhpParser\Parser;
 use Rector\Printer\CodeStyledPrinter;
 use SplFileInfo;
@@ -40,7 +39,7 @@ final class FileReconstructor
     }
 
     # ref: https://github.com/nikic/PHP-Parser/issues/344#issuecomment-298162516
-    public function processFileWithNodeVisitor(SplFileInfo $file, NodeVisitor $nodeVisitor): string
+    public function processFile(SplFileInfo $file): string
     {
         $fileContent = file_get_contents($file->getRealPath());
 
@@ -50,7 +49,6 @@ final class FileReconstructor
         // keep format printer
         $oldTokens = $this->lexer->getTokens();
 
-        $this->nodeTraverser->addVisitor($nodeVisitor);
         $newStmts = $this->nodeTraverser->traverse($oldStmts);
 
         return $this->codeStyledPrinter->printToString($oldStmts, $newStmts, $oldTokens);

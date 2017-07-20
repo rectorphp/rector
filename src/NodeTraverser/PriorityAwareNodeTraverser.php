@@ -2,7 +2,12 @@
 
 namespace Rector\NodeTraverser;
 
-final class PriorityAwareNodeTraverser
+use PhpParser\NodeTraverser;
+
+/**
+ * Allow to add priorites to node vistiors
+ */
+final class PriorityAwareNodeTraverser extends NodeTraverser
 {
-    // ...
+    // might be needed, so ready here
 }

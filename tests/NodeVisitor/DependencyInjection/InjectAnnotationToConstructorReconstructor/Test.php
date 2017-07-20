@@ -2,7 +2,6 @@
 
 namespace Rector\Tests\NodeVisitor\DependencyInjection\InjectAnnotationToConstructorReconstructor;
 
-use Rector\NodeVisitor\DependencyInjection\InjectAnnotationToConstructorNodeVisitor;
 use Rector\Testing\PHPUnit\AbstractReconstructorTestCase;
 
 final class Test extends AbstractReconstructorTestCase
@@ -13,11 +12,6 @@ final class Test extends AbstractReconstructorTestCase
             __DIR__ . '/wrong/wrong.php.inc',
             __DIR__ . '/correct/correct.php.inc'
         );
-    }
-
-    protected function getNodeVisitorClass(): string
-    {
-        return InjectAnnotationToConstructorNodeVisitor::class;
     }
 }
 

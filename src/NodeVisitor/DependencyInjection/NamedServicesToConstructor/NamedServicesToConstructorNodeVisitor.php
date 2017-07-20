@@ -2,12 +2,10 @@
 
 namespace Rector\NodeVisitor\DependencyInjection\NamedServicesToConstructor;
 
-
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -18,6 +16,12 @@ use Rector\Builder\Naming\NameResolver;
 use Rector\Builder\PropertyBuilder;
 use Rector\Tests\NodeVisitor\DependencyInjection\NamedServicesToConstructorReconstructor\Source\LocalKernel;
 
+/**
+ * Add property to class...
+ * Add property to constructor...
+ *
+ * How to dettect that particular class?
+ */
 final class NamedServicesToConstructorNodeVisitor extends NodeVisitorAbstract
 {
     /**
@@ -161,11 +165,13 @@ final class NamedServicesToConstructorNodeVisitor extends NodeVisitorAbstract
         $this->propertyBuilder->addPropertyToClass($classNode, $serviceType, $propertyName);
 
         // creates "$this->propertyName"
-        return new PropertyFetch(
-            new Variable('this', [
-                'name' => $propertyName
-            ]), $propertyName
-        );
+//        return new PropertyFetch(
+//            new Variable('this', [
+//                'name' => $propertyName
+//            ]), $propertyName
+//        );
+
+        return null;
 
     }
 

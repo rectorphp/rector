@@ -60,16 +60,6 @@ final class GetterToPropertyNodeVisitor extends NodeVisitorAbstract
         return null;
     }
 
-    /**
-     * @param Assign|MethodCall $assignOrMethodCallNode
-     */
-    public function reconstruct(Node $assignOrMethodCallNode): void
-    {
-        if ($assignOrMethodCallNode instanceof Assign) {
-            $this->processAssignment($assignOrMethodCallNode);
-        }
-    }
-
     private function isCandidate(Node $node): bool
     {
         // $var = $this->get('some_service');
@@ -92,11 +82,33 @@ final class GetterToPropertyNodeVisitor extends NodeVisitorAbstract
         return false;
     }
 
+    /**
+     * @param Assign|MethodCall $assignOrMethodCallNode
+     */
+    private function reconstruct(Node $assignOrMethodCallNode): void
+    {
+        if ($assignOrMethodCallNode instanceof Assign) {
+            $this->processAssignment($assignOrMethodCallNode);
+        }
+
+        if ($assignOrMethodCallNode instanceof MethodCall) {
+            $this->processMethodCall($assignOrMethodCallNode);
+        }
+    }
+
     private function processAssignment(Assign $assignNode): void
     {
         $refactoredMethodCall = $this->processMethodCallNode($assignNode->expr);
         if ($refactoredMethodCall) {
             $assignNode->expr = $refactoredMethodCall;
+        }
+    }
+
+    private function processMethodCall(MethodCall $methodCallNode): void
+    {
+        $refactoredMethodCall = $this->processMethodCallNode($methodCallNode->var);
+        if ($refactoredMethodCall) {
+            $methodCallNode->var = $refactoredMethodCall;
         }
     }
 
