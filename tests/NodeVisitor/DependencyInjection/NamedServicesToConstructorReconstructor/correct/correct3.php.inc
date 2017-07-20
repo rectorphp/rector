@@ -1,5 +1,5 @@
 <?php declare (strict_types=1);
-class ClassWitNamedService implements ContainerAwareInterface
+class ClassWithNamedService implements ContainerAwareInterface
 {
     /**
      * @var stdClass

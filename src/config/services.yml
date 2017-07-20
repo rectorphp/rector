@@ -1,3 +1,7 @@
+parameters:
+    # todo
+    kernel_class: # for name based service refactoring
+
 services:
     _defaults:
         autowire: true

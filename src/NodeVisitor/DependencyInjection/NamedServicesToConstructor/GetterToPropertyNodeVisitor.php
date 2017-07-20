@@ -11,17 +11,23 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Builder\Kernel\ServiceFromKernelResolver;
 use Rector\Builder\Naming\NameResolver;
+use Rector\Buillder\Class_\ClassPropertyCollector;
 use Rector\Tests\NodeVisitor\DependencyInjection\NamedServicesToConstructorReconstructor\Source\LocalKernel;
 
 /**
  * Converts all:
- * $this->get('some_service')
+ * $this->get('some_service') # where "some_service" is name of the service in container
  *
  * into:
- * $this->someService
+ * $this->someService # where "someService" is type of the service
  */
 final class GetterToPropertyNodeVisitor extends NodeVisitorAbstract
 {
+    /**
+     * @var string
+     */
+    private $className;
+
     /**
      * @var NameResolver
      */
@@ -32,10 +38,34 @@ final class GetterToPropertyNodeVisitor extends NodeVisitorAbstract
      */
     private $serviceFromKernelResolver;
 
-    public function __construct(NameResolver $nameResolver, ServiceFromKernelResolver $serviceFromKernelResolver)
-    {
+    /**
+     * @var ClassPropertyCollector
+     */
+    private $classPropertyCollector;
+
+    public function __construct(
+        NameResolver $nameResolver,
+        ServiceFromKernelResolver $serviceFromKernelResolver,
+        ClassPropertyCollector $classPropertyCollector
+    ) {
         $this->nameResolver = $nameResolver;
         $this->serviceFromKernelResolver = $serviceFromKernelResolver;
+        $this->classPropertyCollector = $classPropertyCollector;
+    }
+
+    /**
+     * @param Node[] $nodes
+     * @return array|null
+     */
+    public function beforeTraverse(array $nodes): ?array
+    {
+        foreach ($nodes as $node) {
+            if ($node instanceof Node\Stmt\Class_) {
+                $this->className = (string) $node->name;
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -88,27 +118,17 @@ final class GetterToPropertyNodeVisitor extends NodeVisitorAbstract
     private function reconstruct(Node $assignOrMethodCallNode): void
     {
         if ($assignOrMethodCallNode instanceof Assign) {
-            $this->processAssignment($assignOrMethodCallNode);
+            $refactoredMethodCall = $this->processMethodCallNode($assignOrMethodCallNode->expr);
+            if ($refactoredMethodCall) {
+                $assignOrMethodCallNode->expr = $refactoredMethodCall;
+            }
         }
 
         if ($assignOrMethodCallNode instanceof MethodCall) {
-            $this->processMethodCall($assignOrMethodCallNode);
-        }
-    }
-
-    private function processAssignment(Assign $assignNode): void
-    {
-        $refactoredMethodCall = $this->processMethodCallNode($assignNode->expr);
-        if ($refactoredMethodCall) {
-            $assignNode->expr = $refactoredMethodCall;
-        }
-    }
-
-    private function processMethodCall(MethodCall $methodCallNode): void
-    {
-        $refactoredMethodCall = $this->processMethodCallNode($methodCallNode->var);
-        if ($refactoredMethodCall) {
-            $methodCallNode->var = $refactoredMethodCall;
+            $refactoredMethodCall = $this->processMethodCallNode($assignOrMethodCallNode->var);
+            if ($refactoredMethodCall) {
+                $assignOrMethodCallNode->var = $refactoredMethodCall;
+            }
         }
     }
 
@@ -142,7 +162,14 @@ final class GetterToPropertyNodeVisitor extends NodeVisitorAbstract
             $serviceName, LocalKernel::class
         );
 
+        if ($serviceType === null) {
+            return null;
+        }
+
+
         $propertyName = $this->nameResolver->resolvePropertyNameFromType($serviceType);
+
+        $this->classPropertyCollector->addPropertyForClass($this->className, $serviceType, $propertyName);
 
         return $this->createPropertyFetch($propertyName);
 

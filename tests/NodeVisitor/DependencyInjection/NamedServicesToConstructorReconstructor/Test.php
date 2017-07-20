@@ -2,7 +2,6 @@
 
 namespace Rector\Tests\NodeVisitor\DependencyInjection\NamedServicesToConstructorReconstructor;
 
-use Rector\NodeVisitor\DependencyInjection\NamedServicesToConstructor\NamedServicesToConstructorNodeVisitor;
 use Rector\Testing\PHPUnit\AbstractReconstructorTestCase;
 
 final class Test extends AbstractReconstructorTestCase
@@ -12,10 +11,5 @@ final class Test extends AbstractReconstructorTestCase
         $this->doTestFileMatchesExpectedContent(__DIR__ . '/wrong/wrong.php.inc', __DIR__ . '/correct/correct.php.inc');
         $this->doTestFileMatchesExpectedContent(__DIR__ . '/wrong/wrong2.php.inc', __DIR__ . '/correct/correct2.php.inc');
 //        $this->doTestFileMatchesExpectedContent(__DIR__ . '/wrong/wrong3.php.inc', __DIR__ . '/correct/correct3.php.inc');
-    }
-
-    protected function getNodeVisitorClass(): string
-    {
-        return NamedServicesToConstructorNodeVisitor::class;
     }
 }
