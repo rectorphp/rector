@@ -62,7 +62,6 @@ final class FileProcessor
 
         $newStmts = $this->nodeTraverser->traverse($oldStmts);
 
-
         $this->codeStyledPrinter->printToFile($file, $newStmts, $oldStmts, $oldTokens);
     }
 

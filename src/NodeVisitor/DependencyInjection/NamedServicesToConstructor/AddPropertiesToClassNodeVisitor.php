@@ -25,11 +25,6 @@ final class AddPropertiesToClassNodeVisitor extends NodeVisitorAbstract
     private $propertyBuilder;
 
     /**
-     * @var string
-     */
-    private $className;
-
-    /**
      * @var ClassPropertyCollector
      */
     private $newClassPropertyCollector;
@@ -52,17 +47,18 @@ final class AddPropertiesToClassNodeVisitor extends NodeVisitorAbstract
     {
         foreach ($nodes as $node) {
             if ($node instanceof Class_) {
-                $this->className = (string) $node->name;
-                $this->reconstruct($node);
+                $this->reconstruct($node, (string) $node->name);
+                break;
             }
         }
 
         return $nodes;
     }
 
-    private function reconstruct(Class_ $classNode): void
+    private function reconstruct(Class_ $classNode, string $className): void
     {
-        $propertiesForClass = $this->newClassPropertyCollector->getPropertiesforClass($this->className);
+        $propertiesForClass = $this->newClassPropertyCollector->getPropertiesforClass($className);
+
         foreach ($propertiesForClass as $propertyType => $propertyName) {
             $this->constructorMethodBuilder->addPropertyAssignToClass($classNode, $propertyType, $propertyName);
             $this->propertyBuilder->addPropertyToClass($classNode, $propertyType, $propertyName);

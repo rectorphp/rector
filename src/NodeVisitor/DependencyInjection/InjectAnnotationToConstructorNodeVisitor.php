@@ -12,7 +12,11 @@ use Rector\Builder\ConstructorMethodBuilder;
 
 final class InjectAnnotationToConstructorNodeVisitor extends NodeVisitorAbstract
 {
-    const ANNOTATION_INJECT = 'inject';
+    /**
+     * @var string
+     */
+    private const ANNOTATION_INJECT = 'inject';
+
     /**
      * @var ConstructorMethodBuilder
      */
@@ -29,9 +33,31 @@ final class InjectAnnotationToConstructorNodeVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @param Class_ $classNode
+     * Called when entering a node.
+     *
+     * Return value semantics:
+     *  * null
+     *        => $node stays as-is
+     *  * NodeTraverser::DONT_TRAVERSE_CHILDREN
+     *        => Children of $node are not traversed. $node stays as-is
+     *  * NodeTraverser::STOP_TRAVERSAL
+     *        => Traversal is aborted. $node stays as-is
+     *  * otherwise
+     *        => $node is set to the return value
+     *
+     * @return null|int|Node Replacement node (or special return value)
      */
-    public function reconstruct(Node $classNode): void
+    public function enterNode(Node $node)
+    {
+        if ($node instanceof Class_) {
+            $this->reconstruct($node);
+            return $node;
+        }
+
+        return null;
+    }
+
+    private function reconstruct(Class_ $classNode): void
     {
         foreach ($classNode->stmts as $classElementStatement) {
             if (! $classElementStatement instanceof Property) {
@@ -75,30 +101,5 @@ final class InjectAnnotationToConstructorNodeVisitor extends NodeVisitorAbstract
         }
 
         $propertyNode->setDocComment(new Doc($propertyDocBlock->getContent()));
-    }
-
-    /**
-     * Called when entering a node.
-     *
-     * Return value semantics:
-     *  * null
-     *        => $node stays as-is
-     *  * NodeTraverser::DONT_TRAVERSE_CHILDREN
-     *        => Children of $node are not traversed. $node stays as-is
-     *  * NodeTraverser::STOP_TRAVERSAL
-     *        => Traversal is aborted. $node stays as-is
-     *  * otherwise
-     *        => $node is set to the return value
-     *
-     * @return null|int|Node Replacement node (or special return value)
-     */
-    public function enterNode(Node $node)
-    {
-        if ($node instanceof Class_) {
-            $this->reconstruct($node);
-            return $node;
-        }
-
-        return null;
     }
 }

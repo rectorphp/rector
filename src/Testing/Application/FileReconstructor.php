@@ -20,18 +20,23 @@ final class FileReconstructor
      * @var CodeStyledPrinter
      */
     private $codeStyledPrinter;
+
     /**
      * @var Lexer
      */
-
     private $lexer;
+
     /**
      * @var NodeTraverser
      */
     private $nodeTraverser;
 
-    public function __construct(Parser $parser, CodeStyledPrinter $codeStyledPrinter, Lexer $lexer, NodeTraverser $nodeTraverser)
-    {
+    public function __construct(
+        Parser $parser,
+        CodeStyledPrinter $codeStyledPrinter,
+        Lexer $lexer,
+        NodeTraverser $nodeTraverser
+    ) {
         $this->parser = $parser;
         $this->codeStyledPrinter = $codeStyledPrinter;
         $this->lexer = $lexer;
@@ -43,12 +48,8 @@ final class FileReconstructor
     {
         $fileContent = file_get_contents($file->getRealPath());
 
-        /** @var Node[] $nodes */
         $oldStmts = $this->parser->parse($fileContent);
-
-        // keep format printer
         $oldTokens = $this->lexer->getTokens();
-
         $newStmts = $this->nodeTraverser->traverse($oldStmts);
 
         return $this->codeStyledPrinter->printToString($newStmts, $oldStmts, $oldTokens);
