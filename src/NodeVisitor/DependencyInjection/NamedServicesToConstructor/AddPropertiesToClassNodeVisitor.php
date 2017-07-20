@@ -2,11 +2,12 @@
 
 namespace Rector\NodeVisitor\DependencyInjection\NamedServicesToConstructor;
 
+use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\NodeVisitorAbstract;
+use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Builder\ConstructorMethodBuilder;
 use Rector\Builder\PropertyBuilder;
-use Rector\Buillder\Class_\ClassPropertyCollector;
 
 /**
  * Add new propertis to class and to contructor.
@@ -43,6 +44,10 @@ final class AddPropertiesToClassNodeVisitor extends NodeVisitorAbstract
         $this->newClassPropertyCollector = $newClassPropertyCollector;
     }
 
+    /**
+     * @param Node[] $nodes
+     * @return Node[]
+     */
     public function afterTraverse(array $nodes): array
     {
         foreach ($nodes as $node) {
@@ -58,7 +63,6 @@ final class AddPropertiesToClassNodeVisitor extends NodeVisitorAbstract
     private function reconstruct(Class_ $classNode): void
     {
         $propertiesForClass = $this->newClassPropertyCollector->getPropertiesforClass($this->className);
-
         foreach ($propertiesForClass as $propertyType => $propertyName) {
             $this->constructorMethodBuilder->addPropertyAssignToClass($classNode, $propertyType, $propertyName);
             $this->propertyBuilder->addPropertyToClass($classNode, $propertyType, $propertyName);

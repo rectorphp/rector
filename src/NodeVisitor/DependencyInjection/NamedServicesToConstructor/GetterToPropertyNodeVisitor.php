@@ -11,7 +11,7 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Builder\Kernel\ServiceFromKernelResolver;
 use Rector\Builder\Naming\NameResolver;
-use Rector\Buillder\Class_\ClassPropertyCollector;
+use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Tests\NodeVisitor\DependencyInjection\NamedServicesToConstructorReconstructor\Source\LocalKernel;
 
 /**
@@ -85,6 +85,7 @@ final class GetterToPropertyNodeVisitor extends NodeVisitorAbstract
     {
         if ($this->isCandidate($node)) {
             $this->reconstruct($node);
+            return $node;
         }
 
         return null;

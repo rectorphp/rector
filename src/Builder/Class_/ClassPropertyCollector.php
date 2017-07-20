@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Buillder\Class_;
+namespace Rector\Builder\Class_;
 
 final class ClassPropertyCollector
 {
@@ -21,6 +21,6 @@ final class ClassPropertyCollector
      */
     public function getPropertiesforClass(string $class): array
     {
-        return $this->classProperties[$class] ?: [];
+        return $this->classProperties[$class] ?? [];
     }
 }

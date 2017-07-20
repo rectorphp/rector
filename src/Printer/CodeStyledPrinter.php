@@ -17,18 +17,18 @@ final class CodeStyledPrinter
         $this->prettyPrinter = $prettyPrinter;
     }
 
-    public function printToFile(SplFileInfo $file, array $originalNodes, array $newNodes): void
+    public function printToFile(SplFileInfo $file, array $newStmts, array $oldStmts, array $oldTokens): void
     {
-        if ($originalNodes === $newNodes) {
+        if ($oldStmts === $newStmts) {
             return;
         }
 
-        file_put_contents($file->getRealPath(), $this->printToString($newNodes));
+        file_put_contents($file->getRealPath(), $this->printToString($newStmts, $oldStmts, $oldTokens));
         // @todo: run ecs with minimal set to code look nice
     }
 
-    public function printToString(array $oldStmts, array $newStmts, array $oldTokens): string
+    public function printToString(array $newStmts, array $oldStmts, array $oldTokens): string
     {
-        return $this->prettyPrinter->printFormatPreserving($oldStmts, $newStmts, $oldTokens);
+        return $this->prettyPrinter->printFormatPreserving($newStmts, $oldStmts, $oldTokens);
     }
 }

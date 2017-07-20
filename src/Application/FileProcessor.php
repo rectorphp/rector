@@ -2,6 +2,7 @@
 
 namespace Rector\Application;
 
+use PhpParser\Lexer;
 use PhpParser\NodeTraverser;
 use PhpParser\Parser;
 use Rector\Printer\CodeStyledPrinter;
@@ -24,11 +25,17 @@ final class FileProcessor
      */
     private $nodeTraverser;
 
-    public function __construct(Parser $parser, CodeStyledPrinter $codeStyledPrinter, NodeTraverser $nodeTraverser)
+    /**
+     * @var Lexer
+     */
+    private $lexer;
+
+    public function __construct(Parser $parser, CodeStyledPrinter $codeStyledPrinter, Lexer $lexer, NodeTraverser $nodeTraverser)
     {
         $this->parser = $parser;
         $this->codeStyledPrinter = $codeStyledPrinter;
         $this->nodeTraverser = $nodeTraverser;
+        $this->lexer = $lexer;
     }
 
     /**
@@ -44,18 +51,19 @@ final class FileProcessor
     public function processFile(SplFileInfo $file): void
     {
         $fileContent = file_get_contents($file->getRealPath());
-        $nodes = $this->parser->parse($fileContent);
-        if ($nodes === null) {
+        $oldStmts = $this->parser->parse($fileContent);
+        if ($oldStmts === null) {
             return;
         }
 
-        $originalNodes = $this->cloneArrayOfObjects($nodes);
+        $oldStmts = $this->cloneArrayOfObjects($oldStmts);
+
+        $oldTokens = $this->lexer->getTokens();
+
+        $newStmts = $this->nodeTraverser->traverse($oldStmts);
 
 
-        $this->nodeTraverser->traverse($nodes);
-
-
-        $this->codeStyledPrinter->printToFile($file, $originalNodes, $nodes);
+        $this->codeStyledPrinter->printToFile($file, $newStmts, $oldStmts, $oldTokens);
     }
 
     /**

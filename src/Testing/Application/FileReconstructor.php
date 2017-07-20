@@ -51,6 +51,6 @@ final class FileReconstructor
 
         $newStmts = $this->nodeTraverser->traverse($oldStmts);
 
-        return $this->codeStyledPrinter->printToString($oldStmts, $newStmts, $oldTokens);
+        return $this->codeStyledPrinter->printToString($newStmts, $oldStmts, $oldTokens);
     }
 }
