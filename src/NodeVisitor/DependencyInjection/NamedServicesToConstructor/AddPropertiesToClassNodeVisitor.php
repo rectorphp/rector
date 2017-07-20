@@ -8,6 +8,7 @@ use PhpParser\NodeVisitorAbstract;
 use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Builder\ConstructorMethodBuilder;
 use Rector\Builder\PropertyBuilder;
+use Rector\NodeTraverser\StateHolder;
 
 /**
  * Add new propertis to class and to contructor.
@@ -29,14 +30,21 @@ final class AddPropertiesToClassNodeVisitor extends NodeVisitorAbstract
      */
     private $newClassPropertyCollector;
 
+    /**
+     * @var StateHolder
+     */
+    private $stateHolder;
+
     public function __construct(
         ConstructorMethodBuilder $constructorMethodBuilder,
         PropertyBuilder $propertyBuilder,
-        ClassPropertyCollector $newClassPropertyCollector
+        ClassPropertyCollector $newClassPropertyCollector,
+        StateHolder $stateHolder
     ) {
         $this->constructorMethodBuilder = $constructorMethodBuilder;
         $this->propertyBuilder = $propertyBuilder;
         $this->newClassPropertyCollector = $newClassPropertyCollector;
+        $this->stateHolder = $stateHolder;
     }
 
     /**
@@ -60,6 +68,7 @@ final class AddPropertiesToClassNodeVisitor extends NodeVisitorAbstract
         $propertiesForClass = $this->newClassPropertyCollector->getPropertiesforClass($className);
 
         foreach ($propertiesForClass as $propertyType => $propertyName) {
+            $this->stateHolder->setAfterTraverserIsCalled();
             $this->constructorMethodBuilder->addPropertyAssignToClass($classNode, $propertyType, $propertyName);
             $this->propertyBuilder->addPropertyToClass($classNode, $propertyType, $propertyName);
         }
