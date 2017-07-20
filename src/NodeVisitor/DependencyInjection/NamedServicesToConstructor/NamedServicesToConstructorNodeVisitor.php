@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Rector\NodeVisitor\DependencyInjection;
+namespace Rector\NodeVisitor\DependencyInjection\NamedServicesToConstructor;
+
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;

@@ -1,21 +1,17 @@
 <?php declare(strict_types=1);
 
-namespace Rector\NodeVisitor\DependencyInjection\NamedServicesToConstrutor;
+namespace Rector\NodeVisitor\DependencyInjection\NamedServicesToConstructor;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Builder\Kernel\ServiceFromKernelResolver;
 use Rector\Builder\Naming\NameResolver;
 use Rector\Tests\NodeVisitor\DependencyInjection\NamedServicesToConstructorReconstructor\Source\LocalKernel;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * Converts all:
@@ -134,15 +130,21 @@ final class GetterToPropertyNodeVisitor extends NodeVisitorAbstract
             $serviceName, LocalKernel::class
         );
 
-        // Get property name
         $propertyName = $this->nameResolver->resolvePropertyNameFromType($serviceType);
 
-        // creates "$this->propertyName"
+        return $this->createPropertyFetch($propertyName);
+
+    }
+
+    /**
+     * Creates "$this->propertyName"
+     */
+    private function createPropertyFetch(string $propertyName): PropertyFetch
+    {
         return new PropertyFetch(
             new Variable('this', [
                 'name' => $propertyName
             ]), $propertyName
         );
-
     }
 }

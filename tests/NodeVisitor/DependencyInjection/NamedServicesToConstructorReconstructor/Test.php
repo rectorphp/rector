@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\NodeVisitor\DependencyInjection\NamedServicesToConstructorReconstructor;
 
-use Rector\NodeVisitor\DependencyInjection\NamedServicesToConstructorNodeVisitor;
+use Rector\NodeVisitor\DependencyInjection\NamedServicesToConstructor\NamedServicesToConstructorNodeVisitor;
 use Rector\Testing\PHPUnit\AbstractReconstructorTestCase;
 
 final class Test extends AbstractReconstructorTestCase
