@@ -38,8 +38,6 @@ final class ReconstructCommand extends Command
     {
         $this->setName(self::NAME);
         $this->setDescription('Reconstruct set of your code.');
-
-        // @todo: use modular configure from ApiGen
         $this->addArgument(
             self::ARGUMENT_SOURCE_NAME,
             InputArgument::REQUIRED | InputArgument::IS_ARRAY,

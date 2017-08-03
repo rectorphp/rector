@@ -1,17 +1,22 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Reconstructor\DependencyInjection;
+namespace Rector\NodeVisitor\DependencyInjection;
 
 use PhpCsFixer\DocBlock\DocBlock;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
+use PhpParser\NodeVisitorAbstract;
 use Rector\Builder\ConstructorMethodBuilder;
-use Rector\Contract\Dispatcher\ReconstructorInterface;
 
-final class InjectAnnotationToConstructorReconstructor implements ReconstructorInterface
+final class InjectAnnotationToConstructorNodeVisitor extends NodeVisitorAbstract
 {
+    /**
+     * @var string
+     */
+    private const ANNOTATION_INJECT = 'inject';
+
     /**
      * @var ConstructorMethodBuilder
      */
@@ -28,9 +33,31 @@ final class InjectAnnotationToConstructorReconstructor implements ReconstructorI
     }
 
     /**
-     * @param Class_ $classNode
+     * Called when entering a node.
+     *
+     * Return value semantics:
+     *  * null
+     *        => $node stays as-is
+     *  * NodeTraverser::DONT_TRAVERSE_CHILDREN
+     *        => Children of $node are not traversed. $node stays as-is
+     *  * NodeTraverser::STOP_TRAVERSAL
+     *        => Traversal is aborted. $node stays as-is
+     *  * otherwise
+     *        => $node is set to the return value
+     *
+     * @return null|int|Node Replacement node (or special return value)
      */
-    public function reconstruct(Node $classNode): void
+    public function enterNode(Node $node)
+    {
+        if ($node instanceof Class_) {
+            $this->reconstruct($node);
+            return $node;
+        }
+
+        return null;
+    }
+
+    private function reconstruct(Class_ $classNode): void
     {
         foreach ($classNode->stmts as $classElementStatement) {
             if (! $classElementStatement instanceof Property) {
@@ -39,7 +66,7 @@ final class InjectAnnotationToConstructorReconstructor implements ReconstructorI
             $propertyNode = $classElementStatement;
 
             $propertyDocBlock = $this->createDocBlockFromProperty($propertyNode);
-            $injectAnnotations = $propertyDocBlock->getAnnotationsOfType('inject');
+            $injectAnnotations = $propertyDocBlock->getAnnotationsOfType(self::ANNOTATION_INJECT);
             if (! $injectAnnotations) {
                 continue;
             }
@@ -49,7 +76,8 @@ final class InjectAnnotationToConstructorReconstructor implements ReconstructorI
 
             $propertyType = $propertyDocBlock->getAnnotationsOfType('var')[0]
                 ->getTypes()[0];
-            $propertyName = $propertyNode->props[0]->name;
+            $propertyName = (string) $propertyNode->props[0]->name;
+
             $this->constructorMethodBuilder->addPropertyAssignToClass($classNode, $propertyType, $propertyName);
         }
     }
@@ -66,7 +94,7 @@ final class InjectAnnotationToConstructorReconstructor implements ReconstructorI
 
     private function removeInjectAnnotationFromProperty(Property $propertyNode, DocBlock $propertyDocBlock): void
     {
-        $injectAnnotations = $propertyDocBlock->getAnnotationsOfType('inject');
+        $injectAnnotations = $propertyDocBlock->getAnnotationsOfType(self::ANNOTATION_INJECT);
 
         foreach ($injectAnnotations as $injectAnnotation) {
             $injectAnnotation->remove();

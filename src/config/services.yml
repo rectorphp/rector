@@ -1,3 +1,7 @@
+parameters:
+    # todo
+    kernel_class: # for name based service refactoring
+
 services:
     _defaults:
         autowire: true
@@ -13,5 +17,12 @@ services:
             $name: "Rector"
     PhpParser\Parser:
         factory: ['@Rector\Parser\ParserFactory', 'create']
+    PhpParser\Lexer:
+        factory: ['@Rector\Parser\LexerFactory', 'create']
     PhpParser\BuilderFactory: ~
+
+    # Traverser
+    PhpParser\NodeTraverser: ~
+    # Printer
+    PhpParser\NodeVisitor\CloningVisitor: ~
     PhpParser\PrettyPrinter\Standard: ~

@@ -1,5 +1,4 @@
 parameters:
     ignoreErrors:
-        - '#should return PhpParser\\Node\[\] but returns PhpParser\\Node\[\]\|null#'
-        # annotated => bug
-        - '#Access to an undefined property PhpParser\\Node\\Expr::\$value#'
+        - '#Internal error#'
+#        - '#should return PhpParser\\Node\[\] but returns PhpParser\\Node\[\]\|null#'

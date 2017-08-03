@@ -2,9 +2,10 @@
 
 namespace Rector\Testing\Application;
 
-use PhpParser\Node;
+use PhpParser\Lexer;
+use PhpParser\NodeTraverser;
 use PhpParser\Parser;
-use Rector\Contract\Dispatcher\ReconstructorInterface;
+use Rector\NodeTraverser\StateHolder;
 use Rector\Printer\CodeStyledPrinter;
 use SplFileInfo;
 
@@ -20,25 +21,48 @@ final class FileReconstructor
      */
     private $codeStyledPrinter;
 
-    public function __construct(Parser $parser, CodeStyledPrinter $codeStyledPrinter)
-    {
+    /**
+     * @var Lexer
+     */
+    private $lexer;
+
+    /**
+     * @var NodeTraverser
+     */
+    private $nodeTraverser;
+
+    /**
+     * @var StateHolder
+     */
+    private $stateHolder;
+
+    public function __construct(
+        Parser $parser,
+        CodeStyledPrinter $codeStyledPrinter,
+        Lexer $lexer,
+        NodeTraverser $nodeTraverser,
+        StateHolder $stateHolder
+    ) {
         $this->parser = $parser;
         $this->codeStyledPrinter = $codeStyledPrinter;
+        $this->lexer = $lexer;
+        $this->nodeTraverser = $nodeTraverser;
+        $this->stateHolder = $stateHolder;
     }
 
-    public function processFileWithReconstructor(SplFileInfo $file, ReconstructorInterface $reconstructor): string
+    # ref: https://github.com/nikic/PHP-Parser/issues/344#issuecomment-298162516
+    public function processFile(SplFileInfo $file): string
     {
         $fileContent = file_get_contents($file->getRealPath());
 
-        /** @var Node[] $nodes */
-        $nodes = $this->parser->parse($fileContent);
+        $oldStmts = $this->parser->parse($fileContent);
+        $oldTokens = $this->lexer->getTokens();
+        $newStmts = $this->nodeTraverser->traverse($oldStmts);
 
-        foreach ($nodes as $node) {
-            if ($reconstructor->isCandidate($node)) {
-                $reconstructor->reconstruct($node);
-            }
+        if (! $this->stateHolder->isAfterTraverseCalled()) {
+            [$newStmts, $oldStmts] = [$oldStmts, $newStmts];
         }
 
-        return $this->codeStyledPrinter->printToString($nodes);
+        return $this->codeStyledPrinter->printToString($newStmts, $oldStmts, $oldTokens);
     }
 }
