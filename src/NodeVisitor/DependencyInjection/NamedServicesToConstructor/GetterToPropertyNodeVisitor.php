@@ -160,7 +160,8 @@ final class GetterToPropertyNodeVisitor extends NodeVisitorAbstract
         $serviceName = $argument->value;
 
         $serviceType = $this->serviceFromKernelResolver->resolveServiceClassByNameFromKernel(
-            $serviceName, LocalKernel::class
+            $serviceName,
+            LocalKernel::class
         );
 
         if ($serviceType === null) {
@@ -173,7 +174,6 @@ final class GetterToPropertyNodeVisitor extends NodeVisitorAbstract
         $this->classPropertyCollector->addPropertyForClass($this->className, $serviceType, $propertyName);
 
         return $this->createPropertyFetch($propertyName);
-
     }
 
     /**
@@ -184,7 +184,8 @@ final class GetterToPropertyNodeVisitor extends NodeVisitorAbstract
         return new PropertyFetch(
             new Variable('this', [
                 'name' => $propertyName
-            ]), $propertyName
+            ]),
+            $propertyName
         );
     }
 }

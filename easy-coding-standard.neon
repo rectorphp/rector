@@ -1,3 +1,2 @@
 includes:
-# todo:
-#    - vendor/symplify/easy-coding-standard/config/
+    - vendor/symplify/easy-coding-standard/config/psr2-checkers.neon

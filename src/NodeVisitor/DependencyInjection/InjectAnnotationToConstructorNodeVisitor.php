@@ -63,6 +63,7 @@ final class InjectAnnotationToConstructorNodeVisitor extends NodeVisitorAbstract
             if (! $classElementStatement instanceof Property) {
                 continue;
             }
+
             $propertyNode = $classElementStatement;
 
             $propertyDocBlock = $this->createDocBlockFromProperty($propertyNode);

@@ -17,8 +17,8 @@
     "require-dev": {
         "phpunit/phpunit": "^6.2",
         "tracy/tracy": "^2.4",
-        "symplify/easy-coding-standard": "@dev",
-        "phpstan/phpstan": "^0.7"
+        "symplify/easy-coding-standard": "^2.2",
+        "phpstan/phpstan": "^0.8"
     },
     "autoload": {
         "psr-4": {
@@ -32,8 +32,8 @@
     },
     "scripts": {
         "all": ["phpunit", "@cs", "@ps"],
-        "cs": "ecs check src tests",
-        "fs": "ecs check src tests --fix",
-        "ps": "phpstan analyse src tests --level 7 --configuration phpstan.neon"
+        "check-cs": "ecs check bin src tests",
+        "fix-cs": "ecs check bin src tests --fix",
+        "phpstan": "phpstan analyse bin src tests --level 7 --configuration phpstan.neon"
     }
 }

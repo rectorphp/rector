@@ -14,4 +14,3 @@ final class Test extends AbstractReconstructorTestCase
         );
     }
 }
-
