@@ -19,4 +19,3 @@ final class StateHolder
         return $this->isAfterTraverseCalled;
     }
 }
-
