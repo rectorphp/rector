@@ -16,7 +16,7 @@ use Rector\Tests\NodeVisitor\DependencyInjection\NamedServicesToConstructorRecon
 
 /**
  * Converts all:
- * $this->get('some_service') # where "some_service" is name of the service in container
+ * $this->get('some_service') # where "some_service" is name of the service in container.
  *
  * into:
  * $this->someService # where "someService" is type of the service
@@ -77,7 +77,7 @@ final class GetterToPropertyNodeVisitor extends NodeVisitorAbstract
      *  * NodeTraverser::STOP_TRAVERSAL
      *        => Traversal is aborted. $node stays as-is
      *  * otherwise
-     *        => $node is set to the return value
+     *        => $node is set to the return value.
      *
      * @return null|int|Node
      */
@@ -85,6 +85,7 @@ final class GetterToPropertyNodeVisitor extends NodeVisitorAbstract
     {
         if ($this->isCandidate($node)) {
             $this->reconstruct($node);
+
             return $node;
         }
 
@@ -168,7 +169,6 @@ final class GetterToPropertyNodeVisitor extends NodeVisitorAbstract
             return null;
         }
 
-
         $propertyName = $this->nameResolver->resolvePropertyNameFromType($serviceType);
 
         $this->classPropertyCollector->addPropertyForClass($this->className, $serviceType, $propertyName);
@@ -177,13 +177,13 @@ final class GetterToPropertyNodeVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * Creates "$this->propertyName"
+     * Creates "$this->propertyName".
      */
     private function createPropertyFetch(string $propertyName): PropertyFetch
     {
         return new PropertyFetch(
             new Variable('this', [
-                'name' => $propertyName
+                'name' => $propertyName,
             ]),
             $propertyName
         );

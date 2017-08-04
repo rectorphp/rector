@@ -2,6 +2,7 @@
 
 namespace Rector\Builder\Kernel;
 
+use Psr\Container\ContainerInterface;
 use Symfony\Component\HttpKernel\Kernel;
 
 final class ServiceFromKernelResolver
@@ -16,6 +17,7 @@ final class ServiceFromKernelResolver
         // @todo: initialize without creating cache or log directory
         // @todo: call only loadBundles() and initializeContainer() methods
 
+        /** @var ContainerInterface $container */
         $container = $kernel->getContainer();
         if (! $container->has($serviceName)) {
             // service name could not be found

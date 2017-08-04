@@ -50,7 +50,7 @@ final class FileReconstructor
         $this->stateHolder = $stateHolder;
     }
 
-    # ref: https://github.com/nikic/PHP-Parser/issues/344#issuecomment-298162516
+    // ref: https://github.com/nikic/PHP-Parser/issues/344#issuecomment-298162516
     public function processFile(SplFileInfo $file): string
     {
         $fileContent = file_get_contents($file->getRealPath());
