@@ -8,12 +8,23 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\TraitUse;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
+use Rector\Builder\StatementGlue;
 
 /**
  * Reflects @link https://doc.nette.org/en/2.4/migration-2-4#toc-nette-smartobject
  */
 final class DeprecatedParentClassToTraitNodeVisitor extends NodeVisitorAbstract
 {
+    /**
+     * @var StatementGlue
+     */
+    private $statementGlue;
+
+    public function __construct(StatementGlue $statementGlue)
+    {
+        $this->statementGlue = $statementGlue;
+    }
+
     public function getParentClassName(): string
     {
         return 'Nette\Object';
@@ -57,9 +68,15 @@ final class DeprecatedParentClassToTraitNodeVisitor extends NodeVisitorAbstract
         // remove parent class
         $classNode->extends = null;
 
-        // add new trait
-        $nameParts = explode('\\', $this->getTraitName());
-        $classNode->stmts[] = new TraitUse([
+        $traitUseNode = $this->createTraitUse($this->getTraitName());
+        $this->statementGlue->addAsFirstTrait($classNode, $traitUseNode);
+    }
+
+    private function createTraitUse(string $traitName): TraitUse
+    {
+        $nameParts = explode('\\', $traitName);
+
+        return new TraitUse([
             new FullyQualified($nameParts)
         ]);
     }

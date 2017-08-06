@@ -2,11 +2,9 @@
 
 namespace Rector\Builder;
 
-use Nette\Utils\Arrays;
 use PhpParser\BuilderFactory;
 use PhpParser\Comment\Doc;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 
 final class PropertyBuilder
@@ -16,45 +14,22 @@ final class PropertyBuilder
      */
     private $builderFactory;
 
-    public function __construct(BuilderFactory $builderFactory)
+    /**
+     * @var StatementGlue
+     */
+    private $statementGlue;
+
+    public function __construct(BuilderFactory $builderFactory, StatementGlue $statementGlue)
     {
         $this->builderFactory = $builderFactory;
+        $this->statementGlue = $statementGlue;
     }
 
     public function addPropertyToClass(Class_ $classNode, string $propertyType, string $propertyName): void
     {
         $propertyNode = $this->buildPrivatePropertyNode($propertyType, $propertyName);
 
-        // add before first method
-        foreach ($classNode->stmts as $key => $classElementNode) {
-            if ($classElementNode instanceof ClassMethod) {
-                Arrays::insertBefore(
-                    $classNode->stmts,
-                    $key,
-                    ['before_' . $key => $propertyNode]
-                );
-
-                return;
-            }
-        }
-
-        // or after last property
-        $previousElement = null;
-        foreach ($classNode->stmts as $key => $classElementNode) {
-            if ($previousElement instanceof Property && ! $classElementNode instanceof Property) {
-                Arrays::insertBefore(
-                    $classNode->stmts,
-                    $key,
-                    ['before_' . $key => $propertyNode]
-                );
-
-                return;
-            }
-
-            $previousElement = $classElementNode;
-        }
-
-        $classNode->stmts[] = $propertyNode;
+        $this->statementGlue->addAsFirstMethod($classNode, $propertyNode);
     }
 
     private function buildPrivatePropertyNode(string $propertyType, string $propertyName): Property
