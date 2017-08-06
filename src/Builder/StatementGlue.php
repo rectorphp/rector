@@ -38,17 +38,24 @@ final class StatementGlue
         $classNode->stmts[] = $node;
     }
 
-    public function addAsFirstTrait(Class_ $classNode, TraitUse $traitUse): void
+    public function addAsFirstTrait(Class_ $classNode, Node $node): void
     {
-        foreach ($classNode->stmts as $key => $classElementNode) {
-            if ($classElementNode instanceof TraitUse) {
-                $this->insertBefore($classNode, $traitUse, $key);
+        $this->addStatementToClassBeforeTypes($classNode, $node, TraitUse::class, Property::class);
+    }
 
-                return;
+    private function addStatementToClassBeforeTypes(Class_ $classNode, Node $node, string ...$types): void
+    {
+        foreach ($types as $type) {
+            foreach ($classNode->stmts as $key => $classElementNode) {
+                if (is_a($classElementNode, $type, true)) {
+                    $this->insertBefore($classNode, $node, $key);
+
+                    return;
+                }
             }
         }
 
-        $classNode->stmts[] = $traitUse;
+        $classNode->stmts[] = $node;
     }
 
     /**

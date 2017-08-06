@@ -18,7 +18,7 @@ final class FileProcessor
     /**
      * @var FormatPerservingPrinter
      */
-    private $codeStyledPrinter;
+    private $formatPerservingPrinter;
 
     /**
      * @var NodeTraverser
@@ -37,7 +37,7 @@ final class FileProcessor
         NodeTraverser $nodeTraverser
     ) {
         $this->parser = $parser;
-        $this->codeStyledPrinter = $codeStyledPrinter;
+        $this->formatPerservingPrinter = $codeStyledPrinter;
         $this->nodeTraverser = $nodeTraverser;
         $this->lexer = $lexer;
     }
@@ -66,7 +66,7 @@ final class FileProcessor
 
         $newStmts = $this->nodeTraverser->traverse($oldStmts);
 
-        $this->codeStyledPrinter->printToFile($file, $newStmts, $oldStmts, $oldTokens);
+        $this->formatPerservingPrinter->printToFile($file, $newStmts, $oldStmts, $oldTokens);
     }
 
     /**

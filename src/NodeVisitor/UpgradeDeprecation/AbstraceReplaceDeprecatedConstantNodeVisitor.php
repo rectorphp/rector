@@ -15,19 +15,6 @@ abstract class AbstraceReplaceDeprecatedConstantNodeVisitor extends NodeVisitorA
 
     abstract public function getNewConstantName(): string;
 
-    /**
-     * Return value semantics:
-     *  * null
-     *        => $node stays as-is
-     *  * NodeTraverser::DONT_TRAVERSE_CHILDREN
-     *        => Children of $node are not traversed. $node stays as-is
-     *  * NodeTraverser::STOP_TRAVERSAL
-     *        => Traversal is aborted. $node stays as-is
-     *  * otherwise
-     *        => $node is set to the return value.
-     *
-     * @return null|int|Node
-     */
     public function enterNode(Node $node): ?int
     {
         if ($this->isCandidate($node)) {
