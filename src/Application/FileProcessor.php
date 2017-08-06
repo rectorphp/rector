@@ -30,8 +30,12 @@ final class FileProcessor
      */
     private $lexer;
 
-    public function __construct(Parser $parser, FormatPerservingPrinter $codeStyledPrinter, Lexer $lexer, NodeTraverser $nodeTraverser)
-    {
+    public function __construct(
+        Parser $parser,
+        FormatPerservingPrinter $codeStyledPrinter,
+        Lexer $lexer,
+        NodeTraverser $nodeTraverser
+    ) {
         $this->parser = $parser;
         $this->codeStyledPrinter = $codeStyledPrinter;
         $this->nodeTraverser = $nodeTraverser;

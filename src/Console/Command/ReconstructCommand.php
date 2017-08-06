@@ -18,6 +18,11 @@ final class ReconstructCommand extends Command
     private const NAME = 'reconstruct';
 
     /**
+     * @var string
+     */
+    private const ARGUMENT_SOURCE_NAME = 'source';
+
+    /**
      * @var FileProcessor
      */
     private $fileProcessor;
@@ -28,11 +33,6 @@ final class ReconstructCommand extends Command
 
         parent::__construct();
     }
-
-    /**
-     * @var string
-     */
-    private const ARGUMENT_SOURCE_NAME = 'source';
 
     protected function configure(): void
     {

@@ -9,9 +9,9 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\NodeVisitorAbstract;
+use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Builder\Kernel\ServiceFromKernelResolver;
 use Rector\Builder\Naming\NameResolver;
-use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Tests\NodeVisitor\DependencyInjection\NamedServicesToConstructorReconstructor\Source\LocalKernel;
 
 /**
@@ -55,7 +55,7 @@ final class GetterToPropertyNodeVisitor extends NodeVisitorAbstract
 
     /**
      * @param Node[] $nodes
-     * @return array|null
+     * @return null|array
      */
     public function beforeTraverse(array $nodes): ?array
     {

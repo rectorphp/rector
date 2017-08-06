@@ -8,7 +8,7 @@ final class ReplaceOldConstantNodeVisitor extends AbstraceReplaceDeprecatedConst
 {
     public function getClassName(): string
     {
-        return'ClassWithConstants';
+        return 'ClassWithConstants';
     }
 
     public function getOldConstantName(): string
