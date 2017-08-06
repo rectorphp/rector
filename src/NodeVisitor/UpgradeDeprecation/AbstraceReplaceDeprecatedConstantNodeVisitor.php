@@ -7,24 +7,13 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 
-final class ReplaceDeprecatedConstantNodeVisitor extends NodeVisitorAbstract
+abstract class AbstraceReplaceDeprecatedConstantNodeVisitor extends NodeVisitorAbstract
 {
-    // this will be in specific node visitor, now hardcoded
+    abstract public function getClassName(): string;
 
-    public function getClassName(): string
-    {
-        return'ClassWithConstants';
-    }
+    abstract public function getOldConstantName(): string;
 
-    public function getOldConstantName(): string
-    {
-        return 'OLD_CONSTANT';
-    }
-
-    public function getNewConstantName(): string
-    {
-        return 'NEW_CONSTANT';
-    }
+    abstract public function getNewConstantName(): string;
 
     /**
      * Return value semantics:

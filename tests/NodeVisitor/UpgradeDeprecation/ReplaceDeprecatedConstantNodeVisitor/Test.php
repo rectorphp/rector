@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\NodeVisitor\ReplaceDeprecatedConstantNodeVisitor\InjectAnnotationToConstructorReconstructor;
+namespace Rector\Tests\NodeVisitor\UpgradeDeprecation\ReplaceDeprecatedConstantNodeVisitor;
 
 use Rector\Testing\PHPUnit\AbstractReconstructorTestCase;
 

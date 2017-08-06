@@ -2,7 +2,6 @@
 
 namespace Rector\Testing\PHPUnit;
 
-use PhpParser\NodeVisitor;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Rector\DependencyInjection\ContainerFactory;
@@ -23,7 +22,7 @@ abstract class AbstractReconstructorTestCase extends TestCase
 
     protected function setUp(): void
     {
-        $this->container = (new ContainerFactory)->create();
+        $this->container = (new ContainerFactory)->createWithConfig(__DIR__ . '/../../../tests/config/services.yml');
         $this->fileReconstructor = $this->container->get(FileReconstructor::class);
     }
 
