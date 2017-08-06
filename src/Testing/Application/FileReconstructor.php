@@ -6,7 +6,7 @@ use PhpParser\Lexer;
 use PhpParser\NodeTraverser;
 use PhpParser\Parser;
 use Rector\NodeTraverser\StateHolder;
-use Rector\Printer\CodeStyledPrinter;
+use Rector\Printer\FormatPerservingPrinter;
 use SplFileInfo;
 
 final class FileReconstructor
@@ -17,7 +17,7 @@ final class FileReconstructor
     private $parser;
 
     /**
-     * @var CodeStyledPrinter
+     * @var FormatPerservingPrinter
      */
     private $codeStyledPrinter;
 
@@ -38,7 +38,7 @@ final class FileReconstructor
 
     public function __construct(
         Parser $parser,
-        CodeStyledPrinter $codeStyledPrinter,
+        FormatPerservingPrinter $codeStyledPrinter,
         Lexer $lexer,
         NodeTraverser $nodeTraverser,
         StateHolder $stateHolder

@@ -5,7 +5,7 @@ namespace Rector\Application;
 use PhpParser\Lexer;
 use PhpParser\NodeTraverser;
 use PhpParser\Parser;
-use Rector\Printer\CodeStyledPrinter;
+use Rector\Printer\FormatPerservingPrinter;
 use SplFileInfo;
 
 final class FileProcessor
@@ -16,7 +16,7 @@ final class FileProcessor
     private $parser;
 
     /**
-     * @var CodeStyledPrinter
+     * @var FormatPerservingPrinter
      */
     private $codeStyledPrinter;
 
@@ -30,7 +30,7 @@ final class FileProcessor
      */
     private $lexer;
 
-    public function __construct(Parser $parser, CodeStyledPrinter $codeStyledPrinter, Lexer $lexer, NodeTraverser $nodeTraverser)
+    public function __construct(Parser $parser, FormatPerservingPrinter $codeStyledPrinter, Lexer $lexer, NodeTraverser $nodeTraverser)
     {
         $this->parser = $parser;
         $this->codeStyledPrinter = $codeStyledPrinter;

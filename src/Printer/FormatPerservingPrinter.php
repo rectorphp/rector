@@ -5,7 +5,7 @@ namespace Rector\Printer;
 use PhpParser\PrettyPrinter\Standard;
 use SplFileInfo;
 
-final class CodeStyledPrinter
+final class FormatPerservingPrinter
 {
     /**
      * @var Standard
