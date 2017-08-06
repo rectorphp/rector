@@ -5,11 +5,13 @@ includes:
 
 checkers:
     # Slevomat
-    - SlevomatCodingStandard\Sniffs\ControlStructures\DisallowEqualOperatorsSniff
     - SlevomatCodingStandard\Sniffs\ControlStructures\YodaComparisonSniff
     - SlevomatCodingStandard\Sniffs\Exceptions\DeadCatchSniff
     - SlevomatCodingStandard\Sniffs\Exceptions\ReferenceThrowableOnlySniff
-    - SlevomatCodingStandard\Sniffs\Namespaces\ReferenceUsedNamesOnlySniff
+    SlevomatCodingStandard\Sniffs\Namespaces\ReferenceUsedNamesOnlySniff:
+        allowPartialUses: false
+        allowFullyQualifiedNameForCollidingClasses: false
+        allowFullyQualifiedGlobalClasses: true
     - SlevomatCodingStandard\Sniffs\Classes\UnusedPrivateElementsSniff
 
     # Files
@@ -22,9 +24,9 @@ checkers:
     # Code Analysis
     - PHP_CodeSniffer\Standards\Generic\Sniffs\CodeAnalysis\EmptyStatementSniff
     PHP_CodeSniffer\Standards\Generic\Sniffs\Metrics\CyclomaticComplexitySniff:
-        absoluteComplexity: 10
+        absoluteComplexity: 5
     PHP_CodeSniffer\Standards\Generic\Sniffs\Metrics\NestingLevelSniff:
-        absoluteNestingLevel: 5
+        absoluteNestingLevel: 2
 
     # Naming Conventions
     - PHP_CodeSniffer\Standards\Generic\Sniffs\NamingConventions\CamelCapsFunctionNameSniff
@@ -43,13 +45,10 @@ checkers:
     PhpCsFixer\Fixer\Operator\ConcatSpaceFixer:
         spacing: one
     - PhpCsFixer\Fixer\ClassNotation\OrderedClassElementsFixer
-    - PhpCsFixer\Fixer\LanguageConstruct\DirConstantFixer
-    - PhpCsFixer\Fixer\CastNotation\ModernizeTypesCastingFixer
     - PhpCsFixer\Fixer\Semicolon\SemicolonAfterInstructionFixer
     - PhpCsFixer\Fixer\Operator\NotOperatorWithSuccessorSpaceFixer
     - PhpCsFixer\Fixer\ControlStructure\NoUselessElseFixer
     - PhpCsFixer\Fixer\ReturnNotation\NoUselessReturnFixer
-    - PhpCsFixer\Fixer\LanguageConstruct\CombineConsecutiveUnsetsFixer
     - PhpCsFixer\Fixer\Strict\StrictComparisonFixer
     PhpCsFixer\Fixer\Phpdoc\GeneralPhpdocAnnotationRemoveFixer:
         annotations:
@@ -62,7 +61,8 @@ checkers:
 
     # new since PhpCsFixer 2.2-2.4
     - PhpCsFixer\Fixer\Phpdoc\PhpdocReturnSelfReferenceFixer
-    - PhpCsFixer\Fixer\LanguageConstruct\IsNullFixer
+    PhpCsFixer\Fixer\LanguageConstruct\IsNullFixer:
+        use_yoda_style: false
     - PhpCsFixer\Fixer\Basic\NonPrintableCharacterFixer
     - PhpCsFixer\Fixer\Phpdoc\PhpdocTypesOrderFixer
     - PhpCsFixer\Fixer\Comment\SingleLineCommentStyleFixer

@@ -4,6 +4,7 @@ namespace Rector\NodeVisitor\UpgradeDeprecation;
 
 use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\TraitUse;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
@@ -35,7 +36,7 @@ final class DeprecatedParentClassToTraitNodeVisitor extends NodeVisitorAbstract
 
     private function isCandidate(Node $node): bool
     {
-        if ($node instanceof Node\Stmt\Class_) {
+        if ($node instanceof Class_) {
             if (! $node->extends) {
                 return false;
             }
@@ -51,7 +52,7 @@ final class DeprecatedParentClassToTraitNodeVisitor extends NodeVisitorAbstract
         return false;
     }
 
-    private function refactor(Node\Stmt\Class_ $classNode): void
+    private function refactor(Class_ $classNode): void
     {
         // remove parent class
         $classNode->extends = null;

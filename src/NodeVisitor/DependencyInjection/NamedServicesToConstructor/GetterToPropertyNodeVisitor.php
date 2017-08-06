@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Builder\Kernel\ServiceFromKernelResolver;
@@ -60,7 +61,7 @@ final class GetterToPropertyNodeVisitor extends NodeVisitorAbstract
     public function beforeTraverse(array $nodes): ?array
     {
         foreach ($nodes as $node) {
-            if ($node instanceof Node\Stmt\Class_) {
+            if ($node instanceof Class_) {
                 $this->className = (string) $node->name;
             }
         }
@@ -96,11 +97,9 @@ final class GetterToPropertyNodeVisitor extends NodeVisitorAbstract
     {
         // $var = $this->get('some_service');
         // $var = $this->get('some_service')->getData();
-        if ($node instanceof Assign) {
-            if ($node->expr instanceof MethodCall || $node->var instanceof MethodCall) {
-                if ($this->isContainerGetCall($node->expr)) {
-                    return true;
-                }
+        if ($node instanceof Assign && ($node->expr instanceof MethodCall || $node->var instanceof MethodCall)) {
+            if ($this->isContainerGetCall($node->expr)) {
+                return true;
             }
         }
 
