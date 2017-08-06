@@ -51,7 +51,7 @@ final class DeprecatedParentClassToTraitNodeVisitor extends NodeVisitorAbstract
         return false;
     }
 
-    private function refactor(Node\Stmt\Class_ $classNode)
+    private function refactor(Node\Stmt\Class_ $classNode): void
     {
         // remove parent class
         $classNode->extends = null;
