@@ -31,7 +31,7 @@
         }
     },
     "scripts": {
-        "all": ["phpunit", "@cs", "@ps"],
+        "all": ["phpunit", "@check-cs", "@phpstan"],
         "check-cs": "ecs check bin src tests",
         "fix-cs": "ecs check bin src tests --fix",
         "phpstan": "phpstan analyse bin src tests --level 7 --configuration phpstan.neon"
