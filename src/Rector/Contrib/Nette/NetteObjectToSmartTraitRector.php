@@ -11,7 +11,7 @@ use Rector\Deprecation\SetNames;
 use Rector\Rector\AbstractRector;
 
 /**
- * Reflects @link https://doc.nette.org/en/2.4/migration-2-4#toc-nette-smartobject
+ * Covers https://doc.nette.org/en/2.4/migration-2-4#toc-nette-smartobject
  */
 final class NetteObjectToSmartTraitRector extends AbstractRector
 {

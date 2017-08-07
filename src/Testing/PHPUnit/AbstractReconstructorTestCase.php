@@ -22,7 +22,7 @@ abstract class AbstractReconstructorTestCase extends TestCase
 
     protected function setUp(): void
     {
-        $this->container = (new ContainerFactory)->createWithConfig(__DIR__ . '/../../../tests/config/services.yml');
+        $this->container = (new ContainerFactory)->create();
         $this->fileReconstructor = $this->container->get(FileReconstructor::class);
     }
 

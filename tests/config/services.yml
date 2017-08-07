@@ -1,6 +1,0 @@
-services:
-    _defaults:
-        autowire: true
-
-    # tests
-    Rector\Tests\NodeVisitor\UpgradeDeprecation\ReplaceDeprecatedConstantNodeVisitor\ReplaceOldConstantNodeVisitor: ~
