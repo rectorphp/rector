@@ -4,6 +4,7 @@ namespace Rector\Printer;
 
 use PhpParser\PrettyPrinter\Standard;
 use SplFileInfo;
+use Tracy\Debugger;
 
 final class FormatPerservingPrinter
 {

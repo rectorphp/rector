@@ -59,10 +59,6 @@ final class FileReconstructor
         $oldTokens = $this->lexer->getTokens();
         $newStmts = $this->nodeTraverser->traverse($oldStmts);
 
-        if (! $this->stateHolder->isAfterTraverseCalled()) {
-            [$newStmts, $oldStmts] = [$oldStmts, $newStmts];
-        }
-
         return $this->codeStyledPrinter->printToString($newStmts, $oldStmts, $oldTokens);
     }
 }

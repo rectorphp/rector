@@ -61,9 +61,7 @@ final class FileProcessor
         }
 
         $oldStmts = $this->cloneArrayOfObjects($oldStmts);
-
         $oldTokens = $this->lexer->getTokens();
-
         $newStmts = $this->nodeTraverser->traverse($oldStmts);
 
         $this->formatPerservingPrinter->printToFile($file, $newStmts, $oldStmts, $oldTokens);

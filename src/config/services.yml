@@ -22,6 +22,7 @@ services:
 
     # Traverser
     PhpParser\NodeTraverser: ~
+    PhpParser\ParserFactory: ~
     # Printer
     PhpParser\NodeVisitor\CloningVisitor: ~
     PhpParser\PrettyPrinter\Standard: ~
