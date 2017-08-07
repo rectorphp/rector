@@ -26,7 +26,7 @@ checkers:
     PHP_CodeSniffer\Standards\Generic\Sniffs\Metrics\CyclomaticComplexitySniff:
         absoluteComplexity: 5
     PHP_CodeSniffer\Standards\Generic\Sniffs\Metrics\NestingLevelSniff:
-        absoluteNestingLevel: 2
+        absoluteNestingLevel: 3
 
     # Naming Conventions
     - PHP_CodeSniffer\Standards\Generic\Sniffs\NamingConventions\CamelCapsFunctionNameSniff
