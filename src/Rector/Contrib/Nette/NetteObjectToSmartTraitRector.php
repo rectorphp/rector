@@ -8,6 +8,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\TraitUse;
 use Rector\Builder\StatementGlue;
 use Rector\Deprecation\SetNames;
+use Rector\NodeTraverser\TokenSwitcher;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -20,9 +21,15 @@ final class NetteObjectToSmartTraitRector extends AbstractRector
      */
     private $statementGlue;
 
-    public function __construct(StatementGlue $statementGlue)
+    /**
+     * @var TokenSwitcher
+     */
+    private $tokenSwitcher;
+
+    public function __construct(StatementGlue $statementGlue, TokenSwitcher $tokenSwitcher)
     {
         $this->statementGlue = $statementGlue;
+        $this->tokenSwitcher = $tokenSwitcher;
     }
 
     public function getSetName(): string
@@ -47,6 +54,7 @@ final class NetteObjectToSmartTraitRector extends AbstractRector
                 return false;
             }
 
+            $this->tokenSwitcher->enable();
             return true;
         }
 
@@ -58,11 +66,11 @@ final class NetteObjectToSmartTraitRector extends AbstractRector
      */
     public function refactor($classNode): ?Node
     {
-        // remove parent class
-        $classNode->extends = null;
-
         $traitUseNode = $this->createTraitUse('Nette\SmartObject');
         $this->statementGlue->addAsFirstTrait($classNode, $traitUseNode);
+
+        // remove parent class
+        $classNode->extends = null;
 
         return $classNode;
     }
