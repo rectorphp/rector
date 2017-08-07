@@ -5,7 +5,6 @@ namespace Rector\Testing\Application;
 use PhpParser\Lexer;
 use PhpParser\NodeTraverser;
 use PhpParser\Parser;
-use Rector\NodeTraverser\StateHolder;
 use Rector\Printer\FormatPerservingPrinter;
 use SplFileInfo;
 
@@ -31,23 +30,16 @@ final class FileReconstructor
      */
     private $nodeTraverser;
 
-    /**
-     * @var StateHolder
-     */
-    private $stateHolder;
-
     public function __construct(
         Parser $parser,
         FormatPerservingPrinter $codeStyledPrinter,
         Lexer $lexer,
-        NodeTraverser $nodeTraverser,
-        StateHolder $stateHolder
+        NodeTraverser $nodeTraverser
     ) {
         $this->parser = $parser;
         $this->codeStyledPrinter = $codeStyledPrinter;
         $this->lexer = $lexer;
         $this->nodeTraverser = $nodeTraverser;
-        $this->stateHolder = $stateHolder;
     }
 
     // ref: https://github.com/nikic/PHP-Parser/issues/344#issuecomment-298162516

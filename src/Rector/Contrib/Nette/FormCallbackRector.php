@@ -33,7 +33,7 @@ final class FormCallbackRector extends NodeVisitorAbstract implements Deprecatio
     }
 
     /**
-     * @return int|null|Node
+     * @return null|int|Node
      */
     public function enterNode(Node $node)
     {
@@ -42,16 +42,7 @@ final class FormCallbackRector extends NodeVisitorAbstract implements Deprecatio
                 return null;
             }
 
-            return new Array_([
-                new ArrayItem($node->var),
-                new ArrayItem(
-                    new String_(
-                        (string) $node->name
-                    )
-                )
-            ], [
-                'kind' => Array_::KIND_SHORT
-            ]);
+            return $this->createShortArray($node);
         }
 
         $this->previousNode = $node;
@@ -79,5 +70,19 @@ final class FormCallbackRector extends NodeVisitorAbstract implements Deprecatio
         }
 
         return true;
+    }
+
+    private function createShortArray(Node $node): Array_
+    {
+        return new Array_([
+            new ArrayItem($node->var),
+            new ArrayItem(
+                new String_(
+                    (string) $node->name
+                )
+            )
+        ], [
+            'kind' => Array_::KIND_SHORT
+        ]);
     }
 }

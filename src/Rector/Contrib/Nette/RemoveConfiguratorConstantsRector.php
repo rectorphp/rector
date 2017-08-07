@@ -4,9 +4,9 @@ namespace Rector\Rector\Contrib\Nette;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Scalar\String_;
 use Rector\Deprecation\SetNames;
 use Rector\Rector\AbstractRector;
-use PhpParser\Node\Scalar\String_;
 
 final class RemoveConfiguratorConstantsRector extends AbstractRector
 {

@@ -11,7 +11,7 @@ use Rector\Contract\Rector\RectorInterface;
 abstract class AbstractRector extends NodeVisitorAbstract implements DeprecationInterface, RectorInterface
 {
     /**
-     * @return int|null|Node
+     * @return null|int|Node
      */
     public function enterNode(Node $node)
     {
