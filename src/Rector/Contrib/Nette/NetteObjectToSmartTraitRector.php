@@ -1,19 +1,19 @@
 <?php declare(strict_types=1);
 
-namespace Rector\NodeVisitor\UpgradeDeprecation;
+namespace Rector\Rector\Contrib\Nette;
 
 use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\TraitUse;
-use PhpParser\NodeTraverser;
-use PhpParser\NodeVisitorAbstract;
 use Rector\Builder\StatementGlue;
+use Rector\Deprecation\SetNames;
+use Rector\Rector\AbstractRector;
 
 /**
  * Reflects @link https://doc.nette.org/en/2.4/migration-2-4#toc-nette-smartobject
  */
-final class DeprecatedParentClassToTraitNodeVisitor extends NodeVisitorAbstract
+final class NetteObjectToSmartTraitRector extends AbstractRector
 {
     /**
      * @var StatementGlue
@@ -25,27 +25,17 @@ final class DeprecatedParentClassToTraitNodeVisitor extends NodeVisitorAbstract
         $this->statementGlue = $statementGlue;
     }
 
-    public function getParentClassName(): string
+    public function getSetName(): string
     {
-        return 'Nette\Object';
+        return SetNames::NETTE;
     }
 
-    public function getTraitName(): string
+    public function sinceVersion(): float
     {
-        return 'Nette\SmartObject';
+        return 2.2;
     }
 
-    public function enterNode(Node $node): ?int
-    {
-        if ($this->isCandidate($node)) {
-            $this->refactor($node);
-            return NodeTraverser::DONT_TRAVERSE_CHILDREN;
-        }
-
-        return null;
-    }
-
-    private function isCandidate(Node $node): bool
+    public function isCandidate(Node $node): bool
     {
         if ($node instanceof Class_) {
             if (! $node->extends) {
@@ -53,7 +43,7 @@ final class DeprecatedParentClassToTraitNodeVisitor extends NodeVisitorAbstract
             }
 
             $parentClassName = (string) $node->extends;
-            if ($parentClassName !== $this->getParentClassName()) {
+            if ($parentClassName !== 'Nette\Object') {
                 return false;
             }
 
@@ -63,21 +53,22 @@ final class DeprecatedParentClassToTraitNodeVisitor extends NodeVisitorAbstract
         return false;
     }
 
-    private function refactor(Class_ $classNode): void
+    /**
+     * @param Class_ $classNode
+     */
+    public function refactor($classNode): void
     {
         // remove parent class
         $classNode->extends = null;
 
-        $traitUseNode = $this->createTraitUse($this->getTraitName());
+        $traitUseNode = $this->createTraitUse('Nette\SmartObject');
         $this->statementGlue->addAsFirstTrait($classNode, $traitUseNode);
     }
 
     private function createTraitUse(string $traitName): TraitUse
     {
-        $nameParts = explode('\\', $traitName);
-
         return new TraitUse([
-            new FullyQualified($nameParts)
+            new FullyQualified($traitName)
         ]);
     }
 }

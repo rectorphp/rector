@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\NodeVisitor\UpgradeDeprecation\DeprecatedParentClassToTraitNodeVisitor;
+namespace Rector\Tests\Rector\Contrib\NetteObjectToSmartTraitRector;
 
 use Rector\Testing\PHPUnit\AbstractReconstructorTestCase;
 
