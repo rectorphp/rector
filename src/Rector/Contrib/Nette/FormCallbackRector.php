@@ -25,6 +25,7 @@ final class FormCallbackRector extends NodeVisitorAbstract implements Deprecatio
     public function enterNode(Node $node): ?int
     {
         if ($this->isCandidate($node)) {
+            return false;
             dump($node); // get next node!
             die;
 

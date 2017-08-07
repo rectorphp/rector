@@ -4,6 +4,6 @@ class ClassWithExternalConstant
 {
     public function getValue()
     {
-        return ClassWithConstants::NEW_CONSTANT;
+        return 'development';
     }
 }

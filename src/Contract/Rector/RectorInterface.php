@@ -11,5 +11,5 @@ interface RectorInterface
     /**
      * @param Node $node
      */
-    public function refactor($node): void;
+    public function refactor($node): ?Node;
 }

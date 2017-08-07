@@ -10,10 +10,16 @@ use Rector\Contract\Rector\RectorInterface;
 
 abstract class AbstractRector extends NodeVisitorAbstract implements DeprecationInterface, RectorInterface
 {
-    public function enterNode(Node $node): ?int
+    /**
+     * @return int|null|Node
+     */
+    public function enterNode(Node $node)
     {
         if ($this->isCandidate($node)) {
-            $this->refactor($node);
+            if ($newNode = $this->refactor($node)) {
+                return $newNode;
+            }
+
             return NodeTraverser::DONT_TRAVERSE_CHILDREN;
         }
 
