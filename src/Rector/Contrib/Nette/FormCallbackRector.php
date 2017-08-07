@@ -3,6 +3,11 @@
 namespace Rector\Rector\Contrib\Nette;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Scalar\String_;
+use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Contract\Deprecation\DeprecationInterface;
 use Rector\Deprecation\SetNames;
@@ -12,6 +17,11 @@ use Rector\Deprecation\SetNames;
  */
 final class FormCallbackRector extends NodeVisitorAbstract implements DeprecationInterface
 {
+    /**
+     * @var Node
+     */
+    private $previousNode;
+
     public function getSetName(): string
     {
         return SetNames::NETTE;
@@ -22,22 +32,52 @@ final class FormCallbackRector extends NodeVisitorAbstract implements Deprecatio
         return 2.4;
     }
 
-    public function enterNode(Node $node): ?int
+    /**
+     * @return int|null|Node
+     */
+    public function enterNode(Node $node)
     {
-        if ($this->isCandidate($node)) {
-            return false;
-            dump($node); // get next node!
-            die;
+        if ($this->previousNode && $this->isFormEventAssign($this->previousNode)) {
+            if (! $node instanceof PropertyFetch) {
+                return null;
+            }
 
-            $this->refactor($node);
+            return new Array_([
+                new ArrayItem($node->var),
+                new ArrayItem(
+                    new String_(
+                        (string) $node->name
+                    )
+                )
+            ], [
+                'kind' => Array_::KIND_SHORT
+            ]);
+        }
+
+        $this->previousNode = $node;
+        if ($this->isFormEventAssign($node)) {
+            // do not check children, just go to next token
             return NodeTraverser::DONT_TRAVERSE_CHILDREN;
         }
 
         return null;
     }
 
-    private function isCandidate(Node $node): bool
+    private function isFormEventAssign(Node $node): bool
     {
-        return $node instanceof Node\Expr\PropertyFetch;
+        if (! $node instanceof PropertyFetch) {
+            return false;
+        }
+
+        if ($node->var->name !== 'form') {
+            return false;
+        }
+
+        $propertyName = (string) $node->name;
+        if (! in_array($propertyName, ['onSuccess', 'onSubmit'], true)) {
+            return false;
+        }
+
+        return true;
     }
 }

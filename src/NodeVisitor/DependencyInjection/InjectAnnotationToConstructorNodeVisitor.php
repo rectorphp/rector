@@ -50,14 +50,13 @@ final class InjectAnnotationToConstructorNodeVisitor extends NodeVisitorAbstract
     public function enterNode(Node $node)
     {
         if ($node instanceof Class_) {
-            $this->reconstruct($node);
-            return $node;
+            return $this->reconstruct($node);
         }
 
         return null;
     }
 
-    private function reconstruct(Class_ $classNode): void
+    private function reconstruct(Class_ $classNode): Node
     {
         foreach ($classNode->stmts as $classElementStatement) {
             if (! $classElementStatement instanceof Property) {
@@ -81,6 +80,8 @@ final class InjectAnnotationToConstructorNodeVisitor extends NodeVisitorAbstract
 
             $this->constructorMethodBuilder->addPropertyAssignToClass($classNode, $propertyType, $propertyName);
         }
+
+        return $classNode;
     }
 
     private function createDocBlockFromProperty(Property $propertyNode): DocBlock
