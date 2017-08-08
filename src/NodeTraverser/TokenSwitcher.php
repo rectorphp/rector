@@ -14,6 +14,11 @@ final class TokenSwitcher
         $this->isEnabled = true;
     }
 
+    public function disable(): void
+    {
+        $this->isEnabled = false;
+    }
+
     public function isEnabled(): bool
     {
         return $this->isEnabled;

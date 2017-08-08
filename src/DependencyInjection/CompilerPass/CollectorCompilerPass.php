@@ -2,8 +2,8 @@
 
 namespace Rector\DependencyInjection\CompilerPass;
 
-use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor;
+use Rector\NodeTraverser\NodeTraverserFactory;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
@@ -32,9 +32,9 @@ final class CollectorCompilerPass implements CompilerPassInterface
     {
         DefinitionCollector::loadCollectorWithType(
             $containerBuilder,
-            NodeTraverser::class,
+            NodeTraverserFactory::class,
             NodeVisitor::class,
-            'addVisitor'
+            'addNodeVisitor'
         );
     }
 }

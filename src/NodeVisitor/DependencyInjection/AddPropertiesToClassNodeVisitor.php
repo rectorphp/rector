@@ -8,6 +8,7 @@ use PhpParser\NodeVisitorAbstract;
 use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Builder\ConstructorMethodBuilder;
 use Rector\Builder\PropertyBuilder;
+use Rector\NodeTraverser\TokenSwitcher;
 
 /**
  * Add new propertis to class and to contructor.
@@ -29,14 +30,21 @@ final class AddPropertiesToClassNodeVisitor extends NodeVisitorAbstract
      */
     private $newClassPropertyCollector;
 
+    /**
+     * @var TokenSwitcher
+     */
+    private $tokenSwitcher;
+
     public function __construct(
         ConstructorMethodBuilder $constructorMethodBuilder,
         PropertyBuilder $propertyBuilder,
-        ClassPropertyCollector $newClassPropertyCollector
+        ClassPropertyCollector $newClassPropertyCollector,
+        TokenSwitcher $tokenSwitcher
     ) {
         $this->constructorMethodBuilder = $constructorMethodBuilder;
         $this->propertyBuilder = $propertyBuilder;
         $this->newClassPropertyCollector = $newClassPropertyCollector;
+        $this->tokenSwitcher = $tokenSwitcher;
     }
 
     /**
@@ -48,8 +56,12 @@ final class AddPropertiesToClassNodeVisitor extends NodeVisitorAbstract
         foreach ($nodes as $key => $node) {
             if ($node instanceof Class_) {
                 $nodes[$key] = $this->reconstruct($node, (string) $node->name);
+                break;
             }
         }
+
+        // this does!
+        $this->tokenSwitcher->disable();
 
         return $nodes;
     }
@@ -57,6 +69,8 @@ final class AddPropertiesToClassNodeVisitor extends NodeVisitorAbstract
     private function reconstruct(Class_ $classNode, string $className): Class_
     {
         $propertiesForClass = $this->newClassPropertyCollector->getPropertiesforClass($className);
+
+        dump($propertiesForClass);
 
         foreach ($propertiesForClass as $propertyType => $propertyName) {
             $this->constructorMethodBuilder->addPropertyAssignToClass($classNode, $propertyType, $propertyName);
