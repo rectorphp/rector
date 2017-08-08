@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\NodeVisitor\DependencyInjection\NamedServicesToConstructorReconstructor;
+namespace Rector\Tests\NodeVisitor\DependencyInjection\NamedServicesToConstructorRector;
 
 use Rector\Testing\PHPUnit\AbstractReconstructorTestCase;
 

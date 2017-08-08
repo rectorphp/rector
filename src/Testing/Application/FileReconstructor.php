@@ -5,8 +5,8 @@ namespace Rector\Testing\Application;
 use PhpParser\Lexer;
 use PhpParser\NodeTraverser;
 use PhpParser\Parser;
-use Rector\NodeTraverser\StateHolder;
-use Rector\Printer\CodeStyledPrinter;
+use Rector\NodeTraverser\TokenSwitcher;
+use Rector\Printer\FormatPerservingPrinter;
 use SplFileInfo;
 
 final class FileReconstructor
@@ -17,7 +17,7 @@ final class FileReconstructor
     private $parser;
 
     /**
-     * @var CodeStyledPrinter
+     * @var FormatPerservingPrinter
      */
     private $codeStyledPrinter;
 
@@ -32,22 +32,22 @@ final class FileReconstructor
     private $nodeTraverser;
 
     /**
-     * @var StateHolder
+     * @var TokenSwitcher
      */
-    private $stateHolder;
+    private $tokenSwitcher;
 
     public function __construct(
         Parser $parser,
-        CodeStyledPrinter $codeStyledPrinter,
+        FormatPerservingPrinter $codeStyledPrinter,
         Lexer $lexer,
         NodeTraverser $nodeTraverser,
-        StateHolder $stateHolder
+        TokenSwitcher $tokenSwitcher
     ) {
         $this->parser = $parser;
         $this->codeStyledPrinter = $codeStyledPrinter;
         $this->lexer = $lexer;
         $this->nodeTraverser = $nodeTraverser;
-        $this->stateHolder = $stateHolder;
+        $this->tokenSwitcher = $tokenSwitcher;
     }
 
     // ref: https://github.com/nikic/PHP-Parser/issues/344#issuecomment-298162516
@@ -59,8 +59,8 @@ final class FileReconstructor
         $oldTokens = $this->lexer->getTokens();
         $newStmts = $this->nodeTraverser->traverse($oldStmts);
 
-        if (! $this->stateHolder->isAfterTraverseCalled()) {
-            [$newStmts, $oldStmts] = [$oldStmts, $newStmts];
+        if ($this->tokenSwitcher->isEnabled()) {
+            [$oldStmts, $newStmts] = [$newStmts, $oldStmts];
         }
 
         return $this->codeStyledPrinter->printToString($newStmts, $oldStmts, $oldTokens);

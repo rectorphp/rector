@@ -1,6 +1,6 @@
 {
     "name": "rector/rector",
-    "description": "Tool that reconstructs your legacy code to modern codebase.",
+    "description": "Refactor legacy code to modern frameworks.",
     "license": "MIT",
     "authors": [
         { "name": "Tomas Votruba", "email": "tomas.vot@gmail.com", "homepage": "https://tomasvotruba.com" },
@@ -11,7 +11,6 @@
         "symfony/console": "^3.3",
         "symfony/dependency-injection": "^3.3",
         "nikic/php-parser": "4.0.x-dev as 3.0.2",
-        "ocramius/code-generator-utils": "^0.4",
         "nette/utils": "^2.4"
     },
     "require-dev": {
@@ -31,7 +30,7 @@
         }
     },
     "scripts": {
-        "all": ["phpunit", "@cs", "@ps"],
+        "all": ["phpunit", "@check-cs", "@phpstan"],
         "check-cs": "ecs check bin src tests",
         "fix-cs": "ecs check bin src tests --fix",
         "phpstan": "phpstan analyse bin src tests --level 7 --configuration phpstan.neon"

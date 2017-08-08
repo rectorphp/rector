@@ -2,7 +2,6 @@
 
 namespace Rector\Builder;
 
-use Nette\Utils\Arrays;
 use PhpParser\Builder\Method;
 use PhpParser\Builder\Param;
 use PhpParser\BuilderFactory;
@@ -23,10 +22,16 @@ final class ConstructorMethodBuilder
      */
     private $builderFactory;
 
-    public function __construct(Parser $parser, BuilderFactory $builderFactory)
+    /**
+     * @var StatementGlue
+     */
+    private $statementGlue;
+
+    public function __construct(Parser $parser, BuilderFactory $builderFactory, StatementGlue $statementGlue)
     {
         $this->parser = $parser;
         $this->builderFactory = $builderFactory;
+        $this->statementGlue = $statementGlue;
     }
 
     public function addPropertyAssignToClass(Class_ $classNode, string $propertyType, string $propertyName): void
@@ -50,7 +55,7 @@ final class ConstructorMethodBuilder
             ->addParam($this->createParameter($propertyType, $propertyName))
             ->addStmts($assign);
 
-        $this->addAsFirstMethod($classNode, $constructorMethod->getNode());
+        $this->statementGlue->addAsFirstMethod($classNode, $constructorMethod->getNode());
     }
 
     private function createParameter(string $propertyType, string $propertyName): Param
@@ -69,22 +74,5 @@ final class ConstructorMethodBuilder
             $propertyName,
             $propertyName
         ));
-    }
-
-    private function addAsFirstMethod(Class_ $classNode, ClassMethod $constructorMethod): void
-    {
-        foreach ($classNode->stmts as $key => $classElementNode) {
-            if ($classElementNode instanceof ClassMethod) {
-                Arrays::insertBefore(
-                    $classNode->stmts,
-                    $key,
-                    ['before_' . $key => $constructorMethod]
-                );
-
-                return;
-            }
-        }
-
-        $classNode->stmts[] = $constructorMethod;
     }
 }

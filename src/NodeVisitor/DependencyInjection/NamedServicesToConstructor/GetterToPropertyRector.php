@@ -8,11 +8,12 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\NodeVisitorAbstract;
+use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Builder\Kernel\ServiceFromKernelResolver;
 use Rector\Builder\Naming\NameResolver;
-use Rector\Builder\Class_\ClassPropertyCollector;
-use Rector\Tests\NodeVisitor\DependencyInjection\NamedServicesToConstructorReconstructor\Source\LocalKernel;
+use Rector\Tests\NodeVisitor\DependencyInjection\NamedServicesToConstructorRector\Source\LocalKernel;
 
 /**
  * Converts all:
@@ -21,7 +22,7 @@ use Rector\Tests\NodeVisitor\DependencyInjection\NamedServicesToConstructorRecon
  * into:
  * $this->someService # where "someService" is type of the service
  */
-final class GetterToPropertyNodeVisitor extends NodeVisitorAbstract
+final class GetterToPropertyRector extends NodeVisitorAbstract
 {
     /**
      * @var string
@@ -55,12 +56,14 @@ final class GetterToPropertyNodeVisitor extends NodeVisitorAbstract
 
     /**
      * @param Node[] $nodes
-     * @return array|null
+     * @return null|array
      */
     public function beforeTraverse(array $nodes): ?array
     {
+        $this->className = null;
+
         foreach ($nodes as $node) {
-            if ($node instanceof Node\Stmt\Class_) {
+            if ($node instanceof Class_) {
                 $this->className = (string) $node->name;
             }
         }
@@ -68,25 +71,10 @@ final class GetterToPropertyNodeVisitor extends NodeVisitorAbstract
         return null;
     }
 
-    /**
-     * Return value semantics:
-     *  * null
-     *        => $node stays as-is
-     *  * NodeTraverser::DONT_TRAVERSE_CHILDREN
-     *        => Children of $node are not traversed. $node stays as-is
-     *  * NodeTraverser::STOP_TRAVERSAL
-     *        => Traversal is aborted. $node stays as-is
-     *  * otherwise
-     *        => $node is set to the return value.
-     *
-     * @return null|int|Node
-     */
-    public function enterNode(Node $node)
+    public function enterNode(Node $node): ?Node
     {
         if ($this->isCandidate($node)) {
-            $this->reconstruct($node);
-
-            return $node;
+            return $this->reconstruct($node);
         }
 
         return null;
@@ -96,11 +84,9 @@ final class GetterToPropertyNodeVisitor extends NodeVisitorAbstract
     {
         // $var = $this->get('some_service');
         // $var = $this->get('some_service')->getData();
-        if ($node instanceof Assign) {
-            if ($node->expr instanceof MethodCall || $node->var instanceof MethodCall) {
-                if ($this->isContainerGetCall($node->expr)) {
-                    return true;
-                }
+        if ($node instanceof Assign && ($node->expr instanceof MethodCall || $node->var instanceof MethodCall)) {
+            if ($this->isContainerGetCall($node->expr)) {
+                return true;
             }
         }
 

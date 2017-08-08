@@ -13,14 +13,24 @@ final class ParserFactory
      */
     private $lexer;
 
-    public function __construct(Lexer $lexer)
+    /**
+     * @var NikicParserFactory
+     */
+    private $nikicParserFactory;
+
+    public function __construct(Lexer $lexer, NikicParserFactory $nikicParserFactory)
     {
         $this->lexer = $lexer;
+        $this->nikicParserFactory = $nikicParserFactory;
     }
 
     public function create(): Parser
     {
-        $nikicParserFactory = new NikicParserFactory;
-        return $nikicParserFactory->create(NikicParserFactory::PREFER_PHP7, $this->lexer);
+        return $this->nikicParserFactory->create(NikicParserFactory::PREFER_PHP7, $this->lexer, [
+            'useIdentifierNodes' => true,
+            'useConsistentVariableNodes' => true,
+            'useExpressionStatements' => true,
+            'useNopStatements' => false,
+        ]);
     }
 }

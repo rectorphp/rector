@@ -2,7 +2,6 @@
 
 namespace Rector\Testing\PHPUnit;
 
-use PhpParser\NodeVisitor;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Rector\DependencyInjection\ContainerFactory;

@@ -16,9 +16,9 @@ script:
   - vendor/bin/phpunit $PHPUNIT_FLAGS
   # check coding standard (defined in composer.json "scripts" section)
   # if this fails, run "composer fs" to fix all fixable issues
-  - composer cs
+  - composer check-cs
   # check with phpstan (defined in composer.json "scripts" section)
-  - composer ps
+  # - composer phpstan
 
 after_script:
   # upload coverage.xml file to Coveralls to analyze it
@@ -29,7 +29,5 @@ after_script:
       php coveralls.phar --verbose
     fi
 
-# do not send success notifications, they have no value
 notifications:
-  email:
-    on_success: never
+  email: never

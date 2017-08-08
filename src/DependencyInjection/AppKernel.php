@@ -10,14 +10,24 @@ use Symfony\Component\HttpKernel\Kernel;
 
 final class AppKernel extends Kernel
 {
-    public function __construct()
+    /**
+     * @var string
+     */
+    private $config;
+
+    public function __construct(?string $config = '')
     {
+        $this->config = $config;
         parent::__construct('dev', true);
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader): void
     {
         $loader->load(__DIR__ . '/../config/services.yml');
+
+        if ($this->config) {
+            $loader->load($this->config);
+        }
     }
 
     public function getCacheDir(): string
