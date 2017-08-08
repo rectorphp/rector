@@ -41,6 +41,7 @@ checkers:
 
     # Namespaces
     - PhpCsFixer\Fixer\Import\OrderedImportsFixer
+    - PhpCsFixer\Fixer\Import\NoUnusedImportsFixer
 
     PhpCsFixer\Fixer\Operator\ConcatSpaceFixer:
         spacing: one

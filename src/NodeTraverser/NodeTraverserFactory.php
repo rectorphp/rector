@@ -5,6 +5,8 @@ namespace Rector\NodeTraverser;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor;
 use PhpParser\NodeVisitor\CloningVisitor;
+use Rector\NodeVisitor\Traverse\NodeConnectorNodeVisitor;
+use Rector\NodeVisitor\Traverse\ParentConnectorNodeVisitor;
 
 final class NodeTraverserFactory
 {
@@ -12,6 +14,15 @@ final class NodeTraverserFactory
      * @var NodeVisitor[]
      */
     private $nodeVisitors = [];
+
+    /**
+     * @var string[]
+     */
+    private $priorityNodeVisitorClasses = [
+        CloningVisitor::class,
+        ParentConnectorNodeVisitor::class,
+        NodeConnectorNodeVisitor::class
+    ];
 
     public function addNodeVisitor(NodeVisitor $nodeVisitor): void
     {
@@ -22,10 +33,15 @@ final class NodeTraverserFactory
     {
         $nodeTraverser = new NodeTraverser;
 
-        // this one has priority
-        $nodeTraverser->addVisitor(new CloningVisitor);
+        foreach ($this->priorityNodeVisitorClasses as $priorityNodeVisitor) {
+            $nodeTraverser->addVisitor(new $priorityNodeVisitor);
+        }
 
         foreach ($this->nodeVisitors as $nodeVisitor) {
+            if (in_array(get_class($nodeVisitor), $this->priorityNodeVisitorClasses, true)) {
+                continue;
+            }
+
             $nodeTraverser->addVisitor($nodeVisitor);
         }
 

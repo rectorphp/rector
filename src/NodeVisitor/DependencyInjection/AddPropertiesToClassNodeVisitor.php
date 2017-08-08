@@ -70,8 +70,6 @@ final class AddPropertiesToClassNodeVisitor extends NodeVisitorAbstract
     {
         $propertiesForClass = $this->newClassPropertyCollector->getPropertiesforClass($className);
 
-        dump($propertiesForClass);
-
         foreach ($propertiesForClass as $propertyType => $propertyName) {
             $this->constructorMethodBuilder->addPropertyAssignToClass($classNode, $propertyType, $propertyName);
             $this->propertyBuilder->addPropertyToClass($classNode, $propertyType, $propertyName);

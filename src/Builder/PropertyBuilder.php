@@ -27,6 +27,10 @@ final class PropertyBuilder
 
     public function addPropertyToClass(Class_ $classNode, string $propertyType, string $propertyName): void
     {
+        if ($this->doesPropertyAlreadyExist($classNode, $propertyName)) {
+            return;
+        }
+
         $propertyNode = $this->buildPrivatePropertyNode($propertyType, $propertyName);
 
         $this->statementGlue->addAsFirstMethod($classNode, $propertyNode);
@@ -48,5 +52,21 @@ final class PropertyBuilder
         return new Doc('/**'
             . PHP_EOL . ' * @var ' . $propertyType
             . PHP_EOL . ' */');
+    }
+
+    private function doesPropertyAlreadyExist(Class_ $classNode, string $propertyName): bool
+    {
+        foreach ($classNode->stmts as $inClassNode) {
+            if (! $inClassNode instanceof Property) {
+                continue;
+            }
+
+            $classPropertyName = (string) $inClassNode->props[0]->name;
+            if ($classPropertyName === $propertyName) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

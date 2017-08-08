@@ -45,6 +45,8 @@ final class PropertyRector extends NodeVisitorAbstract
      */
     public function beforeTraverse(array $nodes): ?array
     {
+        $this->className = null;
+
         foreach ($nodes as $node) {
             if ($node instanceof Class_) {
                 $this->className = (string) $node->name;
