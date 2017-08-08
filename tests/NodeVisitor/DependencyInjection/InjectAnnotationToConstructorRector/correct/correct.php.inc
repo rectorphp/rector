@@ -6,7 +6,6 @@ class ClassWithInjects
      * @var stdClass
      */
     private $property;
-
     /**
      * @var DateTimeInterface
      */

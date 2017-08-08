@@ -11,9 +11,7 @@ final class ClassPropertyCollector
 
     public function addPropertyForClass(string $class, string $propertyType, string $propertyName): void
     {
-        $this->classProperties[$class] = [
-            $propertyType => $propertyName,
-        ];
+        $this->classProperties[$class][$propertyType] = $propertyName;
     }
 
     /**

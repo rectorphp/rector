@@ -1,15 +1,17 @@
 <?php declare(strict_types=1);
 
-namespace Rector\NodeVisitor\DependencyInjection;
+namespace Rector\NodeVisitor\DependencyInjection\InjectAnnotationToConstructor;
 
 use PhpCsFixer\DocBlock\DocBlock;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\NodeVisitorAbstract;
+use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\NodeTraverser\TokenSwitcher;
 
-final class InjectAnnotationToConstructorRector extends NodeVisitorAbstract
+final class PropertyRector extends NodeVisitorAbstract
 {
     /**
      * @var string
@@ -21,19 +23,36 @@ final class InjectAnnotationToConstructorRector extends NodeVisitorAbstract
      */
     private $tokenSwitcher;
 
-//    /**
-//     * @var ConstructorMethodBuilder
-//     */
-//    private $constructorMethodBuilder;
-//
-//    public function __construct(ConstructorMethodBuilder $constructorMethodBuilder)
-//    {
-//        $this->constructorMethodBuilder = $constructorMethodBuilder;
-//    }
+    /**
+     * @var ClassPropertyCollector
+     */
+    private $classPropertyCollector;
 
-    public function __construct(TokenSwitcher $tokenSwitcher)
+    /**
+     * @var string
+     */
+    private $className;
+
+    public function __construct(TokenSwitcher $tokenSwitcher, ClassPropertyCollector $classPropertyCollector)
     {
         $this->tokenSwitcher = $tokenSwitcher;
+        $this->classPropertyCollector = $classPropertyCollector;
+    }
+
+    /**
+     * @param Node[] $nodes
+     * @return null|array
+     */
+    public function beforeTraverse(array $nodes): ?array
+    {
+        dump('1');
+        foreach ($nodes as $node) {
+            if ($node instanceof Class_) {
+                $this->className = (string) $node->name;
+            }
+        }
+
+        return null;
     }
 
     public function enterNode(Node $node): ?Node
@@ -41,6 +60,8 @@ final class InjectAnnotationToConstructorRector extends NodeVisitorAbstract
         if (! $this->isCandidate($node)) {
             return null;
         }
+
+        dump('2');
 
         return $this->reconstructProperty($node);
     }
@@ -59,43 +80,14 @@ final class InjectAnnotationToConstructorRector extends NodeVisitorAbstract
         return true;
     }
 
-//    private function reconstruct(Class_ $classNode): Node
-//    {
-//        dump($classNode);
-//        die;
-//
-//        foreach ($classNode->stmts as $classElementStatement) {
-//            if (! $classElementStatement instanceof Property) {
-//                continue;
-//            }
-//
-//            $propertyNode = $classElementStatement;
-//
-//            $propertyDocBlock = $this->createDocBlockFromNode($propertyNode);
-//            $injectAnnotations = $propertyDocBlock->getAnnotationsOfType(self::ANNOTATION_INJECT);
-//            if (! $injectAnnotations) {
-//                continue;
-//            }
-//
-//            $this->removeInjectAnnotationFromProperty($propertyNode, $propertyDocBlock);
-//            $this->makePropertyPrivate($propertyNode);
-//
-//            $propertyType = $propertyDocBlock->getAnnotationsOfType('var')[0]
-//                ->getTypes()[0];
-//            $propertyName = (string) $propertyNode->props[0]->name;
-//
-//            $this->constructorMethodBuilder->addPropertyAssignToClass($classNode, $propertyType, $propertyName);
-//        }
-//
-//        return $classNode;
-//    }
-
     private function reconstructProperty($propertyNode): Property
     {
         $propertyDocBlock = $this->createDocBlockFromNode($propertyNode);
         $propertyNode = $this->removeInjectAnnotationFromProperty($propertyNode, $propertyDocBlock);
 
-//        $propertyNode->flags = Class_::MODIFIER_PRIVATE;
+        $propertyNode->flags = Class_::MODIFIER_PRIVATE;
+
+        $this->addPropertyToCollector($propertyNode, $propertyDocBlock);
 
         return $propertyNode;
     }
@@ -115,7 +107,6 @@ final class InjectAnnotationToConstructorRector extends NodeVisitorAbstract
     private function removeInjectAnnotationFromProperty(Property $propertyNode, DocBlock $propertyDocBlock): Property
     {
         $injectAnnotations = $propertyDocBlock->getAnnotationsOfType(self::ANNOTATION_INJECT);
-
         foreach ($injectAnnotations as $injectAnnotation) {
             $injectAnnotation->remove();
         }
@@ -123,5 +114,15 @@ final class InjectAnnotationToConstructorRector extends NodeVisitorAbstract
         $propertyNode->setDocComment(new Doc($propertyDocBlock->getContent()));
 
         return $propertyNode;
+    }
+
+    private function addPropertyToCollector(Property $propertyNode, DocBlock $propertyDocBlock): void
+    {
+        $propertyType = $propertyDocBlock->getAnnotationsOfType('var')[0]
+            ->getTypes()[0];
+
+        $propertyName = (string)$propertyNode->props[0]->name;
+
+        $this->classPropertyCollector->addPropertyForClass($this->className, $propertyType, $propertyName);
     }
 }

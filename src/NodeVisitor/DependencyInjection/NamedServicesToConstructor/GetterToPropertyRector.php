@@ -13,7 +13,7 @@ use PhpParser\NodeVisitorAbstract;
 use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Builder\Kernel\ServiceFromKernelResolver;
 use Rector\Builder\Naming\NameResolver;
-use Rector\Tests\NodeVisitor\DependencyInjection\NamedServicesToConstructorReconstructor\Source\LocalKernel;
+use Rector\Tests\NodeVisitor\DependencyInjection\NamedServicesToConstructorRector\Source\LocalKernel;
 
 /**
  * Converts all:
@@ -22,7 +22,7 @@ use Rector\Tests\NodeVisitor\DependencyInjection\NamedServicesToConstructorRecon
  * into:
  * $this->someService # where "someService" is type of the service
  */
-final class GetterToPropertyNodeVisitor extends NodeVisitorAbstract
+final class GetterToPropertyRector extends NodeVisitorAbstract
 {
     /**
      * @var string
@@ -69,25 +69,10 @@ final class GetterToPropertyNodeVisitor extends NodeVisitorAbstract
         return null;
     }
 
-    /**
-     * Return value semantics:
-     *  * null
-     *        => $node stays as-is
-     *  * NodeTraverser::DONT_TRAVERSE_CHILDREN
-     *        => Children of $node are not traversed. $node stays as-is
-     *  * NodeTraverser::STOP_TRAVERSAL
-     *        => Traversal is aborted. $node stays as-is
-     *  * otherwise
-     *        => $node is set to the return value.
-     *
-     * @return null|int|Node
-     */
-    public function enterNode(Node $node)
+    public function enterNode(Node $node): ?Node
     {
         if ($this->isCandidate($node)) {
-            $this->reconstruct($node);
-
-            return $node;
+            return $this->reconstruct($node);
         }
 
         return null;
