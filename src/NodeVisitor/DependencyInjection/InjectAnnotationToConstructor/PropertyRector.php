@@ -41,7 +41,7 @@ final class PropertyRector extends NodeVisitorAbstract
 
     /**
      * @param Node[] $nodes
-     * @return null|array
+     * @return null|Node[]
      */
     public function beforeTraverse(array $nodes): ?array
     {
@@ -79,7 +79,7 @@ final class PropertyRector extends NodeVisitorAbstract
         return true;
     }
 
-    private function reconstructProperty($propertyNode): Property
+    private function reconstructProperty(Property $propertyNode): Property
     {
         $propertyDocBlock = $this->createDocBlockFromNode($propertyNode);
         $propertyNode = $this->removeInjectAnnotationFromProperty($propertyNode, $propertyDocBlock);

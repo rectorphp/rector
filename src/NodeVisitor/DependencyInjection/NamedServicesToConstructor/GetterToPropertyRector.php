@@ -56,7 +56,7 @@ final class GetterToPropertyRector extends NodeVisitorAbstract
 
     /**
      * @param Node[] $nodes
-     * @return null|array
+     * @return null|Node[]
      */
     public function beforeTraverse(array $nodes): ?array
     {
@@ -74,7 +74,8 @@ final class GetterToPropertyRector extends NodeVisitorAbstract
     public function enterNode(Node $node): ?Node
     {
         if ($this->isCandidate($node)) {
-            return $this->reconstruct($node);
+            $this->reconstruct($node);
+            return $node;
         }
 
         return null;

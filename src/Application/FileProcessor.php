@@ -43,7 +43,7 @@ final class FileProcessor
     }
 
     /**
-     * @var SplFileInfo[]
+     * @param SplFileInfo[] $files
      */
     public function processFiles(array $files): void
     {

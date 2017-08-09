@@ -2,6 +2,7 @@
 
 namespace Rector\Printer;
 
+use PhpParser\Node;
 use PhpParser\PrettyPrinter\Standard;
 use SplFileInfo;
 
@@ -17,6 +18,11 @@ final class FormatPerservingPrinter
         $this->prettyPrinter = $prettyPrinter;
     }
 
+    /**
+     * @param Node[] $newStmts
+     * @param Node[] $oldStmts
+     * @param Node[] $oldTokens
+     */
     public function printToFile(SplFileInfo $file, array $newStmts, array $oldStmts, array $oldTokens): void
     {
         if ($oldStmts === $newStmts) {
@@ -27,6 +33,11 @@ final class FormatPerservingPrinter
         // @todo: run ecs with minimal set to code look nice
     }
 
+    /**
+     * @param Node[] $newStmts
+     * @param Node[] $oldStmts
+     * @param Node[] $oldTokens
+     */
     public function printToString(array $newStmts, array $oldStmts, array $oldTokens): string
     {
         return $this->prettyPrinter->printFormatPreserving($newStmts, $oldStmts, $oldTokens);

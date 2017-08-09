@@ -33,3 +33,10 @@ checkers:
     # new since PhpCsFixer 2.2-2.4
     PhpCsFixer\Fixer\LanguageConstruct\IsNullFixer:
         use_yoda_style: false
+
+parameters:
+    skip:
+        SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff:
+            - src/Contract/Rector/RectorInterface.php
+            - *src/Rector/Contrib/Nette/*Rector.php
+            - *src/NodeVisitor/Traverse/*Visitor.php
