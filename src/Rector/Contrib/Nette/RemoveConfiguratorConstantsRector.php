@@ -32,7 +32,7 @@ final class RemoveConfiguratorConstantsRector extends AbstractRector
     /**
      * @param ClassConstFetch $classConstFetchNode
      */
-    public function refactor(ClassConstFetch $classConstFetchNode): ?Node
+    public function refactor($classConstFetchNode): ?Node
     {
         $constantName = (string) $classConstFetchNode->name;
         $string = strtolower($constantName);

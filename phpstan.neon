@@ -1,4 +1,6 @@
 parameters:
     ignoreErrors:
         - '#Internal error#'
-#        - '#should return PhpParser\\Node\[\] but returns PhpParser\\Node\[\]\|null#'
+        - '#Undefined variable: \$possibleAutoloadPaths#'
+        - '#Undefined variable: \$container#'
+        - '#Undefined variable: \$application#'
