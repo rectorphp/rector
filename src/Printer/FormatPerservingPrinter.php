@@ -30,7 +30,6 @@ final class FormatPerservingPrinter
         }
 
         file_put_contents($file->getRealPath(), $this->printToString($newStmts, $oldStmts, $oldTokens));
-        // @todo: run ecs with minimal set to code look nice
     }
 
     /**
