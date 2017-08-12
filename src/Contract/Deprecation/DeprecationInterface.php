@@ -15,7 +15,7 @@ interface DeprecationInterface
 
     /**
      * Version this deprecations is active since.
-     * E.g. 2.3
+     * E.g. 2.3.
      */
     public function sinceVersion(): float;
 }

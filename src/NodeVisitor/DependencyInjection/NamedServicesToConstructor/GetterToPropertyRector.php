@@ -75,6 +75,7 @@ final class GetterToPropertyRector extends NodeVisitorAbstract
     {
         if ($this->isCandidate($node)) {
             $this->reconstruct($node);
+
             return $node;
         }
 

@@ -64,7 +64,7 @@ final class StatementGlue
     private function insertBefore(Class_ $classNode, Node $node, $key): void
     {
         Arrays::insertBefore($classNode->stmts, $key, [
-            'before_' . $key => $node
+            'before_' . $key => $node,
         ]);
     }
 }

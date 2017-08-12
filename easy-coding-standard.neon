@@ -1,7 +1,8 @@
 includes:
-    - vendor/symplify/easy-coding-standard/config/psr2-checkers.neon
+    - vendor/symplify/easy-coding-standard/config/symfony-checkers.neon
     - vendor/symplify/easy-coding-standard/config/php70-checkers.neon
     - vendor/symplify/easy-coding-standard/config/php71-checkers.neon
+    - vendor/symplify/easy-coding-standard/config/symplify-checkers.neon
     - vendor/symplify/easy-coding-standard/config/common.neon
     - vendor/symplify/easy-coding-standard/config/spaces.neon
 
@@ -13,11 +14,9 @@ checkers:
         allowFullyQualifiedNameForCollidingClasses: false
         allowFullyQualifiedGlobalClasses: true
 
-    # Files
+    # Metrics
     PHP_CodeSniffer\Standards\Generic\Sniffs\Files\LineLengthSniff:
         absoluteLineLimit: 120
-
-    # Code Analysis
     PHP_CodeSniffer\Standards\Generic\Sniffs\Metrics\CyclomaticComplexitySniff:
         absoluteComplexity: 5
     PHP_CodeSniffer\Standards\Generic\Sniffs\Metrics\NestingLevelSniff:
@@ -35,8 +34,22 @@ checkers:
         use_yoda_style: false
 
 parameters:
+    exclude_checkers:
+        - PhpCsFixer\Fixer\PhpTag\BlankLineAfterOpeningTagFixer
+        - PhpCsFixer\Fixer\Operator\NewWithBracesFixer
+        - PhpCsFixer\Fixer\Operator\UnaryOperatorSpacesFixer
+        - PhpCsFixer\Fixer\Phpdoc\PhpdocAlignFixer
+
     skip:
         SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff:
             - src/Contract/Rector/RectorInterface.php
             - *src/Rector/Contrib/Nette/*Rector.php
             - *src/NodeVisitor/Traverse/*Visitor.php
+        Symplify\CodingStandard\Fixer\Php\ClassStringToClassConstantFixer:
+            # class might not exist
+            - src/Rector/Contrib/Nette/RemoveConfiguratorConstantsRector.php
+            - src/Rector/Contrib/Nette/NetteObjectToSmartTraitRector.php
+
+        Symplify\CodingStandard\Sniffs\Debug\CommentedOutCodeSniff:
+            # examples of code to be found
+            - src/NodeVisitor/DependencyInjection/NamedServicesToConstructor/GetterToPropertyRector.php

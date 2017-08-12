@@ -76,6 +76,7 @@ final class PropertyRector extends NodeVisitorAbstract
         }
 
         $this->tokenSwitcher->enable();
+
         return true;
     }
 
@@ -120,7 +121,7 @@ final class PropertyRector extends NodeVisitorAbstract
         $propertyType = $propertyDocBlock->getAnnotationsOfType('var')[0]
             ->getTypes()[0];
 
-        $propertyName = (string)$propertyNode->props[0]->name;
+        $propertyName = (string) $propertyNode->props[0]->name;
 
         $this->classPropertyCollector->addPropertyForClass($this->className, $propertyType, $propertyName);
     }

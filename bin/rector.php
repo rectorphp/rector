@@ -10,7 +10,7 @@ gc_disable();
 require_once __DIR__ . '/bootstrap.php';
 
 // Build DI container
-$container = (new ContainerFactory())->create();
+$container = (new ContainerFactory)->create();
 
 // Run Console Application
 /** @var Application $application */

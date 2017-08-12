@@ -50,7 +50,9 @@ final class FileReconstructor
         $this->tokenSwitcher = $tokenSwitcher;
     }
 
-    // ref: https://github.com/nikic/PHP-Parser/issues/344#issuecomment-298162516
+    /**
+     * See https://github.com/nikic/PHP-Parser/issues/344#issuecomment-298162516.
+     */
     public function processFile(SplFileInfo $file): string
     {
         $fileContent = file_get_contents($file->getRealPath());

@@ -12,7 +12,7 @@ use Rector\NodeTraverser\TokenSwitcher;
 use Rector\Rector\AbstractRector;
 
 /**
- * Covers https://doc.nette.org/en/2.4/migration-2-4#toc-nette-smartobject
+ * Covers https://doc.nette.org/en/2.4/migration-2-4#toc-nette-smartobject.
  */
 final class NetteObjectToSmartTraitRector extends AbstractRector
 {
@@ -55,6 +55,7 @@ final class NetteObjectToSmartTraitRector extends AbstractRector
             }
 
             $this->tokenSwitcher->enable();
+
             return true;
         }
 
@@ -78,7 +79,7 @@ final class NetteObjectToSmartTraitRector extends AbstractRector
     private function createTraitUse(string $traitName): TraitUse
     {
         return new TraitUse([
-            new FullyQualified($traitName)
+            new FullyQualified($traitName),
         ]);
     }
 }

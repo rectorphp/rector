@@ -6,7 +6,6 @@ use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor;
 use PhpParser\NodeVisitor\CloningVisitor;
 use Rector\NodeVisitor\Traverse\NodeConnectorNodeVisitor;
-use Rector\NodeVisitor\Traverse\ParentConnectorNodeVisitor;
 
 final class NodeTraverserFactory
 {
@@ -20,8 +19,7 @@ final class NodeTraverserFactory
      */
     private $priorityNodeVisitorClasses = [
         CloningVisitor::class,
-        ParentConnectorNodeVisitor::class,
-        NodeConnectorNodeVisitor::class
+        NodeConnectorNodeVisitor::class,
     ];
 
     public function addNodeVisitor(NodeVisitor $nodeVisitor): void
