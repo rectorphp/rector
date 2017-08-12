@@ -1,17 +1,18 @@
 <?php declare(strict_types=1);
 
-namespace Rector\NodeVisitor\DependencyInjection\InjectAnnotationToConstructor;
+namespace Rector\Rector\Contrib\Nette;
 
 use PhpCsFixer\DocBlock\DocBlock;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
-use PhpParser\NodeVisitorAbstract;
 use Rector\Builder\Class_\ClassPropertyCollector;
+use Rector\Deprecation\SetNames;
 use Rector\NodeTraverser\TokenSwitcher;
+use Rector\Rector\AbstractRector;
 
-final class PropertyRector extends NodeVisitorAbstract
+final class InjectPropertyRector extends AbstractRector
 {
     /**
      * @var string
@@ -56,15 +57,6 @@ final class PropertyRector extends NodeVisitorAbstract
         return null;
     }
 
-    public function enterNode(Node $node): ?Node
-    {
-        if (! $this->isCandidate($node)) {
-            return null;
-        }
-
-        return $this->reconstructProperty($node);
-    }
-
     public function isCandidate(Node $node): bool
     {
         if (! $node instanceof Property) {
@@ -80,7 +72,10 @@ final class PropertyRector extends NodeVisitorAbstract
         return true;
     }
 
-    private function reconstructProperty(Property $propertyNode): Property
+    /**
+     * @param Property $propertyNode
+     */
+    public function refactor($propertyNode): Node
     {
         $propertyDocBlock = $this->createDocBlockFromNode($propertyNode);
         $propertyNode = $this->removeInjectAnnotationFromProperty($propertyNode, $propertyDocBlock);
@@ -90,6 +85,16 @@ final class PropertyRector extends NodeVisitorAbstract
         $this->addPropertyToCollector($propertyNode, $propertyDocBlock);
 
         return $propertyNode;
+    }
+
+    public function getSetName(): string
+    {
+        return SetNames::NETTE;
+    }
+
+    public function sinceVersion(): float
+    {
+        return 2.1;
     }
 
     private function hasInjectAnnotation(Property $propertyNode): bool

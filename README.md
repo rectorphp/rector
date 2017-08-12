@@ -9,8 +9,16 @@ This tool will *reconstruct* (change) your code - **run it only in a new clean g
 
 ## All Reconstructors
 
-- `InjectAnnotationToConstructorNodeTraverser` ([Nette](https://github.com/nette/))
-- `NamedServicesToConstructorNodeTraverser` ([Symfony](https://github.com/symfony/))
+### [Nette](https://github.com/nette/)
+
+- `FormCallbackRector`
+- `InjectPropertyRector`
+- `NetteObjectToSmartTraitRector`
+- `RemoveConfiguratorConstantsRector`
+
+### [Symfony](https://github.com/symfony/)
+
+- `NamedServicesToConstructorNodeTraverser`
 
 
 ## Install

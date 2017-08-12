@@ -13,7 +13,7 @@ use Rector\Contract\Deprecation\DeprecationInterface;
 use Rector\Deprecation\SetNames;
 
 /**
- * Covers https://doc.nette.org/en/2.4/migration-2-4#toc-nette-smartobject
+ * Covers https://doc.nette.org/en/2.4/migration-2-4#toc-nette-smartobject.
  */
 final class FormCallbackRector extends NodeVisitorAbstract implements DeprecationInterface
 {
@@ -80,9 +80,9 @@ final class FormCallbackRector extends NodeVisitorAbstract implements Deprecatio
                 new String_(
                     (string) $node->name
                 )
-            )
+            ),
         ], [
-            'kind' => Array_::KIND_SHORT
+            'kind' => Array_::KIND_SHORT,
         ]);
     }
 }
