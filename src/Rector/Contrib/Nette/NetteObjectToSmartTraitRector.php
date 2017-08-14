@@ -65,7 +65,7 @@ final class NetteObjectToSmartTraitRector extends AbstractRector
     /**
      * @param Class_ $classNode
      */
-    public function refactor($classNode): ?Node
+    public function refactor(Node $classNode): ?Node
     {
         $traitUseNode = $this->createTraitUse('Nette\SmartObject');
         $this->statementGlue->addAsFirstTrait($classNode, $traitUseNode);

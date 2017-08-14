@@ -8,8 +8,5 @@ interface RectorInterface
 {
     public function isCandidate(Node $node): bool;
 
-    /**
-     * @param Node $node
-     */
-    public function refactor($node): ?Node;
+    public function refactor(Node $node): ?Node;
 }

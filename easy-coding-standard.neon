@@ -11,7 +11,6 @@ checkers:
     SlevomatCodingStandard\Sniffs\Namespaces\ReferenceUsedNamesOnlySniff:
         allowPartialUses: false
         allowFullyQualifiedNameForCollidingClasses: false
-        allowFullyQualifiedGlobalClasses: true
 
     # Metrics
     PHP_CodeSniffer\Standards\Generic\Sniffs\Files\LineLengthSniff:
@@ -21,34 +20,19 @@ checkers:
     PHP_CodeSniffer\Standards\Generic\Sniffs\Metrics\NestingLevelSniff:
         absoluteNestingLevel: 3
 
-    # WhiteSpace
-    PHP_CodeSniffer\Standards\Squiz\Sniffs\WhiteSpace\SuperfluousWhitespaceSniff:
-        ignoreBlankLines: false
-
-    PhpCsFixer\Fixer\Operator\ConcatSpaceFixer:
-        spacing: one
-
-    # new since PhpCsFixer 2.2-2.4
-    PhpCsFixer\Fixer\LanguageConstruct\IsNullFixer:
-        use_yoda_style: false
-
 parameters:
     exclude_checkers:
+        # Excluded from symfony-checkers.neon
         - PhpCsFixer\Fixer\PhpTag\BlankLineAfterOpeningTagFixer
         - PhpCsFixer\Fixer\Operator\NewWithBracesFixer
         - PhpCsFixer\Fixer\Operator\UnaryOperatorSpacesFixer
         - PhpCsFixer\Fixer\Phpdoc\PhpdocAlignFixer
 
     skip:
-        SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff:
-            - src/Contract/Rector/RectorInterface.php
-            - *src/Rector/Contrib/Nette/*Rector.php
-            - *src/NodeVisitor/Traverse/*Visitor.php
         Symplify\CodingStandard\Fixer\Php\ClassStringToClassConstantFixer:
             # class might not exist
             - src/Rector/Contrib/Nette/RemoveConfiguratorConstantsRector.php
             - src/Rector/Contrib/Nette/NetteObjectToSmartTraitRector.php
-
         Symplify\CodingStandard\Sniffs\Debug\CommentedOutCodeSniff:
             # examples of code to be found
             - src/NodeVisitor/DependencyInjection/NamedServicesToConstructor/GetterToPropertyRector.php

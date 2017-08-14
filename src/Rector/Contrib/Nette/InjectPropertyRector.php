@@ -75,7 +75,7 @@ final class InjectPropertyRector extends AbstractRector
     /**
      * @param Property $propertyNode
      */
-    public function refactor($propertyNode): Node
+    public function refactor(Node $propertyNode): Node
     {
         $propertyDocBlock = $this->createDocBlockFromNode($propertyNode);
         $propertyNode = $this->removeInjectAnnotationFromProperty($propertyNode, $propertyDocBlock);
