@@ -8,7 +8,6 @@ includes:
 
 checkers:
     # Slevomat
-    - SlevomatCodingStandard\Sniffs\Exceptions\DeadCatchSniff
     SlevomatCodingStandard\Sniffs\Namespaces\ReferenceUsedNamesOnlySniff:
         allowPartialUses: false
         allowFullyQualifiedNameForCollidingClasses: false

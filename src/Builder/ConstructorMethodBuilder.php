@@ -46,6 +46,7 @@ final class ConstructorMethodBuilder
                 ->getNode();
 
             $constructorMethod->stmts[] = $assign[0];
+
             return;
         }
 
