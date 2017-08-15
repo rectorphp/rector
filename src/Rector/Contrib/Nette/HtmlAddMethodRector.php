@@ -2,6 +2,7 @@
 
 namespace Rector\Rector\Contrib\Nette;
 
+use Nette\Utils\Html;
 use PhpParser\Node;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
@@ -22,6 +23,29 @@ final class HtmlAddMethodRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
+        if (! $this->isOnTypeCall($node, Html::class)) {
+            return false;
+        }
+
+        if (! $this->isStaticCall($node)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @param StaticCall $node
+     */
+    public function refactor(Node $node): ?Node
+    {
+        $node->name->name = 'addHtml';
+
+        return $node;
+    }
+
+    private function isStaticCall(Node $node): bool
+    {
         if (! $node instanceof StaticCall) {
             return false;
         }
@@ -41,13 +65,13 @@ final class HtmlAddMethodRector extends AbstractRector
         return true;
     }
 
-    /**
-     * @param StaticCall $node
-     */
-    public function refactor(Node $node): ?Node
+    private function isOnTypeCall(Node $node, string $class): bool
     {
-        $node->name->name = 'addHtml';
+        dump($class);
+        die;
 
-        return $node;
+        # check elements type:
+        # inspire: https://github.com/phpstan/phpstan/blob/355060961eb4a33304c66dfbfc0cd32870a0b9d4/src/Rules/Methods/CallMethodsRule.php#L74
+        # local package?
     }
 }
