@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\NodeVisitor\DependencyInjection\NamedServicesToConstructor;
+namespace Rector\Rector\Contrib\Symfony;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
@@ -9,11 +9,12 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\NodeVisitorAbstract;
 use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Builder\Kernel\ServiceFromKernelResolver;
 use Rector\Builder\Naming\NameResolver;
-use Rector\Tests\NodeVisitor\DependencyInjection\NamedServicesToConstructorRector\Source\LocalKernel;
+use Rector\Deprecation\SetNames;
+use Rector\Rector\AbstractRector;
+use Rector\Tests\Rector\Contrib\Symfony\GetterToPropertyRector\Source\LocalKernel;
 
 /**
  * Converts all:
@@ -22,7 +23,7 @@ use Rector\Tests\NodeVisitor\DependencyInjection\NamedServicesToConstructorRecto
  * into:
  * $this->someService # where "someService" is type of the service
  */
-final class GetterToPropertyRector extends NodeVisitorAbstract
+final class GetterToPropertyRector extends AbstractRector
 {
     /**
      * @var string
@@ -71,18 +72,7 @@ final class GetterToPropertyRector extends NodeVisitorAbstract
         return null;
     }
 
-    public function enterNode(Node $node): ?Node
-    {
-        if ($this->isCandidate($node)) {
-            $this->reconstruct($node);
-
-            return $node;
-        }
-
-        return null;
-    }
-
-    private function isCandidate(Node $node): bool
+    public function isCandidate(Node $node): bool
     {
         // $var = $this->get('some_service');
         // $var = $this->get('some_service')->getData();
@@ -103,9 +93,9 @@ final class GetterToPropertyRector extends NodeVisitorAbstract
     }
 
     /**
-     * @param Assign|MethodCall $assignOrMethodCallNode
+     * @param Node $assignOrMethodCallNode
      */
-    private function reconstruct(Node $assignOrMethodCallNode): void
+    public function refactor(Node $assignOrMethodCallNode): ?Node
     {
         if ($assignOrMethodCallNode instanceof Assign) {
             $refactoredMethodCall = $this->processMethodCallNode($assignOrMethodCallNode->expr);
@@ -120,6 +110,8 @@ final class GetterToPropertyRector extends NodeVisitorAbstract
                 $assignOrMethodCallNode->var = $refactoredMethodCall;
             }
         }
+
+        return $assignOrMethodCallNode;
     }
 
     /**
@@ -175,5 +167,15 @@ final class GetterToPropertyRector extends NodeVisitorAbstract
             ]),
             $propertyName
         );
+    }
+
+    public function getSetName(): string
+    {
+        return SetNames::SYMFONY;
+    }
+
+    public function sinceVersion(): float
+    {
+        return 3.3;
     }
 }
