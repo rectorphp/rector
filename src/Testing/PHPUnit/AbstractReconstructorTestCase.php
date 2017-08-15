@@ -4,6 +4,7 @@ namespace Rector\Testing\PHPUnit;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
+use Rector\Contract\Rector\RectorInterface;
 use Rector\DependencyInjection\ContainerFactory;
 use Rector\Testing\Application\FileReconstructor;
 use SplFileInfo;
@@ -28,8 +29,16 @@ abstract class AbstractReconstructorTestCase extends TestCase
 
     protected function doTestFileMatchesExpectedContent(string $file, string $reconstructedFile): void
     {
-        $reconstructedFileContent = $this->fileReconstructor->processFile(new SplFileInfo($file));
+        $reconstructedFileContent = $this->fileReconstructor->processFileWithRectors(
+            new SplFileInfo($file),
+            $this->getRectorClasses()
+        );
 
         $this->assertStringEqualsFile($reconstructedFile, $reconstructedFileContent);
     }
+
+    /**
+     * @return string[]
+     */
+    abstract protected function getRectorClasses(): array;
 }

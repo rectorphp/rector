@@ -23,4 +23,12 @@ final class Test extends AbstractReconstructorTestCase
             __DIR__ . '/correct/correct3.php.inc'
         );
     }
+
+    /**
+     * @return string[]
+     */
+    protected function getRectorClasses(): array
+    {
+        return [];
+    }
 }

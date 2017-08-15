@@ -10,12 +10,13 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Contract\Deprecation\DeprecationInterface;
+use Rector\Contract\Rector\RectorInterface;
 use Rector\Deprecation\SetNames;
 
 /**
  * Covers https://doc.nette.org/en/2.4/migration-2-4#toc-nette-smartobject.
  */
-final class FormCallbackRector extends NodeVisitorAbstract implements DeprecationInterface
+final class FormCallbackRector extends NodeVisitorAbstract implements DeprecationInterface, RectorInterface
 {
     /**
      * @var Node
@@ -84,5 +85,15 @@ final class FormCallbackRector extends NodeVisitorAbstract implements Deprecatio
         ], [
             'kind' => Array_::KIND_SHORT,
         ]);
+    }
+
+    public function isCandidate(Node $node): bool
+    {
+        return true;
+    }
+
+    public function refactor(Node $node): ?Node
+    {
+        return $node;
     }
 }
