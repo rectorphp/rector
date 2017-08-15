@@ -20,8 +20,7 @@ services:
         factory: ['@Rector\Parser\LexerFactory', 'create']
     PhpParser\BuilderFactory: ~
 
-    PhpParser\NodeTraverser:
-        factory: ['@Rector\NodeTraverser\NodeTraverserFactory', 'create']
+    PhpParser\NodeTraverser: ~
 
     # Traverser
     PhpParser\ParserFactory: ~
