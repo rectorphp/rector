@@ -9,7 +9,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Deprecation\SetNames;
-use Rector\NodeTraverser\TokenSwitcher;
 use Rector\Rector\AbstractRector;
 
 final class InjectPropertyRector extends AbstractRector
@@ -18,11 +17,6 @@ final class InjectPropertyRector extends AbstractRector
      * @var string
      */
     private const ANNOTATION_INJECT = 'inject';
-
-    /**
-     * @var TokenSwitcher
-     */
-    private $tokenSwitcher;
 
     /**
      * @var ClassPropertyCollector
@@ -34,9 +28,8 @@ final class InjectPropertyRector extends AbstractRector
      */
     private $className;
 
-    public function __construct(TokenSwitcher $tokenSwitcher, ClassPropertyCollector $classPropertyCollector)
+    public function __construct(ClassPropertyCollector $classPropertyCollector)
     {
-        $this->tokenSwitcher = $tokenSwitcher;
         $this->classPropertyCollector = $classPropertyCollector;
     }
 
@@ -66,8 +59,6 @@ final class InjectPropertyRector extends AbstractRector
         if (! $this->hasInjectAnnotation($node)) {
             return false;
         }
-
-        $this->tokenSwitcher->enable();
 
         return true;
     }

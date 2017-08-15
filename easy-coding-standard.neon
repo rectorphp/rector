@@ -1,5 +1,6 @@
 includes:
     - vendor/symplify/easy-coding-standard/config/symfony-checkers.neon
+    - vendor/symplify/easy-coding-standard/config/symfony-risky-checkers.neon
     - vendor/symplify/easy-coding-standard/config/php70-checkers.neon
     - vendor/symplify/easy-coding-standard/config/php71-checkers.neon
     - vendor/symplify/easy-coding-standard/config/symplify-checkers.neon
@@ -35,4 +36,4 @@ parameters:
             - src/Rector/Contrib/Nette/NetteObjectToSmartTraitRector.php
         Symplify\CodingStandard\Sniffs\Debug\CommentedOutCodeSniff:
             # examples of code to be found
-            - src/NodeVisitor/DependencyInjection/NamedServicesToConstructor/GetterToPropertyRector.php
+            - src/Rector/Contrib/Symfony/GetterToPropertyRector.php

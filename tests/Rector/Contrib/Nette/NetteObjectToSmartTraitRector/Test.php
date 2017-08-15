@@ -2,9 +2,10 @@
 
 namespace Rector\Tests\Rector\Contrib\Nette\NetteObjectToSmartTraitRector;
 
-use Rector\Testing\PHPUnit\AbstractReconstructorTestCase;
+use Rector\Rector\Contrib\Nette\NetteObjectToSmartTraitRector;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class Test extends AbstractReconstructorTestCase
+final class Test extends AbstractRectorTestCase
 {
     public function test(): void
     {
@@ -20,5 +21,13 @@ final class Test extends AbstractReconstructorTestCase
             __DIR__ . '/wrong/wrong3.php.inc',
             __DIR__ . '/correct/correct3.php.inc'
         );
+    }
+
+    /**
+     * @return string[]
+     */
+    protected function getRectorClasses(): array
+    {
+        return [NetteObjectToSmartTraitRector::class];
     }
 }

@@ -21,7 +21,8 @@ services:
     PhpParser\BuilderFactory: ~
 
     PhpParser\NodeTraverser:
-        factory: ['@Rector\NodeTraverser\NodeTraverserFactory', 'create']
+        calls:
+            - ['addVisitor', ['@Rector\NodeVisitor\DependencyInjection\AddPropertiesToClassNodeVisitor']]
 
     # Traverser
     PhpParser\ParserFactory: ~
