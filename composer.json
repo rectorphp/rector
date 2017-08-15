@@ -11,13 +11,13 @@
         "symfony/console": "^3.3",
         "symfony/dependency-injection": "^3.3",
         "nikic/php-parser": "4.0.x-dev as 3.0.2",
-        "nette/utils": "^2.4"
+        "nette/utils": "^2.4",
+        "phpstan/phpstan": "^0.8"
     },
     "require-dev": {
         "phpunit/phpunit": "^6.2",
         "tracy/tracy": "^2.4",
-        "symplify/easy-coding-standard": "^2.2",
-        "phpstan/phpstan": "^0.8"
+        "symplify/easy-coding-standard": "^2.2"
     },
     "autoload": {
         "psr-4": {

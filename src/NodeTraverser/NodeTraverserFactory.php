@@ -36,7 +36,7 @@ final class NodeTraverserFactory
         }
 
         foreach ($this->nodeVisitors as $nodeVisitor) {
-            if (in_array(get_class($nodeVisitor), $this->priorityNodeVisitorClasses, true)) {
+            if ($this->isPriorityNodeVisitor($nodeVisitor)) {
                 continue;
             }
 
@@ -44,5 +44,12 @@ final class NodeTraverserFactory
         }
 
         return $nodeTraverser;
+    }
+
+    private function isPriorityNodeVisitor(NodeVisitor $nodeVisitor): bool
+    {
+        $nodeVisitorClass = get_class($nodeVisitor);
+
+        return in_array($nodeVisitorClass, $this->priorityNodeVisitorClasses, true);
     }
 }
