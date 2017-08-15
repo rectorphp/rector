@@ -4,12 +4,11 @@ namespace Rector\Testing\PHPUnit;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
-use Rector\Contract\Rector\RectorInterface;
 use Rector\DependencyInjection\ContainerFactory;
 use Rector\Testing\Application\FileProcessor;
 use SplFileInfo;
 
-abstract class AbstractReconstructorTestCase extends TestCase
+abstract class AbstractRectorTestCase extends TestCase
 {
     /**
      * @var FileProcessor
