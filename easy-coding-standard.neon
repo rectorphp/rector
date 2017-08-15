@@ -36,4 +36,4 @@ parameters:
             - src/Rector/Contrib/Nette/NetteObjectToSmartTraitRector.php
         Symplify\CodingStandard\Sniffs\Debug\CommentedOutCodeSniff:
             # examples of code to be found
-            - src/NodeVisitor/DependencyInjection/NamedServicesToConstructor/GetterToPropertyRector.php
+            - src/Rector/Contrib/Symfony/GetterToPropertyRector.php

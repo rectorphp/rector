@@ -92,9 +92,6 @@ final class GetterToPropertyRector extends AbstractRector
         return false;
     }
 
-    /**
-     * @param Node $assignOrMethodCallNode
-     */
     public function refactor(Node $assignOrMethodCallNode): ?Node
     {
         if ($assignOrMethodCallNode instanceof Assign) {
@@ -112,6 +109,16 @@ final class GetterToPropertyRector extends AbstractRector
         }
 
         return $assignOrMethodCallNode;
+    }
+
+    public function getSetName(): string
+    {
+        return SetNames::SYMFONY;
+    }
+
+    public function sinceVersion(): float
+    {
+        return 3.3;
     }
 
     /**
@@ -167,15 +174,5 @@ final class GetterToPropertyRector extends AbstractRector
             ]),
             $propertyName
         );
-    }
-
-    public function getSetName(): string
-    {
-        return SetNames::SYMFONY;
-    }
-
-    public function sinceVersion(): float
-    {
-        return 3.3;
     }
 }

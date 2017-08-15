@@ -82,7 +82,7 @@ final class FileProcessor
 
         $oldStmts = $this->parser->parse($fileContent);
         $oldTokens = $this->lexer->getTokens();
-        $newStmts  = $this->cloningNodeTraverser->traverse($oldStmts);
+        $newStmts = $this->cloningNodeTraverser->traverse($oldStmts);
 
         $newStmts = $this->nodeTraverser->traverse($newStmts);
 

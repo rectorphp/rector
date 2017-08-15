@@ -55,6 +55,16 @@ final class FormCallbackRector extends NodeVisitorAbstract implements Deprecatio
         return null;
     }
 
+    public function isCandidate(Node $node): bool
+    {
+        return true;
+    }
+
+    public function refactor(Node $node): ?Node
+    {
+        return $node;
+    }
+
     private function isFormEventAssign(Node $node): bool
     {
         if (! $node instanceof PropertyFetch) {
@@ -85,15 +95,5 @@ final class FormCallbackRector extends NodeVisitorAbstract implements Deprecatio
         ], [
             'kind' => Array_::KIND_SHORT,
         ]);
-    }
-
-    public function isCandidate(Node $node): bool
-    {
-        return true;
-    }
-
-    public function refactor(Node $node): ?Node
-    {
-        return $node;
     }
 }

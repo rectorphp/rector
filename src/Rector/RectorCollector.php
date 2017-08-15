@@ -21,6 +21,7 @@ final class RectorCollector
     public function getRector(string $class): RectorInterface
     {
         $this->ensureRectorsIsFound($class);
+
         return $this->rectors[$class];
     }
 
@@ -37,7 +38,7 @@ final class RectorCollector
 
         $availableOptionsMessage = sprintf(
             ' Available rectors are: "%s".',
-            implode('", "' , $rectorClasses)
+            implode('", "', $rectorClasses)
         );
 
         throw new RectorNotFoundException(sprintf(
