@@ -36,8 +36,8 @@ final class RectorCollector
         $suggestionMessage = $suggestion ? sprintf(' Did you mean "%s"?', $suggestion) : '';
 
         $availableOptionsMessage = sprintf(
-            'Available rectors are: %s',
-            implode(' ,' , $rectorClasses)
+            ' Available rectors are: "%s".',
+            implode('", "' , $rectorClasses)
         );
 
         throw new RectorNotFoundException(sprintf(

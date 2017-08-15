@@ -6,15 +6,15 @@ use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\DependencyInjection\ContainerFactory;
-use Rector\Testing\Application\FileReconstructor;
+use Rector\Testing\Application\FileProcessor;
 use SplFileInfo;
 
 abstract class AbstractReconstructorTestCase extends TestCase
 {
     /**
-     * @var FileReconstructor
+     * @var FileProcessor
      */
-    private $fileReconstructor;
+    private $fileProcessor;
 
     /**
      * @var ContainerInterface
@@ -24,12 +24,12 @@ abstract class AbstractReconstructorTestCase extends TestCase
     protected function setUp(): void
     {
         $this->container = (new ContainerFactory)->create();
-        $this->fileReconstructor = $this->container->get(FileReconstructor::class);
+        $this->fileProcessor = $this->container->get(FileProcessor::class);
     }
 
     protected function doTestFileMatchesExpectedContent(string $file, string $reconstructedFile): void
     {
-        $reconstructedFileContent = $this->fileReconstructor->processFileWithRectors(
+        $reconstructedFileContent = $this->fileProcessor->processFileWithRectors(
             new SplFileInfo($file),
             $this->getRectorClasses()
         );

@@ -11,7 +11,7 @@ use Rector\Printer\FormatPerservingPrinter;
 use Rector\Rector\RectorCollector;
 use SplFileInfo;
 
-final class FileReconstructor
+final class FileProcessor
 {
     /**
      * @var Parser
