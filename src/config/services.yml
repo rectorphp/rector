@@ -20,8 +20,13 @@ services:
         factory: ['@Rector\Parser\LexerFactory', 'create']
     PhpParser\BuilderFactory: ~
 
+    # to allow $namespacedName
+    # see https://github.com/nikic/PHP-Parser/blob/7b36ca3b6cc1b99210c6699074d6091061e73eea/lib/PhpParser/Node/Stmt/ClassLike.php#L8
+    PhpParser\NodeVisitor\NameResolver: ~
+
     PhpParser\NodeTraverser:
         calls:
+            - ['addVisitor', ['@PhpParser\NodeVisitor\NameResolver']]
             - ['addVisitor', ['@Rector\NodeVisitor\DependencyInjection\AddPropertiesToClassNodeVisitor']]
 
     # Traverser

@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Deprecation\SetNames;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Rector\AbstractRector;
 
 final class HtmlAddMethodRector extends AbstractRector
@@ -20,6 +21,21 @@ final class HtmlAddMethodRector extends AbstractRector
      * @var string[]
      */
     private $variableTypes = [];
+
+    /**
+     * @var NodeTypeResolver
+     */
+    private $nodeTypeResolver;
+
+    /**
+     * @var Node[]
+     */
+    private $fileNodes = [];
+
+    public function __construct(NodeTypeResolver $nodeTypeResolver)
+    {
+        $this->nodeTypeResolver = $nodeTypeResolver;
+    }
 
     public function getSetName(): string
     {
@@ -31,8 +47,15 @@ final class HtmlAddMethodRector extends AbstractRector
         return 2.4;
     }
 
+    public function beforeTraverse(array $nodes): void
+    {
+        $this->fileNodes = $nodes;
+    }
+
     public function isCandidate(Node $node): bool
     {
+        $this->recordVariableTypes($node);
+
         if ($this->isOnTypeCall($node, Html::class)) {
             return true;
         }
@@ -45,37 +68,11 @@ final class HtmlAddMethodRector extends AbstractRector
     }
 
     /**
-     * @param Node[] $nodes
-     */
-    public function beforeTraverse(array $nodes): void
-    {
-        foreach ($nodes as $node) {
-            if ($node instanceof Expression && $node->expr instanceof Assign) {
-                $assignNode = $node->expr;
-                $variableName = $assignNode->var->name;
-                if ($assignNode->expr instanceof New_) {
-                    $variableType = (string) $assignNode->expr->class;
-                }
-
-                $this->variableTypes[$variableName] = $variableType;
-            }
-        }
-    }
-
-    /**
      * @param StaticCall|MethodCall $node
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node instanceof StaticCall) {
-            $node->name->name = 'addHtml';
-
-            return $node;
-        }
-
-        if ($node instanceof MethodCall) {
-            $node->name->name = 'addHtml';
-        }
+        $node->name->name = 'addHtml';
 
         return $node;
     }
@@ -116,7 +113,14 @@ final class HtmlAddMethodRector extends AbstractRector
             return false;
         }
 
+        $type = $this->nodeTypeResolver->getTypeForNode($node->var, $this->fileNodes);
+        dump($type->getType($node->var));
+        die;
+
         $varNode = $node->var;
+
+        dump($varNode); // get type of this node!!
+        die;
 
         if (isset($this->variableTypes[$varNode->name])) {
             if ($this->variableTypes[$varNode->name] === $class) {
@@ -125,5 +129,24 @@ final class HtmlAddMethodRector extends AbstractRector
         }
 
         return false;
+    }
+
+    private function recordVariableTypes(Node $node): void
+    {
+        if ($node instanceof Expression && $node->expr instanceof Assign) {
+            $assignNode = $node->expr;
+            $variableName = $assignNode->var->name;
+            if ($assignNode->expr instanceof New_) {
+                $variableType = (string) $assignNode->expr->class;
+                $this->variableTypes[$variableName] = $variableType;
+            }
+
+            // @todo: decouple to services... TypePesolver packages/...
+                // add another type :)
+//                dump($node->var);
+//                dump($node->expr);
+        }
+
+        //        dump($node);
     }
 }

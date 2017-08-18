@@ -21,7 +21,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Rector\\": "src"
+            "Rector\\": "src",
+            "Rector\\NodeTypeResolver\\": "packages/NodeTypeResolver/src"
         }
     },
     "autoload-dev": {
