@@ -5,10 +5,12 @@ parameters:
 services:
     _defaults:
         autowire: true
+        autoconfigure: true
 
     # PSR-4 autodiscovery
     Rector\:
         resource: '../../src'
+        exclude: '../../src/{Event}'
 
     # autowire by interface
     Rector\Contract\Parser\ParserInterface:
@@ -18,6 +20,9 @@ services:
     Symfony\Component\Console\Application:
         arguments:
             $name: "Rector"
+
+    # Event Distpatcher
+    Symfony\Component\EventDispatcher\EventDispatcher: ~
 
     # PhpParser - Parser
     PhpParser\Parser:
