@@ -20,7 +20,7 @@ abstract class AbstractContainerAwareTestCase extends TestCase
      * @param mixed[] $data
      * @param string $dataName
      */
-    public function __construct($name = null, array $data = [], $dataName = '')
+    public function __construct(string $name = null, array $data = [], string $dataName = '')
     {
         parent::__construct($name, $data, $dataName);
 

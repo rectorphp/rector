@@ -3,7 +3,7 @@
 namespace Rector\Parser;
 
 use PhpParser\Lexer;
-use PhpParser\Parser;
+use PhpParser\Parser as NikicParser;
 use PhpParser\ParserFactory as NikicParserFactory;
 
 final class ParserFactory
@@ -24,7 +24,7 @@ final class ParserFactory
         $this->nikicParserFactory = $nikicParserFactory;
     }
 
-    public function create(): Parser
+    public function create(): NikicParser
     {
         return $this->nikicParserFactory->create(NikicParserFactory::PREFER_PHP7, $this->lexer, [
             'useIdentifierNodes' => true,

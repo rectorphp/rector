@@ -10,26 +10,32 @@ services:
     Rector\:
         resource: '../../src'
 
+    # autowire by interface
+    Rector\Contract\Parser\ParserInterface:
+        alias: Rector\Parser\Parser
+
     # 3rd party services
     Symfony\Component\Console\Application:
         arguments:
             $name: "Rector"
+
+    # PhpParser - Parser
     PhpParser\Parser:
         factory: ['@Rector\Parser\ParserFactory', 'create']
     PhpParser\Lexer:
         factory: ['@Rector\Parser\LexerFactory', 'create']
     PhpParser\BuilderFactory: ~
 
+    # PhpParser - NodeTraverser
     # to allow $namespacedName
     # see https://github.com/nikic/PHP-Parser/blob/7b36ca3b6cc1b99210c6699074d6091061e73eea/lib/PhpParser/Node/Stmt/ClassLike.php#L8
     PhpParser\NodeVisitor\NameResolver: ~
-
     PhpParser\NodeTraverser:
         calls:
             - ['addVisitor', ['@PhpParser\NodeVisitor\NameResolver']]
             - ['addVisitor', ['@Rector\NodeVisitor\DependencyInjection\AddPropertiesToClassNodeVisitor']]
-
-    # Traverser
+            - ['addVisitor', ['@Rector\NodeVisitor\NodeConnector']]
     PhpParser\ParserFactory: ~
-    # Printer
+
+    # PhpParser - Printer
     PhpParser\PrettyPrinter\Standard: ~

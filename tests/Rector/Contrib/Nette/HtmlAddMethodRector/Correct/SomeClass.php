@@ -1,14 +1,14 @@
-<?php declare (strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Rector\Tests\Rector\Contrib\Nette\HtmlAddMethodRector\Correct;
 
 use Nette\Utils\Html;
 
-class SomeClass
+final class SomeClass
 {
-    private function createHtml()
+    private function createHtml(): void
     {
-        $html = new Html();
+        $html = new Html;
         $anotherHtml = $html;
         $anotherHtml->addHtml('someContent');
     }

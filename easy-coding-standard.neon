@@ -20,6 +20,9 @@ checkers:
     PHP_CodeSniffer\Standards\Generic\Sniffs\Metrics\NestingLevelSniff:
         absoluteNestingLevel: 3
 
+    # Class should be Final or Abstract
+    - SlamCsFixer\FinalInternalClassFixer
+
 parameters:
     exclude_checkers:
         # Excluded from symfony-checkers.neon

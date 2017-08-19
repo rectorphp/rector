@@ -1,15 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Rector\NodeTypeResolver\Tests;
+namespace Rector\NodeTypeResolver\Tests\NodeTypeResolverSource;
 
 use Nette\Utils\Html;
 
 final class VariableType
 {
-    /**
-     * @return Html
-     */
-    public function prepare(): \Nette\Utils\Html
+    public function prepare(): Html
     {
         $html = new Html;
         $assignedHtml = $html;

@@ -113,7 +113,17 @@ final class HtmlAddMethodRector extends AbstractRector
             return false;
         }
 
-        $type = $this->nodeTypeResolver->getTypeForNode($node->var, $this->fileNodes);
+
+        $this->nodeTypeResolver->getTypeForNode($node->var, $this->fileNodes);
+
+        dump($node->var);
+        die;
+
+
+        dump($type);
+        die;
+
+
         dump($type->getType($node->var));
         die;
 

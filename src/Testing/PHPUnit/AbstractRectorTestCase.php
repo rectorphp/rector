@@ -47,7 +47,7 @@ abstract class AbstractRectorTestCase extends TestCase
 
     protected function ensureFileExists(string $file): void
     {
-        if (!file_exists($file)) {
+        if (! file_exists($file)) {
             throw new FileNotFoundException(sprintf(
                 'File "%s" not found in "%s".',
                 $file,
