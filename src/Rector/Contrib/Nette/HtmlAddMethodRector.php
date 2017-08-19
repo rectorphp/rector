@@ -4,38 +4,19 @@ namespace Rector\Rector\Contrib\Nette;
 
 use Nette\Utils\Html;
 use PhpParser\Node;
-use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
-use PhpParser\Node\Stmt\Expression;
 use Rector\Deprecation\SetNames;
-use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Rector\AbstractRector;
 
 final class HtmlAddMethodRector extends AbstractRector
 {
     /**
-     * @var string[]
-     */
-    private $variableTypes = [];
-
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    /**
      * @var Node[]
      */
     private $fileNodes = [];
-
-    public function __construct(NodeTypeResolver $nodeTypeResolver)
-    {
-        $this->nodeTypeResolver = $nodeTypeResolver;
-    }
 
     public function getSetName(): string
     {
@@ -54,8 +35,6 @@ final class HtmlAddMethodRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        $this->recordVariableTypes($node);
-
         if ($this->isOnTypeCall($node, Html::class)) {
             return true;
         }
@@ -98,11 +77,6 @@ final class HtmlAddMethodRector extends AbstractRector
         return true;
     }
 
-    /**
-     * check elements type:
-     * inspire: https://github.com/phpstan/phpstan/blob/355060961eb4a33304c66dfbfc0cd32870a0b9d4/src/Rules/Methods/CallMethodsRule.php#L74
-     * https://github.com/phpstan/phpstan/blob/355060961eb4a33304c66dfbfc0cd32870a0b9d4/src/Analyser/Scope.php.
-     */
     private function isOnTypeCall(Node $node, string $class): bool
     {
         if (! $node instanceof MethodCall) {
@@ -113,50 +87,11 @@ final class HtmlAddMethodRector extends AbstractRector
             return false;
         }
 
-
-        $this->nodeTypeResolver->getTypeForNode($node->var, $this->fileNodes);
-
         dump($node->var);
+        dump($node->getAttribute('type'));
+        dump($node->getAttribute('type') === $class);
         die;
-
-
-        dump($type);
-        die;
-
-
-        dump($type->getType($node->var));
-        die;
-
-        $varNode = $node->var;
-
-        dump($varNode); // get type of this node!!
-        die;
-
-        if (isset($this->variableTypes[$varNode->name])) {
-            if ($this->variableTypes[$varNode->name] === $class) {
-                return true;
-            }
-        }
 
         return false;
-    }
-
-    private function recordVariableTypes(Node $node): void
-    {
-        if ($node instanceof Expression && $node->expr instanceof Assign) {
-            $assignNode = $node->expr;
-            $variableName = $assignNode->var->name;
-            if ($assignNode->expr instanceof New_) {
-                $variableType = (string) $assignNode->expr->class;
-                $this->variableTypes[$variableName] = $variableType;
-            }
-
-            // @todo: decouple to services... TypePesolver packages/...
-                // add another type :)
-//                dump($node->var);
-//                dump($node->expr);
-        }
-
-        //        dump($node);
     }
 }

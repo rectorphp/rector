@@ -35,7 +35,6 @@ final class Parser implements ParserInterface
         $fileContent = file_get_contents($filePath);
         $this->nodesByFile[$filePath] = $this->nikicParser->parse($fileContent);
 
-
         return $this->nodesByFile[$filePath];
     }
 }

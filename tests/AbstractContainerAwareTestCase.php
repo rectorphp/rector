@@ -16,11 +16,9 @@ abstract class AbstractContainerAwareTestCase extends TestCase
     /**
      * Constructs a test case with the given name.
      *
-     * @param string $name
      * @param mixed[] $data
-     * @param string $dataName
      */
-    public function __construct(string $name = null, array $data = [], string $dataName = '')
+    public function __construct(?string $name = null, array $data = [], string $dataName = '')
     {
         parent::__construct($name, $data, $dataName);
 
