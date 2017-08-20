@@ -10,12 +10,6 @@ use PhpParser\Node\Identifier;
 
 abstract class AbstractChangeMethodNameRector extends AbstractRector
 {
-    abstract protected function getClassName(): string;
-
-    abstract protected function getOldMethodName(): string;
-
-    abstract protected function getNewMethodName(): string;
-
     public function isCandidate(Node $node): bool
     {
         if ($this->isOnTypeCall($node, $this->getClassName())) {
@@ -38,6 +32,12 @@ abstract class AbstractChangeMethodNameRector extends AbstractRector
 
         return $node;
     }
+
+    abstract protected function getClassName(): string;
+
+    abstract protected function getOldMethodName(): string;
+
+    abstract protected function getNewMethodName(): string;
 
     private function isStaticCall(Node $node): bool
     {
