@@ -5,7 +5,3 @@ services:
     # PSR-4 autodiscovery
     Rector\NodeTypeResolver\:
         resource: '../../src'
-
-    PhpParser\NodeTraverser:
-        calls:
-            - ['addVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\TypeResolvingNodeVisitor']]

@@ -10,7 +10,6 @@ services:
     # PSR-4 autodiscovery
     Rector\:
         resource: '../../src'
-        exclude: '../../src/{Event}'
 
     # autowire by interface
     Rector\Contract\Parser\ParserInterface:
@@ -21,26 +20,16 @@ services:
         arguments:
             $name: "Rector"
 
-    # Event Distpatcher
-    Symfony\Component\EventDispatcher\EventDispatcher: ~
-
     # PhpParser - Parser
     PhpParser\Parser:
         factory: ['@Rector\Parser\ParserFactory', 'create']
     PhpParser\Lexer:
         factory: ['@Rector\Parser\LexerFactory', 'create']
+    PhpParser\ParserFactory: ~
     PhpParser\BuilderFactory: ~
 
-    # PhpParser - NodeTraverser
-    # to allow $namespacedName
-    # see https://github.com/nikic/PHP-Parser/blob/7b36ca3b6cc1b99210c6699074d6091061e73eea/lib/PhpParser/Node/Stmt/ClassLike.php#L8
     PhpParser\NodeVisitor\NameResolver: ~
-    PhpParser\NodeTraverser:
-        calls:
-            - ['addVisitor', ['@PhpParser\NodeVisitor\NameResolver']]
-            - ['addVisitor', ['@Rector\NodeVisitor\DependencyInjection\AddPropertiesToClassNodeVisitor']]
-            - ['addVisitor', ['@Rector\NodeVisitor\NodeConnector']]
-    PhpParser\ParserFactory: ~
+    PhpParser\NodeTraverser: ~
 
     # PhpParser - Printer
     PhpParser\PrettyPrinter\Standard: ~

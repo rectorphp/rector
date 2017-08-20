@@ -11,8 +11,7 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\NodeVisitorAbstract;
 use Rector\NodeTypeResolver\TypeContext;
 
-// @todo: rename to ClassLikeType, noother types are here
-final class TypeResolvingNodeVisitor extends NodeVisitorAbstract
+final class ClassLikeTypeResolver extends NodeVisitorAbstract
 {
     /**
      * @var TypeContext
@@ -45,11 +44,13 @@ final class TypeResolvingNodeVisitor extends NodeVisitorAbstract
         $variableType = null;
 
         if ($node instanceof Variable) {
-            $nextNode = $node->getAttribute('next');
-            if ($nextNode instanceof New_) {
-                $variableType = $nextNode->class->toString();
-                $variableName = $node->name;
-                $this->typeContext->addLocalVariable($variableName, $variableType);
+            $parentNode = $node->getAttribute('parent');
+            if ($parentNode instanceof Assign) {
+                if ($parentNode->expr instanceof New_) {
+                    $variableType = $parentNode->expr->class->toString();
+                    $variableName = $parentNode->var->name;
+                    $this->typeContext->addLocalVariable($variableName, $variableType);
+                }
             } else {
                 $variableType = $this->typeContext->getTypeForVariable((string) $node->name);
             }

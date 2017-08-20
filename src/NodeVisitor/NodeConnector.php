@@ -10,7 +10,14 @@ use PhpParser\NodeVisitorAbstract;
  */
 final class NodeConnector extends NodeVisitorAbstract
 {
+    /**
+     * @var Node
+     */
     private $stack;
+
+    /**
+     * @var Node
+     */
     private $prev;
 
     /**

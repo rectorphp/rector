@@ -23,10 +23,8 @@ final class AppKernel extends Kernel
 
     public function registerContainerConfiguration(LoaderInterface $loader): void
     {
-        // they are merged from bottom up; so to keep desired order (load basic config first, then add others)
-        // they have to be inversed here
-        $loader->load(__DIR__ . '/../../packages/NodeTypeResolver/src/config/services.yml');
         $loader->load(__DIR__ . '/../config/services.yml');
+        $loader->load(__DIR__ . '/../../packages/NodeTypeResolver/src/config/services.yml');
 
         if ($this->config) {
             $loader->load($this->config);

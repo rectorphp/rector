@@ -63,6 +63,7 @@ final class FileProcessor
     public function processFile(SplFileInfo $file): void
     {
         $oldStmts = $this->parser->parseFile($file->getRealPath());
+
         if ($oldStmts === null) {
             return;
         }

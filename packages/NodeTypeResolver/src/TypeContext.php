@@ -24,10 +24,16 @@ final class TypeContext
      */
     private $classLikeNode;
 
+    /**
+     * @var bool
+     */
+    private $isInClass = false;
+
     public function startFile(): void
     {
         $this->types = [];
         $this->classLikeNode = [];
+        $this->isInClass = false;
     }
 
     public function addLocalVariable(string $variableName, string $variableType): void
@@ -38,6 +44,8 @@ final class TypeContext
     public function enterClass(ClassLike $classLikeNode): void
     {
         $this->classLikeNode = $classLikeNode;
+        $this->isInClass = true;
+        // @todo: add properties
     }
 
     public function enterFunction(FunctionLike $functionLikeNode): void
@@ -45,8 +53,10 @@ final class TypeContext
         $this->localTypes = [];
 
         $functionReflection = $this->getFunctionReflection($functionLikeNode);
-        foreach ($functionReflection->getParameters() as $parameterReflection) {
-            $this->localTypes[$parameterReflection->getName()] = $parameterReflection->getType();
+        if ($functionReflection) {
+            foreach ($functionReflection->getParameters() as $parameterReflection) {
+                $this->localTypes[$parameterReflection->getName()] = $parameterReflection->getType();
+            }
         }
     }
 
@@ -62,12 +72,16 @@ final class TypeContext
     }
 
     /**
-     * @return ReflectionFunction|ReflectionMethod
+     * @return ReflectionFunction|ReflectionMethod|null
      */
     private function getFunctionReflection(FunctionLike $functionLikeNode)
     {
         if ($this->classLikeNode) {
             $className = $this->classLikeNode->namespacedName->toString();
+            if (! class_exists($className)) {
+                return null;
+            }
+
             $methodName = (string) $functionLikeNode->name;
 
             return new ReflectionMethod($className, $methodName);
