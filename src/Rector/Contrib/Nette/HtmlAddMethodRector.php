@@ -61,7 +61,7 @@ final class HtmlAddMethodRector extends AbstractRector
             return false;
         }
 
-        if ($node->class->toString() !== self::class) {
+        if ($node->class->toString() !== self::CLASS_NAME) {
             return false;
         }
 

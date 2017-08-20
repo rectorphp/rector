@@ -6,7 +6,7 @@ use Nette\Utils\Html;
 
 final class SomeClass
 {
-    private function createHtml(): void
+    public function createHtml(): void
     {
         $html = new Html;
         $anotherHtml = $html;
