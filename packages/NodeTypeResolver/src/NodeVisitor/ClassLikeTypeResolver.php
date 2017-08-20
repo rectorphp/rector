@@ -44,39 +44,22 @@ final class ClassLikeTypeResolver extends NodeVisitorAbstract
     {
         if ($node instanceof ClassLike) {
             $this->typeContext->enterClass($node);
+
+            return;
         }
 
         if ($node instanceof FunctionLike) {
             $this->typeContext->enterFunction($node);
-        }
 
-        $variableType = null;
+            return;
+        }
 
         if ($node instanceof Variable) {
-            $parentNode = $node->getAttribute('parent');
-            if ($parentNode instanceof Assign) {
-                if ($parentNode->expr instanceof New_) {
-                    $variableName = $node->name;
-                    $variableType = $this->getTypeFromNewNode($parentNode->expr);
-
-                    $this->typeContext->addLocalVariable($variableName, $variableType);
-                }
-            } else {
-                $variableType = $this->typeContext->getTypeForVariable((string) $node->name);
-            }
+            $this->processVariableNode($node);
         }
 
-        if ($variableType) {
-            $node->setAttribute(self::TYPE_ATTRIBUTE, $variableType);
-        }
-
-        if ($node instanceof Assign && $node->var instanceof Variable && $node->expr instanceof Variable) {
-            $this->typeContext->addAssign($node->var->name, $node->expr->name);
-
-            $variableType = $this->typeContext->getTypeForVariable($node->var->name);
-            if ($variableType) {
-                $node->var->setAttribute(self::TYPE_ATTRIBUTE, $variableType);
-            }
+        if ($node instanceof Assign) {
+            $this->processAssignNode($node);
         }
     }
 
@@ -86,5 +69,38 @@ final class ClassLikeTypeResolver extends NodeVisitorAbstract
         $fqnName = $newNode->class->getAttribute('resolvedName');
 
         return $fqnName->toString();
+    }
+
+    private function processVariableNode(Variable $variableNode): void
+    {
+        $variableType = null;
+
+        $parentNode = $variableNode->getAttribute('parent');
+        if ($parentNode instanceof Assign) {
+            if ($parentNode->expr instanceof New_) {
+                $variableName = $variableNode->name;
+                $variableType = $this->getTypeFromNewNode($parentNode->expr);
+
+                $this->typeContext->addVariableWithType($variableName, $variableType);
+            }
+        } else {
+            $variableType = $this->typeContext->getTypeForVariable((string) $variableNode->name);
+        }
+
+        if ($variableType) {
+            $variableNode->setAttribute(self::TYPE_ATTRIBUTE, $variableType);
+        }
+    }
+
+    private function processAssignNode(Assign $assignNode): void
+    {
+        if ($assignNode->var instanceof Variable && $assignNode->expr instanceof Variable) {
+            $this->typeContext->addAssign($assignNode->var->name, $assignNode->expr->name);
+
+            $variableType = $this->typeContext->getTypeForVariable($assignNode->var->name);
+            if ($variableType) {
+                $assignNode->var->setAttribute(self::TYPE_ATTRIBUTE, $variableType);
+            }
+        }
     }
 }

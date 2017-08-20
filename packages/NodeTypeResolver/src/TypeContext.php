@@ -18,11 +18,6 @@ final class TypeContext
     private $types = [];
 
     /**
-     * @var mixed[]
-     */
-    private $localTypes = [];
-
-    /**
      * @var ClassLike|null
      */
     private $classLikeNode;
@@ -39,9 +34,9 @@ final class TypeContext
         $this->isInClass = false;
     }
 
-    public function addLocalVariable(string $variableName, string $variableType): void
+    public function addVariableWithType(string $variableName, string $variableType): void
     {
-        $this->localTypes[$variableName] = $variableType;
+        $this->types[$variableName] = $variableType;
     }
 
     public function enterClass(ClassLike $classLikeNode): void
@@ -53,25 +48,25 @@ final class TypeContext
 
     public function enterFunction(FunctionLike $functionLikeNode): void
     {
-        $this->localTypes = [];
+        $this->types = [];
 
         $functionReflection = $this->getFunctionReflection($functionLikeNode);
         if ($functionReflection) {
             foreach ($functionReflection->getParameters() as $parameterReflection) {
-                $this->localTypes[$parameterReflection->getName()] = $parameterReflection->getType();
+                $this->types[$parameterReflection->getName()] = $parameterReflection->getType();
             }
         }
     }
 
     public function getTypeForVariable(string $name): string
     {
-        return $this->localTypes[$name] ?? '';
+        return $this->types[$name] ?? '';
     }
 
     public function addAssign(string $newVariable, string $oldVariable): void
     {
         $type = $this->getTypeForVariable($oldVariable);
-        $this->addLocalVariable($newVariable, $type);
+        $this->addVariableWithType($newVariable, $type);
     }
 
     /**

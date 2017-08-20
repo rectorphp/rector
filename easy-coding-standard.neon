@@ -39,3 +39,6 @@ parameters:
         Symplify\CodingStandard\Sniffs\Debug\CommentedOutCodeSniff:
             # examples of code to be found
             - src/Rector/Contrib/Symfony/GetterToPropertyRector.php
+        SlevomatCodingStandard\Sniffs\Classes\UnusedPrivateElementsSniff:
+            # will be used soon
+            - packages/NodeTypeResolver/src/TypeContext.php
