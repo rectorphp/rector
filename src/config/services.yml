@@ -2,29 +2,46 @@ parameters:
     # todo
     kernel_class: # for name based service refactoring
 
+    name: "Rector"
+
 services:
     _defaults:
         autowire: true
+        autoconfigure: true
 
     # PSR-4 autodiscovery
     Rector\:
         resource: '../../src'
 
+    # autowire by interface
+    Rector\Contract\Parser\ParserInterface:
+        alias: Rector\Parser\Parser
+
+    Rector\NodeTraverser\StandaloneTraverseNodeTraverser:
+        calls:
+            - ['addNodeVisitor', ['@PhpParser\NodeVisitor\NameResolver']]
+            - ['addNodeVisitor', ['@Rector\NodeVisitor\NodeConnector']]
+            - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\ClassLikeTypeResolver']]
+
     # 3rd party services
     Symfony\Component\Console\Application:
         arguments:
-            $name: "Rector"
+            $name: "%name%"
+
+    # PhpParser - Parser
     PhpParser\Parser:
         factory: ['@Rector\Parser\ParserFactory', 'create']
     PhpParser\Lexer:
         factory: ['@Rector\Parser\LexerFactory', 'create']
+    PhpParser\ParserFactory: ~
     PhpParser\BuilderFactory: ~
 
-    PhpParser\NodeTraverser:
-        calls:
-            - ['addVisitor', ['@Rector\NodeVisitor\DependencyInjection\AddPropertiesToClassNodeVisitor']]
+    PhpParser\NodeVisitor\NameResolver:
+        arguments:
+            $options:
+                'replaceNodes': false
 
-    # Traverser
-    PhpParser\ParserFactory: ~
-    # Printer
+    PhpParser\NodeTraverser: ~
+
+    # PhpParser - Printer
     PhpParser\PrettyPrinter\Standard: ~

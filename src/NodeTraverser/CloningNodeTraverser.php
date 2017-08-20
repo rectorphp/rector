@@ -9,6 +9,7 @@ final class CloningNodeTraverser extends NodeTraverser
 {
     public function __construct()
     {
-        $this->visitors[] = new CloningVisitor;
+        // note: probably have to be recreated to clear cache
+        $this->addVisitor(new CloningVisitor);
     }
 }

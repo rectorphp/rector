@@ -2,14 +2,22 @@
 
 namespace Rector\Rector\Contrib\Nette;
 
+use Nette\Utils\Html;
 use PhpParser\Node;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use Rector\Deprecation\SetNames;
 use Rector\Rector\AbstractRector;
 
 final class HtmlAddMethodRector extends AbstractRector
 {
+    /**
+     * @var string
+     */
+    private const CLASS_NAME = Html::class;
+
     public function getSetName(): string
     {
         return SetNames::NETTE;
@@ -22,6 +30,29 @@ final class HtmlAddMethodRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
+        if ($this->isOnTypeCall($node, self::CLASS_NAME)) {
+            return true;
+        }
+
+        if ($this->isStaticCall($node)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param StaticCall|MethodCall $node
+     */
+    public function refactor(Node $node): ?Node
+    {
+        $node->name->name = 'addHtml';
+
+        return $node;
+    }
+
+    private function isStaticCall(Node $node): bool
+    {
         if (! $node instanceof StaticCall) {
             return false;
         }
@@ -30,7 +61,7 @@ final class HtmlAddMethodRector extends AbstractRector
             return false;
         }
 
-        if ($node->class->getLast() !== 'Html') {
+        if ($node->class->toString() !== self::CLASS_NAME) {
             return false;
         }
 
@@ -41,13 +72,16 @@ final class HtmlAddMethodRector extends AbstractRector
         return true;
     }
 
-    /**
-     * @param StaticCall $node
-     */
-    public function refactor(Node $node): ?Node
+    private function isOnTypeCall(Node $node, string $class): bool
     {
-        $node->name->name = 'addHtml';
+        if (! $node instanceof MethodCall) {
+            return false;
+        }
 
-        return $node;
+        if (! $node->var instanceof Variable) {
+            return false;
+        }
+
+        return $node->var->getAttribute('type') === $class;
     }
 }

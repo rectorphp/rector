@@ -3,10 +3,12 @@
 namespace Rector\Testing\Application;
 
 use PhpParser\Lexer;
-use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor;
-use PhpParser\Parser;
+use Rector\Contract\Parser\ParserInterface;
 use Rector\NodeTraverser\CloningNodeTraverser;
+use Rector\NodeTraverser\MainNodeTraverser;
+use Rector\NodeTraverser\ShutdownNodeTraverser;
+use Rector\NodeTraverser\StandaloneTraverseNodeTraverser;
 use Rector\Printer\FormatPerservingPrinter;
 use Rector\Rector\RectorCollector;
 use SplFileInfo;
@@ -14,7 +16,7 @@ use SplFileInfo;
 final class FileProcessor
 {
     /**
-     * @var Parser
+     * @var ParserInterface
      */
     private $parser;
 
@@ -29,9 +31,9 @@ final class FileProcessor
     private $lexer;
 
     /**
-     * @var NodeTraverser
+     * @var MainNodeTraverser
      */
-    private $nodeTraverser;
+    private $mainNodeTraverser;
 
     /**
      * @var RectorCollector
@@ -43,20 +45,34 @@ final class FileProcessor
      */
     private $cloningNodeTraverser;
 
+    /**
+     * @var ShutdownNodeTraverser
+     */
+    private $shutdownNodeTraverser;
+
+    /**
+     * @var StandaloneTraverseNodeTraverser
+     */
+    private $standaloneTraverseNodeTraverser;
+
     public function __construct(
         CloningNodeTraverser $cloningNodeTraverser,
-        Parser $parser,
+        ParserInterface $parser,
         FormatPerservingPrinter $codeStyledPrinter,
         Lexer $lexer,
-        NodeTraverser $nodeTraverser,
-        RectorCollector $rectorCollector
+        MainNodeTraverser $mainNodeTraverser,
+        RectorCollector $rectorCollector,
+        ShutdownNodeTraverser $shutdownNodeTraverser,
+        StandaloneTraverseNodeTraverser $standaloneTraverseNodeTraverser
     ) {
         $this->parser = $parser;
         $this->codeStyledPrinter = $codeStyledPrinter;
         $this->lexer = $lexer;
-        $this->nodeTraverser = $nodeTraverser;
+        $this->mainNodeTraverser = $mainNodeTraverser;
         $this->rectorCollector = $rectorCollector;
         $this->cloningNodeTraverser = $cloningNodeTraverser;
+        $this->shutdownNodeTraverser = $shutdownNodeTraverser;
+        $this->standaloneTraverseNodeTraverser = $standaloneTraverseNodeTraverser;
     }
 
     /**
@@ -67,7 +83,7 @@ final class FileProcessor
         foreach ($rectorClasses as $rectorClass) {
             /** @var NodeVisitor $rector */
             $rector = $this->rectorCollector->getRector($rectorClass);
-            $this->nodeTraverser->addVisitor($rector);
+            $this->mainNodeTraverser->addVisitor($rector);
         }
 
         return $this->processFile($file);
@@ -78,19 +94,15 @@ final class FileProcessor
      */
     public function processFile(SplFileInfo $file): string
     {
-        $fileContent = $this->getFileContent($file);
-
-        $oldStmts = $this->parser->parse($fileContent);
+        $oldStmts = $this->parser->parseFile($file->getRealPath());
         $oldTokens = $this->lexer->getTokens();
         $newStmts = $this->cloningNodeTraverser->traverse($oldStmts);
 
-        $newStmts = $this->nodeTraverser->traverse($newStmts);
+        $newStmts = $this->standaloneTraverseNodeTraverser->traverse($newStmts);
+
+        $newStmts = $this->mainNodeTraverser->traverse($newStmts);
+        $newStmts = $this->shutdownNodeTraverser->traverse($newStmts);
 
         return $this->codeStyledPrinter->printToString($newStmts, $oldStmts, $oldTokens);
-    }
-
-    private function getFileContent(SplFileInfo $file): string
-    {
-        return file_get_contents($file->getRealPath());
     }
 }

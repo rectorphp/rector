@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\NodeVisitor\DependencyInjection;
+namespace Rector\NodeVisitor;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
@@ -10,9 +10,9 @@ use Rector\Builder\ConstructorMethodBuilder;
 use Rector\Builder\PropertyBuilder;
 
 /**
- * Add new propertis to class and to contructor.
+ * Adds new propertis to class and to contructor.
  */
-final class AddPropertiesToClassNodeVisitor extends NodeVisitorAbstract
+final class PropertyToClassAdder extends NodeVisitorAbstract
 {
     /**
      * @var ConstructorMethodBuilder
@@ -27,16 +27,16 @@ final class AddPropertiesToClassNodeVisitor extends NodeVisitorAbstract
     /**
      * @var ClassPropertyCollector
      */
-    private $newClassPropertyCollector;
+    private $classPropertyCollector;
 
     public function __construct(
         ConstructorMethodBuilder $constructorMethodBuilder,
         PropertyBuilder $propertyBuilder,
-        ClassPropertyCollector $newClassPropertyCollector
+        ClassPropertyCollector $classPropertyCollector
     ) {
         $this->constructorMethodBuilder = $constructorMethodBuilder;
         $this->propertyBuilder = $propertyBuilder;
-        $this->newClassPropertyCollector = $newClassPropertyCollector;
+        $this->classPropertyCollector = $classPropertyCollector;
     }
 
     /**
@@ -47,7 +47,7 @@ final class AddPropertiesToClassNodeVisitor extends NodeVisitorAbstract
     {
         foreach ($nodes as $key => $node) {
             if ($node instanceof Class_) {
-                $nodes[$key] = $this->reconstruct($node, (string) $node->name);
+                $nodes[$key] = $this->processClass($node, (string) $node->name);
                 break;
             }
         }
@@ -55,9 +55,9 @@ final class AddPropertiesToClassNodeVisitor extends NodeVisitorAbstract
         return $nodes;
     }
 
-    private function reconstruct(Class_ $classNode, string $className): Class_
+    private function processClass(Class_ $classNode, string $className): Class_
     {
-        $propertiesForClass = $this->newClassPropertyCollector->getPropertiesforClass($className);
+        $propertiesForClass = $this->classPropertyCollector->getPropertiesforClass($className);
 
         foreach ($propertiesForClass as $propertyType => $propertyName) {
             $this->constructorMethodBuilder->addPropertyAssignToClass($classNode, $propertyType, $propertyName);

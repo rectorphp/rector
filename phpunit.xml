@@ -5,12 +5,14 @@
 >
     <!-- tests directories to run -->
     <testsuite>
+        <directory>packages/*/tests</directory>
         <directory>tests</directory>
     </testsuite>
     <!-- source to check coverage for -->
     <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">src</directory>
+        <whitelist>
+            <directory>packages/*/src</directory>
+            <directory>src</directory>
         </whitelist>
     </filter>
 </phpunit>

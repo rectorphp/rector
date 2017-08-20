@@ -4,15 +4,18 @@ namespace Rector\Application;
 
 use PhpParser\Lexer;
 use PhpParser\NodeTraverser;
-use PhpParser\Parser;
+use Rector\Contract\Parser\ParserInterface;
 use Rector\NodeTraverser\CloningNodeTraverser;
 use Rector\Printer\FormatPerservingPrinter;
 use SplFileInfo;
 
+/**
+ * @todo update to match @see \Rector\Testing\Application\FileProcessor later
+ */
 final class FileProcessor
 {
     /**
-     * @var Parser
+     * @var ParserInterface
      */
     private $parser;
 
@@ -37,7 +40,7 @@ final class FileProcessor
     private $cloningNodeTraverser;
 
     public function __construct(
-        Parser $parser,
+        ParserInterface $parser,
         FormatPerservingPrinter $codeStyledPrinter,
         Lexer $lexer,
         NodeTraverser $nodeTraverser,
@@ -62,8 +65,8 @@ final class FileProcessor
 
     public function processFile(SplFileInfo $file): void
     {
-        $fileContent = file_get_contents($file->getRealPath());
-        $oldStmts = $this->parser->parse($fileContent);
+        $oldStmts = $this->parser->parseFile($file->getRealPath());
+
         if ($oldStmts === null) {
             return;
         }

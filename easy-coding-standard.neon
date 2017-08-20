@@ -11,7 +11,6 @@ checkers:
     # Slevomat
     SlevomatCodingStandard\Sniffs\Namespaces\ReferenceUsedNamesOnlySniff:
         allowPartialUses: false
-        allowFullyQualifiedNameForCollidingClasses: false
 
     # Metrics
     PHP_CodeSniffer\Standards\Generic\Sniffs\Files\LineLengthSniff:
@@ -20,6 +19,9 @@ checkers:
         absoluteComplexity: 5
     PHP_CodeSniffer\Standards\Generic\Sniffs\Metrics\NestingLevelSniff:
         absoluteNestingLevel: 3
+
+    # Class should be Final or Abstract
+    - SlamCsFixer\FinalInternalClassFixer
 
 parameters:
     exclude_checkers:
@@ -37,3 +39,6 @@ parameters:
         Symplify\CodingStandard\Sniffs\Debug\CommentedOutCodeSniff:
             # examples of code to be found
             - src/Rector/Contrib/Symfony/GetterToPropertyRector.php
+        SlevomatCodingStandard\Sniffs\Classes\UnusedPrivateElementsSniff:
+            # will be used soon
+            - packages/NodeTypeResolver/src/TypeContext.php

@@ -11,28 +11,34 @@
         "symfony/console": "^3.3",
         "symfony/dependency-injection": "^3.3",
         "nikic/php-parser": "4.0.x-dev as 3.0.2",
-        "nette/utils": "^2.4",
-        "phpstan/phpstan": "^0.8"
+        "nette/utils": "^2.4"
     },
     "require-dev": {
         "phpunit/phpunit": "^6.2",
+        "phpstan/phpstan": "^0.8",
         "tracy/tracy": "^2.4",
-        "symplify/easy-coding-standard": "^2.2"
+        "symplify/easy-coding-standard": "^2.2",
+        "slam/php-cs-fixer-extensions": "^1.4"
     },
     "autoload": {
         "psr-4": {
-            "Rector\\": "src"
+            "Rector\\": "src",
+            "Rector\\NodeTypeResolver\\": "packages/NodeTypeResolver/src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Rector\\Tests\\": "tests"
+            "Rector\\Tests\\": "tests",
+            "Rector\\NodeTypeResolver\\Tests\\": "packages/NodeTypeResolver/tests"
         }
     },
     "scripts": {
         "all": ["phpunit", "@check-cs", "@phpstan"],
-        "check-cs": "ecs check bin src tests",
-        "fix-cs": "ecs check bin src tests --fix",
-        "phpstan": "phpstan analyse bin src tests --level 7 --configuration phpstan.neon"
+        "check-cs": "ecs check bin packages src tests",
+        "fix-cs": "ecs check bin packages src tests --fix",
+        "phpstan": "phpstan analyse bin packages src tests --level max --configuration phpstan.neon"
+    },
+    "config": {
+        "sort-packages": true
     }
 }
