@@ -13,12 +13,17 @@ This tool will *reconstruct* (change) your code - **run it only in a new clean g
 
 - `FormCallbackRector`
 - `InjectPropertyRector`
+- `HtmlAddMethodRector`
 - `NetteObjectToSmartTraitRector`
 - `RemoveConfiguratorConstantsRector`
 
 ### [Symfony](https://github.com/symfony/)
 
 - `NamedServicesToConstructorNodeTraverser`
+
+### Abstract to use
+
+- `AbstractChangeMethodNameRector`
 
 
 ## Install
