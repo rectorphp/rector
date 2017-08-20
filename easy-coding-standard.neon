@@ -36,6 +36,7 @@ parameters:
             # class might not exist
             - src/Rector/Contrib/Nette/RemoveConfiguratorConstantsRector.php
             - src/Rector/Contrib/Nette/NetteObjectToSmartTraitRector.php
+            - src/Rector/Contrib/Nette/HtmlAddMethodRector.php
         Symplify\CodingStandard\Sniffs\Debug\CommentedOutCodeSniff:
             # examples of code to be found
             - src/Rector/Contrib/Symfony/GetterToPropertyRector.php
