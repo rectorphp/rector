@@ -9,6 +9,9 @@ use Rector\NodeTraverser\CloningNodeTraverser;
 use Rector\Printer\FormatPerservingPrinter;
 use SplFileInfo;
 
+/**
+ * @todo update to match @see \Rector\Testing\Application\FileProcessor later
+ */
 final class FileProcessor
 {
     /**

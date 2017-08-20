@@ -5,8 +5,6 @@ namespace Rector\NodeTraverser;
 use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor;
-use PhpParser\NodeVisitor\NameResolver;
-use PhpParser\NodeVisitorAbstract;
 
 /**
  * This traverser traverse all nodes by one NodeVisitor,
@@ -27,6 +25,11 @@ final class StandaloneTraverseNodeTraverser
     public function __construct()
     {
         $this->nativeNodeTraverser = new NodeTraverser;
+    }
+
+    public function addNodeVisitor(NodeVisitor $nodeVisitor): void
+    {
+        $this->nodeVisitors[] = $nodeVisitor;
     }
 
     /**

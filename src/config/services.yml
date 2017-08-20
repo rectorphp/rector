@@ -17,6 +17,12 @@ services:
     Rector\Contract\Parser\ParserInterface:
         alias: Rector\Parser\Parser
 
+    Rector\NodeTraverser\StandaloneTraverseNodeTraverser:
+        calls:
+            - ['addNodeVisitor', ['@PhpParser\NodeVisitor\NameResolver']]
+            - ['addNodeVisitor', ['@Rector\NodeVisitor\NodeConnector']]
+            - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\ClassLikeTypeResolver']]
+
     # 3rd party services
     Symfony\Component\Console\Application:
         arguments:
