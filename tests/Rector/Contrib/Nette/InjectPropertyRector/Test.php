@@ -2,7 +2,6 @@
 
 namespace Rector\Tests\Rector\Contrib\Nette\InjectPropertyRector;
 
-use Rector\NodeVisitor\DependencyInjection\AddPropertiesToClassNodeVisitor;
 use Rector\Rector\Contrib\Nette\InjectPropertyRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
