@@ -5,6 +5,7 @@ namespace Rector\NodeTypeResolver\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Name\FullyQualified;
@@ -44,14 +45,10 @@ final class ClassLikeTypeResolver extends NodeVisitorAbstract
     {
         if ($node instanceof ClassLike) {
             $this->typeContext->enterClass($node);
-
-            return;
         }
 
         if ($node instanceof FunctionLike) {
             $this->typeContext->enterFunction($node);
-
-            return;
         }
 
         if ($node instanceof Variable) {
@@ -60,6 +57,10 @@ final class ClassLikeTypeResolver extends NodeVisitorAbstract
 
         if ($node instanceof Assign) {
             $this->processAssignNode($node);
+        }
+
+        if ($node instanceof PropertyFetch) {
+            $this->processPropertyFetch($node);
         }
     }
 
@@ -101,6 +102,20 @@ final class ClassLikeTypeResolver extends NodeVisitorAbstract
             if ($variableType) {
                 $assignNode->var->setAttribute(self::TYPE_ATTRIBUTE, $variableType);
             }
+        }
+    }
+
+    private function processPropertyFetch(PropertyFetch $propertyFetchNode): void
+    {
+        if ($propertyFetchNode->var->name !== 'this') {
+            return;
+        }
+
+        $propertyName = (string) $propertyFetchNode->name;
+        $propertyType = $this->typeContext->getTypeForProperty($propertyName);
+
+        if ($propertyType) {
+            $propertyFetchNode->setAttribute(self::TYPE_ATTRIBUTE, $propertyType);
         }
     }
 }

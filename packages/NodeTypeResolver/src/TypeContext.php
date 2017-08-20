@@ -2,8 +2,13 @@
 
 namespace Rector\NodeTypeResolver;
 
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\FunctionLike;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\ClassMethod;
+use ReflectionClass;
 use ReflectionFunction;
 use ReflectionMethod;
 
@@ -18,20 +23,20 @@ final class TypeContext
     private $types = [];
 
     /**
-     * @var ClassLike|null
+     * @var string[]
      */
-    private $classLikeNode;
+    private $classProperties = [];
 
     /**
-     * @var bool
+     * @var ClassLike|nnull
      */
-    private $isInClass = false;
+    private $classLikeNode;
 
     public function startFile(): void
     {
         $this->types = [];
-        $this->classLikeNode = [];
-        $this->isInClass = false;
+        $this->classProperties = [];
+        $this->classLikeNode = null;
     }
 
     public function addVariableWithType(string $variableName, string $variableType): void
@@ -41,9 +46,12 @@ final class TypeContext
 
     public function enterClass(ClassLike $classLikeNode): void
     {
+        $this->classProperties = [];
         $this->classLikeNode = $classLikeNode;
-        $this->isInClass = true;
-        // @todo: add properties
+
+        if ($classLikeNode instanceof Class_) {
+            $this->classProperties = $this->prepareConstructorTypesFromClass($classLikeNode);
+        }
     }
 
     public function enterFunction(FunctionLike $functionLikeNode): void
@@ -53,7 +61,7 @@ final class TypeContext
         $functionReflection = $this->getFunctionReflection($functionLikeNode);
         if ($functionReflection) {
             foreach ($functionReflection->getParameters() as $parameterReflection) {
-                $this->types[$parameterReflection->getName()] = $parameterReflection->getType();
+                $this->types[$parameterReflection->getName()] = (string) $parameterReflection->getType();
             }
         }
     }
@@ -61,6 +69,11 @@ final class TypeContext
     public function getTypeForVariable(string $name): string
     {
         return $this->types[$name] ?? '';
+    }
+
+    public function getTypeForProperty(string $name): string
+    {
+        return $this->classProperties[$name] ?? '';
     }
 
     public function addAssign(string $newVariable, string $oldVariable): void
@@ -86,5 +99,77 @@ final class TypeContext
         }
 
         return new ReflectionFunction((string) $functionLikeNode->name);
+    }
+
+    /**
+     * @return string[]
+     */
+    private function prepareConstructorTypesFromClass(Class_ $classNode): array
+    {
+        $constructorParametersWithTypes = $this->getConstructorParametersWithTypes($classNode);
+        if (! count($constructorParametersWithTypes)) {
+            return [];
+        }
+
+        $propertiesWithTypes = [];
+        foreach ($classNode->stmts as $inClassNode) {
+            if (! $inClassNode instanceof ClassMethod) {
+                continue;
+            }
+
+            if ((string) $inClassNode->name !== '__construct') {
+                continue;
+            }
+
+            foreach ($inClassNode->stmts as $inConstructorNode) {
+                if (! $inConstructorNode->expr instanceof Assign) {
+                    continue;
+                }
+
+                if (! $inConstructorNode->expr->var instanceof PropertyFetch) {
+                    continue;
+                }
+
+                if ($inConstructorNode->expr->var->var->name !== 'this') {
+                    continue;
+                }
+
+                /** @var PropertyFetch $propertyFetchNode */
+                $propertyFetchNode = $inConstructorNode->expr->var;
+                $propertyName = (string) $propertyFetchNode->name;
+                $propertyType = $constructorParametersWithTypes[$propertyName] ?? null;
+
+                if ($propertyName && $propertyType) {
+                    $propertiesWithTypes[$propertyName] = $propertyType;
+                }
+            }
+        }
+
+        return $propertiesWithTypes;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getConstructorParametersWithTypes(Class_ $classNode): array
+    {
+        $className = $classNode->namespacedName->toString();
+        if (! class_exists($className)) {
+            return [];
+        }
+
+        $constructorMethod = (new ReflectionClass($className))->getConstructor();
+        $parametersWithTypes = [];
+
+        if ($constructorMethod) {
+            foreach ($constructorMethod->getParameters() as $parameterReflection) {
+                $parameterName = $parameterReflection->getName();
+                $parameterType = (string) $parameterReflection->getType();
+
+                $parametersWithTypes[$parameterName] = $parameterType;
+            }
+        }
+
+        return $parametersWithTypes;
     }
 }

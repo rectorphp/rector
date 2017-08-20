@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\NodeTypeResolver\Tests\NodeTypeResolverSource;
+namespace Rector\NodeTypeResolver\Tests\NodeVisitor\ClassLikeTypeResolverSource;
 
 use Nette\Utils\Html;
 
