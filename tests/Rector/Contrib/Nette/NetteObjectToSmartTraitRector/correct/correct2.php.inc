@@ -3,5 +3,5 @@
 class ClassWithExternalConstant
 {
     use \Nette\SmartObject;
-    use AnotherTrait;
+    use \AnotherTrait;
 }

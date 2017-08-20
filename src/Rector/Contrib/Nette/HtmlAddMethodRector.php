@@ -14,9 +14,9 @@ use Rector\Rector\AbstractRector;
 final class HtmlAddMethodRector extends AbstractRector
 {
     /**
-     * @var Node[]
+     * @var string
      */
-    private $fileNodes = [];
+    private const CLASS_NAME = Html::class;
 
     public function getSetName(): string
     {
@@ -28,14 +28,9 @@ final class HtmlAddMethodRector extends AbstractRector
         return 2.4;
     }
 
-    public function beforeTraverse(array $nodes): void
-    {
-        $this->fileNodes = $nodes;
-    }
-
     public function isCandidate(Node $node): bool
     {
-        if ($this->isOnTypeCall($node, Html::class)) {
+        if ($this->isOnTypeCall($node, self::CLASS_NAME)) {
             return true;
         }
 
@@ -66,7 +61,7 @@ final class HtmlAddMethodRector extends AbstractRector
             return false;
         }
 
-        if ($node->class->getLast() !== 'Html') {
+        if ($node->class->toString() !== self::class) {
             return false;
         }
 
@@ -87,11 +82,6 @@ final class HtmlAddMethodRector extends AbstractRector
             return false;
         }
 
-        dump($node->var);
-        dump($node->getAttribute('type'));
-        dump($node->getAttribute('type') === $class);
-        die;
-
-        return false;
+        return $node->var->getAttribute('type') === $class;
     }
 }

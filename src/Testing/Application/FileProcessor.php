@@ -6,7 +6,11 @@ use PhpParser\Lexer;
 use PhpParser\NodeVisitor;
 use Rector\Contract\Parser\ParserInterface;
 use Rector\NodeTraverser\CloningNodeTraverser;
+use Rector\NodeTraverser\ConnectorNodeTraverser;
 use Rector\NodeTraverser\MainNodeTraverser;
+use Rector\NodeTraverser\NamingNodeTraverser;
+use Rector\NodeTraverser\ShutdownNodeTraverser;
+use Rector\NodeTraverser\ClassLikeTypeResolvingNodeTraverser;
 use Rector\Printer\FormatPerservingPrinter;
 use Rector\Rector\RectorCollector;
 use SplFileInfo;
@@ -43,13 +47,37 @@ final class FileProcessor
      */
     private $cloningNodeTraverser;
 
+    /**
+     * @var ClassLikeTypeResolvingNodeTraverser
+     */
+    private $classLikeTypeResolvingNodeTraverser;
+
+    /**
+     * @var ShutdownNodeTraverser
+     */
+    private $shutdownNodeTraverser;
+
+    /**
+     * @var NamingNodeTraverser
+     */
+    private $namingNodeTraverser;
+
+    /**
+     * @var ConnectorNodeTraverser
+     */
+    private $connectorNodeTraverser;
+
     public function __construct(
         CloningNodeTraverser $cloningNodeTraverser,
         ParserInterface $parser,
         FormatPerservingPrinter $codeStyledPrinter,
         Lexer $lexer,
         MainNodeTraverser $mainNodeTraverser,
-        RectorCollector $rectorCollector
+        RectorCollector $rectorCollector,
+        ClassLikeTypeResolvingNodeTraverser $classLikeTypeResolvingNodeTraverser,
+        ShutdownNodeTraverser $shutdownNodeTraverser,
+        NamingNodeTraverser $namingNodeTraverser,
+        ConnectorNodeTraverser $connectorNodeTraverser
     ) {
         $this->parser = $parser;
         $this->codeStyledPrinter = $codeStyledPrinter;
@@ -57,6 +85,10 @@ final class FileProcessor
         $this->mainNodeTraverser = $mainNodeTraverser;
         $this->rectorCollector = $rectorCollector;
         $this->cloningNodeTraverser = $cloningNodeTraverser;
+        $this->classLikeTypeResolvingNodeTraverser = $classLikeTypeResolvingNodeTraverser;
+        $this->shutdownNodeTraverser = $shutdownNodeTraverser;
+        $this->namingNodeTraverser = $namingNodeTraverser;
+        $this->connectorNodeTraverser = $connectorNodeTraverser;
     }
 
     /**
@@ -82,9 +114,12 @@ final class FileProcessor
         $oldTokens = $this->lexer->getTokens();
         $newStmts = $this->cloningNodeTraverser->traverse($oldStmts);
 
-        // @todo: first clone, then startup, then main
-
+        // @todo: introduce Traverser queue?
+        $newStmts = $this->namingNodeTraverser->traverse($newStmts);
+        $newStmts = $this->connectorNodeTraverser->traverse($newStmts);
+        $newStmts = $this->classLikeTypeResolvingNodeTraverser->traverse($newStmts);
         $newStmts = $this->mainNodeTraverser->traverse($newStmts);
+        $newStmts = $this->shutdownNodeTraverser->traverse($newStmts);
 
         return $this->codeStyledPrinter->printToString($newStmts, $oldStmts, $oldTokens);
     }

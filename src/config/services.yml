@@ -2,6 +2,8 @@ parameters:
     # todo
     kernel_class: # for name based service refactoring
 
+    name: "Rector"
+
 services:
     _defaults:
         autowire: true
@@ -18,7 +20,7 @@ services:
     # 3rd party services
     Symfony\Component\Console\Application:
         arguments:
-            $name: "Rector"
+            $name: "%name%"
 
     # PhpParser - Parser
     PhpParser\Parser:
@@ -28,7 +30,11 @@ services:
     PhpParser\ParserFactory: ~
     PhpParser\BuilderFactory: ~
 
-    PhpParser\NodeVisitor\NameResolver: ~
+    PhpParser\NodeVisitor\NameResolver:
+        arguments:
+            $options:
+                'replaceNodes': false
+
     PhpParser\NodeTraverser: ~
 
     # PhpParser - Printer
