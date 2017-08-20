@@ -18,6 +18,11 @@ use Rector\NodeTypeResolver\TypeContext;
 final class ClassLikeTypeResolver extends NodeVisitorAbstract
 {
     /**
+     * @var string
+     */
+    private const TYPE_ATTRIBUTE = 'type';
+
+    /**
      * @var TypeContext
      */
     private $typeContext;
@@ -62,11 +67,16 @@ final class ClassLikeTypeResolver extends NodeVisitorAbstract
         }
 
         if ($variableType) {
-            $node->setAttribute('type', $variableType);
+            $node->setAttribute(self::TYPE_ATTRIBUTE, $variableType);
         }
 
         if ($node instanceof Assign && $node->var instanceof Variable && $node->expr instanceof Variable) {
             $this->typeContext->addAssign($node->var->name, $node->expr->name);
+
+            $variableType = $this->typeContext->getTypeForVariable($node->var->name);
+            if ($variableType) {
+                $node->var->setAttribute(self::TYPE_ATTRIBUTE, $variableType);
+            }
         }
     }
 

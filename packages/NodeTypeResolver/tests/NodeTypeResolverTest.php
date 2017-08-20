@@ -2,6 +2,7 @@
 
 namespace Rector\NodeTypeResolver\Tests;
 
+use Nette\Utils\Html;
 use PhpParser\Node\Expr\Variable;
 use Rector\Contract\Parser\ParserInterface;
 use Rector\NodeTraverser\StandaloneTraverseNodeTraverser;
@@ -34,9 +35,11 @@ final class NodeTypeResolverTest extends AbstractContainerAwareTestCase
         /** @var Variable $htmlVariableNode */
         $htmlVariableNode = $nodes[1]->stmts[1]->stmts[0]->stmts[0]->expr->var;
 
-        $this->assertSame(
-            'Nette\Utils\Html',
-            $htmlVariableNode->getAttribute('type')
-        );
+        $this->assertSame(Html::class, $htmlVariableNode->getAttribute('type'));
+
+        /** @var Variable $assignedVariableNode */
+        $assignedVariableNode = $nodes[1]->stmts[1]->stmts[0]->stmts[1]->expr->var;
+
+        $this->assertSame(Html::class, $assignedVariableNode->getAttribute('type'));
     }
 }

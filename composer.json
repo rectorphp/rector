@@ -34,9 +34,9 @@
     },
     "scripts": {
         "all": ["phpunit", "@check-cs", "@phpstan"],
-        "check-cs": "ecs check bin src tests",
-        "fix-cs": "ecs check bin src tests --fix",
-        "phpstan": "phpstan analyse bin src tests --level max --configuration phpstan.neon"
+        "check-cs": "ecs check bin packages src tests",
+        "fix-cs": "ecs check bin packages src tests --fix",
+        "phpstan": "phpstan analyse bin packages src tests --level max --configuration phpstan.neon"
     },
     "config": {
         "sort-packages": true

@@ -20,7 +20,7 @@ final class TypeContext
     /**
      * @var mixed[]
      */
-    private $localTypes;
+    private $localTypes = [];
 
     /**
      * @var ClassLike|null
