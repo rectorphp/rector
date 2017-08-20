@@ -1,36 +1,24 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Rector\Contrib\Nette;
+namespace Rector\Rector;
 
-use Nette\Utils\Html;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
-use Rector\Deprecation\SetNames;
-use Rector\Rector\AbstractRector;
 
-final class HtmlAddMethodRector extends AbstractRector
+abstract class AbstractChangeMethodNameRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private const CLASS_NAME = Html::class;
+    abstract protected function getClassName(): string;
 
-    public function getSetName(): string
-    {
-        return SetNames::NETTE;
-    }
+    abstract protected function getOldMethodName(): string;
 
-    public function sinceVersion(): float
-    {
-        return 2.4;
-    }
+    abstract protected function getNewMethodName(): string;
 
     public function isCandidate(Node $node): bool
     {
-        if ($this->isOnTypeCall($node, self::CLASS_NAME)) {
+        if ($this->isOnTypeCall($node, $this->getClassName())) {
             return true;
         }
 
@@ -46,7 +34,7 @@ final class HtmlAddMethodRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        $node->name->name = 'addHtml';
+        $node->name->name = $this->getNewMethodName();
 
         return $node;
     }
@@ -61,15 +49,11 @@ final class HtmlAddMethodRector extends AbstractRector
             return false;
         }
 
-        if ($node->class->toString() !== self::CLASS_NAME) {
+        if ($node->class->toString() !== $this->getClassName()) {
             return false;
         }
 
-        if ((string) $node->name !== 'add') {
-            return false;
-        }
-
-        return true;
+        return (string) $node->name === $this->getOldMethodName();
     }
 
     private function isOnTypeCall(Node $node, string $class): bool

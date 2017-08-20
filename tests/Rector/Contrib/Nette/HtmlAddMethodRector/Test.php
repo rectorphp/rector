@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\Rector\Contrib\Nette\HtmlAddMethodRector;
 
-use Rector\Rector\Contrib\Nette\HtmlAddMethodRector;
+use Rector\Rector\Contrib\Nette\HtmlAddMethodRectorRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class Test extends AbstractRectorTestCase
@@ -36,6 +36,6 @@ final class Test extends AbstractRectorTestCase
      */
     protected function getRectorClasses(): array
     {
-        return [HtmlAddMethodRector::class];
+        return [HtmlAddMethodRectorRector::class];
     }
 }
