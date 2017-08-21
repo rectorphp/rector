@@ -35,28 +35,31 @@ final class PropertyTest extends AbstractContainerAwareTestCase
         $this->nodes = $this->standaloneTraverseNodeTraverser->traverse($nodes);
     }
 
-//    /**
-//     * $this->property;
-//     */
-//    public function testPropertyFetch(): void
-//    {
-//        /** @var PropertyFetch $propertyFetchNode */
-//        $propertyFetchNode = $this->nodes[1]->stmts[1]->stmts[2]->stmts[0]->expr;
-//        $this->assertSame(Html::class, $propertyFetchNode->getAttribute('type'));
-//    }
+    /**
+     * $this->property;.
+     */
+    public function testPropertyFetch(): void
+    {
+        /** @var PropertyFetch $propertyFetchNode */
+        $propertyFetchNode = $this->nodes[1]->stmts[1]->stmts[2]->stmts[0]->expr;
+        $this->assertSame(Html::class, $propertyFetchNode->getAttribute('type'));
+    }
 
     /**
-     * $property;
+     * $property;.
      */
     public function testProperty(): void
     {
         $propertyNode = $this->nodes[1]->stmts[1]->stmts[0];
         $this->assertSame(Html::class, $propertyNode->getAttribute('type'));
     }
-//
-//    public function testMethodParameter(): void
-//    {
-//        $this->assertTrue(true);
-//        // $constructorVariableNode = $this->nodes[1]->stmts[1]->stmts[1]->params[0]->var;
-//    }
+
+    /**
+     * method(Type $parameter).
+     */
+    public function testMethodParameter(): void
+    {
+        $constructorVariableNode = $this->nodes[1]->stmts[1]->stmts[1]->params[0]->var;
+        $this->assertSame(Html::class, $constructorVariableNode->getAttribute('type'));
+    }
 }

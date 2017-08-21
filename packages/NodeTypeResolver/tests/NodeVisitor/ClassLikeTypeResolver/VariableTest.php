@@ -36,24 +36,22 @@ final class VariableTest extends AbstractContainerAwareTestCase
     }
 
     /**
-     * $variable
+     * $variable.
      */
     public function testVariable(): void
     {
         /** @var Variable $htmlVariableNode */
         $htmlVariableNode = $this->nodes[1]->stmts[1]->stmts[0]->stmts[0]->expr->var;
         $this->assertSame(Html::class, $htmlVariableNode->getAttribute('type'));
-
     }
 
     /**
-     * $newVariable = $variable;
+     * $newVariable = $variable;.
      */
     public function testReassignedVariable(): void
     {
         /** @var Variable $assignedVariableNode */
         $assignedVariableNode = $this->nodes[1]->stmts[1]->stmts[0]->stmts[1]->expr->var;
         $this->assertSame(Html::class, $assignedVariableNode->getAttribute('type'));
-
     }
 }
