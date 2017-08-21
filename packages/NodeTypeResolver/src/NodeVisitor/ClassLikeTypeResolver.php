@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\Property;
 use PhpParser\NodeVisitorAbstract;
 use Rector\NodeTypeResolver\TypeContext;
 
@@ -37,6 +38,7 @@ final class ClassLikeTypeResolver extends NodeVisitorAbstract
     {
         $this->typeContext = $typeContext;
 
+        // consider mini subscribers
         $this->perNodeResolvers[Variable::class] = function (Variable $variableNode): void {
             $this->processVariableNode($variableNode);
         };
@@ -45,6 +47,9 @@ final class ClassLikeTypeResolver extends NodeVisitorAbstract
         };
         $this->perNodeResolvers[PropertyFetch::class] = function (PropertyFetch $propertyFetchNode): void {
             $this->processPropertyFetch($propertyFetchNode);
+        };
+        $this->perNodeResolvers[Property::class] = function (Property $propertyNode): void {
+            $this->processProperty($propertyNode);
         };
     }
 
@@ -129,6 +134,16 @@ final class ClassLikeTypeResolver extends NodeVisitorAbstract
 
         if ($propertyType) {
             $propertyFetchNode->setAttribute(self::TYPE_ATTRIBUTE, $propertyType);
+        }
+    }
+
+    private function processProperty(Property $propertyNode): void
+    {
+        $propertyName = (string) $propertyNode->props[0]->name;
+        $propertyType = $this->typeContext->getTypeForProperty($propertyName);
+
+        if ($propertyType) {
+            $propertyNode->setAttribute(self::TYPE_ATTRIBUTE, $propertyType);
         }
     }
 }

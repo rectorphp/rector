@@ -35,24 +35,24 @@ final class PropertyTest extends AbstractContainerAwareTestCase
         $this->nodes = $this->standaloneTraverseNodeTraverser->traverse($nodes);
     }
 
-    /**
-     * $this->property;
-     */
-    public function testPropertyFetch(): void
-    {
-        /** @var PropertyFetch $propertyFetchNode */
-        $propertyFetchNode = $this->nodes[1]->stmts[1]->stmts[2]->stmts[0]->expr;
-        $this->assertSame(Html::class, $propertyFetchNode->getAttribute('type'));
-    }
-
 //    /**
-//     * $property;
+//     * $this->property;
 //     */
-//    public function testProperty(): void
+//    public function testPropertyFetch(): void
 //    {
-//        $propertyNode = $this->nodes[1]->stmts[1]->stmts[0];
-//        $this->assertSame(Html::class, $propertyNode->getAttribute('type'));
+//        /** @var PropertyFetch $propertyFetchNode */
+//        $propertyFetchNode = $this->nodes[1]->stmts[1]->stmts[2]->stmts[0]->expr;
+//        $this->assertSame(Html::class, $propertyFetchNode->getAttribute('type'));
 //    }
+
+    /**
+     * $property;
+     */
+    public function testProperty(): void
+    {
+        $propertyNode = $this->nodes[1]->stmts[1]->stmts[0];
+        $this->assertSame(Html::class, $propertyNode->getAttribute('type'));
+    }
 //
 //    public function testMethodParameter(): void
 //    {
