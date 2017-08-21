@@ -3,6 +3,7 @@
 namespace Rector\NodeTypeResolver\Tests\NodeVisitor\ClassLikeTypeResolver;
 
 use Nette\Utils\Html;
+use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use Rector\Contract\Parser\ParserInterface;
 use Rector\NodeTraverser\StandaloneTraverseNodeTraverser;
@@ -19,6 +20,11 @@ final class VariableTest extends AbstractContainerAwareTestCase
      * @var StandaloneTraverseNodeTraverser
      */
     private $standaloneTraverseNodeTraverser;
+
+    /**
+     * @var Node[]
+     */
+    private $nodes = [];
 
     protected function setUp(): void
     {
