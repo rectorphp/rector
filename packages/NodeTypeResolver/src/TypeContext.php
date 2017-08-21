@@ -2,13 +2,10 @@
 
 namespace Rector\NodeTypeResolver;
 
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\ClassMethod;
-use ReflectionClass;
+use Rector\NodeTypeResolver\TypesExtractor\ConstructorPropertyTypesExtractor;
 use ReflectionFunction;
 use ReflectionMethod;
 
@@ -28,9 +25,19 @@ final class TypeContext
     private $classProperties = [];
 
     /**
-     * @var ClassLike|nnull
+     * @var ClassLike|null
      */
     private $classLikeNode;
+
+    /**
+     * @var ConstructorPropertyTypesExtractor
+     */
+    private $constructorPropertyTypesExtractor;
+
+    public function __construct(ConstructorPropertyTypesExtractor $constructorPropertyTypesExtractor)
+    {
+        $this->constructorPropertyTypesExtractor = $constructorPropertyTypesExtractor;
+    }
 
     public function startFile(): void
     {
@@ -50,7 +57,7 @@ final class TypeContext
         $this->classLikeNode = $classLikeNode;
 
         if ($classLikeNode instanceof Class_) {
-            $this->classProperties = $this->prepareConstructorTypesFromClass($classLikeNode);
+            $this->classProperties = $this-> constructorPropertyTypesExtractor->extractFromClassNode($classLikeNode);
         }
     }
 
@@ -99,77 +106,5 @@ final class TypeContext
         }
 
         return new ReflectionFunction((string) $functionLikeNode->name);
-    }
-
-    /**
-     * @return string[]
-     */
-    private function prepareConstructorTypesFromClass(Class_ $classNode): array
-    {
-        $constructorParametersWithTypes = $this->getConstructorParametersWithTypes($classNode);
-        if (! count($constructorParametersWithTypes)) {
-            return [];
-        }
-
-        $propertiesWithTypes = [];
-        foreach ($classNode->stmts as $inClassNode) {
-            if (! $inClassNode instanceof ClassMethod) {
-                continue;
-            }
-
-            if ((string) $inClassNode->name !== '__construct') {
-                continue;
-            }
-
-            foreach ($inClassNode->stmts as $inConstructorNode) {
-                if (! $inConstructorNode->expr instanceof Assign) {
-                    continue;
-                }
-
-                if (! $inConstructorNode->expr->var instanceof PropertyFetch) {
-                    continue;
-                }
-
-                if ($inConstructorNode->expr->var->var->name !== 'this') {
-                    continue;
-                }
-
-                /** @var PropertyFetch $propertyFetchNode */
-                $propertyFetchNode = $inConstructorNode->expr->var;
-                $propertyName = (string) $propertyFetchNode->name;
-                $propertyType = $constructorParametersWithTypes[$propertyName] ?? null;
-
-                if ($propertyName && $propertyType) {
-                    $propertiesWithTypes[$propertyName] = $propertyType;
-                }
-            }
-        }
-
-        return $propertiesWithTypes;
-    }
-
-    /**
-     * @return string[]
-     */
-    private function getConstructorParametersWithTypes(Class_ $classNode): array
-    {
-        $className = $classNode->namespacedName->toString();
-        if (! class_exists($className)) {
-            return [];
-        }
-
-        $constructorMethod = (new ReflectionClass($className))->getConstructor();
-        $parametersWithTypes = [];
-
-        if ($constructorMethod) {
-            foreach ($constructorMethod->getParameters() as $parameterReflection) {
-                $parameterName = $parameterReflection->getName();
-                $parameterType = (string) $parameterReflection->getType();
-
-                $parametersWithTypes[$parameterName] = $parameterType;
-            }
-        }
-
-        return $parametersWithTypes;
     }
 }

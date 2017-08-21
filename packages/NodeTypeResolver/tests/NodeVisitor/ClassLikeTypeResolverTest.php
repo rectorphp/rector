@@ -52,7 +52,7 @@ final class ClassLikeTypeResolverTest extends AbstractContainerAwareTestCase
         $propertyFetchNode = $nodes[1]->stmts[1]->stmts[2]->stmts[0]->expr;
         $this->assertSame(Html::class, $propertyFetchNode->getAttribute('type'));
 
-        // @todo
+        // @todo test asl well
         //$propertyNode = $nodes[1]->stmts[1]->stmts[0];
         // $constructorVariableNode = $nodes[1]->stmts[1]->stmts[1]->params[0]->var;
     }
