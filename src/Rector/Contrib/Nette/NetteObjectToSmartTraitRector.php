@@ -37,20 +37,17 @@ final class NetteObjectToSmartTraitRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        if ($node instanceof Class_) {
-            if (! $node->extends) {
-                return false;
-            }
-
-            $parentClassName = (string) $node->extends;
-            if ($parentClassName !== 'Nette\Object') {
-                return false;
-            }
-
-            return true;
+        if (! $node instanceof Class_) {
+            return false;
         }
 
-        return false;
+        if (! $node->extends) {
+            return false;
+        }
+
+        $parentClassName = $this->getParentClassName($node);
+
+        return $parentClassName === $this->getParentClass();
     }
 
     /**
@@ -58,11 +55,10 @@ final class NetteObjectToSmartTraitRector extends AbstractRector
      */
     public function refactor(Node $classNode): ?Node
     {
-        $traitUseNode = $this->createTraitUse('Nette\SmartObject');
+        $traitUseNode = $this->createTraitUse($this->getTraitName());
         $this->statementGlue->addAsFirstTrait($classNode, $traitUseNode);
 
-        // remove parent class
-        $classNode->extends = null;
+        $this->removeParentClass($classNode);
 
         return $classNode;
     }
@@ -72,5 +68,30 @@ final class NetteObjectToSmartTraitRector extends AbstractRector
         return new TraitUse([
             new FullyQualified($traitName),
         ]);
+    }
+
+    private function getParentClass(): string
+    {
+        return 'Nette\Object';
+    }
+
+    private function getTraitName(): string
+    {
+        return 'Nette\SmartObject';
+    }
+
+    private function getParentClassName(Class_ $classNode): string
+    {
+        $parentClass = $classNode->extends;
+
+        /** @var FullyQualified $fqnParentClassName */
+        $fqnParentClassName = $parentClass->getAttribute('resolvedName');
+
+        return $fqnParentClassName->toString();
+    }
+
+    private function removeParentClass(Class_ $classNode): void
+    {
+        $classNode->extends = null;
     }
 }
