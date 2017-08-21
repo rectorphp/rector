@@ -7,6 +7,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use ReflectionClass;
 
 final class ConstructorPropertyTypesExtractor
 {
@@ -20,29 +21,15 @@ final class ConstructorPropertyTypesExtractor
             return [];
         }
 
-        $propertiesWithTypes = [];
         foreach ($classNode->stmts as $inClassNode) {
             if (! $this->isContructorMethodNode($inClassNode)) {
                 continue;
             }
 
-            foreach ($inClassNode->stmts as $inConstructorNode) {
-                if (! $this->isAssignThisNode($inConstructorNode)) {
-                    continue;
-                }
-
-                /** @var PropertyFetch $propertyFetchNode */
-                $propertyFetchNode = $inConstructorNode->expr->var;
-                $propertyName = (string) $propertyFetchNode->name;
-                $propertyType = $constructorParametersWithTypes[$propertyName] ?? null;
-
-                if ($propertyName && $propertyType) {
-                    $propertiesWithTypes[$propertyName] = $propertyType;
-                }
-            }
+            return $this->extractPropertiesFromConstructorMethodNode($inClassNode, $constructorParametersWithTypes);
         }
 
-        return $propertiesWithTypes;
+        return [];
     }
 
     /**
@@ -55,7 +42,7 @@ final class ConstructorPropertyTypesExtractor
             return [];
         }
 
-        $constructorMethod = (new \ReflectionClass($className))->getConstructor();
+        $constructorMethod = (new ReflectionClass($className))->getConstructor();
         $parametersWithTypes = [];
 
         if ($constructorMethod) {
@@ -90,5 +77,33 @@ final class ConstructorPropertyTypesExtractor
         }
 
         return $node->expr->var->var->name === 'this';
+    }
+
+    /**
+     * @param string[] $constructorParametersWithTypes
+     * @return string[]
+     */
+    private function extractPropertiesFromConstructorMethodNode(
+        ClassMethod $classMethodNode,
+        array $constructorParametersWithTypes
+    ): array {
+        $propertiesWithTypes = [];
+
+        foreach ($classMethodNode->stmts as $inConstructorNode) {
+            if (! $this->isAssignThisNode($inConstructorNode)) {
+                continue;
+            }
+
+            /** @var PropertyFetch $propertyFetchNode */
+            $propertyFetchNode = $inConstructorNode->expr->var;
+            $propertyName = (string) $propertyFetchNode->name;
+            $propertyType = $constructorParametersWithTypes[$propertyName] ?? null;
+
+            if ($propertyName && $propertyType) {
+                $propertiesWithTypes[$propertyName] = $propertyType;
+            }
+        }
+
+        return $propertiesWithTypes;
     }
 }

@@ -57,7 +57,7 @@ final class TypeContext
         $this->classLikeNode = $classLikeNode;
 
         if ($classLikeNode instanceof Class_) {
-            $this->classProperties = $this-> constructorPropertyTypesExtractor->extractFromClassNode($classLikeNode);
+            $this->classProperties = $this->constructorPropertyTypesExtractor->extractFromClassNode($classLikeNode);
         }
     }
 

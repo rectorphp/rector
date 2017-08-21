@@ -28,9 +28,24 @@ final class ClassLikeTypeResolver extends NodeVisitorAbstract
      */
     private $typeContext;
 
+    /**
+     * @var callable[]
+     */
+    private $perNodeResolvers = [];
+
     public function __construct(TypeContext $typeContext)
     {
         $this->typeContext = $typeContext;
+
+        $this->perNodeResolvers[Variable::class] = function (Variable $variableNode): void {
+            $this->processVariableNode($variableNode);
+        };
+        $this->perNodeResolvers[Assign::class] = function (Assign $assignNode): void {
+            $this->processAssignNode($assignNode);
+        };
+        $this->perNodeResolvers[PropertyFetch::class] = function (PropertyFetch $propertyFetchNode): void {
+            $this->processPropertyFetch($propertyFetchNode);
+        };
     }
 
     /**
@@ -55,16 +70,10 @@ final class ClassLikeTypeResolver extends NodeVisitorAbstract
             return;
         }
 
-        if ($node instanceof Variable) {
-            $this->processVariableNode($node);
-        }
+        $nodeClass = get_class($node);
 
-        if ($node instanceof Assign) {
-            $this->processAssignNode($node);
-        }
-
-        if ($node instanceof PropertyFetch) {
-            $this->processPropertyFetch($node);
+        if (isset($this->perNodeResolvers[$nodeClass])) {
+            $this->perNodeResolvers[$nodeClass]($node);
         }
     }
 
