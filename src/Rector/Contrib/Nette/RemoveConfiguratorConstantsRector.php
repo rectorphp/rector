@@ -13,9 +13,9 @@ final class RemoveConfiguratorConstantsRector extends AbstractRector
     public function isCandidate(Node $node): bool
     {
         if ($node instanceof ClassConstFetch) {
-            // @todo: check FQN namespace
-            $className = (string) $node->class;
-            if (! in_array($className, ['Nette\Configurator', 'Configurator'], true)) {
+            $className = $this->getClassName($node);
+
+            if ($className !== $this->getDesiredClass()) {
                 return false;
             }
 
@@ -48,5 +48,18 @@ final class RemoveConfiguratorConstantsRector extends AbstractRector
     public function sinceVersion(): float
     {
         return 2.3;
+    }
+
+    private function getClassName(ClassConstFetch $classConstFetchNode): string
+    {
+        /** @var Node\Name\FullyQualified $fqnName */
+        $fqnName = $classConstFetchNode->class->getAttribute('resolvedName');
+
+        return $fqnName->toString();
+    }
+
+    private function getDesiredClass(): string
+    {
+        return 'Nette\Configurator';
     }
 }
