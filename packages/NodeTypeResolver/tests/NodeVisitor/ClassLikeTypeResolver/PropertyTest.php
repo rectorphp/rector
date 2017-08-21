@@ -1,15 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace Rector\NodeTypeResolver\Tests\NodeVisitor;
+namespace Rector\NodeTypeResolver\Tests\NodeVisitor\ClassLikeTypeResolver;
 
 use Nette\Utils\Html;
 use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\Variable;
 use Rector\Contract\Parser\ParserInterface;
 use Rector\NodeTraverser\StandaloneTraverseNodeTraverser;
 use Rector\Tests\AbstractContainerAwareTestCase;
 
-final class ClassLikeTypeResolverTest extends AbstractContainerAwareTestCase
+final class PropertyTest extends AbstractContainerAwareTestCase
 {
     /**
      * @var ParserInterface
@@ -27,33 +26,24 @@ final class ClassLikeTypeResolverTest extends AbstractContainerAwareTestCase
         $this->standaloneTraverseNodeTraverser = $this->container->get(StandaloneTraverseNodeTraverser::class);
     }
 
-    public function testVariable(): void
-    {
-        $nodes = $this->parser->parseFile(__DIR__ . '/ClassLikeTypeResolverSource/VariableType.php');
-
-        $nodes = $this->standaloneTraverseNodeTraverser->traverse($nodes);
-
-        /** @var Variable $htmlVariableNode */
-        $htmlVariableNode = $nodes[1]->stmts[1]->stmts[0]->stmts[0]->expr->var;
-        $this->assertSame(Html::class, $htmlVariableNode->getAttribute('type'));
-
-        /** @var Variable $assignedVariableNode */
-        $assignedVariableNode = $nodes[1]->stmts[1]->stmts[0]->stmts[1]->expr->var;
-        $this->assertSame(Html::class, $assignedVariableNode->getAttribute('type'));
-    }
-
-    public function testProperty(): void
+    public function test(): void
     {
         $nodes = $this->parser->parseFile(__DIR__ . '/ClassLikeTypeResolverSource/PropertyType.php');
 
         $nodes = $this->standaloneTraverseNodeTraverser->traverse($nodes);
 
+        // $this->property;
         /** @var PropertyFetch $propertyFetchNode */
         $propertyFetchNode = $nodes[1]->stmts[1]->stmts[2]->stmts[0]->expr;
         $this->assertSame(Html::class, $propertyFetchNode->getAttribute('type'));
 
-        // @todo test asl well
-        //$propertyNode = $nodes[1]->stmts[1]->stmts[0];
+        // /** @var Type */ $property;
+        $propertyNode = $nodes[1]->stmts[1]->stmts[0];
+        $this->assertSame(Html::class, $propertyNode->getAttribute('type'));
+
+        dump($propertyNode);
+        die;
+
         // $constructorVariableNode = $nodes[1]->stmts[1]->stmts[1]->params[0]->var;
     }
 }
