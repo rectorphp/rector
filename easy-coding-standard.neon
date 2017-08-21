@@ -30,6 +30,7 @@ parameters:
         - PhpCsFixer\Fixer\Operator\NewWithBracesFixer
         - PhpCsFixer\Fixer\Operator\UnaryOperatorSpacesFixer
         - PhpCsFixer\Fixer\Phpdoc\PhpdocAlignFixer
+        - PhpCsFixer\Fixer\Phpdoc\PhpdocSummaryFixer
 
     skip:
         Symplify\CodingStandard\Fixer\Php\ClassStringToClassConstantFixer:

@@ -71,7 +71,7 @@ final class FormCallbackRector extends NodeVisitorAbstract implements Deprecatio
             return false;
         }
 
-        if ($node->var->name !== 'form') {
+        if ($node->var->getAttribute('type') !== $this->getDesiredClass()) {
             return false;
         }
 
@@ -83,6 +83,9 @@ final class FormCallbackRector extends NodeVisitorAbstract implements Deprecatio
         return true;
     }
 
+    /**
+     * [$this, 'something']
+     */
     private function createShortArray(Node $node): Array_
     {
         return new Array_([
@@ -95,5 +98,10 @@ final class FormCallbackRector extends NodeVisitorAbstract implements Deprecatio
         ], [
             'kind' => Array_::KIND_SHORT,
         ]);
+    }
+
+    private function getDesiredClass(): string
+    {
+        return 'Nette\Application\UI\Form';
     }
 }
