@@ -10,8 +10,8 @@ final class Test extends AbstractRectorTestCase
     public function test(): void
     {
         $this->doTestFileMatchesExpectedContent(
-            __DIR__ . '/wrong/wrong.php.inc',
-            __DIR__ . '/correct/correct.php.inc'
+            __DIR__ . '/Wrong/wrong.php.inc',
+            __DIR__ . '/Correct/correct.php.inc'
         );
     }
 
