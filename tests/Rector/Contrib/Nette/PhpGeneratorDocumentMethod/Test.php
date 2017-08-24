@@ -1,8 +1,7 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Contrib\Nette\NetteObjectToSmartTraitRector;
+namespace Rector\Tests\Rector\Contrib\Nette\PhpGeneratorDocumentMethod;
 
-use Rector\Rector\Contrib\Nette\NetteObjectToSmartTraitRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class Test extends AbstractRectorTestCase
@@ -13,18 +12,6 @@ final class Test extends AbstractRectorTestCase
             __DIR__ . '/Wrong/wrong.php.inc',
             __DIR__ . '/Correct/correct.php.inc'
         );
-        $this->doTestFileMatchesExpectedContent(
-            __DIR__ . '/Wrong/wrong2.php.inc',
-            __DIR__ . '/Correct/correct2.php.inc'
-        );
-        $this->doTestFileMatchesExpectedContent(
-            __DIR__ . '/Wrong/wrong3.php.inc',
-            __DIR__ . '/Correct/correct3.php.inc'
-        );
-        $this->doTestFileMatchesExpectedContent(
-            __DIR__ . '/Wrong/wrong4.php.inc',
-            __DIR__ . '/Correct/correct4.php.inc'
-        );
     }
 
     /**
@@ -32,6 +19,6 @@ final class Test extends AbstractRectorTestCase
      */
     protected function getRectorClasses(): array
     {
-        return [NetteObjectToSmartTraitRector::class];
+        return [/* todo */];
     }
 }
