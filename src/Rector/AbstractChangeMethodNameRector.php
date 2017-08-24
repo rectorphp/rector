@@ -10,13 +10,20 @@ use PhpParser\Node\Identifier;
 
 abstract class AbstractChangeMethodNameRector extends AbstractRector
 {
+    /**
+     * @var string|null
+     */
+    private $activeType;
+
     public function isCandidate(Node $node): bool
     {
-        if ($this->isOnTypeCall($node, $this->getClassName())) {
+        $this->activeType = null;
+
+        if ($this->isOnTypeCall($node)) {
             return true;
         }
 
-        if ($this->isStaticCall($node)) {
+        if ($this->isStaticCallOnType($node)) {
             return true;
         }
 
@@ -28,35 +35,26 @@ abstract class AbstractChangeMethodNameRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        $node->name->name = $this->getNewMethodName();
+        $oldToNewMethods = $this->getPerClassOldToNewMethods()[$this->activeType];
+
+        foreach ($oldToNewMethods as $oldMethod => $newMethod) {
+            $methodName = $node->name->name;
+            if ($methodName !== $oldMethod) {
+                continue;
+            }
+
+            $node->name->name = $newMethod;
+        }
 
         return $node;
     }
 
-    abstract protected function getClassName(): string;
+    /**
+     * @return string[][] { class => [ oldMethod => newMethod ] }
+     */
+    abstract protected function getPerClassOldToNewMethods(): array;
 
-    abstract protected function getOldMethodName(): string;
-
-    abstract protected function getNewMethodName(): string;
-
-    private function isStaticCall(Node $node): bool
-    {
-        if (! $node instanceof StaticCall) {
-            return false;
-        }
-
-        if (! $node->name instanceof Identifier) {
-            return false;
-        }
-
-        if ($node->class->toString() !== $this->getClassName()) {
-            return false;
-        }
-
-        return (string) $node->name === $this->getOldMethodName();
-    }
-
-    private function isOnTypeCall(Node $node, string $class): bool
+    private function isOnTypeCall(Node $node): bool
     {
         if (! $node instanceof MethodCall) {
             return false;
@@ -66,6 +64,51 @@ abstract class AbstractChangeMethodNameRector extends AbstractRector
             return false;
         }
 
-        return $node->var->getAttribute('type') === $class;
+        /** @var string $type */
+        $type = $node->var->getAttribute('type');
+
+        if (! $this->isTypeRelevant($type)) {
+            return false;
+        }
+
+        $this->activeType = $type;
+
+        return true;
+    }
+
+    private function isStaticCallOnType(Node $node): bool
+    {
+        if (! $node instanceof StaticCall) {
+            return false;
+        }
+
+        if (! $node->name instanceof Identifier) {
+            return false;
+        }
+
+        $type = $node->class->toString();
+
+        if (! $this->isTypeRelevant($type)) {
+            return false;
+        }
+
+        $this->activeType = $type;
+
+        return true;
+    }
+
+    private function isTypeRelevant(string $type): bool
+    {
+        $classes = $this->getClasses();
+
+        return in_array($type, $classes, true);
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getClasses(): array
+    {
+        return array_keys($this->getPerClassOldToNewMethods());
     }
 }
