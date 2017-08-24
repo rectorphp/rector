@@ -17,21 +17,6 @@ final class HtmlAddMethodRector extends AbstractChangeMethodNameRector
         return 2.4;
     }
 
-//    protected function getClassName(): string
-//    {
-//        return 'Nette\Utils\Html';
-//    }
-//
-//    protected function getOldMethodName(): string
-//    {
-//        return 'add';
-//    }
-//
-//    protected function getNewMethodName(): string
-//    {
-//        return 'addHtml';
-//    }
-
     /**
      * @return string[][]
      */
