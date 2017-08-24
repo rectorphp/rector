@@ -1,6 +1,6 @@
 {
     "name": "rector/rector",
-    "description": "Refactor legacy code to modern frameworks.",
+    "description": "AST based PHP refactoring of Nette or Symfony application to most recent versions.",
     "license": "MIT",
     "authors": [
         { "name": "Tomas Votruba", "email": "tomas.vot@gmail.com", "homepage": "https://tomasvotruba.com" },
