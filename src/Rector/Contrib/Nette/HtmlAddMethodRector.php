@@ -24,8 +24,8 @@ final class HtmlAddMethodRector extends AbstractChangeMethodNameRector
     {
         return [
             'Nette\Utils\Html' => [
-                'add' => 'addHtml'
-            ]
+                'add' => 'addHtml',
+            ],
         ];
     }
 }

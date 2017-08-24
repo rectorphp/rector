@@ -7,6 +7,14 @@ use Rector\Rector\AbstractChangeMethodNameRector;
 
 final class PhpGeneratorDocumentMethodRector extends AbstractChangeMethodNameRector
 {
+    /**
+     * @var string[]
+     */
+    private $commonMethods = [
+        'addDocument' => 'addComment',
+        'setDocuments' => 'setComment',
+        'getDocuments' => 'getComment',
+    ];
 
     public function getSetName(): string
     {
@@ -27,16 +35,7 @@ final class PhpGeneratorDocumentMethodRector extends AbstractChangeMethodNameRec
             'Nette\PhpGenerator\ClassType' => $this->commonMethods,
             'Nette\PhpGenerator\Method' => $this->commonMethods,
             'Nette\PhpGenerator\PhpFile' => $this->commonMethods,
-            'Nette\PhpGenerator\Property' => $this->commonMethods
+            'Nette\PhpGenerator\Property' => $this->commonMethods,
         ];
     }
-
-    /**
-     * @var string[]
-     */
-    private $commonMethods = [
-        'addDocument' => 'addComment',
-        'setDocuments' => 'setComment',
-        'getDocuments' => 'getComment'
-    ];
 }
