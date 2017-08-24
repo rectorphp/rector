@@ -2,6 +2,7 @@
 
 namespace Rector\Tests\Rector\Contrib\Nette\PhpGeneratorDocumentMethod;
 
+use Rector\Rector\Contrib\Nette\PhpGeneratorDocumentMethodRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class Test extends AbstractRectorTestCase
@@ -19,6 +20,6 @@ final class Test extends AbstractRectorTestCase
      */
     protected function getRectorClasses(): array
     {
-        return [/* todo */];
+        return [PhpGeneratorDocumentMethodRector::class];
     }
 }

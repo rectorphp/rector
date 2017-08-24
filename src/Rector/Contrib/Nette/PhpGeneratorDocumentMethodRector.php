@@ -18,26 +18,25 @@ final class PhpGeneratorDocumentMethodRector extends AbstractChangeMethodNameRec
         return 2.4;
     }
 
-    protected function getClassName(): string
-    {
-        // allow array?
-    }
-
-    protected function getOldMethodName(): string
-    {
-        // return string
-    }
-
-    protected function getNewMethodName(): string
-    {
-        // retun string
-    }
-
     /**
      * @return string[][]
      */
     protected function getPerClassOldToNewMethods(): array
     {
-        // TODO: Implement getPerClassOldToNewMethods() method.
+        return [
+            'Nette\PhpGenerator\ClassType' => $this->commonMethods,
+            'Nette\PhpGenerator\Method' => $this->commonMethods,
+            'Nette\PhpGenerator\PhpFile' => $this->commonMethods,
+            'Nette\PhpGenerator\Property' => $this->commonMethods
+        ];
     }
+
+    /**
+     * @var string[]
+     */
+    private $commonMethods = [
+        'addDocument' => 'addComment',
+        'setDocuments' => 'setComment',
+        'getDocuments' => 'getComment'
+    ];
 }
