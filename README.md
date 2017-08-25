@@ -3,7 +3,6 @@
 [![Build Status](https://img.shields.io/travis/TomasVotruba/Rector/master.svg?style=flat-square)](https://travis-ci.org/TomasVotruba/Rector)
 [![Coverage Status](https://img.shields.io/coveralls/TomasVotruba/Rector/master.svg?style=flat-square)](https://coveralls.io/github/TomasVotruba/Rector?branch=master)
 
-
 This tool will *reconstruct* (change) your code - **run it only in a new clean git branch**.
 
 
@@ -62,6 +61,7 @@ public function getSetName(): string
 public function sinceVersion(): float
 {
 }
+
 
 public function isCandidate(Node $node): bool
 {
