@@ -14,11 +14,12 @@
         "nette/utils": "^2.4"
     },
     "require-dev": {
-        "phpunit/phpunit": "^6.2",
         "phpstan/phpstan": "^0.8",
-        "tracy/tracy": "^2.4",
+        "phpunit/phpunit": "^6.2",
+        "slam/php-cs-fixer-extensions": "^1.4",
+        "symfony/form": "^3.3",
         "symplify/easy-coding-standard": "^2.2",
-        "slam/php-cs-fixer-extensions": "^1.4"
+        "tracy/tracy": "^2.4"
     },
     "autoload": {
         "psr-4": {
