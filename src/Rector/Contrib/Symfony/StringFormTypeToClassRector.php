@@ -14,7 +14,7 @@ use Rector\Rector\AbstractRector;
  * $form->add('name', 'form.type.text');
  *
  * into:
- * $form->add('name', 'Symfony\Component\Form\Extension\Core\Type\TextType');
+ * $form->add('name', \Symfony\Component\Form\Extension\Core\Type\TextType::class);
  *
  * Ref: https://github.com/symfony/symfony/blob/master/UPGRADE-4.0.md#frameworkbundle
  */
