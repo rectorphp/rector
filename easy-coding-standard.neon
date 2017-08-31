@@ -26,6 +26,11 @@ checkers:
     # Class should be Final or Abstract
     - SlamCsFixer\FinalInternalClassFixer
 
+    Symplify\CodingStandard\Sniffs\DependencyInjection\NoClassInstantiationSniff:
+        extraAllowedClasses:
+            - 'PhpParser\Node\*'
+            - 'PhpParser\Comment\Doc'
+
 parameters:
     exclude_checkers:
         # Excluded from symfony-checkers.neon
