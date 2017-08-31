@@ -7,9 +7,8 @@ use PhpParser\NodeVisitor\CloningVisitor;
 
 final class CloningNodeTraverser extends NodeTraverser
 {
-    public function __construct()
+    public function __construct(CloningVisitor $cloningVisitor)
     {
-        // note: probably have to be recreated to clear cache
-        $this->addVisitor(new CloningVisitor);
+        $this->addVisitor($cloningVisitor);
     }
 }

@@ -36,6 +36,7 @@ services:
     PhpParser\ParserFactory: ~
     PhpParser\BuilderFactory: ~
 
+    PhpParser\NodeVisitor\CloningVisitor:
     PhpParser\NodeVisitor\NameResolver:
         arguments:
             $options:
