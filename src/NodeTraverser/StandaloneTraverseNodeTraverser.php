@@ -22,9 +22,9 @@ final class StandaloneTraverseNodeTraverser
      */
     private $nodeVisitors = [];
 
-    public function __construct()
+    public function __construct(NodeTraverser $nativeNodeTraverser)
     {
-        $this->nativeNodeTraverser = new NodeTraverser;
+        $this->nativeNodeTraverser = $nativeNodeTraverser;
     }
 
     public function addNodeVisitor(NodeVisitor $nodeVisitor): void
