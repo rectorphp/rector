@@ -26,6 +26,11 @@ checkers:
     # Class should be Final or Abstract
     - SlamCsFixer\FinalInternalClassFixer
 
+    Symplify\CodingStandard\Sniffs\DependencyInjection\NoClassInstantiationSniff:
+        extraAllowedClasses:
+            - 'PhpParser\Node\*'
+            - 'PhpParser\Comment\Doc'
+
 parameters:
     exclude_checkers:
         # Excluded from symfony-checkers.neon
@@ -39,6 +44,7 @@ parameters:
         Symplify\CodingStandard\Fixer\Php\ClassStringToClassConstantFixer:
             # classes might not exist
             - */src/Rector/Contrib/Nette/*Rector.php
+            - src/Rector/Contrib/Symfony/StringFormTypeToClassRector.php
         Symplify\CodingStandard\Sniffs\Debug\CommentedOutCodeSniff:
             # examples of code to be found
             - src/Rector/Contrib/Symfony/GetterToPropertyRector.php
