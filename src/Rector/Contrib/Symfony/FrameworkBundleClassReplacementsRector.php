@@ -29,6 +29,7 @@ final class FrameworkBundleClassReplacementsRector extends AbstractClassReplacer
     {
         return [
             'Symfony\Bundle\FrameworkBundle\DependencyInjectino\Compiler\SerializerPass' => 'Symfony\Component\Serializer\DependencyInjection\SerializerPass',
+            // @todo: complete the rest
         ];
     }
 }
