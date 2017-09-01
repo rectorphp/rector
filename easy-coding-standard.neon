@@ -45,6 +45,7 @@ parameters:
             # classes might not exist
             - */src/Rector/Contrib/Nette/*Rector.php
             - src/Rector/Contrib/Symfony/StringFormTypeToClassRector.php
+            - src/Rector/Contrib/Symfony/FormIsValidRector.php
         Symplify\CodingStandard\Sniffs\Debug\CommentedOutCodeSniff:
             # examples of code to be found
             - src/Rector/Contrib/Symfony/GetterToPropertyRector.php
