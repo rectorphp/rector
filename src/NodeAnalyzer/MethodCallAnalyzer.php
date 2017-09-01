@@ -7,19 +7,25 @@ use PhpParser\Node\Expr\StaticCall;
 
 final class MethodCallAnalyzer
 {
-    public function isStaticMethodCallTypeAndMethod(Node $node, string $type, string $method): bool
+    /**
+     * @param string[] $methodNames
+     */
+    public function isStaticMethodCallTypeAndMethods(Node $node, string $type, array $methodNames): bool
     {
         if (! $this->isStaticMethodCallType($node, $type)) {
             return false;
         }
 
         /** @var StaticCall $node */
-        $methodName = (string) $node->name;
-        if ($methodName !== $method) {
-            return false;
+        $currentMethodName = (string) $node->name;
+
+        foreach ($methodNames as $methodName) {
+            if ($currentMethodName === $methodName) {
+                return true;
+            }
         }
 
-        return true;
+        return false;
     }
 
     private function isStaticMethodCallType(Node $node, string $type): bool

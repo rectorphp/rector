@@ -22,7 +22,11 @@ use Rector\Rector\AbstractRector;
  */
 final class VarDumperTestTraitMethodArgsRector extends AbstractRector
 {
-    const TRAIT_NAME = 'VarDumperTestTrait';
+    /**
+     * @var string
+     */
+    private const TRAIT_NAME = 'VarDumperTestTrait';
+
     /**
      * @var MethodCallAnalyzer
      */
@@ -45,9 +49,9 @@ final class VarDumperTestTraitMethodArgsRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        if (! $this->methodCallAnalyzer->isStaticMethodCallTypeAndMethod($node,self::TRAIT_NAME,'assertDumpEquals')) {
+        if (! $this->methodCallAnalyzer->isStaticMethodCallTypeAndMethods($node,self::TRAIT_NAME, ['assertDumpEquals', 'assertDumpMatchesFormat'])) {
             return false;
-        }
+       }
 
         /** @var StaticCall $node */
         if (count($node->args) <= 2) {
