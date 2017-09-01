@@ -45,9 +45,14 @@ parameters:
             # classes might not exist
             - */src/Rector/Contrib/Nette/*Rector.php
             - src/Rector/Contrib/Symfony/StringFormTypeToClassRector.php
+            - src/Rector/Contrib/Symfony/FormIsValidRector.php
         Symplify\CodingStandard\Sniffs\Debug\CommentedOutCodeSniff:
             # examples of code to be found
             - src/Rector/Contrib/Symfony/GetterToPropertyRector.php
         SlevomatCodingStandard\Sniffs\Classes\UnusedPrivateElementsSniff:
             # will be used soon
             - packages/NodeTypeResolver/src/TypeContext.php
+
+        PHP_CodeSniffer\Standards\Generic\Sniffs\Files\LineLengthSniff:
+            # long FQN classes that might not exist
+            - src/Rector/Contrib/Symfony/FrameworkBundleClassReplacementsRector.php
