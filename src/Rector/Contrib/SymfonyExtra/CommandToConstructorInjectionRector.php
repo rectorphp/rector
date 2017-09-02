@@ -7,7 +7,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Stmt\Class_;
 use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Builder\Kernel\ServiceFromKernelResolver;
 use Rector\Builder\Naming\NameResolver;
@@ -57,11 +56,6 @@ final class CommandToConstructorInjectionRector extends AbstractRector
     private $nameResolver;
 
     /**
-     * @var Class_
-     */
-    private $classNode;
-
-    /**
      * @var NodeFactory
      */
     private $nodeFactory;
@@ -86,25 +80,6 @@ final class CommandToConstructorInjectionRector extends AbstractRector
     public function sinceVersion(): float
     {
         return 3.3;
-    }
-
-    /**
-     * @todo add node traverser for this or to AbstractRector
-     * @param Node[] $nodes
-     * @return null|Node[]
-     */
-    public function beforeTraverse(array $nodes): ?array
-    {
-        $this->classNode = null;
-
-        foreach ($nodes as $node) {
-            if ($node instanceof Class_) {
-                $this->classNode = $node;
-                break;
-            }
-        }
-
-        return null;
     }
 
     public function isCandidate(Node $node): bool
@@ -138,13 +113,7 @@ final class CommandToConstructorInjectionRector extends AbstractRector
     {
         $this->replaceParentContainerAwareCommandWithCommand();
 
-        $serviceName = $node->args[0]->value->value;
-
-        $serviceType = $this->serviceFromKernelResolver->resolveServiceClassByNameFromKernel(
-            $serviceName,
-            LocalKernel::class
-        );
-
+        $serviceType = $this->serviceFromKernelResolver->resolveServiceClassFromArgument($node->args[0], LocalKernel::class);
         if ($serviceType === null) {
             return null;
         }
@@ -154,14 +123,6 @@ final class CommandToConstructorInjectionRector extends AbstractRector
         $this->classPropertyCollector->addPropertyForClass($this->getClassName(), $serviceType, $propertyName);
 
         return $this->nodeFactory->createLocalPropertyFetch($propertyName);
-    }
-
-    /**
-     * @todo move to parent class?
-     */
-    private function getClassName(): string
-    {
-        return $this->classNode->namespacedName->toString();
     }
 
     private function replaceParentContainerAwareCommandWithCommand(): void

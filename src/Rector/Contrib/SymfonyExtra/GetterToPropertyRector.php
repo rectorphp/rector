@@ -7,7 +7,6 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Stmt\Class_;
 use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Builder\Kernel\ServiceFromKernelResolver;
 use Rector\Builder\Naming\NameResolver;
@@ -41,11 +40,6 @@ final class GetterToPropertyRector extends AbstractRector
     private $classPropertyCollector;
 
     /**
-     * @var Class_
-     */
-    private $classNode;
-
-    /**
      * @var NodeFactory
      */
     private $nodeFactory;
@@ -60,25 +54,6 @@ final class GetterToPropertyRector extends AbstractRector
         $this->serviceFromKernelResolver = $serviceFromKernelResolver;
         $this->classPropertyCollector = $classPropertyCollector;
         $this->nodeFactory = $nodeFactory;
-    }
-
-    /**
-     * @todo add node traverser for this or to AbstractRector
-     * @param Node[] $nodes
-     * @return null|Node[]
-     */
-    public function beforeTraverse(array $nodes): ?array
-    {
-        $this->classNode = null;
-
-        foreach ($nodes as $node) {
-            if ($node instanceof Class_) {
-                $this->classNode = $node;
-                break;
-            }
-        }
-
-        return null;
     }
 
     public function isCandidate(Node $node): bool
@@ -152,15 +127,7 @@ final class GetterToPropertyRector extends AbstractRector
 
     private function processMethodCallNode(MethodCall $methodCall): ?PropertyFetch
     {
-        /** @var String_ $argument */
-        $argument = $methodCall->args[0]->value;
-        $serviceName = $argument->value;
-
-        $serviceType = $this->serviceFromKernelResolver->resolveServiceClassByNameFromKernel(
-            $serviceName,
-            LocalKernel::class
-        );
-
+        $serviceType = $this->serviceFromKernelResolver->resolveServiceClassFromArgument($methodCall->args[0], LocalKernel::class);
         if ($serviceType === null) {
             return null;
         }
@@ -170,10 +137,5 @@ final class GetterToPropertyRector extends AbstractRector
         $this->classPropertyCollector->addPropertyForClass($this->getClassName(), $serviceType, $propertyName);
 
         return $this->nodeFactory->createLocalPropertyFetch($propertyName);
-    }
-
-    private function getClassName(): string
-    {
-        return $this->classNode->namespacedName->toString();
     }
 }
