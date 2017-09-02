@@ -7,6 +7,7 @@ use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use Rector\Deprecation\SetNames;
+use Rector\NodeFactory\NodeFactory;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -18,6 +19,16 @@ use Rector\Rector\AbstractRector;
  */
 final class FormIsValidRector extends AbstractRector
 {
+    /**
+     * @var NodeFactory
+     */
+    private $nodeFactory;
+
+    public function __construct(NodeFactory $nodeFactory)
+    {
+        $this->nodeFactory = $nodeFactory;
+    }
+
     public function getSetName(): string
     {
         return SetNames::SYMFONY;
@@ -54,18 +65,11 @@ final class FormIsValidRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        $varName = $node->var->name;
+        $variableName = $node->var->name;
 
         return new BooleanAnd(
-            $this->createMethodCall($varName, 'isSubmitted'),
-            $this->createMethodCall($varName, 'isValid')
+            $this->nodeFactory->createMethodCall($variableName, 'isSubmitted'),
+            $this->nodeFactory->createMethodCall($variableName, 'isValid')
         );
-    }
-
-    private function createMethodCall(string $varName, string $methodName): MethodCall
-    {
-        $varNode = new Variable($varName);
-
-        return new MethodCall($varNode, $methodName);
     }
 }

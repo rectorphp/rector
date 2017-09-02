@@ -3,12 +3,11 @@
 namespace Rector\Rector\Contrib\Symfony;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use Rector\Deprecation\SetNames;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
+use Rector\NodeFactory\NodeFactory;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -32,9 +31,15 @@ final class VarDumperTestTraitMethodArgsRector extends AbstractRector
      */
     private $methodCallAnalyzer;
 
-    public function __construct(MethodCallAnalyzer $methodCallAnalyzer)
+    /**
+     * @var NodeFactory
+     */
+    private $nodeFactory;
+
+    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, NodeFactory $nodeFactory)
     {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
+        $this->nodeFactory = $nodeFactory;
     }
 
     public function getSetName(): string
@@ -74,7 +79,7 @@ final class VarDumperTestTraitMethodArgsRector extends AbstractRector
 
         if ($methodArguments[2]->value instanceof String_) {
             $methodArguments[3] = $methodArguments[2];
-            $methodArguments[2] = $this->createNullConstant();
+            $methodArguments[2] = $this->nodeFactory->createNullConstant();
 
             $node->args = $methodArguments;
 
@@ -82,10 +87,5 @@ final class VarDumperTestTraitMethodArgsRector extends AbstractRector
         }
 
         return null;
-    }
-
-    private function createNullConstant(): ConstFetch
-    {
-        return new ConstFetch(new Name('null'));
     }
 }

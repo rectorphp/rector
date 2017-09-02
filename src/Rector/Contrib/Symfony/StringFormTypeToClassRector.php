@@ -3,10 +3,10 @@
 namespace Rector\Rector\Contrib\Symfony;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use Rector\Deprecation\SetNames;
+use Rector\NodeFactory\NodeFactory;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -55,6 +55,16 @@ final class StringFormTypeToClassRector extends AbstractRector
         'form.type.reset' => 'Symfony\Component\Form\Extension\Core\Type\ResetType',
     ];
 
+    /**
+     * @var NodeFactory
+     */
+    private $nodeFactory;
+
+    public function __construct(NodeFactory $nodeFactory)
+    {
+        $this->nodeFactory = $nodeFactory;
+    }
+
     public function getSetName(): string
     {
         return SetNames::SYMFONY;
@@ -76,8 +86,7 @@ final class StringFormTypeToClassRector extends AbstractRector
     public function refactor(Node $node): ?Node
     {
         $class = $this->nameToClassMap[$node->value];
-        $nameNode = new Name('\\' . $class);
 
-        return new ClassConstFetch($nameNode, 'class');
+        return $this->nodeFactory->createClassConstantReference($class);
     }
 }
