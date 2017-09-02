@@ -127,7 +127,11 @@ final class GetterToPropertyRector extends AbstractRector
 
     private function processMethodCallNode(MethodCall $methodCall): ?PropertyFetch
     {
-        $serviceType = $this->serviceFromKernelResolver->resolveServiceClassFromArgument($methodCall->args[0], LocalKernel::class);
+        $serviceType = $this->serviceFromKernelResolver->resolveServiceClassFromArgument(
+            $methodCall->args[0],
+            LocalKernel::class
+        );
+
         if ($serviceType === null) {
             return null;
         }

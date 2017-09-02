@@ -20,7 +20,6 @@ final class ServiceFromKernelResolver
         return $serviceType;
     }
 
-
     private function resolveServiceClassByNameFromKernel(string $serviceName, string $kernelClass): ?string
     {
         $container = $this->createContainerFromKernelClass($kernelClass);

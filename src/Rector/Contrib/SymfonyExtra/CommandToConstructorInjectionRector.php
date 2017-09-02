@@ -113,7 +113,11 @@ final class CommandToConstructorInjectionRector extends AbstractRector
     {
         $this->replaceParentContainerAwareCommandWithCommand();
 
-        $serviceType = $this->serviceFromKernelResolver->resolveServiceClassFromArgument($node->args[0], LocalKernel::class);
+        $serviceType = $this->serviceFromKernelResolver->resolveServiceClassFromArgument(
+            $node->args[0],
+            LocalKernel::class
+        );
+
         if ($serviceType === null) {
             return null;
         }

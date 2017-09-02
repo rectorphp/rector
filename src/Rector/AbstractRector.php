@@ -34,11 +34,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements Deprecation
         return null;
     }
 
-    protected function getClassName(): string
-    {
-        return $this->classNode->namespacedName->toString();
-    }
-
     /**
      * @return null|int|Node
      */
@@ -53,5 +48,10 @@ abstract class AbstractRector extends NodeVisitorAbstract implements Deprecation
         }
 
         return null;
+    }
+
+    protected function getClassName(): string
+    {
+        return $this->classNode->namespacedName->toString();
     }
 }
