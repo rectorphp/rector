@@ -4,6 +4,6 @@ class ClassWithNamedService extends Controller
 {
     public function render()
     {
-        $this->get('some.class')->render();
+        $this->get('some_service')->render();
     }
 }

@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Contrib\Symfony\GetterToPropertyRector;
+namespace Rector\Tests\Rector\Contrib\SymfonyExtra\GetterToPropertyRector;
 
-use Rector\Rector\Contrib\Symfony\GetterToPropertyRector;
+use Rector\Rector\Contrib\SymfonyExtra\GetterToPropertyRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class Test extends AbstractRectorTestCase
