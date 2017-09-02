@@ -61,7 +61,17 @@ final class GetterToPropertyRector extends AbstractRector
             return false;
         }
 
-        return $this->isContainerGetCall($node);
+        // finds **$this->get**('string')
+        if ($node->var->name !== 'this' || (string) $node->name !== 'get') {
+            return false;
+        }
+
+        // finds $this->get(**'string'**)
+        if (count($node->args) !== 1 || ! $node->args[0]->value instanceof String_) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -80,22 +90,6 @@ final class GetterToPropertyRector extends AbstractRector
     public function sinceVersion(): float
     {
         return 3.3;
-    }
-
-    /**
-     * Is "$this->get('string')" statements?
-     */
-    private function isContainerGetCall(MethodCall $methodCall): bool
-    {
-        if ($methodCall->var->name !== 'this' || (string) $methodCall->name !== 'get') {
-            return false;
-        }
-
-        if (count($methodCall->args) !== 1 || ! $methodCall->args[0]->value instanceof String_) {
-            return false;
-        }
-
-        return true;
     }
 
     private function processMethodCallNode(MethodCall $methodCall): ?PropertyFetch
