@@ -6,13 +6,13 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Builder\Kernel\ServiceFromKernelResolver;
 use Rector\Builder\Naming\NameResolver;
 use Rector\Deprecation\SetNames;
+use Rector\NodeFactory\NodeFactory;
 use Rector\Rector\AbstractRector;
 use Rector\Tests\Rector\Contrib\SymfonyExtra\GetterToPropertyRector\Source\LocalKernel;
 
@@ -45,14 +45,21 @@ final class GetterToPropertyRector extends AbstractRector
      */
     private $classNode;
 
+    /**
+     * @var NodeFactory
+     */
+    private $nodeFactory;
+
     public function __construct(
         NameResolver $nameResolver,
         ServiceFromKernelResolver $serviceFromKernelResolver,
-        ClassPropertyCollector $classPropertyCollector
+        ClassPropertyCollector $classPropertyCollector,
+        NodeFactory $nodeFactory
     ) {
         $this->nameResolver = $nameResolver;
         $this->serviceFromKernelResolver = $serviceFromKernelResolver;
         $this->classPropertyCollector = $classPropertyCollector;
+        $this->nodeFactory = $nodeFactory;
     }
 
     /**
@@ -162,21 +169,7 @@ final class GetterToPropertyRector extends AbstractRector
 
         $this->classPropertyCollector->addPropertyForClass($this->getClassName(), $serviceType, $propertyName);
 
-        return $this->createPropertyFetch($propertyName);
-    }
-
-    /**
-     * @todo move to NodeFactory
-     * Creates "$this->propertyName".
-     */
-    private function createPropertyFetch(string $propertyName): PropertyFetch
-    {
-        return new PropertyFetch(
-            new Variable('this', [
-                'name' => $propertyName,
-            ]),
-            $propertyName
-        );
+        return $this->nodeFactory->createLocalPropertyFetch($propertyName);
     }
 
     private function getClassName(): string
