@@ -3,7 +3,6 @@
 namespace Rector\Rector\Contrib\SymfonyExtra;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Scalar\String_;
@@ -62,44 +61,16 @@ final class GetterToPropertyRector extends AbstractRector
             return false;
         }
 
-        dump($node);
-        die;
-
-        // finds $var = $this->get('some_service');
-        // finds $var = $this->get('some_service')->getData();
-        if ($node instanceof Assign && ($node->expr instanceof MethodCall || $node->var instanceof MethodCall)) {
-            if ($this->isContainerGetCall($node->expr)) {
-                return true;
-            }
-        }
-
-        // finds ['var => $this->get('some_service')->getData()]
-        if ($node instanceof MethodCall && $node->var instanceof MethodCall) {
-            if ($this->isContainerGetCall($node->var)) {
-                return true;
-            }
-        }
-
-        return false;
+        return $this->isContainerGetCall($node);
     }
 
-    public function refactor(Node $assignOrMethodCallNode): ?Node
+    /**
+     * @param MethodCall $methodCallNode
+     * @return null|Node
+     */
+    public function refactor(Node $methodCallNode): ?Node
     {
-        if ($assignOrMethodCallNode instanceof Assign) {
-            $refactoredMethodCall = $this->processMethodCallNode($assignOrMethodCallNode->expr);
-            if ($refactoredMethodCall) {
-                $assignOrMethodCallNode->expr = $refactoredMethodCall;
-            }
-        }
-
-        if ($assignOrMethodCallNode instanceof MethodCall) {
-            $refactoredMethodCall = $this->processMethodCallNode($assignOrMethodCallNode->var);
-            if ($refactoredMethodCall) {
-                $assignOrMethodCallNode->var = $refactoredMethodCall;
-            }
-        }
-
-        return $assignOrMethodCallNode;
+        return $this->processMethodCallNode($methodCallNode);
     }
 
     public function getSetName(): string
@@ -117,15 +88,11 @@ final class GetterToPropertyRector extends AbstractRector
      */
     private function isContainerGetCall(MethodCall $methodCall): bool
     {
-        if ($methodCall->var->name !== 'this') {
+        if ($methodCall->var->name !== 'this' || (string) $methodCall->name !== 'get') {
             return false;
         }
 
-        if ((string) $methodCall->name !== 'get') {
-            return false;
-        }
-
-        if (! $methodCall->args[0]->value instanceof String_) {
+        if (count($methodCall->args) !== 1 || ! $methodCall->args[0]->value instanceof String_) {
             return false;
         }
 
