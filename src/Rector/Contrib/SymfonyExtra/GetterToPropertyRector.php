@@ -66,7 +66,6 @@ final class GetterToPropertyRector extends AbstractRector
 
     /**
      * @param MethodCall $methodCallNode
-     * @return null|Node
      */
     public function refactor(Node $methodCallNode): ?Node
     {
