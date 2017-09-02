@@ -13,4 +13,9 @@ final class SetNames
      * @var string
      */
     public const SYMFONY = 'Symfony';
+
+    /**
+     * @var string
+     */
+    public const SYMFONY_EXTRA = 'SymfonyExtra';
 }
