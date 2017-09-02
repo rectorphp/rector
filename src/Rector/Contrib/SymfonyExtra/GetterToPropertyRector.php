@@ -58,6 +58,13 @@ final class GetterToPropertyRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
+        if (! $node instanceof MethodCall) {
+            return false;
+        }
+
+        dump($node);
+        die;
+
         // finds $var = $this->get('some_service');
         // finds $var = $this->get('some_service')->getData();
         if ($node instanceof Assign && ($node->expr instanceof MethodCall || $node->var instanceof MethodCall)) {
