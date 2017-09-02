@@ -49,9 +49,13 @@ final class VarDumperTestTraitMethodArgsRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        if (! $this->methodCallAnalyzer->isStaticMethodCallTypeAndMethods($node,self::TRAIT_NAME, ['assertDumpEquals', 'assertDumpMatchesFormat'])) {
+        if (! $this->methodCallAnalyzer->isStaticMethodCallTypeAndMethods(
+            $node,
+            self::TRAIT_NAME,
+            ['assertDumpEquals', 'assertDumpMatchesFormat']
+        )) {
             return false;
-       }
+        }
 
         /** @var StaticCall $node */
         if (count($node->args) <= 2) {

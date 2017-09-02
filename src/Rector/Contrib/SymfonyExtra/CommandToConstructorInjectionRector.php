@@ -4,10 +4,9 @@ namespace Rector\Rector\Contrib\SymfonyExtra;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
-use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
@@ -17,7 +16,6 @@ use Rector\Builder\Naming\NameResolver;
 use Rector\Deprecation\SetNames;
 use Rector\Rector\AbstractRector;
 use Rector\Tests\Rector\Contrib\SymfonyExtra\GetterToPropertyRector\Source\LocalKernel;
-use Symfony\Component\Console\Command\Command;
 
 /**
  * Ref: https://github.com/symfony/symfony/blob/master/UPGRADE-4.0.md#console
@@ -103,35 +101,24 @@ final class CommandToConstructorInjectionRector extends AbstractRector
         return null;
     }
 
-
     public function isCandidate(Node $node): bool
     {
         if (! Strings::endsWith($this->getClassName(), 'Command')) {
             return false;
         }
 
-        // $this->getContainer()->get('some_service');
-        if (! $node instanceof MethodCall) {
+        // finds **$this->getContainer()->get**('some_service');
+        if (! $node instanceof MethodCall || ! $node->var instanceof MethodCall) {
             return false;
         }
 
-        if (! $node->var instanceof MethodCall) {
+        // finds **$this**->getContainer()->**get**('some_service');
+        if ((string) $node->var->var->name !== 'this' || (string) $node->name !== 'get') {
             return false;
         }
 
-        if ((string) $node->var->var->name !== 'this') {
-            return false;
-        }
-
-        if ((string) $node->name !== 'get') {
-            return false;
-        }
-
-        if (! isset($node->args[0])) {
-            return false;
-        }
-
-        if (! $node->args[0]->value instanceof String_) {
+        // finds $this->getContainer()->get**('some_service')**;
+        if (count($node->args) !== 1 || ! $node->args[0]->value instanceof String_) {
             return false;
         }
 
@@ -170,7 +157,7 @@ final class CommandToConstructorInjectionRector extends AbstractRector
     private function createPropertyFetch(string $propertyName): PropertyFetch
     {
         return new PropertyFetch(
-            new Node\Expr\Variable('this', [
+            new Variable('this', [
                 'name' => $propertyName,
             ]),
             $propertyName

@@ -74,21 +74,17 @@ final class GetterToPropertyRector extends AbstractRector
         return null;
     }
 
-    /**
-     * @param Node $node
-     * Possibly simlify to just "$this->get('some_service')"
-     */
     public function isCandidate(Node $node): bool
     {
-        // $var = $this->get('some_service');
-        // $var = $this->get('some_service')->getData();
+        // finds $var = $this->get('some_service');
+        // finds $var = $this->get('some_service')->getData();
         if ($node instanceof Assign && ($node->expr instanceof MethodCall || $node->var instanceof MethodCall)) {
             if ($this->isContainerGetCall($node->expr)) {
                 return true;
             }
         }
 
-        // ['var => $this->get('some_service')->getData()]
+        // finds ['var => $this->get('some_service')->getData()]
         if ($node instanceof MethodCall && $node->var instanceof MethodCall) {
             if ($this->isContainerGetCall($node->var)) {
                 return true;
