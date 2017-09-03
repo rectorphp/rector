@@ -3,15 +3,13 @@
 namespace Rector\Rector\Contrib\Nette;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Scalar\String_;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Contract\Deprecation\DeprecationInterface;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\Deprecation\SetNames;
+use Rector\NodeFactory\NodeFactory;
 
 /**
  * Covers https://doc.nette.org/en/2.4/migration-2-4#toc-nette-smartobject.
@@ -19,9 +17,24 @@ use Rector\Deprecation\SetNames;
 final class FormCallbackRector extends NodeVisitorAbstract implements DeprecationInterface, RectorInterface
 {
     /**
+     * @var string
+     */
+    public const FORM_CLASS = 'Nette\Application\UI\Form';
+
+    /**
      * @var Node
      */
     private $previousNode;
+
+    /**
+     * @var NodeFactory
+     */
+    private $nodeFactory;
+
+    public function __construct(NodeFactory $nodeFactory)
+    {
+        $this->nodeFactory = $nodeFactory;
+    }
 
     public function getSetName(): string
     {
@@ -43,7 +56,7 @@ final class FormCallbackRector extends NodeVisitorAbstract implements Deprecatio
                 return null;
             }
 
-            return $this->createShortArray($node);
+            return $this->nodeFactory->createArray($node->var, $node->name);
         }
 
         $this->previousNode = $node;
@@ -71,7 +84,7 @@ final class FormCallbackRector extends NodeVisitorAbstract implements Deprecatio
             return false;
         }
 
-        if ($node->var->getAttribute('type') !== $this->getDesiredClass()) {
+        if ($node->var->getAttribute('type') !== self::FORM_CLASS) {
             return false;
         }
 
@@ -81,27 +94,5 @@ final class FormCallbackRector extends NodeVisitorAbstract implements Deprecatio
         }
 
         return true;
-    }
-
-    /**
-     * [$this, 'something']
-     */
-    private function createShortArray(Node $node): Array_
-    {
-        return new Array_([
-            new ArrayItem($node->var),
-            new ArrayItem(
-                new String_(
-                    (string) $node->name
-                )
-            ),
-        ], [
-            'kind' => Array_::KIND_SHORT,
-        ]);
-    }
-
-    private function getDesiredClass(): string
-    {
-        return 'Nette\Application\UI\Form';
     }
 }

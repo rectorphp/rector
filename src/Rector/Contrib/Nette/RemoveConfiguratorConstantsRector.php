@@ -12,21 +12,17 @@ final class RemoveConfiguratorConstantsRector extends AbstractRector
 {
     public function isCandidate(Node $node): bool
     {
-        if ($node instanceof ClassConstFetch) {
-            $className = $this->getClassNameFromClassConstFetch($node);
-
-            if ($className !== $this->getDesiredClass()) {
-                return false;
-            }
-
-            if (! in_array((string) $node->name, ['DEVELOPMENT', 'PRODUCTION'], true)) {
-                return false;
-            }
-
-            return true;
+        if (! $node instanceof ClassConstFetch) {
+            return false;
         }
 
-        return false;
+        $className = $this->getClassNameFromClassConstFetch($node);
+
+        if ($className !== $this->getDesiredClass()) {
+            return false;
+        }
+
+        return in_array((string) $node->name, ['DEVELOPMENT', 'PRODUCTION'], true);
     }
 
     /**
@@ -35,9 +31,10 @@ final class RemoveConfiguratorConstantsRector extends AbstractRector
     public function refactor(Node $classConstFetchNode): ?Node
     {
         $constantName = (string) $classConstFetchNode->name;
-        $string = strtolower($constantName);
 
-        return new String_($string);
+        $originalConstantValue = strtolower($constantName);
+
+        return new String_($originalConstantValue);
     }
 
     public function getSetName(): string

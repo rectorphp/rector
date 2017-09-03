@@ -3,11 +3,10 @@
 namespace Rector\Rector\Contrib\Symfony;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\ConstFetch;
-use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use Rector\Deprecation\SetNames;
+use Rector\NodeFactory\NodeFactory;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -22,10 +21,19 @@ use Rector\Rector\AbstractRector;
 final class ConstraintUrlOptionRector extends AbstractRector
 {
     /**
-     * @todo complete FQN
      * @var string
      */
-    private const URL_CONSTRAINT_CLASS = 'Url';
+    private const URL_CONSTRAINT_CLASS = 'Symfony\Component\Validator\Constraints\Url';
+
+    /**
+     * @var NodeFactory
+     */
+    private $nodeFactory;
+
+    public function __construct(NodeFactory $nodeFactory)
+    {
+        $this->nodeFactory = $nodeFactory;
+    }
 
     public function getSetName(): string
     {
@@ -60,8 +68,6 @@ final class ConstraintUrlOptionRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        $classNameNode = new Name(self::URL_CONSTRAINT_CLASS);
-
-        return new ClassConstFetch($classNameNode, 'CHECK_DNS_TYPE_ANY');
+        return $this->nodeFactory->createClassConstant(self::URL_CONSTRAINT_CLASS, 'CHECK_DNS_TYPE_ANY');
     }
 }

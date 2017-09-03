@@ -3,14 +3,12 @@
 namespace Rector\Rector\Contrib\SymfonyExtra;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Scalar\String_;
 use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Builder\Kernel\ServiceFromKernelResolver;
 use Rector\Builder\Naming\NameResolver;
 use Rector\Deprecation\SetNames;
+use Rector\NodeAnalyzer\SymfonyContainerCallsAnalyzer;
 use Rector\NodeFactory\NodeFactory;
 use Rector\Rector\AbstractRector;
 use Rector\Tests\Rector\Contrib\SymfonyExtra\GetterToPropertyRector\Source\LocalKernel;
@@ -43,56 +41,53 @@ final class GetterToPropertyRector extends AbstractRector
      * @var NodeFactory
      */
     private $nodeFactory;
+    /**
+     * @var SymfonyContainerCallsAnalyzer
+     */
+    private $symfonyContainerCallsAnalyzer;
 
     public function __construct(
         NameResolver $nameResolver,
         ServiceFromKernelResolver $serviceFromKernelResolver,
         ClassPropertyCollector $classPropertyCollector,
-        NodeFactory $nodeFactory
+        NodeFactory $nodeFactory,
+        SymfonyContainerCallsAnalyzer $symfonyContainerCallsAnalyzer
     ) {
         $this->nameResolver = $nameResolver;
         $this->serviceFromKernelResolver = $serviceFromKernelResolver;
         $this->classPropertyCollector = $classPropertyCollector;
         $this->nodeFactory = $nodeFactory;
+        $this->symfonyContainerCallsAnalyzer = $symfonyContainerCallsAnalyzer;
     }
 
     public function isCandidate(Node $node): bool
     {
-        // finds $var = $this->get('some_service');
-        // finds $var = $this->get('some_service')->getData();
-        if ($node instanceof Assign && ($node->expr instanceof MethodCall || $node->var instanceof MethodCall)) {
-            if ($this->isContainerGetCall($node->expr)) {
-                return true;
-            }
+        if (! $node instanceof MethodCall) {
+            return false;
         }
 
-        // finds ['var => $this->get('some_service')->getData()]
-        if ($node instanceof MethodCall && $node->var instanceof MethodCall) {
-            if ($this->isContainerGetCall($node->var)) {
-                return true;
-            }
-        }
-
-        return false;
+        return $this->symfonyContainerCallsAnalyzer->isThisCall($node);
     }
 
-    public function refactor(Node $assignOrMethodCallNode): ?Node
+    /**
+     * @param MethodCall $methodCallNode
+     */
+    public function refactor(Node $methodCallNode): ?Node
     {
-        if ($assignOrMethodCallNode instanceof Assign) {
-            $refactoredMethodCall = $this->processMethodCallNode($assignOrMethodCallNode->expr);
-            if ($refactoredMethodCall) {
-                $assignOrMethodCallNode->expr = $refactoredMethodCall;
-            }
+        $serviceType = $this->serviceFromKernelResolver->resolveServiceClassFromArgument(
+            $methodCallNode->args[0],
+            LocalKernel::class
+        );
+
+        if ($serviceType === null) {
+            return null;
         }
 
-        if ($assignOrMethodCallNode instanceof MethodCall) {
-            $refactoredMethodCall = $this->processMethodCallNode($assignOrMethodCallNode->var);
-            if ($refactoredMethodCall) {
-                $assignOrMethodCallNode->var = $refactoredMethodCall;
-            }
-        }
+        $propertyName = $this->nameResolver->resolvePropertyNameFromType($serviceType);
 
-        return $assignOrMethodCallNode;
+        $this->classPropertyCollector->addPropertyForClass($this->getClassName(), $serviceType, $propertyName);
+
+        return $this->nodeFactory->createLocalPropertyFetch($propertyName);
     }
 
     public function getSetName(): string
@@ -103,39 +98,5 @@ final class GetterToPropertyRector extends AbstractRector
     public function sinceVersion(): float
     {
         return 3.3;
-    }
-
-    /**
-     * Is "$this->get('string')" statements?
-     */
-    private function isContainerGetCall(MethodCall $methodCall): bool
-    {
-        if ($methodCall->var->name !== 'this') {
-            return false;
-        }
-
-        if ((string) $methodCall->name !== 'get') {
-            return false;
-        }
-
-        if (! $methodCall->args[0]->value instanceof String_) {
-            return false;
-        }
-
-        return true;
-    }
-
-    private function processMethodCallNode(MethodCall $methodCall): ?PropertyFetch
-    {
-        $serviceType = $this->serviceFromKernelResolver->resolveServiceClassFromArgument($methodCall->args[0], LocalKernel::class);
-        if ($serviceType === null) {
-            return null;
-        }
-
-        $propertyName = $this->nameResolver->resolvePropertyNameFromType($serviceType);
-
-        $this->classPropertyCollector->addPropertyForClass($this->getClassName(), $serviceType, $propertyName);
-
-        return $this->nodeFactory->createLocalPropertyFetch($propertyName);
     }
 }

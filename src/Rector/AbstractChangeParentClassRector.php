@@ -3,7 +3,7 @@
 namespace Rector\Rector;
 
 use PhpParser\Node;
-use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 
 abstract class AbstractChangeParentClassRector extends AbstractRector
@@ -14,7 +14,7 @@ abstract class AbstractChangeParentClassRector extends AbstractRector
             return false;
         }
 
-        return $this->getParentClassName($node) === $this->getOldClassName();
+        return $this->getParentClassName() === $this->getOldClassName();
     }
 
     /**
@@ -22,7 +22,7 @@ abstract class AbstractChangeParentClassRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        $node->extends = new Name('\\' . $this->getNewClassName());
+        $node->extends = new FullyQualified($this->getNewClassName());
 
         return $node;
     }
@@ -30,19 +30,4 @@ abstract class AbstractChangeParentClassRector extends AbstractRector
     abstract protected function getOldClassName(): string;
 
     abstract protected function getNewClassName(): string;
-
-    private function getParentClassName(Class_ $classNode): string
-    {
-        if (! $classNode->extends) {
-            return '';
-        }
-
-        /** @var Name $parentClassName */
-        $parentClassNameNode = $classNode->extends;
-
-        /** @var Node\Name\FullyQualified $fsqName */
-        $fsqName = $parentClassNameNode->getAttribute('resolvedName');
-
-        return $fsqName->toString();
-    }
 }
