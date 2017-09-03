@@ -5,7 +5,7 @@ namespace Rector\Rector\Contrib\SymfonyExtra;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Builder\Kernel\ServiceFromKernelResolver;
 use Rector\Builder\Naming\NameResolver;
@@ -17,9 +17,6 @@ use Rector\Tests\Rector\Contrib\SymfonyExtra\GetterToPropertyRector\Source\Local
 
 /**
  * Ref: https://github.com/symfony/symfony/blob/master/UPGRADE-4.0.md#console
- *
- * Similar to @see \Rector\Rector\Contrib\Symfony\GetterToPropertyRector
- * @todo Extract common logic!
  *
  * Before:
  * class MyCommand extends ContainerAwareCommand
@@ -126,6 +123,6 @@ final class CommandToConstructorInjectionRector extends AbstractRector
 
     private function replaceParentContainerAwareCommandWithCommand(): void
     {
-        $this->classNode->extends = new Name('\Symfony\Component\Console\Command\Command');
+        $this->classNode->extends = new FullyQualified('Symfony\Component\Console\Command\Command');
     }
 }
