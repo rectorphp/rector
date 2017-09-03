@@ -22,7 +22,7 @@ abstract class AbstractChangeParentClassRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        $node->extends = new Name('\\' . $this->getNewClassName());
+        $node->extends = new Name\FullyQualified($this->getNewClassName());
 
         return $node;
     }
