@@ -43,12 +43,10 @@ parameters:
     skip:
         Symplify\CodingStandard\Fixer\Php\ClassStringToClassConstantFixer:
             # classes might not exist
-            - */src/Rector/Contrib/Nette/*Rector.php
-            - src/Rector/Contrib/Symfony/StringFormTypeToClassRector.php
-            - src/Rector/Contrib/Symfony/FormIsValidRector.php
+            - */src/Rector/Contrib/*/*Rector.php
         Symplify\CodingStandard\Sniffs\Debug\CommentedOutCodeSniff:
             # examples of code to be found
-            - src/Rector/Contrib/Symfony/GetterToPropertyRector.php
+            - src/Rector/Contrib/SymfonyExtra/CommandToConstructorInjectionRector.php
         SlevomatCodingStandard\Sniffs\Classes\UnusedPrivateElementsSniff:
             # will be used soon
             - packages/NodeTypeResolver/src/TypeContext.php

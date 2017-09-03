@@ -4,6 +4,8 @@ class ClassWithNamedService implements ContainerAwareInterface
 {
     public function render()
     {
-        $someService = $this->get('some.class');
+        $this->renderTwig([
+            'posts' => $this->get('some_service')->callMe()
+        ]);
     }
 }

@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Contrib\Symfony\GetterToPropertyRector;
+namespace Rector\Tests\Rector\Contrib\SymfonyExtra\GetterToPropertyRector;
 
-use Rector\Rector\Contrib\Symfony\GetterToPropertyRector;
+use Rector\Rector\Contrib\SymfonyExtra\GetterToPropertyRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class Test extends AbstractRectorTestCase
@@ -22,6 +22,11 @@ final class Test extends AbstractRectorTestCase
         $this->doTestFileMatchesExpectedContent(
             __DIR__ . '/Wrong/wrong3.php.inc',
             __DIR__ . '/Correct/correct3.php.inc'
+        );
+
+        $this->doTestFileMatchesExpectedContent(
+            __DIR__ . '/Wrong/wrong4.php.inc',
+            __DIR__ . '/Correct/correct4.php.inc'
         );
     }
 

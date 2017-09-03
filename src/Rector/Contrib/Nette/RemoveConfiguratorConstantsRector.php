@@ -13,7 +13,7 @@ final class RemoveConfiguratorConstantsRector extends AbstractRector
     public function isCandidate(Node $node): bool
     {
         if ($node instanceof ClassConstFetch) {
-            $className = $this->getClassName($node);
+            $className = $this->getClassNameFromClassConstFetch($node);
 
             if ($className !== $this->getDesiredClass()) {
                 return false;
@@ -50,7 +50,7 @@ final class RemoveConfiguratorConstantsRector extends AbstractRector
         return 2.3;
     }
 
-    private function getClassName(ClassConstFetch $classConstFetchNode): string
+    private function getClassNameFromClassConstFetch(ClassConstFetch $classConstFetchNode): string
     {
         /** @var Node\Name\FullyQualified $fqnName */
         $fqnName = $classConstFetchNode->class->getAttribute('resolvedName');

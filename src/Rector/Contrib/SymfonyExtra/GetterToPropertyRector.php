@@ -1,20 +1,19 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Rector\Contrib\Symfony;
+namespace Rector\Rector\Contrib\SymfonyExtra;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Stmt\Class_;
 use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Builder\Kernel\ServiceFromKernelResolver;
 use Rector\Builder\Naming\NameResolver;
 use Rector\Deprecation\SetNames;
+use Rector\NodeFactory\NodeFactory;
 use Rector\Rector\AbstractRector;
-use Rector\Tests\Rector\Contrib\Symfony\GetterToPropertyRector\Source\LocalKernel;
+use Rector\Tests\Rector\Contrib\SymfonyExtra\GetterToPropertyRector\Source\LocalKernel;
 
 /**
  * Converts all:
@@ -25,11 +24,6 @@ use Rector\Tests\Rector\Contrib\Symfony\GetterToPropertyRector\Source\LocalKerne
  */
 final class GetterToPropertyRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private $className;
-
     /**
      * @var NameResolver
      */
@@ -45,44 +39,34 @@ final class GetterToPropertyRector extends AbstractRector
      */
     private $classPropertyCollector;
 
+    /**
+     * @var NodeFactory
+     */
+    private $nodeFactory;
+
     public function __construct(
         NameResolver $nameResolver,
         ServiceFromKernelResolver $serviceFromKernelResolver,
-        ClassPropertyCollector $classPropertyCollector
+        ClassPropertyCollector $classPropertyCollector,
+        NodeFactory $nodeFactory
     ) {
         $this->nameResolver = $nameResolver;
         $this->serviceFromKernelResolver = $serviceFromKernelResolver;
         $this->classPropertyCollector = $classPropertyCollector;
-    }
-
-    /**
-     * @param Node[] $nodes
-     * @return null|Node[]
-     */
-    public function beforeTraverse(array $nodes): ?array
-    {
-        $this->className = null;
-
-        foreach ($nodes as $node) {
-            if ($node instanceof Class_) {
-                $this->className = (string) $node->name;
-            }
-        }
-
-        return null;
+        $this->nodeFactory = $nodeFactory;
     }
 
     public function isCandidate(Node $node): bool
     {
-        // $var = $this->get('some_service');
-        // $var = $this->get('some_service')->getData();
+        // finds $var = $this->get('some_service');
+        // finds $var = $this->get('some_service')->getData();
         if ($node instanceof Assign && ($node->expr instanceof MethodCall || $node->var instanceof MethodCall)) {
             if ($this->isContainerGetCall($node->expr)) {
                 return true;
             }
         }
 
-        // ['var => $this->get('some_service')->getData()]
+        // finds ['var => $this->get('some_service')->getData()]
         if ($node instanceof MethodCall && $node->var instanceof MethodCall) {
             if ($this->isContainerGetCall($node->var)) {
                 return true;
@@ -113,7 +97,7 @@ final class GetterToPropertyRector extends AbstractRector
 
     public function getSetName(): string
     {
-        return SetNames::SYMFONY;
+        return SetNames::SYMFONY_EXTRA;
     }
 
     public function sinceVersion(): float
@@ -143,36 +127,15 @@ final class GetterToPropertyRector extends AbstractRector
 
     private function processMethodCallNode(MethodCall $methodCall): ?PropertyFetch
     {
-        /** @var String_ $argument */
-        $argument = $methodCall->args[0]->value;
-        $serviceName = $argument->value;
-
-        $serviceType = $this->serviceFromKernelResolver->resolveServiceClassByNameFromKernel(
-            $serviceName,
-            LocalKernel::class
-        );
-
+        $serviceType = $this->serviceFromKernelResolver->resolveServiceClassFromArgument($methodCall->args[0], LocalKernel::class);
         if ($serviceType === null) {
             return null;
         }
 
         $propertyName = $this->nameResolver->resolvePropertyNameFromType($serviceType);
 
-        $this->classPropertyCollector->addPropertyForClass($this->className, $serviceType, $propertyName);
+        $this->classPropertyCollector->addPropertyForClass($this->getClassName(), $serviceType, $propertyName);
 
-        return $this->createPropertyFetch($propertyName);
-    }
-
-    /**
-     * Creates "$this->propertyName".
-     */
-    private function createPropertyFetch(string $propertyName): PropertyFetch
-    {
-        return new PropertyFetch(
-            new Variable('this', [
-                'name' => $propertyName,
-            ]),
-            $propertyName
-        );
+        return $this->nodeFactory->createLocalPropertyFetch($propertyName);
     }
 }

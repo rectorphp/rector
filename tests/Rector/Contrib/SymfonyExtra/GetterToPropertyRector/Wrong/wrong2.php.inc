@@ -4,7 +4,6 @@ class ClassWithNamedService implements ContainerAwareInterface
 {
     public function render()
     {
-        $someService = $this->get('some.class');
-        $someResult = $this->get('some.class')->callMe();
+        $someService = $this->get('some_service');
     }
 }
