@@ -3,11 +3,10 @@
 namespace Rector\Rector\Contrib\Nette;
 
 use PhpParser\Node;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\TraitUse;
 use Rector\Builder\StatementGlue;
 use Rector\Deprecation\SetNames;
+use Rector\NodeFactory\NodeFactory;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -16,13 +15,29 @@ use Rector\Rector\AbstractRector;
 final class NetteObjectToSmartTraitRector extends AbstractRector
 {
     /**
+     * @var string
+     */
+    private const PARENT_CLASS = 'Nette\Object';
+
+    /**
+     * @var string
+     */
+    private const TRAIT_NAME = 'Nette\SmartObject';
+
+    /**
      * @var StatementGlue
      */
     private $statementGlue;
 
-    public function __construct(StatementGlue $statementGlue)
+    /**
+     * @var NodeFactory
+     */
+    private $nodeFactory;
+
+    public function __construct(StatementGlue $statementGlue, NodeFactory $nodeFactory)
     {
         $this->statementGlue = $statementGlue;
+        $this->nodeFactory = $nodeFactory;
     }
 
     public function getSetName(): string
@@ -45,9 +60,7 @@ final class NetteObjectToSmartTraitRector extends AbstractRector
             return false;
         }
 
-        $parentClassName = $this->getParentClassName($node);
-
-        return $parentClassName === $this->getParentClass();
+        return $this->getParentClassName() === self::PARENT_CLASS;
     }
 
     /**
@@ -55,39 +68,12 @@ final class NetteObjectToSmartTraitRector extends AbstractRector
      */
     public function refactor(Node $classNode): ?Node
     {
-        $traitUseNode = $this->createTraitUse($this->getTraitName());
+        $traitUseNode = $this->nodeFactory->createTraitUse(self::TRAIT_NAME);
         $this->statementGlue->addAsFirstTrait($classNode, $traitUseNode);
 
         $this->removeParentClass($classNode);
 
         return $classNode;
-    }
-
-    private function createTraitUse(string $traitName): TraitUse
-    {
-        return new TraitUse([
-            new FullyQualified($traitName),
-        ]);
-    }
-
-    private function getParentClass(): string
-    {
-        return 'Nette\Object';
-    }
-
-    private function getTraitName(): string
-    {
-        return 'Nette\SmartObject';
-    }
-
-    private function getParentClassName(Class_ $classNode): string
-    {
-        $parentClass = $classNode->extends;
-
-        /** @var FullyQualified $fqnParentClassName */
-        $fqnParentClassName = $parentClass->getAttribute('resolvedName');
-
-        return $fqnParentClassName->toString();
     }
 
     private function removeParentClass(Class_ $classNode): void

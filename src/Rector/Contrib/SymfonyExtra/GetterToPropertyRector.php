@@ -4,7 +4,6 @@ namespace Rector\Rector\Contrib\SymfonyExtra;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Scalar\String_;
 use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Builder\Kernel\ServiceFromKernelResolver;
@@ -79,23 +78,8 @@ final class GetterToPropertyRector extends AbstractRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        return $this->processMethodCallNode($methodCallNode);
-    }
-
-    public function getSetName(): string
-    {
-        return SetNames::SYMFONY_EXTRA;
-    }
-
-    public function sinceVersion(): float
-    {
-        return 3.3;
-    }
-
-    private function processMethodCallNode(MethodCall $methodCall): ?PropertyFetch
-    {
         $serviceType = $this->serviceFromKernelResolver->resolveServiceClassFromArgument(
-            $methodCall->args[0],
+            $methodCallNode->args[0],
             LocalKernel::class
         );
 
@@ -108,5 +92,15 @@ final class GetterToPropertyRector extends AbstractRector
         $this->classPropertyCollector->addPropertyForClass($this->getClassName(), $serviceType, $propertyName);
 
         return $this->nodeFactory->createLocalPropertyFetch($propertyName);
+    }
+
+    public function getSetName(): string
+    {
+        return SetNames::SYMFONY_EXTRA;
+    }
+
+    public function sinceVersion(): float
+    {
+        return 3.3;
     }
 }

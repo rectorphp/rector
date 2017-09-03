@@ -52,6 +52,24 @@ abstract class AbstractRector extends NodeVisitorAbstract implements Deprecation
 
     protected function getClassName(): string
     {
+        if ($this->classNode === null) {
+            return '';
+        }
+
         return $this->classNode->namespacedName->toString();
+    }
+
+    protected function getParentClassName(): string
+    {
+        if ($this->classNode === null) {
+            return '';
+        }
+
+        $parentClass = $this->classNode->extends;
+
+        /** @var Node\Name\FullyQualified $fqnParentClassName */
+        $fqnParentClassName = $parentClass->getAttribute('resolvedName');
+
+        return $fqnParentClassName->toString();
     }
 }

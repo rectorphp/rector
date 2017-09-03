@@ -2,12 +2,19 @@
 
 namespace Rector\NodeFactory;
 
+use PhpParser\Node;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\TraitUse;
 
 final class NodeFactory
 {
@@ -16,12 +23,11 @@ final class NodeFactory
      */
     public function createLocalPropertyFetch(string $propertyName): PropertyFetch
     {
-        return new PropertyFetch(
-            new Variable('this', [
-                'name' => $propertyName,
-            ]),
-            $propertyName
-        );
+        $localVariable = new Variable('this', [
+            'name' => $propertyName,
+        ]);
+
+        return new PropertyFetch($localVariable, $propertyName);
     }
 
     public function createNullConstant(): ConstFetch
@@ -29,9 +35,16 @@ final class NodeFactory
         return new ConstFetch(new Name('null'));
     }
 
+    public function createClassConstant(string $className, string $constantName): ClassConstFetch
+    {
+        $classNameNode = new FullyQualified($className);
+
+        return new ClassConstFetch($classNameNode, $constantName);
+    }
+
     public function createClassConstantReference(string $className): ClassConstFetch
     {
-        $nameNode = new Name('\\' . $className);
+        $nameNode = new FullyQualified($className);
 
         return new ClassConstFetch($nameNode, 'class');
     }
@@ -41,5 +54,33 @@ final class NodeFactory
         $varNode = new Variable($variableName);
 
         return new MethodCall($varNode, $methodName);
+    }
+
+    public function createTraitUse(string $traitName): TraitUse
+    {
+        $traitNameNode = new FullyQualified($traitName);
+
+        return new TraitUse([$traitNameNode]);
+    }
+
+    /**
+     * @param mixed|Node[] ...$items
+     */
+    public function createArray(...$items): Array_
+    {
+        $arrayItems = [];
+
+        foreach ($items as $item) {
+            if ($item instanceof Variable) {
+                $arrayItems[] = new ArrayItem($item);
+            } elseif ($item instanceof Identifier) {
+                $string = new String_((string) $item);
+                $arrayItems[] = new ArrayItem($string);
+            }
+        }
+
+        return new Array_($arrayItems, [
+            'kind' => Array_::KIND_SHORT,
+        ]);
     }
 }

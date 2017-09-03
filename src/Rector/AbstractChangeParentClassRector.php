@@ -14,7 +14,7 @@ abstract class AbstractChangeParentClassRector extends AbstractRector
             return false;
         }
 
-        return $this->getParentClassName($node) === $this->getOldClassName();
+        return $this->getParentClassName() === $this->getOldClassName();
     }
 
     /**
@@ -30,19 +30,4 @@ abstract class AbstractChangeParentClassRector extends AbstractRector
     abstract protected function getOldClassName(): string;
 
     abstract protected function getNewClassName(): string;
-
-    private function getParentClassName(Class_ $classNode): string
-    {
-        if (! $classNode->extends) {
-            return '';
-        }
-
-        /** @var Name $parentClassName */
-        $parentClassNameNode = $classNode->extends;
-
-        /** @var Node\Name\FullyQualified $fsqName */
-        $fsqName = $parentClassNameNode->getAttribute('resolvedName');
-
-        return $fsqName->toString();
-    }
 }
