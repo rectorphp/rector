@@ -4,11 +4,11 @@ namespace Rector\Rector\Contrib\SymfonyExtra;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Scalar\String_;
 use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Builder\Kernel\ServiceFromKernelResolver;
 use Rector\Builder\Naming\NameResolver;
 use Rector\Deprecation\SetNames;
+use Rector\NodeAnalyzer\SymfonyContainerCallsAnalyzer;
 use Rector\NodeFactory\NodeFactory;
 use Rector\Rector\AbstractRector;
 use Rector\Tests\Rector\Contrib\SymfonyExtra\GetterToPropertyRector\Source\LocalKernel;
@@ -41,17 +41,23 @@ final class GetterToPropertyRector extends AbstractRector
      * @var NodeFactory
      */
     private $nodeFactory;
+    /**
+     * @var SymfonyContainerCallsAnalyzer
+     */
+    private $symfonyContainerCallsAnalyzer;
 
     public function __construct(
         NameResolver $nameResolver,
         ServiceFromKernelResolver $serviceFromKernelResolver,
         ClassPropertyCollector $classPropertyCollector,
-        NodeFactory $nodeFactory
+        NodeFactory $nodeFactory,
+        SymfonyContainerCallsAnalyzer $symfonyContainerCallsAnalyzer
     ) {
         $this->nameResolver = $nameResolver;
         $this->serviceFromKernelResolver = $serviceFromKernelResolver;
         $this->classPropertyCollector = $classPropertyCollector;
         $this->nodeFactory = $nodeFactory;
+        $this->symfonyContainerCallsAnalyzer = $symfonyContainerCallsAnalyzer;
     }
 
     public function isCandidate(Node $node): bool
@@ -60,17 +66,7 @@ final class GetterToPropertyRector extends AbstractRector
             return false;
         }
 
-        // finds **$this->get**('string')
-        if ($node->var->name !== 'this' || (string) $node->name !== 'get') {
-            return false;
-        }
-
-        // finds $this->get(**'string'**)
-        if (count($node->args) !== 1 || ! $node->args[0]->value instanceof String_) {
-            return false;
-        }
-
-        return true;
+        return $this->symfonyContainerCallsAnalyzer->isThisCall($node);
     }
 
     /**

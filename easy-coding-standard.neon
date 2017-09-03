@@ -28,7 +28,7 @@ checkers:
 
     Symplify\CodingStandard\Sniffs\DependencyInjection\NoClassInstantiationSniff:
         extraAllowedClasses:
-#            - 'PhpParser\Node\*'
+            - 'PhpParser\Node\*'
             - 'PhpParser\Comment\Doc'
 
 parameters:

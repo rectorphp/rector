@@ -3,7 +3,7 @@
 namespace Rector\Rector;
 
 use PhpParser\Node;
-use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 
 abstract class AbstractChangeParentClassRector extends AbstractRector
@@ -22,7 +22,7 @@ abstract class AbstractChangeParentClassRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        $node->extends = new Name\FullyQualified($this->getNewClassName());
+        $node->extends = new FullyQualified($this->getNewClassName());
 
         return $node;
     }
