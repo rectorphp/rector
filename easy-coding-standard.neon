@@ -44,9 +44,6 @@ parameters:
         Symplify\CodingStandard\Fixer\Php\ClassStringToClassConstantFixer:
             # classes might not exist
             - */src/Rector/Contrib/*/*Rector.php
-        SlevomatCodingStandard\Sniffs\Classes\UnusedPrivateElementsSniff:
-            # will be used soon
-            - packages/NodeTypeResolver/src/TypeContext.php
         PHP_CodeSniffer\Standards\Generic\Sniffs\Files\LineLengthSniff:
             # long FQN classes that might not exist
             - src/Rector/Contrib/Symfony/FrameworkBundleClassReplacementsRector.php
