@@ -3,10 +3,35 @@
 namespace Rector\NodeAnalyzer;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 
 final class MethodCallAnalyzer
 {
+    public function isMethodCallTypeAndMethods(Node $node, string $type, array $methodsNames): bool
+    {
+        if (! $this->isMethodCallType($node, $type)) {
+            return false;
+        }
+    }
+
+    private function isMethodCallType(Node $node, string $type): bool
+    {
+        if (! $node instanceof MethodCall) {
+            return false;
+        }
+
+        dump($node->getAttribute('type'));
+        die;
+
+        if ($node->class->toString() !== $type) {
+            return false;
+        }
+
+        return true;
+    }
+
+
     /**
      * @param string[] $methodNames
      */
