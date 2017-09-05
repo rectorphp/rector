@@ -1,47 +1,34 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Console\Command;
+namespace Rector\TriggerExtractor\Console\Command;
 
 use Nette\Utils\Finder;
-use Rector\Application\FileProcessor;
-use SplFileInfo;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Finder\SplFileInfo;
 
-final class ReconstructCommand extends Command
+final class ExtractCommand extends Command
 {
     /**
      * @var string
      */
-    private const NAME = 'process';
+    private const NAME = 'extract-deprecations';
 
     /**
      * @var string
      */
     private const ARGUMENT_SOURCE_NAME = 'source';
 
-    /**
-     * @var FileProcessor
-     */
-    private $fileProcessor;
-
-    public function __construct(FileProcessor $fileProcessor)
-    {
-        $this->fileProcessor = $fileProcessor;
-
-        parent::__construct();
-    }
-
     protected function configure(): void
     {
         $this->setName(self::NAME);
-        $this->setDescription('Reconstruct set of your code.');
+        $this->setDescription('Extract deprecation notes from PHP files in directory(ies).');
         $this->addArgument(
             self::ARGUMENT_SOURCE_NAME,
             InputArgument::REQUIRED | InputArgument::IS_ARRAY,
-            'The path(s) to be checked.'
+            'One or more directory to be checked.'
         );
     }
 
@@ -49,7 +36,9 @@ final class ReconstructCommand extends Command
     {
         $source = $input->getArgument(self::ARGUMENT_SOURCE_NAME);
         $files = $this->findPhpFilesInDirectories($source);
-        $this->fileProcessor->processFiles($files);
+
+        dump($files);
+        die;
 
         return 0;
     }

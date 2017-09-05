@@ -1,3 +1,6 @@
+imports:
+  - { resource: '../../packages/TriggerExtractor/src/config/services.yml' }
+
 parameters:
     # todo
     kernel_class: # for name based service refactoring
