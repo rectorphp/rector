@@ -2,12 +2,11 @@
 
 namespace Rector\TriggerExtractor\Console\Command;
 
-use Nette\Utils\Finder;
+use Rector\TriggerExtractor\TriggerExtractor;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Finder\SplFileInfo;
 
 final class ExtractCommand extends Command
 {
@@ -20,6 +19,18 @@ final class ExtractCommand extends Command
      * @var string
      */
     private const ARGUMENT_SOURCE_NAME = 'source';
+
+    /**
+     * @var TriggerExtractor
+     */
+    private $triggerExtractor;
+
+    public function __construct(TriggerExtractor $triggerExtractor)
+    {
+        $this->triggerExtractor = $triggerExtractor;
+
+        parent::__construct();
+    }
 
     protected function configure(): void
     {
@@ -35,23 +46,11 @@ final class ExtractCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $source = $input->getArgument(self::ARGUMENT_SOURCE_NAME);
-        $files = $this->findPhpFilesInDirectories($source);
+        $foundDeprecations = $this->triggerExtractor->scanDirectories($source);
 
-        dump($files);
+        dump($foundDeprecations);
         die;
 
         return 0;
-    }
-
-    /**
-     * @param string[] $directories
-     * @return SplFileInfo[] array
-     */
-    private function findPhpFilesInDirectories(array $directories): array
-    {
-        $finder = Finder::find('*.php')
-            ->in($directories);
-
-        return iterator_to_array($finder->getIterator());
     }
 }
