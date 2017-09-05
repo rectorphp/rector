@@ -75,10 +75,11 @@ final class FormSetRequiredRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        return $this->nodeFactory->createMethodCallWithVarAndArgs(
-            $node->var,
-            'setRequired',
+        $node->name->name = 'setRequired';
+        $node->args = $this->nodeFactory->createArgs(
             $this->nodeFactory->createFalseConstant()
         );
+
+        return $node;
     }
 }

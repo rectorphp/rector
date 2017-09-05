@@ -93,14 +93,15 @@ final class NodeFactory
 
     /**
      * @param mixed[] $arguments
+     * @return Arg[]
      */
-    public function createMethodCallWithVarAndArgs(Expr $expressionNode, string $methodName, ...$arguments): MethodCall
+    public function createArgs(...$arguments): array
     {
         $args = [];
         foreach ($arguments as $argument) {
             $args[] = new Arg($argument);
         }
 
-        return new MethodCall($expressionNode, $methodName, $args);
+        return $args;
     }
 }
