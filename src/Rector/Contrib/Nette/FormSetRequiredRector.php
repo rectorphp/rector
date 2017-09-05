@@ -3,6 +3,8 @@
 namespace Rector\Rector\Contrib\Nette;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Deprecation\SetNames;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
@@ -57,7 +59,7 @@ final class FormSetRequiredRector extends AbstractRector
         }
 
         $arg = $node->args[0];
-        if (! $arg->value instanceof Node\Expr\ClassConstFetch) {
+        if (! $arg->value instanceof ClassConstFetch) {
             return false;
         }
 
@@ -74,7 +76,7 @@ final class FormSetRequiredRector extends AbstractRector
     public function refactor(Node $node): ?Node
     {
         $args = [
-            new Node\Arg($this->nodeFactory->createFalseConstant())
+            new Arg($this->nodeFactory->createFalseConstant()),
         ];
 
         return new MethodCall($node->var, 'setRequired', $args);
