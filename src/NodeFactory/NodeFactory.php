@@ -3,6 +3,8 @@
 namespace Rector\NodeFactory;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\ClassConstFetch;
@@ -87,5 +89,18 @@ final class NodeFactory
         return new Array_($arrayItems, [
             'kind' => Array_::KIND_SHORT,
         ]);
+    }
+
+    /**
+     * @param mixed[] $arguments
+     */
+    public function createMethodCallWithVarAndArgs(Expr $expressionNode, string $methodName, ...$arguments): MethodCall
+    {
+        $args = [];
+        foreach ($arguments as $argument) {
+            $args[] = new Arg($argument);
+        }
+
+        return new MethodCall($expressionNode, $methodName, $args);
     }
 }
