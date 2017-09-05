@@ -13,6 +13,8 @@ final class MethodCallAnalyzer
         if (! $this->isMethodCallType($node, $type)) {
             return false;
         }
+
+        return in_array((string) $node->name, $methodsNames, true);
     }
 
     private function isMethodCallType(Node $node, string $type): bool
@@ -21,10 +23,8 @@ final class MethodCallAnalyzer
             return false;
         }
 
-        dump($node->getAttribute('type'));
-        die;
-
-        if ($node->class->toString() !== $type) {
+        $variableType = $this->findVariableType($node);
+        if ($variableType !== $type) {
             return false;
         }
 
@@ -64,5 +64,16 @@ final class MethodCallAnalyzer
         }
 
         return true;
+    }
+
+    private function findVariableType(MethodCall $methodCallNode): string
+    {
+        $varNode = $methodCallNode->var;
+
+        while ($varNode->getAttribute('type') === null) {
+            $varNode = $varNode->var;
+        }
+
+        return (string) $varNode->getAttribute('type');
     }
 }

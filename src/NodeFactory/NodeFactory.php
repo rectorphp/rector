@@ -35,6 +35,11 @@ final class NodeFactory
         return new ConstFetch(new Name('null'));
     }
 
+    public function createFalseConstant(): ConstFetch
+    {
+        return new ConstFetch(new Name('false'));
+    }
+
     public function createClassConstant(string $className, string $constantName): ClassConstFetch
     {
         $classNameNode = new FullyQualified($className);

@@ -5,8 +5,7 @@ class SomePresenter
     public function createNetteForm()
     {
         $form = new \Nette\Application\UI\Form;
-        $form->addText('name')
-            ->setRequired(FALSE)
+        $form->addText('name')->setRequired(false)
             ->addRule('...')
             ->addRule('...');
 

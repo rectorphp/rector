@@ -3,8 +3,10 @@
 namespace Rector\Rector\Contrib\Nette;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\MethodCall;
 use Rector\Deprecation\SetNames;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
+use Rector\NodeFactory\NodeFactory;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -22,9 +24,15 @@ final class FormSetRequiredRector extends AbstractRector
      */
     private $methodCallAnalyzer;
 
-    public function __construct(MethodCallAnalyzer $methodCallAnalyzer)
+    /**
+     * @var NodeFactory
+     */
+    private $nodeFactory;
+
+    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, NodeFactory $nodeFactory)
     {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
+        $this->nodeFactory = $nodeFactory;
     }
 
     public function getSetName(): string
@@ -43,13 +51,32 @@ final class FormSetRequiredRector extends AbstractRector
             return false;
         }
 
-//        dump($node);
-        die;
+        /** @var MethodCall $node */
+        if (count($node->args) !== 1) {
+            return false;
+        }
+
+        $arg = $node->args[0];
+        if (! $arg->value instanceof Node\Expr\ClassConstFetch) {
+            return false;
+        }
+
+        if ($arg->value->class->getAttribute('type') !== self::FORM_CLASS) {
+            return false;
+        }
+
+        return $arg->value->name->name === 'FILLED';
     }
 
+    /**
+     * @param MethodCall $node
+     */
     public function refactor(Node $node): ?Node
     {
-        // replace ->addCondition($form::FILLED) by ->setRequired(FALSE)
-        // TODO: Implement refactor() method.
+        $args = [
+            new Node\Arg($this->nodeFactory->createFalseConstant())
+        ];
+
+        return new MethodCall($node->var, 'setRequired', $args);
     }
 }
