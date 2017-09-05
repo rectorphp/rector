@@ -4,7 +4,6 @@ namespace Rector\NodeFactory;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\ClassConstFetch;
@@ -95,7 +94,7 @@ final class NodeFactory
      * @param mixed[] $arguments
      * @return Arg[]
      */
-    public function createArgs(...$arguments): array
+    public function createArgs(array $arguments): array
     {
         $args = [];
         foreach ($arguments as $argument) {

@@ -3,7 +3,6 @@
 namespace Rector\Rector\Contrib\Nette;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Deprecation\SetNames;
@@ -76,9 +75,9 @@ final class FormSetRequiredRector extends AbstractRector
     public function refactor(Node $node): ?Node
     {
         $node->name->name = 'setRequired';
-        $node->args = $this->nodeFactory->createArgs(
-            $this->nodeFactory->createFalseConstant()
-        );
+        $node->args = $this->nodeFactory->createArgs([
+            $this->nodeFactory->createFalseConstant(),
+        ]);
 
         return $node;
     }
