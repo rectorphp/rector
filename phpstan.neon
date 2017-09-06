@@ -4,3 +4,5 @@ parameters:
         - '#Undefined variable: \$possibleAutoloadPaths#'
         - '#Undefined variable: \$container#'
         - '#Undefined variable: \$application#'
+    excludes_analyse:
+        - *packages/TriggerExtractor/tests/TriggerExtractorSource/Definition.php

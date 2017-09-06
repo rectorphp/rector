@@ -35,9 +35,10 @@ final class TriggerMessageResolver
         }
 
         throw new Exception(sprintf(
-            'Not implemented yet %s::%s()',
+            'Not implemented yet. Go to "%s::%s()" and add check for "%s" node.',
             __CLASS__,
-            __METHOD__
+            __METHOD__,
+            get_class($node)
         ));
     }
 

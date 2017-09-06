@@ -48,7 +48,6 @@ final class ExtractCommand extends Command
         $source = $input->getArgument(self::ARGUMENT_SOURCE_NAME);
         $this->triggerExtractor->scanDirectories($source);
 
-        // $output->writeln()
         // write found deprecations...
 
         return 0;

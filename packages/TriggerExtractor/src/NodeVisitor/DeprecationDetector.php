@@ -2,16 +2,11 @@
 
 namespace Rector\TriggerExtractor\NodeVisitor;
 
-use Exception;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
-use PhpParser\Node\Scalar\MagicConst\Method;
-use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeVisitorAbstract;
 use Rector\TriggerExtractor\Deprecation\DeprecationCollector;
 use Rector\TriggerExtractor\TriggerError\TriggerMessageResolver;
@@ -83,7 +78,6 @@ final class DeprecationDetector extends NodeVisitorAbstract // @todo use : class
         if (! $node->name instanceof Name) {
             return false;
         }
-
 
         return $node->name->toString() === $name;
     }
