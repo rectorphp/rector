@@ -35,17 +35,17 @@ final class Attribute
     /**
      * @var string
      */
-    public const PARENT_NODE = 'parent';
+    public const PARENT_NODE = 'parent_node';
 
     /**
      * @var string
      */
-    public const PREVIOUS_NODE = 'prev';
+    public const PREVIOUS_NODE = 'prev_node';
 
     /**
      * @var string
      */
-    public const NEXT_NODE = 'next';
+    public const NEXT_NODE = 'next_node';
 
     private function __construct()
     {
