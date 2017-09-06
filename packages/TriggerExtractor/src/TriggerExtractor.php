@@ -34,6 +34,7 @@ final class TriggerExtractor
     ) {
         $this->mainNodeTraverser = $mainNodeTraverser;
         $this->mainNodeTraverser->addVisitor($deprecationDetector);
+
         $this->standaloneTraverseNodeTraverser = $standaloneTraverseNodeTraverser;
         $this->parser = $parser;
     }

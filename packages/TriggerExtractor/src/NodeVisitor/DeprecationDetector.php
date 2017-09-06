@@ -91,7 +91,7 @@ final class DeprecationDetector extends NodeVisitorAbstract // @todo use : class
         ));
     }
 
-    private function findParentOfType(Node $node, string $type): ClassMethod
+    private function findParentOfType(Node $node, string $type): Node
     {
         $parentNode = $node->getAttribute('parent');
 
@@ -112,6 +112,7 @@ final class DeprecationDetector extends NodeVisitorAbstract // @todo use : class
             return false;
         }
 
-        return $node->name->toString() !== $name;
+
+        return $node->name->toString() === $name;
     }
 }
