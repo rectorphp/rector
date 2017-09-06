@@ -4,6 +4,7 @@ namespace Rector\NodeVisitor;
 
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
+use Rector\Node\Attribute;
 
 /**
  * See https://github.com/nikic/PHP-Parser/blob/master/doc/5_FAQ.markdown#how-can-the-nextprevious-sibling-of-a-node-be-obtained.
@@ -32,12 +33,14 @@ final class NodeConnector extends NodeVisitorAbstract
     public function enterNode(Node $node): void
     {
         if (! empty($this->stack)) {
-            $node->setAttribute('parent', $this->stack[count($this->stack) - 1]);
+            $node->setAttribute(Attribute::PARENT_NODE, $this->stack[count($this->stack) - 1]);
         }
 
-        if ($this->prev && $this->prev->getAttribute('parent') === $node->getAttribute('parent')) {
-            $node->setAttribute('prev', $this->prev);
-            $this->prev->setAttribute('next', $node);
+        if ($this->prev &&
+            $this->prev->getAttribute(Attribute::PARENT_NODE) === $node->getAttribute(Attribute::PARENT_NODE)
+        ) {
+            $node->setAttribute(Attribute::PREVIOUS_NODE, $this->prev);
+            $this->prev->setAttribute(Attribute::NEXT_NODE, $node);
         }
 
         $this->stack[] = $node;

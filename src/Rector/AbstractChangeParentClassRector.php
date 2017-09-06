@@ -5,6 +5,7 @@ namespace Rector\Rector;
 use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
+use Rector\Node\Attribute;
 
 abstract class AbstractChangeParentClassRector extends AbstractRector
 {
@@ -15,7 +16,7 @@ abstract class AbstractChangeParentClassRector extends AbstractRector
         }
 
         /** @var FullyQualified $fqnName */
-        $fqnName = $node->extends->getAttribute('resolvedName');
+        $fqnName = $node->extends->getAttribute(Attribute::RESOLVED_NAME);
 
         return $fqnName->toString() === $this->getOldClassName();
     }

@@ -2,13 +2,14 @@
 
 namespace Rector\TriggerExtractor;
 
-use Exception;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Scalar\MagicConst\Method;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Exception\NotImplementedException;
+use Rector\Node\Attribute;
 
 final class TriggerMessageResolver
 {
@@ -32,15 +33,15 @@ final class TriggerMessageResolver
         if ($node instanceof Method) {
             $classMethodNode = $this->findParentOfType($node, ClassMethod::class);
 
-            return $node->getAttribute('class') . '::' . $classMethodNode->name->name;
+            return $node->getAttribute(Attribute::CLASS_NAME) . '::' . $classMethodNode->name->name;
         }
 
         if ($node instanceof String_) {
             $message = $node->value; // complet class to local methods
-            return $this->completeClassToLocalMethods($message, $node->getAttribute('class'));
+            return $this->completeClassToLocalMethods($message, (string) $node->getAttribute(Attribute::CLASS_NAME));
         }
 
-        throw new Exception(sprintf(
+        throw new NotImplementedException(sprintf(
             'Not implemented yet. Go to "%s::%s()" and add check for "%s" node.',
             __CLASS__,
             __METHOD__,
@@ -50,10 +51,10 @@ final class TriggerMessageResolver
 
     private function findParentOfType(Node $node, string $type): Node
     {
-        $parentNode = $node->getAttribute('parent');
+        $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
 
         while (! is_a($parentNode, $type, true)) {
-            $parentNode = $parentNode->getAttribute('parent');
+            $parentNode = $parentNode->getAttribute(Attribute::PARENT_NODE);
         }
 
         return $parentNode;

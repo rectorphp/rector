@@ -10,6 +10,7 @@ use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Builder\Kernel\ServiceFromKernelResolver;
 use Rector\Builder\Naming\NameResolver;
 use Rector\Deprecation\SetNames;
+use Rector\Node\Attribute;
 use Rector\NodeAnalyzer\SymfonyContainerCallsAnalyzer;
 use Rector\NodeFactory\NodeFactory;
 use Rector\Rector\AbstractRector;
@@ -56,6 +57,7 @@ final class CommandToConstructorInjectionRector extends AbstractRector
      * @var NodeFactory
      */
     private $nodeFactory;
+
     /**
      * @var SymfonyContainerCallsAnalyzer
      */
@@ -87,7 +89,7 @@ final class CommandToConstructorInjectionRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        $class = (string) $node->getAttribute('class');
+        $class = (string) $node->getAttribute(Attribute::CLASS_NAME);
 
         if (! Strings::endsWith($class, 'Command')) {
             return false;
@@ -119,7 +121,7 @@ final class CommandToConstructorInjectionRector extends AbstractRector
         $propertyName = $this->nameResolver->resolvePropertyNameFromType($serviceType);
 
         $this->classPropertyCollector->addPropertyForClass(
-            (string) $node->getAttribute('class'),
+            (string) $node->getAttribute(Attribute::CLASS_NAME),
             $serviceType,
             $propertyName
         );
@@ -129,7 +131,7 @@ final class CommandToConstructorInjectionRector extends AbstractRector
 
     private function replaceParentContainerAwareCommandWithCommand(Node $node): void
     {
-        $classNode = $node->getAttribute('class_node');
+        $classNode = $node->getAttribute(Attribute::CLASS_NODE);
         $classNode->extends = new FullyQualified('Symfony\Component\Console\Command\Command');
     }
 }

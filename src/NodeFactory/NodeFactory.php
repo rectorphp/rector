@@ -2,6 +2,7 @@
 
 namespace Rector\NodeFactory;
 
+use Nette\NotImplementedException;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
@@ -31,16 +32,25 @@ final class NodeFactory
         return new PropertyFetch($localVariable, $propertyName);
     }
 
+    /**
+     * Creates "null"
+     */
     public function createNullConstant(): ConstFetch
     {
         return new ConstFetch(new Name('null'));
     }
 
+    /**
+     * Creates "false"
+     */
     public function createFalseConstant(): ConstFetch
     {
         return new ConstFetch(new Name('false'));
     }
 
+    /**
+     * Creates "SomeClass::CONSTANT"
+     */
     public function createClassConstant(string $className, string $constantName): ClassConstFetch
     {
         $classNameNode = new FullyQualified($className);
@@ -48,6 +58,9 @@ final class NodeFactory
         return new ClassConstFetch($classNameNode, $constantName);
     }
 
+    /**
+     * Creates "SomeClass::class"
+     */
     public function createClassConstantReference(string $className): ClassConstFetch
     {
         $nameNode = new FullyQualified($className);
@@ -55,6 +68,9 @@ final class NodeFactory
         return new ClassConstFetch($nameNode, 'class');
     }
 
+    /**
+     * Creates "$method->call();"
+     */
     public function createMethodCall(string $variableName, string $methodName): MethodCall
     {
         $varNode = new Variable($variableName);
@@ -62,6 +78,9 @@ final class NodeFactory
         return new MethodCall($varNode, $methodName);
     }
 
+    /**
+     * Creates "use \SomeTrait;"
+     */
     public function createTraitUse(string $traitName): TraitUse
     {
         $traitNameNode = new FullyQualified($traitName);
@@ -70,6 +89,8 @@ final class NodeFactory
     }
 
     /**
+     * Creates "['item', $variable]"
+     *
      * @param mixed|Node[] ...$items
      */
     public function createArray(...$items): Array_
@@ -82,6 +103,13 @@ final class NodeFactory
             } elseif ($item instanceof Identifier) {
                 $string = new String_((string) $item);
                 $arrayItems[] = new ArrayItem($string);
+            } else {
+                throw new NotImplementedException(sprintf(
+                    'Not implemented yet. Go to "%s::%s()" and add check for "%s" node.',
+                    __CLASS__,
+                    __METHOD__,
+                    get_class($item)
+                ));
             }
         }
 
@@ -91,6 +119,8 @@ final class NodeFactory
     }
 
     /**
+     * Creates "($args)"
+     *
      * @param mixed[] $arguments
      * @return Arg[]
      */

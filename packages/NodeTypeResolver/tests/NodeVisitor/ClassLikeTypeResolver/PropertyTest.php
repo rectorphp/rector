@@ -6,6 +6,7 @@ use Nette\Utils\Html;
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
 use Rector\Contract\Parser\ParserInterface;
+use Rector\Node\Attribute;
 use Rector\NodeTraverser\StandaloneTraverseNodeTraverser;
 use Rector\Tests\AbstractContainerAwareTestCase;
 
@@ -42,7 +43,7 @@ final class PropertyTest extends AbstractContainerAwareTestCase
     {
         /** @var PropertyFetch $propertyFetchNode */
         $propertyFetchNode = $this->nodes[1]->stmts[1]->stmts[2]->stmts[0]->expr;
-        $this->assertSame(Html::class, $propertyFetchNode->getAttribute('type'));
+        $this->assertSame(Html::class, $propertyFetchNode->getAttribute(Attribute::TYPE));
     }
 
     /**
@@ -50,8 +51,9 @@ final class PropertyTest extends AbstractContainerAwareTestCase
      */
     public function testProperty(): void
     {
+        /** @var Node $propertyNode */
         $propertyNode = $this->nodes[1]->stmts[1]->stmts[0];
-        $this->assertSame(Html::class, $propertyNode->getAttribute('type'));
+        $this->assertSame(Html::class, $propertyNode->getAttribute(Attribute::TYPE));
     }
 
     /**
@@ -59,7 +61,8 @@ final class PropertyTest extends AbstractContainerAwareTestCase
      */
     public function testMethodParameter(): void
     {
+        /** @var Node $constructorVariableNode */
         $constructorVariableNode = $this->nodes[1]->stmts[1]->stmts[1]->params[0]->var;
-        $this->assertSame(Html::class, $constructorVariableNode->getAttribute('type'));
+        $this->assertSame(Html::class, $constructorVariableNode->getAttribute(Attribute::TYPE));
     }
 }

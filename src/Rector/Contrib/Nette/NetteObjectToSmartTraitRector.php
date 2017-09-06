@@ -7,6 +7,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Builder\StatementGlue;
 use Rector\Deprecation\SetNames;
+use Rector\Node\Attribute;
 use Rector\NodeFactory\NodeFactory;
 use Rector\Rector\AbstractRector;
 
@@ -58,7 +59,7 @@ final class NetteObjectToSmartTraitRector extends AbstractRector
         }
 
         /** @var FullyQualified $fqnName */
-        $fqnName = $node->extends->getAttribute('resolvedName');
+        $fqnName = $node->extends->getAttribute(Attribute::RESOLVED_NAME);
 
         return $fqnName->toString() === self::PARENT_CLASS;
     }

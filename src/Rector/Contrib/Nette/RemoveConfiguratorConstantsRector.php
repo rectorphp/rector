@@ -6,6 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Scalar\String_;
 use Rector\Deprecation\SetNames;
+use Rector\Node\Attribute;
 use Rector\Rector\AbstractRector;
 
 final class RemoveConfiguratorConstantsRector extends AbstractRector
@@ -50,7 +51,7 @@ final class RemoveConfiguratorConstantsRector extends AbstractRector
     private function getClassNameFromClassConstFetch(ClassConstFetch $classConstFetchNode): string
     {
         /** @var Node\Name\FullyQualified $fqnName */
-        $fqnName = $classConstFetchNode->class->getAttribute('resolvedName');
+        $fqnName = $classConstFetchNode->class->getAttribute(Attribute::RESOLVED_NAME);
 
         return $fqnName->toString();
     }
