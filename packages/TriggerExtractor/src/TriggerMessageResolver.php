@@ -3,6 +3,7 @@
 namespace Rector\TriggerExtractor;
 
 use Exception;
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Scalar\MagicConst\Method;
@@ -11,6 +12,10 @@ use PhpParser\Node\Stmt\ClassMethod;
 
 final class TriggerMessageResolver
 {
+    /**
+     * Probably resolve by recursion, similar too
+     * @see \Rector\NodeTypeResolver\NodeVisitor\TypeResolver::__construct()
+     */
     public function resolve(Node $node): string
     {
         $message = '';
@@ -31,7 +36,8 @@ final class TriggerMessageResolver
         }
 
         if ($node instanceof String_) {
-            return $node->value;
+            $message = $node->value; // complet class to local methods
+            return $this->completeClassToLocalMethods($message, $node->getAttribute('class'));
         }
 
         throw new Exception(sprintf(
@@ -51,5 +57,25 @@ final class TriggerMessageResolver
         }
 
         return $parentNode;
+    }
+
+    private function completeClassToLocalMethods(string $message, string $class): string
+    {
+        $completeMessage = '';
+        $words = explode(' ', $message);
+
+        foreach ($words as $word) {
+            // is method()
+            if (Strings::endsWith($word, '()') && strlen($word) > 2) {
+                // doesn't include class in the beggning
+                if (! Strings::startsWith($word, $class)) {
+                    $word = $class . '::' . $word;
+                }
+            }
+
+            $completeMessage .= ' ' . $word;
+        }
+
+        return trim($completeMessage);
     }
 }

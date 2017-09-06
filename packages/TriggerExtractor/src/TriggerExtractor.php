@@ -48,7 +48,7 @@ final class TriggerExtractor
 
         foreach ($files as $file) {
             $nodes = $this->parser->parseFile($file->getRealPath());
-            // this completes parent & child nodes and types
+            // this completes parent & child nodes, types and classses
             $this->standaloneTraverseNodeTraverser->traverse($nodes);
             $this->mainNodeTraverser->traverse($nodes);
         }
