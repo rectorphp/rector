@@ -27,6 +27,16 @@ final class TriggerExtractorTest extends AbstractContainerAwareTestCase
     public function test(): void
     {
         $this->triggerExtractor->scanDirectories([__DIR__ . '/TriggerExtractorSource']);
-        $this->assertCount(2, $this->deprecationCollector->getDeprecations());
+        $deprecations = $this->deprecationCollector->getDeprecations();
+
+        $this->assertCount(2, $deprecations);
+
+        $setClassToSetFacoryDeprecation = $deprecations[0];
+
+        // @todo: complete class in here!
+        $this->assertSame(
+            'setClass() second parameter $args is deprecated, use setFactory()',
+            $setClassToSetFacoryDeprecation
+        );
     }
 }

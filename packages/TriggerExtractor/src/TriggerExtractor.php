@@ -32,11 +32,11 @@ final class TriggerExtractor
         DeprecationDetector $deprecationDetector,
         StandaloneTraverseNodeTraverser $standaloneTraverseNodeTraverser
     ) {
+        $this->parser = $parser;
+        $this->standaloneTraverseNodeTraverser = $standaloneTraverseNodeTraverser;
+
         $this->mainNodeTraverser = $mainNodeTraverser;
         $this->mainNodeTraverser->addVisitor($deprecationDetector);
-
-        $this->standaloneTraverseNodeTraverser = $standaloneTraverseNodeTraverser;
-        $this->parser = $parser;
     }
 
     /**
@@ -48,12 +48,16 @@ final class TriggerExtractor
 
         foreach ($files as $file) {
             $nodes = $this->parser->parseFile($file->getRealPath());
+            // this completes parent & child nodes and types
             $this->standaloneTraverseNodeTraverser->traverse($nodes);
             $this->mainNodeTraverser->traverse($nodes);
         }
     }
 
     /**
+     * @todo duplicated method to
+     * @see \Rector\Console\Command\ReconstructCommand, extract to class
+     *
      * @param string[] $directories
      * @return SplFileInfo[] array
      */
