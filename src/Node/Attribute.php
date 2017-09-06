@@ -15,6 +15,9 @@ final class Attribute
     public const TYPE = 'type';
 
     /**
+     * System name to be found in @see \PhpParser\NodeVisitor\NameResolver
+     * Do not change this even if you want!
+     *
      * @var string
      */
     public const RESOLVED_NAME = 'resolvedName';
