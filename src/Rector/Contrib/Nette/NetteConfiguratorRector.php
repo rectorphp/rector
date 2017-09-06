@@ -23,7 +23,7 @@ final class NetteConfiguratorRector extends AbstractClassReplacerRector
     protected function getOldToNewClasses(): array
     {
         return [
-            'Nette\Config\Configurator' => 'Nette\Configurator'
+            'Nette\Config\Configurator' => 'Nette\Configurator',
         ];
     }
 }
