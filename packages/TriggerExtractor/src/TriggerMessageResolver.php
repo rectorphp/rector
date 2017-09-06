@@ -2,13 +2,13 @@
 
 namespace Rector\TriggerExtractor;
 
-use Exception;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Scalar\MagicConst\Method;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Exception\NotImplementedException;
 
 final class TriggerMessageResolver
 {
@@ -40,7 +40,7 @@ final class TriggerMessageResolver
             return $this->completeClassToLocalMethods($message, $node->getAttribute('class'));
         }
 
-        throw new Exception(sprintf(
+        throw new NotImplementedException(sprintf(
             'Not implemented yet. Go to "%s::%s()" and add check for "%s" node.',
             __CLASS__,
             __METHOD__,
