@@ -6,15 +6,18 @@ use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 
-abstract class AbstractChangeParentClassRector extends AbstractClassAwareRector
+abstract class AbstractChangeParentClassRector extends AbstractRector
 {
     public function isCandidate(Node $node): bool
     {
-        if (! $node instanceof Class_) {
+        if (! $node instanceof Class_ || $node->extends === null) {
             return false;
         }
 
-        return $this->getParentClassName() === $this->getOldClassName();
+        /** @var FullyQualified $fqnName */
+        $fqnName = $node->extends->getAttribute('resolvedName');
+
+        return $fqnName->toString() === $this->getOldClassName();
     }
 
     /**

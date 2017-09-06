@@ -3,16 +3,17 @@
 namespace Rector\Rector\Contrib\Nette;
 
 use PhpParser\Node;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Builder\StatementGlue;
 use Rector\Deprecation\SetNames;
 use Rector\NodeFactory\NodeFactory;
-use Rector\Rector\AbstractClassAwareRector;
+use Rector\Rector\AbstractRector;
 
 /**
  * Covers https://doc.nette.org/en/2.4/migration-2-4#toc-nette-smartobject.
  */
-final class NetteObjectToSmartTraitRector extends AbstractClassAwareRector
+final class NetteObjectToSmartTraitRector extends AbstractRector
 {
     /**
      * @var string
@@ -52,15 +53,14 @@ final class NetteObjectToSmartTraitRector extends AbstractClassAwareRector
 
     public function isCandidate(Node $node): bool
     {
-        if (! $node instanceof Class_) {
+        if (! $node instanceof Class_ || $node->extends === null) {
             return false;
         }
 
-        if (! $node->extends) {
-            return false;
-        }
+        /** @var FullyQualified $fqnName */
+        $fqnName = $node->extends->getAttribute('resolvedName');
 
-        return $this->getParentClassName() === self::PARENT_CLASS;
+        return $fqnName->toString() === self::PARENT_CLASS;
     }
 
     /**

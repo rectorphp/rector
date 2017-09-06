@@ -3,7 +3,7 @@
 namespace Rector\NodeTypeResolver\NodeVisitor;
 
 use PhpParser\Node;
-use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\NodeVisitorAbstract;
 
 /**
@@ -17,27 +17,33 @@ final class ClassResolver extends NodeVisitorAbstract
     private const CLASS_ATTRIBUTE = 'class';
 
     /**
-     * @var string|null
+     * @var string
      */
-    private $className;
+    private const CLASS_NODE_ATTRIBUTE = 'class_node';
+
+    /**
+     * @var Class_|null
+     */
+    private $classNode;
 
     /**
      * @param Node[] $nodes
      */
     public function beforeTraverse(array $nodes): void
     {
-        $this->className = null;
+        $this->classNode = null;
     }
 
     public function enterNode(Node $node): void
     {
         // detect only first "class" to prevent anonymous classes interference
-        if ($this->className === null && $node instanceof Node\Stmt\Class_) {
-            $this->className = $node->namespacedName->toString();
+        if ($this->classNode === null && $node instanceof Class_) {
+            $this->classNode = $node;
         }
 
-        if ($this->className) {
-            $node->setAttribute(self::CLASS_ATTRIBUTE, $this->className);
+        if ($this->classNode) {
+            $node->setAttribute(self::CLASS_NODE_ATTRIBUTE, $this->classNode);
+            $node->setAttribute(self::CLASS_ATTRIBUTE, $this->classNode->namespacedName->toString());
         }
     }
 }

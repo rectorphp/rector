@@ -12,7 +12,7 @@ use Rector\Builder\Naming\NameResolver;
 use Rector\Deprecation\SetNames;
 use Rector\NodeAnalyzer\SymfonyContainerCallsAnalyzer;
 use Rector\NodeFactory\NodeFactory;
-use Rector\Rector\AbstractClassAwareRector;
+use Rector\Rector\AbstractRector;
 use Rector\Tests\Rector\Contrib\SymfonyExtra\GetterToPropertyRector\Source\LocalKernel;
 
 /**
@@ -35,7 +35,7 @@ use Rector\Tests\Rector\Contrib\SymfonyExtra\GetterToPropertyRector\Source\Local
  *
  * $this->someService
  */
-final class CommandToConstructorInjectionRector extends AbstractClassAwareRector
+final class CommandToConstructorInjectionRector extends AbstractRector
 {
     /**
      * @var ServiceFromKernelResolver
@@ -87,7 +87,9 @@ final class CommandToConstructorInjectionRector extends AbstractClassAwareRector
 
     public function isCandidate(Node $node): bool
     {
-        if (! Strings::endsWith($this->getClassName(), 'Command')) {
+        $class = (string) $node->getAttribute('class');
+
+        if (! Strings::endsWith($class, 'Command')) {
             return false;
         }
 
@@ -103,7 +105,7 @@ final class CommandToConstructorInjectionRector extends AbstractClassAwareRector
      */
     public function refactor(Node $node): ?Node
     {
-        $this->replaceParentContainerAwareCommandWithCommand();
+        $this->replaceParentContainerAwareCommandWithCommand($node);
 
         $serviceType = $this->serviceFromKernelResolver->resolveServiceClassFromArgument(
             $node->args[0],
@@ -116,13 +118,18 @@ final class CommandToConstructorInjectionRector extends AbstractClassAwareRector
 
         $propertyName = $this->nameResolver->resolvePropertyNameFromType($serviceType);
 
-        $this->classPropertyCollector->addPropertyForClass($this->getClassName(), $serviceType, $propertyName);
+        $this->classPropertyCollector->addPropertyForClass(
+            (string) $node->getAttribute('class'),
+            $serviceType,
+            $propertyName
+        );
 
         return $this->nodeFactory->createLocalPropertyFetch($propertyName);
     }
 
-    private function replaceParentContainerAwareCommandWithCommand(): void
+    private function replaceParentContainerAwareCommandWithCommand(Node $node): void
     {
-        $this->classNode->extends = new FullyQualified('Symfony\Component\Console\Command\Command');
+        $classNode = $node->getAttribute('class_node');
+        $classNode->extends = new FullyQualified('Symfony\Component\Console\Command\Command');
     }
 }

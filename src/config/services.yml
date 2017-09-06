@@ -11,11 +11,6 @@ services:
     _defaults:
         autowire: true
 
-#    _instanceof:
-#        Rector\Rector\AbstractClassAwareRector:
-#            calls:
-#                - ['setClassResolver', ['@Rector\NodeAnalyzer\ClassResolver']]
-
     # PSR-4 autodiscovery
     Rector\:
         resource: '../../src'
