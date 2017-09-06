@@ -40,9 +40,8 @@ final class TriggerExtractor
 
     /**
      * @param string[] $directories
-     * @return array
      */
-    public function scanDirectories(array $directories): array
+    public function scanDirectories(array $directories): void
     {
         $files = $this->findPhpFilesInDirectories($directories);
 
@@ -50,11 +49,8 @@ final class TriggerExtractor
             $nodes = $this->parser->parseFile($file->getRealPath());
             $this->standaloneTraverseNodeTraverser->traverse($nodes);
             $this->mainNodeTraverser->traverse($nodes);
-            die;
         }
-        die;
     }
-
 
     /**
      * @param string[] $directories

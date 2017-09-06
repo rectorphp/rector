@@ -46,10 +46,10 @@ final class ExtractCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $source = $input->getArgument(self::ARGUMENT_SOURCE_NAME);
-        $foundDeprecations = $this->triggerExtractor->scanDirectories($source);
+        $this->triggerExtractor->scanDirectories($source);
 
-        dump($foundDeprecations);
-        die;
+        // $output->writeln()
+        // write found deprecations...
 
         return 0;
     }
