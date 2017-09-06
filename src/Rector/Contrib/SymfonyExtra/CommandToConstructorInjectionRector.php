@@ -56,6 +56,7 @@ final class CommandToConstructorInjectionRector extends AbstractRector
      * @var NodeFactory
      */
     private $nodeFactory;
+
     /**
      * @var SymfonyContainerCallsAnalyzer
      */

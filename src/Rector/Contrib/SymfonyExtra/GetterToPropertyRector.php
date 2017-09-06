@@ -41,6 +41,7 @@ final class GetterToPropertyRector extends AbstractRector
      * @var NodeFactory
      */
     private $nodeFactory;
+
     /**
      * @var SymfonyContainerCallsAnalyzer
      */
