@@ -14,6 +14,7 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeVisitorAbstract;
 use Rector\TriggerExtractor\Deprecation\DeprecationCollector;
+use Rector\TriggerExtractor\TriggerError\TriggerMessageResolver;
 
 final class DeprecationDetector extends NodeVisitorAbstract // @todo use : class aware node visitor
 {
@@ -22,9 +23,17 @@ final class DeprecationDetector extends NodeVisitorAbstract // @todo use : class
      */
     private $deprecationCollector;
 
-    public function __construct(DeprecationCollector $deprecationCollector)
-    {
+    /**
+     * @var TriggerMessageResolver
+     */
+    private $triggerMessageResolver;
+
+    public function __construct(
+        DeprecationCollector $deprecationCollector,
+        TriggerMessageResolver $triggerMessageResolver
+    ) {
         $this->deprecationCollector = $deprecationCollector;
+        $this->triggerMessageResolver = $triggerMessageResolver;
     }
 
     public function enterNode(Node $node): void
@@ -33,17 +42,10 @@ final class DeprecationDetector extends NodeVisitorAbstract // @todo use : class
             return;
         }
 
-        /** @var FuncCall $funcCallNode */
-        $funcCallNode = $node;
+        /** @var FuncCall $node */
+        $deprecation = $this->triggerMessageResolver->resolve($node->args[0]->value);
 
-        $messageNode = $funcCallNode->args[0]->value;
-        $message = '';
-        if ($messageNode instanceof Concat) {
-            $message .= $this->processConcatNode($messageNode->left);
-            $message .= $this->processConcatNode($messageNode->right);
-        }
-
-        $this->deprecationCollector->addDeprecation($message);
+        $this->deprecationCollector->addDeprecation($deprecation);
     }
 
     /**
@@ -70,36 +72,6 @@ final class DeprecationDetector extends NodeVisitorAbstract // @todo use : class
         $constFetchNode = $secondArgumentNode->value;
 
         return $constFetchNode->name->toString() === 'E_USER_DEPRECATED';
-    }
-
-    private function processConcatNode(Node $node): string
-    {
-        if ($node instanceof Method) {
-            $classMethodNode = $this->findParentOfType($node, ClassMethod::class);
-
-            return $classMethodNode->name->name;
-        }
-
-        if ($node instanceof String_) {
-            return $node->value;
-        }
-
-        throw new Exception(sprintf(
-            'Not implemented yet %s::%s()',
-            __CLASS__,
-            __METHOD__
-        ));
-    }
-
-    private function findParentOfType(Node $node, string $type): Node
-    {
-        $parentNode = $node->getAttribute('parent');
-
-        while (! is_a($parentNode, $type, true)) {
-            $parentNode = $parentNode->getAttribute('parent');
-        }
-
-        return $parentNode;
     }
 
     private function isFunctionWithName(Node $node, string $name): bool
