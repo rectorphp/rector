@@ -11,7 +11,7 @@ use PhpParser\NodeVisitorAbstract;
 use Rector\TriggerExtractor\Deprecation\DeprecationCollector;
 use Rector\TriggerExtractor\TriggerMessageResolver;
 
-final class DeprecationDetector extends NodeVisitorAbstract // @todo use : class aware node visitor
+final class DeprecationDetector extends NodeVisitorAbstract
 {
     /**
      * @var DeprecationCollector

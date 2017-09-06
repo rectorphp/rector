@@ -27,7 +27,7 @@ final class TriggerMessageResolver
         if ($node instanceof Method) {
             $classMethodNode = $this->findParentOfType($node, ClassMethod::class);
 
-            return $classMethodNode->name->name;
+            return $node->getAttribute('class') . '::' . $classMethodNode->name->name;
         }
 
         if ($node instanceof String_) {

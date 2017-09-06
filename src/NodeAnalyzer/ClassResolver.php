@@ -1,26 +1,21 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Rector;
+namespace Rector\NodeAnalyzer;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 
-/**
- * Refactor to use @see \Rector\NodeAnalyzer\ClassResolver after
- * https://github.com/symfony/symfony/issues/24111 is resolved
- */
-abstract class AbstractClassAwareRector extends AbstractRector
+final class ClassResolver
 {
     /**
      * @var Class_|null
      */
-    protected $classNode;
+    private $classNode;
 
     /**
      * @param Node[] $nodes
-     * @return null|Node[]
      */
-    public function beforeTraverse(array $nodes): ?array
+    public function resolveFromNodes(array $nodes): void
     {
         $this->classNode = null;
 
@@ -30,11 +25,9 @@ abstract class AbstractClassAwareRector extends AbstractRector
                 break;
             }
         }
-
-        return null;
     }
 
-    protected function getClassName(): string
+    public function getClassName(): string
     {
         if ($this->classNode === null) {
             return '';
@@ -43,7 +36,7 @@ abstract class AbstractClassAwareRector extends AbstractRector
         return $this->classNode->namespacedName->toString();
     }
 
-    protected function getParentClassName(): string
+    public function getParentClassName(): string
     {
         if ($this->classNode === null) {
             return '';
