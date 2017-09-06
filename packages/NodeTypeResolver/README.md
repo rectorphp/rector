@@ -20,7 +20,7 @@ Anonymous classes are skipped.
 You can get `class` 
 
 ```php
-$class = (string) $node->getAttribute('class');
+$class = (string) $node->getAttribute(Attribute::CLASS_NAME);
 
 if (Strings::endsWith($class, 'Command')) {
     // we are in Command class
@@ -29,9 +29,9 @@ if (Strings::endsWith($class, 'Command')) {
 // to be sure it's console command
 
 /** @var PhpParser\Node\Name\FullyQualified $fqnName */
-$classNode = $node->getAttribute('class_node');
+$classNode = $node->getAttribute(Attribute::CLASS_NODE);
 
-$fqnName = $classNode->extends->getAttribute('resolvedName');
+$fqnName = $classNode->extends->getAttribute(Attribute::RESOLVED_NAME);
 
 if ($fqnName->toString() === 'Symfony\Component\Console\Command') {
     // we are sure it's child of Symfony\Console Command class
@@ -42,7 +42,7 @@ or `type` attribute:
 
 ```php
 /** @var string $type */
-$type = $node->var->getAttribute('type');
+$type = $node->var->getAttribute(Attribute::TYPE);
 
 if ($type === 'Nette\Application\UI\Form') {
     // this is Nette\Application\UI\Form variable

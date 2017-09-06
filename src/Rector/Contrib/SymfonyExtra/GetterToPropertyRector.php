@@ -8,6 +8,7 @@ use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Builder\Kernel\ServiceFromKernelResolver;
 use Rector\Builder\Naming\NameResolver;
 use Rector\Deprecation\SetNames;
+use Rector\Node\Attribute;
 use Rector\NodeAnalyzer\SymfonyContainerCallsAnalyzer;
 use Rector\NodeFactory\NodeFactory;
 use Rector\Rector\AbstractRector;
@@ -87,7 +88,7 @@ final class GetterToPropertyRector extends AbstractRector
         $propertyName = $this->nameResolver->resolvePropertyNameFromType($serviceType);
 
         $this->classPropertyCollector->addPropertyForClass(
-            (string) $methodCallNode->getAttribute('class'),
+            (string) $methodCallNode->getAttribute(Attribute::CLASS_NAME),
             $serviceType,
             $propertyName
         );

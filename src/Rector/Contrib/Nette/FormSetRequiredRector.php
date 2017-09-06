@@ -6,6 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Deprecation\SetNames;
+use Rector\Node\Attribute;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeFactory\NodeFactory;
 use Rector\Rector\AbstractRector;
@@ -62,7 +63,7 @@ final class FormSetRequiredRector extends AbstractRector
             return false;
         }
 
-        if ($arg->value->class->getAttribute('type') !== self::FORM_CLASS) {
+        if ($arg->value->class->getAttribute(Attribute::TYPE) !== self::FORM_CLASS) {
             return false;
         }
 

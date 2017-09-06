@@ -6,6 +6,7 @@ use Nette\Utils\Html;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use Rector\Contract\Parser\ParserInterface;
+use Rector\Node\Attribute;
 use Rector\NodeTraverser\StandaloneTraverseNodeTraverser;
 use Rector\Tests\AbstractContainerAwareTestCase;
 
@@ -42,7 +43,7 @@ final class VariableTest extends AbstractContainerAwareTestCase
     {
         /** @var Variable $htmlVariableNode */
         $htmlVariableNode = $this->nodes[1]->stmts[1]->stmts[0]->stmts[0]->expr->var;
-        $this->assertSame(Html::class, $htmlVariableNode->getAttribute('type'));
+        $this->assertSame(Html::class, $htmlVariableNode->getAttribute(Attribute::TYPE));
     }
 
     /**
@@ -52,6 +53,6 @@ final class VariableTest extends AbstractContainerAwareTestCase
     {
         /** @var Variable $assignedVariableNode */
         $assignedVariableNode = $this->nodes[1]->stmts[1]->stmts[0]->stmts[1]->expr->var;
-        $this->assertSame(Html::class, $assignedVariableNode->getAttribute('type'));
+        $this->assertSame(Html::class, $assignedVariableNode->getAttribute(Attribute::TYPE));
     }
 }

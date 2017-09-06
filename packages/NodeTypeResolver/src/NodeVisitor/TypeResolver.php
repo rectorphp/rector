@@ -12,6 +12,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\NodeVisitorAbstract;
+use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\TypeContext;
 
 /**
@@ -85,7 +86,7 @@ final class TypeResolver extends NodeVisitorAbstract
     private function getTypeFromNewNode(New_ $newNode): string
     {
         /** @var FullyQualified $fqnName */
-        $fqnName = $newNode->class->getAttribute('resolvedName');
+        $fqnName = $newNode->class->getAttribute(Attribute::RESOLVED_NAME);
 
         return $fqnName->toString();
     }
@@ -94,7 +95,7 @@ final class TypeResolver extends NodeVisitorAbstract
     {
         $variableType = null;
 
-        $parentNode = $variableNode->getAttribute('parent');
+        $parentNode = $variableNode->getAttribute(Attribute::PARENT_NODE);
         if ($parentNode instanceof Assign) {
             if ($parentNode->expr instanceof New_) {
                 $variableName = $variableNode->name;

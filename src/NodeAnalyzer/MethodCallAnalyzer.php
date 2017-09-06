@@ -5,6 +5,7 @@ namespace Rector\NodeAnalyzer;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use Rector\Node\Attribute;
 
 final class MethodCallAnalyzer
 {
@@ -72,10 +73,10 @@ final class MethodCallAnalyzer
     {
         $varNode = $methodCallNode->var;
 
-        while ($varNode->getAttribute('type') === null) {
+        while ($varNode->getAttribute(Attribute::TYPE) === null) {
             $varNode = $varNode->var;
         }
 
-        return (string) $varNode->getAttribute('type');
+        return (string) $varNode->getAttribute(Attribute::TYPE);
     }
 }

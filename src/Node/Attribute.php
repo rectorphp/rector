@@ -12,12 +12,37 @@ final class Attribute
     /**
      * @var string
      */
+    public const TYPE = 'type';
+
+    /**
+     * @var string
+     */
+    public const RESOLVED_NAME = 'resolvedName';
+
+    /**
+     * @var string
+     */
+    public const CLASS_NAME = 'class';
+
+    /**
+     * @var string
+     */
+    public const CLASS_NODE = 'class_node';
+
+    /**
+     * @var string
+     */
+    public const PARENT_NODE = 'parent';
+
+    /**
+     * @var string
+     */
     public const PREVIOUS_NODE = 'prev';
 
     /**
      * @var string
      */
-    public const TYPE = 'type';
+    public const NEXT_NODE = 'next';
 
     private function __construct()
     {

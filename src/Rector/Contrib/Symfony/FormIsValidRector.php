@@ -6,6 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Deprecation\SetNames;
+use Rector\Node\Attribute;
 use Rector\NodeFactory\NodeFactory;
 use Rector\Rector\AbstractRector;
 
@@ -44,7 +45,7 @@ final class FormIsValidRector extends AbstractRector
             return false;
         }
 
-        if ($node->var->getAttribute('type') !== 'Symfony\Component\Form\Form') {
+        if ($node->var->getAttribute(Attribute::TYPE) !== 'Symfony\Component\Form\Form') {
             return false;
         }
 
@@ -52,7 +53,7 @@ final class FormIsValidRector extends AbstractRector
             return false;
         }
 
-        if ($node->getAttribute('prev') !== null) {
+        if ($node->getAttribute(Attribute::PREVIOUS_NODE) !== null) {
             return false;
         }
 

@@ -6,6 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Scalar\String_;
 use Rector\Deprecation\SetNames;
+use Rector\Node\Attribute;
 use Rector\NodeFactory\NodeFactory;
 use Rector\Rector\AbstractRector;
 
@@ -55,7 +56,7 @@ final class ConstraintUrlOptionRector extends AbstractRector
             return false;
         }
 
-        $prevNode = $node->getAttribute('prev');
+        $prevNode = $node->getAttribute(Attribute::PREVIOUS_NODE);
         if (! $prevNode instanceof String_) {
             return false;
         }
