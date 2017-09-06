@@ -87,7 +87,9 @@ final class CommandToConstructorInjectionRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        if (! Strings::endsWith($this->getClassName(), 'Command')) {
+        $class = (string) $node->getAttribute('class');
+
+        if (! Strings::endsWith($class, 'Command')) {
             return false;
         }
 
@@ -103,7 +105,7 @@ final class CommandToConstructorInjectionRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        $this->replaceParentContainerAwareCommandWithCommand();
+        $this->replaceParentContainerAwareCommandWithCommand($node);
 
         $serviceType = $this->serviceFromKernelResolver->resolveServiceClassFromArgument(
             $node->args[0],
@@ -116,13 +118,18 @@ final class CommandToConstructorInjectionRector extends AbstractRector
 
         $propertyName = $this->nameResolver->resolvePropertyNameFromType($serviceType);
 
-        $this->classPropertyCollector->addPropertyForClass($this->getClassName(), $serviceType, $propertyName);
+        $this->classPropertyCollector->addPropertyForClass(
+            (string) $node->getAttribute('class'),
+            $serviceType,
+            $propertyName
+        );
 
         return $this->nodeFactory->createLocalPropertyFetch($propertyName);
     }
 
-    private function replaceParentContainerAwareCommandWithCommand(): void
+    private function replaceParentContainerAwareCommandWithCommand(Node $node): void
     {
-        $this->classNode->extends = new FullyQualified('Symfony\Component\Console\Command\Command');
+        $classNode = $node->getAttribute('class_node');
+        $classNode->extends = new FullyQualified('Symfony\Component\Console\Command\Command');
     }
 }

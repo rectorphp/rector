@@ -85,7 +85,11 @@ final class GetterToPropertyRector extends AbstractRector
 
         $propertyName = $this->nameResolver->resolvePropertyNameFromType($serviceType);
 
-        $this->classPropertyCollector->addPropertyForClass($this->getClassName(), $serviceType, $propertyName);
+        $this->classPropertyCollector->addPropertyForClass(
+            (string) $methodCallNode->getAttribute('class'),
+            $serviceType,
+            $propertyName
+        );
 
         return $this->nodeFactory->createLocalPropertyFetch($propertyName);
     }

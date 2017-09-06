@@ -3,6 +3,7 @@
 namespace Rector\NodeFactory;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\ClassConstFetch;
@@ -33,6 +34,11 @@ final class NodeFactory
     public function createNullConstant(): ConstFetch
     {
         return new ConstFetch(new Name('null'));
+    }
+
+    public function createFalseConstant(): ConstFetch
+    {
+        return new ConstFetch(new Name('false'));
     }
 
     public function createClassConstant(string $className, string $constantName): ClassConstFetch
@@ -82,5 +88,19 @@ final class NodeFactory
         return new Array_($arrayItems, [
             'kind' => Array_::KIND_SHORT,
         ]);
+    }
+
+    /**
+     * @param mixed[] $arguments
+     * @return Arg[]
+     */
+    public function createArgs(array $arguments): array
+    {
+        $args = [];
+        foreach ($arguments as $argument) {
+            $args[] = new Arg($argument);
+        }
+
+        return $args;
     }
 }
