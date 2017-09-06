@@ -72,6 +72,11 @@ final class TriggerMessageResolver
                 if (! Strings::startsWith($word, $class)) {
                     $word = $class . '::' . $word;
                 }
+                // is method('...')
+            } elseif (Strings::endsWith($word,'\')')) {
+                if (! Strings::startsWith($word, $class)) {
+                    $word = $class . '::' . $word;
+                }
             }
 
             $completeMessage .= ' ' . $word;
