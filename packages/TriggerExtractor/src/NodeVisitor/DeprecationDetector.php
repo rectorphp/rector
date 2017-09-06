@@ -9,7 +9,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use PhpParser\NodeVisitorAbstract;
 use Rector\TriggerExtractor\Deprecation\DeprecationCollector;
-use Rector\TriggerExtractor\TriggerError\TriggerMessageResolver;
+use Rector\TriggerExtractor\TriggerMessageResolver;
 
 final class DeprecationDetector extends NodeVisitorAbstract // @todo use : class aware node visitor
 {

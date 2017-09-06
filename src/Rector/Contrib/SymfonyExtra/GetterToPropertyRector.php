@@ -10,7 +10,7 @@ use Rector\Builder\Naming\NameResolver;
 use Rector\Deprecation\SetNames;
 use Rector\NodeAnalyzer\SymfonyContainerCallsAnalyzer;
 use Rector\NodeFactory\NodeFactory;
-use Rector\Rector\AbstractRector;
+use Rector\Rector\AbstractClassAwareRector;
 use Rector\Tests\Rector\Contrib\SymfonyExtra\GetterToPropertyRector\Source\LocalKernel;
 
 /**
@@ -20,7 +20,7 @@ use Rector\Tests\Rector\Contrib\SymfonyExtra\GetterToPropertyRector\Source\Local
  * into:
  * $this->someService # where "someService" is type of the service
  */
-final class GetterToPropertyRector extends AbstractRector
+final class GetterToPropertyRector extends AbstractClassAwareRector
 {
     /**
      * @var NameResolver

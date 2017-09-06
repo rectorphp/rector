@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\TriggerExtractor\TriggerError;
+namespace Rector\TriggerExtractor;
 
 use Exception;
 use PhpParser\Node;

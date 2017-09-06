@@ -6,7 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 
-abstract class AbstractChangeParentClassRector extends AbstractRector
+abstract class AbstractChangeParentClassRector extends AbstractClassAwareRector
 {
     public function isCandidate(Node $node): bool
     {

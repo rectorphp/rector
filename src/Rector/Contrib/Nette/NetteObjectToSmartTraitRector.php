@@ -7,12 +7,12 @@ use PhpParser\Node\Stmt\Class_;
 use Rector\Builder\StatementGlue;
 use Rector\Deprecation\SetNames;
 use Rector\NodeFactory\NodeFactory;
-use Rector\Rector\AbstractRector;
+use Rector\Rector\AbstractClassAwareRector;
 
 /**
  * Covers https://doc.nette.org/en/2.4/migration-2-4#toc-nette-smartobject.
  */
-final class NetteObjectToSmartTraitRector extends AbstractRector
+final class NetteObjectToSmartTraitRector extends AbstractClassAwareRector
 {
     /**
      * @var string

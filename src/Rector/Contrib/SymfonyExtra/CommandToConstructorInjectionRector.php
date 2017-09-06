@@ -12,7 +12,7 @@ use Rector\Builder\Naming\NameResolver;
 use Rector\Deprecation\SetNames;
 use Rector\NodeAnalyzer\SymfonyContainerCallsAnalyzer;
 use Rector\NodeFactory\NodeFactory;
-use Rector\Rector\AbstractRector;
+use Rector\Rector\AbstractClassAwareRector;
 use Rector\Tests\Rector\Contrib\SymfonyExtra\GetterToPropertyRector\Source\LocalKernel;
 
 /**
@@ -35,7 +35,7 @@ use Rector\Tests\Rector\Contrib\SymfonyExtra\GetterToPropertyRector\Source\Local
  *
  * $this->someService
  */
-final class CommandToConstructorInjectionRector extends AbstractRector
+final class CommandToConstructorInjectionRector extends AbstractClassAwareRector
 {
     /**
      * @var ServiceFromKernelResolver

@@ -33,9 +33,9 @@ final class TriggerExtractorTest extends AbstractContainerAwareTestCase
 
         $setClassToSetFacoryDeprecation = $deprecations[0];
 
-        // @todo: complete class in here!
         $this->assertSame(
-            'setClass() second parameter $args is deprecated, use setFactory()',
+            'Nette\DI\Definition::setClass() second parameter $args is deprecated,'
+            . ' use Nette\DI\Definition::setFactory()',
             $setClassToSetFacoryDeprecation
         );
     }
