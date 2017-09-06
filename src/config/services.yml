@@ -23,7 +23,7 @@ services:
         calls:
             - ['addNodeVisitor', ['@PhpParser\NodeVisitor\NameResolver']]
             - ['addNodeVisitor', ['@Rector\NodeVisitor\NodeConnector']]
-            - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\ClassLikeTypeResolver']]
+            - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\TypeResolver']]
             - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\ClassResolver']]
 
     # 3rd party services
