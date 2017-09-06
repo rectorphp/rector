@@ -1,0 +1,7 @@
+services:
+    _defaults:
+        autowire: true
+
+    # PSR-4 autodiscovery
+    Rector\TriggerExtractor\:
+        resource: '../../src'

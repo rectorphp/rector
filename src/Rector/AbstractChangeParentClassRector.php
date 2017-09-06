@@ -10,11 +10,14 @@ abstract class AbstractChangeParentClassRector extends AbstractRector
 {
     public function isCandidate(Node $node): bool
     {
-        if (! $node instanceof Class_) {
+        if (! $node instanceof Class_ || $node->extends === null) {
             return false;
         }
 
-        return $this->getParentClassName() === $this->getOldClassName();
+        /** @var FullyQualified $fqnName */
+        $fqnName = $node->extends->getAttribute('resolvedName');
+
+        return $fqnName->toString() === $this->getOldClassName();
     }
 
     /**

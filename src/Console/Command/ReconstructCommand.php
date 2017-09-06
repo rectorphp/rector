@@ -15,7 +15,7 @@ final class ReconstructCommand extends Command
     /**
      * @var string
      */
-    private const NAME = 'processClass';
+    private const NAME = 'process';
 
     /**
      * @var string

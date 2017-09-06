@@ -3,7 +3,7 @@
 [![Build Status](https://img.shields.io/travis/TomasVotruba/Rector/master.svg?style=flat-square)](https://travis-ci.org/TomasVotruba/Rector)
 [![Coverage Status](https://img.shields.io/coveralls/TomasVotruba/Rector/master.svg?style=flat-square)](https://coveralls.io/github/TomasVotruba/Rector?branch=master)
 
-This tool will *reconstruct* (change) your code - **run it only in a new clean git branch**.
+This tool will **upgrade your application** for you.
 
 
 ## All Reconstructors
@@ -15,14 +15,12 @@ This tool will *reconstruct* (change) your code - **run it only in a new clean g
 - `HtmlAddMethodRector`
 - `NetteObjectToSmartTraitRector`
 - `RemoveConfiguratorConstantsRector`
+- and many others
 
 ### [Symfony](https://github.com/symfony/)
 
 - `NamedServicesToConstructorNodeTraverser`
-
-### Abstract to use
-
-- `AbstractChangeMethodNameRector`
+- and many others
 
 
 ## Install

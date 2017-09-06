@@ -1,3 +1,6 @@
+imports:
+  - { resource: '../../packages/TriggerExtractor/src/config/services.yml' }
+
 parameters:
     # todo
     kernel_class: # for name based service refactoring
@@ -7,7 +10,6 @@ parameters:
 services:
     _defaults:
         autowire: true
-        autoconfigure: true
 
     # PSR-4 autodiscovery
     Rector\:
@@ -21,7 +23,8 @@ services:
         calls:
             - ['addNodeVisitor', ['@PhpParser\NodeVisitor\NameResolver']]
             - ['addNodeVisitor', ['@Rector\NodeVisitor\NodeConnector']]
-            - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\ClassLikeTypeResolver']]
+            - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\TypeResolver']]
+            - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\ClassResolver']]
 
     # 3rd party services
     Symfony\Component\Console\Application:
