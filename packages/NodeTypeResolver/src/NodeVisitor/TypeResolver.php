@@ -21,11 +21,6 @@ use Rector\NodeTypeResolver\TypeContext;
 final class TypeResolver extends NodeVisitorAbstract
 {
     /**
-     * @var string
-     */
-    private const TYPE_ATTRIBUTE = 'type';
-
-    /**
      * @var TypeContext
      */
     private $typeContext;
@@ -108,7 +103,7 @@ final class TypeResolver extends NodeVisitorAbstract
         }
 
         if ($variableType) {
-            $variableNode->setAttribute(self::TYPE_ATTRIBUTE, $variableType);
+            $variableNode->setAttribute(Attribute::TYPE, $variableType);
         }
     }
 
@@ -119,7 +114,7 @@ final class TypeResolver extends NodeVisitorAbstract
 
             $variableType = $this->typeContext->getTypeForVariable($assignNode->var->name);
             if ($variableType) {
-                $assignNode->var->setAttribute(self::TYPE_ATTRIBUTE, $variableType);
+                $assignNode->var->setAttribute(Attribute::TYPE, $variableType);
             }
         }
     }
@@ -134,7 +129,7 @@ final class TypeResolver extends NodeVisitorAbstract
         $propertyType = $this->typeContext->getTypeForProperty($propertyName);
 
         if ($propertyType) {
-            $propertyFetchNode->setAttribute(self::TYPE_ATTRIBUTE, $propertyType);
+            $propertyFetchNode->setAttribute(Attribute::TYPE, $propertyType);
         }
     }
 
@@ -144,7 +139,7 @@ final class TypeResolver extends NodeVisitorAbstract
         $propertyType = $this->typeContext->getTypeForProperty($propertyName);
 
         if ($propertyType) {
-            $propertyNode->setAttribute(self::TYPE_ATTRIBUTE, $propertyType);
+            $propertyNode->setAttribute(Attribute::TYPE, $propertyType);
         }
     }
 }
