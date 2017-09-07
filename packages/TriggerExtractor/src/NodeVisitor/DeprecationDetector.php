@@ -62,10 +62,15 @@ final class DeprecationDetector extends NodeVisitorAbstract
     }
 
     /**
-     * This detects: "trigger_error(<some-content>, E_USER_DEPREDCATED)";
+     * This detects inside call of: "trigger_error(<some-content>, E_USER_DEPREDCATED)";
      */
-    private function isTriggerErrorUserDeprecated(Node $node): bool
+    private function hasTriggerErrorUserDeprecatedInside(Node $node): bool
     {
+        dump($node);
+
+        die;
+
+
         if (! $this->isFunctionWithName($node, 'trigger_error')) {
             return false;
         }
