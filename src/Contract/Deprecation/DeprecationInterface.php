@@ -2,7 +2,7 @@
 
 namespace Rector\Contract\Deprecation;
 
-use Rector\Deprecation\SetNames;
+use Rector\Rector\Set\SetNames;
 
 interface DeprecationInterface
 {
