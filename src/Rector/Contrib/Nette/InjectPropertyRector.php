@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use Rector\Builder\Class_\ClassPropertyCollector;
+use Rector\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\Rector\Set\SetNames;
 use Rector\Node\Attribute;
 use Rector\Rector\AbstractRector;
@@ -24,9 +25,15 @@ final class InjectPropertyRector extends AbstractRector
      */
     private $classPropertyCollector;
 
-    public function __construct(ClassPropertyCollector $classPropertyCollector)
+    /**
+     * @var DocBlockAnalyzer
+     */
+    private $docBlockAnalyzer;
+
+    public function __construct(ClassPropertyCollector $classPropertyCollector, DocBlockAnalyzer $docBlockAnalyzer)
     {
         $this->classPropertyCollector = $classPropertyCollector;
+        $this->docBlockAnalyzer = $docBlockAnalyzer;
     }
 
     public function isCandidate(Node $node): bool
@@ -35,7 +42,7 @@ final class InjectPropertyRector extends AbstractRector
             return false;
         }
 
-        if (! $this->hasInjectAnnotation($node)) {
+        if (! $this->docBlockAnalyzer->hasAnnotation($node, 'inject')) {
             return false;
         }
 
@@ -47,12 +54,11 @@ final class InjectPropertyRector extends AbstractRector
      */
     public function refactor(Node $propertyNode): Node
     {
-        $propertyDocBlock = $this->createDocBlockFromNode($propertyNode);
-        $propertyNode = $this->removeInjectAnnotationFromProperty($propertyNode, $propertyDocBlock);
+        $propertyNode = $this->docBlockAnalyzer->removeAnnotationFromNode($propertyNode, 'inject');
 
         $propertyNode->flags = Class_::MODIFIER_PRIVATE;
 
-        $this->addPropertyToCollector($propertyNode, $propertyDocBlock);
+        $this->addPropertyToCollector($propertyNode);
 
         return $propertyNode;
     }
@@ -67,32 +73,10 @@ final class InjectPropertyRector extends AbstractRector
         return 2.1;
     }
 
-    private function hasInjectAnnotation(Property $propertyNode): bool
+    private function addPropertyToCollector(Property $propertyNode): void
     {
-        $propertyDocBlock = $this->createDocBlockFromNode($propertyNode);
+        $propertyDocBlock = new DocBlock($propertyNode->getDocComment());
 
-        return (bool) $propertyDocBlock->getAnnotationsOfType(self::ANNOTATION_INJECT);
-    }
-
-    private function createDocBlockFromNode(Node $node): DocBlock
-    {
-        return new DocBlock($node->getDocComment());
-    }
-
-    private function removeInjectAnnotationFromProperty(Property $propertyNode, DocBlock $propertyDocBlock): Property
-    {
-        $injectAnnotations = $propertyDocBlock->getAnnotationsOfType(self::ANNOTATION_INJECT);
-        foreach ($injectAnnotations as $injectAnnotation) {
-            $injectAnnotation->remove();
-        }
-
-        $propertyNode->setDocComment(new Doc($propertyDocBlock->getContent()));
-
-        return $propertyNode;
-    }
-
-    private function addPropertyToCollector(Property $propertyNode, DocBlock $propertyDocBlock): void
-    {
         $propertyType = $propertyDocBlock->getAnnotationsOfType('var')[0]
             ->getTypes()[0];
 

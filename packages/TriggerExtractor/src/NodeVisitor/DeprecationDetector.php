@@ -34,9 +34,17 @@ final class DeprecationDetector extends NodeVisitorAbstract
 
     public function enterNode(Node $node): void
     {
-        // @todo: add @deprecate annotations as well,
         // @see https://github.com/sensiolabs-de/deprecation-detector/blob/master/src/Visitor/Deprecation/FindDeprecatedTagsVisitor.php
-        if (! $this->isTriggerErrorUserDeprecated($node)) {
+//        if (! $this->isTriggerErrorUserDeprecated($node)) {
+//            return;
+//        }
+
+        if (! $this->hasTriggerErrorUserDeprecatedInside($node)) {
+            return;
+        }
+
+
+        if (! $this->hasDeprecatedDocComment($node)) {
             return;
         }
 
@@ -85,5 +93,22 @@ final class DeprecationDetector extends NodeVisitorAbstract
         }
 
         return $node->name->toString() === $name;
+    }
+
+    /**
+     * @todo extract to docblock analyzer
+     * use deprecated annotation check
+     * @param Node $node
+     *
+     * @return bool
+     */
+    protected function hasDeprecatedDocComment(Node $node)
+    {
+        try {
+            $docBlock = new DocBlock((string) $node->getDocComment());
+            return count($docBlock->getTagsByName('deprecated')) > 0;
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 }
