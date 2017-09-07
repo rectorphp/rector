@@ -26,6 +26,9 @@ final class ClassMethodDeprecation implements DeprecationInterface
      */
     private $newArguments = [];
 
+    /**
+     * @param mixed[] $newArguments
+     */
     public function __construct(string $class, string $oldMethod, string $newMethod, array $newArguments = [])
     {
         $this->class = $class;

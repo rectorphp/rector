@@ -9,9 +9,13 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Node\Attribute;
+use Rector\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\TriggerExtractor\Deprecation\DeprecationCollector;
 use Rector\TriggerExtractor\Deprecation\DeprecationFactory;
 
+/**
+ * Inspired by https://github.com/sensiolabs-de/deprecation-detector/blob/master/src/Visitor/Deprecation/FindDeprecatedTagsVisitor.php
+ */
 final class DeprecationDetector extends NodeVisitorAbstract
 {
     /**
@@ -24,27 +28,28 @@ final class DeprecationDetector extends NodeVisitorAbstract
      */
     private $deprecationFactory;
 
+    /**
+     * @var DocBlockAnalyzer
+     */
+    private $docBlockAnalyzer;
+
     public function __construct(
         DeprecationCollector $deprecationCollector,
-        DeprecationFactory $triggerMessageResolver
+        DeprecationFactory $triggerMessageResolver,
+        DocBlockAnalyzer $docBlockAnalyzer
     ) {
         $this->deprecationCollector = $deprecationCollector;
         $this->deprecationFactory = $triggerMessageResolver;
+        $this->docBlockAnalyzer = $docBlockAnalyzer;
     }
 
     public function enterNode(Node $node): void
     {
-        // @see https://github.com/sensiolabs-de/deprecation-detector/blob/master/src/Visitor/Deprecation/FindDeprecatedTagsVisitor.php
-//        if (! $this->isTriggerErrorUserDeprecated($node)) {
-//            return;
-//        }
-
         if (! $this->hasTriggerErrorUserDeprecatedInside($node)) {
             return;
         }
 
-
-        if (! $this->hasDeprecatedDocComment($node)) {
+        if (! $this->docBlockAnalyzer->hasAnnotation($node, 'deprecated')) {
             return;
         }
 
@@ -93,22 +98,5 @@ final class DeprecationDetector extends NodeVisitorAbstract
         }
 
         return $node->name->toString() === $name;
-    }
-
-    /**
-     * @todo extract to docblock analyzer
-     * use deprecated annotation check
-     * @param Node $node
-     *
-     * @return bool
-     */
-    protected function hasDeprecatedDocComment(Node $node)
-    {
-        try {
-            $docBlock = new DocBlock((string) $node->getDocComment());
-            return count($docBlock->getTagsByName('deprecated')) > 0;
-        } catch (\Exception $e) {
-            return false;
-        }
     }
 }

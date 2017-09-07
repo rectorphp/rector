@@ -6,10 +6,10 @@ use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Builder\StatementGlue;
-use Rector\Rector\Set\SetNames;
 use Rector\Node\Attribute;
 use Rector\NodeFactory\NodeFactory;
 use Rector\Rector\AbstractRector;
+use Rector\Rector\Set\SetNames;
 
 /**
  * Covers https://doc.nette.org/en/2.4/migration-2-4#toc-nette-smartobject.

@@ -4,15 +4,17 @@ namespace Rector\NodeTypeResolver\NodeVisitor;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\Trait_;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Node\Attribute;
 
 /**
- * In class, in interface, in trait, in method or in function?
+ * In class, in interface, in trait, in method or in function.
  */
 final class ScopeResolver extends NodeVisitorAbstract
 {
@@ -21,6 +23,9 @@ final class ScopeResolver extends NodeVisitorAbstract
      */
     private $currentScope;
 
+    /**
+     * @param Node[] $nodes
+     */
     public function beforeTraverse(array $nodes): void
     {
         $this->currentScope = null;
@@ -28,16 +33,10 @@ final class ScopeResolver extends NodeVisitorAbstract
 
     public function enterNode(Node $node): void
     {
+        $this->resolveClassLikeScope($node);
+
         if ($node instanceof Function_) {
             $this->currentScope = 'scope_function';
-        }
-
-        if (($node instanceof Class_ && $node->isAnonymous()) || $node instanceof Property) {
-            $this->currentScope = 'scope_class';
-        }
-
-        if ($node instanceof Interface_) {
-            $this->currentScope = 'scope_interface';
         }
 
         if ($node instanceof ClassMethod) {
@@ -46,6 +45,36 @@ final class ScopeResolver extends NodeVisitorAbstract
 
         if ($this->currentScope) {
             $node->setAttribute(Attribute::SCOPE, $this->currentScope);
+        }
+    }
+
+    public function leaveNode(Node $node): void
+    {
+        if ($node instanceof ClassLike) {
+            if ($node instanceof Class_ && $node->isAnonymous()) {
+                return;
+            }
+
+            $this->currentScope = null;
+        }
+
+        if ($node instanceof ClassMethod || $node instanceof Function_) {
+            $this->currentScope = null;
+        }
+    }
+
+    private function resolveClassLikeScope(Node $node): void
+    {
+        if (($node instanceof Class_ && $node->isAnonymous()) || $node instanceof Property) {
+            $this->currentScope = 'scope_class';
+        }
+
+        if ($node instanceof Interface_) {
+            $this->currentScope = 'scope_interface';
+        }
+
+        if ($node instanceof Trait_) {
+            $this->currentScope = 'scope_trait';
         }
     }
 }

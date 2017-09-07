@@ -16,11 +16,11 @@ final class Attribute
      */
     public const TYPE = 'type';
 
-   /**
-    * In class, in interface, in trait, in method or in function
-    *
-    * @var string
-    */
+    /**
+     * In class, in interface, in trait, in method or in function
+     *
+     * @var string
+     */
     public const SCOPE = 'scope';
 
     /**

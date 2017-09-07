@@ -18,7 +18,7 @@ final class DeprecationFactory
      * @var string
      * @see https://regex101.com/r/WdGoyd/2
      */
-    private const CLASS_WITH_METHOD_PATTERN = '#^(?<classWithMethod>[A-Za-z]+[\\\\A-Za-z]+::[A-Za-z]+\([A-Za-z\']*\))#s';
+    private const CLASS_WITH_METHOD_PATTERN = '#^(?<classMethod>[A-Za-z]+[\\\\A-Za-z]+::[A-Za-z]+\([A-Za-z\']*\))#s';
 
     /**
      * Probably resolve by recursion, similar too
@@ -26,12 +26,8 @@ final class DeprecationFactory
      */
     public function createFromNode(Node $node, string $scope): DeprecationInterface
     {
-        if ($scope === 'scope_class_method') {
-            // new class method deprecation
-
-            dump('tada');
-            die;
-        }
+        dump($node->getAttribute(Attribute::SCOPE));
+        die;
 
         $message = '';
         if ($node instanceof Concat) {
@@ -40,6 +36,37 @@ final class DeprecationFactory
         }
 
         return $this->createFromMesssage($message, $scope);
+    }
+
+    public function tryToCreateClassMethodDeprecation(string $oldMessage, string $newMessage): ?DeprecationInterface
+    {
+        // try to find "SomeClass::methodCall()"
+        $matches = Strings::matchAll($oldMessage, self::CLASS_WITH_METHOD_PATTERN);
+        if (isset($matches[0]['classMethod'])) {
+            $oldClassWithMethod = $matches[0]['classMethod'];
+        }
+
+        // try to find "SomeClass::methodCall()"
+        $matches = Strings::matchAll($newMessage, self::CLASS_WITH_METHOD_PATTERN);
+        if (isset($matches[0]['classMethod'])) {
+            $newClassWithMethod = $matches[0]['classMethod'];
+        }
+
+        if (isset($oldClassWithMethod, $newClassWithMethod)) {
+            [$oldClass, $oldMethod] = explode('::', $oldClassWithMethod);
+            [$newClass, $newMethod] = explode('::', $newClassWithMethod);
+
+            if ($oldClass === $newClass) {
+                // simple method replacement
+                return new ClassMethodDeprecation(
+                    $oldClass,
+                    rtrim($oldMethod, '()'),
+                    rtrim($newMethod, '()')
+                );
+            }
+        }
+
+        return null;
     }
 
     private function processConcatNode(Node $node, string $scope): string
@@ -61,37 +88,6 @@ final class DeprecationFactory
             __METHOD__,
             get_class($node)
         ));
-    }
-
-    public function tryToCreateClassMethodDeprecation(string $oldMessage, string $newMessage): ?DeprecationInterface
-    {
-        // try to find "SomeClass::methodCall()"
-        $matches = Strings::matchAll($oldMessage, self::CLASS_WITH_METHOD_PATTERN);
-        if (isset($matches[0]['classWithMethod'])) {
-            $oldClassWithMethod = $matches[0]['classWithMethod'];
-        }
-
-        // try to find "SomeClass::methodCall()"
-        $matches = Strings::matchAll($newMessage, self::CLASS_WITH_METHOD_PATTERN);
-        if (isset($matches[0]['classWithMethod'])) {
-            $newClassWithMethod = $matches[0]['classWithMethod'];
-        }
-
-        if (isset($oldClassWithMethod, $newClassWithMethod)) {
-            [$oldClass, $oldMethod] = explode('::', $oldClassWithMethod);
-            [$newClass, $newMethod] = explode('::', $newClassWithMethod);
-
-            if ($oldClass === $newClass) {
-                // simple method replacement
-                return new ClassMethodDeprecation(
-                    $oldClass,
-                    rtrim($oldMethod, '()'),
-                    rtrim($newMethod, '()')
-                );
-            }
-        }
-
-        return null;
     }
 
     private function findParentOfType(Node $node, string $type): Node

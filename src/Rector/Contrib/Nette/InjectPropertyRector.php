@@ -3,23 +3,17 @@
 namespace Rector\Rector\Contrib\Nette;
 
 use PhpCsFixer\DocBlock\DocBlock;
-use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use Rector\Builder\Class_\ClassPropertyCollector;
-use Rector\NodeAnalyzer\DocBlockAnalyzer;
-use Rector\Rector\Set\SetNames;
 use Rector\Node\Attribute;
+use Rector\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\Rector\AbstractRector;
+use Rector\Rector\Set\SetNames;
 
 final class InjectPropertyRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private const ANNOTATION_INJECT = 'inject';
-
     /**
      * @var ClassPropertyCollector
      */
@@ -54,7 +48,7 @@ final class InjectPropertyRector extends AbstractRector
      */
     public function refactor(Node $propertyNode): Node
     {
-        $propertyNode = $this->docBlockAnalyzer->removeAnnotationFromNode($propertyNode, 'inject');
+        $this->docBlockAnalyzer->removeAnnotationFromNode($propertyNode, 'inject');
 
         $propertyNode->flags = Class_::MODIFIER_PRIVATE;
 

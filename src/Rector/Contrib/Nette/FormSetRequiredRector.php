@@ -5,11 +5,11 @@ namespace Rector\Rector\Contrib\Nette;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
-use Rector\Rector\Set\SetNames;
 use Rector\Node\Attribute;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeFactory\NodeFactory;
 use Rector\Rector\AbstractRector;
+use Rector\Rector\Set\SetNames;
 
 /**
  * Covers https://forum.nette.org/cs/26672-missing-setrequired-true-false-on-field-abc-in-form

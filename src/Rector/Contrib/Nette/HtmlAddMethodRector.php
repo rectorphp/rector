@@ -2,8 +2,8 @@
 
 namespace Rector\Rector\Contrib\Nette;
 
-use Rector\Rector\Set\SetNames;
 use Rector\Rector\AbstractChangeMethodNameRector;
+use Rector\Rector\Set\SetNames;
 
 final class HtmlAddMethodRector extends AbstractChangeMethodNameRector
 {

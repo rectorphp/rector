@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
@@ -144,7 +145,7 @@ final class NodeFactory
             'name' => $propertyName,
         ]);
 
-        $assign = new Node\Expr\Assign(
+        $assign = new Assign(
             $this->createLocalPropertyFetch($propertyName),
             $variable
         );

@@ -6,10 +6,10 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
-use Rector\Rector\Set\SetNames;
 use Rector\Node\Attribute;
 use Rector\NodeFactory\NodeFactory;
 use Rector\Rector\AbstractRector;
+use Rector\Rector\Set\SetNames;
 
 /**
  * Covers https://doc.nette.org/en/2.4/migration-2-4#toc-nette-smartobject.

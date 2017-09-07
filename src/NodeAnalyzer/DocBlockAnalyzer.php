@@ -15,7 +15,7 @@ final class DocBlockAnalyzer
         return (bool) $docBlock->getAnnotationsOfType($annotation);
     }
 
-    public function removeAnnotationFromNode(Node $node, string $annotation): Node
+    public function removeAnnotationFromNode(Node $node, string $annotation): void
     {
         $docBlock = $this->createDocBlockFromNode($node);
 
@@ -25,8 +25,6 @@ final class DocBlockAnalyzer
         }
 
         $node->setDocComment(new Doc($docBlock->getContent()));
-
-        return $node;
     }
 
     private function createDocBlockFromNode(Node $node): DocBlock

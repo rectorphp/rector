@@ -2,8 +2,8 @@
 
 namespace Rector\Rector\Contrib\Symfony;
 
-use Rector\Rector\Set\SetNames;
 use Rector\Rector\AbstractClassReplacerRector;
+use Rector\Rector\Set\SetNames;
 
 /**
  * Ref.: https://github.com/symfony/symfony/blob/master/UPGRADE-4.0.md#frameworkbundle

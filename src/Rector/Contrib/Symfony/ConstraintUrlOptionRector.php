@@ -5,10 +5,10 @@ namespace Rector\Rector\Contrib\Symfony;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Scalar\String_;
-use Rector\Rector\Set\SetNames;
 use Rector\Node\Attribute;
 use Rector\NodeFactory\NodeFactory;
 use Rector\Rector\AbstractRector;
+use Rector\Rector\Set\SetNames;
 
 /**
  * Ref: https://github.com/symfony/symfony/blob/master/UPGRADE-4.0.md#validator

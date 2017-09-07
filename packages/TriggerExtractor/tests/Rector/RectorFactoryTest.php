@@ -34,8 +34,8 @@ final class RectorFactoryTest extends AbstractContainerAwareTestCase
 
         $this->assertSame([
             'Nette\DI\Definition' => [
-                'setClass' => 'setFactory'
-            ]
+                'setClass' => 'setFactory',
+            ],
         ], Assert::getObjectAttribute($firstRector, 'perClassOldToNewMethod'));
 
         /** @var ConfigurableChangeMethodNameRector $secondRector */
@@ -44,8 +44,8 @@ final class RectorFactoryTest extends AbstractContainerAwareTestCase
 
         $this->assertSame([
             'Nette\DI\Definition' => [
-                'setInject' => 'addTag'
-            ]
+                'setInject' => 'addTag',
+            ],
         ], Assert::getObjectAttribute($secondRector, 'perClassOldToNewMethod'));
     }
 }
