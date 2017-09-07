@@ -1,10 +1,7 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Deprecation;
+namespace Rector\Rector\Set;
 
-/**
- * @todo split to make SOLID
- */
 final class SetNames
 {
     /**

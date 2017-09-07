@@ -2,7 +2,7 @@
 
 namespace Rector\Rector\Contrib\PHPUnit;
 
-use Rector\Deprecation\SetNames;
+use Rector\Rector\Set\SetNames;
 use Rector\Rector\AbstractClassReplacerRector;
 
 final class NamespaceClassRector extends AbstractClassReplacerRector

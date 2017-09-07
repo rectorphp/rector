@@ -5,7 +5,7 @@ namespace Rector\Rector\Contrib\Symfony;
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\MethodCall;
-use Rector\Deprecation\SetNames;
+use Rector\Rector\Set\SetNames;
 use Rector\Node\Attribute;
 use Rector\NodeFactory\NodeFactory;
 use Rector\Rector\AbstractRector;

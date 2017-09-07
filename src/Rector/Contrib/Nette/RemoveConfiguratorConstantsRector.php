@@ -5,7 +5,7 @@ namespace Rector\Rector\Contrib\Nette;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Scalar\String_;
-use Rector\Deprecation\SetNames;
+use Rector\Rector\Set\SetNames;
 use Rector\Node\Attribute;
 use Rector\Rector\AbstractRector;
 

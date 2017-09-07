@@ -2,7 +2,7 @@
 
 namespace Rector\Rector\Contrib\Symfony;
 
-use Rector\Deprecation\SetNames;
+use Rector\Rector\Set\SetNames;
 use Rector\Rector\AbstractClassReplacerRector;
 
 /**

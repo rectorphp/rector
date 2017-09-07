@@ -5,7 +5,7 @@ namespace Rector\Rector\Contrib\Symfony;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
-use Rector\Deprecation\SetNames;
+use Rector\Rector\Set\SetNames;
 use Rector\NodeFactory\NodeFactory;
 use Rector\Rector\AbstractRector;
 
