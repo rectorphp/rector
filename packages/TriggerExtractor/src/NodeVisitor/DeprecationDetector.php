@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use PhpParser\NodeVisitorAbstract;
+use Rector\Node\Attribute;
 use Rector\TriggerExtractor\Deprecation\DeprecationCollector;
 use Rector\TriggerExtractor\Deprecation\DeprecationFactory;
 
@@ -38,6 +39,10 @@ final class DeprecationDetector extends NodeVisitorAbstract
         if (! $this->isTriggerErrorUserDeprecated($node)) {
             return;
         }
+
+        // current scopde would be great
+        dump($node->getAttribute(Attribute::PARENT_NODE)->getParent);
+        die;
 
         /** @var FuncCall $node */
         $deprecation = $this->deprecationFactory->createFromNode($node->args[0]->value);
