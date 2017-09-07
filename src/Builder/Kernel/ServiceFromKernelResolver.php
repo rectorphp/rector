@@ -6,6 +6,9 @@ use PhpParser\Node\Arg;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\HttpKernel\Kernel;
 
+/**
+ * @see for inspiration https://github.com/sensiolabs-de/deprecation-detector/blob/master/src/TypeGuessing/Symfony/ContainerReader.phpě
+ */
 final class ServiceFromKernelResolver
 {
     public function resolveServiceClassFromArgument(Arg $argNode, string $kernelClass): ?string
