@@ -4,7 +4,9 @@ namespace Rector\NodeTypeResolver\NodeVisitor;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\NodeVisitorAbstract;
+use Rector\Node\Attribute;
 
 /**
  * Add attribute 'class' with current class name.
@@ -12,17 +14,7 @@ use PhpParser\NodeVisitorAbstract;
 final class ClassResolver extends NodeVisitorAbstract
 {
     /**
-     * @var string
-     */
-    private const CLASS_ATTRIBUTE = 'class';
-
-    /**
-     * @var string
-     */
-    private const CLASS_NODE_ATTRIBUTE = 'class_node';
-
-    /**
-     * @var Class_|null
+     * @var ClassLike|null
      */
     private $classNode;
 
@@ -36,14 +28,19 @@ final class ClassResolver extends NodeVisitorAbstract
 
     public function enterNode(Node $node): void
     {
-        // detect only first "class" to prevent anonymous classes interference
-        if ($this->classNode === null && $node instanceof Class_) {
+        // detect only first ClassLike elemetn
+        if ($this->classNode === null && $node instanceof ClassLike) {
+            // skip possible anonymous classes
+            if ($node instanceof Class_ && $node->isAnonymous()) {
+                return;
+            }
+
             $this->classNode = $node;
         }
 
         if ($this->classNode) {
-            $node->setAttribute(self::CLASS_NODE_ATTRIBUTE, $this->classNode);
-            $node->setAttribute(self::CLASS_ATTRIBUTE, $this->classNode->namespacedName->toString());
+            $node->setAttribute(Attribute::CLASS_NODE, $this->classNode);
+            $node->setAttribute(Attribute::CLASS_NAME, $this->classNode->namespacedName->toString());
         }
     }
 }

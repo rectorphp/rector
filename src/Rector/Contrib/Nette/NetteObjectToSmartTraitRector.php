@@ -54,7 +54,7 @@ final class NetteObjectToSmartTraitRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        if (! $node instanceof Class_ || $node->extends === null) {
+        if (! $node instanceof Class_ || $node->extends === null || $node->isAnonymous()) {
             return false;
         }
 

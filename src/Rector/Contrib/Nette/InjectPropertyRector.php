@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Deprecation\SetNames;
+use Rector\Node\Attribute;
 use Rector\Rector\AbstractRector;
 
 final class InjectPropertyRector extends AbstractRector
@@ -23,31 +24,9 @@ final class InjectPropertyRector extends AbstractRector
      */
     private $classPropertyCollector;
 
-    /**
-     * @var string
-     */
-    private $className;
-
     public function __construct(ClassPropertyCollector $classPropertyCollector)
     {
         $this->classPropertyCollector = $classPropertyCollector;
-    }
-
-    /**
-     * @param Node[] $nodes
-     * @return null|Node[]
-     */
-    public function beforeTraverse(array $nodes): ?array
-    {
-        $this->className = null;
-
-        foreach ($nodes as $node) {
-            if ($node instanceof Class_) {
-                $this->className = (string) $node->name;
-            }
-        }
-
-        return null;
     }
 
     public function isCandidate(Node $node): bool
@@ -119,6 +98,10 @@ final class InjectPropertyRector extends AbstractRector
 
         $propertyName = (string) $propertyNode->props[0]->name;
 
-        $this->classPropertyCollector->addPropertyForClass($this->className, $propertyType, $propertyName);
+        $this->classPropertyCollector->addPropertyForClass(
+            (string) $propertyNode->getAttribute(Attribute::CLASS_NAME),
+            $propertyType,
+            $propertyName
+        );
     }
 }
