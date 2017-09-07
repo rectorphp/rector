@@ -2,10 +2,10 @@ imports:
   - { resource: '../../packages/TriggerExtractor/src/config/services.yml' }
 
 parameters:
+    name: "Rector"
+
     # todo
     kernel_class: # for name based service refactoring
-
-    name: "Rector"
 
 services:
     _defaults:
@@ -22,9 +22,15 @@ services:
 
     Rector\NodeTraverser\StandaloneTraverseNodeTraverser:
         calls:
+            # adds FQN names for elements
             - ['addNodeVisitor', ['@PhpParser\NodeVisitor\NameResolver']]
+            # adds previous, next and parent node via attribute
             - ['addNodeVisitor', ['@Rector\NodeVisitor\NodeConnector']]
+            # adds type to variable and property nodes via attribute
             - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\TypeResolver']]
+            # adds class/interface/function/method scope to all nodes attribute
+            - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\ScopeResolver']]
+            # adds current class to all nodes via attribute
             - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\ClassResolver']]
 
     # 3rd party services
@@ -44,6 +50,7 @@ services:
     PhpParser\NodeVisitor\NameResolver:
         arguments:
             $options:
+                # keep nodes the same, so the code can be saved without name changes
                 'replaceNodes': false
 
     PhpParser\NodeTraverser: ~
