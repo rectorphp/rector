@@ -5,3 +5,4 @@ services:
     # PSR-4 autodiscovery
     Rector\TriggerExtractor\:
         resource: '../../src'
+        exclude: '../../src/{Deprecation/ClassMethodDeprecation.php}'

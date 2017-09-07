@@ -2,20 +2,22 @@
 
 namespace Rector\TriggerExtractor\Deprecation;
 
+use Rector\TriggerExtractor\Contract\Deprecation\DeprecationInterface;
+
 final class DeprecationCollector
 {
     /**
-     * @var mixed[]
+     * @var DeprecationInterface[]
      */
     private $deprecations = [];
 
-    public function addDeprecation(string $deprecation): void
+    public function addDeprecation(DeprecationInterface $deprecation): void
     {
         $this->deprecations[] = $deprecation;
     }
 
     /**
-     * @return mixed[]
+     * @return DeprecationInterface[]
      */
     public function getDeprecations(): array
     {

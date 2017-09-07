@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\TriggerExtractor;
+namespace Rector\TriggerExtractor\Deprecation;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
@@ -10,14 +10,31 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Exception\NotImplementedException;
 use Rector\Node\Attribute;
+use Rector\TriggerExtractor\Contract\Deprecation\DeprecationInterface;
 
-final class TriggerMessageResolver
+final class DeprecationFactory
 {
+    /**
+     * @var string
+     */
+    private const CLASS_REGEX = '([A-Za-z]+(\\\\[A-Za-z]+)+)';
+
+    /**
+     * @var string
+     */
+    private const CLASS_PATTERN = '#^' . self::CLASS_REGEX . '#s';
+
+    /**
+     * @var string
+     * @see https://regex101.com/r/WdGoyd/1
+     */
+    private const CLASS_WITH_METHOD_PATTER = '#^' . self::CLASS_REGEX . '::[A-Za-z]+\(\)#s';
+
     /**
      * Probably resolve by recursion, similar too
      * @see \Rector\NodeTypeResolver\NodeVisitor\TypeResolver::__construct()
      */
-    public function resolve(Node $node): string
+    public function createFromNode(Node $node): DeprecationInterface
     {
         $message = '';
         if ($node instanceof Concat) {
@@ -25,7 +42,7 @@ final class TriggerMessageResolver
             $message .= $this->processConcatNode($node->right);
         }
 
-        return $message;
+        return $this->createFromMesssage($message);
     }
 
     private function processConcatNode(Node $node): string
@@ -91,5 +108,47 @@ final class TriggerMessageResolver
         }
 
         return $word;
+    }
+
+    private function createFromMesssage(string $message): DeprecationInterface
+    {
+        // format: don't use this, use that
+        if (Strings::contains($message, ' use ')) {
+            [$old, $new] = explode(' use ', $message);
+
+            // try to find SomeClass::methodCall()
+            $matches = Strings::matchAll($old, self::CLASS_WITH_METHOD_PATTER);
+            if (isset($matches[0][0])) {
+                $oldClassWithMethod = $matches[0][0];
+            }
+
+            // try to find SomeClass::methodCall()
+            $matches = Strings::matchAll($new, self::CLASS_WITH_METHOD_PATTER);
+            if (isset($matches[0][0])) {
+                $newClassWithMethod = $matches[0][0];
+            }
+
+            if (isset($oldClassWithMethod) && isset($newClassWithMethod)) {
+                [$oldClass, $oldMethod] = explode('::', $oldClassWithMethod);
+                [$newClass, $newMethod] = explode('::', $newClassWithMethod);
+
+                if ($oldClass === $newClass) {
+                    // simple method replacement
+                    return new ClassMethodDeprecation(
+                        $oldClass,
+                        rtrim($oldMethod, '()'),
+                        rtrim($newMethod, '()')
+                    );
+                }
+            }
+        }
+
+        throw new NotImplementedException(sprintf(
+            '%s::%s() did not resolve %s messsage, so %s was not created. Implement it.',
+            self::class,
+            __METHOD__,
+            $message,
+            DeprecationInterface::class
+        ));
     }
 }

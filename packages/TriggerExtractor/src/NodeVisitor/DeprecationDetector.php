@@ -9,7 +9,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use PhpParser\NodeVisitorAbstract;
 use Rector\TriggerExtractor\Deprecation\DeprecationCollector;
-use Rector\TriggerExtractor\TriggerMessageResolver;
+use Rector\TriggerExtractor\Deprecation\DeprecationFactory;
 
 final class DeprecationDetector extends NodeVisitorAbstract
 {
@@ -19,26 +19,28 @@ final class DeprecationDetector extends NodeVisitorAbstract
     private $deprecationCollector;
 
     /**
-     * @var TriggerMessageResolver
+     * @var DeprecationFactory
      */
-    private $triggerMessageResolver;
+    private $deprecationFactory;
 
     public function __construct(
         DeprecationCollector $deprecationCollector,
-        TriggerMessageResolver $triggerMessageResolver
+        DeprecationFactory $triggerMessageResolver
     ) {
         $this->deprecationCollector = $deprecationCollector;
-        $this->triggerMessageResolver = $triggerMessageResolver;
+        $this->deprecationFactory = $triggerMessageResolver;
     }
 
     public function enterNode(Node $node): void
     {
+        // @todo: add @deprecate annotations as well,
+        // @see https://github.com/sensiolabs-de/deprecation-detector/blob/master/src/Visitor/Deprecation/FindDeprecatedTagsVisitor.php
         if (! $this->isTriggerErrorUserDeprecated($node)) {
             return;
         }
 
         /** @var FuncCall $node */
-        $deprecation = $this->triggerMessageResolver->resolve($node->args[0]->value);
+        $deprecation = $this->deprecationFactory->createFromNode($node->args[0]->value);
 
         $this->deprecationCollector->addDeprecation($deprecation);
     }
