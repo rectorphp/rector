@@ -4,5 +4,4 @@ namespace Rector\TriggerExtractor\Contract\Deprecation;
 
 interface DeprecationInterface
 {
-
 }

@@ -11,6 +11,9 @@ final class ConfigurableChangeMethodNameRector extends AbstractChangeMethodNameR
      */
     private $perClassOldToNewMethod;
 
+    /**
+     * @param string[][] $perClassOldToNewMethod
+     */
     public function setPerClassOldToNewMethods(array $perClassOldToNewMethod): void
     {
         $this->perClassOldToNewMethod = $perClassOldToNewMethod;

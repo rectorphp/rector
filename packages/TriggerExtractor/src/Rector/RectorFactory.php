@@ -51,8 +51,8 @@ final class RectorFactory
             $configurableChangeMethodNameRector = clone $this->configurableChangeMethodNameRector;
             $configurableChangeMethodNameRector->setPerClassOldToNewMethods([
                 $deprecation->getClass() => [
-                    $deprecation->getOldMethod() => $deprecation->getNewMethod()
-                ]
+                    $deprecation->getOldMethod() => $deprecation->getNewMethod(),
+                ],
             ]);
 
             return $configurableChangeMethodNameRector;

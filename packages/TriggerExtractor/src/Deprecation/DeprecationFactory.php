@@ -17,18 +17,13 @@ final class DeprecationFactory
     /**
      * @var string
      */
-    private const CLASS_REGEX = '([A-Za-z]+(\\\\[A-Za-z]+)+)';
-
-    /**
-     * @var string
-     */
-    private const CLASS_PATTERN = '#^' . self::CLASS_REGEX . '#s';
+    private const CLASS_PART_PATTERN = '([A-Za-z]+(\\\\[A-Za-z]+)+)';
 
     /**
      * @var string
      * @see https://regex101.com/r/WdGoyd/1
      */
-    private const CLASS_WITH_METHOD_PATTER = '#^' . self::CLASS_REGEX . '::[A-Za-z]+\(\)#s';
+    private const CLASS_WITH_METHOD_PATTERN = '#^' . self::CLASS_PART_PATTERN . '::[A-Za-z]+\(\)#s';
 
     /**
      * Probably resolve by recursion, similar too
@@ -43,6 +38,37 @@ final class DeprecationFactory
         }
 
         return $this->createFromMesssage($message);
+    }
+
+    public function tryToCreateClassMethodDeprecation(string $oldMessage, string $newMessage): ?DeprecationInterface
+    {
+        // try to find "SomeClass::methodCall()"
+        $matches = Strings::matchAll($oldMessage, self::CLASS_WITH_METHOD_PATTERN);
+        if (isset($matches[0][0])) {
+            $oldClassWithMethod = $matches[0][0];
+        }
+
+        // try to find "SomeClass::methodCall()"
+        $matches = Strings::matchAll($newMessage, self::CLASS_WITH_METHOD_PATTERN);
+        if (isset($matches[0][0])) {
+            $newClassWithMethod = $matches[0][0];
+        }
+
+        if (isset($oldClassWithMethod, $newClassWithMethod)) {
+            [$oldClass, $oldMethod] = explode('::', $oldClassWithMethod);
+            [$newClass, $newMethod] = explode('::', $newClassWithMethod);
+
+            if ($oldClass === $newClass) {
+                // simple method replacement
+                return new ClassMethodDeprecation(
+                    $oldClass,
+                    rtrim($oldMethod, '()'),
+                    rtrim($newMethod, '()')
+                );
+            }
+        }
+
+        return null;
     }
 
     private function processConcatNode(Node $node): string
@@ -114,32 +140,11 @@ final class DeprecationFactory
     {
         // format: don't use this, use that
         if (Strings::contains($message, ' use ')) {
-            [$old, $new] = explode(' use ', $message);
+            [$oldMessage, $newMessage] = explode(' use ', $message);
 
-            // try to find SomeClass::methodCall()
-            $matches = Strings::matchAll($old, self::CLASS_WITH_METHOD_PATTER);
-            if (isset($matches[0][0])) {
-                $oldClassWithMethod = $matches[0][0];
-            }
-
-            // try to find SomeClass::methodCall()
-            $matches = Strings::matchAll($new, self::CLASS_WITH_METHOD_PATTER);
-            if (isset($matches[0][0])) {
-                $newClassWithMethod = $matches[0][0];
-            }
-
-            if (isset($oldClassWithMethod) && isset($newClassWithMethod)) {
-                [$oldClass, $oldMethod] = explode('::', $oldClassWithMethod);
-                [$newClass, $newMethod] = explode('::', $newClassWithMethod);
-
-                if ($oldClass === $newClass) {
-                    // simple method replacement
-                    return new ClassMethodDeprecation(
-                        $oldClass,
-                        rtrim($oldMethod, '()'),
-                        rtrim($newMethod, '()')
-                    );
-                }
+            $deprecation = $this->tryToCreateClassMethodDeprecation($oldMessage, $newMessage);
+            if ($deprecation) {
+                return $deprecation;
             }
         }
 
