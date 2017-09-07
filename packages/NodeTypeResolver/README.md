@@ -17,7 +17,7 @@ Anonymous classes are skipped.
 
 ## How it helps you?
 
-You can get `class` 
+### 1. You can get `class`
 
 ```php
 $class = (string) $node->getAttribute(Attribute::CLASS_NAME);
@@ -38,7 +38,7 @@ if ($fqnName->toString() === 'Symfony\Component\Console\Command') {
 }
 ```
 
-or `type` attribute:
+### 2. Or `type` attribute:
 
 ```php
 /** @var string $type */
