@@ -24,18 +24,25 @@ final class DeprecationFactory
      * Probably resolve by recursion, similar too
      * @see \Rector\NodeTypeResolver\NodeVisitor\TypeResolver::__construct()
      */
-    public function createFromNode(Node $node): DeprecationInterface
+    public function createFromNode(Node $node, string $scope): DeprecationInterface
     {
+        if ($scope === 'scope_class_method') {
+            // new class method deprecation
+
+            dump('tada');
+            die;
+        }
+
         $message = '';
         if ($node instanceof Concat) {
             $message .= $this->processConcatNode($node->left);
             $message .= $this->processConcatNode($node->right);
         }
 
-        return $this->createFromMesssage($message);
+        return $this->createFromMesssage($message, $scope);
     }
 
-    private function processConcatNode(Node $node): string
+    private function processConcatNode(Node $node, string $scope): string
     {
         if ($node instanceof Method) {
             $classMethodNode = $this->findParentOfType($node, ClassMethod::class);

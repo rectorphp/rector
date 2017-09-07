@@ -40,12 +40,10 @@ final class DeprecationDetector extends NodeVisitorAbstract
             return;
         }
 
-        // current scopde would be great
-        dump($node->getAttribute(Attribute::PARENT_NODE)->getParent);
-        die;
+        $scope = $node->getAttribute(Attribute::SCOPE);
 
         /** @var FuncCall $node */
-        $deprecation = $this->deprecationFactory->createFromNode($node->args[0]->value);
+        $deprecation = $this->deprecationFactory->createFromNode($node->args[0]->value, $scope);
 
         $this->deprecationCollector->addDeprecation($deprecation);
     }
