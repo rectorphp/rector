@@ -2,9 +2,9 @@
 
 namespace Rector\DeprecationExtractor\Tests;
 
-use Rector\Tests\AbstractContainerAwareTestCase;
 use Rector\DeprecationExtractor\Deprecation\DeprecationCollector;
 use Rector\DeprecationExtractor\DeprecationExtractor;
+use Rector\Tests\AbstractContainerAwareTestCase;
 
 final class DeprecationExtractorTest extends AbstractContainerAwareTestCase
 {

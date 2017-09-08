@@ -55,6 +55,7 @@ final class Attribute
      * @var string
      */
     public const PREVIOUS_NODE = 'prev_node';
+
     /**
      * @var string
      */

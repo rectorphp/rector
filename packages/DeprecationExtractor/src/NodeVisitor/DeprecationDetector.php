@@ -4,11 +4,10 @@ namespace Rector\DeprecationExtractor\NodeVisitor;
 
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
-use PhpParser\PrettyPrinter\Standard;
+use Rector\DeprecationExtractor\Deprecation\DeprecationCollector;
 use Rector\DeprecationExtractor\NodeAnalyzer\TriggerErrorAnalyzer;
 use Rector\Node\Attribute;
 use Rector\NodeAnalyzer\DocBlockAnalyzer;
-use Rector\DeprecationExtractor\Deprecation\DeprecationCollector;
 
 /**
  * Inspired by https://github.com/sensiolabs-de/deprecation-detector/blob/master/src/Visitor/Deprecation/FindDeprecatedTagsVisitor.php
@@ -26,10 +25,6 @@ final class DeprecationDetector extends NodeVisitorAbstract
     private $docBlockAnalyzer;
 
     /**
-     * @var Standard
-     */
-    private $prettyPrinter;
-    /**
      * @var TriggerErrorAnalyzer
      */
     private $triggerErrorAnalyzer;
@@ -37,12 +32,10 @@ final class DeprecationDetector extends NodeVisitorAbstract
     public function __construct(
         DeprecationCollector $deprecationCollector,
         DocBlockAnalyzer $docBlockAnalyzer,
-        Standard $prettyPrinter,
         TriggerErrorAnalyzer $triggerErrorAnalyzer
     ) {
         $this->deprecationCollector = $deprecationCollector;
         $this->docBlockAnalyzer = $docBlockAnalyzer;
-        $this->prettyPrinter = $prettyPrinter;
         $this->triggerErrorAnalyzer = $triggerErrorAnalyzer;
     }
 
@@ -50,13 +43,13 @@ final class DeprecationDetector extends NodeVisitorAbstract
     {
         if ($this->docBlockAnalyzer->hasAnnotation($node, 'deprecated')) {
             $this->processDocBlockDeprecation($node);
+
             return;
         }
 
         // @todo detect the elments it's realted to
         if ($this->triggerErrorAnalyzer->isUserDeprecation($node)) {
             dump($node->getAttribute(Attribute::SCOPE));
-//            dump($node);
             die;
 
             $scope = $node->getAttribute(Attribute::SCOPE);

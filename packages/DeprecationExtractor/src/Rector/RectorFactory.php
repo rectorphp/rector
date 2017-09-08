@@ -3,10 +3,10 @@
 namespace Rector\DeprecationExtractor\Rector;
 
 use Rector\Contract\Rector\RectorInterface;
-use Rector\Exception\NotImplementedException;
 use Rector\DeprecationExtractor\Contract\Deprecation\DeprecationInterface;
 use Rector\DeprecationExtractor\Deprecation\ClassMethodDeprecation;
 use Rector\DeprecationExtractor\Deprecation\DeprecationCollector;
+use Rector\Exception\NotImplementedException;
 
 /**
  * Creates rectors with propper setup based on found deprecations.

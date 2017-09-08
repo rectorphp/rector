@@ -70,10 +70,12 @@ final class ScopeResolver extends NodeVisitorAbstract
             }
 
             $this->currentScope = null;
+            $this->currentScopeNode = null;
         }
 
         if ($node instanceof ClassMethod || $node instanceof Function_) {
             $this->currentScope = null;
+            $this->currentScopeNode = null;
         }
     }
 

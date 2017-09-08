@@ -3,10 +3,10 @@
 namespace Rector\DeprecationExtractor\Tests\Rector;
 
 use PHPUnit\Framework\Assert;
-use Rector\Tests\AbstractContainerAwareTestCase;
+use Rector\DeprecationExtractor\DeprecationExtractor;
 use Rector\DeprecationExtractor\Rector\ConfigurableChangeMethodNameRector;
 use Rector\DeprecationExtractor\Rector\RectorFactory;
-use Rector\DeprecationExtractor\DeprecationExtractor;
+use Rector\Tests\AbstractContainerAwareTestCase;
 
 final class RectorFactoryTest extends AbstractContainerAwareTestCase
 {

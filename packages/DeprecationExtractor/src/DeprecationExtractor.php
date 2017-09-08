@@ -3,9 +3,9 @@
 namespace Rector\DeprecationExtractor;
 
 use Rector\Contract\Parser\ParserInterface;
+use Rector\DeprecationExtractor\NodeVisitor\DeprecationDetector;
 use Rector\NodeTraverser\MainNodeTraverser;
 use Rector\NodeTraverser\StandaloneTraverseNodeTraverser;
-use Rector\DeprecationExtractor\NodeVisitor\DeprecationDetector;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 

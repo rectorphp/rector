@@ -8,9 +8,9 @@ use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Scalar\MagicConst\Method;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\DeprecationExtractor\Contract\Deprecation\DeprecationInterface;
 use Rector\Exception\NotImplementedException;
 use Rector\Node\Attribute;
-use Rector\DeprecationExtractor\Contract\Deprecation\DeprecationInterface;
 
 final class DeprecationFactory
 {
@@ -26,9 +26,6 @@ final class DeprecationFactory
      */
     public function createFromNode(Node $node, string $scope): DeprecationInterface
     {
-        dump($node->getAttribute(Attribute::SCOPE));
-        die;
-
         $message = '';
         if ($node instanceof Concat) {
             $message .= $this->processConcatNode($node->left);

@@ -48,6 +48,7 @@ final class PropertyToClassAdder extends NodeVisitorAbstract
         foreach ($nodes as $key => $node) {
             if ($node instanceof Class_ && ! $node->isAnonymous()) {
                 $nodes[$key] = $this->processClass($node, (string) $node->name);
+
                 break;
             }
         }

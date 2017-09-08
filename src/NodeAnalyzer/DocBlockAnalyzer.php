@@ -45,6 +45,7 @@ final class DocBlockAnalyzer
 
             if ($type === 'deprecated') {
                 $content = $annotationTags[0]->getContent();
+
                 return ltrim($content, '* @deprecated ');
             }
         }
