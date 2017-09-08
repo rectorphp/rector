@@ -1,9 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Rector\DeprecationExtractor\Deprecation;
+namespace Rector\DeprecationExtractor\Tranformer;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Scalar\MagicConst\Method;
 use PhpParser\Node\Scalar\String_;
@@ -12,13 +13,13 @@ use Rector\DeprecationExtractor\Contract\Deprecation\DeprecationInterface;
 use Rector\Exception\NotImplementedException;
 use Rector\Node\Attribute;
 
-final class DeprecationFactory
+final class ArgumentToDeprecationTransformer
 {
-    /**
-     * @var string
-     * @see https://regex101.com/r/WdGoyd/2
-     */
-    private const CLASS_WITH_METHOD_PATTERN = '#^(?<classMethod>[A-Za-z]+[\\\\A-Za-z]+::[A-Za-z]+\([A-Za-z\']*\))#s';
+    public function transform(Arg $argNode): DeprecationInterface
+    {
+        dump($argNode);
+        die;
+    }
 
     /**
      * Probably resolve by recursion, similar too

@@ -7,9 +7,20 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
+use SplObjectStorage;
 
 final class TriggerErrorAnalyzer
 {
+    /**
+     * @var SplObjectStorage|Arg[]
+     */
+    private $messageNodePerTriggerErrorNode;
+
+    public function __construct()
+    {
+        $this->messageNodePerTriggerErrorNode = new SplObjectStorage;
+    }
+
     public function isUserDeprecation(Node $node): bool
     {
         if (! $this->isFunctionWithName($node, 'trigger_error')) {
@@ -21,6 +32,8 @@ final class TriggerErrorAnalyzer
             return false;
         }
 
+        $this->messageNodePerTriggerErrorNode[$node] = $node->args[0];
+
         /** @var Arg $secondArgumentNode */
         $secondArgumentNode = $node->args[1];
         if (! $secondArgumentNode->value instanceof ConstFetch) {
@@ -31,6 +44,11 @@ final class TriggerErrorAnalyzer
         $constFetchNode = $secondArgumentNode->value;
 
         return $constFetchNode->name->toString() === 'E_USER_DEPRECATED';
+    }
+
+    public function messageNodeForNode(FuncCall $triggerErrorFuncCallNode): Arg
+    {
+        return $this->messageNodePerTriggerErrorNode[$triggerErrorFuncCallNode];
     }
 
     private function isFunctionWithName(Node $node, string $name): bool

@@ -3,6 +3,7 @@
 namespace Rector\DeprecationExtractor\NodeVisitor;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\NodeVisitorAbstract;
 use Rector\DeprecationExtractor\Deprecation\DeprecationCollector;
 use Rector\DeprecationExtractor\NodeAnalyzer\TriggerErrorAnalyzer;
@@ -49,11 +50,9 @@ final class DeprecationDetector extends NodeVisitorAbstract
 
         // @todo detect the elments it's realted to
         if ($this->triggerErrorAnalyzer->isUserDeprecation($node)) {
-            dump($node->getAttribute(Attribute::SCOPE));
-            die;
-
-            $scope = $node->getAttribute(Attribute::SCOPE);
-            $this->deprecationCollector->addDeprecation($deprecation);
+            /** @var FuncCall $node */
+            $argNode = $this->triggerErrorAnalyzer->messageNodeForNode($node);
+            $this->deprecationCollector->addDeprecationNode($argNode);
 
             return;
         }
