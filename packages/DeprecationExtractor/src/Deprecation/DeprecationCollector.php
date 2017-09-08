@@ -14,15 +14,15 @@ final class DeprecationCollector
     /**
      * @var Arg[]
      */
-    private $deprecationNodes = [];
+    private $deprecationArgNodes = [];
 
     public function addDeprecationMessage(string $deprecationMessage): void
     {
         $this->deprecationMessages[] = $deprecationMessage;
     }
 
-    public function addDeprecationNode(Arg $argNode): void
+    public function addDeprecationArgNode(Arg $argNode): void
     {
-        $this->deprecationNodes[] = $argNode;
+        $this->deprecationArgNodes[] = $argNode;
     }
 }

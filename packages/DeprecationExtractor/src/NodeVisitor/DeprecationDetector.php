@@ -7,7 +7,6 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\NodeVisitorAbstract;
 use Rector\DeprecationExtractor\Deprecation\DeprecationCollector;
 use Rector\DeprecationExtractor\NodeAnalyzer\TriggerErrorAnalyzer;
-use Rector\Node\Attribute;
 use Rector\NodeAnalyzer\DocBlockAnalyzer;
 
 /**
@@ -52,7 +51,7 @@ final class DeprecationDetector extends NodeVisitorAbstract
         if ($this->triggerErrorAnalyzer->isUserDeprecation($node)) {
             /** @var FuncCall $node */
             $argNode = $this->triggerErrorAnalyzer->messageNodeForNode($node);
-            $this->deprecationCollector->addDeprecationNode($argNode);
+            $this->deprecationCollector->addDeprecationArgNode($argNode);
 
             return;
         }

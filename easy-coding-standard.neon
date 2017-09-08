@@ -30,6 +30,7 @@ checkers:
         extraAllowedClasses:
             - 'PhpParser\Node\*'
             - 'PhpParser\Comment\Doc'
+            - SplObjectStorage # temporary before adding to Symplify\CodingStandard package
 
 parameters:
     exclude_checkers:
