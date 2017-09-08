@@ -38,7 +38,7 @@ final class DocBlockAnalyzer
         }
 
         if (count($annotationTags) === 1 && $annotationTags[0]->getTag()->getName() === 'var') {
-            return implode('|' , $annotationTags[0]->getTypes());
+            return implode('|', $annotationTags[0]->getTypes());
         }
 
         throw new NotImplementedException(sprintf(
@@ -47,6 +47,19 @@ final class DocBlockAnalyzer
             __METHOD__,
             $annotation
         ));
+    }
+
+    public function getDeprecatedDocComment(Node $node): ?string
+    {
+        $docBlock = new DocBlock($node->getDocComment());
+        $deprecatedTag = $docBlock->getAnnotationsOfType('deprecated');
+        if (count($deprecatedTag) === 0) {
+            return null;
+        }
+
+        $comment = $deprecatedTag[0]->getContent();
+
+        return preg_replace('/[[:blank:]]+/', ' ', $comment);
     }
 
     private function createDocBlockFromNode(Node $node): DocBlock

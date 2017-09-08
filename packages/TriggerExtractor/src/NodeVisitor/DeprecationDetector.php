@@ -1,13 +1,19 @@
 <?php declare(strict_types=1);
 
+/**
+ * @todo rename to deprecation extractor
+ */
+
 namespace Rector\TriggerExtractor\NodeVisitor;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
 use PhpParser\NodeVisitorAbstract;
+use PhpParser\PrettyPrinter\Standard;
 use Rector\Node\Attribute;
 use Rector\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\TriggerExtractor\Deprecation\DeprecationCollector;
@@ -18,6 +24,11 @@ use Rector\TriggerExtractor\Deprecation\DeprecationFactory;
  */
 final class DeprecationDetector extends NodeVisitorAbstract
 {
+    /**
+     * @var string[]
+     */
+    private const DEPRECATEABLE_NODES = [ClassLike::class, ClassMethod::class, Function_::class];
+
     /**
      * @var DeprecationCollector
      */
@@ -33,23 +44,30 @@ final class DeprecationDetector extends NodeVisitorAbstract
      */
     private $docBlockAnalyzer;
 
+    /**
+     * @var Standard
+     */
+    private $prettyPrinter;
+
     public function __construct(
         DeprecationCollector $deprecationCollector,
         DeprecationFactory $triggerMessageResolver,
-        DocBlockAnalyzer $docBlockAnalyzer
+        DocBlockAnalyzer $docBlockAnalyzer,
+        Standard $prettyPrinter
     ) {
         $this->deprecationCollector = $deprecationCollector;
         $this->deprecationFactory = $triggerMessageResolver;
         $this->docBlockAnalyzer = $docBlockAnalyzer;
+        $this->prettyPrinter = $prettyPrinter;
     }
 
     public function enterNode(Node $node): void
     {
-        if (! $this->hasTriggerErrorUserDeprecatedInside($node)) {
+        if (! $this->isDeprecateableNode($node)) {
             return;
         }
 
-        if (! $this->docBlockAnalyzer->hasAnnotation($node, 'deprecated')) {
+        if (! $this->hasDeprecation($node)) {
             return;
         }
 
@@ -61,47 +79,35 @@ final class DeprecationDetector extends NodeVisitorAbstract
         $this->deprecationCollector->addDeprecation($deprecation);
     }
 
+    private function isDeprecateableNode(Node $node): bool
+    {
+        foreach (self::DEPRECATEABLE_NODES as $deprecateableNode) {
+            if (is_a($node, $deprecateableNode, true)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function hasDeprecation(Node $node): bool
+    {
+        if ($this->docBlockAnalyzer->hasAnnotation($node, 'deprecated')) {
+            return true;
+        }
+
+        if ($this->hasTriggerErrorUserDeprecated($node)) {
+            return true;
+        }
+
+        return false;
+    }
+
     /**
      * This detects inside call of: "trigger_error(<some-content>, E_USER_DEPREDCATED)";
      */
-    private function hasTriggerErrorUserDeprecatedInside(Node $node): bool
+    private function hasTriggerErrorUserDeprecated(Node $node): bool
     {
-        dump($node);
-
-        die;
-
-
-        if (! $this->isFunctionWithName($node, 'trigger_error')) {
-            return false;
-        }
-
-        /** @var FuncCall $node */
-        if (count($node->args) !== 2) {
-            return false;
-        }
-
-        /** @var Arg $secondArgumentNode */
-        $secondArgumentNode = $node->args[1];
-        if (! $secondArgumentNode->value instanceof ConstFetch) {
-            return false;
-        }
-
-        /** @var ConstFetch $constFetchNode */
-        $constFetchNode = $secondArgumentNode->value;
-
-        return $constFetchNode->name->toString() === 'E_USER_DEPRECATED';
-    }
-
-    private function isFunctionWithName(Node $node, string $name): bool
-    {
-        if (! $node instanceof FuncCall) {
-            return false;
-        }
-
-        if (! $node->name instanceof Name) {
-            return false;
-        }
-
-        return $node->name->toString() === $name;
+        return Strings::contains($this->prettyPrinter->prettyPrint([$node]), 'E_USER_DEPRECATED');
     }
 }

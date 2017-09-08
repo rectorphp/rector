@@ -2,7 +2,6 @@
 
 namespace Rector\Rector\Contrib\Nette;
 
-use PhpCsFixer\DocBlock\DocBlock;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
