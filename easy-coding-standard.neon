@@ -49,4 +49,4 @@ parameters:
             - src/Rector/Contrib/Symfony/FrameworkBundleClassReplacementsRector.php
         Symplify\CodingStandard\Sniffs\Classes\EqualInterfaceImplementationSniff:
             # empty parent interface, disable for now
-            - packages/TriggerExtractor/src/Deprecation/ClassMethodDeprecation.php
+            - packages/DeprecationExtractor/src/Deprecation/ClassMethodDeprecation.php

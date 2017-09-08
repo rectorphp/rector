@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\TriggerExtractor\Deprecation;
+namespace Rector\DeprecationExtractor\Deprecation;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
@@ -10,7 +10,7 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Exception\NotImplementedException;
 use Rector\Node\Attribute;
-use Rector\TriggerExtractor\Contract\Deprecation\DeprecationInterface;
+use Rector\DeprecationExtractor\Contract\Deprecation\DeprecationInterface;
 
 final class DeprecationFactory
 {

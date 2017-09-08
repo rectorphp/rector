@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Rector\TriggerExtractor\Tests\Rector;
+namespace Rector\DeprecationExtractor\Tests\Rector;
 
 use PHPUnit\Framework\Assert;
 use Rector\Tests\AbstractContainerAwareTestCase;
-use Rector\TriggerExtractor\Rector\ConfigurableChangeMethodNameRector;
-use Rector\TriggerExtractor\Rector\RectorFactory;
-use Rector\TriggerExtractor\TriggerExtractor;
+use Rector\DeprecationExtractor\Rector\ConfigurableChangeMethodNameRector;
+use Rector\DeprecationExtractor\Rector\RectorFactory;
+use Rector\DeprecationExtractor\DeprecationExtractor;
 
 final class RectorFactoryTest extends AbstractContainerAwareTestCase
 {
@@ -19,8 +19,8 @@ final class RectorFactoryTest extends AbstractContainerAwareTestCase
     {
         $this->rectorFactory = $this->container->get(RectorFactory::class);
 
-        $triggerExtractor = $this->container->get(TriggerExtractor::class);
-        $triggerExtractor->scanDirectories([__DIR__ . '/../TriggerExtractorSource']);
+        $DeprecationExtractor = $this->container->get(DeprecationExtractor::class);
+        $DeprecationExtractor->scanDirectories([__DIR__ . '/../DeprecationExtractorSource']);
     }
 
     public function test(): void

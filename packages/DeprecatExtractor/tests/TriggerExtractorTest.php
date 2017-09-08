@@ -1,17 +1,17 @@
 <?php declare(strict_types=1);
 
-namespace Rector\TriggerExtractor\Tests;
+namespace Rector\DeprecationExtractor\Tests;
 
 use Rector\Tests\AbstractContainerAwareTestCase;
-use Rector\TriggerExtractor\Deprecation\DeprecationCollector;
-use Rector\TriggerExtractor\TriggerExtractor;
+use Rector\DeprecationExtractor\Deprecation\DeprecationCollector;
+use Rector\DeprecationExtractor\DeprecationExtractor;
 
-final class TriggerExtractorTest extends AbstractContainerAwareTestCase
+final class DeprecationExtractorTest extends AbstractContainerAwareTestCase
 {
     /**
-     * @var TriggerExtractor
+     * @var DeprecationExtractor
      */
-    private $triggerExtractor;
+    private $DeprecationExtractor;
 
     /**
      * @var DeprecationCollector
@@ -20,13 +20,13 @@ final class TriggerExtractorTest extends AbstractContainerAwareTestCase
 
     protected function setUp(): void
     {
-        $this->triggerExtractor = $this->container->get(TriggerExtractor::class);
+        $this->DeprecationExtractor = $this->container->get(DeprecationExtractor::class);
         $this->deprecationCollector = $this->container->get(DeprecationCollector::class);
     }
 
     public function test(): void
     {
-        $this->triggerExtractor->scanDirectories([__DIR__ . '/TriggerExtractorSource']);
+        $this->DeprecationExtractor->scanDirectories([__DIR__ . '/DeprecationExtractorSource']);
         $deprecations = $this->deprecationCollector->getDeprecations();
 
         $this->assertCount(2, $deprecations);

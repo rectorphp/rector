@@ -1,5 +1,5 @@
 imports:
-  - { resource: '../../packages/TriggerExtractor/src/config/services.yml' }
+  - { resource: '../../packages/DeprecationExtractor/src/config/services.yml' }
 
 parameters:
     name: "Rector"

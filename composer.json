@@ -25,14 +25,14 @@
         "psr-4": {
             "Rector\\": "src",
             "Rector\\NodeTypeResolver\\": "packages/NodeTypeResolver/src",
-            "Rector\\TriggerExtractor\\": "packages/TriggerExtractor/src"
+            "Rector\\DeprecationExtractor\\": "packages/DeprecationExtractor/src"
         }
     },
     "autoload-dev": {
         "psr-4": {
             "Rector\\Tests\\": "tests",
             "Rector\\NodeTypeResolver\\Tests\\": "packages/NodeTypeResolver/tests",
-            "Rector\\TriggerExtractor\\Tests\\": "packages/TriggerExtractor/tests"
+            "Rector\\DeprecationExtractor\\Tests\\": "packages/DeprecationExtractor/tests"
         }
     },
     "scripts": {

@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Rector\TriggerExtractor\Deprecation;
+namespace Rector\DeprecationExtractor\Deprecation;
 
-use Rector\TriggerExtractor\Contract\Deprecation\DeprecationInterface;
+use Rector\DeprecationExtractor\Contract\Deprecation\DeprecationInterface;
 
 final class DeprecationCollector
 {

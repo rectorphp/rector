@@ -4,7 +4,7 @@
  * @todo rename to deprecation extractor
  */
 
-namespace Rector\TriggerExtractor\NodeVisitor;
+namespace Rector\DeprecationExtractor\NodeVisitor;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
@@ -16,8 +16,8 @@ use PhpParser\NodeVisitorAbstract;
 use PhpParser\PrettyPrinter\Standard;
 use Rector\Node\Attribute;
 use Rector\NodeAnalyzer\DocBlockAnalyzer;
-use Rector\TriggerExtractor\Deprecation\DeprecationCollector;
-use Rector\TriggerExtractor\Deprecation\DeprecationFactory;
+use Rector\DeprecationExtractor\Deprecation\DeprecationCollector;
+use Rector\DeprecationExtractor\Deprecation\DeprecationFactory;
 
 /**
  * Inspired by https://github.com/sensiolabs-de/deprecation-detector/blob/master/src/Visitor/Deprecation/FindDeprecatedTagsVisitor.php
@@ -103,11 +103,11 @@ final class DeprecationDetector extends NodeVisitorAbstract
         return false;
     }
 
-    /**
-     * This detects inside call of: "trigger_error(<some-content>, E_USER_DEPREDCATED)";
-     */
     private function hasTriggerErrorUserDeprecated(Node $node): bool
     {
-        return Strings::contains($this->prettyPrinter->prettyPrint([$node]), 'E_USER_DEPRECATED');
+        return Strings::contains(
+            $this->prettyPrinter->prettyPrint([$node]),
+            'E_USER_DEPRECATED'
+        );
     }
 }

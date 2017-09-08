@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Rector\TriggerExtractor\Rector;
+namespace Rector\DeprecationExtractor\Rector;
 
 use Rector\Contract\Rector\RectorInterface;
 use Rector\Exception\NotImplementedException;
-use Rector\TriggerExtractor\Contract\Deprecation\DeprecationInterface;
-use Rector\TriggerExtractor\Deprecation\ClassMethodDeprecation;
-use Rector\TriggerExtractor\Deprecation\DeprecationCollector;
+use Rector\DeprecationExtractor\Contract\Deprecation\DeprecationInterface;
+use Rector\DeprecationExtractor\Deprecation\ClassMethodDeprecation;
+use Rector\DeprecationExtractor\Deprecation\DeprecationCollector;
 
 /**
  * Creates rectors with propper setup based on found deprecations.

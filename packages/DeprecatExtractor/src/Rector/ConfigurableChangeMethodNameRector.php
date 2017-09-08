@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\TriggerExtractor\Rector;
+namespace Rector\DeprecationExtractor\Rector;
 
 use Rector\Rector\AbstractChangeMethodNameRector;
 

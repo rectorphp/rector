@@ -1,15 +1,15 @@
 <?php declare(strict_types=1);
 
-namespace Rector\TriggerExtractor;
+namespace Rector\DeprecationExtractor;
 
 use Rector\Contract\Parser\ParserInterface;
 use Rector\NodeTraverser\MainNodeTraverser;
 use Rector\NodeTraverser\StandaloneTraverseNodeTraverser;
-use Rector\TriggerExtractor\NodeVisitor\DeprecationDetector;
+use Rector\DeprecationExtractor\NodeVisitor\DeprecationDetector;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
-final class TriggerExtractor
+final class DeprecationExtractor
 {
     /**
      * @var ParserInterface

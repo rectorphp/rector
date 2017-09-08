@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\TriggerExtractor\Contract\Deprecation;
+namespace Rector\DeprecationExtractor\Contract\Deprecation;
 
 interface DeprecationInterface
 {
