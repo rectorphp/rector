@@ -4,16 +4,11 @@ namespace Rector\DeprecationExtractor\NodeVisitor;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Function_;
 use PhpParser\NodeVisitorAbstract;
 use PhpParser\PrettyPrinter\Standard;
 use Rector\Node\Attribute;
 use Rector\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\DeprecationExtractor\Deprecation\DeprecationCollector;
-use Rector\DeprecationExtractor\Deprecation\DeprecationFactory;
 
 /**
  * Inspired by https://github.com/sensiolabs-de/deprecation-detector/blob/master/src/Visitor/Deprecation/FindDeprecatedTagsVisitor.php
@@ -24,11 +19,6 @@ final class DeprecationDetector extends NodeVisitorAbstract
      * @var DeprecationCollector
      */
     private $deprecationCollector;
-
-    /**
-     * @var DeprecationFactory
-     */
-    private $deprecationFactory;
 
     /**
      * @var DocBlockAnalyzer
@@ -42,12 +32,10 @@ final class DeprecationDetector extends NodeVisitorAbstract
 
     public function __construct(
         DeprecationCollector $deprecationCollector,
-        DeprecationFactory $triggerMessageResolver,
         DocBlockAnalyzer $docBlockAnalyzer,
         Standard $prettyPrinter
     ) {
         $this->deprecationCollector = $deprecationCollector;
-        $this->deprecationFactory = $triggerMessageResolver;
         $this->docBlockAnalyzer = $docBlockAnalyzer;
         $this->prettyPrinter = $prettyPrinter;
     }
