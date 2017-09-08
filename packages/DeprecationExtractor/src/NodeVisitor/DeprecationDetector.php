@@ -1,9 +1,5 @@
 <?php declare(strict_types=1);
 
-/**
- * @todo rename to deprecation extractor
- */
-
 namespace Rector\DeprecationExtractor\NodeVisitor;
 
 use Nette\Utils\Strings;
@@ -24,11 +20,6 @@ use Rector\DeprecationExtractor\Deprecation\DeprecationFactory;
  */
 final class DeprecationDetector extends NodeVisitorAbstract
 {
-    /**
-     * @var string[]
-     */
-    private const DEPRECATEABLE_NODES = [ClassLike::class, ClassMethod::class, Function_::class];
-
     /**
      * @var DeprecationCollector
      */
@@ -63,51 +54,30 @@ final class DeprecationDetector extends NodeVisitorAbstract
 
     public function enterNode(Node $node): void
     {
-        if (! $this->isDeprecateableNode($node)) {
-            return;
-        }
-
-        if (! $this->hasDeprecation($node)) {
-            return;
-        }
-
-        $scope = $node->getAttribute(Attribute::SCOPE);
-
-        /** @var FuncCall $node */
-        $deprecation = $this->deprecationFactory->createFromNode($node->args[0]->value, $scope);
-
-        $this->deprecationCollector->addDeprecation($deprecation);
-    }
-
-    private function isDeprecateableNode(Node $node): bool
-    {
-        foreach (self::DEPRECATEABLE_NODES as $deprecateableNode) {
-            if (is_a($node, $deprecateableNode, true)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private function hasDeprecation(Node $node): bool
-    {
         if ($this->docBlockAnalyzer->hasAnnotation($node, 'deprecated')) {
-            return true;
+            $this->processDocBlockDeprecation($node);
+            return;
         }
 
         if ($this->hasTriggerErrorUserDeprecated($node)) {
-            return true;
-        }
+            dump($node);
+            die;
 
-        return false;
+            $scope = $node->getAttribute(Attribute::SCOPE);
+            $this->deprecationCollector->addDeprecation($deprecation);
+
+            return;
+        }
     }
 
     private function hasTriggerErrorUserDeprecated(Node $node): bool
     {
-        return Strings::contains(
-            $this->prettyPrinter->prettyPrint([$node]),
-            'E_USER_DEPRECATED'
-        );
+        return Strings::contains($this->prettyPrinter->prettyPrint([$node]), 'E_USER_DEPRECATED');
+    }
+
+    private function processDocBlockDeprecation(Node $node): void
+    {
+        $deprecation = $this->docBlockAnalyzer->getAnnotationFromNode($node, 'deprecated');
+        $this->deprecationCollector->addDeprecationMessage($deprecation);
     }
 }

@@ -37,8 +37,16 @@ final class DocBlockAnalyzer
             return '';
         }
 
-        if (count($annotationTags) === 1 && $annotationTags[0]->getTag()->getName() === 'var') {
-            return implode('|', $annotationTags[0]->getTypes());
+        if (count($annotationTags) === 1) {
+            $type = $annotationTags[0]->getTag()->getName();
+            if ($type === 'var') {
+                return implode('|', $annotationTags[0]->getTypes());
+            }
+
+            if ($type === 'deprecated') {
+                $content = $annotationTags[0]->getContent();
+                return ltrim($content, '* @deprecated ');
+            }
         }
 
         throw new NotImplementedException(sprintf(

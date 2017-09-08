@@ -21,13 +21,13 @@ final class ExtractCommand extends Command
     private const ARGUMENT_SOURCE_NAME = 'source';
 
     /**
-     * @var DeprecationExtractor
+     * @var deprecationExtractor
      */
-    private $DeprecationExtractor;
+    private $deprecationExtractor;
 
-    public function __construct(DeprecationExtractor $DeprecationExtractor)
+    public function __construct(deprecationExtractor $deprecationExtractor)
     {
-        $this->DeprecationExtractor = $DeprecationExtractor;
+        $this->deprecationExtractor = $deprecationExtractor;
 
         parent::__construct();
     }
@@ -46,7 +46,7 @@ final class ExtractCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $source = $input->getArgument(self::ARGUMENT_SOURCE_NAME);
-        $this->DeprecationExtractor->scanDirectories($source);
+        $this->deprecationExtractor->scanDirectories($source);
 
         // write found deprecations...
 

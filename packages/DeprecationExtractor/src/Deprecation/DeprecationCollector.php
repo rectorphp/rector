@@ -11,9 +11,19 @@ final class DeprecationCollector
      */
     private $deprecations = [];
 
+    /**
+     * @var string[]
+     */
+    private $deprecationMessages = [];
+
     public function addDeprecation(DeprecationInterface $deprecation): void
     {
         $this->deprecations[] = $deprecation;
+    }
+
+    public function addDeprecationMessage(string $deprecationMessage): void
+    {
+        $this->deprecationMessages[] = $deprecationMessage;
     }
 
     /**
