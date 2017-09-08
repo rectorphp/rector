@@ -11,7 +11,7 @@ final class DeprecationExtractorTest extends AbstractContainerAwareTestCase
     /**
      * @var DeprecationExtractor
      */
-    private $DeprecationExtractor;
+    private $deprecationExtractor;
 
     /**
      * @var DeprecationCollector
@@ -20,26 +20,25 @@ final class DeprecationExtractorTest extends AbstractContainerAwareTestCase
 
     protected function setUp(): void
     {
-        $this->DeprecationExtractor = $this->container->get(DeprecationExtractor::class);
+        $this->deprecationExtractor = $this->container->get(DeprecationExtractor::class);
         $this->deprecationCollector = $this->container->get(DeprecationCollector::class);
     }
 
     public function test(): void
     {
-        $this->DeprecationExtractor->scanDirectories([__DIR__ . '/DeprecationExtractorSource']);
+        $this->deprecationExtractor->scanDirectories([__DIR__ . '/DeprecationExtractorSource']);
         $deprecations = $this->deprecationCollector->getDeprecations();
 
         $this->assertCount(2, $deprecations);
 
         $setClassToSetFacoryDeprecation = $deprecations[0];
-        $injectMethodToTagDeprecation = $deprecations[1];
-
         $this->assertSame(
             'Nette\DI\Definition::setClass() second parameter $args is deprecated,'
             . ' use Nette\DI\Definition::setFactory()',
             $setClassToSetFacoryDeprecation
         );
 
+        $injectMethodToTagDeprecation = $deprecations[1];
         $this->assertSame(
             'Nette\DI\Definition::setInject() is deprecated, use Nette\DI\Definition::addTag(\'inject\')',
             $injectMethodToTagDeprecation

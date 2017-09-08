@@ -24,6 +24,11 @@ final class Attribute
     public const SCOPE = 'scope';
 
     /**
+     * @var string
+     */
+    public const SCOPE_NODE = 'scope_node';
+
+    /**
      * System name to be found in @see \PhpParser\NodeVisitor\NameResolver
      * Do not change this even if you want!
      *
@@ -50,7 +55,6 @@ final class Attribute
      * @var string
      */
     public const PREVIOUS_NODE = 'prev_node';
-
     /**
      * @var string
      */

@@ -2,10 +2,10 @@
 
 namespace Rector\DeprecationExtractor\NodeVisitor;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
 use PhpParser\PrettyPrinter\Standard;
+use Rector\DeprecationExtractor\NodeAnalyzer\TriggerErrorAnalyzer;
 use Rector\Node\Attribute;
 use Rector\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\DeprecationExtractor\Deprecation\DeprecationCollector;
@@ -29,15 +29,21 @@ final class DeprecationDetector extends NodeVisitorAbstract
      * @var Standard
      */
     private $prettyPrinter;
+    /**
+     * @var TriggerErrorAnalyzer
+     */
+    private $triggerErrorAnalyzer;
 
     public function __construct(
         DeprecationCollector $deprecationCollector,
         DocBlockAnalyzer $docBlockAnalyzer,
-        Standard $prettyPrinter
+        Standard $prettyPrinter,
+        TriggerErrorAnalyzer $triggerErrorAnalyzer
     ) {
         $this->deprecationCollector = $deprecationCollector;
         $this->docBlockAnalyzer = $docBlockAnalyzer;
         $this->prettyPrinter = $prettyPrinter;
+        $this->triggerErrorAnalyzer = $triggerErrorAnalyzer;
     }
 
     public function enterNode(Node $node): void
@@ -47,8 +53,10 @@ final class DeprecationDetector extends NodeVisitorAbstract
             return;
         }
 
-        if ($this->hasTriggerErrorUserDeprecated($node)) {
-            dump($node);
+        // @todo detect the elments it's realted to
+        if ($this->triggerErrorAnalyzer->isUserDeprecation($node)) {
+            dump($node->getAttribute(Attribute::SCOPE));
+//            dump($node);
             die;
 
             $scope = $node->getAttribute(Attribute::SCOPE);
@@ -56,11 +64,6 @@ final class DeprecationDetector extends NodeVisitorAbstract
 
             return;
         }
-    }
-
-    private function hasTriggerErrorUserDeprecated(Node $node): bool
-    {
-        return Strings::contains($this->prettyPrinter->prettyPrint([$node]), 'E_USER_DEPRECATED');
     }
 
     private function processDocBlockDeprecation(Node $node): void
