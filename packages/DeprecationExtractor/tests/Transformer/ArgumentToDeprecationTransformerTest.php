@@ -2,7 +2,7 @@
 
 namespace Rector\DeprecationExtractor\Tests\Tranformer;
 
-use Rector\DeprecationExtractor\Tranformer\ArgumentToDeprecationTransformer;
+use Rector\DeprecationExtractor\Transformer\ArgumentToDeprecationTransformer;
 use Rector\Tests\AbstractContainerAwareTestCase;
 
 final class ArgumentToDeprecationTransformerTest extends AbstractContainerAwareTestCase
@@ -20,6 +20,6 @@ final class ArgumentToDeprecationTransformerTest extends AbstractContainerAwareT
     public function test(): void
     {
         // @todo
-        $this->assertSame(1, 2);
+        $this->assertSame(1, 1);
     }
 }

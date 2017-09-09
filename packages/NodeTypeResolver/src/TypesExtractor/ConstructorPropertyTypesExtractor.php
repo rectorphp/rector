@@ -68,6 +68,9 @@ final class ConstructorPropertyTypesExtractor
 
     private function isAssignThisNode(Node $node): bool
     {
+        dump($node);
+        die;
+
         if (! $node->expr instanceof Assign) {
             return false;
         }

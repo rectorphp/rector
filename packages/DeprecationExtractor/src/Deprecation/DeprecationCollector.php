@@ -25,4 +25,20 @@ final class DeprecationCollector
     {
         $this->deprecationArgNodes[] = $argNode;
     }
+
+    /**
+     * @return string[]
+     */
+    public function getDeprecationMessages(): array
+    {
+        return $this->deprecationMessages;
+    }
+
+    /**
+     * @return Arg[]
+     */
+    public function getDeprecationArgNodes(): array
+    {
+        return $this->deprecationArgNodes;
+    }
 }

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\DeprecationExtractor\Tranformer;
+namespace Rector\DeprecationExtractor\Transformer;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
