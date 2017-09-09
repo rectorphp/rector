@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Rector\Contrib\SymfonyExtra;
+namespace Rector\Rector\Contrib\Symfony;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
@@ -13,8 +13,7 @@ use Rector\Node\Attribute;
 use Rector\NodeAnalyzer\SymfonyContainerCallsAnalyzer;
 use Rector\NodeFactory\NodeFactory;
 use Rector\Rector\AbstractRector;
-use Rector\Rector\Set\SetNames;
-use Rector\Tests\Rector\Contrib\SymfonyExtra\GetterToPropertyRector\Source\LocalKernel;
+use Rector\Tests\Rector\Contrib\Symfony\GetterToPropertyRector\Source\LocalKernel;
 
 /**
  * Ref: https://github.com/symfony/symfony/blob/master/UPGRADE-4.0.md#console
@@ -75,16 +74,6 @@ final class CommandToConstructorInjectionRector extends AbstractRector
         $this->nameResolver = $nameResolver;
         $this->nodeFactory = $nodeFactory;
         $this->symfonyContainerCallsAnalyzer = $symfonyContainerCallsAnalyzer;
-    }
-
-    public function getSetName(): string
-    {
-        return SetNames::SYMFONY_EXTRA;
-    }
-
-    public function sinceVersion(): float
-    {
-        return 3.3;
     }
 
     public function isCandidate(Node $node): bool

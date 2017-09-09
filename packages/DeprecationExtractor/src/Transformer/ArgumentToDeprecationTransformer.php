@@ -10,6 +10,7 @@ use PhpParser\Node\Scalar\MagicConst\Method;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\DeprecationExtractor\Contract\Deprecation\DeprecationInterface;
+use Rector\DeprecationExtractor\Deprecation\ClassMethodDeprecation;
 use Rector\Exception\NotImplementedException;
 use Rector\Node\Attribute;
 

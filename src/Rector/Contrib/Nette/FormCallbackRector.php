@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\PropertyFetch;
 use Rector\Node\Attribute;
 use Rector\NodeFactory\NodeFactory;
 use Rector\Rector\AbstractRector;
-use Rector\Rector\Set\SetNames;
 
 /**
  * Covers https://doc.nette.org/en/2.4/migration-2-4#toc-nette-smartobject.
@@ -29,16 +28,6 @@ final class FormCallbackRector extends AbstractRector
     public function __construct(NodeFactory $nodeFactory)
     {
         $this->nodeFactory = $nodeFactory;
-    }
-
-    public function getSetName(): string
-    {
-        return SetNames::NETTE;
-    }
-
-    public function sinceVersion(): float
-    {
-        return 2.4;
     }
 
     /**

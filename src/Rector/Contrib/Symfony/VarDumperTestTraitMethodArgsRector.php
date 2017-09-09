@@ -8,7 +8,6 @@ use PhpParser\Node\Scalar\String_;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeFactory\NodeFactory;
 use Rector\Rector\AbstractRector;
-use Rector\Rector\Set\SetNames;
 
 /**
  * Converts all:
@@ -40,16 +39,6 @@ final class VarDumperTestTraitMethodArgsRector extends AbstractRector
     {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->nodeFactory = $nodeFactory;
-    }
-
-    public function getSetName(): string
-    {
-        return SetNames::SYMFONY;
-    }
-
-    public function sinceVersion(): float
-    {
-        return 4.0;
     }
 
     public function isCandidate(Node $node): bool

@@ -9,7 +9,6 @@ use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Node\Attribute;
 use Rector\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\Rector\AbstractRector;
-use Rector\Rector\Set\SetNames;
 
 final class InjectPropertyRector extends AbstractRector
 {
@@ -54,16 +53,6 @@ final class InjectPropertyRector extends AbstractRector
         $this->addPropertyToCollector($propertyNode);
 
         return $propertyNode;
-    }
-
-    public function getSetName(): string
-    {
-        return SetNames::NETTE;
-    }
-
-    public function sinceVersion(): float
-    {
-        return 2.1;
     }
 
     private function addPropertyToCollector(Property $propertyNode): void

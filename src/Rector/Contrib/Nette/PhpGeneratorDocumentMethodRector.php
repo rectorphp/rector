@@ -3,7 +3,6 @@
 namespace Rector\Rector\Contrib\Nette;
 
 use Rector\Rector\AbstractChangeMethodNameRector;
-use Rector\Rector\Set\SetNames;
 
 final class PhpGeneratorDocumentMethodRector extends AbstractChangeMethodNameRector
 {
@@ -15,16 +14,6 @@ final class PhpGeneratorDocumentMethodRector extends AbstractChangeMethodNameRec
         'setDocuments' => 'setComment',
         'getDocuments' => 'getComment',
     ];
-
-    public function getSetName(): string
-    {
-        return SetNames::NETTE;
-    }
-
-    public function sinceVersion(): float
-    {
-        return 2.4;
-    }
 
     /**
      * @return string[][]

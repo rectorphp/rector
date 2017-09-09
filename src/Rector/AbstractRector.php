@@ -5,10 +5,9 @@ namespace Rector\Rector;
 use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
-use Rector\Contract\Deprecation\DeprecationInterface;
 use Rector\Contract\Rector\RectorInterface;
 
-abstract class AbstractRector extends NodeVisitorAbstract implements DeprecationInterface, RectorInterface
+abstract class AbstractRector extends NodeVisitorAbstract implements RectorInterface
 {
     /**
      * @return null|int|Node

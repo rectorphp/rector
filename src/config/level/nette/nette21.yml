@@ -1,0 +1,3 @@
+checkers:
+    - Rector\Rector\Contrib\Nette\InjectPropertyRector
+    - Rector\Rector\Contrib\Nette\NetteConfiguratorRector

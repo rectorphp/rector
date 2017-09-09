@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Rector\Contrib\SymfonyExtra;
+namespace Rector\Rector\Contrib\Symfony;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
@@ -11,8 +11,7 @@ use Rector\Node\Attribute;
 use Rector\NodeAnalyzer\SymfonyContainerCallsAnalyzer;
 use Rector\NodeFactory\NodeFactory;
 use Rector\Rector\AbstractRector;
-use Rector\Rector\Set\SetNames;
-use Rector\Tests\Rector\Contrib\SymfonyExtra\GetterToPropertyRector\Source\LocalKernel;
+use Rector\Tests\Rector\Contrib\Symfony\GetterToPropertyRector\Source\LocalKernel;
 
 /**
  * Converts all:
@@ -94,15 +93,5 @@ final class GetterToPropertyRector extends AbstractRector
         );
 
         return $this->nodeFactory->createLocalPropertyFetch($propertyName);
-    }
-
-    public function getSetName(): string
-    {
-        return SetNames::SYMFONY_EXTRA;
-    }
-
-    public function sinceVersion(): float
-    {
-        return 3.3;
     }
 }

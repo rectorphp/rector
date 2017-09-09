@@ -5,22 +5,14 @@
 
 This tool will **upgrade your application** for you.
 
-
 ## All Reconstructors
 
-### [Nette](https://github.com/nette/)
+At the moment these packages are supported:
 
-- `FormCallbackRector`
-- `InjectPropertyRector`
-- `HtmlAddMethodRector`
-- `NetteObjectToSmartTraitRector`
-- `RemoveConfiguratorConstantsRector`
-- and many others
-
-### [Symfony](https://github.com/symfony/)
-
-- `NamedServicesToConstructorNodeTraverser`
-- and many others
+- [Nette](/src/Rector/Contrib/Nette)
+- [Symfony](/src/Rector/Contrib/Symfony)
+- [PHPUnit](/src/Rector/Contrib/PHPUnit)
+- [PHP_CodeSniffer](/src/Rector/Contrib/PHP_CodeSniffer)
 
 
 ## Install
@@ -32,35 +24,17 @@ composer require rector/rector --dev
 ## Use (WIP)
 
 ```bash
-vendor/bin/rector reconstruct src --framework Nette --to-version 2.4
-vendor/bin/rector reconstruct src --framework Symfony --to-version 3.3
+vendor/bin/rector reconstruct src --level=nette24
+vendor/bin/rector reconstruct src --level=symfony40
 ```
 
 
-### How to Add New Rector
+### 6 Steps to Add New Rector
 
 Just extend `Rector\Rector\AbstractRector`.
-It will prepare **4 methods** - 2 informative and 2 processing the node.
+It will prepare **2 methods** processing the node.
 
 ```php
-/**
- * A project that is related to this.
- * E.g "Nette", "Symfony"
- * Use constants from @see SetNames, if possible.
- */
-public function getSetName(): string
-{
-}
-
-/**
- * Version this deprecations is active since.
- * E.g. 2.3.
- */
-public function sinceVersion(): float
-{
-}
-
-
 public function isCandidate(Node $node): bool
 {
 }
@@ -87,9 +61,11 @@ final class MyRector extends AbstractRector
 
 3. Add a Test Case
 
-4. Submit PR
+4. Add to specific level, e.g. [`/src/config/level/nette/nette24.yml`](/src/config/level/nette/nette24.yml)
+
+5. Submit PR
  
-5. :check: 
+6. :check:
 
 
 

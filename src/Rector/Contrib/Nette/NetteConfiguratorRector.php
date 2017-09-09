@@ -3,20 +3,9 @@
 namespace Rector\Rector\Contrib\Nette;
 
 use Rector\Rector\AbstractClassReplacerRector;
-use Rector\Rector\Set\SetNames;
 
 final class NetteConfiguratorRector extends AbstractClassReplacerRector
 {
-    public function getSetName(): string
-    {
-        return SetNames::NETTE;
-    }
-
-    public function sinceVersion(): float
-    {
-        return 2.1;
-    }
-
     /**
      * @return string[]
      */

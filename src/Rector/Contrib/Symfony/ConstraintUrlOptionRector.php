@@ -8,7 +8,6 @@ use PhpParser\Node\Scalar\String_;
 use Rector\Node\Attribute;
 use Rector\NodeFactory\NodeFactory;
 use Rector\Rector\AbstractRector;
-use Rector\Rector\Set\SetNames;
 
 /**
  * Ref: https://github.com/symfony/symfony/blob/master/UPGRADE-4.0.md#validator
@@ -34,16 +33,6 @@ final class ConstraintUrlOptionRector extends AbstractRector
     public function __construct(NodeFactory $nodeFactory)
     {
         $this->nodeFactory = $nodeFactory;
-    }
-
-    public function getSetName(): string
-    {
-        return SetNames::SYMFONY;
-    }
-
-    public function sinceVersion(): float
-    {
-        return 4.0;
     }
 
     public function isCandidate(Node $node): bool

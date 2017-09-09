@@ -1,0 +1,3 @@
+rectors:
+     - Rector\Rector\Contrib\Symfony\CommandToConstructorInjectionRector
+     - Rector\Rector\Contrib\Symfony\GetterToPropertyRector

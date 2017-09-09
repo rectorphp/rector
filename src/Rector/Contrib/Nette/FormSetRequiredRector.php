@@ -9,7 +9,6 @@ use Rector\Node\Attribute;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeFactory\NodeFactory;
 use Rector\Rector\AbstractRector;
-use Rector\Rector\Set\SetNames;
 
 /**
  * Covers https://forum.nette.org/cs/26672-missing-setrequired-true-false-on-field-abc-in-form
@@ -35,16 +34,6 @@ final class FormSetRequiredRector extends AbstractRector
     {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->nodeFactory = $nodeFactory;
-    }
-
-    public function getSetName(): string
-    {
-        return SetNames::NETTE;
-    }
-
-    public function sinceVersion(): float
-    {
-        return 2.4;
     }
 
     public function isCandidate(Node $node): bool
