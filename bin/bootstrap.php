@@ -9,6 +9,7 @@ $possibleAutoloadPaths = [__DIR__ . '/../vendor/autoload.php', __DIR__ . '/../..
 foreach ($possibleAutoloadPaths as $possibleAutoloadPath) {
     if (is_file($possibleAutoloadPath)) {
         require_once $possibleAutoloadPath;
+
         break;
     }
 }

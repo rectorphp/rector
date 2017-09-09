@@ -1,8 +1,11 @@
-# Trigger Extractor
+# Deprecation Extractor
 
-This package extracts `trigger_error(*, E_USER_DEPRECATED)` from the code.
+This package extracts 2 cases:
+ 
+- `@deprecate` annotation
+- `trigger_error(*, E_USER_DEPRECATED)` from the code.
 
-It helps to generated automate rectors.
+It helps to generated automate rectors and identify BC changes purely from the code.
  
 
 ## How it works?

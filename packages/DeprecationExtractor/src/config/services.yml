@@ -3,5 +3,6 @@ services:
         autowire: true
 
     # PSR-4 autodiscovery
-    Rector\TriggerExtractor\:
+    Rector\DeprecationExtractor\:
         resource: '../../src'
+        exclude: '../../src/{Deprecation/ClassMethodDeprecation.php}'

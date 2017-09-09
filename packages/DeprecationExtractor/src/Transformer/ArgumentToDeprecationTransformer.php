@@ -1,23 +1,31 @@
 <?php declare(strict_types=1);
 
-namespace Rector\TriggerExtractor;
+namespace Rector\DeprecationExtractor\Transformer;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Scalar\MagicConst\Method;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\DeprecationExtractor\Contract\Deprecation\DeprecationInterface;
 use Rector\Exception\NotImplementedException;
 use Rector\Node\Attribute;
 
-final class TriggerMessageResolver
+final class ArgumentToDeprecationTransformer
 {
+    public function transform(Arg $argNode): DeprecationInterface
+    {
+        dump($argNode);
+        die;
+    }
+
     /**
      * Probably resolve by recursion, similar too
      * @see \Rector\NodeTypeResolver\NodeVisitor\TypeResolver::__construct()
      */
-    public function resolve(Node $node): string
+    public function createFromNode(Node $node, string $scope): DeprecationInterface
     {
         $message = '';
         if ($node instanceof Concat) {
@@ -25,10 +33,41 @@ final class TriggerMessageResolver
             $message .= $this->processConcatNode($node->right);
         }
 
-        return $message;
+        return $this->createFromMesssage($message, $scope);
     }
 
-    private function processConcatNode(Node $node): string
+    public function tryToCreateClassMethodDeprecation(string $oldMessage, string $newMessage): ?DeprecationInterface
+    {
+        // try to find "SomeClass::methodCall()"
+        $matches = Strings::matchAll($oldMessage, self::CLASS_WITH_METHOD_PATTERN);
+        if (isset($matches[0]['classMethod'])) {
+            $oldClassWithMethod = $matches[0]['classMethod'];
+        }
+
+        // try to find "SomeClass::methodCall()"
+        $matches = Strings::matchAll($newMessage, self::CLASS_WITH_METHOD_PATTERN);
+        if (isset($matches[0]['classMethod'])) {
+            $newClassWithMethod = $matches[0]['classMethod'];
+        }
+
+        if (isset($oldClassWithMethod, $newClassWithMethod)) {
+            [$oldClass, $oldMethod] = explode('::', $oldClassWithMethod);
+            [$newClass, $newMethod] = explode('::', $newClassWithMethod);
+
+            if ($oldClass === $newClass) {
+                // simple method replacement
+                return new ClassMethodDeprecation(
+                    $oldClass,
+                    rtrim($oldMethod, '()'),
+                    rtrim($newMethod, '()')
+                );
+            }
+        }
+
+        return null;
+    }
+
+    private function processConcatNode(Node $node, string $scope): string
     {
         if ($node instanceof Method) {
             $classMethodNode = $this->findParentOfType($node, ClassMethod::class);
@@ -91,5 +130,26 @@ final class TriggerMessageResolver
         }
 
         return $word;
+    }
+
+    private function createFromMesssage(string $message): DeprecationInterface
+    {
+        // format: don't use this, use that
+        if (Strings::contains($message, ' use ')) {
+            [$oldMessage, $newMessage] = explode(' use ', $message);
+
+            $deprecation = $this->tryToCreateClassMethodDeprecation($oldMessage, $newMessage);
+            if ($deprecation) {
+                return $deprecation;
+            }
+        }
+
+        throw new NotImplementedException(sprintf(
+            '%s::%s() did not resolve %s messsage, so %s was not created. Implement it.',
+            self::class,
+            __METHOD__,
+            $message,
+            DeprecationInterface::class
+        ));
     }
 }

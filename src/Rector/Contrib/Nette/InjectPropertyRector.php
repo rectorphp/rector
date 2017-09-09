@@ -2,52 +2,31 @@
 
 namespace Rector\Rector\Contrib\Nette;
 
-use PhpCsFixer\DocBlock\DocBlock;
-use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use Rector\Builder\Class_\ClassPropertyCollector;
-use Rector\Deprecation\SetNames;
+use Rector\Node\Attribute;
+use Rector\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\Rector\AbstractRector;
+use Rector\Rector\Set\SetNames;
 
 final class InjectPropertyRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private const ANNOTATION_INJECT = 'inject';
-
     /**
      * @var ClassPropertyCollector
      */
     private $classPropertyCollector;
 
     /**
-     * @var string
+     * @var DocBlockAnalyzer
      */
-    private $className;
+    private $docBlockAnalyzer;
 
-    public function __construct(ClassPropertyCollector $classPropertyCollector)
+    public function __construct(ClassPropertyCollector $classPropertyCollector, DocBlockAnalyzer $docBlockAnalyzer)
     {
         $this->classPropertyCollector = $classPropertyCollector;
-    }
-
-    /**
-     * @param Node[] $nodes
-     * @return null|Node[]
-     */
-    public function beforeTraverse(array $nodes): ?array
-    {
-        $this->className = null;
-
-        foreach ($nodes as $node) {
-            if ($node instanceof Class_) {
-                $this->className = (string) $node->name;
-            }
-        }
-
-        return null;
+        $this->docBlockAnalyzer = $docBlockAnalyzer;
     }
 
     public function isCandidate(Node $node): bool
@@ -56,7 +35,7 @@ final class InjectPropertyRector extends AbstractRector
             return false;
         }
 
-        if (! $this->hasInjectAnnotation($node)) {
+        if (! $this->docBlockAnalyzer->hasAnnotation($node, 'inject')) {
             return false;
         }
 
@@ -68,12 +47,11 @@ final class InjectPropertyRector extends AbstractRector
      */
     public function refactor(Node $propertyNode): Node
     {
-        $propertyDocBlock = $this->createDocBlockFromNode($propertyNode);
-        $propertyNode = $this->removeInjectAnnotationFromProperty($propertyNode, $propertyDocBlock);
+        $this->docBlockAnalyzer->removeAnnotationFromNode($propertyNode, 'inject');
 
         $propertyNode->flags = Class_::MODIFIER_PRIVATE;
 
-        $this->addPropertyToCollector($propertyNode, $propertyDocBlock);
+        $this->addPropertyToCollector($propertyNode);
 
         return $propertyNode;
     }
@@ -88,37 +66,16 @@ final class InjectPropertyRector extends AbstractRector
         return 2.1;
     }
 
-    private function hasInjectAnnotation(Property $propertyNode): bool
+    private function addPropertyToCollector(Property $propertyNode): void
     {
-        $propertyDocBlock = $this->createDocBlockFromNode($propertyNode);
-
-        return (bool) $propertyDocBlock->getAnnotationsOfType(self::ANNOTATION_INJECT);
-    }
-
-    private function createDocBlockFromNode(Node $node): DocBlock
-    {
-        return new DocBlock($node->getDocComment());
-    }
-
-    private function removeInjectAnnotationFromProperty(Property $propertyNode, DocBlock $propertyDocBlock): Property
-    {
-        $injectAnnotations = $propertyDocBlock->getAnnotationsOfType(self::ANNOTATION_INJECT);
-        foreach ($injectAnnotations as $injectAnnotation) {
-            $injectAnnotation->remove();
-        }
-
-        $propertyNode->setDocComment(new Doc($propertyDocBlock->getContent()));
-
-        return $propertyNode;
-    }
-
-    private function addPropertyToCollector(Property $propertyNode, DocBlock $propertyDocBlock): void
-    {
-        $propertyType = $propertyDocBlock->getAnnotationsOfType('var')[0]
-            ->getTypes()[0];
+        $propertyType = $this->docBlockAnalyzer->getAnnotationFromNode($propertyNode, 'var');
 
         $propertyName = (string) $propertyNode->props[0]->name;
 
-        $this->classPropertyCollector->addPropertyForClass($this->className, $propertyType, $propertyName);
+        $this->classPropertyCollector->addPropertyForClass(
+            (string) $propertyNode->getAttribute(Attribute::CLASS_NAME),
+            $propertyType,
+            $propertyName
+        );
     }
 }

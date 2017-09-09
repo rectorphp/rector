@@ -5,18 +5,12 @@ namespace Rector\Builder;
 use PhpParser\Builder\Method;
 use PhpParser\Builder\Param;
 use PhpParser\BuilderFactory;
-use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Parser;
+use Rector\NodeFactory\NodeFactory;
 
 final class ConstructorMethodBuilder
 {
-    /**
-     * @var Parser
-     */
-    private $parser;
-
     /**
      * @var BuilderFactory
      */
@@ -27,25 +21,33 @@ final class ConstructorMethodBuilder
      */
     private $statementGlue;
 
-    public function __construct(Parser $parser, BuilderFactory $builderFactory, StatementGlue $statementGlue)
-    {
-        $this->parser = $parser;
+    /**
+     * @var NodeFactory
+     */
+    private $nodeFactory;
+
+    public function __construct(
+        BuilderFactory $builderFactory,
+        StatementGlue $statementGlue,
+        NodeFactory $nodeFactory
+    ) {
         $this->builderFactory = $builderFactory;
         $this->statementGlue = $statementGlue;
+        $this->nodeFactory = $nodeFactory;
     }
 
     public function addPropertyAssignToClass(Class_ $classNode, string $propertyType, string $propertyName): void
     {
-        $assign = $this->createPropertyAssignment($propertyName);
-
         $constructorMethod = $classNode->getMethod('__construct') ?: null;
+
+        $propertyAssignNode = $this->nodeFactory->createPropertyAssignment($propertyName);
 
         /** @var ClassMethod $constructorMethod */
         if ($constructorMethod) {
             $constructorMethod->params[] = $this->createParameter($propertyType, $propertyName)
                 ->getNode();
 
-            $constructorMethod->stmts[] = $assign[0];
+            $constructorMethod->stmts[] = $propertyAssignNode;
 
             return;
         }
@@ -54,7 +56,7 @@ final class ConstructorMethodBuilder
         $constructorMethod = $this->builderFactory->method('__construct')
             ->makePublic()
             ->addParam($this->createParameter($propertyType, $propertyName))
-            ->addStmts($assign);
+            ->addStmts([$propertyAssignNode]);
 
         $this->statementGlue->addAsFirstMethod($classNode, $constructorMethod->getNode());
     }
@@ -63,17 +65,5 @@ final class ConstructorMethodBuilder
     {
         return $this->builderFactory->param($propertyName)
             ->setTypeHint($propertyType);
-    }
-
-    /**
-     * @return Node[]
-     */
-    private function createPropertyAssignment(string $propertyName): array
-    {
-        return $this->parser->parse(sprintf(
-            '<?php $this->%s = $%s;',
-            $propertyName,
-            $propertyName
-        ));
     }
 }

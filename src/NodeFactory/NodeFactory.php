@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
@@ -16,6 +17,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\TraitUse;
 
 final class NodeFactory
@@ -132,5 +134,22 @@ final class NodeFactory
         }
 
         return $args;
+    }
+
+    /**
+     * Creates $this->property = $property;
+     */
+    public function createPropertyAssignment(string $propertyName): Expression
+    {
+        $variable = new Variable($propertyName, [
+            'name' => $propertyName,
+        ]);
+
+        $assign = new Assign(
+            $this->createLocalPropertyFetch($propertyName),
+            $variable
+        );
+
+        return new Expression($assign);
     }
 }

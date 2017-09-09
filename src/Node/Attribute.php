@@ -10,9 +10,23 @@ namespace Rector\Node;
 final class Attribute
 {
     /**
+     * Class, interface or trait FQN type.
+     *
      * @var string
      */
     public const TYPE = 'type';
+
+    /**
+     * In class, in interface, in trait, in method or in function
+     *
+     * @var string
+     */
+    public const SCOPE = 'scope';
+
+    /**
+     * @var string
+     */
+    public const SCOPE_NODE = 'scope_node';
 
     /**
      * System name to be found in @see \PhpParser\NodeVisitor\NameResolver

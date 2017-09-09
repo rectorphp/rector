@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Rector\TriggerExtractor\Console\Command;
+namespace Rector\DeprecationExtractor\Console\Command;
 
-use Rector\TriggerExtractor\TriggerExtractor;
+use Rector\DeprecationExtractor\DeprecationExtractor;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -21,13 +21,13 @@ final class ExtractCommand extends Command
     private const ARGUMENT_SOURCE_NAME = 'source';
 
     /**
-     * @var TriggerExtractor
+     * @var deprecationExtractor
      */
-    private $triggerExtractor;
+    private $deprecationExtractor;
 
-    public function __construct(TriggerExtractor $triggerExtractor)
+    public function __construct(deprecationExtractor $deprecationExtractor)
     {
-        $this->triggerExtractor = $triggerExtractor;
+        $this->deprecationExtractor = $deprecationExtractor;
 
         parent::__construct();
     }
@@ -46,7 +46,7 @@ final class ExtractCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $source = $input->getArgument(self::ARGUMENT_SOURCE_NAME);
-        $this->triggerExtractor->scanDirectories($source);
+        $this->deprecationExtractor->scanDirectories($source);
 
         // write found deprecations...
 

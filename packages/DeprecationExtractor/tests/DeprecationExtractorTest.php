@@ -1,17 +1,17 @@
 <?php declare(strict_types=1);
 
-namespace Rector\TriggerExtractor\Tests;
+namespace Rector\DeprecationExtractor\Tests;
 
+use Rector\DeprecationExtractor\Deprecation\DeprecationCollector;
+use Rector\DeprecationExtractor\DeprecationExtractor;
 use Rector\Tests\AbstractContainerAwareTestCase;
-use Rector\TriggerExtractor\Deprecation\DeprecationCollector;
-use Rector\TriggerExtractor\TriggerExtractor;
 
-final class TriggerExtractorTest extends AbstractContainerAwareTestCase
+final class DeprecationExtractorTest extends AbstractContainerAwareTestCase
 {
     /**
-     * @var TriggerExtractor
+     * @var DeprecationExtractor
      */
-    private $triggerExtractor;
+    private $deprecationExtractor;
 
     /**
      * @var DeprecationCollector
@@ -20,26 +20,25 @@ final class TriggerExtractorTest extends AbstractContainerAwareTestCase
 
     protected function setUp(): void
     {
-        $this->triggerExtractor = $this->container->get(TriggerExtractor::class);
+        $this->deprecationExtractor = $this->container->get(DeprecationExtractor::class);
         $this->deprecationCollector = $this->container->get(DeprecationCollector::class);
     }
 
     public function test(): void
     {
-        $this->triggerExtractor->scanDirectories([__DIR__ . '/TriggerExtractorSource']);
+        $this->deprecationExtractor->scanDirectories([__DIR__ . '/DeprecationExtractorSource']);
         $deprecations = $this->deprecationCollector->getDeprecations();
 
         $this->assertCount(2, $deprecations);
 
         $setClassToSetFacoryDeprecation = $deprecations[0];
-        $injectMethodToTagDeprecation = $deprecations[1];
-
         $this->assertSame(
             'Nette\DI\Definition::setClass() second parameter $args is deprecated,'
             . ' use Nette\DI\Definition::setFactory()',
             $setClassToSetFacoryDeprecation
         );
 
+        $injectMethodToTagDeprecation = $deprecations[1];
         $this->assertSame(
             'Nette\DI\Definition::setInject() is deprecated, use Nette\DI\Definition::addTag(\'inject\')',
             $injectMethodToTagDeprecation

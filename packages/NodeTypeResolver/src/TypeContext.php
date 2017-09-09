@@ -56,7 +56,7 @@ final class TypeContext
         $this->classProperties = [];
         $this->classLikeNode = $classLikeNode;
 
-        if ($classLikeNode instanceof Class_) {
+        if ($classLikeNode instanceof Class_ && ! $classLikeNode->isAnonymous()) {
             $this->classProperties = $this->constructorPropertyTypesExtractor->extractFromClassNode($classLikeNode);
         }
     }
