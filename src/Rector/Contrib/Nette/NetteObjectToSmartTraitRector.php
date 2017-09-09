@@ -9,7 +9,6 @@ use Rector\Builder\StatementGlue;
 use Rector\Node\Attribute;
 use Rector\NodeFactory\NodeFactory;
 use Rector\Rector\AbstractRector;
-use Rector\Rector\Set\SetNames;
 
 /**
  * Covers https://doc.nette.org/en/2.4/migration-2-4#toc-nette-smartobject.
@@ -40,16 +39,6 @@ final class NetteObjectToSmartTraitRector extends AbstractRector
     {
         $this->statementGlue = $statementGlue;
         $this->nodeFactory = $nodeFactory;
-    }
-
-    public function getSetName(): string
-    {
-        return SetNames::NETTE;
-    }
-
-    public function sinceVersion(): float
-    {
-        return 2.2;
     }
 
     public function isCandidate(Node $node): bool

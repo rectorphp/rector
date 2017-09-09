@@ -1,11 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Rector\Contrib\SymfonyExtra;
+namespace Rector\Rector\Contrib\Symfony;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Name\FullyQualified;
 use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Builder\Kernel\ServiceFromKernelResolver;
 use Rector\Builder\Naming\NameResolver;
@@ -13,31 +11,22 @@ use Rector\Node\Attribute;
 use Rector\NodeAnalyzer\SymfonyContainerCallsAnalyzer;
 use Rector\NodeFactory\NodeFactory;
 use Rector\Rector\AbstractRector;
-use Rector\Rector\Set\SetNames;
 use Rector\Tests\Rector\Contrib\SymfonyExtra\GetterToPropertyRector\Source\LocalKernel;
 
 /**
- * Ref: https://github.com/symfony/symfony/blob/master/UPGRADE-4.0.md#console
+ * Converts all:
+ * $this->get('some_service') # where "some_service" is name of the service in container.
  *
- * Before:
- * class MyCommand extends ContainerAwareCommand
- *
- * $this->getContainer()->get('some_service');
- *
- * After:
- * class MyCommand extends Command
- *
- * public function construct(SomeService $someService)
- * {
- *     $this->someService = $someService;
- * }
- *
- * ...
- *
- * $this->someService
+ * into:
+ * $this->someService # where "someService" is type of the service
  */
-final class CommandToConstructorInjectionRector extends AbstractRector
+final class GetterToPropertyRector extends AbstractRector
 {
+    /**
+     * @var NameResolver
+     */
+    private $nameResolver;
+
     /**
      * @var ServiceFromKernelResolver
      */
@@ -47,11 +36,6 @@ final class CommandToConstructorInjectionRector extends AbstractRector
      * @var ClassPropertyCollector
      */
     private $classPropertyCollector;
-
-    /**
-     * @var NameResolver
-     */
-    private $nameResolver;
 
     /**
      * @var NodeFactory
@@ -64,53 +48,35 @@ final class CommandToConstructorInjectionRector extends AbstractRector
     private $symfonyContainerCallsAnalyzer;
 
     public function __construct(
+        NameResolver $nameResolver,
         ServiceFromKernelResolver $serviceFromKernelResolver,
         ClassPropertyCollector $classPropertyCollector,
-        NameResolver $nameResolver,
         NodeFactory $nodeFactory,
         SymfonyContainerCallsAnalyzer $symfonyContainerCallsAnalyzer
     ) {
+        $this->nameResolver = $nameResolver;
         $this->serviceFromKernelResolver = $serviceFromKernelResolver;
         $this->classPropertyCollector = $classPropertyCollector;
-        $this->nameResolver = $nameResolver;
         $this->nodeFactory = $nodeFactory;
         $this->symfonyContainerCallsAnalyzer = $symfonyContainerCallsAnalyzer;
     }
 
-    public function getSetName(): string
-    {
-        return SetNames::SYMFONY_EXTRA;
-    }
-
-    public function sinceVersion(): float
-    {
-        return 3.3;
-    }
-
     public function isCandidate(Node $node): bool
     {
-        $class = (string) $node->getAttribute(Attribute::CLASS_NAME);
-
-        if (! Strings::endsWith($class, 'Command')) {
-            return false;
-        }
-
         if (! $node instanceof MethodCall) {
             return false;
         }
 
-        return $this->symfonyContainerCallsAnalyzer->isGetContainerCall($node);
+        return $this->symfonyContainerCallsAnalyzer->isThisCall($node);
     }
 
     /**
-     * @param MethodCall $node
+     * @param MethodCall $methodCallNode
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $methodCallNode): ?Node
     {
-        $this->replaceParentContainerAwareCommandWithCommand($node);
-
         $serviceType = $this->serviceFromKernelResolver->resolveServiceClassFromArgument(
-            $node->args[0],
+            $methodCallNode->args[0],
             LocalKernel::class
         );
 
@@ -121,17 +87,11 @@ final class CommandToConstructorInjectionRector extends AbstractRector
         $propertyName = $this->nameResolver->resolvePropertyNameFromType($serviceType);
 
         $this->classPropertyCollector->addPropertyForClass(
-            (string) $node->getAttribute(Attribute::CLASS_NAME),
+            (string) $methodCallNode->getAttribute(Attribute::CLASS_NAME),
             $serviceType,
             $propertyName
         );
 
         return $this->nodeFactory->createLocalPropertyFetch($propertyName);
-    }
-
-    private function replaceParentContainerAwareCommandWithCommand(Node $node): void
-    {
-        $classNode = $node->getAttribute(Attribute::CLASS_NODE);
-        $classNode->extends = new FullyQualified('Symfony\Component\Console\Command\Command');
     }
 }

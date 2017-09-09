@@ -34,7 +34,7 @@ final class MessageToDeprecationTransformerTest extends AbstractContainerAwareTe
     public function test(): void
     {
         $this->deprecationExtractor->scanDirectories([
-            __DIR__ . '/../../../../vendor/symfony/dependency-injection'
+            __DIR__ . '/../../../../vendor/symfony/dependency-injection',
         ]);
 
         $deprecationMessages = $this->deprecationCollector->getDeprecationMessages();

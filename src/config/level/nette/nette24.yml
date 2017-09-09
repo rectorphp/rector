@@ -1,0 +1,6 @@
+checkers:
+    - Rector\Rector\Contrib\Nette\FormCallbackRector
+    - Rector\Rector\Contrib\Nette\FormSetRequiredRector
+    - Rector\Rector\Contrib\Nette\HtmlAddMethodRector
+    - Rector\Rector\Contrib\Nette\NetteObjectToSmartTraitRector
+    - Rector\Rector\Contrib\Nette\PhpGeneratorDocumentMethodRector

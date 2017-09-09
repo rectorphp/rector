@@ -1,0 +1,7 @@
+rectors:
+    - Rector\Rector\Contrib\Symfony\ConstraintUrlOptionRector
+    - Rector\Rector\Contrib\Symfony\ConstraintValidatorTestClassRenameRector
+    - Rector\Rector\Contrib\Symfony\FormIsValidRector
+    - Rector\Rector\Contrib\Symfony\FrameworkBundleClassReplacementsRector
+    - Rector\Rector\Contrib\Symfony\StringFormTypeToClassRector
+    - Rector\Rector\Contrib\Symfony\VarDumperTestTraitMethodArgsRector

@@ -7,7 +7,6 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Scalar\String_;
 use Rector\Node\Attribute;
 use Rector\Rector\AbstractRector;
-use Rector\Rector\Set\SetNames;
 
 final class RemoveConfiguratorConstantsRector extends AbstractRector
 {
@@ -36,16 +35,6 @@ final class RemoveConfiguratorConstantsRector extends AbstractRector
         $originalConstantValue = strtolower($constantName);
 
         return new String_($originalConstantValue);
-    }
-
-    public function getSetName(): string
-    {
-        return SetNames::NETTE;
-    }
-
-    public function sinceVersion(): float
-    {
-        return 2.3;
     }
 
     private function getClassNameFromClassConstFetch(ClassConstFetch $classConstFetchNode): string

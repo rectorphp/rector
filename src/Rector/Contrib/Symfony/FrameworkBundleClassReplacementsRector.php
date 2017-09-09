@@ -3,7 +3,6 @@
 namespace Rector\Rector\Contrib\Symfony;
 
 use Rector\Rector\AbstractClassReplacerRector;
-use Rector\Rector\Set\SetNames;
 
 /**
  * Ref.: https://github.com/symfony/symfony/blob/master/UPGRADE-4.0.md#frameworkbundle
@@ -12,16 +11,6 @@ use Rector\Rector\Set\SetNames;
  */
 final class FrameworkBundleClassReplacementsRector extends AbstractClassReplacerRector
 {
-    public function getSetName(): string
-    {
-        return SetNames::SYMFONY;
-    }
-
-    public function sinceVersion(): float
-    {
-        return 4.0;
-    }
-
     /**
      * @return string[]
      */
