@@ -15,7 +15,7 @@ final class NamespaceClassRector extends AbstractClassReplacerRector
     protected function getOldToNewClasses(): array
     {
         return [
-            'PHP_CodeSniffer_Sniffs_File' => 'PHP_CodeSniffer\Sniffs\Sniff',
+            'PHP_CodeSniffer_Sniffs_Sniff' => 'PHP_CodeSniffer\Sniffs\Sniff',
             'PHP_CodeSniffer_File' => 'PHP_CodeSniffer\Files\File',
             'PHP_CodeSniffer_Tokens' => 'PHP_CodeSniffer\Util\Tokens',
             'StandardName_Tests_Category_TestSniffUnitTest' => 'PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest',

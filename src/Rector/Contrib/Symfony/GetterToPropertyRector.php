@@ -11,7 +11,7 @@ use Rector\Node\Attribute;
 use Rector\NodeAnalyzer\SymfonyContainerCallsAnalyzer;
 use Rector\NodeFactory\NodeFactory;
 use Rector\Rector\AbstractRector;
-use Rector\Tests\Rector\Contrib\SymfonyExtra\GetterToPropertyRector\Source\LocalKernel;
+use Rector\Tests\Rector\Contrib\Symfony\GetterToPropertyRector\Source\LocalKernel;
 
 /**
  * Converts all:
