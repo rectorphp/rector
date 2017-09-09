@@ -2,6 +2,7 @@
 
 namespace Rector\NodeTypeResolver;
 
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
@@ -97,6 +98,10 @@ final class TypeContext
         if ($this->classLikeNode) {
             $className = $this->classLikeNode->namespacedName->toString();
             if (! class_exists($className)) {
+                return null;
+            }
+
+            if ($functionLikeNode instanceof Closure) {
                 return null;
             }
 
