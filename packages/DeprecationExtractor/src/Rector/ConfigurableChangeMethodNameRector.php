@@ -19,16 +19,6 @@ final class ConfigurableChangeMethodNameRector extends AbstractChangeMethodNameR
         $this->perClassOldToNewMethod = $perClassOldToNewMethod;
     }
 
-    public function getSetName(): string
-    {
-        return 'dynamic';
-    }
-
-    public function sinceVersion(): float
-    {
-        return 0.0;
-    }
-
     /**
      * @return string[][] { class => [ oldMethod => newMethod ] }
      */
