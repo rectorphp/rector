@@ -95,9 +95,10 @@ final class TypeResolver extends NodeVisitorAbstract
     private function getTypeFromNewNode(New_ $newNode): string
     {
         if ($newNode->class instanceof Variable) {
+            // can be anything (dynamic)
             $variableName = $newNode->class->name;
-            dump($variableName);
-            dump($this->typeContext->getTypeForVariable($variableName));
+
+            return $this->typeContext->getTypeForVariable($variableName);
 
         } elseif ($newNode->class instanceof Name) {
             /** @var FullyQualified $fqnName */

@@ -66,6 +66,7 @@ final class DeprecationExtractor
         $finder = Finder::create()
             ->files()
             ->name('*.php')
+            ->exclude('Tests') // obscure code, not common in /app
             ->in($directories);
 
         return iterator_to_array($finder->getIterator());
