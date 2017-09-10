@@ -82,8 +82,7 @@ final class ArgumentToDeprecationTransformer
         }
 
         throw new NotImplementedException(sprintf(
-            'Not implemented yet. Go to "%s::%s()" and add check for "%s" node.',
-            __CLASS__,
+            'Not implemented yet. Go to "%s()" and add check for "%s" node.',
             __METHOD__,
             get_class($node)
         ));
@@ -146,8 +145,7 @@ final class ArgumentToDeprecationTransformer
         }
 
         throw new NotImplementedException(sprintf(
-            '%s::%s() did not resolve %s messsage, so %s was not created. Implement it.',
-            self::class,
+            '%s() did not resolve %s messsage, so %s was not created. Implement it.',
             __METHOD__,
             $message,
             DeprecationInterface::class

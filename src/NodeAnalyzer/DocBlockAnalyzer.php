@@ -51,8 +51,7 @@ final class DocBlockAnalyzer
         }
 
         throw new NotImplementedException(sprintf(
-            'Not implemented yet. Go to "%s::%s()" and add check for "%s" annotation.',
-            __CLASS__,
+            'Not implemented yet. Go to "%s()" and add check for "%s" annotation.',
             __METHOD__,
             $annotation
         ));

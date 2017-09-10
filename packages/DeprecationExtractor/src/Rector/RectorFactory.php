@@ -59,8 +59,7 @@ final class RectorFactory
         }
 
         throw new NotImplementedException(sprintf(
-            '%s::%s() was unable to create a Rector based on "%s" Deprecation. Create a new method there.',
-            self::class,
+            '%s() was unable to create a Rector based on "%s" Deprecation. Create a new method there.',
             __METHOD__,
             get_class($deprecation)
         ));
