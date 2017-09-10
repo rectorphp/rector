@@ -38,12 +38,6 @@ final class MessageToDeprecationTransformerTest extends AbstractContainerAwareTe
         ]);
 
         $deprecationMessages = $this->deprecationCollector->getDeprecationMessages();
-        dump($deprecationMessages);
-        die;
-
-//        $this->messageToDeprecationTransformer->transform();
-
-        // @todo
-        $this->assertSame(1, 1);
+        $this->assertCount(17, $deprecationMessages);
     }
 }
