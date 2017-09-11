@@ -2,6 +2,7 @@
 
 namespace Rector\DeprecationExtractor\Tests;
 
+use PhpParser\Node\Arg;
 use Rector\DeprecationExtractor\Deprecation\DeprecationCollector;
 use Rector\DeprecationExtractor\DeprecationExtractor;
 use Rector\Tests\AbstractContainerAwareTestCase;
@@ -9,39 +10,30 @@ use Rector\Tests\AbstractContainerAwareTestCase;
 final class DeprecationExtractorTest extends AbstractContainerAwareTestCase
 {
     /**
-     * @var DeprecationExtractor
-     */
-    private $deprecationExtractor;
-
-    /**
      * @var DeprecationCollector
      */
     private $deprecationCollector;
 
     protected function setUp(): void
     {
-        $this->deprecationExtractor = $this->container->get(DeprecationExtractor::class);
         $this->deprecationCollector = $this->container->get(DeprecationCollector::class);
+
+        $deprecationExtractor = $this->container->get(DeprecationExtractor::class);
+        $deprecationExtractor->scanDirectories([__DIR__ . '/DeprecationExtractorSource']);
     }
 
-    public function test(): void
+    public function testDeprectaionMessages(): void
     {
-        $this->deprecationExtractor->scanDirectories([__DIR__ . '/DeprecationExtractorSource']);
-        $deprecations = $this->deprecationCollector->getDeprecations();
+        $deprecationMessages = $this->deprecationCollector->getDeprecationMessages();
+        $this->assertCount(0 , $deprecationMessages);
+    }
 
-        $this->assertCount(2, $deprecations);
+    public function testDeprecationNodes(): void
+    {
+        $deprecationArgNodes = $this->deprecationCollector->getDeprecationArgNodes();
+        $this->assertCount(2, $deprecationArgNodes);
 
-        $setClassToSetFacoryDeprecation = $deprecations[0];
-        $this->assertSame(
-            'Nette\DI\Definition::setClass() second parameter $args is deprecated,'
-            . ' use Nette\DI\Definition::setFactory()',
-            $setClassToSetFacoryDeprecation
-        );
-
-        $injectMethodToTagDeprecation = $deprecations[1];
-        $this->assertSame(
-            'Nette\DI\Definition::setInject() is deprecated, use Nette\DI\Definition::addTag(\'inject\')',
-            $injectMethodToTagDeprecation
-        );
+        $deprecationArgNode = $deprecationArgNodes[0];
+        $this->assertInstanceOf(Arg::class, $deprecationArgNode);
     }
 }
