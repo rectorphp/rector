@@ -61,6 +61,11 @@ final class Attribute
      */
     public const NEXT_NODE = 'nextNode';
 
+    /**
+     * @var string
+     */
+    public const USE_STATEMENTS = 'useStatements';
+
     private function __construct()
     {
     }

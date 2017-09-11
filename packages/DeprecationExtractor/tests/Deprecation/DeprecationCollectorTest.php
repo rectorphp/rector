@@ -1,14 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Rector\DeprecationExtractor\Tests\Transformer;
+namespace Rector\DeprecationExtractor\Tests\Deprecation;
 
-use Rector\DeprecationExtractor\Deprecation\ClassDeprecation;
 use Rector\DeprecationExtractor\Deprecation\DeprecationCollector;
 use Rector\DeprecationExtractor\DeprecationExtractor;
-use Rector\DeprecationExtractor\Transformer\MessageToDeprecationTransformer;
 use Rector\Tests\AbstractContainerAwareTestCase;
 
-final class MessageToDeprecationTransformerTest extends AbstractContainerAwareTestCase
+final class DeprecationCollectorTest extends AbstractContainerAwareTestCase
 {
     /**
      * @var DeprecationExtractor
@@ -20,16 +18,10 @@ final class MessageToDeprecationTransformerTest extends AbstractContainerAwareTe
      */
     private $deprecationCollector;
 
-    /**
-     * @var MessageToDeprecationTransformer
-     */
-    private $messageToDeprecationTransformer;
-
     protected function setUp(): void
     {
         $this->deprecationExtractor = $this->container->get(DeprecationExtractor::class);
         $this->deprecationCollector = $this->container->get(DeprecationCollector::class);
-        $this->messageToDeprecationTransformer = $this->container->get(MessageToDeprecationTransformer::class);
     }
 
     public function test(): void
@@ -38,16 +30,11 @@ final class MessageToDeprecationTransformerTest extends AbstractContainerAwareTe
             __DIR__ . '/../../../../vendor/symfony/dependency-injection',
         ]);
 
-        $deprecationMessages = $this->deprecationCollector->getDeprecationMessages();
-        $this->assertCount(17, $deprecationMessages);
+        $deprecations = $this->deprecationCollector->getDeprecations();
+        $this->assertCount(17, $deprecations);
 
-        $deprecationMesssage = $deprecationMessages[0]['message'];
-        $relatedNode = $deprecationMessages[0]['node'];
-
-        $deprecation = $this->messageToDeprecationTransformer->transform(
-            $deprecationMesssage,
-            $relatedNode
-        );
+        dump($deprecations);
+        die;
 
         /** @var ClassDeprecation $deprecation */
         $this->assertInstanceOf(ClassDeprecation::class, $deprecation);
@@ -55,4 +42,5 @@ final class MessageToDeprecationTransformerTest extends AbstractContainerAwareTe
         $this->assertSame('Symfony\Component\DependencyInjection\DefinitionDecorator', $deprecation->getOldClass());
         $this->assertSame('Symfony\Component\DependencyInjection\ChildDefinition', $deprecation->getNewClass());
     }
+
 }

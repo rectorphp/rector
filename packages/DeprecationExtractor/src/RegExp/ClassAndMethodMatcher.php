@@ -7,9 +7,22 @@ use Nette\Utils\Strings;
 final class ClassAndMethodMatcher
 {
     /**
+     * Matches:
+     * - SomeClass
+     * - SomeNamespace\AnotherClass
+     *
      * @var string
      */
     private const CLASS_PATTERN = '[A-Za-z\\\\]+';
+
+    /**
+     * Matches:
+     * - isMethod()
+     * - isMethod('arg')
+     *
+     * @var string
+     */
+    private const METHOD_PATTERN = '[A-Za-z]+\([A-Za-z\']*\)';
 
     /**
      * Matches:
@@ -29,7 +42,9 @@ final class ClassAndMethodMatcher
      */
     private const CLASS_METHOD_PATTERN = '#^(?<classMethod>' .
         self::CLASS_PATTERN .
-        '::[A-Za-z]+\([A-Za-z\']*\))#s';
+        '::' .
+        self::METHOD_PATTERN .
+        ')#s';
 
     public function matchClassWithMethod(string $content): string
     {
@@ -41,6 +56,24 @@ final class ClassAndMethodMatcher
     public function matchClassWithMethodInstead(string $content): string
     {
         $matches = Strings::match($content, self::CLASS_METHOD_INSTEAD_PATTERN);
+
+        return $matches['classMethod'] ?? '';
+    }
+
+    public function matchLocalMethod(string $content): string
+    {
+        $matches = Strings::match($content, '#(?<method>' . self::METHOD_PATTERN . ')#');
+
+        return $matches['method'] ?? '';
+    }
+
+    /**
+     * Only local namespaced class like:
+     * - "use ContainerBuilder::getReflectionClass() instead"
+     */
+    public function matchNamespacedClassWithMethod(string $content): string
+    {
+        $matches = Strings::match($content, '#(?<classMethod>[A-Za-z]+::' . self::METHOD_PATTERN . ')#');
 
         return $matches['classMethod'] ?? '';
     }
