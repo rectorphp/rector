@@ -2,12 +2,13 @@
 
 namespace Rector\DeprecationExtractor\Deprecation;
 
+use PhpParser\Node;
 use PhpParser\Node\Arg;
 
 final class DeprecationCollector
 {
     /**
-     * @var string[]
+     * @var string[]|Node[]
      */
     private $deprecationMessages = [];
 
@@ -16,9 +17,12 @@ final class DeprecationCollector
      */
     private $deprecationArgNodes = [];
 
-    public function addDeprecationMessage(string $deprecationMessage): void
+    public function addDeprecationMessage(string $deprecationMessage, Node $node): void
     {
-        $this->deprecationMessages[] = $deprecationMessage;
+        $this->deprecationMessages[] = [
+            'message' => $deprecationMessage,
+            'node' => $node
+        ];
     }
 
     public function addDeprecationArgNode(Arg $argNode): void
@@ -27,7 +31,7 @@ final class DeprecationCollector
     }
 
     /**
-     * @return string[]
+     * @return string[]|Node[]
      */
     public function getDeprecationMessages(): array
     {

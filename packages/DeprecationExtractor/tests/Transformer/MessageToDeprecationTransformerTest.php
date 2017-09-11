@@ -2,6 +2,7 @@
 
 namespace Rector\DeprecationExtractor\Tests\Tranformer;
 
+use Rector\DeprecationExtractor\Deprecation\ClassDeprecation;
 use Rector\DeprecationExtractor\Deprecation\DeprecationCollector;
 use Rector\DeprecationExtractor\DeprecationExtractor;
 use Rector\DeprecationExtractor\Transformer\MessageToDeprecationTransformer;
@@ -39,5 +40,20 @@ final class MessageToDeprecationTransformerTest extends AbstractContainerAwareTe
 
         $deprecationMessages = $this->deprecationCollector->getDeprecationMessages();
         $this->assertCount(17, $deprecationMessages);
+
+        $deprecationMesssage = $deprecationMessages[0]['message'];
+        $relatedNode = $deprecationMessages[0]['node'];
+
+        // ↓ this will be something useful
+        $deprecation = $this->messageToDeprecationTransformer->transform(
+            $deprecationMesssage,
+            $relatedNode
+        );
+
+        /** @var ClassDeprecation $deprecation */
+        $this->assertInstanceOf(ClassDeprecation::class, $deprecation);
+
+        $this->assertSame('Symfony\Component\DependencyInjection\DefinitionDecorator', $deprecation->getOldClass());
+        $this->assertSame('Symfony\Component\DependencyInjection\ChildDefinition', $deprecation->getNewClass());
     }
 }

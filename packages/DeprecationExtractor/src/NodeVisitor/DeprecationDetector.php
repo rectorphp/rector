@@ -60,6 +60,6 @@ final class DeprecationDetector extends NodeVisitorAbstract
     private function processDocBlockDeprecation(Node $node): void
     {
         $deprecation = $this->docBlockAnalyzer->getAnnotationFromNode($node, 'deprecated');
-        $this->deprecationCollector->addDeprecationMessage($deprecation);
+        $this->deprecationCollector->addDeprecationMessage($deprecation, $node);
     }
 }
