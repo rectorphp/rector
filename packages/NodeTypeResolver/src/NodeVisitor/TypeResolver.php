@@ -92,7 +92,9 @@ final class TypeResolver extends NodeVisitorAbstract
             $variableName = $newNode->class->name;
 
             return $this->typeContext->getTypeForVariable($variableName);
-        } elseif ($newNode->class instanceof Name) {
+        }
+
+        if ($newNode->class instanceof Name) {
             /** @var FullyQualified $fqnName */
             $fqnName = $newNode->class->getAttribute(Attribute::RESOLVED_NAME);
 
@@ -117,6 +119,8 @@ final class TypeResolver extends NodeVisitorAbstract
                 $variableType = $this->getTypeFromNewNode($parentNode->expr);
 
                 $this->typeContext->addVariableWithType($variableName, $variableType);
+            } else {
+                $variableType = $this->typeContext->getTypeForVariable((string) $variableNode->name);
             }
         } else {
             $variableType = $this->typeContext->getTypeForVariable((string) $variableNode->name);
@@ -141,13 +145,6 @@ final class TypeResolver extends NodeVisitorAbstract
 
     private function processPropertyFetch(PropertyFetch $propertyFetchNode): void
     {
-        if ($propertyFetchNode->var instanceof New_) {
-            $propertyType = $propertyFetchNode->var->class->toString();
-            $propertyFetchNode->setAttribute(Attribute::TYPE, $propertyType);
-
-            return;
-        }
-
         // e.g. $r->getParameters()[0]->name
         if ($propertyFetchNode->var instanceof ArrayDimFetch) {
             if ($propertyFetchNode->var->var instanceof MethodCall) {
@@ -158,6 +155,14 @@ final class TypeResolver extends NodeVisitorAbstract
 
                 $variableNode->setAttribute(Attribute::TYPE, $variableType);
             }
+
+            return;
+        }
+
+        if ($propertyFetchNode->var instanceof New_) {
+            $propertyType = $propertyFetchNode->var->class->toString();
+
+            $propertyFetchNode->setAttribute(Attribute::TYPE, $propertyType);
 
             return;
         }

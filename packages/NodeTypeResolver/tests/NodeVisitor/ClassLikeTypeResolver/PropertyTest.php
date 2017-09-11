@@ -43,6 +43,7 @@ final class PropertyTest extends AbstractContainerAwareTestCase
     {
         /** @var PropertyFetch $propertyFetchNode */
         $propertyFetchNode = $this->nodes[1]->stmts[1]->stmts[2]->stmts[0]->expr;
+
         $this->assertSame(Html::class, $propertyFetchNode->getAttribute(Attribute::TYPE));
     }
 

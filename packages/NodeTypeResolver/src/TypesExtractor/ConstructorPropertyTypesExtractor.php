@@ -40,7 +40,7 @@ final class ConstructorPropertyTypesExtractor
     private function getConstructorParametersWithTypes(Class_ $classNode): array
     {
         $className = $classNode->namespacedName->toString();
-        if (! class_exists($className, false)) {
+        if (! class_exists($className)) {
             return [];
         }
 
