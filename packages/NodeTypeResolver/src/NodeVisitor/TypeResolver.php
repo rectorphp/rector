@@ -99,7 +99,6 @@ final class TypeResolver extends NodeVisitorAbstract
             $variableName = $newNode->class->name;
 
             return $this->typeContext->getTypeForVariable($variableName);
-
         } elseif ($newNode->class instanceof Name) {
             /** @var FullyQualified $fqnName */
             $fqnName = $newNode->class->getAttribute(Attribute::RESOLVED_NAME);
@@ -109,7 +108,6 @@ final class TypeResolver extends NodeVisitorAbstract
 
         throw new NotImplementedException(sprintf(
             'Not implemented yet. Go to "%s()" and add check for "%s" node.',
-
             __METHOD__,
             get_class($newNode->class)
         ));
@@ -153,6 +151,7 @@ final class TypeResolver extends NodeVisitorAbstract
         if ($propertyFetchNode->var instanceof New_) {
             $propertyType = $propertyFetchNode->var->class->toString();
             $propertyFetchNode->setAttribute(Attribute::TYPE, $propertyType);
+
             return;
         }
 

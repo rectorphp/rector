@@ -21,7 +21,7 @@ final class DeprecationCollector
     {
         $this->deprecationMessages[] = [
             'message' => $deprecationMessage,
-            'node' => $node
+            'node' => $node,
         ];
     }
 

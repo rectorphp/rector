@@ -10,6 +10,7 @@ final class ClassDeprecation implements DeprecationInterface
      * @var string
      */
     private $oldClass;
+
     /**
      * @var string
      */
@@ -26,9 +27,6 @@ final class ClassDeprecation implements DeprecationInterface
         return $this->oldClass;
     }
 
-    /**
-     * @return string
-     */
     public function getNewClass(): string
     {
         return $this->newClass;
