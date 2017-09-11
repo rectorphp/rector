@@ -43,33 +43,10 @@ final class ArgumentToDeprecationTransformer
 
     public function tryToCreateClassMethodDeprecation(string $oldMessage, string $newMessage): ?DeprecationInterface
     {
-        // try to find "SomeClass::methodCall()"
-        $matches = Strings::matchAll($oldMessage, self::CLASS_WITH_METHOD_PATTERN);
-        if (isset($matches[0]['classMethod'])) {
-            $oldClassWithMethod = $matches[0]['classMethod'];
-        }
+        $oldMethod = $this->classAndMethodMatcher->matchClassWithMethod($oldMessage);
+        $newMethod = $this->classAndMethodMatcher->matchClassWithMethod($newMessage);
 
-        // try to find "SomeClass::methodCall()"
-        $matches = Strings::matchAll($newMessage, self::CLASS_WITH_METHOD_PATTERN);
-        if (isset($matches[0]['classMethod'])) {
-            $newClassWithMethod = $matches[0]['classMethod'];
-        }
-
-        if (isset($oldClassWithMethod, $newClassWithMethod)) {
-            [$oldClass, $oldMethod] = explode('::', $oldClassWithMethod);
-            [$newClass, $newMethod] = explode('::', $newClassWithMethod);
-
-            if ($oldClass === $newClass) {
-                // simple method replacement
-                return new ClassMethodDeprecation(
-                    $oldClass,
-                    rtrim($oldMethod, '()'),
-                    rtrim($newMethod, '()')
-                );
-            }
-        }
-
-        return null;
+        return new ClassMethodDeprecation($oldMethod, $newMethod);
     }
 
     private function processConcatNode(Node $node): string

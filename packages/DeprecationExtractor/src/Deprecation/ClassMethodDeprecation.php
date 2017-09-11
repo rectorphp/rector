@@ -2,15 +2,11 @@
 
 namespace Rector\DeprecationExtractor\Deprecation;
 
+use Nette\Utils\Strings;
 use Rector\DeprecationExtractor\Contract\Deprecation\DeprecationInterface;
 
 final class ClassMethodDeprecation implements DeprecationInterface
 {
-    /**
-     * @var string
-     */
-    private $class;
-
     /**
      * @var string
      */
@@ -22,24 +18,41 @@ final class ClassMethodDeprecation implements DeprecationInterface
     private $newMethod;
 
     /**
-     * @var mixed[]
+     * @var string
      */
-    private $newArguments = [];
+    private $oldClass;
+
+    /**
+     * @var string
+     */
+    private $newClass;
 
     /**
      * @param mixed[] $newArguments
      */
-    public function __construct(string $class, string $oldMethod, string $newMethod, array $newArguments = [])
+    public function __construct(string $oldMethod, string $newMethod)
     {
-        $this->class = $class;
-        $this->oldMethod = $oldMethod;
-        $this->newMethod = $newMethod;
-        $this->newArguments = $newArguments;
+        if (Strings::contains($oldMethod, '::')) {
+            [$this->oldClass, $this->oldMethod] = explode('::', $oldMethod);
+        } else {
+            $this->oldMethod = $oldMethod;
+        }
+
+        if (Strings::contains($newMethod, '::')) {
+            [$this->newClass, $this->newMethod] = explode('::', $newMethod);
+        } else {
+            $this->newMethod = $newMethod;
+        }
     }
 
-    public function getClass(): string
+    public function getOldClass(): string
     {
-        return $this->class;
+        return $this->oldClass;
+    }
+
+    public function getNewClass(): string
+    {
+        return $this->newClass;
     }
 
     public function getOldMethod(): string
@@ -50,13 +63,5 @@ final class ClassMethodDeprecation implements DeprecationInterface
     public function getNewMethod(): string
     {
         return $this->newMethod;
-    }
-
-    /**
-     * @return mixed[]
-     */
-    public function getNewArguments(): array
-    {
-        return $this->newArguments;
     }
 }

@@ -2,6 +2,8 @@
 
 namespace Rector\DeprecationExtractor\RegExp;
 
+use Nette\Utils\Strings;
+
 final class ClassAndMethodMatcher
 {
     /**
@@ -9,15 +11,10 @@ final class ClassAndMethodMatcher
      */
     private const CLASS_WITH_METHOD_PATTERN = '#^(?<classMethod>[A-Za-z]+[\\\\A-Za-z]+::[A-Za-z]+\([A-Za-z\']*\))#s';
 
-    public function matchLocalMethod(string $content): ?string
+    public function matchClassWithMethod(string $content): string
     {
-        dump($content);
-        die;
-    }
+        $result = Strings::match($content, self::CLASS_WITH_METHOD_PATTERN);
 
-    public function matchClassWithMethod(string $content): ?string
-    {
-        dump($content);
-        die;
+        return $result['classMethod'] ?? '';
     }
 }
