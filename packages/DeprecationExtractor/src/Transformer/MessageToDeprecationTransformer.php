@@ -39,11 +39,17 @@ final class MessageToDeprecationTransformer
             $classWithMethod = $this->classAndMethodMatcher->matchClassWithMethod($message);
             $localMethod = $this->classAndMethodMatcher->matchLocalMethod($message);
 
+
+            $className = $node->getAttribute(Attribute::CLASS_NODE)->namespacedName->toString();
+            $methodName = (string) $node->name . '()';
+            $fqnMethodName = $className . '::' . $methodName;
+
             if ($classWithMethod === '' && $localMethod === '') {
-                return new RemovedClassMethodDeprecation(
-                    $node->getAttribute(Attribute::CLASS_NODE)->namespacedName->toString(),
-                    (string) $node->name
-                );
+                return new RemovedClassMethodDeprecation($className, $methodName);
+            }
+
+            if ($localMethod) {
+                return new ClassMethodDeprecation($fqnMethodName, $className . '::' . $localMethod . '()');
             }
 
             $namespacedClassWithMethod = $this->classAndMethodMatcher->matchNamespacedClassWithMethod($message);
@@ -52,10 +58,7 @@ final class MessageToDeprecationTransformer
             $useStatements = $node->getAttribute(Attribute::USE_STATEMENTS);
             $fqnClassWithMethod = $this->completeNamespace($useStatements, $namespacedClassWithMethod);
 
-            return new ClassMethodDeprecation(
-                $node->getAttribute(Attribute::CLASS_NODE)->namespacedName->toString() . '::' . (string) $node->name . '()',
-                $fqnClassWithMethod
-            );
+            return new ClassMethodDeprecation($fqnMethodName, $fqnClassWithMethod);
         }
 
         throw new NotImplementedException(sprintf(
