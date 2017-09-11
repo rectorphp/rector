@@ -52,3 +52,6 @@ parameters:
         Symplify\CodingStandard\Sniffs\Classes\EqualInterfaceImplementationSniff:
             # empty parent interface, disable for now
             - packages/DeprecationExtractor/src/Deprecation/ClassMethodDeprecation.php
+        Symplify\CodingStandard\Sniffs\Debug\CommentedOutCodeSniff:
+            # false positive
+            - packages/NodeTypeResolver/src/NodeVisitor/TypeResolver.php

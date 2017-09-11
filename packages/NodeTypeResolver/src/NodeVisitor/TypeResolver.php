@@ -147,21 +147,13 @@ final class TypeResolver extends NodeVisitorAbstract
     {
         // e.g. $r->getParameters()[0]->name
         if ($propertyFetchNode->var instanceof ArrayDimFetch) {
-            if ($propertyFetchNode->var->var instanceof MethodCall) {
-                /** @var Variable $variableNode */
-                $variableNode = $propertyFetchNode->var->var->var;
-                $variableName = $variableNode->name;
-                $variableType = $this->typeContext->getTypeForVariable($variableName);
-
-                $variableNode->setAttribute(Attribute::TYPE, $variableType);
-            }
+            $this->processArrayDimMethodCall($propertyFetchNode);
 
             return;
         }
 
         if ($propertyFetchNode->var instanceof New_) {
             $propertyType = $propertyFetchNode->var->class->toString();
-
             $propertyFetchNode->setAttribute(Attribute::TYPE, $propertyType);
 
             return;
@@ -171,12 +163,7 @@ final class TypeResolver extends NodeVisitorAbstract
             return;
         }
 
-        if ($propertyFetchNode->name instanceof Variable) {
-            $propertyName = $propertyFetchNode->name->name;
-        } else {
-            $propertyName = (string) $propertyFetchNode->name;
-        }
-
+        $propertyName = $this->resolvePropertyName($propertyFetchNode);
         $propertyType = $this->typeContext->getTypeForProperty($propertyName);
 
         if ($propertyType) {
@@ -192,5 +179,26 @@ final class TypeResolver extends NodeVisitorAbstract
         if ($propertyType) {
             $propertyNode->setAttribute(Attribute::TYPE, $propertyType);
         }
+    }
+
+    private function processArrayDimMethodCall(PropertyFetch $propertyFetchNode): void
+    {
+        if ($propertyFetchNode->var->var instanceof MethodCall) {
+            /** @var Variable $variableNode */
+            $variableNode = $propertyFetchNode->var->var->var;
+            $variableName = $variableNode->name;
+            $variableType = $this->typeContext->getTypeForVariable($variableName);
+
+            $variableNode->setAttribute(Attribute::TYPE, $variableType);
+        }
+    }
+
+    private function resolvePropertyName(PropertyFetch $propertyFetchNode): string
+    {
+        if ($propertyFetchNode->name instanceof Variable) {
+            return $propertyFetchNode->name->name;
+        }
+
+        return (string) $propertyFetchNode->name;
     }
 }
