@@ -21,7 +21,8 @@ final class ClassAndMethodMatcher
      * @var string
      */
     private const CLASS_METHOD_INSTEAD_PATTERN = '#use( the)? (?<classMethod>' .
-        self::CLASS_PATTERN . ')( class)? instead#i';
+        self::CLASS_PATTERN .
+        ')( class)? instead#i';
 
     /**
      * @var string
