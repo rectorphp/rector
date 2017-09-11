@@ -15,7 +15,6 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\NodeVisitorAbstract;
-use PhpParser\PrettyPrinter\Standard;
 use Rector\Exception\NotImplementedException;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\TypeContext;
@@ -35,12 +34,7 @@ final class TypeResolver extends NodeVisitorAbstract
      */
     private $perNodeResolvers = [];
 
-    /**
-     * @var Standard
-     */
-    private $standardPrinter;
-
-    public function __construct(TypeContext $typeContext, Standard $standardPrinter)
+    public function __construct(TypeContext $typeContext)
     {
         $this->typeContext = $typeContext;
 
@@ -60,7 +54,6 @@ final class TypeResolver extends NodeVisitorAbstract
         $this->perNodeResolvers[Property::class] = function (Property $propertyNode): void {
             $this->processProperty($propertyNode);
         };
-        $this->standardPrinter = $standardPrinter;
     }
 
     /**
