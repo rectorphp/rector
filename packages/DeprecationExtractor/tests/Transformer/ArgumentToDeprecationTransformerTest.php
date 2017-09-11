@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\DeprecationExtractor\Tests\Tranformer;
+namespace Rector\DeprecationExtractor\Tests\Transformer;
 
 use Rector\DeprecationExtractor\Transformer\ArgumentToDeprecationTransformer;
 use Rector\Tests\AbstractContainerAwareTestCase;

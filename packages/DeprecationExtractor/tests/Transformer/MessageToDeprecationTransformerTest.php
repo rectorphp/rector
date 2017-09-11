@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\DeprecationExtractor\Tests\Tranformer;
+namespace Rector\DeprecationExtractor\Tests\Transformer;
 
 use Rector\DeprecationExtractor\Deprecation\ClassDeprecation;
 use Rector\DeprecationExtractor\Deprecation\DeprecationCollector;
@@ -44,7 +44,6 @@ final class MessageToDeprecationTransformerTest extends AbstractContainerAwareTe
         $deprecationMesssage = $deprecationMessages[0]['message'];
         $relatedNode = $deprecationMessages[0]['node'];
 
-        // ↓ this will be something useful
         $deprecation = $this->messageToDeprecationTransformer->transform(
             $deprecationMesssage,
             $relatedNode
