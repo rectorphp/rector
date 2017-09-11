@@ -40,6 +40,8 @@ parameters:
         - PhpCsFixer\Fixer\Operator\UnaryOperatorSpacesFixer
         - PhpCsFixer\Fixer\Phpdoc\PhpdocAlignFixer
         - PhpCsFixer\Fixer\Phpdoc\PhpdocSummaryFixer
+        - PhpCsFixer\Fixer\Comment\SingleLineCommentStyleFixer
+        - PhpCsFixer\Fixer\Phpdoc\PhpdocToCommentFixer
 
     skip:
         Symplify\CodingStandard\Fixer\Php\ClassStringToClassConstantFixer:

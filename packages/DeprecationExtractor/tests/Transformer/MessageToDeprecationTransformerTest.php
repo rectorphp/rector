@@ -49,7 +49,7 @@ final class MessageToDeprecationTransformerTest extends AbstractContainerAwareTe
             $relatedNode
         );
 
-        // @var ClassDeprecation $deprecation
+        /** @var ClassDeprecation $deprecation */
         $this->assertInstanceOf(ClassDeprecation::class, $deprecation);
 
         $this->assertSame('Symfony\Component\DependencyInjection\DefinitionDecorator', $deprecation->getOldClass());
