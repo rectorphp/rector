@@ -38,6 +38,7 @@ final class DeprecationCollector
      * @var MessageToDeprecationTransformer
      */
     private $messageToDeprecationTransformer;
+
     /**
      * @var ArgumentToDeprecationTransformer
      */
@@ -93,6 +94,7 @@ final class DeprecationCollector
         if (! $this->areDeprecationsTransformed) {
             $this->transformDeprecations();
         }
+
         $this->areDeprecationsTransformed = true;
 
         return $this->deprecations;
