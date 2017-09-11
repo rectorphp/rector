@@ -8,33 +8,37 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Scalar\MagicConst\Method;
 use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Stmt\ClassMethod;
 use Rector\DeprecationExtractor\Contract\Deprecation\DeprecationInterface;
 use Rector\DeprecationExtractor\Deprecation\ClassMethodDeprecation;
+use Rector\DeprecationExtractor\RegExp\ClassAndMethodMatcher;
 use Rector\Exception\NotImplementedException;
 use Rector\Node\Attribute;
 
 final class ArgumentToDeprecationTransformer
 {
-    public function transform(Arg $argNode): DeprecationInterface
+    /**
+     * @var ClassAndMethodMatcher
+     */
+    private $classAndMethodMatcher;
+
+    public function __construct(ClassAndMethodMatcher $classAndMethodMatcher)
     {
-        dump($argNode);
-        die;
+        $this->classAndMethodMatcher = $classAndMethodMatcher;
     }
 
     /**
      * Probably resolve by recursion, similar too
      * @see \Rector\NodeTypeResolver\NodeVisitor\TypeResolver::__construct()
      */
-    public function createFromNode(Node $node, string $scope): DeprecationInterface
+    public function transform(Arg $argNode): DeprecationInterface
     {
         $message = '';
-        if ($node instanceof Concat) {
-            $message .= $this->processConcatNode($node->left);
-            $message .= $this->processConcatNode($node->right);
+        if ($argNode->value instanceof Concat) {
+            $message .= $this->processConcatNode($argNode->value->left);
+            $message .= $this->processConcatNode($argNode->value->right);
         }
 
-        return $this->createFromMesssage($message, $scope);
+        return $this->createFromMesssage($message);
     }
 
     public function tryToCreateClassMethodDeprecation(string $oldMessage, string $newMessage): ?DeprecationInterface
@@ -68,10 +72,10 @@ final class ArgumentToDeprecationTransformer
         return null;
     }
 
-    private function processConcatNode(Node $node, string $scope): string
+    private function processConcatNode(Node $node): string
     {
         if ($node instanceof Method) {
-            $classMethodNode = $this->findParentOfType($node, ClassMethod::class);
+            $classMethodNode = $node->getAttribute(Attribute::SCOPE_NODE);
 
             return $node->getAttribute(Attribute::CLASS_NAME) . '::' . $classMethodNode->name->name;
         }
@@ -82,22 +86,10 @@ final class ArgumentToDeprecationTransformer
         }
 
         throw new NotImplementedException(sprintf(
-            'Not implemented yet. Go to "%s::%s()" and add check for "%s" node.',
-            __CLASS__,
+            'Not implemented yet. Go to "%s()" and add check for "%s" node.',
             __METHOD__,
             get_class($node)
         ));
-    }
-
-    private function findParentOfType(Node $node, string $type): Node
-    {
-        $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
-
-        while (! is_a($parentNode, $type, true)) {
-            $parentNode = $parentNode->getAttribute(Attribute::PARENT_NODE);
-        }
-
-        return $parentNode;
     }
 
     private function completeClassToLocalMethods(string $message, string $class): string
@@ -146,8 +138,7 @@ final class ArgumentToDeprecationTransformer
         }
 
         throw new NotImplementedException(sprintf(
-            '%s::%s() did not resolve %s messsage, so %s was not created. Implement it.',
-            self::class,
+            '%s() did not resolve %s messsage, so %s was not created. Implement it.',
             __METHOD__,
             $message,
             DeprecationInterface::class

@@ -26,7 +26,7 @@ final class Attribute
     /**
      * @var string
      */
-    public const SCOPE_NODE = 'scope_node';
+    public const SCOPE_NODE = 'scopeNode';
 
     /**
      * System name to be found in @see \PhpParser\NodeVisitor\NameResolver
@@ -44,22 +44,22 @@ final class Attribute
     /**
      * @var string
      */
-    public const CLASS_NODE = 'class_node';
+    public const CLASS_NODE = 'classNode';
 
     /**
      * @var string
      */
-    public const PARENT_NODE = 'parent_node';
+    public const PARENT_NODE = 'parentNode';
 
     /**
      * @var string
      */
-    public const PREVIOUS_NODE = 'prev_node';
+    public const PREVIOUS_NODE = 'prevNode';
 
     /**
      * @var string
      */
-    public const NEXT_NODE = 'next_node';
+    public const NEXT_NODE = 'nextNode';
 
     private function __construct()
     {

@@ -55,9 +55,6 @@ final class DeprecationExtractor
     }
 
     /**
-     * @todo duplicated method to
-     * @see \Rector\Console\Command\ReconstructCommand, extract to class
-     *
      * @param string[] $directories
      * @return SplFileInfo[] array
      */
@@ -66,6 +63,7 @@ final class DeprecationExtractor
         $finder = Finder::create()
             ->files()
             ->name('*.php')
+            ->exclude(['tests', 'Tests']) // deprecations won't be in tests
             ->in($directories);
 
         return iterator_to_array($finder->getIterator());

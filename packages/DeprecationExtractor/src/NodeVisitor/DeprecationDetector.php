@@ -47,7 +47,6 @@ final class DeprecationDetector extends NodeVisitorAbstract
             return;
         }
 
-        // @todo detect the elments it's realted to
         if ($this->triggerErrorAnalyzer->isUserDeprecation($node)) {
             /** @var FuncCall $node */
             $argNode = $this->triggerErrorAnalyzer->messageNodeForNode($node);
@@ -60,6 +59,10 @@ final class DeprecationDetector extends NodeVisitorAbstract
     private function processDocBlockDeprecation(Node $node): void
     {
         $deprecation = $this->docBlockAnalyzer->getAnnotationFromNode($node, 'deprecated');
-        $this->deprecationCollector->addDeprecationMessage($deprecation);
+        if ($deprecation === '') {
+            return;
+        }
+
+        $this->deprecationCollector->addDeprecationMessage($deprecation, $node);
     }
 }

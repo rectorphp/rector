@@ -3,15 +3,19 @@
 namespace Rector\NodeTypeResolver\NodeVisitor;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
+use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\NodeVisitorAbstract;
+use Rector\Exception\NotImplementedException;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\TypeContext;
 
@@ -41,9 +45,12 @@ final class TypeResolver extends NodeVisitorAbstract
         $this->perNodeResolvers[Assign::class] = function (Assign $assignNode): void {
             $this->processAssignNode($assignNode);
         };
+
+        // add subtypes for PropertyFetch
         $this->perNodeResolvers[PropertyFetch::class] = function (PropertyFetch $propertyFetchNode): void {
             $this->processPropertyFetch($propertyFetchNode);
         };
+
         $this->perNodeResolvers[Property::class] = function (Property $propertyNode): void {
             $this->processProperty($propertyNode);
         };
@@ -80,10 +87,25 @@ final class TypeResolver extends NodeVisitorAbstract
 
     private function getTypeFromNewNode(New_ $newNode): string
     {
-        /** @var FullyQualified $fqnName */
-        $fqnName = $newNode->class->getAttribute(Attribute::RESOLVED_NAME);
+        if ($newNode->class instanceof Variable) {
+            // can be anything (dynamic)
+            $variableName = $newNode->class->name;
 
-        return $fqnName->toString();
+            return $this->typeContext->getTypeForVariable($variableName);
+        }
+
+        if ($newNode->class instanceof Name) {
+            /** @var FullyQualified $fqnName */
+            $fqnName = $newNode->class->getAttribute(Attribute::RESOLVED_NAME);
+
+            return $fqnName->toString();
+        }
+
+        throw new NotImplementedException(sprintf(
+            'Not implemented yet. Go to "%s()" and add check for "%s" node.',
+            __METHOD__,
+            get_class($newNode->class)
+        ));
     }
 
     private function processVariableNode(Variable $variableNode): void
@@ -97,6 +119,8 @@ final class TypeResolver extends NodeVisitorAbstract
                 $variableType = $this->getTypeFromNewNode($parentNode->expr);
 
                 $this->typeContext->addVariableWithType($variableName, $variableType);
+            } else {
+                $variableType = $this->typeContext->getTypeForVariable((string) $variableNode->name);
             }
         } else {
             $variableType = $this->typeContext->getTypeForVariable((string) $variableNode->name);
@@ -121,11 +145,38 @@ final class TypeResolver extends NodeVisitorAbstract
 
     private function processPropertyFetch(PropertyFetch $propertyFetchNode): void
     {
+        // e.g. $r->getParameters()[0]->name
+        if ($propertyFetchNode->var instanceof ArrayDimFetch) {
+            if ($propertyFetchNode->var->var instanceof MethodCall) {
+                /** @var Variable $variableNode */
+                $variableNode = $propertyFetchNode->var->var->var;
+                $variableName = $variableNode->name;
+                $variableType = $this->typeContext->getTypeForVariable($variableName);
+
+                $variableNode->setAttribute(Attribute::TYPE, $variableType);
+            }
+
+            return;
+        }
+
+        if ($propertyFetchNode->var instanceof New_) {
+            $propertyType = $propertyFetchNode->var->class->toString();
+
+            $propertyFetchNode->setAttribute(Attribute::TYPE, $propertyType);
+
+            return;
+        }
+
         if ($propertyFetchNode->var->name !== 'this') {
             return;
         }
 
-        $propertyName = (string) $propertyFetchNode->name;
+        if ($propertyFetchNode->name instanceof Variable) {
+            $propertyName = $propertyFetchNode->name->name;
+        } else {
+            $propertyName = (string) $propertyFetchNode->name;
+        }
+
         $propertyType = $this->typeContext->getTypeForProperty($propertyName);
 
         if ($propertyType) {

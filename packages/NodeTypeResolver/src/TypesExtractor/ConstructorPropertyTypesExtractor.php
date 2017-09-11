@@ -5,8 +5,10 @@ namespace Rector\NodeTypeResolver\TypesExtractor;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
 use ReflectionClass;
 
 final class ConstructorPropertyTypesExtractor
@@ -68,6 +70,14 @@ final class ConstructorPropertyTypesExtractor
 
     private function isAssignThisNode(Node $node): bool
     {
+        if (! $node instanceof Expression) {
+            return false;
+        }
+
+        if ($this->isParentConstructCall($node)) {
+            return false;
+        }
+
         if (! $node->expr instanceof Assign) {
             return false;
         }
@@ -105,5 +115,18 @@ final class ConstructorPropertyTypesExtractor
         }
 
         return $propertiesWithTypes;
+    }
+
+    private function isParentConstructCall(Node $node): bool
+    {
+        if (! $node instanceof Expression) {
+            return false;
+        }
+
+        if (! $node->expr instanceof StaticCall) {
+            return false;
+        }
+
+        return $node->expr->name === '__construct';
     }
 }

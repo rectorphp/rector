@@ -46,13 +46,12 @@ final class DocBlockAnalyzer
             if ($type === 'deprecated') {
                 $content = $annotationTags[0]->getContent();
 
-                return ltrim($content, '* @deprecated ');
+                return trim(ltrim($content, '* @deprecated '));
             }
         }
 
         throw new NotImplementedException(sprintf(
-            'Not implemented yet. Go to "%s::%s()" and add check for "%s" annotation.',
-            __CLASS__,
+            'Not implemented yet. Go to "%s()" and add check for "%s" annotation.',
             __METHOD__,
             $annotation
         ));
