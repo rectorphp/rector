@@ -6,17 +6,24 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\BinaryOp\Concat;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Scalar\MagicConst\Class_;
 use PhpParser\Node\Scalar\MagicConst\Method;
 use PhpParser\Node\Scalar\MagicConst\Namespace_;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\PrettyPrinter\Standard;
 use Rector\DeprecationExtractor\Contract\Deprecation\DeprecationInterface;
 use Rector\DeprecationExtractor\Deprecation\ClassMethodDeprecation;
+use Rector\DeprecationExtractor\Deprecation\RemovedFunctionalityDeprecation;
 use Rector\DeprecationExtractor\RegExp\ClassAndMethodMatcher;
 use Rector\Exception\NotImplementedException;
 use Rector\Node\Attribute;
 
+/**
+ * @todo Extract some value resolvers, inspire at BetterReflection, NodeValueResolver
+ */
 final class ArgumentToDeprecationTransformer
 {
     /**
@@ -50,6 +57,11 @@ final class ArgumentToDeprecationTransformer
                 $message = $this->processSprintfNode($argNode->value);
                 $message = $this->completeClassToLocalMethods($message, (string) $argNode->getAttribute(Attribute::CLASS_NAME));
             }
+        } elseif ($argNode->value instanceof String_) {
+            $message = $argNode->value->value;
+        } elseif ($argNode->value instanceof Variable) {
+            // @todo: get value?
+            $message = '$' . $argNode->value->name;
         }
 
         if ($message === '') {
@@ -59,8 +71,7 @@ final class ArgumentToDeprecationTransformer
                 get_class($argNode->value)
             ));
         }
-
-        return $this->createFromMesssage($message);
+            return $this->createFromMesssage($message);
     }
 
     public function tryToCreateClassMethodDeprecation(string $oldMessage, string $newMessage): ?DeprecationInterface
@@ -93,6 +104,10 @@ final class ArgumentToDeprecationTransformer
 
         if ($node instanceof Namespace_) {
             return (string) $node->getAttribute(Attribute::NAMESPACE);
+        }
+
+        if ($node instanceof Class_) {
+            return (string) $node->getAttribute(Attribute::CLASS_NAME);
         }
 
         throw new NotImplementedException(sprintf(
@@ -146,6 +161,8 @@ final class ArgumentToDeprecationTransformer
             }
         }
 
+        return new RemovedFunctionalityDeprecation($message);
+
         throw new NotImplementedException(sprintf(
             '%s() did not resolve "%s" messsage, so %s was not created. Implement it.',
             __METHOD__,
@@ -181,12 +198,20 @@ final class ArgumentToDeprecationTransformer
                 /** @var Node\Stmt\ClassMethod $methodNode */
                 $methodNode = $funcCallNode->getAttribute(Attribute::SCOPE_NODE);
                 $sprintfArguments[] = (string) $methodNode->name;
+            } elseif ($argument->value instanceof Variable) {
+                // @todo: resolve value?
+                $sprintfArguments[] = $argument->value->name;
+            } elseif ($argument->value instanceof ClassConstFetch) {
+                dump($argument->value);
+                die;
             } else {
-                // todo
+                throw new NotImplementedException(sprintf(
+                    'Not implemented yet. Go to "%s()" and add check for "%s" argument node.',
+                    __METHOD__,
+                    get_class($argument->value)
+                ));
             }
         }
-
-        // throw exception on arg missmatch
 
         return sprintf($sprintfMessage, ...$sprintfArguments);
     }
