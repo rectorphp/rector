@@ -48,9 +48,7 @@ final class ArgumentToDeprecationTransformer
         } elseif ($argNode->value instanceof FuncCall) {
             if ((string) $argNode->value->name === 'sprintf') {
                 $message = $this->processSprintfNode($argNode->value);
-
-                dump($message);
-                die;
+                $message = $this->completeClassToLocalMethods($message, (string) $argNode->getAttribute(Attribute::CLASS_NAME));
             }
         }
 
@@ -148,9 +146,6 @@ final class ArgumentToDeprecationTransformer
             }
         }
 
-        dump($message);
-        die;
-
         throw new NotImplementedException(sprintf(
             '%s() did not resolve "%s" messsage, so %s was not created. Implement it.',
             __METHOD__,
@@ -161,7 +156,38 @@ final class ArgumentToDeprecationTransformer
 
     private function processSprintfNode(FuncCall $funcCallNode): string
     {
-        dump($funcCallNode);
-        die;
+        // to be sure
+        if ((string) $funcCallNode->name !== 'sprintf') {
+            // or Exception?
+            return '';
+        }
+
+        $sprintfMessage = '';
+
+        $arguments = $funcCallNode->args;
+        $argumentCount = count($arguments);
+
+        $firstArgument = $arguments[0]->value;
+        if ($firstArgument instanceof String_) {
+            $sprintfMessage = $firstArgument->value;
+        } else {
+            // todo
+        }
+
+        $sprintfArguments = [];
+        for ($i = 1; $i < $argumentCount; $i++) {
+            $argument = $arguments[$i];
+            if ($argument->value instanceof Method) {
+                /** @var Node\Stmt\ClassMethod $methodNode */
+                $methodNode = $funcCallNode->getAttribute(Attribute::SCOPE_NODE);
+                $sprintfArguments[] = (string) $methodNode->name;
+            } else {
+                // todo
+            }
+        }
+
+        // throw exception on arg missmatch
+
+        return sprintf($sprintfMessage, ...$sprintfArguments);
     }
 }
