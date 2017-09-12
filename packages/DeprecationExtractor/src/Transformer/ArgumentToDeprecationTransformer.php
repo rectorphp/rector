@@ -6,9 +6,11 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\BinaryOp\Concat;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Scalar\MagicConst\Method;
 use PhpParser\Node\Scalar\MagicConst\Namespace_;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\PrettyPrinter\Standard;
 use Rector\DeprecationExtractor\Contract\Deprecation\DeprecationInterface;
 use Rector\DeprecationExtractor\Deprecation\ClassMethodDeprecation;
 use Rector\DeprecationExtractor\RegExp\ClassAndMethodMatcher;
@@ -22,9 +24,15 @@ final class ArgumentToDeprecationTransformer
      */
     private $classAndMethodMatcher;
 
-    public function __construct(ClassAndMethodMatcher $classAndMethodMatcher)
+    /**
+     * @var Standard
+     */
+    private $standardPrinter;
+
+    public function __construct(ClassAndMethodMatcher $classAndMethodMatcher, Standard $standardPrinter)
     {
         $this->classAndMethodMatcher = $classAndMethodMatcher;
+        $this->standardPrinter = $standardPrinter;
     }
 
     /**
@@ -37,6 +45,21 @@ final class ArgumentToDeprecationTransformer
         if ($argNode->value instanceof Concat) {
             $message .= $this->processConcatNode($argNode->value->left);
             $message .= $this->processConcatNode($argNode->value->right);
+        } elseif ($argNode->value instanceof FuncCall) {
+            if ((string) $argNode->value->name === 'sprintf') {
+                $message = $this->processSprintfNode($argNode->value);
+
+                dump($message);
+                die;
+            }
+        }
+
+        if ($message === '') {
+            throw new NotImplementedException(sprintf(
+                'Not implemented yet. Go to "%s()" and add check for "%s" node.',
+                __METHOD__,
+                get_class($argNode->value)
+            ));
         }
 
         return $this->createFromMesssage($message);
@@ -71,10 +94,7 @@ final class ArgumentToDeprecationTransformer
         }
 
         if ($node instanceof Namespace_) {
-            dump($node->getAttribute(Attribute::NAMESPACE));
-            // get current namespace :)
-            dump($node);
-            die;
+            return (string) $node->getAttribute(Attribute::NAMESPACE);
         }
 
         throw new NotImplementedException(sprintf(
@@ -119,21 +139,29 @@ final class ArgumentToDeprecationTransformer
 
     private function createFromMesssage(string $message): DeprecationInterface
     {
-        // format: don't use this, use that
-        if (Strings::contains($message, ' use ')) {
-            [$oldMessage, $newMessage] = explode(' use ', $message);
-
+        $result = Strings::split($message, '#^use |Use#');
+        if (count($result) === 2) {
+            [$oldMessage, $newMessage] = $result;
             $deprecation = $this->tryToCreateClassMethodDeprecation($oldMessage, $newMessage);
             if ($deprecation) {
                 return $deprecation;
             }
         }
 
+        dump($message);
+        die;
+
         throw new NotImplementedException(sprintf(
-            '%s() did not resolve %s messsage, so %s was not created. Implement it.',
+            '%s() did not resolve "%s" messsage, so %s was not created. Implement it.',
             __METHOD__,
             $message,
             DeprecationInterface::class
         ));
+    }
+
+    private function processSprintfNode(FuncCall $funcCallNode): string
+    {
+        dump($funcCallNode);
+        die;
     }
 }
