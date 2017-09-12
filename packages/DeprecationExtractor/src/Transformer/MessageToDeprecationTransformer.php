@@ -39,7 +39,6 @@ final class MessageToDeprecationTransformer
             $classWithMethod = $this->classAndMethodMatcher->matchClassWithMethod($message);
             $localMethod = $this->classAndMethodMatcher->matchLocalMethod($message);
 
-
             $className = $node->getAttribute(Attribute::CLASS_NODE)->namespacedName->toString();
             $methodName = (string) $node->name . '()';
             $fqnMethodName = $className . '::' . $methodName;
@@ -77,7 +76,7 @@ final class MessageToDeprecationTransformer
         [$class, $method] = explode('::', $namespacedClassWithMethod);
         foreach ($useStatements as $useStatement) {
             if (Strings::endsWith($useStatement, $class)) {
-                return $useStatement . '::'. $method;
+                return $useStatement . '::' . $method;
             }
         }
 

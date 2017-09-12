@@ -66,6 +66,11 @@ final class Attribute
      */
     public const USE_STATEMENTS = 'useStatements';
 
+    /**
+     * @var string
+     */
+    public const NAMESPACE = 'namespace';
+
     private function __construct()
     {
     }

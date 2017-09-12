@@ -28,6 +28,8 @@ services:
             - ['addNodeVisitor', ['@Rector\NodeVisitor\NodeConnector']]
             # adds type to variable and property nodes via attribute
             - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\TypeResolver']]
+            # adds current namespace to all nodes via attribute
+            - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\NamespaceResolver']]
             # adds class/interface/function/method scope to all nodes attribute
             - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\ScopeResolver']]
             # adds current class to all nodes via attribute

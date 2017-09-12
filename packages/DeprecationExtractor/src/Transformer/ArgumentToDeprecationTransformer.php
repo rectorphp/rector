@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Scalar\MagicConst\Method;
+use PhpParser\Node\Scalar\MagicConst\Namespace_;
 use PhpParser\Node\Scalar\String_;
 use Rector\DeprecationExtractor\Contract\Deprecation\DeprecationInterface;
 use Rector\DeprecationExtractor\Deprecation\ClassMethodDeprecation;
@@ -60,6 +61,20 @@ final class ArgumentToDeprecationTransformer
         if ($node instanceof String_) {
             $message = $node->value; // complet class to local methods
             return $this->completeClassToLocalMethods($message, (string) $node->getAttribute(Attribute::CLASS_NAME));
+        }
+
+        if ($node instanceof Concat) {
+            $message = $this->processConcatNode($node->left);
+            $message .= $this->processConcatNode($node->right);
+
+            return $message;
+        }
+
+        if ($node instanceof Namespace_) {
+            dump($node->getAttribute(Attribute::NAMESPACE));
+            // get current namespace :)
+            dump($node);
+            die;
         }
 
         throw new NotImplementedException(sprintf(

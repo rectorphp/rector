@@ -5,6 +5,8 @@ namespace Rector\DeprecationExtractor\Tests\Deprecation;
 use Rector\DeprecationExtractor\Deprecation\DeprecationCollector;
 use Rector\DeprecationExtractor\DeprecationExtractor;
 use Rector\Tests\AbstractContainerAwareTestCase;
+use Symfony\Component\DependencyInjection\ChildDefinition;
+use Symfony\Component\DependencyInjection\DefinitionDecorator;
 
 final class DeprecationCollectorTest extends AbstractContainerAwareTestCase
 {
@@ -39,8 +41,7 @@ final class DeprecationCollectorTest extends AbstractContainerAwareTestCase
         /** @var ClassDeprecation $deprecation */
         $this->assertInstanceOf(ClassDeprecation::class, $deprecation);
 
-        $this->assertSame('Symfony\Component\DependencyInjection\DefinitionDecorator', $deprecation->getOldClass());
-        $this->assertSame('Symfony\Component\DependencyInjection\ChildDefinition', $deprecation->getNewClass());
+        $this->assertSame(DefinitionDecorator::class, $deprecation->getOldClass());
+        $this->assertSame(ChildDefinition::class, $deprecation->getNewClass());
     }
-
 }
