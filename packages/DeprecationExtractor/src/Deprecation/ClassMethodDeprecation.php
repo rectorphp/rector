@@ -38,11 +38,15 @@ final class ClassMethodDeprecation implements DeprecationInterface
             $this->oldMethod = $oldMethod;
         }
 
+        $this->oldMethod = rtrim($this->oldMethod, '()');
+
         if (Strings::contains($newMethod, '::')) {
             [$this->newClass, $this->newMethod] = explode('::', $newMethod);
         } else {
             $this->newMethod = $newMethod;
         }
+
+        $this->newMethod = rtrim($this->newMethod, '()');
     }
 
     public function getOldClass(): string

@@ -11,9 +11,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Scalar\MagicConst\Class_;
 use PhpParser\Node\Scalar\MagicConst\Method;
-use PhpParser\Node\Scalar\MagicConst\Namespace_;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\PrettyPrinter\Standard;
 use Rector\DeprecationExtractor\Contract\Deprecation\DeprecationInterface;
@@ -59,11 +57,8 @@ final class ArgumentToDeprecationTransformer
     {
         $message = '';
         if ($argNode->value instanceof Concat) {
-            $message .= $this->processConcatNode($argNode->value->left);
-            $message .= $this->processConcatNode($argNode->value->right);
-
-            $value = $this->nodeValueResolver->resolve($argNode->value);
-            $value = $this->completeClassToLocalMethods($value, (string) $argNode->getAttribute(Attribute::CLASS_NAME));
+            $message = $this->nodeValueResolver->resolve($argNode->value);
+            $message = $this->completeClassToLocalMethods($message, (string) $argNode->getAttribute(Attribute::CLASS_NAME));
 
         } elseif ($argNode->value instanceof FuncCall) {
             if ((string) $argNode->value->name === 'sprintf') {
@@ -102,41 +97,6 @@ final class ArgumentToDeprecationTransformer
         return new ClassMethodDeprecation($oldMethod, $newMethod);
     }
 
-    private function processConcatNode(Node $node): string
-    {
-        if ($node instanceof Method) {
-            $classMethodNode = $node->getAttribute(Attribute::SCOPE_NODE);
-
-            return $node->getAttribute(Attribute::CLASS_NAME) . '::' . $classMethodNode->name->name;
-        }
-
-        if ($node instanceof String_) {
-            $message = $node->value; // complet class to local methods
-            return $this->completeClassToLocalMethods($message, (string) $node->getAttribute(Attribute::CLASS_NAME));
-        }
-
-        if ($node instanceof Concat) {
-            $message = $this->processConcatNode($node->left);
-            $message .= $this->processConcatNode($node->right);
-
-            return $message;
-        }
-
-        if ($node instanceof Namespace_) {
-            return (string) $node->getAttribute(Attribute::NAMESPACE);
-        }
-
-        if ($node instanceof Class_) {
-            return (string) $node->getAttribute(Attribute::CLASS_NAME);
-        }
-
-        throw new NotImplementedException(sprintf(
-            'Not implemented yet. Go to "%s()" and add check for "%s" node.',
-            __METHOD__,
-            get_class($node)
-        ));
-    }
-
     private function completeClassToLocalMethods(string $message, string $class): string
     {
         $completeMessage = '';
@@ -172,7 +132,8 @@ final class ArgumentToDeprecationTransformer
 
     private function createFromMesssage(string $message): DeprecationInterface
     {
-        $result = Strings::split($message, '#^use |Use#');
+        $result = Strings::split($message, '#use |Use#');
+
         if (count($result) === 2) {
             [$oldMessage, $newMessage] = $result;
             $deprecation = $this->tryToCreateClassMethodDeprecation($oldMessage, $newMessage);
@@ -202,18 +163,12 @@ final class ArgumentToDeprecationTransformer
             return '';
         }
 
-        $sprintfMessage = '';
-
         $arguments = $funcCallNode->args;
         $argumentCount = count($arguments);
 
         $firstArgument = $arguments[0]->value;
         if ($firstArgument instanceof String_) {
             $sprintfMessage = $firstArgument->value;
-        } else {
-            // todo
-            dump($firstArgument);
-            die;
         }
 
         $sprintfArguments = [];
