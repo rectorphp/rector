@@ -6,6 +6,7 @@ use Rector\Contract\Rector\RectorInterface;
 use Rector\DeprecationExtractor\Contract\Deprecation\DeprecationInterface;
 use Rector\DeprecationExtractor\Deprecation\ClassMethodDeprecation;
 use Rector\DeprecationExtractor\Deprecation\DeprecationCollector;
+use Rector\DeprecationExtractor\Deprecation\RemovedFunctionalityDeprecation;
 use Rector\Exception\NotImplementedException;
 
 /**
@@ -39,6 +40,10 @@ final class RectorFactory
         $rectors = [];
 
         foreach ($this->deprecationCollector->getDeprecations() as $deprecation) {
+            if ($deprecation instanceof RemovedFunctionalityDeprecation) {
+                continue;
+            }
+
             $rectors[] = $this->createRectorFromDeprecation($deprecation);
         }
 

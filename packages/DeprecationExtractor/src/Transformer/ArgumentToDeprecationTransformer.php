@@ -8,6 +8,8 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\MagicConst\Class_;
 use PhpParser\Node\Scalar\MagicConst\Method;
@@ -46,7 +48,7 @@ final class ArgumentToDeprecationTransformer
      * Probably resolve by recursion, similar too
      * @see \Rector\NodeTypeResolver\NodeVisitor\TypeResolver::__construct()
      */
-    public function transform(Arg $argNode): DeprecationInterface
+    public function transform(Arg $argNode): ?DeprecationInterface
     {
         $message = '';
         if ($argNode->value instanceof Concat) {
@@ -57,11 +59,18 @@ final class ArgumentToDeprecationTransformer
                 $message = $this->processSprintfNode($argNode->value);
                 $message = $this->completeClassToLocalMethods($message, (string) $argNode->getAttribute(Attribute::CLASS_NAME));
             }
+
+            if ($message === '') {
+                return null;
+            }
+
         } elseif ($argNode->value instanceof String_) {
             $message = $argNode->value->value;
         } elseif ($argNode->value instanceof Variable) {
             // @todo: get value?
             $message = '$' . $argNode->value->name;
+        } elseif ($argNode->value instanceof MethodCall) {
+            $message = $this->standardPrinter->prettyPrint([$argNode->value]);
         }
 
         if ($message === '') {
@@ -71,7 +80,8 @@ final class ArgumentToDeprecationTransformer
                 get_class($argNode->value)
             ));
         }
-            return $this->createFromMesssage($message);
+
+        return $this->createFromMesssage($message);
     }
 
     public function tryToCreateClassMethodDeprecation(string $oldMessage, string $newMessage): ?DeprecationInterface
@@ -173,9 +183,12 @@ final class ArgumentToDeprecationTransformer
 
     private function processSprintfNode(FuncCall $funcCallNode): string
     {
-        // to be sure
         if ((string) $funcCallNode->name !== 'sprintf') {
             // or Exception?
+            return '';
+        }
+
+        if ($this->isDynamicSprintf($funcCallNode)) {
             return '';
         }
 
@@ -189,6 +202,8 @@ final class ArgumentToDeprecationTransformer
             $sprintfMessage = $firstArgument->value;
         } else {
             // todo
+            dump($firstArgument);
+            die;
         }
 
         $sprintfArguments = [];
@@ -198,13 +213,15 @@ final class ArgumentToDeprecationTransformer
                 /** @var Node\Stmt\ClassMethod $methodNode */
                 $methodNode = $funcCallNode->getAttribute(Attribute::SCOPE_NODE);
                 $sprintfArguments[] = (string) $methodNode->name;
-            } elseif ($argument->value instanceof Variable) {
-                // @todo: resolve value?
-                $sprintfArguments[] = $argument->value->name;
             } elseif ($argument->value instanceof ClassConstFetch) {
-                dump($argument->value);
-                die;
+                $value = $this->standardPrinter->prettyPrint([$argument->value]);
+                if ($value === 'static::class') {
+                    $sprintfArguments[] = $argument->value->getAttribute(Attribute::CLASS_NAME);
+                }
             } else {
+                dump($this->standardPrinter->prettyPrint([$argument]));
+                die;
+
                 throw new NotImplementedException(sprintf(
                     'Not implemented yet. Go to "%s()" and add check for "%s" argument node.',
                     __METHOD__,
@@ -214,5 +231,23 @@ final class ArgumentToDeprecationTransformer
         }
 
         return sprintf($sprintfMessage, ...$sprintfArguments);
+    }
+
+    private function isDynamicSprintf(FuncCall $funcCallNode): bool
+    {
+        foreach ($funcCallNode->args as $argument) {
+            if ($this->isDynamicArgument($argument)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function isDynamicArgument(Arg $argument): bool
+    {
+        $valueNodeClass = get_class($argument->value);
+
+        return in_array($valueNodeClass, [PropertyFetch::class, MethodCall::class, Variable::class], true);
     }
 }

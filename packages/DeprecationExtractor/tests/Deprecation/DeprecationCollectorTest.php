@@ -2,6 +2,7 @@
 
 namespace Rector\DeprecationExtractor\Tests\Deprecation;
 
+use Rector\DeprecationExtractor\Deprecation\ClassDeprecation;
 use Rector\DeprecationExtractor\Deprecation\DeprecationCollector;
 use Rector\DeprecationExtractor\DeprecationExtractor;
 use Rector\Tests\AbstractContainerAwareTestCase;
@@ -33,14 +34,12 @@ final class DeprecationCollectorTest extends AbstractContainerAwareTestCase
         ]);
 
         $deprecations = $this->deprecationCollector->getDeprecations();
-        $this->assertCount(17, $deprecations);
+        $this->assertGreaterThanOrEqual(35, $deprecations);
 
-        dump($deprecations);
-        die;
+        $deprecation = $deprecations[0];
 
         /** @var ClassDeprecation $deprecation */
         $this->assertInstanceOf(ClassDeprecation::class, $deprecation);
-
         $this->assertSame(DefinitionDecorator::class, $deprecation->getOldClass());
         $this->assertSame(ChildDefinition::class, $deprecation->getNewClass());
     }
