@@ -22,10 +22,8 @@ use Rector\DeprecationExtractor\Deprecation\RemovedFunctionalityDeprecation;
 use Rector\DeprecationExtractor\RegExp\ClassAndMethodMatcher;
 use Rector\Exception\NotImplementedException;
 use Rector\Node\Attribute;
+use Rector\NodeValueResolver\NodeValueResolver;
 
-/**
- * @todo Extract some value resolvers, inspire at BetterReflection, NodeValueResolver
- */
 final class ArgumentToDeprecationTransformer
 {
     /**
@@ -38,10 +36,19 @@ final class ArgumentToDeprecationTransformer
      */
     private $standardPrinter;
 
-    public function __construct(ClassAndMethodMatcher $classAndMethodMatcher, Standard $standardPrinter)
-    {
+    /**
+     * @var NodeValueResolver
+     */
+    private $nodeValueResolver;
+
+    public function __construct(
+        ClassAndMethodMatcher $classAndMethodMatcher,
+        Standard $standardPrinter,
+        NodeValueResolver $nodeValueResolver
+    ) {
         $this->classAndMethodMatcher = $classAndMethodMatcher;
         $this->standardPrinter = $standardPrinter;
+        $this->nodeValueResolver = $nodeValueResolver;
     }
 
     /**
@@ -54,6 +61,10 @@ final class ArgumentToDeprecationTransformer
         if ($argNode->value instanceof Concat) {
             $message .= $this->processConcatNode($argNode->value->left);
             $message .= $this->processConcatNode($argNode->value->right);
+
+            $value = $this->nodeValueResolver->resolve($argNode->value);
+            $value = $this->completeClassToLocalMethods($value, (string) $argNode->getAttribute(Attribute::CLASS_NAME));
+
         } elseif ($argNode->value instanceof FuncCall) {
             if ((string) $argNode->value->name === 'sprintf') {
                 $message = $this->processSprintfNode($argNode->value);
@@ -63,7 +74,6 @@ final class ArgumentToDeprecationTransformer
             if ($message === '') {
                 return null;
             }
-
         } elseif ($argNode->value instanceof String_) {
             $message = $argNode->value->value;
         } elseif ($argNode->value instanceof Variable) {
@@ -207,7 +217,7 @@ final class ArgumentToDeprecationTransformer
         }
 
         $sprintfArguments = [];
-        for ($i = 1; $i < $argumentCount; $i++) {
+        for ($i = 1; $i < $argumentCount; ++$i) {
             $argument = $arguments[$i];
             if ($argument->value instanceof Method) {
                 /** @var Node\Stmt\ClassMethod $methodNode */
