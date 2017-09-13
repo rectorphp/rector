@@ -59,7 +59,6 @@ final class ArgumentToDeprecationTransformer
         if ($argNode->value instanceof Concat) {
             $message = $this->nodeValueResolver->resolve($argNode->value);
             $message = $this->completeClassToLocalMethods($message, (string) $argNode->getAttribute(Attribute::CLASS_NAME));
-
         } elseif ($argNode->value instanceof FuncCall) {
             if ((string) $argNode->value->name === 'sprintf') {
                 $message = $this->processSprintfNode($argNode->value);

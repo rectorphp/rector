@@ -90,7 +90,7 @@ final class NodeValueResolver
             case 'true':
                 return true;
             default:
-                if ( ! defined($firstName)) {
+                if (! defined($firstName)) {
                     throw new UnableToCompileNode(
                         sprintf('Constant "%s" has not been defined', $firstName)
                     );
@@ -102,13 +102,14 @@ final class NodeValueResolver
     /**
      * @return mixed[]
      */
-    private function compileArray(Array_ $arrayNode) : array
+    private function compileArray(Array_ $arrayNode): array
     {
         $compiledArray = [];
         foreach ($arrayNode->items as $arrayItem) {
             $compiledValue = $this->resolve($arrayItem->value);
             if ($arrayItem->key === null) {
                 $compiledArray[] = $compiledValue;
+
                 continue;
             }
 
