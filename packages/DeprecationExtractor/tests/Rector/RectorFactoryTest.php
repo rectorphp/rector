@@ -28,24 +28,24 @@ final class RectorFactoryTest extends AbstractContainerAwareTestCase
         $rectors = $this->rectorFactory->createRectors();
         $this->assertCount(2, $rectors);
 
+        /** @var ConfigurableChangeMethodNameRector $secondRector */
+        $secondRector = $rectors[0];
+        $this->assertInstanceOf(ConfigurableChangeMethodNameRector::class, $secondRector);
+
+        $this->assertSame([
+            'Nette\DI\Definition' => [
+                'setInject' => 'addTag',
+            ],
+        ], Assert::getObjectAttribute($secondRector, 'perClassOldToNewMethod'));
+
         /** @var ConfigurableChangeMethodNameRector $firstRector */
-        $firstRector = $rectors[0];
+        $firstRector = $rectors[1];
         $this->assertInstanceOf(ConfigurableChangeMethodNameRector::class, $firstRector);
 
-//        $this->assertSame([
-//            'Nette\DI\Definition' => [
-//                'setClass' => 'setFactory',
-//            ],
-//        ], Assert::getObjectAttribute($firstRector, 'perClassOldToNewMethod'));
-//
-//        /** @var ConfigurableChangeMethodNameRector $secondRector */
-//        $secondRector = $rectors[1];
-//        $this->assertInstanceOf(ConfigurableChangeMethodNameRector::class, $secondRector);
-//
-//        $this->assertSame([
-//            'Nette\DI\Definition' => [
-//                'setInject' => 'addTag',
-//            ],
-//        ], Assert::getObjectAttribute($secondRector, 'perClassOldToNewMethod'));
+        $this->assertSame([
+            'Nette\DI\Definition' => [
+                'setClass' => 'setFactory',
+            ],
+        ], Assert::getObjectAttribute($firstRector, 'perClassOldToNewMethod'));
     }
 }

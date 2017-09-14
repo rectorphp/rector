@@ -2,6 +2,7 @@
 
 namespace Rector\DeprecationExtractor\Console\Command;
 
+use Rector\DeprecationExtractor\Deprecation\DeprecationCollector;
 use Rector\DeprecationExtractor\DeprecationExtractor;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -21,13 +22,19 @@ final class ExtractCommand extends Command
     private const ARGUMENT_SOURCE_NAME = 'source';
 
     /**
-     * @var deprecationExtractor
+     * @var DeprecationExtractor
      */
     private $deprecationExtractor;
 
-    public function __construct(deprecationExtractor $deprecationExtractor)
+    /**
+     * @var DeprecationCollector
+     */
+    private $deprecationCollector;
+
+    public function __construct(DeprecationExtractor $deprecationExtractor, DeprecationCollector $deprecationCollector)
     {
         $this->deprecationExtractor = $deprecationExtractor;
+        $this->deprecationCollector = $deprecationCollector;
 
         parent::__construct();
     }
@@ -48,7 +55,9 @@ final class ExtractCommand extends Command
         $source = $input->getArgument(self::ARGUMENT_SOURCE_NAME);
         $this->deprecationExtractor->scanDirectories($source);
 
-        // write found deprecations...
+        foreach ($this->deprecationCollector->getDeprecations() as $deprecation) {
+            $output->writeln($deprecation);
+        }
 
         return 0;
     }

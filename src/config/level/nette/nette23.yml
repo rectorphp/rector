@@ -1,2 +1,2 @@
-checkers:
+rectors:
     - Rector\Rector\Contrib\Nette\RemoveConfiguratorConstantsRector

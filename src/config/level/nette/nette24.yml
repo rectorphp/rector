@@ -1,4 +1,4 @@
-checkers:
+rectors:
     - Rector\Rector\Contrib\Nette\FormCallbackRector
     - Rector\Rector\Contrib\Nette\FormSetRequiredRector
     - Rector\Rector\Contrib\Nette\HtmlAddMethodRector

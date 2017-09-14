@@ -61,6 +61,16 @@ final class Attribute
      */
     public const NEXT_NODE = 'nextNode';
 
+    /**
+     * @var string
+     */
+    public const USE_STATEMENTS = 'useStatements';
+
+    /**
+     * @var string
+     */
+    public const NAMESPACE = 'namespace';
+
     private function __construct()
     {
     }

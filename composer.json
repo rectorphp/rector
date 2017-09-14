@@ -10,7 +10,7 @@
         "php": "^7.1",
         "symfony/console": "^3.3",
         "symfony/dependency-injection": "^3.3",
-        "nikic/php-parser": "4.0.x-dev as 3.1",
+        "nikic/php-parser": "4.0.x-dev as 3.1.1",
         "nette/utils": "^2.4"
     },
     "require-dev": {
@@ -26,14 +26,16 @@
         "psr-4": {
             "Rector\\": "src",
             "Rector\\NodeTypeResolver\\": "packages/NodeTypeResolver/src",
-            "Rector\\DeprecationExtractor\\": "packages/DeprecationExtractor/src"
+            "Rector\\DeprecationExtractor\\": "packages/DeprecationExtractor/src",
+            "Rector\\NodeValueResolver\\": "packages/NodeValueResolver/src"
         }
     },
     "autoload-dev": {
         "psr-4": {
             "Rector\\Tests\\": "tests",
             "Rector\\NodeTypeResolver\\Tests\\": "packages/NodeTypeResolver/tests",
-            "Rector\\DeprecationExtractor\\Tests\\": "packages/DeprecationExtractor/tests"
+            "Rector\\DeprecationExtractor\\Tests\\": "packages/DeprecationExtractor/tests",
+            "Rector\\NodeValueResolver\\Tests\\": "packages/NodeValueResolver/tests"
         }
     },
     "scripts": {

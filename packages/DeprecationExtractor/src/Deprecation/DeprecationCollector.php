@@ -111,12 +111,17 @@ final class DeprecationCollector
                 $deprecationMessage['node']
             );
 
-            $this->addDeprecation($deprecation);
+            if ($deprecation) {
+                $this->addDeprecation($deprecation);
+            }
         }
 
         foreach ($this->deprecationArgNodes as $deprecationArgNode) {
             $deprecation = $this->argumentToDeprecationTransformer->transform($deprecationArgNode);
-            $this->addDeprecation($deprecation);
+
+            if ($deprecation) {
+                $this->addDeprecation($deprecation);
+            }
         }
     }
 }

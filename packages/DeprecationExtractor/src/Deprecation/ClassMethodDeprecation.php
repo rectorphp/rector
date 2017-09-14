@@ -28,21 +28,43 @@ final class ClassMethodDeprecation implements DeprecationInterface
     private $newClass;
 
     /**
+     * @var mixed[]
+     */
+    private $oldArguments = [];
+
+    /**
+     * @var mixed[]
+     */
+    private $newArguments = [];
+
+    /**
+     * @param mixed[] $oldArguments
      * @param mixed[] $newArguments
      */
-    public function __construct(string $oldMethod, string $newMethod)
-    {
+    public function __construct(
+        string $oldMethod,
+        string $newMethod,
+        array $oldArguments = [],
+        array $newArguments = []
+    ) {
         if (Strings::contains($oldMethod, '::')) {
             [$this->oldClass, $this->oldMethod] = explode('::', $oldMethod);
         } else {
             $this->oldMethod = $oldMethod;
         }
 
+        $this->oldMethod = rtrim($this->oldMethod, '()');
+
         if (Strings::contains($newMethod, '::')) {
             [$this->newClass, $this->newMethod] = explode('::', $newMethod);
         } else {
             $this->newMethod = $newMethod;
         }
+
+        $this->newMethod = rtrim($this->newMethod, '()');
+
+        $this->oldArguments = $oldArguments;
+        $this->newArguments = $newArguments;
     }
 
     public function getOldClass(): string

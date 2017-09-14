@@ -65,7 +65,7 @@ final class MyRector extends AbstractRector
 
 5. Submit PR
  
-6. :check:
+6. :+1:   
 
 
 

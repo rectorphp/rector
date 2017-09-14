@@ -40,12 +40,13 @@ parameters:
         - PhpCsFixer\Fixer\Operator\UnaryOperatorSpacesFixer
         - PhpCsFixer\Fixer\Phpdoc\PhpdocAlignFixer
         - PhpCsFixer\Fixer\Phpdoc\PhpdocSummaryFixer
+        - PhpCsFixer\Fixer\Comment\SingleLineCommentStyleFixer
+        - PhpCsFixer\Fixer\Phpdoc\PhpdocToCommentFixer
 
     skip:
         Symplify\CodingStandard\Fixer\Php\ClassStringToClassConstantFixer:
             # classes might not exist
             - */src/Rector/Contrib/*/*Rector.php
-            - packages/DeprecationExtractor/tests/Transformer/MessageToDeprecationTransformerTest.php
         PHP_CodeSniffer\Standards\Generic\Sniffs\Files\LineLengthSniff:
             # long FQN classes that might not exist
             - src/Rector/Contrib/Symfony/FrameworkBundleClassReplacementsRector.php
@@ -55,3 +56,6 @@ parameters:
         Symplify\CodingStandard\Sniffs\Debug\CommentedOutCodeSniff:
             # false positive
             - packages/NodeTypeResolver/src/NodeVisitor/TypeResolver.php
+        SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff:
+            # covariant types
+            - */packages/NodeValueResolver/src/PerNodeValueResolver/*ValueResolver.php

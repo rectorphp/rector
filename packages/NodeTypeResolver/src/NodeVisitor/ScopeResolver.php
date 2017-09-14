@@ -57,6 +57,7 @@ final class ScopeResolver extends NodeVisitorAbstract
         }
 
         if ($this->currentScope) {
+            // is SCOPE really needed? investigate :)
             $node->setAttribute(Attribute::SCOPE, $this->currentScope);
             $node->setAttribute(Attribute::SCOPE_NODE, $this->currentScopeNode);
         }
@@ -81,7 +82,7 @@ final class ScopeResolver extends NodeVisitorAbstract
 
     private function resolveClassLikeScope(Node $node): void
     {
-        if (($node instanceof Class_ && $node->isAnonymous()) || $node instanceof Property) {
+        if ($node instanceof Property || ($node instanceof Class_ && $node->isAnonymous())) {
             $this->currentScope = 'scope_class';
             $this->currentScopeNode = $node;
         }

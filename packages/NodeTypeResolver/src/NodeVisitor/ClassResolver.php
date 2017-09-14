@@ -10,6 +10,7 @@ use Rector\Node\Attribute;
 
 /**
  * Add attribute 'class' with current class name.
+ * Add 'use_imports' with all related uses.
  */
 final class ClassResolver extends NodeVisitorAbstract
 {
