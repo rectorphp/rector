@@ -6,14 +6,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\ConstFetch;
-use PhpParser\Node\Scalar\DNumber;
-use PhpParser\Node\Scalar\LNumber;
-use PhpParser\Node\Scalar\MagicConst\Class_;
 use PhpParser\Node\Scalar\MagicConst\Method;
-use PhpParser\Node\Scalar\MagicConst\Namespace_;
-use PhpParser\Node\Scalar\String_;
 use Rector\Exception\NotImplementedException;
-use Rector\Node\Attribute;
 use Rector\NodeValueResolver\Contract\PerNodeValueResolver\PerNodeValueResolverInterface;
 use Roave\BetterReflection\NodeCompiler\Exception\UnableToCompileNode;
 
