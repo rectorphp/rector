@@ -56,7 +56,7 @@ final class ExtractCommand extends Command
         $this->deprecationExtractor->scanDirectories($source);
 
         foreach ($this->deprecationCollector->getDeprecations() as $deprecation) {
-            // @todo
+            $output->writeln($deprecation);
         }
 
         return 0;

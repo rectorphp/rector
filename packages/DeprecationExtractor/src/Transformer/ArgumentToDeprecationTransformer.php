@@ -72,12 +72,5 @@ final class ArgumentToDeprecationTransformer
         }
 
         return new RemovedFunctionalityDeprecation($message);
-
-        throw new NotImplementedException(sprintf(
-            '%s() did not resolve "%s" messsage, so %s was not created. Implement it.',
-            __METHOD__,
-            $message,
-            DeprecationInterface::class
-        ));
     }
 }

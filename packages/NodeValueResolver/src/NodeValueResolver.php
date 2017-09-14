@@ -4,7 +4,6 @@ namespace Rector\NodeValueResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\Concat;
-use PhpParser\Node\Expr\ConstFetch;
 use Rector\Exception\NotImplementedException;
 use Rector\NodeValueResolver\Contract\PerNodeValueResolver\PerNodeValueResolverInterface;
 
