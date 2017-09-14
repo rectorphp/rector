@@ -42,22 +42,17 @@ final class FuncCallValueResolver implements PerNodeValueResolverInterface, Node
      */
     public function resolve(Node $funcCallArrayNode)
     {
-        $message = '';
-
-        if ((string) $funcCallArrayNode->name === 'sprintf') {
-            $message = $this->processSprintfNode($funcCallArrayNode);
-            $message = $this->classPrepender->completeClassToLocalMethods(
-                $message,
-                (string) $funcCallArrayNode->getAttribute(Attribute::CLASS_NAME)
-            );
-        }
-
-        if ($message === '') {
+        if ((string) $funcCallArrayNode->name !== 'sprintf') {
             return null;
         }
 
-        dump($funcCallArrayNode);
-        die;
+        $message = $this->processSprintfNode($funcCallArrayNode);
+        $message = $this->classPrepender->completeClassToLocalMethods(
+            $message,
+            (string) $funcCallArrayNode->getAttribute(Attribute::CLASS_NAME)
+        );
+
+        return $message ?: null;
     }
 
     public function setNodeValueResolver(NodeValueResolver $nodeValueResolver): void
@@ -65,15 +60,15 @@ final class FuncCallValueResolver implements PerNodeValueResolverInterface, Node
         $this->nodeValueResolver = $nodeValueResolver;
     }
 
-    private function processSprintfNode(FuncCall $funcCallNode): string
+    private function processSprintfNode(FuncCall $funcCallNode): ?string
     {
         if ((string) $funcCallNode->name !== 'sprintf') {
             // or Exception?
-            return '';
+            return null;
         }
 
         if ($this->isDynamicSprintf($funcCallNode)) {
-            return '';
+            return null;
         }
 
         $arguments = $funcCallNode->args;
@@ -82,33 +77,14 @@ final class FuncCallValueResolver implements PerNodeValueResolverInterface, Node
         $firstArgument = $arguments[0]->value;
         if ($firstArgument instanceof String_) {
             $sprintfMessage = $firstArgument->value;
+        } else {
+            return null;
         }
 
         $sprintfArguments = [];
         for ($i = 1; $i < $argumentCount; ++$i) {
             $argument = $arguments[$i];
-
             $sprintfArguments[] = $this->nodeValueResolver->resolve($argument->value);
-
-//            if ($argument->value instanceof Method) {
-//                /** @var Node\Stmt\ClassMethod $methodNode */
-//                $methodNode = $funcCallNode->getAttribute(Attribute::SCOPE_NODE);
-//                $sprintfArguments[] = (string) $methodNode->name;
-//            } elseif ($argument->value instanceof ClassConstFetch) {
-//                $value = $this->standardPrinter->prettyPrint([$argument->value]);
-//                if ($value === 'static::class') {
-//                    $sprintfArguments[] = $argument->value->getAttribute(Attribute::CLASS_NAME);
-//                }
-//            } else {
-//                dump($this->standardPrinter->prettyPrint([$argument]));
-//                die;
-//
-//                throw new NotImplementedException(sprintf(
-//                    'Not implemented yet. Go to "%s()" and add check for "%s" argument node.',
-//                    __METHOD__,
-//                    get_class($argument->value)
-//                ));
-//            }
         }
 
         return sprintf($sprintfMessage, ...$sprintfArguments);

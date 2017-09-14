@@ -3,7 +3,6 @@
 namespace Rector\NodeValueResolver;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\BinaryOp\Concat;
 use Rector\Exception\NotImplementedException;
 use Rector\NodeValueResolver\Contract\PerNodeValueResolver\PerNodeValueResolverInterface;
 
@@ -33,10 +32,6 @@ final class NodeValueResolver
             }
 
             return $perNodeValueResolver->resolve($node);
-        }
-
-        if ($node instanceof Concat) {
-            return $this->resolve($node->left) . $this->resolve($node->right);
         }
 
         throw new NotImplementedException(sprintf(
