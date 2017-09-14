@@ -3,6 +3,7 @@
 namespace Rector\NodeValueResolver\PerNodeValueResolver;
 
 use PhpParser\Node;
+use PhpParser\Node\Scalar\MagicConst\Class_;
 use Rector\Node\Attribute;
 use Rector\NodeValueResolver\Contract\PerNodeValueResolver\PerNodeValueResolverInterface;
 
@@ -10,8 +11,9 @@ final class ClassConstantValueResolver implements PerNodeValueResolverInterface
 {
     public function getNodeClass(): string
     {
-        return Node\Scalar\MagicConst\Class_::class;
+        return Class_::class;
     }
+
     public function resolve(Node $node): string
     {
         return (string) $node->getAttribute(Attribute::CLASS_NAME);

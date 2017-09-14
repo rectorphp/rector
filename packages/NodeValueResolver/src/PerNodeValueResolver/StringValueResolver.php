@@ -15,7 +15,6 @@ final class StringValueResolver implements PerNodeValueResolverInterface
 
     /**
      * @param String_ $node
-     * @return string
      */
     public function resolve(Node $node): string
     {

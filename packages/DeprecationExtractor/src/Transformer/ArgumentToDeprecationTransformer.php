@@ -38,6 +38,7 @@ final class ArgumentToDeprecationTransformer
      * @var NodeValueResolver
      */
     private $nodeValueResolver;
+
     /**
      * @var ClassPrepender
      */

@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
-use PhpParser\PrettyPrinter\Standard;
 use Rector\Node\Attribute;
 use Rector\NodeValueResolver\Contract\NodeValueResolverAwareInterface;
 use Rector\NodeValueResolver\Contract\PerNodeValueResolver\PerNodeValueResolverInterface;
@@ -47,7 +46,10 @@ final class FuncCallValueResolver implements PerNodeValueResolverInterface, Node
 
         if ((string) $funcCallNode->name === 'sprintf') {
             $message = $this->processSprintfNode($funcCallNode);
-            $message = $this->classPrepender->completeClassToLocalMethods($message, (string) $funcCallNode->getAttribute(Attribute::CLASS_NAME));
+            $message = $this->classPrepender->completeClassToLocalMethods(
+                $message,
+                (string) $funcCallNode->getAttribute(Attribute::CLASS_NAME)
+            );
         }
 
         if ($message === '') {
@@ -56,6 +58,11 @@ final class FuncCallValueResolver implements PerNodeValueResolverInterface, Node
 
         dump($funcCallNode);
         die;
+    }
+
+    public function setNodeValueResolver(NodeValueResolver $nodeValueResolver): void
+    {
+        $this->nodeValueResolver = $nodeValueResolver;
     }
 
     private function processSprintfNode(FuncCall $funcCallNode): string
@@ -123,10 +130,5 @@ final class FuncCallValueResolver implements PerNodeValueResolverInterface, Node
         $valueNodeClass = get_class($argument->value);
 
         return in_array($valueNodeClass, [PropertyFetch::class, MethodCall::class, Variable::class], true);
-    }
-
-    public function setNodeValueResolver(NodeValueResolver $nodeValueResolver): void
-    {
-        $this->nodeValueResolver = $nodeValueResolver;
     }
 }

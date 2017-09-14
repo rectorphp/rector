@@ -12,9 +12,9 @@ use PhpParser\Node\Scalar\MagicConst\Class_;
 use PhpParser\Node\Scalar\MagicConst\Method;
 use PhpParser\Node\Scalar\MagicConst\Namespace_;
 use PhpParser\Node\Scalar\String_;
-use Rector\NodeValueResolver\Contract\PerNodeValueResolver\PerNodeValueResolverInterface;
 use Rector\Exception\NotImplementedException;
 use Rector\Node\Attribute;
+use Rector\NodeValueResolver\Contract\PerNodeValueResolver\PerNodeValueResolverInterface;
 use Roave\BetterReflection\NodeCompiler\Exception\UnableToCompileNode;
 
 /**
@@ -45,10 +45,6 @@ final class NodeValueResolver
             return $perNodeValueResolver->resolve($node);
         }
 
-        if ($node instanceof String_ || $node instanceof DNumber || $node instanceof LNumber) {
-            return $node->value;
-        }
-
         if ($node instanceof Array_) {
             return $this->compileArray($node);
         }
@@ -60,20 +56,6 @@ final class NodeValueResolver
         if ($node instanceof Concat) {
             return $this->resolve($node->left) . $this->resolve($node->right);
         }
-//
-//        if ($node instanceof Class_) {
-//            return $node->getAttribute(Attribute::CLASS_NAME);
-//        }
-
-//        if ($node instanceof Method) {
-//            $classMethodNode = $node->getAttribute(Attribute::SCOPE_NODE);
-//
-//            return $node->getAttribute(Attribute::CLASS_NAME) . '::' . $classMethodNode->name->name;
-//        }
-
-//        if ($node instanceof Namespace_) {
-//            return (string) $node->getAttribute(Attribute::NAMESPACE);
-//        }
 
         throw new NotImplementedException(sprintf(
             '%s() was unable to resolve "%s" Node. Add new value resolver via addValueResolver() method.',

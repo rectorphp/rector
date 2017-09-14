@@ -30,19 +30,23 @@ final class ClassMethodDeprecation implements DeprecationInterface
     /**
      * @var mixed[]
      */
-    private $oldArguments;
+    private $oldArguments = [];
 
     /**
      * @var mixed[]
      */
-    private $newArguments;
+    private $newArguments = [];
 
     /**
      * @param mixed[] $oldArguments
      * @param mixed[] $newArguments
      */
-    public function __construct(string $oldMethod, string $newMethod, array $oldArguments = [], array $newArguments = [])
-    {
+    public function __construct(
+        string $oldMethod,
+        string $newMethod,
+        array $oldArguments = [],
+        array $newArguments = []
+    ) {
         if (Strings::contains($oldMethod, '::')) {
             [$this->oldClass, $this->oldMethod] = explode('::', $oldMethod);
         } else {
@@ -58,6 +62,7 @@ final class ClassMethodDeprecation implements DeprecationInterface
         }
 
         $this->newMethod = rtrim($this->newMethod, '()');
+
         $this->oldArguments = $oldArguments;
         $this->newArguments = $newArguments;
     }

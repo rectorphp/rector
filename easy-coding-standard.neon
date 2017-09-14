@@ -57,3 +57,6 @@ parameters:
         Symplify\CodingStandard\Sniffs\Debug\CommentedOutCodeSniff:
             # false positive
             - packages/NodeTypeResolver/src/NodeVisitor/TypeResolver.php
+        SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff:
+            # covariant types
+            - */packages/NodeValueResolver/src/PerNodeValueResolver/*ValueResolver.php
