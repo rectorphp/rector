@@ -38,6 +38,11 @@ final class ArgumentToDeprecationTransformer
     public function transform(Arg $argNode): ?DeprecationInterface
     {
         $message = $this->nodeValueResolver->resolve($argNode->value);
+
+        if ($message === null) {
+            return $message;
+        }
+
         $message = $this->classPrepender->completeClassToLocalMethods(
             $message,
             (string) $argNode->getAttribute(Attribute::CLASS_NAME)

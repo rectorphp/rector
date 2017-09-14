@@ -3,16 +3,13 @@
 namespace Rector\NodeValueResolver\PerNodeValueResolver;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use Rector\Node\Attribute;
 use Rector\NodeValueResolver\Contract\NodeValueResolverAwareInterface;
 use Rector\NodeValueResolver\Contract\PerNodeValueResolver\PerNodeValueResolverInterface;
 use Rector\NodeValueResolver\Message\ClassPrepender;
+use Rector\NodeValueResolver\NodeAnalyzer\DynamicNodeAnalyzer;
 use Rector\NodeValueResolver\NodeValueResolver;
 
 final class FuncCallValueResolver implements PerNodeValueResolverInterface, NodeValueResolverAwareInterface
@@ -26,10 +23,15 @@ final class FuncCallValueResolver implements PerNodeValueResolverInterface, Node
      * @var NodeValueResolver
      */
     private $nodeValueResolver;
+    /**
+     * @var DynamicNodeAnalyzer
+     */
+    private $dynamicNodeAnalyzer;
 
-    public function __construct(ClassPrepender $classPrepender)
+    public function __construct(ClassPrepender $classPrepender, DynamicNodeAnalyzer $dynamicNodeAnalyzer)
     {
         $this->classPrepender = $classPrepender;
+        $this->dynamicNodeAnalyzer = $dynamicNodeAnalyzer;
     }
 
     public function getNodeClass(): string
@@ -47,6 +49,11 @@ final class FuncCallValueResolver implements PerNodeValueResolverInterface, Node
         }
 
         $message = $this->processSprintfNode($funcCallArrayNode);
+
+        if ($message === null) {
+            return null;
+        }
+
         $message = $this->classPrepender->completeClassToLocalMethods(
             $message,
             (string) $funcCallArrayNode->getAttribute(Attribute::CLASS_NAME)
@@ -67,7 +74,7 @@ final class FuncCallValueResolver implements PerNodeValueResolverInterface, Node
             return null;
         }
 
-        if ($this->isDynamicSprintf($funcCallNode)) {
+        if ($this->dynamicNodeAnalyzer->hasDynamicNodes($funcCallNode->args)) {
             return null;
         }
 
@@ -88,23 +95,5 @@ final class FuncCallValueResolver implements PerNodeValueResolverInterface, Node
         }
 
         return sprintf($sprintfMessage, ...$sprintfArguments);
-    }
-
-    private function isDynamicSprintf(FuncCall $funcCallNode): bool
-    {
-        foreach ($funcCallNode->args as $argument) {
-            if ($this->isDynamicArgument($argument)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private function isDynamicArgument(Arg $argument): bool
-    {
-        $valueNodeClass = get_class($argument->value);
-
-        return in_array($valueNodeClass, [PropertyFetch::class, MethodCall::class, Variable::class], true);
     }
 }
