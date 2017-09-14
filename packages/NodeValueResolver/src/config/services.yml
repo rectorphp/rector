@@ -4,5 +4,4 @@ services:
 
     Rector\NodeValueResolver\:
         resource: '../../src'
-
-    Roave\BetterReflection\NodeCompiler\CompileNodeToValue: ~
+        exclude: '../../src/{Contract}'

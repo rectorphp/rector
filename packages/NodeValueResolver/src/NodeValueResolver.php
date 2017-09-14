@@ -12,25 +12,24 @@ use PhpParser\Node\Scalar\MagicConst\Class_;
 use PhpParser\Node\Scalar\MagicConst\Method;
 use PhpParser\Node\Scalar\MagicConst\Namespace_;
 use PhpParser\Node\Scalar\String_;
+use Rector\NodeValueResolver\Contract\PerNodeValueResolver\PerNodeValueResolverInterface;
 use Rector\Exception\NotImplementedException;
 use Rector\Node\Attribute;
 use Roave\BetterReflection\NodeCompiler\Exception\UnableToCompileNode;
 
 /**
  * Inspired by https://github.com/Roave/BetterReflection/blob/master/test/unit/NodeCompiler/CompileNodeToValueTest.php
- *
- * Just usind DI and
  */
 final class NodeValueResolver
 {
     /**
-     * @var mixed[]
+     * @var PerNodeValueResolverInterface[]
      */
-    private $valueResolvers = [];
+    private $perNodeValueResolvers = [];
 
-    public function addValueResolver(string $nodeType, callable $valueResolver): void
+    public function addPerNodeValueResolver(PerNodeValueResolverInterface $perNodeValueResolver): void
     {
-        $this->valueResolvers[$nodeType] = $valueResolver;
+        $this->perNodeValueResolvers[] = $perNodeValueResolver;
     }
 
     /**
@@ -38,6 +37,14 @@ final class NodeValueResolver
      */
     public function resolve(Node $node)
     {
+        foreach ($this->perNodeValueResolvers as $perNodeValueResolver) {
+            if (! is_a($node, $perNodeValueResolver->getNodeClass(), true)) {
+                continue;
+            }
+
+            return $perNodeValueResolver->resolve($node);
+        }
+
         if ($node instanceof String_ || $node instanceof DNumber || $node instanceof LNumber) {
             return $node->value;
         }
