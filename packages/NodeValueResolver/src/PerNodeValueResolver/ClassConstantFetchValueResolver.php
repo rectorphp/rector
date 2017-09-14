@@ -15,14 +15,14 @@ final class ClassConstantFetchValueResolver implements PerNodeValueResolverInter
      */
     private $standardPrinter;
 
-    public function getNodeClass(): string
-    {
-        return ClassConstFetch::class;
-    }
-
     public function __construct(Standard $standardPrinter)
     {
         $this->standardPrinter = $standardPrinter;
+    }
+
+    public function getNodeClass(): string
+    {
+        return ClassConstFetch::class;
     }
 
     /**
