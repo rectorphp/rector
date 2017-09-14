@@ -2,12 +2,9 @@
 
 namespace Rector\DeprecationExtractor\Tests\Deprecation;
 
-use Rector\DeprecationExtractor\Deprecation\ClassDeprecation;
 use Rector\DeprecationExtractor\Deprecation\DeprecationCollector;
 use Rector\DeprecationExtractor\DeprecationExtractor;
 use Rector\Tests\AbstractContainerAwareTestCase;
-use Symfony\Component\DependencyInjection\ChildDefinition;
-use Symfony\Component\DependencyInjection\DefinitionDecorator;
 
 final class DeprecationCollectorTest extends AbstractContainerAwareTestCase
 {
