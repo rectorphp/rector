@@ -56,10 +56,18 @@ final class ArgumentToDeprecationTransformer
 
     public function tryToCreateClassMethodDeprecation(string $oldMessage, string $newMessage): ?DeprecationInterface
     {
-        $oldMethod = $this->classAndMethodMatcher->matchClassWithMethod($oldMessage);
-        $newMethod = $this->classAndMethodMatcher->matchClassWithMethod($newMessage);
+        $oldMethod = $this->classAndMethodMatcher->matchClassWithMethodWithoutArguments($oldMessage);
+        $newMethod = $this->classAndMethodMatcher->matchClassWithMethodWithoutArguments($newMessage);
 
-        return new ClassMethodDeprecation($oldMethod, $newMethod);
+        $oldArguments = $this->classAndMethodMatcher->matchMethodArguments($oldMessage);
+        $newArguments = $this->classAndMethodMatcher->matchMethodArguments($newMessage);
+
+        return new ClassMethodDeprecation(
+            $oldMethod,
+            $newMethod,
+            $oldArguments,
+            $newArguments
+        );
     }
 
     private function createFromMessage(string $message): DeprecationInterface

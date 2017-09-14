@@ -12,6 +12,13 @@ use Nette;
 
 final class Definition
 {
+    public function setInject(bool $state = true): self
+    {
+        @trigger_error(__METHOD__ . "() is deprecated, use addTag('inject')", E_USER_DEPRECATED);
+
+        return $this->addTag(InjectExtension::TAG_INJECT, $state);
+    }
+
     /**
      * @return static
      * @deprecated
@@ -26,12 +33,5 @@ final class Definition
         }
 
         return $this;
-    }
-
-    public function setInject(bool $state = true): self
-    {
-        @trigger_error(__METHOD__ . "() is deprecated, use addTag('inject')", E_USER_DEPRECATED);
-
-        return $this->addTag(InjectExtension::TAG_INJECT, $state);
     }
 }
