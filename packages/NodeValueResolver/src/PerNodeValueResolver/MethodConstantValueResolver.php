@@ -14,10 +14,10 @@ final class MethodConstantValueResolver implements PerNodeValueResolverInterface
         return Method::class;
     }
 
-    public function resolve(Node $node): string
+    public function resolve(Node $arrayNode): string
     {
-        $classMethodNode = $node->getAttribute(Attribute::SCOPE_NODE);
+        $classMethodNode = $arrayNode->getAttribute(Attribute::SCOPE_NODE);
 
-        return $node->getAttribute(Attribute::CLASS_NAME) . '::' . $classMethodNode->name->name;
+        return $arrayNode->getAttribute(Attribute::CLASS_NAME) . '::' . $classMethodNode->name->name;
     }
 }

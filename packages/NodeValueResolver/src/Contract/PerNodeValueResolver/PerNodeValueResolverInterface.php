@@ -11,5 +11,5 @@ interface PerNodeValueResolverInterface
     /**
      * @return mixed
      */
-    public function resolve(Node $node);
+    public function resolve(Node $arrayNode);
 }

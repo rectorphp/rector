@@ -14,8 +14,8 @@ final class ClassConstantValueResolver implements PerNodeValueResolverInterface
         return Class_::class;
     }
 
-    public function resolve(Node $node): string
+    public function resolve(Node $arrayNode): string
     {
-        return (string) $node->getAttribute(Attribute::CLASS_NAME);
+        return (string) $arrayNode->getAttribute(Attribute::CLASS_NAME);
     }
 }

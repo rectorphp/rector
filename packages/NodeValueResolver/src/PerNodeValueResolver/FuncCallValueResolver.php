@@ -38,17 +38,17 @@ final class FuncCallValueResolver implements PerNodeValueResolverInterface, Node
     }
 
     /**
-     * @param FuncCall $funcCallNode
+     * @param FuncCall $funcCallArrayNode
      */
-    public function resolve(Node $funcCallNode)
+    public function resolve(Node $funcCallArrayNode)
     {
         $message = '';
 
-        if ((string) $funcCallNode->name === 'sprintf') {
-            $message = $this->processSprintfNode($funcCallNode);
+        if ((string) $funcCallArrayNode->name === 'sprintf') {
+            $message = $this->processSprintfNode($funcCallArrayNode);
             $message = $this->classPrepender->completeClassToLocalMethods(
                 $message,
-                (string) $funcCallNode->getAttribute(Attribute::CLASS_NAME)
+                (string) $funcCallArrayNode->getAttribute(Attribute::CLASS_NAME)
             );
         }
 
@@ -56,7 +56,7 @@ final class FuncCallValueResolver implements PerNodeValueResolverInterface, Node
             return null;
         }
 
-        dump($funcCallNode);
+        dump($funcCallArrayNode);
         die;
     }
 

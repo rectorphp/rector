@@ -14,8 +14,8 @@ final class NamespaceConstantValueResolver implements PerNodeValueResolverInterf
         return Namespace_::class;
     }
 
-    public function resolve(Node $node): string
+    public function resolve(Node $arrayNode): string
     {
-        return (string) $node->getAttribute(Attribute::NAMESPACE);
+        return (string) $arrayNode->getAttribute(Attribute::NAMESPACE);
     }
 }

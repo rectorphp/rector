@@ -14,10 +14,10 @@ final class StringValueResolver implements PerNodeValueResolverInterface
     }
 
     /**
-     * @param String_ $node
+     * @param String_ $arrayNode
      */
-    public function resolve(Node $node): string
+    public function resolve(Node $arrayNode): string
     {
-        return (string) $node->value;
+        return (string) $arrayNode->value;
     }
 }
