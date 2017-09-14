@@ -9,6 +9,8 @@ use Rector\DeprecationExtractor\Deprecation\ClassMethodDeprecation;
 use Rector\DeprecationExtractor\Deprecation\RemovedFunctionalityDeprecation;
 use Rector\DeprecationExtractor\RegExp\ClassAndMethodMatcher;
 use Rector\Exception\NotImplementedException;
+use Rector\Node\Attribute;
+use Rector\NodeValueResolver\Message\ClassPrepender;
 use Rector\NodeValueResolver\NodeValueResolver;
 
 final class ArgumentToDeprecationTransformer
@@ -23,22 +25,23 @@ final class ArgumentToDeprecationTransformer
      */
     private $nodeValueResolver;
 
-    public function __construct(ClassAndMethodMatcher $classAndMethodMatcher, NodeValueResolver $nodeValueResolver)
-    {
+    public function __construct(
+        ClassAndMethodMatcher $classAndMethodMatcher,
+        NodeValueResolver $nodeValueResolver,
+        ClassPrepender $classPrepender
+    ) {
         $this->classAndMethodMatcher = $classAndMethodMatcher;
         $this->nodeValueResolver = $nodeValueResolver;
+        $this->classPrepender = $classPrepender;
     }
 
     public function transform(Arg $argNode): ?DeprecationInterface
     {
-//        if ($argNode->value instanceof Variable) {
-//            // @todo: get value?
-//            $message = '$' . $argNode->value->name;
-//        } elseif ($argNode->value instanceof MethodCall) {
-//            $message = $this->standardPrinter->prettyPrint([$argNode->value]);
-//        }
-
         $message = $this->nodeValueResolver->resolve($argNode->value);
+        $message = $this->classPrepender->completeClassToLocalMethods(
+            $message,
+            (string) $argNode->getAttribute(Attribute::CLASS_NAME)
+        );
 
         if ($message === '') {
             throw new NotImplementedException(sprintf(
