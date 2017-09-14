@@ -106,6 +106,9 @@ final class ClassAndMethodMatcher
         return $matches['classMethod'] ?? '';
     }
 
+    /**
+     * @return mixed[]
+     */
     public function matchMethodArguments(string $method): array
     {
         $matches = Strings::match($method, '#\((?<arguments>[^\)]*)\)#');

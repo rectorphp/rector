@@ -16,6 +16,7 @@ final class NodeValueResolver
      * @var PerNodeValueResolverInterface[]
      */
     private $perNodeValueResolvers = [];
+
     /**
      * @var DynamicNodeAnalyzer
      */

@@ -23,6 +23,7 @@ final class FuncCallValueResolver implements PerNodeValueResolverInterface, Node
      * @var NodeValueResolver
      */
     private $nodeValueResolver;
+
     /**
      * @var DynamicNodeAnalyzer
      */

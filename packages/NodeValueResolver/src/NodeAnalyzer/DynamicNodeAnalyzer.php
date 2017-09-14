@@ -12,6 +12,9 @@ use PhpParser\Node\Expr\Variable;
  */
 final class DynamicNodeAnalyzer
 {
+    /**
+     * @param Node[] $nodes
+     */
     public function hasDynamicNodes(array $nodes): bool
     {
         foreach ($nodes as $node) {
