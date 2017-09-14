@@ -60,20 +60,20 @@ final class NodeValueResolver
         if ($node instanceof Concat) {
             return $this->resolve($node->left) . $this->resolve($node->right);
         }
+//
+//        if ($node instanceof Class_) {
+//            return $node->getAttribute(Attribute::CLASS_NAME);
+//        }
 
-        if ($node instanceof Class_) {
-            return $node->getAttribute(Attribute::CLASS_NAME);
-        }
+//        if ($node instanceof Method) {
+//            $classMethodNode = $node->getAttribute(Attribute::SCOPE_NODE);
+//
+//            return $node->getAttribute(Attribute::CLASS_NAME) . '::' . $classMethodNode->name->name;
+//        }
 
-        if ($node instanceof Method) {
-            $classMethodNode = $node->getAttribute(Attribute::SCOPE_NODE);
-
-            return $node->getAttribute(Attribute::CLASS_NAME) . '::' . $classMethodNode->name->name;
-        }
-
-        if ($node instanceof Namespace_) {
-            return (string) $node->getAttribute(Attribute::NAMESPACE);
-        }
+//        if ($node instanceof Namespace_) {
+//            return (string) $node->getAttribute(Attribute::NAMESPACE);
+//        }
 
         throw new NotImplementedException(sprintf(
             '%s() was unable to resolve "%s" Node. Add new value resolver via addValueResolver() method.',

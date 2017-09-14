@@ -2,25 +2,31 @@
 
 namespace Rector\NodeValueResolver\PerNodeValueResolver;
 
-use PhpParser\Builder\Method;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\PrettyPrinter\Standard;
 use Rector\Node\Attribute;
+use Rector\NodeValueResolver\Contract\NodeValueResolverAwareInterface;
 use Rector\NodeValueResolver\Contract\PerNodeValueResolver\PerNodeValueResolverInterface;
 use Rector\NodeValueResolver\Message\ClassPrepender;
+use Rector\NodeValueResolver\NodeValueResolver;
 
-final class FuncCallValueResolver implements PerNodeValueResolverInterface
+final class FuncCallValueResolver implements PerNodeValueResolverInterface, NodeValueResolverAwareInterface
 {
     /**
      * @var ClassPrepender
      */
     private $classPrepender;
+
+    /**
+     * @var NodeValueResolver
+     */
+    private $nodeValueResolver;
 
     public function __construct(ClassPrepender $classPrepender)
     {
@@ -75,27 +81,27 @@ final class FuncCallValueResolver implements PerNodeValueResolverInterface
         for ($i = 1; $i < $argumentCount; ++$i) {
             $argument = $arguments[$i];
 
-            // @node value resolver->resove(...)
+            $sprintfArguments[] = $this->nodeValueResolver->resolve($argument->value);
 
-            if ($argument->value instanceof Method) {
-                /** @var Node\Stmt\ClassMethod $methodNode */
-                $methodNode = $funcCallNode->getAttribute(Attribute::SCOPE_NODE);
-                $sprintfArguments[] = (string) $methodNode->name;
-            } elseif ($argument->value instanceof ClassConstFetch) {
-                $value = $this->standardPrinter->prettyPrint([$argument->value]);
-                if ($value === 'static::class') {
-                    $sprintfArguments[] = $argument->value->getAttribute(Attribute::CLASS_NAME);
-                }
-            } else {
-                dump($this->standardPrinter->prettyPrint([$argument]));
-                die;
-
-                throw new NotImplementedException(sprintf(
-                    'Not implemented yet. Go to "%s()" and add check for "%s" argument node.',
-                    __METHOD__,
-                    get_class($argument->value)
-                ));
-            }
+//            if ($argument->value instanceof Method) {
+//                /** @var Node\Stmt\ClassMethod $methodNode */
+//                $methodNode = $funcCallNode->getAttribute(Attribute::SCOPE_NODE);
+//                $sprintfArguments[] = (string) $methodNode->name;
+//            } elseif ($argument->value instanceof ClassConstFetch) {
+//                $value = $this->standardPrinter->prettyPrint([$argument->value]);
+//                if ($value === 'static::class') {
+//                    $sprintfArguments[] = $argument->value->getAttribute(Attribute::CLASS_NAME);
+//                }
+//            } else {
+//                dump($this->standardPrinter->prettyPrint([$argument]));
+//                die;
+//
+//                throw new NotImplementedException(sprintf(
+//                    'Not implemented yet. Go to "%s()" and add check for "%s" argument node.',
+//                    __METHOD__,
+//                    get_class($argument->value)
+//                ));
+//            }
         }
 
         return sprintf($sprintfMessage, ...$sprintfArguments);
@@ -117,5 +123,10 @@ final class FuncCallValueResolver implements PerNodeValueResolverInterface
         $valueNodeClass = get_class($argument->value);
 
         return in_array($valueNodeClass, [PropertyFetch::class, MethodCall::class, Variable::class], true);
+    }
+
+    public function setNodeValueResolver(NodeValueResolver $nodeValueResolver): void
+    {
+        $this->nodeValueResolver = $nodeValueResolver;
     }
 }

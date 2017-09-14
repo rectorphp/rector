@@ -2,6 +2,7 @@
 
 namespace Rector\NodeValueResolver\DependencyInjection\CompilerPass;
 
+use Rector\NodeValueResolver\Contract\NodeValueResolverAwareInterface;
 use Rector\NodeValueResolver\Contract\PerNodeValueResolver\PerNodeValueResolverInterface;
 use Rector\NodeValueResolver\NodeValueResolver;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
@@ -13,6 +14,7 @@ final class NodeValueResolverCollectorCompilerPass implements CompilerPassInterf
     public function process(ContainerBuilder $containerBuilder): void
     {
         $this->collectPerNodeValueResolversToValueResolver($containerBuilder);
+        $this->setNodeValueResolverToAware($containerBuilder);
     }
 
     private function collectPerNodeValueResolversToValueResolver(ContainerBuilder $containerBuilder): void
@@ -22,6 +24,16 @@ final class NodeValueResolverCollectorCompilerPass implements CompilerPassInterf
             NodeValueResolver::class,
             PerNodeValueResolverInterface::class,
             'addPerNodeValueResolver'
+        );
+    }
+
+    private function setNodeValueResolverToAware(ContainerBuilder $containerBuilder): void
+    {
+        DefinitionCollector::loadCollectorWithType(
+            $containerBuilder,
+            NodeValueResolverAwareInterface::class,
+            NodeValueResolver::class,
+            'setNodeValueResolver'
         );
     }
 }
