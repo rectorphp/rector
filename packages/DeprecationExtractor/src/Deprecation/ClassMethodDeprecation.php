@@ -86,4 +86,20 @@ final class ClassMethodDeprecation implements DeprecationInterface
     {
         return $this->newMethod;
     }
+
+    /**
+     * @return mixed[]
+     */
+    public function getOldArguments(): array
+    {
+        return $this->oldArguments;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    public function getNewArguments(): array
+    {
+        return $this->newArguments;
+    }
 }
