@@ -10,7 +10,7 @@ namespace Nette\DI;
 
 use Nette;
 
-final class Definition
+final class ServiceDefinition
 {
     public function setInject(bool $state = true): self
     {

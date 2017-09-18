@@ -5,6 +5,7 @@ namespace Rector\NodeFactory;
 use Nette\NotImplementedException;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
@@ -129,6 +130,7 @@ final class NodeFactory
     {
         $args = [];
         foreach ($arguments as $argument) {
+            $argument = $this->createTypeFromScalar($argument);
             $args[] = new Arg($argument);
         }
 
@@ -150,5 +152,17 @@ final class NodeFactory
         );
 
         return new Expression($assign);
+    }
+
+    /**
+     * @param mixed $argument
+     */
+    private function createTypeFromScalar($argument): Expr
+    {
+        if (is_string($argument)) {
+            $argument = new String_($argument);
+        }
+
+        return $argument;
     }
 }
