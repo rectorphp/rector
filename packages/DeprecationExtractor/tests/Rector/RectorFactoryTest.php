@@ -33,7 +33,7 @@ final class RectorFactoryTest extends AbstractContainerAwareTestCase
         $this->assertInstanceOf(ConfigurableChangeMethodNameRector::class, $secondRector);
 
         $this->assertSame([
-            'Nette\DI\Definition' => [
+            'Nette\DI\ServiceDefinition' => [
                 'setInject' => 'addTag',
             ],
         ], Assert::getObjectAttribute($secondRector, 'perClassOldToNewMethod'));
@@ -43,7 +43,7 @@ final class RectorFactoryTest extends AbstractContainerAwareTestCase
         $this->assertInstanceOf(ConfigurableChangeMethodNameRector::class, $firstRector);
 
         $this->assertSame([
-            'Nette\DI\Definition' => [
+            'Nette\DI\ServiceDefinition' => [
                 'setClass' => 'setFactory',
             ],
         ], Assert::getObjectAttribute($firstRector, 'perClassOldToNewMethod'));
