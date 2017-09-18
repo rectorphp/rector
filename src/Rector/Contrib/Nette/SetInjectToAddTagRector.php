@@ -13,16 +13,11 @@ final class SetInjectToAddTagRector extends AbstractRector
      * @var MethodCallAnalyzer
      */
     private $methodCallAnalyzer;
+
     /**
      * @var NodeFactory
      */
     private $nodeFactory;
-
-    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, NodeFactory $nodeFactory)
-    {
-        $this->methodCallAnalyzer = $methodCallAnalyzer;
-        $this->nodeFactory = $nodeFactory;
-    }
 
     /**
      * @var string
@@ -44,6 +39,12 @@ final class SetInjectToAddTagRector extends AbstractRector
      */
     private $newArguments = ['inject'];
 
+    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, NodeFactory $nodeFactory)
+    {
+        $this->methodCallAnalyzer = $methodCallAnalyzer;
+        $this->nodeFactory = $nodeFactory;
+    }
+
     public function isCandidate(Node $node): bool
     {
         if (! $this->methodCallAnalyzer->isMethodCallTypeAndMethods(
@@ -59,7 +60,6 @@ final class SetInjectToAddTagRector extends AbstractRector
 
     /**
      * @param Node\Expr\MethodCall $node
-     * @return null|Node
      */
     public function refactor(Node $node): ?Node
     {
