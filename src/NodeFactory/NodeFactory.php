@@ -163,27 +163,41 @@ final class NodeFactory
     }
 
     /**
-     * @param mixed $argument
+     * @param mixed $value
      */
-    private function createTypeFromScalar($argument): Expr
+    private function createTypeFromScalar($value): Expr
     {
-        if (is_string($argument)) {
-            $argument = new String_($argument);
-        } elseif (is_bool($argument)) {
-            $argument = $this->createInternalConstant($argument === true ? 'true' : 'false');
-        } else {
-            throw new NotImplementedException(sprintf(
-                'Not implemented yet. Go to "%s()" and add check for "%s".',
-                __METHOD__,
-                (is_string($argument) && class_exists($argument)) ? get_class($argument) : $argument
-            ));
+        if (is_numeric($value)) {
+            return new Node\Scalar\LNumber($value);
         }
 
-        return $argument;
+        if (is_string($value)) {
+            return new String_($value);
+        }
+
+        if (is_bool($value)) {
+            $value = $this->createInternalConstant($value === true ? 'true' : 'false');
+        }
+
+        throw new NotImplementedException(sprintf(
+            'Not implemented yet. Go to "%s()" and add check for "%s".',
+            __METHOD__,
+            (is_string($value) && class_exists($value)) ? get_class($value) : $value
+        ));
     }
 
     private function createInternalConstant(string $value): ConstFetch
     {
         return new ConstFetch(new Name($value));
+    }
+
+    /**
+     * @param mixed $argument
+     */
+    public function createArg($argument): Arg
+    {
+        $value = $this->createTypeFromScalar($argument);
+
+        return new Arg($value);
     }
 }
