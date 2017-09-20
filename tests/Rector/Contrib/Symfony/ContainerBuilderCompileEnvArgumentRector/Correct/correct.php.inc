@@ -1,5 +1,4 @@
 <?php declare(strict_types=1);
 
-VarDumperTestTrait::assertDumpEquals($dump, $data, null, 'Some message');
-
-VarDumperTestTrait::assertDumpMatchesFormat($dump, $format, null, 'Some message');
+$containerBuilder = new \Symfony\Component\DependencyInjection\ContainerBuilder();
+$containerBuilder->compile(true);

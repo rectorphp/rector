@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Contrib\Symfony\VarDumperTestTraitMethodArgsRector;
+namespace Rector\Tests\Rector\Contrib\Symfony\ContainerBuilderCompileEnvArgumentRector;
 
-use Rector\Rector\Contrib\Symfony\VarDumperTestTraitMethodArgsRector;
+use Rector\Rector\Contrib\Symfony\ContainerBuilderCompileEnvArgumentRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class Test extends AbstractRectorTestCase
@@ -20,6 +20,6 @@ final class Test extends AbstractRectorTestCase
      */
     protected function getRectorClasses(): array
     {
-        return [VarDumperTestTraitMethodArgsRector::class];
+        return [ContainerBuilderCompileEnvArgumentRector::class];
     }
 }

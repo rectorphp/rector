@@ -40,7 +40,7 @@ final class NodeFactory
      */
     public function createNullConstant(): ConstFetch
     {
-        return new ConstFetch(new Name('null'));
+        return $this->createInternalConstant('null');
     }
 
     /**
@@ -48,7 +48,15 @@ final class NodeFactory
      */
     public function createFalseConstant(): ConstFetch
     {
-        return new ConstFetch(new Name('false'));
+        return $this->createInternalConstant('false');
+    }
+
+    /**
+     * Creates "true"
+     */
+    public function createTrueConstant(): ConstFetch
+    {
+        return $this->createInternalConstant('true');
     }
 
     /**
@@ -161,8 +169,21 @@ final class NodeFactory
     {
         if (is_string($argument)) {
             $argument = new String_($argument);
+        } elseif (is_bool($argument)) {
+            $argument = $this->createInternalConstant($argument === true ? 'true' : 'false');
+        } else {
+            throw new NotImplementedException(sprintf(
+                'Not implemented yet. Go to "%s()" and add check for "%s".',
+                __METHOD__,
+                (is_string($argument) && class_exists($argument)) ? get_class($argument) : $argument
+            ));
         }
 
         return $argument;
+    }
+
+    private function createInternalConstant(string $value): ConstFetch
+    {
+        return new ConstFetch(new Name($value));
     }
 }
