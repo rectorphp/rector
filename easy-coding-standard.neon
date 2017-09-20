@@ -46,6 +46,7 @@ parameters:
         Symplify\CodingStandard\Fixer\Php\ClassStringToClassConstantFixer:
             # classes might not exist
             - */src/Rector/Contrib/*/*Rector.php
+            - packages/DeprecationExtractor/tests/Rector/RectorFactoryTest.php
         PHP_CodeSniffer\Standards\Generic\Sniffs\Files\LineLengthSniff:
             # long FQN classes that might not exist
             - src/Rector/Contrib/Symfony/FrameworkBundleClassReplacementsRector.php
