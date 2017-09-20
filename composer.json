@@ -16,7 +16,7 @@
     "require-dev": {
         "phpstan/phpstan": "^0.8",
         "phpunit/phpunit": "^6.2",
-        "slam/php-cs-fixer-extensions": "^1.5",
+        "slam/php-cs-fixer-extensions": "^1.6",
         "symfony/expression-language": "^3.3",
         "symfony/form": "^3.3",
         "symplify/easy-coding-standard": "^2.3",
