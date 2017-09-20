@@ -5,3 +5,4 @@ rectors:
     - Rector\Rector\Contrib\Symfony\FrameworkBundleClassReplacementsRector
     - Rector\Rector\Contrib\Symfony\StringFormTypeToClassRector
     - Rector\Rector\Contrib\Symfony\VarDumperTestTraitMethodArgsRector
+    - Rector\Rector\Contrib\Symfony\ContainerBuilderCompileEnvArgumentRector
