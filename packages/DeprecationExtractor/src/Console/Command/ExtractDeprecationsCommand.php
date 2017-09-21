@@ -9,6 +9,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 // @todo match the name...
 final class ExtractDeprecationsCommand extends Command
@@ -27,11 +28,19 @@ final class ExtractDeprecationsCommand extends Command
      * @var DeprecationCollector
      */
     private $deprecationCollector;
+    /**
+     * @var SymfonyStyle
+     */
+    private $symfonyStyle;
 
-    public function __construct(DeprecationExtractor $deprecationExtractor, DeprecationCollector $deprecationCollector)
-    {
+    public function __construct(
+        DeprecationExtractor $deprecationExtractor,
+        DeprecationCollector $deprecationCollector,
+        SymfonyStyle $symfonyStyle
+    ) {
         $this->deprecationExtractor = $deprecationExtractor;
         $this->deprecationCollector = $deprecationCollector;
+        $this->symfonyStyle = $symfonyStyle;
 
         parent::__construct();
     }
@@ -52,7 +61,7 @@ final class ExtractDeprecationsCommand extends Command
         $source = $input->getArgument(self::ARGUMENT_SOURCE_NAME);
         $this->deprecationExtractor->scanDirectories($source);
 
-        $output->writeln(sprintf(
+        $this->symfonyStyle->note(sprintf(
             'Found %d deprecations.',
             count($this->deprecationCollector->getDeprecations())
         ));
