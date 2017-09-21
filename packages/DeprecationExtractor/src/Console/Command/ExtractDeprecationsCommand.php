@@ -4,18 +4,15 @@ namespace Rector\DeprecationExtractor\Console\Command;
 
 use Rector\DeprecationExtractor\Deprecation\DeprecationCollector;
 use Rector\DeprecationExtractor\DeprecationExtractor;
+use Rector\Naming\CommandNaming;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-final class ExtractCommand extends Command
+// @todo match the name...
+final class ExtractDeprecationsCommand extends Command
 {
-    /**
-     * @var string
-     */
-    private const NAME = 'extract-deprecations';
-
     /**
      * @var string
      */
@@ -41,7 +38,7 @@ final class ExtractCommand extends Command
 
     protected function configure(): void
     {
-        $this->setName(self::NAME);
+        $this->setName(CommandNaming::classToName(self::class));
         $this->setDescription('Extract deprecation notes from PHP files in directory(ies).');
         $this->addArgument(
             self::ARGUMENT_SOURCE_NAME,
@@ -54,6 +51,11 @@ final class ExtractCommand extends Command
     {
         $source = $input->getArgument(self::ARGUMENT_SOURCE_NAME);
         $this->deprecationExtractor->scanDirectories($source);
+
+        $output->writeln(sprintf(
+            'Found %d deprecations.',
+            count($this->deprecationCollector->getDeprecations())
+        ));
 
         foreach ($this->deprecationCollector->getDeprecations() as $deprecation) {
             $output->writeln($deprecation);
