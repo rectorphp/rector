@@ -66,7 +66,7 @@ final class FormSetRequiredRector extends AbstractRector
     {
         $node->name->name = 'setRequired';
         $node->args = $this->nodeFactory->createArgs([
-            $this->nodeFactory->createFalseConstant(),
+            false,
         ]);
 
         return $node;

@@ -139,8 +139,7 @@ final class NodeFactory
     {
         $args = [];
         foreach ($arguments as $argument) {
-            $argument = $this->createTypeFromScalar($argument);
-            $args[] = new Arg($argument);
+            $args[] = $this->createArg($argument);
         }
 
         return $args;
@@ -187,13 +186,13 @@ final class NodeFactory
         }
 
         if (is_bool($value)) {
-            $value = $this->createInternalConstant($value === true ? 'true' : 'false');
+            return $this->createInternalConstant($value === true ? 'true' : 'false');
         }
 
         throw new NotImplementedException(sprintf(
             'Not implemented yet. Go to "%s()" and add check for "%s".',
             __METHOD__,
-            (is_string($value) && class_exists($value)) ? get_class($value) : $value
+            is_object($value) ? get_class($value) : $value
         ));
     }
 
