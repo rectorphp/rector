@@ -53,7 +53,9 @@
     "extra": {
         "patches": {
             "roave/better-reflection": {
-                "parser type miss-match with dev version": "patches/better-reflection-php-parser.patch"
+                "parser type miss-match with dev-version 1": "patches/better-reflection-php-parser-memoizing-parser.patch",
+                "parser type miss-match with dev-version 2": "patches/better-reflection-php-parser-reflection-function-abstract.patch",
+                "parser type miss-match with dev-version 3": "patches/better-reflection-php-parser-reflection-parameter.patch"
             }
         }
     }

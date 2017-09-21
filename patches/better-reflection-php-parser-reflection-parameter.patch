@@ -1,0 +1,11 @@
+--- /dev/null
++++ roave/better-reflection/src/Reflection/ReflectionParameter.php
+@@ -262,7 +262,7 @@
+      */
+     public function getName() : string
+     {
+-        return $this->node->name;
++        return (string) $this->node->type;
+     }
+
+     /**

@@ -6,9 +6,12 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
+use Rector\BetterReflection\Reflector\MethodReflector;
 use Rector\NodeTypeResolver\TypesExtractor\ConstructorPropertyTypesExtractor;
 use ReflectionFunction;
-use ReflectionMethod;
+use Roave\BetterReflection\Reflection\ReflectionMethod;
+use Roave\BetterReflection\Reflector\ClassReflector;
+use Roave\BetterReflection\Reflector\Exception\IdentifierNotFound;
 
 /**
  * Inspired by https://github.com/nikic/PHP-Parser/blob/9373a8e9f551516bc8e42aedeacd1b4f635d27fc/lib/PhpParser/NameContext.php.
@@ -35,9 +38,23 @@ final class TypeContext
      */
     private $constructorPropertyTypesExtractor;
 
-    public function __construct(ConstructorPropertyTypesExtractor $constructorPropertyTypesExtractor)
-    {
+    /**
+     * @var ClassReflector
+     */
+    private $classReflector;
+    /**
+     * @var MethodReflector
+     */
+    private $methodReflector;
+
+    public function __construct(
+        ConstructorPropertyTypesExtractor $constructorPropertyTypesExtractor,
+        ClassReflector $classReflector,
+        MethodReflector $methodReflector
+    ) {
         $this->constructorPropertyTypesExtractor = $constructorPropertyTypesExtractor;
+        $this->classReflector = $classReflector;
+        $this->methodReflector = $methodReflector;
     }
 
     public function startFile(): void
@@ -91,25 +108,22 @@ final class TypeContext
     }
 
     /**
-     * @return ReflectionFunction|ReflectionMethod|null
+     * @return \Roave\BetterReflection\Reflection\ReflectionFunction|ReflectionMethod|null
      */
     private function getFunctionReflection(FunctionLike $functionLikeNode)
     {
         if ($this->classLikeNode) {
-            $className = $this->classLikeNode->namespacedName->toString();
-            if (! class_exists($className)) {
-                return null;
-            }
-
             if ($functionLikeNode instanceof Closure) {
                 return null;
             }
 
+            $className = $this->classLikeNode->namespacedName->toString();
             $methodName = (string) $functionLikeNode->name;
 
-            return new ReflectionMethod($className, $methodName);
+            return $this->methodReflector->reflectClassMethod($className, $methodName);
         }
 
+        // todo: use BetterReflection\FunctionReflector?
         return new ReflectionFunction((string) $functionLikeNode->name);
     }
 }

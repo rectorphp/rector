@@ -1,0 +1,11 @@
+--- /dev/null
++++ roave/better-reflection/src/Reflection/ReflectionFunctionAbstract.php
+@@ -149,7 +149,7 @@
+             return self::CLOSURE_NAME;
+         }
+
+-        return $this->node->name;
++        return (string) $this->node->name;
+     }
+
+     /**

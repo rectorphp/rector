@@ -9,8 +9,9 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use ReflectionClass;
-use Roave\BetterReflection\BetterReflection;
+use PHPStan\Reflection\MethodsClassReflectionExtension;
+use Rector\BetterReflection\Reflector\MethodReflector;
+use Roave\BetterReflection\Reflection\ReflectionMethod;
 use Roave\BetterReflection\Reflector\ClassReflector;
 use Roave\BetterReflection\Reflector\Exception\IdentifierNotFound;
 
@@ -20,10 +21,15 @@ final class ConstructorPropertyTypesExtractor
      * @var ClassReflector
      */
     private $classReflector;
+    /**
+     * @var MethodReflector
+     */
+    private $methodReflector;
 
-    public function __construct(ClassReflector $classReflector)
+    public function __construct(ClassReflector $classReflector, MethodReflector $methodReflector)
     {
         $this->classReflector = $classReflector;
+        $this->methodReflector = $methodReflector;
     }
 
     /**
@@ -54,31 +60,15 @@ final class ConstructorPropertyTypesExtractor
     {
         $className = $classNode->namespacedName->toString();
 
-        try {
-            $classReflection = $this->classReflector->reflect($className);
-
-        } catch (IdentifierNotFound $identifierNotFoundException) {
-            // class doesn't exist
+        $constructorMethodReflection = $this->methodReflector->reflectClassMethod($className, '__construct');
+        if ($constructorMethodReflection === null) {
             return [];
         }
 
-        // use DI
-        dump($classReflection);
-        die;
-
-        // todo: add check for nonexisting classes when it comes
-        if (! class_exists($className)) {
-            return [];
-        }
-
-        dump($classReflection);
-        die;
-
-        $constructorMethod = (new ReflectionClass($className))->getConstructor();
         $parametersWithTypes = [];
 
-        if ($constructorMethod) {
-            foreach ($constructorMethod->getParameters() as $parameterReflection) {
+        if ($constructorMethodReflection) {
+            foreach ($constructorMethodReflection->getParameters() as $parameterReflection) {
                 $parameterName = $parameterReflection->getName();
                 $parameterType = (string) $parameterReflection->getType();
 
