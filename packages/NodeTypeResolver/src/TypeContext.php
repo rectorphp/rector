@@ -10,8 +10,6 @@ use Rector\BetterReflection\Reflector\MethodReflector;
 use Rector\NodeTypeResolver\TypesExtractor\ConstructorPropertyTypesExtractor;
 use ReflectionFunction;
 use Roave\BetterReflection\Reflection\ReflectionMethod;
-use Roave\BetterReflection\Reflector\ClassReflector;
-use Roave\BetterReflection\Reflector\Exception\IdentifierNotFound;
 
 /**
  * Inspired by https://github.com/nikic/PHP-Parser/blob/9373a8e9f551516bc8e42aedeacd1b4f635d27fc/lib/PhpParser/NameContext.php.
@@ -39,21 +37,15 @@ final class TypeContext
     private $constructorPropertyTypesExtractor;
 
     /**
-     * @var ClassReflector
-     */
-    private $classReflector;
-    /**
      * @var MethodReflector
      */
     private $methodReflector;
 
     public function __construct(
         ConstructorPropertyTypesExtractor $constructorPropertyTypesExtractor,
-        ClassReflector $classReflector,
         MethodReflector $methodReflector
     ) {
         $this->constructorPropertyTypesExtractor = $constructorPropertyTypesExtractor;
-        $this->classReflector = $classReflector;
         $this->methodReflector = $methodReflector;
     }
 

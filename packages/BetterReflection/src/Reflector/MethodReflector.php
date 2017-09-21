@@ -2,7 +2,6 @@
 
 namespace Rector\BetterReflection\Reflector;
 
-use Rector\BetterReflection\SourceLocator\SourceLocatorFactory;
 use Roave\BetterReflection\Reflection\ReflectionMethod;
 use Roave\BetterReflection\Reflector\ClassReflector;
 use Roave\BetterReflection\Reflector\Exception\IdentifierNotFound;

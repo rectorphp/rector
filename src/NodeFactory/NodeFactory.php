@@ -17,6 +17,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\TraitUse;
@@ -163,12 +164,22 @@ final class NodeFactory
     }
 
     /**
+     * @param mixed $argument
+     */
+    public function createArg($argument): Arg
+    {
+        $value = $this->createTypeFromScalar($argument);
+
+        return new Arg($value);
+    }
+
+    /**
      * @param mixed $value
      */
     private function createTypeFromScalar($value): Expr
     {
         if (is_numeric($value)) {
-            return new Node\Scalar\LNumber($value);
+            return new LNumber($value);
         }
 
         if (is_string($value)) {
@@ -189,15 +200,5 @@ final class NodeFactory
     private function createInternalConstant(string $value): ConstFetch
     {
         return new ConstFetch(new Name($value));
-    }
-
-    /**
-     * @param mixed $argument
-     */
-    public function createArg($argument): Arg
-    {
-        $value = $this->createTypeFromScalar($argument);
-
-        return new Arg($value);
     }
 }

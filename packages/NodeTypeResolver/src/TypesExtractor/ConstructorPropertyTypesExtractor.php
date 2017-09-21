@@ -9,26 +9,17 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use PHPStan\Reflection\MethodsClassReflectionExtension;
 use Rector\BetterReflection\Reflector\MethodReflector;
-use Roave\BetterReflection\Reflection\ReflectionMethod;
-use Roave\BetterReflection\Reflector\ClassReflector;
-use Roave\BetterReflection\Reflector\Exception\IdentifierNotFound;
 
 final class ConstructorPropertyTypesExtractor
 {
-    /**
-     * @var ClassReflector
-     */
-    private $classReflector;
     /**
      * @var MethodReflector
      */
     private $methodReflector;
 
-    public function __construct(ClassReflector $classReflector, MethodReflector $methodReflector)
+    public function __construct(MethodReflector $methodReflector)
     {
-        $this->classReflector = $classReflector;
         $this->methodReflector = $methodReflector;
     }
 

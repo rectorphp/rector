@@ -32,9 +32,6 @@ final class DeprecationCollectorTest extends AbstractContainerAwareTestCase
 
         $deprecations = $this->deprecationCollector->getDeprecations();
 
-        dump($deprecations);
-        die;
-
         $this->assertGreaterThanOrEqual(35, $deprecations);
     }
 }

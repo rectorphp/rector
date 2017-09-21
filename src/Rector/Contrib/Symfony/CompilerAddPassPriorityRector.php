@@ -26,7 +26,6 @@ final class CompilerAddPassPriorityRector extends AbstractRector
      */
     private $methodCallAnalyzer;
 
-
     /**
      * @var NodeFactory
      */
@@ -57,7 +56,6 @@ final class CompilerAddPassPriorityRector extends AbstractRector
 
     /**
      * @param MethodCall $methodCallNode
-     * @return null|Node
      */
     public function refactor(Node $methodCallNode): ?Node
     {
