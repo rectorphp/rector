@@ -5,7 +5,7 @@
      public function getName() : string
      {
 -        return $this->node->name;
-+        return (string) $this->node->type;
++        return $this->node->var->name;
      }
 
      /**

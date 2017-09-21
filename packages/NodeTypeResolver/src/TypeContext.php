@@ -115,7 +115,6 @@ final class TypeContext
             return $this->methodReflector->reflectClassMethod($className, $methodName);
         }
 
-        // todo: use BetterReflection\FunctionReflector?
         return new ReflectionFunction((string) $functionLikeNode->name);
     }
 }
