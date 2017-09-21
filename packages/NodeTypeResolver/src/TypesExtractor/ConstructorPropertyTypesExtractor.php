@@ -9,10 +9,20 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use ReflectionClass;
+use Rector\BetterReflection\Reflector\MethodReflector;
 
 final class ConstructorPropertyTypesExtractor
 {
+    /**
+     * @var MethodReflector
+     */
+    private $methodReflector;
+
+    public function __construct(MethodReflector $methodReflector)
+    {
+        $this->methodReflector = $methodReflector;
+    }
+
     /**
      * @return string[] { propertyName => propertyType }
      */
@@ -40,15 +50,16 @@ final class ConstructorPropertyTypesExtractor
     private function getConstructorParametersWithTypes(Class_ $classNode): array
     {
         $className = $classNode->namespacedName->toString();
-        if (! class_exists($className)) {
+
+        $constructorMethodReflection = $this->methodReflector->reflectClassMethod($className, '__construct');
+        if ($constructorMethodReflection === null) {
             return [];
         }
 
-        $constructorMethod = (new ReflectionClass($className))->getConstructor();
         $parametersWithTypes = [];
 
-        if ($constructorMethod) {
-            foreach ($constructorMethod->getParameters() as $parameterReflection) {
+        if ($constructorMethodReflection) {
+            foreach ($constructorMethodReflection->getParameters() as $parameterReflection) {
                 $parameterName = $parameterReflection->getName();
                 $parameterType = (string) $parameterReflection->getType();
 

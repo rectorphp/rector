@@ -17,6 +17,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\TraitUse;
@@ -40,7 +41,7 @@ final class NodeFactory
      */
     public function createNullConstant(): ConstFetch
     {
-        return new ConstFetch(new Name('null'));
+        return $this->createInternalConstant('null');
     }
 
     /**
@@ -48,7 +49,15 @@ final class NodeFactory
      */
     public function createFalseConstant(): ConstFetch
     {
-        return new ConstFetch(new Name('false'));
+        return $this->createInternalConstant('false');
+    }
+
+    /**
+     * Creates "true"
+     */
+    public function createTrueConstant(): ConstFetch
+    {
+        return $this->createInternalConstant('true');
     }
 
     /**
@@ -130,8 +139,7 @@ final class NodeFactory
     {
         $args = [];
         foreach ($arguments as $argument) {
-            $argument = $this->createTypeFromScalar($argument);
-            $args[] = new Arg($argument);
+            $args[] = $this->createArg($argument);
         }
 
         return $args;
@@ -157,12 +165,39 @@ final class NodeFactory
     /**
      * @param mixed $argument
      */
-    private function createTypeFromScalar($argument): Expr
+    public function createArg($argument): Arg
     {
-        if (is_string($argument)) {
-            $argument = new String_($argument);
+        $value = $this->createTypeFromScalar($argument);
+
+        return new Arg($value);
+    }
+
+    /**
+     * @param mixed $value
+     */
+    private function createTypeFromScalar($value): Expr
+    {
+        if (is_numeric($value)) {
+            return new LNumber($value);
         }
 
-        return $argument;
+        if (is_string($value)) {
+            return new String_($value);
+        }
+
+        if (is_bool($value)) {
+            return $this->createInternalConstant($value === true ? 'true' : 'false');
+        }
+
+        throw new NotImplementedException(sprintf(
+            'Not implemented yet. Go to "%s()" and add check for "%s".',
+            __METHOD__,
+            is_object($value) ? get_class($value) : $value
+        ));
+    }
+
+    private function createInternalConstant(string $value): ConstFetch
+    {
+        return new ConstFetch(new Name($value));
     }
 }

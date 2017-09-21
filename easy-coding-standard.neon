@@ -33,6 +33,10 @@ checkers:
 
 parameters:
     exclude_checkers:
+        # node style... add options to exclude naming, allow fnmatch as for New...Fixer
+        - Symplify\CodingStandard\Fixer\Naming\PropertyNameMatchingTypeFixer
+        # conflicting checkers
+        - PhpCsFixer\Fixer\ControlStructure\YodaStyleFixer
         # Excluded from symfony-checkers.neon
         - PhpCsFixer\Fixer\PhpTag\BlankLineAfterOpeningTagFixer
         - PhpCsFixer\Fixer\Operator\NewWithBracesFixer
@@ -46,6 +50,7 @@ parameters:
         Symplify\CodingStandard\Fixer\Php\ClassStringToClassConstantFixer:
             # classes might not exist
             - */src/Rector/Contrib/*/*Rector.php
+            - packages/DeprecationExtractor/tests/Rector/RectorFactoryTest.php
         PHP_CodeSniffer\Standards\Generic\Sniffs\Files\LineLengthSniff:
             # long FQN classes that might not exist
             - src/Rector/Contrib/Symfony/FrameworkBundleClassReplacementsRector.php
