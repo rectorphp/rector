@@ -1,4 +1,5 @@
 imports:
+  - { resource: '../../packages/BetterReflection/src/config/services.yml' }
   - { resource: '../../packages/DeprecationExtractor/src/config/services.yml' }
   - { resource: '../../packages/NodeTypeResolver/src/config/services.yml' }
   - { resource: '../../packages/NodeValueResolver/src/config/services.yml' }

@@ -10,9 +10,22 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use ReflectionClass;
+use Roave\BetterReflection\BetterReflection;
+use Roave\BetterReflection\Reflector\ClassReflector;
+use Roave\BetterReflection\Reflector\Exception\IdentifierNotFound;
 
 final class ConstructorPropertyTypesExtractor
 {
+    /**
+     * @var ClassReflector
+     */
+    private $classReflector;
+
+    public function __construct(ClassReflector $classReflector)
+    {
+        $this->classReflector = $classReflector;
+    }
+
     /**
      * @return string[] { propertyName => propertyType }
      */
@@ -40,9 +53,26 @@ final class ConstructorPropertyTypesExtractor
     private function getConstructorParametersWithTypes(Class_ $classNode): array
     {
         $className = $classNode->namespacedName->toString();
+
+        try {
+            $classReflection = $this->classReflector->reflect($className);
+
+        } catch (IdentifierNotFound $identifierNotFoundException) {
+            // class doesn't exist
+            return [];
+        }
+
+        // use DI
+        dump($classReflection);
+        die;
+
+        // todo: add check for nonexisting classes when it comes
         if (! class_exists($className)) {
             return [];
         }
+
+        dump($classReflection);
+        die;
 
         $constructorMethod = (new ReflectionClass($className))->getConstructor();
         $parametersWithTypes = [];
