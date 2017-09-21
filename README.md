@@ -1,7 +1,7 @@
 # Rector - Reconstruct your Legacy Code to Modern Codebase 
 
-[![Build Status](https://img.shields.io/travis/TomasVotruba/Rector/master.svg?style=flat-square)](https://travis-ci.org/TomasVotruba/Rector)
-[![Coverage Status](https://img.shields.io/coveralls/TomasVotruba/Rector/master.svg?style=flat-square)](https://coveralls.io/github/TomasVotruba/Rector?branch=master)
+[![Build Status](https://img.shields.io/travis/RectorPHP/Rector/master.svg?style=flat-square)](https://travis-ci.org/RectorPHP/Rector)
+[![Coverage Status](https://img.shields.io/coveralls/RectorPHP/Rector/master.svg?style=flat-square)](https://coveralls.io/github/RectorPHP/Rector?branch=master)
 
 This tool will **upgrade your application** for you.
 
