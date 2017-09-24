@@ -61,7 +61,7 @@ final class ReconstructCommand extends Command
     private function findPhpFilesInDirectories(array $directories): array
     {
         $finder = Finder::find('*.php')
-            ->in($directories);
+            ->from($directories);
 
         return iterator_to_array($finder->getIterator());
     }
