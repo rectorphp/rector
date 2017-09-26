@@ -5,6 +5,8 @@ namespace Rector\NodeAnalyzer;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Name;
 use Rector\Node\Attribute;
 
 final class MethodCallAnalyzer
@@ -62,9 +64,9 @@ final class MethodCallAnalyzer
             return false;
         }
 
-        if ($node->class instanceof Node\Name) {
+        if ($node->class instanceof Name) {
             $currentType = $node->class->toString();
-        } elseif ($node->class instanceof Node\Expr\Variable) {
+        } elseif ($node->class instanceof Variable) {
             $currentType = $node->class->getAttribute(Attribute::CLASS_NAME);
         }
 

@@ -2,23 +2,12 @@
 
 namespace Rector\NodeAnalyzer;
 
-use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 
 final class SymfonyContainerCallsAnalyzer
 {
-    /**
-     * @var MethodCallAnalyzer
-     */
-    private $methodCallAnalyzer;
-
-    public function __construct(MethodCallAnalyzer $methodCallAnalyzer)
-    {
-        $this->methodCallAnalyzer = $methodCallAnalyzer;
-    }
-
     /**
      * Finds $this->get(...);
      */
