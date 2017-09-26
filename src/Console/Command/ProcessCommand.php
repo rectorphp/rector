@@ -4,7 +4,9 @@ namespace Rector\Console\Command;
 
 use Nette\Utils\Finder;
 use Rector\Application\FileProcessor;
+use Rector\Exception\NoRectorsLoadedException;
 use Rector\Naming\CommandNaming;
+use Rector\Rector\RectorCollector;
 use SplFileInfo;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -23,9 +25,15 @@ final class ProcessCommand extends Command
      */
     private $fileProcessor;
 
-    public function __construct(FileProcessor $fileProcessor)
+    /**
+     * @var RectorCollector
+     */
+    private $rectorCollector;
+
+    public function __construct(FileProcessor $fileProcessor, RectorCollector $rectorCollector)
     {
         $this->fileProcessor = $fileProcessor;
+        $this->rectorCollector = $rectorCollector;
 
         parent::__construct();
     }
@@ -43,6 +51,8 @@ final class ProcessCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $this->ensureSomeRectorsAreRegistered();
+
         $source = $input->getArgument(self::ARGUMENT_SOURCE_NAME);
         $files = $this->findPhpFilesInDirectories($source);
         $this->fileProcessor->processFiles($files);
@@ -60,5 +70,17 @@ final class ProcessCommand extends Command
             ->from($directories);
 
         return iterator_to_array($finder->getIterator());
+    }
+
+    private function ensureSomeRectorsAreRegistered(): void
+    {
+        if ($this->rectorCollector->getRectorCount() > 0) {
+            return;
+        }
+
+        throw new NoRectorsLoadedException(
+            'No rector were found. Registers them in rector.yml config to "rector:" '
+            . 'section or load them via "--config <file>.yml" CLI option.'
+        );
     }
 }
