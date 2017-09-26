@@ -47,4 +47,9 @@ final class RectorCollector
             $suggestionMessage ?: $availableOptionsMessage
         ));
     }
+
+    public function getRectorCount(): int
+    {
+        return count($this->rectors);
+    }
 }
