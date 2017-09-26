@@ -3,6 +3,7 @@
 namespace Rector\Rector\Contrib\Symfony;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
@@ -52,7 +53,7 @@ final class VarDumperTestTraitMethodArgsRector extends AbstractRector
         }
 
         /** @var StaticCall $node */
-        if (count($node->args) <= 2) {
+        if (count($node->args) <= 2 || $node->args[2] instanceof ConstFetch) {
             return false;
         }
 
