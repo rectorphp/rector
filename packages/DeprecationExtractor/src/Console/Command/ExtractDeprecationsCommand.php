@@ -28,6 +28,7 @@ final class ExtractDeprecationsCommand extends Command
      * @var DeprecationCollector
      */
     private $deprecationCollector;
+
     /**
      * @var SymfonyStyle
      */
