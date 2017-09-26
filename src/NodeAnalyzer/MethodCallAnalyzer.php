@@ -77,7 +77,6 @@ final class MethodCallAnalyzer
         while ($varNode->getAttribute(Attribute::TYPE) === null) {
             if (property_exists($varNode, 'var')) {
                 $varNode = $varNode->var;
-
             } else {
                 break;
             }

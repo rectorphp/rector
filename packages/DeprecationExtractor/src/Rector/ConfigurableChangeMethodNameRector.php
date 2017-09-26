@@ -9,7 +9,7 @@ final class ConfigurableChangeMethodNameRector extends AbstractChangeMethodNameR
     /**
      * @var string[][]
      */
-    private $perClassOldToNewMethod;
+    private $perClassOldToNewMethod = [];
 
     /**
      * @param string[][] $perClassOldToNewMethod

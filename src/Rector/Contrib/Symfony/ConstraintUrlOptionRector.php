@@ -41,7 +41,6 @@ final class ConstraintUrlOptionRector extends AbstractRector
             return false;
         }
 
-
         if ($node->name->toString() !== 'true') {
             return false;
         }
@@ -61,7 +60,8 @@ final class ConstraintUrlOptionRector extends AbstractRector
     public function refactor(Node $node): ?Node
     {
         return $this->nodeFactory->createClassConstant(
-            self::URL_CONSTRAINT_CLASS, 'CHECK_DNS_TYPE_ANY'
+            self::URL_CONSTRAINT_CLASS,
+            'CHECK_DNS_TYPE_ANY'
         );
     }
 }

@@ -7,9 +7,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
-use Rector\Exception\NotImplementedException;
 use Rector\Node\Attribute;
-use Rector\NodeValueResolver\NodeValueResolver;
 
 abstract class AbstractChangeMethodNameRector extends AbstractRector
 {
