@@ -4,7 +4,6 @@ namespace Rector\DependencyInjection\Extension;
 
 use Rector\Validator\RectorClassValidator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 
 final class RectorsExtension extends Extension
@@ -33,13 +32,7 @@ final class RectorsExtension extends Extension
         $this->rectorClassValidator->validate($rectorClasses);
 
         foreach ($rectorClasses as $rectorClass) {
-            $this->registerRector($containerBuilder, $rectorClass); // for custom rectors
+            $containerBuilder->autowire($rectorClass);
         }
-    }
-
-    private function registerRector(ContainerBuilder $containerBuilder, string $rectorClass): void
-    {
-        $rectorDefinition = new Definition($rectorClass);
-        $containerBuilder->setDefinition($rectorClass, $rectorDefinition);
     }
 }
