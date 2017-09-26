@@ -14,21 +14,20 @@ final class AppKernel extends Kernel
     /**
      * @var string
      */
-    private $config;
+    private $configFile;
 
-    public function __construct(?string $config = '')
+    public function __construct(?string $configFile = '')
     {
-        $this->config = $config;
+        $this->configFile = $configFile;
         parent::__construct('dev', true);
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader): void
     {
         $loader->load(__DIR__ . '/../config/services.yml');
-        $loader->load(__DIR__ . '/../../packages/NodeTypeResolver/src/config/services.yml');
 
-        if ($this->config) {
-            $loader->load($this->config);
+        if ($this->configFile) {
+            $loader->load($this->configFile);
         }
     }
 
