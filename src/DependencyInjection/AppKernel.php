@@ -46,7 +46,9 @@ final class AppKernel extends Kernel
      */
     public function registerBundles(): array
     {
-        return [];
+        return [
+            new RectorBundle
+        ];
     }
 
     protected function build(ContainerBuilder $containerBuilder): void
