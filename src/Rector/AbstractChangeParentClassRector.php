@@ -18,7 +18,13 @@ abstract class AbstractChangeParentClassRector extends AbstractRector
         /** @var FullyQualified $fqnName */
         $fqnName = $node->extends->getAttribute(Attribute::RESOLVED_NAME);
 
-        return $fqnName->toString() === $this->getOldClassName();
+        if ($fqnName instanceof FullyQualified) {
+            return $fqnName->toString() === $this->getOldClassName();
+        }
+
+        if ($node->extends instanceof FullyQualified) {
+            return $node->extends->toString() === $this->getOldClassName();
+        }
     }
 
     /**
