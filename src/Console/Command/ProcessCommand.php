@@ -39,8 +39,6 @@ final class ProcessCommand extends Command
             InputArgument::REQUIRED | InputArgument::IS_ARRAY,
             'The path(s) to be checked.'
         );
-
-        // add config, same as ECS
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
