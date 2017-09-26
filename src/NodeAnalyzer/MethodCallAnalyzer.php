@@ -62,7 +62,13 @@ final class MethodCallAnalyzer
             return false;
         }
 
-        if ($node->class->toString() !== $type) {
+        if ($node->class instanceof Node\Name) {
+            $currentType = $node->class->toString();
+        } elseif ($node->class instanceof Node\Expr\Variable) {
+            $currentType = $node->class->getAttribute(Attribute::CLASS_NAME);
+        }
+
+        if ($currentType !== $type) {
             return false;
         }
 

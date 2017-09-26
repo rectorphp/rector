@@ -43,6 +43,10 @@ final class FormCallbackRector extends AbstractRector
             return false;
         }
 
+        if (! $node->var->var instanceof PropertyFetch) {
+            return false;
+        }
+
         if (! $this->isFormEventHandler($node->var->var)) {
             return false;
         }
