@@ -4,6 +4,7 @@ namespace Rector\DependencyInjection\Extension;
 
 use Rector\Validator\RectorClassValidator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 
 final class RectorsExtension extends Extension
@@ -27,15 +28,18 @@ final class RectorsExtension extends Extension
             return;
         }
 
-        $rectors = $configs[0];
+        $rectorClasses = $configs[0];
 
-        $this->rectorClassValidator->validate($rectors);
+        $this->rectorClassValidator->validate($rectorClasses);
 
-        foreach ($rectors as $rector) {
-            $this->registerRectorIfNotYet($rector); // for custom rectors
-//            // add to active configuration
-//            dump($rector);
-//            die;
+        foreach ($rectorClasses as $rectorClass) {
+            $this->registerRector($containerBuilder, $rectorClass); // for custom rectors
         }
+    }
+
+    private function registerRector(ContainerBuilder $containerBuilder, string $rectorClass): void
+    {
+        $rectorDefinition = new Definition($rectorClass);
+        $containerBuilder->setDefinition($rectorClass, $rectorDefinition);
     }
 }
