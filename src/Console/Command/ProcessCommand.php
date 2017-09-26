@@ -66,7 +66,16 @@ final class ProcessCommand extends Command
 
         $source = $input->getArgument(self::ARGUMENT_SOURCE_NAME);
         $files = $this->findPhpFilesInDirectories($source);
+
+        $this->reportFiles($files);
+
+        // find files fix :)
+//        dump($files);
+//        die;
+
         $this->fileProcessor->processFiles($files);
+
+        # report: changed x files
 
         return 0;
     }
@@ -107,6 +116,23 @@ final class ProcessCommand extends Command
             $this->symfonyStyle->writeln(sprintf(
                 ' - %s',
                 get_class($rector)
+            ));
+        }
+
+        $this->symfonyStyle->newLine();
+    }
+
+    /**
+     * @var string[]
+     */
+    private function reportFiles(array $files): void
+    {
+        $this->symfonyStyle->title('Processing files');
+
+        foreach ($files as $file) {
+            $this->symfonyStyle->writeln(sprintf(
+                ' - %s',
+                $file
             ));
         }
 
