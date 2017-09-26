@@ -30,6 +30,7 @@ final class ProcessCommand extends Command
      * @var RectorCollector
      */
     private $rectorCollector;
+
     /**
      * @var SymfonyStyle
      */
@@ -75,7 +76,7 @@ final class ProcessCommand extends Command
 
         $this->fileProcessor->processFiles($files);
 
-        # report: changed x files
+        // report: changed x files
 
         return 0;
     }
@@ -123,7 +124,7 @@ final class ProcessCommand extends Command
     }
 
     /**
-     * @var string[]
+     * @param string[] $files
      */
     private function reportFiles(array $files): void
     {
