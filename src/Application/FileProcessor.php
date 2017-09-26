@@ -6,12 +6,12 @@ use PhpParser\Lexer;
 use PhpParser\NodeTraverser;
 use Rector\Contract\Parser\ParserInterface;
 use Rector\NodeTraverser\CloningNodeTraverser;
+use Rector\NodeTraverser\MainNodeTraverser;
+use Rector\NodeTraverser\ShutdownNodeTraverser;
+use Rector\NodeTraverser\StandaloneTraverseNodeTraverser;
 use Rector\Printer\FormatPerservingPrinter;
 use SplFileInfo;
 
-/**
- * @todo update to match @see \Rector\Testing\Application\FileProcessor later
- */
 final class FileProcessor
 {
     /**
@@ -27,7 +27,7 @@ final class FileProcessor
     /**
      * @var NodeTraverser
      */
-    private $nodeTraverser;
+    private $mainNodeTraverser;
 
     /**
      * @var Lexer
@@ -39,18 +39,32 @@ final class FileProcessor
      */
     private $cloningNodeTraverser;
 
+    /**
+     * @var ShutdownNodeTraverser
+     */
+    private $shutdownNodeTraverser;
+
+    /**
+     * @var StandaloneTraverseNodeTraverser
+     */
+    private $standaloneTraverseNodeTraverser;
+
     public function __construct(
         ParserInterface $parser,
         FormatPerservingPrinter $codeStyledPrinter,
         Lexer $lexer,
-        NodeTraverser $nodeTraverser,
-        CloningNodeTraverser $cloningNodeTraverser
+        MainNodeTraverser $mainNodeTraverser,
+        CloningNodeTraverser $cloningNodeTraverser,
+        ShutdownNodeTraverser $shutdownNodeTraverser,
+        StandaloneTraverseNodeTraverser $standaloneTraverseNodeTraverser
     ) {
         $this->parser = $parser;
         $this->formatPerservingPrinter = $codeStyledPrinter;
-        $this->nodeTraverser = $nodeTraverser;
+        $this->mainNodeTraverser = $mainNodeTraverser;
         $this->lexer = $lexer;
         $this->cloningNodeTraverser = $cloningNodeTraverser;
+        $this->shutdownNodeTraverser = $shutdownNodeTraverser;
+        $this->standaloneTraverseNodeTraverser = $standaloneTraverseNodeTraverser;
     }
 
     /**
@@ -63,33 +77,22 @@ final class FileProcessor
         }
     }
 
+    /**
+     * @todo refactor to common NodeTraverserQueue [$file => $newStatements, $oldStatements, $oldTokens]
+     * Apply in testing files processors as well
+     */
     public function processFile(SplFileInfo $file): void
     {
         $oldStmts = $this->parser->parseFile($file->getRealPath());
 
-        if ($oldStmts === null) {
-            return;
-        }
-
-        $oldStmts = $this->cloneArrayOfObjects($oldStmts);
         $oldTokens = $this->lexer->getTokens();
         $newStmts = $this->cloningNodeTraverser->traverse($oldStmts);
 
-        $newStmts = $this->nodeTraverser->traverse($newStmts);
+        $newStmts = $this->standaloneTraverseNodeTraverser->traverse($newStmts);
+
+        $newStmts = $this->mainNodeTraverser->traverse($newStmts);
+        $newStmts = $this->shutdownNodeTraverser->traverse($newStmts);
 
         $this->formatPerservingPrinter->printToFile($file, $newStmts, $oldStmts, $oldTokens);
-    }
-
-    /**
-     * @param object[] $data
-     * @return object[]
-     */
-    private function cloneArrayOfObjects(array $data): array
-    {
-        foreach ($data as $key => $value) {
-            $data[$key] = clone $value;
-        }
-
-        return $data;
     }
 }
