@@ -52,4 +52,12 @@ final class RectorCollector
     {
         return count($this->rectors);
     }
+
+    /**
+     * @return RectorInterface[]
+     */
+    public function getRectors(): array
+    {
+        return $this->rectors;
+    }
 }
