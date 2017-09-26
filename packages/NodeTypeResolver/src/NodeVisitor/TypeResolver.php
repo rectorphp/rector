@@ -126,6 +126,10 @@ final class TypeResolver extends NodeVisitorAbstract
             $variableType = $this->typeContext->getTypeForVariable((string) $variableNode->name);
         }
 
+        if ($variableNode->name === 'this') {
+            $variableType = $variableNode->getAttribute(Attribute::CLASS_NAME);
+        }
+
         if ($variableType) {
             $variableNode->setAttribute(Attribute::TYPE, $variableType);
         }

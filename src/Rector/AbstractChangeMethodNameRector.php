@@ -67,10 +67,11 @@ abstract class AbstractChangeMethodNameRector extends AbstractRector
             return false;
         }
 
-        /** @var string $type */
+        /** @var string|null $type */
         $type = $node->var->getAttribute(Attribute::TYPE);
-
-        $this->ensureVariableHasType($node->var, $type);
+        if ($type === null) {
+            return false;
+        }
 
         if (! $this->isTypeRelevant($type)) {
             return false;
@@ -115,18 +116,5 @@ abstract class AbstractChangeMethodNameRector extends AbstractRector
     private function getClasses(): array
     {
         return array_keys($this->getPerClassOldToNewMethods());
-    }
-
-    private function ensureVariableHasType(Variable $variableNode, $type): void
-    {
-        if ($type === null) {
-            throw new NotImplementedException(sprintf(
-                '%s() was unable to resolve. Type for "%s" with "%s" name was null. Try to fix %s.',
-                __METHOD__,
-                get_class($variableNode),
-                '$' . (string) $variableNode->name,
-                NodeValueResolver::class
-            ));
-        }
     }
 }
