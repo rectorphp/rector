@@ -32,7 +32,6 @@ final class RectorsExtension extends Extension
         $this->rectorClassValidator->validate($rectors);
 
         foreach ($rectors as $rector) {
-
             $this->registerRectorIfNotYet($rector); // for custom rectors
 //            // add to active configuration
 //            dump($rector);

@@ -6,7 +6,7 @@
  */
 $possibleAutoloadPaths = [
     __DIR__ . '/../vendor/autoload.php', // composer require ... | repository
-    __DIR__ . '/../../../vendor/autoload.php' // composer create-project
+    __DIR__ . '/../../../vendor/autoload.php', // composer create-project
 ];
 
 foreach ($possibleAutoloadPaths as $possibleAutoloadPath) {

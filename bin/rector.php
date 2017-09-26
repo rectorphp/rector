@@ -12,7 +12,6 @@ gc_disable();
 // Require Composer autoload.php
 require_once __DIR__ . '/bootstrap.php';
 
-
 try {
     // 1. Detect configuration
     ConfigFilePathHelper::detectFromInput('rector', new ArgvInput);
@@ -32,7 +31,6 @@ try {
     $application = $container->get(Application::class);
     $statusCode = $application->run();
     exit($statusCode);
-
 } catch (Throwable $throwable) {
     $symfonyStyle = SymfonyStyleFactory::create();
     $symfonyStyle->error($throwable->getMessage());

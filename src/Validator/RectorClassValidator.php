@@ -37,7 +37,7 @@ final class RectorClassValidator
         }
 
         throw new InvalidRectorClassException(sprintf(
-            'Rector "%s" is not supported. Use class that implements %s.',
+            'Rector "%s" is not supported. Use class that implements "%s".',
             $rector,
             RectorInterface::class
         ));
