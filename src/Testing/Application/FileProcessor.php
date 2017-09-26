@@ -86,7 +86,15 @@ final class FileProcessor
             $this->mainNodeTraverser->addVisitor($rector);
         }
 
-        return $this->processFile($file);
+        $content = $this->processFile($file);
+
+        foreach ($rectorClasses as $rectorClass) {
+            /** @var NodeVisitor $rector */
+            $rector = $this->rectorCollector->getRector($rectorClass);
+            $this->mainNodeTraverser->removeVisitor($rector);
+        }
+
+        return $content;
     }
 
     /**

@@ -7,7 +7,9 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
+use Rector\Exception\NotImplementedException;
 use Rector\Node\Attribute;
+use Rector\NodeValueResolver\NodeValueResolver;
 
 abstract class AbstractChangeMethodNameRector extends AbstractRector
 {
@@ -68,6 +70,8 @@ abstract class AbstractChangeMethodNameRector extends AbstractRector
         /** @var string $type */
         $type = $node->var->getAttribute(Attribute::TYPE);
 
+        $this->ensureVariableHasType($node->var, $type);
+
         if (! $this->isTypeRelevant($type)) {
             return false;
         }
@@ -111,5 +115,18 @@ abstract class AbstractChangeMethodNameRector extends AbstractRector
     private function getClasses(): array
     {
         return array_keys($this->getPerClassOldToNewMethods());
+    }
+
+    private function ensureVariableHasType(Variable $variableNode, $type): void
+    {
+        if ($type === null) {
+            throw new NotImplementedException(sprintf(
+                '%s() was unable to resolve. Type for "%s" with "%s" name was null. Try to fix %s.',
+                __METHOD__,
+                get_class($variableNode),
+                '$' . (string) $variableNode->name,
+                NodeValueResolver::class
+            ));
+        }
     }
 }
