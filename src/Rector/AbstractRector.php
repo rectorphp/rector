@@ -12,7 +12,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
     /**
      * @return null|int|Node
      */
-    public function enterNode(Node $node)
+    final public function enterNode(Node $node)
     {
         if ($this->isCandidate($node)) {
             if ($newNode = $this->refactor($node)) {
