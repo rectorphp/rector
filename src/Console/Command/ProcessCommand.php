@@ -12,6 +12,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 final class ProcessCommand extends Command
 {
@@ -29,11 +30,19 @@ final class ProcessCommand extends Command
      * @var RectorCollector
      */
     private $rectorCollector;
+    /**
+     * @var SymfonyStyle
+     */
+    private $symfonyStyle;
 
-    public function __construct(FileProcessor $fileProcessor, RectorCollector $rectorCollector)
-    {
+    public function __construct(
+        FileProcessor $fileProcessor,
+        RectorCollector $rectorCollector,
+        SymfonyStyle $symfonyStyle
+    ) {
         $this->fileProcessor = $fileProcessor;
         $this->rectorCollector = $rectorCollector;
+        $this->symfonyStyle = $symfonyStyle;
 
         parent::__construct();
     }
@@ -52,6 +61,8 @@ final class ProcessCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->ensureSomeRectorsAreRegistered();
+
+        $this->reportLoadedRectors();
 
         $source = $input->getArgument(self::ARGUMENT_SOURCE_NAME);
         $files = $this->findPhpFilesInDirectories($source);
@@ -82,5 +93,23 @@ final class ProcessCommand extends Command
             'No rector were found. Registers them in rector.yml config to "rector:" '
             . 'section or load them via "--config <file>.yml" CLI option.'
         );
+    }
+
+    private function reportLoadedRectors(): void
+    {
+        $this->symfonyStyle->title(sprintf(
+            '%d Loaded Rector%s',
+            $this->rectorCollector->getRectorCount(),
+            $this->rectorCollector->getRectorCount() === 1 ? '' : 's'
+        ));
+
+        foreach ($this->rectorCollector->getRectors() as $rector) {
+            $this->symfonyStyle->writeln(sprintf(
+                ' - %s',
+                get_class($rector)
+            ));
+        }
+
+        $this->symfonyStyle->newLine();
     }
 }
