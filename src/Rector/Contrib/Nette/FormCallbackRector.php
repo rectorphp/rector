@@ -39,11 +39,7 @@ final class FormCallbackRector extends AbstractRector
             return false;
         }
 
-        if (! $node->var instanceof ArrayDimFetch) {
-            return false;
-        }
-
-        if (! $node->var->var instanceof PropertyFetch) {
+        if (! $this->isFormEvent($node)) {
             return false;
         }
 
@@ -77,5 +73,18 @@ final class FormCallbackRector extends AbstractRector
         $propertyName = (string) $propertyFetchNode->name;
 
         return in_array($propertyName, ['onSuccess', 'onSubmit', 'onError', 'onRender'], true);
+    }
+
+    private function isFormEvent(Assign $assignNode): bool
+    {
+        if (! $assignNode->var instanceof ArrayDimFetch) {
+            return false;
+        }
+
+        if (! $assignNode->var->var instanceof PropertyFetch) {
+            return false;
+        }
+
+        return true;
     }
 }
