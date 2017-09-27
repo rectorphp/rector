@@ -2,11 +2,9 @@
 
 namespace Rector\Application;
 
-use PhpParser\NodeVisitor;
 use Rector\NodeTraverser\MainNodeTraverser;
 use Rector\NodeTraverserQueue\NodeTraverserQueue;
 use Rector\Printer\FormatPerservingPrinter;
-use Rector\Rector\RectorCollector;
 use SplFileInfo;
 
 final class FileProcessor
@@ -22,11 +20,6 @@ final class FileProcessor
     private $nodeTraverserQueue;
 
     /**
-     * @var RectorCollector
-     */
-    private $rectorCollector;
-
-    /**
      * @var MainNodeTraverser
      */
     private $mainNodeTraverser;
@@ -34,12 +27,10 @@ final class FileProcessor
     public function __construct(
         FormatPerservingPrinter $codeStyledPrinter,
         NodeTraverserQueue $nodeTraverserQueue,
-        RectorCollector $rectorCollector,
         MainNodeTraverser $mainNodeTraverser
     ) {
         $this->formatPerservingPrinter = $codeStyledPrinter;
         $this->nodeTraverserQueue = $nodeTraverserQueue;
-        $this->rectorCollector = $rectorCollector;
         $this->mainNodeTraverser = $mainNodeTraverser;
     }
 

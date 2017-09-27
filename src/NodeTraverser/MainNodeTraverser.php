@@ -35,6 +35,9 @@ final class MainNodeTraverser extends NodeTraverser
         }
     }
 
+    /**
+     * @param string[] $types
+     */
     private function isObjectOfTypes(NodeVisitor $nodeVisitor, array $types): bool
     {
         foreach ($types as $type) {
