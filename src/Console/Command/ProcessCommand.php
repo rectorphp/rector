@@ -68,15 +68,9 @@ final class ProcessCommand extends Command
         $source = $input->getArgument(self::ARGUMENT_SOURCE_NAME);
         $files = $this->findPhpFilesInDirectories($source);
 
-        $this->reportFiles($files);
-
-        // find files fix :)
-//        dump($files);
-//        die;
+        $this->reportFoundFiles($files);
 
         $this->fileProcessor->processFiles($files);
-
-        // report: changed x files
 
         return 0;
     }
@@ -126,7 +120,7 @@ final class ProcessCommand extends Command
     /**
      * @param string[] $files
      */
-    private function reportFiles(array $files): void
+    private function reportFoundFiles(array $files): void
     {
         $this->symfonyStyle->title('Processing files');
 
