@@ -2,7 +2,5 @@ parameters:
     ignoreErrors:
         - '#Internal error#'
         - '#Undefined variable: \$possibleAutoloadPaths#'
-        - '#Undefined variable: \$container#'
-        - '#Undefined variable: \$application#'
     excludes_analyse:
         - *packages/DeprecationExtractor/tests/DeprecationExtractorSource/Definition.php

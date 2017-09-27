@@ -25,6 +25,19 @@ final class RectorCollector
         return $this->rectors[$class];
     }
 
+    public function getRectorCount(): int
+    {
+        return count($this->rectors);
+    }
+
+    /**
+     * @return RectorInterface[]
+     */
+    public function getRectors(): array
+    {
+        return $this->rectors;
+    }
+
     private function ensureRectorsIsFound(string $class): void
     {
         if (isset($this->rectors[$class])) {

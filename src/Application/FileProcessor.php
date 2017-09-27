@@ -2,55 +2,36 @@
 
 namespace Rector\Application;
 
-use PhpParser\Lexer;
-use PhpParser\NodeTraverser;
-use Rector\Contract\Parser\ParserInterface;
-use Rector\NodeTraverser\CloningNodeTraverser;
+use Rector\NodeTraverser\RectorNodeTraverser;
+use Rector\NodeTraverserQueue\NodeTraverserQueue;
 use Rector\Printer\FormatPerservingPrinter;
 use SplFileInfo;
 
-/**
- * @todo update to match @see \Rector\Testing\Application\FileProcessor later
- */
 final class FileProcessor
 {
-    /**
-     * @var ParserInterface
-     */
-    private $parser;
-
     /**
      * @var FormatPerservingPrinter
      */
     private $formatPerservingPrinter;
 
     /**
-     * @var NodeTraverser
+     * @var NodeTraverserQueue
      */
-    private $nodeTraverser;
+    private $nodeTraverserQueue;
 
     /**
-     * @var Lexer
+     * @var RectorNodeTraverser
      */
-    private $lexer;
-
-    /**
-     * @var CloningNodeTraverser
-     */
-    private $cloningNodeTraverser;
+    private $mainNodeTraverser;
 
     public function __construct(
-        ParserInterface $parser,
         FormatPerservingPrinter $codeStyledPrinter,
-        Lexer $lexer,
-        NodeTraverser $nodeTraverser,
-        CloningNodeTraverser $cloningNodeTraverser
+        NodeTraverserQueue $nodeTraverserQueue,
+        RectorNodeTraverser $mainNodeTraverser
     ) {
-        $this->parser = $parser;
         $this->formatPerservingPrinter = $codeStyledPrinter;
-        $this->nodeTraverser = $nodeTraverser;
-        $this->lexer = $lexer;
-        $this->cloningNodeTraverser = $cloningNodeTraverser;
+        $this->nodeTraverserQueue = $nodeTraverserQueue;
+        $this->mainNodeTraverser = $mainNodeTraverser;
     }
 
     /**
@@ -63,33 +44,30 @@ final class FileProcessor
         }
     }
 
-    public function processFile(SplFileInfo $file): void
+    /**
+     * @param string[] $rectorClasses
+     */
+    public function processFileWithRectorsToString(SplFileInfo $file, array $rectorClasses): string
     {
-        $oldStmts = $this->parser->parseFile($file->getRealPath());
+        $this->mainNodeTraverser->enableOnlyRectorClasses($rectorClasses);
 
-        if ($oldStmts === null) {
-            return;
-        }
+        return $this->processFileToString($file);
+    }
 
-        $oldStmts = $this->cloneArrayOfObjects($oldStmts);
-        $oldTokens = $this->lexer->getTokens();
-        $newStmts = $this->cloningNodeTraverser->traverse($oldStmts);
+    private function processFile(SplFileInfo $fileInfo): void
+    {
+        [$newStmts, $oldStmts, $oldTokens] = $this->nodeTraverserQueue->processFileInfo($fileInfo);
 
-        $newStmts = $this->nodeTraverser->traverse($newStmts);
-
-        $this->formatPerservingPrinter->printToFile($file, $newStmts, $oldStmts, $oldTokens);
+        $this->formatPerservingPrinter->printToFile($fileInfo, $newStmts, $oldStmts, $oldTokens);
     }
 
     /**
-     * @param object[] $data
-     * @return object[]
+     * See https://github.com/nikic/PHP-Parser/issues/344#issuecomment-298162516.
      */
-    private function cloneArrayOfObjects(array $data): array
+    private function processFileToString(SplFileInfo $fileInfo): string
     {
-        foreach ($data as $key => $value) {
-            $data[$key] = clone $value;
-        }
+        [$newStmts, $oldStmts, $oldTokens] = $this->nodeTraverserQueue->processFileInfo($fileInfo);
 
-        return $data;
+        return $this->formatPerservingPrinter->printToString($newStmts, $oldStmts, $oldTokens);
     }
 }

@@ -13,7 +13,8 @@
         "nikic/php-parser": "4.0.x-dev as 3.1.1",
         "roave/better-reflection": "^2.0",
         "symfony/console": "^3.3",
-        "symfony/dependency-injection": "^3.3"
+        "symfony/dependency-injection": "^3.3",
+        "symplify/package-builder": "^2.4"
     },
     "require-dev": {
         "phpstan/phpstan": "^0.8",
@@ -29,6 +30,7 @@
             "Rector\\": "src",
             "Rector\\BetterReflection\\": "packages/BetterReflection/src",
             "Rector\\NodeTypeResolver\\": "packages/NodeTypeResolver/src",
+            "Rector\\NodeTraverserQueue\\": "packages/NodeTraverserQueue/src",
             "Rector\\DeprecationExtractor\\": "packages/DeprecationExtractor/src",
             "Rector\\NodeValueResolver\\": "packages/NodeValueResolver/src"
         }
@@ -37,8 +39,7 @@
         "psr-4": {
             "Rector\\Tests\\": "tests",
             "Rector\\NodeTypeResolver\\Tests\\": "packages/NodeTypeResolver/tests",
-            "Rector\\DeprecationExtractor\\Tests\\": "packages/DeprecationExtractor/tests",
-            "Rector\\NodeValueResolver\\Tests\\": "packages/NodeValueResolver/tests"
+            "Rector\\DeprecationExtractor\\Tests\\": "packages/DeprecationExtractor/tests"
         }
     },
     "scripts": {

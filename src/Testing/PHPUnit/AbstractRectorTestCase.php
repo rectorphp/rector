@@ -4,9 +4,9 @@ namespace Rector\Testing\PHPUnit;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
+use Rector\Application\FileProcessor;
 use Rector\DependencyInjection\ContainerFactory;
 use Rector\Exception\FileSystem\FileNotFoundException;
-use Rector\Testing\Application\FileProcessor;
 use SplFileInfo;
 
 abstract class AbstractRectorTestCase extends TestCase
@@ -23,7 +23,8 @@ abstract class AbstractRectorTestCase extends TestCase
 
     protected function setUp(): void
     {
-        $this->container = (new ContainerFactory)->create();
+        $this->container = (new ContainerFactory)->createWithConfig(__DIR__ . '/../../config/levels.yml');
+
         $this->fileProcessor = $this->container->get(FileProcessor::class);
     }
 
@@ -32,7 +33,7 @@ abstract class AbstractRectorTestCase extends TestCase
         $this->ensureFileExists($file);
         $this->ensureFileExists($reconstructedFile);
 
-        $reconstructedFileContent = $this->fileProcessor->processFileWithRectors(
+        $reconstructedFileContent = $this->fileProcessor->processFileWithRectorsToString(
             new SplFileInfo($file),
             $this->getRectorClasses()
         );

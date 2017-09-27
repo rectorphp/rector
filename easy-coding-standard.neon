@@ -30,6 +30,8 @@ checkers:
             - 'PhpParser\Node\*'
             - 'PhpParser\Comment\Doc'
             - 'Rector\DeprecationExtractor\Deprecation\*'
+            # bugged: https://github.com/Symplify/Symplify/issues/372
+            - 'Rector\NodeTraverser\StandaloneTraverseNodeTraverser'
 
 parameters:
     exclude_checkers:
@@ -63,3 +65,6 @@ parameters:
         SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff:
             # covariant types
             - */packages/NodeValueResolver/src/PerNodeValueResolver/*ValueResolver.php
+        Symplify\CodingStandard\Sniffs\DependencyInjection\NoClassInstantiationSniff:
+            # temp ArgvInput: added to master
+            - bin/rector.php

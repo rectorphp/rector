@@ -21,11 +21,25 @@ At the moment these packages are supported:
 composer require rector/rector --dev
 ```
 
-## Use (WIP)
+## How To Reconstruct your Code?
+
+1. Create `rector.yml` with desired Rectors
+
+```yml
+rectors:
+    - Rector\Rector\Contrib\Nette\InjectPropertyRector
+```
+
+2. Run rector on your `/src` directory
 
 ```bash
-vendor/bin/rector reconstruct src --level=nette24
-vendor/bin/rector reconstruct src --level=symfony40
+vendor/bin/rector process src
+```
+
+3. Check the Git
+
+```
+git diff
 ```
 
 

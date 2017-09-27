@@ -4,4 +4,4 @@ services:
 
     Rector\DeprecationExtractor\:
         resource: '../../src'
-        exclude: '../../src/{Deprecation/*Deprecation.php}'
+        exclude: '../../src/{Deprecation/*Deprecation.php,Rector/ConfigurableChangeMethodNameRector.php}'
