@@ -91,11 +91,11 @@ abstract class AbstractChangeMethodNameRector extends AbstractRector
             return false;
         }
 
-        if ($node->class instanceof Name) {
-            $type = $node->class->toString();
-        } elseif ($node->class instanceof Variable) {
-            $type = $node->class->getAttribute(Attribute::CLASS_NAME);
+        if (! $node->class instanceof Name) {
+            return false;
         }
+
+        $type = $node->class->toString();
 
         if (! $this->isTypeRelevant($type)) {
             return false;
