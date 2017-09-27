@@ -6,10 +6,7 @@ class OldPresenter extends Presenter
 {
     /**
      * @var stdClass
+     * @inject
      */
-    private $injectMe;
-    public function __construct(stdClass $injectMe)
-    {
-        $this->injectMe = $injectMe;
-    }
+    public $injectMe;
 }
