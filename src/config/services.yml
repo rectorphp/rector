@@ -6,8 +6,6 @@ imports:
   - { resource: '../../packages/NodeValueResolver/src/config/services.yml' }
 
 parameters:
-    name: "Rector"
-
     # todo
     kernel_class: # for name based service refactoring
 
@@ -38,11 +36,6 @@ services:
             - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\NamespaceResolver']]
             # adds class/interface/function/method scope to all nodes attribute
             - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\ScopeResolver']]
-
-    # 3rd party services
-    Symfony\Component\Console\Application:
-        arguments:
-            $name: "%name%"
 
     # PhpParser - Parser
     PhpParser\Parser:

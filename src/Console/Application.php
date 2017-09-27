@@ -9,6 +9,16 @@ use Symfony\Component\Console\Input\InputOption;
 
 final class Application extends SymfonyApplication
 {
+    /**
+     * @var string
+     */
+    private const NAME = 'Rector';
+
+    public function __construct()
+    {
+        parent::__construct(self::NAME);
+    }
+
     protected function getDefaultInputDefinition(): InputDefinition
     {
         return new InputDefinition([
