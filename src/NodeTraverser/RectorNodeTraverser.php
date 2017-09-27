@@ -5,7 +5,7 @@ namespace Rector\NodeTraverser;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor;
 
-final class MainNodeTraverser extends NodeTraverser
+final class RectorNodeTraverser extends NodeTraverser
 {
     /**
      * @var NodeVisitor[]

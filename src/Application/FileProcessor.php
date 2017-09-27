@@ -2,7 +2,7 @@
 
 namespace Rector\Application;
 
-use Rector\NodeTraverser\MainNodeTraverser;
+use Rector\NodeTraverser\RectorNodeTraverser;
 use Rector\NodeTraverserQueue\NodeTraverserQueue;
 use Rector\Printer\FormatPerservingPrinter;
 use SplFileInfo;
@@ -20,14 +20,14 @@ final class FileProcessor
     private $nodeTraverserQueue;
 
     /**
-     * @var MainNodeTraverser
+     * @var RectorNodeTraverser
      */
     private $mainNodeTraverser;
 
     public function __construct(
         FormatPerservingPrinter $codeStyledPrinter,
         NodeTraverserQueue $nodeTraverserQueue,
-        MainNodeTraverser $mainNodeTraverser
+        RectorNodeTraverser $mainNodeTraverser
     ) {
         $this->formatPerservingPrinter = $codeStyledPrinter;
         $this->nodeTraverserQueue = $nodeTraverserQueue;

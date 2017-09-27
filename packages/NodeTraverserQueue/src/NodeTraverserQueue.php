@@ -5,7 +5,7 @@ namespace Rector\NodeTraverserQueue;
 use PhpParser\Lexer;
 use Rector\Contract\Parser\ParserInterface;
 use Rector\NodeTraverser\CloningNodeTraverser;
-use Rector\NodeTraverser\MainNodeTraverser;
+use Rector\NodeTraverser\RectorNodeTraverser;
 use Rector\NodeTraverser\ShutdownNodeTraverser;
 use Rector\NodeTraverser\StandaloneTraverseNodeTraverser;
 use SplFileInfo;
@@ -23,7 +23,7 @@ final class NodeTraverserQueue
     private $lexer;
 
     /**
-     * @var MainNodeTraverser
+     * @var RectorNodeTraverser
      */
     private $mainNodeTraverser;
 
@@ -46,7 +46,7 @@ final class NodeTraverserQueue
         ParserInterface $parser,
         Lexer $lexer,
         CloningNodeTraverser $cloningNodeTraverser,
-        MainNodeTraverser $mainNodeTraverser,
+        RectorNodeTraverser $mainNodeTraverser,
         ShutdownNodeTraverser $shutdownNodeTraverser,
         StandaloneTraverseNodeTraverser $standaloneTraverseNodeTraverser
     ) {

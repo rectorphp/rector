@@ -3,7 +3,7 @@
 namespace Rector\DependencyInjection\CompilerPass;
 
 use Rector\Contract\Rector\RectorInterface;
-use Rector\NodeTraverser\MainNodeTraverser;
+use Rector\NodeTraverser\RectorNodeTraverser;
 use Rector\Rector\RectorCollector;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
@@ -34,7 +34,7 @@ final class CollectorCompilerPass implements CompilerPassInterface
     {
         DefinitionCollector::loadCollectorWithType(
             $containerBuilder,
-            MainNodeTraverser::class,
+            RectorNodeTraverser::class,
             RectorInterface::class,
             'addVisitor'
         );
