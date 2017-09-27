@@ -24,7 +24,7 @@ final class AppKernel extends Kernel
 
     public function registerContainerConfiguration(LoaderInterface $loader): void
     {
-        $loader->load(__DIR__ . '/../config/services.yml');
+        $loader->load(__DIR__ . '/../config/config.yml');
 
         if ($this->configFile) {
             $loader->load($this->configFile);

@@ -27,7 +27,7 @@ final class RectorsExtension extends Extension
             return;
         }
 
-        $rectorClasses = $configs[0];
+        $rectorClasses = array_merge(...$configs);
 
         $this->rectorClassValidator->validate($rectorClasses);
 

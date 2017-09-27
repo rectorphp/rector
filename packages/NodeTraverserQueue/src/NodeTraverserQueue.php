@@ -67,9 +67,7 @@ final class NodeTraverserQueue
         $oldTokens = $this->lexer->getTokens();
 
         $newStmts = $this->cloningNodeTraverser->traverse($oldStmts);
-
         $newStmts = $this->standaloneTraverseNodeTraverser->traverse($newStmts);
-
         $newStmts = $this->mainNodeTraverser->traverse($newStmts);
         $newStmts = $this->shutdownNodeTraverser->traverse($newStmts);
 

@@ -1,0 +1,7 @@
+imports:
+  - { resource: '../../packages/**/src/config/services.yml' }
+  - { resource: 'services.yml' }
+
+parameters:
+    # todo
+    kernel_class: # for name based service refactoring
