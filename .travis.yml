@@ -7,6 +7,8 @@ install:
   - composer install
   # prepare nette/sandbox
   - composer create-project nette/sandbox:@dev temp/nette-sandbox
+  # prepare symfony/symfony-demo
+  - composer create-project symfony/symfony-demo:@dev temp/symfony-demo
 
 script:
   - vendor/bin/phpunit --coverage-clover coverage.xml
@@ -17,6 +19,8 @@ script:
   - composer phpstan
   # try on nette/sandbox
   - bin/rector process temp/nette-sandbox --config src/config/level/nette/all.yml
+  # try on symfony/symfony-demo
+  - bin/rector process temp/symfony-demo --config src/config/level/symfony/all.yml
 
 after_script:
   # upload coverage to Coveralls.io
