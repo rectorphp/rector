@@ -3,7 +3,6 @@
 namespace Rector\Console\Command;
 
 use Rector\Application\FileProcessor;
-use Rector\Exception\FileSystem\DirectoryNotFoundException;
 use Rector\Exception\NoRectorsLoadedException;
 use Rector\FileSystem\PhpFilesFinder;
 use Rector\Naming\CommandNaming;
@@ -69,17 +68,21 @@ final class ProcessCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $source = $input->getArgument(self::ARGUMENT_SOURCE_NAME);
-        $this->ensureDirectoriesExist($source);
 
         $this->ensureSomeRectorsAreRegistered();
 
         $files = $this->phpFilesFinder->findInDirectories($source);
 
-        $this->reportFoundFiles($files);
-
         $this->reportLoadedRectors();
 
-        $this->fileProcessor->processFiles($files);
+        $this->symfonyStyle->title('Processing files');
+        foreach ($files as $file) {
+            $this->symfonyStyle->writeln(sprintf(
+                ' - %s',
+                $file
+            ));
+            $this->fileProcessor->processFile($file);
+        }
 
         $this->symfonyStyle->success('Rector is done!');
 
@@ -114,39 +117,5 @@ final class ProcessCommand extends Command
         }
 
         $this->symfonyStyle->newLine();
-    }
-
-    /**
-     * @param string[] $files
-     */
-    private function reportFoundFiles(array $files): void
-    {
-        $this->symfonyStyle->title('Processing files');
-
-        foreach ($files as $file) {
-            $this->symfonyStyle->writeln(sprintf(
-                ' - %s',
-                $file
-            ));
-        }
-
-        $this->symfonyStyle->newLine();
-    }
-
-    /**
-     * @param string[] $directories
-     */
-    private function ensureDirectoriesExist(array $directories): void
-    {
-        foreach ($directories as $directory) {
-            if (file_exists($directory)) {
-                continue;
-            }
-
-            throw new DirectoryNotFoundException(sprintf(
-                'Directory "%s" was not found.',
-                $directory
-            ));
-        }
     }
 }

@@ -35,16 +35,6 @@ final class FileProcessor
     }
 
     /**
-     * @param SplFileInfo[] $files
-     */
-    public function processFiles(array $files): void
-    {
-        foreach ($files as $file) {
-            $this->processFile($file);
-        }
-    }
-
-    /**
      * @param string[] $rectorClasses
      */
     public function processFileWithRectorsToString(SplFileInfo $file, array $rectorClasses): string
@@ -54,7 +44,7 @@ final class FileProcessor
         return $this->processFileToString($file);
     }
 
-    private function processFile(SplFileInfo $fileInfo): void
+    public function processFile(SplFileInfo $fileInfo): void
     {
         [$newStmts, $oldStmts, $oldTokens] = $this->nodeTraverserQueue->processFileInfo($fileInfo);
 

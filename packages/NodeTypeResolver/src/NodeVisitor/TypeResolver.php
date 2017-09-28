@@ -236,10 +236,12 @@ final class TypeResolver extends NodeVisitorAbstract
 
         if ($variableNode->name instanceof Variable) {
             $name = $variableNode->name->name;
+
             return $this->typeContext->getTypeForVariable($name);
         }
 
         $name = (string) $variableNode->name;
+
         return $this->typeContext->getTypeForVariable($name);
     }
 }
