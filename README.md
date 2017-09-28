@@ -82,6 +82,12 @@ final class MyRector extends AbstractRector
 6. :+1:   
 
 
+### READMEs for Subpackages
+
+- [DeprecationExtractor](/packages/DeprecationExtractor/README.md)
+- [NodeTraverserQueue](/packages/NodeTraverserQueue/README.md)
+- [NodeTypeResolver](/packages/NodeTypeResolver/README.md)
+- [NodeValueResolver](/packages/NodeValueResolver/README.md)
 
 ### How to Contribute
 
