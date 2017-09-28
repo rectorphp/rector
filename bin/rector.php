@@ -33,6 +33,11 @@ try {
     exit($statusCode);
 } catch (Throwable $throwable) {
     $symfonyStyle = SymfonyStyleFactory::create();
-    $symfonyStyle->error($throwable->getMessage());
+    $symfonyStyle->error(sprintf(
+        '%s in %s on line %d',
+        $throwable->getMessage(),
+        $throwable->getFile(),
+        $throwable->getLine()
+    ));
     exit(1);
 }
