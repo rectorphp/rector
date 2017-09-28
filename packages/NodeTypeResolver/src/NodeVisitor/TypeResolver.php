@@ -87,6 +87,7 @@ final class TypeResolver extends NodeVisitorAbstract
 
     private function getTypeFromNewNode(New_ $newNode): string
     {
+        // e.g. new $someClass;
         if ($newNode->class instanceof Variable) {
             // can be anything (dynamic)
             $variableName = $newNode->class->name;
@@ -94,11 +95,28 @@ final class TypeResolver extends NodeVisitorAbstract
             return $this->typeContext->getTypeForVariable($variableName);
         }
 
+        // e.g. new SomeClass;
         if ($newNode->class instanceof Name) {
             /** @var FullyQualified $fqnName */
             $fqnName = $newNode->class->getAttribute(Attribute::RESOLVED_NAME);
 
             return $fqnName->toString();
+        }
+
+        // e.g. new $this->templateClass;
+        if ($newNode->class instanceof PropertyFetch) {
+            if ($newNode->class->var->name !== 'this') {
+                throw new NotImplementedException(sprintf(
+                    'Not implemented yet. Go to "%s()" and add check for "%s" node for external dependency.',
+                    __METHOD__,
+                    get_class($newNode->class)
+                ));
+            }
+
+            // can be anything (dynamic)
+            $propertyName = (string) $newNode->class->name;
+
+            return $this->typeContext->getTypeForProperty($propertyName);
         }
 
         throw new NotImplementedException(sprintf(
