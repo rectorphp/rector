@@ -55,7 +55,7 @@ parameters:
             - packages/DeprecationExtractor/tests/Rector/RectorFactoryTest.php
         PHP_CodeSniffer\Standards\Generic\Sniffs\Files\LineLengthSniff:
             # long FQN classes that might not exist
-            - src/Rector/Contrib/Symfony/FrameworkBundleClassReplacementsRector.php
+            - src/Rector/Contrib/Symfony/FrameworkBundle/FrameworkBundleClassReplacementsRector.php
         Symplify\CodingStandard\Sniffs\Classes\EqualInterfaceImplementationSniff:
             # empty parent interface, disable for now
             - packages/DeprecationExtractor/src/Deprecation/ClassMethodDeprecation.php
