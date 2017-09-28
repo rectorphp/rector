@@ -2,7 +2,6 @@
 
 namespace Rector\Console\Command;
 
-use Nette\Utils\Finder;
 use Rector\Application\FileProcessor;
 use Rector\Exception\FileSystem\DirectoryNotFoundException;
 use Rector\Exception\NoRectorsLoadedException;
@@ -14,6 +13,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Finder\Finder;
 
 final class ProcessCommand extends Command
 {
@@ -84,8 +84,12 @@ final class ProcessCommand extends Command
      */
     private function findPhpFilesInDirectories(array $directories): array
     {
-        $finder = Finder::find('*.php')
-            ->from($directories);
+        $finder = Finder::create()
+            ->files()
+            ->name('*.php')
+            ->exclude('examples')
+            ->exclude('tests')
+            ->in($directories);
 
         return iterator_to_array($finder->getIterator());
     }
