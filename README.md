@@ -27,7 +27,7 @@ composer require rector/rector --dev
 
 ```yml
 rectors:
-    - Rector\Rector\Contrib\Nette\InjectPropertyRector
+    - Rector\Rector\Contrib\Nette\Application\InjectPropertyRector
 ```
 
 2. Run rector on your `/src` directory

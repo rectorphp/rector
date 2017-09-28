@@ -1,6 +1,6 @@
 rectors:
-    - Rector\Rector\Contrib\Nette\FormCallbackRector
-    - Rector\Rector\Contrib\Nette\FormSetRequiredRector
-    - Rector\Rector\Contrib\Nette\HtmlAddMethodRector
-    - Rector\Rector\Contrib\Nette\NetteObjectToSmartTraitRector
-    - Rector\Rector\Contrib\Nette\PhpGeneratorDocumentMethodRector
+    - Rector\Rector\Contrib\Nette\Form\FormCallbackRector
+    - Rector\Rector\Contrib\Nette\Form\FormSetRequiredRector
+    - Rector\Rector\Contrib\Nette\Utils\HtmlAddMethodRector
+    - Rector\Rector\Contrib\Nette\Utils\NetteObjectToSmartTraitRector
+    - Rector\Rector\Contrib\Nette\PhpGenerator\PhpGeneratorDocumentMethodRector
