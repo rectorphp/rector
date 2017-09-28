@@ -35,6 +35,7 @@ final class ProcessCommand extends Command
      * @var SymfonyStyle
      */
     private $symfonyStyle;
+
     /**
      * @var PhpFilesFinder
      */

@@ -132,20 +132,7 @@ final class TypeResolver extends NodeVisitorAbstract
 
         $parentNode = $variableNode->getAttribute(Attribute::PARENT_NODE);
         if ($parentNode instanceof Assign) {
-            if ($parentNode->expr instanceof New_) {
-                $variableName = $variableNode->name;
-                $variableType = $this->getTypeFromNewNode($parentNode->expr);
-
-                $this->typeContext->addVariableWithType($variableName, $variableType);
-            } else {
-                if ($variableNode->name instanceof Variable) {
-                    $name = $variableNode->name->name;
-                } else {
-                    $name = (string) $variableNode->name;
-                }
-
-                $variableType = $this->typeContext->getTypeForVariable($name);
-            }
+            $variableType = $this->processVariableTypeForAssign($variableNode, $parentNode);
         } else {
             $variableType = $this->typeContext->getTypeForVariable((string) $variableNode->name);
         }
@@ -234,5 +221,25 @@ final class TypeResolver extends NodeVisitorAbstract
         }
 
         return (string) $propertyFetchNode->name;
+    }
+
+    private function processVariableTypeForAssign(Variable $variableNode, Assign $AssignNode): string
+    {
+        if ($AssignNode->expr instanceof New_) {
+            $variableName = $variableNode->name;
+            $variableType = $this->getTypeFromNewNode($AssignNode->expr);
+
+            $this->typeContext->addVariableWithType($variableName, $variableType);
+
+            return $variableType;
+        }
+
+        if ($variableNode->name instanceof Variable) {
+            $name = $variableNode->name->name;
+            return $this->typeContext->getTypeForVariable($name);
+        }
+
+        $name = (string) $variableNode->name;
+        return $this->typeContext->getTypeForVariable($name);
     }
 }
