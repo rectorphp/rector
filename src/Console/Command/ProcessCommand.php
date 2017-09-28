@@ -4,6 +4,7 @@ namespace Rector\Console\Command;
 
 use Nette\Utils\Finder;
 use Rector\Application\FileProcessor;
+use Rector\Exception\FileSystem\DirectoryNotFoundException;
 use Rector\Exception\NoRectorsLoadedException;
 use Rector\Naming\CommandNaming;
 use Rector\Rector\RectorCollector;
@@ -61,11 +62,13 @@ final class ProcessCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $source = $input->getArgument(self::ARGUMENT_SOURCE_NAME);
+        $this->ensureDirectoriesExist($source);
+
         $this->ensureSomeRectorsAreRegistered();
 
         $this->reportLoadedRectors();
 
-        $source = $input->getArgument(self::ARGUMENT_SOURCE_NAME);
         $files = $this->findPhpFilesInDirectories($source);
 
         $this->reportFoundFiles($files);
@@ -132,5 +135,22 @@ final class ProcessCommand extends Command
         }
 
         $this->symfonyStyle->newLine();
+    }
+
+    /**
+     * @param string[] $directories
+     */
+    private function ensureDirectoriesExist(array $directories): void
+    {
+        foreach ($directories as $directory) {
+            if (file_exists($directory)) {
+                continue;
+            }
+
+            throw new DirectoryNotFoundException(sprintf(
+                'Directory "%s" was not found.',
+                $directory
+            ));
+        }
     }
 }
