@@ -18,9 +18,9 @@ script:
   # check with phpstan (defined in composer.json "scripts" section)
   - composer phpstan
   # try on nette/sandbox
-  - bin/rector process temp/nette-sandbox --config src/config/level/nette/all.yml
+  - composer nette-set
   # try on symfony/symfony-demo
-  - bin/rector process temp/symfony-demo --config src/config/level/symfony/all.yml
+  - composer symfony-set
 
 after_script:
   # upload coverage to Coveralls.io
