@@ -6,9 +6,11 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
 use Rector\BetterReflection\Reflector\MethodReflector;
 use Rector\NodeTypeResolver\TypesExtractor\ConstructorPropertyTypesExtractor;
-use ReflectionFunction;
+use Roave\BetterReflection\Reflection\ReflectionFunction;
 use Roave\BetterReflection\Reflection\ReflectionMethod;
 
 /**
@@ -100,21 +102,29 @@ final class TypeContext
     }
 
     /**
-     * @return \Roave\BetterReflection\Reflection\ReflectionFunction|ReflectionMethod|null
+     * @param Function_|ClassMethod|Closure $functionLikeNode
+     *
+     * @return ReflectionFunction|ReflectionMethod|null
      */
     private function getFunctionReflection(FunctionLike $functionLikeNode)
     {
-        if ($this->classLikeNode) {
-            if ($functionLikeNode instanceof Closure) {
-                return null;
-            }
+        if ($functionLikeNode instanceof Closure) {
+            return null;
+        }
 
+        if ($this->classLikeNode) {
             $className = $this->classLikeNode->namespacedName->toString();
             $methodName = (string) $functionLikeNode->name;
 
             return $this->methodReflector->reflectClassMethod($className, $methodName);
         }
 
-        return new ReflectionFunction((string) $functionLikeNode->name);
+        /** @var Function_ $functionLikeNode */
+        $functionName = (string) $functionLikeNode->name;
+        if (! function_exists($functionName)) {
+            return null;
+        }
+
+        return ReflectionFunction::createFromName($functionName);
     }
 }

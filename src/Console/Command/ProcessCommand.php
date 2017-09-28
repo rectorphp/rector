@@ -67,11 +67,11 @@ final class ProcessCommand extends Command
 
         $this->ensureSomeRectorsAreRegistered();
 
-        $this->reportLoadedRectors();
-
         $files = $this->findPhpFilesInDirectories($source);
 
         $this->reportFoundFiles($files);
+
+        $this->reportLoadedRectors();
 
         $this->fileProcessor->processFiles($files);
 
