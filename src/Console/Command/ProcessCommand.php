@@ -91,6 +91,7 @@ final class ProcessCommand extends Command
             ->name('*.php')
             ->exclude('examples')
             ->exclude('tests')
+            ->exclude('Tests')
             ->in($directories);
 
         return iterator_to_array($finder->getIterator());

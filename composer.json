@@ -47,8 +47,8 @@
         "check-cs": "ecs check bin packages src tests",
         "fix-cs": "ecs check bin packages src tests --fix",
         "phpstan": "phpstan analyse bin packages src tests --level max --configuration phpstan.neon",
-        "nette-set": "bin/rector process temp/nette-sandbox --config src/config/level/nette/all.yml",
-        "symfony-set": "bin/rector process temp/symfony-demo --config src/config/level/symfony/all.yml"
+        "nette-set": "bin/rector process temp/nette-sandbox/vendor/nette --config src/config/level/nette/all.yml",
+        "symfony-set": "bin/rector process temp/symfony-demo/vendor/symfony --config src/config/level/symfony/all.yml"
     },
     "config": {
         "sort-packages": true

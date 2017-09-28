@@ -8,7 +8,9 @@ use Rector\NodeTraverser\CloningNodeTraverser;
 use Rector\NodeTraverser\RectorNodeTraverser;
 use Rector\NodeTraverser\ShutdownNodeTraverser;
 use Rector\NodeTraverser\StandaloneTraverseNodeTraverser;
+use Rector\NodeTraverserQueue\Exception\FileProcessingException;
 use SplFileInfo;
+use Throwable;
 
 final class NodeTraverserQueue
 {
@@ -63,14 +65,22 @@ final class NodeTraverserQueue
      */
     public function processFileInfo(SplFileInfo $fileInfo): array
     {
-        $oldStmts = $this->parser->parseFile($fileInfo->getRealPath());
-        $oldTokens = $this->lexer->getTokens();
+        try {
+            $oldStmts = $this->parser->parseFile($fileInfo->getRealPath());
+            $oldTokens = $this->lexer->getTokens();
 
-        $newStmts = $this->cloningNodeTraverser->traverse($oldStmts);
-        $newStmts = $this->standaloneTraverseNodeTraverser->traverse($newStmts);
-        $newStmts = $this->mainNodeTraverser->traverse($newStmts);
-        $newStmts = $this->shutdownNodeTraverser->traverse($newStmts);
+            $newStmts = $this->cloningNodeTraverser->traverse($oldStmts);
+            $newStmts = $this->standaloneTraverseNodeTraverser->traverse($newStmts);
+            $newStmts = $this->mainNodeTraverser->traverse($newStmts);
+            $newStmts = $this->shutdownNodeTraverser->traverse($newStmts);
 
-        return [$newStmts, $oldStmts, $oldTokens];
+            return [$newStmts, $oldStmts, $oldTokens];
+        } catch (Throwable $throwable) {
+            throw new FileProcessingException(sprintf(
+                'Processing file "%s" failed due to: "%s"',
+                $fileInfo->getRealPath(),
+                $throwable->getMessage()
+            ));
+        }
     }
 }
