@@ -16,7 +16,7 @@ script:
   # check with phpstan (defined in composer.json "scripts" section)
   - composer phpstan
   # try on nette/sandbox
-  - bin/rector process temp/nette-sandbox --config src/config/levels.yml
+  - bin/rector process temp/nette-sandbox --config src/config/level/nette/all.yml
 
 after_script:
   # upload coverage to Coveralls.io
