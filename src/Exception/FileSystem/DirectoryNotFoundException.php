@@ -4,6 +4,6 @@ namespace Rector\Exception\FileSystem;
 
 use Exception;
 
-final class FileNotFoundException extends Exception
+final class DirectoryNotFoundException extends Exception
 {
 }
