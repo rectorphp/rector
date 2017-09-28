@@ -5,15 +5,14 @@ namespace Rector\Console\Command;
 use Rector\Application\FileProcessor;
 use Rector\Exception\FileSystem\DirectoryNotFoundException;
 use Rector\Exception\NoRectorsLoadedException;
+use Rector\FileSystem\PhpFilesFinder;
 use Rector\Naming\CommandNaming;
 use Rector\Rector\RectorCollector;
-use SplFileInfo;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Finder\Finder;
 
 final class ProcessCommand extends Command
 {
@@ -36,15 +35,21 @@ final class ProcessCommand extends Command
      * @var SymfonyStyle
      */
     private $symfonyStyle;
+    /**
+     * @var PhpFilesFinder
+     */
+    private $phpFilesFinder;
 
     public function __construct(
         FileProcessor $fileProcessor,
         RectorCollector $rectorCollector,
-        SymfonyStyle $symfonyStyle
+        SymfonyStyle $symfonyStyle,
+        PhpFilesFinder $phpFilesFinder
     ) {
         $this->fileProcessor = $fileProcessor;
         $this->rectorCollector = $rectorCollector;
         $this->symfonyStyle = $symfonyStyle;
+        $this->phpFilesFinder = $phpFilesFinder;
 
         parent::__construct();
     }
@@ -67,7 +72,7 @@ final class ProcessCommand extends Command
 
         $this->ensureSomeRectorsAreRegistered();
 
-        $files = $this->findPhpFilesInDirectories($source);
+        $files = $this->phpFilesFinder->findInDirectories($source);
 
         $this->reportFoundFiles($files);
 
@@ -78,23 +83,6 @@ final class ProcessCommand extends Command
         $this->symfonyStyle->success('Rector is done!');
 
         return 0;
-    }
-
-    /**
-     * @param string[] $directories
-     * @return SplFileInfo[] array
-     */
-    private function findPhpFilesInDirectories(array $directories): array
-    {
-        $finder = Finder::create()
-            ->files()
-            ->name('*.php')
-            ->exclude('examples')
-            ->exclude('tests')
-            ->exclude('Tests')
-            ->in($directories);
-
-        return iterator_to_array($finder->getIterator());
     }
 
     private function ensureSomeRectorsAreRegistered(): void
