@@ -138,7 +138,13 @@ final class TypeResolver extends NodeVisitorAbstract
 
                 $this->typeContext->addVariableWithType($variableName, $variableType);
             } else {
-                $variableType = $this->typeContext->getTypeForVariable((string) $variableNode->name);
+                if ($variableNode->name instanceof Variable) {
+                    $name = $variableNode->name->name;
+                } else {
+                    $name = (string) $variableNode->name;
+                }
+
+                $variableType = $this->typeContext->getTypeForVariable($name);
             }
         } else {
             $variableType = $this->typeContext->getTypeForVariable((string) $variableNode->name);
@@ -156,9 +162,15 @@ final class TypeResolver extends NodeVisitorAbstract
     private function processAssignNode(Assign $assignNode): void
     {
         if ($assignNode->var instanceof Variable && $assignNode->expr instanceof Variable) {
-            $this->typeContext->addAssign($assignNode->var->name, $assignNode->expr->name);
+            if ($assignNode->var->name instanceof Variable) {
+                $name = $assignNode->var->name->name;
+            } else {
+                $name = $assignNode->var->name;
+            }
 
-            $variableType = $this->typeContext->getTypeForVariable($assignNode->var->name);
+            $this->typeContext->addAssign($name, $assignNode->expr->name);
+
+            $variableType = $this->typeContext->getTypeForVariable($name);
             if ($variableType) {
                 $assignNode->var->setAttribute(Attribute::TYPE, $variableType);
             }
