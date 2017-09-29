@@ -3,7 +3,6 @@
 namespace Rector\NodeTraverser;
 
 use PhpParser\Node;
-use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor;
 
 /**
@@ -13,18 +12,18 @@ use PhpParser\NodeVisitor;
 final class StandaloneTraverseNodeTraverser
 {
     /**
-     * @var NodeTraverser
-     */
-    private $nativeNodeTraverser;
-
-    /**
      * @var NodeVisitor[]
      */
     private $nodeVisitors = [];
 
-    public function __construct(NodeTraverser $nativeNodeTraverser)
+    /**
+     * @var NodeTraverserFactory
+     */
+    private $nodeTraverserFactory;
+
+    public function __construct(NodeTraverserFactory $nodeTraverserFactory)
     {
-        $this->nativeNodeTraverser = $nativeNodeTraverser;
+        $this->nodeTraverserFactory = $nodeTraverserFactory;
     }
 
     public function addNodeVisitor(NodeVisitor $nodeVisitor): void
@@ -39,9 +38,8 @@ final class StandaloneTraverseNodeTraverser
     public function traverse(array $nodes): array
     {
         foreach ($this->nodeVisitors as $nodeVisitor) {
-            $this->nativeNodeTraverser->addVisitor($nodeVisitor);
-            $nodes = $this->nativeNodeTraverser->traverse($nodes);
-            $this->nativeNodeTraverser->removeVisitor($nodeVisitor);
+            $nodeTraverser = $this->nodeTraverserFactory->createWithNoeVisitor($nodeVisitor);
+            $nodes = $nodeTraverser->traverse($nodes);
         }
 
         return $nodes;

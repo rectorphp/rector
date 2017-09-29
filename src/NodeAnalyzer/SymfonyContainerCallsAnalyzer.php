@@ -4,6 +4,7 @@ namespace Rector\NodeAnalyzer;
 
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
 
 final class SymfonyContainerCallsAnalyzer
@@ -17,13 +18,14 @@ final class SymfonyContainerCallsAnalyzer
             return false;
         }
 
-        if ($methodCall->name instanceof Variable) {
-            $methodName = $methodCall->name->name;
-        } else {
-            $methodName = (string) $methodCall->name;
+        if (! $methodCall->name instanceof Identifier) {
+            return false;
         }
 
-        if ($methodCall->var->name !== 'this' || $methodName !== 'get') {
+        $variableName = $methodCall->var->name;
+        $methodName = (string) $methodCall->name;
+
+        if ($variableName !== 'this' || $methodName !== 'get') {
             return false;
         }
 

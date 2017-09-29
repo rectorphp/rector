@@ -1,0 +1,11 @@
+--- /dev/null
++++ roave/better-reflection/src/Reflection/ReflectionClass.php
+@@ -175,7 +175,7 @@
+     public function getShortName() : string
+     {
+         if ( ! $this->isAnonymous()) {
+-            return $this->node->name;
++            return (string) $this->node->name;
+         }
+
+         $fileName = $this->getFileName();

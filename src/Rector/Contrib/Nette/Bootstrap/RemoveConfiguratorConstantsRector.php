@@ -4,6 +4,7 @@ namespace Rector\Rector\Contrib\Nette\Bootstrap;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use Rector\Node\Attribute;
 use Rector\Rector\AbstractRector;
@@ -41,6 +42,10 @@ final class RemoveConfiguratorConstantsRector extends AbstractRector
     {
         /** @var Node\Name\FullyQualified $fqnName */
         $fqnName = $classConstFetchNode->class->getAttribute(Attribute::RESOLVED_NAME);
+
+        if ($fqnName === null && $classConstFetchNode->class instanceof Variable) {
+            return (string) $classConstFetchNode->class->name;
+        }
 
         return $fqnName->toString();
     }

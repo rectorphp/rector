@@ -2,12 +2,11 @@
 
 namespace Rector\Console\Command;
 
-use Nette\Utils\Finder;
 use Rector\Application\FileProcessor;
 use Rector\Exception\NoRectorsLoadedException;
+use Rector\FileSystem\PhpFilesFinder;
 use Rector\Naming\CommandNaming;
 use Rector\Rector\RectorCollector;
-use SplFileInfo;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -36,14 +35,21 @@ final class ProcessCommand extends Command
      */
     private $symfonyStyle;
 
+    /**
+     * @var PhpFilesFinder
+     */
+    private $phpFilesFinder;
+
     public function __construct(
         FileProcessor $fileProcessor,
         RectorCollector $rectorCollector,
-        SymfonyStyle $symfonyStyle
+        SymfonyStyle $symfonyStyle,
+        PhpFilesFinder $phpFilesFinder
     ) {
         $this->fileProcessor = $fileProcessor;
         $this->rectorCollector = $rectorCollector;
         $this->symfonyStyle = $symfonyStyle;
+        $this->phpFilesFinder = $phpFilesFinder;
 
         parent::__construct();
     }
@@ -61,30 +67,26 @@ final class ProcessCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $source = $input->getArgument(self::ARGUMENT_SOURCE_NAME);
+
         $this->ensureSomeRectorsAreRegistered();
+
+        $files = $this->phpFilesFinder->findInDirectories($source);
 
         $this->reportLoadedRectors();
 
-        $source = $input->getArgument(self::ARGUMENT_SOURCE_NAME);
-        $files = $this->findPhpFilesInDirectories($source);
+        $this->symfonyStyle->title('Processing files');
+        foreach ($files as $file) {
+            $this->symfonyStyle->writeln(sprintf(
+                ' - %s',
+                $file
+            ));
+            $this->fileProcessor->processFile($file);
+        }
 
-        $this->reportFoundFiles($files);
-
-        $this->fileProcessor->processFiles($files);
+        $this->symfonyStyle->success('Rector is done!');
 
         return 0;
-    }
-
-    /**
-     * @param string[] $directories
-     * @return SplFileInfo[] array
-     */
-    private function findPhpFilesInDirectories(array $directories): array
-    {
-        $finder = Finder::find('*.php')
-            ->from($directories);
-
-        return iterator_to_array($finder->getIterator());
     }
 
     private function ensureSomeRectorsAreRegistered(): void
@@ -111,23 +113,6 @@ final class ProcessCommand extends Command
             $this->symfonyStyle->writeln(sprintf(
                 ' - %s',
                 get_class($rector)
-            ));
-        }
-
-        $this->symfonyStyle->newLine();
-    }
-
-    /**
-     * @param string[] $files
-     */
-    private function reportFoundFiles(array $files): void
-    {
-        $this->symfonyStyle->title('Processing files');
-
-        foreach ($files as $file) {
-            $this->symfonyStyle->writeln(sprintf(
-                ' - %s',
-                $file
             ));
         }
 

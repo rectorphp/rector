@@ -21,6 +21,7 @@
         "phpunit/phpunit": "^6.2",
         "slam/php-cs-fixer-extensions": "^1.6",
         "symfony/expression-language": "^3.3",
+        "symfony/dependency-injection": "^3.3",
         "symfony/form": "^3.3",
         "symplify/easy-coding-standard": "^2.4",
         "tracy/tracy": "^2.4"
@@ -46,7 +47,15 @@
         "all": ["phpunit", "@check-cs", "@phpstan"],
         "check-cs": "ecs check bin packages src tests",
         "fix-cs": "ecs check bin packages src tests --fix",
-        "phpstan": "phpstan analyse bin packages src tests --level max --configuration phpstan.neon"
+        "phpstan": "phpstan analyse bin packages src tests --level max --configuration phpstan.neon",
+        "create-test-projects": [
+            "composer create-project nette/nette temp/nette --no-dev",
+            "composer create-project symfony/symfony temp/symfony --no-dev"
+        ],
+        "process-test-projects": [
+            "bin/rector process temp/nette/vendor --config src/config/level/nette/all.yml",
+            "bin/rector process temp/symfony/src --config src/config/level/symfony/all.yml"
+        ]
     },
     "config": {
         "sort-packages": true
@@ -54,9 +63,10 @@
     "extra": {
         "patches": {
             "roave/better-reflection": {
-                "parser type miss-match with dev-version 1": "patches/better-reflection-php-parser-memoizing-parser.patch",
-                "parser type miss-match with dev-version 2": "patches/better-reflection-php-parser-reflection-function-abstract.patch",
-                "parser type miss-match with dev-version 3": "patches/better-reflection-php-parser-reflection-parameter.patch"
+                "nikic/php-parser dev-version 1": "patches/better-reflection-php-parser-memoizing-parser.patch",
+                "nikic/php-parser dev-version 2": "patches/better-reflection-php-parser-reflection-function-abstract.patch",
+                "nikic/php-parser dev-version 3": "patches/better-reflection-php-parser-reflection-parameter.patch",
+                "nikic/php-parser dev-version 4": "patches/better-reflection-php-parser-reflection-class-get-short-name.patch"
             }
         }
     }
