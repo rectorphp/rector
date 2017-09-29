@@ -25,6 +25,9 @@ final class PhpFilesFinder
             ->exclude('Tests')
             ->exclude('Test')
             ->exclude('stubs')
+            // very rare and specific code
+            ->exclude('polyfill')
+            ->notName('*polyfill*')
             ->sortByName();
 
         return iterator_to_array($finder->getIterator());
