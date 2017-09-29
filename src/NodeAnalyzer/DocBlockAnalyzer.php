@@ -2,6 +2,7 @@
 
 namespace Rector\NodeAnalyzer;
 
+use Nette\Utils\Strings;
 use PhpCsFixer\DocBlock\DocBlock;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
@@ -16,15 +17,20 @@ final class DocBlockAnalyzer
         return (bool) $docBlock->getAnnotationsOfType($annotation);
     }
 
-    public function removeAnnotationFromNode(Node $node, string $annotationName): void
+    public function removeAnnotationFromNode(Node $node, string $annotationName, string $annotatoinContent = ''): void
     {
         $docBlock = $this->createDocBlockFromNode($node);
 
         $annotations = $docBlock->getAnnotationsOfType($annotationName);
 
-
         foreach ($annotations as $annotation) {
-            $annotation->remove();
+            if ($annotatoinContent) {
+                if (Strings::contains($annotation->getContent(), $annotatoinContent)) {
+                    $annotation->remove();
+                }
+            } else {
+                $annotation->remove();
+            }
         }
 
         $doc = new Doc($docBlock->getContent());

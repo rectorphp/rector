@@ -92,13 +92,9 @@ final class MagicMethodRector extends AbstractRector
                 $methodSettings['propertyType'],
                 $methodSettings['propertyName']
             );
+
+            $this->docBlockAnalyzer->removeAnnotationFromNode($classNode, 'method', $methodName);
         }
-
-        $this->docBlockAnalyzer->removeAnnotationFromNode($classNode, 'method');
-
-        dump($classNode);
-        dump($classNode->getDocComment());
-        dump($classNode->setAttribute('comments', null));
 
         return $classNode;
     }
@@ -138,7 +134,7 @@ final class MagicMethodRector extends AbstractRector
             if ($op === 'get' || $op === 'is') {
                 $type = null;
                 $op = 'get';
-            } elseif (                ! $type
+            } elseif (! $type
                 && preg_match('#@var[ \t]+(\S+)' . ($op === 'add' ? '\[\]#' : '#'), $rp->getDocComment(), $match)
             ) {
                 $type = $match[1];
