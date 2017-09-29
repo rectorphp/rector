@@ -35,7 +35,6 @@ final class DocBlockAnalyzer
 
         $doc = new Doc($docBlock->getContent());
         $node->setDocComment($doc);
-        $node->setAttribute('comments', null);
     }
 
     public function getAnnotationFromNode(Node $node, string $annotation): string
