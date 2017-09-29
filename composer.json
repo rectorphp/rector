@@ -53,8 +53,8 @@
             "composer create-project symfony/symfony temp/symfony --no-dev"
         ],
         "process-test-projects": [
-            "bin/rector process temp/nette --config src/config/level/nette/all.yml",
-            "bin/rector process temp/symfony --config src/config/level/symfony/all.yml"
+            "bin/rector process temp/nette/vendor --config src/config/level/nette/all.yml",
+            "bin/rector process temp/symfony/src --config src/config/level/symfony/all.yml"
         ]
     },
     "config": {
