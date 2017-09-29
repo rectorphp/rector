@@ -7,10 +7,12 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Builder\MethodBuilder;
 use Rector\Node\Attribute;
+use Rector\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\Rector\AbstractRector;
 
 /**
  * Catches @method annotations at childs of Nette\Object
+ * and converts them to real methods
  *
  * Covers @see https://github.com/RectorPHP/Rector/issues/49
  *
@@ -38,9 +40,15 @@ final class MagicMethodRector extends AbstractRector
      */
     private $methodBuilder;
 
-    public function __construct(MethodBuilder $methodBuilder)
+    /**
+     * @var DocBlockAnalyzer
+     */
+    private $docBlockAnalyzer;
+
+    public function __construct(MethodBuilder $methodBuilder, DocBlockAnalyzer $docBlockAnalyzer)
     {
         $this->methodBuilder = $methodBuilder;
+        $this->docBlockAnalyzer = $docBlockAnalyzer;
     }
 
     public function isCandidate(Node $node): bool
@@ -73,20 +81,26 @@ final class MagicMethodRector extends AbstractRector
     }
 
     /**
-     * @param Class_ $node
+     * @param Class_ $classNode
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $classNode): ?Node
     {
         foreach ($this->magicMethods as $methodName => $methodSettings) {
             $this->methodBuilder->addMethodToClass(
-                $node,
+                $classNode,
                 $methodName,
                 $methodSettings['propertyType'],
                 $methodSettings['propertyName']
             );
         }
 
-        return $node;
+        $this->docBlockAnalyzer->removeAnnotationFromNode($classNode, 'method');
+
+        dump($classNode);
+        dump($classNode->getDocComment());
+        dump($classNode->setAttribute('comments', null));
+
+        return $classNode;
     }
 
     private function isNetteObjectChild(Class_ $classNode): bool

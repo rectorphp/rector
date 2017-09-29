@@ -16,16 +16,26 @@ final class DocBlockAnalyzer
         return (bool) $docBlock->getAnnotationsOfType($annotation);
     }
 
-    public function removeAnnotationFromNode(Node $node, string $annotation): void
+    public function removeAnnotationFromNode(Node $node, string $annotationName): void
     {
         $docBlock = $this->createDocBlockFromNode($node);
 
-        $annotations = $docBlock->getAnnotationsOfType($annotation);
-        foreach ($annotations as $injectAnnotation) {
-            $injectAnnotation->remove();
+        $annotations = $docBlock->getAnnotationsOfType($annotationName);
+
+
+        foreach ($annotations as $annotation) {
+            $annotation->remove();
         }
 
-        $node->setDocComment(new Doc($docBlock->getContent()));
+        $doc = new Doc($docBlock->getContent());
+
+        // is empty @todo improve
+        if (strlen($doc->jsonSerialize()['text']) <= 7) {
+            $doc = new Doc('');
+        }
+
+        $node->setDocComment($doc);
+        $node->setAttribute('comments', null);
     }
 
     public function getAnnotationFromNode(Node $node, string $annotation): string
