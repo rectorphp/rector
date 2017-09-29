@@ -48,8 +48,8 @@
         "fix-cs": "ecs check bin packages src tests --fix",
         "phpstan": "phpstan analyse bin packages src tests --level max --configuration phpstan.neon",
         "create-test-projects": [
-            "composer create-project nette/nette temp/nette",
-            "composer create-project symfony/symfony temp/symfony"
+            "composer create-project nette/nette temp/nette --no-dev",
+            "composer create-project symfony/symfony temp/symfony --no-dev"
         ],
         "process-test-projects": [
             "bin/rector process temp/nette --config src/config/level/nette/all.yml",
