@@ -173,6 +173,9 @@ final class NodeFactory
     }
 
     /**
+     * @todo consider using PhpParser's
+     * @see \PhpParser\BuilderHelpers::normalizeValue()
+     *
      * @param mixed $value
      */
     private function createTypeFromScalar($value): Expr
