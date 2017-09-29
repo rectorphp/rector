@@ -84,7 +84,6 @@ final class NodeTraverserQueue
                 // keep original
                 return [$oldStmts, $oldStmts, $oldStmts];
             }
-
         } catch (Throwable $throwable) {
             throw new FileProcessingException(sprintf(
                 'Processing file "%s" failed due to: "%s"',

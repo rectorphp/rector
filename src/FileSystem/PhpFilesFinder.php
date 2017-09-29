@@ -23,6 +23,7 @@ final class PhpFilesFinder
             ->exclude('tests')
             ->exclude('Tests')
             ->exclude('Test')
+            ->exclude('stubs')
             ->in($directories);
 
         return iterator_to_array($finder->getIterator());
