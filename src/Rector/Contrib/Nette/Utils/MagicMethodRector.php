@@ -24,11 +24,11 @@ final class MagicMethodRector extends AbstractRector
      * @var string
      */
     private const MAGIC_METHODS_PATTERN = '~^
-			[ \t*]*  @method  [ \t]+
-			(?: [^\s(]+  [ \t]+ )?
-			(set|get|is|add)  ([A-Z]\w*)  [ \t]*
-			(?: \(  [ \t]* ([^)$\s]+)  )?
-		()~mx';
+            [ \t*]*  @method  [ \t]+
+            (?: [^\s(]+  [ \t]+ )?
+            (set|get|is|add)  ([A-Z]\w*)  [ \t]*
+            (?: \(  [ \t]* ([^)$\s]+)  )?
+        ()~mx';
 
     /**
      * @var mixed[]
@@ -145,12 +145,10 @@ final class MagicMethodRector extends AbstractRector
             }
 
             $methods[$name] = [
-                    'propertyType' => $type,
-                    'propertyName' => $prop,
-                ];
+                'propertyType' => $type,
+                'propertyName' => $prop,
+            ];
         }
-
-//        }
 
         return $methods;
     }

@@ -34,12 +34,6 @@ final class DocBlockAnalyzer
         }
 
         $doc = new Doc($docBlock->getContent());
-
-        // is empty @todo improve
-        if (strlen($doc->jsonSerialize()['text']) <= 7) {
-            $doc = new Doc('');
-        }
-
         $node->setDocComment($doc);
         $node->setAttribute('comments', null);
     }

@@ -4,6 +4,9 @@ namespace SomeNamespace;
 
 use Nette\Object;
 
+/**
+ * @method getValue()
+ */
 class SomeClass extends Object
 {
     public function getValue()
