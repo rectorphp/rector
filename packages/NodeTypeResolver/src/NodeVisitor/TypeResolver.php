@@ -5,6 +5,7 @@ namespace Rector\NodeTypeResolver\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -133,6 +134,9 @@ final class TypeResolver extends NodeVisitorAbstract
         $parentNode = $variableNode->getAttribute(Attribute::PARENT_NODE);
         if ($parentNode instanceof Assign) {
             $variableType = $this->processVariableTypeForAssign($variableNode, $parentNode);
+        } elseif ($variableNode->name instanceof Variable) {
+            // nested: ${$type}[$name] - dynamic, unable to resolve type
+            return;
         } else {
             $variableType = $this->typeContext->getTypeForVariable((string) $variableNode->name);
         }
@@ -218,6 +222,10 @@ final class TypeResolver extends NodeVisitorAbstract
     {
         if ($propertyFetchNode->name instanceof Variable) {
             return $propertyFetchNode->name->name;
+        }
+
+        if ($propertyFetchNode->name instanceof Concat) {
+            return '';
         }
 
         return (string) $propertyFetchNode->name;
