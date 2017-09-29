@@ -47,11 +47,13 @@
         "check-cs": "ecs check bin packages src tests",
         "fix-cs": "ecs check bin packages src tests --fix",
         "phpstan": "phpstan analyse bin packages src tests --level max --configuration phpstan.neon",
-        "nette-set": "bin/rector process temp/nette-sandbox/vendor/nette --config src/config/level/nette/all.yml",
-        "symfony-set": "bin/rector process temp/symfony-demo/vendor/symfony --config src/config/level/symfony/all.yml",
-        "post-install-cmd": [
-            "composer create-project nette/sandbox:@dev temp/nette-sandbox",
-            "composer create-project symfony/symfony-demo:@dev temp/symfony-demo"
+        "create-test-projects": [
+            "composer create-project nette/nette temp/nette",
+            "composer create-project symfony/symfony temp/symfony"
+        ],
+        "process-test-projects": [
+            "bin/rector process temp/nette --config src/config/level/nette/all.yml",
+            "bin/rector process temp/symfony --config src/config/level/symfony/all.yml"
         ]
     },
     "config": {

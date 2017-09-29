@@ -5,10 +5,8 @@ php:
 
 install:
   - composer install
-  # prepare nette/sandbox
-  - composer create-project nette/sandbox:@dev temp/nette-sandbox
-  # prepare symfony/symfony-demo
-  - composer create-project symfony/symfony-demo:@dev temp/symfony-demo
+  # prepare test projects
+  - composer create-test-projects
 
 script:
   - vendor/bin/phpunit --coverage-clover coverage.xml
@@ -17,10 +15,8 @@ script:
   - composer check-cs
   # check with phpstan (defined in composer.json "scripts" section)
   - composer phpstan
-  # try on nette/sandbox
-  - composer nette-set
-  # try on symfony/symfony-demo
-  - composer symfony-set
+  # try on test projects
+  - composer process-test-projects
 
 after_script:
   # upload coverage to Coveralls.io
