@@ -1,12 +1,13 @@
-<?php declare (strict_types=1);
+<?php declare(strict_types=1);
 
-class SomeClass
+namespace SomeNamespace;
+
+use Nette\Object;
+
+class SomeClass extends Object
 {
-    use \Nette\SmartObject;
-
     public function getValue()
     {
         return $this->value;
     }
-
 }
