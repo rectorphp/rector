@@ -19,12 +19,13 @@ final class PhpFilesFinder
         $finder = Finder::create()
             ->files()
             ->name('*.php')
+            ->in($directories)
             ->exclude('examples')
             ->exclude('tests')
             ->exclude('Tests')
             ->exclude('Test')
             ->exclude('stubs')
-            ->in($directories);
+            ->sortByName();
 
         return iterator_to_array($finder->getIterator());
     }
