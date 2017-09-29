@@ -33,12 +33,15 @@ final class DocBlockAnalyzer
             }
         }
 
-        /** @var Node $parentNode */
-        $parentNode = $node->getAttribute('parentNode');
-        $parentNode->setAttribute('originalNode', null);
-
         $doc = new Doc($docBlock->getContent());
         $node->setDocComment($doc);
+
+        /** @var Node $parentNode */
+        $parentNode = $node->getAttribute('parentNode');
+        $parentNode->setAttribute('origNode', null);
+
+        $node->setAttribute('parentNode', null);
+        $node->setAttribute('origNode', null);
     }
 
     public function getAnnotationFromNode(Node $node, string $annotation): string
