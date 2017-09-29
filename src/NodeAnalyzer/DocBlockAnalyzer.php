@@ -33,6 +33,10 @@ final class DocBlockAnalyzer
             }
         }
 
+        /** @var Node $parentNode */
+        $parentNode = $node->getAttribute('parentNode');
+        $parentNode->setAttribute('originalNode', null);
+
         $doc = new Doc($docBlock->getContent());
         $node->setDocComment($doc);
     }
