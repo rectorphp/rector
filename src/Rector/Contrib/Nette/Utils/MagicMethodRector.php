@@ -135,6 +135,8 @@ final class MagicMethodRector extends AbstractRector
      * Mimics https://github.com/nette/utils/blob/v2.3/src/Utils/ObjectMixin.php#L285
      * only without reflection.
      *
+     * @todo extract to MagicMethodMatcher service
+     *
      * @return mixed[]
      */
     private function matchMagicMethodsInDocComment(string $currentNamespace, string $text): array
