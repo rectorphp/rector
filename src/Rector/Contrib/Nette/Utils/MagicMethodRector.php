@@ -5,7 +5,6 @@ namespace Rector\Rector\Contrib\Nette\Utils;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
-use PHPStan\Reflection\PropertyReflection;
 use Rector\BetterReflection\Reflector\CurrentFileAwareClassReflector;
 use Rector\Builder\MethodBuilder;
 use Rector\Node\Attribute;
@@ -177,9 +176,9 @@ final class MagicMethodRector extends AbstractRector
         string $currentNamespace,
         string $op,
         string $type,
-        PropertyReflection $propertyReflection,
+        ReflectionProperty $propertyReflection,
         array $match
-    ): string {
+    ): ?string {
         if ($op === 'get' || $op === 'is') {
             $type = null;
             $op = 'get';
