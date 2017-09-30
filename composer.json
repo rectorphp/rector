@@ -39,6 +39,7 @@
     "autoload-dev": {
         "psr-4": {
             "Rector\\Tests\\": "tests",
+            "Rector\\BetterReflection\\Tests\\": "packages/BetterReflection/tests",
             "Rector\\NodeTypeResolver\\Tests\\": "packages/NodeTypeResolver/tests",
             "Rector\\DeprecationExtractor\\Tests\\": "packages/DeprecationExtractor/tests"
         }
@@ -66,7 +67,8 @@
                 "nikic/php-parser dev-version 1": "patches/better-reflection-php-parser-memoizing-parser.patch",
                 "nikic/php-parser dev-version 2": "patches/better-reflection-php-parser-reflection-function-abstract.patch",
                 "nikic/php-parser dev-version 3": "patches/better-reflection-php-parser-reflection-parameter.patch",
-                "nikic/php-parser dev-version 4": "patches/better-reflection-php-parser-reflection-class-get-short-name.patch"
+                "nikic/php-parser dev-version 4": "patches/better-reflection-php-parser-reflection-class-get-short-name.patch",
+                "nikic/php-parser dev-version 5": "patches/better-reflection-php-parser-reflection-property.patch"
             }
         }
     }

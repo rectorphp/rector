@@ -2,6 +2,7 @@
 
 namespace Rector\NodeAnalyzer;
 
+use Nette\Utils\Strings;
 use PhpCsFixer\DocBlock\DocBlock;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
@@ -16,16 +17,25 @@ final class DocBlockAnalyzer
         return (bool) $docBlock->getAnnotationsOfType($annotation);
     }
 
-    public function removeAnnotationFromNode(Node $node, string $annotation): void
+    public function removeAnnotationFromNode(Node $node, string $annotationName, string $annotationContent = ''): void
     {
         $docBlock = $this->createDocBlockFromNode($node);
 
-        $annotations = $docBlock->getAnnotationsOfType($annotation);
-        foreach ($annotations as $injectAnnotation) {
-            $injectAnnotation->remove();
+        $annotations = $docBlock->getAnnotationsOfType($annotationName);
+
+        foreach ($annotations as $annotation) {
+            if ($annotationContent) {
+                if (Strings::contains($annotation->getContent(), $annotationContent)) {
+                    $annotation->remove();
+                }
+            } else {
+                $annotation->remove();
+            }
         }
 
-        $node->setDocComment(new Doc($docBlock->getContent()));
+        $this->saveNewDocBlockToNode($node, $docBlock);
+
+        $this->nullOrigForParentNode($node);
     }
 
     public function getAnnotationFromNode(Node $node, string $annotation): string
@@ -73,5 +83,29 @@ final class DocBlockAnalyzer
     private function createDocBlockFromNode(Node $node): DocBlock
     {
         return new DocBlock($node->getDocComment());
+    }
+
+    /**
+     * @see https://github.com/nikic/PHP-Parser/issues/420#issuecomment-333250500
+     */
+    private function nullOrigForParentNode(Node $node): void
+    {
+        /** @var Node $parentNode */
+        $parentNode = $node->getAttribute('parentNode');
+        if ($parentNode) {
+            $parentNode->setAttribute('origNode', null);
+        }
+    }
+
+    private function saveNewDocBlockToNode(Node $node, DocBlock $docBlock): void
+    {
+        $docContent = $docBlock->getContent();
+
+        if (strlen($docBlock->getContent()) <= 7) {
+            $docContent = '';
+        }
+
+        $doc = new Doc($docContent);
+        $node->setDocComment($doc);
     }
 }

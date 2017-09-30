@@ -4,11 +4,13 @@ namespace Rector\NodeTraverserQueue;
 
 use PhpParser\Lexer;
 use Rector\Contract\Parser\ParserInterface;
+use Rector\FileSystem\CurrentFileProvider;
 use Rector\NodeTraverser\CloningNodeTraverser;
 use Rector\NodeTraverser\RectorNodeTraverser;
 use Rector\NodeTraverser\ShutdownNodeTraverser;
 use Rector\NodeTraverser\StandaloneTraverseNodeTraverser;
 use Rector\NodeTraverserQueue\Exception\FileProcessingException;
+use Roave\BetterReflection\Reflection\ReflectionClass;
 use Roave\BetterReflection\Reflection\ReflectionFunction;
 use Roave\BetterReflection\Reflector\Exception\IdentifierNotFound;
 use SplFileInfo;
@@ -46,13 +48,19 @@ final class NodeTraverserQueue
      */
     private $standaloneTraverseNodeTraverser;
 
+    /**
+     * @var CurrentFileProvider
+     */
+    private $currentFileProvider;
+
     public function __construct(
         ParserInterface $parser,
         Lexer $lexer,
         CloningNodeTraverser $cloningNodeTraverser,
         RectorNodeTraverser $rectorNodeTraverser,
         ShutdownNodeTraverser $shutdownNodeTraverser,
-        StandaloneTraverseNodeTraverser $standaloneTraverseNodeTraverser
+        StandaloneTraverseNodeTraverser $standaloneTraverseNodeTraverser,
+        CurrentFileProvider $currentFileProvider
     ) {
         $this->parser = $parser;
         $this->lexer = $lexer;
@@ -60,6 +68,7 @@ final class NodeTraverserQueue
         $this->cloningNodeTraverser = $cloningNodeTraverser;
         $this->shutdownNodeTraverser = $shutdownNodeTraverser;
         $this->standaloneTraverseNodeTraverser = $standaloneTraverseNodeTraverser;
+        $this->currentFileProvider = $currentFileProvider;
     }
 
     /**
@@ -67,6 +76,8 @@ final class NodeTraverserQueue
      */
     public function processFileInfo(SplFileInfo $fileInfo): array
     {
+        $this->currentFileProvider->setCurrentFile($fileInfo);
+
         try {
             $oldStmts = $this->parser->parseFile($fileInfo->getRealPath());
             $oldTokens = $this->lexer->getTokens();
@@ -80,7 +91,7 @@ final class NodeTraverserQueue
         } catch (IdentifierNotFound $identifierNotFoundException) {
             // could not locate function, skip and keep original
             $identifierType = $identifierNotFoundException->getIdentifier()->getType()->getName();
-            if ($identifierType === ReflectionFunction::class) {
+            if (in_array($identifierType, [ReflectionFunction::class, ReflectionClass::class], true)) {
                 // keep original
                 return [$oldStmts, $oldStmts, $oldStmts];
             }

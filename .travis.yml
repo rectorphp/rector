@@ -10,6 +10,8 @@ install:
 
 script:
   - vendor/bin/phpunit --coverage-clover coverage.xml
+  # disable xdebug
+  - phpenv config-rm xdebug.ini || return 0
   # check coding standard (defined in composer.json "scripts" section)
   # if this fails, run "composer fix-cs" to fix all fixable issues
   - composer check-cs

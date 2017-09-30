@@ -12,7 +12,7 @@ use PhpParser\Node\Stmt\TraitUse;
 final class StatementGlue
 {
     /**
-     * @param ClassMethod|Property $node
+     * @param ClassMethod|Property|ClassMethod $node
      */
     public function addAsFirstMethod(Class_ $classNode, Node $node): void
     {

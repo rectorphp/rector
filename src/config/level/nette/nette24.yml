@@ -4,3 +4,4 @@ rectors:
     - Rector\Rector\Contrib\Nette\Utils\HtmlAddMethodRector
     - Rector\Rector\Contrib\Nette\Utils\NetteObjectToSmartTraitRector
     - Rector\Rector\Contrib\Nette\PhpGenerator\PhpGeneratorDocumentMethodRector
+    - Rector\Rector\Contrib\Nette\Utils\MagicMethodRector

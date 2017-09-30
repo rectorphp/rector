@@ -22,16 +22,16 @@ final class FileProcessor
     /**
      * @var RectorNodeTraverser
      */
-    private $mainNodeTraverser;
+    private $rectorNodeTraverser;
 
     public function __construct(
         FormatPerservingPrinter $codeStyledPrinter,
         NodeTraverserQueue $nodeTraverserQueue,
-        RectorNodeTraverser $mainNodeTraverser
+        RectorNodeTraverser $rectorNodeTraverser
     ) {
         $this->formatPerservingPrinter = $codeStyledPrinter;
         $this->nodeTraverserQueue = $nodeTraverserQueue;
-        $this->mainNodeTraverser = $mainNodeTraverser;
+        $this->rectorNodeTraverser = $rectorNodeTraverser;
     }
 
     /**
@@ -39,7 +39,7 @@ final class FileProcessor
      */
     public function processFileWithRectorsToString(SplFileInfo $file, array $rectorClasses): string
     {
-        $this->mainNodeTraverser->enableOnlyRectorClasses($rectorClasses);
+        $this->rectorNodeTraverser->enableOnlyRectorClasses($rectorClasses);
 
         return $this->processFileToString($file);
     }
