@@ -35,7 +35,7 @@ final class DocBlockAnalyzer
 
         $this->saveNewDocBlockToNode($node, $docBlock);
 
-        $this->nullNode($node);
+        $this->nullOrigForParentNode($node);
     }
 
     public function getAnnotationFromNode(Node $node, string $annotation): string
@@ -85,16 +85,11 @@ final class DocBlockAnalyzer
         return new DocBlock($node->getDocComment());
     }
 
-    private function nullNode(Node $node): void
+    private function nullOrigForParentNode(Node $node): void
     {
         /** @var Node $parentNode */
         $parentNode = $node->getAttribute('parentNode');
-        if ($parentNode) {
-            $parentNode->setAttribute('origNode', null);
-        }
-
-        $node->setAttribute('parentNode', null);
-        $node->setAttribute('origNode', null);
+        $parentNode->setAttribute('origNode', null);
     }
 
     private function saveNewDocBlockToNode(Node $node, DocBlock $docBlock): void
