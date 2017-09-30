@@ -33,7 +33,12 @@ final class DocBlockAnalyzer
             }
         }
 
-        $doc = new Doc($docBlock->getContent());
+        $docContent = $docBlock->getContent();
+        if (strlen($docBlock->getContent()) <= 7) {
+            $docContent = '';
+        }
+
+        $doc = new Doc($docContent);
         $node->setDocComment($doc);
 
         /** @var Node $parentNode */
