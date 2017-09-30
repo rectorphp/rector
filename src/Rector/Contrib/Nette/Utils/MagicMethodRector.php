@@ -149,9 +149,6 @@ final class MagicMethodRector extends AbstractRector
             $name = $op . $prop;
             $prop = strtolower($prop[0]) . substr($prop, 1) . ($op === 'add' ? 's' : '');
 
-            // @todo: file aware BetterReflection? - FileLocator
-            // use CurrentFileProvider? load in ProcessCommand, enable here
-
             if (! $this->classReflection->hasProperty($prop)) {
                 continue;
             }
