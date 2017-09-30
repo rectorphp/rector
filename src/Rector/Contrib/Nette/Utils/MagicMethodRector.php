@@ -5,6 +5,7 @@ namespace Rector\Rector\Contrib\Nette\Utils;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
+use PHPStan\Reflection\PropertyReflection;
 use Rector\BetterReflection\Reflector\CurrentFileAwareClassReflector;
 use Rector\Builder\MethodBuilder;
 use Rector\Node\Attribute;
@@ -157,18 +158,7 @@ final class MagicMethodRector extends AbstractRector
             $propertyReflection = $this->classReflection->getProperty($prop);
 
             if ($propertyReflection && ! $propertyReflection->isStatic()) {
-                if ($op === 'get' || $op === 'is') {
-                    $type = null;
-                    $op = 'get';
-                } elseif (! $type
-                    && preg_match('#@var[ \t]+(\S+)' . ($op === 'add' ? '\[\]#' : '#'), $propertyReflection->getDocComment(), $match)
-                ) {
-                    $type = $match[1];
-                }
-
-                if ($type && $currentNamespace && preg_match('#^[A-Z]\w+(\[|\||\z)#', $type)) {
-                    $type = $currentNamespace . '\\' . $type;
-                }
+                $type = $this->resolveType($currentNamespace, $op, $type, $propertyReflection, $match);
 
                 $methods[$name] = [
                     'propertyType' => $type,
@@ -178,5 +168,33 @@ final class MagicMethodRector extends AbstractRector
         }
 
         return $methods;
+    }
+
+    /**
+     * @param mixed[] $match
+     */
+    private function resolveType(
+        string $currentNamespace,
+        string $op,
+        string $type,
+        PropertyReflection $propertyReflection,
+        array $match
+    ): string {
+        if ($op === 'get' || $op === 'is') {
+            $type = null;
+            $op = 'get';
+        } elseif (! $type && preg_match(
+            '#@var[ \t]+(\S+)' . ($op === 'add' ? '\[\]#' : '#'),
+            $propertyReflection->getDocComment(),
+            $match
+        )) {
+            $type = $match[1];
+        }
+
+        if ($type && $currentNamespace && preg_match('#^[A-Z]\w+(\[|\||\z)#', $type)) {
+            $type = $currentNamespace . '\\' . $type;
+        }
+
+        return $type;
     }
 }

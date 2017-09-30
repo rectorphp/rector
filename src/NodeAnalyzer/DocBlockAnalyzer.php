@@ -17,15 +17,15 @@ final class DocBlockAnalyzer
         return (bool) $docBlock->getAnnotationsOfType($annotation);
     }
 
-    public function removeAnnotationFromNode(Node $node, string $annotationName, string $annotatoinContent = ''): void
+    public function removeAnnotationFromNode(Node $node, string $annotationName, string $annotationContent = ''): void
     {
         $docBlock = $this->createDocBlockFromNode($node);
 
         $annotations = $docBlock->getAnnotationsOfType($annotationName);
 
         foreach ($annotations as $annotation) {
-            if ($annotatoinContent) {
-                if (Strings::contains($annotation->getContent(), $annotatoinContent)) {
+            if ($annotationContent) {
+                if (Strings::contains($annotation->getContent(), $annotationContent)) {
                     $annotation->remove();
                 }
             } else {
@@ -33,23 +33,9 @@ final class DocBlockAnalyzer
             }
         }
 
-        $docContent = $docBlock->getContent();
-        if (strlen($docBlock->getContent()) <= 7) {
-            $docContent = '';
-        }
+        $this->saveNewDocBlockToNode($node, $docBlock);
 
-        $doc = new Doc($docContent);
-        $node->setDocComment($doc);
-
-        /** @var Node $parentNode */
-        $parentNode = $node->getAttribute('parentNode');
-        if ($parentNode) {
-            $parentNode->setAttribute('origNode', null);
-        }
-
-        // ref: https://github.com/nikic/PHP-Parser/issues/420#issuecomment-333301992
-        $node->setAttribute('parentNode', null);
-        $node->setAttribute('origNode', null);
+        $this->nullNode($node);
     }
 
     public function getAnnotationFromNode(Node $node, string $annotation): string
@@ -97,5 +83,29 @@ final class DocBlockAnalyzer
     private function createDocBlockFromNode(Node $node): DocBlock
     {
         return new DocBlock($node->getDocComment());
+    }
+
+    private function nullNode(Node $node): void
+    {
+        /** @var Node $parentNode */
+        $parentNode = $node->getAttribute('parentNode');
+        if ($parentNode) {
+            $parentNode->setAttribute('origNode', null);
+        }
+
+        $node->setAttribute('parentNode', null);
+        $node->setAttribute('origNode', null);
+    }
+
+    private function saveNewDocBlockToNode(Node $node, DocBlock $docBlock): void
+    {
+        $docContent = $docBlock->getContent();
+
+        if (strlen($docBlock->getContent()) <= 7) {
+            $docContent = '';
+        }
+
+        $doc = new Doc($docContent);
+        $node->setDocComment($doc);
     }
 }
