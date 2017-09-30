@@ -42,6 +42,7 @@ final class DocBlockAnalyzer
             $parentNode->setAttribute('origNode', null);
         }
 
+        // ref: https://github.com/nikic/PHP-Parser/issues/420#issuecomment-333301992
         $node->setAttribute('parentNode', null);
         $node->setAttribute('origNode', null);
     }

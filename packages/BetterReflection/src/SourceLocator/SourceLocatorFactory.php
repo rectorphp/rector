@@ -2,6 +2,7 @@
 
 namespace Rector\BetterReflection\SourceLocator;
 
+use Rector\Exception\FileSystem\FileNotFoundException;
 use Roave\BetterReflection\SourceLocator\Ast\Locator;
 use Roave\BetterReflection\SourceLocator\Type\AggregateSourceLocator;
 use Roave\BetterReflection\SourceLocator\Type\AutoloadSourceLocator;
@@ -32,13 +33,14 @@ final class SourceLocatorFactory
     public function createWithFile(SplFileInfo $fileInfo): SourceLocator
     {
         return $this->wrapInMemoizinhSourceLocator(
-            $this->createCommonLocators() +
-            [$this->createFileSourceLocator($fileInfo)]
+            array_merge($this->createCommonLocators(), [$this->createFileSourceLocator($fileInfo)])
         );
     }
 
     private function createFileSourceLocator(SplFileInfo $fileInfo): SingleFileSourceLocator
     {
+        $this->ensureFileExists($fileInfo);
+
         return new SingleFileSourceLocator($fileInfo->getRealPath(), $this->locator);
     }
 
@@ -60,5 +62,18 @@ final class SourceLocatorFactory
     private function wrapInMemoizinhSourceLocator(array $sourceLocators): MemoizingSourceLocator
     {
         return new MemoizingSourceLocator(new AggregateSourceLocator($sourceLocators));
+    }
+
+    private function ensureFileExists(SplFileInfo $fileInfo): void
+    {
+        if (file_exists($fileInfo->getRealPath())) {
+            return;
+        }
+
+        throw new FileNotFoundException(sprintf(
+            'File "%s" not found in "%s".',
+            $fileInfo->getRealPath(),
+            __CLASS__
+        ));
     }
 }

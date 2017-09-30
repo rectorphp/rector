@@ -180,6 +180,7 @@ final class MagicMethodRector extends AbstractRector
             }
         }
 
+
         return $methods;
     }
 }
