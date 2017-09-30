@@ -2,6 +2,7 @@
 
 namespace Rector\Application;
 
+use Rector\FileSystem\CurrentFileProvider;
 use Rector\NodeTraverser\RectorNodeTraverser;
 use Rector\NodeTraverserQueue\NodeTraverserQueue;
 use Rector\Printer\FormatPerservingPrinter;
@@ -24,14 +25,21 @@ final class FileProcessor
      */
     private $rectorNodeTraverser;
 
+    /**
+     * @var CurrentFileProvider
+     */
+    private $currentFileProvider;
+
     public function __construct(
         FormatPerservingPrinter $codeStyledPrinter,
         NodeTraverserQueue $nodeTraverserQueue,
-        RectorNodeTraverser $rectorNodeTraverser
+        RectorNodeTraverser $rectorNodeTraverser,
+        CurrentFileProvider $currentFileProvider
     ) {
         $this->formatPerservingPrinter = $codeStyledPrinter;
         $this->nodeTraverserQueue = $nodeTraverserQueue;
         $this->rectorNodeTraverser = $rectorNodeTraverser;
+        $this->currentFileProvider = $currentFileProvider;
     }
 
     /**
@@ -46,6 +54,8 @@ final class FileProcessor
 
     public function processFile(SplFileInfo $fileInfo): void
     {
+        $this->currentFileProvider->setCurrentFile($fileInfo);
+
         [$newStmts, $oldStmts, $oldTokens] = $this->nodeTraverserQueue->processFileInfo($fileInfo);
 
         $this->formatPerservingPrinter->printToFile($fileInfo, $newStmts, $oldStmts, $oldTokens);
@@ -56,6 +66,8 @@ final class FileProcessor
      */
     private function processFileToString(SplFileInfo $fileInfo): string
     {
+        $this->currentFileProvider->setCurrentFile($fileInfo);
+
         [$newStmts, $oldStmts, $oldTokens] = $this->nodeTraverserQueue->processFileInfo($fileInfo);
 
         return $this->formatPerservingPrinter->printToString($newStmts, $oldStmts, $oldTokens);

@@ -4,12 +4,8 @@ namespace Rector\BetterReflection\Tests\Reflector;
 
 use Rector\BetterReflection\Reflector\ClassReflectorFactory;
 use Rector\Tests\AbstractContainerAwareTestCase;
-use Roave\BetterReflection\BetterReflection;
 use Roave\BetterReflection\Reflection\ReflectionClass;
 use Roave\BetterReflection\Reflector\ClassReflector;
-use Roave\BetterReflection\SourceLocator\Type\AggregateSourceLocator;
-use Roave\BetterReflection\SourceLocator\Type\MemoizingSourceLocator;
-use Roave\BetterReflection\SourceLocator\Type\SingleFileSourceLocator;
 use SplFileInfo;
 
 final class ClassReflectorOnSourceTest extends AbstractContainerAwareTestCase

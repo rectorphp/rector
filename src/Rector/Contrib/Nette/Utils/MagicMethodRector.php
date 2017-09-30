@@ -5,13 +5,13 @@ namespace Rector\Rector\Contrib\Nette\Utils;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
+use Rector\BetterReflection\Reflector\CurrentFileAwareClassReflector;
 use Rector\Builder\MethodBuilder;
 use Rector\Node\Attribute;
 use Rector\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\Rector\AbstractRector;
 use Roave\BetterReflection\Reflection\ReflectionClass;
 use Roave\BetterReflection\Reflection\ReflectionProperty;
-use Roave\BetterReflection\Reflector\ClassReflector;
 
 /**
  * Catches @method annotations at childs of Nette\Object
@@ -49,23 +49,23 @@ final class MagicMethodRector extends AbstractRector
     private $docBlockAnalyzer;
 
     /**
-     * @var ClassReflector
-     */
-    private $classReflector;
-
-    /**
      * @var ReflectionClass
      */
     private $classReflection;
 
+    /**
+     * @var CurrentFileAwareClassReflector
+     */
+    private $currentFileAwareClassReflector;
+
     public function __construct(
         MethodBuilder $methodBuilder,
         DocBlockAnalyzer $docBlockAnalyzer,
-        ClassReflector $classReflector
+        CurrentFileAwareClassReflector $currentFileAwareClassReflector
     ) {
         $this->methodBuilder = $methodBuilder;
         $this->docBlockAnalyzer = $docBlockAnalyzer;
-        $this->classReflector = $classReflector;
+        $this->currentFileAwareClassReflector = $currentFileAwareClassReflector;
     }
 
     public function isCandidate(Node $node): bool
@@ -87,7 +87,7 @@ final class MagicMethodRector extends AbstractRector
 
         /** @var string $className */
         $className = $node->getAttribute(Attribute::CLASS_NAME);
-        $this->classReflection = $this->classReflector->reflect($className);
+        $this->classReflection = $this->currentFileAwareClassReflector->reflect($className);
 
         /** @var Doc $docComment */
         $docComment = $docComments[0];
@@ -179,7 +179,6 @@ final class MagicMethodRector extends AbstractRector
                 ];
             }
         }
-
 
         return $methods;
     }
