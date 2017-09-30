@@ -144,7 +144,7 @@ final class MagicMethodRector extends AbstractRector
         $methods = [];
 
         foreach ($matches as $match) {
-            [, $op, $prop, $type] = $match;
+            [$all, $op, $prop, $type] = $match;
 
             $name = $op . $prop;
             $prop = strtolower($prop[0]) . substr($prop, 1) . ($op === 'add' ? 's' : '');
