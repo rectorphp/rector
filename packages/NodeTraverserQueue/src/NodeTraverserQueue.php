@@ -9,6 +9,7 @@ use Rector\NodeTraverser\RectorNodeTraverser;
 use Rector\NodeTraverser\ShutdownNodeTraverser;
 use Rector\NodeTraverser\StandaloneTraverseNodeTraverser;
 use Rector\NodeTraverserQueue\Exception\FileProcessingException;
+use Roave\BetterReflection\Reflection\ReflectionClass;
 use Roave\BetterReflection\Reflection\ReflectionFunction;
 use Roave\BetterReflection\Reflector\Exception\IdentifierNotFound;
 use SplFileInfo;
@@ -80,7 +81,7 @@ final class NodeTraverserQueue
         } catch (IdentifierNotFound $identifierNotFoundException) {
             // could not locate function, skip and keep original
             $identifierType = $identifierNotFoundException->getIdentifier()->getType()->getName();
-            if ($identifierType === ReflectionFunction::class) {
+            if (in_array($identifierType, [ReflectionFunction::class, ReflectionClass::class], true)) {
                 // keep original
                 return [$oldStmts, $oldStmts, $oldStmts];
             }

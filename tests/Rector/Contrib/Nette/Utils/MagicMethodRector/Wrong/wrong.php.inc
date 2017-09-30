@@ -6,7 +6,10 @@ use Nette\Object;
 
 /**
  * @method getValue()
+ * @method int getAnotherValue()
  */
 class SomeClass extends Object
 {
+    private $value;
+    private $anotherValue;
 }

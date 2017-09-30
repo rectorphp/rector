@@ -38,7 +38,9 @@ final class DocBlockAnalyzer
 
         /** @var Node $parentNode */
         $parentNode = $node->getAttribute('parentNode');
-        $parentNode->setAttribute('origNode', null);
+        if ($parentNode) {
+            $parentNode->setAttribute('origNode', null);
+        }
 
         $node->setAttribute('parentNode', null);
         $node->setAttribute('origNode', null);

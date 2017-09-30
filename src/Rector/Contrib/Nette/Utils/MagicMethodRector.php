@@ -9,6 +9,9 @@ use Rector\Builder\MethodBuilder;
 use Rector\Node\Attribute;
 use Rector\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\Rector\AbstractRector;
+use Roave\BetterReflection\Reflection\ReflectionClass;
+use Roave\BetterReflection\Reflection\ReflectionProperty;
+use Roave\BetterReflection\Reflector\ClassReflector;
 
 /**
  * Catches @method annotations at childs of Nette\Object
@@ -24,11 +27,11 @@ final class MagicMethodRector extends AbstractRector
      * @var string
      */
     private const MAGIC_METHODS_PATTERN = '~^
-            [ \t*]*  @method  [ \t]+
-            (?: [^\s(]+  [ \t]+ )?
-            (set|get|is|add)  ([A-Z]\w*)  [ \t]*
-            (?: \(  [ \t]* ([^)$\s]+)  )?
-        ()~mx';
+        [ \t*]*  @method  [ \t]+
+        (?: [^\s(]+  [ \t]+ )?
+        (set|get|is|add)  ([A-Z]\w*)
+        (?: ([ \t]* \()  [ \t]* ([^)$\s]*)  )?
+    ()~mx';
 
     /**
      * @var mixed[]
@@ -45,10 +48,24 @@ final class MagicMethodRector extends AbstractRector
      */
     private $docBlockAnalyzer;
 
-    public function __construct(MethodBuilder $methodBuilder, DocBlockAnalyzer $docBlockAnalyzer)
-    {
+    /**
+     * @var ClassReflector
+     */
+    private $classReflector;
+
+    /**
+     * @var ReflectionClass
+     */
+    private $classReflection;
+
+    public function __construct(
+        MethodBuilder $methodBuilder,
+        DocBlockAnalyzer $docBlockAnalyzer,
+        ClassReflector $classReflector
+    ) {
         $this->methodBuilder = $methodBuilder;
         $this->docBlockAnalyzer = $docBlockAnalyzer;
+        $this->classReflector = $classReflector;
     }
 
     public function isCandidate(Node $node): bool
@@ -67,6 +84,10 @@ final class MagicMethodRector extends AbstractRector
         if ($docComments === null) {
             return false;
         }
+
+        /** @var string $className */
+        $className = $node->getAttribute(Attribute::CLASS_NAME);
+        $this->classReflection = $this->classReflector->reflect($className);
 
         /** @var Doc $docComment */
         $docComment = $docComments[0];
@@ -127,27 +148,36 @@ final class MagicMethodRector extends AbstractRector
 
             $name = $op . $prop;
             $prop = strtolower($prop[0]) . substr($prop, 1) . ($op === 'add' ? 's' : '');
+
             // @todo: file aware BetterReflection? - FileLocator
             // use CurrentFileProvider? load in ProcessCommand, enable here
-//            if ($rc->hasProperty($prop) && ($rp = $rc->getProperty($prop)) && !$rp->isStatic()) {
-//                $rp->setAccessible(TRUE);
-            if ($op === 'get' || $op === 'is') {
-                $type = null;
-                $op = 'get';
-            } elseif (! $type
-                && preg_match('#@var[ \t]+(\S+)' . ($op === 'add' ? '\[\]#' : '#'), $rp->getDocComment(), $match)
-            ) {
-                $type = $match[1];
+
+            if (! $this->classReflection->hasProperty($prop)) {
+                continue;
             }
 
-            if ($type && $currentNamespace && preg_match('#^[A-Z]\w+(\[|\||\z)#', $type)) {
-                $type = $currentNamespace . '\\' . $type;
-            }
+            /** @var ReflectionProperty $propertyReflection */
+            $propertyReflection = $this->classReflection->getProperty($prop);
 
-            $methods[$name] = [
-                'propertyType' => $type,
-                'propertyName' => $prop,
-            ];
+            if ($propertyReflection && ! $propertyReflection->isStatic()) {
+                if ($op === 'get' || $op === 'is') {
+                    $type = null;
+                    $op = 'get';
+                } elseif (! $type
+                    && preg_match('#@var[ \t]+(\S+)' . ($op === 'add' ? '\[\]#' : '#'), $propertyReflection->getDocComment(), $match)
+                ) {
+                    $type = $match[1];
+                }
+
+                if ($type && $currentNamespace && preg_match('#^[A-Z]\w+(\[|\||\z)#', $type)) {
+                    $type = $currentNamespace . '\\' . $type;
+                }
+
+                $methods[$name] = [
+                    'propertyType' => $type,
+                    'propertyName' => $prop,
+                ];
+            }
         }
 
         return $methods;
