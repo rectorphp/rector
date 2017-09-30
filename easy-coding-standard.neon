@@ -13,6 +13,8 @@ checkers:
         allowPartialUses: false
     SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff:
         enableEachParameterAndReturnInspection: true
+        usefulAnnotations:
+            - "@see"
 
     # Metrics
     PHP_CodeSniffer\Standards\Generic\Sniffs\Files\LineLengthSniff:
