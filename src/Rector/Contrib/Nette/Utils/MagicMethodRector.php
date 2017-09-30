@@ -106,6 +106,9 @@ final class MagicMethodRector extends AbstractRector
      */
     public function refactor(Node $classNode): ?Node
     {
+        // reverse methods, to add them from the top
+        $this->magicMethods = array_reverse($this->magicMethods, true);
+
         foreach ($this->magicMethods as $methodName => $methodSettings) {
             $this->methodBuilder->addMethodToClass(
                 $classNode,
