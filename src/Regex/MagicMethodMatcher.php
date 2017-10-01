@@ -39,7 +39,7 @@ final class MagicMethodMatcher
                 continue;
             }
 
-            /** @var ReflectionProperty $propertyReflection */
+            /** @var ReflectionProperty|null $propertyReflection */
             $propertyReflection = $classReflection->getProperty($propertyName);
 
             if ($propertyReflection === null || $propertyReflection->isStatic()) {
