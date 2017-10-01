@@ -51,7 +51,7 @@ final class MagicMethodMatcher
                 'operation' => $operation,
                 'propertyName' => $propertyName,
                 'propertyType' => $this->resolveType($operation, $type, $propertyReflection, $match),
-                'argumentName' => $argumentName
+                'argumentName' => $argumentName,
             ];
         }
 
