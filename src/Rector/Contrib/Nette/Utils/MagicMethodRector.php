@@ -10,29 +10,14 @@ use Rector\Builder\MethodBuilder;
 use Rector\Node\Attribute;
 use Rector\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\Rector\AbstractRector;
-use Roave\BetterReflection\Reflection\ReflectionClass;
-use Roave\BetterReflection\Reflection\ReflectionProperty;
+use Rector\Regex\MagicMethodMatcher;
 
 /**
  * Catches @method annotations at childs of Nette\Object
  * and converts them to real methods
- *
- * Covers @see https://github.com/RectorPHP/Rector/issues/49
- *
- * This would be nice test: https://github.com/Kdyby/Redis/blob/cbe29eef207ded876f41a40281e1fa746b3a2330/src/Kdyby/Redis/RedisClient.php#L29
  */
 final class MagicMethodRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private const MAGIC_METHODS_PATTERN = '~^
-        [ \t*]*  @method  [ \t]+
-        (?: [^\s(]+  [ \t]+ )?
-        (set|get|is|add)  ([A-Z]\w*)
-        (?: ([ \t]* \()  [ \t]* ([^)$\s]*)  )?
-    ()~mx';
-
     /**
      * @var mixed[]
      */
@@ -49,23 +34,25 @@ final class MagicMethodRector extends AbstractRector
     private $docBlockAnalyzer;
 
     /**
-     * @var ReflectionClass
-     */
-    private $classReflection;
-
-    /**
      * @var CurrentFileAwareClassReflector
      */
     private $currentFileAwareClassReflector;
 
+    /**
+     * @var MagicMethodMatcher
+     */
+    private $magicMethodMatcher;
+
     public function __construct(
         MethodBuilder $methodBuilder,
         DocBlockAnalyzer $docBlockAnalyzer,
-        CurrentFileAwareClassReflector $currentFileAwareClassReflector
+        CurrentFileAwareClassReflector $currentFileAwareClassReflector,
+        MagicMethodMatcher $magicMethodMatcher
     ) {
         $this->methodBuilder = $methodBuilder;
         $this->docBlockAnalyzer = $docBlockAnalyzer;
         $this->currentFileAwareClassReflector = $currentFileAwareClassReflector;
+        $this->magicMethodMatcher = $magicMethodMatcher;
     }
 
     public function isCandidate(Node $node): bool
@@ -80,6 +67,7 @@ final class MagicMethodRector extends AbstractRector
             return false;
         }
 
+        /** @var Doc[]|null $docComments */
         $docComments = $node->getAttribute('comments');
         if ($docComments === null) {
             return false;
@@ -87,16 +75,11 @@ final class MagicMethodRector extends AbstractRector
 
         /** @var string $className */
         $className = $node->getAttribute(Attribute::CLASS_NAME);
-        $this->classReflection = $this->currentFileAwareClassReflector->reflect($className);
 
-        /** @var Doc $docComment */
-        $docComment = $docComments[0];
-
-        // @todo consider NamespaceResolver NodeTraverser
-        $currentNamespace = $node->namespacedName->slice(0, -1)
-            ->toString();
-
-        $this->magicMethods = $this->matchMagicMethodsInDocComment($currentNamespace, $docComment->getText());
+        $this->magicMethods = $this->magicMethodMatcher->matchInContent(
+            $this->currentFileAwareClassReflector->reflect($className),
+            $docComments[0]->getText()
+        );
 
         return (bool) count($this->magicMethods);
     }
@@ -114,7 +97,9 @@ final class MagicMethodRector extends AbstractRector
                 $classNode,
                 $methodName,
                 $methodSettings['propertyType'],
-                $methodSettings['propertyName']
+                $methodSettings['propertyName'],
+                $methodSettings['operation'],
+                $methodSettings['argumentName']
             );
 
             $this->docBlockAnalyzer->removeAnnotationFromNode($classNode, 'method', $methodName);
@@ -132,73 +117,5 @@ final class MagicMethodRector extends AbstractRector
         $parentClassName = (string) $classNode->extends->getAttribute(Attribute::RESOLVED_NAME);
 
         return $parentClassName === 'Nette\Object';
-    }
-
-    /**
-     * Mimics https://github.com/nette/utils/blob/v2.3/src/Utils/ObjectMixin.php#L285
-     * only without reflection.
-     *
-     * @todo extract to MagicMethodMatcher service
-     *
-     * @return mixed[]
-     */
-    private function matchMagicMethodsInDocComment(string $currentNamespace, string $text): array
-    {
-        preg_match_all(self::MAGIC_METHODS_PATTERN, $text, $matches, PREG_SET_ORDER);
-
-        $methods = [];
-
-        foreach ($matches as $match) {
-            [$all, $op, $prop, $type] = $match;
-
-            $name = $op . $prop;
-            $prop = strtolower($prop[0]) . substr($prop, 1) . ($op === 'add' ? 's' : '');
-
-            if (! $this->classReflection->hasProperty($prop)) {
-                continue;
-            }
-
-            /** @var ReflectionProperty $propertyReflection */
-            $propertyReflection = $this->classReflection->getProperty($prop);
-
-            if ($propertyReflection && ! $propertyReflection->isStatic()) {
-                $type = $this->resolveType($currentNamespace, $op, $type, $propertyReflection, $match);
-
-                $methods[$name] = [
-                    'propertyType' => $type,
-                    'propertyName' => $prop,
-                ];
-            }
-        }
-
-        return $methods;
-    }
-
-    /**
-     * @param mixed[] $match
-     */
-    private function resolveType(
-        string $currentNamespace,
-        string $op,
-        string $type,
-        ReflectionProperty $propertyReflection,
-        array $match
-    ): ?string {
-        if ($op === 'get' || $op === 'is') {
-            $type = null;
-            $op = 'get';
-        } elseif (! $type && preg_match(
-            '#@var[ \t]+(\S+)' . ($op === 'add' ? '\[\]#' : '#'),
-            $propertyReflection->getDocComment(),
-            $match
-        )) {
-            $type = $match[1];
-        }
-
-        if ($type && $currentNamespace && preg_match('#^[A-Z]\w+(\[|\||\z)#', $type)) {
-            $type = $currentNamespace . '\\' . $type;
-        }
-
-        return $type;
     }
 }

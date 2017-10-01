@@ -2,7 +2,10 @@
 
 namespace Rector\Builder;
 
+use Nette\Utils\Strings;
 use PhpParser\BuilderFactory;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
@@ -36,22 +39,65 @@ final class MethodBuilder
         Class_ $classNode,
         string $methodName,
         ?string $propertyType,
-        string $propertyName
+        string $propertyName,
+        string $operation,
+        string $argumentName
     ): void {
-        $methodNode = $this->buildMethodNode($methodName, $propertyType, $propertyName);
+        $methodNode = $this->buildMethodNode($methodName, $propertyType, $propertyName, $operation, $argumentName);
 
         $this->statementGlue->addAsFirstMethod($classNode, $methodNode);
     }
 
-    private function buildMethodNode(string $methodName, ?string $propertyType, string $propertyName): ClassMethod
+    private function buildMethodNode(
+        string $methodName,
+        ?string $propertyType,
+        string $propertyName,
+        string $operation,
+        string $argumentName
+    ): ClassMethod {
+        $methodBuild = $this->builderFactory->method($methodName)
+            ->makePublic();
+
+        $methodBodyStatement = $this->buildMethodBody($propertyName, $operation, $argumentName);
+
+        if ($methodBodyStatement) {
+            $methodBuild->addStmt($methodBodyStatement);
+        }
+
+        if ($propertyType && $operation === 'get') {
+            $typeHint = Strings::endsWith($propertyType, '[]') ? 'array' : $propertyType;
+            $methodBuild->setReturnType(new Identifier($typeHint));
+        }
+
+        if ($operation === 'add' || $operation === 'set') {
+            $param = $this->builderFactory->param($argumentName);
+            if ($propertyType) {
+                $typeHint = Strings::endsWith($propertyType, '[]') ? 'array' : $propertyType;
+                $param->setTypeHint($typeHint);
+            }
+
+            $methodBuild->addParam($param);
+        }
+
+        return $methodBuild->getNode();
+    }
+
+    private function buildMethodBody(string $propertyName, string $operation, string $argumentName): ?Stmt
     {
-        $propertyFetchNode = $this->nodeFactory->createLocalPropertyFetch($propertyName);
+        if ($operation === 'set') {
+            return $this->nodeFactory->createPropertyAssignment($propertyName);
+        }
 
-        $returnPropertyNode = new Return_($propertyFetchNode);
+        if ($operation === 'add') {
+            return $this->nodeFactory->createPropertyArrayAssignment($propertyName, $argumentName);
+        }
 
-        return $this->builderFactory->method($methodName)
-            ->makePublic()
-            ->addStmt($returnPropertyNode)
-            ->getNode();
+        if (in_array($operation, ['get', 'is'], true)) {
+            $propertyFetchNode = $this->nodeFactory->createLocalPropertyFetch($propertyName);
+
+            return new Return_($propertyFetchNode);
+        }
+
+        return null;
     }
 }

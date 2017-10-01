@@ -37,6 +37,18 @@ final class NodeFactory
     }
 
     /**
+     * Creates "$this->propertyName[]"
+     */
+    public function createLocalPropertyArrayFetch(string $propertyName): PropertyFetch
+    {
+        $localVariable = new Variable('this', [
+            'name' => $propertyName,
+        ]);
+
+        return new PropertyFetch($localVariable, $propertyName . '[]');
+    }
+
+    /**
      * Creates "null"
      */
     public function createNullConstant(): ConstFetch
@@ -156,6 +168,23 @@ final class NodeFactory
 
         $assign = new Assign(
             $this->createLocalPropertyFetch($propertyName),
+            $variable
+        );
+
+        return new Expression($assign);
+    }
+
+    /**
+     * Creates $this->values[] = $value;
+     */
+    public function createPropertyArrayAssignment(string $propertyName, string $argumentName): Expression
+    {
+        $variable = new Variable($argumentName, [
+            'name' => $argumentName,
+        ]);
+
+        $assign = new Assign(
+            $this->createLocalPropertyArrayFetch($propertyName),
             $variable
         );
 
