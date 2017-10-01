@@ -16,23 +16,9 @@ use Roave\BetterReflection\Reflection\ReflectionClass;
 /**
  * Catches @method annotations at childs of Nette\Object
  * and converts them to real methods
- *
- * Covers @see https://github.com/RectorPHP/Rector/issues/49
- *
- * This would be nice test: https://github.com/Kdyby/Redis/blob/cbe29eef207ded876f41a40281e1fa746b3a2330/src/Kdyby/Redis/RedisClient.php#L29
  */
 final class MagicMethodRector extends AbstractRector
 {
-//    /**
-//     * @var string
-//     */
-//    private const MAGIC_METHODS_PATTERN = '~^
-//        [ \t*]*  @method  [ \t]+
-//        (?: [^\s(]+  [ \t]+ )?
-//        (set|get|is|add)  ([A-Z]\w*)
-//        (?: ([ \t]* \()  [ \t]* ([^)$\s]*)  )?
-//    ()~mx';
-
     /**
      * @var mixed[]
      */
