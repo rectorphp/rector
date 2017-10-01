@@ -23,7 +23,7 @@ final class MagicMethodMatcher
      *
      * @return mixed[]
      */
-    public function matchInContent(ReflectionClass $classReflection, string $currentNamespace, string $text): array
+    public function matchInContent(ReflectionClass $classReflection, string $text): array
     {
         $matches = Strings::matchAll($text, self::MAGIC_METHODS_PATTERN, PREG_SET_ORDER);
 
@@ -46,7 +46,7 @@ final class MagicMethodMatcher
                 continue;
             }
 
-            $type = $this->resolveType($currentNamespace, $op, $type, $propertyReflection, $match);
+            $type = $this->resolveType($op, $type, $propertyReflection, $match);
 
             $methods[$name] = [
                 'propertyType' => $type,
@@ -62,7 +62,6 @@ final class MagicMethodMatcher
      * @param mixed[] $match
      */
     private function resolveType(
-        string $currentNamespace,
         string $op,
         string $type,
         ReflectionProperty $propertyReflection,
@@ -77,10 +76,6 @@ final class MagicMethodMatcher
             $match
         )) {
             $type = $match[1];
-        }
-
-        if ($type && $currentNamespace && preg_match('#^[A-Z]\w+(\[|\||\z)#', $type)) {
-            $type = $currentNamespace . '\\' . $type;
         }
 
         return $type;

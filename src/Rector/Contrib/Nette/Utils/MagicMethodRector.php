@@ -76,12 +76,8 @@ final class MagicMethodRector extends AbstractRector
         /** @var string $className */
         $className = $node->getAttribute(Attribute::CLASS_NAME);
 
-        /** @var string $namespace */
-        $namespace = $node->getAttribute(Attribute::NAMESPACE);
-
         $this->magicMethods = $this->magicMethodMatcher->matchInContent(
             $this->currentFileAwareClassReflector->reflect($className),
-            $namespace,
             $docComments[0]->getText()
         );
 

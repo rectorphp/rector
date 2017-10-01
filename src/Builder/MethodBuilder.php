@@ -2,6 +2,7 @@
 
 namespace Rector\Builder;
 
+use Nette\Utils\Strings;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt;
@@ -68,7 +69,8 @@ final class MethodBuilder
         if ($operation === 'add' || $operation === 'set') {
             $param = $this->builderFactory->param($propertyName);
             if ($propertyType) {
-                $param->setTypeHint($propertyType);
+                $typeHint = Strings::endsWith($propertyType, '[]') ? 'array' : $propertyType;
+                $param->setTypeHint($typeHint);
             }
 
             $methodBuild->addParam($param);
