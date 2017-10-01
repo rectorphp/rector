@@ -63,7 +63,8 @@ final class MethodBuilder
         }
 
         if ($propertyType && $operation === 'get') {
-            $methodBuild->setReturnType(new Identifier($propertyType));
+            $typeHint = Strings::endsWith($propertyType, '[]') ? 'array' : $propertyType;
+            $methodBuild->setReturnType(new Identifier($typeHint));
         }
 
         if ($operation === 'add' || $operation === 'set') {
@@ -89,7 +90,7 @@ final class MethodBuilder
             return $this->nodeFactory->createPropertyArrayAssignment($propertyName);
         }
 
-        if ($operation === 'get') {
+        if (in_array($operation, ['get', 'is'], true)) {
             $propertyFetchNode = $this->nodeFactory->createLocalPropertyFetch($propertyName);
 
             return new Return_($propertyFetchNode);

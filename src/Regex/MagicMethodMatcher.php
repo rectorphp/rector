@@ -70,7 +70,9 @@ final class MagicMethodMatcher
         if ($op === 'get' || $op === 'is') {
             $type = null;
             $op = 'get';
-        } elseif (! $type && preg_match(
+        }
+
+        if (! $type && preg_match(
             '#@var[ \t]+(\S+)' . ($op === 'add' ? '\[\]#' : '#'),
             $propertyReflection->getDocComment(),
             $match

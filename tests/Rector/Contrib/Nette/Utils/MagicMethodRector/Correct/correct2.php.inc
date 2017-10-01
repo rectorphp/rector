@@ -27,7 +27,7 @@ class TestClass extends Object
     {
         $this->items = $items;
     }
-    public function getItems(): array
+    public function getItems() : array
     {
         return $this->items;
     }
