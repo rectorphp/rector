@@ -2,6 +2,7 @@
 
 namespace Rector\Regex;
 
+use Nette\Utils\Strings;
 use Roave\BetterReflection\Reflection\ReflectionClass;
 use Roave\BetterReflection\Reflection\ReflectionProperty;
 
@@ -19,18 +20,17 @@ final class MagicMethodMatcher
 
     /**
      * Mimics https://github.com/nette/utils/blob/v2.3/src/Utils/ObjectMixin.php#L285
-     * only without reflection.
      *
      * @return mixed[]
      */
     public function matchInContent(ReflectionClass $classReflection, string $currentNamespace, string $text): array
     {
-        preg_match_all(self::MAGIC_METHODS_PATTERN, $text, $matches, PREG_SET_ORDER);
+        $matches = Strings::matchAll($text, self::MAGIC_METHODS_PATTERN, PREG_SET_ORDER);
 
         $methods = [];
 
         foreach ($matches as $match) {
-            [$all, $op, $prop, $type] = $match;
+            [$all, $op, $prop, $bracket, $type] = $match;
 
             $name = $op . $prop;
             $prop = strtolower($prop[0]) . substr($prop, 1) . ($op === 'add' ? 's' : '');
@@ -42,15 +42,17 @@ final class MagicMethodMatcher
             /** @var ReflectionProperty $propertyReflection */
             $propertyReflection = $classReflection->getProperty($prop);
 
-            if ($propertyReflection && ! $propertyReflection->isStatic()) {
-                $type = $this->resolveType($currentNamespace, $op, $type, $propertyReflection, $match);
-
-                $methods[$name] = [
-                    'propertyType' => $type,
-                    'propertyName' => $prop,
-                    'operation' => $op,
-                ];
+            if ($propertyReflection === null || $propertyReflection->isStatic()) {
+                continue;
             }
+
+            $type = $this->resolveType($currentNamespace, $op, $type, $propertyReflection, $match);
+
+            $methods[$name] = [
+                'propertyType' => $type,
+                'propertyName' => $prop,
+                'operation' => $op,
+            ];
         }
 
         return $methods;

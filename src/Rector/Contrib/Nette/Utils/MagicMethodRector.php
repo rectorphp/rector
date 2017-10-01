@@ -67,6 +67,7 @@ final class MagicMethodRector extends AbstractRector
             return false;
         }
 
+        /** @var Doc[]|null $docComments */
         $docComments = $node->getAttribute('comments');
         if ($docComments === null) {
             return false;
@@ -75,17 +76,13 @@ final class MagicMethodRector extends AbstractRector
         /** @var string $className */
         $className = $node->getAttribute(Attribute::CLASS_NAME);
 
-        /** @var Doc $docComment */
-        $docComment = $docComments[0];
-
-        // @todo consider NamespaceResolver NodeTraverser
-        $currentNamespace = $node->namespacedName->slice(0, -1)
-            ->toString();
+        /** @var string $namespace */
+        $namespace = $node->getAttribute(Attribute::NAMESPACE);
 
         $this->magicMethods = $this->magicMethodMatcher->matchInContent(
             $this->currentFileAwareClassReflector->reflect($className),
-            $currentNamespace,
-            $docComment->getText()
+            $namespace,
+            $docComments[0]->getText()
         );
 
         return (bool) count($this->magicMethods);

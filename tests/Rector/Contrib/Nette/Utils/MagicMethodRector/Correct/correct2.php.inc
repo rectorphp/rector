@@ -11,9 +11,9 @@ class TestClass extends Object
     /** @var TestClass[] */
     public $items = array();
 
-    public function setName(string $var)
+    public function setName(string $name)
     {
-        $this->name = $var;
+        $this->name = $name;
     }
     public function getName()
     {
