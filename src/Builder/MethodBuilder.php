@@ -40,9 +40,10 @@ final class MethodBuilder
         string $methodName,
         ?string $propertyType,
         string $propertyName,
-        string $operation
+        string $operation,
+        string $argumentName
     ): void {
-        $methodNode = $this->buildMethodNode($methodName, $propertyType, $propertyName, $operation);
+        $methodNode = $this->buildMethodNode($methodName, $propertyType, $propertyName, $operation, $argumentName);
 
         $this->statementGlue->addAsFirstMethod($classNode, $methodNode);
     }
@@ -51,12 +52,13 @@ final class MethodBuilder
         string $methodName,
         ?string $propertyType,
         string $propertyName,
-        string $operation
+        string $operation,
+        string $argumentName
     ): ClassMethod {
         $methodBuild = $this->builderFactory->method($methodName)
             ->makePublic();
 
-        $methodBodyStatement = $this->buildMethodBody($propertyName, $operation);
+        $methodBodyStatement = $this->buildMethodBody($propertyName, $operation, $argumentName);
 
         if ($methodBodyStatement) {
             $methodBuild->addStmt($methodBodyStatement);
@@ -68,7 +70,7 @@ final class MethodBuilder
         }
 
         if ($operation === 'add' || $operation === 'set') {
-            $param = $this->builderFactory->param($propertyName);
+            $param = $this->builderFactory->param($argumentName);
             if ($propertyType) {
                 $typeHint = Strings::endsWith($propertyType, '[]') ? 'array' : $propertyType;
                 $param->setTypeHint($typeHint);
@@ -80,14 +82,14 @@ final class MethodBuilder
         return $methodBuild->getNode();
     }
 
-    private function buildMethodBody(string $propertyName, string $operation): ?Stmt
+    private function buildMethodBody(string $propertyName, string $operation, string $argumentName): ?Stmt
     {
         if ($operation === 'set') {
             return $this->nodeFactory->createPropertyAssignment($propertyName);
         }
 
         if ($operation === 'add') {
-            return $this->nodeFactory->createPropertyArrayAssignment($propertyName);
+            return $this->nodeFactory->createPropertyArrayAssignment($propertyName, $argumentName);
         }
 
         if (in_array($operation, ['get', 'is'], true)) {

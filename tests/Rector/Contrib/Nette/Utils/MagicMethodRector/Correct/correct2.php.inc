@@ -10,7 +10,6 @@ class TestClass extends Object
     public $enabled;
     /** @var TestClass[] */
     public $items = array();
-
     public function setName(string $name)
     {
         $this->name = $name;

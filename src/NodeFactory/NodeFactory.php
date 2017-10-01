@@ -177,10 +177,10 @@ final class NodeFactory
     /**
      * Creates $this->values[] = $value;
      */
-    public function createPropertyArrayAssignment(string $propertyName): Expression
+    public function createPropertyArrayAssignment(string $propertyName, string $argumentName): Expression
     {
-        $variable = new Variable($propertyName, [
-            'name' => $propertyName,
+        $variable = new Variable($argumentName, [
+            'name' => $argumentName,
         ]);
 
         $assign = new Assign(

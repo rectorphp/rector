@@ -32,6 +32,8 @@ final class MagicMethodMatcher
         foreach ($matches as $match) {
             [$all, $operation, $propertyName, $bracket, $type] = $match;
 
+            $argumentName = lcfirst($propertyName);
+
             $methodName = $operation . $propertyName;
             $propertyName = strtolower($propertyName[0]) . substr($propertyName, 1) . ($operation === 'add' ? 's' : '');
 
@@ -39,10 +41,9 @@ final class MagicMethodMatcher
                 continue;
             }
 
-            /** @var ReflectionProperty|null $propertyReflection */
+            /** @var ReflectionProperty $propertyReflection */
             $propertyReflection = $classReflection->getProperty($propertyName);
-
-            if ($propertyReflection === null || $propertyReflection->isStatic()) {
+            if ($propertyReflection->isStatic()) {
                 continue;
             }
 
@@ -50,6 +51,7 @@ final class MagicMethodMatcher
                 'operation' => $operation,
                 'propertyName' => $propertyName,
                 'propertyType' => $this->resolveType($operation, $type, $propertyReflection, $match),
+                'argumentName' => $argumentName
             ];
         }
 
