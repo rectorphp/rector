@@ -2,9 +2,9 @@
 
 namespace Rector\DeprecationExtractor;
 
+use PhpParser\NodeTraverser;
 use Rector\Contract\Parser\ParserInterface;
 use Rector\DeprecationExtractor\NodeVisitor\DeprecationDetector;
-use Rector\NodeTraverser\MainNodeTraverser;
 use Rector\NodeTraverser\StandaloneTraverseNodeTraverser;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
@@ -17,25 +17,24 @@ final class DeprecationExtractor
     private $parser;
 
     /**
-     * @var MainNodeTraverser
-     */
-    private $mainNodeTraverser;
-
-    /**
      * @var StandaloneTraverseNodeTraverser
      */
     private $standaloneTraverseNodeTraverser;
 
+    /**
+     * @var NodeTraverser
+     */
+    private $mainNodeTraverser;
+
     public function __construct(
         ParserInterface $parser,
-        MainNodeTraverser $mainNodeTraverser,
         DeprecationDetector $deprecationDetector,
         StandaloneTraverseNodeTraverser $standaloneTraverseNodeTraverser
     ) {
         $this->parser = $parser;
         $this->standaloneTraverseNodeTraverser = $standaloneTraverseNodeTraverser;
 
-        $this->mainNodeTraverser = $mainNodeTraverser;
+        $this->mainNodeTraverser = new NodeTraverser;
         $this->mainNodeTraverser->addVisitor($deprecationDetector);
     }
 

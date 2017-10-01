@@ -1,2 +1,5 @@
+/temp
+!/temp/.gitkeep
+/example
 /vendor
 composer.lock

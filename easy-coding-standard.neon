@@ -13,6 +13,8 @@ checkers:
         allowPartialUses: false
     SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff:
         enableEachParameterAndReturnInspection: true
+        usefulAnnotations:
+            - "@see"
 
     # Metrics
     PHP_CodeSniffer\Standards\Generic\Sniffs\Files\LineLengthSniff:
@@ -30,6 +32,8 @@ checkers:
             - 'PhpParser\Node\*'
             - 'PhpParser\Comment\Doc'
             - 'Rector\DeprecationExtractor\Deprecation\*'
+            # bugged: https://github.com/Symplify/Symplify/issues/372
+            - 'Rector\NodeTraverser\StandaloneTraverseNodeTraverser'
 
 parameters:
     exclude_checkers:
@@ -53,7 +57,7 @@ parameters:
             - packages/DeprecationExtractor/tests/Rector/RectorFactoryTest.php
         PHP_CodeSniffer\Standards\Generic\Sniffs\Files\LineLengthSniff:
             # long FQN classes that might not exist
-            - src/Rector/Contrib/Symfony/FrameworkBundleClassReplacementsRector.php
+            - src/Rector/Contrib/Symfony/FrameworkBundle/FrameworkBundleClassReplacementsRector.php
         Symplify\CodingStandard\Sniffs\Classes\EqualInterfaceImplementationSniff:
             # empty parent interface, disable for now
             - packages/DeprecationExtractor/src/Deprecation/ClassMethodDeprecation.php
@@ -63,3 +67,6 @@ parameters:
         SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff:
             # covariant types
             - */packages/NodeValueResolver/src/PerNodeValueResolver/*ValueResolver.php
+        Symplify\CodingStandard\Sniffs\DependencyInjection\NoClassInstantiationSniff:
+            # temp ArgvInput: added to master
+            - bin/rector.php

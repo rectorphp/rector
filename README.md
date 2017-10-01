@@ -36,11 +36,25 @@ your-path-to-rector/bin/rector process /var/www/old-project --level=nette24
 your-path-to-rector/bin/rector process /var/www/another-old-project --level=symfony40
 ```
 
-## Use (WIP)
+## How To Reconstruct your Code?
+
+1. Create `rector.yml` with desired Rectors
+
+```yml
+rectors:
+    - Rector\Rector\Contrib\Nette\Application\InjectPropertyRector
+```
+
+2. Run rector on your `/src` directory
 
 ```bash
-vendor/bin/rector reconstruct src --level=nette24
-vendor/bin/rector reconstruct src --level=symfony40
+vendor/bin/rector process src
+```
+
+3. Check the Git
+
+```
+git diff
 ```
 
 
@@ -83,6 +97,12 @@ final class MyRector extends AbstractRector
 6. :+1:   
 
 
+### READMEs for Subpackages
+
+- [DeprecationExtractor](/packages/DeprecationExtractor/README.md)
+- [NodeTraverserQueue](/packages/NodeTraverserQueue/README.md)
+- [NodeTypeResolver](/packages/NodeTypeResolver/README.md)
+- [NodeValueResolver](/packages/NodeValueResolver/README.md)
 
 ### How to Contribute
 

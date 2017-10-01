@@ -1,23 +1,10 @@
-imports:
-  - { resource: '../../packages/BetterReflection/src/config/services.yml' }
-  - { resource: '../../packages/DeprecationExtractor/src/config/services.yml' }
-  - { resource: '../../packages/NodeTypeResolver/src/config/services.yml' }
-  - { resource: '../../packages/NodeValueResolver/src/config/services.yml' }
-
-parameters:
-    name: "Rector"
-
-    # todo
-    kernel_class: # for name based service refactoring
-
 services:
     _defaults:
         autowire: true
 
-    # PSR-4 autodiscovery
     Rector\:
         resource: '../../src'
-        exclude: '../../src/{Node/Attribute.php}'
+        exclude: '../../src/{Node/Attribute.php,Rector/Contrib}'
 
     # autowire by interface
     Rector\Contract\Parser\ParserInterface:
@@ -29,19 +16,14 @@ services:
             - ['addNodeVisitor', ['@PhpParser\NodeVisitor\NameResolver']]
             # adds previous, next and parent node via attribute
             - ['addNodeVisitor', ['@Rector\NodeVisitor\NodeConnector']]
+            # adds current class to all nodes via attribute
+            - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\ClassResolver']]
             # adds type to variable and property nodes via attribute
             - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\TypeResolver']]
             # adds current namespace to all nodes via attribute
             - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\NamespaceResolver']]
             # adds class/interface/function/method scope to all nodes attribute
             - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\ScopeResolver']]
-            # adds current class to all nodes via attribute
-            - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\ClassResolver']]
-
-    # 3rd party services
-    Symfony\Component\Console\Application:
-        arguments:
-            $name: "%name%"
 
     # PhpParser - Parser
     PhpParser\Parser:
@@ -62,3 +44,8 @@ services:
 
     # PhpParser - Printer
     PhpParser\PrettyPrinter\Standard: ~
+
+    # Symfony\Console
+    Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory: ~
+    Symfony\Component\Console\Style\SymfonyStyle:
+        factory: ['@Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory', 'create']

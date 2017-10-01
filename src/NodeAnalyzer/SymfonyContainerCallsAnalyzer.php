@@ -3,6 +3,8 @@
 namespace Rector\NodeAnalyzer;
 
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
 
 final class SymfonyContainerCallsAnalyzer
@@ -12,7 +14,18 @@ final class SymfonyContainerCallsAnalyzer
      */
     public function isThisCall(MethodCall $methodCall): bool
     {
-        if ($methodCall->var->name !== 'this' || (string) $methodCall->name !== 'get') {
+        if (! $methodCall->var instanceof Variable) {
+            return false;
+        }
+
+        if (! $methodCall->name instanceof Identifier) {
+            return false;
+        }
+
+        $variableName = $methodCall->var->name;
+        $methodName = (string) $methodCall->name;
+
+        if ($variableName !== 'this' || $methodName !== 'get') {
             return false;
         }
 

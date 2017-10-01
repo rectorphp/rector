@@ -7,6 +7,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
 use Rector\Node\Attribute;
 
 abstract class AbstractChangeMethodNameRector extends AbstractRector
@@ -65,8 +66,11 @@ abstract class AbstractChangeMethodNameRector extends AbstractRector
             return false;
         }
 
-        /** @var string $type */
+        /** @var string|null $type */
         $type = $node->var->getAttribute(Attribute::TYPE);
+        if ($type === null) {
+            return false;
+        }
 
         if (! $this->isTypeRelevant($type)) {
             return false;
@@ -84,6 +88,10 @@ abstract class AbstractChangeMethodNameRector extends AbstractRector
         }
 
         if (! $node->name instanceof Identifier) {
+            return false;
+        }
+
+        if (! $node->class instanceof Name) {
             return false;
         }
 

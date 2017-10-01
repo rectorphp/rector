@@ -1,9 +1,9 @@
 rectors:
-    - Rector\Rector\Contrib\Symfony\ConstraintUrlOptionRector
-    - Rector\Rector\Contrib\Symfony\ConstraintValidatorTestClassRenameRector
-    - Rector\Rector\Contrib\Symfony\FormIsValidRector
-    - Rector\Rector\Contrib\Symfony\FrameworkBundleClassReplacementsRector
-    - Rector\Rector\Contrib\Symfony\StringFormTypeToClassRector
-    - Rector\Rector\Contrib\Symfony\VarDumperTestTraitMethodArgsRector
-    - Rector\Rector\Contrib\Symfony\ContainerBuilderCompileEnvArgumentRector
-    - Rector\Rector\Contrib\Symfony\CompilerAddPassPriorityRector
+    - Rector\Rector\Contrib\Symfony\Validator\ConstraintUrlOptionRector
+    - Rector\Rector\Contrib\Symfony\Validator\ConstraintValidatorTestClassRenameRector
+    - Rector\Rector\Contrib\Symfony\Form\FormIsValidRector
+    - Rector\Rector\Contrib\Symfony\FrameworkBundle\FrameworkBundleClassReplacementsRector
+    - Rector\Rector\Contrib\Symfony\Form\StringFormTypeToClassRector
+    - Rector\Rector\Contrib\Symfony\VarDumper\VarDumperTestTraitMethodArgsRector
+    - Rector\Rector\Contrib\Symfony\DependencyInjection\ContainerBuilderCompileEnvArgumentRector
+    - Rector\Rector\Contrib\Symfony\DependencyInjection\CompilerAddPassPriorityRector

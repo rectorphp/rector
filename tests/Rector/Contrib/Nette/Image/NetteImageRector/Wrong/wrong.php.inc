@@ -1,0 +1,3 @@
+<?php
+
+Image::$useImageMagick = TRUE;
