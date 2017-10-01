@@ -11,7 +11,6 @@ use Rector\Node\Attribute;
 use Rector\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\Regex\MagicMethodMatcher;
-use Roave\BetterReflection\Reflection\ReflectionClass;
 
 /**
  * Catches @method annotations at childs of Nette\Object
@@ -33,11 +32,6 @@ final class MagicMethodRector extends AbstractRector
      * @var DocBlockAnalyzer
      */
     private $docBlockAnalyzer;
-
-    /**
-     * @var ReflectionClass
-     */
-    private $classReflection;
 
     /**
      * @var CurrentFileAwareClassReflector
@@ -80,7 +74,6 @@ final class MagicMethodRector extends AbstractRector
 
         /** @var string $className */
         $className = $node->getAttribute(Attribute::CLASS_NAME);
-        $this->classReflection = $this->currentFileAwareClassReflector->reflect($className);
 
         /** @var Doc $docComment */
         $docComment = $docComments[0];
@@ -90,7 +83,7 @@ final class MagicMethodRector extends AbstractRector
             ->toString();
 
         $this->magicMethods = $this->magicMethodMatcher->matchInContent(
-            $this->classReflection,
+            $this->currentFileAwareClassReflector->reflect($className),
             $currentNamespace,
             $docComment->getText()
         );
