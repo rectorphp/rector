@@ -21,6 +21,21 @@ At the moment these packages are supported:
 composer require rector/rector --dev
 ```
 
+# Install on PHP < 7.1
+
+You must have separated environment with PHP 7.1 (for example in Docker container). When you have it then run following command.
+
+```
+composer create-project rector/rector your-path-to-rector
+```
+
+When do you have it then you can run all commands like
+
+```
+your-path-to-rector/bin/rector process /var/www/old-project --level=nette24
+your-path-to-rector/bin/rector process /var/www/another-old-project --level=symfony40
+```
+
 ## How To Reconstruct your Code?
 
 1. Create `rector.yml` with desired Rectors
