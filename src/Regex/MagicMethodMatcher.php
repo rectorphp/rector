@@ -30,28 +30,26 @@ final class MagicMethodMatcher
         $methods = [];
 
         foreach ($matches as $match) {
-            [$all, $op, $prop, $bracket, $type] = $match;
+            [$all, $operation, $propertyName, $bracket, $type] = $match;
 
-            $name = $op . $prop;
-            $prop = strtolower($prop[0]) . substr($prop, 1) . ($op === 'add' ? 's' : '');
+            $methodName = $operation . $propertyName;
+            $propertyName = strtolower($propertyName[0]) . substr($propertyName, 1) . ($operation === 'add' ? 's' : '');
 
-            if (! $classReflection->hasProperty($prop)) {
+            if (! $classReflection->hasProperty($propertyName)) {
                 continue;
             }
 
             /** @var ReflectionProperty $propertyReflection */
-            $propertyReflection = $classReflection->getProperty($prop);
+            $propertyReflection = $classReflection->getProperty($propertyName);
 
             if ($propertyReflection === null || $propertyReflection->isStatic()) {
                 continue;
             }
 
-            $type = $this->resolveType($op, $type, $propertyReflection, $match);
-
-            $methods[$name] = [
-                'propertyType' => $type,
-                'propertyName' => $prop,
-                'operation' => $op,
+            $methods[$methodName] = [
+                'operation' => $operation,
+                'propertyName' => $propertyName,
+                'propertyType' => $this->resolveType($operation, $type, $propertyReflection, $match),
             ];
         }
 
