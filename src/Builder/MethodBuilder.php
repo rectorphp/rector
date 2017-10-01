@@ -3,6 +3,7 @@
 namespace Rector\Builder;
 
 use PhpParser\BuilderFactory;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -55,8 +56,22 @@ final class MethodBuilder
             ->makePublic();
 
         $methodBodyStatement = $this->buildMethodBody($propertyName, $operation);
+
         if ($methodBodyStatement) {
             $methodBuild->addStmt($methodBodyStatement);
+        }
+
+        if ($propertyType && $operation === 'get') {
+            $methodBuild->setReturnType(new Identifier($propertyType));
+        }
+
+        if ($operation === 'add' || $operation === 'set') {
+            $param = $this->builderFactory->param($propertyName);
+            if ($propertyType) {
+                $param->setTypeHint($propertyType);
+            }
+
+            $methodBuild->addParam($param);
         }
 
         return $methodBuild->getNode();
@@ -68,14 +83,14 @@ final class MethodBuilder
             return $this->nodeFactory->createPropertyAssignment($propertyName);
         }
 
+        if ($operation === 'add') {
+            return $this->nodeFactory->createPropertyArrayAssignment($propertyName);
+        }
+
         if ($operation === 'get') {
             $propertyFetchNode = $this->nodeFactory->createLocalPropertyFetch($propertyName);
 
             return new Return_($propertyFetchNode);
-        }
-
-        if ($operation === 'add') {
-            return $this->nodeFactory->createPropertyArrayAssignment($propertyName);
         }
 
         return null;

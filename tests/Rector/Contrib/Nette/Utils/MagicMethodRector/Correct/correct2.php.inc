@@ -4,14 +4,6 @@ namespace SomeNamespace;
 
 use Nette\Object;
 
-/**
- * @method void setName(string $var)
- * @method getName()
- * @method addItem()
- * @method self setItems()
- * @method getItems
- * @method setEnabled (bool)
- */
 class TestClass extends Object
 {
     public $name;
@@ -25,7 +17,7 @@ class TestClass extends Object
     }
     public function getName()
     {
-        $this->name;
+        return $this->name;
     }
     public function addItem(TestClass $item)
     {
