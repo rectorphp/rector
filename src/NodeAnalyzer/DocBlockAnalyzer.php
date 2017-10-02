@@ -34,8 +34,6 @@ final class DocBlockAnalyzer
         }
 
         $this->saveNewDocBlockToNode($node, $docBlock);
-
-        $this->nullOrigForParentNode($node);
     }
 
     public function getAnnotationFromNode(Node $node, string $annotation): string
@@ -83,18 +81,6 @@ final class DocBlockAnalyzer
     private function createDocBlockFromNode(Node $node): DocBlock
     {
         return new DocBlock($node->getDocComment());
-    }
-
-    /**
-     * @see https://github.com/nikic/PHP-Parser/issues/420#issuecomment-333250500
-     */
-    private function nullOrigForParentNode(Node $node): void
-    {
-        /** @var Node $parentNode */
-        $parentNode = $node->getAttribute('parentNode');
-        if ($parentNode) {
-            $parentNode->setAttribute('origNode', null);
-        }
     }
 
     private function saveNewDocBlockToNode(Node $node, DocBlock $docBlock): void
