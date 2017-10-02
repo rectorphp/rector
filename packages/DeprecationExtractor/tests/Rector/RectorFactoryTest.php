@@ -19,8 +19,9 @@ final class RectorFactoryTest extends AbstractContainerAwareTestCase
     {
         $this->rectorFactory = $this->container->get(RectorFactory::class);
 
-        $DeprecationExtractor = $this->container->get(DeprecationExtractor::class);
-        $DeprecationExtractor->scanDirectories([__DIR__ . '/../DeprecationExtractorSource']);
+        /** @var DeprecationExtractor $deprecationExtractor */
+        $deprecationExtractor = $this->container->get(DeprecationExtractor::class);
+        $deprecationExtractor->scanDirectories([__DIR__ . '/../DeprecationExtractorSource']);
     }
 
     public function test(): void

@@ -22,6 +22,7 @@ final class ClassReflectorOnSourceTest extends AbstractContainerAwareTestCase
 
     protected function setUp(): void
     {
+        /** @var ClassReflectorFactory $classReflectorFactory */
         $classReflectorFactory = $this->container->get(ClassReflectorFactory::class);
 
         $this->currentProcessedFileInfo = new SplFileInfo(__DIR__ . '/NotLoadedSource/SomeClass.php');

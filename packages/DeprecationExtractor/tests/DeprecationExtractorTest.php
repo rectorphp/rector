@@ -18,6 +18,7 @@ final class DeprecationExtractorTest extends AbstractContainerAwareTestCase
     {
         $this->deprecationCollector = $this->container->get(DeprecationCollector::class);
 
+        /** @var DeprecationExtractor $deprecationExtractor */
         $deprecationExtractor = $this->container->get(DeprecationExtractor::class);
         $deprecationExtractor->scanDirectories([__DIR__ . '/DeprecationExtractorSource']);
     }
