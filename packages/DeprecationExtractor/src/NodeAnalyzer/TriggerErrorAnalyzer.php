@@ -14,7 +14,7 @@ final class TriggerErrorAnalyzer
     /**
      * @var SplObjectStorage|Arg[]
      */
-    private $messageNodePerTriggerErrorNode;
+    private $messageNodePerTriggerErrorNode = [];
 
     public function __construct()
     {

@@ -33,7 +33,7 @@ checkers:
             - 'PhpParser\Comment\Doc'
             - 'Rector\DeprecationExtractor\Deprecation\*'
             # bugged: https://github.com/Symplify/Symplify/issues/372
-            - 'Rector\NodeTraverser\StandaloneTraverseNodeTraverser'
+            - 'PhpParser\NodeTraverser'
 
 parameters:
     exclude_checkers:
