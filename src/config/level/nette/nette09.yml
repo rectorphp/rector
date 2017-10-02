@@ -1,3 +1,2 @@
 rectors:
-    - Rector\Rector\Contrib\Nette\Environment\NetteEnvironmentRector
-    - Rector\Rector\Contrib\Nette\Image\NetteImageRector
+    - Rector\Rector\Contrib\Nette\Naming\ClassNaming20Rector

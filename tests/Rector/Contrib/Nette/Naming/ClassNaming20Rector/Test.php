@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Contrib\Nette\Environment\NetteEnvironmentRector;
+namespace Rector\Tests\Rector\Contrib\Nette\Naming\ClassNaming20Rector;
 
-use Rector\Rector\Contrib\Nette\Environment\NetteEnvironmentRector;
+use Rector\Rector\Contrib\Nette\Naming\ClassNaming20Rector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class Test extends AbstractRectorTestCase
@@ -20,6 +20,6 @@ final class Test extends AbstractRectorTestCase
      */
     protected function getRectorClasses(): array
     {
-        return [NetteEnvironmentRector::class];
+        return [ClassNaming20Rector::class];
     }
 }
