@@ -1,4 +1,5 @@
 rectors:
+    - Rector\Rector\Contrib\Nette\Form\FormNegativeRulesRector
     - Rector\Rector\Contrib\Nette\Form\FormCallbackRector
     - Rector\Rector\Contrib\Nette\Form\FormSetRequiredRector
     - Rector\Rector\Contrib\Nette\Utils\HtmlAddMethodRector
