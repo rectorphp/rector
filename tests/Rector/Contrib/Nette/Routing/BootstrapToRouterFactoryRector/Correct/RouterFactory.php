@@ -1,11 +1,14 @@
 <?php declare(strict_types=1);
 
+use Nette\Application\Routers\Route;
+use Nette\Application\Routers\RouterList;
+
 final class RouterFactory
 {
-    public function create(): Nette\Application\Routers\RouterList
+    public function create(): RouterList
     {
-        $router = new Nette\Application\Routers\RouterList;
-        $router[] = new Nette\Application\Routers\Route('index', 'Page:default');
+        $router = new RouterList;
+        $router[] = new Route('index', 'Page:default');
 
         return $router;
     }

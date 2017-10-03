@@ -25,7 +25,7 @@ final class FormNegativeRulesRector extends AbstractRector
     private const RULE_NAMES = ['FILLED', 'EQUAL'];
 
     /**
-     * Detects "$form->addRule(~Form::FILLED, ...)"
+     * Detects "~Form::FILLED"
      */
     public function isCandidate(Node $node): bool
     {

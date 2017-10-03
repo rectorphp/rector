@@ -70,3 +70,5 @@ parameters:
         Symplify\CodingStandard\Sniffs\DependencyInjection\NoClassInstantiationSniff:
             # temp ArgvInput: added to master
             - bin/rector.php
+            # test file
+            - tests/Rector/Contrib/Nette/Routing/BootstrapToRouterFactoryRector/Wrong/bootstrap.php

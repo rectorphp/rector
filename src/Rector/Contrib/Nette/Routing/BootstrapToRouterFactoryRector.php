@@ -3,34 +3,67 @@
 namespace Rector\Rector\Contrib\Nette\Routing;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\ArrayDimFetch;
+use PhpParser\Node\Expr\Assign;
 use Rector\FileSystem\CurrentFileProvider;
 use Rector\Rector\AbstractRector;
 
 final class BootstrapToRouterFactoryRector extends AbstractRector
 {
     /**
+     * @var string
+     */
+    private const BOOTSTRAP_FILE_NAME = 'bootstrap.php';
+
+    /**
      * @var CurrentFileProvider
      */
     private $currentFileProvider;
+
+    /**
+     * @var mixed[]
+     */
+    private $collectedRouteNodes = [];
 
     public function __construct(CurrentFileProvider $currentFileProvider)
     {
         $this->currentFileProvider = $currentFileProvider;
     }
 
+    /**
+     * Matches $container->router[] =
+     */
     public function isCandidate(Node $node): bool
     {
-        dump($this->currentFileProvider->getCurrentFile());
+        $fileInfo = $this->currentFileProvider->getCurrentFile();
+        if ($fileInfo->getFilename() !== self::BOOTSTRAP_FILE_NAME) {
+            return false;
+        }
 
-        // current file bootstrap.php
+        if (! $node instanceof Assign) {
+            return false;
+        }
 
-        // TODO: Implement isCandidate() method.
+        if (! $node->var instanceof ArrayDimFetch) {
+            return false;
+        }
+
+        if ($node->var->var->var->name !== 'container') {
+            return false;
+        }
+
+        return $node->var->var->name->name === 'router';
     }
 
-    public function refactor(Node $node): ?Node
+    /**
+     * Collect new Route(...) and remove
+     *
+     * @param Assign $assignNode
+     */
+    public function refactor(Node $assignNode): ?Node
     {
-        // extract routing part
-        // store it to app/Router/RouterFactory.php
-        // TODO: Implement refactor() method.
+        $this->collectedRouteNodes[] = $assignNode->var;
+
+        return null;
     }
 }
