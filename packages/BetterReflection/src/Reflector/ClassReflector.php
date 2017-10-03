@@ -51,7 +51,6 @@ final class ClassReflector
 
         if ($currentFile === null) {
             $this->classReflector = $this->classReflectorFactory->create();
-
         } else {
             $this->classReflector = $this->classReflectorFactory->createWithFile($currentFile);
             $this->classReflectorActiveFile = $currentFile;
