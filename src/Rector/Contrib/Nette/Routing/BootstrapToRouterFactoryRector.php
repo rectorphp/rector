@@ -3,8 +3,10 @@
 namespace Rector\Rector\Contrib\Nette\Routing;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Stmt\Expression;
 use Rector\FileSystem\CurrentFileProvider;
 use Rector\Rector\AbstractRector;
 
@@ -31,39 +33,61 @@ final class BootstrapToRouterFactoryRector extends AbstractRector
     }
 
     /**
-     * Matches $container->router[] =
+     * Matches $container->router[] = new ...;
      */
     public function isCandidate(Node $node): bool
     {
-        $fileInfo = $this->currentFileProvider->getCurrentFile();
-        if ($fileInfo->getFilename() !== self::BOOTSTRAP_FILE_NAME) {
+        if (! $this->isBootstrapFile()) {
             return false;
         }
 
-        if (! $node instanceof Assign) {
+        if (! $node instanceof Expression) {
             return false;
         }
 
-        if (! $node->var instanceof ArrayDimFetch) {
+        if (! $this->isContainerRouterArrayAssign($node->expr)) {
             return false;
         }
 
-        if ($node->var->var->var->name !== 'container') {
-            return false;
-        }
+        // @todo clean $container->router = new RouteList;
 
-        return $node->var->var->name->name === 'router';
+        return $node->expr->var->var->name->name === 'router';
     }
 
     /**
-     * Collect new Route(...) and remove
+     * Collect new Route(...) and remove from origin file
      *
-     * @param Assign $assignNode
+     * @param Expression $expressionNode
      */
-    public function refactor(Node $assignNode): ?Node
+    public function refactor(Node $expressionNode): ?Node
     {
-        $this->collectedRouteNodes[] = $assignNode->var;
+        $this->collectedRouteNodes[] = $expressionNode->expr->var;
+
+        $this->shouldRemoveNode = true;
 
         return null;
+    }
+
+    private function isBootstrapFile(): bool
+    {
+        $fileInfo = $this->currentFileProvider->getCurrentFile();
+
+        return $fileInfo->getFilename() === self::BOOTSTRAP_FILE_NAME;
+    }
+
+    /**
+     * Detects "$container->router[] = "
+     */
+    private function isContainerRouterArrayAssign(Expr $exprNode): bool
+    {
+        if (! $exprNode instanceof Assign) {
+            return false;
+        }
+
+        if (! $exprNode->var instanceof ArrayDimFetch) {
+            return false;
+        }
+
+        return $exprNode->var->var->var->name === 'container';
     }
 }
