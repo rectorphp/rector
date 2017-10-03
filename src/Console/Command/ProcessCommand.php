@@ -21,6 +21,11 @@ final class ProcessCommand extends Command
     private const ARGUMENT_SOURCE_NAME = 'source';
 
     /**
+     * @var int
+     */
+    private const MAX_FILES_TO_PRINT = 30;
+
+    /**
      * @var FileProcessor
      */
     private $fileProcessor;
@@ -76,12 +81,28 @@ final class ProcessCommand extends Command
         $this->reportLoadedRectors();
 
         $this->symfonyStyle->title('Processing files');
+
+        $i = 0;
         foreach ($files as $file) {
-            $this->symfonyStyle->writeln(sprintf(
-                ' - %s',
-                $file
-            ));
+            if ($i < self::MAX_FILES_TO_PRINT) {
+                $this->symfonyStyle->writeln(sprintf(
+                    ' - %s',
+                    $file
+                ));
+            }
+
+            if ($i === self::MAX_FILES_TO_PRINT) {
+                $this->symfonyStyle->newLine();
+                $this->symfonyStyle->writeln(sprintf(
+                    '...and %d more.',
+                    count($files) - self::MAX_FILES_TO_PRINT
+                ));
+                $this->symfonyStyle->newLine();
+            }
+
             $this->fileProcessor->processFile($file);
+
+            $i++;
         }
 
         $this->symfonyStyle->success('Rector is done!');
