@@ -3,7 +3,6 @@
 namespace Rector\BetterReflection\Reflector;
 
 use Roave\BetterReflection\Reflection\ReflectionMethod;
-use Roave\BetterReflection\Reflector\ClassReflector;
 use Roave\BetterReflection\Reflector\Exception\IdentifierNotFound;
 
 final class MethodReflector

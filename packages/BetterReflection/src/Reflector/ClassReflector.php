@@ -4,10 +4,9 @@ namespace Rector\BetterReflection\Reflector;
 
 use Rector\FileSystem\CurrentFileProvider;
 use Roave\BetterReflection\Reflection\ReflectionClass;
-use Roave\BetterReflection\Reflector\ClassReflector;
 use SplFileInfo;
 
-final class CurrentFileAwareClassReflector
+final class ClassReflector
 {
     /**
      * @var ClassReflectorFactory
@@ -49,9 +48,14 @@ final class CurrentFileAwareClassReflector
     private function createNewClassReflector(): void
     {
         $currentFile = $this->currentFileProvider->getCurrentFile();
-        $this->classReflector = $this->classReflectorFactory->createWithFile($currentFile);
 
-        $this->classReflectorActiveFile = $currentFile;
+        if ($currentFile === null) {
+            $this->classReflector = $this->classReflectorFactory->create();
+
+        } else {
+            $this->classReflector = $this->classReflectorFactory->createWithFile($currentFile);
+            $this->classReflectorActiveFile = $currentFile;
+        }
     }
 
     private function shouldCreateNewClassReflector(): bool

@@ -5,9 +5,5 @@ services:
     Rector\BetterReflection\:
         resource: '../../src'
 
-    # Roave\BetterReflection
-    Roave\BetterReflection\Reflector\ClassReflector:
-        factory: ['@Rector\BetterReflection\Reflector\ClassReflectorFactory', 'create']
-
     # nikic\PHP-Parser
     Roave\BetterReflection\SourceLocator\Ast\Locator: ~
