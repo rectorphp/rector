@@ -102,7 +102,7 @@ final class ProcessCommand extends Command
 
             $this->fileProcessor->processFile($file);
 
-            $i++;
+            ++$i;
         }
 
         $this->symfonyStyle->success('Rector is done!');
