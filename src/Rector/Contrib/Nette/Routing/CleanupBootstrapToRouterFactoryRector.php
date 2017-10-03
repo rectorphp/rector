@@ -4,13 +4,16 @@ namespace Rector\Rector\Contrib\Nette\Routing;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\Expression;
 use Rector\FileSystem\CurrentFileProvider;
 use Rector\Rector\AbstractRector;
 
-final class BootstrapToRouterFactoryRector extends AbstractRector
+/**
+ * Cleanup Rector to @see BootstrapToRouterFactoryRector
+ */
+final class CleanupBootstrapToRouterFactoryRector extends AbstractRector
 {
     /**
      * @var string
@@ -21,11 +24,6 @@ final class BootstrapToRouterFactoryRector extends AbstractRector
      * @var CurrentFileProvider
      */
     private $currentFileProvider;
-
-    /**
-     * @var mixed[]
-     */
-    private $collectedRouteNodes = [];
 
     public function __construct(CurrentFileProvider $currentFileProvider)
     {
@@ -45,11 +43,7 @@ final class BootstrapToRouterFactoryRector extends AbstractRector
             return false;
         }
 
-        if (! $this->isContainerRouterArrayAssign($node->expr)) {
-            return false;
-        }
-
-        return $node->expr->var->var->name->name === 'router';
+        return $this->isContainerRouterAssign($node->expr);
     }
 
     /**
@@ -59,8 +53,6 @@ final class BootstrapToRouterFactoryRector extends AbstractRector
      */
     public function refactor(Node $expressionNode): ?Node
     {
-        $this->collectedRouteNodes[] = $expressionNode->expr->var;
-
         $this->shouldRemoveNode = true;
 
         return null;
@@ -74,18 +66,22 @@ final class BootstrapToRouterFactoryRector extends AbstractRector
     }
 
     /**
-     * Detects "$container->router[] = "
+     * Detects "$container->router = "
      */
-    private function isContainerRouterArrayAssign(Expr $exprNode): bool
+    private function isContainerRouterAssign(Expr $exprNode): bool
     {
         if (! $exprNode instanceof Assign) {
             return false;
         }
 
-        if (! $exprNode->var instanceof ArrayDimFetch) {
+        if (! $exprNode->var instanceof PropertyFetch) {
             return false;
         }
 
-        return $exprNode->var->var->var->name === 'container';
+        if ($exprNode->var->var->name !== 'container') {
+            return false;
+        }
+
+        return $exprNode->var->name->name === 'router';
     }
 }

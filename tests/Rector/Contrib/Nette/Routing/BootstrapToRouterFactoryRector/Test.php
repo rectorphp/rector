@@ -3,6 +3,7 @@
 namespace Rector\Tests\Rector\Contrib\Nette\Routing\BootstrapToRouterFactoryRector;
 
 use Rector\Rector\Contrib\Nette\Routing\BootstrapToRouterFactoryRector;
+use Rector\Rector\Contrib\Nette\Routing\CleanupBootstrapToRouterFactoryRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class Test extends AbstractRectorTestCase
@@ -20,6 +21,9 @@ final class Test extends AbstractRectorTestCase
      */
     protected function getRectorClasses(): array
     {
-        return [BootstrapToRouterFactoryRector::class];
+        return [
+            BootstrapToRouterFactoryRector::class,
+            CleanupBootstrapToRouterFactoryRector::class,
+        ];
     }
 }
