@@ -7,7 +7,7 @@ use SplFileInfo;
 final class CurrentFileProvider
 {
     /**
-     * @var SplFileInfo
+     * @var SplFileInfo|null
      */
     private $fileInfo;
 
@@ -16,7 +16,7 @@ final class CurrentFileProvider
         $this->fileInfo = $fileInfo;
     }
 
-    public function getCurrentFile(): SplFileInfo
+    public function getCurrentFile(): ?SplFileInfo
     {
         return $this->fileInfo;
     }
