@@ -13,6 +13,11 @@ final class Test extends AbstractRectorTestCase
      */
     private const GENERATED_ROUTER_FACTORY_FILE = __DIR__ . '/Wrong/RouterFactory.php';
 
+    protected function tearDown(): void
+    {
+        unlink(self::GENERATED_ROUTER_FACTORY_FILE);
+    }
+
     public function test(): void
     {
         $this->doTestFileMatchesExpectedContent(
@@ -25,11 +30,6 @@ final class Test extends AbstractRectorTestCase
             self::GENERATED_ROUTER_FACTORY_FILE,
             __DIR__ . '/Correct/RouterFactory.php.expected.inc'
         );
-    }
-
-    protected function tearDown(): void
-    {
-        unlink(self::GENERATED_ROUTER_FACTORY_FILE);
     }
 
     /**

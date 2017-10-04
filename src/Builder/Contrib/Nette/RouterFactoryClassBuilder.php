@@ -3,53 +3,95 @@
 namespace Rector\Builder\Contrib\Nette;
 
 use PhpParser\BuilderFactory;
+use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
-use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
+use Rector\NodeFactory\NodeFactory;
 
 final class RouterFactoryClassBuilder
 {
-    /**
-     * @var string
-     */
-    private const ROUTER_LIST_CLASS = 'Nette\Application\Routers\RouterList';
-
     /**
      * @var BuilderFactory
      */
     private $builderFactory;
 
-    public function __construct(BuilderFactory $builderFactory)
+    /**
+     * @var NodeFactory
+     */
+    private $nodeFactory;
+
+    public function __construct(BuilderFactory $builderFactory, NodeFactory $nodeFactory)
     {
         $this->builderFactory = $builderFactory;
+        $this->nodeFactory = $nodeFactory;
     }
 
     /**
      * @param ArrayDimFetch[] $arrayDimFetchNodes
+     * @return Node[]
      */
-    public function build(array $arrayDimFetchNodes): Class_
+    public function build(array $arrayDimFetchNodes): array
     {
-        $classBuild = $this->builderFactory->class('App\RouterFactory');
+        $allNodes = [];
 
-        $routerVariable = new Variable('router');
+        $allNodes[] = $this->nodeFactory->createDeclareStrictTypes();
+
+        $allNodes[] = $this->builderFactory->namespace('App\Routing\RouterFactory')
+            ->getNode();
+
+        $allNodes[] = $this->builderFactory->use('Nette\Application\Routers\Route')
+            ->getNode();
+
+        $allNodes[] = $this->builderFactory->use('Nette\Application\Routers\RouterList')
+            ->getNode();
+
+        $classBuild = $this->builderFactory->class('RouterFactory')
+            ->makeFinal();
+
+        $classMethodNode = $this->buildMethod($arrayDimFetchNodes);
+
+        $classBuild->addStmts([$classMethodNode]);
+
+        $allNodes[] = $classBuild->getNode();
+
+        return $allNodes;
+    }
+
+    /**
+     * @param New_[] $newRouteNodes
+     */
+    private function buildMethod(array $newRouteNodes): ClassMethod
+    {
+        $routerVariableNode = new Variable('router');
+
+        $methodStatements = [];
 
         // adds "$router = new RouterList;"
-        $methodStatements[] = new Assign($routerVariable, new New_(new Name(self::ROUTER_LIST_CLASS)));
-        // adds routes
-        $methodStatements = array_merge($methodStatements, $arrayDimFetchNodes);
+        $methodStatements[] = new Assign($routerVariableNode, new New_(new Name('RouterList')));
+
+        // adds routes $router[] = new ...
+        foreach ($newRouteNodes as $newRouteNode) {
+            $methodStatements[] = new Assign(
+                new ArrayDimFetch(
+                    $routerVariableNode
+                ),
+                $newRouteNode
+            );
+        }
+
         // adds "return $router;"
-        $methodStatements[] = new Return_($routerVariable);
+        $methodStatements[] = new Return_($routerVariableNode);
 
         $methodBuild = $this->builderFactory->method('create')
+            ->makePublic()
             ->addStmts($methodStatements)
-            ->setReturnType(self::ROUTER_LIST_CLASS);
+            ->setReturnType('RouterList');
 
-        $classBuild->addStmts([$methodBuild]);
-
-        return $classBuild->getNode();
+        return $methodBuild->getNode();
     }
 }

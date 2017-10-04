@@ -81,7 +81,7 @@ final class BootstrapToRouterFactoryRector extends AbstractRector
      */
     public function refactor(Node $expressionNode): ?Node
     {
-        $this->collectedRouteNodes[] = $expressionNode->expr->var;
+        $this->collectedRouteNodes[] = $expressionNode->expr->expr;
 
         $this->shouldRemoveNode = true;
 
@@ -93,7 +93,7 @@ final class BootstrapToRouterFactoryRector extends AbstractRector
      */
     public function afterTraverse(array $nodes): void
     {
-        $routerFactoryClassNode = $this->routerFactoryClassBuilder->build($this->collectedRouteNodes);
+        $routerFactoryClassNodes = $this->routerFactoryClassBuilder->build($this->collectedRouteNodes);
 
         $this->collectedRouteNodes = [];
 
@@ -103,7 +103,7 @@ final class BootstrapToRouterFactoryRector extends AbstractRector
 
         file_put_contents(
             $fileLocation,
-            $this->standard->prettyPrintFile([$routerFactoryClassNode])
+            $this->standard->prettyPrintFile($routerFactoryClassNodes)
         );
     }
 
