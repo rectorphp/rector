@@ -294,6 +294,9 @@ final class TypeResolver extends NodeVisitorAbstract
 
         if ($assignNode->expr->name instanceof Variable) {
             $methodCallName = $assignNode->expr->name->name;
+        } elseif ($assignNode->expr->name instanceof PropertyFetch) {
+            // not implemented yet
+            return;
         } else {
             $methodCallName = (string) $assignNode->expr->name;
         }
