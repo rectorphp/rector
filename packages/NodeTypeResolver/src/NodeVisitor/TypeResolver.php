@@ -300,11 +300,11 @@ final class TypeResolver extends NodeVisitorAbstract
         $methodReflection = $this->methodReflector->reflectClassMethod($methodCallVariableType, $methodCallName);
 
         if ($methodReflection) {
-            // @todo: if success
-            return;
+            $variableType = $methodReflection->getReturnType();
+        } else {
+            $variableType = $this->fallbackStaticType($methodCallVariableType, $methodCallName);
         }
 
-        $variableType = $this->fallbackStaticType($methodCallVariableType, $methodCallName);
         if ($variableType) {
             $variableName = $assignNode->var->name;
             $this->typeContext->addVariableWithType($variableName, $variableType);
