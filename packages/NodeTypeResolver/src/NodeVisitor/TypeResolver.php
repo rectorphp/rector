@@ -292,14 +292,7 @@ final class TypeResolver extends NodeVisitorAbstract
 
         $methodCallVariableType = $this->typeContext->getTypeForVariable($methodCallVariableName);
 
-        if ($assignNode->expr->name instanceof Variable) {
-            $methodCallName = $assignNode->expr->name->name;
-        } elseif ($assignNode->expr->name instanceof PropertyFetch) {
-            // not implemented yet
-            return;
-        } else {
-            $methodCallName = (string) $assignNode->expr->name;
-        }
+        $methodCallName = $this->resolveMethodCallName($assignNode);
 
         // 2. get method() return type
 
@@ -340,5 +333,19 @@ final class TypeResolver extends NodeVisitorAbstract
         }
 
         return $this->fallbackStaticType($methodCallVariableType, $methodCallName);
+    }
+
+    private function resolveMethodCallName(Assign $assignNode): ?string
+    {
+        if ($assignNode->expr->name instanceof Variable) {
+            return $assignNode->expr->name->name;
+        }
+
+        if ($assignNode->expr->name instanceof PropertyFetch) {
+            // not implemented yet
+            return null;
+        }
+
+        return (string) $assignNode->expr->name;
     }
 }
