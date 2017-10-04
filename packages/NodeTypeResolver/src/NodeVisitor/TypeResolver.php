@@ -2,7 +2,6 @@
 
 namespace Rector\NodeTypeResolver\NodeVisitor;
 
-use Nette\DI\Container;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
@@ -319,7 +318,7 @@ final class TypeResolver extends NodeVisitorAbstract
     private function fallbackStaticType(string $type, string $methodName): ?string
     {
         if ($type === 'Nette\Config\Configurator' && $methodName === 'createContainer') {
-            return Container::class;
+            return 'Nette\DI\Container';
         }
 
         return null;

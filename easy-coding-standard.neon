@@ -55,6 +55,7 @@ parameters:
             # classes might not exist
             - */src/Rector/Contrib/*/*Rector.php
             - packages/DeprecationExtractor/tests/Rector/RectorFactoryTest.php
+            - packages/NodeTypeResolver/src/NodeVisitor/TypeResolver.php
         PHP_CodeSniffer\Standards\Generic\Sniffs\Files\LineLengthSniff:
             # long FQN classes that might not exist
             - src/Rector/Contrib/Symfony/FrameworkBundle/FrameworkBundleClassReplacementsRector.php
