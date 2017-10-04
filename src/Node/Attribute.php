@@ -39,7 +39,12 @@ final class Attribute
     /**
      * @var string
      */
-    public const CLASS_NAME = 'class';
+    public const CLASS_NAME = 'className';
+
+    /**
+     * @var string
+     */
+    public const PARENT_CLASS_NAME = 'parentClassName';
 
     /**
      * @var string

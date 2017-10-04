@@ -6,3 +6,4 @@ rectors:
     - Rector\Rector\Contrib\Nette\Utils\NetteObjectToSmartTraitRector
     - Rector\Rector\Contrib\Nette\PhpGenerator\PhpGeneratorDocumentMethodRector
     - Rector\Rector\Contrib\Nette\Utils\MagicMethodRector
+    - Rector\Rector\Contrib\Nette\DI\SetEntityToStatementRector

@@ -6,6 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use Rector\Node\Attribute;
 
@@ -42,6 +43,21 @@ final class MethodCallAnalyzer
         }
 
         return false;
+    }
+
+    public function isMethodCallMethod(Node $node, string $methodName): bool
+    {
+        if (! $node instanceof MethodCall) {
+            return false;
+        }
+
+        if (! $node->name instanceof Identifier) {
+            return false;
+        }
+
+        $nodeMethodName = $node->name->name;
+
+        return $nodeMethodName === $methodName;
     }
 
     private function isMethodCallType(Node $node, string $type): bool
@@ -81,7 +97,7 @@ final class MethodCallAnalyzer
     {
         $varNode = $methodCallNode->var;
 
-        // itterate up
+        // itterate up, @todo: handle in TypeResover
         while ($varNode->getAttribute(Attribute::TYPE) === null) {
             if (property_exists($varNode, 'var')) {
                 $varNode = $varNode->var;
