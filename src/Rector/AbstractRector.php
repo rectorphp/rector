@@ -3,6 +3,7 @@
 namespace Rector\Rector;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\Nop;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Contract\Rector\RectorInterface;
@@ -38,7 +39,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
         if ($this->shouldRemoveNode) {
             $this->shouldRemoveNode = false;
 
-            return new Node\Stmt\Nop;
+            return new Nop;
         }
 
         return null;
