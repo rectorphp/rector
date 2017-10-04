@@ -22,7 +22,6 @@ final class MethodReflector
         try {
             $classReflection = $this->classReflector->reflect($class);
         } catch (IdentifierNotFound $identifierNotFoundException) {
-            // class doesn't exist
             return null;
         }
 

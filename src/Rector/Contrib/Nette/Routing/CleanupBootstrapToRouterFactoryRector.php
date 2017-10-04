@@ -4,10 +4,9 @@ namespace Rector\Rector\Contrib\Nette\Routing;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\Expression;
 use Rector\FileSystem\CurrentFileProvider;
+use Rector\NodeAnalyzer\AssignAnalyzer;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -25,9 +24,15 @@ final class CleanupBootstrapToRouterFactoryRector extends AbstractRector
      */
     private $currentFileProvider;
 
-    public function __construct(CurrentFileProvider $currentFileProvider)
+    /**
+     * @var AssignAnalyzer
+     */
+    private $assignAnalyzer;
+
+    public function __construct(CurrentFileProvider $currentFileProvider, AssignAnalyzer $assignAnalyzer)
     {
         $this->currentFileProvider = $currentFileProvider;
+        $this->assignAnalyzer = $assignAnalyzer;
     }
 
     /**
@@ -70,18 +75,6 @@ final class CleanupBootstrapToRouterFactoryRector extends AbstractRector
      */
     private function isContainerRouterAssign(Expr $exprNode): bool
     {
-        if (! $exprNode instanceof Assign) {
-            return false;
-        }
-
-        if (! $exprNode->var instanceof PropertyFetch) {
-            return false;
-        }
-
-        if ($exprNode->var->var->name !== 'container') {
-            return false;
-        }
-
-        return $exprNode->var->name->name === 'router';
+        return $this->assignAnalyzer->isAssignTypeAndProperty($exprNode, 'Nette\DI\Container', 'router');
     }
 }
