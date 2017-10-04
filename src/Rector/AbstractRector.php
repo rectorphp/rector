@@ -10,6 +10,11 @@ use Rector\Contract\Rector\RectorInterface;
 abstract class AbstractRector extends NodeVisitorAbstract implements RectorInterface
 {
     /**
+     * @var bool
+     */
+    protected $shouldRemoveNode = false;
+
+    /**
      * @return null|int|Node
      */
     final public function enterNode(Node $node)
@@ -20,6 +25,20 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
             }
 
             return NodeTraverser::DONT_TRAVERSE_CHILDREN;
+        }
+
+        return null;
+    }
+
+    /**
+     * @return null|int|Node
+     */
+    final public function leaveNode(Node $node)
+    {
+        if ($this->shouldRemoveNode) {
+            $this->shouldRemoveNode = false;
+
+            return NodeTraverser::REMOVE_NODE;
         }
 
         return null;

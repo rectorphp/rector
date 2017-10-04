@@ -1,2 +1,4 @@
 rectors:
     - Rector\Rector\Contrib\Nette\Naming\ClassNaming20Rector
+    - Rector\Rector\Contrib\Nette\Routing\BootstrapToRouterFactoryRector
+    - Rector\Rector\Contrib\Nette\Routing\CleanupBootstrapToRouterFactoryRector

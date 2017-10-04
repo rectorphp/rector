@@ -5,3 +5,5 @@ parameters:
         - '#Class NotLoadedSource\\SomeClass was not found while trying to analyse it - autoloading is probably not configured properly#'
     excludes_analyse:
         - *packages/DeprecationExtractor/tests/DeprecationExtractorSource/Definition.php
+        - tests/Rector/Contrib/Nette/Routing/BootstrapToRouterFactoryRector/Correct/RouterFactory.php
+        - tests/Rector/Contrib/Nette/Routing/BootstrapToRouterFactoryRector/Wrong/bootstrap.php

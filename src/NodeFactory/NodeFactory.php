@@ -19,6 +19,8 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Declare_;
+use PhpParser\Node\Stmt\DeclareDeclare;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\TraitUse;
 
@@ -199,6 +201,16 @@ final class NodeFactory
         $value = $this->createTypeFromScalar($argument);
 
         return new Arg($value);
+    }
+
+    public function createDeclareStrictTypes(): Declare_
+    {
+        return new Declare_([
+            new DeclareDeclare(
+                new Identifier('strict_types'),
+                new LNumber(1)
+            ),
+        ]);
     }
 
     /**

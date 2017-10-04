@@ -16,6 +16,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\NodeVisitorAbstract;
+use Rector\BetterReflection\Reflector\MethodReflector;
 use Rector\Exception\NotImplementedException;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\TypeContext;
@@ -35,7 +36,12 @@ final class TypeResolver extends NodeVisitorAbstract
      */
     private $perNodeResolvers = [];
 
-    public function __construct(TypeContext $typeContext)
+    /**
+     * @var MethodReflector
+     */
+    private $methodReflector;
+
+    public function __construct(TypeContext $typeContext, MethodReflector $methodReflector)
     {
         $this->typeContext = $typeContext;
 
@@ -55,6 +61,8 @@ final class TypeResolver extends NodeVisitorAbstract
         $this->perNodeResolvers[Property::class] = function (Property $propertyNode): void {
             $this->processProperty($propertyNode);
         };
+
+        $this->methodReflector = $methodReflector;
     }
 
     /**
@@ -152,19 +160,17 @@ final class TypeResolver extends NodeVisitorAbstract
 
     private function processAssignNode(Assign $assignNode): void
     {
-        if ($assignNode->var instanceof Variable && $assignNode->expr instanceof Variable) {
-            if ($assignNode->var->name instanceof Variable) {
-                $name = $assignNode->var->name->name;
-            } else {
-                $name = $assignNode->var->name;
-            }
+        if (! $assignNode->var instanceof Variable) {
+            return;
+        }
 
-            $this->typeContext->addAssign($name, $assignNode->expr->name);
+        // $var = $anotherVar;
+        if ($assignNode->expr instanceof Variable) {
+            $this->processAssignVariableNode($assignNode);
 
-            $variableType = $this->typeContext->getTypeForVariable($name);
-            if ($variableType) {
-                $assignNode->var->setAttribute(Attribute::TYPE, $variableType);
-            }
+            // $var = $anotherVar->method();
+        } elseif ($assignNode->expr instanceof MethodCall) {
+            $this->processAssignMethodReturn($assignNode);
         }
     }
 
@@ -251,5 +257,95 @@ final class TypeResolver extends NodeVisitorAbstract
         $name = (string) $variableNode->name;
 
         return $this->typeContext->getTypeForVariable($name);
+    }
+
+    private function processAssignVariableNode(Assign $assignNode): void
+    {
+        if ($assignNode->var->name instanceof Variable) {
+            $name = $assignNode->var->name->name;
+        } else {
+            $name = $assignNode->var->name;
+        }
+
+        $this->typeContext->addAssign($name, $assignNode->expr->name);
+
+        $variableType = $this->typeContext->getTypeForVariable($name);
+        if ($variableType) {
+            $assignNode->var->setAttribute(Attribute::TYPE, $variableType);
+        }
+    }
+
+    private function processAssignMethodReturn(Assign $assignNode): void
+    {
+        $variableType = null;
+
+        // 1. get $anotherVar type
+
+        /** @var Variable|mixed $methodCallVariable */
+        $methodCallVariable = $assignNode->expr->var;
+
+        if (! $methodCallVariable instanceof Variable) {
+            return;
+        }
+
+        $methodCallVariableName = (string) $methodCallVariable->name;
+
+        $methodCallVariableType = $this->typeContext->getTypeForVariable($methodCallVariableName);
+
+        $methodCallName = $this->resolveMethodCallName($assignNode);
+
+        // 2. get method() return type
+
+        if (! $methodCallVariableType || ! $methodCallName) {
+            return;
+        }
+
+        $variableType = $this->getMethodReturnType($methodCallVariableType, $methodCallName);
+
+        if ($variableType) {
+            $variableName = $assignNode->var->name;
+            $this->typeContext->addVariableWithType($variableName, $variableType);
+            $methodCallVariable->setAttribute(Attribute::TYPE, $variableType);
+        }
+    }
+
+    /**
+     * Dummy static method call return type that doesn't depend on class reflection.
+     */
+    private function fallbackStaticType(string $type, string $methodName): ?string
+    {
+        if ($type === 'Nette\Config\Configurator' && $methodName === 'createContainer') {
+            return 'Nette\DI\Container';
+        }
+
+        return null;
+    }
+
+    private function getMethodReturnType(string $methodCallVariableType, string $methodCallName): ?string
+    {
+        $methodReflection = $this->methodReflector->reflectClassMethod($methodCallVariableType, $methodCallName);
+
+        if ($methodReflection) {
+            $returnType = $methodReflection->getReturnType();
+            if ($returnType) {
+                return (string) $returnType;
+            }
+        }
+
+        return $this->fallbackStaticType($methodCallVariableType, $methodCallName);
+    }
+
+    private function resolveMethodCallName(Assign $assignNode): ?string
+    {
+        if ($assignNode->expr->name instanceof Variable) {
+            return $assignNode->expr->name->name;
+        }
+
+        if ($assignNode->expr->name instanceof PropertyFetch) {
+            // not implemented yet
+            return null;
+        }
+
+        return (string) $assignNode->expr->name;
     }
 }

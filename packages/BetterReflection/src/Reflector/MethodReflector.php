@@ -2,8 +2,10 @@
 
 namespace Rector\BetterReflection\Reflector;
 
+use Nette\Utils\Strings;
 use Roave\BetterReflection\Reflection\ReflectionMethod;
 use Roave\BetterReflection\Reflector\Exception\IdentifierNotFound;
+use TypeError;
 
 final class MethodReflector
 {
@@ -24,6 +26,11 @@ final class MethodReflector
         } catch (IdentifierNotFound $identifierNotFoundException) {
             // class doesn't exist
             return null;
+        } catch (TypeError $typeError) {
+            // temp bug workaround
+            if (Strings::contains($typeError->getMessage(), 'SourceStubber::addDocComment()')) {
+                return null;
+            }
         }
 
         return $classReflection->getImmediateMethods()[$method] ?? null;
