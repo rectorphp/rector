@@ -304,16 +304,7 @@ final class TypeResolver extends NodeVisitorAbstract
             return;
         }
 
-        $methodReflection = $this->methodReflector->reflectClassMethod($methodCallVariableType, $methodCallName);
-
-        if ($methodReflection) {
-            $returnType = $methodReflection->getReturnType();
-            if ($returnType) {
-                $variableType = (string) $returnType;
-            }
-        } else {
-            $variableType = $this->fallbackStaticType($methodCallVariableType, $methodCallName);
-        }
+        $variableType = $this->getMethodReturnType($methodCallVariableType, $methodCallName);
 
         if ($variableType) {
             $variableName = $assignNode->var->name;
@@ -332,5 +323,19 @@ final class TypeResolver extends NodeVisitorAbstract
         }
 
         return null;
+    }
+
+    private function getMethodReturnType(string $methodCallVariableType, string $methodCallName): ?string
+    {
+        $methodReflection = $this->methodReflector->reflectClassMethod($methodCallVariableType, $methodCallName);
+
+        if ($methodReflection) {
+            $returnType = $methodReflection->getReturnType();
+            if ($returnType) {
+                return (string) $returnType;
+            }
+        }
+
+        return $this->fallbackStaticType($methodCallVariableType, $methodCallName);
     }
 }
