@@ -4,6 +4,8 @@ namespace Rector\Rector\Contrib\Nette\Routing;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\PrettyPrinter\Standard;
+use Rector\Builder\Contrib\Nette\RouterFactoryClassBuilder;
 use Rector\FileSystem\CurrentFileProvider;
 use Rector\NodeAnalyzer\AssignAnalyzer;
 use Rector\Rector\AbstractRector;
@@ -30,10 +32,26 @@ final class BootstrapToRouterFactoryRector extends AbstractRector
      */
     private $assignAnalyzer;
 
-    public function __construct(CurrentFileProvider $currentFileProvider, AssignAnalyzer $assignAnalyzer)
-    {
+    /**
+     * @var RouterFactoryClassBuilder
+     */
+    private $routerFactoryClassBuilder;
+
+    /**
+     * @var Standard
+     */
+    private $standard;
+
+    public function __construct(
+        CurrentFileProvider $currentFileProvider,
+        AssignAnalyzer $assignAnalyzer,
+        RouterFactoryClassBuilder $routerFactoryClassBuilder,
+        Standard $standard
+    ) {
         $this->currentFileProvider = $currentFileProvider;
         $this->assignAnalyzer = $assignAnalyzer;
+        $this->routerFactoryClassBuilder = $routerFactoryClassBuilder;
+        $this->standard = $standard;
     }
 
     /**
@@ -68,6 +86,25 @@ final class BootstrapToRouterFactoryRector extends AbstractRector
         $this->shouldRemoveNode = true;
 
         return null;
+    }
+
+    /**
+     * @param Node[] $nodes
+     */
+    public function afterTraverse(array $nodes): void
+    {
+        $routerFactoryClassNode = $this->routerFactoryClassBuilder->build($this->collectedRouteNodes);
+
+        $this->collectedRouteNodes = [];
+
+        // save file to same location as bootstrap.php is
+        $currentFileInfo = $this->currentFileProvider->getCurrentFile();
+        $fileLocation = dirname($currentFileInfo->getRealPath()) . DIRECTORY_SEPARATOR . 'RouterFactory.php';
+
+        file_put_contents(
+            $fileLocation,
+            $this->standard->prettyPrintFile([$routerFactoryClassNode])
+        );
     }
 
     private function isBootstrapFile(): bool
