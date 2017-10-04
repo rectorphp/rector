@@ -277,10 +277,17 @@ final class TypeResolver extends NodeVisitorAbstract
 
     private function processAssignMethodReturn(Assign $assignNode): void
     {
+        $variableType = null;
+
         // 1. get $anotherVar type
 
-        /** @var Variable $methodCallVariable */
+        /** @var Variable|mixed $methodCallVariable */
         $methodCallVariable = $assignNode->expr->var;
+
+        if (! $methodCallVariable instanceof Variable) {
+            return;
+        }
+
         $methodCallVariableName = (string) $methodCallVariable->name;
 
         $methodCallVariableType = $this->typeContext->getTypeForVariable($methodCallVariableName);
@@ -300,7 +307,10 @@ final class TypeResolver extends NodeVisitorAbstract
         $methodReflection = $this->methodReflector->reflectClassMethod($methodCallVariableType, $methodCallName);
 
         if ($methodReflection) {
-            $variableType = $methodReflection->getReturnType();
+            $returnType = $methodReflection->getReturnType();
+            if ($returnType) {
+                $variableType = (string) $returnType;
+            }
         } else {
             $variableType = $this->fallbackStaticType($methodCallVariableType, $methodCallName);
         }
