@@ -37,7 +37,9 @@ final class AssignAnalyzer
         }
 
         return $this->isVariableTypeAndPropetyName(
-            $node->var, $expectedType, $expectedPropertyName
+            $node->var,
+            $expectedType,
+            $expectedPropertyName
         );
     }
 
@@ -52,6 +54,7 @@ final class AssignAnalyzer
         }
 
         $propertyName = $node->var->name->name;
+
         return $propertyName === $expectedPropertyName;
     }
 }
