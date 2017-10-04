@@ -282,10 +282,15 @@ final class TypeResolver extends NodeVisitorAbstract
 
         /** @var Variable $methodCallVariable */
         $methodCallVariable = $assignNode->expr->var;
-        $methodCallVariableName = $methodCallVariable->name;
+        $methodCallVariableName = (string) $methodCallVariable->name;
 
         $methodCallVariableType = $this->typeContext->getTypeForVariable($methodCallVariableName);
-        $methodCallName = (string) $assignNode->expr->name;
+
+        if ($assignNode->expr->name instanceof Variable) {
+            $methodCallName = $assignNode->expr->name->name;
+        } else {
+            $methodCallName = (string) $assignNode->expr->name;
+        }
 
         // 2. get method() return type
 
