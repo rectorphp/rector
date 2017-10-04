@@ -38,7 +38,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
         if ($this->shouldRemoveNode) {
             $this->shouldRemoveNode = false;
 
-            return NodeTraverser::REMOVE_NODE;
+            return new Node\Stmt\Nop;
         }
 
         return null;
