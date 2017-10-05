@@ -5,7 +5,6 @@ namespace Rector\Rector\Contrib\Symfony\Debug;
 use Rector\Rector\AbstractClassReplacerRector;
 
 /**
- *
  * Ref: https://github.com/symfony/symfony/blob/master/UPGRADE-3.3.md#debug
  *
  * Before:
@@ -22,7 +21,7 @@ final class ContextErrorExceptionToErrorExceptionRector extends AbstractClassRep
     protected function getOldToNewClasses(): array
     {
         return [
-            'Symfony\Component\Debug\Exception\ContextErrorException' => 'ErrorException'
+            'Symfony\Component\Debug\Exception\ContextErrorException' => 'ErrorException',
         ];
     }
 }
