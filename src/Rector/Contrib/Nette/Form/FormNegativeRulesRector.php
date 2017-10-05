@@ -33,22 +33,30 @@ final class FormNegativeRulesRector extends AbstractRector
             return false;
         }
 
-        if (! $node->expr instanceof ClassConstFetch) {
+        return $this->isClassConstFetchOfClassNameAndConstantNames($node->expr, self::FORM_CLASS, self::RULE_NAMES);
+    }
+
+    /**
+     * @param string[] $constantNames
+     */
+    public function isClassConstFetchOfClassNameAndConstantNames(Node $node, string $className, array $constantNames): bool
+    {
+        if (! $node instanceof ClassConstFetch) {
             return false;
         }
 
-        /** @var ClassConstFetch $classConstFetchNode */
-        $classConstFetchNode = $node->expr;
+        $classConstFetchNode = $node;
 
         /** @var FullyQualified $className */
-        $className = $classConstFetchNode->class->getAttribute(Attribute::RESOLVED_NAME);
-        $className = $className->toString();
-
-        if ($className !== self::FORM_CLASS) {
+        $classFullyQualifiedName = $classConstFetchNode->class->getAttribute(Attribute::RESOLVED_NAME);
+        $nodeClassName = $classFullyQualifiedName->toString();
+        if ($nodeClassName !== $className) {
             return false;
         }
 
-        return in_array($classConstFetchNode->name->name, self::RULE_NAMES, true);
+        $nodeConstantName = $classConstFetchNode->name->name;
+
+        return in_array($nodeConstantName, $constantNames, true);
     }
 
     /**
