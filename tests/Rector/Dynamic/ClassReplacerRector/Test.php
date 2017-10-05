@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Dynamic;
+namespace Rector\Tests\Rector\Dynamic\ClassReplacerRector;
 
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
@@ -33,7 +33,7 @@ final class Test extends TestCase
 
     public function testConfiguration(): void
     {
-        $oldToNewClasses = Assert::getObjectAttribute($this->classReplacerRector,'oldToNewClasses');
+        $oldToNewClasses = Assert::getObjectAttribute($this->classReplacerRector, 'oldToNewClasses');
         $this->assertNotSame([], $oldToNewClasses);
     }
 

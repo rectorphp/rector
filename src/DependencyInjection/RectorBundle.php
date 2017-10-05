@@ -2,8 +2,9 @@
 
 namespace Rector\DependencyInjection;
 
+use Rector\Configuration\Normalizer\RectorClassNormalizer;
+use Rector\Configuration\Validator\RectorClassValidator;
 use Rector\DependencyInjection\Extension\RectorsExtension;
-use Rector\Validator\RectorClassValidator;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 final class RectorBundle extends Bundle
@@ -11,12 +12,8 @@ final class RectorBundle extends Bundle
     public function getContainerExtension(): RectorsExtension
     {
         return new RectorsExtension(
-            $this->createRectorClassValidator()
+            new RectorClassValidator,
+            new RectorClassNormalizer
         );
-    }
-
-    private function createRectorClassValidator(): RectorClassValidator
-    {
-        return new RectorClassValidator;
     }
 }
