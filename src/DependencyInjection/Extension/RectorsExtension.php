@@ -2,7 +2,8 @@
 
 namespace Rector\DependencyInjection\Extension;
 
-use Rector\Validator\RectorClassValidator;
+use Rector\Configuration\Normalizer\RectorClassNormalizer;
+use Rector\Configuration\Validator\RectorClassValidator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 
@@ -13,9 +14,17 @@ final class RectorsExtension extends Extension
      */
     private $rectorClassValidator;
 
-    public function __construct(RectorClassValidator $rectorClassValidator)
-    {
+    /**
+     * @var RectorClassNormalizer
+     */
+    private $rectorClassNormalizer;
+
+    public function __construct(
+        RectorClassValidator $rectorClassValidator,
+        RectorClassNormalizer $rectorClassNormalizer
+    ) {
         $this->rectorClassValidator = $rectorClassValidator;
+        $this->rectorClassNormalizer = $rectorClassNormalizer;
     }
 
     /**
@@ -27,12 +36,17 @@ final class RectorsExtension extends Extension
             return;
         }
 
-        $rectorClasses = array_merge(...$configs);
+        $rectors = array_merge(...$configs);
 
-        $this->rectorClassValidator->validate($rectorClasses);
+        $rectors = $this->rectorClassNormalizer->normalizer($rectors);
 
-        foreach ($rectorClasses as $rectorClass) {
-            $containerBuilder->autowire($rectorClass);
+        $this->rectorClassValidator->validate(array_keys($rectors));
+
+        foreach ($rectors as $rectorClass => $arguments) {
+            $rectorDefinition = $containerBuilder->autowire($rectorClass);
+            if (count($arguments)) {
+                $rectorDefinition->setArguments([$arguments]);
+            }
         }
     }
 }

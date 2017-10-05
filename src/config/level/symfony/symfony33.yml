@@ -1,0 +1,5 @@
+rectors:
+    - Rector\Rector\Contrib\Symfony\FrameworkBundle\FrameworkBundleClassReplacementsRector
+    - Rector\Rector\Contrib\Symfony\Console\ConsoleExceptionToErrorEventConstantRector
+    - Rector\Rector\Contrib\Symfony\Console\ConsoleExceptionToErrorEventClassRector
+    - Rector\Rector\Contrib\Symfony\Debug\ContextErrorExceptionToErrorExceptionRector

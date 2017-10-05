@@ -5,12 +5,17 @@ namespace Rector\Rector\Contrib\Nette\Form;
 use PhpParser\Node;
 use PhpParser\Node\Expr\BitwiseNot;
 use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Name\FullyQualified;
-use Rector\Node\Attribute;
+use Rector\NodeAnalyzer\ClassConstAnalyzer;
 use Rector\Rector\AbstractRector;
 
 /**
  * Covers https://forum.nette.org/cs/26250-pojdte-otestovat-nette-2-4-rc
+ *
+ * Before:
+ * - ~Form::FILLED
+ *
+ * After:
+ * - Form::NOT_FILLED
  */
 final class FormNegativeRulesRector extends AbstractRector
 {
@@ -25,6 +30,16 @@ final class FormNegativeRulesRector extends AbstractRector
     private const RULE_NAMES = ['FILLED', 'EQUAL'];
 
     /**
+     * @var ClassConstAnalyzer
+     */
+    private $classConstAnalyzer;
+
+    public function __construct(ClassConstAnalyzer $classConstAnalyzer)
+    {
+        $this->classConstAnalyzer = $classConstAnalyzer;
+    }
+
+    /**
      * Detects "~Form::FILLED"
      */
     public function isCandidate(Node $node): bool
@@ -33,22 +48,11 @@ final class FormNegativeRulesRector extends AbstractRector
             return false;
         }
 
-        if (! $node->expr instanceof ClassConstFetch) {
-            return false;
-        }
-
-        /** @var ClassConstFetch $classConstFetchNode */
-        $classConstFetchNode = $node->expr;
-
-        /** @var FullyQualified $className */
-        $className = $classConstFetchNode->class->getAttribute(Attribute::RESOLVED_NAME);
-        $className = $className->toString();
-
-        if ($className !== self::FORM_CLASS) {
-            return false;
-        }
-
-        return in_array($classConstFetchNode->name->name, self::RULE_NAMES, true);
+        return $this->classConstAnalyzer->isClassConstFetchOfClassAndConstantNames(
+            $node->expr,
+            self::FORM_CLASS,
+            self::RULE_NAMES
+        );
     }
 
     /**

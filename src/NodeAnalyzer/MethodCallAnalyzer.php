@@ -13,6 +13,8 @@ use Rector\Node\Attribute;
 final class MethodCallAnalyzer
 {
     /**
+     * Checks "$this->classOfSpecificType->specificMethodName()"
+     *
      * @param string[] $methodsNames
      */
     public function isMethodCallTypeAndMethods(Node $node, string $type, array $methodsNames): bool
@@ -25,6 +27,8 @@ final class MethodCallAnalyzer
     }
 
     /**
+     * Checks "SomeClassOfSpecificType::specificMethodName()"
+     *
      * @param string[] $methodNames
      */
     public function isStaticMethodCallTypeAndMethods(Node $node, string $type, array $methodNames): bool
@@ -45,6 +49,9 @@ final class MethodCallAnalyzer
         return false;
     }
 
+    /**
+     * Checks "$this->specificNameMethod()"
+     */
     public function isMethodCallMethod(Node $node, string $methodName): bool
     {
         if (! $node instanceof MethodCall) {
@@ -60,6 +67,9 @@ final class MethodCallAnalyzer
         return $nodeMethodName === $methodName;
     }
 
+    /**
+     * Checks "$this->methodCall()"
+     */
     private function isMethodCallType(Node $node, string $type): bool
     {
         if (! $node instanceof MethodCall) {
@@ -74,6 +84,9 @@ final class MethodCallAnalyzer
         return true;
     }
 
+    /**
+     * Checks "SomeClassOfSpecificType::someMethod()"
+     */
     private function isStaticMethodCallType(Node $node, string $type): bool
     {
         if (! $node instanceof StaticCall) {

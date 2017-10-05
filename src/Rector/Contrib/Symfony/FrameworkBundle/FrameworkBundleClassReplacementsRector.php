@@ -5,7 +5,7 @@ namespace Rector\Rector\Contrib\Symfony\FrameworkBundle;
 use Rector\Rector\AbstractClassReplacerRector;
 
 /**
- * Ref.: https://github.com/symfony/symfony/blob/master/UPGRADE-4.0.md#frameworkbundle
+ * Ref: https://github.com/symfony/symfony/blob/master/UPGRADE-3.3.md#frameworkbundle
  *
  * FrameworkBundle classes replaced by new ones
  */

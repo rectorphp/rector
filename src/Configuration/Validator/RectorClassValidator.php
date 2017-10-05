@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Validator;
+namespace Rector\Configuration\Validator;
 
 use Rector\Contract\Rector\RectorInterface;
 use Rector\Exception\Validator\InvalidRectorClassException;
