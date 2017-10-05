@@ -36,7 +36,17 @@ final class RectorsExtension extends Extension
             return;
         }
 
-        $rectors = array_merge(...$configs);
+        $rectors = [];
+
+        foreach ($configs as $config) {
+            // this magic will merge array recursively
+            // without making any extra duplications; array_merge only doesn't work
+            $rectors = array_merge(
+                $rectors,
+                $config,
+                array_replace_recursive($rectors, $config)
+            );
+        }
 
         $rectors = $this->rectorClassNormalizer->normalizer($rectors);
 

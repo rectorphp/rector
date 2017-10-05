@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\Rector\Contrib\PHPUnit\NamespaceClassRector;
 
-use Rector\Rector\Contrib\PHPUnit\NamespaceClassRector;
+use Rector\Rector\Dynamic\ClassReplacerRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class Test extends AbstractRectorTestCase
@@ -20,6 +20,6 @@ final class Test extends AbstractRectorTestCase
      */
     protected function getRectorClasses(): array
     {
-        return [NamespaceClassRector::class];
+        return [ClassReplacerRector::class];
     }
 }

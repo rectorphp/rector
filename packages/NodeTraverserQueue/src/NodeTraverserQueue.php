@@ -84,6 +84,7 @@ final class NodeTraverserQueue
 
             $newStmts = $this->cloningNodeTraverser->traverse($oldStmts);
             $newStmts = $this->standaloneTraverseNodeTraverser->traverse($newStmts);
+
             $newStmts = $this->rectorNodeTraverser->traverse($newStmts);
             $newStmts = $this->shutdownNodeTraverser->traverse($newStmts);
 

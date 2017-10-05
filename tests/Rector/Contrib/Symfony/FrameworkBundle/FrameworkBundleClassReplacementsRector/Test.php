@@ -2,7 +2,6 @@
 
 namespace Rector\Tests\Rector\Contrib\Symfony\FrameworkBundle\FrameworkBundleClassReplacementsRector;
 
-use Rector\Rector\Contrib\Symfony\FrameworkBundle\FrameworkBundleClassReplacementsRector;
 use Rector\Rector\Dynamic\ClassReplacerRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
