@@ -1,9 +1,14 @@
 rectors:
     Rector\Rector\Contrib\Symfony\Console\ConsoleExceptionToErrorEventConstantRector: ~
-    Rector\Rector\Contrib\Symfony\Console\ConsoleExceptionToErrorEventClassRector: ~
-    Rector\Rector\Contrib\Symfony\Debug\ContextErrorExceptionToErrorExceptionRector: ~
 
     Rector\Rector\Dynamic\ClassReplacerRector:
+        # console
+        'Symfony\Component\Console\Event\ConsoleExceptionEvent': 'Symfony\Component\Console\Event\ConsoleErrorEvent'
+
+        # debug
+        'Symfony\Component\Debug\Exception\ContextErrorException': 'ErrorException'
+
+        # framework bundle
         'Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\AddConsoleCommandPass': 'Symfony\Component\Console\DependencyInjection\AddConsoleCommandPass'
         'Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\SerializerPass': 'Symfony\Component\Serializer\DependencyInjection\SerializerPass'
         'Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\FormPass': 'Symfony\Component\Form\DependencyInjection\FormPass'
