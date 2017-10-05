@@ -3,7 +3,10 @@
 namespace Rector\Rector\Contrib\Symfony\Console;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Scalar\String_;
+use Rector\NodeAnalyzer\ClassConstAnalyzer;
+use Rector\NodeFactory\NodeFactory;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -29,18 +32,48 @@ use Rector\Rector\AbstractRector;
  */
 final class ConsoleExceptionEventToErrorEventRector extends AbstractRector
 {
+    /**
+     * @var string
+     */
+    private const CONSOLE_EVENTS_CLASS = 'Symfony\Component\Console\ConsoleEvents';
+
+    /**
+     * @var ClassConstAnalyzer
+     */
+    private $classConstAnalyzer;
+    /**
+     * @var NodeFactory
+     */
+    private $nodeFactory;
+
+    public function __construct(ClassConstAnalyzer $classConstAnalyzer, NodeFactory $nodeFactory)
+    {
+        $this->classConstAnalyzer = $classConstAnalyzer;
+        $this->nodeFactory = $nodeFactory;
+    }
+
     public function isCandidate(Node $node): bool
     {
-        // rename event -> ClassConstantAnalyzer Class::OLD => Class::NEW
-        // rename class occurande
+        if ($this->classConstAnalyzer->isClassConstFetchOfClassAndConstantNames(
+            $node,
+            self::CONSOLE_EVENTS_CLASS,
+            ['EXCEPTION']
+        )) {
+            return true;
+        }
+
+        if (! $node instanceof String_) {
+            return false;
+        }
+
+        return $node->value === 'console.exception';
     }
 
     /**
-     * @param MethodCall $node
+     * @param ClassConstFetch|String_ $node
      */
     public function refactor(Node $node): ?Node
     {
-        dump($node);
-        die;
+        return $this->nodeFactory->createClassConstant(self::CONSOLE_EVENTS_CLASS, 'ERROR');
     }
 }
