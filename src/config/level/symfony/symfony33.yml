@@ -1,3 +1,4 @@
 rectors:
     - Rector\Rector\Contrib\Symfony\FrameworkBundle\FrameworkBundleClassReplacementsRector
-    - Rector\Rector\Contrib\Symfony\Console\ConsoleExceptionEventToErrorEventRector
+    - Rector\Rector\Contrib\Symfony\Console\ConsoleExceptionToErrorEventConstantRector
+    - Rector\Rector\Contrib\Symfony\Console\ConsoleExceptionToErrorEventClassRector

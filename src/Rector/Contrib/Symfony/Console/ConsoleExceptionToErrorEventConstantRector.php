@@ -21,16 +21,8 @@ use Rector\Rector\AbstractRector;
  *
  * After:
  * - Symfony\Component\Console\ConsoleEvents::ERROR
- *
- * ---
- *
- * Before:
- * - Symfony\Component\Console\Event\ConsoleExceptionEvent
- *
- * After:
- * - Symfony\Component\Console\Event\ConsoleErrorEvent
  */
-final class ConsoleExceptionEventToErrorEventRector extends AbstractRector
+final class ConsoleExceptionToErrorEventConstantRector extends AbstractRector
 {
     /**
      * @var string
@@ -41,6 +33,7 @@ final class ConsoleExceptionEventToErrorEventRector extends AbstractRector
      * @var ClassConstAnalyzer
      */
     private $classConstAnalyzer;
+
     /**
      * @var NodeFactory
      */
