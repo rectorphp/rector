@@ -11,6 +11,8 @@ use Rector\Node\Attribute;
 final class AssignAnalyzer
 {
     /**
+     * Checks "$this->specificNameProperty =" and it's type
+     *
      * @param string[] $methodsNames
      */
     public function isAssignTypeAndProperty(Node $node, string $expectedType, string $expectedPropertyName): bool
@@ -26,6 +28,9 @@ final class AssignAnalyzer
         return $this->isVariableTypeAndPropetyName($node, $expectedType, $expectedPropertyName);
     }
 
+    /**
+     * Checks "$variable[] = '...';"
+     */
     public function isArrayAssignTypeAndProperty(Node $node, string $expectedType, string $expectedPropertyName): bool
     {
         if (! $node instanceof Assign) {
@@ -44,6 +49,8 @@ final class AssignAnalyzer
     }
 
     /**
+     * Checks "$specificNameVariable = " and its type
+     *
      * @param Assign $node
      */
     private function isVariableTypeAndPropetyName(Node $node, string $expectedType, string $expectedPropertyName): bool
