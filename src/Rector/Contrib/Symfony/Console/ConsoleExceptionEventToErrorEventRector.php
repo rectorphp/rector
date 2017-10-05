@@ -2,18 +2,9 @@
 
 namespace Rector\Rector\Contrib\Symfony\Console;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Name\FullyQualified;
-use Rector\Builder\Class_\ClassPropertyCollector;
-use Rector\Builder\Kernel\ServiceFromKernelResolver;
-use Rector\Builder\Naming\NameResolver;
-use Rector\Node\Attribute;
-use Rector\NodeAnalyzer\SymfonyContainerCallsAnalyzer;
-use Rector\NodeFactory\NodeFactory;
 use Rector\Rector\AbstractRector;
-use Rector\Tests\Rector\Contrib\Symfony\HttpKernel\GetterToPropertyRector\Source\LocalKernel;
 
 /**
  * Ref:
@@ -40,8 +31,6 @@ final class ConsoleExceptionEventToErrorEventRector extends AbstractRector
 {
     public function isCandidate(Node $node): bool
     {
-
-
         // rename event -> ClassConstantAnalyzer Class::OLD => Class::NEW
         // rename class occurande
     }
