@@ -1,6 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Rector;
+namespace Rector\Rector\Dynamic;
+
+use Rector\Rector\AbstractClassReplacerRector;
 
 final class ClassReplacerRector extends AbstractClassReplacerRector
 {
