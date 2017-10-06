@@ -53,6 +53,4 @@ final class Test extends TestCase
 
         $this->assertStringEqualsFile(__DIR__ . '/correct/correct2.php.inc', $refactoredFileContent);
     }
-
-
 }
