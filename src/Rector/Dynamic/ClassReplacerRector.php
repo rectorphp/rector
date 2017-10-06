@@ -43,14 +43,13 @@ final class ClassReplacerRector extends AbstractRector
     public function refactor(Node $node): ?Node
     {
         if ($node instanceof Name) {
-            $newName = $this->getNewName($node->toString());
+            $newName = $this->resolveNewNameFromNode($node);
 
             return new FullyQualified($newName);
         }
 
         if ($node instanceof Use_) {
-            $name = $this->resolveNameFromNode($node);
-            $newName = $this->getNewName($name);
+            $newName = $this->resolveNewNameFromNode($node);
 
             if ($this->isUseStatmenetAlreadyPresent($node, $newName)) {
                 $this->shouldRemoveNode = true;
@@ -58,11 +57,6 @@ final class ClassReplacerRector extends AbstractRector
         }
 
         return null;
-    }
-
-    private function getNewName(string $oldName): string
-    {
-        return $this->oldToNewClasses[$oldName];
     }
 
     private function isUseStatmenetAlreadyPresent(Use_ $useNode, string $newName): bool
@@ -73,9 +67,22 @@ final class ClassReplacerRector extends AbstractRector
         return in_array($newName, $useStatments->getUseStatements(), true);
     }
 
+    private function resolveNewNameFromNode(Node $node): string
+    {
+        $name = $this->resolveNameFromNode($node);
+
+        return $this->oldToNewClasses[$name];
+    }
+
     private function resolveNameFromNode(Node $node): string
     {
         if ($node instanceof Name) {
+            // resolved name has priority, as it is FQN
+            $resolvedName = $node->getAttribute(Attribute::RESOLVED_NAME);
+            if ($resolvedName instanceof FullyQualified) {
+                return $resolvedName->toString();
+            }
+
             return $node->toString();
         }
 

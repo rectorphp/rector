@@ -37,13 +37,27 @@ final class Test extends TestCase
         $this->assertNotSame([], $oldToNewClasses);
     }
 
-    public function testProcessing(): void
+    /**
+     * @dataProvider provideTestFiles()
+     */
+    public function testProcessing(string $testedFile, string $expectedFile): void
     {
         $refactoredFileContent = $this->fileProcessor->processFileWithRectorsToString(
-            new SplFileInfo(__DIR__ . '/wrong/wrong.php.inc'),
+            new SplFileInfo($testedFile),
             [ClassReplacerRector::class]
         );
 
-        $this->assertStringEqualsFile(__DIR__ . '/correct/correct.php.inc', $refactoredFileContent);
+        $this->assertStringEqualsFile($expectedFile, $refactoredFileContent);
+    }
+
+    /**
+     * @return string[][]
+     */
+    public function provideTestFiles(): array
+    {
+        return [
+            [__DIR__ . '/wrong/wrong.php.inc', __DIR__ . '/correct/correct.php.inc'],
+            [__DIR__ . '/wrong/wrong2.php.inc', __DIR__ . '/correct/correct2.php.inc'],
+        ];
     }
 }

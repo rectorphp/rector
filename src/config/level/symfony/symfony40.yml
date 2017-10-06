@@ -1,8 +1,10 @@
 rectors:
-    - Rector\Rector\Contrib\Symfony\Validator\ConstraintUrlOptionRector
-    - Rector\Rector\Contrib\Symfony\Validator\ConstraintValidatorTestClassRenameRector
-    - Rector\Rector\Contrib\Symfony\Form\FormIsValidRector
-    - Rector\Rector\Contrib\Symfony\Form\StringFormTypeToClassRector
-    - Rector\Rector\Contrib\Symfony\VarDumper\VarDumperTestTraitMethodArgsRector
-    - Rector\Rector\Contrib\Symfony\DependencyInjection\ContainerBuilderCompileEnvArgumentRector
-    - Rector\Rector\Contrib\Symfony\DependencyInjection\CompilerAddPassPriorityRector
+    Rector\Rector\Contrib\Symfony\Validator\ConstraintUrlOptionRector: ~
+    Rector\Rector\Contrib\Symfony\Form\FormIsValidRector: ~
+    Rector\Rector\Contrib\Symfony\Form\StringFormTypeToClassRector: ~
+    Rector\Rector\Contrib\Symfony\VarDumper\VarDumperTestTraitMethodArgsRector: ~
+    Rector\Rector\Contrib\Symfony\DependencyInjection\ContainerBuilderCompileEnvArgumentRector: ~
+    Rector\Rector\Contrib\Symfony\DependencyInjection\CompilerAddPassPriorityRector: ~
+
+    Rector\Rector\Dynamic\ClassReplacerRector:
+        'Symfony\Component\Validator\Tests\Constraints\AbstractConstraintValidatorTest': 'Symfony\Component\Validator\Test\ConstraintValidatorTestCase'
