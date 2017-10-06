@@ -30,7 +30,12 @@ final class ClassConstAnalyzer
         /** @var FullyQualified $className */
         $classFullyQualifiedName = $classConstFetchNode->class->getAttribute(Attribute::RESOLVED_NAME);
 
-        $nodeClassName = $classFullyQualifiedName->toString();
+        if ($classFullyQualifiedName instanceof FullyQualified) {
+            return $classFullyQualifiedName->toString() === $className;
+        }
+
+        // e.g. "$form::FILLED"
+        $nodeClassName = $classConstFetchNode->class->getAttribute(Attribute::CLASS_NAME);
 
         return $nodeClassName === $className;
     }

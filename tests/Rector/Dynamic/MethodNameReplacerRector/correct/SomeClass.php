@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Contrib\Nette\Utils\HtmlAddMethodRector\Wrong;
+namespace Rector\Tests\Rector\Dynamic\MethodNameReplacerRector\Wrong;
 
 use Nette\Utils\Html;
 
@@ -10,6 +10,6 @@ final class SomeClass
     {
         $html = new Html;
         $anotherHtml = $html;
-        $anotherHtml->add('someContent');
+        $anotherHtml->addHtml('someContent');
     }
 }

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Rector;
+namespace Rector\Rector\Dynamic;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
@@ -9,13 +9,31 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use Rector\Node\Attribute;
+use Rector\Rector\AbstractRector;
 
-abstract class AbstractChangeMethodNameRector extends AbstractRector
+final class MethodNameReplacerRector extends AbstractRector
 {
+    /**
+     * class => [
+     *     oldMethod => newMethod
+     * ]
+     *
+     * @var string[][]
+     */
+    private $perClassOldToNewMethods = [];
+
     /**
      * @var string|null
      */
     private $activeType;
+
+    /**
+     * @param string[][]
+     */
+    public function __construct(array $perClassOldToNewMethods)
+    {
+        $this->perClassOldToNewMethods = $perClassOldToNewMethods;
+    }
 
     public function isCandidate(Node $node): bool
     {
@@ -37,7 +55,7 @@ abstract class AbstractChangeMethodNameRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        $oldToNewMethods = $this->getPerClassOldToNewMethods()[$this->activeType];
+        $oldToNewMethods = $this->perClassOldToNewMethods[$this->activeType];
 
         foreach ($oldToNewMethods as $oldMethod => $newMethod) {
             $methodName = $node->name->name;
@@ -50,11 +68,6 @@ abstract class AbstractChangeMethodNameRector extends AbstractRector
 
         return $node;
     }
-
-    /**
-     * @return string[][] { class => [ oldMethod => newMethod ] }
-     */
-    abstract protected function getPerClassOldToNewMethods(): array;
 
     private function isOnTypeCall(Node $node): bool
     {
@@ -118,6 +131,6 @@ abstract class AbstractChangeMethodNameRector extends AbstractRector
      */
     private function getClasses(): array
     {
-        return array_keys($this->getPerClassOldToNewMethods());
+        return array_keys($this->perClassOldToNewMethods);
     }
 }
