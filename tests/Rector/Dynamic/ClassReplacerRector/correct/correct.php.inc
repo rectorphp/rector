@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 
 use Bagr;
+
 use NewClass;
 
 class SomeClass
