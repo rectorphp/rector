@@ -1,3 +1,8 @@
 <?php declare (strict_types=1);
 
-$containt = new Url(['checkDNS' => \Symfony\Component\Validator\Constraints\Url::CHECK_DNS_TYPE_ANY]);
+use Symfony\Component\Validator\Tests\Constraints\AbstractConstraintValidatorTest;
+
+class MyCustomValidatorTest extends \Symfony\Component\Validator\Test\ConstraintValidatorTestCase
+{
+    // ...
+}
