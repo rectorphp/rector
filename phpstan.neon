@@ -7,3 +7,5 @@ parameters:
         - *packages/DeprecationExtractor/tests/DeprecationExtractorSource/Definition.php
         - tests/Rector/Contrib/Nette/Routing/BootstrapToRouterFactoryRector/Correct/RouterFactory.php
         - tests/Rector/Contrib/Nette/Routing/BootstrapToRouterFactoryRector/Wrong/bootstrap.php
+        - tests/Rector/Dynamic/MethodNameReplacerRector/wrong/SomeClass.php
+        - tests/Rector/Dynamic/MethodNameReplacerRector/correct/SomeClass.php
