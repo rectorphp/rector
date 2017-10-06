@@ -3,6 +3,7 @@
 namespace Rector\Tests\Rector\Contrib\Symfony\Validator\ConstraintValidatorTestClassRenameRector;
 
 use Rector\Rector\Contrib\Symfony\Validator\ConstraintValidatorTestClassRenameRector;
+use Rector\Rector\Dynamic\ClassReplacerRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class Test extends AbstractRectorTestCase
@@ -20,6 +21,7 @@ final class Test extends AbstractRectorTestCase
      */
     protected function getRectorClasses(): array
     {
-        return [ConstraintValidatorTestClassRenameRector::class];
+//        return [ConstraintValidatorTestClassRenameRector::class];
+        return [ClassReplacerRector::class];
     }
 }
