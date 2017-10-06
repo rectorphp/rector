@@ -60,8 +60,10 @@ parameters:
             # empty parent interface, disable for now
             - packages/DeprecationExtractor/src/Deprecation/ClassMethodDeprecation.php
         Symplify\CodingStandard\Sniffs\Debug\CommentedOutCodeSniff:
-            # false positive
+            # false positive - @todo fix
             - packages/NodeTypeResolver/src/NodeVisitor/TypeResolver.php
+            # false positive - fixed in master
+            - src/NodeAnalyzer/ClassConstAnalyzer.php
         SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff:
             # covariant types
             - */packages/NodeValueResolver/src/PerNodeValueResolver/*ValueResolver.php
