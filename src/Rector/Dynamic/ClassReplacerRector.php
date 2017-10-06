@@ -5,7 +5,6 @@ namespace Rector\Rector\Dynamic;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use Rector\Node\Attribute;
