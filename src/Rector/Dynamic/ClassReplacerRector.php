@@ -43,7 +43,8 @@ final class ClassReplacerRector extends AbstractRector
     public function refactor(Node $node): ?Node
     {
         if ($node instanceof Name) {
-            $newName = $this->getNewName($node->toString());
+            $name = $this->resolveNameFromNode($node);
+            $newName = $this->getNewName($name);
 
             return new FullyQualified($newName);
         }
@@ -76,6 +77,12 @@ final class ClassReplacerRector extends AbstractRector
     private function resolveNameFromNode(Node $node): string
     {
         if ($node instanceof Name) {
+            // resolved name has priority, as it is FQN
+            $resolvedName = $node->getAttribute(Attribute::RESOLVED_NAME);
+            if ($resolvedName instanceof FullyQualified) {
+                return $resolvedName->toString();
+            }
+
             return $node->toString();
         }
 
