@@ -38,6 +38,11 @@ use Rector\Tests\Rector\Contrib\Symfony\HttpKernel\GetterToPropertyRector\Source
 final class CommandToConstructorInjectionRector extends AbstractRector
 {
     /**
+     * @var string
+     */
+    private const COMMAND_CLASS = 'Symfony\Component\Console\Command\Command';
+
+    /**
      * @var ServiceFromKernelResolver
      */
     private $serviceFromKernelResolver;
@@ -121,6 +126,6 @@ final class CommandToConstructorInjectionRector extends AbstractRector
     private function replaceParentContainerAwareCommandWithCommand(Node $node): void
     {
         $classNode = $node->getAttribute(Attribute::CLASS_NODE);
-        $classNode->extends = new FullyQualified('Symfony\Component\Console\Command\Command');
+        $classNode->extends = new FullyQualified(self::COMMAND_CLASS);
     }
 }
