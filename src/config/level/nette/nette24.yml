@@ -1,9 +1,12 @@
 rectors:
-    - Rector\Rector\Contrib\Nette\Form\FormNegativeRulesRector
-    - Rector\Rector\Contrib\Nette\Form\FormCallbackRector
-    - Rector\Rector\Contrib\Nette\Form\FormSetRequiredRector
-    - Rector\Rector\Contrib\Nette\Utils\HtmlAddMethodRector
-    - Rector\Rector\Contrib\Nette\Utils\NetteObjectToSmartTraitRector
-    - Rector\Rector\Contrib\Nette\PhpGenerator\PhpGeneratorDocumentMethodRector
-    - Rector\Rector\Contrib\Nette\Utils\MagicMethodRector
-    - Rector\Rector\Contrib\Nette\DI\SetEntityToStatementRector
+    Rector\Rector\Contrib\Nette\Form\FormNegativeRulesRector: ~
+    Rector\Rector\Contrib\Nette\Form\FormCallbackRector: ~
+    Rector\Rector\Contrib\Nette\Form\FormSetRequiredRector: ~
+    Rector\Rector\Contrib\Nette\Utils\NetteObjectToSmartTraitRector: ~
+    Rector\Rector\Contrib\Nette\PhpGenerator\PhpGeneratorDocumentMethodRector: ~
+    Rector\Rector\Contrib\Nette\Utils\MagicMethodRector: ~
+    Rector\Rector\Contrib\Nette\DI\SetEntityToStatementRector: ~
+
+    Rector\Rector\Dynamic\MethodNameReplacerRector:
+        'Nette\Utils\Html':
+            'add': 'addHtml'
