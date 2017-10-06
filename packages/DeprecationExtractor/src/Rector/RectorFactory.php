@@ -8,6 +8,7 @@ use Rector\DeprecationExtractor\Deprecation\ClassMethodDeprecation;
 use Rector\DeprecationExtractor\Deprecation\DeprecationCollector;
 use Rector\DeprecationExtractor\Deprecation\RemovedFunctionalityDeprecation;
 use Rector\Exception\NotImplementedException;
+use Rector\Rector\Dynamic\MethodNameReplacerRector;
 
 /**
  * Creates rectors with propper setup based on found deprecations.
@@ -19,17 +20,9 @@ final class RectorFactory
      */
     private $deprecationCollector;
 
-    /**
-     * @var ConfigurableChangeMethodNameRector
-     */
-    private $configurableChangeMethodNameRector;
-
-    public function __construct(
-        DeprecationCollector $deprecationCollector,
-        ConfigurableChangeMethodNameRector $configurableChangeMethodNameRector
-    ) {
+    public function __construct(DeprecationCollector $deprecationCollector)
+    {
         $this->deprecationCollector = $deprecationCollector;
-        $this->configurableChangeMethodNameRector = $configurableChangeMethodNameRector;
     }
 
     /**
@@ -53,14 +46,11 @@ final class RectorFactory
     public function createRectorFromDeprecation(DeprecationInterface $deprecation): RectorInterface
     {
         if ($deprecation instanceof ClassMethodDeprecation) {
-            $configurableChangeMethodNameRector = clone $this->configurableChangeMethodNameRector;
-            $configurableChangeMethodNameRector->setPerClassOldToNewMethods([
+            return new MethodNameReplacerRector([
                 $deprecation->getOldClass() => [
                     $deprecation->getOldMethod() => $deprecation->getNewMethod(),
                 ],
             ]);
-
-            return $configurableChangeMethodNameRector;
         }
 
         throw new NotImplementedException(sprintf(

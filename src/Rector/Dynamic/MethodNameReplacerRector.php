@@ -23,17 +23,17 @@ final class MethodNameReplacerRector extends AbstractRector
     private $perClassOldToNewMethods = [];
 
     /**
+     * @var string|null
+     */
+    private $activeType;
+
+    /**
      * @param string[][]
      */
     public function __construct(array $perClassOldToNewMethods)
     {
         $this->perClassOldToNewMethods = $perClassOldToNewMethods;
     }
-
-    /**
-     * @var string|null
-     */
-    private $activeType;
 
     public function isCandidate(Node $node): bool
     {
