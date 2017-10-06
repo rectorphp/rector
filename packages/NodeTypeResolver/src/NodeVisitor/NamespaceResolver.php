@@ -4,16 +4,17 @@ namespace Rector\NodeTypeResolver\NodeVisitor;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Namespace_;
-use PhpParser\Node\Stmt\Use_;
+use PhpParser\Node\Stmt\UseUse;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Node\Attribute;
+use Rector\NodeTypeResolver\UseStatements;
 
 final class NamespaceResolver extends NodeVisitorAbstract
 {
     /**
-     * @var string[]
+     * @var UseStatements
      */
-    private $useStatements = [];
+    private $useStatements;
 
     /**
      * @var string|null
@@ -26,7 +27,7 @@ final class NamespaceResolver extends NodeVisitorAbstract
     public function beforeTraverse(array $nodes): void
     {
         $this->namespace = null;
-        $this->useStatements = [];
+        $this->useStatements = new UseStatements;
     }
 
     public function enterNode(Node $node): void
@@ -35,8 +36,8 @@ final class NamespaceResolver extends NodeVisitorAbstract
             $this->namespace = $node->name ? $node->name->toString() : '';
         }
 
-        if ($node instanceof Use_) {
-            $this->useStatements[] = $node->uses[0]->name->toString();
+        if ($node instanceof UseUse) {
+            $this->useStatements->addUseStatement($node->name->toString());
         }
 
         $node->setAttribute(Attribute::NAMESPACE, $this->namespace);
