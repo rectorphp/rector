@@ -3,10 +3,28 @@ rectors:
     Rector\Rector\Contrib\Nette\Form\FormCallbackRector: ~
     Rector\Rector\Contrib\Nette\Form\FormSetRequiredRector: ~
     Rector\Rector\Contrib\Nette\Utils\NetteObjectToSmartTraitRector: ~
-    Rector\Rector\Contrib\Nette\PhpGenerator\PhpGeneratorDocumentMethodRector: ~
     Rector\Rector\Contrib\Nette\Utils\MagicMethodRector: ~
     Rector\Rector\Contrib\Nette\DI\SetEntityToStatementRector: ~
 
     Rector\Rector\Dynamic\MethodNameReplacerRector:
+        # php-generator
+        'Nette\PhpGenerator\ClassType':
+            'addDocument': 'addComment'
+            'setDocuments': 'setComment'
+            'getDocuments': 'getComment'
+        'Nette\PhpGenerator\Method':
+            'addDocument': 'addComment'
+            'setDocuments': 'setComment'
+            'getDocuments': 'getComment'
+        'Nette\PhpGenerator\PhpFile':
+            'addDocument': 'addComment'
+            'setDocuments': 'setComment'
+            'getDocuments': 'getComment'
+        'Nette\PhpGenerator\Property':
+            'addDocument': 'addComment'
+            'setDocuments': 'setComment'
+            'getDocuments': 'getComment'
+
+        # utils
         'Nette\Utils\Html':
             'add': 'addHtml'
