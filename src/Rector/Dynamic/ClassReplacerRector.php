@@ -2,10 +2,14 @@
 
 namespace Rector\Rector\Dynamic;
 
-use Rector\Rector\AbstractClassReplacerRector;
+use PhpParser\Node;
+use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
+use Rector\Rector\AbstractRector;
 
-final class ClassReplacerRector extends AbstractClassReplacerRector
+final class ClassReplacerRector extends AbstractRector
 {
+
     /**
      * @var string[]
      */
@@ -19,11 +23,32 @@ final class ClassReplacerRector extends AbstractClassReplacerRector
         $this->oldToNewClasses = $oldToNewClasses;
     }
 
-    /**
-     * @return string[]
-     */
-    protected function getOldToNewClasses(): array
+    public function isCandidate(Node $node): bool
     {
-        return $this->oldToNewClasses;
+        if (! $node instanceof Name) {
+            return false;
+        }
+
+        $fqnName = $node->toString();
+
+        return isset($this->oldToNewClasses[$fqnName]);
+    }
+
+    /**
+     * @param Name $nameNode
+     */
+    public function refactor(Node $nameNode): ?Node
+    {
+        $newName = $this->getNewName($nameNode->toString());
+
+        // if already present use statement, just null it
+        // ... neturn Nop()
+
+        return new FullyQualified($newName);
+    }
+
+    private function getNewName(string $oldName): string
+    {
+        return $this->oldToNewClasses[$oldName];
     }
 }
