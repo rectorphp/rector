@@ -1,0 +1,5 @@
+rectors:
+    Rector\Rector\Dynamic\NamespaceReplacerRector:
+        # todo: add autosort to make complex first; allows reverse order
+        'OldNamespaceWith\OldSplitNamespace': 'NewNamespaceWith\NewSplitNamespace'
+        'OldNamespace': 'NewNamespace'
