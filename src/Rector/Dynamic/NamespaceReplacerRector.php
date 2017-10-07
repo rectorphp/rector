@@ -45,6 +45,7 @@ final class NamespaceReplacerRector extends AbstractRector
     {
         if ($node instanceof Namespace_) {
             $newName = $this->resolveNewNameFromNode($node);
+
             $node->name = new Name($newName);
 
             return $node;
@@ -59,16 +60,11 @@ final class NamespaceReplacerRector extends AbstractRector
         }
 
         if ($node instanceof Name) {
-            $newName = $this->resolveNewNameFromNode($node);
-
-            $node->parts = explode('\\', $newName);
-            $node->setAttribute('origNode', null);
-
-            return $node;
-        }
-
-        if ($node instanceof Name) {
-            $newName = $this->resolveNewNameFromNode($node);
+            if ($this->isPartialNamespace($node)) {
+                $newName = $this->resolvePartialNewName($node);
+            } else {
+                $newName = $this->resolveNewNameFromNode($node);
+            }
 
             $node->parts = explode('\\', $newName);
             $node->setAttribute('origNode', null);
@@ -99,6 +95,12 @@ final class NamespaceReplacerRector extends AbstractRector
         }
 
         if ($node instanceof Name) {
+            /** @var FullyQualified|null $resolveName */
+            $resolveName = $node->getAttribute(Attribute::RESOLVED_NAME);
+            if ($resolveName) {
+                return $resolveName->toString();
+            }
+
             return $node->toString();
         }
     }
@@ -159,5 +161,33 @@ final class NamespaceReplacerRector extends AbstractRector
         }
 
         return false;
+    }
+
+    private function isPartialNamespace(Name $nameNode): bool
+    {
+        $resolvedName = $nameNode->getAttribute(Attribute::RESOLVED_NAME);
+        if ($resolvedName === null) {
+            return false;
+        }
+
+        $nodeName = $nameNode->toString();
+        if ($resolvedName instanceof FullyQualified) {
+            return $nodeName !== $resolvedName->toString();
+        }
+
+        return false;
+    }
+
+    private function resolvePartialNewName(Name $nameNode): string
+    {
+        /** @var FullyQualified $resolvedName */
+        $resolvedName = $nameNode->getAttribute(Attribute::RESOLVED_NAME);
+        $fullyQualifiedName = $resolvedName->toString();
+        $completeNewName = $this->resolveNewNameFromNode($resolvedName);
+
+        // first dummy implementation - improve
+        $cutOffFromTheLeft = strlen($fullyQualifiedName) - strlen($nameNode->toString());
+
+        return substr($completeNewName, $cutOffFromTheLeft);
     }
 }

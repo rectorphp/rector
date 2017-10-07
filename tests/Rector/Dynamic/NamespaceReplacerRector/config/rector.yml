@@ -1,3 +1,4 @@
 rectors:
     Rector\Rector\Dynamic\NamespaceReplacerRector:
-        OldNamespace: NewNamespace
+        'OldNamespaceWith\OldSplitNamespace': 'NewNamespaceWith\NewSplitNamespace'
+#        'OldNamespace': 'NewNamespace'
