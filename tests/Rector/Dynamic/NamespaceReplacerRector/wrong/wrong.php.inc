@@ -9,6 +9,8 @@ class SomeClass
 {
     public function someClass()
     {
+        $keepThis = new \OldNamespace;
+
         return new \OldNamespace\SomeClass;
     }
 }

@@ -4,6 +4,7 @@ namespace Rector\Rector\Dynamic;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Namespace_;
@@ -33,8 +34,11 @@ final class NamespaceReplacerRector extends AbstractRector
         }
 
         $name = $this->resolveNameFromNode($node);
+        if (! $this->isNamespaceToChange($name)) {
+            return false;
+        }
 
-        return $this->isNamespaceToChange($name);
+        return ! $this->isClassFullyQualifiedName($node);
     }
 
     public function refactor(Node $node): ?Node
@@ -116,6 +120,31 @@ final class NamespaceReplacerRector extends AbstractRector
     {
         foreach ($types as $type) {
             if (is_a($node, $type, true)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Checks for "new \ClassNoNamespace;"
+     * This should be skipped, not a namespace.
+     */
+    private function isClassFullyQualifiedName(Node $node): bool
+    {
+        $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
+        if ($parentNode === null) {
+            return false;
+        }
+
+        if (! $parentNode instanceof New_) {
+            return false;
+        }
+
+        $newClassName = $parentNode->class->toString();
+        foreach ($this->oldToNewNamespaces as $oldNamespace => $newNamespace) {
+            if ($newClassName === $oldNamespace) {
                 return true;
             }
         }
