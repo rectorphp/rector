@@ -115,6 +115,15 @@ You can:
             'PHPUnit_Framework_TestCase': 'PHPUnit\Framework\TestCase'
     ```
 
+- **replace part of namespace**
+
+    ```yml
+    # better-reflection20.yml
+    rectors:
+        Rector\Rector\Dynamic\NamespaceReplacerRector:
+            'BetterReflection': 'Roave\BetterReflection'
+    ```
+
 - or **change method name**
 
     ```yml
