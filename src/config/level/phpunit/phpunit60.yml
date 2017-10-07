@@ -1,3 +1,3 @@
 rectors:
-    Rector\Rector\Dynamic\NamespaceReplacerRector:
-        'BetterReflection': 'Roave\BetterReflection'
+    Rector\Rector\Dynamic\ClassReplacerRector:
+        'PHPUnit_Framework_TestCase': 'PHPUnit\Framework\TestCase'

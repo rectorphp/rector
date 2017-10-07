@@ -47,6 +47,12 @@ final class NamespaceReplacerRector extends AbstractRector
             return $node;
         }
 
+        if ($node instanceof Use_) {
+            $newName = $this->resolveNewNameFromNode($node);
+
+            $node->uses[0]->name = new Name($newName);
+        }
+
         return null;
     }
 
@@ -95,6 +101,6 @@ final class NamespaceReplacerRector extends AbstractRector
             }
         }
 
-        return false;
+        return [];
     }
 }
