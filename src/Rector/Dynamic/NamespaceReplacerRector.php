@@ -24,6 +24,8 @@ final class NamespaceReplacerRector extends AbstractRector
      */
     public function __construct(array $oldToNewNamespaces)
     {
+        krsort($oldToNewNamespaces);
+
         $this->oldToNewNamespaces = $oldToNewNamespaces;
     }
 
