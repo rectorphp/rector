@@ -43,7 +43,8 @@ final class Test extends TestCase
     public function provideTestFiles(): array
     {
         return [
-            [__DIR__ . '/wrong/wrong.php.inc', __DIR__ . '/correct/correct.php.inc'],
+//            [__DIR__ . '/wrong/wrong.php.inc', __DIR__ . '/correct/correct.php.inc'],
+            [__DIR__ . '/wrong/wrong2.php.inc', __DIR__ . '/correct/correct2.php.inc'],
         ];
     }
 }

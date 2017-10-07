@@ -29,7 +29,7 @@ final class NamespaceReplacerRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        if (! $this->isGivenKind($node, [Namespace_::class, Use_::class, FullyQualified::class])) {
+        if (! $this->isGivenKind($node, [Namespace_::class, Use_::class, Name::class, FullyQualified::class])) {
             return false;
         }
 
@@ -58,7 +58,16 @@ final class NamespaceReplacerRector extends AbstractRector
             return $node;
         }
 
-        if ($node instanceof FullyQualified) {
+        if ($node instanceof Name) {
+            $newName = $this->resolveNewNameFromNode($node);
+
+            $node->parts = explode('\\', $newName);
+            $node->setAttribute('origNode', null);
+
+            return $node;
+        }
+
+        if ($node instanceof Name) {
             $newName = $this->resolveNewNameFromNode($node);
 
             $node->parts = explode('\\', $newName);
@@ -89,7 +98,7 @@ final class NamespaceReplacerRector extends AbstractRector
             return $node->uses[0]->name->toString();
         }
 
-        if ($node instanceof FullyQualified) {
+        if ($node instanceof Name) {
             return $node->toString();
         }
     }
