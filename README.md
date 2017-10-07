@@ -97,6 +97,38 @@ final class MyRector extends AbstractRector
 6. :+1:   
 
 
+### Simpler setup with Dynamic Rectors
+
+You don't have to always write PHP code. Many projects change only classes or method names, so it would be too much work for a simple task.
+
+Instead you can use prepared **Dynamic Rectors** directly in `*.yml` config:
+
+You can:
+
+- **replace class name**
+
+    ```yml
+    # phpunit60.yml
+    rectors:
+        Rector\Rector\Dynamic\ClassReplacerRector:
+            # old class: new class
+            'PHPUnit_Framework_TestCase': 'PHPUnit\Framework\TestCase'
+    ```
+
+- or **change method name**
+
+    ```yml
+    # nette24.yml
+    rectors:
+        Rector\Rector\Dynamic\MethodNameReplacerRector:
+            # class:
+            #       old method: new method
+            'Nette\Utils\Html':
+                'add': 'addHtml'
+    ```
+
+
+
 ### READMEs for Subpackages
 
 - [DeprecationExtractor](/packages/DeprecationExtractor/README.md)
