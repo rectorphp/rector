@@ -24,6 +24,8 @@ final class NamespaceReplacerRector extends AbstractRector
      */
     public function __construct(array $oldToNewNamespaces)
     {
+        krsort($oldToNewNamespaces);
+
         $this->oldToNewNamespaces = $oldToNewNamespaces;
     }
 
@@ -116,6 +118,7 @@ final class NamespaceReplacerRector extends AbstractRector
     private function getNewNamespaceForOldOne(string $namespace): array
     {
         foreach ($this->oldToNewNamespaces as $oldNamespace => $newNamespace) {
+            // ...
             if (Strings::startsWith($namespace, $oldNamespace)) {
                 return [$oldNamespace, $newNamespace];
             }
