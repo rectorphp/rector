@@ -8,6 +8,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
+use Rector\Node\Attribute;
 use Rector\Rector\AbstractRector;
 
 final class NamespaceReplacerRector extends AbstractRector
@@ -57,6 +58,7 @@ final class NamespaceReplacerRector extends AbstractRector
             $newName = $this->resolveNewNameFromNode($node);
 
             $node->parts = explode('\\', $newName);
+            $node->setAttribute('origNode', null);
 
             return $node;
         }
