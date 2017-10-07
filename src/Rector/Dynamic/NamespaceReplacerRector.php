@@ -5,6 +5,7 @@ namespace Rector\Rector\Dynamic;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
 use Rector\Rector\AbstractRector;
@@ -26,7 +27,7 @@ final class NamespaceReplacerRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        if (! $node instanceof Namespace_ && ! $node instanceof Use_) {
+        if (! $this->isGivenKind($node, [Namespace_::class, Use_::class, FullyQualified::class])) {
             return false;
         }
 
@@ -35,9 +36,6 @@ final class NamespaceReplacerRector extends AbstractRector
         return $this->isNamespaceToChange($name);
     }
 
-    /**
-     * @param Namespace_|Use_ $node
-     */
     public function refactor(Node $node): ?Node
     {
         if ($node instanceof Namespace_) {
@@ -51,6 +49,16 @@ final class NamespaceReplacerRector extends AbstractRector
             $newName = $this->resolveNewNameFromNode($node);
 
             $node->uses[0]->name = new Name($newName);
+
+            return $node;
+        }
+
+        if ($node instanceof FullyQualified) {
+            $newName = $this->resolveNewNameFromNode($node);
+
+            $node->parts = explode('\\', $newName);
+
+            return $node;
         }
 
         return null;
@@ -65,9 +73,6 @@ final class NamespaceReplacerRector extends AbstractRector
         return str_replace($oldNamespace, $newNamespace, $name);
     }
 
-    /**
-     * @param Namespace_|Use_ $node
-     */
     private function resolveNameFromNode(Node $node): string
     {
         if ($node instanceof Namespace_) {
@@ -77,17 +82,15 @@ final class NamespaceReplacerRector extends AbstractRector
         if ($node instanceof Use_) {
             return $node->uses[0]->name->toString();
         }
+
+        if ($node instanceof FullyQualified) {
+            return $node->toString();
+        }
     }
 
     private function isNamespaceToChange(string $namespace): bool
     {
-        foreach ($this->oldToNewNamespaces as $oldNamespace => $newNamespace) {
-            if (Strings::startsWith($namespace, $oldNamespace)) {
-                return true;
-            }
-        }
-
-        return false;
+        return (bool) $this->getNewNamespaceForOldOne($namespace);
     }
 
     /**
@@ -102,5 +105,19 @@ final class NamespaceReplacerRector extends AbstractRector
         }
 
         return [];
+    }
+
+    /**
+     * @param string[] $types
+     */
+    private function isGivenKind(Node $node, array $types): bool
+    {
+        foreach ($types as $type) {
+            if (is_a($node, $type, true)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

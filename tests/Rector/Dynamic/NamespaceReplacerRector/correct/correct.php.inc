@@ -7,4 +7,8 @@ use NewNamespace\AnotherSubNamespace;
 
 class SomeClass
 {
+    public function someClass()
+    {
+        return new \NewNamespace\SomeClass;
+    }
 }
