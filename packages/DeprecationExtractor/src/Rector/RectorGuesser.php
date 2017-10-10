@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 
 namespace Rector\DeprecationExtractor\Rector;
+use Rector\DeprecationExtractor\RectorGuess\RectorGuess;
 
 /**
  * This class tries to guess, which Rector could be used to create refactoring
@@ -18,6 +19,10 @@ final class RectorGuesser
      */
     private $triggerErrorRectorGuesser;
 
+    /**
+     * These 2 should be merged to and work primarily with $message
+     * to prevent any duplications.
+     */
     public function __construct(
         AnnotationRectorGuesser $annotationRectorGuesser,
         TriggerErrorRectorGuesser $triggerErrorRectorGuesser

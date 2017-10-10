@@ -47,4 +47,24 @@ final class RectorGuessFactory
             $message
         );
     }
+
+    public function createService(string $message, Node $node): RectorGuess
+    {
+        return new RectorGuess(
+            RectorGuess::SERVICE,
+            0.95,
+            $node,
+            $message
+        );
+    }
+
+    public function createNewArgument(string $message, Node $node): RectorGuess
+    {
+        return new RectorGuess(
+            '_new_argument_rectory_todo',
+            0.95,
+            $node,
+            $message
+        );
+    }
 }

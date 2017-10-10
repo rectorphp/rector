@@ -20,6 +20,11 @@ final class RectorGuess
     /**
      * @var string
      */
+    public const SERVICE = 'SERVICE';
+
+    /**
+     * @var string
+     */
     private $guessedRectorClass;
 
     /**

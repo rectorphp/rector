@@ -119,13 +119,13 @@ final class ExtractDeprecationsCommand extends Command
         return 0;
     }
 
-    protected function shouldSkipGuessedRector(?RectorGuess $guessedRector): bool
+    private function shouldSkipGuessedRector(?RectorGuess $guessedRector): bool
     {
         if ($guessedRector === null) {
             return true;
         }
 
-        if ($guessedRector->getGuessedRectorClass() === RectorGuess::YAML_CONFIGURATION) {
+        if (in_array($guessedRector->getGuessedRectorClass(), [RectorGuess::YAML_CONFIGURATION, RectorGuess::SERVICE], true)) {
             return true;
         }
 

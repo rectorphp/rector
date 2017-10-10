@@ -24,6 +24,32 @@ final class TriggerErrorRectorGuesser
      */
     private $rectorGuessFactory;
 
+    /**
+     * @var string[]
+     */
+    private $yamlDeprecationMessages = [
+        'Autowiring-types are deprecated since',
+        'The "=" suffix that used to disable strict references',
+        'The XmlFileLoader will raise an exception in Symfony 4.0, instead of silently ignoring unsupported',
+        'The "strict" attribute used when referencing the "" service is deprecated since version 3.3 and will be removed in 4.0.',
+        'Service names that start with an underscore are deprecated since Symfony 3.3 and will be reserved in 4.0',
+        'configuration key'
+    ];
+
+    /**
+     * @var string[]
+     */
+    private $serviceDeprecationMessages = [
+        'It should either be deprecated or its implementation upgraded.',
+        'It should either be deprecated or its factory upgraded.',
+        'Service identifiers will be made case sensitive',
+        'Generating a dumped container without populating the method map is deprecated',
+        'Dumping an uncompiled ContainerBuilder is deprecated',
+        'service is private, ',
+        'service is already initialized, ',
+        'Relying on its factory\'s return-type to define the class of service',
+    ];
+
     public function __construct(
         ClassAndMethodMatcher $classAndMethodMatcher,
         NodeValueResolver $nodeValueResolver,
@@ -67,17 +93,33 @@ final class TriggerErrorRectorGuesser
      */
     private function createFromMessage(Node $node, string $message)
     {
-        if (Strings::contains($message, 'Autowiring-types are deprecated since')) {
-            return $this->rectorGuessFactory->createYamlConfiguration($message, $node);
+        foreach ($this->yamlDeprecationMessages as $yamlDeprecationMessage) {
+            if (Strings::contains($message, $yamlDeprecationMessage)) {
+                return $this->rectorGuessFactory->createYamlConfiguration($message, $node);
+            }
         }
 
-        if (Strings::contains($message, 'configuration key') && Strings::contains($message, 'Yaml')) {
-            return $this->rectorGuessFactory->createYamlConfiguration($message, $node);
+        foreach ($this->serviceDeprecationMessages as $serviceDeprecationMessage) {
+            if (Strings::contains($message, $serviceDeprecationMessage)) {
+                return $this->rectorGuessFactory->createService($message, $node);
+            }
+        }
+
+        if (Strings::contains($message, 'It will be made mandatory in') || Strings::contains($message, 'Not defining it is deprecated since')) {
+            return $this->rectorGuessFactory->createNewArgument($message, $node);
         }
 
         $result = Strings::split($message, '#use |Use#');
 
         if (count($result) === 2) {
+            if (Strings::contains($message, 'class is deprecated')) {
+                return $this->rectorGuessFactory->createClassReplacer(
+                    '...',
+                    $message,
+                    $node
+                );
+            }
+
             return $this->rectorGuessFactory->createMethodNameReplacerGuess(
                 $message,
                 $node
