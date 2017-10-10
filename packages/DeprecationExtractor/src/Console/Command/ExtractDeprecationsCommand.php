@@ -71,8 +71,9 @@ final class ExtractDeprecationsCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $source = $input->getArgument(self::ARGUMENT_SOURCE_NAME);
-        $this->deprecationExtractor->scanDirectories($source);
+        $this->deprecationExtractor->scanDirectories(
+            $input->getArgument(self::ARGUMENT_SOURCE_NAME)
+        );
 
         $this->symfonyStyle->note(sprintf(
             'Found %d deprecations.',
@@ -80,16 +81,17 @@ final class ExtractDeprecationsCommand extends Command
             + count($this->deprecationCollector->getDeprecationTriggerErrors())
         ));
 
-        die;
+        $guessedRectors = $this->rectorGuesser->guessForAnnotations(
+            $this->deprecationCollector->getDeprecationAnnotations()
+        );
 
-        $this->deprecationCollector->getDeprecationAnnotations();
-        $this->rectorGuesser->guessForAnnotation();
+        $guessedRectors += $this->rectorGuesser->guessForTriggerErrors(
+            $this->deprecationCollector->getDeprecationTriggerErrors()
+        );
 
-
-//        foreach ($this->deprecationCollector->getDeprecations() as $deprecation) {
-//            dump($deprecation);
-//            $output->writeln($deprecation);
-//        }
+        foreach ($guessedRectors as $guessedRector) {
+            // @todo prepare table
+        }
 
         return 0;
     }

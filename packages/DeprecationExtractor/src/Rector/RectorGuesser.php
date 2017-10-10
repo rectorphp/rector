@@ -28,7 +28,7 @@ final class RectorGuesser
 
     /**
      * @param mixed[] $annotations
-     * @return mixed[]
+     * @return RectorGuess[]
      */
     public function guessForAnnotations(array $annotations): array
     {
@@ -46,7 +46,7 @@ final class RectorGuesser
 
     /**
      * @param mixed[] $triggerErrors
-     * @return mixed[]
+     * @return RectorGuess[]
      */
     public function guessForTriggerErrors(array $triggerErrors): array
     {

@@ -3,10 +3,11 @@
 namespace Rector\DeprecationExtractor\Rector;
 
 use Nette\Utils\Strings;
+use PhpParser\Node;
 use PhpParser\Node\Arg;
-use Rector\DeprecationExtractor\Contract\Deprecation\DeprecationInterface;
 use Rector\DeprecationExtractor\Deprecation\ClassMethodDeprecation;
 use Rector\DeprecationExtractor\Deprecation\RemovedFunctionalityDeprecation;
+use Rector\DeprecationExtractor\RectorGuess\RectorGuessFactory;
 use Rector\DeprecationExtractor\Regex\ClassAndMethodMatcher;
 use Rector\Exception\NotImplementedException;
 use Rector\Node\Attribute;
@@ -24,20 +25,28 @@ final class TriggerErrorRectorGuesser
      * @var NodeValueResolver
      */
     private $nodeValueResolver;
+    /**
+     * @var RectorGuessFactory
+     */
+    private $rectorGuessFactory;
 
     public function __construct(
         ClassAndMethodMatcher $classAndMethodMatcher,
         NodeValueResolver $nodeValueResolver,
-        ClassPrepender $classPrepender
+        ClassPrepender $classPrepender,
+        RectorGuessFactory $rectorGuessFactory
     ) {
         $this->classAndMethodMatcher = $classAndMethodMatcher;
         $this->nodeValueResolver = $nodeValueResolver;
         $this->classPrepender = $classPrepender;
+        $this->rectorGuessFactory = $rectorGuessFactory;
     }
 
 
-
-    public function guess(Arg $argNode): ?DeprecationInterface
+    /**
+     * @return mixed
+     */
+    public function guess(Arg $argNode)
     {
         $message = $this->nodeValueResolver->resolve($argNode->value);
 
@@ -58,37 +67,24 @@ final class TriggerErrorRectorGuesser
             ));
         }
 
-        return $this->createFromMessage($message);
+        return $this->createFromMessage($argNode, $message);
     }
 
-    public function tryToCreateClassMethodDeprecation(string $oldMessage, string $newMessage): ?DeprecationInterface
-    {
-        $oldMethod = $this->classAndMethodMatcher->matchClassWithMethodWithoutArguments($oldMessage);
-        $newMethod = $this->classAndMethodMatcher->matchClassWithMethodWithoutArguments($newMessage);
-
-        $oldArguments = $this->classAndMethodMatcher->matchMethodArguments($oldMessage);
-        $newArguments = $this->classAndMethodMatcher->matchMethodArguments($newMessage);
-
-        return new ClassMethodDeprecation(
-            $oldMethod,
-            $newMethod,
-            $oldArguments,
-            $newArguments
-        );
-    }
-
-    private function createFromMessage(string $message): DeprecationInterface
+    /**
+     * @return mixed
+     */
+    private function createFromMessage(Node $node, string $message)
     {
         $result = Strings::split($message, '#use |Use#');
 
         if (count($result) === 2) {
-            [$oldMessage, $newMessage] = $result;
-            $deprecation = $this->tryToCreateClassMethodDeprecation($oldMessage, $newMessage);
-            if ($deprecation) {
-                return $deprecation;
-            }
+
+            return $this->rectorGuessFactory->createMethodNameReplacerGuess(
+                $message,
+                $node
+            );
         }
 
-        return new RemovedFunctionalityDeprecation($message);
+        return $this->rectorGuessFactory->createRemoval($message, $node);
     }
 }

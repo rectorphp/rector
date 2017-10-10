@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\DeprecationExtractor\Rector;
+namespace Rector\DeprecationExtractor\RectorGuess;
 
 use PhpParser\Node;
 
