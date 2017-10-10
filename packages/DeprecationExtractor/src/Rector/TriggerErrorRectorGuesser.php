@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\DeprecationExtractor\Transformer;
+namespace Rector\DeprecationExtractor\Rector;
 
 use Nette\Utils\Strings;
 use PhpParser\Node\Arg;
@@ -13,7 +13,7 @@ use Rector\Node\Attribute;
 use Rector\NodeValueResolver\Message\ClassPrepender;
 use Rector\NodeValueResolver\NodeValueResolver;
 
-final class ArgumentToDeprecationTransformer
+final class TriggerErrorRectorGuesser
 {
     /**
      * @var ClassAndMethodMatcher
@@ -35,7 +35,9 @@ final class ArgumentToDeprecationTransformer
         $this->classPrepender = $classPrepender;
     }
 
-    public function transform(Arg $argNode): ?DeprecationInterface
+
+
+    public function guess(Arg $argNode): ?DeprecationInterface
     {
         $message = $this->nodeValueResolver->resolve($argNode->value);
 

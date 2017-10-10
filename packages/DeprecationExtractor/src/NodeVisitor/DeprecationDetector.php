@@ -50,7 +50,7 @@ final class DeprecationDetector extends NodeVisitorAbstract
         if ($this->triggerErrorAnalyzer->isUserDeprecation($node)) {
             /** @var FuncCall $node */
             $argNode = $this->triggerErrorAnalyzer->messageNodeForNode($node);
-            $this->deprecationCollector->addDeprecationArgNode($argNode);
+            $this->deprecationCollector->addDeprecationTriggerError($argNode);
 
             return;
         }
@@ -63,6 +63,6 @@ final class DeprecationDetector extends NodeVisitorAbstract
             return;
         }
 
-        $this->deprecationCollector->addDeprecationMessage($deprecation, $node);
+        $this->deprecationCollector->addDeprecationAnnotation($deprecation, $node);
     }
 }

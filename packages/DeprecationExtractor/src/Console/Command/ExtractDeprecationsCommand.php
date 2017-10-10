@@ -4,6 +4,7 @@ namespace Rector\DeprecationExtractor\Console\Command;
 
 use Rector\DeprecationExtractor\Deprecation\DeprecationCollector;
 use Rector\DeprecationExtractor\DeprecationExtractor;
+use Rector\DeprecationExtractor\Rector\RectorGuesser;
 use Rector\Naming\CommandNaming;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -11,7 +12,11 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-// @todo match the name...
+/**
+ * This commands shows suggested rector to use to resolve deprecation.
+ *
+ * We need this manually to analyze other versions and do not actually create any rector.
+ */
 final class ExtractDeprecationsCommand extends Command
 {
     /**
@@ -34,13 +39,20 @@ final class ExtractDeprecationsCommand extends Command
      */
     private $symfonyStyle;
 
+    /**
+     * @var RectorGuesser
+     */
+    private $rectorGuesser;
+
     public function __construct(
         DeprecationExtractor $deprecationExtractor,
         DeprecationCollector $deprecationCollector,
+        RectorGuesser $rectorGuesser,
         SymfonyStyle $symfonyStyle
     ) {
         $this->deprecationExtractor = $deprecationExtractor;
         $this->deprecationCollector = $deprecationCollector;
+        $this->rectorGuesser = $rectorGuesser;
         $this->symfonyStyle = $symfonyStyle;
 
         parent::__construct();
@@ -64,12 +76,20 @@ final class ExtractDeprecationsCommand extends Command
 
         $this->symfonyStyle->note(sprintf(
             'Found %d deprecations.',
-            count($this->deprecationCollector->getDeprecations())
+            count($this->deprecationCollector->getDeprecationAnnotations())
+            + count($this->deprecationCollector->getDeprecationTriggerErrors())
         ));
 
-        foreach ($this->deprecationCollector->getDeprecations() as $deprecation) {
-            $output->writeln($deprecation);
-        }
+        die;
+
+        $this->deprecationCollector->getDeprecationAnnotations();
+        $this->rectorGuesser->guessForAnnotation();
+
+
+//        foreach ($this->deprecationCollector->getDeprecations() as $deprecation) {
+//            dump($deprecation);
+//            $output->writeln($deprecation);
+//        }
 
         return 0;
     }

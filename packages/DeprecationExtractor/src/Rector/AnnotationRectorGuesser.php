@@ -1,20 +1,17 @@
 <?php declare(strict_types=1);
 
-namespace Rector\DeprecationExtractor\Transformer;
+namespace Rector\DeprecationExtractor\Rector;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\DeprecationExtractor\Contract\Deprecation\DeprecationInterface;
-use Rector\DeprecationExtractor\Deprecation\ClassDeprecation;
-use Rector\DeprecationExtractor\Deprecation\ClassMethodDeprecation;
-use Rector\DeprecationExtractor\Deprecation\RemovedClassMethodDeprecation;
 use Rector\DeprecationExtractor\Regex\ClassAndMethodMatcher;
 use Rector\Exception\NotImplementedException;
 use Rector\Node\Attribute;
 
-final class MessageToDeprecationTransformer
+final class AnnotationRectorGuesser
 {
     /**
      * @var ClassAndMethodMatcher
@@ -26,7 +23,7 @@ final class MessageToDeprecationTransformer
         $this->classAndMethodMatcher = $classAndMethodMatcher;
     }
 
-    public function transform(string $message, Node $node): DeprecationInterface
+    public function guess(string $message, Node $node): DeprecationInterface
     {
         if ($node instanceof Class_) {
             return new ClassDeprecation(

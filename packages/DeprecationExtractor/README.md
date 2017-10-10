@@ -13,7 +13,7 @@ It helps to generated automate rectors and identify BC changes purely from the c
 1. Just read the message
 2. Detect what code should be change into what code
 3. Create `Deprecation` class that holds information about the change - e.g. `ClassMethodRepcation` 
-4. Create dynamic rectors that will do the work
+4. Suggest rectors that you should create to take care of this
 
 
 ## How it helps you?
@@ -25,5 +25,3 @@ vendor/bin/rector extract-deprecations vendor/nette/application/src
 ```
 
 It will show you what changed and how. 
-
-Moreover, it will change the code for you instead of writing manuall rectors.

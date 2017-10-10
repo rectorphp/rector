@@ -2,6 +2,7 @@
 
 namespace Rector\DeprecationExtractor;
 
+use PhpParser\NodeTraverser;
 use Rector\Contract\Parser\ParserInterface;
 use Rector\DeprecationExtractor\NodeVisitor\DeprecationDetector;
 use Rector\FileSystem\PhpFilesFinder;
@@ -25,6 +26,11 @@ final class DeprecationExtractor
      */
     private $phpFilesFinder;
 
+    /**
+     * @var NodeTraverser
+     */
+    private $deprecationDetectorNodeTraverser;
+
     public function __construct(
         ParserInterface $parser,
         DeprecationDetector $deprecationDetector,
@@ -34,8 +40,7 @@ final class DeprecationExtractor
     ) {
         $this->parser = $parser;
         $this->standaloneTraverseNodeTraverser = $standaloneTraverseNodeTraverser;
-
-        $this->deprecationDetectorNodeVisitor = $nodeTraverserFactory->createWithNodeVisitor($deprecationDetector);
+        $this->deprecationDetectorNodeTraverser = $nodeTraverserFactory->createWithNodeVisitor($deprecationDetector);
         $this->phpFilesFinder = $phpFilesFinder;
     }
 
@@ -51,7 +56,7 @@ final class DeprecationExtractor
             // this completes parent & child nodes, types and classses
             $this->standaloneTraverseNodeTraverser->traverse($nodes);
 
-            $this->deprecationDetectorNodeVisitor->traverse($nodes);
+            $this->deprecationDetectorNodeTraverser->traverse($nodes);
         }
     }
 }

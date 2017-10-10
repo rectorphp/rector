@@ -25,13 +25,13 @@ final class DeprecationExtractorTest extends AbstractContainerAwareTestCase
 
     public function testDeprectaionMessages(): void
     {
-        $deprecationMessages = $this->deprecationCollector->getDeprecationMessages();
+        $deprecationMessages = $this->deprecationCollector->getDeprecationAnnotations();
         $this->assertCount(0, $deprecationMessages);
     }
 
     public function testDeprecationNodes(): void
     {
-        $deprecationArgNodes = $this->deprecationCollector->getDeprecationArgNodes();
+        $deprecationArgNodes = $this->deprecationCollector->getDeprecationTriggerErrors();
         $this->assertCount(2, $deprecationArgNodes);
 
         $deprecationArgNode = $deprecationArgNodes[0];
