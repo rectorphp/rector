@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\DeprecationExtractor\RegExp;
+namespace Rector\DeprecationExtractor\Regex;
 
 use Nette\Utils\Strings;
 

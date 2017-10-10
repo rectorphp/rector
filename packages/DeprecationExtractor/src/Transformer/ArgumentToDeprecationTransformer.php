@@ -7,7 +7,7 @@ use PhpParser\Node\Arg;
 use Rector\DeprecationExtractor\Contract\Deprecation\DeprecationInterface;
 use Rector\DeprecationExtractor\Deprecation\ClassMethodDeprecation;
 use Rector\DeprecationExtractor\Deprecation\RemovedFunctionalityDeprecation;
-use Rector\DeprecationExtractor\RegExp\ClassAndMethodMatcher;
+use Rector\DeprecationExtractor\Regex\ClassAndMethodMatcher;
 use Rector\Exception\NotImplementedException;
 use Rector\Node\Attribute;
 use Rector\NodeValueResolver\Message\ClassPrepender;
