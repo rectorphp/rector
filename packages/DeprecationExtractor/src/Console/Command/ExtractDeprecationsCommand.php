@@ -82,26 +82,21 @@ final class ExtractDeprecationsCommand extends Command
             + count($this->deprecationCollector->getDeprecationTriggerErrors())
         ));
 
-        $guessedRectors = $this->rectorGuesser->guessForAnnotations(
-            $this->deprecationCollector->getDeprecationAnnotations()
-        );
-
-        $guessedRectors += $this->rectorGuesser->guessForTriggerErrors(
-            $this->deprecationCollector->getDeprecationTriggerErrors()
+        $guessedRectors = array_merge(
+            $this->rectorGuesser->guessForAnnotations(
+                $this->deprecationCollector->getDeprecationAnnotations()
+            ),
+            $this->rectorGuesser->guessForTriggerErrors(
+                $this->deprecationCollector->getDeprecationTriggerErrors()
+            )
         );
 
         /** @var RectorGuess $guessedRector */
         foreach ($guessedRectors as $guessedRector) {
-            if ($guessedRector === null) {
-                // resolve later
+            if ($this->shouldSkipGuessedRector($guessedRector)) {
                 continue;
             }
 
-            if ($guessedRector->getGuessedRectorClass() === RectorGuess::YAML_CONFIGURATION) {
-                continue;
-            }
-
-            // @todo: color highlight based upon type
             if ($guessedRector->canBeCreated()) {
                 $this->symfonyStyle->success($guessedRector->getGuessedRectorClass());
             } else {
@@ -121,30 +116,19 @@ final class ExtractDeprecationsCommand extends Command
             $this->symfonyStyle->newLine(2);
         }
 
-//        $guessedRectorsForTable = $this->prepareForTable($guessedRectors);
-//
-//        $this->symfonyStyle->table(['Guessed Rector', 'Certainity', 'Node', 'Message'], $guessedRectorsForTable);
-
         return 0;
     }
 
-//    /**
-//     * @param RectorGuess[] $guessedRectors
-//     * @return mixed[]
-//     */
-//    private function prepareForTable(array $guessedRectors): array
-//    {
-//        $guessedRectorsForTable = [];
-//        foreach ($guessedRectors as $guessedRector) {
-//
-//            $guessedRectorsForTable[] = [
-//                $guessedRector->getGuessedRectorClass(),
-//                $guessedRector->getCertainity(),
-//                $guessedRector->getNodeClass(),
-//                $guessedRector->getMessage(),
-//            ];
-//        }
-//
-//        return $guessedRectorsForTable;
-//    }
+    protected function shouldSkipGuessedRector(?RectorGuess $guessedRector): bool
+    {
+        if ($guessedRector === null) {
+            return true;
+        }
+
+        if ($guessedRector->getGuessedRectorClass() === RectorGuess::YAML_CONFIGURATION) {
+            return true;
+        }
+
+        return false;
+    }
 }
