@@ -33,7 +33,7 @@ final class TriggerErrorRectorGuesser
         'The XmlFileLoader will raise an exception in Symfony 4.0, instead of silently ignoring unsupported',
         'The "strict" attribute used when referencing the "" service is deprecated since version 3.3 and will be removed in 4.0.',
         'Service names that start with an underscore are deprecated since Symfony 3.3 and will be reserved in 4.0',
-        'configuration key'
+        'configuration key',
     ];
 
     /**

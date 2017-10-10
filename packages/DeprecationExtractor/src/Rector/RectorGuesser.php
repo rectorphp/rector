@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 
 namespace Rector\DeprecationExtractor\Rector;
+
 use Rector\DeprecationExtractor\RectorGuess\RectorGuess;
 
 /**

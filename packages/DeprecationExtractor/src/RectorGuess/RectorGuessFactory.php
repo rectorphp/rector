@@ -12,7 +12,6 @@ final class RectorGuessFactory
     {
         return new RectorGuess(
             RectorGuess::TYPE_REMOVAL,
-            0.9,
             $node,
             $message
         );
@@ -22,7 +21,6 @@ final class RectorGuessFactory
     {
         return new RectorGuess(
             ClassReplacerRector::class,
-            0.95,
             $node,
             $className . ' - ' . $message
         );
@@ -32,7 +30,6 @@ final class RectorGuessFactory
     {
         return new RectorGuess(
             MethodNameReplacerRector::class,
-            0.9,
             $node,
             $message
         );
@@ -42,7 +39,6 @@ final class RectorGuessFactory
     {
         return new RectorGuess(
             RectorGuess::YAML_CONFIGURATION,
-            0.95,
             $node,
             $message
         );
@@ -52,7 +48,6 @@ final class RectorGuessFactory
     {
         return new RectorGuess(
             RectorGuess::SERVICE,
-            0.95,
             $node,
             $message
         );
@@ -62,7 +57,6 @@ final class RectorGuessFactory
     {
         return new RectorGuess(
             '_new_argument_rectory_todo',
-            0.95,
             $node,
             $message
         );

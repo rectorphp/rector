@@ -28,11 +28,6 @@ final class RectorGuess
     private $guessedRectorClass;
 
     /**
-     * @var float
-     */
-    private $certainity;
-
-    /**
      * @var Node
      */
     private $node;
@@ -44,12 +39,10 @@ final class RectorGuess
 
     public function __construct(
         string $guessedRectorClass,
-        float $certainity,
         Node $node,
         string $message = ''
     ) {
         $this->guessedRectorClass = $guessedRectorClass;
-        $this->certainity = $certainity;
         $this->node = $node;
         $this->message = $message;
     }
@@ -57,11 +50,6 @@ final class RectorGuess
     public function getGuessedRectorClass(): string
     {
         return $this->guessedRectorClass;
-    }
-
-    public function getCertainity(): float
-    {
-        return $this->certainity;
     }
 
     public function getNode(): Node

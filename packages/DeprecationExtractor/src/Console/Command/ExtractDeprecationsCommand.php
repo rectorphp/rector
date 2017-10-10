@@ -103,7 +103,6 @@ final class ExtractDeprecationsCommand extends Command
                 $this->symfonyStyle->warning($guessedRector->getGuessedRectorClass());
             }
 
-            $this->symfonyStyle->writeln(' - certainity: ' . $guessedRector->getCertainity());
             $this->symfonyStyle->writeln(' - node: ' . $guessedRector->getNodeClass());
 
             $this->symfonyStyle->newLine();
