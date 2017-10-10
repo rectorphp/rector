@@ -6,7 +6,6 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\DeprecationExtractor\Contract\Deprecation\DeprecationInterface;
 use Rector\DeprecationExtractor\RectorGuess\RectorGuessFactory;
 use Rector\DeprecationExtractor\Regex\ClassAndMethodMatcher;
 use Rector\Exception\NotImplementedException;
@@ -18,15 +17,14 @@ final class AnnotationRectorGuesser
      * @var ClassAndMethodMatcher
      */
     private $classAndMethodMatcher;
+
     /**
      * @var RectorGuessFactory
      */
     private $rectorGuessFactory;
 
-    public function __construct(
-        ClassAndMethodMatcher $classAndMethodMatcher,
-        RectorGuessFactory $rectorGuessFactory
-    ) {
+    public function __construct(ClassAndMethodMatcher $classAndMethodMatcher, RectorGuessFactory $rectorGuessFactory)
+    {
         $this->classAndMethodMatcher = $classAndMethodMatcher;
         $this->rectorGuessFactory = $rectorGuessFactory;
     }
@@ -42,11 +40,6 @@ final class AnnotationRectorGuesser
                 $message,
                 $node
             );
-
-//            return new ClassDeprecation(
-//                $node->namespacedName->toString(),
-//                $this->classAndMethodMatcher->matchClassWithMethodInstead($message)
-//            );
         }
 
         if ($node instanceof ClassMethod) {
@@ -60,7 +53,6 @@ final class AnnotationRectorGuesser
             if ($classWithMethod === '' && $localMethod === '') {
 
                 return $this->rectorGuessFactory->createRemoval($message, $node);
-//                return new RemovedClassMethodDeprecation($className, $methodName);
             }
 
             if ($localMethod) {

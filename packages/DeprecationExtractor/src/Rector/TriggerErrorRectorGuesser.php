@@ -5,8 +5,6 @@ namespace Rector\DeprecationExtractor\Rector;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
-use Rector\DeprecationExtractor\Deprecation\ClassMethodDeprecation;
-use Rector\DeprecationExtractor\Deprecation\RemovedFunctionalityDeprecation;
 use Rector\DeprecationExtractor\RectorGuess\RectorGuessFactory;
 use Rector\DeprecationExtractor\Regex\ClassAndMethodMatcher;
 use Rector\Exception\NotImplementedException;
@@ -17,14 +15,10 @@ use Rector\NodeValueResolver\NodeValueResolver;
 final class TriggerErrorRectorGuesser
 {
     /**
-     * @var ClassAndMethodMatcher
-     */
-    private $classAndMethodMatcher;
-
-    /**
      * @var NodeValueResolver
      */
     private $nodeValueResolver;
+
     /**
      * @var RectorGuessFactory
      */
@@ -36,7 +30,6 @@ final class TriggerErrorRectorGuesser
         ClassPrepender $classPrepender,
         RectorGuessFactory $rectorGuessFactory
     ) {
-        $this->classAndMethodMatcher = $classAndMethodMatcher;
         $this->nodeValueResolver = $nodeValueResolver;
         $this->classPrepender = $classPrepender;
         $this->rectorGuessFactory = $rectorGuessFactory;
@@ -83,6 +76,10 @@ final class TriggerErrorRectorGuesser
                 $message,
                 $node
             );
+        }
+
+        if (Strings::contains($message, 'configuration key') && Strings::contains($message, 'Yaml')) {
+            return $this->rectorGuessFactory->createYamlConfiguration($message, $node);
         }
 
         return $this->rectorGuessFactory->createRemoval($message, $node);

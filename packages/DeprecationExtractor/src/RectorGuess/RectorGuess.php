@@ -9,6 +9,16 @@ final class RectorGuess
     /**
      * @var string
      */
+    public const TYPE_REMOVAL = 'REMOVAL';
+
+    /**
+     * @var string
+     */
+    public const YAML_CONFIGURATION = 'YAML_CONFIGURATION';
+
+    /**
+     * @var string
+     */
     private $guessedRectorClass;
 
     /**
@@ -56,5 +66,15 @@ final class RectorGuess
     public function getMessage(): string
     {
         return $this->message;
+    }
+
+    public function getNodeClass(): string
+    {
+        return get_class($this->node);
+    }
+
+    public function canBeCreated(): bool
+    {
+        return class_exists($this->guessedRectorClass);
     }
 }

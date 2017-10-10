@@ -8,17 +8,10 @@ use Rector\Rector\Dynamic\MethodNameReplacerRector;
 
 final class RectorGuessFactory
 {
-    public function create(): RectorGuess
-    {
-        return new RectorGuess(
-
-        );
-    }
-
     public function createRemoval(string $message, Node $node): RectorGuess
     {
         return new RectorGuess(
-            'NONE_REMOVAL',
+            RectorGuess::TYPE_REMOVAL,
             0.9,
             $node,
             $message
@@ -40,6 +33,16 @@ final class RectorGuessFactory
         return new RectorGuess(
             MethodNameReplacerRector::class,
             0.9,
+            $node,
+            $message
+        );
+    }
+
+    public function createYamlConfiguration(string $message, Node $node): RectorGuess
+    {
+        return new RectorGuess(
+            RectorGuess::YAML_CONFIGURATION,
+            0.95,
             $node,
             $message
         );

@@ -5,6 +5,7 @@ namespace Rector\DeprecationExtractor\Console\Command;
 use Rector\DeprecationExtractor\Deprecation\DeprecationCollector;
 use Rector\DeprecationExtractor\DeprecationExtractor;
 use Rector\DeprecationExtractor\Rector\RectorGuesser;
+use Rector\DeprecationExtractor\RectorGuess\RectorGuess;
 use Rector\Naming\CommandNaming;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -75,8 +76,8 @@ final class ExtractDeprecationsCommand extends Command
             $input->getArgument(self::ARGUMENT_SOURCE_NAME)
         );
 
-        $this->symfonyStyle->note(sprintf(
-            'Found %d deprecations.',
+        $this->symfonyStyle->title(sprintf(
+            'Found %d deprecations',
             count($this->deprecationCollector->getDeprecationAnnotations())
             + count($this->deprecationCollector->getDeprecationTriggerErrors())
         ));
@@ -89,10 +90,57 @@ final class ExtractDeprecationsCommand extends Command
             $this->deprecationCollector->getDeprecationTriggerErrors()
         );
 
+        /** @var RectorGuess $guessedRector */
         foreach ($guessedRectors as $guessedRector) {
-            // @todo prepare table
+            if ($guessedRector === null) {
+                // resolve later
+                continue;
+            }
+
+            // @todo: color highlight based upon type
+            if ($guessedRector->canBeCreated()) {
+                $this->symfonyStyle->success($guessedRector->getGuessedRectorClass());
+            } else {
+                $this->symfonyStyle->warning($guessedRector->getGuessedRectorClass());
+            }
+
+            $this->symfonyStyle->writeln(' - certainity: ' . $guessedRector->getCertainity());
+            $this->symfonyStyle->writeln(' - node: ' . $guessedRector->getNodeClass());
+
+            $this->symfonyStyle->newLine();
+
+            $this->symfonyStyle->writeln($guessedRector->getMessage());
+            // @todo: add metadata like related class, method etc. - or maybe get from NODE like
+            // $node->getAttribute(Attributes::CLASS_NODE)
+            // $node->getAttribute(Attributes::METHOD_NODE)
+
+            $this->symfonyStyle->newLine(2);
         }
+
+//        $guessedRectorsForTable = $this->prepareForTable($guessedRectors);
+//
+//        $this->symfonyStyle->table(['Guessed Rector', 'Certainity', 'Node', 'Message'], $guessedRectorsForTable);
 
         return 0;
     }
+
+//    /**
+//     * @param RectorGuess[] $guessedRectors
+//     * @return mixed[]
+//     */
+//    private function prepareForTable(array $guessedRectors): array
+//    {
+//        $guessedRectorsForTable = [];
+//        foreach ($guessedRectors as $guessedRector) {
+//
+//            $guessedRectorsForTable[] = [
+//                $guessedRector->getGuessedRectorClass(),
+//                $guessedRector->getCertainity(),
+//                $guessedRector->getNodeClass(),
+//                $guessedRector->getMessage(),
+//            ];
+//        }
+//
+//        return $guessedRectorsForTable;
+//    }
 }
