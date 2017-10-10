@@ -10,10 +10,16 @@ It helps to generated automate rectors and identify BC changes purely from the c
 
 ## How it works?
 
-1. Just read the message
-2. Detect what code should be change into what code
-3. Create `Deprecation` class that holds information about the change - e.g. `ClassMethodRepcation` 
-4. Suggest rectors that you should create to take care of this
+1. Just read the message or node
+2. Guess what rector might change the code
+3. Create `RectorGuess` class that holds rector suggetion
+
+    - rector class
+    - certainity (from 0 to 100)
+    - related node  
+    - related message (only for `@deprecate`)
+
+4. Show it in console table
 
 
 ## How it helps you?
