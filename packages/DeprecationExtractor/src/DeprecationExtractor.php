@@ -2,12 +2,11 @@
 
 namespace Rector\DeprecationExtractor;
 
-use PhpParser\NodeTraverser;
 use Rector\Contract\Parser\ParserInterface;
 use Rector\DeprecationExtractor\NodeVisitor\DeprecationDetector;
+use Rector\FileSystem\PhpFilesFinder;
+use Rector\NodeTraverser\NodeTraverserFactory;
 use Rector\NodeTraverser\StandaloneTraverseNodeTraverser;
-use Symfony\Component\Finder\Finder;
-use Symfony\Component\Finder\SplFileInfo;
 
 final class DeprecationExtractor
 {
@@ -22,20 +21,22 @@ final class DeprecationExtractor
     private $standaloneTraverseNodeTraverser;
 
     /**
-     * @var NodeTraverser
+     * @var PhpFilesFinder
      */
-    private $mainNodeTraverser;
+    private $phpFilesFinder;
 
     public function __construct(
         ParserInterface $parser,
         DeprecationDetector $deprecationDetector,
-        StandaloneTraverseNodeTraverser $standaloneTraverseNodeTraverser
+        StandaloneTraverseNodeTraverser $standaloneTraverseNodeTraverser,
+        PhpFilesFinder $phpFilesFinder,
+        NodeTraverserFactory $nodeTraverserFactory
     ) {
         $this->parser = $parser;
         $this->standaloneTraverseNodeTraverser = $standaloneTraverseNodeTraverser;
 
-        $this->mainNodeTraverser = new NodeTraverser;
-        $this->mainNodeTraverser->addVisitor($deprecationDetector);
+        $this->deprecationDetectorNodeVisitor = $nodeTraverserFactory->createWithNodeVisitor($deprecationDetector);
+        $this->phpFilesFinder = $phpFilesFinder;
     }
 
     /**
@@ -43,28 +44,14 @@ final class DeprecationExtractor
      */
     public function scanDirectories(array $directories): void
     {
-        $files = $this->findPhpFilesInDirectories($directories);
+        $files = $this->phpFilesFinder->findInDirectories($directories);
 
         foreach ($files as $file) {
             $nodes = $this->parser->parseFile($file->getRealPath());
             // this completes parent & child nodes, types and classses
             $this->standaloneTraverseNodeTraverser->traverse($nodes);
-            $this->mainNodeTraverser->traverse($nodes);
+
+            $this->deprecationDetectorNodeVisitor->traverse($nodes);
         }
-    }
-
-    /**
-     * @param string[] $directories
-     * @return SplFileInfo[] array
-     */
-    private function findPhpFilesInDirectories(array $directories): array
-    {
-        $finder = Finder::create()
-            ->files()
-            ->name('*.php')
-            ->exclude(['tests', 'Tests']) // deprecations won't be in tests
-            ->in($directories);
-
-        return iterator_to_array($finder->getIterator());
     }
 }

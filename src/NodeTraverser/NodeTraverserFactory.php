@@ -7,7 +7,7 @@ use PhpParser\NodeVisitor;
 
 final class NodeTraverserFactory
 {
-    public function createWithNoeVisitor(NodeVisitor $nodeVisitor): NodeTraverser
+    public function createWithNodeVisitor(NodeVisitor $nodeVisitor): NodeTraverser
     {
         $nodeTraverser = new NodeTraverser;
         $nodeTraverser->addVisitor($nodeVisitor);
