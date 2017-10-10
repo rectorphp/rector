@@ -35,7 +35,6 @@ final class TriggerErrorRectorGuesser
         $this->rectorGuessFactory = $rectorGuessFactory;
     }
 
-
     /**
      * @return mixed
      */
@@ -68,6 +67,14 @@ final class TriggerErrorRectorGuesser
      */
     private function createFromMessage(Node $node, string $message)
     {
+        if (Strings::contains($message, 'Autowiring-types are deprecated since')) {
+            return $this->rectorGuessFactory->createYamlConfiguration($message, $node);
+        }
+
+        if (Strings::contains($message, 'configuration key') && Strings::contains($message, 'Yaml')) {
+            return $this->rectorGuessFactory->createYamlConfiguration($message, $node);
+        }
+
         $result = Strings::split($message, '#use |Use#');
 
         if (count($result) === 2) {
@@ -78,9 +85,6 @@ final class TriggerErrorRectorGuesser
             );
         }
 
-        if (Strings::contains($message, 'configuration key') && Strings::contains($message, 'Yaml')) {
-            return $this->rectorGuessFactory->createYamlConfiguration($message, $node);
-        }
 
         return $this->rectorGuessFactory->createRemoval($message, $node);
     }

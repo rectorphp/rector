@@ -97,6 +97,10 @@ final class ExtractDeprecationsCommand extends Command
                 continue;
             }
 
+            if ($guessedRector->getGuessedRectorClass() === RectorGuess::YAML_CONFIGURATION) {
+                continue;
+            }
+
             // @todo: color highlight based upon type
             if ($guessedRector->canBeCreated()) {
                 $this->symfonyStyle->success($guessedRector->getGuessedRectorClass());

@@ -60,6 +60,10 @@ final class RectorGuess
 
     public function getNode(): Node
     {
+        if ($this->node instanceof Node\Arg) {
+            return $this->node->value;
+        }
+
         return $this->node;
     }
 
@@ -70,7 +74,7 @@ final class RectorGuess
 
     public function getNodeClass(): string
     {
-        return get_class($this->node);
+        return get_class($this->getNode());
     }
 
     public function canBeCreated(): bool
