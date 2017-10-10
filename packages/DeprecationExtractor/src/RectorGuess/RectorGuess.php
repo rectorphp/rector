@@ -3,6 +3,7 @@
 namespace Rector\DeprecationExtractor\RectorGuess;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 
 final class RectorGuess
 {
@@ -60,7 +61,7 @@ final class RectorGuess
 
     public function getNode(): Node
     {
-        if ($this->node instanceof Node\Arg) {
+        if ($this->node instanceof Arg) {
             return $this->node->value;
         }
 

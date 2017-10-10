@@ -78,13 +78,11 @@ final class TriggerErrorRectorGuesser
         $result = Strings::split($message, '#use |Use#');
 
         if (count($result) === 2) {
-
             return $this->rectorGuessFactory->createMethodNameReplacerGuess(
                 $message,
                 $node
             );
         }
-
 
         return $this->rectorGuessFactory->createRemoval($message, $node);
     }

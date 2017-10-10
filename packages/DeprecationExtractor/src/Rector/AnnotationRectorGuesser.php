@@ -6,6 +6,7 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\DeprecationExtractor\RectorGuess\RectorGuess;
 use Rector\DeprecationExtractor\RectorGuess\RectorGuessFactory;
 use Rector\DeprecationExtractor\Regex\ClassAndMethodMatcher;
 use Rector\Exception\NotImplementedException;
@@ -29,10 +30,7 @@ final class AnnotationRectorGuesser
         $this->rectorGuessFactory = $rectorGuessFactory;
     }
 
-    /**
-     * @throws mixed
-     */
-    public function guess(string $message, Node $node)
+    public function guess(string $message, Node $node): ?RectorGuess
     {
         if ($node instanceof Class_) {
             return $this->rectorGuessFactory->createClassReplacer(
@@ -51,12 +49,14 @@ final class AnnotationRectorGuesser
             $fqnMethodName = $className . '::' . $methodName;
 
             if ($classWithMethod === '' && $localMethod === '') {
-
                 return $this->rectorGuessFactory->createRemoval($message, $node);
             }
 
             if ($localMethod) {
-                return new ClassMethodDeprecation($fqnMethodName, $className . '::' . $localMethod . '()');
+                return $this->rectorGuessFactory->createRemoval(
+                    $fqnMethodName . ' => ' . $className . '::' . $localMethod . '()' . $message,
+                    $node
+                );
             }
 
             $namespacedClassWithMethod = $this->classAndMethodMatcher->matchNamespacedClassWithMethod($message);
@@ -65,7 +65,10 @@ final class AnnotationRectorGuesser
             $useStatements = $node->getAttribute(Attribute::USE_STATEMENTS);
             $fqnClassWithMethod = $this->completeNamespace($useStatements, $namespacedClassWithMethod);
 
-            return new ClassMethodDeprecation($fqnMethodName, $fqnClassWithMethod);
+            return $this->rectorGuessFactory->createRemoval(
+                $fqnMethodName . '=> ' . $fqnClassWithMethod,
+                $node
+            );
         }
 
         throw new NotImplementedException(sprintf(
