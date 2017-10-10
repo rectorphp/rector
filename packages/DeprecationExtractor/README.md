@@ -14,8 +14,8 @@ It helps to generated automate rectors and identify BC changes purely from the c
 2. Guess what rector might change the code
 3. Create `RectorGuess` class that holds rector suggetion
 
-    - rector class
-    - certainity (from 0 to 100)
+    - suggested rector class
+    - certainity of the guess (from 0 to 100)
     - related node  
     - related message (only for `@deprecate`)
 
