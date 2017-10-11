@@ -5,7 +5,6 @@ final class MyTest extends \PHPUnit\Framework\TestCase
     public function test()
     {
         $this->setExpectedException('SomeException');
-
         $this->setExpectedException('SomeException', $message);
     }
 }

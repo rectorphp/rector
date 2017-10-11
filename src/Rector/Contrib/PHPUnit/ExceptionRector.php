@@ -65,8 +65,17 @@ final class ExceptionRector extends AbstractRector
             $parentNode = $methodCallNode->getAttribute(Attribute::PARENT_NODE);
             $parentParentNode = $parentNode->getAttribute(Attribute::PARENT_NODE);
 
-            $this->methodStatementCollector->addStatementForMethod($parentParentNode,
-                $this->nodeFactory->createMethodCallWithArguments('this', 'expectExceptionMessage', [$secondArgument])
+            $expectExceptionMessageMethodCall = $this->nodeFactory->createMethodCallWithArguments(
+                'this',
+                'expectExceptionMessage',
+                [$secondArgument]
+            );
+
+            $expressionNode = new Node\Stmt\Expression($expectExceptionMessageMethodCall);
+
+            $this->methodStatementCollector->addStatementForMethod(
+                $parentParentNode,
+                $expressionNode
             );
         }
 
