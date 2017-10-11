@@ -6,6 +6,7 @@ rectors:
     Rector\Rector\Contrib\Nette\Utils\MagicMethodRector: ~
     Rector\Rector\Contrib\Nette\DI\SetEntityToStatementRector: ~
     Rector\Rector\Contrib\Nette\DI\ExpandFunctionToParametersArrayRector: ~
+    Rector\Rector\Contrib\Nette\DI\ExpandFunctionToStaticExpandFunctionRector: ~
 
     Rector\Rector\Dynamic\MethodNameReplacerRector:
         # php-generator

@@ -2,12 +2,12 @@
 
 namespace Rector\Rector\Contrib\Nette\DI;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
-use PhpParser\Node\Expr\ArrayDimFetch;
-use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
 use Rector\Node\Attribute;
 use Rector\NodeAnalyzer\MethodArgumentAnalyzer;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
@@ -16,12 +16,11 @@ use Rector\Rector\AbstractRector;
 /**
  * Covers https://github.com/Kdyby/Doctrine/pull/298/files
  * From:
- * $builder->expand('argument');
- * $builder->expand('%argument%');
+ * $builder->expand(object|array);
  * To:
- * $builder->parameters['argument'];
+ * \Nette\DI\Helpers::expand(object|array, $builder->parameters);
  */
-final class ExpandFunctionToParametersArrayRector extends AbstractRector
+final class ExpandFunctionToStaticExpandFunctionRector extends AbstractRector
 {
 
     /**
@@ -47,7 +46,7 @@ final class ExpandFunctionToParametersArrayRector extends AbstractRector
             return false;
         }
 
-        if (! $this->methodCallAnalyzer->isMethodCallMethod($node, 'expand') || ! $this->methodArgumentAnalyzer->isMethodFirstArgumentString($node)) {
+        if (! $this->methodCallAnalyzer->isMethodCallMethod($node, 'expand') || $this->methodArgumentAnalyzer->isMethodFirstArgumentString($node)) {
             return false;
         }
 
@@ -57,19 +56,20 @@ final class ExpandFunctionToParametersArrayRector extends AbstractRector
     /**
      * @param MethodCall $methodCallNode
      *
-     * Returns $builder->parameters['argument']
+     * Returns \Nette\DI\Helpers::expand('argument', $builder->parameters)
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        $argument = $methodCallNode->args[0]->value;
-        $argument->value = Strings::trim($argument->value, '%');
-
-        return new ArrayDimFetch(
-            new PropertyFetch(
-                $methodCallNode->var,
-                new Identifier('parameters')
-            ),
-            $argument
+        return new StaticCall(
+            new Name('Nette\DI\Helpers'),
+            new Identifier('expand'),
+            [
+                $methodCallNode->args[0],
+                new PropertyFetch(
+                    $methodCallNode->var,
+                    'parameters'
+                )
+            ]
         );
     }
 

@@ -7,6 +7,7 @@ use Psr\Container\ContainerInterface;
 use Rector\Application\FileProcessor;
 use Rector\DependencyInjection\ContainerFactory;
 use Rector\Exception\FileSystem\FileNotFoundException;
+use Rector\Rector\Contrib\Nette\DI\ExpandFunctionToStaticExpandFunctionRector;
 use SplFileInfo;
 
 abstract class AbstractRectorTestCase extends TestCase
@@ -37,6 +38,11 @@ abstract class AbstractRectorTestCase extends TestCase
             new SplFileInfo($file),
             $this->getRectorClasses()
         );
+
+//        if ($this->getRectorClasses()[0] === ExpandFunctionToStaticExpandFunctionRector::class) {
+//            print($reconstructedFileContent);
+//            exit;
+//        }
 
         $this->assertStringEqualsFile($reconstructedFile, $reconstructedFileContent);
     }
