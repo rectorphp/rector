@@ -10,7 +10,7 @@ use Rector\Builder\ConstructorMethodBuilder;
 use Rector\Builder\PropertyBuilder;
 
 /**
- * Adds new propertis to class and to contructor.
+ * Adds new properties to class and to contructor.
  */
 final class PropertyToClassAdder extends NodeVisitorAbstract
 {

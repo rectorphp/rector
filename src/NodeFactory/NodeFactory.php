@@ -3,9 +3,9 @@
 namespace Rector\NodeFactory;
 
 use Nette\NotImplementedException;
+use PhpParser\BuilderHelpers;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
@@ -198,7 +198,7 @@ final class NodeFactory
      */
     public function createArg($argument): Arg
     {
-        $value = $this->createTypeFromScalar($argument);
+        $value = BuilderHelpers::normalizeValue($argument);
 
         return new Arg($value);
     }
@@ -214,30 +214,17 @@ final class NodeFactory
     }
 
     /**
-     * @todo consider using PhpParser's
-     * @see \PhpParser\BuilderHelpers::normalizeValue()
-     *
-     * @param mixed $value
+     * @param Arg[] $arguments
      */
-    private function createTypeFromScalar($value): Expr
-    {
-        if (is_numeric($value)) {
-            return new LNumber($value);
-        }
+    public function createMethodCallWithArguments(
+        string $variableName,
+        string $methodName,
+        array $arguments
+    ): MethodCall {
+        $methodCallNode = $this->createMethodCall($variableName, $methodName);
+        $methodCallNode->args = $arguments;
 
-        if (is_string($value)) {
-            return new String_($value);
-        }
-
-        if (is_bool($value)) {
-            return $this->createInternalConstant($value === true ? 'true' : 'false');
-        }
-
-        throw new NotImplementedException(sprintf(
-            'Not implemented yet. Go to "%s()" and add check for "%s".',
-            __METHOD__,
-            is_object($value) ? get_class($value) : $value
-        ));
+        return $methodCallNode;
     }
 
     private function createInternalConstant(string $value): ConstFetch
