@@ -107,14 +107,9 @@ final class ExtractDeprecationsCommand extends Command
         return 0;
     }
 
-    private function shouldSkipGuessedRector(?RectorGuess $guessedRector): bool
+    private function shouldSkipGuessedRector(RectorGuess $guessedRector): bool
     {
-        if ($guessedRector === null) {
-            return true;
-        }
-
-        $typesToHide = [RectorGuess::TYPE_YAML_CONFIGURATION, RectorGuess::TYPE_SERVICE];
-        if (in_array($guessedRector->getGuessedRectorClass(), $typesToHide, true)) {
+        if ($guessedRector->getGuessedRectorClass() === RectorGuess::TYPE_UNSUPPORTED) {
             return true;
         }
 

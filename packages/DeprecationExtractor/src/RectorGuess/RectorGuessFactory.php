@@ -36,28 +36,19 @@ final class RectorGuessFactory
         );
     }
 
-    public function createYamlConfiguration(string $message, Node $node): RectorGuess
-    {
-        return new RectorGuess(
-            RectorGuess::TYPE_YAML_CONFIGURATION,
-            $node,
-            $message
-        );
-    }
-
-    public function createService(string $message, Node $node): RectorGuess
-    {
-        return new RectorGuess(
-            RectorGuess::TYPE_SERVICE,
-            $node,
-            $message
-        );
-    }
-
     public function createNewArgument(string $message, Node $node): RectorGuess
     {
         return new RectorGuess(
             MethodArgumentChangerRector::class,
+            $node,
+            $message
+        );
+    }
+
+    public function createUnsupported(string $message, Node $node): RectorGuess
+    {
+        return new RectorGuess(
+            RectorGuess::TYPE_UNSUPPORTED,
             $node,
             $message
         );
