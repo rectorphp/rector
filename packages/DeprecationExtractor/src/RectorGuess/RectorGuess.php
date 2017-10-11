@@ -66,11 +66,6 @@ final class RectorGuess
         return $this->message;
     }
 
-    public function getNodeClass(): string
-    {
-        return get_class($this->getNode());
-    }
-
     public function canBeCreated(): bool
     {
         return class_exists($this->guessedRectorClass);

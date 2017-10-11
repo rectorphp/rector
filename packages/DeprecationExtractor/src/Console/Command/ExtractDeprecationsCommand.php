@@ -103,8 +103,6 @@ final class ExtractDeprecationsCommand extends Command
                 $this->symfonyStyle->warning($guessedRector->getGuessedRectorClass());
             }
 
-            $this->symfonyStyle->writeln(' - node: ' . $guessedRector->getNodeClass());
-
             $this->symfonyStyle->newLine();
 
             $this->symfonyStyle->writeln($guessedRector->getMessage());

@@ -30,7 +30,8 @@ final class DeprecationCollectorTest extends AbstractContainerAwareTestCase
             __DIR__ . '/../../../../vendor/symfony/dependency-injection',
         ]);
 
-        $deprecations = $this->deprecationCollector->getDeprecations();
+        $deprecations = $this->deprecationCollector->getDeprecationTriggerErrors()
+            + $this->deprecationCollector->getDeprecationAnnotations();
 
         $this->assertGreaterThanOrEqual(35, $deprecations);
     }
