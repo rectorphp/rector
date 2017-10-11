@@ -1,3 +1,3 @@
 rectors:
     Rector\Rector\Dynamic\NamespaceReplacerRector:
-        'BetterReflection': 'Rector\BetterReflection'
+        'BetterReflection': 'Roave\BetterReflection'
