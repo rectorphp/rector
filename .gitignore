@@ -3,3 +3,6 @@
 /example
 /vendor
 composer.lock
+
+.idea
+.gitignore
