@@ -46,6 +46,10 @@ final class StatementToMethodAdder extends NodeVisitorAbstract
     {
         $methodStatements = $this->methodStatementCollector->getStatementsForMethod($classMethodNode);
 
+        if (! count($methodStatements)) {
+            return $classMethodNode;
+        }
+
         foreach ($methodStatements as $methodStatement) {
             $classMethodNode->stmts[] = $methodStatement;
         }
