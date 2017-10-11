@@ -21,6 +21,14 @@ final class DeprecationCollector
      */
     private $deprecationTriggerErrors = [];
 
+    /**
+     * @var string[]|Node[]
+     */
+    private $deprecations;
+
+    /**
+     * @deprecated use addDeprecation() instead
+     */
     public function addDeprecationAnnotation(string $annotation, Node $node): void
     {
         $this->deprecationAnnotations[] = [
@@ -29,12 +37,16 @@ final class DeprecationCollector
         ];
     }
 
+    /**
+     * @deprecated use addDeprecation() instead
+     */
     public function addDeprecationTriggerError(Arg $argNode): void
     {
         $this->deprecationTriggerErrors[] = $argNode;
     }
 
     /**
+     * @deprecated use getDeprecations() instead
      * @return string[]|Node[]
      */
     public function getDeprecationAnnotations(): array
@@ -43,10 +55,27 @@ final class DeprecationCollector
     }
 
     /**
+     * @deprecated use getDeprecations() instead
      * @return Arg[]
      */
     public function getDeprecationTriggerErrors(): array
     {
         return $this->deprecationTriggerErrors;
+    }
+
+    public function addDeprecation(string $message, Node $node): void
+    {
+        $this->deprecations[] = [
+            'message' => $message,
+            'node' => $node
+        ];
+    }
+
+    /**
+     * @return mixed[]
+     */
+    public function getDeprecations(): array
+    {
+        return $this->deprecations;
     }
 }

@@ -63,6 +63,8 @@ final class DeprecationDetector extends NodeVisitorAbstract
             return;
         }
 
+        $this->deprecationCollector->addDeprecation($deprecation, $node);
+
         $this->deprecationCollector->addDeprecationAnnotation($deprecation, $node);
     }
 }
