@@ -19,6 +19,11 @@ use Rector\Regex\MagicMethodMatcher;
 final class MagicMethodRector extends AbstractRector
 {
     /**
+     * @var string
+     */
+    private const NETTE_OBJECT_CLASS = 'Nette\Object';
+
+    /**
      * @var mixed[]
      */
     private $magicMethods = [];
@@ -36,7 +41,7 @@ final class MagicMethodRector extends AbstractRector
     /**
      * @var ClassReflector
      */
-    private $currentFileAwareClassReflector;
+    private $classReflector;
 
     /**
      * @var MagicMethodMatcher
@@ -46,12 +51,12 @@ final class MagicMethodRector extends AbstractRector
     public function __construct(
         MethodBuilder $methodBuilder,
         DocBlockAnalyzer $docBlockAnalyzer,
-        ClassReflector $currentFileAwareClassReflector,
+        ClassReflector $classReflector,
         MagicMethodMatcher $magicMethodMatcher
     ) {
         $this->methodBuilder = $methodBuilder;
         $this->docBlockAnalyzer = $docBlockAnalyzer;
-        $this->currentFileAwareClassReflector = $currentFileAwareClassReflector;
+        $this->classReflector = $classReflector;
         $this->magicMethodMatcher = $magicMethodMatcher;
     }
 
@@ -77,7 +82,7 @@ final class MagicMethodRector extends AbstractRector
         $className = $node->getAttribute(Attribute::CLASS_NAME);
 
         $this->magicMethods = $this->magicMethodMatcher->matchInContent(
-            $this->currentFileAwareClassReflector->reflect($className),
+            $this->classReflector->reflect($className),
             $docComments[0]->getText()
         );
 
@@ -116,6 +121,6 @@ final class MagicMethodRector extends AbstractRector
 
         $parentClassName = (string) $classNode->extends->getAttribute(Attribute::RESOLVED_NAME);
 
-        return $parentClassName === 'Nette\Object';
+        return $parentClassName === self::NETTE_OBJECT_CLASS;
     }
 }

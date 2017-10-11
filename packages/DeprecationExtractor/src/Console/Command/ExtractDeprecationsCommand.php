@@ -4,14 +4,20 @@ namespace Rector\DeprecationExtractor\Console\Command;
 
 use Rector\DeprecationExtractor\Deprecation\DeprecationCollector;
 use Rector\DeprecationExtractor\DeprecationExtractor;
+use Rector\DeprecationExtractor\Rector\RectorGuesser;
 use Rector\Naming\CommandNaming;
+use Rector\Node\Attribute;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-// @todo match the name...
+/**
+ * This commands shows suggested rector to use to resolve deprecation.
+ *
+ * We need this manually to analyze other versions and do not actually create any rector.
+ */
 final class ExtractDeprecationsCommand extends Command
 {
     /**
@@ -34,13 +40,20 @@ final class ExtractDeprecationsCommand extends Command
      */
     private $symfonyStyle;
 
+    /**
+     * @var RectorGuesser
+     */
+    private $rectorGuesser;
+
     public function __construct(
         DeprecationExtractor $deprecationExtractor,
         DeprecationCollector $deprecationCollector,
+        RectorGuesser $rectorGuesser,
         SymfonyStyle $symfonyStyle
     ) {
         $this->deprecationExtractor = $deprecationExtractor;
         $this->deprecationCollector = $deprecationCollector;
+        $this->rectorGuesser = $rectorGuesser;
         $this->symfonyStyle = $symfonyStyle;
 
         parent::__construct();
@@ -59,16 +72,35 @@ final class ExtractDeprecationsCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $source = $input->getArgument(self::ARGUMENT_SOURCE_NAME);
-        $this->deprecationExtractor->scanDirectories($source);
+        $this->deprecationExtractor->scanDirectories(
+            $input->getArgument(self::ARGUMENT_SOURCE_NAME)
+        );
 
-        $this->symfonyStyle->note(sprintf(
-            'Found %d deprecations.',
+        $this->symfonyStyle->title(sprintf(
+            'Found %d deprecations',
             count($this->deprecationCollector->getDeprecations())
         ));
 
-        foreach ($this->deprecationCollector->getDeprecations() as $deprecation) {
-            $output->writeln($deprecation);
+        $guessedRectors = $this->rectorGuesser->guessForDeprecations($this->deprecationCollector->getDeprecations());
+
+        foreach ($guessedRectors as $guessedRector) {
+            if ($guessedRector->isUseful() === false) {
+                continue;
+            }
+
+            $this->symfonyStyle->success($guessedRector->getGuessedRectorClass());
+
+            $this->symfonyStyle->writeln(' ' . $guessedRector->getMessage());
+            $this->symfonyStyle->newLine();
+
+            $node = $guessedRector->getNode();
+
+            $this->symfonyStyle->writeln(' Namespace: ' . $node->getAttribute(Attribute::NAMESPACE));
+            $this->symfonyStyle->writeln(' Class: ' . $node->getAttribute(Attribute::CLASS_NAME));
+            $this->symfonyStyle->writeln(' Scope: ' . $node->getAttribute(Attribute::SCOPE));
+            $this->symfonyStyle->writeln(' Related node: ' . get_class($node));
+
+            $this->symfonyStyle->newLine(2);
         }
 
         return 0;

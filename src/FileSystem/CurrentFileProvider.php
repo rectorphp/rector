@@ -4,6 +4,10 @@ namespace Rector\FileSystem;
 
 use SplFileInfo;
 
+/**
+ * Consider using NodeTraverser, same as for namespace to add to node.
+ * Would allow united API.
+ */
 final class CurrentFileProvider
 {
     /**

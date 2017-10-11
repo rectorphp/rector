@@ -54,11 +54,7 @@ parameters:
         Symplify\CodingStandard\Fixer\Php\ClassStringToClassConstantFixer:
             # classes might not exist
             - */src/Rector/Contrib/*/*Rector.php
-            - packages/DeprecationExtractor/tests/Rector/RectorFactoryTest.php
             - packages/NodeTypeResolver/src/NodeVisitor/TypeResolver.php
-        Symplify\CodingStandard\Sniffs\Classes\EqualInterfaceImplementationSniff:
-            # empty parent interface, disable for now
-            - packages/DeprecationExtractor/src/Deprecation/ClassMethodDeprecation.php
         Symplify\CodingStandard\Sniffs\Debug\CommentedOutCodeSniff:
             # false positive - @todo fix
             - packages/NodeTypeResolver/src/NodeVisitor/TypeResolver.php

@@ -8,6 +8,7 @@ use PhpParser\NodeVisitorAbstract;
 use Rector\DeprecationExtractor\Deprecation\DeprecationCollector;
 use Rector\DeprecationExtractor\NodeAnalyzer\TriggerErrorAnalyzer;
 use Rector\NodeAnalyzer\DocBlockAnalyzer;
+use Rector\NodeValueResolver\NodeValueResolver;
 
 /**
  * Inspired by https://github.com/sensiolabs-de/deprecation-detector/blob/master/src/Visitor/Deprecation/FindDeprecatedTagsVisitor.php
@@ -29,14 +30,21 @@ final class DeprecationDetector extends NodeVisitorAbstract
      */
     private $triggerErrorAnalyzer;
 
+    /**
+     * @var NodeValueResolver
+     */
+    private $nodeValueResolver;
+
     public function __construct(
         DeprecationCollector $deprecationCollector,
         DocBlockAnalyzer $docBlockAnalyzer,
-        TriggerErrorAnalyzer $triggerErrorAnalyzer
+        TriggerErrorAnalyzer $triggerErrorAnalyzer,
+        NodeValueResolver $nodeValueResolver
     ) {
         $this->deprecationCollector = $deprecationCollector;
         $this->docBlockAnalyzer = $docBlockAnalyzer;
         $this->triggerErrorAnalyzer = $triggerErrorAnalyzer;
+        $this->nodeValueResolver = $nodeValueResolver;
     }
 
     public function enterNode(Node $node): void
@@ -49,8 +57,14 @@ final class DeprecationDetector extends NodeVisitorAbstract
 
         if ($this->triggerErrorAnalyzer->isUserDeprecation($node)) {
             /** @var FuncCall $node */
-            $argNode = $this->triggerErrorAnalyzer->messageNodeForNode($node);
-            $this->deprecationCollector->addDeprecationArgNode($argNode);
+            $argNode = $node->args[0];
+
+            $message = $this->nodeValueResolver->resolve($argNode);
+            if ($message === null) {
+                return;
+            }
+
+            $this->deprecationCollector->addDeprecation($message, $node);
 
             return;
         }
@@ -63,6 +77,6 @@ final class DeprecationDetector extends NodeVisitorAbstract
             return;
         }
 
-        $this->deprecationCollector->addDeprecationMessage($deprecation, $node);
+        $this->deprecationCollector->addDeprecation($deprecation, $node);
     }
 }
