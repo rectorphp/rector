@@ -32,11 +32,11 @@ final class RectorGuess
     private $message;
 
     public function __construct(
-        string $guessedRectorClass,
+        string $rectorClassOrType,
         Node $node,
         string $message
     ) {
-        $this->guessedRectorClass = $guessedRectorClass;
+        $this->guessedRectorClass = $rectorClassOrType;
         $this->node = $node;
         $this->message = $message;
     }
@@ -56,7 +56,7 @@ final class RectorGuess
         return $this->message;
     }
 
-    public function canBeCreated(): bool
+    public function isUseful(): bool
     {
         return class_exists($this->guessedRectorClass);
     }

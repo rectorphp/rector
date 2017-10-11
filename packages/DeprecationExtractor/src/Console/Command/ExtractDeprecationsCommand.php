@@ -5,7 +5,6 @@ namespace Rector\DeprecationExtractor\Console\Command;
 use Rector\DeprecationExtractor\Deprecation\DeprecationCollector;
 use Rector\DeprecationExtractor\DeprecationExtractor;
 use Rector\DeprecationExtractor\Rector\RectorGuesser;
-use Rector\DeprecationExtractor\RectorGuess\RectorGuess;
 use Rector\Naming\CommandNaming;
 use Rector\Node\Attribute;
 use Symfony\Component\Console\Command\Command;
@@ -85,15 +84,11 @@ final class ExtractDeprecationsCommand extends Command
         $guessedRectors = $this->rectorGuesser->guessForDeprecations($this->deprecationCollector->getDeprecations());
 
         foreach ($guessedRectors as $guessedRector) {
-            if ($this->shouldSkipGuessedRector($guessedRector)) {
+            if ($guessedRector->isUseful() === false) {
                 continue;
             }
 
-            if ($guessedRector->canBeCreated()) {
-                $this->symfonyStyle->success($guessedRector->getGuessedRectorClass());
-            } else {
-                $this->symfonyStyle->warning($guessedRector->getGuessedRectorClass());
-            }
+            $this->symfonyStyle->success($guessedRector->getGuessedRectorClass());
 
             $this->symfonyStyle->writeln(' ' . $guessedRector->getMessage());
             $this->symfonyStyle->newLine();
@@ -109,15 +104,5 @@ final class ExtractDeprecationsCommand extends Command
         }
 
         return 0;
-    }
-
-    private function shouldSkipGuessedRector(RectorGuess $guessedRector): bool
-    {
-        $typesToSkip = [RectorGuess::TYPE_UNSUPPORTED, RectorGuess::TYPE_REMOVAL];
-        if (in_array($guessedRector->getGuessedRectorClass(), $typesToSkip, true)) {
-            return true;
-        }
-
-        return false;
     }
 }

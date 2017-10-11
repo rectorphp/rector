@@ -31,7 +31,22 @@ final class RectorGuesser
         $this->unsupportedDeprecationFilter = $unsupportedDeprecationFilter;
     }
 
-    public function guessForDeprecation(Deprecation $deprecation): ?RectorGuess
+    /**
+     * @param Deprecation[] $deprecations
+     * @return RectorGuess[]
+     */
+    public function guessForDeprecations(array $deprecations): array
+    {
+        $guessedRectors = [];
+
+        foreach ($deprecations as $deprecation) {
+            $guessedRectors[] = $this->guessForDeprecation($deprecation);
+        }
+
+        return $guessedRectors;
+    }
+
+    private function guessForDeprecation(Deprecation $deprecation): ?RectorGuess
     {
         $message = $deprecation->getMessage();
 
@@ -62,20 +77,5 @@ final class RectorGuesser
         }
 
         return $this->rectorGuessFactory->createRemoval($message, $deprecation->getNode());
-    }
-
-    /**
-     * @param Deprecation[] $deprecations
-     * @return RectorGuess[]
-     */
-    public function guessForDeprecations(array $deprecations): array
-    {
-        $guessedRectors = [];
-
-        foreach ($deprecations as $deprecation) {
-            $guessedRectors[] = $this->guessForDeprecation($deprecation);
-        }
-
-        return $guessedRectors;
     }
 }
