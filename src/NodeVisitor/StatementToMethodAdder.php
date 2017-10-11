@@ -50,6 +50,10 @@ final class StatementToMethodAdder extends NodeVisitorAbstract
             $classMethodNode->stmts[] = $methodStatement;
         }
 
+        /** @var Node $parentNode */
+        $parentNode = $classMethodNode->getAttribute('parentNode');
+        $parentNode->setAttribute('origNode', null);
+
         return $classMethodNode;
     }
 }

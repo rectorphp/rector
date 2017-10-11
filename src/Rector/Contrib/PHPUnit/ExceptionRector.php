@@ -7,6 +7,7 @@ use PhpParser\Node\Expr\MethodCall;
 use Rector\Builder\Method\MethodStatementCollector;
 use Rector\Node\Attribute;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
+use Rector\NodeFactory\NodeFactory;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -23,13 +24,19 @@ final class ExceptionRector extends AbstractRector
      * @var MethodStatementCollector
      */
     private $methodStatementCollector;
+    /**
+     * @var NodeFactory
+     */
+    private $nodeFactory;
 
     public function __construct(
         MethodCallAnalyzer $methodCallAnalyzer,
-        MethodStatementCollector $methodStatementCollector
+        MethodStatementCollector $methodStatementCollector,
+        NodeFactory $nodeFactory
     ) {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->methodStatementCollector = $methodStatementCollector;
+        $this->nodeFactory = $nodeFactory;
     }
 
     public function isCandidate(Node $node): bool
@@ -58,7 +65,9 @@ final class ExceptionRector extends AbstractRector
             $parentNode = $methodCallNode->getAttribute(Attribute::PARENT_NODE);
             $parentParentNode = $parentNode->getAttribute(Attribute::PARENT_NODE);
 
-            $this->methodStatementCollector->addStatementForMethod($parentParentNode, $secondArgument);
+            $this->methodStatementCollector->addStatementForMethod($parentParentNode,
+                $this->nodeFactory->createMethodCallWithArguments('this', 'expectExceptionMessage', [$secondArgument])
+            );
         }
 
         return $methodCallNode;

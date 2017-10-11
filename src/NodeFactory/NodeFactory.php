@@ -23,6 +23,7 @@ use PhpParser\Node\Stmt\Declare_;
 use PhpParser\Node\Stmt\DeclareDeclare;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\TraitUse;
+use Rector\Builder\Method\MethodStatementCollector;
 
 final class NodeFactory
 {
@@ -243,5 +244,13 @@ final class NodeFactory
     private function createInternalConstant(string $value): ConstFetch
     {
         return new ConstFetch(new Name($value));
+    }
+
+    public function createMethodCallWithArguments(string $variableName, string $methodName, array $arguments): MethodCall
+    {
+        $methodCallNode = $this->createMethodCall($variableName, $methodName);
+        $methodCallNode->args = $arguments;
+
+        return $methodCallNode;
     }
 }
