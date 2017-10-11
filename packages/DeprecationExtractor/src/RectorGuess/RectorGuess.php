@@ -15,12 +15,12 @@ final class RectorGuess
     /**
      * @var string
      */
-    public const YAML_CONFIGURATION = 'YAML_CONFIGURATION';
+    public const TYPE_YAML_CONFIGURATION = 'YAML_CONFIGURATION';
 
     /**
      * @var string
      */
-    public const SERVICE = 'SERVICE';
+    public const TYPE_SERVICE = 'SERVICE';
 
     /**
      * @var string

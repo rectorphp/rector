@@ -81,16 +81,7 @@ final class ExtractDeprecationsCommand extends Command
             count($this->deprecationCollector->getDeprecations())
         ));
 
-        /** @var RectorGuess[] $guessedRectors */
-        $guessedRectors = [];
-        $deprecations = $this->deprecationCollector->getDeprecations();
-
-        foreach ($deprecations as $deprecation) {
-            $guessedRectors[] = $this->rectorGuesser->guessFromMessageAndNode(
-                $deprecation['message'],
-                $deprecation['node']
-            );
-        }
+        $guessedRectors = $this->rectorGuesser->guessForDeprecations($this->deprecationCollector->getDeprecations());
 
         foreach ($guessedRectors as $guessedRector) {
             if ($this->shouldSkipGuessedRector($guessedRector)) {
@@ -122,7 +113,7 @@ final class ExtractDeprecationsCommand extends Command
             return true;
         }
 
-        $typesToHide = [RectorGuess::YAML_CONFIGURATION, RectorGuess::SERVICE];
+        $typesToHide = [RectorGuess::TYPE_YAML_CONFIGURATION, RectorGuess::TYPE_SERVICE];
         if (in_array($guessedRector->getGuessedRectorClass(), $typesToHide, true)) {
             return true;
         }

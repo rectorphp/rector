@@ -11,20 +11,17 @@ use PhpParser\Node;
 final class DeprecationCollector
 {
     /**
-     * @var string[]|Node[]
+     * @var Deprecation[]
      */
     private $deprecations = [];
 
     public function addDeprecation(string $message, Node $node): void
     {
-        $this->deprecations[] = [
-            'message' => $message,
-            'node' => $node,
-        ];
+        $this->deprecations[] = Deprecation::createFromMessageAndNode($message, $node);
     }
 
     /**
-     * @return mixed[]
+     * @return Deprecation[]
      */
     public function getDeprecations(): array
     {

@@ -5,6 +5,7 @@ namespace Rector\DeprecationExtractor\Rector;
 use Nette\Utils\Strings;
 use PhpParser\Builder\Class_;
 use PhpParser\Node;
+use Rector\DeprecationExtractor\Deprecation\Deprecation;
 use Rector\DeprecationExtractor\RectorGuess\RectorGuess;
 use Rector\DeprecationExtractor\RectorGuess\RectorGuessFactory;
 use Rector\Exception\NotImplementedException;
@@ -54,48 +55,49 @@ final class RectorGuesser
         'Relying on its factory\'s return-type to define the class of service',
     ];
 
+    /**
+     * @var UnsupportedDeprecationFilter
+     */
+    private $unsupportedDeprecationFilter;
+
     public function __construct(
         NodeValueResolver $nodeValueResolver,
         ClassPrepender $classPrepender,
-        RectorGuessFactory $rectorGuessFactory
+        RectorGuessFactory $rectorGuessFactory,
+        UnsupportedDeprecationFilter $unsupportedDeprecationFilter
     ) {
         $this->nodeValueResolver = $nodeValueResolver;
         $this->classPrepender = $classPrepender;
         $this->rectorGuessFactory = $rectorGuessFactory;
+        $this->unsupportedDeprecationFilter = $unsupportedDeprecationFilter;
     }
 
-    public function guessFromMessageAndNode(string $message, Node $node): ?RectorGuess
+    public function guessForDeprecation(Deprecation $deprecation): ?RectorGuess
     {
-        // @todo: group to early filter method
-        foreach ($this->yamlDeprecationMessages as $yamlDeprecationMessage) {
-            if (Strings::contains($message, $yamlDeprecationMessage)) {
-                return $this->rectorGuessFactory->createYamlConfiguration($message, $node);
-            }
+        if ($this->unsupportedDeprecationFilter->matches($deprecation)) {
+            return $this->rectorGuessFactory->
         }
 
-        foreach ($this->serviceDeprecationMessages as $serviceDeprecationMessage) {
-            if (Strings::contains($message, $serviceDeprecationMessage)) {
-                return $this->rectorGuessFactory->createService($message, $node);
-            }
+        $rectorGuess = $this->processWithEarlyFilter($deprecation);
+        if ($rectorGuess !== null) {
+            return $rectorGuess;
         }
-
 
         $message = $this->classPrepender->completeClassToLocalMethods(
-            $message,
-            (string) $node->getAttribute(Attribute::CLASS_NAME)
+            $deprecation->getMessage(),
+            (string) $deprecation->getNode()->getAttribute(Attribute::CLASS_NAME)
         );
 
         if ($message === '') {
             throw new NotImplementedException(sprintf(
                 'Not implemented yet. Go to "%s()" and add check for "%s" node.',
                 __METHOD__,
-                get_class($node)
+                get_class($deprecation->getNode())
             ));
         }
 
-
         if (Strings::contains($message, 'It will be made mandatory in') || Strings::contains($message, 'Not defining it is deprecated since')) {
-            return $this->rectorGuessFactory->createNewArgument($message, $node);
+            return $this->rectorGuessFactory->createNewArgument($message, $deprecation->getNode());
         }
 
         $result = Strings::split($message, '#use |Use#');
@@ -105,68 +107,100 @@ final class RectorGuesser
                 return $this->rectorGuessFactory->createClassReplacer(
                     '...',
                     $message,
-                    $node
+                    $deprecation->getNode()
                 );
             }
 
             return $this->rectorGuessFactory->createMethodNameReplacerGuess(
                 $message,
-                $node
+                $deprecation->getNode()
             );
         }
 
-        return $this->rectorGuessFactory->createRemoval($message, $node);
+        return $this->rectorGuessFactory->createRemoval($message, $deprecation->getNode());
     }
 
-    public function guess(string $message, Node $node): ?RectorGuess
+    /**
+     * @param Deprecation[] $deprecations
+     * @return RectorGuess[]
+     */
+    public function guessForDeprecations(array $deprecations): array
     {
-        // @todo: per node resolver...
-        if ($node instanceof Class_) {
-            return $this->rectorGuessFactory->createClassReplacer(
-                $node->namespacedName->toString(),
-                $message,
-                $node
-            );
+        $guessedRectors = [];
+
+        foreach ($deprecations as $deprecation) {
+            $guessedRectors[] = $this->guessForDeprecation($deprecation);
         }
 
-        if ($node instanceof Node\Stmt\ClassMethod) {
-            $classWithMethod = $this->classAndMethodMatcher->matchClassWithMethod($message);
-            $localMethod = $this->classAndMethodMatcher->matchLocalMethod($message);
-
-            $className = $node->getAttribute(Attribute::CLASS_NODE)->namespacedName->toString();
-            $methodName = (string) $node->name . '()';
-            $fqnMethodName = $className . '::' . $methodName;
-
-            if ($classWithMethod === '' && $localMethod === '') {
-                return $this->rectorGuessFactory->createRemoval($message, $node);
-            }
-
-            if ($localMethod) {
-                return $this->rectorGuessFactory->createRemoval(
-                    $fqnMethodName . ' => ' . $className . '::' . $localMethod . '()' . $message,
-                    $node
-                );
-            }
-
-            $namespacedClassWithMethod = $this->classAndMethodMatcher->matchNamespacedClassWithMethod($message);
-
-            /** @var string[] $useStatements */
-            $useStatements = $node->getAttribute(Attribute::USE_STATEMENTS);
-            $fqnClassWithMethod = $this->completeNamespace($useStatements, $namespacedClassWithMethod);
-
-            return $this->rectorGuessFactory->createRemoval(
-                $fqnMethodName . '=> ' . $fqnClassWithMethod,
-                $node
-            );
-        }
-
-        throw new NotImplementedException(sprintf(
-            '%s() was unable to create a Deprecation based on "%s" string and "%s" Node. Create a new method there.',
-            __METHOD__,
-            $message,
-            get_class($node)
-        ));
+        return $guessedRectors;
     }
+
+    private function processWithEarlyFilter(Deprecation $deprecation): ?RectorGuess
+    {
+        foreach ($this->yamlDeprecationMessages as $yamlDeprecationMessage) {
+            if (Strings::contains($deprecation->getMessage(), $yamlDeprecationMessage)) {
+                return $this->rectorGuessFactory->createYamlConfiguration($deprecation->getMessage(), $deprecation->getNode());
+            }
+        }
+
+        foreach ($this->serviceDeprecationMessages as $serviceDeprecationMessage) {
+            if (Strings::contains($deprecation->getMessage(), $serviceDeprecationMessage)) {
+                return $this->rectorGuessFactory->createService($deprecation->getMessage(), $deprecation->getNode());
+            }
+        }
+
+        return null;
+    }
+
+//    private function guess(string $message, Node $node): ?RectorGuess
+//    {
+//        // @todo: per node resolver...
+//        if ($node instanceof Class_) {
+//            return $this->rectorGuessFactory->createClassReplacer(
+//                $node->namespacedName->toString(),
+//                $message,
+//                $node
+//            );
+//        }
+//
+//        if ($node instanceof Node\Stmt\ClassMethod) {
+//            $classWithMethod = $this->classAndMethodMatcher->matchClassWithMethod($message);
+//            $localMethod = $this->classAndMethodMatcher->matchLocalMethod($message);
+//
+//            $className = $node->getAttribute(Attribute::CLASS_NODE)->namespacedName->toString();
+//            $methodName = (string) $node->name . '()';
+//            $fqnMethodName = $className . '::' . $methodName;
+//
+//            if ($classWithMethod === '' && $localMethod === '') {
+//                return $this->rectorGuessFactory->createRemoval($message, $node);
+//            }
+//
+//            if ($localMethod) {
+//                return $this->rectorGuessFactory->createRemoval(
+//                    $fqnMethodName . ' => ' . $className . '::' . $localMethod . '()' . $message,
+//                    $node
+//                );
+//            }
+//
+//            $namespacedClassWithMethod = $this->classAndMethodMatcher->matchNamespacedClassWithMethod($message);
+//
+//            /** @var string[] $useStatements */
+//            $useStatements = $node->getAttribute(Attribute::USE_STATEMENTS);
+//            $fqnClassWithMethod = $this->completeNamespace($useStatements, $namespacedClassWithMethod);
+//
+//            return $this->rectorGuessFactory->createRemoval(
+//                $fqnMethodName . '=> ' . $fqnClassWithMethod,
+//                $node
+//            );
+//        }
+//
+//        throw new NotImplementedException(sprintf(
+//            '%s() was unable to create a Deprecation based on "%s" string and "%s" Node. Create a new method there.',
+//            __METHOD__,
+//            $message,
+//            get_class($node)
+//        ));
+//    }
 
     /**
      * @param string[] $useStatements
