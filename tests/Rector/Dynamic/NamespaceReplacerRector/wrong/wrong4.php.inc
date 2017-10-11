@@ -4,6 +4,6 @@ class SomeClass
 {
     public function someClass()
     {
-        return new \PHPUnit_Framework_Assert;
+        return new \PHPUnit_Framework_Something;
     }
 }
