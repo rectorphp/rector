@@ -46,10 +46,10 @@ final class TriggerErrorAnalyzer
         return $constFetchNode->name->toString() === 'E_USER_DEPRECATED';
     }
 
-    public function messageNodeForNode(FuncCall $triggerErrorFuncCallNode): Arg
-    {
-        return $this->messageNodePerTriggerErrorNode[$triggerErrorFuncCallNode];
-    }
+//    public function messageNodeForNode(FuncCall $triggerErrorFuncCallNode): Arg
+//    {
+//        return $this->messageNodePerTriggerErrorNode[$triggerErrorFuncCallNode];
+//    }
 
     private function isFunctionWithName(Node $node, string $name): bool
     {

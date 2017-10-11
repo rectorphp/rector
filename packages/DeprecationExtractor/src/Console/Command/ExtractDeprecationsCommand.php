@@ -122,7 +122,8 @@ final class ExtractDeprecationsCommand extends Command
             return true;
         }
 
-        if (in_array($guessedRector->getGuessedRectorClass(), [RectorGuess::YAML_CONFIGURATION, RectorGuess::SERVICE], true)) {
+        $typesToHide = [RectorGuess::YAML_CONFIGURATION, RectorGuess::SERVICE];
+        if (in_array($guessedRector->getGuessedRectorClass(), $typesToHide, true)) {
             return true;
         }
 
