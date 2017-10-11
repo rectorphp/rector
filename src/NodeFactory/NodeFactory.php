@@ -3,9 +3,9 @@
 namespace Rector\NodeFactory;
 
 use Nette\NotImplementedException;
+use PhpParser\BuilderHelpers;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
@@ -198,7 +198,7 @@ final class NodeFactory
      */
     public function createArg($argument): Arg
     {
-        $value = $this->createTypeFromScalar($argument);
+        $value = BuilderHelpers::normalizeValue($argument);
 
         return new Arg($value);
     }
@@ -225,33 +225,6 @@ final class NodeFactory
         $methodCallNode->args = $arguments;
 
         return $methodCallNode;
-    }
-
-    /**
-     * @todo consider using PhpParser's
-     * @see \PhpParser\BuilderHelpers::normalizeValue()
-     *
-     * @param mixed $value
-     */
-    private function createTypeFromScalar($value): Expr
-    {
-        if (is_numeric($value)) {
-            return new LNumber($value);
-        }
-
-        if (is_string($value)) {
-            return new String_($value);
-        }
-
-        if (is_bool($value)) {
-            return $this->createInternalConstant($value === true ? 'true' : 'false');
-        }
-
-        throw new NotImplementedException(sprintf(
-            'Not implemented yet. Go to "%s()" and add check for "%s".',
-            __METHOD__,
-            is_object($value) ? get_class($value) : $value
-        ));
     }
 
     private function createInternalConstant(string $value): ConstFetch
