@@ -30,11 +30,13 @@ final class StatementToMethodAdder extends NodeVisitorAbstract
     public function afterTraverse(array $nodes): array
     {
         foreach ($nodes as $key => $node) {
-            if ($node instanceof Class_) {
-                foreach ($node->stmts as $id => $inClassStatement) {
-                    if ($inClassStatement instanceof ClassMethod) {
-                        $node->stmts[$id] = $this->processClassMethod($inClassStatement);
-                    }
+            if (! $node instanceof Class_) {
+                continue;
+            }
+
+            foreach ($node->stmts as $id => $inClassStatement) {
+                if ($inClassStatement instanceof ClassMethod) {
+                    $node->stmts[$id] = $this->processClassMethod($inClassStatement);
                 }
             }
         }

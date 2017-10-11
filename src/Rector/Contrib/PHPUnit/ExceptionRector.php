@@ -4,6 +4,7 @@ namespace Rector\Rector\Contrib\PHPUnit;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Stmt\Expression;
 use Rector\Builder\Method\MethodStatementCollector;
 use Rector\Node\Attribute;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
@@ -24,6 +25,7 @@ final class ExceptionRector extends AbstractRector
      * @var MethodStatementCollector
      */
     private $methodStatementCollector;
+
     /**
      * @var NodeFactory
      */
@@ -49,7 +51,6 @@ final class ExceptionRector extends AbstractRector
 
     /**
      * @param MethodCall $methodCallNode
-     * @return null|Node
      */
     public function refactor(Node $methodCallNode): ?Node
     {
@@ -71,7 +72,7 @@ final class ExceptionRector extends AbstractRector
                 [$secondArgument]
             );
 
-            $expressionNode = new Node\Stmt\Expression($expectExceptionMessageMethodCall);
+            $expressionNode = new Expression($expectExceptionMessageMethodCall);
 
             $this->methodStatementCollector->addStatementForMethod(
                 $parentParentNode,
