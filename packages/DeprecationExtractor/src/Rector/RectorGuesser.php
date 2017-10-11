@@ -3,15 +3,9 @@
 namespace Rector\DeprecationExtractor\Rector;
 
 use Nette\Utils\Strings;
-use PhpParser\Builder\Class_;
-use PhpParser\Node;
 use Rector\DeprecationExtractor\Deprecation\Deprecation;
 use Rector\DeprecationExtractor\RectorGuess\RectorGuess;
 use Rector\DeprecationExtractor\RectorGuess\RectorGuessFactory;
-use Rector\DeprecationExtractor\Regex\ClassAndMethodMatcher;
-use Rector\Exception\NotImplementedException;
-use Rector\Node\Attribute;
-use Rector\NodeValueResolver\Message\ClassPrepender;
 
 /**
  * This class tries to guess, which Rector could be used to create refactoring
@@ -29,43 +23,25 @@ final class RectorGuesser
      */
     private $unsupportedDeprecationFilter;
 
-    /**
-     * @var ClassAndMethodMatcher
-     */
-    private $classAndMethodMatcher;
-
     public function __construct(
-        ClassPrepender $classPrepender,
         RectorGuessFactory $rectorGuessFactory,
-        UnsupportedDeprecationFilter $unsupportedDeprecationFilter,
-        ClassAndMethodMatcher $classAndMethodMatcher
+        UnsupportedDeprecationFilter $unsupportedDeprecationFilter
     ) {
-        $this->classPrepender = $classPrepender;
         $this->rectorGuessFactory = $rectorGuessFactory;
         $this->unsupportedDeprecationFilter = $unsupportedDeprecationFilter;
-        $this->classAndMethodMatcher = $classAndMethodMatcher;
     }
 
     public function guessForDeprecation(Deprecation $deprecation): ?RectorGuess
     {
+        $message = $deprecation->getMessage();
+
         if ($this->unsupportedDeprecationFilter->matches($deprecation)) {
-            return $this->rectorGuessFactory->createUnsupported($deprecation->getMessage(), $deprecation->getNode());
+            return $this->rectorGuessFactory->createUnsupported($message, $deprecation->getNode());
         }
 
-        $message = $this->classPrepender->completeClassToLocalMethods(
-            $deprecation->getMessage(),
-            (string) $deprecation->getNode()->getAttribute(Attribute::CLASS_NAME)
-        );
-
-        if ($message === '') {
-            throw new NotImplementedException(sprintf(
-                'Not implemented yet. Go to "%s()" and add check for "%s" node.',
-                __METHOD__,
-                get_class($deprecation->getNode())
-            ));
-        }
-
-        if (Strings::contains($message, 'It will be made mandatory in') || Strings::contains($message, 'Not defining it is deprecated since')) {
+        if (Strings::contains($message, 'It will be made mandatory in') ||
+            Strings::contains($message, 'Not defining it is deprecated since')
+        ) {
             return $this->rectorGuessFactory->createNewArgument($message, $deprecation->getNode());
         }
 
@@ -101,70 +77,5 @@ final class RectorGuesser
         }
 
         return $guessedRectors;
-    }
-
-    private function guess(string $message, Node $node): ?RectorGuess
-    {
-        // @todo: per node resolver...
-        if ($node instanceof Class_) {
-            return $this->rectorGuessFactory->createClassReplacer(
-                $node->namespacedName->toString(),
-                $message,
-                $node
-            );
-        }
-
-        if ($node instanceof Node\Stmt\ClassMethod) {
-            $classWithMethod = $this->classAndMethodMatcher->matchClassWithMethod($message);
-            $localMethod = $this->classAndMethodMatcher->matchLocalMethod($message);
-
-            $className = $node->getAttribute(Attribute::CLASS_NODE)->namespacedName->toString();
-            $methodName = (string) $node->name . '()';
-            $fqnMethodName = $className . '::' . $methodName;
-
-            if ($classWithMethod === '' && $localMethod === '') {
-                return $this->rectorGuessFactory->createRemoval($message, $node);
-            }
-
-            if ($localMethod) {
-                return $this->rectorGuessFactory->createRemoval(
-                    $fqnMethodName . ' => ' . $className . '::' . $localMethod . '()' . $message,
-                    $node
-                );
-            }
-
-            $namespacedClassWithMethod = $this->classAndMethodMatcher->matchNamespacedClassWithMethod($message);
-
-            /** @var string[] $useStatements */
-            $useStatements = $node->getAttribute(Attribute::USE_STATEMENTS);
-            $fqnClassWithMethod = $this->completeNamespace($useStatements, $namespacedClassWithMethod);
-
-            return $this->rectorGuessFactory->createRemoval(
-                $fqnMethodName . '=> ' . $fqnClassWithMethod,
-                $node
-            );
-        }
-
-        throw new NotImplementedException(sprintf(
-            '%s() was unable to create a Deprecation based on "%s" string and "%s" Node. Create a new method there.',
-            __METHOD__,
-            $message,
-            get_class($node)
-        ));
-    }
-
-    /**
-     * @param string[] $useStatements
-     */
-    private function completeNamespace(array $useStatements, string $namespacedClassWithMethod): string
-    {
-        [$class, $method] = explode('::', $namespacedClassWithMethod);
-        foreach ($useStatements as $useStatement) {
-            if (Strings::endsWith($useStatement, $class)) {
-                return $useStatement . '::' . $method;
-            }
-        }
-
-        return $namespacedClassWithMethod;
     }
 }

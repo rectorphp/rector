@@ -100,11 +100,10 @@ final class ExtractDeprecationsCommand extends Command
 
             $node = $guessedRector->getNode();
 
-            if ($guessedRector->getGuessedRectorClass() !== 'REMOVAL') {
-                $this->symfonyStyle->writeln(' Namespace: ' . $node->getAttribute(Attribute::NAMESPACE));
-                $this->symfonyStyle->writeln(' Class: ' . $node->getAttribute(Attribute::CLASS_NAME));
-                $this->symfonyStyle->writeln(' Scope: ' . $node->getAttribute(Attribute::SCOPE));
-            }
+            $this->symfonyStyle->writeln(' Namespace: ' . $node->getAttribute(Attribute::NAMESPACE));
+            $this->symfonyStyle->writeln(' Class: ' . $node->getAttribute(Attribute::CLASS_NAME));
+            $this->symfonyStyle->writeln(' Scope: ' . $node->getAttribute(Attribute::SCOPE));
+            $this->symfonyStyle->writeln(' Related node: ' . get_class($node));
 
             $this->symfonyStyle->newLine(2);
         }
@@ -114,7 +113,8 @@ final class ExtractDeprecationsCommand extends Command
 
     private function shouldSkipGuessedRector(RectorGuess $guessedRector): bool
     {
-        if ($guessedRector->getGuessedRectorClass() === RectorGuess::TYPE_UNSUPPORTED) {
+        $typesToSkip = [RectorGuess::TYPE_UNSUPPORTED, RectorGuess::TYPE_REMOVAL];
+        if (in_array($guessedRector->getGuessedRectorClass(), $typesToSkip, true)) {
             return true;
         }
 
