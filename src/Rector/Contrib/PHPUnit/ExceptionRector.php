@@ -2,6 +2,7 @@
 
 namespace Rector\Rector\Contrib\PHPUnit;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Expression;
@@ -43,6 +44,10 @@ final class ExceptionRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
+        if (! $this->isInTestClass($node)) {
+            return false;
+        }
+
         return $this->methodCallAnalyzer->isMethodCallMethod(
             $node,
             'setExpectedException'
@@ -81,5 +86,12 @@ final class ExceptionRector extends AbstractRector
         }
 
         return $methodCallNode;
+    }
+
+    private function isInTestClass(Node $node): bool
+    {
+        $className = $node->getAttribute(Attribute::CLASS_NAME);
+
+        return Strings::endsWith($className, 'Test');
     }
 }
