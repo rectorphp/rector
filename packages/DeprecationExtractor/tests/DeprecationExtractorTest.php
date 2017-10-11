@@ -2,7 +2,6 @@
 
 namespace Rector\DeprecationExtractor\Tests;
 
-use PhpParser\Node\Arg;
 use Rector\DeprecationExtractor\Deprecation\DeprecationCollector;
 use Rector\DeprecationExtractor\DeprecationExtractor;
 use Rector\Tests\AbstractContainerAwareTestCase;
@@ -25,16 +24,7 @@ final class DeprecationExtractorTest extends AbstractContainerAwareTestCase
 
     public function testDeprectaionMessages(): void
     {
-        $deprecationMessages = $this->deprecationCollector->getDeprecationAnnotations();
-        $this->assertCount(0, $deprecationMessages);
-    }
-
-    public function testDeprecationNodes(): void
-    {
-        $deprecationArgNodes = $this->deprecationCollector->getDeprecationTriggerErrors();
-        $this->assertCount(2, $deprecationArgNodes);
-
-        $deprecationArgNode = $deprecationArgNodes[0];
-        $this->assertInstanceOf(Arg::class, $deprecationArgNode);
+        $deprecationMessages = $this->deprecationCollector->getDeprecations();
+        $this->assertCount(2, $deprecationMessages);
     }
 }

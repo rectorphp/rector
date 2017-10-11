@@ -35,7 +35,7 @@ final class RectorGuess
     public function __construct(
         string $guessedRectorClass,
         Node $node,
-        string $message = ''
+        string $message
     ) {
         $this->guessedRectorClass = $guessedRectorClass;
         $this->node = $node;

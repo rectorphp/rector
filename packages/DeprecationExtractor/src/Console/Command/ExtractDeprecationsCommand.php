@@ -7,6 +7,7 @@ use Rector\DeprecationExtractor\DeprecationExtractor;
 use Rector\DeprecationExtractor\Rector\RectorGuesser;
 use Rector\DeprecationExtractor\RectorGuess\RectorGuess;
 use Rector\Naming\CommandNaming;
+use Rector\Node\Attribute;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -94,12 +95,16 @@ final class ExtractDeprecationsCommand extends Command
                 $this->symfonyStyle->warning($guessedRector->getGuessedRectorClass());
             }
 
+            $this->symfonyStyle->writeln(' ' . $guessedRector->getMessage());
             $this->symfonyStyle->newLine();
 
-            $this->symfonyStyle->writeln($guessedRector->getMessage());
-            // @todo: add metadata like related class, method etc. - or maybe get from NODE like
-            // $node->getAttribute(Attributes::CLASS_NODE)
-            // $node->getAttribute(Attributes::METHOD_NODE)
+            $node = $guessedRector->getNode();
+
+            if ($guessedRector->getGuessedRectorClass() !== 'REMOVAL') {
+                $this->symfonyStyle->writeln(' Namespace: ' . $node->getAttribute(Attribute::NAMESPACE));
+                $this->symfonyStyle->writeln(' Class: ' . $node->getAttribute(Attribute::CLASS_NAME));
+                $this->symfonyStyle->writeln(' Scope: ' . $node->getAttribute(Attribute::SCOPE));
+            }
 
             $this->symfonyStyle->newLine(2);
         }

@@ -8,10 +8,10 @@ use PhpParser\Node;
 use Rector\DeprecationExtractor\Deprecation\Deprecation;
 use Rector\DeprecationExtractor\RectorGuess\RectorGuess;
 use Rector\DeprecationExtractor\RectorGuess\RectorGuessFactory;
+use Rector\DeprecationExtractor\Regex\ClassAndMethodMatcher;
 use Rector\Exception\NotImplementedException;
 use Rector\Node\Attribute;
 use Rector\NodeValueResolver\Message\ClassPrepender;
-use Rector\NodeValueResolver\NodeValueResolver;
 
 /**
  * This class tries to guess, which Rector could be used to create refactoring
@@ -29,16 +29,21 @@ final class RectorGuesser
      */
     private $unsupportedDeprecationFilter;
 
+    /**
+     * @var ClassAndMethodMatcher
+     */
+    private $classAndMethodMatcher;
+
     public function __construct(
-//        NodeValueResolver $nodeValueResolver,
         ClassPrepender $classPrepender,
         RectorGuessFactory $rectorGuessFactory,
-        UnsupportedDeprecationFilter $unsupportedDeprecationFilter
+        UnsupportedDeprecationFilter $unsupportedDeprecationFilter,
+        ClassAndMethodMatcher $classAndMethodMatcher
     ) {
-//        $this->nodeValueResolver = $nodeValueResolver;
         $this->classPrepender = $classPrepender;
         $this->rectorGuessFactory = $rectorGuessFactory;
         $this->unsupportedDeprecationFilter = $unsupportedDeprecationFilter;
+        $this->classAndMethodMatcher = $classAndMethodMatcher;
     }
 
     public function guessForDeprecation(Deprecation $deprecation): ?RectorGuess
@@ -69,7 +74,6 @@ final class RectorGuesser
         if (count($result) === 2) {
             if (Strings::contains($message, 'class is deprecated')) {
                 return $this->rectorGuessFactory->createClassReplacer(
-                    '...',
                     $message,
                     $deprecation->getNode()
                 );
@@ -99,55 +103,55 @@ final class RectorGuesser
         return $guessedRectors;
     }
 
-//    private function guess(string $message, Node $node): ?RectorGuess
-//    {
-//        // @todo: per node resolver...
-//        if ($node instanceof Class_) {
-//            return $this->rectorGuessFactory->createClassReplacer(
-//                $node->namespacedName->toString(),
-//                $message,
-//                $node
-//            );
-//        }
-//
-//        if ($node instanceof Node\Stmt\ClassMethod) {
-//            $classWithMethod = $this->classAndMethodMatcher->matchClassWithMethod($message);
-//            $localMethod = $this->classAndMethodMatcher->matchLocalMethod($message);
-//
-//            $className = $node->getAttribute(Attribute::CLASS_NODE)->namespacedName->toString();
-//            $methodName = (string) $node->name . '()';
-//            $fqnMethodName = $className . '::' . $methodName;
-//
-//            if ($classWithMethod === '' && $localMethod === '') {
-//                return $this->rectorGuessFactory->createRemoval($message, $node);
-//            }
-//
-//            if ($localMethod) {
-//                return $this->rectorGuessFactory->createRemoval(
-//                    $fqnMethodName . ' => ' . $className . '::' . $localMethod . '()' . $message,
-//                    $node
-//                );
-//            }
-//
-//            $namespacedClassWithMethod = $this->classAndMethodMatcher->matchNamespacedClassWithMethod($message);
-//
-//            /** @var string[] $useStatements */
-//            $useStatements = $node->getAttribute(Attribute::USE_STATEMENTS);
-//            $fqnClassWithMethod = $this->completeNamespace($useStatements, $namespacedClassWithMethod);
-//
-//            return $this->rectorGuessFactory->createRemoval(
-//                $fqnMethodName . '=> ' . $fqnClassWithMethod,
-//                $node
-//            );
-//        }
-//
-//        throw new NotImplementedException(sprintf(
-//            '%s() was unable to create a Deprecation based on "%s" string and "%s" Node. Create a new method there.',
-//            __METHOD__,
-//            $message,
-//            get_class($node)
-//        ));
-//    }
+    private function guess(string $message, Node $node): ?RectorGuess
+    {
+        // @todo: per node resolver...
+        if ($node instanceof Class_) {
+            return $this->rectorGuessFactory->createClassReplacer(
+                $node->namespacedName->toString(),
+                $message,
+                $node
+            );
+        }
+
+        if ($node instanceof Node\Stmt\ClassMethod) {
+            $classWithMethod = $this->classAndMethodMatcher->matchClassWithMethod($message);
+            $localMethod = $this->classAndMethodMatcher->matchLocalMethod($message);
+
+            $className = $node->getAttribute(Attribute::CLASS_NODE)->namespacedName->toString();
+            $methodName = (string) $node->name . '()';
+            $fqnMethodName = $className . '::' . $methodName;
+
+            if ($classWithMethod === '' && $localMethod === '') {
+                return $this->rectorGuessFactory->createRemoval($message, $node);
+            }
+
+            if ($localMethod) {
+                return $this->rectorGuessFactory->createRemoval(
+                    $fqnMethodName . ' => ' . $className . '::' . $localMethod . '()' . $message,
+                    $node
+                );
+            }
+
+            $namespacedClassWithMethod = $this->classAndMethodMatcher->matchNamespacedClassWithMethod($message);
+
+            /** @var string[] $useStatements */
+            $useStatements = $node->getAttribute(Attribute::USE_STATEMENTS);
+            $fqnClassWithMethod = $this->completeNamespace($useStatements, $namespacedClassWithMethod);
+
+            return $this->rectorGuessFactory->createRemoval(
+                $fqnMethodName . '=> ' . $fqnClassWithMethod,
+                $node
+            );
+        }
+
+        throw new NotImplementedException(sprintf(
+            '%s() was unable to create a Deprecation based on "%s" string and "%s" Node. Create a new method there.',
+            __METHOD__,
+            $message,
+            get_class($node)
+        ));
+    }
 
     /**
      * @param string[] $useStatements

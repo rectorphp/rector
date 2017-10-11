@@ -9,48 +9,28 @@ use Rector\Rector\Dynamic\MethodNameReplacerRector;
 
 final class RectorGuessFactory
 {
-    public function createRemoval(string $message, Node $node): RectorGuess
+    public function createClassReplacer(string $message, Node $node): RectorGuess
     {
-        return new RectorGuess(
-            RectorGuess::TYPE_REMOVAL,
-            $node,
-            $message
-        );
-    }
-
-    public function createClassReplacer(string $className, string $message, Node $node): RectorGuess
-    {
-        return new RectorGuess(
-            ClassReplacerRector::class,
-            $node,
-            $className . ' - ' . $message
-        );
+        return new RectorGuess(ClassReplacerRector::class, $node, $message);
     }
 
     public function createMethodNameReplacerGuess(string $message, Node $node): RectorGuess
     {
-        return new RectorGuess(
-            MethodNameReplacerRector::class,
-            $node,
-            $message
-        );
+        return new RectorGuess(MethodNameReplacerRector::class, $node, $message);
     }
 
     public function createNewArgument(string $message, Node $node): RectorGuess
     {
-        return new RectorGuess(
-            MethodArgumentChangerRector::class,
-            $node,
-            $message
-        );
+        return new RectorGuess(MethodArgumentChangerRector::class, $node, $message);
+    }
+
+    public function createRemoval(string $message, Node $node): RectorGuess
+    {
+        return new RectorGuess(RectorGuess::TYPE_REMOVAL, $node, $message);
     }
 
     public function createUnsupported(string $message, Node $node): RectorGuess
     {
-        return new RectorGuess(
-            RectorGuess::TYPE_UNSUPPORTED,
-            $node,
-            $message
-        );
+        return new RectorGuess(RectorGuess::TYPE_UNSUPPORTED, $node, $message);
     }
 }

@@ -11,11 +11,11 @@ final class UnsupportedDeprecationFilter
      * @var string[]
      */
     private $yamlDeprecationMessages = [
-        'Autowiring-types are deprecated since',
+        'Autowiring-types are deprecated',
         'The "=" suffix that used to disable strict references',
         'The XmlFileLoader will raise an exception in Symfony 4.0, instead of silently ignoring unsupported',
-        'The "strict" attribute used when referencing the "" service is deprecated since version 3.3 and will be removed in 4.0.',
-        'Service names that start with an underscore are deprecated since Symfony 3.3 and will be reserved in 4.0',
+        'The "strict" attribute used when referencing the "" service is deprecated',
+        'Service names that start with an underscore are deprecated',
         'configuration key',
     ];
 
