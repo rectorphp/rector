@@ -1,3 +1,7 @@
 rectors:
     Rector\Rector\Dynamic\ClassReplacerRector:
         'PHPUnit_Framework_TestCase': 'PHPUnit\Framework\TestCase'
+
+    # ref. https://github.com/sebastianbergmann/phpunit/compare/5.7.9...6.0.0
+    Rector\Rector\Dynamic\NamespaceReplacerRector:
+        'PHPUnit_Framework_': 'PHPUnit\Framework\'
