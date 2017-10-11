@@ -3,7 +3,7 @@
 namespace Rector\BetterReflection\Reflector;
 
 use Rector\BetterReflection\SourceLocator\SourceLocatorFactory;
-use Roave\BetterReflection\Reflector\ClassReflector;
+use Rector\BetterReflection\Reflector\ClassReflector;
 use SplFileInfo;
 
 final class ClassReflectorFactory

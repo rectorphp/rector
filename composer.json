@@ -8,10 +8,9 @@
     ],
     "require": {
         "php": "^7.1",
-        "cweagans/composer-patches": "^1.6",
         "nette/utils": "^2.4",
         "nikic/php-parser": "4.0.x-dev#ed8a744c as 3.1.1",
-        "roave/better-reflection": "^2.0",
+        "rector/better-reflection": "^3.0",
         "symfony/console": "^3.3",
         "symfony/dependency-injection": "^3.3",
         "symplify/package-builder": "^2.5"
@@ -60,16 +59,5 @@
     },
     "config": {
         "sort-packages": true
-    },
-    "extra": {
-        "patches": {
-            "roave/better-reflection": {
-                "nikic/php-parser dev-version 1": "patches/better-reflection-php-parser-memoizing-parser.patch",
-                "nikic/php-parser dev-version 2": "patches/better-reflection-php-parser-reflection-function-abstract.patch",
-                "nikic/php-parser dev-version 3": "patches/better-reflection-php-parser-reflection-parameter.patch",
-                "nikic/php-parser dev-version 4": "patches/better-reflection-php-parser-reflection-class-get-short-name.patch",
-                "nikic/php-parser dev-version 5": "patches/better-reflection-php-parser-reflection-property.patch"
-            }
-        }
     }
 }

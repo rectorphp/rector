@@ -6,4 +6,4 @@ services:
         resource: '../../src'
 
     # nikic\PHP-Parser
-    Roave\BetterReflection\SourceLocator\Ast\Locator: ~
+    Rector\BetterReflection\SourceLocator\Ast\Locator: ~

@@ -10,9 +10,9 @@ use Rector\NodeTraverser\RectorNodeTraverser;
 use Rector\NodeTraverser\ShutdownNodeTraverser;
 use Rector\NodeTraverser\StandaloneTraverseNodeTraverser;
 use Rector\NodeTraverserQueue\Exception\FileProcessingException;
-use Roave\BetterReflection\Reflection\ReflectionClass;
-use Roave\BetterReflection\Reflection\ReflectionFunction;
-use Roave\BetterReflection\Reflector\Exception\IdentifierNotFound;
+use Rector\BetterReflection\Reflection\ReflectionClass;
+use Rector\BetterReflection\Reflection\ReflectionFunction;
+use Rector\BetterReflection\Reflector\Exception\IdentifierNotFound;
 use SplFileInfo;
 use Throwable;
 

@@ -3,8 +3,8 @@
 namespace Rector\BetterReflection\Reflector;
 
 use Nette\Utils\Strings;
-use Roave\BetterReflection\Reflection\ReflectionMethod;
-use Roave\BetterReflection\Reflector\Exception\IdentifierNotFound;
+use Rector\BetterReflection\Reflection\ReflectionMethod;
+use Rector\BetterReflection\Reflector\Exception\IdentifierNotFound;
 use TypeError;
 
 final class MethodReflector

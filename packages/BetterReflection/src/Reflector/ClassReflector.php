@@ -3,7 +3,7 @@
 namespace Rector\BetterReflection\Reflector;
 
 use Rector\FileSystem\CurrentFileProvider;
-use Roave\BetterReflection\Reflection\ReflectionClass;
+use Rector\BetterReflection\Reflection\ReflectionClass;
 use SplFileInfo;
 
 final class ClassReflector
