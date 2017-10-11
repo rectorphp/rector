@@ -1,4 +1,6 @@
 rectors:
+    Rector\Rector\Contrib\PHPUnit\ExceptionRector: ~
+
     Rector\Rector\Dynamic\ClassReplacerRector:
         'PHPUnit_Framework_TestCase': 'PHPUnit\Framework\TestCase'
 
