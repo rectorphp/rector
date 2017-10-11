@@ -2,10 +2,11 @@
 
 namespace Rector\BetterReflection\Tests\Reflector;
 
+use Rector\BetterReflection\Reflector\ClassReflector;
 use Rector\BetterReflection\Reflector\ClassReflectorFactory;
 use Rector\Tests\AbstractContainerAwareTestCase;
 use Rector\BetterReflection\Reflection\ReflectionClass;
-use Rector\BetterReflection\Reflector\ClassReflector;
+use Rector\BetterReflection\Reflector\SmartClassReflector;
 use SplFileInfo;
 
 final class ClassReflectorOnSourceTest extends AbstractContainerAwareTestCase
@@ -16,7 +17,7 @@ final class ClassReflectorOnSourceTest extends AbstractContainerAwareTestCase
     private $currentProcessedFileInfo;
 
     /**
-     * @var ClassReflector
+     * @var SmartClassReflector
      */
     private $currentFileAwareClassReflector;
 

@@ -3,7 +3,6 @@
 namespace Rector\BetterReflection\Reflector;
 
 use Rector\BetterReflection\SourceLocator\SourceLocatorFactory;
-use Rector\BetterReflection\Reflector\ClassReflector;
 use SplFileInfo;
 
 final class ClassReflectorFactory

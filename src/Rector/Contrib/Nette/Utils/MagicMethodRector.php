@@ -5,7 +5,7 @@ namespace Rector\Rector\Contrib\Nette\Utils;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
-use Rector\BetterReflection\Reflector\ClassReflector;
+use Rector\BetterReflection\Reflector\SmartClassReflector;
 use Rector\Builder\MethodBuilder;
 use Rector\Node\Attribute;
 use Rector\NodeAnalyzer\DocBlockAnalyzer;
@@ -39,7 +39,7 @@ final class MagicMethodRector extends AbstractRector
     private $docBlockAnalyzer;
 
     /**
-     * @var ClassReflector
+     * @var SmartClassReflector
      */
     private $classReflector;
 
@@ -51,7 +51,7 @@ final class MagicMethodRector extends AbstractRector
     public function __construct(
         MethodBuilder $methodBuilder,
         DocBlockAnalyzer $docBlockAnalyzer,
-        ClassReflector $classReflector,
+        SmartClassReflector $classReflector,
         MagicMethodMatcher $magicMethodMatcher
     ) {
         $this->methodBuilder = $methodBuilder;
