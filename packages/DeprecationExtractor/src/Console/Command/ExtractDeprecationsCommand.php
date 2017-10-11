@@ -78,20 +78,20 @@ final class ExtractDeprecationsCommand extends Command
 
         $this->symfonyStyle->title(sprintf(
             'Found %d deprecations',
-            count($this->deprecationCollector->getDeprecationAnnotations())
-            + count($this->deprecationCollector->getDeprecationTriggerErrors())
+            count($this->deprecationCollector->getDeprecations())
         ));
 
-        $guessedRectors = array_merge(
-            $this->rectorGuesser->guessForAnnotations(
-                $this->deprecationCollector->getDeprecationAnnotations()
-            ),
-            $this->rectorGuesser->guessForTriggerErrors(
-                $this->deprecationCollector->getDeprecationTriggerErrors()
-            )
-        );
+        /** @var RectorGuess[] $guessedRectors */
+        $guessedRectors = [];
+        $deprecations = $this->deprecationCollector->getDeprecations();
 
-        /** @var RectorGuess $guessedRector */
+        foreach ($deprecations as $deprecation) {
+            $guessedRectors[] = $this->rectorGuesser->guessFromMessageAndNode(
+                $deprecation['message'],
+                $deprecation['node']
+            );
+        }
+
         foreach ($guessedRectors as $guessedRector) {
             if ($this->shouldSkipGuessedRector($guessedRector)) {
                 continue;

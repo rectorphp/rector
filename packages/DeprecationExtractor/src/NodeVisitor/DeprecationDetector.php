@@ -60,6 +60,9 @@ final class DeprecationDetector extends NodeVisitorAbstract
             $argNode = $node->args[0];
 
             $message = $this->nodeValueResolver->resolve($argNode);
+            if ($message === null) {
+                return;
+            }
 
             $this->deprecationCollector->addDeprecation($message, $node);
 

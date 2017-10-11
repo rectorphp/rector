@@ -23,7 +23,7 @@ final class ArgValueResolver implements PerNodeValueResolverInterface, NodeValue
     /**
      * @param Arg $argNode
      */
-    public function resolve(Node $argNode): string
+    public function resolve(Node $argNode): ?string
     {
         return $this->nodeValueResolver->resolve($argNode->value);
     }
