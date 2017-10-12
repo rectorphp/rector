@@ -37,7 +37,7 @@ final class MethodArgumentAnalyzer
 
     public function isMethodFirstArgumentString(Node $node): bool
     {
-        if(! $this->hasMethodFirstArgument($node)) {
+        if (! $this->hasMethodFirstArgument($node)) {
             return false;
         }
 

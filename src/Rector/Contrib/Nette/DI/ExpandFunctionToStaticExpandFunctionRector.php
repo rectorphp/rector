@@ -45,7 +45,8 @@ final class ExpandFunctionToStaticExpandFunctionRector extends AbstractRector
             return false;
         }
 
-        if (! $this->methodCallAnalyzer->isMethodCallMethod($node, 'expand') || $this->methodArgumentAnalyzer->isMethodFirstArgumentString($node)) {
+        if (! $this->methodCallAnalyzer->isMethodCallMethod($node, 'expand')
+            || $this->methodArgumentAnalyzer->isMethodFirstArgumentString($node)) {
             return false;
         }
 
