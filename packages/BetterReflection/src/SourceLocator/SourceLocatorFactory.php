@@ -2,7 +2,6 @@
 
 namespace Rector\BetterReflection\SourceLocator;
 
-use Rector\Exception\FileSystem\FileNotFoundException;
 use Rector\BetterReflection\SourceLocator\Ast\Locator;
 use Rector\BetterReflection\SourceLocator\Type\AggregateSourceLocator;
 use Rector\BetterReflection\SourceLocator\Type\AutoloadSourceLocator;
@@ -11,6 +10,7 @@ use Rector\BetterReflection\SourceLocator\Type\MemoizingSourceLocator;
 use Rector\BetterReflection\SourceLocator\Type\PhpInternalSourceLocator;
 use Rector\BetterReflection\SourceLocator\Type\SingleFileSourceLocator;
 use Rector\BetterReflection\SourceLocator\Type\SourceLocator;
+use Rector\Exception\FileSystem\FileNotFoundException;
 use SplFileInfo;
 
 final class SourceLocatorFactory

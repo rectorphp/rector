@@ -2,11 +2,11 @@
 
 namespace Rector\BetterReflection\Tests\Reflector;
 
+use Rector\BetterReflection\Reflection\ReflectionClass;
 use Rector\BetterReflection\Reflector\ClassReflector;
 use Rector\BetterReflection\Reflector\ClassReflectorFactory;
-use Rector\Tests\AbstractContainerAwareTestCase;
-use Rector\BetterReflection\Reflection\ReflectionClass;
 use Rector\BetterReflection\Reflector\SmartClassReflector;
+use Rector\Tests\AbstractContainerAwareTestCase;
 use SplFileInfo;
 
 final class ClassReflectorOnSourceTest extends AbstractContainerAwareTestCase

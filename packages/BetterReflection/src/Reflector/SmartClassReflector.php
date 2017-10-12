@@ -2,8 +2,8 @@
 
 namespace Rector\BetterReflection\Reflector;
 
-use Rector\FileSystem\CurrentFileProvider;
 use Rector\BetterReflection\Reflection\ReflectionClass;
+use Rector\FileSystem\CurrentFileProvider;
 use SplFileInfo;
 use TypeError;
 
@@ -45,7 +45,6 @@ final class SmartClassReflector
             }
 
             return $this->classReflector->reflect($className);
-
         } catch (TypeError $typeError) {
             return null;
         }
