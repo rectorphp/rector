@@ -9,10 +9,11 @@ This tool will **upgrade your application** for you.
 
 At the moment these packages are supported:
 
-- [Nette](/src/Rector/Contrib/Nette)
-- [Symfony](/src/Rector/Contrib/Symfony)
-- [PHPUnit](/src/Rector/Contrib/PHPUnit)
-- [PHP_CodeSniffer](/src/Rector/Contrib/PHP_CodeSniffer)
+- [Nette](/src/config/level/nette)
+- [PHP_CodeSniffer](/src/config/level/php-code-sniffer)
+- [PHPUnit](/src/config/level/phpunit)
+- [Roave](/src/config/level/roave)
+- [Symfony](/src/config/level/symfony)
 
 
 ## Install
