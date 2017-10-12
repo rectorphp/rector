@@ -3,11 +3,11 @@
 namespace Rector\Rector\Contrib\Nette\DI;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\StaticCall;
 use Rector\Node\Attribute;
 use Rector\NodeAnalyzer\MethodArgumentAnalyzer;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
@@ -22,7 +22,6 @@ use Rector\Rector\AbstractRector;
  */
 final class ExpandFunctionToStaticExpandFunctionRector extends AbstractRector
 {
-
     /**
      * @var MethodCallAnalyzer
      */
@@ -68,9 +67,8 @@ final class ExpandFunctionToStaticExpandFunctionRector extends AbstractRector
                 new PropertyFetch(
                     $methodCallNode->var,
                     'parameters'
-                )
+                ),
             ]
         );
     }
-
 }

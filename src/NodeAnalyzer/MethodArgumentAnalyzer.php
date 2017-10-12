@@ -9,21 +9,13 @@ use PhpParser\Node\Scalar\String_;
 
 final class MethodArgumentAnalyzer
 {
-
-    /**
-     * Checks "$this->specificNameMethod()"
-     */
-    public function isMethodFirstArgumentString(Node $node): bool
+    public function hasMethodFirstArgument(Node $node): bool
     {
         if (! $node instanceof MethodCall) {
             return false;
         }
 
         if (! isset($node->args[0]) || ! $node->args[0] instanceof Arg) {
-            return false;
-        }
-
-        if (! $node->args[0]->value instanceof String_) {
             return false;
         }
 
@@ -37,6 +29,19 @@ final class MethodArgumentAnalyzer
         }
 
         if (count($node->args) < 2) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function isMethodFirstArgumentString(Node $node): bool
+    {
+        if(! $this->hasMethodFirstArgument($node)) {
+            return false;
+        }
+
+        if (! $node->args[0]->value instanceof String_) {
             return false;
         }
 

@@ -23,7 +23,6 @@ use Rector\Rector\AbstractRector;
  */
 final class ExpandFunctionToParametersArrayRector extends AbstractRector
 {
-
     /**
      * @var MethodCallAnalyzer
      */
@@ -47,7 +46,9 @@ final class ExpandFunctionToParametersArrayRector extends AbstractRector
             return false;
         }
 
-        if (! $this->methodCallAnalyzer->isMethodCallMethod($node, 'expand') || ! $this->methodArgumentAnalyzer->isMethodFirstArgumentString($node)) {
+        if (! $this->methodCallAnalyzer->isMethodCallMethod($node, 'expand')
+            || ! $this->methodArgumentAnalyzer->isMethodFirstArgumentString($node)
+        ) {
             return false;
         }
 
@@ -72,5 +73,4 @@ final class ExpandFunctionToParametersArrayRector extends AbstractRector
             $argument
         );
     }
-
 }
