@@ -2,11 +2,12 @@
 
 namespace Rector\BetterReflection\Reflector;
 
+use Rector\BetterReflection\Reflection\ReflectionClass;
 use Rector\FileSystem\CurrentFileProvider;
-use Roave\BetterReflection\Reflection\ReflectionClass;
 use SplFileInfo;
+use TypeError;
 
-final class ClassReflector
+final class SmartClassReflector
 {
     /**
      * @var ClassReflectorFactory
@@ -19,7 +20,7 @@ final class ClassReflector
     private $currentFileProvider;
 
     /**
-     * @var ClassReflector
+     * @var SmartClassReflector
      */
     private $classReflector;
 
@@ -36,13 +37,17 @@ final class ClassReflector
         $this->currentFileProvider = $currentFileProvider;
     }
 
-    public function reflect(string $className): ReflectionClass
+    public function reflect(string $className): ?ReflectionClass
     {
-        if ($this->shouldCreateNewClassReflector()) {
-            $this->createNewClassReflector();
-        }
+        try {
+            if ($this->shouldCreateNewClassReflector()) {
+                $this->createNewClassReflector();
+            }
 
-        return $this->classReflector->reflect($className);
+            return $this->classReflector->reflect($className);
+        } catch (TypeError $typeError) {
+            return null;
+        }
     }
 
     private function createNewClassReflector(): void

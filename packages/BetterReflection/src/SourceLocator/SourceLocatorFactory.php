@@ -2,15 +2,15 @@
 
 namespace Rector\BetterReflection\SourceLocator;
 
+use Rector\BetterReflection\SourceLocator\Ast\Locator;
+use Rector\BetterReflection\SourceLocator\Type\AggregateSourceLocator;
+use Rector\BetterReflection\SourceLocator\Type\AutoloadSourceLocator;
+use Rector\BetterReflection\SourceLocator\Type\EvaledCodeSourceLocator;
+use Rector\BetterReflection\SourceLocator\Type\MemoizingSourceLocator;
+use Rector\BetterReflection\SourceLocator\Type\PhpInternalSourceLocator;
+use Rector\BetterReflection\SourceLocator\Type\SingleFileSourceLocator;
+use Rector\BetterReflection\SourceLocator\Type\SourceLocator;
 use Rector\Exception\FileSystem\FileNotFoundException;
-use Roave\BetterReflection\SourceLocator\Ast\Locator;
-use Roave\BetterReflection\SourceLocator\Type\AggregateSourceLocator;
-use Roave\BetterReflection\SourceLocator\Type\AutoloadSourceLocator;
-use Roave\BetterReflection\SourceLocator\Type\EvaledCodeSourceLocator;
-use Roave\BetterReflection\SourceLocator\Type\MemoizingSourceLocator;
-use Roave\BetterReflection\SourceLocator\Type\PhpInternalSourceLocator;
-use Roave\BetterReflection\SourceLocator\Type\SingleFileSourceLocator;
-use Roave\BetterReflection\SourceLocator\Type\SourceLocator;
 use SplFileInfo;
 
 final class SourceLocatorFactory

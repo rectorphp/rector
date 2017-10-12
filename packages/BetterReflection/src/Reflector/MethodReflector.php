@@ -2,19 +2,17 @@
 
 namespace Rector\BetterReflection\Reflector;
 
-use Nette\Utils\Strings;
-use Roave\BetterReflection\Reflection\ReflectionMethod;
-use Roave\BetterReflection\Reflector\Exception\IdentifierNotFound;
-use TypeError;
+use Rector\BetterReflection\Reflection\ReflectionMethod;
+use Rector\BetterReflection\Reflector\Exception\IdentifierNotFound;
 
 final class MethodReflector
 {
     /**
-     * @var ClassReflector
+     * @var SmartClassReflector
      */
     private $classReflector;
 
-    public function __construct(ClassReflector $classReflector)
+    public function __construct(SmartClassReflector $classReflector)
     {
         $this->classReflector = $classReflector;
     }
@@ -26,11 +24,10 @@ final class MethodReflector
         } catch (IdentifierNotFound $identifierNotFoundException) {
             // class doesn't exist
             return null;
-        } catch (TypeError $typeError) {
-            // temp bug workaround
-            if (Strings::contains($typeError->getMessage(), 'SourceStubber::addDocComment()')) {
-                return null;
-            }
+        }
+
+        if ($classReflection === null) {
+            return null;
         }
 
         return $classReflection->getImmediateMethods()[$method] ?? null;
