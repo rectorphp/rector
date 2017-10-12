@@ -6,7 +6,9 @@ use Nette\NotImplementedException;
 use PhpParser\BuilderHelpers;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\ClassConstFetch;
@@ -225,6 +227,21 @@ final class NodeFactory
         $methodCallNode->args = $arguments;
 
         return $methodCallNode;
+    }
+
+    /**
+     * Creates:
+     * - $variable->property['key'];
+     */
+    public function createVariablePropertyArrayFetch(
+        Expr $exprNode,
+        string $propertyName,
+ String_ $keyNode
+    ): ArrayDimFetch {
+        return new ArrayDimFetch(
+            new PropertyFetch($exprNode, new Identifier($propertyName)),
+            $keyNode
+        );
     }
 
     private function createInternalConstant(string $value): ConstFetch

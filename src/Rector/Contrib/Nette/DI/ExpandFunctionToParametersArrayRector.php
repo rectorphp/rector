@@ -4,20 +4,20 @@ namespace Rector\Rector\Contrib\Nette\DI;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
-use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Identifier;
 use Rector\Node\Attribute;
 use Rector\NodeAnalyzer\MethodArgumentAnalyzer;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
+use Rector\NodeFactory\NodeFactory;
 use Rector\Rector\AbstractRector;
 
 /**
  * Covers https://github.com/Kdyby/Doctrine/pull/298/files
+ *
  * From:
  * $builder->expand('argument');
  * $builder->expand('%argument%');
+ *
  * To:
  * $builder->parameters['argument'];
  */
@@ -33,10 +33,19 @@ final class ExpandFunctionToParametersArrayRector extends AbstractRector
      */
     private $methodArgumentAnalyzer;
 
-    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, MethodArgumentAnalyzer $methodArgumentAnalyzer)
-    {
+    /**
+     * @var NodeFactory
+     */
+    private $nodeFactory;
+
+    public function __construct(
+        MethodCallAnalyzer $methodCallAnalyzer,
+        MethodArgumentAnalyzer $methodArgumentAnalyzer,
+        NodeFactory $nodeFactory
+    ) {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->methodArgumentAnalyzer = $methodArgumentAnalyzer;
+        $this->nodeFactory = $nodeFactory;
     }
 
     public function isCandidate(Node $node): bool
@@ -46,9 +55,11 @@ final class ExpandFunctionToParametersArrayRector extends AbstractRector
             return false;
         }
 
-        if (! $this->methodCallAnalyzer->isMethodCallMethod($node, 'expand')
-            || ! $this->methodArgumentAnalyzer->isMethodFirstArgumentString($node)
-        ) {
+        if (! $this->methodCallAnalyzer->isMethodCallMethod($node, 'expand')) {
+            return false;
+        }
+
+        if (! $this->methodArgumentAnalyzer->isMethodFirstArgumentString($node)) {
             return false;
         }
 
@@ -62,14 +73,13 @@ final class ExpandFunctionToParametersArrayRector extends AbstractRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
+        /** @var Node\Scalar\String_ $argument */
         $argument = $methodCallNode->args[0]->value;
         $argument->value = Strings::trim($argument->value, '%');
 
-        return new ArrayDimFetch(
-            new PropertyFetch(
-                $methodCallNode->var,
-                new Identifier('parameters')
-            ),
+        return $this->nodeFactory->createVariablePropertyArrayFetch(
+            $methodCallNode->var,
+            'parameters',
             $argument
         );
     }
