@@ -236,7 +236,7 @@ final class NodeFactory
     public function createVariablePropertyArrayFetch(
         Expr $exprNode,
         string $propertyName,
- String_ $keyNode
+        String_ $keyNode
     ): ArrayDimFetch {
         return new ArrayDimFetch(
             new PropertyFetch($exprNode, new Identifier($propertyName)),
