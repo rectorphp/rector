@@ -5,6 +5,11 @@ namespace Rector\DeprecationExtractor\RectorGuess;
 final class RectorGuessFilter
 {
     /**
+     * @var float
+     */
+    private const MAX_RELATIVE_SIMIARITY = 0.05;
+
+    /**
      * @param RectorGuess[] $rectorGuesses
      * @return RectorGuess[]
      */
@@ -39,10 +44,12 @@ final class RectorGuessFilter
 
         $filteredGuessedRectors = [];
         foreach ($rectorGuesses as $rectorGuess) {
+            $maxSimilarity = strlen($rectorGuess->getMessage()) * self::MAX_RELATIVE_SIMIARITY;
+
             foreach ($allMessages as $message) {
-                // experimental; maybe count from message length?
+                // experimental
                 $levenshtein = levenshtein($rectorGuess->getMessage(), $message);
-                if ($levenshtein !== 0 && $levenshtein < 10) {
+                if ($levenshtein !== 0 && $levenshtein < $maxSimilarity) {
                     continue 2;
                 }
             }
