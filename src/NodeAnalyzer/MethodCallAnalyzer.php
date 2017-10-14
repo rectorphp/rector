@@ -42,6 +42,19 @@ final class MethodCallAnalyzer
 
     /**
      * Checks "SomeClassOfSpecificType::specificMethodName()"
+     */
+    public function isStaticMethodCallTypeAndMethod(Node $node, string $type, string $method): bool
+    {
+        if (! $this->isStaticMethodCallType($node, $type)) {
+            return false;
+        }
+
+        /** @var StaticCall $node */
+        return (string) $node->name === $method;
+    }
+
+    /**
+     * Checks "SomeClassOfSpecificType::specificMethodName()"
      *
      * @param string[] $methodNames
      */

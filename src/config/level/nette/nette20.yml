@@ -4,3 +4,5 @@ rectors:
         'Image': 'Nette\Image'
     Rector\Rector\Contrib\Nette\Routing\BootstrapToRouterFactoryRector: ~
     Rector\Rector\Contrib\Nette\Routing\CleanupBootstrapToRouterFactoryRector: ~
+
+    Rector\Rector\Contrib\Nette\Environment\GetServiceToConstructorInjectionRector: ~
