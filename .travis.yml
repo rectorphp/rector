@@ -15,8 +15,6 @@ script:
   # check coding standard (defined in composer.json "scripts" section)
   # if this fails, run "composer fix-cs" to fix all fixable issues
   - composer check-cs
-  # check with phpstan (defined in composer.json "scripts" section)
-  - composer phpstan
   # try on test projects
   - composer process-test-projects
 
