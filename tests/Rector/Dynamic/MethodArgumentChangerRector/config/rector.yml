@@ -1,0 +1,8 @@
+rectors:
+    Rector\Rector\Dynamic\MethodArgumentChangerRector:
+        -
+            class: Symfony\Component\DependencyInjection\ContainerBuilder
+            method: compile
+            position: 1
+            type: added
+            default_value: false
