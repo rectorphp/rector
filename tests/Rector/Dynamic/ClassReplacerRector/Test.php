@@ -2,62 +2,34 @@
 
 namespace Rector\Tests\Rector\Dynamic\ClassReplacerRector;
 
-use PHPUnit\Framework\Assert;
-use PHPUnit\Framework\TestCase;
-use Rector\Application\FileProcessor;
-use Rector\DependencyInjection\ContainerFactory;
 use Rector\Rector\Dynamic\ClassReplacerRector;
-use SplFileInfo;
+use Rector\Testing\PHPUnit\AbstractConfigurableRectorTestCase;
 
-final class Test extends TestCase
+final class Test extends AbstractConfigurableRectorTestCase
 {
-    /**
-     * @var ClassReplacerRector
-     */
-    private $classReplacerRector;
-
-    /**
-     * @var FileProcessor
-     */
-    private $fileProcessor;
-
-    protected function setUp(): void
+    public function test(): void
     {
-        $container = (new ContainerFactory)->createWithConfig(
-            __DIR__ . '/config/rector.yml'
+        $this->doTestFileMatchesExpectedContent(
+            __DIR__ . '/wrong/wrong.php.inc',
+            __DIR__ . '/correct/correct.php.inc'
         );
 
-        $this->fileProcessor = $container->get(FileProcessor::class);
-        $this->classReplacerRector = $container->get(ClassReplacerRector::class);
-    }
-
-    public function testConfiguration(): void
-    {
-        $oldToNewClasses = Assert::getObjectAttribute($this->classReplacerRector, 'oldToNewClasses');
-        $this->assertNotSame([], $oldToNewClasses);
-    }
-
-    /**
-     * @dataProvider provideTestFiles()
-     */
-    public function testProcessing(string $testedFile, string $expectedFile): void
-    {
-        $refactoredFileContent = $this->fileProcessor->processFileWithRectorsToString(
-            new SplFileInfo($testedFile),
-            [ClassReplacerRector::class]
+        $this->doTestFileMatchesExpectedContent(
+            __DIR__ . '/wrong/wrong2.php.inc',
+            __DIR__ . '/correct/correct2.php.inc'
         );
+    }
 
-        $this->assertStringEqualsFile($expectedFile, $refactoredFileContent);
+    protected function provideConfig(): string
+    {
+        return __DIR__ . '/config/rector.yml';
     }
 
     /**
-     * @return string[][]
+     * @return string[]
      */
-    public function provideTestFiles(): array
+    protected function getRectorClasses(): array
     {
-        return [
-            [__DIR__ . '/wrong/wrong.php.inc', __DIR__ . '/correct/correct.php.inc'],
-            [__DIR__ . '/wrong/wrong2.php.inc', __DIR__ . '/correct/correct2.php.inc'],
-        ];
+        return [ClassReplacerRector::class];
     }
 }

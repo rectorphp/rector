@@ -2,49 +2,34 @@
 
 namespace Rector\Tests\Rector\Dynamic\MethodArgumentChangerRector;
 
-use PHPUnit\Framework\TestCase;
-use Rector\Application\FileProcessor;
-use Rector\DependencyInjection\ContainerFactory;
 use Rector\Rector\Dynamic\MethodArgumentChangerRector;
-use SplFileInfo;
+use Rector\Testing\PHPUnit\AbstractConfigurableRectorTestCase;
 
-final class Test extends TestCase
+final class Test extends AbstractConfigurableRectorTestCase
 {
-    /**
-     * @var FileProcessor
-     */
-    private $fileProcessor;
-
-    protected function setUp(): void
+    protected function provideConfig(): string
     {
-        $container = (new ContainerFactory)->createWithConfig(
-            __DIR__ . '/config/rector.yml'
+        return __DIR__ . '/config/rector.yml';
+    }
+
+    public function test(): void
+    {
+        $this->doTestFileMatchesExpectedContent(
+            __DIR__ . '/wrong/wrong.php.inc',
+            __DIR__ . '/correct/correct.php.inc'
         );
 
-        $this->fileProcessor = $container->get(FileProcessor::class);
+        $this->doTestFileMatchesExpectedContent(
+            __DIR__ . '/wrong/wrong2.php.inc',
+            __DIR__ . '/correct/correct2.php.inc'
+        );
     }
 
     /**
-     * @dataProvider provideTestFiles()
+     * @return string[]
      */
-    public function testProcessing(string $testedFile, string $expectedFile): void
+    protected function getRectorClasses(): array
     {
-        $refactoredFileContent = $this->fileProcessor->processFileWithRectorsToString(
-            new SplFileInfo($testedFile),
-            [MethodArgumentChangerRector::class]
-        );
-
-        $this->assertStringEqualsFile($expectedFile, $refactoredFileContent);
-    }
-
-    /**
-     * @return string[][]
-     */
-    public function provideTestFiles(): array
-    {
-        return [
-            [__DIR__ . '/wrong/wrong.php.inc', __DIR__ . '/correct/correct.php.inc'],
-            [__DIR__ . '/wrong/wrong2.php.inc', __DIR__ . '/correct/correct2.php.inc'],
-        ];
+        return [MethodArgumentChangerRector::class];
     }
 }
