@@ -12,6 +12,7 @@ rectors:
             class: Symfony\Component\DependencyInjection\Compiler\ServiceReferenceGraph
             method: connect
             position: 6
+            type: added
             default_value: false
 
 
@@ -36,7 +37,7 @@ rectors:
         'Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\ConfigCachePass': 'Symfony\Component\Config\DependencyInjection\ConfigCachePass'
         'Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\PropertyInfoPass': 'Symfony\Component\PropertyInfo\DependencyInjection\PropertyInfoPass'
 
-    MethodNameReplacerRector:
+    Rector\Rector\Dynamic\MethodNameReplacerRector:
         # dependency-injection
         'Symfony\Component\DependencyInjection\Container':
             'isFrozen': 'isCompiled'
