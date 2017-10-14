@@ -47,27 +47,12 @@ final class MethodArgumentChangerRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        $this->activeMethodChange = null;
-
-        if (! $node instanceof MethodCall) {
-            return false;
-        }
-
-        foreach ($this->methodChanges as $methodChange) {
-            if ($this->methodCallAnalyzer->isMethodCallTypeAndMethod(
-                $node,
-                $methodChange->getClass(),
-                $methodChange->getMethod()
-            )) {
-                $this->activeMethodChange = $methodChange;
-                break;
-            }
-        }
-
+        $this->activeMethodChange = $this->resolveMethodChangeForNode($node);
         if ($this->activeMethodChange === null) {
             return false;
         }
 
+        /** @var MethodCall $node */
         if ($this->activeMethodChange->getType() === MethodChange::TYPE_ADDED) {
             $argumentCount = count($node->args);
 
@@ -102,5 +87,29 @@ final class MethodArgumentChangerRector extends AbstractRector
         $methodCallNode->args = $arguments;
 
         return $methodCallNode;
+    }
+
+    private function resolveMethodChangeForNode(Node $node): ?MethodChange
+    {
+        if (! $node instanceof MethodCall) {
+            return null;
+        }
+
+        foreach ($this->methodChanges as $methodChange) {
+            if ($this->matchesMethodChange($node, $methodChange)) {
+                return $methodChange;
+            }
+        }
+
+        return null;
+    }
+
+    private function matchesMethodChange(Node $node, MethodChange $methodChange): bool
+    {
+        return $this->methodCallAnalyzer->isMethodCallTypeAndMethod(
+            $node,
+            $methodChange->getClass(),
+            $methodChange->getMethod()
+        );
     }
 }
