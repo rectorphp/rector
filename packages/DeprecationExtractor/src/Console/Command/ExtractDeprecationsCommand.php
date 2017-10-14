@@ -77,22 +77,60 @@ final class ExtractDeprecationsCommand extends Command
             $input->getArgument(self::ARGUMENT_SOURCE_NAME)
         );
 
+        $guessedRectors = $this->rectorGuesser->guessForDeprecations($this->deprecationCollector->getDeprecations());
+        $guessedRectors = $this->filterOutUsefulGuessedRectors($guessedRectors);
+        $guessedRectors = $this->filterOutDuplicatedGuessedRectors($guessedRectors);
+
         $this->symfonyStyle->title(sprintf(
-            'Found %d deprecations',
-            count($this->deprecationCollector->getDeprecations())
+            'Found %d useful deprecations',
+            count($guessedRectors)
         ));
 
-        $guessedRectors = $this->rectorGuesser->guessForDeprecations($this->deprecationCollector->getDeprecations());
-
         foreach ($guessedRectors as $guessedRector) {
-            if ($guessedRector->isUseful() === false) {
-                continue;
-            }
+            // filter out duplicated deprecations, trigger_error + @deprecated annotation
 
-            $this->renderGuessedRector($guessedRector);
+            // $this->renderGuessedRector($guessedRector);
         }
 
         return 0;
+    }
+
+    /**
+     * @param RectorGuess[] $guessedRectors
+     * @return RectorGuess[]
+     */
+    private function filterOutUsefulGuessedRectors(array $guessedRectors): array
+    {
+        return array_filter($guessedRectors, function (RectorGuess $rectorGuess) {
+            return $rectorGuess->isUseful();
+        });
+    }
+
+    /**
+     * @param RectorGuess[] $guessedRectors
+     * @return RectorGuess[]
+     */
+    private function filterOutDuplicatedGuessedRectors(array $guessedRectors): array
+    {
+        $allMessages = [];
+        foreach ($guessedRectors as $rectorGuess) {
+            $allMessages[] = $rectorGuess->getMessage();
+        }
+
+        $filteredGuessedRectors = [];
+        foreach ($guessedRectors as $rectorGuess) {
+            foreach ($allMessages as $message) {
+                // experimental; maybe count from message length?
+                $levenshtein = levenshtein($rectorGuess->getMessage(), $message);
+                if ($levenshtein !== 0 && $levenshtein < 10) {
+                    continue 2;
+                }
+            }
+
+            $filteredGuessedRectors[] = $rectorGuess;
+        }
+
+        return $filteredGuessedRectors;
     }
 
     private function renderGuessedRector(RectorGuess $guessedRector): void
