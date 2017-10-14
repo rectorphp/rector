@@ -5,13 +5,12 @@ namespace Rector\Rector\Contrib\Symfony\HttpKernel;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Builder\Class_\ClassPropertyCollector;
-use Rector\Builder\Kernel\ServiceFromKernelResolver;
 use Rector\Builder\Naming\NameResolver;
+use Rector\Contract\Bridge\ServiceNameToTypeProviderInterface;
 use Rector\Node\Attribute;
 use Rector\NodeAnalyzer\SymfonyContainerCallsAnalyzer;
 use Rector\NodeFactory\NodeFactory;
 use Rector\Rector\AbstractRector;
-use Rector\Tests\Rector\Contrib\Symfony\HttpKernel\GetterToPropertyRector\Source\LocalKernel;
 
 /**
  * Converts all:
@@ -28,11 +27,6 @@ final class GetterToPropertyRector extends AbstractRector
     private $nameResolver;
 
     /**
-     * @var ServiceFromKernelResolver
-     */
-    private $serviceFromKernelResolver;
-
-    /**
      * @var ClassPropertyCollector
      */
     private $classPropertyCollector;
@@ -47,18 +41,23 @@ final class GetterToPropertyRector extends AbstractRector
      */
     private $symfonyContainerCallsAnalyzer;
 
+    /**
+     * @var ServiceNameToTypeProviderInterface
+     */
+    private $serviceNameToTypeProvider;
+
     public function __construct(
         NameResolver $nameResolver,
-        ServiceFromKernelResolver $serviceFromKernelResolver,
         ClassPropertyCollector $classPropertyCollector,
         NodeFactory $nodeFactory,
-        SymfonyContainerCallsAnalyzer $symfonyContainerCallsAnalyzer
+        SymfonyContainerCallsAnalyzer $symfonyContainerCallsAnalyzer,
+        ServiceNameToTypeProviderInterface $serviceNameToTypeProvider
     ) {
         $this->nameResolver = $nameResolver;
-        $this->serviceFromKernelResolver = $serviceFromKernelResolver;
         $this->classPropertyCollector = $classPropertyCollector;
         $this->nodeFactory = $nodeFactory;
         $this->symfonyContainerCallsAnalyzer = $symfonyContainerCallsAnalyzer;
+        $this->serviceNameToTypeProvider = $serviceNameToTypeProvider;
     }
 
     public function isCandidate(Node $node): bool
@@ -75,14 +74,15 @@ final class GetterToPropertyRector extends AbstractRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        $serviceType = $this->serviceFromKernelResolver->resolveServiceClassFromArgument(
-            $methodCallNode->args[0],
-            LocalKernel::class
-        );
+        $serviceName = $methodCallNode->args[0]->value->value;
 
-        if ($serviceType === null) {
+        $serviceNameToTypeMap = $this->serviceNameToTypeProvider->provide();
+
+        if (! isset($serviceNameToTypeMap[$serviceName])) {
             return null;
         }
+
+        $serviceType = $serviceNameToTypeMap[$serviceName];
 
         $propertyName = $this->nameResolver->resolvePropertyNameFromType($serviceType);
 

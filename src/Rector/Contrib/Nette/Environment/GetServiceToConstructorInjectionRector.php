@@ -35,10 +35,12 @@ final class GetServiceToConstructorInjectionRector extends AbstractRector
      * @var NodeFactory
      */
     private $nodeFactory;
+
     /**
      * @var MethodCallAnalyzer
      */
     private $methodCallAnalyzer;
+
     /**
      * @var ServiceNameToTypeProviderInterface
      */

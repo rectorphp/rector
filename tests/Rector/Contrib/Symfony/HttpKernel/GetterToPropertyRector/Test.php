@@ -3,9 +3,9 @@
 namespace Rector\Tests\Rector\Contrib\Symfony\HttpKernel\GetterToPropertyRector;
 
 use Rector\Rector\Contrib\Symfony\HttpKernel\GetterToPropertyRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractConfigurableRectorTestCase;
 
-final class Test extends AbstractRectorTestCase
+final class Test extends AbstractConfigurableRectorTestCase
 {
     public function test(): void
     {
@@ -36,5 +36,10 @@ final class Test extends AbstractRectorTestCase
     protected function getRectorClasses(): array
     {
         return [GetterToPropertyRector::class];
+    }
+
+    protected function provideConfig(): string
+    {
+        return __DIR__ . '/Source/rector.yml';
     }
 }

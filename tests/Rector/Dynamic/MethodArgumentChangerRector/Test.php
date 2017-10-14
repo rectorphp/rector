@@ -7,11 +7,6 @@ use Rector\Testing\PHPUnit\AbstractConfigurableRectorTestCase;
 
 final class Test extends AbstractConfigurableRectorTestCase
 {
-    protected function provideConfig(): string
-    {
-        return __DIR__ . '/config/rector.yml';
-    }
-
     public function test(): void
     {
         $this->doTestFileMatchesExpectedContent(
@@ -23,6 +18,11 @@ final class Test extends AbstractConfigurableRectorTestCase
             __DIR__ . '/wrong/wrong2.php.inc',
             __DIR__ . '/correct/correct2.php.inc'
         );
+    }
+
+    protected function provideConfig(): string
+    {
+        return __DIR__ . '/config/rector.yml';
     }
 
     /**
