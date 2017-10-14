@@ -37,7 +37,7 @@ final class MethodCallAnalyzer
         }
 
         /** @var MethodCall $node */
-        return $node->name === $method;
+        return (string) $node->name === $method;
     }
 
     /**
@@ -107,6 +107,7 @@ final class MethodCallAnalyzer
             return false;
         }
 
+        $currentType = null;
         if ($node->class instanceof Name) {
             $currentType = $node->class->toString();
         } elseif ($node->class instanceof Variable) {

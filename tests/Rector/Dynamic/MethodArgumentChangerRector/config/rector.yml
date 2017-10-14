@@ -3,6 +3,6 @@ rectors:
         -
             class: Symfony\Component\DependencyInjection\ContainerBuilder
             method: compile
-            position: 1
+            position: 0
             type: added
             default_value: false

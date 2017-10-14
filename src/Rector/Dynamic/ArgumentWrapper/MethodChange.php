@@ -9,7 +9,7 @@ final class MethodChange
     /**
      * @var string
      */
-    private const TYPE_ADDED = 'added';
+    public const TYPE_ADDED = 'added';
 
     /**
      * @var string
@@ -98,7 +98,7 @@ final class MethodChange
     }
 
     /**
-     * @param mixed $methodChange
+     * @param mixed[] $methodChange
      */
     private static function ensureMethodChangeIsValid(array $methodChange): void
     {

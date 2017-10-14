@@ -2,6 +2,7 @@
 
 namespace Rector\Rector\Dynamic;
 
+use PhpParser\BuilderHelpers;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
@@ -12,7 +13,6 @@ use Rector\Rector\Dynamic\ArgumentWrapper\MethodChange;
  * @todo collect cases and prepare tests for them
  *
  * Possible options so far:
- * - new argument
  * - argument removed
  * - new default value for argument
  */
@@ -29,6 +29,11 @@ final class MethodArgumentChangerRector extends AbstractRector
     private $methodCallAnalyzer;
 
     /**
+     * @var MethodChange|null
+     */
+    private $activeMethodChange;
+
+    /**
      * @param mixed[] $methodChanges
      */
     public function __construct(array $methodChanges, MethodCallAnalyzer $methodCallAnalyzer)
@@ -42,29 +47,60 @@ final class MethodArgumentChangerRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
+        $this->activeMethodChange = null;
+
         if (! $node instanceof MethodCall) {
             return false;
         }
 
         foreach ($this->methodChanges as $methodChange) {
-            if (! $this->methodCallAnalyzer->isMethodCallTypeAndMethod(
+            if ($this->methodCallAnalyzer->isMethodCallTypeAndMethod(
                 $node,
                 $methodChange->getClass(),
                 $methodChange->getMethod()
             )) {
-                continue;
+                $this->activeMethodChange = $methodChange;
+                break;
             }
         }
 
-        die;
+        if ($this->activeMethodChange === null) {
+            return false;
+        }
 
-        // is method call...
+        if ($this->activeMethodChange->getType() === MethodChange::TYPE_ADDED) {
+            $argumentCount = count($node->args);
 
-        return true;
+            if ($argumentCount < $this->activeMethodChange->getPosition() + 1) {
+                return true;
+            }
+        }
+
+        // @todo: other types
+
+        return false;
     }
 
-    public function refactor(Node $node): ?Node
+    /**
+     * @param MethodCall $methodCallNode
+     */
+    public function refactor(Node $methodCallNode): ?Node
     {
-        return null;
+        $arguments = $methodCallNode->args;
+
+        if ($this->activeMethodChange->getType() === MethodChange::TYPE_ADDED) {
+            if (count($arguments) < $this->activeMethodChange->getPosition() + 1) {
+                $defaultValue = $this->activeMethodChange->getDefaultValue();
+                $defaultValueNode = BuilderHelpers::normalizeValue($defaultValue);
+
+                $arguments[$this->activeMethodChange->getPosition()] = $defaultValueNode;
+            }
+        }
+
+        // @todo: other types
+
+        $methodCallNode->args = $arguments;
+
+        return $methodCallNode;
     }
 }
