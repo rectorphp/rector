@@ -24,7 +24,7 @@ final class ConcatValueResolver implements PerNodeValueResolverInterface, NodeVa
      * @param Concat $concatNode
      * @return mixed
      */
-    public function resolve(Node $concatNode)
+    public function resolve(Node $concatNode): string
     {
         return $this->nodeValueResolver->resolve($concatNode->left) .
             $this->nodeValueResolver->resolve($concatNode->right);
