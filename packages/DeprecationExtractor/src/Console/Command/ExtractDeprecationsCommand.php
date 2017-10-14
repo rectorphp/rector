@@ -6,6 +6,7 @@ use Rector\DeprecationExtractor\Deprecation\DeprecationCollector;
 use Rector\DeprecationExtractor\DeprecationExtractor;
 use Rector\DeprecationExtractor\Rector\RectorGuesser;
 use Rector\DeprecationExtractor\RectorGuess\RectorGuess;
+use Rector\DeprecationExtractor\RectorGuess\RectorGuessFilter;
 use Rector\Naming\CommandNaming;
 use Rector\Node\Attribute;
 use Symfony\Component\Console\Command\Command;
@@ -46,16 +47,23 @@ final class ExtractDeprecationsCommand extends Command
      */
     private $rectorGuesser;
 
+    /**
+     * @var RectorGuessFilter
+     */
+    private $rectorGuessFilter;
+
     public function __construct(
         DeprecationExtractor $deprecationExtractor,
         DeprecationCollector $deprecationCollector,
         RectorGuesser $rectorGuesser,
-        SymfonyStyle $symfonyStyle
+        SymfonyStyle $symfonyStyle,
+        RectorGuessFilter $rectorGuessFilter
     ) {
         $this->deprecationExtractor = $deprecationExtractor;
         $this->deprecationCollector = $deprecationCollector;
         $this->rectorGuesser = $rectorGuesser;
         $this->symfonyStyle = $symfonyStyle;
+        $this->rectorGuessFilter = $rectorGuessFilter;
 
         parent::__construct();
     }
@@ -78,8 +86,7 @@ final class ExtractDeprecationsCommand extends Command
         );
 
         $guessedRectors = $this->rectorGuesser->guessForDeprecations($this->deprecationCollector->getDeprecations());
-        $guessedRectors = $this->filterOutUsefulGuessedRectors($guessedRectors);
-        $guessedRectors = $this->filterOutDuplicatedGuessedRectors($guessedRectors);
+        $guessedRectors = $this->rectorGuessFilter->filterRectorGuessesToShow($guessedRectors);
 
         $this->symfonyStyle->title(sprintf(
             'Found %d useful deprecations',
@@ -87,50 +94,10 @@ final class ExtractDeprecationsCommand extends Command
         ));
 
         foreach ($guessedRectors as $guessedRector) {
-            // filter out duplicated deprecations, trigger_error + @deprecated annotation
-
-            // $this->renderGuessedRector($guessedRector);
+            $this->renderGuessedRector($guessedRector);
         }
 
         return 0;
-    }
-
-    /**
-     * @param RectorGuess[] $guessedRectors
-     * @return RectorGuess[]
-     */
-    private function filterOutUsefulGuessedRectors(array $guessedRectors): array
-    {
-        return array_filter($guessedRectors, function (RectorGuess $rectorGuess) {
-            return $rectorGuess->isUseful();
-        });
-    }
-
-    /**
-     * @param RectorGuess[] $guessedRectors
-     * @return RectorGuess[]
-     */
-    private function filterOutDuplicatedGuessedRectors(array $guessedRectors): array
-    {
-        $allMessages = [];
-        foreach ($guessedRectors as $rectorGuess) {
-            $allMessages[] = $rectorGuess->getMessage();
-        }
-
-        $filteredGuessedRectors = [];
-        foreach ($guessedRectors as $rectorGuess) {
-            foreach ($allMessages as $message) {
-                // experimental; maybe count from message length?
-                $levenshtein = levenshtein($rectorGuess->getMessage(), $message);
-                if ($levenshtein !== 0 && $levenshtein < 10) {
-                    continue 2;
-                }
-            }
-
-            $filteredGuessedRectors[] = $rectorGuess;
-        }
-
-        return $filteredGuessedRectors;
     }
 
     private function renderGuessedRector(RectorGuess $guessedRector): void
