@@ -47,7 +47,6 @@ final class RectorGuessFilter
             $maxSimilarity = strlen($rectorGuess->getMessage()) * self::MAX_RELATIVE_SIMIARITY;
 
             foreach ($allMessages as $message) {
-                // experimental
                 $levenshtein = levenshtein($rectorGuess->getMessage(), $message);
                 if ($levenshtein !== 0 && $levenshtein < $maxSimilarity) {
                     continue 2;

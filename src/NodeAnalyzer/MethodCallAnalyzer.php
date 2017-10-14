@@ -15,15 +15,29 @@ final class MethodCallAnalyzer
     /**
      * Checks "$this->classOfSpecificType->specificMethodName()"
      *
-     * @param string[] $methodsNames
+     * @param string[] $methods
      */
-    public function isMethodCallTypeAndMethods(Node $node, string $type, array $methodsNames): bool
+    public function isMethodCallTypeAndMethods(Node $node, string $type, array $methods): bool
     {
         if (! $this->isMethodCallType($node, $type)) {
             return false;
         }
 
-        return in_array((string) $node->name, $methodsNames, true);
+        /** @var MethodCall $node */
+        return in_array((string) $node->name, $methods, true);
+    }
+
+    /**
+     * Checks "$this->classOfSpecificType->specificMethodName()"
+     */
+    public function isMethodCallTypeAndMethod(Node $node, string $type, string $method): bool
+    {
+        if (! $this->isMethodCallType($node, $type)) {
+            return false;
+        }
+
+        /** @var MethodCall $node */
+        return $node->name === $method;
     }
 
     /**
