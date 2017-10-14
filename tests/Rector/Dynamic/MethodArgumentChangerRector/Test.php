@@ -44,6 +44,7 @@ final class Test extends TestCase
     {
         return [
             [__DIR__ . '/wrong/wrong.php.inc', __DIR__ . '/correct/correct.php.inc'],
+            [__DIR__ . '/wrong/wrong2.php.inc', __DIR__ . '/correct/correct2.php.inc'],
         ];
     }
 }
