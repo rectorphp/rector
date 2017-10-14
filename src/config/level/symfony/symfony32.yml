@@ -4,6 +4,6 @@ rectors:
         -
             class: Symfony\Component\DependencyInjection\ContainerBuilder
             method: addCompilerPass
-            position: 3
+            position: 2
             type: added
             default_value: 0

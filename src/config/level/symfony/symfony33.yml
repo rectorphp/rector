@@ -8,6 +8,13 @@ rectors:
             type: added
             default_value: false
 
+        -
+            class: Symfony\Component\DependencyInjection\Compiler\ServiceReferenceGraph
+            method: connect
+            position: 6
+            default_value: false
+
+
     Rector\Rector\Contrib\Symfony\Console\ConsoleExceptionToErrorEventConstantRector: ~
 
     Rector\Rector\Dynamic\ClassReplacerRector:
@@ -28,3 +35,8 @@ rectors:
         'Symfony\Bundle\FrameworkBundle\EventListener\TestSessionListenr': 'Symfony\Component\HttpKernel\EventListener\TestSessionListener'
         'Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\ConfigCachePass': 'Symfony\Component\Config\DependencyInjection\ConfigCachePass'
         'Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\PropertyInfoPass': 'Symfony\Component\PropertyInfo\DependencyInjection\PropertyInfoPass'
+
+    MethodNameReplacerRector:
+        # dependency-injection
+        'Symfony\Component\DependencyInjection\Container':
+            'isFrozen': 'isCompiled'
