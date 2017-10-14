@@ -1,0 +1,15 @@
+rectors:
+    Rector\Rector\Dynamic\MethodArgumentChangerRector:
+        -
+            class: Symfony\Component\DependencyInjection\ContainerBuilder
+            method: compile
+            position: 0
+            type: added
+            default_value: false
+
+        -
+            class: Symfony\Component\DependencyInjection\ContainerBuilder
+            method: addCompilerPass
+            position: 2
+            type: added
+            default_value: 0

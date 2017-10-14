@@ -54,9 +54,11 @@ final class RectorsExtension extends Extension
 
         foreach ($rectors as $rectorClass => $arguments) {
             $rectorDefinition = $containerBuilder->autowire($rectorClass);
-            if (count($arguments)) {
-                $rectorDefinition->setArguments([$arguments]);
+            if (! count($arguments)) {
+                continue;
             }
+
+            $rectorDefinition->setArguments([$arguments]);
         }
     }
 }
