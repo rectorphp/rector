@@ -5,6 +5,7 @@ namespace Rector\DeprecationExtractor\Console\Command;
 use Rector\DeprecationExtractor\Deprecation\DeprecationCollector;
 use Rector\DeprecationExtractor\DeprecationExtractor;
 use Rector\DeprecationExtractor\Rector\RectorGuesser;
+use Rector\DeprecationExtractor\RectorGuess\RectorGuess;
 use Rector\Naming\CommandNaming;
 use Rector\Node\Attribute;
 use Symfony\Component\Console\Command\Command;
@@ -88,21 +89,26 @@ final class ExtractDeprecationsCommand extends Command
                 continue;
             }
 
-            $this->symfonyStyle->success($guessedRector->getGuessedRectorClass());
-
-            $this->symfonyStyle->writeln(' ' . $guessedRector->getMessage());
-            $this->symfonyStyle->newLine();
-
-            $node = $guessedRector->getNode();
-
-            $this->symfonyStyle->writeln(' Namespace: ' . $node->getAttribute(Attribute::NAMESPACE));
-            $this->symfonyStyle->writeln(' Class: ' . $node->getAttribute(Attribute::CLASS_NAME));
-            $this->symfonyStyle->writeln(' Scope: ' . $node->getAttribute(Attribute::SCOPE));
-            $this->symfonyStyle->writeln(' Related node: ' . get_class($node));
-
-            $this->symfonyStyle->newLine(2);
+            $this->renderGuessedRector($guessedRector);
         }
 
         return 0;
+    }
+
+    private function renderGuessedRector(RectorGuess $guessedRector): void
+    {
+        $this->symfonyStyle->success($guessedRector->getGuessedRectorClass());
+
+        $this->symfonyStyle->writeln(' ' . $guessedRector->getMessage());
+        $this->symfonyStyle->newLine();
+
+        $node = $guessedRector->getNode();
+
+        $this->symfonyStyle->writeln(' Namespace: ' . $node->getAttribute(Attribute::NAMESPACE));
+        $this->symfonyStyle->writeln(' Class: ' . $node->getAttribute(Attribute::CLASS_NAME));
+        $this->symfonyStyle->writeln(' Scope: ' . $node->getAttribute(Attribute::SCOPE));
+        $this->symfonyStyle->writeln(' Related node: ' . get_class($node));
+
+        $this->symfonyStyle->newLine(2);
     }
 }
