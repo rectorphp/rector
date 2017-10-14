@@ -8,6 +8,9 @@ rectors:
         # debug
         'Symfony\Component\Debug\Exception\ContextErrorException': 'ErrorException'
 
+        # dependency-injection
+        'Symfony\Component\DependencyInjection\DefinitionDecorator': 'Symfony\Component\DependencyInjection\ChildDefinition'
+
         # framework bundle
         'Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\AddConsoleCommandPass': 'Symfony\Component\Console\DependencyInjection\AddConsoleCommandPass'
         'Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\SerializerPass': 'Symfony\Component\Serializer\DependencyInjection\SerializerPass'
