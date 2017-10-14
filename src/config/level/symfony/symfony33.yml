@@ -1,4 +1,13 @@
 rectors:
+    # dependency-injection
+    Rector\Rector\Dynamic\MethodArgumentChangerRector:
+        -
+            class: Symfony\Component\DependencyInjection\ContainerBuilder
+            method: compile
+            position: 0
+            type: added
+            default_value: false
+
     Rector\Rector\Contrib\Symfony\Console\ConsoleExceptionToErrorEventConstantRector: ~
 
     Rector\Rector\Dynamic\ClassReplacerRector:
