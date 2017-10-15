@@ -146,6 +146,13 @@ You can:
 - [NodeTypeResolver](/packages/NodeTypeResolver/README.md)
 - [NodeValueResolver](/packages/NodeValueResolver/README.md)
 
+
+### Advanced Operations
+
+
+- [Service Name to Type Provider](/docs/ServiceNameToTypeProvider.md)
+
+
 ### How to Contribute
 
 Just follow 3 rules:

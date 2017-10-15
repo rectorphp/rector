@@ -2,17 +2,19 @@
 
 namespace Rector\Tests\Rector\Contrib\Symfony\Console\CommandToConstructorInjectionRector\Source;
 
-use Rector\Contract\Bridge\ServiceNameToTypeProviderInterface;
+use Rector\Contract\Bridge\ServiceTypeForNameProviderInterface;
 
-final class DummyProvider implements ServiceNameToTypeProviderInterface
+final class DummyProvider implements ServiceTypeForNameProviderInterface
 {
     /**
-     * @return string[]
+     * @var string[]
      */
-    public function provide(): array
+    private $nameToTypeMap = [
+        'some_service' => 'stdClass',
+    ];
+
+    public function provideTypeForName(string $name): ?string
     {
-        return [
-            'some_service' => 'stdClass',
-        ];
+        return $this->nameToTypeMap[$name] ?? null;
     }
 }

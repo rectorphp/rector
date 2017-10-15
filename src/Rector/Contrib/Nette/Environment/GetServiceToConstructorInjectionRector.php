@@ -6,7 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Builder\Naming\NameResolver;
-use Rector\Contract\Bridge\ServiceNameToTypeProviderInterface;
+use Rector\Contract\Bridge\ServiceTypeForNameProviderInterface;
 use Rector\Node\Attribute;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeFactory\NodeFactory;
@@ -42,25 +42,22 @@ final class GetServiceToConstructorInjectionRector extends AbstractRector
     private $methodCallAnalyzer;
 
     /**
-     * @var ServiceNameToTypeProviderInterface
+     * @var ServiceTypeForNameProviderInterface
      */
-    private $serviceNameToTypeProvider;
-
-    // @todo: service to type map - any manuall implementation works, use interface
-    // and register to rector.yml
+    private $serviceTypeForNameProvider;
 
     public function __construct(
         NameResolver $nameResolver,
         ClassPropertyCollector $classPropertyCollector,
         NodeFactory $nodeFactory,
         MethodCallAnalyzer $methodCallAnalyzer,
-        ServiceNameToTypeProviderInterface $serviceNameToTypeProvider
+        ServiceTypeForNameProviderInterface $serviceTypeForNameProvider
     ) {
         $this->nameResolver = $nameResolver;
         $this->classPropertyCollector = $classPropertyCollector;
         $this->nodeFactory = $nodeFactory;
         $this->methodCallAnalyzer = $methodCallAnalyzer;
-        $this->serviceNameToTypeProvider = $serviceNameToTypeProvider;
+        $this->serviceTypeForNameProvider = $serviceTypeForNameProvider;
     }
 
     public function isCandidate(Node $node): bool
@@ -75,12 +72,10 @@ final class GetServiceToConstructorInjectionRector extends AbstractRector
     {
         $serviceName = $methodCallNode->args[0]->value->value;
 
-        $serviceToTypeMap = $this->serviceNameToTypeProvider->provide();
-        if (! isset($serviceToTypeMap[$serviceName])) {
+        $serviceType = $this->serviceTypeForNameProvider->provideTypeForName($serviceName);
+        if ($serviceType === null) {
             return null;
         }
-
-        $serviceType = $serviceToTypeMap[$serviceName];
 
         $propertyName = $this->nameResolver->resolvePropertyNameFromType($serviceType);
 
