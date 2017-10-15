@@ -77,12 +77,13 @@ final class AppKernelProvider implements ServiceTypeForNameProviderInterface
      */
     private $container;
 
-    // @todo: modify API so it matches
-
-    // https://github.com/RectorPHP/Rector/pull/86/commits/0e375e713b3fea3a990762d5f117a019d317e67e#diff-4f9e06675af869311a8729c450e01d2eL26
-
     public function provideTypeForName(string $name): ?string
     {
+        if (! $this->container->has($name)) {
+            return null;
+        }
+        
+        return $this->container->get($name);
     }
 
     private function getContainer(): ContainerInterface
