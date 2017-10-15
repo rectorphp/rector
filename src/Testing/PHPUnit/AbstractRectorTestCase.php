@@ -14,12 +14,12 @@ abstract class AbstractRectorTestCase extends TestCase
     /**
      * @var FileProcessor
      */
-    private $fileProcessor;
+    protected $fileProcessor;
 
     /**
      * @var ContainerInterface
      */
-    private $container;
+    protected $container;
 
     protected function setUp(): void
     {
