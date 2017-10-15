@@ -6,7 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Builder\Naming\NameResolver;
-use Rector\Contract\Bridge\ServiceNameToTypeProviderInterface;
+use Rector\Contract\Bridge\ServiceTypeForNameProviderInterface;
 use Rector\Node\Attribute;
 use Rector\NodeAnalyzer\SymfonyContainerCallsAnalyzer;
 use Rector\NodeFactory\NodeFactory;
@@ -42,22 +42,22 @@ final class GetterToPropertyRector extends AbstractRector
     private $symfonyContainerCallsAnalyzer;
 
     /**
-     * @var ServiceNameToTypeProviderInterface
+     * @var ServiceTypeForNameProviderInterface
      */
-    private $serviceNameToTypeProvider;
+    private $serviceTypeForNameProvider;
 
     public function __construct(
         NameResolver $nameResolver,
         ClassPropertyCollector $classPropertyCollector,
         NodeFactory $nodeFactory,
         SymfonyContainerCallsAnalyzer $symfonyContainerCallsAnalyzer,
-        ServiceNameToTypeProviderInterface $serviceNameToTypeProvider
+        ServiceTypeForNameProviderInterface $serviceTypeForNameProvider
     ) {
         $this->nameResolver = $nameResolver;
         $this->classPropertyCollector = $classPropertyCollector;
         $this->nodeFactory = $nodeFactory;
         $this->symfonyContainerCallsAnalyzer = $symfonyContainerCallsAnalyzer;
-        $this->serviceNameToTypeProvider = $serviceNameToTypeProvider;
+        $this->serviceTypeForNameProvider = $serviceTypeForNameProvider;
     }
 
     public function isCandidate(Node $node): bool
@@ -75,14 +75,10 @@ final class GetterToPropertyRector extends AbstractRector
     public function refactor(Node $methodCallNode): ?Node
     {
         $serviceName = $methodCallNode->args[0]->value->value;
-
-        $serviceNameToTypeMap = $this->serviceNameToTypeProvider->provide();
-
-        if (! isset($serviceNameToTypeMap[$serviceName])) {
+        $serviceType = $this->serviceTypeForNameProvider->provideTypeForName($serviceName);
+        if ($serviceType === null) {
             return null;
         }
-
-        $serviceType = $serviceNameToTypeMap[$serviceName];
 
         $propertyName = $this->nameResolver->resolvePropertyNameFromType($serviceType);
 

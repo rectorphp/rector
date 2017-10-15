@@ -9,36 +9,38 @@ rectors:
     Rector\Rector\Contrib\Nette\Environment\GetServiceToConstructorInjectionRector: ~
 ```
 
-requires `Rector\Contract\Bridge\ServiceNameToTypeProviderInterface` service that provides **service type for certain service name**.
+requires `Rector\Contract\Bridge\ServiceTypeForNameProviderInterface` service that provides **service type for certain service name**.
 
 
-**Why Interface?**
+**Why Should You Implement the Interface?**
 
-This operation could be automated to some level, but Kernel and Container API vary over time, so the implementation is left up to you and your specific case. This allows any framework and container to use these rectors and gives you freedom to provide own types.
+This operation could be automated on some level, but Kernel and Container API vary too much over frameworks and their versions. The implementation is left up to you and your specific case. **This allows any framework and container to use these rectors and gives you freedom to provide own desired types if needed**.
 
 
 ## How to Add it?
 
-1. Implement `Rector\Contract\Bridge\ServiceNameToTypeProviderInterface`
+1. Implement `Rector\Contract\Bridge\ServiceTypeForNameProviderInterface`
 2. And add *name* to *type* map.
 
     **Static implementation** would look like this:
 
-    ```yaml
+    ```php
     <?php declare(strict_types=1);
 
-    use Rector\Contract\Bridge\ServiceNameToTypeProviderInterface;
+    use Rector\Contract\Bridge\ServiceTypeForNameProviderInterface;
 
-    final class StaticProvidero implements ServiceNameToTypeProviderInterface
+    final class StaticProvidero implements ServiceTypeForNameProviderInterface
     {
-        /**
-         * @return string[]
+        /** 
+         * @var string[]
          */
-        public function provide(): array
+        private $nameToTypeMap = [
+            'eventDispatcher' => 'Symfony\Component\EventDispatcher\EventDispatcherInterface',
+        ];
+     
+        public function provideTypeForName(string $name): ?string
         {
-            return [
-                'eventDispatcher' => 'Symfony\Component\EventDispatcher\EventDispatcherInterface',
-            ];
+            return $this->nameToTypeMap[$name] ?? null;
         }
     }
     ```
@@ -50,7 +52,7 @@ This operation could be automated to some level, but Kernel and Container API va
         StaticProvider: ~
 
         # this allows autowiring via interface
-        Rector\Contract\Bridge\ServiceNameToTypeProviderInterface:
+        Rector\Contract\Bridge\ServiceTypeForNameProviderInterface:
             alias: StaticProvider
     ```
 
@@ -65,36 +67,35 @@ Of couse we have some prepared examples for Kernel, don't you worry.
 
 ```php
 use Psr\Container\ContainerInterface;
-use Rector\Contract\Bridge\ServiceNameToTypeProviderInterface;
+use Rector\Contract\Bridge\ServiceTypeForNameProviderInterface;
 use Symfony\Component\HttpKernel\Kernel;
 
-final class AppKernelProvider implements ServiceNameToTypeProviderInterface
+final class AppKernelProvider implements ServiceTypeForNameProviderInterface
 {
+    /**
+     * @var ContainerInterface
+     */
+    private $container;
+
     // @todo: modify API so it matches
 
     // https://github.com/RectorPHP/Rector/pull/86/commits/0e375e713b3fea3a990762d5f117a019d317e67e#diff-4f9e06675af869311a8729c450e01d2eL26
 
-    public function getTypeForName(string $name)
-    {
-
-    }
-
-    /**
-     * @return string[]
-     */
-    public function provide(): array
+    public function provideTypeForName(string $name): ?string
     {
     }
 
     private function getContainer(): ContainerInterface
     {
-        // @todo: cache it
+        if ($this->container) {
+            return $this->container;
+        }
 
         /** @var Kernel $kernel */
         $kernel = new $kernelClass('rector_dev', true);
         $kernel->boot();
 
-        return $kernel->getContainer();
+        return $this->container = $kernel->getContainer();
     }
 }
 ```

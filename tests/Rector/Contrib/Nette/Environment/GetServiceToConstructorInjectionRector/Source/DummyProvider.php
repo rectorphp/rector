@@ -2,17 +2,19 @@
 
 namespace Rector\Tests\Rector\Contrib\Nette\Environment\GetServiceToConstructorInjectionRector\Source;
 
-use Rector\Contract\Bridge\ServiceNameToTypeProviderInterface;
+use Rector\Contract\Bridge\ServiceTypeForNameProviderInterface;
 
-final class DummyProvider implements ServiceNameToTypeProviderInterface
+final class DummyProvider implements ServiceTypeForNameProviderInterface
 {
     /**
-     * @return string[]
+     * @var string[]
      */
-    public function provide(): array
+    private $nameToTypeMap = [
+        'someService' => 'someType',
+    ];
+
+    public function provideTypeForName(string $name): ?string
     {
-        return [
-            'someService' => 'someType',
-        ];
+        return $this->nameToTypeMap[$name] ?? null;
     }
 }
