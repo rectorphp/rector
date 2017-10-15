@@ -2,7 +2,6 @@
 
 class SomeNetteExtension extends Nette\DI\CompilerExtension
 {
-
     public function loadConfiguration()
     {
         Nette\DI\Helpers::expand($config['logging'], $builder->parameters);

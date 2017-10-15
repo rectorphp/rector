@@ -1,3 +1,0 @@
-services:
-    some_service:
-        class: stdClass

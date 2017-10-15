@@ -7,13 +7,12 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Name\FullyQualified;
 use Rector\Builder\Class_\ClassPropertyCollector;
-use Rector\Builder\Kernel\ServiceFromKernelResolver;
 use Rector\Builder\Naming\NameResolver;
+use Rector\Contract\Bridge\ServiceNameToTypeProviderInterface;
 use Rector\Node\Attribute;
 use Rector\NodeAnalyzer\SymfonyContainerCallsAnalyzer;
 use Rector\NodeFactory\NodeFactory;
 use Rector\Rector\AbstractRector;
-use Rector\Tests\Rector\Contrib\Symfony\HttpKernel\GetterToPropertyRector\Source\LocalKernel;
 
 /**
  * Ref: https://github.com/symfony/symfony/blob/master/UPGRADE-4.0.md#console
@@ -43,11 +42,6 @@ final class CommandToConstructorInjectionRector extends AbstractRector
     private const COMMAND_CLASS = 'Symfony\Component\Console\Command\Command';
 
     /**
-     * @var ServiceFromKernelResolver
-     */
-    private $serviceFromKernelResolver;
-
-    /**
      * @var ClassPropertyCollector
      */
     private $classPropertyCollector;
@@ -67,17 +61,22 @@ final class CommandToConstructorInjectionRector extends AbstractRector
      */
     private $symfonyContainerCallsAnalyzer;
 
+    /**
+     * @var ServiceNameToTypeProviderInterface
+     */
+    private $serviceNameToTypeProvider;
+
     public function __construct(
-        ServiceFromKernelResolver $serviceFromKernelResolver,
         ClassPropertyCollector $classPropertyCollector,
         NameResolver $nameResolver,
         NodeFactory $nodeFactory,
+        ServiceNameToTypeProviderInterface $serviceNameToTypeProvider,
         SymfonyContainerCallsAnalyzer $symfonyContainerCallsAnalyzer
     ) {
-        $this->serviceFromKernelResolver = $serviceFromKernelResolver;
         $this->classPropertyCollector = $classPropertyCollector;
         $this->nameResolver = $nameResolver;
         $this->nodeFactory = $nodeFactory;
+        $this->serviceNameToTypeProvider = $serviceNameToTypeProvider;
         $this->symfonyContainerCallsAnalyzer = $symfonyContainerCallsAnalyzer;
     }
 
@@ -97,25 +96,26 @@ final class CommandToConstructorInjectionRector extends AbstractRector
     }
 
     /**
-     * @param MethodCall $node
+     * @param MethodCall $methodCallNode
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $methodCallNode): ?Node
     {
-        $this->replaceParentContainerAwareCommandWithCommand($node);
+        $this->replaceParentContainerAwareCommandWithCommand($methodCallNode);
 
-        $serviceType = $this->serviceFromKernelResolver->resolveServiceClassFromArgument(
-            $node->args[0],
-            LocalKernel::class
-        );
+        $serviceName = $methodCallNode->args[0]->value->value;
 
-        if ($serviceType === null) {
+        $serviceNameToTypeMap = $this->serviceNameToTypeProvider->provide();
+
+        if (! isset($serviceNameToTypeMap[$serviceName])) {
             return null;
         }
+
+        $serviceType = $serviceNameToTypeMap[$serviceName];
 
         $propertyName = $this->nameResolver->resolvePropertyNameFromType($serviceType);
 
         $this->classPropertyCollector->addPropertyForClass(
-            (string) $node->getAttribute(Attribute::CLASS_NAME),
+            (string) $methodCallNode->getAttribute(Attribute::CLASS_NAME),
             $serviceType,
             $propertyName
         );

@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Contrib\Symfony\Console\CommandToConstructorInjectionRector;
+namespace Rector\Tests\Rector\Contrib\Nette\Environment\GetServiceToConstructorInjectionRector;
 
-use Rector\Rector\Contrib\Symfony\Console\CommandToConstructorInjectionRector;
+use Rector\Rector\Contrib\Nette\Environment\GetServiceToConstructorInjectionRector;
 use Rector\Testing\PHPUnit\AbstractConfigurableRectorTestCase;
 
 final class Test extends AbstractConfigurableRectorTestCase
@@ -20,7 +20,7 @@ final class Test extends AbstractConfigurableRectorTestCase
      */
     protected function getRectorClasses(): array
     {
-        return [CommandToConstructorInjectionRector::class];
+        return [GetServiceToConstructorInjectionRector::class];
     }
 
     protected function provideConfig(): string

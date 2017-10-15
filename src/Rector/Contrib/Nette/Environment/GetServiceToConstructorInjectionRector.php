@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Rector\Contrib\Symfony\HttpKernel;
+namespace Rector\Rector\Contrib\Nette\Environment;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
@@ -8,18 +8,18 @@ use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Builder\Naming\NameResolver;
 use Rector\Contract\Bridge\ServiceNameToTypeProviderInterface;
 use Rector\Node\Attribute;
-use Rector\NodeAnalyzer\SymfonyContainerCallsAnalyzer;
+use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeFactory\NodeFactory;
 use Rector\Rector\AbstractRector;
 
 /**
  * Converts all:
- * $this->get('some_service') # where "some_service" is name of the service in container.
+ * Environment::get('some_service') # where "some_service" is name of the service in container.
  *
  * into:
  * $this->someService # where "someService" is type of the service
  */
-final class GetterToPropertyRector extends AbstractRector
+final class GetServiceToConstructorInjectionRector extends AbstractRector
 {
     /**
      * @var NameResolver
@@ -37,36 +37,35 @@ final class GetterToPropertyRector extends AbstractRector
     private $nodeFactory;
 
     /**
-     * @var SymfonyContainerCallsAnalyzer
+     * @var MethodCallAnalyzer
      */
-    private $symfonyContainerCallsAnalyzer;
+    private $methodCallAnalyzer;
 
     /**
      * @var ServiceNameToTypeProviderInterface
      */
     private $serviceNameToTypeProvider;
 
+    // @todo: service to type map - any manuall implementation works, use interface
+    // and register to rector.yml
+
     public function __construct(
         NameResolver $nameResolver,
         ClassPropertyCollector $classPropertyCollector,
         NodeFactory $nodeFactory,
-        SymfonyContainerCallsAnalyzer $symfonyContainerCallsAnalyzer,
+        MethodCallAnalyzer $methodCallAnalyzer,
         ServiceNameToTypeProviderInterface $serviceNameToTypeProvider
     ) {
         $this->nameResolver = $nameResolver;
         $this->classPropertyCollector = $classPropertyCollector;
         $this->nodeFactory = $nodeFactory;
-        $this->symfonyContainerCallsAnalyzer = $symfonyContainerCallsAnalyzer;
+        $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->serviceNameToTypeProvider = $serviceNameToTypeProvider;
     }
 
     public function isCandidate(Node $node): bool
     {
-        if (! $node instanceof MethodCall) {
-            return false;
-        }
-
-        return $this->symfonyContainerCallsAnalyzer->isThisCall($node);
+        return $this->methodCallAnalyzer->isStaticMethodCallTypeAndMethod($node, 'Nette\Environment', 'getService');
     }
 
     /**
@@ -76,13 +75,12 @@ final class GetterToPropertyRector extends AbstractRector
     {
         $serviceName = $methodCallNode->args[0]->value->value;
 
-        $serviceNameToTypeMap = $this->serviceNameToTypeProvider->provide();
-
-        if (! isset($serviceNameToTypeMap[$serviceName])) {
+        $serviceToTypeMap = $this->serviceNameToTypeProvider->provide();
+        if (! isset($serviceToTypeMap[$serviceName])) {
             return null;
         }
 
-        $serviceType = $serviceNameToTypeMap[$serviceName];
+        $serviceType = $serviceToTypeMap[$serviceName];
 
         $propertyName = $this->nameResolver->resolvePropertyNameFromType($serviceType);
 
