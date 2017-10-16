@@ -7,7 +7,7 @@ use PhpParser\Builder\Param;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\NodeFactory\NodeFactory;
+use Rector\Node\NodeFactory;
 
 final class ConstructorMethodBuilder
 {

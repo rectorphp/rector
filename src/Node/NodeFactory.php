@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\NodeFactory;
+namespace Rector\Node;
 
 use Nette\NotImplementedException;
 use PhpParser\BuilderHelpers;

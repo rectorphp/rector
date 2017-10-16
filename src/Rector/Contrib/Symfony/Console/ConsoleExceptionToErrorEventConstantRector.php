@@ -5,8 +5,8 @@ namespace Rector\Rector\Contrib\Symfony\Console;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Scalar\String_;
+use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\ClassConstAnalyzer;
-use Rector\NodeFactory\NodeFactory;
 use Rector\Rector\AbstractRector;
 
 /**

@@ -7,7 +7,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Builder\StatementGlue;
 use Rector\Node\Attribute;
-use Rector\NodeFactory\NodeFactory;
+use Rector\Node\NodeFactory;
 use Rector\Rector\AbstractRector;
 
 /**

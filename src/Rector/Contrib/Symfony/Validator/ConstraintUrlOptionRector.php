@@ -6,7 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Scalar\String_;
 use Rector\Node\Attribute;
-use Rector\NodeFactory\NodeFactory;
+use Rector\Node\NodeFactory;
 use Rector\Rector\AbstractRector;
 
 /**

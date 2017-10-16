@@ -11,7 +11,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
-use Rector\NodeFactory\NodeFactory;
+use Rector\Node\NodeFactory;
 
 final class RouterFactoryClassBuilder
 {
