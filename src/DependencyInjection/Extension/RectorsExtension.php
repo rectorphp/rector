@@ -36,17 +36,7 @@ final class RectorsExtension extends Extension
             return;
         }
 
-        $rectors = [];
-
-        foreach ($configs as $config) {
-            // this magic will merge array recursively
-            // without making any extra duplications; array_merge only doesn't work
-            $rectors = array_merge(
-                $rectors,
-                $config,
-                array_replace_recursive($rectors, $config)
-            );
-        }
+        $rectors = $this->mergeAllConfigsRecursively($configs);
 
         $rectors = $this->rectorClassNormalizer->normalizer($rectors);
 
@@ -60,5 +50,29 @@ final class RectorsExtension extends Extension
 
             $rectorDefinition->setArguments([$arguments]);
         }
+    }
+
+    /**
+     * This magic will merge array recursively
+     * without making any extra duplications.
+     *
+     * Only array_merge doesn't work in this case.
+     *
+     * @param mixed[] $configs
+     * @return mixed[]
+     */
+    private function mergeAllConfigsRecursively(array $configs): array
+    {
+        $mergedConfigs = [];
+
+        foreach ($configs as $config) {
+            $mergedConfigs = array_merge(
+                $mergedConfigs,
+                $config,
+                array_replace_recursive($mergedConfigs, $config)
+            );
+        }
+
+        return $mergedConfigs;
     }
 }
