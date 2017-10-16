@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\UseUse;
 use Rector\Node\Attribute;
 use Rector\Node\NodeFactory;
@@ -92,7 +93,7 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
                 $this->oldToNewUseStatements[$oldName] = $lastNewNamePart;
             } elseif (isset($this->oldToNewUseStatements[$oldName])) {
                 // to prevent "getComments() on string" error
-                $nameOrIdentifierNode->setAttribute(Attribute::ORIGIGINAL_NODE, null);
+                $nameOrIdentifierNode->setAttribute(Attribute::ORIGINAL_NODE, null);
                 $newNameParts = [$this->oldToNewUseStatements[$oldName]];
             }
 
@@ -127,6 +128,7 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
             foreach ($nodes as $key => $node) {
                 if ($node instanceof Class_) {
                     $nodes = $this->insertBefore($nodes, $namespaceNode, $key);
+                    $nodes = $this->insertBefore($nodes, new Nop, $key);
 
                     break;
                 }

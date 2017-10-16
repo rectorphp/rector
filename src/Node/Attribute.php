@@ -34,7 +34,7 @@ final class Attribute
      *
      * @var string
      */
-    public const ORIGIGINAL_NODE = 'origNode';
+    public const ORIGINAL_NODE = 'origNode';
 
     /**
      * System name to be found in @see \PhpParser\NodeVisitor\NameResolver

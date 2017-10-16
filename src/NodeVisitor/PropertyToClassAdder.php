@@ -66,7 +66,7 @@ final class PropertyToClassAdder extends NodeVisitorAbstract
         }
 
         // prevents offset errors
-        $classNode->setAttribute(Attribute::ORIGIGINAL_NODE, null);
+        $classNode->setAttribute(Attribute::ORIGINAL_NODE, null);
 
         foreach ($propertiesForClass as $propertyType => $propertyName) {
             $this->constructorMethodBuilder->addPropertyAssignToClass($classNode, $propertyType, $propertyName);
