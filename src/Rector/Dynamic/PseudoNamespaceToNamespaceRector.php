@@ -2,9 +2,13 @@
 
 namespace Rector\Rector\Dynamic;
 
+use Nette\Utils\Arrays;
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\UseUse;
 use Rector\Node\Attribute;
 use Rector\Rector\AbstractRector;
@@ -30,6 +34,11 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
     private $oldToNewUseStatements = [];
 
     /**
+     * @var string
+     */
+    private $newNamespace;
+
+    /**
      * @param string[] $pseudoNamespacePrefixes
      */
     public function __construct(array $pseudoNamespacePrefixes)
@@ -42,17 +51,19 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
      */
     public function beforeTraverse(array $nodes): void
     {
+        $this->newNamespace = null;
         $this->oldToNewUseStatements = [];
     }
 
     public function isCandidate(Node $node): bool
     {
-        if (! $node instanceof Name) {
+        $name = $this->resolveNameFromNode($node);
+        if ($name === null) {
             return false;
         }
 
         foreach ($this->pseudoNamespacePrefixes as $pseudoNamespacePrefix) {
-            if (Strings::startsWith($node->toString(), $pseudoNamespacePrefix)) {
+            if (Strings::startsWith($name, $pseudoNamespacePrefix)) {
                 return true;
             }
         }
@@ -61,26 +72,95 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
     }
 
     /**
-     * @param Name $nameNode
+     * @param Name|Identifier $nameOrIdentifierNode
      */
-    public function refactor(Node $nameNode): ?Node
+    public function refactor(Node $nameOrIdentifierNode): ?Node
     {
-        $oldName = $nameNode->toString();
+        $oldName = $this->resolveNameFromNode($nameOrIdentifierNode);
         $newNameParts = explode('_', $oldName);
+        $parentNode = $nameOrIdentifierNode->getAttribute(Attribute::PARENT_NODE);
+        $lastNewNamePart = $newNameParts[count($newNameParts) - 1];
 
-        $parentNode = $nameNode->getAttribute(Attribute::PARENT_NODE);
-
-        if ($parentNode instanceof UseUse) {
-            $lastNewNamePart = $newNameParts[count($newNameParts) - 1];
-            $this->oldToNewUseStatements[$oldName] = $lastNewNamePart;
-        } elseif (isset($this->oldToNewUseStatements[$oldName])) {
-            // to prevent "getComments() on string" error
-            $nameNode->setAttribute('origNode', null);
-            $newNameParts = [$this->oldToNewUseStatements[$oldName]];
+        if ($nameOrIdentifierNode instanceof Name) {
+            if ($parentNode instanceof UseUse) {
+                $this->oldToNewUseStatements[$oldName] = $lastNewNamePart;
+            } elseif (isset($this->oldToNewUseStatements[$oldName])) {
+                // to prevent "getComments() on string" error
+                $nameOrIdentifierNode->setAttribute('origNode', null);
+                $newNameParts = [$this->oldToNewUseStatements[$oldName]];
+            }
         }
 
-        $nameNode->parts = $newNameParts;
+        if ($nameOrIdentifierNode instanceof Identifier && $parentNode instanceof Class_) {
+            $namespaceParts = $newNameParts;
+            array_pop($namespaceParts);
 
-        return $nameNode;
+            $this->newNamespace = implode('\\', $namespaceParts);
+
+            $newNameParts = [$lastNewNamePart];
+        }
+
+        $nameOrIdentifierNode->parts = $newNameParts;
+
+        return $nameOrIdentifierNode;
+    }
+
+    /**
+     * @param Node[] $nodes
+     * @return Node[]
+     */
+    public function afterTraverse(array $nodes): array
+    {
+        if ($this->newNamespace) {
+            $namespaceNode = new Namespace_(
+                new Name($this->newNamespace)
+            );
+
+            foreach ($nodes as $key => $node) {
+                if ($node instanceof Class_) {
+                    $nodes = $this->insertBefore($nodes, $namespaceNode, $key);
+
+                    break;
+                }
+            }
+        }
+
+        return $nodes;
+    }
+
+    private function resolveNameFromNode(Node $node): ?string
+    {
+        if ($node instanceof Identifier) {
+            return $node->name;
+        }
+
+        if ($node instanceof Name) {
+            return $node->toString();
+        }
+
+        return null;
+    }
+
+    /**
+     * @param Node[] $nodes
+     * @param int|string $key
+     * @return Node[]
+     */
+    private function insertBefore(array $nodes, Node $addedNode, $key): array
+    {
+        Arrays::insertBefore($nodes, $key, [
+            'before_' . $key => $addedNode,
+        ]);
+
+        // recound ids
+        $recountedNodes = [];
+        $i = 0;
+
+        foreach ($nodes as $node) {
+            $recountedNodes[$i] = $node;
+            ++$i;
+        }
+
+        return $recountedNodes;
     }
 }

@@ -59,6 +59,8 @@ final class StatementGlue
     }
 
     /**
+     * @todo decouple to statements added
+     *
      * @param int|string $key
      */
     private function insertBefore(Class_ $classNode, Node $node, $key): void
