@@ -89,6 +89,10 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
                 $nameOrIdentifierNode->setAttribute('origNode', null);
                 $newNameParts = [$this->oldToNewUseStatements[$oldName]];
             }
+
+            $nameOrIdentifierNode->parts = $newNameParts;
+
+            return $nameOrIdentifierNode;
         }
 
         if ($nameOrIdentifierNode instanceof Identifier && $parentNode instanceof Class_) {
@@ -97,12 +101,12 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
 
             $this->newNamespace = implode('\\', $namespaceParts);
 
-            $newNameParts = [$lastNewNamePart];
+            $nameOrIdentifierNode->name = $lastNewNamePart;
+
+            return $nameOrIdentifierNode;
         }
 
-        $nameOrIdentifierNode->parts = $newNameParts;
-
-        return $nameOrIdentifierNode;
+        return null;
     }
 
     /**
