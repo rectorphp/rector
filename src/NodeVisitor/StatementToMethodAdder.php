@@ -7,7 +7,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Builder\Method\MethodStatementCollector;
-use Rector\Node\Attribute;
 
 /**
  * Adds new statements to method.
@@ -56,10 +55,6 @@ final class StatementToMethodAdder extends NodeVisitorAbstract
         foreach ($methodStatements as $methodStatement) {
             $classMethodNode->stmts[] = $methodStatement;
         }
-
-        /** @var Node $parentNode */
-        $parentNode = $classMethodNode->getAttribute('parentNode');
-        $parentNode->setAttribute(Attribute::ORIGINAL_NODE, null);
 
         return $classMethodNode;
     }
