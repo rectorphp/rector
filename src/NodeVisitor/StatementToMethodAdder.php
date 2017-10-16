@@ -59,7 +59,7 @@ final class StatementToMethodAdder extends NodeVisitorAbstract
 
         /** @var Node $parentNode */
         $parentNode = $classMethodNode->getAttribute('parentNode');
-        $parentNode->setAttribute(Attribute::ORIGIGINAL_NODEq, null);
+        $parentNode->setAttribute(Attribute::ORIGIGINAL_NODE, null);
 
         return $classMethodNode;
     }
