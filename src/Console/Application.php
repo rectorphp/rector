@@ -20,8 +20,8 @@ final class Application extends SymfonyApplication
     }
 
     /**
-     * This overridate add option to load
-     * custom config via --config in any command.
+     * This method override adds option to
+     * load custom config via --config in any command.
      */
     protected function getDefaultInputDefinition(): InputDefinition
     {
