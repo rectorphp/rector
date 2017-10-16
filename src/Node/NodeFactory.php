@@ -58,7 +58,7 @@ final class NodeFactory
      */
     public function createNullConstant(): ConstFetch
     {
-        return $this->createInternalConstant('null');
+        return BuilderHelpers::normalizeValue(null);
     }
 
     /**
@@ -66,7 +66,7 @@ final class NodeFactory
      */
     public function createFalseConstant(): ConstFetch
     {
-        return $this->createInternalConstant('false');
+        return BuilderHelpers::normalizeValue(false);
     }
 
     /**
@@ -74,7 +74,7 @@ final class NodeFactory
      */
     public function createTrueConstant(): ConstFetch
     {
-        return $this->createInternalConstant('true');
+        return BuilderHelpers::normalizeValue(true);
     }
 
     /**
@@ -251,12 +251,6 @@ final class NodeFactory
      */
     public function createNamespace(string $namespace): Namespace_
     {
-        return new Namespace_(new Name($namespace));
-    }
-
-    private function createInternalConstant(string $value): ConstFetch
-    {
-        // return BuilderHelpers::normalizeValue($value);
-        return new ConstFetch(new Name($value));
+        return new Namespace_(BuilderHelpers::normalizeName($namespace));
     }
 }
