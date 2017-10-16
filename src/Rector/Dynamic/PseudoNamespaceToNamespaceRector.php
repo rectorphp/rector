@@ -8,9 +8,9 @@ use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\UseUse;
 use Rector\Node\Attribute;
+use Rector\Node\NodeFactory;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -39,11 +39,17 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
     private $newNamespace;
 
     /**
+     * @var NodeFactory
+     */
+    private $nodeFactory;
+
+    /**
      * @param string[] $pseudoNamespacePrefixes
      */
-    public function __construct(array $pseudoNamespacePrefixes)
+    public function __construct(array $pseudoNamespacePrefixes, NodeFactory $nodeFactory)
     {
         $this->pseudoNamespacePrefixes = $pseudoNamespacePrefixes;
+        $this->nodeFactory = $nodeFactory;
     }
 
     /**
@@ -116,9 +122,7 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
     public function afterTraverse(array $nodes): array
     {
         if ($this->newNamespace) {
-            $namespaceNode = new Namespace_(
-                new Name($this->newNamespace)
-            );
+            $namespaceNode = $this->nodeFactory->createNamespace($this->newNamespace);
 
             foreach ($nodes as $key => $node) {
                 if ($node instanceof Class_) {

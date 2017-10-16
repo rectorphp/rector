@@ -19,6 +19,7 @@ final class Test extends AbstractConfigurableRectorTestCase
             __DIR__ . '/correct/correct2.php.inc'
         );
 
+        // @todo: figure out why formatting is broken :/
         $this->doTestFileMatchesExpectedContent(
             __DIR__ . '/wrong/wrong3.php.inc',
             __DIR__ . '/correct/correct3.php.inc'
