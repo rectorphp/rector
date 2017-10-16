@@ -5,6 +5,8 @@ namespace Rector\Rector\Dynamic;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\UseUse;
+use Rector\Node\Attribute;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -23,11 +25,24 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
     private $pseudoNamespacePrefixes = [];
 
     /**
+     * @var string[]
+     */
+    private $oldToNewUseStatements = [];
+
+    /**
      * @param string[] $pseudoNamespacePrefixes
      */
     public function __construct(array $pseudoNamespacePrefixes)
     {
         $this->pseudoNamespacePrefixes = $pseudoNamespacePrefixes;
+    }
+
+    /**
+     * @param mixed[] $nodes
+     */
+    public function beforeTraverse(array $nodes): void
+    {
+        $this->oldToNewUseStatements = [];
     }
 
     public function isCandidate(Node $node): bool
@@ -50,7 +65,19 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
      */
     public function refactor(Node $nameNode): ?Node
     {
-        $newNameParts = explode('_', $nameNode->toString());
+        $oldName = $nameNode->toString();
+        $newNameParts = explode('_', $oldName);
+
+        $parentNode = $nameNode->getAttribute(Attribute::PARENT_NODE);
+
+        if ($parentNode instanceof UseUse) {
+            $lastNewNamePart = $newNameParts[count($newNameParts) - 1];
+            $this->oldToNewUseStatements[$oldName] = $lastNewNamePart;
+        } elseif (isset($this->oldToNewUseStatements[$oldName])) {
+            // to prevent "getComments() on string" error
+            $nameNode->setAttribute('origNode', null);
+            $newNameParts = [$this->oldToNewUseStatements[$oldName]];
+        }
 
         $nameNode->parts = $newNameParts;
 
