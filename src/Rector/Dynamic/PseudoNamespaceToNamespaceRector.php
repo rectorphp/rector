@@ -49,9 +49,7 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
      */
     public function refactor(Node $nameNode): ?Node
     {
-        $oldName = $nameNode->toString();
-        $newName = str_replace('_', '\\', $oldName);
-        $newNameParts = explode('\\', $newName);
+        $newNameParts = explode('_', $nameNode->toString());
 
         $nameNode->parts = $newNameParts;
 
