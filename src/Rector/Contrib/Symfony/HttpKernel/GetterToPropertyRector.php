@@ -5,8 +5,8 @@ namespace Rector\Rector\Contrib\Symfony\HttpKernel;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Builder\Class_\ClassPropertyCollector;
-use Rector\Builder\Naming\NameResolver;
 use Rector\Contract\Bridge\ServiceTypeForNameProviderInterface;
+use Rector\Naming\PropertyNaming;
 use Rector\Node\Attribute;
 use Rector\NodeAnalyzer\SymfonyContainerCallsAnalyzer;
 use Rector\NodeFactory\NodeFactory;
@@ -22,9 +22,9 @@ use Rector\Rector\AbstractRector;
 final class GetterToPropertyRector extends AbstractRector
 {
     /**
-     * @var NameResolver
+     * @var PropertyNaming
      */
-    private $nameResolver;
+    private $propertyNaming;
 
     /**
      * @var ClassPropertyCollector
@@ -47,13 +47,13 @@ final class GetterToPropertyRector extends AbstractRector
     private $serviceTypeForNameProvider;
 
     public function __construct(
-        NameResolver $nameResolver,
+        PropertyNaming $propertyNaming,
         ClassPropertyCollector $classPropertyCollector,
         NodeFactory $nodeFactory,
         SymfonyContainerCallsAnalyzer $symfonyContainerCallsAnalyzer,
         ServiceTypeForNameProviderInterface $serviceTypeForNameProvider
     ) {
-        $this->nameResolver = $nameResolver;
+        $this->propertyNaming = $propertyNaming;
         $this->classPropertyCollector = $classPropertyCollector;
         $this->nodeFactory = $nodeFactory;
         $this->symfonyContainerCallsAnalyzer = $symfonyContainerCallsAnalyzer;
@@ -80,7 +80,7 @@ final class GetterToPropertyRector extends AbstractRector
             return null;
         }
 
-        $propertyName = $this->nameResolver->resolvePropertyNameFromType($serviceType);
+        $propertyName = $this->propertyNaming->typeToName($serviceType);
 
         $this->classPropertyCollector->addPropertyForClass(
             (string) $methodCallNode->getAttribute(Attribute::CLASS_NAME),
