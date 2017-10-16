@@ -63,6 +63,8 @@ final class NetteObjectToSmartTraitRector extends AbstractRector
 
         $this->removeParentClass($classNode);
 
+        $classNode->setAttribute(Attribute::ORIGIGINAL_NODE, null);
+
         return $classNode;
     }
 

@@ -29,6 +29,14 @@ final class Attribute
     public const SCOPE_NODE = 'scopeNode';
 
     /**
+     * System name.
+     * Do not change this even if you want!
+     *
+     * @var string
+     */
+    public const ORIGIGINAL_NODE = 'origNode';
+
+    /**
      * System name to be found in @see \PhpParser\NodeVisitor\NameResolver
      * Do not change this even if you want!
      *
