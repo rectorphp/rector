@@ -125,7 +125,7 @@ You can:
             'BetterReflection': 'Roave\BetterReflection'
     ```
 
-- or **change method name**
+- **change method name**
 
     ```yml
     # nette24.yml
@@ -137,6 +137,14 @@ You can:
                 'add': 'addHtml'
     ```
 
+- or **replace underscore naming `_` with namespaces `\`**
+
+    ```yml
+    rectors:
+        Rector\Roector\Dynamic\PseudoNamespaceToNamespaceRector:
+            # old namespace prefix
+            - 'PHPUnit_'
+    ```
 
 
 ### READMEs for Subpackages

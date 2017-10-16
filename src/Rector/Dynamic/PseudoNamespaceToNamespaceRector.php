@@ -17,10 +17,7 @@ use Rector\Rector\AbstractRector;
 /**
  * Basically inversion of https://github.com/nikic/PHP-Parser/blob/master/doc/2_Usage_of_basic_components.markdown#example-converting-namespaced-code-to-pseudo-namespaces
  *
- *
  * Requested on SO: https://stackoverflow.com/questions/29014957/converting-pseudo-namespaced-classes-to-use-real-namespace
- *
- * @todo might handle current @see phpunit60.yml @see \Rector\Rector\Dynamic\NamespaceReplacerRector
  */
 final class PseudoNamespaceToNamespaceRector extends AbstractRector
 {
