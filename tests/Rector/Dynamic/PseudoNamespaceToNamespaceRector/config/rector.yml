@@ -1,0 +1,3 @@
+rectors:
+    Rector\Rector\Dynamic\PseudoNamespaceToNamespaceRector:
+        - 'PHPUnit_'
