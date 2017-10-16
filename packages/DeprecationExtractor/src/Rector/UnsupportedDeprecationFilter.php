@@ -28,7 +28,7 @@ final class UnsupportedDeprecationFilter
         'Service identifiers will be made case sensitive',
         'Generating a dumped container without populating the method map is deprecated',
         'Dumping an uncompiled ContainerBuilder is deprecated',
-        'service is private, ',
+        'service is private',
         'service is already initialized, ',
         'Relying on its factory\'s return-type to define the class of service',
     ];
