@@ -4,7 +4,7 @@ namespace Rector\Rector\Contrib\Symfony\Form;
 
 use PhpParser\Node;
 use PhpParser\Node\Scalar\String_;
-use Rector\NodeFactory\NodeFactory;
+use Rector\Node\NodeFactory;
 use Rector\Rector\AbstractRector;
 
 /**

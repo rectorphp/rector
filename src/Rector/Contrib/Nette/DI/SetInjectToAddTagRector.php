@@ -3,8 +3,8 @@
 namespace Rector\Rector\Contrib\Nette\DI;
 
 use PhpParser\Node;
+use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
-use Rector\NodeFactory\NodeFactory;
 use Rector\Rector\AbstractRector;
 
 final class SetInjectToAddTagRector extends AbstractRector

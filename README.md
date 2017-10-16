@@ -141,6 +141,7 @@ You can:
 
 ### READMEs for Subpackages
 
+- [BetterReflection](/packages/BetterReflection/README.md)
 - [DeprecationExtractor](/packages/DeprecationExtractor/README.md)
 - [NodeTraverserQueue](/packages/NodeTraverserQueue/README.md)
 - [NodeTypeResolver](/packages/NodeTypeResolver/README.md)

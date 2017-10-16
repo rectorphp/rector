@@ -3,8 +3,8 @@
 namespace Rector\Rector\Contrib\Symfony\DependencyInjection;
 
 use PhpParser\Node;
+use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
-use Rector\NodeFactory\NodeFactory;
 use Rector\Rector\AbstractRector;
 
 final class ContainerBuilderCompileEnvArgumentRector extends AbstractRector

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\NodeFactory;
+namespace Rector\Node;
 
 use Nette\NotImplementedException;
 use PhpParser\BuilderHelpers;
@@ -24,6 +24,7 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Declare_;
 use PhpParser\Node\Stmt\DeclareDeclare;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\TraitUse;
 
 final class NodeFactory
@@ -242,6 +243,15 @@ final class NodeFactory
             new PropertyFetch($exprNode, new Identifier($propertyName)),
             $keyNode
         );
+    }
+
+    /**
+     * Creates:
+     * - namespace NamespaceName;
+     */
+    public function createNamespace(string $namespace): Namespace_
+    {
+        return new Namespace_(new Name($namespace));
     }
 
     private function createInternalConstant(string $value): ConstFetch

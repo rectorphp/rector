@@ -19,6 +19,10 @@ final class Application extends SymfonyApplication
         parent::__construct(self::NAME);
     }
 
+    /**
+     * This method override adds option to
+     * load custom config via --config in any command.
+     */
     protected function getDefaultInputDefinition(): InputDefinition
     {
         return new InputDefinition([

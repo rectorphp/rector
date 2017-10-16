@@ -7,11 +7,11 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Name\FullyQualified;
 use Rector\Builder\Class_\ClassPropertyCollector;
-use Rector\Builder\Naming\NameResolver;
 use Rector\Contract\Bridge\ServiceTypeForNameProviderInterface;
+use Rector\Naming\PropertyNaming;
 use Rector\Node\Attribute;
+use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\SymfonyContainerCallsAnalyzer;
-use Rector\NodeFactory\NodeFactory;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -47,9 +47,9 @@ final class CommandToConstructorInjectionRector extends AbstractRector
     private $classPropertyCollector;
 
     /**
-     * @var NameResolver
+     * @var PropertyNaming
      */
-    private $nameResolver;
+    private $propertyNaming;
 
     /**
      * @var NodeFactory
@@ -68,13 +68,13 @@ final class CommandToConstructorInjectionRector extends AbstractRector
 
     public function __construct(
         ClassPropertyCollector $classPropertyCollector,
-        NameResolver $nameResolver,
+        PropertyNaming $propertyNaming,
         NodeFactory $nodeFactory,
         SymfonyContainerCallsAnalyzer $symfonyContainerCallsAnalyzer,
         ServiceTypeForNameProviderInterface $serviceTypeForNameProvider
     ) {
         $this->classPropertyCollector = $classPropertyCollector;
-        $this->nameResolver = $nameResolver;
+        $this->propertyNaming = $propertyNaming;
         $this->nodeFactory = $nodeFactory;
         $this->symfonyContainerCallsAnalyzer = $symfonyContainerCallsAnalyzer;
         $this->serviceTypeForNameProvider = $serviceTypeForNameProvider;
@@ -108,7 +108,7 @@ final class CommandToConstructorInjectionRector extends AbstractRector
             return null;
         }
 
-        $propertyName = $this->nameResolver->resolvePropertyNameFromType($serviceType);
+        $propertyName = $this->propertyNaming->typeToName($serviceType);
 
         $this->classPropertyCollector->addPropertyForClass(
             (string) $methodCallNode->getAttribute(Attribute::CLASS_NAME),

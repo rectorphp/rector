@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Builder\Naming;
+namespace Rector\Naming;
 
-final class NameResolver
+final class PropertyNaming
 {
-    public function resolvePropertyNameFromType(string $serviceType): string
+    public function typeToName(string $serviceType): string
     {
         $serviceNameParts = explode('\\', $serviceType);
         $lastNamePart = array_pop($serviceNameParts);

@@ -7,7 +7,7 @@ use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use Rector\Node\Attribute;
-use Rector\NodeFactory\NodeFactory;
+use Rector\Node\NodeFactory;
 use Rector\Rector\AbstractRector;
 
 /**

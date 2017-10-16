@@ -2,18 +2,6 @@ rectors:
     Rector\Rector\Contrib\PHPUnit\ExceptionRector: ~
     Rector\Rector\Contrib\PHPUnit\GetMockRector: ~
 
-    Rector\Rector\Dynamic\ClassReplacerRector:
-        'PHPUnit_Framework_TestCase': 'PHPUnit\Framework\TestCase'
-
     # ref. https://github.com/sebastianbergmann/phpunit/compare/5.7.9...6.0.0
-    Rector\Rector\Dynamic\NamespaceReplacerRector:
-        'PHPUnit_': 'PHPUnit\'
-        'PHPUnit_Framework_': 'PHPUnit\Framework\'
-        'PHPUnit_Framework_Constraint_': 'PHPUnit\Framework\Constraint\'
-        'PHPUnit_Framework_Error_': 'PHPUnit\Framework\Error\'
-        'PHPUnit_Runner_': 'PHPUnit\Runner\'
-        'PHPUnit_Runner_Filter_': 'PHPUnit\Runner\Filter\'
-        'PHPUnit_Runner_TextUI_': 'PHPUnit\Runner\TextUI\'
-        'PHPUnit_Util_': 'PHPUnit\Util\'
-        'PHPUnit_Util_Log_': 'PHPUnit\Util\Log\'
-        'PHPUnit_Util_TestDox_': 'PHPUnit\Util\TestDox\'
+    Rector\Rector\Dynamic\PseudoNamespaceToNamespaceRector:
+        - 'PHPUnit_'

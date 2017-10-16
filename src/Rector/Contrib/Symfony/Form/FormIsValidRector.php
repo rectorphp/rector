@@ -6,7 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Node\Attribute;
-use Rector\NodeFactory\NodeFactory;
+use Rector\Node\NodeFactory;
 use Rector\Rector\AbstractRector;
 
 /**

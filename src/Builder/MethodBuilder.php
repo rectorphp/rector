@@ -9,7 +9,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
-use Rector\NodeFactory\NodeFactory;
+use Rector\Node\NodeFactory;
 
 final class MethodBuilder
 {
