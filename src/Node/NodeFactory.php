@@ -256,6 +256,7 @@ final class NodeFactory
 
     private function createInternalConstant(string $value): ConstFetch
     {
+        // return BuilderHelpers::normalizeValue($value);
         return new ConstFetch(new Name($value));
     }
 }
