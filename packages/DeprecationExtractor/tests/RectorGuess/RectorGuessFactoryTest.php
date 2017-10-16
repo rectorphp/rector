@@ -30,6 +30,9 @@ final class RectorGuessFactoryTest extends TestCase
         /** @var RectorGuess $rectorGuess */
         $rectorGuess = $this->rectorGuessFactory->$method('message', new Nop);
 
+        $this->assertSame('message', $rectorGuess->getMessage());
+        $this->assertInstanceOf(Nop::class, $rectorGuess->getNode());
+
         $this->assertSame($expectedType, $rectorGuess->getGuessedRectorClass());
         $this->assertSame($isUseful, $rectorGuess->isUseful());
     }
