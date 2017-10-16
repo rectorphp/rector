@@ -1,6 +1,5 @@
 <?php declare(strict_types=1);
 
-
 namespace Rector\Rector\Dynamic;
 
 use Nette\Utils\Strings;
@@ -23,6 +22,9 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
      */
     private $pseudoNamespacePrefixes = [];
 
+    /**
+     * @param string[] $pseudoNamespacePrefixes
+     */
     public function __construct(array $pseudoNamespacePrefixes)
     {
         $this->pseudoNamespacePrefixes = $pseudoNamespacePrefixes;
@@ -45,7 +47,6 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
 
     /**
      * @param Name $nameNode
-     * @return null|Node
      */
     public function refactor(Node $nameNode): ?Node
     {
