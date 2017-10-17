@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Node\NodeFactory;
+use Rector\NodeAnalyzer\ExpressionAnalyzer;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Rector\AbstractRector;
 
@@ -25,16 +26,6 @@ use Rector\Rector\AbstractRector;
 final class GetAndSetToMethodCallRector extends AbstractRector
 {
     /**
-     * @var string
-     */
-    private const FETCH_TYPE_GET = 'get';
-
-    /**
-     * @var string
-     */
-    private const FETCH_TYPE_SET = 'set';
-
-    /**
      * @var string[]
      */
     private $typeToMethodCalls = [];
@@ -50,14 +41,14 @@ final class GetAndSetToMethodCallRector extends AbstractRector
     private $nodeFactory;
 
     /**
-     * @var string
-     */
-    private $fetchType;
-
-    /**
      * @var string[]
      */
     private $activeTransformation = [];
+
+    /**
+     * @var ExpressionAnalyzer
+     */
+    private $expressionAnalyzer;
 
     /**
      * Type to method call()
@@ -67,19 +58,20 @@ final class GetAndSetToMethodCallRector extends AbstractRector
     public function __construct(
         array $typeToMethodCalls,
         PropertyFetchAnalyzer $propertyAccessAnalyzer,
-        NodeFactory $nodeFactory
+        NodeFactory $nodeFactory,
+        ExpressionAnalyzer $expressionAnalyzer
     ) {
         $this->typeToMethodCalls = $typeToMethodCalls;
         $this->propertyAccessAnalyzer = $propertyAccessAnalyzer;
         $this->nodeFactory = $nodeFactory;
+        $this->expressionAnalyzer = $expressionAnalyzer;
     }
 
     public function isCandidate(Node $node): bool
     {
-        $this->fetchType = null;
         $this->activeTransformation = [];
 
-        $propertyFetchNode = $this->resolvePropertyFetch($node);
+        $propertyFetchNode = $this->expressionAnalyzer->resolvePropertyFetch($node);
         if ($propertyFetchNode === null) {
             return false;
         }
@@ -100,81 +92,47 @@ final class GetAndSetToMethodCallRector extends AbstractRector
      */
     public function refactor(Node $expressionNode): ?Node
     {
-        if ($this->fetchType === self::FETCH_TYPE_GET) {
+        if ($expressionNode->expr->expr instanceof PropertyFetch) {
             /** @var PropertyFetch $propertyFetchNode */
             $propertyFetchNode = $expressionNode->expr->expr;
+            $method = $this->activeTransformation['get'];
+            $expressionNode->expr->expr = $this->createMethodCallNodeFromPropertyFetchNode($propertyFetchNode, $method);
 
-            $expressionNode->expr->expr = $this->createMethodCallNodeFromPropertyFetchNode($propertyFetchNode);
+            return $expressionNode;
         }
 
-        if ($this->fetchType === self::FETCH_TYPE_SET) {
-            /** @var Assign $assignNode */
-            $assignNode = $expressionNode->expr;
-
-            $expressionNode->expr = $this->createMethodCallNodeFromAssignNode($assignNode);
-        }
+        /** @var Assign $assignNode */
+        $assignNode = $expressionNode->expr;
+        $method = $this->activeTransformation['set'];
+        $expressionNode->expr = $this->createMethodCallNodeFromAssignNode($assignNode, $method);
 
         return $expressionNode;
     }
 
-    private function createMethodCallNodeFromPropertyFetchNode(PropertyFetch $propertyFetchNode): MethodCall
-    {
+    private function createMethodCallNodeFromPropertyFetchNode(
+        PropertyFetch $propertyFetchNode,
+        string $method
+    ): MethodCall {
         $value = $propertyFetchNode->name->name;
 
-        $method = $this->activeTransformation[$this->fetchType] ?? null;
-
-        $methodCall = $this->nodeFactory->createMethodCallWithVariableAndArguments(
+        return $this->nodeFactory->createMethodCallWithVariableAndArguments(
             $propertyFetchNode->var,
             $method,
             [$value]
         );
-
-        return $methodCall;
     }
 
-    private function createMethodCallNodeFromAssignNode(Assign $assignNode): MethodCall
+    private function createMethodCallNodeFromAssignNode(Assign $assignNode, string $method): MethodCall
     {
         /** @var PropertyFetch $propertyFetchNode */
         $propertyFetchNode = $assignNode->var;
 
         $key = $propertyFetchNode->name->name;
 
-        $method = $this->activeTransformation[$this->fetchType] ?? null;
-
         return $this->nodeFactory->createMethodCallWithVariableAndArguments(
             $propertyFetchNode->var,
             $method,
             [$key, $assignNode->expr]
         );
-    }
-
-    private function resolvePropertyFetch(Node $node): ?PropertyFetch
-    {
-        if (! $node instanceof Expression) {
-            return null;
-        }
-
-        if (! $node->expr instanceof Assign) {
-            return null;
-        }
-
-        return $this->resolvePropertyFetchNodeFromAssignNode($node->expr);
-    }
-
-    private function resolvePropertyFetchNodeFromAssignNode(Assign $assignNode): ?PropertyFetch
-    {
-        if ($assignNode->expr instanceof PropertyFetch) {
-            $this->fetchType = self::FETCH_TYPE_GET;
-
-            return $assignNode->expr;
-        }
-
-        if ($assignNode->var instanceof PropertyFetch) {
-            $this->fetchType = self::FETCH_TYPE_SET;
-
-            return $assignNode->var;
-        }
-
-        return null;
     }
 }
