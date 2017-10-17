@@ -11,10 +11,10 @@ use Rector\Rector\AbstractRector;
 /**
  * __get to specific call
  *
- * Converts:
+ * Example - from:
  * - $container->someService;
  *
- * To:
+ * To
  * - $container->getService('someService');
  */
 final class GetToMethodCallRector extends AbstractRector
