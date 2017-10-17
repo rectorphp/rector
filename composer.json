@@ -9,6 +9,7 @@
     "require": {
         "php": "^7.1",
         "beberlei/assert": "^2.7",
+        "doctrine/annotations": "^1.5",
         "nette/utils": "^2.4",
         "nikic/php-parser": "4.0.x-dev#3193f7a as 3.1.1",
         "rector/better-reflection": "^3.0",
@@ -29,6 +30,7 @@
         "psr-4": {
             "Rector\\": "src",
             "Rector\\BetterReflection\\": "packages/BetterReflection/src",
+            "Rector\\DeprecatedAnnotation\\": "packages/DeprecatedAnnotation/src",
             "Rector\\NodeTypeResolver\\": "packages/NodeTypeResolver/src",
             "Rector\\NodeTraverserQueue\\": "packages/NodeTraverserQueue/src",
             "Rector\\DeprecationExtractor\\": "packages/DeprecationExtractor/src",
