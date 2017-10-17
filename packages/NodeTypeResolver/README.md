@@ -12,7 +12,7 @@ Anonymous classes are skipped.
 1. Traverse all nodes
 2. Detect variable assigns, property use, method arguments
 3. Resolve types 
-4. Add them via `$node->setAttribute('type', $type);` to ever node
+4. Add them via `$node->setAttribute(Attribute::TYPE, $type);` to ever node
 
 
 ## How it helps you?
