@@ -3,21 +3,23 @@
 namespace Rector\Rector\MagicDisclosure;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Stmt\Expression;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Rector\AbstractRector;
 
 /**
- * __get to specific call
+ * __set to specific call
  *
  * Example - from:
- * - $container->someService;
+ * - $container->someKey = 'someValue'
  *
  * To
- * - $container->getService('someService');
+ * - $container->setValue('someKey', 'someValue');
  */
-final class GetToMethodCallRector extends AbstractRector
+final class SetToMethodCallRector extends AbstractRector
 {
     /**
      * @var string[]
@@ -54,13 +56,25 @@ final class GetToMethodCallRector extends AbstractRector
         $this->nodeFactory = $nodeFactory;
     }
 
+    /**
+     * Detects "$this->someProperty = '...';"
+     */
     public function isCandidate(Node $node): bool
     {
-        $this->activeMethod = null;
+        if (! $node instanceof Expression) {
+            return false;
+        }
+
+        if (! $node->expr instanceof Assign) {
+            return false;
+        }
+
+        $possiblePropertyFetchNode = $node->expr->var;
 
         foreach ($this->typeToMethodCalls as $type => $method) {
-            if ($this->propertyAccessAnalyzer->isMagicPropertyFetchOnType($node, $type)) {
+            if ($this->propertyAccessAnalyzer->isMagicPropertyFetchOnType($possiblePropertyFetchNode, $type)) {
                 $this->activeMethod = $method;
+
                 return true;
             }
         }
@@ -69,15 +83,22 @@ final class GetToMethodCallRector extends AbstractRector
     }
 
     /**
-     * @param PropertyFetch $propertyFetchNode
+     * @param Expression $expressionNode
      */
-    public function refactor(Node $propertyFetchNode): ?Node
+    public function refactor(Node $expressionNode): ?Node
     {
+        /** @var PropertyFetch $propertyFetchNode */
+        $propertyFetchNode = $expressionNode->expr->var;
+
         $methodCall = $this->nodeFactory->createMethodCallWithVariable($propertyFetchNode->var, $this->activeMethod);
 
-        $serviceName = $propertyFetchNode->name->name;
-        $methodCall->args[] = $this->nodeFactory->createArg($serviceName);
+        $keyName = $propertyFetchNode->name->name;
 
-        return $methodCall;
+        $methodCall->args[] = $this->nodeFactory->createArg($keyName);
+        $methodCall->args[] = $this->nodeFactory->createArg($expressionNode->expr->expr);
+
+        $expressionNode->expr = $methodCall;
+
+        return $expressionNode;
     }
 }
