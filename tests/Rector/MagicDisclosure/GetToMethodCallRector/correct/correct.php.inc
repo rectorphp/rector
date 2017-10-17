@@ -2,5 +2,6 @@
 
 $container = new Nette\DI\Container;
 $someService = $container->getService('someService');
+$container->someService = new SomeService;
 
 $parameters = $container->parameters;

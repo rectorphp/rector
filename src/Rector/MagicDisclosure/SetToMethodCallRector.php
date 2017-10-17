@@ -61,6 +61,8 @@ final class SetToMethodCallRector extends AbstractRector
      */
     public function isCandidate(Node $node): bool
     {
+        $this->activeMethod = null;
+
         if (! $node instanceof Expression) {
             return false;
         }

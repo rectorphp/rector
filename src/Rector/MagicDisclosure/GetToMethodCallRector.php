@@ -3,7 +3,9 @@
 namespace Rector\Rector\MagicDisclosure;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Stmt\Expression;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Rector\AbstractRector;
@@ -58,9 +60,20 @@ final class GetToMethodCallRector extends AbstractRector
     {
         $this->activeMethod = null;
 
+        if (! $node instanceof Expression) {
+            return false;
+        }
+
+        if (! $node->expr instanceof Assign) {
+            return false;
+        }
+
+        $possiblePropertyFetchNode = $node->expr->expr;
+
         foreach ($this->typeToMethodCalls as $type => $method) {
-            if ($this->propertyAccessAnalyzer->isMagicPropertyFetchOnType($node, $type)) {
+            if ($this->propertyAccessAnalyzer->isMagicPropertyFetchOnType($possiblePropertyFetchNode, $type)) {
                 $this->activeMethod = $method;
+
                 return true;
             }
         }
@@ -69,15 +82,20 @@ final class GetToMethodCallRector extends AbstractRector
     }
 
     /**
-     * @param PropertyFetch $propertyFetchNode
+     * @param Expression $expressionNode
      */
-    public function refactor(Node $propertyFetchNode): ?Node
+    public function refactor(Node $expressionNode): ?Node
     {
+        /** @var PropertyFetch $propertyFetchNode */
+        $propertyFetchNode = $expressionNode->expr->expr;
+
         $methodCall = $this->nodeFactory->createMethodCallWithVariable($propertyFetchNode->var, $this->activeMethod);
 
         $serviceName = $propertyFetchNode->name->name;
         $methodCall->args[] = $this->nodeFactory->createArg($serviceName);
 
-        return $methodCall;
+        $expressionNode->expr->expr = $methodCall;
+
+        return $expressionNode;
     }
 }
