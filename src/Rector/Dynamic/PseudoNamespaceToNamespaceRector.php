@@ -150,24 +150,12 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
 
     /**
      * @param Node[] $nodes
-     * @param int|string $key
      * @return Node[]
      */
-    private function insertBefore(array $nodes, Node $addedNode, $key): array
+    private function insertBefore(array $nodes, Node $addedNode, int $key): array
     {
-        Arrays::insertBefore($nodes, $key, [
-            'before_' . $key => $addedNode,
-        ]);
+        array_splice($nodes, $key, 0, [$addedNode]);
 
-        // recound ids
-        $recountedNodes = [];
-        $i = 0;
-
-        foreach ($nodes as $node) {
-            $recountedNodes[$i] = $node;
-            ++$i;
-        }
-
-        return $recountedNodes;
+        return $nodes;
     }
 }

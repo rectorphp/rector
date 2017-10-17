@@ -60,13 +60,9 @@ final class StatementGlue
 
     /**
      * @todo decouple to statements added
-     *
-     * @param int|string $key
      */
-    private function insertBefore(Class_ $classNode, Node $node, $key): void
+    private function insertBefore(Class_ $classNode, Node $node, int $key): void
     {
-        Arrays::insertBefore($classNode->stmts, $key, [
-            'before_' . $key => $node,
-        ]);
+        array_splice($classNode->stmts, $key, 0, [$node]);
     }
 }
