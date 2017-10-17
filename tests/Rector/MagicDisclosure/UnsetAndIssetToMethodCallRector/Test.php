@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\MagicDisclosure\IssetToMethodCallRector;
+namespace Rector\Tests\Rector\MagicDisclosure\UnsetAndIssetToMethodCallRector;
 
-use Rector\Rector\MagicDisclosure\IssetToMethodCallRector;
+use Rector\Rector\MagicDisclosure\UnsetAndIssetToMethodCallRector;
 use Rector\Testing\PHPUnit\AbstractConfigurableRectorTestCase;
 
 final class Test extends AbstractConfigurableRectorTestCase
@@ -25,6 +25,6 @@ final class Test extends AbstractConfigurableRectorTestCase
      */
     protected function getRectorClasses(): array
     {
-        return [IssetToMethodCallRector::class];
+        return [UnsetAndIssetToMethodCallRector::class];
     }
 }

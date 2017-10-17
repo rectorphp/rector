@@ -2,3 +2,4 @@
 
 $container = new Nette\DI\Container;
 isset($container['someService']);
+unset($container['someService']);
