@@ -4,6 +4,7 @@ namespace Rector\Rector\MagicDisclosure;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Node\NodeFactory;
@@ -89,13 +90,21 @@ final class GetToMethodCallRector extends AbstractRector
         /** @var PropertyFetch $propertyFetchNode */
         $propertyFetchNode = $expressionNode->expr->expr;
 
-        $methodCall = $this->nodeFactory->createMethodCallWithVariable($propertyFetchNode->var, $this->activeMethod);
-
-        $serviceName = $propertyFetchNode->name->name;
-        $methodCall->args[] = $this->nodeFactory->createArg($serviceName);
-
-        $expressionNode->expr->expr = $methodCall;
+        $expressionNode->expr->expr = $this->createMethodCallNodeFromPropertyFetchNode($propertyFetchNode);
 
         return $expressionNode;
+    }
+
+    private function createMethodCallNodeFromPropertyFetchNode(PropertyFetch $propertyFetchNode): MethodCall
+    {
+        $serviceName = $propertyFetchNode->name->name;
+
+        $methodCall = $this->nodeFactory->createMethodCallWithVariableAndArguments(
+            $propertyFetchNode->var,
+            $this->activeMethod,
+            [$serviceName]
+        );
+
+        return $methodCall;
     }
 }

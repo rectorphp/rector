@@ -26,6 +26,10 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\TraitUse;
 
+/**
+ * @todo decouple MethodCallNodeFactory
+ * @todo decouple PropertyFetchNodeFactory
+ */
 final class NodeFactory
 {
     /**
@@ -235,6 +239,20 @@ final class NodeFactory
         $methodCallNode->args = $arguments;
 
         return $methodCallNode;
+    }
+
+    /**
+     * @param mixed[] $arguments
+     */
+    public function createMethodCallWithVariableAndArguments(
+        Variable $variableNode,
+        string $method,
+        array $arguments
+    ): MethodCall {
+        $methodCall = $this->createMethodCallWithVariable($variableNode, $method);
+        $methodCall->args = $this->createArgs($arguments);
+
+        return $methodCall;
     }
 
     /**
