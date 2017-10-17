@@ -9,11 +9,9 @@ final class DummyRector implements RectorInterface
 {
     public function isCandidate(Node $node): bool
     {
-        // TODO: Implement isCandidate() method.
     }
 
     public function refactor(Node $node): ?Node
     {
-        // TODO: Implement refactor() method.
     }
 }

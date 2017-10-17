@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\MagicDisclosure\SetToMethodCallRector;
+namespace Rector\Tests\Rector\MagicDisclosure\GetAndSetToMethodCallRector;
 
-use Rector\Rector\MagicDisclosure\SetToMethodCallRector;
+use Rector\Rector\MagicDisclosure\GetAndSetToMethodCallRector;
 use Rector\Testing\PHPUnit\AbstractConfigurableRectorTestCase;
 
 final class Test extends AbstractConfigurableRectorTestCase
@@ -12,6 +12,11 @@ final class Test extends AbstractConfigurableRectorTestCase
         $this->doTestFileMatchesExpectedContent(
             __DIR__ . '/wrong/wrong.php.inc',
             __DIR__ . '/correct/correct.php.inc'
+        );
+
+        $this->doTestFileMatchesExpectedContent(
+            __DIR__ . '/wrong/wrong2.php.inc',
+            __DIR__ . '/correct/correct2.php.inc'
         );
     }
 
@@ -25,6 +30,6 @@ final class Test extends AbstractConfigurableRectorTestCase
      */
     protected function getRectorClasses(): array
     {
-        return [SetToMethodCallRector::class];
+        return [GetAndSetToMethodCallRector::class];
     }
 }
