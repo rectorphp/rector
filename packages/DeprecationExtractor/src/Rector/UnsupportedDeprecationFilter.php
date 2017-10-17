@@ -10,19 +10,22 @@ final class UnsupportedDeprecationFilter
     /**
      * @var string[]
      */
-    private $yamlDeprecationMessages = [
+    private $configDeprecationMessages = [
         'Autowiring-types are deprecated',
         'The "=" suffix that used to disable strict references',
         'The XmlFileLoader will raise an exception in Symfony 4.0, instead of silently ignoring unsupported',
         'The "strict" attribute used when referencing the "" service is deprecated',
         'Service names that start with an underscore are deprecated',
         'configuration key',
+        // Laravel
+        "Key 'create' is deprecated, use 'factory' or 'type' in configuration",
     ];
 
     /**
      * @var string[]
      */
     private $serviceDeprecationMessages = [
+        // Symfony
         'It should either be deprecated or its implementation upgraded.',
         'It should either be deprecated or its factory upgraded.',
         'Service identifiers will be made case sensitive',
@@ -35,8 +38,8 @@ final class UnsupportedDeprecationFilter
 
     public function matches(Deprecation $deprecation): bool
     {
-        foreach ($this->yamlDeprecationMessages as $yamlDeprecationMessage) {
-            if (Strings::contains($deprecation->getMessage(), $yamlDeprecationMessage)) {
+        foreach ($this->configDeprecationMessages as $configDeprecationMessage) {
+            if (Strings::contains($deprecation->getMessage(), $configDeprecationMessage)) {
                 return true;
             }
         }

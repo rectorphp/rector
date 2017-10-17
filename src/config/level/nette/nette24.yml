@@ -9,6 +9,11 @@ rectors:
     Rector\Rector\Contrib\Nette\DI\ExpandFunctionToStaticExpandFunctionRector: ~
 
     Rector\Rector\Dynamic\MethodNameReplacerRector:
+        # di
+        'Nette\DI\ServiceDefinition':
+            'setImplementType': 'setImplementMode'
+            'getImplementType': 'getImplementMode'
+
         # php-generator
         'Nette\PhpGenerator\ClassType':
             'addDocument': 'addComment'
