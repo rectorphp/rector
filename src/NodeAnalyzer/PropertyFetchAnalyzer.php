@@ -25,31 +25,21 @@ final class PropertyFetchAnalyzer
         $this->smartClassReflector = $smartClassReflector;
     }
 
-    /**
-     * Checks "$classOfSpecificType->anyProperty"
-     */
-    public function isPropertyAccessType(Node $node, string $type): bool
+    public function isMagicPropertyFetchOnType(Node $node, string $type): bool
     {
         if (! $node instanceof PropertyFetch) {
             return false;
         }
 
-        $nodeType = $node->var->getAttribute(Attribute::TYPE);
+        $variableNodeType = $node->var->getAttribute(Attribute::TYPE);
+        if ($variableNodeType !== $type) {
+            return false;
+        }
 
-        return $nodeType === $type;
-    }
-
-    /**
-     * Checks if accessing a real existing public property of object,
-     * or some magic.
-     */
-    public function isPropertyAccessOfPublicProperty(PropertyFetch $propertyFetchNode, string $type): bool
-    {
+        $nodePropertyName = $node->name->name;
         $publicPropertyNames = $this->getPublicPropertyNamesForType($type);
 
-        $nodePropertyName = $propertyFetchNode->name->name;
-
-        return in_array($nodePropertyName, $publicPropertyNames, true);
+        return ! in_array($nodePropertyName, $publicPropertyNames, true);
     }
 
     /**

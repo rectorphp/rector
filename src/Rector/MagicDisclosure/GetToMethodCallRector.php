@@ -52,12 +52,9 @@ final class GetToMethodCallRector extends AbstractRector
     public function isCandidate(Node $node): bool
     {
         foreach ($this->typeToMethodCalls as $type => $method) {
-            if (! $this->propertyAccessAnalyzer->isPropertyAccessType($node, $type)) {
-                continue;
+            if ($this->propertyAccessAnalyzer->isMagicPropertyFetchOnType($node, $type)) {
+                return true;
             }
-
-            /** @var PropertyFetch $node */
-            return ! $this->propertyAccessAnalyzer->isPropertyAccessOfPublicProperty($node, $type);
         }
 
         return false;
