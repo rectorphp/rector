@@ -15,10 +15,10 @@ rectors:
             'set': 'setService'
 
     Rector\Rector\MagicDisclosure\UnsetAndIssetToMethodCallRector:
-         # di
-         'Nette\DI\Container':
-             'isset': 'hasService'
-             'unset': 'removeService'
+        # di
+        'Nette\DI\Container':
+            'isset': 'hasService'
+            'unset': 'removeService'
 
     Rector\Rector\Dynamic\MethodNameReplacerRector:
         # di
