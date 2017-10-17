@@ -33,7 +33,7 @@ final class RectorClassNormalizerTest extends TestCase
     {
         $this->expectException(InvalidConfigurationTypeException::class);
         $this->rectorClassNormalizer->normalize([
-            'rector' => 'config'
+            'rector' => 'config',
         ]);
     }
 
@@ -47,21 +47,21 @@ final class RectorClassNormalizerTest extends TestCase
                 ['rector'],
                 [
                     'rector' => [],
-                ]
+                ],
             ],
-            # commented configurtaion
+            // commented configurtaion
             [
                 ['rector' => null],
                 [
                     'rector' => [],
-                ]
+                ],
             ],
-            # configurtaion
+            // with configuration
             [
                 ['rector' => ['yes']],
                 [
                     'rector' => ['yes'],
-                ]
+                ],
             ],
         ];
     }
