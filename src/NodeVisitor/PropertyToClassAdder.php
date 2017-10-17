@@ -8,7 +8,6 @@ use PhpParser\NodeVisitorAbstract;
 use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Builder\ConstructorMethodBuilder;
 use Rector\Builder\PropertyBuilder;
-use Rector\Node\Attribute;
 
 /**
  * Adds new properties to class and to contructor.
@@ -64,9 +63,6 @@ final class PropertyToClassAdder extends NodeVisitorAbstract
         if (! count($propertiesForClass)) {
             return $classNode;
         }
-
-        // prevents offset errors
-        $classNode->setAttribute(Attribute::ORIGINAL_NODE, null);
 
         foreach ($propertiesForClass as $propertyType => $propertyName) {
             $this->constructorMethodBuilder->addPropertyAssignToClass($classNode, $propertyType, $propertyName);

@@ -2,7 +2,6 @@
 
 namespace Rector\Builder;
 
-use Nette\Utils\Arrays;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;

@@ -2,7 +2,6 @@
 
 namespace Rector\Rector\Dynamic;
 
-use Nette\Utils\Arrays;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
