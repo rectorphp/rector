@@ -101,9 +101,17 @@ final class NodeFactory
      */
     public function createMethodCall(string $variableName, string $methodName): MethodCall
     {
-        $varNode = new Variable($variableName);
+        $variableNode = new Variable($variableName);
 
-        return new MethodCall($varNode, $methodName);
+        return new MethodCall($variableNode, $methodName);
+    }
+
+    /**
+     * Creates "$method->call();" from existing variable
+     */
+    public function createMethodCallWithVariable(Variable $variableNode, string $methodName): MethodCall
+    {
+        return new MethodCall($variableNode, $methodName);
     }
 
     /**
