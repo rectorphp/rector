@@ -8,6 +8,12 @@ rectors:
     Rector\Rector\Contrib\Nette\DI\ExpandFunctionToParametersArrayRector: ~
     Rector\Rector\Contrib\Nette\DI\ExpandFunctionToStaticExpandFunctionRector: ~
 
+    Rector\Rector\MagicDisclosure\GetToMethodCallRector:
+        'Nette\DI\Container': 'getService'
+
+    Rector\Rector\MagicDisclosure\SetToMethodCallRector:
+         'Nette\DI\Container': 'addService'
+
     Rector\Rector\Dynamic\MethodNameReplacerRector:
         # di
         'Nette\DI\ServiceDefinition':
