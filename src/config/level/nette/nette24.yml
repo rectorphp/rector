@@ -8,7 +8,24 @@ rectors:
     Rector\Rector\Contrib\Nette\DI\ExpandFunctionToParametersArrayRector: ~
     Rector\Rector\Contrib\Nette\DI\ExpandFunctionToStaticExpandFunctionRector: ~
 
+    Rector\Rector\MagicDisclosure\GetAndSetToMethodCallRector:
+        # di
+        'Nette\DI\Container':
+            'get': 'getService'
+            'set': 'setService'
+
+    Rector\Rector\MagicDisclosure\UnsetAndIssetToMethodCallRector:
+        # di
+        'Nette\DI\Container':
+            'isset': 'hasService'
+            'unset': 'removeService'
+
     Rector\Rector\Dynamic\MethodNameReplacerRector:
+        # di
+        'Nette\DI\ServiceDefinition':
+            'setImplementType': 'setImplementMode'
+            'getImplementType': 'getImplementMode'
+
         # php-generator
         'Nette\PhpGenerator\ClassType':
             'addDocument': 'addComment'

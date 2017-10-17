@@ -1,0 +1,5 @@
+rectors:
+    Rector\Rector\MagicDisclosure\GetAndSetToMethodCallRector:
+        'Nette\DI\Container':
+            'get': 'getService'
+            'set': 'addService'

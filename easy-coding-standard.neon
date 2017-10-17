@@ -56,7 +56,8 @@ parameters:
             - */src/Rector/Contrib/*/*Rector.php
             - packages/NodeTypeResolver/src/NodeVisitor/TypeResolver.php
         Symplify\CodingStandard\Sniffs\Debug\CommentedOutCodeSniff:
-            # false positive - @todo fix
+            # false positives - @todo fix
+            - packages/DeprecationExtractor/src/Rector/UnsupportedDeprecationFilter.php
             - packages/NodeTypeResolver/src/NodeVisitor/TypeResolver.php
             # false positive - fixed in master
             - src/NodeAnalyzer/ClassConstAnalyzer.php
