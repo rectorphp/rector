@@ -97,12 +97,12 @@ final class GetToMethodCallRector extends AbstractRector
 
     private function createMethodCallNodeFromPropertyFetchNode(PropertyFetch $propertyFetchNode): MethodCall
     {
-        $serviceName = $propertyFetchNode->name->name;
+        $value = $propertyFetchNode->name->name;
 
         $methodCall = $this->nodeFactory->createMethodCallWithVariableAndArguments(
             $propertyFetchNode->var,
             $this->activeMethod,
-            [$serviceName]
+            [$value]
         );
 
         return $methodCall;

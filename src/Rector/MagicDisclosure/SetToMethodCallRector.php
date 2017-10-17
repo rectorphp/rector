@@ -4,6 +4,7 @@ namespace Rector\Rector\MagicDisclosure;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Node\NodeFactory;
@@ -89,18 +90,25 @@ final class SetToMethodCallRector extends AbstractRector
      */
     public function refactor(Node $expressionNode): ?Node
     {
-        /** @var PropertyFetch $propertyFetchNode */
-        $propertyFetchNode = $expressionNode->expr->var;
+        /** @var Assign $assignNode */
+        $assignNode = $expressionNode->expr;
 
-        $methodCall = $this->nodeFactory->createMethodCallWithVariable($propertyFetchNode->var, $this->activeMethod);
-
-        $keyName = $propertyFetchNode->name->name;
-
-        $methodCall->args[] = $this->nodeFactory->createArg($keyName);
-        $methodCall->args[] = $this->nodeFactory->createArg($expressionNode->expr->expr);
-
-        $expressionNode->expr = $methodCall;
+        $expressionNode->expr = $this->createMethodCallNodeFromAssignNode($assignNode);
 
         return $expressionNode;
+    }
+
+    private function createMethodCallNodeFromAssignNode(Assign $assignNode): MethodCall
+    {
+        /** @var PropertyFetch $propertyFetchNode */
+        $propertyFetchNode = $assignNode->var;
+
+        $key = $propertyFetchNode->name->name;
+
+        return $this->nodeFactory->createMethodCallWithVariableAndArguments(
+            $propertyFetchNode->var,
+            $this->activeMethod,
+            [$key, $assignNode->expr]
+        );
     }
 }
