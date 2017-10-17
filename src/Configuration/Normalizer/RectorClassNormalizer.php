@@ -10,7 +10,7 @@ final class RectorClassNormalizer
      * @param mixed[] $rectors
      * @return mixed[]
      */
-    public function normalizer(array $rectors): array
+    public function normalize(array $rectors): array
     {
         $configuredClasses = [];
         foreach ($rectors as $name => $class) {
