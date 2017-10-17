@@ -3,7 +3,6 @@
 namespace Rector\Rector\MagicDisclosure;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -26,6 +25,16 @@ use Rector\Rector\AbstractRector;
 final class GetAndSetToMethodCallRector extends AbstractRector
 {
     /**
+     * @var string
+     */
+    private const FETCH_TYPE_GET = 'get';
+
+    /**
+     * @var string
+     */
+    private const FETCH_TYPE_SET = 'set';
+
+    /**
      * @var string[]
      */
     private $typeToMethodCalls = [];
@@ -43,7 +52,7 @@ final class GetAndSetToMethodCallRector extends AbstractRector
     /**
      * @var string
      */
-    private $type;
+    private $fetchType;
 
     /**
      * @var string[]
@@ -67,18 +76,10 @@ final class GetAndSetToMethodCallRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        $this->type = null;
+        $this->fetchType = null;
         $this->activeTransformation = [];
 
-        if (! $node instanceof Expression) {
-            return false;
-        }
-
-        if (! $node->expr instanceof Assign) {
-            return false;
-        }
-
-        $propertyFetchNode = $this->resolvePropertyFetchNodeFromAssignNode($node->expr);
+        $propertyFetchNode = $this->resolvePropertyFetch($node);
         if ($propertyFetchNode === null) {
             return false;
         }
@@ -95,32 +96,32 @@ final class GetAndSetToMethodCallRector extends AbstractRector
     }
 
     /**
-     * @param Expr $exprNode
+     * @param Expression $expressionNode
      */
-    public function refactor(Node $exprNode): ?Node
+    public function refactor(Node $expressionNode): ?Node
     {
-        if ($this->type === 'get') {
+        if ($this->fetchType === self::FETCH_TYPE_GET) {
             /** @var PropertyFetch $propertyFetchNode */
-            $propertyFetchNode = $exprNode->expr->expr;
+            $propertyFetchNode = $expressionNode->expr->expr;
 
-            $exprNode->expr->expr = $this->createMethodCallNodeFromPropertyFetchNode($propertyFetchNode);
+            $expressionNode->expr->expr = $this->createMethodCallNodeFromPropertyFetchNode($propertyFetchNode);
         }
 
-        if ($this->type === 'set') {
+        if ($this->fetchType === self::FETCH_TYPE_SET) {
             /** @var Assign $assignNode */
-            $assignNode = $exprNode->expr;
+            $assignNode = $expressionNode->expr;
 
-            $exprNode->expr = $this->createMethodCallNodeFromAssignNode($assignNode);
+            $expressionNode->expr = $this->createMethodCallNodeFromAssignNode($assignNode);
         }
 
-        return $exprNode;
+        return $expressionNode;
     }
 
     private function createMethodCallNodeFromPropertyFetchNode(PropertyFetch $propertyFetchNode): MethodCall
     {
         $value = $propertyFetchNode->name->name;
 
-        $method = $this->activeTransformation[$this->type] ?? null;
+        $method = $this->activeTransformation[$this->fetchType] ?? null;
 
         $methodCall = $this->nodeFactory->createMethodCallWithVariableAndArguments(
             $propertyFetchNode->var,
@@ -138,7 +139,7 @@ final class GetAndSetToMethodCallRector extends AbstractRector
 
         $key = $propertyFetchNode->name->name;
 
-        $method = $this->activeTransformation[$this->type] ?? null;
+        $method = $this->activeTransformation[$this->fetchType] ?? null;
 
         return $this->nodeFactory->createMethodCallWithVariableAndArguments(
             $propertyFetchNode->var,
@@ -147,16 +148,29 @@ final class GetAndSetToMethodCallRector extends AbstractRector
         );
     }
 
+    private function resolvePropertyFetch(Node $node): ?PropertyFetch
+    {
+        if (! $node instanceof Expression) {
+            return null;
+        }
+
+        if (! $node->expr instanceof Assign) {
+            return null;
+        }
+
+        return $this->resolvePropertyFetchNodeFromAssignNode($node->expr);
+    }
+
     private function resolvePropertyFetchNodeFromAssignNode(Assign $assignNode): ?PropertyFetch
     {
         if ($assignNode->expr instanceof PropertyFetch) {
-            $this->type = 'get';
+            $this->fetchType = self::FETCH_TYPE_GET;
 
             return $assignNode->expr;
         }
 
         if ($assignNode->var instanceof PropertyFetch) {
-            $this->type = 'set';
+            $this->fetchType = self::FETCH_TYPE_SET;
 
             return $assignNode->var;
         }
