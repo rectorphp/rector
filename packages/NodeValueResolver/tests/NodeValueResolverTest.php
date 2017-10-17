@@ -26,9 +26,10 @@ final class NodeValueResolverTest extends AbstractContainerAwareTestCase
         $arrayNode = new Array_([
             new ArrayItem(new String_('hi')),
             new ArrayItem(BuilderHelpers::normalizeValue(true)),
+            new ArrayItem(BuilderHelpers::normalizeValue(false)),
         ]);
 
         $resolved = $this->nodeValueResolver->resolve($arrayNode);
-        $this->assertSame(['hi', true], $resolved);
+        $this->assertSame(['hi', true, false], $resolved);
     }
 }

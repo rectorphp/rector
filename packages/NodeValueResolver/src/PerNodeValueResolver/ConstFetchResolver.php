@@ -16,7 +16,7 @@ final class ConstFetchResolver implements PerNodeValueResolverInterface
     /**
      * @param ConstFetch $constFetchNode
      */
-    public function resolve(Node $constFetchNode): ?bool
+    public function resolve(Node $constFetchNode): bool
     {
         $name = $constFetchNode->name->toString();
         if ($name === 'true') {
@@ -25,10 +25,6 @@ final class ConstFetchResolver implements PerNodeValueResolverInterface
 
         if ($name === 'false') {
             return false;
-        }
-
-        if ($name === 'null') {
-            return null;
         }
     }
 }
