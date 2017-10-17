@@ -38,7 +38,7 @@ final class RectorsExtension extends Extension
 
         $rectors = $this->mergeAllConfigsRecursively($configs);
 
-        $rectors = $this->rectorClassNormalizer->normalizer($rectors);
+        $rectors = $this->rectorClassNormalizer->normalize($rectors);
 
         $this->rectorClassValidator->validate(array_keys($rectors));
 

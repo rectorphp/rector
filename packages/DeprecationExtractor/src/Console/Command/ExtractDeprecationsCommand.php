@@ -88,14 +88,14 @@ final class ExtractDeprecationsCommand extends Command
         $guessedRectors = $this->rectorGuesser->guessForDeprecations($this->deprecationCollector->getDeprecations());
         $guessedRectors = $this->rectorGuessFilter->filterRectorGuessesToShow($guessedRectors);
 
-        $this->symfonyStyle->title(sprintf(
-            'Found %d useful deprecations',
-            count($guessedRectors)
-        ));
-
         foreach ($guessedRectors as $guessedRector) {
             $this->renderGuessedRector($guessedRector);
         }
+
+        $this->symfonyStyle->success(sprintf(
+            'Found %d useful deprecations',
+            count($guessedRectors)
+        ));
 
         return 0;
     }
@@ -104,7 +104,8 @@ final class ExtractDeprecationsCommand extends Command
     {
         $this->symfonyStyle->success($guessedRector->getGuessedRectorClass());
 
-        $this->symfonyStyle->writeln(' ' . $guessedRector->getMessage());
+        $this->symfonyStyle->writeln('<fg=yellow> ' . $guessedRector->getMessage() . '</>');
+
         $this->symfonyStyle->newLine();
 
         $node = $guessedRector->getNode();
