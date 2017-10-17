@@ -12,7 +12,7 @@ use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Rector\AbstractRector;
 
 /**
- * __get to specific call
+ * __get/__set to specific call
  *
  * Example - from:
  * - $someService = $container->someService;
