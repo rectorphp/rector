@@ -19,6 +19,7 @@ final class UnsupportedDeprecationFilter
         'configuration key',
         // Laravel
         "Key 'create' is deprecated, use 'factory' or 'type' in configuration",
+        "Option 'run' is deprecated, use 'run' as tag.",
     ];
 
     /**
