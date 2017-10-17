@@ -83,8 +83,4 @@ final class Attribute
      * @var string
      */
     public const NAMESPACE = 'namespace';
-
-    private function __construct()
-    {
-    }
 }
