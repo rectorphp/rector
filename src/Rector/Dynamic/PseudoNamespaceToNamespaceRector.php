@@ -55,15 +55,6 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
         $this->statementGlue = $statementGlue;
     }
 
-    /**
-     * @param mixed[] $nodes
-     */
-    public function beforeTraverse(array $nodes): void
-    {
-        $this->newNamespace = null;
-        $this->oldToNewUseStatements = [];
-    }
-
     public function isCandidate(Node $node): bool
     {
         $name = $this->resolveNameFromNode($node);
@@ -133,6 +124,9 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
                 }
             }
         }
+
+        $this->newNamespace = null;
+        $this->oldToNewUseStatements = [];
 
         return $nodes;
     }
