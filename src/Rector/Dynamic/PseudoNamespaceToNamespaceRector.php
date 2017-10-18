@@ -94,8 +94,6 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
             if ($parentNode instanceof UseUse) {
                 $this->oldToNewUseStatements[$oldName] = $lastNewNamePart;
             } elseif (isset($this->oldToNewUseStatements[$oldName])) {
-                // to prevent "getComments() on string" error
-                $nameOrIdentifierNode->setAttribute(Attribute::ORIGINAL_NODE, null);
                 $newNameParts = [$this->oldToNewUseStatements[$oldName]];
             }
 
