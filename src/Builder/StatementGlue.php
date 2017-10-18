@@ -43,21 +43,6 @@ final class StatementGlue
         $this->addStatementToClassBeforeTypes($classNode, $node, TraitUse::class, Property::class);
     }
 
-    private function addStatementToClassBeforeTypes(Class_ $classNode, Node $node, string ...$types): void
-    {
-        foreach ($types as $type) {
-            foreach ($classNode->stmts as $key => $classElementNode) {
-                if (is_a($classElementNode, $type, true)) {
-                    $classNode->stmts = $this->insertBefore($classNode->stmts, $node, $key);
-
-                    return;
-                }
-            }
-        }
-
-        $classNode->stmts[] = $node;
-    }
-
     /**
      * @param Node[] $nodes
      * @return Node[] $nodes
@@ -79,5 +64,20 @@ final class StatementGlue
         array_splice($nodes, $key, 0, [$node]);
 
         return $nodes;
+    }
+
+    private function addStatementToClassBeforeTypes(Class_ $classNode, Node $node, string ...$types): void
+    {
+        foreach ($types as $type) {
+            foreach ($classNode->stmts as $key => $classElementNode) {
+                if (is_a($classElementNode, $type, true)) {
+                    $classNode->stmts = $this->insertBefore($classNode->stmts, $node, $key);
+
+                    return;
+                }
+            }
+        }
+
+        $classNode->stmts[] = $node;
     }
 }
