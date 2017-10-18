@@ -11,7 +11,7 @@
         "beberlei/assert": "^2.7",
         "doctrine/annotations": "^1.5",
         "nette/utils": "^2.4",
-        "nikic/php-parser": "4.0.x-dev#3193f7a as 3.1.1",
+        "nikic/php-parser": "4.0.x-dev#f5de7f9 as 3.1.1",
         "rector/better-reflection": "^3.0",
         "symfony/console": "^3.3",
         "symfony/dependency-injection": "^3.3",
@@ -23,7 +23,7 @@
         "symfony/expression-language": "^3.3",
         "symfony/dependency-injection": "^3.3",
         "symfony/form": "^3.3",
-        "symplify/easy-coding-standard": "^2.5",
+        "symplify/easy-coding-standard": "^2.5.4",
         "tracy/tracy": "^2.4"
     },
     "autoload": {

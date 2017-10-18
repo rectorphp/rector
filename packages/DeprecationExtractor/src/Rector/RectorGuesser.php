@@ -37,13 +37,13 @@ final class RectorGuesser
      */
     public function guessForDeprecations(array $deprecations): array
     {
-        $guessedRectors = [];
+        $rectorGuesses = [];
 
         foreach ($deprecations as $deprecation) {
-            $guessedRectors[] = $this->guessForDeprecation($deprecation);
+            $rectorGuesses[] = $this->guessForDeprecation($deprecation);
         }
 
-        return $guessedRectors;
+        return $rectorGuesses;
     }
 
     private function guessForDeprecation(Deprecation $deprecation): ?RectorGuess

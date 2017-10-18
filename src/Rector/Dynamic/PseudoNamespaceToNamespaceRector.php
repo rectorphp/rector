@@ -2,14 +2,13 @@
 
 namespace Rector\Rector\Dynamic;
 
-use Nette\Utils\Arrays;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\UseUse;
+use Rector\Builder\StatementGlue;
 use Rector\Node\Attribute;
 use Rector\Node\NodeFactory;
 use Rector\Rector\AbstractRector;
@@ -42,12 +41,18 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
     private $nodeFactory;
 
     /**
+     * @var StatementGlue
+     */
+    private $statementGlue;
+
+    /**
      * @param string[] $pseudoNamespacePrefixes
      */
-    public function __construct(array $pseudoNamespacePrefixes, NodeFactory $nodeFactory)
+    public function __construct(array $pseudoNamespacePrefixes, NodeFactory $nodeFactory, StatementGlue $statementGlue)
     {
         $this->pseudoNamespacePrefixes = $pseudoNamespacePrefixes;
         $this->nodeFactory = $nodeFactory;
+        $this->statementGlue = $statementGlue;
     }
 
     /**
@@ -89,8 +94,6 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
             if ($parentNode instanceof UseUse) {
                 $this->oldToNewUseStatements[$oldName] = $lastNewNamePart;
             } elseif (isset($this->oldToNewUseStatements[$oldName])) {
-                // to prevent "getComments() on string" error
-                $nameOrIdentifierNode->setAttribute(Attribute::ORIGINAL_NODE, null);
                 $newNameParts = [$this->oldToNewUseStatements[$oldName]];
             }
 
@@ -124,8 +127,7 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
 
             foreach ($nodes as $key => $node) {
                 if ($node instanceof Class_) {
-                    $nodes = $this->insertBefore($nodes, $namespaceNode, $key);
-                    $nodes = $this->insertBefore($nodes, new Nop, $key);
+                    $nodes = $this->statementGlue->insertBeforeAndFollowWithNewline($nodes, $namespaceNode, $key);
 
                     break;
                 }
@@ -146,28 +148,5 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
         }
 
         return null;
-    }
-
-    /**
-     * @param Node[] $nodes
-     * @param int|string $key
-     * @return Node[]
-     */
-    private function insertBefore(array $nodes, Node $addedNode, $key): array
-    {
-        Arrays::insertBefore($nodes, $key, [
-            'before_' . $key => $addedNode,
-        ]);
-
-        // recound ids
-        $recountedNodes = [];
-        $i = 0;
-
-        foreach ($nodes as $node) {
-            $recountedNodes[$i] = $node;
-            ++$i;
-        }
-
-        return $recountedNodes;
     }
 }

@@ -10,17 +10,17 @@ final class MethodReflector
     /**
      * @var SmartClassReflector
      */
-    private $classReflector;
+    private $smartClassReflector;
 
-    public function __construct(SmartClassReflector $classReflector)
+    public function __construct(SmartClassReflector $smartClassReflector)
     {
-        $this->classReflector = $classReflector;
+        $this->smartClassReflector = $smartClassReflector;
     }
 
     public function reflectClassMethod(string $class, string $method): ?ReflectionMethod
     {
         try {
-            $classReflection = $this->classReflector->reflect($class);
+            $classReflection = $this->smartClassReflector->reflect($class);
         } catch (IdentifierNotFound $identifierNotFoundException) {
             // class doesn't exist
             return null;

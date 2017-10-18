@@ -22,7 +22,7 @@ final class SmartClassReflector
     /**
      * @var SmartClassReflector
      */
-    private $classReflector;
+    private $smartClassReflector;
 
     /**
      * @var SplFileInfo
@@ -44,7 +44,7 @@ final class SmartClassReflector
                 $this->createNewClassReflector();
             }
 
-            return $this->classReflector->reflect($className);
+            return $this->smartClassReflector->reflect($className);
         } catch (TypeError $typeError) {
             return null;
         }
@@ -55,16 +55,16 @@ final class SmartClassReflector
         $currentFile = $this->currentFileProvider->getCurrentFile();
 
         if ($currentFile === null) {
-            $this->classReflector = $this->classReflectorFactory->create();
+            $this->smartClassReflector = $this->classReflectorFactory->create();
         } else {
-            $this->classReflector = $this->classReflectorFactory->createWithFile($currentFile);
+            $this->smartClassReflector = $this->classReflectorFactory->createWithFile($currentFile);
             $this->classReflectorActiveFile = $currentFile;
         }
     }
 
     private function shouldCreateNewClassReflector(): bool
     {
-        if ($this->classReflector === null) {
+        if ($this->smartClassReflector === null) {
             return true;
         }
 

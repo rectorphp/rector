@@ -69,7 +69,6 @@ final class NamespaceReplacerRector extends AbstractRector
             }
 
             $node->parts = explode('\\', $newName);
-            $node->setAttribute(Attribute::ORIGINAL_NODE, null);
 
             return $node;
         }

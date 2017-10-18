@@ -2,10 +2,10 @@
 
 namespace Rector\Builder;
 
-use Nette\Utils\Arrays;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\TraitUse;
 
@@ -18,7 +18,7 @@ final class StatementGlue
     {
         foreach ($classNode->stmts as $key => $classElementNode) {
             if ($classElementNode instanceof ClassMethod) {
-                $this->insertBefore($classNode, $node, $key);
+                $classNode->stmts = $this->insertBefore($classNode->stmts, $node, $key);
 
                 return;
             }
@@ -27,7 +27,7 @@ final class StatementGlue
         $previousElement = null;
         foreach ($classNode->stmts as $key => $classElementNode) {
             if ($previousElement instanceof Property && ! $classElementNode instanceof Property) {
-                $this->insertBefore($classNode, $node, $key);
+                $classNode->stmts = $this->insertBefore($classNode->stmts, $node, $key);
 
                 return;
             }
@@ -43,12 +43,35 @@ final class StatementGlue
         $this->addStatementToClassBeforeTypes($classNode, $node, TraitUse::class, Property::class);
     }
 
+    /**
+     * @param Node[] $nodes
+     * @return Node[] $nodes
+     */
+    public function insertBeforeAndFollowWithNewline(array $nodes, Node $node, int $key): array
+    {
+        $nodes = $this->insertBefore($nodes, $node, $key);
+        $nodes = $this->insertBefore($nodes, new Nop, $key);
+
+        return $nodes;
+    }
+
+    /**
+     * @param Node[] $nodes
+     * @return Node[] $nodes
+     */
+    public function insertBefore(array $nodes, Node $node, int $key): array
+    {
+        array_splice($nodes, $key, 0, [$node]);
+
+        return $nodes;
+    }
+
     private function addStatementToClassBeforeTypes(Class_ $classNode, Node $node, string ...$types): void
     {
         foreach ($types as $type) {
             foreach ($classNode->stmts as $key => $classElementNode) {
                 if (is_a($classElementNode, $type, true)) {
-                    $this->insertBefore($classNode, $node, $key);
+                    $classNode->stmts = $this->insertBefore($classNode->stmts, $node, $key);
 
                     return;
                 }
@@ -56,17 +79,5 @@ final class StatementGlue
         }
 
         $classNode->stmts[] = $node;
-    }
-
-    /**
-     * @todo decouple to statements added
-     *
-     * @param int|string $key
-     */
-    private function insertBefore(Class_ $classNode, Node $node, $key): void
-    {
-        Arrays::insertBefore($classNode->stmts, $key, [
-            'before_' . $key => $node,
-        ]);
     }
 }

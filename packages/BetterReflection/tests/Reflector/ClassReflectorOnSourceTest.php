@@ -19,7 +19,7 @@ final class ClassReflectorOnSourceTest extends AbstractContainerAwareTestCase
     /**
      * @var SmartClassReflector
      */
-    private $currentFileAwareClassReflector;
+    private $smartClassReflector;
 
     protected function setUp(): void
     {
@@ -27,19 +27,19 @@ final class ClassReflectorOnSourceTest extends AbstractContainerAwareTestCase
         $classReflectorFactory = $this->container->get(ClassReflectorFactory::class);
 
         $this->currentProcessedFileInfo = new SplFileInfo(__DIR__ . '/NotLoadedSource/SomeClass.php');
-        $this->currentFileAwareClassReflector = $classReflectorFactory->createWithFile($this->currentProcessedFileInfo);
+        $this->smartClassReflector = $classReflectorFactory->createWithFile($this->currentProcessedFileInfo);
     }
 
     public function test(): void
     {
-        $this->assertInstanceOf(ClassReflector::class, $this->currentFileAwareClassReflector);
+        $this->assertInstanceOf(ClassReflector::class, $this->smartClassReflector);
     }
 
     public function testReflectClassThatIsNotLoaded(): void
     {
         $className = 'NotLoadedSource\SomeClass';
 
-        $classReflection = $this->currentFileAwareClassReflector->reflect($className);
+        $classReflection = $this->smartClassReflector->reflect($className);
 
         $this->assertInstanceOf(ReflectionClass::class, $classReflection);
     }

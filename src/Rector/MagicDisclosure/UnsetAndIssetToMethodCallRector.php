@@ -35,19 +35,17 @@ final class UnsetAndIssetToMethodCallRector extends AbstractRector
     private $nodeFactory;
 
     /**
-     * @var mixed
+     * @var mixed[]
      */
-    private $activeTransformation;
+    private $activeTransformation = [];
 
     /**
      * Type to method call()
      *
      * @param string[] $typeToMethodCalls
      */
-    public function __construct(
-        array $typeToMethodCalls,
-        NodeFactory $nodeFactory
-    ) {
+    public function __construct(array $typeToMethodCalls, NodeFactory $nodeFactory)
+    {
         $this->typeToMethodCalls = $typeToMethodCalls;
         $this->nodeFactory = $nodeFactory;
     }
@@ -64,17 +62,13 @@ final class UnsetAndIssetToMethodCallRector extends AbstractRector
             return false;
         }
 
-        /** @var ArrayDimFetch $var */
         foreach ($node->vars as $var) {
-            $variableNode = $var->var;
-            $variableNodeType = $variableNode->getAttribute(Attribute::TYPE);
+            if (! $var instanceof ArrayDimFetch) {
+                continue;
+            }
 
-            foreach ($this->typeToMethodCalls as $type => $transformation) {
-                if ($variableNodeType === $type) {
-                    $this->activeTransformation = $transformation;
-
-                    return true;
-                }
+            if ($this->matchArrayDimFetch($var)) {
+                return true;
             }
         }
 
@@ -122,5 +116,20 @@ final class UnsetAndIssetToMethodCallRector extends AbstractRector
         }
 
         return null;
+    }
+
+    private function matchArrayDimFetch(ArrayDimFetch $arrayDimFetchNode): bool
+    {
+        $variableNodeType = $arrayDimFetchNode->var->getAttribute(Attribute::TYPE);
+
+        foreach ($this->typeToMethodCalls as $type => $transformation) {
+            if ($variableNodeType === $type) {
+                $this->activeTransformation = $transformation;
+
+                return true;
+            }
+        }
+
+        return false;
     }
 }
