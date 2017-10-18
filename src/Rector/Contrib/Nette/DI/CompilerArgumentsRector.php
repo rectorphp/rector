@@ -6,8 +6,8 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Expression;
+use Rector\Builder\StatementGlue;
 use Rector\Node\Attribute;
-use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
 use SplObjectStorage;
@@ -35,11 +35,16 @@ final class CompilerArgumentsRector extends AbstractRector
      */
     private $expressionsToPrepend = [];
 
-    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, NodeFactory $nodeFactory)
+    /**
+     * @var StatementGlue
+     */
+    private $statementGlue;
+
+    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, StatementGlue $statementGlue)
     {
         $this->expressionsToPrepend = new SplObjectStorage;
-
         $this->methodCallAnalyzer = $methodCallAnalyzer;
+        $this->statementGlue = $statementGlue;
     }
 
     public function isCandidate(Node $node): bool
@@ -53,13 +58,22 @@ final class CompilerArgumentsRector extends AbstractRector
     }
 
     /**
+     * @todo build into abstract?
+     *
      * @param Node[] $nodes
      * @return Node[]
      */
     public function afterTraverse(array $nodes): array
     {
-        // statements with current key and prepends some
-        $nodes = array_merge($nodes, $this->expressionsToPrepend);
+        foreach ($nodes as $i => $node) {
+            if ($node instanceof Expression) {
+                if (! isset($this->expressionsToPrepend[$node])) {
+                    continue;
+                }
+
+                $nodes = $this->statementGlue->insertNewNodesAfter($nodes, $this->expressionsToPrepend[$node], $i);
+            }
+        }
 
         $this->expressionsToPrepend = [];
 
@@ -72,15 +86,14 @@ final class CompilerArgumentsRector extends AbstractRector
     public function refactor(Node $methodCallNode): ?Node
     {
         $oldArguments = $methodCallNode->args;
-
-        $parentExpressionNode = $methodCallNode->getAttribute(Attribute::PARENT_NODE);
+        $nodesToPrepend = [];
 
         $addConfigMethodCallNode = $this->cloneMethodWithNameAndArgument(
             $methodCallNode,
             'addConfig',
             $oldArguments[0]
         );
-        $this->expressionsToPrepend[$parentExpressionNode] = new Expression($addConfigMethodCallNode);
+        $nodesToPrepend[] = new Expression($addConfigMethodCallNode);
 
         if (isset($oldArguments[1])) {
             $setClassNameMethodCallNode = $this->cloneMethodWithNameAndArgument(
@@ -88,8 +101,11 @@ final class CompilerArgumentsRector extends AbstractRector
                 'setClassName',
                 $oldArguments[1]
             );
-            $this->expressionsToPrepend[$parentExpressionNode] = new Expression($setClassNameMethodCallNode);
+            $nodesToPrepend[] = new Expression($setClassNameMethodCallNode);
         }
+
+        $parentExpressionNode = $methodCallNode->getAttribute(Attribute::PARENT_NODE);
+        $this->expressionsToPrepend[$parentExpressionNode] = $nodesToPrepend;
 
         $methodCallNode->args = [];
 
