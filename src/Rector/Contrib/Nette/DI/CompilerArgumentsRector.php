@@ -3,11 +3,14 @@
 namespace Rector\Rector\Contrib\Nette\DI;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Expression;
+use Rector\Node\Attribute;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
+use SplObjectStorage;
 
 /**
  * Nette\DI\Compiler::compile arguments are deprecated, use Compiler::addConfig() and Compiler::setClassName().
@@ -28,12 +31,14 @@ final class CompilerArgumentsRector extends AbstractRector
     private $methodCallAnalyzer;
 
     /**
-     * @var Expression[]
+     * @var SplObjectStorage|Expression[]
      */
     private $expressionsToPrepend = [];
 
     public function __construct(MethodCallAnalyzer $methodCallAnalyzer, NodeFactory $nodeFactory)
     {
+        $this->expressionsToPrepend = new SplObjectStorage;
+
         $this->methodCallAnalyzer = $methodCallAnalyzer;
     }
 
@@ -68,22 +73,38 @@ final class CompilerArgumentsRector extends AbstractRector
     {
         $oldArguments = $methodCallNode->args;
 
-        $addConfigMethodCallNode = clone $methodCallNode;
-        $addConfigMethodCallNode->name = 'addConfig';
-        $addConfigMethodCallNode->args = [$oldArguments[0]];
+        $parentExpressionNode = $methodCallNode->getAttribute(Attribute::PARENT_NODE);
 
-        $this->expressionsToPrepend[] = new Expression($addConfigMethodCallNode);
+        $addConfigMethodCallNode = $this->cloneMethodWithNameAndArgument(
+            $methodCallNode,
+            'addConfig',
+            $oldArguments[0]
+        );
+        $this->expressionsToPrepend[$parentExpressionNode] = new Expression($addConfigMethodCallNode);
 
         if (isset($oldArguments[1])) {
-            $setClassNameMethodCallNode = clone $methodCallNode;
-            $setClassNameMethodCallNode->name = 'setClassName';
-            $setClassNameMethodCallNode->args = [$oldArguments[1]];
-
-            $this->expressionsToPrepend[] = new Expression($setClassNameMethodCallNode);
+            $setClassNameMethodCallNode = $this->cloneMethodWithNameAndArgument(
+                $methodCallNode,
+                'setClassName',
+                $oldArguments[1]
+            );
+            $this->expressionsToPrepend[$parentExpressionNode] = new Expression($setClassNameMethodCallNode);
         }
 
         $methodCallNode->args = [];
 
         return $methodCallNode;
+    }
+
+    private function cloneMethodWithNameAndArgument(
+        MethodCall $methodCallNode,
+        string $method,
+        Arg $argNode
+    ): MethodCall {
+        $addConfigMethodCallNode = clone $methodCallNode;
+        $addConfigMethodCallNode->name = $method;
+        $addConfigMethodCallNode->args = [$argNode];
+
+        return $addConfigMethodCallNode;
     }
 }
