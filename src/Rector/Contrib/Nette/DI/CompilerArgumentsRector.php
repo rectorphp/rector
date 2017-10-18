@@ -4,6 +4,7 @@ namespace Rector\Rector\Contrib\Nette\DI;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Stmt\Expression;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
@@ -26,6 +27,11 @@ final class CompilerArgumentsRector extends AbstractRector
      */
     private $methodCallAnalyzer;
 
+    /**
+     * @var Expression[]
+     */
+    private $expressionsToPrepend = [];
+
     public function __construct(MethodCallAnalyzer $methodCallAnalyzer, NodeFactory $nodeFactory)
     {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
@@ -42,15 +48,41 @@ final class CompilerArgumentsRector extends AbstractRector
     }
 
     /**
+     * @param Node[] $nodes
+     * @return Node[]
+     */
+    public function afterTraverse(array $nodes): array
+    {
+        // statements with current key and prepends some
+        $nodes = array_merge($nodes, $this->expressionsToPrepend);
+
+        $this->expressionsToPrepend = [];
+
+        return $nodes;
+    }
+
+    /**
      * @param MethodCall $methodCallNode
      */
     public function refactor(Node $methodCallNode): ?Node
     {
+        $oldArguments = $methodCallNode->args;
+
+        $addConfigMethodCallNode = clone $methodCallNode;
+        $addConfigMethodCallNode->name = 'addConfig';
+        $addConfigMethodCallNode->args = [$oldArguments[0]];
+
+        $this->expressionsToPrepend[] = new Expression($addConfigMethodCallNode);
+
+        if (isset($oldArguments[1])) {
+            $setClassNameMethodCallNode = clone $methodCallNode;
+            $setClassNameMethodCallNode->name = 'setClassName';
+            $setClassNameMethodCallNode->args = [$oldArguments[1]];
+
+            $this->expressionsToPrepend[] = new Expression($setClassNameMethodCallNode);
+        }
+
         $methodCallNode->args = [];
-
-
-
-//        $methodCallNode->setAttribute(Attribute::ORIGINAL_NODE, null);
 
         return $methodCallNode;
     }
