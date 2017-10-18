@@ -23,7 +23,7 @@ final class MagicMethodMatcher
      *
      * @return mixed[]
      */
-    public function matchInContent(ReflectionClass $classReflection, string $text): array
+    public function matchInContent(ReflectionClass $reflectionClass, string $text): array
     {
         $matches = Strings::matchAll($text, self::MAGIC_METHODS_PATTERN, PREG_SET_ORDER);
 
@@ -37,12 +37,12 @@ final class MagicMethodMatcher
             $methodName = $operation . $propertyName;
             $propertyName = strtolower($propertyName[0]) . substr($propertyName, 1) . ($operation === 'add' ? 's' : '');
 
-            if (! $classReflection->hasProperty($propertyName)) {
+            if (! $reflectionClass->hasProperty($propertyName)) {
                 continue;
             }
 
             /** @var ReflectionProperty $propertyReflection */
-            $propertyReflection = $classReflection->getProperty($propertyName);
+            $propertyReflection = $reflectionClass->getProperty($propertyName);
             if ($propertyReflection->isStatic()) {
                 continue;
             }
@@ -64,7 +64,7 @@ final class MagicMethodMatcher
     private function resolveType(
         string $op,
         string $type,
-        ReflectionProperty $propertyReflection,
+        ReflectionProperty $reflectionProperty,
         array $match
     ): ?string {
         if ($op === 'get' || $op === 'is') {
@@ -74,7 +74,7 @@ final class MagicMethodMatcher
 
         if (! $type && preg_match(
             '#@var[ \t]+(\S+)' . ($op === 'add' ? '\[\]#' : '#'),
-            $propertyReflection->getDocComment(),
+            $reflectionProperty->getDocComment(),
             $match
         )) {
             $type = $match[1];

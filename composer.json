@@ -23,7 +23,7 @@
         "symfony/expression-language": "^3.3",
         "symfony/dependency-injection": "^3.3",
         "symfony/form": "^3.3",
-        "symplify/easy-coding-standard": "^2.5.3",
+        "symplify/easy-coding-standard": "^2.5.4",
         "tracy/tracy": "^2.4"
     },
     "autoload": {
