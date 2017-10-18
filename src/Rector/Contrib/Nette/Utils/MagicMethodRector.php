@@ -41,7 +41,7 @@ final class MagicMethodRector extends AbstractRector
     /**
      * @var SmartClassReflector
      */
-    private $classReflector;
+    private $smartClassReflector;
 
     /**
      * @var MagicMethodMatcher
@@ -51,12 +51,12 @@ final class MagicMethodRector extends AbstractRector
     public function __construct(
         MethodBuilder $methodBuilder,
         DocBlockAnalyzer $docBlockAnalyzer,
-        SmartClassReflector $classReflector,
+        SmartClassReflector $smartClassReflector,
         MagicMethodMatcher $magicMethodMatcher
     ) {
         $this->methodBuilder = $methodBuilder;
         $this->docBlockAnalyzer = $docBlockAnalyzer;
-        $this->classReflector = $classReflector;
+        $this->smartClassReflector = $smartClassReflector;
         $this->magicMethodMatcher = $magicMethodMatcher;
     }
 
@@ -82,7 +82,7 @@ final class MagicMethodRector extends AbstractRector
         $className = $node->getAttribute(Attribute::CLASS_NAME);
 
         $this->magicMethods = $this->magicMethodMatcher->matchInContent(
-            $this->classReflector->reflect($className),
+            $this->smartClassReflector->reflect($className),
             $docComments[0]->getText()
         );
 
