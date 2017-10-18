@@ -33,7 +33,7 @@ final class GetAndSetToMethodCallRector extends AbstractRector
     /**
      * @var PropertyFetchAnalyzer
      */
-    private $propertyAccessAnalyzer;
+    private $propertyFetchAnalyzer;
 
     /**
      * @var NodeFactory
@@ -57,12 +57,12 @@ final class GetAndSetToMethodCallRector extends AbstractRector
      */
     public function __construct(
         array $typeToMethodCalls,
-        PropertyFetchAnalyzer $propertyAccessAnalyzer,
+        PropertyFetchAnalyzer $propertyFetchAnalyzer,
         NodeFactory $nodeFactory,
         ExpressionAnalyzer $expressionAnalyzer
     ) {
         $this->typeToMethodCalls = $typeToMethodCalls;
-        $this->propertyAccessAnalyzer = $propertyAccessAnalyzer;
+        $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
         $this->nodeFactory = $nodeFactory;
         $this->expressionAnalyzer = $expressionAnalyzer;
     }
@@ -77,7 +77,7 @@ final class GetAndSetToMethodCallRector extends AbstractRector
         }
 
         foreach ($this->typeToMethodCalls as $type => $transformation) {
-            if ($this->propertyAccessAnalyzer->isMagicPropertyFetchOnType($propertyFetchNode, $type)) {
+            if ($this->propertyFetchAnalyzer->isMagicPropertyFetchOnType($propertyFetchNode, $type)) {
                 $this->activeTransformation = $transformation;
 
                 return true;
