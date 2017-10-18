@@ -100,15 +100,15 @@ final class ExtractDeprecationsCommand extends Command
         return 0;
     }
 
-    private function renderGuessedRector(RectorGuess $guessedRector): void
+    private function renderGuessedRector(RectorGuess $rectorGuess): void
     {
-        $this->symfonyStyle->success($guessedRector->getGuessedRectorClass());
+        $this->symfonyStyle->success($rectorGuess->getGuessedRectorClass());
 
-        $this->symfonyStyle->writeln('<fg=yellow> ' . $guessedRector->getMessage() . '</>');
+        $this->symfonyStyle->writeln('<fg=yellow> ' . $rectorGuess->getMessage() . '</>');
 
         $this->symfonyStyle->newLine();
 
-        $node = $guessedRector->getNode();
+        $node = $rectorGuess->getNode();
 
         $this->symfonyStyle->writeln(' Namespace: ' . $node->getAttribute(Attribute::NAMESPACE));
         $this->symfonyStyle->writeln(' Class: ' . $node->getAttribute(Attribute::CLASS_NAME));

@@ -25,11 +25,11 @@ final class FileProcessor
     private $rectorNodeTraverser;
 
     public function __construct(
-        FormatPerservingPrinter $codeStyledPrinter,
+        FormatPerservingPrinter $formatPerservingPrinter,
         NodeTraverserQueue $nodeTraverserQueue,
         RectorNodeTraverser $rectorNodeTraverser
     ) {
-        $this->formatPerservingPrinter = $codeStyledPrinter;
+        $this->formatPerservingPrinter = $formatPerservingPrinter;
         $this->nodeTraverserQueue = $nodeTraverserQueue;
         $this->rectorNodeTraverser = $rectorNodeTraverser;
     }

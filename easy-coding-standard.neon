@@ -31,13 +31,16 @@ checkers:
             - 'PhpParser\Comment\Doc'
             - 'Rector\DeprecationExtractor\Deprecation\*'
 
+    Symplify\CodingStandard\Fixer\Naming\PropertyNameMatchingTypeFixer:
+        extra_skipped_classes:
+            - 'PhpParser\PrettyPrinter\Standard'
+            - 'PhpParser\Node'
+
 parameters:
     exclude_checkers:
-        # node style... add options to exclude naming, allow fnmatch as for New...Fixer
-        - Symplify\CodingStandard\Fixer\Naming\PropertyNameMatchingTypeFixer
         # conflicting checkers
         - PhpCsFixer\Fixer\ControlStructure\YodaStyleFixer
-        # Excluded from symfony-checkers.neon
+        # excluded from symfony-checkers.neon
         - PhpCsFixer\Fixer\PhpTag\BlankLineAfterOpeningTagFixer
         - PhpCsFixer\Fixer\Operator\NewWithBracesFixer
         - PhpCsFixer\Fixer\Operator\UnaryOperatorSpacesFixer
