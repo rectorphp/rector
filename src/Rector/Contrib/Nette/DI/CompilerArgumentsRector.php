@@ -65,19 +65,7 @@ final class CompilerArgumentsRector extends AbstractRector
      */
     public function afterTraverse(array $nodes): array
     {
-        foreach ($nodes as $i => $node) {
-            if ($node instanceof Expression) {
-                if (! isset($this->expressionsToPrepend[$node])) {
-                    continue;
-                }
-
-                $nodes = $this->statementGlue->insertNewNodesAfter($nodes, $this->expressionsToPrepend[$node], $i);
-            }
-        }
-
-        $this->expressionsToPrepend = [];
-
-        return $nodes;
+        return $this->processNodes($nodes);
     }
 
     /**
@@ -110,6 +98,28 @@ final class CompilerArgumentsRector extends AbstractRector
         $methodCallNode->args = [];
 
         return $methodCallNode;
+    }
+
+    /**
+     * @param Node[] $nodes
+     * @return Node[] array
+     */
+    private function processNodes(array $nodes): array
+    {
+        foreach ($nodes as $i => $node) {
+            if ($node instanceof Expression) {
+                if (! isset($this->expressionsToPrepend[$node])) {
+                    continue;
+                }
+
+                $nodes = $this->statementGlue->insertNewNodesAfter($nodes, $this->expressionsToPrepend[$node], $i);
+                $this->expressionsToPrepend[$node] = null;
+            } elseif (isset($node->stmts)) {
+                $node->stmts = $this->processNodes($node->stmts);
+            }
+        }
+
+        return $nodes;
     }
 
     private function cloneMethodWithNameAndArgument(
