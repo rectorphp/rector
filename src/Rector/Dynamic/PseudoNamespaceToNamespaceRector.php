@@ -9,6 +9,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\UseUse;
+use Rector\Builder\StatementGlue;
 use Rector\Node\Attribute;
 use Rector\Node\NodeFactory;
 use Rector\Rector\AbstractRector;
@@ -41,12 +42,18 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
     private $nodeFactory;
 
     /**
+     * @var StatementGlue
+     */
+    private $statementGlue;
+
+    /**
      * @param string[] $pseudoNamespacePrefixes
      */
-    public function __construct(array $pseudoNamespacePrefixes, NodeFactory $nodeFactory)
+    public function __construct(array $pseudoNamespacePrefixes, NodeFactory $nodeFactory, StatementGlue $statementGlue)
     {
         $this->pseudoNamespacePrefixes = $pseudoNamespacePrefixes;
         $this->nodeFactory = $nodeFactory;
+        $this->statementGlue = $statementGlue;
     }
 
     /**
@@ -123,8 +130,8 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
 
             foreach ($nodes as $key => $node) {
                 if ($node instanceof Class_) {
-                    $nodes = $this->insertBefore($nodes, $namespaceNode, $key);
-                    $nodes = $this->insertBefore($nodes, new Nop, $key);
+                    $nodes = $this->statementGlue->insertBefore($nodes, $namespaceNode, $key);
+                    $nodes = $this->statementGlue->insertBefore($nodes, new Nop, $key);
 
                     break;
                 }
@@ -145,16 +152,5 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
         }
 
         return null;
-    }
-
-    /**
-     * @param Node[] $nodes
-     * @return Node[]
-     */
-    private function insertBefore(array $nodes, Node $addedNode, int $key): array
-    {
-        array_splice($nodes, $key, 0, [$addedNode]);
-
-        return $nodes;
     }
 }

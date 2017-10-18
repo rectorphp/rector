@@ -17,7 +17,7 @@ final class StatementGlue
     {
         foreach ($classNode->stmts as $key => $classElementNode) {
             if ($classElementNode instanceof ClassMethod) {
-                $this->insertBefore($classNode, $node, $key);
+                $classNode->stmts = $this->insertBefore($classNode->stmts, $node, $key);
 
                 return;
             }
@@ -26,7 +26,7 @@ final class StatementGlue
         $previousElement = null;
         foreach ($classNode->stmts as $key => $classElementNode) {
             if ($previousElement instanceof Property && ! $classElementNode instanceof Property) {
-                $this->insertBefore($classNode, $node, $key);
+                $classNode->stmts = $this->insertBefore($classNode->stmts, $node, $key);
 
                 return;
             }
@@ -47,7 +47,7 @@ final class StatementGlue
         foreach ($types as $type) {
             foreach ($classNode->stmts as $key => $classElementNode) {
                 if (is_a($classElementNode, $type, true)) {
-                    $this->insertBefore($classNode, $node, $key);
+                    $classNode->stmts = $this->insertBefore($classNode->stmts, $node, $key);
 
                     return;
                 }
@@ -58,10 +58,13 @@ final class StatementGlue
     }
 
     /**
-     * @todo decouple to statements added
+     * @param Node[] $nodes
+     * @return Node[] $nodes
      */
-    private function insertBefore(Class_ $classNode, Node $node, int $key): void
+    public function insertBefore(array $nodes, Node $node, int $key): array
     {
-        array_splice($classNode->stmts, $key, 0, [$node]);
+        array_splice($nodes, $key, 0, [$node]);
+
+        return $nodes;
     }
 }
