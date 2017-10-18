@@ -10,14 +10,14 @@ final class RectorGuessFilter
      */
     public function filterRectorGuessesToShow(array $rectorGuesses): array
     {
-        return $this->filterOutUsefulrectorGuesses($rectorGuesses);
+        return $this->filterOutUsefulRectorGuesses($rectorGuesses);
     }
 
     /**
      * @param RectorGuess[] $rectorGuesses
      * @return RectorGuess[]
      */
-    private function filterOutUsefulrectorGuesses(array $rectorGuesses): array
+    private function filterOutUsefulRectorGuesses(array $rectorGuesses): array
     {
         return array_filter($rectorGuesses, function (RectorGuess $rectorGuess) {
             return $rectorGuess->isUseful();
