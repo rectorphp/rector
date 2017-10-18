@@ -5,6 +5,7 @@ namespace Rector\Builder;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\TraitUse;
 
@@ -55,6 +56,18 @@ final class StatementGlue
         }
 
         $classNode->stmts[] = $node;
+    }
+
+    /**
+     * @param Node[] $nodes
+     * @return Node[] $nodes
+     */
+    public function insertBeforeAndFollowWithNewline(array $nodes, Node $node, int $key): array
+    {
+        $nodes = $this->insertBefore($nodes, $node, $key);
+        $nodes = $this->insertBefore($nodes, new Nop, $key);
+
+        return $nodes;
     }
 
     /**

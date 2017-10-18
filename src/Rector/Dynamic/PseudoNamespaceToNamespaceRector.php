@@ -7,7 +7,6 @@ use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\UseUse;
 use Rector\Builder\StatementGlue;
 use Rector\Node\Attribute;
@@ -130,8 +129,7 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
 
             foreach ($nodes as $key => $node) {
                 if ($node instanceof Class_) {
-                    $nodes = $this->statementGlue->insertBefore($nodes, $namespaceNode, $key);
-                    $nodes = $this->statementGlue->insertBefore($nodes, new Nop, $key);
+                    $nodes = $this->statementGlue->insertBeforeAndFollowWithNewline($nodes, $namespaceNode, $key);
 
                     break;
                 }
