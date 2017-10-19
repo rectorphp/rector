@@ -82,14 +82,10 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
 
     protected function prependNodeAfterNode(Expr $nodeToPrepend, Node $positionNode): void
     {
-        /** @var Node $parentNode */
+        /** @var Expression $parentNode */
         $parentNode = $positionNode->getAttribute(Attribute::PARENT_NODE);
-        if (! $parentNode instanceof Expression) {
-            // validate?
-            return;
-        }
 
-        $expressionToPrepend = new Expression($nodeToPrepend);
+        $expressionToPrepend = $this->resolveToExpression($nodeToPrepend);
 
         if (isset($this->expressionsToPrependAfter[$parentNode])) {
             $this->expressionsToPrependAfter[$parentNode] = array_merge(
@@ -103,14 +99,10 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
 
     protected function prependNodeBeforeNode(Expr $nodeToPrepend, Node $positionNode): void
     {
-        /** @var Node $parentNode */
+        /** @var Expression $parentNode */
         $parentNode = $positionNode->getAttribute(Attribute::PARENT_NODE);
-        if (! $parentNode instanceof Expression) {
-            // validate?
-            return;
-        }
 
-        $expressionToPrepend = new Expression($nodeToPrepend);
+        $expressionToPrepend = $this->resolveToExpression($nodeToPrepend);
 
         if (isset($this->expressionsToPrependBefore[$parentNode])) {
             $this->expressionsToPrependBefore[$parentNode] = array_merge(
@@ -123,6 +115,8 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
     }
 
     /**
+     * Adds new nodes before or after particular Expression nodes.
+     *
      * @param Node[] $nodes
      * @return Node[] array
      */
@@ -158,5 +152,14 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
         }
 
         return $nodes;
+    }
+
+    private function resolveToExpression(Expr $exprNode): Expression
+    {
+        if ($exprNode instanceof Expression) {
+            return $exprNode;
+        }
+
+        return new Expression($exprNode);
     }
 }
