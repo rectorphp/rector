@@ -104,11 +104,8 @@ final class MethodCallAnalyzer
         }
 
         $variableType = $this->findVariableType($node);
-        if ($variableType !== $type) {
-            return false;
-        }
 
-        return true;
+        return $variableType === $type;
     }
 
     /**
