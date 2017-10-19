@@ -51,7 +51,6 @@ final class CompilerGenerateCodeArgumentsRector extends AbstractRector
             $oldArguments[0]
         );
 
-
         $this->prependNodeBeforeNode($setClassNameMethodCallNode, $methodCallNode);
 
         $methodCallNode->args = [];

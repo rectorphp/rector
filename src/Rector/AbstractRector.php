@@ -130,21 +130,31 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
     {
         foreach ($nodes as $i => $node) {
             if ($node instanceof Expression) {
-                if (isset($this->expressionsToPrependBefore[$node])) {
-                    array_splice($nodes, $i, 0, $this->expressionsToPrependBefore[$node]);
-
-                    unset($this->expressionsToPrependBefore[$node]);
-                }
-
-                if (isset($this->expressionsToPrependAfter[$node])) {
-                    array_splice($nodes, $i + 1, 0, $this->expressionsToPrependAfter[$node]);
-
-                    unset($this->expressionsToPrependAfter[$node]);
-                }
-
+                $nodes = $this->prependNodesAfterAndBeforeExpression($nodes, $node, $i);
             } elseif (isset($node->stmts)) {
                 $node->stmts = $this->prependExpressionNodes($node->stmts);
             }
+        }
+
+        return $nodes;
+    }
+
+    /**
+     * @param Node[] $nodes
+     * @return Node[]
+     */
+    private function prependNodesAfterAndBeforeExpression(array $nodes, Node $node, int $i): array
+    {
+        if (isset($this->expressionsToPrependBefore[$node])) {
+            array_splice($nodes, $i, 0, $this->expressionsToPrependBefore[$node]);
+
+            unset($this->expressionsToPrependBefore[$node]);
+        }
+
+        if (isset($this->expressionsToPrependAfter[$node])) {
+            array_splice($nodes, $i + 1, 0, $this->expressionsToPrependAfter[$node]);
+
+            unset($this->expressionsToPrependAfter[$node]);
         }
 
         return $nodes;
