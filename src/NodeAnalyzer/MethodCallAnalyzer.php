@@ -97,11 +97,13 @@ final class MethodCallAnalyzer
     /**
      * Checks "$this->methodCall()"
      */
-    private function isMethodCallType(Node $node, string $type): bool
+    public function isMethodCallType(Node $node, string $type): bool
     {
         if (! $node instanceof MethodCall) {
             return false;
         }
+
+        dump($node);
 
         $variableType = $this->findVariableType($node);
 
