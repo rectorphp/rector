@@ -4,9 +4,13 @@ rectors:
     Rector\Rector\Contrib\Nette\Form\FormSetRequiredRector: ~
     Rector\Rector\Contrib\Nette\Utils\NetteObjectToSmartTraitRector: ~
     Rector\Rector\Contrib\Nette\Utils\MagicMethodRector: ~
+
+    # di
     Rector\Rector\Contrib\Nette\DI\SetEntityToStatementRector: ~
     Rector\Rector\Contrib\Nette\DI\ExpandFunctionToParametersArrayRector: ~
     Rector\Rector\Contrib\Nette\DI\ExpandFunctionToStaticExpandFunctionRector: ~
+    Rector\Rector\Contrib\Nette\DI\CompilerCompileArgumentsRector: ~
+    Rector\Rector\Contrib\Nette\DI\CompilerGenerateCodeArgumentsRector: ~
 
     Rector\Rector\MagicDisclosure\GetAndSetToMethodCallRector:
         # di
