@@ -22,7 +22,12 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
     /**
      * @var SplObjectStorage|Expression[]
      */
-    private $expressionsToPrepend = [];
+    private $expressionsToPrependBefore = [];
+
+    /**
+     * @var SplObjectStorage|Expression[]
+     */
+    private $expressionsToPrependAfter = [];
 
     /**
      * @param Node[] $nodes
@@ -30,7 +35,8 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
      */
     final public function beforeTraverse(array $nodes): array
     {
-        $this->expressionsToPrepend = new SplObjectStorage;
+        $this->expressionsToPrependBefore = new SplObjectStorage;
+        $this->expressionsToPrependAfter = new SplObjectStorage;
 
         return $nodes;
     }
@@ -74,7 +80,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
         return $this->prependExpressionNodes($nodes);
     }
 
-    protected function prependNodeBehindNode(Expr $nodeToPrepend, Node $positionNode): void
+    protected function prependNodeAfterNode(Expr $nodeToPrepend, Node $positionNode): void
     {
         /** @var Node $parentNode */
         $parentNode = $positionNode->getAttribute(Attribute::PARENT_NODE);
@@ -85,13 +91,34 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
 
         $expressionToPrepend = new Expression($nodeToPrepend);
 
-        if (isset($this->expressionsToPrepend[$parentNode])) {
-            $this->expressionsToPrepend[$parentNode] = array_merge(
-                $this->expressionsToPrepend[$parentNode],
+        if (isset($this->expressionsToPrependAfter[$parentNode])) {
+            $this->expressionsToPrependAfter[$parentNode] = array_merge(
+                $this->expressionsToPrependAfter[$parentNode],
                 [$expressionToPrepend]
             );
         } else {
-            $this->expressionsToPrepend[$parentNode] = [$expressionToPrepend];
+            $this->expressionsToPrependAfter[$parentNode] = [$expressionToPrepend];
+        }
+    }
+
+    protected function prependNodeBeforeNode(Expr $nodeToPrepend, Node $positionNode): void
+    {
+        /** @var Node $parentNode */
+        $parentNode = $positionNode->getAttribute(Attribute::PARENT_NODE);
+        if (! $parentNode instanceof Expression) {
+            // validate?
+            return;
+        }
+
+        $expressionToPrepend = new Expression($nodeToPrepend);
+
+        if (isset($this->expressionsToPrependBefore[$parentNode])) {
+            $this->expressionsToPrependBefore[$parentNode] = array_merge(
+                $this->expressionsToPrependBefore[$parentNode],
+                [$expressionToPrepend]
+            );
+        } else {
+            $this->expressionsToPrependBefore[$parentNode] = [$expressionToPrepend];
         }
     }
 
@@ -103,13 +130,18 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
     {
         foreach ($nodes as $i => $node) {
             if ($node instanceof Expression) {
-                if (! isset($this->expressionsToPrepend[$node])) {
-                    continue;
+                if (isset($this->expressionsToPrependBefore[$node])) {
+                    array_splice($nodes, $i, 0, $this->expressionsToPrependBefore[$node]);
+
+                    unset($this->expressionsToPrependBefore[$node]);
                 }
 
-                array_splice($nodes, $i + 1, 0, $this->expressionsToPrepend[$node]);
+                if (isset($this->expressionsToPrependAfter[$node])) {
+                    array_splice($nodes, $i + 1, 0, $this->expressionsToPrependAfter[$node]);
 
-                unset($this->expressionsToPrepend[$node]);
+                    unset($this->expressionsToPrependAfter[$node]);
+                }
+
             } elseif (isset($node->stmts)) {
                 $node->stmts = $this->prependExpressionNodes($node->stmts);
             }

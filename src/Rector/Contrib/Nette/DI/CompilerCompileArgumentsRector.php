@@ -19,7 +19,7 @@ use Rector\Rector\AbstractRector;
  * - $compiler->addConfig($config);
  * - $compiler->setClassName($className);
  */
-final class CompilerArgumentsRector extends AbstractRector
+final class CompilerCompileArgumentsRector extends AbstractRector
 {
     /**
      * @var MethodCallAnalyzer
@@ -53,7 +53,7 @@ final class CompilerArgumentsRector extends AbstractRector
             'addConfig',
             $oldArguments[0]
         );
-        $this->prependNodeBehindNode($addConfigMethodCallNode, $methodCallNode);
+        $this->prependNodeAfterNode($addConfigMethodCallNode, $methodCallNode);
 
         if (isset($oldArguments[1])) {
             $setClassNameMethodCallNode = $this->cloneMethodWithNameAndArgument(
@@ -61,7 +61,7 @@ final class CompilerArgumentsRector extends AbstractRector
                 'setClassName',
                 $oldArguments[1]
             );
-            $this->prependNodeBehindNode($setClassNameMethodCallNode, $methodCallNode);
+            $this->prependNodeAfterNode($setClassNameMethodCallNode, $methodCallNode);
         }
 
         $methodCallNode->args = [];

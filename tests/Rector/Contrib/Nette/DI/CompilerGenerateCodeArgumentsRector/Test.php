@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Contrib\Nette\DI\CompilerArgumentsRector;
+namespace Rector\Tests\Rector\Contrib\Nette\DI\CompilerGenerateCodeArgumentsRector;
 
-use Rector\Rector\Contrib\Nette\DI\CompilerArgumentsRector;
+use Rector\Rector\Contrib\Nette\DI\CompilerGenerateCodeArgumentsRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class Test extends AbstractRectorTestCase
@@ -13,11 +13,6 @@ final class Test extends AbstractRectorTestCase
             __DIR__ . '/Wrong/wrong.php.inc',
             __DIR__ . '/Correct/correct.php.inc'
         );
-
-        $this->doTestFileMatchesExpectedContent(
-            __DIR__ . '/Wrong/wrong2.php.inc',
-            __DIR__ . '/Correct/correct2.php.inc'
-        );
     }
 
     /**
@@ -25,6 +20,6 @@ final class Test extends AbstractRectorTestCase
      */
     protected function getRectorClasses(): array
     {
-        return [CompilerArgumentsRector::class];
+        return [CompilerGenerateCodeArgumentsRector::class];
     }
 }
