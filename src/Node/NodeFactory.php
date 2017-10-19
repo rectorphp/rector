@@ -278,4 +278,9 @@ final class NodeFactory
     {
         return new Namespace_(BuilderHelpers::normalizeName($namespace));
     }
+
+    public function clonePropertyFetch(PropertyFetch $propertyFetchNode): PropertyFetch
+    {
+        return new PropertyFetch($propertyFetchNode->var, $propertyFetchNode->name);
+    }
 }
