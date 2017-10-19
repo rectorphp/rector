@@ -113,9 +113,9 @@ final class NodeFactory
     /**
      * Creates "$method->call();" from existing variable
      */
-    public function createMethodCallWithVariable(Variable $variableNode, string $methodName): MethodCall
+    public function createMethodCallWithVariable(Expr $exprNode, string $methodName): MethodCall
     {
-        return new MethodCall($variableNode, $methodName);
+        return new MethodCall($exprNode, $methodName);
     }
 
     /**
