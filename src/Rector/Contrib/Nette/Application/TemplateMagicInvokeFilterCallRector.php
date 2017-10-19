@@ -11,12 +11,12 @@ use Rector\Rector\AbstractRector;
 
 /**
  * Before:
- * $this->template->someFilter(...);
+ * - $this->template->someFilter(...);
  *
  * After:
- * $this->template->getLatte()->invokeFilter('someFilter', ...)
+ * - $this->template->getLatte()->invokeFilter('someFilter', ...)
  */
-final class TemplateFilterCallRector extends AbstractRector
+final class TemplateMagicInvokeFilterCallRector extends AbstractRector
 {
     /**
      * @var MethodCallAnalyzer

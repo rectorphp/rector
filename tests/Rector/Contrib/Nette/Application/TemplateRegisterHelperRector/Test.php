@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Contrib\Nette\Application\TemplateFilterCallRector;
+namespace Rector\Tests\Rector\Contrib\Nette\Application\TemplateRegisterHelperRector;
 
-use Rector\Rector\Contrib\Nette\Application\TemplateFilterCallRector;
+use Rector\Rector\Contrib\Nette\Application\TemplateRegisterHelperRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class Test extends AbstractRectorTestCase
@@ -20,6 +20,6 @@ final class Test extends AbstractRectorTestCase
      */
     protected function getRectorClasses(): array
     {
-        return [TemplateFilterCallRector::class];
+        return [TemplateRegisterHelperRector::class];
     }
 }

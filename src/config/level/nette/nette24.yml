@@ -7,7 +7,8 @@ rectors:
 
     # application
     Rector\Rector\Contrib\Nette\Application\ValidateControlRector: ~
-    Rector\Rector\Contrib\Nette\Application\TemplateFilterCallRector: ~
+    Rector\Rector\Contrib\Nette\Application\TemplateMagicInvokeFilterCallRector: ~
+    Rector\Rector\Contrib\Nette\Application\TemplateRegisterHelperRector: ~
 
     # di
     Rector\Rector\Contrib\Nette\DI\SetEntityToStatementRector: ~
