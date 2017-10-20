@@ -12,41 +12,60 @@ final class ClassConstAnalyzer
     /**
      * @param string[] $constantNames
      */
-    public function isClassConstFetchOfClassAndConstantNames(Node $node, string $class, array $constantNames): bool
+    public function isTypeAndNames(Node $node, string $type, array $constantNames): bool
+    {
+        if (! $this->isType($node, $type)) {
+            return false;
+        }
+
+        /** @var ClassConstFetch $node */
+        return $this->isNames($node, $constantNames);
+    }
+
+    /**
+     * @param string[] $types
+     */
+    public function matchTypes(Node $node, array $types): ?string
+    {
+        if (! $node instanceof ClassConstFetch) {
+            return null;
+        }
+
+        $class = $this->resolveType($node);
+
+        return in_array($class, $types, true) ? $class : null;
+    }
+
+    private function isType(Node $node, string $type): bool
     {
         if (! $node instanceof ClassConstFetch) {
             return false;
         }
 
-        if (! $this->isClassName($node, $class)) {
-            return false;
-        }
+        $nodeClass = $this->resolveType($node);
 
-        return $this->isConstantName($node, $constantNames);
-    }
-
-    private function isClassName(ClassConstFetch $classConstFetchNode, string $className): bool
-    {
-        /** @var FullyQualified $className */
-        $classFullyQualifiedName = $classConstFetchNode->class->getAttribute(Attribute::RESOLVED_NAME);
-
-        if ($classFullyQualifiedName instanceof FullyQualified) {
-            return $classFullyQualifiedName->toString() === $className;
-        }
-
-        // e.g. "$form::FILLED"
-        $nodeClassName = $classConstFetchNode->class->getAttribute(Attribute::CLASS_NAME);
-
-        return $nodeClassName === $className;
+        return $nodeClass === $type;
     }
 
     /**
-     * @param string[] $constantNames
+     * @param string[] $names
      */
-    private function isConstantName(ClassConstFetch $node, array $constantNames): bool
+    private function isNames(ClassConstFetch $node, array $names): bool
     {
         $nodeConstantName = $node->name->name;
 
-        return in_array($nodeConstantName, $constantNames, true);
+        return in_array($nodeConstantName, $names, true);
+    }
+
+    private function resolveType(ClassConstFetch $classConstFetchNode): string
+    {
+        $classFullyQualifiedName = $classConstFetchNode->class->getAttribute(Attribute::RESOLVED_NAME);
+
+        if ($classFullyQualifiedName instanceof FullyQualified) {
+            return $classFullyQualifiedName->toString();
+        }
+
+        // e.g. "$form::FILLED"
+        return (string) $classConstFetchNode->class->getAttribute(Attribute::CLASS_NAME);
     }
 }

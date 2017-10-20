@@ -69,11 +69,11 @@ final class StringFormTypeToClassRector extends AbstractRector
     }
 
     /**
-     * @param String_ $node
+     * @param String_ $stringNode
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $stringNode): ?Node
     {
-        $class = $this->nameToClassMap[$node->value];
+        $class = $this->nameToClassMap[$stringNode->value];
 
         return $this->nodeFactory->createClassConstantReference($class);
     }

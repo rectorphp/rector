@@ -1,0 +1,6 @@
+rectors:
+    Rector\Rector\Dynamic\ClassConstantReplacerRector:
+        'Symfony\Component\Form\FormEvents':
+            'PRE_BIND': 'PRE_SUBMIT'
+            'BIND': 'SUBMIT'
+            'POST_BIND': 'POST_SUBMIT'

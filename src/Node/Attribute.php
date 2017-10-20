@@ -52,6 +52,11 @@ final class Attribute
     /**
      * @var string
      */
+    public const METHOD_NAME = 'methodName';
+
+    /**
+     * @var string
+     */
     public const PARENT_CLASS_NAME = 'parentClassName';
 
     /**

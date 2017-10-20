@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\NodeAnalyzer;
+namespace Rector\NodeAnalyzer\Contrib;
 
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
