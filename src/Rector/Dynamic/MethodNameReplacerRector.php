@@ -38,6 +38,7 @@ final class MethodNameReplacerRector extends AbstractRector
      * @var MethodCallAnalyzer
      */
     private $methodCallAnalyzer;
+
     /**
      * @var StaticMethodCallAnalyzer
      */

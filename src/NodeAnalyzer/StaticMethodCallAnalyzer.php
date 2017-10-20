@@ -12,18 +12,6 @@ use Rector\Node\Attribute;
 final class StaticMethodCallAnalyzer
 {
     /**
-     * Checks "SpecificType::anyMethod()"
-     */
-    private function isStaticMethodCallType(Node $node, string $type): bool
-    {
-        if (! $node instanceof StaticCall) {
-            return false;
-        }
-
-        return $this->resolveNodeType($node) === $type;
-    }
-
-    /**
      * Checks "SpecificType::specificMethod()"
      */
     public function isStaticMethodCallTypeAndMethod(Node $node, string $type, string $method): bool
@@ -79,6 +67,18 @@ final class StaticMethodCallAnalyzer
         $nodeType = $node->class->toString();
 
         return in_array($nodeType, $types, true) ? $nodeType : null;
+    }
+
+    /**
+     * Checks "SpecificType::anyMethod()"
+     */
+    private function isStaticMethodCallType(Node $node, string $type): bool
+    {
+        if (! $node instanceof StaticCall) {
+            return false;
+        }
+
+        return $this->resolveNodeType($node) === $type;
     }
 
     private function resolveNodeType(StaticCall $staticCallNode): ?string
