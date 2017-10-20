@@ -1,0 +1,16 @@
+rectors:
+    # @todo dynamic constant rename rector
+
+    Rector\Rector\Dynamic\MethodNameReplacerRector:
+        # form
+        'Symfony\Component\Form\AbstractType':
+            'setDefaultOptions': 'configureOptions'
+        'Symfony\Component\Form\FormTypeInterface':
+            'getName': 'getBlockPrefix'
+
+    Rector\Rector\Dynamic\ClassReplacerRector:
+        # form
+        'Symfony\Component\Form\Util\VirtualFormAwareIterator': 'Symfony\Component\Form\Util\InheritDataAwareIterator'
+        # property access
+        Symfony\Component\PropertyAccess\PropertyAccess:
+            'getPropertyAccessor': 'createPropertyAccessor'
