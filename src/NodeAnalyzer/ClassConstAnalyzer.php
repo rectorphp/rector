@@ -22,6 +22,9 @@ final class ClassConstAnalyzer
         return $this->isNames($node, $constantNames);
     }
 
+    /**
+     * @param string[] $types
+     */
     public function matchTypes(Node $node, array $types): ?string
     {
         if (! $node instanceof ClassConstFetch) {
