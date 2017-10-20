@@ -66,11 +66,16 @@ final class MethodNameReplacerRector extends AbstractRector
     {
         $oldToNewMethods = $this->perClassOldToNewMethods[$this->activeType];
 
+        $methodName = $node->name->name;
+
         if ($this->isClassRename($oldToNewMethods)) {
+            [$newClass, $newMethod] = $oldToNewMethods[$methodName];
+
+            $node->class = new Name($newClass);
+            $node->name->name = $newMethod;
 
         } else { // is only method rename
             foreach ($oldToNewMethods as $oldMethod => $newMethod) {
-                $methodName = $node->name->name;
                 if ($methodName !== $oldMethod) {
                     continue;
                 }
