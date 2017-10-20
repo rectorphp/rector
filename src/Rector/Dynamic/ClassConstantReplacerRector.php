@@ -5,8 +5,6 @@ namespace Rector\Rector\Dynamic;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
-use PhpParser\Node\Stmt\UseUse;
 use Rector\NodeAnalyzer\ClassConstAnalyzer;
 use Rector\Rector\AbstractRector;
 
@@ -48,6 +46,7 @@ final class ClassConstantReplacerRector extends AbstractRector
             $matchedType = $this->classConstAnalyzer->matchTypes($node, $this->getTypes());
             if ($matchedType) {
                 $this->activeType = $matchedType;
+
                 return true;
             }
         }

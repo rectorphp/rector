@@ -48,7 +48,7 @@ final class FormNegativeRulesRector extends AbstractRector
             return false;
         }
 
-        return $this->classConstAnalyzer->isClassConstFetchOfClassAndConstantNames(
+        return $this->classConstAnalyzer->isTypeAndNames(
             $node->expr,
             self::FORM_CLASS,
             self::RULE_NAMES

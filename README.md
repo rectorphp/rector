@@ -144,6 +144,20 @@ You can:
                 'renderFormBegin': ['Nette\Bridges\FormsLatte\Runtime', 'renderFormBegin']
     ```
 
+- **change class constant name**
+
+    ```yml
+    # symfony30.yml
+    rectors:
+        Rector\Rector\Dynamic\ClassConstantReplacerRector:
+            # class:
+            #   OLD_CONSTANT: NEW_CONSTANT
+            'Symfony\Component\Form\FormEvents':
+                'PRE_BIND': 'PRE_SUBMIT'
+                'BIND': 'SUBMIT'
+                'POST_BIND': 'POST_SUBMIT'
+    ```
+
 - or **replace underscore naming `_` with namespaces `\`**
 
     ```yml
