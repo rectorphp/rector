@@ -25,6 +25,22 @@ final class PropertyFetchAnalyzer
         $this->smartClassReflector = $smartClassReflector;
     }
 
+    public function isPropertyFetchOnType(Node $node, string $type, string $property): bool
+    {
+        if (! $node instanceof PropertyFetch) {
+            return false;
+        }
+
+        $variableNodeType = $node->var->getAttribute(Attribute::TYPE);
+        if ($variableNodeType !== $type) {
+            return false;
+        }
+
+        $nodePropertyName = $node->name->toString();
+
+        return $nodePropertyName === $property;
+    }
+
     public function isMagicPropertyFetchOnType(Node $node, string $type): bool
     {
         if (! $node instanceof PropertyFetch) {
