@@ -21,5 +21,7 @@ rectors:
             'getPropertyAccessor': 'createPropertyAccessor'
 
     Rector\Rector\Dynamic\ClassReplacerRector:
+        # console
+        'Symfony\Component\Console\Helper\ProgressHelper': 'Symfony\Component\Console\Helper\ProgressBar'
         # form
         'Symfony\Component\Form\Util\VirtualFormAwareIterator': 'Symfony\Component\Form\Util\InheritDataAwareIterator'
