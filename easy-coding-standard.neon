@@ -30,6 +30,7 @@ checkers:
             - 'PhpParser\Node\*'
             - 'PhpParser\Comment\Doc'
             - 'Rector\DeprecationExtractor\Deprecation\*'
+            - 'Rector\BetterReflection\SourceLocator\**'
 
     Symplify\CodingStandard\Fixer\Naming\PropertyNameMatchingTypeFixer:
         extra_skipped_classes:
