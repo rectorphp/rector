@@ -100,17 +100,13 @@ final class MethodCallAnalyzer
         return in_array($nodeType, $types, true) ? $nodeType : null;
     }
 
-    public function isMagicOnType(Node $node, string $type): bool
+    public function isTypeAndMagic(Node $node, string $type): bool
     {
-        if (! $node instanceof MethodCall) {
+        if (! $this->isType($node, $type)) {
             return false;
         }
 
-        $variableType = $this->resolveVariableType($node);
-        if ($variableType !== $type) {
-            return false;
-        }
-
+        /** @var MethodCall $node */
         $nodeMethodName = $node->name->name;
 
         $publicMethodNames = $this->getPublicMethodNamesForType($type);
