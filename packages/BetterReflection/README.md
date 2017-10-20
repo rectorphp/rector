@@ -1,6 +1,36 @@
 # Better Reflection
 
-This package add 2 features:
+This package add 3 features:
  
 - ignores missing functions without crashing
 - `SmartClassReflector` always knows about file it's parsing thanks to `CurrentFileProvider` 
+
+- add stub file to `/stub` directory
+
+
+## Stub Files
+
+Sometimes **we need reflection of class that is not here**.
+
+To overcome this hard dependency on `/vendor`, we can prepare a stub file in format:
+
+    /stubs/Namespace.SubNamespace.ClassName.stub
+ 
+When class `Namespace\SubNamespace\ClassName` and is nowhere to be found, the stub file will be used to identify it.
+
+
+### Add Metadata for Sure
+
+Just copy original file from Github and use `y` to get absolute link to original file (in case of debug or anything).
+Also refer Rector config with version this stub was used for.
+
+**Add these 2 informations to the top of stub file**:
+
+```php
+<?php
+
+# source: https://github.com/nette/application/blob/12ce71ebb7389d2c24fa6f1a57a4348cad228c5e/src/Application/UI/ITemplate.php
+# for: nette24.yml
+
+namespace Nette\...
+```

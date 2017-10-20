@@ -22,7 +22,7 @@ final class SourceStubber
 
     public function __construct()
     {
-        $this->stubDirectory = __DIR__ . '/../../stub';
+        $this->stubDirectory = __DIR__ . '/../../stubs';
     }
 
     public function getStubFileInfoForName(string $name): ?SplFileInfo
