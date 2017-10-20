@@ -7,6 +7,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
+use Rector\NodeAnalyzer\StaticMethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
 
 final class MethodNameReplacerRector extends AbstractRector
@@ -37,14 +38,22 @@ final class MethodNameReplacerRector extends AbstractRector
      * @var MethodCallAnalyzer
      */
     private $methodCallAnalyzer;
+    /**
+     * @var StaticMethodCallAnalyzer
+     */
+    private $staticMethodCallAnalyzer;
 
     /**
      * @param string[][]
      */
-    public function __construct(array $perClassOldToNewMethods, MethodCallAnalyzer $methodCallAnalyzer)
-    {
+    public function __construct(
+        array $perClassOldToNewMethods,
+        MethodCallAnalyzer $methodCallAnalyzer,
+        StaticMethodCallAnalyzer $staticMethodCallAnalyzer
+    ) {
         $this->perClassOldToNewMethods = $perClassOldToNewMethods;
         $this->methodCallAnalyzer = $methodCallAnalyzer;
+        $this->staticMethodCallAnalyzer = $staticMethodCallAnalyzer;
     }
 
     public function isCandidate(Node $node): bool
@@ -58,7 +67,7 @@ final class MethodNameReplacerRector extends AbstractRector
             return true;
         }
 
-        $matchedType = $this->methodCallAnalyzer->matchStaticMethodCallTypes($node, $this->getClasses());
+        $matchedType = $this->staticMethodCallAnalyzer->matchStaticMethodCallTypes($node, $this->getClasses());
         if ($matchedType !== null) {
             $this->activeType = $matchedType;
 
