@@ -1,4 +1,6 @@
 rectors:
+    Rector\Rector\Contrib\Symfony\Form\FormTypeGetParentRector: ~
+
     Rector\Rector\Dynamic\ClassConstantReplacerRector:
         # form
         'Symfony\Component\Form\FormEvents':
