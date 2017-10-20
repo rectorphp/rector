@@ -15,7 +15,7 @@ rectors:
     Rector\Rector\Contrib\Nette\DI\CompilerGenerateCodeArgumentsRector: ~
 
     # forms
-    Rector\Rector\Contrib\Nette\Forms\MultiChoiceDefaultValueRector: ~
+    Rector\Rector\Contrib\Nette\Forms\ChoiceDefaultValueRector: ~
     Rector\Rector\Contrib\Nette\Forms\FormNegativeRulesRector: ~
     Rector\Rector\Contrib\Nette\Forms\FormCallbackRector: ~
     Rector\Rector\Contrib\Nette\Forms\FormSetRequiredRector: ~

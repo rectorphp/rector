@@ -25,14 +25,18 @@ final class PropertyFetchAnalyzer
         $this->smartClassReflector = $smartClassReflector;
     }
 
-    public function isPropertyFetchOnType(Node $node, string $type, string $property): bool
+    /**
+     * @param string[] $types
+     */
+    public function isPropertyFetchOnTypes(Node $node, array $types, string $property): bool
     {
         if (! $node instanceof PropertyFetch) {
             return false;
         }
 
         $variableNodeType = $node->var->getAttribute(Attribute::TYPE);
-        if ($variableNodeType !== $type) {
+
+        if (! in_array($variableNodeType, $types, true)) {
             return false;
         }
 

@@ -15,7 +15,7 @@ use Rector\Rector\AbstractRector;
  * After:
  * - $control->checkDefaultValue(false);
  */
-final class MultiChoiceDefaultValueRector extends AbstractRector
+final class ChoiceDefaultValueRector extends AbstractRector
 {
     /**
      * @var PropertyFetchAnalyzer
@@ -39,9 +39,9 @@ final class MultiChoiceDefaultValueRector extends AbstractRector
             return false;
         }
 
-        return $this->propertyFetchAnalyzer->isPropertyFetchOnType(
+        return $this->propertyFetchAnalyzer->isPropertyFetchOnTypes(
             $node->var,
-            'Nette\Forms\Controls\MultiChoiceControl',
+            ['Nette\Forms\Controls\MultiChoiceControl', 'Nette\Forms\Controls\ChoiceControl'],
             'checkAllowedValues'
         );
     }
