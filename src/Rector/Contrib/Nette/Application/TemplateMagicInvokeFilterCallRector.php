@@ -36,7 +36,7 @@ final class TemplateMagicInvokeFilterCallRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        return $this->methodCallAnalyzer->isMagicMethodCallOnType($node, 'Nette\Bridges\ApplicationLatte\Template');
+        return $this->methodCallAnalyzer->isMagicOnType($node, 'Nette\Bridges\ApplicationLatte\Template');
     }
 
     /**

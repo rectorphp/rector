@@ -62,7 +62,7 @@ final class GetServiceToConstructorInjectionRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        return $this->staticMethodCallAnalyzer->isStaticMethodCallTypeAndMethod(
+        return $this->staticMethodCallAnalyzer->isTypeAndMethod(
             $node,
             'Nette\Environment',
             'getService'

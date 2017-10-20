@@ -61,14 +61,14 @@ final class MethodNameReplacerRector extends AbstractRector
     {
         $this->activeType = null;
 
-        $matchedType = $this->methodCallAnalyzer->matchMethodCallTypes($node, $this->getClasses());
+        $matchedType = $this->methodCallAnalyzer->matchTypes($node, $this->getClasses());
         if ($matchedType !== null) {
             $this->activeType = $matchedType;
 
             return true;
         }
 
-        $matchedType = $this->staticMethodCallAnalyzer->matchStaticMethodCallTypes($node, $this->getClasses());
+        $matchedType = $this->staticMethodCallAnalyzer->matchTypes($node, $this->getClasses());
         if ($matchedType !== null) {
             $this->activeType = $matchedType;
 

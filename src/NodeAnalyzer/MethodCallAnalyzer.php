@@ -31,9 +31,9 @@ final class MethodCallAnalyzer
      *
      * @param string[] $methods
      */
-    public function isMethodCallTypeAndMethods(Node $node, string $type, array $methods): bool
+    public function isTypeAndMethods(Node $node, string $type, array $methods): bool
     {
-        if (! $this->isMethodCallType($node, $type)) {
+        if (! $this->isType($node, $type)) {
             return false;
         }
 
@@ -44,9 +44,9 @@ final class MethodCallAnalyzer
     /**
      * Checks "$this->classOfSpecificType->specificMethodName()"
      */
-    public function isMethodCallTypeAndMethod(Node $node, string $type, string $method): bool
+    public function isTypeAndMethod(Node $node, string $type, string $method): bool
     {
-        if (! $this->isMethodCallType($node, $type)) {
+        if (! $this->isType($node, $type)) {
             return false;
         }
 
@@ -57,7 +57,7 @@ final class MethodCallAnalyzer
     /**
      * Checks "$this->specificNameMethod()"
      */
-    public function isMethodCallMethod(Node $node, string $methodName): bool
+    public function isMethod(Node $node, string $methodName): bool
     {
         if (! $node instanceof MethodCall) {
             return false;
@@ -75,13 +75,13 @@ final class MethodCallAnalyzer
     /**
      * Checks "$this->methodCall()"
      */
-    public function isMethodCallType(Node $node, string $type): bool
+    public function isType(Node $node, string $type): bool
     {
         if (! $node instanceof MethodCall) {
             return false;
         }
 
-        $variableType = $this->findVariableType($node);
+        $variableType = $this->resolveVariableType($node);
 
         return $variableType === $type;
     }
@@ -89,7 +89,7 @@ final class MethodCallAnalyzer
     /**
      * @param string[] $types
      */
-    public function matchMethodCallTypes(Node $node, array $types): ?string
+    public function matchTypes(Node $node, array $types): ?string
     {
         if (! $node instanceof MethodCall) {
             return null;
@@ -100,13 +100,13 @@ final class MethodCallAnalyzer
         return in_array($nodeType, $types, true) ? $nodeType : null;
     }
 
-    public function isMagicMethodCallOnType(Node $node, string $type): bool
+    public function isMagicOnType(Node $node, string $type): bool
     {
         if (! $node instanceof MethodCall) {
             return false;
         }
 
-        $variableType = $this->findVariableType($node);
+        $variableType = $this->resolveVariableType($node);
         if ($variableType !== $type) {
             return false;
         }
@@ -133,7 +133,7 @@ final class MethodCallAnalyzer
         return $this->publicMethodNamesForType[$type] = array_keys($publicMethods);
     }
 
-    private function findVariableType(MethodCall $methodCallNode): string
+    private function resolveVariableType(MethodCall $methodCallNode): string
     {
         $varNode = $methodCallNode->var;
 

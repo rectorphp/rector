@@ -14,9 +14,9 @@ final class StaticMethodCallAnalyzer
     /**
      * Checks "SpecificType::specificMethod()"
      */
-    public function isStaticMethodCallTypeAndMethod(Node $node, string $type, string $method): bool
+    public function isTypeAndMethod(Node $node, string $type, string $method): bool
     {
-        if (! $this->isStaticMethodCallType($node, $type)) {
+        if (! $this->isType($node, $type)) {
             return false;
         }
 
@@ -29,9 +29,9 @@ final class StaticMethodCallAnalyzer
      *
      * @param string[] $methodNames
      */
-    public function isStaticMethodCallTypeAndMethods(Node $node, string $type, array $methodNames): bool
+    public function isTypeAndMethods(Node $node, string $type, array $methodNames): bool
     {
-        if (! $this->isStaticMethodCallType($node, $type)) {
+        if (! $this->isType($node, $type)) {
             return false;
         }
 
@@ -50,7 +50,7 @@ final class StaticMethodCallAnalyzer
     /**
      * @param string[] $types
      */
-    public function matchStaticMethodCallTypes(Node $node, array $types): ?string
+    public function matchTypes(Node $node, array $types): ?string
     {
         if (! $node instanceof StaticCall) {
             return null;
@@ -72,7 +72,7 @@ final class StaticMethodCallAnalyzer
     /**
      * Checks "SpecificType::anyMethod()"
      */
-    private function isStaticMethodCallType(Node $node, string $type): bool
+    private function isType(Node $node, string $type): bool
     {
         if (! $node instanceof StaticCall) {
             return false;
