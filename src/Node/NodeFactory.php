@@ -113,9 +113,9 @@ final class NodeFactory
     /**
      * Creates "$method->call();" from existing variable
      */
-    public function createMethodCallWithVariable(Variable $variableNode, string $methodName): MethodCall
+    public function createMethodCallWithVariable(Expr $exprNode, string $methodName): MethodCall
     {
-        return new MethodCall($variableNode, $methodName);
+        return new MethodCall($exprNode, $methodName);
     }
 
     /**
@@ -277,5 +277,10 @@ final class NodeFactory
     public function createNamespace(string $namespace): Namespace_
     {
         return new Namespace_(BuilderHelpers::normalizeName($namespace));
+    }
+
+    public function clonePropertyFetch(PropertyFetch $propertyFetchNode): PropertyFetch
+    {
+        return new PropertyFetch($propertyFetchNode->var, $propertyFetchNode->name);
     }
 }

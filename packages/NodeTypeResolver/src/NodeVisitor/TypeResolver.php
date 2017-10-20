@@ -2,6 +2,7 @@
 
 namespace Rector\NodeTypeResolver\NodeVisitor;
 
+use PhpCsFixer\DocBlock\DocBlock;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
@@ -207,6 +208,13 @@ final class TypeResolver extends NodeVisitorAbstract
         $propertyName = (string) $propertyNode->props[0]->name;
         $propertyType = $this->typeContext->getTypeForProperty($propertyName);
 
+        if ($propertyType === null) {
+            $propertyType = $this->resolveTypeFromPropertyDocComment($propertyNode);
+            if ($propertyType) {
+                $this->typeContext->addPropertyType($propertyName, $propertyType);
+            }
+        }
+
         if ($propertyType) {
             $propertyNode->setAttribute(Attribute::TYPE, $propertyType);
         }
@@ -347,5 +355,29 @@ final class TypeResolver extends NodeVisitorAbstract
         }
 
         return (string) $assignNode->expr->name;
+    }
+
+    private function resolveTypeFromPropertyDocComment(Property $propertyNode): ?string
+    {
+        $doc = $propertyNode->getDocComment();
+        if ($doc === null) {
+            return null;
+        }
+
+        $docBlock = new DocBlock($doc->getText());
+        $varAnnotations = $docBlock->getAnnotationsOfType('var');
+        if (! count($varAnnotations)) {
+            return null;
+        }
+
+        // @todo: resolve non-FQN names using namespace imports
+        // $propertyNode->getAttribute(Attribute::USE_STATEMENTS)
+        // maybe decouple to service?
+        $varTypes = $varAnnotations[0]->getTypes();
+        if (! count($varTypes)) {
+            return null;
+        }
+
+        return $varTypes[0];
     }
 }

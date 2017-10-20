@@ -60,6 +60,23 @@ final class RectorGuesser
             return $this->rectorGuessFactory->createNewArgument($message, $deprecation->getNode());
         }
 
+        $possibleRectorGuess = $this->processUseInMessage($deprecation, $message);
+        if ($possibleRectorGuess) {
+            return $possibleRectorGuess;
+        }
+
+        if (Strings::contains($message, 'Replace') || Strings::contains($message, 'replace')) {
+            return $this->rectorGuessFactory->createMethodNameReplacerGuess(
+                $message,
+                $deprecation->getNode()
+            );
+        }
+
+        return $this->rectorGuessFactory->createRemoval($message, $deprecation->getNode());
+    }
+
+    private function processUseInMessage(Deprecation $deprecation, string $message): ?RectorGuess
+    {
         $result = Strings::split($message, '#use |Use#');
 
         if (count($result) === 2) {
@@ -76,6 +93,6 @@ final class RectorGuesser
             );
         }
 
-        return $this->rectorGuessFactory->createRemoval($message, $deprecation->getNode());
+        return null;
     }
 }

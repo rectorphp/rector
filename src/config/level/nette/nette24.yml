@@ -5,6 +5,11 @@ rectors:
     Rector\Rector\Contrib\Nette\Utils\NetteObjectToSmartTraitRector: ~
     Rector\Rector\Contrib\Nette\Utils\MagicMethodRector: ~
 
+    # application
+    Rector\Rector\Contrib\Nette\Application\ValidateControlRector: ~
+    Rector\Rector\Contrib\Nette\Application\TemplateMagicInvokeFilterCallRector: ~
+    Rector\Rector\Contrib\Nette\Application\TemplateRegisterHelperRector: ~
+
     # di
     Rector\Rector\Contrib\Nette\DI\SetEntityToStatementRector: ~
     Rector\Rector\Contrib\Nette\DI\ExpandFunctionToParametersArrayRector: ~
@@ -25,6 +30,10 @@ rectors:
             'unset': 'removeService'
 
     Rector\Rector\Dynamic\MethodNameReplacerRector:
+        # application
+        'Nette\Application\UI\Control':
+            'invalidateControl': 'redrawControl'
+
         # di
         'Nette\DI\ServiceDefinition':
             'setImplementType': 'setImplementMode'

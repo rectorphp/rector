@@ -90,15 +90,20 @@ final class TypeContext
         return $this->types[$name] ?? '';
     }
 
-    public function getTypeForProperty(string $name): string
+    public function getTypeForProperty(string $name): ?string
     {
-        return $this->classProperties[$name] ?? '';
+        return $this->classProperties[$name] ?? null;
     }
 
     public function addAssign(string $newVariable, string $oldVariable): void
     {
         $type = $this->getTypeForVariable($oldVariable);
         $this->addVariableWithType($newVariable, $type);
+    }
+
+    public function addPropertyType(string $propertyName, string $propertyType): void
+    {
+        $this->classProperties[$propertyName] = $propertyType;
     }
 
     /**

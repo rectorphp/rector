@@ -18,6 +18,7 @@
         "symplify/package-builder": "^2.5"
     },
     "require-dev": {
+        "nette/application": "^2.4",
         "phpunit/phpunit": "^6.2",
         "slam/php-cs-fixer-extensions": "^1.6",
         "symfony/expression-language": "^3.3",
