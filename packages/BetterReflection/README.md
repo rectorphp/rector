@@ -14,17 +14,18 @@ Sometimes **we need reflection of class that is not here**.
 
 To overcome this hard dependency on `/vendor`, we can prepare a stub file in format:
 
-    /stubs/Namespace.SubNamespace.ClassName.stub
+```
+/stubs/Namespace.ClassName.stub
+```
  
-When class `Namespace\SubNamespace\ClassName` and is nowhere to be found, the stub file will be used to identify it.
+When class `Namespace\ClassName` and is nowhere to be found, the stub file will be used to identify it.
 
 
-### Add Metadata for Sure
+### How to add Stub File?
 
-Just copy original file from Github and use `y` to get absolute link to original file (in case of debug or anything).
-Also refer Rector config with version this stub was used for.
-
-**Add these 2 informations to the top of stub file**:
+- Copy original file from Github and use `y` to get absolute link to original file (in case of debug or anything).
+- Also refer Rector config with version this stub was used for.
+- **Add these 2 informations to the top of stub file**:
 
 ```php
 <?php
