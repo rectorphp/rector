@@ -7,10 +7,10 @@ rectors:
             'setDefaultOptions': 'configureOptions'
         'Symfony\Component\Form\FormTypeInterface':
             'getName': 'getBlockPrefix'
+        # property access
+        Symfony\Component\PropertyAccess\PropertyAccess:
+            'getPropertyAccessor': 'createPropertyAccessor'
 
     Rector\Rector\Dynamic\ClassReplacerRector:
         # form
         'Symfony\Component\Form\Util\VirtualFormAwareIterator': 'Symfony\Component\Form\Util\InheritDataAwareIterator'
-        # property access
-        Symfony\Component\PropertyAccess\PropertyAccess:
-            'getPropertyAccessor': 'createPropertyAccessor'

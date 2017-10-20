@@ -27,17 +27,9 @@ final class ClassConstAnalyzer
 
     private function isClassName(ClassConstFetch $classConstFetchNode, string $className): bool
     {
-        /** @var FullyQualified $className */
-        $classFullyQualifiedName = $classConstFetchNode->class->getAttribute(Attribute::RESOLVED_NAME);
+        $nodeClass = $this->resolveClass($classConstFetchNode);
 
-        if ($classFullyQualifiedName instanceof FullyQualified) {
-            return $classFullyQualifiedName->toString() === $className;
-        }
-
-        // e.g. "$form::FILLED"
-        $nodeClassName = $classConstFetchNode->class->getAttribute(Attribute::CLASS_NAME);
-
-        return $nodeClassName === $className;
+        return $nodeClass === $className;
     }
 
     /**
@@ -48,5 +40,28 @@ final class ClassConstAnalyzer
         $nodeConstantName = $node->name->name;
 
         return in_array($nodeConstantName, $constantNames, true);
+    }
+
+    public function matchTypes(Node $node, array $types): ?string
+    {
+        if (! $node instanceof ClassConstFetch) {
+            return null;
+        }
+
+        $class = $this->resolveClass($node);
+
+        return in_array($class, $types, true) ? $class : null;
+    }
+
+    private function resolveClass(ClassConstFetch $classConstFetchNode): string
+    {
+        $classFullyQualifiedName = $classConstFetchNode->class->getAttribute(Attribute::RESOLVED_NAME);
+
+        if ($classFullyQualifiedName instanceof FullyQualified) {
+            return $classFullyQualifiedName->toString();
+        }
+
+        // e.g. "$form::FILLED"
+        return (string) $classConstFetchNode->class->getAttribute(Attribute::CLASS_NAME);
     }
 }
