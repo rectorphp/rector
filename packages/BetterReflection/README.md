@@ -4,8 +4,7 @@ This package add 3 features:
  
 - ignores missing functions without crashing
 - `SmartClassReflector` always knows about file it's parsing thanks to `CurrentFileProvider` 
-
-- add stub file to `/stub` directory
+- add stub file to `/stubs` directory
 
 
 ## Stub Files
