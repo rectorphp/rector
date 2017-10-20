@@ -11,7 +11,7 @@ use Rector\Contract\Bridge\ServiceTypeForNameProviderInterface;
 use Rector\Naming\PropertyNaming;
 use Rector\Node\Attribute;
 use Rector\Node\NodeFactory;
-use Rector\NodeAnalyzer\SymfonyContainerCallsAnalyzer;
+use Rector\NodeAnalyzer\Contrib\SymfonyContainerCallsAnalyzer;
 use Rector\Rector\AbstractRector;
 
 /**

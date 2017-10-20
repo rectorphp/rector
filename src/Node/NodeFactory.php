@@ -18,6 +18,7 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Declare_;
@@ -105,7 +106,7 @@ final class NodeFactory
      */
     public function createMethodCall(string $variableName, string $methodName): MethodCall
     {
-        $variableNode = new Variable($variableName);
+        $variableNode = $this->createVariable($variableName);
 
         return new MethodCall($variableNode, $methodName);
     }
@@ -282,5 +283,19 @@ final class NodeFactory
     public function clonePropertyFetch(PropertyFetch $propertyFetchNode): PropertyFetch
     {
         return new PropertyFetch($propertyFetchNode->var, $propertyFetchNode->name);
+    }
+
+    public function createParam(string $name, string $type): Param
+    {
+        return new Param(
+            $this->createVariable($name),
+            null,
+            $type
+        );
+    }
+
+    public function createVariable(string $name): Variable
+    {
+        return new Variable($name);
     }
 }
