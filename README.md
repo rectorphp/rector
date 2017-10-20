@@ -132,9 +132,16 @@ You can:
     rectors:
         Rector\Rector\Dynamic\MethodNameReplacerRector:
             # class:
-            #       old method: new method
+            #   old method: new method
             'Nette\Utils\Html':
                 'add': 'addHtml'
+            
+            # or in case of static methods calls
+             
+            # class:
+            #   old method: [new class, new method] 
+            'Nette\Bridges\FormsLatte\FormMacros':
+                'renderFormBegin': ['Nette\Bridges\FormsLatte\Runtime', 'renderFormBegin']
     ```
 
 - or **replace underscore naming `_` with namespaces `\`**
