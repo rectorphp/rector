@@ -39,7 +39,7 @@ final class CompilerAddPassPriorityRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        if ($this->methodCallAnalyzer->isMethodCallTypeAndMethods(
+        if ($this->methodCallAnalyzer->isTypeAndMethods(
             $node,
             'Symfony\Component\DependencyInjection\Compiler\Compiler',
             ['addPass']

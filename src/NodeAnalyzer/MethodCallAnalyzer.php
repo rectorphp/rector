@@ -4,10 +4,7 @@ namespace Rector\NodeAnalyzer;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
 use Rector\BetterReflection\Reflector\SmartClassReflector;
 use Rector\Node\Attribute;
 use ReflectionMethod;
@@ -34,69 +31,33 @@ final class MethodCallAnalyzer
      *
      * @param string[] $methods
      */
-    public function isMethodCallTypeAndMethods(Node $node, string $type, array $methods): bool
+    public function isTypeAndMethods(Node $node, string $type, array $methods): bool
     {
-        if (! $this->isMethodCallType($node, $type)) {
+        if (! $this->isType($node, $type)) {
             return false;
         }
 
         /** @var MethodCall $node */
-        return in_array((string) $node->name, $methods, true);
+        return in_array($node->name->toString(), $methods, true);
     }
 
     /**
      * Checks "$this->classOfSpecificType->specificMethodName()"
      */
-    public function isMethodCallTypeAndMethod(Node $node, string $type, string $method): bool
+    public function isTypeAndMethod(Node $node, string $type, string $method): bool
     {
-        if (! $this->isMethodCallType($node, $type)) {
+        if (! $this->isType($node, $type)) {
             return false;
         }
 
         /** @var MethodCall $node */
-        return (string) $node->name === $method;
-    }
-
-    /**
-     * Checks "SomeClassOfSpecificType::specificMethodName()"
-     */
-    public function isStaticMethodCallTypeAndMethod(Node $node, string $type, string $method): bool
-    {
-        if (! $this->isStaticMethodCallType($node, $type)) {
-            return false;
-        }
-
-        /** @var StaticCall $node */
-        return (string) $node->name === $method;
-    }
-
-    /**
-     * Checks "SomeClassOfSpecificType::specificMethodName()"
-     *
-     * @param string[] $methodNames
-     */
-    public function isStaticMethodCallTypeAndMethods(Node $node, string $type, array $methodNames): bool
-    {
-        if (! $this->isStaticMethodCallType($node, $type)) {
-            return false;
-        }
-
-        /** @var StaticCall $node */
-        $currentMethodName = (string) $node->name;
-
-        foreach ($methodNames as $methodName) {
-            if ($currentMethodName === $methodName) {
-                return true;
-            }
-        }
-
-        return false;
+        return $node->name->toString() === $method;
     }
 
     /**
      * Checks "$this->specificNameMethod()"
      */
-    public function isMethodCallMethod(Node $node, string $methodName): bool
+    public function isMethod(Node $node, string $methodName): bool
     {
         if (! $node instanceof MethodCall) {
             return false;
@@ -114,28 +75,38 @@ final class MethodCallAnalyzer
     /**
      * Checks "$this->methodCall()"
      */
-    public function isMethodCallType(Node $node, string $type): bool
+    public function isType(Node $node, string $type): bool
     {
         if (! $node instanceof MethodCall) {
             return false;
         }
 
-        $variableType = $this->findVariableType($node);
+        $variableType = $this->resolveVariableType($node);
 
         return $variableType === $type;
     }
 
-    public function isMagicMethodCallOnType(Node $node, string $type): bool
+    /**
+     * @param string[] $types
+     */
+    public function matchTypes(Node $node, array $types): ?string
     {
         if (! $node instanceof MethodCall) {
+            return null;
+        }
+
+        $nodeType = $node->var->getAttribute(Attribute::TYPE);
+
+        return in_array($nodeType, $types, true) ? $nodeType : null;
+    }
+
+    public function isTypeAndMagic(Node $node, string $type): bool
+    {
+        if (! $this->isType($node, $type)) {
             return false;
         }
 
-        $variableType = $this->findVariableType($node);
-        if ($variableType !== $type) {
-            return false;
-        }
-
+        /** @var MethodCall $node */
         $nodeMethodName = $node->name->name;
 
         $publicMethodNames = $this->getPublicMethodNamesForType($type);
@@ -158,30 +129,7 @@ final class MethodCallAnalyzer
         return $this->publicMethodNamesForType[$type] = array_keys($publicMethods);
     }
 
-    /**
-     * Checks "SomeClassOfSpecificType::someMethod()"
-     */
-    private function isStaticMethodCallType(Node $node, string $type): bool
-    {
-        if (! $node instanceof StaticCall) {
-            return false;
-        }
-
-        $currentType = null;
-        if ($node->class instanceof Name) {
-            $currentType = $node->class->toString();
-        } elseif ($node->class instanceof Variable) {
-            $currentType = $node->class->getAttribute(Attribute::CLASS_NAME);
-        }
-
-        if ($currentType !== $type) {
-            return false;
-        }
-
-        return true;
-    }
-
-    private function findVariableType(MethodCall $methodCallNode): string
+    private function resolveVariableType(MethodCall $methodCallNode): string
     {
         $varNode = $methodCallNode->var;
 

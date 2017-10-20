@@ -30,7 +30,7 @@ final class CompilerGenerateCodeArgumentsRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        if (! $this->methodCallAnalyzer->isMethodCallTypeAndMethod($node, 'Nette\DI\Compiler', 'generateCode')) {
+        if (! $this->methodCallAnalyzer->isTypeAndMethod($node, 'Nette\DI\Compiler', 'generateCode')) {
             return false;
         }
 

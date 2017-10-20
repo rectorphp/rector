@@ -12,19 +12,19 @@ use Rector\Rector\AbstractRector;
 
 /**
  * Converts all:
- * VarDumperTestTrait::assertDumpEquals($dump, $data, $mesage = '');
- * VarDumperTestTrait::assertDumpMatchesFormat($dump, $format, $mesage = '');
+ * - VarDumperTestTrait->assertDumpEquals($dump, $data, $mesage = '');
+ * - VarDumperTestTrait->assertDumpMatchesFormat($dump, $format, $mesage = '');
  *
  * into:
- * VarDumperTestTrait::assertDumpEquals($dump, $data, $context = null, $mesage = '');
- * VarDumperTestTrait::assertDumpMatchesFormat($dump, $format, $context = null,  $mesage = '');
+ * - VarDumperTestTrait->assertDumpEquals($dump, $data, $context = null, $mesage = '');
+ * - VarDumperTestTrait->assertDumpMatchesFormat($dump, $format, $context = null,  $mesage = '');
  */
 final class VarDumperTestTraitMethodArgsRector extends AbstractRector
 {
     /**
      * @var string
      */
-    private const TRAIT_NAME = 'VarDumperTestTrait';
+    private const TRAIT_NAME = 'Symfony\Component\VarDumper\Test\VarDumperTestTrait';
 
     /**
      * @var MethodCallAnalyzer
@@ -44,7 +44,7 @@ final class VarDumperTestTraitMethodArgsRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        if (! $this->methodCallAnalyzer->isStaticMethodCallTypeAndMethods(
+        if (! $this->methodCallAnalyzer->isTypeAndMethods(
             $node,
             self::TRAIT_NAME,
             ['assertDumpEquals', 'assertDumpMatchesFormat']

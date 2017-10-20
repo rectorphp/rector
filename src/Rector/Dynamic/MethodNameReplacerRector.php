@@ -5,10 +5,9 @@ namespace Rector\Rector\Dynamic;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
-use Rector\Node\Attribute;
+use Rector\NodeAnalyzer\MethodCallAnalyzer;
+use Rector\NodeAnalyzer\StaticMethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
 
 final class MethodNameReplacerRector extends AbstractRector
@@ -16,6 +15,14 @@ final class MethodNameReplacerRector extends AbstractRector
     /**
      * class => [
      *     oldMethod => newMethod
+     * ]
+     *
+     * or (typically for static calls):
+     *
+     * class => [
+     *     oldMethod => [
+     *          newClass, newMethod
+     *     ]
      * ]
      *
      * @var string[][]
@@ -28,22 +35,43 @@ final class MethodNameReplacerRector extends AbstractRector
     private $activeType;
 
     /**
+     * @var MethodCallAnalyzer
+     */
+    private $methodCallAnalyzer;
+
+    /**
+     * @var StaticMethodCallAnalyzer
+     */
+    private $staticMethodCallAnalyzer;
+
+    /**
      * @param string[][]
      */
-    public function __construct(array $perClassOldToNewMethods)
-    {
+    public function __construct(
+        array $perClassOldToNewMethods,
+        MethodCallAnalyzer $methodCallAnalyzer,
+        StaticMethodCallAnalyzer $staticMethodCallAnalyzer
+    ) {
         $this->perClassOldToNewMethods = $perClassOldToNewMethods;
+        $this->methodCallAnalyzer = $methodCallAnalyzer;
+        $this->staticMethodCallAnalyzer = $staticMethodCallAnalyzer;
     }
 
     public function isCandidate(Node $node): bool
     {
         $this->activeType = null;
 
-        if ($this->isOnTypeCall($node)) {
+        $matchedType = $this->methodCallAnalyzer->matchTypes($node, $this->getClasses());
+        if ($matchedType) {
+            $this->activeType = $matchedType;
+
             return true;
         }
 
-        if ($this->isStaticCallOnType($node)) {
+        $matchedType = $this->staticMethodCallAnalyzer->matchTypes($node, $this->getClasses());
+        if ($matchedType) {
+            $this->activeType = $matchedType;
+
             return true;
         }
 
@@ -57,8 +85,23 @@ final class MethodNameReplacerRector extends AbstractRector
     {
         $oldToNewMethods = $this->perClassOldToNewMethods[$this->activeType];
 
+        $methodName = $node->name->name;
+
+        if (! isset($oldToNewMethods[$methodName])) {
+            return $node;
+        }
+
+        if ($this->isClassRename($oldToNewMethods)) {
+            [$newClass, $newMethod] = $oldToNewMethods[$methodName];
+
+            $node->class = new Name($newClass);
+            $node->name->name = $newMethod;
+
+            return $node;
+        }
+
+        // is only method rename
         foreach ($oldToNewMethods as $oldMethod => $newMethod) {
-            $methodName = $node->name->name;
             if ($methodName !== $oldMethod) {
                 continue;
             }
@@ -69,68 +112,21 @@ final class MethodNameReplacerRector extends AbstractRector
         return $node;
     }
 
-    private function isOnTypeCall(Node $node): bool
-    {
-        if (! $node instanceof MethodCall) {
-            return false;
-        }
-
-        if (! $node->var instanceof Variable) {
-            return false;
-        }
-
-        /** @var string|null $type */
-        $type = $node->var->getAttribute(Attribute::TYPE);
-        if ($type === null) {
-            return false;
-        }
-
-        if (! $this->isTypeRelevant($type)) {
-            return false;
-        }
-
-        $this->activeType = $type;
-
-        return true;
-    }
-
-    private function isStaticCallOnType(Node $node): bool
-    {
-        if (! $node instanceof StaticCall) {
-            return false;
-        }
-
-        if (! $node->name instanceof Identifier) {
-            return false;
-        }
-
-        if (! $node->class instanceof Name) {
-            return false;
-        }
-
-        $type = $node->class->toString();
-
-        if (! $this->isTypeRelevant($type)) {
-            return false;
-        }
-
-        $this->activeType = $type;
-
-        return true;
-    }
-
-    private function isTypeRelevant(string $type): bool
-    {
-        $classes = $this->getClasses();
-
-        return in_array($type, $classes, true);
-    }
-
     /**
      * @return string[]
      */
     private function getClasses(): array
     {
         return array_keys($this->perClassOldToNewMethods);
+    }
+
+    /**
+     * @param mixed[] $oldToNewMethods
+     */
+    private function isClassRename(array $oldToNewMethods): bool
+    {
+        $firstMethodConfiguration = current($oldToNewMethods);
+
+        return is_array($firstMethodConfiguration);
     }
 }

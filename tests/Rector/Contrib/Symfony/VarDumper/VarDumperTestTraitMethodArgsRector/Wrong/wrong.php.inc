@@ -1,5 +1,5 @@
 <?php declare(strict_types=1);
 
-VarDumperTestTrait::assertDumpEquals($dump, $data, 'Some message');
-
-VarDumperTestTrait::assertDumpMatchesFormat($dump, $format, 'Some message');
+$trait = new Symfony\Component\VarDumper\Test\VarDumperTestTrait;
+$trait->assertDumpEquals($dump, $data, 'Some message');
+$trait->assertDumpMatchesFormat($dump, $format, 'Some message');

@@ -106,7 +106,7 @@ final class MethodArgumentChangerRector extends AbstractRector
 
     private function matchesMethodChange(Node $node, MethodChange $methodChange): bool
     {
-        return $this->methodCallAnalyzer->isMethodCallTypeAndMethod(
+        return $this->methodCallAnalyzer->isTypeAndMethod(
             $node,
             $methodChange->getClass(),
             $methodChange->getMethod()

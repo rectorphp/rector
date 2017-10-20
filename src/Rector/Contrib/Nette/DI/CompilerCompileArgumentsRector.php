@@ -33,7 +33,7 @@ final class CompilerCompileArgumentsRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        if (! $this->methodCallAnalyzer->isMethodCallTypeAndMethod($node, 'Nette\DI\Compiler', 'compile')) {
+        if (! $this->methodCallAnalyzer->isTypeAndMethod($node, 'Nette\DI\Compiler', 'compile')) {
             return false;
         }
 

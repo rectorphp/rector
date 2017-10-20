@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Contrib\Nette\Form\FormNegativeRulesRector;
+namespace Rector\Tests\Rector\Contrib\Nette\Forms\FormSetRequiredRector;
 
-use Rector\Rector\Contrib\Nette\Form\FormNegativeRulesRector;
+use Rector\Rector\Contrib\Nette\Forms\FormSetRequiredRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class Test extends AbstractRectorTestCase
@@ -20,6 +20,6 @@ final class Test extends AbstractRectorTestCase
      */
     protected function getRectorClasses(): array
     {
-        return [FormNegativeRulesRector::class];
+        return [FormSetRequiredRector::class];
     }
 }

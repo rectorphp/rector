@@ -1,7 +1,4 @@
 rectors:
-    Rector\Rector\Contrib\Nette\Form\FormNegativeRulesRector: ~
-    Rector\Rector\Contrib\Nette\Form\FormCallbackRector: ~
-    Rector\Rector\Contrib\Nette\Form\FormSetRequiredRector: ~
     Rector\Rector\Contrib\Nette\Utils\NetteObjectToSmartTraitRector: ~
     Rector\Rector\Contrib\Nette\Utils\MagicMethodRector: ~
 
@@ -16,6 +13,12 @@ rectors:
     Rector\Rector\Contrib\Nette\DI\ExpandFunctionToStaticExpandFunctionRector: ~
     Rector\Rector\Contrib\Nette\DI\CompilerCompileArgumentsRector: ~
     Rector\Rector\Contrib\Nette\DI\CompilerGenerateCodeArgumentsRector: ~
+
+    # forms
+    Rector\Rector\Contrib\Nette\Forms\ChoiceDefaultValueRector: ~
+    Rector\Rector\Contrib\Nette\Forms\FormNegativeRulesRector: ~
+    Rector\Rector\Contrib\Nette\Forms\FormCallbackRector: ~
+    Rector\Rector\Contrib\Nette\Forms\FormSetRequiredRector: ~
 
     Rector\Rector\MagicDisclosure\GetAndSetToMethodCallRector:
         # di
@@ -38,6 +41,11 @@ rectors:
         'Nette\DI\ServiceDefinition':
             'setImplementType': 'setImplementMode'
             'getImplementType': 'getImplementMode'
+
+        # forms
+        'Nette\Bridges\FormsLatte\FormMacros':
+            'renderFormBegin': ['Nette\Bridges\FormsLatte\Runtime', 'renderFormBegin']
+            'renderFormEnd': ['Nette\Bridges\FormsLatte\Runtime', 'renderFormEnd']
 
         # php-generator
         'Nette\PhpGenerator\ClassType':

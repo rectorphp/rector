@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Rector\Contrib\Nette\Form;
+namespace Rector\Rector\Contrib\Nette\Forms;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
@@ -38,7 +38,7 @@ final class FormSetRequiredRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        if (! $this->methodCallAnalyzer->isMethodCallTypeAndMethods($node, self::FORM_CLASS, ['addCondition'])) {
+        if (! $this->methodCallAnalyzer->isTypeAndMethods($node, self::FORM_CLASS, ['addCondition'])) {
             return false;
         }
 

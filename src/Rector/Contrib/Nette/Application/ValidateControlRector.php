@@ -35,7 +35,7 @@ final class ValidateControlRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        return $this->methodCallAnalyzer->isMethodCallTypeAndMethod(
+        return $this->methodCallAnalyzer->isTypeAndMethod(
             $node,
             'Nette\Application\UI\Control',
             'validateControl'

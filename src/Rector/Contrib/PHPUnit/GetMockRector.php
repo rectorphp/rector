@@ -27,7 +27,7 @@ final class GetMockRector extends AbstractRector
             return false;
         }
 
-        return $this->methodCallAnalyzer->isMethodCallMethod(
+        return $this->methodCallAnalyzer->isMethod(
             $node,
             'getMock'
         );

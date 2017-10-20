@@ -55,7 +55,7 @@ final class ExpandFunctionToParametersArrayRector extends AbstractRector
             return false;
         }
 
-        if (! $this->methodCallAnalyzer->isMethodCallMethod($node, 'expand')) {
+        if (! $this->methodCallAnalyzer->isMethod($node, 'expand')) {
             return false;
         }
 

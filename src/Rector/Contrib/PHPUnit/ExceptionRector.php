@@ -48,7 +48,7 @@ final class ExceptionRector extends AbstractRector
             return false;
         }
 
-        return $this->methodCallAnalyzer->isMethodCallMethod(
+        return $this->methodCallAnalyzer->isMethod(
             $node,
             'setExpectedException'
         );

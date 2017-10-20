@@ -9,7 +9,7 @@ use Rector\Contract\Bridge\ServiceTypeForNameProviderInterface;
 use Rector\Naming\PropertyNaming;
 use Rector\Node\Attribute;
 use Rector\Node\NodeFactory;
-use Rector\NodeAnalyzer\MethodCallAnalyzer;
+use Rector\NodeAnalyzer\StaticMethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -37,32 +37,36 @@ final class GetServiceToConstructorInjectionRector extends AbstractRector
     private $nodeFactory;
 
     /**
-     * @var MethodCallAnalyzer
-     */
-    private $methodCallAnalyzer;
-
-    /**
      * @var ServiceTypeForNameProviderInterface
      */
     private $serviceTypeForNameProvider;
+
+    /**
+     * @var StaticMethodCallAnalyzer
+     */
+    private $staticMethodCallAnalyzer;
 
     public function __construct(
         PropertyNaming $propertyNaming,
         ClassPropertyCollector $classPropertyCollector,
         NodeFactory $nodeFactory,
-        MethodCallAnalyzer $methodCallAnalyzer,
+        StaticMethodCallAnalyzer $staticMethodCallAnalyzer,
         ServiceTypeForNameProviderInterface $serviceTypeForNameProvider
     ) {
         $this->propertyNaming = $propertyNaming;
         $this->classPropertyCollector = $classPropertyCollector;
         $this->nodeFactory = $nodeFactory;
-        $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->serviceTypeForNameProvider = $serviceTypeForNameProvider;
+        $this->staticMethodCallAnalyzer = $staticMethodCallAnalyzer;
     }
 
     public function isCandidate(Node $node): bool
     {
-        return $this->methodCallAnalyzer->isStaticMethodCallTypeAndMethod($node, 'Nette\Environment', 'getService');
+        return $this->staticMethodCallAnalyzer->isTypeAndMethod(
+            $node,
+            'Nette\Environment',
+            'getService'
+        );
     }
 
     /**
