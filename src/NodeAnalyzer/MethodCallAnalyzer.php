@@ -38,7 +38,7 @@ final class MethodCallAnalyzer
         }
 
         /** @var MethodCall $node */
-        return in_array((string) $node->name, $methods, true);
+        return in_array($node->name->toString(), $methods, true);
     }
 
     /**
@@ -51,7 +51,7 @@ final class MethodCallAnalyzer
         }
 
         /** @var MethodCall $node */
-        return (string) $node->name === $method;
+        return $node->name->toString() === $method;
     }
 
     /**
