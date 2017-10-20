@@ -62,14 +62,14 @@ final class MethodNameReplacerRector extends AbstractRector
         $this->activeType = null;
 
         $matchedType = $this->methodCallAnalyzer->matchTypes($node, $this->getClasses());
-        if ($matchedType !== null) {
+        if ($matchedType) {
             $this->activeType = $matchedType;
 
             return true;
         }
 
         $matchedType = $this->staticMethodCallAnalyzer->matchTypes($node, $this->getClasses());
-        if ($matchedType !== null) {
+        if ($matchedType) {
             $this->activeType = $matchedType;
 
             return true;
@@ -87,19 +87,26 @@ final class MethodNameReplacerRector extends AbstractRector
 
         $methodName = $node->name->name;
 
+        if (! isset($oldToNewMethods[$methodName])) {
+            return $node;
+        }
+
         if ($this->isClassRename($oldToNewMethods)) {
             [$newClass, $newMethod] = $oldToNewMethods[$methodName];
 
             $node->class = new Name($newClass);
             $node->name->name = $newMethod;
-        } else { // is only method rename
-            foreach ($oldToNewMethods as $oldMethod => $newMethod) {
-                if ($methodName !== $oldMethod) {
-                    continue;
-                }
 
-                $node->name->name = $newMethod;
+            return $node;
+        }
+
+        // is only method rename
+        foreach ($oldToNewMethods as $oldMethod => $newMethod) {
+            if ($methodName !== $oldMethod) {
+                continue;
             }
+
+            $node->name->name = $newMethod;
         }
 
         return $node;
