@@ -42,6 +42,11 @@ rectors:
             'setImplementType': 'setImplementMode'
             'getImplementType': 'getImplementMode'
 
+        # forms
+#        'Nette\Bridges\FormsLatte\FormMacros':
+#            'renderFormBegin': ['Nette\Bridges\FormsLatte\Runtime', 'renderFormBegin']
+#            'renderFormEnd': ['Nette\Bridges\FormsLatte\Runtime', 'renderFormEnd']
+
         # php-generator
         'Nette\PhpGenerator\ClassType':
             'addDocument': 'addComment'

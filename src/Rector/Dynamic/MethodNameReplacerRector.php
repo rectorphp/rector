@@ -2,6 +2,7 @@
 
 namespace Rector\Rector\Dynamic;
 
+use Nette\Utils\Arrays;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
@@ -16,6 +17,14 @@ final class MethodNameReplacerRector extends AbstractRector
     /**
      * class => [
      *     oldMethod => newMethod
+     * ]
+     *
+     * or (typically for static calls):
+     *
+     * class => [
+     *     oldMethod => [
+     *          newClass, newMethod
+     *     ]
      * ]
      *
      * @var string[][]
@@ -57,18 +66,25 @@ final class MethodNameReplacerRector extends AbstractRector
     {
         $oldToNewMethods = $this->perClassOldToNewMethods[$this->activeType];
 
-        foreach ($oldToNewMethods as $oldMethod => $newMethod) {
-            $methodName = $node->name->name;
-            if ($methodName !== $oldMethod) {
-                continue;
-            }
+        if ($this->isClassRename($oldToNewMethods)) {
 
-            $node->name->name = $newMethod;
+        } else { // is only method rename
+            foreach ($oldToNewMethods as $oldMethod => $newMethod) {
+                $methodName = $node->name->name;
+                if ($methodName !== $oldMethod) {
+                    continue;
+                }
+
+                $node->name->name = $newMethod;
+            }
         }
 
         return $node;
     }
 
+    /**
+     * @todo use method analyzer instead
+     */
     private function isOnTypeCall(Node $node): bool
     {
         if (! $node instanceof MethodCall) {
@@ -94,6 +110,9 @@ final class MethodNameReplacerRector extends AbstractRector
         return true;
     }
 
+    /**
+     * @todo use method analyzer instead
+     */
     private function isStaticCallOnType(Node $node): bool
     {
         if (! $node instanceof StaticCall) {
@@ -132,5 +151,12 @@ final class MethodNameReplacerRector extends AbstractRector
     private function getClasses(): array
     {
         return array_keys($this->perClassOldToNewMethods);
+    }
+
+    private function isClassRename(array $oldToNewMethods): bool
+    {
+        $firstMethodConfiguration = current($oldToNewMethods);
+
+        return is_array($firstMethodConfiguration);
     }
 }
