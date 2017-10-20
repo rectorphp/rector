@@ -1,6 +1,7 @@
 rectors:
     Rector\Rector\Contrib\Symfony\HttpKernel\GetRequestRector: ~
     Rector\Rector\Contrib\Symfony\Form\FormTypeGetParentRector: ~
+    Rector\Rector\Contrib\Symfony\Form\OptionNameRector: ~
 
     Rector\Rector\Dynamic\ClassConstantReplacerRector:
         # form
