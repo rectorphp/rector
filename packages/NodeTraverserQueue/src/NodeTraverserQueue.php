@@ -2,8 +2,8 @@
 
 namespace Rector\NodeTraverserQueue;
 
+use Nette\Utils\Strings;
 use PhpParser\Lexer;
-use Rector\BetterReflection\Reflection\ReflectionClass;
 use Rector\BetterReflection\Reflection\ReflectionFunction;
 use Rector\BetterReflection\Reflector\Exception\IdentifierNotFound;
 use Rector\Contract\Parser\ParserInterface;
@@ -92,10 +92,20 @@ final class NodeTraverserQueue
         } catch (IdentifierNotFound $identifierNotFoundException) {
             // could not locate function, skip and keep original
             $identifierType = $identifierNotFoundException->getIdentifier()->getType()->getName();
-            if (in_array($identifierType, [ReflectionFunction::class, ReflectionClass::class], true)) {
+            if ($identifierType === ReflectionFunction::class) {
                 // keep original
                 return [$oldStmts, $oldStmts, $oldStmts];
             }
+
+            $identifierName = $identifierNotFoundException->getIdentifier()->getName();
+
+            // is single class? - probably test class
+            if (! Strings::contains($identifierName, '\\')) {
+                // keep original
+                return [$oldStmts, $oldStmts, $oldStmts];
+            }
+
+            throw $identifierNotFoundException;
         } catch (Throwable $throwable) {
             throw new FileProcessingException($fileInfo, $throwable);
         }

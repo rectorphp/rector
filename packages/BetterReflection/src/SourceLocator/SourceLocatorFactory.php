@@ -20,9 +20,15 @@ final class SourceLocatorFactory
      */
     private $locator;
 
-    public function __construct(Locator $locator)
+    /**
+     * @var StubSourceLocator
+     */
+    private $stubSourceLocator;
+
+    public function __construct(Locator $locator, StubSourceLocator $stubSourceLocator)
     {
         $this->locator = $locator;
+        $this->stubSourceLocator = $stubSourceLocator;
     }
 
     public function create(): SourceLocator
@@ -53,6 +59,7 @@ final class SourceLocatorFactory
             new PhpInternalSourceLocator($this->locator),
             new EvaledCodeSourceLocator($this->locator),
             new AutoloadSourceLocator($this->locator),
+            $this->stubSourceLocator,
         ];
     }
 
