@@ -125,6 +125,20 @@ final class MethodCallAnalyzer
         return $variableType === $type;
     }
 
+    /**
+     * @param string[] $types
+     */
+    public function matchMethodCallTypes(Node $node, array $types): ?string
+    {
+        if (! $node instanceof MethodCall) {
+            return null;
+        }
+
+        $nodeType = $node->var->getAttribute(Attribute::TYPE);
+
+        return in_array($nodeType, $types, true) ? $nodeType : null;
+    }
+
     public function isMagicMethodCallOnType(Node $node, string $type): bool
     {
         if (! $node instanceof MethodCall) {
@@ -141,6 +155,28 @@ final class MethodCallAnalyzer
         $publicMethodNames = $this->getPublicMethodNamesForType($type);
 
         return ! in_array($nodeMethodName, $publicMethodNames, true);
+    }
+
+    /**
+     * @param string[] $types
+     */
+    public function matchStaticMethodCallTypes(Node $node, array $types): ?string
+    {
+        if (! $node instanceof StaticCall) {
+            return null;
+        }
+
+        if (! $node->name instanceof Identifier) {
+            return null;
+        }
+
+        if (! $node->class instanceof Name) {
+            return null;
+        }
+
+        $nodeType = $node->class->toString();
+
+        return in_array($nodeType, $types, true) ? $nodeType : null;
     }
 
     /**
