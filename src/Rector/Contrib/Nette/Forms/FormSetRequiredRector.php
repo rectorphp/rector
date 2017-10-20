@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Rector\Contrib\Nette\Form;
+namespace Rector\Rector\Contrib\Nette\Forms;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;

@@ -1,7 +1,4 @@
 rectors:
-    Rector\Rector\Contrib\Nette\Form\FormNegativeRulesRector: ~
-    Rector\Rector\Contrib\Nette\Form\FormCallbackRector: ~
-    Rector\Rector\Contrib\Nette\Form\FormSetRequiredRector: ~
     Rector\Rector\Contrib\Nette\Utils\NetteObjectToSmartTraitRector: ~
     Rector\Rector\Contrib\Nette\Utils\MagicMethodRector: ~
 
@@ -16,6 +13,12 @@ rectors:
     Rector\Rector\Contrib\Nette\DI\ExpandFunctionToStaticExpandFunctionRector: ~
     Rector\Rector\Contrib\Nette\DI\CompilerCompileArgumentsRector: ~
     Rector\Rector\Contrib\Nette\DI\CompilerGenerateCodeArgumentsRector: ~
+
+    # forms
+    Rector\Rector\Contrib\Nette\Forms\MultiChoiceDefaultValueRector: ~
+    Rector\Rector\Contrib\Nette\Forms\FormNegativeRulesRector: ~
+    Rector\Rector\Contrib\Nette\Forms\FormCallbackRector: ~
+    Rector\Rector\Contrib\Nette\Forms\FormSetRequiredRector: ~
 
     Rector\Rector\MagicDisclosure\GetAndSetToMethodCallRector:
         # di
