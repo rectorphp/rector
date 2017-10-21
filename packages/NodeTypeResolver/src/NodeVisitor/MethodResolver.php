@@ -4,6 +4,7 @@ namespace Rector\NodeTypeResolver\NodeVisitor;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeVisitorAbstract;
@@ -40,7 +41,9 @@ final class MethodResolver extends NodeVisitorAbstract
         }
 
         if ($node instanceof MethodCall) {
-            $this->methodCall = $node->name->toString();
+            if ($node->name instanceof Identifier) {
+                $this->methodCall = $node->name->toString();
+            }
         }
 
         $node->setAttribute(Attribute::METHOD_NAME, $this->methodName);
