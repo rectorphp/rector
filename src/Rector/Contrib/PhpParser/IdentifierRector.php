@@ -25,17 +25,17 @@ final class IdentifierRector extends AbstractRector
      */
     private $typeToPropertiesMap = [
         'PhpParser\Node\Const_' => ['name'],
-        'PhpParser\Node\NullableType' => ['type'], # sometimes only
-        'PhpParser\Node\Param' => ['type'],  # sometimes only
+        'PhpParser\Node\NullableType' => ['type'], // sometimes only
+        'PhpParser\Node\Param' => ['type'],  // sometimes only
         'PhpParser\Node\Expr\ClassConstFetch' => ['name'],
-        'PhpParser\Node\Expr\Closure' => ['returnType'], # sometimes only
+        'PhpParser\Node\Expr\Closure' => ['returnType'], // sometimes only
         'PhpParser\Node\Expr\MethodCall' => ['name'],
         'PhpParser\Node\Expr\PropertyFetch' => ['name'],
         'PhpParser\Node\Expr\StaticCall' => ['name'],
         'PhpParser\Node\Expr\StaticPropertyFetch' => ['name'], // uses VarLikeIdentifier
         'PhpParser\Node\Stmt\Class_' => ['name'],
-        'PhpParser\Node\Stmt\ClassMethod' => ['name', 'returnType' /* sometimes only */ ],
-        'PhpParser\Node\Stmt\Function' => ['name', 'returnType' /* sometimes only */ ],
+        'PhpParser\Node\Stmt\ClassMethod' => ['name', 'returnType' /* sometimes only */],
+        'PhpParser\Node\Stmt\Function' => ['name', 'returnType' /* sometimes only */],
         'PhpParser\Node\Stmt\Goto_' => ['name'],
         'PhpParser\Node\Stmt\Interface_' => ['name'],
         'PhpParser\Node\Stmt\Label' => ['name'],

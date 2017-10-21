@@ -144,6 +144,18 @@ You can:
                 'renderFormBegin': ['Nette\Bridges\FormsLatte\Runtime', 'renderFormBegin']
     ```
 
+- **change property name**
+
+    ```yml
+    # php-parser40.yml
+    rectors:
+        Rector\Rector\Dynamic\PropertyNameReplacerRector:
+            # class:
+            #   old property: new property
+            'PhpParser\Node\Param':
+                'name': 'var'
+    ```
+
 - **change class constant name**
 
     ```yml

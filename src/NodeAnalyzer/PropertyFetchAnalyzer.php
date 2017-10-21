@@ -91,6 +91,18 @@ final class PropertyFetchAnalyzer
     }
 
     /**
+     * @param string[] $types
+     */
+    public function matchTypes(Node $node, array $types): ?string
+    {
+        if (! $this->isTypes($node, $types)) {
+            return null;
+        }
+
+        return $node->var->getAttribute(Attribute::TYPE);
+    }
+
+    /**
      * @return string[]
      */
     private function getPublicPropertyNamesForType(string $type): array
