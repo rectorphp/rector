@@ -34,7 +34,7 @@ final class IdentifierRector extends AbstractRector
     {
         $types = ['PhpParser\Node\Const_'];
 
-        if (! $this->propertyFetchAnalyzer->isPropertyFetchOnTypes($node, $types, 'name')) {
+        if (! $this->propertyFetchAnalyzer->isTypesAndProperty($node, $types, 'name')) {
             return false;
         }
 

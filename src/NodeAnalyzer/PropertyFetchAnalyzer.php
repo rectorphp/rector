@@ -28,7 +28,7 @@ final class PropertyFetchAnalyzer
     /**
      * @param string[] $types
      */
-    public function isPropertyFetchOnTypes(Node $node, array $types, string $property): bool
+    public function isTypesAndProperty(Node $node, array $types, string $property): bool
     {
         if (! $node instanceof PropertyFetch) {
             return false;
@@ -45,7 +45,7 @@ final class PropertyFetchAnalyzer
         return $nodePropertyName === $property;
     }
 
-    public function isMagicPropertyFetchOnType(Node $node, string $type): bool
+    public function isMagicOnType(Node $node, string $type): bool
     {
         if (! $node instanceof PropertyFetch) {
             return false;
