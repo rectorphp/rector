@@ -61,6 +61,7 @@ final class FormTypeGetParentRector extends AbstractRector
         'button' => 'Symfony\Component\Form\Extension\Core\Type\ButtonType',
         'submit' => 'Symfony\Component\Form\Extension\Core\Type\SubmitType',
         'reset' => 'Symfony\Component\Form\Extension\Core\Type\ResetType',
+        'entity' => 'Symfony\Bridge\Doctrine\Form\Type\EntityType',
     ];
 
     /**
@@ -75,7 +76,11 @@ final class FormTypeGetParentRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        if (! $node instanceof String_ || ! isset($this->nameToClassMap[$node->value])) {
+        if (! $node instanceof String_) {
+            return false;
+        }
+
+        if (! isset($this->nameToClassMap[$node->value])) {
             return false;
         }
 
