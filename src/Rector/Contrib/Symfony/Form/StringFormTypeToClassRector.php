@@ -30,12 +30,12 @@ final class StringFormTypeToClassRector extends AbstractRector
     /**
      * @var FormTypeStringToTypeProvider
      */
-    private $formTypeStringToType;
+    private $formTypeStringToTypeProvider;
 
-    public function __construct(NodeFactory $nodeFactory, FormTypeStringToTypeProvider $formTypeStringToType)
+    public function __construct(NodeFactory $nodeFactory, FormTypeStringToTypeProvider $formTypeStringToTypeProvider)
     {
         $this->nodeFactory = $nodeFactory;
-        $this->formTypeStringToType = $formTypeStringToType;
+        $this->formTypeStringToTypeProvider = $formTypeStringToTypeProvider;
     }
 
     public function isCandidate(Node $node): bool
@@ -44,7 +44,7 @@ final class StringFormTypeToClassRector extends AbstractRector
             return false;
         }
 
-        if (! $this->formTypeStringToType->hasClassForNameWithPrefix($node->value)) {
+        if (! $this->formTypeStringToTypeProvider->hasClassForNameWithPrefix($node->value)) {
             return false;
         }
 
@@ -66,7 +66,7 @@ final class StringFormTypeToClassRector extends AbstractRector
      */
     public function refactor(Node $stringNode): ?Node
     {
-        $class = $this->formTypeStringToType->getClassForNameWithPrefix($stringNode->value);
+        $class = $this->formTypeStringToTypeProvider->getClassForNameWithPrefix($stringNode->value);
 
         return $this->nodeFactory->createClassConstantReference($class);
     }

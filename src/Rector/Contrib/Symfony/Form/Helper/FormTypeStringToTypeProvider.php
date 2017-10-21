@@ -3,6 +3,35 @@
 namespace Rector\Rector\Contrib\Symfony\Form\Helper;
 
 use Nette\Utils\Strings;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\CountryType;
+use Symfony\Component\Form\Extension\Core\Type\CurrencyType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\LanguageType;
+use Symfony\Component\Form\Extension\Core\Type\LocaleType;
+use Symfony\Component\Form\Extension\Core\Type\MoneyType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\PercentType;
+use Symfony\Component\Form\Extension\Core\Type\RadioType;
+use Symfony\Component\Form\Extension\Core\Type\RangeType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Form\Extension\Core\Type\SearchType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TimeType;
+use Symfony\Component\Form\Extension\Core\Type\TimezoneType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
+use Symfony\Component\Form\Extension\Core\Type\ButtonType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\ResetType;
 
 final class FormTypeStringToTypeProvider
 {
@@ -10,36 +39,36 @@ final class FormTypeStringToTypeProvider
      * @var string[]
      */
     private static $nameToTypeMap = [
-        'form' => 'Symfony\Component\Form\Extension\Core\Type\FormType',
-        'birthday' => 'Symfony\Component\Form\Extension\Core\Type\BirthdayType',
-        'checkbox' => 'Symfony\Component\Form\Extension\Core\Type\CheckboxType',
-        'collection' => 'Symfony\Component\Form\Extension\Core\Type\CollectionType',
-        'country' => 'Symfony\Component\Form\Extension\Core\Type\CountryType',
-        'currency' => 'Symfony\Component\Form\Extension\Core\Type\CurrencyType',
-        'date' => 'Symfony\Component\Form\Extension\Core\Type\DateType',
+        'form' => FormType::class,
+        'birthday' => BirthdayType::class,
+        'checkbox' => CheckboxType::class,
+        'collection' => CollectionType::class,
+        'country' => CountryType::class,
+        'currency' => CurrencyType::class,
+        'date' => DateType::class,
         'datetime' => 'Symfony\Component\Form\Extension\Core\Type\DatetimeType',
-        'email' => 'Symfony\Component\Form\Extension\Core\Type\EmailType',
-        'file' => 'Symfony\Component\Form\Extension\Core\Type\FileType',
-        'hidden' => 'Symfony\Component\Form\Extension\Core\Type\HiddenType',
-        'integer' => 'Symfony\Component\Form\Extension\Core\Type\IntegerType',
-        'language' => 'Symfony\Component\Form\Extension\Core\Type\LanguageType',
-        'locale' => 'Symfony\Component\Form\Extension\Core\Type\LocaleType',
-        'money' => 'Symfony\Component\Form\Extension\Core\Type\MoneyType',
-        'number' => 'Symfony\Component\Form\Extension\Core\Type\NumberType',
-        'password' => 'Symfony\Component\Form\Extension\Core\Type\PasswordType',
-        'percent' => 'Symfony\Component\Form\Extension\Core\Type\PercentType',
-        'radio' => 'Symfony\Component\Form\Extension\Core\Type\RadioType',
-        'range' => 'Symfony\Component\Form\Extension\Core\Type\RangeType',
-        'repeated' => 'Symfony\Component\Form\Extension\Core\Type\RepeatedType',
-        'search' => 'Symfony\Component\Form\Extension\Core\Type\SearchType',
-        'textarea' => 'Symfony\Component\Form\Extension\Core\Type\TextareaType',
-        'text' => 'Symfony\Component\Form\Extension\Core\Type\TextType',
-        'time' => 'Symfony\Component\Form\Extension\Core\Type\TimeType',
-        'timezone' => 'Symfony\Component\Form\Extension\Core\Type\TimezoneType',
-        'url' => 'Symfony\Component\Form\Extension\Core\Type\UrlType',
-        'button' => 'Symfony\Component\Form\Extension\Core\Type\ButtonType',
-        'submit' => 'Symfony\Component\Form\Extension\Core\Type\SubmitType',
-        'reset' => 'Symfony\Component\Form\Extension\Core\Type\ResetType',
+        'email' => EmailType::class,
+        'file' => FileType::class,
+        'hidden' => HiddenType::class,
+        'integer' => IntegerType::class,
+        'language' => LanguageType::class,
+        'locale' => LocaleType::class,
+        'money' => MoneyType::class,
+        'number' => NumberType::class,
+        'password' => PasswordType::class,
+        'percent' => PercentType::class,
+        'radio' => RadioType::class,
+        'range' => RangeType::class,
+        'repeated' => RepeatedType::class,
+        'search' => SearchType::class,
+        'textarea' => TextareaType::class,
+        'text' => TextType::class,
+        'time' => TimeType::class,
+        'timezone' => TimezoneType::class,
+        'url' => UrlType::class,
+        'button' => ButtonType::class,
+        'submit' => SubmitType::class,
+        'reset' => ResetType::class,
         'entity' => 'Symfony\Bridge\Doctrine\Form\Type\EntityType',
     ];
 
