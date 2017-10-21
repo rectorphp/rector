@@ -1,11 +1,6 @@
 rectors:
     Rector\Rector\Contrib\PhpParser\IdentifierRector: ~
-
-    Rector\Rector\Dynamic\PropertyNameReplacerRector:
-        'PhpParser\Node\Param':
-            'name': 'var'
-        'PhpParser\Node\Stmt\StaticVar':
-            'name': 'var'
+    Rector\Rector\Contrib\PhpParser\ParamAndStaticVarNameRector: ~
 
     Rector\Rector\Dynamic\ClassConstantReplacerRector:
         'PhpParser\Node\Stmt\Class_':
