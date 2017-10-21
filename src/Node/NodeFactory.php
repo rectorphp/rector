@@ -15,8 +15,10 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\LNumber;
@@ -302,5 +304,13 @@ final class NodeFactory
     public function createVariable(string $name): Variable
     {
         return new Variable($name);
+    }
+
+    /**
+     * @param mixed[] $arguments
+     */
+    public function createStaticMethodCallWithArgs(string $class, string $method, array $arguments): StaticCall
+    {
+        return new StaticCall(new Name($class), new Identifier($method), $arguments);
     }
 }

@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use Rector\Node\Attribute;
+use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodArgumentAnalyzer;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
@@ -31,11 +32,19 @@ final class ExpandFunctionToStaticExpandFunctionRector extends AbstractRector
      * @var MethodArgumentAnalyzer
      */
     private $methodArgumentAnalyzer;
+    /**
+     * @var NodeFactory
+     */
+    private $nodeFactory;
 
-    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, MethodArgumentAnalyzer $methodArgumentAnalyzer)
-    {
+    public function __construct(
+        MethodCallAnalyzer $methodCallAnalyzer,
+        MethodArgumentAnalyzer $methodArgumentAnalyzer,
+        NodeFactory $nodeFactory
+    ) {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->methodArgumentAnalyzer = $methodArgumentAnalyzer;
+        $this->nodeFactory = $nodeFactory;
     }
 
     public function isCandidate(Node $node): bool
@@ -60,16 +69,11 @@ final class ExpandFunctionToStaticExpandFunctionRector extends AbstractRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        return new StaticCall(
-            new Name('Nette\DI\Helpers'),
-            new Identifier('expand'),
-            [
-                $methodCallNode->args[0],
-                new PropertyFetch(
-                    $methodCallNode->var,
-                    'parameters'
-                ),
-            ]
-        );
+        $arguments = [
+            $methodCallNode->args[0],
+            new PropertyFetch($methodCallNode->var, 'parameters')
+        ];
+
+        return $this->nodeFactory->createStaticMethodCallWithArgs('Nette\DI\Helpers', 'expand', $arguments);
     }
 }
