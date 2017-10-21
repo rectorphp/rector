@@ -11,11 +11,17 @@ use Rector\Rector\AbstractRector;
 /**
  * Converts all:
  * - getParent() {
- *      return 'some_string';
+ *      return 'collection';
+ * }
+ * - getExtendedType() {
+ *      return 'collection';
  * }
  *
  * into:
  * - getParent() {
+ *      return CollectionType::class;
+ * }
+ * - getExtendedType() {
  *      return CollectionType::class;
  * }
  */
@@ -25,6 +31,7 @@ final class FormTypeGetParentRector extends AbstractRector
      * @var string[]
      */
     private $nameToClassMap = [
+        'form' => 'Symfony\Component\Form\Extension\Core\Type\FormType',
         'birthday' => 'Symfony\Component\Form\Extension\Core\Type\BirthdayType',
         'checkbox' => 'Symfony\Component\Form\Extension\Core\Type\CheckboxType',
         'collection' => 'Symfony\Component\Form\Extension\Core\Type\CollectionType',
@@ -72,17 +79,15 @@ final class FormTypeGetParentRector extends AbstractRector
             return false;
         }
 
-        $parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
-        if ($parentClassName !== 'Symfony\Component\Form\AbstractType') {
-            return false;
+        if ($this->isParentTypeAndMethod($node, 'Symfony\Component\Form\AbstractType', 'getParent')) {
+            return true;
         }
 
-        $methodName = $node->getAttribute(Attribute::METHOD_NAME);
-        if ($methodName !== 'getParent') {
-            return false;
+        if ($this->isParentTypeAndMethod($node, 'Symfony\Component\Form\AbstractTypeExtension', 'getExtendedType')) {
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     /**
@@ -93,5 +98,17 @@ final class FormTypeGetParentRector extends AbstractRector
         $class = $this->nameToClassMap[$stringNode->value];
 
         return $this->nodeFactory->createClassConstantReference($class);
+    }
+
+    private function isParentTypeAndMethod(Node $node, string $type, string $method): bool
+    {
+        $parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
+        if ($parentClassName !== $type) {
+            return false;
+        }
+
+        $methodName = $node->getAttribute(Attribute::METHOD_NAME);
+
+        return $methodName === $method;
     }
 }
