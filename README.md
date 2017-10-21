@@ -158,6 +158,20 @@ You can:
                 'POST_BIND': 'POST_SUBMIT'
     ```
 
+- **change parameters typehtint according to parent type**
+
+    ```yml
+    # php-parser40.yml
+    rectors:
+        Rector\Rector\Dynamic\ParentTypehintedArgumentRector:
+            # class:
+            #   method:
+            #       parameter: typehting
+            'PhpParser\Parser':
+                'parse':
+                    'code': 'string'
+    ```
+
 - or **replace underscore naming `_` with namespaces `\`**
 
     ```yml
