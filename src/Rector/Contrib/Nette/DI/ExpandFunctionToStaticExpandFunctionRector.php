@@ -5,9 +5,6 @@ namespace Rector\Rector\Contrib\Nette\DI;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
 use Rector\Node\Attribute;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodArgumentAnalyzer;
@@ -32,6 +29,7 @@ final class ExpandFunctionToStaticExpandFunctionRector extends AbstractRector
      * @var MethodArgumentAnalyzer
      */
     private $methodArgumentAnalyzer;
+
     /**
      * @var NodeFactory
      */
@@ -71,7 +69,7 @@ final class ExpandFunctionToStaticExpandFunctionRector extends AbstractRector
     {
         $arguments = [
             $methodCallNode->args[0],
-            new PropertyFetch($methodCallNode->var, 'parameters')
+            new PropertyFetch($methodCallNode->var, 'parameters'),
         ];
 
         return $this->nodeFactory->createStaticMethodCallWithArgs('Nette\DI\Helpers', 'expand', $arguments);
