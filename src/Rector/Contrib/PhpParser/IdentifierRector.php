@@ -5,6 +5,7 @@ namespace Rector\Rector\Contrib\PhpParser;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
+use Rector\Node\Attribute;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Rector\AbstractRector;
@@ -20,6 +21,32 @@ final class IdentifierRector extends AbstractRector
     private $propertyFetchAnalyzer;
 
     /**
+     * @var string[][]
+     */
+    private $typeToPropertiesMap = [
+        'PhpParser\Node\Const_' => ['name'],
+        'PhpParser\Node\NullableType' => ['type'], # sometimes only
+        'PhpParser\Node\Param' => ['type'],  # sometimes only
+        'PhpParser\Node\Expr\ClassConstFetch' => ['name'],
+        'PhpParser\Node\Expr\Closure' => ['returnType'], # sometimes only
+        'PhpParser\Node\Expr\MethodCall' => ['name'],
+        'PhpParser\Node\Expr\PropertyFetch' => ['name'],
+        'PhpParser\Node\Expr\StaticCall' => ['name'],
+        'PhpParser\Node\Expr\StaticPropertyFetch' => ['name'], // uses VarLikeIdentifier
+        'PhpParser\Node\Stmt\Class_' => ['name'],
+        'PhpParser\Node\Stmt\ClassMethod' => ['name', 'returnType' /* sometimes only */ ],
+        'PhpParser\Node\Stmt\Function' => ['name', 'returnType' /* sometimes only */ ],
+        'PhpParser\Node\Stmt\Goto_' => ['name'],
+        'PhpParser\Node\Stmt\Interface_' => ['name'],
+        'PhpParser\Node\Stmt\Label' => ['name'],
+        'PhpParser\Node\Stmt\PropertyProperty' => ['name'],
+        'PhpParser\Node\Stmt\TraitUseAdaptation\Alias' => ['method', 'newName'],
+        'PhpParser\Node\Stmt\TraitUseAdaptation\Precedence' => ['method'],
+        'PhpParser\Node\Stmt\Trait_' => ['name'],
+        'PhpParser\Node\Stmt\UseUse' => ['alias'],
+    ];
+
+    /**
      * @var NodeFactory
      */
     private $nodeFactory;
@@ -32,13 +59,16 @@ final class IdentifierRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        $types = ['PhpParser\Node\Const_'];
-
-        if (! $this->propertyFetchAnalyzer->isTypesAndProperty($node, $types, 'name')) {
+        if (! $this->propertyFetchAnalyzer->isTypes($node, array_keys($this->typeToPropertiesMap))) {
             return false;
         }
 
-        return true;
+        /** @var PropertyFetch $node */
+        $nodeType = $node->var->getAttribute(Attribute::TYPE);
+
+        $properties = $this->typeToPropertiesMap[$nodeType];
+
+        return $this->propertyFetchAnalyzer->isProperties($node, $properties);
     }
 
     /**

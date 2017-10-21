@@ -63,6 +63,34 @@ final class PropertyFetchAnalyzer
     }
 
     /**
+     * @param string[] $properties
+     */
+    public function isProperties(Node $node, array $properties): bool
+    {
+        if (! $node instanceof PropertyFetch) {
+            return false;
+        }
+
+        $nodePropertyName = $node->name->toString();
+
+        return in_array($nodePropertyName, $properties, true);
+    }
+
+    /**
+     * @param string[] $types
+     */
+    public function isTypes(Node $node, array $types): bool
+    {
+        if (! $node instanceof PropertyFetch) {
+            return false;
+        }
+
+        $variableNodeType = $node->var->getAttribute(Attribute::TYPE);
+
+        return in_array($variableNodeType, $types, true);
+    }
+
+    /**
      * @return string[]
      */
     private function getPublicPropertyNamesForType(string $type): array
