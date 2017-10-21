@@ -3,8 +3,6 @@
 namespace Rector\Rector\Contrib\Symfony\Form;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\Node\Attribute;
 use Rector\Node\NodeFactory;
@@ -48,17 +46,9 @@ final class StringFormTypeToClassRector extends AbstractRector
             return false;
         }
 
-        $argNode = $node->getAttribute(Attribute::PARENT_NODE);
-        if (! $argNode instanceof Arg) {
-            return false;
-        }
+        $methodCallName = (string) $node->getAttribute(Attribute::METHOD_CALL);
 
-        $methodCallNode = $argNode->getAttribute(Attribute::PARENT_NODE);
-        if (! $methodCallNode instanceof MethodCall) {
-            return false;
-        }
-
-        return $methodCallNode->name->toString() === 'add';
+        return $methodCallName === 'add';
     }
 
     /**

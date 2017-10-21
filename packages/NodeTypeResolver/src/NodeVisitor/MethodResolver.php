@@ -3,7 +3,9 @@
 namespace Rector\NodeTypeResolver\NodeVisitor;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Node\Attribute;
 
@@ -18,11 +20,17 @@ final class MethodResolver extends NodeVisitorAbstract
     private $methodName;
 
     /**
+     * @var string|null
+     */
+    private $methodCall;
+
+    /**
      * @param Node[] $nodes
      */
     public function beforeTraverse(array $nodes): void
     {
         $this->methodName = null;
+        $this->methodCall = null;
     }
 
     public function enterNode(Node $node): void
@@ -31,10 +39,18 @@ final class MethodResolver extends NodeVisitorAbstract
             $this->methodName = $node->name->toString();
         }
 
-        if ($this->methodName === null) {
-            return;
+        if ($node instanceof MethodCall) {
+            $this->methodCall = $node->name->toString();
         }
 
         $node->setAttribute(Attribute::METHOD_NAME, $this->methodName);
+        $node->setAttribute(Attribute::METHOD_CALL, $this->methodCall);
+    }
+
+    public function leaveNode(Node $node): void
+    {
+        if ($node instanceof Expression) {
+            $this->methodCall = null;
+        }
     }
 }

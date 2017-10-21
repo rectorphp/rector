@@ -88,4 +88,9 @@ final class Attribute
      * @var string
      */
     public const NAMESPACE = 'namespace';
+
+    /**
+     * @var string
+     */
+    public const METHOD_CALL = 'methodCall';
 }
