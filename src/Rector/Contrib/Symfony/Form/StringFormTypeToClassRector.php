@@ -3,7 +3,10 @@
 namespace Rector\Rector\Contrib\Symfony\Form;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
+use Rector\Node\Attribute;
 use Rector\Node\NodeFactory;
 use Rector\Rector\AbstractRector;
 
@@ -51,6 +54,7 @@ final class StringFormTypeToClassRector extends AbstractRector
         'form.type.button' => 'Symfony\Component\Form\Extension\Core\Type\ButtonType',
         'form.type.submit' => 'Symfony\Component\Form\Extension\Core\Type\SubmitType',
         'form.type.reset' => 'Symfony\Component\Form\Extension\Core\Type\ResetType',
+        'form.type.entity' => 'Symfony\Bridge\Doctrine\Form\Type\EntityType',
     ];
 
     /**
@@ -65,7 +69,25 @@ final class StringFormTypeToClassRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        return $node instanceof String_ && isset($this->nameToClassMap[$node->value]);
+        if (! $node instanceof String_) {
+            return false;
+        }
+
+        if (! isset($this->nameToClassMap[$node->value])) {
+            return false;
+        }
+
+        $argNode = $node->getAttribute(Attribute::PARENT_NODE);
+        if (! $argNode instanceof Arg) {
+            return false;
+        }
+
+        $methodCallNode = $argNode->getAttribute(Attribute::PARENT_NODE);
+        if (! $methodCallNode instanceof MethodCall) {
+            return false;
+        }
+
+        return $methodCallNode->name->toString() === 'add';
     }
 
     /**

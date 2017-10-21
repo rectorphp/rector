@@ -2,3 +2,5 @@
 
 $formBuilder = new Symfony\Component\Form\FormBuilder;
 $formBuilder->add('task', 'form.type.text');
+
+$variable = 'form.type.text';
