@@ -155,7 +155,7 @@ final class NodeFactory
             if ($item instanceof Variable) {
                 $arrayItems[] = new ArrayItem($item);
             } elseif ($item instanceof Identifier) {
-                $string = new String_((string) $item);
+                $string = new String_($item->toString());
                 $arrayItems[] = new ArrayItem($string);
             } else {
                 throw new NotImplementedException(sprintf(
@@ -312,5 +312,12 @@ final class NodeFactory
     public function createStaticMethodCallWithArgs(string $class, string $method, array $arguments): StaticCall
     {
         return new StaticCall(new Name($class), new Identifier($method), $arguments);
+    }
+
+    public function createPropertyFetch(string $variable, string $property): PropertyFetch
+    {
+        $variableNode = new Variable($variable);
+
+        return new PropertyFetch($variableNode, $property);
     }
 }
