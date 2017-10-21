@@ -1,3 +1,4 @@
 rectors:
-    Rector\Rector\Dynamic\NamespaceReplacerRector:
-        'BetterReflection': 'Roave\BetterReflection'
+    Rector\Rector\Dynamic\ClassConstantReplacerRector:
+        'PhpParser\Node\Stmt\Class_':
+            'VISIBILITY_MODIFER_MASK': 'VISIBILITY_MODIFIER_MASK'
