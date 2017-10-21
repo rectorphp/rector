@@ -1,6 +1,7 @@
 rectors:
     Rector\Rector\Contrib\PhpParser\IdentifierRector: ~
     Rector\Rector\Contrib\PhpParser\ParamAndStaticVarNameRector: ~
+    Rector\Rector\Contrib\PhpParser\SetLineRector: ~
 
     Rector\Rector\Dynamic\ClassConstantReplacerRector:
         'PhpParser\Node\Stmt\Class_':
