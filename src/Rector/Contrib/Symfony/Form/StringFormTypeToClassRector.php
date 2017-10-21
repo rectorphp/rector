@@ -3,9 +3,13 @@
 namespace Rector\Rector\Contrib\Symfony\Form;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
+use Rector\Node\Attribute;
 use Rector\Node\NodeFactory;
 use Rector\Rector\AbstractRector;
+use Rector\Rector\Contrib\Symfony\Form\Helper\FormTypeStringToTypeProvider;
 
 /**
  * Converts all:
@@ -19,53 +23,42 @@ use Rector\Rector\AbstractRector;
 final class StringFormTypeToClassRector extends AbstractRector
 {
     /**
-     * @var string[]
-     */
-    private $nameToClassMap = [
-        'form.type.birthday' => 'Symfony\Component\Form\Extension\Core\Type\BirthdayType',
-        'form.type.checkbox' => 'Symfony\Component\Form\Extension\Core\Type\CheckboxType',
-        'form.type.collection' => 'Symfony\Component\Form\Extension\Core\Type\CollectionType',
-        'form.type.country' => 'Symfony\Component\Form\Extension\Core\Type\CountryType',
-        'form.type.currency' => 'Symfony\Component\Form\Extension\Core\Type\CurrencyType',
-        'form.type.date' => 'Symfony\Component\Form\Extension\Core\Type\DateType',
-        'form.type.datetime' => 'Symfony\Component\Form\Extension\Core\Type\DatetimeType',
-        'form.type.email' => 'Symfony\Component\Form\Extension\Core\Type\EmailType',
-        'form.type.file' => 'Symfony\Component\Form\Extension\Core\Type\FileType',
-        'form.type.hidden' => 'Symfony\Component\Form\Extension\Core\Type\HiddenType',
-        'form.type.integer' => 'Symfony\Component\Form\Extension\Core\Type\IntegerType',
-        'form.type.language' => 'Symfony\Component\Form\Extension\Core\Type\LanguageType',
-        'form.type.locale' => 'Symfony\Component\Form\Extension\Core\Type\LocaleType',
-        'form.type.money' => 'Symfony\Component\Form\Extension\Core\Type\MoneyType',
-        'form.type.number' => 'Symfony\Component\Form\Extension\Core\Type\NumberType',
-        'form.type.password' => 'Symfony\Component\Form\Extension\Core\Type\PasswordType',
-        'form.type.percent' => 'Symfony\Component\Form\Extension\Core\Type\PercentType',
-        'form.type.radio' => 'Symfony\Component\Form\Extension\Core\Type\RadioType',
-        'form.type.range' => 'Symfony\Component\Form\Extension\Core\Type\RangeType',
-        'form.type.repeated' => 'Symfony\Component\Form\Extension\Core\Type\RepeatedType',
-        'form.type.search' => 'Symfony\Component\Form\Extension\Core\Type\SearchType',
-        'form.type.textarea' => 'Symfony\Component\Form\Extension\Core\Type\TextareaType',
-        'form.type.text' => 'Symfony\Component\Form\Extension\Core\Type\TextType',
-        'form.type.time' => 'Symfony\Component\Form\Extension\Core\Type\TimeType',
-        'form.type.timezone' => 'Symfony\Component\Form\Extension\Core\Type\TimezoneType',
-        'form.type.url' => 'Symfony\Component\Form\Extension\Core\Type\UrlType',
-        'form.type.button' => 'Symfony\Component\Form\Extension\Core\Type\ButtonType',
-        'form.type.submit' => 'Symfony\Component\Form\Extension\Core\Type\SubmitType',
-        'form.type.reset' => 'Symfony\Component\Form\Extension\Core\Type\ResetType',
-    ];
-
-    /**
      * @var NodeFactory
      */
     private $nodeFactory;
 
-    public function __construct(NodeFactory $nodeFactory)
+    /**
+     * @var FormTypeStringToTypeProvider
+     */
+    private $formTypeStringToTypeProvider;
+
+    public function __construct(NodeFactory $nodeFactory, FormTypeStringToTypeProvider $formTypeStringToTypeProvider)
     {
         $this->nodeFactory = $nodeFactory;
+        $this->formTypeStringToTypeProvider = $formTypeStringToTypeProvider;
     }
 
     public function isCandidate(Node $node): bool
     {
-        return $node instanceof String_ && isset($this->nameToClassMap[$node->value]);
+        if (! $node instanceof String_) {
+            return false;
+        }
+
+        if (! $this->formTypeStringToTypeProvider->hasClassForNameWithPrefix($node->value)) {
+            return false;
+        }
+
+        $argNode = $node->getAttribute(Attribute::PARENT_NODE);
+        if (! $argNode instanceof Arg) {
+            return false;
+        }
+
+        $methodCallNode = $argNode->getAttribute(Attribute::PARENT_NODE);
+        if (! $methodCallNode instanceof MethodCall) {
+            return false;
+        }
+
+        return $methodCallNode->name->toString() === 'add';
     }
 
     /**
@@ -73,7 +66,7 @@ final class StringFormTypeToClassRector extends AbstractRector
      */
     public function refactor(Node $stringNode): ?Node
     {
-        $class = $this->nameToClassMap[$stringNode->value];
+        $class = $this->formTypeStringToTypeProvider->getClassForNameWithPrefix($stringNode->value);
 
         return $this->nodeFactory->createClassConstantReference($class);
     }

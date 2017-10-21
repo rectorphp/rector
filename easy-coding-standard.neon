@@ -54,6 +54,7 @@ parameters:
         Symplify\CodingStandard\Fixer\Php\ClassStringToClassConstantFixer:
             # classes might not exist
             - */src/Rector/Contrib/*/*Rector.php
+            - */src/Rector/Contrib/**/Helper/**.php
             - packages/NodeTypeResolver/src/NodeVisitor/TypeResolver.php
             - src/Builder/Contrib/Nette/RouterFactoryClassBuilder.php
         Symplify\CodingStandard\Sniffs\Debug\CommentedOutCodeSniff:

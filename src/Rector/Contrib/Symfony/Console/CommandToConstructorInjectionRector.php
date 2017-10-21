@@ -11,7 +11,7 @@ use Rector\Contract\Bridge\ServiceTypeForNameProviderInterface;
 use Rector\Naming\PropertyNaming;
 use Rector\Node\Attribute;
 use Rector\Node\NodeFactory;
-use Rector\NodeAnalyzer\Contrib\SymfonyContainerCallsAnalyzer;
+use Rector\NodeAnalyzer\Contrib\Symfony\ContainerCallAnalyzer;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -57,9 +57,9 @@ final class CommandToConstructorInjectionRector extends AbstractRector
     private $nodeFactory;
 
     /**
-     * @var SymfonyContainerCallsAnalyzer
+     * @var ContainerCallAnalyzer
      */
-    private $symfonyContainerCallsAnalyzer;
+    private $containerCallAnalyzer;
 
     /**
      * @var ServiceTypeForNameProviderInterface
@@ -70,13 +70,13 @@ final class CommandToConstructorInjectionRector extends AbstractRector
         ClassPropertyCollector $classPropertyCollector,
         PropertyNaming $propertyNaming,
         NodeFactory $nodeFactory,
-        SymfonyContainerCallsAnalyzer $symfonyContainerCallsAnalyzer,
+        ContainerCallAnalyzer $containerCallAnalyzer,
         ServiceTypeForNameProviderInterface $serviceTypeForNameProvider
     ) {
         $this->classPropertyCollector = $classPropertyCollector;
         $this->propertyNaming = $propertyNaming;
         $this->nodeFactory = $nodeFactory;
-        $this->symfonyContainerCallsAnalyzer = $symfonyContainerCallsAnalyzer;
+        $this->containerCallAnalyzer = $containerCallAnalyzer;
         $this->serviceTypeForNameProvider = $serviceTypeForNameProvider;
     }
 
@@ -92,7 +92,7 @@ final class CommandToConstructorInjectionRector extends AbstractRector
             return false;
         }
 
-        return $this->symfonyContainerCallsAnalyzer->isGetContainerCall($node);
+        return $this->containerCallAnalyzer->isGetContainerCall($node);
     }
 
     /**
