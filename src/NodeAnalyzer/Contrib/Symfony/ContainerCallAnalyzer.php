@@ -1,13 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace Rector\NodeAnalyzer\Contrib;
+namespace Rector\NodeAnalyzer\Contrib\Symfony;
 
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
 
-final class SymfonyContainerCallsAnalyzer
+final class ContainerCallAnalyzer
 {
     /**
      * Finds $this->get(...);

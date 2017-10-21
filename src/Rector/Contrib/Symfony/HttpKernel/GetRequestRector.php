@@ -7,7 +7,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Node\Attribute;
 use Rector\Node\NodeFactory;
-use Rector\NodeAnalyzer\Contrib\ControllerMethodAnalyzer;
+use Rector\NodeAnalyzer\Contrib\Symfony\ControllerMethodAnalyzer;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
 
