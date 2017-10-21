@@ -2,4 +2,4 @@ rectors:
     Rector\Rector\Dynamic\ParentTypehintedArgumentRector:
         'PhpParser\Parser':
             'parse':
-                '$code': 'string'
+                'code': 'string'
