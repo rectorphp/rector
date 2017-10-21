@@ -3,6 +3,14 @@ rectors:
     Rector\Rector\Contrib\PhpParser\ParamAndStaticVarNameRector: ~
     Rector\Rector\Contrib\PhpParser\SetLineRector: ~
 
+    Rector\Rector\Dynamic\PropertyNameReplacerRector:
+        'PhpParser\Node\Stmt\Class_':
+            'type': 'flags'
+        'PhpParser\Node\Stmt\ClassMethod':
+            'type': 'flags'
+        'PhpParser\Node\Stmt\Property':
+            'type': 'flags'
+
     Rector\Rector\Dynamic\ClassConstantReplacerRector:
         'PhpParser\Node\Stmt\Class_':
             'VISIBILITY_MODIFER_MASK': 'VISIBILITY_MODIFIER_MASK'
