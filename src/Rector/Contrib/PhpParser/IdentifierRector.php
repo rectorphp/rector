@@ -32,7 +32,7 @@ final class IdentifierRector extends AbstractRector
         'PhpParser\Node\Expr\MethodCall' => ['name'],
         'PhpParser\Node\Expr\PropertyFetch' => ['name'],
         'PhpParser\Node\Expr\StaticCall' => ['name'],
-        'PhpParser\Node\Expr\StaticPropertyFetch' => ['name'], // uses VarLikeIdentifier
+        'PhpParser\Node\Expr\StaticPropertyFetch' => ['name'],
         'PhpParser\Node\Stmt\Class_' => ['name'],
         'PhpParser\Node\Stmt\ClassMethod' => ['name', 'returnType' /* sometimes only */],
         'PhpParser\Node\Stmt\Function' => ['name', 'returnType' /* sometimes only */],
