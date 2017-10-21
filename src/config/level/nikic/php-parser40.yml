@@ -4,6 +4,8 @@ rectors:
     Rector\Rector\Dynamic\PropertyNameReplacerRector:
         'PhpParser\Node\Param':
             'name': 'var'
+        'PhpParser\Node\Stmt\StaticVar':
+            'name': 'var'
 
     Rector\Rector\Dynamic\ClassConstantReplacerRector:
         'PhpParser\Node\Stmt\Class_':
