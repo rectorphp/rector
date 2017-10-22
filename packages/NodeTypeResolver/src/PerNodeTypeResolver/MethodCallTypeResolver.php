@@ -2,6 +2,7 @@
 
 namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
 
+use Nette\Reflection\Method;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
@@ -14,7 +15,7 @@ use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInte
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\TypeContext;
 
-final class AssignTypeResolver implements PerNodeTypeResolverInterface, NodeTypeResolverAwareInterface
+final class MethodCallTypeResolver implements PerNodeTypeResolverInterface, NodeTypeResolverAwareInterface
 {
     /**
      * @var TypeContext
@@ -39,28 +40,7 @@ final class AssignTypeResolver implements PerNodeTypeResolverInterface, NodeType
 
     public function getNodeClass(): string
     {
-        return Assign::class;
-    }
-
-    /**
-     * @param Assign $assignNode
-     */
-    public function resolve(Node $assignNode): ?string
-    {
-        if (! $assignNode->var instanceof Variable) {
-            return null;
-        }
-
-        // $var = $anotherVar;
-        if ($assignNode->expr instanceof Variable) {
-            return $this->processAssignVariableNode($assignNode);
-        }
-
-        if ($assignNode->expr instanceof MethodCall) {
-            return $this->processAssignMethodReturn($assignNode);
-        }
-
-        return null;
+        return MethodCall::class;
     }
 
     public function setNodeTypeResolver(NodeTypeResolver $nodeTypeResolver): void
@@ -68,34 +48,14 @@ final class AssignTypeResolver implements PerNodeTypeResolverInterface, NodeType
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
-    private function processAssignVariableNode(Assign $assignNode): ?string
+    public function resolve(Node $methodCallNode): ?string
     {
-        if ($assignNode->var->name instanceof Variable) {
-            $name = $assignNode->var->name->name;
-        } else {
-            $name = $assignNode->var->name;
-        }
-
-        $this->typeContext->addAssign($name, $assignNode->expr->name);
-
-        $variableType = $this->typeContext->getTypeForVariable($name);
-        if ($variableType) {
-            $assignNode->var->setAttribute(Attribute::TYPE, $variableType);
-
-            return $variableType;
-        }
-
-        return null;
-    }
-
-    private function processAssignMethodReturn(Assign $assignNode): ?string
-    {
-        $variableType = null;
+//        $variableType = null;
 
         // 1. get $anotherVar type
 
         /** @var Variable|mixed $methodCallVariable */
-        $methodCallVariable = $assignNode->expr->var;
+        $methodCallVariable = $methodCallNode->var;
 
         if (! $methodCallVariable instanceof Variable) {
             return null;
@@ -105,7 +65,7 @@ final class AssignTypeResolver implements PerNodeTypeResolverInterface, NodeType
 
         $methodCallVariableType = $this->typeContext->getTypeForVariable($methodCallVariableName);
 
-        $methodCallName = $this->resolveMethodCallName($assignNode);
+        $methodCallName = $this->resolveMethodCallName($methodCallNode);
 
         // 2. get method() return type
         if (! $methodCallVariableType || ! $methodCallName) {
@@ -114,24 +74,42 @@ final class AssignTypeResolver implements PerNodeTypeResolverInterface, NodeType
 
         $variableType = $this->methodReflector->getMethodReturnType($methodCallVariableType, $methodCallName);
         if ($variableType) {
-            $variableName = $assignNode->var->name;
+            $variableName = $this->getVariableToAssignTo($methodCallNode);
+            if ($variableName === null) {
+                return null;
+            }
+
             $this->typeContext->addVariableWithType($variableName, $variableType);
         }
 
         return $variableType;
     }
 
-    private function resolveMethodCallName(Assign $assignNode): ?string
+    private function resolveMethodCallName(MethodCall $methodCallNode): ?string
     {
-        if ($assignNode->expr->name instanceof Variable) {
-            return $assignNode->expr->name->name;
+        if ($methodCallNode->name instanceof Variable) {
+            return $methodCallNode->name->name;
         }
 
-        if ($assignNode->expr->name instanceof PropertyFetch) {
+        if ($methodCallNode->name instanceof PropertyFetch) {
             // not implemented yet
             return null;
         }
 
-        return (string) $assignNode->expr->name;
+        return (string) $methodCallNode->name;
+    }
+
+    private function getVariableToAssignTo(MethodCall $methodCallNode): ?string
+    {
+        $assignNode = $methodCallNode->getAttribute(Attribute::PARENT_NODE);
+        if (! $assignNode instanceof Assign) {
+            return null;
+        }
+
+        if ($assignNode->var instanceof Variable) {
+            return $assignNode->var->name;
+        }
+
+        return null;
     }
 }
