@@ -4,6 +4,7 @@ namespace Rector\Rector\Contrib\PhpParser;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
+use Rector\Node\Attribute;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Rector\AbstractRector;
@@ -37,12 +38,11 @@ final class CatchAndClosureUseNameRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        $types = [
-            'PhpParser\Node\Stmt\Catch_',
-            'PhpParser\Node\Expr\ClosureUse',
-        ];
-
-        return $this->propertyFetchAnalyzer->isTypesAndProperty($node, $types, 'var');
+        return $this->propertyFetchAnalyzer->isTypesAndProperty(
+            $node,
+            ['PhpParser\Node\Stmt\Catch_', 'PhpParser\Node\Expr\ClosureUse'],
+            'var'
+        );
     }
 
     /**
@@ -50,6 +50,11 @@ final class CatchAndClosureUseNameRector extends AbstractRector
      */
     public function refactor(Node $propertyFetchNode): ?Node
     {
+        $parentNode = $propertyFetchNode->getAttribute(Attribute::PARENT_NODE);
+        if ($parentNode instanceof PropertyFetch) {
+            return $propertyFetchNode;
+        }
+
         $propertyFetchNode->var = $this->nodeFactory->createPropertyFetch($propertyFetchNode->var->name, 'var');
         $propertyFetchNode->name = 'name';
 
