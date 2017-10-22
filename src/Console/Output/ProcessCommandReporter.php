@@ -15,6 +15,11 @@ final class ProcessCommandReporter
     private const MAX_FILES_TO_PRINT = 30;
 
     /**
+     * @var int
+     */
+    private $alreadyReportedFiles = 0;
+
+    /**
      * @var RectorCollector
      */
     private $rectorCollector;
@@ -73,16 +78,16 @@ final class ProcessCommandReporter
         }
     }
 
-    public function reportLoadedFile(int $i, SplFileInfo $fileInfo, int $fileCount): void
+    public function reportLoadedFile(SplFileInfo $fileInfo, int $fileCount): void
     {
-        if ($i < self::MAX_FILES_TO_PRINT) {
+        if ($this->alreadyReportedFiles < self::MAX_FILES_TO_PRINT) {
             $this->symfonyStyle->writeln(sprintf(
                 ' - %s',
                 $fileInfo
             ));
         }
 
-        if ($i === self::MAX_FILES_TO_PRINT) {
+        if ($this->alreadyReportedFiles === self::MAX_FILES_TO_PRINT) {
             $this->symfonyStyle->newLine();
             $this->symfonyStyle->writeln(sprintf(
                 '...and %d more.',

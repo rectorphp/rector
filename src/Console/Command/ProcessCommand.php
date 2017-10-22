@@ -110,13 +110,10 @@ final class ProcessCommand extends Command
     private function processFiles(array $fileInfos): void
     {
         $this->symfonyStyle->title('Processing files');
-        $i = 0;
 
         foreach ($fileInfos as $fileInfo) {
-            $this->processCommandReporter->reportLoadedFile($i, $fileInfo, count($fileInfos));
+            $this->processCommandReporter->reportLoadedFile($fileInfo, count($fileInfos));
             $this->fileProcessor->processFile($fileInfo);
-
-            ++$i;
         }
     }
 }
