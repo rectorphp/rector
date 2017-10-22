@@ -6,13 +6,18 @@ use Rector\Application\FileProcessor;
 use Rector\Exception\NoRectorsLoadedException;
 use Rector\FileSystem\PhpFilesFinder;
 use Rector\Naming\CommandNaming;
+use Rector\Printer\ChangedFilesCollector;
 use Rector\Rector\RectorCollector;
+use SplFileInfo;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+/**
+ * @todo decouple report methods to output ... ProcessCommandReporter
+ */
 final class ProcessCommand extends Command
 {
     /**
@@ -45,16 +50,23 @@ final class ProcessCommand extends Command
      */
     private $phpFilesFinder;
 
+    /**
+     * @var ChangedFilesCollector
+     */
+    private $changedFilesCollector;
+
     public function __construct(
         FileProcessor $fileProcessor,
         RectorCollector $rectorCollector,
         SymfonyStyle $symfonyStyle,
-        PhpFilesFinder $phpFilesFinder
+        PhpFilesFinder $phpFilesFinder,
+        ChangedFilesCollector $changedFilesCollector
     ) {
         $this->fileProcessor = $fileProcessor;
         $this->rectorCollector = $rectorCollector;
         $this->symfonyStyle = $symfonyStyle;
         $this->phpFilesFinder = $phpFilesFinder;
+        $this->changedFilesCollector = $changedFilesCollector;
 
         parent::__construct();
     }
@@ -84,26 +96,13 @@ final class ProcessCommand extends Command
 
         $i = 0;
         foreach ($files as $file) {
-            if ($i < self::MAX_FILES_TO_PRINT) {
-                $this->symfonyStyle->writeln(sprintf(
-                    ' - %s',
-                    $file
-                ));
-            }
-
-            if ($i === self::MAX_FILES_TO_PRINT) {
-                $this->symfonyStyle->newLine();
-                $this->symfonyStyle->writeln(sprintf(
-                    '...and %d more.',
-                    count($files) - self::MAX_FILES_TO_PRINT
-                ));
-                $this->symfonyStyle->newLine();
-            }
-
+            $this->reportLoadedFile($i, $file, count($files));
             $this->fileProcessor->processFile($file);
 
             ++$i;
         }
+
+        $this->reportChangedFiles();
 
         $this->symfonyStyle->success('Rector is done!');
 
@@ -138,5 +137,40 @@ final class ProcessCommand extends Command
         }
 
         $this->symfonyStyle->newLine();
+    }
+
+    private function reportChangedFiles(): void
+    {
+        $this->symfonyStyle->title(sprintf(
+            '%d Changed File%s',
+            $this->changedFilesCollector->getChangedFilesCount(),
+            $this->changedFilesCollector->getChangedFilesCount() === 1 ? '' : 's'
+        ));
+
+        foreach ($this->changedFilesCollector->getChangedFiles() as $fileInfo) {
+            $this->symfonyStyle->writeln(sprintf(
+                ' - %s',
+                $fileInfo
+            ));
+        }
+    }
+
+    private function reportLoadedFile(int $i, SplFileInfo $fileInfo, int $fileCount): void
+    {
+        if ($i < self::MAX_FILES_TO_PRINT) {
+            $this->symfonyStyle->writeln(sprintf(
+                ' - %s',
+                $fileInfo
+            ));
+        }
+
+        if ($i === self::MAX_FILES_TO_PRINT) {
+            $this->symfonyStyle->newLine();
+            $this->symfonyStyle->writeln(sprintf(
+                '...and %d more.',
+                $fileCount - self::MAX_FILES_TO_PRINT
+            ));
+            $this->symfonyStyle->newLine();
+        }
     }
 }
