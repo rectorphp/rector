@@ -8,8 +8,5 @@ interface PerNodeTypeResolverInterface
 {
     public function getNodeClass(): string;
 
-    /**
-     * @return mixed
-     */
-    public function resolve(Node $arrayNode);
+    public function resolve(Node $node): ?string;
 }

@@ -28,11 +28,13 @@ final class NodeTypeResolver
             return $perNodeTypeResolver->resolve($node);
         }
 
-        throw new NotImplementedException(sprintf(
-            '%s() was unable to resolve "%s" Node type. Create new class that implements "%s".',
-            __METHOD__,
-            get_class($node),
-            PerNodeTypeResolverInterface::class
-        ));
+        return null;
+
+//        throw new NotImplementedException(sprintf(
+//            '%s() was unable to resolve "%s" Node type. Create new class that implements "%s".',
+//            __METHOD__,
+//            get_class($node),
+//            PerNodeTypeResolverInterface::class
+//        ));
     }
 }

@@ -21,6 +21,7 @@ use Rector\BetterReflection\Reflector\MethodReflector;
 use Rector\Exception\NotImplementedException;
 use Rector\Node\Attribute;
 use Rector\NodeAnalyzer\ClassAnalyzer;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\TypeContext;
 
 /**
@@ -48,17 +49,25 @@ final class TypeResolver extends NodeVisitorAbstract
      */
     private $classAnalyzer;
 
+    /**
+     * @var NodeTypeResolver
+     */
+    private $nodeTypeResolver;
+
     public function __construct(
         TypeContext $typeContext,
         MethodReflector $methodReflector,
-        ClassAnalyzer $classAnalyzer
+        ClassAnalyzer $classAnalyzer,
+        NodeTypeResolver $nodeTypeResolver
     ) {
         $this->typeContext = $typeContext;
 
         // consider mini subscribers
         $this->perNodeResolvers[Variable::class] = function (Variable $variableNode): void {
+//            $this->nodeTypeResolver->resolve($variableNode);
             $this->processVariableNode($variableNode);
         };
+
         $this->perNodeResolvers[Assign::class] = function (Assign $assignNode): void {
             $this->processAssignNode($assignNode);
         };
@@ -74,6 +83,7 @@ final class TypeResolver extends NodeVisitorAbstract
 
         $this->methodReflector = $methodReflector;
         $this->classAnalyzer = $classAnalyzer;
+        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     /**
