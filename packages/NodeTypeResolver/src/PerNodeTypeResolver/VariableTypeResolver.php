@@ -68,6 +68,8 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface, NodeTy
 
     private function processVariableTypeForAssign(Variable $variableNode, Assign $assignNode): ?string
     {
+//        $variableType = $this->processAssignVariableNode($assignNode);
+
         if ($assignNode->expr instanceof New_) {
             $variableName = $variableNode->name;
             $variableType = $this->nodeTypeResolver->resolve($assignNode->expr);
@@ -86,5 +88,25 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface, NodeTy
         $name = (string) $variableNode->name;
 
         return $this->typeContext->getTypeForVariable($name);
+    }
+
+    private function processAssignVariableNode(Assign $assignNode): ?string
+    {
+        if ($assignNode->var->name instanceof Variable) {
+            $name = $assignNode->var->name->name;
+        } else {
+            $name = $assignNode->var->name;
+        }
+
+        $this->typeContext->addAssign($name, $assignNode->expr->name);
+
+        $variableType = $this->typeContext->getTypeForVariable($name);
+        if ($variableType) {
+            $assignNode->var->setAttribute(Attribute::TYPE, $variableType);
+
+            return $variableType;
+        }
+
+        return null;
     }
 }

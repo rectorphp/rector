@@ -4,19 +4,15 @@ namespace Rector\NodeTypeResolver\NodeVisitor;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
-use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
-use PhpParser\Node\Name;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\NodeVisitorAbstract;
 use Rector\BetterReflection\Reflector\MethodReflector;
-use Rector\Exception\NotImplementedException;
 use Rector\Node\Attribute;
 use Rector\NodeAnalyzer\ClassAnalyzer;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -38,16 +34,6 @@ final class TypeResolver extends NodeVisitorAbstract
     private $perNodeResolvers = [];
 
     /**
-     * @var MethodReflector
-     */
-    private $methodReflector;
-
-    /**
-     * @var ClassAnalyzer
-     */
-    private $classAnalyzer;
-
-    /**
      * @var NodeTypeResolver
      */
     private $nodeTypeResolver;
@@ -65,8 +51,6 @@ final class TypeResolver extends NodeVisitorAbstract
             $this->processPropertyFetch($propertyFetchNode);
         };
 
-        $this->methodReflector = $methodReflector;
-        $this->classAnalyzer = $classAnalyzer;
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
@@ -102,66 +86,6 @@ final class TypeResolver extends NodeVisitorAbstract
         if ($type) {
             $node->setAttribute(Attribute::TYPE, $type);
         }
-    }
-
-    private function getTypeFromNewNode(New_ $newNode): ?string
-    {
-        // e.g. new class extends AnotherClass();
-
-        if ($this->classAnalyzer->isAnonymousClassNode($newNode->class)) {
-            $classNode = $newNode->class;
-            if (! $classNode->extends instanceof Name) {
-                return null;
-            }
-
-            // @todo: add interfaces as well
-            // use some gettypesForClass($class) method, already used somewhere else
-
-            $resolvedName = $classNode->extends->getAttribute(Attribute::RESOLVED_NAME);
-            if ($resolvedName instanceof FullyQualified) {
-                return $resolvedName->toString();
-            }
-
-            return null;
-        }
-
-        // e.g. new $someClass;
-        if ($newNode->class instanceof Variable) {
-            // can be anything (dynamic)
-            $variableName = $newNode->class->name;
-
-            return $this->typeContext->getTypeForVariable($variableName);
-        }
-
-        // e.g. new SomeClass;
-        if ($newNode->class instanceof Name) {
-            /** @var FullyQualified $fqnName */
-            $fqnName = $newNode->class->getAttribute(Attribute::RESOLVED_NAME);
-
-            return $fqnName->toString();
-        }
-
-        // e.g. new $this->templateClass;
-        if ($newNode->class instanceof PropertyFetch) {
-            if ($newNode->class->var->name !== 'this') {
-                throw new NotImplementedException(sprintf(
-                    'Not implemented yet. Go to "%s()" and add check for "%s" node for external dependency.',
-                    __METHOD__,
-                    get_class($newNode->class)
-                ));
-            }
-
-            // can be anything (dynamic)
-            $propertyName = (string) $newNode->class->name;
-
-            return $this->typeContext->getTypeForProperty($propertyName);
-        }
-
-        throw new NotImplementedException(sprintf(
-            'Not implemented yet. Go to "%s()" and add check for "%s" node.',
-            __METHOD__,
-            get_class($newNode->class)
-        ));
     }
 
     private function processPropertyFetch(PropertyFetch $propertyFetchNode): void
@@ -215,45 +139,5 @@ final class TypeResolver extends NodeVisitorAbstract
         }
 
         return (string) $propertyFetchNode->name;
-    }
-
-    /**
-     * Dummy static method call return type that doesn't depend on class reflection.
-     */
-    private function fallbackStaticType(string $type, string $methodName): ?string
-    {
-        if ($type === 'Nette\Config\Configurator' && $methodName === 'createContainer') {
-            return 'Nette\DI\Container';
-        }
-
-        return null;
-    }
-
-    private function getMethodReturnType(string $methodCallVariableType, string $methodCallName): ?string
-    {
-        $methodReflection = $this->methodReflector->reflectClassMethod($methodCallVariableType, $methodCallName);
-
-        if ($methodReflection) {
-            $returnType = $methodReflection->getReturnType();
-            if ($returnType) {
-                return (string) $returnType;
-            }
-        }
-
-        return $this->fallbackStaticType($methodCallVariableType, $methodCallName);
-    }
-
-    private function resolveMethodCallName(Assign $assignNode): ?string
-    {
-        if ($assignNode->expr->name instanceof Variable) {
-            return $assignNode->expr->name->name;
-        }
-
-        if ($assignNode->expr->name instanceof PropertyFetch) {
-            // not implemented yet
-            return null;
-        }
-
-        return (string) $assignNode->expr->name;
     }
 }
