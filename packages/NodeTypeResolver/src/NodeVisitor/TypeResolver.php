@@ -21,6 +21,7 @@ use Rector\BetterReflection\Reflector\MethodReflector;
 use Rector\Exception\NotImplementedException;
 use Rector\Node\Attribute;
 use Rector\NodeAnalyzer\ClassAnalyzer;
+use Rector\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\TypeContext;
 
@@ -53,12 +54,17 @@ final class TypeResolver extends NodeVisitorAbstract
      * @var NodeTypeResolver
      */
     private $nodeTypeResolver;
+    /**
+     * @var DocBlockAnalyzer
+     */
+    private $docBlockAnalyzer;
 
     public function __construct(
         TypeContext $typeContext,
         MethodReflector $methodReflector,
         ClassAnalyzer $classAnalyzer,
-        NodeTypeResolver $nodeTypeResolver
+        NodeTypeResolver $nodeTypeResolver,
+        DocBlockAnalyzer $docBlockAnalyzer
     ) {
         $this->typeContext = $typeContext;
 
@@ -67,7 +73,7 @@ final class TypeResolver extends NodeVisitorAbstract
 //            $this->nodeTypeResolver->resolve($variableNode);
             $this->processVariableNode($variableNode);
         };
-//
+
         $this->perNodeResolvers[Assign::class] = function (Assign $assignNode): void {
             // done
             $this->processAssignNode($assignNode);
@@ -86,6 +92,7 @@ final class TypeResolver extends NodeVisitorAbstract
         $this->methodReflector = $methodReflector;
         $this->classAnalyzer = $classAnalyzer;
         $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->docBlockAnalyzer = $docBlockAnalyzer;
     }
 
     /**
@@ -121,7 +128,6 @@ final class TypeResolver extends NodeVisitorAbstract
             $node->setAttribute(Attribute::TYPE, $type);
         }
     }
-
 
     private function getTypeFromNewNode(New_ $newNode): ?string
     {
@@ -256,7 +262,7 @@ final class TypeResolver extends NodeVisitorAbstract
         $propertyType = $this->typeContext->getTypeForProperty($propertyName);
 
         if ($propertyType === null) {
-            $propertyType = $this->resolveTypeFromPropertyDocComment($propertyNode);
+            $propertyType = $this->docBlockAnalyzer->getAnnotationFromNode($propertyNode, 'var');
             if ($propertyType) {
                 $this->typeContext->addPropertyType($propertyName, $propertyType);
             }
@@ -402,29 +408,5 @@ final class TypeResolver extends NodeVisitorAbstract
         }
 
         return (string) $assignNode->expr->name;
-    }
-
-    private function resolveTypeFromPropertyDocComment(Property $propertyNode): ?string
-    {
-        $doc = $propertyNode->getDocComment();
-        if ($doc === null) {
-            return null;
-        }
-
-        $docBlock = new DocBlock($doc->getText());
-        $varAnnotations = $docBlock->getAnnotationsOfType('var');
-        if (! count($varAnnotations)) {
-            return null;
-        }
-
-        // @todo: resolve non-FQN names using namespace imports
-        // $propertyNode->getAttribute(Attribute::USE_STATEMENTS)
-        // maybe decouple to service?
-        $varTypes = $varAnnotations[0]->getTypes();
-        if (! count($varTypes)) {
-            return null;
-        }
-
-        return $varTypes[0];
     }
 }

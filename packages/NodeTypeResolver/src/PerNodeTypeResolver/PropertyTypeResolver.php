@@ -3,17 +3,17 @@
 namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\BinaryOp\Concat;
-use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\Property;
+use Rector\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverAwareInterface;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\TypeContext;
 
-final class PropertyFetchTypeResolver implements PerNodeTypeResolverInterface, NodeTypeResolverAwareInterface
+final class PropertyTypeResolver implements PerNodeTypeResolverInterface, NodeTypeResolverAwareInterface
 {
     /**
      * @var TypeContext
@@ -25,36 +25,39 @@ final class PropertyFetchTypeResolver implements PerNodeTypeResolverInterface, N
      */
     private $nodeTypeResolver;
 
-    public function __construct(TypeContext $typeContext)
+    /**
+     * @var DocBlockAnalyzer
+     */
+    private $docBlockAnalyzer;
+
+    public function __construct(TypeContext $typeContext, DocBlockAnalyzer $docBlockAnalyzer)
     {
         $this->typeContext = $typeContext;
+        $this->docBlockAnalyzer = $docBlockAnalyzer;
     }
 
     public function getNodeClass(): string
     {
-        return PropertyFetch::class;
+        return Property::class;
     }
 
     /**
-     * @param PropertyFetch $propertyFetchNode
+     * @param Property $propertyNode
      */
-    public function resolve(Node $propertyFetchNode): ?string
+    public function resolve(Node $propertyNode): ?string
     {
-        // e.g. $r->getParameters()[0]->name
-        if ($propertyFetchNode->var instanceof ArrayDimFetch) {
-            return $this->nodeTypeResolver->resolve($propertyFetchNode);
-        }
+        // return if has one - @todo uncomment later after NodeResolver cleanup
+//        if ($propertyNode->getAttribute(Attribute::TYPE)) {
+//            return $propertyNode->getAttribute(Attribute::TYPE);
+//        }
 
-        if ($propertyFetchNode->var instanceof New_) {
-            return $propertyFetchNode->var->class->toString();
-        }
+        $varType = $this->docBlockAnalyzer->getAnnotationFromNode($propertyNode, 'var');
 
-        if ($propertyFetchNode->var->name !== 'this') {
-            return null;
-        }
 
-        // @todo
-        $propertyName = $this->resolvePropertyName($propertyFetchNode);
+        dump($propertyNode);
+        die;
+
+        $propertyName = $this->resolvePropertyName($propertyNode);
 
         return $this->typeContext->getTypeForProperty($propertyName);
     }

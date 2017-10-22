@@ -3,10 +3,8 @@
 namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use Rector\BetterReflection\Reflector\MethodReflector;
@@ -15,6 +13,7 @@ use Rector\NodeTypeResolver\Contract\NodeTypeResolverAwareInterface;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\TypeContext;
+use Nette\DI\Container;
 
 final class AssignTypeResolver implements PerNodeTypeResolverInterface, NodeTypeResolverAwareInterface
 {
@@ -66,6 +65,11 @@ final class AssignTypeResolver implements PerNodeTypeResolverInterface, NodeType
         }
     }
 
+    public function setNodeTypeResolver(NodeTypeResolver $nodeTypeResolver): void
+    {
+        $this->nodeTypeResolver = $nodeTypeResolver;
+    }
+
     private function processAssignVariableNode(Assign $assignNode): ?string
     {
         if ($assignNode->var->name instanceof Variable) {
@@ -107,8 +111,7 @@ final class AssignTypeResolver implements PerNodeTypeResolverInterface, NodeType
 
         // 2. get method() return type
 
-        if (
-            ! $methodCallVariableType || ! $methodCallName) {
+        if (            ! $methodCallVariableType || ! $methodCallName) {
             return null;
         }
 
@@ -121,13 +124,6 @@ final class AssignTypeResolver implements PerNodeTypeResolverInterface, NodeType
 
         return $variableType;
     }
-
-
-    public function setNodeTypeResolver(NodeTypeResolver $nodeTypeResolver): void
-    {
-        $this->nodeTypeResolver = $nodeTypeResolver;
-    }
-
 
     private function getMethodReturnType(string $methodCallVariableType, string $methodCallName): ?string
     {
@@ -157,7 +153,6 @@ final class AssignTypeResolver implements PerNodeTypeResolverInterface, NodeType
         return (string) $assignNode->expr->name;
     }
 
-
     /**
      * Dummy static method call return type that doesn't depend on class reflection.
      *
@@ -166,7 +161,7 @@ final class AssignTypeResolver implements PerNodeTypeResolverInterface, NodeType
     private function fallbackStaticType(string $type, string $methodName): ?string
     {
         if ($type === 'Nette\Config\Configurator' && $methodName === 'createContainer') {
-            return 'Nette\DI\Container';
+            return Container::class;
         }
 
         return null;

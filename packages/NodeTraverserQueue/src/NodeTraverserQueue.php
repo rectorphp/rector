@@ -107,9 +107,7 @@ final class NodeTraverserQueue
 
             throw $identifierNotFoundException;
         } catch (Throwable $throwable) {
-            throw $throwable;
-            // @todo: too vague for deeper debugging: simplify and just add causing file
-//            throw new FileProcessingException($fileInfo, $throwable);
+            throw new FileProcessingException($fileInfo, $throwable);
         }
     }
 }
