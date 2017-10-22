@@ -4,13 +4,13 @@ namespace Rector\NodeTypeResolver;
 
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\FunctionLike;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use Rector\BetterReflection\Reflection\ReflectionFunction;
 use Rector\BetterReflection\Reflection\ReflectionMethod;
 use Rector\BetterReflection\Reflector\MethodReflector;
+use Rector\NodeAnalyzer\ClassAnalyzer;
 use Rector\NodeTypeResolver\TypesExtractor\ConstructorPropertyTypesExtractor;
 
 /**
@@ -29,7 +29,7 @@ final class TypeContext
     private $classProperties = [];
 
     /**
-     * @var Class_|ClassLike|null
+     * @var ClassLike|null
      */
     private $classLikeNode;
 
@@ -43,12 +43,19 @@ final class TypeContext
      */
     private $methodReflector;
 
+    /**
+     * @var ClassAnalyzer
+     */
+    private $classAnalyzer;
+
     public function __construct(
         ConstructorPropertyTypesExtractor $constructorPropertyTypesExtractor,
-        MethodReflector $methodReflector
+        MethodReflector $methodReflector,
+        ClassAnalyzer $classAnalyzer
     ) {
         $this->constructorPropertyTypesExtractor = $constructorPropertyTypesExtractor;
         $this->methodReflector = $methodReflector;
+        $this->classAnalyzer = $classAnalyzer;
     }
 
     public function startFile(): void
@@ -68,7 +75,7 @@ final class TypeContext
         $this->classProperties = [];
         $this->classLikeNode = $classLikeNode;
 
-        if ($classLikeNode instanceof Class_ && ! $classLikeNode->isAnonymous()) {
+        if ($this->classAnalyzer->isNormalClass($classLikeNode)) {
             $this->classProperties = $this->constructorPropertyTypesExtractor->extractFromClassNode($classLikeNode);
         }
     }
@@ -118,7 +125,7 @@ final class TypeContext
         }
 
         if ($this->classLikeNode) {
-            if ($this->classLikeNode instanceof Class_ && $this->classLikeNode->isAnonymous()) {
+            if ($this->classAnalyzer->isAnonymousClassNode($this->classLikeNode)) {
                 return null;
             }
 

@@ -14,13 +14,13 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\NodeVisitorAbstract;
 use Rector\BetterReflection\Reflector\MethodReflector;
 use Rector\Exception\NotImplementedException;
 use Rector\Node\Attribute;
+use Rector\NodeAnalyzer\ClassAnalyzer;
 use Rector\NodeTypeResolver\TypeContext;
 
 /**
@@ -43,8 +43,16 @@ final class TypeResolver extends NodeVisitorAbstract
      */
     private $methodReflector;
 
-    public function __construct(TypeContext $typeContext, MethodReflector $methodReflector)
-    {
+    /**
+     * @var ClassAnalyzer
+     */
+    private $classAnalyzer;
+
+    public function __construct(
+        TypeContext $typeContext,
+        MethodReflector $methodReflector,
+        ClassAnalyzer $classAnalyzer
+    ) {
         $this->typeContext = $typeContext;
 
         // consider mini subscribers
@@ -65,6 +73,7 @@ final class TypeResolver extends NodeVisitorAbstract
         };
 
         $this->methodReflector = $methodReflector;
+        $this->classAnalyzer = $classAnalyzer;
     }
 
     /**
@@ -99,7 +108,8 @@ final class TypeResolver extends NodeVisitorAbstract
     private function getTypeFromNewNode(New_ $newNode): ?string
     {
         // e.g. new class extends AnotherClass();
-        if ($newNode->class instanceof Class_ && $newNode->class->isAnonymous()) {
+
+        if ($this->classAnalyzer->isAnonymousClassNode($newNode->class)) {
             $classNode = $newNode->class;
             if (! $classNode->extends instanceof Name) {
                 return null;

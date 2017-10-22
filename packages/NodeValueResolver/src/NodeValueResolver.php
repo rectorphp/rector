@@ -50,9 +50,10 @@ final class NodeValueResolver
         }
 
         throw new NotImplementedException(sprintf(
-            '%s() was unable to resolve "%s" Node. Add new value resolver via addValueResolver() method.',
+            '%s() was unable to resolve "%s" Node. Create new class that implements "%s".',
             __METHOD__,
-            get_class($node)
+            get_class($node),
+            PerNodeValueResolverInterface::class
         ));
     }
 }
