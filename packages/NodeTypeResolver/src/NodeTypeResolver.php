@@ -3,6 +3,7 @@
 namespace Rector\NodeTypeResolver;
 
 use PhpParser\Node;
+use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 
 final class NodeTypeResolver
@@ -22,6 +23,11 @@ final class NodeTypeResolver
         foreach ($this->perNodeTypeResolvers as $perNodeTypeResolver) {
             if (! is_a($node, $perNodeTypeResolver->getNodeClass(), true)) {
                 continue;
+            }
+
+            // resolve just once
+            if ($node->getAttribute(Attribute::TYPE)) {
+                return $node->getAttribute(Attribute::TYPE);
             }
 
             return $perNodeTypeResolver->resolve($node);

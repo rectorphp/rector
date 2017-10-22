@@ -84,10 +84,10 @@ final class TypeResolver extends NodeVisitorAbstract
             // done
             $this->processPropertyFetch($propertyFetchNode);
         };
-
-        $this->perNodeResolvers[Property::class] = function (Property $propertyNode): void {
-            $this->processProperty($propertyNode);
-        };
+//
+//        $this->perNodeResolvers[Property::class] = function (Property $propertyNode): void {
+//            $this->processProperty($propertyNode);
+//        };
 
         $this->methodReflector = $methodReflector;
         $this->classAnalyzer = $classAnalyzer;

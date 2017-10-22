@@ -2,28 +2,21 @@
 
 namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
-use PhpParser\Node\Expr\BinaryOp\Concat;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Property;
+use Rector\Node\Attribute;
 use Rector\NodeAnalyzer\DocBlockAnalyzer;
-use Rector\NodeTypeResolver\Contract\NodeTypeResolverAwareInterface;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
-use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\TypeContext;
+use Rector\NodeTypeResolver\UseStatements;
 
-final class PropertyTypeResolver implements PerNodeTypeResolverInterface, NodeTypeResolverAwareInterface
+final class PropertyTypeResolver implements PerNodeTypeResolverInterface
 {
     /**
      * @var TypeContext
      */
     private $typeContext;
-
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
 
     /**
      * @var DocBlockAnalyzer
@@ -46,37 +39,35 @@ final class PropertyTypeResolver implements PerNodeTypeResolverInterface, NodeTy
      */
     public function resolve(Node $propertyNode): ?string
     {
-        // return if has one - @todo uncomment later after NodeResolver cleanup
-//        if ($propertyNode->getAttribute(Attribute::TYPE)) {
-//            return $propertyNode->getAttribute(Attribute::TYPE);
-//        }
-
-        $varType = $this->docBlockAnalyzer->getAnnotationFromNode($propertyNode, 'var');
-
-
-        dump($propertyNode);
-        die;
-
-        $propertyName = $this->resolvePropertyName($propertyNode);
-
-        return $this->typeContext->getTypeForProperty($propertyName);
-    }
-
-    public function setNodeTypeResolver(NodeTypeResolver $nodeTypeResolver): void
-    {
-        $this->nodeTypeResolver = $nodeTypeResolver;
-    }
-
-    private function resolvePropertyName(PropertyFetch $propertyFetchNode): string
-    {
-        if ($propertyFetchNode->name instanceof Variable) {
-            return $propertyFetchNode->name->name;
+        $propertyName = $propertyNode->props[0]->name->toString();
+        $propertyType = $this->typeContext->getTypeForProperty($propertyName);
+        if ($propertyType) {
+            return $propertyType;
         }
 
-        if ($propertyFetchNode->name instanceof Concat) {
-            return '';
+        $propertyType = $this->docBlockAnalyzer->getAnnotationFromNode($propertyNode, 'var');
+
+        $namespace = (string) $propertyNode->getAttribute(Attribute::NAMESPACE);
+        $useStatements = $propertyNode->getAttribute(Attribute::USE_STATEMENTS);
+
+        $propertyType = $this->resolveTypeWithNamespaceAndUseStatments($propertyType, $namespace, $useStatements);
+
+        $this->typeContext->addPropertyType($propertyName, $propertyType);
+
+        return $propertyType;
+    }
+
+    private function resolveTypeWithNamespaceAndUseStatments(
+        string $type,
+        string $namespace,
+        UseStatements $useStatements
+    ): string {
+        foreach ($useStatements->getUseStatements() as $useStatement) {
+            if (Strings::endsWith($useStatement, '\\' . $type)) {
+                return $useStatement;
+            }
         }
 
-        return (string) $propertyFetchNode->name;
+        return ($namespace ? $namespace . '\\' : '') . $type;
     }
 }
