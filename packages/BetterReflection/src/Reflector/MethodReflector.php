@@ -3,7 +3,6 @@
 namespace Rector\BetterReflection\Reflector;
 
 use Rector\BetterReflection\Reflection\ReflectionMethod;
-use Rector\BetterReflection\Reflector\Exception\IdentifierNotFound;
 
 final class MethodReflector
 {
@@ -19,12 +18,7 @@ final class MethodReflector
 
     public function reflectClassMethod(string $class, string $method): ?ReflectionMethod
     {
-        try {
-            $classReflection = $this->smartClassReflector->reflect($class);
-        } catch (IdentifierNotFound $identifierNotFoundException) {
-            // class doesn't exist
-            return null;
-        }
+        $classReflection = $this->smartClassReflector->reflect($class);
 
         if ($classReflection === null) {
             return null;

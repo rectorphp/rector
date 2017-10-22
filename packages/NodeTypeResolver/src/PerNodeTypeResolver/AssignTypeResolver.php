@@ -2,6 +2,7 @@
 
 namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
 
+use phpDocumentor\Reflection\Types\Object_;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
@@ -53,7 +54,6 @@ final class AssignTypeResolver implements PerNodeTypeResolverInterface, NodeType
 
         // $var = $anotherVar;
         if ($assignNode->expr instanceof Variable) {
-//            return $this->nodeTypeResolver->resolve($assignNode->expr);
             return $this->processAssignVariableNode($assignNode);
         }
 
@@ -130,12 +130,23 @@ final class AssignTypeResolver implements PerNodeTypeResolverInterface, NodeType
 
         if ($methodReflection) {
             $returnType = $methodReflection->getReturnType();
+
             if ($returnType) {
                 return (string) $returnType;
             }
+
+            $returnTypes = $methodReflection->getDocBlockReturnTypes();
+
+            if (! isset($returnTypes[0])) {
+                return null;
+            }
+
+            if ($returnTypes[0] instanceof Object_) {
+                return ltrim((string) $returnTypes[0]->getFqsen(), '\\');
+            }
         }
 
-        return $this->fallbackStaticType($methodCallVariableType, $methodCallName);
+        return null;
     }
 
     private function resolveMethodCallName(Assign $assignNode): ?string
@@ -150,19 +161,5 @@ final class AssignTypeResolver implements PerNodeTypeResolverInterface, NodeType
         }
 
         return (string) $assignNode->expr->name;
-    }
-
-    /**
-     * Dummy static method call return type that doesn't depend on class reflection.
-     *
-     * @todo use stubs instead
-     */
-    private function fallbackStaticType(string $type, string $methodName): ?string
-    {
-        if ($type === 'Nette\Config\Configurator' && $methodName === 'createContainer') {
-            return 'Nette\DI\Container';
-        }
-
-        return null;
     }
 }

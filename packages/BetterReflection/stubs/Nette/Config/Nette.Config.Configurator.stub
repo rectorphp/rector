@@ -180,7 +180,7 @@ class Configurator extends Object
 
     /**
      * Returns system DI container.
-     * @return DI\Container
+     * @return \Nette\DI\Container
      */
     public function createContainer()
     {
