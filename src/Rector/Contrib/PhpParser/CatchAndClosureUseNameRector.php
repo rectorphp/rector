@@ -22,6 +22,7 @@ final class CatchAndClosureUseNameRector extends AbstractRector
      * @var PropertyFetchAnalyzer
      */
     private $propertyFetchAnalyzer;
+
     /**
      * @var NodeFactory
      */

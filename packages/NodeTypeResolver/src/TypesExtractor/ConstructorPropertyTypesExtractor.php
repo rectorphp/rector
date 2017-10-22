@@ -61,7 +61,13 @@ final class ConstructorPropertyTypesExtractor
         if ($constructorMethodReflection) {
             foreach ($constructorMethodReflection->getParameters() as $parameterReflection) {
                 $parameterName = $parameterReflection->getName();
+
                 $parameterType = (string) $parameterReflection->getType();
+
+                // @todo: add some is_scalar check
+                if (in_array($parameterType, ['string', 'bool', 'array'], true)) {
+                    continue;
+                }
 
                 $parametersWithTypes[$parameterName] = $parameterType;
             }
