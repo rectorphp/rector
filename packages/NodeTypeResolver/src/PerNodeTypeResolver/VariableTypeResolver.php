@@ -39,28 +39,26 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface, NodeTy
      */
     public function resolve(Node $variableNode): ?string
     {
-        $variableType = null;
-
         $parentNode = $variableNode->getAttribute(Attribute::PARENT_NODE);
-
         if ($parentNode instanceof Assign) {
-            $variableType = $this->processVariableTypeForAssign($variableNode, $parentNode);
-        } elseif ($variableNode->name instanceof Variable) {
+            return $this->processVariableTypeForAssign($variableNode, $parentNode);
+        }
+
+        if ($variableNode->name instanceof Variable) {
             // nested: ${$type}[$name] - dynamic, unable to resolve type
             return null;
         }
 
         $variableType = $this->typeContext->getTypeForVariable((string) $variableNode->name);
+        if ($variableType) {
+            return $variableType;
+        }
 
         if ($variableNode->name === 'this') {
             return $variableNode->getAttribute(Attribute::CLASS_NAME);
         }
 
-        if ($variableType) {
-            $variableNode->setAttribute(Attribute::TYPE, $variableType);
-        }
-
-        return $variableType;
+        return null;
     }
 
     public function setNodeTypeResolver(NodeTypeResolver $nodeTypeResolver): void

@@ -6,6 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use Rector\Exception\NotImplementedException;
 use Rector\Node\Attribute;
@@ -42,10 +43,9 @@ final class NewTypeResolver implements PerNodeTypeResolverInterface
     public function resolve(Node $newNode): ?string
     {
         // e.g. new class extends AnotherClass();
-
         if ($this->classAnalyzer->isAnonymousClassNode($newNode->class)) {
             $classNode = $newNode->class;
-            if (! $classNode->extends instanceof Node\Name) {
+            if (! $classNode->extends instanceof Name) {
                 return null;
             }
 
@@ -69,7 +69,7 @@ final class NewTypeResolver implements PerNodeTypeResolverInterface
         }
 
         // e.g. new SomeClass;
-        if ($newNode->class instanceof Node\Name) {
+        if ($newNode->class instanceof Name) {
             /** @var FullyQualified $fqnName */
             $fqnName = $newNode->class->getAttribute(Attribute::RESOLVED_NAME);
 
@@ -87,15 +87,11 @@ final class NewTypeResolver implements PerNodeTypeResolverInterface
             }
 
             // can be anything (dynamic)
-            $propertyName = (string) $newNode->class->name;
+            $propertyName = $newNode->class->name->toString();
 
             return $this->typeContext->getTypeForProperty($propertyName);
         }
 
-        throw new NotImplementedException(sprintf(
-            'Not implemented yet. Go to "%s()" and add check for "%s" node.',
-            __METHOD__,
-            get_class($newNode->class)
-        ));
+        return null;
     }
 }
