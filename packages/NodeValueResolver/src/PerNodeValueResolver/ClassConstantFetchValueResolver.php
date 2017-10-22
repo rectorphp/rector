@@ -31,6 +31,7 @@ final class ClassConstantFetchValueResolver implements PerNodeValueResolverInter
      */
     public function resolve(Node $classConstFetchNode)
     {
+        // @todo try NodeFinder
         $value = $this->standardPrinter->prettyPrint([$classConstFetchNode]);
         if ($value === 'static::class') {
             return $classConstFetchNode->getAttribute(Attribute::CLASS_NAME);

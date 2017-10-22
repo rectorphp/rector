@@ -41,6 +41,7 @@ final class ControllerMethodAnalyzer
 
     public function doesNodeContain(ClassMethod $classMethodNode, string $part): bool
     {
+        // @todo try NodeFinder
         $methodInString = $this->standardPrinter->prettyPrint([$classMethodNode]);
 
         return Strings::contains($methodInString, $part);
