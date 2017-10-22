@@ -39,7 +39,7 @@ final class ChoiceDefaultValueRector extends AbstractRector
             return false;
         }
 
-        return $this->propertyFetchAnalyzer->isPropertyFetchOnTypes(
+        return $this->propertyFetchAnalyzer->isTypesAndProperty(
             $node->var,
             ['Nette\Forms\Controls\MultiChoiceControl', 'Nette\Forms\Controls\ChoiceControl'],
             'checkAllowedValues'

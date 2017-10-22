@@ -14,6 +14,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\NodeVisitorAbstract;
@@ -95,8 +96,26 @@ final class TypeResolver extends NodeVisitorAbstract
         }
     }
 
-    private function getTypeFromNewNode(New_ $newNode): string
+    private function getTypeFromNewNode(New_ $newNode): ?string
     {
+        // e.g. new class extends AnotherClass();
+        if ($newNode->class instanceof Class_ && $newNode->class->isAnonymous()) {
+            $classNode = $newNode->class;
+            if (! $classNode->extends instanceof Name) {
+                return null;
+            }
+
+            // @todo: add interfaces as well
+            // use some gettypesForClass($class) method, already used somewhere else
+
+            $resolvedName = $classNode->extends->getAttribute(Attribute::RESOLVED_NAME);
+            if ($resolvedName instanceof FullyQualified) {
+                return $resolvedName->toString();
+            }
+
+            return null;
+        }
+
         // e.g. new $someClass;
         if ($newNode->class instanceof Variable) {
             // can be anything (dynamic)
@@ -245,11 +264,11 @@ final class TypeResolver extends NodeVisitorAbstract
         return (string) $propertyFetchNode->name;
     }
 
-    private function processVariableTypeForAssign(Variable $variableNode, Assign $AssignNode): string
+    private function processVariableTypeForAssign(Variable $variableNode, Assign $assignNode): ?string
     {
-        if ($AssignNode->expr instanceof New_) {
+        if ($assignNode->expr instanceof New_) {
             $variableName = $variableNode->name;
-            $variableType = $this->getTypeFromNewNode($AssignNode->expr);
+            $variableType = $this->getTypeFromNewNode($assignNode->expr);
 
             $this->typeContext->addVariableWithType($variableName, $variableType);
 

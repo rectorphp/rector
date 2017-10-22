@@ -13,9 +13,15 @@ final class FormatPerservingPrinter
      */
     private $prettyPrinter;
 
-    public function __construct(Standard $prettyPrinter)
+    /**
+     * @var ChangedFilesCollector
+     */
+    private $changedFilesCollector;
+
+    public function __construct(Standard $prettyPrinter, ChangedFilesCollector $changedFilesCollector)
     {
         $this->prettyPrinter = $prettyPrinter;
+        $this->changedFilesCollector = $changedFilesCollector;
     }
 
     /**
@@ -23,13 +29,18 @@ final class FormatPerservingPrinter
      * @param Node[] $oldStmts
      * @param Node[] $oldTokens
      */
-    public function printToFile(SplFileInfo $file, array $newStmts, array $oldStmts, array $oldTokens): void
+    public function printToFile(SplFileInfo $fileInfo, array $newStmts, array $oldStmts, array $oldTokens): void
     {
-        if ($oldStmts === $newStmts) {
+        $oldContent = file_get_contents($fileInfo->getRealPath());
+        $newContent = $this->printToString($newStmts, $oldStmts, $oldTokens);
+
+        if ($oldContent === $newContent) {
             return;
         }
 
-        file_put_contents($file->getRealPath(), $this->printToString($newStmts, $oldStmts, $oldTokens));
+        $this->changedFilesCollector->addChangedFile($fileInfo);
+
+        file_put_contents($fileInfo->getRealPath(), $newContent);
     }
 
     /**

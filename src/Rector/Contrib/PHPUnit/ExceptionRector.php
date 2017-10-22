@@ -5,8 +5,6 @@ namespace Rector\Rector\Contrib\PHPUnit;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Stmt\Expression;
-use Rector\Builder\Method\MethodStatementCollector;
 use Rector\Node\Attribute;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
@@ -23,22 +21,13 @@ final class ExceptionRector extends AbstractRector
     private $methodCallAnalyzer;
 
     /**
-     * @var MethodStatementCollector
-     */
-    private $methodStatementCollector;
-
-    /**
      * @var NodeFactory
      */
     private $nodeFactory;
 
-    public function __construct(
-        MethodCallAnalyzer $methodCallAnalyzer,
-        MethodStatementCollector $methodStatementCollector,
-        NodeFactory $nodeFactory
-    ) {
+    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, NodeFactory $nodeFactory)
+    {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
-        $this->methodStatementCollector = $methodStatementCollector;
         $this->nodeFactory = $nodeFactory;
     }
 
@@ -48,10 +37,7 @@ final class ExceptionRector extends AbstractRector
             return false;
         }
 
-        return $this->methodCallAnalyzer->isMethod(
-            $node,
-            'setExpectedException'
-        );
+        return $this->methodCallAnalyzer->isMethod($node, 'setExpectedException');
     }
 
     /**
@@ -63,27 +49,20 @@ final class ExceptionRector extends AbstractRector
 
         // 2nd argument move to standalone method...
 
-        if (isset($methodCallNode->args[1])) {
-            $secondArgument = $methodCallNode->args[1];
-            unset($methodCallNode->args[1]);
-
-            /** @var Node $parentNode */
-            $parentNode = $methodCallNode->getAttribute(Attribute::PARENT_NODE);
-            $parentParentNode = $parentNode->getAttribute(Attribute::PARENT_NODE);
-
-            $expectExceptionMessageMethodCall = $this->nodeFactory->createMethodCallWithArguments(
-                'this',
-                'expectExceptionMessage',
-                [$secondArgument]
-            );
-
-            $expressionNode = new Expression($expectExceptionMessageMethodCall);
-
-            $this->methodStatementCollector->addStatementForMethod(
-                $parentParentNode,
-                $expressionNode
-            );
+        if (! isset($methodCallNode->args[1])) {
+            return $methodCallNode;
         }
+
+        $secondArgument = $methodCallNode->args[1];
+        unset($methodCallNode->args[1]);
+
+        $expectExceptionMessageMethodCall = $this->nodeFactory->createMethodCallWithArguments(
+            'this',
+            'expectExceptionMessage',
+            [$secondArgument]
+        );
+
+        $this->prependNodeAfterNode($expectExceptionMessageMethodCall, $methodCallNode);
 
         return $methodCallNode;
     }

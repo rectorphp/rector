@@ -2,7 +2,7 @@
 
 namespace Rector\Node;
 
-use Nette\NotImplementedException;
+use PhpParser\BuilderFactory;
 use PhpParser\BuilderHelpers;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
@@ -15,8 +15,10 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\LNumber;
@@ -26,6 +28,7 @@ use PhpParser\Node\Stmt\DeclareDeclare;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\TraitUse;
+use Rector\Exception\NotImplementedException;
 
 /**
  * @todo decouple MethodCallNodeFactory
@@ -33,6 +36,16 @@ use PhpParser\Node\Stmt\TraitUse;
  */
 final class NodeFactory
 {
+    /**
+     * @var BuilderFactory
+     */
+    private $builderFactory;
+
+    public function __construct(BuilderFactory $builderFactory)
+    {
+        $this->builderFactory = $builderFactory;
+    }
+
     /**
      * Creates "$this->propertyName"
      */
@@ -142,7 +155,7 @@ final class NodeFactory
             if ($item instanceof Variable) {
                 $arrayItems[] = new ArrayItem($item);
             } elseif ($item instanceof Identifier) {
-                $string = new String_((string) $item);
+                $string = new String_($item->toString());
                 $arrayItems[] = new ArrayItem($string);
             } else {
                 throw new NotImplementedException(sprintf(
@@ -166,12 +179,7 @@ final class NodeFactory
      */
     public function createArgs(array $arguments): array
     {
-        $args = [];
-        foreach ($arguments as $argument) {
-            $args[] = $this->createArg($argument);
-        }
-
-        return $args;
+        return $this->builderFactory->args($arguments);
     }
 
     /**
@@ -277,7 +285,8 @@ final class NodeFactory
      */
     public function createNamespace(string $namespace): Namespace_
     {
-        return new Namespace_(BuilderHelpers::normalizeName($namespace));
+        return $this->builderFactory->namespace($namespace)
+            ->getNode();
     }
 
     public function clonePropertyFetch(PropertyFetch $propertyFetchNode): PropertyFetch
@@ -287,15 +296,28 @@ final class NodeFactory
 
     public function createParam(string $name, string $type): Param
     {
-        return new Param(
-            $this->createVariable($name),
-            null,
-            $type
-        );
+        return $this->builderFactory->param($name)
+            ->setTypeHint($type)
+            ->getNode();
     }
 
     public function createVariable(string $name): Variable
     {
         return new Variable($name);
+    }
+
+    /**
+     * @param mixed[] $arguments
+     */
+    public function createStaticMethodCallWithArgs(string $class, string $method, array $arguments): StaticCall
+    {
+        return new StaticCall(new Name($class), new Identifier($method), $arguments);
+    }
+
+    public function createPropertyFetch(string $variable, string $property): PropertyFetch
+    {
+        $variableNode = new Variable($variable);
+
+        return new PropertyFetch($variableNode, $property);
     }
 }

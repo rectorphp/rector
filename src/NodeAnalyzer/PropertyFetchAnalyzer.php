@@ -28,7 +28,7 @@ final class PropertyFetchAnalyzer
     /**
      * @param string[] $types
      */
-    public function isPropertyFetchOnTypes(Node $node, array $types, string $property): bool
+    public function isTypesAndProperty(Node $node, array $types, string $property): bool
     {
         if (! $node instanceof PropertyFetch) {
             return false;
@@ -45,7 +45,7 @@ final class PropertyFetchAnalyzer
         return $nodePropertyName === $property;
     }
 
-    public function isMagicPropertyFetchOnType(Node $node, string $type): bool
+    public function isMagicOnType(Node $node, string $type): bool
     {
         if (! $node instanceof PropertyFetch) {
             return false;
@@ -60,6 +60,46 @@ final class PropertyFetchAnalyzer
         $publicPropertyNames = $this->getPublicPropertyNamesForType($type);
 
         return ! in_array($nodePropertyName, $publicPropertyNames, true);
+    }
+
+    /**
+     * @param string[] $properties
+     */
+    public function isProperties(Node $node, array $properties): bool
+    {
+        if (! $node instanceof PropertyFetch) {
+            return false;
+        }
+
+        $nodePropertyName = $node->name->toString();
+
+        return in_array($nodePropertyName, $properties, true);
+    }
+
+    /**
+     * @param string[] $types
+     */
+    public function isTypes(Node $node, array $types): bool
+    {
+        if (! $node instanceof PropertyFetch) {
+            return false;
+        }
+
+        $variableNodeType = $node->var->getAttribute(Attribute::TYPE);
+
+        return in_array($variableNodeType, $types, true);
+    }
+
+    /**
+     * @param string[] $types
+     */
+    public function matchTypes(Node $node, array $types): ?string
+    {
+        if (! $this->isTypes($node, $types)) {
+            return null;
+        }
+
+        return $node->var->getAttribute(Attribute::TYPE);
     }
 
     /**

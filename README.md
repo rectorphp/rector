@@ -33,8 +33,8 @@ composer create-project rector/rector your-path-to-rector
 When do you have it then you can run all commands like
 
 ```
-your-path-to-rector/bin/rector process /var/www/old-project --level=nette24
-your-path-to-rector/bin/rector process /var/www/another-old-project --level=symfony40
+your-path-to-rector/bin/rector process /var/www/old-project --config=your-path-to-rector/src/config/level/nette/nette24.yml
+your-path-to-rector/bin/rector process /var/www/another-old-project --config=your-path-to-rector/src/config/level/symfony/symfony40.yml
 ```
 
 ## How To Reconstruct your Code?
@@ -144,6 +144,18 @@ You can:
                 'renderFormBegin': ['Nette\Bridges\FormsLatte\Runtime', 'renderFormBegin']
     ```
 
+- **change property name**
+
+    ```yml
+    # php-parser40.yml
+    rectors:
+        Rector\Rector\Dynamic\PropertyNameReplacerRector:
+            # class:
+            #   old property: new property
+            'PhpParser\Node\Param':
+                'name': 'var'
+    ```
+
 - **change class constant name**
 
     ```yml
@@ -156,6 +168,20 @@ You can:
                 'PRE_BIND': 'PRE_SUBMIT'
                 'BIND': 'SUBMIT'
                 'POST_BIND': 'POST_SUBMIT'
+    ```
+
+- **change parameters typehint according to parent type**
+
+    ```yml
+    # php-parser40.yml
+    rectors:
+        Rector\Rector\Dynamic\ParentTypehintedArgumentRector:
+            # class:
+            #   method:
+            #       parameter: typehting
+            'PhpParser\Parser':
+                'parse':
+                    'code': 'string'
     ```
 
 - or **replace underscore naming `_` with namespaces `\`**

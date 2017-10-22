@@ -77,7 +77,7 @@ final class GetAndSetToMethodCallRector extends AbstractRector
         }
 
         foreach ($this->typeToMethodCalls as $type => $transformation) {
-            if ($this->propertyFetchAnalyzer->isMagicPropertyFetchOnType($propertyFetchNode, $type)) {
+            if ($this->propertyFetchAnalyzer->isMagicOnType($propertyFetchNode, $type)) {
                 $this->activeTransformation = $transformation;
 
                 return true;
