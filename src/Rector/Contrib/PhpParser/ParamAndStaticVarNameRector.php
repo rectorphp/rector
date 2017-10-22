@@ -38,14 +38,7 @@ final class ParamAndStaticVarNameRector extends AbstractRector
             'PhpParser\Node\Stmt\StaticVar',
         ];
 
-        if (! $this->propertyFetchAnalyzer->isTypes($node, $types)) {
-            return false;
-        }
-
-        /** @var PropertyFetch $node */
-        $propertyName = $node->name->name;
-
-        return $propertyName === 'name';
+        return $this->propertyFetchAnalyzer->isTypesAndProperty($node, $types, 'name');
     }
 
     /**

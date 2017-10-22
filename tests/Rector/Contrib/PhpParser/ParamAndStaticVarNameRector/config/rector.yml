@@ -1,4 +1,0 @@
-rectors:
-    Rector\Rector\Dynamic\PropertyNameReplacerRector:
-        'SomeClass':
-            'oldProperty': 'newProperty'
