@@ -19,7 +19,6 @@ use Rector\BetterReflection\Reflector\MethodReflector;
 use Rector\Exception\NotImplementedException;
 use Rector\Node\Attribute;
 use Rector\NodeAnalyzer\ClassAnalyzer;
-use Rector\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\TypeContext;
 
@@ -53,41 +52,26 @@ final class TypeResolver extends NodeVisitorAbstract
      */
     private $nodeTypeResolver;
 
-    /**
-     * @var DocBlockAnalyzer
-     */
-    private $docBlockAnalyzer;
-
     public function __construct(
         TypeContext $typeContext,
         MethodReflector $methodReflector,
         ClassAnalyzer $classAnalyzer,
-        NodeTypeResolver $nodeTypeResolver,
-        DocBlockAnalyzer $docBlockAnalyzer
+        NodeTypeResolver $nodeTypeResolver
     ) {
         $this->typeContext = $typeContext;
 
-        // consider mini subscribers
-        $this->perNodeResolvers[Variable::class] = function (Variable $variableNode): void {
-//            $this->nodeTypeResolver->resolve($variableNode);
-            $this->processVariableNode($variableNode);
-        };
-
         $this->perNodeResolvers[Assign::class] = function (Assign $assignNode): void {
-            // done
             $this->processAssignNode($assignNode);
         };
-//
+
         // add subtypes for PropertyFetch
         $this->perNodeResolvers[PropertyFetch::class] = function (PropertyFetch $propertyFetchNode): void {
-            // done
             $this->processPropertyFetch($propertyFetchNode);
         };
 
         $this->methodReflector = $methodReflector;
         $this->classAnalyzer = $classAnalyzer;
         $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->docBlockAnalyzer = $docBlockAnalyzer;
     }
 
     /**
@@ -182,29 +166,6 @@ final class TypeResolver extends NodeVisitorAbstract
             __METHOD__,
             get_class($newNode->class)
         ));
-    }
-
-    private function processVariableNode(Variable $variableNode): void
-    {
-        $variableType = null;
-
-        $parentNode = $variableNode->getAttribute(Attribute::PARENT_NODE);
-        if ($parentNode instanceof Assign) {
-            $variableType = $this->processVariableTypeForAssign($variableNode, $parentNode);
-        } elseif ($variableNode->name instanceof Variable) {
-            // nested: ${$type}[$name] - dynamic, unable to resolve type
-            return;
-        } else {
-            $variableType = $this->typeContext->getTypeForVariable((string) $variableNode->name);
-        }
-
-        if ($variableNode->name === 'this') {
-            $variableType = $variableNode->getAttribute(Attribute::CLASS_NAME);
-        }
-
-        if ($variableType) {
-            $variableNode->setAttribute(Attribute::TYPE, $variableType);
-        }
     }
 
     private function processAssignNode(Assign $assignNode): void
