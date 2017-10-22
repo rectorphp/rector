@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use Rector\BetterReflection\Reflection\TypeAnalyzer;
 use Rector\BetterReflection\Reflector\MethodReflector;
 
 final class ConstructorPropertyTypesExtractor
@@ -18,9 +19,15 @@ final class ConstructorPropertyTypesExtractor
      */
     private $methodReflector;
 
-    public function __construct(MethodReflector $methodReflector)
+    /**
+     * @var TypeAnalyzer
+     */
+    private $typeAnalyzer;
+
+    public function __construct(MethodReflector $methodReflector, TypeAnalyzer $typeAnalyzer)
     {
         $this->methodReflector = $methodReflector;
+        $this->typeAnalyzer = $typeAnalyzer;
     }
 
     /**
@@ -64,8 +71,7 @@ final class ConstructorPropertyTypesExtractor
 
                 $parameterType = (string) $parameterReflection->getType();
 
-                // @todo: add some is_scalar check
-                if (in_array($parameterType, ['string', 'bool', 'array'], true)) {
+                if ($this->typeAnalyzer->isBuiltinType($parameterType)) {
                     continue;
                 }
 
