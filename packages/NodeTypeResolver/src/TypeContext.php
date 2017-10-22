@@ -29,7 +29,7 @@ final class TypeContext
     private $classProperties = [];
 
     /**
-     * @var ClassLike|null
+     * @var Class_|ClassLike|null
      */
     private $classLikeNode;
 
@@ -118,7 +118,12 @@ final class TypeContext
         }
 
         if ($this->classLikeNode) {
+            if ($this->classLikeNode instanceof Class_ && $this->classLikeNode->isAnonymous()) {
+                return null;
+            }
+
             $className = $this->classLikeNode->namespacedName->toString();
+
             $methodName = (string) $functionLikeNode->name;
 
             return $this->methodReflector->reflectClassMethod($className, $methodName);
