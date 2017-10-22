@@ -3,6 +3,7 @@
 namespace Rector\DependencyInjection;
 
 use Rector\DependencyInjection\CompilerPass\CollectorCompilerPass;
+use Rector\NodeTypeResolver\DependencyInjection\CompilerPass\NodeTypeResolverCollectorCompilerPass;
 use Rector\NodeValueResolver\DependencyInjection\CompilerPass\NodeValueResolverCollectorCompilerPass;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -55,5 +56,6 @@ final class AppKernel extends Kernel
     {
         $containerBuilder->addCompilerPass(new CollectorCompilerPass);
         $containerBuilder->addCompilerPass(new NodeValueResolverCollectorCompilerPass);
+        $containerBuilder->addCompilerPass(new NodeTypeResolverCollectorCompilerPass);
     }
 }

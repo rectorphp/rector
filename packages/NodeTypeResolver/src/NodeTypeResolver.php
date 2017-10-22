@@ -3,7 +3,6 @@
 namespace Rector\NodeTypeResolver;
 
 use PhpParser\Node;
-use Rector\Exception\NotImplementedException;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 
 final class NodeTypeResolver
@@ -29,12 +28,5 @@ final class NodeTypeResolver
         }
 
         return null;
-
-//        throw new NotImplementedException(sprintf(
-//            '%s() was unable to resolve "%s" Node type. Create new class that implements "%s".',
-//            __METHOD__,
-//            get_class($node),
-//            PerNodeTypeResolverInterface::class
-//        ));
     }
 }

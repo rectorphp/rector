@@ -4,8 +4,10 @@ namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
+use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\Variable;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverAwareInterface;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -38,6 +40,8 @@ final class PropertyFetchTypeResolver implements PerNodeTypeResolverInterface, N
      */
     public function resolve(Node $propertyFetchNode): ?string
     {
+        return null;
+
         // e.g. $r->getParameters()[0]->name
         if ($propertyFetchNode->var instanceof ArrayDimFetch) {
             return $this->nodeTypeResolver->resolve($propertyFetchNode);
@@ -51,6 +55,7 @@ final class PropertyFetchTypeResolver implements PerNodeTypeResolverInterface, N
             return null;
         }
 
+        // @todo
         $propertyName = $this->resolvePropertyName($propertyFetchNode);
 
         return $this->typeContext->getTypeForProperty($propertyName);
@@ -59,5 +64,18 @@ final class PropertyFetchTypeResolver implements PerNodeTypeResolverInterface, N
     public function setNodeTypeResolver(NodeTypeResolver $nodeTypeResolver): void
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
+    }
+
+    private function resolvePropertyName(PropertyFetch $propertyFetchNode): string
+    {
+        if ($propertyFetchNode->name instanceof Variable) {
+            return $propertyFetchNode->name->name;
+        }
+
+        if ($propertyFetchNode->name instanceof Concat) {
+            return '';
+        }
+
+        return (string) $propertyFetchNode->name;
     }
 }

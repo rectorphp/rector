@@ -67,13 +67,15 @@ final class TypeResolver extends NodeVisitorAbstract
 //            $this->nodeTypeResolver->resolve($variableNode);
             $this->processVariableNode($variableNode);
         };
-
+//
         $this->perNodeResolvers[Assign::class] = function (Assign $assignNode): void {
+            // done
             $this->processAssignNode($assignNode);
         };
-
+//
         // add subtypes for PropertyFetch
         $this->perNodeResolvers[PropertyFetch::class] = function (PropertyFetch $propertyFetchNode): void {
+            // done
             $this->processPropertyFetch($propertyFetchNode);
         };
 
@@ -113,7 +115,13 @@ final class TypeResolver extends NodeVisitorAbstract
         if (isset($this->perNodeResolvers[$nodeClass])) {
             $this->perNodeResolvers[$nodeClass]($node);
         }
+
+        $type = $this->nodeTypeResolver->resolve($node);
+        if ($type) {
+            $node->setAttribute(Attribute::TYPE, $type);
+        }
     }
+
 
     private function getTypeFromNewNode(New_ $newNode): ?string
     {

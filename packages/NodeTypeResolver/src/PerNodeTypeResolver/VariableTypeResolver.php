@@ -38,6 +38,8 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface, NodeTy
      */
     public function resolve(Node $variableNode): ?string
     {
+        return null;
+
         $variableType = null;
 
         $parentNode = $variableNode->getAttribute(Attribute::PARENT_NODE);
