@@ -2,7 +2,6 @@
 
 namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
 
-use phpDocumentor\Reflection\Types\Object_;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
@@ -102,51 +101,24 @@ final class AssignTypeResolver implements PerNodeTypeResolverInterface, NodeType
             return null;
         }
 
-        $methodCallVariableName = (string) $methodCallVariable->name;
+        $methodCallVariableName = $methodCallVariable->name;
 
         $methodCallVariableType = $this->typeContext->getTypeForVariable($methodCallVariableName);
 
         $methodCallName = $this->resolveMethodCallName($assignNode);
 
         // 2. get method() return type
-
         if (! $methodCallVariableType || ! $methodCallName) {
             return null;
         }
 
-        $variableType = $this->getMethodReturnType($methodCallVariableType, $methodCallName);
-
+        $variableType = $this->methodReflector->getMethodReturnType($methodCallVariableType, $methodCallName);
         if ($variableType) {
             $variableName = $assignNode->var->name;
             $this->typeContext->addVariableWithType($variableName, $variableType);
         }
 
         return $variableType;
-    }
-
-    private function getMethodReturnType(string $methodCallVariableType, string $methodCallName): ?string
-    {
-        $methodReflection = $this->methodReflector->reflectClassMethod($methodCallVariableType, $methodCallName);
-
-        if ($methodReflection) {
-            $returnType = $methodReflection->getReturnType();
-
-            if ($returnType) {
-                return (string) $returnType;
-            }
-
-            $returnTypes = $methodReflection->getDocBlockReturnTypes();
-
-            if (! isset($returnTypes[0])) {
-                return null;
-            }
-
-            if ($returnTypes[0] instanceof Object_) {
-                return ltrim((string) $returnTypes[0]->getFqsen(), '\\');
-            }
-        }
-
-        return null;
     }
 
     private function resolveMethodCallName(Assign $assignNode): ?string
