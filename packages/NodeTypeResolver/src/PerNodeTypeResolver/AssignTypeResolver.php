@@ -5,7 +5,6 @@ namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use Rector\BetterReflection\Reflector\MethodReflector;
 use Rector\Node\Attribute;
@@ -58,7 +57,6 @@ final class AssignTypeResolver implements PerNodeTypeResolverInterface, NodeType
 
         if ($assignNode->expr instanceof MethodCall) {
             return $this->nodeTypeResolver->resolve($assignNode->expr);
-//            return $this->processAssignMethodReturn($assignNode);
         }
 
         return null;
@@ -87,52 +85,5 @@ final class AssignTypeResolver implements PerNodeTypeResolverInterface, NodeType
         }
 
         return null;
-    }
-
-    private function processAssignMethodReturn(Assign $assignNode): ?string
-    {
-        $variableType = null;
-
-        // 1. get $anotherVar type
-
-        /** @var Variable|mixed $methodCallVariable */
-        $methodCallVariable = $assignNode->expr->var;
-
-        if (! $methodCallVariable instanceof Variable) {
-            return null;
-        }
-
-        $methodCallVariableName = $methodCallVariable->name;
-
-        $methodCallVariableType = $this->typeContext->getTypeForVariable($methodCallVariableName);
-
-        $methodCallName = $this->resolveMethodCallName($assignNode);
-
-        // 2. get method() return type
-        if (! $methodCallVariableType || ! $methodCallName) {
-            return null;
-        }
-
-        $variableType = $this->methodReflector->getMethodReturnType($methodCallVariableType, $methodCallName);
-        if ($variableType) {
-            $variableName = $assignNode->var->name;
-            $this->typeContext->addVariableWithType($variableName, $variableType);
-        }
-
-        return $variableType;
-    }
-
-    private function resolveMethodCallName(Assign $assignNode): ?string
-    {
-        if ($assignNode->expr->name instanceof Variable) {
-            return $assignNode->expr->name->name;
-        }
-
-        if ($assignNode->expr->name instanceof PropertyFetch) {
-            // not implemented yet
-            return null;
-        }
-
-        return (string) $assignNode->expr->name;
     }
 }
