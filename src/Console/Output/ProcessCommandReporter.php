@@ -80,6 +80,8 @@ final class ProcessCommandReporter
 
     public function reportLoadedFile(SplFileInfo $fileInfo, int $fileCount): void
     {
+        ++$this->alreadyReportedFiles;
+
         if ($this->alreadyReportedFiles < self::MAX_FILES_TO_PRINT) {
             $this->symfonyStyle->writeln(sprintf(
                 ' - %s',
