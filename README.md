@@ -170,7 +170,7 @@ You can:
                 'POST_BIND': 'POST_SUBMIT'
     ```
 
-- **change parameters typehtint according to parent type**
+- **change parameters typehint according to parent type**
 
     ```yml
     # php-parser40.yml
