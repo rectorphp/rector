@@ -33,8 +33,8 @@ composer create-project rector/rector your-path-to-rector
 When do you have it then you can run all commands like
 
 ```
-your-path-to-rector/bin/rector process /var/www/old-project --level=nette24
-your-path-to-rector/bin/rector process /var/www/another-old-project --level=symfony40
+your-path-to-rector/bin/rector process /var/www/old-project --config=your-path-to-rector/src/config/level/nette/nette24.yml
+your-path-to-rector/bin/rector process /var/www/another-old-project --config=your-path-to-rector/src/config/level/symfony/symfony40.yml
 ```
 
 ## How To Reconstruct your Code?
