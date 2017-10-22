@@ -2,7 +2,6 @@
 
 namespace Rector\NodeTypeResolver\NodeVisitor;
 
-use PhpCsFixer\DocBlock\DocBlock;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
@@ -15,7 +14,6 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\Property;
 use PhpParser\NodeVisitorAbstract;
 use Rector\BetterReflection\Reflector\MethodReflector;
 use Rector\Exception\NotImplementedException;
@@ -54,6 +52,7 @@ final class TypeResolver extends NodeVisitorAbstract
      * @var NodeTypeResolver
      */
     private $nodeTypeResolver;
+
     /**
      * @var DocBlockAnalyzer
      */
@@ -84,10 +83,6 @@ final class TypeResolver extends NodeVisitorAbstract
             // done
             $this->processPropertyFetch($propertyFetchNode);
         };
-//
-//        $this->perNodeResolvers[Property::class] = function (Property $propertyNode): void {
-//            $this->processProperty($propertyNode);
-//        };
 
         $this->methodReflector = $methodReflector;
         $this->classAnalyzer = $classAnalyzer;
@@ -253,23 +248,6 @@ final class TypeResolver extends NodeVisitorAbstract
 
         if ($propertyType) {
             $propertyFetchNode->setAttribute(Attribute::TYPE, $propertyType);
-        }
-    }
-
-    private function processProperty(Property $propertyNode): void
-    {
-        $propertyName = (string) $propertyNode->props[0]->name;
-        $propertyType = $this->typeContext->getTypeForProperty($propertyName);
-
-        if ($propertyType === null) {
-            $propertyType = $this->docBlockAnalyzer->getAnnotationFromNode($propertyNode, 'var');
-            if ($propertyType) {
-                $this->typeContext->addPropertyType($propertyName, $propertyType);
-            }
-        }
-
-        if ($propertyType) {
-            $propertyNode->setAttribute(Attribute::TYPE, $propertyType);
         }
     }
 

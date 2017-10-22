@@ -57,6 +57,7 @@ parameters:
             - */src/Rector/Contrib/**/Helper/**.php
             - packages/NodeTypeResolver/src/NodeVisitor/TypeResolver.php
             - src/Builder/Contrib/Nette/RouterFactoryClassBuilder.php
+            - packages/NodeTypeResolver/tests/NodeVisitor/ClassLikeTypeResolver/PropertyTest.php
         Symplify\CodingStandard\Sniffs\Debug\CommentedOutCodeSniff:
             # false positives - @todo fix
             - packages/DeprecationExtractor/src/Rector/UnsupportedDeprecationFilter.php

@@ -2,6 +2,7 @@
 
 namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
 
+use Nette\DI\Container;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
@@ -13,7 +14,6 @@ use Rector\NodeTypeResolver\Contract\NodeTypeResolverAwareInterface;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\TypeContext;
-use Nette\DI\Container;
 
 final class AssignTypeResolver implements PerNodeTypeResolverInterface, NodeTypeResolverAwareInterface
 {
@@ -111,7 +111,7 @@ final class AssignTypeResolver implements PerNodeTypeResolverInterface, NodeType
 
         // 2. get method() return type
 
-        if (            ! $methodCallVariableType || ! $methodCallName) {
+        if (! $methodCallVariableType || ! $methodCallName) {
             return null;
         }
 
