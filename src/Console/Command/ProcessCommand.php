@@ -3,10 +3,10 @@
 namespace Rector\Console\Command;
 
 use Rector\Application\FileProcessor;
+use Rector\Console\Output\ProcessCommandReporter;
 use Rector\Exception\NoRectorsLoadedException;
 use Rector\FileSystem\PhpFilesFinder;
 use Rector\Naming\CommandNaming;
-use Rector\Printer\ChangedFilesCollector;
 use Rector\Rector\RectorCollector;
 use SplFileInfo;
 use Symfony\Component\Console\Command\Command;
@@ -15,20 +15,12 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-/**
- * @todo decouple report methods to output ... ProcessCommandReporter
- */
 final class ProcessCommand extends Command
 {
     /**
      * @var string
      */
     private const ARGUMENT_SOURCE_NAME = 'source';
-
-    /**
-     * @var int
-     */
-    private const MAX_FILES_TO_PRINT = 30;
 
     /**
      * @var FileProcessor
@@ -51,22 +43,22 @@ final class ProcessCommand extends Command
     private $phpFilesFinder;
 
     /**
-     * @var ChangedFilesCollector
+     * @var ProcessCommandReporter
      */
-    private $changedFilesCollector;
+    private $processCommandReporter;
 
     public function __construct(
         FileProcessor $fileProcessor,
         RectorCollector $rectorCollector,
         SymfonyStyle $symfonyStyle,
         PhpFilesFinder $phpFilesFinder,
-        ChangedFilesCollector $changedFilesCollector
+        ProcessCommandReporter $processCommandReporter
     ) {
         $this->fileProcessor = $fileProcessor;
         $this->rectorCollector = $rectorCollector;
         $this->symfonyStyle = $symfonyStyle;
         $this->phpFilesFinder = $phpFilesFinder;
-        $this->changedFilesCollector = $changedFilesCollector;
+        $this->processCommandReporter = $processCommandReporter;
 
         parent::__construct();
     }
@@ -84,25 +76,16 @@ final class ProcessCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $source = $input->getArgument(self::ARGUMENT_SOURCE_NAME);
-
         $this->ensureSomeRectorsAreRegistered();
 
+        $source = $input->getArgument(self::ARGUMENT_SOURCE_NAME);
         $files = $this->phpFilesFinder->findInDirectories($source);
 
-        $this->reportLoadedRectors();
+        $this->processCommandReporter->reportLoadedRectors();
 
-        $this->symfonyStyle->title('Processing files');
+        $this->processFiles($files);
 
-        $i = 0;
-        foreach ($files as $file) {
-            $this->reportLoadedFile($i, $file, count($files));
-            $this->fileProcessor->processFile($file);
-
-            ++$i;
-        }
-
-        $this->reportChangedFiles();
+        $this->processCommandReporter->reportChangedFiles();
 
         $this->symfonyStyle->success('Rector is done!');
 
@@ -121,56 +104,19 @@ final class ProcessCommand extends Command
         );
     }
 
-    private function reportLoadedRectors(): void
+    /**
+     * @param SplFileInfo[] $fileInfos
+     */
+    private function processFiles(array $fileInfos): void
     {
-        $this->symfonyStyle->title(sprintf(
-            '%d Loaded Rector%s',
-            $this->rectorCollector->getRectorCount(),
-            $this->rectorCollector->getRectorCount() === 1 ? '' : 's'
-        ));
+        $this->symfonyStyle->title('Processing files');
+        $i = 0;
 
-        foreach ($this->rectorCollector->getRectors() as $rector) {
-            $this->symfonyStyle->writeln(sprintf(
-                ' - %s',
-                get_class($rector)
-            ));
-        }
+        foreach ($fileInfos as $fileInfo) {
+            $this->processCommandReporter->reportLoadedFile($i, $fileInfo, count($fileInfos));
+            $this->fileProcessor->processFile($fileInfo);
 
-        $this->symfonyStyle->newLine();
-    }
-
-    private function reportChangedFiles(): void
-    {
-        $this->symfonyStyle->title(sprintf(
-            '%d Changed File%s',
-            $this->changedFilesCollector->getChangedFilesCount(),
-            $this->changedFilesCollector->getChangedFilesCount() === 1 ? '' : 's'
-        ));
-
-        foreach ($this->changedFilesCollector->getChangedFiles() as $fileInfo) {
-            $this->symfonyStyle->writeln(sprintf(
-                ' - %s',
-                $fileInfo
-            ));
-        }
-    }
-
-    private function reportLoadedFile(int $i, SplFileInfo $fileInfo, int $fileCount): void
-    {
-        if ($i < self::MAX_FILES_TO_PRINT) {
-            $this->symfonyStyle->writeln(sprintf(
-                ' - %s',
-                $fileInfo
-            ));
-        }
-
-        if ($i === self::MAX_FILES_TO_PRINT) {
-            $this->symfonyStyle->newLine();
-            $this->symfonyStyle->writeln(sprintf(
-                '...and %d more.',
-                $fileCount - self::MAX_FILES_TO_PRINT
-            ));
-            $this->symfonyStyle->newLine();
+            ++$i;
         }
     }
 }
