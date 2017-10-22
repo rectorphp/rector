@@ -2,7 +2,6 @@
 
 namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
 
-use Nette\DI\Container;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
@@ -32,9 +31,10 @@ final class AssignTypeResolver implements PerNodeTypeResolverInterface, NodeType
      */
     private $methodReflector;
 
-    public function __construct(TypeContext $typeContext)
+    public function __construct(TypeContext $typeContext, MethodReflector $methodReflector)
     {
         $this->typeContext = $typeContext;
+        $this->methodReflector = $methodReflector;
     }
 
     public function getNodeClass(): string
@@ -47,8 +47,6 @@ final class AssignTypeResolver implements PerNodeTypeResolverInterface, NodeType
      */
     public function resolve(Node $assignNode): ?string
     {
-        return null;
-
         if (! $assignNode->var instanceof Variable) {
             return null;
         }
@@ -63,6 +61,8 @@ final class AssignTypeResolver implements PerNodeTypeResolverInterface, NodeType
         if ($assignNode->expr instanceof MethodCall) {
             return $this->processAssignMethodReturn($assignNode);
         }
+
+        return null;
     }
 
     public function setNodeTypeResolver(NodeTypeResolver $nodeTypeResolver): void
@@ -161,7 +161,7 @@ final class AssignTypeResolver implements PerNodeTypeResolverInterface, NodeType
     private function fallbackStaticType(string $type, string $methodName): ?string
     {
         if ($type === 'Nette\Config\Configurator' && $methodName === 'createContainer') {
-            return Container::class;
+            return 'Nette\DI\Container';
         }
 
         return null;

@@ -60,10 +60,6 @@ final class TypeResolver extends NodeVisitorAbstract
     ) {
         $this->typeContext = $typeContext;
 
-        $this->perNodeResolvers[Assign::class] = function (Assign $assignNode): void {
-            $this->processAssignNode($assignNode);
-        };
-
         // add subtypes for PropertyFetch
         $this->perNodeResolvers[PropertyFetch::class] = function (PropertyFetch $propertyFetchNode): void {
             $this->processPropertyFetch($propertyFetchNode);
@@ -168,22 +164,6 @@ final class TypeResolver extends NodeVisitorAbstract
         ));
     }
 
-    private function processAssignNode(Assign $assignNode): void
-    {
-        if (! $assignNode->var instanceof Variable) {
-            return;
-        }
-
-        // $var = $anotherVar;
-        if ($assignNode->expr instanceof Variable) {
-            $this->processAssignVariableNode($assignNode);
-
-            // $var = $anotherVar->method();
-        } elseif ($assignNode->expr instanceof MethodCall) {
-            $this->processAssignMethodReturn($assignNode);
-        }
-    }
-
     private function processPropertyFetch(PropertyFetch $propertyFetchNode): void
     {
         // e.g. $r->getParameters()[0]->name
@@ -235,78 +215,6 @@ final class TypeResolver extends NodeVisitorAbstract
         }
 
         return (string) $propertyFetchNode->name;
-    }
-
-    private function processVariableTypeForAssign(Variable $variableNode, Assign $assignNode): ?string
-    {
-        if ($assignNode->expr instanceof New_) {
-            $variableName = $variableNode->name;
-            $variableType = $this->getTypeFromNewNode($assignNode->expr);
-
-            $this->typeContext->addVariableWithType($variableName, $variableType);
-
-            return $variableType;
-        }
-
-        if ($variableNode->name instanceof Variable) {
-            $name = $variableNode->name->name;
-
-            return $this->typeContext->getTypeForVariable($name);
-        }
-
-        $name = (string) $variableNode->name;
-
-        return $this->typeContext->getTypeForVariable($name);
-    }
-
-    private function processAssignVariableNode(Assign $assignNode): void
-    {
-        if ($assignNode->var->name instanceof Variable) {
-            $name = $assignNode->var->name->name;
-        } else {
-            $name = $assignNode->var->name;
-        }
-
-        $this->typeContext->addAssign($name, $assignNode->expr->name);
-
-        $variableType = $this->typeContext->getTypeForVariable($name);
-        if ($variableType) {
-            $assignNode->var->setAttribute(Attribute::TYPE, $variableType);
-        }
-    }
-
-    private function processAssignMethodReturn(Assign $assignNode): void
-    {
-        $variableType = null;
-
-        // 1. get $anotherVar type
-
-        /** @var Variable|mixed $methodCallVariable */
-        $methodCallVariable = $assignNode->expr->var;
-
-        if (! $methodCallVariable instanceof Variable) {
-            return;
-        }
-
-        $methodCallVariableName = (string) $methodCallVariable->name;
-
-        $methodCallVariableType = $this->typeContext->getTypeForVariable($methodCallVariableName);
-
-        $methodCallName = $this->resolveMethodCallName($assignNode);
-
-        // 2. get method() return type
-
-        if (! $methodCallVariableType || ! $methodCallName) {
-            return;
-        }
-
-        $variableType = $this->getMethodReturnType($methodCallVariableType, $methodCallName);
-
-        if ($variableType) {
-            $variableName = $assignNode->var->name;
-            $this->typeContext->addVariableWithType($variableName, $variableType);
-            $methodCallVariable->setAttribute(Attribute::TYPE, $variableType);
-        }
     }
 
     /**
