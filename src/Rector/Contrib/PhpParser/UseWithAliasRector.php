@@ -3,6 +3,7 @@
 namespace Rector\Rector\Contrib\PhpParser;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Rector\AbstractRector;
@@ -36,7 +37,8 @@ final class UseWithAliasRector extends AbstractRector
      */
     public function refactor(Node $propertyFetchNode): ?Node
     {
-        dump($propertyFetchNode);
-        die;
+        $getAliasMethodCall = new MethodCall($propertyFetchNode->var, 'getAlias');
+
+        return new MethodCall($getAliasMethodCall, 'toString');
     }
 }
