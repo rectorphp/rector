@@ -6,6 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Param;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverAwareInterface;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
@@ -56,6 +57,17 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface, NodeTy
 
         if ($variableNode->name === 'this') {
             return $variableNode->getAttribute(Attribute::CLASS_NAME);
+        }
+
+        if ($parentNode instanceof Param) {
+            $variableName = $variableNode->name;
+            $variableType = $this->nodeTypeResolver->resolve($parentNode->type);
+
+            if ($variableType) {
+                $this->typeContext->addVariableWithType($variableName, $variableType);
+
+                return $variableType;
+            }
         }
 
         return null;

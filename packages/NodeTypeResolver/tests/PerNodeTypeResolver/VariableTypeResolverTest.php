@@ -8,7 +8,7 @@ use Rector\NodeTypeResolver\Tests\AbstractNodeTypeResolverTest;
 
 final class VariableTypeResolverTest extends AbstractNodeTypeResolverTest
 {
-    public function test(): void
+    public function testNewAndAssign(): void
     {
         $nodes = $this->getNodesWithTypesForFile(__DIR__ . '/Source/SomeClass.php.inc');
         $variableNodes = $this->nodeFinder->findInstanceOf($nodes, Variable::class);
@@ -16,5 +16,14 @@ final class VariableTypeResolverTest extends AbstractNodeTypeResolverTest
         $this->assertSame('SomeNamespace\AnotherType', $variableNodes[0]->getAttribute(Attribute::TYPE));
         $this->assertSame('SomeNamespace\AnotherType', $variableNodes[1]->getAttribute(Attribute::TYPE));
         $this->assertSame('SomeNamespace\AnotherType', $variableNodes[2]->getAttribute(Attribute::TYPE));
+    }
+
+    public function testCallbackArgumentTypehint(): void
+    {
+        $nodes = $this->getNodesWithTypesForFile(__DIR__ . '/Source/callbackArgumentTypehint.php.inc');
+        $variableNodes = $this->nodeFinder->findInstanceOf($nodes, Variable::class);
+
+        $this->assertSame('SomeNamespace\UseUse', $variableNodes[0]->getAttribute(Attribute::TYPE));
+        $this->assertSame('SomeNamespace\UseUse', $variableNodes[1]->getAttribute(Attribute::TYPE));
     }
 }
