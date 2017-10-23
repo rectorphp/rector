@@ -72,7 +72,9 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface, NodeTy
             $variableName = $variableNode->name;
             $variableType = $this->nodeTypeResolver->resolve($assignNode->expr);
 
-            $this->typeContext->addVariableWithType($variableName, $variableType);
+            if ($variableType) {
+                $this->typeContext->addVariableWithType($variableName, $variableType);
+            }
 
             return $variableType;
         }
