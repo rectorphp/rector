@@ -11,5 +11,8 @@ final class CommandNamingTest extends TestCase
     {
         $name = CommandNaming::classToName('SomeNameCommand');
         $this->assertSame('some-name', $name);
+
+        $name = CommandNaming::classToName('AlsoNamespace\SomeNameCommand');
+        $this->assertSame('some-name', $name);
     }
 }
