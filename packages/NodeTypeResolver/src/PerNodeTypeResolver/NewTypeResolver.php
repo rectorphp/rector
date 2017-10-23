@@ -7,8 +7,8 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\ClassLike;
 use Rector\Exception\NotImplementedException;
-use Rector\NodeAnalyzer\ClassAnalyzer;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverAwareInterface;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -22,19 +22,13 @@ final class NewTypeResolver implements PerNodeTypeResolverInterface, NodeTypeRes
     private $typeContext;
 
     /**
-     * @var ClassAnalyzer
-     */
-    private $classAnalyzer;
-
-    /**
      * @var NodeTypeResolver
      */
     private $nodeTypeResolver;
 
-    public function __construct(TypeContext $typeContext, ClassAnalyzer $classAnalyzer)
+    public function __construct(TypeContext $typeContext)
     {
         $this->typeContext = $typeContext;
-        $this->classAnalyzer = $classAnalyzer;
     }
 
     public function getNodeClass(): string
@@ -47,23 +41,7 @@ final class NewTypeResolver implements PerNodeTypeResolverInterface, NodeTypeRes
      */
     public function resolve(Node $newNode): ?string
     {
-        // e.g. new class extends AnotherClass();
-        if ($this->classAnalyzer->isAnonymousClassNode($newNode->class)) {
-            $parentTypes = $this->classAnalyzer->resolveParentTypes($newNode->class);
-            // @todo: add support for many-types later
-
-            if (! count($parentTypes)) {
-                return null;
-            }
-        }
-
-        // e.g. new $someClass;
-        if ($newNode->class instanceof Variable) {
-            return $this->nodeTypeResolver->resolve($newNode->class);
-        }
-
-        // e.g. new SomeClass;
-        if ($newNode->class instanceof Name) {
+        if ($this->shouldDelegate($newNode)) {
             return $this->nodeTypeResolver->resolve($newNode->class);
         }
 
@@ -89,5 +67,12 @@ final class NewTypeResolver implements PerNodeTypeResolverInterface, NodeTypeRes
     public function setNodeTypeResolver(NodeTypeResolver $nodeTypeResolver): void
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
+    }
+
+    private function shouldDelegate(New_ $newNode): bool
+    {
+        $nodeClass = get_class($newNode->class);
+
+        return in_array($nodeClass, [ClassLike::class, Variable::class, Name::class], true);
     }
 }
