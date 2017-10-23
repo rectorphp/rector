@@ -4,7 +4,6 @@ namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
 use Rector\Node\Attribute;
@@ -55,7 +54,7 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface, NodeTy
 
         $parentNode = $variableNode->getAttribute(Attribute::PARENT_NODE);
         if ($parentNode instanceof Assign) {
-            return $this->processVariableTypeForAssign($parentNode);
+            return $this->nodeTypeResolver->resolve($parentNode);
         }
 
         if ($parentNode instanceof Param) {
@@ -68,27 +67,5 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface, NodeTy
     public function setNodeTypeResolver(NodeTypeResolver $nodeTypeResolver): void
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
-    }
-
-    private function processVariableTypeForAssign(Assign $assignNode): ?string
-    {
-        $variableNode = $assignNode->var;
-
-        if ($assignNode->expr instanceof New_) {
-            $variableName = $variableNode->name;
-            $variableType = $this->nodeTypeResolver->resolve($assignNode->expr);
-
-            if ($variableType) {
-                $this->typeContext->addVariableWithType($variableName, $variableType);
-            }
-
-            return $variableType;
-        }
-
-        if ($variableNode->name instanceof Variable) {
-            return $this->resolve($variableNode->name);
-        }
-
-        return null;
     }
 }

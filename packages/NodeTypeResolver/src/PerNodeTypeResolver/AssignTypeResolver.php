@@ -5,8 +5,8 @@ namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Variable;
-use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverAwareInterface;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -44,16 +44,16 @@ final class AssignTypeResolver implements PerNodeTypeResolverInterface, NodeType
             return null;
         }
 
-        // $var = $anotherVar;
-        if ($assignNode->expr instanceof Variable) {
-            return $this->processAssignVariableNode($assignNode);
+        $variableType = $this->resolveTypeForRightSide($assignNode);
+
+        if ($variableType) {
+            /** @var Variable $variableNode */
+            $variableNode = $assignNode->var;
+            $variableName = $variableNode->name;
+            $this->typeContext->addVariableWithType($variableName, $variableType);
         }
 
-        if ($assignNode->expr instanceof MethodCall) {
-            return $this->nodeTypeResolver->resolve($assignNode->expr);
-        }
-
-        return null;
+        return $variableType;
     }
 
     public function setNodeTypeResolver(NodeTypeResolver $nodeTypeResolver): void
@@ -71,11 +71,24 @@ final class AssignTypeResolver implements PerNodeTypeResolverInterface, NodeType
 
         $this->typeContext->addAssign($name, $assignNode->expr->name);
 
-        $variableType = $this->typeContext->getTypeForVariable($name);
-        if ($variableType) {
-            $assignNode->var->setAttribute(Attribute::TYPE, $variableType);
+        return $this->typeContext->getTypeForVariable($name);
+    }
 
-            return $variableType;
+    private function resolveTypeForRightSide(Assign $assignNode): ?string
+    {
+        // $var = $anotherVar;
+        if ($assignNode->expr instanceof Variable) {
+            return $this->processAssignVariableNode($assignNode);
+        }
+
+        // $var = $this->someMethod();
+        if ($assignNode->expr instanceof MethodCall) {
+            return $this->nodeTypeResolver->resolve($assignNode->expr);
+        }
+
+        // $var = new (...);
+        if ($assignNode->expr instanceof New_) {
+            return $this->nodeTypeResolver->resolve($assignNode->expr);
         }
 
         return null;
