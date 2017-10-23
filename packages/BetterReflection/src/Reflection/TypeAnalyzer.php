@@ -6,6 +6,8 @@ final class TypeAnalyzer
 {
     public function isBuiltinType(string $type): bool
     {
-        return in_array(strtolower($type), ['string', 'int', 'float', 'bool', 'array', 'callable'], true);
+        $builtinTypes = ['string', 'int', 'float', 'bool', 'array', 'callable', 'iterable'];
+
+        return in_array($type, $builtinTypes, true);
     }
 }

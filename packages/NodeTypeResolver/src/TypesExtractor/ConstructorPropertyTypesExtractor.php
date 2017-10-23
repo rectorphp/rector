@@ -88,7 +88,7 @@ final class ConstructorPropertyTypesExtractor
             return false;
         }
 
-        return (string) $node->name === '__construct';
+        return $node->name->toString() === '__construct';
     }
 
     private function isAssignThisNode(Node $node): bool
@@ -129,7 +129,7 @@ final class ConstructorPropertyTypesExtractor
 
             /** @var PropertyFetch $propertyFetchNode */
             $propertyFetchNode = $inConstructorNode->expr->var;
-            $propertyName = (string) $propertyFetchNode->name;
+            $propertyName = $propertyFetchNode->name->toString();
             $propertyType = $constructorParametersWithTypes[$propertyName] ?? null;
 
             if ($propertyName && $propertyType) {
