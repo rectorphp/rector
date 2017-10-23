@@ -46,7 +46,7 @@ final class PropertyFetchTypeResolver implements PerNodeTypeResolverInterface, N
         }
 
         if ($propertyFetchNode->var instanceof New_) {
-            return $propertyFetchNode->var->class->toString();
+            return $this->nodeTypeResolver->resolve($propertyFetchNode->var);
         }
 
         if ($propertyFetchNode->var->name !== 'this') {
