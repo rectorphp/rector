@@ -3,8 +3,8 @@
 namespace Rector\Rector\Contrib\PhpParser;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Stmt\UseUse;
+use PhpParser\Node\Expr\PropertyFetch;
+use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -12,20 +12,31 @@ use Rector\Rector\AbstractRector;
  */
 final class UseWithAliasRector extends AbstractRector
 {
+    /**
+     * @var PropertyFetchAnalyzer
+     */
+    private $propertyFetchAnalyzer;
+
+    public function __construct(PropertyFetchAnalyzer $propertyFetchAnalyzer)
+    {
+        $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
+    }
+
     public function isCandidate(Node $node): bool
     {
-        if (! $node instanceof UseUse) {
-            return false;
-        }
-
-        dump($node);
-        die;
+        return $this->propertyFetchAnalyzer->isTypeAndProperty(
+            $node,
+            'PhpParser\Node\Stmt\UseUse',
+            'alias'
+        );
     }
 
     /**
-     * @param MethodCall $methodCallNode
+     * @param PropertyFetch $propertyFetchNode
      */
-    public function refactor(Node $methodCallNode): ?Node
+    public function refactor(Node $propertyFetchNode): ?Node
     {
+        dump($propertyFetchNode);
+        die;
     }
 }
