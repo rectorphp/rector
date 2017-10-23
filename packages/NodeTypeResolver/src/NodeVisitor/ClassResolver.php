@@ -10,8 +10,10 @@ use PhpParser\NodeVisitorAbstract;
 use Rector\Node\Attribute;
 
 /**
- * Add attribute 'class' with current class name.
- * Add 'use_imports' with all related uses.
+ * Adds attribute to all nodes inside:
+ * - 'className' with current class name
+ * - 'classNode' with current class node
+ * - 'parentClassName' with current class node
  */
 final class ClassResolver extends NodeVisitorAbstract
 {
@@ -21,31 +23,32 @@ final class ClassResolver extends NodeVisitorAbstract
     private $classNode;
 
     /**
+     * @var string|null
+     */
+    private $className;
+
+    /**
      * @param Node[] $nodes
      */
     public function beforeTraverse(array $nodes): void
     {
         $this->classNode = null;
+        $this->className = null;
     }
 
     public function enterNode(Node $node): void
     {
-        // detect only first ClassLike element
-        if ($this->classNode === null && $node instanceof ClassLike) {
-            // skip possible anonymous classes
-            if ($node instanceof Class_ && $node->isAnonymous()) {
-                return;
-            }
-
-            $this->classNode = $node;
-        }
-
-        if ($this->classNode === null) {
+        if ($node instanceof Class_ && $node->isAnonymous()) {
             return;
         }
 
+        if ($node instanceof ClassLike) {
+            $this->classNode = $node;
+            $this->className = $node->namespacedName->toString();
+        }
+
         $node->setAttribute(Attribute::CLASS_NODE, $this->classNode);
-        $node->setAttribute(Attribute::CLASS_NAME, $this->classNode->namespacedName->toString());
+        $node->setAttribute(Attribute::CLASS_NAME, $this->className);
 
         if ($this->classNode instanceof Class_) {
             $this->setParentClassName($this->classNode, $node);

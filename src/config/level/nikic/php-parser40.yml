@@ -4,6 +4,7 @@ rectors:
     Rector\Rector\Contrib\PhpParser\CatchAndClosureUseNameRector: ~
     Rector\Rector\Contrib\PhpParser\SetLineRector: ~
     Rector\Rector\Contrib\PhpParser\RemoveNodeRector: ~
+    Rector\Rector\Contrib\PhpParser\UseWithAliasRector: ~
 
     Rector\Rector\Dynamic\PropertyNameReplacerRector:
         'PhpParser\Node\Stmt\Class_':

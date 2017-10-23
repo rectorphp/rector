@@ -22,7 +22,7 @@ At the moment these packages are supported:
 composer require rector/rector --dev
 ```
 
-# Install on PHP < 7.1
+### On PHP < 7.1
 
 You must have separated environment with PHP 7.1 (for example in Docker container). When you have it then run following command.
 

@@ -2,6 +2,7 @@
 
 namespace Rector\BetterReflection\Reflector;
 
+use phpDocumentor\Reflection\Types\Object_;
 use Rector\BetterReflection\Reflection\ReflectionMethod;
 use Rector\BetterReflection\Reflector\Exception\IdentifierNotFound;
 
@@ -22,7 +23,6 @@ final class MethodReflector
         try {
             $classReflection = $this->smartClassReflector->reflect($class);
         } catch (IdentifierNotFound $identifierNotFoundException) {
-            // class doesn't exist
             return null;
         }
 
@@ -31,5 +31,30 @@ final class MethodReflector
         }
 
         return $classReflection->getImmediateMethods()[$method] ?? null;
+    }
+
+    public function getMethodReturnType(string $class, string $methodCallName): ?string
+    {
+        $methodReflection = $this->reflectClassMethod($class, $methodCallName);
+
+        if ($methodReflection) {
+            $returnType = $methodReflection->getReturnType();
+
+            if ($returnType) {
+                return (string) $returnType;
+            }
+
+            $returnTypes = $methodReflection->getDocBlockReturnTypes();
+
+            if (! isset($returnTypes[0])) {
+                return null;
+            }
+
+            if ($returnTypes[0] instanceof Object_) {
+                return ltrim((string) $returnTypes[0]->getFqsen(), '\\');
+            }
+        }
+
+        return null;
     }
 }

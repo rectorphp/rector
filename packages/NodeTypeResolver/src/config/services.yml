@@ -4,3 +4,5 @@ services:
 
     Rector\NodeTypeResolver\:
         resource: '../../src'
+
+    PhpParser\NodeFinder: ~

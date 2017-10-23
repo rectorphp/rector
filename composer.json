@@ -48,15 +48,7 @@
     "scripts": {
         "all": ["phpunit", "@check-cs", "@phpstan"],
         "check-cs": "ecs check bin packages src tests",
-        "fix-cs": "ecs check bin packages src tests --fix",
-        "create-test-projects": [
-            "composer create-project nette/nette temp/nette --no-dev",
-            "composer create-project symfony/symfony temp/symfony --no-dev"
-        ],
-        "process-test-projects": [
-            "bin/rector process temp/nette/vendor --config src/config/level/nette/all.yml",
-            "bin/rector process temp/symfony/src/Symfony/Bundle --config src/config/level/symfony/all.yml"
-        ]
+        "fix-cs": "ecs check bin packages src tests --fix"
     },
     "config": {
         "sort-packages": true

@@ -20,12 +20,10 @@ services:
             - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\ClassResolver']]
             # adds current method to all nodes via attribute
             - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\MethodResolver']]
+            # adds current namespace to all nodes via attribute (have to be before TypeResolver)
+            - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\NamespaceResolver']]
             # adds type to variable and property nodes via attribute
             - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\TypeResolver']]
-            # adds current namespace to all nodes via attribute
-            - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\NamespaceResolver']]
-            # adds class/interface/function/method scope to all nodes attribute
-            - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\ScopeResolver']]
 
     # PhpParser - Parser
     PhpParser\Parser:

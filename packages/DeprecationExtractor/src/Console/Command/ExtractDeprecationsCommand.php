@@ -112,7 +112,7 @@ final class ExtractDeprecationsCommand extends Command
 
         $this->symfonyStyle->writeln(' Namespace: ' . $node->getAttribute(Attribute::NAMESPACE));
         $this->symfonyStyle->writeln(' Class: ' . $node->getAttribute(Attribute::CLASS_NAME));
-        $this->symfonyStyle->writeln(' Scope: ' . $node->getAttribute(Attribute::SCOPE));
+        $this->symfonyStyle->writeln(' Method: ' . $node->getAttribute(Attribute::METHOD_NAME));
         $this->symfonyStyle->writeln(' Related node: ' . get_class($node));
 
         $this->symfonyStyle->newLine(2);

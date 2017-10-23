@@ -8,6 +8,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Node\Attribute;
+use Rector\NodeAnalyzer\ClassAnalyzer;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -36,11 +37,17 @@ final class ParentTypehintedArgumentRector extends AbstractRector
     private $typehintForArgumentByMethodAndClass = [];
 
     /**
+     * @var ClassAnalyzer
+     */
+    private $classAnalyzer;
+
+    /**
      * @param mixed[] $typehintForArgumentByMethodAndClass
      */
-    public function __construct(array $typehintForArgumentByMethodAndClass)
+    public function __construct(array $typehintForArgumentByMethodAndClass, ClassAnalyzer $classAnalyzer)
     {
         $this->typehintForArgumentByMethodAndClass = $typehintForArgumentByMethodAndClass;
+        $this->classAnalyzer = $classAnalyzer;
     }
 
     public function isCandidate(Node $node): bool
@@ -52,7 +59,7 @@ final class ParentTypehintedArgumentRector extends AbstractRector
         /** @var Class_ $classNode */
         $classNode = $node->getAttribute(Attribute::CLASS_NODE);
 
-        $parentTypes = $this->resolveParentClassesAndInterfacesFromClassNode($classNode);
+        $parentTypes = $this->classAnalyzer->resolveParentTypes($classNode);
 
         return $this->isTypeMatch($parentTypes);
     }
@@ -65,7 +72,7 @@ final class ParentTypehintedArgumentRector extends AbstractRector
         /** @var Class_ $classMethodNode */
         $classNode = $classMethodNode->getAttribute(Attribute::CLASS_NODE);
 
-        $classParentTypes = $this->resolveParentClassesAndInterfacesFromClassNode($classNode);
+        $classParentTypes = $this->classAnalyzer->resolveParentTypes($classNode);
 
         $matchingTypes = $this->getMatchingTypesForClassNode($classParentTypes);
 
@@ -90,28 +97,6 @@ final class ParentTypehintedArgumentRector extends AbstractRector
     private function getClasses(): array
     {
         return array_keys($this->typehintForArgumentByMethodAndClass);
-    }
-
-    /**
-     * @return string[]
-     */
-    private function resolveParentClassesAndInterfacesFromClassNode(Class_ $classNode): array
-    {
-        $types = [];
-
-        $parentClasses = (array) $classNode->extends;
-        foreach ($parentClasses as $parentClass) {
-            /** @var Node\Name\FullyQualified $parentClass */
-            $types[] = $parentClass->toString();
-        }
-
-        $interfaces = (array) $classNode->implements;
-        foreach ($interfaces as $interface) {
-            /** @var Node\Name\FullyQualified $interface */
-            $types[] = $interface->toString();
-        }
-
-        return $types;
     }
 
     /**
