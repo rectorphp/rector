@@ -51,8 +51,8 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface, NodeTy
         }
 
         if ($variableNode->name instanceof Variable) {
-            // nested: ${$type}[$name] - dynamic, unable to resolve type
-            return null;
+            // nested: ${$type}[$name] - dynamic
+            return $this->resolve($variableNode);
         }
 
         if ($variableNode->name === 'this') {
@@ -85,13 +85,9 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface, NodeTy
         }
 
         if ($variableNode->name instanceof Variable) {
-            $name = $variableNode->name->name;
-
-            return $this->typeContext->getTypeForVariable($name);
+            return $this->resolve($variableNode->name);
         }
 
-        $name = (string) $variableNode->name;
-
-        return $this->typeContext->getTypeForVariable($name);
+        return null;
     }
 }
