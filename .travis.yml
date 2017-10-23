@@ -5,8 +5,6 @@ php:
 
 install:
   - composer install
-  # prepare test projects
-  - composer create-test-projects
 
 script:
   - vendor/bin/phpunit --coverage-clover coverage.xml
@@ -15,8 +13,6 @@ script:
   # check coding standard (defined in composer.json "scripts" section)
   # if this fails, run "composer fix-cs" to fix all fixable issues
   - composer check-cs
-  # try on test projects
-  - composer process-test-projects
 
 after_script:
   # upload coverage to Coveralls.io
