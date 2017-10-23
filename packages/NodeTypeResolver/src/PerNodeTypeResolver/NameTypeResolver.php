@@ -4,7 +4,6 @@ namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Name;
-use PhpParser\Node\Name\FullyQualified;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 
@@ -20,9 +19,12 @@ final class NameTypeResolver implements PerNodeTypeResolverInterface
      */
     public function resolve(Node $nameNode): ?string
     {
-        /** @var FullyQualified $fqnName */
+        /** @var Name|null $fqnName */
         $fqnName = $nameNode->getAttribute(Attribute::RESOLVED_NAME);
+        if ($fqnName instanceof Name) {
+            return $fqnName->toString();
+        }
 
-        return $fqnName->toString();
+        return $nameNode->toString();
     }
 }

@@ -31,15 +31,13 @@ final class ClassLikeTypeResolver implements PerNodeTypeResolverInterface
      */
     public function resolve(Node $classLikeNode): ?string
     {
-        if ($classLikeNode instanceof Class_) {
-            $parentTypes = $this->classAnalyzer->resolveParentTypes($classLikeNode);
-            // @todo: add support for many-types later
+        return $classLikeNode->name->toString();
 
-            if (! count($parentTypes)) {
-                return null;
-            }
-        }
-
-        return null;
+//            $parentTypes = $this->classAnalyzer->resolveParentTypes($classLikeNode);
+//            // @todo: add support for many-types later
+//
+//            if (! count($parentTypes)) {
+//                return null;
+//            }
     }
 }

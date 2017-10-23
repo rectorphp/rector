@@ -7,7 +7,7 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
-use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\Class_;
 use Rector\Exception\NotImplementedException;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverAwareInterface;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
@@ -73,6 +73,12 @@ final class NewTypeResolver implements PerNodeTypeResolverInterface, NodeTypeRes
     {
         $nodeClass = get_class($newNode->class);
 
-        return in_array($nodeClass, [ClassLike::class, Variable::class, Name::class], true);
+        foreach ([Class_::class, Variable::class, Name::class] as $typeToSkip) {
+            if (is_a($nodeClass, $typeToSkip, true)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
