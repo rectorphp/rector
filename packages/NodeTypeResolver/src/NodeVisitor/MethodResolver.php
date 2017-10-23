@@ -49,10 +49,8 @@ final class MethodResolver extends NodeVisitorAbstract
             $this->methodName = $node->name->toString();
         }
 
-        if ($node instanceof MethodCall) {
-            if ($node->name instanceof Identifier) {
-                $this->methodCall = $node->name->toString();
-            }
+        if ($node instanceof MethodCall && $node->name instanceof Identifier) {
+            $this->methodCall = $node->name->toString();
         }
 
         $node->setAttribute(Attribute::METHOD_NAME, $this->methodName);
