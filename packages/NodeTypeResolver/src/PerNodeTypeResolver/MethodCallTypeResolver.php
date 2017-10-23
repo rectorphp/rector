@@ -42,16 +42,16 @@ final class MethodCallTypeResolver implements PerNodeTypeResolverInterface
     {
         // 1. get $anotherVar type
 
-        /** @var Variable|mixed $methodCallVariable */
-        $methodCallVariable = $methodCallNode->var;
+        /** @var Variable|mixed $variableNode */
+        $variableNode = $methodCallNode->var;
 
-        if (! $methodCallVariable instanceof Variable) {
+        if (! $variableNode instanceof Variable) {
             return null;
         }
 
-        $methodCallVariableName = $methodCallVariable->name;
+        $variableName = $variableNode->name;
 
-        $methodCallVariableType = $this->typeContext->getTypeForVariable($methodCallVariableName);
+        $methodCallVariableType = $this->typeContext->getTypeForVariable($variableName);
 
         $methodCallName = $this->resolveMethodCallName($methodCallNode);
 

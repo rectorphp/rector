@@ -17,18 +17,6 @@ final class Attribute
     public const TYPE = 'type';
 
     /**
-     * In class, in interface, in trait, in method or in function
-     *
-     * @var string
-     */
-    public const SCOPE = 'scope';
-
-    /**
-     * @var string
-     */
-    public const SCOPE_NODE = 'scopeNode';
-
-    /**
      * System name.
      * Do not change this even if you want!
      *

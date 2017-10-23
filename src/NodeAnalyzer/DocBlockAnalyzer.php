@@ -49,7 +49,7 @@ final class DocBlockAnalyzer
             $type = $annotationTags[0]->getTag()->getName();
             if ($type === 'var') {
                 // @todo: resolve non-FQN names using namespace imports
-                // $propertyNode->getAttribute(Attribute::USE_STATEMENTS)
+                // e.g. $propertyNode->getAttribute(Attribute::USE_STATEMENTS)
                 // maybe decouple to service?
                 return implode('|', $annotationTags[0]->getTypes());
             }
