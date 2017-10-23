@@ -6,7 +6,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
-use Rector\BetterReflection\Reflector\MethodReflector;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverAwareInterface;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
@@ -25,15 +24,9 @@ final class AssignTypeResolver implements PerNodeTypeResolverInterface, NodeType
      */
     private $nodeTypeResolver;
 
-    /**
-     * @var MethodReflector
-     */
-    private $methodReflector;
-
-    public function __construct(TypeContext $typeContext, MethodReflector $methodReflector)
+    public function __construct(TypeContext $typeContext)
     {
         $this->typeContext = $typeContext;
-        $this->methodReflector = $methodReflector;
     }
 
     public function getNodeClass(): string
