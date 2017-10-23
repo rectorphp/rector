@@ -7,14 +7,14 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
-use PhpParser\Node\Name\FullyQualified;
 use Rector\Exception\NotImplementedException;
-use Rector\Node\Attribute;
 use Rector\NodeAnalyzer\ClassAnalyzer;
+use Rector\NodeTypeResolver\Contract\NodeTypeResolverAwareInterface;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\TypeContext;
 
-final class NewTypeResolver implements PerNodeTypeResolverInterface
+final class NewTypeResolver implements PerNodeTypeResolverInterface, NodeTypeResolverAwareInterface
 {
     /**
      * @var TypeContext
@@ -25,6 +25,11 @@ final class NewTypeResolver implements PerNodeTypeResolverInterface
      * @var ClassAnalyzer
      */
     private $classAnalyzer;
+
+    /**
+     * @var NodeTypeResolver
+     */
+    private $nodeTypeResolver;
 
     public function __construct(TypeContext $typeContext, ClassAnalyzer $classAnalyzer)
     {
@@ -44,36 +49,22 @@ final class NewTypeResolver implements PerNodeTypeResolverInterface
     {
         // e.g. new class extends AnotherClass();
         if ($this->classAnalyzer->isAnonymousClassNode($newNode->class)) {
-            $classNode = $newNode->class;
-            if (! $classNode->extends instanceof Name) {
+            $parentTypes = $this->classAnalyzer->resolveParentTypes($newNode->class);
+            // @todo: add support for many-types later
+
+            if (! count($parentTypes)) {
                 return null;
             }
-
-            // @todo: add interfaces as well
-            // use some gettypesForClass($class) method, already used somewhere else
-
-            $resolvedName = $classNode->extends->getAttribute(Attribute::RESOLVED_NAME);
-            if ($resolvedName instanceof FullyQualified) {
-                return $resolvedName->toString();
-            }
-
-            return null;
         }
 
         // e.g. new $someClass;
         if ($newNode->class instanceof Variable) {
-            // can be anything (dynamic)
-            $variableName = $newNode->class->name;
-
-            return $this->typeContext->getTypeForVariable($variableName);
+            return $this->nodeTypeResolver->resolve($newNode->class);
         }
 
         // e.g. new SomeClass;
         if ($newNode->class instanceof Name) {
-            /** @var FullyQualified $fqnName */
-            $fqnName = $newNode->class->getAttribute(Attribute::RESOLVED_NAME);
-
-            return $fqnName->toString();
+            return $this->nodeTypeResolver->resolve($newNode->class);
         }
 
         // e.g. new $this->templateClass;
@@ -93,5 +84,10 @@ final class NewTypeResolver implements PerNodeTypeResolverInterface
         }
 
         return null;
+    }
+
+    public function setNodeTypeResolver(NodeTypeResolver $nodeTypeResolver): void
+    {
+        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 }
