@@ -99,9 +99,9 @@ final class GetRequestRector extends AbstractRector
             return false;
         }
 
-        $scopeNode = $node->getAttribute(Attribute::SCOPE_NODE);
+        $methodNode = $node->getAttribute(Attribute::METHOD_NODE);
 
-        if (! $this->controllerMethodAnalyzer->isAction($scopeNode)) {
+        if (! $this->controllerMethodAnalyzer->isAction($methodNode)) {
             return false;
         }
 

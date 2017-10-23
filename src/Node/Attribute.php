@@ -93,4 +93,9 @@ final class Attribute
      * @var string
      */
     public const METHOD_CALL = 'methodCall';
+
+    /**
+     * @var string
+     */
+    public const METHOD_NODE = 'methodNode';
 }

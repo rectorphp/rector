@@ -21,6 +21,11 @@ final class MethodResolver extends NodeVisitorAbstract
     private $methodName;
 
     /**
+     * @var ClassMethod|null
+     */
+    private $methodNode;
+
+    /**
      * @var string|null
      */
     private $methodCall;
@@ -37,6 +42,7 @@ final class MethodResolver extends NodeVisitorAbstract
     public function enterNode(Node $node): void
     {
         if ($node instanceof ClassMethod) {
+            $this->methodNode = $node;
             $this->methodName = $node->name->toString();
         }
 
@@ -47,6 +53,7 @@ final class MethodResolver extends NodeVisitorAbstract
         }
 
         $node->setAttribute(Attribute::METHOD_NAME, $this->methodName);
+        $node->setAttribute(Attribute::METHOD_NODE, $this->methodNode);
         $node->setAttribute(Attribute::METHOD_CALL, $this->methodCall);
     }
 

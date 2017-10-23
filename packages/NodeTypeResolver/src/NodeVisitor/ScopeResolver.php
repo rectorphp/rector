@@ -42,17 +42,17 @@ final class ScopeResolver extends NodeVisitorAbstract
         $this->resolveClassLikeScope($node);
 
         if ($node instanceof Namespace_) {
-            $this->currentScope = 'scope_namespace';
+            $this->currentScope = 'scopeNamespace';
             $this->currentScopeNode = $node;
         }
 
         if ($node instanceof Function_) {
-            $this->currentScope = 'scope_function';
+            $this->currentScope = 'scopeFunction';
             $this->currentScopeNode = $node;
         }
 
         if ($node instanceof ClassMethod) {
-            $this->currentScope = 'scope_class_method';
+            $this->currentScope = 'scopeClassMethod';
             $this->currentScopeNode = $node;
         }
 
