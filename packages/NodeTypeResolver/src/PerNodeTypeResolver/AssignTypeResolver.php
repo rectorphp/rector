@@ -40,6 +40,7 @@ final class AssignTypeResolver implements PerNodeTypeResolverInterface, NodeType
     public function resolve(Node $assignNode): ?string
     {
         if (! $assignNode->var instanceof Variable) {
+            // @todo: resolve for properties etc. as well
             return null;
         }
 
