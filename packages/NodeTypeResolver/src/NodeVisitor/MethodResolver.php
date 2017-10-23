@@ -11,7 +11,10 @@ use PhpParser\NodeVisitorAbstract;
 use Rector\Node\Attribute;
 
 /**
- * Add attribute 'methodName' with current class name.
+ * Adds attribute to all nodes inside:
+ * - 'methodName' with current method name
+ * - 'methodNode' with current method node
+ * - 'methodCall' with current method call
  */
 final class MethodResolver extends NodeVisitorAbstract
 {
