@@ -3,9 +3,7 @@
 namespace Rector\NodeTypeResolver\NodeVisitor;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\BinaryOp\Concat;
-use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
@@ -91,12 +89,6 @@ final class TypeResolver extends NodeVisitorAbstract
     private function processPropertyFetch(PropertyFetch $propertyFetchNode): void
     {
         // e.g. $r->getParameters()[0]->name
-        if ($propertyFetchNode->var instanceof ArrayDimFetch) {
-            $this->processArrayDimMethodCall($propertyFetchNode);
-
-            return;
-        }
-
         if ($propertyFetchNode->var instanceof New_) {
             $propertyType = $propertyFetchNode->var->class->toString();
             $propertyFetchNode->setAttribute(Attribute::TYPE, $propertyType);
@@ -113,18 +105,6 @@ final class TypeResolver extends NodeVisitorAbstract
 
         if ($propertyType) {
             $propertyFetchNode->setAttribute(Attribute::TYPE, $propertyType);
-        }
-    }
-
-    private function processArrayDimMethodCall(PropertyFetch $propertyFetchNode): void
-    {
-        if ($propertyFetchNode->var->var instanceof MethodCall) {
-            /** @var Variable $variableNode */
-            $variableNode = $propertyFetchNode->var->var->var;
-            $variableName = $variableNode->name;
-            $variableType = $this->typeContext->getTypeForVariable($variableName);
-
-            $variableNode->setAttribute(Attribute::TYPE, $variableType);
         }
     }
 
