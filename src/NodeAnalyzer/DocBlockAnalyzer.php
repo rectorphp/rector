@@ -5,11 +5,11 @@ namespace Rector\NodeAnalyzer;
 use Nette\Utils\Strings;
 use PhpCsFixer\DocBlock\DocBlock;
 use phpDocumentor\Reflection\DocBlock\Tags\Param;
-use phpDocumentor\Reflection\DocBlockFactory;
 use phpDocumentor\Reflection\Types\Object_;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use Rector\Exception\NotImplementedException;
+use Rector\ReflectionDocBlock\DocBlock\DocBlockFactory;
 
 final class DocBlockAnalyzer
 {
@@ -100,15 +100,10 @@ final class DocBlockAnalyzer
             return null;
         }
 
-        // @todo: di own package
-        $docBlockFactory = DocBlockFactory::createInstance();
-
-        dump($this->docBlockFactory->create($node->getDocComment()->getText()));
-
-        $phpDocumentorDocBlock = $this->docBlockFactory->create($node->getDocComment()->getText());
+        $docBlock = $this->docBlockFactory->createFromNode($node);
 
         /** @var Param[] $paramAnnotations */
-        $paramAnnotations = $phpDocumentorDocBlock->getTagsByName('param');
+        $paramAnnotations = $docBlock->getTagsByName('param');
         foreach ($paramAnnotations as $paramAnnotation) {
             if ($paramAnnotation->getVariableName() === $paramName) {
                 $type = $paramAnnotation->getType();
