@@ -18,11 +18,11 @@ final class DocBlockFactory
 
     public function __construct(
         TagFactory $tagFactory,
-        PhpDocumentorDocBlockFactory $docBlockFactory,
+        PhpDocumentorDocBlockFactory $phpDocumentorDocBlockFactory,
         DescriptionFactory $descriptionFactory,
         TypeResolver $typeResolver
     ) {
-        $this->phpDocumentorDocBlockFactory = $docBlockFactory;
+        $this->phpDocumentorDocBlockFactory = $phpDocumentorDocBlockFactory;
 
         // cannot move to services.yml, because it would cause circular dependency exception
         $tagFactory->addService($descriptionFactory);
