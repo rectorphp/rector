@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\NodeAnalyzer;
+namespace Rector\ReflectionDocBlock\Tests\NodeAnalyzer;
 
 use PhpParser\Comment\Doc;
 use PhpParser\Node\Scalar\String_;
