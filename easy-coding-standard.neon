@@ -57,14 +57,7 @@ parameters:
             - */src/Rector/Contrib/**/Helper/**.php
             - packages/NodeTypeResolver/src/NodeVisitor/TypeResolver.php
             - src/Builder/Contrib/Nette/RouterFactoryClassBuilder.php
-            - packages/NodeTypeResolver/tests/NodeVisitor/ClassLikeTypeResolver/PropertyTest.php
             - packages/NodeTypeResolver/src/PerNodeTypeResolver/AssignTypeResolver.php
-        Symplify\CodingStandard\Sniffs\Debug\CommentedOutCodeSniff:
-            # false positives - @todo fix
-            - packages/DeprecationExtractor/src/Rector/UnsupportedDeprecationFilter.php
-            - packages/NodeTypeResolver/src/NodeVisitor/TypeResolver.php
-            # false positive - fixed in master
-            - src/NodeAnalyzer/ClassConstAnalyzer.php
         SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff:
             # covariant types
             - */packages/NodeValueResolver/src/PerNodeValueResolver/*ValueResolver.php
