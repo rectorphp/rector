@@ -28,6 +28,7 @@ final class ParamTypeResolver implements PerNodeTypeResolverInterface, NodeTypeR
      * @var DocBlockAnalyzer
      */
     private $docBlockAnalyzer;
+
     /**
      * @var NamespaceAnalyzer
      */
