@@ -1,5 +1,7 @@
 <?php
 
+namespace SomeNamespace;
+
 use SomeNamespace\SubNamespace\Html;
 
 class SomeClass

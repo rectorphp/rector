@@ -2,14 +2,12 @@
 
 namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
-use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\TypeContext;
-use Rector\NodeTypeResolver\UseStatements;
 use Rector\ReflectionDocBlock\NodeAnalyzer\DocBlockAnalyzer;
+use Rector\ReflectionDocBlock\NodeAnalyzer\NamespaceAnalyzer;
 
 final class PropertyTypeResolver implements PerNodeTypeResolverInterface
 {
@@ -23,10 +21,19 @@ final class PropertyTypeResolver implements PerNodeTypeResolverInterface
      */
     private $docBlockAnalyzer;
 
-    public function __construct(TypeContext $typeContext, DocBlockAnalyzer $docBlockAnalyzer)
-    {
+    /**
+     * @var NamespaceAnalyzer
+     */
+    private $namespaceAnalyzer;
+
+    public function __construct(
+        TypeContext $typeContext,
+        DocBlockAnalyzer $docBlockAnalyzer,
+        NamespaceAnalyzer $namespaceAnalyzer
+    ) {
         $this->typeContext = $typeContext;
         $this->docBlockAnalyzer = $docBlockAnalyzer;
+        $this->namespaceAnalyzer = $namespaceAnalyzer;
     }
 
     public function getNodeClass(): string
@@ -47,27 +54,10 @@ final class PropertyTypeResolver implements PerNodeTypeResolverInterface
 
         $propertyType = $this->docBlockAnalyzer->getAnnotationFromNode($propertyNode, 'var');
 
-        $namespace = (string) $propertyNode->getAttribute(Attribute::NAMESPACE_NAME);
-        $useStatements = $propertyNode->getAttribute(Attribute::USE_STATEMENTS);
-
-        $propertyType = $this->resolveTypeWithNamespaceAndUseStatments($propertyType, $namespace, $useStatements);
+        $propertyType = $this->namespaceAnalyzer->resolveTypeToFullyQualified($propertyType, $propertyNode);
 
         $this->typeContext->addPropertyType($propertyName, $propertyType);
 
         return $propertyType;
-    }
-
-    private function resolveTypeWithNamespaceAndUseStatments(
-        string $type,
-        string $namespace,
-        UseStatements $useStatements
-    ): string {
-        foreach ($useStatements->getUseStatements() as $useStatement) {
-            if (Strings::endsWith($useStatement, '\\' . $type)) {
-                return $useStatement;
-            }
-        }
-
-        return ($namespace ? $namespace . '\\' : '') . $type;
     }
 }

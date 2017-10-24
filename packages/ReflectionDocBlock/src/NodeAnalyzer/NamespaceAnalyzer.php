@@ -2,6 +2,7 @@
 
 namespace Rector\ReflectionDocBlock\NodeAnalyzer;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Use_;
 use Rector\Node\Attribute;
@@ -27,5 +28,22 @@ final class NamespaceAnalyzer
         }
 
         return false;
+    }
+
+    public function resolveTypeToFullyQualified(string $name, Node $node): string
+    {
+        /** @var Use_[] $useNodes */
+        $useNodes = $node->getAttribute(Attribute::USE_NODES);
+
+        foreach ($useNodes as $useNode) {
+            $nodeUseName = $useNode->uses[0]->name->toString();
+            if (Strings::endsWith($nodeUseName, '\\' . $name)) {
+                return $nodeUseName;
+            }
+        }
+
+        $namespace = $node->getAttribute(Attribute::NAMESPACE_NAME);
+
+        return ($namespace ? $namespace . '\\' : '') . $name;
     }
 }
