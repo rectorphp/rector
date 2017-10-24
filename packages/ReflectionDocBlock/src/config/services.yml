@@ -6,8 +6,9 @@ services:
         resource: '../../src'
 
     phpDocumentor\Reflection\DocBlockFactory: ~
-    phpDocumentor\Reflection\Types\ContextFactory: ~
-    phpDocumentor\Reflection\FqsenResolver: ~
     phpDocumentor\Reflection\DocBlock\StandardTagFactory: ~
     phpDocumentor\Reflection\DocBlock\DescriptionFactory: ~
     phpDocumentor\Reflection\TypeResolver: ~
+
+    phpDocumentor\Reflection\Types\ContextFactory: ~
+    phpDocumentor\Reflection\FqsenResolver: ~

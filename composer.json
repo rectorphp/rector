@@ -42,6 +42,7 @@
         "psr-4": {
             "Rector\\Tests\\": "tests",
             "Rector\\BetterReflection\\Tests\\": "packages/BetterReflection/tests",
+            "Rector\\ReflectionDocBlock\\Tests\\": "packages/ReflectionDocBlock/tests",
             "Rector\\NodeTypeResolver\\Tests\\": "packages/NodeTypeResolver/tests",
             "Rector\\DeprecationExtractor\\Tests\\": "packages/DeprecationExtractor/tests",
             "Rector\\NodeValueResolver\\Tests\\": "packages/NodeValueResolver/tests"

@@ -31,7 +31,7 @@ final class DocBlockFactory
 
     public function createFromNode(Node $node): DocBlock
     {
-        $docBlock = $node->getDocComment() ? $node->getDocComment()->getText() : '';
+        $docBlock = $node->getDocComment() ? $node->getDocComment()->getText() : ' ';
 
         return $this->phpDocumentorDocBlockFactory->create($docBlock);
     }
