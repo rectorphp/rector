@@ -41,8 +41,6 @@ parameters:
     exclude_checkers:
         # wip
         - Symplify\CodingStandard\Sniffs\Debug\CommentedOutCodeSniff
-        # conflicting checkers
-#        - PhpCsFixer\Fixer\ControlStructure\YodaStyleFixer
         # excluded from symfony-checkers.neon
         - PhpCsFixer\Fixer\PhpTag\BlankLineAfterOpeningTagFixer
         - PhpCsFixer\Fixer\Operator\NewWithBracesFixer
