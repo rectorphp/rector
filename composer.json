@@ -23,7 +23,7 @@
         "slam/php-cs-fixer-extensions": "^1.7",
         "symfony/expression-language": "^3.3",
         "symfony/form": "^3.3",
-        "symplify/easy-coding-standard": "^2.5.8",
+        "symplify/easy-coding-standard": "^2.5",
         "tracy/tracy": "^2.4"
     },
     "autoload": {
