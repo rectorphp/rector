@@ -8,9 +8,16 @@ use Rector\NodeTypeResolver\Tests\AbstractNodeTypeResolverTest;
 
 final class Test extends AbstractNodeTypeResolverTest
 {
+    public function testTypehint(): void
+    {
+        $variableNodes = $this->getNodesForFileOfType(__DIR__ . '/Source/MethodParamTypeHint.php.inc', Variable::class);
+
+        $this->assertSame('SomeNamespace\SubNamespace\Html', $variableNodes[0]->getAttribute(Attribute::TYPE));
+    }
+
     public function testDocBlock(): void
     {
-        $variableNodes = $this->getNodesForFileOfType(__DIR__ . '/Source/MethodParam.php.inc', Variable::class);
+        $variableNodes = $this->getNodesForFileOfType(__DIR__ . '/Source/MethodParamDocBlock.php.inc', Variable::class);
 
         $this->assertSame('SomeNamespace\SubNamespace\Html', $variableNodes[0]->getAttribute(Attribute::TYPE));
     }

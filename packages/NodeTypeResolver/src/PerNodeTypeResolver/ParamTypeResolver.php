@@ -4,6 +4,8 @@ namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Param;
+use Rector\Node\Attribute;
+use Rector\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverAwareInterface;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -21,9 +23,15 @@ final class ParamTypeResolver implements PerNodeTypeResolverInterface, NodeTypeR
      */
     private $nodeTypeResolver;
 
-    public function __construct(TypeContext $typeContext)
+    /**
+     * @var DocBlockAnalyzer
+     */
+    private $docBlockAnalyzer;
+
+    public function __construct(TypeContext $typeContext, DocBlockAnalyzer $docBlockAnalyzer)
     {
         $this->typeContext = $typeContext;
+        $this->docBlockAnalyzer = $docBlockAnalyzer;
     }
 
     public function getNodeClass(): string
@@ -36,18 +44,29 @@ final class ParamTypeResolver implements PerNodeTypeResolverInterface, NodeTypeR
      */
     public function resolve(Node $paramNode): ?string
     {
-        if ($paramNode->type === null) {
-            return null;
-        }
-
         $variableName = $paramNode->var->name;
-        $variableType = $this->nodeTypeResolver->resolve($paramNode->type);
 
-        if ($variableType) {
-            $this->typeContext->addVariableWithType($variableName, $variableType);
+        // 1. method(ParamType $param)
+        if ($paramNode->type) {
+            $variableType = $this->nodeTypeResolver->resolve($paramNode->type);
+            if ($variableType) {
+                $this->typeContext->addVariableWithType($variableName, $variableType);
 
-            return $variableType;
+                return $variableType;
+            }
         }
+
+        // 2. @param ParamType $param
+        /* @var \PhpParser\Node\Stmt\ClassMethod $classMethod */
+        $classMethod = $paramNode->getAttribute(Attribute::PARENT_NODE);
+
+        // resolve param type from docblock
+        $doc = $classMethod->getDocComment();
+        $paramAnnotations = $this->docBlockAnalyzer->getAnnotationFromNode($classMethod, 'param');
+        dump($paramAnnotations);
+
+//        dump($classMethod->getDocComment());
+        die;
 
         return null;
     }

@@ -4,6 +4,9 @@ namespace Rector\NodeAnalyzer;
 
 use Nette\Utils\Strings;
 use PhpCsFixer\DocBlock\DocBlock;
+use phpDocumentor\Reflection\DocBlock\Tags\Param;
+use phpDocumentor\Reflection\DocBlockFactory;
+use phpDocumentor\Reflection\Types\Object_;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use Rector\Exception\NotImplementedException;
@@ -96,5 +99,29 @@ final class DocBlockAnalyzer
 
         $doc = new Doc($docContent);
         $node->setDocComment($doc);
+    }
+
+    public function getParamTypeFor(Node $node, string $paramName): ?string
+    {
+        if ($node->getDocComment() === null) {
+            return null;
+        }
+
+        // @todo: di own package
+        $docBlockFactory = DocBlockFactory::createInstance();
+        $phpDocumentorDocBlock = $docBlockFactory->create($node->getDocComment()->getText());
+
+        /** @var Param[] $paramAnnotations */
+        $paramAnnotations = $phpDocumentorDocBlock->getTagsByName('param');
+        foreach ($paramAnnotations as $paramAnnotation) {
+            if ($paramAnnotation->getVariableName() === $paramName) {
+                $type = $paramAnnotation->getType();
+                if ($type instanceof Object_) {
+                    return $type->getFqsen()->getName();
+                }
+            }
+        }
+
+        return null;
     }
 }
