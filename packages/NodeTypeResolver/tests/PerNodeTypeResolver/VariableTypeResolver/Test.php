@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver;
+namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\VariableTypeResolver;
 
 use PhpParser\Node\Expr\Variable;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Tests\AbstractNodeTypeResolverTest;
 
-final class VariableTypeResolverTest extends AbstractNodeTypeResolverTest
+final class Test extends AbstractNodeTypeResolverTest
 {
     public function testNewAndAssign(): void
     {
