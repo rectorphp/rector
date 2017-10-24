@@ -13,6 +13,16 @@ use Rector\Exception\NotImplementedException;
 
 final class DocBlockAnalyzer
 {
+    /**
+     * @var DocBlockFactory
+     */
+    private $docBlockFactory;
+
+    public function __construct(DocBlockFactory $docBlockFactory)
+    {
+        $this->docBlockFactory = $docBlockFactory;
+    }
+
     public function hasAnnotation(Node $node, string $annotation): bool
     {
         $docBlock = $this->createDocBlockFromNode($node);
@@ -92,7 +102,10 @@ final class DocBlockAnalyzer
 
         // @todo: di own package
         $docBlockFactory = DocBlockFactory::createInstance();
-        $phpDocumentorDocBlock = $docBlockFactory->create($node->getDocComment()->getText());
+
+        dump($this->docBlockFactory->create($node->getDocComment()->getText()));
+
+        $phpDocumentorDocBlock = $this->docBlockFactory->create($node->getDocComment()->getText());
 
         /** @var Param[] $paramAnnotations */
         $paramAnnotations = $phpDocumentorDocBlock->getTagsByName('param');
