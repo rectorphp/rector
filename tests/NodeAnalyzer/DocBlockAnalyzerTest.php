@@ -74,6 +74,7 @@ final class DocBlockAnalyzerTest extends AbstractContainerAwareTestCase
     {
         $node = new String_('string');
         $node->setDocComment(new Doc(sprintf('/** %s */', $doc)));
+
         return $node;
     }
 }

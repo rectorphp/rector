@@ -2,6 +2,7 @@
 
 namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Param;
 use Rector\Node\Attribute;
@@ -10,6 +11,7 @@ use Rector\NodeTypeResolver\Contract\NodeTypeResolverAwareInterface;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\TypeContext;
+use Rector\NodeTypeResolver\UseStatements;
 
 final class ParamTypeResolver implements PerNodeTypeResolverInterface, NodeTypeResolverAwareInterface
 {
@@ -61,18 +63,41 @@ final class ParamTypeResolver implements PerNodeTypeResolverInterface, NodeTypeR
         $classMethod = $paramNode->getAttribute(Attribute::PARENT_NODE);
 
         // resolve param type from docblock
-        $doc = $classMethod->getDocComment();
-        $paramAnnotations = $this->docBlockAnalyzer->getAnnotationFromNode($classMethod, 'param');
-        dump($paramAnnotations);
+        $paramType = $this->docBlockAnalyzer->getParamTypeFor($classMethod, $variableName);
 
-//        dump($classMethod->getDocComment());
-        die;
+        // resolve to FQN
+        $paramType = $this->resolveTypeWithNamespaceAndUseStatments(
+            $paramType,
+            (string) $paramNode->getAttribute(Attribute::NAMESPACE),
+            $paramNode->getAttribute(Attribute::USE_STATEMENTS)
+        );
 
-        return null;
+        if ($paramType) {
+            $this->typeContext->addVariableWithType($variableName, $paramType);
+        }
+
+        return $paramType;
     }
 
     public function setNodeTypeResolver(NodeTypeResolver $nodeTypeResolver): void
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
+    }
+
+    /**
+     * @todo decouple to FqnResolver, if needed; phpdocumentor might handle this though
+     */
+    private function resolveTypeWithNamespaceAndUseStatments(
+        string $type,
+        string $namespace,
+        UseStatements $useStatements
+    ): string {
+        foreach ($useStatements->getUseStatements() as $useStatement) {
+            if (Strings::endsWith($useStatement, '\\' . $type)) {
+                return $useStatement;
+            }
+        }
+
+        return ($namespace ? $namespace . '\\' : '') . $type;
     }
 }

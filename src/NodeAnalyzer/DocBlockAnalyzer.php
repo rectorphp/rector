@@ -84,23 +84,6 @@ final class DocBlockAnalyzer
         return preg_replace('/[[:blank:]]+/', ' ', $comment);
     }
 
-    private function createDocBlockFromNode(Node $node): DocBlock
-    {
-        return new DocBlock($node->getDocComment());
-    }
-
-    private function saveNewDocBlockToNode(Node $node, DocBlock $docBlock): void
-    {
-        $docContent = $docBlock->getContent();
-
-        if (strlen($docBlock->getContent()) <= 7) {
-            $docContent = '';
-        }
-
-        $doc = new Doc($docContent);
-        $node->setDocComment($doc);
-    }
-
     public function getParamTypeFor(Node $node, string $paramName): ?string
     {
         if ($node->getDocComment() === null) {
@@ -123,5 +106,22 @@ final class DocBlockAnalyzer
         }
 
         return null;
+    }
+
+    private function createDocBlockFromNode(Node $node): DocBlock
+    {
+        return new DocBlock($node->getDocComment());
+    }
+
+    private function saveNewDocBlockToNode(Node $node, DocBlock $docBlock): void
+    {
+        $docContent = $docBlock->getContent();
+
+        if (strlen($docBlock->getContent()) <= 7) {
+            $docContent = '';
+        }
+
+        $doc = new Doc($docContent);
+        $node->setDocComment($doc);
     }
 }
