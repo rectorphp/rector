@@ -6,10 +6,10 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
 use Rector\Node\Attribute;
-use Rector\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\TypeContext;
 use Rector\NodeTypeResolver\UseStatements;
+use Rector\ReflectionDocBlock\NodeAnalyzer\DocBlockAnalyzer;
 
 final class PropertyTypeResolver implements PerNodeTypeResolverInterface
 {
@@ -47,7 +47,7 @@ final class PropertyTypeResolver implements PerNodeTypeResolverInterface
 
         $propertyType = $this->docBlockAnalyzer->getAnnotationFromNode($propertyNode, 'var');
 
-        $namespace = (string) $propertyNode->getAttribute(Attribute::NAMESPACE);
+        $namespace = (string) $propertyNode->getAttribute(Attribute::NAMESPACE_NAME);
         $useStatements = $propertyNode->getAttribute(Attribute::USE_STATEMENTS);
 
         $propertyType = $this->resolveTypeWithNamespaceAndUseStatments($propertyType, $namespace, $useStatements);

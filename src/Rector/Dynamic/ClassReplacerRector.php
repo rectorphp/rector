@@ -8,8 +8,8 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use Rector\Node\Attribute;
-use Rector\NodeTypeResolver\UseStatements;
 use Rector\Rector\AbstractRector;
+use Rector\ReflectionDocBlock\NodeAnalyzer\NamespaceAnalyzer;
 
 final class ClassReplacerRector extends AbstractRector
 {
@@ -19,11 +19,17 @@ final class ClassReplacerRector extends AbstractRector
     private $oldToNewClasses = [];
 
     /**
+     * @var NamespaceAnalyzer
+     */
+    private $namespaceAnalyzer;
+
+    /**
      * @param string[] $oldToNewClasses
      */
-    public function __construct(array $oldToNewClasses)
+    public function __construct(array $oldToNewClasses, NamespaceAnalyzer $namespaceAnalyzer)
     {
         $this->oldToNewClasses = $oldToNewClasses;
+        $this->namespaceAnalyzer = $namespaceAnalyzer;
     }
 
     public function isCandidate(Node $node): bool
@@ -51,20 +57,12 @@ final class ClassReplacerRector extends AbstractRector
         if ($node instanceof Use_) {
             $newName = $this->resolveNewNameFromNode($node);
 
-            if ($this->isUseStatmenetAlreadyPresent($node, $newName)) {
+            if ($this->namespaceAnalyzer->isUseStatmenetAlreadyPresent($node, $newName)) {
                 $this->shouldRemoveNode = true;
             }
         }
 
         return null;
-    }
-
-    private function isUseStatmenetAlreadyPresent(Use_ $useNode, string $newName): bool
-    {
-        /** @var UseStatements $useStatments */
-        $useStatments = $useNode->getAttribute(Attribute::USE_STATEMENTS);
-
-        return in_array($newName, $useStatments->getUseStatements(), true);
     }
 
     private function resolveNewNameFromNode(Node $node): string

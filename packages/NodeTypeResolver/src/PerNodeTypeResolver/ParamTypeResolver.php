@@ -6,12 +6,12 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Param;
 use Rector\Node\Attribute;
-use Rector\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverAwareInterface;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\TypeContext;
 use Rector\NodeTypeResolver\UseStatements;
+use Rector\ReflectionDocBlock\NodeAnalyzer\DocBlockAnalyzer;
 
 final class ParamTypeResolver implements PerNodeTypeResolverInterface, NodeTypeResolverAwareInterface
 {
@@ -71,7 +71,7 @@ final class ParamTypeResolver implements PerNodeTypeResolverInterface, NodeTypeR
         // resolve to FQN
         $paramType = $this->resolveTypeWithNamespaceAndUseStatments(
             $paramType,
-            (string) $paramNode->getAttribute(Attribute::NAMESPACE),
+            (string) $paramNode->getAttribute(Attribute::NAMESPACE_NAME),
             $paramNode->getAttribute(Attribute::USE_STATEMENTS)
         );
 

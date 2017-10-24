@@ -75,7 +75,7 @@ final class Attribute
     /**
      * @var string
      */
-    public const NAMESPACE = 'namespace';
+    public const NAMESPACE_NAME = 'namespace';
 
     /**
      * @var string
@@ -86,4 +86,14 @@ final class Attribute
      * @var string
      */
     public const METHOD_NODE = 'methodNode';
+
+    /**
+     * @var string
+     */
+    public const NAMESPACE_NODE = 'namespaceNode';
+
+    /**
+     * @var string
+     */
+    public const USE_NODES = 'useNodes';
 }

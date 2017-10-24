@@ -8,8 +8,8 @@ use PhpParser\Node\Stmt\Class_;
 use Rector\BetterReflection\Reflector\SmartClassReflector;
 use Rector\Builder\MethodBuilder;
 use Rector\Node\Attribute;
-use Rector\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\Rector\AbstractRector;
+use Rector\ReflectionDocBlock\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\Regex\MagicMethodMatcher;
 
 /**

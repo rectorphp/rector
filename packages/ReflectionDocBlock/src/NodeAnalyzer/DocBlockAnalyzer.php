@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\NodeAnalyzer;
+namespace Rector\ReflectionDocBlock\NodeAnalyzer;
 
 use Nette\Utils\Strings;
 use PhpCsFixer\DocBlock\DocBlock;

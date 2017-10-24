@@ -4,7 +4,7 @@ namespace Rector\Tests\NodeAnalyzer;
 
 use PhpParser\Comment\Doc;
 use PhpParser\Node\Scalar\String_;
-use Rector\NodeAnalyzer\DocBlockAnalyzer;
+use Rector\ReflectionDocBlock\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\Tests\AbstractContainerAwareTestCase;
 
 final class DocBlockAnalyzerTest extends AbstractContainerAwareTestCase
