@@ -133,6 +133,9 @@ final class MethodCallAnalyzer
     {
         $varNode = $methodCallNode->var;
 
+        // get types?
+        // @todo resolve in classResolver -> add parent types as well .=))
+
         // itterate up, @todo: handle in TypeResover
         while ($varNode->getAttribute(Attribute::TYPE) === null) {
             if (property_exists($varNode, 'var')) {
