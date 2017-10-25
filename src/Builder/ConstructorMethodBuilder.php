@@ -64,9 +64,16 @@ final class ConstructorMethodBuilder
         $this->statementGlue->addAsFirstMethod($classNode, $constructorMethod->getNode());
     }
 
-    private function createParameter(string $propertyType, string $propertyName): Param
+    /**
+     * @param string[] $propertyTypes
+     */
+    private function createParameter(array $propertyTypes, string $propertyName): Param
     {
-        return $this->builderFactory->param($propertyName)
-            ->setTypeHint($propertyType);
+        $paramBuild = $this->builderFactory->param($propertyName);
+        foreach ($propertyTypes as $propertyType) {
+            $paramBuild->setTypeHint($propertyType);
+        }
+
+        return $paramBuild;
     }
 }
