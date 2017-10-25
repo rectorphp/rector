@@ -51,7 +51,7 @@ final class PropertyFetchTypeResolver implements PerNodeTypeResolverInterface, N
         }
 
         if ($propertyFetchNode->var->name !== 'this') {
-            return null;
+            return [];
         }
 
         $propertyName = $this->resolvePropertyName($propertyFetchNode);

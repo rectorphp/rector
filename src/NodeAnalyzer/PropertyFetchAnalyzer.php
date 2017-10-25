@@ -102,18 +102,20 @@ final class PropertyFetchAnalyzer
             return false;
         }
 
-        $variableNodeType = $node->var->getAttribute(Attribute::TYPES);
 
-        return in_array($variableNodeType, $types, true);
+        $variableNodeTypes = $node->var->getAttribute(Attribute::TYPES);
+
+        return (bool) array_intersect($variableNodeTypes, $types);
     }
 
     /**
      * @param string[] $types
+     * @return string[]
      */
-    public function matchTypes(Node $node, array $types): ?string
+    public function matchTypes(Node $node, array $types): array
     {
         if (! $this->isTypes($node, $types)) {
-            return null;
+            return [];
         }
 
         return $node->var->getAttribute(Attribute::TYPES);
