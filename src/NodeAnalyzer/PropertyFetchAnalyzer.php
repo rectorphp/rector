@@ -102,7 +102,6 @@ final class PropertyFetchAnalyzer
             return false;
         }
 
-
         $variableNodeTypes = $node->var->getAttribute(Attribute::TYPES);
 
         return (bool) array_intersect($variableNodeTypes, $types);
