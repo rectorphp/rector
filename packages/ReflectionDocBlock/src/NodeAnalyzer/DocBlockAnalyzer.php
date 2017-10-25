@@ -77,7 +77,7 @@ final class DocBlockAnalyzer
             return null;
         }
 
-        return (string) $varTags[0]->getType();
+        return ltrim((string) $varTags[0]->getType(), '\\');
     }
 
     public function getDeprecatedDocComment(Node $node): ?string
@@ -100,7 +100,7 @@ final class DocBlockAnalyzer
     {
         /** @var Param[] $paramTags */
         $paramTags = $this->getTagsByName($node, 'param');
-        if ($paramTags === 0) {
+        if ($paramTags === null) {
             return null;
         }
 
@@ -151,6 +151,9 @@ final class DocBlockAnalyzer
         return (bool) preg_match('#^/\*\*[\s\*]*\*/$#', $docContent);
     }
 
+    /**
+     * @return Tag[]|null
+     */
     private function getTagsByName(Node $node, string $name): ?array
     {
         $docBlock = $this->docBlockFactory->createFromNode($node);
@@ -161,5 +164,5 @@ final class DocBlockAnalyzer
         }
 
         return $tags;
-}
+    }
 }
