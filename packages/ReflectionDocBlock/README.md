@@ -30,4 +30,3 @@ var_dump($valueNodeTypes); // ['SomeNamespace\SomeType'];
 ### Inspiration
 
 - [Roave\BetterReflection](https://github.com/Roave/BetterReflection/tree/master/src/TypesFinder)
-
