@@ -81,9 +81,9 @@ final class MethodCallAnalyzer
             return false;
         }
 
-        $variableType = $this->resolveVariableType($node);
+        $variableTypes = $this->resolveVariableType($node);
 
-        return $variableType === $type;
+        return in_array($type, $variableTypes, true);
     }
 
     /**
@@ -130,7 +130,10 @@ final class MethodCallAnalyzer
         return $this->publicMethodNamesForType[$type] = array_keys($publicMethods);
     }
 
-    private function resolveVariableType(MethodCall $methodCallNode): string
+    /**
+     * @return string[]
+     */
+    private function resolveVariableType(MethodCall $methodCallNode): array
     {
         $varNode = $methodCallNode->var;
 
@@ -146,6 +149,6 @@ final class MethodCallAnalyzer
             }
         }
 
-        return (string) $varNode->getAttribute(Attribute::TYPES);
+        return $varNode->getAttribute(Attribute::TYPES);
     }
 }
