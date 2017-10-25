@@ -46,7 +46,6 @@ final class SmartClassReflector
             return $this->smartClassReflector->reflect($className);
         } catch (IdentifierNotFound $identifierNotFoundException) {
             return null;
-
         } catch (TypeError $typeError) {
             return null;
         }

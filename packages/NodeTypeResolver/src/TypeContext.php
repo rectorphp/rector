@@ -97,7 +97,6 @@ final class TypeContext
         }
     }
 
-
     /**
      * @return string[]
      */
