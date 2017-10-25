@@ -49,6 +49,7 @@ final class StaticMethodCallAnalyzer
 
     /**
      * @param string[] $types
+     * @return string[]
      */
     public function matchTypes(Node $node, array $types): ?array
     {
