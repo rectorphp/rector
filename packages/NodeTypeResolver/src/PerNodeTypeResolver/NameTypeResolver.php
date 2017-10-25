@@ -40,8 +40,8 @@ final class NameTypeResolver implements PerNodeTypeResolverInterface
 
             $classLikeReflection = $this->smartClassReflector->reflect($fullyQualifiedName);
 
-            $types += array_keys($classLikeReflection->getInterfaces());
-            $types += array_keys($classLikeReflection->getParentClassNames());
+            $types = array_merge($types, array_keys($classLikeReflection->getInterfaces()));
+            $types = array_merge($types, $classLikeReflection->getParentClassNames());
 
             return implode('_', $types);
         }
