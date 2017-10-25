@@ -57,7 +57,7 @@ final class PropertyTypeResolver implements PerNodeTypeResolverInterface
 
         $propertyType = $this->namespaceAnalyzer->resolveTypeToFullyQualified($propertyType, $propertyNode);
 
-        $this->typeContext->addPropertyType($propertyName, $propertyType);
+        $this->typeContext->addPropertyTypes($propertyName, $propertyType);
 
         return [$propertyType];
     }

@@ -62,7 +62,10 @@ final class AssignTypeResolver implements PerNodeTypeResolverInterface, NodeType
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
-    private function processAssignVariableNode(Assign $assignNode): ?string
+    /**
+     * @return string[]
+     */
+    private function processAssignVariableNode(Assign $assignNode): array
     {
         if ($assignNode->var->name instanceof Variable) {
             $name = $assignNode->var->name->name;
@@ -75,7 +78,10 @@ final class AssignTypeResolver implements PerNodeTypeResolverInterface, NodeType
         return $this->typeContext->getTypesForVariable($name);
     }
 
-    private function resolveTypeForRightSide(Assign $assignNode): ?string
+    /**
+     * @return string[]
+     */
+    private function resolveTypeForRightSide(Assign $assignNode): array
     {
         // $var = $anotherVar;
         if ($assignNode->expr instanceof Variable) {
@@ -92,6 +98,6 @@ final class AssignTypeResolver implements PerNodeTypeResolverInterface, NodeType
             return $this->nodeTypeResolver->resolve($assignNode->expr);
         }
 
-        return null;
+        return [];
     }
 }

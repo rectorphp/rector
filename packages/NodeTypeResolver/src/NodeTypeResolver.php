@@ -36,6 +36,6 @@ final class NodeTypeResolver
             return $perNodeTypeResolver->resolve($node);
         }
 
-        return null;
+        return [];
     }
 }

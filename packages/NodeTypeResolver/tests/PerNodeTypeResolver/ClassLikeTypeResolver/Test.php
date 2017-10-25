@@ -14,7 +14,7 @@ final class Test extends AbstractNodeTypeResolverTest
         $variableNodes = $this->getNodesForFileOfType($file, Variable::class);
 
         $this->assertSame(
-            'SomeNamespace\SomeClass_SomeNamespace\SomeInterface',
+            ['SomeNamespace\SomeClass', 'SomeNamespace\SomeInterface'],
             $variableNodes[0]->getAttribute(Attribute::TYPES)
         );
     }

@@ -66,9 +66,12 @@ final class TypeContext
         $this->classLikeNode = null;
     }
 
-    public function addVariableWithType(string $variableName, string $variableType): void
+    /**
+     * @param string[] $variableTypes
+     */
+    public function addVariableWithType(string $variableName, array $variableTypes): void
     {
-        $this->variableTypes[$variableName] = $variableType;
+        $this->variableTypes[$variableName] = $variableTypes;
     }
 
     public function enterClassLike(ClassLike $classLikeNode): void
@@ -117,9 +120,12 @@ final class TypeContext
         $this->addVariableWithType($newVariable, $type);
     }
 
-    public function addPropertyType(string $propertyName, string $propertyType): void
+    /**
+     * @param string[] $propertyTypes
+     */
+    public function addPropertyTypes(string $propertyName, array $propertyTypes): void
     {
-        $this->propertyTypes[$propertyName] = $propertyType;
+        $this->propertyTypes[$propertyName] = $propertyTypes;
     }
 
     /**
