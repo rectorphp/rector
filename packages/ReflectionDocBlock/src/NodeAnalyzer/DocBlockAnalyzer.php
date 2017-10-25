@@ -71,11 +71,9 @@ final class DocBlockAnalyzer
 
     public function getVarTypes(Node $node): ?string
     {
-        $docBlock = $this->docBlockFactory->createFromNode($node);
-
         /** @var Var_[] $varTags */
-        $varTags = $docBlock->getTagsByName('var');
-        if (count($varTags) === 0) {
+        $varTags = $this->getTagsByName($node, 'var');
+        if ($varTags === null) {
             return null;
         }
 
@@ -84,24 +82,21 @@ final class DocBlockAnalyzer
 
     public function getDeprecatedDocComment(Node $node): ?string
     {
-        $docBlock = $this->docBlockFactory->createFromNode($node);
-
         /** @var Deprecated[] $deprecatedTags */
-        $deprecatedTags = $docBlock->getTagsByName('deprecated');
-        if (count($deprecatedTags) === 0) {
+        $deprecatedTags = $this->getTagsByName($node, 'deprecated');
+        if ($deprecatedTags === null) {
             return null;
         }
 
-        return $deprecatedTags[0]->getDescription()->render();
+        return $deprecatedTags[0]->getDescription()
+            ->render();
     }
 
     public function getParamTypeFor(Node $node, string $paramName): ?string
     {
-        $docBlock = $this->docBlockFactory->createFromNode($node);
-
         /** @var Param[] $paramTags */
-        $paramTags = $docBlock->getTagsByName('param');
-        if (count($paramTags) === 0) {
+        $paramTags = $this->getTagsByName($node, 'param');
+        if ($paramTags === 0) {
             return null;
         }
 
@@ -151,4 +146,16 @@ final class DocBlockAnalyzer
     {
         return (bool) preg_match('#^/\*\*[\s\*]*\*/$#', $docContent);
     }
+
+    private function getTagsByName(Node $node, string $name): ?array
+    {
+        $docBlock = $this->docBlockFactory->createFromNode($node);
+
+        $tags = $docBlock->getTagsByName($name);
+        if (count($tags) === 0) {
+            return null;
+        }
+
+        return $tags;
+}
 }
