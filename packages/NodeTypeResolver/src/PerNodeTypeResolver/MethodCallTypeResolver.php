@@ -70,7 +70,7 @@ final class MethodCallTypeResolver implements PerNodeTypeResolverInterface
                 return null;
             }
 
-            $this->typeContext->addVariableWithType($variableName, [$variableType]);
+            $this->typeContext->addVariableWithTypes($variableName, [$variableType]);
         }
 
         return [$variableType];

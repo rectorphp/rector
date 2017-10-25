@@ -12,7 +12,10 @@ final class Test extends AbstractNodeTypeResolverTest
     {
         $propertyNodes = $this->getNodesForFileOfType(__DIR__ . '/Source/DocBlockDefinedProperty.inc', Property::class);
 
-        $this->assertSame('SomeNamespace\PropertyType', $propertyNodes[0]->getAttribute(Attribute::TYPES));
+        $this->assertSame(
+            ['SomeNamespace\PropertyType'],
+            $propertyNodes[0]->getAttribute(Attribute::TYPES)
+        );
     }
 
     public function testConstructorType(): void
@@ -23,6 +26,9 @@ final class Test extends AbstractNodeTypeResolverTest
         );
 
         // @todo: add propertyFetch test
-        $this->assertSame('SomeNamespace\PropertyType', $propertyNodes[0]->getAttribute(Attribute::TYPES));
+        $this->assertSame(
+            ['SomeNamespace\PropertyType'],
+            $propertyNodes[0]->getAttribute(Attribute::TYPES)
+        );
     }
 }

@@ -12,13 +12,19 @@ final class Test extends AbstractNodeTypeResolverTest
     {
         $variableNodes = $this->getNodesForFileOfType(__DIR__ . '/Source/MethodParamTypeHint.php.inc', Variable::class);
 
-        $this->assertSame('SomeNamespace\SubNamespace\Html', $variableNodes[0]->getAttribute(Attribute::TYPES));
+        $this->assertSame(
+            ['SomeNamespace\SubNamespace\Html'],
+            $variableNodes[0]->getAttribute(Attribute::TYPES)
+        );
     }
 
     public function testDocBlock(): void
     {
         $variableNodes = $this->getNodesForFileOfType(__DIR__ . '/Source/MethodParamDocBlock.php.inc', Variable::class);
 
-        $this->assertSame('SomeNamespace\SubNamespace\Html', $variableNodes[0]->getAttribute(Attribute::TYPES));
+        $this->assertSame(
+            ['SomeNamespace\SubNamespace\Html'],
+            $variableNodes[0]->getAttribute(Attribute::TYPES)
+        );
     }
 }

@@ -69,7 +69,7 @@ final class TypeContext
     /**
      * @param string[] $variableTypes
      */
-    public function addVariableWithType(string $variableName, array $variableTypes): void
+    public function addVariableWithTypes(string $variableName, array $variableTypes): void
     {
         $this->variableTypes[$variableName] = $variableTypes;
     }
@@ -109,15 +109,15 @@ final class TypeContext
     /**
      * @return string[]
      */
-    public function getTypeForProperty(string $name): array
+    public function getTypesForProperty(string $name): array
     {
         return $this->propertyTypes[$name] ?? [];
     }
 
     public function addAssign(string $newVariable, string $oldVariable): void
     {
-        $type = $this->getTypesForVariable($oldVariable);
-        $this->addVariableWithType($newVariable, $type);
+        $variableTypes = $this->getTypesForVariable($oldVariable);
+        $this->addVariableWithTypes($newVariable, $variableTypes);
     }
 
     /**

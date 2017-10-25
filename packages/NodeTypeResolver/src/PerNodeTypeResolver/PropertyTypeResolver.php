@@ -48,7 +48,7 @@ final class PropertyTypeResolver implements PerNodeTypeResolverInterface
     public function resolve(Node $propertyNode): array
     {
         $propertyName = $propertyNode->props[0]->name->toString();
-        $propertyType = $this->typeContext->getTypeForProperty($propertyName);
+        $propertyType = $this->typeContext->getTypesForProperty($propertyName);
         if ($propertyType) {
             return [$propertyType];
         }
@@ -57,7 +57,7 @@ final class PropertyTypeResolver implements PerNodeTypeResolverInterface
 
         $propertyType = $this->namespaceAnalyzer->resolveTypeToFullyQualified($propertyType, $propertyNode);
 
-        $this->typeContext->addPropertyTypes($propertyName, $propertyType);
+        $this->typeContext->addPropertyTypes($propertyName, [$propertyType]);
 
         return [$propertyType];
     }

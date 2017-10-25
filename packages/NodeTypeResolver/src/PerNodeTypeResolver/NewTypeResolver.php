@@ -59,7 +59,7 @@ final class NewTypeResolver implements PerNodeTypeResolverInterface, NodeTypeRes
             // can be anything (dynamic)
             $propertyName = $newNode->class->name->toString();
 
-            return $this->typeContext->getTypeForProperty($propertyName);
+            return $this->typeContext->getTypesForProperty($propertyName);
         }
 
         return [];

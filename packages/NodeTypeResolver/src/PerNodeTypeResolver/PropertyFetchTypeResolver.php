@@ -56,7 +56,7 @@ final class PropertyFetchTypeResolver implements PerNodeTypeResolverInterface, N
 
         $propertyName = $this->resolvePropertyName($propertyFetchNode);
 
-        return $this->typeContext->getTypeForProperty($propertyName);
+        return $this->typeContext->getTypesForProperty($propertyName);
     }
 
     public function setNodeTypeResolver(NodeTypeResolver $nodeTypeResolver): void
