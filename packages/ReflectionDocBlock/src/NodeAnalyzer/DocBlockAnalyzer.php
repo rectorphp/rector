@@ -57,10 +57,12 @@ final class DocBlockAnalyzer
             if ($annotationContent) {
                 if (Strings::contains($annotation->render(), $annotationContent)) {
                     $annotationsToRemove[] = $annotation;
+
                     continue;
                 }
             } else {
                 $annotationsToRemove[] = $annotation;
+
                 continue;
             }
         }
