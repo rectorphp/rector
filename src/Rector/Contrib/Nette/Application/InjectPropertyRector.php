@@ -57,7 +57,7 @@ final class InjectPropertyRector extends AbstractRector
 
     private function addPropertyToCollector(Property $propertyNode): void
     {
-        $propertyType = $this->docBlockAnalyzer->getAnnotationFromNode($propertyNode, 'var');
+        $propertyType = $this->docBlockAnalyzer->getVarTypes($propertyNode);
 
         $propertyName = (string) $propertyNode->props[0]->name;
 

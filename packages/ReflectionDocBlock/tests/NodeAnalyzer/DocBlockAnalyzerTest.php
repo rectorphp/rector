@@ -43,10 +43,10 @@ final class DocBlockAnalyzerTest extends AbstractContainerAwareTestCase
            * @deprecated This is deprecated 
         ');
 
-        $deprecatedAnnotation = $this->docBlockAnalyzer->getAnnotationFromNode($node, 'deprecated');
+        $deprecatedAnnotation = $this->docBlockAnalyzer->getDeprecatedDocComment($node);
         $this->assertSame('This is deprecated', $deprecatedAnnotation);
 
-        $varAnnotation = $this->docBlockAnalyzer->getAnnotationFromNode($node, 'var');
+        $varAnnotation = $this->docBlockAnalyzer->getVarTypes($node);
         $this->assertSame('int', $varAnnotation);
     }
 

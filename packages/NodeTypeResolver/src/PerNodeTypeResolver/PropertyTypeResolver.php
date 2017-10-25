@@ -53,7 +53,7 @@ final class PropertyTypeResolver implements PerNodeTypeResolverInterface
             return $propertyTypes;
         }
 
-        $propertyTypes = $this->docBlockAnalyzer->getAnnotationFromNode($propertyNode, 'var');
+        $propertyTypes = $this->docBlockAnalyzer->getVarTypes($propertyNode);
 
         $propertyTypes = $this->namespaceAnalyzer->resolveTypeToFullyQualified($propertyTypes, $propertyNode);
 

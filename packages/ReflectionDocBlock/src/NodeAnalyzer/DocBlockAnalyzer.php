@@ -12,7 +12,6 @@ use phpDocumentor\Reflection\DocBlock\Tags\Var_;
 use phpDocumentor\Reflection\Types\Object_;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
-use Rector\Exception\NotImplementedException;
 use Rector\ReflectionDocBlock\DocBlock\DocBlockFactory;
 use ReflectionProperty;
 
@@ -70,36 +69,17 @@ final class DocBlockAnalyzer
         $this->saveNewDocBlockToNode($node, $docBlock);
     }
 
-    public function getAnnotationFromNode(Node $node, string $annotation): string
+    public function getVarTypes(Node $node): ?string
     {
         $docBlock = $this->docBlockFactory->createFromNode($node);
 
-        $annotationTags = $docBlock->getTagsByName($annotation);
-        if (count($annotationTags) === 0) {
-            return '';
+        /** @var Var_[] $varTags */
+        $varTags = $docBlock->getTagsByName('var');
+        if (count($varTags) === 0) {
+            return null;
         }
 
-        if (count($annotationTags) === 1) {
-            $type = $annotationTags[0]->getName();
-            if ($annotationTags[0] instanceof Var_) {
-                // @todo: resolve non-FQN names using namespace imports
-                // e.g. $propertyNode->getAttribute(Attribute::USE_STATEMENTS)
-                // maybe decouple to service?
-                return (string) $annotationTags[0]->getType();
-            }
-
-            if ($type === 'deprecated') {
-                $content = $annotationTags[0]->render();
-
-                return trim(ltrim($content, '* @deprecated '));
-            }
-        }
-
-        throw new NotImplementedException(sprintf(
-            'Not implemented yet. Go to "%s()" and add check for "%s" annotation.',
-            __METHOD__,
-            $annotation
-        ));
+        return (string) $varTags[0]->getType();
     }
 
     public function getDeprecatedDocComment(Node $node): ?string
@@ -117,17 +97,17 @@ final class DocBlockAnalyzer
 
     public function getParamTypeFor(Node $node, string $paramName): ?string
     {
-        if ($node->getDocComment() === null) {
+        $docBlock = $this->docBlockFactory->createFromNode($node);
+
+        /** @var Param[] $paramTags */
+        $paramTags = $docBlock->getTagsByName('param');
+        if (count($paramTags) === 0) {
             return null;
         }
 
-        $docBlock = $this->docBlockFactory->createFromNode($node);
-
-        /** @var Param[] $paramAnnotations */
-        $paramAnnotations = $docBlock->getTagsByName('param');
-        foreach ($paramAnnotations as $paramAnnotation) {
-            if ($paramAnnotation->getVariableName() === $paramName) {
-                $type = $paramAnnotation->getType();
+        foreach ($paramTags as $paramTag) {
+            if ($paramTag->getVariableName() === $paramName) {
+                $type = $paramTag->getType();
                 if ($type instanceof Object_) {
                     return $type->getFqsen()->getName();
                 }
