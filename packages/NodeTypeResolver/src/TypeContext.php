@@ -92,7 +92,12 @@ final class TypeContext
         $functionReflection = $this->getFunctionReflection($functionLikeNode);
         if ($functionReflection) {
             foreach ($functionReflection->getParameters() as $parameterReflection) {
-                $this->variableTypes[$parameterReflection->getName()] = (string) $parameterReflection->getType();
+                $type = (string) $parameterReflection->getType();
+                if (! $type) {
+                    continue;
+                }
+
+                $this->variableTypes[$parameterReflection->getName()] = [$type];
             }
         }
     }
