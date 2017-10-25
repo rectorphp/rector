@@ -34,7 +34,7 @@ final class FormIsValidRector extends AbstractRector
             return false;
         }
 
-        if ($node->var->getAttribute(Attribute::TYPE) !== 'Symfony\Component\Form\Form') {
+        if ($node->var->getAttribute(Attribute::TYPES) !== 'Symfony\Component\Form\Form') {
             return false;
         }
 

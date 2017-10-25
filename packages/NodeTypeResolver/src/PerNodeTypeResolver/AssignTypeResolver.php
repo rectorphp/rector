@@ -36,12 +36,13 @@ final class AssignTypeResolver implements PerNodeTypeResolverInterface, NodeType
 
     /**
      * @param Assign $assignNode
+     * @return string[]
      */
-    public function resolve(Node $assignNode): ?string
+    public function resolve(Node $assignNode): array
     {
         if (! $assignNode->var instanceof Variable) {
             // @todo: resolve for properties etc. as well
-            return null;
+            return [];
         }
 
         $variableType = $this->resolveTypeForRightSide($assignNode);
@@ -53,7 +54,7 @@ final class AssignTypeResolver implements PerNodeTypeResolverInterface, NodeType
             $this->typeContext->addVariableWithType($variableName, $variableType);
         }
 
-        return $variableType;
+        return [$variableType];
     }
 
     public function setNodeTypeResolver(NodeTypeResolver $nodeTypeResolver): void
@@ -71,7 +72,7 @@ final class AssignTypeResolver implements PerNodeTypeResolverInterface, NodeType
 
         $this->typeContext->addAssign($name, $assignNode->expr->name);
 
-        return $this->typeContext->getTypeForVariable($name);
+        return $this->typeContext->getTypesForVariable($name);
     }
 
     private function resolveTypeForRightSide(Assign $assignNode): ?string

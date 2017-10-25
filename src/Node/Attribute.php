@@ -14,7 +14,7 @@ final class Attribute
      *
      * @var string
      */
-    public const TYPE = 'type';
+    public const TYPES = 'type';
 
     /**
      * System name.

@@ -38,8 +38,9 @@ final class NewTypeResolver implements PerNodeTypeResolverInterface, NodeTypeRes
 
     /**
      * @param New_ $newNode
+     * @return string[]
      */
-    public function resolve(Node $newNode): ?string
+    public function resolve(Node $newNode): array
     {
         if ($this->shouldDelegate($newNode)) {
             return $this->nodeTypeResolver->resolve($newNode->class);
@@ -61,7 +62,7 @@ final class NewTypeResolver implements PerNodeTypeResolverInterface, NodeTypeRes
             return $this->typeContext->getTypeForProperty($propertyName);
         }
 
-        return null;
+        return [];
     }
 
     public function setNodeTypeResolver(NodeTypeResolver $nodeTypeResolver): void

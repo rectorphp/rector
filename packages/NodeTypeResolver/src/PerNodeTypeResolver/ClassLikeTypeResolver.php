@@ -15,9 +15,10 @@ final class ClassLikeTypeResolver implements PerNodeTypeResolverInterface
 
     /**
      * @param ClassLike $classLikeNode
+     * @return string[]
      */
-    public function resolve(Node $classLikeNode): ?string
+    public function resolve(Node $classLikeNode): array
     {
-        return $classLikeNode->name->toString();
+        return [$classLikeNode->name->toString()];
     }
 }

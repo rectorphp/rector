@@ -64,7 +64,7 @@ final class IdentifierRector extends AbstractRector
         }
 
         /** @var PropertyFetch $node */
-        $nodeType = $node->var->getAttribute(Attribute::TYPE);
+        $nodeType = $node->var->getAttribute(Attribute::TYPES);
 
         $properties = $this->typeToPropertiesMap[$nodeType];
 

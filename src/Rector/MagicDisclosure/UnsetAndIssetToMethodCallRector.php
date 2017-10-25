@@ -120,7 +120,7 @@ final class UnsetAndIssetToMethodCallRector extends AbstractRector
 
     private function matchArrayDimFetch(ArrayDimFetch $arrayDimFetchNode): bool
     {
-        $variableNodeType = $arrayDimFetchNode->var->getAttribute(Attribute::TYPE);
+        $variableNodeType = $arrayDimFetchNode->var->getAttribute(Attribute::TYPES);
 
         foreach ($this->typeToMethodCalls as $type => $transformation) {
             if ($variableNodeType === $type) {

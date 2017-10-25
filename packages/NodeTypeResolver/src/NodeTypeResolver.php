@@ -18,7 +18,10 @@ final class NodeTypeResolver
         $this->perNodeTypeResolvers[$perNodeTypeResolver->getNodeClass()] = $perNodeTypeResolver;
     }
 
-    public function resolve(Node $node): ?string
+    /**
+     * @return string[]
+     */
+    public function resolve(Node $node): array
     {
         foreach ($this->perNodeTypeResolvers as $class => $perNodeTypeResolver) {
             if (! $node instanceof $class) {
@@ -26,8 +29,8 @@ final class NodeTypeResolver
             }
 
             // resolve just once
-            if ($node->getAttribute(Attribute::TYPE)) {
-                return $node->getAttribute(Attribute::TYPE);
+            if ($node->getAttribute(Attribute::TYPES)) {
+                return $node->getAttribute(Attribute::TYPES);
             }
 
             return $perNodeTypeResolver->resolve($node);

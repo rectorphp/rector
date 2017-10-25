@@ -15,7 +15,7 @@ final class Test extends AbstractNodeTypeResolverTest
 
         $this->assertSame(
             'SomeNamespace\SomeClass_SomeNamespace\SomeInterface',
-            $variableNodes[0]->getAttribute(Attribute::TYPE)
+            $variableNodes[0]->getAttribute(Attribute::TYPES)
         );
     }
 }

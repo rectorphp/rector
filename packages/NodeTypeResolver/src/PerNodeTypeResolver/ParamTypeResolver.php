@@ -51,8 +51,9 @@ final class ParamTypeResolver implements PerNodeTypeResolverInterface, NodeTypeR
 
     /**
      * @param Param $paramNode
+     * @return string[]
      */
-    public function resolve(Node $paramNode): ?string
+    public function resolve(Node $paramNode): array
     {
         $variableName = $paramNode->var->name;
 
@@ -78,12 +79,11 @@ final class ParamTypeResolver implements PerNodeTypeResolverInterface, NodeTypeR
 
         // resolve to FQN
         $paramType = $this->namespaceAnalyzer->resolveTypeToFullyQualified($paramType, $paramNode);
-
         if ($paramType) {
             $this->typeContext->addVariableWithType($variableName, $paramType);
         }
 
-        return $paramType;
+        return [$paramType];
     }
 
     public function setNodeTypeResolver(NodeTypeResolver $nodeTypeResolver): void

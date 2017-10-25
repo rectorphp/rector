@@ -42,7 +42,7 @@ final class TypeResolver extends NodeVisitorAbstract
     public function enterNode(Node $node): void
     {
         if ($node instanceof ClassLike) {
-            $this->typeContext->enterClass($node);
+            $this->typeContext->enterClassLike($node);
 
             return;
         }
@@ -55,7 +55,7 @@ final class TypeResolver extends NodeVisitorAbstract
 
         $type = $this->nodeTypeResolver->resolve($node);
         if ($type) {
-            $node->setAttribute(Attribute::TYPE, $type);
+            $node->setAttribute(Attribute::TYPES, $type);
         }
     }
 }

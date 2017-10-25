@@ -95,7 +95,7 @@ final class MethodCallAnalyzer
             return null;
         }
 
-        $nodeType = $node->var->getAttribute(Attribute::TYPE);
+        $nodeType = $node->var->getAttribute(Attribute::TYPES);
 
         return in_array($nodeType, $types, true) ? $nodeType : null;
     }
@@ -137,7 +137,7 @@ final class MethodCallAnalyzer
         // @todo resolve in classResolver -> add parent types as well .=))
 
         // itterate up, @todo: handle in TypeResover
-        while ($varNode->getAttribute(Attribute::TYPE) === null) {
+        while ($varNode->getAttribute(Attribute::TYPES) === null) {
             if (property_exists($varNode, 'var')) {
                 $varNode = $varNode->var;
             } else {
@@ -145,6 +145,6 @@ final class MethodCallAnalyzer
             }
         }
 
-        return (string) $varNode->getAttribute(Attribute::TYPE);
+        return (string) $varNode->getAttribute(Attribute::TYPES);
     }
 }

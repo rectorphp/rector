@@ -27,8 +27,9 @@ final class NameTypeResolver implements PerNodeTypeResolverInterface
 
     /**
      * @param Name $nameNode
+     * @return string[]
      */
-    public function resolve(Node $nameNode): ?string
+    public function resolve(Node $nameNode): array
     {
         $types = [];
 
@@ -43,7 +44,7 @@ final class NameTypeResolver implements PerNodeTypeResolverInterface
             $types = array_merge($types, array_keys($classLikeReflection->getInterfaces()));
             $types = array_merge($types, $classLikeReflection->getParentClassNames());
 
-            return implode('_', $types);
+            return $types;
         }
 
         return $nameNode->toString();

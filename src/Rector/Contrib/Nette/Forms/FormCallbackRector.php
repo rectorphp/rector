@@ -66,7 +66,7 @@ final class FormCallbackRector extends AbstractRector
 
     private function isFormEventHandler(PropertyFetch $propertyFetchNode): bool
     {
-        if ($propertyFetchNode->var->getAttribute(Attribute::TYPE) !== self::FORM_CLASS) {
+        if ($propertyFetchNode->var->getAttribute(Attribute::TYPES) !== self::FORM_CLASS) {
             return false;
         }
 

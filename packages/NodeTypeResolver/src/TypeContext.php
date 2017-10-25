@@ -4,6 +4,7 @@ namespace Rector\NodeTypeResolver;
 
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\FunctionLike;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
@@ -19,14 +20,14 @@ use Rector\NodeTypeResolver\TypesExtractor\ConstructorPropertyTypesExtractor;
 final class TypeContext
 {
     /**
-     * @var mixed[]
+     * @var string[][]
      */
-    private $types = [];
+    private $variableTypes = [];
 
     /**
-     * @var string[]
+     * @var string[][]
      */
-    private $classProperties = [];
+    private $propertyTypes = [];
 
     /**
      * @var ClassLike|null
@@ -60,57 +61,65 @@ final class TypeContext
 
     public function startFile(): void
     {
-        $this->types = [];
-        $this->classProperties = [];
+        $this->variableTypes = [];
+        $this->propertyTypes = [];
         $this->classLikeNode = null;
     }
 
     public function addVariableWithType(string $variableName, string $variableType): void
     {
-        $this->types[$variableName] = $variableType;
+        $this->variableTypes[$variableName] = $variableType;
     }
 
-    public function enterClass(ClassLike $classLikeNode): void
+    public function enterClassLike(ClassLike $classLikeNode): void
     {
-        $this->classProperties = [];
+        $this->propertyTypes = [];
         $this->classLikeNode = $classLikeNode;
 
         if ($this->classAnalyzer->isNormalClass($classLikeNode)) {
-            $this->classProperties = $this->constructorPropertyTypesExtractor->extractFromClassNode($classLikeNode);
+            /** @var Class_ $classLikeNode */
+            $this->propertyTypes = $this->constructorPropertyTypesExtractor->extractFromClassNode($classLikeNode);
         }
     }
 
     public function enterFunction(FunctionLike $functionLikeNode): void
     {
-        $this->types = [];
+        $this->variableTypes = [];
 
         $functionReflection = $this->getFunctionReflection($functionLikeNode);
         if ($functionReflection) {
             foreach ($functionReflection->getParameters() as $parameterReflection) {
-                $this->types[$parameterReflection->getName()] = (string) $parameterReflection->getType();
+                $this->variableTypes[$parameterReflection->getName()] = (string) $parameterReflection->getType();
             }
         }
     }
 
-    public function getTypeForVariable(string $name): string
+
+    /**
+     * @return string[]
+     */
+    public function getTypesForVariable(string $name): array
     {
-        return $this->types[$name] ?? '';
+        return $this->variableTypes[$name] ?? [];
     }
 
-    public function getTypeForProperty(string $name): ?string
+    /**
+     * @return string[]
+     */
+    public function getTypeForProperty(string $name): array
     {
-        return $this->classProperties[$name] ?? null;
+        return $this->propertyTypes[$name] ?? [];
     }
 
     public function addAssign(string $newVariable, string $oldVariable): void
     {
-        $type = $this->getTypeForVariable($oldVariable);
+        $type = $this->getTypesForVariable($oldVariable);
         $this->addVariableWithType($newVariable, $type);
     }
 
     public function addPropertyType(string $propertyName, string $propertyType): void
     {
-        $this->classProperties[$propertyName] = $propertyType;
+        $this->propertyTypes[$propertyName] = $propertyType;
     }
 
     /**

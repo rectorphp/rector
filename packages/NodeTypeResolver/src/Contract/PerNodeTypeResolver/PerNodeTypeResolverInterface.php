@@ -8,5 +8,9 @@ interface PerNodeTypeResolverInterface
 {
     public function getNodeClass(): string;
 
-    public function resolve(Node $node): ?string;
+    /**
+     * @param Node $node
+     * @return string[]
+     */
+    public function resolve(Node $node): array;
 }

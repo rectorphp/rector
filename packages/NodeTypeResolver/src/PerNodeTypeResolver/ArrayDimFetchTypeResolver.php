@@ -23,8 +23,9 @@ final class ArrayDimFetchTypeResolver implements PerNodeTypeResolverInterface, N
 
     /**
      * @param ArrayDimFetch $arrayDimFetchNode
+     * @return string[]
      */
-    public function resolve(Node $arrayDimFetchNode): ?string
+    public function resolve(Node $arrayDimFetchNode): array
     {
         if ($arrayDimFetchNode->var instanceof MethodCall) {
             return $this->nodeTypeResolver->resolve($arrayDimFetchNode->var);

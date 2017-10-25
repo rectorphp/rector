@@ -52,7 +52,7 @@ final class FormSetRequiredRector extends AbstractRector
             return false;
         }
 
-        if ($arg->value->class->getAttribute(Attribute::TYPE) !== self::FORM_CLASS) {
+        if ($arg->value->class->getAttribute(Attribute::TYPES) !== self::FORM_CLASS) {
             return false;
         }
 

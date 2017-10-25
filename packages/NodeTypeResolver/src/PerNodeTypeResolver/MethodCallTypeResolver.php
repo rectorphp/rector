@@ -37,8 +37,9 @@ final class MethodCallTypeResolver implements PerNodeTypeResolverInterface
 
     /**
      * @param MethodCall $methodCallNode
+     * @return string[]
      */
-    public function resolve(Node $methodCallNode): ?string
+    public function resolve(Node $methodCallNode): array
     {
         // 1. get $anotherVar type
 
@@ -51,7 +52,7 @@ final class MethodCallTypeResolver implements PerNodeTypeResolverInterface
 
         $variableName = $variableNode->name;
 
-        $methodCallVariableType = $this->typeContext->getTypeForVariable($variableName);
+        $methodCallVariableType = $this->typeContext->getTypesForVariable($variableName);
 
         $methodCallName = $this->resolveMethodCallName($methodCallNode);
 
@@ -70,7 +71,7 @@ final class MethodCallTypeResolver implements PerNodeTypeResolverInterface
             $this->typeContext->addVariableWithType($variableName, $variableType);
         }
 
-        return $variableType;
+        return [$variableType];
     }
 
     private function resolveMethodCallName(MethodCall $methodCallNode): ?string

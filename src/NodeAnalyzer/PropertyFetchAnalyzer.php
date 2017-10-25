@@ -31,7 +31,7 @@ final class PropertyFetchAnalyzer
             return false;
         }
 
-        $variableNodeType = $node->var->getAttribute(Attribute::TYPE);
+        $variableNodeType = $node->var->getAttribute(Attribute::TYPES);
 
         if ($variableNodeType !== $type) {
             return false;
@@ -51,7 +51,7 @@ final class PropertyFetchAnalyzer
             return false;
         }
 
-        $variableNodeType = $node->var->getAttribute(Attribute::TYPE);
+        $variableNodeType = $node->var->getAttribute(Attribute::TYPES);
 
         if (! in_array($variableNodeType, $types, true)) {
             return false;
@@ -68,7 +68,7 @@ final class PropertyFetchAnalyzer
             return false;
         }
 
-        $variableNodeType = $node->var->getAttribute(Attribute::TYPE);
+        $variableNodeType = $node->var->getAttribute(Attribute::TYPES);
         if ($variableNodeType !== $type) {
             return false;
         }
@@ -102,7 +102,7 @@ final class PropertyFetchAnalyzer
             return false;
         }
 
-        $variableNodeType = $node->var->getAttribute(Attribute::TYPE);
+        $variableNodeType = $node->var->getAttribute(Attribute::TYPES);
 
         return in_array($variableNodeType, $types, true);
     }
@@ -116,7 +116,7 @@ final class PropertyFetchAnalyzer
             return null;
         }
 
-        return $node->var->getAttribute(Attribute::TYPE);
+        return $node->var->getAttribute(Attribute::TYPES);
     }
 
     /**
