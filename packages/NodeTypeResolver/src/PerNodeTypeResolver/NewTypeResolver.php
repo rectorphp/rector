@@ -71,10 +71,8 @@ final class NewTypeResolver implements PerNodeTypeResolverInterface, NodeTypeRes
 
     private function shouldDelegate(New_ $newNode): bool
     {
-        $nodeClass = get_class($newNode->class);
-
         foreach ([Class_::class, Variable::class, Name::class] as $typeToSkip) {
-            if ($nodeClass instanceof $typeToSkip) {
+            if ($newNode->class instanceof $typeToSkip) {
                 return true;
             }
         }
