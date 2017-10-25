@@ -66,5 +66,3 @@ parameters:
             - bin/rector.php
             # test file
             - tests/Rector/Contrib/Nette/Routing/BootstrapToRouterFactoryRector/Wrong/bootstrap.php
-            # value object
-            - packages/NodeTypeResolver/src/NodeVisitor/NamespaceResolver.php
