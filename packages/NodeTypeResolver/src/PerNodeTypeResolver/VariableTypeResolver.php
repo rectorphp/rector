@@ -52,7 +52,7 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface, NodeTy
             return $this->nodeTypeResolver->resolve($variableNode->name);
         }
 
-        return null;
+        return [];
     }
 
     public function setNodeTypeResolver(NodeTypeResolver $nodeTypeResolver): void

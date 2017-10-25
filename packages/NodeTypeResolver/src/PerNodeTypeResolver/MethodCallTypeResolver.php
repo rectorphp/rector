@@ -47,7 +47,7 @@ final class MethodCallTypeResolver implements PerNodeTypeResolverInterface
         $variableNode = $methodCallNode->var;
 
         if (! $variableNode instanceof Variable) {
-            return null;
+            return [];
         }
 
         $variableName = $variableNode->name;
@@ -58,7 +58,7 @@ final class MethodCallTypeResolver implements PerNodeTypeResolverInterface
 
         // 2. get method() return type
         if (! $methodCallVariableTypes || ! $methodCallName) {
-            return null;
+            return [];
         }
 
         $methodCallVariableType = array_pop($methodCallVariableTypes);
@@ -67,7 +67,7 @@ final class MethodCallTypeResolver implements PerNodeTypeResolverInterface
         if ($variableType) {
             $variableName = $this->getVariableToAssignTo($methodCallNode);
             if ($variableName === null) {
-                return null;
+                return [];
             }
 
             $this->typeContext->addVariableWithTypes($variableName, [$variableType]);

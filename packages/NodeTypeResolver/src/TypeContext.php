@@ -120,8 +120,7 @@ final class TypeContext
 
     public function addAssign(string $newVariable, string $oldVariable): void
     {
-        $variableTypes = $this->getTypesForVariable($oldVariable);
-        $this->addVariableWithTypes($newVariable, $variableTypes);
+        $this->addVariableWithTypes($newVariable, $this->getTypesForVariable($oldVariable));
     }
 
     /**
