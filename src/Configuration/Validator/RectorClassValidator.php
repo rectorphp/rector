@@ -32,7 +32,7 @@ final class RectorClassValidator
 
     private function ensureIsRector(string $rector): void
     {
-        if ($rector instanceof RectorInterface) {
+        if (is_a($rector, RectorInterface::class, true)) {
             return;
         }
 
