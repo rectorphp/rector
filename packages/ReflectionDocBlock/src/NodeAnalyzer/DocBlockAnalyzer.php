@@ -88,8 +88,12 @@ final class DocBlockAnalyzer
             return null;
         }
 
-        return $deprecatedTags[0]->getDescription()
-            ->render();
+        if ($deprecatedTags[0]->getDescription()) {
+            return $deprecatedTags[0]->getDescription()
+                ->render();
+        }
+
+        return $deprecatedTags[0]->getName();
     }
 
     public function getParamTypeFor(Node $node, string $paramName): ?string
