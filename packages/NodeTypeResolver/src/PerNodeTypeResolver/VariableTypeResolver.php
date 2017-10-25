@@ -39,13 +39,13 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface, NodeTy
      */
     public function resolve(Node $variableNode): array
     {
-        $variableType = $this->typeContext->getTypesForVariable((string) $variableNode->name);
-        if ($variableType) {
-            return $variableType;
+        $variableTypes = $this->typeContext->getTypesForVariable((string) $variableNode->name);
+        if ($variableTypes) {
+            return $variableTypes;
         }
 
         if ($variableNode->name === 'this') {
-            return $variableNode->getAttribute(Attribute::CLASS_NAME);
+            return [$variableNode->getAttribute(Attribute::CLASS_NAME)];
         }
 
         if ($variableNode->name instanceof Variable) {

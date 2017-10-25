@@ -12,22 +12,37 @@ final class Test extends AbstractNodeTypeResolverTest
     {
         $variableNodes = $this->getNodesForFileOfType(__DIR__ . '/Source/SomeClass.php.inc', Variable::class);
 
-        $this->assertSame('SomeNamespace\AnotherType', $variableNodes[0]->getAttribute(Attribute::TYPES));
-        $this->assertSame('SomeNamespace\AnotherType', $variableNodes[2]->getAttribute(Attribute::TYPES));
+        $this->assertSame(
+            ['SomeNamespace\AnotherType'],
+            $variableNodes[0]->getAttribute(Attribute::TYPES)
+        );
+        $this->assertSame(
+            ['SomeNamespace\AnotherType'],
+            $variableNodes[2]->getAttribute(Attribute::TYPES)
+        );
     }
 
     public function testAssign(): void
     {
         $variableNodes = $this->getNodesForFileOfType(__DIR__ . '/Source/SomeClass.php.inc', Variable::class);
 
-        $this->assertSame('SomeNamespace\AnotherType', $variableNodes[1]->getAttribute(Attribute::TYPES));
+        $this->assertSame(
+            ['SomeNamespace\AnotherType'],
+            $variableNodes[1]->getAttribute(Attribute::TYPES)
+        );
     }
 
     public function testCallbackArgumentTypehint(): void
     {
         $variableNodes = $this->getNodesForFileOfType(__DIR__ . '/Source/ArgumentTypehint.php.inc', Variable::class);
 
-        $this->assertSame('SomeNamespace\UseUse', $variableNodes[0]->getAttribute(Attribute::TYPES));
-        $this->assertSame('SomeNamespace\UseUse', $variableNodes[1]->getAttribute(Attribute::TYPES));
+        $this->assertSame(
+            ['SomeNamespace\UseUse'],
+            $variableNodes[0]->getAttribute(Attribute::TYPES)
+        );
+        $this->assertSame(
+            ['SomeNamespace\UseUse'],
+            $variableNodes[1]->getAttribute(Attribute::TYPES)
+        );
     }
 }
