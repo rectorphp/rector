@@ -140,6 +140,11 @@ final class DocBlockAnalyzer
     private function saveNewDocBlockToNode(Node $node, DocBlock $docBlock): void
     {
         $docContent = $this->serializer->getDocComment($docBlock);
+
+        if ($this->isDocContentEmpty($docContent)) {
+            $docContent = '';
+        }
+
         $doc = new Doc($docContent);
         $node->setDocComment($doc);
     }
@@ -157,5 +162,13 @@ final class DocBlockAnalyzer
         $tagsPropertyReflection->setValue($docBlock, $annnotations);
 
         return $docBlock;
+    }
+
+    /**
+     * Inspiration https://github.com/FriendsOfPHP/PHP-CS-Fixer/blob/b23b5e0a4877a1c97d58f260ea0eb66fbff30e04/Symfony/CS/Fixer/Symfony/NoEmptyPhpdocFixer.php#L35
+     */
+    private function isDocContentEmpty(string $docContent): bool
+    {
+        return (bool) preg_match('#^/\*\*[\s\*]*\*/$#', $docContent);
     }
 }
