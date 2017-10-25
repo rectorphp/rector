@@ -131,7 +131,7 @@ final class NamespaceReplacerRector extends AbstractRector
     private function isGivenKind(Node $node, array $types): bool
     {
         foreach ($types as $type) {
-            if (is_a($node, $type, true)) {
+            if ($node instanceof $type) {
                 return true;
             }
         }

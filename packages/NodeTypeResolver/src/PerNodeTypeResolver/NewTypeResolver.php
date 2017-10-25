@@ -74,7 +74,7 @@ final class NewTypeResolver implements PerNodeTypeResolverInterface, NodeTypeRes
         $nodeClass = get_class($newNode->class);
 
         foreach ([Class_::class, Variable::class, Name::class] as $typeToSkip) {
-            if (is_a($nodeClass, $typeToSkip, true)) {
+            if ($nodeClass instanceof $typeToSkip) {
                 return true;
             }
         }
