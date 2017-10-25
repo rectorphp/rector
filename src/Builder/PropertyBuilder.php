@@ -40,7 +40,7 @@ final class PropertyBuilder
     }
 
     /**
-     * @param string[] $propertyName
+     * @param string[] $propertyTypes
      */
     private function buildPrivatePropertyNode(array $propertyTypes, string $propertyName): Property
     {

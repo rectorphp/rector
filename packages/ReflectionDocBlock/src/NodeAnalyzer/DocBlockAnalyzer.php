@@ -50,19 +50,22 @@ final class DocBlockAnalyzer
 
         $annotations = $docBlock->getTagsByName($annotationName);
 
-        $annotationsToKeep = [];
+        $allAnnotations = $docBlock->getTags();
+        $annotationsToRemove = [];
 
         foreach ($annotations as $annotation) {
             if ($annotationContent) {
                 if (Strings::contains($annotation->render(), $annotationContent)) {
+                    $annotationsToRemove[] = $annotation;
                     continue;
                 }
             } else {
+                $annotationsToRemove[] = $annotation;
                 continue;
             }
-
-            $annotationsToKeep[] = $annotation;
         }
+
+        $annotationsToKeep = array_diff($allAnnotations, $annotationsToRemove);
 
         $docBlock = $this->replaceDocBlockAnnotations($docBlock, $annotationsToKeep);
 
@@ -96,7 +99,7 @@ final class DocBlockAnalyzer
         return $deprecatedTags[0]->getName();
     }
 
-    public function getParamTypeFor(Node $node, string $paramName): ?string
+    public function getTypeForParam(Node $node, string $paramName): ?string
     {
         /** @var Param[] $paramTags */
         $paramTags = $this->getTagsByName($node, 'param');

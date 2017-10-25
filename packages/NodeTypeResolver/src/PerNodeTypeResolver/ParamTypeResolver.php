@@ -72,7 +72,7 @@ final class ParamTypeResolver implements PerNodeTypeResolverInterface, NodeTypeR
         $classMethod = $paramNode->getAttribute(Attribute::PARENT_NODE);
 
         // resolve param type from docblock
-        $paramType = $this->docBlockAnalyzer->getParamTypeFor($classMethod, $variableName);
+        $paramType = $this->docBlockAnalyzer->getTypeForParam($classMethod, $variableName);
         if ($paramType === null) {
             return [];
         }

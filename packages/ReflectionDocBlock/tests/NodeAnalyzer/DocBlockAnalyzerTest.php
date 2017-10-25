@@ -56,7 +56,7 @@ final class DocBlockAnalyzerTest extends AbstractContainerAwareTestCase
            * @param ParamType $paramName 
         ');
 
-        $this->assertSame('ParamType', $this->docBlockAnalyzer->getParamTypeFor($node, 'paramName'));
+        $this->assertSame('ParamType', $this->docBlockAnalyzer->getTypeForParam($node, 'paramName'));
     }
 
     public function testGetDeprecatedDocComment(): void
