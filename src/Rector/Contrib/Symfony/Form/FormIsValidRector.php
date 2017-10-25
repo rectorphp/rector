@@ -7,6 +7,7 @@ use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Node\Attribute;
 use Rector\Node\NodeFactory;
+use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -23,22 +24,24 @@ final class FormIsValidRector extends AbstractRector
      */
     private $nodeFactory;
 
-    public function __construct(NodeFactory $nodeFactory)
+    /**
+     * @var MethodCallAnalyzer
+     */
+    private $methodCallAnalyzer;
+
+    public function __construct(NodeFactory $nodeFactory, MethodCallAnalyzer $methodCallAnalyzer)
     {
         $this->nodeFactory = $nodeFactory;
+        $this->methodCallAnalyzer = $methodCallAnalyzer;
     }
 
     public function isCandidate(Node $node): bool
     {
-        if (! $node instanceof MethodCall) {
-            return false;
-        }
-
-        if ($node->var->getAttribute(Attribute::TYPES) !== 'Symfony\Component\Form\Form') {
-            return false;
-        }
-
-        if ((string) $node->name !== 'isValid') {
+        if (! $this->methodCallAnalyzer->isTypeAndMethod(
+            $node,
+            'Symfony\Component\Form\Form',
+            'isValid'
+        )) {
             return false;
         }
 
