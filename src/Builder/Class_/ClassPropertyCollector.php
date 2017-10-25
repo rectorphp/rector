@@ -5,17 +5,23 @@ namespace Rector\Builder\Class_;
 final class ClassPropertyCollector
 {
     /**
-     * @var string[][]
+     * @var mixed[][]
      */
     private $classProperties = [];
 
-    public function addPropertyForClass(string $class, string $propertyType, string $propertyName): void
+    /**
+     * @param string[] $propertyTypes
+     */
+    public function addPropertyForClass(string $class, array $propertyTypes, string $propertyName): void
     {
-        $this->classProperties[$class][$propertyType] = $propertyName;
+        $this->classProperties[$class][] = [
+            'name' => $propertyName,
+            'types' => $propertyTypes,
+        ];
     }
 
     /**
-     * @return string[]
+     * @return mixed[]
      */
     public function getPropertiesforClass(string $class): array
     {
