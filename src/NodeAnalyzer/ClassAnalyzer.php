@@ -5,6 +5,8 @@ namespace Rector\NodeAnalyzer;
 use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\Interface_;
 
 final class ClassAnalyzer
 {
@@ -19,19 +21,20 @@ final class ClassAnalyzer
     }
 
     /**
+     * @param Class_|Interface_ $classLikeNode
      * @return string[]
      */
-    public function resolveParentTypes(Class_ $classNode): array
+    public function resolveParentTypes(ClassLike $classLikeNode): array
     {
         $types = [];
 
-        $parentClasses = (array) $classNode->extends;
+        $parentClasses = (array) $classLikeNode->extends;
         foreach ($parentClasses as $parentClass) {
             /** @var FullyQualified $parentClass */
             $types[] = $parentClass->toString();
         }
 
-        $interfaces = (array) $classNode->implements;
+        $interfaces = (array) $classLikeNode->implements;
         foreach ($interfaces as $interface) {
             /** @var FullyQualified $interface */
             $types[] = $interface->toString();
