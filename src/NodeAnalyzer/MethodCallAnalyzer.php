@@ -88,16 +88,17 @@ final class MethodCallAnalyzer
 
     /**
      * @param string[] $types
+     * @return string[]
      */
-    public function matchTypes(Node $node, array $types): ?string
+    public function matchTypes(Node $node, array $types): ?array
     {
         if (! $node instanceof MethodCall) {
             return null;
         }
 
-        $nodeType = $node->var->getAttribute(Attribute::TYPES);
+        $nodeTypes = $node->var->getAttribute(Attribute::TYPES);
 
-        return in_array($nodeType, $types, true) ? $nodeType : null;
+        return array_intersect($nodeTypes, $types) ? $nodeTypes : null;
     }
 
     public function isTypeAndMagic(Node $node, string $type): bool
