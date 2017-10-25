@@ -10,7 +10,8 @@ final class Test extends AbstractNodeTypeResolverTest
 {
     public function test(): void
     {
-        $variableNodes = $this->getNodesForFileOfType(__DIR__ . '/Source/ClassWithParent.php.inc', Variable::class);
+        $file = __DIR__ . '/Source/ClassWithParent.php.inc';
+        $variableNodes = $this->getNodesForFileOfType($file, Variable::class);
 
         $this->assertSame(
             'SomeNamespace\SomeClass_SomeNamespace\SomeInterface',

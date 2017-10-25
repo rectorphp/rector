@@ -29,10 +29,8 @@ final class SmartClassReflector
      */
     private $classReflectorActiveFile;
 
-    public function __construct(
-        ClassReflectorFactory $classReflectorFactory,
-        CurrentFileProvider $currentFileProvider
-    ) {
+    public function __construct(ClassReflectorFactory $classReflectorFactory, CurrentFileProvider $currentFileProvider)
+    {
         $this->classReflectorFactory = $classReflectorFactory;
         $this->currentFileProvider = $currentFileProvider;
     }

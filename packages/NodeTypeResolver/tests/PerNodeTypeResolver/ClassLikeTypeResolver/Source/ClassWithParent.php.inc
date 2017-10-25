@@ -6,4 +6,9 @@ class SomeClass implements SomeInterface
 {
 }
 
+interface SomeInterface
+{
+
+}
+
 $someClass = new SomeClass;
