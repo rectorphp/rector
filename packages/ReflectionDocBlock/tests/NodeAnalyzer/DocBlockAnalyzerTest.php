@@ -67,7 +67,7 @@ final class DocBlockAnalyzerTest extends AbstractContainerAwareTestCase
         ');
 
         $deprecatedDocComment = $this->docBlockAnalyzer->getDeprecatedDocComment($node);
-        $this->assertSame(' * @deprecated This is deprecated ' . PHP_EOL, $deprecatedDocComment);
+        $this->assertSame('This is deprecated', $deprecatedDocComment);
     }
 
     private function createNodeWithDoc(string $doc): String_

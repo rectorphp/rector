@@ -8,6 +8,7 @@ use phpDocumentor\Reflection\DocBlock\TagFactory;
 use phpDocumentor\Reflection\DocBlockFactory as PhpDocumentorDocBlockFactory;
 use phpDocumentor\Reflection\TypeResolver;
 use PhpParser\Node;
+use SplObjectStorage;
 
 final class DocBlockFactory
 {
@@ -16,12 +17,18 @@ final class DocBlockFactory
      */
     private $phpDocumentorDocBlockFactory;
 
+    /**
+     * @var DocBlock[]|SplObjectStorage
+     */
+    private $docBlocksPerNode;
+
     public function __construct(
         TagFactory $tagFactory,
         PhpDocumentorDocBlockFactory $phpDocumentorDocBlockFactory,
         DescriptionFactory $descriptionFactory,
         TypeResolver $typeResolver
     ) {
+        $this->docBlocksPerNode = new SplObjectStorage;
         $this->phpDocumentorDocBlockFactory = $phpDocumentorDocBlockFactory;
 
         // cannot move to services.yml, because it would cause circular dependency exception
@@ -31,8 +38,14 @@ final class DocBlockFactory
 
     public function createFromNode(Node $node): DocBlock
     {
-        $docBlock = $node->getDocComment() ? $node->getDocComment()->getText() : ' ';
+        if (isset($this->docBlocksPerNode[$node])) {
+            return $this->docBlocksPerNode[$node];
+        }
 
-        return $this->phpDocumentorDocBlockFactory->create($docBlock);
+        $docBlockContent = $node->getDocComment() ? $node->getDocComment()->getText() : ' ';
+
+        $docBlock = $this->phpDocumentorDocBlockFactory->create($docBlockContent);
+
+        return $this->docBlocksPerNode[$node] = $docBlock;
     }
 }

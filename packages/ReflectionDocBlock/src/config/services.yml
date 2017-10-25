@@ -12,3 +12,5 @@ services:
 
     phpDocumentor\Reflection\Types\ContextFactory: ~
     phpDocumentor\Reflection\FqsenResolver: ~
+
+    phpDocumentor\Reflection\DocBlock\Serializer: ~
