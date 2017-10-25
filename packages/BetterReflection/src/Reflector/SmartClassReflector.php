@@ -3,6 +3,7 @@
 namespace Rector\BetterReflection\Reflector;
 
 use Rector\BetterReflection\Reflection\ReflectionClass;
+use Rector\BetterReflection\Reflector\Exception\IdentifierNotFound;
 use Rector\FileSystem\CurrentFileProvider;
 use SplFileInfo;
 use TypeError;
@@ -43,6 +44,9 @@ final class SmartClassReflector
             }
 
             return $this->smartClassReflector->reflect($className);
+        } catch (IdentifierNotFound $identifierNotFoundException) {
+            return null;
+
         } catch (TypeError $typeError) {
             return null;
         }

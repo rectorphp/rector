@@ -31,22 +31,24 @@ final class NameTypeResolver implements PerNodeTypeResolverInterface
      */
     public function resolve(Node $nameNode): array
     {
-        /** @var Name|null $fqnName */
-        $fqnName = $nameNode->getAttribute(Attribute::RESOLVED_NAME);
+        /** @var Name|null $name */
+        $name = $nameNode->getAttribute(Attribute::RESOLVED_NAME);
+        if ($name === null) {
+            return [];
+        }
+
+        $fullyQualifiedName = $name->toString();
 
         $types = [];
-        if ($fqnName) {
-            $types[] = $fullyQualifiedName = $fqnName->toString();
+        $types[] = $fullyQualifiedName;
+
+        $classLikeReflection = $this->smartClassReflector->reflect($fullyQualifiedName);
+        if ($classLikeReflection === null) {
+            return $types;
         }
 
-        if ($fqnName instanceof Name) {
-            if ($fullyQualifiedName) {
-                $classLikeReflection = $this->smartClassReflector->reflect($fullyQualifiedName);
-            }
-
-            $types = array_merge($types, array_keys($classLikeReflection->getInterfaces()));
-            $types = array_merge($types, $classLikeReflection->getParentClassNames());
-        }
+        $types = array_merge($types, array_keys($classLikeReflection->getInterfaces()));
+        $types = array_merge($types, $classLikeReflection->getParentClassNames());
 
         return $types;
     }
