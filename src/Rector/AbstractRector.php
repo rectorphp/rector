@@ -83,6 +83,9 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
     protected function prependNodeAfterNode(Expr $nodeToPrepend, Node $positionNode): void
     {
         /** @var Expression $parentNode */
+
+        // @todo: use NodeFinder->getAncestor(Expression::class)
+
         $parentNode = $positionNode->getAttribute(Attribute::PARENT_NODE);
 
         $expressionToPrepend = $this->resolveToExpression($nodeToPrepend);

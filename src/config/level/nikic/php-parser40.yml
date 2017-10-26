@@ -1,8 +1,8 @@
 rectors:
-#    Rector\Rector\Contrib\PhpParser\IdentifierRector: ~
-#    Rector\Rector\Contrib\PhpParser\ParamAndStaticVarNameRector: ~
-#    Rector\Rector\Contrib\PhpParser\CatchAndClosureUseNameRector: ~
-#    Rector\Rector\Contrib\PhpParser\SetLineRector: ~
+    Rector\Rector\Contrib\PhpParser\IdentifierRector: ~
+    Rector\Rector\Contrib\PhpParser\ParamAndStaticVarNameRector: ~
+    Rector\Rector\Contrib\PhpParser\CatchAndClosureUseNameRector: ~
+    Rector\Rector\Contrib\PhpParser\SetLineRector: ~
     Rector\Rector\Contrib\PhpParser\RemoveNodeRector: ~
     Rector\Rector\Contrib\PhpParser\UseWithAliasRector: ~
 
