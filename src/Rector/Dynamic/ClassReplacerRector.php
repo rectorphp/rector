@@ -9,7 +9,6 @@ use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use Rector\Node\Attribute;
 use Rector\Rector\AbstractRector;
-use Rector\ReflectionDocBlock\NodeAnalyzer\NamespaceAnalyzer;
 
 final class ClassReplacerRector extends AbstractRector
 {
@@ -19,17 +18,11 @@ final class ClassReplacerRector extends AbstractRector
     private $oldToNewClasses = [];
 
     /**
-     * @var NamespaceAnalyzer
-     */
-    private $namespaceAnalyzer;
-
-    /**
      * @param string[] $oldToNewClasses
      */
-    public function __construct(array $oldToNewClasses, NamespaceAnalyzer $namespaceAnalyzer)
+    public function __construct(array $oldToNewClasses)
     {
         $this->oldToNewClasses = $oldToNewClasses;
-        $this->namespaceAnalyzer = $namespaceAnalyzer;
     }
 
     public function isCandidate(Node $node): bool
@@ -58,11 +51,9 @@ final class ClassReplacerRector extends AbstractRector
         if ($node instanceof Use_) {
             $newName = $this->resolveNewNameFromNode($node);
 
-            if ($this->namespaceAnalyzer->isUseStatmenetAlreadyPresent($node, $newName)) {
-                $this->shouldRemoveNode = true;
-            }
-
             $node->uses[0]->name = new Name($newName);
+
+            $node->setAttribute(Attribute::ORIGINAL_NODE, null);
 
             return $node;
         }

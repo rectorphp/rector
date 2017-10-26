@@ -3,7 +3,7 @@
 namespace SomeNamespace;
 
 use Bagr;
-
+use NewClass;
 use NewClass;
 
 class SomeClass
@@ -12,6 +12,6 @@ class SomeClass
     {
         $newClass = new NewClass;
 
-        return new \NewClass;
+        return new NewClass;
     }
 }
