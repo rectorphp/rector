@@ -114,6 +114,10 @@ final class TidingSerializer
         return $doc->getContent();
     }
 
+    /**
+     * phpDocumentor adds extra preslashes,
+     * maybe could be resolved with custom @see DocBlock\Tags\Formatter instead of @see PassthroughFormatter
+     */
     private function clearUnnededPreslashes(string $content): string
     {
         $content = str_replace('@var \\', '@var ', $content);
