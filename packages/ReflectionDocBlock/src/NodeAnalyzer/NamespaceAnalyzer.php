@@ -36,8 +36,7 @@ final class NamespaceAnalyzer
     public function resolveTypeToFullyQualified(array $types, Node $node): string
     {
         /** @var Use_[] $useNodes */
-        $useNodes = $node->getAttribute(Attribute::USE_NODES);
-
+        $useNodes = (array) $node->getAttribute(Attribute::USE_NODES);
         foreach ($useNodes as $useNode) {
             $nodeUseName = $useNode->uses[0]->name->toString();
 
