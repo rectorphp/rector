@@ -4,7 +4,6 @@ namespace Rector\ReflectionDocBlock\NodeAnalyzer;
 
 use Nette\Utils\Strings;
 use phpDocumentor\Reflection\DocBlock;
-use phpDocumentor\Reflection\DocBlock\Serializer;
 use phpDocumentor\Reflection\DocBlock\Tag;
 use phpDocumentor\Reflection\DocBlock\Tags\Deprecated;
 use phpDocumentor\Reflection\DocBlock\Tags\Param;

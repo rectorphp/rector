@@ -20,6 +20,7 @@
         "symplify/package-builder": "^2.5"
     },
     "require-dev": {
+        "latte/latte": "^2.4",
         "nette/application": "^2.4",
         "nette/forms": "^2.4",
         "phpunit/phpunit": "^6.4",

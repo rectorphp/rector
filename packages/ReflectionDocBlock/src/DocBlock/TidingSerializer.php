@@ -5,6 +5,7 @@ namespace Rector\ReflectionDocBlock\DocBlock;
 use PhpCsFixer\DocBlock\DocBlock as PhpCsFixerDocBlock;
 use PhpCsFixer\DocBlock\Line;
 use phpDocumentor\Reflection\DocBlock;
+use phpDocumentor\Reflection\DocBlock\Serializer;
 
 /**
  * As extra, it removes empty lines and spaces.
@@ -12,11 +13,11 @@ use phpDocumentor\Reflection\DocBlock;
 final class TidingSerializer
 {
     /**
-     * @var DocBlock\Serializer
+     * @var Serializer
      */
     private $serializer;
 
-    public function __construct(DocBlock\Serializer $serializer)
+    public function __construct(Serializer $serializer)
     {
         $this->serializer = $serializer;
     }
@@ -37,8 +38,6 @@ final class TidingSerializer
 
     /**
      * Inspiration https://github.com/FriendsOfPHP/PHP-CS-Fixer/blob/b23b5e0a4877a1c97d58f260ea0eb66fbff30e04/Symfony/CS/Fixer/Symfony/NoEmptyPhpdocFixer.php#L35
-     *
-     *
      */
     private function isDocContentEmpty(string $docContent): bool
     {
@@ -67,7 +66,6 @@ final class TidingSerializer
         return $content;
     }
 
-
     /**
      * Make sure the first useful line starts immediately after the first line.
      */
@@ -79,16 +77,19 @@ final class TidingSerializer
         $lines = $doc->getLines();
         $total = count($lines);
         foreach ($lines as $index => $line) {
-            if (!$line->isTheStart()) {
+            if (! $line->isTheStart()) {
                 // don't remove lines with content and don't entirely delete docblocks
                 if ($total - $index < 3 || $line->containsUsefulContent()) {
                     break;
                 }
+
                 $line->remove();
             }
         }
+
         return $doc->getContent();
     }
+
     /**
      * Make sure the last useful is immediately before after the final line.
      */
@@ -100,20 +101,23 @@ final class TidingSerializer
         $lines = array_reverse($doc->getLines());
         $total = count($lines);
         foreach ($lines as $index => $line) {
-            if (!$line->isTheEnd()) {
+            if (! $line->isTheEnd()) {
                 // don't remove lines with content and don't entirely delete docblocks
                 if ($total - $index < 3 || $line->containsUsefulContent()) {
                     break;
                 }
+
                 $line->remove();
             }
         }
+
         return $doc->getContent();
     }
 
-    private function clearUnnededPreslashes(string $content)
+    private function clearUnnededPreslashes(string $content): string
     {
         $content = str_replace('@var \\', '@var ', $content);
+
         return str_replace('@param \\', '@param ', $content);
     }
 }
