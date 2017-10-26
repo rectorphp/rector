@@ -30,20 +30,26 @@ final class NamespaceAnalyzer
         return false;
     }
 
-    public function resolveTypeToFullyQualified(string $name, Node $node): string
+    /**
+     * @param string[] $types
+     */
+    public function resolveTypeToFullyQualified(array $types, Node $node): string
     {
         /** @var Use_[] $useNodes */
         $useNodes = $node->getAttribute(Attribute::USE_NODES);
 
         foreach ($useNodes as $useNode) {
             $nodeUseName = $useNode->uses[0]->name->toString();
-            if (Strings::endsWith($nodeUseName, '\\' . $name)) {
-                return $nodeUseName;
+
+            foreach ($types as $type) {
+                if (Strings::endsWith($nodeUseName, '\\' . $type)) {
+                    return $nodeUseName;
+                }
             }
         }
 
         $namespace = $node->getAttribute(Attribute::NAMESPACE_NAME);
 
-        return ($namespace ? $namespace . '\\' : '') . $name;
+        return ($namespace ? $namespace . '\\' : '') . array_pop($types);
     }
 }
