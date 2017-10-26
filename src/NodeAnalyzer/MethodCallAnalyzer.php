@@ -4,7 +4,9 @@ namespace Rector\NodeAnalyzer;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
+use PhpParser\NodeFinder;
 use Rector\BetterReflection\Reflector\SmartClassReflector;
 use Rector\Node\Attribute;
 use ReflectionMethod;
@@ -17,13 +19,19 @@ final class MethodCallAnalyzer
     private $smartClassReflector;
 
     /**
+     * @var NodeFinder
+     */
+    private $nodeFinder;
+
+    /**
      * @var string[][]
      */
     private $publicMethodNamesForType = [];
 
-    public function __construct(SmartClassReflector $smartClassReflector)
+    public function __construct(SmartClassReflector $smartClassReflector, NodeFinder $nodeFinder)
     {
         $this->smartClassReflector = $smartClassReflector;
+        $this->nodeFinder = $nodeFinder;
     }
 
     /**
@@ -135,20 +143,8 @@ final class MethodCallAnalyzer
      */
     private function resolveVariableType(MethodCall $methodCallNode): array
     {
-        $varNode = $methodCallNode->var;
+        $variableNode = $this->nodeFinder->findFirstInstanceOf([$methodCallNode], Variable::class);
 
-        // get types?
-        // @todo resolve in classResolver -> add parent types as well .=))
-
-        // itterate up, @todo: handle in TypeResover
-        while ($varNode->getAttribute(Attribute::TYPES) === null) {
-            if (property_exists($varNode, 'var')) {
-                $varNode = $varNode->var;
-            } else {
-                break;
-            }
-        }
-
-        return (array) $varNode->getAttribute(Attribute::TYPES);
+        return (array) $variableNode->getAttribute(Attribute::TYPES);
     }
 }
