@@ -44,6 +44,7 @@ final class MethodReflector
                 return (string) $returnType;
             }
 
+
             $returnTypes = $methodReflection->getDocBlockReturnTypes();
 
             if (! isset($returnTypes[0])) {

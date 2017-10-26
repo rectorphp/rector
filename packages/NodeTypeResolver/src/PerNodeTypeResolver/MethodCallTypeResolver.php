@@ -61,9 +61,11 @@ final class MethodCallTypeResolver implements PerNodeTypeResolverInterface
             return [];
         }
 
-        $methodCallVariableType = array_pop($methodCallVariableTypes);
+        // get first type
+        $methodCallVariableType = array_shift($methodCallVariableTypes);
 
         $variableType = $this->methodReflector->getMethodReturnType($methodCallVariableType, $methodCallName);
+
         if ($variableType) {
             $variableName = $this->getVariableToAssignTo($methodCallNode);
             if ($variableName === null) {
