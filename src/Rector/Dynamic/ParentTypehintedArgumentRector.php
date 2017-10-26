@@ -59,7 +59,7 @@ final class ParentTypehintedArgumentRector extends AbstractRector
         /** @var Class_ $classNode */
         $classNode = $node->getAttribute(Attribute::CLASS_NODE);
 
-        $parentTypes = $this->classAnalyzer->resolveParentTypes($classNode);
+        $parentTypes = $this->classAnalyzer->resolveTypeAndParentTypes($classNode);
 
         return $this->isTypeMatch($parentTypes);
     }
@@ -72,7 +72,7 @@ final class ParentTypehintedArgumentRector extends AbstractRector
         /** @var Class_ $classMethodNode */
         $classNode = $classMethodNode->getAttribute(Attribute::CLASS_NODE);
 
-        $classParentTypes = $this->classAnalyzer->resolveParentTypes($classNode);
+        $classParentTypes = $this->classAnalyzer->resolveTypeAndParentTypes($classNode);
 
         $matchingTypes = $this->getMatchingTypesForClassNode($classParentTypes);
 

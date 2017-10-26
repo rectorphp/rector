@@ -12,9 +12,7 @@ use Rector\NodeTraverser\CloningNodeTraverser;
 use Rector\NodeTraverser\RectorNodeTraverser;
 use Rector\NodeTraverser\ShutdownNodeTraverser;
 use Rector\NodeTraverser\StandaloneTraverseNodeTraverser;
-use Rector\NodeTraverserQueue\Exception\FileProcessingException;
 use SplFileInfo;
-use Throwable;
 
 final class NodeTraverserQueue
 {
@@ -106,8 +104,6 @@ final class NodeTraverserQueue
             }
 
             throw $identifierNotFoundException;
-        } catch (Throwable $throwable) {
-            throw new FileProcessingException($fileInfo, $throwable);
         }
     }
 }

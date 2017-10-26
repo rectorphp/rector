@@ -3,10 +3,12 @@
 namespace Rector\NodeAnalyzer;
 
 use PhpParser\Node;
+use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
+use Rector\Node\Attribute;
 
 final class ClassAnalyzer
 {
@@ -24,14 +26,20 @@ final class ClassAnalyzer
      * @param Class_|Interface_ $classLikeNode
      * @return string[]
      */
-    public function resolveParentTypes(ClassLike $classLikeNode): array
+    public function resolveTypeAndParentTypes(ClassLike $classLikeNode): array
     {
         $types = [];
 
-        $parentClasses = (array) $classLikeNode->extends;
-        foreach ($parentClasses as $parentClass) {
+        if (! $this->isAnonymousClassNode($classLikeNode)) {
+            $types[] = $this->resolveNameNode($classLikeNode);
+        }
+
+        $currentClassNode = $classLikeNode;
+        while ($currentClassNode->extends) {
             /** @var FullyQualified $parentClass */
-            $types[] = $parentClass->toString();
+            $types[] = $this->resolveNameNode($classLikeNode->extends);
+
+            $currentClassNode = $currentClassNode->extends;
         }
 
         $interfaces = (array) $classLikeNode->implements;
@@ -41,5 +49,15 @@ final class ClassAnalyzer
         }
 
         return $types;
+    }
+
+    private function resolveNameNode(ClassLike $classLikeNode): string
+    {
+        $nameNode = $classLikeNode->getAttribute(Attribute::RESOLVED_NAME);
+        if ($nameNode instanceof Name) {
+            return $nameNode->toString();
+        }
+
+        return $classLikeNode->name->toString();
     }
 }

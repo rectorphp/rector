@@ -56,26 +56,13 @@ final class MethodCallTypeResolver implements PerNodeTypeResolverInterface
 
         $methodCallName = $this->resolveMethodCallName($methodCallNode);
 
-        // 2. get method() return type
         if (! $methodCallVariableTypes || ! $methodCallName) {
             return [];
         }
 
-        // get first type
         $methodCallVariableType = array_shift($methodCallVariableTypes);
 
-        $variableType = $this->methodReflector->getMethodReturnType($methodCallVariableType, $methodCallName);
-
-        if ($variableType) {
-            $variableName = $this->getVariableToAssignTo($methodCallNode);
-            if ($variableName === null) {
-                return [];
-            }
-
-            $this->typeContext->addVariableWithTypes($variableName, [$variableType]);
-        }
-
-        return [$variableType];
+        return $this->resolveMethodReflectionReturnTypes($methodCallNode, $methodCallVariableType, $methodCallName);
     }
 
     private function resolveMethodCallName(MethodCall $methodCallNode): ?string
@@ -104,5 +91,31 @@ final class MethodCallTypeResolver implements PerNodeTypeResolverInterface
         }
 
         return null;
+    }
+
+    /**
+     * Resolve for:
+     * - getMethod(): ReturnType
+     *
+     * @return string[]
+     */
+    private function resolveMethodReflectionReturnTypes(
+        MethodCall $methodCallNode,
+        string $class,
+        string $method
+    ): array {
+        $variableType = $this->methodReflector->getMethodReturnType($class, $method);
+        if ($variableType === null) {
+            return [];
+        }
+
+        $variableName = $this->getVariableToAssignTo($methodCallNode);
+        if ($variableName === null) {
+            return [];
+        }
+
+        $this->typeContext->addVariableWithTypes($variableName, [$variableType]);
+
+        return [$variableType];
     }
 }
