@@ -1,6 +1,6 @@
 <?php declare (strict_types=1);
 
-class ClassWithNamedService implements ContainerAwareInterface
+class ClassWithNamedService2 implements ContainerAwareInterface
 {
     public function render()
     {

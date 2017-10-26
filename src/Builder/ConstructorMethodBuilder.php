@@ -47,6 +47,13 @@ final class ConstructorMethodBuilder
 
         /** @var ClassMethod $constructorMethod */
         if ($constructorMethod) {
+            // has parameter already?
+            foreach ($constructorMethod->params as $constructorParameter) {
+                if ($constructorParameter->var->name === $propertyName) {
+                    return;
+                }
+            }
+
             $constructorMethod->params[] = $this->createParameter($propertyTypes, $propertyName)
                 ->getNode();
 
