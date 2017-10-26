@@ -64,9 +64,9 @@ final class IdentifierRector extends AbstractRector
         }
 
         /** @var PropertyFetch $node */
-        $nodeType = $node->var->getAttribute(Attribute::TYPES);
+        $nodeTypes = $node->var->getAttribute(Attribute::TYPES);
 
-        $properties = $this->typeToPropertiesMap[$nodeType];
+        $properties = $this->matchTypeToProperties($nodeTypes);
 
         return $this->propertyFetchAnalyzer->isProperties($node, $properties);
     }
@@ -82,5 +82,20 @@ final class IdentifierRector extends AbstractRector
         );
 
         return new MethodCall($propertyFetchNode, 'toString');
+    }
+
+    /**
+     * @param string[] $nodeTypes
+     * @return string[]
+     */
+    private function matchTypeToProperties(array $nodeTypes): array
+    {
+        foreach ($nodeTypes as $nodeType) {
+            if ($this->typeToPropertiesMap[$nodeType]) {
+                return $this->typeToPropertiesMap[$nodeType];
+            }
+        }
+
+        return [];
     }
 }

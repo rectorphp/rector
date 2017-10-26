@@ -149,6 +149,6 @@ final class MethodCallAnalyzer
             }
         }
 
-        return $varNode->getAttribute(Attribute::TYPES);
+        return (array) $varNode->getAttribute(Attribute::TYPES);
     }
 }

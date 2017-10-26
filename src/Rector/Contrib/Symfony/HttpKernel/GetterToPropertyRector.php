@@ -84,7 +84,7 @@ final class GetterToPropertyRector extends AbstractRector
 
         $this->classPropertyCollector->addPropertyForClass(
             (string) $methodCallNode->getAttribute(Attribute::CLASS_NAME),
-            $serviceType,
+            [$serviceType],
             $propertyName
         );
 
