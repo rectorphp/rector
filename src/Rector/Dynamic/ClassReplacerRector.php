@@ -27,7 +27,7 @@ final class ClassReplacerRector extends AbstractRector
     /**
      * @var NodeCollector
      */
-    private $expressionCollector;
+    private $nodeCollector;
 
     /**
      * @param string[] $oldToNewClasses
@@ -35,11 +35,11 @@ final class ClassReplacerRector extends AbstractRector
     public function __construct(
         array $oldToNewClasses,
         NamespaceAnalyzer $namespaceAnalyzer,
-        NodeCollector $expressionCollector
+        NodeCollector $nodeCollector
     ) {
         $this->oldToNewClasses = $oldToNewClasses;
         $this->namespaceAnalyzer = $namespaceAnalyzer;
-        $this->expressionCollector = $expressionCollector;
+        $this->nodeCollector = $nodeCollector;
     }
 
     public function isCandidate(Node $node): bool
@@ -69,7 +69,7 @@ final class ClassReplacerRector extends AbstractRector
             $newName = $this->resolveNewNameFromNode($node);
 
             if ($this->namespaceAnalyzer->isUseStatmenetAlreadyPresent($node, $newName)) {
-                $this->expressionCollector->addNodeToRemove($node);
+                $this->nodeCollector->addNodeToRemove($node);
 
                 return null;
 //                $this->shouldRemoveNode = true;

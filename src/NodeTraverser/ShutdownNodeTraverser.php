@@ -8,9 +8,9 @@ use Rector\NodeVisitor\PropertyToClassAdder;
 
 final class ShutdownNodeTraverser extends NodeTraverser
 {
-    public function __construct(PropertyToClassAdder $propertyToClassAdder, NodeRemover $expressionRemover)
+    public function __construct(PropertyToClassAdder $propertyToClassAdder, NodeRemover $nodeRemover)
     {
         $this->addVisitor($propertyToClassAdder);
-        $this->addVisitor($expressionRemover);
+        $this->addVisitor($nodeRemover);
     }
 }

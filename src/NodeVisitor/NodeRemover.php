@@ -6,6 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
+use Rector\Node\Attribute;
 use Rector\NodeVisitor\Collector\NodeCollector;
 
 final class NodeRemover extends NodeVisitorAbstract
@@ -33,6 +34,9 @@ final class NodeRemover extends NodeVisitorAbstract
         if (! in_array($node, $nodesToRemove, true)) {
             return null;
         }
+
+        $node->getAttribute(Attribute::PARENT_NODE)
+            ->setAttribute(Attribute::ORIGINAL_NODE, null);
 
         return new Nop;
     }

@@ -3,8 +3,8 @@
 namespace SomeNamespace;
 
 use Bagr;
-use NewClass;
 
+use NewClass;
 class SomeClass
 {
     public function create()
