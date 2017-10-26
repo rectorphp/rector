@@ -39,8 +39,6 @@ checkers:
 
 parameters:
     exclude_checkers:
-        # wip
-        - Symplify\CodingStandard\Sniffs\Debug\CommentedOutCodeSniff
         # excluded from symfony-checkers.neon
         - PhpCsFixer\Fixer\PhpTag\BlankLineAfterOpeningTagFixer
         - PhpCsFixer\Fixer\Operator\NewWithBracesFixer
@@ -57,12 +55,11 @@ parameters:
             - */src/Rector/Contrib/**/Helper/**.php
             - packages/NodeTypeResolver/src/NodeVisitor/TypeResolver.php
             - src/Builder/Contrib/Nette/RouterFactoryClassBuilder.php
-            - packages/NodeTypeResolver/src/PerNodeTypeResolver/AssignTypeResolver.php
+            - */packages/NodeTypeResolver/**/PerNodeTypeResolver/**TypeResolver.php
+            - */packages/NodeTypeResolver/**/PerNodeTypeResolver/**TypeResolver/Test.php
         SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff:
             # covariant types
             - */packages/NodeValueResolver/src/PerNodeValueResolver/*ValueResolver.php
         Symplify\CodingStandard\Sniffs\DependencyInjection\NoClassInstantiationSniff:
-            # temp ArgvInput: added to master
-            - bin/rector.php
             # test file
             - tests/Rector/Contrib/Nette/Routing/BootstrapToRouterFactoryRector/Wrong/bootstrap.php
