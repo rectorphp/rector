@@ -72,7 +72,6 @@ final class ClassReplacerRector extends AbstractRector
                 $this->nodeCollector->addNodeToRemove($node);
 
                 return null;
-//                $this->shouldRemoveNode = true;
             }
 
             $node->uses[0]->name = new Name($newName);

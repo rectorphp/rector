@@ -5,7 +5,6 @@ namespace Rector\Rector;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\Nop;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Contract\Rector\RectorInterface;
@@ -14,11 +13,6 @@ use SplObjectStorage;
 
 abstract class AbstractRector extends NodeVisitorAbstract implements RectorInterface
 {
-    /**
-     * @var bool
-     */
-    protected $shouldRemoveNode = false;
-
     /**
      * @var SplObjectStorage|Expression[]
      */
@@ -52,20 +46,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
             }
 
             return NodeTraverser::DONT_TRAVERSE_CHILDREN;
-        }
-
-        return null;
-    }
-
-    /**
-     * @return null|int|Node
-     */
-    final public function leaveNode(Node $node)
-    {
-        if ($this->shouldRemoveNode) {
-            $this->shouldRemoveNode = false;
-
-            return new Nop;
         }
 
         return null;
