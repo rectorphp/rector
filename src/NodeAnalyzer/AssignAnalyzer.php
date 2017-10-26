@@ -56,7 +56,8 @@ final class AssignAnalyzer
     private function isVariableTypeAndPropetyName(Node $node, string $expectedType, string $expectedPropertyName): bool
     {
         $variableTypes = $node->var->var->getAttribute(Attribute::TYPES);
-        if (in_array($expectedType, $variableTypes, true)) {
+
+        if (! in_array($expectedType, $variableTypes, true)) {
             return false;
         }
 

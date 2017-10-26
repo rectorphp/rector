@@ -85,7 +85,7 @@ final class GetServiceToConstructorInjectionRector extends AbstractRector
 
         $this->classPropertyCollector->addPropertyForClass(
             (string) $methodCallNode->getAttribute(Attribute::CLASS_NAME),
-            $serviceType,
+            [$serviceType],
             $propertyName
         );
 
