@@ -31,7 +31,7 @@ final class BetterNodeFinder
             $currentNode = $currentNode->getAttribute(Attribute::PARENT_NODE);
         }
 
-        return $currentNode;
+        return null;
     }
 
     /**
