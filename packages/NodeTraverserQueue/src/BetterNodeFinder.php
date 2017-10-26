@@ -50,4 +50,13 @@ final class BetterNodeFinder
     {
         return $this->nodeFinder->findFirstInstanceOf($nodes, $type);
     }
+
+    /**
+     * @param Node|Node[] $nodes
+     * @return Node[]
+     */
+    public function find($nodes, callable $filter): array
+    {
+        return $this->nodeFinder->find($nodes, $filter);
+    }
 }
