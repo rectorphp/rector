@@ -51,13 +51,21 @@ final class ClassAnalyzer
         return $types;
     }
 
-    private function resolveNameNode(ClassLike $classLikeNode): string
+    /**
+     * @param Name|ClassLike $node
+     * @return string
+     */
+    private function resolveNameNode(Node $node): string
     {
-        $nameNode = $classLikeNode->getAttribute(Attribute::RESOLVED_NAME);
+        if ($node instanceof Name) {
+            return $node->toString();
+        }
+
+        $nameNode = $node->getAttribute(Attribute::RESOLVED_NAME);
         if ($nameNode instanceof Name) {
             return $nameNode->toString();
         }
 
-        return $classLikeNode->name->toString();
+        return $node->name->toString();
     }
 }
