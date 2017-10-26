@@ -150,6 +150,7 @@ final class MethodCallAnalyzer
         }
 
         $variableNode = $this->nodeFinder->findFirstInstanceOf([$methodCallNode], Variable::class);
+
         return (array) $variableNode->getAttribute(Attribute::TYPES);
     }
 }
