@@ -47,10 +47,10 @@ final class NetteObjectToSmartTraitRector extends AbstractRector
             return false;
         }
 
-        /** @var FullyQualified $fqnName */
-        $fqnName = $node->extends->getAttribute(Attribute::RESOLVED_NAME);
+        /** @var FullyQualified $fullyQualifiedName */
+        $fullyQualifiedName = $node->extends->getAttribute(Attribute::RESOLVED_NAME);
 
-        return $fqnName->toString() === self::PARENT_CLASS;
+        return $fullyQualifiedName->toString() === self::PARENT_CLASS;
     }
 
     /**
