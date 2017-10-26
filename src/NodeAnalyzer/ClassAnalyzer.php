@@ -31,15 +31,18 @@ final class ClassAnalyzer
         $types = [];
 
         if (! $this->isAnonymousClassNode($classLikeNode)) {
-            $types[] = $this->resolveNameNode($classLikeNode);
+            $className = $this->resolveNameNode($classLikeNode);
+
+            $types[] = $className;
+
+            if ($classLikeNode->extends) {
+                $types[] = class_parents($className);
+            }
         }
 
-        $currentClassNode = $classLikeNode;
-        while ($currentClassNode->extends) {
+        if ($this->isAnonymousClassNode($classLikeNode)) {
             /** @var FullyQualified $parentClass */
             $types[] = $this->resolveNameNode($classLikeNode->extends);
-
-            $currentClassNode = $currentClassNode->extends;
         }
 
         $interfaces = (array) $classLikeNode->implements;

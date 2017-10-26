@@ -112,7 +112,7 @@ final class DocBlockAnalyzer
         foreach ($paramTags as $paramTag) {
             if ($paramTag->getVariableName() === $paramName) {
                 $type = $paramTag->getType();
-                if ($type instanceof Object_) {
+                if ($type instanceof Object_ && $type->getFqsen()) {
                     return $type->getFqsen()->getName();
                 }
             }
