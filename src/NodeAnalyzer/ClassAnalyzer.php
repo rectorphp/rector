@@ -53,7 +53,6 @@ final class ClassAnalyzer
 
     /**
      * @param Name|ClassLike $node
-     * @return string
      */
     private function resolveNameNode(Node $node): string
     {

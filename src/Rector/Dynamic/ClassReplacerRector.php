@@ -8,7 +8,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use Rector\Node\Attribute;
-use Rector\NodeVisitor\Collector\ExpressionCollector;
+use Rector\NodeVisitor\Collector\NodeCollector;
 use Rector\Rector\AbstractRector;
 use Rector\ReflectionDocBlock\NodeAnalyzer\NamespaceAnalyzer;
 
@@ -23,8 +23,9 @@ final class ClassReplacerRector extends AbstractRector
      * @var NamespaceAnalyzer
      */
     private $namespaceAnalyzer;
+
     /**
-     * @var ExpressionCollector
+     * @var NodeCollector
      */
     private $expressionCollector;
 
@@ -34,7 +35,7 @@ final class ClassReplacerRector extends AbstractRector
     public function __construct(
         array $oldToNewClasses,
         NamespaceAnalyzer $namespaceAnalyzer,
-        ExpressionCollector $expressionCollector
+        NodeCollector $expressionCollector
     ) {
         $this->oldToNewClasses = $oldToNewClasses;
         $this->namespaceAnalyzer = $namespaceAnalyzer;
@@ -69,6 +70,7 @@ final class ClassReplacerRector extends AbstractRector
 
             if ($this->namespaceAnalyzer->isUseStatmenetAlreadyPresent($node, $newName)) {
                 $this->expressionCollector->addNodeToRemove($node);
+
                 return null;
 //                $this->shouldRemoveNode = true;
             }
