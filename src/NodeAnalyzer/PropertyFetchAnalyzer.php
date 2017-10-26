@@ -149,6 +149,9 @@ final class PropertyFetchAnalyzer
         }
 
         $variableNodeTypes = $node->var->getAttribute(Attribute::TYPES);
+        if ($variableNodeTypes === null) {
+            return false;
+        }
 
         return in_array($type, $variableNodeTypes, true);
     }
