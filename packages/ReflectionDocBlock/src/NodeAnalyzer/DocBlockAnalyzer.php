@@ -13,6 +13,7 @@ use phpDocumentor\Reflection\Types\Object_;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use Rector\ReflectionDocBlock\DocBlock\DocBlockFactory;
+use Rector\ReflectionDocBlock\DocBlock\TidingSerializer;
 use ReflectionProperty;
 
 /**
@@ -27,14 +28,14 @@ final class DocBlockAnalyzer
     private $docBlockFactory;
 
     /**
-     * @var Serializer
+     * @var TidingSerializer
      */
-    private $serializer;
+    private $tidingSerializer;
 
-    public function __construct(DocBlockFactory $docBlockFactory, Serializer $serializer)
+    public function __construct(DocBlockFactory $docBlockFactory, TidingSerializer $tidingSerializer)
     {
         $this->docBlockFactory = $docBlockFactory;
-        $this->serializer = $serializer;
+        $this->tidingSerializer = $tidingSerializer;
     }
 
     public function hasAnnotation(Node $node, string $annotation): bool
@@ -123,12 +124,7 @@ final class DocBlockAnalyzer
 
     private function saveNewDocBlockToNode(Node $node, DocBlock $docBlock): void
     {
-        $docContent = $this->serializer->getDocComment($docBlock);
-
-        if ($this->isDocContentEmpty($docContent)) {
-            $docContent = '';
-        }
-
+        $docContent = $this->tidingSerializer->getDocComment($docBlock);
         $doc = new Doc($docContent);
         $node->setDocComment($doc);
     }
@@ -146,14 +142,6 @@ final class DocBlockAnalyzer
         $tagsPropertyReflection->setValue($docBlock, $annnotations);
 
         return $docBlock;
-    }
-
-    /**
-     * Inspiration https://github.com/FriendsOfPHP/PHP-CS-Fixer/blob/b23b5e0a4877a1c97d58f260ea0eb66fbff30e04/Symfony/CS/Fixer/Symfony/NoEmptyPhpdocFixer.php#L35
-     */
-    private function isDocContentEmpty(string $docContent): bool
-    {
-        return (bool) preg_match('#^/\*\*[\s\*]*\*/$#', $docContent);
     }
 
     /**
