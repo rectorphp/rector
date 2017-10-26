@@ -4,6 +4,7 @@ namespace Rector\NodeAnalyzer;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\NodeFinder;
@@ -143,8 +144,12 @@ final class MethodCallAnalyzer
      */
     private function resolveVariableType(MethodCall $methodCallNode): array
     {
-        $variableNode = $this->nodeFinder->findFirstInstanceOf([$methodCallNode], Variable::class);
+        $propertyFetchNode = $this->nodeFinder->findFirstInstanceOf([$methodCallNode], PropertyFetch::class);
+        if ($propertyFetchNode) {
+            return (array) $propertyFetchNode->getAttribute(Attribute::TYPES);
+        }
 
+        $variableNode = $this->nodeFinder->findFirstInstanceOf([$methodCallNode], Variable::class);
         return (array) $variableNode->getAttribute(Attribute::TYPES);
     }
 }
