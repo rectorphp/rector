@@ -35,8 +35,11 @@ final class NodeRemover extends NodeVisitorAbstract
             return null;
         }
 
-        $node->getAttribute(Attribute::PARENT_NODE)
-            ->setAttribute(Attribute::ORIGINAL_NODE, null);
+        /** @var Node|null $parentNode */
+        $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
+        if ($parentNode) {
+            $parentNode->setAttribute(Attribute::ORIGINAL_NODE, null);
+        }
 
         return new Nop;
     }
