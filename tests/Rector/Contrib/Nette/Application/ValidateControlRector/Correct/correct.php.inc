@@ -1,5 +1,10 @@
 <?php declare (strict_types=1);
 
-$myControl = new Nette\Application\UI\Control;
+final class CustomControl extends Nette\Application\UI\Control
+{
+
+}
+
+$myControl = new CustomControl;
 $myControl->redrawControl(null, false);
 $myControl->redrawControl('snippet', false);

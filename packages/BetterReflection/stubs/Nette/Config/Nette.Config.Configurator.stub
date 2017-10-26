@@ -11,6 +11,7 @@ namespace Nette\Config;
 
 use Nette;
 use Nette\DI;
+use Nette\Object;
 use Tracy;
 
 

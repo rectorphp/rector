@@ -7,8 +7,8 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\NodeVisitorAbstract;
 use Rector\DeprecationExtractor\Deprecation\DeprecationCollector;
 use Rector\DeprecationExtractor\NodeAnalyzer\TriggerErrorAnalyzer;
-use Rector\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\NodeValueResolver\NodeValueResolver;
+use Rector\ReflectionDocBlock\NodeAnalyzer\DocBlockAnalyzer;
 
 /**
  * Inspired by https://github.com/sensiolabs-de/deprecation-detector/blob/master/src/Visitor/Deprecation/FindDeprecatedTagsVisitor.php
@@ -72,7 +72,7 @@ final class DeprecationDetector extends NodeVisitorAbstract
 
     private function processDocBlockDeprecation(Node $node): void
     {
-        $deprecation = $this->docBlockAnalyzer->getAnnotationFromNode($node, 'deprecated');
+        $deprecation = $this->docBlockAnalyzer->getDeprecatedDocComment($node);
         if ($deprecation === '') {
             return;
         }

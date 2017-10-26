@@ -6,8 +6,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
-use Rector\Node\Attribute;
 use Rector\Node\NodeFactory;
+use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -25,9 +25,15 @@ final class FormCallbackRector extends AbstractRector
      */
     private $nodeFactory;
 
-    public function __construct(NodeFactory $nodeFactory)
+    /**
+     * @var PropertyFetchAnalyzer
+     */
+    private $propertyFetchAnalyzer;
+
+    public function __construct(NodeFactory $nodeFactory, PropertyFetchAnalyzer $propertyFetchAnalyzer)
     {
         $this->nodeFactory = $nodeFactory;
+        $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
     }
 
     /**
@@ -66,13 +72,11 @@ final class FormCallbackRector extends AbstractRector
 
     private function isFormEventHandler(PropertyFetch $propertyFetchNode): bool
     {
-        if ($propertyFetchNode->var->getAttribute(Attribute::TYPE) !== self::FORM_CLASS) {
-            return false;
-        }
-
-        $propertyName = (string) $propertyFetchNode->name;
-
-        return in_array($propertyName, ['onSuccess', 'onSubmit', 'onError', 'onRender'], true);
+        return $this->propertyFetchAnalyzer->isTypeAndProperties(
+            $propertyFetchNode,
+            self::FORM_CLASS,
+            ['onSuccess', 'onSubmit', 'onError', 'onRender']
+        );
     }
 
     private function isFormEvent(Assign $assignNode): bool

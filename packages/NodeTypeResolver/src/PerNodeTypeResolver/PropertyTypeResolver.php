@@ -2,14 +2,12 @@
 
 namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
-use Rector\Node\Attribute;
-use Rector\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\TypeContext;
-use Rector\NodeTypeResolver\UseStatements;
+use Rector\ReflectionDocBlock\NodeAnalyzer\DocBlockAnalyzer;
+use Rector\ReflectionDocBlock\NodeAnalyzer\NamespaceAnalyzer;
 
 final class PropertyTypeResolver implements PerNodeTypeResolverInterface
 {
@@ -23,10 +21,19 @@ final class PropertyTypeResolver implements PerNodeTypeResolverInterface
      */
     private $docBlockAnalyzer;
 
-    public function __construct(TypeContext $typeContext, DocBlockAnalyzer $docBlockAnalyzer)
-    {
+    /**
+     * @var NamespaceAnalyzer
+     */
+    private $namespaceAnalyzer;
+
+    public function __construct(
+        TypeContext $typeContext,
+        DocBlockAnalyzer $docBlockAnalyzer,
+        NamespaceAnalyzer $namespaceAnalyzer
+    ) {
         $this->typeContext = $typeContext;
         $this->docBlockAnalyzer = $docBlockAnalyzer;
+        $this->namespaceAnalyzer = $namespaceAnalyzer;
     }
 
     public function getNodeClass(): string
@@ -36,38 +43,27 @@ final class PropertyTypeResolver implements PerNodeTypeResolverInterface
 
     /**
      * @param Property $propertyNode
+     * @return string[]
      */
-    public function resolve(Node $propertyNode): ?string
+    public function resolve(Node $propertyNode): array
     {
         $propertyName = $propertyNode->props[0]->name->toString();
-        $propertyType = $this->typeContext->getTypeForProperty($propertyName);
-        if ($propertyType) {
-            return $propertyType;
+        $propertyTypes = $this->typeContext->getTypesForProperty($propertyName);
+        if ($propertyTypes) {
+            return $propertyTypes;
         }
 
-        $propertyType = $this->docBlockAnalyzer->getAnnotationFromNode($propertyNode, 'var');
+        // should be resolved at getAttribute(Attribute::TYPES)
+        $propertyType = $this->docBlockAnalyzer->getVarTypes($propertyNode);
 
-        $namespace = (string) $propertyNode->getAttribute(Attribute::NAMESPACE);
-        $useStatements = $propertyNode->getAttribute(Attribute::USE_STATEMENTS);
-
-        $propertyType = $this->resolveTypeWithNamespaceAndUseStatments($propertyType, $namespace, $useStatements);
-
-        $this->typeContext->addPropertyType($propertyName, $propertyType);
-
-        return $propertyType;
-    }
-
-    private function resolveTypeWithNamespaceAndUseStatments(
-        string $type,
-        string $namespace,
-        UseStatements $useStatements
-    ): string {
-        foreach ($useStatements->getUseStatements() as $useStatement) {
-            if (Strings::endsWith($useStatement, '\\' . $type)) {
-                return $useStatement;
-            }
+        if ($propertyType === null) {
+            return [];
         }
 
-        return ($namespace ? $namespace . '\\' : '') . $type;
+        $propertyTypes = $this->namespaceAnalyzer->resolveTypeToFullyQualified([$propertyType], $propertyNode);
+
+        $this->typeContext->addPropertyTypes($propertyName, [$propertyTypes]);
+
+        return [$propertyTypes];
     }
 }

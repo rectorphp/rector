@@ -4,7 +4,6 @@ namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
-use PhpParser\Node\Expr\MethodCall;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverAwareInterface;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -23,14 +22,11 @@ final class ArrayDimFetchTypeResolver implements PerNodeTypeResolverInterface, N
 
     /**
      * @param ArrayDimFetch $arrayDimFetchNode
+     * @return string[]
      */
-    public function resolve(Node $arrayDimFetchNode): ?string
+    public function resolve(Node $arrayDimFetchNode): array
     {
-        if ($arrayDimFetchNode->var instanceof MethodCall) {
-            return $this->nodeTypeResolver->resolve($arrayDimFetchNode->var);
-        }
-
-        return null;
+        return $this->nodeTypeResolver->resolve($arrayDimFetchNode->var);
     }
 
     public function setNodeTypeResolver(NodeTypeResolver $nodeTypeResolver): void

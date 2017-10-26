@@ -8,7 +8,6 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use Rector\Node\Attribute;
-use Rector\NodeTypeResolver\UseStatements;
 use Rector\Rector\AbstractRector;
 
 final class ClassReplacerRector extends AbstractRector
@@ -32,9 +31,9 @@ final class ClassReplacerRector extends AbstractRector
             return false;
         }
 
-        $name = $this->resolveNameFromNode($node);
+        $nameNode = $this->resolveNameNodeFromNode($node);
 
-        return isset($this->oldToNewClasses[$name]);
+        return isset($this->oldToNewClasses[$nameNode->toString()]);
     }
 
     /**
@@ -44,52 +43,47 @@ final class ClassReplacerRector extends AbstractRector
     {
         if ($node instanceof Name) {
             $newName = $this->resolveNewNameFromNode($node);
+            $newNameNode = new Name($newName);
 
-            return new FullyQualified($newName);
+            return new Name($newNameNode->getLast());
         }
 
         if ($node instanceof Use_) {
             $newName = $this->resolveNewNameFromNode($node);
 
-            if ($this->isUseStatmenetAlreadyPresent($node, $newName)) {
-                $this->shouldRemoveNode = true;
-            }
+            $node->uses[0]->name = new Name($newName);
+
+            $node->setAttribute(Attribute::ORIGINAL_NODE, null);
+
+            return $node;
         }
 
         return null;
     }
 
-    private function isUseStatmenetAlreadyPresent(Use_ $useNode, string $newName): bool
-    {
-        /** @var UseStatements $useStatments */
-        $useStatments = $useNode->getAttribute(Attribute::USE_STATEMENTS);
-
-        return in_array($newName, $useStatments->getUseStatements(), true);
-    }
-
     private function resolveNewNameFromNode(Node $node): string
     {
-        $name = $this->resolveNameFromNode($node);
+        $nameNode = $this->resolveNameNodeFromNode($node);
 
-        return $this->oldToNewClasses[$name];
+        return $this->oldToNewClasses[$nameNode->toString()];
     }
 
-    private function resolveNameFromNode(Node $node): string
+    private function resolveNameNodeFromNode(Node $node): ?Name
     {
         if ($node instanceof Name) {
             // resolved name has priority, as it is FQN
             $resolvedName = $node->getAttribute(Attribute::RESOLVED_NAME);
             if ($resolvedName instanceof FullyQualified) {
-                return $resolvedName->toString();
+                return $resolvedName;
             }
 
-            return $node->toString();
+            return $node;
         }
 
         if ($node instanceof Use_) {
-            return $node->uses[0]->name->toString();
+            return $node->uses[0]->name;
         }
 
-        return '';
+        return null;
     }
 }

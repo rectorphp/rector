@@ -7,8 +7,8 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Node\Attribute;
-use Rector\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\Rector\AbstractRector;
+use Rector\ReflectionDocBlock\NodeAnalyzer\DocBlockAnalyzer;
 
 final class InjectPropertyRector extends AbstractRector
 {
@@ -57,13 +57,13 @@ final class InjectPropertyRector extends AbstractRector
 
     private function addPropertyToCollector(Property $propertyNode): void
     {
-        $propertyType = $this->docBlockAnalyzer->getAnnotationFromNode($propertyNode, 'var');
+        $propertyTypes = $propertyNode->getAttribute(Attribute::TYPES);
 
         $propertyName = (string) $propertyNode->props[0]->name;
 
         $this->classPropertyCollector->addPropertyForClass(
             (string) $propertyNode->getAttribute(Attribute::CLASS_NAME),
-            $propertyType,
+            $propertyTypes,
             $propertyName
         );
     }

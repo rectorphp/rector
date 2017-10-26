@@ -29,7 +29,17 @@ abstract class AbstractNodeTypeResolverTest extends AbstractContainerAwareTestCa
     /**
      * @return Node[]
      */
-    protected function getNodesWithTypesForFile(string $file): array
+    protected function getNodesForFileOfType(string $file, string $type): array
+    {
+        $nodes = $this->getNodesForFile($file);
+
+        return $this->nodeFinder->findInstanceOf($nodes, $type);
+    }
+
+    /**
+     * @return Node[]
+     */
+    protected function getNodesForFile(string $file): array
     {
         $fileInfo = new SplFileInfo($file);
 

@@ -25,20 +25,26 @@ final class PropertyBuilder
         $this->statementGlue = $statementGlue;
     }
 
-    public function addPropertyToClass(Class_ $classNode, string $propertyType, string $propertyName): void
+    /**
+     * @param string[] $propertyTypes
+     */
+    public function addPropertyToClass(Class_ $classNode, array $propertyTypes, string $propertyName): void
     {
         if ($this->doesPropertyAlreadyExist($classNode, $propertyName)) {
             return;
         }
 
-        $propertyNode = $this->buildPrivatePropertyNode($propertyType, $propertyName);
+        $propertyNode = $this->buildPrivatePropertyNode($propertyTypes, $propertyName);
 
         $this->statementGlue->addAsFirstMethod($classNode, $propertyNode);
     }
 
-    private function buildPrivatePropertyNode(string $propertyType, string $propertyName): Property
+    /**
+     * @param string[] $propertyTypes
+     */
+    private function buildPrivatePropertyNode(array $propertyTypes, string $propertyName): Property
     {
-        $docComment = $this->createDocWithVarAnnotation($propertyType);
+        $docComment = $this->createDocWithVarAnnotation($propertyTypes);
 
         $propertyBuilder = $this->builderFactory->property($propertyName)
             ->makePrivate()
@@ -47,10 +53,13 @@ final class PropertyBuilder
         return $propertyBuilder->getNode();
     }
 
-    private function createDocWithVarAnnotation(string $propertyType): Doc
+    /**
+     * @param string[] $propertyTypes
+     */
+    private function createDocWithVarAnnotation(array $propertyTypes): Doc
     {
         return new Doc('/**'
-            . PHP_EOL . ' * @var ' . $propertyType
+            . PHP_EOL . ' * @var ' . implode('|', $propertyTypes)
             . PHP_EOL . ' */');
     }
 
@@ -62,6 +71,7 @@ final class PropertyBuilder
             }
 
             $classPropertyName = (string) $inClassNode->props[0]->name;
+
             if ($classPropertyName === $propertyName) {
                 return true;
             }

@@ -4,7 +4,10 @@ namespace Rector\NodeAnalyzer;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
+use PhpParser\NodeFinder;
 use Rector\BetterReflection\Reflector\SmartClassReflector;
 use Rector\Node\Attribute;
 use ReflectionMethod;
@@ -17,13 +20,19 @@ final class MethodCallAnalyzer
     private $smartClassReflector;
 
     /**
+     * @var NodeFinder
+     */
+    private $nodeFinder;
+
+    /**
      * @var string[][]
      */
     private $publicMethodNamesForType = [];
 
-    public function __construct(SmartClassReflector $smartClassReflector)
+    public function __construct(SmartClassReflector $smartClassReflector, NodeFinder $nodeFinder)
     {
         $this->smartClassReflector = $smartClassReflector;
+        $this->nodeFinder = $nodeFinder;
     }
 
     /**
@@ -81,23 +90,24 @@ final class MethodCallAnalyzer
             return false;
         }
 
-        $variableType = $this->resolveVariableType($node);
+        $variableTypes = $this->resolveVariableType($node);
 
-        return $variableType === $type;
+        return in_array($type, $variableTypes, true);
     }
 
     /**
      * @param string[] $types
+     * @return string[]
      */
-    public function matchTypes(Node $node, array $types): ?string
+    public function matchTypes(Node $node, array $types): ?array
     {
         if (! $node instanceof MethodCall) {
             return null;
         }
 
-        $nodeType = $node->var->getAttribute(Attribute::TYPE);
+        $nodeTypes = $node->var->getAttribute(Attribute::TYPES);
 
-        return in_array($nodeType, $types, true) ? $nodeType : null;
+        return array_intersect($nodeTypes, $types) ? $nodeTypes : null;
     }
 
     public function isTypeAndMagic(Node $node, string $type): bool
@@ -129,19 +139,18 @@ final class MethodCallAnalyzer
         return $this->publicMethodNamesForType[$type] = array_keys($publicMethods);
     }
 
-    private function resolveVariableType(MethodCall $methodCallNode): string
+    /**
+     * @return string[]
+     */
+    private function resolveVariableType(MethodCall $methodCallNode): array
     {
-        $varNode = $methodCallNode->var;
-
-        // itterate up, @todo: handle in TypeResover
-        while ($varNode->getAttribute(Attribute::TYPE) === null) {
-            if (property_exists($varNode, 'var')) {
-                $varNode = $varNode->var;
-            } else {
-                break;
-            }
+        $propertyFetchNode = $this->nodeFinder->findFirstInstanceOf([$methodCallNode], PropertyFetch::class);
+        if ($propertyFetchNode) {
+            return (array) $propertyFetchNode->getAttribute(Attribute::TYPES);
         }
 
-        return (string) $varNode->getAttribute(Attribute::TYPE);
+        $variableNode = $this->nodeFinder->findFirstInstanceOf([$methodCallNode], Variable::class);
+
+        return (array) $variableNode->getAttribute(Attribute::TYPES);
     }
 }

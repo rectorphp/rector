@@ -36,7 +36,10 @@ final class ConstructorMethodBuilder
         $this->nodeFactory = $nodeFactory;
     }
 
-    public function addPropertyAssignToClass(Class_ $classNode, string $propertyType, string $propertyName): void
+    /**
+     * @param string[] $propertyTypes
+     */
+    public function addPropertyAssignToClass(Class_ $classNode, array $propertyTypes, string $propertyName): void
     {
         $constructorMethod = $classNode->getMethod('__construct') ?: null;
 
@@ -44,7 +47,14 @@ final class ConstructorMethodBuilder
 
         /** @var ClassMethod $constructorMethod */
         if ($constructorMethod) {
-            $constructorMethod->params[] = $this->createParameter($propertyType, $propertyName)
+            // has parameter already?
+            foreach ($constructorMethod->params as $constructorParameter) {
+                if ($constructorParameter->var->name === $propertyName) {
+                    return;
+                }
+            }
+
+            $constructorMethod->params[] = $this->createParameter($propertyTypes, $propertyName)
                 ->getNode();
 
             $constructorMethod->stmts[] = $propertyAssignNode;
@@ -55,15 +65,22 @@ final class ConstructorMethodBuilder
         /** @var Method $constructorMethod */
         $constructorMethod = $this->builderFactory->method('__construct')
             ->makePublic()
-            ->addParam($this->createParameter($propertyType, $propertyName))
+            ->addParam($this->createParameter($propertyTypes, $propertyName))
             ->addStmts([$propertyAssignNode]);
 
         $this->statementGlue->addAsFirstMethod($classNode, $constructorMethod->getNode());
     }
 
-    private function createParameter(string $propertyType, string $propertyName): Param
+    /**
+     * @param string[] $propertyTypes
+     */
+    private function createParameter(array $propertyTypes, string $propertyName): Param
     {
-        return $this->builderFactory->param($propertyName)
-            ->setTypeHint($propertyType);
+        $paramBuild = $this->builderFactory->param($propertyName);
+        foreach ($propertyTypes as $propertyType) {
+            $paramBuild->setTypeHint($propertyType);
+        }
+
+        return $paramBuild;
     }
 }

@@ -75,7 +75,7 @@ final class ConstructorPropertyTypesExtractor
                     continue;
                 }
 
-                $parametersWithTypes[$parameterName] = $parameterType;
+                $parametersWithTypes[$parameterName] = [$parameterType];
             }
         }
 
@@ -130,10 +130,10 @@ final class ConstructorPropertyTypesExtractor
             /** @var PropertyFetch $propertyFetchNode */
             $propertyFetchNode = $inConstructorNode->expr->var;
             $propertyName = $propertyFetchNode->name->toString();
-            $propertyType = $constructorParametersWithTypes[$propertyName] ?? null;
+            $propertyTypes = $constructorParametersWithTypes[$propertyName] ?? null;
 
-            if ($propertyName && $propertyType) {
-                $propertiesWithTypes[$propertyName] = $propertyType;
+            if ($propertyName && $propertyTypes) {
+                $propertiesWithTypes[$propertyName] = $propertyTypes;
             }
         }
 

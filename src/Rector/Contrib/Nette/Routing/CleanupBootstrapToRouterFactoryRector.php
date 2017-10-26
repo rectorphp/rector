@@ -75,6 +75,10 @@ final class CleanupBootstrapToRouterFactoryRector extends AbstractRector
      */
     private function isContainerRouterAssign(Expr $exprNode): bool
     {
-        return $this->assignAnalyzer->isAssignTypeAndProperty($exprNode, 'Nette\DI\Container', 'router');
+        return $this->assignAnalyzer->isAssignTypeAndProperty(
+            $exprNode,
+            'Nette\DI\Container',
+            'router'
+        );
     }
 }

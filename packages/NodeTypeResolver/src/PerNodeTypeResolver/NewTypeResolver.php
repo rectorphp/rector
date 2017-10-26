@@ -38,8 +38,9 @@ final class NewTypeResolver implements PerNodeTypeResolverInterface, NodeTypeRes
 
     /**
      * @param New_ $newNode
+     * @return string[]
      */
-    public function resolve(Node $newNode): ?string
+    public function resolve(Node $newNode): array
     {
         if ($this->shouldDelegate($newNode)) {
             return $this->nodeTypeResolver->resolve($newNode->class);
@@ -58,10 +59,10 @@ final class NewTypeResolver implements PerNodeTypeResolverInterface, NodeTypeRes
             // can be anything (dynamic)
             $propertyName = $newNode->class->name->toString();
 
-            return $this->typeContext->getTypeForProperty($propertyName);
+            return $this->typeContext->getTypesForProperty($propertyName);
         }
 
-        return null;
+        return [];
     }
 
     public function setNodeTypeResolver(NodeTypeResolver $nodeTypeResolver): void
@@ -71,10 +72,8 @@ final class NewTypeResolver implements PerNodeTypeResolverInterface, NodeTypeRes
 
     private function shouldDelegate(New_ $newNode): bool
     {
-        $nodeClass = get_class($newNode->class);
-
         foreach ([Class_::class, Variable::class, Name::class] as $typeToSkip) {
-            if (is_a($nodeClass, $typeToSkip, true)) {
+            if ($newNode->class instanceof $typeToSkip) {
                 return true;
             }
         }

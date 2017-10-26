@@ -49,8 +49,9 @@ final class StaticMethodCallAnalyzer
 
     /**
      * @param string[] $types
+     * @return string[]
      */
-    public function matchTypes(Node $node, array $types): ?string
+    public function matchTypes(Node $node, array $types): ?array
     {
         if (! $node instanceof StaticCall) {
             return null;
@@ -66,7 +67,7 @@ final class StaticMethodCallAnalyzer
 
         $nodeType = $node->class->toString();
 
-        return in_array($nodeType, $types, true) ? $nodeType : null;
+        return in_array($nodeType, $types, true) ? [$nodeType] : null;
     }
 
     /**

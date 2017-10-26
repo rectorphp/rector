@@ -16,12 +16,12 @@ final class PropertyNameReplacerRector extends AbstractRector
      *
      * @var string[][]
      */
-    private $oldToNewPropertyByClass = [];
+    private $perClassOldToNewProperties = [];
 
     /**
-     * @var string|null
+     * @var string[]
      */
-    private $activeType;
+    private $activeTypes = [];
 
     /**
      * @var PropertyFetchAnalyzer
@@ -31,19 +31,19 @@ final class PropertyNameReplacerRector extends AbstractRector
     /**
      * @param string[][]
      */
-    public function __construct(array $oldToNewPropertyByClass, PropertyFetchAnalyzer $propertyFetchAnalyzer)
+    public function __construct(array $perClassOldToNewProperties, PropertyFetchAnalyzer $propertyFetchAnalyzer)
     {
-        $this->oldToNewPropertyByClass = $oldToNewPropertyByClass;
+        $this->perClassOldToNewProperties = $perClassOldToNewProperties;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
     }
 
     public function isCandidate(Node $node): bool
     {
-        $this->activeType = null;
+        $this->activeTypes = null;
 
-        $matchedType = $this->propertyFetchAnalyzer->matchTypes($node, $this->getClasses());
-        if ($matchedType) {
-            $this->activeType = $matchedType;
+        $matchedTypes = $this->propertyFetchAnalyzer->matchTypes($node, $this->getClasses());
+        if ($matchedTypes) {
+            $this->activeTypes = $matchedTypes;
 
             return true;
         }
@@ -56,7 +56,7 @@ final class PropertyNameReplacerRector extends AbstractRector
      */
     public function refactor(Node $propertyFetchNode): ?Node
     {
-        $oldToNewProperties = $this->oldToNewPropertyByClass[$this->activeType];
+        $oldToNewProperties = $this->matchOldToNewProperties();
 
         $propertyName = $propertyFetchNode->name->name;
 
@@ -80,6 +80,20 @@ final class PropertyNameReplacerRector extends AbstractRector
      */
     private function getClasses(): array
     {
-        return array_keys($this->oldToNewPropertyByClass);
+        return array_keys($this->perClassOldToNewProperties);
+    }
+
+    /**
+     * @return string[]
+     */
+    private function matchOldToNewProperties(): array
+    {
+        foreach ($this->activeTypes as $activeType) {
+            if ($this->perClassOldToNewProperties[$activeType]) {
+                return $this->perClassOldToNewProperties[$activeType];
+            }
+        }
+
+        return [];
     }
 }

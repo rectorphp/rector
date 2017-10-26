@@ -6,7 +6,6 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassLike;
 use Rector\NodeAnalyzer\ClassAnalyzer;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
-use Rector\NodeTypeResolver\TypeContext;
 
 final class ClassLikeTypeResolver implements PerNodeTypeResolverInterface
 {
@@ -15,7 +14,7 @@ final class ClassLikeTypeResolver implements PerNodeTypeResolverInterface
      */
     private $classAnalyzer;
 
-    public function __construct(TypeContext $typeContext, ClassAnalyzer $classAnalyzer)
+    public function __construct(ClassAnalyzer $classAnalyzer)
     {
         $this->classAnalyzer = $classAnalyzer;
     }
@@ -27,16 +26,10 @@ final class ClassLikeTypeResolver implements PerNodeTypeResolverInterface
 
     /**
      * @param ClassLike $classLikeNode
+     * @return string[]
      */
-    public function resolve(Node $classLikeNode): ?string
+    public function resolve(Node $classLikeNode): array
     {
-        return $classLikeNode->name->toString();
-
-        $parentTypes = $this->classAnalyzer->resolveParentTypes($classLikeNode);
-//            // @todo: add support for many-types later
-//
-//            if (! count($parentTypes)) {
-//                return null;
-//            }
+        return $this->classAnalyzer->resolveTypeAndParentTypes($classLikeNode);
     }
 }

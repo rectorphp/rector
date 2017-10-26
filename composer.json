@@ -12,12 +12,17 @@
         "doctrine/annotations": "^1.5",
         "nette/utils": "^2.4",
         "nikic/php-parser": "4.0.x-dev#f5de7f9 as 3.1.1",
+        "phpdocumentor/reflection-docblock": "^4.1",
+        "phpdocumentor/type-resolver": "^0.4.0",
         "rector/better-reflection": "^3.0",
         "symfony/console": "^3.3",
         "symfony/dependency-injection": "^3.3",
         "symplify/package-builder": "^2.5"
     },
     "require-dev": {
+        "latte/latte": "^2.4",
+        "nette/application": "^2.4",
+        "nette/forms": "^2.4",
         "phpunit/phpunit": "^6.4",
         "slam/php-cs-fixer-extensions": "^1.7",
         "symfony/expression-language": "^3.3",
@@ -29,6 +34,7 @@
         "psr-4": {
             "Rector\\": "src",
             "Rector\\BetterReflection\\": "packages/BetterReflection/src",
+            "Rector\\ReflectionDocBlock\\": "packages/ReflectionDocBlock/src",
             "Rector\\DeprecatedAnnotation\\": "packages/DeprecatedAnnotation/src",
             "Rector\\NodeTypeResolver\\": "packages/NodeTypeResolver/src",
             "Rector\\NodeTraverserQueue\\": "packages/NodeTraverserQueue/src",
@@ -40,6 +46,7 @@
         "psr-4": {
             "Rector\\Tests\\": "tests",
             "Rector\\BetterReflection\\Tests\\": "packages/BetterReflection/tests",
+            "Rector\\ReflectionDocBlock\\Tests\\": "packages/ReflectionDocBlock/tests",
             "Rector\\NodeTypeResolver\\Tests\\": "packages/NodeTypeResolver/tests",
             "Rector\\DeprecationExtractor\\Tests\\": "packages/DeprecationExtractor/tests",
             "Rector\\NodeValueResolver\\Tests\\": "packages/NodeValueResolver/tests"

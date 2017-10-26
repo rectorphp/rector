@@ -27,13 +27,7 @@ final class PropertyFetchAnalyzer
 
     public function isTypeAndProperty(Node $node, string $type, string $property): bool
     {
-        if (! $node instanceof PropertyFetch) {
-            return false;
-        }
-
-        $variableNodeType = $node->var->getAttribute(Attribute::TYPE);
-
-        if ($variableNodeType !== $type) {
+        if (! $this->isType($node, $type)) {
             return false;
         }
 
@@ -51,9 +45,9 @@ final class PropertyFetchAnalyzer
             return false;
         }
 
-        $variableNodeType = $node->var->getAttribute(Attribute::TYPE);
+        $variableNodeTypes = $node->var->getAttribute(Attribute::TYPES);
 
-        if (! in_array($variableNodeType, $types, true)) {
+        if (! array_intersect($types, $variableNodeTypes)) {
             return false;
         }
 
@@ -68,8 +62,8 @@ final class PropertyFetchAnalyzer
             return false;
         }
 
-        $variableNodeType = $node->var->getAttribute(Attribute::TYPE);
-        if ($variableNodeType !== $type) {
+        $variableNodeTypes = $node->var->getAttribute(Attribute::TYPES);
+        if (! in_array($type, $variableNodeTypes, true)) {
             return false;
         }
 
@@ -102,21 +96,35 @@ final class PropertyFetchAnalyzer
             return false;
         }
 
-        $variableNodeType = $node->var->getAttribute(Attribute::TYPE);
+        $variableNodeTypes = $node->var->getAttribute(Attribute::TYPES);
 
-        return in_array($variableNodeType, $types, true);
+        return (bool) array_intersect($variableNodeTypes, $types);
+    }
+
+    /**
+     * @param string[] $propertyNames
+     */
+    public function isTypeAndProperties(Node $node, string $type, array $propertyNames): bool
+    {
+        if (! $this->isType($node, $type)) {
+            return false;
+        }
+
+        /** @var PropertyFetch $node */
+        return in_array((string) $node->name, $propertyNames, true);
     }
 
     /**
      * @param string[] $types
+     * @return string[]
      */
-    public function matchTypes(Node $node, array $types): ?string
+    public function matchTypes(Node $node, array $types): array
     {
         if (! $this->isTypes($node, $types)) {
-            return null;
+            return [];
         }
 
-        return $node->var->getAttribute(Attribute::TYPE);
+        return $node->var->getAttribute(Attribute::TYPES);
     }
 
     /**
@@ -132,5 +140,16 @@ final class PropertyFetchAnalyzer
         $publicProperties = $classReflection->getProperties(ReflectionProperty::IS_PUBLIC);
 
         return $this->publicPropertyNamesForType[$type] = array_keys($publicProperties);
+    }
+
+    private function isType(Node $node, string $type): bool
+    {
+        if (! $node instanceof PropertyFetch) {
+            return false;
+        }
+
+        $variableNodeTypes = $node->var->getAttribute(Attribute::TYPES);
+
+        return in_array($type, $variableNodeTypes, true);
     }
 }

@@ -110,7 +110,7 @@ final class ExtractDeprecationsCommand extends Command
 
         $node = $rectorGuess->getNode();
 
-        $this->symfonyStyle->writeln(' Namespace: ' . $node->getAttribute(Attribute::NAMESPACE));
+        $this->symfonyStyle->writeln(' Namespace: ' . $node->getAttribute(Attribute::NAMESPACE_NAME));
         $this->symfonyStyle->writeln(' Class: ' . $node->getAttribute(Attribute::CLASS_NAME));
         $this->symfonyStyle->writeln(' Method: ' . $node->getAttribute(Attribute::METHOD_NAME));
         $this->symfonyStyle->writeln(' Related node: ' . get_class($node));

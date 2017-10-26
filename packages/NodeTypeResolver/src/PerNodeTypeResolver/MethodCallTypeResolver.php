@@ -37,8 +37,9 @@ final class MethodCallTypeResolver implements PerNodeTypeResolverInterface
 
     /**
      * @param MethodCall $methodCallNode
+     * @return string[]
      */
-    public function resolve(Node $methodCallNode): ?string
+    public function resolve(Node $methodCallNode): array
     {
         // 1. get $anotherVar type
 
@@ -46,31 +47,22 @@ final class MethodCallTypeResolver implements PerNodeTypeResolverInterface
         $variableNode = $methodCallNode->var;
 
         if (! $variableNode instanceof Variable) {
-            return null;
+            return [];
         }
 
         $variableName = $variableNode->name;
 
-        $methodCallVariableType = $this->typeContext->getTypeForVariable($variableName);
+        $methodCallVariableTypes = $this->typeContext->getTypesForVariable($variableName);
 
         $methodCallName = $this->resolveMethodCallName($methodCallNode);
 
-        // 2. get method() return type
-        if (! $methodCallVariableType || ! $methodCallName) {
-            return null;
+        if (! $methodCallVariableTypes || ! $methodCallName) {
+            return [];
         }
 
-        $variableType = $this->methodReflector->getMethodReturnType($methodCallVariableType, $methodCallName);
-        if ($variableType) {
-            $variableName = $this->getVariableToAssignTo($methodCallNode);
-            if ($variableName === null) {
-                return null;
-            }
+        $methodCallVariableType = array_shift($methodCallVariableTypes);
 
-            $this->typeContext->addVariableWithType($variableName, $variableType);
-        }
-
-        return $variableType;
+        return $this->resolveMethodReflectionReturnTypes($methodCallNode, $methodCallVariableType, $methodCallName);
     }
 
     private function resolveMethodCallName(MethodCall $methodCallNode): ?string
@@ -99,5 +91,31 @@ final class MethodCallTypeResolver implements PerNodeTypeResolverInterface
         }
 
         return null;
+    }
+
+    /**
+     * Resolve for:
+     * - getMethod(): ReturnType
+     *
+     * @return string[]
+     */
+    private function resolveMethodReflectionReturnTypes(
+        MethodCall $methodCallNode,
+        string $class,
+        string $method
+    ): array {
+        $variableType = $this->methodReflector->getMethodReturnType($class, $method);
+        if ($variableType === null) {
+            return [];
+        }
+
+        $variableName = $this->getVariableToAssignTo($methodCallNode);
+        if ($variableName === null) {
+            return [];
+        }
+
+        $this->typeContext->addVariableWithTypes($variableName, [$variableType]);
+
+        return [$variableType];
     }
 }

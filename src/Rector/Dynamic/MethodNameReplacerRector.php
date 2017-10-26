@@ -30,9 +30,9 @@ final class MethodNameReplacerRector extends AbstractRector
     private $perClassOldToNewMethods = [];
 
     /**
-     * @var string|null
+     * @var string[]
      */
-    private $activeType;
+    private $activeTypes = [];
 
     /**
      * @var MethodCallAnalyzer
@@ -59,18 +59,18 @@ final class MethodNameReplacerRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        $this->activeType = null;
+        $this->activeTypes = null;
 
-        $matchedType = $this->methodCallAnalyzer->matchTypes($node, $this->getClasses());
-        if ($matchedType) {
-            $this->activeType = $matchedType;
+        $matchedTypes = $this->methodCallAnalyzer->matchTypes($node, $this->getClasses());
+        if ($matchedTypes) {
+            $this->activeTypes = $matchedTypes;
 
             return true;
         }
 
-        $matchedType = $this->staticMethodCallAnalyzer->matchTypes($node, $this->getClasses());
-        if ($matchedType) {
-            $this->activeType = $matchedType;
+        $matchedTypes = $this->staticMethodCallAnalyzer->matchTypes($node, $this->getClasses());
+        if ($matchedTypes) {
+            $this->activeTypes = $matchedTypes;
 
             return true;
         }
@@ -83,8 +83,7 @@ final class MethodNameReplacerRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        $oldToNewMethods = $this->perClassOldToNewMethods[$this->activeType];
-
+        $oldToNewMethods = $this->matchOldToNewMethos();
         $methodName = $node->name->name;
 
         if (! isset($oldToNewMethods[$methodName])) {
@@ -128,5 +127,19 @@ final class MethodNameReplacerRector extends AbstractRector
         $firstMethodConfiguration = current($oldToNewMethods);
 
         return is_array($firstMethodConfiguration);
+    }
+
+    /**
+     * @return string[]
+     */
+    private function matchOldToNewMethos(): array
+    {
+        foreach ($this->activeTypes as $activeType) {
+            if ($this->perClassOldToNewMethods[$activeType]) {
+                return $this->perClassOldToNewMethods[$activeType];
+            }
+        }
+
+        return [];
     }
 }

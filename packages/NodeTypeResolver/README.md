@@ -41,12 +41,18 @@ if ($fqnName->toString() === 'Symfony\Component\Console\Command') {
 ### 2. Or `type` attribute:
 
 ```php
-/** @var string $type */
-$type = $node->var->getAttribute(Attribute::TYPE);
+/** @var string[] $nodeTypes */
+$nodeTypes = $node->var->getAttribute(Attribute::TYPES);
 
-if ($type === 'Nette\Application\UI\Form') {
+if (in_array('Nette\Application\UI\Form', $nodeTypes, true) {
     // this is Nette\Application\UI\Form variable
 }
 ```
 
 ...in any Rector you create.
+
+
+### Inspiration
+
+- https://github.com/Roave/BetterReflection/pull/224
+- https://github.com/phpactor/worse-reflection/blob/master/lib/Core/Inference/SymbolInformationResolver.php

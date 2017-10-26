@@ -37,8 +37,9 @@ final class PropertyFetchTypeResolver implements PerNodeTypeResolverInterface, N
 
     /**
      * @param PropertyFetch $propertyFetchNode
+     * @return string[]
      */
-    public function resolve(Node $propertyFetchNode): ?string
+    public function resolve(Node $propertyFetchNode): array
     {
         // e.g. $r->getParameters()[0]->name
         if ($propertyFetchNode->var instanceof ArrayDimFetch) {
@@ -50,12 +51,12 @@ final class PropertyFetchTypeResolver implements PerNodeTypeResolverInterface, N
         }
 
         if ($propertyFetchNode->var->name !== 'this') {
-            return null;
+            return [];
         }
 
         $propertyName = $this->resolvePropertyName($propertyFetchNode);
 
-        return $this->typeContext->getTypeForProperty($propertyName);
+        return $this->typeContext->getTypesForProperty($propertyName);
     }
 
     public function setNodeTypeResolver(NodeTypeResolver $nodeTypeResolver): void

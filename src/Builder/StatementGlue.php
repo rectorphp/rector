@@ -82,7 +82,7 @@ final class StatementGlue
     {
         foreach ($types as $type) {
             foreach ($classNode->stmts as $key => $classElementNode) {
-                if (is_a($classElementNode, $type, true)) {
+                if ($classElementNode instanceof $type) {
                     $classNode->stmts = $this->insertBefore($classNode->stmts, $node, $key);
 
                     return;
