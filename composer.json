@@ -21,6 +21,7 @@
     },
     "require-dev": {
         "nette/application": "^2.4",
+        "nette/forms": "^2.4",
         "phpunit/phpunit": "^6.4",
         "slam/php-cs-fixer-extensions": "^1.7",
         "symfony/expression-language": "^3.3",

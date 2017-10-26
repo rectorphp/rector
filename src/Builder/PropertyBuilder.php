@@ -71,6 +71,7 @@ final class PropertyBuilder
             }
 
             $classPropertyName = (string) $inClassNode->props[0]->name;
+
             if ($classPropertyName === $propertyName) {
                 return true;
             }
