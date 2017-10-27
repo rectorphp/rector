@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use Rector\BetterReflection\Reflector\PropertyReflector;
+use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverAwareInterface;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -48,9 +49,18 @@ final class PropertyFetchTypeResolver implements PerNodeTypeResolverInterface, N
      */
     public function resolve(Node $propertyFetchNode): array
     {
+        $propertyName = $propertyFetchNode->name->toString();
+
         // e.g. $r->getParameters()[0]->name
         if ($propertyFetchNode->var instanceof ArrayDimFetch) {
-            return $this->nodeTypeResolver->resolve($propertyFetchNode->var);
+            $types = $this->nodeTypeResolver->resolve($propertyFetchNode->var->var);
+            $type = array_shift($types);
+
+            $propertyType = $this->propertyReflector->getPropertyType($type, $propertyName);
+            return [$propertyType];
+
+            // @todo: keep for now for possible BC changes of other resolvers
+            // return $this->nodeTypeResolver->resolve($propertyFetchNode->var);
         }
 
         if ($propertyFetchNode->var instanceof New_) {
@@ -68,7 +78,7 @@ final class PropertyFetchTypeResolver implements PerNodeTypeResolverInterface, N
         $types = $this->nodeTypeResolver->resolve($propertyFetchNode->var);
         $type = array_shift($types);
 
-        $type = $this->propertyReflector->getPropertyType($type, $propertyFetchNode->name->toString());
+        $type = $this->propertyReflector->getPropertyType($type, $propertyName);
         if ($type) {
             return [$type];
         }
