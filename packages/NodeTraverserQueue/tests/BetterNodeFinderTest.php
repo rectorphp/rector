@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\NodeTraverserQueue;
+namespace Rector\NodeTraverserQueue\Tests;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
