@@ -15,30 +15,16 @@ final class Test extends AbstractNodeTypeResolverTest
             PropertyFetch::class
         );
 
-        $this->assertCount(4, $propertyFetchNodes);
+        $this->assertCount(3, $propertyFetchNodes);
 
-        $this->assertSame('name', $propertyFetchNodes[0]->name->toString());
-        $this->assertSame(
-            null, // should be nothing, is string
-            $propertyFetchNodes[0]->getAttribute(Attribute::TYPES)
-        );
+//        $this->assertSame('name', $propertyFetchNodes[0]->name->toString());
+//        // should be nothing, is string
+//        $this->assertNull($propertyFetchNodes[0]->getAttribute(Attribute::TYPES));
 
         $this->assertSame('props', $propertyFetchNodes[1]->name->toString());
-        $this->assertSame(
-            null, // should be something
-            $propertyFetchNodes[1]->getAttribute(Attribute::TYPES)
-        );
+        $this->assertSame(['PhpParser\Node\Stmt\PropertyProperty'], $propertyFetchNodes[1]->getAttribute(Attribute::TYPES));
 
         $this->assertSame('node', $propertyFetchNodes[2]->name->toString());
-        $this->assertSame(
-            ['PhpParser\Node\Stmt\Property'],
-            $propertyFetchNodes[2]->getAttribute(Attribute::TYPES)
-        );
-
-        $this->assertSame('positionInNode', $propertyFetchNodes[3]->name->toString());
-        $this->assertSame(
-            null, // should be null
-            $propertyFetchNodes[3]->getAttribute(Attribute::TYPES)
-        );
+        $this->assertSame(['PhpParser\Node\Stmt\Property'], $propertyFetchNodes[2]->getAttribute(Attribute::TYPES));
     }
 }

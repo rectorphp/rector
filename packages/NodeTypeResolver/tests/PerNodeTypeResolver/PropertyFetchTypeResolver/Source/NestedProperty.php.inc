@@ -18,6 +18,6 @@ class someClass
      */
     public function getName() : string
     {
-        return $this->node->props[$this->positionInNode]->name->toString();
+        return $this->node->props[5]->name->toString();
     }
 }

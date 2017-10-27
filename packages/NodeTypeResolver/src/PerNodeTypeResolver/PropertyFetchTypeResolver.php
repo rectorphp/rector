@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
+use Rector\BetterReflection\Reflector\PropertyReflector;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverAwareInterface;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -24,10 +25,15 @@ final class PropertyFetchTypeResolver implements PerNodeTypeResolverInterface, N
      * @var NodeTypeResolver
      */
     private $nodeTypeResolver;
+    /**
+     * @var PropertyReflector
+     */
+    private $propertyReflector;
 
-    public function __construct(TypeContext $typeContext)
+    public function __construct(TypeContext $typeContext, PropertyReflector $propertyReflector)
     {
         $this->typeContext = $typeContext;
+        $this->propertyReflector = $propertyReflector;
     }
 
     public function getNodeClass(): string
@@ -50,8 +56,15 @@ final class PropertyFetchTypeResolver implements PerNodeTypeResolverInterface, N
             return $this->nodeTypeResolver->resolve($propertyFetchNode->var);
         }
 
+        // $this->property->anotherProperty
         if ($propertyFetchNode->var->name !== 'this') {
-            return [];
+            $types = $this->nodeTypeResolver->resolve($propertyFetchNode->var);
+            $type = array_shift($types);
+
+            $type = $this->propertyReflector->getPropertyType($type, $propertyFetchNode->name->toString());
+            if ($type) {
+                return [$type];
+            }
         }
 
         $propertyName = $this->resolvePropertyName($propertyFetchNode);
