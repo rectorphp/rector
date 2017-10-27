@@ -38,10 +38,16 @@ final class NamespaceAnalyzer
         /** @var Use_[] $useNodes */
         $useNodes = (array) $node->getAttribute(Attribute::USE_NODES);
         foreach ($useNodes as $useNode) {
-            $nodeUseName = $useNode->uses[0]->name->toString();
+            $useUseNode = $useNode->uses[0];
+            $nodeUseName = $useUseNode->name->toString();
 
             foreach ($types as $type) {
                 if (Strings::endsWith($nodeUseName, '\\' . $type)) {
+                    return $nodeUseName;
+                }
+
+                // alias
+                if ($useUseNode->getAlias() && $type === $useUseNode->getAlias()->toString()) {
                     return $nodeUseName;
                 }
             }
