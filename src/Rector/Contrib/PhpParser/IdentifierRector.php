@@ -76,11 +76,15 @@ final class IdentifierRector extends AbstractRector
      */
     public function refactor(Node $propertyFetchNode): ?Node
     {
+        $parentNode = $propertyFetchNode->getAttribute(Attribute::PARENT_NODE);
+        if ($parentNode instanceof MethodCall) {
+            return $propertyFetchNode;
+        }
+
         $propertyFetchNode = $this->nodeFactory->createPropertyFetch(
             $propertyFetchNode->var->name,
             $propertyFetchNode->name->toString()
         );
-
         return new MethodCall($propertyFetchNode, 'toString');
     }
 
