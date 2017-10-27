@@ -85,6 +85,7 @@ final class IdentifierRector extends AbstractRector
             $propertyFetchNode->var->name,
             $propertyFetchNode->name->toString()
         );
+
         return new MethodCall($propertyFetchNode, 'toString');
     }
 
