@@ -11,10 +11,10 @@
         "beberlei/assert": "^2.7",
         "doctrine/annotations": "^1.5",
         "nette/utils": "^2.4",
-        "nikic/php-parser": "4.0.x-dev#f5de7f9 as 3.1.1",
+        "nikic/php-parser": "v4.0.0alpha1 as 3.1.1",
         "phpdocumentor/reflection-docblock": "^4.1",
         "phpdocumentor/type-resolver": "^0.4.0",
-        "rector/better-reflection": "^3.0",
+        "rector/better-reflection": "^3.0.2",
         "symfony/console": "^3.3",
         "symfony/dependency-injection": "^3.3",
         "symplify/package-builder": "^2.5"
