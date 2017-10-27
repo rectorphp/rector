@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Rector\BetterReflection\SourceLocator\Reflection;
+namespace Roave\BetterReflection\SourceLocator\Reflection;
 
 use PhpParser\Builder\Class_;
 use PhpParser\Builder\Declaration;

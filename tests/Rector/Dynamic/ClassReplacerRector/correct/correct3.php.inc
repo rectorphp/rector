@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Rector\BetterReflection\SourceLocator\Reflection;
+namespace Roave\BetterReflection\SourceLocator\Reflection;
 
 use PhpParser\Builder\Class_;
 use PhpParser\Builder\Declaration;
@@ -10,7 +10,7 @@ use PhpParser\Builder\Method;
 use PhpParser\Builder\Param;
 use PhpParser\Builder\Property;
 use PhpParser\Builder\Trait_;
-use PhpParser\BuilderAbstract;
+use PhpParser\Builder;
 use PhpParser\BuilderFactory;
 use PhpParser\Comment\Doc;
 use PhpParser\Node\Const_;
@@ -94,7 +94,7 @@ final class SourceStubber
      * @param Class_|Interface_|Trait_|Method|Property $node
      * @param CoreReflectionClass|CoreReflectionMethod|CoreReflectionProperty $reflection
      */
-    private function addDocComment(BuilderAbstract $node, CoreReflector $reflection) : void
+    private function addDocComment(Builder $node, CoreReflector $reflection) : void
     {
         if (false !== $reflection->getDocComment()) {
             $node->setDocComment(new Doc($reflection->getDocComment()));
