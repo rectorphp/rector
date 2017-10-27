@@ -35,7 +35,6 @@
             "Rector\\": "src",
             "Rector\\BetterReflection\\": "packages/BetterReflection/src",
             "Rector\\ReflectionDocBlock\\": "packages/ReflectionDocBlock/src",
-            "Rector\\DeprecatedAnnotation\\": "packages/DeprecatedAnnotation/src",
             "Rector\\NodeTypeResolver\\": "packages/NodeTypeResolver/src",
             "Rector\\NodeTraverserQueue\\": "packages/NodeTraverserQueue/src",
             "Rector\\DeprecationExtractor\\": "packages/DeprecationExtractor/src",

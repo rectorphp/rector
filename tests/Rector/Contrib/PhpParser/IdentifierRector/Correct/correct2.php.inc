@@ -1,8 +1,14 @@
 <?php declare(strict_types=1);
 
-function compileClassConstFetch(\PhpParser\Node\Expr\ClassConstFetch $node)
+namespace Rector\BetterReflection\NodeCompiler;
+
+use PhpParser\Node;
+
+function compileClassConstFetch(Node\Expr\ClassConstFetch $node)
 {
     if ('class' === $node->name->toString()) {
         return 'className';
     }
+
+    return $node->name->toString();
 }
