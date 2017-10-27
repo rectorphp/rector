@@ -1,11 +1,5 @@
 <?php declare(strict_types=1);
 
-$constNode = new \PhpParser\Node\Const_;
-$name = $constNode->name;
-
-
-
-
 function compileClassConstFetch(\PhpParser\Node\Expr\ClassConstFetch $node)
 {
     if ('class' === $node->name) {
