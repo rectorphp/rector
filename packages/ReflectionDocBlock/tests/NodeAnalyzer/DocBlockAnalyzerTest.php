@@ -34,13 +34,27 @@ final class DocBlockAnalyzerTest extends AbstractContainerAwareTestCase
 
         $this->docBlockAnalyzer->removeAnnotationFromNode($node, 'param');
         $this->assertSame('', $node->getDocComment()->getText());
+
+        $initDoc = <<<'EOT'
+@param ParamType $paramName
+@param AnotherValue $anotherValue
+EOT;
+        $node = $this->createNodeWithDoc($initDoc);
+        $this->docBlockAnalyzer->removeAnnotationFromNode($node, 'param', 'paramName');
+
+        $expectedDoc = <<<'EOT'
+/**
+ * @param AnotherValue $anotherValue
+ */
+EOT;
+        $this->assertSame($expectedDoc, $node->getDocComment()->getText());
     }
 
     public function testGetAnnotationFromNode(): void
     {
         $node = $this->createNodeWithDoc('
-           * @var int 
-           * @deprecated This is deprecated 
+           * @var int
+           * @deprecated This is deprecated
         ');
 
         $deprecatedAnnotation = $this->docBlockAnalyzer->getDeprecatedDocComment($node);
@@ -53,7 +67,7 @@ final class DocBlockAnalyzerTest extends AbstractContainerAwareTestCase
     public function testGetParamTypeFor(): void
     {
         $node = $this->createNodeWithDoc('
-           * @param ParamType $paramName 
+           * @param ParamType $paramName
         ');
 
         $this->assertSame('ParamType', $this->docBlockAnalyzer->getTypeForParam($node, 'paramName'));
@@ -62,8 +76,8 @@ final class DocBlockAnalyzerTest extends AbstractContainerAwareTestCase
     public function testGetDeprecatedDocComment(): void
     {
         $node = $this->createNodeWithDoc('
-           * @var int 
-           * @deprecated This is deprecated 
+           * @var int
+           * @deprecated This is deprecated
         ');
 
         $deprecatedDocComment = $this->docBlockAnalyzer->getDeprecatedDocComment($node);

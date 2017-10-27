@@ -11,6 +11,7 @@ use phpDocumentor\Reflection\DocBlock\Tags\Var_;
 use phpDocumentor\Reflection\Types\Object_;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
+use Rector\ReflectionDocBlock\DocBlock\AnnotationRemover;
 use Rector\ReflectionDocBlock\DocBlock\DocBlockFactory;
 use Rector\ReflectionDocBlock\DocBlock\TidingSerializer;
 use ReflectionProperty;
@@ -30,11 +31,19 @@ final class DocBlockAnalyzer
      * @var TidingSerializer
      */
     private $tidingSerializer;
+    /**
+     * @var AnnotationRemover
+     */
+    private $annotationRemover;
 
-    public function __construct(DocBlockFactory $docBlockFactory, TidingSerializer $tidingSerializer)
-    {
+    public function __construct(
+        DocBlockFactory $docBlockFactory,
+        TidingSerializer $tidingSerializer,
+        AnnotationRemover $annotationRemover
+    ) {
         $this->docBlockFactory = $docBlockFactory;
         $this->tidingSerializer = $tidingSerializer;
+        $this->annotationRemover = $annotationRemover;
     }
 
     public function hasAnnotation(Node $node, string $annotation): bool
@@ -44,33 +53,10 @@ final class DocBlockAnalyzer
         return (bool) $docBlock->hasTag($annotation);
     }
 
-    public function removeAnnotationFromNode(Node $node, string $annotationName, string $annotationContent = ''): void
+    public function removeAnnotationFromNode(Node $node, string $name, string $content = ''): void
     {
         $docBlock = $this->docBlockFactory->createFromNode($node);
-
-        $annotations = $docBlock->getTagsByName($annotationName);
-
-        $allAnnotations = $docBlock->getTags();
-        $annotationsToRemove = [];
-
-        foreach ($annotations as $annotation) {
-            if ($annotationContent) {
-                if (Strings::contains($annotation->render(), $annotationContent)) {
-                    $annotationsToRemove[] = $annotation;
-
-                    continue;
-                }
-            } else {
-                $annotationsToRemove[] = $annotation;
-
-                continue;
-            }
-        }
-
-        $annotationsToKeep = array_diff($allAnnotations, $annotationsToRemove);
-
-        $docBlock = $this->replaceDocBlockAnnotations($docBlock, $annotationsToKeep);
-
+        $docBlock = $this->annotationRemover->removeFromDocBlockByNameAndContent($docBlock, $name, $content);
         $this->saveNewDocBlockToNode($node, $docBlock);
     }
 
@@ -126,21 +112,6 @@ final class DocBlockAnalyzer
         $docContent = $this->tidingSerializer->getDocComment($docBlock);
         $doc = new Doc($docContent);
         $node->setDocComment($doc);
-    }
-
-    /**
-     * Magic untill it is possible to remove tag
-     * https://github.com/phpDocumentor/ReflectionDocBlock/issues/124
-     *
-     * @param Tag[] $annnotations
-     */
-    private function replaceDocBlockAnnotations(DocBlock $docBlock, array $annnotations): DocBlock
-    {
-        $tagsPropertyReflection = new ReflectionProperty(get_class($docBlock), 'tags');
-        $tagsPropertyReflection->setAccessible(true);
-        $tagsPropertyReflection->setValue($docBlock, $annnotations);
-
-        return $docBlock;
     }
 
     /**
