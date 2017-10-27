@@ -17,14 +17,13 @@ final class Test extends AbstractNodeTypeResolverTest
 
         $this->assertCount(3, $propertyFetchNodes);
 
-//        $this->assertSame('name', $propertyFetchNodes[0]->name->toString());
-//        // should be nothing, is string
-//        $this->assertNull($propertyFetchNodes[0]->getAttribute(Attribute::TYPES));
+        $this->assertSame('name', $propertyFetchNodes[0]->name->toString());
+        $this->assertSame(['PhpParser\NodeAbstract\Identifier'], $propertyFetchNodes[0]->getAttribute(Attribute::TYPES));
 
-        $this->assertSame('props', $propertyFetchNodes[1]->name->toString());
-        $this->assertSame(['PhpParser\Node\Stmt\PropertyProperty'], $propertyFetchNodes[1]->getAttribute(Attribute::TYPES));
-
-        $this->assertSame('node', $propertyFetchNodes[2]->name->toString());
-        $this->assertSame(['PhpParser\Node\Stmt\Property'], $propertyFetchNodes[2]->getAttribute(Attribute::TYPES));
+//        $this->assertSame('props', $propertyFetchNodes[1]->name->toString());
+//        $this->assertSame(['PhpParser\Node\Stmt\PropertyProperty'], $propertyFetchNodes[1]->getAttribute(Attribute::TYPES));
+//
+//        $this->assertSame('node', $propertyFetchNodes[2]->name->toString());
+//        $this->assertSame(['PhpParser\Node\Stmt\Property'], $propertyFetchNodes[2]->getAttribute(Attribute::TYPES));
     }
 }

@@ -2,7 +2,6 @@
 
 namespace Rector\BetterReflection\Reflector;
 
-use Nette\Object;
 use phpDocumentor\Reflection\Types\Array_;
 use phpDocumentor\Reflection\Types\Object_;
 use Rector\BetterReflection\Reflection\ReflectionProperty;
@@ -14,6 +13,11 @@ final class PropertyReflector
      * @var SmartClassReflector
      */
     private $smartClassReflector;
+
+    /**
+     * @var mixed[][]
+     */
+    private $cachedClassPropertyTypes = [];
 
     public function __construct(SmartClassReflector $smartClassReflector)
     {
@@ -37,23 +41,37 @@ final class PropertyReflector
 
     public function getPropertyType(string $class, string $property): ?string
     {
+        if (isset($this->cachedClassPropertyTypes[$class][$property])) {
+            return $this->cachedClassPropertyTypes[$class][$property];
+        }
+
         $propertyReflection = $this->reflectClassProperty($class, $property);
 
+        $type = null;
         if ($propertyReflection) {
-            $types = $propertyReflection->getDocBlockTypes();
+            $type = $this->resolveTypeFromReflectionProperty($propertyReflection);
+        }
 
-            if (! isset($types[0])) {
-                return null;
-            }
+        return $this->cachedClassPropertyTypes[$class][$property] = $type;
+    }
 
-            if ($types[0] instanceof Array_) {
-                $valueType = $types[0]->getValueType();
-                if ($valueType instanceof Object_) {
-                    return ltrim((string) $valueType->getFqsen(), '\\');
-                }
-            } elseif ($types[0] instanceof Object_) {
-                return ltrim((string) $types[0]->getFqsen(), '\\');
+    private function resolveTypeFromReflectionProperty(ReflectionProperty $reflectionProperty): ?string
+    {
+        $types = $reflectionProperty->getDocBlockTypes();
+
+        if (! isset($types[0])) {
+            return null;
+        }
+
+        if ($types[0] instanceof Array_) {
+            $valueType = $types[0]->getValueType();
+            if ($valueType instanceof Object_) {
+                return ltrim((string) $valueType->getFqsen(), '\\');
             }
+        }
+
+        if ($types[0] instanceof Object_) {
+            return ltrim((string) $types[0]->getFqsen(), '\\');
         }
 
         return null;
