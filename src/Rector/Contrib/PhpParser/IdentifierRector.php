@@ -83,15 +83,17 @@ final class IdentifierRector extends AbstractRector
         }
 
         if ($propertyFetchNode->var instanceof ArrayDimFetch) {
-            $propertyFetchNode = $propertyFetchNode->var;
-            $hangingPropertyNode = $propertyFetchNode->var->var->name->toString();
-        } else {
-            $hangingPropertyNode = $propertyFetchNode->var->name;
+            return $propertyFetchNode;
         }
 
         $propertyFetchNode = $this->nodeFactory->createPropertyFetch(
-            $hangingPropertyNode,
-            $propertyFetchNode->name->toString()
+            'this',
+            'node'
+        );
+
+        $propertyFetchNode = new PropertyFetch(
+            $propertyFetchNode,
+            'name'
         );
 
         return new MethodCall($propertyFetchNode, 'toString');

@@ -4,7 +4,7 @@ namespace Rector\BetterReflection\NodeCompiler;
 
 use PhpParser\Node;
 
-class someClass
+class SomeClass
 {
     /**
      * @var Node\Stmt\ClassMethod|Node\Stmt\Function_|Node\Expr\Closure
