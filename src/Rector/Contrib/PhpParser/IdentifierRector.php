@@ -3,11 +3,11 @@
 namespace Rector\Rector\Contrib\PhpParser;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Stmt\Expression;
+use PhpParser\NodeFinder;
 use Rector\Node\Attribute;
-use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Rector\AbstractRector;
 
@@ -48,57 +48,52 @@ final class IdentifierRector extends AbstractRector
     ];
 
     /**
-     * @var NodeFactory
+     * @var NodeFinder
      */
-    private $nodeFactory;
+    private $nodeFinder;
 
-    public function __construct(PropertyFetchAnalyzer $propertyFetchAnalyzer, NodeFactory $nodeFactory)
+    public function __construct(PropertyFetchAnalyzer $propertyFetchAnalyzer, NodeFinder $nodeFinder)
     {
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
-        $this->nodeFactory = $nodeFactory;
+        $this->nodeFinder = $nodeFinder;
     }
 
     public function isCandidate(Node $node): bool
     {
-        if (! $this->propertyFetchAnalyzer->isTypes($node, array_keys($this->typeToPropertiesMap))) {
+        if (! $node instanceof Expression) {
             return false;
         }
 
-        /** @var PropertyFetch $node */
-        $nodeTypes = $node->var->getAttribute(Attribute::TYPES);
+        $typedNode = $this->nodeFinder->findFirst($node, function (Node $node) {
+            return $this->propertyFetchAnalyzer->isTypes($node, array_keys($this->typeToPropertiesMap));
+        });
+
+        if ($typedNode === null) {
+            return false;
+        }
+
+        // his parent should not be method call
+        $parentNode = $typedNode->getAttribute(Attribute::PARENT_NODE);
+        if ($parentNode instanceof MethodCall) {
+            return false;
+        }
+
+        /** @var PropertyFetch $typedNode */
+        $nodeTypes = $typedNode->var->getAttribute(Attribute::TYPES);
 
         $properties = $this->matchTypeToProperties($nodeTypes);
 
-        return $this->propertyFetchAnalyzer->isProperties($node, $properties);
+        return $this->propertyFetchAnalyzer->isProperties($typedNode, $properties);
     }
 
     /**
-     * @param PropertyFetch $propertyFetchNode
+     * @param Expression $expressionNode
      */
-    public function refactor(Node $propertyFetchNode): ?Node
+    public function refactor(Node $expressionNode): ?Node
     {
-        $parentNode = $propertyFetchNode->getAttribute(Attribute::PARENT_NODE);
-        if ($parentNode instanceof MethodCall) {
-            return $propertyFetchNode;
-        }
-
-        if ($propertyFetchNode->var instanceof ArrayDimFetch) {
-            $propertyFetchNode->var;
-
-            return new MethodCall($propertyFetchNode, 'toString');
-        }
-
-        $origPropertyFetchNode = $propertyFetchNode;
-
-        $firstPropertyName = $origPropertyFetchNode->var->name;
-        $secondPropertyName = $origPropertyFetchNode->name->toString();
-
-        $newPropertyFetchNode = $this->nodeFactory->createPropertyFetch(
-            $firstPropertyName,
-            $secondPropertyName
+        return new Expression(
+            new MethodCall($expressionNode->expr, 'toString')
         );
-
-        return new MethodCall($newPropertyFetchNode, 'toString');
     }
 
     /**
