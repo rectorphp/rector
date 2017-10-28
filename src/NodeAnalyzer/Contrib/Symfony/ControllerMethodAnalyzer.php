@@ -5,21 +5,10 @@ namespace Rector\NodeAnalyzer\Contrib\Symfony;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\PrettyPrinter\Standard;
 use Rector\Node\Attribute;
 
 final class ControllerMethodAnalyzer
 {
-    /**
-     * @var Standard
-     */
-    private $standardPrinter;
-
-    public function __construct(Standard $standardPrinter)
-    {
-        $this->standardPrinter = $standardPrinter;
-    }
-
     /**
      * Detect if is <some>Action() in Controller
      */
@@ -37,13 +26,5 @@ final class ControllerMethodAnalyzer
         }
 
         return Strings::endsWith($node->name->toString(), 'Action');
-    }
-
-    public function doesNodeContain(ClassMethod $classMethodNode, string $part): bool
-    {
-        // @todo try NodeFinder
-        $methodInString = $this->standardPrinter->prettyPrint([$classMethodNode]);
-
-        return Strings::contains($methodInString, $part);
     }
 }

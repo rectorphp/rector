@@ -31,15 +31,18 @@ final class ClassAnalyzer
         $types = [];
 
         if (! $this->isAnonymousClassNode($classLikeNode)) {
-            $types[] = $this->resolveNameNode($classLikeNode);
+            $className = $this->resolveNameNode($classLikeNode);
+
+            $types[] = $className;
+
+            if ($classLikeNode->extends) {
+                $types[] = class_parents($className);
+            }
         }
 
-        $currentClassNode = $classLikeNode;
-        while ($currentClassNode->extends) {
+        if ($this->isAnonymousClassNode($classLikeNode)) {
             /** @var FullyQualified $parentClass */
             $types[] = $this->resolveNameNode($classLikeNode->extends);
-
-            $currentClassNode = $currentClassNode->extends;
         }
 
         $interfaces = (array) $classLikeNode->implements;
@@ -51,13 +54,20 @@ final class ClassAnalyzer
         return $types;
     }
 
-    private function resolveNameNode(ClassLike $classLikeNode): string
+    /**
+     * @param Name|ClassLike $node
+     */
+    private function resolveNameNode(Node $node): string
     {
-        $nameNode = $classLikeNode->getAttribute(Attribute::RESOLVED_NAME);
+        if ($node instanceof Name) {
+            return $node->toString();
+        }
+
+        $nameNode = $node->getAttribute(Attribute::RESOLVED_NAME);
         if ($nameNode instanceof Name) {
             return $nameNode->toString();
         }
 
-        return $classLikeNode->name->toString();
+        return $node->name->toString();
     }
 }

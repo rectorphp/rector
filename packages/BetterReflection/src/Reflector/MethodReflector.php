@@ -39,7 +39,6 @@ final class MethodReflector
 
         if ($methodReflection) {
             $returnType = $methodReflection->getReturnType();
-
             if ($returnType) {
                 return (string) $returnType;
             }

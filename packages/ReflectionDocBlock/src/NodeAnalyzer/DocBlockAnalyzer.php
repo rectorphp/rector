@@ -2,7 +2,6 @@
 
 namespace Rector\ReflectionDocBlock\NodeAnalyzer;
 
-use Nette\Utils\Strings;
 use phpDocumentor\Reflection\DocBlock;
 use phpDocumentor\Reflection\DocBlock\Tag;
 use phpDocumentor\Reflection\DocBlock\Tags\Deprecated;
@@ -11,9 +10,9 @@ use phpDocumentor\Reflection\DocBlock\Tags\Var_;
 use phpDocumentor\Reflection\Types\Object_;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
+use Rector\ReflectionDocBlock\DocBlock\AnnotationRemover;
 use Rector\ReflectionDocBlock\DocBlock\DocBlockFactory;
 use Rector\ReflectionDocBlock\DocBlock\TidingSerializer;
-use ReflectionProperty;
 
 /**
  * @todo Make use of phpdocumentor/type-resolver, to return FQN names
@@ -31,10 +30,19 @@ final class DocBlockAnalyzer
      */
     private $tidingSerializer;
 
-    public function __construct(DocBlockFactory $docBlockFactory, TidingSerializer $tidingSerializer)
-    {
+    /**
+     * @var AnnotationRemover
+     */
+    private $annotationRemover;
+
+    public function __construct(
+        DocBlockFactory $docBlockFactory,
+        TidingSerializer $tidingSerializer,
+        AnnotationRemover $annotationRemover
+    ) {
         $this->docBlockFactory = $docBlockFactory;
         $this->tidingSerializer = $tidingSerializer;
+        $this->annotationRemover = $annotationRemover;
     }
 
     public function hasAnnotation(Node $node, string $annotation): bool
@@ -44,37 +52,17 @@ final class DocBlockAnalyzer
         return (bool) $docBlock->hasTag($annotation);
     }
 
-    public function removeAnnotationFromNode(Node $node, string $annotationName, string $annotationContent = ''): void
+    public function removeAnnotationFromNode(Node $node, string $name, string $content = ''): void
     {
         $docBlock = $this->docBlockFactory->createFromNode($node);
-
-        $annotations = $docBlock->getTagsByName($annotationName);
-
-        $allAnnotations = $docBlock->getTags();
-        $annotationsToRemove = [];
-
-        foreach ($annotations as $annotation) {
-            if ($annotationContent) {
-                if (Strings::contains($annotation->render(), $annotationContent)) {
-                    $annotationsToRemove[] = $annotation;
-
-                    continue;
-                }
-            } else {
-                $annotationsToRemove[] = $annotation;
-
-                continue;
-            }
-        }
-
-        $annotationsToKeep = array_diff($allAnnotations, $annotationsToRemove);
-
-        $docBlock = $this->replaceDocBlockAnnotations($docBlock, $annotationsToKeep);
-
+        $docBlock = $this->annotationRemover->removeFromDocBlockByNameAndContent($docBlock, $name, $content);
         $this->saveNewDocBlockToNode($node, $docBlock);
     }
 
-    public function getVarTypes(Node $node): ?string
+    /**
+     * @return string[]|null
+     */
+    public function getVarTypes(Node $node): ?array
     {
         /** @var Var_[] $varTags */
         $varTags = $this->getTagsByName($node, 'var');
@@ -82,7 +70,12 @@ final class DocBlockAnalyzer
             return null;
         }
 
-        return ltrim((string) $varTags[0]->getType(), '\\');
+        $varTag = array_shift($varTags);
+
+        $types = explode('|', (string) $varTag);
+        $types = $this->normalizeTypes($types);
+
+        return $types;
     }
 
     public function getDeprecatedDocComment(Node $node): ?string
@@ -103,6 +96,8 @@ final class DocBlockAnalyzer
 
     public function getTypeForParam(Node $node, string $paramName): ?string
     {
+        // @todo should be array as well, use same approach as for @getVarTypes()
+
         /** @var Param[] $paramTags */
         $paramTags = $this->getTagsByName($node, 'param');
         if ($paramTags === null) {
@@ -112,7 +107,7 @@ final class DocBlockAnalyzer
         foreach ($paramTags as $paramTag) {
             if ($paramTag->getVariableName() === $paramName) {
                 $type = $paramTag->getType();
-                if ($type instanceof Object_) {
+                if ($type instanceof Object_ && $type->getFqsen()) {
                     return $type->getFqsen()->getName();
                 }
             }
@@ -129,21 +124,6 @@ final class DocBlockAnalyzer
     }
 
     /**
-     * Magic untill it is possible to remove tag
-     * https://github.com/phpDocumentor/ReflectionDocBlock/issues/124
-     *
-     * @param Tag[] $annnotations
-     */
-    private function replaceDocBlockAnnotations(DocBlock $docBlock, array $annnotations): DocBlock
-    {
-        $tagsPropertyReflection = new ReflectionProperty(get_class($docBlock), 'tags');
-        $tagsPropertyReflection->setAccessible(true);
-        $tagsPropertyReflection->setValue($docBlock, $annnotations);
-
-        return $docBlock;
-    }
-
-    /**
      * @return Tag[]|null
      */
     private function getTagsByName(Node $node, string $name): ?array
@@ -156,5 +136,16 @@ final class DocBlockAnalyzer
         }
 
         return $tags;
+    }
+
+    /**
+     * @param string[] $types
+     * @return string[]
+     */
+    private function normalizeTypes(array $types): array
+    {
+        return array_map(function (string $type) {
+            return ltrim(trim($type), '\\');
+        }, $types);
     }
 }

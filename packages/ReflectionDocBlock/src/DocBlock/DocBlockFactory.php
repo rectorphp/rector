@@ -7,7 +7,10 @@ use phpDocumentor\Reflection\DocBlock\DescriptionFactory;
 use phpDocumentor\Reflection\DocBlock\TagFactory;
 use phpDocumentor\Reflection\DocBlockFactory as PhpDocumentorDocBlockFactory;
 use phpDocumentor\Reflection\TypeResolver;
+use phpDocumentor\Reflection\Types\Context;
 use PhpParser\Node;
+use Rector\BetterReflection\TypesFinder\PhpDocumentor\NamespaceNodeToReflectionTypeContext;
+use Rector\Node\Attribute;
 use SplObjectStorage;
 
 final class DocBlockFactory
@@ -43,9 +46,20 @@ final class DocBlockFactory
         }
 
         $docBlockContent = $node->getDocComment() ? $node->getDocComment()->getText() : ' ';
+        $docBlockContext = $this->createContextForNamespace($node);
 
-        $docBlock = $this->phpDocumentorDocBlockFactory->create($docBlockContent);
+        $docBlock = $this->phpDocumentorDocBlockFactory->create($docBlockContent, $docBlockContext);
 
         return $this->docBlocksPerNode[$node] = $docBlock;
+    }
+
+    private function createContextForNamespace(Node $node): ?Context
+    {
+        $namespaceNode = $node->getAttribute(Attribute::NAMESPACE_NODE);
+        if ($namespaceNode === null) {
+            return null;
+        }
+
+        return (new NamespaceNodeToReflectionTypeContext)($namespaceNode);
     }
 }

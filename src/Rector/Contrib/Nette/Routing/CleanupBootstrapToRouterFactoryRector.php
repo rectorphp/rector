@@ -7,6 +7,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\Expression;
 use Rector\FileSystem\CurrentFileProvider;
 use Rector\NodeAnalyzer\AssignAnalyzer;
+use Rector\NodeVisitor\Collector\NodeCollector;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -29,10 +30,19 @@ final class CleanupBootstrapToRouterFactoryRector extends AbstractRector
      */
     private $assignAnalyzer;
 
-    public function __construct(CurrentFileProvider $currentFileProvider, AssignAnalyzer $assignAnalyzer)
-    {
+    /**
+     * @var NodeCollector
+     */
+    private $nodeCollector;
+
+    public function __construct(
+        CurrentFileProvider $currentFileProvider,
+        AssignAnalyzer $assignAnalyzer,
+        NodeCollector $nodeCollector
+    ) {
         $this->currentFileProvider = $currentFileProvider;
         $this->assignAnalyzer = $assignAnalyzer;
+        $this->nodeCollector = $nodeCollector;
     }
 
     /**
@@ -58,7 +68,7 @@ final class CleanupBootstrapToRouterFactoryRector extends AbstractRector
      */
     public function refactor(Node $expressionNode): ?Node
     {
-        $this->shouldRemoveNode = true;
+        $this->nodeCollector->addNodeToRemove($expressionNode);
 
         return null;
     }

@@ -8,7 +8,9 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use Rector\Node\Attribute;
+use Rector\NodeVisitor\Collector\NodeCollector;
 use Rector\Rector\AbstractRector;
+use Rector\ReflectionDocBlock\NodeAnalyzer\NamespaceAnalyzer;
 
 final class ClassReplacerRector extends AbstractRector
 {
@@ -18,11 +20,26 @@ final class ClassReplacerRector extends AbstractRector
     private $oldToNewClasses = [];
 
     /**
+     * @var NamespaceAnalyzer
+     */
+    private $namespaceAnalyzer;
+
+    /**
+     * @var NodeCollector
+     */
+    private $nodeCollector;
+
+    /**
      * @param string[] $oldToNewClasses
      */
-    public function __construct(array $oldToNewClasses)
-    {
+    public function __construct(
+        array $oldToNewClasses,
+        NamespaceAnalyzer $namespaceAnalyzer,
+        NodeCollector $nodeCollector
+    ) {
         $this->oldToNewClasses = $oldToNewClasses;
+        $this->namespaceAnalyzer = $namespaceAnalyzer;
+        $this->nodeCollector = $nodeCollector;
     }
 
     public function isCandidate(Node $node): bool
@@ -50,6 +67,12 @@ final class ClassReplacerRector extends AbstractRector
 
         if ($node instanceof Use_) {
             $newName = $this->resolveNewNameFromNode($node);
+
+            if ($this->namespaceAnalyzer->isUseStatmenetAlreadyPresent($node, $newName)) {
+                $this->nodeCollector->addNodeToRemove($node);
+
+                return null;
+            }
 
             $node->uses[0]->name = new Name($newName);
 

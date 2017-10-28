@@ -19,4 +19,4 @@ rectors:
             'VISIBILITY_MODIFER_MASK': 'VISIBILITY_MODIFIER_MASK'
 
     Rector\Rector\Dynamic\ClassReplacerRector:
-        'PhpParser\BuilderAbstract': 'PhpParser\Builder\Declaration'
+        'PhpParser\BuilderAbstract': 'PhpParser\Builder'

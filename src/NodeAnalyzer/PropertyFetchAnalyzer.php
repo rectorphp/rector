@@ -46,6 +46,9 @@ final class PropertyFetchAnalyzer
         }
 
         $variableNodeTypes = $node->var->getAttribute(Attribute::TYPES);
+        if ($variableNodeTypes === null) {
+            return false;
+        }
 
         if (! array_intersect($types, $variableNodeTypes)) {
             return false;
@@ -97,6 +100,11 @@ final class PropertyFetchAnalyzer
         }
 
         $variableNodeTypes = $node->var->getAttribute(Attribute::TYPES);
+        if ($variableNodeTypes === null) {
+            return false;
+        }
+
+        dump($variableNodeTypes);
 
         return (bool) array_intersect($variableNodeTypes, $types);
     }
@@ -149,6 +157,9 @@ final class PropertyFetchAnalyzer
         }
 
         $variableNodeTypes = $node->var->getAttribute(Attribute::TYPES);
+        if ($variableNodeTypes === null) {
+            return false;
+        }
 
         return in_array($type, $variableNodeTypes, true);
     }

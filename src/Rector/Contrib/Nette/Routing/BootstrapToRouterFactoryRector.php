@@ -8,6 +8,7 @@ use PhpParser\PrettyPrinter\Standard;
 use Rector\Builder\Contrib\Nette\RouterFactoryClassBuilder;
 use Rector\FileSystem\CurrentFileProvider;
 use Rector\NodeAnalyzer\AssignAnalyzer;
+use Rector\NodeVisitor\Collector\NodeCollector;
 use Rector\Rector\AbstractRector;
 
 final class BootstrapToRouterFactoryRector extends AbstractRector
@@ -42,16 +43,23 @@ final class BootstrapToRouterFactoryRector extends AbstractRector
      */
     private $standard;
 
+    /**
+     * @var NodeCollector
+     */
+    private $nodeCollector;
+
     public function __construct(
         CurrentFileProvider $currentFileProvider,
         AssignAnalyzer $assignAnalyzer,
         RouterFactoryClassBuilder $routerFactoryClassBuilder,
-        Standard $standard
+        Standard $standard,
+        NodeCollector $nodeCollector
     ) {
         $this->currentFileProvider = $currentFileProvider;
         $this->assignAnalyzer = $assignAnalyzer;
         $this->routerFactoryClassBuilder = $routerFactoryClassBuilder;
         $this->standard = $standard;
+        $this->nodeCollector = $nodeCollector;
     }
 
     /**
@@ -83,7 +91,7 @@ final class BootstrapToRouterFactoryRector extends AbstractRector
     {
         $this->collectedRouteNodes[] = $expressionNode->expr->expr;
 
-        $this->shouldRemoveNode = true;
+        $this->nodeCollector->addNodeToRemove($expressionNode);
 
         return null;
     }

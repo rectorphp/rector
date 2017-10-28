@@ -5,29 +5,38 @@ namespace Rector\Rector;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\Nop;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Contract\Rector\RectorInterface;
-use Rector\Node\Attribute;
+use Rector\NodeTraverserQueue\BetterNodeFinder;
 use SplObjectStorage;
 
 abstract class AbstractRector extends NodeVisitorAbstract implements RectorInterface
 {
     /**
-     * @var bool
-     */
-    protected $shouldRemoveNode = false;
-
-    /**
-     * @var SplObjectStorage|Expression[]
+     * @var SplObjectStorage|Expression[][]
      */
     private $expressionsToPrependBefore = [];
 
     /**
-     * @var SplObjectStorage|Expression[]
+     * @var SplObjectStorage|Expression[][]
      */
     private $expressionsToPrependAfter = [];
+
+    /**
+     * @var BetterNodeFinder
+     */
+    private $betterNodeFinder;
+
+    /**
+     * Nasty magic, unable to do that in config autowire _instanceof calls.
+     *
+     * @required
+     */
+    public function setBetterNodeFinder(BetterNodeFinder $betterNodeFinder): void
+    {
+        $this->betterNodeFinder = $betterNodeFinder;
+    }
 
     /**
      * @param Node[] $nodes
@@ -58,20 +67,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
     }
 
     /**
-     * @return null|int|Node
-     */
-    final public function leaveNode(Node $node)
-    {
-        if ($this->shouldRemoveNode) {
-            $this->shouldRemoveNode = false;
-
-            return new Nop;
-        }
-
-        return null;
-    }
-
-    /**
      * @param Node[] $nodes
      * @return Node[]
      */
@@ -82,35 +77,39 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
 
     protected function prependNodeAfterNode(Expr $nodeToPrepend, Node $positionNode): void
     {
-        /** @var Expression $parentNode */
-        $parentNode = $positionNode->getAttribute(Attribute::PARENT_NODE);
+        $positionExpressionNode = $this->betterNodeFinder->findFirstAncestorInstanceOf(
+            $positionNode,
+            Expression::class
+        );
 
-        $expressionToPrepend = $this->resolveToExpression($nodeToPrepend);
+        $expressionToPrepend = $this->wrapToExpression($nodeToPrepend);
 
-        if (isset($this->expressionsToPrependAfter[$parentNode])) {
-            $this->expressionsToPrependAfter[$parentNode] = array_merge(
-                $this->expressionsToPrependAfter[$parentNode],
+        if (isset($this->expressionsToPrependAfter[$positionExpressionNode])) {
+            $this->expressionsToPrependAfter[$positionExpressionNode] = array_merge(
+                $this->expressionsToPrependAfter[$positionExpressionNode],
                 [$expressionToPrepend]
             );
         } else {
-            $this->expressionsToPrependAfter[$parentNode] = [$expressionToPrepend];
+            $this->expressionsToPrependAfter[$positionExpressionNode] = [$expressionToPrepend];
         }
     }
 
     protected function prependNodeBeforeNode(Expr $nodeToPrepend, Node $positionNode): void
     {
-        /** @var Expression $parentNode */
-        $parentNode = $positionNode->getAttribute(Attribute::PARENT_NODE);
+        $positionExpressionNode = $this->betterNodeFinder->findFirstAncestorInstanceOf(
+            $positionNode,
+            Expression::class
+        );
 
-        $expressionToPrepend = $this->resolveToExpression($nodeToPrepend);
+        $expressionToPrepend = $this->wrapToExpression($nodeToPrepend);
 
-        if (isset($this->expressionsToPrependBefore[$parentNode])) {
-            $this->expressionsToPrependBefore[$parentNode] = array_merge(
-                $this->expressionsToPrependBefore[$parentNode],
+        if (isset($this->expressionsToPrependBefore[$positionExpressionNode])) {
+            $this->expressionsToPrependBefore[$positionExpressionNode] = array_merge(
+                $this->expressionsToPrependBefore[$positionExpressionNode],
                 [$expressionToPrepend]
             );
         } else {
-            $this->expressionsToPrependBefore[$parentNode] = [$expressionToPrepend];
+            $this->expressionsToPrependBefore[$positionExpressionNode] = [$expressionToPrepend];
         }
     }
 
@@ -154,12 +153,8 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
         return $nodes;
     }
 
-    private function resolveToExpression(Expr $exprNode): Expression
+    private function wrapToExpression(Expr $exprNode): Expression
     {
-        if ($exprNode instanceof Expression) {
-            return $exprNode;
-        }
-
         return new Expression($exprNode);
     }
 }

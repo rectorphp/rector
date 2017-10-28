@@ -1,10 +1,20 @@
 # Node Type Resolver
 
-This package detects `class`, type `class_node` and `$variable` or `$this->property` types and adds them to all relevant nodes.
+This package detects **class, interface and trait types** for classes, variables and properties. Those types and added via `setAttribute(Attribute::TYPES)`, so you always now where you are.
 
-Class type is added to all nodes inside it, so you always now where you are. 
+Anonymous classes are included, e.g.:
 
-Anonymous classes are skipped.
+```php
+$someAnonymousClass = new class extends SomeClass
+{
+}
+```
+
+includes types:
+
+```php
+['SomeClass']
+```
 
 
 ## How it works?

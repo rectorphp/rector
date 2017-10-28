@@ -3,7 +3,7 @@
 namespace Rector\NodeTypeResolver\Tests;
 
 use PhpParser\Node;
-use PhpParser\NodeFinder;
+use Rector\NodeTraverserQueue\BetterNodeFinder;
 use Rector\NodeTraverserQueue\NodeTraverserQueue;
 use Rector\Tests\AbstractContainerAwareTestCase;
 use SplFileInfo;
@@ -11,9 +11,9 @@ use SplFileInfo;
 abstract class AbstractNodeTypeResolverTest extends AbstractContainerAwareTestCase
 {
     /**
-     * @var NodeFinder
+     * @var BetterNodeFinder
      */
-    protected $nodeFinder;
+    protected $betterNodeFinder;
 
     /**
      * @var NodeTraverserQueue
@@ -22,7 +22,7 @@ abstract class AbstractNodeTypeResolverTest extends AbstractContainerAwareTestCa
 
     protected function setUp(): void
     {
-        $this->nodeFinder = $this->container->get(NodeFinder::class);
+        $this->betterNodeFinder = $this->container->get(BetterNodeFinder::class);
         $this->nodeTraverserQueue = $this->container->get(NodeTraverserQueue::class);
     }
 
@@ -33,7 +33,7 @@ abstract class AbstractNodeTypeResolverTest extends AbstractContainerAwareTestCa
     {
         $nodes = $this->getNodesForFile($file);
 
-        return $this->nodeFinder->findInstanceOf($nodes, $type);
+        return $this->betterNodeFinder->findInstanceOf($nodes, $type);
     }
 
     /**

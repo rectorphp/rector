@@ -7,7 +7,6 @@ use PhpParser\Node\Stmt\Property;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\TypeContext;
 use Rector\ReflectionDocBlock\NodeAnalyzer\DocBlockAnalyzer;
-use Rector\ReflectionDocBlock\NodeAnalyzer\NamespaceAnalyzer;
 
 final class PropertyTypeResolver implements PerNodeTypeResolverInterface
 {
@@ -21,19 +20,10 @@ final class PropertyTypeResolver implements PerNodeTypeResolverInterface
      */
     private $docBlockAnalyzer;
 
-    /**
-     * @var NamespaceAnalyzer
-     */
-    private $namespaceAnalyzer;
-
-    public function __construct(
-        TypeContext $typeContext,
-        DocBlockAnalyzer $docBlockAnalyzer,
-        NamespaceAnalyzer $namespaceAnalyzer
-    ) {
+    public function __construct(TypeContext $typeContext, DocBlockAnalyzer $docBlockAnalyzer)
+    {
         $this->typeContext = $typeContext;
         $this->docBlockAnalyzer = $docBlockAnalyzer;
-        $this->namespaceAnalyzer = $namespaceAnalyzer;
     }
 
     public function getNodeClass(): string
@@ -49,21 +39,19 @@ final class PropertyTypeResolver implements PerNodeTypeResolverInterface
     {
         $propertyName = $propertyNode->props[0]->name->toString();
         $propertyTypes = $this->typeContext->getTypesForProperty($propertyName);
+
         if ($propertyTypes) {
             return $propertyTypes;
         }
 
         // should be resolved at getAttribute(Attribute::TYPES)
-        $propertyType = $this->docBlockAnalyzer->getVarTypes($propertyNode);
-
-        if ($propertyType === null) {
+        $propertyTypes = $this->docBlockAnalyzer->getVarTypes($propertyNode);
+        if ($propertyTypes === null) {
             return [];
         }
 
-        $propertyTypes = $this->namespaceAnalyzer->resolveTypeToFullyQualified([$propertyType], $propertyNode);
+        $this->typeContext->addPropertyTypes($propertyName, $propertyTypes);
 
-        $this->typeContext->addPropertyTypes($propertyName, [$propertyTypes]);
-
-        return [$propertyTypes];
+        return $propertyTypes;
     }
 }

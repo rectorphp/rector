@@ -4,12 +4,13 @@ namespace Rector\NodeAnalyzer;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
-use PhpParser\NodeFinder;
 use Rector\BetterReflection\Reflector\SmartClassReflector;
 use Rector\Node\Attribute;
+use Rector\NodeTraverserQueue\BetterNodeFinder;
 use ReflectionMethod;
 
 final class MethodCallAnalyzer
@@ -20,19 +21,19 @@ final class MethodCallAnalyzer
     private $smartClassReflector;
 
     /**
-     * @var NodeFinder
+     * @var BetterNodeFinder
      */
-    private $nodeFinder;
+    private $betterNodeFinder;
 
     /**
      * @var string[][]
      */
     private $publicMethodNamesForType = [];
 
-    public function __construct(SmartClassReflector $smartClassReflector, NodeFinder $nodeFinder)
+    public function __construct(SmartClassReflector $smartClassReflector, BetterNodeFinder $betterNodeFinder)
     {
         $this->smartClassReflector = $smartClassReflector;
-        $this->nodeFinder = $nodeFinder;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
 
     /**
@@ -144,13 +145,21 @@ final class MethodCallAnalyzer
      */
     private function resolveVariableType(MethodCall $methodCallNode): array
     {
-        $propertyFetchNode = $this->nodeFinder->findFirstInstanceOf([$methodCallNode], PropertyFetch::class);
+        $propertyFetchNode = $this->betterNodeFinder->findFirstInstanceOf([$methodCallNode], PropertyFetch::class);
         if ($propertyFetchNode) {
             return (array) $propertyFetchNode->getAttribute(Attribute::TYPES);
         }
 
-        $variableNode = $this->nodeFinder->findFirstInstanceOf([$methodCallNode], Variable::class);
+        $variableNode = $this->betterNodeFinder->findFirstInstanceOf([$methodCallNode], Variable::class);
+        if ($variableNode) {
+            return (array) $variableNode->getAttribute(Attribute::TYPES);
+        }
 
-        return (array) $variableNode->getAttribute(Attribute::TYPES);
+        $newNode = $this->betterNodeFinder->findFirstInstanceOf([$methodCallNode], New_::class);
+        if ($newNode) {
+            return (array) $newNode->getAttribute(Attribute::TYPES);
+        }
+
+        return [];
     }
 }

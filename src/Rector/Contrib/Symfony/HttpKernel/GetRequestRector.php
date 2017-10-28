@@ -9,6 +9,7 @@ use Rector\Node\Attribute;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\Contrib\Symfony\ControllerMethodAnalyzer;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
+use Rector\NodeTraverserQueue\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -40,14 +41,21 @@ final class GetRequestRector extends AbstractRector
      */
     private $methodCallAnalyzer;
 
+    /**
+     * @var BetterNodeFinder
+     */
+    private $betterNodeFinder;
+
     public function __construct(
         ControllerMethodAnalyzer $controllerMethodAnalyzer,
         MethodCallAnalyzer $methodCallAnalyzer,
-        NodeFactory $nodeFactory
+        NodeFactory $nodeFactory,
+        BetterNodeFinder $betterNodeFinder
     ) {
         $this->controllerMethodAnalyzer = $controllerMethodAnalyzer;
         $this->nodeFactory = $nodeFactory;
         $this->methodCallAnalyzer = $methodCallAnalyzer;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
 
     public function isCandidate(Node $node): bool
@@ -85,12 +93,9 @@ final class GetRequestRector extends AbstractRector
             return false;
         }
 
-        /** @var ClassMethod $node */
-        if (! $this->controllerMethodAnalyzer->doesNodeContain($node, '$this->getRequest()')) {
-            return false;
-        }
-
-        return true;
+        return (bool) $this->betterNodeFinder->find($node, function (Node $node) {
+            return $this->methodCallAnalyzer->isMethod($node, 'getRequest');
+        });
     }
 
     private function isGetRequestInAction(Node $node): bool
