@@ -53,6 +53,10 @@ final class PropertyFetchTypeResolver implements PerNodeTypeResolverInterface, N
         // e.g. $r->getParameters()[0]->name
         if ($propertyFetchNode->var instanceof ArrayDimFetch) {
             $types = $this->nodeTypeResolver->resolve($propertyFetchNode->var->var);
+            if (! $types) {
+                return [];
+            }
+
             $type = array_shift($types);
 
             $propertyType = $this->propertyReflector->getPropertyType($type, $propertyName);
@@ -76,8 +80,11 @@ final class PropertyFetchTypeResolver implements PerNodeTypeResolverInterface, N
 
         // e.g. $this->property->anotherProperty
         $types = $this->nodeTypeResolver->resolve($propertyFetchNode->var);
-        $type = array_shift($types);
+        if (! $types) {
+            return [];
+        }
 
+        $type = array_shift($types);
         $type = $this->propertyReflector->getPropertyType($type, $propertyName);
         if ($type) {
             return [$type];

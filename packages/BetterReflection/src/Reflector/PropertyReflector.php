@@ -58,7 +58,6 @@ final class PropertyReflector
     private function resolveTypeFromReflectionProperty(ReflectionProperty $reflectionProperty): ?string
     {
         $types = $reflectionProperty->getDocBlockTypes();
-
         if (! isset($types[0])) {
             return null;
         }
