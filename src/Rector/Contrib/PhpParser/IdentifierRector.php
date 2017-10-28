@@ -46,9 +46,15 @@ final class IdentifierRector extends AbstractRector
         'PhpParser\Node\Stmt\UseUse' => ['alias'],
     ];
 
-    public function __construct(PropertyFetchAnalyzer $propertyFetchAnalyzer)
+    /**
+     * @var NodeFactory
+     */
+    private $nodeFactory;
+
+    public function __construct(PropertyFetchAnalyzer $propertyFetchAnalyzer, NodeFactory $nodeFactory)
     {
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
+        $this->nodeFactory = $nodeFactory;
     }
 
     public function isCandidate(Node $node): bool
@@ -75,10 +81,7 @@ final class IdentifierRector extends AbstractRector
             return $propertyFetchNode;
         }
 
-        $methodCallNode = new MethodCall($propertyFetchNode, 'toString');
-        $propertyFetchNode->setAttribute(Attribute::PARENT_NODE, $methodCallNode);
-
-        return $methodCallNode;
+        return $this->nodeFactory->createMethodCallWithVariable($propertyFetchNode, 'toString');
     }
 
     /**

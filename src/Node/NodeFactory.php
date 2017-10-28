@@ -129,7 +129,10 @@ final class NodeFactory
      */
     public function createMethodCallWithVariable(Expr $exprNode, string $methodName): MethodCall
     {
-        return new MethodCall($exprNode, $methodName);
+        $methodCallNode = new MethodCall($exprNode, $methodName);
+        $exprNode->setAttribute(Attribute::PARENT_NODE, $methodCallNode);
+
+        return $methodCallNode;
     }
 
     /**
