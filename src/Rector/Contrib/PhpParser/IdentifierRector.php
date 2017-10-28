@@ -86,14 +86,14 @@ final class IdentifierRector extends AbstractRector
             return $propertyFetchNode;
         }
 
-        $propertyFetchNode = $this->nodeFactory->createPropertyFetch(
-            'this',
-            'node'
-        );
+        $origPropertyFetchNode = $propertyFetchNode;
 
-        $propertyFetchNode = new PropertyFetch(
-            $propertyFetchNode,
-            'name'
+        $firstPropertyName = $origPropertyFetchNode->var->name;
+        $secondPropertyName = $origPropertyFetchNode->name->toString();
+
+        $propertyFetchNode = $this->nodeFactory->createPropertyFetch(
+            $firstPropertyName,
+            $secondPropertyName
         );
 
         return new MethodCall($propertyFetchNode, 'toString');
