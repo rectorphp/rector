@@ -104,6 +104,8 @@ final class PropertyFetchAnalyzer
             return false;
         }
 
+        dump($variableNodeTypes);
+
         return (bool) array_intersect($variableNodeTypes, $types);
     }
 

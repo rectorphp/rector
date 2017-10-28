@@ -33,4 +33,17 @@ final class Test extends AbstractNodeTypeResolverTest
             $propertyNodes[0]->getAttribute(Attribute::TYPES)
         );
     }
+
+    public function testPartialDocBlock(): void
+    {
+        $propertyNodes = $this->getNodesForFileOfType(
+            __DIR__ . '/Source/PartialDocBlock.php.inc',
+            Property::class
+        );
+
+        $this->assertSame(
+            ['PhpParser\Node\Stmt\ClassMethod', 'PhpParser\Node\Stmt\Function_', 'PhpParser\Node\Expr\Closure'],
+            $propertyNodes[0]->getAttribute(Attribute::TYPES)
+        );
+    }
 }

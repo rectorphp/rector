@@ -2,7 +2,6 @@
 
 namespace Rector\ReflectionDocBlock\NodeAnalyzer;
 
-use Nette\Utils\Strings;
 use phpDocumentor\Reflection\DocBlock;
 use phpDocumentor\Reflection\DocBlock\Tag;
 use phpDocumentor\Reflection\DocBlock\Tags\Deprecated;
@@ -14,7 +13,6 @@ use PhpParser\Node;
 use Rector\ReflectionDocBlock\DocBlock\AnnotationRemover;
 use Rector\ReflectionDocBlock\DocBlock\DocBlockFactory;
 use Rector\ReflectionDocBlock\DocBlock\TidingSerializer;
-use ReflectionProperty;
 
 /**
  * @todo Make use of phpdocumentor/type-resolver, to return FQN names
@@ -31,6 +29,7 @@ final class DocBlockAnalyzer
      * @var TidingSerializer
      */
     private $tidingSerializer;
+
     /**
      * @var AnnotationRemover
      */
@@ -60,7 +59,10 @@ final class DocBlockAnalyzer
         $this->saveNewDocBlockToNode($node, $docBlock);
     }
 
-    public function getVarTypes(Node $node): ?string
+    /**
+     * @return string[]|null
+     */
+    public function getVarTypes(Node $node): ?array
     {
         /** @var Var_[] $varTags */
         $varTags = $this->getTagsByName($node, 'var');
@@ -68,7 +70,12 @@ final class DocBlockAnalyzer
             return null;
         }
 
-        return ltrim((string) $varTags[0]->getType(), '\\');
+        $varTag = array_shift($varTags);
+
+        $types = explode('|', (string) $varTag);
+        $types = $this->normalizeTypes($types);
+
+        return $types;
     }
 
     public function getDeprecatedDocComment(Node $node): ?string
@@ -89,6 +96,8 @@ final class DocBlockAnalyzer
 
     public function getTypeForParam(Node $node, string $paramName): ?string
     {
+        // @todo should be array as well, use same approach as for @getVarTypes()
+
         /** @var Param[] $paramTags */
         $paramTags = $this->getTagsByName($node, 'param');
         if ($paramTags === null) {
@@ -127,5 +136,16 @@ final class DocBlockAnalyzer
         }
 
         return $tags;
+    }
+
+    /**
+     * @param string[] $types
+     * @return string[]
+     */
+    private function normalizeTypes(array $types): array
+    {
+        return array_map(function (string $type) {
+            return ltrim(trim($type), '\\');
+        }, $types);
     }
 }

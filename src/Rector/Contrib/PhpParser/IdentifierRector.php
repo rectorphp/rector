@@ -3,6 +3,7 @@
 namespace Rector\Rector\Contrib\PhpParser;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use Rector\Node\Attribute;
@@ -81,8 +82,15 @@ final class IdentifierRector extends AbstractRector
             return $propertyFetchNode;
         }
 
+        if ($propertyFetchNode->var instanceof ArrayDimFetch) {
+            $propertyFetchNode = $propertyFetchNode->var;
+            $hangingPropertyNode = $propertyFetchNode->var->var->name->toString();
+        } else {
+            $hangingPropertyNode = $propertyFetchNode->var->name;
+        }
+
         $propertyFetchNode = $this->nodeFactory->createPropertyFetch(
-            $propertyFetchNode->var->name,
+            $hangingPropertyNode,
             $propertyFetchNode->name->toString()
         );
 

@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use Rector\BetterReflection\Reflector\PropertyReflector;
-use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverAwareInterface;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -57,6 +56,7 @@ final class PropertyFetchTypeResolver implements PerNodeTypeResolverInterface, N
             $type = array_shift($types);
 
             $propertyType = $this->propertyReflector->getPropertyType($type, $propertyName);
+
             return [$propertyType];
 
             // @todo: keep for now for possible BC changes of other resolvers
