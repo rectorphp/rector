@@ -60,8 +60,7 @@ EOT;
         $deprecatedAnnotation = $this->docBlockAnalyzer->getDeprecatedDocComment($node);
         $this->assertSame('This is deprecated', $deprecatedAnnotation);
 
-        $varAnnotation = $this->docBlockAnalyzer->getVarTypes($node);
-        $this->assertSame('int', $varAnnotation);
+        $this->assertSame(['int'], $this->docBlockAnalyzer->getVarTypes($node));
     }
 
     public function testGetParamTypeFor(): void
