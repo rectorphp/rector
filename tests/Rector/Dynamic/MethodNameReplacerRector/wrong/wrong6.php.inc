@@ -1,3 +1,9 @@
 <?php declare (strict_types=1);
 
-$result = Nette\Bridges\FormsLatte\FormMacros::renderFormBegin($someArgs);
+class MyType extends \Symfony\Component\Form\AbstractType
+{
+    public function setDefaultOptions(SomeResolver $resolver)
+    {
+        parent::setDefaultOptions($resolver);
+    }
+}
