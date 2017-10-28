@@ -3,7 +3,6 @@
 namespace Rector\Rector\Contrib\PhpParser;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use Rector\Node\Attribute;
@@ -47,15 +46,9 @@ final class IdentifierRector extends AbstractRector
         'PhpParser\Node\Stmt\UseUse' => ['alias'],
     ];
 
-    /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
-
-    public function __construct(PropertyFetchAnalyzer $propertyFetchAnalyzer, NodeFactory $nodeFactory)
+    public function __construct(PropertyFetchAnalyzer $propertyFetchAnalyzer)
     {
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
-        $this->nodeFactory = $nodeFactory;
     }
 
     public function isCandidate(Node $node): bool
@@ -82,23 +75,10 @@ final class IdentifierRector extends AbstractRector
             return $propertyFetchNode;
         }
 
-        if ($propertyFetchNode->var instanceof ArrayDimFetch) {
-            $propertyFetchNode->var;
+        $methodCallNode = new MethodCall($propertyFetchNode, 'toString');
+        $propertyFetchNode->setAttribute(Attribute::PARENT_NODE, $methodCallNode);
 
-            return new MethodCall($propertyFetchNode, 'toString');
-        }
-
-        $origPropertyFetchNode = $propertyFetchNode;
-
-        $firstPropertyName = $origPropertyFetchNode->var->name;
-        $secondPropertyName = $origPropertyFetchNode->name->toString();
-
-        $newPropertyFetchNode = $this->nodeFactory->createPropertyFetch(
-            $firstPropertyName,
-            $secondPropertyName
-        );
-
-        return new MethodCall($newPropertyFetchNode, 'toString');
+        return $methodCallNode;
     }
 
     /**
