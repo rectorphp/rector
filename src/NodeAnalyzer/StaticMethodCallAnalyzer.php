@@ -65,9 +65,9 @@ final class StaticMethodCallAnalyzer
             return null;
         }
 
-        $nodeType = $node->class->toString();
+        $nodeTypes = $node->class->getAttribute(Attribute::TYPES);
 
-        return in_array($nodeType, $types, true) ? [$nodeType] : null;
+        return array_intersect($nodeTypes, $types) ? $nodeTypes : null;
     }
 
     /**
