@@ -1,0 +1,5 @@
+rectors:
+    Rector\Rector\Dynamic\NamespaceReplacerRector:
+        'OldNamespace': 'NewNamespace'
+        'OldNamespaceWith\OldSplitNamespace': 'NewNamespaceWith\NewSplitNamespace'
+        'PHPUnit_Framework_': 'PHPUnit\Framework\'
