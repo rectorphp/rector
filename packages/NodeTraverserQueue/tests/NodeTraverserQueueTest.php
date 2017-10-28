@@ -9,7 +9,6 @@ use Rector\Contract\Parser\ParserInterface;
 use Rector\Printer\FormatPerservingPrinter;
 use Rector\Tests\AbstractContainerAwareTestCase;
 use SplFileInfo;
-use Throwable;
 
 final class NodeTraverserQueueTest extends AbstractContainerAwareTestCase
 {
@@ -43,22 +42,15 @@ final class NodeTraverserQueueTest extends AbstractContainerAwareTestCase
 
     public function testRaw(): void
     {
-        try {
-            $oldStmts = $this->parser->parseFile($this->fileInfo->getRealPath());
-            $oldTokens = $this->lexer->getTokens();
+        $oldStmts = $this->parser->parseFile($this->fileInfo->getRealPath());
+        $oldTokens = $this->lexer->getTokens();
 
-            $cloningNodeTraverser = new NodeTraverser;
-            $cloningNodeTraverser->addVisitor(new CloningVisitor);
+        $cloningNodeTraverser = new NodeTraverser;
+        $cloningNodeTraverser->addVisitor(new CloningVisitor);
 
-            $newStmts = $cloningNodeTraverser->traverse($oldStmts);
+        $newStmts = $cloningNodeTraverser->traverse($oldStmts);
 
-            $processedFileContent = $this->formatPerservingPrinter->printToString($newStmts, $oldStmts, $oldTokens);
-            $this->assertStringEqualsFile($this->fileInfo->getRealPath(), $processedFileContent);
-        } catch (Throwable $throwable) {
-            $this->markTestSkipped(sprintf(
-                'Test  %s failed.',
-                __METHOD__
-            ));
-        }
+        $processedFileContent = $this->formatPerservingPrinter->printToString($newStmts, $oldStmts, $oldTokens);
+        $this->assertStringEqualsFile($this->fileInfo->getRealPath(), $processedFileContent);
     }
 }
