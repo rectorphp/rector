@@ -39,12 +39,10 @@ final class PropertyTypeResolver implements PerNodeTypeResolverInterface
     {
         $propertyName = $propertyNode->props[0]->name->toString();
         $propertyTypes = $this->typeContext->getTypesForProperty($propertyName);
-
         if ($propertyTypes) {
             return $propertyTypes;
         }
 
-        // should be resolved at getAttribute(Attribute::TYPES)
         $propertyTypes = $this->docBlockAnalyzer->getVarTypes($propertyNode);
         if ($propertyTypes === null) {
             return [];
