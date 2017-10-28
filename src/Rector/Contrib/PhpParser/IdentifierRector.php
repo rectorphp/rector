@@ -81,23 +81,9 @@ final class IdentifierRector extends AbstractRector
         if ($parentNode instanceof MethodCall) {
             return $propertyFetchNode;
         }
+
         if ($propertyFetchNode->var instanceof ArrayDimFetch) {
-            $parentNode = $propertyFetchNode->var;
-
-            // experiment: clean to prevent segfault due some cyclic calls
-            /** @var Node[] $nodesToClear */
-            $nodesToClear = [];
-            while ($parentNode = $parentNode->getAttribute(Attribute::PARENT_NODE)) {
-                $nodesToClear[] = $parentNode;
-            }
-
-            foreach ($nodesToClear as $nodeToClear) {
-                $nodeToClear->setAttribute(Attribute::ORIGINAL_NODE, null);
-                $nodeToClear->setAttribute(Attribute::PARENT_NODE, null);
-            }
-
-            $propertyFetchNode->setAttribute(Attribute::ORIGINAL_NODE, null);
-            $propertyFetchNode->setAttribute(Attribute::PARENT_NODE, null);
+            $propertyFetchNode->var;
 
             return new MethodCall($propertyFetchNode, 'toString');
         }
