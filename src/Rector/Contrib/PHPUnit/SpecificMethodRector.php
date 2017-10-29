@@ -21,7 +21,7 @@ final class SpecificMethodRector extends AbstractRector
      * @var string[]
      */
     private $oldToNewMethods = [
-        'is_readable' => ['assertIsReadable', 'assertNotIsReadable']
+        'is_readable' => ['assertIsReadable', 'assertNotIsReadable'],
     ];
 
     /**
