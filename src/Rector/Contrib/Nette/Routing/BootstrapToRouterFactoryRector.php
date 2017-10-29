@@ -97,7 +97,7 @@ final class BootstrapToRouterFactoryRector extends AbstractRector
     }
 
     /**
-     * @param Node[] $nodes2"
+     * @param Node[] $nodes
      * @return Node[]
      */
     public function afterTraverse(array $nodes): array
