@@ -5,7 +5,7 @@ namespace Rector\Rector\Contrib\PhpParser;
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
 use Rector\Node\Attribute;
-use Rector\Node\NodeFactory;
+use Rector\Node\PropertyFetchNodeFactory;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Rector\AbstractRector;
 
@@ -24,17 +24,19 @@ final class CatchAndClosureUseNameRector extends AbstractRector
     private $propertyFetchAnalyzer;
 
     /**
-     * @var NodeFactory
+     * @var PropertyFetchNodeFactory
      */
-    private $nodeFactory;
+    private $propertyFetchNodeFactory;
 
     /**
      * @param string[][]
      */
-    public function __construct(PropertyFetchAnalyzer $propertyFetchAnalyzer, NodeFactory $nodeFactory)
-    {
+    public function __construct(
+        PropertyFetchAnalyzer $propertyFetchAnalyzer,
+        PropertyFetchNodeFactory $propertyFetchNodeFactory
+    ) {
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
-        $this->nodeFactory = $nodeFactory;
+        $this->propertyFetchNodeFactory = $propertyFetchNodeFactory;
     }
 
     public function isCandidate(Node $node): bool
@@ -56,7 +58,7 @@ final class CatchAndClosureUseNameRector extends AbstractRector
             return $propertyFetchNode;
         }
 
-        $propertyFetchNode->var = $this->nodeFactory->createPropertyFetch($propertyFetchNode->var->name, 'var');
+        $propertyFetchNode->var = $this->propertyFetchNodeFactory->createPropertyFetch($propertyFetchNode->var->name, 'var');
         $propertyFetchNode->name = 'name';
 
         return $propertyFetchNode;

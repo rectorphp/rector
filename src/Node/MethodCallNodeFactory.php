@@ -39,7 +39,7 @@ final class MethodCallNodeFactory
     public function createWithVariableAndMethodName(Expr $exprNode, string $methodName): MethodCall
     {
         if ($exprNode instanceof PropertyFetch) {
-            $exprNode = $this->nodeFactory->clonePropertyFetch($exprNode);
+            $exprNode = $this->clonePropertyFetch($exprNode);
         }
 
         $methodCallNode = new MethodCall($exprNode, $methodName);
@@ -82,5 +82,10 @@ final class MethodCallNodeFactory
     public function createStaticMethodCallWithArgs(string $class, string $method, array $arguments): StaticCall
     {
         return new StaticCall(new Name($class), new Identifier($method), $arguments);
+    }
+
+    private function clonePropertyFetch(PropertyFetch $propertyFetchNode): PropertyFetch
+    {
+        return new PropertyFetch($propertyFetchNode->var, $propertyFetchNode->name);
     }
 }

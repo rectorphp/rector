@@ -9,6 +9,7 @@ use Rector\Contract\Bridge\ServiceTypeForNameProviderInterface;
 use Rector\Naming\PropertyNaming;
 use Rector\Node\Attribute;
 use Rector\Node\NodeFactory;
+use Rector\Node\PropertyFetchNodeFactory;
 use Rector\NodeAnalyzer\Contrib\Symfony\ContainerCallAnalyzer;
 use Rector\Rector\AbstractRector;
 
@@ -32,9 +33,9 @@ final class GetterToPropertyRector extends AbstractRector
     private $classPropertyCollector;
 
     /**
-     * @var NodeFactory
+     * @var PropertyFetchNodeFactory
      */
-    private $nodeFactory;
+    private $propertyFetchNodeFactory;
 
     /**
      * @var ContainerCallAnalyzer
@@ -49,13 +50,13 @@ final class GetterToPropertyRector extends AbstractRector
     public function __construct(
         PropertyNaming $propertyNaming,
         ClassPropertyCollector $classPropertyCollector,
-        NodeFactory $nodeFactory,
+        PropertyFetchNodeFactory $propertyFetchNodeFactory,
         ContainerCallAnalyzer $containerCallAnalyzer,
         ServiceTypeForNameProviderInterface $serviceTypeForNameProvider
     ) {
         $this->propertyNaming = $propertyNaming;
         $this->classPropertyCollector = $classPropertyCollector;
-        $this->nodeFactory = $nodeFactory;
+        $this->propertyFetchNodeFactory = $propertyFetchNodeFactory;
         $this->containerCallAnalyzer = $containerCallAnalyzer;
         $this->serviceTypeForNameProvider = $serviceTypeForNameProvider;
     }
@@ -88,6 +89,6 @@ final class GetterToPropertyRector extends AbstractRector
             $propertyName
         );
 
-        return $this->nodeFactory->createLocalPropertyFetch($propertyName);
+        return $this->propertyFetchNodeFactory->createLocalPropertyFetch($propertyName);
     }
 }

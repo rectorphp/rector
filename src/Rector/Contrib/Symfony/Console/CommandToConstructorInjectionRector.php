@@ -11,6 +11,7 @@ use Rector\Contract\Bridge\ServiceTypeForNameProviderInterface;
 use Rector\Naming\PropertyNaming;
 use Rector\Node\Attribute;
 use Rector\Node\NodeFactory;
+use Rector\Node\PropertyFetchNodeFactory;
 use Rector\NodeAnalyzer\Contrib\Symfony\ContainerCallAnalyzer;
 use Rector\Rector\AbstractRector;
 
@@ -54,7 +55,7 @@ final class CommandToConstructorInjectionRector extends AbstractRector
     /**
      * @var NodeFactory
      */
-    private $nodeFactory;
+    private $propertyFetchNodeFactory;
 
     /**
      * @var ContainerCallAnalyzer
@@ -69,13 +70,13 @@ final class CommandToConstructorInjectionRector extends AbstractRector
     public function __construct(
         ClassPropertyCollector $classPropertyCollector,
         PropertyNaming $propertyNaming,
-        NodeFactory $nodeFactory,
+        PropertyFetchNodeFactory $propertyFetchNodeFactory,
         ContainerCallAnalyzer $containerCallAnalyzer,
         ServiceTypeForNameProviderInterface $serviceTypeForNameProvider
     ) {
         $this->classPropertyCollector = $classPropertyCollector;
         $this->propertyNaming = $propertyNaming;
-        $this->nodeFactory = $nodeFactory;
+        $this->propertyFetchNodeFactory = $propertyFetchNodeFactory;
         $this->containerCallAnalyzer = $containerCallAnalyzer;
         $this->serviceTypeForNameProvider = $serviceTypeForNameProvider;
     }
@@ -116,7 +117,7 @@ final class CommandToConstructorInjectionRector extends AbstractRector
             $propertyName
         );
 
-        return $this->nodeFactory->createLocalPropertyFetch($propertyName);
+        return $this->propertyFetchNodeFactory->createLocalPropertyFetch($propertyName);
     }
 
     private function replaceParentContainerAwareCommandWithCommand(Node $node): void

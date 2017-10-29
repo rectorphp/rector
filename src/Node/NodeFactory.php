@@ -29,37 +29,27 @@ use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\TraitUse;
 use Rector\Exception\NotImplementedException;
 
-/**
- * @todo decouple PropertyFetchNodeFactory
- */
 final class NodeFactory
 {
     /**
      * @var BuilderFactory
      */
     private $builderFactory;
+    /**
+     * @var PropertyFetchNodeFactory
+     */
+    private $propertyFetchNodeFactory;
 
-    public function __construct(BuilderFactory $builderFactory)
+    public function __construct(BuilderFactory $builderFactory, PropertyFetchNodeFactory $propertyFetchNodeFactory)
     {
         $this->builderFactory = $builderFactory;
-    }
-
-    /**
-     * Creates "$this->propertyName"
-     */
-    public function createLocalPropertyFetch(string $propertyName): PropertyFetch
-    {
-        $localVariable = new Variable('this', [
-            'name' => $propertyName,
-        ]);
-
-        return new PropertyFetch($localVariable, $propertyName);
+        $this->propertyFetchNodeFactory = $propertyFetchNodeFactory;
     }
 
     /**
      * Creates "$this->propertyName[]"
      */
-    public function createLocalPropertyArrayFetch(string $propertyName): PropertyFetch
+    private function createLocalPropertyArrayFetch(string $propertyName): PropertyFetch
     {
         $localVariable = new Variable('this', [
             'name' => $propertyName,
@@ -172,7 +162,7 @@ final class NodeFactory
         ]);
 
         $assign = new Assign(
-            $this->createLocalPropertyFetch($propertyName),
+            $this->propertyFetchNodeFactory->createLocalPropertyFetch($propertyName),
             $variable
         );
 
@@ -239,11 +229,6 @@ final class NodeFactory
     {
         return $this->builderFactory->namespace($namespace)
             ->getNode();
-    }
-
-    public function clonePropertyFetch(PropertyFetch $propertyFetchNode): PropertyFetch
-    {
-        return new PropertyFetch($propertyFetchNode->var, $propertyFetchNode->name);
     }
 
     public function createParam(string $name, string $type): Param

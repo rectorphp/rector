@@ -9,6 +9,7 @@ use Rector\Contract\Bridge\ServiceTypeForNameProviderInterface;
 use Rector\Naming\PropertyNaming;
 use Rector\Node\Attribute;
 use Rector\Node\NodeFactory;
+use Rector\Node\PropertyFetchNodeFactory;
 use Rector\NodeAnalyzer\StaticMethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
 
@@ -32,9 +33,9 @@ final class GetServiceToConstructorInjectionRector extends AbstractRector
     private $classPropertyCollector;
 
     /**
-     * @var NodeFactory
+     * @var PropertyFetchNodeFactory
      */
-    private $nodeFactory;
+    private $propertyFetchNodeFactory;
 
     /**
      * @var ServiceTypeForNameProviderInterface
@@ -49,13 +50,13 @@ final class GetServiceToConstructorInjectionRector extends AbstractRector
     public function __construct(
         PropertyNaming $propertyNaming,
         ClassPropertyCollector $classPropertyCollector,
-        NodeFactory $nodeFactory,
+        PropertyFetchNodeFactory $propertyFetchNodeFactory,
         StaticMethodCallAnalyzer $staticMethodCallAnalyzer,
         ServiceTypeForNameProviderInterface $serviceTypeForNameProvider
     ) {
         $this->propertyNaming = $propertyNaming;
         $this->classPropertyCollector = $classPropertyCollector;
-        $this->nodeFactory = $nodeFactory;
+        $this->propertyFetchNodeFactory = $propertyFetchNodeFactory;
         $this->serviceTypeForNameProvider = $serviceTypeForNameProvider;
         $this->staticMethodCallAnalyzer = $staticMethodCallAnalyzer;
     }
@@ -89,6 +90,6 @@ final class GetServiceToConstructorInjectionRector extends AbstractRector
             $propertyName
         );
 
-        return $this->nodeFactory->createLocalPropertyFetch($propertyName);
+        return $this->propertyFetchNodeFactory->createLocalPropertyFetch($propertyName);
     }
 }
