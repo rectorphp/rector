@@ -1,6 +1,7 @@
 rectors:
     Rector\Rector\Contrib\PHPUnit\ExceptionRector: ~
     Rector\Rector\Contrib\PHPUnit\GetMockRector: ~
+    Rector\Rector\Contrib\PHPUnit\SpecificMethodRector: ~
 
     # ref. https://github.com/sebastianbergmann/phpunit/compare/5.7.9...6.0.0
     Rector\Rector\Dynamic\PseudoNamespaceToNamespaceRector:
