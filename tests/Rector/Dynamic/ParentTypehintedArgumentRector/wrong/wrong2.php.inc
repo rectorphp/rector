@@ -1,8 +1,13 @@
 <?php declare(strict_types=1);
 
-class SomeClass implements \PhpParser\Parser
+namespace SomeNamespace;
+
+use Doctrine\ORM\EntityManager;
+
+class MyMetadataFactory extends \Doctrine\ORM\Mapping\ClassMetadataFactory
 {
-    public function parse($code, \PhpParser\ErrorHandler $errorHandler = null)
+    public function setEntityManager(EntityManager $em)
     {
+        $this->em = $em;
     }
 }

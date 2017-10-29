@@ -4,11 +4,12 @@ namespace Rector\Rector\Dynamic;
 
 use PhpParser\BuilderHelpers;
 use PhpParser\Node;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\BetterReflection\Reflection\TypeAnalyzer;
 use Rector\Node\Attribute;
-use Rector\NodeAnalyzer\ClassAnalyzer;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -37,17 +38,17 @@ final class ParentTypehintedArgumentRector extends AbstractRector
     private $typehintForArgumentByMethodAndClass = [];
 
     /**
-     * @var ClassAnalyzer
+     * @var TypeAnalyzer
      */
-    private $classAnalyzer;
+    private $typeAnalyzer;
 
     /**
      * @param mixed[] $typehintForArgumentByMethodAndClass
      */
-    public function __construct(array $typehintForArgumentByMethodAndClass, ClassAnalyzer $classAnalyzer)
+    public function __construct(array $typehintForArgumentByMethodAndClass, TypeAnalyzer $typeAnalyzer)
     {
         $this->typehintForArgumentByMethodAndClass = $typehintForArgumentByMethodAndClass;
-        $this->classAnalyzer = $classAnalyzer;
+        $this->typeAnalyzer = $typeAnalyzer;
     }
 
     public function isCandidate(Node $node): bool
@@ -59,9 +60,12 @@ final class ParentTypehintedArgumentRector extends AbstractRector
         /** @var Class_ $classNode */
         $classNode = $node->getAttribute(Attribute::CLASS_NODE);
 
-        $parentTypes = $this->classAnalyzer->resolveTypeAndParentTypes($classNode);
+        $classNodeTypes = $classNode->getAttribute(Attribute::TYPES);
+        if (! $classNodeTypes) {
+            return false;
+        }
 
-        return $this->isTypeMatch($parentTypes);
+        return $this->isTypeMatch($classNodeTypes);
     }
 
     /**
@@ -72,9 +76,9 @@ final class ParentTypehintedArgumentRector extends AbstractRector
         /** @var Class_ $classMethodNode */
         $classNode = $classMethodNode->getAttribute(Attribute::CLASS_NODE);
 
-        $classParentTypes = $this->classAnalyzer->resolveTypeAndParentTypes($classNode);
+        $classNodeTypes = $classNode->getAttribute(Attribute::TYPES);
 
-        $matchingTypes = $this->getMatchingTypesForClassNode($classParentTypes);
+        $matchingTypes = $this->getMatchingTypesForClassNode($classNodeTypes);
 
         $methodName = $classMethodNode->name->toString();
 
@@ -127,13 +131,18 @@ final class ParentTypehintedArgumentRector extends AbstractRector
         foreach ($classMethodNode->params as $param) {
             $parameterName = $param->var->name;
 
+
             if (! isset($parametersToTypehints[$parameterName])) {
                 continue;
             }
 
             $newTypehint = $parametersToTypehints[$parameterName];
 
-            $param->type = BuilderHelpers::normalizeType($newTypehint);
+            if ($this->typeAnalyzer->isBuiltinType($newTypehint)) {
+                $param->type = BuilderHelpers::normalizeType($newTypehint);
+            } else {
+                $param->type = new FullyQualified($newTypehint);
+            }
         }
 
         return $classMethodNode;
