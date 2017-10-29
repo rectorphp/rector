@@ -184,6 +184,18 @@ You can:
                     'code': 'string'
     ```
 
+- **remove unused arguments**
+
+    ```yml
+    Rector\Rector\Dynamic\ArgumentRemoverRector:
+        # class
+            # method
+                # arguments to remove
+        'Doctrine\ORM\Persisters\Entity\AbstractEntityInheritancePersister':
+            'getSelectJoinColumnSQL':
+                - 'className'
+    ```
+    
 - or **replace underscore naming `_` with namespaces `\`**
 
     ```yml
