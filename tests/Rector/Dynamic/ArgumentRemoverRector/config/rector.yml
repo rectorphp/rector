@@ -1,0 +1,5 @@
+rectors:
+    Rector\Rector\Dynamic\ArgumentRemoverRector:
+        'Doctrine\ORM\Persisters\Entity\AbstractEntityInheritancePersister':
+            'getSelectJoinColumnSQL':
+                - 'className'

@@ -2,54 +2,43 @@
 
 namespace Rector\Rector\Dynamic;
 
-use PhpParser\BuilderHelpers;
 use PhpParser\Node;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\BetterReflection\Reflection\TypeAnalyzer;
 use Rector\Node\Attribute;
 use Rector\Rector\AbstractRector;
 
 /**
- * Useful when parent class or interface gets new typehints,
- * that breaks contract with child instances.
+ * Remove arguments, that is used no more.
  *
- * E.g. interface SomeInterface
- * {
- *      public read($content);
- * }
+ * Before:
+ * - $this->callMe($one, $two);
  *
- * After
- *      public read(string $content);
+ * After:
+ * - $this->callMe($one);
  */
-final class ParentTypehintedArgumentRector extends AbstractRector
+final class ArgumentRemoverRector extends AbstractRector
 {
     /**
      * class => [
      *      method => [
-     *           argument => typehting
+     *          argument,
+     *              anotherArgument
      *      ]
      * ]
      *
      * @var string[]
      */
-    private $typehintForArgumentByMethodAndClass = [];
+    private $argumentsToRemoveByMethodAndClass = [];
 
     /**
-     * @var TypeAnalyzer
+     * @param mixed[] $argumentsToRemoveByMethodAndClass
      */
-    private $typeAnalyzer;
-
-    /**
-     * @param mixed[] $typehintForArgumentByMethodAndClass
-     */
-    public function __construct(array $typehintForArgumentByMethodAndClass, TypeAnalyzer $typeAnalyzer)
+    public function __construct(array $argumentsToRemoveByMethodAndClass)
     {
-        $this->typehintForArgumentByMethodAndClass = $typehintForArgumentByMethodAndClass;
-        $this->typeAnalyzer = $typeAnalyzer;
+        $this->argumentsToRemoveByMethodAndClass = $argumentsToRemoveByMethodAndClass;
     }
 
     public function isCandidate(Node $node): bool
@@ -61,6 +50,7 @@ final class ParentTypehintedArgumentRector extends AbstractRector
         /** @var ClassLike $classNode */
         $classNode = $node->getAttribute(Attribute::CLASS_NODE);
         $classNodeTypes = $classNode->getAttribute(Attribute::TYPES);
+
         if (! $classNodeTypes) {
             return false;
         }
@@ -75,19 +65,17 @@ final class ParentTypehintedArgumentRector extends AbstractRector
     {
         /** @var Class_ $classMethodNode */
         $classNode = $classMethodNode->getAttribute(Attribute::CLASS_NODE);
-
         $classNodeTypes = $classNode->getAttribute(Attribute::TYPES);
-
         $matchingTypes = $this->getMatchingTypesForClassNode($classNodeTypes);
 
         $methodName = $classMethodNode->name->toString();
 
         foreach ($matchingTypes as $matchingType) {
-            $configuration = $this->typehintForArgumentByMethodAndClass[$matchingType];
+            $configuration = $this->argumentsToRemoveByMethodAndClass[$matchingType];
 
-            foreach ($configuration as $method => $parametersToTypehints) {
+            foreach ($configuration as $method => $argumentsToRemove) {
                 if ($methodName === $method) {
-                    return $this->processClassMethodNodeWithTypehints($classMethodNode, $parametersToTypehints);
+                    return $this->processClassMethodNodeWithArgumentsToRemove($classMethodNode, $argumentsToRemove);
                 }
             }
         }
@@ -100,7 +88,7 @@ final class ParentTypehintedArgumentRector extends AbstractRector
      */
     private function getClasses(): array
     {
-        return array_keys($this->typehintForArgumentByMethodAndClass);
+        return array_keys($this->argumentsToRemoveByMethodAndClass);
     }
 
     /**
@@ -121,27 +109,21 @@ final class ParentTypehintedArgumentRector extends AbstractRector
     }
 
     /**
-     * @param string[] $parametersToTypehints
+     * @param string[] $argumentsToRemove
      */
-    private function processClassMethodNodeWithTypehints(
+    private function processClassMethodNodeWithArgumentsToRemove(
         ClassMethod $classMethodNode,
-        array $parametersToTypehints
+        array $argumentsToRemove
     ): ClassMethod {
         /** @var Param $param */
-        foreach ($classMethodNode->params as $param) {
+        foreach ($classMethodNode->params as $key => $param) {
             $parameterName = $param->var->name;
 
-            if (! isset($parametersToTypehints[$parameterName])) {
+            if (! in_array($parameterName, $argumentsToRemove)) {
                 continue;
             }
 
-            $newTypehint = $parametersToTypehints[$parameterName];
-
-            if ($this->typeAnalyzer->isBuiltinType($newTypehint)) {
-                $param->type = BuilderHelpers::normalizeType($newTypehint);
-            } else {
-                $param->type = new FullyQualified($newTypehint);
-            }
+            unset($classMethodNode->params[$key]);
         }
 
         return $classMethodNode;
