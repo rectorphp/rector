@@ -33,7 +33,7 @@ final class NodeValueResolver
     }
 
     /**
-     * @return mixed
+     * @return string|bool|null
      */
     public function resolve(Node $node)
     {
