@@ -36,6 +36,7 @@ final class ClassLikeTypeResolver implements PerNodeTypeResolverInterface
         if (! $types) {
             return [];
         }
+
         $classLikeNode->setAttribute(Attribute::TYPES, $types);
 
         return $types;

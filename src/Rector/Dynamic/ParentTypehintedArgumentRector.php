@@ -131,7 +131,6 @@ final class ParentTypehintedArgumentRector extends AbstractRector
         foreach ($classMethodNode->params as $param) {
             $parameterName = $param->var->name;
 
-
             if (! isset($parametersToTypehints[$parameterName])) {
                 continue;
             }
