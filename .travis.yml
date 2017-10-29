@@ -1,23 +1,34 @@
 language: php
 
 php:
+  - 7.2
   - 7.1
 
+before_install:
+  # hide xdebug to speed up
+  - mv ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini{,.disabled} || echo "xdebug not available"
+
 install:
-  - composer install
+  - composer install --prefer-dist
 
 script:
-  - vendor/bin/phpunit --coverage-clover coverage.xml
-  # disable xdebug
-  - phpenv config-rm xdebug.ini || return 0
-  # check coding standard (defined in composer.json "scripts" section)
-  # if this fails, run "composer fix-cs" to fix all fixable issues
-  - composer check-cs
+  - vendor/bin/phpunit -v
 
-after_script:
-  # upload coverage to Coveralls.io
-  - wget https://github.com/satooshi/php-coveralls/releases/download/v1.0.1/coveralls.phar
-  - php coveralls.phar --verbose
+jobs:
+  include:
+    - stage: coding standards and code coverage
+      php: 7.1
+      script:
+        - composer check-cs
+    -
+      php: 7.1
+      script:
+        # get xdebug back for coverage
+        - mv ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini{.disabled,}
+        - vendor/bin/phpunit --coverage-clover coverage.xml
+      after_script:
+        - wget https://github.com/satooshi/php-coveralls/releases/download/v1.0.1/coveralls.phar
+        - php coveralls.phar --verbose --config tests/.coveralls.yml
 
 notifications:
   email: never

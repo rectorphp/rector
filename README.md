@@ -184,6 +184,18 @@ You can:
                     'code': 'string'
     ```
 
+- **remove unused argument**
+
+    ```yml
+    Rector\Rector\Dynamic\ArgumentRemoverRector:
+        # class
+            # method
+                # arguments to remove
+        'Doctrine\ORM\Persisters\Entity\AbstractEntityInheritancePersister':
+            'getSelectJoinColumnSQL':
+                - 'className'
+    ```
+    
 - or **replace underscore naming `_` with namespaces `\`**
 
     ```yml
@@ -194,18 +206,7 @@ You can:
     ```
 
 
-### READMEs for Subpackages
-
-- [BetterReflection](/packages/BetterReflection/README.md)
-- [DeprecationExtractor](/packages/DeprecationExtractor/README.md)
-- [NodeTraverserQueue](/packages/NodeTraverserQueue/README.md)
-- [NodeTypeResolver](/packages/NodeTypeResolver/README.md)
-- [NodeValueResolver](/packages/NodeValueResolver/README.md)
-- [ReflectionDocBlock](/packages/ReflectionDocBlock/README.md)
-
-
 ### Advanced Operations
-
 
 - [Service Name to Type Provider](/docs/ServiceNameToTypeProvider.md)
 
