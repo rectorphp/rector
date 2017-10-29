@@ -7,3 +7,11 @@ class MyType extends \Symfony\Component\Form\AbstractType
         parent::setDefaultOptions($resolver);
     }
 }
+
+class AnotherClass
+{
+    public function setDefaultOptions(SomeResolver $resolver)
+    {
+        parent::setDefaultOptions($resolver);
+    }
+}

@@ -5,8 +5,11 @@ namespace Rector\Rector\Dynamic;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use Rector\Node\Attribute;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
+use Rector\NodeAnalyzer\MethodNameAnalyzer;
 use Rector\NodeAnalyzer\StaticMethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
 
@@ -45,16 +48,23 @@ final class MethodNameReplacerRector extends AbstractRector
     private $staticMethodCallAnalyzer;
 
     /**
+     * @var MethodNameAnalyzer
+     */
+    private $methodNameAnalyzer;
+
+    /**
      * @param string[][]
      */
     public function __construct(
         array $perClassOldToNewMethods,
         MethodCallAnalyzer $methodCallAnalyzer,
-        StaticMethodCallAnalyzer $staticMethodCallAnalyzer
+        StaticMethodCallAnalyzer $staticMethodCallAnalyzer,
+        MethodNameAnalyzer $methodNameAnalyzer
     ) {
         $this->perClassOldToNewMethods = $perClassOldToNewMethods;
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->staticMethodCallAnalyzer = $staticMethodCallAnalyzer;
+        $this->methodNameAnalyzer = $methodNameAnalyzer;
     }
 
     public function isCandidate(Node $node): bool
@@ -75,38 +85,34 @@ final class MethodNameReplacerRector extends AbstractRector
             return true;
         }
 
+        if ($this->isMethodName($node, $this->getClasses())) {
+            return true;
+        }
+
         return false;
     }
 
     /**
-     * @param StaticCall|MethodCall $node
+     * @param Identifier|StaticCall|MethodCall $node
      */
     public function refactor(Node $node): ?Node
     {
         $oldToNewMethods = $this->matchOldToNewMethos();
-        $methodName = $node->name->name;
 
+        if ($node instanceof Identifier) {
+            return $this->resolveIdentifier($node);
+        }
+
+        $methodName = $node->name->name;
         if (! isset($oldToNewMethods[$methodName])) {
             return $node;
         }
 
         if ($this->isClassRename($oldToNewMethods)) {
-            [$newClass, $newMethod] = $oldToNewMethods[$methodName];
-
-            $node->class = new Name($newClass);
-            $node->name->name = $newMethod;
-
-            return $node;
+            return $this->resolveClassRename($node, $oldToNewMethods, $methodName);
         }
 
-        // is only method rename
-        foreach ($oldToNewMethods as $oldMethod => $newMethod) {
-            if ($methodName !== $oldMethod) {
-                continue;
-            }
-
-            $node->name->name = $newMethod;
-        }
+        $node->name->name = $oldToNewMethods[$methodName];
 
         return $node;
     }
@@ -141,5 +147,54 @@ final class MethodNameReplacerRector extends AbstractRector
         }
 
         return [];
+    }
+
+    /**
+     * @param string[] $types
+     */
+    private function isMethodName(Node $node, array $types): bool
+    {
+        if (! $this->methodNameAnalyzer->isOverrideOfTypes($node, $types)) {
+            return false;
+        }
+
+        $parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
+
+        /** @var Identifier $node */
+        if (! isset($this->perClassOldToNewMethods[$parentClassName][$node->toString()])) {
+            return false;
+        }
+
+        $this->activeTypes = [$parentClassName];
+
+        return true;
+    }
+
+    private function resolveIdentifier(Identifier $node): Node
+    {
+        $oldToNewMethods = $this->matchOldToNewMethos();
+
+        $methodName = $node->name;
+        if (! isset($oldToNewMethods[$methodName])) {
+            return $node;
+        }
+
+        $node->name = $oldToNewMethods[$methodName];
+
+        return $node;
+    }
+
+    /**
+     * @param StaticCall|MethodCall $node
+     * @param string[] $oldToNewMethods
+     */
+    private function resolveClassRename(Node $node, array $oldToNewMethods, string $methodName): Node
+    {
+        [$newClass, $newMethod] = $oldToNewMethods[$methodName];
+
+        $node->class = new Name($newClass);
+        $node->name->name = $newMethod;
+
+        return $node;
     }
 }
