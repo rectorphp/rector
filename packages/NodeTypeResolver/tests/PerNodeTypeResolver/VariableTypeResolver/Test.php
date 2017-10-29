@@ -8,6 +8,16 @@ use Rector\NodeTypeResolver\Tests\AbstractNodeTypeResolverTest;
 
 final class Test extends AbstractNodeTypeResolverTest
 {
+    public function testThis(): void
+    {
+        $variableNodes = $this->getNodesForFileOfType(__DIR__ . '/Source/This.php.inc', Variable::class);
+
+        $this->assertSame(
+            ['SomeNamespace\SomeClass', 'SomeNamespace\AnotherClass'],
+            $variableNodes[0]->getAttribute(Attribute::TYPES)
+        );
+    }
+
     public function testNew(): void
     {
         $variableNodes = $this->getNodesForFileOfType(__DIR__ . '/Source/SomeClass.php.inc', Variable::class);
