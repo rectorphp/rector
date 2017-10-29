@@ -31,7 +31,6 @@ use PhpParser\Node\Stmt\TraitUse;
 use Rector\Exception\NotImplementedException;
 
 /**
- * @todo decouple MethodCallNodeFactory
  * @todo decouple PropertyFetchNodeFactory
  */
 final class NodeFactory
