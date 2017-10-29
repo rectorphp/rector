@@ -115,7 +115,7 @@ final class GetAndSetToMethodCallRector extends AbstractRector
     ): MethodCall {
         $value = $propertyFetchNode->name->name;
 
-        return $this->methodCallNodeFactory->createMethodCallWithVariableAndArguments(
+        return $this->methodCallNodeFactory->createWithVariableMethodNameAndArguments(
             $propertyFetchNode->var,
             $method,
             [$value]
@@ -129,7 +129,7 @@ final class GetAndSetToMethodCallRector extends AbstractRector
 
         $key = $propertyFetchNode->name->name;
 
-        return $this->methodCallNodeFactory->createMethodCallWithVariableAndArguments(
+        return $this->methodCallNodeFactory->createWithVariableMethodNameAndArguments(
             $propertyFetchNode->var,
             $method,
             [$key, $assignNode->expr]

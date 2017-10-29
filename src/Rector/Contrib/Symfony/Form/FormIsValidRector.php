@@ -60,8 +60,8 @@ final class FormIsValidRector extends AbstractRector
         $variableName = $node->var->name;
 
         return new BooleanAnd(
-            $this->methodCallNodeFactory->createMethodCall($variableName, 'isSubmitted'),
-            $this->methodCallNodeFactory->createMethodCall($variableName, 'isValid')
+            $this->methodCallNodeFactory->createWithVariableNameAndMethodName($variableName, 'isSubmitted'),
+            $this->methodCallNodeFactory->createWithVariableNameAndMethodName($variableName, 'isValid')
         );
     }
 }

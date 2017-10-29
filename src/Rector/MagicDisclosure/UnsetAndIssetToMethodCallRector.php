@@ -88,7 +88,7 @@ final class UnsetAndIssetToMethodCallRector extends AbstractRector
         $variableNode = $issetOrUnsetNode->vars[0]->var;
         $key = $issetOrUnsetNode->vars[0]->dim;
 
-        $methodCall = $this->methodCallNodeFactory->createMethodCallWithVariableAndArguments(
+        $methodCall = $this->methodCallNodeFactory->createWithVariableMethodNameAndArguments(
             $variableNode,
             $method,
             [$key]

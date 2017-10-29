@@ -83,7 +83,7 @@ final class IdentifierRector extends AbstractRector
             return $propertyFetchNode;
         }
 
-        return $this->methodCallNodeFactory->createMethodCallWithVariable($propertyFetchNode, 'toString');
+        return $this->methodCallNodeFactory->createWithVariableAndMethodName($propertyFetchNode, 'toString');
     }
 
     /**

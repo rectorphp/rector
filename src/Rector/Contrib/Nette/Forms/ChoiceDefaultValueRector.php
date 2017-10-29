@@ -55,7 +55,7 @@ final class ChoiceDefaultValueRector extends AbstractRector
     {
         $propertyNode = $assignNode->var->var;
 
-        return $this->methodCallNodeFactory->createMethodCallWithVariableAndArguments(
+        return $this->methodCallNodeFactory->createWithVariableMethodNameAndArguments(
             $propertyNode,
             'checkDefaultValue',
             [$assignNode->expr]

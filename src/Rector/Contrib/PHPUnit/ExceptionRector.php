@@ -56,7 +56,7 @@ final class ExceptionRector extends AbstractRector
         $secondArgument = $methodCallNode->args[1];
         unset($methodCallNode->args[1]);
 
-        $expectExceptionMessageMethodCall = $this->methodCallNodeFactory->createMethodCallWithArguments(
+        $expectExceptionMessageMethodCall = $this->methodCallNodeFactory->createWithVariableNameMethodNameAndArguments(
             'this',
             'expectExceptionMessage',
             [$secondArgument]

@@ -56,7 +56,7 @@ final class TemplateMagicInvokeFilterCallRector extends AbstractRector
     {
         $this->changeToInvokeFilterMethodCall($methodCallNode);
 
-        $methodCallNode->var = $this->methodCallNodeFactory->createMethodCallWithVariable(
+        $methodCallNode->var = $this->methodCallNodeFactory->createWithVariableAndMethodName(
             $methodCallNode->var,
             'getLatte'
         );

@@ -50,7 +50,7 @@ final class TemplateRegisterHelperRector extends AbstractRector
     {
         $methodCallNode->name = new Identifier('addFilter');
 
-        $methodCallNode->var = $this->methodCallNodeFactory->createMethodCallWithVariable(
+        $methodCallNode->var = $this->methodCallNodeFactory->createWithVariableAndMethodName(
             $methodCallNode->var,
             'getLatte'
         );

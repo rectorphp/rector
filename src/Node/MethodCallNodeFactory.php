@@ -26,7 +26,7 @@ final class MethodCallNodeFactory
     /**
      * Creates "$method->call();"
      */
-    public function createMethodCall(string $variableName, string $methodName): MethodCall
+    public function createWithVariableNameAndMethodName(string $variableName, string $methodName): MethodCall
     {
         $variableNode = $this->nodeFactory->createVariable($variableName);
 
@@ -36,7 +36,7 @@ final class MethodCallNodeFactory
     /**
      * Creates "$method->call();" from existing variable
      */
-    public function createMethodCallWithVariable(Expr $exprNode, string $methodName): MethodCall
+    public function createWithVariableAndMethodName(Expr $exprNode, string $methodName): MethodCall
     {
         if ($exprNode instanceof PropertyFetch) {
             $exprNode = $this->nodeFactory->clonePropertyFetch($exprNode);
@@ -51,12 +51,12 @@ final class MethodCallNodeFactory
     /**
      * @param Arg[] $arguments
      */
-    public function createMethodCallWithArguments(
+    public function createWithVariableNameMethodNameAndArguments(
         string $variableName,
         string $methodName,
         array $arguments
     ): MethodCall {
-        $methodCallNode = $this->createMethodCall($variableName, $methodName);
+        $methodCallNode = $this->createWithVariableNameAndMethodName($variableName, $methodName);
         $methodCallNode->args = $arguments;
 
         return $methodCallNode;
@@ -65,12 +65,12 @@ final class MethodCallNodeFactory
     /**
      * @param mixed[] $arguments
      */
-    public function createMethodCallWithVariableAndArguments(
+    public function createWithVariableMethodNameAndArguments(
         Variable $variableNode,
         string $method,
         array $arguments
     ): MethodCall {
-        $methodCall = $this->createMethodCallWithVariable($variableNode, $method);
+        $methodCall = $this->createWithVariableAndMethodName($variableNode, $method);
         $methodCall->args = $this->nodeFactory->createArgs($arguments);
 
         return $methodCall;
