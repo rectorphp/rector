@@ -16,7 +16,7 @@ script:
 
 jobs:
   include:
-    - stage: Coding Standards and Code Coverage
+    - stage: coding standards and code coverage
       php: 7.1
       script:
         - composer check-cs
