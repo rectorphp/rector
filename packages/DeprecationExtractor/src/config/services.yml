@@ -4,4 +4,4 @@ services:
 
     Rector\DeprecationExtractor\:
         resource: '../../src'
-        exclude: '../../src/{Deprecation/*Deprecation.php,RectorGuess/RectorGuess.php}'
+        exclude: '../../src/{Deprecation/Deprecation.php,RectorGuess/RectorGuess.php}'

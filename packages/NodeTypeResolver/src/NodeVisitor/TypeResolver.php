@@ -43,14 +43,10 @@ final class TypeResolver extends NodeVisitorAbstract
     {
         if ($node instanceof ClassLike) {
             $this->typeContext->enterClassLike($node);
-
-            return;
         }
 
         if ($node instanceof FunctionLike) {
             $this->typeContext->enterFunction($node);
-
-            return;
         }
 
         $type = $this->nodeTypeResolver->resolve($node);

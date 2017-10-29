@@ -1,17 +1,10 @@
 services:
     _defaults:
         autowire: true
-#        autowired_calls:
-#            - 'setBetterNodeFinder'
 
     Rector\:
         resource: '../../src'
         exclude: '../../src/{Node/Attribute.php,Rector/Contrib,Rector/Dynamic,Rector/MagicDisclosure}'
-
-#    _instanceof:
-#        Rector\Rector\AbstractRector:
-#            autowired_calls:
-#                - ['setBetterNodeFinder']
 
     # autowire by interface
     Rector\Contract\Parser\ParserInterface:

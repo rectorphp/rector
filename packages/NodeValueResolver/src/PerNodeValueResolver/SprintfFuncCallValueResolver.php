@@ -5,20 +5,13 @@ namespace Rector\NodeValueResolver\PerNodeValueResolver;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Scalar\String_;
-use Rector\Node\Attribute;
 use Rector\NodeValueResolver\Contract\NodeValueResolverAwareInterface;
 use Rector\NodeValueResolver\Contract\PerNodeValueResolver\PerNodeValueResolverInterface;
-use Rector\NodeValueResolver\Message\ClassPrepender;
 use Rector\NodeValueResolver\NodeAnalyzer\DynamicNodeAnalyzer;
 use Rector\NodeValueResolver\NodeValueResolver;
 
-final class FuncCallValueResolver implements PerNodeValueResolverInterface, NodeValueResolverAwareInterface
+final class SprintfFuncCallValueResolver implements PerNodeValueResolverInterface, NodeValueResolverAwareInterface
 {
-    /**
-     * @var ClassPrepender
-     */
-    private $classPrepender;
-
     /**
      * @var NodeValueResolver
      */
@@ -29,9 +22,8 @@ final class FuncCallValueResolver implements PerNodeValueResolverInterface, Node
      */
     private $dynamicNodeAnalyzer;
 
-    public function __construct(ClassPrepender $classPrepender, DynamicNodeAnalyzer $dynamicNodeAnalyzer)
+    public function __construct(DynamicNodeAnalyzer $dynamicNodeAnalyzer)
     {
-        $this->classPrepender = $classPrepender;
         $this->dynamicNodeAnalyzer = $dynamicNodeAnalyzer;
     }
 
@@ -49,18 +41,7 @@ final class FuncCallValueResolver implements PerNodeValueResolverInterface, Node
             return null;
         }
 
-        $message = $this->processSprintfNode($funcCallArrayNode);
-
-        if ($message === null) {
-            return null;
-        }
-
-        $message = $this->classPrepender->completeClassToLocalMethods(
-            $message,
-            (string) $funcCallArrayNode->getAttribute(Attribute::CLASS_NAME)
-        );
-
-        return $message ?: null;
+        return $this->processSprintfNode($funcCallArrayNode);
     }
 
     public function setNodeValueResolver(NodeValueResolver $nodeValueResolver): void
@@ -70,11 +51,6 @@ final class FuncCallValueResolver implements PerNodeValueResolverInterface, Node
 
     private function processSprintfNode(FuncCall $funcCallNode): ?string
     {
-        if ((string) $funcCallNode->name !== 'sprintf') {
-            // or Exception?
-            return null;
-        }
-
         if ($this->dynamicNodeAnalyzer->hasDynamicNodes($funcCallNode->args)) {
             return null;
         }

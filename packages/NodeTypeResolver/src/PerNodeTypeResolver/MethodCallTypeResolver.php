@@ -12,6 +12,10 @@ use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\TypeContext;
 
+/**
+ * This resolves return type of method call,
+ * not types of its elements.
+ */
 final class MethodCallTypeResolver implements PerNodeTypeResolverInterface
 {
     /**
