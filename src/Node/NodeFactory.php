@@ -35,6 +35,7 @@ final class NodeFactory
      * @var BuilderFactory
      */
     private $builderFactory;
+
     /**
      * @var PropertyFetchNodeFactory
      */
@@ -237,12 +238,5 @@ final class NodeFactory
     public function createStaticMethodCallWithArgs(string $class, string $method, array $arguments): StaticCall
     {
         return new StaticCall(new Name($class), new Identifier($method), $arguments);
-    }
-
-    public function createPropertyFetch(string $variable, string $property): PropertyFetch
-    {
-        $variableNode = new Variable($variable);
-
-        return new PropertyFetch($variableNode, $property);
     }
 }

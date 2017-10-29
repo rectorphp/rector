@@ -8,7 +8,6 @@ use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Contract\Bridge\ServiceTypeForNameProviderInterface;
 use Rector\Naming\PropertyNaming;
 use Rector\Node\Attribute;
-use Rector\Node\NodeFactory;
 use Rector\Node\PropertyFetchNodeFactory;
 use Rector\NodeAnalyzer\StaticMethodCallAnalyzer;
 use Rector\Rector\AbstractRector;

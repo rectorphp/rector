@@ -28,6 +28,7 @@ final class MethodBuilder
      * @var NodeFactory
      */
     private $nodeFactory;
+
     /**
      * @var PropertyFetchNodeFactory
      */
