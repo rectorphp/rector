@@ -10,7 +10,7 @@ use Rector\NodeValueResolver\Contract\PerNodeValueResolver\PerNodeValueResolverI
 use Rector\NodeValueResolver\NodeAnalyzer\DynamicNodeAnalyzer;
 use Rector\NodeValueResolver\NodeValueResolver;
 
-final class FuncCallValueResolver implements PerNodeValueResolverInterface, NodeValueResolverAwareInterface
+final class SprintfFuncCallValueResolver implements PerNodeValueResolverInterface, NodeValueResolverAwareInterface
 {
     /**
      * @var NodeValueResolver
@@ -51,11 +51,6 @@ final class FuncCallValueResolver implements PerNodeValueResolverInterface, Node
 
     private function processSprintfNode(FuncCall $funcCallNode): ?string
     {
-        if ((string) $funcCallNode->name !== 'sprintf') {
-            // or Exception?
-            return null;
-        }
-
         if ($this->dynamicNodeAnalyzer->hasDynamicNodes($funcCallNode->args)) {
             return null;
         }

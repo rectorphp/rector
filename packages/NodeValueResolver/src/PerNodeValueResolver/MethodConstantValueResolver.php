@@ -16,7 +16,6 @@ final class MethodConstantValueResolver implements PerNodeValueResolverInterface
 
     /**
      * @param Method $methodNode
-     * @return string
      */
     public function resolve(Node $methodNode): string
     {
