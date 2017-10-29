@@ -35,9 +35,5 @@ jobs:
         - wget https://github.com/satooshi/php-coveralls/releases/download/v1.0.1/coveralls.phar
         - php coveralls.phar --verbose --config tests/.coveralls.yml
 
-cache:
-  directories:
-    - $HOME/.composer/cache
-
 notifications:
   email: never
