@@ -34,6 +34,18 @@ final class PropertyFetchNodeFactory
     }
 
     /**
+     * Creates "$this->propertyName[]"
+     */
+    public function createLocalPropertyArrayFetch(string $propertyName): PropertyFetch
+    {
+        $localVariable = new Variable('this', [
+            'name' => $propertyName,
+        ]);
+
+        return new PropertyFetch($localVariable, $propertyName . '[]');
+    }
+
+    /**
      * Creates:
      * - $variable->property['key'];
      */
