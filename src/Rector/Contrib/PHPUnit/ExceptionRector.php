@@ -15,6 +15,10 @@ use Rector\Rector\AbstractRector;
  */
 final class ExceptionRector extends AbstractRector
 {
+    private $oldToNewMethod = [
+        'setExpectedException' => 'expectExceptionMesage',
+        'setExpectedExceptionRegExp' => 'expectExceptionMessageRegExp'
+    ];
     /**
      * @var MethodCallAnalyzer
      */
@@ -33,11 +37,12 @@ final class ExceptionRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
+        // @todo turn into is method types [PHP_TestCase.. PHPUnit\TestCase]
         if (! $this->isInTestClass($node)) {
             return false;
         }
 
-        return $this->methodCallAnalyzer->isMethod($node, 'setExpectedException');
+        return $this->methodCallAnalyzer->isMethods($node, array_keys($this->oldToNewMethod));
     }
 
     /**
@@ -45,10 +50,10 @@ final class ExceptionRector extends AbstractRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
+        $oldMethodName = $methodCallNode->name->name;
         $methodCallNode->name->name = 'expectException';
 
         // 2nd argument move to standalone method...
-
         if (! isset($methodCallNode->args[1])) {
             return $methodCallNode;
         }
@@ -58,7 +63,7 @@ final class ExceptionRector extends AbstractRector
 
         $expectExceptionMessageMethodCall = $this->methodCallNodeFactory->createWithVariableNameMethodNameAndArguments(
             'this',
-            'expectExceptionMessage',
+            $this->oldToNewMethod[$oldMethodName],
             [$secondArgument]
         );
 

@@ -14,9 +14,10 @@ use Rector\Rector\AbstractRector;
 /**
  * Covers https://github.com/Kdyby/Doctrine/pull/298/files
  * From:
- * $builder->expand(object|array);
+ * - $builder->expand(object|array);
+ *
  * To:
- * \Nette\DI\Helpers::expand(object|array, $builder->parameters);
+ * - \Nette\DI\Helpers::expand(object|array, $builder->parameters);
  */
 final class ExpandFunctionToStaticExpandFunctionRector extends AbstractRector
 {

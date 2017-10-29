@@ -77,9 +77,20 @@ final class MethodCallAnalyzer
             return false;
         }
 
-        $nodeMethodName = $node->name->name;
+        return $node->name->name === $methodName;
+    }
 
-        return $nodeMethodName === $methodName;
+    public function isMethods(Node $node, array $methods): bool
+    {
+        if (! $node instanceof MethodCall) {
+            return false;
+        }
+
+        if (! $node->name instanceof Identifier) {
+            return false;
+        }
+
+        return in_array($node->name->name, $methods, true);
     }
 
     /**
