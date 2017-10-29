@@ -184,7 +184,7 @@ You can:
                     'code': 'string'
     ```
 
-- **remove unused arguments**
+- **remove unused argument**
 
     ```yml
     Rector\Rector\Dynamic\ArgumentRemoverRector:
