@@ -6,3 +6,8 @@ rectors:
         'Doctrine\ORM\Tools\DebugUnitOfWorkListener':
             'dumpIdentityMap':
                 'em': 'Doctrine\ORM\EntityManagerInterface'
+
+    Rector\Rector\Dynamic\ArgumentRemoverRector:
+        'Doctrine\ORM\Persisters\Entity\AbstractEntityInheritancePersister':
+            'getSelectJoinColumnSQL':
+                - 'className'
