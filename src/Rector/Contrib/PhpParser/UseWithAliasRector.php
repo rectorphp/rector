@@ -25,11 +25,7 @@ final class UseWithAliasRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        return $this->propertyFetchAnalyzer->isTypeAndProperty(
-            $node,
-            'PhpParser\Node\Stmt\UseUse',
-            'alias'
-        );
+        return $this->propertyFetchAnalyzer->isTypeAndProperty($node, 'PhpParser\Node\Stmt\UseUse', 'alias');
     }
 
     /**

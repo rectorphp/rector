@@ -38,6 +38,9 @@ final class NameTypeResolver implements PerNodeTypeResolverInterface
         }
 
         $fullyQualifiedName = $name->toString();
+        if ($fullyQualifiedName === 'parent') {
+            return [$nameNode->getAttribute(Attribute::PARENT_CLASS_NAME)];
+        }
 
         $types = [];
         $types[] = $fullyQualifiedName;

@@ -3,9 +3,9 @@
 namespace Rector\Tests\Rector\Dynamic\MethodNameReplacerRector;
 
 use Rector\Rector\Dynamic\MethodNameReplacerRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractConfigurableRectorTestCase;
 
-final class Test extends AbstractRectorTestCase
+final class Test extends AbstractConfigurableRectorTestCase
 {
     public function test(): void
     {
@@ -30,6 +30,10 @@ final class Test extends AbstractRectorTestCase
             __DIR__ . '/correct/correct5.php.inc'
         );
         $this->doTestFileMatchesExpectedContent(
+            __DIR__ . '/wrong/wrong6.php.inc',
+            __DIR__ . '/correct/correct6.php.inc'
+        );
+        $this->doTestFileMatchesExpectedContent(
             __DIR__ . '/wrong/SomeClass.php',
             __DIR__ . '/correct/SomeClass.php'
         );
@@ -41,5 +45,10 @@ final class Test extends AbstractRectorTestCase
     protected function getRectorClasses(): array
     {
         return [MethodNameReplacerRector::class];
+    }
+
+    protected function provideConfig(): string
+    {
+        return __DIR__ . '/config/rector.yml';
     }
 }

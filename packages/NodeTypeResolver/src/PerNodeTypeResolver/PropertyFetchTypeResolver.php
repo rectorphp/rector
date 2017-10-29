@@ -3,11 +3,13 @@
 namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
-use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
 use Rector\BetterReflection\Reflector\PropertyReflector;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverAwareInterface;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
@@ -52,19 +54,8 @@ final class PropertyFetchTypeResolver implements PerNodeTypeResolverInterface, N
 
         // e.g. $r->getParameters()[0]->name
         if ($propertyFetchNode->var instanceof ArrayDimFetch) {
-            $types = $this->nodeTypeResolver->resolve($propertyFetchNode->var->var);
-            if (! $types) {
-                return [];
-            }
-
-            $type = array_shift($types);
-
-            $propertyType = $this->propertyReflector->getPropertyType($type, $propertyName);
-
-            return [$propertyType];
-
-            // @todo: keep for now for possible BC changes of other resolvers
-            // return $this->nodeTypeResolver->resolve($propertyFetchNode->var);
+            return $this->resolveTypesFromVariable($propertyFetchNode->var->var, $propertyName);
+            // return $this->nodeTypeResolver->resolve($propertyFetchNode->var->var);
         }
 
         if ($propertyFetchNode->var instanceof New_) {
@@ -78,19 +69,7 @@ final class PropertyFetchTypeResolver implements PerNodeTypeResolverInterface, N
             return $this->typeContext->getTypesForProperty($propertyName);
         }
 
-        // e.g. $this->property->anotherProperty
-        $types = $this->nodeTypeResolver->resolve($propertyFetchNode->var);
-        if (! $types) {
-            return [];
-        }
-
-        $type = array_shift($types);
-        $type = $this->propertyReflector->getPropertyType($type, $propertyName);
-        if ($type) {
-            return [$type];
-        }
-
-        return [];
+        return $this->resolveTypesFromVariable($propertyFetchNode->var, $propertyName);
     }
 
     public function setNodeTypeResolver(NodeTypeResolver $nodeTypeResolver): void
@@ -104,10 +83,30 @@ final class PropertyFetchTypeResolver implements PerNodeTypeResolverInterface, N
             return $propertyFetchNode->name->name;
         }
 
-        if ($propertyFetchNode->name instanceof Concat) {
-            return '';
+        if ($propertyFetchNode->name instanceof Name || $propertyFetchNode->name instanceof Identifier) {
+            return $propertyFetchNode->name->toString();
         }
 
-        return (string) $propertyFetchNode->name;
+        return '';
+    }
+
+    /**
+     * @return string[]
+     */
+    private function resolveTypesFromVariable(Expr $exprNode, string $propertyName): array
+    {
+        $types = $this->nodeTypeResolver->resolve($exprNode);
+        if (! $types) {
+            return [];
+        }
+
+        $type = array_shift($types);
+
+        $propertyType = $this->propertyReflector->getPropertyType($type, $propertyName);
+        if (! $propertyType) {
+            return [];
+        }
+
+        return [$propertyType];
     }
 }
