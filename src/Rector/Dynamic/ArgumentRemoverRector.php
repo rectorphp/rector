@@ -3,6 +3,9 @@
 namespace Rector\Rector\Dynamic;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
@@ -43,7 +46,7 @@ final class ArgumentRemoverRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        if (! $node instanceof ClassMethod) {
+        if (! $node instanceof ClassMethod && ! $node instanceof MethodCall && ! $node instanceof StaticCall) {
             return false;
         }
 
@@ -59,28 +62,24 @@ final class ArgumentRemoverRector extends AbstractRector
     }
 
     /**
-     * @param ClassMethod $classMethodNode
+     * @param ClassMethod|StaticCall|StaticCall $node
      */
-    public function refactor(Node $classMethodNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        /** @var Class_ $classMethodNode */
-        $classNode = $classMethodNode->getAttribute(Attribute::CLASS_NODE);
+        /** @var Class_ $node */
+        $classNode = $node->getAttribute(Attribute::CLASS_NODE);
         $classNodeTypes = $classNode->getAttribute(Attribute::TYPES);
         $matchingTypes = $this->getMatchingTypesForClassNode($classNodeTypes);
 
-        $methodName = $classMethodNode->name->toString();
-
-        foreach ($matchingTypes as $matchingType) {
-            $configuration = $this->argumentsToRemoveByMethodAndClass[$matchingType];
-
-            foreach ($configuration as $method => $argumentsToRemove) {
-                if ($methodName === $method) {
-                    return $this->processClassMethodNodeWithArgumentsToRemove($classMethodNode, $argumentsToRemove);
-                }
-            }
+        if ($node instanceof ClassMethod) {
+            return $this->processClassMethod($node, $matchingTypes);
         }
 
-        return $classMethodNode;
+        if ($node instanceof MethodCall || $node instanceof StaticCall) {
+            return $this->processMethodAndStaticCall($node, $matchingTypes);
+        }
+
+        return $node;
     }
 
     /**
@@ -109,17 +108,52 @@ final class ArgumentRemoverRector extends AbstractRector
     }
 
     /**
+     * @param StaticCall|MethodCall $node
+     * @param string[] $matchingTypes
+     * @return StaticCall|MethodCall
+     */
+    private function processMethodAndStaticCall(Node $node, array $matchingTypes): Node
+    {
+        $methodName = $node->name->toString();
+
+        foreach ($matchingTypes as $matchingType) {
+            $configuration = $this->argumentsToRemoveByMethodAndClass[$matchingType];
+
+            foreach ($configuration as $method => $argumentsToRemove) {
+                if ($methodName === $method) {
+                    return $this->removeParameterFromMethodAndStaticCall($node, $argumentsToRemove);
+                }
+            }
+        }
+    }
+
+    /**
+     * @param string[] $matchingTypes
+     */
+    private function processClassMethod(ClassMethod $classMethodNode, array $matchingTypes): ClassMethod
+    {
+        $methodName = $classMethodNode->name->toString();
+
+        foreach ($matchingTypes as $matchingType) {
+            $configuration = $this->argumentsToRemoveByMethodAndClass[$matchingType];
+
+            foreach ($configuration as $method => $argumentsToRemove) {
+                if ($methodName === $method) {
+                    return $this->removeArgumentsFromClassMethod($classMethodNode, $argumentsToRemove);
+                }
+            }
+        }
+    }
+
+    /**
      * @param string[] $argumentsToRemove
      */
-    private function processClassMethodNodeWithArgumentsToRemove(
-        ClassMethod $classMethodNode,
-        array $argumentsToRemove
-    ): ClassMethod {
+    private function removeArgumentsFromClassMethod(ClassMethod $classMethodNode, array $argumentsToRemove): ClassMethod
+    {
         /** @var Param $param */
         foreach ($classMethodNode->params as $key => $param) {
             $parameterName = $param->var->name;
-
-            if (! in_array($parameterName, $argumentsToRemove)) {
+            if (! in_array($parameterName, $argumentsToRemove, true)) {
                 continue;
             }
 
@@ -127,5 +161,24 @@ final class ArgumentRemoverRector extends AbstractRector
         }
 
         return $classMethodNode;
+    }
+
+    /**
+     * @param StaticCall|MethodCall $node
+     * @param string[] $argumentsToRemove
+     */
+    private function removeParameterFromMethodAndStaticCall(Node $node, array $argumentsToRemove): Node
+    {
+        /** @var Arg $arg */
+        foreach ($node->args as $key => $arg) {
+            $argumentName = $arg->value->name;
+            if (! in_array($argumentName, $argumentsToRemove, true)) {
+                continue;
+            }
+
+            unset($node->args[$key]);
+        }
+
+        return $node;
     }
 }
