@@ -97,9 +97,10 @@ final class BootstrapToRouterFactoryRector extends AbstractRector
     }
 
     /**
-     * @param Node[] $nodes
+     * @param Node[] $nodes2"
+     * @return Node[]
      */
-    public function afterTraverse(array $nodes): void
+    public function afterTraverse(array $nodes): array
     {
         $routerFactoryClassNodes = $this->routerFactoryClassBuilder->build($this->collectedRouteNodes);
 
@@ -113,6 +114,8 @@ final class BootstrapToRouterFactoryRector extends AbstractRector
             $fileLocation,
             $this->standard->prettyPrintFile($routerFactoryClassNodes)
         );
+
+        return $nodes;
     }
 
     private function isBootstrapFile(): bool
