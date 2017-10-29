@@ -5,6 +5,7 @@ namespace Rector\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
@@ -37,6 +38,10 @@ final class MethodCallNodeFactory
      */
     public function createMethodCallWithVariable(Expr $exprNode, string $methodName): MethodCall
     {
+        if ($exprNode instanceof PropertyFetch) {
+            $exprNode = $this->nodeFactory->clonePropertyFetch($exprNode);
+        }
+
         $methodCallNode = new MethodCall($exprNode, $methodName);
         $exprNode->setAttribute(Attribute::PARENT_NODE, $methodCallNode);
 

@@ -6,7 +6,7 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Node\Attribute;
-use Rector\Node\NodeFactory;
+use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
 
@@ -21,14 +21,14 @@ final class ExceptionRector extends AbstractRector
     private $methodCallAnalyzer;
 
     /**
-     * @var NodeFactory
+     * @var MethodCallNodeFactory
      */
-    private $nodeFactory;
+    private $methodCallNodeFactory;
 
-    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, NodeFactory $nodeFactory)
+    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, MethodCallNodeFactory $methodCallNodeFactory)
     {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
-        $this->nodeFactory = $nodeFactory;
+        $this->methodCallNodeFactory = $methodCallNodeFactory;
     }
 
     public function isCandidate(Node $node): bool
@@ -56,7 +56,7 @@ final class ExceptionRector extends AbstractRector
         $secondArgument = $methodCallNode->args[1];
         unset($methodCallNode->args[1]);
 
-        $expectExceptionMessageMethodCall = $this->nodeFactory->createMethodCallWithArguments(
+        $expectExceptionMessageMethodCall = $this->methodCallNodeFactory->createMethodCallWithArguments(
             'this',
             'expectExceptionMessage',
             [$secondArgument]

@@ -13,7 +13,6 @@ use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\ConstFetch;
-use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
@@ -111,27 +110,6 @@ final class NodeFactory
         $nameNode = new FullyQualified($className);
 
         return new ClassConstFetch($nameNode, 'class');
-    }
-
-    /**
-     * Creates "$method->call();"
-     */
-    public function createMethodCall(string $variableName, string $methodName): MethodCall
-    {
-        $variableNode = $this->createVariable($variableName);
-
-        return new MethodCall($variableNode, $methodName);
-    }
-
-    /**
-     * Creates "$method->call();" from existing variable
-     */
-    public function createMethodCallWithVariable(Expr $exprNode, string $methodName): MethodCall
-    {
-        $methodCallNode = new MethodCall($exprNode, $methodName);
-        $exprNode->setAttribute(Attribute::PARENT_NODE, $methodCallNode);
-
-        return $methodCallNode;
     }
 
     /**
@@ -236,34 +214,6 @@ final class NodeFactory
                 new LNumber(1)
             ),
         ]);
-    }
-
-    /**
-     * @param Arg[] $arguments
-     */
-    public function createMethodCallWithArguments(
-        string $variableName,
-        string $methodName,
-        array $arguments
-    ): MethodCall {
-        $methodCallNode = $this->createMethodCall($variableName, $methodName);
-        $methodCallNode->args = $arguments;
-
-        return $methodCallNode;
-    }
-
-    /**
-     * @param mixed[] $arguments
-     */
-    public function createMethodCallWithVariableAndArguments(
-        Variable $variableNode,
-        string $method,
-        array $arguments
-    ): MethodCall {
-        $methodCall = $this->createMethodCallWithVariable($variableNode, $method);
-        $methodCall->args = $this->createArgs($arguments);
-
-        return $methodCall;
     }
 
     /**

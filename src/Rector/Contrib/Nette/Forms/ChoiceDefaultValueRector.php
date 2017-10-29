@@ -4,7 +4,7 @@ namespace Rector\Rector\Contrib\Nette\Forms;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
-use Rector\Node\NodeFactory;
+use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Rector\AbstractRector;
 
@@ -23,14 +23,16 @@ final class ChoiceDefaultValueRector extends AbstractRector
     private $propertyFetchAnalyzer;
 
     /**
-     * @var NodeFactory
+     * @var MethodCallNodeFactory
      */
-    private $nodeFactory;
+    private $methodCallNodeFactory;
 
-    public function __construct(PropertyFetchAnalyzer $propertyFetchAnalyzer, NodeFactory $nodeFactory)
-    {
+    public function __construct(
+        PropertyFetchAnalyzer $propertyFetchAnalyzer,
+        MethodCallNodeFactory $methodCallNodeFactory
+    ) {
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
-        $this->nodeFactory = $nodeFactory;
+        $this->methodCallNodeFactory = $methodCallNodeFactory;
     }
 
     public function isCandidate(Node $node): bool
@@ -53,7 +55,7 @@ final class ChoiceDefaultValueRector extends AbstractRector
     {
         $propertyNode = $assignNode->var->var;
 
-        return $this->nodeFactory->createMethodCallWithVariableAndArguments(
+        return $this->methodCallNodeFactory->createMethodCallWithVariableAndArguments(
             $propertyNode,
             'checkDefaultValue',
             [$assignNode->expr]
