@@ -5,6 +5,7 @@ php:
   - 7.1
 
 before_install:
+  # hide xdebug to speed up
   - mv ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini{,.disabled} || echo "xdebug not available"
 
 install:
@@ -13,23 +14,17 @@ install:
 script:
   - vendor/bin/phpunit -v
 
-stages:
-  - coding standards
-  - test
-  - code coverage
-
 jobs:
   include:
-    - stage: coding standards
+    - stage: Coding Standards and Code Coverage
       php: 7.1
       script:
         - composer check-cs
-
-    - stage: code coverage
+    -
       php: 7.1
-      before_script:
-        - mv ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini{.disabled,}
       script:
+        # get xdebug back for coverage
+        - mv ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini{.disabled,}
         - vendor/bin/phpunit --coverage-clover coverage.xml
       after_script:
         - wget https://github.com/satooshi/php-coveralls/releases/download/v1.0.1/coveralls.phar
