@@ -9,7 +9,6 @@
     "require": {
         "php": "^7.1",
         "beberlei/assert": "^2.7",
-        "doctrine/annotations": "^1.5",
         "nette/utils": "^2.4",
         "nikic/php-parser": "dev-master#5900d78 as v3.1.1",
         "phpdocumentor/reflection-docblock": "^4.1",
@@ -52,7 +51,7 @@
         }
     },
     "scripts": {
-        "all": ["phpunit", "@check-cs", "@phpstan"],
+        "all": ["@check-cs", "phpunit"],
         "check-cs": "ecs check bin packages src tests",
         "fix-cs": "ecs check bin packages src tests --fix"
     },
