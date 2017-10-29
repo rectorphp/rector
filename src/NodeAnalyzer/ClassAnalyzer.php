@@ -8,10 +8,21 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
+use Rector\BetterReflection\Reflector\SmartClassReflector;
 use Rector\Node\Attribute;
 
 final class ClassAnalyzer
 {
+    /**
+     * @var SmartClassReflector
+     */
+    private $smartClassReflector;
+
+    public function __construct(SmartClassReflector $smartClassReflector)
+    {
+        $this->smartClassReflector = $smartClassReflector;
+    }
+
     public function isAnonymousClassNode(Node $node): bool
     {
         return $node instanceof Class_ && $node->isAnonymous();
@@ -32,11 +43,10 @@ final class ClassAnalyzer
 
         if (! $this->isAnonymousClassNode($classLikeNode)) {
             $className = $this->resolveNameNode($classLikeNode);
-
             $types[] = $className;
 
             if ($classLikeNode->extends) {
-                $types[] = class_parents($className);
+                $types = array_merge($types, $this->smartClassReflector->getClassParents($className));
             }
         }
 
@@ -59,13 +69,23 @@ final class ClassAnalyzer
      */
     private function resolveNameNode(Node $node): string
     {
-        if ($node instanceof Name) {
-            return $node->toString();
+        $name = (string) $node->getAttribute(Attribute::CLASS_NAME);
+        if ($name) {
+            return $name;
+        }
+
+        $namespacedName = $node->getAttribute('namespacedName');
+        if ($namespacedName instanceof FullyQualified) {
+            return $namespacedName->toString();
         }
 
         $nameNode = $node->getAttribute(Attribute::RESOLVED_NAME);
         if ($nameNode instanceof Name) {
             return $nameNode->toString();
+        }
+
+        if ($node instanceof Name) {
+            return $node->toString();
         }
 
         return $node->name->toString();

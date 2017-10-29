@@ -80,6 +80,9 @@ final class MethodCallAnalyzer
         return $node->name->name === $methodName;
     }
 
+    /**
+     * @param string[] $methods
+     */
     public function isMethods(Node $node, array $methods): bool
     {
         if (! $node instanceof MethodCall) {

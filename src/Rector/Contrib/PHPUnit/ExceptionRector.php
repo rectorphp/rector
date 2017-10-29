@@ -2,10 +2,8 @@
 
 namespace Rector\Rector\Contrib\PHPUnit;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
-use Rector\Node\Attribute;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
@@ -15,10 +13,14 @@ use Rector\Rector\AbstractRector;
  */
 final class ExceptionRector extends AbstractRector
 {
+    /**
+     * @var string[]
+     */
     private $oldToNewMethod = [
-        'setExpectedException' => 'expectExceptionMesage',
-        'setExpectedExceptionRegExp' => 'expectExceptionMessageRegExp'
+        'setExpectedException' => 'expectExceptionMessage',
+        'setExpectedExceptionRegExp' => 'expectExceptionMessageRegExp',
     ];
+
     /**
      * @var MethodCallAnalyzer
      */
@@ -37,12 +39,16 @@ final class ExceptionRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        // @todo turn into is method types [PHP_TestCase.. PHPUnit\TestCase]
-        if (! $this->isInTestClass($node)) {
+        if (! $this->methodCallAnalyzer->isTypeAndMethods(
+            $node,
+            'PHPUnit\Framework\TestCase',
+            array_keys($this->oldToNewMethod)
+        )) {
             return false;
         }
 
-        return $this->methodCallAnalyzer->isMethods($node, array_keys($this->oldToNewMethod));
+        /** @var MethodCall $node */
+        return isset($node->args[1]);
     }
 
     /**
@@ -52,11 +58,6 @@ final class ExceptionRector extends AbstractRector
     {
         $oldMethodName = $methodCallNode->name->name;
         $methodCallNode->name->name = 'expectException';
-
-        // 2nd argument move to standalone method...
-        if (! isset($methodCallNode->args[1])) {
-            return $methodCallNode;
-        }
 
         $secondArgument = $methodCallNode->args[1];
         unset($methodCallNode->args[1]);
@@ -70,12 +71,5 @@ final class ExceptionRector extends AbstractRector
         $this->prependNodeAfterNode($expectExceptionMessageMethodCall, $methodCallNode);
 
         return $methodCallNode;
-    }
-
-    private function isInTestClass(Node $node): bool
-    {
-        $className = $node->getAttribute(Attribute::CLASS_NAME);
-
-        return Strings::endsWith($className, 'Test');
     }
 }
