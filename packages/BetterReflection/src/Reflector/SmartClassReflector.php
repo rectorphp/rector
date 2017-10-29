@@ -2,9 +2,11 @@
 
 namespace Rector\BetterReflection\Reflector;
 
+use PhpParser\Node\Stmt\ClassLike;
 use Rector\BetterReflection\Reflection\ReflectionClass;
 use Rector\BetterReflection\Reflector\Exception\IdentifierNotFound;
 use Rector\FileSystem\CurrentFileProvider;
+use Rector\Node\Attribute;
 use SplFileInfo;
 use Throwable;
 use TypeError;
@@ -53,14 +55,15 @@ final class SmartClassReflector
     /**
      * @return string[]
      */
-    public function getClassParents(string $className): array
+    public function getClassParents(string $className, ClassLike $classLikeNode): array
     {
         $classReflection = $this->reflect($className);
 
         try {
             return $classReflection->getParentClassNames();
         } catch (Throwable $throwable) {
-            return [];
+            // fallback to static
+            return [$classLikeNode->getAttribute(Attribute::PARENT_CLASS_NAME)];
         }
     }
 

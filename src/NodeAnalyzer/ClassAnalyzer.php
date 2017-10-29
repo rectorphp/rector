@@ -46,7 +46,7 @@ final class ClassAnalyzer
             $types[] = $className;
 
             if ($classLikeNode->extends) {
-                $types = array_merge($types, $this->smartClassReflector->getClassParents($className));
+                $types = array_merge($types, $this->smartClassReflector->getClassParents($className, $classLikeNode));
             }
         }
 

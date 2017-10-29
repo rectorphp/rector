@@ -39,9 +39,9 @@ final class ExceptionRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        return $this->methodCallAnalyzer->isTypeAndMethods(
+        return $this->methodCallAnalyzer->isTypesAndMethods(
             $node,
-            'PHPUnit\Framework\TestCase',
+            ['PHPUnit\Framework\TestCase', 'PHPUnit_Framework_TestCase'],
             array_keys($this->oldToNewMethod)
         );
     }
