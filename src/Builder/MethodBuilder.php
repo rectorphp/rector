@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Node\NodeFactory;
+use Rector\Node\PropertyFetchNodeFactory;
 
 final class MethodBuilder
 {
@@ -28,11 +29,21 @@ final class MethodBuilder
      */
     private $nodeFactory;
 
-    public function __construct(BuilderFactory $builderFactory, StatementGlue $statementGlue, NodeFactory $nodeFactory)
-    {
+    /**
+     * @var PropertyFetchNodeFactory
+     */
+    private $propertyFetchNodeFactory;
+
+    public function __construct(
+        BuilderFactory $builderFactory,
+        StatementGlue $statementGlue,
+        NodeFactory $nodeFactory,
+        PropertyFetchNodeFactory $propertyFetchNodeFactory
+    ) {
         $this->builderFactory = $builderFactory;
         $this->statementGlue = $statementGlue;
         $this->nodeFactory = $nodeFactory;
+        $this->propertyFetchNodeFactory = $propertyFetchNodeFactory;
     }
 
     public function addMethodToClass(
@@ -93,7 +104,7 @@ final class MethodBuilder
         }
 
         if (in_array($operation, ['get', 'is'], true)) {
-            $propertyFetchNode = $this->nodeFactory->createLocalPropertyFetch($propertyName);
+            $propertyFetchNode = $this->propertyFetchNodeFactory->createLocalWithPropertyName($propertyName);
 
             return new Return_($propertyFetchNode);
         }

@@ -5,6 +5,7 @@ namespace Rector\Rector\Contrib\Nette\Application;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
+use Rector\Node\MethodCallNodeFactory;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
@@ -28,10 +29,19 @@ final class TemplateMagicInvokeFilterCallRector extends AbstractRector
      */
     private $nodeFactory;
 
-    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, NodeFactory $nodeFactory)
-    {
+    /**
+     * @var MethodCallNodeFactory
+     */
+    private $methodCallNodeFactory;
+
+    public function __construct(
+        MethodCallAnalyzer $methodCallAnalyzer,
+        NodeFactory $nodeFactory,
+        MethodCallNodeFactory $methodCallNodeFactory
+    ) {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->nodeFactory = $nodeFactory;
+        $this->methodCallNodeFactory = $methodCallNodeFactory;
     }
 
     public function isCandidate(Node $node): bool
@@ -46,9 +56,10 @@ final class TemplateMagicInvokeFilterCallRector extends AbstractRector
     {
         $this->changeToInvokeFilterMethodCall($methodCallNode);
 
-        $propertyFetchNode = $this->nodeFactory->clonePropertyFetch($methodCallNode->var);
-
-        $methodCallNode->var = $this->nodeFactory->createMethodCallWithVariable($propertyFetchNode, 'getLatte');
+        $methodCallNode->var = $this->methodCallNodeFactory->createWithVariableAndMethodName(
+            $methodCallNode->var,
+            'getLatte'
+        );
 
         return $methodCallNode;
     }

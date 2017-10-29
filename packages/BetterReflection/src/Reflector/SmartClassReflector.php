@@ -2,10 +2,13 @@
 
 namespace Rector\BetterReflection\Reflector;
 
+use PhpParser\Node\Stmt\ClassLike;
 use Rector\BetterReflection\Reflection\ReflectionClass;
 use Rector\BetterReflection\Reflector\Exception\IdentifierNotFound;
 use Rector\FileSystem\CurrentFileProvider;
+use Rector\Node\Attribute;
 use SplFileInfo;
+use Throwable;
 use TypeError;
 
 final class SmartClassReflector
@@ -23,7 +26,7 @@ final class SmartClassReflector
     /**
      * @var SmartClassReflector
      */
-    private $smartClassReflector;
+    private $currentSmartClassReflector;
 
     /**
      * @var SplFileInfo
@@ -43,11 +46,24 @@ final class SmartClassReflector
                 $this->createNewClassReflector();
             }
 
-            return $this->smartClassReflector->reflect($className);
-        } catch (IdentifierNotFound $identifierNotFoundException) {
+            return $this->currentSmartClassReflector->reflect($className);
+        } catch (IdentifierNotFound|TypeError $throwable) {
             return null;
-        } catch (TypeError $typeError) {
-            return null;
+        }
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getClassParents(string $className, ClassLike $classLikeNode): array
+    {
+        $classReflection = $this->reflect($className);
+
+        try {
+            return $classReflection->getParentClassNames();
+        } catch (Throwable $throwable) {
+            // fallback to static
+            return [$classLikeNode->getAttribute(Attribute::PARENT_CLASS_NAME)];
         }
     }
 
@@ -56,16 +72,16 @@ final class SmartClassReflector
         $currentFile = $this->currentFileProvider->getCurrentFile();
 
         if ($currentFile === null) {
-            $this->smartClassReflector = $this->classReflectorFactory->create();
+            $this->currentSmartClassReflector = $this->classReflectorFactory->create();
         } else {
-            $this->smartClassReflector = $this->classReflectorFactory->createWithFile($currentFile);
+            $this->currentSmartClassReflector = $this->classReflectorFactory->createWithFile($currentFile);
             $this->classReflectorActiveFile = $currentFile;
         }
     }
 
     private function shouldCreateNewClassReflector(): bool
     {
-        if ($this->smartClassReflector === null) {
+        if ($this->currentSmartClassReflector === null) {
             return true;
         }
 

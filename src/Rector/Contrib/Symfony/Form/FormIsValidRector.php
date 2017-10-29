@@ -6,7 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Node\Attribute;
-use Rector\Node\NodeFactory;
+use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
 
@@ -20,19 +20,19 @@ use Rector\Rector\AbstractRector;
 final class FormIsValidRector extends AbstractRector
 {
     /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
-
-    /**
      * @var MethodCallAnalyzer
      */
     private $methodCallAnalyzer;
 
-    public function __construct(NodeFactory $nodeFactory, MethodCallAnalyzer $methodCallAnalyzer)
+    /**
+     * @var MethodCallNodeFactory
+     */
+    private $methodCallNodeFactory;
+
+    public function __construct(MethodCallNodeFactory $methodCallNodeFactory, MethodCallAnalyzer $methodCallAnalyzer)
     {
-        $this->nodeFactory = $nodeFactory;
         $this->methodCallAnalyzer = $methodCallAnalyzer;
+        $this->methodCallNodeFactory = $methodCallNodeFactory;
     }
 
     public function isCandidate(Node $node): bool
@@ -60,8 +60,8 @@ final class FormIsValidRector extends AbstractRector
         $variableName = $node->var->name;
 
         return new BooleanAnd(
-            $this->nodeFactory->createMethodCall($variableName, 'isSubmitted'),
-            $this->nodeFactory->createMethodCall($variableName, 'isValid')
+            $this->methodCallNodeFactory->createWithVariableNameAndMethodName($variableName, 'isSubmitted'),
+            $this->methodCallNodeFactory->createWithVariableNameAndMethodName($variableName, 'isValid')
         );
     }
 }

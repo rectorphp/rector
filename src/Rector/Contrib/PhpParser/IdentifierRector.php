@@ -6,7 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use Rector\Node\Attribute;
-use Rector\Node\NodeFactory;
+use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Rector\AbstractRector;
 
@@ -47,14 +47,16 @@ final class IdentifierRector extends AbstractRector
     ];
 
     /**
-     * @var NodeFactory
+     * @var MethodCallNodeFactory
      */
-    private $nodeFactory;
+    private $methodCallNodeFactory;
 
-    public function __construct(PropertyFetchAnalyzer $propertyFetchAnalyzer, NodeFactory $nodeFactory)
-    {
+    public function __construct(
+        PropertyFetchAnalyzer $propertyFetchAnalyzer,
+        MethodCallNodeFactory $methodCallNodeFactory
+    ) {
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
-        $this->nodeFactory = $nodeFactory;
+        $this->methodCallNodeFactory = $methodCallNodeFactory;
     }
 
     public function isCandidate(Node $node): bool
@@ -81,7 +83,7 @@ final class IdentifierRector extends AbstractRector
             return $propertyFetchNode;
         }
 
-        return $this->nodeFactory->createMethodCallWithVariable($propertyFetchNode, 'toString');
+        return $this->methodCallNodeFactory->createWithVariableAndMethodName($propertyFetchNode, 'toString');
     }
 
     /**

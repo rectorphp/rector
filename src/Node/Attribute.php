@@ -10,11 +10,11 @@ namespace Rector\Node;
 final class Attribute
 {
     /**
-     * Class, interface or trait FQN type.
+     * Class, interface or trait FQN types.
      *
      * @var string
      */
-    public const TYPES = 'type';
+    public const TYPES = 'types';
 
     /**
      * System name.

@@ -45,7 +45,9 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface, NodeTy
         }
 
         if ($variableNode->name === 'this') {
-            return [$variableNode->getAttribute(Attribute::CLASS_NAME)];
+            $classNode = $variableNode->getAttribute(Attribute::CLASS_NODE);
+
+            return $this->nodeTypeResolver->resolve($classNode);
         }
 
         if ($variableNode->name instanceof Variable) {

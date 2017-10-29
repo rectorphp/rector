@@ -2,11 +2,9 @@
 
 namespace Rector\Rector\Contrib\PHPUnit;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
-use Rector\Node\Attribute;
-use Rector\Node\NodeFactory;
+use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
 
@@ -16,28 +14,36 @@ use Rector\Rector\AbstractRector;
 final class ExceptionRector extends AbstractRector
 {
     /**
+     * @var string[]
+     */
+    private $oldToNewMethod = [
+        'setExpectedException' => 'expectExceptionMessage',
+        'setExpectedExceptionRegExp' => 'expectExceptionMessageRegExp',
+    ];
+
+    /**
      * @var MethodCallAnalyzer
      */
     private $methodCallAnalyzer;
 
     /**
-     * @var NodeFactory
+     * @var MethodCallNodeFactory
      */
-    private $nodeFactory;
+    private $methodCallNodeFactory;
 
-    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, NodeFactory $nodeFactory)
+    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, MethodCallNodeFactory $methodCallNodeFactory)
     {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
-        $this->nodeFactory = $nodeFactory;
+        $this->methodCallNodeFactory = $methodCallNodeFactory;
     }
 
     public function isCandidate(Node $node): bool
     {
-        if (! $this->isInTestClass($node)) {
-            return false;
-        }
-
-        return $this->methodCallAnalyzer->isMethod($node, 'setExpectedException');
+        return $this->methodCallAnalyzer->isTypesAndMethods(
+            $node,
+            ['PHPUnit\Framework\TestCase', 'PHPUnit_Framework_TestCase'],
+            array_keys($this->oldToNewMethod)
+        );
     }
 
     /**
@@ -45,9 +51,8 @@ final class ExceptionRector extends AbstractRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
+        $oldMethodName = $methodCallNode->name->name;
         $methodCallNode->name->name = 'expectException';
-
-        // 2nd argument move to standalone method...
 
         if (! isset($methodCallNode->args[1])) {
             return $methodCallNode;
@@ -56,21 +61,14 @@ final class ExceptionRector extends AbstractRector
         $secondArgument = $methodCallNode->args[1];
         unset($methodCallNode->args[1]);
 
-        $expectExceptionMessageMethodCall = $this->nodeFactory->createMethodCallWithArguments(
+        $expectExceptionMessageMethodCall = $this->methodCallNodeFactory->createWithVariableNameMethodNameAndArguments(
             'this',
-            'expectExceptionMessage',
+            $this->oldToNewMethod[$oldMethodName],
             [$secondArgument]
         );
 
         $this->prependNodeAfterNode($expectExceptionMessageMethodCall, $methodCallNode);
 
         return $methodCallNode;
-    }
-
-    private function isInTestClass(Node $node): bool
-    {
-        $className = $node->getAttribute(Attribute::CLASS_NAME);
-
-        return Strings::endsWith($className, 'Test');
     }
 }

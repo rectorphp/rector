@@ -13,7 +13,6 @@ use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\ConstFetch;
-use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
@@ -30,10 +29,6 @@ use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\TraitUse;
 use Rector\Exception\NotImplementedException;
 
-/**
- * @todo decouple MethodCallNodeFactory
- * @todo decouple PropertyFetchNodeFactory
- */
 final class NodeFactory
 {
     /**
@@ -41,33 +36,15 @@ final class NodeFactory
      */
     private $builderFactory;
 
-    public function __construct(BuilderFactory $builderFactory)
+    /**
+     * @var PropertyFetchNodeFactory
+     */
+    private $propertyFetchNodeFactory;
+
+    public function __construct(BuilderFactory $builderFactory, PropertyFetchNodeFactory $propertyFetchNodeFactory)
     {
         $this->builderFactory = $builderFactory;
-    }
-
-    /**
-     * Creates "$this->propertyName"
-     */
-    public function createLocalPropertyFetch(string $propertyName): PropertyFetch
-    {
-        $localVariable = new Variable('this', [
-            'name' => $propertyName,
-        ]);
-
-        return new PropertyFetch($localVariable, $propertyName);
-    }
-
-    /**
-     * Creates "$this->propertyName[]"
-     */
-    public function createLocalPropertyArrayFetch(string $propertyName): PropertyFetch
-    {
-        $localVariable = new Variable('this', [
-            'name' => $propertyName,
-        ]);
-
-        return new PropertyFetch($localVariable, $propertyName . '[]');
+        $this->propertyFetchNodeFactory = $propertyFetchNodeFactory;
     }
 
     /**
@@ -112,27 +89,6 @@ final class NodeFactory
         $nameNode = new FullyQualified($className);
 
         return new ClassConstFetch($nameNode, 'class');
-    }
-
-    /**
-     * Creates "$method->call();"
-     */
-    public function createMethodCall(string $variableName, string $methodName): MethodCall
-    {
-        $variableNode = $this->createVariable($variableName);
-
-        return new MethodCall($variableNode, $methodName);
-    }
-
-    /**
-     * Creates "$method->call();" from existing variable
-     */
-    public function createMethodCallWithVariable(Expr $exprNode, string $methodName): MethodCall
-    {
-        $methodCallNode = new MethodCall($exprNode, $methodName);
-        $exprNode->setAttribute(Attribute::PARENT_NODE, $methodCallNode);
-
-        return $methodCallNode;
     }
 
     /**
@@ -195,7 +151,7 @@ final class NodeFactory
         ]);
 
         $assign = new Assign(
-            $this->createLocalPropertyFetch($propertyName),
+            $this->propertyFetchNodeFactory->createLocalWithPropertyName($propertyName),
             $variable
         );
 
@@ -212,7 +168,7 @@ final class NodeFactory
         ]);
 
         $assign = new Assign(
-            $this->createLocalPropertyArrayFetch($propertyName),
+            $this->propertyFetchNodeFactory->createLocalArrayFetchWithPropertyName($propertyName),
             $variable
         );
 
@@ -240,34 +196,6 @@ final class NodeFactory
     }
 
     /**
-     * @param Arg[] $arguments
-     */
-    public function createMethodCallWithArguments(
-        string $variableName,
-        string $methodName,
-        array $arguments
-    ): MethodCall {
-        $methodCallNode = $this->createMethodCall($variableName, $methodName);
-        $methodCallNode->args = $arguments;
-
-        return $methodCallNode;
-    }
-
-    /**
-     * @param mixed[] $arguments
-     */
-    public function createMethodCallWithVariableAndArguments(
-        Variable $variableNode,
-        string $method,
-        array $arguments
-    ): MethodCall {
-        $methodCall = $this->createMethodCallWithVariable($variableNode, $method);
-        $methodCall->args = $this->createArgs($arguments);
-
-        return $methodCall;
-    }
-
-    /**
      * Creates:
      * - $variable->property['key'];
      */
@@ -292,11 +220,6 @@ final class NodeFactory
             ->getNode();
     }
 
-    public function clonePropertyFetch(PropertyFetch $propertyFetchNode): PropertyFetch
-    {
-        return new PropertyFetch($propertyFetchNode->var, $propertyFetchNode->name);
-    }
-
     public function createParam(string $name, string $type): Param
     {
         return $this->builderFactory->param($name)
@@ -315,12 +238,5 @@ final class NodeFactory
     public function createStaticMethodCallWithArgs(string $class, string $method, array $arguments): StaticCall
     {
         return new StaticCall(new Name($class), new Identifier($method), $arguments);
-    }
-
-    public function createPropertyFetch(string $variable, string $property): PropertyFetch
-    {
-        $variableNode = new Variable($variable);
-
-        return new PropertyFetch($variableNode, $property);
     }
 }

@@ -37,6 +37,24 @@ final class MethodCallAnalyzer
     }
 
     /**
+     * @param string[] $types
+     * @param string[] $methods
+     */
+    public function isTypesAndMethods(Node $node, array $types, array $methods): bool
+    {
+        if (! $node instanceof MethodCall) {
+            return false;
+        }
+
+        $variableTypes = $this->resolveVariableType($node);
+        if (! (bool) array_intersect($types, $variableTypes)) {
+            return false;
+        }
+
+        return $this->isMethods($node, $methods);
+    }
+
+    /**
      * Checks "$this->classOfSpecificType->specificMethodName()"
      *
      * @param string[] $methods
@@ -77,9 +95,23 @@ final class MethodCallAnalyzer
             return false;
         }
 
-        $nodeMethodName = $node->name->name;
+        return $node->name->name === $methodName;
+    }
 
-        return $nodeMethodName === $methodName;
+    /**
+     * @param string[] $methods
+     */
+    public function isMethods(Node $node, array $methods): bool
+    {
+        if (! $node instanceof MethodCall) {
+            return false;
+        }
+
+        if (! $node->name instanceof Identifier) {
+            return false;
+        }
+
+        return in_array($node->name->name, $methods, true);
     }
 
     /**
