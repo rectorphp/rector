@@ -151,7 +151,7 @@ final class NodeFactory
         ]);
 
         $assign = new Assign(
-            $this->propertyFetchNodeFactory->createLocalPropertyFetch($propertyName),
+            $this->propertyFetchNodeFactory->createLocalWithPropertyName($propertyName),
             $variable
         );
 
@@ -168,7 +168,7 @@ final class NodeFactory
         ]);
 
         $assign = new Assign(
-            $this->propertyFetchNodeFactory->createLocalPropertyArrayFetch($propertyName),
+            $this->propertyFetchNodeFactory->createLocalArrayFetchWithPropertyName($propertyName),
             $variable
         );
 

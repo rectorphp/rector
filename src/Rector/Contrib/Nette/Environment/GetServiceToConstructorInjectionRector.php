@@ -89,6 +89,6 @@ final class GetServiceToConstructorInjectionRector extends AbstractRector
             $propertyName
         );
 
-        return $this->propertyFetchNodeFactory->createLocalPropertyFetch($propertyName);
+        return $this->propertyFetchNodeFactory->createLocalWithPropertyName($propertyName);
     }
 }

@@ -58,7 +58,7 @@ final class CatchAndClosureUseNameRector extends AbstractRector
             return $propertyFetchNode;
         }
 
-        $propertyFetchNode->var = $this->propertyFetchNodeFactory->createPropertyFetch(
+        $propertyFetchNode->var = $this->propertyFetchNodeFactory->createWithVariableNameAndPropertyName(
             $propertyFetchNode->var->name,
             'var'
         );

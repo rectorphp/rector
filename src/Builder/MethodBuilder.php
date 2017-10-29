@@ -104,7 +104,7 @@ final class MethodBuilder
         }
 
         if (in_array($operation, ['get', 'is'], true)) {
-            $propertyFetchNode = $this->propertyFetchNodeFactory->createLocalPropertyFetch($propertyName);
+            $propertyFetchNode = $this->propertyFetchNodeFactory->createLocalWithPropertyName($propertyName);
 
             return new Return_($propertyFetchNode);
         }

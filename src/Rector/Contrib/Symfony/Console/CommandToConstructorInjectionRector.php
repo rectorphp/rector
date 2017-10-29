@@ -117,7 +117,7 @@ final class CommandToConstructorInjectionRector extends AbstractRector
             $propertyName
         );
 
-        return $this->propertyFetchNodeFactory->createLocalPropertyFetch($propertyName);
+        return $this->propertyFetchNodeFactory->createLocalWithPropertyName($propertyName);
     }
 
     private function replaceParentContainerAwareCommandWithCommand(Node $node): void

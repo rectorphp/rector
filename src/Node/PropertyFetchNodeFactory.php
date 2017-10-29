@@ -14,7 +14,7 @@ final class PropertyFetchNodeFactory
     /**
      * Creates "$variable->property"
      */
-    public function createPropertyFetch(string $variable, string $property): PropertyFetch
+    public function createWithVariableNameAndPropertyName(string $variable, string $property): PropertyFetch
     {
         $variableNode = new Variable($variable);
 
@@ -24,7 +24,7 @@ final class PropertyFetchNodeFactory
     /**
      * Creates "$this->propertyName"
      */
-    public function createLocalPropertyFetch(string $propertyName): PropertyFetch
+    public function createLocalWithPropertyName(string $propertyName): PropertyFetch
     {
         $localVariable = new Variable('this', [
             'name' => $propertyName,
@@ -36,7 +36,7 @@ final class PropertyFetchNodeFactory
     /**
      * Creates "$this->propertyName[]"
      */
-    public function createLocalPropertyArrayFetch(string $propertyName): PropertyFetch
+    public function createLocalArrayFetchWithPropertyName(string $propertyName): PropertyFetch
     {
         $localVariable = new Variable('this', [
             'name' => $propertyName,
@@ -49,7 +49,7 @@ final class PropertyFetchNodeFactory
      * Creates:
      * - $variable->property['key'];
      */
-    public function createVariablePropertyArrayFetch(
+    public function createArrayWithVariablePropertyNameAndKey(
         Expr $exprNode,
         string $propertyName,
         String_ $keyNode
