@@ -6,13 +6,13 @@
 This tool will **upgrade your application** for you, with focus on open-source projects.
 
 <p align="center">
-    <img src="/docs/symfony.png">
+    <a href="/src/config/level/symfony"><img src="/docs/symfony.png"></a>
     <img src="/docs/space.png">
-    <img src="/docs/nette.png">
+    <a href="/src/config/level/nette"><img src="/docs/nette.png" height="50"></a>
     <img src="/docs/space.png">
-    <img src="/docs/phpunit.jpg">
+    <a href="/src/config/level/phpunit"><img src="/docs/phpunit.jpg"></a>
     <img src="/docs/space.png">
-    <img src="/docs/roave.png">
+    <a href="/src/config/level/roave"><img src="/docs/roave.png"></a>
 </p>
 
 
