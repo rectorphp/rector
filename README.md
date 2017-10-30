@@ -1,4 +1,4 @@
-# Rector - Reconstruct your Legacy Code to Modern Codebase 
+# Rector - Reconstruct your Legacy Code to Modern Codebase
 
 [![Build Status](https://img.shields.io/travis/RectorPHP/Rector/master.svg?style=flat-square)](https://travis-ci.org/RectorPHP/Rector)
 [![Coverage Status](https://img.shields.io/coveralls/RectorPHP/Rector/master.svg?style=flat-square)](https://coveralls.io/github/RectorPHP/Rector?branch=master)
@@ -22,22 +22,34 @@ At the moment these packages are supported:
 composer require rector/rector --dev
 ```
 
-### On PHP < 7.1
-
-You must have separated environment with PHP 7.1 (for example in Docker container). When you have it then run following command.
-
-```
-composer create-project rector/rector your-path-to-rector
-```
-
-When do you have it then you can run all commands like
-
-```
-your-path-to-rector/bin/rector process /var/www/old-project --config=your-path-to-rector/src/config/level/nette/nette24.yml
-your-path-to-rector/bin/rector process /var/www/another-old-project --config=your-path-to-rector/src/config/level/symfony/symfony40.yml
-```
-
 ## How To Reconstruct your Code?
+
+### A. Prepared Sets
+
+Fetaures open-source projects have prepared rectors sets, you can find them in [`/src/config/level`](/src/config/level).
+
+E.g. Do you need to upgrade to Nette 2.4?
+
+1. Run rector on your `/src` directory
+
+```bash
+vendor/bin/rector process src --config vendor/bin/rector/src/config/level/nette/nette24.yml
+```
+
+Too long? Try `--level` shortcut:
+
+```bash
+vendor/bin/rector process src --level nette24
+```
+
+2. Check the Git
+
+```
+git diff
+```
+
+
+### B. Custom Sets
 
 1. Create `rector.yml` with desired Rectors
 
@@ -80,7 +92,7 @@ public function refactor(Node $node): ?Node
 <?php declare(strict_types=1);
 
 namespace Rector\Contrib\Symfony;
-    
+
 use Rector\Rector\AbstractRector;
 
 final class MyRector extends AbstractRector
@@ -94,8 +106,8 @@ final class MyRector extends AbstractRector
 4. Add to specific level, e.g. [`/src/config/level/nette/nette24.yml`](/src/config/level/nette/nette24.yml)
 
 5. Submit PR
- 
-6. :+1:   
+
+6. :+1:
 
 
 ### Simpler setup with Dynamic Rectors
@@ -135,11 +147,11 @@ You can:
             #   old method: new method
             'Nette\Utils\Html':
                 'add': 'addHtml'
-            
+
             # or in case of static methods calls
-             
+
             # class:
-            #   old method: [new class, new method] 
+            #   old method: [new class, new method]
             'Nette\Bridges\FormsLatte\FormMacros':
                 'renderFormBegin': ['Nette\Bridges\FormsLatte\Runtime', 'renderFormBegin']
     ```
@@ -195,7 +207,7 @@ You can:
             'getSelectJoinColumnSQL':
                 - 'className'
     ```
-    
+
 - or **replace underscore naming `_` with namespaces `\`**
 
     ```yml
@@ -230,3 +242,20 @@ Just follow 3 rules:
     ```
 
 We would be happy to merge your feature then.
+
+
+### How to use on PHP < 7.1
+
+You must have separated environment with PHP 7.1 (for example in Docker container). When you have it then run following command:
+
+```
+composer create-project rector/rector path-to-rector
+```
+
+When do you have it then you can run all commands like
+
+```
+path-to-rector/bin/rector process /var/www/old-project --config path-to-rector/src/config/level/nette/nette24.yml
+# or for short
+path-to-rector/bin/rector process /var/www/old-project --level nette24
+```

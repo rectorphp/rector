@@ -20,8 +20,8 @@ final class Application extends SymfonyApplication
     }
 
     /**
-     * This method override adds option to
-     * load custom config via --config in any command.
+     * This method override adds option to load custom config via --config in any command.
+     * And --level option as well.
      */
     protected function getDefaultInputDefinition(): InputDefinition
     {
@@ -33,6 +33,12 @@ final class Application extends SymfonyApplication
                 InputOption::VALUE_REQUIRED,
                 'Path to config file.',
                 getcwd() . '/rector.yml'
+            ),
+            new InputOption(
+                '--level',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Finds config by shortcut name.'
             ),
             new InputOption('--help', '-h', InputOption::VALUE_NONE, 'Display this help message'),
             new InputOption('--ansi', '', InputOption::VALUE_NONE, 'Force ANSI output'),
