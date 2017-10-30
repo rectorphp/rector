@@ -3,7 +3,7 @@
 [![Build Status](https://img.shields.io/travis/RectorPHP/Rector/master.svg?style=flat-square)](https://travis-ci.org/RectorPHP/Rector)
 [![Coverage Status](https://img.shields.io/coveralls/RectorPHP/Rector/master.svg?style=flat-square)](https://coveralls.io/github/RectorPHP/Rector?branch=master)
 
-This tool will **upgrade your application** for you, with focus on open-source projects.
+Rector **upgrades your application** for you, with focus on open-source projects:
 
 <p align="center">
     <a href="/src/config/level/symfony"><img src="/docs/symfony.png"></a>
@@ -15,6 +15,7 @@ This tool will **upgrade your application** for you, with focus on open-source p
     <a href="/src/config/level/roave"><img src="/docs/roave.png"></a>
 </p>
 
+<br>
 
 ## Install
 
