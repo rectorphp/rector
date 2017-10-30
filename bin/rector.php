@@ -1,5 +1,6 @@
 <?php declare(strict_types=1);
 
+use Rector\Configuration\RectorConfigFilePathHelper;
 use Rector\Console\Application;
 use Rector\DependencyInjection\ContainerFactory;
 use Symfony\Component\Console\Input\ArgvInput;
@@ -13,13 +14,17 @@ gc_disable();
 require_once __DIR__ . '/bootstrap.php';
 
 try {
-    // 1. Detect configuration
-    ConfigFilePathHelper::detectFromInput('rector', new ArgvInput);
+    // 1. Detect configuration from --level
+    $configFile = RectorConfigFilePathHelper::resolveLevel(new ArgvInput);
+
+    // 2. Or from --config
+    if ($configFile === null) {
+        ConfigFilePathHelper::detectFromInput('rector', new ArgvInput);
+        $configFile = ConfigFilePathHelper::provide('rector', 'rector.yml');
+    }
 
     // 2. Build DI container
     $containerFactory = new ContainerFactory;
-    $configFile = ConfigFilePathHelper::provide('rector', 'rector.yml');
-
     if ($configFile) {
         $container = $containerFactory->createWithConfig($configFile);
     } else {
