@@ -3,13 +3,17 @@
 [![Build Status](https://img.shields.io/travis/RectorPHP/Rector/master.svg?style=flat-square)](https://travis-ci.org/RectorPHP/Rector)
 [![Coverage Status](https://img.shields.io/coveralls/RectorPHP/Rector/master.svg?style=flat-square)](https://coveralls.io/github/RectorPHP/Rector?branch=master)
 
-This tool will **upgrade your application** for you, with focus on open-source projetcs.
+This tool will **upgrade your application** for you, with focus on open-source projects.
 
-![Symfony](docs/symfony.png)
-![Nette](docs/nette.png)
-![PHPUnit](docs/phpunit.jpg)
-![Roave](docs/roave.jpg)
-![PHP_CodeSniffer](docs/codesniffer.jpg)
+<p align="center">
+    <img src="/docs/symfony.png">
+    <img src="/docs/space.png">
+    <img src="/docs/nette.png">
+    <img src="/docs/space.png">
+    <img src="/docs/phpunit.jpg">
+    <img src="/docs/space.png">
+    <img src="/docs/roave.png">
+</p>
 
 
 ## Install
