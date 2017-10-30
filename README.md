@@ -3,18 +3,19 @@
 [![Build Status](https://img.shields.io/travis/RectorPHP/Rector/master.svg?style=flat-square)](https://travis-ci.org/RectorPHP/Rector)
 [![Coverage Status](https://img.shields.io/coveralls/RectorPHP/Rector/master.svg?style=flat-square)](https://coveralls.io/github/RectorPHP/Rector?branch=master)
 
-This tool will **upgrade your application** for you.
+Rector **upgrades your application** for you, with focus on open-source projects:
 
-## All Reconstructors
+<p align="center">
+    <a href="/src/config/level/symfony"><img src="/docs/symfony.png"></a>
+    <img src="/docs/space.png">
+    <a href="/src/config/level/nette"><img src="/docs/nette.png" height="50"></a>
+    <img src="/docs/space.png">
+    <a href="/src/config/level/phpunit"><img src="/docs/phpunit.jpg"></a>
+    <img src="/docs/space.png">
+    <a href="/src/config/level/roave"><img src="/docs/roave.png"></a>
+</p>
 
-At the moment these packages are supported:
-
-- [Nette](/src/config/level/nette)
-- [PHP_CodeSniffer](/src/config/level/php-code-sniffer)
-- [PHPUnit](/src/config/level/phpunit)
-- [Roave](/src/config/level/roave)
-- [Symfony](/src/config/level/symfony)
-
+<br>
 
 ## Install
 
@@ -26,7 +27,7 @@ composer require rector/rector --dev
 
 ### A. Prepared Sets
 
-Fetaures open-source projects have prepared rectors sets, you can find them in [`/src/config/level`](/src/config/level).
+Fetaured open-source projects have **prepared sets**. You'll find them in [`/src/config/level`](/src/config/level).
 
 E.g. Do you need to upgrade to Nette 2.4?
 
