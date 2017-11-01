@@ -4,13 +4,9 @@ namespace Rector\NodeAnalyzer;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
-use Rector\BetterReflection\Reflector\MethodReflector;
 use Rector\BetterReflection\Reflector\SmartClassReflector;
 use Rector\Node\Attribute;
-use Rector\NodeTraverserQueue\BetterNodeFinder;
 use ReflectionMethod;
 
 final class MethodCallAnalyzer
@@ -21,28 +17,13 @@ final class MethodCallAnalyzer
     private $smartClassReflector;
 
     /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
      * @var string[][]
      */
     private $publicMethodNamesForType = [];
 
-    /**
-     * @var MethodReflector
-     */
-    private $methodReflector;
-
-    public function __construct(
-        SmartClassReflector $smartClassReflector,
-        BetterNodeFinder $betterNodeFinder,
-        MethodReflector $methodReflector
-    ) {
+    public function __construct(SmartClassReflector $smartClassReflector)
+    {
         $this->smartClassReflector = $smartClassReflector;
-        $this->betterNodeFinder = $betterNodeFinder;
-        $this->methodReflector = $methodReflector;
     }
 
     /**
@@ -55,8 +36,8 @@ final class MethodCallAnalyzer
             return false;
         }
 
-        $variableTypes = $this->resolveVariableTypes($node);
-        if (! (bool) array_intersect($types, $variableTypes)) {
+        $callerNodeTypes = (array) $node->getAttribute(Attribute::CALLER_TYPES);
+        if (! array_intersect($types, $callerNodeTypes)) {
             return false;
         }
 
@@ -132,9 +113,9 @@ final class MethodCallAnalyzer
             return false;
         }
 
-        $variableTypes = $this->resolveVariableTypes($node);
+        $callerNodeTypes = (array) $node->getAttribute(Attribute::CALLER_TYPES);
 
-        return in_array($type, $variableTypes, true);
+        return in_array($type, $callerNodeTypes, true);
     }
 
     /**
@@ -179,42 +160,5 @@ final class MethodCallAnalyzer
         $publicMethods = $classReflection->getMethods(ReflectionMethod::IS_PUBLIC);
 
         return $this->publicMethodNamesForType[$type] = array_keys($publicMethods);
-    }
-
-    /**
-     * @return string[]
-     */
-    private function resolveVariableTypes(MethodCall $methodCallNode): array
-    {
-//        $methodCallNode->getAttribute(Attribute::RETURN_TYPES);
-
-//        $parentNode = $methodCallNode->getAttribute(Attribute::PARENT_NODE);
-
-//        if ($parentNode instanceof MethodCall && $parentNode->var instanceof MethodCall) {
-//            // resolve return type type
-//            // @todo: consider Attribute::RETURN_TYPES for MethodCall and StaticCall types
-//
-//            $nodeVarTypes = $parentNode->var->var->getAttribute(Attribute::TYPES);
-//            $nodeVarType = array_shift($nodeVarTypes);
-//
-//            $methodName = $parentNode->var->name->toString(); // method
-//            $methodReturnType = $this->methodReflector->getMethodReturnType($nodeVarType, $methodName);
-//
-//            if ($methodReturnType) {
-//                return [$methodReturnType];
-//            }
-//        }
-
-        $node = $this->betterNodeFinder->findFirstInstanceOfAny(
-            $methodCallNode,
-            [Variable::class, PropertyFetch::class]
-        );
-
-        $nodeTypes = (array) $node->getAttribute(Attribute::TYPES);
-        if ($nodeTypes) {
-            return $nodeTypes;
-        }
-
-        return [];
     }
 }
