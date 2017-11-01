@@ -214,12 +214,27 @@ You can:
 
     ```yml
     Rector\Rector\Dynamic\ArgumentRemoverRector:
-        # class
-            # method
-                # arguments to remove
+        # class:
+        #   method:
+        #       - argument to remove
         'Doctrine\ORM\Persisters\Entity\AbstractEntityInheritancePersister':
             'getSelectJoinColumnSQL':
                 - 'className'
+    ```
+    
+- **change argument value** (@todo improve and unit API to per class and method)
+
+    ```yml
+    Rector\Rector\Dynamic\ArgumentReplacerRector:
+        # class:s
+        #   method:
+        #       - 'argument po'
+        -
+            class: Symfony\Component\DependencyInjection\ContainerBuilder
+            method: compile
+            position: 0
+            type: added
+            default_value: false
     ```
 
 - or **replace underscore naming `_` with namespaces `\`**
