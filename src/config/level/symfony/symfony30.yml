@@ -20,15 +20,15 @@ rectors:
             'ROUND_HALFDOWN': 'ROUND_HALF_DOWN'
 
     Rector\Rector\Dynamic\MethodNameReplacerRector:
-        # dependency injection
+        # class loader
         'Symfony\Component\ClassLoader\UniversalClassLoader\UniversalClassLoader':
-              'registerNamespaces': ['Symfony\Component\ClassLoader\ClassLoader', 'addPrefixes']
-              'registerPrefixes': ['Symfony\Component\ClassLoader\ClassLoader', 'addPrefixes']
-              'registerNamespace': ['Symfony\Component\ClassLoader\ClassLoader', 'addPrefix']
-              'registerPrefix': ['Symfony\Component\ClassLoader\ClassLoader', 'addPrefix']
-              'getNamespaces': ['Symfony\Component\ClassLoader\ClassLoader', 'getPrefixes']
-              'getNamespaceFallbacks': ['Symfony\Component\ClassLoader\ClassLoader', 'getFallbackDirs']
-              'getPrefixFallbacks': ['Symfony\Component\ClassLoader\ClassLoader', 'getFallbackDirs']
+              'registerNamespaces': 'addPrefixes'
+              'registerPrefixes': 'addPrefixes'
+              'registerNamespace': 'addPrefix'
+              'registerPrefix': 'addPrefix'
+              'getNamespaces': 'getPrefixes'
+              'getNamespaceFallbacks': 'getFallbackDirs'
+              'getPrefixFallbacks': 'getFallbackDirs'
 
         # form
         'Symfony\Component\Form\AbstractType':
@@ -80,8 +80,7 @@ rectors:
         'Symfony\Component\Translation\Dumper\FileDumper':
             'format': 'formatCatalogue'
         'Symfony\Component\Translation\Translator':
-            # @todo: verify
-            'getMessages': ['Symfony\Component\Translation\TranslatorBagInterface': 'getCatalogue']
+            'getMessages': 'getCatalogue'
 
         # validator
         'Symfony\Component\Validator\ConstraintViolationInterface':
@@ -92,6 +91,9 @@ rectors:
             'getMessagePluralization': 'getPlural'
 
     Rector\Rector\Dynamic\ClassReplacerRector:
+        # class loader
+        'Symfony\Component\ClassLoader\UniversalClassLoader\UniversalClassLoader': 'Symfony\Component\ClassLoader\ClassLoader' # partial with method rename
+
         # console
         'Symfony\Component\Console\Helper\ProgressHelper': 'Symfony\Component\Console\Helper\ProgressBar'
 
@@ -125,6 +127,9 @@ rectors:
 
         # security
         'Symfony\Component\Security\Core\Authorization\Voter\AbstractVoter': 'Symfony\Component\Security\Core\Authorization\Voter\Voter'
+
+        # translator
+        'Symfony\Component\Translation\Translator': 'Symfony\Component\Translation\TranslatorBagInterface' # partial with class rename
 
         # twig
         'Symfony\Bundle\TwigBundle\TwigDefaultEscapingStrategy': 'Twig_FileExtensionEscapingStrategy'
