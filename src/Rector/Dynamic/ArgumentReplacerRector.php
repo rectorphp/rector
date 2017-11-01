@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\NodeAnalyzer\ClassMethodAnalyzer;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
 
@@ -26,14 +27,22 @@ final class ArgumentReplacerRector extends AbstractRector
      * @var mixed[]|null
      */
     private $activeArgumentChangesByPosition;
+    /**
+     * @var ClassMethodAnalyzer
+     */
+    private $classMethodAnalyzer;
 
     /**
      * @param mixed[] $argumentChangesByMethodAndType
      */
-    public function __construct(array $argumentChangesByMethodAndType, MethodCallAnalyzer $methodCallAnalyzer)
-    {
+    public function __construct(
+        array $argumentChangesByMethodAndType,
+        MethodCallAnalyzer $methodCallAnalyzer,
+        ClassMethodAnalyzer $classMethodAnalyzer
+    ) {
         $this->argumentChangesMethodAndClass = $argumentChangesByMethodAndType;
         $this->methodCallAnalyzer = $methodCallAnalyzer;
+        $this->classMethodAnalyzer = $classMethodAnalyzer;
     }
 
     public function isCandidate(Node $node): bool
@@ -84,10 +93,6 @@ final class ArgumentReplacerRector extends AbstractRector
      */
     private function matchArgumentChanges(Node $node): ?array
     {
-//        if (! $node instanceof MethodCall) {
-//            return null;
-//        }
-
         if (! $node instanceof ClassMethod && ! $node instanceof MethodCall && ! $node instanceof StaticCall) {
             return null;
         }
@@ -95,6 +100,10 @@ final class ArgumentReplacerRector extends AbstractRector
         foreach ($this->argumentChangesMethodAndClass as $type => $argumentChangesByMethod) {
             $methods = array_keys($argumentChangesByMethod);
             if ($this->methodCallAnalyzer->isTypeAndMethods($node, $type, $methods)) {
+                return $argumentChangesByMethod[$node->name->toString()];
+            }
+
+            if ($this->classMethodAnalyzer->isTypeAndMethods($node, $type, $methods)) {
                 return $argumentChangesByMethod[$node->name->toString()];
             }
         }
