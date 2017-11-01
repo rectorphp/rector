@@ -197,7 +197,6 @@ You can:
 - **change parameters typehint according to parent type**
 
     ```yml
-    # php-parser40.yml
     rectors:
         Rector\Rector\Dynamic\ParentTypehintedArgumentRector:
             # class
@@ -208,7 +207,7 @@ You can:
                     'code': 'string'
     ```
 
-- **remove unused argument**
+- **remove unused argument** (@todo consider mergin with `ArgumentReplacerRector`)
 
     ```yml
     rectors:
@@ -221,7 +220,7 @@ You can:
                     - 'className'
     ```
     
-- **change argument value** (@todo improve and unit API to per class and method)
+- **change argument value**
 
     ```yml
     rectors:
