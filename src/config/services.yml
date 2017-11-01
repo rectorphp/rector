@@ -24,6 +24,8 @@ services:
             - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\NamespaceResolver']]
             # adds type to variable and property nodes via attribute
             - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\TypeResolver']]
+            # adds types to method call and static call via attribute
+            - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\ReturnTypeResolver']]
 
     # PhpParser - Parser
     PhpParser\Parser:

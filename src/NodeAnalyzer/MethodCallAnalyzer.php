@@ -186,6 +186,8 @@ final class MethodCallAnalyzer
      */
     private function resolveVariableTypes(MethodCall $methodCallNode): array
     {
+        $methodCallNode->getAttribute(Attribute::RETURN_TYPES);
+
         $parentNode = $methodCallNode->getAttribute(Attribute::PARENT_NODE);
 
         if ($parentNode instanceof MethodCall && $parentNode->var instanceof MethodCall) {

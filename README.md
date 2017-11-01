@@ -207,19 +207,6 @@ You can:
                     'code': 'string'
     ```
 
-- **remove unused argument** (@todo consider d with `ArgumentReplacerRector`)
-
-    ```yml
-    rectors:
-        Rector\Rector\Dynamic\ArgumentRemoverRector:
-            # class
-            'Doctrine\ORM\Persisters\Entity\AbstractEntityInheritancePersister':
-                # method
-                'getSelectJoinColumnSQL':
-                    # argument(s) to remove
-                    - 'className'
-    ```
-    
 - **change argument value**
 
     ```yml

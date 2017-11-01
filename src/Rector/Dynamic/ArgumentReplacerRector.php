@@ -117,17 +117,9 @@ final class ArgumentReplacerRector extends AbstractRector
 
         foreach ($this->argumentChangesMethodAndClass as $type => $argumentChangesByMethod) {
             $methods = array_keys($argumentChangesByMethod);
-            if ($this->methodCallAnalyzer->isTypeAndMethods($node, $type, $methods)) {
+            if ($this->isTypeAndMethods($node, $type, $methods)) {
                 return $argumentChangesByMethod[$node->name->toString()];
             }
-
-//            if ($this->staticMethodCallAnalyzer->isTypeAndMethods($node, $type, $methods)) {
-//                return $argumentChangesByMethod[$node->name->toString()];
-//            }
-//
-//            if ($this->classMethodAnalyzer->isTypeAndMethods($node, $type, $methods)) {
-//                return $argumentChangesByMethod[$node->name->toString()];
-//            }
         }
 
         return null;
@@ -160,5 +152,25 @@ final class ArgumentReplacerRector extends AbstractRector
         if ($node instanceof ClassMethod) {
             $node->params = $argumentsOrParameters;
         }
+    }
+
+    /**
+     * @param string[] $argumentChangesByMethod
+     */
+    private function isTypeAndMethods(Node $node, string $type, array $methods): bool
+    {
+        if ($this->methodCallAnalyzer->isTypeAndMethods($node, $type, $methods)) {
+            return true;
+        }
+
+        if ($this->staticMethodCallAnalyzer->isTypeAndMethods($node, $type, $methods)) {
+            return true;
+        }
+
+        if ($this->classMethodAnalyzer->isTypeAndMethods($node, $type, $methods)) {
+            return true;
+        }
+
+        return false;
     }
 }
