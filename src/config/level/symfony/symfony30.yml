@@ -1,7 +1,12 @@
+# resources:
+# - https://github.com/symfony/symfony/blob/master/UPGRADE-3.0.md
+
 rectors:
     Rector\Rector\Contrib\Symfony\HttpKernel\GetRequestRector: ~
     Rector\Rector\Contrib\Symfony\Form\FormTypeGetParentRector: ~
     Rector\Rector\Contrib\Symfony\Form\OptionNameRector: ~
+
+    # dynamic
 
     Rector\Rector\Dynamic\ClassConstantReplacerRector:
         # form
@@ -9,19 +14,137 @@ rectors:
             'PRE_BIND': 'PRE_SUBMIT'
             'BIND': 'SUBMIT'
             'POST_BIND': 'POST_SUBMIT'
+        'Symfony\Component\Form\Extension\Core\DataTransformer':
+            'ROUND_HALFEVEN': 'ROUND_HALF_EVEN'
+            'ROUND_HALFUP': 'ROUND_HALF_UP'
+            'ROUND_HALFDOWN': 'ROUND_HALF_DOWN'
 
     Rector\Rector\Dynamic\MethodNameReplacerRector:
+        # class loader
+        'Symfony\Component\ClassLoader\UniversalClassLoader\UniversalClassLoader':
+              'registerNamespaces': 'addPrefixes'
+              'registerPrefixes': 'addPrefixes'
+              'registerNamespace': 'addPrefix'
+              'registerPrefix': 'addPrefix'
+              'getNamespaces': 'getPrefixes'
+              'getNamespaceFallbacks': 'getFallbackDirs'
+              'getPrefixFallbacks': 'getFallbackDirs'
+
         # form
         'Symfony\Component\Form\AbstractType':
+            'getName': 'getBlockPrefix'
             'setDefaultOptions': 'configureOptions'
         'Symfony\Component\Form\FormTypeInterface':
             'getName': 'getBlockPrefix'
+            'setDefaultOptions': 'configureOptions'
+        'Symfony\Component\Form\ResolvedFormTypeInterface':
+            'getName': 'getBlockPrefix'
+        'Symfony\Component\Form\AbstractTypeExtension':
+            'setDefaultOptions': 'configureOptions'
+        'Symfony\Component\Form\Form':
+            'bind': 'submit'
+            'isBound': 'isSubmitted'
+
+        # process
+        'Symfony\Component\Process\Process':
+            'setStdin': 'setInput'
+            'getStdin': 'getInput'
+
+        # monolog
+        'Symfony\Bridge\Monolog\Logger':
+            'emerg': 'emergency'
+            'crit': 'critical'
+            'err': 'error'
+            'warn': 'warning'
+
+        # http kernel
+        'Symfony\Component\HttpKernel\Log\LoggerInterface':
+              'emerg': 'emergency'
+              'crit': 'critical'
+              'err': 'error'
+              'warn': 'warning'
+        'Symfony\Component\HttpKernel\Log\NullLogger':
+              'emerg': 'emergency'
+              'crit': 'critical'
+              'err': 'error'
+              'warn': 'warning'
+
         # property access
         Symfony\Component\PropertyAccess\PropertyAccess:
             'getPropertyAccessor': 'createPropertyAccessor'
 
+        # serialazer
+        'Symfony\Component\Serializer\Exception\Exception': 'Symfony\Component\Serializer\Exception\ExceptionInterface'
+
+        # translator
+        'Symfony\Component\Translation\Dumper\FileDumper':
+            'format': 'formatCatalogue'
+        'Symfony\Component\Translation\Translator':
+            'getMessages': 'getCatalogue'
+
+        # validator
+        'Symfony\Component\Validator\ConstraintViolationInterface':
+            'getMessageParameters': 'getParameters'
+            'getMessagePluralization': 'getPlural'
+        'Symfony\Component\Validator\ConstraintViolation':
+            'getMessageParameters': 'getParameters'
+            'getMessagePluralization': 'getPlural'
+
     Rector\Rector\Dynamic\ClassReplacerRector:
+        # class loader
+        'Symfony\Component\ClassLoader\UniversalClassLoader\UniversalClassLoader': 'Symfony\Component\ClassLoader\ClassLoader' # partial with method rename
+
         # console
         'Symfony\Component\Console\Helper\ProgressHelper': 'Symfony\Component\Console\Helper\ProgressBar'
+
         # form
         'Symfony\Component\Form\Util\VirtualFormAwareIterator': 'Symfony\Component\Form\Util\InheritDataAwareIterator'
+        'Symfony\Component\Form\Tests\Extension\Core\Type\TypeTestCase': 'Symfony\Component\Form\Test\TypeTestCase'
+        'Symfony\Component\Form\Tests\FormIntegrationTestCase': 'Symfony\Component\Form\Test\FormIntegrationTestCase'
+        'Symfony\Component\Form\Tests\FormPerformanceTestCase': 'Symfony\Component\Form\Test\FormPerformanceTestCase'
+        'Symfony\Component\Form\Extension\Core\ChoiceList\ChoiceListInterface': 'Symfony\Component\Form\ChoiceList\ChoiceListInterface'
+        'Symfony\Component\Form\Extension\Core\View\ChoiceView': 'Symfony\Component\Form\ChoiceList\View\ChoiceView'
+        'Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface': 'Symfony\Component\Security\Csrf\CsrfTokenManagerInterface'
+        'Symfony\Component\Form\Extension\Core\ChoiceList\ChoiceList': 'Symfony\Component\Form\ChoiceList\ArrayChoiceList'
+        'Symfony\Component\Form\Extension\Core\ChoiceList\LazyChoiceList': 'Symfony\Component\Form\ChoiceList\LazyChoiceList'
+        'Symfony\Component\Form\Extension\Core\ChoiceList\ObjectChoiceList': 'Symfony\Component\Form\ChoiceList\ArrayChoiceList'
+        'Symfony\Component\Form\Extension\Core\ChoiceList\SimpleChoiceList': 'Symfony\Component\Form\ChoiceList\ArrayChoiceList'
+        'Symfony\Component\Form\ChoiceList\ArrayKeyChoiceList': 'Symfony\Component\Form\ChoiceList\ArrayChoiceList'
+
+        # http kernel
+        'Symfony\Component\HttpKernel\Debug\ErrorHandler': 'Symfony\Component\Debug\ErrorHandler'
+        'Symfony\Component\HttpKernel\Debug\ExceptionHandler': 'Symfony\Component\Debug\ExceptionHandler'
+        'Symfony\Component\HttpKernel\Exception\FatalErrorException': 'Symfony\Component\Debug\Exception\FatalErrorException'
+        'Symfony\Component\HttpKernel\Exception\FlattenException': 'Symfony\Component\Debug\Exception\FlattenException'
+        'Symfony\Component\HttpKernel\Log\LoggerInterface': 'Psr\Log\LoggerInterface' # partial with method rename
+
+        # event disptacher
+        'Symfony\Component\HttpKernel\DependencyInjection\RegisterListenersPass': 'Symfony\Component\EventDispatcher\DependencyInjection\RegisterListenersPass'
+        'Symfony\Component\HttpKernel\Log\NullLogger': 'Psr\Log\LoggerInterface' # partial with methor rename
+
+        # monolog
+        'Symfony\Bridge\Monolog\Logger': 'Psr\Log\LoggerInterface' # partial with method rename
+
+        # security
+        'Symfony\Component\Security\Core\Authorization\Voter\AbstractVoter': 'Symfony\Component\Security\Core\Authorization\Voter\Voter'
+
+        # translator
+        'Symfony\Component\Translation\Translator': 'Symfony\Component\Translation\TranslatorBagInterface' # partial with class rename
+
+        # twig
+        'Symfony\Bundle\TwigBundle\TwigDefaultEscapingStrategy': 'Twig_FileExtensionEscapingStrategy'
+
+        # validator
+        'Symfony\Component\Validator\Constraints\Collection\Optional': 'Symfony\Component\Validator\Constraints\Optional'
+        'Symfony\Component\Validator\Constraints\Collection\Required': 'Symfony\Component\Validator\Constraints\Required'
+        'Symfony\Component\Validator\MetadataInterface': 'Symfony\Component\Validator\Mapping\MetadataInterface'
+        'Symfony\Component\Validator\PropertyMetadataInterface': 'Symfony\Component\Validator\Mapping\PropertyMetadataInterface'
+        'Symfony\Component\Validator\PropertyMetadataContainerInterface': 'Symfony\Component\Validator\Mapping\ClassMetadataInterface'
+        'Symfony\Component\Validator\ClassBasedInterface': 'Symfony\Component\Validator\Mapping\ClassMetadataInterface'
+        'Symfony\Component\Validator\Mapping\ElementMetadata': 'Symfony\Component\Validator\Mapping\GenericMetadata'
+        'Symfony\Component\Validator\ExecutionContextInterface': 'Symfony\Component\Validator\Context\ExecutionContextInterface'
+        'Symfony\Component\Validator\Mapping\ClassMetadataFactory': 'Symfony\Component\Validator\Mapping\Factory\LazyLoadingMetadataFactory'
+        'Symfony\Component\Validator\Mapping\MetadataFactoryInterface': 'Symfony\Component\Validator\Mapping\Factory\MetadataFactoryInterface'
+
+        # swift mailer
+        'Symfony\Bridge\Swiftmailer\DataCollector\MessageDataCollector': 'Symfony\Bundle\SwiftmailerBundle\DataCollector\MessageDataCollector'
