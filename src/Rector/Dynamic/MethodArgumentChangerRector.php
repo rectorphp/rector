@@ -9,7 +9,7 @@ use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\Rector\Dynamic\ArgumentWrapper\MethodChange;
 
-final class MethodArgumentChangerRector extends AbstractRector
+final class ArgumentReplacerRector extends AbstractRector
 {
     /**
      * @var MethodChange[]

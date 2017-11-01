@@ -1,6 +1,6 @@
 rectors:
     # dependency-injection
-    Rector\Rector\Dynamic\MethodArgumentChangerRector:
+    Rector\Rector\Dynamic\ArgumentReplacerRector:
         -
             class: Symfony\Component\DependencyInjection\ContainerBuilder
             method: addCompilerPass

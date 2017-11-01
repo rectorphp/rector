@@ -1,5 +1,5 @@
 rectors:
-    Rector\Rector\Dynamic\MethodArgumentChangerRector:
+    Rector\Rector\Dynamic\ArgumentReplacerRector:
         -
             class: Symfony\Component\DependencyInjection\ContainerBuilder
             method: compile
@@ -13,3 +13,11 @@ rectors:
             position: 2
             type: added
             default_value: 0
+
+        -
+            class: Symfony\Component\DependencyInjection\ContainerBuilder
+            method: setScope
+            position: 1
+            type: added # drop this, just 'old' => 'new'; check usage in configs!
+            # use replace table, not only one change for all
+            default_value: false
