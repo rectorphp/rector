@@ -10,6 +10,12 @@ rectors:
                     # added default value
                     ~: 0
 
+        'Doctrine\ORM\Persisters\Entity\AbstractEntityInheritancePersister':
+            'getSelectJoinColumnSQL':
+                4:
+                    # remove completely
+                    ~: ~
+
 #        -
 #            class: Symfony\Component\DependencyInjection\ContainerBuilder
 #            method: setScope

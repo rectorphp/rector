@@ -5,6 +5,8 @@ namespace Rector\Rector\Dynamic;
 use PhpParser\BuilderHelpers;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Stmt\ClassMethod;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
 
@@ -49,8 +51,6 @@ final class ArgumentReplacerRector extends AbstractRector
             }
         }
 
-        // @todo: other types
-
         return false;
     }
 
@@ -62,11 +62,13 @@ final class ArgumentReplacerRector extends AbstractRector
         $arguments = $methodCallNode->args;
 
         foreach ($this->activeArgumentChangesByPosition as $position => $argumentChange) {
-            if (count($arguments) < $position + 1) {
-                $key = key($argumentChange);
-                $value = array_shift($argumentChange);
+            $key = key($argumentChange);
+            $value = array_shift($argumentChange);
 
-                if ($key === '~') { // new default value
+            if ($key === '~') {
+                if ($value === '~') { // remove argument
+                    unset($arguments[$position]);
+                } else { // new default value
                     $arguments[$position] = BuilderHelpers::normalizeValue($value);
                 }
             }
@@ -82,7 +84,11 @@ final class ArgumentReplacerRector extends AbstractRector
      */
     private function matchArgumentChanges(Node $node): ?array
     {
-        if (! $node instanceof MethodCall) {
+//        if (! $node instanceof MethodCall) {
+//            return null;
+//        }
+
+        if (! $node instanceof ClassMethod && ! $node instanceof MethodCall && ! $node instanceof StaticCall) {
             return null;
         }
 

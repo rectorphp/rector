@@ -207,7 +207,7 @@ You can:
                     'code': 'string'
     ```
 
-- **remove unused argument** (@todo consider mergin with `ArgumentReplacerRector`)
+- **remove unused argument** (@todo consider d with `ArgumentReplacerRector`)
 
     ```yml
     rectors:
