@@ -52,40 +52,40 @@ final class ArgumentReplacerRector extends AbstractRector
             return false;
         }
 
-        /** @var MethodCall $node */
-        foreach ($this->activeArgumentChangesByPosition as $position => $argumentChange) {
-            $argumentOrParameterCount = $this->countArgumentsOrParameters($node);
-            if ($argumentOrParameterCount < $position + 1) {
-                return true;
-            }
-        }
+//        /** @var MethodCall $node */
+//        foreach ($this->activeArgumentChangesByPosition as $position => $argumentChange) {
+//            $argumentOrParameterCount = $this->countArgumentsOrParameters($node);
+//            if ($argumentOrParameterCount < $position + 1) {
+//                return true;
+//            }
+//        }
 
-        return false;
+        return true;
     }
 
     /**
-     * @param MethodCall $methodCallNode
+     * @param MethodCall|StaticCall|ClassMethod $node
      */
-    public function refactor(Node $methodCallNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        $arguments = $methodCallNode->args;
+        $argumentsOrParameters = $this->getNodeArgumentsOrParameters($node);
 
         foreach ($this->activeArgumentChangesByPosition as $position => $argumentChange) {
             $key = key($argumentChange);
             $value = array_shift($argumentChange);
 
             if ($key === '~') {
-                if ($value === '~') { // remove argument
-                    unset($arguments[$position]);
+                if ($value === null) { // remove argument
+                    unset($argumentsOrParameters[$position]);
                 } else { // new default value
-                    $arguments[$position] = BuilderHelpers::normalizeValue($value);
+                    $argumentsOrParameters[$position] = BuilderHelpers::normalizeValue($value);
                 }
             }
         }
 
-        $methodCallNode->args = $arguments;
+        $this->setNodeArugmentsOrParameters($node, $argumentsOrParameters);
 
-        return $methodCallNode;
+        return $node;
     }
 
     /**
@@ -111,16 +111,32 @@ final class ArgumentReplacerRector extends AbstractRector
         return null;
     }
 
-    private function countArgumentsOrParameters(Node $node): int
+    /**
+     * @return mixed[]
+     */
+    private function getNodeArgumentsOrParameters(Node $node): array
     {
         if ($node instanceof MethodCall || $node instanceof StaticCall) {
-            return count($node->args);
+            return $node->args;
         }
 
         if ($node instanceof ClassMethod) {
-            return count($node->params);
+            return $node->params;
+        }
+    }
+
+    /**
+     * @param MethodCall|StaticCall|ClassMethod $node
+     * @param mixed[] $argumentsOrParameters
+     */
+    private function setNodeArugmentsOrParameters(Node $node, array $argumentsOrParameters): void
+    {
+        if ($node instanceof MethodCall || $node instanceof StaticCall) {
+            $node->args = $argumentsOrParameters;
         }
 
-        return 0;
+        if ($node instanceof ClassMethod) {
+            $node->params = $argumentsOrParameters;
+        }
     }
 }
