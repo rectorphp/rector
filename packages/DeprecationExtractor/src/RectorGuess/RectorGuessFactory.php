@@ -3,8 +3,8 @@
 namespace Rector\DeprecationExtractor\RectorGuess;
 
 use PhpParser\Node;
-use Rector\Rector\Dynamic\ClassReplacerRector;
 use Rector\Rector\Dynamic\ArgumentReplacerRector;
+use Rector\Rector\Dynamic\ClassReplacerRector;
 use Rector\Rector\Dynamic\MethodNameReplacerRector;
 
 final class RectorGuessFactory

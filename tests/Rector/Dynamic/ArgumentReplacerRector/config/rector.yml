@@ -1,23 +1,19 @@
 rectors:
     Rector\Rector\Dynamic\ArgumentReplacerRector:
-        -
-            class: Symfony\Component\DependencyInjection\ContainerBuilder
-            method: compile
-            position: 0
-            type: added
-            default_value: false
+        'Symfony\Component\DependencyInjection\ContainerBuilder':
+            'compile':
+                0:
+                    # added default value
+                    ~: false
+            'addCompilerPass':
+                2:
+                    # added default value
+                    ~: 0
 
-        -
-            class: Symfony\Component\DependencyInjection\ContainerBuilder
-            method: addCompilerPass
-            position: 2
-            type: added
-            default_value: 0
-
-        -
-            class: Symfony\Component\DependencyInjection\ContainerBuilder
-            method: setScope
-            position: 1
-            type: added # drop this, just 'old' => 'new'; check usage in configs!
-            # use replace table, not only one change for all
-            default_value: false
+#        -
+#            class: Symfony\Component\DependencyInjection\ContainerBuilder
+#            method: setScope
+#            position: 1
+#            type: added # drop this, just 'old' => 'new'; check usage in configs!
+#            # use replace table, not only one change for all
+#            default_value: false

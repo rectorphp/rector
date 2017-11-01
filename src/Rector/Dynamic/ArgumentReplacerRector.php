@@ -7,14 +7,13 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
-use Rector\Rector\Dynamic\ArgumentWrapper\MethodChange;
 
 final class ArgumentReplacerRector extends AbstractRector
 {
     /**
-     * @var MethodChange[]
+     * @var mixed[]
      */
-    private $methodChanges = [];
+    private $argumentChangesMethodAndClass = [];
 
     /**
      * @var MethodCallAnalyzer
@@ -22,34 +21,30 @@ final class ArgumentReplacerRector extends AbstractRector
     private $methodCallAnalyzer;
 
     /**
-     * @var MethodChange|null
+     * @var mixed[]|null
      */
-    private $activeMethodChange;
+    private $activeArgumentChangesByPosition;
 
     /**
-     * @param mixed[] $methodChanges
+     * @param mixed[] $argumentChangesByMethodAndType
      */
-    public function __construct(array $methodChanges, MethodCallAnalyzer $methodCallAnalyzer)
+    public function __construct(array $argumentChangesByMethodAndType, MethodCallAnalyzer $methodCallAnalyzer)
     {
-        foreach ($methodChanges as $methodChange) {
-            $this->methodChanges[] = MethodChange::createFromMethodChange($methodChange);
-        }
-
+        $this->argumentChangesMethodAndClass = $argumentChangesByMethodAndType;
         $this->methodCallAnalyzer = $methodCallAnalyzer;
     }
 
     public function isCandidate(Node $node): bool
     {
-        $this->activeMethodChange = $this->resolveMethodChangeForNode($node);
-        if ($this->activeMethodChange === null) {
+        $this->activeArgumentChangesByPosition = $this->matchArgumentChanges($node);
+        if ($this->activeArgumentChangesByPosition === null) {
             return false;
         }
 
         /** @var MethodCall $node */
-        if ($this->activeMethodChange->getType() === MethodChange::TYPE_ADDED) {
+        foreach ($this->activeArgumentChangesByPosition as $position => $argumentChange) {
             $argumentCount = count($node->args);
-
-            if ($argumentCount < $this->activeMethodChange->getPosition() + 1) {
+            if ($argumentCount < $position + 1) {
                 return true;
             }
         }
@@ -66,43 +61,38 @@ final class ArgumentReplacerRector extends AbstractRector
     {
         $arguments = $methodCallNode->args;
 
-        if ($this->activeMethodChange->getType() === MethodChange::TYPE_ADDED) {
-            if (count($arguments) < $this->activeMethodChange->getPosition() + 1) {
-                $defaultValue = $this->activeMethodChange->getDefaultValue();
-                $defaultValueNode = BuilderHelpers::normalizeValue($defaultValue);
+        foreach ($this->activeArgumentChangesByPosition as $position => $argumentChange) {
+            if (count($arguments) < $position + 1) {
+                $key = key($argumentChange);
+                $value = array_shift($argumentChange);
 
-                $arguments[$this->activeMethodChange->getPosition()] = $defaultValueNode;
+                if ($key === '~') { // new default value
+                    $arguments[$position] = BuilderHelpers::normalizeValue($value);
+                }
             }
         }
-
-        // @todo: other types
 
         $methodCallNode->args = $arguments;
 
         return $methodCallNode;
     }
 
-    private function resolveMethodChangeForNode(Node $node): ?MethodChange
+    /**
+     * @return mixed[]|null
+     */
+    private function matchArgumentChanges(Node $node): ?array
     {
         if (! $node instanceof MethodCall) {
             return null;
         }
 
-        foreach ($this->methodChanges as $methodChange) {
-            if ($this->matchesMethodChange($node, $methodChange)) {
-                return $methodChange;
+        foreach ($this->argumentChangesMethodAndClass as $type => $argumentChangesByMethod) {
+            $methods = array_keys($argumentChangesByMethod);
+            if ($this->methodCallAnalyzer->isTypeAndMethods($node, $type, $methods)) {
+                return $argumentChangesByMethod[$node->name->toString()];
             }
         }
 
         return null;
-    }
-
-    private function matchesMethodChange(Node $node, MethodChange $methodChange): bool
-    {
-        return $this->methodCallAnalyzer->isTypeAndMethod(
-            $node,
-            $methodChange->getClass(),
-            $methodChange->getMethod()
-        );
     }
 }

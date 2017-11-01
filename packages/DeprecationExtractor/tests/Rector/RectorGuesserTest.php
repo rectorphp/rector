@@ -6,8 +6,8 @@ use PhpParser\Node\Stmt\Nop;
 use Rector\DeprecationExtractor\Deprecation\Deprecation;
 use Rector\DeprecationExtractor\Rector\RectorGuesser;
 use Rector\DeprecationExtractor\RectorGuess\RectorGuess;
-use Rector\Rector\Dynamic\ClassReplacerRector;
 use Rector\Rector\Dynamic\ArgumentReplacerRector;
+use Rector\Rector\Dynamic\ClassReplacerRector;
 use Rector\Rector\Dynamic\MethodNameReplacerRector;
 use Rector\Tests\AbstractContainerAwareTestCase;
 
