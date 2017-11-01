@@ -258,7 +258,7 @@ Just follow 3 rules:
 We would be happy to merge your feature then.
 
 
-### How to use on PHP < 7.1
+### How to use on PHP < 7.1 on Incompatible Composer Dependencies
 
 You must have separated environment with PHP 7.1 (for example in Docker container). When you have it then run following command:
 
