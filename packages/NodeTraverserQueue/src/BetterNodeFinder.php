@@ -76,4 +76,12 @@ final class BetterNodeFinder
     {
         return $this->nodeFinder->find($nodes, $filter);
     }
+
+    /**
+     * @param Node|Node[] $nodes
+     */
+    public function findFirst($nodes, callable $filter): ?Node
+    {
+        return $this->nodeFinder->findFirst($nodes, $filter);
+    }
 }

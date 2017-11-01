@@ -70,12 +70,24 @@ final class CallerTypeResolver extends NodeVisitorAbstract
 
     private function processMethodCallNode(MethodCall $methodCallNode): void
     {
-        $node = $this->betterNodeFinder->findFirstInstanceOfAny(
+        $callerNode = $this->betterNodeFinder->findFirst(
             $methodCallNode,
-            [Variable::class, PropertyFetch::class]
+            function (Node $node) use ($methodCallNode) {
+                if ($node instanceof Variable || $node instanceof PropertyFetch /* || $node instanceof MethodCall*/) {
+                    return $node;
+                }
+
+                if ($node === $methodCallNode) {
+                    return null;
+                }
+            }
         );
 
-        $nodeTypes = (array) $node->getAttribute(Attribute::TYPES);
+        if ($callerNode === null) {
+            return;
+        }
+
+        $nodeTypes = (array) $callerNode->getAttribute(Attribute::TYPES);
         if ($nodeTypes) {
             $methodCallNode->setAttribute(Attribute::CALLER_TYPES, $nodeTypes);
         }
