@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\NodeAnalyzer\ClassMethodAnalyzer;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
+use Rector\NodeAnalyzer\StaticMethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
 
 final class ArgumentReplacerRector extends AbstractRector
@@ -31,6 +32,10 @@ final class ArgumentReplacerRector extends AbstractRector
      * @var ClassMethodAnalyzer
      */
     private $classMethodAnalyzer;
+    /**
+     * @var StaticMethodCallAnalyzer
+     */
+    private $staticMethodCallAnalyzer;
 
     /**
      * @param mixed[] $argumentChangesByMethodAndType
@@ -38,11 +43,13 @@ final class ArgumentReplacerRector extends AbstractRector
     public function __construct(
         array $argumentChangesByMethodAndType,
         MethodCallAnalyzer $methodCallAnalyzer,
-        ClassMethodAnalyzer $classMethodAnalyzer
+        ClassMethodAnalyzer $classMethodAnalyzer,
+        StaticMethodCallAnalyzer $staticMethodCallAnalyzer
     ) {
         $this->argumentChangesMethodAndClass = $argumentChangesByMethodAndType;
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->classMethodAnalyzer = $classMethodAnalyzer;
+        $this->staticMethodCallAnalyzer = $staticMethodCallAnalyzer;
     }
 
     public function isCandidate(Node $node): bool
@@ -100,6 +107,10 @@ final class ArgumentReplacerRector extends AbstractRector
         foreach ($this->argumentChangesMethodAndClass as $type => $argumentChangesByMethod) {
             $methods = array_keys($argumentChangesByMethod);
             if ($this->methodCallAnalyzer->isTypeAndMethods($node, $type, $methods)) {
+                return $argumentChangesByMethod[$node->name->toString()];
+            }
+
+            if ($this->staticMethodCallAnalyzer->isTypeAndMethods($node, $type, $methods)) {
                 return $argumentChangesByMethod[$node->name->toString()];
             }
 

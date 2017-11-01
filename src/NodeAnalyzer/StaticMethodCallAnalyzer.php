@@ -85,7 +85,10 @@ final class StaticMethodCallAnalyzer
     private function resolveNodeType(StaticCall $staticCallNode): ?string
     {
         if ($staticCallNode->class instanceof Name) {
-            return $staticCallNode->class->toString();
+            $class = $staticCallNode->class->toString();
+            if ($class === 'parent') {
+                return $staticCallNode->class->getAttribute(Attribute::PARENT_CLASS_NAME);
+            }
         }
 
         if ($staticCallNode->class instanceof Variable) {
