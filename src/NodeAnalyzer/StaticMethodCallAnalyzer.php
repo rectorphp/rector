@@ -4,7 +4,6 @@ namespace Rector\NodeAnalyzer;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use Rector\Node\Attribute;
@@ -79,22 +78,8 @@ final class StaticMethodCallAnalyzer
             return false;
         }
 
-        return $this->resolveNodeType($node) === $type;
-    }
+        $callerTypes = (array) $node->getAttribute(Attribute::CALLER_TYPES);
 
-    private function resolveNodeType(StaticCall $staticCallNode): ?string
-    {
-        if ($staticCallNode->class instanceof Name) {
-            $class = $staticCallNode->class->toString();
-            if ($class === 'parent') {
-                return $staticCallNode->class->getAttribute(Attribute::PARENT_CLASS_NAME);
-            }
-        }
-
-        if ($staticCallNode->class instanceof Variable) {
-            return $staticCallNode->class->getAttribute(Attribute::CLASS_NAME);
-        }
-
-        return null;
+        return in_array($type, $callerTypes, true);
     }
 }

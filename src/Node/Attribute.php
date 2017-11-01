@@ -101,4 +101,9 @@ final class Attribute
      * @var string
      */
     public const RETURN_TYPES = 'returnTypes';
+
+    /**
+     * @var string
+     */
+    public const CALLER_TYPES = 'callerTypes';
 }

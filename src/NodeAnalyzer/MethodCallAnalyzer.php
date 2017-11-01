@@ -186,28 +186,28 @@ final class MethodCallAnalyzer
      */
     private function resolveVariableTypes(MethodCall $methodCallNode): array
     {
-        $methodCallNode->getAttribute(Attribute::RETURN_TYPES);
+//        $methodCallNode->getAttribute(Attribute::RETURN_TYPES);
 
-        $parentNode = $methodCallNode->getAttribute(Attribute::PARENT_NODE);
+//        $parentNode = $methodCallNode->getAttribute(Attribute::PARENT_NODE);
 
-        if ($parentNode instanceof MethodCall && $parentNode->var instanceof MethodCall) {
-            // resolve return type type
-            // @todo: consider Attribute::RETURN_TYPES for MethodCall and StaticCall types
-
-            $nodeVarTypes = $parentNode->var->var->getAttribute(Attribute::TYPES);
-            $nodeVarType = array_shift($nodeVarTypes);
-
-            $methodName = $parentNode->var->name->toString(); // method
-            $methodReturnType = $this->methodReflector->getMethodReturnType($nodeVarType, $methodName);
-
-            if ($methodReturnType) {
-                return [$methodReturnType];
-            }
-        }
+//        if ($parentNode instanceof MethodCall && $parentNode->var instanceof MethodCall) {
+//            // resolve return type type
+//            // @todo: consider Attribute::RETURN_TYPES for MethodCall and StaticCall types
+//
+//            $nodeVarTypes = $parentNode->var->var->getAttribute(Attribute::TYPES);
+//            $nodeVarType = array_shift($nodeVarTypes);
+//
+//            $methodName = $parentNode->var->name->toString(); // method
+//            $methodReturnType = $this->methodReflector->getMethodReturnType($nodeVarType, $methodName);
+//
+//            if ($methodReturnType) {
+//                return [$methodReturnType];
+//            }
+//        }
 
         $node = $this->betterNodeFinder->findFirstInstanceOfAny(
             $methodCallNode,
-            [PropertyFetch::class, Variable::class]
+            [Variable::class, PropertyFetch::class]
         );
 
         $nodeTypes = (array) $node->getAttribute(Attribute::TYPES);
