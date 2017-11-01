@@ -15,7 +15,5 @@ final class ReturnTypeResolver extends NodeVisitorAbstract
             return $node;
         }
 
-        dump($node);
-        die;
     }
 }

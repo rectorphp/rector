@@ -155,7 +155,7 @@ final class ArgumentReplacerRector extends AbstractRector
     }
 
     /**
-     * @param string[] $argumentChangesByMethod
+     * @param string[] $methods
      */
     private function isTypeAndMethods(Node $node, string $type, array $methods): bool
     {
