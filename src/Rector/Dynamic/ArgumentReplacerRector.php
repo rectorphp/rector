@@ -54,8 +54,8 @@ final class ArgumentReplacerRector extends AbstractRector
 
         /** @var MethodCall $node */
         foreach ($this->activeArgumentChangesByPosition as $position => $argumentChange) {
-            $argumentCount = count($node->args);
-            if ($argumentCount < $position + 1) {
+            $argumentOrParameterCount = $this->countArgumentsOrParameters($node);
+            if ($argumentOrParameterCount < $position + 1) {
                 return true;
             }
         }
@@ -109,5 +109,18 @@ final class ArgumentReplacerRector extends AbstractRector
         }
 
         return null;
+    }
+
+    private function countArgumentsOrParameters(Node $node): int
+    {
+        if ($node instanceof MethodCall || $node instanceof StaticCall) {
+            return count($node->args);
+        }
+
+        if ($node instanceof ClassMethod) {
+            return count($node->params);
+        }
+
+        return 0;
     }
 }
