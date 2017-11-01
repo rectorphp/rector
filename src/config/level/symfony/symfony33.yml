@@ -1,20 +1,20 @@
 rectors:
     # dependency-injection
     Rector\Rector\Dynamic\ArgumentReplacerRector:
-        -
-            class: Symfony\Component\DependencyInjection\ContainerBuilder
-            method: compile
-            position: 0
-            type: added
-            default_value: false
-
-        -
-            class: Symfony\Component\DependencyInjection\Compiler\ServiceReferenceGraph
-            method: connect
-            position: 6
-            type: added
-            default_value: false
-
+        'Symfony\Component\DependencyInjection\ContainerBuilder':
+            'compile':
+                0:
+                    # added default value
+                    ~: false
+            'addCompilerPass':
+                2:
+                    # added default value
+                    ~: 0
+        'Symfony\Component\DependencyInjection\Compiler\ServiceReferenceGraph':
+            'connect':
+                6:
+                    # added default value
+                    ~: false
 
     Rector\Rector\Contrib\Symfony\Console\ConsoleExceptionToErrorEventConstantRector: ~
 
