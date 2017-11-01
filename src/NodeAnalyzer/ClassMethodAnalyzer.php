@@ -35,5 +35,4 @@ final class ClassMethodAnalyzer
 
         return in_array($type, $nodeTypes, true);
     }
-
 }

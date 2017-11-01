@@ -19,16 +19,15 @@ final class Test extends AbstractConfigurableRectorTestCase
             __DIR__ . '/correct/correct2.php.inc'
         );
 
-//        $this->doTestFileMatchesExpectedContent(
-//            __DIR__ . '/wrong/wrong3.php.inc',
-//            __DIR__ . '/correct/correct3.php.inc'
-//        );
+        $this->doTestFileMatchesExpectedContent(
+            __DIR__ . '/wrong/wrong3.php.inc',
+            __DIR__ . '/correct/correct3.php.inc'
+        );
 
         $this->doTestFileMatchesExpectedContent(
             __DIR__ . '/wrong/wrong4.php.inc',
             __DIR__ . '/correct/correct4.php.inc'
         );
-
     }
 
     protected function provideConfig(): string

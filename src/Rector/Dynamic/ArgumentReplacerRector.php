@@ -28,10 +28,12 @@ final class ArgumentReplacerRector extends AbstractRector
      * @var mixed[]|null
      */
     private $activeArgumentChangesByPosition;
+
     /**
      * @var ClassMethodAnalyzer
      */
     private $classMethodAnalyzer;
+
     /**
      * @var StaticMethodCallAnalyzer
      */
