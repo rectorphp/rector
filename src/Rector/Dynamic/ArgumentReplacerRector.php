@@ -2,11 +2,15 @@
 
 namespace Rector\Rector\Dynamic;
 
+use Nette\Utils\Strings;
 use PhpParser\BuilderHelpers;
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\PrettyPrinter\Standard;
 use Rector\NodeAnalyzer\ClassMethodAnalyzer;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeAnalyzer\StaticMethodCallAnalyzer;
@@ -40,36 +44,32 @@ final class ArgumentReplacerRector extends AbstractRector
     private $staticMethodCallAnalyzer;
 
     /**
+     * @var Standard
+     */
+    private $standard;
+
+    /**
      * @param mixed[] $argumentChangesByMethodAndType
      */
     public function __construct(
         array $argumentChangesByMethodAndType,
         MethodCallAnalyzer $methodCallAnalyzer,
         ClassMethodAnalyzer $classMethodAnalyzer,
-        StaticMethodCallAnalyzer $staticMethodCallAnalyzer
+        StaticMethodCallAnalyzer $staticMethodCallAnalyzer,
+        Standard $standard
     ) {
         $this->argumentChangesMethodAndClass = $argumentChangesByMethodAndType;
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->classMethodAnalyzer = $classMethodAnalyzer;
         $this->staticMethodCallAnalyzer = $staticMethodCallAnalyzer;
+        $this->standard = $standard;
     }
 
     public function isCandidate(Node $node): bool
     {
         $this->activeArgumentChangesByPosition = $this->matchArgumentChanges($node);
-        if ($this->activeArgumentChangesByPosition === null) {
-            return false;
-        }
 
-//        /** @var MethodCall $node */
-//        foreach ($this->activeArgumentChangesByPosition as $position => $argumentChange) {
-//            $argumentOrParameterCount = $this->countArgumentsOrParameters($node);
-//            if ($argumentOrParameterCount < $position + 1) {
-//                return true;
-//            }
-//        }
-
-        return true;
+        return (bool) $this->activeArgumentChangesByPosition;
     }
 
     /**
@@ -87,6 +87,15 @@ final class ArgumentReplacerRector extends AbstractRector
                 if ($value === null) { // remove argument
                     unset($argumentsOrParameters[$position]);
                 } else { // new default value
+                    $argumentsOrParameters[$position] = BuilderHelpers::normalizeValue($value);
+                }
+            } else {
+                // replace old value with new one
+                $argumentsOrParameter = $argumentsOrParameters[$position];
+
+                // very dummy mechanism just for now
+                $currentValue = $this->standard->prettyPrint([$argumentsOrParameter]);
+                if (Strings::endsWith($key, $currentValue)) {
                     $argumentsOrParameters[$position] = BuilderHelpers::normalizeValue($value);
                 }
             }
@@ -112,20 +121,20 @@ final class ArgumentReplacerRector extends AbstractRector
                 return $argumentChangesByMethod[$node->name->toString()];
             }
 
-            if ($this->staticMethodCallAnalyzer->isTypeAndMethods($node, $type, $methods)) {
-                return $argumentChangesByMethod[$node->name->toString()];
-            }
-
-            if ($this->classMethodAnalyzer->isTypeAndMethods($node, $type, $methods)) {
-                return $argumentChangesByMethod[$node->name->toString()];
-            }
+//            if ($this->staticMethodCallAnalyzer->isTypeAndMethods($node, $type, $methods)) {
+//                return $argumentChangesByMethod[$node->name->toString()];
+//            }
+//
+//            if ($this->classMethodAnalyzer->isTypeAndMethods($node, $type, $methods)) {
+//                return $argumentChangesByMethod[$node->name->toString()];
+//            }
         }
 
         return null;
     }
 
     /**
-     * @return mixed[]
+     * @return Arg[]|Param[]
      */
     private function getNodeArgumentsOrParameters(Node $node): array
     {
