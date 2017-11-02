@@ -37,7 +37,6 @@ final class NestedMethodCallTest extends AbstractNodeTypeResolverTest
         );
     }
 
-
     public function testOnNestedDifferentMethodCall(): void
     {
         /** @var MethodCall[] $methodCallNodes */

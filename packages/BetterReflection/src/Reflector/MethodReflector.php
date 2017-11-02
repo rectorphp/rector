@@ -38,6 +38,7 @@ final class MethodReflector
 
     /**
      * @todo possibly cache, quite slow
+     * @return string[]
      */
     public function getMethodReturnTypes(string $class, string $methodCallName): array
     {
@@ -116,11 +117,16 @@ final class MethodReflector
         return [];
     }
 
-    private function completeParentClasses($types): array
+    /**
+     * @param string[] $types
+     * @return string[]
+     */
+    private function completeParentClasses(array $types): array
     {
         foreach ($types as $type) {
             $types = array_merge($types, $this->smartClassReflector->getClassParents($type));
         }
+
         return $types;
     }
 }
