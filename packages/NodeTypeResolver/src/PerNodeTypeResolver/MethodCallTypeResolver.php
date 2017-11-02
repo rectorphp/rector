@@ -108,8 +108,8 @@ final class MethodCallTypeResolver implements PerNodeTypeResolverInterface
         string $class,
         string $method
     ): array {
-        $variableType = $this->methodReflector->getMethodReturnTypes($class, $method);
-        if ($variableType === null) {
+        $variableTypes = $this->methodReflector->getMethodReturnTypes($class, $method);
+        if (! $variableTypes) {
             return [];
         }
 
@@ -118,8 +118,8 @@ final class MethodCallTypeResolver implements PerNodeTypeResolverInterface
             return [];
         }
 
-        $this->typeContext->addVariableWithTypes($variableName, [$variableType]);
+        $this->typeContext->addVariableWithTypes($variableName, $variableTypes);
 
-        return [$variableType];
+        return $variableTypes;
     }
 }
