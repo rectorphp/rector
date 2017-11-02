@@ -4,6 +4,7 @@ namespace Rector\NodeTypeResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
@@ -92,8 +93,8 @@ final class NodeCallerTypeResolver
             return $this->resolverMethodCallReturnTypes($node->var);
         }
 
-        if ($node->var instanceof Variable) {
-            return $node->var->getAttribute(Attribute::TYPES);
+        if ($node->var instanceof Variable || $node->var instanceof PropertyFetch) {
+            return (array) $node->var->getAttribute(Attribute::TYPES);
         }
 
         /** @var string[] $callerNodeTypes */

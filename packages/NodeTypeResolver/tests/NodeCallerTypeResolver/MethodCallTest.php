@@ -6,6 +6,9 @@ use PhpParser\Node\Expr\MethodCall;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Tests\AbstractNodeTypeResolverTest;
 
+/**
+ * @todo split to NestedMethodCallTest
+ */
 final class MethodCallTest extends AbstractNodeTypeResolverTest
 {
     public function testOnNestedDifferentMethodCall(): void
@@ -110,6 +113,6 @@ final class MethodCallTest extends AbstractNodeTypeResolverTest
             MethodCall::class
         );
 
-        $this->doTestAttributeEquals($methodCallNodes[0], Attribute::CALLER_TYPES, ['Nette\DI\Container']);
+        $this->doTestAttributeEquals($methodCallNodes[0], Attribute::CALLER_TYPES, ['Nette\Config\Configurator']);
     }
 }
