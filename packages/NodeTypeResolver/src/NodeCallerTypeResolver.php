@@ -136,16 +136,14 @@ final class NodeCallerTypeResolver
             return $this->resolverMethodCallReturnTypes($node);
         }
 
-
         $callerNodeTypes = $node->var->getAttribute(Attribute::TYPES);
-
         $callerNodeType = array_shift($callerNodeTypes);
 
         $methodName = $node->name->toString();
         $callerReturnType = $this->methodReflector->getMethodReturnType($callerNodeType, $methodName);
 
         if ($callerReturnType) {
-            return $callerReturnType;
+            return [$callerReturnType];
         }
 
         return [];

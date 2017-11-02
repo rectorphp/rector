@@ -17,7 +17,7 @@ use Rector\NodeTypeResolver\NodeCallerTypeResolver;
  * - $this->{getThis()}->callMe()
  * - {new John}->callMe()
  */
-final class CallerTypeResolver extends NodeVisitorAbstract
+final class CallerTypeNodeVisitor extends NodeVisitorAbstract
 {
     /**
      * @var NodeCallerTypeResolver
