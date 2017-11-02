@@ -38,7 +38,10 @@ abstract class AbstractRectorTestCase extends TestCase
             $this->getRectorClasses()
         );
 
-        $this->assertStringEqualsFile($reconstructedFile, $reconstructedFileContent);
+        $this->assertStringEqualsFile($reconstructedFile, $reconstructedFileContent, sprintf(
+            'Original file "%s" did not match the result.',
+            $file
+        ));
     }
 
     /**
