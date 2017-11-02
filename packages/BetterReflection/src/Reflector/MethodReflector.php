@@ -62,6 +62,9 @@ final class MethodReflector
         }
 
         $type = $types[0];
+        if ($type === null) { // @todo: resolve, some edge case
+            return [];
+        }
 
         $returnType = $this->getMethodReturnType($type, $method);
         if ($returnType === $type) { // self/static
