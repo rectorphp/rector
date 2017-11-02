@@ -56,4 +56,25 @@ final class MethodReflector
 
         return null;
     }
+
+    /**
+     * @param string[] $types
+     * @return string[]
+     */
+    public function resolveReturnTypesForTypesAndMethod(array $types, string $method): array
+    {
+        if (! count($types)) {
+            return [];
+        }
+
+        $type = $types[0];
+
+        $returnType = $this->getMethodReturnType($type, $method);
+
+        if ($returnType === 'self') {
+            return $types;
+        }
+
+        return [$returnType];
+    }
 }

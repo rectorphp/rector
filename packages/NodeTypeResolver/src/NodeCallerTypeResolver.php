@@ -77,31 +77,19 @@ final class NodeCallerTypeResolver
     {
         if ($node->var instanceof MethodCall) {
             return $this->resolverMethodCallReturnTypes($node->var);
+//            $parentReturnTypes = $this->resolverMethodCallReturnTypes($node->var);
+//            dump($node->var->name);
+//            die;
         }
 
         if ($node->var instanceof Variable) {
             return $node->var->getAttribute(Attribute::TYPES);
         }
 
-        /** @var string[]|null $callerNodeTypes */
-        $callerNodeTypes = $node->var->getAttribute(Attribute::TYPES);
-        $callerNodeType = $callerNodeTypes[0] ?? null;
-
+        /** @var string[] $callerNodeTypes */
+        $callerNodeTypes = (array) $node->var->getAttribute(Attribute::TYPES);
         $methodName = $node->name->toString();
 
-        if (! $callerNodeType || ! $methodName) {
-            return [];
-        }
-
-        $callerReturnType = $this->methodReflector->getMethodReturnType($callerNodeType, $methodName);
-        if ($callerReturnType) {
-            if ($callerReturnType === 'self') {
-                return $callerNodeTypes;
-            }
-
-            return [$callerReturnType];
-        }
-
-        return [];
+        return $this->methodReflector->resolveReturnTypesForTypesAndMethod($callerNodeTypes, $methodName);
     }
 }
