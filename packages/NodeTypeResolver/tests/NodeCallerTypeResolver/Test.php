@@ -10,22 +10,31 @@ final class Test extends AbstractNodeTypeResolverTest
 {
     public function testOnMethodCall(): void
     {
-        $methodCallNodes = $this->getNodesForFileOfType(__DIR__ . '/Source/OnMethodCallCall.php.inc', MethodCall::class);
+        $methodCallNodes = $this->getNodesForFileOfType(
+            __DIR__ . '/Source/OnMethodCallCall.php.inc',
+            MethodCall::class
+        );
 
         $this->doTestAttributeEquals($methodCallNodes[0], Attribute::CALLER_TYPES, ['Nette\DI\Container']);
     }
 
-//    public function testOnVariableCall(): void
-//    {
-//        $methodCallNodes = $this->getNodesForFileOfType(__DIR__ . '/Source/OnVariableCall.php.inc', MethodCall::class);
-//
-//        $this->doTestAttributeEquals($methodCallNodes[0], Attribute::CALLER_TYPES, ['Nette\DI\Container']);
-//    }
-//
-//    public function testOnPropertyCall(): void
-//    {
-//        $methodCallNodes = $this->getNodesForFileOfType(__DIR__ . '/Source/OnPropertyCall.php.inc', MethodCall::class);
-//
-//        $this->doTestAttributeEquals($methodCallNodes[0], Attribute::CALLER_TYPES, ['Nette\DI\Container']);
-//    }
+    public function testOnVariableCall(): void
+    {
+        $methodCallNodes = $this->getNodesForFileOfType(
+            __DIR__ . '/Source/OnVariableCall.php.inc',
+            MethodCall::class
+        );
+
+        $this->doTestAttributeEquals($methodCallNodes[0], Attribute::CALLER_TYPES, ['Nette\DI\Container']);
+    }
+
+    public function testOnPropertyCall(): void
+    {
+        $methodCallNodes = $this->getNodesForFileOfType(
+            __DIR__ . '/Source/OnPropertyCall.php.inc',
+            MethodCall::class
+        );
+
+        $this->doTestAttributeEquals($methodCallNodes[0], Attribute::CALLER_TYPES, ['Nette\DI\Container']);
+    }
 }

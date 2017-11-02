@@ -48,6 +48,9 @@ abstract class AbstractNodeTypeResolverTest extends AbstractContainerAwareTestCa
         return $newStmts;
     }
 
+    /**
+     * @param mixed[] $expectedContent
+     */
     protected function doTestAttributeEquals(Node $node, string $attribute, array $expectedContent): void
     {
         $this->assertSame($expectedContent, $node->getAttribute($attribute));
