@@ -237,6 +237,26 @@ final class MyRector extends AbstractRector
 6. :+1:
 
 
+
+### Coding Standards are Outsourced
+
+
+This package has no intention in formating your code, as it **coding standard tools handle this much better**.
+
+We prefer [EasyCodingStandard](https://github.com/Symplify/EasyCodingStandard):
+
+
+```php
+# check
+vendor/bin/ecs check --config vendor/rector/rector/ecs-after-rector.neon
+# fix
+vendor/bin/ecs check --config vendor/rector/rector/ecs-after-rector.neon --fix
+```
+
+but you can use any other with [this setup](/ecs-after-rector.neon).
+
+
+
 ### Advanced Operations
 
 - [Service Name to Type Provider](/docs/ServiceNameToTypeProvider.md)
