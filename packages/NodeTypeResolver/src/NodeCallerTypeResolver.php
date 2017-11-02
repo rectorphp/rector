@@ -79,6 +79,10 @@ final class NodeCallerTypeResolver
             return $this->resolverMethodCallReturnTypes($node->var);
         }
 
+        if ($node->var instanceof Variable) {
+            return $node->var->getAttribute(Attribute::TYPES);
+        }
+
         $callerNodeTypes = $node->var->getAttribute(Attribute::TYPES);
         $callerNodeType = $callerNodeTypes[0] ?? null;
 

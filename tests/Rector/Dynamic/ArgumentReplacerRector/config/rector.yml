@@ -1,20 +1,20 @@
 rectors:
     Rector\Rector\Dynamic\ArgumentReplacerRector:
-#        'Symfony\Component\DependencyInjection\ContainerBuilder':
-#            'compile':
-#                0:
-#                    # added default value
-#                    ~: false
-#            'addCompilerPass':
-#                2:
-#                    # added default value
-#                    ~: 0
-#
-#        'Doctrine\ORM\Persisters\Entity\AbstractEntityInheritancePersister':
-#            'getSelectJoinColumnSQL':
-#                4:
-#                    # remove completely
-#                    ~: ~
+        'Symfony\Component\DependencyInjection\ContainerBuilder':
+            'compile':
+                0:
+                    # added default value
+                    ~: false
+            'addCompilerPass':
+                2:
+                    # added default value
+                    ~: 0
+
+        'Doctrine\ORM\Persisters\Entity\AbstractEntityInheritancePersister':
+            'getSelectJoinColumnSQL':
+                4:
+                    # remove completely
+                    ~: ~
 
         'Symfony\Component\DependencyInjection\Definition':
             'setScope':
