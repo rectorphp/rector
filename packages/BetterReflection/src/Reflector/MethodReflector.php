@@ -36,6 +36,9 @@ final class MethodReflector
         return $classReflection->getImmediateMethods()[$method] ?? null;
     }
 
+    /**
+     * @todo possibly cache, quite slow
+     */
     public function getMethodReturnTypes(string $class, string $methodCallName): array
     {
         $methodReflection = $this->reflectClassMethod($class, $methodCallName);
