@@ -20,4 +20,4 @@ rectors:
             'setScope':
                 0:
                     # replace by new value
-                    'Symfony\Component\DependencyInjection\ContainerBuilder\ContainerBuilder::SCOPE_PROTOTYPE': false
+                    'Symfony\Component\DependencyInjection\ContainerBuilder::SCOPE_PROTOTYPE': false

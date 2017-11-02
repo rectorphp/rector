@@ -2,7 +2,6 @@
 
 namespace Rector\Rector\Dynamic;
 
-use Nette\Utils\Strings;
 use PhpParser\BuilderHelpers;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
@@ -10,10 +9,10 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\PrettyPrinter\Standard;
 use Rector\NodeAnalyzer\ClassMethodAnalyzer;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeAnalyzer\StaticMethodCallAnalyzer;
+use Rector\NodeValueResolver\NodeValueResolver;
 use Rector\Rector\AbstractRector;
 
 final class ArgumentReplacerRector extends AbstractRector
@@ -44,9 +43,9 @@ final class ArgumentReplacerRector extends AbstractRector
     private $staticMethodCallAnalyzer;
 
     /**
-     * @var Standard
+     * @var NodeValueResolver
      */
-    private $standard;
+    private $nodeValueResolver;
 
     /**
      * @param mixed[] $argumentChangesByMethodAndType
@@ -56,13 +55,13 @@ final class ArgumentReplacerRector extends AbstractRector
         MethodCallAnalyzer $methodCallAnalyzer,
         ClassMethodAnalyzer $classMethodAnalyzer,
         StaticMethodCallAnalyzer $staticMethodCallAnalyzer,
-        Standard $standard
+        NodeValueResolver $nodeValueResolver
     ) {
         $this->argumentChangesMethodAndClass = $argumentChangesByMethodAndType;
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->classMethodAnalyzer = $classMethodAnalyzer;
         $this->staticMethodCallAnalyzer = $staticMethodCallAnalyzer;
-        $this->standard = $standard;
+        $this->nodeValueResolver = $nodeValueResolver;
     }
 
     public function isCandidate(Node $node): bool
@@ -93,9 +92,9 @@ final class ArgumentReplacerRector extends AbstractRector
                 // replace old value with new one
                 $argumentsOrParameter = $argumentsOrParameters[$position];
 
-                // very dummy mechanism just for now
-                $currentValue = $this->standard->prettyPrint([$argumentsOrParameter]);
-                if (Strings::endsWith($key, $currentValue)) {
+                $resolvedValue = $this->nodeValueResolver->resolve($argumentsOrParameter->value);
+
+                if ($resolvedValue === $key) {
                     $argumentsOrParameters[$position] = BuilderHelpers::normalizeValue($value);
                 }
             }
