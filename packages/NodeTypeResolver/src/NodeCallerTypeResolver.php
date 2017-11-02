@@ -80,7 +80,7 @@ final class NodeCallerTypeResolver
         }
 
         $callerNodeTypes = $node->var->getAttribute(Attribute::TYPES);
-        $callerNodeType = $callerNodeTypes[0] ?? '';
+        $callerNodeType = $callerNodeTypes[0] ?? null;
 
         $methodName = $node->name->toString();
 

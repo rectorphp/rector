@@ -8,6 +8,20 @@ use Rector\NodeTypeResolver\Tests\AbstractNodeTypeResolverTest;
 
 final class MethodCallTest extends AbstractNodeTypeResolverTest
 {
+    public function testOnNestedMethodCall(): void
+    {
+        $methodCallNodes = $this->getNodesForFileOfType(
+            __DIR__ . '/MethodCallSource/NestedMethodCalls.php.inc',
+            MethodCall::class
+        );
+
+        $this->assertCount(3, $methodCallNodes);
+
+        $this->doTestAttributeEquals($methodCallNodes[0], Attribute::CALLER_TYPES, ['Nette\DI\Container']);
+        $this->doTestAttributeEquals($methodCallNodes[1], Attribute::CALLER_TYPES, ['Nette\DI\Container']);
+        $this->doTestAttributeEquals($methodCallNodes[2], Attribute::CALLER_TYPES, ['Nette\DI\Container']);
+    }
+
     public function testOnSelfCall(): void
     {
         $methodCallNodes = $this->getNodesForFileOfType(
