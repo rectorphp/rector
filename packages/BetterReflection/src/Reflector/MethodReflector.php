@@ -36,16 +36,16 @@ final class MethodReflector
         return $classReflection->getImmediateMethods()[$method] ?? null;
     }
 
-    public function getMethodReturnType(string $class, string $methodCallName): ?string
+    public function getMethodReturnTypes(string $class, string $methodCallName): array
     {
         $methodReflection = $this->reflectClassMethod($class, $methodCallName);
         if (! $methodReflection) {
-            return null;
+            return [];
         }
 
         $returnType = $methodReflection->getReturnType();
         if ($returnType) {
-            return (string) $returnType;
+            return [(string) $returnType];
         }
 
         return $this->resolveDocBlockReturnTypes($class, $methodReflection->getDocBlockReturnTypes());
@@ -61,48 +61,63 @@ final class MethodReflector
             return [];
         }
 
-        $returnType = $this->resolveFirstMatchingTypeAndMethod($types, $method);
-        if ($returnType === $types[0]) { // self/static
+        $returnTypes = $this->resolveFirstMatchingTypeAndMethod($types, $method);
+        if (! $returnTypes) {
+            return [];
+        }
+
+        if ($returnTypes[0] === $types[0]) { // self/static
             return $types;
         }
 
-        return $returnType ? [$returnType] : [];
+        return $returnTypes;
     }
 
     /**
      * @param string[]|Type[] $returnTypes
+     * @return string[]
      */
-    private function resolveDocBlockReturnTypes(string $class, array $returnTypes): ?string
+    private function resolveDocBlockReturnTypes(string $class, array $returnTypes): array
     {
         if (! isset($returnTypes[0])) {
-            return null;
+            return [];
         }
 
-        // @todo: improve for multi types
-        if ($returnTypes[0] instanceof Object_) {
-            return ltrim((string) $returnTypes[0]->getFqsen(), '\\');
+        $types = [];
+        foreach ($returnTypes as $returnType) {
+            if ($returnType instanceof Object_) {
+                $types[] = ltrim((string) $returnType->getFqsen(), '\\');
+            }
+
+            if ($returnTypes instanceof Static_ || $returnTypes instanceof Self_) {
+                $types[] = $class;
+            }
         }
 
-        if ($returnTypes[0] instanceof Static_ || $returnTypes[0] instanceof Self_) {
-            return $class;
-        }
-
-        return null;
+        return $this->completeParentClasses($types);
     }
 
     /**
      * @param string[] $types
+     * @return string[]
      */
-    private function resolveFirstMatchingTypeAndMethod(array $types, string $method): ?string
+    private function resolveFirstMatchingTypeAndMethod(array $types, string $method): array
     {
-        $returnType = null;
         foreach ($types as $type) {
-            $returnType = $this->getMethodReturnType($type, $method);
-            if ($returnType) {
-                return $returnType;
+            $returnTypes = $this->getMethodReturnTypes($type, $method);
+            if ($returnTypes) {
+                return $returnTypes;
             }
         }
 
-        return null;
+        return [];
+    }
+
+    private function completeParentClasses($types): array
+    {
+        foreach ($types as $type) {
+            $types = array_merge($types, $this->smartClassReflector->getClassParents($type));
+        }
+        return $types;
     }
 }
