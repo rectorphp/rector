@@ -6,63 +6,8 @@ use PhpParser\Node\Expr\MethodCall;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Tests\AbstractNodeTypeResolverTest;
 
-/**
- * @todo split to NestedMethodCallTest
- */
 final class MethodCallTest extends AbstractNodeTypeResolverTest
 {
-    public function testOnNestedDifferentMethodCall(): void
-    {
-        /** @var MethodCall[] $methodCallNodes */
-        $methodCallNodes = $this->getNodesForFileOfType(
-            __DIR__ . '/MethodCallSource/OnMethodCallCallDifferentType.php.inc',
-            MethodCall::class
-        );
-
-        $this->assertCount(2, $methodCallNodes);
-        $this->assertSame('setScope', $methodCallNodes[0]->name->toString());
-        $this->doTestAttributeEquals($methodCallNodes[0], Attribute::CALLER_TYPES, [
-            'Symfony\Component\DependencyInjection\Definition',
-        ]);
-
-        $this->assertSame('register', $methodCallNodes[1]->name->toString());
-        $this->doTestAttributeEquals($methodCallNodes[1], Attribute::CALLER_TYPES, [
-            'Symfony\Component\DependencyInjection\ContainerBuilder',
-            'Symfony\Component\DependencyInjection\ResettableContainerInterface',
-            'Symfony\Component\DependencyInjection\ContainerInterface',
-            'Psr\Container\ContainerInterface',
-            'Symfony\Component\DependencyInjection\TaggedContainerInterface',
-            'Symfony\Component\DependencyInjection\Container',
-        ]);
-    }
-
-    public function testOnNestedMethodCall(): void
-    {
-        /** @var MethodCall[] $methodCallNodes */
-        $methodCallNodes = $this->getNodesForFileOfType(
-            __DIR__ . '/MethodCallSource/NestedMethodCalls.php.inc',
-            MethodCall::class
-        );
-
-        $this->assertCount(3, $methodCallNodes);
-
-        $this->assertSame('getParameters', $methodCallNodes[0]->name->toString());
-        $this->doTestAttributeEquals($methodCallNodes[0], Attribute::CALLER_TYPES, [
-            'Nette\DI\Container',
-        ]);
-
-        $this->assertSame('addService', $methodCallNodes[1]->name->toString());
-        $this->doTestAttributeEquals($methodCallNodes[1], Attribute::CALLER_TYPES, [
-            'Nette\DI\Container',
-        ]);
-
-        $this->assertSame('createContainer', $methodCallNodes[2]->name->toString());
-        $this->doTestAttributeEquals($methodCallNodes[2], Attribute::CALLER_TYPES, [
-            'Nette\Config\Configurator',
-            'Nette\Object',
-        ]);
-    }
-
     public function testOnSelfCall(): void
     {
         $methodCallNodes = $this->getNodesForFileOfType(
