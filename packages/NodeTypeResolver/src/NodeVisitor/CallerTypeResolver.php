@@ -4,13 +4,10 @@ namespace Rector\NodeTypeResolver\NodeVisitor;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Name;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Node\Attribute;
-use Rector\NodeTraverserQueue\BetterNodeFinder;
+use Rector\NodeTypeResolver\NodeCallerTypeResolver;
 
 /**
  * This will tell the type of Node, which is calling this method
@@ -23,88 +20,24 @@ use Rector\NodeTraverserQueue\BetterNodeFinder;
 final class CallerTypeResolver extends NodeVisitorAbstract
 {
     /**
-     * @var BetterNodeFinder
+     * @var NodeCallerTypeResolver
      */
-    private $betterNodeFinder;
+    private $nodeCallerTypeResolver;
 
-    public function __construct(BetterNodeFinder $betterNodeFinder)
+    public function __construct(NodeCallerTypeResolver $nodeCallerTypeResolver)
     {
-        $this->betterNodeFinder = $betterNodeFinder;
+        $this->nodeCallerTypeResolver = $nodeCallerTypeResolver;
     }
 
     public function enterNode(Node $node): ?Node
     {
-        if ($node instanceof StaticCall) {
-            $this->processStaticCallNode($node);
-
-            return null;
+        if (! $node instanceof StaticCall && ! $node instanceof MethodCall) {
+            return $node;
         }
 
-        if ($node instanceof MethodCall) {
-            $this->processMethodCallNode($node);
-
-            return null;
+        $types = $this->nodeCallerTypeResolver->resolve($node);
+        if ($types) {
+            $node->setAttribute(Attribute::CALLER_TYPES, $types);
         }
-
-        return $node;
-    }
-
-    private function processStaticCallNode(StaticCall $staticCallNode): void
-    {
-        $types = [];
-        if ($staticCallNode->class instanceof Name) {
-            $class = $staticCallNode->class->toString();
-            if ($class === 'parent') {
-                $types[] = $staticCallNode->class->getAttribute(Attribute::PARENT_CLASS_NAME);
-            } else {
-                $types[] = $class;
-            }
-        }
-
-        if ($staticCallNode->class instanceof Variable) {
-            $types[] = $staticCallNode->class->getAttribute(Attribute::CLASS_NAME);
-        }
-
-        $staticCallNode->setAttribute(Attribute::CALLER_TYPES, $types);
-    }
-
-    private function processMethodCallNode(MethodCall $methodCallNode): void
-    {
-        $callerNode = $this->betterNodeFinder->findFirst(
-            $methodCallNode,
-            function (Node $node) use ($methodCallNode) {
-                if ($node instanceof Variable || $node instanceof PropertyFetch /* || $node instanceof MethodCall*/) {
-                    return $node;
-                }
-
-                if ($node === $methodCallNode) {
-                    return null;
-                }
-            }
-        );
-
-        if ($callerNode === null) {
-            return;
-        }
-
-        $nodeTypes = (array) $callerNode->getAttribute(Attribute::TYPES);
-        if ($nodeTypes) {
-            $methodCallNode->setAttribute(Attribute::CALLER_TYPES, $nodeTypes);
-        }
-
-//        if ($parentNode instanceof MethodCall && $parentNode->var instanceof MethodCall) {
-//            // resolve return type type
-//            // @todo: consider Attribute::RETURN_TYPES for MethodCall and StaticCall types
-//
-//            $nodeVarTypes = $parentNode->var->var->getAttribute(Attribute::TYPES);
-//            $nodeVarType = array_shift($nodeVarTypes);
-//
-//            $methodName = $parentNode->var->name->toString(); // method
-//            $methodReturnType = $this->methodReflector->getMethodReturnType($nodeVarType, $methodName);
-//
-//            if ($methodReturnType) {
-//                return [$methodReturnType];
-//            }
-//        }
     }
 }

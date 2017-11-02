@@ -49,9 +49,9 @@ final class TypeResolver extends NodeVisitorAbstract
             $this->typeContext->enterFunction($node);
         }
 
-        $type = $this->nodeTypeResolver->resolve($node);
-        if ($type) {
-            $node->setAttribute(Attribute::TYPES, $type);
+        $types = $this->nodeTypeResolver->resolve($node);
+        if ($types) {
+            $node->setAttribute(Attribute::TYPES, $types);
         }
     }
 }
