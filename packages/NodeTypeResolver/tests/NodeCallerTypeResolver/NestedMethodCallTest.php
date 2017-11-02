@@ -8,6 +8,32 @@ use Rector\NodeTypeResolver\Tests\AbstractNodeTypeResolverTest;
 
 final class NestedMethodCallTest extends AbstractNodeTypeResolverTest
 {
+    public function testFormChainCalls(): void
+    {
+        /** @var MethodCall[] $methodCallNodes */
+        $methodCallNodes = $this->getNodesForFileOfType(
+            __DIR__ . '/NestedMethodCallSource/FormChainMethodCalls.php.inc',
+            MethodCall::class
+        );
+
+        $this->assertCount(4, $methodCallNodes);
+
+        $this->assertSame('addRule', $methodCallNodes[0]->name->toString());
+        $this->doTestAttributeEquals($methodCallNodes[0], Attribute::CALLER_TYPES, [null]);
+
+        $this->assertSame('addRule', $methodCallNodes[1]->name->toString());
+        $this->doTestAttributeEquals($methodCallNodes[1], Attribute::CALLER_TYPES, [null]);
+
+        $this->assertSame('addCondition', $methodCallNodes[2]->name->toString());
+        $this->doTestAttributeEquals($methodCallNodes[2], Attribute::CALLER_TYPES, [null]);
+
+        $this->assertSame('addText', $methodCallNodes[3]->name->toString());
+        $this->assertContains(
+            'Nette\Application\UI\Form',
+            $methodCallNodes[3]->getAttribute(Attribute::CALLER_TYPES)
+        );
+    }
+
     public function testOnNestedDifferentMethodCall(): void
     {
         /** @var MethodCall[] $methodCallNodes */
