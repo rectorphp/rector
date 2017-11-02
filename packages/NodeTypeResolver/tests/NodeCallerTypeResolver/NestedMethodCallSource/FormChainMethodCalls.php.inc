@@ -6,9 +6,7 @@ class SomePresenter
     {
         $form = new \Nette\Application\UI\Form;
         $form->addText('name')
-            ->addCondition($form::FILLED)
-            ->addRule('...')
-            ->addRule('...');
+            ->addCondition($form::FILLED);
 
         return $form;
     }

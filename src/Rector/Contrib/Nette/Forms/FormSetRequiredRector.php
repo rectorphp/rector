@@ -41,8 +41,8 @@ final class FormSetRequiredRector extends AbstractRector
         if (! $this->methodCallAnalyzer->isTypesAndMethods(
             $node,
             [self::FORM_CLASS, 'Nette\Forms\Container'],
-        ['addCondition']
-            )
+            ['addCondition']
+        )
         ) {
             return false;
         }

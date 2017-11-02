@@ -37,7 +37,7 @@ final class NodeCallerTypeResolver
     public function resolve(Node $node): array
     {
         if ($node instanceof MethodCall) {
-            return $this->resolverMethodCallReturnTypes($node);
+            return $this->resolveMethodCallReturnTypes($node);
         }
 
         if ($node instanceof StaticCall) {
@@ -74,23 +74,17 @@ final class NodeCallerTypeResolver
      *
      * @return string[]
      */
-    private function resolverMethodCallReturnTypes(MethodCall $node): array
+    private function resolveMethodCallReturnTypes(MethodCall $node): array
     {
         if ($node->var instanceof MethodCall) {
-            $parentReturnTypes = $this->resolverMethodCallReturnTypes($node->var);
+            $parentReturnTypes = $this->resolveMethodCallReturnTypes($node->var);
 
             $methodName = $node->var->name->toString();
 
-            $returnTypes = $this->methodReflector->resolveReturnTypesForTypesAndMethod(
-                $parentReturnTypes,
-                $methodName
-            );
-
+            $returnTypes = $this->methodReflector->resolveReturnTypesForTypesAndMethod($parentReturnTypes, $methodName);
             if ($returnTypes) {
                 return $returnTypes;
             }
-
-            return $this->resolverMethodCallReturnTypes($node->var);
         }
 
         if ($node->var instanceof Variable || $node->var instanceof PropertyFetch) {

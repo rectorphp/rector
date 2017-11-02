@@ -61,17 +61,12 @@ final class MethodReflector
             return [];
         }
 
-        $type = $types[0];
-        if ($type === null) { // @todo: resolve, some edge case
-            return [];
-        }
-
-        $returnType = $this->getMethodReturnType($type, $method);
-        if ($returnType === $type) { // self/static
+        $returnType = $this->resolveFirstMatchingTypeAndMethod($types, $method);
+        if ($returnType === $types[0]) { // self/static
             return $types;
         }
 
-        return [$returnType];
+        return $returnType ? [$returnType] : [];
     }
 
     /**
@@ -90,6 +85,22 @@ final class MethodReflector
 
         if ($returnTypes[0] instanceof Static_ || $returnTypes[0] instanceof Self_) {
             return $class;
+        }
+
+        return null;
+    }
+
+    /**
+     * @param string[] $types
+     */
+    private function resolveFirstMatchingTypeAndMethod(array $types, string $method): ?string
+    {
+        $returnType = null;
+        foreach ($types as $type) {
+            $returnType = $this->getMethodReturnType($type, $method);
+            if ($returnType) {
+                return $returnType;
+            }
         }
 
         return null;
