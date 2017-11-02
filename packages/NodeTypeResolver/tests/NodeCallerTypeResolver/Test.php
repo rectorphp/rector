@@ -2,8 +2,6 @@
 
 namespace Rector\NodeTypeResolver\Tests\NodeCallerTypeResolver;
 
-use Nette\DI\Container;
-use Nette\DI\Container;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Tests\AbstractNodeTypeResolverTest;
@@ -17,7 +15,7 @@ final class Test extends AbstractNodeTypeResolverTest
         $methodCallNode = $methodCallNodes[0];
         $callerNodeTypes = $methodCallNode->getAttribute(Attribute::CALLER_TYPES);
 
-        $this->assertSame([Container::class], $callerNodeTypes);
+        $this->assertSame(['Nette\DI\Container'], $callerNodeTypes);
     }
 
     public function testOnPropertyCall(): void
@@ -27,6 +25,6 @@ final class Test extends AbstractNodeTypeResolverTest
         $methodCallNode = $methodCallNodes[0];
         $callerNodeTypes = $methodCallNode->getAttribute(Attribute::CALLER_TYPES);
 
-        $this->assertSame([Container::class], $callerNodeTypes);
+        $this->assertSame(['Nette\DI\Container'], $callerNodeTypes);
     }
 }
