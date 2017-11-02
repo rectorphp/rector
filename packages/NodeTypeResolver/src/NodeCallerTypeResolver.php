@@ -129,7 +129,7 @@ final class NodeCallerTypeResolver
     private function resolverMethodCallReturnTypes(MethodCall $node): array
     {
         if ($node->var instanceof MethodCall) {
-            return $this->resolverMethodCallReturnTypes($node);
+            return $this->resolverMethodCallReturnTypes($node->var);
         }
 
         $callerNodeTypes = $node->var->getAttribute(Attribute::TYPES);
