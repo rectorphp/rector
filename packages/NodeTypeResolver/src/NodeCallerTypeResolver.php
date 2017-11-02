@@ -8,7 +8,6 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
-use PhpParser\NodeVisitorAbstract;
 use Rector\BetterReflection\Reflector\MethodReflector;
 use Rector\Node\Attribute;
 use Rector\NodeTraverserQueue\BetterNodeFinder;
@@ -45,7 +44,6 @@ final class NodeCallerTypeResolver
     public function resolve(Node $node): array
     {
         return $this->resolverMethodCallReturnTypes($node);
-
     }
 
     private function processStaticCallNode(StaticCall $staticCallNode): void
@@ -106,8 +104,6 @@ final class NodeCallerTypeResolver
 
         $nodeTypes = (array) $callerNode->getAttribute(Attribute::CALLER_TYPES);
         $methodCallNode->setAttribute(Attribute::CALLER_TYPES, $nodeTypes);
-
-
 
 //        if ($parentNode instanceof MethodCall && $parentNode->var instanceof MethodCall) {
 //            // resolve return type type

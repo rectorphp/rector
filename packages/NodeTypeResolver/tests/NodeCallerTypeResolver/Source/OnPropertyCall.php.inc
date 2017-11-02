@@ -1,7 +1,19 @@
 <?php
 
+namespace SomeNamespace;
+
 use Nette\Config\Configurator;
 
-$configurator = new Configurator;
+class SomeClass
+{
+    /**
+     * @var Configurator
+     */
+    private $configurator;
 
-$container = $configurator->createContainer();
+
+    public function someMethod()
+    {
+        $this->configurator->createContainer();
+    }
+}
