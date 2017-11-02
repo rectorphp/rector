@@ -3,6 +3,7 @@
 namespace Rector\BetterReflection\Reflector;
 
 use phpDocumentor\Reflection\Types\Object_;
+use phpDocumentor\Reflection\Types\Static_;
 use Rector\BetterReflection\Reflection\ReflectionMethod;
 use Rector\BetterReflection\Reflector\Exception\IdentifierNotFound;
 
@@ -37,21 +38,26 @@ final class MethodReflector
     {
         $methodReflection = $this->reflectClassMethod($class, $methodCallName);
 
-        if ($methodReflection) {
-            $returnType = $methodReflection->getReturnType();
-            if ($returnType) {
-                return (string) $returnType;
-            }
+        if (! $methodReflection) {
+            return null;
+        }
 
-            $returnTypes = $methodReflection->getDocBlockReturnTypes();
+        $returnType = $methodReflection->getReturnType();
+        if ($returnType) {
+            return (string) $returnType;
+        }
 
-            if (! isset($returnTypes[0])) {
-                return null;
-            }
+        $returnTypes = $methodReflection->getDocBlockReturnTypes();
+        if (! isset($returnTypes[0])) {
+            return null;
+        }
 
-            if ($returnTypes[0] instanceof Object_) {
-                return ltrim((string) $returnTypes[0]->getFqsen(), '\\');
-            }
+        if ($returnTypes[0] instanceof Object_) {
+            return ltrim((string) $returnTypes[0]->getFqsen(), '\\');
+        }
+
+        if ($returnTypes[0] instanceof Static_ || $returnTypes[0] instanceof Self_) {
+            return $class;
         }
 
         return null;

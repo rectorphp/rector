@@ -76,10 +76,20 @@ final class NodeCallerTypeResolver
     private function resolverMethodCallReturnTypes(MethodCall $node): array
     {
         if ($node->var instanceof MethodCall) {
+            $parentReturnTypes = $this->resolverMethodCallReturnTypes($node->var);
+
+            $methodName = $node->var->name->toString();
+
+            $returnTypes = $this->methodReflector->resolveReturnTypesForTypesAndMethod(
+                $parentReturnTypes,
+                $methodName
+            );
+
+            if ($returnTypes) {
+                return $returnTypes;
+            }
+
             return $this->resolverMethodCallReturnTypes($node->var);
-//            $parentReturnTypes = $this->resolverMethodCallReturnTypes($node->var);
-//            dump($node->var->name);
-//            die;
         }
 
         if ($node->var instanceof Variable) {
