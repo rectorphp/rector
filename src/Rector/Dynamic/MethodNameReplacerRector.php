@@ -28,6 +28,9 @@ final class MethodNameReplacerRector extends AbstractRector
      *     ]
      * ]
      *
+     * @todo consider splitting to static call replacer or class rename,
+     * this api can lead users to bugs (already did)
+     *
      * @var string[][]
      */
     private $perClassOldToNewMethods = [];

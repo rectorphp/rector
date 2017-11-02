@@ -53,7 +53,7 @@ parameters:
             # classes might not exist
             - */src/Rector/Contrib/*/*Rector.php
             - */src/Rector/Contrib/**/Helper/**.php
-            - packages/NodeTypeResolver/src/NodeVisitor/TypeResolver.php
+            - */packages/NodeTypeResolver/tests/NodeCallerTypeResolver/**Test.php
             - src/Builder/Contrib/Nette/RouterFactoryClassBuilder.php
             - */packages/NodeTypeResolver/**/PerNodeTypeResolver/**TypeResolver.php
             - */packages/NodeTypeResolver/**/PerNodeTypeResolver/**TypeResolver/Test.php

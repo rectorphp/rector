@@ -148,32 +148,31 @@ You can:
     # better-reflection20.yml
     rectors:
         Rector\Rector\Dynamic\NamespaceReplacerRector:
+            # old namespace: new namespace
             'BetterReflection': 'Roave\BetterReflection'
     ```
 
 - **change method name**
 
     ```yml
-    # nette24.yml
     rectors:
         Rector\Rector\Dynamic\MethodNameReplacerRector:
-            # class:
-            #   old method: new method
+            # class
             'Nette\Utils\Html':
+                # old method: new method
                 'add': 'addHtml'
 
             # or in case of static methods calls
 
-            # class:
-            #   old method: [new class, new method]
+            # class
             'Nette\Bridges\FormsLatte\FormMacros':
+                # old method: [new class, new method]
                 'renderFormBegin': ['Nette\Bridges\FormsLatte\Runtime', 'renderFormBegin']
     ```
 
 - **change property name**
 
     ```yml
-    # php-parser40.yml
     rectors:
         Rector\Rector\Dynamic\PropertyNameReplacerRector:
             # class:
@@ -185,12 +184,11 @@ You can:
 - **change class constant name**
 
     ```yml
-    # symfony30.yml
     rectors:
         Rector\Rector\Dynamic\ClassConstantReplacerRector:
-            # class:
-            #   OLD_CONSTANT: NEW_CONSTANT
+            # class
             'Symfony\Component\Form\FormEvents':
+                # old constant: new constant
                 'PRE_BIND': 'PRE_SUBMIT'
                 'BIND': 'SUBMIT'
                 'POST_BIND': 'POST_SUBMIT'
@@ -199,27 +197,33 @@ You can:
 - **change parameters typehint according to parent type**
 
     ```yml
-    # php-parser40.yml
     rectors:
         Rector\Rector\Dynamic\ParentTypehintedArgumentRector:
-            # class:
-            #   method:
-            #       parameter: typehting
+            # class
             'PhpParser\Parser':
+                # method
                 'parse':
+                    # parameter: typehint
                     'code': 'string'
     ```
 
-- **remove unused argument**
+- **change argument value**
 
     ```yml
-    Rector\Rector\Dynamic\ArgumentRemoverRector:
-        # class
-            # method
-                # arguments to remove
-        'Doctrine\ORM\Persisters\Entity\AbstractEntityInheritancePersister':
-            'getSelectJoinColumnSQL':
-                - 'className'
+    rectors:
+        Rector\Rector\Dynamic\ArgumentReplacerRector:
+            # class
+            'Symfony\Component\DependencyInjection\ContainerBuilder':
+                # method
+                'compile':
+                    # argument position
+                    0:
+                        # added default value
+                        ~: false
+                        # or remove completely
+                        ~: ~
+                        # or replace by new value
+                        'Symfony\Component\DependencyInjection\ContainerBuilder\ContainerBuilder::SCOPE_PROTOTYPE': false
     ```
 
 - or **replace underscore naming `_` with namespaces `\`**

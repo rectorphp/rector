@@ -38,7 +38,12 @@ final class FormSetRequiredRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        if (! $this->methodCallAnalyzer->isTypeAndMethods($node, self::FORM_CLASS, ['addCondition'])) {
+        if (! $this->methodCallAnalyzer->isTypesAndMethods(
+            $node,
+            ['Nette\Forms\Controls\TextInput'],
+            ['addCondition']
+        )
+        ) {
             return false;
         }
 

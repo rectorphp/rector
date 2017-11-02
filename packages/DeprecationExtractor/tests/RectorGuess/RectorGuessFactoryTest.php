@@ -6,8 +6,8 @@ use PhpParser\Node\Stmt\Nop;
 use PHPUnit\Framework\TestCase;
 use Rector\DeprecationExtractor\RectorGuess\RectorGuess;
 use Rector\DeprecationExtractor\RectorGuess\RectorGuessFactory;
+use Rector\Rector\Dynamic\ArgumentReplacerRector;
 use Rector\Rector\Dynamic\ClassReplacerRector;
-use Rector\Rector\Dynamic\MethodArgumentChangerRector;
 use Rector\Rector\Dynamic\MethodNameReplacerRector;
 
 final class RectorGuessFactoryTest extends TestCase
@@ -45,7 +45,7 @@ final class RectorGuessFactoryTest extends TestCase
         return [
             ['createClassReplacer', ClassReplacerRector::class, true],
             ['createMethodNameReplacerGuess', MethodNameReplacerRector::class, true],
-            ['createNewArgument', MethodArgumentChangerRector::class, true],
+            ['createNewArgument', ArgumentReplacerRector::class, true],
             ['createRemoval', RectorGuess::TYPE_REMOVAL, false],
             ['createUnsupported', RectorGuess::TYPE_UNSUPPORTED, false],
         ];

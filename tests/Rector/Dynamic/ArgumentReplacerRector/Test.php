@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Dynamic\MethodArgumentChangerRector;
+namespace Rector\Tests\Rector\Dynamic\ArgumentReplacerRector;
 
-use Rector\Rector\Dynamic\MethodArgumentChangerRector;
+use Rector\Rector\Dynamic\ArgumentReplacerRector;
 use Rector\Testing\PHPUnit\AbstractConfigurableRectorTestCase;
 
 final class Test extends AbstractConfigurableRectorTestCase
@@ -18,6 +18,16 @@ final class Test extends AbstractConfigurableRectorTestCase
             __DIR__ . '/wrong/wrong2.php.inc',
             __DIR__ . '/correct/correct2.php.inc'
         );
+
+        $this->doTestFileMatchesExpectedContent(
+            __DIR__ . '/wrong/wrong3.php.inc',
+            __DIR__ . '/correct/correct3.php.inc'
+        );
+
+        $this->doTestFileMatchesExpectedContent(
+            __DIR__ . '/wrong/wrong4.php.inc',
+            __DIR__ . '/correct/correct4.php.inc'
+        );
     }
 
     protected function provideConfig(): string
@@ -30,6 +40,6 @@ final class Test extends AbstractConfigurableRectorTestCase
      */
     protected function getRectorClasses(): array
     {
-        return [MethodArgumentChangerRector::class];
+        return [ArgumentReplacerRector::class];
     }
 }

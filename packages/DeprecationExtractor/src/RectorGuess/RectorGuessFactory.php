@@ -3,8 +3,8 @@
 namespace Rector\DeprecationExtractor\RectorGuess;
 
 use PhpParser\Node;
+use Rector\Rector\Dynamic\ArgumentReplacerRector;
 use Rector\Rector\Dynamic\ClassReplacerRector;
-use Rector\Rector\Dynamic\MethodArgumentChangerRector;
 use Rector\Rector\Dynamic\MethodNameReplacerRector;
 
 final class RectorGuessFactory
@@ -21,7 +21,7 @@ final class RectorGuessFactory
 
     public function createNewArgument(string $message, Node $node): RectorGuess
     {
-        return new RectorGuess(MethodArgumentChangerRector::class, $node, $message);
+        return new RectorGuess(ArgumentReplacerRector::class, $node, $message);
     }
 
     public function createRemoval(string $message, Node $node): RectorGuess

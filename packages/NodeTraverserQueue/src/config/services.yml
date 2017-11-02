@@ -5,3 +5,5 @@ services:
     Rector\NodeTraverserQueue\:
         resource: '../../src'
         exclude: '../../src/{Exception}'
+
+    PhpParser\NodeFinder: ~

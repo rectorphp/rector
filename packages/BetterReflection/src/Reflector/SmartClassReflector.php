@@ -55,16 +55,20 @@ final class SmartClassReflector
     /**
      * @return string[]
      */
-    public function getClassParents(string $className, ClassLike $classLikeNode): array
+    public function getClassParents(string $className, ?ClassLike $classLikeNode = null): array
     {
         $classReflection = $this->reflect($className);
 
         try {
             return $classReflection->getParentClassNames();
         } catch (Throwable $throwable) {
-            // fallback to static
-            return [$classLikeNode->getAttribute(Attribute::PARENT_CLASS_NAME)];
+            if ($classLikeNode) {
+                // fallback to static
+                return [$classLikeNode->getAttribute(Attribute::PARENT_CLASS_NAME)];
+            }
         }
+
+        return [];
     }
 
     private function createNewClassReflector(): void

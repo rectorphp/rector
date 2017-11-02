@@ -6,8 +6,8 @@ use PhpParser\Node\Stmt\Nop;
 use Rector\DeprecationExtractor\Deprecation\Deprecation;
 use Rector\DeprecationExtractor\Rector\RectorGuesser;
 use Rector\DeprecationExtractor\RectorGuess\RectorGuess;
+use Rector\Rector\Dynamic\ArgumentReplacerRector;
 use Rector\Rector\Dynamic\ClassReplacerRector;
-use Rector\Rector\Dynamic\MethodArgumentChangerRector;
 use Rector\Rector\Dynamic\MethodNameReplacerRector;
 use Rector\Tests\AbstractContainerAwareTestCase;
 
@@ -48,7 +48,7 @@ final class RectorGuesserTest extends AbstractContainerAwareTestCase
         return [
             ['This class is deprecated, use AnotherClass instead', ClassReplacerRector::class],
             ['This method is deprecated, use method() instead', MethodNameReplacerRector::class],
-            ['It will be made mandatory in Symfony 4.0', MethodArgumentChangerRector::class],
+            ['It will be made mandatory in Symfony 4.0', ArgumentReplacerRector::class],
             ['removed', RectorGuess::TYPE_REMOVAL],
             ['service is private', RectorGuess::TYPE_UNSUPPORTED],
         ];

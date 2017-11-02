@@ -13,7 +13,7 @@ use Rector\NodeTypeResolver\TypeContext;
 /**
  * Inspired by https://github.com/nikic/PHP-Parser/blob/9373a8e9f551516bc8e42aedeacd1b4f635d27fc/lib/PhpParser/NodeVisitor/NameResolver.php.
  */
-final class TypeResolver extends NodeVisitorAbstract
+final class TypeNodeVisitor extends NodeVisitorAbstract
 {
     /**
      * @var TypeContext
@@ -49,9 +49,9 @@ final class TypeResolver extends NodeVisitorAbstract
             $this->typeContext->enterFunction($node);
         }
 
-        $type = $this->nodeTypeResolver->resolve($node);
-        if ($type) {
-            $node->setAttribute(Attribute::TYPES, $type);
+        $types = $this->nodeTypeResolver->resolve($node);
+        if ($types) {
+            $node->setAttribute(Attribute::TYPES, $types);
         }
     }
 }
