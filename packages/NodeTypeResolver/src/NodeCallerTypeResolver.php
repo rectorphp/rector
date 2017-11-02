@@ -65,8 +65,12 @@ final class NodeCallerTypeResolver
         $staticCallNode->setAttribute(Attribute::CALLER_TYPES, $types);
     }
 
-    private function processMethodCallNode(MethodCall $methodCallNode): void
+    /**
+     * @return string[]
+     */
+    private function processMethodCallNode(MethodCall $methodCallNode): array
     {
+        // @todo extract to own method
         $callerNode = $this->betterNodeFinder->findFirst(
             $methodCallNode,
             function (Node $node) use ($methodCallNode) {
@@ -81,7 +85,6 @@ final class NodeCallerTypeResolver
                     }
 
                     return $node;
-
                     // 2 options:
                     // 1. self - fluent interface, first variable
                     // 2. another object
@@ -93,32 +96,17 @@ final class NodeCallerTypeResolver
             }
         );
 
+
         if ($callerNode === null) {
-            return;
+            return [];
         }
 
         $nodeTypes = (array) $callerNode->getAttribute(Attribute::TYPES);
         if ($nodeTypes) {
-            $methodCallNode->setAttribute(Attribute::CALLER_TYPES, $nodeTypes);
+            return $nodeTypes;
         }
 
-        $nodeTypes = (array) $callerNode->getAttribute(Attribute::CALLER_TYPES);
-        $methodCallNode->setAttribute(Attribute::CALLER_TYPES, $nodeTypes);
-
-//        if ($parentNode instanceof MethodCall && $parentNode->var instanceof MethodCall) {
-//            // resolve return type type
-//            // @todo: consider Attribute::RETURN_TYPES for MethodCall and StaticCall types
-//
-//            $nodeVarTypes = $parentNode->var->var->getAttribute(Attribute::TYPES);
-//            $nodeVarType = array_shift($nodeVarTypes);
-//
-//            $methodName = $parentNode->var->name->toString(); // method
-//            $methodReturnType = $this->methodReflector->getMethodReturnType($nodeVarType, $methodName);
-//
-//            if ($methodReturnType) {
-//                return [$methodReturnType];
-//            }
-//        }
+        return (array) $callerNode->getAttribute(Attribute::CALLER_TYPES);
     }
 
     /**
