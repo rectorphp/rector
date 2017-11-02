@@ -89,7 +89,7 @@ final class MethodReflector
                 $types[] = ltrim((string) $returnType->getFqsen(), '\\');
             }
 
-            if ($returnTypes instanceof Static_ || $returnTypes instanceof Self_) {
+            if ($returnType instanceof Static_ || $returnType instanceof Self_) {
                 $types[] = $class;
             }
         }
