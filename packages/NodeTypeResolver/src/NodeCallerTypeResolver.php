@@ -74,7 +74,33 @@ final class NodeCallerTypeResolver
         }
 
         return $types;
-//        $staticCallNode->setAttribute(Attribute::CALLER_TYPES, $types);
+    }
+
+    /**
+     * Returnts on magic method calls, void type, scalar types and array types.
+
+     * @return string[]
+     */
+    private function resolverMethodCallReturnTypes(MethodCall $node): array
+    {
+        if ($node->var instanceof MethodCall) {
+            return $this->resolverMethodCallReturnTypes($node->var);
+        }
+
+        $callerNodeTypes = $node->var->getAttribute(Attribute::TYPES);
+        $callerNodeType = $callerNodeTypes[0] ?? [];
+
+        $methodName = $node->name->toString();
+        $callerReturnType = $this->methodReflector->getMethodReturnType($callerNodeType, $methodName);
+        if ($callerReturnType) {
+            if ($callerReturnType === 'self') {
+                return $callerNodeTypes;
+            }
+
+            return [$callerReturnType];
+        }
+
+        return [];
     }
 
     /**
@@ -108,7 +134,6 @@ final class NodeCallerTypeResolver
             }
         );
 
-
         if ($callerNode === null) {
             return [];
         }
@@ -119,29 +144,5 @@ final class NodeCallerTypeResolver
         }
 
         return (array) $callerNode->getAttribute(Attribute::CALLER_TYPES);
-    }
-
-    /**
-     * Returnts on magic method calls, void type, scalar types and array types.
-
-     * @return string[]
-     */
-    private function resolverMethodCallReturnTypes(MethodCall $node): array
-    {
-        if ($node->var instanceof MethodCall) {
-            return $this->resolverMethodCallReturnTypes($node->var);
-        }
-
-        $callerNodeTypes = $node->var->getAttribute(Attribute::TYPES);
-        $callerNodeType = array_shift($callerNodeTypes);
-
-        $methodName = $node->name->toString();
-        $callerReturnType = $this->methodReflector->getMethodReturnType($callerNodeType, $methodName);
-
-        if ($callerReturnType) {
-            return [$callerReturnType];
-        }
-
-        return [];
     }
 }

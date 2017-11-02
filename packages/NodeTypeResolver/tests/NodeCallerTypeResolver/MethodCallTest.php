@@ -8,6 +8,21 @@ use Rector\NodeTypeResolver\Tests\AbstractNodeTypeResolverTest;
 
 final class MethodCallTest extends AbstractNodeTypeResolverTest
 {
+    public function testOnSelfCall(): void
+    {
+        $methodCallNodes = $this->getNodesForFileOfType(
+            __DIR__ . '/MethodCallSource/OnSelfCall.php.inc',
+            MethodCall::class
+        );
+
+        $this->doTestAttributeEquals($methodCallNodes[0], Attribute::CALLER_TYPES, null);
+        $this->doTestAttributeEquals($methodCallNodes[1], Attribute::CALLER_TYPES, [
+            'SomeClass',
+            'Nette\Config\Configurator',
+            'Nette\Object',
+        ]);
+    }
+
     public function testOnMethodCall(): void
     {
         $methodCallNodes = $this->getNodesForFileOfType(
