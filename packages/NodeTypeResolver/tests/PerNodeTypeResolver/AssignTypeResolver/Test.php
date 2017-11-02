@@ -38,13 +38,13 @@ final class Test extends AbstractNodeTypeResolverTest
         );
     }
 
-//    public function testMethodCall(): void
-//    {
-//        $variableNodes = $this->getNodesForFileOfType(__DIR__ . '/Source/MethodCall.php.inc', Variable::class);
-//
-//        $this->assertSame(
-//            ['Nette\DI\Container'],
-//            $variableNodes[1]->getAttribute(Attribute::TYPES)
-//        );
-//    }
+    public function testMethodCall(): void
+    {
+        $variableNodes = $this->getNodesForFileOfType(__DIR__ . '/Source/MethodCall.php.inc', Variable::class);
+
+        $this->assertSame(
+            ['Nette\DI\Container'],
+            $variableNodes[1]->getAttribute(Attribute::TYPES)
+        );
+    }
 }

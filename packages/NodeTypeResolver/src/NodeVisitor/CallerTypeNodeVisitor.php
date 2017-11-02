@@ -29,10 +29,7 @@ final class CallerTypeNodeVisitor extends NodeVisitorAbstract
         $this->nodeCallerTypeResolver = $nodeCallerTypeResolver;
     }
 
-    /**
-     * @return Node|null|void
-     */
-    public function enterNode(Node $node)
+    public function enterNode(Node $node): ?Node
     {
         if (! $node instanceof StaticCall && ! $node instanceof MethodCall) {
             return $node;
@@ -42,5 +39,7 @@ final class CallerTypeNodeVisitor extends NodeVisitorAbstract
         if ($types) {
             $node->setAttribute(Attribute::CALLER_TYPES, $types);
         }
+
+        return null;
     }
 }
