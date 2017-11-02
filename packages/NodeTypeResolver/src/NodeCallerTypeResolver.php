@@ -43,10 +43,21 @@ final class NodeCallerTypeResolver
      */
     public function resolve(Node $node): array
     {
-        return $this->resolverMethodCallReturnTypes($node);
+        if ($node instanceof MethodCall) {
+            return $this->resolverMethodCallReturnTypes($node);
+        }
+
+        if ($node instanceof StaticCall) {
+            return $this->processStaticCallNode($node);
+        }
+
+        return [];
     }
 
-    private function processStaticCallNode(StaticCall $staticCallNode): void
+    /**
+     * @return string[]
+     */
+    private function processStaticCallNode(StaticCall $staticCallNode): array
     {
         $types = [];
         if ($staticCallNode->class instanceof Name) {
@@ -62,7 +73,8 @@ final class NodeCallerTypeResolver
             $types[] = $staticCallNode->class->getAttribute(Attribute::CLASS_NAME);
         }
 
-        $staticCallNode->setAttribute(Attribute::CALLER_TYPES, $types);
+        return $types;
+//        $staticCallNode->setAttribute(Attribute::CALLER_TYPES, $types);
     }
 
     /**

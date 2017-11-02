@@ -6,12 +6,12 @@ use PhpParser\Node\Expr\MethodCall;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Tests\AbstractNodeTypeResolverTest;
 
-final class Test extends AbstractNodeTypeResolverTest
+final class MethodCallTest extends AbstractNodeTypeResolverTest
 {
     public function testOnMethodCall(): void
     {
         $methodCallNodes = $this->getNodesForFileOfType(
-            __DIR__ . '/Source/OnMethodCallCall.php.inc',
+            __DIR__ . '/MethodCallSource/OnMethodCallCall.php.inc',
             MethodCall::class
         );
 
@@ -21,7 +21,7 @@ final class Test extends AbstractNodeTypeResolverTest
     public function testOnVariableCall(): void
     {
         $methodCallNodes = $this->getNodesForFileOfType(
-            __DIR__ . '/Source/OnVariableCall.php.inc',
+            __DIR__ . '/MethodCallSource/OnVariableCall.php.inc',
             MethodCall::class
         );
 
@@ -31,7 +31,7 @@ final class Test extends AbstractNodeTypeResolverTest
     public function testOnPropertyCall(): void
     {
         $methodCallNodes = $this->getNodesForFileOfType(
-            __DIR__ . '/Source/OnPropertyCall.php.inc',
+            __DIR__ . '/MethodCallSource/OnPropertyCall.php.inc',
             MethodCall::class
         );
 
