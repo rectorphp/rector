@@ -2,7 +2,9 @@
 
 namespace Rector\BetterReflection\Reflector;
 
+use phpDocumentor\Reflection\Type;
 use phpDocumentor\Reflection\Types\Object_;
+use phpDocumentor\Reflection\Types\Self_;
 use phpDocumentor\Reflection\Types\Static_;
 use Rector\BetterReflection\Reflection\ReflectionMethod;
 use Rector\BetterReflection\Reflector\Exception\IdentifierNotFound;
@@ -37,7 +39,6 @@ final class MethodReflector
     public function getMethodReturnType(string $class, string $methodCallName): ?string
     {
         $methodReflection = $this->reflectClassMethod($class, $methodCallName);
-
         if (! $methodReflection) {
             return null;
         }
@@ -47,20 +48,7 @@ final class MethodReflector
             return (string) $returnType;
         }
 
-        $returnTypes = $methodReflection->getDocBlockReturnTypes();
-        if (! isset($returnTypes[0])) {
-            return null;
-        }
-
-        if ($returnTypes[0] instanceof Object_) {
-            return ltrim((string) $returnTypes[0]->getFqsen(), '\\');
-        }
-
-        if ($returnTypes[0] instanceof Static_ || $returnTypes[0] instanceof Self_) {
-            return $class;
-        }
-
-        return null;
+        return $this->resolveDocBlockReturnTypes($class, $methodReflection->getDocBlockReturnTypes());
     }
 
     /**
@@ -76,11 +64,31 @@ final class MethodReflector
         $type = $types[0];
 
         $returnType = $this->getMethodReturnType($type, $method);
-
-        if ($returnType === 'self') {
+        if ($returnType === $type) { // self/static
             return $types;
         }
 
         return [$returnType];
+    }
+
+    /**
+     * @param string[]|Type[] $returnTypes
+     */
+    private function resolveDocBlockReturnTypes(string $class, array $returnTypes): ?string
+    {
+        if (! isset($returnTypes[0])) {
+            return null;
+        }
+
+        // @todo: improve for multi types
+        if ($returnTypes[0] instanceof Object_) {
+            return ltrim((string) $returnTypes[0]->getFqsen(), '\\');
+        }
+
+        if ($returnTypes[0] instanceof Static_ || $returnTypes[0] instanceof Self_) {
+            return $class;
+        }
+
+        return null;
     }
 }
