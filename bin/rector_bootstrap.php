@@ -5,9 +5,12 @@
  * "composer create-project ..." and "composer require" installation.
  */
 $possibleAutoloadPaths = [
-    __DIR__ . '/../vendor/autoload.php', // repository
-    __DIR__ . '/../vendor/autoload.php', // composer create-project
-    __DIR__ . '/../../../../vendor/autoload.php', // composer require
+    // repository
+    __DIR__ . '/../vendor/autoload.php',
+    // composer create-project
+    __DIR__ . '/../vendor/autoload.php',
+    // composer require
+    __DIR__ . '/../../../../vendor/autoload.php',
 ];
 
 foreach ($possibleAutoloadPaths as $possibleAutoloadPath) {

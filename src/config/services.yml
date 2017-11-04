@@ -4,7 +4,7 @@ services:
 
     Rector\:
         resource: '../../src'
-        exclude: '../../src/{Node/Attribute.php,Rector/Contrib,Rector/Dynamic,Rector/MagicDisclosure}'
+        exclude: '../../src/{Node/Attribute.php,Rector/Contrib,Rector/Dynamic,Rector/MagicDisclosure,Testing}'
 
     # autowire by interface
     Rector\Contract\Parser\ParserInterface:
