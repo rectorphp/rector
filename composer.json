@@ -55,6 +55,10 @@
         "check-cs": "ecs check bin packages src tests",
         "fix-cs": "ecs check bin packages src tests --fix"
     },
+    "bin": [
+        "bin/rector",
+        "bin/rector.php"
+    ],
     "config": {
         "sort-packages": true
     }
