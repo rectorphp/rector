@@ -11,7 +11,7 @@ use Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
 gc_disable();
 
 // Require Composer autoload.php
-require_once __DIR__ . '/bootstrap.php';
+require_once __DIR__ . '/rector_bootstrap.php';
 
 try {
     // 1. Detect configuration from --level
