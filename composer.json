@@ -57,7 +57,8 @@
     },
     "bin": [
         "bin/rector",
-        "bin/rector.php"
+        "bin/rector.php",
+        "bin/bootstrap.php"
     ],
     "config": {
         "sort-packages": true
