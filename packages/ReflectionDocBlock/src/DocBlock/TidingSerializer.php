@@ -25,23 +25,12 @@ final class TidingSerializer
     public function getDocComment(DocBlock $docBlock): string
     {
         $docComment = $this->serializer->getDocComment($docBlock);
-        if ($this->isDocContentEmpty($docComment)) {
-            return '';
-        }
 
         $docComment = $this->clearTrailingSpace($docComment);
         $docComment = $this->clearEmptySpacesFromStartAndEnd($docComment);
         $docComment = $this->clearUnnededPreslashes($docComment);
 
         return $docComment;
-    }
-
-    /**
-     * Inspiration https://github.com/FriendsOfPHP/PHP-CS-Fixer/blob/b23b5e0a4877a1c97d58f260ea0eb66fbff30e04/Symfony/CS/Fixer/Symfony/NoEmptyPhpdocFixer.php#L35
-     */
-    private function isDocContentEmpty(string $docContent): bool
-    {
-        return (bool) preg_match('#^/\*\*[\s\*]*\*/$#', $docContent);
     }
 
     private function clearTrailingSpace(string $content): string
