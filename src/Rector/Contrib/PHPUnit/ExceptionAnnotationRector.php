@@ -7,7 +7,6 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Node\MethodCallNodeFactory;
-use Rector\Node\NodeFactory;
 use Rector\Rector\AbstractRector;
 use Rector\ReflectionDocBlock\NodeAnalyzer\DocBlockAnalyzer;
 
@@ -32,19 +31,10 @@ final class ExceptionAnnotationRector extends AbstractRector
      */
     private $docBlockAnalyzer;
 
-    /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
-
-    public function __construct(
-        MethodCallNodeFactory $methodCallNodeFactory,
-        DocBlockAnalyzer $docBlockAnalyzer,
-        NodeFactory $nodeFactory
-    ) {
+    public function __construct(MethodCallNodeFactory $methodCallNodeFactory, DocBlockAnalyzer $docBlockAnalyzer)
+    {
         $this->methodCallNodeFactory = $methodCallNodeFactory;
         $this->docBlockAnalyzer = $docBlockAnalyzer;
-        $this->nodeFactory = $nodeFactory;
     }
 
     public function isCandidate(Node $node): bool
@@ -89,9 +79,9 @@ final class ExceptionAnnotationRector extends AbstractRector
         return $classMethodNode;
     }
 
-    private function createMethodCallExpressionFromTag(Generic $genericTag, string $method): Expression
+    private function createMethodCallExpressionFromTag(Generic $generic, string $method): Expression
     {
-        $annotationContent = (string)$genericTag->getDescription();
+        $annotationContent = (string) $generic->getDescription();
         $annotationContent = ltrim($annotationContent, '\\'); // this is needed due to BuilderHelpers
 
         $methodCall = $this->methodCallNodeFactory->createWithVariableNameMethodNameAndArguments(
