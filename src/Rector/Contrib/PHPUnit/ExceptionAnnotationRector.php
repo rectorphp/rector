@@ -5,7 +5,9 @@ namespace Rector\Rector\Contrib\PHPUnit;
 use phpDocumentor\Reflection\DocBlock\Tags\Generic;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
 use Rector\Node\MethodCallNodeFactory;
+use Rector\Node\NodeFactory;
 use Rector\Rector\AbstractRector;
 use Rector\ReflectionDocBlock\NodeAnalyzer\DocBlockAnalyzer;
 
@@ -30,10 +32,19 @@ final class ExceptionAnnotationRector extends AbstractRector
      */
     private $docBlockAnalyzer;
 
-    public function __construct(MethodCallNodeFactory $methodCallNodeFactory, DocBlockAnalyzer $docBlockAnalyzer)
-    {
+    /**
+     * @var NodeFactory
+     */
+    private $nodeFactory;
+
+    public function __construct(
+        MethodCallNodeFactory $methodCallNodeFactory,
+        DocBlockAnalyzer $docBlockAnalyzer,
+        NodeFactory $nodeFactory
+    ) {
         $this->methodCallNodeFactory = $methodCallNodeFactory;
         $this->docBlockAnalyzer = $docBlockAnalyzer;
+        $this->nodeFactory = $nodeFactory;
     }
 
     public function isCandidate(Node $node): bool
@@ -64,21 +75,31 @@ final class ExceptionAnnotationRector extends AbstractRector
             /** @var Generic[] $tags */
             $tags = $this->docBlockAnalyzer->getTagsByName($classMethodNode, $annotation);
 
-            foreach ($tags as $tag) {
-                $annotationContent = (string) $tag->getDescription();
-                $methodCall = $this->methodCallNodeFactory->createWithVariableNameMethodNameAndArguments(
-                    'this',
-                    $method,
-                    [$annotationContent]
-                );
+            $methodCallExpressions = [];
 
-                // @todo
-//                $this->prependNodeInsideNode($methodCall, $classMethodNode);
+            foreach ($tags as $tag) {
+                $methodCallExpressions[] = $this->createMethodCallExpressionFromTag($tag, $method);
             }
+
+            $classMethodNode->stmts = array_merge($methodCallExpressions, $classMethodNode->stmts);
 
             $this->docBlockAnalyzer->removeAnnotationFromNode($classMethodNode, $annotation);
         }
 
         return $classMethodNode;
+    }
+
+    private function createMethodCallExpressionFromTag(Generic $genericTag, string $method): Expression
+    {
+        $annotationContent = (string)$genericTag->getDescription();
+        $annotationContent = ltrim($annotationContent, '\\'); // this is needed due to BuilderHelpers
+
+        $methodCall = $this->methodCallNodeFactory->createWithVariableNameMethodNameAndArguments(
+            'this',
+            $method,
+            [$annotationContent]
+        );
+
+        return new Expression($methodCall);
     }
 }
