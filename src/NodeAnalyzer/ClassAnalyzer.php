@@ -51,15 +51,12 @@ final class ClassAnalyzer
             if ($classLikeNode instanceof Class_ || $classLikeNode instanceof Interface_) {
                 $types = array_merge($types, $this->resolveExtendsTypes($classLikeNode, $className));
             }
-        }
-
-        if ($this->isAnonymousClassNode($classLikeNode)) {
-            /** @var FullyQualified $parentClass */
-            $types[] = $this->resolveNameNode($classLikeNode->extends);
+        } else {
+            $types = array_merge($types, $this->resolveExtendsTypes($classLikeNode));
         }
 
         if ($classLikeNode instanceof Class_) {
-            $types += $this->resolveImplementsTypes($classLikeNode);
+            $types = array_merge($types, $this->resolveImplementsTypes($classLikeNode));
         }
 
         return $types;
@@ -96,8 +93,12 @@ final class ClassAnalyzer
      * @param Class_|Interface_ $classLikeNode
      * @return string[]
      */
-    private function resolveExtendsTypes(ClassLike $classLikeNode, string $className): array
+    private function resolveExtendsTypes(ClassLike $classLikeNode, ?string $className = null): array
     {
+        if (! $classLikeNode->extends) {
+            return [];
+        }
+
         return $this->smartClassReflector->getClassParents($className, $classLikeNode);
     }
 

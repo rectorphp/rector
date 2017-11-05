@@ -3,6 +3,7 @@
 namespace Rector\Tests\NodeAnalyzer;
 
 use PhpParser\BuilderFactory;
+use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
@@ -27,7 +28,7 @@ final class ClassAnalyzerTest extends AbstractContainerAwareTestCase
         $this->builderFactory = $this->container->get(BuilderFactory::class);
     }
 
-    public function testTraitResolveTypeAndParentTypes(): void
+    public function testClass(): void
     {
         $this->assertSame(
             ['SomeClass'],
@@ -42,15 +43,44 @@ final class ClassAnalyzerTest extends AbstractContainerAwareTestCase
             ['SomeClass', 'ParentClass'],
             $this->classAnalyzer->resolveTypeAndParentTypes($classWithParent)
         );
+    }
 
+    public function testInterface(): void
+    {
         $this->assertSame(
             ['SomeInterface'],
             $this->classAnalyzer->resolveTypeAndParentTypes(new Interface_('SomeInterface'))
         );
+    }
 
+    public function testTrait(): void
+    {
         $this->assertSame(
             ['SomeTrait'],
             $this->classAnalyzer->resolveTypeAndParentTypes(new Trait_('SomeTrait'))
+        );
+    }
+
+    public function testAnonymousClass(): void
+    {
+        $this->assertSame(
+            [],
+            $this->classAnalyzer->resolveTypeAndParentTypes(new Class_(null))
+        );
+
+        $classWithParent = new Class_(null);
+        $classWithParent->extends = new Name('SomeParentClass');
+
+        $this->assertSame(
+            ['SomeParentClass'],
+            $this->classAnalyzer->resolveTypeAndParentTypes($classWithParent)
+        );
+
+        $classWithParent->implements[] = new Name('SomeInterface');
+
+        $this->assertSame(
+            ['SomeParentClass', 'SomeInterface'],
+            $this->classAnalyzer->resolveTypeAndParentTypes($classWithParent)
         );
     }
 }

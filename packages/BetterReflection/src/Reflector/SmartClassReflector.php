@@ -55,8 +55,17 @@ final class SmartClassReflector
     /**
      * @return string[]
      */
-    public function getClassParents(string $className, ?ClassLike $classLikeNode = null): array
+    public function getClassParents(?string $className = null, ?ClassLike $classLikeNode = null): array
     {
+        // anonymous class
+        if ($className === null) {
+            if ($classLikeNode && $classLikeNode->extends) {
+                return [$classLikeNode->extends->toString()];
+            }
+
+            return [];
+        }
+
         $classReflection = $this->reflect($className);
 
         try {
