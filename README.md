@@ -19,21 +19,8 @@ Rector **upgrades your application** for you, with focus on open-source projects
 
 ## Install
 
-Add to your `composer.json`:
-
-```json
-{
-    "require-dev": {
-        "rector/rector": "@dev",
-        "nikic/php-parser": "dev-master#5900d78 as v3.1.1"
-    }
-}
-```
-
-And download packages:
-
 ```bash
-composer update
+composer require --dev rector/rector @dev nikic/php-parser 'dev-master#5900d78 as v3.1.1'
 ```
 
 ## How To Reconstruct your Code?
