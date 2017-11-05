@@ -64,7 +64,14 @@ final class SmartClassReflector
         } catch (Throwable $throwable) {
             if ($classLikeNode) {
                 // fallback to static
-                return [$classLikeNode->getAttribute(Attribute::PARENT_CLASS_NAME)];
+                $parentClassName = $classLikeNode->getAttribute(Attribute::PARENT_CLASS_NAME);
+                if ($parentClassName) {
+                    return $parentClassName;
+                }
+
+                if ($classLikeNode->extends) {
+                    return [$classLikeNode->extends->toString()];
+                }
             }
         }
 

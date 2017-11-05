@@ -2,6 +2,7 @@
 
 namespace Rector\Tests\NodeAnalyzer;
 
+use PhpParser\BuilderFactory;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
@@ -15,9 +16,15 @@ final class ClassAnalyzerTest extends AbstractContainerAwareTestCase
      */
     private $classAnalyzer;
 
+    /**
+     * @var BuilderFactory
+     */
+    private $builderFactory;
+
     protected function setUp(): void
     {
         $this->classAnalyzer = $this->container->get(ClassAnalyzer::class);
+        $this->builderFactory = $this->container->get(BuilderFactory::class);
     }
 
     public function testTraitResolveTypeAndParentTypes(): void
@@ -25,6 +32,15 @@ final class ClassAnalyzerTest extends AbstractContainerAwareTestCase
         $this->assertSame(
             ['SomeClass'],
             $this->classAnalyzer->resolveTypeAndParentTypes(new Class_('SomeClass'))
+        );
+
+        $classWithParent = $this->builderFactory->class('SomeClass')
+            ->extend('ParentClass')
+            ->getNode();
+
+        $this->assertSame(
+            ['SomeClass', 'ParentClass'],
+            $this->classAnalyzer->resolveTypeAndParentTypes($classWithParent)
         );
 
         $this->assertSame(

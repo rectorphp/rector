@@ -49,7 +49,7 @@ final class ClassAnalyzer
             $types[] = $className;
 
             if ($classLikeNode instanceof Class_ || $classLikeNode instanceof Interface_) {
-                $types += $this->resolveExtendsTypes($classLikeNode, $className);
+                $types = array_merge($types, $this->resolveExtendsTypes($classLikeNode, $className));
             }
         }
 
