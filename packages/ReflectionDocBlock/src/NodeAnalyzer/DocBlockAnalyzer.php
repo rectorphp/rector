@@ -49,7 +49,7 @@ final class DocBlockAnalyzer
     {
         $docBlock = $this->docBlockFactory->createFromNode($node);
 
-        return (bool) $docBlock->hasTag($annotation);
+        return $docBlock->hasTag($annotation);
     }
 
     public function removeAnnotationFromNode(Node $node, string $name, string $content = ''): void
@@ -126,7 +126,7 @@ final class DocBlockAnalyzer
     /**
      * @return Tag[]|null
      */
-    private function getTagsByName(Node $node, string $name): ?array
+    public function getTagsByName(Node $node, string $name): ?array
     {
         $docBlock = $this->docBlockFactory->createFromNode($node);
 
