@@ -51,6 +51,15 @@ final class ClassAnalyzerTest extends AbstractContainerAwareTestCase
             ['SomeInterface'],
             $this->classAnalyzer->resolveTypeAndParentTypes(new Interface_('SomeInterface'))
         );
+
+        $interfaceWithParent = $this->builderFactory->interface('SomeInterface')
+            ->extend('AnotherInterface')
+            ->getNode();
+
+        $this->assertSame(
+            ['SomeInterface', 'AnotherInterface'],
+            $this->classAnalyzer->resolveTypeAndParentTypes($interfaceWithParent)
+        );
     }
 
     public function testTrait(): void
