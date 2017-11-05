@@ -272,13 +272,13 @@ We would be happy to merge your feature then.
 
 ### How to use on PHP < 7.1 on Incompatible Composer Dependencies
 
-You must have separated environment with PHP 7.1 (for example in Docker container). When you have it then run following command:
+You must have an isolated environment with PHP 7.1 (for example in a Docker container). When you have it then run following command:
 
 ```
 composer create-project rector/rector path-to-rector
 ```
 
-When do you have it then you can run all commands like
+You will be able to run all commands in the following manner:
 
 ```
 path-to-rector/bin/rector process /var/www/old-project --config path-to-rector/src/config/level/nette/nette24.yml
