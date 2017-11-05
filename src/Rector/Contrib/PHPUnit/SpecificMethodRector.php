@@ -22,6 +22,14 @@ final class SpecificMethodRector extends AbstractRector
      */
     private $oldToNewMethods = [
         'is_readable' => ['assertIsReadable', 'assertNotIsReadable'],
+        'array_key_exists' => ['assertArrayHasKey', 'assertArrayNotHasKey'],
+        'empty' => ['assertEmpty', 'assertNotEmpty'],
+        'file_exists' => ['assertFileExists', 'assertFileNotExists'],
+        'is_dir' => ['assertDirectoryExists', 'assertDirectoryNotExists'],
+        'is_infinite' => ['assertInfinite', 'assertFinite'],
+        'is_null' => ['assertNull', 'assertNotNull'],
+        'is_writable' => ['assertIsWritable', 'assertNotIsWritable'],
+        'is_nan' => ['assertNan', false],
     ];
 
     /**
@@ -88,9 +96,9 @@ final class SpecificMethodRector extends AbstractRector
 
         [$trueMethodName, $falseMethodName] = $this->oldToNewMethods[$this->activeFuncCallName];
 
-        if ($oldMethodName === 'assertTrue') {
+        if ($oldMethodName === 'assertTrue' && $trueMethodName) {
             $methodCallNode->name = $trueMethodName;
-        } elseif ($oldMethodName === 'assertFalse') {
+        } elseif ($oldMethodName === 'assertFalse' && $falseMethodName) {
             $methodCallNode->name = $falseMethodName;
         }
     }
