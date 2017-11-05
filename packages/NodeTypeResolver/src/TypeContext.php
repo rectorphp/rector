@@ -11,7 +11,7 @@ use PhpParser\Node\Stmt\Function_;
 use Rector\BetterReflection\Reflection\ReflectionFunction;
 use Rector\BetterReflection\Reflection\ReflectionMethod;
 use Rector\BetterReflection\Reflector\MethodReflector;
-use Rector\NodeAnalyzer\ClassAnalyzer;
+use Rector\NodeAnalyzer\ClassLikeAnalyzer;
 use Rector\NodeTypeResolver\TypesExtractor\ConstructorPropertyTypesExtractor;
 
 /**
@@ -45,18 +45,18 @@ final class TypeContext
     private $methodReflector;
 
     /**
-     * @var ClassAnalyzer
+     * @var ClassLikeAnalyzer
      */
-    private $classAnalyzer;
+    private $classLikeAnalyzer;
 
     public function __construct(
         ConstructorPropertyTypesExtractor $constructorPropertyTypesExtractor,
         MethodReflector $methodReflector,
-        ClassAnalyzer $classAnalyzer
+        ClassLikeAnalyzer $classLikeAnalyzer
     ) {
         $this->constructorPropertyTypesExtractor = $constructorPropertyTypesExtractor;
         $this->methodReflector = $methodReflector;
-        $this->classAnalyzer = $classAnalyzer;
+        $this->classLikeAnalyzer = $classLikeAnalyzer;
     }
 
     public function startFile(): void
@@ -79,7 +79,7 @@ final class TypeContext
         $this->propertyTypes = [];
         $this->classLikeNode = $classLikeNode;
 
-        if ($this->classAnalyzer->isNormalClass($classLikeNode)) {
+        if ($this->classLikeAnalyzer->isNormalClass($classLikeNode)) {
             /** @var Class_ $classLikeNode */
             $this->propertyTypes = $this->constructorPropertyTypesExtractor->extractFromClassNode($classLikeNode);
         }
@@ -143,7 +143,7 @@ final class TypeContext
         }
 
         if ($this->classLikeNode) {
-            if ($this->classAnalyzer->isAnonymousClassNode($this->classLikeNode)) {
+            if ($this->classLikeAnalyzer->isAnonymousClassNode($this->classLikeNode)) {
                 return null;
             }
 

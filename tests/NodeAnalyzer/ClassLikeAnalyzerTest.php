@@ -7,15 +7,15 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
-use Rector\NodeAnalyzer\ClassAnalyzer;
+use Rector\NodeAnalyzer\ClassLikeAnalyzer;
 use Rector\Tests\AbstractContainerAwareTestCase;
 
-final class ClassAnalyzerTest extends AbstractContainerAwareTestCase
+final class ClassLikeAnalyzerTest extends AbstractContainerAwareTestCase
 {
     /**
-     * @var ClassAnalyzer
+     * @var ClassLikeAnalyzer
      */
-    private $classAnalyzer;
+    private $classLikeAnalyzer;
 
     /**
      * @var BuilderFactory
@@ -24,7 +24,7 @@ final class ClassAnalyzerTest extends AbstractContainerAwareTestCase
 
     protected function setUp(): void
     {
-        $this->classAnalyzer = $this->container->get(ClassAnalyzer::class);
+        $this->classLikeAnalyzer = $this->container->get(ClassLikeAnalyzer::class);
         $this->builderFactory = $this->container->get(BuilderFactory::class);
     }
 
@@ -32,7 +32,7 @@ final class ClassAnalyzerTest extends AbstractContainerAwareTestCase
     {
         $this->assertSame(
             ['SomeClass'],
-            $this->classAnalyzer->resolveTypeAndParentTypes(new Class_('SomeClass'))
+            $this->classLikeAnalyzer->resolveTypeAndParentTypes(new Class_('SomeClass'))
         );
 
         $classWithParent = $this->builderFactory->class('SomeClass')
@@ -41,7 +41,7 @@ final class ClassAnalyzerTest extends AbstractContainerAwareTestCase
 
         $this->assertSame(
             ['SomeClass', 'ParentClass'],
-            $this->classAnalyzer->resolveTypeAndParentTypes($classWithParent)
+            $this->classLikeAnalyzer->resolveTypeAndParentTypes($classWithParent)
         );
     }
 
@@ -49,7 +49,7 @@ final class ClassAnalyzerTest extends AbstractContainerAwareTestCase
     {
         $this->assertSame(
             ['SomeInterface'],
-            $this->classAnalyzer->resolveTypeAndParentTypes(new Interface_('SomeInterface'))
+            $this->classLikeAnalyzer->resolveTypeAndParentTypes(new Interface_('SomeInterface'))
         );
 
         $interfaceWithParent = $this->builderFactory->interface('SomeInterface')
@@ -58,7 +58,7 @@ final class ClassAnalyzerTest extends AbstractContainerAwareTestCase
 
         $this->assertSame(
             ['SomeInterface', 'AnotherInterface'],
-            $this->classAnalyzer->resolveTypeAndParentTypes($interfaceWithParent)
+            $this->classLikeAnalyzer->resolveTypeAndParentTypes($interfaceWithParent)
         );
     }
 
@@ -66,7 +66,7 @@ final class ClassAnalyzerTest extends AbstractContainerAwareTestCase
     {
         $this->assertSame(
             ['SomeTrait'],
-            $this->classAnalyzer->resolveTypeAndParentTypes(new Trait_('SomeTrait'))
+            $this->classLikeAnalyzer->resolveTypeAndParentTypes(new Trait_('SomeTrait'))
         );
     }
 
@@ -74,7 +74,7 @@ final class ClassAnalyzerTest extends AbstractContainerAwareTestCase
     {
         $this->assertSame(
             [],
-            $this->classAnalyzer->resolveTypeAndParentTypes(new Class_(null))
+            $this->classLikeAnalyzer->resolveTypeAndParentTypes(new Class_(null))
         );
 
         $classWithParent = new Class_(null);
@@ -82,14 +82,14 @@ final class ClassAnalyzerTest extends AbstractContainerAwareTestCase
 
         $this->assertSame(
             ['SomeParentClass'],
-            $this->classAnalyzer->resolveTypeAndParentTypes($classWithParent)
+            $this->classLikeAnalyzer->resolveTypeAndParentTypes($classWithParent)
         );
 
         $classWithParent->implements[] = new Name('SomeInterface');
 
         $this->assertSame(
             ['SomeParentClass', 'SomeInterface'],
-            $this->classAnalyzer->resolveTypeAndParentTypes($classWithParent)
+            $this->classLikeAnalyzer->resolveTypeAndParentTypes($classWithParent)
         );
     }
 }

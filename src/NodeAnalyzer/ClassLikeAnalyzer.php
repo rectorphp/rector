@@ -11,10 +11,7 @@ use PhpParser\Node\Stmt\Interface_;
 use Rector\BetterReflection\Reflector\SmartClassReflector;
 use Rector\Node\Attribute;
 
-/**
- * @todo rename to ClassLikeAnalyzer, since it handles Interfaces and Traits
- */
-final class ClassAnalyzer
+final class ClassLikeAnalyzer
 {
     /**
      * @var SmartClassReflector

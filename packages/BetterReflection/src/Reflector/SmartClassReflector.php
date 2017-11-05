@@ -8,7 +8,6 @@ use PhpParser\Node\Stmt\Interface_;
 use Rector\BetterReflection\Reflection\ReflectionClass;
 use Rector\BetterReflection\Reflector\Exception\IdentifierNotFound;
 use Rector\FileSystem\CurrentFileProvider;
-use Rector\Node\Attribute;
 use SplFileInfo;
 use Throwable;
 use TypeError;
@@ -107,11 +106,6 @@ final class SmartClassReflector
      */
     private function resolveClassParentsFromNode(ClassLike $classLikeNode): array
     {
-        $parentClassName = $classLikeNode->getAttribute(Attribute::PARENT_CLASS_NAME);
-        if ($parentClassName) {
-            return [$parentClassName];
-        }
-
         if (! $classLikeNode->extends) {
             return [];
         }
@@ -128,6 +122,5 @@ final class SmartClassReflector
 
             return $types;
         }
-
     }
 }
