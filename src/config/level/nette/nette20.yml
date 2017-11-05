@@ -2,5 +2,6 @@ rectors:
     Rector\Rector\Dynamic\ClassReplacerRector:
         'Environment': 'Nette\Environment'
         'Image': 'Nette\Image'
+        'Component': 'Nette\ComponentModel\Component'
     Rector\Rector\Contrib\Nette\Routing\BootstrapToRouterFactoryRector: ~
     Rector\Rector\Contrib\Nette\Routing\CleanupBootstrapToRouterFactoryRector: ~
