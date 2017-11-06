@@ -142,6 +142,10 @@ final class PropertyFetchAnalyzer
         }
 
         $classReflection = $this->smartClassReflector->reflect($type);
+        if ($classReflection === null) {
+            return [];
+        }
+
         $publicProperties = $classReflection->getProperties(ReflectionProperty::IS_PUBLIC);
 
         return $this->publicPropertyNamesForType[$type] = array_keys($publicProperties);

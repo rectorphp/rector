@@ -54,6 +54,7 @@ final class SmartClassReflector
     }
 
     /**
+     * @todo validate at least one is passed, or split to 2 methods?
      * @return string[]
      */
     public function getClassParents(?string $className = null, ?ClassLike $classLikeNode = null): array
@@ -67,17 +68,15 @@ final class SmartClassReflector
             return [];
         }
 
-        $classReflection = $this->reflect($className);
-
         try {
+            $classReflection = $this->reflect($className);
+
             return $classReflection->getParentClassNames();
         } catch (Throwable $throwable) {
-            if ($classLikeNode) {
-                return $this->resolveClassParentsFromNode($classLikeNode);
-            }
+            // intentionally empty
         }
 
-        return [];
+        return $this->resolveClassParentsFromNode($classLikeNode);
     }
 
     private function createNewClassReflector(): void

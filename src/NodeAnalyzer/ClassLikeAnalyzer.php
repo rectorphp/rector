@@ -84,7 +84,7 @@ final class ClassLikeAnalyzer
             return $node->toString();
         }
 
-        return $node->name->toString();
+        return $node->name ? $node->name->toString() : '';
     }
 
     /**

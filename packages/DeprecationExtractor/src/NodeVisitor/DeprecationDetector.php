@@ -73,7 +73,7 @@ final class DeprecationDetector extends NodeVisitorAbstract
     private function processDocBlockDeprecation(Node $node): void
     {
         $deprecation = $this->docBlockAnalyzer->getDeprecatedDocComment($node);
-        if ($deprecation === '') {
+        if (! is_string($deprecation)) {
             return;
         }
 
