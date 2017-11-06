@@ -2,14 +2,20 @@ parameters:
     ignoreErrors:
         # property overriden
         - '#Rector\\NodeTraverser\\(Cloning|Shutdown)NodeTraverser::__construct\(\) does not call parent constructor from PhpParser\\NodeTraverser#'
+
         # false positive - property_exists()
         - '#Access to an undefined property PhpParser\\Node\\Stmt\\ClassLike::\$extends#'
+
         # false positive, has annotation type above (@todo recheck for possible ignored positives)
         - '#Access to an undefined property PhpParser\\Node::\$args#'
         - '#Access to an undefined property PhpParser\\Node::\$var#'
         - '#Call to an undefined method PhpParser\\Node::toString\(\)#'
         - '#Access to an undefined property PhpParser\\Node::\$name#' # 13 off
         - '#Access to an undefined property PhpParser\\Node\\Stmt::\$expr#'
+        - '#Parameter \#1 \$node of method Rector\\NodeAnalyzer\\ClassConstAnalyzer::isNames\(\) expects PhpParser\\Node\\Expr\\ClassConstFetch, PhpParser\\Node given#'
+        - '#Parameter \#1 \$classNode of method Rector\\NodeTypeResolver\\TypesExtractor\\ConstructorPropertyTypesExtractor::extractFromClassNode\(\) expects PhpParser\\Node\\Stmt\\Class_, PhpParser\\Node\\Stmt\\ClassLike given#'
+        - '#Parameter \#1 \$classMethodNode of method Rector\\NodeTypeResolver\\TypesExtractor\\ConstructorPropertyTypesExtractor::extractPropertiesFromConstructorMethodNode\(\) expects PhpParser\\Node\\Stmt\\ClassMethod, PhpParser\\Node\\Stmt given#'
+
         # known values
         - '#Method Rector\\Node\\NodeFactory::create(Null|False|True)Constant\(\) should return PhpParser\\Node\\Expr\\ConstFetch but returns PhpParser\\Node\\Expr#'
         - '#Method Rector\\Node\\NodeFactory::createNamespace\(\) should return PhpParser\\Node\\Stmt\\Namespace_ but returns PhpParser\\Node#'

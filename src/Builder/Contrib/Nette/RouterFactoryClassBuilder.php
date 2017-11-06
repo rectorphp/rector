@@ -32,10 +32,10 @@ final class RouterFactoryClassBuilder
     }
 
     /**
-     * @param ArrayDimFetch[] $arrayDimFetchNodes
+     * @param New_[] $newNodes
      * @return Node[]
      */
-    public function build(array $arrayDimFetchNodes): array
+    public function build(array $newNodes): array
     {
         $allNodes = [];
 
@@ -53,7 +53,7 @@ final class RouterFactoryClassBuilder
         $classBuild = $this->builderFactory->class('RouterFactory')
             ->makeFinal();
 
-        $classMethodNode = $this->buildMethod($arrayDimFetchNodes);
+        $classMethodNode = $this->buildMethod($newNodes);
 
         $classBuild->addStmts([$classMethodNode]);
 

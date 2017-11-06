@@ -46,6 +46,7 @@ final class ConstructorPropertyTypesExtractor
                 continue;
             }
 
+            /** @var ClassMethod $inClassNode */
             return $this->extractPropertiesFromConstructorMethodNode($inClassNode, $constructorParametersWithTypes);
         }
 
@@ -53,7 +54,7 @@ final class ConstructorPropertyTypesExtractor
     }
 
     /**
-     * @return string[][] { parameterName => parameterType }
+     * @return string[] { parameterName => parameterType }
      */
     private function getConstructorParametersWithTypes(Class_ $classNode): array
     {
