@@ -11,7 +11,7 @@ use PhpParser\Node\Stmt\Interface_;
 use Rector\BetterReflection\Reflector\SmartClassReflector;
 use Rector\Node\Attribute;
 
-final class ClassAnalyzer
+final class ClassLikeAnalyzer
 {
     /**
      * @var SmartClassReflector
@@ -45,20 +45,15 @@ final class ClassAnalyzer
             $className = $this->resolveNameNode($classLikeNode);
             $types[] = $className;
 
-            if ($classLikeNode->extends) {
-                $types = array_merge($types, $this->smartClassReflector->getClassParents($className, $classLikeNode));
+            if ($classLikeNode instanceof Class_ || $classLikeNode instanceof Interface_) {
+                $types = array_merge($types, $this->resolveExtendsTypes($classLikeNode, $className));
             }
+        } else {
+            $types = array_merge($types, $this->resolveExtendsTypes($classLikeNode));
         }
 
-        if ($this->isAnonymousClassNode($classLikeNode)) {
-            /** @var FullyQualified $parentClass */
-            $types[] = $this->resolveNameNode($classLikeNode->extends);
-        }
-
-        $interfaces = (array) $classLikeNode->implements;
-        foreach ($interfaces as $interface) {
-            /** @var FullyQualified $interface */
-            $types[] = $interface->toString();
+        if ($classLikeNode instanceof Class_) {
+            $types = array_merge($types, $this->resolveImplementsTypes($classLikeNode));
         }
 
         return $types;
@@ -89,5 +84,34 @@ final class ClassAnalyzer
         }
 
         return $node->name->toString();
+    }
+
+    /**
+     * @param Class_|Interface_ $classLikeNode
+     * @return string[]
+     */
+    private function resolveExtendsTypes(ClassLike $classLikeNode, ?string $className = null): array
+    {
+        if (! $classLikeNode->extends) {
+            return [];
+        }
+
+        return $this->smartClassReflector->getClassParents($className, $classLikeNode);
+    }
+
+    /**
+     * @return string[]
+     */
+    private function resolveImplementsTypes(Class_ $classNode): array
+    {
+        $types = [];
+
+        $interfaces = (array) $classNode->implements;
+        foreach ($interfaces as $interface) {
+            /** @var FullyQualified $interface */
+            $types[] = $interface->toString();
+        }
+
+        return $types;
     }
 }

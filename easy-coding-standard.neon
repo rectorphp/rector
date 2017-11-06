@@ -30,7 +30,7 @@ checkers:
             - 'PhpParser\Node\*'
             - 'PhpParser\Comment\Doc'
             - 'Rector\DeprecationExtractor\Deprecation\*'
-            - 'Rector\BetterReflection\SourceLocator\**'
+            - 'Rector\BetterReflection\SourceLocator\Located\LocatedSource'
 
     Symplify\CodingStandard\Fixer\Naming\PropertyNameMatchingTypeFixer:
         extra_skipped_classes:
@@ -61,5 +61,6 @@ parameters:
             # covariant types
             - */packages/NodeValueResolver/src/PerNodeValueResolver/*ValueResolver.php
         Symplify\CodingStandard\Sniffs\DependencyInjection\NoClassInstantiationSniff:
+            - bin/rector.php
             # test file
             - tests/Rector/Contrib/Nette/Routing/BootstrapToRouterFactoryRector/Wrong/bootstrap.php

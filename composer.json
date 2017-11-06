@@ -12,8 +12,8 @@
         "nette/utils": "^2.4",
         "nikic/php-parser": "dev-master#5900d78 as v3.1.1",
         "phpdocumentor/reflection-docblock": "^4.1",
-        "phpdocumentor/type-resolver": "^0.4.0",
-        "rector/better-reflection": "^3.0.4",
+        "phpdocumentor/type-resolver": "^0.4",
+        "rector/better-reflection": "^3.0",
         "symfony/console": "^3.3",
         "symfony/dependency-injection": "^3.3",
         "symfony/finder": "^3.3",
@@ -23,6 +23,7 @@
         "latte/latte": "^2.4",
         "nette/application": "^2.4",
         "nette/forms": "^2.4",
+        "phpstan/phpstan-shim": "^0.8.5",
         "phpunit/phpunit": "^6.4",
         "slam/php-cs-fixer-extensions": "^1.7",
         "symfony/expression-language": "^3.3",
@@ -54,7 +55,8 @@
     "scripts": {
         "all": ["@check-cs", "phpunit"],
         "check-cs": "ecs check bin packages src tests",
-        "fix-cs": "ecs check bin packages src tests --fix"
+        "fix-cs": "ecs check bin packages src tests --fix",
+        "phpstan": "vendor/bin/phpstan.phar analyse packages src tests --level 0"
     },
     "bin": [
         "bin/rector",

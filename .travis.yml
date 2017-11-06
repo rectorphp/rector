@@ -1,34 +1,39 @@
 language: php
 
-php:
-  - 7.2
-  - 7.1
-
-before_install:
-  # hide xdebug to speed up
-  - mv ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini{,.disabled} || echo "xdebug not available"
+matrix:
+  include:
+    - php: 7.1
+      env: PHPUNIT_FLAGS="--coverage-clover coverage.xml" STATIC_ANALYSIS=true
+    - php: 7.2
 
 install:
-  - composer install --prefer-dist
+  - composer install
+
+before_script:
+  # disable xdebug if not coverage
+  - if [[ $PHPUNIT_FLAGS = "" ]]; then phpenv config-rm xdebug.ini;
 
 script:
-  - vendor/bin/phpunit -v
+  - vendor/bin/phpunit $PHPUNIT_FLAGS
+  # disable xdebug
+  - phpenv config-rm xdebug.ini || return 0
+  - |
+    if [[ $STATIC_ANALYSIS != "" ]]; then
+      composer check-cs
+      composer ps
+    fi
 
-jobs:
-  include:
-    - stage: coding standards and code coverage
-      php: 7.1
-      script:
-        - composer check-cs
-    -
-      php: 7.1
-      script:
-        # get xdebug back for coverage
-        - mv ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini{.disabled,}
-        - vendor/bin/phpunit --coverage-clover coverage.xml
-      after_script:
-        - wget https://github.com/satooshi/php-coveralls/releases/download/v1.0.1/coveralls.phar
-        - php coveralls.phar --verbose --config tests/.coveralls.yml
+after_script:
+  # upload coverage to Coveralls.io
+  - |
+    if [[ $PHPUNIT_FLAGS != "" ]]; then
+      wget https://github.com/satooshi/php-coveralls/releases/download/v1.0.1/coveralls.phar
+      php coveralls.phar --verbose
+    fi
+
+cache:
+  directories:
+    - $HOME/.composer/cache
 
 notifications:
   email: never
