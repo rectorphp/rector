@@ -106,7 +106,7 @@ final class ClassLikeAnalyzer
     {
         $types = [];
 
-        $interfaces = (array) $classNode->implements;
+        $interfaces = $classNode->implements;
         foreach ($interfaces as $interface) {
             /** @var FullyQualified $interface */
             $types[] = $interface->toString();
