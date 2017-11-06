@@ -5,6 +5,7 @@ namespace Rector\Rector\Contrib\Nette\DI;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Identifier;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
 
@@ -75,7 +76,7 @@ final class CompilerCompileArgumentsRector extends AbstractRector
         Arg $argNode
     ): MethodCall {
         $addConfigMethodCallNode = clone $methodCallNode;
-        $addConfigMethodCallNode->name = $method;
+        $addConfigMethodCallNode->name = new Identifier($method);
         $addConfigMethodCallNode->args = [$argNode];
 
         return $addConfigMethodCallNode;

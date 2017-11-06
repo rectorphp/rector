@@ -5,6 +5,7 @@ namespace Rector\Rector\Contrib\PhpParser;
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
 use Rector\Node\Attribute;
 use Rector\Node\PropertyFetchNodeFactory;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
@@ -63,10 +64,10 @@ final class CatchAndClosureUseNameRector extends AbstractRector
         $variableNode = $propertyFetchNode->var;
 
         $propertyFetchNode->var = $this->propertyFetchNodeFactory->createWithVariableNameAndPropertyName(
-            $variableNode->name,
+            (string) $variableNode->name,
             'var'
         );
-        $propertyFetchNode->name = 'name';
+        $propertyFetchNode->name = new Identifier('name');
 
         return $propertyFetchNode;
     }

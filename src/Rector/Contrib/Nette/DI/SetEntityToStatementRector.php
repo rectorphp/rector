@@ -3,11 +3,12 @@
 namespace Rector\Rector\Contrib\Nette\DI;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
 use Rector\Node\Attribute;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
@@ -57,10 +58,10 @@ final class SetEntityToStatementRector extends AbstractRector
         return new Assign(
             $methodCallNode->var,
             new New_(
-                new Identifier('Nette\DI\Statement'),
+                new Name('Nette\DI\Statement'),
                 [
                     $methodCallNode->args[0],
-                    new PropertyFetch($methodCallNode->var, 'arguments'),
+                    new Arg(new PropertyFetch($methodCallNode->var, 'arguments')),
                 ]
             )
         );

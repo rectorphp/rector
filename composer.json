@@ -57,7 +57,7 @@
         "all": ["@check-cs", "phpunit"],
         "check-cs": "ecs check bin packages src tests",
         "fix-cs": "ecs check bin packages src tests --fix",
-        "phpstan": "vendor/bin/phpstan.phar analyse packages src tests --level 5 --configuration phpstan.neon"
+        "phpstan": "vendor/bin/phpstan.phar analyse packages src tests --level 6 --configuration phpstan.neon"
     },
     "bin": [
         "bin/rector",
