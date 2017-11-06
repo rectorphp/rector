@@ -18,6 +18,9 @@ use Rector\Node\Attribute;
  * - {$this}->callMe()
  * - $this->{getThis()}->callMe()
  * - {new John}->callMe()
+ * - {parent}::callMe()
+ * - {$this}::callMe()
+ * - {self}::callMe()
  */
 final class NodeCallerTypeResolver
 {
