@@ -82,7 +82,7 @@ final class PropertyFetchTypeResolver implements PerNodeTypeResolverInterface, N
     private function resolvePropertyName(PropertyFetch $propertyFetchNode): string
     {
         if ($propertyFetchNode->name instanceof Variable) {
-            return $propertyFetchNode->name->name;
+            return (string) $propertyFetchNode->name->name;
         }
 
         if ($propertyFetchNode->name instanceof Name || $propertyFetchNode->name instanceof Identifier) {

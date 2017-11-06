@@ -50,7 +50,7 @@ final class AssignTypeResolver implements PerNodeTypeResolverInterface, NodeType
         if ($variableTypes) {
             /** @var Variable $variableNode */
             $variableNode = $assignNode->var;
-            $variableName = $variableNode->name;
+            $variableName = (string) $variableNode->name;
             $this->typeContext->addVariableWithTypes($variableName, $variableTypes);
         }
 
@@ -71,15 +71,16 @@ final class AssignTypeResolver implements PerNodeTypeResolverInterface, NodeType
         $variableNode = $assignNode->var;
 
         if ($variableNode->name instanceof Variable) {
-            $name = $variableNode->name->name;
+            $name = (string) $variableNode->name->name;
         } else {
-            $name = $variableNode->name;
+            $name = (string) $variableNode->name;
         }
 
         /** @var Variable $otherVariableNode */
         $otherVariableNode = $assignNode->expr;
+        $otherVariableName = (string) $otherVariableNode->name;
 
-        $this->typeContext->addAssign($name, $otherVariableNode->name);
+        $this->typeContext->addAssign($name, $otherVariableName);
 
         return $this->typeContext->getTypesForVariable($name);
     }
