@@ -1,9 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Rector\ReflectionDocBlock\DocBlock;
+namespace Rector\ReflectionDocBlock\Tests\DocBlock;
 
 use phpDocumentor\Reflection\DocBlock;
 use PhpParser\Node\Scalar\String_;
+use Rector\ReflectionDocBlock\DocBlock\DocBlockFactory;
 use Rector\Tests\AbstractContainerAwareTestCase;
 
 final class DocBlockFactoryTest extends AbstractContainerAwareTestCase

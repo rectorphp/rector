@@ -25,6 +25,7 @@ final class BetterNodeFinderTest extends AbstractNodeTypeResolverTest
 
     public function testFindFirstAncestorInstanceOf(): void
     {
+        /** @var Variable $variableNode */
         $variableNode = $this->betterNodeFinder->findFirstInstanceOf($this->nodes, Variable::class);
         $classNode = $this->betterNodeFinder->findFirstInstanceOf($this->nodes, Class_::class);
 
@@ -34,6 +35,7 @@ final class BetterNodeFinderTest extends AbstractNodeTypeResolverTest
 
     public function testFindMissingFirstAncestorInstanceOf(): void
     {
+        /** @var Variable $variableNode */
         $variableNode = $this->betterNodeFinder->findFirstInstanceOf($this->nodes, Variable::class);
 
         $this->assertNull($this->betterNodeFinder->findFirstAncestorInstanceOf($variableNode, Array_::class));

@@ -55,7 +55,7 @@ final class ParamTypeResolver implements PerNodeTypeResolverInterface, NodeTypeR
      */
     public function resolve(Node $paramNode): array
     {
-        $variableName = $paramNode->var->name;
+        $variableName = (string) $paramNode->var->name;
 
         // 1. method(ParamType $param)
         if ($paramNode->type) {

@@ -2,6 +2,7 @@
 
 namespace Rector\NodeAnalyzer;
 
+use PhpParser\Builder\Trait_;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
@@ -34,7 +35,7 @@ final class ClassLikeAnalyzer
     }
 
     /**
-     * @param Class_|Interface_ $classLikeNode
+     * @param Class_|Interface_|Trait_ $classLikeNode
      * @return string[]
      */
     public function resolveTypeAndParentTypes(ClassLike $classLikeNode): array
@@ -83,7 +84,7 @@ final class ClassLikeAnalyzer
             return $node->toString();
         }
 
-        return $node->name->toString();
+        return $node->name ? $node->name->toString() : '';
     }
 
     /**
@@ -106,7 +107,7 @@ final class ClassLikeAnalyzer
     {
         $types = [];
 
-        $interfaces = (array) $classNode->implements;
+        $interfaces = $classNode->implements;
         foreach ($interfaces as $interface) {
             /** @var FullyQualified $interface */
             $types[] = $interface->toString();

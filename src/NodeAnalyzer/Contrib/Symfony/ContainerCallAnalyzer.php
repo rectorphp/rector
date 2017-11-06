@@ -41,7 +41,14 @@ final class ContainerCallAnalyzer
             return false;
         }
 
-        if ((string) $methodCall->var->var->name !== 'this' || (string) $methodCall->name !== 'get') {
+        /** @var MethodCall $methodCallNode */
+        $methodCallNode = $methodCall->var;
+
+        if (! $methodCallNode->var instanceof Variable) {
+            return false;
+        }
+
+        if ((string) $methodCallNode->var->name !== 'this' || (string) $methodCall->name !== 'get') {
             return false;
         }
 

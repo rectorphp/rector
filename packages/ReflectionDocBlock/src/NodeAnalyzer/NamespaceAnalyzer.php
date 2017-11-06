@@ -16,7 +16,7 @@ final class NamespaceAnalyzer
     {
         /** @var Use_[] $useNodes */
         $useNodes = $node->getAttribute(Attribute::USE_NODES);
-        if ($useNodes === null) {
+        if (! count($useNodes)) {
             return false;
         }
 

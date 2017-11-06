@@ -3,6 +3,7 @@
 namespace Rector\Rector\Contrib\Nette\Routing;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\PrettyPrinter\Standard;
 use Rector\Builder\Contrib\Nette\RouterFactoryClassBuilder;
@@ -89,7 +90,10 @@ final class BootstrapToRouterFactoryRector extends AbstractRector
      */
     public function refactor(Node $expressionNode): ?Node
     {
-        $this->collectedRouteNodes[] = $expressionNode->expr->expr;
+        /** @var Assign $assignNode */
+        $assignNode = $expressionNode->expr;
+
+        $this->collectedRouteNodes[] = $assignNode->expr;
 
         $this->nodeCollector->addNodeToRemove($expressionNode);
 

@@ -9,7 +9,7 @@ use Rector\NodeTraverserQueue\BetterNodeFinder;
 final class NodeCollector
 {
     /**
-     * @var Node[]
+     * @var Expression[]|Node[]
      */
     private $nodesToRemove = [];
 
@@ -38,7 +38,7 @@ final class NodeCollector
     }
 
     /**
-     * @return Expression[]
+     * @return Expression[]|Node[]
      */
     public function getNodesToRemove(): array
     {

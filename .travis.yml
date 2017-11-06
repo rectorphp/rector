@@ -3,15 +3,16 @@ language: php
 matrix:
   include:
     - php: 7.1
-      env: PHPUNIT_FLAGS="--coverage-clover coverage.xml" STATIC_ANALYSIS=true
+      env: STATIC_ANALYSIS=true
     - php: 7.2
+      env: PHPUNIT_FLAGS="--coverage-clover coverage.xml"
 
 install:
   - composer install
 
 before_script:
   # disable xdebug if not coverage
-  - if [[ $PHPUNIT_FLAGS = "" ]]; then phpenv config-rm xdebug.ini;
+  - if [[ $PHPUNIT_FLAGS = "" ]]; then phpenv config-rm xdebug.ini; fi
 
 script:
   - vendor/bin/phpunit $PHPUNIT_FLAGS
@@ -20,7 +21,7 @@ script:
   - |
     if [[ $STATIC_ANALYSIS != "" ]]; then
       composer check-cs
-      composer ps
+      composer phpstan
     fi
 
 after_script:

@@ -48,6 +48,7 @@
             "Rector\\BetterReflection\\Tests\\": "packages/BetterReflection/tests",
             "Rector\\ReflectionDocBlock\\Tests\\": "packages/ReflectionDocBlock/tests",
             "Rector\\NodeTypeResolver\\Tests\\": "packages/NodeTypeResolver/tests",
+            "Rector\\NodeTraverserQueue\\Tests\\": "packages/NodeTraverserQueue/tests",
             "Rector\\DeprecationExtractor\\Tests\\": "packages/DeprecationExtractor/tests",
             "Rector\\NodeValueResolver\\Tests\\": "packages/NodeValueResolver/tests"
         }
@@ -56,7 +57,7 @@
         "all": ["@check-cs", "phpunit"],
         "check-cs": "ecs check bin packages src tests",
         "fix-cs": "ecs check bin packages src tests --fix",
-        "phpstan": "vendor/bin/phpstan.phar analyse packages src tests --level 0"
+        "phpstan": "vendor/bin/phpstan.phar analyse packages src tests --level max --configuration phpstan.neon"
     },
     "bin": [
         "bin/rector",

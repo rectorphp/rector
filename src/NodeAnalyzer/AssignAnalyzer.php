@@ -41,8 +41,11 @@ final class AssignAnalyzer
             return false;
         }
 
+        /** @var ArrayDimFetch $arrayDimFetchNode */
+        $arrayDimFetchNode = $node->var;
+
         return $this->isVariableTypeAndPropetyName(
-            $node->var,
+            $arrayDimFetchNode,
             $expectedType,
             $expectedPropertyName
         );
@@ -51,17 +54,22 @@ final class AssignAnalyzer
     /**
      * Checks "$specificNameVariable = " and its type
      *
-     * @param Assign $node
+     * @param Assign|ArrayDimFetch $assignOrArrayDimFetchNode
      */
-    private function isVariableTypeAndPropetyName(Node $node, string $expectedType, string $expectedPropertyName): bool
-    {
-        $variableTypes = $node->var->var->getAttribute(Attribute::TYPES);
+    private function isVariableTypeAndPropetyName(
+        Node $assignOrArrayDimFetchNode,
+        string $expectedType,
+        string $expectedPropertyName
+    ): bool {
+        /** @var PropertyFetch $propertyFetchNode */
+        $propertyFetchNode = $assignOrArrayDimFetchNode->var;
 
+        $variableTypes = $propertyFetchNode->var->getAttribute(Attribute::TYPES);
         if (! in_array($expectedType, $variableTypes, true)) {
             return false;
         }
 
-        $propertyName = $node->var->name->name;
+        $propertyName = $propertyFetchNode->name->name;
 
         return $propertyName === $expectedPropertyName;
     }

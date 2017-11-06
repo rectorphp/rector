@@ -6,6 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
@@ -31,7 +32,7 @@ final class ConstructorPropertyTypesExtractor
     }
 
     /**
-     * @return string[] { propertyName => propertyType }
+     * @return string[][] { propertyName => propertyType }
      */
     public function extractFromClassNode(Class_ $classNode): array
     {
@@ -45,6 +46,7 @@ final class ConstructorPropertyTypesExtractor
                 continue;
             }
 
+            /** @var ClassMethod $inClassNode */
             return $this->extractPropertiesFromConstructorMethodNode($inClassNode, $constructorParametersWithTypes);
         }
 
@@ -105,16 +107,12 @@ final class ConstructorPropertyTypesExtractor
             return false;
         }
 
-        if (! $node->expr->var instanceof PropertyFetch) {
-            return false;
-        }
-
-        return $node->expr->var->var->name === 'this';
+        return $this->isThisPropertyFetch($node->expr);
     }
 
     /**
      * @param string[] $constructorParametersWithTypes
-     * @return string[]
+     * @return string[][]
      */
     private function extractPropertiesFromConstructorMethodNode(
         ClassMethod $classMethodNode,
@@ -127,8 +125,13 @@ final class ConstructorPropertyTypesExtractor
                 continue;
             }
 
+            /** @var Expression $inConstructorNode */
+            /** @var Assign $assignNode */
+            $assignNode = $inConstructorNode->expr;
+
             /** @var PropertyFetch $propertyFetchNode */
-            $propertyFetchNode = $inConstructorNode->expr->var;
+            $propertyFetchNode = $assignNode->var;
+
             $propertyName = $propertyFetchNode->name->toString();
             $propertyTypes = $constructorParametersWithTypes[$propertyName] ?? null;
 
@@ -151,5 +154,19 @@ final class ConstructorPropertyTypesExtractor
         }
 
         return $node->expr->name === '__construct';
+    }
+
+    private function isThisPropertyFetch(Assign $assigNode): bool
+    {
+        if (! $assigNode->var instanceof PropertyFetch) {
+            return false;
+        }
+
+        $propertyFetchNode = $assigNode->var;
+        if (! $propertyFetchNode->var instanceof Variable) {
+            return false;
+        }
+
+        return $propertyFetchNode->var->name === 'this';
     }
 }

@@ -1,0 +1,45 @@
+parameters:
+    ignoreErrors:
+        # property overriden
+        - '#Rector\\NodeTraverser\\(Cloning|Shutdown)NodeTraverser::__construct\(\) does not call parent constructor from PhpParser\\NodeTraverser#'
+
+        # false positive - property_exists()
+        - '#Access to an undefined property PhpParser\\Node\\Stmt\\ClassLike::\$extends#'
+
+        # false positive, has annotation type above (@todo recheck for possible ignored positives)
+        - '#Access to an undefined property PhpParser\\Node::\$args#'
+        - '#Access to an undefined property PhpParser\\Node::\$var#'
+        - '#Call to an undefined method PhpParser\\Node::toString\(\)#'
+        - '#Access to an undefined property PhpParser\\Node::\$name#' # 13 off
+        - '#Access to an undefined property PhpParser\\Node\\Stmt::\$expr#'
+        - '#Parameter \#1 \$node of method Rector\\NodeAnalyzer\\ClassConstAnalyzer::isNames\(\) expects PhpParser\\Node\\Expr\\ClassConstFetch, PhpParser\\Node given#'
+        - '#Parameter \#1 \$classNode of method Rector\\NodeTypeResolver\\TypesExtractor\\ConstructorPropertyTypesExtractor::extractFromClassNode\(\) expects PhpParser\\Node\\Stmt\\Class_, PhpParser\\Node\\Stmt\\ClassLike given#'
+        - '#Parameter \#1 \$classMethodNode of method Rector\\NodeTypeResolver\\TypesExtractor\\ConstructorPropertyTypesExtractor::extractPropertiesFromConstructorMethodNode\(\) expects PhpParser\\Node\\Stmt\\ClassMethod, PhpParser\\Node\\Stmt given#'
+
+        # known values
+        - '#Method Rector\\Node\\NodeFactory::create(Null|False|True)Constant\(\) should return PhpParser\\Node\\Expr\\ConstFetch but returns PhpParser\\Node\\Expr#'
+        - '#Method Rector\\Node\\NodeFactory::createNamespace\(\) should return PhpParser\\Node\\Stmt\\Namespace_ but returns PhpParser\\Node#'
+        - '#Property PhpParser\\Node\\Stmt\\ClassLike::\$stmts \(PhpParser\\Node\\Stmt\[\]\) does not accept PhpParser\\Node\[\]#'
+        - '#Array \(PhpParser\\Node\\Stmt\[\]\) does not accept PhpParser\\Node#'
+        - '#Property Rector\\NodeTypeResolver\\NodeVisitor\\NamespaceResolver::\$useNodes \(PhpParser\\Node\\Stmt\\Use_\[\]\) does not accept PhpParser\\Node\[\]#'
+        - '#Method Rector\\NodeValueResolver\\PerNodeValueResolver\\ArgValueResolver::resolve\(\) should return string\|null but returns bool\|string\|null#'
+        - '#Calling method (getRealPath|getFilename)\(\) on possibly null value of type SplFileInfo\|null#'
+        - '#Calling method toString\(\) on possibly null value of type PhpParser\\Node\\Name\\FullyQualified\|null#'
+        - '#Calling method toString\(\) on possibly null value of type PhpParser\\Node\\Name\|null#'
+        - '#Calling method getText\(\) on possibly null value of type PhpParser\\Comment\\Doc\|null#'
+        - '#Parameter \#1 \$classLikeNode of method Rector\\BetterReflection\\Reflector\\SmartClassReflector::resolveClassParentsFromNode\(\) expects PhpParser\\Node\\Stmt\\ClassLike, PhpParser\\Node\\Stmt\\ClassLike\|null given#'
+        - '#Calling method getParentClassNames\(\) on possibly null value of type Rector\\BetterReflection\\Reflection\\ReflectionClass\|null#'
+
+        # buggy
+        - '#Property Rector\\Rector\\Contrib\\PHPUnit\\SpecificMethodRector::\$oldToNewMethods \(false\[\]\[\]|string\[\]\[\]\) does not accept default value of type \(false|string\)\[\]\[\]#'
+        - '#Parameter \#1 \$classLikeNode of method Rector\\NodeAnalyzer\\ClassLikeAnalyzer::resolveExtendsTypes\(\) expects PhpParser\\Node\\Stmt\\Class_\|PhpParser\\Node\\Stmt\\Interface_, PhpParser\\Node\\Stmt\\ClassLike given#'
+        - '#Parameter \#1 \$functionLikeNode of method Rector\\NodeTypeResolver\\TypeContext::getFunctionReflection\(\) expects PhpParser\\Node\\Expr\\Closure\|PhpParser\\Node\\Stmt\\ClassMethod\|PhpParser\\Node\\Stmt\\Function_, PhpParser\\Node\\FunctionLike given#'
+        - '#Method Rector\\BetterReflection\\Reflector\\SmartClassReflector::reflect\(\) should return Rector\\BetterReflection\\Reflection\\ReflectionClass\|null but returns Rector\\BetterReflection\\Reflection\\Reflection\|Rector\\BetterReflection\\Reflection\\ReflectionClass#'
+
+    excludes_analyse:
+        # test files
+        - '*tests/Rector/Contrib/Nette/Routing/BootstrapToRouterFactoryRector/Wrong/bootstrap.php'
+        - '*tests/Rector/Dynamic/MethodNameReplacerRector/wrong/*'
+        - '*tests/Rector/Dynamic/MethodNameReplacerRector/correct/*'
+        - '*packages/**/tests/**/**Source/**'
+        - '*packages/**/tests/**Source/**'

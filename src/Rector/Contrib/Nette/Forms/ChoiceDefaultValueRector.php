@@ -4,6 +4,8 @@ namespace Rector\Rector\Contrib\Nette\Forms;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\Variable;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Rector\AbstractRector;
@@ -53,7 +55,11 @@ final class ChoiceDefaultValueRector extends AbstractRector
      */
     public function refactor(Node $assignNode): ?Node
     {
-        $propertyNode = $assignNode->var->var;
+        /** @var PropertyFetch $propertyFetchNode */
+        $propertyFetchNode = $assignNode->var;
+
+        /** @var Variable $propertyNode */
+        $propertyNode = $propertyFetchNode->var;
 
         return $this->methodCallNodeFactory->createWithVariableMethodNameAndArguments(
             $propertyNode,

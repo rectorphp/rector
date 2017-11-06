@@ -25,9 +25,9 @@ final class SmartClassReflector
     private $currentFileProvider;
 
     /**
-     * @var SmartClassReflector
+     * @var ClassReflector
      */
-    private $currentSmartClassReflector;
+    private $currentClassReflector;
 
     /**
      * @var SplFileInfo
@@ -47,37 +47,36 @@ final class SmartClassReflector
                 $this->createNewClassReflector();
             }
 
-            return $this->currentSmartClassReflector->reflect($className);
+            return $this->currentClassReflector->reflect($className);
         } catch (IdentifierNotFound|TypeError $throwable) {
             return null;
         }
     }
 
     /**
+     * @todo validate at least one is passed, or split to 2 methods?
      * @return string[]
      */
     public function getClassParents(?string $className = null, ?ClassLike $classLikeNode = null): array
     {
         // anonymous class
         if ($className === null) {
-            if ($classLikeNode && $classLikeNode->extends) {
+            if ($classLikeNode && property_exists($classLikeNode, 'extends')) {
                 return [$classLikeNode->extends->toString()];
             }
 
             return [];
         }
 
-        $classReflection = $this->reflect($className);
-
         try {
+            $classReflection = $this->reflect($className);
+
             return $classReflection->getParentClassNames();
         } catch (Throwable $throwable) {
-            if ($classLikeNode) {
-                return $this->resolveClassParentsFromNode($classLikeNode);
-            }
+            // intentionally empty
         }
 
-        return [];
+        return $this->resolveClassParentsFromNode($classLikeNode);
     }
 
     private function createNewClassReflector(): void
@@ -85,16 +84,16 @@ final class SmartClassReflector
         $currentFile = $this->currentFileProvider->getCurrentFile();
 
         if ($currentFile === null) {
-            $this->currentSmartClassReflector = $this->classReflectorFactory->create();
+            $this->currentClassReflector = $this->classReflectorFactory->create();
         } else {
-            $this->currentSmartClassReflector = $this->classReflectorFactory->createWithFile($currentFile);
+            $this->currentClassReflector = $this->classReflectorFactory->createWithFile($currentFile);
             $this->classReflectorActiveFile = $currentFile;
         }
     }
 
     private function shouldCreateNewClassReflector(): bool
     {
-        if ($this->currentSmartClassReflector === null) {
+        if ($this->currentClassReflector === null) {
             return true;
         }
 
@@ -106,7 +105,7 @@ final class SmartClassReflector
      */
     private function resolveClassParentsFromNode(ClassLike $classLikeNode): array
     {
-        if (! $classLikeNode->extends) {
+        if (! property_exists($classLikeNode, 'extends')) {
             return [];
         }
 

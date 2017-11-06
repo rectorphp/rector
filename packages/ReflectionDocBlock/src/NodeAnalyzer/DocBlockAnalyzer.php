@@ -62,7 +62,7 @@ final class DocBlockAnalyzer
     {
         /** @var Var_[] $varTags */
         $varTags = $this->getTagsByName($node, 'var');
-        if ($varTags === null) {
+        if (! count($varTags)) {
             return null;
         }
 
@@ -78,7 +78,7 @@ final class DocBlockAnalyzer
     {
         /** @var Deprecated[] $deprecatedTags */
         $deprecatedTags = $this->getTagsByName($node, 'deprecated');
-        if ($deprecatedTags === null) {
+        if (! count($deprecatedTags)) {
             return null;
         }
 
@@ -96,7 +96,7 @@ final class DocBlockAnalyzer
 
         /** @var Param[] $paramTags */
         $paramTags = $this->getTagsByName($node, 'param');
-        if ($paramTags === null) {
+        if (! count($paramTags)) {
             return null;
         }
 

@@ -64,3 +64,6 @@ parameters:
             - bin/rector.php
             # test file
             - tests/Rector/Contrib/Nette/Routing/BootstrapToRouterFactoryRector/Wrong/bootstrap.php
+        PHP_CodeSniffer\Standards\Generic\Sniffs\CodeAnalysis\EmptyStatementSniff:
+            # intentionally
+            - packages/BetterReflection/src/Reflector/SmartClassReflector.php

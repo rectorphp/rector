@@ -20,7 +20,7 @@ use Rector\Rector\AbstractRector;
 final class OptionNameRector extends AbstractRector
 {
     /**
-     * @var string
+     * @var string[]
      */
     private $oldToNewOption = [
         'precision' => 'scale',
@@ -45,17 +45,17 @@ final class OptionNameRector extends AbstractRector
         $arrayParentNode = $arrayItemParentNode->getAttribute(Attribute::PARENT_NODE);
         $argParentNode = $arrayParentNode->getAttribute(Attribute::PARENT_NODE);
 
-        /** @var MethodCall $methodCallNode */
+        /** @var MethodCall $argParentNode */
         $methodCallNode = $argParentNode->getAttribute(Attribute::PARENT_NODE);
 
         return $methodCallNode->name->toString() === 'add';
     }
 
     /**
-     * @param MethodCall $node
+     * @param String_ $stringNode
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $stringNode): ?Node
     {
-        return new String_($this->oldToNewOption[$node->value]);
+        return new String_($this->oldToNewOption[$stringNode->value]);
     }
 }
