@@ -2,11 +2,14 @@ parameters:
     ignoreErrors:
         # property overriden
         - '#Rector\\NodeTraverser\\(Cloning|Shutdown)NodeTraverser::__construct\(\) does not call parent constructor from PhpParser\\NodeTraverser#'
+        # false positive - property_exists()
+        - '#Access to an undefined property PhpParser\\Node\\Stmt\\ClassLike::\$extends#'
         # false positive, has annotation type above (@todo recheck for possible ignored positives)
         - '#Access to an undefined property PhpParser\\Node::\$args#'
         - '#Access to an undefined property PhpParser\\Node::\$var#'
         - '#Call to an undefined method PhpParser\\Node::toString\(\)#'
         - '#Access to an undefined property PhpParser\\Node::\$name#' # 13 off
+        - '#Access to an undefined property PhpParser\\Node\\Stmt::\$expr#'
 
     excludes_analyse:
         # test files

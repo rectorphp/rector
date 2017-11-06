@@ -48,7 +48,14 @@ final class NewTypeResolver implements PerNodeTypeResolverInterface, NodeTypeRes
 
         // e.g. new $this->templateClass;
         if ($newNode->class instanceof PropertyFetch) {
-            if ($newNode->class->var->name !== 'this') {
+            if (! $newNode->class->var instanceof Variable) {
+                return [];
+            }
+
+            /** @var Variable $variableNode */
+            $variableNode = $newNode->class->var;
+
+            if ($variableNode->name !== 'this') {
                 throw new NotImplementedException(sprintf(
                     'Not implemented yet. Go to "%s()" and add check for "%s" node for external dependency.',
                     __METHOD__,

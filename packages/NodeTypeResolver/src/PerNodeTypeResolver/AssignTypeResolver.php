@@ -67,13 +67,19 @@ final class AssignTypeResolver implements PerNodeTypeResolverInterface, NodeType
      */
     private function processAssignVariableNode(Assign $assignNode): array
     {
-        if ($assignNode->var->name instanceof Variable) {
-            $name = $assignNode->var->name->name;
+        /** @var Variable $variableNode */
+        $variableNode = $assignNode->var;
+
+        if ($variableNode->name instanceof Variable) {
+            $name = $variableNode->name->name;
         } else {
-            $name = $assignNode->var->name;
+            $name = $variableNode->name;
         }
 
-        $this->typeContext->addAssign($name, $assignNode->expr->name);
+        /** @var Variable $otherVariableNode */
+        $otherVariableNode = $assignNode->expr;
+
+        $this->typeContext->addAssign($name, $otherVariableNode->name);
 
         return $this->typeContext->getTypesForVariable($name);
     }

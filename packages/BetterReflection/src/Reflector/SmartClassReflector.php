@@ -60,7 +60,7 @@ final class SmartClassReflector
     {
         // anonymous class
         if ($className === null) {
-            if ($classLikeNode && $classLikeNode->extends) {
+            if ($classLikeNode && property_exists($classLikeNode, 'extends')) {
                 return [$classLikeNode->extends->toString()];
             }
 
@@ -106,7 +106,7 @@ final class SmartClassReflector
      */
     private function resolveClassParentsFromNode(ClassLike $classLikeNode): array
     {
-        if (! $classLikeNode->extends) {
+        if (! property_exists($classLikeNode, 'extends')) {
             return [];
         }
 
