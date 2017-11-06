@@ -20,6 +20,7 @@ script:
   - |
     if [[ $STATIC_ANALYSIS != "" ]]; then
       composer check-cs
+      composer ps
     fi
 
 after_script:
