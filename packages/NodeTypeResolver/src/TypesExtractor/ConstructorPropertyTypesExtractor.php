@@ -32,7 +32,7 @@ final class ConstructorPropertyTypesExtractor
     }
 
     /**
-     * @return string[] { propertyName => propertyType }
+     * @return string[][] { propertyName => propertyType }
      */
     public function extractFromClassNode(Class_ $classNode): array
     {
@@ -53,7 +53,7 @@ final class ConstructorPropertyTypesExtractor
     }
 
     /**
-     * @return string[] { parameterName => parameterType }
+     * @return string[][] { parameterName => parameterType }
      */
     private function getConstructorParametersWithTypes(Class_ $classNode): array
     {
@@ -111,7 +111,7 @@ final class ConstructorPropertyTypesExtractor
 
     /**
      * @param string[] $constructorParametersWithTypes
-     * @return string[]
+     * @return string[][]
      */
     private function extractPropertiesFromConstructorMethodNode(
         ClassMethod $classMethodNode,

@@ -12,12 +12,12 @@ use Rector\Node\Attribute;
 final class NodeConnector extends NodeVisitorAbstract
 {
     /**
-     * @var Node
+     * @var Node[]
      */
     private $stack = [];
 
     /**
-     * @var Node
+     * @var Node|null
      */
     private $prev;
 

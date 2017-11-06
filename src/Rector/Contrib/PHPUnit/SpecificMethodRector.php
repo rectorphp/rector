@@ -18,7 +18,7 @@ use Rector\Rector\AbstractRector;
 final class SpecificMethodRector extends AbstractRector
 {
     /**
-     * @var string[]
+     * @var string[][]|bool[][]
      */
     private $oldToNewMethods = [
         'is_readable' => ['assertIsReadable', 'assertNotIsReadable'],
@@ -38,7 +38,7 @@ final class SpecificMethodRector extends AbstractRector
     private $methodCallAnalyzer;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $activeFuncCallName;
 

@@ -39,7 +39,7 @@ final class PropertyNameReplacerRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        $this->activeTypes = null;
+        $this->activeTypes = [];
 
         $matchedTypes = $this->propertyFetchAnalyzer->matchTypes($node, $this->getClasses());
         if ($matchedTypes) {

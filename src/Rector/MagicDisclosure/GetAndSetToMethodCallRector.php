@@ -26,7 +26,7 @@ use Rector\Rector\AbstractRector;
 final class GetAndSetToMethodCallRector extends AbstractRector
 {
     /**
-     * @var string[]
+     * @var string[][][]
      */
     private $typeToMethodCalls = [];
 
@@ -36,7 +36,7 @@ final class GetAndSetToMethodCallRector extends AbstractRector
     private $propertyFetchAnalyzer;
 
     /**
-     * @var string[]
+     * @var string[][]
      */
     private $activeTransformation = [];
 
@@ -53,7 +53,7 @@ final class GetAndSetToMethodCallRector extends AbstractRector
     /**
      * Type to method call()
      *
-     * @param string[] $typeToMethodCalls
+     * @param string[][][] $typeToMethodCalls
      */
     public function __construct(
         array $typeToMethodCalls,

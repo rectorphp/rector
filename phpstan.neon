@@ -10,6 +10,12 @@ parameters:
         - '#Call to an undefined method PhpParser\\Node::toString\(\)#'
         - '#Access to an undefined property PhpParser\\Node::\$name#' # 13 off
         - '#Access to an undefined property PhpParser\\Node\\Stmt::\$expr#'
+        # known values
+        - '#Method Rector\\Node\\NodeFactory::create(Null|False|True)Constant\(\) should return PhpParser\\Node\\Expr\\ConstFetch but returns PhpParser\\Node\\Expr#'
+        - '#Method Rector\\Node\\NodeFactory::createNamespace\(\) should return PhpParser\\Node\\Stmt\\Namespace_ but returns PhpParser\\Node#'
+        - '#Property PhpParser\\Node\\Stmt\\ClassLike::\$stmts \(PhpParser\\Node\\Stmt\[\]\) does not accept PhpParser\\Node\[\]#'
+        - '#Array \(PhpParser\\Node\\Stmt\[\]\) does not accept PhpParser\\Node#'
+        - '#Property Rector\\NodeTypeResolver\\NodeVisitor\\NamespaceResolver::\$useNodes \(PhpParser\\Node\\Stmt\\Use_\[\]\) does not accept PhpParser\\Node\[\]#'
 
     excludes_analyse:
         # test files

@@ -20,7 +20,7 @@ use Rector\Rector\AbstractRector;
 final class OptionNameRector extends AbstractRector
 {
     /**
-     * @var string
+     * @var string[]
      */
     private $oldToNewOption = [
         'precision' => 'scale',
