@@ -19,21 +19,8 @@ Rector **upgrades your application** for you, with focus on open-source projects
 
 ## Install
 
-Add to your `composer.json`:
-
-```json
-{
-    "require-dev": {
-        "rector/rector": "@dev",
-        "nikic/php-parser": "dev-master#5900d78 as v3.1.1"
-    }
-}
-```
-
-And download packages:
-
 ```bash
-composer update
+composer require --dev rector/rector @dev nikic/php-parser 'dev-master#5900d78 as v3.1.1'
 ```
 
 ## How To Reconstruct your Code?
@@ -241,7 +228,7 @@ final class MyRector extends AbstractRector
 ### Coding Standards are Outsourced
 
 
-This package has no intention in formating your code, as it **coding standard tools handle this much better**.
+This package has no intention in formatting your code, as **coding standard tools handle this much better**.
 
 We prefer [EasyCodingStandard](https://github.com/Symplify/EasyCodingStandard):
 
@@ -285,13 +272,13 @@ We would be happy to merge your feature then.
 
 ### How to use on PHP < 7.1 on Incompatible Composer Dependencies
 
-You must have separated environment with PHP 7.1 (for example in Docker container). When you have it then run following command:
+You must have an isolated environment with PHP 7.1 (for example in a Docker container). When you have it then run following command:
 
 ```
 composer create-project rector/rector path-to-rector
 ```
 
-When do you have it then you can run all commands like
+You will be able to run all commands in the following manner:
 
 ```
 path-to-rector/bin/rector process /var/www/old-project --config path-to-rector/src/config/level/nette/nette24.yml
