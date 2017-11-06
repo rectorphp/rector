@@ -161,6 +161,7 @@ final class MethodNameReplacerRector extends AbstractRector
             return false;
         }
 
+        /** @var Identifier $node */
         $parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
 
         /** @var Identifier $node */

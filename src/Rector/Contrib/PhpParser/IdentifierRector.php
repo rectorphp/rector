@@ -5,6 +5,7 @@ namespace Rector\Rector\Contrib\PhpParser;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\Variable;
 use Rector\Node\Attribute;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
@@ -66,7 +67,10 @@ final class IdentifierRector extends AbstractRector
         }
 
         /** @var PropertyFetch $node */
-        $nodeTypes = $node->var->getAttribute(Attribute::TYPES);
+        $variableNode = $node->var;
+
+        /** @var Variable $variableNode */
+        $nodeTypes = $variableNode->getAttribute(Attribute::TYPES);
 
         $properties = $this->matchTypeToProperties($nodeTypes);
 

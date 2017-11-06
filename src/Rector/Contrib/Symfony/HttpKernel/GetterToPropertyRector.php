@@ -74,7 +74,10 @@ final class GetterToPropertyRector extends AbstractRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        $serviceName = $methodCallNode->args[0]->value->value;
+        /** @var Node\Scalar\String_ $stringArgument */
+        $stringArgument = $methodCallNode->args[0]->value;
+
+        $serviceName = $stringArgument->value;
         $serviceType = $this->serviceTypeForNameProvider->provideTypeForName($serviceName);
         if ($serviceType === null) {
             return null;

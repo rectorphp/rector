@@ -31,7 +31,7 @@ final class ClassMethodAnalyzer
             return false;
         }
 
-        $nodeTypes = (array) $node->getAttributes(Attribute::TYPES);
+        $nodeTypes = (array) $node->getAttribute(Attribute::TYPES);
 
         return in_array($type, $nodeTypes, true);
     }

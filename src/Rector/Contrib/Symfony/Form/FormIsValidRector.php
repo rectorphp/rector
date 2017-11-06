@@ -5,6 +5,7 @@ namespace Rector\Rector\Contrib\Symfony\Form;
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\Variable;
 use Rector\Node\Attribute;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
@@ -57,7 +58,9 @@ final class FormIsValidRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        $variableName = $node->var->name;
+        /** @var Variable $variableNode */
+        $variableNode = $node->var;
+        $variableName = $variableNode->name;
 
         return new BooleanAnd(
             $this->methodCallNodeFactory->createWithVariableNameAndMethodName($variableName, 'isSubmitted'),

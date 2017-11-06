@@ -6,11 +6,11 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Scalar\String_;
 use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Contract\Bridge\ServiceTypeForNameProviderInterface;
 use Rector\Naming\PropertyNaming;
 use Rector\Node\Attribute;
-use Rector\Node\NodeFactory;
 use Rector\Node\PropertyFetchNodeFactory;
 use Rector\NodeAnalyzer\Contrib\Symfony\ContainerCallAnalyzer;
 use Rector\Rector\AbstractRector;
@@ -53,7 +53,7 @@ final class CommandToConstructorInjectionRector extends AbstractRector
     private $propertyNaming;
 
     /**
-     * @var NodeFactory
+     * @var PropertyFetchNodeFactory
      */
     private $propertyFetchNodeFactory;
 
@@ -103,7 +103,10 @@ final class CommandToConstructorInjectionRector extends AbstractRector
     {
         $this->replaceParentContainerAwareCommandWithCommand($methodCallNode);
 
-        $serviceName = $methodCallNode->args[0]->value->value;
+        /** @var String_ $serviceNameArgument */
+        $serviceNameArgument = $methodCallNode->args[0]->value;
+
+        $serviceName = $serviceNameArgument->value;
         $serviceType = $this->serviceTypeForNameProvider->provideTypeForName($serviceName);
         if ($serviceType === null) {
             return null;

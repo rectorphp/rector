@@ -49,7 +49,12 @@ final class FormCallbackRector extends AbstractRector
             return false;
         }
 
-        if (! $this->isFormEventHandler($node->var->var)) {
+        /** @var ArrayDimFetch $arrayDimFetchNode */
+        $arrayDimFetchNode = $node->var;
+
+        /** @var PropertyFetch $propertyFetchNode */
+        $propertyFetchNode = $arrayDimFetchNode->var;
+        if (! $this->isFormEventHandler($propertyFetchNode)) {
             return false;
         }
 
@@ -65,7 +70,10 @@ final class FormCallbackRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        $node->expr = $this->nodeFactory->createArray($node->expr->var, $node->expr->name);
+        /** @var PropertyFetch $propertyFetchNode */
+        $propertyFetchNode = $node->expr;
+
+        $node->expr = $this->nodeFactory->createArray($propertyFetchNode->var, $propertyFetchNode->name);
 
         return $node;
     }
