@@ -32,7 +32,7 @@ final class Application extends SymfonyApplication
     {
         $options = $inputDefinition->getOptions();
 
-        unset($options['quiet'], $options['version'], $options['no-interraction']);
+        unset($options['quiet'], $options['version'], $options['no-interaction']);
 
         $inputDefinition->setOptions($options);
     }
@@ -40,7 +40,7 @@ final class Application extends SymfonyApplication
     private function addCustomOptions(InputDefinition $inputDefinition): void
     {
         $inputDefinition->addOption(new InputOption(
-            '--config',
+            'config',
             null,
             InputOption::VALUE_REQUIRED,
             'Path to config file.',
@@ -48,7 +48,7 @@ final class Application extends SymfonyApplication
         ));
 
         $inputDefinition->addOption(new InputOption(
-            '--level',
+            'level',
             null,
             InputOption::VALUE_REQUIRED,
             'Finds config by shortcut name.'
