@@ -50,11 +50,7 @@ final class PropertyFetchTypeResolver implements PerNodeTypeResolverInterface, N
      */
     public function resolve(Node $propertyFetchNode): array
     {
-        if ($propertyFetchNode->name instanceof Variable) {
-            return $this->nodeTypeResolver->resolve($propertyFetchNode->name);
-        }
-
-        if ($propertyFetchNode->name instanceof ArrayDimFetch) {
+        if ($propertyFetchNode->name instanceof Variable || $propertyFetchNode->name instanceof ArrayDimFetch) {
             return $this->nodeTypeResolver->resolve($propertyFetchNode->name);
         }
 
