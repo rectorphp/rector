@@ -8,7 +8,7 @@ rectors:
         - 'PHPUnit_'
 
     # handles 2nd and 3rd arugment of setExpectedException
-    Rector\Rector\Contrib\PHPUnit\ExceptionRector: ~
+    Rector\Rector\Contrib\PHPUnit\DelegateExceptionArgumentsRector: ~
 
     Rector\Rector\Dynamic\MethodNameReplacerRector:
         'PHPUnit\Framework\TestClass':

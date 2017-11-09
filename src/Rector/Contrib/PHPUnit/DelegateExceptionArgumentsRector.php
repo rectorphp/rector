@@ -19,7 +19,7 @@ use Rector\Rector\AbstractRector;
  * - $this->expectExceptionMessage('Message');
  * - $this->expectExceptionCode('CODE');
  */
-final class ExceptionRector extends AbstractRector
+final class DelegateExceptionArgumentsRector extends AbstractRector
 {
     /**
      * @var string[]
