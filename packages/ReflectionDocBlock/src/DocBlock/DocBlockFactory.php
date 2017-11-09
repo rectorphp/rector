@@ -46,6 +46,7 @@ final class DocBlockFactory
         }
 
         $docBlockContent = $node->getDocComment() ? $node->getDocComment()->getText() : ' ';
+
         $docBlockContext = $this->createContextForNamespace($node);
 
         $docBlock = $this->phpDocumentorDocBlockFactory->create($docBlockContent, $docBlockContext);
@@ -60,6 +61,7 @@ final class DocBlockFactory
             return null;
         }
 
+        // @todo: service to prevent static?
         return (new NamespaceNodeToReflectionTypeContext)($namespaceNode);
     }
 }
