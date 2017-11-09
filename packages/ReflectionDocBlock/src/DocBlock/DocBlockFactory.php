@@ -25,14 +25,21 @@ final class DocBlockFactory
      */
     private $docBlocksPerNode;
 
+    /**
+     * @var NamespaceNodeToReflectionTypeContext
+     */
+    private $namespaceNodeToReflectionTypeContext;
+
     public function __construct(
         TagFactory $tagFactory,
         PhpDocumentorDocBlockFactory $phpDocumentorDocBlockFactory,
         DescriptionFactory $descriptionFactory,
-        TypeResolver $typeResolver
+        TypeResolver $typeResolver,
+        NamespaceNodeToReflectionTypeContext $namespaceNodeToReflectionTypeContext
     ) {
         $this->docBlocksPerNode = new SplObjectStorage;
         $this->phpDocumentorDocBlockFactory = $phpDocumentorDocBlockFactory;
+        $this->namespaceNodeToReflectionTypeContext = $namespaceNodeToReflectionTypeContext;
 
         // cannot move to services.yml, because it would cause circular dependency exception
         $tagFactory->addService($descriptionFactory);
@@ -61,7 +68,6 @@ final class DocBlockFactory
             return null;
         }
 
-        // @todo: service to prevent static?
-        return (new NamespaceNodeToReflectionTypeContext)($namespaceNode);
+        return ($this->namespaceNodeToReflectionTypeContext)($namespaceNode);
     }
 }
