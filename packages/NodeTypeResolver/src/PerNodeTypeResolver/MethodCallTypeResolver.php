@@ -54,7 +54,7 @@ final class MethodCallTypeResolver implements PerNodeTypeResolverInterface
             return [];
         }
 
-        $variableName = $variableNode->name;
+        $variableName = (string) $variableNode->name;
 
         $methodCallVariableTypes = $this->typeContext->getTypesForVariable($variableName);
 
@@ -72,7 +72,7 @@ final class MethodCallTypeResolver implements PerNodeTypeResolverInterface
     private function resolveMethodCallName(MethodCall $methodCallNode): ?string
     {
         if ($methodCallNode->name instanceof Variable) {
-            return $methodCallNode->name->name;
+            return (string) $methodCallNode->name->name;
         }
 
         if ($methodCallNode->name instanceof PropertyFetch) {
@@ -91,7 +91,7 @@ final class MethodCallTypeResolver implements PerNodeTypeResolverInterface
         }
 
         if ($assignNode->var instanceof Variable) {
-            return $assignNode->var->name;
+            return (string) $assignNode->var->name;
         }
 
         return null;

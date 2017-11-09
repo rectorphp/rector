@@ -1,9 +1,12 @@
 <?php declare(strict_types=1);
 
+namespace Rector\Tests\Configuration\Validator;
+
 use PHPUnit\Framework\TestCase;
 use Rector\Configuration\Validator\RectorClassValidator;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\Exception\Validator\InvalidRectorClassException;
+use stdClass;
 
 final class RectorClassValidatorTest extends TestCase
 {

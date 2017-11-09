@@ -49,6 +49,9 @@ final class ClassReplacerRector extends AbstractRector
         }
 
         $nameNode = $this->resolveNameNodeFromNode($node);
+        if ($nameNode === null) {
+            return false;
+        }
 
         return isset($this->oldToNewClasses[$nameNode->toString()]);
     }
@@ -68,7 +71,7 @@ final class ClassReplacerRector extends AbstractRector
         if ($node instanceof Use_) {
             $newName = $this->resolveNewNameFromNode($node);
 
-            if ($this->namespaceAnalyzer->isUseStatmenetAlreadyPresent($node, $newName)) {
+            if ($this->namespaceAnalyzer->isUseStatementAlreadyPresent($node, $newName)) {
                 $this->nodeCollector->addNodeToRemove($node);
 
                 return null;

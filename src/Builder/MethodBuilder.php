@@ -4,7 +4,7 @@ namespace Rector\Builder;
 
 use Nette\Utils\Strings;
 use PhpParser\BuilderFactory;
-use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -77,7 +77,7 @@ final class MethodBuilder
 
         if ($propertyType && $operation === 'get') {
             $typeHint = Strings::endsWith($propertyType, '[]') ? 'array' : $propertyType;
-            $methodBuild->setReturnType(new Identifier($typeHint));
+            $methodBuild->setReturnType(new Name($typeHint));
         }
 
         if ($operation === 'add' || $operation === 'set') {

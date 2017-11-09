@@ -76,10 +76,10 @@ final class NodeTraverserQueue
     {
         $this->currentFileProvider->setCurrentFile($fileInfo);
 
-        try {
-            $oldStmts = $this->parser->parseFile($fileInfo->getRealPath());
-            $oldTokens = $this->lexer->getTokens();
+        $oldStmts = $this->parser->parseFile($fileInfo->getRealPath());
+        $oldTokens = $this->lexer->getTokens();
 
+        try {
             $newStmts = $this->cloningNodeTraverser->traverse($oldStmts);
             $newStmts = $this->standaloneTraverseNodeTraverser->traverse($newStmts);
 

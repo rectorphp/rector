@@ -87,7 +87,7 @@ final class NamespaceReplacerRector extends AbstractRector
 
     private function resolveNameFromNode(Node $node): string
     {
-        if ($node instanceof Namespace_) {
+        if ($node instanceof Namespace_ && $node->name) {
             return $node->name->toString();
         }
 
@@ -104,6 +104,8 @@ final class NamespaceReplacerRector extends AbstractRector
 
             return $node->toString();
         }
+
+        return '';
     }
 
     private function isNamespaceToChange(string $namespace): bool

@@ -25,7 +25,7 @@ final class ClassConstantReplacerRector extends AbstractRector
     private $classConstAnalyzer;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $activeType;
 

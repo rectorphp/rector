@@ -1,7 +1,12 @@
 checkers:
     # remove unused "use" statements
     - PhpCsFixer\Fixer\Import\NoUnusedImportsFixer
+
     # order use statements A-Z
     - PhpCsFixer\Fixer\Import\OrderedImportsFixer
+
     # remove extra spaces from DocBlocks
     - PhpCsFixer\Fixer\Comment\NoTrailingWhitespaceInCommentFixer
+
+    # clean empty doc blocks, e.g. after annotation removal
+    - PhpCsFixer\Fixer\Phpdoc\NoEmptyPhpdocFixer

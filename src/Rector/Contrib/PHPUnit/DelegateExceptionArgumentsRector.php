@@ -3,15 +3,23 @@
 namespace Rector\Rector\Contrib\PHPUnit;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
 
 /**
- * Covers ref. https://github.com/RectorPHP/Rector/issues/79
+ * Before:
+ * - $this->setExpectedException(Exception::class, 'Message', 'CODE');
+ *
+ *
+ * After:
+ * - $this->setExpectedException(Exception::class);
+ * - $this->expectExceptionMessage('Message');
+ * - $this->expectExceptionCode('CODE');
  */
-final class ExceptionRector extends AbstractRector
+final class DelegateExceptionArgumentsRector extends AbstractRector
 {
     /**
      * @var string[]
@@ -39,11 +47,16 @@ final class ExceptionRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        return $this->methodCallAnalyzer->isTypesAndMethods(
+        if (! $this->methodCallAnalyzer->isTypeAndMethods(
             $node,
-            ['PHPUnit\Framework\TestCase', 'PHPUnit_Framework_TestCase'],
+            'PHPUnit\Framework\TestCase',
             array_keys($this->oldToNewMethod)
-        );
+        )) {
+            return false;
+        }
+
+        /** @var MethodCall $node */
+        return isset($node->args[1]);
     }
 
     /**
@@ -52,23 +65,34 @@ final class ExceptionRector extends AbstractRector
     public function refactor(Node $methodCallNode): ?Node
     {
         $oldMethodName = $methodCallNode->name->name;
-        $methodCallNode->name->name = 'expectException';
 
-        if (! isset($methodCallNode->args[1])) {
-            return $methodCallNode;
-        }
-
-        $secondArgument = $methodCallNode->args[1];
+        $this->prependNewMethodCall(
+            $methodCallNode,
+            $this->oldToNewMethod[$oldMethodName],
+            $methodCallNode->args[1]
+        );
         unset($methodCallNode->args[1]);
 
+        if (isset($methodCallNode->args[2])) {
+            $this->prependNewMethodCall(
+                $methodCallNode,
+                'expectExceptionCode',
+                $methodCallNode->args[2]
+            );
+            unset($methodCallNode->args[2]);
+        }
+
+        return $methodCallNode;
+    }
+
+    private function prependNewMethodCall(MethodCall $methodCallNode, string $methodName, Arg $argNode): void
+    {
         $expectExceptionMessageMethodCall = $this->methodCallNodeFactory->createWithVariableNameMethodNameAndArguments(
             'this',
-            $this->oldToNewMethod[$oldMethodName],
-            [$secondArgument]
+            $methodName,
+            [$argNode]
         );
 
         $this->prependNodeAfterNode($expectExceptionMessageMethodCall, $methodCallNode);
-
-        return $methodCallNode;
     }
 }

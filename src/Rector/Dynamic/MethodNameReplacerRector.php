@@ -72,7 +72,7 @@ final class MethodNameReplacerRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        $this->activeTypes = null;
+        $this->activeTypes = [];
 
         $matchedTypes = $this->methodCallAnalyzer->matchTypes($node, $this->getClasses());
         if ($matchedTypes) {
@@ -161,6 +161,7 @@ final class MethodNameReplacerRector extends AbstractRector
             return false;
         }
 
+        /** @var Identifier $node */
         $parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
 
         /** @var Identifier $node */

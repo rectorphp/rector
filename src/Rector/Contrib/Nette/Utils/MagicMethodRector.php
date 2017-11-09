@@ -81,8 +81,14 @@ final class MagicMethodRector extends AbstractRector
         /** @var string $className */
         $className = $node->getAttribute(Attribute::CLASS_NAME);
 
+        $classReflection = $this->smartClassReflector->reflect($className);
+
+        if ($classReflection === null) {
+            return false;
+        }
+
         $this->magicMethods = $this->magicMethodMatcher->matchInContent(
-            $this->smartClassReflector->reflect($className),
+            $classReflection,
             $docComments[0]->getText()
         );
 

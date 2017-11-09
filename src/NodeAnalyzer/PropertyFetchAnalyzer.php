@@ -31,6 +31,7 @@ final class PropertyFetchAnalyzer
             return false;
         }
 
+        /** @var PropertyFetch $node */
         $nodePropertyName = $node->name->toString();
 
         return $nodePropertyName === $property;
@@ -85,9 +86,7 @@ final class PropertyFetchAnalyzer
             return false;
         }
 
-        $nodePropertyName = $node->name->toString();
-
-        return in_array($nodePropertyName, $properties, true);
+        return in_array($node->name->toString(), $properties, true);
     }
 
     /**
@@ -117,7 +116,7 @@ final class PropertyFetchAnalyzer
         }
 
         /** @var PropertyFetch $node */
-        return in_array((string) $node->name, $propertyNames, true);
+        return in_array($node->name->toString(), $propertyNames, true);
     }
 
     /**
@@ -143,6 +142,10 @@ final class PropertyFetchAnalyzer
         }
 
         $classReflection = $this->smartClassReflector->reflect($type);
+        if ($classReflection === null) {
+            return [];
+        }
+
         $publicProperties = $classReflection->getProperties(ReflectionProperty::IS_PUBLIC);
 
         return $this->publicPropertyNamesForType[$type] = array_keys($publicProperties);

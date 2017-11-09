@@ -60,7 +60,7 @@ final class DeprecationDetector extends NodeVisitorAbstract
             $argNode = $node->args[0];
 
             $message = $this->nodeValueResolver->resolve($argNode);
-            if ($message === null) {
+            if (! is_string($message)) {
                 return;
             }
 
@@ -73,7 +73,7 @@ final class DeprecationDetector extends NodeVisitorAbstract
     private function processDocBlockDeprecation(Node $node): void
     {
         $deprecation = $this->docBlockAnalyzer->getDeprecatedDocComment($node);
-        if ($deprecation === '') {
+        if (! is_string($deprecation)) {
             return;
         }
 

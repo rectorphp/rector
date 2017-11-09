@@ -12,11 +12,11 @@ use Rector\Node\Attribute;
  */
 final class NamespaceAnalyzer
 {
-    public function isUseStatmenetAlreadyPresent(Node $node, string $useName): bool
+    public function isUseStatementAlreadyPresent(Node $node, string $useName): bool
     {
         /** @var Use_[] $useNodes */
         $useNodes = $node->getAttribute(Attribute::USE_NODES);
-        if ($useNodes === null) {
+        if (! count($useNodes)) {
             return false;
         }
 

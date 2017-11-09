@@ -57,7 +57,7 @@ final class MethodCallNodeFactory
         array $arguments
     ): MethodCall {
         $methodCallNode = $this->createWithVariableNameAndMethodName($variableName, $methodName);
-        $methodCallNode->args = $arguments;
+        $methodCallNode->args = $this->nodeFactory->createArgs($arguments);
 
         return $methodCallNode;
     }
