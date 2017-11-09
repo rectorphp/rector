@@ -11,6 +11,6 @@ class SomeClass
     {
         $newClass = new NewClass;
 
-        return new NewClass;
+        return new \NewClass;
     }
 }
