@@ -6,11 +6,8 @@ use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Use_;
-use PhpParser\Node\Stmt\UseUse;
 use Rector\Node\Attribute;
-use Rector\NodeVisitor\Collector\NodeCollector;
 use Rector\Rector\AbstractRector;
-use Rector\ReflectionDocBlock\NodeAnalyzer\NamespaceAnalyzer;
 
 final class ClassReplacerRector extends AbstractRector
 {
@@ -20,31 +17,16 @@ final class ClassReplacerRector extends AbstractRector
     private $oldToNewClasses = [];
 
     /**
-     * @var NamespaceAnalyzer
-     */
-    private $namespaceAnalyzer;
-
-    /**
-     * @var NodeCollector
-     */
-    private $nodeCollector;
-
-    /**
      * @param string[] $oldToNewClasses
      */
-    public function __construct(
-        array $oldToNewClasses,
-        NamespaceAnalyzer $namespaceAnalyzer,
-        NodeCollector $nodeCollector
-    ) {
+    public function __construct(array $oldToNewClasses)
+    {
         $this->oldToNewClasses = $oldToNewClasses;
-        $this->namespaceAnalyzer = $namespaceAnalyzer;
-        $this->nodeCollector = $nodeCollector;
     }
 
     public function isCandidate(Node $node): bool
     {
-        if (! $node instanceof Name && ! $node instanceof Use_) {
+        if (! $node instanceof Name) {
             return false;
         }
 
@@ -57,31 +39,14 @@ final class ClassReplacerRector extends AbstractRector
     }
 
     /**
-     * @param Name|UseUse $node
+     * @param Name $nameNode
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $nameNode): ?Node
     {
-        if ($node instanceof Name) {
-            $newName = $this->resolveNewNameFromNode($node);
-            $newNameNode = new Name($newName);
+        if ($nameNode instanceof Name) {
+            $newName = $this->resolveNewNameFromNode($nameNode);
 
-            return new Name($newNameNode->getLast());
-        }
-
-        if ($node instanceof Use_) {
-            $newName = $this->resolveNewNameFromNode($node);
-
-            if ($this->namespaceAnalyzer->isUseStatementAlreadyPresent($node, $newName)) {
-                $this->nodeCollector->addNodeToRemove($node);
-
-                return null;
-            }
-
-            $node->uses[0]->name = new Name($newName);
-
-            $node->setAttribute(Attribute::ORIGINAL_NODE, null);
-
-            return $node;
+            return new FullyQualified($newName);
         }
 
         return null;

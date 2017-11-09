@@ -3,16 +3,40 @@
 namespace Rector\FileSystem;
 
 use Rector\Exception\FileSystem\DirectoryNotFoundException;
+use SplFileInfo;
 use Symfony\Component\Finder\Finder;
-use Symfony\Component\Finder\SplFileInfo;
 
 final class PhpFilesFinder
 {
     /**
+     * @param string[] $source
+     * @return SplFileInfo[]
+     */
+    public function findInDirectoriesAndFiles(array $source): array
+    {
+        $files = [];
+        $directories = [];
+
+        foreach ($source as $singleSource) {
+            if (is_file($singleSource)) {
+                $files[] = new SplFileInfo($singleSource);
+            } else {
+                $directories[] = $singleSource;
+            }
+        }
+
+        if (count($directories)) {
+            $files = array_merge($files, $this->findInDirectories($directories));
+        }
+
+        return $files;
+    }
+
+    /**
      * @param string[] $directories
      * @return SplFileInfo[]
      */
-    public function findInDirectories(array $directories): array
+    private function findInDirectories(array $directories): array
     {
         $this->ensureDirectoriesExist($directories);
 
