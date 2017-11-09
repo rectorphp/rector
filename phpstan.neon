@@ -26,7 +26,6 @@ parameters:
         - '#Calling method toString\(\) on possibly null value of type PhpParser\\Node\\Name\\FullyQualified\|null#'
         - '#Calling method toString\(\) on possibly null value of type PhpParser\\Node\\Name\|null#'
         - '#Calling method getText\(\) on possibly null value of type PhpParser\\Comment\\Doc\|null#'
-        - '#Parameter \#1 \$classLikeNode of method Rector\\BetterReflection\\Reflector\\SmartClassReflector::resolveClassParentsFromNode\(\) expects PhpParser\\Node\\Stmt\\ClassLike, PhpParser\\Node\\Stmt\\ClassLike\|null given#'
         - '#Calling method getParentClassNames\(\) on possibly null value of type Rector\\BetterReflection\\Reflection\\ReflectionClass\|null#'
 
         # buggy

@@ -76,7 +76,11 @@ final class SmartClassReflector
             // intentionally empty
         }
 
-        return $this->resolveClassParentsFromNode($classLikeNode);
+        if ($classLikeNode) {
+            return $this->resolveClassParentsFromNode($classLikeNode);
+        }
+
+        return [];
     }
 
     private function createNewClassReflector(): void

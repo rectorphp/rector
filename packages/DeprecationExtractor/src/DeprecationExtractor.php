@@ -4,10 +4,12 @@ namespace Rector\DeprecationExtractor;
 
 use PhpParser\NodeTraverser;
 use Rector\Contract\Parser\ParserInterface;
+use Rector\DeprecationExtractor\Exception\DeprecationExtractorException;
 use Rector\DeprecationExtractor\NodeVisitor\DeprecationDetector;
 use Rector\FileSystem\PhpFilesFinder;
 use Rector\NodeTraverser\NodeTraverserFactory;
 use Rector\NodeTraverser\StandaloneTraverseNodeTraverser;
+use Throwable;
 
 final class DeprecationExtractor
 {
@@ -52,11 +54,20 @@ final class DeprecationExtractor
         $files = $this->phpFilesFinder->findInDirectoriesAndFiles($source);
 
         foreach ($files as $file) {
-            $nodes = $this->parser->parseFile($file->getRealPath());
-            // this completes parent & child nodes, types and classses
-            $this->standaloneTraverseNodeTraverser->traverse($nodes);
+            try {
+                $nodes = $this->parser->parseFile($file->getRealPath());
+                // this completes parent & child nodes, types and classses
+                $this->standaloneTraverseNodeTraverser->traverse($nodes);
 
-            $this->deprecationDetectorNodeTraverser->traverse($nodes);
+                $this->deprecationDetectorNodeTraverser->traverse($nodes);
+            } catch (Throwable $throwable) {
+                $message = sprintf(
+                    'Extracting deperactions from "%s" file failed.',
+                    $file->getRealPath()
+                );
+
+                throw new DeprecationExtractorException($message, 0, $throwable);
+            }
         }
     }
 }

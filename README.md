@@ -29,17 +29,17 @@ composer require --dev rector/rector @dev nikic/php-parser 'dev-master#5900d78 a
 
 Fetaured open-source projects have **prepared sets**. You'll find them in [`/src/config/level`](/src/config/level).
 
-E.g. Do you need to upgrade to Nette 2.4?
+E.g. Do you need to upgrade to Symfony 3.3?
 
 1. Run rector on your `/src` directory
 
 ```bash
-vendor/bin/rector process src --level nette24
+vendor/bin/rector process src --level symfony33
 ```
 
 Which is just a shortcut for using complete path with `--config` option:
 ```bash
-vendor/bin/rector process src --config vendor/rector/rector/src/config/level/nette/nette24.yml
+vendor/bin/rector process src --config vendor/rector/rector/src/config/level/symfony/symfony33.yml
 ```
 
 You can also use your own config file:
@@ -222,7 +222,7 @@ final class MyRector extends AbstractRector
 
 3. Add a Test Case
 
-4. Add to specific level, e.g. [`/src/config/level/nette/nette24.yml`](/src/config/level/nette/nette24.yml)
+4. Add to specific level, e.g. [`/src/config/level/symfony/symfony33.yml`](/src/config/level/symfony/symfony33.yml)
 
 5. Submit PR
 
@@ -286,7 +286,7 @@ composer create-project rector/rector path-to-rector
 You will be able to run all commands in the following manner:
 
 ```
-path-to-rector/bin/rector process /var/www/old-project --config path-to-rector/src/config/level/nette/nette24.yml
+path-to-rector/bin/rector process /var/www/old-project --config path-to-rector/src/config/level/symfony/symfony33.yml
 # or for short
-path-to-rector/bin/rector process /var/www/old-project --level nette24
+path-to-rector/bin/rector process /var/www/old-project --level symfony33
 ```

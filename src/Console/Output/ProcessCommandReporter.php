@@ -85,7 +85,7 @@ final class ProcessCommandReporter
         if ($this->alreadyReportedFiles < self::MAX_FILES_TO_PRINT) {
             $this->symfonyStyle->writeln(sprintf(
                 ' - %s',
-                $fileInfo
+                $fileInfo->getRealPath()
             ));
         }
 
