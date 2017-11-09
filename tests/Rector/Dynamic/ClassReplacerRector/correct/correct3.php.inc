@@ -10,7 +10,7 @@ use PhpParser\Builder\Method;
 use PhpParser\Builder\Param;
 use PhpParser\Builder\Property;
 use PhpParser\Builder\Trait_;
-use PhpParser\Builder;
+use \PhpParser\Builder;
 use PhpParser\BuilderFactory;
 use PhpParser\Comment\Doc;
 use PhpParser\Node\Const_;
