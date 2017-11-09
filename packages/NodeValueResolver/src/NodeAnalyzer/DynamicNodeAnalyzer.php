@@ -3,8 +3,10 @@
 namespace Rector\NodeValueResolver\NodeAnalyzer;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
 
 /**
@@ -12,6 +14,17 @@ use PhpParser\Node\Expr\Variable;
  */
 final class DynamicNodeAnalyzer
 {
+    /**
+     * @var string[]
+     */
+    private $dynamicNodeTypes = [
+        ArrayDimFetch::class,
+        StaticPropertyFetch::class,
+        PropertyFetch::class,
+        MethodCall::class,
+        Variable::class,
+    ];
+
     /**
      * @param Node[] $nodes
      */
@@ -30,6 +43,6 @@ final class DynamicNodeAnalyzer
     {
         $nodeClass = get_class($node);
 
-        return in_array($nodeClass, [PropertyFetch::class, MethodCall::class, Variable::class], true);
+        return in_array($nodeClass, $this->dynamicNodeTypes, true);
     }
 }
