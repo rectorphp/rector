@@ -38,7 +38,6 @@ parameters:
 
     excludes_analyse:
         # test files
-        - '*tests/Rector/Contrib/Nette/Routing/BootstrapToRouterFactoryRector/Wrong/bootstrap.php'
         - '*tests/Rector/Dynamic/MethodNameReplacerRector/wrong/*'
         - '*tests/Rector/Dynamic/MethodNameReplacerRector/correct/*'
         - '*packages/**/tests/**/**Source/**'
