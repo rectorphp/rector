@@ -23,7 +23,6 @@ parameters:
         - '#Array \(PhpParser\\Node\\Stmt\[\]\) does not accept PhpParser\\Node#'
         - '#Property Rector\\NodeTypeResolver\\NodeVisitor\\NamespaceResolver::\$useNodes \(PhpParser\\Node\\Stmt\\Use_\[\]\) does not accept PhpParser\\Node\[\]#'
         - '#Method Rector\\NodeValueResolver\\PerNodeValueResolver\\ArgValueResolver::resolve\(\) should return string\|null but returns bool\|string\|null#'
-        - '#Calling method (getRealPath|getFilename)\(\) on possibly null value of type SplFileInfo\|null#'
         - '#Calling method toString\(\) on possibly null value of type PhpParser\\Node\\Name\\FullyQualified\|null#'
         - '#Calling method toString\(\) on possibly null value of type PhpParser\\Node\\Name\|null#'
         - '#Calling method getText\(\) on possibly null value of type PhpParser\\Comment\\Doc\|null#'

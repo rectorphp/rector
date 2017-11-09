@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Contrib\PHPUnit\ExceptionRector;
+namespace Rector\Tests\Rector\Contrib\PHPUnit\DelegateExceptionArgumentsRector;
 
-use Rector\Rector\Contrib\PHPUnit\ExceptionRector;
+use Rector\Rector\Contrib\PHPUnit\DelegateExceptionArgumentsRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class Test extends AbstractRectorTestCase
@@ -25,6 +25,6 @@ final class Test extends AbstractRectorTestCase
      */
     protected function getRectorClasses(): array
     {
-        return [ExceptionRector::class];
+        return [DelegateExceptionArgumentsRector::class];
     }
 }
