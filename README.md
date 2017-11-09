@@ -34,13 +34,18 @@ E.g. Do you need to upgrade to Nette 2.4?
 1. Run rector on your `/src` directory
 
 ```bash
-vendor/bin/rector process src --config vendor/bin/rector/src/config/level/nette/nette24.yml
+vendor/bin/rector process src --level nette24
 ```
 
-Too long? Try `--level` shortcut:
+Which is just a shortcut for using complete path with `--config` option:
+```bash
+vendor/bin/rector process src --config vendor/rector/rector/src/config/level/nette/nette24.yml
+```
+
+You can also use your own config file:
 
 ```bash
-vendor/bin/rector process src --level nette24
+vendor/bin/rector process src --config your-own-config.yml
 ```
 
 2. Check the Git
