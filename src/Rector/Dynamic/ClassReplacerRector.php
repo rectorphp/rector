@@ -63,9 +63,8 @@ final class ClassReplacerRector extends AbstractRector
     {
         if ($node instanceof Name) {
             $newName = $this->resolveNewNameFromNode($node);
-            $newNameNode = new Name($newName);
 
-            return new Name($newNameNode->getLast());
+            return new FullyQualified($newName);
         }
 
         if ($node instanceof Use_) {
