@@ -33,7 +33,12 @@ final class DocBlockAnalyzerTest extends AbstractContainerAwareTestCase
         $this->assertNotSame('', $node->getDocComment()->getText());
 
         $this->docBlockAnalyzer->removeAnnotationFromNode($node, 'param');
-        $this->assertSame('', $node->getDocComment()->getText());
+        $emptyDoc = <<<'EOT'
+/**
+ *
+ */
+EOT;
+        $this->assertSame($emptyDoc, $node->getDocComment()->getText());
 
         $initDoc = <<<'EOT'
 @param ParamType $paramName

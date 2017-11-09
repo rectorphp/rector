@@ -14,10 +14,6 @@ use Rector\ReflectionDocBlock\DocBlock\AnnotationRemover;
 use Rector\ReflectionDocBlock\DocBlock\DocBlockFactory;
 use Rector\ReflectionDocBlock\DocBlock\TidingSerializer;
 
-/**
- * @todo Make use of phpdocumentor/type-resolver, to return FQN names
- * @see https://github.com/Roave/BetterReflection/blob/a6f46b13307f751a0123ad3b830db2105f263867/src/TypesFinder/FindPropertyType.php#L52
- */
 final class DocBlockAnalyzer
 {
     /**
@@ -49,7 +45,7 @@ final class DocBlockAnalyzer
     {
         $docBlock = $this->docBlockFactory->createFromNode($node);
 
-        return (bool) $docBlock->hasTag($annotation);
+        return $docBlock->hasTag($annotation);
     }
 
     public function removeAnnotationFromNode(Node $node, string $name, string $content = ''): void
@@ -66,7 +62,7 @@ final class DocBlockAnalyzer
     {
         /** @var Var_[] $varTags */
         $varTags = $this->getTagsByName($node, 'var');
-        if ($varTags === null) {
+        if (! count($varTags)) {
             return null;
         }
 
@@ -82,7 +78,7 @@ final class DocBlockAnalyzer
     {
         /** @var Deprecated[] $deprecatedTags */
         $deprecatedTags = $this->getTagsByName($node, 'deprecated');
-        if ($deprecatedTags === null) {
+        if (! count($deprecatedTags)) {
             return null;
         }
 
@@ -100,7 +96,7 @@ final class DocBlockAnalyzer
 
         /** @var Param[] $paramTags */
         $paramTags = $this->getTagsByName($node, 'param');
-        if ($paramTags === null) {
+        if (! count($paramTags)) {
             return null;
         }
 
@@ -116,17 +112,10 @@ final class DocBlockAnalyzer
         return null;
     }
 
-    private function saveNewDocBlockToNode(Node $node, DocBlock $docBlock): void
-    {
-        $docContent = $this->tidingSerializer->getDocComment($docBlock);
-        $doc = new Doc($docContent);
-        $node->setDocComment($doc);
-    }
-
     /**
      * @return Tag[]|null
      */
-    private function getTagsByName(Node $node, string $name): ?array
+    public function getTagsByName(Node $node, string $name): ?array
     {
         $docBlock = $this->docBlockFactory->createFromNode($node);
 
@@ -136,6 +125,13 @@ final class DocBlockAnalyzer
         }
 
         return $tags;
+    }
+
+    private function saveNewDocBlockToNode(Node $node, DocBlock $docBlock): void
+    {
+        $docContent = $this->tidingSerializer->getDocComment($docBlock);
+        $doc = new Doc($docContent);
+        $node->setDocComment($doc);
     }
 
     /**

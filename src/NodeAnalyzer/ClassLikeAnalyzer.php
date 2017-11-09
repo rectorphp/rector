@@ -2,6 +2,7 @@
 
 namespace Rector\NodeAnalyzer;
 
+use PhpParser\Builder\Trait_;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
@@ -11,7 +12,7 @@ use PhpParser\Node\Stmt\Interface_;
 use Rector\BetterReflection\Reflector\SmartClassReflector;
 use Rector\Node\Attribute;
 
-final class ClassAnalyzer
+final class ClassLikeAnalyzer
 {
     /**
      * @var SmartClassReflector
@@ -34,7 +35,7 @@ final class ClassAnalyzer
     }
 
     /**
-     * @param Class_|Interface_ $classLikeNode
+     * @param Class_|Interface_|Trait_ $classLikeNode
      * @return string[]
      */
     public function resolveTypeAndParentTypes(ClassLike $classLikeNode): array
@@ -45,20 +46,15 @@ final class ClassAnalyzer
             $className = $this->resolveNameNode($classLikeNode);
             $types[] = $className;
 
-            if ($classLikeNode->extends) {
-                $types = array_merge($types, $this->smartClassReflector->getClassParents($className, $classLikeNode));
+            if ($classLikeNode instanceof Class_ || $classLikeNode instanceof Interface_) {
+                $types = array_merge($types, $this->resolveExtendsTypes($classLikeNode, $className));
             }
+        } else {
+            $types = array_merge($types, $this->resolveExtendsTypes($classLikeNode));
         }
 
-        if ($this->isAnonymousClassNode($classLikeNode)) {
-            /** @var FullyQualified $parentClass */
-            $types[] = $this->resolveNameNode($classLikeNode->extends);
-        }
-
-        $interfaces = (array) $classLikeNode->implements;
-        foreach ($interfaces as $interface) {
-            /** @var FullyQualified $interface */
-            $types[] = $interface->toString();
+        if ($classLikeNode instanceof Class_) {
+            $types = array_merge($types, $this->resolveImplementsTypes($classLikeNode));
         }
 
         return $types;
@@ -88,6 +84,35 @@ final class ClassAnalyzer
             return $node->toString();
         }
 
-        return $node->name->toString();
+        return $node->name ? $node->name->toString() : '';
+    }
+
+    /**
+     * @param Class_|Interface_ $classLikeNode
+     * @return string[]
+     */
+    private function resolveExtendsTypes(ClassLike $classLikeNode, ?string $className = null): array
+    {
+        if (! $classLikeNode->extends) {
+            return [];
+        }
+
+        return $this->smartClassReflector->getClassParents($className, $classLikeNode);
+    }
+
+    /**
+     * @return string[]
+     */
+    private function resolveImplementsTypes(Class_ $classNode): array
+    {
+        $types = [];
+
+        $interfaces = $classNode->implements;
+        foreach ($interfaces as $interface) {
+            /** @var FullyQualified $interface */
+            $types[] = $interface->toString();
+        }
+
+        return $types;
     }
 }

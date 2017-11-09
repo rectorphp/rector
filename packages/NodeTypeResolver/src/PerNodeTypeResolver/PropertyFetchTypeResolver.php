@@ -61,14 +61,17 @@ final class PropertyFetchTypeResolver implements PerNodeTypeResolverInterface, N
             return $this->nodeTypeResolver->resolve($propertyFetchNode->var);
         }
 
+        /** @var Variable $variableNode */
+        $variableNode = $propertyFetchNode->var;
+
         // e.g. $this->property
-        if ($propertyFetchNode->var->name === 'this') {
+        if ($variableNode->name === 'this') {
             $propertyName = $this->resolvePropertyName($propertyFetchNode);
 
             return $this->typeContext->getTypesForProperty($propertyName);
         }
 
-        return $this->resolveTypesFromVariable($propertyFetchNode->var, $propertyName);
+        return $this->resolveTypesFromVariable($variableNode, $propertyName);
     }
 
     public function setNodeTypeResolver(NodeTypeResolver $nodeTypeResolver): void
@@ -79,7 +82,7 @@ final class PropertyFetchTypeResolver implements PerNodeTypeResolverInterface, N
     private function resolvePropertyName(PropertyFetch $propertyFetchNode): string
     {
         if ($propertyFetchNode->name instanceof Variable) {
-            return $propertyFetchNode->name->name;
+            return (string) $propertyFetchNode->name->name;
         }
 
         if ($propertyFetchNode->name instanceof Name || $propertyFetchNode->name instanceof Identifier) {

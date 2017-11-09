@@ -157,6 +157,10 @@ final class MethodCallAnalyzer
         }
 
         $classReflection = $this->smartClassReflector->reflect($type);
+        if ($classReflection === null) {
+            return [];
+        }
+
         $publicMethods = $classReflection->getMethods(ReflectionMethod::IS_PUBLIC);
 
         return $this->publicMethodNamesForType[$type] = array_keys($publicMethods);

@@ -5,7 +5,6 @@ namespace Rector\BetterReflection\Tests\Reflector;
 use Rector\BetterReflection\Reflection\ReflectionClass;
 use Rector\BetterReflection\Reflector\ClassReflector;
 use Rector\BetterReflection\Reflector\ClassReflectorFactory;
-use Rector\BetterReflection\Reflector\SmartClassReflector;
 use Rector\Tests\AbstractContainerAwareTestCase;
 use SplFileInfo;
 
@@ -17,9 +16,9 @@ final class ClassReflectorOnSourceTest extends AbstractContainerAwareTestCase
     private $currentProcessedFileInfo;
 
     /**
-     * @var SmartClassReflector
+     * @var ClassReflector
      */
-    private $smartClassReflector;
+    private $classReflector;
 
     protected function setUp(): void
     {
@@ -27,19 +26,19 @@ final class ClassReflectorOnSourceTest extends AbstractContainerAwareTestCase
         $classReflectorFactory = $this->container->get(ClassReflectorFactory::class);
 
         $this->currentProcessedFileInfo = new SplFileInfo(__DIR__ . '/NotLoadedSource/SomeClass.php');
-        $this->smartClassReflector = $classReflectorFactory->createWithFile($this->currentProcessedFileInfo);
+        $this->classReflector = $classReflectorFactory->createWithFile($this->currentProcessedFileInfo);
     }
 
     public function test(): void
     {
-        $this->assertInstanceOf(ClassReflector::class, $this->smartClassReflector);
+        $this->assertInstanceOf(ClassReflector::class, $this->classReflector);
     }
 
     public function testReflectClassThatIsNotLoaded(): void
     {
         $className = 'NotLoadedSource\SomeClass';
 
-        $classReflection = $this->smartClassReflector->reflect($className);
+        $classReflection = $this->classReflector->reflect($className);
 
         $this->assertInstanceOf(ReflectionClass::class, $classReflection);
     }

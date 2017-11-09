@@ -16,9 +16,9 @@ final class RectorConfigFilePathHelper
     /**
      * @var string
      */
-    private static $levelDirectory = __DIR__ . '/../config/level';
+    private $levelDirectory = __DIR__ . '/../config/level';
 
-    public static function resolveLevel(InputInterface $input): ?string
+    public function resolveLevel(InputInterface $input): ?string
     {
         if (! $input->hasParameterOption(self::LEVEL_OPTION_NAME)) {
             return null;
@@ -29,7 +29,7 @@ final class RectorConfigFilePathHelper
         $finder = Finder::create()
             ->files()
             ->name($levelConfigName . '.yml')
-            ->in(self::$levelDirectory);
+            ->in($this->levelDirectory);
 
         $firstFile = self::getFirstFileFromFinder($finder);
         if (! $firstFile) {
@@ -39,7 +39,7 @@ final class RectorConfigFilePathHelper
         return $firstFile->getRealPath();
     }
 
-    private static function getFirstFileFromFinder(Finder $finder): ?SplFileInfo
+    private function getFirstFileFromFinder(Finder $finder): ?SplFileInfo
     {
         $iterator = $finder->getIterator();
         $iterator->rewind();

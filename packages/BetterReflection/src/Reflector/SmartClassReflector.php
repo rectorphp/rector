@@ -2,11 +2,12 @@
 
 namespace Rector\BetterReflection\Reflector;
 
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\Interface_;
 use Rector\BetterReflection\Reflection\ReflectionClass;
 use Rector\BetterReflection\Reflector\Exception\IdentifierNotFound;
 use Rector\FileSystem\CurrentFileProvider;
-use Rector\Node\Attribute;
 use SplFileInfo;
 use Throwable;
 use TypeError;
@@ -24,9 +25,9 @@ final class SmartClassReflector
     private $currentFileProvider;
 
     /**
-     * @var SmartClassReflector
+     * @var ClassReflector
      */
-    private $currentSmartClassReflector;
+    private $currentClassReflector;
 
     /**
      * @var SplFileInfo
@@ -46,29 +47,36 @@ final class SmartClassReflector
                 $this->createNewClassReflector();
             }
 
-            return $this->currentSmartClassReflector->reflect($className);
+            return $this->currentClassReflector->reflect($className);
         } catch (IdentifierNotFound|TypeError $throwable) {
             return null;
         }
     }
 
     /**
+     * @todo validate at least one is passed, or split to 2 methods?
      * @return string[]
      */
-    public function getClassParents(string $className, ?ClassLike $classLikeNode = null): array
+    public function getClassParents(?string $className = null, ?ClassLike $classLikeNode = null): array
     {
-        $classReflection = $this->reflect($className);
-
-        try {
-            return $classReflection->getParentClassNames();
-        } catch (Throwable $throwable) {
-            if ($classLikeNode) {
-                // fallback to static
-                return [$classLikeNode->getAttribute(Attribute::PARENT_CLASS_NAME)];
+        // anonymous class
+        if ($className === null) {
+            if ($classLikeNode && property_exists($classLikeNode, 'extends')) {
+                return [$classLikeNode->extends->toString()];
             }
+
+            return [];
         }
 
-        return [];
+        try {
+            $classReflection = $this->reflect($className);
+
+            return $classReflection->getParentClassNames();
+        } catch (Throwable $throwable) {
+            // intentionally empty
+        }
+
+        return $this->resolveClassParentsFromNode($classLikeNode);
     }
 
     private function createNewClassReflector(): void
@@ -76,19 +84,42 @@ final class SmartClassReflector
         $currentFile = $this->currentFileProvider->getCurrentFile();
 
         if ($currentFile === null) {
-            $this->currentSmartClassReflector = $this->classReflectorFactory->create();
+            $this->currentClassReflector = $this->classReflectorFactory->create();
         } else {
-            $this->currentSmartClassReflector = $this->classReflectorFactory->createWithFile($currentFile);
+            $this->currentClassReflector = $this->classReflectorFactory->createWithFile($currentFile);
             $this->classReflectorActiveFile = $currentFile;
         }
     }
 
     private function shouldCreateNewClassReflector(): bool
     {
-        if ($this->currentSmartClassReflector === null) {
+        if ($this->currentClassReflector === null) {
             return true;
         }
 
         return $this->classReflectorActiveFile !== $this->currentFileProvider->getCurrentFile();
+    }
+
+    /**
+     * @return string[]
+     */
+    private function resolveClassParentsFromNode(ClassLike $classLikeNode): array
+    {
+        if (! property_exists($classLikeNode, 'extends')) {
+            return [];
+        }
+
+        if ($classLikeNode instanceof Class_) {
+            return [$classLikeNode->extends->toString()];
+        }
+
+        if ($classLikeNode instanceof Interface_) {
+            $types = [];
+            foreach ($classLikeNode->extends as $interface) {
+                $types[] = $interface->toString();
+            }
+
+            return $types;
+        }
     }
 }

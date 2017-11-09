@@ -3,7 +3,9 @@
 namespace Rector\Rector\Contrib\Nette\Application;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Identifier;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
@@ -47,10 +49,10 @@ final class ValidateControlRector extends AbstractRector
      */
     public function refactor(Node $methodCallNode): Node
     {
-        $methodCallNode->name = 'redrawControl';
+        $methodCallNode->name = new Identifier('redrawControl');
 
-        $methodCallNode->args[0] = $methodCallNode->args[0] ?? $this->nodeFactory->createNullConstant();
-        $methodCallNode->args[1] = $this->nodeFactory->createFalseConstant();
+        $methodCallNode->args[0] = $methodCallNode->args[0] ?? new Arg($this->nodeFactory->createNullConstant());
+        $methodCallNode->args[1] = new Arg($this->nodeFactory->createFalseConstant());
 
         return $methodCallNode;
     }

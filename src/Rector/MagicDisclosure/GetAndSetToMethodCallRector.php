@@ -6,6 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeAnalyzer\ExpressionAnalyzer;
@@ -26,7 +27,7 @@ use Rector\Rector\AbstractRector;
 final class GetAndSetToMethodCallRector extends AbstractRector
 {
     /**
-     * @var string[]
+     * @var string[][]
      */
     private $typeToMethodCalls = [];
 
@@ -53,7 +54,7 @@ final class GetAndSetToMethodCallRector extends AbstractRector
     /**
      * Type to method call()
      *
-     * @param string[] $typeToMethodCalls
+     * @param string[][] $typeToMethodCalls
      */
     public function __construct(
         array $typeToMethodCalls,
@@ -92,11 +93,14 @@ final class GetAndSetToMethodCallRector extends AbstractRector
      */
     public function refactor(Node $expressionNode): ?Node
     {
-        if ($expressionNode->expr->expr instanceof PropertyFetch) {
+        /** @var Assign $assignNode */
+        $assignNode = $expressionNode->expr;
+
+        if ($assignNode->expr instanceof PropertyFetch) {
             /** @var PropertyFetch $propertyFetchNode */
-            $propertyFetchNode = $expressionNode->expr->expr;
+            $propertyFetchNode = $assignNode->expr;
             $method = $this->activeTransformation['get'];
-            $expressionNode->expr->expr = $this->createMethodCallNodeFromPropertyFetchNode($propertyFetchNode, $method);
+            $assignNode->expr = $this->createMethodCallNodeFromPropertyFetchNode($propertyFetchNode, $method);
 
             return $expressionNode;
         }
@@ -115,8 +119,11 @@ final class GetAndSetToMethodCallRector extends AbstractRector
     ): MethodCall {
         $value = $propertyFetchNode->name->name;
 
+        /** @var Variable $variableNode */
+        $variableNode = $propertyFetchNode->var;
+
         return $this->methodCallNodeFactory->createWithVariableMethodNameAndArguments(
-            $propertyFetchNode->var,
+            $variableNode,
             $method,
             [$value]
         );
@@ -129,8 +136,11 @@ final class GetAndSetToMethodCallRector extends AbstractRector
 
         $key = $propertyFetchNode->name->name;
 
+        /** @var Variable $variableNode */
+        $variableNode = $propertyFetchNode->var;
+
         return $this->methodCallNodeFactory->createWithVariableMethodNameAndArguments(
-            $propertyFetchNode->var,
+            $variableNode,
             $method,
             [$key, $assignNode->expr]
         );

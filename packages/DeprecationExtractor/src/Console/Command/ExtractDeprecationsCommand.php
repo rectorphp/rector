@@ -75,13 +75,13 @@ final class ExtractDeprecationsCommand extends Command
         $this->addArgument(
             self::ARGUMENT_SOURCE_NAME,
             InputArgument::REQUIRED | InputArgument::IS_ARRAY,
-            'One or more directory to be checked.'
+            'Files or directories to be checked.'
         );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->deprecationExtractor->scanDirectories(
+        $this->deprecationExtractor->scanDirectoriesAndFiles(
             $input->getArgument(self::ARGUMENT_SOURCE_NAME)
         );
 

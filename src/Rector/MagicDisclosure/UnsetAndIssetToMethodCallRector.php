@@ -25,7 +25,7 @@ use Rector\Rector\AbstractRector;
 final class UnsetAndIssetToMethodCallRector extends AbstractRector
 {
     /**
-     * @var string[]
+     * @var string[][][]
      */
     private $typeToMethodCalls = [];
 
@@ -42,7 +42,7 @@ final class UnsetAndIssetToMethodCallRector extends AbstractRector
     /**
      * Type to method call()
      *
-     * @param string[] $typeToMethodCalls
+     * @param string[][][] $typeToMethodCalls
      */
     public function __construct(array $typeToMethodCalls, MethodCallNodeFactory $methodCallNodeFactory)
     {
@@ -56,7 +56,7 @@ final class UnsetAndIssetToMethodCallRector extends AbstractRector
      */
     public function isCandidate(Node $node): bool
     {
-        $this->activeTransformation = null;
+        $this->activeTransformation = [];
 
         if (! $node instanceof Isset_ && ! $node instanceof Unset_) {
             return false;

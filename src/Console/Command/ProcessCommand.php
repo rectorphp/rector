@@ -70,7 +70,7 @@ final class ProcessCommand extends Command
         $this->addArgument(
             self::ARGUMENT_SOURCE_NAME,
             InputArgument::REQUIRED | InputArgument::IS_ARRAY,
-            'The path(s) to be checked.'
+            'Files or directories to be upgraded.'
         );
     }
 
@@ -79,7 +79,7 @@ final class ProcessCommand extends Command
         $this->ensureSomeRectorsAreRegistered();
 
         $source = $input->getArgument(self::ARGUMENT_SOURCE_NAME);
-        $files = $this->phpFilesFinder->findInDirectories($source);
+        $files = $this->phpFilesFinder->findInDirectoriesAndFiles($source);
 
         $this->processCommandReporter->reportLoadedRectors();
 

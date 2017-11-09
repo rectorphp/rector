@@ -15,7 +15,7 @@ require_once __DIR__ . '/rector_bootstrap.php';
 
 try {
     // 1. Detect configuration from --level
-    $configFile = RectorConfigFilePathHelper::resolveLevel(new ArgvInput);
+    $configFile = (new RectorConfigFilePathHelper)->resolveLevel(new ArgvInput);
 
     // 2. Or from --config
     if ($configFile === null) {

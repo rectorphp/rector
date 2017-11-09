@@ -19,7 +19,10 @@ final class AppKernel extends Kernel
 
     public function __construct(?string $configFile = '')
     {
-        $this->configFile = $configFile;
+        if ($configFile) {
+            $this->configFile = $configFile;
+        }
+
         parent::__construct('dev' . sha1($configFile), true);
     }
 

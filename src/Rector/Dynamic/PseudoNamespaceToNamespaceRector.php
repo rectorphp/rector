@@ -31,7 +31,7 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
     private $oldToNewUseStatements = [];
 
     /**
-     * @var string
+     * @var string|null
      */
     private $newNamespace;
 

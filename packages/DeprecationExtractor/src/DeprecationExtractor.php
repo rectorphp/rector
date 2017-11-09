@@ -45,11 +45,11 @@ final class DeprecationExtractor
     }
 
     /**
-     * @param string[] $directories
+     * @param string[] $source
      */
-    public function scanDirectories(array $directories): void
+    public function scanDirectoriesAndFiles(array $source): void
     {
-        $files = $this->phpFilesFinder->findInDirectories($directories);
+        $files = $this->phpFilesFinder->findInDirectoriesAndFiles($source);
 
         foreach ($files as $file) {
             $nodes = $this->parser->parseFile($file->getRealPath());

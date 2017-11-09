@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-final class MyTest extends \PHPUnit_Framework_TestCase
+final class MyTest extends \PHPUnit\Framework\TestCase
 {
     public function test()
     {

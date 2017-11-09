@@ -4,6 +4,7 @@ namespace Rector\Rector\Contrib\Nette\Environment;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Scalar\String_;
 use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Contract\Bridge\ServiceTypeForNameProviderInterface;
 use Rector\Naming\PropertyNaming;
@@ -74,7 +75,12 @@ final class GetServiceToConstructorInjectionRector extends AbstractRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        $serviceName = $methodCallNode->args[0]->value->value;
+        $firstArgument = $methodCallNode->args[0]->value;
+        if (! $firstArgument instanceof String_) {
+            return $methodCallNode;
+        }
+
+        $serviceName = $firstArgument->value;
 
         $serviceType = $this->serviceTypeForNameProvider->provideTypeForName($serviceName);
         if ($serviceType === null) {

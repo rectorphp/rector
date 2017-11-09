@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Configuration;
+namespace Rector\Tests\Configuration\Normalizer;
 
 use PHPUnit\Framework\TestCase;
 use Rector\Configuration\Normalizer\RectorClassNormalizer;
