@@ -7,9 +7,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Use_;
 use Rector\Node\Attribute;
-use Rector\NodeVisitor\Collector\NodeCollector;
 use Rector\Rector\AbstractRector;
-use Rector\ReflectionDocBlock\NodeAnalyzer\NamespaceAnalyzer;
 
 final class ClassReplacerRector extends AbstractRector
 {
