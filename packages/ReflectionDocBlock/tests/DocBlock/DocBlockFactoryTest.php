@@ -2,7 +2,6 @@
 
 namespace Rector\ReflectionDocBlock\Tests\DocBlock;
 
-use InvalidArgumentException;
 use phpDocumentor\Reflection\DocBlock;
 use PhpParser\Node\Scalar\String_;
 use Rector\Parser\Parser;
@@ -39,8 +38,7 @@ final class DocBlockFactoryTest extends AbstractContainerAwareTestCase
         $nodes = $this->parser->parseFile(__DIR__ . '/DocBlockFactorySource/SomeClassWithAuthor.php.inc');
         $classNode = $nodes[1];
 
-        // should be ok
-        $this->expectException(InvalidArgumentException::class);
-        $this->docBlockFactory->createFromNode($classNode);
+        $docBlock = $this->docBlockFactory->createFromNode($classNode);
+        $this->assertInstanceOf(DocBlock::class, $docBlock);
     }
 }

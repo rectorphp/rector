@@ -6,7 +6,10 @@ services:
         resource: '../../src'
 
     phpDocumentor\Reflection\DocBlockFactory: ~
-    phpDocumentor\Reflection\DocBlock\StandardTagFactory: ~
+
+    phpDocumentor\Reflection\DocBlock\StandardTagFactory:
+        factory: ['@Rector\ReflectionDocBlock\DocBlock\TagFactoryFactory', 'create']
+
     phpDocumentor\Reflection\DocBlock\DescriptionFactory: ~
     phpDocumentor\Reflection\TypeResolver: ~
 
