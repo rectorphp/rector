@@ -17,7 +17,8 @@
         "symfony/console": "^3.3",
         "symfony/dependency-injection": "^3.3",
         "symfony/finder": "^3.3",
-        "symplify/package-builder": "^2.5"
+        "symplify/package-builder": "^2.5",
+        "symplify/easy-coding-standard": "^2.5"
     },
     "require-dev": {
         "latte/latte": "^2.4",
@@ -28,7 +29,6 @@
         "slam/php-cs-fixer-extensions": "^1.7",
         "symfony/expression-language": "^3.3",
         "symfony/form": "^3.3",
-        "symplify/easy-coding-standard": "^2.5",
         "tracy/tracy": "^2.4"
     },
     "autoload": {

@@ -232,11 +232,9 @@ final class MyRector extends AbstractRector
 
 ### Coding Standards are Outsourced
 
-
 This package has no intention in formatting your code, as **coding standard tools handle this much better**.
 
 We prefer [EasyCodingStandard](https://github.com/Symplify/EasyCodingStandard):
-
 
 ```php
 # check
