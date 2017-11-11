@@ -1,7 +1,7 @@
 # Rector - Reconstruct your Legacy Code to Modern Codebase
 
-[![Build Status](https://img.shields.io/travis/RectorPHP/Rector/master.svg?style=flat-square)](https://travis-ci.org/RectorPHP/Rector)
-[![Coverage Status](https://img.shields.io/coveralls/RectorPHP/Rector/master.svg?style=flat-square)](https://coveralls.io/github/RectorPHP/Rector?branch=master)
+[![Build Status](https://img.shields.io/travis/rectorphp/rector/master.svg?style=flat-square)](https://travis-ci.org/RectorPHP/Rector)
+[![Coverage Status](https://img.shields.io/coveralls/rectorphp/rector/master.svg?style=flat-square)](https://coveralls.io/github/rectorphp/rector?branch=master)
 
 Rector **upgrades your application** for you, with focus on open-source projects:
 
@@ -234,7 +234,7 @@ final class MyRector extends AbstractRector
 
 This package has no intention in formatting your code, as **coding standard tools handle this much better**.
 
-We prefer [EasyCodingStandard](https://github.com/Symplify/EasyCodingStandard):
+We prefer [EasyCodingStandard](https://github.com/Symplify/EasyCodingStandard) that is already available (no install needed):
 
 ```php
 # check
