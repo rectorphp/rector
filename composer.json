@@ -9,27 +9,27 @@
     "require": {
         "php": "^7.1",
         "beberlei/assert": "^2.7",
-        "nette/utils": "^2.4",
+        "nette/utils": "^2.4|^3.0",
         "nikic/php-parser": "dev-master#5900d78 as v3.1.1",
         "phpdocumentor/reflection-docblock": "^4.1",
         "phpdocumentor/type-resolver": "^0.4",
         "rector/better-reflection": "^3.0",
-        "symfony/console": "^3.3",
-        "symfony/dependency-injection": "^3.3",
-        "symfony/finder": "^3.3",
-        "symplify/package-builder": "^2.5",
-        "symplify/easy-coding-standard": "^2.5"
+        "symfony/console": "^3.3|^4.0",
+        "symfony/dependency-injection": "^3.3|^4.0",
+        "symfony/finder": "^3.3|^4.0",
+        "symplify/package-builder": "^2.5|^3.0",
+        "symplify/easy-coding-standard": "^2.5|^3.0"
     },
     "require-dev": {
-        "latte/latte": "^2.4",
-        "nette/application": "^2.4",
-        "nette/forms": "^2.4",
-        "phpstan/phpstan-shim": "^0.8.5",
+        "latte/latte": "^2.4|^3.0",
+        "nette/application": "^2.4|^3.0",
+        "nette/forms": "^2.4|^3.0",
+        "phpstan/phpstan-shim": "^0.8",
         "phpunit/phpunit": "^6.4",
-        "slam/php-cs-fixer-extensions": "^1.7",
-        "symfony/expression-language": "^3.3",
-        "symfony/form": "^3.3",
-        "tracy/tracy": "^2.4"
+        "slam/php-cs-fixer-extensions": "^1.8",
+        "symfony/expression-language": "^3.3|^4.0",
+        "symfony/form": "^3.3|^4.0",
+        "tracy/tracy": "^2.4|^3.0"
     },
     "autoload": {
         "psr-4": {
