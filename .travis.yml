@@ -3,9 +3,9 @@ language: php
 matrix:
   include:
     - php: 7.1
-      env: STATIC_ANALYSIS=true
-    - php: 7.2
       env: PHPUNIT_FLAGS="--coverage-clover coverage.xml"
+    - php: 7.2
+      env: STATIC_ANALYSIS=true
 
 install:
   - composer install

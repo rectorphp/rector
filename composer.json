@@ -10,7 +10,7 @@
         "php": "^7.1",
         "beberlei/assert": "^2.7",
         "nette/utils": "^2.4|^3.0",
-        "nikic/php-parser": "dev-master#5900d78 as v3.1.1",
+        "nikic/php-parser": "dev-master as v3.1.1",
         "phpdocumentor/reflection-docblock": "^4.1",
         "phpdocumentor/type-resolver": "^0.4",
         "rector/better-reflection": "^3.0",
