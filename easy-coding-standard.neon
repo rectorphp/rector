@@ -49,6 +49,10 @@ parameters:
         - PhpCsFixer\Fixer\Phpdoc\PhpdocToCommentFixer
 
     skip:
+        Symplify\CodingStandard\Sniffs\DependencyInjection\NoClassInstantiationSniff:
+            # already fixed in master
+            - bin/rector.php
+
         Symplify\CodingStandard\Fixer\Php\ClassStringToClassConstantFixer:
             # classes might not exist
             - */src/Rector/Contrib/*/*Rector.php
