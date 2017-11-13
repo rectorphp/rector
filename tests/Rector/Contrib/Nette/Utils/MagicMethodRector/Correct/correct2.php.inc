@@ -3,6 +3,7 @@
 namespace SomeNamespace;
 
 use Nette\Object;
+
 /**
  *
  */
