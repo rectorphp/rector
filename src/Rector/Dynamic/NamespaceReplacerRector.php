@@ -185,11 +185,10 @@ final class NamespaceReplacerRector extends AbstractRector
     {
         /** @var FullyQualified $resolvedName */
         $resolvedName = $nameNode->getAttribute(Attribute::RESOLVED_NAME);
-        $fullyQualifiedName = $resolvedName->toString();
         $completeNewName = $this->resolveNewNameFromNode($resolvedName);
 
         // first dummy implementation - improve
-        $cutOffFromTheLeft = strlen($fullyQualifiedName) - strlen($nameNode->toString());
+        $cutOffFromTheLeft = strlen($completeNewName) - strlen($nameNode->toString());
 
         return substr($completeNewName, $cutOffFromTheLeft);
     }
