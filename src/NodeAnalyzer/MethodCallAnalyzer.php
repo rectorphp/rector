@@ -128,7 +128,7 @@ final class MethodCallAnalyzer
             return null;
         }
 
-        $nodeTypes = $node->var->getAttribute(Attribute::TYPES);
+        $nodeTypes = (array) $node->var->getAttribute(Attribute::TYPES);
 
         return array_intersect($nodeTypes, $types) ? $nodeTypes : null;
     }
