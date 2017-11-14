@@ -18,11 +18,12 @@
         "symfony/dependency-injection": "^3.3|^4.0",
         "symfony/finder": "^3.3|^4.0",
         "symplify/package-builder": "dev-master as 2.5",
-        "symplify/easy-coding-standard": "^2.5|^3.0"
+        "symplify/easy-coding-standard": "dev-master as 2.5"
     },
     "require-dev": {
         "latte/latte": "^2.4|^3.0",
         "nette/application": "^2.4|^3.0",
+        "nette/di": "^2.4",
         "nette/forms": "^2.4|^3.0",
         "phpstan/phpstan-shim": "^0.8",
         "phpunit/phpunit": "^6.4",
