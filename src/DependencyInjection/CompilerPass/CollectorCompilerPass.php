@@ -9,7 +9,7 @@ use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symplify\PackageBuilder\Adapter\Symfony\DependencyInjection\DefinitionCollector;
+use Symplify\PackageBuilder\DependencyInjection\DefinitionCollector;
 
 final class CollectorCompilerPass implements CompilerPassInterface
 {

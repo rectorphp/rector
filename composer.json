@@ -17,7 +17,7 @@
         "symfony/console": "^3.3|^4.0",
         "symfony/dependency-injection": "^3.3|^4.0",
         "symfony/finder": "^3.3|^4.0",
-        "symplify/package-builder": "^2.5|^3.0",
+        "symplify/package-builder": "dev-master as 2.5",
         "symplify/easy-coding-standard": "^2.5|^3.0"
     },
     "require-dev": {
