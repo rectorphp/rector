@@ -58,7 +58,7 @@ final class PropertyToClassAdder extends NodeVisitorAbstract
 
     private function processClass(Class_ $classNode, string $className): Class_
     {
-        $propertiesForClass = $this->classPropertyCollector->getPropertiesforClass($className);
+        $propertiesForClass = $this->classPropertyCollector->getPropertiesForClass($className);
 
         if (! count($propertiesForClass)) {
             return $classNode;
