@@ -100,7 +100,7 @@ final class ArgumentReplacerRector extends AbstractRector
             }
         }
 
-        $this->setNodeArugmentsOrParameters($node, $argumentsOrParameters);
+        $this->setNodeArgumentsOrParameters($node, $argumentsOrParameters);
 
         return $node;
     }
@@ -142,7 +142,7 @@ final class ArgumentReplacerRector extends AbstractRector
      * @param MethodCall|StaticCall|ClassMethod $node
      * @param mixed[] $argumentsOrParameters
      */
-    private function setNodeArugmentsOrParameters(Node $node, array $argumentsOrParameters): void
+    private function setNodeArgumentsOrParameters(Node $node, array $argumentsOrParameters): void
     {
         if ($node instanceof MethodCall || $node instanceof StaticCall) {
             $node->args = $argumentsOrParameters;
