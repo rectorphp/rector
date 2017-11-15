@@ -100,7 +100,7 @@ final class MethodNameReplacerRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        $oldToNewMethods = $this->matchOldToNewMethos();
+        $oldToNewMethods = $this->matchOldToNewMethods();
 
         if ($node instanceof Identifier) {
             return $this->resolveIdentifier($node);
@@ -141,7 +141,7 @@ final class MethodNameReplacerRector extends AbstractRector
     /**
      * @return string[]
      */
-    private function matchOldToNewMethos(): array
+    private function matchOldToNewMethods(): array
     {
         foreach ($this->activeTypes as $activeType) {
             if ($this->perClassOldToNewMethods[$activeType]) {
@@ -176,7 +176,7 @@ final class MethodNameReplacerRector extends AbstractRector
 
     private function resolveIdentifier(Identifier $node): Node
     {
-        $oldToNewMethods = $this->matchOldToNewMethos();
+        $oldToNewMethods = $this->matchOldToNewMethods();
 
         $methodName = $node->name;
         if (! isset($oldToNewMethods[$methodName])) {

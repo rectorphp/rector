@@ -23,7 +23,7 @@ final class ClassPropertyCollector
     /**
      * @return mixed[]
      */
-    public function getPropertiesforClass(string $class): array
+    public function getPropertiesForClass(string $class): array
     {
         return $this->classProperties[$class] ?? [];
     }
