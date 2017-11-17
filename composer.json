@@ -10,15 +10,15 @@
         "php": "^7.1",
         "beberlei/assert": "^2.7",
         "nette/utils": "^2.4|^3.0",
-        "nikic/php-parser": "dev-master as v3.1.1",
+        "nikic/php-parser": "dev-master as v4.0.0alpha1",
         "phpdocumentor/reflection-docblock": "^4.1",
         "phpdocumentor/type-resolver": "^0.4",
         "rector/better-reflection": "^3.0",
         "symfony/console": "^3.3|^4.0",
         "symfony/dependency-injection": "^3.3|^4.0",
         "symfony/finder": "^3.3|^4.0",
-        "symplify/package-builder": "dev-master as 2.5",
-        "symplify/easy-coding-standard": "dev-master as 2.5"
+        "symplify/package-builder": "v3.0.0-RC2",
+        "symplify/easy-coding-standard": "v3.0.0-RC2"
     },
     "require-dev": {
         "latte/latte": "^2.4|^3.0",
@@ -27,6 +27,7 @@
         "nette/forms": "^2.4|^3.0",
         "phpstan/phpstan-shim": "^0.8",
         "phpunit/phpunit": "^6.4",
+        "symplify/coding-standard": "v3.0.0-RC2",
         "slam/php-cs-fixer-extensions": "^1.8",
         "symfony/expression-language": "^3.3|^4.0",
         "symfony/form": "^3.3|^4.0",

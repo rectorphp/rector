@@ -1,19 +1,10 @@
 includes:
-    - vendor/symplify/easy-coding-standard/config/symfony-checkers.neon
-    - vendor/symplify/easy-coding-standard/config/symfony-risky-checkers.neon
-    - vendor/symplify/easy-coding-standard/config/php70-checkers.neon
-    - vendor/symplify/easy-coding-standard/config/php71-checkers.neon
-    - vendor/symplify/easy-coding-standard/config/symplify-checkers.neon
+    - vendor/symplify/easy-coding-standard/config/psr2.neon
+    - vendor/symplify/easy-coding-standard/config/php71.neon
+    - vendor/symplify/easy-coding-standard/config/symplify.neon
     - vendor/symplify/easy-coding-standard/config/common.neon
-    - vendor/symplify/easy-coding-standard/config/spaces.neon
 
 checkers:
-    # Slevomat
-    SlevomatCodingStandard\Sniffs\Namespaces\ReferenceUsedNamesOnlySniff:
-        allowPartialUses: false
-    SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff:
-        enableEachParameterAndReturnInspection: true
-
     # Metrics
     PHP_CodeSniffer\Standards\Generic\Sniffs\Files\LineLengthSniff:
         absoluteLineLimit: 120
