@@ -47,6 +47,7 @@ final class ProcessCommand extends Command
      * @var ProcessCommandReporter
      */
     private $processCommandReporter;
+
     /**
      * @var ParameterProvider
      */
