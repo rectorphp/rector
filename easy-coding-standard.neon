@@ -40,6 +40,10 @@ parameters:
         - PhpCsFixer\Fixer\Phpdoc\PhpdocToCommentFixer
 
     skip:
+        Symplify\CodingStandard\Fixer\Commenting\RemoveUselessDocBlockFixer:
+            # bugged
+            - src/Node/NodeFactory.php
+
         Symplify\CodingStandard\Sniffs\DependencyInjection\NoClassInstantiationSniff:
             # already fixed in master
             - bin/rector.php
