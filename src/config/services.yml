@@ -48,6 +48,7 @@ services:
     PhpParser\PrettyPrinter\Standard: ~
 
     # Symfony\Console
-    Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory: ~
     Symfony\Component\Console\Style\SymfonyStyle:
-        factory: ['@Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory', 'create']
+        factory: ['Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory', 'create']
+
+    Symplify\PackageBuilder\Parameter\ParameterProvider: ~

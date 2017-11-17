@@ -14,6 +14,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
 final class ProcessCommand extends Command
 {
@@ -47,12 +48,18 @@ final class ProcessCommand extends Command
      */
     private $processCommandReporter;
 
+    /**
+     * @var ParameterProvider
+     */
+    private $parameterProvider;
+
     public function __construct(
         FileProcessor $fileProcessor,
         RectorCollector $rectorCollector,
         SymfonyStyle $symfonyStyle,
         PhpFilesFinder $phpFilesFinder,
-        ProcessCommandReporter $processCommandReporter
+        ProcessCommandReporter $processCommandReporter,
+        ParameterProvider $parameterProvider
     ) {
         $this->fileProcessor = $fileProcessor;
         $this->rectorCollector = $rectorCollector;
@@ -61,6 +68,7 @@ final class ProcessCommand extends Command
         $this->processCommandReporter = $processCommandReporter;
 
         parent::__construct();
+        $this->parameterProvider = $parameterProvider;
     }
 
     protected function configure(): void
@@ -79,6 +87,7 @@ final class ProcessCommand extends Command
         $this->ensureSomeRectorsAreRegistered();
 
         $source = $input->getArgument(self::ARGUMENT_SOURCE_NAME);
+        $this->parameterProvider->changeParameter('source', $source);
         $files = $this->phpFilesFinder->findInDirectoriesAndFiles($source);
 
         $this->processCommandReporter->reportLoadedRectors();

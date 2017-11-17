@@ -5,6 +5,7 @@ namespace Rector\BetterReflection\SourceLocator;
 use Rector\BetterReflection\SourceLocator\Ast\Locator;
 use Rector\BetterReflection\SourceLocator\Type\AggregateSourceLocator;
 use Rector\BetterReflection\SourceLocator\Type\AutoloadSourceLocator;
+use Rector\BetterReflection\SourceLocator\Type\ComposerSourceLocator;
 use Rector\BetterReflection\SourceLocator\Type\EvaledCodeSourceLocator;
 use Rector\BetterReflection\SourceLocator\Type\MemoizingSourceLocator;
 use Rector\BetterReflection\SourceLocator\Type\PhpInternalSourceLocator;
@@ -12,6 +13,8 @@ use Rector\BetterReflection\SourceLocator\Type\SingleFileSourceLocator;
 use Rector\BetterReflection\SourceLocator\Type\SourceLocator;
 use Rector\Exception\FileSystem\FileNotFoundException;
 use SplFileInfo;
+use Symplify\PackageBuilder\Composer\AutoloadFinder;
+use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
 final class SourceLocatorFactory
 {
@@ -25,10 +28,19 @@ final class SourceLocatorFactory
      */
     private $stubSourceLocator;
 
-    public function __construct(Locator $locator, StubSourceLocator $stubSourceLocator)
-    {
+    /**
+     * @var ParameterProvider
+     */
+    private $parameterProvider;
+
+    public function __construct(
+        Locator $locator,
+        StubSourceLocator $stubSourceLocator,
+        ParameterProvider $parameterProvider
+    ) {
         $this->locator = $locator;
         $this->stubSourceLocator = $stubSourceLocator;
+        $this->parameterProvider = $parameterProvider;
     }
 
     public function create(): SourceLocator
@@ -55,12 +67,23 @@ final class SourceLocatorFactory
      */
     private function createCommonLocators(): array
     {
-        return [
+        $locators = [
             new PhpInternalSourceLocator($this->locator),
             new EvaledCodeSourceLocator($this->locator),
             new AutoloadSourceLocator($this->locator),
             $this->stubSourceLocator,
         ];
+
+        $source = $this->parameterProvider->provideParameter('source');
+        if ($source) {
+            $vendorAutoload = AutoloadFinder::findNearDirectories($source);
+            if ($vendorAutoload !== null) {
+                $vendorAutoload = require_once $vendorAutoload;
+                $locators[] = new ComposerSourceLocator($vendorAutoload, $this->locator);
+            }
+        }
+
+        return $locators;
     }
 
     /**
