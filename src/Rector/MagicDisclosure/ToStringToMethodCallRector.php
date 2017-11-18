@@ -17,7 +17,7 @@ use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Rector\AbstractRector;
 
 /**
- * __get/__set to specific call
+ * __toString specific call
  *
  * Example - from:
  * - $result = (string) $someValue;
