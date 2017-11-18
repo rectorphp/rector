@@ -13,6 +13,10 @@ final class Test extends AbstractRectorTestCase
             __DIR__ . '/Wrong/wrong.php.inc',
             __DIR__ . '/Correct/correct.php.inc'
         );
+        $this->doTestFileMatchesExpectedContent(
+            __DIR__ . '/Wrong/wrong2.php.inc',
+            __DIR__ . '/Correct/correct2.php.inc'
+        );
     }
 
     /**
