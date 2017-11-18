@@ -1,3 +1,5 @@
 rectors:
     Rector\Rector\Dynamic\PseudoNamespaceToNamespaceRector:
         - 'PHPUnit_'
+        # exclude this class
+        - '!PHPUnit_Framework_MockObject_MockObject'

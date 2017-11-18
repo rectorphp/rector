@@ -13,11 +13,6 @@ use Rector\Node\Attribute;
 use Rector\Node\NodeFactory;
 use Rector\Rector\AbstractRector;
 
-/**
- * Basically inversion of https://github.com/nikic/PHP-Parser/blob/master/doc/2_Usage_of_basic_components.markdown#example-converting-namespaced-code-to-pseudo-namespaces
- *
- * Requested on SO: https://stackoverflow.com/questions/29014957/converting-pseudo-namespaced-classes-to-use-real-namespace
- */
 final class PseudoNamespaceToNamespaceRector extends AbstractRector
 {
     /**
@@ -46,11 +41,16 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
     private $statementGlue;
 
     /**
-     * @param string[] $pseudoNamespacePrefixes
+     * @var string[]
      */
-    public function __construct(array $pseudoNamespacePrefixes, NodeFactory $nodeFactory, StatementGlue $statementGlue)
+    private $excludedClasses = [];
+
+    /**
+     * @param string[] $configuration
+     */
+    public function __construct(array $configuration, NodeFactory $nodeFactory, StatementGlue $statementGlue)
     {
-        $this->pseudoNamespacePrefixes = $pseudoNamespacePrefixes;
+        $this->resolvePseudoNamespacePrefixesAndExcludedClasses($configuration);
         $this->nodeFactory = $nodeFactory;
         $this->statementGlue = $statementGlue;
     }
@@ -59,6 +59,10 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
     {
         $name = $this->resolveNameFromNode($node);
         if ($name === null) {
+            return false;
+        }
+
+        if (in_array($name, $this->excludedClasses)) {
             return false;
         }
 
@@ -133,14 +137,24 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
 
     private function resolveNameFromNode(Node $node): ?string
     {
-        if ($node instanceof Identifier) {
-            return $node->name;
-        }
-
-        if ($node instanceof Name) {
+        if ($node instanceof Identifier || $node instanceof Name) {
             return $node->toString();
         }
 
         return null;
+    }
+
+    /**
+     * @param string[] $configuration
+     */
+    private function resolvePseudoNamespacePrefixesAndExcludedClasses(array $configuration): void
+    {
+        foreach ($configuration as $item) {
+            if (Strings::startsWith($item, '!')) {
+                $this->excludedClasses[] = ltrim($item, '!');
+            } else {
+                $this->pseudoNamespacePrefixes[] = $item;
+            }
+        }
     }
 }
