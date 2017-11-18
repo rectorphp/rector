@@ -1,0 +1,6 @@
+rectors:
+    Rector\Rector\Dynamic\PropertyToMethodRector:
+        'Translator':
+            'locale':
+                'get': 'getLocale'
+                'set': 'setLocale'

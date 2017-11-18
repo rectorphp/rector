@@ -20,7 +20,7 @@ Rector **upgrades your application** for you, with focus on open-source projects
 ## Install
 
 ```bash
-composer require --dev rector/rector @dev nikic/php-parser 'dev-master#5900d78 as v3.1.1'
+composer require --dev rector/rector @dev nikic/php-parser 'dev-master as v4.0.0alpha1'
 ```
 
 Do you have old PHP or dependencies in conflict? Ok, [it is not problem](/docs/HowUseWithOldPhp.md).
@@ -131,8 +131,8 @@ You can:
     rectors:
         Rector\Rector\Dynamic\PropertyNameReplacerRector:
             # class:
-            #   old property: new property
             'PhpParser\Node\Param':
+                # old property: new property
                 'name': 'var'
     ```
 
@@ -191,6 +191,22 @@ You can:
             # exclude classes
             - '!PHPUnit_Framework_MockObject_MockObject'
     ```
+
+- or **change property to method**
+
+    ```yml
+    rectors:
+        Rector\Rector\Dynamic\PropertyToMethodRector:
+            # type
+            'Symfony\Component\Translation\Translator':
+                # property to replace
+                'locale':
+                    # (prepared key): get method name
+                    'get': 'getLocale'
+                    # (prepared key): set method name
+                    'set': 'setLocale'
+    ```
+
 
 ### Turn Magic to Methods
 
@@ -266,66 +282,23 @@ You can:
     ```
 
 
-### 6 Steps to Add New Rector
-
-In case you need a transformation that you didn't find in Dynamic Rectors, you can create your own:
-
-1. Just extend `Rector\Rector\AbstractRector` class. It will prepare **2 methods**:
-
-```php
-public function isCandidate(Node $node): bool
-{
-}
-
-public function refactor(Node $node): ?Node
-{
-}
-```
-
-2. Put it under `namespace Rector\Contrib\<set>;` namespace
-
-```php
-<?php declare(strict_types=1);
-
-namespace Rector\Contrib\Symfony;
-
-use Rector\Rector\AbstractRector;
-
-final class MyRector extends AbstractRector
-{
-    // ...
-}
-```
-
-3. Add a Test Case
-
-4. Add to specific level, e.g. [`/src/config/level/symfony/symfony33.yml`](/src/config/level/symfony/symfony33.yml)
-
-5. Submit PR
-
-6. :+1:
-
-
-
 ### Coding Standards are Outsourced
 
 This package has no intention in formatting your code, as **coding standard tools handle this much better**.
 
-We prefer [EasyCodingStandard](https://github.com/Symplify/EasyCodingStandard) that is already available (no install needed):
+We prefer [EasyCodingStandard](https://github.com/Symplify/EasyCodingStandard) that is already available:
 
-```php
+```bash
 # check
 vendor/bin/ecs check --config vendor/rector/rector/ecs-after-rector.neon
+
 # fix
 vendor/bin/ecs check --config vendor/rector/rector/ecs-after-rector.neon --fix
 ```
 
-but you can use any other with [this setup](/ecs-after-rector.neon).
+### More Detailed Documentation
 
-
-
-### Advanced Operations
-
+- [How to Create Own Rector](/docs/HowToCreateOwnRector.md)
 - [Service Name to Type Provider](/docs/ServiceNameToTypeProvider.md)
 
 
