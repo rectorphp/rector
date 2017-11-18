@@ -13,11 +13,6 @@ use Rector\Node\Attribute;
 use Rector\Node\NodeFactory;
 use Rector\Rector\AbstractRector;
 
-/**
- * Basically inversion of https://github.com/nikic/PHP-Parser/blob/master/doc/2_Usage_of_basic_components.markdown#example-converting-namespaced-code-to-pseudo-namespaces
- *
- * Requested on SO: https://stackoverflow.com/questions/29014957/converting-pseudo-namespaced-classes-to-use-real-namespace
- */
 final class PseudoNamespaceToNamespaceRector extends AbstractRector
 {
     /**
@@ -81,6 +76,11 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
         $parentNode = $nameOrIdentifierNode->getAttribute(Attribute::PARENT_NODE);
         $lastNewNamePart = $newNameParts[count($newNameParts) - 1];
 
+        // do not rename classes
+        if ($parentNode instanceof Class_) {
+            return null;
+        }
+
         if ($nameOrIdentifierNode instanceof Name) {
             if ($parentNode instanceof UseUse) {
                 $this->oldToNewUseStatements[$oldName] = $lastNewNamePart;
@@ -93,7 +93,7 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
             return $nameOrIdentifierNode;
         }
 
-        if ($nameOrIdentifierNode instanceof Identifier && $parentNode instanceof Class_) {
+        if ($nameOrIdentifierNode instanceof Identifier) {
             $namespaceParts = $newNameParts;
             array_pop($namespaceParts);
 
