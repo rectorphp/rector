@@ -192,6 +192,63 @@ You can:
             - '!PHPUnit_Framework_MockObject_MockObject'
     ```
 
+### Turn Magic to Methods
+
+- **replace get/set magic methods with real ones**
+
+    ```yml
+    rectors:
+        Rector\Rector\MagicDisclosure\GetAndSetToMethodCallRector:
+            # class
+            'Nette\DI\Container':
+                # magic method (prepared keys): new real method
+                'get': 'getService'
+                'set': 'addService'
+    ```
+    
+    This will change:
+    
+    ```php
+    $result = $container['key'];
+    
+    $container['key'] = $value;
+    ```
+    
+    Into
+    
+    ```php
+    $result = $container->getService('key');
+  
+    $container->addService('key', $value);
+    ```
+    
+- or **replaces isset/unset magic methods with real ones**
+
+    ```yml
+    rectors:
+        Rector\Rector\MagicDisclosure\UnsetAndIssetToMethodCallRector:
+            # class
+            'Nette\DI\Container':
+                # magic method (prepared keys): new real method
+                'isset': 'hasService'
+                'unset': 'removeService'
+    ```
+
+    This will change:
+    
+    ```php
+    isset($container['key']);
+    
+    unset($container['key']);
+    ```
+    
+    Into
+    
+    ```php
+    $container->hasService('key');
+  
+    $container->removeService('key');
+    ```
 
 ### 6 Steps to Add New Rector
 
