@@ -3,11 +3,22 @@
 namespace Rector\Rector\Dynamic;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Rector\AbstractRector;
 
+/**
+ * Example - from:
+ * - $result = $object->property;
+ * - $object->property = $value;
+ *
+ * To
+ * - $result = $object->getProperty();
+ * - $object->setProperty($value);
+ */
 final class PropertyToMethodRector extends AbstractRector
 {
     /**
@@ -20,9 +31,9 @@ final class PropertyToMethodRector extends AbstractRector
     private $perClassPropertyToMethods = [];
 
     /**
-     * @var string[]
+     * @var string
      */
-    private $activeTypes = [];
+    private $activeMethod;
 
     /**
      * @var PropertyFetchAnalyzer
@@ -40,29 +51,54 @@ final class PropertyToMethodRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        if (! $node instanceof PropertyFetch) {
+        if (! $node instanceof Assign) {
             return false;
         }
 
-        foreach ($this->perClassPropertyToMethods as $class => $propertyToMethods) {
-            if ($this->propertyFetchAnalyzer->isTypeAndProperties($node, $class, array_keys($propertyToMethods))) {
-                $this->activeTypes = $propertyToMethods[$node->name->toString()];
+        // setter
+        if ($node->var instanceof PropertyFetch) {
+            return $this->processPropertyFetchCandidate($node->var, 'set');
+        }
 
-                return true;
-            }
+        // getter
+        if ($node->expr instanceof PropertyFetch) {
+            return $this->processPropertyFetchCandidate($node->expr, 'get');
         }
 
         return false;
     }
 
     /**
-     * @param PropertyFetch $propertyFetchNode
+     * @param Assign $assignNode
      */
-    public function refactor(Node $propertyFetchNode): ?Node
+    public function refactor(Node $assignNode): ?Node
     {
-        return new MethodCall(
-            $propertyFetchNode->var,
-            $this->activeTypes[0]
-        );
+        // setter
+        if ($assignNode->var instanceof PropertyFetch) {
+            $args = [new Arg($assignNode->expr)];
+
+            return new MethodCall($assignNode->var->var, $this->activeMethod, $args);
+        }
+
+        // getter
+        if ($assignNode->expr instanceof PropertyFetch) {
+            $assignNode->expr = new MethodCall($assignNode->expr->var, $this->activeMethod);
+        }
+
+        return null;
+    }
+
+    private function processPropertyFetchCandidate(PropertyFetch $propertyFetchNode, string $type): bool
+    {
+        foreach ($this->perClassPropertyToMethods as $class => $propertyToMethods) {
+            $properties = array_keys($propertyToMethods);
+            if ($this->propertyFetchAnalyzer->isTypeAndProperties($propertyFetchNode, $class, $properties)) {
+                $this->activeMethod = $propertyToMethods[$propertyFetchNode->name->toString()][$type];
+
+                return true;
+            }
+        }
+
+        return false;
     }
 }
