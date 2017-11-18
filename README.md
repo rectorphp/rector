@@ -206,19 +206,15 @@ You can:
                 'set': 'addService'
     ```
     
-    This will change:
-    
+    For example:
+
     ```php
     $result = $container['key'];
+    # to
+    $result = $container->getService('key');
     
     $container['key'] = $value;
-    ```
-    
-    Into
-    
-    ```php
-    $result = $container->getService('key');
-  
+    # to
     $container->addService('key', $value);
     ```
     
@@ -234,19 +230,15 @@ You can:
                 'unset': 'removeService'
     ```
 
-    This will change:
-    
+    For example:
+
     ```php
     isset($container['key']);
-    
-    unset($container['key']);
-    ```
-    
-    Into
-    
-    ```php
+    # to
     $container->hasService('key');
-  
+
+    unset($container['key']);
+    # to
     $container->removeService('key');
     ```
 
