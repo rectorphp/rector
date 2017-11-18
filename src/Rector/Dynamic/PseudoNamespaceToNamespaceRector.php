@@ -41,11 +41,16 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
     private $statementGlue;
 
     /**
-     * @param string[] $pseudoNamespacePrefixes
+     * @var string[]
      */
-    public function __construct(array $pseudoNamespacePrefixes, NodeFactory $nodeFactory, StatementGlue $statementGlue)
+    private $excludedClasses = [];
+
+    /**
+     * @param string[] $configuration
+     */
+    public function __construct(array $configuration, NodeFactory $nodeFactory, StatementGlue $statementGlue)
     {
-        $this->pseudoNamespacePrefixes = $pseudoNamespacePrefixes;
+        $this->resolvePseudoNamespacePrefixesAndExcludedClasses($configuration);
         $this->nodeFactory = $nodeFactory;
         $this->statementGlue = $statementGlue;
     }
@@ -54,6 +59,10 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
     {
         $name = $this->resolveNameFromNode($node);
         if ($name === null) {
+            return false;
+        }
+
+        if (in_array($name, $this->excludedClasses)) {
             return false;
         }
 
@@ -76,11 +85,6 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
         $parentNode = $nameOrIdentifierNode->getAttribute(Attribute::PARENT_NODE);
         $lastNewNamePart = $newNameParts[count($newNameParts) - 1];
 
-        // do not rename classes
-        if ($parentNode instanceof Class_) {
-            return null;
-        }
-
         if ($nameOrIdentifierNode instanceof Name) {
             if ($parentNode instanceof UseUse) {
                 $this->oldToNewUseStatements[$oldName] = $lastNewNamePart;
@@ -93,7 +97,7 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
             return $nameOrIdentifierNode;
         }
 
-        if ($nameOrIdentifierNode instanceof Identifier) {
+        if ($nameOrIdentifierNode instanceof Identifier && $parentNode instanceof Class_) {
             $namespaceParts = $newNameParts;
             array_pop($namespaceParts);
 
@@ -133,14 +137,24 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
 
     private function resolveNameFromNode(Node $node): ?string
     {
-        if ($node instanceof Identifier) {
-            return $node->name;
-        }
-
-        if ($node instanceof Name) {
+        if ($node instanceof Identifier || $node instanceof Name) {
             return $node->toString();
         }
 
         return null;
+    }
+
+    /**
+     * @param string[] $configuration
+     */
+    private function resolvePseudoNamespacePrefixesAndExcludedClasses(array $configuration): void
+    {
+        foreach ($configuration as $pseudoNamespacePrefixesAndExcludedClasses) {
+            if (Strings::startsWith($pseudoNamespacePrefixesAndExcludedClasses, '!')) {
+                $this->excludedClasses[] = ltrim($pseudoNamespacePrefixesAndExcludedClasses, '!');
+            } else {
+                $this->pseudoNamespacePrefixes[] = $pseudoNamespacePrefixesAndExcludedClasses;
+            }
+        }
     }
 }

@@ -188,6 +188,8 @@ You can:
         Rector\Roector\Dynamic\PseudoNamespaceToNamespaceRector:
             # old namespace prefix
             - 'PHPUnit_'
+            # exclude classes
+            - '!PHPUnit_Framework_MockObject_MockObject'
     ```
 
 

@@ -2,7 +2,7 @@
 
 namespace SomeNamespace;
 
-class PHPUnit_TestCase
+class SomeTestCase
 {
     /**
      * @return Synapse|\PHPUnit_Framework_MockObject_MockObject
