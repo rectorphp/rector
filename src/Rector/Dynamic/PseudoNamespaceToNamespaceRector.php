@@ -149,11 +149,11 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
      */
     private function resolvePseudoNamespacePrefixesAndExcludedClasses(array $configuration): void
     {
-        foreach ($configuration as $pseudoNamespacePrefixesAndExcludedClasses) {
-            if (Strings::startsWith($pseudoNamespacePrefixesAndExcludedClasses, '!')) {
-                $this->excludedClasses[] = ltrim($pseudoNamespacePrefixesAndExcludedClasses, '!');
+        foreach ($configuration as $item) {
+            if (Strings::startsWith($item, '!')) {
+                $this->excludedClasses[] = ltrim($item, '!');
             } else {
-                $this->pseudoNamespacePrefixes[] = $pseudoNamespacePrefixesAndExcludedClasses;
+                $this->pseudoNamespacePrefixes[] = $item;
             }
         }
     }
