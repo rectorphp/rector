@@ -192,6 +192,22 @@ You can:
             - '!PHPUnit_Framework_MockObject_MockObject'
     ```
 
+- or **change property to method**
+
+    ```yml
+    rectors:
+        Rector\Rector\Dynamic\PropertyToMethodRector:
+            # type
+            'Symfony\Component\Translation\Translator':
+                # property to replace
+                'locale':
+                    # (prepared key): get method name
+                    'get': 'getLocale'
+                    # (prepared key): set method name
+                    'set': 'setLocale'
+    ```
+
+
 ### Turn Magic to Methods
 
 - **replace get/set magic methods with real ones**
