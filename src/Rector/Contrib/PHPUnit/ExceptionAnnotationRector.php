@@ -13,12 +13,15 @@ use Rector\ReflectionDocBlock\NodeAnalyzer\DocBlockAnalyzer;
 final class ExceptionAnnotationRector extends AbstractRector
 {
     /**
+     * In reversed order, which they should be called in code.
+     *
      * @var string[]
      */
     private $annotationToMethod = [
+        'expectedExceptionMessageRegExp' => 'expectExceptionMessageRegExp',
+        'expectedExceptionMessage' => 'expectExceptionMessage',
+        'expectedExceptionCode' => 'expectExceptionCode',
         'expectedException' => 'expectException',
-        'expectedExceptionMessageRegExp' => 'expectedExceptionMessageRegExp',
-        'expectedExceptionCode' => 'expectedExceptionCode',
     ];
 
     /**
