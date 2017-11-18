@@ -2,18 +2,12 @@
 
 namespace Rector\Rector\MagicDisclosure;
 
+use PhpParser\Node\Identifier;
 use PhpParser\Node;
-use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Cast\String_;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt\Expression;
 use Rector\Node\Attribute;
-use Rector\Node\MethodCallNodeFactory;
-use Rector\NodeAnalyzer\ExpressionAnalyzer;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
-use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -38,6 +32,7 @@ final class ToStringToMethodCallRector extends AbstractRector
      * @var string
      */
     private $activeTransformation;
+
     /**
      * @var MethodCallAnalyzer
      */
@@ -48,7 +43,8 @@ final class ToStringToMethodCallRector extends AbstractRector
      *
      * @param string[][] $typeToMethodCalls
      */
-    public function __construct(array $typeToMethodCalls, MethodCallAnalyzer $methodCallAnalyzer) {
+    public function __construct(array $typeToMethodCalls, MethodCallAnalyzer $methodCallAnalyzer)
+    {
         $this->typeToMethodCalls = $typeToMethodCalls;
         $this->methodCallAnalyzer = $methodCallAnalyzer;
     }
@@ -56,25 +52,11 @@ final class ToStringToMethodCallRector extends AbstractRector
     public function isCandidate(Node $node): bool
     {
         if ($node instanceof String_ && $node->expr) {
-            $nodeTypes = $node->expr->getAttribute(Attribute::TYPES);
-
-            foreach ($this->typeToMethodCalls as $type => $transformation) {
-                if (in_array($type, $nodeTypes, true)) {
-                    $this->activeTransformation = $transformation['toString'];
-
-                    return true;
-                }
-            }
+            return $this->processStringCandidate($node);
         }
 
         if ($node instanceof MethodCall) {
-            foreach ($this->typeToMethodCalls as $type => $transformation) {
-                if ($this->methodCallAnalyzer->isTypeAndMethod($node, $type, '__toString')) {
-                    $this->activeTransformation = $transformation['toString'];
-
-                    return true;
-                }
-            }
+            return $this->processMethodCallCandidate($node);
         }
 
         return false;
@@ -89,8 +71,36 @@ final class ToStringToMethodCallRector extends AbstractRector
             return new MethodCall($node->expr, $this->activeTransformation);
         }
 
-        $node->name = $this->activeTransformation;
+        $node->name = new Identifier($this->activeTransformation);
 
         return $node;
+    }
+
+    private function processStringCandidate(String_ $stringNode): bool
+    {
+        $nodeTypes = $stringNode->expr->getAttribute(Attribute::TYPES);
+
+        foreach ($this->typeToMethodCalls as $type => $transformation) {
+            if (in_array($type, $nodeTypes, true)) {
+                $this->activeTransformation = $transformation['toString'];
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function processMethodCallCandidate(MethodCall $methodCallNode): bool
+    {
+        foreach ($this->typeToMethodCalls as $type => $transformation) {
+            if ($this->methodCallAnalyzer->isTypeAndMethod($methodCallNode, $type, '__toString')) {
+                $this->activeTransformation = $transformation['toString'];
+
+                return true;
+            }
+        }
+
+        return false;
     }
 }
