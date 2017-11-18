@@ -17,8 +17,8 @@
         "symfony/console": "^3.3|^4.0",
         "symfony/dependency-injection": "^3.3|^4.0",
         "symfony/finder": "^3.3|^4.0",
-        "symplify/package-builder": "v3.0.0-RC2",
-        "symplify/easy-coding-standard": "v3.0.0-RC2"
+        "symplify/package-builder": "v3.0.0-RC3",
+        "symplify/easy-coding-standard": "v3.0.0-RC3"
     },
     "require-dev": {
         "latte/latte": "^2.4|^3.0",
@@ -27,7 +27,7 @@
         "nette/forms": "^2.4|^3.0",
         "phpstan/phpstan-shim": "^0.8",
         "phpunit/phpunit": "^6.4",
-        "symplify/coding-standard": "v3.0.0-RC2",
+        "symplify/coding-standard": "v3.0.0-RC3",
         "slam/php-cs-fixer-extensions": "^1.8",
         "symfony/expression-language": "^3.3|^4.0",
         "symfony/form": "^3.3|^4.0",

@@ -242,6 +242,30 @@ You can:
     $container->removeService('key');
     ```
 
+- or **replaces toString magic methods with real ones**
+
+    ```yml
+    rectors:
+        Rector\Rector\MagicDisclosure\ToStringToMethodCallRector:
+            # class
+            'Symfony\Component\Config\ConfigCache':
+                # magic method (prepared key): new real method
+                'toString': 'getPath'
+    ```
+    
+    For example:
+    
+    ```php
+    $result = (string) $someValue;
+    # to
+    $result = $someValue->someMethod();
+  
+    $result = $someValue->__toString();
+    # to
+    $result = $someValue->someMethod();
+    ```
+
+
 ### 6 Steps to Add New Rector
 
 In case you need a transformation that you didn't find in Dynamic Rectors, you can create your own:
