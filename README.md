@@ -213,7 +213,7 @@ You can:
     rectors:
         Rector\Rector\Dynamic\ValueObjectRemoverRector:
             # type
-            - 'SomeValueObject'
+            - 'Name'
     ```
     
     For example:
