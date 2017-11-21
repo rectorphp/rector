@@ -15,5 +15,8 @@ class ActionClass
     public function someFunction()
     {
         $someChildValueObject = new SomeChildOfValueObject('value');
+
+        $someChildValueObject = new SomeChildOfValueObject();
+        $someChildValueObject = new SomeChildOfValueObject('value', 'anotherValue');
     }
 }
