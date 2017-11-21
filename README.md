@@ -207,6 +207,22 @@ You can:
                     'set': 'setLocale'
     ```
 
+- or **change remove value object**
+
+    ```yml
+    rectors:
+        Rector\Rector\Dynamic\ValueObjectRemoverRector:
+            # type
+            - 'SomeValueObject'
+    ```
+    
+    For example:
+
+    ```php
+    $value = new Name('Tomas');
+    # to
+    $value = 'Tomas';
+    ```
 
 ### Turn Magic to Methods
 
