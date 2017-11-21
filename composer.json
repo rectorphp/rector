@@ -42,7 +42,8 @@
             "Rector\\NodeTypeResolver\\": "packages/NodeTypeResolver/src",
             "Rector\\NodeTraverserQueue\\": "packages/NodeTraverserQueue/src",
             "Rector\\DeprecationExtractor\\": "packages/DeprecationExtractor/src",
-            "Rector\\NodeValueResolver\\": "packages/NodeValueResolver/src"
+            "Rector\\NodeValueResolver\\": "packages/NodeValueResolver/src",
+            "Rector\\YamlParser\\": "packages/YamlParser/src"
         }
     },
     "autoload-dev": {
@@ -53,7 +54,8 @@
             "Rector\\NodeTypeResolver\\Tests\\": "packages/NodeTypeResolver/tests",
             "Rector\\NodeTraverserQueue\\Tests\\": "packages/NodeTraverserQueue/tests",
             "Rector\\DeprecationExtractor\\Tests\\": "packages/DeprecationExtractor/tests",
-            "Rector\\NodeValueResolver\\Tests\\": "packages/NodeValueResolver/tests"
+            "Rector\\NodeValueResolver\\Tests\\": "packages/NodeValueResolver/tests",
+            "Rector\\YamlParser\\Tests\\": "packages/YamlParser/tests"
         }
     },
     "scripts": {
