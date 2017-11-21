@@ -32,7 +32,6 @@ final class ValueObjectRemoverRector extends AbstractRector
             return false;
         }
 
-
         $classNodeTypes = $node->class->getAttribute(Attribute::TYPES);
 
         return (bool) array_intersect($classNodeTypes, $this->oldValueObjects);
@@ -43,10 +42,6 @@ final class ValueObjectRemoverRector extends AbstractRector
      */
     public function refactor(Node $newNode): ?Node
     {
-        $newNode->class = null;
-        unset($newNode->class);
-        //->setAttribute(Attribute::ORIGINAL_NODE, null);
-
         return $newNode->args[0];
     }
 }
