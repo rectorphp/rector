@@ -1,3 +1,3 @@
-<?php declare(strict_types=1);
+<?php
 
 $someValueObject = new SomeValueObject('value');
