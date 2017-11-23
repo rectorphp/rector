@@ -79,6 +79,6 @@ final class PropertyTypeResolver implements PerNodeTypeResolverInterface
             }
         }
 
-        return $propertyTypes;
+        return array_values(array_unique($propertyTypes));
     }
 }

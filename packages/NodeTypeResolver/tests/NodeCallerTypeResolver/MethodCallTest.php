@@ -58,6 +58,9 @@ final class MethodCallTest extends AbstractNodeTypeResolverTest
             MethodCall::class
         );
 
-        $this->doTestAttributeEquals($methodCallNodes[0], Attribute::CALLER_TYPES, ['Nette\Config\Configurator']);
+        $this->doTestAttributeEquals($methodCallNodes[0], Attribute::CALLER_TYPES, [
+            'Nette\Config\Configurator',
+            'Nette\Object'
+        ]);
     }
 }

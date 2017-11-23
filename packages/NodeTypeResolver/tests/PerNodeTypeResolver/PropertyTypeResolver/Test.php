@@ -41,9 +41,13 @@ final class Test extends AbstractNodeTypeResolverTest
             Property::class
         );
 
-        $this->assertSame(
-            ['PhpParser\Node\Stmt\ClassMethod', 'PhpParser\Node\Stmt\Function_', 'PhpParser\Node\Expr\Closure'],
-            $propertyNodes[0]->getAttribute(Attribute::TYPES)
-        );
+        $this->assertSame([
+            'PhpParser\Node\Stmt\ClassMethod',
+            'PhpParser\Node\Stmt\Function_',
+            'PhpParser\Node\Expr\Closure',
+            'PhpParser\Node\Stmt',
+            'PhpParser\NodeAbstract',
+            'PhpParser\Node\Expr'
+        ], $propertyNodes[0]->getAttribute(Attribute::TYPES));
     }
 }
