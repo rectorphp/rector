@@ -1,4 +1,4 @@
 rectors:
     Rector\Rector\Dynamic\ValueObjectRemoverRector:
-        - SomeValueObject
-        - 'SomeNamespace\SomeValueObject'
+        SomeValueObject: string
+        'SomeNamespace\SomeValueObject': int
