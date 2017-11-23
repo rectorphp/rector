@@ -12,15 +12,7 @@ class SomeChildOfValueObject extends SomeValueObject
 
 class ActionClass
 {
-    /**
-     * @var SomeChildOfValueObject
-     */
-    private $someChildValueObject;
-
-    public function someFunction()
+    public function someFunction(SomeChildOfValueObject $name)
     {
-        $this->someChildValueObject = new SomeChildOfValueObject('value');
-
-        $someChildValueObject = new SomeChildOfValueObject();
     }
 }
