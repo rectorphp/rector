@@ -207,21 +207,45 @@ You can:
                     'set': 'setLocale'
     ```
 
-- or **change remove value object**
+- or **remove value object and use simple types**
 
     ```yml
     rectors:
         Rector\Rector\Dynamic\ValueObjectRemoverRector:
-            # type
-            - 'Name'
+            # type: new simple type
+            'ValueObjects\Name': 'string'
     ```
     
     For example:
 
     ```php
-    $value = new Name('Tomas');
+    $value = new ValueObjects\Name('Tomas');
+
     # to
+
     $value = 'Tomas';
+    ```
+    
+    ```php
+    /**
+     * @var ValueObjects\Name
+     */
+    private $name;
+
+    # to
+
+    /**
+     * @var string
+     */
+    private $name;
+    ```
+    
+    ```php
+    public function someMethod(ValueObjects\Name $name) { ...
+
+    # to
+
+    public function someMethod(string $name) { ...
     ```
 
 ### Turn Magic to Methods
@@ -242,11 +266,17 @@ You can:
 
     ```php
     $result = $container['key'];
+  
     # to
-    $result = $container->getService('key');
     
+    $result = $container->getService('key');
+    ```
+    
+    ```php
     $container['key'] = $value;
+    
     # to
+  
     $container->addService('key', $value);
     ```
     
@@ -266,11 +296,17 @@ You can:
 
     ```php
     isset($container['key']);
-    # to
-    $container->hasService('key');
 
-    unset($container['key']);
     # to
+
+    $container->hasService('key');
+    ```
+    
+    ```php
+    unset($container['key']);
+
+    # to
+
     $container->removeService('key');
     ```
 
@@ -289,11 +325,17 @@ You can:
     
     ```php
     $result = (string) $someValue;
+
     # to
+
     $result = $someValue->someMethod();
-  
+    ```  
+
+    ```php
     $result = $someValue->__toString();
+
     # to
+
     $result = $someValue->someMethod();
     ```
 
