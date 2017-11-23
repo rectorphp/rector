@@ -4,6 +4,8 @@ namespace Rector\Rector\Dynamic;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Name;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Property;
 use Rector\Node\Attribute;
 use Rector\Rector\AbstractRector;
@@ -40,6 +42,13 @@ final class ValueObjectRemoverRector extends AbstractRector
             return $this->processPropertyCandidate($node);
         }
 
+        if ($node instanceof Name) {
+            $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
+            if ($parentNode instanceof Param) {
+                return true;
+            }
+        }
+
         return false;
     }
 
@@ -54,6 +63,15 @@ final class ValueObjectRemoverRector extends AbstractRector
 
         if ($node instanceof Property) {
             return $this->refactorProperty($node);
+        }
+
+        if ($node instanceof Name) {
+            $newType = $this->matchNewType($node);
+            if ($newType === null) {
+                return null;
+            }
+
+            return new Name($newType);
         }
 
         return null;
@@ -87,7 +105,7 @@ final class ValueObjectRemoverRector extends AbstractRector
 
     private function refactorProperty(Property $propertyNode): Property
     {
-        $newType = $this->matchPropertyTypeRemapping($propertyNode);
+        $newType = $this->matchNewType($propertyNode);
         if ($newType === null) {
             return $propertyNode;
         }
@@ -97,10 +115,10 @@ final class ValueObjectRemoverRector extends AbstractRector
         return $propertyNode;
     }
 
-    private function matchPropertyTypeRemapping(Property $propertyNode): ?string
+    private function matchNewType(Node $node): ?string
     {
-        $propertyTypes = $propertyNode->getAttribute(Attribute::TYPES);
-        foreach ($propertyTypes as $propertyType) {
+        $nodeTypes = $node->getAttribute(Attribute::TYPES);
+        foreach ($nodeTypes as $propertyType) {
             if (! isset($this->valueObjectsToSimpleTypes[$propertyType])) {
                 continue;
             }
