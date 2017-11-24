@@ -52,6 +52,6 @@ final class GetMockRector extends AbstractRector
     {
         $className = $node->getAttribute(Attribute::CLASS_NAME);
 
-        return Strings::endsWith($className, 'Test');
+        return Strings::endsWith((string) $className, 'Test');
     }
 }
