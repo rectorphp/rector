@@ -7,12 +7,18 @@ use phpDocumentor\Reflection\DocBlock\Tag;
 use phpDocumentor\Reflection\DocBlock\Tags\Deprecated;
 use phpDocumentor\Reflection\DocBlock\Tags\Param;
 use phpDocumentor\Reflection\DocBlock\Tags\Var_;
+use phpDocumentor\Reflection\Type;
+use phpDocumentor\Reflection\Types\Boolean;
+use phpDocumentor\Reflection\Types\Integer;
 use phpDocumentor\Reflection\Types\Object_;
+use phpDocumentor\Reflection\Types\String_;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
+use Rector\Exception\NotImplementedException;
 use Rector\ReflectionDocBlock\DocBlock\AnnotationRemover;
 use Rector\ReflectionDocBlock\DocBlock\DocBlockFactory;
 use Rector\ReflectionDocBlock\DocBlock\TidingSerializer;
+use ReflectionProperty;
 
 final class DocBlockAnalyzer
 {
@@ -127,6 +133,26 @@ final class DocBlockAnalyzer
         return $tags;
     }
 
+    public function replaceVarType(Node $node, string $to): void
+    {
+        $docBlock = $this->docBlockFactory->createFromNode($node);
+
+        $tags = $docBlock->getTags();
+        foreach ($tags as $tag) {
+            if (! $tag instanceof Var_) {
+                continue;
+            }
+
+            $newType = $this->resolveNewTypeObjectFromString($to);
+
+            $this->setPrivatePropertyValue($tag, 'type', $newType);
+
+            break;
+        }
+
+        $this->saveNewDocBlockToNode($node, $docBlock);
+    }
+
     private function saveNewDocBlockToNode(Node $node, DocBlock $docBlock): void
     {
         $docContent = $this->tidingSerializer->getDocComment($docBlock);
@@ -143,5 +169,35 @@ final class DocBlockAnalyzer
         return array_map(function (string $type) {
             return ltrim(trim($type), '\\');
         }, $types);
+    }
+
+    /**
+     * Magic untill, since object is read only
+     *
+     * @param object $object
+     * @param mixed $value
+     */
+    private function setPrivatePropertyValue($object, string $name, $value): void
+    {
+        $propertyReflection = new ReflectionProperty(get_class($object), $name);
+        $propertyReflection->setAccessible(true);
+        $propertyReflection->setValue($object, $value);
+    }
+
+    private function resolveNewTypeObjectFromString(string $type): Type
+    {
+        if ($type === 'string') {
+            return new String_();
+        }
+
+        if ($type === 'int') {
+            return new Integer();
+        }
+
+        if ($type === 'bool') {
+            return new Boolean();
+        }
+
+        throw new NotImplementedException(__METHOD__);
     }
 }

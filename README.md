@@ -6,13 +6,13 @@
 Rector **upgrades your application** for you, with focus on open-source projects:
 
 <p align="center">
-    <a href="/src/config/level/symfony"><img src="/docs/symfony.png"></a>
-    <img src="/docs/space.png">
-    <a href="/src/config/level/nette"><img src="/docs/nette.png" height="50"></a>
-    <img src="/docs/space.png">
-    <a href="/src/config/level/phpunit"><img src="/docs/phpunit.jpg"></a>
-    <img src="/docs/space.png">
-    <a href="/src/config/level/roave"><img src="/docs/roave.png"></a>
+    <a href="/src/config/level/symfony"><img src="/docs/images/symfony.png"></a>
+    <img src="/docs/images/space.png">
+    <a href="/src/config/level/nette"><img src="/docs/images/nette.png" height="50"></a>
+    <img src="/docs/images/space.png">
+    <a href="/src/config/level/phpunit"><img src="/docs/images/phpunit.jpg"></a>
+    <img src="/docs/images/space.png">
+    <a href="/src/config/level/roave"><img src="/docs/images/roave.png"></a>
 </p>
 
 <br>
@@ -207,6 +207,46 @@ You can:
                     'set': 'setLocale'
     ```
 
+- or **remove value object and use simple types**
+
+    ```yml
+    rectors:
+        Rector\Rector\Dynamic\ValueObjectRemoverRector:
+            # type: new simple type
+            'ValueObjects\Name': 'string'
+    ```
+    
+    For example:
+
+    ```php
+    $value = new ValueObjects\Name('Tomas');
+
+    # to
+
+    $value = 'Tomas';
+    ```
+    
+    ```php
+    /**
+     * @var ValueObjects\Name
+     */
+    private $name;
+
+    # to
+
+    /**
+     * @var string
+     */
+    private $name;
+    ```
+    
+    ```php
+    public function someMethod(ValueObjects\Name $name) { ...
+
+    # to
+
+    public function someMethod(string $name) { ...
+    ```
 
 ### Turn Magic to Methods
 
@@ -226,11 +266,17 @@ You can:
 
     ```php
     $result = $container['key'];
+  
     # to
-    $result = $container->getService('key');
     
+    $result = $container->getService('key');
+    ```
+    
+    ```php
     $container['key'] = $value;
+    
     # to
+  
     $container->addService('key', $value);
     ```
     
@@ -250,11 +296,17 @@ You can:
 
     ```php
     isset($container['key']);
-    # to
-    $container->hasService('key');
 
-    unset($container['key']);
     # to
+
+    $container->hasService('key');
+    ```
+    
+    ```php
+    unset($container['key']);
+
+    # to
+
     $container->removeService('key');
     ```
 
@@ -273,11 +325,17 @@ You can:
     
     ```php
     $result = (string) $someValue;
+
     # to
+
     $result = $someValue->someMethod();
-  
+    ```  
+
+    ```php
     $result = $someValue->__toString();
+
     # to
+
     $result = $someValue->someMethod();
     ```
 
