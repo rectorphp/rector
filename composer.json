@@ -17,8 +17,9 @@
         "symfony/console": "^3.3|^4.0",
         "symfony/dependency-injection": "^3.3|^4.0",
         "symfony/finder": "^3.3|^4.0",
+        "symplify/easy-coding-standard": "v3.0.0-RC3",
         "symplify/package-builder": "v3.0.0-RC3",
-        "symplify/easy-coding-standard": "v3.0.0-RC3"
+        "webmozart/assert": "^1.2"
     },
     "require-dev": {
         "latte/latte": "^2.4|^3.0",
