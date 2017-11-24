@@ -4,17 +4,17 @@ rectors:
             'compile':
                 0:
                     # added default value
-                    ~: false
+                    '~': 'false'
             'addCompilerPass':
                 2:
                     # added default value
-                    ~: 0
+                    '~': 0
 
         'Doctrine\ORM\Persisters\Entity\AbstractEntityInheritancePersister':
             'getSelectJoinColumnSQL':
                 4:
                     # remove completely
-                    ~: ~
+                    '~': ~
 
         'Symfony\Component\DependencyInjection\Definition':
             'setScope':

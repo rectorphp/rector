@@ -1,10 +1,13 @@
 services:
     _defaults:
         autowire: true
+        public: true # for tests
 
     Rector\:
         resource: '../../src'
         exclude: '../../src/{Node/Attribute.php,Rector/Contrib,Rector/Dynamic,Rector/MagicDisclosure,Testing}'
+
+    Rector\Rector\Contrib\Symfony\Form\Helper\FormTypeStringToTypeProvider: ~
 
     # autowire by interface
     Rector\Contract\Parser\ParserInterface:

@@ -47,7 +47,7 @@ final class Test extends AbstractNodeTypeResolverTest
             'PhpParser\Node\Expr\Closure',
             'PhpParser\Node\Stmt',
             'PhpParser\NodeAbstract',
-            'PhpParser\Node\Expr'
+            'PhpParser\Node\Expr',
         ], $propertyNodes[0]->getAttribute(Attribute::TYPES));
     }
 }
