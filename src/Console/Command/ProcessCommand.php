@@ -121,7 +121,7 @@ final class ProcessCommand extends Command
         $this->symfonyStyle->title('Processing files');
 
         foreach ($fileInfos as $fileInfo) {
-            $this->processCommandReporter->reportLoadedFile($fileInfo, count($fileInfos));
+            $this->symfonyStyle->writeln(sprintf(' - %s', $fileInfo->getRealPath()));
             $this->fileProcessor->processFile($fileInfo);
         }
     }

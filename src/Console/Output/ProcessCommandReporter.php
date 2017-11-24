@@ -4,21 +4,10 @@ namespace Rector\Console\Output;
 
 use Rector\Printer\ChangedFilesCollector;
 use Rector\Rector\RectorCollector;
-use SplFileInfo;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 final class ProcessCommandReporter
 {
-    /**
-     * @var int
-     */
-    private const MAX_FILES_TO_PRINT = 30;
-
-    /**
-     * @var int
-     */
-    private $alreadyReportedFiles = 0;
-
     /**
      * @var RectorCollector
      */
@@ -75,27 +64,6 @@ final class ProcessCommandReporter
                 ' - %s',
                 $fileInfo
             ));
-        }
-    }
-
-    public function reportLoadedFile(SplFileInfo $fileInfo, int $fileCount): void
-    {
-        ++$this->alreadyReportedFiles;
-
-        if ($this->alreadyReportedFiles < self::MAX_FILES_TO_PRINT) {
-            $this->symfonyStyle->writeln(sprintf(
-                ' - %s',
-                $fileInfo->getRealPath()
-            ));
-        }
-
-        if ($this->alreadyReportedFiles === self::MAX_FILES_TO_PRINT) {
-            $this->symfonyStyle->newLine();
-            $this->symfonyStyle->writeln(sprintf(
-                '...and %d more.',
-                $fileCount - self::MAX_FILES_TO_PRINT
-            ));
-            $this->symfonyStyle->newLine();
         }
     }
 }
