@@ -4,7 +4,9 @@ final class MyTest extends \PHPUnit\Framework\TestCase
 {
     public function test()
     {
-        $mock = $this->buildMock()
-            ->createMock();
+        $firstMock = $this->createMock('SomeClass');
+
+        $secondMock = $this->buildMock()
+            ->getMock();
     }
 }

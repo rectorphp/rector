@@ -35,7 +35,7 @@ final class GetMockRector extends AbstractRector
         }
 
         /** @var MethodCall $node */
-        return ! isset($node->args[1]);
+        return count($node->args) === 1;
     }
 
     /**
