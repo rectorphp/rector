@@ -174,9 +174,9 @@ You can:
                     # argument position
                     0:
                         # added default value
-                        ~: false
+                        '~': false
                         # or remove completely
-                        ~: ~
+                        '~': ~
                         # or replace by new value
                         'Symfony\Component\DependencyInjection\ContainerBuilder\ContainerBuilder::SCOPE_PROTOTYPE': false
     ```

@@ -73,7 +73,7 @@ final class NodeCallerTypeResolver
     }
 
     /**
-     * Returnts on magic method calls, void type, scalar types and array types.
+     * Returns on magic method calls, void type, scalar types and array types.
      *
      * @return string[]
      */
@@ -85,6 +85,7 @@ final class NodeCallerTypeResolver
             $methodName = $node->var->name->toString();
 
             $returnTypes = $this->methodReflector->resolveReturnTypesForTypesAndMethod($parentReturnTypes, $methodName);
+
             if ($returnTypes) {
                 return $returnTypes;
             }
@@ -96,6 +97,7 @@ final class NodeCallerTypeResolver
 
         /** @var string[] $callerNodeTypes */
         $callerNodeTypes = (array) $node->var->getAttribute(Attribute::TYPES);
+
         $methodName = $node->name->toString();
 
         return $this->methodReflector->resolveReturnTypesForTypesAndMethod($callerNodeTypes, $methodName);

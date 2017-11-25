@@ -5,5 +5,5 @@ services:
     Rector\Tests\Rector\Contrib\Symfony\Console\CommandToConstructorInjectionRector\Source\DummyProvider: ~
 
     # require for interface autowiring
-    Rector\Contract\Bridge\ServiceNameToTypeProviderInterface:
+    Rector\Contract\Bridge\ServiceTypeForNameProviderInterface:
         alias: Rector\Tests\Rector\Contrib\Symfony\Console\CommandToConstructorInjectionRector\Source\DummyProvider

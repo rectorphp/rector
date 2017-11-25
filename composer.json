@@ -13,11 +13,11 @@
         "phpdocumentor/reflection-docblock": "^4.1",
         "phpdocumentor/type-resolver": "^0.4",
         "rector/better-reflection": "^3.0",
-        "symfony/console": "^3.3|^4.0",
-        "symfony/dependency-injection": "^3.3|^4.0",
-        "symfony/finder": "^3.3|^4.0",
-        "symplify/easy-coding-standard": "v3.0.0-RC3",
-        "symplify/package-builder": "v3.0.0-RC3",
+        "symfony/console": "^3.4|^4.0",
+        "symfony/dependency-injection": "^3.4|^4.0",
+        "symfony/finder": "^3.4|^4.0",
+        "symplify/easy-coding-standard": "^3.0",
+        "symplify/package-builder": "^3.0",
         "webmozart/assert": "^1.2"
     },
     "require-dev": {
@@ -27,10 +27,11 @@
         "nette/forms": "^2.4|^3.0",
         "phpstan/phpstan-shim": "^0.8",
         "phpunit/phpunit": "^6.4",
-        "symplify/coding-standard": "v3.0.0-RC3",
+        "symplify/coding-standard": "^3.0",
+        "symplify/token-runner": "^3.0",
         "slam/php-cs-fixer-extensions": "^1.8",
-        "symfony/expression-language": "^3.3|^4.0",
-        "symfony/form": "^3.3|^4.0",
+        "symfony/expression-language": "^3.4|^4.0",
+        "symfony/form": "^3.4|^4.0",
         "tracy/tracy": "^2.4|^3.0"
     },
     "autoload": {
@@ -68,5 +69,6 @@
     ],
     "config": {
         "sort-packages": true
-    }
+    },
+    "minimum-stability": "dev"
 }

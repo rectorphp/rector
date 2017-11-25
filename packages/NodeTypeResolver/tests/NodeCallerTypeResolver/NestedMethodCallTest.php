@@ -33,6 +33,7 @@ final class NestedMethodCallTest extends AbstractNodeTypeResolverTest
         $this->assertSame('addText', $methodCallNodes[2]->name->toString());
         $this->assertContains(
             'Nette\Application\UI\Form',
+
             $methodCallNodes[2]->getAttribute(Attribute::CALLER_TYPES)
         );
     }

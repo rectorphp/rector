@@ -5,16 +5,16 @@ rectors:
             'compile':
                 0:
                     # added default value
-                    ~: false
+                    '~': false
             'addCompilerPass':
                 2:
                     # added default value
-                    ~: 0
+                    '~': 0
         'Symfony\Component\DependencyInjection\Compiler\ServiceReferenceGraph':
             'connect':
                 6:
                     # added default value
-                    ~: false
+                    '~': false
 
     Rector\Rector\Contrib\Symfony\Console\ConsoleExceptionToErrorEventConstantRector: ~
 

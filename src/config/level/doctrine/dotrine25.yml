@@ -11,4 +11,4 @@ rectors:
         'Doctrine\ORM\Persisters\Entity\AbstractEntityInheritancePersister':
             'getSelectJoinColumnSQL':
                 4:
-                    ~: ~
+                    '~': ~

@@ -30,7 +30,7 @@ final class Test extends AbstractNodeTypeResolverTest
         $this->assertSame([
             'PhpParser\Node\Stmt\Property',
             'PhpParser\Node\Stmt',
-            'PhpParser\NodeAbstract'
+            'PhpParser\NodeAbstract',
         ], $propertyFetchNodes[2]->getAttribute(Attribute::TYPES));
     }
 }

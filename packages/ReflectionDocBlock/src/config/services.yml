@@ -1,14 +1,18 @@
 services:
     _defaults:
         autowire: true
+        public: true # for tests
 
     Rector\ReflectionDocBlock\:
         resource: '../../src'
 
     phpDocumentor\Reflection\DocBlockFactory: ~
+    Rector\BetterReflection\TypesFinder\PhpDocumentor\NamespaceNodeToReflectionTypeContext: ~
 
     phpDocumentor\Reflection\DocBlock\StandardTagFactory:
         factory: ['@Rector\ReflectionDocBlock\DocBlock\TagFactoryFactory', 'create']
+    phpDocumentor\Reflection\DocBlock\TagFactory:
+        alias: phpDocumentor\Reflection\DocBlock\StandardTagFactory
 
     phpDocumentor\Reflection\DocBlock\DescriptionFactory: ~
     phpDocumentor\Reflection\TypeResolver: ~
