@@ -9,7 +9,7 @@ abstract class AbstractConfigurableRectorTestCase extends AbstractRectorTestCase
 {
     protected function setUp(): void
     {
-        $this->container = (new ContainerFactory)->createWithConfig($this->provideConfig());
+        $this->container = (new ContainerFactory())->createWithConfig($this->provideConfig());
 
         $this->fileProcessor = $this->container->get(FileProcessor::class);
     }

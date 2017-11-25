@@ -15,16 +15,16 @@ require_once __DIR__ . '/rector_bootstrap.php';
 
 try {
     // 1. Detect configuration from --level
-    $configFile = (new RectorConfigFilePathHelper)->resolveLevel(new ArgvInput);
+    $configFile = (new RectorConfigFilePathHelper())->resolveLevel(new ArgvInput());
 
     // 2. Or from --config
     if ($configFile === null) {
-        ConfigFilePathHelper::detectFromInput('rector', new ArgvInput);
+        ConfigFilePathHelper::detectFromInput('rector', new ArgvInput());
         $configFile = ConfigFilePathHelper::provide('rector', 'rector.yml');
     }
 
     // 2. Build DI container
-    $containerFactory = new ContainerFactory;
+    $containerFactory = new ContainerFactory();
     if ($configFile) {
         $container = $containerFactory->createWithConfig($configFile);
     } else {

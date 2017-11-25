@@ -37,7 +37,7 @@ final class DocBlockFactory
         TypeResolver $typeResolver,
         NamespaceNodeToReflectionTypeContext $namespaceNodeToReflectionTypeContext
     ) {
-        $this->docBlocksPerNode = new SplObjectStorage;
+        $this->docBlocksPerNode = new SplObjectStorage();
         $this->phpDocumentorDocBlockFactory = $phpDocumentorDocBlockFactory;
         $this->namespaceNodeToReflectionTypeContext = $namespaceNodeToReflectionTypeContext;
 

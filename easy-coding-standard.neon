@@ -31,14 +31,8 @@ checkers:
 
 parameters:
     exclude_checkers:
-        # excluded from symfony-checkers.neon
-        - PhpCsFixer\Fixer\PhpTag\BlankLineAfterOpeningTagFixer
-        - PhpCsFixer\Fixer\Operator\NewWithBracesFixer
-        - PhpCsFixer\Fixer\Operator\UnaryOperatorSpacesFixer
-        - PhpCsFixer\Fixer\Phpdoc\PhpdocAlignFixer
-        - PhpCsFixer\Fixer\Phpdoc\PhpdocSummaryFixer
-        - PhpCsFixer\Fixer\Comment\SingleLineCommentStyleFixer
-        - PhpCsFixer\Fixer\Phpdoc\PhpdocToCommentFixer
+        # too strict - remove
+        - Symplify\CodingStandard\Fixer\Solid\NoInterfaceOnAbstractClassFixer
 
     skip:
         Symplify\CodingStandard\Fixer\Commenting\RemoveUselessDocBlockFixer:

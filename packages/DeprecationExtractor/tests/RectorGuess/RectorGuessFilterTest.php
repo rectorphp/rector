@@ -29,8 +29,8 @@ final class RectorGuessFilterTest extends AbstractContainerAwareTestCase
     {
         $rectorGuesses = [];
 
-        $rectorGuesses[] = $this->rectorGuessFactory->createClassReplacer('message', new Nop);
-        $rectorGuesses[] = $this->rectorGuessFactory->createUnsupported('message', new Nop);
+        $rectorGuesses[] = $this->rectorGuessFactory->createClassReplacer('message', new Nop());
+        $rectorGuesses[] = $this->rectorGuessFactory->createUnsupported('message', new Nop());
 
         $this->assertCount(2, $rectorGuesses);
 

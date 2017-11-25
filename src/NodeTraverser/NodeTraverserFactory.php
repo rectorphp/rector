@@ -9,7 +9,7 @@ final class NodeTraverserFactory
 {
     public function createWithNodeVisitor(NodeVisitor $nodeVisitor): NodeTraverser
     {
-        $nodeTraverser = new NodeTraverser;
+        $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor($nodeVisitor);
 
         return $nodeTraverser;

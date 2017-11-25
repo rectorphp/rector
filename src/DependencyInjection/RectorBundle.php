@@ -12,8 +12,8 @@ final class RectorBundle extends Bundle
     public function getContainerExtension(): RectorsExtension
     {
         return new RectorsExtension(
-            new RectorClassValidator,
-            new RectorClassNormalizer
+            new RectorClassValidator(),
+            new RectorClassNormalizer()
         );
     }
 }

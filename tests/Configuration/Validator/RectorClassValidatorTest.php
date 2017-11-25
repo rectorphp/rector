@@ -17,7 +17,7 @@ final class RectorClassValidatorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->rectorClassValidator = new RectorClassValidator;
+        $this->rectorClassValidator = new RectorClassValidator();
     }
 
     public function testNonExistingClass(): void

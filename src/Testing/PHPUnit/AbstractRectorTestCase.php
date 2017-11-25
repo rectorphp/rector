@@ -23,7 +23,7 @@ abstract class AbstractRectorTestCase extends TestCase
 
     protected function setUp(): void
     {
-        $this->container = (new ContainerFactory)->createWithConfig(__DIR__ . '/../../config/levels.yml');
+        $this->container = (new ContainerFactory())->createWithConfig(__DIR__ . '/../../config/levels.yml');
 
         $this->fileProcessor = $this->container->get(FileProcessor::class);
     }

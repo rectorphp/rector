@@ -29,7 +29,7 @@ final class RectorGuesserTest extends AbstractContainerAwareTestCase
     public function test(string $message, string $expectedType): void
     {
         $deprecations = [
-            Deprecation::createFromMessageAndNode($message, new Nop),
+            Deprecation::createFromMessageAndNode($message, new Nop()),
         ];
 
         $rectorGuesses = $this->rectorGuesser->guessForDeprecations($deprecations);

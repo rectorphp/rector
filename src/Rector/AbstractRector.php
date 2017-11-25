@@ -44,8 +44,8 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
      */
     final public function beforeTraverse(array $nodes): array
     {
-        $this->expressionsToPrependBefore = new SplObjectStorage;
-        $this->expressionsToPrependAfter = new SplObjectStorage;
+        $this->expressionsToPrependBefore = new SplObjectStorage();
+        $this->expressionsToPrependAfter = new SplObjectStorage();
 
         return $nodes;
     }
