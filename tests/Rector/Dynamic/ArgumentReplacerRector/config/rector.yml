@@ -4,7 +4,7 @@ rectors:
             'compile':
                 0:
                     # added default value
-                    '~': 'false'
+                    '~': false
             'addCompilerPass':
                 2:
                     # added default value
