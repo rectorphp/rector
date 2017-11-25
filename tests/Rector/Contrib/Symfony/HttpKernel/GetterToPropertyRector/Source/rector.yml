@@ -5,5 +5,4 @@ services:
     Rector\Tests\Rector\Contrib\Symfony\HttpKernel\GetterToPropertyRector\Source\DummyProvider: ~
 
     # require for interface autowiring
-    Rector\Contract\Bridge\ServiceNameToTypeProviderInterface:
-        alias: Rector\Tests\Rector\Contrib\Symfony\HttpKernel\GetterToPropertyRector\Source\DummyProvider
+    'Rector\Contract\Bridge\ServiceTypeForNameProviderInterface': '@Rector\Tests\Rector\Contrib\Symfony\HttpKernel\GetterToPropertyRector\Source\DummyProvider'
