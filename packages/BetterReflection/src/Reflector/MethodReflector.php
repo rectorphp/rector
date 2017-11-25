@@ -110,7 +110,7 @@ final class MethodReflector
         foreach ($types as $type) {
             $returnTypes = $this->getMethodReturnTypes($type, $method);
             if ($returnTypes) {
-                return $returnTypes;
+                return $this->completeParentClasses($returnTypes);
             }
         }
 
