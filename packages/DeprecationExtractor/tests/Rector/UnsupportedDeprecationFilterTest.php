@@ -24,7 +24,7 @@ final class UnsupportedDeprecationFilterTest extends AbstractContainerAwareTestC
      */
     public function test(string $message, bool $isMatched): void
     {
-        $deprecation = Deprecation::createFromMessageAndNode($message, new Nop);
+        $deprecation = Deprecation::createFromMessageAndNode($message, new Nop());
 
         $this->assertSame($isMatched, $this->unsupportedDeprecationFilter->matches($deprecation));
     }

@@ -15,7 +15,7 @@ final class RectorClassNormalizerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->rectorClassNormalizer = new RectorClassNormalizer;
+        $this->rectorClassNormalizer = new RectorClassNormalizer();
     }
 
     /**

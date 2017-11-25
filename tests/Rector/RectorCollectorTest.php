@@ -17,7 +17,7 @@ final class RectorCollectorTest extends AbstractContainerAwareTestCase
     protected function setUp(): void
     {
         $this->rectorCollector = $this->container->get(RectorCollector::class);
-        $this->rectorCollector->addRector(new DummyRector);
+        $this->rectorCollector->addRector(new DummyRector());
 
         $dummyRector = $this->rectorCollector->getRector(DummyRector::class);
         $this->assertInstanceOf(DummyRector::class, $dummyRector);

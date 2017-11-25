@@ -51,14 +51,14 @@ final class AppKernel extends Kernel
     public function registerBundles(): array
     {
         return [
-            new RectorBundle,
+            new RectorBundle(),
         ];
     }
 
     protected function build(ContainerBuilder $containerBuilder): void
     {
-        $containerBuilder->addCompilerPass(new CollectorCompilerPass);
-        $containerBuilder->addCompilerPass(new NodeValueResolverCollectorCompilerPass);
-        $containerBuilder->addCompilerPass(new NodeTypeResolverCollectorCompilerPass);
+        $containerBuilder->addCompilerPass(new CollectorCompilerPass());
+        $containerBuilder->addCompilerPass(new NodeValueResolverCollectorCompilerPass());
+        $containerBuilder->addCompilerPass(new NodeTypeResolverCollectorCompilerPass());
     }
 }

@@ -8,7 +8,7 @@ final class SomeClass
 {
     public function createHtml(): void
     {
-        $html = new Html;
+        $html = new Html();
         $anotherHtml = $html;
         $anotherHtml->add('someContent');
     }

@@ -8,7 +8,7 @@ final class ContainerFactory
 {
     public function create(): ContainerInterface
     {
-        $appKernel = new AppKernel;
+        $appKernel = new AppKernel();
         $appKernel->boot();
 
         return $appKernel->getContainer();

@@ -28,7 +28,7 @@
         "phpstan/phpstan-shim": "^0.8",
         "phpunit/phpunit": "^6.4",
         "symplify/coding-standard": "^3.0",
-        "symplify/token-runner": "^3.0",
+        "symplify/token-runner": "dev-master#0af8cc8",
         "slam/php-cs-fixer-extensions": "^1.8",
         "symfony/expression-language": "^3.4|^4.0",
         "symfony/form": "^3.4|^4.0",

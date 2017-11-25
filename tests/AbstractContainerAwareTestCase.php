@@ -22,6 +22,6 @@ abstract class AbstractContainerAwareTestCase extends TestCase
     {
         parent::__construct($name, $data, $dataName);
 
-        $this->container = (new ContainerFactory)->create();
+        $this->container = (new ContainerFactory())->create();
     }
 }
