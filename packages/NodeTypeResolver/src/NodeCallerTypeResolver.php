@@ -3,6 +3,7 @@
 namespace Rector\NodeTypeResolver;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
@@ -93,6 +94,11 @@ final class NodeCallerTypeResolver
 
         if ($node->var instanceof Variable || $node->var instanceof PropertyFetch) {
             return (array) $node->var->getAttribute(Attribute::TYPES);
+        }
+
+        // unable to determine
+        if ($node->name instanceof ArrayDimFetch || $node->name instanceof Variable) {
+            return [];
         }
 
         /** @var string[] $callerNodeTypes */
