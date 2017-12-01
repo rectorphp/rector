@@ -11,7 +11,7 @@ final class YamlParserTest extends TestCase
      */
     private $yamlParser;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->yamlParser = new YamlParser();
     }
