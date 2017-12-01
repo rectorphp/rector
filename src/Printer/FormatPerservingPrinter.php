@@ -3,24 +3,25 @@
 namespace Rector\Printer;
 
 use PhpParser\Node;
-use PhpParser\PrettyPrinter\Standard;
 use SplFileInfo;
 
 final class FormatPerservingPrinter
 {
     /**
-     * @var Standard
+     * @var BetterStandardPrinter
      */
-    private $prettyPrinter;
+    private $betterStandardPrinter;
 
     /**
      * @var ChangedFilesCollector
      */
     private $changedFilesCollector;
 
-    public function __construct(Standard $prettyPrinter, ChangedFilesCollector $changedFilesCollector)
-    {
-        $this->prettyPrinter = $prettyPrinter;
+    public function __construct(
+        BetterStandardPrinter $betterStandardPrinter,
+        ChangedFilesCollector $changedFilesCollector
+    ) {
+        $this->betterStandardPrinter = $betterStandardPrinter;
         $this->changedFilesCollector = $changedFilesCollector;
     }
 
@@ -50,6 +51,6 @@ final class FormatPerservingPrinter
      */
     public function printToString(array $newStmts, array $oldStmts, array $oldTokens): string
     {
-        return $this->prettyPrinter->printFormatPreserving($newStmts, $oldStmts, $oldTokens);
+        return $this->betterStandardPrinter->printFormatPreserving($newStmts, $oldStmts, $oldTokens);
     }
 }
