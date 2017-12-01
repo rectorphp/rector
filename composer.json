@@ -13,9 +13,9 @@
         "phpdocumentor/reflection-docblock": "^4.1",
         "phpdocumentor/type-resolver": "^0.4",
         "rector/better-reflection": "^3.0",
-        "symfony/console": "^3.4|^4.0",
-        "symfony/dependency-injection": "^3.4|^4.0",
-        "symfony/finder": "^3.4|^4.0",
+        "symfony/console": "^4.0",
+        "symfony/dependency-injection": "^4.0",
+        "symfony/finder": "^4.0",
         "symplify/easy-coding-standard": "^3.0",
         "symplify/package-builder": "^3.0",
         "webmozart/assert": "^1.2"
@@ -30,8 +30,8 @@
         "symplify/coding-standard": "^3.0",
         "symplify/token-runner": "dev-master#0af8cc8",
         "slam/php-cs-fixer-extensions": "^1.8",
-        "symfony/expression-language": "^3.4|^4.0",
-        "symfony/form": "^3.4|^4.0",
+        "symfony/expression-language": "^4.0",
+        "symfony/form": "^4.0",
         "tracy/tracy": "^2.4|^3.0"
     },
     "autoload": {
