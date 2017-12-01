@@ -8,6 +8,7 @@
     ],
     "require": {
         "php": "^7.1",
+        "klausi/yaml_comments": "0.x-dev",
         "nette/utils": "^2.4|^3.0",
         "nikic/php-parser": "dev-master as v4.0.0alpha1",
         "phpdocumentor/reflection-docblock": "^4.1",
@@ -28,7 +29,7 @@
         "phpstan/phpstan-shim": "^0.8",
         "phpunit/phpunit": "^6.4",
         "symplify/coding-standard": "^3.0",
-        "symplify/token-runner": "dev-master#0af8cc8",
+        "symplify/token-runner": "dev-master",
         "slam/php-cs-fixer-extensions": "^1.8",
         "symfony/expression-language": "^4.0",
         "symfony/form": "^4.0",

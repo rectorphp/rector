@@ -3,6 +3,7 @@
 namespace Rector\YamlParser;
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Yaml\Yaml;
 
 final class YamlParserTest extends TestCase
 {
@@ -18,10 +19,25 @@ final class YamlParserTest extends TestCase
 
     public function test(): void
     {
-        $result = $this->yamlParser->parseFile(__DIR__ . '/YamlParserSource/some_services.yml');
+        $file = __DIR__ . '/YamlParserSource/some_services.yml';
 
-        dump($result);
-        $result = implode(' ', $result);
+        $result = $this->yamlParser->parseFile($file);
+
+        // change it
+        $services = $result->getData()['services'];
+
+        $newServices = [];
+        foreach ($services as $name => $service) {
+            if ($name === $service['class'] || (is_string($name) && $service['class'])) {
+                unset($services[$name]);
+                $newServices[$service['class']] = '~';
+            }
+        }
+
+        $data = $result->getData();
+        $data['services'] = $newServices;
+
+        $result = Yaml::dump($data);
 
         $this->assertStringEqualsFile(
             __DIR__ . '/YamlParserSource/expected.some_services.yml',

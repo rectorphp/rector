@@ -2,20 +2,13 @@
 
 namespace Rector\YamlParser;
 
-use Symfony\Component\Yaml\Yaml;
+use Klausi\YamlComments\ParseResult;
+use Klausi\YamlComments\YamlComments;
 
-/**
- * Inspire:
- *
- * - https://github.com/klausi/yaml_comments
- * - https://github.com/mulesoft-labs/yaml-ast-parser
- */
 final class YamlParser
 {
-    public function parseFile(string $file): array
+    public function parseFile(string $file): ParseResult
     {
-        $yaml = Yaml::parse(file_get_contents($file));
-
-        return $yaml;
+        return YamlComments::parse(file_get_contents($file));
     }
 }

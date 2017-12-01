@@ -1,5 +1,2 @@
 services:
-    _defaults:
-        autowire: true
-
-    SomeClass: ~
+    SomeClass: '~'
