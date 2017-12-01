@@ -3,12 +3,12 @@
 namespace Rector\NodeTypeResolver;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
+use Rector\BetterReflection\Identifier\Identifier;
 use Rector\BetterReflection\Reflector\MethodReflector;
 use Rector\Node\Attribute;
 
@@ -97,7 +97,7 @@ final class NodeCallerTypeResolver
         }
 
         // unable to determine
-        if ($node->name instanceof ArrayDimFetch || $node->name instanceof Variable) {
+        if (! $node->name instanceof Identifier) {
             return [];
         }
 
