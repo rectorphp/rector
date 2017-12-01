@@ -47,9 +47,6 @@ services:
 
     PhpParser\NodeTraverser: ~
 
-    # PhpParser - Printer
-    PhpParser\PrettyPrinter\Standard: ~
-
     # Symfony\Console
     Symfony\Component\Console\Style\SymfonyStyle:
         factory: ['Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory', 'create']
