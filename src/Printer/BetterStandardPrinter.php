@@ -7,11 +7,16 @@ use PhpParser\PrettyPrinter\Standard;
 final class BetterStandardPrinter extends Standard
 {
     /**
-     * Do not preslash slashes.
-     * Was causing `Vendor\Class` => `Vendor\\Class`.
+     * Do not preslash all slashes (parent behavior), but only those:
+     *
+     * - followed by "\"
+     * - by "'"
+     * - or the end of the string
+     *
+     * Prevents `Vendor\Class` => `Vendor\\Class`.
      */
     protected function pSingleQuotedString(string $string): string
     {
-        return '\'' . addcslashes($string, '\'') . '\'';
+        return '\'' . preg_replace("/'|\\\\(?=[\\\\']|$)/", '\\\\$0', $string) . '\'';
     }
 }
