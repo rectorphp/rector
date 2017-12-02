@@ -9,8 +9,8 @@ final class NamedServiceToClassRectorTest extends AbstractConfigurableYamlRector
     public function test(): void
     {
         $this->assertStringEqualsFile(
-            __DIR__ . '/Source/services_before.yml',
-            $this->yamlRectorCollector->processFile(__DIR__ . '/Source/services_after.yml')
+            __DIR__ . '/Source/services_after.yml',
+            $this->yamlRectorCollector->processFile(__DIR__ . '/Source/services_before.yml')
         );
     }
 
