@@ -1,6 +1,7 @@
 services:
     _defaults:
         autowire: true
+        public: true # for tests
 
     Rector\YamlParser\:
         resource: '../'

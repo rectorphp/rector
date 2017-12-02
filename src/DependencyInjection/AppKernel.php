@@ -5,6 +5,7 @@ namespace Rector\DependencyInjection;
 use Rector\DependencyInjection\CompilerPass\CollectorCompilerPass;
 use Rector\NodeTypeResolver\DependencyInjection\CompilerPass\NodeTypeResolverCollectorCompilerPass;
 use Rector\NodeValueResolver\DependencyInjection\CompilerPass\NodeValueResolverCollectorCompilerPass;
+use Rector\YamlParser\DependencyInjection\CompilerPass\YamlRetcorCollectorCompilerPass;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
@@ -60,5 +61,6 @@ final class AppKernel extends Kernel
         $containerBuilder->addCompilerPass(new CollectorCompilerPass());
         $containerBuilder->addCompilerPass(new NodeValueResolverCollectorCompilerPass());
         $containerBuilder->addCompilerPass(new NodeTypeResolverCollectorCompilerPass());
+        $containerBuilder->addCompilerPass(new YamlRetcorCollectorCompilerPass());
     }
 }
