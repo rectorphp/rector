@@ -13,6 +13,8 @@ Rector **upgrades your application** for you, with focus on open-source projects
     <a href="/src/config/level/phpunit"><img src="/docs/images/phpunit.jpg"></a>
     <img src="/docs/images/space.png">
     <a href="/src/config/level/roave"><img src="/docs/images/roave.png"></a>
+    <img src="/docs/images/space.png">
+    <a href="/src/config/level/twig"><img src="/docs/images/twig.png"></a>
 </p>
 
 <br>
