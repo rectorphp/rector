@@ -12,4 +12,3 @@ interface YamlRectorInterface
      */
     public function refactor(array $data): array;
 }
-
