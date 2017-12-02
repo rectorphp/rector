@@ -3,6 +3,7 @@
 namespace Rector\YamlParser\Tests;
 
 use PHPUnit\Framework\TestCase;
+use Rector\YamlParser\YamlParser;
 use Symfony\Component\Yaml\Yaml;
 
 final class YamlParserTest extends TestCase
@@ -22,6 +23,10 @@ final class YamlParserTest extends TestCase
         $file = __DIR__ . '/YamlParserSource/some_services.yml';
 
         $result = $this->yamlParser->parseFile($file);
+
+        // 1. yaml to php
+        // 2. parse the php with php-parser
+        // use rector and back to yaml
 
         // change it
         $services = $result->getData()['services'];
