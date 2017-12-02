@@ -185,7 +185,7 @@ You can:
 
     ```yml
     rectors:
-        Rector\Roector\Dynamic\PseudoNamespaceToNamespaceRector:
+        Rector\Rector\Dynamic\PseudoNamespaceToNamespaceRector:
             # old namespace prefix
             - 'PHPUnit_'
             # exclude classes
