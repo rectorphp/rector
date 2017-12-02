@@ -5,4 +5,4 @@ services:
 
     Rector\YamlParser\:
         resource: '../'
-        exclude: '../{Contract}'
+        exclude: '../{Contract,Rector/Contrib}'
