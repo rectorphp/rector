@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\YamlParser\Tests\Rector\Contrib\Symfony;
+namespace Rector\YamlParser\Tests\Rector\Contrib\Symfony\NamedServiceToClassRector;
 
 use Rector\YamlParser\Testing\PHPUnit\AbstractConfigurableYamlRectorTestCase;
 
