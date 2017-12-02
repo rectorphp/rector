@@ -4,7 +4,7 @@ namespace Rector\YamlParser\Contract\Rector;
 
 interface YamlRectorInterface
 {
-    public function getCondidateKey(): string;
+    public function getCandidateKey(): string;
 
     /**
      * @param mixed[] $data

@@ -37,9 +37,6 @@ final class PropertyBuilder
         $this->statementGlue->addAsFirstMethod($classNode, $propertyNode);
     }
 
-    /**
-     * @param string[] $propertyTypes
-     */
     private function buildPrivatePropertyNode(Property $property): PhpParserProperty
     {
         $docComment = $this->createDocWithVarAnnotation($property->getTypes());
@@ -51,9 +48,6 @@ final class PropertyBuilder
         return $propertyBuilder->getNode();
     }
 
-    /**
-     * @param string[] $propertyTypes
-     */
     private function createDocWithVarAnnotation(array $propertyTypes): Doc
     {
         return new Doc('/**'
