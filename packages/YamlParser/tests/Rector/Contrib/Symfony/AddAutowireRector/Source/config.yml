@@ -1,0 +1,2 @@
+rectors:
+    Rector\YamlParser\Rector\Contrib\Symfony\AddAutowireRector: ~

@@ -12,7 +12,7 @@ final class NamedServiceToClassRectorTest extends AbstractConfigurableYamlRector
             __DIR__ . '/Source/expected.some_services.yml',
             $this->yamlRectorCollector->processFile(__DIR__ . '/Source/some_services.yml')
         );
-11    }
+    }
 
     protected function provideConfig(): string
     {
