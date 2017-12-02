@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\YamlParser;
+namespace Rector\YamlParser\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Yaml\Yaml;
