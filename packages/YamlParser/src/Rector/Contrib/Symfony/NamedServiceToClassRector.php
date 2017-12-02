@@ -7,6 +7,17 @@ use Rector\YamlParser\Contract\Rector\YamlRectorInterface;
 /**
  * Turn custom names of services,
  * to class based ones.
+ *
+ * Before:
+ *
+ * services:
+ *      some_class:
+ *          class: SomeClass
+ *
+ * After:
+ *
+ * services:
+ *      SomeClass: ~
  */
 final class NamedServiceToClassRector implements YamlRectorInterface
 {
