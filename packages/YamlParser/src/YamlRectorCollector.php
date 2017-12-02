@@ -28,9 +28,7 @@ final class YamlRectorCollector
 
     public function processFile(string $file): string
     {
-        $parseResult = $this->yamlParser->parseFile($file);
-
-        $data = $parseResult->getData();
+        $data = $this->yamlParser->parseFile($file);
 
         foreach ($this->yamlRectors as $yamlRector) {
             if (! array_key_exists($yamlRector->getCandidateKey(), $data)) {
