@@ -2,10 +2,7 @@
 
 namespace Rector\FileSystem;
 
-use Rector\Exception\FileSystem\DirectoryNotFoundException;
 use Rector\Exception\FileSystem\FileNotFoundException;
-use SplFileInfo;
-use Symfony\Component\Finder\Finder;
 
 final class FileGuard
 {

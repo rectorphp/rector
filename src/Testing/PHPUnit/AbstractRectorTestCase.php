@@ -6,7 +6,6 @@ use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Rector\Application\FileProcessor;
 use Rector\DependencyInjection\ContainerFactory;
-use Rector\Exception\FileSystem\FileNotFoundException;
 use Rector\FileSystem\FileGuard;
 use SplFileInfo;
 
