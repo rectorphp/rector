@@ -29,7 +29,7 @@ Do you have old PHP or dependencies in conflict? Ok, [it is not problem](/docs/H
 
 ### A. Prepared Sets
 
-Fetaured open-source projects have **prepared sets**. You'll find them in [`/src/config/level`](/src/config/level).
+Featured open-source projects have **prepared sets**. You'll find them in [`/src/config/level`](/src/config/level).
 
 E.g. Do you need to upgrade to Symfony 3.3?
 
