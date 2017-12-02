@@ -65,12 +65,8 @@ final class PropertyToClassAdder extends NodeVisitorAbstract
         }
 
         foreach ($propertiesForClass as $property) {
-            $this->constructorMethodBuilder->addPropertyAssignToClass(
-                $classNode,
-                $property['types'],
-                $property['name']
-            );
-            $this->propertyBuilder->addPropertyToClass($classNode, $property['types'], $property['name']);
+            $this->constructorMethodBuilder->addPropertyAssignToClass($classNode, $property);
+            $this->propertyBuilder->addPropertyToClass($classNode, $property);
         }
 
         return $classNode;

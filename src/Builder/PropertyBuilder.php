@@ -5,7 +5,8 @@ namespace Rector\Builder;
 use PhpParser\BuilderFactory;
 use PhpParser\Comment\Doc;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\Property as PhpParserProperty;
+use Rector\Builder\Class_\Property;
 
 final class PropertyBuilder
 {
@@ -25,16 +26,13 @@ final class PropertyBuilder
         $this->statementGlue = $statementGlue;
     }
 
-    /**
-     * @param string[] $propertyTypes
-     */
-    public function addPropertyToClass(Class_ $classNode, array $propertyTypes, string $propertyName): void
+    public function addPropertyToClass(Class_ $classNode, Property $property): void
     {
-        if ($this->doesPropertyAlreadyExist($classNode, $propertyName)) {
+        if ($this->doesPropertyAlreadyExist($classNode, $property)) {
             return;
         }
 
-        $propertyNode = $this->buildPrivatePropertyNode($propertyTypes, $propertyName);
+        $propertyNode = $this->buildPrivatePropertyNode($property);
 
         $this->statementGlue->addAsFirstMethod($classNode, $propertyNode);
     }
@@ -42,11 +40,11 @@ final class PropertyBuilder
     /**
      * @param string[] $propertyTypes
      */
-    private function buildPrivatePropertyNode(array $propertyTypes, string $propertyName): Property
+    private function buildPrivatePropertyNode(Property $property): PhpParserProperty
     {
-        $docComment = $this->createDocWithVarAnnotation($propertyTypes);
+        $docComment = $this->createDocWithVarAnnotation($property->getTypes());
 
-        $propertyBuilder = $this->builderFactory->property($propertyName)
+        $propertyBuilder = $this->builderFactory->property($property->getName())
             ->makePrivate()
             ->setDocComment($docComment);
 
@@ -63,16 +61,16 @@ final class PropertyBuilder
             . PHP_EOL . ' */');
     }
 
-    private function doesPropertyAlreadyExist(Class_ $classNode, string $propertyName): bool
+    private function doesPropertyAlreadyExist(Class_ $classNode, Property $property): bool
     {
         foreach ($classNode->stmts as $inClassNode) {
-            if (! $inClassNode instanceof Property) {
+            if (! $inClassNode instanceof PhpParserProperty) {
                 continue;
             }
 
             $classPropertyName = (string) $inClassNode->props[0]->name;
 
-            if ($classPropertyName === $propertyName) {
+            if ($classPropertyName === $property->getName()) {
                 return true;
             }
         }
