@@ -3,6 +3,8 @@
 namespace Rector\YamlParser;
 
 use Rector\FileSystem\FileGuard;
+use Symfony\Component\DependencyInjection\Dumper\YamlDumper;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\Yaml\Yaml;
 
 final class YamlParser
@@ -22,6 +24,6 @@ final class YamlParser
      */
     public function getStringFromData(array $data): string
     {
-        return Yaml::dump($data);
+        return Yaml::dump($data, 3);
     }
 }

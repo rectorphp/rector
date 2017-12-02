@@ -41,7 +41,13 @@ final class AddAutowireRector implements YamlRectorInterface
                 $service['arguments'] = $nonAutowireableArguments;
             }
 
+            // no arguments, use null
+            if (count($service) === 0) {
+                $service = '~';
+            }
+
             $services[$name] = $service;
+
         }
 
         return $services;
