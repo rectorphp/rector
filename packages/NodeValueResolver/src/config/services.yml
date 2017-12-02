@@ -4,5 +4,5 @@ services:
         public: true # for tests
 
     Rector\NodeValueResolver\:
-        resource: '../../src'
-        exclude: '../../src/{Contract}'
+        resource: '../'
+        exclude: '../{Contract}'

@@ -4,7 +4,7 @@ services:
         public: true # for tests
 
     Rector\NodeTraverserQueue\:
-        resource: '../../src'
-        exclude: '../../src/{Exception}'
+        resource: '../'
+        exclude: '../{Exception}'
 
     PhpParser\NodeFinder: ~
