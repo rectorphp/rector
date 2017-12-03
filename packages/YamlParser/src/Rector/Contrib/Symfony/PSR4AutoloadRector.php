@@ -120,7 +120,6 @@ final class PSR4AutoloadRector implements YamlRectorInterface
 
         foreach ($namespacePrefixes as $class => $namespacePrefix) {
             if (class_exists($class)) {
-                // @todo: nest files 1 more, so they don't share directory with config => false corelations
                 $classPath = (new ReflectionClass($class))->getFileName();
 
                 // how many directories were traversed up to namespace
