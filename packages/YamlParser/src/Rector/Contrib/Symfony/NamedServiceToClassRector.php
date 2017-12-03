@@ -27,7 +27,7 @@ final class NamedServiceToClassRector implements YamlRectorInterface
     }
 
     /**
-     * @param mixed[] $data
+     * @param mixed[] $services
      * @return mixed[]
      */
     public function refactor(array $services): array

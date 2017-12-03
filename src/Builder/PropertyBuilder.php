@@ -48,6 +48,9 @@ final class PropertyBuilder
         return $propertyBuilder->getNode();
     }
 
+    /**
+     * @param string[] $propertyTypes
+     */
     private function createDocWithVarAnnotation(array $propertyTypes): Doc
     {
         return new Doc('/**'

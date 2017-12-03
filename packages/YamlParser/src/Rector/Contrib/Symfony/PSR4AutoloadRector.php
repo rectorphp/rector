@@ -40,7 +40,6 @@ final class PSR4AutoloadRector implements YamlRectorInterface
         foreach ($services as $name => $service) {
         }
 
-
         return $services;
     }
 }

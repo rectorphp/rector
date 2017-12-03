@@ -29,37 +29,10 @@ final class AddAutowireRector implements YamlRectorInterface
                 continue;
             }
 
-            $nonAutowireableArguments = $this->removeServiceReferencesFromArguments($service['arguments']);
-            if (count($nonAutowireableArguments) === 0) {
-                unset($service['arguments']);
-            } else {
-                $service['arguments'] = $nonAutowireableArguments;
-            }
-
-            // no arguments, use null
-            if (count($service) === 0) {
-                $service = '~';
-            }
-
-            $services[$name] = $service;
+            $services[$name] = $this->processService($service);
         }
 
         return $services;
-    }
-
-    /**
-     * @param mixed[] $arguments
-     * @return mixed[]
-     */
-    private function removeServiceReferencesFromArguments(array $arguments): array
-    {
-        foreach ($arguments as $key => $argument) {
-            if (Strings::startsWith($argument, '@')) {
-                unset($arguments[$key]);
-            }
-        }
-
-        return $arguments;
     }
 
     /**
@@ -75,5 +48,40 @@ final class AddAutowireRector implements YamlRectorInterface
         ];
 
         return array_merge($defaultsAutowire, $services);
+    }
+
+    /**
+     * @param mixed[] $service
+     */
+    private function processService(array $service): string
+    {
+        $nonAutowireableArguments = $this->removeServiceReferencesFromArguments($service['arguments']);
+        if (count($nonAutowireableArguments) === 0) {
+            unset($service['arguments']);
+        } else {
+            $service['arguments'] = $nonAutowireableArguments;
+        }
+
+        // no arguments, use null
+        if (count($service) === 0) {
+            return '~';
+        }
+
+        return $service;
+    }
+
+    /**
+     * @param mixed[] $arguments
+     * @return mixed[]
+     */
+    private function removeServiceReferencesFromArguments(array $arguments): array
+    {
+        foreach ($arguments as $key => $argument) {
+            if (Strings::startsWith($argument, '@')) {
+                unset($arguments[$key]);
+            }
+        }
+
+        return $arguments;
     }
 }
