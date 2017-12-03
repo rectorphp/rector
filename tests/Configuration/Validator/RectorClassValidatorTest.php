@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Rector\Configuration\Validator\RectorClassValidator;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\Exception\Validator\InvalidRectorClassException;
+use Rector\YamlParser\Contract\Rector\YamlRectorInterface;
 use stdClass;
 
 final class RectorClassValidatorTest extends TestCase
@@ -39,9 +40,10 @@ final class RectorClassValidatorTest extends TestCase
 
         $this->expectException(InvalidRectorClassException::class);
         $this->expectExceptionMessage(sprintf(
-            'Rector "%s" is not supported. Use class that implements "%s".',
+            'Rector "%s" is not supported. Use class that implements "%s" or "%s".',
             $nonRectorClass,
-            RectorInterface::class
+            RectorInterface::class,
+            YamlRectorInterface::class
         ));
 
         $this->rectorClassValidator->validate([$nonRectorClass]);
