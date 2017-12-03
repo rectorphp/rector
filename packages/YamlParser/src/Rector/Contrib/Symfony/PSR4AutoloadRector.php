@@ -38,14 +38,7 @@ final class PSR4AutoloadRector implements YamlRectorInterface
             }
         }
 
-        $namespacePrefixes = array_unique($namespacePrefixes);
-        foreach ($namespacePrefixes as $namespacePrefix) {
-            $services[$namespacePrefix] = [
-                'resource' => '..'
-            ];
-        }
-
-        return $services;
+        return $this->prependResources($services, $namespacePrefixes);
     }
 
     private function resolveNamespacePrefix(string $className): string
@@ -72,5 +65,22 @@ final class PSR4AutoloadRector implements YamlRectorInterface
         }
 
         return false;
+    }
+
+    /**
+     * @param mixed[] $services
+     * @param string[] $namespacePrefixes
+     * @return mixed[]
+     */
+    private function prependResources(array $services, array $namespacePrefixes): array
+    {
+        $namespacePrefixes = array_unique($namespacePrefixes);
+        foreach ($namespacePrefixes as $namespacePrefix) {
+            $services[$namespacePrefix] = [
+                'resource' => '..',
+            ];
+        }
+
+        return $services;
     }
 }
