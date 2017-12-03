@@ -52,8 +52,9 @@ final class AddAutowireRector implements YamlRectorInterface
 
     /**
      * @param mixed[] $service
+     * @return mixed[]|string
      */
-    private function processService(array $service): string
+    private function processService(array $service)
     {
         $nonAutowireableArguments = $this->removeServiceReferencesFromArguments($service['arguments']);
         if (count($nonAutowireableArguments) === 0) {
