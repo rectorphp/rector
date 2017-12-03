@@ -1,0 +1,3 @@
+services:
+    Rector\YamlParser\:
+        resource: ..

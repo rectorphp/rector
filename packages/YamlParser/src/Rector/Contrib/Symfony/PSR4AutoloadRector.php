@@ -2,6 +2,7 @@
 
 namespace Rector\YamlParser\Rector\Contrib\Symfony;
 
+use Nette\Utils\Strings;
 use Rector\YamlParser\Contract\Rector\YamlRectorInterface;
 
 final class PSR4AutoloadRector implements YamlRectorInterface
@@ -17,29 +18,59 @@ final class PSR4AutoloadRector implements YamlRectorInterface
      */
     public function refactor(array $services): array
     {
-        if (isset($services['_defaults']['autowire'])) {
-            return $services;
+        $classNames = [];
+
+        // find namespace => resource ideal match
+        foreach ($services as $name => $service) {
+            $classNames[] = $service['class'] ?? $name;
         }
 
-        $defaultsAutowire = [
-            '_defaults' => [
-                'autowire' => true,
-            ],
-        ];
-        $services = array_merge($defaultsAutowire, $services);
-
-        foreach ($services as $name => $service) {
-            // find namespace => resource ideal match
-        }
-
-        // add those matches
-        foreach ($services as $name => $service) {
+        $namespacePrefixes = [];
+        foreach ($classNames as $className) {
+            $namespacePrefixes[] = $this->resolveNamespacePrefix($className);
         }
 
         // remove already loaded classes
         foreach ($services as $name => $service) {
+            $className = $service['class'] ?? $name;
+            if ($this->isClassCoveredInNamespacePrefixes($className, $namespacePrefixes)) {
+                unset($services[$name]);
+            }
+        }
+
+        $namespacePrefixes = array_unique($namespacePrefixes);
+        foreach ($namespacePrefixes as $namespacePrefix) {
+            $services[$namespacePrefix] = [
+                'resource' => '..'
+            ];
         }
 
         return $services;
+    }
+
+    private function resolveNamespacePrefix(string $className): string
+    {
+        $classNameParts = explode('\\', $className);
+
+        if (count($classNameParts) === 1) {
+            return $classNameParts[0] . '\\';
+        }
+
+        return $classNameParts[0] . '\\' . $classNameParts[1] . '\\';
+    }
+
+    /**
+     * @param mixed[] $service
+     * @param string[] $namespacePrefixes
+     */
+    private function isClassCoveredInNamespacePrefixes(string $className, array $namespacePrefixes): bool
+    {
+        foreach ($namespacePrefixes as $namespacePrefix) {
+            if (Strings::startsWith($className, $namespacePrefix)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
