@@ -2,6 +2,8 @@
 
 namespace Rector\YamlParser\Contract\Rector;
 
+use SplFileInfo;
+
 interface YamlRectorInterface
 {
     public function getCandidateKey(): string;
@@ -10,5 +12,5 @@ interface YamlRectorInterface
      * @param mixed[] $data
      * @return mixed[]
      */
-    public function refactor(array $data): array;
+    public function refactor(array $data, SplFileInfo $fileInfo): array;
 }

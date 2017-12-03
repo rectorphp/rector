@@ -3,6 +3,7 @@
 namespace Rector\YamlParser;
 
 use Rector\YamlParser\Contract\Rector\YamlRectorInterface;
+use SplFileInfo;
 
 final class YamlRectorCollector
 {
@@ -36,7 +37,7 @@ final class YamlRectorCollector
             }
 
             $key = $yamlRector->getCandidateKey();
-            $data[$key] = $yamlRector->refactor($data[$key]);
+            $data[$key] = $yamlRector->refactor($data[$key], new SplFileInfo($file));
         }
 
         return $this->yamlParser->getStringFromData($data);

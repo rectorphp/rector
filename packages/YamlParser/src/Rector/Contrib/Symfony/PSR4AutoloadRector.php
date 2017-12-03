@@ -4,6 +4,8 @@ namespace Rector\YamlParser\Rector\Contrib\Symfony;
 
 use Nette\Utils\Strings;
 use Rector\YamlParser\Contract\Rector\YamlRectorInterface;
+use ReflectionClass;
+use SplFileInfo;
 
 final class PSR4AutoloadRector implements YamlRectorInterface
 {
@@ -16,19 +18,10 @@ final class PSR4AutoloadRector implements YamlRectorInterface
      * @param mixed[] $services
      * @return mixed[]
      */
-    public function refactor(array $services): array
+    public function refactor(array $services, SplFileInfo $fileInfo): array
     {
-        $classNames = [];
-
-        // find namespace => resource ideal match
-        foreach ($services as $name => $service) {
-            $classNames[] = $service['class'] ?? $name;
-        }
-
-        $namespacePrefixes = [];
-        foreach ($classNames as $className) {
-            $namespacePrefixes[] = $this->resolveNamespacePrefix($className);
-        }
+        $classNames = $this->resolveClassNamesFromServices($services);
+        $namespacePrefixes = $this->resolveNamespacePrefixesFromClassNames($classNames);
 
         // remove already loaded classes
         foreach ($services as $name => $service) {
@@ -38,18 +31,9 @@ final class PSR4AutoloadRector implements YamlRectorInterface
             }
         }
 
+        $namespacePrefixes = $this->resolveResourcesForNamespacePrefixes($namespacePrefixes, $fileInfo);
+
         return $this->prependResources($services, $namespacePrefixes);
-    }
-
-    private function resolveNamespacePrefix(string $className): string
-    {
-        $classNameParts = explode('\\', $className);
-
-        if (count($classNameParts) === 1) {
-            return $classNameParts[0] . '\\';
-        }
-
-        return $classNameParts[0] . '\\' . $classNameParts[1] . '\\';
     }
 
     /**
@@ -75,12 +59,96 @@ final class PSR4AutoloadRector implements YamlRectorInterface
     private function prependResources(array $services, array $namespacePrefixes): array
     {
         $namespacePrefixes = array_unique($namespacePrefixes);
-        foreach ($namespacePrefixes as $namespacePrefix) {
+        foreach ($namespacePrefixes as $namespacePrefix => $resource) {
             $services[$namespacePrefix] = [
-                'resource' => '..',
+                'resource' => $resource
             ];
         }
 
         return $services;
+    }
+
+    /**
+     * @param mixed[] $services
+     * @return string[]
+     */
+    private function resolveClassNamesFromServices(array $services): array
+    {
+        $classNames = [];
+
+        // find namespace => resource ideal match
+        foreach ($services as $name => $service) {
+            $classNames[] = $service['class'] ?? $name;
+        }
+
+        return $classNames;
+    }
+
+    /**
+     * @param string[] $classNames
+     * @return string[]
+     */
+    private function resolveNamespacePrefixesFromClassNames(array $classNames): array
+    {
+        $namespacePrefixes = [];
+
+        foreach ($classNames as $className) {
+            $namespacePrefixes[$className] = $this->resolveNamespacePrefix($className);
+        }
+
+        return array_unique($namespacePrefixes);
+    }
+
+    private function resolveNamespacePrefix(string $className): string
+    {
+        $classNameParts = explode('\\', $className);
+
+        if (count($classNameParts) === 1) {
+            return $classNameParts[0] . '\\';
+        }
+
+        return $classNameParts[0] . '\\' . $classNameParts[1] . '\\';
+    }
+
+    /**
+     * @param string[] $namespacePrefixes
+     * @return string[]
+     */
+    private function resolveResourcesForNamespacePrefixes(array $namespacePrefixes, SplFileInfo $fileInfo): array
+    {
+        $namespacePrefixesToResources = [];
+
+        foreach ($namespacePrefixes as $class => $namespacePrefix) {
+            if (class_exists($class)) {
+                // @todo: nest files 1 more, so they don't share directory with config => false corelations
+                $classPath = (new ReflectionClass($class))->getFileName();
+
+                // how many directories were traversed up to namespace
+                $climbedDirectoryCount = substr_count($class, '\\') - substr_count($namespacePrefix, '\\');
+
+                // apply same traverse to directory
+                $dirname = dirname($classPath);
+                for ($i = $climbedDirectoryCount; $i > 0; --$i) {
+                    $dirname = dirname($dirname);
+                }
+
+                // directory where current config is located
+                $sourceDirectory = $fileInfo->getPath();
+
+                // path from namespace prefix to current config
+                $relativePathFomrNamespacePrefixToConfig = substr($sourceDirectory, strlen($dirname));
+
+                $resourceClimbedLevels = substr_count($relativePathFomrNamespacePrefixToConfig, '/');
+
+                $resource = '';
+                for ($i = $resourceClimbedLevels; $i > 0; --$i) {
+                    $resource .= '../';
+                }
+
+                $namespacePrefixesToResources[$namespacePrefix] = $resource;
+            }
+        }
+
+        return $namespacePrefixesToResources;
     }
 }
