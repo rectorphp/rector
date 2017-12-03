@@ -1,0 +1,6 @@
+services:
+    _defaults:
+        autoconfigure: true
+
+    twig.stringloader:
+        class: Twig_Loader_Array
