@@ -2,13 +2,17 @@
 
 namespace Rector\YamlParser;
 
+use Nette\Utils\Strings;
 use Rector\FileSystem\FileGuard;
-use Symfony\Component\DependencyInjection\Dumper\YamlDumper;
-use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\Yaml\Yaml;
 
 final class YamlParser
 {
+    /**
+     * @var string
+     */
+    private const NEW_ITEM_PATTERN = '#^[\s]{4}[a-zA-Z_]+#m';
+
     /**
      * @return mixed[]
      */
@@ -24,6 +28,21 @@ final class YamlParser
      */
     public function getStringFromData(array $data): string
     {
-        return Yaml::dump($data, 3);
+        $result = Yaml::dump($data,10);
+
+        return $this->addEmptyLinesBetweenItems($result);
+    }
+
+    private function addEmptyLinesBetweenItems(string $result): string
+    {
+        $i = 0;
+        return Strings::replace($result, self::NEW_ITEM_PATTERN, function ($match) use (&$i) {
+            ++$i;
+            if ($i === 1) {
+                return $match[0];
+            }
+
+            return PHP_EOL . $match[0];
+        });
     }
 }
