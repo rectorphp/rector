@@ -22,12 +22,7 @@ final class AddAutowireRector implements YamlRectorInterface
             return $services;
         }
 
-        $defaultsAutowire = [
-            '_defaults' => [
-                'autowire' => true,
-            ],
-        ];
-        $services = array_merge($defaultsAutowire, $services);
+        $services = $this->prependDefaultsAutowire($services);
 
         foreach ($services as $name => $service) {
             if (! isset($service['arguments'])) {
@@ -47,7 +42,6 @@ final class AddAutowireRector implements YamlRectorInterface
             }
 
             $services[$name] = $service;
-
         }
 
         return $services;
@@ -66,5 +60,20 @@ final class AddAutowireRector implements YamlRectorInterface
         }
 
         return $arguments;
+    }
+
+    /**
+     * @param mixed[] $services
+     * @return mixed[]
+     */
+    private function prependDefaultsAutowire(array $services): array
+    {
+        $defaultsAutowire = [
+            '_defaults' => [
+                'autowire' => true,
+            ],
+        ];
+
+        return array_merge($defaultsAutowire, $services);
     }
 }

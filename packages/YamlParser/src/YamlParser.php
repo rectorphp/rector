@@ -28,7 +28,7 @@ final class YamlParser
      */
     public function getStringFromData(array $data): string
     {
-        $result = Yaml::dump($data,10);
+        $result = Yaml::dump($data, 10);
 
         return $this->addEmptyLinesBetweenItems($result);
     }
