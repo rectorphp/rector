@@ -8,14 +8,15 @@
     ],
     "require": {
         "php": "^7.1",
+        "klausi/yaml_comments": "0.x-dev",
         "nette/utils": "^2.4|^3.0",
         "nikic/php-parser": "dev-master as v4.0.0alpha1",
         "phpdocumentor/reflection-docblock": "^4.1",
         "phpdocumentor/type-resolver": "^0.4",
         "rector/better-reflection": "^3.0",
-        "symfony/console": "^3.4|^4.0",
-        "symfony/dependency-injection": "^3.4|^4.0",
-        "symfony/finder": "^3.4|^4.0",
+        "symfony/console": "^4.0",
+        "symfony/dependency-injection": "^4.0",
+        "symfony/finder": "^4.0",
         "symplify/easy-coding-standard": "^3.0",
         "symplify/package-builder": "^3.0",
         "webmozart/assert": "^1.2"
@@ -28,10 +29,10 @@
         "phpstan/phpstan-shim": "^0.8",
         "phpunit/phpunit": "^6.4",
         "symplify/coding-standard": "^3.0",
-        "symplify/token-runner": "dev-master#0af8cc8",
+        "symplify/token-runner": "dev-master",
         "slam/php-cs-fixer-extensions": "^1.8",
-        "symfony/expression-language": "^3.4|^4.0",
-        "symfony/form": "^3.4|^4.0",
+        "symfony/expression-language": "^4.0",
+        "symfony/form": "^4.0",
         "tracy/tracy": "^2.4|^3.0"
     },
     "autoload": {
@@ -42,7 +43,8 @@
             "Rector\\NodeTypeResolver\\": "packages/NodeTypeResolver/src",
             "Rector\\NodeTraverserQueue\\": "packages/NodeTraverserQueue/src",
             "Rector\\DeprecationExtractor\\": "packages/DeprecationExtractor/src",
-            "Rector\\NodeValueResolver\\": "packages/NodeValueResolver/src"
+            "Rector\\NodeValueResolver\\": "packages/NodeValueResolver/src",
+            "Rector\\YamlParser\\": "packages/YamlParser/src"
         }
     },
     "autoload-dev": {
@@ -53,7 +55,8 @@
             "Rector\\NodeTypeResolver\\Tests\\": "packages/NodeTypeResolver/tests",
             "Rector\\NodeTraverserQueue\\Tests\\": "packages/NodeTraverserQueue/tests",
             "Rector\\DeprecationExtractor\\Tests\\": "packages/DeprecationExtractor/tests",
-            "Rector\\NodeValueResolver\\Tests\\": "packages/NodeValueResolver/tests"
+            "Rector\\NodeValueResolver\\Tests\\": "packages/NodeValueResolver/tests",
+            "Rector\\YamlParser\\Tests\\": "packages/YamlParser/tests"
         }
     },
     "scripts": {

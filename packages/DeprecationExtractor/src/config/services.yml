@@ -4,5 +4,5 @@ services:
         public: true # for tests
 
     Rector\DeprecationExtractor\:
-        resource: '../../src'
-        exclude: '../../src/{Deprecation/Deprecation.php,RectorGuess/RectorGuess.php}'
+        resource: '../'
+        exclude: '../{Deprecation/Deprecation.php,RectorGuess/RectorGuess.php}'

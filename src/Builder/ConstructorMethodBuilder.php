@@ -7,6 +7,7 @@ use PhpParser\Builder\Param;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Builder\Class_\Property;
 use Rector\Node\NodeFactory;
 
 final class ConstructorMethodBuilder
@@ -39,22 +40,22 @@ final class ConstructorMethodBuilder
     /**
      * @param string[] $propertyTypes
      */
-    public function addPropertyAssignToClass(Class_ $classNode, array $propertyTypes, string $propertyName): void
+    public function addPropertyAssignToClass(Class_ $classNode, Property $property): void
     {
         $constructorMethod = $classNode->getMethod('__construct') ?: null;
 
-        $propertyAssignNode = $this->nodeFactory->createPropertyAssignment($propertyName);
+        $propertyAssignNode = $this->nodeFactory->createPropertyAssignment($property->getName());
 
         /** @var ClassMethod $constructorMethod */
         if ($constructorMethod) {
             // has parameter already?
             foreach ($constructorMethod->params as $constructorParameter) {
-                if ($constructorParameter->var->name === $propertyName) {
+                if ($constructorParameter->var->name === $property->getName()) {
                     return;
                 }
             }
 
-            $constructorMethod->params[] = $this->createParameter($propertyTypes, $propertyName)
+            $constructorMethod->params[] = $this->createParameter($property->getTypes(), $property->getName())
                 ->getNode();
 
             $constructorMethod->stmts[] = $propertyAssignNode;
@@ -65,7 +66,7 @@ final class ConstructorMethodBuilder
         /** @var Method $constructorMethod */
         $constructorMethod = $this->builderFactory->method('__construct')
             ->makePublic()
-            ->addParam($this->createParameter($propertyTypes, $propertyName))
+            ->addParam($this->createParameter($property->getTypes(), $property->getName()))
             ->addStmts([$propertyAssignNode]);
 
         $this->statementGlue->addAsFirstMethod($classNode, $constructorMethod->getNode());

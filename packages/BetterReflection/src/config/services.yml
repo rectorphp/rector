@@ -4,7 +4,7 @@ services:
         public: true # for tests
 
     Rector\BetterReflection\:
-        resource: '../../src'
+        resource: '../'
 
     # nikic\PHP-Parser
     Rector\BetterReflection\SourceLocator\Ast\Locator: ~

@@ -9,5 +9,7 @@ final class MyTest extends \PHPUnit_Framework_TestCase
     public function testThrowExceptionWhenOperatorIsInvalid(): void
     {
         Comparison::compare(1, 1, '~=');
+
+        // extra line
     }
 }

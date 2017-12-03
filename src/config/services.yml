@@ -4,8 +4,8 @@ services:
         public: true # for tests
 
     Rector\:
-        resource: '../../src'
-        exclude: '../../src/{Node/Attribute.php,Rector/Contrib,Rector/Dynamic,Rector/MagicDisclosure,Testing}'
+        resource: '../'
+        exclude: '../{Node/Attribute.php,Rector/Contrib,Rector/Dynamic,Rector/MagicDisclosure,Testing}'
 
     Rector\Rector\Contrib\Symfony\Form\Helper\FormTypeStringToTypeProvider: ~
 
@@ -46,9 +46,6 @@ services:
                 'replaceNodes': false
 
     PhpParser\NodeTraverser: ~
-
-    # PhpParser - Printer
-    PhpParser\PrettyPrinter\Standard: ~
 
     # Symfony\Console
     Symfony\Component\Console\Style\SymfonyStyle:

@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Rector\Application\FileProcessor;
 use Rector\DependencyInjection\ContainerFactory;
-use Rector\Exception\FileSystem\FileNotFoundException;
+use Rector\FileSystem\FileGuard;
 use SplFileInfo;
 
 abstract class AbstractRectorTestCase extends TestCase
@@ -30,8 +30,8 @@ abstract class AbstractRectorTestCase extends TestCase
 
     protected function doTestFileMatchesExpectedContent(string $file, string $reconstructedFile): void
     {
-        $this->ensureFileExists($file);
-        $this->ensureFileExists($reconstructedFile);
+        FileGuard::ensureFileExists($file, get_called_class());
+        FileGuard::ensureFileExists($reconstructedFile, get_called_class());
 
         $reconstructedFileContent = $this->fileProcessor->processFileWithRectorsToString(
             new SplFileInfo($file),
@@ -48,15 +48,4 @@ abstract class AbstractRectorTestCase extends TestCase
      * @return string[]
      */
     abstract protected function getRectorClasses(): array;
-
-    protected function ensureFileExists(string $file): void
-    {
-        if (! file_exists($file)) {
-            throw new FileNotFoundException(sprintf(
-                'File "%s" not found in "%s".',
-                $file,
-                get_called_class()
-            ));
-        }
-    }
 }

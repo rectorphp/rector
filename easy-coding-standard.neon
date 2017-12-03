@@ -30,19 +30,7 @@ checkers:
             - 'PhpParser\Node'
 
 parameters:
-    exclude_checkers:
-        # too strict - remove
-        - Symplify\CodingStandard\Fixer\Solid\NoInterfaceOnAbstractClassFixer
-
     skip:
-        Symplify\CodingStandard\Fixer\Commenting\RemoveUselessDocBlockFixer:
-            # bugged
-            - src/Node/NodeFactory.php
-
-        Symplify\CodingStandard\Sniffs\DependencyInjection\NoClassInstantiationSniff:
-            # already fixed in master
-            - bin/rector.php
-
         Symplify\CodingStandard\Fixer\Php\ClassStringToClassConstantFixer:
             # classes might not exist
             - */src/Rector/Contrib/*/*Rector.php

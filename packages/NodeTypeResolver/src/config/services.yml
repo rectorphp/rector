@@ -4,4 +4,4 @@ services:
         public: true # for tests
 
     Rector\NodeTypeResolver\:
-        resource: '../../src'
+        resource: '../'

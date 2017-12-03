@@ -1,0 +1,2 @@
+yaml_rectors:
+    Rector\YamlParser\Rector\Contrib\Symfony\NamedServiceToClassRector: ~
