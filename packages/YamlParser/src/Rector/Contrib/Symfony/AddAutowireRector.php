@@ -4,6 +4,7 @@ namespace Rector\YamlParser\Rector\Contrib\Symfony;
 
 use Nette\Utils\Strings;
 use Rector\YamlParser\Contract\Rector\YamlRectorInterface;
+use SplFileInfo;
 
 final class AddAutowireRector implements YamlRectorInterface
 {
@@ -16,7 +17,7 @@ final class AddAutowireRector implements YamlRectorInterface
      * @param mixed[] $services
      * @return mixed[]
      */
-    public function refactor(array $services): array
+    public function refactor(array $services, SplFileInfo $fileInfo): array
     {
         if (isset($services['_defaults']['autowire'])) {
             return $services;

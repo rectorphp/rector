@@ -3,6 +3,7 @@
 namespace Rector\YamlParser\Rector\Contrib\Symfony;
 
 use Rector\YamlParser\Contract\Rector\YamlRectorInterface;
+use SplFileInfo;
 
 /**
  * Turn custom names of services,
@@ -30,7 +31,7 @@ final class NamedServiceToClassRector implements YamlRectorInterface
      * @param mixed[] $services
      * @return mixed[]
      */
-    public function refactor(array $services): array
+    public function refactor(array $services, SplFileInfo $fileInfo): array
     {
         $newServices = [];
 

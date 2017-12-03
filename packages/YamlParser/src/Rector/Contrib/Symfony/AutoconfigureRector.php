@@ -3,6 +3,7 @@
 namespace Rector\YamlParser\Rector\Contrib\Symfony;
 
 use Rector\YamlParser\Contract\Rector\YamlRectorInterface;
+use SplFileInfo;
 
 final class AutoconfigureRector implements YamlRectorInterface
 {
@@ -58,7 +59,7 @@ final class AutoconfigureRector implements YamlRectorInterface
      * @param mixed[] $services
      * @return mixed[]
      */
-    public function refactor(array $services): array
+    public function refactor(array $services, SplFileInfo $fileInfo): array
     {
         // skip if autoconfigure already exists
         if (isset($services['_defaults']['autoconfigure'])) {
