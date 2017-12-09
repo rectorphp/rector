@@ -5,6 +5,7 @@ namespace Rector\Rector\MagicDisclosure;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Isset_;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Unset_;
 use Rector\Node\Attribute;
@@ -85,8 +86,13 @@ final class UnsetAndIssetToMethodCallRector extends AbstractRector
             return $issetOrUnsetNode;
         }
 
-        $variableNode = $issetOrUnsetNode->vars[0]->var;
-        $key = $issetOrUnsetNode->vars[0]->dim;
+        /** @var ArrayDimFetch $arrayDimFetchNode */
+        $arrayDimFetchNode = $issetOrUnsetNode->vars[0];
+
+        /** @var Variable $variableNode */
+        $variableNode = $arrayDimFetchNode->var;
+
+        $key = $arrayDimFetchNode->dim;
 
         $methodCall = $this->methodCallNodeFactory->createWithVariableMethodNameAndArguments(
             $variableNode,

@@ -5,6 +5,8 @@ namespace Rector\Rector\Contrib\Nette\Application;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\PropertyProperty;
+use PhpParser\Node\VarLikeIdentifier;
 use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Node\Attribute;
 use Rector\Rector\AbstractRector;
@@ -59,7 +61,13 @@ final class InjectPropertyRector extends AbstractRector
     {
         $propertyTypes = $propertyNode->getAttribute(Attribute::TYPES);
 
-        $propertyName = (string) $propertyNode->props[0]->name;
+        /** @var PropertyProperty $propertyPropertyNode */
+        $propertyPropertyNode = $propertyNode->props[0];
+
+        /** @var VarLikeIdentifier $varLikeIdentifierNode */
+        $varLikeIdentifierNode = $propertyPropertyNode->name;
+
+        $propertyName = $varLikeIdentifierNode->name;
 
         $this->classPropertyCollector->addPropertyForClass(
             (string) $propertyNode->getAttribute(Attribute::CLASS_NAME),
