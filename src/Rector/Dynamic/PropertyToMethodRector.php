@@ -41,7 +41,7 @@ final class PropertyToMethodRector extends AbstractRector
     private $propertyFetchAnalyzer;
 
     /**
-     * @param string[][][]
+     * @param string[][][] $perClassOldToNewProperties
      */
     public function __construct(array $perClassOldToNewProperties, PropertyFetchAnalyzer $propertyFetchAnalyzer)
     {

@@ -37,9 +37,6 @@ final class ConstructorMethodBuilder
         $this->nodeFactory = $nodeFactory;
     }
 
-    /**
-     * @param string[] $propertyTypes
-     */
     public function addPropertyAssignToClass(Class_ $classNode, Property $property): void
     {
         $constructorMethod = $classNode->getMethod('__construct') ?: null;

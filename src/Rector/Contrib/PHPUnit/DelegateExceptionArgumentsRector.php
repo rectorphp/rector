@@ -13,7 +13,6 @@ use Rector\Rector\AbstractRector;
  * Before:
  * - $this->setExpectedException(Exception::class, 'Message', 'CODE');
  *
- *
  * After:
  * - $this->setExpectedException(Exception::class);
  * - $this->expectExceptionMessage('Message');

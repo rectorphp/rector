@@ -56,7 +56,7 @@ final class MethodNameReplacerRector extends AbstractRector
     private $methodNameAnalyzer;
 
     /**
-     * @param string[][]
+     * @param string[][] $perClassOldToNewMethods
      */
     public function __construct(
         array $perClassOldToNewMethods,

@@ -23,9 +23,6 @@ final class ParamAndStaticVarNameRector extends AbstractRector
      */
     private $propertyFetchAnalyzer;
 
-    /**
-     * @param string[][]
-     */
     public function __construct(PropertyFetchAnalyzer $propertyFetchAnalyzer)
     {
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;

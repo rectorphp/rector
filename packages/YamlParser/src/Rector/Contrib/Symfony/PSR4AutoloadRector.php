@@ -37,7 +37,6 @@ final class PSR4AutoloadRector implements YamlRectorInterface
     }
 
     /**
-     * @param mixed[] $service
      * @param string[] $namespacePrefixes
      */
     private function isClassCoveredInNamespacePrefixes(string $className, array $namespacePrefixes): bool
@@ -61,7 +60,7 @@ final class PSR4AutoloadRector implements YamlRectorInterface
         $namespacePrefixes = array_unique($namespacePrefixes);
         foreach ($namespacePrefixes as $namespacePrefix => $resource) {
             $services[$namespacePrefix] = [
-                'resource' => $resource
+                'resource' => $resource,
             ];
         }
 

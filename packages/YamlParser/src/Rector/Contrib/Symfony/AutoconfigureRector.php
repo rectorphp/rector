@@ -98,7 +98,6 @@ final class AutoconfigureRector implements YamlRectorInterface
             $services = $this->prependAutoconfigure($services);
         }
 
-
         return $services;
     }
 
