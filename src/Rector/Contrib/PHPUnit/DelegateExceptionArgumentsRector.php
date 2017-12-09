@@ -63,7 +63,9 @@ final class DelegateExceptionArgumentsRector extends AbstractRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        $oldMethodName = $methodCallNode->name->name;
+        /** @var Node\Identifier $identifierNode */
+        $identifierNode = $methodCallNode->name;
+        $oldMethodName = $identifierNode->name;
 
         $this->prependNewMethodCall(
             $methodCallNode,

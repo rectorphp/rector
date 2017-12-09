@@ -5,6 +5,7 @@ namespace Rector\Rector\Contrib\Nette\Forms;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Identifier;
 use Rector\Node\Attribute;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
@@ -57,24 +58,29 @@ final class FormSetRequiredRector extends AbstractRector
             return false;
         }
 
-        $argTypes = $arg->value->class->getAttribute(Attribute::TYPES);
+        $classConstFetchNode = $arg->value;
+
+        $argTypes = $classConstFetchNode->class->getAttribute(Attribute::TYPES);
         if (! in_array(self::FORM_CLASS, $argTypes, true)) {
             return false;
         }
 
-        return $arg->value->name->name === 'FILLED';
+        /** @var Identifier $identifierNode */
+        $identifierNode = $classConstFetchNode->name;
+
+        return $identifierNode->toString() === 'FILLED';
     }
 
     /**
-     * @param MethodCall $node
+     * @param MethodCall $methodCallNode
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $methodCallNode): ?Node
     {
-        $node->name->name = 'setRequired';
-        $node->args = $this->nodeFactory->createArgs([
+        $methodCallNode->name = new Identifier('setRequired');
+        $methodCallNode->args = $this->nodeFactory->createArgs([
             false,
         ]);
 
-        return $node;
+        return $methodCallNode;
     }
 }

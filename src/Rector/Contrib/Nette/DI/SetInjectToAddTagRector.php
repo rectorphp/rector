@@ -3,6 +3,8 @@
 namespace Rector\Rector\Contrib\Nette\DI;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Identifier;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
@@ -59,13 +61,13 @@ final class SetInjectToAddTagRector extends AbstractRector
     }
 
     /**
-     * @param Node\Expr\MethodCall $node
+     * @param MethodCall $methodCallNode
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $methodCallNode): ?Node
     {
-        $node->name->name = $this->newMethod;
-        $node->args = $this->nodeFactory->createArgs($this->newArguments);
+        $methodCallNode->name = new Identifier($this->newMethod);
+        $methodCallNode->args = $this->nodeFactory->createArgs($this->newArguments);
 
-        return $node;
+        return $methodCallNode;
     }
 }

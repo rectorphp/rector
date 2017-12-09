@@ -5,6 +5,7 @@ namespace Rector\Rector\Contrib\PHPUnit;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Identifier;
 use Rector\Node\Attribute;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
@@ -43,7 +44,7 @@ final class GetMockRector extends AbstractRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        $methodCallNode->name->name = 'createMock';
+        $methodCallNode->name = new Identifier('createMock');
 
         return $methodCallNode;
     }
