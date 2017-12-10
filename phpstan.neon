@@ -48,6 +48,7 @@ parameters:
         - '#Call to an undefined method PhpParser\\BuilderFactory::args\(\)#'
         - "#Casting to string something that's already string#"
         - '#Call to an undefined method PhpParser\\Node\\Stmt\\UseUse::getAlias\(\)#'
+        - '#Call to an undefined method Rector\\Printer\\BetterStandardPrinter::printFormatPreserving\(\)#'
 
     excludes_analyse:
         # test files
