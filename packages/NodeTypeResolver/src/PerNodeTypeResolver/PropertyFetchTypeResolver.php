@@ -58,7 +58,10 @@ final class PropertyFetchTypeResolver implements PerNodeTypeResolverInterface, N
             return $this->nodeTypeResolver->resolve($propertyFetchNode->name);
         }
 
-        $propertyName = $propertyFetchNode->name->toString();
+        /** @var Identifier $identifierNode */
+        $identifierNode = $propertyFetchNode->name;
+
+        $propertyName = $identifierNode->toString();
 
         // e.g. $r->getParameters()[0]->name
         if ($propertyFetchNode->var instanceof ArrayDimFetch) {

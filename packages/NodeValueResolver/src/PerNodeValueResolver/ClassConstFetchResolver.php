@@ -4,6 +4,7 @@ namespace Rector\NodeValueResolver\PerNodeValueResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Identifier;
 use Rector\Node\Attribute;
 use Rector\NodeValueResolver\Contract\PerNodeValueResolver\PerNodeValueResolverInterface;
 
@@ -22,7 +23,10 @@ final class ClassConstFetchResolver implements PerNodeValueResolverInterface
         $class = $classConstFetchNode->class->getAttribute(Attribute::RESOLVED_NAME)
             ->toString();
 
-        $constant = $classConstFetchNode->name->toString();
+        /** @var Identifier $identifierNode */
+        $identifierNode = $classConstFetchNode->name;
+
+        $constant = $identifierNode->toString();
 
         return $class . '::' . $constant;
     }

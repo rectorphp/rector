@@ -6,6 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Exception\NotImplementedException;
@@ -64,7 +65,10 @@ final class NewTypeResolver implements PerNodeTypeResolverInterface, NodeTypeRes
             }
 
             // can be anything (dynamic)
-            $propertyName = $newNode->class->name->toString();
+            /** @var Identifier $identifierNode */
+            $identifierNode = $newNode->class->name;
+
+            $propertyName = $identifierNode->toString();
 
             return $this->typeContext->getTypesForProperty($propertyName);
         }

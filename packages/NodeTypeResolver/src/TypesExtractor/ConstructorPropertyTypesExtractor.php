@@ -7,6 +7,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
@@ -90,7 +91,10 @@ final class ConstructorPropertyTypesExtractor
             return false;
         }
 
-        return $node->name->toString() === '__construct';
+        /** @var Identifier $identifierNode */
+        $identifierNode = $node->name;
+
+        return $identifierNode->toString() === '__construct';
     }
 
     private function isAssignThisNode(Node $node): bool
@@ -120,7 +124,7 @@ final class ConstructorPropertyTypesExtractor
     ): array {
         $propertiesWithTypes = [];
 
-        foreach ($classMethodNode->stmts as $inConstructorNode) {
+        foreach ((array) $classMethodNode->stmts as $inConstructorNode) {
             if (! $this->isAssignThisNode($inConstructorNode)) {
                 continue;
             }
@@ -132,7 +136,10 @@ final class ConstructorPropertyTypesExtractor
             /** @var PropertyFetch $propertyFetchNode */
             $propertyFetchNode = $assignNode->var;
 
-            $propertyName = $propertyFetchNode->name->toString();
+            /** @var Identifier $identifierNode */
+            $identifierNode = $propertyFetchNode->name;
+
+            $propertyName = $identifierNode->toString();
             $propertyTypes = $constructorParametersWithTypes[$propertyName] ?? null;
 
             if ($propertyName && $propertyTypes) {

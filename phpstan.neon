@@ -1,5 +1,8 @@
 parameters:
     ignoreErrors:
+        # stricter return type of parent
+        - '#PHPDoc tag @return with type mixed is not subtype of native type (int|string)#'
+
         # property overriden
         - '#Rector\\NodeTraverser\\(Cloning|Shutdown)NodeTraverser::__construct\(\) does not call parent constructor from PhpParser\\NodeTraverser#'
 
@@ -13,6 +16,7 @@ parameters:
 
         # subtype
         - '#Property PhpParser\\Node\\Param::\$type \(PhpParser\\Node\\Name|PhpParser\\Node\\NullableType\|string\|null\) does not accept PhpParser\\Node\\Identifier|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType#'
+
 
         # known values
         - '#Method Rector\\Node\\NodeFactory::create(Null|False|True)Constant\(\) should return PhpParser\\Node\\Expr\\ConstFetch but returns PhpParser\\Node\\Expr#'
@@ -29,6 +33,11 @@ parameters:
         - '#PHPDoc tag @param for parameter \$classLikeNode with type PhpParser\\Builder\\Trait_\|PhpParser\\Node\\Stmt\\Class_\|PhpParser\\Node\\Stmt#'
         - '#Instanceof between string\|null and PhpParser\\Node\\Identifier will always evaluate to false#'
         - '#Method Rector\\NodeTraverserQueue\\BetterNodeFinder::findFirstAncestorInstanceOf\(\) should return PhpParser\\Node\|null but returns object#'
+        - '#Access to an undefined property PhpParser\\Node\\Stmt\\(Class_|ClassLike)::\$namespacedName#'
+        - '#Property Rector\\NodeTypeResolver\\NodeVisitor\\NamespaceResolver::\$useNodes \(array<PhpParser\\Node\\Stmt\\Use_>\) does not accept array<PhpParser\\Node>#'
+        - '#Parameter \#1 \$classMethodNode of method Rector\\NodeTypeResolver\\TypesExtractor\\ConstructorPropertyTypesExtractor::extractPropertiesFromConstructorMethodNode\(\) expects PhpParser\\Node\\Stmt\\ClassMethod, PhpParser\\Node given#'
+        - '#Instanceof between PhpParser\\Node\\Expr\|string and PhpParser\\Node\\Name will always evaluate to false#'
+        - '#Method Rector\\BetterReflection\\Reflector\\SmartClassReflector::reflect\(\) should return Rector\\BetterReflection\\Reflection\\ReflectionClass\|null but returns Rector\\BetterReflection\\Reflection\\Reflection#'
 
         # buggy
         - '#Parameter \#1 \$classLikeNode of method Rector\\NodeAnalyzer\\ClassLikeAnalyzer::resolveExtendsTypes\(\) expects PhpParser\\Node\\Stmt\\Class_\|PhpParser\\Node\\Stmt\\Interface_, PhpParser\\Node\\Stmt\\ClassLike given#'
@@ -37,6 +46,8 @@ parameters:
         - '#Access to an undefined property PhpParser\\Node\\Param::\$var#'
         - '#Access to an undefined property PhpParser\\Node\\Arg|PhpParser\\Node\\Expr\|PhpParser\\Node\\Param::\$value#'
         - '#Call to an undefined method PhpParser\\BuilderFactory::args\(\)#'
+        - "#Casting to string something that's already string#"
+        - '#Call to an undefined method PhpParser\\Node\\Stmt\\UseUse::getAlias\(\)#'
 
     excludes_analyse:
         # test files

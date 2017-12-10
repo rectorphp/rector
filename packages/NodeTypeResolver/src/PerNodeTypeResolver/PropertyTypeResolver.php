@@ -4,6 +4,7 @@ namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\VarLikeIdentifier;
 use Rector\BetterReflection\Reflector\SmartClassReflector;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\TypeContext;
@@ -47,7 +48,10 @@ final class PropertyTypeResolver implements PerNodeTypeResolverInterface
      */
     public function resolve(Node $propertyNode): array
     {
-        $propertyName = $propertyNode->props[0]->name->toString();
+        /** @var VarLikeIdentifier $varLikeIdentifierNode */
+        $varLikeIdentifierNode = $propertyNode->props[0]->name;
+
+        $propertyName = $varLikeIdentifierNode->toString();
         $propertyTypes = $this->typeContext->getTypesForProperty($propertyName);
         if ($propertyTypes) {
             return $propertyTypes;
