@@ -67,7 +67,10 @@ final class AssignAnalyzer
             return false;
         }
 
-        $propertyName = $propertyFetchNode->name->name;
+        /** @var Node\Identifier $identifierNode */
+        $identifierNode = $propertyFetchNode->name;
+
+        $propertyName = $identifierNode->toString();
 
         return $propertyName === $expectedPropertyName;
     }

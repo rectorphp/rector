@@ -23,7 +23,12 @@ parameters:
         - '#Calling method getText\(\) on possibly null value of type PhpParser\\Comment\\Doc\|null#'
         - '#Calling method getParentClassNames\(\) on possibly null value of type Rector\\BetterReflection\\Reflection\\ReflectionClass\|null#'
         - '#Property PhpParser\\Node\\Expr\\MethodCall::$name \(PhpParser\\Node\\Expr|string\) does not accept PhpParser\\Node\\Identifier#'
-        - '#Argument of an invalid type array<array>\|null supplied for foreach, only iterables are supported#'
+        - '#Argument of an invalid type array(?:<array>)\|null supplied for foreach, only iterables are supported#'
+        - '#Parameter \#2 \$name of class PhpParser\\Node\\Expr\\PropertyFetch constructor expects PhpParser\\Node\\Expr|string, PhpParser\\Node\\Identifier given#'
+        - '#Instanceof between PhpParser\\Node\\Expr\|string and PhpParser\\Node\\Identifier will always evaluate to false#'
+        - '#PHPDoc tag @param for parameter \$classLikeNode with type PhpParser\\Builder\\Trait_\|PhpParser\\Node\\Stmt\\Class_\|PhpParser\\Node\\Stmt#'
+        - '#Instanceof between string\|null and PhpParser\\Node\\Identifier will always evaluate to false#'
+        - '#Method Rector\\NodeTraverserQueue\\BetterNodeFinder::findFirstAncestorInstanceOf\(\) should return PhpParser\\Node\|null but returns object#'
 
         # buggy
         - '#Parameter \#1 \$classLikeNode of method Rector\\NodeAnalyzer\\ClassLikeAnalyzer::resolveExtendsTypes\(\) expects PhpParser\\Node\\Stmt\\Class_\|PhpParser\\Node\\Stmt\\Interface_, PhpParser\\Node\\Stmt\\ClassLike given#'
@@ -31,6 +36,7 @@ parameters:
         - '#Property Rector\\Rector\\AbstractRector::\$expressionsToPrepend(After|Before) \(iterable<array<PhpParser\\Node\\Stmt\\Expression>>&SplObjectStorage\) does not accept default value of type array#'
         - '#Access to an undefined property PhpParser\\Node\\Param::\$var#'
         - '#Access to an undefined property PhpParser\\Node\\Arg|PhpParser\\Node\\Expr\|PhpParser\\Node\\Param::\$value#'
+        - '#Call to an undefined method PhpParser\\BuilderFactory::args\(\)#'
 
     excludes_analyse:
         # test files

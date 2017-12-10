@@ -15,7 +15,7 @@ final class Parser implements ParserInterface
     private $nikicParser;
 
     /**
-     * @var Stmt[][]|null[]
+     * @var Stmt[][]
      */
     private $nodesByFile = [];
 
@@ -34,7 +34,7 @@ final class Parser implements ParserInterface
         }
 
         $fileContent = file_get_contents($filePath);
-        $this->nodesByFile[$filePath] = $this->nikicParser->parse($fileContent);
+        $this->nodesByFile[$filePath] = (array) $this->nikicParser->parse($fileContent);
 
         return $this->nodesByFile[$filePath];
     }

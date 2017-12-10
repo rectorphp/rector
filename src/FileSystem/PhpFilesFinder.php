@@ -3,8 +3,8 @@
 namespace Rector\FileSystem;
 
 use Rector\Exception\FileSystem\DirectoryNotFoundException;
-use SplFileInfo;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Finder\SplFileInfo;
 
 final class PhpFilesFinder
 {
@@ -19,7 +19,7 @@ final class PhpFilesFinder
 
         foreach ($source as $singleSource) {
             if (is_file($singleSource)) {
-                $files[] = new SplFileInfo($singleSource);
+                $files[] = new SplFileInfo($singleSource, '', '');
             } else {
                 $directories[] = $singleSource;
             }
