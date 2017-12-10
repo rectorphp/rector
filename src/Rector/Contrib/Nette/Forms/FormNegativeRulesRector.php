@@ -5,6 +5,7 @@ namespace Rector\Rector\Contrib\Nette\Forms;
 use PhpParser\Node;
 use PhpParser\Node\Expr\BitwiseNot;
 use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Identifier;
 use Rector\NodeAnalyzer\ClassConstAnalyzer;
 use Rector\Rector\AbstractRector;
 
@@ -63,9 +64,10 @@ final class FormNegativeRulesRector extends AbstractRector
         /** @var ClassConstFetch $classConstFetchNode */
         $classConstFetchNode = $bitwiseNotNode->expr;
 
-        $oldRuleName = $classConstFetchNode->name->name;
+        /** @var Identifier $identifierNode */
+        $identifierNode = $classConstFetchNode->name;
 
-        $classConstFetchNode->name->name = 'NOT_' . $oldRuleName;
+        $classConstFetchNode->name = new Identifier('NOT_' . $identifierNode->toString());
 
         return $classConstFetchNode;
     }

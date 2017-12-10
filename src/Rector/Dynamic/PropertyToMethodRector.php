@@ -7,6 +7,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Identifier;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Rector\AbstractRector;
 
@@ -41,7 +42,7 @@ final class PropertyToMethodRector extends AbstractRector
     private $propertyFetchAnalyzer;
 
     /**
-     * @param string[][][]
+     * @param string[][][] $perClassOldToNewProperties
      */
     public function __construct(array $perClassOldToNewProperties, PropertyFetchAnalyzer $propertyFetchAnalyzer)
     {
@@ -93,7 +94,10 @@ final class PropertyToMethodRector extends AbstractRector
         foreach ($this->perClassPropertyToMethods as $class => $propertyToMethods) {
             $properties = array_keys($propertyToMethods);
             if ($this->propertyFetchAnalyzer->isTypeAndProperties($propertyFetchNode, $class, $properties)) {
-                $this->activeMethod = $propertyToMethods[$propertyFetchNode->name->toString()][$type];
+                /** @var Identifier $identifierNode */
+                $identifierNode = $propertyFetchNode->name;
+
+                $this->activeMethod = $propertyToMethods[$identifierNode->toString()][$type];
 
                 return true;
             }

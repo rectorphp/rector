@@ -4,6 +4,7 @@ namespace Rector\Rector\Dynamic;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Identifier;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Rector\AbstractRector;
 
@@ -29,7 +30,7 @@ final class PropertyNameReplacerRector extends AbstractRector
     private $propertyFetchAnalyzer;
 
     /**
-     * @param string[][]
+     * @param string[][] $perClassOldToNewProperties
      */
     public function __construct(array $perClassOldToNewProperties, PropertyFetchAnalyzer $propertyFetchAnalyzer)
     {
@@ -58,7 +59,10 @@ final class PropertyNameReplacerRector extends AbstractRector
     {
         $oldToNewProperties = $this->matchOldToNewProperties();
 
-        $propertyName = $propertyFetchNode->name->name;
+        /** @var Identifier $identifierNode */
+        $identifierNode = $propertyFetchNode->name;
+
+        $propertyName = $identifierNode->toString();
 
         if (! isset($oldToNewProperties[$propertyName])) {
             return $propertyFetchNode;
@@ -69,7 +73,7 @@ final class PropertyNameReplacerRector extends AbstractRector
                 continue;
             }
 
-            $propertyFetchNode->name->name = $newProperty;
+            $propertyFetchNode->name = new Identifier($newProperty);
         }
 
         return $propertyFetchNode;

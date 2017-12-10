@@ -28,7 +28,7 @@ final class RectorGuessFactoryTest extends TestCase
     public function test(string $method, string $expectedType, bool $isUseful): void
     {
         /** @var RectorGuess $rectorGuess */
-        $rectorGuess = $this->rectorGuessFactory->$method('message', new Nop());
+        $rectorGuess = $this->rectorGuessFactory->{$method}('message', new Nop());
 
         $this->assertSame('message', $rectorGuess->getMessage());
         $this->assertInstanceOf(Nop::class, $rectorGuess->getNode());

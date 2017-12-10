@@ -3,6 +3,7 @@
 namespace Rector\NodeTypeResolver\Tests\NodeCallerTypeResolver;
 
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Identifier;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Tests\AbstractNodeTypeResolverTest;
 
@@ -18,19 +19,25 @@ final class NestedMethodCallTest extends AbstractNodeTypeResolverTest
 
         $this->assertCount(3, $methodCallNodes);
 
-        $this->assertSame('addRule', $methodCallNodes[0]->name->toString());
+        /** @var Identifier $identifierNode */
+        $identifierNode = $methodCallNodes[0]->name;
+        $this->assertSame('addRule', $identifierNode->toString());
         $this->assertSame(
             ['Nette\Forms\Rules'],
             $methodCallNodes[0]->getAttribute(Attribute::CALLER_TYPES)
         );
 
-        $this->assertSame('addCondition', $methodCallNodes[1]->name->toString());
+        /** @var Identifier $identifierNode */
+        $identifierNode = $methodCallNodes[1]->name;
+        $this->assertSame('addCondition', $identifierNode->toString());
         $this->assertContains(
             'Nette\Forms\Controls\TextInput',
             $methodCallNodes[1]->getAttribute(Attribute::CALLER_TYPES)
         );
 
-        $this->assertSame('addText', $methodCallNodes[2]->name->toString());
+        /** @var Identifier $identifierNode */
+        $identifierNode = $methodCallNodes[2]->name;
+        $this->assertSame('addText', $identifierNode->toString());
         $this->assertContains(
             'Nette\Application\UI\Form',
             $methodCallNodes[2]->getAttribute(Attribute::CALLER_TYPES)
@@ -46,12 +53,17 @@ final class NestedMethodCallTest extends AbstractNodeTypeResolverTest
         );
 
         $this->assertCount(2, $methodCallNodes);
-        $this->assertSame('setScope', $methodCallNodes[0]->name->toString());
+
+        /** @var Identifier $identifierNode */
+        $identifierNode = $methodCallNodes[0]->name;
+        $this->assertSame('setScope', $identifierNode->toString());
         $this->doTestAttributeEquals($methodCallNodes[0], Attribute::CALLER_TYPES, [
             'Symfony\Component\DependencyInjection\Definition',
         ]);
 
-        $this->assertSame('register', $methodCallNodes[1]->name->toString());
+        /** @var Identifier $identifierNode */
+        $identifierNode = $methodCallNodes[1]->name;
+        $this->assertSame('register', $identifierNode->toString());
         $this->doTestAttributeEquals($methodCallNodes[1], Attribute::CALLER_TYPES, [
             'Symfony\Component\DependencyInjection\ContainerBuilder',
             'Symfony\Component\DependencyInjection\ResettableContainerInterface',
@@ -72,17 +84,23 @@ final class NestedMethodCallTest extends AbstractNodeTypeResolverTest
 
         $this->assertCount(3, $methodCallNodes);
 
-        $this->assertSame('getParameters', $methodCallNodes[0]->name->toString());
+        /** @var Identifier $identifierNode */
+        $identifierNode = $methodCallNodes[0]->name;
+        $this->assertSame('getParameters', $identifierNode->toString());
         $this->doTestAttributeEquals($methodCallNodes[0], Attribute::CALLER_TYPES, [
             'Nette\DI\Container',
         ]);
 
-        $this->assertSame('addService', $methodCallNodes[1]->name->toString());
+        /** @var Identifier $identifierNode */
+        $identifierNode = $methodCallNodes[1]->name;
+        $this->assertSame('addService', $identifierNode->toString());
         $this->doTestAttributeEquals($methodCallNodes[1], Attribute::CALLER_TYPES, [
             'Nette\DI\Container',
         ]);
 
-        $this->assertSame('createContainer', $methodCallNodes[2]->name->toString());
+        /** @var Identifier $identifierNode */
+        $identifierNode = $methodCallNodes[2]->name;
+        $this->assertSame('createContainer', $identifierNode->toString());
         $this->doTestAttributeEquals($methodCallNodes[2], Attribute::CALLER_TYPES, [
             'Nette\Config\Configurator',
             'Nette\Object',

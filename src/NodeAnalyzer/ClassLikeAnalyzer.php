@@ -4,6 +4,7 @@ namespace Rector\NodeAnalyzer;
 
 use PhpParser\Builder\Trait_;
 use PhpParser\Node;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
@@ -84,7 +85,7 @@ final class ClassLikeAnalyzer
             return $node->toString();
         }
 
-        return $node->name ? $node->name->toString() : '';
+        return $node->name instanceof Identifier ? $node->name->toString() : '';
     }
 
     /**

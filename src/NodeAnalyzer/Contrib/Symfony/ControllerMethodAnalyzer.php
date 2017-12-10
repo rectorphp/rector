@@ -4,6 +4,7 @@ namespace Rector\NodeAnalyzer\Contrib\Symfony;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Node\Attribute;
 
@@ -25,6 +26,9 @@ final class ControllerMethodAnalyzer
             return false;
         }
 
-        return Strings::endsWith($node->name->toString(), 'Action');
+        /** @var Identifier $identifierNode */
+        $identifierNode = $node->name;
+
+        return Strings::endsWith($identifierNode->toString(), 'Action');
     }
 }

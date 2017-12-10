@@ -52,7 +52,10 @@ final class ClassConstAnalyzer
      */
     private function isNames(ClassConstFetch $node, array $names): bool
     {
-        $nodeConstantName = $node->name->name;
+        /** @var Node\Identifier $identifierNode */
+        $identifierNode = $node->name;
+
+        $nodeConstantName = $identifierNode->toString();
 
         return in_array($nodeConstantName, $names, true);
     }

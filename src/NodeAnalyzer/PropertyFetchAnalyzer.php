@@ -55,7 +55,10 @@ final class PropertyFetchAnalyzer
             return false;
         }
 
-        $nodePropertyName = $node->name->toString();
+        /** @var Node\Identifier $identifierNode */
+        $identifierNode = $node->name;
+
+        $nodePropertyName = $identifierNode->toString();
 
         return $nodePropertyName === $property;
     }
@@ -71,7 +74,11 @@ final class PropertyFetchAnalyzer
             return false;
         }
 
-        $nodePropertyName = $node->name->name;
+        /** @var Node\Identifier $identifierNode */
+        $identifierNode = $node->name;
+
+        $nodePropertyName = $identifierNode->toString();
+
         $publicPropertyNames = $this->getPublicPropertyNamesForType($type);
 
         return ! in_array($nodePropertyName, $publicPropertyNames, true);
@@ -86,7 +93,10 @@ final class PropertyFetchAnalyzer
             return false;
         }
 
-        return in_array($node->name->toString(), $properties, true);
+        /** @var Node\Identifier $identifierNode */
+        $identifierNode = $node->name;
+
+        return in_array($identifierNode->toString(), $properties, true);
     }
 
     /**

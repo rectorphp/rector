@@ -83,7 +83,10 @@ final class NodeCallerTypeResolver
         if ($node->var instanceof MethodCall) {
             $parentReturnTypes = $this->resolveMethodCallReturnTypes($node->var);
 
-            $methodName = $node->var->name->toString();
+            /** @var Identifier $identifierNode */
+            $identifierNode = $node->var->name;
+
+            $methodName = $identifierNode->toString();
 
             $returnTypes = $this->methodReflector->resolveReturnTypesForTypesAndMethod($parentReturnTypes, $methodName);
 

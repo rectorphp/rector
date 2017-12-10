@@ -68,23 +68,7 @@ final class AutoconfigureRector implements YamlRectorInterface
 
         // find class with system tags
         foreach ($services as $key => $service) {
-            if (! isset($service['tags'])) {
-                continue;
-            }
-
-            $tags = $service['tags'];
-            // more tags or more than tag name
-            if (count($tags) !== 1 || count($tags[0]) !== 1) {
-                continue;
-            }
-
-            if (! isset($tags[0]['name'])) {
-                continue;
-            }
-
-            // is system tag name
-            $tagName = $tags[0]['name'];
-            if (! in_array($tagName, $this->systemTags, true)) {
+            if ($this->shouldSkip($service)) {
                 continue;
             }
 
@@ -97,7 +81,6 @@ final class AutoconfigureRector implements YamlRectorInterface
         if ($this->shouldAutoconfigure) {
             $services = $this->prependAutoconfigure($services);
         }
-
 
         return $services;
     }
@@ -115,5 +98,33 @@ final class AutoconfigureRector implements YamlRectorInterface
         ];
 
         return array_merge($defaultsAutowire, $services);
+    }
+
+    /**
+     * @param mixed[] $service
+     */
+    private function shouldSkip(array $service): bool
+    {
+        if (! isset($service['tags'])) {
+            return true;
+        }
+
+        $tags = $service['tags'];
+        // more tags or more than tag name
+        if (count($tags) !== 1 || count($tags[0]) !== 1) {
+            return true;
+        }
+
+        if (! isset($tags[0]['name'])) {
+            return true;
+        }
+
+        // is system tag name
+        $tagName = $tags[0]['name'];
+        if (! in_array($tagName, $this->systemTags, true)) {
+            return true;
+        }
+
+        return false;
     }
 }

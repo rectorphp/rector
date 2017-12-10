@@ -56,7 +56,7 @@ final class MethodNameReplacerRector extends AbstractRector
     private $methodNameAnalyzer;
 
     /**
-     * @param string[][]
+     * @param string[][] $perClassOldToNewMethods
      */
     public function __construct(
         array $perClassOldToNewMethods,
@@ -106,16 +106,19 @@ final class MethodNameReplacerRector extends AbstractRector
             return $this->resolveIdentifier($node);
         }
 
-        $methodName = $node->name->name;
+        /** @var Identifier $identifierNode */
+        $identifierNode = $node->name;
+
+        $methodName = $identifierNode->toString();
         if (! isset($oldToNewMethods[$methodName])) {
             return $node;
         }
 
-        if ($this->isClassRename($oldToNewMethods)) {
+        if ($node instanceof StaticCall && $this->isClassRename($oldToNewMethods)) {
             return $this->resolveClassRename($node, $oldToNewMethods, $methodName);
         }
 
-        $node->name->name = $oldToNewMethods[$methodName];
+        $node->name = new Identifier($oldToNewMethods[$methodName]);
 
         return $node;
     }
@@ -189,16 +192,15 @@ final class MethodNameReplacerRector extends AbstractRector
     }
 
     /**
-     * @param StaticCall|MethodCall $node
      * @param string[] $oldToNewMethods
      */
-    private function resolveClassRename(Node $node, array $oldToNewMethods, string $methodName): Node
+    private function resolveClassRename(StaticCall $staticCallNode, array $oldToNewMethods, string $methodName): Node
     {
         [$newClass, $newMethod] = $oldToNewMethods[$methodName];
 
-        $node->class = new Name($newClass);
-        $node->name->name = $newMethod;
+        $staticCallNode->class = new Name($newClass);
+        $staticCallNode->name = new Identifier($newMethod);
 
-        return $node;
+        return $staticCallNode;
     }
 }

@@ -13,7 +13,6 @@ use Rector\Rector\AbstractRector;
  * Converts all:
  * - $builder->add('...', ['precision' => '...', 'virtual' => '...'];
  *
- *
  * into:
  * - $builder->add('...', ['scale' => '...', 'inherit_data' => '...'];
  */

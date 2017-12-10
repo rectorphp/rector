@@ -66,7 +66,10 @@ final class TemplateMagicInvokeFilterCallRector extends AbstractRector
 
     private function changeToInvokeFilterMethodCall(MethodCall $methodCallNode): void
     {
-        $filterName = $methodCallNode->name->toString();
+        /** @var Identifier $identifierNode */
+        $identifierNode = $methodCallNode->name;
+
+        $filterName = $identifierNode->toString();
         $filterArguments = $methodCallNode->args;
 
         $methodCallNode->name = new Identifier('invokeFilter');

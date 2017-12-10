@@ -12,8 +12,6 @@ final class AssignAnalyzer
 {
     /**
      * Checks "$this->specificNameProperty =" and it's type
-     *
-     * @param string[] $methodsNames
      */
     public function isAssignTypeAndProperty(Node $node, string $expectedType, string $expectedPropertyName): bool
     {
@@ -69,7 +67,10 @@ final class AssignAnalyzer
             return false;
         }
 
-        $propertyName = $propertyFetchNode->name->name;
+        /** @var Node\Identifier $identifierNode */
+        $identifierNode = $propertyFetchNode->name;
+
+        $propertyName = $identifierNode->toString();
 
         return $propertyName === $expectedPropertyName;
     }

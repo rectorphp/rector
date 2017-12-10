@@ -5,6 +5,8 @@ namespace Rector\Rector\Contrib\PHPUnit;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
 
@@ -69,7 +71,10 @@ final class SpecificMethodRector extends AbstractRector
             return false;
         }
 
-        $funcCallName = $firstArgumentValue->name->toString();
+        /** @var Name $nameNode */
+        $nameNode = $firstArgumentValue->name;
+
+        $funcCallName = $nameNode->toString();
         if (! isset($this->oldToNewMethods[$funcCallName])) {
             return false;
         }
@@ -92,7 +97,9 @@ final class SpecificMethodRector extends AbstractRector
 
     private function renameMethod(MethodCall $methodCallNode): void
     {
-        $oldMethodName = $methodCallNode->name->toString();
+        /** @var Identifier $identifierNode */
+        $identifierNode = $methodCallNode->name;
+        $oldMethodName = $identifierNode->toString();
 
         [$trueMethodName, $falseMethodName] = $this->oldToNewMethods[$this->activeFuncCallName];
 

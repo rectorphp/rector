@@ -13,7 +13,6 @@ use Rector\Rector\AbstractRector;
  * Before:
  * - $this->setExpectedException(Exception::class, 'Message', 'CODE');
  *
- *
  * After:
  * - $this->setExpectedException(Exception::class);
  * - $this->expectExceptionMessage('Message');
@@ -64,7 +63,9 @@ final class DelegateExceptionArgumentsRector extends AbstractRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        $oldMethodName = $methodCallNode->name->name;
+        /** @var Node\Identifier $identifierNode */
+        $identifierNode = $methodCallNode->name;
+        $oldMethodName = $identifierNode->name;
 
         $this->prependNewMethodCall(
             $methodCallNode,

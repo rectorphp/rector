@@ -30,9 +30,6 @@ final class CatchAndClosureUseNameRector extends AbstractRector
      */
     private $propertyFetchNodeFactory;
 
-    /**
-     * @param string[][]
-     */
     public function __construct(
         PropertyFetchAnalyzer $propertyFetchAnalyzer,
         PropertyFetchNodeFactory $propertyFetchNodeFactory
