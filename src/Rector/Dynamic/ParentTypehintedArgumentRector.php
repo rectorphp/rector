@@ -4,6 +4,8 @@ namespace Rector\Rector\Dynamic;
 
 use PhpParser\BuilderHelpers;
 use PhpParser\Node;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
@@ -34,7 +36,7 @@ final class ParentTypehintedArgumentRector extends AbstractRector
      *      ]
      * ]
      *
-     * @var string[]
+     * @var string[][][]
      */
     private $typehintForArgumentByMethodAndClass = [];
 
@@ -80,7 +82,10 @@ final class ParentTypehintedArgumentRector extends AbstractRector
 
         $matchingTypes = $this->getMatchingTypesForClassNode($classNodeTypes);
 
-        $methodName = $classMethodNode->name->toString();
+        /** @var Identifier $identifierNode */
+        $identifierNode = $classMethodNode->name;
+
+        $methodName = $identifierNode->toString();
 
         foreach ($matchingTypes as $matchingType) {
             $configuration = $this->typehintForArgumentByMethodAndClass[$matchingType];
@@ -129,7 +134,10 @@ final class ParentTypehintedArgumentRector extends AbstractRector
     ): ClassMethod {
         /** @var Param $param */
         foreach ($classMethodNode->params as $param) {
-            $parameterName = (string) $param->var->name;
+            /** @var Variable $variableNode */
+            $variableNode = $param->var;
+
+            $parameterName = (string) $variableNode->name;
 
             if (! isset($parametersToTypehints[$parameterName])) {
                 continue;
