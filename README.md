@@ -13,6 +13,8 @@ Rector **upgrades your application** for you, with focus on open-source projects
     <a href="/src/config/level/phpunit"><img src="/docs/images/phpunit.jpg"></a>
     <img src="/docs/images/space.png">
     <a href="/src/config/level/roave"><img src="/docs/images/roave.png"></a>
+    <img src="/docs/images/space.png">
+    <a href="/src/config/level/twig"><img src="/docs/images/twig.png"></a>
 </p>
 
 <br>
@@ -29,7 +31,7 @@ Do you have old PHP or dependencies in conflict? Ok, [it is not problem](/docs/H
 
 ### A. Prepared Sets
 
-Fetaured open-source projects have **prepared sets**. You'll find them in [`/src/config/level`](/src/config/level).
+Featured open-source projects have **prepared sets**. You'll find them in [`/src/config/level`](/src/config/level).
 
 E.g. Do you need to upgrade to Symfony 3.3?
 
