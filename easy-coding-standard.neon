@@ -44,3 +44,9 @@ parameters:
         PHP_CodeSniffer\Standards\Generic\Sniffs\CodeAnalysis\EmptyStatementSniff:
             # intentionally
             - packages/BetterReflection/src/Reflector/SmartClassReflector.php
+
+    skip_codes:
+        SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff.MissingParameterTypeHint:
+            # forcing "mixed" types
+            - src/Node/NodeFactory.php
+            - packages/NodeTypeResolver/tests/AbstractNodeTypeResolverTest.php

@@ -175,9 +175,6 @@ final class NodeFactory
         return new Expression($assign);
     }
 
-    /**
-     * @param mixed $argument
-     */
     public function createArg($argument): Arg
     {
         $value = BuilderHelpers::normalizeValue($argument);
