@@ -5,5 +5,6 @@ namespace SomeNamespace;
 use Symfony\Component\Process\ProcessBuilder;
 
 $builder = new ProcessBuilder([]);
-
 $process = $builder;
+
+$commandLine = (new ProcessBuilder('something'))->getCommandLine();

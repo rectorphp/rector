@@ -24,7 +24,6 @@ final class ProcessBuilderGetProcessRector extends AbstractRector
      * @var MethodCallAnalyzer
      */
     private $methodCallAnalyzer;
-    private $staticMethodCallAnalyzer;
 
     public function __construct(MethodCallAnalyzer $methodCallAnalyzer)
     {
@@ -33,12 +32,15 @@ final class ProcessBuilderGetProcessRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        return $this->methodCallAnalyzer->isTypeAndMethod($node,'Symfony\Component\Process\ProcessBuilder', 'getProcess');
+        return $this->methodCallAnalyzer->isTypeAndMethod(
+            $node,
+            'Symfony\Component\Process\ProcessBuilder',
+            'getProcess'
+        );
     }
 
     /**
      * @param MethodCall $methodCallNode
-     * @return null|Node
      */
     public function refactor(Node $methodCallNode): ?Node
     {

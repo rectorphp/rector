@@ -3,10 +3,8 @@
 namespace Rector\Rector\Contrib\Symfony\Process;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
-use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeAnalyzer\StaticMethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
 
