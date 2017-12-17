@@ -13,10 +13,12 @@ use Rector\Rector\AbstractRector;
  * Before:
  * - $processBuilder = new Symfony\Component\Process\ProcessBuilder;
  * - $process = $processBuilder->getProcess();
+ * - $commamdLine = $processBuilder->getProcess()->getCommandLine();
  *
  * After:
  * - $processBuilder = new Symfony\Component\Process\ProcessBuilder;
  * - $process = $processBuilder;
+ * - $commamdLine = $processBuilder->getCommandLine();
  */
 final class ProcessBuilderGetProcessRector extends AbstractRector
 {
