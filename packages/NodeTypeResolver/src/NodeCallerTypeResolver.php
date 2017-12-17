@@ -58,12 +58,16 @@ final class NodeCallerTypeResolver
     {
         $types = [];
         if ($staticCallNode->class instanceof Name) {
+            if ($staticCallNode->class->getAttribute(Attribute::TYPES)) {
+                $types = $staticCallNode->class->getAttribute(Attribute::TYPES);
+            }
+
             $class = $staticCallNode->class->toString();
             if ($class === 'parent') {
                 $types[] = $staticCallNode->class->getAttribute(Attribute::PARENT_CLASS_NAME);
-            } else {
-                $types[] = $class;
             }
+
+            $types = array_unique($types);
         }
 
         if ($staticCallNode->class instanceof Variable) {

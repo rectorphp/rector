@@ -5,6 +5,8 @@ rectors:
     Rector\Rector\Contrib\Symfony\VarDumper\VarDumperTestTraitMethodArgsRector: ~
     Rector\Rector\Contrib\Symfony\DependencyInjection\ContainerBuilderCompileEnvArgumentRector: ~
     Rector\Rector\Contrib\Symfony\DependencyInjection\CompilerAddPassPriorityRector: ~
+
+    Rector\Rector\Contrib\Symfony\Process\ProcessBuilderInstanceRector: ~
     Rector\Rector\Contrib\Symfony\Process\ProcessBuilderGetProcessRector: ~
 
     Rector\Rector\Dynamic\ClassReplacerRector:

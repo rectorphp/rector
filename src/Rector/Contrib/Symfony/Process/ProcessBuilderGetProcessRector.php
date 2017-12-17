@@ -24,6 +24,7 @@ final class ProcessBuilderGetProcessRector extends AbstractRector
      * @var MethodCallAnalyzer
      */
     private $methodCallAnalyzer;
+    private $staticMethodCallAnalyzer;
 
     public function __construct(MethodCallAnalyzer $methodCallAnalyzer)
     {
