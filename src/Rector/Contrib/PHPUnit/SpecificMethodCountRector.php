@@ -3,34 +3,22 @@
 namespace Rector\Rector\Contrib\PHPUnit;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Scalar\LNumber;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
 
 /**
  * Before:
- * - $this->assertSame(null, $anything);
- * - $this->assertSame(true, $anything);
- * - $this->assertSame(false, $anything);
+ * - $this->assertSame(5, count($anything));
  *
  * After:
- * - $this->assertNull($anything);
- * - $this->assertTrue($anything);
- * - $this->assertFalse($anything);
+ * - $this->assertCount(5, $anything);
  */
-final class SpecificMethodBoolNullRector extends AbstractRector
+final class SpecificMethodCountRector extends AbstractRector
 {
-    /**
-     * @var string[]
-     */
-    private $constValueToMethodNames = [
-        'null' => 'assertNull',
-        'true' => 'assertTrue',
-        'false' => 'assertFalse',
-    ];
-
     /**
      * @var MethodCallAnalyzer
      */
@@ -62,13 +50,17 @@ final class SpecificMethodBoolNullRector extends AbstractRector
         $methodCallNode = $node;
 
         $firstArgumentValue = $methodCallNode->args[0]->value;
-        if (! $firstArgumentValue instanceof ConstFetch) {
+        if (! $firstArgumentValue instanceof LNumber) {
             return false;
         }
 
-        $costName = $firstArgumentValue->name->toString();
+        $secondArgumentValue = $methodCallNode->args[1]->value;
 
-        return isset($this->constValueToMethodNames[$costName]);
+        if (! $secondArgumentValue instanceof FuncCall) {
+            return false;
+        }
+
+        return $secondArgumentValue->name->toString() === 'count';
     }
 
     /**
@@ -76,17 +68,12 @@ final class SpecificMethodBoolNullRector extends AbstractRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        /** @var ConstFetch $constFetchNode */
-        $constFetchNode = $methodCallNode->args[0]->value;
-        $constValue = $constFetchNode->name->toString();
+        $methodCallNode->name = new Identifier('assertCount');
 
-        $newMethodName = $this->constValueToMethodNames[$constValue];
-        $methodCallNode->name = new Identifier($newMethodName);
+        /** @var FuncCall $secondArgument */
+        $secondArgument = $methodCallNode->args[1]->value;
 
-        $methodArguments = $methodCallNode->args;
-        array_shift($methodArguments);
-
-        $methodCallNode->args = $methodArguments;
+        $methodCallNode->args[1] = $secondArgument->args[0];
 
         return $methodCallNode;
     }
