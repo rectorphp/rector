@@ -71,7 +71,7 @@ final class SpecificMethodBoolNullRector extends AbstractRector
         $methodArguments = $methodCallNode->args;
         array_shift($methodArguments);
 
-        $methodCallNode->args = $methodCallNode;
+        $methodCallNode->args = $methodArguments;
 
         return $methodCallNode;
     }
