@@ -3,12 +3,11 @@
 namespace Rector\Rector\Contrib\PHPUnit;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Identifier;
-use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
@@ -86,8 +85,8 @@ final class SpecificMethodObjectAttributeRector extends AbstractRector
 
         // and set as arguments
         $methodCallNode->args = [
-            new String_($propertyFetchNode->name->toString()),
-            $propertyFetchNode->var
+            new Arg(new String_($propertyFetchNode->name->toString())),
+            new Arg($propertyFetchNode->var),
         ];
 
         return $methodCallNode;
