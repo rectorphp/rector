@@ -22,7 +22,7 @@ Rector **upgrades your application** for you, with focus on open-source projects
 ## Install
 
 ```bash
-composer require --dev rector/rector @dev nikic/php-parser 'dev-master as v4.0.0alpha1'
+composer require --dev rector/rector @dev nikic/php-parser '4.0.x-dev'
 ```
 
 Do you have old PHP or dependencies in conflict? Ok, [it is not problem](/docs/HowUseWithOldPhp.md).
