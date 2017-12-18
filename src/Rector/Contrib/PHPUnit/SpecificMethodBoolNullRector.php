@@ -19,6 +19,15 @@ use Rector\Rector\AbstractRector;
 final class SpecificMethodBoolNullRector extends AbstractRector
 {
     /**
+     * @var string[]
+     */
+    private $constValueToMethodNames = [
+        'null' => 'assertNull',
+        'true' => 'assertTrue',
+        'false' => 'assertFalse',
+    ];
+
+    /**
      * @var MethodCallAnalyzer
      */
     private $methodCallAnalyzer;
@@ -54,11 +63,8 @@ final class SpecificMethodBoolNullRector extends AbstractRector
         }
 
         $costName = $firstArgumentValue->name->toString();
-        if ($costName === 'null') {
-            return true;
-        }
 
-        return false;
+        return isset($this->constValueToMethodNames[$costName]);
     }
 
     /**
@@ -66,7 +72,12 @@ final class SpecificMethodBoolNullRector extends AbstractRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        $methodCallNode->name = new Identifier('assertNull');
+        /** @var ConstFetch $constFetchNode */
+        $constFetchNode = $methodCallNode->args[0]->value;
+        $constValue = $constFetchNode->name->toString();
+
+        $newMethodName = $this->constValueToMethodNames[$constValue];
+        $methodCallNode->name = new Identifier($newMethodName);
 
         $methodArguments = $methodCallNode->args;
         array_shift($methodArguments);
