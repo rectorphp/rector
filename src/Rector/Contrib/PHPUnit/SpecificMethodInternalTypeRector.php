@@ -2,7 +2,6 @@
 
 namespace Rector\Rector\Contrib\PHPUnit;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
@@ -14,15 +13,31 @@ use Rector\Rector\AbstractRector;
 
 /**
  * Before:
- * - $this->assertTrue(is_string($anything));
- * - $this->assertFalse(is_string($anything));
+ * - $this->assertTrue(is_{internal_type}($anything));
+ * - $this->assertFalse(is_{internal_type}($anything));
  *
  * After:
- * - $this->assertInternalType('string', $anything);
- * - $this->assertNotInternalType('string', $anything);
+ * - $this->assertInternalType({internal_type}, $anything);
+ * - $this->assertNotInternalType({internal_type}, $anything);
  */
 final class SpecificMethodInternalTypeRector extends AbstractRector
 {
+    /**
+     * @var string[]
+     */
+    private $oldMethodsToTypes = [
+        'is_array' => 'array',
+        'is_bool' => 'bool',
+        'is_callable' => 'callable',
+        'is_float' => 'float',
+        'is_integer' => 'integer',
+        'is_numeric' => 'numeric',
+        'is_object' => 'object',
+        'is_resource' => 'resource',
+        'is_scalar' => 'scalar',
+        'is_string' => 'string',
+    ];
+
     /**
      * @var MethodCallAnalyzer
      */
@@ -53,7 +68,7 @@ final class SpecificMethodInternalTypeRector extends AbstractRector
 
         $methodName = $firstArgumentValue->name->toString();
 
-        return Strings::startsWith($methodName, 'is_');
+        return isset($this->oldMethodsToTypes[$methodName]);
     }
 
     /**
@@ -72,10 +87,13 @@ final class SpecificMethodInternalTypeRector extends AbstractRector
         /** @var FuncCall $methodCallNode */
         $isFunctionNode = $methodCallNode->args[0]->value;
 
+        $isFunctionName = $isFunctionNode->name->toString();
         $argument = $isFunctionNode->args[0]->value;
 
         $methodCallNode->args = [
-            new Arg(new String_('string')),
+            new Arg(new String_(
+                $this->oldMethodsToTypes[$isFunctionName]
+            )),
             new Arg($argument),
         ];
 
