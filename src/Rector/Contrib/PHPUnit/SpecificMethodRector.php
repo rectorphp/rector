@@ -3,6 +3,7 @@
 namespace Rector\Rector\Contrib\PHPUnit;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Empty_;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
@@ -67,14 +68,12 @@ final class SpecificMethodRector extends AbstractRector
         }
 
         $firstArgumentValue = $node->args[0]->value;
-        if (! $firstArgumentValue instanceof FuncCall) {
+
+        $funcCallName = $this->resolveFunctionName($firstArgumentValue);
+        if ($funcCallName === null) {
             return false;
         }
 
-        /** @var Name $nameNode */
-        $nameNode = $firstArgumentValue->name;
-
-        $funcCallName = $nameNode->toString();
         if (! isset($this->oldToNewMethods[$funcCallName])) {
             return false;
         }
@@ -104,16 +103,39 @@ final class SpecificMethodRector extends AbstractRector
         [$trueMethodName, $falseMethodName] = $this->oldToNewMethods[$this->activeFuncCallName];
 
         if ($oldMethodName === 'assertTrue' && $trueMethodName) {
-            $methodCallNode->name = $trueMethodName;
+            /** @var string $trueMethodName */
+            $methodCallNode->name = new Identifier($trueMethodName);
         } elseif ($oldMethodName === 'assertFalse' && $falseMethodName) {
-            $methodCallNode->name = $falseMethodName;
+            /** @var string $falseMethodName */
+            $methodCallNode->name = new Identifier($falseMethodName);
         }
     }
 
     private function moveArgumentUp(MethodCall $methodCallNode): void
     {
-        /** @var FuncCall $funcCall */
-        $funcCall = $methodCallNode->args[0]->value;
-        $methodCallNode->args[0] = $funcCall->args[0];
+        $funcCallOrEmptyNode = $methodCallNode->args[0]->value;
+        if ($funcCallOrEmptyNode instanceof FuncCall) {
+            $methodCallNode->args[0] = $funcCallOrEmptyNode->args[0];
+        }
+
+        if ($funcCallOrEmptyNode instanceof Empty_) {
+            $methodCallNode->args[0] = $funcCallOrEmptyNode->expr;
+        }
+    }
+
+    private function resolveFunctionName(Node $node): ?string
+    {
+        if ($node instanceof FuncCall) {
+            /** @var Name $nameNode */
+            $nameNode = $node->name;
+
+            return $nameNode->toString();
+        }
+
+        if ($node instanceof Empty_) {
+            return 'empty';
+        }
+
+        return null;
     }
 }
