@@ -3,7 +3,6 @@
 namespace Rector\Rector\Contrib\PHPUnit;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Empty_;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
@@ -53,8 +52,6 @@ final class SpecificMethodRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        $this->activeFuncCallName = null;
-
         if (! $this->methodCallAnalyzer->isTypesAndMethods(
             $node,
             ['PHPUnit\Framework\TestCase', 'PHPUnit_Framework_TestCase'],
@@ -90,7 +87,7 @@ final class SpecificMethodRector extends AbstractRector
     public function refactor(Node $methodCallNode): ?Node
     {
         $this->renameMethod($methodCallNode);
-        $this->moveArgumentUp($methodCallNode);
+        $this->moveFunctionArgumentsUp($methodCallNode);
 
         return $methodCallNode;
     }
@@ -112,21 +109,26 @@ final class SpecificMethodRector extends AbstractRector
         }
     }
 
-    private function moveArgumentUp(MethodCall $methodCallNode): void
+    /**
+     * Before:
+     * - $this->assertTrue(array_key_exists('...', ['...']), 'second argument');
+     *
+     * After:
+     * - $this->assertArrayHasKey('...', ['...'], 'second argument');
+     */
+    private function moveFunctionArgumentsUp(MethodCall $methodCallNode): void
     {
         $funcCallOrEmptyNode = $methodCallNode->args[0]->value;
         if ($funcCallOrEmptyNode instanceof FuncCall) {
-            $methodCallNode->args[0] = $funcCallOrEmptyNode->args[0];
+            $oldArguments = $methodCallNode->args;
+            unset($oldArguments[0]);
+            $newArguments = array_merge($funcCallOrEmptyNode->args, $oldArguments);
+
+            $methodCallNode->args = $newArguments;
         }
 
         if ($funcCallOrEmptyNode instanceof Empty_) {
             $methodCallNode->args[0] = $funcCallOrEmptyNode->expr;
-        }
-
-        $arrayNode = $funcCallOrEmptyNode->args[1]->value ?? null;
-
-        if ($arrayNode instanceof Array_) {
-            $methodCallNode->args[1] = $arrayNode;
         }
     }
 
