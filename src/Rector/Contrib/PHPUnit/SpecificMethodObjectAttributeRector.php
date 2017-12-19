@@ -14,10 +14,10 @@ use Rector\Rector\AbstractRector;
 
 /**
  * Before:
- * - $this->assertSame(5, count($anything));
+ * - $this->assertTrue(isset($anything->foo));
  *
  * After:
- * - $this->assertCount(5, $anything);
+ * - $this->assertObjectHasAttribute('foo', $anything);
  */
 final class SpecificMethodObjectAttributeRector extends AbstractRector
 {
