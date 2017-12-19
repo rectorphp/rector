@@ -28,25 +28,23 @@ final class DiffConsoleFormatter
         );
     }
 
-    public function format(string $diff, string $lineTemplate = '%s'): string
+    public function format(string $diff): string
     {
         return sprintf(
             $this->template,
             implode(PHP_EOL, array_map(
-                static function ($string) use ($lineTemplate) {
+                static function ($string) {
                     $string = preg_replace(
                         ['/^(\+.*)/', '/^(\-.*)/', '/^(@.*)/'],
                         ['<fg=green>\1</fg=green>', '<fg=red>\1</fg=red>', '<fg=cyan>\1</fg=cyan>'],
                         $string
                     );
 
-                    $templated = sprintf($lineTemplate, $string);
-
                     if ($string === ' ') {
-                        $templated = rtrim($templated);
+                        $string = rtrim($string);
                     }
 
-                    return $templated;
+                    return $string;
                 },
                 preg_split("#\n\r|\n#", OutputFormatter::escape(rtrim($diff)))
             ))
