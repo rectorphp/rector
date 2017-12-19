@@ -13,21 +13,40 @@ use Rector\Rector\AbstractRector;
 /**
  * Before:
  * - $this->assertSame(5, count($anything));
+ * - $this->assertNotSame(5, count($anything));
+ * - $this->assertEquals(5, count($anything));
+ * - $this->assertNotEquals(5, count($anything));
+ * - $this->assertSame(5, sizeof($anything));
+ * - $this->assertNotSame(5, sizeof($anything));
+ * - $this->assertEquals(5, sizeof($anything));
+ * - $this->assertNotEquals(5, sizeof($anything));
  *
  * After:
  * - $this->assertCount(5, $anything);
+ * - $this->assertNotCount(5, $anything);
+ * - $this->assertCount(5, $anything);
+ * - $this->assertNotCount(5, $anything);
+ * - $this->assertCount(5, $anything);
+ * - $this->assertNotCount(5, $anything);
+ * - $this->assertCount(5, $anything);
+ * - $this->assertNotCount(5, $anything);
  */
 final class SpecificMethodCountRector extends AbstractRector
 {
     /**
+     * @var string[]
+     */
+    private $renameMethodsMap = [
+        'assertSame' => 'assertCount',
+        'assertNotSame' => 'assertNotCount',
+        'assertEquals' => 'assertCount',
+        'assertNotEquals' => 'assertNotCount',
+    ];
+
+    /**
      * @var MethodCallAnalyzer
      */
     private $methodCallAnalyzer;
-
-    /**
-     * @var string|null
-     */
-    private $activeFuncCallName;
 
     public function __construct(MethodCallAnalyzer $methodCallAnalyzer)
     {
@@ -36,12 +55,10 @@ final class SpecificMethodCountRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        $this->activeFuncCallName = null;
-
         if (! $this->methodCallAnalyzer->isTypesAndMethods(
             $node,
             ['PHPUnit\Framework\TestCase', 'PHPUnit_Framework_TestCase'],
-            ['assertSame']
+            array_keys($this->renameMethodsMap)
         )) {
             return false;
         }
@@ -60,7 +77,11 @@ final class SpecificMethodCountRector extends AbstractRector
             return false;
         }
 
-        return $secondArgumentValue->name->toString() === 'count';
+        $coutableMethod = $secondArgumentValue->name->toString();
+
+        return in_array($coutableMethod, [
+            'count', 'sizeof',
+        ]);
     }
 
     /**
@@ -68,7 +89,9 @@ final class SpecificMethodCountRector extends AbstractRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        $methodCallNode->name = new Identifier('assertCount');
+        $oldMethodName = $methodCallNode->name->toString();
+
+        $methodCallNode->name = new Identifier($this->renameMethodsMap[$oldMethodName]);
 
         /** @var FuncCall $secondArgument */
         $secondArgument = $methodCallNode->args[1]->value;
