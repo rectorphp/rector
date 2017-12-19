@@ -113,9 +113,15 @@ final class SpecificMethodRector extends AbstractRector
 
     private function moveArgumentUp(MethodCall $methodCallNode): void
     {
-        /** @var FuncCall $funcCall */
-        $funcCall = $methodCallNode->args[0]->value;
-        $methodCallNode->args[0] = $funcCall->args[0];
+        $funcCallOrEmptyNode = $methodCallNode->args[0]->value;
+        if ($funcCallOrEmptyNode instanceof FuncCall) {
+            $methodCallNode->args[0] = $funcCallOrEmptyNode->args[0];
+        }
+
+        if ($funcCallOrEmptyNode instanceof Empty_) {
+            // what should be here on the right part instead to fix this? :)
+            $methodCallNode->args[0] = $funcCallOrEmptyNode->args[0];
+        }
     }
 
     private function resolveFunctionName(Node $node): ?string
