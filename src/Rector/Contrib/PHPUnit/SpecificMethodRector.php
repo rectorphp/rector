@@ -3,6 +3,7 @@
 namespace Rector\Rector\Contrib\PHPUnit;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Empty_;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
@@ -22,7 +23,7 @@ final class SpecificMethodRector extends AbstractRector
     /**
      * @var string[][]|false[][]
      */
-    private $oldToNewMethods = [
+    private static $oldToNewMethods = [
         'is_readable' => ['assertIsReadable', 'assertNotIsReadable'],
         'array_key_exists' => ['assertArrayHasKey', 'assertArrayNotHasKey'],
         'empty' => ['assertEmpty', 'assertNotEmpty'],
@@ -67,15 +68,13 @@ final class SpecificMethodRector extends AbstractRector
         }
 
         $firstArgumentValue = $node->args[0]->value;
-        if (! $firstArgumentValue instanceof FuncCall) {
+
+        $funcCallName = $this->resolveFunctionName($firstArgumentValue);
+        if ($funcCallName === null) {
             return false;
         }
 
-        /** @var Name $nameNode */
-        $nameNode = $firstArgumentValue->name;
-
-        $funcCallName = $nameNode->toString();
-        if (! isset($this->oldToNewMethods[$funcCallName])) {
+        if (! isset(self::$oldToNewMethods[$funcCallName])) {
             return false;
         }
 
@@ -101,12 +100,14 @@ final class SpecificMethodRector extends AbstractRector
         $identifierNode = $methodCallNode->name;
         $oldMethodName = $identifierNode->toString();
 
-        [$trueMethodName, $falseMethodName] = $this->oldToNewMethods[$this->activeFuncCallName];
+        [$trueMethodName, $falseMethodName] = self::$oldToNewMethods[$this->activeFuncCallName];
 
         if ($oldMethodName === 'assertTrue' && $trueMethodName) {
-            $methodCallNode->name = $trueMethodName;
+            /** @var string $trueMethodName */
+            $methodCallNode->name = new Identifier($trueMethodName);
         } elseif ($oldMethodName === 'assertFalse' && $falseMethodName) {
-            $methodCallNode->name = $falseMethodName;
+            /** @var string $falseMethodName */
+            $methodCallNode->name = new Identifier($falseMethodName);
         }
     }
 
@@ -115,5 +116,21 @@ final class SpecificMethodRector extends AbstractRector
         /** @var FuncCall $funcCall */
         $funcCall = $methodCallNode->args[0]->value;
         $methodCallNode->args[0] = $funcCall->args[0];
+    }
+
+    private function resolveFunctionName(Node $node): ?string
+    {
+        if ($node instanceof FuncCall) {
+            /** @var Name $nameNode */
+            $nameNode = $node->name;
+
+            return $nameNode->toString();
+        }
+
+        if ($node instanceof Empty_) {
+            return 'empty';
+        }
+
+        return null;
     }
 }
