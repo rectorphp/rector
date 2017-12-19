@@ -20,4 +20,5 @@ rectors:
     Rector\Rector\Contrib\PHPUnit\SpecificMethodRector: ~
     Rector\Rector\Contrib\PHPUnit\SpecificMethodBoolNullRector: ~
     Rector\Rector\Contrib\PHPUnit\SpecificMethodCountRector: ~
+    Rector\Rector\Contrib\PHPUnit\SpecificMethodInternalTypeRector: ~
     Rector\Rector\Contrib\PHPUnit\SpecificMethodObjectAttributeRector: ~
