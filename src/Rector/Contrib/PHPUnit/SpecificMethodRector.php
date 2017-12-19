@@ -119,8 +119,7 @@ final class SpecificMethodRector extends AbstractRector
         }
 
         if ($funcCallOrEmptyNode instanceof Empty_) {
-            // what should be here on the right part instead to fix this? :)
-            $methodCallNode->args[0] = $funcCallOrEmptyNode->args[0];
+            $methodCallNode->args[0] = $funcCallOrEmptyNode->expr;
         }
     }
 
