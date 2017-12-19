@@ -175,7 +175,6 @@ final class DocBlockAnalyzer
      * Magic untill, since object is read only
      *
      * @param object $object
-     * @param mixed $value
      */
     private function setPrivatePropertyValue($object, string $name, $value): void
     {
