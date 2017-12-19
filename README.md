@@ -1,4 +1,4 @@
-# Rector Reconstructs your Legacy Code to Modern Codebase
+# Rector - Upgrade your Legacy App to Modern Codebase
 
 [![Build Status](https://img.shields.io/travis/rectorphp/rector/master.svg?style=flat-square)](https://travis-ci.org/rectorphp/rector)
 [![Coverage Status](https://img.shields.io/coveralls/RectorPHP/Rector/master.svg?style=flat-square)](https://coveralls.io/github/rectorphp/rector?branch=master)
