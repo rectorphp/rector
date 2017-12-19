@@ -13,12 +13,12 @@ use Rector\Rector\AbstractRector;
 
 /**
  * Before:
- * - $this->assertTrue(is_{internal_type}($anything));
- * - $this->assertFalse(is_{internal_type}($anything));
+ * - $this->assertTrue(is_{internal_type}($anything), 'message');
+ * - $this->assertFalse(is_{internal_type}($anything), 'message');
  *
  * After:
- * - $this->assertInternalType({internal_type}, $anything);
- * - $this->assertNotInternalType({internal_type}, $anything);
+ * - $this->assertInternalType({internal_type}, $anything, 'message');
+ * - $this->assertNotInternalType({internal_type}, $anything, 'message');
  */
 final class SpecificMethodInternalTypeRector extends AbstractRector
 {
@@ -76,6 +76,15 @@ final class SpecificMethodInternalTypeRector extends AbstractRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
+        $this->renameMethod($methodCallNode);
+        $this->moveFunctionArgumentsUp($methodCallNode);
+
+        return $methodCallNode;
+    }
+
+    private function renameMethod(MethodCall $methodCallNode): void
+    {
+        /** @var Identifier $identifierNode */
         $assertionMethodName = $methodCallNode->name->toString();
 
         if ($assertionMethodName === 'assertTrue') {
@@ -83,20 +92,23 @@ final class SpecificMethodInternalTypeRector extends AbstractRector
         } else {
             $methodCallNode->name = new Identifier('assertNotInternalType');
         }
+    }
 
+    private function moveFunctionArgumentsUp(MethodCall $methodCallNode): void
+    {
         /** @var FuncCall $methodCallNode */
         $isFunctionNode = $methodCallNode->args[0]->value;
-
-        $isFunctionName = $isFunctionNode->name->toString();
         $argument = $isFunctionNode->args[0]->value;
+        $isFunctionName = $isFunctionNode->name->toString();
 
-        $methodCallNode->args = [
+        $oldArguments = $methodCallNode->args;
+        unset($oldArguments[0]);
+
+        $methodCallNode->args = array_merge([
             new Arg(new String_(
                 $this->oldMethodsToTypes[$isFunctionName]
             )),
             new Arg($argument),
-        ];
-
-        return $methodCallNode;
+        ], $oldArguments);
     }
 }

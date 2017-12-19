@@ -4,35 +4,35 @@ final class MyTest extends \PHPUnit\Framework\TestCase
 {
     public function test()
     {
-        $this->assertInternalType('string', $something);
-        $this->assertNotInternalType('string', $something);
-        $this->assertInternalType('array', $something);
-        $this->assertNotInternalType('array', $something);
-        $this->assertInternalType('numeric', $something);
-        $this->assertNotInternalType('numeric', $something);
-        $this->assertInternalType('integer', $something);
-        $this->assertNotInternalType('integer', $something);
-        $this->assertInternalType('float', $something);
-        $this->assertNotInternalType('float', $something);
-        $this->assertInternalType('bool', $something);
-        $this->assertNotInternalType('bool', $something);
-        $this->assertInternalType('object', $something);
-        $this->assertNotInternalType('object', $something);
-        $this->assertInternalType('resource', $something);
-        $this->assertNotInternalType('resource', $something);
-        $this->assertInternalType('scalar', $something);
-        $this->assertNotInternalType('scalar', $something);
-        $this->assertInternalType('callable', $something);
-        $this->assertNotInternalType('callable', $something);
-        $this->assertTrue(is_file($something));
-        $this->assertFalse(is_file($something));
-        $this->assertTrue(is_dir($something));
-        $this->assertFalse(is_dir($something));
-        $this->assertTrue(is_null($something));
-        $this->assertFalse(is_null($something));
-        $this->assertTrue(is_a($something));
-        $this->assertFalse(is_a($something));
-        $this->assertTrue(is_link($something));
-        $this->assertFalse(is_link($something));
+        $this->assertInternalType('string', $something, 'third argument');
+        $this->assertNotInternalType('string', $something, 'third argument');
+        $this->assertInternalType('array', $something, 'third argument');
+        $this->assertNotInternalType('array', $something, 'third argument');
+        $this->assertInternalType('numeric', $something, 'third argument');
+        $this->assertNotInternalType('numeric', $something, 'third argument');
+        $this->assertInternalType('integer', $something, 'third argument');
+        $this->assertNotInternalType('integer', $something, 'third argument');
+        $this->assertInternalType('float', $something, 'third argument');
+        $this->assertNotInternalType('float', $something, 'third argument');
+        $this->assertInternalType('bool', $something, 'third argument');
+        $this->assertNotInternalType('bool', $something, 'third argument');
+        $this->assertInternalType('object', $something, 'third argument');
+        $this->assertNotInternalType('object', $something, 'third argument');
+        $this->assertInternalType('resource', $something, 'third argument');
+        $this->assertNotInternalType('resource', $something, 'third argument');
+        $this->assertInternalType('scalar', $something, 'third argument');
+        $this->assertNotInternalType('scalar', $something, 'third argument');
+        $this->assertInternalType('callable', $something, 'third argument');
+        $this->assertNotInternalType('callable', $something, 'third argument');
+        $this->assertTrue(is_file($something), 'second argument');
+        $this->assertFalse(is_file($something), 'second argument');
+        $this->assertTrue(is_dir($something), 'second argument');
+        $this->assertFalse(is_dir($something), 'second argument');
+        $this->assertTrue(is_null($something), 'second argument');
+        $this->assertFalse(is_null($something), 'second argument');
+        $this->assertTrue(is_a($something), 'second argument');
+        $this->assertFalse(is_a($something), 'second argument');
+        $this->assertTrue(is_link($something), 'second argument');
+        $this->assertFalse(is_link($something), 'second argument');
     }
 }
