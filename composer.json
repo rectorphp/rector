@@ -18,7 +18,8 @@
         "symfony/dependency-injection": "^4.0",
         "symfony/finder": "^4.0",
         "symplify/easy-coding-standard": "^3.0",
-        "webmozart/assert": "^1.2"
+        "webmozart/assert": "^1.2",
+        "friendsofphp/php-cs-fixer": "^2.9"
     },
     "require-dev": {
         "latte/latte": "^2.4",
