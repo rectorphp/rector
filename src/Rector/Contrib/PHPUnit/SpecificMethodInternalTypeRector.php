@@ -2,6 +2,7 @@
 
 namespace Rector\Rector\Contrib\PHPUnit;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
@@ -14,9 +15,11 @@ use Rector\Rector\AbstractRector;
 /**
  * Before:
  * - $this->assertTrue(is_string($anything));
+ * - $this->assertFalse(is_string($anything));
  *
  * After:
  * - $this->assertInternalType('string', $anything);
+ * - $this->assertNotInternalType('string', $anything);
  */
 final class SpecificMethodInternalTypeRector extends AbstractRector
 {
@@ -25,11 +28,6 @@ final class SpecificMethodInternalTypeRector extends AbstractRector
      */
     private $methodCallAnalyzer;
 
-    /**
-     * @var string|null
-     */
-    private $activeFuncCallName;
-
     public function __construct(MethodCallAnalyzer $methodCallAnalyzer)
     {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
@@ -37,12 +35,10 @@ final class SpecificMethodInternalTypeRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        $this->activeFuncCallName = null;
-
         if (! $this->methodCallAnalyzer->isTypesAndMethods(
             $node,
             ['PHPUnit\Framework\TestCase', 'PHPUnit_Framework_TestCase'],
-            ['assertTrue']
+            ['assertTrue', 'assertFalse']
         )) {
             return false;
         }
@@ -55,7 +51,9 @@ final class SpecificMethodInternalTypeRector extends AbstractRector
             return false;
         }
 
-        return strpos($firstArgumentValue->name->toString(), 'is_') === 0;
+        $methodName = $firstArgumentValue->name->toString();
+
+        return Strings::startsWith($methodName, 'is_');
     }
 
     /**
@@ -63,12 +61,18 @@ final class SpecificMethodInternalTypeRector extends AbstractRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        $methodCallNode->name = new Identifier('assertInternalType');
+        $assertionMethodName = $methodCallNode->name->toString();
+
+        if ($assertionMethodName === 'assertTrue') {
+            $methodCallNode->name = new Identifier('assertInternalType');
+        } else {
+            $methodCallNode->name = new Identifier('assertNotInternalType');
+        }
 
         /** @var FuncCall $methodCallNode */
-        $isNode = $methodCallNode->args[0]->value;
+        $isFunctionNode = $methodCallNode->args[0]->value;
 
-        $argument = $isNode->args[0]->value;
+        $argument = $isFunctionNode->args[0]->value;
 
         $methodCallNode->args = [
             new Arg(new String_('string')),
