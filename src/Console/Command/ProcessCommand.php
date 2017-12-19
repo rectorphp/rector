@@ -2,10 +2,10 @@
 
 namespace Rector\Console\Command;
 
-use PhpCsFixer\Differ\DiffConsoleFormatter;
 use PhpCsFixer\Differ\UnifiedDiffer;
 use Rector\Application\FileProcessor;
 use Rector\Console\Output\ProcessCommandReporter;
+use Rector\ConsoleDiffer\DifferAndFormatter;
 use Rector\Exception\NoRectorsLoadedException;
 use Rector\FileSystem\PhpFilesFinder;
 use Rector\Naming\CommandNaming;
@@ -61,6 +61,11 @@ final class ProcessCommand extends Command
      */
     private $unifiedDiffer;
 
+    /**
+     * @var DifferAndFormatter
+     */
+    private $differAndFormatter;
+
     public function __construct(
         FileProcessor $fileProcessor,
         RectorCollector $rectorCollector,
@@ -68,7 +73,7 @@ final class ProcessCommand extends Command
         PhpFilesFinder $phpFilesFinder,
         ProcessCommandReporter $processCommandReporter,
         ParameterProvider $parameterProvider,
-        UnifiedDiffer $unifiedDiffer
+        DifferAndFormatter $differAndFormatter
     ) {
         $this->fileProcessor = $fileProcessor;
         $this->rectorCollector = $rectorCollector;
@@ -78,7 +83,7 @@ final class ProcessCommand extends Command
 
         parent::__construct();
         $this->parameterProvider = $parameterProvider;
-        $this->unifiedDiffer = $unifiedDiffer;
+        $this->differAndFormatter = $differAndFormatter;
     }
 
     protected function configure(): void
@@ -139,18 +144,8 @@ final class ProcessCommand extends Command
                 $oldContent = $fileInfo->getContents();
                 $newContent = $this->fileProcessor->processFileToString($fileInfo);
 
-                // @todo service?
-                $diffConsoleFormatter = new DiffConsoleFormatter(true, sprintf(
-                    '<comment>    ---------- begin diff ----------</comment>' .
-                    '%s%%s%s' .
-                    '<comment>    ----------- end diff -----------</comment>',
-                    PHP_EOL,
-                    PHP_EOL
-                ));
-
                 if ($newContent !== $oldContent) {
-                    $diff = $this->unifiedDiffer->diff($oldContent, $newContent);
-                    $this->symfonyStyle->writeln($diffConsoleFormatter->format($diff));
+                    $this->symfonyStyle->writeln($this->differAndFormatter->diffAndFormat($oldContent, $newContent));
                 }
             } else {
                 $this->fileProcessor->processFile($fileInfo);
