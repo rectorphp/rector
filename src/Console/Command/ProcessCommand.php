@@ -80,6 +80,7 @@ final class ProcessCommand extends Command
             InputArgument::REQUIRED | InputArgument::IS_ARRAY,
             'Files or directories to be upgraded.'
         );
+        $this->addOption('dry-run');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
