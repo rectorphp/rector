@@ -55,6 +55,7 @@ final class ProcessCommand extends Command
      * @var ParameterProvider
      */
     private $parameterProvider;
+
     /**
      * @var UnifiedDiffer
      */
@@ -151,11 +152,9 @@ final class ProcessCommand extends Command
                     $diff = $this->unifiedDiffer->diff($oldContent, $newContent);
                     $this->symfonyStyle->writeln($diffConsoleFormatter->format($diff));
                 }
-
             } else {
                 $this->fileProcessor->processFile($fileInfo);
             }
-
         }
     }
 }
