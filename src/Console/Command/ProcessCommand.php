@@ -2,18 +2,21 @@
 
 namespace Rector\Console\Command;
 
+use PhpCsFixer\Differ\DiffConsoleFormatter;
+use PhpCsFixer\Differ\UnifiedDiffer;
 use Rector\Application\FileProcessor;
 use Rector\Console\Output\ProcessCommandReporter;
 use Rector\Exception\NoRectorsLoadedException;
 use Rector\FileSystem\PhpFilesFinder;
 use Rector\Naming\CommandNaming;
 use Rector\Rector\RectorCollector;
-use SplFileInfo;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Finder\SplFileInfo;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
 final class ProcessCommand extends Command
@@ -52,6 +55,10 @@ final class ProcessCommand extends Command
      * @var ParameterProvider
      */
     private $parameterProvider;
+    /**
+     * @var UnifiedDiffer
+     */
+    private $unifiedDiffer;
 
     public function __construct(
         FileProcessor $fileProcessor,
@@ -59,7 +66,8 @@ final class ProcessCommand extends Command
         SymfonyStyle $symfonyStyle,
         PhpFilesFinder $phpFilesFinder,
         ProcessCommandReporter $processCommandReporter,
-        ParameterProvider $parameterProvider
+        ParameterProvider $parameterProvider,
+        UnifiedDiffer $unifiedDiffer
     ) {
         $this->fileProcessor = $fileProcessor;
         $this->rectorCollector = $rectorCollector;
@@ -69,6 +77,7 @@ final class ProcessCommand extends Command
 
         parent::__construct();
         $this->parameterProvider = $parameterProvider;
+        $this->unifiedDiffer = $unifiedDiffer;
     }
 
     protected function configure(): void
@@ -80,7 +89,7 @@ final class ProcessCommand extends Command
             InputArgument::REQUIRED | InputArgument::IS_ARRAY,
             'Files or directories to be upgraded.'
         );
-        $this->addOption('dry-run');
+        $this->addOption('dry-run', null, InputOption::VALUE_NONE, 'See diff of changes, do not save them to files.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -89,6 +98,7 @@ final class ProcessCommand extends Command
 
         $source = $input->getArgument(self::ARGUMENT_SOURCE_NAME);
         $this->parameterProvider->changeParameter('source', $source);
+        $this->parameterProvider->changeParameter('dry-run', $input->getOption('dry-run'));
         $files = $this->phpFilesFinder->findInDirectoriesAndFiles($source);
 
         $this->processCommandReporter->reportLoadedRectors();
@@ -123,7 +133,29 @@ final class ProcessCommand extends Command
 
         foreach ($fileInfos as $fileInfo) {
             $this->symfonyStyle->writeln(sprintf(' - %s', $fileInfo->getRealPath()));
-            $this->fileProcessor->processFile($fileInfo);
+
+            if ($this->parameterProvider->provideParameter('dry-run')) {
+                $oldContent = $fileInfo->getContents();
+                $newContent = $this->fileProcessor->processFileToString($fileInfo);
+
+                // @todo service?
+                $diffConsoleFormatter = new DiffConsoleFormatter(true, sprintf(
+                    '<comment>    ---------- begin diff ----------</comment>' .
+                    '%s%%s%s' .
+                    '<comment>    ----------- end diff -----------</comment>',
+                    PHP_EOL,
+                    PHP_EOL
+                ));
+
+                if ($newContent !== $oldContent) {
+                    $diff = $this->unifiedDiffer->diff($oldContent, $newContent);
+                    $this->symfonyStyle->writeln($diffConsoleFormatter->format($diff));
+                }
+
+            } else {
+                $this->fileProcessor->processFile($fileInfo);
+            }
+
         }
     }
 }
