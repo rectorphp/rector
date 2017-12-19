@@ -28,7 +28,7 @@
         "phpstan/phpstan-shim": "^0.9",
         "phpunit/phpunit": "^6.5",
         "symplify/coding-standard": "^3.0",
-        "slam/php-cs-fixer-extensions": "^1.8",
+        "slam/php-cs-fixer-extensions": "^1.10",
         "symfony/expression-language": "^4.0",
         "symfony/form": "^4.0",
         "tracy/tracy": "^2.4"
@@ -40,7 +40,6 @@
             "Rector\\ReflectionDocBlock\\": "packages/ReflectionDocBlock/src",
             "Rector\\NodeTypeResolver\\": "packages/NodeTypeResolver/src",
             "Rector\\NodeTraverserQueue\\": "packages/NodeTraverserQueue/src",
-            "Rector\\DeprecationExtractor\\": "packages/DeprecationExtractor/src",
             "Rector\\NodeValueResolver\\": "packages/NodeValueResolver/src",
             "Rector\\YamlParser\\": "packages/YamlParser/src"
         }
@@ -52,7 +51,6 @@
             "Rector\\ReflectionDocBlock\\Tests\\": "packages/ReflectionDocBlock/tests",
             "Rector\\NodeTypeResolver\\Tests\\": "packages/NodeTypeResolver/tests",
             "Rector\\NodeTraverserQueue\\Tests\\": "packages/NodeTraverserQueue/tests",
-            "Rector\\DeprecationExtractor\\Tests\\": "packages/DeprecationExtractor/tests",
             "Rector\\NodeValueResolver\\Tests\\": "packages/NodeValueResolver/tests",
             "Rector\\YamlParser\\Tests\\": "packages/YamlParser/tests"
         }

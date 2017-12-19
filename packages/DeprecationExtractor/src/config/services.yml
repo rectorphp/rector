@@ -1,8 +1,0 @@
-services:
-    _defaults:
-        autowire: true
-        public: true # for tests
-
-    Rector\DeprecationExtractor\:
-        resource: '../'
-        exclude: '../{Deprecation/Deprecation.php,RectorGuess/RectorGuess.php}'
