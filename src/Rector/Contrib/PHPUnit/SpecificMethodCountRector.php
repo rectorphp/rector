@@ -34,14 +34,19 @@ use Rector\Rector\AbstractRector;
 final class SpecificMethodCountRector extends AbstractRector
 {
     /**
+     * @var string[]
+     */
+    private $renameMethodsMap = [
+        'assertSame' => 'assertCount',
+        'assertNotSame' => 'assertNotCount',
+        'assertEquals' => 'assertCount',
+        'assertNotEquals' => 'assertNotCount',
+    ];
+
+    /**
      * @var MethodCallAnalyzer
      */
     private $methodCallAnalyzer;
-
-    /**
-     * @var string|null
-     */
-    private $activeFuncCallName;
 
     public function __construct(MethodCallAnalyzer $methodCallAnalyzer)
     {
@@ -50,8 +55,6 @@ final class SpecificMethodCountRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        $this->activeFuncCallName = null;
-
         if (! $this->methodCallAnalyzer->isTypesAndMethods(
             $node,
             ['PHPUnit\Framework\TestCase', 'PHPUnit_Framework_TestCase'],
@@ -76,7 +79,9 @@ final class SpecificMethodCountRector extends AbstractRector
 
         $coutableMethod = $secondArgumentValue->name->toString();
 
-        return $coutableMethod === 'count' || $coutableMethod === 'sizeof';
+        return in_array($coutableMethod, [
+            'count', 'sizeof',
+        ]);
     }
 
     /**
@@ -86,13 +91,7 @@ final class SpecificMethodCountRector extends AbstractRector
     {
         $oldMethodName = $methodCallNode->name->toString();
 
-        if ($oldMethodName === 'assertEquals' || $oldMethodName === 'assertSame') {
-            /** @var string $trueMethodName */
-            $methodCallNode->name = new Identifier('assertCount');
-        } elseif ($oldMethodName === 'assertNotEquals' || $oldMethodName === 'assertNotSame') {
-            /** @var string $falseMethodName */
-            $methodCallNode->name = new Identifier('assertNotCount');
-        }
+        $methodCallNode->name = new Identifier($this->renameMethodsMap[$oldMethodName]);
 
         /** @var FuncCall $secondArgument */
         $secondArgument = $methodCallNode->args[1]->value;
