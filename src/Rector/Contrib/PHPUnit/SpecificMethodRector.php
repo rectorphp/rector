@@ -3,6 +3,7 @@
 namespace Rector\Rector\Contrib\PHPUnit;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Empty_;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
@@ -120,6 +121,12 @@ final class SpecificMethodRector extends AbstractRector
 
         if ($funcCallOrEmptyNode instanceof Empty_) {
             $methodCallNode->args[0] = $funcCallOrEmptyNode->expr;
+        }
+
+        $arrayNode = $funcCallOrEmptyNode->args[1]->value ?? null;
+
+        if ($arrayNode instanceof Array_) {
+            $methodCallNode->args[1] = $arrayNode;
         }
     }
 
