@@ -13,9 +13,23 @@ use Rector\Rector\AbstractRector;
 /**
  * Before:
  * - $this->assertSame(5, count($anything));
+ * - $this->assertNotSame(5, count($anything));
+ * - $this->assertEquals(5, count($anything));
+ * - $this->assertNotEquals(5, count($anything));
+ * - $this->assertSame(5, sizeof($anything));
+ * - $this->assertNotSame(5, sizeof($anything));
+ * - $this->assertEquals(5, sizeof($anything));
+ * - $this->assertNotEquals(5, sizeof($anything));
  *
  * After:
  * - $this->assertCount(5, $anything);
+ * - $this->assertNotCount(5, $anything);
+ * - $this->assertCount(5, $anything);
+ * - $this->assertNotCount(5, $anything);
+ * - $this->assertCount(5, $anything);
+ * - $this->assertNotCount(5, $anything);
+ * - $this->assertCount(5, $anything);
+ * - $this->assertNotCount(5, $anything);
  */
 final class SpecificMethodCountRector extends AbstractRector
 {
@@ -41,7 +55,7 @@ final class SpecificMethodCountRector extends AbstractRector
         if (! $this->methodCallAnalyzer->isTypesAndMethods(
             $node,
             ['PHPUnit\Framework\TestCase', 'PHPUnit_Framework_TestCase'],
-            ['assertSame']
+            ['assertSame', 'assertEquals', 'assertNotSame', 'assertNotEquals']
         )) {
             return false;
         }
@@ -60,7 +74,9 @@ final class SpecificMethodCountRector extends AbstractRector
             return false;
         }
 
-        return $secondArgumentValue->name->toString() === 'count';
+        $coutableMethod = $secondArgumentValue->name->toString();
+
+        return $coutableMethod === 'count' || $coutableMethod === 'sizeof';
     }
 
     /**
@@ -68,7 +84,15 @@ final class SpecificMethodCountRector extends AbstractRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        $methodCallNode->name = new Identifier('assertCount');
+        $oldMethodName = $methodCallNode->name->toString();
+
+        if ($oldMethodName === 'assertEquals' || $oldMethodName === 'assertSame') {
+            /** @var string $trueMethodName */
+            $methodCallNode->name = new Identifier('assertCount');
+        } elseif ($oldMethodName === 'assertNotEquals' || $oldMethodName === 'assertNotSame') {
+            /** @var string $falseMethodName */
+            $methodCallNode->name = new Identifier('assertNotCount');
+        }
 
         /** @var FuncCall $secondArgument */
         $secondArgument = $methodCallNode->args[1]->value;
