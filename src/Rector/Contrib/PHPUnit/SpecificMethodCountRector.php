@@ -58,7 +58,7 @@ final class SpecificMethodCountRector extends AbstractRector
         if (! $this->methodCallAnalyzer->isTypesAndMethods(
             $node,
             ['PHPUnit\Framework\TestCase', 'PHPUnit_Framework_TestCase'],
-            ['assertSame', 'assertEquals', 'assertNotSame', 'assertNotEquals']
+            array_keys($this->renameMethodsMap)
         )) {
             return false;
         }
