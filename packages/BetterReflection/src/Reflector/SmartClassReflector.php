@@ -34,6 +34,11 @@ final class SmartClassReflector
      */
     private $classReflectorActiveFile;
 
+    /**
+     * @var ReflectionClass[]
+     */
+    private $perClassNameClassReflections = [];
+
     public function __construct(ClassReflectorFactory $classReflectorFactory, CurrentFileProvider $currentFileProvider)
     {
         $this->classReflectorFactory = $classReflectorFactory;
@@ -47,12 +52,16 @@ final class SmartClassReflector
             return null;
         }
 
+        if (isset($this->perClassNameClassReflections[$className])) {
+            return $this->perClassNameClassReflections[$className];
+        }
+
         try {
             if ($this->shouldCreateNewClassReflector()) {
                 $this->createNewClassReflector();
             }
 
-            return $this->currentClassReflector->reflect($className);
+            return $this->perClassNameClassReflections[$className] = $this->currentClassReflector->reflect($className);
         } catch (IdentifierNotFound | TypeError $throwable) {
             return null;
         }
