@@ -33,6 +33,11 @@ final class SourceLocatorFactory
      */
     private $parameterProvider;
 
+    /**
+     * @var SourceLocator[]
+     */
+    private $commonLocators = [];
+
     public function __construct(
         Locator $locator,
         StubSourceLocator $stubSourceLocator,
@@ -67,7 +72,11 @@ final class SourceLocatorFactory
      */
     private function createCommonLocators(): array
     {
-        $locators = [
+        if ($this->commonLocators) {
+            return $this->commonLocators;
+        }
+
+        $this->commonLocators = [
             new PhpInternalSourceLocator($this->locator),
             new EvaledCodeSourceLocator($this->locator),
             new AutoloadSourceLocator($this->locator),
@@ -79,11 +88,11 @@ final class SourceLocatorFactory
             $vendorAutoload = AutoloadFinder::findNearDirectories($source);
             if ($vendorAutoload !== null) {
                 $vendorAutoload = require $vendorAutoload;
-                $locators[] = new ComposerSourceLocator($vendorAutoload, $this->locator);
+                $this->commonLocators[] = new ComposerSourceLocator($vendorAutoload, $this->locator);
             }
         }
 
-        return $locators;
+        return $this->commonLocators;
     }
 
     /**
