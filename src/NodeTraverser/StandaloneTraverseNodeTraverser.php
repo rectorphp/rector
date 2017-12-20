@@ -3,7 +3,6 @@
 namespace Rector\NodeTraverser;
 
 use PhpParser\Node;
-use PhpParser\NodeTraverser;
 use PhpParser\NodeTraverserInterface;
 use PhpParser\NodeVisitor;
 
@@ -26,7 +25,7 @@ final class StandaloneTraverseNodeTraverser
     /**
      * @var NodeTraverserInterface[]
      */
-    private $nodeTraversers;
+    private $nodeTraversers = [];
 
     public function __construct(NodeTraverserFactory $nodeTraverserFactory)
     {
