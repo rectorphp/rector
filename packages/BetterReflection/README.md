@@ -3,7 +3,7 @@
 This package add 3 features:
  
 - ignores missing functions without crashing
-- `SmartClassReflector` always knows about file it's parsing thanks to `CurrentFileProvider` 
+- `SmartClassReflector` knows about every file passed as source 
 - add stub file to `/stubs` directory
 
 
