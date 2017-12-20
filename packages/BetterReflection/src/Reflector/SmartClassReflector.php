@@ -32,6 +32,11 @@ final class SmartClassReflector
      */
     private $parameterProvider;
 
+    /**
+     * @var string[]
+     */
+    private $lastSource = [];
+
     public function __construct(ClassReflectorFactory $classReflectorFactory, ParameterProvider $parameterProvider)
     {
         $this->classReflectorFactory = $classReflectorFactory;
@@ -109,15 +114,20 @@ final class SmartClassReflector
         }
     }
 
+    /**
+     * Rebuilds when source changes, so it reflects current scope.
+     * Useful mainly for tests.
+     */
     private function getClassReflector(): ClassReflector
     {
-        if ($this->classReflector) {
+        $currentSource = $this->parameterProvider->provideParameter('source');
+        if ($this->lastSource === $currentSource) {
             return $this->classReflector;
         }
 
-        $source = $this->parameterProvider->provideParameter('source');
-        if ($source) {
-            return $this->classReflector = $this->classReflectorFactory->createWithSource($source);
+        if ($currentSource) {
+            $this->lastSource = $currentSource;
+            return $this->classReflector = $this->classReflectorFactory->createWithSource($currentSource);
         }
 
         return $this->classReflector = $this->classReflectorFactory->create();
