@@ -41,7 +41,12 @@ final class ProcessCommandReporter
             $this->rectorCollector->getRectorCount() === 1 ? '' : 's'
         ));
 
-        foreach ($this->rectorCollector->getRectors() as $rector) {
+        $rectorList = $this->rectorCollector->getRectors();
+        usort($rectorList, function ($first, $second) {
+            return get_class($first) <=> get_class($second);
+        });
+
+        foreach ($rectorList as $rector) {
             $this->symfonyStyle->writeln(sprintf(
                 ' - %s',
                 get_class($rector)
@@ -49,21 +54,5 @@ final class ProcessCommandReporter
         }
 
         $this->symfonyStyle->newLine();
-    }
-
-    public function reportChangedFiles(): void
-    {
-        $this->symfonyStyle->title(sprintf(
-            '%d Changed File%s',
-            $this->changedFilesCollector->getChangedFilesCount(),
-            $this->changedFilesCollector->getChangedFilesCount() === 1 ? '' : 's'
-        ));
-
-        foreach ($this->changedFilesCollector->getChangedFiles() as $fileInfo) {
-            $this->symfonyStyle->writeln(sprintf(
-                ' - %s',
-                $fileInfo
-            ));
-        }
     }
 }

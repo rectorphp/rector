@@ -74,13 +74,13 @@ final class ProcessCommand extends Command
         ParameterProvider $parameterProvider,
         DifferAndFormatter $differAndFormatter
     ) {
+        parent::__construct();
+
         $this->fileProcessor = $fileProcessor;
         $this->rectorCollector = $rectorCollector;
         $this->symfonyStyle = $symfonyStyle;
         $this->phpFilesFinder = $phpFilesFinder;
         $this->processCommandReporter = $processCommandReporter;
-
-        parent::__construct();
         $this->parameterProvider = $parameterProvider;
         $this->differAndFormatter = $differAndFormatter;
     }
@@ -94,7 +94,12 @@ final class ProcessCommand extends Command
             InputArgument::REQUIRED | InputArgument::IS_ARRAY,
             'Files or directories to be upgraded.'
         );
-        $this->addOption(self::OPTION_DRY_RUN, null, InputOption::VALUE_NONE, 'See diff of changes, do not save them to files.');
+        $this->addOption(
+            self::OPTION_DRY_RUN,
+            null,
+            InputOption::VALUE_NONE,
+            'See diff of changes, do not save them to files.'
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -109,9 +114,6 @@ final class ProcessCommand extends Command
         $this->processCommandReporter->reportLoadedRectors();
 
         $this->processFiles($files);
-
-        $this->processCommandReporter->reportChangedFiles();
-
         $this->symfonyStyle->success('Rector is done!');
 
         return 0;
@@ -136,8 +138,9 @@ final class ProcessCommand extends Command
     {
         $this->symfonyStyle->title('Processing files');
 
+        $i = 1;
         foreach ($fileInfos as $fileInfo) {
-            $this->symfonyStyle->writeln(sprintf(' - %s', $fileInfo->getRealPath()));
+            $this->symfonyStyle->writeln(sprintf('<options=bold>%d) %s</>', $i, $fileInfo->getPathname()));
 
             if ($this->parameterProvider->provideParameter(self::OPTION_DRY_RUN)) {
                 $oldContent = $fileInfo->getContents();
@@ -149,6 +152,8 @@ final class ProcessCommand extends Command
             } else {
                 $this->fileProcessor->processFile($fileInfo);
             }
+
+            ++$i;
         }
     }
 }
