@@ -166,9 +166,17 @@ final class DocBlockAnalyzer
      */
     private function normalizeTypes(array $types): array
     {
-        return array_map(function (string $type) {
+        // remove preslash: {\]SomeClass
+        $types = array_map(function (string $type) {
             return ltrim(trim($type), '\\');
         }, $types);
+
+        // remove arrays: Type{[][][]}
+        $types = array_map(function (string $type) {
+            return rtrim($type, '[]');
+        }, $types);
+
+        return $types;
     }
 
     /**

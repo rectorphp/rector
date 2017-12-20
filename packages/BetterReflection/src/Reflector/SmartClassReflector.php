@@ -42,6 +42,11 @@ final class SmartClassReflector
 
     public function reflect(string $className): ?ReflectionClass
     {
+        // invalid class types
+        if (in_array($className, ['self', 'null', 'array', 'string', 'bool'])) {
+            return null;
+        }
+
         try {
             if ($this->shouldCreateNewClassReflector()) {
                 $this->createNewClassReflector();
