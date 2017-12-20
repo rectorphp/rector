@@ -33,54 +33,55 @@ Do you have old PHP or dependencies in conflict? Ok, [it is not problem](/docs/H
 
 Featured open-source projects have **prepared sets**. You'll find them in [`/src/config/level`](/src/config/level).
 
-E.g. Do you need to upgrade to Symfony 3.3?
+E.g. Do you need to upgrade to Symfony 4.0?
 
 1. Run rector on your `/src` directory
 
-```bash
-vendor/bin/rector process src --level symfony33
-```
+    ```bash
+    vendor/bin/rector process src --level symfony40
+    ```
 
-Which is just a shortcut for using complete path with `--config` option:
-```bash
-vendor/bin/rector process src --config vendor/rector/rector/src/config/level/symfony/symfony33.yml
-```
+    Which is just a shortcut for using complete path with `--config` option:
+    
+    ```bash
+    vendor/bin/rector process src --config vendor/rector/rector/src/config/level/symfony/symfony40.yml
+    ```
 
-You can also use your own config file:
+    You can also use your **own config file**:
 
-```bash
-vendor/bin/rector process src --config your-own-config.yml
-```
+    ```bash
+    vendor/bin/rector process src --config your-own-config.yml
+    ```
 
 2. Do you want to see preview of changes first? 
 
-Use `--dry-run` option:
-
-```
-vendor/bin/rector process src --level symfony33 --dry-run
-```
+    Use `--dry-run` option:
+    
+    ```
+    vendor/bin/rector process src --level symfony33 --dry-run
+    ```
 
 
 ### B. Custom Sets
 
 1. Create `rector.yml` with desired Rectors
 
-```yml
-rectors:
-    - Rector\Rector\Contrib\Nette\Application\InjectPropertyRector
-```
+    ```yml
+    rectors:
+        - Rector\Rector\Contrib\Nette\Application\InjectPropertyRector
+    ```
 
-2. Run rector on your `/src` directory
+2. Try Rector on your `/src` directory
 
-```bash
-vendor/bin/rector process src
-```
+    ```bash
+    vendor/bin/rector process src --dry-run
+    ```
 
-3. Check the Git
+3. Apply Changes if you like them
 
-```
-git diff
-```
+    ```
+    vendor/bin/rector process src
+    ```
 
 
 ### Simple setup with Dynamic Rectors
