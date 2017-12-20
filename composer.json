@@ -9,7 +9,6 @@
     "require": {
         "php": "^7.1",
         "gecko-packages/gecko-diff-output-builder": "^1.0",
-        "klausi/yaml_comments": "0.x-dev",
         "nette/utils": "^2.4",
         "nikic/php-parser": "4.0.x-dev",
         "phpdocumentor/reflection-docblock": "^4.1",

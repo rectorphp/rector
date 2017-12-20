@@ -1,2 +1,0 @@
-rectors:
-    Rector\YamlParser\Rector\Contrib\Symfony\AutoconfigureRector: ~

@@ -4,7 +4,6 @@ namespace Rector\Configuration\Validator;
 
 use Rector\Contract\Rector\RectorInterface;
 use Rector\Exception\Validator\InvalidRectorClassException;
-use Rector\YamlParser\Contract\Rector\YamlRectorInterface;
 
 final class RectorClassValidator
 {
@@ -37,15 +36,10 @@ final class RectorClassValidator
             return;
         }
 
-        if (is_a($rector, YamlRectorInterface::class, true)) {
-            return;
-        }
-
         throw new InvalidRectorClassException(sprintf(
-            'Rector "%s" is not supported. Use class that implements "%s" or "%s".',
+            'Rector "%s" is not supported. Use class that implements "%s".',
             $rector,
-            RectorInterface::class,
-            YamlRectorInterface::class
+            RectorInterface::class
         ));
     }
 }

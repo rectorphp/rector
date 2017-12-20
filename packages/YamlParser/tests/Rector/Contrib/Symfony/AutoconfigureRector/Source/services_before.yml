@@ -1,5 +1,0 @@
-services:
-    twig.stringloader:
-        class: Twig_Loader_Array
-        tags:
-            - { name: twig.loader }
