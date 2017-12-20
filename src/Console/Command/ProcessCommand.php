@@ -26,6 +26,11 @@ final class ProcessCommand extends Command
     private const ARGUMENT_SOURCE_NAME = 'source';
 
     /**
+     * @var string
+     */
+    private const OPTION_DRY_RUN = 'dry-run';
+
+    /**
      * @var FileProcessor
      */
     private $fileProcessor;
@@ -89,7 +94,7 @@ final class ProcessCommand extends Command
             InputArgument::REQUIRED | InputArgument::IS_ARRAY,
             'Files or directories to be upgraded.'
         );
-        $this->addOption('dry-run', null, InputOption::VALUE_NONE, 'See diff of changes, do not save them to files.');
+        $this->addOption(self::OPTION_DRY_RUN, null, InputOption::VALUE_NONE, 'See diff of changes, do not save them to files.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -97,8 +102,8 @@ final class ProcessCommand extends Command
         $this->ensureSomeRectorsAreRegistered();
 
         $source = $input->getArgument(self::ARGUMENT_SOURCE_NAME);
-        $this->parameterProvider->changeParameter('source', $source);
-        $this->parameterProvider->changeParameter('dry-run', $input->getOption('dry-run'));
+        $this->parameterProvider->changeParameter(self::ARGUMENT_SOURCE_NAME, $source);
+        $this->parameterProvider->changeParameter(self::OPTION_DRY_RUN, $input->getOption(self::OPTION_DRY_RUN));
         $files = $this->phpFilesFinder->findInDirectoriesAndFiles($source);
 
         $this->processCommandReporter->reportLoadedRectors();
@@ -134,7 +139,7 @@ final class ProcessCommand extends Command
         foreach ($fileInfos as $fileInfo) {
             $this->symfonyStyle->writeln(sprintf(' - %s', $fileInfo->getRealPath()));
 
-            if ($this->parameterProvider->provideParameter('dry-run')) {
+            if ($this->parameterProvider->provideParameter(self::OPTION_DRY_RUN)) {
                 $oldContent = $fileInfo->getContents();
                 $newContent = $this->fileProcessor->processFileToString($fileInfo);
 
