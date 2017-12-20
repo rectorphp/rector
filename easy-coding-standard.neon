@@ -5,6 +5,8 @@ includes:
     - vendor/symplify/easy-coding-standard/config/common.neon
 
 checkers:
+    - SlevomatCodingStandard\Sniffs\Classes\UnusedPrivateElementsSniff
+
     # Metrics
     PHP_CodeSniffer\Standards\Generic\Sniffs\Files\LineLengthSniff:
         absoluteLineLimit: 120

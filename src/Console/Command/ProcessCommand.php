@@ -2,7 +2,6 @@
 
 namespace Rector\Console\Command;
 
-use PhpCsFixer\Differ\UnifiedDiffer;
 use Rector\Application\FileProcessor;
 use Rector\Console\Output\ProcessCommandReporter;
 use Rector\ConsoleDiffer\DifferAndFormatter;
@@ -55,11 +54,6 @@ final class ProcessCommand extends Command
      * @var ParameterProvider
      */
     private $parameterProvider;
-
-    /**
-     * @var UnifiedDiffer
-     */
-    private $unifiedDiffer;
 
     /**
      * @var DifferAndFormatter
