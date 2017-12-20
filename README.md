@@ -52,10 +52,12 @@ You can also use your own config file:
 vendor/bin/rector process src --config your-own-config.yml
 ```
 
-2. Check the Git
+2. Do you want to see preview of changes first? 
+
+Use `--dry-run` option:
 
 ```
-git diff
+vendor/bin/rector process src --level symfony33 --dry-run
 ```
 
 
