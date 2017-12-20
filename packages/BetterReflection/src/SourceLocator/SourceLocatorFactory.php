@@ -78,7 +78,7 @@ final class SourceLocatorFactory
         if ($source) {
             $vendorAutoload = AutoloadFinder::findNearDirectories($source);
             if ($vendorAutoload !== null) {
-                $vendorAutoload = require_once $vendorAutoload;
+                $vendorAutoload = require $vendorAutoload;
                 $locators[] = new ComposerSourceLocator($vendorAutoload, $this->locator);
             }
         }
