@@ -5,9 +5,9 @@ namespace Rector\Rector\Contrib\PHPUnit;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\LNumber;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
+use Rector\NodeChanger\MethodNameChanger;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -48,9 +48,15 @@ final class SpecificMethodCountRector extends AbstractRector
      */
     private $methodCallAnalyzer;
 
-    public function __construct(MethodCallAnalyzer $methodCallAnalyzer)
+    /**
+     * @var MethodNameChanger
+     */
+    private $methodNameChanger;
+
+    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, MethodNameChanger $methodNameChanger)
     {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
+        $this->methodNameChanger = $methodNameChanger;
     }
 
     public function isCandidate(Node $node): bool
@@ -87,9 +93,7 @@ final class SpecificMethodCountRector extends AbstractRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        $oldMethodName = $methodCallNode->name->toString();
-
-        $methodCallNode->name = new Identifier($this->renameMethodsMap[$oldMethodName]);
+        $this->methodNameChanger->renameNode($methodCallNode, $this->renameMethodsMap);
 
         /** @var FuncCall $secondArgument */
         $secondArgument = $methodCallNode->args[1]->value;
