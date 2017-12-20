@@ -7,7 +7,6 @@ use Rector\BetterReflection\SourceLocator\Type\AggregateSourceLocator;
 use Rector\BetterReflection\SourceLocator\Type\AutoloadSourceLocator;
 use Rector\BetterReflection\SourceLocator\Type\ComposerSourceLocator;
 use Rector\BetterReflection\SourceLocator\Type\DirectoriesSourceLocator;
-use Rector\BetterReflection\SourceLocator\Type\EvaledCodeSourceLocator;
 use Rector\BetterReflection\SourceLocator\Type\MemoizingSourceLocator;
 use Rector\BetterReflection\SourceLocator\Type\PhpInternalSourceLocator;
 use Rector\BetterReflection\SourceLocator\Type\SingleFileSourceLocator;
@@ -84,7 +83,6 @@ final class SourceLocatorFactory
 
         $this->commonLocators = [
             new PhpInternalSourceLocator($this->locator),
-            new EvaledCodeSourceLocator($this->locator),
             new AutoloadSourceLocator($this->locator),
             $this->stubSourceLocator,
         ];
