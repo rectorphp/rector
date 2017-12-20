@@ -4,14 +4,16 @@ final class MyTest extends \PHPUnit\Framework\TestCase
 {
     public function test()
     {
-        $this->assertTrue(is_readable('...'), 'second argument');
-        $this->assertTrue(array_key_exists('...', ['...']), 'second argument');
-        $this->assertTrue(empty('...'), 'second argument');
-        $this->assertTrue(file_exists('...'), 'second argument');
-        $this->assertTrue(is_dir('...'), 'second argument');
-        $this->assertTrue(is_infinite('...'), 'second argument');
-        $this->assertTrue(is_null('...'), 'second argument');
-        $this->assertTrue(is_writable('...'), 'second argument');
-        $this->assertTrue(is_nan('...'), 'second argument');
+        $this->assertTrue(array_key_exists('...', ['...']), 'argument');
+        $this->assertTrue(in_array('...', ['...']), 'argument');
+        $this->assertFalse(is_readable('...'));
+        $this->assertTrue(empty('...'));
+        $this->assertFalse(file_exists('...'));
+        $this->assertTrue(is_dir('...'));
+        $this->assertFalse(is_infinite('...'));
+        $this->assertTrue(is_nan('...'));
+        $this->assertFalse(is_null('...'));
+        $this->assertTrue(is_writable('...'));
+        $this->assertFalse(array_search('...', ['...']), 'argument');
     }
 }
