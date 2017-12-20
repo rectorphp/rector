@@ -9,7 +9,6 @@
     "require": {
         "php": "^7.1",
         "gecko-packages/gecko-diff-output-builder": "^1.0",
-        "klausi/yaml_comments": "0.x-dev",
         "nette/utils": "^2.4",
         "nikic/php-parser": "4.0.x-dev",
         "phpdocumentor/reflection-docblock": "^4.1",
@@ -42,8 +41,7 @@
             "Rector\\ReflectionDocBlock\\": "packages/ReflectionDocBlock/src",
             "Rector\\NodeTypeResolver\\": "packages/NodeTypeResolver/src",
             "Rector\\NodeTraverserQueue\\": "packages/NodeTraverserQueue/src",
-            "Rector\\NodeValueResolver\\": "packages/NodeValueResolver/src",
-            "Rector\\YamlParser\\": "packages/YamlParser/src"
+            "Rector\\NodeValueResolver\\": "packages/NodeValueResolver/src"
         }
     },
     "autoload-dev": {
@@ -53,8 +51,7 @@
             "Rector\\ReflectionDocBlock\\Tests\\": "packages/ReflectionDocBlock/tests",
             "Rector\\NodeTypeResolver\\Tests\\": "packages/NodeTypeResolver/tests",
             "Rector\\NodeTraverserQueue\\Tests\\": "packages/NodeTraverserQueue/tests",
-            "Rector\\NodeValueResolver\\Tests\\": "packages/NodeValueResolver/tests",
-            "Rector\\YamlParser\\Tests\\": "packages/YamlParser/tests"
+            "Rector\\NodeValueResolver\\Tests\\": "packages/NodeValueResolver/tests"
         }
     },
     "scripts": {

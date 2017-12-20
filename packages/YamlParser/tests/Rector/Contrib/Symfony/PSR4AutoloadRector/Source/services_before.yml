@@ -1,6 +1,0 @@
-services:
-    myApp.someClass:
-        class: Rector\YamlParser\Tests\Rector\Contrib\Symfony\PSR4AutoloadRector\Source\SomeClass
-
-    myApp.anotherClass:
-        class: Rector\YamlParser\Tests\Rector\Contrib\Symfony\PSR4AutoloadRector\Source\AnotherClass
