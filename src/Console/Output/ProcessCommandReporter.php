@@ -2,7 +2,6 @@
 
 namespace Rector\Console\Output;
 
-use Rector\Printer\ChangedFilesCollector;
 use Rector\Rector\RectorCollector;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -14,22 +13,13 @@ final class ProcessCommandReporter
     private $rectorCollector;
 
     /**
-     * @var ChangedFilesCollector
-     */
-    private $changedFilesCollector;
-
-    /**
      * @var SymfonyStyle
      */
     private $symfonyStyle;
 
-    public function __construct(
-        RectorCollector $rectorCollector,
-        ChangedFilesCollector $changedFilesCollector,
-        SymfonyStyle $symfonyStyle
-    ) {
+    public function __construct(RectorCollector $rectorCollector, SymfonyStyle $symfonyStyle)
+    {
         $this->rectorCollector = $rectorCollector;
-        $this->changedFilesCollector = $changedFilesCollector;
         $this->symfonyStyle = $symfonyStyle;
     }
 
@@ -41,11 +31,7 @@ final class ProcessCommandReporter
             $this->rectorCollector->getRectorCount() === 1 ? '' : 's'
         ));
 
-        $rectorList = $this->rectorCollector->getRectors();
-        usort($rectorList, function ($first, $second) {
-            return get_class($first) <=> get_class($second);
-        });
-
+        $rectorList = $this->sortByClassName($this->rectorCollector->getRectors());
         foreach ($rectorList as $rector) {
             $this->symfonyStyle->writeln(sprintf(
                 ' - %s',
@@ -54,5 +40,18 @@ final class ProcessCommandReporter
         }
 
         $this->symfonyStyle->newLine();
+    }
+
+    /**
+     * @param object[] $objects
+     * @return object[]
+     */
+    private function sortByClassName(array $objects): array
+    {
+        usort($objects, function ($first, $second): int {
+            return get_class($first) <=> get_class($second);
+        });
+
+        return $objects;
     }
 }
