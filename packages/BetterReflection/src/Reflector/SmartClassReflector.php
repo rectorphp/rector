@@ -116,7 +116,10 @@ final class SmartClassReflector
         }
 
         $source = $this->parameterProvider->provideParameter('source');
+        if ($source) {
+            return $this->classReflector = $this->classReflectorFactory->createWithSource($source);
+        }
 
-        return $this->classReflector = $this->classReflectorFactory->createWithSource($source);
+        return $this->classReflector = $this->classReflectorFactory->create();
     }
 }

@@ -68,7 +68,8 @@ final class SourceLocatorFactory
         }
 
         return $this->wrapInMemoizingSourceLocator(
-            array_merge($sourceLocators, $this->createCommonLocators())
+            // order matters to performance
+            array_merge($this->createCommonLocators(), $sourceLocators)
         );
     }
 
