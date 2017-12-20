@@ -7,9 +7,9 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
+use Rector\NodeChanger\MethodNameChanger;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -22,13 +22,27 @@ use Rector\Rector\AbstractRector;
 final class SpecificMethodObjectAttributeRector extends AbstractRector
 {
     /**
+     * @var string[]
+     */
+    private $renameMethodsMap = [
+        'assertTrue' => 'assertObjectHasAttribute',
+        'assertFalse' => 'assertObjectNotHasAttribute',
+    ];
+
+    /**
      * @var MethodCallAnalyzer
      */
     private $methodCallAnalyzer;
 
-    public function __construct(MethodCallAnalyzer $methodCallAnalyzer)
+    /**
+     * @var MethodNameChanger
+     */
+    private $methodNameChanger;
+
+    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, MethodNameChanger $methodNameChanger)
     {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
+        $this->methodNameChanger = $methodNameChanger;
     }
 
     public function isCandidate(Node $node): bool
@@ -36,7 +50,7 @@ final class SpecificMethodObjectAttributeRector extends AbstractRector
         if (! $this->methodCallAnalyzer->isTypesAndMethods(
             $node,
             ['PHPUnit\Framework\TestCase', 'PHPUnit_Framework_TestCase'],
-            ['assertTrue', 'assertFalse']
+            array_keys($this->renameMethodsMap)
         )) {
             return false;
         }
@@ -63,11 +77,7 @@ final class SpecificMethodObjectAttributeRector extends AbstractRector
     public function refactor(Node $methodCallNode): ?Node
     {
         // rename method
-        if ($methodCallNode->name->toString() === 'assertTrue') {
-            $methodCallNode->name = new Identifier('assertObjectHasAttribute');
-        } else {
-            $methodCallNode->name = new Identifier('assertObjectNotHasAttribute');
-        }
+        $this->methodNameChanger->renameNode($methodCallNode, $this->renameMethodsMap);
 
         // move isset to property and object
         /** @var Isset_ $issetNode */
