@@ -7,6 +7,7 @@ use Rector\NodeTraverserQueue\BetterNodeFinder;
 use Rector\NodeTraverserQueue\NodeTraverserQueue;
 use Rector\Tests\AbstractContainerAwareTestCase;
 use SplFileInfo;
+use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
 abstract class AbstractNodeTypeResolverTest extends AbstractContainerAwareTestCase
 {
@@ -20,10 +21,16 @@ abstract class AbstractNodeTypeResolverTest extends AbstractContainerAwareTestCa
      */
     private $nodeTraverserQueue;
 
+    /**
+     * @var ParameterProvider
+     */
+    private $parameterProvider;
+
     protected function setUp(): void
     {
         $this->betterNodeFinder = $this->container->get(BetterNodeFinder::class);
         $this->nodeTraverserQueue = $this->container->get(NodeTraverserQueue::class);
+        $this->parameterProvider = $this->container->get(ParameterProvider::class);
     }
 
     /**
@@ -42,6 +49,8 @@ abstract class AbstractNodeTypeResolverTest extends AbstractContainerAwareTestCa
     protected function getNodesForFile(string $file): array
     {
         $fileInfo = new SplFileInfo($file);
+
+        $this->parameterProvider->changeParameter('source', [$file]);
 
         [$newStmts,] = $this->nodeTraverserQueue->processFileInfo($fileInfo);
 
