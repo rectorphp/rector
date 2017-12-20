@@ -96,7 +96,7 @@ final class SpecificMethodInternalTypeRector extends AbstractRector
 
     private function moveFunctionArgumentsUp(MethodCall $methodCallNode): void
     {
-        /** @var FuncCall $methodCallNode */
+        /** @var FuncCall $isFunctionNode */
         $isFunctionNode = $methodCallNode->args[0]->value;
         $argument = $isFunctionNode->args[0]->value;
         $isFunctionName = $isFunctionNode->name->toString();
