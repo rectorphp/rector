@@ -41,8 +41,7 @@
             "Rector\\ReflectionDocBlock\\": "packages/ReflectionDocBlock/src",
             "Rector\\NodeTypeResolver\\": "packages/NodeTypeResolver/src",
             "Rector\\NodeTraverserQueue\\": "packages/NodeTraverserQueue/src",
-            "Rector\\NodeValueResolver\\": "packages/NodeValueResolver/src",
-            "Rector\\YamlParser\\": "packages/YamlParser/src"
+            "Rector\\NodeValueResolver\\": "packages/NodeValueResolver/src"
         }
     },
     "autoload-dev": {
@@ -52,8 +51,7 @@
             "Rector\\ReflectionDocBlock\\Tests\\": "packages/ReflectionDocBlock/tests",
             "Rector\\NodeTypeResolver\\Tests\\": "packages/NodeTypeResolver/tests",
             "Rector\\NodeTraverserQueue\\Tests\\": "packages/NodeTraverserQueue/tests",
-            "Rector\\NodeValueResolver\\Tests\\": "packages/NodeValueResolver/tests",
-            "Rector\\YamlParser\\Tests\\": "packages/YamlParser/tests"
+            "Rector\\NodeValueResolver\\Tests\\": "packages/NodeValueResolver/tests"
         }
     },
     "scripts": {
