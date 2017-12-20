@@ -25,3 +25,5 @@ services:
         factory: ['Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory', 'create']
 
     Symplify\PackageBuilder\Parameter\ParameterProvider: ~
+
+    PhpCsFixer\Differ\UnifiedDiffer: ~

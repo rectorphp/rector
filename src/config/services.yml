@@ -9,10 +9,6 @@ services:
 
     Rector\Rector\Contrib\Symfony\Form\Helper\FormTypeStringToTypeProvider: ~
 
-    # autowire by interface
-    Rector\Contract\Parser\ParserInterface:
-        alias: Rector\Parser\Parser
-
     Rector\NodeTraverser\StandaloneTraverseNodeTraverser:
         # order matters, so the next NodeVisitor can work with previous' attributes
         calls:

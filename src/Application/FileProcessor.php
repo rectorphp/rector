@@ -54,7 +54,7 @@ final class FileProcessor
     /**
      * See https://github.com/nikic/PHP-Parser/issues/344#issuecomment-298162516.
      */
-    private function processFileToString(SplFileInfo $fileInfo): string
+    public function processFileToString(SplFileInfo $fileInfo): string
     {
         [$newStmts, $oldStmts, $oldTokens] = $this->nodeTraverserQueue->processFileInfo($fileInfo);
 

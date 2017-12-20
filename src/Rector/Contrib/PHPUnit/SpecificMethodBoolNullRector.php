@@ -36,11 +36,6 @@ final class SpecificMethodBoolNullRector extends AbstractRector
      */
     private $methodCallAnalyzer;
 
-    /**
-     * @var string|null
-     */
-    private $activeFuncCallName;
-
     public function __construct(MethodCallAnalyzer $methodCallAnalyzer)
     {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
@@ -48,8 +43,6 @@ final class SpecificMethodBoolNullRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        $this->activeFuncCallName = null;
-
         if (! $this->methodCallAnalyzer->isTypesAndMethods(
             $node,
             ['PHPUnit\Framework\TestCase', 'PHPUnit_Framework_TestCase'],

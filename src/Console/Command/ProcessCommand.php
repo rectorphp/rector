@@ -4,16 +4,18 @@ namespace Rector\Console\Command;
 
 use Rector\Application\FileProcessor;
 use Rector\Console\Output\ProcessCommandReporter;
+use Rector\ConsoleDiffer\DifferAndFormatter;
 use Rector\Exception\NoRectorsLoadedException;
 use Rector\FileSystem\PhpFilesFinder;
 use Rector\Naming\CommandNaming;
 use Rector\Rector\RectorCollector;
-use SplFileInfo;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Finder\SplFileInfo;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
 final class ProcessCommand extends Command
@@ -22,6 +24,11 @@ final class ProcessCommand extends Command
      * @var string
      */
     private const ARGUMENT_SOURCE_NAME = 'source';
+
+    /**
+     * @var string
+     */
+    private const OPTION_DRY_RUN = 'dry-run';
 
     /**
      * @var FileProcessor
@@ -53,22 +60,29 @@ final class ProcessCommand extends Command
      */
     private $parameterProvider;
 
+    /**
+     * @var DifferAndFormatter
+     */
+    private $differAndFormatter;
+
     public function __construct(
         FileProcessor $fileProcessor,
         RectorCollector $rectorCollector,
         SymfonyStyle $symfonyStyle,
         PhpFilesFinder $phpFilesFinder,
         ProcessCommandReporter $processCommandReporter,
-        ParameterProvider $parameterProvider
+        ParameterProvider $parameterProvider,
+        DifferAndFormatter $differAndFormatter
     ) {
+        parent::__construct();
+
         $this->fileProcessor = $fileProcessor;
         $this->rectorCollector = $rectorCollector;
         $this->symfonyStyle = $symfonyStyle;
         $this->phpFilesFinder = $phpFilesFinder;
         $this->processCommandReporter = $processCommandReporter;
-
-        parent::__construct();
         $this->parameterProvider = $parameterProvider;
+        $this->differAndFormatter = $differAndFormatter;
     }
 
     protected function configure(): void
@@ -80,6 +94,12 @@ final class ProcessCommand extends Command
             InputArgument::REQUIRED | InputArgument::IS_ARRAY,
             'Files or directories to be upgraded.'
         );
+        $this->addOption(
+            self::OPTION_DRY_RUN,
+            null,
+            InputOption::VALUE_NONE,
+            'See diff of changes, do not save them to files.'
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -87,15 +107,13 @@ final class ProcessCommand extends Command
         $this->ensureSomeRectorsAreRegistered();
 
         $source = $input->getArgument(self::ARGUMENT_SOURCE_NAME);
-        $this->parameterProvider->changeParameter('source', $source);
+        $this->parameterProvider->changeParameter(self::ARGUMENT_SOURCE_NAME, $source);
+        $this->parameterProvider->changeParameter(self::OPTION_DRY_RUN, $input->getOption(self::OPTION_DRY_RUN));
         $files = $this->phpFilesFinder->findInDirectoriesAndFiles($source);
 
         $this->processCommandReporter->reportLoadedRectors();
 
         $this->processFiles($files);
-
-        $this->processCommandReporter->reportChangedFiles();
-
         $this->symfonyStyle->success('Rector is done!');
 
         return 0;
@@ -109,7 +127,7 @@ final class ProcessCommand extends Command
 
         throw new NoRectorsLoadedException(
             'No rector were found. Registers them in rector.yml config to "rector:" '
-            . 'section or load them via "--config <file>.yml" CLI option.'
+            . 'section, load them via "--config <file>.yml" or "--level <level>" CLI options.'
         );
     }
 
@@ -120,9 +138,21 @@ final class ProcessCommand extends Command
     {
         $this->symfonyStyle->title('Processing files');
 
+        $i = 1;
         foreach ($fileInfos as $fileInfo) {
-            $this->symfonyStyle->writeln(sprintf(' - %s', $fileInfo->getRealPath()));
-            $this->fileProcessor->processFile($fileInfo);
+            if ($this->parameterProvider->provideParameter(self::OPTION_DRY_RUN)) {
+                $this->symfonyStyle->writeln(sprintf('<options=bold>%d) %s</>', $i, $fileInfo->getPathname()));
+                $oldContent = $fileInfo->getContents();
+                $newContent = $this->fileProcessor->processFileToString($fileInfo);
+
+                if ($newContent !== $oldContent) {
+                    $this->symfonyStyle->writeln($this->differAndFormatter->diffAndFormat($oldContent, $newContent));
+                }
+            } else {
+                $this->fileProcessor->processFile($fileInfo);
+            }
+
+            ++$i;
         }
     }
 }

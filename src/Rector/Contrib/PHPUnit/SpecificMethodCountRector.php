@@ -79,9 +79,7 @@ final class SpecificMethodCountRector extends AbstractRector
 
         $coutableMethod = $secondArgumentValue->name->toString();
 
-        return in_array($coutableMethod, [
-            'count', 'sizeof',
-        ]);
+        return in_array($coutableMethod, ['count', 'sizeof'], true);
     }
 
     /**

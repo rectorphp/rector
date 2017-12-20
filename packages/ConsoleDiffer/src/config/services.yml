@@ -1,0 +1,16 @@
+services:
+    _defaults:
+        autowire: true
+
+    Rector\ConsoleDiffer\:
+        resource: ..
+
+    GeckoPackages\DiffOutputBuilder\UnifiedDiffOutputBuilder:
+        arguments:
+            $options:
+                'fromFile': 'Original'
+                'toFile': 'New'
+
+    SebastianBergmann\Diff\Differ:
+        arguments:
+            - '@GeckoPackages\DiffOutputBuilder\UnifiedDiffOutputBuilder'

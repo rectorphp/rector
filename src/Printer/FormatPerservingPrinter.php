@@ -3,26 +3,19 @@
 namespace Rector\Printer;
 
 use PhpParser\Node;
+use PhpParser\PrettyPrinter\Standard;
 use SplFileInfo;
 
 final class FormatPerservingPrinter
 {
     /**
-     * @var BetterStandardPrinter
+     * @var BetterStandardPrinter|Standard
      */
     private $betterStandardPrinter;
 
-    /**
-     * @var ChangedFilesCollector
-     */
-    private $changedFilesCollector;
-
-    public function __construct(
-        BetterStandardPrinter $betterStandardPrinter,
-        ChangedFilesCollector $changedFilesCollector
-    ) {
+    public function __construct(BetterStandardPrinter $betterStandardPrinter)
+    {
         $this->betterStandardPrinter = $betterStandardPrinter;
-        $this->changedFilesCollector = $changedFilesCollector;
     }
 
     /**
@@ -38,8 +31,6 @@ final class FormatPerservingPrinter
         if ($oldContent === $newContent) {
             return;
         }
-
-        $this->changedFilesCollector->addChangedFile($fileInfo);
 
         file_put_contents($fileInfo->getRealPath(), $newContent);
     }

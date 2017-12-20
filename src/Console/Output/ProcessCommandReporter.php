@@ -2,7 +2,6 @@
 
 namespace Rector\Console\Output;
 
-use Rector\Printer\ChangedFilesCollector;
 use Rector\Rector\RectorCollector;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -14,22 +13,13 @@ final class ProcessCommandReporter
     private $rectorCollector;
 
     /**
-     * @var ChangedFilesCollector
-     */
-    private $changedFilesCollector;
-
-    /**
      * @var SymfonyStyle
      */
     private $symfonyStyle;
 
-    public function __construct(
-        RectorCollector $rectorCollector,
-        ChangedFilesCollector $changedFilesCollector,
-        SymfonyStyle $symfonyStyle
-    ) {
+    public function __construct(RectorCollector $rectorCollector, SymfonyStyle $symfonyStyle)
+    {
         $this->rectorCollector = $rectorCollector;
-        $this->changedFilesCollector = $changedFilesCollector;
         $this->symfonyStyle = $symfonyStyle;
     }
 
@@ -41,7 +31,8 @@ final class ProcessCommandReporter
             $this->rectorCollector->getRectorCount() === 1 ? '' : 's'
         ));
 
-        foreach ($this->rectorCollector->getRectors() as $rector) {
+        $rectorList = $this->sortByClassName($this->rectorCollector->getRectors());
+        foreach ($rectorList as $rector) {
             $this->symfonyStyle->writeln(sprintf(
                 ' - %s',
                 get_class($rector)
@@ -51,19 +42,16 @@ final class ProcessCommandReporter
         $this->symfonyStyle->newLine();
     }
 
-    public function reportChangedFiles(): void
+    /**
+     * @param object[] $objects
+     * @return object[]
+     */
+    private function sortByClassName(array $objects): array
     {
-        $this->symfonyStyle->title(sprintf(
-            '%d Changed File%s',
-            $this->changedFilesCollector->getChangedFilesCount(),
-            $this->changedFilesCollector->getChangedFilesCount() === 1 ? '' : 's'
-        ));
+        usort($objects, function ($first, $second): int {
+            return get_class($first) <=> get_class($second);
+        });
 
-        foreach ($this->changedFilesCollector->getChangedFiles() as $fileInfo) {
-            $this->symfonyStyle->writeln(sprintf(
-                ' - %s',
-                $fileInfo
-            ));
-        }
+        return $objects;
     }
 }

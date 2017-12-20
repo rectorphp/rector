@@ -8,6 +8,7 @@
     ],
     "require": {
         "php": "^7.1",
+        "gecko-packages/gecko-diff-output-builder": "^1.0",
         "klausi/yaml_comments": "0.x-dev",
         "nette/utils": "^2.4",
         "nikic/php-parser": "4.0.x-dev",
@@ -37,6 +38,7 @@
         "psr-4": {
             "Rector\\": "src",
             "Rector\\BetterReflection\\": "packages/BetterReflection/src",
+            "Rector\\ConsoleDiffer\\": "packages/ConsoleDiffer/src",
             "Rector\\ReflectionDocBlock\\": "packages/ReflectionDocBlock/src",
             "Rector\\NodeTypeResolver\\": "packages/NodeTypeResolver/src",
             "Rector\\NodeTraverserQueue\\": "packages/NodeTraverserQueue/src",
