@@ -3,7 +3,6 @@
 namespace Rector\BetterReflection\Reflector;
 
 use Rector\BetterReflection\SourceLocator\SourceLocatorFactory;
-use SplFileInfo;
 
 final class ClassReflectorFactory
 {
@@ -22,9 +21,12 @@ final class ClassReflectorFactory
         return new ClassReflector($this->sourceLocatorFactory->create());
     }
 
-    public function createWithFile(SplFileInfo $fileInfo): ClassReflector
+    /**
+     * @param string[] $source Files or directories
+     */
+    public function createWithSource(array $source): ClassReflector
     {
-        $sourceLocator = $this->sourceLocatorFactory->createWithFile($fileInfo);
+        $sourceLocator = $this->sourceLocatorFactory->createWithSource($source);
 
         return new ClassReflector($sourceLocator);
     }

@@ -7,10 +7,8 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
 use Rector\BetterReflection\Reflection\ReflectionClass;
 use Rector\BetterReflection\Reflector\Exception\IdentifierNotFound;
-use Rector\FileSystem\CurrentFileProvider;
-use SplFileInfo;
+use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Throwable;
-use TypeError;
 
 final class SmartClassReflector
 {
@@ -20,29 +18,24 @@ final class SmartClassReflector
     private $classReflectorFactory;
 
     /**
-     * @var CurrentFileProvider
-     */
-    private $currentFileProvider;
-
-    /**
      * @var ClassReflector
      */
-    private $currentClassReflector;
-
-    /**
-     * @var SplFileInfo
-     */
-    private $classReflectorActiveFile;
+    private $classReflector;
 
     /**
      * @var ReflectionClass[]
      */
     private $perClassNameClassReflections = [];
 
-    public function __construct(ClassReflectorFactory $classReflectorFactory, CurrentFileProvider $currentFileProvider)
+    /**
+     * @var ParameterProvider
+     */
+    private $parameterProvider;
+
+    public function __construct(ClassReflectorFactory $classReflectorFactory, ParameterProvider $parameterProvider)
     {
         $this->classReflectorFactory = $classReflectorFactory;
-        $this->currentFileProvider = $currentFileProvider;
+        $this->parameterProvider = $parameterProvider;
     }
 
     public function reflect(string $className): ?ReflectionClass
@@ -57,12 +50,8 @@ final class SmartClassReflector
         }
 
         try {
-            if ($this->shouldCreateNewClassReflector()) {
-                $this->createNewClassReflector();
-            }
-
-            return $this->perClassNameClassReflections[$className] = $this->currentClassReflector->reflect($className);
-        } catch (IdentifierNotFound | TypeError $throwable) {
+            return $this->perClassNameClassReflections[$className] = $this->getClassReflector()->reflect($className);
+        } catch (IdentifierNotFound $throwable) {
             return null;
         }
     }
@@ -97,27 +86,6 @@ final class SmartClassReflector
         return [];
     }
 
-    private function createNewClassReflector(): void
-    {
-        $currentFile = $this->currentFileProvider->getCurrentFile();
-
-        if ($currentFile === null) {
-            $this->currentClassReflector = $this->classReflectorFactory->create();
-        } else {
-            $this->currentClassReflector = $this->classReflectorFactory->createWithFile($currentFile);
-            $this->classReflectorActiveFile = $currentFile;
-        }
-    }
-
-    private function shouldCreateNewClassReflector(): bool
-    {
-        if ($this->currentClassReflector === null) {
-            return true;
-        }
-
-        return $this->classReflectorActiveFile !== $this->currentFileProvider->getCurrentFile();
-    }
-
     /**
      * @return string[]
      */
@@ -139,5 +107,16 @@ final class SmartClassReflector
 
             return $types;
         }
+    }
+
+    private function getClassReflector(): ClassReflector
+    {
+        if ($this->classReflector) {
+            return $this->classReflector;
+        }
+
+        $source = $this->parameterProvider->provideParameter('source');
+
+        return $this->classReflector = $this->classReflectorFactory->createWithSource($source);
     }
 }
