@@ -6,13 +6,11 @@ use Rector\BetterReflection\SourceLocator\Ast\Locator;
 use Rector\BetterReflection\SourceLocator\Type\AggregateSourceLocator;
 use Rector\BetterReflection\SourceLocator\Type\AutoloadSourceLocator;
 use Rector\BetterReflection\SourceLocator\Type\ComposerSourceLocator;
-use Rector\BetterReflection\SourceLocator\Type\EvaledCodeSourceLocator;
+use Rector\BetterReflection\SourceLocator\Type\DirectoriesSourceLocator;
 use Rector\BetterReflection\SourceLocator\Type\MemoizingSourceLocator;
 use Rector\BetterReflection\SourceLocator\Type\PhpInternalSourceLocator;
 use Rector\BetterReflection\SourceLocator\Type\SingleFileSourceLocator;
 use Rector\BetterReflection\SourceLocator\Type\SourceLocator;
-use Rector\Exception\FileSystem\FileNotFoundException;
-use SplFileInfo;
 use Symplify\PackageBuilder\Composer\AutoloadFinder;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
@@ -33,6 +31,11 @@ final class SourceLocatorFactory
      */
     private $parameterProvider;
 
+    /**
+     * @var SourceLocator[]
+     */
+    private $commonLocators = [];
+
     public function __construct(
         Locator $locator,
         StubSourceLocator $stubSourceLocator,
@@ -45,21 +48,29 @@ final class SourceLocatorFactory
 
     public function create(): SourceLocator
     {
-        return $this->wrapInMemoizinhSourceLocator($this->createCommonLocators());
+        return $this->wrapInMemoizingSourceLocator($this->createCommonLocators());
     }
 
-    public function createWithFile(SplFileInfo $fileInfo): SourceLocator
+    /**
+     * @param string[] $source Files or directories
+     */
+    public function createWithSource(array $source): SourceLocator
     {
-        return $this->wrapInMemoizinhSourceLocator(
-            array_merge($this->createCommonLocators(), [$this->createFileSourceLocator($fileInfo)])
+        $sourceLocators = [];
+        [$directories, $files] = $this->splitToDirectoriesAndFiles($source);
+
+        if (count($directories)) {
+            $sourceLocators[] = new DirectoriesSourceLocator($directories, $this->locator);
+        }
+
+        foreach ($files as $file) {
+            $sourceLocators[] = new SingleFileSourceLocator($file, $this->locator);
+        }
+
+        return $this->wrapInMemoizingSourceLocator(
+            // order matters to performance
+            array_merge($this->createCommonLocators(), $sourceLocators)
         );
-    }
-
-    private function createFileSourceLocator(SplFileInfo $fileInfo): SingleFileSourceLocator
-    {
-        $this->ensureFileExists($fileInfo);
-
-        return new SingleFileSourceLocator($fileInfo->getRealPath(), $this->locator);
     }
 
     /**
@@ -67,9 +78,12 @@ final class SourceLocatorFactory
      */
     private function createCommonLocators(): array
     {
-        $locators = [
+        if ($this->commonLocators) {
+            return $this->commonLocators;
+        }
+
+        $this->commonLocators = [
             new PhpInternalSourceLocator($this->locator),
-            new EvaledCodeSourceLocator($this->locator),
             new AutoloadSourceLocator($this->locator),
             $this->stubSourceLocator,
         ];
@@ -78,32 +92,39 @@ final class SourceLocatorFactory
         if ($source) {
             $vendorAutoload = AutoloadFinder::findNearDirectories($source);
             if ($vendorAutoload !== null) {
-                $vendorAutoload = require_once $vendorAutoload;
-                $locators[] = new ComposerSourceLocator($vendorAutoload, $this->locator);
+                $vendorAutoload = require $vendorAutoload;
+                $this->commonLocators[] = new ComposerSourceLocator($vendorAutoload, $this->locator);
             }
         }
 
-        return $locators;
+        return $this->commonLocators;
     }
 
     /**
      * @param SourceLocator[] $sourceLocators
      */
-    private function wrapInMemoizinhSourceLocator(array $sourceLocators): MemoizingSourceLocator
+    private function wrapInMemoizingSourceLocator(array $sourceLocators): MemoizingSourceLocator
     {
         return new MemoizingSourceLocator(new AggregateSourceLocator($sourceLocators));
     }
 
-    private function ensureFileExists(SplFileInfo $fileInfo): void
+    /**
+     * @param string[] $source
+     * @return string[][]
+     */
+    private function splitToDirectoriesAndFiles(array $source): array
     {
-        if (file_exists($fileInfo->getRealPath())) {
-            return;
+        $directories = [];
+        $files = [];
+
+        foreach ($source as $fileOrDirectory) {
+            if (is_dir($fileOrDirectory)) {
+                $directories[] = $fileOrDirectory;
+            } elseif (file_exists($fileOrDirectory)) {
+                $files[] = $fileOrDirectory;
+            }
         }
 
-        throw new FileNotFoundException(sprintf(
-            'File "%s" not found in "%s".',
-            $fileInfo->getRealPath(),
-            __CLASS__
-        ));
+        return [$directories, $files];
     }
 }

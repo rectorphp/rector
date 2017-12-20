@@ -53,6 +53,7 @@ parameters:
         - "#Casting to string something that's already string#"
         - '#Call to an undefined method PhpParser\\Node\\Stmt\\UseUse::getAlias\(\)#'
         - '#Call to an undefined method PhpParser\\PrettyPrinter\\Standard::printFormatPreserving\(\)#'
+        - '#Array \(array<Rector\\BetterReflection\\Reflection\\ReflectionClass>\) does not accept Rector\\BetterReflection\\Reflection\\Reflection#'
 
     excludes_analyse:
         # test files

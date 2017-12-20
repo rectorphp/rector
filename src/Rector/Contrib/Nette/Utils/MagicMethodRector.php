@@ -19,11 +19,6 @@ use Rector\Regex\MagicMethodMatcher;
 final class MagicMethodRector extends AbstractRector
 {
     /**
-     * @var string
-     */
-    private const NETTE_OBJECT_CLASS = 'Nette\Object';
-
-    /**
      * @var mixed[]
      */
     private $magicMethods = [];
@@ -121,12 +116,6 @@ final class MagicMethodRector extends AbstractRector
 
     private function isNetteObjectChild(Class_ $classNode): bool
     {
-        if ($classNode->extends === null) {
-            return false;
-        }
-
-        $parentClassName = (string) $classNode->extends->getAttribute(Attribute::RESOLVED_NAME);
-
-        return $parentClassName === self::NETTE_OBJECT_CLASS;
+        return in_array('Nette\Object', (array) $classNode->getAttribute(Attribute::TYPES), true);
     }
 }

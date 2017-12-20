@@ -141,18 +141,17 @@ final class ProcessCommand extends Command
         $i = 1;
         foreach ($fileInfos as $fileInfo) {
             if ($this->parameterProvider->provideParameter(self::OPTION_DRY_RUN)) {
-                $this->symfonyStyle->writeln(sprintf('<options=bold>%d) %s</>', $i, $fileInfo->getPathname()));
                 $oldContent = $fileInfo->getContents();
                 $newContent = $this->fileProcessor->processFileToString($fileInfo);
 
                 if ($newContent !== $oldContent) {
+                    $this->symfonyStyle->writeln(sprintf('<options=bold>%d) %s</>', $i, $fileInfo->getPathname()));
                     $this->symfonyStyle->writeln($this->differAndFormatter->diffAndFormat($oldContent, $newContent));
+                    ++$i;
                 }
             } else {
                 $this->fileProcessor->processFile($fileInfo);
             }
-
-            ++$i;
         }
     }
 }

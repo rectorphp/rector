@@ -7,10 +7,8 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
 use Rector\BetterReflection\Reflection\ReflectionClass;
 use Rector\BetterReflection\Reflector\Exception\IdentifierNotFound;
-use Rector\FileSystem\CurrentFileProvider;
-use SplFileInfo;
+use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Throwable;
-use TypeError;
 
 final class SmartClassReflector
 {
@@ -20,35 +18,45 @@ final class SmartClassReflector
     private $classReflectorFactory;
 
     /**
-     * @var CurrentFileProvider
-     */
-    private $currentFileProvider;
-
-    /**
      * @var ClassReflector
      */
-    private $currentClassReflector;
+    private $classReflector;
 
     /**
-     * @var SplFileInfo
+     * @var ReflectionClass[]
      */
-    private $classReflectorActiveFile;
+    private $perClassNameClassReflections = [];
 
-    public function __construct(ClassReflectorFactory $classReflectorFactory, CurrentFileProvider $currentFileProvider)
+    /**
+     * @var ParameterProvider
+     */
+    private $parameterProvider;
+
+    /**
+     * @var string[]
+     */
+    private $lastSource = [];
+
+    public function __construct(ClassReflectorFactory $classReflectorFactory, ParameterProvider $parameterProvider)
     {
         $this->classReflectorFactory = $classReflectorFactory;
-        $this->currentFileProvider = $currentFileProvider;
+        $this->parameterProvider = $parameterProvider;
     }
 
     public function reflect(string $className): ?ReflectionClass
     {
-        try {
-            if ($this->shouldCreateNewClassReflector()) {
-                $this->createNewClassReflector();
-            }
+        // invalid class types
+        if (in_array($className, ['self', 'null', 'array', 'string', 'bool'])) {
+            return null;
+        }
 
-            return $this->currentClassReflector->reflect($className);
-        } catch (IdentifierNotFound | TypeError $throwable) {
+        if (isset($this->perClassNameClassReflections[$className])) {
+            return $this->perClassNameClassReflections[$className];
+        }
+
+        try {
+            return $this->perClassNameClassReflections[$className] = $this->getClassReflector()->reflect($className);
+        } catch (IdentifierNotFound $throwable) {
             return null;
         }
     }
@@ -83,27 +91,6 @@ final class SmartClassReflector
         return [];
     }
 
-    private function createNewClassReflector(): void
-    {
-        $currentFile = $this->currentFileProvider->getCurrentFile();
-
-        if ($currentFile === null) {
-            $this->currentClassReflector = $this->classReflectorFactory->create();
-        } else {
-            $this->currentClassReflector = $this->classReflectorFactory->createWithFile($currentFile);
-            $this->classReflectorActiveFile = $currentFile;
-        }
-    }
-
-    private function shouldCreateNewClassReflector(): bool
-    {
-        if ($this->currentClassReflector === null) {
-            return true;
-        }
-
-        return $this->classReflectorActiveFile !== $this->currentFileProvider->getCurrentFile();
-    }
-
     /**
      * @return string[]
      */
@@ -125,5 +112,24 @@ final class SmartClassReflector
 
             return $types;
         }
+    }
+
+    /**
+     * Rebuilds when source changes, so it reflects current scope.
+     * Useful mainly for tests.
+     */
+    private function getClassReflector(): ClassReflector
+    {
+        $currentSource = $this->parameterProvider->provideParameter('source');
+        if ($this->lastSource === $currentSource) {
+            return $this->classReflector;
+        }
+
+        if ($currentSource) {
+            $this->lastSource = $currentSource;
+            return $this->classReflector = $this->classReflectorFactory->createWithSource($currentSource);
+        }
+
+        return $this->classReflector = $this->classReflectorFactory->create();
     }
 }
