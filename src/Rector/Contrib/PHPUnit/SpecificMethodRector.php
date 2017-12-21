@@ -161,8 +161,8 @@ final class SpecificMethodRector extends AbstractRector
     }
 
     /**
-     * @param string[] $activeMethods
-     * @return string[]
+     * @param string[][]|false[][] $activeMethods
+     * @return string[][]|false[][]
      */
     private function filterActiveOldToNewMethods(array $activeMethods = []): array
     {

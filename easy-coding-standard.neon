@@ -55,3 +55,6 @@ parameters:
             # forcing "mixed" types
             - src/Node/NodeFactory.php
             - packages/NodeTypeResolver/tests/AbstractNodeTypeResolverTest.php
+
+        # empty arguments passing
+        - PHP_CodeSniffer\Standards\PEAR\Sniffs\Functions\ValidDefaultValueSniff.NotAtEnd
