@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Rector\Contrib\PHPUnit;
+namespace Rector\Rector\Contrib\PHPUnit\SpecificMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
@@ -31,7 +31,7 @@ use Rector\Rector\AbstractRector;
  * - $this->assertCount(5, $anything);
  * - $this->assertNotCount(5, $anything);
  */
-final class SpecificMethodCountRector extends AbstractRector
+final class AssertSameCountToSpecificMethodRector extends AbstractRector
 {
     /**
      * @var string[]
