@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Rector\Contrib\PHPUnit;
+namespace Rector\Rector\Contrib\PHPUnit\SpecificMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
@@ -20,7 +20,7 @@ use Rector\Rector\AbstractRector;
  * - $this->assertInternalType({internal_type}, $anything, 'message');
  * - $this->assertNotInternalType({internal_type}, $anything, 'message');
  */
-final class SpecificMethodInternalTypeRector extends AbstractRector
+final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractRector
 {
     /**
      * @var string[]
