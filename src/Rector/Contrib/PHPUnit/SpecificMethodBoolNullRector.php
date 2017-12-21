@@ -36,6 +36,11 @@ final class SpecificMethodBoolNullRector extends AbstractRector
      */
     private $methodCallAnalyzer;
 
+    /**
+     * @var string
+     */
+    private $costantName;
+
     public function __construct(MethodCallAnalyzer $methodCallAnalyzer)
     {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
@@ -59,9 +64,9 @@ final class SpecificMethodBoolNullRector extends AbstractRector
             return false;
         }
 
-        $costName = $firstArgumentValue->name->toString();
+        $this->costantName = $firstArgumentValue->name->toString();
 
-        return isset($this->constValueToMethodNames[$costName]);
+        return isset($this->constValueToMethodNames[$this->costantName]);
     }
 
     /**
@@ -69,18 +74,23 @@ final class SpecificMethodBoolNullRector extends AbstractRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        /** @var ConstFetch $constFetchNode */
-        $constFetchNode = $methodCallNode->args[0]->value;
-        $constValue = $constFetchNode->name->toString();
+        $this->renameMethod($methodCallNode);
+        $this->moveArguments($methodCallNode);
 
-        $newMethodName = $this->constValueToMethodNames[$constValue];
+        return $methodCallNode;
+    }
+
+    private function renameMethod(MethodCall $methodCallNode): void
+    {
+        $newMethodName = $this->constValueToMethodNames[$this->costantName];
         $methodCallNode->name = new Identifier($newMethodName);
+    }
 
+    private function moveArguments(MethodCall $methodCallNode): void
+    {
         $methodArguments = $methodCallNode->args;
         array_shift($methodArguments);
 
         $methodCallNode->args = $methodArguments;
-
-        return $methodCallNode;
     }
 }
