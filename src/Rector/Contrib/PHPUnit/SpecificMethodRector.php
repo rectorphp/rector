@@ -27,6 +27,8 @@ final class SpecificMethodRector extends AbstractRector
     private $oldToNewMethods = [
         'is_readable' => ['assertIsReadable', 'assertNotIsReadable'],
         'array_key_exists' => ['assertArrayHasKey', 'assertArrayNotHasKey'],
+        'array_search' => ['assertContains', 'assertNotContains'],
+        'in_array' => ['assertContains', 'assertNotContains'],
         'empty' => ['assertEmpty', 'assertNotEmpty'],
         'file_exists' => ['assertFileExists', 'assertFileNotExists'],
         'is_dir' => ['assertDirectoryExists', 'assertDirectoryNotExists'],
