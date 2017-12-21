@@ -32,22 +32,22 @@ final class DiffConsoleFormatter
     {
         return sprintf(
             $this->template,
-            implode(PHP_EOL, array_map(
-                static function ($string) {
-                    $string = preg_replace(
-                        ['/^(\+.*)/', '/^(\-.*)/', '/^(@.*)/'],
-                        ['<fg=green>\1</fg=green>', '<fg=red>\1</fg=red>', '<fg=cyan>\1</fg=cyan>'],
-                        $string
-                    );
+            implode(PHP_EOL, array_map(function ($string) {
+                // make "+" lines green
+                // make "-" lines red
+                // make "@ note" lines cyan
+                $string = preg_replace(
+                    ['/^(\+.*)/', '/^(\-.*)/', '/^(@.*)/'],
+                    ['<fg=green>\1</fg=green>', '<fg=red>\1</fg=red>', '<fg=cyan>\1</fg=cyan>'],
+                    $string
+                );
 
-                    if ($string === ' ') {
-                        $string = rtrim($string);
-                    }
+                if ($string === ' ') {
+                    $string = rtrim($string);
+                }
 
-                    return $string;
-                },
-                preg_split("#\n\r|\n#", OutputFormatter::escape(rtrim($diff)))
-            ))
+                return $string;
+            }, preg_split("#\n\r|\n#", OutputFormatter::escape(rtrim($diff)))))
         );
     }
 }
