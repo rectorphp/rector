@@ -19,7 +19,7 @@ use Rector\Rector\AbstractRector;
  * After:
  * - $this->assertIsReadable($readmeFile, 'message'));
  */
-final class SpecificMethodRector extends AbstractRector
+final class AssertTrueFalseToSpecificMethodRector extends AbstractRector
 {
     /**
      * @var string[][]|false[][]
