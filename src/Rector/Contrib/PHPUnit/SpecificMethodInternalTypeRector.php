@@ -6,9 +6,9 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
+use Rector\NodeChanger\MethodNameChanger;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -39,13 +39,27 @@ final class SpecificMethodInternalTypeRector extends AbstractRector
     ];
 
     /**
+     * @var string[]
+     */
+    private $renameMethodsMap = [
+        'assertTrue' => 'assertInternalType',
+        'assertFalse' => 'assertNotInternalType',
+    ];
+
+    /**
      * @var MethodCallAnalyzer
      */
     private $methodCallAnalyzer;
 
-    public function __construct(MethodCallAnalyzer $methodCallAnalyzer)
+    /**
+     * @var MethodNameChanger
+     */
+    private $methodNameChanger;
+
+    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, MethodNameChanger $methodNameChanger)
     {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
+        $this->methodNameChanger = $methodNameChanger;
     }
 
     public function isCandidate(Node $node): bool
@@ -53,7 +67,7 @@ final class SpecificMethodInternalTypeRector extends AbstractRector
         if (! $this->methodCallAnalyzer->isTypesAndMethods(
             $node,
             ['PHPUnit\Framework\TestCase', 'PHPUnit_Framework_TestCase'],
-            ['assertTrue', 'assertFalse']
+            array_keys($this->renameMethodsMap)
         )) {
             return false;
         }
@@ -84,14 +98,7 @@ final class SpecificMethodInternalTypeRector extends AbstractRector
 
     private function renameMethod(MethodCall $methodCallNode): void
     {
-        /** @var Identifier $identifierNode */
-        $assertionMethodName = $methodCallNode->name->toString();
-
-        if ($assertionMethodName === 'assertTrue') {
-            $methodCallNode->name = new Identifier('assertInternalType');
-        } else {
-            $methodCallNode->name = new Identifier('assertNotInternalType');
-        }
+        $this->methodNameChanger->renameNode($methodCallNode, $this->renameMethodsMap);
     }
 
     private function moveFunctionArgumentsUp(MethodCall $methodCallNode): void
