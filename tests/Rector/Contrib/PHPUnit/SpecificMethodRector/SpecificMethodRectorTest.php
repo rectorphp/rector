@@ -5,7 +5,7 @@ namespace Rector\Tests\Rector\Contrib\PHPUnit\SpecificMethodRector;
 use Rector\Rector\Contrib\PHPUnit\SpecificMethodRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class Test extends AbstractRectorTestCase
+final class SpecificMethodRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()
