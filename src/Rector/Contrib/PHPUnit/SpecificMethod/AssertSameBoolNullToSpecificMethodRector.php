@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Rector\Contrib\PHPUnit;
+namespace Rector\Rector\Contrib\PHPUnit\SpecificMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ConstFetch;
@@ -20,7 +20,7 @@ use Rector\Rector\AbstractRector;
  * - $this->assertTrue($anything);
  * - $this->assertFalse($anything);
  */
-final class SpecificMethodBoolNullRector extends AbstractRector
+final class AssertSameBoolNullToSpecificMethodRector extends AbstractRector
 {
     /**
      * @var string[]

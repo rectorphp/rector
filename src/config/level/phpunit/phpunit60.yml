@@ -18,7 +18,7 @@ rectors:
 
     # possibly earlier
     Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertTrueFalseToSpecificMethodRector: ~
-    Rector\Rector\Contrib\PHPUnit\SpecificMethodBoolNullRector: ~
+    Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertSameBoolNullToSpecificMethodRector: ~
     Rector\Rector\Contrib\PHPUnit\SpecificMethodCountRector: ~
     Rector\Rector\Contrib\PHPUnit\SpecificMethodInternalTypeRector: ~
     Rector\Rector\Contrib\PHPUnit\SpecificMethodObjectAttributeRector: ~
