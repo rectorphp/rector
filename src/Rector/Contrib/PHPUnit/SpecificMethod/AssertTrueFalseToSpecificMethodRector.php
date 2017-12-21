@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Rector\Contrib\PHPUnit;
+namespace Rector\Rector\Contrib\PHPUnit\SpecificMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
