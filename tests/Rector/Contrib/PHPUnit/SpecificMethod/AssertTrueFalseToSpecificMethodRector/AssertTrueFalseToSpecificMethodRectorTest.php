@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Contrib\PHPUnit\SpecificMethodRector;
+namespace Rector\Tests\Rector\Contrib\PHPUnit\SpecificMethod\AssertTrueFalseToSpecificMethodRector;
 
-use Rector\Rector\Contrib\PHPUnit\SpecificMethodRector;
+use Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertTrueFalseToSpecificMethodRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class SpecificMethodRectorTest extends AbstractRectorTestCase
+final class AssertTrueFalseToSpecificMethodRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()
@@ -30,6 +30,6 @@ final class SpecificMethodRectorTest extends AbstractRectorTestCase
      */
     protected function getRectorClasses(): array
     {
-        return [SpecificMethodRector::class];
+        return [AssertTrueFalseToSpecificMethodRector::class];
     }
 }
