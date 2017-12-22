@@ -4,6 +4,7 @@ namespace Rector\Tests\Configuration;
 
 use PHPUnit\Framework\TestCase;
 use Rector\Configuration\ConfigMerger;
+use Symfony\Component\Yaml\Yaml;
 
 final class ConfigMergerTest extends TestCase
 {
@@ -20,18 +21,18 @@ final class ConfigMergerTest extends TestCase
     public function test(): void
     {
         $result = $this->configMerger->mergeConfigs([
-            ['SomeRector' => ['key' => 'value']]
+            Yaml::parseFile(__DIR__ . '/ConfigMergerSource/config1.yml'),
+            Yaml::parseFile(__DIR__ . '/ConfigMergerSource/config2.yml'),
         ]);
 
-        $this->assertSame(['SomeRector' => ['key' => 'value']], $result);
+        $this->assertSame(Yaml::parseFile(__DIR__ . '/ConfigMergerSource/expected-config1-2.yml'), $result);
 
         $result = $this->configMerger->mergeConfigs([
-            ['SomeRector' => ['key' => ['value']]],
-            ['SomeRector' => ['key' => ['another_value']]]
+            Yaml::parseFile(__DIR__ . '/ConfigMergerSource/config3.yml'),
+            Yaml::parseFile(__DIR__ . '/ConfigMergerSource/config4.yml'),
         ]);
 
-        $this->assertSame(['SomeRector' => ['key' => 'value']], $result);
-
+        $this->assertSame(Yaml::parseFile(__DIR__ . '/ConfigMergerSource/expected-config3-4.yml'), $result);
     }
 }
 

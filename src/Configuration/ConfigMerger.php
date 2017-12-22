@@ -16,8 +16,6 @@ final class ConfigMerger
      */
     public function mergeConfigs(array $configs): array
     {
-        dump($configs);
-
         if (count($configs) <= 1) {
             return $configs[0];
         }
@@ -25,6 +23,7 @@ final class ConfigMerger
         $mergedConfigs = [];
 
         foreach ($configs as $config) {
+
             $mergedConfigs = array_merge(
                 $mergedConfigs,
                 $config,
