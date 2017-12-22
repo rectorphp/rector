@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Rector\Contrib\PHPUnit;
+namespace Rector\Rector\Contrib\PHPUnit\SpecificMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ConstFetch;
@@ -20,7 +20,7 @@ use Rector\Rector\AbstractRector;
  * - $this->assertTrue($anything);
  * - $this->assertFalse($anything);
  */
-final class SpecificMethodBoolNullRector extends AbstractRector
+final class AssertSameBoolNullToSpecificMethodRector extends AbstractRector
 {
     /**
      * @var string[]
@@ -35,6 +35,11 @@ final class SpecificMethodBoolNullRector extends AbstractRector
      * @var MethodCallAnalyzer
      */
     private $methodCallAnalyzer;
+
+    /**
+     * @var string
+     */
+    private $costantName;
 
     public function __construct(MethodCallAnalyzer $methodCallAnalyzer)
     {
@@ -59,9 +64,9 @@ final class SpecificMethodBoolNullRector extends AbstractRector
             return false;
         }
 
-        $costName = $firstArgumentValue->name->toString();
+        $this->costantName = $firstArgumentValue->name->toString();
 
-        return isset($this->constValueToMethodNames[$costName]);
+        return isset($this->constValueToMethodNames[$this->costantName]);
     }
 
     /**
@@ -69,18 +74,23 @@ final class SpecificMethodBoolNullRector extends AbstractRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        /** @var ConstFetch $constFetchNode */
-        $constFetchNode = $methodCallNode->args[0]->value;
-        $constValue = $constFetchNode->name->toString();
+        $this->renameMethod($methodCallNode);
+        $this->moveArguments($methodCallNode);
 
-        $newMethodName = $this->constValueToMethodNames[$constValue];
+        return $methodCallNode;
+    }
+
+    private function renameMethod(MethodCall $methodCallNode): void
+    {
+        $newMethodName = $this->constValueToMethodNames[$this->costantName];
         $methodCallNode->name = new Identifier($newMethodName);
+    }
 
+    private function moveArguments(MethodCall $methodCallNode): void
+    {
         $methodArguments = $methodCallNode->args;
         array_shift($methodArguments);
 
         $methodCallNode->args = $methodArguments;
-
-        return $methodCallNode;
     }
 }

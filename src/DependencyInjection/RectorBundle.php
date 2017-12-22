@@ -2,6 +2,7 @@
 
 namespace Rector\DependencyInjection;
 
+use Rector\Configuration\ConfigMerger;
 use Rector\Configuration\Normalizer\RectorClassNormalizer;
 use Rector\Configuration\Validator\RectorClassValidator;
 use Rector\DependencyInjection\Extension\RectorsExtension;
@@ -11,9 +12,6 @@ final class RectorBundle extends Bundle
 {
     public function getContainerExtension(): RectorsExtension
     {
-        return new RectorsExtension(
-            new RectorClassValidator(),
-            new RectorClassNormalizer()
-        );
+        return new RectorsExtension(new RectorClassValidator(), new RectorClassNormalizer(), new ConfigMerger());
     }
 }

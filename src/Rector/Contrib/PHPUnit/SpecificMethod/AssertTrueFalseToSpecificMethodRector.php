@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Rector\Contrib\PHPUnit;
+namespace Rector\Rector\Contrib\PHPUnit\SpecificMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
@@ -19,12 +19,12 @@ use Rector\Rector\AbstractRector;
  * After:
  * - $this->assertIsReadable($readmeFile, 'message'));
  */
-final class SpecificMethodRector extends AbstractRector
+final class AssertTrueFalseToSpecificMethodRector extends AbstractRector
 {
     /**
      * @var string[][]|false[][]
      */
-    private $oldToNewMethods = [
+    private $defaultOldToNewMethods = [
         'is_readable' => ['assertIsReadable', 'assertNotIsReadable'],
         'array_key_exists' => ['assertArrayHasKey', 'assertArrayNotHasKey'],
         'array_search' => ['assertContains', 'assertNotContains'],
@@ -39,6 +39,11 @@ final class SpecificMethodRector extends AbstractRector
     ];
 
     /**
+     * @var string[][]|false[][]
+     */
+    private $activeOldToNewMethods = [];
+
+    /**
      * @var MethodCallAnalyzer
      */
     private $methodCallAnalyzer;
@@ -48,8 +53,12 @@ final class SpecificMethodRector extends AbstractRector
      */
     private $activeFuncCallName;
 
-    public function __construct(MethodCallAnalyzer $methodCallAnalyzer)
+    /**
+     * @param string[][] $activeMethods
+     */
+    public function __construct(array $activeMethods = [], MethodCallAnalyzer $methodCallAnalyzer)
     {
+        $this->activeOldToNewMethods = $this->filterActiveOldToNewMethods($activeMethods);
         $this->methodCallAnalyzer = $methodCallAnalyzer;
     }
 
@@ -75,7 +84,7 @@ final class SpecificMethodRector extends AbstractRector
             return false;
         }
 
-        if (! isset($this->oldToNewMethods[$funcCallName])) {
+        if (! isset($this->activeOldToNewMethods[$funcCallName])) {
             return false;
         }
 
@@ -101,7 +110,7 @@ final class SpecificMethodRector extends AbstractRector
         $identifierNode = $methodCallNode->name;
         $oldMethodName = $identifierNode->toString();
 
-        [$trueMethodName, $falseMethodName] = $this->oldToNewMethods[$this->activeFuncCallName];
+        [$trueMethodName, $falseMethodName] = $this->activeOldToNewMethods[$this->activeFuncCallName];
 
         if ($oldMethodName === 'assertTrue' && $trueMethodName) {
             /** @var string $trueMethodName */
@@ -149,5 +158,20 @@ final class SpecificMethodRector extends AbstractRector
         }
 
         return null;
+    }
+
+    /**
+     * @param string[][]|false[][] $activeMethods
+     * @return string[][]|false[][]
+     */
+    private function filterActiveOldToNewMethods(array $activeMethods = []): array
+    {
+        if ($activeMethods) {
+            return array_filter($this->defaultOldToNewMethods, function (string $method) use ($activeMethods) {
+                return in_array($method, $activeMethods, true);
+            }, ARRAY_FILTER_USE_KEY);
+        }
+
+        return $this->defaultOldToNewMethods;
     }
 }

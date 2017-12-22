@@ -1,0 +1,6 @@
+rectors:
+    Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertTrueFalseToSpecificMethodRector: ~
+    Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertSameBoolNullToSpecificMethodRector: ~
+    Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertTrueFalseInternalTypeToSpecificMethodRector: ~
+    Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertSameCountToSpecificMethodRector: ~
+    Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertTrueIssetToObjectHasAttributeRector: ~
