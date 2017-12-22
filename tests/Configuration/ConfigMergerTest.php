@@ -26,13 +26,6 @@ final class ConfigMergerTest extends TestCase
         ]);
 
         $this->assertSame(Yaml::parseFile(__DIR__ . '/ConfigMergerSource/expected-config1-2.yml'), $result);
-
-        $result = $this->configMerger->mergeConfigs([
-            Yaml::parseFile(__DIR__ . '/ConfigMergerSource/config3.yml'),
-            Yaml::parseFile(__DIR__ . '/ConfigMergerSource/config4.yml'),
-        ]);
-
-        $this->assertSame(Yaml::parseFile(__DIR__ . '/ConfigMergerSource/expected-config3-4.yml'), $result);
     }
 }
 

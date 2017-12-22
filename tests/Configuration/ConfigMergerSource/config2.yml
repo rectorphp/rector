@@ -1,3 +1,7 @@
 rectors:
     ClassReplacer:
-        AnotherOldClass: AnotherNewClass
+        OldClass:
+            oldKey: oldValue
+            anotherOldKey: anotherOldValue
+        AnotherOldClass:
+            oldKey: oldValue

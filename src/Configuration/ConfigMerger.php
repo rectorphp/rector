@@ -23,7 +23,6 @@ final class ConfigMerger
         $mergedConfigs = [];
 
         foreach ($configs as $config) {
-
             $mergedConfigs = array_merge(
                 $mergedConfigs,
                 $config,
