@@ -1,8 +1,5 @@
 parameters:
     ignoreErrors:
-        # stricter return type of parent
-        - '#PHPDoc tag @return with type mixed is not subtype of native type (int|string)#'
-
         # property overriden
         - '#Rector\\NodeTraverser\\(Cloning|Shutdown)NodeTraverser::__construct\(\) does not call parent constructor from PhpParser\\NodeTraverser#'
 
