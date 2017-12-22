@@ -3,7 +3,6 @@
 namespace Rector\NodeValueResolver;
 
 use PhpParser\Node;
-use Rector\Exception\NotImplementedException;
 use Rector\NodeValueResolver\Contract\PerNodeValueResolver\PerNodeValueResolverInterface;
 use Rector\NodeValueResolver\NodeAnalyzer\DynamicNodeAnalyzer;
 
@@ -49,11 +48,6 @@ final class NodeValueResolver
             return $perNodeValueResolver->resolve($node);
         }
 
-        throw new NotImplementedException(sprintf(
-            '%s() was unable to resolve "%s" Node. Create new class that implements "%s".',
-            __METHOD__,
-            get_class($node),
-            PerNodeValueResolverInterface::class
-        ));
+        return null;
     }
 }
