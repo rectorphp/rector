@@ -28,4 +28,3 @@ final class ConfigMergerTest extends TestCase
         $this->assertSame(Yaml::parseFile(__DIR__ . '/ConfigMergerSource/expected-config1-2.yml'), $result);
     }
 }
-

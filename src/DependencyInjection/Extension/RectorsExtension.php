@@ -28,11 +28,11 @@ final class RectorsExtension extends Extension
     public function __construct(
         RectorClassValidator $rectorClassValidator,
         RectorClassNormalizer $rectorClassNormalizer,
-        ConfigMerger $configurationMerger
+        ConfigMerger $configMerger
     ) {
         $this->rectorClassValidator = $rectorClassValidator;
         $this->rectorClassNormalizer = $rectorClassNormalizer;
-        $this->configMerger = $configurationMerger;
+        $this->configMerger = $configMerger;
     }
 
     /**
