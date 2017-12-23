@@ -5,10 +5,10 @@ namespace Rector\Rector\Contrib\PHPUnit\SpecificMethod;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
-use Rector\NodeChanger\MethodNameChanger;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -27,7 +27,7 @@ final class AssertCompareToSpecificMethodRector extends AbstractRector
     /**
      * @var string[][]|false[][]
      */
-    private $renameMethodsMap = [
+    private $defaultOldToNewMethods = [
         'count' => ['assertCount', 'assertNotCount'],
         'sizeof' => ['assertCount', 'assertNotCount'],
         'gettype' => ['assertInternalType', 'assertNotInternalType'],
@@ -39,19 +39,13 @@ final class AssertCompareToSpecificMethodRector extends AbstractRector
     private $methodCallAnalyzer;
 
     /**
-     * @var MethodNameChanger
-     */
-    private $methodNameChanger;
-
-    /**
      * @var string|null
      */
     private $activeFuncCallName;
 
-    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, MethodNameChanger $methodNameChanger)
+    public function __construct(MethodCallAnalyzer $methodCallAnalyzer)
     {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
-        $this->methodNameChanger = $methodNameChanger;
     }
 
     public function isCandidate(Node $node): bool
@@ -80,6 +74,11 @@ final class AssertCompareToSpecificMethodRector extends AbstractRector
             return false;
         }
 
+        $funcCallName = $secondArgumentValue->name->toString();
+        if (! isset($this->defaultOldToNewMethods[$funcCallName])) {
+            return false;
+        }
+
         $this->activeFuncCallName = $funcCallName;
 
         return true;
@@ -94,8 +93,6 @@ final class AssertCompareToSpecificMethodRector extends AbstractRector
         $this->moveFunctionArgumentsUp($methodCallNode);
 
         return $methodCallNode;
-
-        $this->methodNameChanger->renameNode($methodCallNode, $this->renameMethodsMap);
     }
 
     private function renameMethod(MethodCall $methodCallNode): void
@@ -104,7 +101,7 @@ final class AssertCompareToSpecificMethodRector extends AbstractRector
         $identifierNode = $methodCallNode->name;
         $oldMethodName = $identifierNode->toString();
 
-        [$trueMethodName, $falseMethodName] = $this->oldToNewMethods[$this->activeFuncCallName];
+        [$trueMethodName, $falseMethodName] = $this->defaultOldToNewMethods[$this->activeFuncCallName];
 
         if (in_array($oldMethodName, ['assertSame', 'assertEquals']) && $trueMethodName) {
             /** @var string $trueMethodName */
