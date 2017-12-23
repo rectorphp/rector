@@ -6,41 +6,30 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Scalar\String_;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeChanger\MethodNameChanger;
 use Rector\Rector\AbstractRector;
 
 /**
  * Before:
- * - $this->assertSame(5, count($anything));
- * - $this->assertNotSame(5, count($anything));
- * - $this->assertEquals(5, count($anything));
- * - $this->assertNotEquals(5, count($anything));
- * - $this->assertSame(5, sizeof($anything));
- * - $this->assertNotSame(5, sizeof($anything));
- * - $this->assertEquals(5, sizeof($anything));
- * - $this->assertNotEquals(5, sizeof($anything));
+ * - $this->assertSame($value, {function}($anything), 'message');
+ * - $this->assertNotSame($value, {function}($anything), 'message');
+ * - $this->assertEquals($value, {function}($anything), 'message');
+ * - $this->assertNotEquals($value, {function}($anything), 'message');
  *
  * After:
- * - $this->assertCount(5, $anything);
- * - $this->assertNotCount(5, $anything);
- * - $this->assertCount(5, $anything);
- * - $this->assertNotCount(5, $anything);
- * - $this->assertCount(5, $anything);
- * - $this->assertNotCount(5, $anything);
- * - $this->assertCount(5, $anything);
- * - $this->assertNotCount(5, $anything);
+ * - $this->assert{function}($value, $anything, 'message');
+ * - $this->assertNot{function}($value, $anything, 'message');
  */
 final class AssertCompareToSpecificMethodRector extends AbstractRector
 {
     /**
-     * @var string[]
+     * @var string[][]|false[][]
      */
     private $renameMethodsMap = [
-        'assertSame' => 'assertCount',
-        'assertNotSame' => 'assertNotCount',
-        'assertEquals' => 'assertCount',
-        'assertNotEquals' => 'assertNotCount',
+        'count' => ['assertCount', 'assertNotCount'],
+        'sizeof' => ['assertCount', 'assertNotCount'],
     ];
 
     /**
@@ -53,6 +42,11 @@ final class AssertCompareToSpecificMethodRector extends AbstractRector
      */
     private $methodNameChanger;
 
+    /**
+     * @var string|null
+     */
+    private $activeFuncCallName;
+
     public function __construct(MethodCallAnalyzer $methodCallAnalyzer, MethodNameChanger $methodNameChanger)
     {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
@@ -64,7 +58,7 @@ final class AssertCompareToSpecificMethodRector extends AbstractRector
         if (! $this->methodCallAnalyzer->isTypesAndMethods(
             $node,
             ['PHPUnit\Framework\TestCase', 'PHPUnit_Framework_TestCase'],
-            array_keys($this->renameMethodsMap)
+            ['assertSame', 'assertNotSame', 'assertEquals', 'assertNotEquals']
         )) {
             return false;
         }
@@ -73,7 +67,9 @@ final class AssertCompareToSpecificMethodRector extends AbstractRector
         $methodCallNode = $node;
 
         $firstArgumentValue = $methodCallNode->args[0]->value;
-        if (! $firstArgumentValue instanceof LNumber) {
+        if (! $firstArgumentValue instanceof LNumber &&
+            ! $firstArgumentValue instanceof String_
+        ) {
             return false;
         }
 
@@ -83,9 +79,9 @@ final class AssertCompareToSpecificMethodRector extends AbstractRector
             return false;
         }
 
-        $coutableMethod = $secondArgumentValue->name->toString();
+        $this->activeFuncCallName = $funcCallName;
 
-        return in_array($coutableMethod, ['count', 'sizeof'], true);
+        return true;
     }
 
     /**
@@ -93,13 +89,38 @@ final class AssertCompareToSpecificMethodRector extends AbstractRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        $this->methodNameChanger->renameNode($methodCallNode, $this->renameMethodsMap);
-
-        /** @var FuncCall $secondArgument */
-        $secondArgument = $methodCallNode->args[1]->value;
-
-        $methodCallNode->args[1] = $secondArgument->args[0];
+        $this->renameMethod($methodCallNode);
+        $this->moveFunctionArgumentsUp($methodCallNode);
 
         return $methodCallNode;
+
+        $this->methodNameChanger->renameNode($methodCallNode, $this->renameMethodsMap);
+    }
+
+    private function renameMethod(MethodCall $methodCallNode): void
+    {
+        /** @var Identifier $identifierNode */
+        $identifierNode = $methodCallNode->name;
+        $oldMethodName = $identifierNode->toString();
+
+        [$trueMethodName, $falseMethodName] = $this->oldToNewMethods[$this->activeFuncCallName];
+
+        if (in_array($oldMethodName, ['assertSame', 'assertEquals']) && $trueMethodName) {
+            /** @var string $trueMethodName */
+            $methodCallNode->name = new Identifier($trueMethodName);
+        } elseif (in_array($oldMethodName, ['assertNotSame', 'assertNotEquals']) && $falseMethodName) {
+            /** @var string $falseMethodName */
+            $methodCallNode->name = new Identifier($falseMethodName);
+        }
+    }
+
+    /**
+     * Handles custom error messages to not be overwrite by function with multiple args.
+     */
+    private function moveFunctionArgumentsUp(MethodCall $methodCallNode): void
+    {
+        /** @var FuncCall $secondArgument */
+        $secondArgument = $methodCallNode->args[1]->value;
+        $methodCallNode->args[1] = $secondArgument->args[0];
     }
 }
