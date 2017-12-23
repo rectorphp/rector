@@ -15,9 +15,11 @@ use Rector\Rector\AbstractRector;
 /**
  * Before:
  * - $this->assertTrue(isset($anything->foo));
+ * - $this->assertFalse(isset($anything->foo));
  *
  * After:
  * - $this->assertObjectHasAttribute('foo', $anything);
+ * - $this->assertObjectNotHasAttribute('foo', $anything);
  */
 final class AssertTrueIssetToObjectHasAttributeRector extends AbstractRector
 {
