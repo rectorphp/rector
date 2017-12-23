@@ -13,12 +13,14 @@ use Rector\Rector\AbstractRector;
 
 /**
  * Before:
+ * - $this->assertSame(10, count($anything), 'message');
  * - $this->assertSame($value, {function}($anything), 'message');
  * - $this->assertNotSame($value, {function}($anything), 'message');
  * - $this->assertEquals($value, {function}($anything), 'message');
  * - $this->assertNotEquals($value, {function}($anything), 'message');
  *
  * After:
+ * - $this->assertCount(10, $anything, 'message');
  * - $this->assert{function}($value, $anything, 'message');
  * - $this->assertNot{function}($value, $anything, 'message');
  */
