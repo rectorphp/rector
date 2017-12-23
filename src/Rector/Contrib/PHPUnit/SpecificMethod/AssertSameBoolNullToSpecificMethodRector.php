@@ -11,12 +11,12 @@ use Rector\Rector\AbstractRector;
 
 /**
  * Before:
- * - $this->assertSame({keyword}}, $anything);
- * - $this->assertNotSame({keyword}}, $anything);
+ * - $this->assertSame(null, $anything);
+ * - $this->assertNotSame(false, $anything);
  *
  * After:
- * - $this->assert{keyword}($anything);
- * - $this->assertNot{keyword}($anything);
+ * - $this->assertNull($anything);
+ * - $this->assertNotFalse($anything);
  */
 final class AssertSameBoolNullToSpecificMethodRector extends AbstractRector
 {
