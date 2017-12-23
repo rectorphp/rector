@@ -1,8 +1,5 @@
 parameters:
     ignoreErrors:
-        # stricter return type of parent
-        - '#PHPDoc tag @return with type mixed is not subtype of native type (int|string)#'
-
         # property overriden
         - '#Rector\\NodeTraverser\\(Cloning|Shutdown)NodeTraverser::__construct\(\) does not call parent constructor from PhpParser\\NodeTraverser#'
 
@@ -21,7 +18,6 @@ parameters:
         # known values
         - '#Method Rector\\Node\\NodeFactory::create(Null|False|True)Constant\(\) should return PhpParser\\Node\\Expr\\ConstFetch but returns PhpParser\\Node\\Expr#'
         - '#Method Rector\\Node\\NodeFactory::createNamespace\(\) should return PhpParser\\Node\\Stmt\\Namespace_ but returns PhpParser\\Node#'
-        - '#Method Rector\\NodeValueResolver\\PerNodeValueResolver\\ArgValueResolver::resolve\(\) should return string\|null but returns bool\|string\|null#'
         - '#Calling method toString\(\) on possibly null value of type PhpParser\\Node\\Name\\FullyQualified\|null#'
         - '#Calling method toString\(\) on possibly null value of type PhpParser\\Node\\Name\|null#'
         - '#Calling method getText\(\) on possibly null value of type PhpParser\\Comment\\Doc\|null#'

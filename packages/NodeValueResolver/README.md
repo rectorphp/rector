@@ -2,10 +2,8 @@
 
 This package detects values like:
  
-- `__NAMESPACE__`
-- `__METHOD__`
-- `__CLASS__`
-- `self::class`
-- `static::class`
+- `true`
+- `false`
+- `null`
 
-And turns them into their current values.
+And turns them into their string values.
