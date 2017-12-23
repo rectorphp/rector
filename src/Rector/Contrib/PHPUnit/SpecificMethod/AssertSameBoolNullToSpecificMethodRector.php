@@ -11,24 +11,22 @@ use Rector\Rector\AbstractRector;
 
 /**
  * Before:
- * - $this->assertSame(null, $anything);
- * - $this->assertSame(true, $anything);
- * - $this->assertSame(false, $anything);
+ * - $this->assertSame({keyword}}, $anything);
+ * - $this->assertNotSame({keyword}}, $anything);
  *
  * After:
- * - $this->assertNull($anything);
- * - $this->assertTrue($anything);
- * - $this->assertFalse($anything);
+ * - $this->assert{keyword}($anything);
+ * - $this->assertNot{keyword}($anything);
  */
 final class AssertSameBoolNullToSpecificMethodRector extends AbstractRector
 {
     /**
-     * @var string[]
+     * @var string[][]|false[][]
      */
-    private $constValueToMethodNames = [
-        'null' => 'assertNull',
-        'true' => 'assertTrue',
-        'false' => 'assertFalse',
+    private $constValueToNewMethodNames = [
+        'null' => ['assertNull', 'assertNotNull'],
+        'true' => ['assertTrue', 'assertNotTrue'],
+        'false' => ['assertFalse', 'assertNotFalse'],
     ];
 
     /**
@@ -39,7 +37,7 @@ final class AssertSameBoolNullToSpecificMethodRector extends AbstractRector
     /**
      * @var string
      */
-    private $costantName;
+    private $constantName;
 
     public function __construct(MethodCallAnalyzer $methodCallAnalyzer)
     {
@@ -51,7 +49,7 @@ final class AssertSameBoolNullToSpecificMethodRector extends AbstractRector
         if (! $this->methodCallAnalyzer->isTypesAndMethods(
             $node,
             ['PHPUnit\Framework\TestCase', 'PHPUnit_Framework_TestCase'],
-            ['assertSame']
+            ['assertSame', 'assertNotSame']
         )) {
             return false;
         }
@@ -64,9 +62,9 @@ final class AssertSameBoolNullToSpecificMethodRector extends AbstractRector
             return false;
         }
 
-        $this->costantName = $firstArgumentValue->name->toString();
+        $this->constantName = $firstArgumentValue->name->toString();
 
-        return isset($this->constValueToMethodNames[$this->costantName]);
+        return isset($this->constValueToNewMethodNames[$this->constantName]);
     }
 
     /**
@@ -82,8 +80,19 @@ final class AssertSameBoolNullToSpecificMethodRector extends AbstractRector
 
     private function renameMethod(MethodCall $methodCallNode): void
     {
-        $newMethodName = $this->constValueToMethodNames[$this->costantName];
-        $methodCallNode->name = new Identifier($newMethodName);
+        /** @var Identifier $identifierNode */
+        $identifierNode = $methodCallNode->name;
+        $oldMethodName = $identifierNode->toString();
+
+        [$sameMethodName, $notSameMethodName] = $this->constValueToNewMethodNames[$this->constantName];
+
+        if ($oldMethodName === 'assertSame' && $sameMethodName) {
+            /** @var string $sameMethodName */
+            $methodCallNode->name = new Identifier($sameMethodName);
+        } elseif ($oldMethodName === 'assertNotSame' && $notSameMethodName) {
+            /** @var string $notSameMethodName */
+            $methodCallNode->name = new Identifier($notSameMethodName);
+        }
     }
 
     private function moveArguments(MethodCall $methodCallNode): void
