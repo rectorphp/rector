@@ -6,5 +6,6 @@ final class MyTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertSame(5, count($something));
         $this->assertNotEquals(5, sizeof($something), 'third argument');
+        $this->assertEquals('string', gettype($something));
     }
 }

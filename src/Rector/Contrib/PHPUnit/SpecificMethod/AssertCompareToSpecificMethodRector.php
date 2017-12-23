@@ -30,6 +30,7 @@ final class AssertCompareToSpecificMethodRector extends AbstractRector
     private $renameMethodsMap = [
         'count' => ['assertCount', 'assertNotCount'],
         'sizeof' => ['assertCount', 'assertNotCount'],
+        'gettype' => ['assertInternalType', 'assertNotInternalType'],
     ];
 
     /**
