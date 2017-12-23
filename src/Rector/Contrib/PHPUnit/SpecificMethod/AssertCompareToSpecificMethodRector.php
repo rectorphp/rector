@@ -31,7 +31,7 @@ use Rector\Rector\AbstractRector;
  * - $this->assertCount(5, $anything);
  * - $this->assertNotCount(5, $anything);
  */
-final class AssertSameCountToSpecificMethodRector extends AbstractRector
+final class AssertCompareToSpecificMethodRector extends AbstractRector
 {
     /**
      * @var string[]

@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Contrib\PHPUnit\SpecificMethod\AssertSameCountToSpecificMethodRector;
+namespace Rector\Tests\Rector\Contrib\PHPUnit\SpecificMethod\AssertCompareToSpecificMethodRector;
 
-use Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertSameCountToSpecificMethodRector;
+use Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertCompareToSpecificMethodRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class AssertSameCountToSpecificMethodRectorTest extends AbstractRectorTestCase
+final class AssertCompareToSpecificMethodRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()
@@ -30,6 +30,6 @@ final class AssertSameCountToSpecificMethodRectorTest extends AbstractRectorTest
      */
     protected function getRectorClasses(): array
     {
-        return [AssertSameCountToSpecificMethodRector::class];
+        return [AssertCompareToSpecificMethodRector::class];
     }
 }
