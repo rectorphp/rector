@@ -7,9 +7,9 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Empty_;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
+use Rector\NodeChanger\MethodNameChanger;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -39,6 +39,14 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractRector
     ];
 
     /**
+     * @var string[][]|string[]
+     */
+    private $acceptedAssertionMethods = [
+        'trueMethodNames' => ['assertTrue'],
+        'falseMethodNames' => ['assertFalse'],
+    ];
+
+    /**
      * @var string[][]|false[][]
      */
     private $activeOldToNewMethods = [];
@@ -49,6 +57,11 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractRector
     private $methodCallAnalyzer;
 
     /**
+     * @var MethodNameChanger
+     */
+    private $methodNameChanger;
+
+    /**
      * @var string|null
      */
     private $activeFuncCallName;
@@ -56,10 +69,14 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractRector
     /**
      * @param string[][] $activeMethods
      */
-    public function __construct(array $activeMethods = [], MethodCallAnalyzer $methodCallAnalyzer)
-    {
+    public function __construct(
+        array $activeMethods = [],
+        MethodCallAnalyzer $methodCallAnalyzer,
+        MethodNameChanger $methodNameChanger
+    ) {
         $this->activeOldToNewMethods = $this->filterActiveOldToNewMethods($activeMethods);
         $this->methodCallAnalyzer = $methodCallAnalyzer;
+        $this->methodNameChanger = $methodNameChanger;
     }
 
     public function isCandidate(Node $node): bool
@@ -98,27 +115,15 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        $this->renameMethod($methodCallNode);
+        $this->methodNameChanger->renameNode(
+            $methodCallNode,
+            $this->defaultOldToNewMethods,
+            $this->acceptedAssertionMethods,
+            $this->activeFuncCallName
+        );
         $this->moveFunctionArgumentsUp($methodCallNode);
 
         return $methodCallNode;
-    }
-
-    private function renameMethod(MethodCall $methodCallNode): void
-    {
-        /** @var Identifier $identifierNode */
-        $identifierNode = $methodCallNode->name;
-        $oldMethodName = $identifierNode->toString();
-
-        [$trueMethodName, $falseMethodName] = $this->activeOldToNewMethods[$this->activeFuncCallName];
-
-        if ($oldMethodName === 'assertTrue' && $trueMethodName) {
-            /** @var string $trueMethodName */
-            $methodCallNode->name = new Identifier($trueMethodName);
-        } elseif ($oldMethodName === 'assertFalse' && $falseMethodName) {
-            /** @var string $falseMethodName */
-            $methodCallNode->name = new Identifier($falseMethodName);
-        }
     }
 
     /**
