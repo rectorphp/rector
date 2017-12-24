@@ -2,6 +2,7 @@
 
 namespace Rector\Rector\Contrib\PHPUnit\SpecificMethod;
 
+use Nette\Utils\Arrays;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
@@ -63,7 +64,7 @@ final class AssertSameBoolNullToSpecificMethodRector extends AbstractRector
         if (! $this->methodCallAnalyzer->isTypesAndMethods(
             $node,
             ['PHPUnit\Framework\TestCase', 'PHPUnit_Framework_TestCase'],
-            ['assertSame', 'assertNotSame']
+            Arrays::flatten($this->acceptedAssertionMethods)
         )) {
             return false;
         }

@@ -2,6 +2,7 @@
 
 namespace Rector\Rector\Contrib\PHPUnit\SpecificMethod;
 
+use Nette\Utils\Arrays;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
@@ -69,7 +70,7 @@ final class AssertCompareToSpecificMethodRector extends AbstractRector
         if (! $this->methodCallAnalyzer->isTypesAndMethods(
             $node,
             ['PHPUnit\Framework\TestCase', 'PHPUnit_Framework_TestCase'],
-            ['assertSame', 'assertNotSame', 'assertEquals', 'assertNotEquals']
+            Arrays::flatten($this->acceptedAssertionMethods)
         )) {
             return false;
         }

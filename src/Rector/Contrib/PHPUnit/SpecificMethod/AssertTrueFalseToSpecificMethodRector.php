@@ -2,6 +2,7 @@
 
 namespace Rector\Rector\Contrib\PHPUnit\SpecificMethod;
 
+use Nette\Utils\Arrays;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Empty_;
@@ -84,7 +85,7 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractRector
         if (! $this->methodCallAnalyzer->isTypesAndMethods(
             $node,
             ['PHPUnit\Framework\TestCase', 'PHPUnit_Framework_TestCase'],
-            ['assertTrue', 'assertFalse']
+            Arrays::flatten($this->acceptedAssertionMethods)
         )) {
             return false;
         }
