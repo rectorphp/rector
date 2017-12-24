@@ -93,15 +93,10 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractRe
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        $this->renameMethod($methodCallNode);
+        $this->methodNameChanger->renameNode($methodCallNode, $this->renameMethodsMap);
         $this->moveFunctionArgumentsUp($methodCallNode);
 
         return $methodCallNode;
-    }
-
-    private function renameMethod(MethodCall $methodCallNode): void
-    {
-        $this->methodNameChanger->renameNode($methodCallNode, $this->renameMethodsMap);
     }
 
     private function moveFunctionArgumentsUp(MethodCall $methodCallNode): void
