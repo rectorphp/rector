@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
+use Rector\NodeChanger\MethodNameChanger;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -25,13 +26,19 @@ final class ValidateControlRector extends AbstractRector
     private $methodCallAnalyzer;
 
     /**
+     * @var MethodNameChanger
+     */
+    private $MethodNameChanger;
+
+    /**
      * @var NodeFactory
      */
     private $nodeFactory;
 
-    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, NodeFactory $nodeFactory)
+    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, MethodNameChanger $methodNameChanger, NodeFactory $nodeFactory)
     {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
+        $this->methodNameChanger = $methodNameChanger;
         $this->nodeFactory = $nodeFactory;
     }
 
@@ -49,7 +56,7 @@ final class ValidateControlRector extends AbstractRector
      */
     public function refactor(Node $methodCallNode): Node
     {
-        $methodCallNode->name = new Identifier('redrawControl');
+        $this->methodNameChanger->renameNode($methodCallNode, 'redrawControl');
 
         $methodCallNode->args[0] = $methodCallNode->args[0] ?? new Arg($this->nodeFactory->createNullConstant());
         $methodCallNode->args[1] = new Arg($this->nodeFactory->createFalseConstant());
