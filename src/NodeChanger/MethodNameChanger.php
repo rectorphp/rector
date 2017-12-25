@@ -17,13 +17,13 @@ final class MethodNameChanger
         array $renameMethodMap,
         array $acceptedAssertionMethods = [],
         ?string $activeFuncCallName = null
-    ): ?Node {
+    ): void {
         $oldNodeMethodName = $node->name->toString();
 
         if (empty($acceptedAssertionMethods)) {
             $node->name = new Identifier($renameMethodMap[$oldNodeMethodName]);
 
-            return $node;
+            return;
         }
 
         [$trueMethodName, $falseMethodName] = $renameMethodMap[$activeFuncCallName];
@@ -33,7 +33,5 @@ final class MethodNameChanger
         } elseif (in_array($oldNodeMethodName, $acceptedAssertionMethods['falseMethodNames']) && $falseMethodName) {
             $node->name = new Identifier($falseMethodName);
         }
-
-        return $node;
     }
 }
