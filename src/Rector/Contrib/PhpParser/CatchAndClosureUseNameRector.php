@@ -5,10 +5,10 @@ namespace Rector\Rector\Contrib\PhpParser;
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Identifier;
 use Rector\Node\Attribute;
 use Rector\Node\PropertyFetchNodeFactory;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
+use Rector\NodeChanger\MethodNameChanger;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -21,6 +21,11 @@ use Rector\Rector\AbstractRector;
 final class CatchAndClosureUseNameRector extends AbstractRector
 {
     /**
+     * @var MethodNameChanger
+     */
+    private $methodNameChanger;
+
+    /**
      * @var PropertyFetchAnalyzer
      */
     private $propertyFetchAnalyzer;
@@ -31,9 +36,11 @@ final class CatchAndClosureUseNameRector extends AbstractRector
     private $propertyFetchNodeFactory;
 
     public function __construct(
+        MethodNameChanger $methodNameChanger,
         PropertyFetchAnalyzer $propertyFetchAnalyzer,
         PropertyFetchNodeFactory $propertyFetchNodeFactory
     ) {
+        $this->methodNameChanger = $methodNameChanger;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
         $this->propertyFetchNodeFactory = $propertyFetchNodeFactory;
     }
@@ -64,7 +71,7 @@ final class CatchAndClosureUseNameRector extends AbstractRector
             (string) $variableNode->name,
             'var'
         );
-        $propertyFetchNode->name = new Identifier('name');
+        $this->methodNameChanger->renameNode($propertyFetchNode, 'name');
 
         return $propertyFetchNode;
     }
