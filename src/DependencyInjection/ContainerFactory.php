@@ -10,6 +10,7 @@ final class ContainerFactory
     {
         $appKernel = new AppKernel();
         $appKernel->boot();
+        putenv('SHELL_VERBOSITY=1');
 
         return $appKernel->getContainer();
     }
@@ -18,6 +19,7 @@ final class ContainerFactory
     {
         $appKernel = new AppKernel($config);
         $appKernel->boot();
+        putenv('SHELL_VERBOSITY=1');
 
         return $appKernel->getContainer();
     }

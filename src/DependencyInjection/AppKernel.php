@@ -23,7 +23,8 @@ final class AppKernel extends Kernel
             $this->configFile = $configFile;
         }
 
-        parent::__construct('cli' . sha1($configFile), false);
+        // debug: true is require to invalidate container on service files change
+        parent::__construct('cli' . sha1($configFile), true);
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader): void
