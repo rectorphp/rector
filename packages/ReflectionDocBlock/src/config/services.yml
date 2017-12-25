@@ -6,18 +6,7 @@ services:
     Rector\ReflectionDocBlock\:
         resource: '../'
 
-    phpDocumentor\Reflection\DocBlockFactory: ~
     Rector\BetterReflection\TypesFinder\PhpDocumentor\NamespaceNodeToReflectionTypeContext: ~
 
-    phpDocumentor\Reflection\DocBlock\StandardTagFactory:
-        factory: ['@Rector\ReflectionDocBlock\DocBlock\TagFactoryFactory', 'create']
-    phpDocumentor\Reflection\DocBlock\TagFactory:
-        alias: phpDocumentor\Reflection\DocBlock\StandardTagFactory
-
-    phpDocumentor\Reflection\DocBlock\DescriptionFactory: ~
-    phpDocumentor\Reflection\TypeResolver: ~
-
-    phpDocumentor\Reflection\Types\ContextFactory: ~
-    phpDocumentor\Reflection\FqsenResolver: ~
-
-    phpDocumentor\Reflection\DocBlock\Serializer: ~
+    Symplify\TokenRunner\ReflectionDocBlock\CleanDocBlockFactory: ~
+    Symplify\TokenRunner\ReflectionDocBlock\FixedSerializer: ~
