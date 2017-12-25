@@ -2,13 +2,14 @@
 
 namespace Rector\Rector\Contrib\PHPUnit\SpecificMethod;
 
+use Nette\Utils\Arrays;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
+use Rector\NodeChanger\MethodNameChanger;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -36,18 +37,32 @@ final class AssertCompareToSpecificMethodRector extends AbstractRector
     ];
 
     /**
+     * @var string[][]|string[]
+     */
+    private $acceptedAssertionMethods = [
+        'trueMethodNames' => ['assertSame', 'assertEquals'],
+        'falseMethodNames' => ['assertNotSame', 'assertNotEquals'],
+    ];
+
+    /**
      * @var MethodCallAnalyzer
      */
     private $methodCallAnalyzer;
+
+    /**
+     * @var MethodNameChanger
+     */
+    private $methodNameChanger;
 
     /**
      * @var string|null
      */
     private $activeFuncCallName;
 
-    public function __construct(MethodCallAnalyzer $methodCallAnalyzer)
+    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, MethodNameChanger $methodNameChanger)
     {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
+        $this->methodNameChanger = $methodNameChanger;
     }
 
     public function isCandidate(Node $node): bool
@@ -55,7 +70,7 @@ final class AssertCompareToSpecificMethodRector extends AbstractRector
         if (! $this->methodCallAnalyzer->isTypesAndMethods(
             $node,
             ['PHPUnit\Framework\TestCase', 'PHPUnit_Framework_TestCase'],
-            ['assertSame', 'assertNotSame', 'assertEquals', 'assertNotEquals']
+            Arrays::flatten($this->acceptedAssertionMethods)
         )) {
             return false;
         }
@@ -91,27 +106,15 @@ final class AssertCompareToSpecificMethodRector extends AbstractRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        $this->renameMethod($methodCallNode);
+        $this->methodNameChanger->renameNode(
+            $methodCallNode,
+            $this->defaultOldToNewMethods,
+            $this->acceptedAssertionMethods,
+            $this->activeFuncCallName
+        );
         $this->moveFunctionArgumentsUp($methodCallNode);
 
         return $methodCallNode;
-    }
-
-    private function renameMethod(MethodCall $methodCallNode): void
-    {
-        /** @var Identifier $identifierNode */
-        $identifierNode = $methodCallNode->name;
-        $oldMethodName = $identifierNode->toString();
-
-        [$trueMethodName, $falseMethodName] = $this->defaultOldToNewMethods[$this->activeFuncCallName];
-
-        if (in_array($oldMethodName, ['assertSame', 'assertEquals']) && $trueMethodName) {
-            /** @var string $trueMethodName */
-            $methodCallNode->name = new Identifier($trueMethodName);
-        } elseif (in_array($oldMethodName, ['assertNotSame', 'assertNotEquals']) && $falseMethodName) {
-            /** @var string $falseMethodName */
-            $methodCallNode->name = new Identifier($falseMethodName);
-        }
     }
 
     /**

@@ -2,11 +2,12 @@
 
 namespace Rector\Rector\Contrib\PHPUnit\SpecificMethod;
 
+use Nette\Utils\Arrays;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Identifier;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
+use Rector\NodeChanger\MethodNameChanger;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -30,18 +31,32 @@ final class AssertSameBoolNullToSpecificMethodRector extends AbstractRector
     ];
 
     /**
+     * @var string[][]|string[]
+     */
+    private $acceptedAssertionMethods = [
+        'trueMethodNames' => ['assertSame'],
+        'falseMethodNames' => ['assertNotSame'],
+    ];
+
+    /**
      * @var MethodCallAnalyzer
      */
     private $methodCallAnalyzer;
+
+    /**
+     * @var MethodNameChanger
+     */
+    private $methodNameChanger;
 
     /**
      * @var string
      */
     private $constantName;
 
-    public function __construct(MethodCallAnalyzer $methodCallAnalyzer)
+    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, MethodNameChanger $methodNameChanger)
     {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
+        $this->methodNameChanger = $methodNameChanger;
     }
 
     public function isCandidate(Node $node): bool
@@ -49,7 +64,7 @@ final class AssertSameBoolNullToSpecificMethodRector extends AbstractRector
         if (! $this->methodCallAnalyzer->isTypesAndMethods(
             $node,
             ['PHPUnit\Framework\TestCase', 'PHPUnit_Framework_TestCase'],
-            ['assertSame', 'assertNotSame']
+            Arrays::flatten($this->acceptedAssertionMethods)
         )) {
             return false;
         }
@@ -72,27 +87,15 @@ final class AssertSameBoolNullToSpecificMethodRector extends AbstractRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        $this->renameMethod($methodCallNode);
+        $this->methodNameChanger->renameNode(
+            $methodCallNode,
+            $this->constValueToNewMethodNames,
+            $this->acceptedAssertionMethods,
+            $this->constantName
+        );
         $this->moveArguments($methodCallNode);
 
         return $methodCallNode;
-    }
-
-    private function renameMethod(MethodCall $methodCallNode): void
-    {
-        /** @var Identifier $identifierNode */
-        $identifierNode = $methodCallNode->name;
-        $oldMethodName = $identifierNode->toString();
-
-        [$sameMethodName, $notSameMethodName] = $this->constValueToNewMethodNames[$this->constantName];
-
-        if ($oldMethodName === 'assertSame' && $sameMethodName) {
-            /** @var string $sameMethodName */
-            $methodCallNode->name = new Identifier($sameMethodName);
-        } elseif ($oldMethodName === 'assertNotSame' && $notSameMethodName) {
-            /** @var string $notSameMethodName */
-            $methodCallNode->name = new Identifier($notSameMethodName);
-        }
     }
 
     private function moveArguments(MethodCall $methodCallNode): void
