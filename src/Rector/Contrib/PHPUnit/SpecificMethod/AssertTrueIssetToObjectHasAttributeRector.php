@@ -79,7 +79,7 @@ final class AssertTrueIssetToObjectHasAttributeRector extends AbstractRector
     public function refactor(Node $methodCallNode): ?Node
     {
         // rename method
-        $this->methodNameChanger->renameNode($methodCallNode, $this->renameMethodsMap);
+        $this->methodNameChanger->renameNodeWithMap($methodCallNode, $this->renameMethodsMap);
 
         // move isset to property and object
         /** @var Isset_ $issetNode */
