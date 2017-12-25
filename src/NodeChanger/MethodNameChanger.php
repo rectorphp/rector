@@ -2,13 +2,13 @@
 
 namespace Rector\NodeChanger;
 
-use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Identifier;
 
 final class MethodNameChanger
 {
 
-    public function renameNode(MethodCall $node, $oldToNewMethods): void
+    public function renameNode(Expr $node, $oldToNewMethods): void
     {
         if (is_array($oldToNewMethods)) {
             $oldNodeMethodName = $node->name->toString();
