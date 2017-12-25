@@ -9,9 +9,9 @@ use Symplify\TokenRunner\ReflectionDocBlock\FixedSerializer;
 final class TidingSerializer
 {
     /**
-     * @var Serializer
+     * @var FixedSerializer
      */
-    private $serializer;
+    private $fixedSerializer;
 
     public function __construct(FixedSerializer $fixedSerializer)
     {
