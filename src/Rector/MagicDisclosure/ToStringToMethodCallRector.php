@@ -5,9 +5,9 @@ namespace Rector\Rector\MagicDisclosure;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Cast\String_;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Identifier;
 use Rector\Node\Attribute;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
+use Rector\NodeChanger\MethodNameChanger;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -39,14 +39,20 @@ final class ToStringToMethodCallRector extends AbstractRector
     private $methodCallAnalyzer;
 
     /**
+     * @var MethodNameChanger
+     */
+    private $methodNameChanger;
+
+    /**
      * Type to method call()
      *
      * @param string[][] $typeToMethodCalls
      */
-    public function __construct(array $typeToMethodCalls, MethodCallAnalyzer $methodCallAnalyzer)
+    public function __construct(array $typeToMethodCalls, MethodCallAnalyzer $methodCallAnalyzer, MethodNameChanger $methodNameChanger)
     {
         $this->typeToMethodCalls = $typeToMethodCalls;
         $this->methodCallAnalyzer = $methodCallAnalyzer;
+        $this->methodNameChanger = $methodNameChanger;
     }
 
     public function isCandidate(Node $node): bool
@@ -71,9 +77,7 @@ final class ToStringToMethodCallRector extends AbstractRector
             return new MethodCall($node->expr, $this->activeTransformation);
         }
 
-        $node->name = new Identifier($this->activeTransformation);
-
-        return $node;
+        return $this->methodNameChanger->renameNode($node, $this->activeTransformation);
     }
 
     private function processStringCandidate(String_ $stringNode): bool
