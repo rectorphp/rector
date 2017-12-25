@@ -9,6 +9,7 @@ use PhpParser\Node\Identifier;
 use Rector\Node\Attribute;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
+use Rector\NodeChanger\MethodNameChanger;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -27,13 +28,19 @@ final class FormSetRequiredRector extends AbstractRector
     private $methodCallAnalyzer;
 
     /**
+     * @var MethodNameChanger
+     */
+    private $methodNameChanger;
+
+    /**
      * @var NodeFactory
      */
     private $nodeFactory;
 
-    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, NodeFactory $nodeFactory)
+    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, MethodNameChanger $methodNameChanger, NodeFactory $nodeFactory)
     {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
+        $this->methodNameChanger = $methodNameChanger;
         $this->nodeFactory = $nodeFactory;
     }
 
@@ -76,7 +83,7 @@ final class FormSetRequiredRector extends AbstractRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        $methodCallNode->name = new Identifier('setRequired');
+        $this->methodNameChanger->renameNode($methodCallNode, 'setRequired');
         $methodCallNode->args = $this->nodeFactory->createArgs([
             false,
         ]);
