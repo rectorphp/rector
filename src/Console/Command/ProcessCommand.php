@@ -5,6 +5,7 @@ namespace Rector\Console\Command;
 use Rector\Application\FileProcessor;
 use Rector\Console\Output\ProcessCommandReporter;
 use Rector\ConsoleDiffer\DifferAndFormatter;
+use Rector\Exception\Command\FileProcessingException;
 use Rector\Exception\NoRectorsLoadedException;
 use Rector\FileSystem\PhpFilesFinder;
 use Rector\Naming\CommandNaming;
@@ -17,6 +18,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Finder\SplFileInfo;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
+use Throwable;
 
 final class ProcessCommand extends Command
 {
@@ -143,17 +145,14 @@ final class ProcessCommand extends Command
 
         $i = 1;
         foreach ($fileInfos as $fileInfo) {
-            if ($this->parameterProvider->provideParameter(self::OPTION_DRY_RUN)) {
-                $oldContent = $fileInfo->getContents();
-                $newContent = $this->fileProcessor->processFileToString($fileInfo);
-
-                if ($newContent !== $oldContent) {
-                    $this->symfonyStyle->writeln(sprintf('<options=bold>%d) %s</>', $i, $fileInfo->getPathname()));
-                    $this->symfonyStyle->writeln($this->differAndFormatter->diffAndFormat($oldContent, $newContent));
-                    ++$i;
-                }
-            } else {
-                $this->fileProcessor->processFile($fileInfo);
+            try {
+                $this->processFile($fileInfo, $i);
+            } catch (Throwable $throwable) {
+                throw new FileProcessingException(
+                    sprintf('Processing of "%s" file failed.', $fileInfo->getRealPath()),
+                    $throwable->getCode(),
+                    $throwable
+                );
             }
 
             $this->symfonyStyle->progressAdvance();
@@ -161,5 +160,21 @@ final class ProcessCommand extends Command
 
         $this->symfonyStyle->newLine();
         $this->symfonyStyle->newLine();
+    }
+
+    private function processFile(SplFileInfo $fileInfo, int &$i): void
+    {
+        if ($this->parameterProvider->provideParameter(self::OPTION_DRY_RUN)) {
+            $oldContent = $fileInfo->getContents();
+            $newContent = $this->fileProcessor->processFileToString($fileInfo);
+
+            if ($newContent !== $oldContent) {
+                $this->symfonyStyle->writeln(sprintf('<options=bold>%d) %s</>', $i, $fileInfo->getPathname()));
+                $this->symfonyStyle->writeln($this->differAndFormatter->diffAndFormat($oldContent, $newContent));
+                ++$i;
+            }
+        } else {
+            $this->fileProcessor->processFile($fileInfo);
+        }
     }
 }

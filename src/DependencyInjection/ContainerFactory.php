@@ -10,6 +10,8 @@ final class ContainerFactory
     {
         $appKernel = new AppKernel();
         $appKernel->boot();
+        // this is require to keep CLI verbosity independent on AppKernel dev/prod mode
+        putenv('SHELL_VERBOSITY=1');
 
         return $appKernel->getContainer();
     }
@@ -18,6 +20,8 @@ final class ContainerFactory
     {
         $appKernel = new AppKernel($config);
         $appKernel->boot();
+        // this is require to keep CLI verbosity independent on AppKernel dev/prod mode
+        putenv('SHELL_VERBOSITY=1');
 
         return $appKernel->getContainer();
     }

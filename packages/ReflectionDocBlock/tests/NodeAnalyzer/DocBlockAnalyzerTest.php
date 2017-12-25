@@ -35,7 +35,6 @@ final class DocBlockAnalyzerTest extends AbstractContainerAwareTestCase
         $this->docBlockAnalyzer->removeAnnotationFromNode($node, 'param');
         $emptyDoc = <<<'EOT'
 /**
- *
  */
 EOT;
         $this->assertSame($emptyDoc, $node->getDocComment()->getText());
@@ -62,9 +61,6 @@ EOT;
            * @deprecated This is deprecated
         ');
 
-        $deprecatedAnnotation = $this->docBlockAnalyzer->getDeprecatedDocComment($node);
-        $this->assertSame('This is deprecated', $deprecatedAnnotation);
-
         $this->assertSame(['int'], $this->docBlockAnalyzer->getVarTypes($node));
     }
 
@@ -75,17 +71,6 @@ EOT;
         ');
 
         $this->assertSame('ParamType', $this->docBlockAnalyzer->getTypeForParam($node, 'paramName'));
-    }
-
-    public function testGetDeprecatedDocComment(): void
-    {
-        $node = $this->createNodeWithDoc('
-           * @var int
-           * @deprecated This is deprecated
-        ');
-
-        $deprecatedDocComment = $this->docBlockAnalyzer->getDeprecatedDocComment($node);
-        $this->assertSame('This is deprecated', $deprecatedDocComment);
     }
 
     private function createNodeWithDoc(string $doc): String_

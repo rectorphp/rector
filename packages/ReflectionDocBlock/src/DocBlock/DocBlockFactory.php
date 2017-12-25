@@ -3,23 +3,15 @@
 namespace Rector\ReflectionDocBlock\DocBlock;
 
 use phpDocumentor\Reflection\DocBlock;
-use phpDocumentor\Reflection\DocBlock\DescriptionFactory;
-use phpDocumentor\Reflection\DocBlock\TagFactory;
-use phpDocumentor\Reflection\DocBlockFactory as PhpDocumentorDocBlockFactory;
-use phpDocumentor\Reflection\TypeResolver;
 use phpDocumentor\Reflection\Types\Context;
 use PhpParser\Node;
 use Rector\BetterReflection\TypesFinder\PhpDocumentor\NamespaceNodeToReflectionTypeContext;
 use Rector\Node\Attribute;
 use SplObjectStorage;
+use Symplify\TokenRunner\ReflectionDocBlock\CleanDocBlockFactory;
 
 final class DocBlockFactory
 {
-    /**
-     * @var PhpDocumentorDocBlockFactory
-     */
-    private $phpDocumentorDocBlockFactory;
-
     /**
      * @var DocBlock[]|SplObjectStorage
      */
@@ -30,20 +22,18 @@ final class DocBlockFactory
      */
     private $namespaceNodeToReflectionTypeContext;
 
+    /**
+     * @var CleanDocBlockFactory
+     */
+    private $cleanDocBlockFactory;
+
     public function __construct(
-        TagFactory $tagFactory,
-        PhpDocumentorDocBlockFactory $phpDocumentorDocBlockFactory,
-        DescriptionFactory $descriptionFactory,
-        TypeResolver $typeResolver,
-        NamespaceNodeToReflectionTypeContext $namespaceNodeToReflectionTypeContext
+        NamespaceNodeToReflectionTypeContext $namespaceNodeToReflectionTypeContext,
+        CleanDocBlockFactory $cleanDocBlockFactory
     ) {
         $this->docBlocksPerNode = new SplObjectStorage();
-        $this->phpDocumentorDocBlockFactory = $phpDocumentorDocBlockFactory;
         $this->namespaceNodeToReflectionTypeContext = $namespaceNodeToReflectionTypeContext;
-
-        // cannot move to services.yml, because it would cause circular dependency exception
-        $tagFactory->addService($descriptionFactory);
-        $tagFactory->addService($typeResolver);
+        $this->cleanDocBlockFactory = $cleanDocBlockFactory;
     }
 
     public function createFromNode(Node $node): DocBlock
@@ -53,12 +43,9 @@ final class DocBlockFactory
         }
 
         $docBlockContent = $node->getDocComment() ? $node->getDocComment()->getText() : ' ';
-
         $docBlockContext = $this->createContextForNamespace($node);
 
-        $docBlock = $this->phpDocumentorDocBlockFactory->create($docBlockContent, $docBlockContext);
-
-        return $this->docBlocksPerNode[$node] = $docBlock;
+        return $this->docBlocksPerNode[$node] = $this->cleanDocBlockFactory->create($docBlockContent, $docBlockContext);
     }
 
     private function createContextForNamespace(Node $node): ?Context
