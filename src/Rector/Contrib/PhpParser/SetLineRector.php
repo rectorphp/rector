@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
+use Rector\NodeChanger\MethodNameChanger;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -24,9 +25,15 @@ final class SetLineRector extends AbstractRector
      */
     private $methodCallAnalyzer;
 
-    public function __construct(MethodCallAnalyzer $methodCallAnalyzer)
+    /**
+     * @var MethodNameChanger
+     */
+    private $MethodNameChanger;
+
+    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, MethodNameChanger $MethodNameChanger)
     {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
+        $this->methodNameChanger = $MethodNameChanger;
     }
 
     public function isCandidate(Node $node): bool
@@ -39,7 +46,7 @@ final class SetLineRector extends AbstractRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        $methodCallNode->name = new Identifier('setAttribute');
+        $this->methodNameChanger->renameNode($methodCallNode, 'setAttribute');
 
         $methodCallNode->args[1] = $methodCallNode->args[0];
         $methodCallNode->args[0] = new Arg(new String_('line'));
