@@ -8,16 +8,20 @@ use PhpParser\Node\Identifier;
 final class MethodNameChanger
 {
     /**
-     * @param string|string[] $newMethodName
+     * @param string $newMethodName
      */
-    public function renameNode(Node $node, $newMethodName): void
+    public function renameNode(Node $node, string $newMethodName): void
     {
-        if (is_array($newMethodName)) {
-            $oldNodeMethodName = $node->name->toString();
+        $node->name = new Identifier($newMethodName);
+    }
 
-            $node->name = new Identifier($newMethodName[$oldNodeMethodName]);
-        } elseif (is_string($newMethodName)) {
-            $node->name = new Identifier($newMethodName);
-        }
+    /**
+     * @param string[] $renameMethodMap
+     */
+    public function renameNodeWithMap(Node $node, array $renameMethodMap): void
+    {
+        $oldNodeMethodName = $node->name->toString();
+
+        $node->name = new Identifier($renameMethodMap[$oldNodeMethodName]);
     }
 }
