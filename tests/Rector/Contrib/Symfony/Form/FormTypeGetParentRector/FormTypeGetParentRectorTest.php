@@ -26,7 +26,7 @@ final class FormTypeGetParentRectorTest extends AbstractRectorTestCase
         ];
     }
 
-   /**
+    /**
      * @return string[]
      */
     protected function getRectorClasses(): array
