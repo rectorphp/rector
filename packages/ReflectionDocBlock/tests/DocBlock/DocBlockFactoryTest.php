@@ -35,16 +35,10 @@ final class DocBlockFactoryTest extends AbstractContainerAwareTestCase
 
     public function testMailformedAnnotations(): void
     {
-        $nodes = $this->parser->parseFile(__DIR__ . '/DocBlockFactorySource/SomeClassWithAuthor.php.inc');
+        $nodes = $this->parser->parseFile(__DIR__ . '/DocBlockFactorySource/SomeClassWithFalsyAnnotations.php.inc');
         $classNode = $nodes[1];
 
         $docBlock = $this->docBlockFactory->createFromNode($classNode);
-        $this->assertInstanceOf(DocBlock::class, $docBlock);
-
-        $nodes = $this->parser->parseFile(__DIR__ . '/DocBlockFactorySource/SomeClassWithReturn.php.inc');
-        $methodNode = $nodes[1]->stmts[0];
-
-        $docBlock = $this->docBlockFactory->createFromNode($methodNode);
         $this->assertInstanceOf(DocBlock::class, $docBlock);
     }
 }
