@@ -4,7 +4,6 @@ namespace Rector\ReflectionDocBlock\NodeAnalyzer;
 
 use phpDocumentor\Reflection\DocBlock;
 use phpDocumentor\Reflection\DocBlock\Tag;
-use phpDocumentor\Reflection\DocBlock\Tags\Deprecated;
 use phpDocumentor\Reflection\DocBlock\Tags\Param;
 use phpDocumentor\Reflection\DocBlock\Tags\Var_;
 use phpDocumentor\Reflection\Type;
@@ -78,22 +77,6 @@ final class DocBlockAnalyzer
         $types = $this->normalizeTypes($types);
 
         return $types;
-    }
-
-    public function getDeprecatedDocComment(Node $node): ?string
-    {
-        /** @var Deprecated[] $deprecatedTags */
-        $deprecatedTags = $this->getTagsByName($node, 'deprecated');
-        if (! count($deprecatedTags)) {
-            return null;
-        }
-
-        if ($deprecatedTags[0]->getDescription()) {
-            return $deprecatedTags[0]->getDescription()
-                ->render();
-        }
-
-        return $deprecatedTags[0]->getName();
     }
 
     public function getTypeForParam(Node $node, string $paramName): ?string
