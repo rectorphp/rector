@@ -5,9 +5,9 @@ namespace Rector\Rector\Contrib\Nette\DI;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Identifier;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
+use Rector\NodeChanger\MethodNameChanger;
 
 /**
  * Nette\DI\Compiler::compile arguments are deprecated, use Compiler::addConfig() and Compiler::setClassName().
@@ -27,9 +27,15 @@ final class CompilerCompileArgumentsRector extends AbstractRector
      */
     private $methodCallAnalyzer;
 
-    public function __construct(MethodCallAnalyzer $methodCallAnalyzer)
+    /**
+     * @var MethodNameChanger
+     */
+    private $MethodNameChanger;
+
+    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, MethodNameChanger $methodNameChanger)
     {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
+        $this->methodNameChanger = $methodNameChanger;
     }
 
     public function isCandidate(Node $node): bool
@@ -76,7 +82,7 @@ final class CompilerCompileArgumentsRector extends AbstractRector
         Arg $argNode
     ): MethodCall {
         $addConfigMethodCallNode = clone $methodCallNode;
-        $addConfigMethodCallNode->name = new Identifier($method);
+        $this->methodNameChanger->renameNode($addConfigMethodCallNode, $method);
         $addConfigMethodCallNode->args = [$argNode];
 
         return $addConfigMethodCallNode;
