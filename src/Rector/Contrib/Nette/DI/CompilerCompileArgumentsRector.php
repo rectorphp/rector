@@ -6,8 +6,8 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
-use Rector\Rector\AbstractRector;
 use Rector\NodeChanger\MethodNameChanger;
+use Rector\Rector\AbstractRector;
 
 /**
  * Nette\DI\Compiler::compile arguments are deprecated, use Compiler::addConfig() and Compiler::setClassName().
