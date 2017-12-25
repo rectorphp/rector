@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-use Rector\Configuration\RectorConfigFilePathHelper;
 use Rector\Console\Application;
 use Rector\DependencyInjection\ContainerFactory;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symplify\PackageBuilder\Configuration\ConfigFilePathHelper;
+use Symplify\PackageBuilder\Configuration\LevelConfigShortcutFinder;
 use Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
 
 // Performance boost
@@ -17,7 +17,7 @@ require_once __DIR__ . '/rector_bootstrap.php';
 
 try {
     // 1. Detect configuration from --level
-    $configFile = (new RectorConfigFilePathHelper())->resolveLevel(new ArgvInput());
+    $configFile = (new LevelConfigShortcutFinder())->resolveLevel(new ArgvInput(), __DIR__ . '/../src/config/level');
 
     // 2. Or from --config
     if ($configFile === null) {
