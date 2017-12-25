@@ -46,8 +46,11 @@ final class SetInjectToAddTagRector extends AbstractRector
      */
     private $newArguments = ['inject'];
 
-    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, MethodNameChanger $methodNameChanger, NodeFactory $nodeFactory)
-    {
+    public function __construct(
+        MethodCallAnalyzer $methodCallAnalyzer,
+        MethodNameChanger $methodNameChanger,
+        NodeFactory $nodeFactory
+    ) {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->methodNameChanger = $methodNameChanger;
         $this->nodeFactory = $nodeFactory;

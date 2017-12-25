@@ -48,8 +48,11 @@ final class ToStringToMethodCallRector extends AbstractRector
      *
      * @param string[][] $typeToMethodCalls
      */
-    public function __construct(array $typeToMethodCalls, MethodCallAnalyzer $methodCallAnalyzer, MethodNameChanger $methodNameChanger)
-    {
+    public function __construct(
+        array $typeToMethodCalls,
+        MethodCallAnalyzer $methodCallAnalyzer,
+        MethodNameChanger $methodNameChanger
+    ) {
         $this->typeToMethodCalls = $typeToMethodCalls;
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->methodNameChanger = $methodNameChanger;

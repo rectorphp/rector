@@ -38,8 +38,11 @@ final class ClassConstantReplacerRector extends AbstractRector
     /**
      * @param string[] $oldToNewConstantsByClass
      */
-    public function __construct(array $oldToNewConstantsByClass, ClassConstAnalyzer $classConstAnalyzer, MethodNameChanger $methodNameChanger)
-    {
+    public function __construct(
+        array $oldToNewConstantsByClass,
+        ClassConstAnalyzer $classConstAnalyzer,
+        MethodNameChanger $methodNameChanger
+    ) {
         $this->oldToNewConstantsByClass = $oldToNewConstantsByClass;
         $this->classConstAnalyzer = $classConstAnalyzer;
         $this->methodNameChanger = $methodNameChanger;

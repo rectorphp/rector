@@ -33,8 +33,11 @@ final class TemplateRegisterHelperRector extends AbstractRector
      */
     private $methodCallNodeFactory;
 
-    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, MethodNameChanger $methodNameChanger, MethodCallNodeFactory $methodCallNodeFactory)
-    {
+    public function __construct(
+        MethodCallAnalyzer $methodCallAnalyzer,
+        MethodNameChanger $methodNameChanger,
+        MethodCallNodeFactory $methodCallNodeFactory
+    ) {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->methodNameChanger = $methodNameChanger;
         $this->methodCallNodeFactory = $methodCallNodeFactory;

@@ -38,8 +38,11 @@ final class PropertyNameReplacerRector extends AbstractRector
     /**
      * @param string[][] $perClassOldToNewProperties
      */
-    public function __construct(array $perClassOldToNewProperties, MethodNameChanger $methodNameChanger, PropertyFetchAnalyzer $propertyFetchAnalyzer)
-    {
+    public function __construct(
+        array $perClassOldToNewProperties,
+        MethodNameChanger $methodNameChanger,
+        PropertyFetchAnalyzer $propertyFetchAnalyzer
+    ) {
         $this->perClassOldToNewProperties = $perClassOldToNewProperties;
         $this->methodNameChanger = $methodNameChanger;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
