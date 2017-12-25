@@ -5,7 +5,6 @@ namespace SomeNamespace;
 use Nette\Object;
 
 /**
- *
  */
 class SomeClass extends Object
 {
