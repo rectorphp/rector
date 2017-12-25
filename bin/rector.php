@@ -4,6 +4,8 @@ use Rector\Configuration\RectorConfigFilePathHelper;
 use Rector\Console\Application;
 use Rector\DependencyInjection\ContainerFactory;
 use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symplify\PackageBuilder\Configuration\ConfigFilePathHelper;
 use Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
 
@@ -34,7 +36,11 @@ try {
     // 3. Run Console Application
     /** @var Application $application */
     $application = $container->get(Application::class);
-    $statusCode = $application->run();
+    /** @var InputInterface $input */
+    $input = $container->get(InputInterface::class);
+    /** @var OutputInterface $output */
+    $output = $container->get(OutputInterface::class);
+    $statusCode = $application->run($input, $output);
     exit($statusCode);
 } catch (Throwable $throwable) {
     $symfonyStyle = SymfonyStyleFactory::create();
@@ -44,5 +50,5 @@ try {
         $throwable->getFile(),
         $throwable->getLine()
     ));
-    exit(1);
+    exit($throwable->getCode());
 }

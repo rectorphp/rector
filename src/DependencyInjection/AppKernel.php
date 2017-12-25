@@ -23,7 +23,7 @@ final class AppKernel extends Kernel
             $this->configFile = $configFile;
         }
 
-        parent::__construct('dev' . sha1($configFile), true);
+        parent::__construct('cli' . sha1($configFile), false);
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader): void
