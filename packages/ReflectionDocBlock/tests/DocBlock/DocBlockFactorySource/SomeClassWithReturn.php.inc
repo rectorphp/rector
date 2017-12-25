@@ -1,10 +1,14 @@
 <?php declare(strict_types=1);
 
 
-/**
- * @author Tobias Schultze <http://tobion.de>
- */
 class SomeClassWithAuthor
 {
-
+    /**
+     * Get the session store used by the guard.
+     *
+     * @return \Illuminate\Contracts\Session\Session.
+     */
+    public function getSession()
+    {
+    }
 }
