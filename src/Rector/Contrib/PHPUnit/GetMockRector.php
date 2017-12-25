@@ -10,6 +10,14 @@ use Rector\Node\Attribute;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
 
+/**
+ * Before:
+ * - $this->getMock('Class')
+ * - $this->getMockWithoutInvokingTheOriginalConstructor('Class')
+ *
+ * After:
+ * - $this->createMock('Class')
+ */
 final class GetMockRector extends AbstractRector
 {
     /**

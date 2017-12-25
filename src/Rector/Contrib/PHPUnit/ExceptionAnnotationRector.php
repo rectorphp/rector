@@ -10,6 +10,15 @@ use Rector\Node\MethodCallNodeFactory;
 use Rector\Rector\AbstractRector;
 use Rector\ReflectionDocBlock\NodeAnalyzer\DocBlockAnalyzer;
 
+/**
+ * Before:
+ * - @expectedException Exception
+ * - @expectedExceptionMessage Message
+ *
+ * After:
+ * - $this->expectException('Exception');
+ * - $this->expectExceptionMessage('Message');
+ */
 final class ExceptionAnnotationRector extends AbstractRector
 {
     /**
