@@ -58,7 +58,9 @@ final class GetMockRector extends AbstractRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        return $this->methodNameChanger->renameNode($methodCallNode, 'createMock');
+        $this->methodNameChanger->renameNode($methodCallNode, 'createMock');
+
+        return $methodCallNode;
     }
 
     private function isInTestClass(Node $node): bool

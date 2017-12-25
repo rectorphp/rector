@@ -82,7 +82,9 @@ final class ClassConstantReplacerRector extends AbstractRector
             return $classConstFetchNode;
         }
 
-        return $this->methodNameChanger->renameNode($classConstFetchNode, $newConstantName);
+        $this->methodNameChanger->renameNode($classConstFetchNode, $newConstantName);
+
+        return $classConstFetchNode;
     }
 
     /**

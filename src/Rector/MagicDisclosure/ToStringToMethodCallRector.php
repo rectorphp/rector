@@ -80,7 +80,9 @@ final class ToStringToMethodCallRector extends AbstractRector
             return new MethodCall($node->expr, $this->activeTransformation);
         }
 
-        return $this->methodNameChanger->renameNode($node, $this->activeTransformation);
+        $this->methodNameChanger->renameNode($node, $this->activeTransformation);
+
+        return $node;
     }
 
     private function processStringCandidate(String_ $stringNode): bool
