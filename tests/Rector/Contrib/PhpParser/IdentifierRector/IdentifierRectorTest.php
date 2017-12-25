@@ -35,6 +35,6 @@ final class IdentifierRectorTest extends AbstractRectorTestCase
      */
     protected function getRectorClasses(): array
     {
-        return [IdentifierRectorTest::class];
+        return [IdentifierRector::class];
     }
 }
