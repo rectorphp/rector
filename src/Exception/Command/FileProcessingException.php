@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Command;
+namespace Rector\Exception\Command;
 
 use Exception;
 

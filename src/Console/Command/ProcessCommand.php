@@ -3,9 +3,9 @@
 namespace Rector\Console\Command;
 
 use Rector\Application\FileProcessor;
-use Rector\Command\FileProcessingException;
 use Rector\Console\Output\ProcessCommandReporter;
 use Rector\ConsoleDiffer\DifferAndFormatter;
+use Rector\Exception\Command\FileProcessingException;
 use Rector\Exception\NoRectorsLoadedException;
 use Rector\FileSystem\PhpFilesFinder;
 use Rector\Naming\CommandNaming;
