@@ -3,14 +3,12 @@
 namespace Rector\NodeTraverser;
 
 use PhpParser\NodeTraverser;
-use Rector\NodeVisitor\NodeRemover;
 use Rector\NodeVisitor\PropertyToClassAdder;
 
 final class ShutdownNodeTraverser extends NodeTraverser
 {
-    public function __construct(PropertyToClassAdder $propertyToClassAdder, NodeRemover $nodeRemover)
+    public function __construct(PropertyToClassAdder $propertyToClassAdder)
     {
         $this->addVisitor($propertyToClassAdder);
-        $this->addVisitor($nodeRemover);
     }
 }

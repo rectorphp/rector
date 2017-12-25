@@ -104,6 +104,8 @@ final class ProcessCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $this->symfonyStyle->setVerbosity($output->getVerbosity());
+
         $this->ensureSomeRectorsAreRegistered();
 
         $source = $input->getArgument(self::ARGUMENT_SOURCE_NAME);
@@ -137,6 +139,7 @@ final class ProcessCommand extends Command
     private function processFiles(array $fileInfos): void
     {
         $this->symfonyStyle->title('Processing files');
+        $this->symfonyStyle->progressStart(count($fileInfos));
 
         $i = 1;
         foreach ($fileInfos as $fileInfo) {
@@ -152,6 +155,11 @@ final class ProcessCommand extends Command
             } else {
                 $this->fileProcessor->processFile($fileInfo);
             }
+
+            $this->symfonyStyle->progressAdvance();
         }
+
+        $this->symfonyStyle->newLine();
+        $this->symfonyStyle->newLine();
     }
 }
