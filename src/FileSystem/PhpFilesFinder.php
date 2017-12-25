@@ -45,9 +45,6 @@ final class PhpFilesFinder
             ->name('*.php')
             ->in($directories)
             ->exclude('examples')
-            ->exclude('tests')
-            ->exclude('Tests')
-            ->exclude('Test')
             ->exclude('stubs')
             // very rare and specific code
             ->exclude('polyfill')
