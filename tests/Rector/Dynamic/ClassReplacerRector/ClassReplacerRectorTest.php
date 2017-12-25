@@ -7,22 +7,24 @@ use Rector\Testing\PHPUnit\AbstractConfigurableRectorTestCase;
 
 final class ClassReplacerRectorTest extends AbstractConfigurableRectorTestCase
 {
-    public function test(): void
+    /**
+     * @dataProvider provideWrongToFixedFiles()
+     */
+    public function test(string $wrong, string $fixed): void
     {
-        $this->doTestFileMatchesExpectedContent(
-            __DIR__ . '/wrong/wrong.php.inc',
-            __DIR__ . '/correct/correct.php.inc'
-        );
+        $this->doTestFileMatchesExpectedContent($wrong, $fixed);
+    }
 
-        $this->doTestFileMatchesExpectedContent(
-            __DIR__ . '/wrong/wrong2.php.inc',
-            __DIR__ . '/correct/correct2.php.inc'
-        );
-
-        $this->doTestFileMatchesExpectedContent(
-            __DIR__ . '/wrong/wrong3.php.inc',
-            __DIR__ . '/correct/correct3.php.inc'
-        );
+    /**
+     * @return string[][]
+     */
+    public function provideWrongToFixedFiles(): array
+    {
+        return [
+            [__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc'],
+            [__DIR__ . '/Wrong/wrong2.php.inc', __DIR__ . '/Correct/correct2.php.inc'],
+            [__DIR__ . '/Wrong/wrong3.php.inc', __DIR__ . '/Correct/correct3.php.inc'],
+        ];
     }
 
     protected function provideConfig(): string
