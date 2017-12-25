@@ -126,7 +126,7 @@ final class MethodNameReplacerRector extends AbstractRector
             return $this->resolveClassRename($node, $oldToNewMethods, $methodName);
         }
 
-        return $this->methodNameChanger->renameNode($node, $oldToNewMethods[$methodName]);;
+        return $this->methodNameChanger->renameNode($node, $oldToNewMethods[$methodName]);
     }
 
     /**

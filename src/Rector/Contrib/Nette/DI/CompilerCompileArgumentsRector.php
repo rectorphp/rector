@@ -30,7 +30,7 @@ final class CompilerCompileArgumentsRector extends AbstractRector
     /**
      * @var MethodNameChanger
      */
-    private $MethodNameChanger;
+    private $methodNameChanger;
 
     public function __construct(MethodCallAnalyzer $methodCallAnalyzer, MethodNameChanger $methodNameChanger)
     {

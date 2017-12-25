@@ -27,7 +27,7 @@ final class ValidateControlRector extends AbstractRector
     /**
      * @var MethodNameChanger
      */
-    private $MethodNameChanger;
+    private $methodNameChanger;
 
     /**
      * @var NodeFactory
