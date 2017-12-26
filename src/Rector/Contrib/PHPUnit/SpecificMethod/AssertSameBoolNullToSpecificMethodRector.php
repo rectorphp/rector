@@ -62,7 +62,7 @@ final class AssertSameBoolNullToSpecificMethodRector extends AbstractRector
             return false;
         }
 
-        $this->constantName = $firstArgumentValue->name->toString();
+        $this->constantName = strtolower($firstArgumentValue->name->toString());
 
         return isset($this->constValueToNewMethodNames[$this->constantName]);
     }

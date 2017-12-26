@@ -4,7 +4,7 @@ final class MyTest extends \PHPUnit\Framework\TestCase
 {
     public function test()
     {
-        $this->assertSame(null, 'something');
+        $this->assertSame(NULL, 'something');
         $this->assertNotSame(false, 'something', 'message');
     }
 }
