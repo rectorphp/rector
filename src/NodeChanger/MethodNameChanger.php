@@ -7,9 +7,6 @@ use PhpParser\Node\Identifier;
 
 final class MethodNameChanger
 {
-    /**
-     * @param string $newMethodName
-     */
     public function renameNode(Node $node, string $newMethodName): void
     {
         $node->name = new Identifier($newMethodName);
