@@ -5,6 +5,7 @@ namespace Rector\Rector\Contrib\PHPUnit\SpecificMethod;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
@@ -66,7 +67,8 @@ final class AssertCompareToSpecificMethodRector extends AbstractRector
 
         $firstArgumentValue = $methodCallNode->args[0]->value;
         if (! $firstArgumentValue instanceof LNumber &&
-            ! $firstArgumentValue instanceof String_
+            ! $firstArgumentValue instanceof String_ &&
+            ! $firstArgumentValue instanceof Variable
         ) {
             return false;
         }
