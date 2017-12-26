@@ -35,6 +35,8 @@ final class LazyTypeAttributeTest extends AbstractNodeTypeResolverTest
         });
         $this->assertFalse($this->isCalled);
 
+        $this->assertTrue(is_callable($this->variableNode->getAttribute('someKey')));
+
         $this->assertSame(5, $this->variableNode->getAttribute('someKey')());
         $this->assertTrue($this->isCalled);
     }
