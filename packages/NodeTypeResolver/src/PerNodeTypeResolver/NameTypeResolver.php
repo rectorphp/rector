@@ -27,10 +27,7 @@ final class NameTypeResolver implements PerNodeTypeResolverInterface
      */
     public function getNodeTypes(): array
     {
-        return [
-            'Name_Relative',
-            'Name_FullyQualified',
-        ];
+        return ['Name'];
     }
 
     /**

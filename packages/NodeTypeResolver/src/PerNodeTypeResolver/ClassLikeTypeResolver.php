@@ -24,11 +24,7 @@ final class ClassLikeTypeResolver implements PerNodeTypeResolverInterface
      */
     public function getNodeTypes(): array
     {
-        return [
-            'Stmt_Class',
-            'Stmt_Trait',
-            'Stmt_Interface',
-        ];
+        return ['Stmt_Class', 'Stmt_Trait', 'Stmt_Interface'];
     }
 
     /**

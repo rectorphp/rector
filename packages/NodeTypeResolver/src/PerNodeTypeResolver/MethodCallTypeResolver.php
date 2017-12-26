@@ -39,8 +39,7 @@ final class MethodCallTypeResolver implements PerNodeTypeResolverInterface
      */
     public function getNodeTypes(): array
     {
-        // also special case, expression
-        return [MethodCall::class];
+        return ['Expr_MethodCall'];
     }
 
     /**

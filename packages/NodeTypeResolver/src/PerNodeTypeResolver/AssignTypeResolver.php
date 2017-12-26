@@ -34,10 +34,7 @@ final class AssignTypeResolver implements PerNodeTypeResolverInterface, NodeType
      */
     public function getNodeTypes(): array
     {
-        // special case of expression
-        // maybe move to variable?
-        // inspire in printer, how it's solved there
-        return [Assign::class];
+        return ['Expr_Assign'];
     }
 
     /**
