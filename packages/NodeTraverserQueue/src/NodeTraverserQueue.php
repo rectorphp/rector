@@ -6,17 +6,17 @@ use Nette\Utils\Strings;
 use PhpParser\Lexer;
 use Rector\BetterReflection\Reflection\ReflectionFunction;
 use Rector\BetterReflection\Reflector\Exception\IdentifierNotFound;
-use Rector\Contract\Parser\ParserInterface;
 use Rector\NodeTraverser\CloningNodeTraverser;
 use Rector\NodeTraverser\RectorNodeTraverser;
 use Rector\NodeTraverser\ShutdownNodeTraverser;
 use Rector\NodeTraverser\StandaloneTraverseNodeTraverser;
+use Rector\Parser\Parser;
 use SplFileInfo;
 
 final class NodeTraverserQueue
 {
     /**
-     * @var ParserInterface
+     * @var Parser
      */
     private $parser;
 
@@ -46,7 +46,7 @@ final class NodeTraverserQueue
     private $standaloneTraverseNodeTraverser;
 
     public function __construct(
-        ParserInterface $parser,
+        Parser $parser,
         Lexer $lexer,
         CloningNodeTraverser $cloningNodeTraverser,
         RectorNodeTraverser $rectorNodeTraverser,
@@ -66,6 +66,8 @@ final class NodeTraverserQueue
      */
     public function processFileInfo(SplFileInfo $fileInfo): array
     {
+        dump($fileInfo->getRealPath());
+
         $oldStmts = $this->parser->parseFile($fileInfo->getRealPath());
         $oldTokens = $this->lexer->getTokens();
 

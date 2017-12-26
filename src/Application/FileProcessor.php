@@ -18,7 +18,6 @@ final class FileProcessor
      * @var NodeTraverserQueue
      */
     private $nodeTraverserQueue;
-
     /**
      * @var RectorNodeTraverser
      */
