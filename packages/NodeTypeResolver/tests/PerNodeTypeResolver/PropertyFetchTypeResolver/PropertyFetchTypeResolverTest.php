@@ -3,7 +3,6 @@
 namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\PropertyFetchTypeResolver;
 
 use PhpParser\Node\Expr\PropertyFetch;
-use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Tests\AbstractNodeTypeResolverTest;
 
 final class Test extends AbstractNodeTypeResolverTest
@@ -18,12 +17,15 @@ final class Test extends AbstractNodeTypeResolverTest
         $this->assertCount(3, $propertyFetchNodes);
 
         $this->assertSame('name', $propertyFetchNodes[0]->name->toString());
-        $this->assertSame(['PhpParser\Node\VarLikeIdentifier'], $propertyFetchNodes[0]->getAttribute(Attribute::TYPES));
+
+        $this->assertSame(['PhpParser\Node\VarLikeIdentifier'], $this->nodeTypeResolver->resolve($propertyFetchNodes[0]));
+//        $this->assertSame(['PhpParser\Node\VarLikeIdentifier'], $propertyFetchNodes[0]->getAttribute(Attribute::TYPES));
 
         $this->assertSame('props', $propertyFetchNodes[1]->name->toString());
         $this->assertSame(
             ['PhpParser\Node\Stmt\PropertyProperty'],
-            $propertyFetchNodes[1]->getAttribute(Attribute::TYPES)
+            $this->nodeTypeResolver->resolve($propertyFetchNodes[1])
+//        $propertyFetchNodes[1]->getAttribute(Attribute::TYPES)
         );
 
         $this->assertSame('node', $propertyFetchNodes[2]->name->toString());
@@ -31,6 +33,7 @@ final class Test extends AbstractNodeTypeResolverTest
             'PhpParser\Node\Stmt\Property',
             'PhpParser\Node\Stmt',
             'PhpParser\NodeAbstract',
-        ], $propertyFetchNodes[2]->getAttribute(Attribute::TYPES));
+        ], $this->nodeTypeResolver->resolve($propertyFetchNodes[2]));
+//        ], $propertyFetchNodes[2]->getAttribute(Attribute::TYPES));
     }
 }
