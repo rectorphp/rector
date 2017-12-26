@@ -3,9 +3,6 @@
 namespace Rector\NodeTypeResolver;
 
 use PhpParser\Node;
-use PhpParser\Node\Stmt\Namespace_;
-use PhpParser\Node\Stmt\Use_;
-use PhpParser\Node\Stmt\UseUse;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 
@@ -18,7 +15,9 @@ final class NodeTypeResolver
 
     public function addPerNodeTypeResolver(PerNodeTypeResolverInterface $perNodeTypeResolver): void
     {
-        $this->perNodeTypeResolvers[$perNodeTypeResolver->getNodeTypes()] = $perNodeTypeResolver;
+        foreach ($perNodeTypeResolver->getNodeTypes() as $nodeType) {
+            $this->perNodeTypeResolvers[$nodeType] = $perNodeTypeResolver;
+        }
     }
 
     /**
@@ -26,26 +25,15 @@ final class NodeTypeResolver
      */
     public function resolve(Node $node): array
     {
-        // @todo isset
-
-        foreach ($this->perNodeTypeResolvers as $class => $perNodeTypeResolver) {
-
-            dump($node->getType());
-
-            die;
-
-            if (! $node instanceof $class) {
-                continue;
-            }
-
-            // resolve just once
-            if ($node->getAttribute(Attribute::TYPES)) {
-                return $node->getAttribute(Attribute::TYPES);
-            }
-
-            return $perNodeTypeResolver->resolve($node);
+        if (! isset($this->perNodeTypeResolvers[$node->getType()])) {
+            return [];
         }
 
-        return [];
+        // resolve just once
+        if ($node->getAttribute(Attribute::TYPES)) {
+            return $node->getAttribute(Attribute::TYPES);
+        }
+
+        return $this->perNodeTypeResolvers[$node->getType()]->resolve($node);
     }
 }
