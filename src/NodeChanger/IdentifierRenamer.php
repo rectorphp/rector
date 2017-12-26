@@ -3,8 +3,11 @@
 namespace Rector\NodeChanger;
 
 use Exception;
-use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 
 final class IdentifierRenamer
@@ -30,10 +33,8 @@ final class IdentifierRenamer
 
     private function ensureNodeHasIdentifier(Node $node): void
     {
-        $typeNode = Strings::after(get_class($node), '\\', 3);
-
-        if (! in_array($typeNode, [
-            'MethodCall', 'StaticCall', 'PropertyFetch', 'ClassConstFetch',
+        if (! in_array(get_class($node), [
+            ClassConstFetch::class, MethodCall::class, PropertyFetch::class, StaticCall::class,
         ])) {
             throw new Exception('The given Node does not have a valid Identifier.');
         }
