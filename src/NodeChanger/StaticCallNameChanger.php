@@ -2,12 +2,12 @@
 
 namespace Rector\NodeChanger;
 
-use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 
-final class ClassConstFetchNameChanger
+final class StaticCallNameChanger
 {
-    public function renameNode(ClassConstFetch $node, string $newMethodName): void
+    public function renameNode(StaticCall $node, string $newMethodName): void
     {
         $node->name = new Identifier($newMethodName);
     }
@@ -15,7 +15,7 @@ final class ClassConstFetchNameChanger
     /**
      * @param string[] $renameMethodMap
      */
-    public function renameNodeWithMap(ClassConstFetch $node, array $renameMethodMap): void
+    public function renameNodeWithMap(StaticCall $node, array $renameMethodMap): void
     {
         $oldNodeMethodName = $node->name->toString();
 
