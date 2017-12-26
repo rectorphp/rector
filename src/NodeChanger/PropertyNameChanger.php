@@ -11,14 +11,4 @@ final class PropertyNameChanger
     {
         $node->name = new Identifier($newMethodName);
     }
-
-    /**
-     * @param string[] $renameMethodMap
-     */
-    public function renameNodeWithMap(PropertyFetch $node, array $renameMethodMap): void
-    {
-        $oldNodeMethodName = $node->name->toString();
-
-        $node->name = new Identifier($renameMethodMap[$oldNodeMethodName]);
-    }
 }
