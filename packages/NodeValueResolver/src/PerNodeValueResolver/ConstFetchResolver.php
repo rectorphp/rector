@@ -18,7 +18,8 @@ final class ConstFetchResolver implements PerNodeValueResolverInterface
      */
     public function resolve(Node $constFetchNode): bool
     {
-        $name = $constFetchNode->name->toString();
+        $name = strtolower($constFetchNode->name->toString());
+
         if ($name === 'true') {
             return true;
         }
