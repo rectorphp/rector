@@ -57,7 +57,7 @@
         }
     },
     "scripts": {
-        "all": ["@check-cs", "phpunit"],
+        "all": ["@check-cs", "phpunit", "@phpstan"],
         "check-cs": "vendor/bin/ecs check bin packages src tests",
         "fix-cs": "vendor/bin/ecs check bin packages src tests --fix",
         "phpstan": "vendor/bin/phpstan.phar analyse packages src tests --level max --configuration phpstan.neon"
