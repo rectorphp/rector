@@ -63,9 +63,4 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface, NodeTy
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
-
-    public function isPrimary(): bool
-    {
-        return true;
-    }
 }

@@ -94,9 +94,4 @@ final class NewTypeResolver implements PerNodeTypeResolverInterface, NodeTypeRes
 
         return false;
     }
-
-    public function isPrimary(): bool
-    {
-        return true;
-    }
 }

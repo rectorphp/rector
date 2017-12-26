@@ -24,7 +24,11 @@ final class ClassLikeTypeResolver implements PerNodeTypeResolverInterface
      */
     public function getNodeTypes(): array
     {
+<<<<<<< HEAD
         return ['Stmt_Class', 'Stmt_Trait', 'Stmt_Interface'];
+=======
+        return ClassLike::class;
+>>>>>>> parent of ae2d27c... add isPrimary()
     }
 
     /**
@@ -34,10 +38,5 @@ final class ClassLikeTypeResolver implements PerNodeTypeResolverInterface
     public function resolve(Node $classLikeNode): array
     {
         return $this->classLikeAnalyzer->resolveTypeAndParentTypes($classLikeNode);
-    }
-
-    public function isPrimary(): bool
-    {
-        return true;
     }
 }

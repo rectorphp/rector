@@ -93,9 +93,4 @@ final class ParamTypeResolver implements PerNodeTypeResolverInterface, NodeTypeR
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
-
-    public function isPrimary(): bool
-    {
-        return false;
-    }
 }
