@@ -122,4 +122,9 @@ final class PropertyFetchTypeResolver implements PerNodeTypeResolverInterface, N
 
         return [$propertyType];
     }
+
+    public function isPrimary(): bool
+    {
+        return true;
+    }
 }

@@ -13,6 +13,7 @@ use Rector\ReflectionDocBlock\NodeAnalyzer\DocBlockAnalyzer;
 final class PropertyTypeResolver implements PerNodeTypeResolverInterface
 {
     /**
+     * @todo decouple
      * @var string[]
      */
     private $scalarTypes = ['string', 'bool', 'array', 'int', 'resource', 'iterable', 'callable', 'object'];
@@ -111,5 +112,10 @@ final class PropertyTypeResolver implements PerNodeTypeResolverInterface
         }
 
         return $propertyTypes;
+    }
+
+    public function isPrimary(): bool
+    {
+        return true;
     }
 }

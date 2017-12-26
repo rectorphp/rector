@@ -122,4 +122,9 @@ final class MethodCallTypeResolver implements PerNodeTypeResolverInterface
 
         return $variableTypes;
     }
+
+    public function isPrimary(): bool
+    {
+        return true;
+    }
 }

@@ -107,4 +107,9 @@ final class AssignTypeResolver implements PerNodeTypeResolverInterface, NodeType
 
         return [];
     }
+
+    public function isPrimary(): bool
+    {
+        return false;
+    }
 }

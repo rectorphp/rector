@@ -104,4 +104,9 @@ final class NameTypeResolver implements PerNodeTypeResolverInterface
 
         return $stringName;
     }
+
+    public function isPrimary(): bool
+    {
+        return false;
+    }
 }

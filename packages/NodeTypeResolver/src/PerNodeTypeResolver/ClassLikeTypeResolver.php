@@ -21,6 +21,8 @@ final class ClassLikeTypeResolver implements PerNodeTypeResolverInterface
 
     public function getNodeClass(): string
     {
+        // @todo: types as subscribers, or array
+        // Class_, Trait_, Interface_
         return ClassLike::class;
     }
 
@@ -31,5 +33,10 @@ final class ClassLikeTypeResolver implements PerNodeTypeResolverInterface
     public function resolve(Node $classLikeNode): array
     {
         return $this->classLikeAnalyzer->resolveTypeAndParentTypes($classLikeNode);
+    }
+
+    public function isPrimary(): bool
+    {
+        return true;
     }
 }

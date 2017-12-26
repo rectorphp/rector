@@ -33,4 +33,9 @@ final class ArrayDimFetchTypeResolver implements PerNodeTypeResolverInterface, N
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
+
+    public function isPrimary(): bool
+    {
+        return true;
+    }
 }
