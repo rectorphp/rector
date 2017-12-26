@@ -6,7 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Identifier;
 use Rector\NodeAnalyzer\ClassConstAnalyzer;
-use Rector\NodeChanger\MethodNameChanger;
+use Rector\NodeChanger\ClassConstFetchNameChanger;
 use Rector\Rector\AbstractRector;
 
 final class ClassConstantReplacerRector extends AbstractRector
@@ -26,9 +26,9 @@ final class ClassConstantReplacerRector extends AbstractRector
     private $classConstAnalyzer;
 
     /**
-     * @var MethodNameChanger
+     * @var ClassConstFetchNameChanger
      */
-    private $methodNameChanger;
+    private $classConstFetchNameChanger;
 
     /**
      * @var string|null
@@ -41,11 +41,11 @@ final class ClassConstantReplacerRector extends AbstractRector
     public function __construct(
         array $oldToNewConstantsByClass,
         ClassConstAnalyzer $classConstAnalyzer,
-        MethodNameChanger $methodNameChanger
+        ClassConstFetchNameChanger $classConstFetchNameChanger
     ) {
         $this->oldToNewConstantsByClass = $oldToNewConstantsByClass;
         $this->classConstAnalyzer = $classConstAnalyzer;
-        $this->methodNameChanger = $methodNameChanger;
+        $this->classConstFetchNameChanger = $classConstFetchNameChanger;
     }
 
     public function isCandidate(Node $node): bool
@@ -82,7 +82,7 @@ final class ClassConstantReplacerRector extends AbstractRector
             return $classConstFetchNode;
         }
 
-        $this->methodNameChanger->renameNode($classConstFetchNode, $newConstantName);
+        $this->classConstFetchNameChanger->renameNode($classConstFetchNode, $newConstantName);
 
         return $classConstFetchNode;
     }

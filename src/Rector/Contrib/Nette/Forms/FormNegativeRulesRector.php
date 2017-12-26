@@ -7,7 +7,7 @@ use PhpParser\Node\Expr\BitwiseNot;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Identifier;
 use Rector\NodeAnalyzer\ClassConstAnalyzer;
-use Rector\NodeChanger\MethodNameChanger;
+use Rector\NodeChanger\ClassConstFetchNameChanger;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -37,14 +37,14 @@ final class FormNegativeRulesRector extends AbstractRector
     private $classConstAnalyzer;
 
     /**
-     * @var MethodNameChanger
+     * @var ClassConstFetchNameChanger
      */
-    private $methodNameChanger;
+    private $classConstFetchNameChanger;
 
-    public function __construct(ClassConstAnalyzer $classConstAnalyzer, MethodNameChanger $methodNameChanger)
+    public function __construct(ClassConstAnalyzer $classConstAnalyzer, ClassConstFetchNameChanger $classConstFetchNameChanger)
     {
         $this->classConstAnalyzer = $classConstAnalyzer;
-        $this->methodNameChanger = $methodNameChanger;
+        $this->classConstFetchNameChanger = $classConstFetchNameChanger;
     }
 
     /**
@@ -74,7 +74,7 @@ final class FormNegativeRulesRector extends AbstractRector
         /** @var Identifier $identifierNode */
         $identifierNode = $classConstFetchNode->name;
 
-        $this->methodNameChanger->renameNode($classConstFetchNode, 'NOT_' . $identifierNode->toString());
+        $this->classConstFetchNameChanger->renameNode($classConstFetchNode, 'NOT_' . $identifierNode->toString());
 
         return $classConstFetchNode;
     }
