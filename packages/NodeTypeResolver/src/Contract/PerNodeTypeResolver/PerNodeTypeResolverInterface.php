@@ -6,7 +6,10 @@ use PhpParser\Node;
 
 interface PerNodeTypeResolverInterface
 {
-    public function getNodeClass(): string;
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array;
 
     /**
      * @return string[]

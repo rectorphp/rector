@@ -16,18 +16,9 @@ final class NodeTypeResolver
      */
     private $perNodeTypeResolvers = [];
 
-    /**
-     * @var string[]
-     */
-    private $nodesToSkip = [
-        Namespace_::class,
-        Use_::class,
-        UseUse::class,
-    ];
-
     public function addPerNodeTypeResolver(PerNodeTypeResolverInterface $perNodeTypeResolver): void
     {
-        $this->perNodeTypeResolvers[$perNodeTypeResolver->getNodeClass()] = $perNodeTypeResolver;
+        $this->perNodeTypeResolvers[$perNodeTypeResolver->getNodeTypes()] = $perNodeTypeResolver;
     }
 
     /**
@@ -35,11 +26,14 @@ final class NodeTypeResolver
      */
     public function resolve(Node $node): array
     {
-        if (in_array(get_class($node), $this->nodesToSkip, true)) {
-            return [];
-        }
+        // @todo isset
 
         foreach ($this->perNodeTypeResolvers as $class => $perNodeTypeResolver) {
+
+            dump($node->getType());
+
+            die;
+
             if (! $node instanceof $class) {
                 continue;
             }

@@ -22,9 +22,15 @@ final class NameTypeResolver implements PerNodeTypeResolverInterface
         $this->smartClassReflector = $smartClassReflector;
     }
 
-    public function getNodeClass(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        return Name::class;
+        return [
+            'Name_Relative',
+            'Name_FullyQualified',
+        ];
     }
 
     /**

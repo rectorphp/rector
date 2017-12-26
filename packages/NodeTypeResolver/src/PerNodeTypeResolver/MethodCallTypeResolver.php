@@ -34,9 +34,13 @@ final class MethodCallTypeResolver implements PerNodeTypeResolverInterface
         $this->methodReflector = $methodReflector;
     }
 
-    public function getNodeClass(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        return MethodCall::class;
+        // also special case, expression
+        return [MethodCall::class];
     }
 
     /**

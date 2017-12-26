@@ -15,9 +15,12 @@ final class ArrayDimFetchTypeResolver implements PerNodeTypeResolverInterface, N
      */
     private $nodeTypeResolver;
 
-    public function getNodeClass(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        return ArrayDimFetch::class;
+        return ['Expr_ArrayDimFetch'];
     }
 
     /**

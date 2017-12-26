@@ -19,11 +19,16 @@ final class ClassLikeTypeResolver implements PerNodeTypeResolverInterface
         $this->classLikeAnalyzer = $classLikeAnalyzer;
     }
 
-    public function getNodeClass(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        // @todo: types as subscribers, or array
-        // Class_, Trait_, Interface_
-        return ClassLike::class;
+        return [
+            'Stmt_Class',
+            'Stmt_Trait',
+            'Stmt_Interface',
+        ];
     }
 
     /**
