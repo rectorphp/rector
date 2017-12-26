@@ -2,9 +2,10 @@
 
 namespace Rector\NodeValueResolver\Tests;
 
-use PhpParser\BuilderHelpers;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use Rector\NodeValueResolver\NodeValueResolver;
 use Rector\Tests\AbstractContainerAwareTestCase;
@@ -25,8 +26,8 @@ final class NodeValueResolverTest extends AbstractContainerAwareTestCase
     {
         $arrayNode = new Array_([
             new ArrayItem(new String_('hi')),
-            new ArrayItem(BuilderHelpers::normalizeValue(true)),
-            new ArrayItem(BuilderHelpers::normalizeValue(false)),
+            new ArrayItem(new ConstFetch(new Name('true'))),
+            new ArrayItem(new ConstFetch(new Name('FALSE'))),
         ]);
 
         $resolved = $this->nodeValueResolver->resolve($arrayNode);
