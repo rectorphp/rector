@@ -167,7 +167,7 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractRector
     private function filterActiveOldToNewMethods(array $activeMethods = []): array
     {
         if ($activeMethods) {
-            return array_filter($this->defaultOldToNewMethods, function (string $method) use ($activeMethods) {
+            return array_filter($this->defaultOldToNewMethods, function (string $method) use ($activeMethods): bool {
                 return in_array($method, $activeMethods, true);
             }, ARRAY_FILTER_USE_KEY);
         }

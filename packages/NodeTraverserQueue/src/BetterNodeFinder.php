@@ -57,7 +57,7 @@ final class BetterNodeFinder
      */
     public function findFirstInstanceOfAny($nodes, array $types): ?Node
     {
-        return $this->nodeFinder->findFirst($nodes, function (Node $node) use ($types) {
+        return $this->nodeFinder->findFirst($nodes, function (Node $node) use ($types): bool {
             foreach ($types as $type) {
                 if ($node instanceof $type) {
                     return true;
