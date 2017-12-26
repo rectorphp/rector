@@ -27,11 +27,8 @@ final class ConstructorMethodBuilder
      */
     private $nodeFactory;
 
-    public function __construct(
-        BuilderFactory $builderFactory,
-        StatementGlue $statementGlue,
-        NodeFactory $nodeFactory
-    ) {
+    public function __construct(BuilderFactory $builderFactory, StatementGlue $statementGlue, NodeFactory $nodeFactory)
+    {
         $this->builderFactory = $builderFactory;
         $this->statementGlue = $statementGlue;
         $this->nodeFactory = $nodeFactory;

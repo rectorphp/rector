@@ -41,10 +41,8 @@ final class FormNegativeRulesRector extends AbstractRector
      */
     private $identifierRenamer;
 
-    public function __construct(
-        ClassConstAnalyzer $classConstAnalyzer,
-        IdentifierRenamer $identifierRenamer
-    ) {
+    public function __construct(ClassConstAnalyzer $classConstAnalyzer, IdentifierRenamer $identifierRenamer)
+    {
         $this->classConstAnalyzer = $classConstAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
     }
