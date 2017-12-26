@@ -6,7 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
-use Rector\NodeChanger\MethodNameChanger;
+use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractRector;
 
 final class SetInjectToAddTagRector extends AbstractRector
@@ -17,9 +17,9 @@ final class SetInjectToAddTagRector extends AbstractRector
     private $methodCallAnalyzer;
 
     /**
-     * @var MethodNameChanger
+     * @var IdentifierRenamer
      */
-    private $methodNameChanger;
+    private $identifierRenamer;
 
     /**
      * @var NodeFactory
@@ -48,11 +48,11 @@ final class SetInjectToAddTagRector extends AbstractRector
 
     public function __construct(
         MethodCallAnalyzer $methodCallAnalyzer,
-        MethodNameChanger $methodNameChanger,
+        IdentifierRenamer $identifierRenamer,
         NodeFactory $nodeFactory
     ) {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
-        $this->methodNameChanger = $methodNameChanger;
+        $this->identifierRenamer = $identifierRenamer;
         $this->nodeFactory = $nodeFactory;
     }
 
@@ -74,7 +74,7 @@ final class SetInjectToAddTagRector extends AbstractRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        $this->methodNameChanger->renameNode($methodCallNode, $this->newMethod);
+        $this->identifierRenamer->renameNode($methodCallNode, $this->newMethod);
         $methodCallNode->args = $this->nodeFactory->createArgs($this->newArguments);
 
         return $methodCallNode;

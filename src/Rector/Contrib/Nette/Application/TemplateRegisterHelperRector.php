@@ -6,7 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
-use Rector\NodeChanger\MethodNameChanger;
+use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -24,9 +24,9 @@ final class TemplateRegisterHelperRector extends AbstractRector
     private $methodCallAnalyzer;
 
     /**
-     * @var MethodNameChanger
+     * @var IdentifierRenamer
      */
-    private $methodNameChanger;
+    private $identifierRenamer;
 
     /**
      * @var MethodCallNodeFactory
@@ -35,11 +35,11 @@ final class TemplateRegisterHelperRector extends AbstractRector
 
     public function __construct(
         MethodCallAnalyzer $methodCallAnalyzer,
-        MethodNameChanger $methodNameChanger,
+        IdentifierRenamer $identifierRenamer,
         MethodCallNodeFactory $methodCallNodeFactory
     ) {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
-        $this->methodNameChanger = $methodNameChanger;
+        $this->identifierRenamer = $identifierRenamer;
         $this->methodCallNodeFactory = $methodCallNodeFactory;
     }
 
@@ -57,7 +57,7 @@ final class TemplateRegisterHelperRector extends AbstractRector
      */
     public function refactor(Node $methodCallNode): Node
     {
-        $this->methodNameChanger->renameNode($methodCallNode, 'addFilter');
+        $this->identifierRenamer->renameNode($methodCallNode, 'addFilter');
 
         $methodCallNode->var = $this->methodCallNodeFactory->createWithVariableAndMethodName(
             $methodCallNode->var,

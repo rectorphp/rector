@@ -8,7 +8,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
-use Rector\NodeChanger\MethodNameChanger;
+use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -55,14 +55,14 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractRe
     private $methodCallAnalyzer;
 
     /**
-     * @var MethodNameChanger
+     * @var IdentifierRenamer
      */
-    private $methodNameChanger;
+    private $identifierRenamer;
 
-    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, MethodNameChanger $methodNameChanger)
+    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, IdentifierRenamer $identifierRenamer)
     {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
-        $this->methodNameChanger = $methodNameChanger;
+        $this->identifierRenamer = $identifierRenamer;
     }
 
     public function isCandidate(Node $node): bool
@@ -93,7 +93,7 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractRe
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        $this->methodNameChanger->renameNodeWithMap($methodCallNode, $this->renameMethodsMap);
+        $this->identifierRenamer->renameNodeWithMap($methodCallNode, $this->renameMethodsMap);
         $this->moveFunctionArgumentsUp($methodCallNode);
 
         return $methodCallNode;

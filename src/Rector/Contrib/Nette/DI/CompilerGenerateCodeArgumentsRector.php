@@ -6,7 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
-use Rector\NodeChanger\MethodNameChanger;
+use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -25,14 +25,14 @@ final class CompilerGenerateCodeArgumentsRector extends AbstractRector
     private $methodCallAnalyzer;
 
     /**
-     * @var MethodNameChanger
+     * @var IdentifierRenamer
      */
-    private $methodNameChanger;
+    private $identifierRenamer;
 
-    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, MethodNameChanger $methodNameChanger)
+    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, IdentifierRenamer $identifierRenamer)
     {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
-        $this->methodNameChanger = $methodNameChanger;
+        $this->identifierRenamer = $identifierRenamer;
     }
 
     public function isCandidate(Node $node): bool
@@ -71,7 +71,7 @@ final class CompilerGenerateCodeArgumentsRector extends AbstractRector
         Arg $argNode
     ): MethodCall {
         $addConfigMethodCallNode = clone $methodCallNode;
-        $this->methodNameChanger->renameNode($addConfigMethodCallNode, $method);
+        $this->identifierRenamer->renameNode($addConfigMethodCallNode, $method);
         $addConfigMethodCallNode->args = [$argNode];
 
         return $addConfigMethodCallNode;

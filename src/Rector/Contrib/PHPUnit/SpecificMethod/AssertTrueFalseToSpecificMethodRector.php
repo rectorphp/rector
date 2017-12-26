@@ -10,7 +10,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
-use Rector\NodeChanger\MethodNameChanger;
+use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -50,9 +50,9 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractRector
     private $methodCallAnalyzer;
 
     /**
-     * @var MethodNameChanger
+     * @var IdentifierRenamer
      */
-    private $methodNameChanger;
+    private $identifierRenamer;
 
     /**
      * @var string|null
@@ -65,11 +65,11 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractRector
     public function __construct(
         array $activeMethods = [],
         MethodCallAnalyzer $methodCallAnalyzer,
-        MethodNameChanger $methodNameChanger
+        IdentifierRenamer $identifierRenamer
     ) {
         $this->activeOldToNewMethods = $this->filterActiveOldToNewMethods($activeMethods);
         $this->methodCallAnalyzer = $methodCallAnalyzer;
-        $this->methodNameChanger = $methodNameChanger;
+        $this->identifierRenamer = $identifierRenamer;
     }
 
     public function isCandidate(Node $node): bool
@@ -123,9 +123,9 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractRector
         [$trueMethodName, $falseMethodName] = $this->activeOldToNewMethods[$this->activeFuncCallName];
 
         if ($oldMethodName === 'assertTrue' && $trueMethodName) {
-            $this->methodNameChanger->renameNode($methodCallNode, $trueMethodName);
+            $this->identifierRenamer->renameNode($methodCallNode, $trueMethodName);
         } elseif ($oldMethodName === 'assertFalse' && $falseMethodName) {
-            $this->methodNameChanger->renameNode($methodCallNode, $falseMethodName);
+            $this->identifierRenamer->renameNode($methodCallNode, $falseMethodName);
         }
     }
 

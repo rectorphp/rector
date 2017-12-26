@@ -6,7 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Identifier;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
-use Rector\NodeChanger\PropertyNameChanger;
+use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractRector;
 
 final class PropertyNameReplacerRector extends AbstractRector
@@ -26,9 +26,9 @@ final class PropertyNameReplacerRector extends AbstractRector
     private $activeTypes = [];
 
     /**
-     * @var PropertyNameChanger
+     * @var IdentifierRenamer
      */
-    private $propertyNameChanger;
+    private $identifierRenamer;
 
     /**
      * @var PropertyFetchAnalyzer
@@ -40,11 +40,11 @@ final class PropertyNameReplacerRector extends AbstractRector
      */
     public function __construct(
         array $perClassOldToNewProperties,
-        PropertyNameChanger $propertyNameChanger,
+        IdentifierRenamer $identifierRenamer,
         PropertyFetchAnalyzer $propertyFetchAnalyzer
     ) {
         $this->perClassOldToNewProperties = $perClassOldToNewProperties;
-        $this->propertyNameChanger = $propertyNameChanger;
+        $this->identifierRenamer = $identifierRenamer;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
     }
 
@@ -83,7 +83,7 @@ final class PropertyNameReplacerRector extends AbstractRector
                 continue;
             }
 
-            $this->propertyNameChanger->renameNode($propertyFetchNode, $newProperty);
+            $this->identifierRenamer->renameNode($propertyFetchNode, $newProperty);
         }
 
         return $propertyFetchNode;

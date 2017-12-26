@@ -11,8 +11,7 @@ use Rector\Node\Attribute;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeAnalyzer\MethodNameAnalyzer;
 use Rector\NodeAnalyzer\StaticMethodCallAnalyzer;
-use Rector\NodeChanger\MethodNameChanger;
-use Rector\NodeChanger\StaticCallNameChanger;
+use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractRector;
 
 final class MethodNameReplacerRector extends AbstractRector
@@ -58,14 +57,9 @@ final class MethodNameReplacerRector extends AbstractRector
     private $methodNameAnalyzer;
 
     /**
-     * @var MethodNameChanger
+     * @var IdentifierRenamer
      */
-    private $methodNameChanger;
-
-    /**
-     * @var StaticCallNameChanger
-     */
-    private $staticCallNameChanger;
+    private $identifierRenamer;
 
     /**
      * @param string[][] $perClassOldToNewMethods
@@ -75,15 +69,13 @@ final class MethodNameReplacerRector extends AbstractRector
         MethodCallAnalyzer $methodCallAnalyzer,
         StaticMethodCallAnalyzer $staticMethodCallAnalyzer,
         MethodNameAnalyzer $methodNameAnalyzer,
-        StaticCallNameChanger $staticCallNameChanger,
-        MethodNameChanger $methodNameChanger
+        IdentifierRenamer $identifierRenamer
     ) {
         $this->perClassOldToNewMethods = $perClassOldToNewMethods;
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->staticMethodCallAnalyzer = $staticMethodCallAnalyzer;
         $this->methodNameAnalyzer = $methodNameAnalyzer;
-        $this->staticCallNameChanger = $staticCallNameChanger;
-        $this->methodNameChanger = $methodNameChanger;
+        $this->identifierRenamer = $identifierRenamer;
     }
 
     public function isCandidate(Node $node): bool
@@ -134,11 +126,7 @@ final class MethodNameReplacerRector extends AbstractRector
             return $this->resolveClassRename($node, $oldToNewMethods, $methodName);
         }
 
-        if ($node instanceof MethodCall) {
-            $this->methodNameChanger->renameNode($node, $oldToNewMethods[$methodName]);
-        } else {
-            $this->staticCallNameChanger->renameNode($node, $oldToNewMethods[$methodName]);
-        }
+        $this->identifierRenamer->renameNode($node, $oldToNewMethods[$methodName]);
 
         return $node;
     }
@@ -219,7 +207,7 @@ final class MethodNameReplacerRector extends AbstractRector
         [$newClass, $newMethod] = $oldToNewMethods[$methodName];
 
         $staticCallNode->class = new Name($newClass);
-        $this->staticCallNameChanger->renameNode($staticCallNode, $newMethod);
+        $this->identifierRenamer->renameNode($staticCallNode, $newMethod);
 
         return $staticCallNode;
     }
