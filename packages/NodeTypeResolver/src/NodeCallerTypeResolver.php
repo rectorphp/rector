@@ -22,8 +22,8 @@ final class NodeCallerTypeResolver
 
     public function addPerNodeCallerTypeResolver(PerNodeCallerTypeResolverInterface $perNodeCallerTypeResolver): void
     {
-        foreach ($perNodeCallerTypeResolver->getNodeTypes() as $nodeType) {
-            $this->perNodeCallerTypeResolvers[$nodeType] = $perNodeCallerTypeResolver;
+        foreach ($perNodeCallerTypeResolver->getNodeClasses() as $nodeClass) {
+            $this->perNodeCallerTypeResolvers[$nodeClass] = $perNodeCallerTypeResolver;
         }
     }
 
@@ -32,10 +32,12 @@ final class NodeCallerTypeResolver
      */
     public function resolve(Node $node): array
     {
-        if (! isset($this->perNodeCallerTypeResolvers[$node->getType()])) {
+        $nodeClass = get_class($node);
+
+        if (! isset($this->perNodeCallerTypeResolvers[$nodeClass])) {
             return [];
         }
 
-        return $this->perNodeCallerTypeResolvers[$node->getType()]->resolve($node);
+        return $this->perNodeCallerTypeResolvers[$nodeClass]->resolve($node);
     }
 }

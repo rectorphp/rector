@@ -49,8 +49,8 @@ final class StaticCallCallerTypeResolver implements PerNodeCallerTypeResolverInt
     /**
      * @return string[]
      */
-    public function getNodeTypes(): array
+    public function getNodeClasses(): array
     {
-        return ['Expr_StaticCall'];
+        return [StaticCall::class];
     }
 }

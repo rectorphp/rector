@@ -34,9 +34,9 @@ final class MethodCallCallerTypeResolver implements PerNodeCallerTypeResolverInt
     /**
      * @return string[]
      */
-    public function getNodeTypes(): array
+    public function getNodeClasses(): array
     {
-        return ['Expr_MethodCall'];
+        return [MethodCall::class];
     }
 
     /**
