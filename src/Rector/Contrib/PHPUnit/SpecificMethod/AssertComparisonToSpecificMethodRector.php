@@ -3,7 +3,6 @@
 namespace Rector\Rector\Contrib\PHPUnit\SpecificMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
@@ -102,8 +101,8 @@ final class AssertComparisonToSpecificMethodRector extends AbstractRector
         unset($oldArguments[0]);
 
         $methodCallNode->args = array_merge([
-            new Arg($firstArgument),
-            new Arg($secondArgument),
+            $firstArgument,
+            $secondArgument,
         ], $oldArguments);
     }
 
