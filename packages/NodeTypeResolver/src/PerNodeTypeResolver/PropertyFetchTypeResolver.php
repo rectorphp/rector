@@ -43,9 +43,9 @@ final class PropertyFetchTypeResolver implements PerNodeTypeResolverInterface, N
     /**
      * @return string[]
      */
-    public function getNodeTypes(): array
+    public function getNodeClasses(): array
     {
-        return ['Expr_PropertyFetch'];
+        return [PropertyFetch::class];
     }
 
     /**

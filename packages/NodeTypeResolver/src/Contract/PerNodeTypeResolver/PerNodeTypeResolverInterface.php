@@ -9,7 +9,7 @@ interface PerNodeTypeResolverInterface
     /**
      * @return string[]
      */
-    public function getNodeTypes(): array;
+    public function getNodeClasses(): array;
 
     /**
      * @return string[]

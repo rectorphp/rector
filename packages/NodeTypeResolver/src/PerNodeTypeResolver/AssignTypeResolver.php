@@ -32,9 +32,9 @@ final class AssignTypeResolver implements PerNodeTypeResolverInterface, NodeType
     /**
      * @return string[]
      */
-    public function getNodeTypes(): array
+    public function getNodeClasses(): array
     {
-        return ['Expr_Assign'];
+        return [Assign::class];
     }
 
     /**

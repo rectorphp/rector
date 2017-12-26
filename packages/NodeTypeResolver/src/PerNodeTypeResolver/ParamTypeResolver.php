@@ -47,9 +47,9 @@ final class ParamTypeResolver implements PerNodeTypeResolverInterface, NodeTypeR
     /**
      * @return string[]
      */
-    public function getNodeTypes(): array
+    public function getNodeClasses(): array
     {
-        return ['Param'];
+        return [Param::class];
     }
 
     /**

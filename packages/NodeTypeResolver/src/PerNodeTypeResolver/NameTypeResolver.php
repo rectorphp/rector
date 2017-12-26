@@ -5,6 +5,7 @@ namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\BetterReflection\Reflector\SmartClassReflector;
 use Rector\Node\Attribute;
@@ -25,9 +26,9 @@ final class NameTypeResolver implements PerNodeTypeResolverInterface
     /**
      * @return string[]
      */
-    public function getNodeTypes(): array
+    public function getNodeClasses(): array
     {
-        return ['Name', 'Name_FullyQualified'];
+        return [Name::class, FullyQualified::class];
     }
 
     /**

@@ -20,6 +20,14 @@ use Rector\NodeTypeResolver\Contract\PerNodeCallerTypeResolver\PerNodeCallerType
 final class StaticCallCallerTypeResolver implements PerNodeCallerTypeResolverInterface
 {
     /**
+     * @return string[]
+     */
+    public function getNodeClasses(): array
+    {
+        return [StaticCall::class];
+    }
+
+    /**
      * @param StaticCall $staticCallNode
      * @return string[]
      */
@@ -44,13 +52,5 @@ final class StaticCallCallerTypeResolver implements PerNodeCallerTypeResolverInt
         }
 
         return $types;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getNodeClasses(): array
-    {
-        return [StaticCall::class];
     }
 }

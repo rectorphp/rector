@@ -30,9 +30,9 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface, NodeTy
     /**
      * @return string[]
      */
-    public function getNodeTypes(): array
+    public function getNodeClasses(): array
     {
-        return ['Expr_Variable'];
+        return [Variable::class];
     }
 
     /**

@@ -45,9 +45,9 @@ final class PropertyTypeResolver implements PerNodeTypeResolverInterface
     /**
      * @return string[]
      */
-    public function getNodeTypes(): array
+    public function getNodeClasses(): array
     {
-        return ['Stmt_Property'];
+        return [Property::class];
     }
 
     /**

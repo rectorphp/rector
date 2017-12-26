@@ -35,9 +35,9 @@ final class NewTypeResolver implements PerNodeTypeResolverInterface, NodeTypeRes
     /**
      * @return string[]
      */
-    public function getNodeTypes(): array
+    public function getNodeClasses(): array
     {
-        return ['Expr_New'];
+        return [New_::class];
     }
 
     /**
