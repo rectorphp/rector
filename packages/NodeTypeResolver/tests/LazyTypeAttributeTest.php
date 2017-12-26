@@ -21,6 +21,7 @@ final class LazyTypeAttributeTest extends AbstractNodeTypeResolverTest
     {
         parent::setUp();
 
+        /** @var Variable[] $nodes */
         $nodes = $this->getNodesForFileOfType(__DIR__ . '/LazyTypeAttributeSource/MethodCall.php.inc', Variable::class);
         $this->assertCount(3, $nodes);
 
