@@ -33,6 +33,7 @@ final class AssertCompareToSpecificMethodRector extends AbstractRector
         'count' => ['assertCount', 'assertNotCount'],
         'sizeof' => ['assertCount', 'assertNotCount'],
         'gettype' => ['assertInternalType', 'assertNotInternalType'],
+        'get_class' => ['assertInstanceOf', 'assertNotInstanceOf'],
     ];
 
     /**
