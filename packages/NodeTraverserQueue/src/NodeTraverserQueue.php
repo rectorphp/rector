@@ -66,8 +66,6 @@ final class NodeTraverserQueue
      */
     public function processFileInfo(SplFileInfo $fileInfo): array
     {
-        dump($fileInfo->getRealPath());
-
         $oldStmts = $this->parser->parseFile($fileInfo->getRealPath());
         $oldTokens = $this->lexer->getTokens();
 
