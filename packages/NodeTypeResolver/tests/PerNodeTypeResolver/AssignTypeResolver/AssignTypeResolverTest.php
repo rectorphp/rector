@@ -14,12 +14,12 @@ final class AssignTypeResolverTest extends AbstractNodeTypeResolverTest
 
         $this->assertSame(
             ['Nette\Config\Configurator', 'Nette\Object'],
-            $variableNodes[0]->getAttribute(Attribute::TYPES)
+            $this->nodeTypeResolver->resolve($variableNodes[0])
         );
 
         $this->assertSame(
             ['Nette\Config\Configurator', 'Nette\Object'],
-            $variableNodes[2]->getAttribute(Attribute::TYPES)
+            $this->nodeTypeResolver->resolve($variableNodes[2])
         );
     }
 
@@ -29,12 +29,12 @@ final class AssignTypeResolverTest extends AbstractNodeTypeResolverTest
 
         $this->assertSame(
             'Symfony\Component\DependencyInjection\ContainerBuilder',
-            $variableNodes[0]->getAttribute(Attribute::TYPES)[0]
+            $this->nodeTypeResolver->resolve($variableNodes[0])[0]
         );
 
         $this->assertSame(
             'Symfony\Component\DependencyInjection\ContainerBuilder',
-            $variableNodes[1]->getAttribute(Attribute::TYPES)[0]
+            $this->nodeTypeResolver->resolve($variableNodes[1])[0]
         );
     }
 
@@ -44,7 +44,7 @@ final class AssignTypeResolverTest extends AbstractNodeTypeResolverTest
 
         $this->assertSame(
             ['Nette\DI\Container'],
-            $variableNodes[1]->getAttribute(Attribute::TYPES)
+            $this->nodeTypeResolver->resolve($variableNodes[1])
         );
     }
 }
