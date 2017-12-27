@@ -3,7 +3,12 @@
 namespace Rector\NodeTypeResolver\NodeVisitor;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\NodeVisitorAbstract;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -19,10 +24,11 @@ final class TypeNodeVisitor extends NodeVisitorAbstract
      * @var string[]
      */
     private $nodesGraduallyToSkip = [
-        Node\Name::class,
-        Node\Name\FullyQualified::class,
-        Node\Stmt\Class_::class,
-        Node\Expr\New_::class,
+        Name::class,
+        FullyQualified::class,
+        Class_::class,
+        New_::class,
+        MethodCall::class
 //        Variable::class,
 //        Property::class
     ];
