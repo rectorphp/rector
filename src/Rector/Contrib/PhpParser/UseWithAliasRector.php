@@ -3,8 +3,8 @@
 namespace Rector\Rector\Contrib\PhpParser;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
+use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Rector\AbstractRector;
 
@@ -18,9 +18,17 @@ final class UseWithAliasRector extends AbstractRector
      */
     private $propertyFetchAnalyzer;
 
-    public function __construct(PropertyFetchAnalyzer $propertyFetchAnalyzer)
-    {
+    /**
+     * @var MethodCallNodeFactory
+     */
+    private $methodCallNodeFactory;
+
+    public function __construct(
+        PropertyFetchAnalyzer $propertyFetchAnalyzer,
+        MethodCallNodeFactory $methodCallNodeFactory
+    ) {
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
+        $this->methodCallNodeFactory = $methodCallNodeFactory;
     }
 
     public function isCandidate(Node $node): bool
@@ -33,8 +41,11 @@ final class UseWithAliasRector extends AbstractRector
      */
     public function refactor(Node $propertyFetchNode): ?Node
     {
-        $getAliasMethodCall = new MethodCall($propertyFetchNode->var, 'getAlias');
+        $getAliasMethodCall = $this->methodCallNodeFactory->createWithVariableAndMethodName(
+            $propertyFetchNode->var,
+            'getAlias'
+        );
 
-        return new MethodCall($getAliasMethodCall, 'toString');
+        return $this->methodCallNodeFactory->createWithVariableAndMethodName($getAliasMethodCall, 'toString');
     }
 }

@@ -5,6 +5,7 @@ namespace Rector\Rector\MagicDisclosure;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Cast\String_;
 use PhpParser\Node\Expr\MethodCall;
+use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -49,6 +50,11 @@ final class ToStringToMethodCallRector extends AbstractRector
     private $nodeTypeResolver;
 
     /**
+     * @var MethodCallNodeFactory
+     */
+    private $methodCallNodeFactory;
+
+    /**
      * Type to method call()
      *
      * @param string[][] $typeToMethodCalls
@@ -57,12 +63,14 @@ final class ToStringToMethodCallRector extends AbstractRector
         array $typeToMethodCalls,
         MethodCallAnalyzer $methodCallAnalyzer,
         IdentifierRenamer $identifierRenamer,
-        NodeTypeResolver $nodeTypeResolver
+        NodeTypeResolver $nodeTypeResolver,
+        MethodCallNodeFactory $methodCallNodeFactory
     ) {
         $this->typeToMethodCalls = $typeToMethodCalls;
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
         $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->methodCallNodeFactory = $methodCallNodeFactory;
     }
 
     public function isCandidate(Node $node): bool
@@ -84,7 +92,10 @@ final class ToStringToMethodCallRector extends AbstractRector
     public function refactor(Node $node): ?Node
     {
         if ($node instanceof String_) {
-            return new MethodCall($node->expr, $this->activeTransformation);
+            return $this->methodCallNodeFactory->createWithVariableAndMethodName(
+                $node->expr,
+                $this->activeTransformation
+            );
         }
 
         $this->identifierRenamer->renameNode($node, $this->activeTransformation);
