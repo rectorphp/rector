@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver;
+namespace Rector\NodeTypeResolver\Tests\PerNodeCallerTypeResolver;
 
 use PhpParser\Node;
 use Rector\NodeTraverserQueue\BetterNodeFinder;
@@ -10,17 +10,12 @@ use Rector\Tests\AbstractContainerAwareTestCase;
 use SplFileInfo;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
-abstract class AbstractNodeTypeResolverTest extends AbstractContainerAwareTestCase
+abstract class AbstractNodeCallerTypeResolverTest extends AbstractContainerAwareTestCase
 {
     /**
      * @var BetterNodeFinder
      */
-    protected $betterNodeFinder;
-
-    /**
-     * @var NodeTypeResolver
-     */
-    protected $nodeTypeResolver;
+    private $betterNodeFinder;
 
     /**
      * @var NodeTraverserQueue
@@ -37,7 +32,6 @@ abstract class AbstractNodeTypeResolverTest extends AbstractContainerAwareTestCa
         $this->betterNodeFinder = $this->container->get(BetterNodeFinder::class);
         $this->nodeTraverserQueue = $this->container->get(NodeTraverserQueue::class);
         $this->parameterProvider = $this->container->get(ParameterProvider::class);
-        $this->nodeTypeResolver = $this->container->get(NodeTypeResolver::class);
     }
 
     /**
@@ -62,5 +56,10 @@ abstract class AbstractNodeTypeResolverTest extends AbstractContainerAwareTestCa
         [$newStmts,] = $this->nodeTraverserQueue->processFileInfo($fileInfo);
 
         return $newStmts;
+    }
+
+    protected function doTestAttributeEquals(Node $node, string $attribute, $expectedContent): void
+    {
+        $this->assertSame($expectedContent, $node->getAttribute($attribute));
     }
 }

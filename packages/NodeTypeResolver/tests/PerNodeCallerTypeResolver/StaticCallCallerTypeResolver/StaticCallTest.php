@@ -4,9 +4,9 @@ namespace Rector\NodeTypeResolver\Tests\PerNodeCallerTypeResolver\StaticCallCall
 
 use PhpParser\Node\Expr\StaticCall;
 use Rector\Node\Attribute;
-use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
+use Rector\NodeTypeResolver\Tests\PerNodeCallerTypeResolver\AbstractNodeCallerTypeResolverTest;
 
-final class StaticCallTest extends AbstractNodeTypeResolverTest
+final class StaticCallTest extends AbstractNodeCallerTypeResolverTest
 {
     public function testOnParentStaticCall(): void
     {
