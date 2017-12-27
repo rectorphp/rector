@@ -12,6 +12,10 @@ final class NameTypeResolverTest extends AbstractNodeTypeResolverTest
     {
         $nameNodes = $this->getNodesForFileOfType(__DIR__ . '/Source/ParentCall.php.inc', Name::class);
 
-        $this->assertSame(['Nette\Config\Configurator'], $nameNodes[2]->getAttribute(Attribute::TYPES));
+        $this->assertSame(
+            ['Nette\Config\Configurator'],
+            $this->nodeTypeResolver->resolve($nameNodes[2])
+//            $nameNodes[2]->getAttribute(Attribute::TYPES)
+        );
     }
 }
