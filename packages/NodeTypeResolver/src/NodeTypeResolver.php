@@ -26,7 +26,7 @@ final class NodeTypeResolver
     public function resolve(Node $node): array
     {
         // resolve just once
-        if ($node->getAttribute(Attribute::TYPES)) {
+        if ($node->hasAttribute(Attribute::TYPES)) {
             return $node->getAttribute(Attribute::TYPES);
         }
 
