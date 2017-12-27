@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\Variable;
 use Rector\Node\Attribute;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -52,12 +53,19 @@ final class IdentifierRector extends AbstractRector
      */
     private $methodCallNodeFactory;
 
+    /**
+     * @var NodeTypeResolver
+     */
+    private $nodeTypeResolver;
+
     public function __construct(
         PropertyFetchAnalyzer $propertyFetchAnalyzer,
-        MethodCallNodeFactory $methodCallNodeFactory
+        MethodCallNodeFactory $methodCallNodeFactory,
+        NodeTypeResolver $nodeTypeResolver
     ) {
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
         $this->methodCallNodeFactory = $methodCallNodeFactory;
+        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     public function isCandidate(Node $node): bool
@@ -70,7 +78,7 @@ final class IdentifierRector extends AbstractRector
         $variableNode = $node->var;
 
         /** @var Variable $variableNode */
-        $nodeTypes = $variableNode->getAttribute(Attribute::TYPES);
+        $nodeTypes = $this->nodeTypeResolver->resolve($variableNode);
 
         $properties = $this->matchTypeToProperties($nodeTypes);
 
