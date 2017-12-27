@@ -59,7 +59,7 @@ final class NestedMethodCallTest extends AbstractNodeCallerTypeResolverTest
                 'Nette\Forms\Controls\TextInput',
                 'Nette\Forms\Controls\TextBase',
                 'Nette\Forms\Controls\BaseControl',
-                'Nette\ComponentModel\Component'
+                'Nette\ComponentModel\Component',
             ]],
             [2, 'addText', [
                 'Nette\Application\UI\Form',
