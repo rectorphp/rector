@@ -24,7 +24,7 @@ final class NestedMethodCallTest extends AbstractNodeCallerTypeResolverTest
         $this->assertSame('addRule', $identifierNode->toString());
         $this->assertSame(
             ['Nette\Forms\Rules'],
-            $methodCallNodes[0]->getAttribute(Attribute::CALLER_TYPES)
+            $this->nodeCallerTypeResolver->resolve($methodCallNodes[0])
         );
 
         /** @var Identifier $identifierNode */
@@ -32,7 +32,7 @@ final class NestedMethodCallTest extends AbstractNodeCallerTypeResolverTest
         $this->assertSame('addCondition', $identifierNode->toString());
         $this->assertContains(
             'Nette\Forms\Controls\TextInput',
-            $methodCallNodes[1]->getAttribute(Attribute::CALLER_TYPES)
+            $this->nodeCallerTypeResolver->resolve($methodCallNodes[1])
         );
 
         /** @var Identifier $identifierNode */
@@ -40,7 +40,7 @@ final class NestedMethodCallTest extends AbstractNodeCallerTypeResolverTest
         $this->assertSame('addText', $identifierNode->toString());
         $this->assertContains(
             'Nette\Application\UI\Form',
-            $methodCallNodes[2]->getAttribute(Attribute::CALLER_TYPES)
+            $this->nodeCallerTypeResolver->resolve($methodCallNodes[2])
         );
     }
 
