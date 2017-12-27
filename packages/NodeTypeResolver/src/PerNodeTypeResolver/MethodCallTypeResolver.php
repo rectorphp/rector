@@ -7,6 +7,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Scalar\MagicConst\Class_;
 use Rector\BetterReflection\Reflector\MethodReflector;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
@@ -72,15 +73,18 @@ final class MethodCallTypeResolver implements PerNodeTypeResolverInterface
         return $this->resolveMethodReflectionReturnTypes($methodCallNode, $methodCallVariableType, $methodCallName);
     }
 
-    private function resolveMethodCallName(MethodCall $methodCallNode): ?string
+    private function resolveMethodCallName(MethodCall $methodCallNode): string
     {
         if ($methodCallNode->name instanceof Variable) {
             return (string) $methodCallNode->name->name;
         }
 
         if ($methodCallNode->name instanceof PropertyFetch) {
-            // not implemented yet
-            return null;
+            return (string) $methodCallNode->name->name;
+        }
+
+        if ($methodCallNode->name instanceof Class_) {
+            return $methodCallNode->name->getName();
         }
 
         return (string) $methodCallNode->name;
