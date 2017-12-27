@@ -7,6 +7,7 @@ use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\Node\Attribute;
+use Rector\Node\NodeFactory;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -25,6 +26,16 @@ final class OptionNameRector extends AbstractRector
         'precision' => 'scale',
         'virtual' => 'inherit_data',
     ];
+
+    /**
+     * @var NodeFactory
+     */
+    private $nodeFactory;
+
+    public function __construct(NodeFactory $nodeFactory)
+    {
+        $this->nodeFactory = $nodeFactory;
+    }
 
     public function isCandidate(Node $node): bool
     {
@@ -55,6 +66,6 @@ final class OptionNameRector extends AbstractRector
      */
     public function refactor(Node $stringNode): ?Node
     {
-        return new String_($this->oldToNewOption[$stringNode->value]);
+        return $this->nodeFactory->createString($this->oldToNewOption[$stringNode->value]);
     }
 }

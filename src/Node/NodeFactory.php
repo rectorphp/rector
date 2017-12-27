@@ -224,6 +224,11 @@ final class NodeFactory
             ->getNode();
     }
 
+    public function createString(string $name): String_
+    {
+        return new String_($name);
+    }
+
     public function createVariable(string $name): Variable
     {
         return new Variable($name);

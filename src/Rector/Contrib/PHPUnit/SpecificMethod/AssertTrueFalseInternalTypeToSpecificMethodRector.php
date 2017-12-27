@@ -5,7 +5,6 @@ namespace Rector\Rector\Contrib\PHPUnit\SpecificMethod;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Scalar\String_;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
@@ -119,7 +118,7 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractRe
         unset($oldArguments[0]);
 
         $methodCallNode->args = array_merge([
-            $this->nodeFactory->createArg(new String_($this->oldMethodsToTypes[$isFunctionName])),
+            $this->nodeFactory->createString($this->oldMethodsToTypes[$isFunctionName]),
             $argument,
         ], $oldArguments);
     }

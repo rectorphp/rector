@@ -4,7 +4,6 @@ namespace Rector\Rector\Contrib\PhpParser;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Scalar\String_;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
@@ -57,7 +56,7 @@ final class SetLineRector extends AbstractRector
         $this->identifierRenamer->renameNode($methodCallNode, 'setAttribute');
 
         $methodCallNode->args[1] = $methodCallNode->args[0];
-        $methodCallNode->args[0] = $this->nodeFactory->createArg(new String_('line'));
+        $methodCallNode->args[0] = $this->nodeFactory->createArg($this->nodeFactory->createString('line'));
 
         return $methodCallNode;
     }

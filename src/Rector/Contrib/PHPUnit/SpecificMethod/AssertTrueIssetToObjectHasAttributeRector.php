@@ -6,7 +6,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Scalar\String_;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
@@ -99,7 +98,7 @@ final class AssertTrueIssetToObjectHasAttributeRector extends AbstractRector
 
         // and set as arguments
         $methodCallNode->args = $this->nodeFactory->createArgs([
-            new String_($propertyFetchNode->name->toString()),
+            $this->nodeFactory->createString($propertyFetchNode->name->toString()),
             $propertyFetchNode->var,
         ]);
 
