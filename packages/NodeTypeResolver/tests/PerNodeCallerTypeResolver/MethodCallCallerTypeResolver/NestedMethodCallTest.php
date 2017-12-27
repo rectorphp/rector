@@ -4,7 +4,6 @@ namespace Rector\NodeTypeResolver\Tests\PerNodeCallerTypeResolver\MethodCallCall
 
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
-use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Tests\PerNodeCallerTypeResolver\AbstractNodeCallerTypeResolverTest;
 
 final class NestedMethodCallTest extends AbstractNodeCallerTypeResolverTest
@@ -90,23 +89,25 @@ final class NestedMethodCallTest extends AbstractNodeCallerTypeResolverTest
         /** @var Identifier $identifierNode */
         $identifierNode = $methodCallNodes[0]->name;
         $this->assertSame('getParameters', $identifierNode->toString());
-        $this->doTestAttributeEquals($methodCallNodes[0], Attribute::CALLER_TYPES, [
-            'Nette\DI\Container',
-        ]);
+        $this->assertSame(
+            ['Nette\DI\Container'],
+            $this->nodeCallerTypeResolver->resolve($methodCallNodes[0])
+        );
 
         /** @var Identifier $identifierNode */
         $identifierNode = $methodCallNodes[1]->name;
         $this->assertSame('addService', $identifierNode->toString());
-        $this->doTestAttributeEquals($methodCallNodes[1], Attribute::CALLER_TYPES, [
-            'Nette\DI\Container',
-        ]);
+        $this->assertSame(
+            ['Nette\DI\Container'],
+            $this->nodeCallerTypeResolver->resolve($methodCallNodes[1])
+        );
 
         /** @var Identifier $identifierNode */
         $identifierNode = $methodCallNodes[2]->name;
         $this->assertSame('createContainer', $identifierNode->toString());
-        $this->doTestAttributeEquals($methodCallNodes[2], Attribute::CALLER_TYPES, [
+        $this->assertSame([
             'Nette\Config\Configurator',
             'Nette\Object',
-        ]);
+        ], $this->nodeCallerTypeResolver->resolve($methodCallNodes[2]));
     }
 }
