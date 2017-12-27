@@ -6,6 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\VarLikeIdentifier;
 use Rector\BetterReflection\Reflector\SmartClassReflector;
+use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\TypeContext;
 use Rector\ReflectionDocBlock\NodeAnalyzer\DocBlockAnalyzer;
@@ -13,6 +14,7 @@ use Rector\ReflectionDocBlock\NodeAnalyzer\DocBlockAnalyzer;
 final class PropertyTypeResolver implements PerNodeTypeResolverInterface
 {
     /**
+     * @todo move to helper service
      * @var string[]
      */
     private $scalarTypes = ['string', 'bool', 'array', 'int', 'resource', 'iterable', 'callable', 'object'];
@@ -60,7 +62,12 @@ final class PropertyTypeResolver implements PerNodeTypeResolverInterface
         $varLikeIdentifierNode = $propertyNode->props[0]->name;
 
         $propertyName = $varLikeIdentifierNode->toString();
+
+        $classNode = $propertyNode->getAttribute(Attribute::CLASS_NODE);
+        $this->typeContext->enterClassLike($classNode);
+
         $propertyTypes = $this->typeContext->getTypesForProperty($propertyName);
+
         if ($propertyTypes) {
             return $propertyTypes;
         }
