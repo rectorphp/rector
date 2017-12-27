@@ -4,9 +4,9 @@ namespace Rector\Rector\Contrib\Nette\DI;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Identifier;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
+use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractRector;
 
 final class SetInjectToAddTagRector extends AbstractRector
@@ -15,6 +15,11 @@ final class SetInjectToAddTagRector extends AbstractRector
      * @var MethodCallAnalyzer
      */
     private $methodCallAnalyzer;
+
+    /**
+     * @var IdentifierRenamer
+     */
+    private $identifierRenamer;
 
     /**
      * @var NodeFactory
@@ -41,9 +46,13 @@ final class SetInjectToAddTagRector extends AbstractRector
      */
     private $newArguments = ['inject'];
 
-    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, NodeFactory $nodeFactory)
-    {
+    public function __construct(
+        MethodCallAnalyzer $methodCallAnalyzer,
+        IdentifierRenamer $identifierRenamer,
+        NodeFactory $nodeFactory
+    ) {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
+        $this->identifierRenamer = $identifierRenamer;
         $this->nodeFactory = $nodeFactory;
     }
 
@@ -65,7 +74,7 @@ final class SetInjectToAddTagRector extends AbstractRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        $methodCallNode->name = new Identifier($this->newMethod);
+        $this->identifierRenamer->renameNode($methodCallNode, $this->newMethod);
         $methodCallNode->args = $this->nodeFactory->createArgs($this->newArguments);
 
         return $methodCallNode;

@@ -7,6 +7,7 @@ use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
+use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -41,13 +42,19 @@ final class AssertComparisonToSpecificMethodRector extends AbstractRector
     private $methodCallAnalyzer;
 
     /**
+     * @var IdentifierRenamer
+     */
+    private $identifierRenamer;
+
+    /**
      * @var string|null
      */
     private $activeOpSignal;
 
-    public function __construct(MethodCallAnalyzer $methodCallAnalyzer)
+    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, IdentifierRenamer $identifierRenamer)
     {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
+        $this->identifierRenamer = $identifierRenamer;
     }
 
     public function isCandidate(Node $node): bool
@@ -115,9 +122,9 @@ final class AssertComparisonToSpecificMethodRector extends AbstractRector
         [$trueMethodName, $falseMethodName] = $this->defaultOldToNewMethods[$this->activeOpSignal];
 
         if ($oldMethodName === 'assertTrue' && $trueMethodName) {
-            $methodCallNode->name = new Identifier($trueMethodName);
+            $this->identifierRenamer->renameNode($methodCallNode, $trueMethodName);
         } elseif ($oldMethodName === 'assertFalse' && $falseMethodName) {
-            $methodCallNode->name = new Identifier($falseMethodName);
+            $this->identifierRenamer->renameNode($methodCallNode, $falseMethodName);
         }
     }
 }

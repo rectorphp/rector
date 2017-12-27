@@ -8,6 +8,7 @@ use PhpParser\Node\Identifier;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
+use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -25,6 +26,11 @@ final class TemplateMagicInvokeFilterCallRector extends AbstractRector
     private $methodCallAnalyzer;
 
     /**
+     * @var IdentifierRenamer
+     */
+    private $identifierRenamer;
+
+    /**
      * @var NodeFactory
      */
     private $nodeFactory;
@@ -36,10 +42,12 @@ final class TemplateMagicInvokeFilterCallRector extends AbstractRector
 
     public function __construct(
         MethodCallAnalyzer $methodCallAnalyzer,
+        IdentifierRenamer $identifierRenamer,
         NodeFactory $nodeFactory,
         MethodCallNodeFactory $methodCallNodeFactory
     ) {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
+        $this->identifierRenamer = $identifierRenamer;
         $this->nodeFactory = $nodeFactory;
         $this->methodCallNodeFactory = $methodCallNodeFactory;
     }
@@ -72,7 +80,7 @@ final class TemplateMagicInvokeFilterCallRector extends AbstractRector
         $filterName = $identifierNode->toString();
         $filterArguments = $methodCallNode->args;
 
-        $methodCallNode->name = new Identifier('invokeFilter');
+        $this->identifierRenamer->renameNode($methodCallNode, 'invokeFilter');
 
         $methodCallNode->args[0] = $this->nodeFactory->createArg($filterName);
         $methodCallNode->args = array_merge($methodCallNode->args, $filterArguments);

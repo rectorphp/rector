@@ -7,6 +7,7 @@ use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
+use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -35,13 +36,19 @@ final class AssertSameBoolNullToSpecificMethodRector extends AbstractRector
     private $methodCallAnalyzer;
 
     /**
+     * @var IdentifierRenamer
+     */
+    private $identifierRenamer;
+
+    /**
      * @var string
      */
     private $constantName;
 
-    public function __construct(MethodCallAnalyzer $methodCallAnalyzer)
+    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, IdentifierRenamer $identifierRenamer)
     {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
+        $this->identifierRenamer = $identifierRenamer;
     }
 
     public function isCandidate(Node $node): bool
@@ -87,11 +94,9 @@ final class AssertSameBoolNullToSpecificMethodRector extends AbstractRector
         [$sameMethodName, $notSameMethodName] = $this->constValueToNewMethodNames[$this->constantName];
 
         if ($oldMethodName === 'assertSame' && $sameMethodName) {
-            /** @var string $sameMethodName */
-            $methodCallNode->name = new Identifier($sameMethodName);
+            $this->identifierRenamer->renameNode($methodCallNode, $sameMethodName);
         } elseif ($oldMethodName === 'assertNotSame' && $notSameMethodName) {
-            /** @var string $notSameMethodName */
-            $methodCallNode->name = new Identifier($notSameMethodName);
+            $this->identifierRenamer->renameNode($methodCallNode, $notSameMethodName);
         }
     }
 

@@ -4,8 +4,8 @@ namespace Rector\Rector\Contrib\PhpParser;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Identifier;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
+use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -20,12 +20,18 @@ use Rector\Rector\AbstractRector;
 final class ParamAndStaticVarNameRector extends AbstractRector
 {
     /**
+     * @var IdentifierRenamer
+     */
+    private $identifierRenamer;
+
+    /**
      * @var PropertyFetchAnalyzer
      */
     private $propertyFetchAnalyzer;
 
-    public function __construct(PropertyFetchAnalyzer $propertyFetchAnalyzer)
+    public function __construct(IdentifierRenamer $identifierRenamer, PropertyFetchAnalyzer $propertyFetchAnalyzer)
     {
+        $this->identifierRenamer = $identifierRenamer;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
     }
 
@@ -44,7 +50,7 @@ final class ParamAndStaticVarNameRector extends AbstractRector
      */
     public function refactor(Node $propertyFetchNode): ?Node
     {
-        $propertyFetchNode->name = new Identifier('var');
+        $this->identifierRenamer->renameNode($propertyFetchNode, 'var');
 
         return new PropertyFetch($propertyFetchNode, 'name');
     }

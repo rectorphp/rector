@@ -5,8 +5,8 @@ namespace Rector\Rector\Contrib\Nette\DI;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Identifier;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
+use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -27,9 +27,15 @@ final class CompilerCompileArgumentsRector extends AbstractRector
      */
     private $methodCallAnalyzer;
 
-    public function __construct(MethodCallAnalyzer $methodCallAnalyzer)
+    /**
+     * @var IdentifierRenamer
+     */
+    private $identifierRenamer;
+
+    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, IdentifierRenamer $identifierRenamer)
     {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
+        $this->identifierRenamer = $identifierRenamer;
     }
 
     public function isCandidate(Node $node): bool
@@ -76,7 +82,7 @@ final class CompilerCompileArgumentsRector extends AbstractRector
         Arg $argNode
     ): MethodCall {
         $addConfigMethodCallNode = clone $methodCallNode;
-        $addConfigMethodCallNode->name = new Identifier($method);
+        $this->identifierRenamer->renameNode($addConfigMethodCallNode, $method);
         $addConfigMethodCallNode->args = [$argNode];
 
         return $addConfigMethodCallNode;

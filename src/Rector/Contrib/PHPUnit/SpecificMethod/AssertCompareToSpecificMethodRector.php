@@ -10,6 +10,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
+use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -43,13 +44,19 @@ final class AssertCompareToSpecificMethodRector extends AbstractRector
     private $methodCallAnalyzer;
 
     /**
+     * @var IdentifierRenamer
+     */
+    private $identifierRenamer;
+
+    /**
      * @var string|null
      */
     private $activeFuncCallName;
 
-    public function __construct(MethodCallAnalyzer $methodCallAnalyzer)
+    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, IdentifierRenamer $identifierRenamer)
     {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
+        $this->identifierRenamer = $identifierRenamer;
     }
 
     public function isCandidate(Node $node): bool
@@ -109,11 +116,9 @@ final class AssertCompareToSpecificMethodRector extends AbstractRector
         [$trueMethodName, $falseMethodName] = $this->defaultOldToNewMethods[$this->activeFuncCallName];
 
         if (in_array($oldMethodName, ['assertSame', 'assertEquals']) && $trueMethodName) {
-            /** @var string $trueMethodName */
-            $methodCallNode->name = new Identifier($trueMethodName);
+            $this->identifierRenamer->renameNode($methodCallNode, $trueMethodName);
         } elseif (in_array($oldMethodName, ['assertNotSame', 'assertNotEquals']) && $falseMethodName) {
-            /** @var string $falseMethodName */
-            $methodCallNode->name = new Identifier($falseMethodName);
+            $this->identifierRenamer->renameNode($methodCallNode, $falseMethodName);
         }
     }
 

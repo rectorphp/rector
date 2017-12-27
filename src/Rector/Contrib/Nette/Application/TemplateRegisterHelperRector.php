@@ -4,9 +4,9 @@ namespace Rector\Rector\Contrib\Nette\Application;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Identifier;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
+use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -24,13 +24,22 @@ final class TemplateRegisterHelperRector extends AbstractRector
     private $methodCallAnalyzer;
 
     /**
+     * @var IdentifierRenamer
+     */
+    private $identifierRenamer;
+
+    /**
      * @var MethodCallNodeFactory
      */
     private $methodCallNodeFactory;
 
-    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, MethodCallNodeFactory $methodCallNodeFactory)
-    {
+    public function __construct(
+        MethodCallAnalyzer $methodCallAnalyzer,
+        IdentifierRenamer $identifierRenamer,
+        MethodCallNodeFactory $methodCallNodeFactory
+    ) {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
+        $this->identifierRenamer = $identifierRenamer;
         $this->methodCallNodeFactory = $methodCallNodeFactory;
     }
 
@@ -48,7 +57,7 @@ final class TemplateRegisterHelperRector extends AbstractRector
      */
     public function refactor(Node $methodCallNode): Node
     {
-        $methodCallNode->name = new Identifier('addFilter');
+        $this->identifierRenamer->renameNode($methodCallNode, 'addFilter');
 
         $methodCallNode->var = $this->methodCallNodeFactory->createWithVariableAndMethodName(
             $methodCallNode->var,
