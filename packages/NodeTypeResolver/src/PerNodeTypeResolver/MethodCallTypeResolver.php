@@ -49,8 +49,6 @@ final class MethodCallTypeResolver implements PerNodeTypeResolverInterface
     public function resolve(Node $methodCallNode): array
     {
         // 1. get $anotherVar type
-
-        /** @var Variable|mixed $variableNode */
         $variableNode = $methodCallNode->var;
 
         if (! $variableNode instanceof Variable) {

@@ -3,7 +3,6 @@
 namespace Rector\Rector\Contrib\Nette\Utils;
 
 use PhpParser\Node;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Builder\StatementGlue;
 use Rector\Node\Attribute;
@@ -47,7 +46,6 @@ final class NetteObjectToSmartTraitRector extends AbstractRector
             return false;
         }
 
-        /** @var FullyQualified $fullyQualifiedName */
         $fullyQualifiedName = $node->extends->getAttribute(Attribute::RESOLVED_NAME);
 
         return $fullyQualifiedName->toString() === self::PARENT_CLASS;

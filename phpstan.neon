@@ -18,7 +18,6 @@ parameters:
         # known values
         - '#Method Rector\\Node\\NodeFactory::create(Null|False|True)Constant\(\) should return PhpParser\\Node\\Expr\\ConstFetch but returns PhpParser\\Node\\Expr#'
         - '#Method Rector\\Node\\NodeFactory::createNamespace\(\) should return PhpParser\\Node\\Stmt\\Namespace_ but returns PhpParser\\Node#'
-        - '#Calling method toString\(\) on possibly null value of type PhpParser\\Node\\Name\\FullyQualified\|null#'
         - '#Calling method toString\(\) on possibly null value of type PhpParser\\Node\\Name\|null#'
         - '#Calling method getText\(\) on possibly null value of type PhpParser\\Comment\\Doc\|null#'
         - '#Calling method getParentClassNames\(\) on possibly null value of type Rector\\BetterReflection\\Reflection\\ReflectionClass\|null#'
@@ -47,7 +46,6 @@ parameters:
         - '#Access to an undefined property PhpParser\\Node\\Arg|PhpParser\\Node\\Expr\|PhpParser\\Node\\Param::\$value#'
         - '#Call to an undefined method PhpParser\\BuilderFactory::args\(\)#'
         - "#Casting to string something that's already string#"
-        - '#Call to an undefined method PhpParser\\Node\\Stmt\\UseUse::getAlias\(\)#'
         - '#Call to an undefined method PhpParser\\PrettyPrinter\\Standard::printFormatPreserving\(\)#'
         - '#Array \(array<Rector\\BetterReflection\\Reflection\\ReflectionClass>\) does not accept Rector\\BetterReflection\\Reflection\\Reflection#'
 

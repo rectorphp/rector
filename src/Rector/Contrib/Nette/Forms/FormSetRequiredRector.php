@@ -60,7 +60,6 @@ final class FormSetRequiredRector extends AbstractRector
             return false;
         }
 
-        /** @var MethodCall $node */
         if (count($node->args) !== 1) {
             return false;
         }

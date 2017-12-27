@@ -37,7 +37,6 @@ final class ContainerBuilderCompileEnvArgumentRector extends AbstractRector
             return false;
         }
 
-        /** @var Node\Expr\MethodCall $node */
         $arguments = $node->args;
 
         // already has an argument

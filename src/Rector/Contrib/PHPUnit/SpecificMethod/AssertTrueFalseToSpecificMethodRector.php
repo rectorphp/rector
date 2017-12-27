@@ -7,8 +7,6 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Empty_;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractRector;
@@ -82,7 +80,6 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractRector
             return false;
         }
 
-        /** @var MethodCall $node */
         if (! isset($node->args[0])) {
             return false;
         }
@@ -116,7 +113,6 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractRector
 
     private function renameMethod(MethodCall $methodCallNode): void
     {
-        /** @var Identifier $identifierNode */
         $identifierNode = $methodCallNode->name;
         $oldMethodName = $identifierNode->toString();
 
@@ -155,7 +151,6 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractRector
     private function resolveFunctionName(Node $node): ?string
     {
         if ($node instanceof FuncCall) {
-            /** @var Name $nameNode */
             $nameNode = $node->name;
 
             return $nameNode->toString();

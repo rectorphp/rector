@@ -4,6 +4,7 @@ namespace Rector\Rector\Contrib\Symfony\HttpKernel;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Scalar\String_;
 use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Contract\Bridge\ServiceTypeForNameProviderInterface;
 use Rector\Naming\PropertyNaming;
@@ -74,7 +75,7 @@ final class GetterToPropertyRector extends AbstractRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        /** @var Node\Scalar\String_ $stringArgument */
+        /** @var String_ $stringArgument */
         $stringArgument = $methodCallNode->args[0]->value;
 
         $serviceName = $stringArgument->value;

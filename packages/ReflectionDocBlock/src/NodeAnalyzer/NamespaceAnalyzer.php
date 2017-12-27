@@ -4,7 +4,6 @@ namespace Rector\ReflectionDocBlock\NodeAnalyzer;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
-use PhpParser\Node\Stmt\Use_;
 use Rector\Node\Attribute;
 
 /**
@@ -14,7 +13,6 @@ final class NamespaceAnalyzer
 {
     public function isUseStatementAlreadyPresent(Node $node, string $useName): bool
     {
-        /** @var Use_[] $useNodes */
         $useNodes = $node->getAttribute(Attribute::USE_NODES);
         if (! count($useNodes)) {
             return false;
@@ -35,7 +33,6 @@ final class NamespaceAnalyzer
      */
     public function resolveTypeToFullyQualified(array $types, Node $node): string
     {
-        /** @var Use_[] $useNodes */
         $useNodes = (array) $node->getAttribute(Attribute::USE_NODES);
         foreach ($useNodes as $useNode) {
             $useUseNode = $useNode->uses[0];

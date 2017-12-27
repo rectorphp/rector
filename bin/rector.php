@@ -34,11 +34,8 @@ try {
     }
 
     // 3. Run Console Application
-    /** @var Application $application */
     $application = $container->get(Application::class);
-    /** @var InputInterface $input */
     $input = $container->get(InputInterface::class);
-    /** @var OutputInterface $output */
     $output = $container->get(OutputInterface::class);
     $statusCode = $application->run($input, $output);
     exit($statusCode);

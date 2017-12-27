@@ -31,7 +31,6 @@ final class PropertyFetchAnalyzer
             return false;
         }
 
-        /** @var PropertyFetch $node */
         $nodePropertyName = $node->name->toString();
 
         return $nodePropertyName === $property;
@@ -55,7 +54,6 @@ final class PropertyFetchAnalyzer
             return false;
         }
 
-        /** @var Node\Identifier $identifierNode */
         $identifierNode = $node->name;
 
         $nodePropertyName = $identifierNode->toString();
@@ -74,7 +72,6 @@ final class PropertyFetchAnalyzer
             return false;
         }
 
-        /** @var Node\Identifier $identifierNode */
         $identifierNode = $node->name;
 
         $nodePropertyName = $identifierNode->toString();
@@ -93,7 +90,6 @@ final class PropertyFetchAnalyzer
             return false;
         }
 
-        /** @var Node\Identifier $identifierNode */
         $identifierNode = $node->name;
 
         return in_array($identifierNode->toString(), $properties, true);
@@ -125,7 +121,6 @@ final class PropertyFetchAnalyzer
             return false;
         }
 
-        /** @var PropertyFetch $node */
         return in_array($node->name->toString(), $propertyNames, true);
     }
 

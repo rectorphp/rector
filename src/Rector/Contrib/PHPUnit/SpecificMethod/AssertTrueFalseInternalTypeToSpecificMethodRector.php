@@ -75,7 +75,6 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractRe
             return false;
         }
 
-        /** @var MethodCall $methodCallNode */
         $methodCallNode = $node;
 
         $firstArgumentValue = $methodCallNode->args[0]->value;

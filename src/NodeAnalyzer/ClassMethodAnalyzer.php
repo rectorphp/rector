@@ -32,7 +32,6 @@ final class ClassMethodAnalyzer
             return false;
         }
 
-        /** @var MethodCall $node */
         return in_array($node->name->toString(), $methods, true);
     }
 

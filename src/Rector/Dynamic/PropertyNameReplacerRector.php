@@ -4,7 +4,6 @@ namespace Rector\Rector\Dynamic;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Identifier;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractRector;
@@ -69,7 +68,6 @@ final class PropertyNameReplacerRector extends AbstractRector
     {
         $oldToNewProperties = $this->matchOldToNewProperties();
 
-        /** @var Identifier $identifierNode */
         $identifierNode = $propertyFetchNode->name;
 
         $propertyName = $identifierNode->toString();

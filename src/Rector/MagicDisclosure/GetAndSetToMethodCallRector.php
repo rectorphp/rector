@@ -7,7 +7,6 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeAnalyzer\ExpressionAnalyzer;
@@ -98,7 +97,6 @@ final class GetAndSetToMethodCallRector extends AbstractRector
         $assignNode = $expressionNode->expr;
 
         if ($assignNode->expr instanceof PropertyFetch) {
-            /** @var PropertyFetch $propertyFetchNode */
             $propertyFetchNode = $assignNode->expr;
             $method = $this->activeTransformation['get'];
             $assignNode->expr = $this->createMethodCallNodeFromPropertyFetchNode($propertyFetchNode, $method);
@@ -118,7 +116,6 @@ final class GetAndSetToMethodCallRector extends AbstractRector
         PropertyFetch $propertyFetchNode,
         string $method
     ): MethodCall {
-        /** @var Identifier $identifierNode */
         $identifierNode = $propertyFetchNode->name;
 
         $value = $identifierNode->toString();
@@ -138,7 +135,6 @@ final class GetAndSetToMethodCallRector extends AbstractRector
         /** @var PropertyFetch $propertyFetchNode */
         $propertyFetchNode = $assignNode->var;
 
-        /** @var Identifier $identifierNode */
         $identifierNode = $propertyFetchNode->name;
 
         $key = $identifierNode->toString();

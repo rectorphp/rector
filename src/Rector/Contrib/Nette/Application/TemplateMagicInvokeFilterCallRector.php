@@ -4,7 +4,6 @@ namespace Rector\Rector\Contrib\Nette\Application;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Identifier;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
@@ -74,7 +73,6 @@ final class TemplateMagicInvokeFilterCallRector extends AbstractRector
 
     private function changeToInvokeFilterMethodCall(MethodCall $methodCallNode): void
     {
-        /** @var Identifier $identifierNode */
         $identifierNode = $methodCallNode->name;
 
         $filterName = $identifierNode->toString();

@@ -4,7 +4,6 @@ namespace Rector\NodeTypeResolver;
 
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\FunctionLike;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
@@ -80,7 +79,6 @@ final class TypeContext
         $this->classLikeNode = $classLikeNode;
 
         if ($this->classLikeAnalyzer->isNormalClass($classLikeNode)) {
-            /** @var Class_ $classLikeNode */
             $this->propertyTypes = $this->constructorPropertyTypesExtractor->extractFromClassNode($classLikeNode);
         }
     }
@@ -154,7 +152,6 @@ final class TypeContext
             return $this->methodReflector->reflectClassMethod($className, $methodName);
         }
 
-        /** @var Function_ $functionLikeNode */
         $functionName = (string) $functionLikeNode->name;
         if (! function_exists($functionName)) {
             return null;

@@ -5,7 +5,6 @@ namespace Rector\Rector\Contrib\Nette\Application;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
-use PhpParser\Node\Stmt\PropertyProperty;
 use PhpParser\Node\VarLikeIdentifier;
 use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Node\Attribute;
@@ -71,7 +70,6 @@ final class InjectPropertyRector extends AbstractRector
     {
         $propertyTypes = $this->nodeTypeResolver->resolve($propertyNode);
 
-        /** @var PropertyProperty $propertyPropertyNode */
         $propertyPropertyNode = $propertyNode->props[0];
 
         /** @var VarLikeIdentifier $varLikeIdentifierNode */

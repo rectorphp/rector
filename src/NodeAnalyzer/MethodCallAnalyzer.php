@@ -72,7 +72,6 @@ final class MethodCallAnalyzer
             return false;
         }
 
-        /** @var MethodCall $node */
         return in_array($node->name->toString(), $methods, true);
     }
 
@@ -85,7 +84,6 @@ final class MethodCallAnalyzer
             return false;
         }
 
-        /** @var MethodCall $node */
         return $node->name->toString() === $method;
     }
 
@@ -156,7 +154,6 @@ final class MethodCallAnalyzer
             return false;
         }
 
-        /** @var MethodCall $node */
         $nodeMethodName = $node->name->name;
 
         $publicMethodNames = $this->getPublicMethodNamesForType($type);

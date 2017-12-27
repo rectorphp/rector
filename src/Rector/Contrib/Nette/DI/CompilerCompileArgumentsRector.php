@@ -44,7 +44,6 @@ final class CompilerCompileArgumentsRector extends AbstractRector
             return false;
         }
 
-        /** @var MethodCall $node */
         return count($node->args) >= 1;
     }
 

@@ -57,7 +57,6 @@ final class AssertTrueIssetToObjectHasAttributeRector extends AbstractRector
             return false;
         }
 
-        /** @var MethodCall $methodCallNode */
         $methodCallNode = $node;
 
         $firstArgumentValue = $methodCallNode->args[0]->value;
@@ -67,7 +66,6 @@ final class AssertTrueIssetToObjectHasAttributeRector extends AbstractRector
             return false;
         }
 
-        /** @var Isset_ $issetNode */
         $issetNode = $firstArgumentValue;
 
         return $issetNode->vars[0] instanceof PropertyFetch;
@@ -81,7 +79,6 @@ final class AssertTrueIssetToObjectHasAttributeRector extends AbstractRector
         // rename method
         $this->identifierRenamer->renameNodeWithMap($methodCallNode, $this->renameMethodsMap);
 
-        // move isset to property and object
         /** @var Isset_ $issetNode */
         $issetNode = $methodCallNode->args[0]->value;
 

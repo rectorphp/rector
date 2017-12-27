@@ -47,7 +47,6 @@ final class ConstructorPropertyTypesExtractor
                 continue;
             }
 
-            /** @var ClassMethod $inClassNode */
             return $this->extractPropertiesFromConstructorMethodNode($inClassNode, $constructorParametersWithTypes);
         }
 
@@ -129,14 +128,10 @@ final class ConstructorPropertyTypesExtractor
                 continue;
             }
 
-            /** @var Expression $inConstructorNode */
-            /** @var Assign $assignNode */
             $assignNode = $inConstructorNode->expr;
 
-            /** @var PropertyFetch $propertyFetchNode */
             $propertyFetchNode = $assignNode->var;
 
-            /** @var Identifier $identifierNode */
             $identifierNode = $propertyFetchNode->name;
 
             $propertyName = $identifierNode->toString();

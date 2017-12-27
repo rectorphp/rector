@@ -4,12 +4,9 @@ namespace Rector\Rector\Dynamic;
 
 use PhpParser\BuilderHelpers;
 use PhpParser\Node;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\BetterReflection\Reflection\TypeAnalyzer;
 use Rector\Node\Attribute;
@@ -70,7 +67,6 @@ final class ParentTypehintedArgumentRector extends AbstractRector
             return false;
         }
 
-        /** @var ClassLike $classNode */
         $classNode = $node->getAttribute(Attribute::CLASS_NODE);
         $classNodeTypes = $this->nodeTypeResolver->resolve($classNode);
         if (! $classNodeTypes) {
@@ -85,7 +81,6 @@ final class ParentTypehintedArgumentRector extends AbstractRector
      */
     public function refactor(Node $classMethodNode): ?Node
     {
-        /** @var Class_ $classMethodNode */
         $classNode = $classMethodNode->getAttribute(Attribute::CLASS_NODE);
         $classNodeTypes = $this->nodeTypeResolver->resolve($classNode);
 
@@ -141,9 +136,7 @@ final class ParentTypehintedArgumentRector extends AbstractRector
         ClassMethod $classMethodNode,
         array $parametersToTypehints
     ): ClassMethod {
-        /** @var Param $param */
         foreach ($classMethodNode->params as $param) {
-            /** @var Variable $variableNode */
             $variableNode = $param->var;
 
             $parameterName = (string) $variableNode->name;
