@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\PropertyProperty;
 use PhpParser\Node\VarLikeIdentifier;
 use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Node\Attribute;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Rector\AbstractRector;
 use Rector\ReflectionDocBlock\NodeAnalyzer\DocBlockAnalyzer;
 
@@ -24,10 +25,19 @@ final class InjectPropertyRector extends AbstractRector
      */
     private $docBlockAnalyzer;
 
-    public function __construct(ClassPropertyCollector $classPropertyCollector, DocBlockAnalyzer $docBlockAnalyzer)
-    {
+    /**
+     * @var NodeTypeResolver
+     */
+    private $nodeTypeResolver;
+
+    public function __construct(
+        ClassPropertyCollector $classPropertyCollector,
+        DocBlockAnalyzer $docBlockAnalyzer,
+        NodeTypeResolver $nodeTypeResolver
+    ) {
         $this->classPropertyCollector = $classPropertyCollector;
         $this->docBlockAnalyzer = $docBlockAnalyzer;
+        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     public function isCandidate(Node $node): bool
@@ -59,7 +69,8 @@ final class InjectPropertyRector extends AbstractRector
 
     private function addPropertyToCollector(Property $propertyNode): void
     {
-        $propertyTypes = $propertyNode->getAttribute(Attribute::TYPES);
+        $propertyTypes = $this->nodeTypeResolver->resolve($propertyNode);
+        //getAttribute(Attribute::TYPES);
 
         /** @var PropertyProperty $propertyPropertyNode */
         $propertyPropertyNode = $propertyNode->props[0];
