@@ -32,6 +32,9 @@ checkers:
             - 'PhpParser\PrettyPrinter\Standard'
             - 'PhpParser\Node'
 
+    # Types should be referenced via a use statement
+    - Symplify\CodingStandard\Fixer\Import\ImportNamespacedNameFixer
+
 parameters:
     skip:
         Symplify\CodingStandard\Fixer\Php\ClassStringToClassConstantFixer:
