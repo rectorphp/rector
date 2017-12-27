@@ -16,9 +16,9 @@ final class PropertyTypeResolverTest extends AbstractNodeTypeResolverTest
      */
     public function test(string $file, int $nodePosition, array $expectedTypes): void
     {
-        $variableNodes = $this->getNodesForFileOfType($file, Property::class);
+        $propertyNodes = $this->getNodesForFileOfType($file, Property::class);
 
-        $this->assertSame($expectedTypes, $this->nodeTypeResolver->resolve($variableNodes[$nodePosition]));
+        $this->assertSame($expectedTypes, $this->nodeTypeResolver->resolve($propertyNodes[$nodePosition]));
     }
 
     /**
