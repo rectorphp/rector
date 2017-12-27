@@ -10,23 +10,27 @@ use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTe
  */
 final class ParamTypeResolverTest extends AbstractNodeTypeResolverTest
 {
-    public function testTypehint(): void
+    /**
+     * @dataProvider provideTypeForNodesAndFilesData()
+     * @param string[]
+     */
+    public function test(string $file, int $nodePosition, array $expectedTypes): void
     {
-        $variableNodes = $this->getNodesForFileOfType(__DIR__ . '/Source/MethodParamTypeHint.php.inc', Variable::class);
+        $variableNodes = $this->getNodesForFileOfType($file, Variable::class);
 
-        $this->assertSame(
-            ['SomeNamespace\SubNamespace\Html'],
-            $this->nodeTypeResolver->resolve($variableNodes[0])
-        );
+        $this->assertSame($expectedTypes, $this->nodeTypeResolver->resolve($variableNodes[$nodePosition]));
     }
 
-    public function testDocBlock(): void
+    /**
+     * @return mixed[][]
+     */
+    public function provideTypeForNodesAndFilesData(): array
     {
-        $variableNodes = $this->getNodesForFileOfType(__DIR__ . '/Source/MethodParamDocBlock.php.inc', Variable::class);
-
-        $this->assertSame(
-            ['SomeNamespace\SubNamespace\Html'],
-            $this->nodeTypeResolver->resolve($variableNodes[0])
-        );
+        return [
+            # typehint
+            [__DIR__ . '/Source/MethodParamTypeHint.php.inc', 0, ['SomeNamespace\SubNamespace\Html']],
+            # docblock
+            [__DIR__ . '/Source/MethodParamDocBlock.php.inc', 0, ['SomeNamespace\SubNamespace\Html']],
+        ];
     }
 }
