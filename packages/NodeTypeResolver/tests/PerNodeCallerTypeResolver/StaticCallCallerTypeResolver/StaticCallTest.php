@@ -3,7 +3,6 @@
 namespace Rector\NodeTypeResolver\Tests\PerNodeCallerTypeResolver\StaticCallCallerTypeResolver;
 
 use PhpParser\Node\Expr\StaticCall;
-use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Tests\PerNodeCallerTypeResolver\AbstractNodeCallerTypeResolverTest;
 
 final class StaticCallTest extends AbstractNodeCallerTypeResolverTest
@@ -15,6 +14,9 @@ final class StaticCallTest extends AbstractNodeCallerTypeResolverTest
             StaticCall::class
         );
 
-        $this->doTestAttributeEquals($methodCallNodes[0], Attribute::CALLER_TYPES, ['Nette\Config\Configurator']);
+        $this->assertSame(
+            ['Nette\Config\Configurator'],
+            $this->nodeCallerTypeResolver->resolve($methodCallNodes[0])
+        );
     }
 }

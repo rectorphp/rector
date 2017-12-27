@@ -5,12 +5,18 @@ namespace Rector\NodeTypeResolver\Tests\PerNodeCallerTypeResolver;
 use PhpParser\Node;
 use Rector\NodeTraverserQueue\BetterNodeFinder;
 use Rector\NodeTraverserQueue\NodeTraverserQueue;
+use Rector\NodeTypeResolver\NodeCallerTypeResolver;
 use Rector\Tests\AbstractContainerAwareTestCase;
 use SplFileInfo;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
 abstract class AbstractNodeCallerTypeResolverTest extends AbstractContainerAwareTestCase
 {
+    /**
+     * @var NodeCallerTypeResolver
+     */
+    protected $nodeCallerTypeResolver;
+
     /**
      * @var BetterNodeFinder
      */
@@ -31,6 +37,7 @@ abstract class AbstractNodeCallerTypeResolverTest extends AbstractContainerAware
         $this->betterNodeFinder = $this->container->get(BetterNodeFinder::class);
         $this->nodeTraverserQueue = $this->container->get(NodeTraverserQueue::class);
         $this->parameterProvider = $this->container->get(ParameterProvider::class);
+        $this->nodeCallerTypeResolver = $this->container->get(NodeCallerTypeResolver::class);
     }
 
     /**
