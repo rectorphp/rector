@@ -3,6 +3,7 @@
 namespace Rector\NodeTypeResolver;
 
 use PhpParser\Node;
+use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Contract\PerNodeCallerTypeResolver\PerNodeCallerTypeResolverInterface;
 
 /**
@@ -32,12 +33,21 @@ final class NodeCallerTypeResolver
      */
     public function resolve(Node $node): array
     {
-        $nodeClass = get_class($node);
+        // resolve just once
+        if ($node->hasAttribute(Attribute::CALLER_TYPES)) {
+            return $node->getAttribute(Attribute::CALLER_TYPES);
+        }
 
+        $nodeClass = get_class($node);
         if (! isset($this->perNodeCallerTypeResolvers[$nodeClass])) {
             return [];
         }
 
-        return $this->perNodeCallerTypeResolvers[$nodeClass]->resolve($node);
+        $nodeCallerTypes = $this->perNodeCallerTypeResolvers[$nodeClass]->resolve($node);
+        $nodeCallerTypes = array_unique($nodeCallerTypes);
+
+        $node->setAttribute(Attribute::CALLER_TYPES, $nodeCallerTypes);
+
+        return $nodeCallerTypes;
     }
 }
