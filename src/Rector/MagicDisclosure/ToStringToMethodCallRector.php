@@ -5,9 +5,9 @@ namespace Rector\Rector\MagicDisclosure;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Cast\String_;
 use PhpParser\Node\Expr\MethodCall;
-use Rector\Node\Attribute;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -44,6 +44,11 @@ final class ToStringToMethodCallRector extends AbstractRector
     private $identifierRenamer;
 
     /**
+     * @var NodeTypeResolver
+     */
+    private $nodeTypeResolver;
+
+    /**
      * Type to method call()
      *
      * @param string[][] $typeToMethodCalls
@@ -51,11 +56,13 @@ final class ToStringToMethodCallRector extends AbstractRector
     public function __construct(
         array $typeToMethodCalls,
         MethodCallAnalyzer $methodCallAnalyzer,
-        IdentifierRenamer $identifierRenamer
+        IdentifierRenamer $identifierRenamer,
+        NodeTypeResolver $nodeTypeResolver
     ) {
         $this->typeToMethodCalls = $typeToMethodCalls;
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
+        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     public function isCandidate(Node $node): bool
@@ -87,7 +94,7 @@ final class ToStringToMethodCallRector extends AbstractRector
 
     private function processStringCandidate(String_ $stringNode): bool
     {
-        $nodeTypes = $stringNode->expr->getAttribute(Attribute::TYPES);
+        $nodeTypes = $this->nodeTypeResolver->resolve($stringNode->expr);
 
         foreach ($this->typeToMethodCalls as $type => $transformation) {
             if (in_array($type, $nodeTypes, true)) {
