@@ -57,6 +57,11 @@ final class NestedMethodCallTest extends AbstractNodeCallerTypeResolverTest
         /** @var Identifier $identifierNode */
         $identifierNode = $methodCallNodes[0]->name;
         $this->assertSame('setScope', $identifierNode->toString());
+
+        $this->assertSame([
+            'Symfony\Component\DependencyInjection\Definition',
+        ], $this->nodeCallerTypeResolver->resolve($methodCallNodes[1]));
+
         $this->doTestAttributeEquals($methodCallNodes[0], Attribute::CALLER_TYPES, [
             'Symfony\Component\DependencyInjection\Definition',
         ]);
