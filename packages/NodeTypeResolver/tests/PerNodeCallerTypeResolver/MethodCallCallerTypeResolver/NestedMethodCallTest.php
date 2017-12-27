@@ -11,11 +11,21 @@ final class NestedMethodCallTest extends AbstractNodeCallerTypeResolverTest
     /**
      * @var MethodCall[]
      */
+    private $formChainMethodCallNodes = [];
+
+    /**
+     * @var MethodCall[]
+     */
     private $nestedMethodCallNodes = [];
 
     protected function setUp(): void
     {
         parent::setUp();
+
+        $this->formChainMethodCallNodes = $this->getNodesForFileOfType(
+            __DIR__ . '/NestedMethodCallSource/FormChainMethodCalls.php.inc',
+            MethodCall::class
+        );
 
         $this->nestedMethodCallNodes = $this->getNodesForFileOfType(
             __DIR__ . '/NestedMethodCallSource/NestedMethodCalls.php.inc',
@@ -23,40 +33,47 @@ final class NestedMethodCallTest extends AbstractNodeCallerTypeResolverTest
         );
     }
 
-
-    public function testFormChainCalls(): void
+    /**
+     * @dataProvider provideFormChainMethodCallData()
+     * @param string[] $expectedTypes
+     */
+    public function testFormChainCalls(int $nodeId, string $methodName, array $expectedTypes): void
     {
-        /** @var MethodCall[] $methodCallNodes */
-        $methodCallNodes = $this->getNodesForFileOfType(
-            __DIR__ . '/NestedMethodCallSource/FormChainMethodCalls.php.inc',
-            MethodCall::class
-        );
-
-        $this->assertCount(3, $methodCallNodes);
+        $node = $this->formChainMethodCallNodes[$nodeId];
 
         /** @var Identifier $identifierNode */
-        $identifierNode = $methodCallNodes[0]->name;
-        $this->assertSame('addRule', $identifierNode->toString());
-        $this->assertSame(
-            ['Nette\Forms\Rules'],
-            $this->nodeCallerTypeResolver->resolve($methodCallNodes[0])
-        );
+        $identifierNode = $node->name;
+        $this->assertSame($methodName, $identifierNode->toString());
 
-        /** @var Identifier $identifierNode */
-        $identifierNode = $methodCallNodes[1]->name;
-        $this->assertSame('addCondition', $identifierNode->toString());
-        $this->assertContains(
-            'Nette\Forms\Controls\TextInput',
-            $this->nodeCallerTypeResolver->resolve($methodCallNodes[1])
-        );
+        $this->assertSame($expectedTypes, $this->nodeCallerTypeResolver->resolve($node));
+    }
 
-        /** @var Identifier $identifierNode */
-        $identifierNode = $methodCallNodes[2]->name;
-        $this->assertSame('addText', $identifierNode->toString());
-        $this->assertContains(
-            'Nette\Application\UI\Form',
-            $this->nodeCallerTypeResolver->resolve($methodCallNodes[2])
-        );
+    /**
+     * @return mixed[][]
+     */
+    public function provideFormChainMethodCallData(): array
+    {
+        return [
+            [0, 'addRule', ['Nette\Forms\Rules']],
+            [1, 'addCondition', [
+                'Nette\Forms\Controls\TextInput',
+                'Nette\Forms\Controls\TextBase',
+                'Nette\Forms\Controls\BaseControl',
+                'Nette\ComponentModel\Component'
+            ]],
+            [2, 'addText', [
+                'Nette\Application\UI\Form',
+                'Nette\ComponentModel\IComponent',
+                'Nette\ComponentModel\IContainer',
+                'ArrayAccess',
+                'Nette\Utils\IHtmlString',
+                'Nette\Application\UI\ISignalReceiver',
+                'Nette\Forms\Form',
+                'Nette\Forms\Container',
+                'Nette\ComponentModel\Container',
+                'Nette\ComponentModel\Component',
+            ]],
+        ];
     }
 
     public function testOnNestedDifferentMethodCall(): void
@@ -118,6 +135,4 @@ final class NestedMethodCallTest extends AbstractNodeCallerTypeResolverTest
             [2, 'createContainer', ['Nette\Config\Configurator', 'Nette\Object']],
         ];
     }
-
-
 }
