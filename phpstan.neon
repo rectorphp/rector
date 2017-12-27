@@ -33,6 +33,7 @@ parameters:
         - '#Parameter \#1 \$classMethodNode of method Rector\\NodeTypeResolver\\TypesExtractor\\ConstructorPropertyTypesExtractor::extractPropertiesFromConstructorMethodNode\(\) expects PhpParser\\Node\\Stmt\\ClassMethod, PhpParser\\Node given#'
         - '#Instanceof between PhpParser\\Node\\Expr\|string and PhpParser\\Node\\Name will always evaluate to false#'
         - '#Method Rector\\BetterReflection\\Reflector\\SmartClassReflector::reflect\(\) should return Rector\\BetterReflection\\Reflection\\ReflectionClass\|null but returns Rector\\BetterReflection\\Reflection\\Reflection#'
+        - '#Property Rector\\NodeTypeResolver\\Tests\\PerNodeCallerTypeResolver\\MethodCallCallerTypeResolver\\NestedMethodCallTest::\$(formChainMethodCallNodes|nestedMethodCallNodes) \(array<PhpParser\\Node\\Expr\\MethodCall>\) does not accept array<PhpParser\\Node>#'
 
         # known value of Name of MethodCall
         - '#Call to an undefined method PhpParser\\Node\\Expr\|PhpParser\\Node\\Name::toString\(\)#'

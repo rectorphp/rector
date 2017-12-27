@@ -25,17 +25,21 @@ final class NodeTypeResolver
      */
     public function resolve(Node $node): array
     {
-        $nodeClass = get_class($node);
+        // resolve just once
+        if ($node->hasAttribute(Attribute::TYPES)) {
+            return $node->getAttribute(Attribute::TYPES);
+        }
 
+        $nodeClass = get_class($node);
         if (! isset($this->perNodeTypeResolvers[$nodeClass])) {
             return [];
         }
 
-        // resolve just once
-        if ($node->getAttribute(Attribute::TYPES)) {
-            return $node->getAttribute(Attribute::TYPES);
-        }
+        $nodeTypes = $this->perNodeTypeResolvers[$nodeClass]->resolve($node);
+        $nodeTypes = array_unique($nodeTypes);
 
-        return $this->perNodeTypeResolvers[$nodeClass]->resolve($node);
+        $node->setAttribute(Attribute::TYPES, $nodeTypes);
+
+        return $nodeTypes;
     }
 }

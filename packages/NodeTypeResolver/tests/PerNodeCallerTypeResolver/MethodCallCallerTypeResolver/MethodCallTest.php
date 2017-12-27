@@ -3,10 +3,9 @@
 namespace Rector\NodeTypeResolver\Tests\PerNodeCallerTypeResolver\MethodCallCallerTypeResolver;
 
 use PhpParser\Node\Expr\MethodCall;
-use Rector\Node\Attribute;
-use Rector\NodeTypeResolver\Tests\AbstractNodeTypeResolverTest;
+use Rector\NodeTypeResolver\Tests\PerNodeCallerTypeResolver\AbstractNodeCallerTypeResolverTest;
 
-final class MethodCallTest extends AbstractNodeTypeResolverTest
+final class MethodCallTest extends AbstractNodeCallerTypeResolverTest
 {
     public function testOnSelfCall(): void
     {
@@ -15,17 +14,17 @@ final class MethodCallTest extends AbstractNodeTypeResolverTest
             MethodCall::class
         );
 
-        $this->doTestAttributeEquals($methodCallNodes[0], Attribute::CALLER_TYPES, [
+        $this->assertSame([
             'SomeClass',
             'Nette\Config\Configurator',
             'Nette\Object',
-        ]);
+        ], $this->nodeCallerTypeResolver->resolve($methodCallNodes[0]));
 
-        $this->doTestAttributeEquals($methodCallNodes[1], Attribute::CALLER_TYPES, [
+        $this->assertSame([
             'SomeClass',
             'Nette\Config\Configurator',
             'Nette\Object',
-        ]);
+        ], $this->nodeCallerTypeResolver->resolve($methodCallNodes[1]));
     }
 
     public function testOnMethodCall(): void
@@ -35,7 +34,9 @@ final class MethodCallTest extends AbstractNodeTypeResolverTest
             MethodCall::class
         );
 
-        $this->doTestAttributeEquals($methodCallNodes[0], Attribute::CALLER_TYPES, ['Nette\DI\Container']);
+        $this->assertSame([
+            'Nette\DI\Container',
+        ], $this->nodeCallerTypeResolver->resolve($methodCallNodes[0]));
     }
 
     public function testOnVariableCall(): void
@@ -45,10 +46,10 @@ final class MethodCallTest extends AbstractNodeTypeResolverTest
             MethodCall::class
         );
 
-        $this->doTestAttributeEquals($methodCallNodes[0], Attribute::CALLER_TYPES, [
+        $this->assertSame([
             'Nette\Config\Configurator',
             'Nette\Object',
-        ]);
+        ], $this->nodeCallerTypeResolver->resolve($methodCallNodes[0]));
     }
 
     public function testOnPropertyCall(): void
@@ -58,9 +59,9 @@ final class MethodCallTest extends AbstractNodeTypeResolverTest
             MethodCall::class
         );
 
-        $this->doTestAttributeEquals($methodCallNodes[0], Attribute::CALLER_TYPES, [
+        $this->assertSame([
             'Nette\Config\Configurator',
             'Nette\Object',
-        ]);
+        ], $this->nodeCallerTypeResolver->resolve($methodCallNodes[0]));
     }
 }

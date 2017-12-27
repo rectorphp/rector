@@ -4,44 +4,76 @@ namespace Rector\NodeTypeResolver\Tests\PerNodeCallerTypeResolver\MethodCallCall
 
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
-use Rector\Node\Attribute;
-use Rector\NodeTypeResolver\Tests\AbstractNodeTypeResolverTest;
+use Rector\NodeTypeResolver\Tests\PerNodeCallerTypeResolver\AbstractNodeCallerTypeResolverTest;
 
-final class NestedMethodCallTest extends AbstractNodeTypeResolverTest
+final class NestedMethodCallTest extends AbstractNodeCallerTypeResolverTest
 {
-    public function testFormChainCalls(): void
+    /**
+     * @var MethodCall[]
+     */
+    private $formChainMethodCallNodes = [];
+
+    /**
+     * @var MethodCall[]
+     */
+    private $nestedMethodCallNodes = [];
+
+    protected function setUp(): void
     {
-        /** @var MethodCall[] $methodCallNodes */
-        $methodCallNodes = $this->getNodesForFileOfType(
+        parent::setUp();
+
+        $this->formChainMethodCallNodes = $this->getNodesForFileOfType(
             __DIR__ . '/NestedMethodCallSource/FormChainMethodCalls.php.inc',
             MethodCall::class
         );
 
-        $this->assertCount(3, $methodCallNodes);
+        $this->nestedMethodCallNodes = $this->getNodesForFileOfType(
+            __DIR__ . '/NestedMethodCallSource/NestedMethodCalls.php.inc',
+            MethodCall::class
+        );
+    }
+
+    /**
+     * @dataProvider provideFormChainMethodCallData()
+     * @param string[] $expectedTypes
+     */
+    public function testFormChainCalls(int $nodeId, string $methodName, array $expectedTypes): void
+    {
+        $node = $this->formChainMethodCallNodes[$nodeId];
 
         /** @var Identifier $identifierNode */
-        $identifierNode = $methodCallNodes[0]->name;
-        $this->assertSame('addRule', $identifierNode->toString());
-        $this->assertSame(
-            ['Nette\Forms\Rules'],
-            $methodCallNodes[0]->getAttribute(Attribute::CALLER_TYPES)
-        );
+        $identifierNode = $node->name;
+        $this->assertSame($methodName, $identifierNode->toString());
 
-        /** @var Identifier $identifierNode */
-        $identifierNode = $methodCallNodes[1]->name;
-        $this->assertSame('addCondition', $identifierNode->toString());
-        $this->assertContains(
-            'Nette\Forms\Controls\TextInput',
-            $methodCallNodes[1]->getAttribute(Attribute::CALLER_TYPES)
-        );
+        $this->assertSame($expectedTypes, $this->nodeCallerTypeResolver->resolve($node));
+    }
 
-        /** @var Identifier $identifierNode */
-        $identifierNode = $methodCallNodes[2]->name;
-        $this->assertSame('addText', $identifierNode->toString());
-        $this->assertContains(
-            'Nette\Application\UI\Form',
-            $methodCallNodes[2]->getAttribute(Attribute::CALLER_TYPES)
-        );
+    /**
+     * @return mixed[][]
+     */
+    public function provideFormChainMethodCallData(): array
+    {
+        return [
+            [0, 'addRule', ['Nette\Forms\Rules']],
+            [1, 'addCondition', [
+                'Nette\Forms\Controls\TextInput',
+                'Nette\Forms\Controls\TextBase',
+                'Nette\Forms\Controls\BaseControl',
+                'Nette\ComponentModel\Component',
+            ]],
+            [2, 'addText', [
+                'Nette\Application\UI\Form',
+                'Nette\ComponentModel\IComponent',
+                'Nette\ComponentModel\IContainer',
+                'ArrayAccess',
+                'Nette\Utils\IHtmlString',
+                'Nette\Application\UI\ISignalReceiver',
+                'Nette\Forms\Form',
+                'Nette\Forms\Container',
+                'Nette\ComponentModel\Container',
+                'Nette\ComponentModel\Component',
+            ]],
+        ];
     }
 
     public function testOnNestedDifferentMethodCall(): void
@@ -57,53 +89,50 @@ final class NestedMethodCallTest extends AbstractNodeTypeResolverTest
         /** @var Identifier $identifierNode */
         $identifierNode = $methodCallNodes[0]->name;
         $this->assertSame('setScope', $identifierNode->toString());
-        $this->doTestAttributeEquals($methodCallNodes[0], Attribute::CALLER_TYPES, [
-            'Symfony\Component\DependencyInjection\Definition',
-        ]);
+
+        $this->assertSame(
+            ['Symfony\Component\DependencyInjection\Definition'],
+            $this->nodeCallerTypeResolver->resolve($methodCallNodes[0])
+        );
 
         /** @var Identifier $identifierNode */
         $identifierNode = $methodCallNodes[1]->name;
         $this->assertSame('register', $identifierNode->toString());
-        $this->doTestAttributeEquals($methodCallNodes[1], Attribute::CALLER_TYPES, [
+
+        $this->assertSame([
             'Symfony\Component\DependencyInjection\ContainerBuilder',
             'Symfony\Component\DependencyInjection\ResettableContainerInterface',
             'Symfony\Component\DependencyInjection\ContainerInterface',
             'Psr\Container\ContainerInterface',
             'Symfony\Component\DependencyInjection\TaggedContainerInterface',
             'Symfony\Component\DependencyInjection\Container',
-        ]);
+        ], $this->nodeCallerTypeResolver->resolve($methodCallNodes[1]));
     }
 
-    public function testOnNestedMethodCall(): void
+    /**
+     * @dataProvider provideNestedMethodCallData()
+     * @param string[] $expectedTypes
+     */
+    public function testOnNestedMethodCall(int $nodeId, string $methodName, array $expectedTypes): void
     {
-        /** @var MethodCall[] $methodCallNodes */
-        $methodCallNodes = $this->getNodesForFileOfType(
-            __DIR__ . '/NestedMethodCallSource/NestedMethodCalls.php.inc',
-            MethodCall::class
-        );
-
-        $this->assertCount(3, $methodCallNodes);
+        $node = $this->nestedMethodCallNodes[$nodeId];
 
         /** @var Identifier $identifierNode */
-        $identifierNode = $methodCallNodes[0]->name;
-        $this->assertSame('getParameters', $identifierNode->toString());
-        $this->doTestAttributeEquals($methodCallNodes[0], Attribute::CALLER_TYPES, [
-            'Nette\DI\Container',
-        ]);
+        $identifierNode = $node->name;
+        $this->assertSame($methodName, $identifierNode->toString());
 
-        /** @var Identifier $identifierNode */
-        $identifierNode = $methodCallNodes[1]->name;
-        $this->assertSame('addService', $identifierNode->toString());
-        $this->doTestAttributeEquals($methodCallNodes[1], Attribute::CALLER_TYPES, [
-            'Nette\DI\Container',
-        ]);
+        $this->assertSame($expectedTypes, $this->nodeCallerTypeResolver->resolve($node));
+    }
 
-        /** @var Identifier $identifierNode */
-        $identifierNode = $methodCallNodes[2]->name;
-        $this->assertSame('createContainer', $identifierNode->toString());
-        $this->doTestAttributeEquals($methodCallNodes[2], Attribute::CALLER_TYPES, [
-            'Nette\Config\Configurator',
-            'Nette\Object',
-        ]);
+    /**
+     * @return mixed[][]
+     */
+    public function provideNestedMethodCallData(): array
+    {
+        return [
+            [0, 'getParameters', ['Nette\DI\Container']],
+            [1, 'addService', ['Nette\DI\Container']],
+            [2, 'createContainer', ['Nette\Config\Configurator', 'Nette\Object']],
+        ];
     }
 }

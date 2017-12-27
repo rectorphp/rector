@@ -6,12 +6,23 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Node\Attribute;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 
 /**
  * Checks "public function methodCall()"
  */
 final class ClassMethodAnalyzer
 {
+    /**
+     * @var NodeTypeResolver
+     */
+    private $nodeTypeResolver;
+
+    public function __construct(NodeTypeResolver $nodeTypeResolver)
+    {
+        $this->nodeTypeResolver = $nodeTypeResolver;
+    }
+
     /**
      * @param string[] $methods
      */
@@ -32,7 +43,7 @@ final class ClassMethodAnalyzer
         }
 
         $classNode = $node->getAttribute(Attribute::CLASS_NODE);
-        $nodeTypes = (array) $classNode->getAttribute(Attribute::TYPES);
+        $nodeTypes = $this->nodeTypeResolver->resolve($classNode);
 
         return in_array($type, $nodeTypes, true);
     }

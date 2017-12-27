@@ -3,10 +3,9 @@
 namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AssignTypeResolver;
 
 use PhpParser\Node\Expr\Variable;
-use Rector\Node\Attribute;
-use Rector\NodeTypeResolver\Tests\AbstractNodeTypeResolverTest;
+use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
 
-final class Test extends AbstractNodeTypeResolverTest
+final class AssignTypeResolverTest extends AbstractNodeTypeResolverTest
 {
     public function testNew(): void
     {
@@ -14,12 +13,12 @@ final class Test extends AbstractNodeTypeResolverTest
 
         $this->assertSame(
             ['Nette\Config\Configurator', 'Nette\Object'],
-            $variableNodes[0]->getAttribute(Attribute::TYPES)
+            $this->nodeTypeResolver->resolve($variableNodes[0])
         );
 
         $this->assertSame(
             ['Nette\Config\Configurator', 'Nette\Object'],
-            $variableNodes[2]->getAttribute(Attribute::TYPES)
+            $this->nodeTypeResolver->resolve($variableNodes[2])
         );
     }
 
@@ -29,12 +28,12 @@ final class Test extends AbstractNodeTypeResolverTest
 
         $this->assertSame(
             'Symfony\Component\DependencyInjection\ContainerBuilder',
-            $variableNodes[0]->getAttribute(Attribute::TYPES)[0]
+            $this->nodeTypeResolver->resolve($variableNodes[0])[0]
         );
 
         $this->assertSame(
             'Symfony\Component\DependencyInjection\ContainerBuilder',
-            $variableNodes[1]->getAttribute(Attribute::TYPES)[0]
+            $this->nodeTypeResolver->resolve($variableNodes[1])[0]
         );
     }
 
@@ -44,7 +43,7 @@ final class Test extends AbstractNodeTypeResolverTest
 
         $this->assertSame(
             ['Nette\DI\Container'],
-            $variableNodes[1]->getAttribute(Attribute::TYPES)
+            $this->nodeTypeResolver->resolve($variableNodes[1])
         );
     }
 }

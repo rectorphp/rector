@@ -3,10 +3,9 @@
 namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ParamTypeResolver;
 
 use PhpParser\Node\Expr\Variable;
-use Rector\Node\Attribute;
-use Rector\NodeTypeResolver\Tests\AbstractNodeTypeResolverTest;
+use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
 
-final class Test extends AbstractNodeTypeResolverTest
+final class ParamTypeResolverTest extends AbstractNodeTypeResolverTest
 {
     public function testTypehint(): void
     {
@@ -14,7 +13,7 @@ final class Test extends AbstractNodeTypeResolverTest
 
         $this->assertSame(
             ['SomeNamespace\SubNamespace\Html'],
-            $variableNodes[0]->getAttribute(Attribute::TYPES)
+            $this->nodeTypeResolver->resolve($variableNodes[0])
         );
     }
 
@@ -24,7 +23,7 @@ final class Test extends AbstractNodeTypeResolverTest
 
         $this->assertSame(
             ['SomeNamespace\SubNamespace\Html'],
-            $variableNodes[0]->getAttribute(Attribute::TYPES)
+            $this->nodeTypeResolver->resolve($variableNodes[0])
         );
     }
 }

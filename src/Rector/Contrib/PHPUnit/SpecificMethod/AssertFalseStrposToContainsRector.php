@@ -7,6 +7,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
+use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -25,9 +26,15 @@ final class AssertFalseStrposToContainsRector extends AbstractRector
      */
     private $methodCallAnalyzer;
 
-    public function __construct(MethodCallAnalyzer $methodCallAnalyzer)
+    /**
+     * @var IdentifierRenamer
+     */
+    private $identifierRenamer;
+
+    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, IdentifierRenamer $identifierRenamer)
     {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
+        $this->identifierRenamer = $identifierRenamer;
     }
 
     public function isCandidate(Node $node): bool
@@ -83,9 +90,9 @@ final class AssertFalseStrposToContainsRector extends AbstractRector
         $oldMethodName = $methodCallNode->name->toString();
 
         if ($oldMethodName === 'assertFalse') {
-            $methodCallNode->name = new Identifier('assertNotContains');
+            $this->identifierRenamer->renameNode($methodCallNode, 'assertNotContains');
         } else {
-            $methodCallNode->name = new Identifier('assertContains');
+            $this->identifierRenamer->renameNode($methodCallNode, 'assertContains');
         }
     }
 }

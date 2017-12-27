@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Contract\PerNodeCallerTypeResolver\PerNodeCallerTypeResolverInterface;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 
 /**
  * This will tell the type of Node, which is calling this method
@@ -19,6 +20,16 @@ use Rector\NodeTypeResolver\Contract\PerNodeCallerTypeResolver\PerNodeCallerType
  */
 final class StaticCallCallerTypeResolver implements PerNodeCallerTypeResolverInterface
 {
+    /**
+     * @var NodeTypeResolver
+     */
+    private $nodeTypeResolver;
+
+    public function __construct(NodeTypeResolver $nodeTypeResolver)
+    {
+        $this->nodeTypeResolver = $nodeTypeResolver;
+    }
+
     /**
      * @return string[]
      */
@@ -35,9 +46,7 @@ final class StaticCallCallerTypeResolver implements PerNodeCallerTypeResolverInt
     {
         $types = [];
         if ($staticCallNode->class instanceof Name) {
-            if ($staticCallNode->class->getAttribute(Attribute::TYPES)) {
-                $types = $staticCallNode->class->getAttribute(Attribute::TYPES);
-            }
+            $types = $this->nodeTypeResolver->resolve($staticCallNode->class);
 
             $class = $staticCallNode->class->toString();
             if ($class === 'parent') {

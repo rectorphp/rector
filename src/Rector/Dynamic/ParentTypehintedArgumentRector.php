@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\BetterReflection\Reflection\TypeAnalyzer;
 use Rector\Node\Attribute;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -46,12 +47,21 @@ final class ParentTypehintedArgumentRector extends AbstractRector
     private $typeAnalyzer;
 
     /**
+     * @var NodeTypeResolver
+     */
+    private $nodeTypeResolver;
+
+    /**
      * @param mixed[] $typehintForArgumentByMethodAndClass
      */
-    public function __construct(array $typehintForArgumentByMethodAndClass, TypeAnalyzer $typeAnalyzer)
-    {
+    public function __construct(
+        array $typehintForArgumentByMethodAndClass,
+        TypeAnalyzer $typeAnalyzer,
+        NodeTypeResolver $nodeTypeResolver
+    ) {
         $this->typehintForArgumentByMethodAndClass = $typehintForArgumentByMethodAndClass;
         $this->typeAnalyzer = $typeAnalyzer;
+        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     public function isCandidate(Node $node): bool
@@ -62,7 +72,7 @@ final class ParentTypehintedArgumentRector extends AbstractRector
 
         /** @var ClassLike $classNode */
         $classNode = $node->getAttribute(Attribute::CLASS_NODE);
-        $classNodeTypes = $classNode->getAttribute(Attribute::TYPES);
+        $classNodeTypes = $this->nodeTypeResolver->resolve($classNode);
         if (! $classNodeTypes) {
             return false;
         }
@@ -77,8 +87,7 @@ final class ParentTypehintedArgumentRector extends AbstractRector
     {
         /** @var Class_ $classMethodNode */
         $classNode = $classMethodNode->getAttribute(Attribute::CLASS_NODE);
-
-        $classNodeTypes = $classNode->getAttribute(Attribute::TYPES);
+        $classNodeTypes = $this->nodeTypeResolver->resolve($classNode);
 
         $matchingTypes = $this->getMatchingTypesForClassNode($classNodeTypes);
 

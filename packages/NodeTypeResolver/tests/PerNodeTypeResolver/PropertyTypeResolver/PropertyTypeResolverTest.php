@@ -3,10 +3,9 @@
 namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\PropertyTypeResolver;
 
 use PhpParser\Node\Stmt\Property;
-use Rector\Node\Attribute;
-use Rector\NodeTypeResolver\Tests\AbstractNodeTypeResolverTest;
+use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
 
-final class Test extends AbstractNodeTypeResolverTest
+final class PropertyTypeResolverTest extends AbstractNodeTypeResolverTest
 {
     public function testDocBlock(): void
     {
@@ -17,7 +16,7 @@ final class Test extends AbstractNodeTypeResolverTest
 
         $this->assertSame(
             ['SomeNamespace\PropertyType'],
-            $propertyNodes[0]->getAttribute(Attribute::TYPES)
+            $this->nodeTypeResolver->resolve($propertyNodes[0])
         );
     }
 
@@ -30,7 +29,7 @@ final class Test extends AbstractNodeTypeResolverTest
 
         $this->assertSame(
             ['SomeNamespace\PropertyType'],
-            $propertyNodes[0]->getAttribute(Attribute::TYPES)
+            $this->nodeTypeResolver->resolve($propertyNodes[0])
         );
     }
 
@@ -48,6 +47,6 @@ final class Test extends AbstractNodeTypeResolverTest
             'PhpParser\Node\Stmt',
             'PhpParser\NodeAbstract',
             'PhpParser\Node\Expr',
-        ], $propertyNodes[0]->getAttribute(Attribute::TYPES));
+        ], $this->nodeTypeResolver->resolve($propertyNodes[0]));
     }
 }

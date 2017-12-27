@@ -6,10 +6,10 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
-use Rector\Node\Attribute;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -17,11 +17,6 @@ use Rector\Rector\AbstractRector;
  */
 final class FormSetRequiredRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    public const FORM_CLASS = 'Nette\Application\UI\Form';
-
     /**
      * @var MethodCallAnalyzer
      */
@@ -37,14 +32,21 @@ final class FormSetRequiredRector extends AbstractRector
      */
     private $nodeFactory;
 
+    /**
+     * @var NodeTypeResolver
+     */
+    private $nodeTypeResolver;
+
     public function __construct(
         MethodCallAnalyzer $methodCallAnalyzer,
         IdentifierRenamer $identifierRenamer,
-        NodeFactory $nodeFactory
+        NodeFactory $nodeFactory,
+        NodeTypeResolver $nodeTypeResolver
     ) {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
         $this->nodeFactory = $nodeFactory;
+        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     public function isCandidate(Node $node): bool
@@ -70,8 +72,8 @@ final class FormSetRequiredRector extends AbstractRector
 
         $classConstFetchNode = $arg->value;
 
-        $argTypes = $classConstFetchNode->class->getAttribute(Attribute::TYPES);
-        if (! in_array(self::FORM_CLASS, $argTypes, true)) {
+        $argTypes = $this->nodeTypeResolver->resolve($classConstFetchNode->class);
+        if (! in_array('Nette\Application\UI\Form', $argTypes, true)) {
             return false;
         }
 

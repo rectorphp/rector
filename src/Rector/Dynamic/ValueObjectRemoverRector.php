@@ -8,6 +8,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Property;
 use Rector\Node\Attribute;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Rector\AbstractRector;
 use Rector\ReflectionDocBlock\NodeAnalyzer\DocBlockAnalyzer;
 
@@ -24,12 +25,21 @@ final class ValueObjectRemoverRector extends AbstractRector
     private $docBlockAnalyzer;
 
     /**
+     * @var NodeTypeResolver
+     */
+    private $nodeTypeResolver;
+
+    /**
      * @param string[] $valueObjectsToSimpleTypes
      */
-    public function __construct(array $valueObjectsToSimpleTypes, DocBlockAnalyzer $docBlockAnalyzer)
-    {
+    public function __construct(
+        array $valueObjectsToSimpleTypes,
+        DocBlockAnalyzer $docBlockAnalyzer,
+        NodeTypeResolver $nodeTypeResolver
+    ) {
         $this->valueObjectsToSimpleTypes = $valueObjectsToSimpleTypes;
         $this->docBlockAnalyzer = $docBlockAnalyzer;
+        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     public function isCandidate(Node $node): bool
@@ -83,7 +93,7 @@ final class ValueObjectRemoverRector extends AbstractRector
             return false;
         }
 
-        $classNodeTypes = $newNode->class->getAttribute(Attribute::TYPES);
+        $classNodeTypes = $this->nodeTypeResolver->resolve($newNode->class);
 
         return (bool) array_intersect($classNodeTypes, $this->getValueObjects());
     }
@@ -98,7 +108,7 @@ final class ValueObjectRemoverRector extends AbstractRector
 
     private function processPropertyCandidate(Property $propertyNode): bool
     {
-        $propertyNodeTypes = $propertyNode->getAttribute(Attribute::TYPES);
+        $propertyNodeTypes = $this->nodeTypeResolver->resolve($propertyNode);
 
         return (bool) array_intersect($propertyNodeTypes, $this->getValueObjects());
     }
@@ -117,7 +127,7 @@ final class ValueObjectRemoverRector extends AbstractRector
 
     private function matchNewType(Node $node): ?string
     {
-        $nodeTypes = $node->getAttribute(Attribute::TYPES);
+        $nodeTypes = $this->nodeTypeResolver->resolve($node);
         foreach ($nodeTypes as $propertyType) {
             if (! isset($this->valueObjectsToSimpleTypes[$propertyType])) {
                 continue;
