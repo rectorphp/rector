@@ -4,7 +4,6 @@ namespace Rector\NodeValueResolver;
 
 use PhpParser\Node;
 use Rector\NodeValueResolver\Contract\PerNodeValueResolver\PerNodeValueResolverInterface;
-use Rector\NodeValueResolver\NodeAnalyzer\DynamicNodeAnalyzer;
 
 /**
  * Inspired by https://github.com/Roave/BetterReflection/blob/master/test/unit/NodeCompiler/CompileNodeToValueTest.php
@@ -16,19 +15,9 @@ final class NodeValueResolver
      */
     private $perNodeValueResolvers = [];
 
-    /**
-     * @var DynamicNodeAnalyzer
-     */
-    private $dynamicNodeAnalyzer;
-
-    public function __construct(DynamicNodeAnalyzer $dynamicNodeAnalyzer)
-    {
-        $this->dynamicNodeAnalyzer = $dynamicNodeAnalyzer;
-    }
-
     public function addPerNodeValueResolver(PerNodeValueResolverInterface $perNodeValueResolver): void
     {
-        $this->perNodeValueResolvers[] = $perNodeValueResolver;
+        $this->perNodeValueResolvers[$perNodeValueResolver->getNodeClass()] = $perNodeValueResolver;
     }
 
     /**
@@ -36,18 +25,11 @@ final class NodeValueResolver
      */
     public function resolve(Node $node)
     {
-        if ($this->dynamicNodeAnalyzer->isDynamicNode($node)) {
+        $nodeClass = get_class($node);
+        if (!isset($this->perNodeValueResolvers[$nodeClass])) {
             return null;
         }
 
-        foreach ($this->perNodeValueResolvers as $perNodeValueResolver) {
-            if (! is_a($node, $perNodeValueResolver->getNodeClass(), true)) {
-                continue;
-            }
-
-            return $perNodeValueResolver->resolve($node);
-        }
-
-        return null;
+        return $this->perNodeValueResolvers[$nodeClass]->resolve($node);
     }
 }
