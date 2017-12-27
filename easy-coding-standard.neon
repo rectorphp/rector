@@ -7,6 +7,8 @@ includes:
 checkers:
     - SlevomatCodingStandard\Sniffs\Classes\UnusedPrivateElementsSniff
 
+    - SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff
+
     # Metrics
     PHP_CodeSniffer\Standards\Generic\Sniffs\Files\LineLengthSniff:
         absoluteLineLimit: 120
