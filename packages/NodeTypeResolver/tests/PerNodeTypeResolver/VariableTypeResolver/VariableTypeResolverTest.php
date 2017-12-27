@@ -14,7 +14,7 @@ final class VariableTypeResolverTest extends AbstractNodeTypeResolverTest
 
         $this->assertSame(
             ['SomeNamespace\SomeClass', 'SomeNamespace\AnotherClass'],
-            $variableNodes[0]->getAttribute(Attribute::TYPES)
+            $this->nodeTypeResolver->resolve($variableNodes[0])
         );
     }
 
@@ -24,11 +24,11 @@ final class VariableTypeResolverTest extends AbstractNodeTypeResolverTest
 
         $this->assertSame(
             ['SomeNamespace\AnotherType'],
-            $variableNodes[0]->getAttribute(Attribute::TYPES)
+            $this->nodeTypeResolver->resolve($variableNodes[0])
         );
         $this->assertSame(
             ['SomeNamespace\AnotherType'],
-            $variableNodes[2]->getAttribute(Attribute::TYPES)
+            $this->nodeTypeResolver->resolve($variableNodes[2])
         );
     }
 
@@ -38,7 +38,7 @@ final class VariableTypeResolverTest extends AbstractNodeTypeResolverTest
 
         $this->assertSame(
             ['SomeNamespace\AnotherType'],
-            $variableNodes[1]->getAttribute(Attribute::TYPES)
+            $this->nodeTypeResolver->resolve($variableNodes[1])
         );
     }
 
@@ -48,11 +48,11 @@ final class VariableTypeResolverTest extends AbstractNodeTypeResolverTest
 
         $this->assertSame(
             ['SomeNamespace\UseUse'],
-            $variableNodes[0]->getAttribute(Attribute::TYPES)
+            $this->nodeTypeResolver->resolve($variableNodes[0])
         );
         $this->assertSame(
             ['SomeNamespace\UseUse'],
-            $variableNodes[1]->getAttribute(Attribute::TYPES)
+            $this->nodeTypeResolver->resolve($variableNodes[1])
         );
     }
 }
