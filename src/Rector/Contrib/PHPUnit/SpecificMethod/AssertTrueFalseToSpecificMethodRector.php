@@ -3,12 +3,12 @@
 namespace Rector\Rector\Contrib\PHPUnit\SpecificMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Empty_;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractRector;
@@ -55,6 +55,11 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractRector
     private $identifierRenamer;
 
     /**
+     * @var NodeFactory
+     */
+    private $nodeFactory;
+
+    /**
      * @var string|null
      */
     private $activeFuncCallName;
@@ -65,11 +70,13 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractRector
     public function __construct(
         array $activeMethods = [],
         MethodCallAnalyzer $methodCallAnalyzer,
-        IdentifierRenamer $identifierRenamer
+        IdentifierRenamer $identifierRenamer,
+        NodeFactory $nodeFactory
     ) {
         $this->activeOldToNewMethods = $this->filterActiveOldToNewMethods($activeMethods);
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
+        $this->nodeFactory = $nodeFactory;
     }
 
     public function isCandidate(Node $node): bool
@@ -148,7 +155,7 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractRector
         }
 
         if ($funcCallOrEmptyNode instanceof Empty_) {
-            $methodCallNode->args[0] = new Arg($funcCallOrEmptyNode->expr);
+            $methodCallNode->args[0] = $this->nodeFactory->createArg($funcCallOrEmptyNode->expr);
         }
     }
 

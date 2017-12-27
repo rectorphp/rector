@@ -113,7 +113,7 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractRe
             new Arg(new String_(
                 $this->oldMethodsToTypes[$isFunctionName]
             )),
-            new Arg($argument),
+            $argument,
         ], $oldArguments);
     }
 }
