@@ -29,8 +29,9 @@ final class ClassLikeTypeResolverTest extends AbstractNodeTypeResolverTest
         return [
             # assign of "new <name>"
             [__DIR__ . '/Source/ClassWithParent.php.inc', 0, [
-                'SomeNamespace\SomeClass', 'SomeNamespace\SomeInterface', ],
-            ],
+                'SomeNamespace\SomeClass',
+                'SomeNamespace\SomeInterface',
+            ]],
         ];
     }
 }
