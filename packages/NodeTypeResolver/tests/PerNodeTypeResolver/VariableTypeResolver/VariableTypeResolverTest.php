@@ -14,11 +14,11 @@ final class VariableTypeResolverTest extends AbstractNodeTypeResolverTest
      * @dataProvider provideTypeForNodesAndFilesData()
      * @param string[]
      */
-    public function testCallbackArgumentTypehint(string $file, int $position, array $expectedTypes): void
+    public function test(string $file, int $nodePosition, array $expectedTypes): void
     {
         $variableNodes = $this->getNodesForFileOfType($file, Variable::class);
 
-        $this->assertSame($expectedTypes, $this->nodeTypeResolver->resolve($variableNodes[$position]));
+        $this->assertSame($expectedTypes, $this->nodeTypeResolver->resolve($variableNodes[$nodePosition]));
     }
 
     /**
