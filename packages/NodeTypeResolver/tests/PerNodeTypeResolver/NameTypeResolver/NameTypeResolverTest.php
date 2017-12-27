@@ -12,7 +12,7 @@ final class NameTypeResolverTest extends AbstractNodeTypeResolverTest
 {
     /**
      * @dataProvider provideTypeForNodesAndFilesData()
-     * @param string[]
+     * @param string[] $expectedTypes
      */
     public function test(string $file, int $nodePosition, array $expectedTypes): void
     {

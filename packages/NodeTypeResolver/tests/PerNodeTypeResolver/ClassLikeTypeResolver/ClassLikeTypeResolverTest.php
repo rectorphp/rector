@@ -12,7 +12,7 @@ final class ClassLikeTypeResolverTest extends AbstractNodeTypeResolverTest
 {
     /**
      * @dataProvider provideTypeForNodesAndFilesData()
-     * @param string[]
+     * @param string[] $expectedTypes
      */
     public function test(string $file, int $nodePosition, array $expectedTypes): void
     {
@@ -28,7 +28,9 @@ final class ClassLikeTypeResolverTest extends AbstractNodeTypeResolverTest
     {
         return [
             # assign of "new <name>"
-            [__DIR__ . '/Source/ClassWithParent.php.inc', 0, ['SomeNamespace\SomeClass', 'SomeNamespace\SomeInterface']],
+            [__DIR__ . '/Source/ClassWithParent.php.inc', 0, [
+                'SomeNamespace\SomeClass', 'SomeNamespace\SomeInterface', ],
+            ],
         ];
     }
 }

@@ -12,7 +12,7 @@ final class PropertyFetchTypeResolverTest extends AbstractNodeTypeResolverTest
 {
     /**
      * @dataProvider provideTypeForNodesAndFilesData()
-     * @param string[]
+     * @param string[] $expectedTypes
      */
     public function test(string $file, int $nodePosition, string $propertyName, array $expectedTypes): void
     {
