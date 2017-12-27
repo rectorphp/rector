@@ -40,7 +40,7 @@ parameters:
             - */src/Rector/Contrib/**/Helper/**.php
             - */packages/NodeTypeResolver/tests/PerNodeCallerTypeResolver/**Test.php
             - */packages/NodeTypeResolver/**/PerNodeTypeResolver/**TypeResolver.php
-            - */packages/NodeTypeResolver/**/PerNodeTypeResolver/**TypeResolver/Test.php
+            - */packages/NodeTypeResolver/**/PerNodeTypeResolver/**TypeResolver/*Test.php
         SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff:
             # covariant types
             - */packages/NodeValueResolver/src/PerNodeValueResolver/*ValueResolver.php

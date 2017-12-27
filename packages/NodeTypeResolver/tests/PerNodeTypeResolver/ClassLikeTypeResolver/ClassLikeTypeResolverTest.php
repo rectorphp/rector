@@ -3,7 +3,6 @@
 namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ClassLikeTypeResolver;
 
 use PhpParser\Node\Expr\Variable;
-use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Tests\AbstractNodeTypeResolverTest;
 
 final class ClassLikeTypeResolverTest extends AbstractNodeTypeResolverTest
@@ -16,7 +15,6 @@ final class ClassLikeTypeResolverTest extends AbstractNodeTypeResolverTest
         $this->assertSame(
             ['SomeNamespace\SomeClass', 'SomeNamespace\SomeInterface'],
             $this->nodeTypeResolver->resolve($variableNodes[0])
-//            $variableNodes[0]->getAttribute(Attribute::TYPES)
         );
     }
 }
