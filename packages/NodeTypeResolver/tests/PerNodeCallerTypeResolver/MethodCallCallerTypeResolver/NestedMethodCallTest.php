@@ -58,25 +58,23 @@ final class NestedMethodCallTest extends AbstractNodeCallerTypeResolverTest
         $identifierNode = $methodCallNodes[0]->name;
         $this->assertSame('setScope', $identifierNode->toString());
 
-        $this->assertSame([
-            'Symfony\Component\DependencyInjection\Definition',
-        ], $this->nodeCallerTypeResolver->resolve($methodCallNodes[1]));
-
-        $this->doTestAttributeEquals($methodCallNodes[0], Attribute::CALLER_TYPES, [
-            'Symfony\Component\DependencyInjection\Definition',
-        ]);
+        $this->assertSame(
+            ['Symfony\Component\DependencyInjection\Definition'],
+            $this->nodeCallerTypeResolver->resolve($methodCallNodes[0])
+        );
 
         /** @var Identifier $identifierNode */
         $identifierNode = $methodCallNodes[1]->name;
         $this->assertSame('register', $identifierNode->toString());
-        $this->doTestAttributeEquals($methodCallNodes[1], Attribute::CALLER_TYPES, [
+
+        $this->assertSame([
             'Symfony\Component\DependencyInjection\ContainerBuilder',
             'Symfony\Component\DependencyInjection\ResettableContainerInterface',
             'Symfony\Component\DependencyInjection\ContainerInterface',
             'Psr\Container\ContainerInterface',
             'Symfony\Component\DependencyInjection\TaggedContainerInterface',
             'Symfony\Component\DependencyInjection\Container',
-        ]);
+        ], $this->nodeCallerTypeResolver->resolve($methodCallNodes[1]));
     }
 
     public function testOnNestedMethodCall(): void
