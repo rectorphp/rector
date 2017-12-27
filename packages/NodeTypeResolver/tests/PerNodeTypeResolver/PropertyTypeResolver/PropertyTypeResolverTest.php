@@ -17,7 +17,7 @@ final class PropertyTypeResolverTest extends AbstractNodeTypeResolverTest
 
         $this->assertSame(
             ['SomeNamespace\PropertyType'],
-            $propertyNodes[0]->getAttribute(Attribute::TYPES)
+            $this->nodeTypeResolver->resolve($propertyNodes[0])
         );
     }
 
@@ -30,7 +30,7 @@ final class PropertyTypeResolverTest extends AbstractNodeTypeResolverTest
 
         $this->assertSame(
             ['SomeNamespace\PropertyType'],
-            $propertyNodes[0]->getAttribute(Attribute::TYPES)
+            $this->nodeTypeResolver->resolve($propertyNodes[0])
         );
     }
 
@@ -48,6 +48,6 @@ final class PropertyTypeResolverTest extends AbstractNodeTypeResolverTest
             'PhpParser\Node\Stmt',
             'PhpParser\NodeAbstract',
             'PhpParser\Node\Expr',
-        ], $propertyNodes[0]->getAttribute(Attribute::TYPES));
+        ], $this->nodeTypeResolver->resolve($propertyNodes[0]));
     }
 }
