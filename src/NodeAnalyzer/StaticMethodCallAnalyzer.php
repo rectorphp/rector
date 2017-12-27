@@ -7,9 +7,20 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use Rector\Node\Attribute;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 
 final class StaticMethodCallAnalyzer
 {
+    /**
+     * @var NodeTypeResolver
+     */
+    private $nodeTypeResolver;
+
+    public function __construct(NodeTypeResolver $nodeTypeResolver)
+    {
+        $this->nodeTypeResolver = $nodeTypeResolver;
+    }
+
     /**
      * Checks "SpecificType::specificMethod()"
      */
@@ -64,7 +75,7 @@ final class StaticMethodCallAnalyzer
             return null;
         }
 
-        $nodeTypes = $node->class->getAttribute(Attribute::TYPES);
+        $nodeTypes = $this->nodeTypeResolver->resolve($node->class);
 
         return array_intersect($nodeTypes, $types) ? $nodeTypes : null;
     }
