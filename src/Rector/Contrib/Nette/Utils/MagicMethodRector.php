@@ -8,6 +8,7 @@ use PhpParser\Node\Stmt\Class_;
 use Rector\BetterReflection\Reflector\SmartClassReflector;
 use Rector\Builder\MethodBuilder;
 use Rector\Node\Attribute;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Rector\AbstractRector;
 use Rector\ReflectionDocBlock\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\Regex\MagicMethodMatcher;
@@ -42,17 +43,23 @@ final class MagicMethodRector extends AbstractRector
      * @var MagicMethodMatcher
      */
     private $magicMethodMatcher;
+    /**
+     * @var NodeTypeResolver
+     */
+    private $nodeTypeResolver;
 
     public function __construct(
         MethodBuilder $methodBuilder,
         DocBlockAnalyzer $docBlockAnalyzer,
         SmartClassReflector $smartClassReflector,
-        MagicMethodMatcher $magicMethodMatcher
+        MagicMethodMatcher $magicMethodMatcher,
+        NodeTypeResolver $nodeTypeResolver
     ) {
         $this->methodBuilder = $methodBuilder;
         $this->docBlockAnalyzer = $docBlockAnalyzer;
         $this->smartClassReflector = $smartClassReflector;
         $this->magicMethodMatcher = $magicMethodMatcher;
+        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     public function isCandidate(Node $node): bool
@@ -116,6 +123,8 @@ final class MagicMethodRector extends AbstractRector
 
     private function isNetteObjectChild(Class_ $classNode): bool
     {
-        return in_array('Nette\Object', (array) $classNode->getAttribute(Attribute::TYPES), true);
+        $classNodeTypes = $this->nodeTypeResolver->resolve($classNode);
+
+        return in_array('Nette\Object', $classNodeTypes, true);
     }
 }
