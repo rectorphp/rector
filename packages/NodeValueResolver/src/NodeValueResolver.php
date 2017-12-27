@@ -26,7 +26,7 @@ final class NodeValueResolver
     public function resolve(Node $node)
     {
         $nodeClass = get_class($node);
-        if (!isset($this->perNodeValueResolvers[$nodeClass])) {
+        if (! isset($this->perNodeValueResolvers[$nodeClass])) {
             return null;
         }
 
