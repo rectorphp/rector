@@ -5,7 +5,6 @@ namespace Rector\NodeTypeResolver\Tests\PerNodeCallerTypeResolver;
 use PhpParser\Node;
 use Rector\NodeTraverserQueue\BetterNodeFinder;
 use Rector\NodeTraverserQueue\NodeTraverserQueue;
-use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Tests\AbstractContainerAwareTestCase;
 use SplFileInfo;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
@@ -58,6 +57,9 @@ abstract class AbstractNodeCallerTypeResolverTest extends AbstractContainerAware
         return $newStmts;
     }
 
+    /**
+     * @param mixed $expectedContent
+     */
     protected function doTestAttributeEquals(Node $node, string $attribute, $expectedContent): void
     {
         $this->assertSame($expectedContent, $node->getAttribute($attribute));
