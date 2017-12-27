@@ -4,9 +4,10 @@ namespace Rector\Rector\Dynamic;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
+use Rector\Node\MethodCallNodeFactory;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Rector\AbstractRector;
@@ -47,16 +48,23 @@ final class PropertyToMethodRector extends AbstractRector
     private $nodeFactory;
 
     /**
+     * @var MethodCallNodeFactory
+     */
+    private $methodCallNodeFactory;
+
+    /**
      * @param string[][][] $perClassOldToNewProperties
      */
     public function __construct(
         array $perClassOldToNewProperties,
         PropertyFetchAnalyzer $propertyFetchAnalyzer,
-        NodeFactory $nodeFactory
+        NodeFactory $nodeFactory,
+        MethodCallNodeFactory $methodCallNodeFactory
     ) {
         $this->perClassPropertyToMethods = $perClassOldToNewProperties;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
         $this->nodeFactory = $nodeFactory;
+        $this->methodCallNodeFactory = $methodCallNodeFactory;
     }
 
     public function isCandidate(Node $node): bool
@@ -89,12 +97,22 @@ final class PropertyToMethodRector extends AbstractRector
                 $assignNode->expr,
             ]);
 
-            return new MethodCall($assignNode->var->var, $this->activeMethod, $args);
+            /** @var Variable $variable */
+            $variable = $assignNode->var->var;
+
+            return $this->methodCallNodeFactory->createWithVariableMethodNameAndArguments(
+                $variable,
+                $this->activeMethod,
+                $args
+            );
         }
 
         // getter
         if ($assignNode->expr instanceof PropertyFetch) {
-            $assignNode->expr = new MethodCall($assignNode->expr->var, $this->activeMethod);
+            $assignNode->expr = $this->methodCallNodeFactory->createWithVariableAndMethodName(
+                $assignNode->expr->var,
+                $this->activeMethod
+            );
         }
 
         return null;
