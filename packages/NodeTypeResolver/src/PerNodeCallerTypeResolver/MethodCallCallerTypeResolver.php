@@ -8,7 +8,6 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use Rector\BetterReflection\Reflector\MethodReflector;
-use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Contract\PerNodeCallerTypeResolver\PerNodeCallerTypeResolverInterface;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
@@ -74,15 +73,6 @@ final class MethodCallCallerTypeResolver implements PerNodeCallerTypeResolverInt
         }
 
         // unable to determine
-        if (! $methodCallNode->name instanceof Identifier) {
-            return [];
-        }
-
-        /** @var string[] $callerNodeTypes */
-        $callerNodeTypes = (array) $methodCallNode->var->getAttribute(Attribute::TYPES);
-
-        $methodName = $methodCallNode->name->toString();
-
-        return $this->methodReflector->resolveReturnTypesForTypesAndMethod($callerNodeTypes, $methodName);
+        return [];
     }
 }
