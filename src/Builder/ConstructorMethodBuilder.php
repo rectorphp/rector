@@ -2,11 +2,9 @@
 
 namespace Rector\Builder;
 
-use PhpParser\Builder\Method;
 use PhpParser\Builder\Param;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Builder\Class_\Property;
 use Rector\Node\NodeFactory;
 
@@ -40,7 +38,6 @@ final class ConstructorMethodBuilder
 
         $propertyAssignNode = $this->nodeFactory->createPropertyAssignment($property->getName());
 
-        /** @var ClassMethod $constructorMethod */
         if ($constructorMethod) {
             // has parameter already?
             foreach ($constructorMethod->params as $constructorParameter) {
@@ -57,7 +54,6 @@ final class ConstructorMethodBuilder
             return;
         }
 
-        /** @var Method $constructorMethod */
         $constructorMethod = $this->builderFactory->method('__construct')
             ->makePublic()
             ->addParam($this->createParameter($property->getTypes(), $property->getName()))

@@ -20,7 +20,6 @@ final class BetterNodeFinder
 
     public function findFirstAncestorInstanceOf(Node $node, string $type): ?Node
     {
-        /** @var Node|null $currentNode */
         $currentNode = $node->getAttribute(Attribute::PARENT_NODE);
 
         while ($currentNode !== null) {

@@ -38,7 +38,6 @@ final class StaticMethodCallAnalyzer
             return false;
         }
 
-        /** @var StaticCall $node */
         return (string) $node->name === $method;
     }
 
@@ -53,7 +52,6 @@ final class StaticMethodCallAnalyzer
             return false;
         }
 
-        /** @var StaticCall $node */
         $currentMethodName = (string) $node->name;
 
         foreach ($methodNames as $methodName) {

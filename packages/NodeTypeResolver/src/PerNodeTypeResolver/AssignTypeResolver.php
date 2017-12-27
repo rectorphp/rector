@@ -51,7 +51,6 @@ final class AssignTypeResolver implements PerNodeTypeResolverInterface, NodeType
         $variableTypes = $this->resolveTypeForRightSide($assignNode);
 
         if ($variableTypes) {
-            /** @var Variable $variableNode */
             $variableNode = $assignNode->var;
             $variableName = (string) $variableNode->name;
             $this->typeContext->addVariableWithTypes($variableName, $variableTypes);

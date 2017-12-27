@@ -2,7 +2,6 @@
 
 namespace Rector\Rector\Contrib\Nette\Utils;
 
-use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use Rector\BetterReflection\Reflector\SmartClassReflector;
@@ -75,13 +74,11 @@ final class MagicMethodRector extends AbstractRector
             return false;
         }
 
-        /** @var Doc[]|null $docComments */
         $docComments = $node->getAttribute('comments');
         if ($docComments === null) {
             return false;
         }
 
-        /** @var string $className */
         $className = $node->getAttribute(Attribute::CLASS_NAME);
 
         $classReflection = $this->smartClassReflector->reflect($className);

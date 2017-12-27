@@ -7,7 +7,6 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\NodeAnalyzer\ClassMethodAnalyzer;
@@ -93,7 +92,6 @@ final class ArgumentReplacerRector extends AbstractRector
                 // replace old value with new one
                 $argumentOrParameter = $argumentsOrParameters[$position];
 
-                /** @var Arg $argumentOrParameter */
                 $resolvedValue = $this->nodeValueResolver->resolve($argumentOrParameter->value);
 
                 if ($resolvedValue === $key) {
@@ -119,7 +117,6 @@ final class ArgumentReplacerRector extends AbstractRector
         foreach ($this->argumentChangesMethodAndClass as $type => $argumentChangesByMethod) {
             $methods = array_keys($argumentChangesByMethod);
             if ($this->isTypeAndMethods($node, $type, $methods)) {
-                /** @var Identifier $identifierNode */
                 $identifierNode = $node->name;
 
                 return $argumentChangesByMethod[$identifierNode->toString()];

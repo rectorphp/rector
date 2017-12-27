@@ -41,7 +41,6 @@ final class ContainerCallAnalyzer
             return false;
         }
 
-        /** @var MethodCall $methodCallNode */
         $methodCallNode = $methodCall->var;
 
         if (! $methodCallNode->var instanceof Variable) {

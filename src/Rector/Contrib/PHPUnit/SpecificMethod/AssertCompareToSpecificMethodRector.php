@@ -6,7 +6,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
@@ -69,7 +68,6 @@ final class AssertCompareToSpecificMethodRector extends AbstractRector
             return false;
         }
 
-        /** @var MethodCall $methodCallNode */
         $methodCallNode = $node;
 
         $firstArgumentValue = $methodCallNode->args[0]->value;
@@ -109,7 +107,6 @@ final class AssertCompareToSpecificMethodRector extends AbstractRector
 
     private function renameMethod(MethodCall $methodCallNode): void
     {
-        /** @var Identifier $identifierNode */
         $identifierNode = $methodCallNode->name;
         $oldMethodName = $identifierNode->toString();
 

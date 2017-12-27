@@ -3,7 +3,6 @@
 namespace Rector\NodeTypeResolver\Tests\PerNodeCallerTypeResolver\MethodCallCallerTypeResolver;
 
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Identifier;
 use Rector\NodeTypeResolver\Tests\PerNodeCallerTypeResolver\AbstractNodeCallerTypeResolverTest;
 
 final class NestedMethodCallTest extends AbstractNodeCallerTypeResolverTest
@@ -41,7 +40,6 @@ final class NestedMethodCallTest extends AbstractNodeCallerTypeResolverTest
     {
         $node = $this->formChainMethodCallNodes[$nodeId];
 
-        /** @var Identifier $identifierNode */
         $identifierNode = $node->name;
         $this->assertSame($methodName, $identifierNode->toString());
 
@@ -78,7 +76,6 @@ final class NestedMethodCallTest extends AbstractNodeCallerTypeResolverTest
 
     public function testOnNestedDifferentMethodCall(): void
     {
-        /** @var MethodCall[] $methodCallNodes */
         $methodCallNodes = $this->getNodesForFileOfType(
             __DIR__ . '/NestedMethodCallSource/OnMethodCallCallDifferentType.php.inc',
             MethodCall::class
@@ -86,7 +83,6 @@ final class NestedMethodCallTest extends AbstractNodeCallerTypeResolverTest
 
         $this->assertCount(2, $methodCallNodes);
 
-        /** @var Identifier $identifierNode */
         $identifierNode = $methodCallNodes[0]->name;
         $this->assertSame('setScope', $identifierNode->toString());
 
@@ -95,7 +91,6 @@ final class NestedMethodCallTest extends AbstractNodeCallerTypeResolverTest
             $this->nodeCallerTypeResolver->resolve($methodCallNodes[0])
         );
 
-        /** @var Identifier $identifierNode */
         $identifierNode = $methodCallNodes[1]->name;
         $this->assertSame('register', $identifierNode->toString());
 
@@ -117,7 +112,6 @@ final class NestedMethodCallTest extends AbstractNodeCallerTypeResolverTest
     {
         $node = $this->nestedMethodCallNodes[$nodeId];
 
-        /** @var Identifier $identifierNode */
         $identifierNode = $node->name;
         $this->assertSame($methodName, $identifierNode->toString());
 

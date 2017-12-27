@@ -41,7 +41,6 @@ final class MethodArgumentAnalyzer
             return false;
         }
 
-        /** @var MethodCall $node */
         if (! $node->args[0]->value instanceof String_) {
             return false;
         }

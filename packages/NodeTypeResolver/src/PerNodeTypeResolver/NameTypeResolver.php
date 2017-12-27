@@ -100,7 +100,6 @@ final class NameTypeResolver implements PerNodeTypeResolverInterface
 
     private function resolveFullyQualifiedName(Node $nameNode, string $stringName): string
     {
-        /** @var Name|null $name */
         $name = $nameNode->getAttribute(Attribute::RESOLVED_NAME);
         if ($name instanceof Name) {
             return $name->toString();

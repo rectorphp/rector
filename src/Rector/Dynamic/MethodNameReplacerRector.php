@@ -114,7 +114,6 @@ final class MethodNameReplacerRector extends AbstractRector
 
         $oldToNewMethods = $this->matchOldToNewMethods();
 
-        /** @var Identifier $identifierNode */
         $identifierNode = $node->name;
 
         $methodName = $identifierNode->toString();
@@ -172,10 +171,8 @@ final class MethodNameReplacerRector extends AbstractRector
             return false;
         }
 
-        /** @var Identifier $node */
         $parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
 
-        /** @var Identifier $node */
         if (! isset($this->perClassOldToNewMethods[$parentClassName][$node->toString()])) {
             return false;
         }

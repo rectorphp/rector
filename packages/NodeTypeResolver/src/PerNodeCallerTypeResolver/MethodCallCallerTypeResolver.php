@@ -6,7 +6,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Identifier;
 use Rector\BetterReflection\Reflector\MethodReflector;
 use Rector\NodeTypeResolver\Contract\PerNodeCallerTypeResolver\PerNodeCallerTypeResolverInterface;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -56,7 +55,6 @@ final class MethodCallCallerTypeResolver implements PerNodeCallerTypeResolverInt
         if ($methodCallNode->var instanceof MethodCall) {
             $parentReturnTypes = $this->resolve($methodCallNode->var);
 
-            /** @var Identifier $identifierNode */
             $identifierNode = $methodCallNode->var->name;
 
             $methodName = $identifierNode->toString();

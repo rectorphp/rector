@@ -5,7 +5,6 @@ namespace Rector\Rector\Contrib\PHPUnit\SpecificMethod;
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Identifier;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractRector;
@@ -67,7 +66,6 @@ final class AssertComparisonToSpecificMethodRector extends AbstractRector
             return false;
         }
 
-        /** @var MethodCall $methodCallNode */
         $methodCallNode = $node;
 
         $firstArgumentValue = $methodCallNode->args[0]->value;
@@ -115,7 +113,6 @@ final class AssertComparisonToSpecificMethodRector extends AbstractRector
 
     private function renameMethod(MethodCall $methodCallNode): void
     {
-        /** @var Identifier $identifierNode */
         $identifierNode = $methodCallNode->name;
         $oldMethodName = $identifierNode->toString();
 

@@ -96,7 +96,6 @@ final class NamespaceReplacerRector extends AbstractRector
         }
 
         if ($node instanceof Name) {
-            /** @var FullyQualified|null $resolveName */
             $resolveName = $node->getAttribute(Attribute::RESOLVED_NAME);
             if ($resolveName) {
                 return $resolveName->toString();
@@ -186,7 +185,6 @@ final class NamespaceReplacerRector extends AbstractRector
 
     private function resolvePartialNewName(Name $nameNode): string
     {
-        /** @var FullyQualified $resolvedName */
         $resolvedName = $nameNode->getAttribute(Attribute::RESOLVED_NAME);
         $completeNewName = $this->resolveNewNameFromNode($resolvedName);
 
