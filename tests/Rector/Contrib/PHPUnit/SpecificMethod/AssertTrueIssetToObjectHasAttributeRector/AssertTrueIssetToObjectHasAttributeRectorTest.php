@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Contrib\PHPUnit\SpecificMethod\AssertTrueIssetToHasObjectAttributeRector;
+namespace Rector\Tests\Rector\Contrib\PHPUnit\SpecificMethod\AssertTrueIssetToObjectHasAttributeRector;
 
 use Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertTrueIssetToObjectHasAttributeRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
