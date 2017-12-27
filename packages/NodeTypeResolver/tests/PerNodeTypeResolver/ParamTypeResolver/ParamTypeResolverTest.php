@@ -3,7 +3,7 @@
 namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ParamTypeResolver;
 
 use PhpParser\Node\Expr\Variable;
-use Rector\NodeTypeResolver\Tests\AbstractNodeTypeResolverTest;
+use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
 
 final class ParamTypeResolverTest extends AbstractNodeTypeResolverTest
 {

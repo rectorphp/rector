@@ -3,7 +3,7 @@
 namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\PropertyFetchTypeResolver;
 
 use PhpParser\Node\Expr\PropertyFetch;
-use Rector\NodeTypeResolver\Tests\AbstractNodeTypeResolverTest;
+use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
 
 final class PropertyFetchTypeResolverTest extends AbstractNodeTypeResolverTest
 {

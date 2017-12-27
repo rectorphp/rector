@@ -4,7 +4,7 @@ namespace Rector\NodeTypeResolver\Tests\PerNodeCallerTypeResolver\MethodCallCall
 
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Node\Attribute;
-use Rector\NodeTypeResolver\Tests\AbstractNodeTypeResolverTest;
+use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
 
 final class MethodCallTest extends AbstractNodeTypeResolverTest
 {

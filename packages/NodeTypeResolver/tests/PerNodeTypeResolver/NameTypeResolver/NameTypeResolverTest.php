@@ -3,7 +3,7 @@
 namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\NameTypeResolver;
 
 use PhpParser\Node\Name;
-use Rector\NodeTypeResolver\Tests\AbstractNodeTypeResolverTest;
+use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
 
 final class NameTypeResolverTest extends AbstractNodeTypeResolverTest
 {

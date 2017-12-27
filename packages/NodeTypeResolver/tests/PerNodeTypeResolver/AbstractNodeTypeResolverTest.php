@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\NodeTypeResolver\Tests;
+namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver;
 
 use PhpParser\Node;
 use Rector\NodeTraverserQueue\BetterNodeFinder;
