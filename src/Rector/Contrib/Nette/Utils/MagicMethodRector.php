@@ -43,6 +43,7 @@ final class MagicMethodRector extends AbstractRector
      * @var MagicMethodMatcher
      */
     private $magicMethodMatcher;
+
     /**
      * @var NodeTypeResolver
      */
