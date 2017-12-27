@@ -3,10 +3,10 @@
 namespace Rector\Rector\Contrib\PHPUnit\SpecificMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
+use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractRector;
@@ -59,10 +59,19 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractRe
      */
     private $identifierRenamer;
 
-    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, IdentifierRenamer $identifierRenamer)
-    {
+    /**
+     * @var NodeFactory
+     */
+    private $nodeFactory;
+
+    public function __construct(
+        MethodCallAnalyzer $methodCallAnalyzer,
+        IdentifierRenamer $identifierRenamer,
+        NodeFactory $nodeFactory
+    ) {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
+        $this->nodeFactory = $nodeFactory;
     }
 
     public function isCandidate(Node $node): bool
@@ -110,9 +119,7 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractRe
         unset($oldArguments[0]);
 
         $methodCallNode->args = array_merge([
-            new Arg(new String_(
-                $this->oldMethodsToTypes[$isFunctionName]
-            )),
+            $this->nodeFactory->createArg(new String_($this->oldMethodsToTypes[$isFunctionName])),
             $argument,
         ], $oldArguments);
     }
