@@ -27,9 +27,12 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface, NodeTy
         $this->typeContext = $typeContext;
     }
 
-    public function getNodeClass(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeClasses(): array
     {
-        return Variable::class;
+        return [Variable::class];
     }
 
     /**

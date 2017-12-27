@@ -3,6 +3,7 @@
 [![Build Status](https://img.shields.io/travis/rectorphp/rector/master.svg?style=flat-square)](https://travis-ci.org/rectorphp/rector)
 [![Coverage Status](https://img.shields.io/coveralls/RectorPHP/Rector/master.svg?style=flat-square)](https://coveralls.io/github/rectorphp/rector?branch=master)
 
+
 Rector **upgrades your application** for you, with focus on open-source projects:
 
 <p align="center">
@@ -16,6 +17,18 @@ Rector **upgrades your application** for you, with focus on open-source projects
     <img src="/docs/images/space.png" width=20>
     <a href="/src/config/level/twig"><img src="/docs/images/twig.png"></a>
 </p>
+
+It can:
+
+- rename class
+- rename class methods
+- rename partial namespace
+- rename "_" pseudo-namespace to namespace
+- add arguments
+- replace arguments
+- remove arguments
+- add typehints based on new types of parent class or interface
+- and more...
 
 <br>
 

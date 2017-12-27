@@ -29,9 +29,12 @@ final class AssignTypeResolver implements PerNodeTypeResolverInterface, NodeType
         $this->typeContext = $typeContext;
     }
 
-    public function getNodeClass(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeClasses(): array
     {
-        return Assign::class;
+        return [Assign::class];
     }
 
     /**

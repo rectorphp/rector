@@ -5,3 +5,4 @@ services:
 
     Rector\NodeTypeResolver\:
         resource: '../'
+        exclude: '../{Contract}'

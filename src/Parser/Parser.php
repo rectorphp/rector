@@ -5,9 +5,8 @@ namespace Rector\Parser;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\Parser as NikicParser;
-use Rector\Contract\Parser\ParserInterface;
 
-final class Parser implements ParserInterface
+final class Parser
 {
     /**
      * @var NikicParser

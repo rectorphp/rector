@@ -32,9 +32,12 @@ final class NewTypeResolver implements PerNodeTypeResolverInterface, NodeTypeRes
         $this->typeContext = $typeContext;
     }
 
-    public function getNodeClass(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeClasses(): array
     {
-        return New_::class;
+        return [New_::class];
     }
 
     /**

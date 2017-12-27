@@ -3,7 +3,10 @@
 namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\Interface_;
+use PhpParser\Node\Stmt\Trait_;
 use Rector\NodeAnalyzer\ClassLikeAnalyzer;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 
@@ -19,9 +22,12 @@ final class ClassLikeTypeResolver implements PerNodeTypeResolverInterface
         $this->classLikeAnalyzer = $classLikeAnalyzer;
     }
 
-    public function getNodeClass(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeClasses(): array
     {
-        return ClassLike::class;
+        return [Class_::class, Trait_::class, Interface_::class];
     }
 
     /**

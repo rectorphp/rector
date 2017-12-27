@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\NodeTypeResolver\Tests\NodeCallerTypeResolver;
+namespace Rector\NodeTypeResolver\Tests\PerNodeCallerTypeResolver\StaticCallCallerTypeResolver;
 
 use PhpParser\Node\Expr\StaticCall;
 use Rector\Node\Attribute;

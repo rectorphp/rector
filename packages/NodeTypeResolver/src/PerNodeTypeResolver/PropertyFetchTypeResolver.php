@@ -40,9 +40,12 @@ final class PropertyFetchTypeResolver implements PerNodeTypeResolverInterface, N
         $this->propertyReflector = $propertyReflector;
     }
 
-    public function getNodeClass(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeClasses(): array
     {
-        return PropertyFetch::class;
+        return [PropertyFetch::class];
     }
 
     /**

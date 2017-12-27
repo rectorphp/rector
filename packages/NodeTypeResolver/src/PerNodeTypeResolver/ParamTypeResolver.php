@@ -44,9 +44,12 @@ final class ParamTypeResolver implements PerNodeTypeResolverInterface, NodeTypeR
         $this->namespaceAnalyzer = $namespaceAnalyzer;
     }
 
-    public function getNodeClass(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeClasses(): array
     {
-        return Param::class;
+        return [Param::class];
     }
 
     /**

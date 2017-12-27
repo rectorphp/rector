@@ -15,7 +15,9 @@ final class NodeTypeResolver
 
     public function addPerNodeTypeResolver(PerNodeTypeResolverInterface $perNodeTypeResolver): void
     {
-        $this->perNodeTypeResolvers[$perNodeTypeResolver->getNodeClass()] = $perNodeTypeResolver;
+        foreach ($perNodeTypeResolver->getNodeClasses() as $nodeClass) {
+            $this->perNodeTypeResolvers[$nodeClass] = $perNodeTypeResolver;
+        }
     }
 
     /**
@@ -23,19 +25,17 @@ final class NodeTypeResolver
      */
     public function resolve(Node $node): array
     {
-        foreach ($this->perNodeTypeResolvers as $class => $perNodeTypeResolver) {
-            if (! $node instanceof $class) {
-                continue;
-            }
+        $nodeClass = get_class($node);
 
-            // resolve just once
-            if ($node->getAttribute(Attribute::TYPES)) {
-                return $node->getAttribute(Attribute::TYPES);
-            }
-
-            return $perNodeTypeResolver->resolve($node);
+        if (! isset($this->perNodeTypeResolvers[$nodeClass])) {
+            return [];
         }
 
-        return [];
+        // resolve just once
+        if ($node->getAttribute(Attribute::TYPES)) {
+            return $node->getAttribute(Attribute::TYPES);
+        }
+
+        return $this->perNodeTypeResolvers[$nodeClass]->resolve($node);
     }
 }

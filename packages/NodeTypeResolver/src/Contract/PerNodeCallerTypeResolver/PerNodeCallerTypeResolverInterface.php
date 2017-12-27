@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Rector\NodeTypeResolver\Contract\PerNodeTypeResolver;
+namespace Rector\NodeTypeResolver\Contract\PerNodeCallerTypeResolver;
 
 use PhpParser\Node;
 
-interface PerNodeTypeResolverInterface
+interface PerNodeCallerTypeResolverInterface
 {
     /**
      * @return string[]

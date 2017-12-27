@@ -42,9 +42,12 @@ final class PropertyTypeResolver implements PerNodeTypeResolverInterface
         $this->smartClassReflector = $smartClassReflector;
     }
 
-    public function getNodeClass(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeClasses(): array
     {
-        return Property::class;
+        return [Property::class];
     }
 
     /**
