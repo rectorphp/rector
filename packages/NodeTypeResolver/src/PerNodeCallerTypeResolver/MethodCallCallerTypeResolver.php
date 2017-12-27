@@ -10,6 +10,7 @@ use PhpParser\Node\Identifier;
 use Rector\BetterReflection\Reflector\MethodReflector;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Contract\PerNodeCallerTypeResolver\PerNodeCallerTypeResolverInterface;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 
 /**
  * This will tell the type of Node, which is calling this method
@@ -26,9 +27,15 @@ final class MethodCallCallerTypeResolver implements PerNodeCallerTypeResolverInt
      */
     private $methodReflector;
 
-    public function __construct(MethodReflector $methodReflector)
+    /**
+     * @var NodeTypeResolver
+     */
+    private $nodeTypeResolver;
+
+    public function __construct(MethodReflector $methodReflector, NodeTypeResolver $nodeTypeResolver)
     {
         $this->methodReflector = $methodReflector;
+        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     /**
@@ -63,7 +70,7 @@ final class MethodCallCallerTypeResolver implements PerNodeCallerTypeResolverInt
         }
 
         if ($methodCallNode->var instanceof Variable || $methodCallNode->var instanceof PropertyFetch) {
-            return (array) $methodCallNode->var->getAttribute(Attribute::TYPES);
+            return $this->nodeTypeResolver->resolve($methodCallNode->var);
         }
 
         // unable to determine
