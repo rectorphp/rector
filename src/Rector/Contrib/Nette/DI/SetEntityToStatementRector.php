@@ -3,13 +3,13 @@
 namespace Rector\Rector\Contrib\Nette\DI;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Name;
 use Rector\Node\Attribute;
+use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
 
@@ -29,9 +29,15 @@ final class SetEntityToStatementRector extends AbstractRector
      */
     private $methodCallAnalyzer;
 
-    public function __construct(MethodCallAnalyzer $methodCallAnalyzer)
+    /**
+     * @var NodeFactory
+     */
+    private $nodeFactory;
+
+    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, NodeFactory $nodeFactory)
     {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
+        $this->nodeFactory = $nodeFactory;
     }
 
     public function isCandidate(Node $node): bool
@@ -61,7 +67,7 @@ final class SetEntityToStatementRector extends AbstractRector
                 new Name('Nette\DI\Statement'),
                 [
                     $methodCallNode->args[0],
-                    new Arg(new PropertyFetch($methodCallNode->var, 'arguments')),
+                    $this->nodeFactory->createArg(new PropertyFetch($methodCallNode->var, 'arguments')),
                 ]
             )
         );

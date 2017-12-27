@@ -3,9 +3,9 @@
 namespace Rector\Rector\Contrib\PhpParser;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
+use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractRector;
@@ -29,10 +29,19 @@ final class SetLineRector extends AbstractRector
      */
     private $identifierRenamer;
 
-    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, IdentifierRenamer $IdentifierRenamer)
-    {
+    /**
+     * @var NodeFactory
+     */
+    private $nodeFactory;
+
+    public function __construct(
+        MethodCallAnalyzer $methodCallAnalyzer,
+        IdentifierRenamer $identifierRenamer,
+        NodeFactory $nodeFactory
+    ) {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
-        $this->identifierRenamer = $IdentifierRenamer;
+        $this->identifierRenamer = $identifierRenamer;
+        $this->nodeFactory = $nodeFactory;
     }
 
     public function isCandidate(Node $node): bool
@@ -48,7 +57,7 @@ final class SetLineRector extends AbstractRector
         $this->identifierRenamer->renameNode($methodCallNode, 'setAttribute');
 
         $methodCallNode->args[1] = $methodCallNode->args[0];
-        $methodCallNode->args[0] = new Arg(new String_('line'));
+        $methodCallNode->args[0] = $this->nodeFactory->createArg(new String_('line'));
 
         return $methodCallNode;
     }
