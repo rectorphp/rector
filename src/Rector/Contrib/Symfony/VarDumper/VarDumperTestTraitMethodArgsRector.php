@@ -3,7 +3,6 @@
 namespace Rector\Rector\Contrib\Symfony\VarDumper;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Scalar\String_;
@@ -70,7 +69,9 @@ final class VarDumperTestTraitMethodArgsRector extends AbstractRector
 
         if ($methodArguments[2]->value instanceof String_) {
             $methodArguments[3] = $methodArguments[2];
-            $methodArguments[2] = new Arg($this->nodeFactory->createNullConstant());
+            $methodArguments[2] = $this->nodeFactory->createArg(
+                $this->nodeFactory->createNullConstant()
+            );
 
             $node->args = $methodArguments;
 

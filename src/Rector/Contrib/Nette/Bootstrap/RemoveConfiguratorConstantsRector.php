@@ -6,12 +6,22 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Scalar\String_;
 use Rector\Node\Attribute;
+use Rector\Node\NodeFactory;
 use Rector\Rector\AbstractRector;
 
 final class RemoveConfiguratorConstantsRector extends AbstractRector
 {
+    /**
+     * @var NodeFactory
+     */
+    private $nodeFactory;
+
+    public function __construct(NodeFactory $nodeFactory)
+    {
+        $this->nodeFactory = $nodeFactory;
+    }
+
     public function isCandidate(Node $node): bool
     {
         if (! $node instanceof ClassConstFetch) {
@@ -36,7 +46,7 @@ final class RemoveConfiguratorConstantsRector extends AbstractRector
 
         $originalConstantValue = strtolower($constantName);
 
-        return new String_($originalConstantValue);
+        return $this->nodeFactory->createString($originalConstantValue);
     }
 
     private function getClassNameFromClassConstFetch(ClassConstFetch $classConstFetchNode): string

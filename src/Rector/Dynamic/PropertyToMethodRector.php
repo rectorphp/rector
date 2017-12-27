@@ -3,11 +3,11 @@
 namespace Rector\Rector\Dynamic;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Identifier;
+use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Rector\AbstractRector;
 
@@ -42,12 +42,21 @@ final class PropertyToMethodRector extends AbstractRector
     private $propertyFetchAnalyzer;
 
     /**
+     * @var NodeFactory
+     */
+    private $nodeFactory;
+
+    /**
      * @param string[][][] $perClassOldToNewProperties
      */
-    public function __construct(array $perClassOldToNewProperties, PropertyFetchAnalyzer $propertyFetchAnalyzer)
-    {
+    public function __construct(
+        array $perClassOldToNewProperties,
+        PropertyFetchAnalyzer $propertyFetchAnalyzer,
+        NodeFactory $nodeFactory
+    ) {
         $this->perClassPropertyToMethods = $perClassOldToNewProperties;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
+        $this->nodeFactory = $nodeFactory;
     }
 
     public function isCandidate(Node $node): bool
@@ -76,7 +85,9 @@ final class PropertyToMethodRector extends AbstractRector
     {
         // setter
         if ($assignNode->var instanceof PropertyFetch) {
-            $args = [new Arg($assignNode->expr)];
+            $args = $this->nodeFactory->createArgs([
+                $assignNode->expr,
+            ]);
 
             return new MethodCall($assignNode->var->var, $this->activeMethod, $args);
         }

@@ -6,10 +6,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
 
 final class MethodCallNodeFactory
 {
@@ -74,14 +71,6 @@ final class MethodCallNodeFactory
         $methodCall->args = $this->nodeFactory->createArgs($arguments);
 
         return $methodCall;
-    }
-
-    /**
-     * @param mixed[] $arguments
-     */
-    public function createStaticMethodCallWithArgs(string $class, string $method, array $arguments): StaticCall
-    {
-        return new StaticCall(new Name($class), new Identifier($method), $arguments);
     }
 
     private function clonePropertyFetch(PropertyFetch $propertyFetchNode): PropertyFetch
