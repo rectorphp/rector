@@ -48,7 +48,6 @@ final class AssignTypeResolverTest extends AbstractNodeTypeResolverTest
             ]],
             # method call
             [__DIR__ . '/Source/MethodCall.php.inc', 1, ['Nette\DI\Container']],
-
         ];
     }
 
