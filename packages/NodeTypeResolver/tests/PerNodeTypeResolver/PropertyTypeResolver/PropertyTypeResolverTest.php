@@ -6,7 +6,7 @@ use PhpParser\Node\Stmt\Property;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Tests\AbstractNodeTypeResolverTest;
 
-final class Test extends AbstractNodeTypeResolverTest
+final class PropertyTypeResolverTest extends AbstractNodeTypeResolverTest
 {
     public function testDocBlock(): void
     {

@@ -6,7 +6,7 @@ use PhpParser\Node\Expr\Variable;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Tests\AbstractNodeTypeResolverTest;
 
-final class Test extends AbstractNodeTypeResolverTest
+final class VariableTypeResolverTest extends AbstractNodeTypeResolverTest
 {
     public function testThis(): void
     {
