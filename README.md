@@ -219,7 +219,7 @@ You can:
                     'set': 'setLocale'
     ```
 
-- **Remove a value object and use simple types**
+- **Remove a value object and use simple type**
 
     ```yml
     rectors:
@@ -322,7 +322,7 @@ You can:
     $container->removeService('key');
     ```
 
-- **Replace `toString` magic method with real ones**
+- **Replace `toString` magic method with real one**
 
     ```yml
     rectors:
