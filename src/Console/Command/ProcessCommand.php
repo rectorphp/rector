@@ -151,7 +151,7 @@ final class ProcessCommand extends Command
     private function processFiles(array $fileInfos): void
     {
         $totalFiles = count($fileInfos);
-        $this->symfonyStyle->title(sprintf('Processing %s Files', $totalFiles));
+        $this->symfonyStyle->title(sprintf('Processing %s File%s', $totalFiles, $totalFiles === 1 ? '' : 's'));
         $this->symfonyStyle->progressStart($totalFiles);
 
         $i = 1;
