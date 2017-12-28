@@ -34,7 +34,7 @@ Rector can:
 composer require --dev rector/rector @dev nikic/php-parser '4.0.x-dev'
 ```
 
-Do you have old `PHP` or dependencies in conflict? Ok, [it is not a problem](/docs/HowUseWithOldPhp.md).
+Do you have old PHP or dependencies in conflict? Ok, [it is not a problem](/docs/HowUseWithOldPhp.md).
 
 ## How to Reconstruct your Code
 
@@ -99,7 +99,7 @@ Instead you can use prepared **Dynamic Rectors** directly in `*.yml` config:
 
 You can:
 
-- **Replace a class name**:
+- **Replace a class name**
 
     ```yml
     # phpunit60.yml
@@ -109,7 +109,7 @@ You can:
             'PHPUnit_Framework_TestCase': 'PHPUnit\Framework\TestCase'
     ```
 
-- **Replace some part of the namespace**:
+- **Replace some part of the namespace**
 
     ```yml
     # better-reflection20.yml
@@ -119,7 +119,7 @@ You can:
             'BetterReflection': 'Roave\BetterReflection'
     ```
 
-- **Change a method name**:
+- **Change a method name**
 
     ```yml
     rectors:
@@ -137,7 +137,7 @@ You can:
                 'renderFormBegin': ['Nette\Bridges\FormsLatte\Runtime', 'renderFormBegin']
     ```
 
-- **Change a property name**:
+- **Change a property name**
 
     ```yml
     rectors:
@@ -148,7 +148,7 @@ You can:
                 'name': 'var'
     ```
 
-- **Change a class constant name**:
+- **Change a class constant name**
 
     ```yml
     rectors:
@@ -161,7 +161,7 @@ You can:
                 'POST_BIND': 'POST_SUBMIT'
     ```
 
-- **Change parameters type hinting according to the parent type**:
+- **Change parameters type hinting according to the parent type**
 
     ```yml
     rectors:
@@ -174,7 +174,7 @@ You can:
                     'code': 'string'
     ```
 
-- **Change a argument value**:
+- **Change a argument value**
 
     ```yml
     rectors:
@@ -193,7 +193,7 @@ You can:
                         'Symfony\Component\DependencyInjection\ContainerBuilder\ContainerBuilder::SCOPE_PROTOTYPE': false
     ```
 
-- **Replace the underscore naming `_` with namespaces `\`**:
+- **Replace the underscore naming `_` with namespaces `\`**
 
     ```yml
     rectors:
@@ -204,7 +204,7 @@ You can:
             - '!PHPUnit_Framework_MockObject_MockObject'
     ```
 
-- **Modify a property to method**:
+- **Modify a property to method**
 
     ```yml
     rectors:
@@ -219,7 +219,7 @@ You can:
                     'set': 'setLocale'
     ```
 
-- **Remove a value object and use simple types**:
+- **Remove a value object and use simple types**
 
     ```yml
     rectors:
@@ -262,7 +262,7 @@ You can:
 
 ## Turn Magic to Methods
 
-- **Replace `get/set` magic methods with real ones**:
+- **Replace `get/set` magic methods with real ones**
 
     ```yml
     rectors:
@@ -292,7 +292,7 @@ You can:
     $container->addService('key', $value);
     ```
 
-- **Replace `isset/unset` magic methods with real ones**:
+- **Replace `isset/unset` magic methods with real ones**
 
     ```yml
     rectors:
@@ -377,13 +377,13 @@ Just follow 3 rules:
 
 - **1 feature per pull-request**
 - **New feature needs tests**
-- Tests, Coding Standards and PHPStan **checks must pass**:
+- Tests, coding standards and PHPStan **checks must pass**:
 
     ```bash
     composer all
     ```
 
-    Don you need to fix Coding Standards? Run:
+    Don you need to fix coding standards? Run:
 
     ```bash
     composer fix-cs
