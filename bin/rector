@@ -1,5 +1,55 @@
 #!/usr/bin/env php
 <?php
 
-require_once __DIR__ . '/rector.php';
+use Rector\Console\Application;
+use Rector\DependencyInjection\ContainerFactory;
+use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symplify\PackageBuilder\Configuration\ConfigFilePathHelper;
+use Symplify\PackageBuilder\Configuration\LevelConfigShortcutFinder;
+use Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
 
+// Performance boost
+gc_disable();
+
+// Require Composer autoload.php
+require_once __DIR__ . '/rector_bootstrap.php';
+
+try {
+    // 1. Detect configuration from --level
+    $configFile = (new LevelConfigShortcutFinder())->resolveLevel(new ArgvInput(), __DIR__ . '/../src/config/level');
+
+    // 2. Or from --config
+    if ($configFile === null) {
+        ConfigFilePathHelper::detectFromInput('rector', new ArgvInput());
+        $configFile = ConfigFilePathHelper::provide('rector', 'rector.yml');
+    }
+
+    // 2. Build DI container
+    $containerFactory = new ContainerFactory();
+    if ($configFile) {
+        $container = $containerFactory->createWithConfig($configFile);
+    } else {
+        $container = $containerFactory->create();
+    }
+
+    // 3. Run Console Application
+    /** @var Application $application */
+    $application = $container->get(Application::class);
+    /** @var InputInterface $input */
+    $input = $container->get(InputInterface::class);
+    /** @var OutputInterface $output */
+    $output = $container->get(OutputInterface::class);
+    $statusCode = $application->run($input, $output);
+    exit($statusCode);
+} catch (Throwable $throwable) {
+    $symfonyStyle = SymfonyStyleFactory::create();
+    $symfonyStyle->error(sprintf(
+        '%s in %s on line %d',
+        $throwable->getMessage(),
+        $throwable->getFile(),
+        $throwable->getLine()
+    ));
+    exit($throwable->getCode());
+}
