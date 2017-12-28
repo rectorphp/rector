@@ -174,9 +174,8 @@ final class ProcessCommand extends Command
 
     private function processFile(SplFileInfo $fileInfo, int &$i): void
     {
-        $oldContent = $fileInfo->getContents();
-
         if ($this->parameterProvider->provideParameter(self::OPTION_DRY_RUN)) {
+            $oldContent = $fileInfo->getContents();
             $newContent = $this->fileProcessor->processFileToString($fileInfo);
 
             if ($newContent !== $oldContent) {
@@ -186,8 +185,7 @@ final class ProcessCommand extends Command
             }
         } else {
             $newContent = $this->fileProcessor->processFile($fileInfo);
-
-            if ($newContent !== $oldContent) {
+            if ($newContent !== false) {
                 $this->changedFiles[] = $fileInfo->getPathname();
             }
         }

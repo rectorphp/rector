@@ -44,11 +44,14 @@ final class FileProcessor
         return $this->processFileToString($file);
     }
 
-    public function processFile(SplFileInfo $fileInfo): void
+    /**
+     * @return mixed
+     */
+    public function processFile(SplFileInfo $fileInfo)
     {
         [$newStmts, $oldStmts, $oldTokens] = $this->nodeTraverserQueue->processFileInfo($fileInfo);
 
-        $this->formatPerservingPrinter->printToFile($fileInfo, $newStmts, $oldStmts, $oldTokens);
+        return $this->formatPerservingPrinter->printToFile($fileInfo, $newStmts, $oldStmts, $oldTokens);
     }
 
     /**
