@@ -18,19 +18,15 @@ Rector **upgrades your application** for you, with focus on open-source projects
     <a href="/src/config/level/twig"><img src="/docs/images/twig.png"></a>
 </p>
 
-It can:
+Rector can:
 
-- rename class
-- rename class methods
-- rename partial namespace
-- rename "_" pseudo-namespace to namespace
-- add arguments
-- replace arguments
-- remove arguments
-- add typehints based on new types of parent class or interface
-- and more...
-
-<br>
+- Rename classes
+- Rename class' methods
+- Rename partial namespace
+- Rename pseudo-namespace to namespace
+- Add, replace or remove arguments
+- Add typehints based on new types of parent class or interface
+- And much more...
 
 ## Install
 
@@ -38,24 +34,24 @@ It can:
 composer require --dev rector/rector @dev nikic/php-parser '4.0.x-dev'
 ```
 
-Do you have old PHP or dependencies in conflict? Ok, [it is not problem](/docs/HowUseWithOldPhp.md).
+Do you have old `PHP` or dependencies in conflict? Ok, [it is not a problem](/docs/HowUseWithOldPhp.md).
 
-## How To Reconstruct your Code?
+## How to Reconstruct your Code
 
 ### A. Prepared Sets
 
 Featured open-source projects have **prepared sets**. You'll find them in [`/src/config/level`](/src/config/level).
 
-E.g. Do you need to upgrade to Symfony 4.0?
+Do you need to upgrade to **Symfony 4.0**, for example?
 
-1. Run rector on your `/src` directory
+1. Run rector on your `/src` directory:
 
     ```bash
     vendor/bin/rector process src --level symfony40
     ```
 
-    Which is just a shortcut for using complete path with `--config` option:
-    
+    Which is a shortcut for using complete path with `--config` option:
+
     ```bash
     vendor/bin/rector process src --config vendor/rector/rector/src/config/level/symfony/symfony40.yml
     ```
@@ -66,38 +62,36 @@ E.g. Do you need to upgrade to Symfony 4.0?
     vendor/bin/rector process src --config your-own-config.yml
     ```
 
-2. Do you want to see preview of changes first? 
+2. Do you want to see the preview of changes first?
 
-    Use `--dry-run` option:
-    
-    ```
+    Use the `--dry-run` option:
+
+    ```bash
     vendor/bin/rector process src --level symfony33 --dry-run
     ```
 
-
 ### B. Custom Sets
 
-1. Create `rector.yml` with desired Rectors
+1. Create `rector.yml` with desired Rectors:
 
     ```yml
     rectors:
         - Rector\Rector\Contrib\Nette\Application\InjectPropertyRector
     ```
 
-2. Try Rector on your `/src` directory
+2. Try Rector on your `/src` directory:
 
     ```bash
     vendor/bin/rector process src --dry-run
     ```
 
-3. Apply Changes if you like them
+3. Apply the changes if you like them:
 
-    ```
+    ```bash
     vendor/bin/rector process src
     ```
 
-
-### Simple setup with Dynamic Rectors
+## Simple setup with Dynamic Rectors
 
 You don't have to always write PHP code. Many projects change only classes or method names, so it would be too much work for a simple task.
 
@@ -105,7 +99,7 @@ Instead you can use prepared **Dynamic Rectors** directly in `*.yml` config:
 
 You can:
 
-- **replace class name**
+- **Replace a class name**:
 
     ```yml
     # phpunit60.yml
@@ -115,7 +109,7 @@ You can:
             'PHPUnit_Framework_TestCase': 'PHPUnit\Framework\TestCase'
     ```
 
-- **replace part of namespace**
+- **Replace some part of the namespace**:
 
     ```yml
     # better-reflection20.yml
@@ -125,7 +119,7 @@ You can:
             'BetterReflection': 'Roave\BetterReflection'
     ```
 
-- **change method name**
+- **Change a method name**:
 
     ```yml
     rectors:
@@ -143,7 +137,7 @@ You can:
                 'renderFormBegin': ['Nette\Bridges\FormsLatte\Runtime', 'renderFormBegin']
     ```
 
-- **change property name**
+- **Change a property name**:
 
     ```yml
     rectors:
@@ -154,7 +148,7 @@ You can:
                 'name': 'var'
     ```
 
-- **change class constant name**
+- **Change a class constant name**:
 
     ```yml
     rectors:
@@ -167,7 +161,7 @@ You can:
                 'POST_BIND': 'POST_SUBMIT'
     ```
 
-- **change parameters typehint according to parent type**
+- **Change parameters type hinting according to the parent type**:
 
     ```yml
     rectors:
@@ -180,7 +174,7 @@ You can:
                     'code': 'string'
     ```
 
-- **change argument value**
+- **Change a argument value**:
 
     ```yml
     rectors:
@@ -199,7 +193,7 @@ You can:
                         'Symfony\Component\DependencyInjection\ContainerBuilder\ContainerBuilder::SCOPE_PROTOTYPE': false
     ```
 
-- or **replace underscore naming `_` with namespaces `\`**
+- **Replace the underscore naming `_` with namespaces `\`**:
 
     ```yml
     rectors:
@@ -210,7 +204,7 @@ You can:
             - '!PHPUnit_Framework_MockObject_MockObject'
     ```
 
-- or **change property to method**
+- **Modify a property to method**:
 
     ```yml
     rectors:
@@ -225,7 +219,7 @@ You can:
                     'set': 'setLocale'
     ```
 
-- or **remove value object and use simple types**
+- **Remove a value object and use simple types**:
 
     ```yml
     rectors:
@@ -233,42 +227,42 @@ You can:
             # type: new simple type
             'ValueObjects\Name': 'string'
     ```
-    
+
     For example:
 
     ```php
     $value = new ValueObjects\Name('Tomas');
 
-    # to
+    // to
 
     $value = 'Tomas';
     ```
-    
+
     ```php
     /**
      * @var ValueObjects\Name
      */
     private $name;
 
-    # to
+    // to
 
     /**
      * @var string
      */
     private $name;
     ```
-    
+
     ```php
     public function someMethod(ValueObjects\Name $name) { ...
 
-    # to
+    // to
 
     public function someMethod(string $name) { ...
     ```
 
-### Turn Magic to Methods
+## Turn Magic to Methods
 
-- **replace get/set magic methods with real ones**
+- **Replace `get/set` magic methods with real ones**:
 
     ```yml
     rectors:
@@ -279,26 +273,26 @@ You can:
                 'get': 'getService'
                 'set': 'addService'
     ```
-    
+
     For example:
 
     ```php
     $result = $container['key'];
-  
-    # to
-    
+
+    // to
+
     $result = $container->getService('key');
     ```
-    
+
     ```php
     $container['key'] = $value;
-    
-    # to
-  
+
+    // to
+
     $container->addService('key', $value);
     ```
-    
-- or **replaces isset/unset magic methods with real ones**
+
+- **Replace `isset/unset` magic methods with real ones**:
 
     ```yml
     rectors:
@@ -315,20 +309,20 @@ You can:
     ```php
     isset($container['key']);
 
-    # to
+    // to
 
     $container->hasService('key');
     ```
-    
+
     ```php
     unset($container['key']);
 
-    # to
+    // to
 
     $container->removeService('key');
     ```
 
-- or **replaces toString magic methods with real ones**
+- **Replace `toString` magic method with real ones**
 
     ```yml
     rectors:
@@ -338,13 +332,13 @@ You can:
                 # magic method (prepared key): new real method
                 'toString': 'getPath'
     ```
-    
+
     For example:
-    
+
     ```php
     $result = (string) $someValue;
 
-    # to
+    // to
 
     $result = $someValue->someMethod();
     ```  
@@ -352,13 +346,12 @@ You can:
     ```php
     $result = $someValue->__toString();
 
-    # to
+    // to
 
     $result = $someValue->someMethod();
     ```
 
-
-### Coding Standards are Outsourced
+## Coding Standards are Outsourced
 
 This package has no intention in formatting your code, as **coding standard tools handle this much better**.
 
@@ -372,25 +365,25 @@ vendor/bin/ecs check --config vendor/rector/rector/ecs-after-rector.neon
 vendor/bin/ecs check --config vendor/rector/rector/ecs-after-rector.neon --fix
 ```
 
-### More Detailed Documentation
+## More Detailed Documentation
 
 - [How to Create Own Rector](/docs/HowToCreateOwnRector.md)
 - [Service Name to Type Provider](/docs/ServiceNameToTypeProvider.md)
 
 
-### How to Contribute
+## How to Contribute
 
 Just follow 3 rules:
 
 - **1 feature per pull-request**
 - **New feature needs tests**
-- Tests, coding standard and PHPStan **checks must pass**
+- Tests, Coding Standards and PHPStan **checks must pass**:
 
     ```bash
     composer all
     ```
 
-    Don you need to fix coding standards? Run:
+    Don you need to fix Coding Standards? Run:
 
     ```bash
     composer fix-cs
