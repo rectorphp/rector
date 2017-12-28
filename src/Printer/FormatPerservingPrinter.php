@@ -22,7 +22,7 @@ final class FormatPerservingPrinter
      * @param Node[] $newStmts
      * @param Node[] $oldStmts
      * @param Node[] $oldTokens
-     * @return mixed
+     * @return int|bool
      */
     public function printToFile(SplFileInfo $fileInfo, array $newStmts, array $oldStmts, array $oldTokens)
     {

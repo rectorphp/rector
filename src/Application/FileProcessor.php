@@ -45,7 +45,7 @@ final class FileProcessor
     }
 
     /**
-     * @return mixed
+     * @return int|bool
      */
     public function processFile(SplFileInfo $fileInfo)
     {
