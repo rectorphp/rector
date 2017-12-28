@@ -185,7 +185,7 @@ final class ProcessCommand extends Command
             }
         } else {
             $newContent = $this->fileProcessor->processFile($fileInfo);
-            if ($newContent !== false) {
+            if ($newContent) {
                 $this->changedFiles[] = $fileInfo->getPathname();
             }
         }

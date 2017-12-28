@@ -22,9 +22,8 @@ final class FormatPerservingPrinter
      * @param Node[] $newStmts
      * @param Node[] $oldStmts
      * @param Node[] $oldTokens
-     * @return int|bool
      */
-    public function printToFile(SplFileInfo $fileInfo, array $newStmts, array $oldStmts, array $oldTokens)
+    public function printToFile(SplFileInfo $fileInfo, array $newStmts, array $oldStmts, array $oldTokens): bool
     {
         $oldContent = file_get_contents($fileInfo->getRealPath());
         $newContent = $this->printToString($newStmts, $oldStmts, $oldTokens);
