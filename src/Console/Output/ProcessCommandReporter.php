@@ -3,6 +3,7 @@
 namespace Rector\Console\Output;
 
 use Rector\Console\ConsoleStyle;
+use Rector\Contract\Rector\RectorInterface;
 use Rector\Rector\RectorCollector;
 
 final class ProcessCommandReporter
@@ -33,7 +34,7 @@ final class ProcessCommandReporter
 
         $rectorList = $this->sortByClassName($this->rectorCollector->getRectors());
 
-        $this->consoleStyle->listing(array_map(function ($rector): string {
+        $this->consoleStyle->listing(array_map(function (RectorInterface $rector): string {
             return get_class($rector);
         }, $rectorList));
     }
