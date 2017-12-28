@@ -44,7 +44,7 @@ final class ProcessCommandReporter
     public function reportChangedFiles(array $changedFiles): void
     {
         $this->consoleStyle->title(sprintf(
-            '%s Changed File%s',
+            '%d Changed file%s',
             count($changedFiles),
             count($changedFiles) === 1 ? '' : 's'
         ));

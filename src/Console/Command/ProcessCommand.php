@@ -151,7 +151,7 @@ final class ProcessCommand extends Command
     private function processFiles(array $fileInfos): void
     {
         $totalFiles = count($fileInfos);
-        $this->consoleStyle->title(sprintf('Processing %s File%s', $totalFiles, $totalFiles === 1 ? '' : 's'));
+        $this->consoleStyle->title(sprintf('Processing %d file%s', $totalFiles, $totalFiles === 1 ? '' : 's'));
         $this->consoleStyle->progressStart($totalFiles);
 
         $i = 1;
