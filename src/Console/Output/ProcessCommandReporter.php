@@ -28,18 +28,23 @@ final class ProcessCommandReporter
         $this->symfonyStyle->title(sprintf(
             '%d Loaded Rector%s',
             $this->rectorCollector->getRectorCount(),
-            $this->rectorCollector->getRectorCount() === 1 ? '' : 's'
+            $this->rectorCollector->getRectorCount() === 1 ?: 's'
         ));
 
         $rectorList = $this->sortByClassName($this->rectorCollector->getRectors());
-        foreach ($rectorList as $rector) {
-            $this->symfonyStyle->writeln(sprintf(
-                ' - %s',
-                get_class($rector)
-            ));
-        }
 
-        $this->symfonyStyle->newLine();
+        $this->symfonyStyle->listing(array_map(function ($rector): string {
+            return get_class($rector);
+        }, $rectorList));
+    }
+
+    /**
+     * @param string[] $changedFiles
+     */
+    public function reportChangedFiles(array $changedFiles): void
+    {
+        $this->symfonyStyle->title(sprintf('%s Changed Files', count($changedFiles)));
+        $this->symfonyStyle->listing($changedFiles);
     }
 
     /**

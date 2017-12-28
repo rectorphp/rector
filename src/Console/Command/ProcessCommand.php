@@ -67,6 +67,11 @@ final class ProcessCommand extends Command
      */
     private $differAndFormatter;
 
+    /**
+     * @var string[]
+     */
+    private $changedFiles = [];
+
     public function __construct(
         FileProcessor $fileProcessor,
         RectorCollector $rectorCollector,
@@ -118,6 +123,11 @@ final class ProcessCommand extends Command
         $this->processCommandReporter->reportLoadedRectors();
 
         $this->processFiles($files);
+
+        if (count($this->changedFiles) > 0) {
+            $this->processCommandReporter->reportChangedFiles($this->changedFiles);
+        }
+
         $this->symfonyStyle->success('Rector is done!');
 
         return 0;
@@ -140,8 +150,9 @@ final class ProcessCommand extends Command
      */
     private function processFiles(array $fileInfos): void
     {
-        $this->symfonyStyle->title('Processing files');
-        $this->symfonyStyle->progressStart(count($fileInfos));
+        $totalFiles = count($fileInfos);
+        $this->symfonyStyle->title(sprintf('Processing %s Files', $totalFiles));
+        $this->symfonyStyle->progressStart($totalFiles);
 
         $i = 1;
         foreach ($fileInfos as $fileInfo) {
@@ -158,14 +169,14 @@ final class ProcessCommand extends Command
             $this->symfonyStyle->progressAdvance();
         }
 
-        $this->symfonyStyle->newLine();
-        $this->symfonyStyle->newLine();
+        $this->symfonyStyle->newLine(2);
     }
 
     private function processFile(SplFileInfo $fileInfo, int &$i): void
     {
+        $oldContent = $fileInfo->getContents();
+
         if ($this->parameterProvider->provideParameter(self::OPTION_DRY_RUN)) {
-            $oldContent = $fileInfo->getContents();
             $newContent = $this->fileProcessor->processFileToString($fileInfo);
 
             if ($newContent !== $oldContent) {
@@ -174,7 +185,11 @@ final class ProcessCommand extends Command
                 ++$i;
             }
         } else {
-            $this->fileProcessor->processFile($fileInfo);
+            $newContent = $this->fileProcessor->processFile($fileInfo);
+
+            if ($newContent !== $oldContent) {
+                $this->changedFiles[] = $fileInfo->getPathname();
+            }
         }
     }
 }
