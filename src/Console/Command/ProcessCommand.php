@@ -3,6 +3,7 @@
 namespace Rector\Console\Command;
 
 use Rector\Application\FileProcessor;
+use Rector\Console\ConsoleStyle;
 use Rector\Console\Output\ProcessCommandReporter;
 use Rector\ConsoleDiffer\DifferAndFormatter;
 use Rector\Exception\Command\FileProcessingException;
@@ -15,7 +16,6 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Finder\SplFileInfo;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Throwable;
@@ -43,9 +43,9 @@ final class ProcessCommand extends Command
     private $rectorCollector;
 
     /**
-     * @var SymfonyStyle
+     * @var ConsoleStyle
      */
-    private $symfonyStyle;
+    private $consoleStyle;
 
     /**
      * @var PhpFilesFinder
@@ -67,10 +67,15 @@ final class ProcessCommand extends Command
      */
     private $differAndFormatter;
 
+    /**
+     * @var string[]
+     */
+    private $changedFiles = [];
+
     public function __construct(
         FileProcessor $fileProcessor,
         RectorCollector $rectorCollector,
-        SymfonyStyle $symfonyStyle,
+        ConsoleStyle $consoleStyle,
         PhpFilesFinder $phpFilesFinder,
         ProcessCommandReporter $processCommandReporter,
         ParameterProvider $parameterProvider,
@@ -80,7 +85,7 @@ final class ProcessCommand extends Command
 
         $this->fileProcessor = $fileProcessor;
         $this->rectorCollector = $rectorCollector;
-        $this->symfonyStyle = $symfonyStyle;
+        $this->consoleStyle = $consoleStyle;
         $this->phpFilesFinder = $phpFilesFinder;
         $this->processCommandReporter = $processCommandReporter;
         $this->parameterProvider = $parameterProvider;
@@ -106,7 +111,7 @@ final class ProcessCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->symfonyStyle->setVerbosity($output->getVerbosity());
+        $this->consoleStyle->setVerbosity($output->getVerbosity());
 
         $this->ensureSomeRectorsAreRegistered();
 
@@ -118,7 +123,12 @@ final class ProcessCommand extends Command
         $this->processCommandReporter->reportLoadedRectors();
 
         $this->processFiles($files);
-        $this->symfonyStyle->success('Rector is done!');
+
+        if (count($this->changedFiles) > 0) {
+            $this->processCommandReporter->reportChangedFiles($this->changedFiles);
+        }
+
+        $this->consoleStyle->success('Rector is done!');
 
         return 0;
     }
@@ -140,8 +150,9 @@ final class ProcessCommand extends Command
      */
     private function processFiles(array $fileInfos): void
     {
-        $this->symfonyStyle->title('Processing files');
-        $this->symfonyStyle->progressStart(count($fileInfos));
+        $totalFiles = count($fileInfos);
+        $this->consoleStyle->title(sprintf('Processing %d file%s', $totalFiles, $totalFiles === 1 ? '' : 's'));
+        $this->consoleStyle->progressStart($totalFiles);
 
         $i = 1;
         foreach ($fileInfos as $fileInfo) {
@@ -155,11 +166,10 @@ final class ProcessCommand extends Command
                 );
             }
 
-            $this->symfonyStyle->progressAdvance();
+            $this->consoleStyle->progressAdvance();
         }
 
-        $this->symfonyStyle->newLine();
-        $this->symfonyStyle->newLine();
+        $this->consoleStyle->newLine(2);
     }
 
     private function processFile(SplFileInfo $fileInfo, int &$i): void
@@ -169,12 +179,15 @@ final class ProcessCommand extends Command
             $newContent = $this->fileProcessor->processFileToString($fileInfo);
 
             if ($newContent !== $oldContent) {
-                $this->symfonyStyle->writeln(sprintf('<options=bold>%d) %s</>', $i, $fileInfo->getPathname()));
-                $this->symfonyStyle->writeln($this->differAndFormatter->diffAndFormat($oldContent, $newContent));
+                $this->consoleStyle->writeln(sprintf('<options=bold>%d) %s</>', $i, $fileInfo->getPathname()));
+                $this->consoleStyle->writeln($this->differAndFormatter->diffAndFormat($oldContent, $newContent));
                 ++$i;
             }
         } else {
-            $this->fileProcessor->processFile($fileInfo);
+            $newContent = $this->fileProcessor->processFile($fileInfo);
+            if ($newContent) {
+                $this->changedFiles[] = $fileInfo->getPathname();
+            }
         }
     }
 }

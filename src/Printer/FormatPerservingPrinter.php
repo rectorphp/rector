@@ -23,16 +23,16 @@ final class FormatPerservingPrinter
      * @param Node[] $oldStmts
      * @param Node[] $oldTokens
      */
-    public function printToFile(SplFileInfo $fileInfo, array $newStmts, array $oldStmts, array $oldTokens): void
+    public function printToFile(SplFileInfo $fileInfo, array $newStmts, array $oldStmts, array $oldTokens): bool
     {
         $oldContent = file_get_contents($fileInfo->getRealPath());
         $newContent = $this->printToString($newStmts, $oldStmts, $oldTokens);
 
         if ($oldContent === $newContent) {
-            return;
+            return false;
         }
 
-        file_put_contents($fileInfo->getRealPath(), $newContent);
+        return file_put_contents($fileInfo->getRealPath(), $newContent);
     }
 
     /**

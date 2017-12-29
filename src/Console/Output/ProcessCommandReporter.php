@@ -2,8 +2,9 @@
 
 namespace Rector\Console\Output;
 
+use Rector\Console\ConsoleStyle;
+use Rector\Contract\Rector\RectorInterface;
 use Rector\Rector\RectorCollector;
-use Symfony\Component\Console\Style\SymfonyStyle;
 
 final class ProcessCommandReporter
 {
@@ -13,33 +14,42 @@ final class ProcessCommandReporter
     private $rectorCollector;
 
     /**
-     * @var SymfonyStyle
+     * @var ConsoleStyle
      */
-    private $symfonyStyle;
+    private $consoleStyle;
 
-    public function __construct(RectorCollector $rectorCollector, SymfonyStyle $symfonyStyle)
+    public function __construct(RectorCollector $rectorCollector, ConsoleStyle $consoleStyle)
     {
         $this->rectorCollector = $rectorCollector;
-        $this->symfonyStyle = $symfonyStyle;
+        $this->consoleStyle = $consoleStyle;
     }
 
     public function reportLoadedRectors(): void
     {
-        $this->symfonyStyle->title(sprintf(
+        $this->consoleStyle->title(sprintf(
             '%d Loaded Rector%s',
             $this->rectorCollector->getRectorCount(),
             $this->rectorCollector->getRectorCount() === 1 ? '' : 's'
         ));
 
         $rectorList = $this->sortByClassName($this->rectorCollector->getRectors());
-        foreach ($rectorList as $rector) {
-            $this->symfonyStyle->writeln(sprintf(
-                ' - %s',
-                get_class($rector)
-            ));
-        }
 
-        $this->symfonyStyle->newLine();
+        $this->consoleStyle->listing(array_map(function (RectorInterface $rector): string {
+            return get_class($rector);
+        }, $rectorList));
+    }
+
+    /**
+     * @param string[] $changedFiles
+     */
+    public function reportChangedFiles(array $changedFiles): void
+    {
+        $this->consoleStyle->title(sprintf(
+            '%d Changed file%s',
+            count($changedFiles),
+            count($changedFiles) === 1 ? '' : 's'
+        ));
+        $this->consoleStyle->listing($changedFiles);
     }
 
     /**
