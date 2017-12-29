@@ -380,7 +380,7 @@ Just follow 3 rules:
 - Tests, coding standards and PHPStan **checks must pass**:
 
     ```bash
-    composer all
+    composer complete-check
     ```
 
     Don you need to fix coding standards? Run:
