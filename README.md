@@ -230,34 +230,22 @@ You can:
 
     For example:
 
-    ```php
-    $value = new ValueObjects\Name('Tomas');
-
-    // to
-
-    $value = 'Tomas';
+    ```diff
+    - $value = new ValueObjects\Name('Tomas');
+    + $value = 'Tomas';
     ```
 
-    ```php
+    ```diff
     /**
-     * @var ValueObjects\Name
-     */
-    private $name;
-
-    // to
-
-    /**
-     * @var string
+    -* @var ValueObjects\Name
+    +* @var string
      */
     private $name;
     ```
 
-    ```php
-    public function someMethod(ValueObjects\Name $name) { ...
-
-    // to
-
-    public function someMethod(string $name) { ...
+    ```diff
+    - public function someMethod(ValueObjects\Name $name) { ...
+    + public function someMethod(string $name) { ...
     ```
 
 ## Turn Magic to Methods
@@ -276,20 +264,14 @@ You can:
 
     For example:
 
-    ```php
-    $result = $container['key'];
-
-    // to
-
-    $result = $container->getService('key');
+    ```diff
+    - $result = $container['key'];
+    + $result = $container->getService('key');
     ```
 
-    ```php
-    $container['key'] = $value;
-
-    // to
-
-    $container->addService('key', $value);
+    ```diff
+    - $container['key'] = $value;
+    + $container->addService('key', $value);
     ```
 
 - **Replace `isset/unset` magic methods with real ones**
@@ -306,20 +288,14 @@ You can:
 
     For example:
 
-    ```php
-    isset($container['key']);
-
-    // to
-
-    $container->hasService('key');
+    ```diff
+    - isset($container['key']);
+    + $container->hasService('key');
     ```
 
-    ```php
-    unset($container['key']);
-
-    // to
-
-    $container->removeService('key');
+    ```diff
+    - unset($container['key']);
+    + $container->removeService('key');
     ```
 
 - **Replace `toString` magic method with real one**
@@ -335,20 +311,14 @@ You can:
 
     For example:
 
-    ```php
-    $result = (string) $someValue;
-
-    // to
-
-    $result = $someValue->someMethod();
+    ```diff
+    - $result = (string) $someValue;
+    + $result = $someValue->someMethod();
     ```  
 
-    ```php
-    $result = $someValue->__toString();
-
-    // to
-
-    $result = $someValue->someMethod();
+    ```diff
+    - $result = $someValue->__toString();
+    + $result = $someValue->someMethod();
     ```
 
 ## Coding Standards are Outsourced
