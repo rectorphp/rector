@@ -71,7 +71,6 @@
     },
     "bin": [
         "bin/rector",
-        "bin/rector.php",
         "bin/rector_bootstrap.php"
     ],
     "config": {
