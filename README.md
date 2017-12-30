@@ -20,12 +20,12 @@ Rector **upgrades your application** for you, with focus on open-source projects
 
 Rector can:
 
-- Rename classes
-- Rename class' methods
-- Rename partial namespace
-- Rename pseudo-namespace to namespace
-- Add, replace or remove arguments
-- Add typehints based on new types of parent class or interface
+- [Rename classes](#rename-classes)
+- [Rename class' methods](#rename-class-method)
+- [Rename partial namespace](#rename-partial-namespace)
+- [Rename pseudo-namespace to namespace](#rename-pseudo-namespaces)
+- [Add, replace or remove arguments](#edit-arguments)
+- [Add typehints based on new types of parent class or interface](#typehints)
 - And much more...
 
 ## Install
@@ -99,6 +99,7 @@ Instead you can use prepared **Dynamic Rectors** directly in `*.yml` config:
 
 You can:
 
+<a name="rename-classes"></a>
 ### Replace a class name
 
 ```yml
@@ -109,6 +110,7 @@ rectors:
         'PHPUnit_Framework_TestCase': 'PHPUnit\Framework\TestCase'
 ```
 
+<a name="rename-partial-namespace"></a>
 ### Replace some part of the namespace
 
 ```yml
@@ -119,6 +121,7 @@ rectors:
         'BetterReflection': 'Roave\BetterReflection'
 ```
 
+<a name="rename-class-method"></a>
 ### Change a method name
 
 ```yml
@@ -174,6 +177,7 @@ rectors:
                 'code': 'string'
 ```
 
+<a name="edit-arguments"></a>
 ### Change a argument value
 
 ```yml
@@ -193,6 +197,7 @@ rectors:
                     'Symfony\Component\DependencyInjection\ContainerBuilder\ContainerBuilder::SCOPE_PROTOTYPE': false
 ```
 
+<a name="rename-pseudo-namespaces"></a>
 ### Replace the underscore naming `_` with namespaces `\`
 
 ```yml
@@ -219,6 +224,7 @@ rectors:
                 'set': 'setLocale'
 ```
 
+<a name="typehints"></a>
 ### Remove a value object and use simple type
 
 ```yml
