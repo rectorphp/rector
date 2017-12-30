@@ -99,227 +99,227 @@ Instead you can use prepared **Dynamic Rectors** directly in `*.yml` config:
 
 You can:
 
-- **Replace a class name**
+### Replace a class name
 
-    ```yml
-    # phpunit60.yml
-    rectors:
-        Rector\Rector\Dynamic\ClassReplacerRector:
-            # old class: new class
-            'PHPUnit_Framework_TestCase': 'PHPUnit\Framework\TestCase'
-    ```
+```yml
+# phpunit60.yml
+rectors:
+    Rector\Rector\Dynamic\ClassReplacerRector:
+        # old class: new class
+        'PHPUnit_Framework_TestCase': 'PHPUnit\Framework\TestCase'
+```
 
-- **Replace some part of the namespace**
+### Replace some part of the namespace
 
-    ```yml
-    # better-reflection20.yml
-    rectors:
-        Rector\Rector\Dynamic\NamespaceReplacerRector:
-            # old namespace: new namespace
-            'BetterReflection': 'Roave\BetterReflection'
-    ```
+```yml
+# better-reflection20.yml
+rectors:
+    Rector\Rector\Dynamic\NamespaceReplacerRector:
+        # old namespace: new namespace
+        'BetterReflection': 'Roave\BetterReflection'
+```
 
-- **Change a method name**
+### Change a method name
 
-    ```yml
-    rectors:
-        Rector\Rector\Dynamic\MethodNameReplacerRector:
-            # class
-            'Nette\Utils\Html':
-                # old method: new method
-                'add': 'addHtml'
+```yml
+rectors:
+    Rector\Rector\Dynamic\MethodNameReplacerRector:
+        # class
+        'Nette\Utils\Html':
+            # old method: new method
+            'add': 'addHtml'
 
-            # or in case of static methods calls
+        # or in case of static methods calls
 
-            # class
-            'Nette\Bridges\FormsLatte\FormMacros':
-                # old method: [new class, new method]
-                'renderFormBegin': ['Nette\Bridges\FormsLatte\Runtime', 'renderFormBegin']
-    ```
+        # class
+        'Nette\Bridges\FormsLatte\FormMacros':
+            # old method: [new class, new method]
+            'renderFormBegin': ['Nette\Bridges\FormsLatte\Runtime', 'renderFormBegin']
+```
 
-- **Change a property name**
+### Change a property name
 
-    ```yml
-    rectors:
-        Rector\Rector\Dynamic\PropertyNameReplacerRector:
-            # class:
-            'PhpParser\Node\Param':
-                # old property: new property
-                'name': 'var'
-    ```
+```yml
+rectors:
+    Rector\Rector\Dynamic\PropertyNameReplacerRector:
+        # class:
+        'PhpParser\Node\Param':
+            # old property: new property
+            'name': 'var'
+```
 
-- **Change a class constant name**
+### Change a class constant name
 
-    ```yml
-    rectors:
-        Rector\Rector\Dynamic\ClassConstantReplacerRector:
-            # class
-            'Symfony\Component\Form\FormEvents':
-                # old constant: new constant
-                'PRE_BIND': 'PRE_SUBMIT'
-                'BIND': 'SUBMIT'
-                'POST_BIND': 'POST_SUBMIT'
-    ```
+```yml
+rectors:
+    Rector\Rector\Dynamic\ClassConstantReplacerRector:
+        # class
+        'Symfony\Component\Form\FormEvents':
+            # old constant: new constant
+            'PRE_BIND': 'PRE_SUBMIT'
+            'BIND': 'SUBMIT'
+            'POST_BIND': 'POST_SUBMIT'
+```
 
-- **Change parameters type hinting according to the parent type**
+### Change parameters type hinting according to the parent type
 
-    ```yml
-    rectors:
-        Rector\Rector\Dynamic\ParentTypehintedArgumentRector:
-            # class
-            'PhpParser\Parser':
-                # method
-                'parse':
-                    # parameter: typehint
-                    'code': 'string'
-    ```
+```yml
+rectors:
+    Rector\Rector\Dynamic\ParentTypehintedArgumentRector:
+        # class
+        'PhpParser\Parser':
+            # method
+            'parse':
+                # parameter: typehint
+                'code': 'string'
+```
 
-- **Change a argument value**
+### Change a argument value
 
-    ```yml
-    rectors:
-        Rector\Rector\Dynamic\ArgumentReplacerRector:
-            # class
-            'Symfony\Component\DependencyInjection\ContainerBuilder':
-                # method
-                'compile':
-                    # argument position
-                    0:
-                        # added default value
-                        '~': false
-                        # or remove completely
-                        '~': ~
-                        # or replace by new value
-                        'Symfony\Component\DependencyInjection\ContainerBuilder\ContainerBuilder::SCOPE_PROTOTYPE': false
-    ```
+```yml
+rectors:
+    Rector\Rector\Dynamic\ArgumentReplacerRector:
+        # class
+        'Symfony\Component\DependencyInjection\ContainerBuilder':
+            # method
+            'compile':
+                # argument position
+                0:
+                    # added default value
+                    '~': false
+                    # or remove completely
+                    '~': ~
+                    # or replace by new value
+                    'Symfony\Component\DependencyInjection\ContainerBuilder\ContainerBuilder::SCOPE_PROTOTYPE': false
+```
 
-- **Replace the underscore naming `_` with namespaces `\`**
+### Replace the underscore naming `_` with namespaces `\`
 
-    ```yml
-    rectors:
-        Rector\Rector\Dynamic\PseudoNamespaceToNamespaceRector:
-            # old namespace prefix
-            - 'PHPUnit_'
-            # exclude classes
-            - '!PHPUnit_Framework_MockObject_MockObject'
-    ```
+```yml
+rectors:
+    Rector\Rector\Dynamic\PseudoNamespaceToNamespaceRector:
+        # old namespace prefix
+        - 'PHPUnit_'
+        # exclude classes
+        - '!PHPUnit_Framework_MockObject_MockObject'
+```
 
-- **Modify a property to method**
+### Modify a property to method
 
-    ```yml
-    rectors:
-        Rector\Rector\Dynamic\PropertyToMethodRector:
-            # type
-            'Symfony\Component\Translation\Translator':
-                # property to replace
-                'locale':
-                    # (prepared key): get method name
-                    'get': 'getLocale'
-                    # (prepared key): set method name
-                    'set': 'setLocale'
-    ```
+```yml
+rectors:
+    Rector\Rector\Dynamic\PropertyToMethodRector:
+        # type
+        'Symfony\Component\Translation\Translator':
+            # property to replace
+            'locale':
+                # (prepared key): get method name
+                'get': 'getLocale'
+                # (prepared key): set method name
+                'set': 'setLocale'
+```
 
-- **Remove a value object and use simple type**
+### Remove a value object and use simple type
 
-    ```yml
-    rectors:
-        Rector\Rector\Dynamic\ValueObjectRemoverRector:
-            # type: new simple type
-            'ValueObjects\Name': 'string'
-    ```
+```yml
+rectors:
+    Rector\Rector\Dynamic\ValueObjectRemoverRector:
+        # type: new simple type
+        'ValueObjects\Name': 'string'
+```
 
-    For example:
+For example:
 
-    ```diff
-    - $value = new ValueObjects\Name('Tomas');
-    + $value = 'Tomas';
-    ```
+```diff
+- $value = new ValueObjects\Name('Tomas');
++ $value = 'Tomas';
+```
 
-    ```diff
-    /**
-    -* @var ValueObjects\Name
-    +* @var string
-     */
-    private $name;
-    ```
+```diff
+/**
+-* @var ValueObjects\Name
++* @var string
+ */
+private $name;
+```
 
-    ```diff
-    - public function someMethod(ValueObjects\Name $name) { ...
-    + public function someMethod(string $name) { ...
-    ```
+```diff
+- public function someMethod(ValueObjects\Name $name) { ...
++ public function someMethod(string $name) { ...
+```
 
 ## Turn Magic to Methods
 
-- **Replace `get/set` magic methods with real ones**
+### Replace `get/set` magic methods with real ones
 
-    ```yml
-    rectors:
-        Rector\Rector\MagicDisclosure\GetAndSetToMethodCallRector:
-            # class
-            'Nette\DI\Container':
-                # magic method (prepared keys): new real method
-                'get': 'getService'
-                'set': 'addService'
-    ```
+```yml
+rectors:
+    Rector\Rector\MagicDisclosure\GetAndSetToMethodCallRector:
+        # class
+        'Nette\DI\Container':
+            # magic method (prepared keys): new real method
+            'get': 'getService'
+            'set': 'addService'
+```
 
-    For example:
+For example:
 
-    ```diff
-    - $result = $container['key'];
-    + $result = $container->getService('key');
-    ```
+```diff
+- $result = $container['key'];
++ $result = $container->getService('key');
+```
 
-    ```diff
-    - $container['key'] = $value;
-    + $container->addService('key', $value);
-    ```
+```diff
+- $container['key'] = $value;
++ $container->addService('key', $value);
+```
 
-- **Replace `isset/unset` magic methods with real ones**
+### Replace `isset/unset` magic methods with real ones
 
-    ```yml
-    rectors:
-        Rector\Rector\MagicDisclosure\UnsetAndIssetToMethodCallRector:
-            # class
-            'Nette\DI\Container':
-                # magic method (prepared keys): new real method
-                'isset': 'hasService'
-                'unset': 'removeService'
-    ```
+```yml
+rectors:
+    Rector\Rector\MagicDisclosure\UnsetAndIssetToMethodCallRector:
+        # class
+        'Nette\DI\Container':
+            # magic method (prepared keys): new real method
+            'isset': 'hasService'
+            'unset': 'removeService'
+```
 
-    For example:
+For example:
 
-    ```diff
-    - isset($container['key']);
-    + $container->hasService('key');
-    ```
+```diff
+- isset($container['key']);
++ $container->hasService('key');
+```
 
-    ```diff
-    - unset($container['key']);
-    + $container->removeService('key');
-    ```
+```diff
+- unset($container['key']);
++ $container->removeService('key');
+```
 
-- **Replace `toString` magic method with real one**
+### Replace `toString` magic method with real one
 
-    ```yml
-    rectors:
-        Rector\Rector\MagicDisclosure\ToStringToMethodCallRector:
-            # class
-            'Symfony\Component\Config\ConfigCache':
-                # magic method (prepared key): new real method
-                'toString': 'getPath'
-    ```
+```yml
+rectors:
+    Rector\Rector\MagicDisclosure\ToStringToMethodCallRector:
+        # class
+        'Symfony\Component\Config\ConfigCache':
+            # magic method (prepared key): new real method
+            'toString': 'getPath'
+```
 
-    For example:
+For example:
 
-    ```diff
-    - $result = (string) $someValue;
-    + $result = $someValue->someMethod();
-    ```  
+```diff
+- $result = (string) $someValue;
++ $result = $someValue->someMethod();
+```  
 
-    ```diff
-    - $result = $someValue->__toString();
-    + $result = $someValue->someMethod();
-    ```
+```diff
+- $result = $someValue->__toString();
++ $result = $someValue->someMethod();
+```
 
 ## Coding Standards are Outsourced
 
