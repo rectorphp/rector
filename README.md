@@ -20,12 +20,12 @@ Rector **upgrades your application** for you, with focus on open-source projects
 
 Rector can:
 
-- Rename classes
-- Rename class' methods
-- Rename partial namespace
-- Rename pseudo-namespace to namespace
-- Add, replace or remove arguments
-- Add typehints based on new types of parent class or interface
+- [Rename classes](#replace-a-class-name)
+- [Rename class' methods](#change-a-method-name)
+- [Rename partial namespace](#eplace-some-part-of-the-namespace)
+- [Rename pseudo-namespace to namespace](#replace-the-underscore-naming-_-with-namespaces-)
+- [Add, replace or remove arguments](#change-a-argument-value)
+- [Add typehints based on new types of parent class or interface](#remove-a-value-object-and-use-simple-type)
 - And much more...
 
 ## Install
