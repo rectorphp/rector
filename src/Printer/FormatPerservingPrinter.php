@@ -32,7 +32,7 @@ final class FormatPerservingPrinter
             return false;
         }
 
-        return file_put_contents($fileInfo->getRealPath(), $newContent);
+        return (bool) file_put_contents($fileInfo->getRealPath(), $newContent);
     }
 
     /**
