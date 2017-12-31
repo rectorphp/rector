@@ -16,13 +16,11 @@ includes types:
 ['SomeClass']
 ```
 
-
 ## How it works?
 
 1. Traverse all nodes
 2. Detect variable assigns, property use, method arguments
-3. Resolve types 
-
+3. Resolve types
 
 ## How it helps you?
 
@@ -58,17 +56,17 @@ final class SomeRector
      * @var NodeTypeResolver
      */
     private $nodeTypeResolver;
-    
+
     public function __construct(NodeTypeResolver $nodeTypeResolver)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
-    
+
     public function refactor(Node $node): ?Node
     {
         /** @var string[] $nodeTypes */
         $nodeTypes = $this->nodeTypeResolver->resolve($node);
-        
+
         if (in_array('Nette\Application\UI\Form', $nodeTypes, true) {
             // this is Nette\Application\UI\Form variable
         }
@@ -77,7 +75,6 @@ final class SomeRector
 ```
 
 ...in any Rector you create.
-
 
 ### Inspiration
 

@@ -4,7 +4,6 @@ This package takes care of Fully Qualified names from annotations:
 
 This code:
 
- 
 ```php
 namespace SomeNamespace;
 
@@ -20,12 +19,10 @@ public function __construct($value)
 
 will produce this:
 
-
 ```php
 $valueNodeTypes = $valueNode->getAttribute(Attributes::TYPES);
 var_dump($valueNodeTypes); // ['SomeNamespace\SomeType'];
 ```
-
 
 ### Inspiration
 
