@@ -1,6 +1,5 @@
 ## PHPUnit Rectors
 
-
 All methods are changes by default. But **you can specify methods** you like:
 
 ````yaml
