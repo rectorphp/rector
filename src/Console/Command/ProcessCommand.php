@@ -72,6 +72,11 @@ final class ProcessCommand extends Command
      */
     private $changedFiles = [];
 
+    /**
+     * @var string[][]
+     */
+    private $diffFiles = [];
+
     public function __construct(
         FileProcessor $fileProcessor,
         RectorCollector $rectorCollector,
@@ -124,6 +129,10 @@ final class ProcessCommand extends Command
 
         $this->processFiles($files);
 
+        if (count($this->diffFiles) > 0) {
+            $this->processCommandReporter->reportDiffFiles($this->diffFiles);
+        }
+
         if (count($this->changedFiles) > 0) {
             $this->processCommandReporter->reportChangedFiles($this->changedFiles);
         }
@@ -154,7 +163,7 @@ final class ProcessCommand extends Command
         $this->consoleStyle->title(sprintf('Processing %d file%s', $totalFiles, $totalFiles === 1 ? '' : 's'));
         $this->consoleStyle->progressStart($totalFiles);
 
-        $i = 1;
+        $i = 0;
         foreach ($fileInfos as $fileInfo) {
             try {
                 $this->processFile($fileInfo, $i);
@@ -180,9 +189,10 @@ final class ProcessCommand extends Command
             $newContent = $this->fileProcessor->processFileToString($fileInfo);
 
             if ($newContent !== $oldContent) {
-                $this->consoleStyle->writeln(sprintf('<options=bold>%d) %s</>', $i, $fileInfo->getPathname()));
-                $this->consoleStyle->writeln($this->differAndFormatter->diffAndFormat($oldContent, $newContent));
-                ++$i;
+                $this->diffFiles[] = [
+                    'file' => sprintf('<options=bold>%d) %s</>', ++$i, $fileInfo->getPathname()),
+                    'diff' => $this->differAndFormatter->diffAndFormat($oldContent, $newContent),
+                ];
             }
         } else {
             $newContent = $this->fileProcessor->processFile($fileInfo);

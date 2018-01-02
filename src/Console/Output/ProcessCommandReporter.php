@@ -53,6 +53,23 @@ final class ProcessCommandReporter
     }
 
     /**
+     * @param string[][] $diffFiles
+     */
+    public function reportDiffFiles(array $diffFiles): void
+    {
+        $this->consoleStyle->title(sprintf(
+            '%d file%s with changes',
+            count($diffFiles),
+            count($diffFiles) === 1 ? '' : 's'
+        ));
+
+        foreach ($diffFiles as $diffFile) {
+            $this->consoleStyle->writeln($diffFile['file']);
+            $this->consoleStyle->writeln($diffFile['diff']);
+        }
+    }
+
+    /**
      * @param object[] $objects
      * @return object[]
      */
