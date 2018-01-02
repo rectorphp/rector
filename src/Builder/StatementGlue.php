@@ -66,18 +66,6 @@ final class StatementGlue
         return $nodes;
     }
 
-    /**
-     * @param Node[] $nodes
-     * @param Node[] $newNodes
-     * @return Node[]
-     */
-    public function insertNewNodesAfter(array $nodes, array $newNodes, int $key): array
-    {
-        array_splice($nodes, $key + 1, 0, $newNodes);
-
-        return $nodes;
-    }
-
     private function addStatementToClassBeforeTypes(Class_ $classNode, Node $node, string ...$types): void
     {
         foreach ($types as $type) {

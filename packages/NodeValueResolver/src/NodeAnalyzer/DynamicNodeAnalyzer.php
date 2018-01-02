@@ -25,20 +25,6 @@ final class DynamicNodeAnalyzer
         Variable::class,
     ];
 
-    /**
-     * @param Node[] $nodes
-     */
-    public function hasDynamicNodes(array $nodes): bool
-    {
-        foreach ($nodes as $node) {
-            if ($this->isDynamicNode($node)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     public function isDynamicNode(Node $node): bool
     {
         $nodeClass = get_class($node);

@@ -53,23 +53,6 @@ final class BetterNodeFinder
 
     /**
      * @param Node|Node[] $nodes
-     * @param string[] $types
-     */
-    public function findFirstInstanceOfAny($nodes, array $types): ?Node
-    {
-        return $this->nodeFinder->findFirst($nodes, function (Node $node) use ($types): bool {
-            foreach ($types as $type) {
-                if ($node instanceof $type) {
-                    return true;
-                }
-            }
-
-            return false;
-        });
-    }
-
-    /**
-     * @param Node|Node[] $nodes
      * @return Node[]
      */
     public function find($nodes, callable $filter): array
