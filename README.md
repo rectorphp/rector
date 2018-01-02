@@ -3,7 +3,6 @@
 [![Build Status](https://img.shields.io/travis/rectorphp/rector/master.svg?style=flat-square)](https://travis-ci.org/rectorphp/rector)
 [![Coverage Status](https://img.shields.io/coveralls/RectorPHP/Rector/master.svg?style=flat-square)](https://coveralls.io/github/rectorphp/rector?branch=master)
 
-
 Rector **upgrades your application** for you, with focus on open-source projects:
 
 <p align="center">
@@ -314,7 +313,7 @@ For example:
 ```diff
 - $result = (string) $someValue;
 + $result = $someValue->someMethod();
-```  
+```
 
 ```diff
 - $result = $someValue->__toString();
@@ -339,7 +338,6 @@ vendor/bin/ecs check --config vendor/rector/rector/ecs-after-rector.neon --fix
 
 - [How to Create Own Rector](/docs/HowToCreateOwnRector.md)
 - [Service Name to Type Provider](/docs/ServiceNameToTypeProvider.md)
-
 
 ## How to Contribute
 
