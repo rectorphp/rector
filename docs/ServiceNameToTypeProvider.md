@@ -11,11 +11,9 @@ rectors:
 
 requires `Rector\Contract\Bridge\ServiceTypeForNameProviderInterface` service that provides **service type for certain service name**.
 
-
 **Why Should You Implement the Interface?**
 
 This operation could be automated on some level, but Kernel and Container API vary too much over frameworks and their versions. The implementation is left up to you and your specific case. **This allows any framework and container to use these rectors and gives you freedom to provide own desired types if needed**.
-
 
 ## How to Add it?
 
@@ -31,13 +29,13 @@ This operation could be automated on some level, but Kernel and Container API va
 
     final class StaticProvidero implements ServiceTypeForNameProviderInterface
     {
-        /** 
+        /**
          * @var string[]
          */
         private $nameToTypeMap = [
             'eventDispatcher' => 'Symfony\Component\EventDispatcher\EventDispatcherInterface',
         ];
-     
+
         public function provideTypeForName(string $name): ?string
         {
             return $this->nameToTypeMap[$name] ?? null;
@@ -58,12 +56,9 @@ This operation could be automated on some level, but Kernel and Container API va
 
 That's it!
 
-
-
 ## Symfony Kernel Version
 
 Of couse we have some prepared examples for Kernel, don't you worry.
-
 
 ```php
 use Psr\Container\ContainerInterface;
@@ -82,7 +77,7 @@ final class AppKernelProvider implements ServiceTypeForNameProviderInterface
         if (! $this->container->has($name)) {
             return null;
         }
-        
+
         return $this->container->get($name);
     }
 
@@ -100,8 +95,6 @@ final class AppKernelProvider implements ServiceTypeForNameProviderInterface
     }
 }
 ```
-
-
 
 ## Nette Environment
 

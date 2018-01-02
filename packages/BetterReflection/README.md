@@ -1,11 +1,10 @@
 # Better Reflection
 
 This package add 3 features:
- 
-- ignores missing functions without crashing
-- `SmartClassReflector` knows about every file passed as source 
-- add stub file to `/stubs` directory
 
+- ignores missing functions without crashing
+- `SmartClassReflector` knows about every file passed as source
+- add stub file to `/stubs` directory
 
 ## Stub Files
 
@@ -16,19 +15,17 @@ To overcome this hard dependency on `/vendor`, we can prepare a stub file in for
 ```
 /stubs/Namespace.ClassName.stub
 ```
- 
+
 When class `Namespace\ClassName` and is nowhere to be found, the stub file will be used to identify it.
 
 ### Note - `composer require --dev` related to config version
- 
 
 Sometimes it's more useful to install package of certain version, rather than to depend on version locked stubs, e.g.:
- 
+
 ```
 composer require --dev nette/application:2.4
 
 ```
-
 
 ### How to add Stub File?
 

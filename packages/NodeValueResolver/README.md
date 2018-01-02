@@ -1,7 +1,7 @@
 # Node Value Resolver
 
 This package detects values like:
- 
+
 - `true`
 - `false`
 - `null`
