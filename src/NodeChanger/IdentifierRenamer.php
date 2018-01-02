@@ -2,7 +2,6 @@
 
 namespace Rector\NodeChanger;
 
-use Exception;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
@@ -41,15 +40,15 @@ final class IdentifierRenamer
 
     private function ensureNodeHasIdentifier(Node $node): void
     {
-        if (in_array(get_class($node), $this->nodeClassesWithIdentifier)) {
+        if (in_array(get_class($node), $this->nodeClassesWithIdentifier, true)) {
             return;
         }
 
         throw new NodeMissingIdentifierException(sprintf(
             'Node "%s" does not contain a "$name" property with "%s". Pass only one of "%s".',
-            get_class($node)),
+            get_class($node),
             Identifier::class,
             implode('", "', $this->nodeClassesWithIdentifier)
-        );
+        ));
     }
 }

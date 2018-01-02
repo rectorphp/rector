@@ -115,9 +115,9 @@ final class AssertCompareToSpecificMethodRector extends AbstractRector
 
         [$trueMethodName, $falseMethodName] = $this->defaultOldToNewMethods[$this->activeFuncCallName];
 
-        if (in_array($oldMethodName, ['assertSame', 'assertEquals']) && $trueMethodName) {
+        if (in_array($oldMethodName, ['assertSame', 'assertEquals'], true) && $trueMethodName) {
             $this->identifierRenamer->renameNode($methodCallNode, $trueMethodName);
-        } elseif (in_array($oldMethodName, ['assertNotSame', 'assertNotEquals']) && $falseMethodName) {
+        } elseif (in_array($oldMethodName, ['assertNotSame', 'assertNotEquals'], true) && $falseMethodName) {
             $this->identifierRenamer->renameNode($methodCallNode, $falseMethodName);
         }
     }
