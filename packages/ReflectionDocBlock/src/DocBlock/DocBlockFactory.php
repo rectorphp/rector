@@ -8,7 +8,7 @@ use PhpParser\Node;
 use Rector\BetterReflection\TypesFinder\PhpDocumentor\NamespaceNodeToReflectionTypeContext;
 use Rector\Node\Attribute;
 use SplObjectStorage;
-use Symplify\TokenRunner\ReflectionDocBlock\CleanDocBlockFactory;
+use Symplify\BetterReflectionDocBlock\CleanDocBlockFactory;
 
 final class DocBlockFactory
 {

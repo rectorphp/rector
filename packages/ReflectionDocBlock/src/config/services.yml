@@ -8,5 +8,5 @@ services:
 
     Rector\BetterReflection\TypesFinder\PhpDocumentor\NamespaceNodeToReflectionTypeContext: ~
 
-    Symplify\TokenRunner\ReflectionDocBlock\CleanDocBlockFactory: ~
-    Symplify\TokenRunner\ReflectionDocBlock\FixedSerializer: ~
+    Symplify\BetterReflectionDocBlock\CleanDocBlockFactory: ~
+    Symplify\BetterReflectionDocBlock\FixedSerializer: ~
