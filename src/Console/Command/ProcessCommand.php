@@ -160,7 +160,7 @@ final class ProcessCommand extends Command
                 $this->processFile($fileInfo, $i);
             } catch (Throwable $throwable) {
                 throw new FileProcessingException(
-                    sprintf('Processing of "%s" file failed.', $fileInfo->getRealPath()),
+                    sprintf('Processing of "%s" file failed.', $fileInfo->getRelativePathname()),
                     $throwable->getCode(),
                     $throwable
                 );
