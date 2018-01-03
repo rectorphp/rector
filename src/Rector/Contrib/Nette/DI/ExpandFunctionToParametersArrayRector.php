@@ -5,6 +5,7 @@ namespace Rector\Rector\Contrib\Nette\DI;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Scalar\String_;
 use Rector\Node\Attribute;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodArgumentAnalyzer;
@@ -73,7 +74,7 @@ final class ExpandFunctionToParametersArrayRector extends AbstractRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        /** @var Node\Scalar\String_ $argument */
+        /** @var String_ $argument */
         $argument = $methodCallNode->args[0]->value;
         $argument->value = Strings::trim($argument->value, '%');
 

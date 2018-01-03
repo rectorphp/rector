@@ -3,6 +3,7 @@
 namespace Rector\Rector\Contrib\Symfony\DependencyInjection;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\MethodCall;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
@@ -37,7 +38,7 @@ final class ContainerBuilderCompileEnvArgumentRector extends AbstractRector
             return false;
         }
 
-        /** @var Node\Expr\MethodCall $node */
+        /** @var MethodCall $node */
         $arguments = $node->args;
 
         // already has an argument
@@ -45,7 +46,7 @@ final class ContainerBuilderCompileEnvArgumentRector extends AbstractRector
     }
 
     /**
-     * @param Node\Expr\MethodCall $methodCallNode
+     * @param MethodCall $methodCallNode
      */
     public function refactor(Node $methodCallNode): ?Node
     {
