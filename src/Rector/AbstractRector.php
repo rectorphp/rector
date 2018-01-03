@@ -137,6 +137,8 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
     }
 
     /**
+     * @todo maybe use leave node instead where is used array_splice() method?
+     *
      * Adds new nodes before or after particular Expression nodes.
      *
      * @param Node[] $nodes
@@ -145,10 +147,14 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
     private function prependExpressionNodes(array $nodes): array
     {
         foreach ($nodes as $i => $node) {
-            if ($node instanceof Expression) {
-                $nodes = $this->prependNodesAfterAndBeforeExpression($nodes, $node, $i);
-            } elseif (isset($node->stmts)) {
+            if (isset($node->stmts)) {
                 $node->stmts = $this->prependExpressionNodes($node->stmts);
+                if ($node instanceof Node\Stmt\If_) {
+                    $node->else->stmts = $this->prependExpressionNodes($node->else->stmts);
+                }
+
+            } elseif ($node instanceof Expression) {
+                $nodes = $this->prependNodesAfterAndBeforeExpression($nodes, $node, $i);
             }
         }
 
@@ -168,7 +174,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
         }
 
         if (isset($this->expressionsToPrependAfter[$node])) {
-            array_splice($nodes, $i + 1, 0, $this->expressionsToPrependAfter[$node]);
+            array_splice($nodes, $i + 1, 1, $this->expressionsToPrependAfter[$node]);
 
             unset($this->expressionsToPrependAfter[$node]);
         }
@@ -197,9 +203,10 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
                 $expressionToBeAddedInString = $this->betterStandardPrinter->prettyPrint([$expressionToBeAdded]);
 
                 throw new ShouldNotHappenException(sprintf(
-                    '"%s" expression was not added %s "%s" in "%s" class',
+                    '"%s" expression was not added %s%s"%s" in "%s" class',
                     $expressionToBeAddedInString,
                     $type,
+                    PHP_EOL,
                     $targetExpressionInString,
                     self::class
                 ));
