@@ -20,10 +20,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
-use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Stmt\Declare_;
-use PhpParser\Node\Stmt\DeclareDeclare;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\TraitUse;
@@ -61,14 +58,6 @@ final class NodeFactory
     public function createFalseConstant(): ConstFetch
     {
         return BuilderHelpers::normalizeValue(false);
-    }
-
-    /**
-     * Creates "true"
-     */
-    public function createTrueConstant(): ConstFetch
-    {
-        return BuilderHelpers::normalizeValue(true);
     }
 
     /**
@@ -180,16 +169,6 @@ final class NodeFactory
         $value = BuilderHelpers::normalizeValue($argument);
 
         return new Arg($value);
-    }
-
-    public function createDeclareStrictTypes(): Declare_
-    {
-        return new Declare_([
-            new DeclareDeclare(
-                new Identifier('strict_types'),
-                new LNumber(1)
-            ),
-        ]);
     }
 
     /**

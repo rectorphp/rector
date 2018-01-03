@@ -5,6 +5,7 @@ namespace Rector\Rector\Contrib\PHPUnit;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Identifier;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
@@ -63,7 +64,7 @@ final class DelegateExceptionArgumentsRector extends AbstractRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        /** @var Node\Identifier $identifierNode */
+        /** @var Identifier $identifierNode */
         $identifierNode = $methodCallNode->name;
         $oldMethodName = $identifierNode->name;
 

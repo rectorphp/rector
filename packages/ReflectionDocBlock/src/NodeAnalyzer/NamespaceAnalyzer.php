@@ -12,24 +12,6 @@ use Rector\Node\Attribute;
  */
 final class NamespaceAnalyzer
 {
-    public function isUseStatementAlreadyPresent(Node $node, string $useName): bool
-    {
-        /** @var Use_[] $useNodes */
-        $useNodes = $node->getAttribute(Attribute::USE_NODES);
-        if (! count($useNodes)) {
-            return false;
-        }
-
-        foreach ($useNodes as $useNode) {
-            $nodeUseName = $useNode->uses[0]->name->toString();
-            if ($nodeUseName === $useName) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     /**
      * @param string[] $types
      */

@@ -46,7 +46,7 @@ final class SmartClassReflector
     public function reflect(string $className): ?ReflectionClass
     {
         // invalid class types
-        if (in_array($className, ['self', 'null', 'array', 'string', 'bool'])) {
+        if (in_array($className, ['self', 'null', 'array', 'string', 'bool'], true)) {
             return null;
         }
 

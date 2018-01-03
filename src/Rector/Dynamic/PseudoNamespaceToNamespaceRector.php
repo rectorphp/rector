@@ -62,7 +62,7 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
             return false;
         }
 
-        if (in_array($name, $this->excludedClasses)) {
+        if (in_array($name, $this->excludedClasses, true)) {
             return false;
         }
 

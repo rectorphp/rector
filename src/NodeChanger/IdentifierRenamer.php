@@ -2,16 +2,23 @@
 
 namespace Rector\NodeChanger;
 
-use Exception;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
+use Rector\Exception\NodeChanger\NodeMissingIdentifierException;
 
 final class IdentifierRenamer
 {
+    /**
+     * @var string[]
+     */
+    private $nodeClassesWithIdentifier = [
+        ClassConstFetch::class, MethodCall::class, PropertyFetch::class, StaticCall::class,
+    ];
+
     public function renameNode(Node $node, string $newMethodName): void
     {
         $this->ensureNodeHasIdentifier($node);
@@ -33,10 +40,15 @@ final class IdentifierRenamer
 
     private function ensureNodeHasIdentifier(Node $node): void
     {
-        if (! in_array(get_class($node), [
-            ClassConstFetch::class, MethodCall::class, PropertyFetch::class, StaticCall::class,
-        ])) {
-            throw new Exception('The given Node does not have a valid Identifier.');
+        if (in_array(get_class($node), $this->nodeClassesWithIdentifier, true)) {
+            return;
         }
+
+        throw new NodeMissingIdentifierException(sprintf(
+            'Node "%s" does not contain a "$name" property with "%s". Pass only one of "%s".',
+            get_class($node),
+            Identifier::class,
+            implode('", "', $this->nodeClassesWithIdentifier)
+        ));
     }
 }

@@ -4,6 +4,7 @@ namespace Rector\NodeAnalyzer;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use Rector\Node\Attribute;
 
@@ -52,7 +53,7 @@ final class ClassConstAnalyzer
      */
     private function isNames(ClassConstFetch $node, array $names): bool
     {
-        /** @var Node\Identifier $identifierNode */
+        /** @var Identifier $identifierNode */
         $identifierNode = $node->name;
 
         $nodeConstantName = $identifierNode->toString();

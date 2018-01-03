@@ -4,6 +4,7 @@ namespace Rector\NodeAnalyzer;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Identifier;
 use Rector\BetterReflection\Reflector\SmartClassReflector;
 use Rector\Node\Attribute;
 use ReflectionProperty;
@@ -55,7 +56,7 @@ final class PropertyFetchAnalyzer
             return false;
         }
 
-        /** @var Node\Identifier $identifierNode */
+        /** @var Identifier $identifierNode */
         $identifierNode = $node->name;
 
         $nodePropertyName = $identifierNode->toString();
@@ -74,7 +75,7 @@ final class PropertyFetchAnalyzer
             return false;
         }
 
-        /** @var Node\Identifier $identifierNode */
+        /** @var Identifier $identifierNode */
         $identifierNode = $node->name;
 
         $nodePropertyName = $identifierNode->toString();
@@ -93,7 +94,7 @@ final class PropertyFetchAnalyzer
             return false;
         }
 
-        /** @var Node\Identifier $identifierNode */
+        /** @var Identifier $identifierNode */
         $identifierNode = $node->name;
 
         return in_array($identifierNode->toString(), $properties, true);

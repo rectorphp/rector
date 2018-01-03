@@ -3,7 +3,7 @@
 namespace Rector\ReflectionDocBlock\DocBlock;
 
 use phpDocumentor\Reflection\DocBlock;
-use Symplify\TokenRunner\ReflectionDocBlock\FixedSerializer;
+use Symplify\BetterReflectionDocBlock\FixedSerializer;
 
 final class TidingSerializer
 {

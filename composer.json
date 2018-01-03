@@ -17,9 +17,8 @@
         "symfony/console": "^4.0",
         "symfony/dependency-injection": "^4.0",
         "symfony/finder": "^4.0",
-        "symplify/easy-coding-standard": "^3.0",
-        "symplify/package-builder": "^3.0",
-        "symplify/token-runner": "^3.0",
+        "symplify/easy-coding-standard": "^3.1",
+        "symplify/package-builder": "^3.1",
         "webmozart/assert": "^1.2"
     },
     "require-dev": {
@@ -29,7 +28,7 @@
         "nette/forms": "^2.4",
         "phpstan/phpstan-shim": "^0.9",
         "phpunit/phpunit": "^6.5",
-        "symplify/coding-standard": "^3.0",
+        "symplify/coding-standard": "^3.1",
         "slam/php-cs-fixer-extensions": "^1.10",
         "symfony/expression-language": "^4.0",
         "symfony/form": "^4.0",
