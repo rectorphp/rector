@@ -1,0 +1,12 @@
+<?php declare(strict_types=1);
+
+final class MyTest extends \PHPUnit\Framework\TestCase
+{
+    public function test()
+    {
+        if (true) {
+            $this->setExpectedException('SomeException');
+            $this->expectExceptionMessage($message);
+        }
+    }
+}
