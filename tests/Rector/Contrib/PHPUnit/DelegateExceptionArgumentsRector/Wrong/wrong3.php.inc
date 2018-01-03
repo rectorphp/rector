@@ -1,11 +1,15 @@
-<?php declare(strict_types=1);
+<?php
 
-final class MyTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+class ArrayInputTest extends TestCase
 {
-    public function test()
+    public function testParseInvalidInput($expectedExceptionMessage)
     {
-        if (true) {
+        if (method_exists($this, 'expectException')) {
             $this->setExpectedException('SomeException', $message);
+        } else {
+            $this->setExpectedException('InvalidArgumentException', $expectedExceptionMessage);
         }
     }
 }
