@@ -31,6 +31,16 @@ final class DelegateExceptionArgumentsRector extends AbstractRector
     ];
 
     /**
+     * @var string[]
+     */
+    private $phpUnitTestCaseClasses = [
+        // PHPUnit 6 and lower
+        'PHPUnit_Framework_TestCase',
+        // PHPUnit 5 and higher
+        'PHPUnit\Framework\TestCase',
+    ];
+
+    /**
      * @var MethodCallAnalyzer
      */
     private $methodCallAnalyzer;
@@ -39,29 +49,20 @@ final class DelegateExceptionArgumentsRector extends AbstractRector
      * @var MethodCallNodeFactory
      */
     private $methodCallNodeFactory;
-    /**
-     * @var Scoper
-     */
-    private $scoper;
 
-    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, MethodCallNodeFactory $methodCallNodeFactory, Scoper $scoper)
+    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, MethodCallNodeFactory $methodCallNodeFactory)
     {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->methodCallNodeFactory = $methodCallNodeFactory;
-        $this->scoper = $scoper;
     }
 
     public function isCandidate(Node $node): bool
     {
-        if (! $this->scoper->isInClassOfPhpUnitTestCase($node)) {
-            return false;
-        }
-
-        if (! $this->methodCallAnalyzer->isTypeAndMethods(
+        if (! $this->methodCallAnalyzer->isTypesAndMethods(
             $node,
-            'PHPUnit\Framework\TestCase',
-            array_keys($this->oldToNewMethod)
-        )) {
+            $this->phpUnitTestCaseClasses,
+            array_keys($this->oldToNewMethod))
+        ) {
             return false;
         }
 
