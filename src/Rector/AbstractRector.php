@@ -19,11 +19,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
     /**
      * @var SplObjectStorage|Expression[][]
      */
-    private $expressionsToPrependBefore = [];
-
-    /**
-     * @var SplObjectStorage|Expression[][]
-     */
     private $expressionsToPrependAfter = [];
 
     /**
@@ -62,7 +57,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
      */
     final public function beforeTraverse(array $nodes): array
     {
-        $this->expressionsToPrependBefore = new SplObjectStorage();
         $this->expressionsToPrependAfter = new SplObjectStorage();
 
         return $nodes;
@@ -117,29 +111,10 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
         }
     }
 
-    protected function prependNodeBeforeNode(Expr $nodeToPrepend, Node $positionNode): void
-    {
-        $positionExpressionNode = $this->betterNodeFinder->findFirstAncestorInstanceOf(
-            $positionNode,
-            Expression::class
-        );
-
-        $expressionToPrepend = $this->wrapToExpression($nodeToPrepend);
-
-        if (isset($this->expressionsToPrependBefore[$positionExpressionNode])) {
-            $this->expressionsToPrependBefore[$positionExpressionNode] = array_merge(
-                $this->expressionsToPrependBefore[$positionExpressionNode],
-                [$expressionToPrepend]
-            );
-        } else {
-            $this->expressionsToPrependBefore[$positionExpressionNode] = [$expressionToPrepend];
-        }
-    }
-
     /**
      * @todo maybe use leave node instead where is used array_splice() method?
      *
-     * Adds new nodes before or after particular Expression nodes.
+     * Adds new nodes after particular Expression nodes.
      *
      * @param Node[] $nodes
      * @return Node[] array
@@ -149,12 +124,12 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
         foreach ($nodes as $i => $node) {
             if (isset($node->stmts)) {
                 $node->stmts = $this->prependExpressionNodes($node->stmts);
-                if ($node instanceof Node\Stmt\If_) {
+                if ($node instanceof Node\Stmt\If_ && isset($node->else->stmts)) {
                     $node->else->stmts = $this->prependExpressionNodes($node->else->stmts);
                 }
 
             } elseif ($node instanceof Expression) {
-                $nodes = $this->prependNodesAfterAndBeforeExpression($nodes, $node, $i);
+                $nodes = $this->prependNodesAfterExpression($nodes, $node, $i);
             }
         }
 
@@ -165,16 +140,10 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
      * @param Node[] $nodes
      * @return Node[]
      */
-    private function prependNodesAfterAndBeforeExpression(array $nodes, Node $node, int $i): array
+    private function prependNodesAfterExpression(array $nodes, Node $node, int $i): array
     {
-        if (isset($this->expressionsToPrependBefore[$node])) {
-            array_splice($nodes, $i, 0, $this->expressionsToPrependBefore[$node]);
-
-            unset($this->expressionsToPrependBefore[$node]);
-        }
-
         if (isset($this->expressionsToPrependAfter[$node])) {
-            array_splice($nodes, $i + 1, 1, $this->expressionsToPrependAfter[$node]);
+            array_splice($nodes, $i + 1, 0, $this->expressionsToPrependAfter[$node]);
 
             unset($this->expressionsToPrependAfter[$node]);
         }
@@ -189,23 +158,16 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
 
     private function ensureAllExpressionsWerePrepended(): void
     {
-        $this->reportRemainingExpressionsToPrepend($this->expressionsToPrependAfter, 'after');
-        $this->reportRemainingExpressionsToPrepend($this->expressionsToPrependBefore, 'before');
-    }
-
-    private function reportRemainingExpressionsToPrepend(SplObjectStorage $expressionsToPrepend, string $type): void
-    {
-        foreach ($expressionsToPrepend as $value) {
-            $targetExpression = $expressionsToPrepend->current();
+        foreach ($this->expressionsToPrependAfter as $value) {
+            $targetExpression = $this->expressionsToPrependAfter->current();
             $targetExpressionInString = $this->betterStandardPrinter->prettyPrint([$targetExpression]);
 
-            foreach ($expressionsToPrepend->getInfo() as $expressionToBeAdded) {
+            foreach ($this->expressionsToPrependAfter->getInfo() as $expressionToBeAdded) {
                 $expressionToBeAddedInString = $this->betterStandardPrinter->prettyPrint([$expressionToBeAdded]);
 
                 throw new ShouldNotHappenException(sprintf(
-                    '"%s" expression was not added %s%s"%s" in "%s" class',
+                    '"%s" expression was not added after %s"%s" in "%s" class',
                     $expressionToBeAddedInString,
-                    $type,
                     PHP_EOL,
                     $targetExpressionInString,
                     self::class
