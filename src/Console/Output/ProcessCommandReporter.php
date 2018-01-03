@@ -65,7 +65,9 @@ final class ProcessCommandReporter
 
         foreach ($diffFiles as $diffFile) {
             $this->consoleStyle->writeln($diffFile['file']);
+            $this->consoleStyle->newLine();
             $this->consoleStyle->writeln($diffFile['diff']);
+            $this->consoleStyle->newLine();
         }
     }
 }
