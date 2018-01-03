@@ -77,11 +77,9 @@ final class ExceptionAnnotationRector extends AbstractRector
             /** @var Generic[] $tags */
             $tags = $this->docBlockAnalyzer->getTagsByName($classMethodNode, $annotation);
 
-            $methodCallExpressions = [];
-
-            foreach ($tags as $tag) {
-                $methodCallExpressions[] = $this->createMethodCallExpressionFromTag($tag, $method);
-            }
+            $methodCallExpressions = array_map(function (Generic $tag) use ($method): Expression {
+                return $this->createMethodCallExpressionFromTag($tag, $method);
+            }, $tags);
 
             $classMethodNode->stmts = array_merge($methodCallExpressions, $classMethodNode->stmts);
 

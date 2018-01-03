@@ -2,6 +2,7 @@
 
 namespace Rector\BetterReflection\Reflector;
 
+use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
@@ -105,12 +106,9 @@ final class SmartClassReflector
         }
 
         if ($classLikeNode instanceof Interface_) {
-            $types = [];
-            foreach ($classLikeNode->extends as $interface) {
-                $types[] = $interface->toString();
-            }
-
-            return $types;
+            return array_map(function (Name $interface): string {
+                return $interface->toString();
+            }, $classLikeNode->extends);
         }
     }
 
