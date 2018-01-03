@@ -5,8 +5,8 @@ namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
 use Rector\BetterReflection\Reflector\MethodReflector;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
@@ -74,16 +74,11 @@ final class MethodCallTypeResolver implements PerNodeTypeResolverInterface
 
     private function resolveMethodCallName(MethodCall $methodCallNode): ?string
     {
-        if ($methodCallNode->name instanceof Variable) {
-            return (string) $methodCallNode->name->name;
+        if ($methodCallNode->name instanceof Identifier) {
+            return $methodCallNode->name->toString();
         }
 
-        if ($methodCallNode->name instanceof PropertyFetch) {
-            // not implemented yet
-            return null;
-        }
-
-        return (string) $methodCallNode->name;
+        return null;
     }
 
     private function getVariableToAssignTo(MethodCall $methodCallNode): ?string

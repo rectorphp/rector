@@ -46,4 +46,34 @@ final class AssignTypeResolverTest extends AbstractNodeTypeResolverTest
             $this->nodeTypeResolver->resolve($variableNodes[1])
         );
     }
+
+    public function testMethodCallOnClassConstant(): void
+    {
+        $variableNodes = $this->getNodesForFileOfType(__DIR__ . '/Source/ClassConstant.php.inc', Variable::class);
+
+        $this->assertSame(
+            ['Nette\Config\Configurator', 'Nette\Object'],
+            $this->nodeTypeResolver->resolve($variableNodes[0])
+        );
+
+        $this->assertSame(
+            ['Nette\Config\Configurator', 'Nette\Object'],
+            $this->nodeTypeResolver->resolve($variableNodes[2])
+        );
+    }
+
+    public function testMethodCallOnPropertyFetch(): void
+    {
+        $variableNodes = $this->getNodesForFileOfType(__DIR__ . '/Source/PropertyFetch.php.inc', Variable::class);
+
+        $this->assertSame(
+            ['Nette\Config\Configurator', 'Nette\Object'],
+            $this->nodeTypeResolver->resolve($variableNodes[0])
+        );
+
+        $this->assertSame(
+            ['Nette\Config\Configurator', 'Nette\Object'],
+            $this->nodeTypeResolver->resolve($variableNodes[2])
+        );
+    }
 }
