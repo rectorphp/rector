@@ -15,5 +15,6 @@ final class MyTest extends \PHPUnit\Framework\TestCase
         $this->assertNotNull('...');
         $this->assertIsWritable('...');
         $this->assertNotContains('...', ['...'], 'argument');
+        $this->assertInstanceOf('Foo', $anything, 'argument');
     }
 }
