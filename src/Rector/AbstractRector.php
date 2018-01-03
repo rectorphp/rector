@@ -7,8 +7,11 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
+use PhpParser\PrettyPrinter\Standard;
 use Rector\Contract\Rector\RectorInterface;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTraverserQueue\BetterNodeFinder;
+use Rector\Printer\BetterStandardPrinter;
 use SplObjectStorage;
 
 abstract class AbstractRector extends NodeVisitorAbstract implements RectorInterface
@@ -29,6 +32,11 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
     private $betterNodeFinder;
 
     /**
+     * @var BetterStandardPrinter
+     */
+    private $betterStandardPrinter;
+
+    /**
      * Nasty magic, unable to do that in config autowire _instanceof calls.
      *
      * @required
@@ -36,6 +44,16 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
     public function setBetterNodeFinder(BetterNodeFinder $betterNodeFinder): void
     {
         $this->betterNodeFinder = $betterNodeFinder;
+    }
+
+    /**
+     * Nasty magic, unable to do that in config autowire _instanceof calls.
+     *
+     * @required
+     */
+    public function setPrettyPrinter(BetterStandardPrinter $betterStandardPrinter): void
+    {
+        $this->betterStandardPrinter = $betterStandardPrinter;
     }
 
     /**
@@ -73,7 +91,11 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
      */
     public function afterTraverse(array $nodes): array
     {
-        return $this->prependExpressionNodes($nodes);
+        $nodesWithPrependedExpressions = $this->prependExpressionNodes($nodes);
+
+        $this->ensureAllExpressionsWerePrepended();
+
+        return $nodesWithPrependedExpressions;
     }
 
     protected function prependNodeAfterNode(Expr $nodeToPrepend, Node $positionNode): void
@@ -157,5 +179,31 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
     private function wrapToExpression(Expr $exprNode): Expression
     {
         return new Expression($exprNode);
+    }
+
+    private function ensureAllExpressionsWerePrepended(): void
+    {
+        $this->reportRemainingExpressionsToPrepend($this->expressionsToPrependAfter, 'after');
+        $this->reportRemainingExpressionsToPrepend($this->expressionsToPrependBefore, 'before');
+    }
+
+    private function reportRemainingExpressionsToPrepend(SplObjectStorage $expressionsToPrepend, string $type): void
+    {
+        foreach ($expressionsToPrepend as $value) {
+            $targetExpression = $expressionsToPrepend->current();
+            $targetExpressionInString = $this->betterStandardPrinter->prettyPrint([$targetExpression]);
+
+            foreach ($expressionsToPrepend->getInfo() as $expressionToBeAdded) {
+                $expressionToBeAddedInString = $this->betterStandardPrinter->prettyPrint([$expressionToBeAdded]);
+
+                throw new ShouldNotHappenException(sprintf(
+                    '"%s" expression was not added %s "%s" in "%s" class',
+                    $expressionToBeAddedInString,
+                    $type,
+                    $targetExpressionInString,
+                    self::class
+                ));
+            }
+        }
     }
 }
