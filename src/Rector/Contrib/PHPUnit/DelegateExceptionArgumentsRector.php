@@ -9,7 +9,6 @@ use PhpParser\Node\Identifier;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
-use Rector\Scoper\Scoper;
 
 /**
  * Before:
@@ -79,19 +78,12 @@ final class DelegateExceptionArgumentsRector extends AbstractRector
         $identifierNode = $methodCallNode->name;
         $oldMethodName = $identifierNode->name;
 
-        $this->prependNewMethodCall(
-            $methodCallNode,
-            $this->oldToNewMethod[$oldMethodName],
-            $methodCallNode->args[1]
-        );
+        $this->prependNewMethodCall($methodCallNode, $this->oldToNewMethod[$oldMethodName], $methodCallNode->args[1]);
         unset($methodCallNode->args[1]);
 
+        // prepend exception code method call
         if (isset($methodCallNode->args[2])) {
-            $this->prependNewMethodCall(
-                $methodCallNode,
-                'expectExceptionCode',
-                $methodCallNode->args[2]
-            );
+            $this->prependNewMethodCall($methodCallNode, 'expectExceptionCode', $methodCallNode->args[2]);
             unset($methodCallNode->args[2]);
         }
 
