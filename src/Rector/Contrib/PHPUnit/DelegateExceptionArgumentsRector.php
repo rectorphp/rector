@@ -9,6 +9,7 @@ use PhpParser\Node\Identifier;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
+use Rector\Scoper\Scoper;
 
 /**
  * Before:
@@ -38,15 +39,24 @@ final class DelegateExceptionArgumentsRector extends AbstractRector
      * @var MethodCallNodeFactory
      */
     private $methodCallNodeFactory;
+    /**
+     * @var Scoper
+     */
+    private $scoper;
 
-    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, MethodCallNodeFactory $methodCallNodeFactory)
+    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, MethodCallNodeFactory $methodCallNodeFactory, Scoper $scoper)
     {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->methodCallNodeFactory = $methodCallNodeFactory;
+        $this->scoper = $scoper;
     }
 
     public function isCandidate(Node $node): bool
     {
+        if (! $this->scoper->isInClassOfPhpUnitTestCase($node)) {
+            return false;
+        }
+
         if (! $this->methodCallAnalyzer->isTypeAndMethods(
             $node,
             'PHPUnit\Framework\TestCase',
