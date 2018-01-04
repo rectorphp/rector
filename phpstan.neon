@@ -57,3 +57,6 @@ parameters:
         - '*tests/Rector/Dynamic/MethodNameReplacerRector/correct/*'
         - '*packages/**/tests/**/**Source/**'
         - '*packages/**/tests/**Source/**'
+
+    # clean once upon a time
+    reportUnmatchedIgnoredErrors: false
