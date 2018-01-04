@@ -43,7 +43,11 @@ final class NameTypeResolver implements PerNodeTypeResolverInterface
             return [];
         }
 
-        $fullyQualifiedName = $this->resolveFullyQualifiedName($nameNode, $stringName);
+        if ($nameNode->toString() === 'self') {
+            $fullyQualifiedName = $nameNode->getAttribute(Attribute::CLASS_NAME);
+        } else {
+            $fullyQualifiedName = $this->resolveFullyQualifiedName($nameNode, $stringName);
+        }
 
         // known types, for performance
         if ($fullyQualifiedName === 'PHPUnit\Framework\TestCase') {
@@ -83,19 +87,16 @@ final class NameTypeResolver implements PerNodeTypeResolverInterface
      */
     private function reflectClassLike(string $name): array
     {
-        $types = [];
-        $types[] = $name;
-
         $classLikeReflection = $this->smartClassReflector->reflect($name);
         if ($classLikeReflection === null) {
-            return $types;
+            return [$name];
         }
 
-        // add interfaces
-        $types = array_merge($types, array_keys($classLikeReflection->getInterfaces()));
-
-        // add parent classes
-        return array_merge($types, $classLikeReflection->getParentClassNames());
+        return array_merge(
+            [$name],
+            $this->smartClassReflector->resolveClassInterfaces($classLikeReflection),
+            $this->smartClassReflector->resolveClassParents($classLikeReflection)
+        );
     }
 
     private function resolveFullyQualifiedName(Node $nameNode, string $stringName): string
