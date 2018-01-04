@@ -9,7 +9,6 @@ use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\NodeTraverserQueue\BetterNodeFinder;
-use Rector\Printer\BetterStandardPrinter;
 use SplObjectStorage;
 
 abstract class AbstractRector extends NodeVisitorAbstract implements RectorInterface
@@ -25,11 +24,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
     private $betterNodeFinder;
 
     /**
-     * @var BetterStandardPrinter
-     */
-    private $betterStandardPrinter;
-
-    /**
      * Nasty magic, unable to do that in config autowire _instanceof calls.
      *
      * @required
@@ -37,16 +31,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
     public function setBetterNodeFinder(BetterNodeFinder $betterNodeFinder): void
     {
         $this->betterNodeFinder = $betterNodeFinder;
-    }
-
-    /**
-     * Nasty magic, unable to do that in config autowire _instanceof calls.
-     *
-     * @required
-     */
-    public function setPrettyPrinter(BetterStandardPrinter $betterStandardPrinter): void
-    {
-        $this->betterStandardPrinter = $betterStandardPrinter;
     }
 
     /**
@@ -83,38 +67,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
      */
     public function afterTraverse(array $nodes): array
     {
-        return $this->prependExpressionNodes($nodes);
-    }
-
-    protected function prependNodeAfterNode(Expr $nodeToPrepend, Node $positionNode): void
-    {
-        $positionExpressionNode = $this->betterNodeFinder->findFirstAncestorInstanceOf(
-            $positionNode,
-            Expression::class
-        );
-
-        $expressionToPrepend = $this->wrapToExpression($nodeToPrepend);
-
-        if (isset($this->expressionsToPrependAfter[$positionExpressionNode])) {
-            $this->expressionsToPrependAfter[$positionExpressionNode] = array_merge(
-                $this->expressionsToPrependAfter[$positionExpressionNode],
-                [$expressionToPrepend]
-            );
-        } else {
-            $this->expressionsToPrependAfter[$positionExpressionNode] = [$expressionToPrepend];
-        }
-    }
-
-    /**
-     * @todo maybe use leave node instead where is used array_splice() method?
-     *
-     * Adds new nodes after particular Expression nodes.
-     *
-     * @param Node[] $nodes
-     * @return Node[] array
-     */
-    private function prependExpressionNodes(array $nodes): array
-    {
+        // Add new nodes after particular Expression nodes
         $expressionPrependerNodeVisitor = new class($this->expressionsToPrependAfter) extends NodeVisitorAbstract {
             private $expressionsToPrependAfter;
             public function __construct(SplObjectStorage $expressionsToPrependAfter)
@@ -136,6 +89,25 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
         $nodeTraverser->addVisitor($expressionPrependerNodeVisitor);
 
         return $nodeTraverser->traverse($nodes);
+    }
+
+    protected function prependNodeAfterNode(Expr $nodeToPrepend, Node $positionNode): void
+    {
+        $positionExpressionNode = $this->betterNodeFinder->findFirstAncestorInstanceOf(
+            $positionNode,
+            Expression::class
+        );
+
+        $expressionToPrepend = $this->wrapToExpression($nodeToPrepend);
+
+        if (isset($this->expressionsToPrependAfter[$positionExpressionNode])) {
+            $this->expressionsToPrependAfter[$positionExpressionNode] = array_merge(
+                $this->expressionsToPrependAfter[$positionExpressionNode],
+                [$expressionToPrepend]
+            );
+        } else {
+            $this->expressionsToPrependAfter[$positionExpressionNode] = [$expressionToPrepend];
+        }
     }
 
     private function wrapToExpression(Expr $exprNode): Expression
