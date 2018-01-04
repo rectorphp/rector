@@ -7,23 +7,23 @@ use PhpParser\Node\Expr;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Contract\Rector\RectorInterface;
-use Rector\NodeVisitor\ExpressionPrependingNodeVisitor;
+use Rector\NodeChanger\ExpressionPrepender;
 
 abstract class AbstractRector extends NodeVisitorAbstract implements RectorInterface
 {
     /**
-     * @var ExpressionPrependingNodeVisitor
+     * @var ExpressionPrepender
      */
-    private $expressionPrependingNodeVisitor;
+    private $expressionPrepender;
 
     /**
      * Nasty magic, unable to do that in config autowire _instanceof calls.
      *
      * @required
      */
-    public function setNodeVisitor(ExpressionPrependingNodeVisitor $expressionPrependingNodeVisitor): void
+    public function setExpressionPrepender(ExpressionPrepender $expressionPrepender): void
     {
-        $this->expressionPrependingNodeVisitor = $expressionPrependingNodeVisitor;
+        $this->expressionPrepender = $expressionPrepender;
     }
 
     /**
@@ -32,7 +32,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
      */
     final public function beforeTraverse(array $nodes): array
     {
-        $this->expressionPrependingNodeVisitor->clear();
+        $this->expressionPrepender->clear();
 
         return $nodes;
     }
@@ -60,15 +60,11 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
      */
     public function afterTraverse(array $nodes): array
     {
-        // prepend new expressions
-        $nodeTraverser = new NodeTraverser();
-        $nodeTraverser->addVisitor($this->expressionPrependingNodeVisitor);
-
-        return $nodeTraverser->traverse($nodes);
+        return $this->expressionPrepender->prependExpressionsToNodes($nodes);
     }
 
     protected function prependNodeAfterNode(Expr $nodeToPrepend, Node $positionNode): void
     {
-        $this->expressionPrependingNodeVisitor->prependNodeAfterNode($nodeToPrepend, $positionNode);
+        $this->expressionPrepender->prependNodeAfterNode($nodeToPrepend, $positionNode);
     }
 }
