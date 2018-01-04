@@ -20,7 +20,7 @@ services:
             - ['addNodeVisitors', [['@PhpParser\NodeVisitor\NameResolver', '@Rector\NodeVisitor\NodeConnector', '@Rector\NodeTypeResolver\NodeVisitor\ClassResolver', '@Rector\NodeTypeResolver\NodeVisitor\MethodResolver', '@Rector\NodeTypeResolver\NodeVisitor\NamespaceResolver']]]
 
             # adds type to variable and property nodes via attribute
-#            - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\TypeNodeVisitor']]
+            - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\TypeNodeVisitor']]
 
             # adds types to caller of method calls and static calls via attribute (have to be after TypeResolver)
-#            - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\CallerTypeNodeVisitor']]
+            - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\CallerTypeNodeVisitor']]
