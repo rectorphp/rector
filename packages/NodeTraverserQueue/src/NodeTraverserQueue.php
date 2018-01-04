@@ -2,7 +2,6 @@
 
 namespace Rector\NodeTraverserQueue;
 
-use Nette\Utils\Strings;
 use PhpParser\Lexer;
 use Rector\BetterReflection\Reflection\ReflectionFunction;
 use Rector\BetterReflection\Reflector\Exception\IdentifierNotFound;
@@ -31,11 +30,6 @@ final class NodeTraverserQueue
     private $rectorNodeTraverser;
 
     /**
-     * @var CloningNodeTraverser
-     */
-    private $cloningNodeTraverser;
-
-    /**
      * @var ShutdownNodeTraverser
      */
     private $shutdownNodeTraverser;
@@ -48,7 +42,6 @@ final class NodeTraverserQueue
     public function __construct(
         Parser $parser,
         Lexer $lexer,
-        CloningNodeTraverser $cloningNodeTraverser,
         RectorNodeTraverser $rectorNodeTraverser,
         ShutdownNodeTraverser $shutdownNodeTraverser,
         StandaloneTraverseNodeTraverser $standaloneTraverseNodeTraverser
@@ -56,7 +49,6 @@ final class NodeTraverserQueue
         $this->parser = $parser;
         $this->lexer = $lexer;
         $this->rectorNodeTraverser = $rectorNodeTraverser;
-        $this->cloningNodeTraverser = $cloningNodeTraverser;
         $this->shutdownNodeTraverser = $shutdownNodeTraverser;
         $this->standaloneTraverseNodeTraverser = $standaloneTraverseNodeTraverser;
     }
@@ -70,9 +62,7 @@ final class NodeTraverserQueue
         $oldTokens = $this->lexer->getTokens();
 
         try {
-            $newStmts = $this->cloningNodeTraverser->traverse($oldStmts);
-            $newStmts = $this->standaloneTraverseNodeTraverser->traverse($newStmts);
-
+            $newStmts = $this->standaloneTraverseNodeTraverser->traverse($oldStmts);
             $newStmts = $this->rectorNodeTraverser->traverse($newStmts);
             $newStmts = $this->shutdownNodeTraverser->traverse($newStmts);
 
@@ -81,14 +71,6 @@ final class NodeTraverserQueue
             // could not locate function, skip and keep original
             $identifierType = $identifierNotFoundException->getIdentifier()->getType()->getName();
             if ($identifierType === ReflectionFunction::class) {
-                // keep original
-                return [$oldStmts, $oldStmts, $oldStmts];
-            }
-
-            $identifierName = $identifierNotFoundException->getIdentifier()->getName();
-
-            // is single class? - probably test class
-            if (! Strings::contains($identifierName, '\\')) {
                 // keep original
                 return [$oldStmts, $oldStmts, $oldStmts];
             }

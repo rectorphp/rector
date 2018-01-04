@@ -43,7 +43,7 @@ final class NameTypeResolver implements PerNodeTypeResolverInterface
             return [];
         }
 
-        if ($nameNode->toString() === 'self') {
+        if (in_array($nameNode->toString(), ['self', 'static', 'this'], true)) {
             $fullyQualifiedName = $nameNode->getAttribute(Attribute::CLASS_NAME);
         } else {
             $fullyQualifiedName = $this->resolveFullyQualifiedName($nameNode, $stringName);

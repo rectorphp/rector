@@ -9,6 +9,7 @@ services:
 
     Rector\Rector\Contrib\Symfony\Form\Helper\FormTypeStringToTypeProvider: ~
 
+    # prepares helper attributes of nodes
     Rector\NodeTraverser\StandaloneTraverseNodeTraverser:
         # order matters, so the next NodeVisitor can work with previous' attributes
         calls:
@@ -17,7 +18,7 @@ services:
             # adds current class to all nodes via attribute
             # adds current method to all nodes via attribute
             # adds current namespace to all nodes via attribute (have to be before TypeResolver)
-            - ['addNodeVisitors', [['@PhpParser\NodeVisitor\NameResolver', '@Rector\NodeVisitor\NodeConnector', '@Rector\NodeTypeResolver\NodeVisitor\ClassResolver', '@Rector\NodeTypeResolver\NodeVisitor\MethodResolver', '@Rector\NodeTypeResolver\NodeVisitor\NamespaceResolver']]]
+            - ['addNodeVisitors', [['@PhpParser\NodeVisitor\CloningVisitor', '@PhpParser\NodeVisitor\NameResolver', '@Rector\NodeVisitor\NodeConnector', '@Rector\NodeTypeResolver\NodeVisitor\ClassResolver', '@Rector\NodeTypeResolver\NodeVisitor\MethodResolver', '@Rector\NodeTypeResolver\NodeVisitor\NamespaceResolver']]]
 
             # adds type to variable and property nodes via attribute
             - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\TypeNodeVisitor']]
