@@ -56,10 +56,6 @@ final class NodeTraverserQueue
             $newStmts = $this->standaloneTraverseNodeTraverser->traverse($oldStmts);
             $newStmts = $this->rectorNodeTraverser->traverse($newStmts);
 
-            // @todo: should be in scope of AbstractRector, in particular Rector after traverse run
-            // same as expression adder
-//            $newStmts = $this->shutdownNodeTraverser->traverse($newStmts);
-
             return [$newStmts, $oldStmts, $oldTokens];
         } catch (IdentifierNotFound $identifierNotFoundException) {
             // could not locate function, skip and keep original

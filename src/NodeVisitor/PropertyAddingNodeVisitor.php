@@ -36,10 +36,6 @@ final class PropertyAddingNodeVisitor extends NodeVisitorAbstract
         $this->classPropertyCollector = $classPropertyCollector;
     }
 
-    /**
-     * @param Node[] $nodes
-     * @return Node[]
-     */
     public function enterNode(Node $node): ?Node
     {
         if (! $node instanceof Class_ || $node->isAnonymous()) {
@@ -51,7 +47,7 @@ final class PropertyAddingNodeVisitor extends NodeVisitorAbstract
 
     private function processClassNode(Class_ $classNode): Class_
     {
-        $className = $classNode->name->toString();
+        $className = (string) $classNode->name;
 
         $propertiesForClass = $this->classPropertyCollector->getPropertiesForClass($className);
         if (! count($propertiesForClass)) {

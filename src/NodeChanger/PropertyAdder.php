@@ -11,6 +11,11 @@ use Rector\NodeVisitor\PropertyAddingNodeVisitor;
  */
 final class PropertyAdder
 {
+    /**
+     * @var NodeTraverser
+     */
+    private $nodeTraverser;
+
     public function __construct(PropertyAddingNodeVisitor $propertyAddingNodeVisitor)
     {
         $this->nodeTraverser = new NodeTraverser();

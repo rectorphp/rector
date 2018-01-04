@@ -18,7 +18,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
     private $expressionPrepender;
 
     /**
-     * @var \Rector\NodeChanger\PropertyAdder
+     * @var PropertyAdder
      */
     private $propertyAdder;
 
@@ -80,7 +80,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
 
         return $nodes;
     }
-
 
     protected function prependNodeAfterNode(Expr $nodeToPrepend, Node $positionNode): void
     {
