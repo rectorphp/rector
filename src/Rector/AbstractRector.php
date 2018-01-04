@@ -32,8 +32,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
      */
     final public function beforeTraverse(array $nodes): array
     {
-        $this->expressionPrepender->clear();
-
         return $nodes;
     }
 

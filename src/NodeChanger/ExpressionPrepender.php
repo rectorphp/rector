@@ -2,8 +2,13 @@
 
 namespace Rector\NodeChanger;
 
+use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeTraverser;
+use Rector\NodeTraverserQueue\BetterNodeFinder;
 use Rector\NodeVisitor\ExpressionPrependingNodeVisitor;
+use SplObjectStorage;
 
 /**
  * This class collects all to-be-added expresssions (expression ~= 1 line in code)
@@ -20,26 +25,50 @@ use Rector\NodeVisitor\ExpressionPrependingNodeVisitor;
 final class ExpressionPrepender
 {
     /**
+     * @var NodeTraverser
+     */
+    private $nodeTraverser;
+
+    /**
      * @var ExpressionPrependingNodeVisitor
      */
     private $expressionPrependingNodeVisitor;
 
     /**
-     * @var NodeTraverser
+     * @var SplObjectStorage
      */
-    private $nodeTraverser;
+    private $expressionsToPrepend;
 
-    public function __construct(ExpressionPrependingNodeVisitor $expressionPrependingNodeVisitor)
-    {
-        $this->expressionPrependingNodeVisitor = $expressionPrependingNodeVisitor;
+    /**
+     * @var BetterNodeFinder
+     */
+    private $betterNodeFinder;
 
+    public function __construct(
+        ExpressionPrependingNodeVisitor $expressionPrependingNodeVisitor,
+        BetterNodeFinder $betterNodeFinder
+    ) {
         $this->nodeTraverser = new NodeTraverser();
         $this->nodeTraverser->addVisitor($expressionPrependingNodeVisitor);
+
+        $this->expressionPrependingNodeVisitor = $expressionPrependingNodeVisitor;
+        $this->expressionsToPrepend = new SplObjectStorage();
+        $this->betterNodeFinder = $betterNodeFinder;
     }
 
-    public function prependNodeAfterNode($nodeToPrepend, $positionNode): void
+    public function prependNodeAfterNode(Expr $nodeToPrepend, Node $positionNode): void
     {
-        $this->expressionPrependingNodeVisitor->prependNodeAfterNode($nodeToPrepend, $positionNode);
+        $expressionToPrepend = new Expression($nodeToPrepend);
+        $positionExpressionNode = $this->betterNodeFinder->findFirstAncestorInstanceOf($positionNode, Expression::class);
+
+        if (isset($this->expressionsToPrepend[$positionExpressionNode])) {
+            $this->expressionsToPrepend[$positionExpressionNode] = array_merge(
+                $this->expressionsToPrepend[$positionExpressionNode],
+                [$expressionToPrepend]
+            );
+        } else {
+            $this->expressionsToPrepend[$positionExpressionNode] = [$expressionToPrepend];
+        }
     }
 
     /**
@@ -48,11 +77,8 @@ final class ExpressionPrepender
      */
     public function prependExpressionsToNodes(array $nodes)
     {
-        return $this->nodeTraverser->traverse($nodes);
-    }
-
-    public function clear(): void
-    {
-        $this->expressionPrependingNodeVisitor->clear();
+        $this->expressionPrependingNodeVisitor->setExpressionsToPrepend($this->expressionsToPrepend);
+        $nodes = $this->nodeTraverser->traverse($nodes);
+        return $nodes;
     }
 }
