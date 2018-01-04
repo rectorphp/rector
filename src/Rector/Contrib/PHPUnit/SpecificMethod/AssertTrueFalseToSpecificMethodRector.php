@@ -37,6 +37,7 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractRector
         'is_null' => ['assertNull', 'assertNotNull'],
         'is_writable' => ['assertIsWritable', 'assertNotIsWritable'],
         'is_nan' => ['assertNan', false],
+        'is_a' => ['assertInstanceOf', 'assertNotInstanceOf'],
     ];
 
     /**
@@ -147,9 +148,19 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractRector
     {
         $funcCallOrEmptyNode = $methodCallNode->args[0]->value;
         if ($funcCallOrEmptyNode instanceof FuncCall) {
+            $funcCallOrEmptyNodeName = $funcCallOrEmptyNode->name->toString();
+            $funcCallOrEmptyNodeArgs = $funcCallOrEmptyNode->args;
             $oldArguments = $methodCallNode->args;
             unset($oldArguments[0]);
-            $newArguments = array_merge($funcCallOrEmptyNode->args, $oldArguments);
+
+            if ($funcCallOrEmptyNodeName === 'is_a') {
+                $newArguments = array_merge(
+                    array_reverse($funcCallOrEmptyNodeArgs),
+                    $oldArguments
+                );
+            } else {
+                $newArguments = array_merge($funcCallOrEmptyNodeArgs, $oldArguments);
+            }
 
             $methodCallNode->args = $newArguments;
         }

@@ -106,14 +106,9 @@ final class ClassLikeAnalyzer
      */
     private function resolveImplementsTypes(Class_ $classNode): array
     {
-        $types = [];
-
-        $interfaces = $classNode->implements;
-        foreach ($interfaces as $interface) {
+        return array_map(function (Name $interface): string {
             /** @var FullyQualified $interface */
-            $types[] = $interface->toString();
-        }
-
-        return $types;
+            return $interface->toString();
+        }, $classNode->implements);
     }
 }

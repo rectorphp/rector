@@ -4,7 +4,7 @@ final class MyTest extends \PHPUnit\Framework\TestCase
 {
     public function test()
     {
-        $this->assertNotFalse(strpos($node, 'foo'));
-        $this->assertFalse(stripos($node, 'foo'), 'message');
+        $this->assertTrue($something instanceof Foo);
+        $this->assertFalse($something instanceof Foo);
     }
 }

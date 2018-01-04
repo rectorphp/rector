@@ -13,7 +13,7 @@ use Rector\Rector\AbstractRector;
 /**
  * Before:
  * - $this->assertFalse(strpos($anything, 'foo'), 'message');
- * - $this->assertNotFalse(strpos($anything, 'foo'), 'message');
+ * - $this->assertNotFalse(stripos($anything, 'foo'), 'message');
  *
  * After:
  * - $this->assertNotContains('foo', $anything, 'message');
@@ -55,7 +55,7 @@ final class AssertFalseStrposToContainsRector extends AbstractRector
 
         $strposNode = $firstArgumentValue->name->toString();
 
-        return $strposNode === 'strpos';
+        return in_array($strposNode, ['strpos', 'stripos'], true);
     }
 
     /**
