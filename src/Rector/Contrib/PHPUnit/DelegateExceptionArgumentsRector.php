@@ -60,8 +60,8 @@ final class DelegateExceptionArgumentsRector extends AbstractRector
         if (! $this->methodCallAnalyzer->isTypesAndMethods(
             $node,
             $this->phpUnitTestCaseClasses,
-            array_keys($this->oldToNewMethod))
-        ) {
+            array_keys($this->oldToNewMethod)
+        )) {
             return false;
         }
 

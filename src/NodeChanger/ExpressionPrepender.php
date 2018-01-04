@@ -59,7 +59,11 @@ final class ExpressionPrepender
     public function prependNodeAfterNode(Expr $nodeToPrepend, Node $positionNode): void
     {
         $expressionToPrepend = new Expression($nodeToPrepend);
-        $positionExpressionNode = $this->betterNodeFinder->findFirstAncestorInstanceOf($positionNode, Expression::class);
+
+        $positionExpressionNode = $this->betterNodeFinder->findFirstAncestorInstanceOf(
+            $positionNode,
+            Expression::class
+        );
 
         if (isset($this->expressionsToPrepend[$positionExpressionNode])) {
             $this->expressionsToPrepend[$positionExpressionNode] = array_merge(
@@ -72,13 +76,13 @@ final class ExpressionPrepender
     }
 
     /**
-     * @param array $nodes
-     * @return mixed
+     * @param Node[] $nodes
+     * @return Node[]
      */
-    public function prependExpressionsToNodes(array $nodes)
+    public function prependExpressionsToNodes(array $nodes): array
     {
         $this->expressionPrependingNodeVisitor->setExpressionsToPrepend($this->expressionsToPrepend);
-        $nodes = $this->nodeTraverser->traverse($nodes);
-        return $nodes;
+
+        return $this->nodeTraverser->traverse($nodes);
     }
 }

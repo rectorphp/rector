@@ -13,7 +13,7 @@ final class ExpressionPrependingNodeVisitor extends NodeVisitorAbstract
      */
     private $expressionsToPrepend;
 
-    public function setExpressionsToPrepend(SplObjectStorage $expressionsToPrepend)
+    public function setExpressionsToPrepend(SplObjectStorage $expressionsToPrepend): void
     {
         $this->expressionsToPrepend = $expressionsToPrepend;
     }
