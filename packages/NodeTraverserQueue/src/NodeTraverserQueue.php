@@ -6,7 +6,6 @@ use PhpParser\Lexer;
 use Rector\BetterReflection\Reflection\ReflectionFunction;
 use Rector\BetterReflection\Reflector\Exception\IdentifierNotFound;
 use Rector\NodeTraverser\RectorNodeTraverser;
-use Rector\NodeTraverser\ShutdownNodeTraverser;
 use Rector\NodeTraverser\StandaloneTraverseNodeTraverser;
 use Rector\Parser\Parser;
 use SplFileInfo;
@@ -29,11 +28,6 @@ final class NodeTraverserQueue
     private $rectorNodeTraverser;
 
     /**
-     * @var ShutdownNodeTraverser
-     */
-    private $shutdownNodeTraverser;
-
-    /**
      * @var StandaloneTraverseNodeTraverser
      */
     private $standaloneTraverseNodeTraverser;
@@ -42,13 +36,11 @@ final class NodeTraverserQueue
         Parser $parser,
         Lexer $lexer,
         RectorNodeTraverser $rectorNodeTraverser,
-        ShutdownNodeTraverser $shutdownNodeTraverser,
         StandaloneTraverseNodeTraverser $standaloneTraverseNodeTraverser
     ) {
         $this->parser = $parser;
         $this->lexer = $lexer;
         $this->rectorNodeTraverser = $rectorNodeTraverser;
-        $this->shutdownNodeTraverser = $shutdownNodeTraverser;
         $this->standaloneTraverseNodeTraverser = $standaloneTraverseNodeTraverser;
     }
 
@@ -63,7 +55,10 @@ final class NodeTraverserQueue
         try {
             $newStmts = $this->standaloneTraverseNodeTraverser->traverse($oldStmts);
             $newStmts = $this->rectorNodeTraverser->traverse($newStmts);
-            $newStmts = $this->shutdownNodeTraverser->traverse($newStmts);
+
+            // @todo: should be in scope of AbstractRector, in particular Rector after traverse run
+            // same as expression adder
+//            $newStmts = $this->shutdownNodeTraverser->traverse($newStmts);
 
             return [$newStmts, $oldStmts, $oldTokens];
         } catch (IdentifierNotFound $identifierNotFoundException) {
