@@ -86,7 +86,6 @@ final class SmartClassReflector
 
             return $classReflection->getParentClassNames();
         } catch (Throwable $throwable) {
-            dump($throwable);
             // intentionally empty
         }
 
