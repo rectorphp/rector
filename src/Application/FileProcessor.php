@@ -44,7 +44,7 @@ final class FileProcessor
         return $this->processFileToString($file);
     }
 
-    public function processFile(SplFileInfo $fileInfo): bool
+    public function processFile(SplFileInfo $fileInfo): string
     {
         [$newStmts, $oldStmts, $oldTokens] = $this->nodeTraverserQueue->processFileInfo($fileInfo);
 
