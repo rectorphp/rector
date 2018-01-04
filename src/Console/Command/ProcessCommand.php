@@ -194,7 +194,6 @@ final class ProcessCommand extends Command
                     'diff' => $this->differAndFormatter->diffAndFormat($oldContent, $newContent),
                 ];
             }
-
         } else {
             $newContent = $this->fileProcessor->processFile($fileInfo);
             if ($newContent !== $oldContent) {

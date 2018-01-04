@@ -107,7 +107,6 @@ final class SmartClassReflector
             // @todo check if type is needed by any Rector
             return [];
         }
-
     }
 
     /**
@@ -117,7 +116,6 @@ final class SmartClassReflector
     {
         try {
             return $reflectionClass->getParentClassNames();
-
         } catch (IdentifierNotFound $identifierNotFoundException) {
             // @todo check if type is needed by any Rector
             return [];
