@@ -7,9 +7,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
-use PhpParser\PrettyPrinter\Standard;
 use Rector\Contract\Rector\RectorInterface;
-use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTraverserQueue\BetterNodeFinder;
 use Rector\Printer\BetterStandardPrinter;
 use SplObjectStorage;
@@ -85,11 +83,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
      */
     public function afterTraverse(array $nodes): array
     {
-        $nodesWithPrependedExpressions = $this->prependExpressionNodes($nodes);
-
-        $this->ensureAllExpressionsWerePrepended();
-
-        return $nodesWithPrependedExpressions;
+        return $this->prependExpressionNodes($nodes);
     }
 
     protected function prependNodeAfterNode(Expr $nodeToPrepend, Node $positionNode): void
@@ -121,58 +115,31 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
      */
     private function prependExpressionNodes(array $nodes): array
     {
-        foreach ($nodes as $i => $node) {
-            if (isset($node->stmts)) {
-                $node->stmts = $this->prependExpressionNodes($node->stmts);
-                if ($node instanceof Node\Stmt\If_ && isset($node->else->stmts)) {
-                    $node->else->stmts = $this->prependExpressionNodes($node->else->stmts);
+        $expressionPrependerNodeVisitor = new class($this->expressionsToPrependAfter) extends NodeVisitorAbstract {
+            private $expressionsToPrependAfter;
+            public function __construct(SplObjectStorage $expressionsToPrependAfter)
+            {
+                $this->expressionsToPrependAfter = $expressionsToPrependAfter;
+            }
+
+            public function leaveNode(Node $node)
+            {
+                if (! isset($this->expressionsToPrependAfter[$node])) {
+                    return $node;
                 }
 
-            } elseif ($node instanceof Expression) {
-                $nodes = $this->prependNodesAfterExpression($nodes, $node, $i);
+                return array_merge([$node], $this->expressionsToPrependAfter[$node]);
             }
-        }
+        };
 
-        return $nodes;
-    }
+        $nodeTraverser = new NodeTraverser();
+        $nodeTraverser->addVisitor($expressionPrependerNodeVisitor);
 
-    /**
-     * @param Node[] $nodes
-     * @return Node[]
-     */
-    private function prependNodesAfterExpression(array $nodes, Node $node, int $i): array
-    {
-        if (isset($this->expressionsToPrependAfter[$node])) {
-            array_splice($nodes, $i + 1, 0, $this->expressionsToPrependAfter[$node]);
-
-            unset($this->expressionsToPrependAfter[$node]);
-        }
-
-        return $nodes;
+        return $nodeTraverser->traverse($nodes);
     }
 
     private function wrapToExpression(Expr $exprNode): Expression
     {
         return new Expression($exprNode);
-    }
-
-    private function ensureAllExpressionsWerePrepended(): void
-    {
-        foreach ($this->expressionsToPrependAfter as $value) {
-            $targetExpression = $this->expressionsToPrependAfter->current();
-            $targetExpressionInString = $this->betterStandardPrinter->prettyPrint([$targetExpression]);
-
-            foreach ($this->expressionsToPrependAfter->getInfo() as $expressionToBeAdded) {
-                $expressionToBeAddedInString = $this->betterStandardPrinter->prettyPrint([$expressionToBeAdded]);
-
-                throw new ShouldNotHappenException(sprintf(
-                    '"%s" expression was not added after %s"%s" in "%s" class',
-                    $expressionToBeAddedInString,
-                    PHP_EOL,
-                    $targetExpressionInString,
-                    self::class
-                ));
-            }
-        }
     }
 }
