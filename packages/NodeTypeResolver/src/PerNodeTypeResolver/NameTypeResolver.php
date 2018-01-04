@@ -37,25 +37,19 @@ final class NameTypeResolver implements PerNodeTypeResolverInterface
      */
     public function resolve(Node $nameNode): array
     {
-        $stringName = $nameNode->toString();
+        if ($nameNode->toString() === 'parent') {
+            return [$nameNode->getAttribute(Attribute::PARENT_CLASS_NAME)];
+        }
 
-        if ($this->shouldSkip($nameNode, $stringName)) {
+        if ($this->shouldSkip($nameNode, $nameNode->toString())) {
             return [];
         }
 
-        if (in_array($nameNode->toString(), ['self', 'static', 'this'], true)) {
-            $fullyQualifiedName = $nameNode->getAttribute(Attribute::CLASS_NAME);
-        } else {
-            $fullyQualifiedName = $this->resolveFullyQualifiedName($nameNode, $stringName);
-        }
+        $fullyQualifiedName = $this->resolveFullyQualifiedName($nameNode, $nameNode->toString());
 
         // known types, for performance
         if ($fullyQualifiedName === 'PHPUnit\Framework\TestCase') {
             return ['PHPUnit\Framework\TestCase'];
-        }
-
-        if ($fullyQualifiedName === 'parent') {
-            return [$nameNode->getAttribute(Attribute::PARENT_CLASS_NAME)];
         }
 
         // skip tests, since they are autoloaded and decoupled from the prod code
@@ -99,14 +93,18 @@ final class NameTypeResolver implements PerNodeTypeResolverInterface
         );
     }
 
-    private function resolveFullyQualifiedName(Node $nameNode, string $stringName): string
+    private function resolveFullyQualifiedName(Node $nameNode, string $name): string
     {
-        /** @var Name|null $name */
-        $name = $nameNode->getAttribute(Attribute::RESOLVED_NAME);
-        if ($name instanceof Name) {
-            return $name->toString();
+        if (in_array($name, ['self', 'static', 'this'], true)) {
+            return $nameNode->getAttribute(Attribute::CLASS_NAME);
         }
 
-        return $stringName;
+        /** @var Name|null $name */
+        $resolvedNameNode = $nameNode->getAttribute(Attribute::RESOLVED_NAME);
+        if ($resolvedNameNode instanceof Name) {
+            return $resolvedNameNode->toString();
+        }
+
+        return $name;
     }
 }
