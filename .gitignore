@@ -1,3 +1,4 @@
+rector.yml
 /temp
 !/temp/.gitkeep
 /example
