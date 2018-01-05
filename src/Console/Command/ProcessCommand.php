@@ -127,6 +127,9 @@ final class ProcessCommand extends Command
 
         $this->processCommandReporter->reportLoadedRectors();
 
+        // for testing purposes
+        array_splice($files, 0, -100);
+
         $this->processFiles($files);
 
         if (count($this->diffFiles) > 0) {
