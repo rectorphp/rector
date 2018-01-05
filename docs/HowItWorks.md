@@ -10,6 +10,25 @@
 
 ## 2. Parse and Reconstruct 1 File
 
+The iteration of files, nodes and Rectors respects this life cycle:
+ 
+```php
+
+foreach ($fileInfos as $fileInfo) {
+    // 1 file => nodes
+    $nodes = $phpParser->parseFileInfo($fileInfo);
+    
+    // nodes => 1 node 
+    foreach ($nodes as $node) { // rather traverse all of them
+        foreach ($rectors as $rector) {
+            if ($rector->isCandidate($node)) {
+                $rector->reconstructr($node);
+            }
+        }
+    }
+}
+```
+
 ### 2.1 Prepare Phase
 
 - File is parsed by [`nikic/php-parser`](https://github.com/nikic/PHP-Parser), 4.0-dex (this is important, because this version support writing modified tree back to file)
