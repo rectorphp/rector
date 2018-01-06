@@ -6,5 +6,7 @@ class SomeTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertContains('f', 'foo');
         $this->assertContains('f', 'foo');
+
+        $this->assertContains('oauth_body_hash', $headers['Authorization'][0]);
     }
 }

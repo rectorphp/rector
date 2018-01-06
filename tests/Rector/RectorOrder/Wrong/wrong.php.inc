@@ -6,5 +6,7 @@ class SomeTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertTrue(strpos('foo', 'f') !== false);
         $this->assertNotSame(false, strpos('foo', 'f'));
+
+        $this->assertTrue(strpos($headers['Authorization'][0], 'oauth_body_hash') !== false);
     }
 }
