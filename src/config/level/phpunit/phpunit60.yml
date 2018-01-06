@@ -5,7 +5,7 @@ rectors:
     # ref. https://github.com/sebastianbergmann/phpunit/compare/5.7.9...6.0.0
     Rector\Rector\Dynamic\PseudoNamespaceToNamespaceRector:
         - 'PHPUnit_'
-        # exclude this class
+        # exclude this class, since it has no namespaced replacement
         - '!PHPUnit_Framework_MockObject_MockObject'
 
     # handles 2nd and 3rd argument of setExpectedException
