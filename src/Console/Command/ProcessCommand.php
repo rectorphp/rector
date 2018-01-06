@@ -33,6 +33,11 @@ final class ProcessCommand extends Command
     private const OPTION_DRY_RUN = 'dry-run';
 
     /**
+     * @var string
+     */
+    private const OPTION_AUTOLOAD_FILE = 'autoload-file';
+
+    /**
      * @var FileProcessor
      */
     private $fileProcessor;
@@ -112,12 +117,19 @@ final class ProcessCommand extends Command
             InputOption::VALUE_NONE,
             'See diff of changes, do not save them to files.'
         );
+        $this->addOption(
+            self::OPTION_AUTOLOAD_FILE,
+            null,
+            InputOption::VALUE_REQUIRED,
+            'File with extra autoload'
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->consoleStyle->setVerbosity($output->getVerbosity());
 
+        $this->loadAutoloadFile($input);
         $this->ensureSomeRectorsAreRegistered();
 
         $source = $input->getArgument(self::ARGUMENT_SOURCE_NAME);
@@ -199,5 +211,20 @@ final class ProcessCommand extends Command
                 $this->changedFiles[] = $fileInfo->getPathname();
             }
         }
+    }
+
+    private function loadAutoloadFile(InputInterface $input): void
+    {
+        /** @var string|null $autoloadFile */
+        $autoloadFile = $input->getOption(self::OPTION_AUTOLOAD_FILE);
+        if ($autoloadFile === null) {
+            return;
+        }
+
+        if (! is_file($autoloadFile) || ! file_exists($autoloadFile)) {
+            return;
+        }
+
+        require_once $autoloadFile;
     }
 }
