@@ -163,10 +163,10 @@ final class ProcessCommand extends Command
         $this->consoleStyle->title(sprintf('Processing %d file%s', $totalFiles, $totalFiles === 1 ? '' : 's'));
         $this->consoleStyle->progressStart($totalFiles);
 
-        $i = 0;
         foreach ($fileInfos as $fileInfo) {
             try {
-                $this->processFile($fileInfo, $i);
+                $this->processFile($fileInfo);
+
             } catch (Throwable $throwable) {
                 $this->consoleStyle->newLine();
                 throw new FileProcessingException(
@@ -176,13 +176,14 @@ final class ProcessCommand extends Command
                 );
             }
 
+
             $this->consoleStyle->progressAdvance();
         }
 
         $this->consoleStyle->newLine(2);
     }
 
-    private function processFile(SplFileInfo $fileInfo, int &$i): void
+    private function processFile(SplFileInfo $fileInfo): void
     {
         $oldContent = $fileInfo->getContents();
 
@@ -190,7 +191,7 @@ final class ProcessCommand extends Command
             $newContent = $this->fileProcessor->processFileToString($fileInfo);
             if ($newContent !== $oldContent) {
                 $this->diffFiles[] = [
-                    'file' => sprintf('<options=bold>%d) %s</>', ++$i, $fileInfo->getPathname()),
+                    'file' => $fileInfo->getPathname(),
                     'diff' => $this->differAndFormatter->diffAndFormat($oldContent, $newContent),
                 ];
             }
