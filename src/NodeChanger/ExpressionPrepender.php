@@ -18,7 +18,6 @@ use SplObjectStorage;
  * - $this->someCall();
  *
  * To:
- *
  * - $this->someCall();
  * - $value = this->someNewCall(); // added expression
  */
