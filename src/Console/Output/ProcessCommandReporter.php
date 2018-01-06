@@ -32,11 +32,11 @@ final class ProcessCommandReporter
             $this->rectorCollector->getRectorCount() === 1 ? '' : 's'
         ));
 
-        $rectorList = $this->sortByClassName($this->rectorCollector->getRectors());
-
-        $this->consoleStyle->listing(array_map(function (RectorInterface $rector): string {
+        $rectorClasses = array_map(function (RectorInterface $rector): string {
             return get_class($rector);
-        }, $rectorList));
+        }, $this->rectorCollector->getRectors());
+
+        $this->consoleStyle->listing($rectorClasses);
     }
 
     /**
@@ -67,18 +67,5 @@ final class ProcessCommandReporter
             $this->consoleStyle->writeln($diffFile['file']);
             $this->consoleStyle->writeln($diffFile['diff']);
         }
-    }
-
-    /**
-     * @param object[] $objects
-     * @return object[]
-     */
-    private function sortByClassName(array $objects): array
-    {
-        usort($objects, function ($first, $second): int {
-            return get_class($first) <=> get_class($second);
-        });
-
-        return $objects;
     }
 }
