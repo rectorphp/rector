@@ -30,7 +30,7 @@ foreach ($fileInfos as $fileInfo) {
 
 ### 2.1 Prepare Phase
 
-- File is parsed by [`nikic/php-parser`](https://github.com/nikic/PHP-Parser), 4.0-dex (this is important, because this version support writing modified tree back to file)
+- File is parsed by [`nikic/php-parser`](https://github.com/nikic/PHP-Parser), 4.0-dev (this is important, because this version support writing modified tree back to file)
 - Then nodes (array of objects by parser) are traversed by `StandaloneTraverseNodeTraverser` to prepare it's metadata, e.g. class name, method node the node is in, namespace name etc. added by `$node->setAttribute(Attribute::CLASS_NODE, 'value')`.
 
 ### 2.2 Rectify Phase
