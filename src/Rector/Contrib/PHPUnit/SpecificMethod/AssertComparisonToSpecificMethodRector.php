@@ -3,6 +3,7 @@
 namespace Rector\Rector\Contrib\PHPUnit\SpecificMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
@@ -102,8 +103,8 @@ final class AssertComparisonToSpecificMethodRector extends AbstractRector
         /** @var BinaryOp $expression */
         $expression = $oldArguments[0]->value;
 
-        $firstArgument = $expression->right;
-        $secondArgument = $expression->left;
+        $firstArgument = new Arg($expression->right);
+        $secondArgument = new Arg($expression->left);
 
         unset($oldArguments[0]);
 
