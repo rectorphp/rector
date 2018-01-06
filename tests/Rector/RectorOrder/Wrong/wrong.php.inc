@@ -5,5 +5,6 @@ class SomeTest extends \PHPUnit\Framework\TestCase
     public function test()
     {
         $this->assertTrue(strpos('foo', 'f') !== false);
+        $this->assertNotSame(false, strpos('foo', 'f'));
     }
 }
