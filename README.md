@@ -35,6 +35,23 @@ Rector can:
 composer require --dev rector/rector 'dev-master' nikic/php-parser '4.0.x-dev'
 ```
 
+### Do you Have Conflicts?
+
+It may also happen your dependencies are in conflict, e.g. PHPStan requires `nikic/php-parser 3.0`, or older PHPUnit etc. This might be solved in the future, when `nikic/php-parser` 4 becomes stable.
+
+Since Rector **uses project's autoload to analyze type of elements**, it cannot be installed as project in standalone directory but **needs to be added as dependency**. Here [`bamarni/composer-bin-plugin`](https://github.com/bamarni/composer-bin-plugin) comes to the play.
+
+```bash
+composer require bamarni/composer-bin-plugin --dev
+composer bin rector require rector/rector:dev-master#6e7297b --dev nikic/php-parser 4.0.x-dev
+```
+
+And Rector is still accessible in:
+
+```bash
+vendor/bin/rector
+```
+
 ## How to Reconstruct your Code
 
 ### A. Prepared Sets
