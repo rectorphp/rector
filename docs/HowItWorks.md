@@ -13,7 +13,6 @@
 The iteration of files, nodes and Rectors respects this life cycle:
  
 ```php
-
 foreach ($fileInfos as $fileInfo) {
     // 1 file => nodes
     $nodes = $phpParser->parseFileInfo($fileInfo);
