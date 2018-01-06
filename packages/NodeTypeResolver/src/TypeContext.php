@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\Function_;
 use Rector\BetterReflection\Reflection\ReflectionFunction;
 use Rector\BetterReflection\Reflection\ReflectionMethod;
 use Rector\BetterReflection\Reflector\MethodReflector;
+use Rector\Node\Attribute;
 use Rector\NodeAnalyzer\ClassLikeAnalyzer;
 use Rector\NodeTypeResolver\TypesExtractor\ConstructorPropertyTypesExtractor;
 
@@ -160,6 +161,13 @@ final class TypeContext
             return null;
         }
 
+        $namespaceName = $functionLikeNode->getAttribute(Attribute::NAMESPACE_NAME);
+        $namespacedFunctionName = $namespaceName . '\\' . $functionName;
+        if (function_exists($namespacedFunctionName)) {
+            return ReflectionFunction::createFromName($namespacedFunctionName);
+        }
+
+        // PHP native function
         return ReflectionFunction::createFromName($functionName);
     }
 }
