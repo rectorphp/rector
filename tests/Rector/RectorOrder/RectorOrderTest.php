@@ -4,6 +4,7 @@ namespace Rector\Tests\Rector\RectorOrder;
 
 use Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertComparisonToSpecificMethodRector;
 use Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertFalseStrposToContainsRector;
+use Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertSameBoolNullToSpecificMethodRector;
 use Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertTrueFalseToSpecificMethodRector;
 use Rector\Testing\PHPUnit\AbstractConfigurableRectorTestCase;
 
@@ -41,9 +42,10 @@ final class RectorOrderTest extends AbstractConfigurableRectorTestCase
     protected function getRectorClasses(): array
     {
         return [
+            AssertSameBoolNullToSpecificMethodRector::class,
             AssertComparisonToSpecificMethodRector::class,
             AssertTrueFalseToSpecificMethodRector::class,
-            AssertFalseStrposToContainsRector::class
+            AssertFalseStrposToContainsRector::class,
         ];
     }
 }

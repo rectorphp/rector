@@ -5,5 +5,6 @@ class SomeTest extends \PHPUnit\Framework\TestCase
     public function test()
     {
         $this->assertContains('f', 'foo');
+        $this->assertContains('f', 'foo');
     }
 }
