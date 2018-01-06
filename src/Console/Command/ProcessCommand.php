@@ -3,6 +3,7 @@
 namespace Rector\Console\Command;
 
 use Rector\Application\FileProcessor;
+use Rector\Autoloading\AdditionalAutoloader;
 use Rector\Console\ConsoleStyle;
 use Rector\Console\Output\ProcessCommandReporter;
 use Rector\ConsoleDiffer\DifferAndFormatter;
@@ -25,17 +26,17 @@ final class ProcessCommand extends Command
     /**
      * @var string
      */
+    public const OPTION_AUTOLOAD_FILE = 'autoload-file';
+
+    /**
+     * @var string
+     */
     private const ARGUMENT_SOURCE_NAME = 'source';
 
     /**
      * @var string
      */
     private const OPTION_DRY_RUN = 'dry-run';
-
-    /**
-     * @var string
-     */
-    private const OPTION_AUTOLOAD_FILE = 'autoload-file';
 
     /**
      * @var FileProcessor
@@ -82,6 +83,11 @@ final class ProcessCommand extends Command
      */
     private $diffFiles = [];
 
+    /**
+     * @var AdditionalAutoloader
+     */
+    private $additionalAutoloader;
+
     public function __construct(
         FileProcessor $fileProcessor,
         RectorCollector $rectorCollector,
@@ -89,7 +95,8 @@ final class ProcessCommand extends Command
         PhpFilesFinder $phpFilesFinder,
         ProcessCommandReporter $processCommandReporter,
         ParameterProvider $parameterProvider,
-        DifferAndFormatter $differAndFormatter
+        DifferAndFormatter $differAndFormatter,
+        AdditionalAutoloader $additionalAutoloader
     ) {
         parent::__construct();
 
@@ -100,6 +107,7 @@ final class ProcessCommand extends Command
         $this->processCommandReporter = $processCommandReporter;
         $this->parameterProvider = $parameterProvider;
         $this->differAndFormatter = $differAndFormatter;
+        $this->additionalAutoloader = $additionalAutoloader;
     }
 
     protected function configure(): void
@@ -129,7 +137,8 @@ final class ProcessCommand extends Command
     {
         $this->consoleStyle->setVerbosity($output->getVerbosity());
 
-        $this->loadAutoloadFile($input);
+        $this->additionalAutoloader->autoloadWithInput($input);
+
         $this->ensureSomeRectorsAreRegistered();
 
         $source = $input->getArgument(self::ARGUMENT_SOURCE_NAME);
@@ -211,20 +220,5 @@ final class ProcessCommand extends Command
                 $this->changedFiles[] = $fileInfo->getPathname();
             }
         }
-    }
-
-    private function loadAutoloadFile(InputInterface $input): void
-    {
-        /** @var string|null $autoloadFile */
-        $autoloadFile = $input->getOption(self::OPTION_AUTOLOAD_FILE);
-        if ($autoloadFile === null) {
-            return;
-        }
-
-        if (! is_file($autoloadFile) || ! file_exists($autoloadFile)) {
-            return;
-        }
-
-        require_once $autoloadFile;
     }
 }
