@@ -80,6 +80,10 @@ final class ExpressionAdder
      */
     public function addExpressionsToNodes(array $nodes): array
     {
+        if (! count($this->expressionsToAdd)) {
+            return $nodes;
+        }
+
         $this->expressionAddingNodeVisitor->setExpressionsToAdd($this->expressionsToAdd);
 
         return $this->nodeTraverser->traverse($nodes);
