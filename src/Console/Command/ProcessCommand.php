@@ -150,14 +150,8 @@ final class ProcessCommand extends Command
 
         $this->processFiles($files);
 
-        if (count($this->diffFiles) > 0) {
-            $this->processCommandReporter->reportDiffFiles($this->diffFiles);
-        }
-
-        if (count($this->changedFiles) > 0) {
-            $this->processCommandReporter->reportChangedFiles($this->changedFiles);
-        }
-
+        $this->processCommandReporter->reportDiffFiles($this->diffFiles);
+        $this->processCommandReporter->reportChangedFiles($this->changedFiles);
         $this->consoleStyle->success('Rector is done!');
 
         return 0;
