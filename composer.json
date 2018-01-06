@@ -9,6 +9,7 @@
     "require": {
         "php": "^7.1",
         "gecko-packages/gecko-diff-output-builder": "^1.0",
+        "nette/robot-loader": "^3.0",
         "nette/utils": "^2.4",
         "nikic/php-parser": "4.0.x-dev",
         "phpdocumentor/reflection-docblock": "^4.1",
@@ -75,7 +76,5 @@
     ],
     "config": {
         "sort-packages": true
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true
+    }
 }
