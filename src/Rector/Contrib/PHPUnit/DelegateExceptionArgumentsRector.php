@@ -33,9 +33,9 @@ final class DelegateExceptionArgumentsRector extends AbstractRector
      * @var string[]
      */
     private $phpUnitTestCaseClasses = [
-        // PHPUnit 6 and lower
+        // PHPUnit 5-
         'PHPUnit_Framework_TestCase',
-        // PHPUnit 5 and higher
+        // PHPUnit 6+
         'PHPUnit\Framework\TestCase',
     ];
 
