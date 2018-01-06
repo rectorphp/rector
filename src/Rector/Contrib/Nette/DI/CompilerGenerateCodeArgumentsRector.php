@@ -52,7 +52,7 @@ final class CompilerGenerateCodeArgumentsRector extends AbstractRector
         $this->identifierRenamer->renameNode($methodCallNode, 'setClassName');
 
         $generateCode = new MethodCall($methodCallNode->var, 'generateCode');
-        $this->prependNodeAfterNode($generateCode, $methodCallNode);
+        $this->addNodeAfterNode($generateCode, $methodCallNode);
 
         return $methodCallNode;
     }

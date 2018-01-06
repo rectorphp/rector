@@ -7,15 +7,15 @@ use PhpParser\Node\Expr;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Contract\Rector\RectorInterface;
-use Rector\NodeChanger\ExpressionPrepender;
+use Rector\NodeChanger\ExpressionAdder;
 use Rector\NodeChanger\PropertyAdder;
 
 abstract class AbstractRector extends NodeVisitorAbstract implements RectorInterface
 {
     /**
-     * @var ExpressionPrepender
+     * @var ExpressionAdder
      */
-    private $expressionPrepender;
+    private $expressionAdder;
 
     /**
      * @var PropertyAdder
@@ -27,9 +27,9 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
      *
      * @required
      */
-    public function setExpressionPrepender(ExpressionPrepender $expressionPrepender): void
+    public function setExpressionAdder(ExpressionAdder $expressionAdder): void
     {
-        $this->expressionPrepender = $expressionPrepender;
+        $this->expressionAdder = $expressionAdder;
     }
 
     /**
@@ -74,15 +74,15 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
      */
     public function afterTraverse(array $nodes): array
     {
-        $nodes = $this->expressionPrepender->prependExpressionsToNodes($nodes);
+        $nodes = $this->expressionAdder->addExpressionsToNodes($nodes);
 
         $nodes = $this->propertyAdder->addPropertiesToNodes($nodes);
 
         return $nodes;
     }
 
-    protected function prependNodeAfterNode(Expr $nodeToPrepend, Node $positionNode): void
+    protected function addNodeAfterNode(Expr $newNode, Node $positionNode): void
     {
-        $this->expressionPrepender->prependNodeAfterNode($nodeToPrepend, $positionNode);
+        $this->expressionAdder->addNodeAfterNode($newNode, $positionNode);
     }
 }
