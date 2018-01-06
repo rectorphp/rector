@@ -1,4 +1,4 @@
-rector.yml
+/rector.yml
 /temp
 !/temp/.gitkeep
 /example
