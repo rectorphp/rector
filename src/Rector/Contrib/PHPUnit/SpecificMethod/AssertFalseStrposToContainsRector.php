@@ -48,7 +48,6 @@ final class AssertFalseStrposToContainsRector extends AbstractRector
         }
 
         $firstArgumentValue = $node->args[0]->value;
-
         if (! $firstArgumentValue instanceof FuncCall) {
             return false;
         }
