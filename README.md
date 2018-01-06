@@ -43,7 +43,7 @@ Since Rector **uses project's autoload to analyze type of elements**, it cannot 
 
 ```bash
 composer require bamarni/composer-bin-plugin --dev
-composer bin rector require rector/rector:dev-master#6e7297b --dev nikic/php-parser 4.0.x-dev
+composer bin rector require rector/rector:dev-master --dev nikic/php-parser 4.0.x-dev
 ```
 
 And Rector is still accessible in:
