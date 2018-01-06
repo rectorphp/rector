@@ -166,7 +166,6 @@ final class ProcessCommand extends Command
         foreach ($fileInfos as $fileInfo) {
             try {
                 $this->processFile($fileInfo);
-
             } catch (Throwable $throwable) {
                 $this->consoleStyle->newLine();
                 throw new FileProcessingException(
@@ -175,7 +174,6 @@ final class ProcessCommand extends Command
                     $throwable
                 );
             }
-
 
             $this->consoleStyle->progressAdvance();
         }
