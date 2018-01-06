@@ -3,9 +3,13 @@
 namespace Rector\NodeTypeResolver\NodeVisitor;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Node\Attribute;
 
@@ -14,8 +18,11 @@ use Rector\Node\Attribute;
  * - 'className' with current class name
  * - 'classNode' with current class node
  * - 'parentClassName' with current class node
+ * - 'methodName' with current method name
+ * - 'methodNode' with current method node
+ * - 'methodCall' with current method call
  */
-final class ClassResolver extends NodeVisitorAbstract
+final class ClassAndMethodResolver extends NodeVisitorAbstract
 {
     /**
      * @var ClassLike|null
@@ -28,12 +35,31 @@ final class ClassResolver extends NodeVisitorAbstract
     private $className;
 
     /**
+     * @var string|null
+     */
+    private $methodName;
+
+    /**
+     * @var ClassMethod|null
+     */
+    private $methodNode;
+
+    /**
+     * @var string|null
+     */
+    private $methodCall;
+
+
+    /**
      * @param Node[] $nodes
      */
     public function beforeTraverse(array $nodes): void
     {
         $this->classNode = null;
         $this->className = null;
+        $this->methodName = null;
+        $this->methodNode = null;
+        $this->methodCall = null;
     }
 
     public function enterNode(Node $node): void
@@ -52,6 +78,30 @@ final class ClassResolver extends NodeVisitorAbstract
 
         if ($this->classNode instanceof Class_) {
             $this->setParentClassName($this->classNode, $node);
+        }
+
+        if ($node instanceof ClassMethod) {
+            $this->methodNode = $node;
+
+            /** @var Identifier $identifierNode */
+            $identifierNode = $node->name;
+
+            $this->methodName = $identifierNode->toString();
+        }
+
+        if ($node instanceof MethodCall && $node->name instanceof Identifier) {
+            $this->methodCall = $node->name->toString();
+        }
+
+        $node->setAttribute(Attribute::METHOD_NAME, $this->methodName);
+        $node->setAttribute(Attribute::METHOD_NODE, $this->methodNode);
+        $node->setAttribute(Attribute::METHOD_CALL, $this->methodCall);
+    }
+
+    public function leaveNode(Node $node): void
+    {
+        if ($node instanceof Expression) {
+            $this->methodCall = null;
         }
     }
 
