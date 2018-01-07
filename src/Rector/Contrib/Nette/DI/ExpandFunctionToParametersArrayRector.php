@@ -21,6 +21,7 @@ use Rector\Rector\AbstractRector;
  *
  * To:
  * $builder->parameters['argument'];
+ * $builder->parameters['argument'];
  */
 final class ExpandFunctionToParametersArrayRector extends AbstractRector
 {

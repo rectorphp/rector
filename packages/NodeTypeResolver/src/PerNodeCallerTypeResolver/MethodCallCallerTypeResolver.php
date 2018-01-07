@@ -63,6 +63,8 @@ final class MethodCallCallerTypeResolver implements PerNodeCallerTypeResolverInt
 
             $returnTypes = $this->methodReflector->resolveReturnTypesForTypesAndMethod($parentReturnTypes, $methodName);
 
+            dump($returnTypes);
+
             if ($returnTypes) {
                 return $returnTypes;
             }
