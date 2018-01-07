@@ -44,11 +44,16 @@ final class PhpFilesFinder
             ->files()
             ->name('*.php')
             ->in($directories)
-            ->exclude('examples')
-            ->exclude('stubs')
-            ->exclude('fixtures')
-            // very rare and specific code
-            ->exclude('polyfill')
+            ->exclude([
+                'examples',
+                'Examples',
+                'stubs',
+                'Stubs',
+                'fixtures',
+                'Fixtures',
+                'polyfill',
+                'Polyfill',
+            ])
             ->notName('*polyfill*')
             ->sortByName();
 
