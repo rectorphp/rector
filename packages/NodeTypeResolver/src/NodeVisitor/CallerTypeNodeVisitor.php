@@ -37,13 +37,6 @@ final class CallerTypeNodeVisitor extends NodeVisitorAbstract
 
     public function enterNode(Node $node): ?Node
     {
-        if ($node instanceof StaticCall) {
-            $types = $this->nodeTypeResolver->resolve($node->class);
-            $node->setAttribute(Attribute::CALLER_TYPES, $types);
-
-            return $node;
-        }
-
         if ($node instanceof MethodCall) {
             $nodeTypeResolverTypes = $this->nodeTypeResolver->resolve($node->var);
             $types = $this->nodeCallerTypeResolver->resolve($node);
@@ -51,8 +44,8 @@ final class CallerTypeNodeVisitor extends NodeVisitorAbstract
             if ($nodeTypeResolverTypes !== $types) {
                 dump($nodeTypeResolverTypes);
                 dump($types);
-                throw new \Exception('aa');
-                die;
+//                throw new \Exception('aa');
+//                die;
             }
 
             $node->setAttribute(Attribute::CALLER_TYPES, $types);
