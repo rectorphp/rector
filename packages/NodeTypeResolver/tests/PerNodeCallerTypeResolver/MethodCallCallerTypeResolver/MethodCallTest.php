@@ -34,8 +34,9 @@ final class MethodCallTest extends AbstractNodeCallerTypeResolverTest
                 'Nette\Config\Configurator',
                 'Nette\Object',
             ]],
-            # on variable call
+            # on method call
             [__DIR__ . '/MethodCallSource/OnMethodCallCall.php.inc', 0, ['Nette\DI\Container']],
+            # on variable call
             [__DIR__ . '/MethodCallSource/OnVariableCall.php.inc', 0, [
                 'Nette\Config\Configurator',
                 'Nette\Object',
