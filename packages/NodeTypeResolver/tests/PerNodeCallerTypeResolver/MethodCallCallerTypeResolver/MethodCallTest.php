@@ -7,61 +7,44 @@ use Rector\NodeTypeResolver\Tests\PerNodeCallerTypeResolver\AbstractNodeCallerTy
 
 final class MethodCallTest extends AbstractNodeCallerTypeResolverTest
 {
-    public function testOnSelfCall(): void
+    /**
+     * @dataProvider provideData()
+     * @param string[] $expectedTypes
+     */
+    public function test(string $file, int $position, array $expectedTypes): void
     {
-        $methodCallNodes = $this->getNodesForFileOfType(
-            __DIR__ . '/MethodCallSource/OnSelfCall.php.inc',
-            MethodCall::class
-        );
-
-        $this->assertSame([
-            'SomeClass',
-            'Nette\Config\Configurator',
-            'Nette\Object',
-        ], $this->nodeCallerTypeResolver->resolve($methodCallNodes[0]));
-
-        $this->assertSame([
-            'SomeClass',
-            'Nette\Config\Configurator',
-            'Nette\Object',
-        ], $this->nodeCallerTypeResolver->resolve($methodCallNodes[1]));
+        $methodCallNodes = $this->getNodesForFileOfType($file, MethodCall::class);
+        $this->assertSame($expectedTypes, $this->nodeCallerTypeResolver->resolve($methodCallNodes[$position]));
     }
 
-    public function testOnMethodCall(): void
+    /**
+     * @return string[][]|int[][]|string[][][]
+     */
+    public function provideData(): array
     {
-        $methodCallNodes = $this->getNodesForFileOfType(
-            __DIR__ . '/MethodCallSource/OnMethodCallCall.php.inc',
-            MethodCall::class
-        );
-
-        $this->assertSame([
-            'Nette\DI\Container',
-        ], $this->nodeCallerTypeResolver->resolve($methodCallNodes[0]));
-    }
-
-    public function testOnVariableCall(): void
-    {
-        $methodCallNodes = $this->getNodesForFileOfType(
-            __DIR__ . '/MethodCallSource/OnVariableCall.php.inc',
-            MethodCall::class
-        );
-
-        $this->assertSame([
-            'Nette\Config\Configurator',
-            'Nette\Object',
-        ], $this->nodeCallerTypeResolver->resolve($methodCallNodes[0]));
-    }
-
-    public function testOnPropertyCall(): void
-    {
-        $methodCallNodes = $this->getNodesForFileOfType(
-            __DIR__ . '/MethodCallSource/OnPropertyCall.php.inc',
-            MethodCall::class
-        );
-
-        $this->assertSame([
-            'Nette\Config\Configurator',
-            'Nette\Object',
-        ], $this->nodeCallerTypeResolver->resolve($methodCallNodes[0]));
+        return [
+            # on self call
+            [__DIR__ . '/MethodCallSource/OnSelfCall.php.inc', 0, [
+                'SomeClass',
+                'Nette\Config\Configurator',
+                'Nette\Object'
+            ]],
+            [__DIR__ . '/MethodCallSource/OnSelfCall.php.inc', 1, [
+                'SomeClass',
+                'Nette\Config\Configurator',
+                'Nette\Object',
+            ]],
+            # on variable call
+            [__DIR__ . '/MethodCallSource/OnMethodCallCall.php.inc', 0, ['Nette\DI\Container']],
+            [__DIR__ . '/MethodCallSource/OnVariableCall.php.inc', 0, [
+                'Nette\Config\Configurator',
+                'Nette\Object',
+            ]],
+            # on property call
+            [__DIR__ . '/MethodCallSource/OnPropertyCall.php.inc', 0, [
+                'Nette\Config\Configurator',
+                'Nette\Object',
+            ]]
+        ];
     }
 }
