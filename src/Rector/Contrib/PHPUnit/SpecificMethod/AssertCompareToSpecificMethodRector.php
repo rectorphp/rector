@@ -5,8 +5,10 @@ namespace Rector\Rector\Contrib\PHPUnit\SpecificMethod;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
@@ -80,18 +82,18 @@ final class AssertCompareToSpecificMethodRector extends AbstractRector
             return false;
         }
 
-        $secondArgumentValue = $methodCallNode->args[1]->value;
+        $secondArgumentValue = $methodCallNode->args[1]->value->name;
 
-        if (! $secondArgumentValue instanceof FuncCall) {
+        if (! $secondArgumentValue instanceof Name) {
             return false;
         }
 
-        $funcCallName = $secondArgumentValue->name->toString();
-        if (! isset($this->defaultOldToNewMethods[$funcCallName])) {
+        $name = $secondArgumentValue->getFirst();
+        if (! isset($this->defaultOldToNewMethods[$name])) {
             return false;
         }
 
-        $this->activeFuncCallName = $funcCallName;
+        $this->activeFuncCallName = $name;
 
         return true;
     }
