@@ -37,21 +37,19 @@ final class NameTypeResolver implements PerNodeTypeResolverInterface
      */
     public function resolve(Node $nameNode): array
     {
-        $stringName = $nameNode->toString();
+        if ($nameNode->toString() === 'parent') {
+            return [$nameNode->getAttribute(Attribute::PARENT_CLASS_NAME)];
+        }
 
-        if ($this->shouldSkip($nameNode, $stringName)) {
+        if ($this->shouldSkip($nameNode, $nameNode->toString())) {
             return [];
         }
 
-        $fullyQualifiedName = $this->resolveFullyQualifiedName($nameNode, $stringName);
+        $fullyQualifiedName = $this->resolveFullyQualifiedName($nameNode, $nameNode->toString());
 
         // known types, for performance
         if ($fullyQualifiedName === 'PHPUnit\Framework\TestCase') {
             return ['PHPUnit\Framework\TestCase'];
-        }
-
-        if ($fullyQualifiedName === 'parent') {
-            return [$nameNode->getAttribute(Attribute::PARENT_CLASS_NAME)];
         }
 
         // skip tests, since they are autoloaded and decoupled from the prod code
@@ -83,29 +81,30 @@ final class NameTypeResolver implements PerNodeTypeResolverInterface
      */
     private function reflectClassLike(string $name): array
     {
-        $types = [];
-        $types[] = $name;
-
         $classLikeReflection = $this->smartClassReflector->reflect($name);
         if ($classLikeReflection === null) {
-            return $types;
+            return [$name];
         }
 
-        // add interfaces
-        $types = array_merge($types, array_keys($classLikeReflection->getInterfaces()));
-
-        // add parent classes
-        return array_merge($types, $classLikeReflection->getParentClassNames());
+        return array_merge(
+            [$name],
+            $this->smartClassReflector->resolveClassInterfaces($classLikeReflection),
+            $this->smartClassReflector->resolveClassParents($classLikeReflection)
+        );
     }
 
-    private function resolveFullyQualifiedName(Node $nameNode, string $stringName): string
+    private function resolveFullyQualifiedName(Node $nameNode, string $name): string
     {
-        /** @var Name|null $name */
-        $name = $nameNode->getAttribute(Attribute::RESOLVED_NAME);
-        if ($name instanceof Name) {
-            return $name->toString();
+        if (in_array($name, ['self', 'static', 'this'], true)) {
+            return $nameNode->getAttribute(Attribute::CLASS_NAME);
         }
 
-        return $stringName;
+        /** @var Name|null $name */
+        $resolvedNameNode = $nameNode->getAttribute(Attribute::RESOLVED_NAME);
+        if ($resolvedNameNode instanceof Name) {
+            return $resolvedNameNode->toString();
+        }
+
+        return $name;
     }
 }

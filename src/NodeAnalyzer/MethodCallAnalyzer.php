@@ -7,7 +7,6 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use Rector\BetterReflection\Reflector\SmartClassReflector;
 use Rector\Node\Attribute;
-use Rector\NodeTypeResolver\NodeCallerTypeResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use ReflectionMethod;
 
@@ -28,19 +27,10 @@ final class MethodCallAnalyzer
      */
     private $nodeTypeResolver;
 
-    /**
-     * @var NodeCallerTypeResolver
-     */
-    private $nodeCallerTypeResolver;
-
-    public function __construct(
-        SmartClassReflector $smartClassReflector,
-        NodeTypeResolver $nodeTypeResolver,
-        NodeCallerTypeResolver $nodeCallerTypeResolver
-    ) {
+    public function __construct(SmartClassReflector $smartClassReflector, NodeTypeResolver $nodeTypeResolver)
+    {
         $this->smartClassReflector = $smartClassReflector;
         $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->nodeCallerTypeResolver = $nodeCallerTypeResolver;
     }
 
     /**
@@ -53,7 +43,7 @@ final class MethodCallAnalyzer
             return false;
         }
 
-        $callerNodeTypes = $this->nodeCallerTypeResolver->resolve($node);
+        $callerNodeTypes = $this->nodeTypeResolver->resolve($node->var);
         if (! array_intersect($types, $callerNodeTypes)) {
             return false;
         }

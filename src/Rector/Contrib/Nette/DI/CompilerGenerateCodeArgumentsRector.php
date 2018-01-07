@@ -3,7 +3,6 @@
 namespace Rector\Rector\Contrib\Nette\DI;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
@@ -50,30 +49,11 @@ final class CompilerGenerateCodeArgumentsRector extends AbstractRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        $oldArguments = $methodCallNode->args;
+        $this->identifierRenamer->renameNode($methodCallNode, 'setClassName');
 
-        $setClassNameMethodCallNode = $this->cloneMethodWithNameAndArgument(
-            $methodCallNode,
-            'setClassName',
-            $oldArguments[0]
-        );
-
-        $this->prependNodeBeforeNode($setClassNameMethodCallNode, $methodCallNode);
-
-        $methodCallNode->args = [];
+        $generateCode = new MethodCall($methodCallNode->var, 'generateCode');
+        $this->addNodeAfterNode($generateCode, $methodCallNode);
 
         return $methodCallNode;
-    }
-
-    private function cloneMethodWithNameAndArgument(
-        MethodCall $methodCallNode,
-        string $method,
-        Arg $argNode
-    ): MethodCall {
-        $addConfigMethodCallNode = clone $methodCallNode;
-        $this->identifierRenamer->renameNode($addConfigMethodCallNode, $method);
-        $addConfigMethodCallNode->args = [$argNode];
-
-        return $addConfigMethodCallNode;
     }
 }

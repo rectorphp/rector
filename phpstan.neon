@@ -42,7 +42,7 @@ parameters:
         # buggy
         - '#Parameter \#1 \$classLikeNode of method Rector\\NodeAnalyzer\\ClassLikeAnalyzer::resolveExtendsTypes\(\) expects PhpParser\\Node\\Stmt\\Class_\|PhpParser\\Node\\Stmt\\Interface_, PhpParser\\Node\\Stmt\\ClassLike given#'
         - '#Parameter \#1 \$functionLikeNode of method Rector\\NodeTypeResolver\\TypeContext::getFunctionReflection\(\) expects PhpParser\\Node\\Expr\\Closure\|PhpParser\\Node\\Stmt\\ClassMethod\|PhpParser\\Node\\Stmt\\Function_, PhpParser\\Node\\FunctionLike given#'
-        - '#Property Rector\\Rector\\AbstractRector::\$expressionsToPrepend(After|Before) \(iterable<array<PhpParser\\Node\\Stmt\\Expression>>&SplObjectStorage\) does not accept default value of type array#'
+        - '#Property Rector\\Rector\\AbstractRector::\$expressionsToAdd(After|Before) \(iterable<array<PhpParser\\Node\\Stmt\\Expression>>&SplObjectStorage\) does not accept default value of type array#'
         - '#Access to an undefined property PhpParser\\Node\\Param::\$var#'
         - '#Access to an undefined property PhpParser\\Node\\Arg|PhpParser\\Node\\Expr\|PhpParser\\Node\\Param::\$value#'
         - '#Call to an undefined method PhpParser\\BuilderFactory::args\(\)#'
@@ -57,3 +57,6 @@ parameters:
         - '*tests/Rector/Dynamic/MethodNameReplacerRector/correct/*'
         - '*packages/**/tests/**/**Source/**'
         - '*packages/**/tests/**Source/**'
+
+    # clean once upon a time
+    reportUnmatchedIgnoredErrors: false

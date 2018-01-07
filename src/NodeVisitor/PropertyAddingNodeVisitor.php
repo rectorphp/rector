@@ -9,10 +9,7 @@ use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Builder\ConstructorMethodBuilder;
 use Rector\Builder\PropertyBuilder;
 
-/**
- * Adds new properties to class and to contructor.
- */
-final class PropertyToClassAdder extends NodeVisitorAbstract
+final class PropertyAddingNodeVisitor extends NodeVisitorAbstract
 {
     /**
      * @var ConstructorMethodBuilder
@@ -39,27 +36,20 @@ final class PropertyToClassAdder extends NodeVisitorAbstract
         $this->classPropertyCollector = $classPropertyCollector;
     }
 
-    /**
-     * @param Node[] $nodes
-     * @return Node[]
-     */
-    public function afterTraverse(array $nodes): array
+    public function enterNode(Node $node): ?Node
     {
-        foreach ($nodes as $key => $node) {
-            if ($node instanceof Class_ && ! $node->isAnonymous()) {
-                $nodes[$key] = $this->processClass($node, (string) $node->name);
-
-                break;
-            }
+        if (! $node instanceof Class_ || $node->isAnonymous()) {
+            return $node;
         }
 
-        return $nodes;
+        return $this->processClassNode($node);
     }
 
-    private function processClass(Class_ $classNode, string $className): Class_
+    private function processClassNode(Class_ $classNode): Class_
     {
-        $propertiesForClass = $this->classPropertyCollector->getPropertiesForClass($className);
+        $className = (string) $classNode->name;
 
+        $propertiesForClass = $this->classPropertyCollector->getPropertiesForClass($className);
         if (! count($propertiesForClass)) {
             return $classNode;
         }

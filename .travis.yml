@@ -3,11 +3,13 @@ language: php
 matrix:
   include:
     - php: 7.1
-      env: CODING_STANDARD=true
-    - php: 7.1
-      env: PHPSTAN=true
+      env: STATIC_ANALYSIS=true
     - php: 7.2
-      env: PHPUNIT_FLAGS="--coverage-clover coverage.xml"
+      env: PHPUNIT_FLAGS="--coverage-clover coverage.xml --testsuite=contrib-rectors"
+    - php: 7.2
+      env: PHPUNIT_FLAGS="--coverage-clover coverage.xml --testsuite=general-rectors"
+    - php: 7.2
+      env: PHPUNIT_FLAGS="--coverage-clover coverage.xml --testsuite=main"
 
 install:
   - composer install
@@ -20,8 +22,8 @@ script:
   - vendor/bin/phpunit $PHPUNIT_FLAGS
   # disable xdebug
   - phpenv config-rm xdebug.ini || return 0
-  - if [[ $CODING_STANDARD != "" ]]; then composer check-cs; fi
-  - if [[ $PHPSTAN != "" ]]; then composer phpstan; fi
+  - if [[ $STATIC_ANALYSIS != "" ]]; then composer check-cs; fi
+  - if [[ $STATIC_ANALYSIS != "" ]]; then composer phpstan; fi
 
 after_script:
   # upload coverage to Coveralls.io

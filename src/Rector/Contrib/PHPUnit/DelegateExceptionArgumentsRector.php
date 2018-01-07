@@ -30,6 +30,16 @@ final class DelegateExceptionArgumentsRector extends AbstractRector
     ];
 
     /**
+     * @var string[]
+     */
+    private $phpUnitTestCaseClasses = [
+        // PHPUnit 5-
+        'PHPUnit_Framework_TestCase',
+        // PHPUnit 6+
+        'PHPUnit\Framework\TestCase',
+    ];
+
+    /**
      * @var MethodCallAnalyzer
      */
     private $methodCallAnalyzer;
@@ -47,9 +57,9 @@ final class DelegateExceptionArgumentsRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        if (! $this->methodCallAnalyzer->isTypeAndMethods(
+        if (! $this->methodCallAnalyzer->isTypesAndMethods(
             $node,
-            'PHPUnit\Framework\TestCase',
+            $this->phpUnitTestCaseClasses,
             array_keys($this->oldToNewMethod)
         )) {
             return false;
@@ -68,26 +78,19 @@ final class DelegateExceptionArgumentsRector extends AbstractRector
         $identifierNode = $methodCallNode->name;
         $oldMethodName = $identifierNode->name;
 
-        $this->prependNewMethodCall(
-            $methodCallNode,
-            $this->oldToNewMethod[$oldMethodName],
-            $methodCallNode->args[1]
-        );
+        $this->addNewMethodCall($methodCallNode, $this->oldToNewMethod[$oldMethodName], $methodCallNode->args[1]);
         unset($methodCallNode->args[1]);
 
+        // add exception code method call
         if (isset($methodCallNode->args[2])) {
-            $this->prependNewMethodCall(
-                $methodCallNode,
-                'expectExceptionCode',
-                $methodCallNode->args[2]
-            );
+            $this->addNewMethodCall($methodCallNode, 'expectExceptionCode', $methodCallNode->args[2]);
             unset($methodCallNode->args[2]);
         }
 
         return $methodCallNode;
     }
 
-    private function prependNewMethodCall(MethodCall $methodCallNode, string $methodName, Arg $argNode): void
+    private function addNewMethodCall(MethodCall $methodCallNode, string $methodName, Arg $argNode): void
     {
         $expectExceptionMessageMethodCall = $this->methodCallNodeFactory->createWithVariableNameMethodNameAndArguments(
             'this',
@@ -95,6 +98,6 @@ final class DelegateExceptionArgumentsRector extends AbstractRector
             [$argNode]
         );
 
-        $this->prependNodeAfterNode($expectExceptionMessageMethodCall, $methodCallNode);
+        $this->addNodeAfterNode($expectExceptionMessageMethodCall, $methodCallNode);
     }
 }

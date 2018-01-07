@@ -8,8 +8,8 @@ use PhpParser\NodeTraverserInterface;
 use PhpParser\NodeVisitor;
 
 /**
- * This traverser traverse all nodes by one NodeVisitor,
- * then passed to another NodeVisitor.
+ * Oppose to NodeTraverser, that traverse ONE node by ALL NodeVisitors,
+ * this traverser traverse ALL nodes by one NodeVisitor, THEN passes them to next NodeVisitor.
  */
 final class StandaloneTraverseNodeTraverser
 {

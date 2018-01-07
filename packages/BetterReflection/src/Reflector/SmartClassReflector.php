@@ -47,7 +47,7 @@ final class SmartClassReflector
     public function reflect(string $className): ?ReflectionClass
     {
         // invalid class types
-        if (in_array($className, ['self', 'null', 'array', 'string', 'bool'], true)) {
+        if (in_array($className, ['this', 'static', 'self', 'null', 'array', 'string', 'bool'], true)) {
             return null;
         }
 
@@ -60,6 +60,10 @@ final class SmartClassReflector
         } catch (IdentifierNotFound $throwable) {
             return null;
         }
+
+        // @todo
+        // throw exception or rather error only on classes, that were requested by isType*() on NodeAnalyzers
+        // it doesn't make sense to reflect any other...
     }
 
     /**
@@ -90,6 +94,32 @@ final class SmartClassReflector
         }
 
         return [];
+    }
+
+    /**
+     * @return string[]
+     */
+    public function resolveClassInterfaces(ReflectionClass $reflectionClass): array
+    {
+        try {
+            return array_keys($reflectionClass->getInterfaces());
+        } catch (IdentifierNotFound $identifierNotFoundException) {
+            // @todo check if type is needed by any Rector
+            return [];
+        }
+    }
+
+    /**
+     * @return string[]
+     */
+    public function resolveClassParents(ReflectionClass $reflectionClass): array
+    {
+        try {
+            return $reflectionClass->getParentClassNames();
+        } catch (IdentifierNotFound $identifierNotFoundException) {
+            // @todo check if type is needed by any Rector
+            return [];
+        }
     }
 
     /**

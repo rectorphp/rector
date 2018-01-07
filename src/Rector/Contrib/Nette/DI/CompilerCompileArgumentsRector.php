@@ -60,7 +60,7 @@ final class CompilerCompileArgumentsRector extends AbstractRector
             'addConfig',
             $oldArguments[0]
         );
-        $this->prependNodeAfterNode($addConfigMethodCallNode, $methodCallNode);
+        $this->addNodeAfterNode($addConfigMethodCallNode, $methodCallNode);
 
         if (isset($oldArguments[1])) {
             $setClassNameMethodCallNode = $this->cloneMethodWithNameAndArgument(
@@ -68,7 +68,7 @@ final class CompilerCompileArgumentsRector extends AbstractRector
                 'setClassName',
                 $oldArguments[1]
             );
-            $this->prependNodeAfterNode($setClassNameMethodCallNode, $methodCallNode);
+            $this->addNodeAfterNode($setClassNameMethodCallNode, $methodCallNode);
         }
 
         $methodCallNode->args = [];
