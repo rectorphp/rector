@@ -5,6 +5,7 @@ namespace Rector\NodeTypeResolver;
 use PhpParser\Node;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Contract\PerNodeCallerTypeResolver\PerNodeCallerTypeResolverInterface;
+use Rector\NodeTypeResolver\PerNodeCallerTypeResolver\MethodCallCallerTypeResolver;
 
 /**
  * This will tell the type of Node, which is calling this method
@@ -17,15 +18,13 @@ use Rector\NodeTypeResolver\Contract\PerNodeCallerTypeResolver\PerNodeCallerType
 final class NodeCallerTypeResolver
 {
     /**
-     * @var PerNodeCallerTypeResolverInterface[]
+     * @var MethodCallCallerTypeResolver
      */
-    private $perNodeCallerTypeResolvers = [];
+    private $methodCallCallerTypeResolver;
 
-    public function addPerNodeCallerTypeResolver(PerNodeCallerTypeResolverInterface $perNodeCallerTypeResolver): void
+    public function __construct(MethodCallCallerTypeResolver $methodCallCallerTypeResolver)
     {
-        foreach ($perNodeCallerTypeResolver->getNodeClasses() as $nodeClass) {
-            $this->perNodeCallerTypeResolvers[$nodeClass] = $perNodeCallerTypeResolver;
-        }
+        $this->methodCallCallerTypeResolver = $methodCallCallerTypeResolver;
     }
 
     /**
@@ -33,21 +32,14 @@ final class NodeCallerTypeResolver
      */
     public function resolve(Node $node): array
     {
-        // resolve just once
-        if ($node->hasAttribute(Attribute::CALLER_TYPES)) {
-            return $node->getAttribute(Attribute::CALLER_TYPES);
+        if ($node instanceof Node\Expr\MethodCall) {
+            $callerTypes = $this->methodCallCallerTypeResolver->resolve($node);
+            $callerTypes = array_unique($callerTypes);
+            $node->setAttribute(Attribute::CALLER_TYPES, $callerTypes);
+
+            return $callerTypes;
         }
 
-        $nodeClass = get_class($node);
-        if (! isset($this->perNodeCallerTypeResolvers[$nodeClass])) {
-            return [];
-        }
-
-        $nodeCallerTypes = $this->perNodeCallerTypeResolvers[$nodeClass]->resolve($node);
-        $nodeCallerTypes = array_unique($nodeCallerTypes);
-
-        $node->setAttribute(Attribute::CALLER_TYPES, $nodeCallerTypes);
-
-        return $nodeCallerTypes;
+        return [];
     }
 }
