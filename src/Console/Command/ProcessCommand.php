@@ -4,6 +4,7 @@ namespace Rector\Console\Command;
 
 use Rector\Application\FileProcessor;
 use Rector\Autoloading\AdditionalAutoloader;
+use Rector\Configuration\Option;
 use Rector\Console\ConsoleStyle;
 use Rector\Console\Output\ProcessCommandReporter;
 use Rector\ConsoleDiffer\DifferAndFormatter;
@@ -27,11 +28,6 @@ final class ProcessCommand extends Command
      * @var string
      */
     public const OPTION_AUTOLOAD_FILE = 'autoload-file';
-
-    /**
-     * @var string
-     */
-    private const ARGUMENT_SOURCE_NAME = 'source';
 
     /**
      * @var string
@@ -115,7 +111,7 @@ final class ProcessCommand extends Command
         $this->setName(CommandNaming::classToName(self::class));
         $this->setDescription('Reconstruct set of your code.');
         $this->addArgument(
-            self::ARGUMENT_SOURCE_NAME,
+            Option::SOURCE,
             InputArgument::REQUIRED | InputArgument::IS_ARRAY,
             'Files or directories to be upgraded.'
         );
@@ -141,8 +137,8 @@ final class ProcessCommand extends Command
 
         $this->ensureSomeRectorsAreRegistered();
 
-        $source = $input->getArgument(self::ARGUMENT_SOURCE_NAME);
-        $this->parameterProvider->changeParameter(self::ARGUMENT_SOURCE_NAME, $source);
+        $source = $input->getArgument(Option::SOURCE);
+        $this->parameterProvider->changeParameter(Option::SOURCE, $source);
         $this->parameterProvider->changeParameter(self::OPTION_DRY_RUN, $input->getOption(self::OPTION_DRY_RUN));
         $files = $this->phpFilesFinder->findInDirectoriesAndFiles($source);
 
