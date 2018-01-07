@@ -14,11 +14,6 @@ use Throwable;
 final class SmartClassReflector
 {
     /**
-     * @var ClassReflectorFactory
-     */
-    private $classReflectorFactory;
-
-    /**
      * @var ClassReflector
      */
     private $classReflector;
@@ -27,6 +22,11 @@ final class SmartClassReflector
      * @var ReflectionClass[]
      */
     private $perClassNameClassReflections = [];
+
+    /**
+     * @var ClassReflectorFactory
+     */
+    private $classReflectorFactory;
 
     /**
      * @var ParameterProvider
@@ -46,27 +46,11 @@ final class SmartClassReflector
 
     public function reflect(string $className): ?ReflectionClass
     {
-        // invalid class types
-        if (in_array($className, ['this', 'static', 'self', 'null', 'array', 'string', 'bool'], true)) {
-            return null;
-        }
-
         if (isset($this->perClassNameClassReflections[$className])) {
             return $this->perClassNameClassReflections[$className];
         }
 
-        // is function
-        if (is_callable($className)) {
-            return null;
-        }
-
-        // is constant
-        if (defined($className)) {
-            return null;
-        }
-
-        // report with autoloading error
-        if (! class_exists($className, false)) {
+        if (! $this->isValidClassName($className)) {
             return null;
         }
 
@@ -75,13 +59,11 @@ final class SmartClassReflector
             $className = 'DOMDocument';
         }
 
-        return $this->perClassNameClassReflections[$className] = ReflectionClass::createFromName($className);
-
-//        try {
-//            return $this->perClassNameClassReflections[$className] = $this->getClassReflector()->reflect($className);
-//        } catch (IdentifierNotFound $throwable) {
-//            return null;
-//        }
+        try {
+            return $this->perClassNameClassReflections[$className] = $this->getClassReflector()->reflect($className);
+        } catch (IdentifierNotFound $throwable) {
+            return null;
+        }
 
         // @todo
         // throw exception or rather error only on classes, that were requested by isType*() on NodeAnalyzers
@@ -162,5 +144,44 @@ final class SmartClassReflector
                 return $interface->toString();
             }, $classLikeNode->extends);
         }
+    }
+
+    /**
+     * Rebuilds when source changes, so it reflects current scope.
+     * Useful mainly for tests.
+     */
+    private function getClassReflector(): ClassReflector
+    {
+        $currentSource = $this->parameterProvider->provideParameter('source');
+        if ($this->lastSource === $currentSource) {
+            return $this->classReflector;
+        }
+
+        if ($currentSource) {
+            $this->lastSource = $currentSource;
+            return $this->classReflector = $this->classReflectorFactory->createWithSource($currentSource);
+        }
+
+        return $this->classReflector = $this->classReflectorFactory->create();
+    }
+
+    private function isValidClassName(string $className): bool
+    {
+        // invalid class types
+        if (in_array($className, ['this', 'static', 'self', 'null', 'array', 'string', 'bool'], true)) {
+            return false;
+        }
+
+        // is function
+        if (is_callable($className)) {
+            return false;
+        }
+
+        // is constant
+        if (defined($className)) {
+            return false;
+        }
+
+        return true;
     }
 }

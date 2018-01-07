@@ -50,7 +50,6 @@ final class ClassAndMethodResolver extends NodeVisitorAbstract
      */
     private $methodCall;
 
-
     /**
      * @param Node[] $nodes
      */

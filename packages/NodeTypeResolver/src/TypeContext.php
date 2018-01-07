@@ -2,6 +2,7 @@
 
 namespace Rector\NodeTypeResolver;
 
+use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Class_;
@@ -94,14 +95,7 @@ final class TypeContext
         try {
             $functionReflection = $this->getFunctionReflection($functionLikeNode);
             if ($functionReflection) {
-                foreach ($functionReflection->getParameters() as $parameterReflection) {
-                    $type = (string) $parameterReflection->getType();
-                    if (! $type) {
-                        continue;
-                    }
-
-                    $this->variableTypes[$parameterReflection->getName()] = [$type];
-                }
+                $this->processFunctionVariableTypes($functionReflection);
             }
         } catch (Throwable $throwable) {
             // function not autoloaded
@@ -155,25 +149,39 @@ final class TypeContext
             }
 
             $className = $this->classLikeNode->namespacedName->toString();
-
             $methodName = (string) $functionLikeNode->name;
-
             return $this->methodReflector->reflectClassMethod($className, $methodName);
         }
 
         /** @var Function_ $functionLikeNode */
         $functionName = (string) $functionLikeNode->name;
-        if (! function_exists($functionName)) {
-            return null;
-        }
 
-        $namespaceName = $functionLikeNode->getAttribute(Attribute::NAMESPACE_NAME);
-        $namespacedFunctionName = $namespaceName . '\\' . $functionName;
+        $namespacedFunctionName = $this->prefixFunctionWithNamespace($functionLikeNode, $functionName);
         if (function_exists($namespacedFunctionName)) {
             return ReflectionFunction::createFromName($namespacedFunctionName);
         }
 
         // PHP native function
         return ReflectionFunction::createFromName($functionName);
+    }
+
+    private function processFunctionVariableTypes(ReflectionFunction $reflectionFunction): void
+    {
+        foreach ($reflectionFunction->getParameters() as $parameterReflection) {
+            $type = (string) $parameterReflection->getType();
+            if (! $type) {
+                continue;
+            }
+
+            $this->variableTypes[$parameterReflection->getName()] = [$type];
+        }
+    }
+
+    private function prefixFunctionWithNamespace(Node $node, string $functionName): string
+    {
+        /** @var string $namespaceName */
+        $namespaceName = $node->getAttribute(Attribute::NAMESPACE_NAME);
+
+        return $namespaceName . '\\' . $functionName;
     }
 }
