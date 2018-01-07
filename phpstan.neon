@@ -51,6 +51,7 @@ parameters:
         - '#Call to an undefined method PhpParser\\PrettyPrinter\\Standard::printFormatPreserving\(\)#'
         - '#Array \(array<Rector\\BetterReflection\\Reflection\\ReflectionClass>\) does not accept Rector\\BetterReflection\\Reflection\\Reflection#'
 
+        - '#Access to an undefined property PhpParser\\Node\\Expr::\$name#'
     excludes_analyse:
         # test files
         - '*tests/Rector/Dynamic/MethodNameReplacerRector/wrong/*'
