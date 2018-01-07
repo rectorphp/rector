@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use Rector\BetterReflection\Reflection\ReflectionFunction;
+use Rector\BetterReflection\Reflection\ReflectionFunctionAbstract;
 use Rector\BetterReflection\Reflection\ReflectionMethod;
 use Rector\BetterReflection\Reflector\MethodReflector;
 use Rector\Node\Attribute;
@@ -165,7 +166,7 @@ final class TypeContext
         return ReflectionFunction::createFromName($functionName);
     }
 
-    private function processFunctionVariableTypes(ReflectionFunction $reflectionFunction): void
+    private function processFunctionVariableTypes(ReflectionFunctionAbstract $reflectionFunction): void
     {
         foreach ($reflectionFunction->getParameters() as $parameterReflection) {
             $type = (string) $parameterReflection->getType();
