@@ -3,6 +3,7 @@
 namespace Rector\NodeTypeResolver\Tests\PerNodeCallerTypeResolver;
 
 use PhpParser\Node;
+use Rector\Configuration\Option;
 use Rector\NodeTraverserQueue\BetterNodeFinder;
 use Rector\NodeTraverserQueue\NodeTraverserQueue;
 use Rector\NodeTypeResolver\NodeCallerTypeResolver;
@@ -57,7 +58,7 @@ abstract class AbstractNodeCallerTypeResolverTest extends AbstractContainerAware
     {
         $fileInfo = new SplFileInfo($file);
 
-        $this->parameterProvider->changeParameter('source', [$file]);
+        $this->parameterProvider->changeParameter(Option::SOURCE, [$file]);
 
         [$newStmts,] = $this->nodeTraverserQueue->processFileInfo($fileInfo);
 
