@@ -166,9 +166,9 @@ final class TypeContext
         return ReflectionFunction::createFromName($functionName);
     }
 
-    private function processFunctionVariableTypes(ReflectionFunctionAbstract $reflectionFunction): void
+    private function processFunctionVariableTypes(ReflectionFunctionAbstract $reflectionFunctionAbstract): void
     {
-        foreach ($reflectionFunction->getParameters() as $parameterReflection) {
+        foreach ($reflectionFunctionAbstract->getParameters() as $parameterReflection) {
             $type = (string) $parameterReflection->getType();
             if (! $type) {
                 continue;
