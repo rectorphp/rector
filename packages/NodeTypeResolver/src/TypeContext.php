@@ -14,6 +14,7 @@ use Rector\BetterReflection\Reflector\MethodReflector;
 use Rector\Node\Attribute;
 use Rector\NodeAnalyzer\ClassLikeAnalyzer;
 use Rector\NodeTypeResolver\TypesExtractor\ConstructorPropertyTypesExtractor;
+use Throwable;
 
 /**
  * Inspired by https://github.com/nikic/PHP-Parser/blob/9373a8e9f551516bc8e42aedeacd1b4f635d27fc/lib/PhpParser/NameContext.php.
@@ -90,16 +91,21 @@ final class TypeContext
     {
         $this->variableTypes = [];
 
-        $functionReflection = $this->getFunctionReflection($functionLikeNode);
-        if ($functionReflection) {
-            foreach ($functionReflection->getParameters() as $parameterReflection) {
-                $type = (string) $parameterReflection->getType();
-                if (! $type) {
-                    continue;
-                }
+        try {
+            $functionReflection = $this->getFunctionReflection($functionLikeNode);
+            if ($functionReflection) {
+                foreach ($functionReflection->getParameters() as $parameterReflection) {
+                    $type = (string) $parameterReflection->getType();
+                    if (! $type) {
+                        continue;
+                    }
 
-                $this->variableTypes[$parameterReflection->getName()] = [$type];
+                    $this->variableTypes[$parameterReflection->getName()] = [$type];
+                }
             }
+        } catch (Throwable $throwable) {
+            // function not autoloaded
+            return;
         }
     }
 

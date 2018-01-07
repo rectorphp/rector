@@ -54,7 +54,8 @@ final class AdditionalAutoloader
 
         $robotLoader = new RobotLoader();
         $robotLoader->ignoreDirs = ['*Fixtures'] + $robotLoader->ignoreDirs;
-        $robotLoader->setTempDirectory(sys_get_temp_dir() . '/_rector_robot_loader');
+        // last argument is workaround: https://github.com/nette/robot-loader/issues/12
+        $robotLoader->setTempDirectory(__DIR__ . '/../../temp/_rector_robot_loader');
 
         foreach ($autoloadDirectories as $autoloadDirectory) {
             $robotLoader->addDirectory($autoloadDirectory);
