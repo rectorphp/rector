@@ -7,5 +7,6 @@ final class MyTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(5, $something);
         $this->assertNotCount($count, $something, 'third argument');
         $this->assertInternalType('string', $something);
+        $this->assertEquals('string', $something['property']());
     }
 }

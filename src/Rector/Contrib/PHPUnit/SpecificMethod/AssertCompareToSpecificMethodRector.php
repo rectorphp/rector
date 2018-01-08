@@ -3,10 +3,12 @@
 namespace Rector\Rector\Contrib\PHPUnit\SpecificMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
@@ -80,18 +82,19 @@ final class AssertCompareToSpecificMethodRector extends AbstractRector
             return false;
         }
 
+        /** @var Expr $secondArgumentValue */
         $secondArgumentValue = $methodCallNode->args[1]->value;
 
-        if (! $secondArgumentValue instanceof FuncCall) {
+        if (! $this->isNamedFunction($secondArgumentValue)) {
             return false;
         }
 
-        $funcCallName = $secondArgumentValue->name->toString();
-        if (! isset($this->defaultOldToNewMethods[$funcCallName])) {
+        $methodName = $secondArgumentValue->name->toString();
+        if (! isset($this->defaultOldToNewMethods[$methodName])) {
             return false;
         }
 
-        $this->activeFuncCallName = $funcCallName;
+        $this->activeFuncCallName = $methodName;
 
         return true;
     }
@@ -130,5 +133,19 @@ final class AssertCompareToSpecificMethodRector extends AbstractRector
         /** @var FuncCall $secondArgument */
         $secondArgument = $methodCallNode->args[1]->value;
         $methodCallNode->args[1] = $secondArgument->args[0];
+    }
+
+    private function isNamedFunction(Expr $node): bool
+    {
+        if (! $node instanceof FuncCall) {
+            return false;
+        }
+
+        $functionName = $node->name;
+        if (! $functionName instanceof Name) {
+            return false;
+        }
+
+        return true;
     }
 }
