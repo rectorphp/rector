@@ -21,6 +21,18 @@ use Rector\NodeTypeResolver\TypeContext;
 final class MethodCallTypeResolver implements PerNodeTypeResolverInterface, NodeTypeResolverAwareInterface
 {
     /**
+     * @var string[]
+     */
+    private $allowedVarNodeClasses = [
+        // chain method calls: $this->someCall()->anotherCall()
+        MethodCall::class,
+        // $this->someCall()
+        Variable::class,
+        // $this->property->someCall()
+        PropertyFetch::class,
+    ];
+
+    /**
      * @var TypeContext
      */
     private $typeContext;
@@ -55,21 +67,9 @@ final class MethodCallTypeResolver implements PerNodeTypeResolverInterface, Node
      */
     public function resolve(Node $methodCallNode): array
     {
-        // @todo: decouple to own method
-        if ($methodCallNode->var instanceof MethodCall) {
-            // chain method calls: $this->someCall()->anotherCall()
-            $parentCallerTypes = $this->nodeTypeResolver->resolve($methodCallNode->var);
-        } elseif ($methodCallNode->var instanceof Variable) {
-            // $this->someCall()
-            $parentCallerTypes = $this->nodeTypeResolver->resolve($methodCallNode->var);
-        } elseif ($methodCallNode->var instanceof PropertyFetch) {
-            // $this->propertySomeCall()
-            $parentCallerTypes = $this->nodeTypeResolver->resolve($methodCallNode->var);
-        } else {
-            return [];
-        }
-
+        $parentCallerTypes = $this->resolveMethodCallVarTypes($methodCallNode);
         $methodName = (string) $methodCallNode->name;
+
         if (! $parentCallerTypes || ! $methodName) {
             return [];
         }
@@ -121,5 +121,19 @@ final class MethodCallTypeResolver implements PerNodeTypeResolverInterface, Node
         }
 
         return null;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function resolveMethodCallVarTypes(MethodCall $methodCallNode): array
+    {
+        $varNodeClass = get_class($methodCallNode->var);
+
+        if (in_array($varNodeClass, $this->allowedVarNodeClasses, true)) {
+            return $this->nodeTypeResolver->resolve($methodCallNode->var);
+        }
+
+        return [];
     }
 }
