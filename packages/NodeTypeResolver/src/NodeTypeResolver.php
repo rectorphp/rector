@@ -36,8 +36,6 @@ final class NodeTypeResolver
         }
 
         $nodeTypes = $this->perNodeTypeResolvers[$nodeClass]->resolve($node);
-        $nodeTypes = array_unique($nodeTypes);
-
         $node->setAttribute(Attribute::TYPES, $nodeTypes);
 
         return $nodeTypes;

@@ -95,7 +95,7 @@ final class MethodCallTypeResolver implements PerNodeTypeResolverInterface, Node
     ): array {
         $methodReturnTypes = $this->methodReflector->resolveReturnTypesForTypesAndMethod($methodCallerTypes, $method);
         if ($methodReturnTypes) {
-            return $methodReturnTypes;
+            return array_unique($methodReturnTypes);
         }
 
         $variableName = $this->getVariableToAssignTo($methodCallNode);
