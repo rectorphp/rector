@@ -5,6 +5,7 @@ namespace Rector\Rector\Contrib\Nette\Application;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
+use Rector\Node\Attribute;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
@@ -54,6 +55,11 @@ final class TemplateMagicInvokeFilterCallRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
+        // skip just added calls
+        if ($node->getAttribute(Attribute::ORIGINAL_NODE) === null) {
+            return false;
+        }
+
         return $this->methodCallAnalyzer->isTypeAndMagic($node, 'Nette\Bridges\ApplicationLatte\Template');
     }
 

@@ -5,14 +5,11 @@ namespace Rector\BetterReflection\SourceLocator;
 use Rector\BetterReflection\SourceLocator\Ast\Locator;
 use Rector\BetterReflection\SourceLocator\Type\AggregateSourceLocator;
 use Rector\BetterReflection\SourceLocator\Type\AutoloadSourceLocator;
-use Rector\BetterReflection\SourceLocator\Type\ComposerSourceLocator;
 use Rector\BetterReflection\SourceLocator\Type\DirectoriesSourceLocator;
 use Rector\BetterReflection\SourceLocator\Type\MemoizingSourceLocator;
 use Rector\BetterReflection\SourceLocator\Type\PhpInternalSourceLocator;
 use Rector\BetterReflection\SourceLocator\Type\SingleFileSourceLocator;
 use Rector\BetterReflection\SourceLocator\Type\SourceLocator;
-use Symplify\PackageBuilder\Composer\AutoloadFinder;
-use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
 final class SourceLocatorFactory
 {
@@ -27,23 +24,14 @@ final class SourceLocatorFactory
     private $stubSourceLocator;
 
     /**
-     * @var ParameterProvider
-     */
-    private $parameterProvider;
-
-    /**
      * @var SourceLocator[]
      */
     private $commonLocators = [];
 
-    public function __construct(
-        Locator $locator,
-        StubSourceLocator $stubSourceLocator,
-        ParameterProvider $parameterProvider
-    ) {
+    public function __construct(Locator $locator, StubSourceLocator $stubSourceLocator)
+    {
         $this->locator = $locator;
         $this->stubSourceLocator = $stubSourceLocator;
-        $this->parameterProvider = $parameterProvider;
     }
 
     public function create(): SourceLocator
@@ -83,19 +71,10 @@ final class SourceLocatorFactory
         }
 
         $this->commonLocators = [
-            new PhpInternalSourceLocator($this->locator),
             new AutoloadSourceLocator($this->locator),
+            new PhpInternalSourceLocator($this->locator),
             $this->stubSourceLocator,
         ];
-
-        $source = $this->parameterProvider->provideParameter('source');
-        if ($source) {
-            $vendorAutoload = AutoloadFinder::findNearDirectories($source);
-            if ($vendorAutoload !== null) {
-                $vendorAutoload = require $vendorAutoload;
-                $this->commonLocators[] = new ComposerSourceLocator($vendorAutoload, $this->locator);
-            }
-        }
 
         return $this->commonLocators;
     }

@@ -44,6 +44,10 @@ final class ProcessCommandReporter
      */
     public function reportChangedFiles(array $changedFiles): void
     {
+        if (count($changedFiles) <= 0) {
+            return;
+        }
+
         $this->consoleStyle->title(sprintf(
             '%d Changed file%s',
             count($changedFiles),
@@ -57,14 +61,19 @@ final class ProcessCommandReporter
      */
     public function reportDiffFiles(array $diffFiles): void
     {
+        if (count($diffFiles) <= 0) {
+            return;
+        }
+
         $this->consoleStyle->title(sprintf(
             '%d file%s with changes',
             count($diffFiles),
             count($diffFiles) === 1 ? '' : 's'
         ));
 
+        $i = 0;
         foreach ($diffFiles as $diffFile) {
-            $this->consoleStyle->writeln($diffFile['file']);
+            $this->consoleStyle->writeln(sprintf('<options=bold>%d) %s</>', ++$i, $diffFile['file']));
             $this->consoleStyle->newLine();
             $this->consoleStyle->writeln($diffFile['diff']);
             $this->consoleStyle->newLine();

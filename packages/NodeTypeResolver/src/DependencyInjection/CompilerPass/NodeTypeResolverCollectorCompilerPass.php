@@ -3,9 +3,7 @@
 namespace Rector\NodeTypeResolver\DependencyInjection\CompilerPass;
 
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverAwareInterface;
-use Rector\NodeTypeResolver\Contract\PerNodeCallerTypeResolver\PerNodeCallerTypeResolverInterface;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
-use Rector\NodeTypeResolver\NodeCallerTypeResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -16,18 +14,7 @@ final class NodeTypeResolverCollectorCompilerPass implements CompilerPassInterfa
     public function process(ContainerBuilder $containerBuilder): void
     {
         $this->collectPerNodeTypeResolversToNodeTypeResolver($containerBuilder);
-        $this->collectPerCallerNodeTypeResolversToCallerNodeTypeResolver($containerBuilder);
         $this->setNodeTypeResolverToAware($containerBuilder);
-    }
-
-    private function collectPerCallerNodeTypeResolversToCallerNodeTypeResolver(ContainerBuilder $containerBuilder): void
-    {
-        DefinitionCollector::loadCollectorWithType(
-            $containerBuilder,
-            NodeCallerTypeResolver::class,
-            PerNodeCallerTypeResolverInterface::class,
-            'addPerNodeCallerTypeResolver'
-        );
     }
 
     private function collectPerNodeTypeResolversToNodeTypeResolver(ContainerBuilder $containerBuilder): void

@@ -2,6 +2,7 @@
 
 namespace Rector\NodeTypeResolver;
 
+use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Class_;
@@ -9,10 +10,13 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use Rector\BetterReflection\Reflection\ReflectionFunction;
+use Rector\BetterReflection\Reflection\ReflectionFunctionAbstract;
 use Rector\BetterReflection\Reflection\ReflectionMethod;
 use Rector\BetterReflection\Reflector\MethodReflector;
+use Rector\Node\Attribute;
 use Rector\NodeAnalyzer\ClassLikeAnalyzer;
 use Rector\NodeTypeResolver\TypesExtractor\ConstructorPropertyTypesExtractor;
+use Throwable;
 
 /**
  * Inspired by https://github.com/nikic/PHP-Parser/blob/9373a8e9f551516bc8e42aedeacd1b4f635d27fc/lib/PhpParser/NameContext.php.
@@ -89,16 +93,14 @@ final class TypeContext
     {
         $this->variableTypes = [];
 
-        $functionReflection = $this->getFunctionReflection($functionLikeNode);
-        if ($functionReflection) {
-            foreach ($functionReflection->getParameters() as $parameterReflection) {
-                $type = (string) $parameterReflection->getType();
-                if (! $type) {
-                    continue;
-                }
-
-                $this->variableTypes[$parameterReflection->getName()] = [$type];
+        try {
+            $functionReflection = $this->getFunctionReflection($functionLikeNode);
+            if ($functionReflection) {
+                $this->processFunctionVariableTypes($functionReflection);
             }
+        } catch (Throwable $throwable) {
+            // function not autoloaded
+            return;
         }
     }
 
@@ -148,18 +150,39 @@ final class TypeContext
             }
 
             $className = $this->classLikeNode->namespacedName->toString();
-
             $methodName = (string) $functionLikeNode->name;
-
             return $this->methodReflector->reflectClassMethod($className, $methodName);
         }
 
         /** @var Function_ $functionLikeNode */
         $functionName = (string) $functionLikeNode->name;
-        if (! function_exists($functionName)) {
-            return null;
+
+        $namespacedFunctionName = $this->prefixFunctionWithNamespace($functionLikeNode, $functionName);
+        if (function_exists($namespacedFunctionName)) {
+            return ReflectionFunction::createFromName($namespacedFunctionName);
         }
 
+        // PHP native function
         return ReflectionFunction::createFromName($functionName);
+    }
+
+    private function processFunctionVariableTypes(ReflectionFunctionAbstract $reflectionFunctionAbstract): void
+    {
+        foreach ($reflectionFunctionAbstract->getParameters() as $parameterReflection) {
+            $type = (string) $parameterReflection->getType();
+            if (! $type) {
+                continue;
+            }
+
+            $this->variableTypes[$parameterReflection->getName()] = [$type];
+        }
+    }
+
+    private function prefixFunctionWithNamespace(Node $node, string $functionName): string
+    {
+        /** @var string $namespaceName */
+        $namespaceName = $node->getAttribute(Attribute::NAMESPACE_NAME);
+
+        return $namespaceName . '\\' . $functionName;
     }
 }

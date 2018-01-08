@@ -14,11 +14,6 @@ use Throwable;
 final class SmartClassReflector
 {
     /**
-     * @var ClassReflectorFactory
-     */
-    private $classReflectorFactory;
-
-    /**
      * @var ClassReflector
      */
     private $classReflector;
@@ -27,6 +22,11 @@ final class SmartClassReflector
      * @var ReflectionClass[]
      */
     private $perClassNameClassReflections = [];
+
+    /**
+     * @var ClassReflectorFactory
+     */
+    private $classReflectorFactory;
 
     /**
      * @var ParameterProvider
@@ -46,13 +46,17 @@ final class SmartClassReflector
 
     public function reflect(string $className): ?ReflectionClass
     {
-        // invalid class types
-        if (in_array($className, ['this', 'static', 'self', 'null', 'array', 'string', 'bool'], true)) {
+        if (isset($this->perClassNameClassReflections[$className])) {
+            return $this->perClassNameClassReflections[$className];
+        }
+
+        if (! $this->isValidClassName($className)) {
             return null;
         }
 
-        if (isset($this->perClassNameClassReflections[$className])) {
-            return $this->perClassNameClassReflections[$className];
+        // correct native class typos
+        if ($className === 'DomDocument') {
+            $className = 'DOMDocument';
         }
 
         try {
@@ -159,5 +163,25 @@ final class SmartClassReflector
         }
 
         return $this->classReflector = $this->classReflectorFactory->create();
+    }
+
+    private function isValidClassName(string $className): bool
+    {
+        // invalid class types
+        if (in_array($className, ['this', 'static', 'self', 'null', 'array', 'string', 'bool'], true)) {
+            return false;
+        }
+
+        // is function
+        if (is_callable($className)) {
+            return false;
+        }
+
+        // is constant
+        if (defined($className)) {
+            return false;
+        }
+
+        return true;
     }
 }

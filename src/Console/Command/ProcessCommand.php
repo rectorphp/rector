@@ -3,6 +3,8 @@
 namespace Rector\Console\Command;
 
 use Rector\Application\FileProcessor;
+use Rector\Autoloading\AdditionalAutoloader;
+use Rector\Configuration\Option;
 use Rector\Console\ConsoleStyle;
 use Rector\Console\Output\ProcessCommandReporter;
 use Rector\ConsoleDiffer\DifferAndFormatter;
@@ -25,7 +27,7 @@ final class ProcessCommand extends Command
     /**
      * @var string
      */
-    private const ARGUMENT_SOURCE_NAME = 'source';
+    public const OPTION_AUTOLOAD_FILE = 'autoload-file';
 
     /**
      * @var string
@@ -77,6 +79,11 @@ final class ProcessCommand extends Command
      */
     private $diffFiles = [];
 
+    /**
+     * @var AdditionalAutoloader
+     */
+    private $additionalAutoloader;
+
     public function __construct(
         FileProcessor $fileProcessor,
         RectorCollector $rectorCollector,
@@ -84,7 +91,8 @@ final class ProcessCommand extends Command
         PhpFilesFinder $phpFilesFinder,
         ProcessCommandReporter $processCommandReporter,
         ParameterProvider $parameterProvider,
-        DifferAndFormatter $differAndFormatter
+        DifferAndFormatter $differAndFormatter,
+        AdditionalAutoloader $additionalAutoloader
     ) {
         parent::__construct();
 
@@ -95,6 +103,7 @@ final class ProcessCommand extends Command
         $this->processCommandReporter = $processCommandReporter;
         $this->parameterProvider = $parameterProvider;
         $this->differAndFormatter = $differAndFormatter;
+        $this->additionalAutoloader = $additionalAutoloader;
     }
 
     protected function configure(): void
@@ -102,7 +111,7 @@ final class ProcessCommand extends Command
         $this->setName(CommandNaming::classToName(self::class));
         $this->setDescription('Reconstruct set of your code.');
         $this->addArgument(
-            self::ARGUMENT_SOURCE_NAME,
+            Option::SOURCE,
             InputArgument::REQUIRED | InputArgument::IS_ARRAY,
             'Files or directories to be upgraded.'
         );
@@ -112,16 +121,24 @@ final class ProcessCommand extends Command
             InputOption::VALUE_NONE,
             'See diff of changes, do not save them to files.'
         );
+        $this->addOption(
+            self::OPTION_AUTOLOAD_FILE,
+            null,
+            InputOption::VALUE_REQUIRED,
+            'File with extra autoload'
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->consoleStyle->setVerbosity($output->getVerbosity());
 
+        $this->additionalAutoloader->autoloadWithInput($input);
+
         $this->ensureSomeRectorsAreRegistered();
 
-        $source = $input->getArgument(self::ARGUMENT_SOURCE_NAME);
-        $this->parameterProvider->changeParameter(self::ARGUMENT_SOURCE_NAME, $source);
+        $source = $input->getArgument(Option::SOURCE);
+        $this->parameterProvider->changeParameter(Option::SOURCE, $source);
         $this->parameterProvider->changeParameter(self::OPTION_DRY_RUN, $input->getOption(self::OPTION_DRY_RUN));
         $files = $this->phpFilesFinder->findInDirectoriesAndFiles($source);
 
@@ -129,14 +146,8 @@ final class ProcessCommand extends Command
 
         $this->processFiles($files);
 
-        if (count($this->diffFiles) > 0) {
-            $this->processCommandReporter->reportDiffFiles($this->diffFiles);
-        }
-
-        if (count($this->changedFiles) > 0) {
-            $this->processCommandReporter->reportChangedFiles($this->changedFiles);
-        }
-
+        $this->processCommandReporter->reportDiffFiles($this->diffFiles);
+        $this->processCommandReporter->reportChangedFiles($this->changedFiles);
         $this->consoleStyle->success('Rector is done!');
 
         return 0;
@@ -163,10 +174,9 @@ final class ProcessCommand extends Command
         $this->consoleStyle->title(sprintf('Processing %d file%s', $totalFiles, $totalFiles === 1 ? '' : 's'));
         $this->consoleStyle->progressStart($totalFiles);
 
-        $i = 0;
         foreach ($fileInfos as $fileInfo) {
             try {
-                $this->processFile($fileInfo, $i);
+                $this->processFile($fileInfo);
             } catch (Throwable $throwable) {
                 $this->consoleStyle->newLine();
                 throw new FileProcessingException(
@@ -182,7 +192,7 @@ final class ProcessCommand extends Command
         $this->consoleStyle->newLine(2);
     }
 
-    private function processFile(SplFileInfo $fileInfo, int &$i): void
+    private function processFile(SplFileInfo $fileInfo): void
     {
         $oldContent = $fileInfo->getContents();
 
@@ -190,7 +200,7 @@ final class ProcessCommand extends Command
             $newContent = $this->fileProcessor->processFileToString($fileInfo);
             if ($newContent !== $oldContent) {
                 $this->diffFiles[] = [
-                    'file' => sprintf('<options=bold>%d) %s</>', ++$i, $fileInfo->getPathname()),
+                    'file' => $fileInfo->getPathname(),
                     'diff' => $this->differAndFormatter->diffAndFormat($oldContent, $newContent),
                 ];
             }
