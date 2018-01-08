@@ -7,16 +7,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\NodeTypeResolver\PerNodeCallerTypeResolver\MethodCallCallerTypeResolver;
 
-/**
- * This will tell the type of Node, which is calling this method
- *
- * E.g.:
- * - {$this}->callMe()
- * - $this->{getThis()}->callMe()
- * - {new John}->callMe()
- */
 final class CallerTypeNodeVisitor extends NodeVisitorAbstract
 {
     /**
@@ -24,32 +15,15 @@ final class CallerTypeNodeVisitor extends NodeVisitorAbstract
      */
     private $nodeTypeResolver;
 
-    /**
-     * @var MethodCallCallerTypeResolver
-     */
-    private $methodCallCallerTypeResolver;
-
-    public function __construct(
-        NodeTypeResolver $nodeTypeResolver,
-        MethodCallCallerTypeResolver $methodCallCallerTypeResolver
-    ) {
+    public function __construct(NodeTypeResolver $nodeTypeResolver)
+    {
         $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->methodCallCallerTypeResolver = $methodCallCallerTypeResolver;
     }
 
     public function enterNode(Node $node): ?Node
     {
         if ($node instanceof MethodCall) {
-            $nodeTypeResolverTypes = $this->nodeTypeResolver->resolve($node->var);
-            $types = $this->methodCallCallerTypeResolver->resolve($node);
-
-            if ($nodeTypeResolverTypes !== $types) {
-                dump($nodeTypeResolverTypes);
-                dump($types);
-//                throw new \Exception('aa');
-//                die;
-            }
-
+            $types = $this->nodeTypeResolver->resolve($node->var);
             $node->setAttribute(Attribute::CALLER_TYPES, $types);
 
             return $node;
