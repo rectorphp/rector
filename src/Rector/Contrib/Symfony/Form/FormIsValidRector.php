@@ -38,6 +38,11 @@ final class FormIsValidRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
+        // skip just added calls
+        if ($node->getAttribute(Attribute::ORIGINAL_NODE) === null) {
+            return false;
+        }
+
         if (! $this->methodCallAnalyzer->isTypeAndMethod(
             $node,
             'Symfony\Component\Form\Form',
