@@ -38,6 +38,7 @@ parameters:
         # known value of Name of MethodCall
         - '#Call to an undefined method PhpParser\\Node\\Expr\|PhpParser\\Node\\Name::toString\(\)#'
         - '#Cannot call method toString\(\) on PhpParser\\Node\\Expr\|string#'
+        - '#Access to an undefined property PhpParser\\Node\\Expr::\$name#'
 
         # buggy
         - '#Parameter \#1 \$classLikeNode of method Rector\\NodeAnalyzer\\ClassLikeAnalyzer::resolveExtendsTypes\(\) expects PhpParser\\Node\\Stmt\\Class_\|PhpParser\\Node\\Stmt\\Interface_, PhpParser\\Node\\Stmt\\ClassLike given#'
@@ -51,7 +52,6 @@ parameters:
         - '#Call to an undefined method PhpParser\\PrettyPrinter\\Standard::printFormatPreserving\(\)#'
         - '#Array \(array<Rector\\BetterReflection\\Reflection\\ReflectionClass>\) does not accept Rector\\BetterReflection\\Reflection\\Reflection#'
 
-        - '#Access to an undefined property PhpParser\\Node\\Expr::\$name#'
     excludes_analyse:
         # test files
         - '*tests/Rector/Dynamic/MethodNameReplacerRector/wrong/*'
