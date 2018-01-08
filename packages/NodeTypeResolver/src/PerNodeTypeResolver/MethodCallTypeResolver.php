@@ -2,12 +2,12 @@
 
 namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
 
-use Nette\Reflection\Method;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Identifier;
+use PhpParser\Node\Stmt\Property;
 use Rector\BetterReflection\Reflector\MethodReflector;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverAwareInterface;
@@ -56,53 +56,38 @@ final class MethodCallTypeResolver implements PerNodeTypeResolverInterface, Node
      */
     public function resolve(Node $methodCallNode): array
     {
-        // 1. get $anotherVar type
-
-        /** @var Variable|mixed $variableNode */
-        $variableNode = $methodCallNode->var;
-
-        if (! $variableNode instanceof Variable && ! $variableNode instanceof MethodCall) {
-            return [];
-        }
-
-        $parentCallerTypes = [];
-
         // chain method calls: $this->someCall()->anotherCall()
         if ($methodCallNode->var instanceof MethodCall) {
             $parentCallerTypes = $this->nodeTypeResolver->resolve($methodCallNode->var);
         }
 
         // $this->someCall()
-        if ($methodCallNode->var instanceof Variable) {
+        elseif ($methodCallNode->var instanceof Variable) {
             $parentCallerTypes = $this->nodeTypeResolver->resolve($methodCallNode->var);
         }
 
-        $methodCallName = $methodCallNode->name->toString();
-        if (! $parentCallerTypes || ! $methodCallName) {
+        // $this->propertySomeCall()
+        elseif ($methodCallNode->var instanceof PropertyFetch) {
+            $parentCallerTypes = $this->nodeTypeResolver->resolve($methodCallNode->var);
+        } else {
             return [];
         }
 
+        if (! $parentCallerTypes) {
+            return [];
+        }
 
-        return $this->resolveMethodReflectionReturnTypes($methodCallNode, $parentCallerTypes, $methodCallName);
+        $methodName = (string) $methodCallNode->name;
+        if (! $methodName) {
+            return [];
+        }
+
+        return $this->resolveMethodReflectionReturnTypes($methodCallNode, $parentCallerTypes, $methodName);
     }
 
     public function setNodeTypeResolver(NodeTypeResolver $nodeTypeResolver): void
     {
-        $this->nodeTypeResolver= $nodeTypeResolver;
-    }
-
-    private function getVariableToAssignTo(MethodCall $methodCallNode): ?string
-    {
-        $assignNode = $methodCallNode->getAttribute(Attribute::PARENT_NODE);
-        if (! $assignNode instanceof Assign) {
-            return null;
-        }
-
-        if ($assignNode->var instanceof Variable) {
-            return (string) $assignNode->var->name;
-        }
-
-        return null;
+        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     /**
@@ -129,5 +114,19 @@ final class MethodCallTypeResolver implements PerNodeTypeResolverInterface, Node
         $this->typeContext->addVariableWithTypes($variableName, $methodReturnTypes);
 
         return $methodReturnTypes;
+    }
+
+    private function getVariableToAssignTo(MethodCall $methodCallNode): ?string
+    {
+        $assignNode = $methodCallNode->getAttribute(Attribute::PARENT_NODE);
+        if (! $assignNode instanceof Assign) {
+            return null;
+        }
+
+        if ($assignNode->var instanceof Variable) {
+            return (string) $assignNode->var->name;
+        }
+
+        return null;
     }
 }
