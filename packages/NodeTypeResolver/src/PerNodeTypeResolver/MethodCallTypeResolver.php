@@ -55,6 +55,7 @@ final class MethodCallTypeResolver implements PerNodeTypeResolverInterface, Node
      */
     public function resolve(Node $methodCallNode): array
     {
+        // @todo: decouple to own method
         if ($methodCallNode->var instanceof MethodCall) {
             // chain method calls: $this->someCall()->anotherCall()
             $parentCallerTypes = $this->nodeTypeResolver->resolve($methodCallNode->var);
