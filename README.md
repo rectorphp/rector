@@ -329,12 +329,12 @@ For example:
 
 ```diff
 - $result = (string) $someValue;
-+ $result = $someValue->someMethod();
++ $result = $someValue->getPath();
 ```
 
 ```diff
 - $result = $someValue->__toString();
-+ $result = $someValue->someMethod();
++ $result = $someValue->getPath();
 ```
 
 ## Coding Standards are Outsourced
