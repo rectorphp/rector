@@ -10,6 +10,6 @@ final class DummyConfigurator extends DummyObject
     }
 }
 
-final class DummyObject
+class DummyObject
 {
 }

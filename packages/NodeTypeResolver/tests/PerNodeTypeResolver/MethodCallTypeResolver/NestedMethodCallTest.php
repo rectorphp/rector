@@ -55,7 +55,7 @@ final class NestedMethodCallTest extends AbstractNodeTypeResolverTest
 
             # nested different method calls
             [__DIR__ . '/NestedMethodCallSource/OnMethodCallCallDifferentType.php.inc', 0, 'setScope', [
-                'Symfony\Component\DependencyInjection\Definition'
+                'Symfony\Component\DependencyInjection\Definition',
             ]],
             [__DIR__ . '/NestedMethodCallSource/OnMethodCallCallDifferentType.php.inc', 1, 'register', [
                 'Symfony\Component\DependencyInjection\ContainerBuilder',
@@ -70,7 +70,7 @@ final class NestedMethodCallTest extends AbstractNodeTypeResolverTest
             [__DIR__ . '/NestedMethodCallSource/NestedMethodCalls.php.inc', 0, 'getParameters', ['Nette\DI\Container']],
             [__DIR__ . '/NestedMethodCallSource/NestedMethodCalls.php.inc', 1, 'addService', ['Nette\DI\Container']],
             [__DIR__ . '/NestedMethodCallSource/NestedMethodCalls.php.inc', 2, 'createContainer', [
-                'Nette\Config\Configurator', 'Nette\Object'
+                'Nette\Config\Configurator', 'Nette\Object',
             ]],
         ];
     }

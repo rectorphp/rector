@@ -7,7 +7,6 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt\Property;
 use Rector\BetterReflection\Reflector\MethodReflector;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverAwareInterface;
@@ -56,29 +55,21 @@ final class MethodCallTypeResolver implements PerNodeTypeResolverInterface, Node
      */
     public function resolve(Node $methodCallNode): array
     {
-        // chain method calls: $this->someCall()->anotherCall()
         if ($methodCallNode->var instanceof MethodCall) {
+            // chain method calls: $this->someCall()->anotherCall()
             $parentCallerTypes = $this->nodeTypeResolver->resolve($methodCallNode->var);
-        }
-
-        // $this->someCall()
-        elseif ($methodCallNode->var instanceof Variable) {
+        } elseif ($methodCallNode->var instanceof Variable) {
+            // $this->someCall()
             $parentCallerTypes = $this->nodeTypeResolver->resolve($methodCallNode->var);
-        }
-
-        // $this->propertySomeCall()
-        elseif ($methodCallNode->var instanceof PropertyFetch) {
+        } elseif ($methodCallNode->var instanceof PropertyFetch) {
+            // $this->propertySomeCall()
             $parentCallerTypes = $this->nodeTypeResolver->resolve($methodCallNode->var);
         } else {
             return [];
         }
 
-        if (! $parentCallerTypes) {
-            return [];
-        }
-
         $methodName = (string) $methodCallNode->name;
-        if (! $methodName) {
+        if (! $parentCallerTypes || ! $methodName) {
             return [];
         }
 
@@ -94,14 +85,15 @@ final class MethodCallTypeResolver implements PerNodeTypeResolverInterface, Node
      * Resolve for:
      * - getMethod(): ReturnType
      *
+     * @param string[] $methodCallerTypes
      * @return string[]
      */
     private function resolveMethodReflectionReturnTypes(
         MethodCall $methodCallNode,
-        array $methodCallVariableTypes,
+        array $methodCallerTypes,
         string $method
     ): array {
-        $methodReturnTypes = $this->methodReflector->resolveReturnTypesForTypesAndMethod($methodCallVariableTypes, $method);
+        $methodReturnTypes = $this->methodReflector->resolveReturnTypesForTypesAndMethod($methodCallerTypes, $method);
         if ($methodReturnTypes) {
             return $methodReturnTypes;
         }
