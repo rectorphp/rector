@@ -21,6 +21,3 @@ services:
 
             # adds type to variable and property nodes via attribute
             - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\TypeNodeVisitor']]
-
-            # adds types to caller of method calls and static calls via attribute (have to be after TypeResolver)
-            - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\CallerTypeNodeVisitor']]

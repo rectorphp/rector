@@ -6,7 +6,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use Rector\BetterReflection\Reflector\SmartClassReflector;
-use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use ReflectionMethod;
 
@@ -120,7 +119,7 @@ final class MethodCallAnalyzer
             return false;
         }
 
-        $callerNodeTypes = (array) $node->getAttribute(Attribute::CALLER_TYPES);
+        $callerNodeTypes = $this->nodeTypeResolver->resolve($node->var);
 
         return in_array($type, $callerNodeTypes, true);
     }
