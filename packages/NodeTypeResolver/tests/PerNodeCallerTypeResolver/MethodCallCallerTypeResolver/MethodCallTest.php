@@ -14,7 +14,7 @@ final class MethodCallTest extends AbstractNodeCallerTypeResolverTest
     public function test(string $file, int $position, array $expectedTypes): void
     {
         $methodCallNodes = $this->getNodesForFileOfType($file, MethodCall::class);
-        $this->assertSame($expectedTypes, $this->nodeCallerTypeResolver->resolve($methodCallNodes[$position]));
+        $this->assertSame($expectedTypes, $this->methodCallCallerTypeResolver->resolve($methodCallNodes[$position]));
     }
 
     /**
@@ -27,7 +27,7 @@ final class MethodCallTest extends AbstractNodeCallerTypeResolverTest
             [__DIR__ . '/MethodCallSource/OnSelfCall.php.inc', 0, [
                 'SomeClass',
                 'Nette\Config\Configurator',
-                'Nette\Object'
+                'Nette\Object',
             ]],
             [__DIR__ . '/MethodCallSource/OnSelfCall.php.inc', 1, [
                 'SomeClass',
@@ -45,7 +45,7 @@ final class MethodCallTest extends AbstractNodeCallerTypeResolverTest
             [__DIR__ . '/MethodCallSource/OnPropertyCall.php.inc', 0, [
                 'Nette\Config\Configurator',
                 'Nette\Object',
-            ]]
+            ]],
         ];
     }
 }

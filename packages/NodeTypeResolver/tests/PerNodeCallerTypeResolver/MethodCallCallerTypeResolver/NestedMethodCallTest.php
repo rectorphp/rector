@@ -45,7 +45,7 @@ final class NestedMethodCallTest extends AbstractNodeCallerTypeResolverTest
         $identifierNode = $node->name;
         $this->assertSame($methodName, $identifierNode->toString());
 
-        $this->assertSame($expectedTypes, $this->nodeCallerTypeResolver->resolve($node));
+        $this->assertSame($expectedTypes, $this->methodCallCallerTypeResolver->resolve($node));
     }
 
     /**
@@ -92,7 +92,7 @@ final class NestedMethodCallTest extends AbstractNodeCallerTypeResolverTest
 
         $this->assertSame(
             ['Symfony\Component\DependencyInjection\Definition'],
-            $this->nodeCallerTypeResolver->resolve($methodCallNodes[0])
+            $this->methodCallCallerTypeResolver->resolve($methodCallNodes[0])
         );
 
         /** @var Identifier $identifierNode */
@@ -106,7 +106,7 @@ final class NestedMethodCallTest extends AbstractNodeCallerTypeResolverTest
             'Psr\Container\ContainerInterface',
             'Symfony\Component\DependencyInjection\TaggedContainerInterface',
             'Symfony\Component\DependencyInjection\Container',
-        ], $this->nodeCallerTypeResolver->resolve($methodCallNodes[1]));
+        ], $this->methodCallCallerTypeResolver->resolve($methodCallNodes[1]));
     }
 
     /**
@@ -121,7 +121,7 @@ final class NestedMethodCallTest extends AbstractNodeCallerTypeResolverTest
         $identifierNode = $node->name;
         $this->assertSame($methodName, $identifierNode->toString());
 
-        $this->assertSame($expectedTypes, $this->nodeCallerTypeResolver->resolve($node));
+        $this->assertSame($expectedTypes, $this->methodCallCallerTypeResolver->resolve($node));
     }
 
     /**

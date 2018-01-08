@@ -4,11 +4,10 @@ namespace Rector\NodeTypeResolver\NodeVisitor;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\StaticCall;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Node\Attribute;
-use Rector\NodeTypeResolver\NodeCallerTypeResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\NodeTypeResolver\PerNodeCallerTypeResolver\MethodCallCallerTypeResolver;
 
 /**
  * This will tell the type of Node, which is calling this method
@@ -21,25 +20,28 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class CallerTypeNodeVisitor extends NodeVisitorAbstract
 {
     /**
-     * @var NodeCallerTypeResolver
-     */
-    private $nodeCallerTypeResolver;
-    /**
      * @var NodeTypeResolver
      */
     private $nodeTypeResolver;
 
-    public function __construct(NodeCallerTypeResolver $nodeCallerTypeResolver, NodeTypeResolver $nodeTypeResolver)
-    {
-        $this->nodeCallerTypeResolver = $nodeCallerTypeResolver;
+    /**
+     * @var MethodCallCallerTypeResolver
+     */
+    private $methodCallCallerTypeResolver;
+
+    public function __construct(
+        NodeTypeResolver $nodeTypeResolver,
+        MethodCallCallerTypeResolver $methodCallCallerTypeResolver
+    ) {
         $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->methodCallCallerTypeResolver = $methodCallCallerTypeResolver;
     }
 
     public function enterNode(Node $node): ?Node
     {
         if ($node instanceof MethodCall) {
             $nodeTypeResolverTypes = $this->nodeTypeResolver->resolve($node->var);
-            $types = $this->nodeCallerTypeResolver->resolve($node);
+            $types = $this->methodCallCallerTypeResolver->resolve($node);
 
             if ($nodeTypeResolverTypes !== $types) {
                 dump($nodeTypeResolverTypes);

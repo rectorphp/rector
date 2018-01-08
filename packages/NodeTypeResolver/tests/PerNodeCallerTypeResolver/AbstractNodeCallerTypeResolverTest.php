@@ -6,7 +6,7 @@ use PhpParser\Node;
 use Rector\Configuration\Option;
 use Rector\NodeTraverserQueue\BetterNodeFinder;
 use Rector\NodeTraverserQueue\NodeTraverserQueue;
-use Rector\NodeTypeResolver\NodeCallerTypeResolver;
+use Rector\NodeTypeResolver\PerNodeCallerTypeResolver\MethodCallCallerTypeResolver;
 use Rector\Tests\AbstractContainerAwareTestCase;
 use SplFileInfo;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
@@ -14,9 +14,9 @@ use Symplify\PackageBuilder\Parameter\ParameterProvider;
 abstract class AbstractNodeCallerTypeResolverTest extends AbstractContainerAwareTestCase
 {
     /**
-     * @var NodeCallerTypeResolver
+     * @var MethodCallCallerTypeResolver
      */
-    protected $nodeCallerTypeResolver;
+    protected $methodCallCallerTypeResolver;
 
     /**
      * @var BetterNodeFinder
@@ -38,7 +38,7 @@ abstract class AbstractNodeCallerTypeResolverTest extends AbstractContainerAware
         $this->betterNodeFinder = $this->container->get(BetterNodeFinder::class);
         $this->nodeTraverserQueue = $this->container->get(NodeTraverserQueue::class);
         $this->parameterProvider = $this->container->get(ParameterProvider::class);
-        $this->nodeCallerTypeResolver = $this->container->get(NodeCallerTypeResolver::class);
+        $this->methodCallCallerTypeResolver = $this->container->get(MethodCallCallerTypeResolver::class);
     }
 
     /**

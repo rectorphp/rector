@@ -2,7 +2,7 @@
 
 namespace SomeNamespace;
 
-class DummyConfigurator extends DummyObject
+final class DummyConfigurator extends DummyObject
 {
     public function createContainer()
     {
@@ -10,7 +10,6 @@ class DummyConfigurator extends DummyObject
     }
 }
 
-class DummyObject
+final class DummyObject
 {
-
 }
