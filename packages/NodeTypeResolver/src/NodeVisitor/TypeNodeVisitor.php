@@ -5,7 +5,6 @@ namespace Rector\NodeTypeResolver\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\NodeTypeResolver\TypeContext;
 
 final class TypeNodeVisitor extends NodeVisitorAbstract
 {
@@ -14,7 +13,7 @@ final class TypeNodeVisitor extends NodeVisitorAbstract
      */
     private $nodeTypeResolver;
 
-    public function __construct(TypeContext $typeContext, NodeTypeResolver $nodeTypeResolver)
+    public function __construct(NodeTypeResolver $nodeTypeResolver)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
