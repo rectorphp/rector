@@ -3,11 +3,10 @@
 namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\MethodCallTypeResolver;
 
 use PhpParser\Node\Expr\MethodCall;
-use Rector\NodeTypeResolver\PerNodeTypeResolver\MethodCallTypeResolver;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
 
 /**
- * @covers MethodCallTypeResolver
+ * @covers \Rector\NodeTypeResolver\PerNodeTypeResolver\MethodCallTypeResolver
  */
 final class MethodCallTypeResolverTest extends AbstractNodeTypeResolverTest
 {
