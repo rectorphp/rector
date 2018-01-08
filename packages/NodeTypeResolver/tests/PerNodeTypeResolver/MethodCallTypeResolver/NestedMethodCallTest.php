@@ -4,9 +4,9 @@ namespace Rector\NodeTypeResolver\Tests\PerNodeCallerTypeResolver\MethodCallCall
 
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
-use Rector\NodeTypeResolver\Tests\PerNodeCallerTypeResolver\AbstractNodeCallerTypeResolverTest;
+use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
 
-final class NestedMethodCallTest extends AbstractNodeCallerTypeResolverTest
+final class NestedMethodCallTest extends AbstractNodeTypeResolverTest
 {
     /**
      * @var MethodCall[]
@@ -45,7 +45,7 @@ final class NestedMethodCallTest extends AbstractNodeCallerTypeResolverTest
         $identifierNode = $node->name;
         $this->assertSame($methodName, $identifierNode->toString());
 
-        $this->assertSame($expectedTypes, $this->methodCallCallerTypeResolver->resolve($node));
+        $this->assertSame($expectedTypes, $this->nodeTypeResolver->resolve($node));
     }
 
     /**
@@ -76,6 +76,9 @@ final class NestedMethodCallTest extends AbstractNodeCallerTypeResolverTest
         ];
     }
 
+    /**
+     * @todo use data provider
+     */
     public function testOnNestedDifferentMethodCall(): void
     {
         /** @var MethodCall[] $methodCallNodes */
@@ -92,7 +95,7 @@ final class NestedMethodCallTest extends AbstractNodeCallerTypeResolverTest
 
         $this->assertSame(
             ['Symfony\Component\DependencyInjection\Definition'],
-            $this->methodCallCallerTypeResolver->resolve($methodCallNodes[0])
+            $this->nodeTypeResolver->resolve($methodCallNodes[0])
         );
 
         /** @var Identifier $identifierNode */
@@ -106,7 +109,7 @@ final class NestedMethodCallTest extends AbstractNodeCallerTypeResolverTest
             'Psr\Container\ContainerInterface',
             'Symfony\Component\DependencyInjection\TaggedContainerInterface',
             'Symfony\Component\DependencyInjection\Container',
-        ], $this->methodCallCallerTypeResolver->resolve($methodCallNodes[1]));
+        ], $this->nodeTypeResolver->resolve($methodCallNodes[1]));
     }
 
     /**
@@ -121,7 +124,7 @@ final class NestedMethodCallTest extends AbstractNodeCallerTypeResolverTest
         $identifierNode = $node->name;
         $this->assertSame($methodName, $identifierNode->toString());
 
-        $this->assertSame($expectedTypes, $this->methodCallCallerTypeResolver->resolve($node));
+        $this->assertSame($expectedTypes, $this->nodeTypeResolver->resolve($node));
     }
 
     /**

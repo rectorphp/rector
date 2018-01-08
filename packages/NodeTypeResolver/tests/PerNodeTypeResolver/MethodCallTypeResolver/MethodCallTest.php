@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Rector\NodeTypeResolver\Tests\PerNodeCallerTypeResolver\MethodCallCallerTypeResolver;
+namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\MethodCallCallerTypeResolver;
 
 use PhpParser\Node\Expr\MethodCall;
-use Rector\NodeTypeResolver\Tests\PerNodeCallerTypeResolver\AbstractNodeCallerTypeResolverTest;
+use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
 
-final class MethodCallTest extends AbstractNodeCallerTypeResolverTest
+final class MethodCallTest extends AbstractNodeTypeResolverTest
 {
     /**
      * @dataProvider provideData()
@@ -14,7 +14,7 @@ final class MethodCallTest extends AbstractNodeCallerTypeResolverTest
     public function test(string $file, int $position, array $expectedTypes): void
     {
         $methodCallNodes = $this->getNodesForFileOfType($file, MethodCall::class);
-        $this->assertSame($expectedTypes, $this->methodCallCallerTypeResolver->resolve($methodCallNodes[$position]));
+        $this->assertSame($expectedTypes, $this->nodeTypeResolver->resolve($methodCallNodes[$position]));
     }
 
     /**
