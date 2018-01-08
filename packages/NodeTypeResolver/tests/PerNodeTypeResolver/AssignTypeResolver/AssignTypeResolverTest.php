@@ -5,6 +5,9 @@ namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AssignTypeResolver;
 use PhpParser\Node\Expr\Variable;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
 
+/**
+ * @covers \Rector\NodeTypeResolver\PerNodeTypeResolver\AssignTypeResolver
+ */
 final class AssignTypeResolverTest extends AbstractNodeTypeResolverTest
 {
     public function testNew(): void

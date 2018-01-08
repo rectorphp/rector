@@ -5,6 +5,9 @@ namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\NameTypeResolver;
 use PhpParser\Node\Name;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
 
+/**
+ * @covers \Rector\NodeTypeResolver\PerNodeTypeResolver\NameTypeResolver
+ */
 final class NameTypeResolverTest extends AbstractNodeTypeResolverTest
 {
     public function testNew(): void

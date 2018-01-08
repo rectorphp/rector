@@ -5,6 +5,9 @@ namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\PropertyFetchTypeRes
 use PhpParser\Node\Expr\PropertyFetch;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
 
+/**
+ * @covers \Rector\NodeTypeResolver\PerNodeTypeResolver\PropertyFetchTypeResolver
+ */
 final class PropertyFetchTypeResolverTest extends AbstractNodeTypeResolverTest
 {
     public function testDocBlock(): void

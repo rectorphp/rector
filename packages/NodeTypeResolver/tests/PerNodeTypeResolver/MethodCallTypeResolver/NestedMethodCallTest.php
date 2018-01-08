@@ -6,6 +6,9 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
 
+/**
+ * @covers \Rector\NodeTypeResolver\PerNodeTypeResolver\MethodCallTypeResolver
+ */
 final class NestedMethodCallTest extends AbstractNodeTypeResolverTest
 {
     /**

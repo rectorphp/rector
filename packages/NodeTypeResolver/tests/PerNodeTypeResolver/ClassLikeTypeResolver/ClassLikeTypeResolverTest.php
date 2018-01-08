@@ -5,6 +5,9 @@ namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ClassLikeTypeResolve
 use PhpParser\Node\Expr\Variable;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
 
+/**
+ * @covers \Rector\NodeTypeResolver\PerNodeTypeResolver\ClassLikeTypeResolver
+ */
 final class ClassLikeTypeResolverTest extends AbstractNodeTypeResolverTest
 {
     public function test(): void
