@@ -13,8 +13,11 @@ final class MethodCallTest extends AbstractNodeTypeResolverTest
      */
     public function test(string $file, int $position, array $expectedTypes): void
     {
+        /** @var MethodCall[] $methodCallNodes */
         $methodCallNodes = $this->getNodesForFileOfType($file, MethodCall::class);
-        $this->assertSame($expectedTypes, $this->nodeTypeResolver->resolve($methodCallNodes[$position]));
+        $methodCallNode = $methodCallNodes[$position];
+
+        $this->assertSame($expectedTypes, $this->nodeTypeResolver->resolve($methodCallNode->var));
     }
 
     /**

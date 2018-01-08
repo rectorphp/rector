@@ -39,13 +39,13 @@ final class NestedMethodCallTest extends AbstractNodeTypeResolverTest
      */
     public function testFormChainCalls(int $nodeId, string $methodName, array $expectedTypes): void
     {
-        $node = $this->formChainMethodCallNodes[$nodeId];
+        $methodCallNode = $this->formChainMethodCallNodes[$nodeId];
 
         /** @var Identifier $identifierNode */
-        $identifierNode = $node->name;
+        $identifierNode = $methodCallNode->name;
         $this->assertSame($methodName, $identifierNode->toString());
 
-        $this->assertSame($expectedTypes, $this->nodeTypeResolver->resolve($node));
+        $this->assertSame($expectedTypes, $this->nodeTypeResolver->resolve($methodCallNode->var));
     }
 
     /**
@@ -77,9 +77,10 @@ final class NestedMethodCallTest extends AbstractNodeTypeResolverTest
     }
 
     /**
-     * @todo use data provider
+     * @dataProvider provideNestedDifferentMethodCallData()
+     * @param string[] $expectedTypes
      */
-    public function testOnNestedDifferentMethodCall(): void
+    public function testOnNestedDifferentMethodCall(int $position, string $methodName, array $expectedTypes): void
     {
         /** @var MethodCall[] $methodCallNodes */
         $methodCallNodes = $this->getNodesForFileOfType(
@@ -87,29 +88,31 @@ final class NestedMethodCallTest extends AbstractNodeTypeResolverTest
             MethodCall::class
         );
 
-        $this->assertCount(2, $methodCallNodes);
+        $methodCallNode = $methodCallNodes[$position];
 
         /** @var Identifier $identifierNode */
-        $identifierNode = $methodCallNodes[0]->name;
-        $this->assertSame('setScope', $identifierNode->toString());
+        $identifierNode = $methodCallNode->name;
+        $this->assertSame($methodName, $identifierNode->toString());
 
-        $this->assertSame(
-            ['Symfony\Component\DependencyInjection\Definition'],
-            $this->nodeTypeResolver->resolve($methodCallNodes[0])
-        );
+        $this->assertSame($expectedTypes, $this->nodeTypeResolver->resolve($methodCallNode->var));
+    }
 
-        /** @var Identifier $identifierNode */
-        $identifierNode = $methodCallNodes[1]->name;
-        $this->assertSame('register', $identifierNode->toString());
-
-        $this->assertSame([
-            'Symfony\Component\DependencyInjection\ContainerBuilder',
-            'Symfony\Component\DependencyInjection\ResettableContainerInterface',
-            'Symfony\Component\DependencyInjection\ContainerInterface',
-            'Psr\Container\ContainerInterface',
-            'Symfony\Component\DependencyInjection\TaggedContainerInterface',
-            'Symfony\Component\DependencyInjection\Container',
-        ], $this->nodeTypeResolver->resolve($methodCallNodes[1]));
+    /**
+     * @return mixed[][]
+     */
+    public function provideNestedDifferentMethodCallData(): array
+    {
+        return [
+            [0, 'setScope', ['Symfony\Component\DependencyInjection\Definition']],
+            [1, 'register', [
+                'Symfony\Component\DependencyInjection\ContainerBuilder',
+                'Symfony\Component\DependencyInjection\ResettableContainerInterface',
+                'Symfony\Component\DependencyInjection\ContainerInterface',
+                'Psr\Container\ContainerInterface',
+                'Symfony\Component\DependencyInjection\TaggedContainerInterface',
+                'Symfony\Component\DependencyInjection\Container',
+            ]],
+        ];
     }
 
     /**
@@ -124,7 +127,7 @@ final class NestedMethodCallTest extends AbstractNodeTypeResolverTest
         $identifierNode = $node->name;
         $this->assertSame($methodName, $identifierNode->toString());
 
-        $this->assertSame($expectedTypes, $this->nodeTypeResolver->resolve($node));
+        $this->assertSame($expectedTypes, $this->nodeTypeResolver->resolve($node->var));
     }
 
     /**
@@ -133,6 +136,7 @@ final class NestedMethodCallTest extends AbstractNodeTypeResolverTest
     public function provideNestedMethodCallData(): array
     {
         return [
+            # nested method calls
             [0, 'getParameters', ['Nette\DI\Container']],
             [1, 'addService', ['Nette\DI\Container']],
             [2, 'createContainer', ['Nette\Config\Configurator', 'Nette\Object']],
