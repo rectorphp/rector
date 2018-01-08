@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\MethodCallCallerTypeResolver;
+namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\MethodCallTypeResolver;
 
 use PhpParser\Node\Expr\MethodCall;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
@@ -21,7 +21,7 @@ final class MethodCallTest extends AbstractNodeTypeResolverTest
     }
 
     /**
-     * @return string[][]|int[][]|string[][][]
+     * @return mixed[][]
      */
     public function provideData(): array
     {

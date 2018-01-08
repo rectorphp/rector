@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\NodeTypeResolver\Tests\PerNodeCallerTypeResolver\MethodCallCallerTypeResolver;
+namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\MethodCallTypeResolver;
 
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
