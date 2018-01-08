@@ -5,7 +5,6 @@ namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
-use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
@@ -54,14 +53,10 @@ final class PropertyFetchTypeResolver implements PerNodeTypeResolverInterface, N
      */
     public function resolve(Node $propertyFetchNode): array
     {
-        if ($propertyFetchNode->name instanceof Variable ||
-            $propertyFetchNode->name instanceof ArrayDimFetch ||
-            $propertyFetchNode->name instanceof Concat
-        ) {
+        if (! $propertyFetchNode->name instanceof Identifier) {
             return $this->nodeTypeResolver->resolve($propertyFetchNode->name);
         }
 
-        /** @var Identifier $identifierNode */
         $identifierNode = $propertyFetchNode->name;
 
         $propertyName = $identifierNode->toString();

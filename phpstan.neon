@@ -35,6 +35,7 @@ parameters:
         - '#Method Rector\\BetterReflection\\Reflector\\SmartClassReflector::reflect\(\) should return Rector\\BetterReflection\\Reflection\\ReflectionClass\|null but returns Rector\\BetterReflection\\Reflection\\Reflection#'
         - '#Property Rector\\NodeTypeResolver\\Tests\\PerNodeCallerTypeResolver\\MethodCallCallerTypeResolver\\NestedMethodCallTest::\$(formChainMethodCallNodes|nestedMethodCallNodes) \(array<PhpParser\\Node\\Expr\\MethodCall>\) does not accept array<PhpParser\\Node>#'
         - '#Cannot call method toString\(\) on string#'
+        - '#Parameter \#1 \$node of method Rector\\NodeTypeResolver\\NodeTypeResolver::resolve\(\) expects PhpParser\\Node, PhpParser\\Node\\Expr|string given#'
 
         # known value of Name of MethodCall
         - '#Call to an undefined method PhpParser\\Node\\Expr\|PhpParser\\Node\\Name::toString\(\)#'
