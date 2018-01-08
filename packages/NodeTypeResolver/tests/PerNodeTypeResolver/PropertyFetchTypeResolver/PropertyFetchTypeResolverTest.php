@@ -10,33 +10,34 @@ use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTe
  */
 final class PropertyFetchTypeResolverTest extends AbstractNodeTypeResolverTest
 {
-    public function testDocBlock(): void
+    /**
+     * @dataProvider provideTypeForNodesAndFilesData()
+     * @param string[] $expectedTypes
+     */
+    public function test(string $file, int $nodePosition, string $propertyName, array $expectedTypes): void
     {
-        $propertyFetchNodes = $this->getNodesForFileOfType(
-            __DIR__ . '/Source/NestedProperty.php.inc',
-            PropertyFetch::class
-        );
+        /** @var PropertyFetch[] $propertyFetchNodes */
+        $propertyFetchNodes = $this->getNodesForFileOfType($file, PropertyFetch::class);
+        $propertyFetchNode = $propertyFetchNodes[$nodePosition];
 
-        $this->assertCount(3, $propertyFetchNodes);
+        $this->assertSame($propertyName, $propertyFetchNode->name->toString());
+        $this->assertSame($expectedTypes, $this->nodeTypeResolver->resolve($propertyFetchNode));
+    }
 
-        $this->assertSame('name', $propertyFetchNodes[0]->name->toString());
-
-        $this->assertSame(
-            ['PhpParser\Node\VarLikeIdentifier'],
-            $this->nodeTypeResolver->resolve($propertyFetchNodes[0])
-        );
-
-        $this->assertSame('props', $propertyFetchNodes[1]->name->toString());
-        $this->assertSame(
-            ['PhpParser\Node\Stmt\PropertyProperty'],
-            $this->nodeTypeResolver->resolve($propertyFetchNodes[1])
-        );
-
-        $this->assertSame('node', $propertyFetchNodes[2]->name->toString());
-        $this->assertSame([
-            'PhpParser\Node\Stmt\Property',
-            'PhpParser\Node\Stmt',
-            'PhpParser\NodeAbstract',
-        ], $this->nodeTypeResolver->resolve($propertyFetchNodes[2]));
+    /**
+     * @return mixed[][]
+     */
+    public function provideTypeForNodesAndFilesData(): array
+    {
+        return [
+            # doc block
+            [__DIR__ . '/Source/NestedProperty.php.inc', 0, 'name', ['PhpParser\Node\VarLikeIdentifier']],
+            [__DIR__ . '/Source/NestedProperty.php.inc', 1, 'props', ['PhpParser\Node\Stmt\PropertyProperty']],
+            [__DIR__ . '/Source/NestedProperty.php.inc', 2, 'node', [
+                'PhpParser\Node\Stmt\Property',
+                'PhpParser\Node\Stmt',
+                'PhpParser\NodeAbstract',
+            ]],
+        ];
     }
 }

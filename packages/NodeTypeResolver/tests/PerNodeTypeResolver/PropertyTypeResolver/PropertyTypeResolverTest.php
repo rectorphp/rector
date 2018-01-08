@@ -10,46 +10,36 @@ use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTe
  */
 final class PropertyTypeResolverTest extends AbstractNodeTypeResolverTest
 {
-    public function testDocBlock(): void
+    /**
+     * @dataProvider provideTypeForNodesAndFilesData()
+     * @param string[] $expectedTypes
+     */
+    public function test(string $file, int $nodePosition, array $expectedTypes): void
     {
-        $propertyNodes = $this->getNodesForFileOfType(
-            __DIR__ . '/Source/DocBlockDefinedProperty.php.inc',
-            Property::class
-        );
+        $propertyNodes = $this->getNodesForFileOfType($file, Property::class);
 
-        $this->assertSame(
-            ['SomeNamespace\PropertyType'],
-            $this->nodeTypeResolver->resolve($propertyNodes[0])
-        );
+        $this->assertSame($expectedTypes, $this->nodeTypeResolver->resolve($propertyNodes[$nodePosition]));
     }
 
-    public function testConstructorType(): void
+    /**
+     * @return mixed[][]
+     */
+    public function provideTypeForNodesAndFilesData(): array
     {
-        $propertyNodes = $this->getNodesForFileOfType(
-            __DIR__ . '/Source/ConstructorDefinedProperty.php.inc',
-            Property::class
-        );
-
-        $this->assertSame(
-            ['SomeNamespace\PropertyType'],
-            $this->nodeTypeResolver->resolve($propertyNodes[0])
-        );
-    }
-
-    public function testPartialDocBlock(): void
-    {
-        $propertyNodes = $this->getNodesForFileOfType(
-            __DIR__ . '/Source/PartialDocBlock.php.inc',
-            Property::class
-        );
-
-        $this->assertSame([
-            'PhpParser\Node\Stmt\ClassMethod',
-            'PhpParser\Node\Stmt\Function_',
-            'PhpParser\Node\Expr\Closure',
-            'PhpParser\Node\Stmt',
-            'PhpParser\NodeAbstract',
-            'PhpParser\Node\Expr',
-        ], $this->nodeTypeResolver->resolve($propertyNodes[0]));
+        return [
+            # doc block
+            [__DIR__ . '/Source/DocBlockDefinedProperty.php.inc', 0, ['SomeNamespace\PropertyType']],
+            # constructor defined property
+            [__DIR__ . '/Source/ConstructorDefinedProperty.php.inc', 0, ['SomeNamespace\PropertyType']],
+            # partial doc block
+            [__DIR__ . '/Source/PartialDocBlock.php.inc', 0, [
+                'PhpParser\Node\Stmt\ClassMethod',
+                'PhpParser\Node\Stmt\Function_',
+                'PhpParser\Node\Expr\Closure',
+                'PhpParser\Node\Stmt',
+                'PhpParser\NodeAbstract',
+                'PhpParser\Node\Expr',
+            ]],
+        ];
     }
 }

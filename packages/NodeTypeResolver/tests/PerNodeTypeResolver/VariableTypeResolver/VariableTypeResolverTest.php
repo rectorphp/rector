@@ -10,51 +10,33 @@ use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTe
  */
 final class VariableTypeResolverTest extends AbstractNodeTypeResolverTest
 {
-    public function testThis(): void
+    /**
+     * @dataProvider provideTypeForNodesAndFilesData()
+     * @param string[] $expectedTypes
+     */
+    public function test(string $file, int $nodePosition, array $expectedTypes): void
     {
-        $variableNodes = $this->getNodesForFileOfType(__DIR__ . '/Source/This.php.inc', Variable::class);
+        $variableNodes = $this->getNodesForFileOfType($file, Variable::class);
 
-        $this->assertSame(
-            ['SomeNamespace\SomeClass', 'SomeNamespace\AnotherClass'],
-            $this->nodeTypeResolver->resolve($variableNodes[0])
-        );
+        $this->assertSame($expectedTypes, $this->nodeTypeResolver->resolve($variableNodes[$nodePosition]));
     }
 
-    public function testNew(): void
+    /**
+     * @return mixed[][]
+     */
+    public function provideTypeForNodesAndFilesData(): array
     {
-        $variableNodes = $this->getNodesForFileOfType(__DIR__ . '/Source/SomeClass.php.inc', Variable::class);
-
-        $this->assertSame(
-            ['SomeNamespace\AnotherType'],
-            $this->nodeTypeResolver->resolve($variableNodes[0])
-        );
-        $this->assertSame(
-            ['SomeNamespace\AnotherType'],
-            $this->nodeTypeResolver->resolve($variableNodes[2])
-        );
-    }
-
-    public function testAssign(): void
-    {
-        $variableNodes = $this->getNodesForFileOfType(__DIR__ . '/Source/SomeClass.php.inc', Variable::class);
-
-        $this->assertSame(
-            ['SomeNamespace\AnotherType'],
-            $this->nodeTypeResolver->resolve($variableNodes[1])
-        );
-    }
-
-    public function testCallbackArgumentTypehint(): void
-    {
-        $variableNodes = $this->getNodesForFileOfType(__DIR__ . '/Source/ArgumentTypehint.php.inc', Variable::class);
-
-        $this->assertSame(
-            ['SomeNamespace\UseUse'],
-            $this->nodeTypeResolver->resolve($variableNodes[0])
-        );
-        $this->assertSame(
-            ['SomeNamespace\UseUse'],
-            $this->nodeTypeResolver->resolve($variableNodes[1])
-        );
+        return [
+            # this
+            [__DIR__ . '/Source/This.php.inc', 0, ['SomeNamespace\SomeClass', 'SomeNamespace\AnotherClass']],
+            # new
+            [__DIR__ . '/Source/SomeClass.php.inc', 0, ['SomeNamespace\AnotherType']],
+            [__DIR__ . '/Source/SomeClass.php.inc', 2, ['SomeNamespace\AnotherType']],
+            # assignment
+            [__DIR__ . '/Source/SomeClass.php.inc', 1, ['SomeNamespace\AnotherType']],
+            # callback arguments
+            [__DIR__ . '/Source/ArgumentTypehint.php.inc', 0, ['SomeNamespace\UseUse']],
+            [__DIR__ . '/Source/ArgumentTypehint.php.inc', 1, ['SomeNamespace\UseUse']],
+        ];
     }
 }

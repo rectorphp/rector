@@ -10,14 +10,28 @@ use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTe
  */
 final class ClassLikeTypeResolverTest extends AbstractNodeTypeResolverTest
 {
-    public function test(): void
+    /**
+     * @dataProvider provideTypeForNodesAndFilesData()
+     * @param string[] $expectedTypes
+     */
+    public function test(string $file, int $nodePosition, array $expectedTypes): void
     {
-        $file = __DIR__ . '/Source/ClassWithParent.php.inc';
         $variableNodes = $this->getNodesForFileOfType($file, Variable::class);
 
-        $this->assertSame(
-            ['SomeNamespace\SomeClass', 'SomeNamespace\SomeInterface'],
-            $this->nodeTypeResolver->resolve($variableNodes[0])
-        );
+        $this->assertSame($expectedTypes, $this->nodeTypeResolver->resolve($variableNodes[$nodePosition]));
+    }
+
+    /**
+     * @return mixed[][]
+     */
+    public function provideTypeForNodesAndFilesData(): array
+    {
+        return [
+            # assign of "new <name>"
+            [__DIR__ . '/Source/ClassWithParent.php.inc', 0, [
+                'SomeNamespace\SomeClass',
+                'SomeNamespace\SomeInterface',
+            ]],
+        ];
     }
 }

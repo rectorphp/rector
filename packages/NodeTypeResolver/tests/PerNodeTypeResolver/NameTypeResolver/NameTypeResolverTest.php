@@ -10,13 +10,25 @@ use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTe
  */
 final class NameTypeResolverTest extends AbstractNodeTypeResolverTest
 {
-    public function testNew(): void
+    /**
+     * @dataProvider provideTypeForNodesAndFilesData()
+     * @param string[] $expectedTypes
+     */
+    public function test(string $file, int $nodePosition, array $expectedTypes): void
     {
-        $nameNodes = $this->getNodesForFileOfType(__DIR__ . '/Source/ParentCall.php.inc', Name::class);
+        $nameNodes = $this->getNodesForFileOfType($file, Name::class);
 
-        $this->assertSame(
-            ['Nette\Config\Configurator'],
-            $this->nodeTypeResolver->resolve($nameNodes[2])
-        );
+        $this->assertSame($expectedTypes, $this->nodeTypeResolver->resolve($nameNodes[$nodePosition]));
+    }
+
+    /**
+     * @return mixed[][]
+     */
+    public function provideTypeForNodesAndFilesData(): array
+    {
+        return [
+            # test new
+            [__DIR__ . '/Source/ParentCall.php.inc', 2, ['Nette\Config\Configurator']],
+        ];
     }
 }
