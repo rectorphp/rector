@@ -89,7 +89,7 @@ final class AssertCompareToSpecificMethodRector extends AbstractRector
             return false;
         }
 
-        $methodName = $secondArgumentValue->name->getFirst();
+        $methodName = $secondArgumentValue->name->toString();
         if (! isset($this->defaultOldToNewMethods[$methodName])) {
             return false;
         }
