@@ -69,11 +69,7 @@ final class NameTypeResolver implements PerNodeTypeResolverInterface
         }
 
         // is parent namespace?
-        if ($nameNode->getAttribute(Attribute::PARENT_NODE) instanceof Namespace_) {
-            return true;
-        }
-
-        return false;
+        return $nameNode->getAttribute(Attribute::PARENT_NODE) instanceof Namespace_;
     }
 
     /**

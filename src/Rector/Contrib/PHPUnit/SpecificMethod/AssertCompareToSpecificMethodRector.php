@@ -142,10 +142,6 @@ final class AssertCompareToSpecificMethodRector extends AbstractRector
         }
 
         $functionName = $node->name;
-        if (! $functionName instanceof Name) {
-            return false;
-        }
-
-        return true;
+        return $functionName instanceof Name;
     }
 }
