@@ -29,11 +29,7 @@ final class SourceStubber
     {
         $this->loadStubs();
 
-        if (! isset($this->stubs[$name])) {
-            return null;
-        }
-
-        return $this->stubs[$name];
+        return $this->stubs[$name] ?? null;
     }
 
     private function loadStubs(): void
