@@ -52,6 +52,11 @@ final class MethodCallTypeResolverTest extends AbstractNodeTypeResolverTest
                 'Nette\Config\Configurator',
                 'Nette\Object',
             ]],
+            # on magic class call
+            [__DIR__ . '/MethodCallSource/OnMagicClassCall.php.inc', 0, [
+                'Nette\Config\Configurator',
+                'Nette\Object',
+            ]],
         ];
     }
 }

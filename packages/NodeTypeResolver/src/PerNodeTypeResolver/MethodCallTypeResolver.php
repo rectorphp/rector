@@ -7,6 +7,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
 use Rector\BetterReflection\Reflector\MethodReflector;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverAwareInterface;
@@ -68,7 +69,12 @@ final class MethodCallTypeResolver implements PerNodeTypeResolverInterface, Node
     public function resolve(Node $methodCallNode): array
     {
         $parentCallerTypes = $this->resolveMethodCallVarTypes($methodCallNode);
-        $methodName = (string) $methodCallNode->name;
+
+        if ($methodCallNode->name instanceof Identifier) {
+            $methodName = $methodCallNode->name->toString();
+        } else {
+            $methodName = (string) $methodCallNode->name;
+        }
 
         if (! $parentCallerTypes || ! $methodName) {
             return [];
