@@ -1,10 +1,10 @@
 {
     "name": "rector/rector",
-    "description": "AST based PHP refactoring of Nette or Symfony application to most recent versions.",
+    "description": "Upgrade your application with CLI without any deprecations knowledge.",
     "license": "MIT",
     "authors": [
         { "name": "Tomas Votruba", "email": "tomas.vot@gmail.com", "homepage": "https://tomasvotruba.com" },
-        { "name": "Rector Contributors", "homepage": "https://github.com/TomasVotruba/Rector/graphs/contributors" }
+        { "name": "Rector Contributors", "homepage": "https://github.com/rectorphp/rector/graphs/contributors" }
     ],
     "require": {
         "php": "^7.1",
