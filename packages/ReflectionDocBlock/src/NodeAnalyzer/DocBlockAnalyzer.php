@@ -102,18 +102,13 @@ final class DocBlockAnalyzer
     }
 
     /**
-     * @return Tag[]|null
+     * @return Tag[]|string[]
      */
-    public function getTagsByName(Node $node, string $name): ?array
+    public function getTagsByName(Node $node, string $name): array
     {
         $docBlock = $this->docBlockFactory->createFromNode($node);
 
-        $tags = $docBlock->getTagsByName($name);
-        if (count($tags) === 0) {
-            return null;
-        }
-
-        return $tags;
+        return $docBlock->getTagsByName($name);
     }
 
     public function replaceVarType(Node $node, string $to): void
