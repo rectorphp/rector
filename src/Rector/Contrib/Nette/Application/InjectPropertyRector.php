@@ -46,11 +46,7 @@ final class InjectPropertyRector extends AbstractRector
             return false;
         }
 
-        if (! $this->docBlockAnalyzer->hasAnnotation($node, 'inject')) {
-            return false;
-        }
-
-        return true;
+        return $this->docBlockAnalyzer->hasAnnotation($node, 'inject');
     }
 
     /**

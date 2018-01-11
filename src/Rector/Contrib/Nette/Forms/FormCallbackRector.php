@@ -58,11 +58,7 @@ final class FormCallbackRector extends AbstractRector
             return false;
         }
 
-        if (! $node->expr instanceof PropertyFetch) {
-            return false;
-        }
-
-        return true;
+        return $node->expr instanceof PropertyFetch;
     }
 
     /**
@@ -93,10 +89,6 @@ final class FormCallbackRector extends AbstractRector
             return false;
         }
 
-        if (! $assignNode->var->var instanceof PropertyFetch) {
-            return false;
-        }
-
-        return true;
+        return $assignNode->var->var instanceof PropertyFetch;
     }
 }

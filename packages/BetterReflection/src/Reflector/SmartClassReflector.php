@@ -178,10 +178,6 @@ final class SmartClassReflector
         }
 
         // is constant
-        if (defined($className)) {
-            return false;
-        }
-
-        return true;
+        return ! defined($className);
     }
 }

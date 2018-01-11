@@ -51,11 +51,7 @@ final class FormIsValidRector extends AbstractRector
             return false;
         }
 
-        if ($node->getAttribute(Attribute::PREVIOUS_NODE) !== null) {
-            return false;
-        }
-
-        return true;
+        return $node->getAttribute(Attribute::PREVIOUS_NODE) === null;
     }
 
     /**

@@ -171,10 +171,6 @@ final class ArgumentReplacerRector extends AbstractRector
             return true;
         }
 
-        if ($this->classMethodAnalyzer->isTypeAndMethods($node, $type, $methods)) {
-            return true;
-        }
-
-        return false;
+        return $this->classMethodAnalyzer->isTypeAndMethods($node, $type, $methods);
     }
 }

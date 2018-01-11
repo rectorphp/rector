@@ -15,11 +15,7 @@ final class MethodArgumentAnalyzer
             return false;
         }
 
-        if (! isset($node->args[0]) || ! $node->args[0] instanceof Arg) {
-            return false;
-        }
-
-        return true;
+        return isset($node->args[0]) || $node->args[0] instanceof Arg;
     }
 
     public function hasMethodSecondArgument(Node $node): bool
@@ -42,10 +38,6 @@ final class MethodArgumentAnalyzer
         }
 
         /** @var MethodCall $node */
-        if (! $node->args[0]->value instanceof String_) {
-            return false;
-        }
-
-        return true;
+        return $node->args[0]->value instanceof String_;
     }
 }

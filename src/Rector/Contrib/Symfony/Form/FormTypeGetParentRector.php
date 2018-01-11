@@ -58,11 +58,7 @@ final class FormTypeGetParentRector extends AbstractRector
             return true;
         }
 
-        if ($this->isParentTypeAndMethod($node, 'Symfony\Component\Form\AbstractTypeExtension', 'getExtendedType')) {
-            return true;
-        }
-
-        return false;
+        return $this->isParentTypeAndMethod($node, 'Symfony\Component\Form\AbstractTypeExtension', 'getExtendedType');
     }
 
     /**

@@ -96,11 +96,7 @@ final class MethodNameReplacerRector extends AbstractRector
             return true;
         }
 
-        if ($this->isMethodName($node, $this->getClasses())) {
-            return true;
-        }
-
-        return false;
+        return $this->isMethodName($node, $this->getClasses());
     }
 
     /**

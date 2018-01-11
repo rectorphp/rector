@@ -64,11 +64,7 @@ final class GetRequestRector extends AbstractRector
             return true;
         }
 
-        if ($this->isGetRequestInAction($node)) {
-            return true;
-        }
-
-        return false;
+        return $this->isGetRequestInAction($node);
     }
 
     /**
@@ -106,10 +102,6 @@ final class GetRequestRector extends AbstractRector
 
         $methodNode = $node->getAttribute(Attribute::METHOD_NODE);
 
-        if (! $this->controllerMethodAnalyzer->isAction($methodNode)) {
-            return false;
-        }
-
-        return true;
+        return $this->controllerMethodAnalyzer->isAction($methodNode);
     }
 }

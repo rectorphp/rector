@@ -47,11 +47,7 @@ final class SetEntityToStatementRector extends AbstractRector
             return false;
         }
 
-        if (! $this->methodCallAnalyzer->isMethod($node, 'setEntity')) {
-            return false;
-        }
-
-        return true;
+        return $this->methodCallAnalyzer->isMethod($node, 'setEntity');
     }
 
     /**
