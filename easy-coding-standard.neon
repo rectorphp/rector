@@ -32,6 +32,10 @@ checkers:
             - 'PhpParser\Node'
 
 parameters:
+    exclude_checkers:
+        # bugged in php-cs-fixer 2.10
+        - PhpCsFixer\Fixer\PhpUnit\PhpUnitTestAnnotationFixer
+
     skip:
         Symplify\CodingStandard\Fixer\Php\ClassStringToClassConstantFixer:
             # classes might not exist
