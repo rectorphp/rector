@@ -67,10 +67,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
                 return $newNode;
             }
 
-            if (is_int($newNode)) {
-                return $newNode;
-            }
-
             return NodeTraverser::DONT_TRAVERSE_CHILDREN;
         }
 
