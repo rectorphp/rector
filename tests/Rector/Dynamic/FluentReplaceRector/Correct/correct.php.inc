@@ -26,7 +26,7 @@ class ActionClass
     {
         $this->someClass = new SomeClass();
 
-        $this->someClass->someFunction()
+        $this->someClass->someFunction();
         $this->someClass->otherFunction();
     }
 }
