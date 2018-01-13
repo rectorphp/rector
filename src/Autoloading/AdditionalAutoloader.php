@@ -3,7 +3,7 @@
 namespace Rector\Autoloading;
 
 use Nette\Loaders\RobotLoader;
-use Rector\Console\Command\ProcessCommand;
+use Rector\Configuration\Option;
 use Symfony\Component\Console\Input\InputInterface;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
@@ -33,7 +33,7 @@ final class AdditionalAutoloader
     private function autoloadFileFromInput(InputInterface $input): void
     {
         /** @var string|null $autoloadFile */
-        $autoloadFile = $input->getOption(ProcessCommand::OPTION_AUTOLOAD_FILE);
+        $autoloadFile = $input->getOption(Option::OPTION_AUTOLOAD_FILE);
         if ($autoloadFile === null) {
             return;
         }

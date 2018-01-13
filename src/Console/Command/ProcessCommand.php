@@ -25,16 +25,6 @@ use Throwable;
 final class ProcessCommand extends Command
 {
     /**
-     * @var string
-     */
-    public const OPTION_AUTOLOAD_FILE = 'autoload-file';
-
-    /**
-     * @var string
-     */
-    private const OPTION_DRY_RUN = 'dry-run';
-
-    /**
      * @var FileProcessor
      */
     private $fileProcessor;
@@ -116,13 +106,13 @@ final class ProcessCommand extends Command
             'Files or directories to be upgraded.'
         );
         $this->addOption(
-            self::OPTION_DRY_RUN,
+            Option::OPTION_DRY_RUN,
             null,
             InputOption::VALUE_NONE,
             'See diff of changes, do not save them to files.'
         );
         $this->addOption(
-            self::OPTION_AUTOLOAD_FILE,
+            Option::OPTION_AUTOLOAD_FILE,
             null,
             InputOption::VALUE_REQUIRED,
             'File with extra autoload'
@@ -139,7 +129,7 @@ final class ProcessCommand extends Command
 
         $source = $input->getArgument(Option::SOURCE);
         $this->parameterProvider->changeParameter(Option::SOURCE, $source);
-        $this->parameterProvider->changeParameter(self::OPTION_DRY_RUN, $input->getOption(self::OPTION_DRY_RUN));
+        $this->parameterProvider->changeParameter(Option::OPTION_DRY_RUN, $input->getOption(Option::OPTION_DRY_RUN));
         $files = $this->phpFilesFinder->findInDirectoriesAndFiles($source);
 
         $this->processCommandReporter->reportLoadedRectors();
@@ -196,7 +186,7 @@ final class ProcessCommand extends Command
     {
         $oldContent = $fileInfo->getContents();
 
-        if ($this->parameterProvider->provideParameter(self::OPTION_DRY_RUN)) {
+        if ($this->parameterProvider->provideParameter(Option::OPTION_DRY_RUN)) {
             $newContent = $this->fileProcessor->processFileToString($fileInfo);
             if ($newContent !== $oldContent) {
                 $this->diffFiles[] = [
