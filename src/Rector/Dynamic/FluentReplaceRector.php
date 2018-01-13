@@ -6,6 +6,8 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\NodeTraverser;
+use Rector\Node\Attribute;
 use Rector\Rector\AbstractRector;
 
 final class FluentReplaceRector extends AbstractRector
@@ -25,8 +27,9 @@ final class FluentReplaceRector extends AbstractRector
         return $returnExpr->name === 'this';
     }
 
-    public function refactor(Node $node): Node
+    public function refactor(Node $node): ?Node
     {
-        return new Nop;
+        $this->removeNode = true;
+        return null;
     }
 }
