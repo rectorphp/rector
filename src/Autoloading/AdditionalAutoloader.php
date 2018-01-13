@@ -4,7 +4,6 @@ namespace Rector\Autoloading;
 
 use Nette\Loaders\RobotLoader;
 use Rector\Configuration\Option;
-use Rector\Console\Command\ProcessCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
