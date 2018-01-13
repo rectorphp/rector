@@ -17,28 +17,35 @@ final class FluentReplaceRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        if (! $node instanceof Return_) {
-            return false;
+        if ($node instanceof Return_) {
+            $returnExpr = $node->expr;
+
+            if (! $returnExpr instanceof Variable) {
+                return false;
+            }
+
+            return $returnExpr->name === 'this';
         }
 
-        $returnExpr = $node->expr;
-
-        if (! $returnExpr instanceof Variable) {
-            return false;
-        }
-
-        return $returnExpr->name === 'this';
+        return false;
     }
 
+    /**
+     * @param Return_ $node
+     */
     public function refactor(Node $node): ?Node
     {
-        $this->removeNode = true;
+        if ($node instanceof Return_) {
+            $this->removeNode = true;
 
-        $className = $node->getAttribute(Attribute::CLASS_NAME);
-        $methodName = $node->getAttribute(Attribute::METHOD_NAME);
+            $className = $node->getAttribute(Attribute::CLASS_NAME);
+            $methodName = $node->getAttribute(Attribute::METHOD_NAME);
 
-        $this->relatedTypesAndMethods[$className][] = $methodName;
+            $this->relatedTypesAndMethods[$className][] = $methodName;
 
-        return null;
+            return null;
+        }
+
+        return $node;
     }
 }
