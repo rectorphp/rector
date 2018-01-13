@@ -3,6 +3,7 @@
 namespace Rector\Rector\Dynamic;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Expr\Variable;
 use Rector\Rector\AbstractRector;
@@ -24,8 +25,8 @@ final class FluentReplaceRector extends AbstractRector
         return $returnExpr->name === 'this';
     }
 
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $node): Node
     {
-        return null;
+        return new Nop;
     }
 }
