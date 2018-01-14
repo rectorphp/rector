@@ -6,6 +6,8 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Return_;
+use PhpParser\NodeFinder;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\Node\NodeFactory;
 use Rector\Rector\AbstractRector;
@@ -37,15 +39,21 @@ final class TemplateAnnotationRector extends AbstractRector
      * @var NodeFactory
      */
     private $nodeFactory;
+    /**
+     * @var NodeFinder
+     */
+    private $nodeFinder;
 
     public function __construct(
         DocBlockAnalyzer $docBlockAnalyzer,
         MethodCallNodeFactory $methodCallNodeFactory,
-        NodeFactory $nodeFactory
+        NodeFactory $nodeFactory,
+        NodeFinder $nodeFinder
     ) {
         $this->docBlockAnalyzer = $docBlockAnalyzer;
         $this->methodCallNodeFactory = $methodCallNodeFactory;
         $this->nodeFactory = $nodeFactory;
+        $this->nodeFinder = $nodeFinder;
     }
 
     public function isCandidate(Node $node): bool
@@ -69,15 +77,31 @@ final class TemplateAnnotationRector extends AbstractRector
         $methodName = $classMethodNode->name->toString();
         $templateName = $this->resolveTemplateNameFromActionMethodName($methodName);
 
+        $arguments = [$templateName];
+
+        // has method return type?
+        $secondArg = null;
+        $returnNode = $this->nodeFinder->findFirstInstanceOf($classMethodNode->stmts, Return_::class);
+        if ($returnNode instanceof Return_) {
+            if ($returnNode->expr instanceof Node\Expr\Array_) {
+                $arguments[] = $returnNode->expr;
+            }
+        }
+
         // 3. add $this->render method call with template
         $thisRenderMethodCall = $this->methodCallNodeFactory->createWithVariableNameMethodNameAndArguments(
             'this',
             'render',
-            $this->nodeFactory->createArgs([$templateName])
+            $this->nodeFactory->createArgs($arguments)
         );
 
-        // 4. to bottom of method - probably $methodCall->stmts[]
-        $classMethodNode->stmts[] = new Expression($thisRenderMethodCall);
+        // 4. replace Return_ node value if exists
+        if ($returnNode instanceof Return_) {
+            $returnNode->expr = $thisRenderMethodCall;
+        } else {
+            // or add to the bottom of method
+            $classMethodNode->stmts[] = new Return_($thisRenderMethodCall);
+        }
 
         return $classMethodNode;
     }
