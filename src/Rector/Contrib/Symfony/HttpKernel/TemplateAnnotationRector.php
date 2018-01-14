@@ -2,6 +2,7 @@
 
 namespace Rector\Rector\Contrib\Symfony\HttpKernel;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
@@ -76,6 +77,10 @@ final class TemplateAnnotationRector extends AbstractRector
 
     private function resolveTemplateNameFromActionMethodName(string $methodName): string
     {
-        // ...?
+        if (Strings::startsWith($methodName, 'action')) {
+            return substr($methodName, strlen('action')) . '.twig.html';
+        }
+
+        // @todo
     }
 }
