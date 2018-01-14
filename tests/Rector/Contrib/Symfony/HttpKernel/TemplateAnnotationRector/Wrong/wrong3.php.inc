@@ -3,7 +3,7 @@
 class ClassWithNamedService1 extends Controller
 {
     /**
-     * @template("someFile.toBe.used")
+     * @Template("someFile.toBe.used")
      */
     public function indexAction()
     {
