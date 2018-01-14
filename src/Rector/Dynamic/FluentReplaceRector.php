@@ -50,18 +50,7 @@ final class FluentReplaceRector extends AbstractRector
         }
 
         if ($node instanceof MethodCall) {
-            // is chain method call
-            if (! $node->var instanceof MethodCall) {
-                return false;
-            }
-
-            foreach ($this->relatedTypesAndMethods as $type => $methods) {
-                if (! $this->methodCallAnalyzer->isTypeAndMethods($node->var, $type, $methods)) {
-                    continue;
-                }
-
-                return true;
-            }
+            return $this->isMethodCallCandidate($node);
         }
 
         return false;
@@ -107,5 +96,23 @@ final class FluentReplaceRector extends AbstractRector
         }
 
         return $node;
+    }
+
+    private function isMethodCallCandidate(MethodCall $methodCallNode): bool
+    {
+        // is chain method call
+        if (! $methodCallNode->var instanceof MethodCall) {
+            return false;
+        }
+
+        foreach ($this->relatedTypesAndMethods as $type => $methods) {
+            if (! $this->methodCallAnalyzer->isTypeAndMethods($methodCallNode->var, $type, $methods)) {
+                continue;
+            }
+
+            return true;
+        }
+
+        return false;
     }
 }
