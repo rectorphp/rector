@@ -4,8 +4,8 @@ namespace Rector\Rector\Contrib\Symfony\HttpKernel;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeFinder;
 use Rector\Node\MethodCallNodeFactory;
@@ -39,6 +39,7 @@ final class TemplateAnnotationRector extends AbstractRector
      * @var NodeFactory
      */
     private $nodeFactory;
+
     /**
      * @var NodeFinder
      */
@@ -83,7 +84,7 @@ final class TemplateAnnotationRector extends AbstractRector
         $secondArg = null;
         $returnNode = $this->nodeFinder->findFirstInstanceOf($classMethodNode->stmts, Return_::class);
         if ($returnNode instanceof Return_) {
-            if ($returnNode->expr instanceof Node\Expr\Array_) {
+            if ($returnNode->expr instanceof Array_) {
                 $arguments[] = $returnNode->expr;
             }
         }
@@ -112,6 +113,6 @@ final class TemplateAnnotationRector extends AbstractRector
             return substr($methodName, 0, -strlen('Action')) . '.html.twig';
         }
 
-        // @todo
+        // @todo - see @template docs for Symfony
     }
 }
