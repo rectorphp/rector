@@ -1,14 +1,14 @@
 <?php declare (strict_types=1);
 
-namespace Rector\AppBundle\Controller;
+namespace AppBundle\Controller;
 
 class ClassWithNamedService1 extends Controller
 {
     /**
-     * @Template
+     * @Template()
      */
     public function indexAction()
     {
-        return ['someKey' => 'someValue'];
+        return $this->render('AppBundle:ClassWithNamedService1:index.html.twig');
     }
 }
