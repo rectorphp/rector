@@ -4,16 +4,10 @@ namespace Rector\Rector\Contrib\Symfony\HttpKernel;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Builder\Class_\ClassPropertyCollector;
-use Rector\Contract\Bridge\ServiceTypeForNameProviderInterface;
-use Rector\Naming\PropertyNaming;
-use Rector\Node\Attribute;
+use PhpParser\Node\Stmt\Expression;
 use Rector\Node\MethodCallNodeFactory;
-use Rector\Node\PropertyFetchNodeFactory;
-use Rector\NodeAnalyzer\Contrib\Symfony\ContainerCallAnalyzer;
+use Rector\Node\NodeFactory;
 use Rector\Rector\AbstractRector;
 use Rector\ReflectionDocBlock\NodeAnalyzer\DocBlockAnalyzer;
 
@@ -39,10 +33,19 @@ final class TemplateAnnotationRector extends AbstractRector
      */
     private $methodCallNodeFactory;
 
-    public function __construct(DocBlockAnalyzer $docBlockAnalyzer, MethodCallNodeFactory $methodCallNodeFactory)
-    {
+    /**
+     * @var NodeFactory
+     */
+    private $nodeFactory;
+
+    public function __construct(
+        DocBlockAnalyzer $docBlockAnalyzer,
+        MethodCallNodeFactory $methodCallNodeFactory,
+        NodeFactory $nodeFactory
+    ) {
         $this->docBlockAnalyzer = $docBlockAnalyzer;
         $this->methodCallNodeFactory = $methodCallNodeFactory;
+        $this->nodeFactory = $nodeFactory;
     }
 
     public function isCandidate(Node $node): bool
@@ -74,11 +77,11 @@ final class TemplateAnnotationRector extends AbstractRector
         $thisRenderMethodCall = $this->methodCallNodeFactory->createWithVariableNameMethodNameAndArguments(
             'this',
             'render',
-            [new Node\Arg(new String_($templateName))]
+            $this->nodeFactory->createArgs([$templateName])
         );
 
         // 4. to bottom of method - probably $methodCall->stmts[]
-        $classMethodNode->stmts[] = new Node\Stmt\Expression($thisRenderMethodCall);
+        $classMethodNode->stmts[] = new Expression($thisRenderMethodCall);
 
         return $classMethodNode;
     }
