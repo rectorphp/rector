@@ -78,15 +78,15 @@ final class TemplateAnnotationRector extends AbstractRector
         );
 
         // 4. to bottom of method - probably $methodCall->stmts[]
-        $classMethodNode->stmts += $thisRenderMethodCall;
+        $classMethodNode->stmts[] = new Node\Stmt\Expression($thisRenderMethodCall);
 
         return $classMethodNode;
     }
 
     private function resolveTemplateNameFromActionMethodName(string $methodName): string
     {
-        if (Strings::startsWith($methodName, 'action')) {
-            return substr($methodName, strlen('action')) . '.twig.html';
+        if (Strings::endsWith($methodName, 'Action')) {
+            return substr($methodName, 0, -strlen('Action')) . '.html.twig';
         }
 
         // @todo
