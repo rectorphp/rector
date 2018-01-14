@@ -4,6 +4,7 @@ namespace Rector\Rector\Contrib\Symfony\HttpKernel;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
@@ -71,38 +72,26 @@ final class TemplateAnnotationRector extends AbstractRector
      */
     public function refactor(Node $classMethodNode): ?Node
     {
-        // 1. derive template name
-        // @decoule to resolve template name method
-        $templateName = $this->resolveTemplateName($classMethodNode);
-
-        $arguments = [$templateName];
-
-        // 2.remove annotation
-        $this->docBlockAnalyzer->removeAnnotationFromNode($classMethodNode, 'template');
-
-        // has method return type?
-        $secondArg = null;
+        /** @var Return_|null $returnNode */
         $returnNode = $this->nodeFinder->findFirstInstanceOf((array) $classMethodNode->stmts, Return_::class);
-        if ($returnNode instanceof Return_) {
-            if ($returnNode->expr instanceof Array_ && count($returnNode->expr->items)) {
-                $arguments[] = $returnNode->expr;
-            }
-        }
 
-        // 3. add $this->render method call with template
+        // create "$this->render('template', ['key' => 'value']);" method call
         $thisRenderMethodCall = $this->methodCallNodeFactory->createWithVariableNameMethodNameAndArguments(
             'this',
             'render',
-            $this->nodeFactory->createArgs($arguments)
+            $this->resolveRenderArguments($classMethodNode, $returnNode)
         );
 
-        // 4. replace Return_ node value if exists
-        if ($returnNode instanceof Return_) {
+        // replace Return_ node value if exists
+        if ($returnNode) {
             $returnNode->expr = $thisRenderMethodCall;
         } else {
             // or add to the bottom of method
             $classMethodNode->stmts[] = new Return_($thisRenderMethodCall);
         }
+
+        // remove annotation
+        $this->docBlockAnalyzer->removeAnnotationFromNode($classMethodNode, 'template');
 
         return $classMethodNode;
     }
@@ -127,5 +116,21 @@ final class TemplateAnnotationRector extends AbstractRector
         }
 
         return $this->resolveTemplateNameFromActionMethodName($classMethodNode->name->toString());
+    }
+
+    /**
+     * @return Arg[]
+     */
+    private function resolveRenderArguments(ClassMethod $classMethodNode, ?Return_ $returnNode): array
+    {
+        $arguments = [$this->resolveTemplateName($classMethodNode)];
+
+        if ($returnNode) {
+            if ($returnNode->expr instanceof Array_ && count($returnNode->expr->items)) {
+                $arguments[] = $returnNode->expr;
+            }
+        }
+
+        return $this->nodeFactory->createArgs($arguments);
     }
 }
