@@ -2,7 +2,7 @@
 
 namespace Rector\AppBundle\Controller;
 
-class ClassWithNamedService1 extends Controller
+class ClassWithNamedService1Controller extends Controller
 {
     /**
      */
