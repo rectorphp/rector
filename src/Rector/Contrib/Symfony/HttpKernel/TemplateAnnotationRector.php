@@ -16,7 +16,7 @@ use Rector\ReflectionDocBlock\NodeAnalyzer\DocBlockAnalyzer;
 
 /**
  * Converts all:
- * - @template()
+ * - @Template()
  * - public function indexAction() { }
  *
  * into:
@@ -64,7 +64,7 @@ final class TemplateAnnotationRector extends AbstractRector
             return false;
         }
 
-        return $this->docBlockAnalyzer->hasAnnotation($node, 'template');
+        return $this->docBlockAnalyzer->hasAnnotation($node, 'Template');
     }
 
     /**
@@ -75,7 +75,7 @@ final class TemplateAnnotationRector extends AbstractRector
         /** @var Return_|null $returnNode */
         $returnNode = $this->nodeFinder->findFirstInstanceOf((array) $classMethodNode->stmts, Return_::class);
 
-        // create "$this->render('template', ['key' => 'value']);" method call
+        // create "$this->render('template.file.twig.html', ['key' => 'value']);" method call
         $thisRenderMethodCall = $this->methodCallNodeFactory->createWithVariableNameMethodNameAndArguments(
             'this',
             'render',
@@ -86,12 +86,12 @@ final class TemplateAnnotationRector extends AbstractRector
         if ($returnNode) {
             $returnNode->expr = $thisRenderMethodCall;
         } else {
-            // or add to the bottom of method
+            // or add as last statement in the method
             $classMethodNode->stmts[] = new Return_($thisRenderMethodCall);
         }
 
         // remove annotation
-        $this->docBlockAnalyzer->removeAnnotationFromNode($classMethodNode, 'template');
+        $this->docBlockAnalyzer->removeAnnotationFromNode($classMethodNode, 'Template');
 
         return $classMethodNode;
     }
@@ -102,14 +102,15 @@ final class TemplateAnnotationRector extends AbstractRector
             return substr($methodName, 0, -strlen('Action')) . '.html.twig';
         }
 
-        // @todo - see @template docs for Symfony
+        // @todo - see @Template docs for Symfony
     }
 
     private function resolveTemplateName(ClassMethod $classMethodNode): string
     {
-        $templateAnnotation = $this->docBlockAnalyzer->getTagsByName($classMethodNode, 'template')[0];
+        $templateAnnotation = $this->docBlockAnalyzer->getTagsByName($classMethodNode, 'Template')[0];
         $content = $templateAnnotation->render();
 
+        // @todo consider using sth similar to offical parsing
         $annotationContent = Strings::match($content, '#\("(?<filename>.*?)"\)#');
         if (isset($annotationContent['filename'])) {
             return $annotationContent['filename'];
