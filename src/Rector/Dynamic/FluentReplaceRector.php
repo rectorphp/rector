@@ -41,19 +41,12 @@ final class FluentReplaceRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        // skip just added calls
-        if ($node->getAttribute(Attribute::ORIGINAL_NODE) === null) {
-            return false;
-        }
-
         if ($node instanceof Return_) {
-            $returnExpr = $node->expr;
-
-            if (! $returnExpr instanceof Variable) {
+            if (! $node->expr instanceof Variable) {
                 return false;
             }
 
-            return $returnExpr->name === 'this';
+            return $node->expr->name === 'this';
         }
 
         if ($node instanceof MethodCall) {
