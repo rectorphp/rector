@@ -35,7 +35,7 @@ Rector can:
 ## Install
 
 ```bash
-composer require --dev rector/rector 'dev-master' nikic/php-parser '4.0.x-dev'
+composer require --dev rector/rector:'dev-master' nikic/php-parser:'4.0.x-dev'
 ```
 
 ### Do you Have Conflicts?
@@ -51,7 +51,7 @@ composer require bamarni/composer-bin-plugin --dev
 Then, require Rector using `composer bin`:
 
 ```bash
-composer bin rector require --dev rector/rector 'dev-master' nikic/php-parser '4.0.x-dev'
+composer bin rector require --dev rector/rector:'dev-master' nikic/php-parser:'4.0.x-dev'
 ```
 
 And Rector is accessible as:
