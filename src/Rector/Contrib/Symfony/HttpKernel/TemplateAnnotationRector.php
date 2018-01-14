@@ -73,15 +73,7 @@ final class TemplateAnnotationRector extends AbstractRector
     {
         // 1. derive template name
         // @decoule to resolve template name method
-        $templateAnnotation = $this->docBlockAnalyzer->getTagsByName($classMethodNode, 'template')[0];
-        $content = $templateAnnotation->render();
-        $annotationContent = Strings::match($content, '#\("(?<filename>.*?)"\)#');
-        if (isset($annotationContent['filename'])) {
-            $templateName = $annotationContent['filename'];
-        } else {
-            $methodName = $classMethodNode->name->toString();
-            $templateName = $this->resolveTemplateNameFromActionMethodName($methodName);
-        }
+        $templateName = $this->resolveTemplateName($classMethodNode);
 
         $arguments = [$templateName];
 
@@ -122,5 +114,18 @@ final class TemplateAnnotationRector extends AbstractRector
         }
 
         // @todo - see @template docs for Symfony
+    }
+
+    private function resolveTemplateName(ClassMethod $classMethodNode): string
+    {
+        $templateAnnotation = $this->docBlockAnalyzer->getTagsByName($classMethodNode, 'template')[0];
+        $content = $templateAnnotation->render();
+
+        $annotationContent = Strings::match($content, '#\("(?<filename>.*?)"\)#');
+        if (isset($annotationContent['filename'])) {
+            return $annotationContent['filename'];
+        }
+
+        return $this->resolveTemplateNameFromActionMethodName($classMethodNode->name->toString());
     }
 }
