@@ -82,7 +82,7 @@ final class TemplateAnnotationRector extends AbstractRector
 
         // has method return type?
         $secondArg = null;
-        $returnNode = $this->nodeFinder->findFirstInstanceOf($classMethodNode->stmts, Return_::class);
+        $returnNode = $this->nodeFinder->findFirstInstanceOf((array) $classMethodNode->stmts, Return_::class);
         if ($returnNode instanceof Return_) {
             if ($returnNode->expr instanceof Array_ && count($returnNode->expr->items)) {
                 $arguments[] = $returnNode->expr;
