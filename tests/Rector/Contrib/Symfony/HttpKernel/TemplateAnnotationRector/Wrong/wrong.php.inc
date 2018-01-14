@@ -7,5 +7,6 @@ class ClassWithNamedService1 extends Controller
      */
     public function indexAction()
     {
+        return [];
     }
 }

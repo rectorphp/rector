@@ -84,7 +84,7 @@ final class TemplateAnnotationRector extends AbstractRector
         $secondArg = null;
         $returnNode = $this->nodeFinder->findFirstInstanceOf($classMethodNode->stmts, Return_::class);
         if ($returnNode instanceof Return_) {
-            if ($returnNode->expr instanceof Array_) {
+            if ($returnNode->expr instanceof Array_ && count($returnNode->expr->items)) {
                 $arguments[] = $returnNode->expr;
             }
         }
