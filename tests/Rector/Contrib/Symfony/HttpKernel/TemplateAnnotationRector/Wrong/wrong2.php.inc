@@ -3,9 +3,10 @@
 class ClassWithNamedService1 extends Controller
 {
     /**
+     * @template
      */
     public function indexAction()
     {
-        return $this->render('index.html.twig');
+        return ['someKey' => 'someValue'];
     }
 }
