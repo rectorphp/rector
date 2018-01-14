@@ -51,16 +51,31 @@ final class TemplateAnnotationRector extends AbstractRector
     }
 
     /**
-     * @param MethodCall $methodCallNode
+     * @param ClassMethod $classMethodNode
      */
-    public function refactor(Node $methodCallNode): ?Node
+    public function refactor(Node $classMethodNode): ?Node
     {
-        dump($methodCallNode);
+        $this->docBlockAnalyzer->removeAnnotationFromNode($classMethodNode, 'template');
+
+        $methodName = $classMethodNode->name->toString();
+        $templateName = $this->resolveTemplateNameFromActionMethodName($methodName);
+
+        dump($templateName);
         die;
+
+        return $classMethodNode;
+//        dump($classMethodNode->stmts);
+//        dump($classMethodNode->stmts);
+//        die;
 
         // 1.remove annotation
         // 2. derive template name
         // 3. add $this->render method call with template
         // 4. to bottom of method - probably $methodCall->stmts[]
+    }
+
+    private function resolveTemplateNameFromActionMethodName(string $methodName): string
+    {
+        // ...?
     }
 }
