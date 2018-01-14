@@ -3,7 +3,7 @@
 class ClassWithNamedService1 extends Controller
 {
     /**
-     * @template
+     * @Template
      */
     public function indexAction()
     {

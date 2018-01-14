@@ -112,6 +112,7 @@ final class TemplateAnnotationRector extends AbstractRector
 
         // @todo consider using sth similar to offical parsing
         $annotationContent = Strings::match($content, '#\("(?<filename>.*?)"\)#');
+
         if (isset($annotationContent['filename'])) {
             return $annotationContent['filename'];
         }
