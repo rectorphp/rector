@@ -54,11 +54,7 @@ final class TemplateAnnotationRector extends AbstractRector
             return false;
         }
 
-        if (! $this->docBlockAnalyzer->hasAnnotation($node, 'template')) {
-            return false;
-        }
-
-        return true;
+        return $this->docBlockAnalyzer->hasAnnotation($node, 'template');
     }
 
     /**
