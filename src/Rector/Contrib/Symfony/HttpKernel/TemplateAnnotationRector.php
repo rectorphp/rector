@@ -11,6 +11,7 @@ use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Contract\Bridge\ServiceTypeForNameProviderInterface;
 use Rector\Naming\PropertyNaming;
 use Rector\Node\Attribute;
+use Rector\Node\MethodCallNodeFactory;
 use Rector\Node\PropertyFetchNodeFactory;
 use Rector\NodeAnalyzer\Contrib\Symfony\ContainerCallAnalyzer;
 use Rector\Rector\AbstractRector;
@@ -33,9 +34,15 @@ final class TemplateAnnotationRector extends AbstractRector
      */
     private $docBlockAnalyzer;
 
-    public function __construct(DocBlockAnalyzer $docBlockAnalyzer)
+    /**
+     * @var MethodCallNodeFactory
+     */
+    private $methodCallNodeFactory;
+
+    public function __construct(DocBlockAnalyzer $docBlockAnalyzer, MethodCallNodeFactory $methodCallNodeFactory)
     {
         $this->docBlockAnalyzer = $docBlockAnalyzer;
+        $this->methodCallNodeFactory = $methodCallNodeFactory;
     }
 
     public function isCandidate(Node $node): bool
@@ -56,23 +63,24 @@ final class TemplateAnnotationRector extends AbstractRector
      */
     public function refactor(Node $classMethodNode): ?Node
     {
+        // 1.remove annotation
         $this->docBlockAnalyzer->removeAnnotationFromNode($classMethodNode, 'template');
 
+        // 2. derive template name
         $methodName = $classMethodNode->name->toString();
         $templateName = $this->resolveTemplateNameFromActionMethodName($methodName);
 
-        dump($templateName);
-        die;
+        // 3. add $this->render method call with template
+        $thisRenderMethodCall = $this->methodCallNodeFactory->createWithVariableNameMethodNameAndArguments(
+            'this',
+            'render',
+            [new Node\Arg(new String_($templateName))]
+        );
+
+        // 4. to bottom of method - probably $methodCall->stmts[]
+        $classMethodNode->stmts += $thisRenderMethodCall;
 
         return $classMethodNode;
-//        dump($classMethodNode->stmts);
-//        dump($classMethodNode->stmts);
-//        die;
-
-        // 1.remove annotation
-        // 2. derive template name
-        // 3. add $this->render method call with template
-        // 4. to bottom of method - probably $methodCall->stmts[]
     }
 
     private function resolveTemplateNameFromActionMethodName(string $methodName): string
