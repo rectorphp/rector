@@ -74,16 +74,7 @@ final class FluentReplaceRector extends AbstractRector
 
         if ($node instanceof MethodCall) {
             // method call to prepend
-            /** @var Node $parentVarName */
-            $parentVarName = $node->var->var;
-            $parentVarName->setAttribute(Attribute::ORIGINAL_NODE, null);
-
-            $nextMethodCallNode = $this->methodCallNodeFactory->createWithVariableAndMethodName(
-                $parentVarName,
-                $node->name->toString()
-            );
-
-            $this->addNodeAfterNode($nextMethodCallNode, $node->var);
+            $this->decoupleMethodCall($node);
 
             // move method call one up
             $node->name = $node->var->name;
@@ -114,5 +105,15 @@ final class FluentReplaceRector extends AbstractRector
         }
 
         return false;
+    }
+
+    private function decoupleMethodCall(MethodCall $methodCallNode): void
+    {
+        $nextMethodCallNode = $this->methodCallNodeFactory->createWithVariableAndMethodName(
+            $methodCallNode->var->var,
+            $methodCallNode->name->toString()
+        );
+
+        $this->addNodeAfterNode($nextMethodCallNode, $methodCallNode->var);
     }
 }
