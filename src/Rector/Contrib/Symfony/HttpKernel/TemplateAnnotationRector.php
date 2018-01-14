@@ -71,14 +71,22 @@ final class TemplateAnnotationRector extends AbstractRector
      */
     public function refactor(Node $classMethodNode): ?Node
     {
-        // 1.remove annotation
-        $this->docBlockAnalyzer->removeAnnotationFromNode($classMethodNode, 'template');
-
-        // 2. derive template name
-        $methodName = $classMethodNode->name->toString();
-        $templateName = $this->resolveTemplateNameFromActionMethodName($methodName);
+        // 1. derive template name
+        // @decoule to resolve template name method
+        $templateAnnotation = $this->docBlockAnalyzer->getTagsByName($classMethodNode, 'template')[0];
+        $content = $templateAnnotation->render();
+        $annotationContent = Strings::match($content, '#\("(?<filename>.*?)"\)#');
+        if (isset($annotationContent['filename'])) {
+            $templateName = $annotationContent['filename'];
+        } else {
+            $methodName = $classMethodNode->name->toString();
+            $templateName = $this->resolveTemplateNameFromActionMethodName($methodName);
+        }
 
         $arguments = [$templateName];
+
+        // 2.remove annotation
+        $this->docBlockAnalyzer->removeAnnotationFromNode($classMethodNode, 'template');
 
         // has method return type?
         $secondArg = null;
