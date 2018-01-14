@@ -35,21 +35,26 @@ Rector can:
 ## Install
 
 ```bash
-composer require --dev rector/rector 'dev-master' nikic/php-parser '4.0.x-dev'
+composer require --dev rector/rector:'dev-master' nikic/php-parser:'4.0.x-dev'
 ```
 
 ### Do you Have Conflicts?
 
-It may also happen your dependencies are in conflict, e.g. PHPStan requires `nikic/php-parser 3.0`, or older PHPUnit etc. This might be solved in the future, when `nikic/php-parser` 4 becomes stable.
+It may also happen your dependencies are in conflict, e.g. [PHPStan](https://github.com/phpstan/phpstan) requires [PHP-Parser](https://github.com/nikic/PHP-Parser) version 3, or older PHPUnit etc. This might be solved in the future, when PHP-Parser version 4 becomes stable.
 
-Since Rector **uses project's autoload to analyze type of elements**, it cannot be installed as project in standalone directory but **needs to be added as dependency**. Here [`bamarni/composer-bin-plugin`](https://github.com/bamarni/composer-bin-plugin) comes to the play.
+Since Rector **uses project's autoload to analyze type of elements**, it cannot be installed as project in standalone directory but **needs to be added as dependency**. Here [`bamarni/composer-bin-plugin`](https://github.com/bamarni/composer-bin-plugin) becomes useful:
 
 ```bash
 composer require bamarni/composer-bin-plugin --dev
-composer bin rector require rector/rector:dev-master --dev nikic/php-parser 4.0.x-dev
 ```
 
-And Rector is still accessible in:
+Then, require Rector using `composer bin`:
+
+```bash
+composer bin rector require --dev rector/rector:'dev-master' nikic/php-parser:'4.0.x-dev'
+```
+
+And Rector is accessible as:
 
 ```bash
 vendor/bin/rector
