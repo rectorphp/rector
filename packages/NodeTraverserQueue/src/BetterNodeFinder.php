@@ -53,6 +53,19 @@ final class BetterNodeFinder
 
     /**
      * @param Node|Node[] $nodes
+     */
+    public function findLastInstanceOf($nodes, string $type): ?Node
+    {
+        $foundInstances = $this->nodeFinder->findInstanceOf($nodes, $type);
+        if (! $foundInstances) {
+            return null;
+        }
+
+        return array_pop($foundInstances);
+    }
+
+    /**
+     * @param Node|Node[] $nodes
      * @return Node[]
      */
     public function find($nodes, callable $filter): array
