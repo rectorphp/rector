@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
-use PhpParser\NodeFinder;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\Contrib\Symfony\TemplateGuesser;
@@ -115,21 +114,13 @@ final class TemplateAnnotationRector extends AbstractRector
         $arguments = [$this->resolveTemplateName($classMethodNode)];
         if (! $returnNode) {
             return $this->nodeFactory->createArgs($arguments);
-
         }
 
         if ($returnNode->expr instanceof Array_ && count($returnNode->expr->items)) {
             $arguments[] = $returnNode->expr;
         }
 
-        // already existing method call
-        if ($returnNode->expr instanceof MethodCall) {
-            foreach ($returnNode->expr->args as $arg) {
-                if ($arg->value instanceof Array_) {
-                    $arguments[] = $arg->value;
-                }
-            }
-        }
+        $arguments = array_merge($arguments, $this->resolveArgumentsFromMethodCall($returnNode));
 
         return $this->nodeFactory->createArgs($arguments);
     }
@@ -147,5 +138,23 @@ final class TemplateAnnotationRector extends AbstractRector
         }
 
         return $this->templateGuesser->resolveFromClassMethodNode($classMethodNode);
+    }
+
+    /**
+     * Already existing method call
+     * @return mixed[]
+     */
+    private function resolveArgumentsFromMethodCall(Return_ $returnNode): array
+    {
+        $arguments = [];
+        if ($returnNode->expr instanceof MethodCall) {
+            foreach ($returnNode->expr->args as $arg) {
+                if ($arg->value instanceof Array_) {
+                    $arguments[] = $arg->value;
+                }
+            }
+        }
+
+        return $arguments;
     }
 }
