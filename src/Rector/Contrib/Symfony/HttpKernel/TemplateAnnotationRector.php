@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeFinder;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\Node\NodeFactory;
+use Rector\NodeAnalyzer\Contrib\Symfony\TemplateGuesser;
 use Rector\Rector\AbstractRector;
 use Rector\ReflectionDocBlock\NodeAnalyzer\DocBlockAnalyzer;
 
@@ -46,16 +47,23 @@ final class TemplateAnnotationRector extends AbstractRector
      */
     private $nodeFinder;
 
+    /**
+     * @var TemplateGuesser
+     */
+    private $templateGuesser;
+
     public function __construct(
         DocBlockAnalyzer $docBlockAnalyzer,
         MethodCallNodeFactory $methodCallNodeFactory,
         NodeFactory $nodeFactory,
-        NodeFinder $nodeFinder
+        NodeFinder $nodeFinder,
+        TemplateGuesser $templateGuesser
     ) {
         $this->docBlockAnalyzer = $docBlockAnalyzer;
         $this->methodCallNodeFactory = $methodCallNodeFactory;
         $this->nodeFactory = $nodeFactory;
         $this->nodeFinder = $nodeFinder;
+        $this->templateGuesser = $templateGuesser;
     }
 
     public function isCandidate(Node $node): bool
@@ -96,30 +104,6 @@ final class TemplateAnnotationRector extends AbstractRector
         return $classMethodNode;
     }
 
-    private function resolveTemplateNameFromActionMethodName(string $methodName): string
-    {
-        if (Strings::endsWith($methodName, 'Action')) {
-            return substr($methodName, 0, -strlen('Action')) . '.html.twig';
-        }
-
-        // @todo - see @Template docs for Symfony
-    }
-
-    private function resolveTemplateName(ClassMethod $classMethodNode): string
-    {
-        $templateAnnotation = $this->docBlockAnalyzer->getTagsByName($classMethodNode, 'Template')[0];
-        $content = $templateAnnotation->render();
-
-        // @todo consider using sth similar to offical parsing
-        $annotationContent = Strings::match($content, '#\("(?<filename>.*?)"\)#');
-
-        if (isset($annotationContent['filename'])) {
-            return $annotationContent['filename'];
-        }
-
-        return $this->resolveTemplateNameFromActionMethodName($classMethodNode->name->toString());
-    }
-
     /**
      * @return Arg[]
      */
@@ -134,5 +118,20 @@ final class TemplateAnnotationRector extends AbstractRector
         }
 
         return $this->nodeFactory->createArgs($arguments);
+    }
+
+    private function resolveTemplateName(ClassMethod $classMethodNode): string
+    {
+        $templateAnnotation = $this->docBlockAnalyzer->getTagsByName($classMethodNode, 'Template')[0];
+        $content = $templateAnnotation->render();
+
+        // @todo consider using sth similar to offical parsing
+        $annotationContent = Strings::match($content, '#\("(?<filename>.*?)"\)#');
+
+        if (isset($annotationContent['filename'])) {
+            return $annotationContent['filename'];
+        }
+
+        return $this->templateGuesser->resolveFromClassMethodNode($classMethodNode);
     }
 }
