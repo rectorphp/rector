@@ -84,10 +84,11 @@ final class TemplateAnnotationRector extends AbstractRector
         $returnNode = $this->nodeFinder->findFirstInstanceOf((array) $classMethodNode->stmts, Return_::class);
 
         // create "$this->render('template.file.twig.html', ['key' => 'value']);" method call
+        $renderArguments = $this->resolveRenderArguments($classMethodNode, $returnNode);
         $thisRenderMethodCall = $this->methodCallNodeFactory->createWithVariableNameMethodNameAndArguments(
             'this',
             'render',
-            $this->resolveRenderArguments($classMethodNode, $returnNode)
+            $renderArguments
         );
 
         // replace Return_ node value if exists
@@ -114,6 +115,15 @@ final class TemplateAnnotationRector extends AbstractRector
         if ($returnNode) {
             if ($returnNode->expr instanceof Array_ && count($returnNode->expr->items)) {
                 $arguments[] = $returnNode->expr;
+            }
+
+            // already existing method call
+            if ($returnNode->expr instanceof Node\Expr\MethodCall) {
+                foreach ($returnNode->expr->args as $arg) {
+                    if ($arg->value instanceof Array_) {
+                        $arguments[] = $arg->value;
+                    }
+                }
             }
         }
 
