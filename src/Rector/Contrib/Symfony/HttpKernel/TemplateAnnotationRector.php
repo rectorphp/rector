@@ -6,12 +6,14 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeFinder;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\Contrib\Symfony\TemplateGuesser;
+use Rector\NodeTraverserQueue\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
 use Rector\ReflectionDocBlock\NodeAnalyzer\DocBlockAnalyzer;
 
@@ -43,9 +45,9 @@ final class TemplateAnnotationRector extends AbstractRector
     private $nodeFactory;
 
     /**
-     * @var NodeFinder
+     * @var BetterNodeFinder
      */
-    private $nodeFinder;
+    private $betterNodeFinder;
 
     /**
      * @var TemplateGuesser
@@ -56,13 +58,13 @@ final class TemplateAnnotationRector extends AbstractRector
         DocBlockAnalyzer $docBlockAnalyzer,
         MethodCallNodeFactory $methodCallNodeFactory,
         NodeFactory $nodeFactory,
-        NodeFinder $nodeFinder,
+        BetterNodeFinder $betterNodeFinder,
         TemplateGuesser $templateGuesser
     ) {
         $this->docBlockAnalyzer = $docBlockAnalyzer;
         $this->methodCallNodeFactory = $methodCallNodeFactory;
         $this->nodeFactory = $nodeFactory;
-        $this->nodeFinder = $nodeFinder;
+        $this->betterNodeFinder = $betterNodeFinder;
         $this->templateGuesser = $templateGuesser;
     }
 
@@ -81,7 +83,7 @@ final class TemplateAnnotationRector extends AbstractRector
     public function refactor(Node $classMethodNode): ?Node
     {
         /** @var Return_|null $returnNode */
-        $returnNode = $this->nodeFinder->findFirstInstanceOf((array) $classMethodNode->stmts, Return_::class);
+        $returnNode = $this->betterNodeFinder->findLastInstanceOf((array) $classMethodNode->stmts, Return_::class);
 
         // create "$this->render('template.file.twig.html', ['key' => 'value']);" method call
         $renderArguments = $this->resolveRenderArguments($classMethodNode, $returnNode);
@@ -111,18 +113,20 @@ final class TemplateAnnotationRector extends AbstractRector
     private function resolveRenderArguments(ClassMethod $classMethodNode, ?Return_ $returnNode): array
     {
         $arguments = [$this->resolveTemplateName($classMethodNode)];
+        if (! $returnNode) {
+            return $this->nodeFactory->createArgs($arguments);
 
-        if ($returnNode) {
-            if ($returnNode->expr instanceof Array_ && count($returnNode->expr->items)) {
-                $arguments[] = $returnNode->expr;
-            }
+        }
 
-            // already existing method call
-            if ($returnNode->expr instanceof Node\Expr\MethodCall) {
-                foreach ($returnNode->expr->args as $arg) {
-                    if ($arg->value instanceof Array_) {
-                        $arguments[] = $arg->value;
-                    }
+        if ($returnNode->expr instanceof Array_ && count($returnNode->expr->items)) {
+            $arguments[] = $returnNode->expr;
+        }
+
+        // already existing method call
+        if ($returnNode->expr instanceof MethodCall) {
+            foreach ($returnNode->expr->args as $arg) {
+                if ($arg->value instanceof Array_) {
+                    $arguments[] = $arg->value;
                 }
             }
         }
