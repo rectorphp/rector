@@ -12,7 +12,7 @@ class ClassWithNamedService1Controller extends Controller
             return $this->redirectToRoute('rector_is_cool');
         }
 
-        return $this->render('AppBundle:ClassWithNamedService1:index.html.twig', array(
+        return $this->render('@App/class_with_named_service1/index.html.twig', array(
             'form' => $form->createView()
         ));
     }

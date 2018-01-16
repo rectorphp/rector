@@ -9,7 +9,7 @@ class ClassWithNamedService1Controller extends Controller
      */
     public function indexAction()
     {
-        return $this->render('AppBundle:NameNotFollowingConvention:index.html.twig', array(
+        return $this->render('@App/NameNotFollowingConvention/index.html.twig', array(
             'form' => $form->createView()
         ));
     }
