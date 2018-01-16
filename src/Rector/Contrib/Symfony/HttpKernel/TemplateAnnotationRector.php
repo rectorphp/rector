@@ -92,12 +92,14 @@ final class TemplateAnnotationRector extends AbstractRector
             $renderArguments
         );
 
-        // replace Return_ node value if exists
-        if ($returnNode) {
-            $returnNode->expr = $thisRenderMethodCall;
-        } else {
+        if (!$returnNode) {
             // or add as last statement in the method
             $classMethodNode->stmts[] = new Return_($thisRenderMethodCall);
+        }
+
+        // replace Return_ node value if exists and is not already in correct format
+        if ($returnNode && !$returnNode->expr instanceof MethodCall) {
+            $returnNode->expr = $thisRenderMethodCall;
         }
 
         // remove annotation
