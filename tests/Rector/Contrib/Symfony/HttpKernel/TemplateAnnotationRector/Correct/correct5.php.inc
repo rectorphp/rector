@@ -8,7 +8,7 @@ class ClassWithNamedService1Controller extends Controller
      */
     public function indexAction()
     {
-        return $this->render('@App/ClassWithNamedService1/index.html.twig', array(
+        return $this->render('AppBundle:ClassWithNamedService1:index.html.twig', array(
             'form' => $form->createView()
         ));
     }

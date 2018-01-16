@@ -25,9 +25,6 @@ rectors:
         # debug
         'Symfony\Component\Debug\Exception\ContextErrorException': 'ErrorException'
 
-        # http-kernel
-        Rector\Rector\Contrib\Symfony\HttpKernel\TemplateAnnotationRector: ~
-
         # dependency-injection
         'Symfony\Component\DependencyInjection\DefinitionDecorator': 'Symfony\Component\DependencyInjection\ChildDefinition'
 
