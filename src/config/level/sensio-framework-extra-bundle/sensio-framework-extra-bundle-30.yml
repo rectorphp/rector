@@ -1,0 +1,4 @@
+rectors:
+    Rector\Rector\Dynamic\ClassReplacerRector:
+        # http-kernel
+        Rector\Rector\Contrib\Symfony\HttpKernel\TemplateAnnotationRector: ~

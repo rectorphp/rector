@@ -7,7 +7,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Node\Attribute;
 
 /**
- * Mimics https://github.com/sensiolabs/SensioFrameworkExtraBundle/blob/072c00c52b947e88a1e619e9ff426cee6c8c482b/Templating/TemplateGuesser.php
+ * Mimics https://github.com/sensiolabs/SensioFrameworkExtraBundle/blob/v3.0.29/Templating/TemplateGuesser.php
  * only without Symfony dependency
  */
 final class TemplateGuesser
@@ -18,21 +18,13 @@ final class TemplateGuesser
         $class = (string) $classMethodNode->getAttribute(Attribute::CLASS_NAME);
         $method = $classMethodNode->name->toString();
 
-        // AppBundle\SomeNamespace\ => AppBundle
-        // App\OtherBundle\SomeNamespace\ => OtherBundle
-        $templateName = Strings::match($namespace, '/(?<bundle>[A-Za-z]*Bundle)/')['bundle'] ?? '';
-        $templateName .= ':';
+        // converts AppBundle\SomeNamespace\ => AppBundle
+        // converts App\OtherBundle\SomeNamespace\ => OtherBundle
+        // This check may fail if people dont follow naming conventions
+        $bundle = Strings::match($namespace, '/(?<bundle>[A-Za-z]*Bundle)/')['bundle'] ?? '';
+        $controller = Strings::match($class, '/(?<controller>[A-Za-z0-9]*)Controller$/')['controller'] ?? '';
+        $action = Strings::match($method, '/(?<method>[A-Za-z]*)Action$/')['method'] ?? '';
 
-        // SomeSuper\ControllerClass => ControllerClass
-        $templateName .= Strings::match($class, '/(?<controller>[A-Za-z0-9]*)Controller$/')['controller'] ?? '';
-        $templateName .= ':';
-
-        // indexAction => index
-        $templateName .= Strings::match($method, '/(?<method>[A-Za-z]*)Action$/')['method'] ?? '';
-
-        // suffix
-        $templateName .= '.html.twig';
-
-        return $templateName;
+        return sprintf('%s:%s:%s.html.twig', $bundle, $controller, $action);
     }
 }

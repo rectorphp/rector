@@ -23,7 +23,7 @@ use Rector\ReflectionDocBlock\NodeAnalyzer\DocBlockAnalyzer;
  *
  * into:
  * - public function indexAction() {
- * -     $this->render('index.html.twig');
+ * -     return $this->render('@App/App/index.html.twig');
  * - }
  */
 final class TemplateAnnotationRector extends AbstractRector
@@ -92,12 +92,14 @@ final class TemplateAnnotationRector extends AbstractRector
             $renderArguments
         );
 
-        // replace Return_ node value if exists
-        if ($returnNode) {
-            $returnNode->expr = $thisRenderMethodCall;
-        } else {
-            // or add as last statement in the method
+        // add as last statement in the method
+        if (! $returnNode) {
             $classMethodNode->stmts[] = new Return_($thisRenderMethodCall);
+        }
+
+        // replace Return_ node value if exists and is not already in correct format
+        if ($returnNode && ! $returnNode->expr instanceof MethodCall) {
+            $returnNode->expr = $thisRenderMethodCall;
         }
 
         // remove annotation
