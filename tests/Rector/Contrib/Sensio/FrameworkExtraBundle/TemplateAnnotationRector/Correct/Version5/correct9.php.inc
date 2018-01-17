@@ -5,7 +5,7 @@ namespace App\Controller;
 class AppController extends AbstractController
 {
     /**
-     * @Route ("/", name="homepage")
+     * @Route("/", name="homepage")
      */
     public function index()
     {

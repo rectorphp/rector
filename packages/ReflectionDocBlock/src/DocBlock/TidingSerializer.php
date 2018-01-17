@@ -2,6 +2,7 @@
 
 namespace Rector\ReflectionDocBlock\DocBlock;
 
+use Nette\Utils\Strings;
 use phpDocumentor\Reflection\DocBlock;
 use Symplify\BetterReflectionDocBlock\FixedSerializer;
 
@@ -21,7 +22,9 @@ final class TidingSerializer
     {
         $docComment = $this->fixedSerializer->getDocComment($docBlock);
 
-        return $this->clearUnnededPreslashes($docComment);
+        $docComment = $this->clearUnnededPreslashes($docComment);
+
+        return $this->clearUnnededSpaces($docComment);
     }
 
     /**
@@ -33,5 +36,16 @@ final class TidingSerializer
         $content = str_replace('@var \\', '@var ', $content);
 
         return str_replace('@param \\', '@param ', $content);
+    }
+
+    /**
+     * phpDocumentor adds extra spaces before Doctrine-Annotation based annotations
+     * starting with uppercase and followed by (, e.g. @Route('value')
+     */
+    private function clearUnnededSpaces(string $content): string
+    {
+        return Strings::replace($content, '#@[A-Z][a-z]+\s\(#', function (array $match) {
+            return str_replace(' ', '', $match[0]);
+        });
     }
 }
