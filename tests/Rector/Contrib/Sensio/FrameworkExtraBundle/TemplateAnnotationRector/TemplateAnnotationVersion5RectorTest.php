@@ -21,14 +21,14 @@ final class TemplateAnnotationVersion5RectorTest extends AbstractConfigurableRec
     public function provideWrongToFixedFiles(): array
     {
         return [
-            [__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc'],
-            [__DIR__ . '/Wrong/wrong2.php.inc', __DIR__ . '/Correct/correct2.php.inc'],
-            [__DIR__ . '/Wrong/wrong3.php.inc', __DIR__ . '/Correct/correct3.php.inc'],
-            [__DIR__ . '/Wrong/wrong4.php.inc', __DIR__ . '/Correct/correct4.php.inc'],
-            [__DIR__ . '/Wrong/wrong5.php.inc', __DIR__ . '/Correct/correct5.php.inc'],
-            [__DIR__ . '/Wrong/wrong6.php.inc', __DIR__ . '/Correct/correct6.php.inc'],
-            [__DIR__ . '/Wrong/wrong7.php.inc', __DIR__ . '/Correct/correct7.php.inc'],
-            [__DIR__ . '/Wrong/wrong8.php.inc', __DIR__ . '/Correct/correct8.php.inc'],
+            [__DIR__ . '/Wrong/Version5/wrong.php.inc', __DIR__ . '/Correct/Version5/correct.php.inc'],
+            [__DIR__ . '/Wrong/Version5/wrong2.php.inc', __DIR__ . '/Correct/Version5/correct2.php.inc'],
+            [__DIR__ . '/Wrong/Version5/wrong3.php.inc', __DIR__ . '/Correct/Version5/correct3.php.inc'],
+            [__DIR__ . '/Wrong/Version5/wrong4.php.inc', __DIR__ . '/Correct/Version5/correct4.php.inc'],
+            [__DIR__ . '/Wrong/Version5/wrong5.php.inc', __DIR__ . '/Correct/Version5/correct5.php.inc'],
+            [__DIR__ . '/Wrong/Version5/wrong6.php.inc', __DIR__ . '/Correct/Version5/correct6.php.inc'],
+            [__DIR__ . '/Wrong/Version5/wrong7.php.inc', __DIR__ . '/Correct/Version5/correct7.php.inc'],
+            [__DIR__ . '/Wrong/Version5/wrong8.php.inc', __DIR__ . '/Correct/Version5/correct8.php.inc'],
         ];
     }
 
