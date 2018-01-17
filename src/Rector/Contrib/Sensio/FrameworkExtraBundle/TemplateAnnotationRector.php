@@ -23,7 +23,7 @@ use Rector\ReflectionDocBlock\NodeAnalyzer\DocBlockAnalyzer;
  *
  * into:
  * - public function indexAction() {
- * -     $this->render('index.html.twig');
+ * -     return $this->render('index.html.twig');
  * - }
  */
 final class TemplateAnnotationRector extends AbstractRector
