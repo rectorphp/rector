@@ -5,7 +5,7 @@ namespace Rector\Tests\Rector\Contrib\Sensio\FrameworkExtraBundle\TemplateAnnota
 use Rector\Rector\Contrib\Sensio\FrameworkExtraBundle\TemplateAnnotationRector;
 use Rector\Testing\PHPUnit\AbstractConfigurableRectorTestCase;
 
-final class TemplateAnnotationRectorTest extends AbstractConfigurableRectorTestCase
+final class TemplateAnnotationVersion3RectorTest extends AbstractConfigurableRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()
@@ -42,6 +42,6 @@ final class TemplateAnnotationRectorTest extends AbstractConfigurableRectorTestC
 
     protected function provideConfig(): string
     {
-        return __DIR__ . '/Source/rector.yml';
+        return __DIR__ . '/Source/version3.yml';
     }
 }
