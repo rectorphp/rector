@@ -72,6 +72,11 @@ final class TemplateGuesser
 
         $action = preg_replace('/Action$/', '', $method);
 
-        return $bundle ? '@' . $bundle . '/' : '' . $controller . ($controller ? '/' : '') . $action . '.html.twig';
+        return sprintf(
+            '%s%s%s.html.twig',
+            $bundle ? '@' . $bundle . '/' : '',
+            $controller ? $controller . '/' : '',
+            $action
+        );
     }
 }
