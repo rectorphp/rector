@@ -41,6 +41,7 @@ final class FluentReplaceRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
+        // @todo this run has to be first, dual run?
         if ($node instanceof Return_) {
             if (! $node->expr instanceof Variable) {
                 return false;
@@ -76,17 +77,8 @@ final class FluentReplaceRector extends AbstractRector
             // method call to prepend
             $this->decoupleMethodCall($node);
 
-            /** @var MethodCall $previousMethodNodeCall */
-            $previousMethodNodeCall = $node->var;
-
-            // move method call one up
-            $node->name = $previousMethodNodeCall->name;
-            $node->var = $previousMethodNodeCall->var;
-
-            // to clear indent
-            $node->setAttribute(Attribute::ORIGINAL_NODE, null);
-
-            return $node;
+            /** @var MethodCall $node->var */
+            return $node->var;
         }
 
         return $node;
