@@ -74,11 +74,13 @@ final class FluentReplaceRector extends AbstractRector
         }
 
         if ($node instanceof MethodCall) {
-            // method call to prepend
-            $this->decoupleMethodCall($node);
+            /** @var MethodCall $innerCall */
+            $innerCall = $node->var;
 
-            /** @var MethodCall $node->var */
-            return $node->var;
+            // method call to prepend
+            $this->decoupleMethodCall($node, $innerCall);
+
+            return $innerCall;
         }
 
         return $node;
@@ -102,16 +104,13 @@ final class FluentReplaceRector extends AbstractRector
         return false;
     }
 
-    private function decoupleMethodCall(MethodCall $methodCallNode): void
+    private function decoupleMethodCall(MethodCall $outerMethodCallNode, MethodCall $innerMethodCallNode): void
     {
-        /** @var MethodCall $previousMethodNodeCall */
-        $previousMethodNodeCall = $methodCallNode->var;
-
         $nextMethodCallNode = $this->methodCallNodeFactory->createWithVariableAndMethodName(
-            $previousMethodNodeCall->var,
-            $methodCallNode->name->toString()
+            $innerMethodCallNode->var,
+            $outerMethodCallNode->name->toString()
         );
 
-        $this->addNodeAfterNode($nextMethodCallNode, $methodCallNode->var);
+        $this->addNodeAfterNode($nextMethodCallNode, $outerMethodCallNode->var);
     }
 }
