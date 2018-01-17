@@ -16,18 +16,18 @@ final class TemplateGuesser
         $method = $classMethodNode->name->toString();
 
         if ($version === 3) {
-            $templateName = $this->resolveForVersion3($namespace, $class, $method);
-        } elseif ($version === 5) {
-            $templateName = $this->resolveForVersion5($namespace, $class, $method);
-        } else {
-            throw new ShouldNotHappenException(sprintf(
-                'Version "%d" is not supported in "%s". Add it.',
-                $version,
-                self::class
-            ));
+            return $this->resolveForVersion3($namespace, $class, $method);
         }
 
-        return $templateName . '.html.twig';
+        if ($version === 5) {
+            return $this->resolveForVersion5($namespace, $class, $method);
+        }
+
+        throw new ShouldNotHappenException(sprintf(
+            'Version "%d" is not supported in "%s". Add it.',
+            $version,
+            self::class
+        ));
     }
 
     /**
@@ -37,37 +37,32 @@ final class TemplateGuesser
     {
         // AppBundle\SomeNamespace\ => AppBundle
         // App\OtherBundle\SomeNamespace\ => OtherBundle
-        $templateName = Strings::match($namespace, '/(?<bundle>[A-Za-z]*Bundle)/')['bundle'] ?? '';
-        $templateName .= ':';
+        $bundle = Strings::match($namespace, '/(?<bundle>[A-Za-z]*Bundle)/')['bundle'] ?? '';
 
         // SomeSuper\ControllerClass => ControllerClass
-        $templateName .= Strings::match($class, '/(?<controller>[A-Za-z0-9]*)Controller$/')['controller'] ?? '';
-        $templateName .= ':';
+        $controller = Strings::match($class, '/(?<controller>[A-Za-z0-9]*)Controller$/')['controller'] ?? '';
 
         // indexAction => index
-        $templateName .= Strings::match($method, '/(?<method>[A-Za-z]*)Action$/')['method'] ?? '';
+        $action = Strings::match($method, '/(?<method>[A-Za-z]*)Action$/')['method'] ?? '';
 
-        return $templateName;
+        return sprintf('%s:%s:%s.html.twig', $bundle, $controller, $action);
     }
 
     /**
-     * @todo update
      * Mimics https://github.com/sensiolabs/SensioFrameworkExtraBundle/blob/v5.0.0/Templating/TemplateGuesser.php
      */
     private function resolveForVersion5(string $namespace, string $class, string $method): string
     {
         // AppBundle\SomeNamespace\ => AppBundle
         // App\OtherBundle\SomeNamespace\ => OtherBundle
-        $templateName = Strings::match($namespace, '/(?<bundle>[A-Za-z]*Bundle)/')['bundle'] ?? '';
-        $templateName .= ':';
+        $bundle = Strings::match($namespace, '/(?<bundle>[A-Za-z]*Bundle)/')['bundle'] ?? '';
 
         // SomeSuper\ControllerClass => ControllerClass
-        $templateName .= Strings::match($class, '/(?<controller>[A-Za-z0-9]*)Controller$/')['controller'] ?? '';
-        $templateName .= ':';
+        $controller = Strings::match($class, '/(?<controller>[A-Za-z0-9]*)Controller$/')['controller'] ?? '';
 
         // indexAction => index
-        $templateName .= Strings::match($method, '/(?<method>[A-Za-z]*)Action$/')['method'] ?? '';
+        $action = Strings::match($method, '/(?<method>[A-Za-z]*)Action$/')['method'] ?? '';
 
-        return $templateName;
+        return sprintf('%s:%s:%s.html.twig', $bundle, $controller, $action);
     }
 }
