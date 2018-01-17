@@ -53,30 +53,26 @@ final class TemplateGuesser
      */
     private function resolveForVersion5(string $namespace, string $class, string $method): string
     {
-        $controllerPatterns[] = '/Controller\\\(.+)Controller$/';
-
         $bundle = Strings::match($namespace, '/(?<bundle>[A-Za-z]*Bundle)/')['bundle'] ?? '';
         $bundle = preg_replace('/Bundle$/', '', $bundle);
+        $bundle = $bundle ? '@' . $bundle . '/' : '';
 
-        $controller = null;
-        foreach ($controllerPatterns as $pattern) {
-            if (! preg_match($pattern, $class, $tempMatch)) {
-                continue;
-            }
-
-            $controller = str_replace('\\', '/', strtolower(
-                preg_replace('/([a-z\d])([A-Z])/', '\\1_\\2', $tempMatch[1])
-            ));
-            break;
-        }
-
+        $controller = $this->resolveControllerVersion5($class);
         $action = preg_replace('/Action$/', '', $method);
 
-        return sprintf(
-            '%s%s%s.html.twig',
-            $bundle ? '@' . $bundle . '/' : '',
-            $controller ? $controller . '/' : '',
-            $action
-        );
+        return sprintf('%s%s%s.html.twig', $bundle, $controller, $action);
+    }
+
+    private function resolveControllerVersion5(string $class): string
+    {
+        if (! preg_match('/Controller\\\(.+)Controller$/', $class, $tempMatch)) {
+            return '';
+        }
+
+        $controller = str_replace('\\', '/', strtolower(
+            preg_replace('/([a-z\d])([A-Z])/', '\\1_\\2', $tempMatch[1])
+        ));
+
+        return $controller ? $controller . '/' : '';
     }
 }
