@@ -74,13 +74,12 @@ final class FluentReplaceRector extends AbstractRector
         }
 
         if ($node instanceof MethodCall) {
-            /** @var MethodCall $innerCall */
-            $innerCall = $node->var;
+            /** @var MethodCall $innerMethodCallNode */
+            $innerMethodCallNode = $node->var;
 
-            // method call to prepend
-            $this->decoupleMethodCall($node, $innerCall);
+            $this->decoupleMethodCall($node, $innerMethodCallNode);
 
-            return $innerCall;
+            return $innerMethodCallNode;
         }
 
         return $node;
@@ -111,6 +110,6 @@ final class FluentReplaceRector extends AbstractRector
             $outerMethodCallNode->name->toString()
         );
 
-        $this->addNodeAfterNode($nextMethodCallNode, $outerMethodCallNode->var);
+        $this->addNodeAfterNode($nextMethodCallNode, $innerMethodCallNode);
     }
 }
