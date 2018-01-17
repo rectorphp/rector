@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Contrib\Symfony\HttpKernel\TemplateAnnotationRector;
+namespace Rector\Tests\Rector\Contrib\Sensio\FrameworkExtraBundle\TemplateAnnotationRector;
 
-use Rector\Rector\Contrib\Symfony\HttpKernel\TemplateAnnotationRector;
+use Rector\Rector\Contrib\Sensio\FrameworkExtraBundle\TemplateAnnotationRector;
 use Rector\Testing\PHPUnit\AbstractConfigurableRectorTestCase;
 
 final class TemplateAnnotationRectorTest extends AbstractConfigurableRectorTestCase
