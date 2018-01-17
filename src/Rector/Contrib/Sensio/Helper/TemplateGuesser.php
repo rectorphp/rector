@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\NodeAnalyzer\Contrib\Symfony;
+namespace Rector\Rector\Contrib\Sensio\Helper;
 
 use Nette\Utils\Strings;
 use PhpParser\Node\Stmt\ClassMethod;

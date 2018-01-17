@@ -12,9 +12,9 @@ use PhpParser\Node\Stmt\Return_;
 use Rector\Exception\Rector\InvalidRectorConfigurationException;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\Node\NodeFactory;
-use Rector\NodeAnalyzer\Contrib\Symfony\TemplateGuesser;
 use Rector\NodeTraverserQueue\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
+use Rector\Rector\Contrib\Sensio\Helper\TemplateGuesser;
 use Rector\ReflectionDocBlock\NodeAnalyzer\DocBlockAnalyzer;
 
 /**
