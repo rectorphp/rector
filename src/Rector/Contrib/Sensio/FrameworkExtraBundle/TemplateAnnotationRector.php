@@ -70,8 +70,7 @@ final class TemplateAnnotationRector extends AbstractRector
         BetterNodeFinder $betterNodeFinder,
         TemplateGuesser $templateGuesser
     ) {
-        $this->ensureConfigHasVersion($config);
-        $this->version = $config['version'];
+        $this->setConfig($config);
         $this->docBlockAnalyzer = $docBlockAnalyzer;
         $this->methodCallNodeFactory = $methodCallNodeFactory;
         $this->nodeFactory = $nodeFactory;
@@ -170,6 +169,15 @@ final class TemplateAnnotationRector extends AbstractRector
         }
 
         return $arguments;
+    }
+
+    /**
+     * @param mixed[] $config
+     */
+    private function setConfig(array $config): void
+    {
+        $this->ensureConfigHasVersion($config);
+        $this->version = $config['version'];
     }
 
     /**
