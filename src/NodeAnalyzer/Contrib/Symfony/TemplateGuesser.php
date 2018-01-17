@@ -53,16 +53,25 @@ final class TemplateGuesser
      */
     private function resolveForVersion5(string $namespace, string $class, string $method): string
     {
-        // AppBundle\SomeNamespace\ => AppBundle
-        // App\OtherBundle\SomeNamespace\ => OtherBundle
+        $controllerPatterns[] = '/Controller\\\(.+)Controller$/';
+
         $bundle = Strings::match($namespace, '/(?<bundle>[A-Za-z]*Bundle)/')['bundle'] ?? '';
+        $bundle = preg_replace('/Bundle$/', '', $bundle);
 
-        // SomeSuper\ControllerClass => ControllerClass
-        $controller = Strings::match($class, '/(?<controller>[A-Za-z0-9]*)Controller$/')['controller'] ?? '';
+        $controller = null;
+        foreach ($controllerPatterns as $pattern) {
+            if (! preg_match($pattern, $class, $tempMatch)) {
+                continue;
+            }
 
-        // indexAction => index
-        $action = Strings::match($method, '/(?<method>[A-Za-z]*)Action$/')['method'] ?? '';
+            $controller = str_replace('\\', '/', strtolower(
+                preg_replace('/([a-z\d])([A-Z])/', '\\1_\\2', $tempMatch[1])
+            ));
+            break;
+        }
 
-        return sprintf('%s:%s:%s.html.twig', $bundle, $controller, $action);
+        $action = preg_replace('/Action$/', '', $method);
+
+        return $bundle ? '@' . $bundle . '/' : '' . $controller . ($controller ? '/' : '') . $action . '.html.twig';
     }
 }
