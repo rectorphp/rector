@@ -29,6 +29,7 @@ final class TemplateAnnotationVersion5RectorTest extends AbstractConfigurableRec
             [__DIR__ . '/Wrong/Version5/wrong6.php.inc', __DIR__ . '/Correct/Version5/correct6.php.inc'],
             [__DIR__ . '/Wrong/Version5/wrong7.php.inc', __DIR__ . '/Correct/Version5/correct7.php.inc'],
             [__DIR__ . '/Wrong/Version5/wrong8.php.inc', __DIR__ . '/Correct/Version5/correct8.php.inc'],
+            [__DIR__ . '/Wrong/Version5/wrong9.php.inc', __DIR__ . '/Correct/Version5/correct9.php.inc'],
         ];
     }
 
