@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
+use Rector\Exception\Rector\InvalidRectorConfigurationException;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\Contrib\Symfony\TemplateGuesser;
@@ -53,13 +54,24 @@ final class TemplateAnnotationRector extends AbstractRector
      */
     private $templateGuesser;
 
+    /**
+     * @var int
+     */
+    private $version;
+
+    /**
+     * @param mixed[] $config
+     */
     public function __construct(
+        array $config,
         DocBlockAnalyzer $docBlockAnalyzer,
         MethodCallNodeFactory $methodCallNodeFactory,
         NodeFactory $nodeFactory,
         BetterNodeFinder $betterNodeFinder,
         TemplateGuesser $templateGuesser
     ) {
+        $this->ensureConfigHasVersion($config);
+        $this->version = $config['version'];
         $this->docBlockAnalyzer = $docBlockAnalyzer;
         $this->methodCallNodeFactory = $methodCallNodeFactory;
         $this->nodeFactory = $nodeFactory;
@@ -139,7 +151,7 @@ final class TemplateAnnotationRector extends AbstractRector
             return $annotationContent['filename'];
         }
 
-        return $this->templateGuesser->resolveFromClassMethodNode($classMethodNode);
+        return $this->templateGuesser->resolveFromClassMethodNode($classMethodNode, $this->version);
     }
 
     /**
@@ -158,5 +170,22 @@ final class TemplateAnnotationRector extends AbstractRector
         }
 
         return $arguments;
+    }
+
+    /**
+     * @param mixed[] $config
+     */
+    private function ensureConfigHasVersion(array $config): void
+    {
+        if (isset($config['version'])) {
+            return;
+        }
+
+        throw new InvalidRectorConfigurationException(sprintf(
+            'Rector "%s" is missing "%s" configuration. Add it as "%s" to config.yml under its key"',
+            self::class,
+            'version',
+            'version: <value>'
+        ));
     }
 }
