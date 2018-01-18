@@ -14,8 +14,6 @@ parameters:
         # known values
         - '#Method Rector\\Node\\NodeFactory::create(Null|False|True)Constant\(\) should return PhpParser\\Node\\Expr\\ConstFetch but returns PhpParser\\Node\\Expr#' # 2
         - '#Method Rector\\Node\\NodeFactory::createNamespace\(\) should return PhpParser\\Node\\Stmt\\Namespace_ but returns PhpParser\\Node#' # 1
-        - '#Calling method toString\(\) on possibly null value of type PhpParser\\Node\\Name\\FullyQualified\|null#' # 1
-        - '#Calling method toString\(\) on possibly null value of type PhpParser\\Node\\Name\|null#' # 1
         - '#Calling method getText\(\) on possibly null value of type PhpParser\\Comment\\Doc\|null#' # 3
         - '#Calling method getParentClassNames\(\) on possibly null value of type Rector\\BetterReflection\\Reflection\\ReflectionClass\|null#' # 1
         - '#Argument of an invalid type array(?:<array>)\|null supplied for foreach, only iterables are supported#' # 1
