@@ -16,7 +16,6 @@ parameters:
         - '#Method Rector\\Node\\NodeFactory::createNamespace\(\) should return PhpParser\\Node\\Stmt\\Namespace_ but returns PhpParser\\Node#' # 1
         - '#Calling method getText\(\) on possibly null value of type PhpParser\\Comment\\Doc\|null#' # 3
         - '#Calling method getParentClassNames\(\) on possibly null value of type Rector\\BetterReflection\\Reflection\\ReflectionClass\|null#' # 1
-        - '#Argument of an invalid type array(?:<array>)\|null supplied for foreach, only iterables are supported#' # 1
         - '#Parameter \#2 \$name of class PhpParser\\Node\\Expr\\PropertyFetch constructor expects PhpParser\\Node\\Expr|string, PhpParser\\Node\\Identifier given#' # 2
         - '#Instanceof between PhpParser\\Node\\Expr\|string and PhpParser\\Node\\Identifier will always evaluate to false#' # 8
         - '#PHPDoc tag @param for parameter \$classLikeNode with type PhpParser\\Builder\\Trait_\|PhpParser\\Node\\Stmt\\Class_\|PhpParser\\Node\\Stmt#' # 1

@@ -29,9 +29,9 @@ final class ArgumentReplacerRector extends AbstractRector
     private $methodCallAnalyzer;
 
     /**
-     * @var mixed[][]|null
+     * @var mixed[][]
      */
-    private $activeArgumentChangesByPosition;
+    private $activeArgumentChangesByPosition = [];
 
     /**
      * @var ClassMethodAnalyzer
@@ -108,12 +108,12 @@ final class ArgumentReplacerRector extends AbstractRector
     }
 
     /**
-     * @return mixed[][]|null
+     * @return mixed[][]
      */
-    private function matchArgumentChanges(Node $node): ?array
+    private function matchArgumentChanges(Node $node): array
     {
         if (! $node instanceof ClassMethod && ! $node instanceof MethodCall && ! $node instanceof StaticCall) {
-            return null;
+            return [];
         }
 
         foreach ($this->argumentChangesMethodAndClass as $type => $argumentChangesByMethod) {
@@ -126,7 +126,7 @@ final class ArgumentReplacerRector extends AbstractRector
             }
         }
 
-        return null;
+        return [];
     }
 
     /**
