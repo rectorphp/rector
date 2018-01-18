@@ -3,6 +3,7 @@
 namespace Rector\Rector\Contrib\PHPUnit\SpecificMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -14,22 +15,14 @@ use Rector\Rector\AbstractRector;
 /**
  * Before:
  * - $this->assertTrue(isset($anything->foo));
- * - $this->assertFalse(isset($anything->foo));
+ * - $this->assertFalse(isset($anything['foo']), 'message');
  *
  * After:
  * - $this->assertObjectHasAttribute('foo', $anything);
- * - $this->assertObjectNotHasAttribute('foo', $anything);
+ * - $this->assertArrayNotHasKey('foo', $anything, 'message');
  */
-final class AssertTrueIssetToObjectHasAttributeRector extends AbstractRector
+final class AssertIssetToSpecificMethodRector extends AbstractRector
 {
-    /**
-     * @var string[]
-     */
-    private $renameMethodsMap = [
-        'assertTrue' => 'assertObjectHasAttribute',
-        'assertFalse' => 'assertObjectNotHasAttribute',
-    ];
-
     /**
      * @var MethodCallAnalyzer
      */
@@ -60,7 +53,7 @@ final class AssertTrueIssetToObjectHasAttributeRector extends AbstractRector
         if (! $this->methodCallAnalyzer->isTypesAndMethods(
             $node,
             ['PHPUnit\Framework\TestCase', 'PHPUnit_Framework_TestCase'],
-            array_keys($this->renameMethodsMap)
+            ['assertTrue', 'assertFalse']
         )) {
             return false;
         }
@@ -75,10 +68,9 @@ final class AssertTrueIssetToObjectHasAttributeRector extends AbstractRector
             return false;
         }
 
-        /** @var Isset_ $issetNode */
-        $issetNode = $firstArgumentValue;
+        $variableNodeClass = get_class($firstArgumentValue->vars[0]);
 
-        return $issetNode->vars[0] instanceof PropertyFetch;
+        return in_array($variableNodeClass, [ArrayDimFetch::class, PropertyFetch::class], true);
     }
 
     /**
@@ -86,22 +78,51 @@ final class AssertTrueIssetToObjectHasAttributeRector extends AbstractRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        // rename method
-        $this->identifierRenamer->renameNodeWithMap($methodCallNode, $this->renameMethodsMap);
-
-        // move isset to property and object
         /** @var Isset_ $issetNode */
         $issetNode = $methodCallNode->args[0]->value;
 
-        /** @var PropertyFetch $propertyFetchNode */
-        $propertyFetchNode = $issetNode->vars[0];
+        $issetNodeArg = $issetNode->vars[0];
 
-        // and set as arguments
-        $methodCallNode->args = $this->nodeFactory->createArgs([
-            $this->nodeFactory->createString($propertyFetchNode->name->toString()),
-            $propertyFetchNode->var,
-        ]);
+        if ($issetNodeArg instanceof PropertyFetch) {
+            $this->refactorPropertyFetchNode($methodCallNode, $issetNodeArg);
+        } elseif ($issetNodeArg instanceof ArrayDimFetch) {
+            $this->refactorArrayDimFetchNode($methodCallNode, $issetNodeArg);
+        }
 
         return $methodCallNode;
+    }
+
+    private function refactorPropertyFetchNode(MethodCall $node, PropertyFetch $propertyFetchNode): void
+    {
+        $this->identifierRenamer->renameNodeWithMap($node, [
+            'assertTrue' => 'assertObjectHasAttribute',
+            'assertFalse' => 'assertObjectNotHasAttribute',
+        ]);
+
+        $oldArgs = $node->args;
+
+        unset($oldArgs[0]);
+
+        $node->args = array_merge($this->nodeFactory->createArgs([
+            $this->nodeFactory->createString($propertyFetchNode->name->toString()),
+            $propertyFetchNode->var,
+        ]), $oldArgs);
+    }
+
+    private function refactorArrayDimFetchNode(MethodCall $node, ArrayDimFetch $arrayDimFetchNode): void
+    {
+        $this->identifierRenamer->renameNodeWithMap($node, [
+            'assertTrue' => 'assertArrayHasKey',
+            'assertFalse' => 'assertArrayNotHasKey',
+        ]);
+
+        $oldArgs = $node->args;
+
+        unset($oldArgs[0]);
+
+        $node->args = array_merge($this->nodeFactory->createArgs([
+            $arrayDimFetchNode->dim,
+            $arrayDimFetchNode->var,
+        ]), $oldArgs);
     }
 }
