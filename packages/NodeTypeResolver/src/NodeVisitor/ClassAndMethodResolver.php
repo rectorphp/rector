@@ -113,7 +113,7 @@ final class ClassAndMethodResolver extends NodeVisitorAbstract
     {
         if ($node instanceof ClassMethod) {
             $this->methodNode = $node;
-            $this->methodName = $node->name->toString();
+            $this->methodName = (string) $node->name;
         }
 
         if ($node instanceof MethodCall && $node->name instanceof Identifier) {

@@ -13,7 +13,7 @@ final class TemplateGuesser
     {
         $namespace = (string) $classMethodNode->getAttribute(Attribute::NAMESPACE_NAME);
         $class = (string) $classMethodNode->getAttribute(Attribute::CLASS_NAME);
-        $method = $classMethodNode->name->toString();
+        $method = (string) $classMethodNode->name;
 
         if ($version === 3) {
             return $this->resolveForVersion3($namespace, $class, $method);

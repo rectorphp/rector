@@ -33,7 +33,6 @@ parameters:
         - '#Instanceof between PhpParser\\Node\\Expr\|string and PhpParser\\Node\\Name will always evaluate to false#'
         - '#Method Rector\\BetterReflection\\Reflector\\SmartClassReflector::reflect\(\) should return Rector\\BetterReflection\\Reflection\\ReflectionClass\|null but returns Rector\\BetterReflection\\Reflection\\Reflection#'
         - '#Property Rector\\NodeTypeResolver\\Tests\\PerNodeCallerTypeResolver\\MethodCallCallerTypeResolver\\NestedMethodCallTest::\$(formChainMethodCallNodes|nestedMethodCallNodes) \(array<PhpParser\\Node\\Expr\\MethodCall>\) does not accept array<PhpParser\\Node>#'
-        - '#Cannot call method toString\(\) on string#'
         - '#Parameter \#1 \$node of method Rector\\NodeTypeResolver\\NodeTypeResolver::resolve\(\) expects PhpParser\\Node, PhpParser\\Node\\Expr|string given#'
         - '#Cannot call method render\(\) on phpDocumentor\\Reflection\\DocBlock\\Tag\|string#'
 
