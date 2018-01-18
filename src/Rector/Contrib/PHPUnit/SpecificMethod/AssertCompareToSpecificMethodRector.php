@@ -82,7 +82,7 @@ final class AssertCompareToSpecificMethodRector extends AbstractRector
             return false;
         }
 
-        /** @var Expr $secondArgumentValue */
+        /** @var FuncCall $secondArgumentValue */
         $secondArgumentValue = $methodCallNode->args[1]->value;
 
         if (! $this->isNamedFunction($secondArgumentValue)) {
