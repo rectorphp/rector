@@ -15,11 +15,11 @@ use Rector\Rector\AbstractRector;
 /**
  * Before:
  * - $this->assertTrue(isset($anything->foo));
- * - $this->assertFalse(isset($anything['foo']));
+ * - $this->assertFalse(isset($anything['foo']), 'message');
  *
  * After:
  * - $this->assertObjectHasAttribute('foo', $anything);
- * - $this->assertArrayNotHasKey('foo', $anything);
+ * - $this->assertArrayNotHasKey('foo', $anything, 'message');
  */
 final class AssertIssetToSpecificMethodRector extends AbstractRector
 {
@@ -103,10 +103,14 @@ final class AssertIssetToSpecificMethodRector extends AbstractRector
             'assertFalse' => 'assertObjectNotHasAttribute',
         ]);
 
-        $node->args = $this->nodeFactory->createArgs([
+        $oldArgs = $node->args;
+
+        unset($oldArgs[0]);
+
+        $node->args = array_merge($this->nodeFactory->createArgs([
             $this->nodeFactory->createString($propertyFetchNode->name->toString()),
             $propertyFetchNode->var,
-        ]);
+        ]), $oldArgs);
     }
 
     private function refactorArrayDimFetchNode(MethodCall $node, ArrayDimFetch $arrayDimFetchNode): void
@@ -116,9 +120,13 @@ final class AssertIssetToSpecificMethodRector extends AbstractRector
             'assertFalse' => 'assertArrayNotHasKey',
         ]);
 
-        $node->args = $this->nodeFactory->createArgs([
+        $oldArgs = $node->args;
+
+        unset($oldArgs[0]);
+
+        $node->args = array_merge($this->nodeFactory->createArgs([
             $arrayDimFetchNode->dim,
             $arrayDimFetchNode->var,
-        ]);
+        ]), $oldArgs);
     }
 }
