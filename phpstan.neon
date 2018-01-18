@@ -45,7 +45,6 @@ parameters:
         - '#Parameter \#1 \$functionLikeNode of method Rector\\NodeTypeResolver\\TypeContext::getFunctionReflection\(\) expects PhpParser\\Node\\Expr\\Closure\|PhpParser\\Node\\Stmt\\ClassMethod\|PhpParser\\Node\\Stmt\\Function_, PhpParser\\Node\\FunctionLike given#'
         - '#Property Rector\\Rector\\AbstractRector::\$expressionsToAdd(After|Before) \(iterable<array<PhpParser\\Node\\Stmt\\Expression>>&SplObjectStorage\) does not accept default value of type array#'
         - '#Access to an undefined property PhpParser\\Node\\Param::\$var#'
-        - '#Access to an undefined property PhpParser\\Node\\Arg|PhpParser\\Node\\Expr\|PhpParser\\Node\\Param::\$value#'
         - '#Call to an undefined method PhpParser\\BuilderFactory::args\(\)#'
         - "#Casting to string something that's already string#"
         - '#Call to an undefined method PhpParser\\Node\\Stmt\\UseUse::getAlias\(\)#'

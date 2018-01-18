@@ -91,9 +91,9 @@ final class ArgumentReplacerRector extends AbstractRector
                 }
             } else {
                 // replace old value with new one
+                /** @var Arg $argumentOrParameter */
                 $argumentOrParameter = $argumentsOrParameters[$position];
 
-                /** @var Arg $argumentOrParameter */
                 $resolvedValue = $this->nodeValueResolver->resolve($argumentOrParameter->value);
 
                 if ($resolvedValue === $key) {
