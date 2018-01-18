@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Contrib\PHPUnit\SpecificMethod\AssertTrueIssetToObjectHasAttributeRector;
+namespace Rector\Tests\Rector\Contrib\PHPUnit\SpecificMethod\AssertIssetToSpecificMethodRector;
 
-use Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertTrueIssetToObjectHasAttributeRector;
+use Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertIssetToSpecificMethodRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class AssertTrueIssetToObjectHasAttributeRectorTest extends AbstractRectorTestCase
+final class AssertIssetToSpecificMethodRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()
@@ -30,6 +30,6 @@ final class AssertTrueIssetToObjectHasAttributeRectorTest extends AbstractRector
      */
     protected function getRectorClasses(): array
     {
-        return [AssertTrueIssetToObjectHasAttributeRector::class];
+        return [AssertIssetToSpecificMethodRector::class];
     }
 }

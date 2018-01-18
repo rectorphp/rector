@@ -20,7 +20,7 @@ use Rector\Rector\AbstractRector;
  * - $this->assertObjectHasAttribute('foo', $anything);
  * - $this->assertObjectNotHasAttribute('foo', $anything);
  */
-final class AssertTrueIssetToObjectHasAttributeRector extends AbstractRector
+final class AssertIssetToSpecificMethodRector extends AbstractRector
 {
     /**
      * @var string[]

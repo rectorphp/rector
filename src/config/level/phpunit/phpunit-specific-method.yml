@@ -8,5 +8,5 @@ rectors:
     # after: $this->assertInternalType('string', 'value');
     Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertTrueFalseInternalTypeToSpecificMethodRector: ~
     Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertCompareToSpecificMethodRector: ~
-    Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertTrueIssetToObjectHasAttributeRector: ~
+    Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertIssetToSpecificMethodRector: ~
     Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertInstanceOfComparisonRector: ~
