@@ -58,7 +58,9 @@ final class RemoveConfiguratorConstantsRector extends AbstractRector
             return (string) $classConstFetchNode->class->name;
         }
 
-        return $fqnName->toString();
+        if ($fqnName !== null) {
+            return $fqnName->toString();
+        }
     }
 
     private function getDesiredClass(): string

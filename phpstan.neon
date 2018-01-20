@@ -1,59 +1,47 @@
 parameters:
     ignoreErrors:
-        # property overriden
-        - '#Rector\\NodeTraverser\\(Cloning|Shutdown)NodeTraverser::__construct\(\) does not call parent constructor from PhpParser\\NodeTraverser#'
-
         # false positive, has annotation type above (@todo recheck for possible ignored positives)
-        - '#Access to an undefined property PhpParser\\Node::\$args#'
-        - '#Access to an undefined property PhpParser\\Node::\$var#'
-        - '#Call to an undefined method PhpParser\\Node::toString\(\)#'
-        - '#Access to an undefined property PhpParser\\Node::\$name#' # 13 off
-        - '#Parameter \#1 \$node of method Rector\\NodeAnalyzer\\ClassConstAnalyzer::isNames\(\) expects PhpParser\\Node\\Expr\\ClassConstFetch, PhpParser\\Node given#'
-        - '#Parameter \#1 \$classNode of method Rector\\NodeTypeResolver\\TypesExtractor\\ConstructorPropertyTypesExtractor::extractFromClassNode\(\) expects PhpParser\\Node\\Stmt\\Class_, PhpParser\\Node\\Stmt\\ClassLike given#'
-        - '#Call to an undefined method PhpParser\\Node\\Expr\\BinaryOp::getOperatorSigil\(\)#'
+        - '#Access to an undefined property PhpParser\\Node::\$args#' # 12
+        - '#Access to an undefined property PhpParser\\Node::\$var#' # 2
+        - '#Access to an undefined property PhpParser\\Node::\$name#' # 12
+        - '#Parameter \#1 \$node of method Rector\\NodeAnalyzer\\ClassConstAnalyzer::isNames\(\) expects PhpParser\\Node\\Expr\\ClassConstFetch, PhpParser\\Node given#' # 12
+        - '#Parameter \#1 \$classNode of method Rector\\NodeTypeResolver\\TypesExtractor\\ConstructorPropertyTypesExtractor::extractFromClassNode\(\) expects PhpParser\\Node\\Stmt\\Class_, PhpParser\\Node\\Stmt\\ClassLike given#' # 1
+        - '#Call to an undefined method PhpParser\\Node\\Expr\\BinaryOp::getOperatorSigil\(\)#' # 1
 
         # subtype
-        - '#Property PhpParser\\Node\\Param::\$type \(PhpParser\\Node\\Name|PhpParser\\Node\\NullableType\|string\|null\) does not accept PhpParser\\Node\\Identifier|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType#'
+        - '#Property PhpParser\\Node\\Param::\$type \(PhpParser\\Node\\Name|PhpParser\\Node\\NullableType\|string\|null\) does not accept PhpParser\\Node\\Identifier|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType#' # 1
 
         # known values
-        - '#Method Rector\\Node\\NodeFactory::create(Null|False|True)Constant\(\) should return PhpParser\\Node\\Expr\\ConstFetch but returns PhpParser\\Node\\Expr#'
-        - '#Method Rector\\Node\\NodeFactory::createNamespace\(\) should return PhpParser\\Node\\Stmt\\Namespace_ but returns PhpParser\\Node#'
-        - '#Calling method toString\(\) on possibly null value of type PhpParser\\Node\\Name\\FullyQualified\|null#'
-        - '#Calling method toString\(\) on possibly null value of type PhpParser\\Node\\Name\|null#'
-        - '#Calling method getText\(\) on possibly null value of type PhpParser\\Comment\\Doc\|null#'
-        - '#Calling method getParentClassNames\(\) on possibly null value of type Rector\\BetterReflection\\Reflection\\ReflectionClass\|null#'
-        - '#Argument of an invalid type array(?:<array>)\|null supplied for foreach, only iterables are supported#'
-        - '#Parameter \#2 \$name of class PhpParser\\Node\\Expr\\PropertyFetch constructor expects PhpParser\\Node\\Expr|string, PhpParser\\Node\\Identifier given#'
-        - '#Instanceof between PhpParser\\Node\\Expr\|string and PhpParser\\Node\\Identifier will always evaluate to false#'
-        - '#PHPDoc tag @param for parameter \$classLikeNode with type PhpParser\\Builder\\Trait_\|PhpParser\\Node\\Stmt\\Class_\|PhpParser\\Node\\Stmt#'
-        - '#Instanceof between string\|null and PhpParser\\Node\\Identifier will always evaluate to false#'
-        - '#Method Rector\\NodeTraverserQueue\\BetterNodeFinder::findFirstAncestorInstanceOf\(\) should return PhpParser\\Node\|null but returns object#'
-        - '#Access to an undefined property PhpParser\\Node\\Stmt\\(Class_|ClassLike)::\$namespacedName#'
-        - '#Property Rector\\NodeTypeResolver\\NodeVisitor\\NamespaceResolver::\$useNodes \(array<PhpParser\\Node\\Stmt\\Use_>\) does not accept array<PhpParser\\Node>#'
-        - '#Parameter \#1 \$classMethodNode of method Rector\\NodeTypeResolver\\TypesExtractor\\ConstructorPropertyTypesExtractor::extractPropertiesFromConstructorMethodNode\(\) expects PhpParser\\Node\\Stmt\\ClassMethod, PhpParser\\Node given#'
-        - '#Instanceof between PhpParser\\Node\\Expr\|string and PhpParser\\Node\\Name will always evaluate to false#'
-        - '#Method Rector\\BetterReflection\\Reflector\\SmartClassReflector::reflect\(\) should return Rector\\BetterReflection\\Reflection\\ReflectionClass\|null but returns Rector\\BetterReflection\\Reflection\\Reflection#'
-        - '#Property Rector\\NodeTypeResolver\\Tests\\PerNodeCallerTypeResolver\\MethodCallCallerTypeResolver\\NestedMethodCallTest::\$(formChainMethodCallNodes|nestedMethodCallNodes) \(array<PhpParser\\Node\\Expr\\MethodCall>\) does not accept array<PhpParser\\Node>#'
-        - '#Cannot call method toString\(\) on string#'
-        - '#Parameter \#1 \$node of method Rector\\NodeTypeResolver\\NodeTypeResolver::resolve\(\) expects PhpParser\\Node, PhpParser\\Node\\Expr|string given#'
-        - '#Cannot call method render\(\) on phpDocumentor\\Reflection\\DocBlock\\Tag\|string#'
+        - '#Method Rector\\Node\\NodeFactory::create(Null|False|True)Constant\(\) should return PhpParser\\Node\\Expr\\ConstFetch but returns PhpParser\\Node\\Expr#' # 2
+        - '#Method Rector\\Node\\NodeFactory::createNamespace\(\) should return PhpParser\\Node\\Stmt\\Namespace_ but returns PhpParser\\Node#' # 1
+        - '#Calling method getText\(\) on possibly null value of type PhpParser\\Comment\\Doc\|null#' # 3
+        - '#Calling method getParentClassNames\(\) on possibly null value of type Rector\\BetterReflection\\Reflection\\ReflectionClass\|null#' # 1
+        - '#Parameter \#2 \$name of class PhpParser\\Node\\Expr\\PropertyFetch constructor expects PhpParser\\Node\\Expr|string, PhpParser\\Node\\Identifier given#' # 2
+        - '#Instanceof between PhpParser\\Node\\Expr\|string and PhpParser\\Node\\Identifier will always evaluate to false#' # 8
+        - '#PHPDoc tag @param for parameter \$classLikeNode with type PhpParser\\Builder\\Trait_\|PhpParser\\Node\\Stmt\\Class_\|PhpParser\\Node\\Stmt#' # 1
+        - '#Instanceof between string\|null and PhpParser\\Node\\Identifier will always evaluate to false#' # 1
+        - '#Method Rector\\NodeTraverserQueue\\BetterNodeFinder::findFirstAncestorInstanceOf\(\) should return PhpParser\\Node\|null but returns object#' # 1
+        - '#Access to an undefined property PhpParser\\Node\\Stmt\\(Class_|ClassLike)::\$namespacedName#' # 3
+        - '#Property Rector\\NodeTypeResolver\\NodeVisitor\\NamespaceResolver::\$useNodes \(array<PhpParser\\Node\\Stmt\\Use_>\) does not accept array<PhpParser\\Node>#' # 1
+        - '#Parameter \#1 \$classMethodNode of method Rector\\NodeTypeResolver\\TypesExtractor\\ConstructorPropertyTypesExtractor::extractPropertiesFromConstructorMethodNode\(\) expects PhpParser\\Node\\Stmt\\ClassMethod, PhpParser\\Node given#' # 1
+        - '#Instanceof between PhpParser\\Node\\Expr\|string and PhpParser\\Node\\Name will always evaluate to false#' # 1
+        - '#Method Rector\\BetterReflection\\Reflector\\SmartClassReflector::reflect\(\) should return Rector\\BetterReflection\\Reflection\\ReflectionClass\|null but returns Rector\\BetterReflection\\Reflection\\Reflection#' # 1
+        - '#Parameter \#1 \$node of method Rector\\NodeTypeResolver\\NodeTypeResolver::resolve\(\) expects PhpParser\\Node, PhpParser\\Node\\Expr|string given#' # 1
+        - '#Cannot call method render\(\) on phpDocumentor\\Reflection\\DocBlock\\Tag\|string#' # 1
 
         # known value of Name of MethodCall
-        - '#Call to an undefined method PhpParser\\Node\\Expr\|PhpParser\\Node\\Name::toString\(\)#'
-        - '#Cannot call method toString\(\) on PhpParser\\Node\\Expr\|string#'
-        - '#Access to an undefined property PhpParser\\Node\\Expr::\$name#'
+        - '#Call to an undefined method PhpParser\\Node\\Expr\|PhpParser\\Node\\Name::toString\(\)#' # 5
+        - '#Cannot call method toString\(\) on PhpParser\\Node\\Expr\|string#' # 3
 
         # buggy
-        - '#Parameter \#1 \$classLikeNode of method Rector\\NodeAnalyzer\\ClassLikeAnalyzer::resolveExtendsTypes\(\) expects PhpParser\\Node\\Stmt\\Class_\|PhpParser\\Node\\Stmt\\Interface_, PhpParser\\Node\\Stmt\\ClassLike given#'
-        - '#Parameter \#1 \$functionLikeNode of method Rector\\NodeTypeResolver\\TypeContext::getFunctionReflection\(\) expects PhpParser\\Node\\Expr\\Closure\|PhpParser\\Node\\Stmt\\ClassMethod\|PhpParser\\Node\\Stmt\\Function_, PhpParser\\Node\\FunctionLike given#'
-        - '#Property Rector\\Rector\\AbstractRector::\$expressionsToAdd(After|Before) \(iterable<array<PhpParser\\Node\\Stmt\\Expression>>&SplObjectStorage\) does not accept default value of type array#'
-        - '#Access to an undefined property PhpParser\\Node\\Param::\$var#'
-        - '#Access to an undefined property PhpParser\\Node\\Arg|PhpParser\\Node\\Expr\|PhpParser\\Node\\Param::\$value#'
-        - '#Call to an undefined method PhpParser\\BuilderFactory::args\(\)#'
-        - "#Casting to string something that's already string#"
-        - '#Call to an undefined method PhpParser\\Node\\Stmt\\UseUse::getAlias\(\)#'
-        - '#Call to an undefined method PhpParser\\PrettyPrinter\\Standard::printFormatPreserving\(\)#'
-        - '#Array \(array<Rector\\BetterReflection\\Reflection\\ReflectionClass>\) does not accept Rector\\BetterReflection\\Reflection\\Reflection#'
+        - '#Parameter \#1 \$classLikeNode of method Rector\\NodeAnalyzer\\ClassLikeAnalyzer::resolveExtendsTypes\(\) expects PhpParser\\Node\\Stmt\\Class_\|PhpParser\\Node\\Stmt\\Interface_, PhpParser\\Node\\Stmt\\ClassLike given#' # 1
+        - '#Parameter \#1 \$functionLikeNode of method Rector\\NodeTypeResolver\\TypeContext::getFunctionReflection\(\) expects PhpParser\\Node\\Expr\\Closure\|PhpParser\\Node\\Stmt\\ClassMethod\|PhpParser\\Node\\Stmt\\Function_, PhpParser\\Node\\FunctionLike given#' # 1
+        - '#Access to an undefined property PhpParser\\Node\\Param::\$var#' # 3
+        - '#Call to an undefined method PhpParser\\BuilderFactory::args\(\)#' # 1
+        - "#Casting to string something that's already string#" # 5
+        - '#Call to an undefined method PhpParser\\Node\\Stmt\\UseUse::getAlias\(\)#' # 2
+        - '#Call to an undefined method PhpParser\\PrettyPrinter\\Standard::printFormatPreserving\(\)#' # 1
+        - '#Array \(array<Rector\\BetterReflection\\Reflection\\ReflectionClass>\) does not accept Rector\\BetterReflection\\Reflection\\Reflection#' # 1
 
     excludes_analyse:
         # test files
