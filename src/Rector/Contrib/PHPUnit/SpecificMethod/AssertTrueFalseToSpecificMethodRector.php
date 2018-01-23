@@ -105,13 +105,9 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractPHPUnitRector
             return false;
         }
 
-        if (! isset($this->activeOldToNewMethods[$funcCallName])) {
-            return false;
-        }
-
         $this->activeFuncCallName = $funcCallName;
 
-        return true;
+        return isset($this->activeOldToNewMethods[$funcCallName]);
     }
 
     /**

@@ -93,13 +93,9 @@ final class AssertCompareToSpecificMethodRector extends AbstractPHPUnitRector
         }
 
         $methodName = $secondArgumentValue->name->toString();
-        if (! isset($this->defaultOldToNewMethods[$methodName])) {
-            return false;
-        }
-
         $this->activeFuncCallName = $methodName;
 
-        return true;
+        return isset($this->defaultOldToNewMethods[$methodName]);
     }
 
     /**
