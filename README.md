@@ -349,15 +349,7 @@ For example:
 
 This package has no intention in formatting your code, as **coding standard tools handle this much better**.
 
-We prefer [EasyCodingStandard](https://github.com/Symplify/EasyCodingStandard) that is already available:
-
-```bash
-# check
-vendor/bin/ecs check --config vendor/rector/rector/ecs-after-rector.neon
-
-# fix
-vendor/bin/ecs check --config vendor/rector/rector/ecs-after-rector.neon --fix
-```
+We prefer [EasyCodingStandard](https://github.com/Symplify/EasyCodingStandard).
 
 ## More Detailed Documentation
 
