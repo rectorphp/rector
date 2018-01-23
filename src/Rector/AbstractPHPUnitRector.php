@@ -8,6 +8,11 @@ use Rector\Node\Attribute;
 
 abstract class AbstractPHPUnitRector extends AbstractRector
 {
+    /**
+     * Check if the file is a PHPUnit TestCase. By default, it should end with "Test", as it is the standard.
+     *
+     * @see https://phpunit.de/getting-started-with-phpunit.html
+     */
     protected function isInTestClass(Node $node): bool
     {
         $className = $node->getAttribute(Attribute::CLASS_NAME);
