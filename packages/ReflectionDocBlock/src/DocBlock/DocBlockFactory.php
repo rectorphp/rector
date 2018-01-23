@@ -45,7 +45,10 @@ final class DocBlockFactory
         $docBlockContent = $node->getDocComment() ? $node->getDocComment()->getText() : ' ';
         $docBlockContext = $this->createContextForNamespace($node);
 
-        return $this->docBlocksPerNode[$node] = $this->cleanDocBlockFactory->create($docBlockContent, $docBlockContext);
+        return $this->docBlocksPerNode[$node] = $this->cleanDocBlockFactory->create(
+            $docBlockContent,
+            $docBlockContext
+        );
     }
 
     private function createContextForNamespace(Node $node): ?Context

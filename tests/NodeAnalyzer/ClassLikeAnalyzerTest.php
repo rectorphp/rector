@@ -72,10 +72,7 @@ final class ClassLikeAnalyzerTest extends AbstractContainerAwareTestCase
 
     public function testAnonymousClass(): void
     {
-        $this->assertSame(
-            [],
-            $this->classLikeAnalyzer->resolveTypeAndParentTypes(new Class_(null))
-        );
+        $this->assertSame([], $this->classLikeAnalyzer->resolveTypeAndParentTypes(new Class_(null)));
 
         $classWithParent = new Class_(null);
         $classWithParent->extends = new Name('SomeParentClass');
