@@ -10,7 +10,7 @@ use PhpParser\Node\Expr\PropertyFetch;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
-use Rector\Rector\AbstractRector;
+use Rector\Rector\AbstractPHPUnitRector;
 
 /**
  * Before:
@@ -21,7 +21,7 @@ use Rector\Rector\AbstractRector;
  * - $this->assertObjectHasAttribute('foo', $anything);
  * - $this->assertArrayNotHasKey('foo', $anything, 'message');
  */
-final class AssertIssetToSpecificMethodRector extends AbstractRector
+final class AssertIssetToSpecificMethodRector extends AbstractPHPUnitRector
 {
     /**
      * @var MethodCallAnalyzer
@@ -50,11 +50,11 @@ final class AssertIssetToSpecificMethodRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        if (! $this->methodCallAnalyzer->isTypesAndMethods(
-            $node,
-            ['PHPUnit\Framework\TestCase', 'PHPUnit_Framework_TestCase'],
-            ['assertTrue', 'assertFalse']
-        )) {
+        if (! $this->isInTestClass($node)) {
+            return false;
+        }
+
+        if (! $this->methodCallAnalyzer->isMethods($node, ['assertTrue', 'assertFalse'])) {
             return false;
         }
 

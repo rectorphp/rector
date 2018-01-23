@@ -7,7 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Node\MethodCallNodeFactory;
-use Rector\Rector\AbstractRector;
+use Rector\Rector\AbstractPHPUnitRector;
 use Rector\ReflectionDocBlock\NodeAnalyzer\DocBlockAnalyzer;
 
 /**
@@ -19,7 +19,7 @@ use Rector\ReflectionDocBlock\NodeAnalyzer\DocBlockAnalyzer;
  * - $this->expectException('Exception');
  * - $this->expectExceptionMessage('Message');
  */
-final class ExceptionAnnotationRector extends AbstractRector
+final class ExceptionAnnotationRector extends AbstractPHPUnitRector
 {
     /**
      * In reversed order, which they should be called in code.
@@ -51,6 +51,10 @@ final class ExceptionAnnotationRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
+        if (! $this->isInTestClass($node)) {
+            return false;
+        }
+
         if (! $node instanceof ClassMethod) {
             return false;
         }

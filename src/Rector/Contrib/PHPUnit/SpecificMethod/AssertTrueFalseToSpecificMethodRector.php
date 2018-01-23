@@ -11,7 +11,7 @@ use PhpParser\Node\Name;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
-use Rector\Rector\AbstractRector;
+use Rector\Rector\AbstractPHPUnitRector;
 
 /**
  * Before:
@@ -20,7 +20,7 @@ use Rector\Rector\AbstractRector;
  * After:
  * - $this->assertIsReadable($readmeFile, 'message'));
  */
-final class AssertTrueFalseToSpecificMethodRector extends AbstractRector
+final class AssertTrueFalseToSpecificMethodRector extends AbstractPHPUnitRector
 {
     /**
      * @var string[][]|false[][]
@@ -82,11 +82,11 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        if (! $this->methodCallAnalyzer->isTypesAndMethods(
-            $node,
-            ['PHPUnit\Framework\TestCase', 'PHPUnit_Framework_TestCase'],
-            ['assertTrue', 'assertFalse']
-        )) {
+        if (! $this->isInTestClass($node)) {
+            return false;
+        }
+
+        if (! $this->methodCallAnalyzer->isMethods($node, ['assertTrue', 'assertFalse'])) {
             return false;
         }
 
@@ -102,13 +102,9 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractRector
             return false;
         }
 
-        if (! isset($this->activeOldToNewMethods[$funcCallName])) {
-            return false;
-        }
-
         $this->activeFuncCallName = $funcCallName;
 
-        return true;
+        return isset($this->activeOldToNewMethods[$funcCallName]);
     }
 
     /**
@@ -172,7 +168,9 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractRector
 
     private function resolveFunctionName(Node $node): ?string
     {
-        if ($node instanceof FuncCall) {
+        if ($node instanceof FuncCall
+            && $node->name instanceof Name
+        ) {
             /** @var Name $nameNode */
             $nameNode = $node->name;
 

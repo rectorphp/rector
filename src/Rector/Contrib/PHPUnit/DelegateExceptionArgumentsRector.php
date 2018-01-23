@@ -8,7 +8,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
-use Rector\Rector\AbstractRector;
+use Rector\Rector\AbstractPHPUnitRector;
 
 /**
  * Before:
@@ -19,7 +19,7 @@ use Rector\Rector\AbstractRector;
  * - $this->expectExceptionMessage('Message');
  * - $this->expectExceptionCode('CODE');
  */
-final class DelegateExceptionArgumentsRector extends AbstractRector
+final class DelegateExceptionArgumentsRector extends AbstractPHPUnitRector
 {
     /**
      * @var string[]
@@ -27,16 +27,6 @@ final class DelegateExceptionArgumentsRector extends AbstractRector
     private $oldToNewMethod = [
         'setExpectedException' => 'expectExceptionMessage',
         'setExpectedExceptionRegExp' => 'expectExceptionMessageRegExp',
-    ];
-
-    /**
-     * @var string[]
-     */
-    private $phpUnitTestCaseClasses = [
-        // PHPUnit 5-
-        'PHPUnit_Framework_TestCase',
-        // PHPUnit 6+
-        'PHPUnit\Framework\TestCase',
     ];
 
     /**
@@ -57,11 +47,11 @@ final class DelegateExceptionArgumentsRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        if (! $this->methodCallAnalyzer->isTypesAndMethods(
-            $node,
-            $this->phpUnitTestCaseClasses,
-            array_keys($this->oldToNewMethod)
-        )) {
+        if (! $this->isInTestClass($node)) {
+            return false;
+        }
+
+        if (! $this->methodCallAnalyzer->isMethods($node, array_keys($this->oldToNewMethod))) {
             return false;
         }
 
