@@ -51,10 +51,7 @@ final class DelegateExceptionArgumentsRector extends AbstractPHPUnitRector
             return false;
         }
 
-        if (! $this->methodCallAnalyzer->isMethods(
-            $node,
-            array_keys($this->oldToNewMethod)
-        )) {
+        if (! $this->methodCallAnalyzer->isMethods($node, array_keys($this->oldToNewMethod))) {
             return false;
         }
 

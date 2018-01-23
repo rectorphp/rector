@@ -45,10 +45,7 @@ final class AssertFalseStrposToContainsRector extends AbstractPHPUnitRector
             return false;
         }
 
-        if (! $this->methodCallAnalyzer->isMethods(
-            $node,
-            ['assertFalse', 'assertNotFalse']
-        )) {
+        if (! $this->methodCallAnalyzer->isMethods($node, ['assertFalse', 'assertNotFalse'])) {
             return false;
         }
 

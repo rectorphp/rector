@@ -81,10 +81,7 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractPH
             return false;
         }
 
-        if (! $this->methodCallAnalyzer->isMethods(
-            $node,
-            array_keys($this->renameMethodsMap)
-        )) {
+        if (! $this->methodCallAnalyzer->isMethods($node, array_keys($this->renameMethodsMap))) {
             return false;
         }
 

@@ -64,10 +64,7 @@ final class AssertComparisonToSpecificMethodRector extends AbstractPHPUnitRector
             return false;
         }
 
-        if (! $this->methodCallAnalyzer->isMethods(
-            $node,
-            ['assertTrue', 'assertFalse']
-        )) {
+        if (! $this->methodCallAnalyzer->isMethods($node, ['assertTrue', 'assertFalse'])) {
             return false;
         }
 

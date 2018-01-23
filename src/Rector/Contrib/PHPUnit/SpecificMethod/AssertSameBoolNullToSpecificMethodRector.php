@@ -57,10 +57,7 @@ final class AssertSameBoolNullToSpecificMethodRector extends AbstractPHPUnitRect
             return false;
         }
 
-        if (! $this->methodCallAnalyzer->isMethods(
-            $node,
-            ['assertSame', 'assertNotSame']
-        )) {
+        if (! $this->methodCallAnalyzer->isMethods($node, ['assertSame', 'assertNotSame'])) {
             return false;
         }
 
