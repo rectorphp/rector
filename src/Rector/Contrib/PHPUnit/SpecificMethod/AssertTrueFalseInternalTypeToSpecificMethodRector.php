@@ -3,8 +3,10 @@
 namespace Rector\Rector\Contrib\PHPUnit\SpecificMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Name;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
@@ -90,7 +92,7 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractPH
         $methodCallNode = $node;
 
         $firstArgumentValue = $methodCallNode->args[0]->value;
-        if (! $firstArgumentValue instanceof FuncCall) {
+        if (! $this->isNamedFunction($firstArgumentValue)) {
             return false;
         }
 
@@ -124,5 +126,15 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractPH
             $this->nodeFactory->createString($this->oldMethodsToTypes[$isFunctionName]),
             $argument,
         ], $oldArguments);
+    }
+
+    private function isNamedFunction(Expr $node): bool
+    {
+        if (! $node instanceof FuncCall) {
+            return false;
+        }
+
+        $functionName = $node->name;
+        return $functionName instanceof Name;
     }
 }

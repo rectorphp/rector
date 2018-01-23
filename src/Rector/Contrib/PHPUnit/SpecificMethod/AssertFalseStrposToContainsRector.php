@@ -3,9 +3,11 @@
 namespace Rector\Rector\Contrib\PHPUnit\SpecificMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractPHPUnitRector;
@@ -51,7 +53,7 @@ final class AssertFalseStrposToContainsRector extends AbstractPHPUnitRector
         }
 
         $firstArgumentValue = $node->args[0]->value;
-        if (! $firstArgumentValue instanceof FuncCall) {
+        if (! $this->isNamedFunction($firstArgumentValue)) {
             return false;
         }
 
@@ -96,5 +98,15 @@ final class AssertFalseStrposToContainsRector extends AbstractPHPUnitRector
         } else {
             $this->identifierRenamer->renameNode($methodCallNode, 'assertContains');
         }
+    }
+
+    private function isNamedFunction(Expr $node): bool
+    {
+        if (! $node instanceof FuncCall) {
+            return false;
+        }
+
+        $functionName = $node->name;
+        return $functionName instanceof Name;
     }
 }

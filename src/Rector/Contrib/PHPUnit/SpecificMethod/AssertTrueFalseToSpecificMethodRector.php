@@ -171,7 +171,9 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractPHPUnitRector
 
     private function resolveFunctionName(Node $node): ?string
     {
-        if ($node instanceof FuncCall) {
+        if ($node instanceof FuncCall
+            && $node->name instanceof Name
+        ) {
             /** @var Name $nameNode */
             $nameNode = $node->name;
 
