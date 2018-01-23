@@ -8,7 +8,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
-use Rector\Rector\AbstractRector;
+use Rector\Rector\AbstractPHPUnitRector;
 
 /**
  * Before:
@@ -19,7 +19,7 @@ use Rector\Rector\AbstractRector;
  * - $this->assertNull($anything);
  * - $this->assertNotFalse($anything);
  */
-final class AssertSameBoolNullToSpecificMethodRector extends AbstractRector
+final class AssertSameBoolNullToSpecificMethodRector extends AbstractPHPUnitRector
 {
     /**
      * @var string[][]|false[][]
@@ -53,9 +53,12 @@ final class AssertSameBoolNullToSpecificMethodRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        if (! $this->methodCallAnalyzer->isTypesAndMethods(
+        if (! $this->isInTestClass($node)) {
+            return false;
+        }
+
+        if (! $this->methodCallAnalyzer->isMethods(
             $node,
-            ['PHPUnit\Framework\TestCase', 'PHPUnit_Framework_TestCase'],
             ['assertSame', 'assertNotSame']
         )) {
             return false;

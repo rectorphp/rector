@@ -8,7 +8,7 @@ use PhpParser\Node\Expr\MethodCall;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
-use Rector\Rector\AbstractRector;
+use Rector\Rector\AbstractPHPUnitRector;
 
 /**
  * Before:
@@ -19,7 +19,7 @@ use Rector\Rector\AbstractRector;
  * - $this->assertInternalType({internal_type}, $anything, 'message');
  * - $this->assertNotInternalType({internal_type}, $anything, 'message');
  */
-final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractRector
+final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractPHPUnitRector
 {
     /**
      * @var string[]
@@ -75,9 +75,12 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractRe
 
     public function isCandidate(Node $node): bool
     {
-        if (! $this->methodCallAnalyzer->isTypesAndMethods(
+        if (! $this->isInTestClass($node)) {
+            return false;
+        }
+
+        if (! $this->methodCallAnalyzer->isMethods(
             $node,
-            ['PHPUnit\Framework\TestCase', 'PHPUnit_Framework_TestCase'],
             array_keys($this->renameMethodsMap)
         )) {
             return false;

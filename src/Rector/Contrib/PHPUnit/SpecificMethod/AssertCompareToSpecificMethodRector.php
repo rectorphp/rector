@@ -13,7 +13,7 @@ use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
-use Rector\Rector\AbstractRector;
+use Rector\Rector\AbstractPHPUnitRector;
 
 /**
  * Before:
@@ -28,7 +28,7 @@ use Rector\Rector\AbstractRector;
  * - $this->assert{function}($value, $anything, 'message');
  * - $this->assertNot{function}($value, $anything, 'message');
  */
-final class AssertCompareToSpecificMethodRector extends AbstractRector
+final class AssertCompareToSpecificMethodRector extends AbstractPHPUnitRector
 {
     /**
      * @var string[][]|false[][]
@@ -63,9 +63,12 @@ final class AssertCompareToSpecificMethodRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        if (! $this->methodCallAnalyzer->isTypesAndMethods(
+        if (! $this->isInTestClass($node)) {
+            return false;
+        }
+
+        if (! $this->methodCallAnalyzer->isMethods(
             $node,
-            ['PHPUnit\Framework\TestCase', 'PHPUnit_Framework_TestCase'],
             ['assertSame', 'assertNotSame', 'assertEquals', 'assertNotEquals']
         )) {
             return false;

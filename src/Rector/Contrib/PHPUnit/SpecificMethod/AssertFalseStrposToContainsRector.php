@@ -8,7 +8,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
-use Rector\Rector\AbstractRector;
+use Rector\Rector\AbstractPHPUnitRector;
 
 /**
  * Before:
@@ -19,7 +19,7 @@ use Rector\Rector\AbstractRector;
  * - $this->assertNotContains('foo', $anything, 'message');
  * - $this->assertContains('foo', $anything, 'message');
  */
-final class AssertFalseStrposToContainsRector extends AbstractRector
+final class AssertFalseStrposToContainsRector extends AbstractPHPUnitRector
 {
     /**
      * @var MethodCallAnalyzer
@@ -39,9 +39,12 @@ final class AssertFalseStrposToContainsRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        if (! $this->methodCallAnalyzer->isTypesAndMethods(
+        if (! $this->isInTestClass($node)) {
+            return false;
+        }
+
+        if (! $this->methodCallAnalyzer->isMethods(
             $node,
-            ['PHPUnit\Framework\TestCase', 'PHPUnit_Framework_TestCase'],
             ['assertFalse', 'assertNotFalse']
         )) {
             return false;

@@ -2,13 +2,11 @@
 
 namespace Rector\Rector\Contrib\PHPUnit;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
-use Rector\Node\Attribute;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
-use Rector\Rector\AbstractRector;
+use Rector\Rector\AbstractPHPUnitRector;
 
 /**
  * Before:
@@ -18,7 +16,7 @@ use Rector\Rector\AbstractRector;
  * After:
  * - $this->createMock('Class')
  */
-final class GetMockRector extends AbstractRector
+final class GetMockRector extends AbstractPHPUnitRector
 {
     /**
      * @var MethodCallAnalyzer
@@ -61,12 +59,5 @@ final class GetMockRector extends AbstractRector
         $this->identifierRenamer->renameNode($methodCallNode, 'createMock');
 
         return $methodCallNode;
-    }
-
-    private function isInTestClass(Node $node): bool
-    {
-        $className = $node->getAttribute(Attribute::CLASS_NAME);
-
-        return Strings::endsWith((string) $className, 'Test');
     }
 }

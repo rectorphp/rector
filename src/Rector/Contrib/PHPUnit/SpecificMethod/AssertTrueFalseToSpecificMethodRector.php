@@ -11,7 +11,7 @@ use PhpParser\Node\Name;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
-use Rector\Rector\AbstractRector;
+use Rector\Rector\AbstractPHPUnitRector;
 
 /**
  * Before:
@@ -20,7 +20,7 @@ use Rector\Rector\AbstractRector;
  * After:
  * - $this->assertIsReadable($readmeFile, 'message'));
  */
-final class AssertTrueFalseToSpecificMethodRector extends AbstractRector
+final class AssertTrueFalseToSpecificMethodRector extends AbstractPHPUnitRector
 {
     /**
      * @var string[][]|false[][]
@@ -82,9 +82,12 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        if (! $this->methodCallAnalyzer->isTypesAndMethods(
+        if (! $this->isInTestClass($node)) {
+            return false;
+        }
+
+        if (! $this->methodCallAnalyzer->isMethods(
             $node,
-            ['PHPUnit\Framework\TestCase', 'PHPUnit_Framework_TestCase'],
             ['assertTrue', 'assertFalse']
         )) {
             return false;
