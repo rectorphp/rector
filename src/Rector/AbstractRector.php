@@ -13,6 +13,11 @@ use Rector\NodeChanger\PropertyAdder;
 abstract class AbstractRector extends NodeVisitorAbstract implements RectorInterface
 {
     /**
+     * @var bool
+     */
+    protected $removeNode = false;
+
+    /**
      * @var ExpressionAdder
      */
     private $expressionAdder;
@@ -66,6 +71,19 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
         }
 
         return null;
+    }
+
+    /**
+     * @return int|Node
+     */
+    public function leaveNode(Node $node)
+    {
+        if ($this->removeNode) {
+            $this->removeNode = false;
+            return NodeTraverser::REMOVE_NODE;
+        }
+
+        return $node;
     }
 
     /**
