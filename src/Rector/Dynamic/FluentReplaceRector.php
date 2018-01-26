@@ -91,7 +91,7 @@ final class FluentReplaceRector extends AbstractRector
         }
 
         if ($node instanceof MethodCall) {
-            // metod call to prepend
+            // method call to prepend
             /** @var Node $parentVarName */
             $parentVarName = $node->var->var;
             $parentVarName->setAttribute(Attribute::ORIGINAL_NODE, null);
