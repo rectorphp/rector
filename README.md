@@ -345,6 +345,37 @@ For example:
 + $result = $someValue->getPath();
 ```
 
+### Remove [Fluent Interface]()
+
+```yml
+rectors:
+    Rector\Rector\Dynamic\FluentReplaceRector: ~
+```
+
+```diff
+ class SomeClass
+ {
+     public function setValue($value)
+     {
+         $this->value = $value;
+-        return $this;
+     }
+    
+     public function setAnotherValue($anontherValue)
+     {
+         $this->anotherValue = $anotherValue;
+-        return $this;
+     }
+ }
+
+ $someClass = new SomeClass();
+- $someClass->setValue(5)
++ $someClass->setValue(5);
+-     ->setAnotherValue(10);
++ $someClass->setAnotherValue(10);
+ }
+```
+
 ## Coding Standards are Outsourced
 
 This package has no intention in formatting your code, as **coding standard tools handle this much better**.
