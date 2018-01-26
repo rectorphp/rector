@@ -345,7 +345,7 @@ For example:
 + $result = $someValue->getPath();
 ```
 
-### Remove [Fluent Interface]()
+### Remove [Fluent Interface](https://ocramius.github.io/blog/fluent-interfaces-are-evil/)
 
 ```yml
 rectors:
