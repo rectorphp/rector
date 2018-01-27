@@ -2,22 +2,20 @@
 
 namespace Rector\NodeValueResolver;
 
+use PhpParser\ConstExprEvaluator;
 use PhpParser\Node;
-use Rector\NodeValueResolver\Contract\PerNodeValueResolver\PerNodeValueResolverInterface;
+use PhpParser\Node\Expr;
 
-/**
- * Inspired by https://github.com/Roave/BetterReflection/blob/master/test/unit/NodeCompiler/CompileNodeToValueTest.php
- */
 final class NodeValueResolver
 {
     /**
-     * @var PerNodeValueResolverInterface[]
+     * @var ConstExprEvaluator
      */
-    private $perNodeValueResolvers = [];
+    private $constExprEvaluator;
 
-    public function addPerNodeValueResolver(PerNodeValueResolverInterface $perNodeValueResolver): void
+    public function __construct(ConstExprEvaluator $constExprEvaluator)
     {
-        $this->perNodeValueResolvers[$perNodeValueResolver->getNodeClass()] = $perNodeValueResolver;
+        $this->constExprEvaluator = $constExprEvaluator;
     }
 
     /**
@@ -25,11 +23,10 @@ final class NodeValueResolver
      */
     public function resolve(Node $node)
     {
-        $nodeClass = get_class($node);
-        if (! isset($this->perNodeValueResolvers[$nodeClass])) {
-            return null;
+        if ($node instanceof Expr) {
+            return $this->constExprEvaluator->evaluateDirectly($node);
         }
 
-        return $this->perNodeValueResolvers[$nodeClass]->resolve($node);
+        return null;
     }
 }
