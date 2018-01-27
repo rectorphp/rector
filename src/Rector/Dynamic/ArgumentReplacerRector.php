@@ -3,6 +3,7 @@
 namespace Rector\Rector\Dynamic;
 
 use PhpParser\BuilderHelpers;
+use PhpParser\ConstExprEvaluator;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
@@ -13,7 +14,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\NodeAnalyzer\ClassMethodAnalyzer;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeAnalyzer\StaticMethodCallAnalyzer;
-use Rector\NodeValueResolver\NodeValueResolver;
 use Rector\Rector\AbstractRector;
 
 final class ArgumentReplacerRector extends AbstractRector
@@ -44,9 +44,9 @@ final class ArgumentReplacerRector extends AbstractRector
     private $staticMethodCallAnalyzer;
 
     /**
-     * @var NodeValueResolver
+     * @var ConstExprEvaluator
      */
-    private $nodeValueResolver;
+    private $constExprEvaluator;
 
     /**
      * @param mixed[] $argumentChangesByMethodAndType
@@ -56,13 +56,13 @@ final class ArgumentReplacerRector extends AbstractRector
         MethodCallAnalyzer $methodCallAnalyzer,
         ClassMethodAnalyzer $classMethodAnalyzer,
         StaticMethodCallAnalyzer $staticMethodCallAnalyzer,
-        NodeValueResolver $nodeValueResolver
+        ConstExprEvaluator $constExprEvaluator
     ) {
         $this->argumentChangesMethodAndClass = $argumentChangesByMethodAndType;
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->classMethodAnalyzer = $classMethodAnalyzer;
         $this->staticMethodCallAnalyzer = $staticMethodCallAnalyzer;
-        $this->nodeValueResolver = $nodeValueResolver;
+        $this->constExprEvaluator = $constExprEvaluator;
     }
 
     public function isCandidate(Node $node): bool
@@ -94,7 +94,7 @@ final class ArgumentReplacerRector extends AbstractRector
                 /** @var Arg $argumentOrParameter */
                 $argumentOrParameter = $argumentsOrParameters[$position];
 
-                $resolvedValue = $this->nodeValueResolver->resolve($argumentOrParameter->value);
+                $resolvedValue = $this->constExprEvaluator->evaluateDirectly($argumentOrParameter->value);
 
                 if ($resolvedValue === $key) {
                     $argumentsOrParameters[$position] = BuilderHelpers::normalizeValue($value);
