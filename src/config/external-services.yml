@@ -20,6 +20,10 @@ services:
 
     PhpParser\NodeTraverser: ~
 
+    # value resolver
+    PhpParser\ConstExprEvaluator:
+        factory: ['@Rector\NodeValueResolver\ConstExprEvaluatorFactory', 'create']
+
     # Symfony\Console
     Symfony\Component\Console\Style\SymfonyStyle:
         factory: ['Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory', 'create']
