@@ -17,8 +17,8 @@ use Rector\Rector\AbstractPHPUnitRector;
  * - $this->assertFalse($foo instanceof Foo, 'message');
  *
  * - After:
- * - $this->assertInstanceOf(Foo::class, $foo, 'message');
- * - $this->assertNotInstanceOf(Foo::class, $foo, 'message');
+ * - $this->assertInstanceOf('Foo', $foo, 'message');
+ * - $this->assertNotInstanceOf('Foo', $foo, 'message');
  */
 final class AssertInstanceOfComparisonRector extends AbstractPHPUnitRector
 {

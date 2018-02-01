@@ -15,7 +15,7 @@ use Rector\Rector\AbstractPHPUnitRector;
 
 /**
  * Before:
- * - $this->assertTrue(is_readable($readmeFile), 'messag');
+ * - $this->assertTrue(is_readable($readmeFile), 'message');
  *
  * After:
  * - $this->assertIsReadable($readmeFile, 'message'));
