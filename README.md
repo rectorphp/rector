@@ -360,7 +360,7 @@ rectors:
          $this->value = $value;
 -        return $this;
      }
-    
+
      public function setAnotherValue($anontherValue)
      {
          $this->anotherValue = $anotherValue;
