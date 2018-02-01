@@ -4,8 +4,8 @@ final class MyTest extends \PHPUnit\Framework\TestCase
 {
     public function test()
     {
-        $this->assertTrue(is_string($something));
-        $this->assertFalse(is_array($something));
+        $this->assertTrue(\is_string($something));
+        $this->assertFalse(\is_array($something));
 
         $this->assertTrue(is_integer($something), 'third argument');
         $this->assertFalse(is_bool($something), 'third argument');
