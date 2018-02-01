@@ -3,9 +3,6 @@ rectors:
     Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertTrueFalseToSpecificMethodRector: ~
     Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertSameBoolNullToSpecificMethodRector: ~
     Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertFalseStrposToContainsRector: ~
-
-    # before: $this->assertTrue(is_string('value'));
-    # after: $this->assertInternalType('string', 'value');
     Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertTrueFalseInternalTypeToSpecificMethodRector: ~
     Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertCompareToSpecificMethodRector: ~
     Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertIssetToSpecificMethodRector: ~
