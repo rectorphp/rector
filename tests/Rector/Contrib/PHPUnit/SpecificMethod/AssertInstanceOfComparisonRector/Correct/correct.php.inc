@@ -5,6 +5,6 @@ final class MyTest extends \PHPUnit\Framework\TestCase
     public function test()
     {
         $this->assertInstanceOf('Foo', $something);
-        $this->assertNotInstanceOf('Foo', $something);
+        $this->assertNotInstanceOf('Namespaced\Foo', $something);
     }
 }

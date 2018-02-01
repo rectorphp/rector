@@ -5,6 +5,6 @@ final class MyTest extends \PHPUnit\Framework\TestCase
     public function test()
     {
         $this->assertTrue($something instanceof Foo);
-        $this->assertFalse($something instanceof Foo);
+        $this->assertFalse($something instanceof \Namespaced\Foo);
     }
 }
