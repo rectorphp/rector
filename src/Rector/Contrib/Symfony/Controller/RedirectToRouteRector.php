@@ -9,6 +9,12 @@ use Rector\NodeAnalyzer\MethodArgumentAnalyzer;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
 
+/**
+ * Before:
+ * return $this->redirect($this->generateUrl("homepage"));
+ * After:
+ * return $this->redirectToRoute("homepage");
+ */
 final class RedirectToRouteRector extends AbstractRector
 {
     /**
