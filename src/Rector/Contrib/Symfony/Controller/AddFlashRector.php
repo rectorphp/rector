@@ -12,7 +12,7 @@ use Rector\Rector\AbstractRector;
  * Before:
  * $request->getSession()->getFlashBag()->add('success', 'something');
  * After:
- * $this->>addflash('success', 'something');
+ * $this->addflash('success', 'something');
  */
 final class AddFlashRector extends AbstractRector
 {
