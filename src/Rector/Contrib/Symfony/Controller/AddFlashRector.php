@@ -5,33 +5,34 @@ namespace Rector\Rector\Contrib\Symfony\Controller;
 use PhpParser\Node;
 use Rector\Node\Attribute;
 use Rector\Node\MethodCallNodeFactory;
-use Rector\NodeAnalyzer\MethodCallAnalyzer;
+use Rector\NodeAnalyzer\ChainMethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
 
 /**
  * Before:
- * $request->getSession()->getFlashBag()->add('success', 'something');
+ * - $request->getSession()->getFlashBag()->add('success', 'something');
+ *
  * After:
- * $this->addflash('success', 'something');
+ * - $this->addflash('success', 'something');
  */
 final class AddFlashRector extends AbstractRector
 {
-    /**
-     * @var MethodCallAnalyzer
-     */
-    private $methodCallAnalyzer;
-
     /**
      * @var MethodCallNodeFactory
      */
     private $methodCallNodeFactory;
 
+    /**
+     * @var ChainMethodCallAnalyzer
+     */
+    private $chainMethodCallAnalyzer;
+
     public function __construct(
-        MethodCallAnalyzer $methodCallAnalyzer,
-        MethodCallNodeFactory $methodCallNodeFactory
+        MethodCallNodeFactory $methodCallNodeFactory,
+        ChainMethodCallAnalyzer $chainMethodCallAnalyzer
     ) {
-        $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->methodCallNodeFactory = $methodCallNodeFactory;
+        $this->chainMethodCallAnalyzer = $chainMethodCallAnalyzer;
     }
 
     public function isCandidate(Node $node): bool
@@ -41,19 +42,15 @@ final class AddFlashRector extends AbstractRector
             return false;
         }
 
-        if (! $this->methodCallAnalyzer->isTypeAndMethod(
+        if (! $this->chainMethodCallAnalyzer->isTypeAndChainCalls(
             $node,
             'Symfony\Component\HttpFoundation\Request',
-            'getSession'
-        )) {
+            ['getSession', 'getFlashBag', 'add']
+        )
+        ) {
             return false;
         }
 
-        if ($node->getAttribute(Attribute::NEXT_NODE)->name !== 'getFlashBag') {
-            return false;
-        }
-
-        // add check for add method
         return true;
     }
 
