@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Contrib\Symfony\Controller\RedirectToRouteRector;
+namespace Rector\Tests\Rector\Contrib\Symfony\Controller\AddFlashRector;
 
 use Rector\Rector\Contrib\Symfony\Controller\AddFlashRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
