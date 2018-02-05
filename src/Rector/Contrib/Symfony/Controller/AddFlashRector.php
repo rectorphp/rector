@@ -59,7 +59,7 @@ final class AddFlashRector extends AbstractRector
         return $this->methodCallNodeFactory->createWithVariableNameMethodNameAndArguments(
             'this',
             'addFlash',
-            [] // todo arguments of last method
+            $node->args
         );
     }
 }
