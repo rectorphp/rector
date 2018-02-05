@@ -5,12 +5,8 @@ services:
     Rector\ConsoleDiffer\:
         resource: ..
 
-    GeckoPackages\DiffOutputBuilder\UnifiedDiffOutputBuilder:
-        arguments:
-            $options:
-                'fromFile': 'Original'
-                'toFile': 'New'
+    SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder:
 
     SebastianBergmann\Diff\Differ:
         arguments:
-            - '@GeckoPackages\DiffOutputBuilder\UnifiedDiffOutputBuilder'
+            - '@SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder'
