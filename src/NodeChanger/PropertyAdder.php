@@ -7,7 +7,7 @@ use PhpParser\NodeTraverser;
 use Rector\NodeVisitor\PropertyAddingNodeVisitor;
 
 /**
- * Adds new properties to class and to contructor
+ * Adds new properties to class and to constructor
  */
 final class PropertyAdder
 {
