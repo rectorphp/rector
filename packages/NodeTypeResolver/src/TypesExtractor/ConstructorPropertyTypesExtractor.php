@@ -43,7 +43,7 @@ final class ConstructorPropertyTypesExtractor
         }
 
         foreach ($classNode->stmts as $inClassNode) {
-            if (! $this->isContructorMethodNode($inClassNode)) {
+            if (! $this->isConstructorMethodNode($inClassNode)) {
                 continue;
             }
 
@@ -85,7 +85,7 @@ final class ConstructorPropertyTypesExtractor
         return $parametersWithTypes;
     }
 
-    private function isContructorMethodNode(Node $node): bool
+    private function isConstructorMethodNode(Node $node): bool
     {
         if (! $node instanceof ClassMethod) {
             return false;
