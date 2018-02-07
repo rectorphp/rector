@@ -43,6 +43,7 @@ parameters:
         - '#Call to an undefined method PhpParser\\PrettyPrinter\\Standard::printFormatPreserving\(\)#' # 1
         - '#Array \(array<Rector\\BetterReflection\\Reflection\\ReflectionClass>\) does not accept Rector\\BetterReflection\\Reflection\\Reflection#' # 1
         - '#Method Rector\\Rector\\AbstractRector::leaveNode\(\) should return int\|PhpParser\\Node but returns bool#'
+        - '#Access to an undefined property PhpParser\\Node\\Expr::\$(name|var)#'
 
     excludes_analyse:
         # test files
