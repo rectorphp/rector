@@ -5,8 +5,12 @@ services:
     Rector\ConsoleDiffer\:
         resource: ..
 
-    SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder:
+    SebastianBergmann\Diff\Output\StrictUnifiedDiffOutputBuilder:
+        arguments:
+            $options:
+                'fromFile': 'Original'
+                'toFile': 'New'
 
     SebastianBergmann\Diff\Differ:
         arguments:
-            - '@SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder'
+            - '@SebastianBergmann\Diff\Output\StrictUnifiedDiffOutputBuilder'
