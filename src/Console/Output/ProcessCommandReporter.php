@@ -5,6 +5,7 @@ namespace Rector\Console\Output;
 use Rector\Console\ConsoleStyle;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\Rector\RectorCollector;
+use Rector\Reporting\FileDiff;
 
 final class ProcessCommandReporter
 {
@@ -57,25 +58,25 @@ final class ProcessCommandReporter
     }
 
     /**
-     * @param string[][] $diffFiles
+     * @param FileDiff[] $fileDiffs
      */
-    public function reportDiffFiles(array $diffFiles): void
+    public function reportFileDiffs(array $fileDiffs): void
     {
-        if (count($diffFiles) <= 0) {
+        if (count($fileDiffs) <= 0) {
             return;
         }
 
         $this->consoleStyle->title(sprintf(
             '%d file%s with changes',
-            count($diffFiles),
-            count($diffFiles) === 1 ? '' : 's'
+            count($fileDiffs),
+            count($fileDiffs) === 1 ? '' : 's'
         ));
 
         $i = 0;
-        foreach ($diffFiles as $diffFile) {
-            $this->consoleStyle->writeln(sprintf('<options=bold>%d) %s</>', ++$i, $diffFile['file']));
+        foreach ($fileDiffs as $fileDiff) {
+            $this->consoleStyle->writeln(sprintf('<options=bold>%d) %s</>', ++$i, $fileDiff->getFile()));
             $this->consoleStyle->newLine();
-            $this->consoleStyle->writeln($diffFile['diff']);
+            $this->consoleStyle->writeln($fileDiff->getDiff());
             $this->consoleStyle->newLine();
         }
     }

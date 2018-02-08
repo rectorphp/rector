@@ -13,6 +13,7 @@ use Rector\Exception\NoRectorsLoadedException;
 use Rector\FileSystem\PhpFilesFinder;
 use Rector\Naming\CommandNaming;
 use Rector\Rector\RectorCollector;
+use Rector\Reporting\FileDiff;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -65,9 +66,9 @@ final class ProcessCommand extends Command
     private $changedFiles = [];
 
     /**
-     * @var string[][]
+     * @var FileDiff[]
      */
-    private $diffFiles = [];
+    private $fileDiffs = [];
 
     /**
      * @var AdditionalAutoloader
@@ -136,7 +137,7 @@ final class ProcessCommand extends Command
 
         $this->processFiles($files);
 
-        $this->processCommandReporter->reportDiffFiles($this->diffFiles);
+        $this->processCommandReporter->reportFileDiffs($this->fileDiffs);
         $this->processCommandReporter->reportChangedFiles($this->changedFiles);
         $this->consoleStyle->success('Rector is done!');
 
@@ -189,10 +190,10 @@ final class ProcessCommand extends Command
         if ($this->parameterProvider->provideParameter(Option::OPTION_DRY_RUN)) {
             $newContent = $this->fileProcessor->processFileToString($fileInfo);
             if ($newContent !== $oldContent) {
-                $this->diffFiles[] = [
-                    'file' => $fileInfo->getPathname(),
-                    'diff' => $this->differAndFormatter->diffAndFormat($oldContent, $newContent),
-                ];
+                $this->fileDiffs[] = new FileDiff(
+                    $fileInfo->getPathname(),
+                    $this->differAndFormatter->diffAndFormat($oldContent, $newContent)
+                );
             }
         } else {
             $newContent = $this->fileProcessor->processFile($fileInfo);

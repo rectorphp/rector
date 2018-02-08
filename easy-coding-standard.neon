@@ -25,6 +25,7 @@ checkers:
             - 'Rector\DeprecationExtractor\Deprecation\*'
             - 'Rector\BetterReflection\SourceLocator\Located\LocatedSource'
             - 'phpDocumentor\Reflection\Types\*'
+            - 'Rector\Reporting\FileDiff'
 
     Symplify\CodingStandard\Fixer\Naming\PropertyNameMatchingTypeFixer:
         extra_skipped_classes:
