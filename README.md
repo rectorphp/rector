@@ -64,8 +64,8 @@ vendor/bin/rector
 
 ### Extra Autoloading
 
-Rector relies on project and autoloading of its classes. To specify own autoload file, use `--autoload-file` option:  
- 
+Rector relies on project and autoloading of its classes. To specify own autoload file, use `--autoload-file` option:
+
 ```bash
 vendor/bin/rector process ../project --autoload-file ../project/vendor/autoload.php
 ```
