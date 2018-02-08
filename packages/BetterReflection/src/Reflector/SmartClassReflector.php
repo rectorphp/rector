@@ -167,6 +167,10 @@ final class SmartClassReflector
 
     private function isValidClassName(string $className): bool
     {
+        if (empty($className)) {
+            return false;
+        }
+
         // invalid class types
         if (in_array($className, ['this', 'static', 'self', 'null', 'array', 'string', 'bool'], true)) {
             return false;
