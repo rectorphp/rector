@@ -2,6 +2,7 @@
 
 namespace Rector\ReflectionDocBlock\NodeAnalyzer;
 
+use Nette\Utils\Strings;
 use phpDocumentor\Reflection\DocBlock;
 use phpDocumentor\Reflection\DocBlock\Tag;
 use phpDocumentor\Reflection\DocBlock\Tags\Param;
@@ -58,6 +59,19 @@ final class DocBlockAnalyzer
         $docBlock = $this->docBlockFactory->createFromNode($node);
         $docBlock = $this->annotationRemover->removeFromDocBlockByNameAndContent($docBlock, $name, $content);
         $this->saveNewDocBlockToNode($node, $docBlock);
+    }
+
+    public function replaceAnnotationInNode(Node $node, string $oldAnnotation, string $newAnnotation): void
+    {
+        if (! $node->getDocComment()) {
+            return;
+        }
+
+        $oldContent = $node->getDocComment()->getText();
+        $newContent = Strings::replace($oldContent, sprintf('#@%s#', $oldAnnotation), '@' . $newAnnotation);
+
+        $doc = new Doc($newContent);
+        $node->setDocComment($doc);
     }
 
     /**
