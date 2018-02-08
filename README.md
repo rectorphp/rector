@@ -62,6 +62,14 @@ And Rector is accessible as:
 vendor/bin/rector
 ```
 
+### Extra Autoloading
+
+Rector relies on project and autoloading of it's classes. To specify own autoload file, use `--autoload-file` option:  
+ 
+```bash
+vendor/bin/rector --autoload-file ../project/vendor/autoload.php
+```
+
 ## How to Reconstruct your Code
 
 ### A. Prepared Sets
