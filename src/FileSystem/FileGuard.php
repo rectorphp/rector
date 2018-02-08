@@ -12,10 +12,6 @@ final class FileGuard
             return;
         }
 
-        throw new FileNotFoundException(sprintf(
-            'File "%s" not found in "%s".',
-            $file,
-            $location
-        ));
+        throw new FileNotFoundException(sprintf('File "%s" not found in "%s".', $file, $location));
     }
 }

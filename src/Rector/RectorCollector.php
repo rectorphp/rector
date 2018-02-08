@@ -49,10 +49,7 @@ final class RectorCollector
         $suggestion = ObjectMixin::getSuggestion($rectorClasses, $class);
         $suggestionMessage = $suggestion ? sprintf(' Did you mean "%s"?', $suggestion) : '';
 
-        $availableOptionsMessage = sprintf(
-            ' Available rectors are: "%s".',
-            implode('", "', $rectorClasses)
-        );
+        $availableOptionsMessage = sprintf(' Available rectors are: "%s".', implode('", "', $rectorClasses));
 
         throw new RectorNotFoundException(sprintf(
             'Rectors class "%s" was not found.%s',

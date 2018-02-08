@@ -70,10 +70,7 @@ final class PhpFilesFinder
                 continue;
             }
 
-            throw new DirectoryNotFoundException(sprintf(
-                'Directory "%s" was not found.',
-                $directory
-            ));
+            throw new DirectoryNotFoundException(sprintf('Directory "%s" was not found.', $directory));
         }
     }
 }
