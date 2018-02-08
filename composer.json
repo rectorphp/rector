@@ -8,6 +8,7 @@
     ],
     "require": {
         "php": "^7.1",
+        "jean85/pretty-package-versions": "^1.1",
         "nette/robot-loader": "^3.0",
         "nette/utils": "^2.4",
         "nikic/php-parser": "4.0.x-dev",
