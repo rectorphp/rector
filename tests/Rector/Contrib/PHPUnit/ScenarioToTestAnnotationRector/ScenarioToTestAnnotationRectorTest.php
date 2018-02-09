@@ -2,10 +2,10 @@
 
 namespace Rector\Tests\Rector\Contrib\PHPUnit\ScenarioToTestAnnotationRector;
 
-use Rector\Rector\Contrib\PHPUnit\ScenarioToTestAnnotationRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Rector\Dynamic\AnnotationReplacerRector;
+use Rector\Testing\PHPUnit\AbstractConfigurableRectorTestCase;
 
-final class ScenarioToTestAnnotationRectorTest extends AbstractRectorTestCase
+final class ScenarioToTestAnnotationRectorTest extends AbstractConfigurableRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()
@@ -30,6 +30,11 @@ final class ScenarioToTestAnnotationRectorTest extends AbstractRectorTestCase
      */
     protected function getRectorClasses(): array
     {
-        return [ScenarioToTestAnnotationRector::class];
+        return [AnnotationReplacerRector::class];
+    }
+
+    protected function provideConfig(): string
+    {
+        return __DIR__ . '/config/rector.yml';
     }
 }
