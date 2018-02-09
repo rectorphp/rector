@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Contrib\PHPUnit\ScenarioToTestAnnotationRector;
+namespace Rector\Tests\Rector\Dynamic\AnnotationReplacerRector;
 
 use Rector\Rector\Dynamic\AnnotationReplacerRector;
 use Rector\Testing\PHPUnit\AbstractConfigurableRectorTestCase;
