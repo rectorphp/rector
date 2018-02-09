@@ -287,7 +287,9 @@ private $name;
 ```yml
 rectors:
     Rector\Rector\Dynamic\AnnotationReplacerRector:
+        # type
         PHPUnit\Framework\TestCase:
+            # old annotation: new annotation
             scenario: test
 ```
 
