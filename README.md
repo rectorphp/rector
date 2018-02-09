@@ -64,8 +64,8 @@ vendor/bin/rector
 
 ### Extra Autoloading
 
-Rector relies on project and autoloading of its classes. To specify own autoload file, use `--autoload-file` option:  
- 
+Rector relies on project and autoloading of its classes. To specify own autoload file, use `--autoload-file` option:
+
 ```bash
 vendor/bin/rector process ../project --autoload-file ../project/vendor/autoload.php
 ```
@@ -259,27 +259,49 @@ rectors:
 rectors:
     Rector\Rector\Dynamic\ValueObjectRemoverRector:
         # type: new simple type
-        'ValueObjects\Name': 'string'
+        'ValueObject\Name': 'string'
 ```
 
 For example:
 
 ```diff
-- $value = new ValueObjects\Name('Tomas');
+- $value = new ValueObject\Name('Tomas');
 + $value = 'Tomas';
 ```
 
 ```diff
 /**
--* @var ValueObjects\Name
+-* @var ValueObject\Name
 +* @var string
  */
 private $name;
 ```
 
 ```diff
-- public function someMethod(ValueObjects\Name $name) { ...
+- public function someMethod(ValueObject\Name $name) { ...
 + public function someMethod(string $name) { ...
+```
+
+## Replace Property and Methods Annotations
+
+```yml
+rectors:
+    Rector\Rector\Dynamic\AnnotationReplacerRector:
+        PHPUnit\Framework\TestCase:
+            scenario: test
+```
+
+```diff
+ final class SomeTest extends PHPUnit\Framework\TestCase
+ {
+     /**
+-     * @scenario
++     * @test
+      */
+     public function test()
+     {
+     }
+ }
 ```
 
 ## Turn Magic to Methods

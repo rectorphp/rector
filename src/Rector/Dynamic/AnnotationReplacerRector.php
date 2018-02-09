@@ -21,7 +21,7 @@ final class AnnotationReplacerRector extends AbstractPHPUnitRector
     /**
      * @var string[][]
      */
-    private $classToAnnotationMap;
+    private $classToAnnotationMap = [];
 
     /**
      * @var DocBlockAnalyzer
