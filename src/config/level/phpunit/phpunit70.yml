@@ -1,0 +1,4 @@
+rectors:
+    Rector\Rector\Dynamic\AnnotationReplacerRector:
+        PHPUnit\Framework\TestCase:
+            scenario: test
