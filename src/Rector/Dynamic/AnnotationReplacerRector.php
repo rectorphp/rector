@@ -29,6 +29,11 @@ final class AnnotationReplacerRector extends AbstractPHPUnitRector
     private $docBlockAnalyzer;
 
     /**
+     * @var string[]
+     */
+    private $activeAnnotationMap = [];
+
+    /**
      * @param string[][] $classToAnnotationMap
      */
     public function __construct(array $classToAnnotationMap, DocBlockAnalyzer $docBlockAnalyzer)
@@ -39,34 +44,61 @@ final class AnnotationReplacerRector extends AbstractPHPUnitRector
 
     public function isCandidate(Node $node): bool
     {
-        if (! $node instanceof ClassMethod && ! $node instanceof Property) {
+        if ($this->shouldSkip($node)) {
             return false;
         }
 
-        /** @var Node|null $parentNode */
         $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
-        if (! $parentNode) {
-            return false;
-        }
-
         foreach ($this->classToAnnotationMap as $type => $annotationMap) {
             if (! in_array($type, $parentNode->getAttribute(Attribute::TYPES), true)) {
                 continue;
             }
 
-            return $this->docBlockAnalyzer->hasAnnotation($node, 'scenario');
+            $this->activeAnnotationMap = $annotationMap;
+
+            if ($this->hasAnyAnnotation($node)) {
+                return true;
+            }
         }
 
         return false;
     }
 
     /**
-     * @param ClassMethod|Property $classMethodOrPropertyNode
+     * @param ClassMethod|Property $node
      */
-    public function refactor(Node $classMethodOrPropertyNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        $this->docBlockAnalyzer->replaceAnnotationInNode($classMethodOrPropertyNode, 'scenario', 'test');
+        foreach ($this->activeAnnotationMap as $oldAnnotation => $newAnnotation) {
+            $this->docBlockAnalyzer->replaceAnnotationInNode($node, $oldAnnotation, $newAnnotation);
+        }
 
-        return $classMethodOrPropertyNode;
+        return $node;
+    }
+
+    private function shouldSkip(Node $node): bool
+    {
+        if (! $node instanceof ClassMethod && ! $node instanceof Property) {
+            return true;
+        }
+
+        /** @var Node|null $parentNode */
+        $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
+        if (! $parentNode) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function hasAnyAnnotation(Node $node): bool
+    {
+        foreach ($this->activeAnnotationMap as $oldAnnotation => $newAnnotation) {
+            if ($this->docBlockAnalyzer->hasAnnotation($node, $oldAnnotation)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
