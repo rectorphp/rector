@@ -282,7 +282,7 @@ private $name;
 + public function someMethod(string $name) { ...
 ```
 
-## Replace Property and Methods Annotations
+## Replace Property and Method Annotations
 
 ```yml
 rectors:
