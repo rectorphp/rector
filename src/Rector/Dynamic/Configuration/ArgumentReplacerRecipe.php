@@ -89,21 +89,6 @@ final class ArgumentReplacerRecipe
         );
     }
 
-    /**
-     * @param mixed[] $data
-     */
-    private static function validateArrayData(array $data): void
-    {
-        Assert::keyExists($data, 'class');
-        Assert::keyExists($data, 'method');
-        Assert::keyExists($data, 'position');
-        Assert::keyExists($data, 'type');
-
-        if ($data['type'] === 'replace_default_value') {
-            Assert::keyExists($data, 'replace_map');
-        }
-    }
-
     public function getClass(): string
     {
         return $this->class;
@@ -138,5 +123,20 @@ final class ArgumentReplacerRecipe
     public function getReplaceMap(): array
     {
         return $this->replaceMap;
+    }
+
+    /**
+     * @param mixed[] $data
+     */
+    private static function validateArrayData(array $data): void
+    {
+        Assert::keyExists($data, 'class');
+        Assert::keyExists($data, 'method');
+        Assert::keyExists($data, 'position');
+        Assert::keyExists($data, 'type');
+
+        if ($data['type'] === 'replace_default_value') {
+            Assert::keyExists($data, 'replace_map');
+        }
     }
 }

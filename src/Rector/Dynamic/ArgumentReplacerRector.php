@@ -89,7 +89,9 @@ final class ArgumentReplacerRector extends AbstractRector
             }
 
             if ($type === ArgumentReplacerRecipe::TYPE_CHANGED) {
-                $argumentsOrParameters[$position] = BuilderHelpers::normalizeValue($argumentReplacerItemRecipe->getDefaultValue());
+                $argumentsOrParameters[$position] = BuilderHelpers::normalizeValue(
+                    $argumentReplacerItemRecipe->getDefaultValue()
+                );
                 continue;
             }
 
