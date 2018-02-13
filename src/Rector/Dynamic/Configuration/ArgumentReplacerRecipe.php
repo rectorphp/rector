@@ -2,7 +2,8 @@
 
 namespace Rector\Rector\Dynamic\Configuration;
 
-use Webmozart\Assert\Assert;
+use Rector\Exception\Rector\InvalidRectorConfigurationException;
+use Rector\Rector\Dynamic\ArgumentReplacerRector;
 
 final class ArgumentReplacerRecipe
 {
@@ -76,7 +77,6 @@ final class ArgumentReplacerRecipe
      */
     public static function createFromArray(array $data): self
     {
-        // @todo: make exceptions clear for end user
         self::validateArrayData($data);
 
         return new self(
@@ -87,6 +87,19 @@ final class ArgumentReplacerRecipe
             $data['default_value'] ?? null,
             $data['replace_map'] ?? []
         );
+    }
+
+    private static function ensureHasKey(array $data, string $key): void
+    {
+        if (isset($data[$key])) {
+            return;
+        }
+
+        throw new InvalidRectorConfigurationException(sprintf(
+            'Configuration for "%s" Rector should have "%s" key, but is missing.',
+            ArgumentReplacerRector::class,
+            $key
+        ));
     }
 
     public function getClass(): string
@@ -130,13 +143,14 @@ final class ArgumentReplacerRecipe
      */
     private static function validateArrayData(array $data): void
     {
-        Assert::keyExists($data, 'class');
-        Assert::keyExists($data, 'method');
-        Assert::keyExists($data, 'position');
-        Assert::keyExists($data, 'type');
+        self::ensureHasKey($data, 'class');
+        self::ensureHasKey($data, 'class');
+        self::ensureHasKey($data, 'method');
+        self::ensureHasKey($data, 'position');
+        self::ensureHasKey($data, 'type');
 
         if ($data['type'] === self::TYPE_REPLACED_DEFAULT_VALUE) {
-            Assert::keyExists($data, 'replace_map');
+            self::ensureHasKey($data, 'replace_map');
         }
     }
 }
