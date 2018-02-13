@@ -89,19 +89,6 @@ final class ArgumentReplacerRecipe
         );
     }
 
-    private static function ensureHasKey(array $data, string $key): void
-    {
-        if (isset($data[$key])) {
-            return;
-        }
-
-        throw new InvalidRectorConfigurationException(sprintf(
-            'Configuration for "%s" Rector should have "%s" key, but is missing.',
-            ArgumentReplacerRector::class,
-            $key
-        ));
-    }
-
     public function getClass(): string
     {
         return $this->class;
@@ -136,6 +123,22 @@ final class ArgumentReplacerRecipe
     public function getReplaceMap(): array
     {
         return $this->replaceMap;
+    }
+
+    /**
+     * @param mixed[] $data
+     */
+    private static function ensureHasKey(array $data, string $key): void
+    {
+        if (isset($data[$key])) {
+            return;
+        }
+
+        throw new InvalidRectorConfigurationException(sprintf(
+            'Configuration for "%s" Rector should have "%s" key, but is missing.',
+            ArgumentReplacerRector::class,
+            $key
+        ));
     }
 
     /**
