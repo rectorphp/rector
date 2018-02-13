@@ -14,26 +14,12 @@ use Rector\NodeAnalyzer\ClassMethodAnalyzer;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeAnalyzer\StaticMethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
-use Rector\Rector\Dynamic\Configuration\ArgumentReplacerItemRecipe;
+use Rector\Rector\Dynamic\Configuration\ArgumentReplacerRecipe;
 
 final class ArgumentReplacerRector extends AbstractRector
 {
     /**
-     * @var string
-     */
-    private const TYPE_REMOVED = 'removed';
-
-    /**
-     * @var string
-     */
-    private const TYPE_CHANGED = 'changed';
-
-    /**
-     * @var string
-     */
-    private const TYPE_REPLACED_DEFAULT_VALUE = 'replace_default_value';
-    /**
-     * @var ArgumentReplacerItemRecipe[]
+     * @var ArgumentReplacerRecipe[]
      */
     private $argumentReplacerRecipes = [];
 
@@ -43,7 +29,7 @@ final class ArgumentReplacerRector extends AbstractRector
     private $methodCallAnalyzer;
 
     /**
-     * @var argumentReplacerItemRecipe[]
+     * @var ArgumentReplacerRecipe[]
      */
     private $activeArgumentReplacerItemRecipes = [];
 
@@ -97,17 +83,17 @@ final class ArgumentReplacerRector extends AbstractRector
             $type = $argumentReplacerItemRecipe->getType();
             $position = $argumentReplacerItemRecipe->getPosition();
 
-            if ($type === self::TYPE_REMOVED) {
+            if ($type === ArgumentReplacerRecipe::TYPE_REMOVED) {
                 unset($argumentsOrParameters[$position]);
                 continue;
             }
 
-            if ($type === self::TYPE_CHANGED) {
+            if ($type === ArgumentReplacerRecipe::TYPE_CHANGED) {
                 $argumentsOrParameters[$position] = BuilderHelpers::normalizeValue($argumentReplacerItemRecipe->getDefaultValue());
                 continue;
             }
 
-            if ($type === self::TYPE_REPLACED_DEFAULT_VALUE) {
+            if ($type === ArgumentReplacerRecipe::TYPE_REPLACED_DEFAULT_VALUE) {
                 /** @var Arg $argumentOrParameter */
                 $argumentOrParameter = $argumentsOrParameters[$position];
                 $resolvedValue = $this->constExprEvaluator->evaluateDirectly($argumentOrParameter->value);
@@ -127,7 +113,7 @@ final class ArgumentReplacerRector extends AbstractRector
     }
 
     /**
-     * @return ArgumentReplacerItemRecipe[]
+     * @return ArgumentReplacerRecipe[]
      */
     private function matchArgumentChanges(Node $node): array
     {
@@ -191,7 +177,7 @@ final class ArgumentReplacerRector extends AbstractRector
     private function loadArgumentReplacerItemRecipes(array $configurationArrays): void
     {
         foreach ($configurationArrays as $configurationArray) {
-            $this->argumentReplacerRecipes[] = ArgumentReplacerItemRecipe::createFromArray($configurationArray);
+            $this->argumentReplacerRecipes[] = ArgumentReplacerRecipe::createFromArray($configurationArray);
         }
     }
 }

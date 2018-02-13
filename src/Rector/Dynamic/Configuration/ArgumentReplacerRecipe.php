@@ -4,8 +4,23 @@ namespace Rector\Rector\Dynamic\Configuration;
 
 use Webmozart\Assert\Assert;
 
-final class ArgumentReplacerItemRecipe
+final class ArgumentReplacerRecipe
 {
+    /**
+     * @var string
+     */
+    public const TYPE_REMOVED = 'removed';
+
+    /**
+     * @var string
+     */
+    public const TYPE_CHANGED = 'changed';
+
+    /**
+     * @var string
+     */
+    public const TYPE_REPLACED_DEFAULT_VALUE = 'replace_default_value';
+
     /**
      * @var string
      */
