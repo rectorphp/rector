@@ -78,37 +78,7 @@ final class ArgumentReplacerRector extends AbstractRector
     public function refactor(Node $node): ?Node
     {
         $argumentsOrParameters = $this->getNodeArgumentsOrParameters($node);
-
-        foreach ($this->activeArgumentReplacerRecipes as $argumentReplacerRecipe) {
-            $type = $argumentReplacerRecipe->getType();
-            $position = $argumentReplacerRecipe->getPosition();
-
-            if ($type === ArgumentReplacerRecipe::TYPE_REMOVED) {
-                unset($argumentsOrParameters[$position]);
-                continue;
-            }
-
-            if ($type === ArgumentReplacerRecipe::TYPE_CHANGED) {
-                $argumentsOrParameters[$position] = BuilderHelpers::normalizeValue(
-                    $argumentReplacerRecipe->getDefaultValue()
-                );
-                continue;
-            }
-
-            if ($type === ArgumentReplacerRecipe::TYPE_REPLACED_DEFAULT_VALUE) {
-                /** @var Arg $argumentOrParameter */
-                $argumentOrParameter = $argumentsOrParameters[$position];
-                $resolvedValue = $this->constExprEvaluator->evaluateDirectly($argumentOrParameter->value);
-
-                $replaceMap = $argumentReplacerRecipe->getReplaceMap();
-                foreach ($replaceMap as $oldValue => $newValue) {
-                    if ($resolvedValue === $oldValue) {
-                        $argumentsOrParameters[$position] = BuilderHelpers::normalizeValue($newValue);
-                    }
-                }
-            }
-        }
-
+        $argumentsOrParameters = $this->processArgumentsOrParamters($argumentsOrParameters);
         $this->setNodeArgumentsOrParameters($node, $argumentsOrParameters);
 
         return $node;
@@ -126,7 +96,7 @@ final class ArgumentReplacerRector extends AbstractRector
         $argumentReplacerRecipes = [];
 
         foreach ($this->argumentReplacerRecipes as $argumentReplacerRecipe) {
-            if ($this->isRecipeMatch($node, $argumentReplacerRecipe)) {
+            if ($this->isNodeToRecipeMatch($node, $argumentReplacerRecipe)) {
                 $argumentReplacerRecipes[] = $argumentReplacerRecipe;
             }
         }
@@ -163,7 +133,7 @@ final class ArgumentReplacerRector extends AbstractRector
         }
     }
 
-    private function isRecipeMatch(Node $node, ArgumentReplacerRecipe $argumentReplacerRecipe): bool
+    private function isNodeToRecipeMatch(Node $node, ArgumentReplacerRecipe $argumentReplacerRecipe): bool
     {
         $type = $argumentReplacerRecipe->getClass();
         $method = $argumentReplacerRecipe->getMethod();
@@ -187,5 +157,50 @@ final class ArgumentReplacerRector extends AbstractRector
         foreach ($configurationArrays as $configurationArray) {
             $this->argumentReplacerRecipes[] = ArgumentReplacerRecipe::createFromArray($configurationArray);
         }
+    }
+
+    /**
+     * @param mixed[] $argumentsOrParameters
+     * @return mixed[]
+     */
+    private function processArgumentsOrParamters(array $argumentsOrParameters): array
+    {
+        foreach ($this->activeArgumentReplacerRecipes as $argumentReplacerRecipe) {
+            $type = $argumentReplacerRecipe->getType();
+            $position = $argumentReplacerRecipe->getPosition();
+
+            if ($type === ArgumentReplacerRecipe::TYPE_REMOVED) {
+                unset($argumentsOrParameters[$position]);
+            } elseif ($type === ArgumentReplacerRecipe::TYPE_CHANGED) {
+                $argumentsOrParameters[$position] = BuilderHelpers::normalizeValue(
+                    $argumentReplacerRecipe->getDefaultValue()
+                );
+            } elseif ($type === ArgumentReplacerRecipe::TYPE_REPLACED_DEFAULT_VALUE) {
+                $argumentsOrParameters[$position] = $this->processReplacedDefaultValue(
+                    $argumentsOrParameters[$position],
+                    $argumentReplacerRecipe
+                );
+            }
+        }
+
+        return $argumentsOrParameters;
+    }
+
+    /**
+     * @param Arg|Param $argumentOrParameter
+     * @return Arg|Param
+     */
+    private function processReplacedDefaultValue($argumentOrParameter, ArgumentReplacerRecipe $argumentReplacerRecipe)
+    {
+        $resolvedValue = $this->constExprEvaluator->evaluateDirectly($argumentOrParameter->value);
+
+        $replaceMap = $argumentReplacerRecipe->getReplaceMap();
+        foreach ($replaceMap as $oldValue => $newValue) {
+            if ($resolvedValue === $oldValue) {
+                return new Arg(BuilderHelpers::normalizeValue($newValue));
+            }
+        }
+
+        return $argumentOrParameter;
     }
 }

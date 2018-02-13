@@ -135,7 +135,7 @@ final class ArgumentReplacerRecipe
         Assert::keyExists($data, 'position');
         Assert::keyExists($data, 'type');
 
-        if ($data['type'] === 'replace_default_value') {
+        if ($data['type'] === self::TYPE_REPLACED_DEFAULT_VALUE) {
             Assert::keyExists($data, 'replace_map');
         }
     }
