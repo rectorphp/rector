@@ -31,7 +31,7 @@ final class ArgumentReplacerRector extends AbstractRector
     /**
      * @var ArgumentReplacerRecipe[]
      */
-    private $activeArgumentReplacerItemRecipes = [];
+    private $activeArgumentReplacerRecipes = [];
 
     /**
      * @var ClassMethodAnalyzer
@@ -58,7 +58,7 @@ final class ArgumentReplacerRector extends AbstractRector
         StaticMethodCallAnalyzer $staticMethodCallAnalyzer,
         ConstExprEvaluator $constExprEvaluator
     ) {
-        $this->loadArgumentReplacerItemRecipes($argumentChangesByMethodAndType);
+        $this->loadArgumentReplacerRecipes($argumentChangesByMethodAndType);
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->classMethodAnalyzer = $classMethodAnalyzer;
         $this->staticMethodCallAnalyzer = $staticMethodCallAnalyzer;
@@ -67,9 +67,9 @@ final class ArgumentReplacerRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        $this->activeArgumentReplacerItemRecipes = $this->matchArgumentChanges($node);
+        $this->activeArgumentReplacerRecipes = $this->matchArgumentChanges($node);
 
-        return (bool) $this->activeArgumentReplacerItemRecipes;
+        return (bool) $this->activeArgumentReplacerRecipes;
     }
 
     /**
@@ -79,9 +79,9 @@ final class ArgumentReplacerRector extends AbstractRector
     {
         $argumentsOrParameters = $this->getNodeArgumentsOrParameters($node);
 
-        foreach ($this->activeArgumentReplacerItemRecipes as $argumentReplacerItemRecipe) {
-            $type = $argumentReplacerItemRecipe->getType();
-            $position = $argumentReplacerItemRecipe->getPosition();
+        foreach ($this->activeArgumentReplacerRecipes as $argumentReplacerRecipe) {
+            $type = $argumentReplacerRecipe->getType();
+            $position = $argumentReplacerRecipe->getPosition();
 
             if ($type === ArgumentReplacerRecipe::TYPE_REMOVED) {
                 unset($argumentsOrParameters[$position]);
@@ -90,7 +90,7 @@ final class ArgumentReplacerRector extends AbstractRector
 
             if ($type === ArgumentReplacerRecipe::TYPE_CHANGED) {
                 $argumentsOrParameters[$position] = BuilderHelpers::normalizeValue(
-                    $argumentReplacerItemRecipe->getDefaultValue()
+                    $argumentReplacerRecipe->getDefaultValue()
                 );
                 continue;
             }
@@ -100,7 +100,7 @@ final class ArgumentReplacerRector extends AbstractRector
                 $argumentOrParameter = $argumentsOrParameters[$position];
                 $resolvedValue = $this->constExprEvaluator->evaluateDirectly($argumentOrParameter->value);
 
-                $replaceMap = $argumentReplacerItemRecipe->getReplaceMap();
+                $replaceMap = $argumentReplacerRecipe->getReplaceMap();
                 foreach ($replaceMap as $oldValue => $newValue) {
                     if ($resolvedValue === $oldValue) {
                         $argumentsOrParameters[$position] = BuilderHelpers::normalizeValue($newValue);
@@ -123,15 +123,15 @@ final class ArgumentReplacerRector extends AbstractRector
             return [];
         }
 
-        $argumentReplacerItemRecipes = [];
+        $argumentReplacerRecipes = [];
 
         foreach ($this->argumentReplacerRecipes as $argumentReplacerRecipe) {
             if ($this->isRecipeMatch($node, $argumentReplacerRecipe)) {
-                $argumentReplacerItemRecipes[] = $argumentReplacerRecipe;
+                $argumentReplacerRecipes[] = $argumentReplacerRecipe;
             }
         }
 
-        return $argumentReplacerItemRecipes;
+        return $argumentReplacerRecipes;
     }
 
     /**
@@ -182,7 +182,7 @@ final class ArgumentReplacerRector extends AbstractRector
     /**
      * @param mixed[] $configurationArrays
      */
-    private function loadArgumentReplacerItemRecipes(array $configurationArrays): void
+    private function loadArgumentReplacerRecipes(array $configurationArrays): void
     {
         foreach ($configurationArrays as $configurationArray) {
             $this->argumentReplacerRecipes[] = ArgumentReplacerRecipe::createFromArray($configurationArray);
