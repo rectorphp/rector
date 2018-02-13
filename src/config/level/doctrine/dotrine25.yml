@@ -8,7 +8,8 @@ rectors:
                 'em': 'Doctrine\ORM\EntityManagerInterface'
 
     Rector\Rector\Dynamic\ArgumentReplacerRector:
-        'Doctrine\ORM\Persisters\Entity\AbstractEntityInheritancePersister':
-            'getSelectJoinColumnSQL':
-                4:
-                    '~': ~
+        -
+            class: 'Doctrine\ORM\Persisters\Entity\AbstractEntityInheritancePersister'
+            method: 'getSelectJoinColumnSQL'
+            position: 4
+            type: 'removed'

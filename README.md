@@ -208,23 +208,26 @@ rectors:
                 'code': 'string'
 ```
 
-### Change a argument value
+### Change argument value or remove argument
 
 ```yml
 rectors:
     Rector\Rector\Dynamic\ArgumentReplacerRector:
-        # class
-        'Symfony\Component\DependencyInjection\ContainerBuilder':
-            # method
-            'compile':
-                # argument position
-                0:
-                    # added default value
-                    '~': false
-                    # or remove completely
-                    '~': ~
-                    # or replace by new value
-                    'Symfony\Component\DependencyInjection\ContainerBuilder\ContainerBuilder::SCOPE_PROTOTYPE': false
+        -
+            class: 'Symfony\Component\DependencyInjection\ContainerBuilder'
+            method: 'compile'
+            position: 0
+            # change default value
+            type: 'changed'
+            default_value: false
+
+            # or remove
+            type: 'removed'
+
+            # or replace old default value by new one
+            type: 'replace_default_value'
+            replace_map:
+                'Symfony\Component\DependencyInjection\ContainerBuilder::SCOPE_PROTOTYPE': false
 ```
 
 ### Replace the underscore naming `_` with namespaces `\`
