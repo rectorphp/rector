@@ -1,23 +1,41 @@
 rectors:
     Rector\Rector\Dynamic\ArgumentReplacerRector:
-        'Symfony\Component\DependencyInjection\ContainerBuilder':
-            'compile':
-                0:
-                    # added default value
-                    '~': false
-            'addCompilerPass':
-                2:
-                    # added default value
-                    '~': 0
+        # value object approach
+        -
+            class: 'Symfony\Component\DependencyInjection\ContainerBuilder'
+            method: 'addCompilerPass'
+            position: 2
+            type: 'added'
+            default_value: 0
 
-        'Doctrine\ORM\Persisters\Entity\AbstractEntityInheritancePersister':
-            'getSelectJoinColumnSQL':
-                4:
-                    # remove completely
-                    '~': ~
+        # added default value
+        -
+            class: 'Symfony\Component\DependencyInjection\ContainerBuilder'
+            method: 'compile'
+            type: 'changed'
+            position: 0
+            default_value: false
 
-        'Symfony\Component\DependencyInjection\Definition':
-            'setScope':
-                0:
-                    # replace by new value
-                    'Symfony\Component\DependencyInjection\ContainerBuilder::SCOPE_PROTOTYPE': false
+        # added default value
+        -
+            class: 'Symfony\Component\DependencyInjection\ContainerBuilder'
+            method: 'addCompilerPass'
+            type: 'changed'
+            position: 0
+            default_value: 0
+
+        # remove argument
+        -
+            class: 'Doctrine\ORM\Persisters\Entity\AbstractEntityInheritancePersister'
+            method: 'getSelectJoinColumnSQL'
+            position: 4
+            type: 'remove'
+
+        # replace default value
+        -
+            class: 'Symfony\Component\DependencyInjection\Definition'
+            method: 'setScope'
+            position: 0
+            type: 'replace_default_value'
+            replace_map:
+                'Symfony\Component\DependencyInjection\ContainerBuilder::SCOPE_PROTOTYPE': false

@@ -8,20 +8,20 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\NodeAnalyzer\ClassMethodAnalyzer;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeAnalyzer\StaticMethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
+use Rector\Rector\Dynamic\Configuration\ArgumentReplacerItemRecipe;
 
 final class ArgumentReplacerRector extends AbstractRector
 {
     /**
-     * @var mixed[]
+     * @var ArgumentReplacerItemRecipe[]
      */
-    private $argumentChangesMethodAndClass = [];
+    private $argumentReplacerItemRecipes = [];
 
     /**
      * @var MethodCallAnalyzer
@@ -29,9 +29,9 @@ final class ArgumentReplacerRector extends AbstractRector
     private $methodCallAnalyzer;
 
     /**
-     * @var mixed[][]
+     * @var argumentReplacerItemRecipe[]
      */
-    private $activeArgumentChangesByPosition = [];
+    private $activeArgumentReplacerItemRecipes = [];
 
     /**
      * @var ClassMethodAnalyzer
@@ -58,7 +58,7 @@ final class ArgumentReplacerRector extends AbstractRector
         StaticMethodCallAnalyzer $staticMethodCallAnalyzer,
         ConstExprEvaluator $constExprEvaluator
     ) {
-        $this->argumentChangesMethodAndClass = $argumentChangesByMethodAndType;
+        $this->loadArgumentReplacerItemRecipes($argumentChangesByMethodAndType);
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->classMethodAnalyzer = $classMethodAnalyzer;
         $this->staticMethodCallAnalyzer = $staticMethodCallAnalyzer;
@@ -67,9 +67,9 @@ final class ArgumentReplacerRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        $this->activeArgumentChangesByPosition = $this->matchArgumentChanges($node);
+        $this->activeArgumentReplacerItemRecipes = $this->matchArgumentChanges($node);
 
-        return (bool) $this->activeArgumentChangesByPosition;
+        return (bool) $this->activeArgumentReplacerItemRecipes;
     }
 
     /**
@@ -79,25 +79,23 @@ final class ArgumentReplacerRector extends AbstractRector
     {
         $argumentsOrParameters = $this->getNodeArgumentsOrParameters($node);
 
-        foreach ($this->activeArgumentChangesByPosition as $position => $argumentChange) {
-            $key = key($argumentChange);
-            $value = array_shift($argumentChange);
+        foreach ($this->activeArgumentReplacerItemRecipes as $argumentReplacerItemRecipe) {
+            // @todo constants and own methods
+            if ($argumentReplacerItemRecipe->getType() === 'removed') {
+                unset($argumentsOrParameters[$argumentReplacerItemRecipe->getPosition()]);
 
-            if ($key === '~') {
-                if ($value === null) { // remove argument
-                    unset($argumentsOrParameters[$position]);
-                } else { // new default value
-                    $argumentsOrParameters[$position] = BuilderHelpers::normalizeValue($value);
-                }
-            } else {
-                // replace old value with new one
+            } elseif ($argumentReplacerItemRecipe->getType() === 'changed') {
+                $argumentsOrParameters[$argumentReplacerItemRecipe->getPosition()] = BuilderHelpers::normalizeValue($argumentReplacerItemRecipe->getDefaultValue());
+            } elseif ($argumentReplacerItemRecipe->getType() === 'replace_default_value') {
                 /** @var Arg $argumentOrParameter */
-                $argumentOrParameter = $argumentsOrParameters[$position];
-
+                $argumentOrParameter = $argumentsOrParameters[$argumentReplacerItemRecipe->getPosition()];
                 $resolvedValue = $this->constExprEvaluator->evaluateDirectly($argumentOrParameter->value);
 
-                if ($resolvedValue === $key) {
-                    $argumentsOrParameters[$position] = BuilderHelpers::normalizeValue($value);
+                $replaceMap = $argumentReplacerItemRecipe->getReplaceMap();
+                foreach ($replaceMap as $oldValue => $newValue) {
+                    if ($resolvedValue === $oldValue) {
+                        $argumentsOrParameters[$argumentReplacerItemRecipe->getPosition()] = BuilderHelpers::normalizeValue($newValue);
+                    }
                 }
             }
         }
@@ -108,7 +106,7 @@ final class ArgumentReplacerRector extends AbstractRector
     }
 
     /**
-     * @return mixed[][]
+     * @return ArgumentReplacerItemRecipe[]
      */
     private function matchArgumentChanges(Node $node): array
     {
@@ -116,17 +114,16 @@ final class ArgumentReplacerRector extends AbstractRector
             return [];
         }
 
-        foreach ($this->argumentChangesMethodAndClass as $type => $argumentChangesByMethod) {
-            $methods = array_keys($argumentChangesByMethod);
-            if ($this->isTypeAndMethods($node, $type, $methods)) {
-                /** @var Identifier $identifierNode */
-                $identifierNode = $node->name;
+        $argumentReplacerItemRecipes = [];
 
-                return $argumentChangesByMethod[$identifierNode->toString()];
+        foreach ($this->argumentReplacerItemRecipes as $argumentReplacerItemRecipe) {
+
+            if ($this->isTypeAndMethods($node, $argumentReplacerItemRecipe->getClass(), [$argumentReplacerItemRecipe->getMethod()])) {
+                $argumentReplacerItemRecipes[] = $argumentReplacerItemRecipe;
             }
         }
 
-        return [];
+        return $argumentReplacerItemRecipes;
     }
 
     /**
@@ -172,5 +169,12 @@ final class ArgumentReplacerRector extends AbstractRector
         }
 
         return $this->classMethodAnalyzer->isTypeAndMethods($node, $type, $methods);
+    }
+
+    private function loadArgumentReplacerItemRecipes(array $configurationArrays): void
+    {
+        foreach ($configurationArrays as $configurationArray) {
+            $this->argumentReplacerItemRecipes[] = ArgumentReplacerItemRecipe::createFromArray($configurationArray);
+        }
     }
 }
