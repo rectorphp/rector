@@ -25,14 +25,17 @@ final class ArgumentReplacerRecipe
      * @var string
      */
     private $class;
+
     /**
      * @var string
      */
     private $method;
+
     /**
      * @var int
      */
     private $position;
+
     /**
      * @var string
      */
@@ -74,14 +77,7 @@ final class ArgumentReplacerRecipe
     public static function createFromArray(array $data): self
     {
         // @todo: make exceptions clear for end user
-        Assert::keyExists($data, 'class');
-        Assert::keyExists($data, 'method');
-        Assert::keyExists($data, 'position');
-        Assert::keyExists($data, 'type');
-
-        if ($data['type'] === 'replace_default_value') {
-            Assert::keyExists($data, 'replace_map');
-        }
+        self::validateArrayData($data);
 
         return new self(
             $data['class'],
@@ -91,6 +87,21 @@ final class ArgumentReplacerRecipe
             $data['default_value'] ?? null,
             $data['replace_map'] ?? []
         );
+    }
+
+    /**
+     * @param mixed[] $data
+     */
+    private static function validateArrayData(array $data): void
+    {
+        Assert::keyExists($data, 'class');
+        Assert::keyExists($data, 'method');
+        Assert::keyExists($data, 'position');
+        Assert::keyExists($data, 'type');
+
+        if ($data['type'] === 'replace_default_value') {
+            Assert::keyExists($data, 'replace_map');
+        }
     }
 
     public function getClass(): string

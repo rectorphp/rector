@@ -124,7 +124,7 @@ final class ArgumentReplacerRector extends AbstractRector
         $argumentReplacerItemRecipes = [];
 
         foreach ($this->argumentReplacerRecipes as $argumentReplacerRecipe) {
-            if ($this->isTypeAndMethod($node, $argumentReplacerRecipe->getClass(), $argumentReplacerRecipe->getMethod())) {
+            if ($this->isRecipeMatch($node, $argumentReplacerRecipe)) {
                 $argumentReplacerItemRecipes[] = $argumentReplacerRecipe;
             }
         }
@@ -161,8 +161,11 @@ final class ArgumentReplacerRector extends AbstractRector
         }
     }
 
-    private function isTypeAndMethod(Node $node, string $type, string $method): bool
+    private function isRecipeMatch(Node $node, ArgumentReplacerRecipe $argumentReplacerRecipe): bool
     {
+        $type = $argumentReplacerRecipe->getClass();
+        $method = $argumentReplacerRecipe->getMethod();
+
         if ($this->methodCallAnalyzer->isTypeAndMethods($node, $type, [$method])) {
             return true;
         }
@@ -174,6 +177,9 @@ final class ArgumentReplacerRector extends AbstractRector
         return $this->classMethodAnalyzer->isTypeAndMethods($node, $type, [$method]);
     }
 
+    /**
+     * @param mixed[] $configurationArrays
+     */
     private function loadArgumentReplacerItemRecipes(array $configurationArrays): void
     {
         foreach ($configurationArrays as $configurationArray) {
