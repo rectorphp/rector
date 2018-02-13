@@ -1,13 +1,5 @@
 rectors:
     Rector\Rector\Dynamic\ArgumentReplacerRector:
-        # value object approach
-        -
-            class: 'Symfony\Component\DependencyInjection\ContainerBuilder'
-            method: 'addCompilerPass'
-            position: 2
-            type: 'added'
-            default_value: 0
-
         # added default value
         -
             class: 'Symfony\Component\DependencyInjection\ContainerBuilder'
@@ -20,8 +12,8 @@ rectors:
         -
             class: 'Symfony\Component\DependencyInjection\ContainerBuilder'
             method: 'addCompilerPass'
+            position: 2
             type: 'changed'
-            position: 0
             default_value: 0
 
         # remove argument
@@ -29,7 +21,7 @@ rectors:
             class: 'Doctrine\ORM\Persisters\Entity\AbstractEntityInheritancePersister'
             method: 'getSelectJoinColumnSQL'
             position: 4
-            type: 'remove'
+            type: 'removed'
 
         # replace default value
         -
