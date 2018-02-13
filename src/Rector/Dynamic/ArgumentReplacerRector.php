@@ -19,9 +19,23 @@ use Rector\Rector\Dynamic\Configuration\ArgumentReplacerItemRecipe;
 final class ArgumentReplacerRector extends AbstractRector
 {
     /**
+     * @var string
+     */
+    private const TYPE_REMOVED = 'removed';
+
+    /**
+     * @var string
+     */
+    private const TYPE_CHANGED = 'changed';
+
+    /**
+     * @var string
+     */
+    private const TYPE_REPLACED_DEFAULT_VALUE = 'replace_default_value';
+    /**
      * @var ArgumentReplacerItemRecipe[]
      */
-    private $argumentReplacerItemRecipes = [];
+    private $argumentReplacerRecipes = [];
 
     /**
      * @var MethodCallAnalyzer
@@ -80,21 +94,28 @@ final class ArgumentReplacerRector extends AbstractRector
         $argumentsOrParameters = $this->getNodeArgumentsOrParameters($node);
 
         foreach ($this->activeArgumentReplacerItemRecipes as $argumentReplacerItemRecipe) {
-            // @todo constants and own methods
-            if ($argumentReplacerItemRecipe->getType() === 'removed') {
-                unset($argumentsOrParameters[$argumentReplacerItemRecipe->getPosition()]);
+            $type = $argumentReplacerItemRecipe->getType();
+            $position = $argumentReplacerItemRecipe->getPosition();
 
-            } elseif ($argumentReplacerItemRecipe->getType() === 'changed') {
-                $argumentsOrParameters[$argumentReplacerItemRecipe->getPosition()] = BuilderHelpers::normalizeValue($argumentReplacerItemRecipe->getDefaultValue());
-            } elseif ($argumentReplacerItemRecipe->getType() === 'replace_default_value') {
+            if ($type === self::TYPE_REMOVED) {
+                unset($argumentsOrParameters[$position]);
+                continue;
+            }
+
+            if ($type === self::TYPE_CHANGED) {
+                $argumentsOrParameters[$position] = BuilderHelpers::normalizeValue($argumentReplacerItemRecipe->getDefaultValue());
+                continue;
+            }
+
+            if ($type === self::TYPE_REPLACED_DEFAULT_VALUE) {
                 /** @var Arg $argumentOrParameter */
-                $argumentOrParameter = $argumentsOrParameters[$argumentReplacerItemRecipe->getPosition()];
+                $argumentOrParameter = $argumentsOrParameters[$position];
                 $resolvedValue = $this->constExprEvaluator->evaluateDirectly($argumentOrParameter->value);
 
                 $replaceMap = $argumentReplacerItemRecipe->getReplaceMap();
                 foreach ($replaceMap as $oldValue => $newValue) {
                     if ($resolvedValue === $oldValue) {
-                        $argumentsOrParameters[$argumentReplacerItemRecipe->getPosition()] = BuilderHelpers::normalizeValue($newValue);
+                        $argumentsOrParameters[$position] = BuilderHelpers::normalizeValue($newValue);
                     }
                 }
             }
@@ -116,10 +137,9 @@ final class ArgumentReplacerRector extends AbstractRector
 
         $argumentReplacerItemRecipes = [];
 
-        foreach ($this->argumentReplacerItemRecipes as $argumentReplacerItemRecipe) {
-
-            if ($this->isTypeAndMethods($node, $argumentReplacerItemRecipe->getClass(), [$argumentReplacerItemRecipe->getMethod()])) {
-                $argumentReplacerItemRecipes[] = $argumentReplacerItemRecipe;
+        foreach ($this->argumentReplacerRecipes as $argumentReplacerRecipe) {
+            if ($this->isTypeAndMethod($node, $argumentReplacerRecipe->getClass(), $argumentReplacerRecipe->getMethod())) {
+                $argumentReplacerItemRecipes[] = $argumentReplacerRecipe;
             }
         }
 
@@ -155,26 +175,23 @@ final class ArgumentReplacerRector extends AbstractRector
         }
     }
 
-    /**
-     * @param string[] $methods
-     */
-    private function isTypeAndMethods(Node $node, string $type, array $methods): bool
+    private function isTypeAndMethod(Node $node, string $type, string $method): bool
     {
-        if ($this->methodCallAnalyzer->isTypeAndMethods($node, $type, $methods)) {
+        if ($this->methodCallAnalyzer->isTypeAndMethods($node, $type, [$method])) {
             return true;
         }
 
-        if ($this->staticMethodCallAnalyzer->isTypeAndMethods($node, $type, $methods)) {
+        if ($this->staticMethodCallAnalyzer->isTypeAndMethods($node, $type, [$method])) {
             return true;
         }
 
-        return $this->classMethodAnalyzer->isTypeAndMethods($node, $type, $methods);
+        return $this->classMethodAnalyzer->isTypeAndMethods($node, $type, [$method]);
     }
 
     private function loadArgumentReplacerItemRecipes(array $configurationArrays): void
     {
         foreach ($configurationArrays as $configurationArray) {
-            $this->argumentReplacerItemRecipes[] = ArgumentReplacerItemRecipe::createFromArray($configurationArray);
+            $this->argumentReplacerRecipes[] = ArgumentReplacerItemRecipe::createFromArray($configurationArray);
         }
     }
 }

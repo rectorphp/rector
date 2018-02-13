@@ -37,8 +37,14 @@ final class ArgumentReplacerItemRecipe
      * @param mixed $defaultValue
      * @param string[] $replaceMap
      */
-    private function __construct(string $class, string $method, int $position, string $type, $defaultValue = null, array $replaceMap)
-    {
+    private function __construct(
+        string $class,
+        string $method,
+        int $position,
+        string $type,
+        $defaultValue = null,
+        array $replaceMap
+    ) {
         $this->class = $class;
         $this->method = $method;
         $this->position = $position;
@@ -47,6 +53,9 @@ final class ArgumentReplacerItemRecipe
         $this->replaceMap = $replaceMap;
     }
 
+    /**
+     * @param mixed[] $data
+     */
     public static function createFromArray(array $data): self
     {
         // @todo: make exceptions clear for end user
