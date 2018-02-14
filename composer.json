@@ -9,6 +9,7 @@
     ],
     "require": {
         "php": "^7.1",
+        "humbug/box": "^3.0@dev",
         "jean85/pretty-package-versions": "^1.1",
         "nette/robot-loader": "^3.0",
         "nette/utils": "^2.5",

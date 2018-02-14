@@ -1,0 +1,15 @@
+{
+    "chmod": "0755",
+    "directories": ["src", "packages"],
+    "directories-bin": ["bin"],
+    "main": "bin/rector",
+    "output": "rector.phar",
+    "stub": true,
+    "finder": [
+        {
+            "name": "*.php,*.yml",
+            "exclude": ["Tests"],
+            "in": "vendor"
+        }
+    ]
+}
