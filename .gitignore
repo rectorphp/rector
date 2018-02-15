@@ -4,3 +4,5 @@
 /example
 /vendor
 composer.lock
+
+rector.phar
