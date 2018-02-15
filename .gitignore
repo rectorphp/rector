@@ -3,6 +3,7 @@
 !/temp/.gitkeep
 /example
 /vendor
+/vendor-bin
 composer.lock
 
 rector.phar
