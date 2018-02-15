@@ -1,6 +1,6 @@
 {
     "chmod": "0755",
-    "base-path": "build",
+    "base-path": "phar-build",
     "directories": ["src", "packages"],
     "directories-bin": ["bin"],
     "main": "bin/rector",
