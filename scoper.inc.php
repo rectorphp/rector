@@ -11,34 +11,34 @@ return [
     'finders' => [
         Finder::create()
             ->files()
-            ->in('bin')
-            ->in('src')
-            ->in('packages')
-            ->exclude(['tests']),
+            ->in(__DIR__ . '/bin')
+            ->in(__DIR__ . '/src')
+            ->in(__DIR__ . '/packages')
+            ->exclude('tests'),
 
         Finder::create()
             ->files()
+            ->name('*.php')
             ->ignoreVCS(true)
-            ->notName('/LICENSE|.*\\.md|.*\\.dist|Makefile|composer\\.json|composer\\.lock/')
             ->exclude([
                 'doc',
                 'test',
-                'test_old',
                 'Test',
+                'test_old',
                 'tests',
-                'Tests',
-                'vendor-bin',
+                'Tests'
             ])
-            ->in('vendor'),
+            ->in(__DIR__ . '/vendor'),
 
         Finder::create()->append([
-            'composer.json',
-            'vendor/friendsofphp/php-cs-fixer/tests/TestCase.php'
+            __DIR__ . '/composer.json',
+            __DIR__ . '/vendor/friendsofphp/php-cs-fixer/tests/TestCase.php'
         ]),
 
+        // workaround for php-cs-fixer's misslocation of source files in /tests directory
         Finder::create()
             ->files()
-            ->in('vendor/friendsofphp/php-cs-fixer/tests/Test')
+            ->in(__DIR__ . '/vendor/friendsofphp/php-cs-fixer/tests/Test')
     ],
 
 
