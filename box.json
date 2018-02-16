@@ -8,8 +8,8 @@
     "stub": true,
     "finder": [
         {
-            "name": "*.php,*.yml",
-//            "exclude": ["Tests", "tests", "docs"],
+            "name": "*.{php,yml}",
+            "exclude": ["Tests", "tests", "docs"],
             "in": "vendor"
         }
     ]
