@@ -67,10 +67,11 @@
             "@install-phar",
             "vendor/bin/php-scoper add-prefix --output-dir=build --force",
             "composer dump-autoload --working-dir=build --classmap-authoritative --no-dev",
-            "vendor/bin/box build"
+            "vendor/bin/box build",
+            "rm -rf build"
         ],
         "install-phar": [
-            "if [ ! -d vendor-bin/php-scoper ]; then composer bin php-scoper require --dev humbug/box; fi",
+            "if [ ! -d vendor-bin/box ]; then composer bin box require --dev humbug/box; fi",
             "if [ ! -d vendor-bin/php-scoper ]; then composer bin php-scoper require --dev humbug/php-scoper; fi"
         ]
     },
