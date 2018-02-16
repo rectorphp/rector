@@ -6,4 +6,6 @@
 /vendor-bin
 composer.lock
 
+# phar related
+/build
 rector.phar
