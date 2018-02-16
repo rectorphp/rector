@@ -9,6 +9,7 @@ return [
     //
     // For more see: https://github.com/humbug/php-scoper#finders-and-paths
     'finders' => [
+        // Rector source
         Finder::create()
             ->files()
             ->in(__DIR__ . '/bin')
@@ -16,6 +17,7 @@ return [
             ->in(__DIR__ . '/packages')
             ->exclude('tests'),
 
+        // /vendor files
         Finder::create()
             ->files()
             ->name('*.php')
@@ -30,14 +32,15 @@ return [
             ])
             ->in(__DIR__ . '/vendor'),
 
+        // required for php-scoper - "autoload" sections and "composer dump"
         Finder::create()->append([
             __DIR__ . '/composer.json',
-            __DIR__ . '/vendor/friendsofphp/php-cs-fixer/tests/TestCase.php'
         ]),
 
         // workaround for php-cs-fixer's misslocation of source files in /tests directory
         Finder::create()
             ->files()
             ->in(__DIR__ . '/vendor/friendsofphp/php-cs-fixer/tests/Test')
+            ->append([__DIR__ . '/vendor/friendsofphp/php-cs-fixer/tests/TestCase.php'])
     ],
 ];
