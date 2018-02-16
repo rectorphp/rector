@@ -25,6 +25,7 @@ script:
   - if [[ $STATIC_ANALYSIS != "" ]]; then composer check-cs; fi
   - if [[ $STATIC_ANALYSIS != "" ]]; then composer phpstan; fi
   - if [[ $BUILD_PHAR != "" ]]; then composer build-phar && php rector.phar; fi
+  - if [[ $BUILD_PHAR != "" ]]; then vendor/bin/phpunit --testsuite=phar-build; fi
 
 after_script:
   # upload coverage to Coveralls.io
