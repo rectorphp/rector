@@ -12,5 +12,6 @@
             "exclude": ["Tests", "tests", "docs"],
             "in": "vendor"
         }
-    ]
+    ],
+    "compression": "GZ"
 }
