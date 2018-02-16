@@ -71,7 +71,7 @@
             "rm -rf build"
         ],
         "build-phar-install": [
-            "if [ ! -d vendor-bin/box ]; then composer bin box require --dev humbug/box; fi",
+            "if [ ! -d vendor-bin/box ]; then composer bin box require --dev humbug/box:^3.0@dev; fi",
             "if [ ! -d vendor-bin/php-scoper ]; then composer bin php-scoper require --dev humbug/php-scoper; fi"
         ]
     },
