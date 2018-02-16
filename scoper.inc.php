@@ -12,9 +12,9 @@ return [
         // Rector source
         Finder::create()
             ->files()
-            ->in(__DIR__ . '/bin')
-            ->in(__DIR__ . '/src')
-            ->in(__DIR__ . '/packages')
+            ->in('bin')
+            ->in('src')
+            ->in('packages')
             ->exclude('tests'),
 
         // /vendor files
@@ -32,15 +32,15 @@ return [
             ])
             ->in(__DIR__ . '/vendor'),
 
-        // required for php-scoper - "autoload" sections and "composer dump"
-        Finder::create()->append([
-            __DIR__ . '/composer.json',
-        ]),
-
         // workaround for php-cs-fixer's misslocation of source files in /tests directory
         Finder::create()
             ->files()
             ->in(__DIR__ . '/vendor/friendsofphp/php-cs-fixer/tests/Test')
-            ->append([__DIR__ . '/vendor/friendsofphp/php-cs-fixer/tests/TestCase.php'])
+            ->append([__DIR__ . '/vendor/friendsofphp/php-cs-fixer/tests/TestCase.php']),
+
+        // required for php-scoper - "autoload" sections and "composer dump"
+        Finder::create()->append([
+            'composer.json',
+        ]),
     ],
 ];
