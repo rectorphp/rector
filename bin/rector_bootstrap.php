@@ -16,7 +16,7 @@ foreach ($possibleAutoloadPaths as $possibleAutoloadPath) {
     }
 }
 
-throw new RuntimeException(sprintf(
+die(sprintf(
     'Composer autoload.php was not found in paths "%s". Have you run  "composer update"?',
     implode('", "', $possibleAutoloadPaths)
 ));
