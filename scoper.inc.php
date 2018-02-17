@@ -12,6 +12,7 @@ return [
         // Rector source
         Finder::create()
             ->files()
+            ->notName('*.sh')
             ->in('bin')
             ->in('src')
             ->in('packages')
