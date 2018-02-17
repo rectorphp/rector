@@ -18,10 +18,11 @@ return [
             ->in('packages')
             ->exclude('tests'),
 
-        // /vendor files
+        // /vendor files; note: composer.json is needed for "composer dump"
         Finder::create()
             ->files()
             ->name('*.php')
+            ->name('composer.json')
             ->ignoreVCS(true)
             ->exclude([
                 'doc',
@@ -42,6 +43,7 @@ return [
         // required for php-scoper - "autoload" sections and "composer dump"
         Finder::create()->append([
             'composer.json',
+            'composer.lock',
         ]),
     ],
 ];
