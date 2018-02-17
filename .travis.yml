@@ -3,13 +3,14 @@ language: php
 matrix:
   include:
     - php: 7.1
-      env: STATIC_ANALYSIS=true BUILD_PHAR=true
-    - php: 7.2
-      env: PHPUNIT_FLAGS="--coverage-clover coverage.xml --testsuite=contrib-rectors"
-    - php: 7.2
-      env: PHPUNIT_FLAGS="--coverage-clover coverage.xml --testsuite=general-rectors"
-    - php: 7.2
-      env: PHPUNIT_FLAGS="--coverage-clover coverage.xml --testsuite=main"
+      env: BUILD_PHAR=true
+#      env: STATIC_ANALYSIS=true BUILD_PHAR=true
+#    - php: 7.2
+#      env: PHPUNIT_FLAGS="--coverage-clover coverage.xml --testsuite=contrib-rectors"
+#    - php: 7.2
+#      env: PHPUNIT_FLAGS="--coverage-clover coverage.xml --testsuite=general-rectors"
+#    - php: 7.2
+#      env: PHPUNIT_FLAGS="--coverage-clover coverage.xml --testsuite=main"
 
 install:
   - composer install
@@ -31,7 +32,6 @@ script:
       composer dump-autoload --working-dir=build --classmap-authoritative --no-dev
       chmod +x build/bin/rector
       build/bin/rector
-
       composer build-phar && php rector.phar
       then vendor/bin/phpunit --testsuite=phar-build
     fi
