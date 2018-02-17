@@ -32,8 +32,9 @@ script:
       composer dump-autoload --working-dir=build --classmap-authoritative --no-dev
       chmod +x build/bin/rector
       build/bin/rector
-      composer build-phar && php rector.phar
-      then vendor/bin/phpunit --testsuite=phar-build
+      composer build-phar
+      php rector.phar
+      vendor/bin/phpunit --testsuite=phar-build
     fi
 
 after_script:
