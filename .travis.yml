@@ -3,7 +3,7 @@ language: php
 matrix:
   include:
     - php: 7.1
-      env: BUILD_PHAR=true
+      env: BUILD_PHAR=true PHPUNIT_FLAGS="--testsuite=main"
 #      env: STATIC_ANALYSIS=true BUILD_PHAR=true
 #    - php: 7.2
 #      env: PHPUNIT_FLAGS="--coverage-clover coverage.xml --testsuite=contrib-rectors"
