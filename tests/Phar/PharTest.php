@@ -8,6 +8,6 @@ final class PharTest extends TestCase
 {
     public function test(): void
     {
-        $this->assertTrue(file_exists(__DIR__ . '/../../rector.phar'));
+        $this->assertFileExists(__DIR__ . '/../../rector.phar');
     }
 }
