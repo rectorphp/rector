@@ -33,30 +33,19 @@ final class MethodCallTypeResolverTest extends AbstractNodeTypeResolverTest
             [__DIR__ . '/MethodCallSource/OnSelfCall.php.inc', 0, [
                 'SomeClass',
                 'Nette\Config\Configurator',
-                'Nette\Object',
             ]],
             [__DIR__ . '/MethodCallSource/OnSelfCall.php.inc', 1, [
                 'SomeClass',
                 'Nette\Config\Configurator',
-                'Nette\Object',
             ]],
             # on method call
             [__DIR__ . '/MethodCallSource/OnMethodCallCall.php.inc', 0, ['Nette\DI\Container']],
             # on variable call
-            [__DIR__ . '/MethodCallSource/OnVariableCall.php.inc', 0, [
-                'Nette\Config\Configurator',
-                'Nette\Object',
-            ]],
+            [__DIR__ . '/MethodCallSource/OnVariableCall.php.inc', 0, ['Nette\Config\Configurator']],
             # on property call
-            [__DIR__ . '/MethodCallSource/OnPropertyCall.php.inc', 0, [
-                'Nette\Config\Configurator',
-                'Nette\Object',
-            ]],
+            [__DIR__ . '/MethodCallSource/OnPropertyCall.php.inc', 0, ['Nette\Config\Configurator']],
             # on magic class call
-            [__DIR__ . '/MethodCallSource/OnMagicClassCall.php.inc', 0, [
-                'Nette\Config\Configurator',
-                'Nette\Object',
-            ]],
+            [__DIR__ . '/MethodCallSource/OnMagicClassCall.php.inc', 0, ['Nette\Config\Configurator']],
         ];
     }
 }

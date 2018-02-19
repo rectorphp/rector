@@ -73,7 +73,7 @@ final class NestedMethodCallTest extends AbstractNodeTypeResolverTest
             [__DIR__ . '/NestedMethodCallSource/NestedMethodCalls.php.inc', 0, 'getParameters', ['Nette\DI\Container']],
             [__DIR__ . '/NestedMethodCallSource/NestedMethodCalls.php.inc', 1, 'addService', ['Nette\DI\Container']],
             [__DIR__ . '/NestedMethodCallSource/NestedMethodCalls.php.inc', 2, 'createContainer', [
-                'Nette\Config\Configurator', 'Nette\Object',
+                'Nette\Config\Configurator'
             ]],
         ];
     }
