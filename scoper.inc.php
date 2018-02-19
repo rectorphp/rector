@@ -22,7 +22,7 @@ return [
         Finder::create()
             ->files()
             ->name('*.php')
-            ->name('composer.json')
+            ->name('{composer,installed}.json')
             ->ignoreVCS(true)
             ->exclude([
                 'doc',
@@ -37,13 +37,14 @@ return [
         // workaround for php-cs-fixer's misslocation of source files in /tests directory
         Finder::create()
             ->files()
-            ->in(__DIR__ . '/vendor/friendsofphp/php-cs-fixer/tests/Test')
-            ->append([__DIR__ . '/vendor/friendsofphp/php-cs-fixer/tests/TestCase.php']),
+            ->in(__DIR__ . '/vendor/friendsofphp/php-cs-fixer/tests/Test'),
 
         // required for php-scoper - "autoload" sections and "composer dump"
         Finder::create()->append([
             'composer.json',
             'composer.lock',
+            // required by php-cs-fixer; only 1 append is allowed probably
+            __DIR__ . '/vendor/friendsofphp/php-cs-fixer/tests/TestCase.php',
         ]),
-    ],
+    ]
 ];
