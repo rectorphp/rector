@@ -71,15 +71,16 @@ return [
             // https://regex101.com/r/IdrE7s/4
 
             // "@ServiceReference"
-            $patternReference = '#\@([A-Z][a-zA-Z]+)#';
+            $patternReference = '#\@\K([A-Z][a-zA-Z]+)#';
             $prefixedContents = preg_replace_callback($patternReference, function ($match) use ($prefix) {
-                return '@' . $prefix . '\\' . $match[1];
+                return $prefix . '\\' . $match[1];
             }, $contents);
 
             // "SomeService\" + @todo: add for single class services, this only matches with "\" in the end
-            $patternSingleService = '#\s([A-Z][A-Za-z]+)\\\\#';
+            // "\K" => https://stackoverflow.com/a/45031856/1348344
+            $patternSingleService = '#\s\K([A-Z][A-Za-z]+)\\\\#';
             $prefixedContents = preg_replace_callback($patternSingleService, function ($match) use ($prefix) {
-                return $prefix . $match[1] . '\\';
+                return $prefix . '\\' . $match[1] . '\\';
             }, $prefixedContents);
 
             return $prefixedContents;
