@@ -65,9 +65,11 @@
         "phpstan": "vendor/bin/phpstan.phar analyse packages src tests --level max --configuration phpstan.neon",
         "build-phar": [
             "@build-phar-install",
+            "composer install --no-dev",
             "vendor/bin/php-scoper add-prefix --output-dir=build --force",
             "composer dump-autoload --working-dir=build --optimize",
-            "vendor/bin/box build"
+            "vendor/bin/box build",
+            "composer install"
         ],
         "build-phar-install": [
             "if [ ! -d vendor-bin/box ]; then composer bin box require --dev humbug/box:^3.0@dev; fi",
