@@ -67,6 +67,7 @@
             "@build-phar-install",
             "composer install --no-dev",
             "vendor/bin/php-scoper add-prefix --output-dir=build --force",
+            "chmod +x build/bin/rector",
             "composer dump-autoload --working-dir=build --optimize",
             "vendor/bin/box build",
             "composer install"

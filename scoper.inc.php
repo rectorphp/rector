@@ -83,6 +83,11 @@ return [
                 return $prefix . '\\' . $match[1] . '\\';
             }, $prefixedContents);
 
+            $patternStaticFactory = '#factory:\s\[\'\K([A-Z][A-Za-z]+)\\\\#';
+            $prefixedContents = preg_replace_callback($patternStaticFactory, function ($match) use ($prefix) {
+                return $prefix . '\\' . $match[1] . '\\';
+            }, $prefixedContents);
+
             return $prefixedContents;
         },
 

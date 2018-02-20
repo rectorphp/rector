@@ -5,7 +5,7 @@
     "directories-bin": ["bin"],
     "main": "bin/rector",
     "output": "rector.phar",
-    "stub": true,
+    "stub": "../packages/PharBuilder/Stub.php",
     "finder": [
         {
             "name": "*.{php,yml}",
