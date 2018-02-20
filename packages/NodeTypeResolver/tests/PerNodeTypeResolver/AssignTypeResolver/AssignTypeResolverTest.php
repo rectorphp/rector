@@ -28,8 +28,8 @@ final class AssignTypeResolverTest extends AbstractNodeTypeResolverTest
     {
         return [
             # assign of "new <name>"
-            [__DIR__ . '/Source/MethodCall.php.inc', 0, ['Nette\Config\Configurator']],
-            [__DIR__ . '/Source/MethodCall.php.inc', 2, ['Nette\Config\Configurator']],
+            [__DIR__ . '/Source/MethodCall.php.inc', 0, ['Nette\Config\Configurator', 'Nette\Object']],
+            [__DIR__ . '/Source/MethodCall.php.inc', 2, ['Nette\Config\Configurator', 'Nette\Object']],
             [__DIR__ . '/Source/New.php.inc', 0, [
                 'Symfony\Component\DependencyInjection\ContainerBuilder',
                 'Symfony\Component\DependencyInjection\ResettableContainerInterface',
@@ -56,12 +56,12 @@ final class AssignTypeResolverTest extends AbstractNodeTypeResolverTest
         $variableNodes = $this->getNodesForFileOfType(__DIR__ . '/Source/ClassConstant.php.inc', Variable::class);
 
         $this->assertSame(
-            ['Nette\Config\Configurator'],
+            ['Nette\Config\Configurator', 'Nette\Object'],
             $this->nodeTypeResolver->resolve($variableNodes[0])
         );
 
         $this->assertSame(
-            ['Nette\Config\Configurator'],
+            ['Nette\Config\Configurator', 'Nette\Object'],
             $this->nodeTypeResolver->resolve($variableNodes[2])
         );
     }
@@ -71,12 +71,12 @@ final class AssignTypeResolverTest extends AbstractNodeTypeResolverTest
         $variableNodes = $this->getNodesForFileOfType(__DIR__ . '/Source/PropertyFetch.php.inc', Variable::class);
 
         $this->assertSame(
-            ['Nette\Config\Configurator'],
+            ['Nette\Config\Configurator', 'Nette\Object'],
             $this->nodeTypeResolver->resolve($variableNodes[0])
         );
 
         $this->assertSame(
-            ['Nette\Config\Configurator'],
+            ['Nette\Config\Configurator', 'Nette\Object'],
             $this->nodeTypeResolver->resolve($variableNodes[2])
         );
     }
