@@ -1,5 +1,9 @@
 <?php declare(strict_types=1);
 
+require __DIR__ . '/vendor/nette/utils/src/Utils/StaticClass.php';
+require __DIR__ . '/vendor/nette/utils/src/Utils/Strings.php';
+
+use Nette\Utils\Strings;
 use Symfony\Component\Finder\Finder;
 
 return [
@@ -48,6 +52,7 @@ return [
         ]),
     ],
 
+    // For more see: https://github.com/humbug/php-scoper#patchers
     // change code based on conditions (suffix, content)
     'patchers' => [
         function (string $filePath, string $prefix, string $contents): string {
@@ -56,7 +61,7 @@ return [
                 return $contents;
             }
 
-            if (strpos($filePath, 'Rector/src/config/level')) {
+            if (Strings::contains($filePath, 'Rector/src/config/level')) {
                 // @todo: resolve levels, Rector classes would need to be renamed? or skip "Rector" namespace?
                 // https://github.com/humbug/php-scoper/issues/166#issuecomment-366894125
                 return $contents;
@@ -78,6 +83,26 @@ return [
             }, $prefixedContents);
 
             return $prefixedContents;
+        },
+
+        // remove shebang workaround
+        // issue ref: https://github.com/humbug/php-scoper/issues/166#issuecomment-366922368
+        function (string $filePath, string $prefix, string $contents): string {
+            if (! Strings::endsWith($filePath, 'bin/rector')) {
+                return $contents;
+            }
+
+            $contents = ltrim($contents,'#!/usr/bin/env php');
+            $contents = trim($contents);
+
+            return $contents;
         }
+    ],
+
+    // For more see: https://github.com/humbug/php-scoper#whitelist
+    // do not prefix any 'Rector\*' class, to allow access via external API
+    // @todo: reflect in yaml prefixer above, that prefixes those cases now
+    'whitelist' => [
+        'Rector\*',
     ],
 ];
