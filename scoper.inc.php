@@ -21,7 +21,7 @@ return [
         // /vendor files; note: composer.json is needed for "composer dump"
         Finder::create()
             ->files()
-            ->name('*.php')
+            ->name('*.{php,yml}')
             ->name('{composer,installed}.json')
             ->ignoreVCS(true)
             ->exclude([
@@ -46,5 +46,38 @@ return [
             // required by php-cs-fixer; only 1 append is allowed probably
             __DIR__ . '/vendor/friendsofphp/php-cs-fixer/tests/TestCase.php',
         ]),
-    ]
+    ],
+
+    // change code based on conditions (suffix, content)
+    'patchers' => [
+        function (string $filePath, string $prefix, string $contents): string {
+            // only .yml files
+            if (! strpos($filePath, '.yml')) {
+                return $contents;
+            }
+
+            if (strpos($filePath, 'Rector/src/config/level')) {
+                // @todo: resolve levels, Rector classes would need to be renamed? or skip "Rector" namespace?
+                // https://github.com/humbug/php-scoper/issues/166#issuecomment-366894125
+                return $contents;
+            }
+
+            // match all possible type references in .yml
+            // https://regex101.com/r/IdrE7s/4
+
+            // "@ServiceReference"
+            $patternReference = '#\@([A-Z][a-zA-Z]+)#';
+            $prefixedContents = preg_replace_callback($patternReference, function ($match) use ($prefix) {
+                return '@' . $prefix . '\\' . $match[1];
+            }, $contents);
+
+            // "SomeService\" + @todo: add for single class services, this only matches with "\" in the end
+            $patternSingleService = '#\s([A-Z][A-Za-z]+)\\\\#';
+            $prefixedContents = preg_replace_callback($patternSingleService, function ($match) use ($prefix) {
+                return $prefix . '\\' . $match[1];
+            }, $prefixedContents);
+
+            return $prefixedContents;
+        }
+    ],
 ];
