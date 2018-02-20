@@ -79,7 +79,7 @@ return [
             // "SomeService\" + @todo: add for single class services, this only matches with "\" in the end
             $patternSingleService = '#\s([A-Z][A-Za-z]+)\\\\#';
             $prefixedContents = preg_replace_callback($patternSingleService, function ($match) use ($prefix) {
-                return $prefix . '\\' . $match[1];
+                return $prefix . $match[1] . '\\';
             }, $prefixedContents);
 
             return $prefixedContents;
@@ -93,9 +93,7 @@ return [
             }
 
             $contents = ltrim($contents,'#!/usr/bin/env php');
-            $contents = trim($contents);
-
-            return $contents;
+            return trim($contents);
         }
     ],
 
