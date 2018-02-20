@@ -45,6 +45,9 @@ parameters:
         - '#Method Rector\\Rector\\AbstractRector::leaveNode\(\) should return int\|PhpParser\\Node but returns bool#'
         - '#Access to an undefined property PhpParser\\Node\\Expr::\$(name|var)#'
 
+        # part of test
+        - '#Call to an undefined method Nette\\Utils\\Html::add\(\)#'
+
     excludes_analyse:
         # test files
         - '*tests/Rector/Dynamic/MethodNameReplacerRector/wrong/*'
