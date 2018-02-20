@@ -66,9 +66,8 @@
         "build-phar": [
             "@build-phar-install",
             "vendor/bin/php-scoper add-prefix --output-dir=build --force",
-            "composer dump-autoload --working-dir=build --classmap-authoritative --no-dev",
-            "vendor/bin/box build",
-            "rm -rf build"
+            "composer dump-autoload --working-dir=build --optimize",
+            "vendor/bin/box build"
         ],
         "build-phar-install": [
             "if [ ! -d vendor-bin/box ]; then composer bin box require --dev humbug/box:^3.0@dev; fi",
