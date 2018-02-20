@@ -164,6 +164,16 @@ final class MethodNameReplacerRector extends AbstractRector
      */
     private function isMethodName(Node $node, array $types): bool
     {
+        // already covered by previous methods
+        if (! $node instanceof Identifier) {
+            return false;
+        }
+
+        $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
+        if ($parentNode instanceof MethodCall || $parentNode instanceof StaticCall) {
+            return false;
+        }
+
         if (! $this->methodNameAnalyzer->isOverrideOfTypes($node, $types)) {
             return false;
         }
