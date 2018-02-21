@@ -2,12 +2,10 @@
 
 namespace Rector\PharBuilder\Compiler;
 
-use Closure;
 use FilesystemIterator;
 use Phar;
+use Rector\PharBuilder\Filesystem\PharFilesFinder;
 use Seld\PharUtils\Timestamps;
-use Symfony\Component\Finder\Finder;
-use Symfony\Component\Finder\SplFileInfo;
 
 /**
  * 1st step: make hardcoded work
@@ -15,6 +13,16 @@ use Symfony\Component\Finder\SplFileInfo;
  */
 final class Compiler
 {
+    /**
+     * @var PharFilesFinder
+     */
+    private $pharFilesFinder;
+
+    public function __construct(PharFilesFinder $pharFilesFinder)
+    {
+        $this->pharFilesFinder = $pharFilesFinder;
+    }
+
     public function compile(string $buildDir): void
     {
         // flags: KEY_AS_PATHNAME - use relative paths from Finder keys
@@ -22,7 +30,7 @@ final class Compiler
         $phar->setSignatureAlgorithm(Phar::SHA1);
         $phar->startBuffering();
 
-        $finder = $this->createFinderWithAllFiles($buildDir);
+        $finder = $this->pharFilesFinder->createFinderWithAllFiles($buildDir);
         $phar->buildFromIterator($finder->getIterator(), $buildDir);
 
         $this->addRectorBin($phar);
@@ -55,31 +63,5 @@ Phar::mapPhar('rector.phar');
 require 'phar://rector.phar/bin/rector';
 __HALT_COMPILER();
 EOF;
-    }
-
-    private function createFinderWithAllFiles(string $buildDir): Finder
-    {
-        return (new Finder())
-            ->files()
-            ->ignoreVCS(true)
-            ->name('*.{yml,php}')
-            ->in([
-                $buildDir . '/bin',
-                $buildDir . '/src',
-                $buildDir . '/packages',
-                $buildDir . '/vendor',
-            ])
-            ->exclude(['tests', 'docs', 'Tests', 'phpunit'])
-            ->sort($this->sortFilesByName());
-    }
-
-    private function sortFilesByName(): Closure
-    {
-        return function (SplFileInfo $firstFileInfo, SplFileInfo $secondFileInfo) {
-            return strcmp(
-                strtr($firstFileInfo->getRealPath(), '\\', '/'),
-                strtr($secondFileInfo->getRealPath(), '\\', '/')
-            );
-        };
     }
 }
