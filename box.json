@@ -1,16 +1,14 @@
 {
     "chmod": "0755",
-    "base-path": "build",
-    "directories": ["src", "packages"],
     "directories-bin": ["bin"],
+    "shebang": "#!/usr/bin/env php",
     "main": "bin/rector",
     "output": "rector.phar",
-    "stub": "../packages/PharBuilder/Stub.php",
     "finder": [
         {
             "name": "*.{php,yml}",
             "exclude": ["Tests", "tests", "docs"],
-            "in": "vendor"
+            "in": ["vendor", "src", "packages"]
         }
     ],
     "compression": "GZ"

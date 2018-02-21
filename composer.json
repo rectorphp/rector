@@ -28,7 +28,11 @@
         "phpstan/phpstan-shim": "^0.9",
         "phpunit/phpunit": "^7.0",
         "slam/php-cs-fixer-extensions": "^1.13",
-        "tracy/tracy": "^2.4"
+        "symfony/expression-language": "^4.0",
+        "symfony/form": "^4.0",
+        "symplify/coding-standard": "^3.2",
+        "tracy/tracy": "^2.4",
+        "humbug/box": "^3.0@dev"
     },
     "autoload": {
         "psr-4": {
@@ -64,17 +68,7 @@
         ],
         "phpstan": "vendor/bin/phpstan.phar analyse packages src tests --level max --configuration phpstan.neon",
         "build-phar": [
-            "@build-phar-install",
-            "composer install --no-dev",
-            "vendor/bin/php-scoper add-prefix --output-dir=build --force",
-            "chmod +x build/bin/rector",
-            "composer dump-autoload --working-dir=build --optimize",
-            "vendor/bin/box build",
-            "composer install"
-        ],
-        "build-phar-install": [
-            "if [ ! -d vendor-bin/box ]; then composer bin box require --dev humbug/box:^3.0@dev; fi",
-            "if [ ! -d vendor-bin/php-scoper ]; then composer bin php-scoper require --dev humbug/php-scoper:v1.0.x-dev; fi"
+            "vendor/bin/box build"
         ]
     },
     "bin": [
