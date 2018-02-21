@@ -60,6 +60,8 @@ final class Compiler
 
         $timestamps = new Timestamps('rector.phar');
         $timestamps->save('rector.phar', Phar::SHA1);
+
+        $this->symfonyStyle->success(sprintf('Phar file "%s" build successful!', 'rector.phar'));
     }
 
     private function addRectorBin(Phar $phar): void
