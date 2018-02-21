@@ -1,8 +1,6 @@
 <?php declare(strict_types=1);
 
 $possibleAutoloadPaths = [
-    // Is scoped (in PHAR or build directory)
-    __DIR__.'/../scoper-autoload.php',
     // repository
     __DIR__ . '/../vendor/autoload.php',
     // composer require
