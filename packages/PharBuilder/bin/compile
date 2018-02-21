@@ -11,9 +11,10 @@ ini_set('display_errors', '1');
 
 try {
     $container = (new ContainerFactory())->create();
+
     /** @var PharBuilder $pharBuilder */
     $pharBuilder = $container->get(PharBuilder::class);
-    $pharBuilder->build(realpath(__DIR__ . '/../../..'));
+    $pharBuilder->build(dirname(dirname(dirname(__DIR__))));
 } catch (Throwable $exception) {
     echo sprintf(
         'Failed to compile phar: [%s] %s at %s:%d' . PHP_EOL,
