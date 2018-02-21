@@ -1,11 +1,13 @@
 parameters:
     phar_name: 'rector.phar'
+    bin_file_name: 'bin/rector'
 
 services:
     _defaults:
         autowire: true
         bind:
             $pharName: '%phar_name%'
+            $binFileName: '%bin_file_name%'
 
     Rector\PharBuilder\:
         resource: '../'

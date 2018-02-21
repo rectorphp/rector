@@ -25,10 +25,20 @@ final class Compiler
      */
     private $symfonyStyle;
 
-    public function __construct(string $pharName, PharFilesFinder $pharFilesFinder, SymfonyStyle $symfonyStyle)
-    {
+    /**
+     * @var string
+     */
+    private $binFileName;
+
+    public function __construct(
+        string $pharName,
+        string $binFileName,
+        PharFilesFinder $pharFilesFinder,
+        SymfonyStyle $symfonyStyle
+    ) {
         $this->pharName = $pharName;
         $this->pharFilesFinder = $pharFilesFinder;
+        $this->binFileName = $binFileName;
         $this->symfonyStyle = $symfonyStyle;
     }
 
@@ -68,13 +78,13 @@ final class Compiler
 
     private function addRectorBin(Phar $phar): void
     {
-        $content = file_get_contents(__DIR__ . '/../../../../bin/rector');
+        $content = file_get_contents(__DIR__ . '/../../../../' . $this->binFileName);
         // remove shebang from bin, causes errors
         $content = preg_replace('~^#!/usr/bin/env php\s*~', '', $content);
         // replace relative paths by phar paths
         $content = preg_replace("~__DIR__\\s*\\.\\s*'\\/\\.\\.\\/~", "'phar://rector.phar/", $content);
 
-        $phar->addFromString('bin/rector', $content);
+        $phar->addFromString($this->binFileName, $content);
     }
 
     private function getStub(): string
@@ -83,10 +93,10 @@ final class Compiler
 #!/usr/bin/env php
 <?php
 Phar::mapPhar('%s');
-require 'phar://%s/bin/rector';
+require 'phar://%s/%s';
 __HALT_COMPILER();
 EOF;
 
-        return sprintf($stubTemplate, $this->pharName, $this->pharName);
+        return sprintf($stubTemplate, $this->pharName, $this->pharName, $this->binFileName);
     }
 }
