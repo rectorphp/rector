@@ -1,6 +1,11 @@
+parameters:
+    phar_name: 'rector.phar'
+
 services:
     _defaults:
         autowire: true
+        bind:
+            $pharName: '%phar_name%'
 
     Rector\PharBuilder\:
         resource: '../'
