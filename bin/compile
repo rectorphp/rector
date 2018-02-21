@@ -1,0 +1,23 @@
+#!/usr/bin/env php
+<?php declare(strict_types=1);
+
+require __DIR__.'/rector_bootstrap.php';
+
+// @todo: use contsructor injection over statics
+use Rector\PharBuilder\Compiler;
+
+error_reporting(-1);
+ini_set('display_errors', '1');
+
+try {
+    (new Compiler())->compile(realpath(__DIR__ . '/..'));
+} catch (Throwable $exception) {
+    echo sprintf(
+        'Failed to compile phar: [%s] %s at %s:%d' . PHP_EOL,
+        get_class($exception),
+        $exception->getMessage(),
+        $exception->getFile(),
+        $exception->getLine()
+    );
+    exit(1);
+}
