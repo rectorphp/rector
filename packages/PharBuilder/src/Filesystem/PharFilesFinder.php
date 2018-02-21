@@ -8,17 +8,17 @@ use Symfony\Component\Finder\SplFileInfo;
 
 final class PharFilesFinder
 {
-    public function createFinderWithAllFiles(string $buildDir): Finder
+    public function createForDirectory(string $directory): Finder
     {
         return (new Finder())
             ->files()
             ->ignoreVCS(true)
             ->name('*.{yml,php}')
             ->in([
-                $buildDir . '/bin',
-                $buildDir . '/src',
-                $buildDir . '/packages',
-                $buildDir . '/vendor',
+                $directory . '/bin',
+                $directory . '/src',
+                $directory . '/packages',
+                $directory . '/vendor',
             ])
             ->exclude(['tests', 'docs', 'Tests', 'phpunit'])
             ->sort($this->sortFilesByName());

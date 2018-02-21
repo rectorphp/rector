@@ -30,7 +30,7 @@ final class Compiler
         $phar->setSignatureAlgorithm(Phar::SHA1);
         $phar->startBuffering();
 
-        $finder = $this->pharFilesFinder->createFinderWithAllFiles($buildDir);
+        $finder = $this->pharFilesFinder->createForDirectory($buildDir);
         $phar->buildFromIterator($finder->getIterator(), $buildDir);
 
         $this->addRectorBin($phar);
