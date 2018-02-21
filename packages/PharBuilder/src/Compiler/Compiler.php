@@ -12,7 +12,7 @@ use Symfony\Component\Finder\SplFileInfo;
  * 1st step: make hardcoded work
  * 2nd step: make abstract work - use Configuration class to provide all the stuffs
  */
-class Compiler
+final class Compiler
 {
     public function compile(string $buildDir): void
     {
@@ -31,7 +31,6 @@ class Compiler
 
         $phar->setStub($this->getStub());
         $phar->stopBuffering();
-
 
         $timestamps = new Timestamps('rector.phar');
         $timestamps->save('rector.phar', Phar::SHA1);
@@ -63,10 +62,7 @@ EOF;
     {
         // what is this for?
         $finderSort = function (SplFileInfo $a, SplFileInfo $b) {
-            return strcmp(
-                strtr($a->getRealPath(), '\\', '/'),
-                strtr($b->getRealPath(), '\\', '/')
-            );
+            return strcmp(strtr($a->getRealPath(), '\\', '/'), strtr($b->getRealPath(), '\\', '/'));
         };
 
         return (new Finder())
@@ -76,7 +72,7 @@ EOF;
             ->in([
                 $buildDir . '/src',
                 $buildDir . '/packages',
-                $buildDir . '/vendor'
+                $buildDir . '/vendor',
             ])
             ->exclude(['tests', 'docs', 'Tests', 'phpunit'])
             ->sort($finderSort);
