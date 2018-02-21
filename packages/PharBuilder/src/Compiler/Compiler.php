@@ -16,8 +16,6 @@ final class Compiler
 {
     public function compile(string $buildDir): void
     {
-        ini_set('phar.readonly', '0');
-
         // flags: KEY_AS_PATHNAME - use relative paths from Finder keys
         $phar = new Phar('rector.phar', FilesystemIterator::KEY_AS_PATHNAME, 'rector.phar');
         $phar->setSignatureAlgorithm(Phar::SHA1);

@@ -18,6 +18,12 @@ final class PharBuilder
 
     public function build(string $buildDirectory): void
     {
+        $this->init();
         $this->compiler->compile($buildDirectory);
+    }
+
+    private function init(): void
+    {
+        ini_set('phar.readonly', '0');
     }
 }
