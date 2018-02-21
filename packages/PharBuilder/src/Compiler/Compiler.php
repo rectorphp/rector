@@ -82,7 +82,11 @@ final class Compiler
         // remove shebang from bin, causes errors
         $content = preg_replace('~^#!/usr/bin/env php\s*~', '', $content);
         // replace relative paths by phar paths
-        $content = preg_replace("~__DIR__\\s*\\.\\s*'\\/\\.\\.\\/~", "'phar://rector.phar/", $content);
+        $content = preg_replace(
+            "~__DIR__\\s*\\.\\s*'\\/\\.\\.\\/~",
+            sprintf("'phar://%s/", $this->pharName),
+            $content
+        );
 
         $phar->addFromString($this->binFileName, $content);
     }
