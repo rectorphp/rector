@@ -17,6 +17,7 @@
         "phpdocumentor/type-resolver": "^0.4",
         "rector/better-reflection": "^3.0.6",
         "sebastian/diff": "^3.0",
+        "seld/phar-utils": "^1.0",
         "symfony/console": "^4.0",
         "symfony/dependency-injection": "^4.0",
         "symfony/finder": "^4.0",
@@ -31,8 +32,7 @@
         "symfony/expression-language": "^4.0",
         "symfony/form": "^4.0",
         "symplify/coding-standard": "^3.2",
-        "tracy/tracy": "^2.4",
-        "humbug/box": "^3.0@dev"
+        "tracy/tracy": "^2.4"
     },
     "autoload": {
         "psr-4": {
@@ -40,6 +40,7 @@
             "Rector\\BetterReflection\\": "packages/BetterReflection/src",
             "Rector\\ConsoleDiffer\\": "packages/ConsoleDiffer/src",
             "Rector\\RectorBuilder\\": "packages/RectorBuilder/src",
+            "Rector\\PharBuilder\\": "packages/PharBuilder/src",
             "Rector\\ReflectionDocBlock\\": "packages/ReflectionDocBlock/src",
             "Rector\\NodeTypeResolver\\": "packages/NodeTypeResolver/src",
             "Rector\\NodeTraverserQueue\\": "packages/NodeTraverserQueue/src"
