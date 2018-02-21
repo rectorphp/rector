@@ -1,5 +1,5 @@
 #!/usr/bin/env php
-<?php
+<?php declare(strict_types=1);
 
 use Rector\Console\Application;
 use Rector\DependencyInjection\ContainerFactory;
