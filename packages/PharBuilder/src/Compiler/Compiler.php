@@ -6,6 +6,7 @@ use FilesystemIterator;
 use Phar;
 use Rector\PharBuilder\Filesystem\PharFilesFinder;
 use Seld\PharUtils\Timestamps;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * 1st step: make hardcoded work
@@ -18,24 +19,42 @@ final class Compiler
      */
     private $pharFilesFinder;
 
-    public function __construct(PharFilesFinder $pharFilesFinder)
+    /**
+     * @var SymfonyStyle
+     */
+    private $symfonyStyle;
+
+    public function __construct(PharFilesFinder $pharFilesFinder, SymfonyStyle $symfonyStyle)
     {
         $this->pharFilesFinder = $pharFilesFinder;
+        $this->symfonyStyle = $symfonyStyle;
     }
 
     public function compile(string $buildDir): void
     {
+        $this->symfonyStyle->note('Starting PHAR build');
+
         // flags: KEY_AS_PATHNAME - use relative paths from Finder keys
         $phar = new Phar('rector.phar', FilesystemIterator::KEY_AS_PATHNAME, 'rector.phar');
         $phar->setSignatureAlgorithm(Phar::SHA1);
         $phar->startBuffering();
 
         $finder = $this->pharFilesFinder->createForDirectory($buildDir);
-        $phar->buildFromIterator($finder->getIterator(), $buildDir);
 
+        $this->symfonyStyle->note('Adding files');
+        $fileCount = count(iterator_to_array($finder->getIterator()));
+        $this->symfonyStyle->progressStart($fileCount);
+
+        foreach ($finder as $relativeFilePath => $splFileInfo) {
+            $phar->addFile($relativeFilePath);
+            $this->symfonyStyle->progressAdvance();
+        }
+
+        $this->symfonyStyle->note('Adding bin');
         $this->addRectorBin($phar);
         $phar->compress(Phar::GZ);
 
+        $this->symfonyStyle->note('Setting stub');
         $phar->setStub($this->getStub());
         $phar->stopBuffering();
 

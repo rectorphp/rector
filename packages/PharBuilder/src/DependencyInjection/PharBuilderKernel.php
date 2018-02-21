@@ -11,7 +11,7 @@ final class PharBuilderKernel extends Kernel
     public function __construct()
     {
         // debug: true is require to invalidate container on service files change
-        parent::__construct('cli', true);
+        parent::__construct('cli' . random_int(1, 1000), true);
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader): void

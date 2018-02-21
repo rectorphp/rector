@@ -1,6 +1,10 @@
 services:
+    _defaults:
+        autowire: true
+
     Rector\PharBuilder\:
-        resource: /..
+        resource: '../'
+        public: true
 
     # Symfony\Console
     Symfony\Component\Console\Style\SymfonyStyle:
