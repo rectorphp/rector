@@ -3,7 +3,6 @@
 !/temp/.gitkeep
 /example
 /vendor
-/vendor-bin
 composer.lock
 
 # phar related
