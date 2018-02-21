@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\PharBuilder;
+namespace Rector\PharBuilder\Compiler;
 
 use FilesystemIterator;
 use Phar;
@@ -61,8 +61,11 @@ EOF;
     private function createFinderWithAllFiles(string $buildDir): Finder
     {
         // what is this for?
-        $finderSort = function (SplFileInfo $a, SplFileInfo $b) {
-            return strcmp(strtr($a->getRealPath(), '\\', '/'), strtr($b->getRealPath(), '\\', '/'));
+        $finderSort = function (SplFileInfo $firstFileInfo, SplFileInfo $secondFileInfo) {
+            return strcmp(
+                strtr($firstFileInfo->getRealPath(), '\\', '/'),
+                strtr($secondFileInfo->getRealPath(), '\\', '/')
+            );
         };
 
         return (new Finder())
@@ -70,12 +73,12 @@ EOF;
             ->ignoreVCS(true)
             ->name('*.{yml,php}')
             ->in([
+                $buildDir . '/bin',
                 $buildDir . '/src',
                 $buildDir . '/packages',
                 $buildDir . '/vendor',
             ])
             ->exclude(['tests', 'docs', 'Tests', 'phpunit'])
             ->sort($finderSort);
-//            ->append(['bin/rector_bootstrap.php']);
     }
 }

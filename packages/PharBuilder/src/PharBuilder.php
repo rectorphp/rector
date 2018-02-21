@@ -2,6 +2,8 @@
 
 namespace Rector\PharBuilder;
 
+use Rector\PharBuilder\Compiler\Compiler;
+
 final class PharBuilder
 {
     /**
