@@ -28,7 +28,7 @@ final class MethodNameReplacerRectorTest extends AbstractRectorTestCase
             [__DIR__ . '/Wrong/wrong6.php.inc', __DIR__ . '/Correct/correct6.php.inc'],
             [__DIR__ . '/Wrong/wrong7.php.inc', __DIR__ . '/Correct/correct7.php.inc'],
             [__DIR__ . '/Wrong/SomeClass.php', __DIR__ . '/Correct/SomeClass.php'],
-                ubtree-split-master-and-last-tag.s        ];
+        ];
     }
 
     protected function provideConfig(): string
