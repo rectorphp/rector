@@ -2,6 +2,7 @@
 
 namespace Rector\PharBuilder\Compiler;
 
+use Closure;
 use FilesystemIterator;
 use Phar;
 use Seld\PharUtils\Timestamps;
@@ -58,14 +59,6 @@ EOF;
 
     private function createFinderWithAllFiles(string $buildDir): Finder
     {
-        // what is this for?
-        $finderSort = function (SplFileInfo $firstFileInfo, SplFileInfo $secondFileInfo) {
-            return strcmp(
-                strtr($firstFileInfo->getRealPath(), '\\', '/'),
-                strtr($secondFileInfo->getRealPath(), '\\', '/')
-            );
-        };
-
         return (new Finder())
             ->files()
             ->ignoreVCS(true)
@@ -77,6 +70,16 @@ EOF;
                 $buildDir . '/vendor',
             ])
             ->exclude(['tests', 'docs', 'Tests', 'phpunit'])
-            ->sort($finderSort);
+            ->sort($this->sortFilesByName());
+    }
+
+    private function sortFilesByName(): Closure
+    {
+        return function (SplFileInfo $firstFileInfo, SplFileInfo $secondFileInfo) {
+            return strcmp(
+                strtr($firstFileInfo->getRealPath(), '\\', '/'),
+                strtr($secondFileInfo->getRealPath(), '\\', '/')
+            );
+        };
     }
 }
