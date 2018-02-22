@@ -7,6 +7,7 @@ use Phar;
 use Rector\PharBuilder\Filesystem\PharFilesFinder;
 use Seld\PharUtils\Timestamps;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\Process\Process;
 
 final class Compiler
@@ -68,10 +69,7 @@ final class Compiler
         $fileCount = count(iterator_to_array($finder->getIterator()));
         $this->symfonyStyle->progressStart($fileCount);
 
-        foreach ($finder as $relativeFilePath => $splFileInfo) {
-            $phar->addFile($relativeFilePath);
-            $this->symfonyStyle->progressAdvance();
-        }
+        $this->addFinderFilesToPhar($finder, $phar);
 
         $this->symfonyStyle->newLine(2);
         $this->symfonyStyle->note('Adding bin');
@@ -123,5 +121,13 @@ EOF;
     private function removeShebang(string $content): string
     {
         return preg_replace('~^#!/usr/bin/env php\s*~', '', $content);
+    }
+
+    private function addFinderFilesToPhar(Finder $finder, Phar $phar): void
+    {
+        foreach ($finder as $relativeFilePath => $splFileInfo) {
+            $phar->addFile($relativeFilePath);
+            $this->symfonyStyle->progressAdvance();
+        }
     }
 }
