@@ -17,7 +17,7 @@ final class PathNormalizer
     public function normalizeAbsoluteToPharInContent(string $content): string
     {
         return preg_replace(
-            "~__DIR__\\s*\\.\\s*'\\/\\.\\.\\/~",
+            "#__DIR__\\s*\\.\\s*'\\/\\.\\.\\/#",
             sprintf("'phar://%s/", $this->pharName),
             $content
         );
