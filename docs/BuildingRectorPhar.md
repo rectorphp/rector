@@ -1,4 +1,4 @@
-# 3 Steps to Build PHAR
+# [WIP] 3 Steps to Build PHAR
 
 To build `rector.phar` just run:
 
