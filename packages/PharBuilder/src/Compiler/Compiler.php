@@ -4,6 +4,7 @@ namespace Rector\PharBuilder\Compiler;
 
 use FilesystemIterator;
 use Phar;
+use Rector\PharBuilder\Exception\BinFileNotFoundException;
 use Rector\PharBuilder\Filesystem\PharFilesFinder;
 use Seld\PharUtils\Timestamps;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -44,7 +45,7 @@ final class Compiler
         $this->symfonyStyle = $symfonyStyle;
     }
 
-    public function compile(string $buildDir): void
+    public function compile(string $buildDirectory): void
     {
         $this->symfonyStyle->note('Starting PHAR build');
 
@@ -55,25 +56,24 @@ final class Compiler
 
         // use only dev deps + rebuild dump autoload
         $this->symfonyStyle->note('Removing dev packages from composer');
-        $process = new Process('composer update --no-dev', $buildDir);
+        $process = new Process('composer update --no-dev', $buildDirectory);
         $process->run();
 
         // dump autoload
         $this->symfonyStyle->note('Dumping new composer autoload');
-        $process = new Process('composer dump-autoload --optimize', $buildDir);
+        $process = new Process('composer dump-autoload --optimize', $buildDirectory);
         $process->run();
 
-        $finder = $this->pharFilesFinder->createForDirectory($buildDir);
+        $finder = $this->pharFilesFinder->createForDirectory($buildDirectory);
 
         $this->symfonyStyle->note('Adding files');
-        $fileCount = count(iterator_to_array($finder->getIterator()));
-        $this->symfonyStyle->progressStart($fileCount);
+        $this->symfonyStyle->progressStart($this->getFileCountFromFinder($finder));
 
-        $this->addFinderFilesToPhar($finder, $phar);
+//        $this->addFinderFilesToPhar($finder, $phar);
 
         $this->symfonyStyle->newLine(2);
         $this->symfonyStyle->note('Adding bin');
-        $this->addRectorBin($phar);
+        $this->addRectorBin($phar, $buildDirectory);
 
         $this->symfonyStyle->note('Setting stub');
         $phar->setStub($this->getStub());
@@ -84,17 +84,21 @@ final class Compiler
 
         // return dev deps
         $this->symfonyStyle->note('Returning dev packages to composer');
-        $process = new Process('composer update', $buildDir);
+        $process = new Process('composer update', $buildDirectory);
         $process->run();
 
         $this->symfonyStyle->success(sprintf('Phar file "%s" build successful!', $this->pharName));
     }
 
-    private function addRectorBin(Phar $phar): void
+    private function addRectorBin(Phar $phar, string $buildDirectory): void
     {
-        $content = file_get_contents(__DIR__ . '/../../../../' . $this->binFileName);
+        $binFilePath = $buildDirectory . DIRECTORY_SEPARATOR . $this->binFileName;
+        $this->ensureBinFileExists($binFilePath);
+
+        $content = file_get_contents($binFilePath);
         $content = $this->removeShebang($content);
-        // replace relative paths by phar paths
+
+        // replace absolute paths by phar:// paths
         $content = preg_replace(
             "~__DIR__\\s*\\.\\s*'\\/\\.\\.\\/~",
             sprintf("'phar://%s/", $this->pharName),
@@ -127,6 +131,21 @@ EOF;
         foreach ($finder as $relativeFilePath => $splFileInfo) {
             $phar->addFile($relativeFilePath);
             $this->symfonyStyle->progressAdvance();
+        }
+    }
+
+    private function getFileCountFromFinder(Finder $finder): int
+    {
+        return count(iterator_to_array($finder->getIterator()));
+    }
+
+    private function ensureBinFileExists($binFilePath): void
+    {
+        if (!file_exists($binFilePath)) {
+            throw new BinFileNotFoundException(sprintf(
+                'Bin file not found in "%s". Have you set it up in config.yml file?',
+                $binFilePath
+            ));
         }
     }
 }
