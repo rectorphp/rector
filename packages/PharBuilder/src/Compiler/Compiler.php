@@ -39,6 +39,7 @@ final class Compiler
      * @var PathNormalizer
      */
     private $pathNormalizer;
+
     /**
      * @var FinderToPharAdder
      */
