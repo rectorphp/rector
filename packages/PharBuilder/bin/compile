@@ -5,6 +5,7 @@ require_once __DIR__ . '/../../../vendor/autoload.php';
 
 use Rector\PharBuilder\DependencyInjection\ContainerFactory;
 use Rector\PharBuilder\PharBuilder;
+use Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
 
 error_reporting(-1);
 ini_set('display_errors', '1');
@@ -16,12 +17,12 @@ try {
     $pharBuilder = $container->get(PharBuilder::class);
     $pharBuilder->build(dirname(dirname(dirname(__DIR__))));
 } catch (Throwable $exception) {
-    echo sprintf(
-        'Failed to compile phar: [%s] %s at %s:%d' . PHP_EOL,
-        get_class($exception),
-        $exception->getMessage(),
-        $exception->getFile(),
-        $exception->getLine()
-    );
-    exit(1);
+    $symfonyStyle = SymfonyStyleFactory::create();
+    $symfonyStyle->error(sprintf(
+        '%s in %s on line %d',
+        $throwable->getMessage(),
+        $throwable->getFile(),
+        $throwable->getLine()
+    ));
+    exit($throwable->getCode());
 }
