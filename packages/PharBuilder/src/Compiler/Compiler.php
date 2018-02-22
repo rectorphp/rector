@@ -7,6 +7,7 @@ use Phar;
 use Rector\PharBuilder\Exception\BinFileNotFoundException;
 use Rector\PharBuilder\Filesystem\PathNormalizer;
 use Rector\PharBuilder\Filesystem\PharFilesFinder;
+use Rector\PharBuilder\FinderToPharAdder;
 use Seld\PharUtils\Timestamps;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Finder\Finder;
@@ -38,19 +39,25 @@ final class Compiler
      * @var PathNormalizer
      */
     private $pathNormalizer;
+    /**
+     * @var FinderToPharAdder
+     */
+    private $finderToPharAdder;
 
     public function __construct(
         string $pharName,
         string $binFileName,
         PharFilesFinder $pharFilesFinder,
         SymfonyStyle $symfonyStyle,
-        PathNormalizer $pathNormalizer
+        PathNormalizer $pathNormalizer,
+        FinderToPharAdder $finderToPharAdder
     ) {
         $this->pharName = $pharName;
         $this->pharFilesFinder = $pharFilesFinder;
         $this->binFileName = $binFileName;
         $this->symfonyStyle = $symfonyStyle;
         $this->pathNormalizer = $pathNormalizer;
+        $this->finderToPharAdder = $finderToPharAdder;
     }
 
     public function compile(string $buildDirectory): void
@@ -77,7 +84,7 @@ final class Compiler
         $this->symfonyStyle->note('Adding files');
         $this->symfonyStyle->progressStart($this->getFileCountFromFinder($finder));
 
-//        $this->addFinderFilesToPhar($finder, $phar);
+        $this->finderToPharAdder->addFinderToPhar($finder, $phar);
 
         $this->symfonyStyle->newLine(2);
         $this->symfonyStyle->note('Adding bin');
@@ -128,14 +135,6 @@ EOF;
     private function removeShebang(string $content): string
     {
         return preg_replace('~^#!/usr/bin/env php\s*~', '', $content);
-    }
-
-    private function addFinderFilesToPhar(Finder $finder, Phar $phar): void
-    {
-        foreach ($finder as $relativeFilePath => $splFileInfo) {
-            $phar->addFile($relativeFilePath);
-            $this->symfonyStyle->progressAdvance();
-        }
     }
 
     private function getFileCountFromFinder(Finder $finder): int

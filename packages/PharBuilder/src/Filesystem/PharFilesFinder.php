@@ -18,7 +18,7 @@ final class PharFilesFinder
                 $directory . '/bin',
                 $directory . '/src',
                 $directory . '/packages',
-                $directory . '/vendor',
+//                $directory . '/vendor',
             ])
             ->exclude(['tests', 'docs', 'Tests', 'phpunit'])
             ->sort($this->sortFilesByName());
