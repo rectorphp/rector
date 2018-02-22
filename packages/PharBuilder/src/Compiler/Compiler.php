@@ -5,6 +5,7 @@ namespace Rector\PharBuilder\Compiler;
 use FilesystemIterator;
 use Phar;
 use Rector\PharBuilder\Exception\BinFileNotFoundException;
+use Rector\PharBuilder\Filesystem\PathNormalizer;
 use Rector\PharBuilder\Filesystem\PharFilesFinder;
 use Seld\PharUtils\Timestamps;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -33,16 +34,23 @@ final class Compiler
      */
     private $binFileName;
 
+    /**
+     * @var PathNormalizer
+     */
+    private $pathNormalizer;
+
     public function __construct(
         string $pharName,
         string $binFileName,
         PharFilesFinder $pharFilesFinder,
-        SymfonyStyle $symfonyStyle
+        SymfonyStyle $symfonyStyle,
+        PathNormalizer $pathNormalizer
     ) {
         $this->pharName = $pharName;
         $this->pharFilesFinder = $pharFilesFinder;
         $this->binFileName = $binFileName;
         $this->symfonyStyle = $symfonyStyle;
+        $this->pathNormalizer = $pathNormalizer;
     }
 
     public function compile(string $buildDirectory): void
@@ -99,11 +107,7 @@ final class Compiler
         $content = $this->removeShebang($content);
 
         // replace absolute paths by phar:// paths
-        $content = preg_replace(
-            "~__DIR__\\s*\\.\\s*'\\/\\.\\.\\/~",
-            sprintf("'phar://%s/", $this->pharName),
-            $content
-        );
+        $content = $this->pathNormalizer->normalizeAbsoluteToPharInContent($content);
 
         $phar->addFromString($this->binFileName, $content);
     }
@@ -139,13 +143,15 @@ EOF;
         return count(iterator_to_array($finder->getIterator()));
     }
 
-    private function ensureBinFileExists($binFilePath): void
+    private function ensureBinFileExists(string $binFilePath): void
     {
-        if (!file_exists($binFilePath)) {
-            throw new BinFileNotFoundException(sprintf(
-                'Bin file not found in "%s". Have you set it up in config.yml file?',
-                $binFilePath
-            ));
+        if (file_exists($binFilePath)) {
+            return;
         }
+
+        throw new BinFileNotFoundException(sprintf(
+            'Bin file not found in "%s". Have you set it up in config.yml file?',
+            $binFilePath
+        ));
     }
 }
