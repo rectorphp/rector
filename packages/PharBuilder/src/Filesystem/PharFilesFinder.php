@@ -14,12 +14,9 @@ final class PharFilesFinder
             ->files()
             ->ignoreVCS(true)
             ->name('*.{yml,php}')
-            ->in([
-                $directory . '/bin',
-                $directory . '/src',
-                $directory . '/packages',
-//                $directory . '/vendor',
-            ])
+            // "in()" and "path()" have to be split to make SplFileInfo "getRelativePathname()" get path from $directory
+            ->in($directory)
+            ->path('/bin|/src|/packages|/vendor')
             ->exclude(['tests', 'docs', 'Tests', 'phpunit'])
             ->sort($this->sortFilesByName());
     }
