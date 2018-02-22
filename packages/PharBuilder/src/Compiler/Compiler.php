@@ -53,7 +53,13 @@ final class Compiler
         $phar->startBuffering();
 
         // use only dev deps + rebuild dump autoload
+        $this->symfonyStyle->note('Removing dev packages from composer');
         $process = new Process('composer update --no-dev', $buildDir);
+        $process->run();
+
+        // dump autoload
+        $this->symfonyStyle->note('Dumping new composer autoload');
+        $process = new Process('composer dump-autoload --optimize', $buildDir);
         $process->run();
 
         $finder = $this->pharFilesFinder->createForDirectory($buildDir);
@@ -67,6 +73,7 @@ final class Compiler
             $this->symfonyStyle->progressAdvance();
         }
 
+        $this->symfonyStyle->newLine(2);
         $this->symfonyStyle->note('Adding bin');
         $this->addRectorBin($phar);
         $phar->compress(Phar::GZ);
@@ -79,6 +86,7 @@ final class Compiler
         $timestamps->save($this->pharName, Phar::SHA1);
 
         // return dev deps
+        $this->symfonyStyle->note('Returning dev packages to composer');
         $process = new Process('composer update', $buildDir);
         $process->run();
 
@@ -88,8 +96,7 @@ final class Compiler
     private function addRectorBin(Phar $phar): void
     {
         $content = file_get_contents(__DIR__ . '/../../../../' . $this->binFileName);
-        // remove shebang from bin, causes errors
-        $content = preg_replace('~^#!/usr/bin/env php\s*~', '', $content);
+        $content = $this->removeShebang($content);
         // replace relative paths by phar paths
         $content = preg_replace(
             "~__DIR__\\s*\\.\\s*'\\/\\.\\.\\/~",
@@ -111,5 +118,10 @@ __HALT_COMPILER();
 EOF;
 
         return sprintf($stubTemplate, $this->pharName, $this->pharName, $this->binFileName);
+    }
+
+    private function removeShebang(string $content): string
+    {
+        return preg_replace('~^#!/usr/bin/env php\s*~', '', $content);
     }
 }
