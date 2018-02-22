@@ -4,7 +4,9 @@
 require_once __DIR__ . '/../../../vendor/autoload.php';
 
 use Rector\PharBuilder\DependencyInjection\ContainerFactory;
-use Rector\PharBuilder\PharBuilder;
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
 
 error_reporting(-1);
@@ -13,10 +15,16 @@ ini_set('display_errors', '1');
 try {
     $container = (new ContainerFactory())->create();
 
-    /** @var PharBuilder $pharBuilder */
-    $pharBuilder = $container->get(PharBuilder::class);
-    $pharBuilder->build(dirname(dirname(dirname(__DIR__))));
-} catch (Throwable $exception) {
+    // 3. Run Console Application
+    /** @var Application $application */
+    $application = $container->get(Application::class);
+    /** @var InputInterface $input */
+    $input = $container->get(InputInterface::class);
+    /** @var OutputInterface $output */
+    $output = $container->get(OutputInterface::class);
+    $statusCode = $application->run($input, $output);
+    exit($statusCode);
+} catch (Throwable $throwable) {
     $symfonyStyle = SymfonyStyleFactory::create();
     $symfonyStyle->error(sprintf(
         '%s in %s on line %d',

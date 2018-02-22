@@ -44,10 +44,15 @@ final class Compiler
      * @var FinderToPharAdder
      */
     private $finderToPharAdder;
+    /**
+     * @var string
+     */
+    private $buildDirectory;
 
     public function __construct(
         string $pharName,
         string $binFileName,
+        string $buildDirectory,
         PharFilesFinder $pharFilesFinder,
         SymfonyStyle $symfonyStyle,
         PathNormalizer $pathNormalizer,
@@ -59,11 +64,12 @@ final class Compiler
         $this->symfonyStyle = $symfonyStyle;
         $this->pathNormalizer = $pathNormalizer;
         $this->finderToPharAdder = $finderToPharAdder;
+        $this->buildDirectory = realpath($buildDirectory);
     }
 
-    public function compile(string $buildDirectory): void
+    public function compile(): void
     {
-        $this->symfonyStyle->note('Starting PHAR build');
+        $this->symfonyStyle->note(sprintf('Starting PHAR build in "%s" directory', $this->buildDirectory));
 
         // flags: KEY_AS_PATHNAME - use relative paths from Finder keys
         $phar = new Phar($this->pharName, FilesystemIterator::KEY_AS_PATHNAME, $this->pharName);
@@ -71,25 +77,26 @@ final class Compiler
         $phar->startBuffering();
 
         // use only dev deps + rebuild dump autoload
-        $this->symfonyStyle->note('Removing dev packages from composer');
-        $process = new Process('composer update --no-dev', $buildDirectory);
-        $process->run();
+//        $this->symfonyStyle->note('Removing dev packages from composer');
+//        $process = new Process('composer update --no-dev', $buildDirectory);
+//        $process->run();
 
         // dump autoload
-        $this->symfonyStyle->note('Dumping new composer autoload');
-        $process = new Process('composer dump-autoload --optimize', $buildDirectory);
-        $process->run();
+//        $this->symfonyStyle->note('Dumping new composer autoload');
+//        $process = new Process('composer dump-autoload --optimize', $buildDirectory);
+//        $process->run();
 
-        $finder = $this->pharFilesFinder->createForDirectory($buildDirectory);
+        $finder = $this->pharFilesFinder->createForDirectory($this->buildDirectory);
 
-        $this->symfonyStyle->note('Adding files');
-        $this->symfonyStyle->progressStart($this->getFileCountFromFinder($finder));
+        $fileCount = $this->getFileCountFromFinder($finder);
+        $this->symfonyStyle->note(sprintf('Adding %d files', $fileCount));
+        $this->symfonyStyle->progressStart($fileCount);
 
         $this->finderToPharAdder->addFinderToPhar($finder, $phar);
 
         $this->symfonyStyle->newLine(2);
         $this->symfonyStyle->note('Adding bin');
-        $this->addRectorBin($phar, $buildDirectory);
+        $this->addRectorBin($phar, $this->buildDirectory);
 
         $this->symfonyStyle->note('Setting stub');
         $phar->setStub($this->getStub());
@@ -99,9 +106,9 @@ final class Compiler
         $timestamps->save($this->pharName, Phar::SHA1);
 
         // return dev deps
-        $this->symfonyStyle->note('Returning dev packages to composer');
-        $process = new Process('composer update', $buildDirectory);
-        $process->run();
+//        $this->symfonyStyle->note('Returning dev packages to composer');
+//        $process = new Process('composer update', $buildDirectory);
+//        $process->run();
 
         $this->symfonyStyle->success(sprintf('Phar file "%s" build successful!', $this->pharName));
     }

@@ -2,6 +2,7 @@ parameters:
     # customizable (via %ENV()?)
     pharName: 'rector.phar'
     binFileName: 'bin/rector'
+    buildDirectory: '%kernel.root_dir%/../../../..'
 
 services:
     _defaults:
@@ -9,11 +10,26 @@ services:
         bind:
             $pharName: '%pharName%'
             $binFileName: '%binFileName%'
+            $buildDirectory: '%buildDirectory%'
+        # for "bin/compile" fetching
+        public: true
 
     Rector\PharBuilder\:
         resource: '../'
-        public: true
 
     # Symfony\Console
+    Symfony\Component\Console\Application:
+        calls:
+            - ['add', ['@Rector\PharBuilder\Command\CompileCommand']]
+            - ['setDefaultCommand', ['compile', true]]
+
     Symfony\Component\Console\Style\SymfonyStyle:
         factory: ['Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory', 'create']
+
+    Symfony\Component\Console\Input\ArgvInput: ~
+    Symfony\Component\Console\Input\InputInterface:
+        alias: Symfony\Component\Console\Input\ArgvInput
+
+    Symfony\Component\Console\Output\ConsoleOutput: ~
+    Symfony\Component\Console\Output\OutputInterface:
+        alias: Symfony\Component\Console\Output\ConsoleOutput

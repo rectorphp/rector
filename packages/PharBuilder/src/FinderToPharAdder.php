@@ -21,8 +21,13 @@ final class FinderToPharAdder
     public function addFinderToPhar(Finder $finder, Phar $phar): void
     {
         foreach ($finder as $fileInfo) {
+            if ($this->symfonyStyle->isVerbose()) {
+                $this->symfonyStyle->note(sprintf('Adding "%s" file', $fileInfo->getRelativePathname()));
+            } else {
+                $this->symfonyStyle->progressAdvance();
+            }
+
             $phar->addFromString($fileInfo->getRelativePathname(), $fileInfo->getContents());
-            $this->symfonyStyle->progressAdvance();
         }
     }
 }
