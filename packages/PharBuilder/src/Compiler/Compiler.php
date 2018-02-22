@@ -74,7 +74,6 @@ final class Compiler
         $this->symfonyStyle->newLine(2);
         $this->symfonyStyle->note('Adding bin');
         $this->addRectorBin($phar);
-        $phar->compress(Phar::GZ);
 
         $this->symfonyStyle->note('Setting stub');
         $phar->setStub($this->getStub());
