@@ -6,7 +6,7 @@
     verbose="true"
 >
     <testsuites>
-        <testsuite>
+        <testsuite name="all-except-phar">
             <directory>tests</directory>
             <directory>packages/*/tests</directory>
             <exclude>tests/Phar</exclude>
