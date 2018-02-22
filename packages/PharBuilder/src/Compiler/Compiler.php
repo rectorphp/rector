@@ -7,6 +7,7 @@ use Phar;
 use Rector\PharBuilder\Filesystem\PharFilesFinder;
 use Seld\PharUtils\Timestamps;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Process\Process;
 
 final class Compiler
 {
@@ -51,6 +52,10 @@ final class Compiler
         $phar->setSignatureAlgorithm(Phar::SHA1);
         $phar->startBuffering();
 
+        // use only dev deps + rebuild dump autoload
+        $process = new Process('composer update --no-dev', $buildDir);
+        $process->run();
+
         $finder = $this->pharFilesFinder->createForDirectory($buildDir);
 
         $this->symfonyStyle->note('Adding files');
@@ -72,6 +77,10 @@ final class Compiler
 
         $timestamps = new Timestamps($this->pharName);
         $timestamps->save($this->pharName, Phar::SHA1);
+
+        // return dev deps
+        $process = new Process('composer update', $buildDir);
+        $process->run();
 
         $this->symfonyStyle->success(sprintf('Phar file "%s" build successful!', $this->pharName));
     }
