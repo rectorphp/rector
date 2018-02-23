@@ -1,0 +1,5 @@
+rectors:
+
+      factory: [
+          '@RectorBuilder
+      ]

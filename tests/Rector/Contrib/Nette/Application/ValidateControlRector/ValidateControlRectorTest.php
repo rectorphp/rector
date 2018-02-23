@@ -3,9 +3,10 @@
 namespace Rector\Tests\Rector\Contrib\Nette\Application\ValidateControlRector;
 
 use Rector\Rector\Contrib\Nette\Application\ValidateControlRector;
+use Rector\Testing\PHPUnit\AbstractConfigurableRectorTestCase;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class ValidateControlRectorTest extends AbstractRectorTestCase
+final class ValidateControlRectorTest extends AbstractConfigurableRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()
@@ -31,5 +32,10 @@ final class ValidateControlRectorTest extends AbstractRectorTestCase
     protected function getRectorClasses(): array
     {
         return [ValidateControlRector::class];
+    }
+
+    protected function provideConfig(): string
+    {
+        return __DIR__ . '/config/rector.yml';
     }
 }
