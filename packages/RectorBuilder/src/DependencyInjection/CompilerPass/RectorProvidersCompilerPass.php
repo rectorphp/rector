@@ -2,6 +2,7 @@
 
 namespace Rector\RectorBuilder\DependencyInjection\CompilerPass;
 
+use Rector\NodeTraverser\RectorNodeTraverser;
 use Rector\Rector\RectorCollector;
 use Rector\RectorBuilder\Contract\RectorProviderInterface;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
@@ -14,14 +15,18 @@ final class RectorProvidersCompilerPass implements CompilerPassInterface
     public function process(ContainerBuilder $containerBuilder): void
     {
         $rectorCollectorDefinition = DefinitionFinder::getByType($containerBuilder, RectorCollector::class);
+        $rectorNodeTraverserDefinition = DefinitionFinder::getByType($containerBuilder, RectorNodeTraverser::class);
+
         $rectorProviderDefinitions = DefinitionFinder::findAllByType($containerBuilder, RectorProviderInterface::class);
 
         // see https://symfony.com/doc/current/service_container/expression_language.html
         foreach ($rectorProviderDefinitions as $rectorProviderDefinition) {
-            $methodCallArgument = new Expression(
+            $rectorService = new Expression(
                 sprintf('service("%s").provide()', addslashes($rectorProviderDefinition->getClass()))
             );
-            $rectorCollectorDefinition->addMethodCall('addRector', [$methodCallArgument]);
+
+            $rectorCollectorDefinition->addMethodCall('addRector', [$rectorService]);
+            $rectorNodeTraverserDefinition->addMethodCall('addVisitor', [$rectorService]);
         }
     }
 }
