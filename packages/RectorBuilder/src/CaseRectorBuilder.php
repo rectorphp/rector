@@ -3,6 +3,8 @@
 namespace Rector\RectorBuilder;
 
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
+use Rector\NodeChanger\ExpressionAdder;
+use Rector\NodeChanger\PropertyAdder;
 
 final class CaseRectorBuilder
 {
@@ -16,9 +18,21 @@ final class CaseRectorBuilder
      */
     private $methodCallAnalyzer;
 
-    public function __construct(MethodCallAnalyzer $methodCallAnalyzer)
+    /**
+     * @var ExpressionAdder
+     */
+    private $expressionAdder;
+
+    /**
+     * @var PropertyAdder
+     */
+    private $propertyAdder;
+
+    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, ExpressionAdder $expressionAdder, PropertyAdder $propertyAdder)
     {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
+        $this->expressionAdder = $expressionAdder;
+        $this->propertyAdder = $propertyAdder;
     }
 
     public function matchMethodCallByType(string $methodCallType): self
@@ -59,6 +73,12 @@ final class CaseRectorBuilder
             return $this->caseRector;
         }
 
-        return $this->caseRector = new CaseRector($this->methodCallAnalyzer);
+        $this->caseRector = new CaseRector($this->methodCallAnalyzer);
+
+        // @required setter DI replacement
+        $this->caseRector->setExpressionAdder($this->expressionAdder);
+        $this->caseRector->setPropertyToClassAdder($this->propertyAdder);
+
+        return $this->caseRector;
     }
 }
