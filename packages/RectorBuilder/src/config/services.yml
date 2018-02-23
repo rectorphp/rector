@@ -3,5 +3,5 @@ services:
         autowire: true
 
     Rector\RectorBuilder\:
-        resource: '../'
-        exclude: '../{BuilderRector.php}'
+        resource: ..
+        exclude: ../{CaseRector.php}

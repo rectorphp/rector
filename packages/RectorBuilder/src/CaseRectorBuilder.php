@@ -26,6 +26,16 @@ final class CaseRectorBuilder
      */
     private $newArguments = [];
 
+    /**
+     * @var CaseRector
+     */
+    private $caseRector;
+
+    public function __construct(CaseRector $caseRector)
+    {
+        $this->caseRector = $caseRector;
+    }
+
     public function matchMethodCallByType(string $type): self
     {
         $this->type = $type;
@@ -56,9 +66,10 @@ final class CaseRectorBuilder
 
     public function create(): RectorInterface
     {
-        // $caseRector = new CaseRector()
+        $caseRector = clone $this->caseRector;
 
-        dump('the work :)');
-        die;
+        // @todo: configure by all that has been setup here
+
+        return $caseRector;
     }
 }

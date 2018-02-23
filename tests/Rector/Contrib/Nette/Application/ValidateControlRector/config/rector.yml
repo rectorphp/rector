@@ -1,5 +1,2 @@
-rectors:
-
-      factory: [
-          '@RectorBuilder
-      ]
+services:
+    Rector\Tests\Rector\Contrib\Nette\Application\ValidateControlRector\RectorProvider: ~
