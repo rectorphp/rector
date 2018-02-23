@@ -58,6 +58,11 @@ final class OptionNameRector extends AbstractRector
         /** @var MethodCall $argParentNode */
         $methodCallNode = $argParentNode->getAttribute(Attribute::PARENT_NODE);
 
+        /** @var MethodCall|Node $methodCallNode */
+        if (! $methodCallNode instanceof MethodCall) {
+            return false;
+        }
+
         return $methodCallNode->name->toString() === 'add';
     }
 

@@ -56,6 +56,10 @@ parameters:
             # intentionally
             - packages/BetterReflection/src/Reflector/SmartClassReflector.php
 
+        Symplify\CodingStandard\Sniffs\Architecture\ExplicitExceptionSniff:
+            # before composer/autoload.php Exception
+            - bin/rector_bootstrap.php
+
     skip_codes:
         SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff.MissingParameterTypeHint:
             # forcing "mixed" types

@@ -12,7 +12,11 @@ $possibleAutoloadPaths = [
 foreach ($possibleAutoloadPaths as $possibleAutoloadPath) {
     if (is_file($possibleAutoloadPath)) {
         require_once $possibleAutoloadPath;
-
-        break;
+        return;
     }
 }
+
+die(sprintf(
+    'Composer autoload.php was not found in paths "%s". Have you ran "composer update"?',
+    implode('", "', $possibleAutoloadPaths)
+));
