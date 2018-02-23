@@ -44,6 +44,7 @@ final class Compiler
      * @var FinderToPharAdder
      */
     private $finderToPharAdder;
+
     /**
      * @var string
      */
