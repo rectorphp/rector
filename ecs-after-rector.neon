@@ -13,3 +13,6 @@ checkers:
 
     # clean empty doc blocks, e.g. after annotation removal
     - PhpCsFixer\Fixer\Phpdoc\NoEmptyPhpdocFixer
+
+    # import all namespaces
+    - Symplify\CodingStandard\Fixer\Import\ImportNamespacedNameFixer
