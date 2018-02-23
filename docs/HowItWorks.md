@@ -69,3 +69,8 @@ rectors:
 
 - After this Rector displays list of changed files
 - Or with `--dry-run` option the diff of these files
+
+
+### Similar Projects
+
+- [ClangMR](https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/41342.pdf) for C++ by Google (closed source) - almost idential workflow, develope independly though
