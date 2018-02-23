@@ -17,6 +17,6 @@ foreach ($possibleAutoloadPaths as $possibleAutoloadPath) {
 }
 
 die(sprintf(
-    'Composer autoload.php was not found in paths "%s". Have you run  "composer update"?',
+    'Composer autoload.php was not found in paths "%s". Have you ran "composer update"?',
     implode('", "', $possibleAutoloadPaths)
 ));
