@@ -5,7 +5,7 @@ namespace Rector\Tests\Rector\Contrib\Nette\Bootstrap\RemoveConfiguratorConstant
 use Rector\Rector\Contrib\Nette\Bootstrap\RemoveConfiguratorConstantsRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class ValidateControlRectorTest extends AbstractRectorTestCase
+final class RemoveConfiguratorConstantsRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()
