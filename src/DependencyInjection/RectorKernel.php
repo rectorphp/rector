@@ -9,7 +9,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\Kernel;
 
-final class AppKernel extends Kernel
+final class RectorKernel extends Kernel
 {
     /**
      * @var string
