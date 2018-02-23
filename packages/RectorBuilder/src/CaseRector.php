@@ -13,6 +13,26 @@ final class CaseRector extends AbstractRector
      */
     private $methodCallAnalyzer;
 
+    /**
+     * @var string|null
+     */
+    private $methodCallType;
+
+    /**
+     * @var string|null
+     */
+    private $methodName;
+
+    /**
+     * @var string|null
+     */
+    private $newMethodName;
+
+    /**
+     * @var mixed[]
+     */
+    private $newArguments = [];
+
     public function __construct(MethodCallAnalyzer $methodCallAnalyzer)
     {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
@@ -20,6 +40,20 @@ final class CaseRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
+        if ($this->methodCallType) {
+            if (! $this->methodCallAnalyzer->isType($node, $this->methodCallType)) {
+                return false;
+            }
+        }
+
+        dump($this->methodName);
+
+        if ($this->methodName) {
+            if (! $this->methodCallAnalyzer->isMethod($node, $this->methodName)) {
+                return false;
+            }
+        }
+
         dump('EE');
         die;
         // TODO: Implement isCandidate() method.
@@ -27,6 +61,30 @@ final class CaseRector extends AbstractRector
 
     public function refactor(Node $node): ?Node
     {
-        // TODO: Implement refactor() method.
+        dump('refactor');
+        die;
+    }
+
+    public function setMethodCallType(string $methodCallType): void
+    {
+        $this->methodCallType = $methodCallType;
+    }
+
+    public function setMethodName(string $methodName): void
+    {
+        $this->methodName = $methodName;
+    }
+
+    public function setNewMethodName(string $newMethodName): void
+    {
+        $this->newMethodName = $newMethodName;
+    }
+
+    /**
+     * @param mixed $value
+     */
+    public function addNewArgument(int $position, $value): void
+    {
+        $this->newArguments[$position] = $value;
     }
 }

@@ -2,74 +2,63 @@
 
 namespace Rector\RectorBuilder;
 
-use Rector\Contract\Rector\RectorInterface;
+use Rector\NodeAnalyzer\MethodCallAnalyzer;
 
 final class CaseRectorBuilder
 {
     /**
-     * @var string
-     */
-    private $type;
-
-    /**
-     * @var string
-     */
-    private $methodName;
-
-    /**
-     * @var string
-     */
-    private $newMethodName;
-
-    /**
-     * @var mixed[]
-     */
-    private $newArguments = [];
-
-    /**
-     * @var CaseRector
+     * @var CaseRector|null
      */
     private $caseRector;
 
-    public function __construct(CaseRector $caseRector)
+    /**
+     * @var MethodCallAnalyzer
+     */
+    private $methodCallAnalyzer;
+
+    public function __construct(MethodCallAnalyzer $methodCallAnalyzer)
     {
-        $this->caseRector = $caseRector;
+        $this->methodCallAnalyzer = $methodCallAnalyzer;
     }
 
-    public function matchMethodCallByType(string $type): self
+    public function matchMethodCallByType(string $methodCallType): self
     {
-        $this->type = $type;
-
+        $this->getCaseRector()->setMethodCallType($methodCallType);
         return $this;
     }
 
     public function matchMethodName(string $methodName): self
     {
-        $this->methodName = $methodName;
-
+        $this->getCaseRector()->setMethodName($methodName);
         return $this;
     }
 
     public function changeMethodNameTo(string $newMethodName): self
     {
-        $this->newMethodName = $newMethodName;
-
+        $this->getCaseRector()->setNewMethodName($newMethodName);
         return $this;
     }
 
     public function addArgument(int $position, $value): self
     {
-        $this->newArguments[$position] = $value;
-
+        $this->getCaseRector()->addNewArgument($position, $value);
         return $this;
     }
 
-    public function create(): RectorInterface
+    public function build(): CaseRector
     {
-        $caseRector = clone $this->caseRector;
-
-        // @todo: configure by all that has been setup here
+        $caseRector = $this->caseRector;
+        $this->caseRector = null;
 
         return $caseRector;
+    }
+
+    private function getCaseRector(): CaseRector
+    {
+        if ($this->caseRector) {
+            return $this->caseRector;
+        }
+
+        return $this->caseRector = new CaseRector($this->methodCallAnalyzer);
     }
 }
