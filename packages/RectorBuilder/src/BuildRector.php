@@ -4,7 +4,7 @@ namespace Rector\RectorBuilder;
 
 use Rector\Contract\Rector\RectorInterface;
 
-final class RectorBuilder
+final class BuildRector
 {
     /**
      * @var string

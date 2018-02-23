@@ -4,3 +4,4 @@ services:
 
     Rector\RectorBuilder\:
         resource: '../'
+        exclude: '../{BuilderRector.php}'
