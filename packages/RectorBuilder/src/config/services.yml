@@ -4,4 +4,3 @@ services:
 
     Rector\RectorBuilder\:
         resource: ..
-        exclude: ../{CaseRector.php}
