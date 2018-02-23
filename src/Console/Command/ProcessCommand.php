@@ -122,8 +122,6 @@ final class ProcessCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->consoleStyle->setVerbosity($output->getVerbosity());
-
         $this->additionalAutoloader->autoloadWithInput($input);
 
         $this->ensureSomeRectorsAreRegistered();
