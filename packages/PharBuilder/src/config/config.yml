@@ -23,8 +23,7 @@ services:
             - ['add', ['@Rector\PharBuilder\Command\CompileCommand']]
             - ['setDefaultCommand', ['compile', true]]
 
-    Symfony\Component\Console\Style\SymfonyStyle:
-        factory: ['Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory', 'create']
+    Symfony\Component\Console\Style\SymfonyStyle: ~
 
     Symfony\Component\Console\Input\ArgvInput: ~
     Symfony\Component\Console\Input\InputInterface:
