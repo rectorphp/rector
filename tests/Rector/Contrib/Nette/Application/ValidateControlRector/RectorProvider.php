@@ -24,6 +24,6 @@ final class RectorProvider implements RectorProviderInterface
             ->matchMethodName('@todo')
             ->changeMethodNameTo('@todo')
             ->addArgument(2, '@todo')
-            ->create();
+            ->build();
     }
 }
