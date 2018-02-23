@@ -4,7 +4,7 @@ namespace Rector\RectorBuilder;
 
 use Rector\Contract\Rector\RectorInterface;
 
-final class BuildRector
+final class CaseRectorBuilder
 {
     /**
      * @var string
@@ -56,6 +56,8 @@ final class BuildRector
 
     public function create(): RectorInterface
     {
+        // $caseRector = new CaseRector()
+
         dump('the work :)');
         die;
     }
