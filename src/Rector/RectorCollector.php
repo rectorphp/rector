@@ -15,6 +15,7 @@ final class RectorCollector
 
     public function addRector(RectorInterface $rector): void
     {
+        // @todo: fix for multiple CaseRector[] instances
         $this->rectors[get_class($rector)] = $rector;
     }
 
