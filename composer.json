@@ -35,8 +35,8 @@
         "psr-4": {
             "Rector\\": "src",
             "Rector\\BetterReflection\\": "packages/BetterReflection/src",
-            "Rector\\Scoper\\": "packages/Scoper/src",
             "Rector\\ConsoleDiffer\\": "packages/ConsoleDiffer/src",
+            "Rector\\RectorBuilder\\": "packages/RectorBuilder/src",
             "Rector\\ReflectionDocBlock\\": "packages/ReflectionDocBlock/src",
             "Rector\\NodeTypeResolver\\": "packages/NodeTypeResolver/src",
             "Rector\\NodeTraverserQueue\\": "packages/NodeTraverserQueue/src"
