@@ -3,10 +3,10 @@
 namespace Rector\RectorBuilder;
 
 use PhpParser\Node;
-use Rector\Contract\Rector\RectorInterface;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
+use Rector\Rector\AbstractRector;
 
-final class CaseRector implements RectorInterface
+final class CaseRector extends AbstractRector
 {
     /**
      * @var MethodCallAnalyzer
