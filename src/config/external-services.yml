@@ -25,8 +25,7 @@ services:
         factory: ['@Rector\NodeValueResolver\ConstExprEvaluatorFactory', 'create']
 
     # Symfony\Console
-    Symfony\Component\Console\Style\SymfonyStyle:
-        factory: ['Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory', 'create']
+    Symfony\Component\Console\Style\SymfonyStyle: ~
 
     Symfony\Component\Console\Input\ArgvInput: ~
     Symfony\Component\Console\Input\InputInterface:
