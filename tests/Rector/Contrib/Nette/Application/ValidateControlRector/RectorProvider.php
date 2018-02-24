@@ -20,10 +20,10 @@ final class RectorProvider implements RectorProviderInterface
 
     public function provide(): RectorInterface
     {
-        return $this->caseRectorBuilder->matchMethodCallByType('@todo')
+        return $this->caseRectorBuilder->create()
+            ->matchMethodCallByType('@todo')
             ->matchMethodName('@todo')
             ->changeMethodNameTo('@todo')
-            ->addArgument(2, '@todo')
-            ->build();
+            ->addArgument(2, '@todo');
     }
 }
