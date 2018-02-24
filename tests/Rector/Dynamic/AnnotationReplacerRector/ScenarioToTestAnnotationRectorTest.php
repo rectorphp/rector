@@ -2,7 +2,6 @@
 
 namespace Rector\Tests\Rector\Dynamic\AnnotationReplacerRector;
 
-
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ScenarioToTestAnnotationRectorTest extends AbstractRectorTestCase
