@@ -14,6 +14,4 @@ class SomeNetteExtension extends Nette\DI\CompilerExtension
         $this->builder->expand('%appDir%');
         $this->getContainerBuilder()->expand('%appDir%');
     }    protected function provideConfig(): string
-    {
-        return __DIR__ . '/config.yml';
-    }}
+}

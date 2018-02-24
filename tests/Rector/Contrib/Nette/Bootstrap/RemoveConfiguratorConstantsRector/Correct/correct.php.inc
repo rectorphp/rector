@@ -7,7 +7,5 @@ class ClassWithExternalConstant
     public function getValue()
     {
         return 'development';
-    }    protected function provideConfig(): string
-    {
-        return __DIR__ . '/config.yml';
-    }}
+    }
+}

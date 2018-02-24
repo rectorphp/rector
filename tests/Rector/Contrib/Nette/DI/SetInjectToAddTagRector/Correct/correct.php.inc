@@ -6,7 +6,5 @@ class SomeNetteExtension
     {
         $definition = new Nette\DI\ServiceDefinition();
         $definition->addTag('inject');
-    }    protected function provideConfig(): string
-    {
-        return __DIR__ . '/config.yml';
-    }}
+    }
+}

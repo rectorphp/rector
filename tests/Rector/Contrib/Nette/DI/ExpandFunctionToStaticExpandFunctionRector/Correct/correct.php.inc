@@ -15,7 +15,5 @@ class SomeNetteExtension extends Nette\DI\CompilerExtension
             ),
             $defaults
         ), $this->getContainerBuilder()->parameters);
-    }    protected function provideConfig(): string
-    {
-        return __DIR__ . '/config.yml';
-    }}
+    }
+}

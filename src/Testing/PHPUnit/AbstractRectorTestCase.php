@@ -29,7 +29,10 @@ abstract class AbstractRectorTestCase extends TestCase
 
     protected function setUp(): void
     {
-        $this->container = (new ContainerFactory())->createWithConfig($this->provideConfig());
+        $config = $this->provideConfig();
+        FileGuard::ensureFileExists($config, get_called_class());
+
+        $this->container = (new ContainerFactory())->createWithConfig($config);
         $this->fileProcessor = $this->container->get(FileProcessor::class);
         $this->parameterProvider = $this->container->get(ParameterProvider::class);
     }

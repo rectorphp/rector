@@ -15,7 +15,5 @@ class SomeNetteExtension extends Nette\DI\CompilerExtension
             ),
             $defaults
         ));
-    }    protected function provideConfig(): string
-    {
-        return __DIR__ . '/config.yml';
-    }}
+    }
+}

@@ -4,16 +4,13 @@ class ClassWithInjects
 {
     /**
      * @var stdClass
+     * @inject
      */
-    private $property;
+    public $property;
 
     /**
      * @var DateTimeInterface
+     * @inject
      */
-    private $otherProperty;
-    public function __construct(stdClass $property, DateTimeInterface $otherProperty)
-    {
-        $this->property = $property;
-        $this->otherProperty = $otherProperty;
-    }
+    public $otherProperty;
 }
