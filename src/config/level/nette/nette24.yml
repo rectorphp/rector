@@ -1,12 +1,14 @@
+services:
+    _defaults:
+        autowire: true
+
+    Rector\Rector\Contrib\Nette\Application\ValidateControlRectorProvider: ~
+
 rectors:
     Rector\Rector\Contrib\Nette\Utils\NetteObjectToSmartTraitRector: ~
     Rector\Rector\Contrib\Nette\Utils\MagicMethodRector: ~
 
     # application
-
-    # todo: turn to RectorProvider with fluent setup
-    Rector\Rector\Contrib\Nette\Application\ValidateControlRector: ~
-
     Rector\Rector\Contrib\Nette\Application\TemplateMagicInvokeFilterCallRector: ~
     Rector\Rector\Contrib\Nette\Application\TemplateRegisterHelperRector: ~
 
