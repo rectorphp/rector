@@ -3,24 +3,24 @@
 namespace Rector\Tests\Rector\Contrib\Nette\Application\ValidateControlRector;
 
 use Rector\Contract\Rector\RectorInterface;
-use Rector\RectorBuilder\CaseRectorBuilder;
+use Rector\RectorBuilder\BuilderRectorFactory;
 use Rector\RectorBuilder\Contract\RectorProviderInterface;
 
 final class RectorProvider implements RectorProviderInterface
 {
     /**
-     * @var CaseRectorBuilder
+     * @var BuilderRectorFactory
      */
-    private $caseRectorBuilder;
+    private $BuilderRectorBuilder;
 
-    public function __construct(CaseRectorBuilder $caseRectorBuilder)
+    public function __construct(BuilderRectorFactory $BuilderRectorBuilder)
     {
-        $this->caseRectorBuilder = $caseRectorBuilder;
+        $this->BuilderRectorBuilder = $BuilderRectorBuilder;
     }
 
     public function provide(): RectorInterface
     {
-        return $this->caseRectorBuilder->create()
+        return $this->BuilderRectorBuilder->create()
             ->matchMethodCallByType('Stub_Nette\Application\UI\Control')
             ->matchMethodName('validateControl')
             ->changeMethodNameTo('redrawControl')

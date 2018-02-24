@@ -9,7 +9,7 @@ use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractRector;
 
-final class CaseRector extends AbstractRector
+final class BuilderRector extends AbstractRector
 {
     /**
      * @var MethodCallAnalyzer

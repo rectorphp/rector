@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\Rector\Contrib\Nette\Application\ValidateControlRector;
 
-use Rector\RectorBuilder\CaseRector;
+use Rector\RectorBuilder\BuilderRector;
 use Rector\Testing\PHPUnit\AbstractConfigurableRectorTestCase;
 
 final class ValidateControlRectorTest extends AbstractConfigurableRectorTestCase
@@ -30,7 +30,7 @@ final class ValidateControlRectorTest extends AbstractConfigurableRectorTestCase
      */
     protected function getRectorClasses(): array
     {
-        return [CaseRector::class];
+        return [BuilderRector::class];
     }
 
     protected function provideConfig(): string

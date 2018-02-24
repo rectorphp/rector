@@ -8,7 +8,7 @@ use Rector\NodeChanger\ExpressionAdder;
 use Rector\NodeChanger\IdentifierRenamer;
 use Rector\NodeChanger\PropertyAdder;
 
-final class CaseRectorBuilder
+final class BuilderRectorFactory
 {
     /**
      * @var MethodCallAnalyzer
@@ -47,14 +47,14 @@ final class CaseRectorBuilder
         $this->nodeFactory = $nodeFactory;
     }
 
-    public function create(): CaseRector
+    public function create(): BuilderRector
     {
-        $caseRector = new CaseRector($this->methodCallAnalyzer, $this->identifierRenamer, $this->nodeFactory);
+        $BuilderRector = new BuilderRector($this->methodCallAnalyzer, $this->identifierRenamer, $this->nodeFactory);
 
         // @required setter DI replacement
-        $caseRector->setExpressionAdder($this->expressionAdder);
-        $caseRector->setPropertyToClassAdder($this->propertyAdder);
+        $BuilderRector->setExpressionAdder($this->expressionAdder);
+        $BuilderRector->setPropertyToClassAdder($this->propertyAdder);
 
-        return $caseRector;
+        return $BuilderRector;
     }
 }
