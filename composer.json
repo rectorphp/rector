@@ -47,6 +47,7 @@
         "psr-4": {
             "Rector\\Tests\\": "tests",
             "Rector\\BetterReflection\\Tests\\": "packages/BetterReflection/tests",
+            "Rector\\RectorBuilder\\Tests\\": "packages/RectorBuilder/tests",
             "Rector\\ReflectionDocBlock\\Tests\\": "packages/ReflectionDocBlock/tests",
             "Rector\\NodeTypeResolver\\Tests\\": "packages/NodeTypeResolver/tests",
             "Rector\\NodeTraverserQueue\\Tests\\": "packages/NodeTraverserQueue/tests"

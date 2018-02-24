@@ -5,7 +5,7 @@ namespace Rector\Tests\Rector\Contrib\Nette\Application\ValidateControlRector;
 use Rector\RectorBuilder\BuilderRector;
 use Rector\Testing\PHPUnit\AbstractConfigurableRectorTestCase;
 
-final class ValidateControlRectorTest extends AbstractConfigurableRectorTestCase
+final class BuilderRectorTest extends AbstractConfigurableRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()
