@@ -2,6 +2,7 @@
 
 namespace Rector\Tests\Rector\Dynamic\AnnotationReplacerRector;
 
+
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ScenarioToTestAnnotationRectorTest extends AbstractRectorTestCase
@@ -26,6 +27,6 @@ final class ScenarioToTestAnnotationRectorTest extends AbstractRectorTestCase
 
     protected function provideConfig(): string
     {
-        return __DIR__ . '/config/rector.yml';
+        return __DIR__ . '/config.yml';
     }
 }

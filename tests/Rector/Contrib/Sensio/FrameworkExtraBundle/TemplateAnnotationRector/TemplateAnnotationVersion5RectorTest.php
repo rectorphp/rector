@@ -37,6 +37,6 @@ final class TemplateAnnotationVersion5RectorTest extends AbstractRectorTestCase
 
     protected function provideConfig(): string
     {
-        return __DIR__ . '/Source/version5.yml';
+        return __DIR__ . '/config-version5.yml';
     }
 }

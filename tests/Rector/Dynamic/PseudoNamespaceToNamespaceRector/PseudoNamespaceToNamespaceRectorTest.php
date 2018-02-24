@@ -29,6 +29,6 @@ final class PseudoNamespaceToNamespaceRectorTest extends AbstractRectorTestCase
 
     protected function provideConfig(): string
     {
-        return __DIR__ . '/config/rector.yml';
+        return __DIR__ . '/config.yml';
     }
 }

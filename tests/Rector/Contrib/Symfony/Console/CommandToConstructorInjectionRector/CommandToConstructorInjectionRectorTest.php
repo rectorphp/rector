@@ -29,6 +29,6 @@ final class CommandToConstructorInjectionRectorTest extends AbstractRectorTestCa
 
     protected function provideConfig(): string
     {
-        return __DIR__ . '/Source/rector.yml';
+        return __DIR__ . '/config.yml';
     }
 }
