@@ -41,7 +41,7 @@ abstract class AbstractRectorTestCase extends TestCase
 
         $this->parameterProvider->changeParameter('source', [$file]);
 
-        $reconstructedFileContent = $this->fileProcessor->processFile(new SplFileInfo($file));
+        $reconstructedFileContent = $this->fileProcessor->processFileToString(new SplFileInfo($file));
 
         $this->assertStringEqualsFile($reconstructedFile, $reconstructedFileContent, sprintf(
             'Original file "%s" did not match the result.',
