@@ -6,7 +6,5 @@ final class MyTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertNull('something');
         $this->assertNotFalse('something', 'message');
-    }    protected function provideConfig(): string
-    {
-        return __DIR__ . '/config.yml';
-    }}
+    }
+}

@@ -35,7 +35,5 @@ class TestClass extends Object
     public function setEnabled(bool $enabled)
     {
         $this->enabled = $enabled;
-    }    protected function provideConfig(): string
-    {
-        return __DIR__ . '/config.yml';
-    }}
+    }
+}

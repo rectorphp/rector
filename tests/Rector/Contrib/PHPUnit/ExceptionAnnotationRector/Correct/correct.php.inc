@@ -8,7 +8,5 @@ final class MyTest extends \PHPUnit_Framework_TestCase
     {
         $this->expectException('FooException');
         // some code
-    }    protected function provideConfig(): string
-    {
-        return __DIR__ . '/config.yml';
-    }}
+    }
+}

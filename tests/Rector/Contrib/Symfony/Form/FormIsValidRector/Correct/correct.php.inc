@@ -9,7 +9,5 @@ class SomeController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->processForm($form);
         }
-    }    protected function provideConfig(): string
-    {
-        return __DIR__ . '/config.yml';
-    }}
+    }
+}

@@ -6,7 +6,5 @@ class SomePresenter
     {
         $someService = Nette\Environment::getService('someService');
         $someResult = Nette\Environment::getService('someService')->callMe();
-    }    protected function provideConfig(): string
-    {
-        return __DIR__ . '/config.yml';
-    }}
+    }
+}

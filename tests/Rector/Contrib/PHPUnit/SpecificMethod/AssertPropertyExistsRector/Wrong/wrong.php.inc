@@ -6,7 +6,5 @@ final class MyTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertTrue(property_exists(new stdClass(), 'property'));
         $this->assertFalse(property_exists(new \Namespaced\stdClass, 'property'), 'message');
-    }    protected function provideConfig(): string
-    {
-        return __DIR__ . '/config.yml';
-    }}
+    }
+}

@@ -8,7 +8,5 @@ class SomeTest extends \PHPUnit\Framework\TestCase
         $this->assertNotSame(false, strpos('foo', 'f'));
 
         $this->assertTrue(strpos($headers['Authorization'][0], 'oauth_body_hash') !== false);
-    }    protected function provideConfig(): string
-    {
-        return __DIR__ . '/config.yml';
-    }}
+    }
+}

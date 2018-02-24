@@ -6,7 +6,5 @@ class SomePresenter
     {
         $control = new Nette\Forms\Controls\ChoiceControl;
         $control->checkAllowedValues = false;
-    }    protected function provideConfig(): string
-    {
-        return __DIR__ . '/config.yml';
-    }}
+    }
+}

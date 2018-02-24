@@ -8,7 +8,5 @@ final class MyTest extends \PHPUnit\Framework\TestCase
 
         $secondMock = $this->buildMock()
             ->getMock();
-    }    protected function provideConfig(): string
-    {
-        return __DIR__ . '/config.yml';
-    }}
+    }
+}

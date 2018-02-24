@@ -22,7 +22,5 @@ class RegistrationFormType extends AbstractType
             ])
             ->add('password', 'password')
         ;
-    }    protected function provideConfig(): string
-    {
-        return __DIR__ . '/config.yml';
-    }}
+    }
+}

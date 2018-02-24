@@ -6,7 +6,5 @@ final class MyTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertClassHasAttribute('property', 'stdClass');
         $this->assertClassNotHasAttribute('property', 'Namespaced\stdClass', 'message');
-    }    protected function provideConfig(): string
-    {
-        return __DIR__ . '/config.yml';
-    }}
+    }
+}

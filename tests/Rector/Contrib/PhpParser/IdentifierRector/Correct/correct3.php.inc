@@ -19,7 +19,5 @@ class someClass
     public function getName() : string
     {
         return $this->node->props[$this->positionInNode]->name->toString();
-    }    protected function provideConfig(): string
-    {
-        return __DIR__ . '/config.yml';
-    }}
+    }
+}

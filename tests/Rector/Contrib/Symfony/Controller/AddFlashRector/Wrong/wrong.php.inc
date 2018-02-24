@@ -8,7 +8,5 @@ class AppController extends Controller
     public function someAction(Request $request)
     {
         $request->getSession()->getFlashBag()->add('success', 'message');
-    }    protected function provideConfig(): string
-    {
-        return __DIR__ . '/config.yml';
-    }}
+    }
+}

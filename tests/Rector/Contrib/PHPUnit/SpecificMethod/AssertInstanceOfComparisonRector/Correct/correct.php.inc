@@ -6,7 +6,5 @@ final class MyTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertInstanceOf('Foo', $something);
         $this->assertNotInstanceOf('Namespaced\Foo', $something);
-    }    protected function provideConfig(): string
-    {
-        return __DIR__ . '/config.yml';
-    }}
+    }
+}

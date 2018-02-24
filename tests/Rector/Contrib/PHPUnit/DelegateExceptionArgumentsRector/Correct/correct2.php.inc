@@ -6,7 +6,5 @@ final class MyTest extends \PHPUnit\Framework\TestCase
     {
         $this->setExpectedExceptionRegExp('SomeException');
         $this->expectExceptionMessageRegExp('SomREGEPX');
-    }    protected function provideConfig(): string
-    {
-        return __DIR__ . '/config.yml';
-    }}
+    }
+}

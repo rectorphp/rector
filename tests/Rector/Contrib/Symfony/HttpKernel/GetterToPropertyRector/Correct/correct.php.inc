@@ -13,7 +13,5 @@ class ClassWithNamedService1 extends Controller
     public function render()
     {
         $this->stdClass->render();
-    }    protected function provideConfig(): string
-    {
-        return __DIR__ . '/config.yml';
-    }}
+    }
+}

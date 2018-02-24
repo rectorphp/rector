@@ -5,7 +5,5 @@ class ClassWithNamedService2 implements ContainerAwareInterface
     public function render()
     {
         $someService = $this->get('some_service');
-    }    protected function provideConfig(): string
-    {
-        return __DIR__ . '/config.yml';
-    }}
+    }
+}

@@ -7,7 +7,5 @@ class ClassWithNamedService extends Controller
     public function someAction(Symfony\Component\HttpFoundation\Request $request)
     {
         $request->getSomething();
-    }    protected function provideConfig(): string
-    {
-        return __DIR__ . '/config.yml';
-    }}
+    }
+}

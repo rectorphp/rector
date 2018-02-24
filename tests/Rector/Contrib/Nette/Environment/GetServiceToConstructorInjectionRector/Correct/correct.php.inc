@@ -14,7 +14,5 @@ class SomePresenter
     {
         $someService = $this->someType;
         $someResult = $this->someType->callMe();
-    }    protected function provideConfig(): string
-    {
-        return __DIR__ . '/config.yml';
-    }}
+    }
+}

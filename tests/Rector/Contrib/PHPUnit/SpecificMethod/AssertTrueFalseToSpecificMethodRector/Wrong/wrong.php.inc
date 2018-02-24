@@ -16,7 +16,5 @@ final class MyTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(is_writable('...'));
         $this->assertFalse(array_search('...', ['...']), 'argument');
         $this->assertTrue(is_a($anything, 'Foo'), 'argument');
-    }    protected function provideConfig(): string
-    {
-        return __DIR__ . '/config.yml';
-    }}
+    }
+}

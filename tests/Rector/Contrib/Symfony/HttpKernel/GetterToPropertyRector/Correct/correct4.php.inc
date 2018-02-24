@@ -15,7 +15,5 @@ class ClassWithNamedService4 implements ContainerAwareInterface
         $this->renderTwig([
             'posts' => $this->stdClass->callMe()
         ]);
-    }    protected function provideConfig(): string
-    {
-        return __DIR__ . '/config.yml';
-    }}
+    }
+}
