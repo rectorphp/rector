@@ -54,7 +54,6 @@ final class SourceStubber
         $this->builderFactory = new BuilderFactory();
         $this->prettyPrinter  = new Standard(['shortArraySyntax' => true]);
     }
-
     public function __invoke(CoreReflectionClass $classReflection) : string
     {
         $classNode = $this->createClass($classReflection);
@@ -70,26 +69,21 @@ final class SourceStubber
         if ( ! $classReflection->inNamespace()) {
             return $this->prettyPrinter->prettyPrint([$classNode->getNode()]);
         }
-
         $namespaceNode = $this->builderFactory->namespace($classReflection->getNamespaceName());
         $namespaceNode->addStmt($classNode);
 
         return $this->prettyPrinter->prettyPrint([$namespaceNode->getNode()]);
     }
-
     private function createClass(CoreReflectionClass $classReflection) : Declaration
     {
         if ($classReflection->isTrait()) {
             return $this->builderFactory->trait($classReflection->getShortName());
         }
-
         if ($classReflection->isInterface()) {
             return $this->builderFactory->interface($classReflection->getShortName());
         }
-
         return $this->builderFactory->class($classReflection->getShortName());
     }
-
     /**
      * @param Class_|Interface_|Trait_|Method|Property $node
      * @param CoreReflectionClass|CoreReflectionMethod|CoreReflectionProperty $reflection
@@ -100,7 +94,6 @@ final class SourceStubber
             $node->setDocComment(new Doc($reflection->getDocComment()));
         }
     }
-
     /**
      * @param Class_|Interface_|Trait_ $classNode
      * @param CoreReflectionClass $classReflection
@@ -128,11 +121,9 @@ final class SourceStubber
             $classNode->extend(new FullyQualified($parentClass->getName()));
             $interfaces = \array_diff($interfaces, $parentClass->getInterfaceNames());
         }
-
         foreach ($classReflection->getInterfaces() as $interface) {
             $interfaces = \array_diff($interfaces, $interface->getInterfaceNames());
         }
-
         foreach ($interfaces as $interfaceName) {
             if ($classReflection->isInterface()) {
                 $classNode->extend(new FullyQualified($interfaceName));
@@ -141,7 +132,6 @@ final class SourceStubber
             }
         }
     }
-
     private function addTraitUse(Declaration $classNode, CoreReflectionClass $classReflection) : void
     {
         $alreadyUsedTraitNames = [];
@@ -157,12 +147,10 @@ final class SourceStubber
 
             $alreadyUsedTraitNames[] = $traitName;
         }
-
         foreach (\array_diff($classReflection->getTraitNames(), $alreadyUsedTraitNames) as $traitName) {
             $classNode->addStmt(new TraitUse([new FullyQualified($traitName)]));
         }
     }
-
     private function addProperties(Declaration $classNode, CoreReflectionClass $classReflection) : void
     {
         $defaultProperties = $classReflection->getDefaultProperties();
@@ -171,7 +159,6 @@ final class SourceStubber
             if ( ! $this->isPropertyDeclaredInClass($propertyReflection, $classReflection)) {
                 continue;
             }
-
             $propertyNode = $this->builderFactory->property($propertyReflection->getName());
 
             $this->addPropertyModifiers($propertyNode, $propertyReflection);
@@ -180,52 +167,42 @@ final class SourceStubber
             if (\array_key_exists($propertyReflection->getName(), $defaultProperties)) {
                 $propertyNode->setDefault($defaultProperties[$propertyReflection->getName()]);
             }
-
             $classNode->addStmt($propertyNode);
         }
     }
-
     private function isPropertyDeclaredInClass(CoreReflectionProperty $propertyReflection, CoreReflectionClass $classReflection) : bool
     {
         if ($propertyReflection->getDeclaringClass()->getName() !== $classReflection->getName()) {
             return false;
         }
-
         foreach ($classReflection->getTraits() as $trait) {
             if ($trait->hasProperty($propertyReflection->getName())) {
                 return false;
             }
         }
-
         return true;
     }
-
     private function addPropertyModifiers(Property $propertyNode, CoreReflectionProperty $propertyReflection) : void
     {
         if ($propertyReflection->isStatic()) {
             $propertyNode->makeStatic();
         }
-
         if ($propertyReflection->isPublic()) {
             $propertyNode->makePublic();
         }
-
         if ($propertyReflection->isProtected()) {
             $propertyNode->makeProtected();
         }
-
         if ($propertyReflection->isPrivate()) {
             $propertyNode->makePrivate();
         }
     }
-
     private function addConstants(Declaration $classNode, CoreReflectionClass $classReflection) : void
     {
         foreach ($classReflection->getReflectionConstants() as $constantReflection) {
             if ($constantReflection->getDeclaringClass()->getName() !== $classReflection->getName()) {
                 continue;
             }
-
             $classConstantNode = new ClassConst(
                 [new Const_($constantReflection->getName(), $this->constantValueNode($constantReflection))],
                 $this->constantVisibilityFlags($constantReflection)
@@ -237,7 +214,6 @@ final class SourceStubber
             $classNode->addStmt($classConstantNode);
         }
     }
-
     /**
      * A little hack so we don't have to copy the code in PhpParser\BuilderAbstract::normalizeValue()
      */
@@ -251,7 +227,6 @@ final class SourceStubber
             ->props[0]
             ->default;
     }
-
     private function constantVisibilityFlags(ReflectionClassConstant $constant) : int
     {
         if ($constant->isPrivate()) {
@@ -262,7 +237,6 @@ final class SourceStubber
         }
         return ClassNode::MODIFIER_PUBLIC;
     }
-
     private function addMethods(Declaration $classNode, CoreReflectionClass $classReflection) : void
     {
         foreach ($classReflection->getMethods() as $methodReflection) {
@@ -283,26 +257,21 @@ final class SourceStubber
             $classNode->addStmt($methodNode);
         }
     }
-
     private function isMethodDeclaredInClass(CoreReflectionMethod $methodReflection, CoreReflectionClass $classReflection) : bool
     {
         if ($methodReflection->getDeclaringClass()->getName() !== $classReflection->getName()) {
             return false;
         }
-
         if (\array_key_exists($methodReflection->getName(), $classReflection->getTraitAliases())) {
             return false;
         }
-
         foreach ($classReflection->getTraits() as $trait) {
             if ($trait->hasMethod($methodReflection->getName())) {
                 return false;
             }
         }
-
         return true;
     }
-
     private function addMethodFlags(Method $methodNode, CoreReflectionMethod $methodReflection) : void
     {
         if ($methodReflection->isFinal()) {
@@ -327,7 +296,6 @@ final class SourceStubber
             $methodNode->makeReturnByRef();
         }
     }
-
     private function addParameters(Method $methodNode, CoreReflectionMethod $methodReflection) : void
     {
         foreach ($methodReflection->getParameters() as $parameterReflection) {
@@ -341,7 +309,6 @@ final class SourceStubber
             $methodNode->addParam($this->addParameterModifiers($parameterReflection, $parameterNode));
         }
     }
-
     private function addParameterModifiers(ReflectionParameter $parameterReflection, Param $parameterNode) : Param
     {
         if ($parameterReflection->isVariadic()) {
