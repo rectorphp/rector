@@ -8,6 +8,7 @@ class PermissionCollectionType extends AbstractType
     {
         return 'some_name';
     }
+
     public function getParent()
     {
         return \Symfony\Component\Form\Extension\Core\Type\CollectionType::class;

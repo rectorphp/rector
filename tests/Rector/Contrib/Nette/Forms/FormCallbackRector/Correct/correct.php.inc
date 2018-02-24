@@ -10,6 +10,7 @@ class SomePresenter
 
         return $form;
     }
+
     public function createNetteForm()
     {
         $form = new \Nette\Application\UI\Form;
