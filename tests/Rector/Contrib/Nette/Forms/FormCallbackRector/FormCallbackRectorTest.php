@@ -2,7 +2,6 @@
 
 namespace Rector\Tests\Rector\Contrib\Nette\Forms\FormCallbackRector;
 
-use Rector\Rector\Contrib\Nette\Forms\FormCallbackRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
@@ -28,7 +27,8 @@ final class FormCallbackRectorTest extends AbstractRectorTestCase
         ];
     }
 
-        protected function provideConfig(): string
+    protected function provideConfig(): string
     {
         return __DIR__ . '/config.yml';
-    }}
+    }
+}

@@ -2,7 +2,6 @@
 
 namespace Rector\Tests\Rector\Contrib\Nette\DI\SetInjectToAddTagRector;
 
-use Rector\Rector\Contrib\Nette\DI\SetInjectToAddTagRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
@@ -31,4 +30,5 @@ final class SetInjectToAddTagRectorTest extends AbstractRectorTestCase
     protected function provideConfig(): string
     {
         return __DIR__ . '/config.yml';
-    }}
+    }
+}

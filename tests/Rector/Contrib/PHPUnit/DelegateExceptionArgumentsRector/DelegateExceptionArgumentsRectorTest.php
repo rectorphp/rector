@@ -36,7 +36,10 @@ final class DelegateExceptionArgumentsRectorTest extends AbstractRectorTestCase
     protected function getRectorClasses(): array
     {
         return [DelegateExceptionArgumentsRector::class];
-    }    protected function provideConfig(): string
+    }
+
+    protected function provideConfig(): string
     {
         return __DIR__ . '/config.yml';
-    }}
+    }
+}

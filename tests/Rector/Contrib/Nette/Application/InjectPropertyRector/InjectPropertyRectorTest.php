@@ -27,7 +27,8 @@ final class InjectPropertyRectorTest extends AbstractRectorTestCase
         ];
     }
 
-        protected function provideConfig(): string
+    protected function provideConfig(): string
     {
         return __DIR__ . '/config.yml';
-    }}
+    }
+}

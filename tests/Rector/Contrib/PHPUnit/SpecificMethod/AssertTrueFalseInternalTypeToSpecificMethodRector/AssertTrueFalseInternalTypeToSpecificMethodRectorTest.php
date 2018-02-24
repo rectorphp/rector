@@ -2,7 +2,6 @@
 
 namespace Rector\Tests\Rector\Contrib\PHPUnit\SpecificMethod\AssertTrueFalseInternalTypeToSpecificMethodRector;
 
-use Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertTrueFalseInternalTypeToSpecificMethodRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
@@ -31,4 +30,5 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRectorTest extends Abstra
     protected function provideConfig(): string
     {
         return __DIR__ . '/config.yml';
-    }}
+    }
+}

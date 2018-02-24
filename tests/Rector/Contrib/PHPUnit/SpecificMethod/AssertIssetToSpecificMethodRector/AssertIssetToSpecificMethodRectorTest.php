@@ -2,7 +2,6 @@
 
 namespace Rector\Tests\Rector\Contrib\PHPUnit\SpecificMethod\AssertIssetToSpecificMethodRector;
 
-use Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertIssetToSpecificMethodRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
@@ -27,7 +26,9 @@ final class AssertIssetToSpecificMethodRectorTest extends AbstractRectorTestCase
             [__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc'],
         ];
     }
-  protected function provideConfig(): string
+
+    protected function provideConfig(): string
     {
         return __DIR__ . '/config.yml';
-    }}
+    }
+}

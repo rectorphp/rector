@@ -2,7 +2,6 @@
 
 namespace Rector\Tests\Rector\Contrib\PHPUnit\SpecificMethod\AssertComparisonToSpecificMethodRector;
 
-use Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertComparisonToSpecificMethodRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**

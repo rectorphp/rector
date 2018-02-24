@@ -2,7 +2,6 @@
 
 namespace Rector\Tests\Rector\Contrib\Nette\Utils\NetteObjectToSmartTraitRector;
 
-use Rector\Rector\Contrib\Nette\Utils\NetteObjectToSmartTraitRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**

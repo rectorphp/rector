@@ -2,7 +2,6 @@
 
 namespace Rector\Tests\Rector\Contrib\Symfony\DependencyInjection\ContainerBuilderCompileEnvArgumentRector;
 
-use Rector\Rector\Contrib\Symfony\DependencyInjection\ContainerBuilderCompileEnvArgumentRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
@@ -31,4 +30,5 @@ final class ContainerBuilderCompileEnvArgumentRectorTest extends AbstractRectorT
     protected function provideConfig(): string
     {
         return __DIR__ . '/config.yml';
-    }}
+    }
+}

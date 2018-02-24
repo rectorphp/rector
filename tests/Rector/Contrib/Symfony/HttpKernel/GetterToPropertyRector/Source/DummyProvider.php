@@ -16,7 +16,10 @@ final class DummyProvider implements ServiceTypeForNameProviderInterface
     public function provideTypeForName(string $name): ?string
     {
         return $this->nameToTypeMap[$name] ?? null;
-    }    protected function provideConfig(): string
+    }
+
+    private function provideConfig(): string
     {
         return __DIR__ . '/config.yml';
-    }}
+    }
+}

@@ -2,7 +2,6 @@
 
 namespace Rector\Tests\Rector\Contrib\Symfony\Console\CommandToConstructorInjectionRector;
 
-use Rector\Rector\Contrib\Symfony\Console\CommandToConstructorInjectionRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**

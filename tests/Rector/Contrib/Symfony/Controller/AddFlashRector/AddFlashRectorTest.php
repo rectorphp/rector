@@ -2,7 +2,6 @@
 
 namespace Rector\Tests\Rector\Contrib\Symfony\Controller\AddFlashRector;
 
-use Rector\Rector\Contrib\Symfony\Controller\AddFlashRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
@@ -32,4 +31,5 @@ final class AddFlashRectorTest extends AbstractRectorTestCase
     protected function provideConfig(): string
     {
         return __DIR__ . '/config.yml';
-    }}
+    }
+}

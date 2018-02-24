@@ -2,7 +2,6 @@
 
 namespace Rector\Tests\Rector\Contrib\Sensio\FrameworkExtraBundle\TemplateAnnotationRector;
 
-use Rector\Rector\Contrib\Sensio\FrameworkExtraBundle\TemplateAnnotationRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**

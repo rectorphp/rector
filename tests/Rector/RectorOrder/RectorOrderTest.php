@@ -45,7 +45,10 @@ final class RectorOrderTest extends AbstractRectorTestCase
             AssertComparisonToSpecificMethodRector::class,
             AssertFalseStrposToContainsRector::class,
         ];
-    }    protected function provideConfig(): string
+    }
+
+    protected function provideConfig(): string
     {
         return __DIR__ . '/config.yml';
-    }}
+    }
+}

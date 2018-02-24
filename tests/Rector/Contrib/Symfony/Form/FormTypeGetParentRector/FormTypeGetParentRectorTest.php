@@ -2,7 +2,6 @@
 
 namespace Rector\Tests\Rector\Contrib\Symfony\Form\FormTypeGetParentRector;
 
-use Rector\Rector\Contrib\Symfony\Form\FormTypeGetParentRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
@@ -32,4 +31,5 @@ final class FormTypeGetParentRectorTest extends AbstractRectorTestCase
     protected function provideConfig(): string
     {
         return __DIR__ . '/config.yml';
-    }}
+    }
+}

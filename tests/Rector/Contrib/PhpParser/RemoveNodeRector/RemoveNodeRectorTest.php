@@ -2,7 +2,6 @@
 
 namespace Rector\Tests\Rector\Contrib\PhpParser\RemoveNodeRector;
 
-use Rector\Rector\Contrib\PhpParser\RemoveNodeRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
@@ -32,4 +31,5 @@ final class RemoveNodeRectorTest extends AbstractRectorTestCase
     protected function provideConfig(): string
     {
         return __DIR__ . '/config.yml';
-    }}
+    }
+}

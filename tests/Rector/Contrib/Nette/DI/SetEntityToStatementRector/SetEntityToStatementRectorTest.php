@@ -2,7 +2,6 @@
 
 namespace Rector\Tests\Rector\Contrib\Nette\DI\SetEntityToStatementRector;
 
-use Rector\Rector\Contrib\Nette\DI\SetEntityToStatementRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
@@ -31,4 +30,5 @@ final class SetEntityToStatementRectorTest extends AbstractRectorTestCase
     protected function provideConfig(): string
     {
         return __DIR__ . '/config.yml';
-    }}
+    }
+}

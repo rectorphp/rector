@@ -36,7 +36,10 @@ final class GetServiceToConstructorInjectionRectorTest extends AbstractRectorTes
     protected function provideConfig(): string
     {
         return __DIR__ . '/Source/rector.yml';
-    }    protected function provideConfig(): string
+    }
+
+    protected function provideConfig(): string
     {
         return __DIR__ . '/config.yml';
-    }}
+    }
+}

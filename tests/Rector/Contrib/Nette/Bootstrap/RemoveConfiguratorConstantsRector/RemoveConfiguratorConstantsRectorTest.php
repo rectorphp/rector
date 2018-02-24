@@ -27,8 +27,8 @@ final class RemoveConfiguratorConstantsRectorTest extends AbstractRectorTestCase
         ];
     }
 
-
     protected function provideConfig(): string
     {
         return __DIR__ . '/config.yml';
-    }}
+    }
+}

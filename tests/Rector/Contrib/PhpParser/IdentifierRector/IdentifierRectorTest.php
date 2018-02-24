@@ -2,7 +2,6 @@
 
 namespace Rector\Tests\Rector\Contrib\PhpParser\IdentifierRector;
 
-use Rector\Rector\Contrib\PhpParser\IdentifierRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**

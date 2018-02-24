@@ -2,7 +2,6 @@
 
 namespace Rector\Tests\Rector\Contrib\PHPUnit\SpecificMethod\AssertPropertyExistsRector;
 
-use Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertPropertyExistsRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
@@ -31,4 +30,5 @@ final class AssertPropertyExistsRectorTest extends AbstractRectorTestCase
     protected function provideConfig(): string
     {
         return __DIR__ . '/config.yml';
-    }}
+    }
+}

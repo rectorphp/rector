@@ -48,7 +48,10 @@ final class RectorCollectorTest extends AbstractContainerAwareTestCase
         ));
 
         $this->rectorCollector->getRector('MissingRector');
-    }    protected function provideConfig(): string
+    }
+
+    protected function provideConfig(): string
     {
         return __DIR__ . '/config.yml';
-    }}
+    }
+}

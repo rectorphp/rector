@@ -2,7 +2,6 @@
 
 namespace Rector\Tests\Rector\Contrib\Symfony\Console\ConsoleExceptionToErrorEventConstantRector;
 
-use Rector\Rector\Contrib\Symfony\Console\ConsoleExceptionToErrorEventConstantRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
@@ -31,4 +30,5 @@ final class ConsoleExceptionToErrorEventConstantRectorTest extends AbstractRecto
     protected function provideConfig(): string
     {
         return __DIR__ . '/config.yml';
-    }}
+    }
+}

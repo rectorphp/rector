@@ -2,7 +2,6 @@
 
 namespace Rector\Tests\Rector\Contrib\Symfony\HttpKernel\GetterToPropertyRector;
 
-use Rector\Rector\Contrib\Symfony\HttpKernel\GetterToPropertyRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**

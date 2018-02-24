@@ -2,7 +2,6 @@
 
 namespace Rector\Tests\Rector\Contrib\Symfony\DependencyInjection\CompileAddPassPriorityRector;
 
-use Rector\Rector\Contrib\Symfony\DependencyInjection\CompilerAddPassPriorityRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
@@ -31,4 +30,5 @@ final class CompileAddPassPriorityRectorTest extends AbstractRectorTestCase
     protected function provideConfig(): string
     {
         return __DIR__ . '/config.yml';
-    }}
+    }
+}

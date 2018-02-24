@@ -2,7 +2,6 @@
 
 namespace Rector\Tests\Rector\Contrib\PhpParser\SetLineRector;
 
-use Rector\Rector\Contrib\PhpParser\SetLineRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
@@ -31,4 +30,5 @@ final class SetLineRectorTest extends AbstractRectorTestCase
     protected function provideConfig(): string
     {
         return __DIR__ . '/config.yml';
-    }}
+    }
+}
