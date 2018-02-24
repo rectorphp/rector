@@ -1,2 +1,2 @@
 rectors:
-    \Rector\Rector\Contrib\Symfony\Process\ProcessBuilderInstanceRector: ~
+    Rector\Rector\Contrib\Symfony\Process\ProcessBuilderInstanceRector: ~

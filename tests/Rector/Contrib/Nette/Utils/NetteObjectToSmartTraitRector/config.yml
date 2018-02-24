@@ -1,2 +1,2 @@
 rectors:
-    \Rector\Rector\Contrib\Nette\Utils\NetteObjectToSmartTraitRector: ~
+    Rector\Rector\Contrib\Nette\Utils\NetteObjectToSmartTraitRector: ~

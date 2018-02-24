@@ -1,2 +1,2 @@
 rectors:
-    \Rector\Rector\Contrib\Nette\Forms\FormCallbackRector: ~
+    Rector\Rector\Contrib\Nette\Forms\FormCallbackRector: ~

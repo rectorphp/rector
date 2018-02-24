@@ -1,2 +1,2 @@
 rectors:
-    \Rector\Rector\Contrib\PhpParser\RemoveNodeRector: ~
+    Rector\Rector\Contrib\PhpParser\RemoveNodeRector: ~

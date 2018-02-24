@@ -1,2 +1,2 @@
 rectors:
-    \Rector\Rector\Contrib\Nette\DI\SetInjectToAddTagRector: ~
+    Rector\Rector\Contrib\Nette\DI\SetInjectToAddTagRector: ~

@@ -1,2 +1,2 @@
 rectors:
-    \Rector\Rector\Contrib\PhpParser\CatchAndClosureUseNameRector: ~
+    Rector\Rector\Contrib\PhpParser\CatchAndClosureUseNameRector: ~

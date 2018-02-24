@@ -1,2 +1,2 @@
 rectors:
-    \Rector\Rector\Contrib\PHPUnit\GetMockRector: ~
+    Rector\Rector\Contrib\PHPUnit\GetMockRector: ~

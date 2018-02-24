@@ -1,2 +1,2 @@
 rectors:
-    \Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertFalseStrposToContainsRector: ~
+    Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertFalseStrposToContainsRector: ~

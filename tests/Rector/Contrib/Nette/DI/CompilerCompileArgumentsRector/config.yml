@@ -1,2 +1,2 @@
 rectors:
-    \Rector\Rector\Contrib\Nette\DI\CompilerCompileArgumentsRector: ~
+    Rector\Rector\Contrib\Nette\DI\CompilerCompileArgumentsRector: ~

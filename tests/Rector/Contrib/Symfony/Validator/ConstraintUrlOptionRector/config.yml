@@ -1,2 +1,2 @@
 rectors:
-    \Rector\Rector\Contrib\Symfony\Validator\ConstraintUrlOptionRector: ~
+    Rector\Rector\Contrib\Symfony\Validator\ConstraintUrlOptionRector: ~

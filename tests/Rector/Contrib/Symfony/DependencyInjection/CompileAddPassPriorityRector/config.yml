@@ -1,2 +1,2 @@
 rectors:
-    \Rector\Rector\Contrib\Symfony\DependencyInjection\CompilerAddPassPriorityRector: ~
+    Rector\Rector\Contrib\Symfony\DependencyInjection\CompilerAddPassPriorityRector: ~

@@ -1,2 +1,2 @@
 rectors:
-    \Rector\Rector\Contrib\Nette\Forms\FormNegativeRulesRector: ~
+    Rector\Rector\Contrib\Nette\Forms\FormNegativeRulesRector: ~

@@ -1,2 +1,2 @@
 rectors:
-    \Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertInstanceOfComparisonRector: ~
+    Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertInstanceOfComparisonRector: ~

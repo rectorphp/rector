@@ -1,2 +1,2 @@
 rectors:
-    \Rector\Rector\Contrib\PHPUnit\DelegateExceptionArgumentsRector: ~
+    Rector\Rector\Contrib\PHPUnit\DelegateExceptionArgumentsRector: ~

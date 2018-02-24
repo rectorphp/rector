@@ -1,2 +1,2 @@
 rectors:
-    \Rector\Rector\Contrib\Nette\Forms\ChoiceDefaultValueRector: ~
+    Rector\Rector\Contrib\Nette\Forms\ChoiceDefaultValueRector: ~

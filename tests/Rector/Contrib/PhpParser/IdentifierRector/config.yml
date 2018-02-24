@@ -1,2 +1,2 @@
 rectors:
-    \Rector\Rector\Contrib\PhpParser\IdentifierRector: ~
+    Rector\Rector\Contrib\PhpParser\IdentifierRector: ~

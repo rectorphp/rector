@@ -1,2 +1,2 @@
 rectors:
-    \Rector\Rector\Contrib\Symfony\Controller\AddFlashRector: ~
+    Rector\Rector\Contrib\Symfony\Controller\AddFlashRector: ~
