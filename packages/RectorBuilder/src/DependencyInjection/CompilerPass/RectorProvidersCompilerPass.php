@@ -14,8 +14,8 @@ final class RectorProvidersCompilerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $containerBuilder): void
     {
-        $rectorCollectorDefinition = DefinitionFinder::getByType($containerBuilder, RectorCollector::class);
-        $rectorNodeTraverserDefinition = DefinitionFinder::getByType($containerBuilder, RectorNodeTraverser::class);
+        $rectorCollectorDefinition = $containerBuilder->getDefinition(RectorCollector::class);
+        $rectorNodeTraverserDefinition = $containerBuilder->getDefinition(RectorNodeTraverser::class);
 
         $rectorProviderDefinitions = DefinitionFinder::findAllByType($containerBuilder, RectorProviderInterface::class);
 
