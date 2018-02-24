@@ -9,6 +9,7 @@ class SomeClass
         foo();
         return $this;
     }
+
     public function otherFunction()
     {
         bar();

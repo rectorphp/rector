@@ -5,9 +5,11 @@ namespace SomeNamespace;
 class SomeValueObject
 {
 }
+
 class SomeChildOfValueObject extends SomeValueObject
 {
 }
+
 class ActionClass
 {
     /**
