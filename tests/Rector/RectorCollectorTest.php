@@ -4,6 +4,7 @@ namespace Rector\Tests\Rector;
 
 use Rector\Exception\Rector\RectorNotFoundException;
 use Rector\Rector\RectorCollector;
+use Rector\RectorBuilder\BuilderRector;
 use Rector\Tests\AbstractContainerAwareTestCase;
 use Rector\Tests\Rector\RectorCollectorSource\DummyRector;
 
@@ -25,8 +26,8 @@ final class RectorCollectorTest extends AbstractContainerAwareTestCase
 
     public function testCounts(): void
     {
-        $this->assertCount(1, $this->rectorCollector->getRectors());
-        $this->assertSame(1, $this->rectorCollector->getRectorCount());
+        $this->assertCount(2, $this->rectorCollector->getRectors());
+        $this->assertSame(2, $this->rectorCollector->getRectorCount());
     }
 
     public function testGetRectors(): void
@@ -43,7 +44,7 @@ final class RectorCollectorTest extends AbstractContainerAwareTestCase
         $this->expectExceptionMessage(sprintf(
             'Rectors class "%s" was not found. Available rectors are: "%s".',
             'MissingRector',
-            DummyRector::class
+            implode('", "', [BuilderRector::class, DummyRector::class])
         ));
 
         $this->rectorCollector->getRector('MissingRector');
