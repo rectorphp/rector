@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Contrib\Nette\Application\ValidateControlRector;
+namespace Rector\RectorBuilder\Tests\BuilderRector;
 
 use Rector\RectorBuilder\BuilderRector;
 use Rector\Testing\PHPUnit\AbstractConfigurableRectorTestCase;
