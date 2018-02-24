@@ -13,5 +13,5 @@ class SomeNetteExtension extends Nette\DI\CompilerExtension
         $builder->expand('%appDir%');
         $this->builder->expand('%appDir%');
         $this->getContainerBuilder()->expand('%appDir%');
-    }    protected function provideConfig(): string
+    }
 }
