@@ -2,7 +2,6 @@
 
 namespace Rector\Tests\Rector\Dynamic\PropertyNameReplacerRector;
 
-use Rector\Rector\Dynamic\PropertyNameReplacerRector;
 use Rector\Testing\PHPUnit\AbstractConfigurableRectorTestCase;
 
 final class PropertyNameReplacerRectorTest extends AbstractConfigurableRectorTestCase
@@ -23,14 +22,6 @@ final class PropertyNameReplacerRectorTest extends AbstractConfigurableRectorTes
         return [
             [__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc'],
         ];
-    }
-
-    /**
-     * @return string[]
-     */
-    protected function getRectorClasses(): array
-    {
-        return [PropertyNameReplacerRector::class];
     }
 
     protected function provideConfig(): string

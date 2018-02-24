@@ -2,7 +2,6 @@
 
 namespace Rector\Tests\Rector\Contrib\PHPUnit\DelegateExceptionArgumentsRector;
 
-use Rector\Rector\Contrib\PHPUnit\DelegateExceptionArgumentsRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
@@ -28,14 +27,6 @@ final class DelegateExceptionArgumentsRectorTest extends AbstractRectorTestCase
             [__DIR__ . '/Wrong/wrong2.php.inc', __DIR__ . '/Correct/correct2.php.inc'],
             [__DIR__ . '/Wrong/wrong3.php.inc', __DIR__ . '/Correct/correct3.php.inc'],
         ];
-    }
-
-    /**
-     * @return string[]
-     */
-    protected function getRectorClasses(): array
-    {
-        return [DelegateExceptionArgumentsRector::class];
     }
 
     protected function provideConfig(): string

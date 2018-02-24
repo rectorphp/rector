@@ -2,7 +2,6 @@
 
 namespace Rector\Tests\Rector\Dynamic\MethodNameReplacerRector;
 
-use Rector\Rector\Dynamic\MethodNameReplacerRector;
 use Rector\Testing\PHPUnit\AbstractConfigurableRectorTestCase;
 
 final class MethodNameReplacerRectorTest extends AbstractConfigurableRectorTestCase
@@ -30,14 +29,6 @@ final class MethodNameReplacerRectorTest extends AbstractConfigurableRectorTestC
             [__DIR__ . '/Wrong/wrong7.php.inc', __DIR__ . '/Correct/correct7.php.inc'],
             [__DIR__ . '/Wrong/SomeClass.php', __DIR__ . '/Correct/SomeClass.php'],
         ];
-    }
-
-    /**
-     * @return string[]
-     */
-    protected function getRectorClasses(): array
-    {
-        return [MethodNameReplacerRector::class];
     }
 
     protected function provideConfig(): string

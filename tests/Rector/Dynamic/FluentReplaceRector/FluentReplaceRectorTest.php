@@ -2,7 +2,6 @@
 
 namespace Rector\Tests\Rector\Dynamic\FluentReplaceRector;
 
-use Rector\Rector\Dynamic\FluentReplaceRector;
 use Rector\Testing\PHPUnit\AbstractConfigurableRectorTestCase;
 
 final class FluentReplaceRectorTest extends AbstractConfigurableRectorTestCase
@@ -28,13 +27,5 @@ final class FluentReplaceRectorTest extends AbstractConfigurableRectorTestCase
     protected function provideConfig(): string
     {
         return __DIR__ . '/config/rector.yml';
-    }
-
-    /**
-     * @return string[]
-     */
-    protected function getRectorClasses(): array
-    {
-        return [FluentReplaceRector::class];
     }
 }

@@ -2,7 +2,6 @@
 
 namespace Rector\Tests\Rector\Dynamic\PropertyToMethodRector;
 
-use Rector\Rector\Dynamic\PropertyToMethodRector;
 use Rector\Testing\PHPUnit\AbstractConfigurableRectorTestCase;
 
 final class PropertyToMethodRectorTest extends AbstractConfigurableRectorTestCase
@@ -23,14 +22,6 @@ final class PropertyToMethodRectorTest extends AbstractConfigurableRectorTestCas
         return [
             [__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc'],
         ];
-    }
-
-    /**
-     * @return string[]
-     */
-    protected function getRectorClasses(): array
-    {
-        return [PropertyToMethodRector::class];
     }
 
     protected function provideConfig(): string

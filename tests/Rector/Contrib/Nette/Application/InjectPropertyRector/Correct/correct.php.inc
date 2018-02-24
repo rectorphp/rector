@@ -15,7 +15,5 @@ class ClassWithInjects
     {
         $this->property = $property;
         $this->otherProperty = $otherProperty;
-    }    protected function provideConfig(): string
-    {
-        return __DIR__ . '/config.yml';
     }
+}

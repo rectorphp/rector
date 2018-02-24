@@ -2,9 +2,6 @@
 
 namespace Rector\Tests\Rector\RectorOrder;
 
-use Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertComparisonToSpecificMethodRector;
-use Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertFalseStrposToContainsRector;
-use Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertSameBoolNullToSpecificMethodRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
@@ -27,23 +24,6 @@ final class RectorOrderTest extends AbstractRectorTestCase
     {
         return [
             [__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc'],
-        ];
-    }
-
-    protected function provideConfig(): string
-    {
-        return __DIR__ . '/config/rector.yml';
-    }
-
-    /**
-     * @return string[]
-     */
-    protected function getRectorClasses(): array
-    {
-        return [
-            AssertSameBoolNullToSpecificMethodRector::class,
-            AssertComparisonToSpecificMethodRector::class,
-            AssertFalseStrposToContainsRector::class,
         ];
     }
 

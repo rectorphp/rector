@@ -1,2 +1,2 @@
 rectors:
-    Rector\Rector\Contrib\Nette\Application\TemplateMagicInvokeFilterRector: ~
+    Rector\Rector\Contrib\Nette\Application\TemplateMagicInvokeFilterCallRector: ~

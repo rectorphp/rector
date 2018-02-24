@@ -1,9 +1,0 @@
-rectors:
-    Rector\Rector\Contrib\Nette\Environment\GetServiceToConstructorInjectionRector: ~
-
-services:
-    Rector\Tests\Rector\Contrib\Nette\Environment\GetServiceToConstructorInjectionRector\Source\DummyProvider: ~
-
-    # require for interface autowiring
-    Rector\Contract\Bridge\ServiceTypeForNameProviderInterface:
-        alias: 'Rector\Tests\Rector\Contrib\Nette\Environment\GetServiceToConstructorInjectionRector\Source\DummyProvider'
