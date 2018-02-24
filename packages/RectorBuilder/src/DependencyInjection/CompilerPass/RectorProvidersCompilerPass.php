@@ -20,13 +20,8 @@ final class RectorProvidersCompilerPass implements CompilerPassInterface
             RectorProviderInterface::class
         );
 
-        // see https://symfony.com/doc/current/service_container/expression_language.html
         foreach ($rectorProviderDefinitions as $rectorProviderDefinition) {
-            $rectorService = new Expression(
-                sprintf('service("%s").provide()', addslashes($rectorProviderDefinition->getClass()))
-            );
-
-            $rectorNodeTraverserDefinition->addMethodCall('addVisitor', [$rectorService]);
+            $rectorNodeTraverserDefinition->addMethodCall('addRectorProvider', ['@' . $rectorProviderDefinition->getClass()]);
         }
     }
 }
