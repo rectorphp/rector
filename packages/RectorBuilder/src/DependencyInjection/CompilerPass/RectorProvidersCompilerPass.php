@@ -3,7 +3,6 @@
 namespace Rector\RectorBuilder\DependencyInjection\CompilerPass;
 
 use Rector\NodeTraverser\RectorNodeTraverser;
-use Rector\Rector\RectorCollector;
 use Rector\RectorBuilder\Contract\RectorProviderInterface;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -14,7 +13,6 @@ final class RectorProvidersCompilerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $containerBuilder): void
     {
-        $rectorCollectorDefinition = $containerBuilder->getDefinition(RectorCollector::class);
         $rectorNodeTraverserDefinition = $containerBuilder->getDefinition(RectorNodeTraverser::class);
 
         $rectorProviderDefinitions = DefinitionFinder::findAllByType(
@@ -28,7 +26,6 @@ final class RectorProvidersCompilerPass implements CompilerPassInterface
                 sprintf('service("%s").provide()', addslashes($rectorProviderDefinition->getClass()))
             );
 
-            $rectorCollectorDefinition->addMethodCall('addRector', [$rectorService]);
             $rectorNodeTraverserDefinition->addMethodCall('addVisitor', [$rectorService]);
         }
     }

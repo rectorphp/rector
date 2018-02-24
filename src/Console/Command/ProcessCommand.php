@@ -12,7 +12,7 @@ use Rector\Exception\Command\FileProcessingException;
 use Rector\Exception\NoRectorsLoadedException;
 use Rector\FileSystem\PhpFilesFinder;
 use Rector\Naming\CommandNaming;
-use Rector\Rector\RectorCollector;
+use Rector\NodeTraverser\RectorNodeTraverser;
 use Rector\Reporting\FileDiff;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -29,11 +29,6 @@ final class ProcessCommand extends Command
      * @var FileProcessor
      */
     private $fileProcessor;
-
-    /**
-     * @var RectorCollector
-     */
-    private $rectorCollector;
 
     /**
      * @var ConsoleStyle
@@ -75,26 +70,31 @@ final class ProcessCommand extends Command
      */
     private $additionalAutoloader;
 
+    /**
+     * @var RectorNodeTraverser
+     */
+    private $rectorNodeTraverser;
+
     public function __construct(
         FileProcessor $fileProcessor,
-        RectorCollector $rectorCollector,
         ConsoleStyle $consoleStyle,
         PhpFilesFinder $phpFilesFinder,
         ProcessCommandReporter $processCommandReporter,
         ParameterProvider $parameterProvider,
         DifferAndFormatter $differAndFormatter,
-        AdditionalAutoloader $additionalAutoloader
+        AdditionalAutoloader $additionalAutoloader,
+        RectorNodeTraverser $rectorNodeTraverser
     ) {
         parent::__construct();
 
         $this->fileProcessor = $fileProcessor;
-        $this->rectorCollector = $rectorCollector;
         $this->consoleStyle = $consoleStyle;
         $this->phpFilesFinder = $phpFilesFinder;
         $this->processCommandReporter = $processCommandReporter;
         $this->parameterProvider = $parameterProvider;
         $this->differAndFormatter = $differAndFormatter;
         $this->additionalAutoloader = $additionalAutoloader;
+        $this->rectorNodeTraverser = $rectorNodeTraverser;
     }
 
     protected function configure(): void
@@ -144,7 +144,7 @@ final class ProcessCommand extends Command
 
     private function ensureSomeRectorsAreRegistered(): void
     {
-        if ($this->rectorCollector->getRectorCount() > 0) {
+        if ($this->rectorNodeTraverser->getRectorCount() > 0) {
             return;
         }
 
