@@ -46,8 +46,6 @@ final class CaseRector extends AbstractRector
             }
         }
 
-        dump($this->methodName);
-
         if ($this->methodName) {
             if (! $this->methodCallAnalyzer->isMethod($node, $this->methodName)) {
                 return false;
@@ -65,26 +63,30 @@ final class CaseRector extends AbstractRector
         die;
     }
 
-    public function setMethodCallType(string $methodCallType): void
+    public function matchMethodCallByType(string $methodCallType): self
     {
         $this->methodCallType = $methodCallType;
+        return $this;
     }
 
-    public function setMethodName(string $methodName): void
+    public function matchMethodName(string $methodName): self
     {
         $this->methodName = $methodName;
+        return $this;
     }
 
-    public function setNewMethodName(string $newMethodName): void
+    public function changeMethodNameTo(string $newMethodName): self
     {
         $this->newMethodName = $newMethodName;
+        return $this;
     }
 
     /**
      * @param mixed $value
      */
-    public function addNewArgument(int $position, $value): void
+    public function addArgument(int $position, $value): self
     {
         $this->newArguments[$position] = $value;
+        return $this;
     }
 }
