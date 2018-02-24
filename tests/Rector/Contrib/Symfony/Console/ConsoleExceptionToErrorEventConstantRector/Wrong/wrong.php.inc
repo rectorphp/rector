@@ -8,5 +8,7 @@ final class SomeSubscriber
             'console.exception' => someFunction(),
             Symfony\Component\Console\ConsoleEvents::EXCEPTION => someFunction(),
         ];
-    }
-}
+    }    protected function provideConfig(): string
+    {
+        return __DIR__ . '/config.yml';
+    }}

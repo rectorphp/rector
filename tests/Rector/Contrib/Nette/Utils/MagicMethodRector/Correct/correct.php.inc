@@ -17,5 +17,7 @@ class SomeClass extends Object
     public function getAnotherValue()
     {
         return $this->anotherValue;
-    }
-}
+    }    protected function provideConfig(): string
+    {
+        return __DIR__ . '/config.yml';
+    }}

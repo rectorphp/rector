@@ -7,5 +7,7 @@ final class MyTest extends \PHPUnit\Framework\TestCase
         $this->assertNotSame($anything, $something);
         $this->assertGreaterThan(2, count($something));
         $this->assertLessThanOrEqual(5, count($something), 'message');
-    }
-}
+    }    protected function provideConfig(): string
+    {
+        return __DIR__ . '/config.yml';
+    }}

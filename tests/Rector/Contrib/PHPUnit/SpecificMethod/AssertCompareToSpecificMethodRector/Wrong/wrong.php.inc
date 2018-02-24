@@ -8,5 +8,7 @@ final class MyTest extends \PHPUnit\Framework\TestCase
         $this->assertNotEquals($count, sizeof($something), 'third argument');
         $this->assertEquals('string', gettype($something));
         $this->assertEquals('string', $something['property']());
-    }
-}
+    }    protected function provideConfig(): string
+    {
+        return __DIR__ . '/config.yml';
+    }}

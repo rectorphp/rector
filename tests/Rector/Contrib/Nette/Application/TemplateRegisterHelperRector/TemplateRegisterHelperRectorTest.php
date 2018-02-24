@@ -2,9 +2,11 @@
 
 namespace Rector\Tests\Rector\Contrib\Nette\Application\TemplateRegisterHelperRector;
 
-use Rector\Rector\Contrib\Nette\Application\TemplateRegisterHelperRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
+/**
+ * @covers \Rector\Rector\Contrib\Nette\Application\TemplateRegisterHelperRector
+ */
 final class TemplateRegisterHelperRectorTest extends AbstractRectorTestCase
 {
     /**
@@ -25,11 +27,8 @@ final class TemplateRegisterHelperRectorTest extends AbstractRectorTestCase
         ];
     }
 
-    /**
-     * @return string[]
-     */
-    protected function getRectorClasses(): array
+    protected function provideConfig(): string
     {
-        return [TemplateRegisterHelperRector::class];
+        return __DIR__ . '/config.yml';
     }
 }

@@ -3,9 +3,12 @@
 namespace Rector\Tests\Rector\Contrib\Sensio\FrameworkExtraBundle\TemplateAnnotationRector;
 
 use Rector\Rector\Contrib\Sensio\FrameworkExtraBundle\TemplateAnnotationRector;
-use Rector\Testing\PHPUnit\AbstractConfigurableRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class TemplateAnnotationVersion5RectorTest extends AbstractConfigurableRectorTestCase
+/**
+ * @covers \Rector\Rector\Contrib\Sensio\FrameworkExtraBundle\TemplateAnnotationRector
+ */
+final class TemplateAnnotationVersion5RectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()
@@ -31,14 +34,6 @@ final class TemplateAnnotationVersion5RectorTest extends AbstractConfigurableRec
             [__DIR__ . '/Wrong/wrong8.php.inc', __DIR__ . '/Correct/Version5/correct8.php.inc'],
             [__DIR__ . '/Wrong/wrong9.php.inc', __DIR__ . '/Correct/Version5/correct9.php.inc'],
         ];
-    }
-
-    /**
-     * @return string[]
-     */
-    protected function getRectorClasses(): array
-    {
-        return [TemplateAnnotationRector::class];
     }
 
     protected function provideConfig(): string

@@ -6,5 +6,7 @@ final class MyTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertContains('foo', $node);
         $this->assertNotContains('foo', $node, 'message');
-    }
-}
+    }    protected function provideConfig(): string
+    {
+        return __DIR__ . '/config.yml';
+    }}

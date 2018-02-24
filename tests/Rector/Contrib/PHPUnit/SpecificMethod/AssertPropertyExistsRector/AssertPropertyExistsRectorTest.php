@@ -5,6 +5,9 @@ namespace Rector\Tests\Rector\Contrib\PHPUnit\SpecificMethod\AssertPropertyExist
 use Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertPropertyExistsRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
+/**
+ * @covers \Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertPropertyExistsRector
+ */
 final class AssertPropertyExistsRectorTest extends AbstractRectorTestCase
 {
     /**
@@ -25,11 +28,7 @@ final class AssertPropertyExistsRectorTest extends AbstractRectorTestCase
         ];
     }
 
-    /**
-     * @return string[]
-     */
-    protected function getRectorClasses(): array
+    protected function provideConfig(): string
     {
-        return [AssertPropertyExistsRector::class];
-    }
-}
+        return __DIR__ . '/config.yml';
+    }}

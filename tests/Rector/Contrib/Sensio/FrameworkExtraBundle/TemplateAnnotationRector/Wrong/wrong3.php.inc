@@ -8,5 +8,7 @@ class ClassWithNamedService1 extends Controller
     public function indexAction()
     {
         return [];
-    }
-}
+    }    protected function provideConfig(): string
+    {
+        return __DIR__ . '/config.yml';
+    }}

@@ -5,6 +5,9 @@ namespace Rector\Tests\Rector\Contrib\Nette\DI\CompilerGenerateCodeArgumentsRect
 use Rector\Rector\Contrib\Nette\DI\CompilerGenerateCodeArgumentsRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
+/**
+ * @covers \Rector\Rector\Contrib\Nette\DI\CompilerGenerateCodeArgumentsRector
+ */
 final class CompilerGenerateCodeArgumentsRectorTest extends AbstractRectorTestCase
 {
     /**
@@ -25,11 +28,7 @@ final class CompilerGenerateCodeArgumentsRectorTest extends AbstractRectorTestCa
         ];
     }
 
-    /**
-     * @return string[]
-     */
-    protected function getRectorClasses(): array
+  protected function provideConfig(): string
     {
-        return [CompilerGenerateCodeArgumentsRector::class];
-    }
-}
+        return __DIR__ . '/config.yml';
+    }}

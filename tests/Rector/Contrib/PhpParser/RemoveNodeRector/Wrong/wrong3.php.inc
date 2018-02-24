@@ -10,5 +10,7 @@ class SomeVisitor extends MyAbstractVisitor
     public function leaveNode(\PhpParser\Node $node)
     {
         return false;
-    }
-}
+    }    protected function provideConfig(): string
+    {
+        return __DIR__ . '/config.yml';
+    }}

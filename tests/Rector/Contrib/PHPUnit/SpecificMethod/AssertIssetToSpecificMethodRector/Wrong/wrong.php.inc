@@ -8,5 +8,7 @@ final class MyTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse(isset($node->value2), 'message');
         $this->assertTrue(isset($node['value1']), 'message');
         $this->assertFalse(isset($node['value2']));
-    }
-}
+    }    protected function provideConfig(): string
+    {
+        return __DIR__ . '/config.yml';
+    }}

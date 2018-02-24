@@ -10,5 +10,7 @@ class SomeClass
         $compiler->setClassName($secondArg);
 
         $someOtherValue = 5;
-    }
-}
+    }    protected function provideConfig(): string
+    {
+        return __DIR__ . '/config.yml';
+    }}

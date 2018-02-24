@@ -4,13 +4,18 @@ class ClassWithInjects
 {
     /**
      * @var stdClass
-     * @inject
      */
-    public $property;
+    private $property;
 
     /**
      * @var DateTimeInterface
-     * @inject
      */
-    public $otherProperty;
-}
+    private $otherProperty;
+    public function __construct(stdClass $property, DateTimeInterface $otherProperty)
+    {
+        $this->property = $property;
+        $this->otherProperty = $otherProperty;
+    }    protected function provideConfig(): string
+    {
+        return __DIR__ . '/config.yml';
+    }}

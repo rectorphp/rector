@@ -12,5 +12,7 @@ class PermissionCollectionType extends AbstractType
     public function getParent()
     {
         return 'collection';
-    }
-}
+    }    protected function provideConfig(): string
+    {
+        return __DIR__ . '/config.yml';
+    }}

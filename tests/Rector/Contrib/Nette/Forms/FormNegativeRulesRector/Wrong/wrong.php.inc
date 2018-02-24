@@ -12,5 +12,7 @@ class SomePresenter
         $form->addRule(~Form::EQUAL, '...');
 
         return $form;
-    }
-}
+    }    protected function provideConfig(): string
+    {
+        return __DIR__ . '/config.yml';
+    }}

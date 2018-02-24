@@ -24,5 +24,7 @@ class SomeClass
         }
 
         return $this->node->name->toString();
-    }
-}
+    }    protected function provideConfig(): string
+    {
+        return __DIR__ . '/config.yml';
+    }}

@@ -5,6 +5,9 @@ namespace Rector\Tests\Rector\Contrib\Symfony\Process\ProcessBuilderInstanceRect
 use Rector\Rector\Contrib\Symfony\Process\ProcessBuilderInstanceRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
+/**
+ * @covers \Rector\Rector\Contrib\Symfony\Process\ProcessBuilderInstanceRector
+ */
 final class ProcessBuilderInstanceRectorTest extends AbstractRectorTestCase
 {
     /**
@@ -25,11 +28,7 @@ final class ProcessBuilderInstanceRectorTest extends AbstractRectorTestCase
         ];
     }
 
-    /**
-     * @return string[]
-     */
-    protected function getRectorClasses(): array
+    protected function provideConfig(): string
     {
-        return [ProcessBuilderInstanceRector::class];
-    }
-}
+        return __DIR__ . '/config.yml';
+    }}

@@ -8,5 +8,7 @@ class AppController extends Controller
     public function someAction(Request $request)
     {
         $this->addFlash('success', 'message');
-    }
-}
+    }    protected function provideConfig(): string
+    {
+        return __DIR__ . '/config.yml';
+    }}

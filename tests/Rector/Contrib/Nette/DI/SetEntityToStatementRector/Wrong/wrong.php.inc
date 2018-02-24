@@ -6,5 +6,7 @@ class SomeNetteExtension extends Nette\DI\CompilerExtension
     {
         $statement = new Nette\DI\Statement('oldEntity');
         $statement->setEntity('newEntity');
-    }
-}
+    }    protected function provideConfig(): string
+    {
+        return __DIR__ . '/config.yml';
+    }}

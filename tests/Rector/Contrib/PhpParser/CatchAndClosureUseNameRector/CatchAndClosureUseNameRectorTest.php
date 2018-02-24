@@ -5,6 +5,9 @@ namespace Rector\Tests\Rector\Contrib\PhpParser\CatchAndClosureUseNameRector;
 use Rector\Rector\Contrib\PhpParser\CatchAndClosureUseNameRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
+/**
+ * @covers \Rector\Rector\Contrib\PhpParser\CatchAndClosureUseNameRector
+ */
 final class CatchAndClosureUseNameRectorTest extends AbstractRectorTestCase
 {
     /**
@@ -25,11 +28,7 @@ final class CatchAndClosureUseNameRectorTest extends AbstractRectorTestCase
         ];
     }
 
-    /**
-     * @return string[]
-     */
-    protected function getRectorClasses(): array
+    protected function provideConfig(): string
     {
-        return [CatchAndClosureUseNameRector::class];
-    }
-}
+        return __DIR__ . '/config.yml';
+    }}

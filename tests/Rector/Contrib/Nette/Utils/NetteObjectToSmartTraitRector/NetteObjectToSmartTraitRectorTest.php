@@ -5,6 +5,9 @@ namespace Rector\Tests\Rector\Contrib\Nette\Utils\NetteObjectToSmartTraitRector;
 use Rector\Rector\Contrib\Nette\Utils\NetteObjectToSmartTraitRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
+/**
+ * @covers \Rector\Rector\Contrib\Nette\Utils\NetteObjectToSmartTraitRector
+ */
 final class NetteObjectToSmartTraitRectorTest extends AbstractRectorTestCase
 {
     /**
@@ -28,11 +31,8 @@ final class NetteObjectToSmartTraitRectorTest extends AbstractRectorTestCase
         ];
     }
 
-    /**
-     * @return string[]
-     */
-    protected function getRectorClasses(): array
+    protected function provideConfig(): string
     {
-        return [NetteObjectToSmartTraitRector::class];
+        return __DIR__ . '/config.yml';
     }
 }

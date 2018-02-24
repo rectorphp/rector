@@ -15,5 +15,7 @@ final class MyCommand extends \Symfony\Component\Console\Command\Command
     protected function execute()
     {
         $someService = $this->stdClass;
-    }
-}
+    }    protected function provideConfig(): string
+    {
+        return __DIR__ . '/config.yml';
+    }}

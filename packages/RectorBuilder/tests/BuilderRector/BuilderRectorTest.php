@@ -3,9 +3,9 @@
 namespace Rector\RectorBuilder\Tests\BuilderRector;
 
 use Rector\RectorBuilder\BuilderRector;
-use Rector\Testing\PHPUnit\AbstractConfigurableRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class BuilderRectorTest extends AbstractConfigurableRectorTestCase
+final class BuilderRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()

@@ -7,5 +7,7 @@ final class MyCommand extends ContainerAwareCommand
     protected function execute()
     {
         $someService = $this->getContainer()->get('some_service');
-    }
-}
+    }    protected function provideConfig(): string
+    {
+        return __DIR__ . '/config.yml';
+    }}

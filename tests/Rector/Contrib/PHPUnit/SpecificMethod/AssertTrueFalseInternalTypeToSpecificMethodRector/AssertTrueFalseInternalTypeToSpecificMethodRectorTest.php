@@ -5,6 +5,9 @@ namespace Rector\Tests\Rector\Contrib\PHPUnit\SpecificMethod\AssertTrueFalseInte
 use Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertTrueFalseInternalTypeToSpecificMethodRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
+/**
+ * @covers \Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertTrueFalseInternalTypeToSpecificMethodRector
+ */
 final class AssertTrueFalseInternalTypeToSpecificMethodRectorTest extends AbstractRectorTestCase
 {
     /**
@@ -25,11 +28,7 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRectorTest extends Abstra
         ];
     }
 
-    /**
-     * @return string[]
-     */
-    protected function getRectorClasses(): array
+    protected function provideConfig(): string
     {
-        return [AssertTrueFalseInternalTypeToSpecificMethodRector::class];
-    }
-}
+        return __DIR__ . '/config.yml';
+    }}

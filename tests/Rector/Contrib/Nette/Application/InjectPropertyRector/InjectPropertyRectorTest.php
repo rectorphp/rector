@@ -2,9 +2,11 @@
 
 namespace Rector\Tests\Rector\Contrib\Nette\Application\InjectPropertyRector;
 
-use Rector\Rector\Contrib\Nette\Application\InjectPropertyRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
+/**
+ * @covers \Rector\Rector\Contrib\Nette\Application\InjectPropertyRector
+ */
 final class InjectPropertyRectorTest extends AbstractRectorTestCase
 {
     /**
@@ -25,11 +27,7 @@ final class InjectPropertyRectorTest extends AbstractRectorTestCase
         ];
     }
 
-    /**
-     * @return string[]
-     */
-    protected function getRectorClasses(): array
+        protected function provideConfig(): string
     {
-        return [InjectPropertyRector::class];
-    }
-}
+        return __DIR__ . '/config.yml';
+    }}

@@ -6,5 +6,7 @@ final class MyTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertNotFalse(strpos($node, 'foo'));
         $this->assertFalse(stripos($node, 'foo'), 'message');
-    }
-}
+    }    protected function provideConfig(): string
+    {
+        return __DIR__ . '/config.yml';
+    }}

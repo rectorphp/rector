@@ -5,6 +5,9 @@ namespace Rector\Tests\Rector\Contrib\PhpParser\ParamAndStaticVarNameRector;
 use Rector\Rector\Contrib\PhpParser\ParamAndStaticVarNameRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
+/**
+ * @covers \Rector\Rector\Contrib\PhpParser\ParamAndStaticVarNameRector
+ */
 final class ParamAndStaticVarNameRectorTest extends AbstractRectorTestCase
 {
     /**
@@ -25,11 +28,7 @@ final class ParamAndStaticVarNameRectorTest extends AbstractRectorTestCase
         ];
     }
 
-    /**
-     * @return string[]
-     */
-    protected function getRectorClasses(): array
+    protected function provideConfig(): string
     {
-        return [ParamAndStaticVarNameRector::class];
-    }
-}
+        return __DIR__ . '/config.yml';
+    }}

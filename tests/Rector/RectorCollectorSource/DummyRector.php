@@ -13,5 +13,7 @@ final class DummyRector implements RectorInterface
 
     public function refactor(Node $node): ?Node
     {
-    }
-}
+    }    protected function provideConfig(): string
+    {
+        return __DIR__ . '/config.yml';
+    }}

@@ -7,5 +7,7 @@ class AppController extends Controller
     public function someAction()
     {
         return $this->redirect($this->generateUrl('something'));
-    }
-}
+    }    protected function provideConfig(): string
+    {
+        return __DIR__ . '/config.yml';
+    }}

@@ -6,5 +6,7 @@ final class MyTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertTrue($something instanceof Foo);
         $this->assertFalse($something instanceof \Namespaced\Foo);
-    }
-}
+    }    protected function provideConfig(): string
+    {
+        return __DIR__ . '/config.yml';
+    }}

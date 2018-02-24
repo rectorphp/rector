@@ -5,6 +5,9 @@ namespace Rector\Tests\Rector\Contrib\Nette\DI\ExpandFunctionToStaticExpandFunct
 use Rector\Rector\Contrib\Nette\DI\ExpandFunctionToStaticExpandFunctionRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
+/**
+ * @covers \Rector\Rector\Contrib\Nette\DI\ExpandFunctionToStaticExpandFunctionRector
+ */
 final class ExpandFunctionToStaticExpandFunctionRectorTest extends AbstractRectorTestCase
 {
     /**
@@ -25,11 +28,7 @@ final class ExpandFunctionToStaticExpandFunctionRectorTest extends AbstractRecto
         ];
     }
 
-    /**
-     * @return string[]
-     */
-    protected function getRectorClasses(): array
+    protected function provideConfig(): string
     {
-        return [ExpandFunctionToStaticExpandFunctionRector::class];
-    }
-}
+        return __DIR__ . '/config.yml';
+    }}

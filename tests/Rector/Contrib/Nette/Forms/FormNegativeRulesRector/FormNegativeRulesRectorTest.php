@@ -5,6 +5,9 @@ namespace Rector\Tests\Rector\Contrib\Nette\Forms\FormNegativeRulesRector;
 use Rector\Rector\Contrib\Nette\Forms\FormNegativeRulesRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
+/**
+ * @covers \Rector\Rector\Contrib\Nette\Forms\FormNegativeRulesRector
+ */
 final class FormNegativeRulesRectorTest extends AbstractRectorTestCase
 {
     /**
@@ -25,11 +28,7 @@ final class FormNegativeRulesRectorTest extends AbstractRectorTestCase
         ];
     }
 
-    /**
-     * @return string[]
-     */
-    protected function getRectorClasses(): array
+    protected function provideConfig(): string
     {
-        return [FormNegativeRulesRector::class];
-    }
-}
+        return __DIR__ . '/config.yml';
+    }}

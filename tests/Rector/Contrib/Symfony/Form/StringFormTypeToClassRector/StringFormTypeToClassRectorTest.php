@@ -5,6 +5,9 @@ namespace Rector\Tests\Rector\Contrib\Symfony\Form\StringFormTypeToClassRector;
 use Rector\Rector\Contrib\Symfony\Form\StringFormTypeToClassRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
+/**
+ * @covers \Rector\Rector\Contrib\Symfony\Form\StringFormTypeToClassRector
+ */
 final class StringFormTypeToClassRectorTest extends AbstractRectorTestCase
 {
     /**
@@ -25,11 +28,7 @@ final class StringFormTypeToClassRectorTest extends AbstractRectorTestCase
         ];
     }
 
-    /**
-     * @return string[]
-     */
-    protected function getRectorClasses(): array
+    protected function provideConfig(): string
     {
-        return [StringFormTypeToClassRector::class];
-    }
-}
+        return __DIR__ . '/config.yml';
+    }}

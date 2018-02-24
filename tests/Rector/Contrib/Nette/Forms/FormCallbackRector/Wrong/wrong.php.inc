@@ -18,5 +18,7 @@ class SomePresenter
         $form->onSuccess[] = $this->someMethod;
 
         return $form;
-    }
-}
+    }    protected function provideConfig(): string
+    {
+        return __DIR__ . '/config.yml';
+    }}

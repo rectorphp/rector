@@ -9,5 +9,7 @@ class ClassWithNamedService1Controller extends Controller
     public function indexAction()
     {
         return $this->render('AppBundle:ClassWithNamedService1:index.html.twig', ['someKey' => 'someValue']);
-    }
-}
+    }    protected function provideConfig(): string
+    {
+        return __DIR__ . '/config.yml';
+    }}

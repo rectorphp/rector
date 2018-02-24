@@ -12,5 +12,7 @@ class ClassWithNamedService1Controller extends Controller
         return $this->render('AppBundle:NameNotFollowingConvention:index.html.twig', array(
             'form' => $form->createView()
         ));
-    }
-}
+    }    protected function provideConfig(): string
+    {
+        return __DIR__ . '/config.yml';
+    }}

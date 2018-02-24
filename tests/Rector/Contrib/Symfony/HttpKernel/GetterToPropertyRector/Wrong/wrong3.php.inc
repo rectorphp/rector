@@ -6,5 +6,7 @@ class ClassWithNamedService3 implements ContainerAwareInterface
     {
         $someService = $this->get('some_service');
         $someResult = $this->get('some_service')->callMe();
-    }
-}
+    }    protected function provideConfig(): string
+    {
+        return __DIR__ . '/config.yml';
+    }}

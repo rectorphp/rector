@@ -7,5 +7,7 @@ final class MyTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($something === $anything);
         $this->assertTrue(count($something) > 2);
         $this->assertFalse(count($something) >= 5, 'message');
-    }
-}
+    }    protected function provideConfig(): string
+    {
+        return __DIR__ . '/config.yml';
+    }}

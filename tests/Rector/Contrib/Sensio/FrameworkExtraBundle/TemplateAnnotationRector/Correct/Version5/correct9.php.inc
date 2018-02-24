@@ -10,5 +10,7 @@ class AppController extends AbstractController
     public function index()
     {
         return $this->render('app/index.html.twig');
-    }
-}
+    }    protected function provideConfig(): string
+    {
+        return __DIR__ . '/config.yml';
+    }}

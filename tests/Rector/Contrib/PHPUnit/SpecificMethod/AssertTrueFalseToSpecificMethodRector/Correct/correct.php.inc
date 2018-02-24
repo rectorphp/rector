@@ -16,5 +16,7 @@ final class MyTest extends \PHPUnit\Framework\TestCase
         $this->assertIsWritable('...');
         $this->assertNotContains('...', ['...'], 'argument');
         $this->assertInstanceOf('Foo', $anything, 'argument');
-    }
-}
+    }    protected function provideConfig(): string
+    {
+        return __DIR__ . '/config.yml';
+    }}

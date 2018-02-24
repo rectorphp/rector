@@ -5,6 +5,9 @@ namespace Rector\Tests\Rector\Contrib\Symfony\HttpKernel\GetRequestRector;
 use Rector\Rector\Contrib\Symfony\HttpKernel\GetRequestRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
+/**
+ * @covers \Rector\Rector\Contrib\Symfony\HttpKernel\GetRequestRector
+ */
 final class GetRequestRectorTest extends AbstractRectorTestCase
 {
     /**
@@ -25,11 +28,7 @@ final class GetRequestRectorTest extends AbstractRectorTestCase
         ];
     }
 
-    /**
-     * @return string[]
-     */
-    protected function getRectorClasses(): array
+    protected function provideConfig(): string
     {
-        return [GetRequestRector::class];
-    }
-}
+        return __DIR__ . '/config.yml';
+    }}

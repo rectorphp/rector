@@ -10,5 +10,7 @@ class SomeClass
     public function action()
     {
         $this->template->someFilter('value');
-    }
-}
+    }    protected function provideConfig(): string
+    {
+        return __DIR__ . '/config.yml';
+    }}

@@ -7,5 +7,7 @@ class ClassWithNamedService extends Controller
     public function someAction()
     {
         $this->getRequest()->getSomething();
-    }
-}
+    }    protected function provideConfig(): string
+    {
+        return __DIR__ . '/config.yml';
+    }}

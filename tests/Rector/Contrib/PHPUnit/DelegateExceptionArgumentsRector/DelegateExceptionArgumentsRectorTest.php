@@ -5,6 +5,9 @@ namespace Rector\Tests\Rector\Contrib\PHPUnit\DelegateExceptionArgumentsRector;
 use Rector\Rector\Contrib\PHPUnit\DelegateExceptionArgumentsRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
+/**
+ * @covers \Rector\Rector\Contrib\PHPUnit\DelegateExceptionArgumentsRector
+ */
 final class DelegateExceptionArgumentsRectorTest extends AbstractRectorTestCase
 {
     /**
@@ -33,5 +36,7 @@ final class DelegateExceptionArgumentsRectorTest extends AbstractRectorTestCase
     protected function getRectorClasses(): array
     {
         return [DelegateExceptionArgumentsRector::class];
-    }
-}
+    }    protected function provideConfig(): string
+    {
+        return __DIR__ . '/config.yml';
+    }}

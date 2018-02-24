@@ -5,6 +5,9 @@ namespace Rector\Tests\Rector\Contrib\PHPUnit\SpecificMethod\AssertSameBoolNullT
 use Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertSameBoolNullToSpecificMethodRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
+/**
+ * @covers \Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertSameBoolNullToSpecificMethodRector
+ */
 final class AssertSameBoolNullToSpecificMethodRectorTest extends AbstractRectorTestCase
 {
     /**
@@ -25,11 +28,8 @@ final class AssertSameBoolNullToSpecificMethodRectorTest extends AbstractRectorT
         ];
     }
 
-    /**
-     * @return string[]
-     */
-    protected function getRectorClasses(): array
+    protected function provideConfig(): string
     {
-        return [AssertSameBoolNullToSpecificMethodRector::class];
+        return __DIR__ . '/config.yml';
     }
 }

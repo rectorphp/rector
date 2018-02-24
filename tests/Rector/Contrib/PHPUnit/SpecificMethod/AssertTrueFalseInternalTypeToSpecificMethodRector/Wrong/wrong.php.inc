@@ -12,5 +12,7 @@ final class MyTest extends \PHPUnit\Framework\TestCase
 
         $this->assertTrue(is_file($something));
         $this->assertFalse(is_null($something), 'second argument');
-    }
-}
+    }    protected function provideConfig(): string
+    {
+        return __DIR__ . '/config.yml';
+    }}

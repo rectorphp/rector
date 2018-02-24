@@ -11,5 +11,7 @@ class ArrayInputTest extends TestCase
         } else {
             $this->setExpectedException('InvalidArgumentException', $expectedExceptionMessage);
         }
-    }
-}
+    }    protected function provideConfig(): string
+    {
+        return __DIR__ . '/config.yml';
+    }}
