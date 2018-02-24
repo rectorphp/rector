@@ -415,7 +415,7 @@ rectors:
 
 ## Coding Standards are Outsourced
 
-This package has no intention in formatting your code, as **coding standard tools handle this much better**. We prefer [EasyCodingStandard](https://github.com/Symplify/EasyCodingStandard) with Rector's prepared set: 
+This package has no intention in formatting your code, as **coding standard tools handle this much better**. We prefer [EasyCodingStandard](https://github.com/Symplify/EasyCodingStandard) with Rector's prepared set:
 
 ```bash
 # install

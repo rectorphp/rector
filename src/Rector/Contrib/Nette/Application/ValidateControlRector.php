@@ -10,9 +10,6 @@ use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractRector;
 
 /**
- * @todo - turn to dynamic -> rename method + add arg
- * then drop this too specific one
- *
  * Before::
  * - $myControl->validateControl(?$snippet)
  *

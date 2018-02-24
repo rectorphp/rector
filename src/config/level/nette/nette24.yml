@@ -3,7 +3,10 @@ rectors:
     Rector\Rector\Contrib\Nette\Utils\MagicMethodRector: ~
 
     # application
+
+    # todo: turn to RectorProvider with fluent setup
     Rector\Rector\Contrib\Nette\Application\ValidateControlRector: ~
+
     Rector\Rector\Contrib\Nette\Application\TemplateMagicInvokeFilterCallRector: ~
     Rector\Rector\Contrib\Nette\Application\TemplateRegisterHelperRector: ~
 
