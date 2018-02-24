@@ -24,10 +24,12 @@ final class BuilderRectorFactory
      * @var PropertyAdder
      */
     private $propertyAdder;
+
     /**
      * @var IdentifierRenamer
      */
     private $identifierRenamer;
+
     /**
      * @var NodeFactory
      */

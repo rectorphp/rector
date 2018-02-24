@@ -11,16 +11,16 @@ final class RectorProvider implements RectorProviderInterface
     /**
      * @var BuilderRectorFactory
      */
-    private $BuilderRectorBuilder;
+    private $builderRectorFactory;
 
-    public function __construct(BuilderRectorFactory $BuilderRectorBuilder)
+    public function __construct(BuilderRectorFactory $builderRectorFactory)
     {
-        $this->BuilderRectorBuilder = $BuilderRectorBuilder;
+        $this->builderRectorFactory = $builderRectorFactory;
     }
 
     public function provide(): RectorInterface
     {
-        return $this->BuilderRectorBuilder->create()
+        return $this->builderRectorFactory->create()
             ->matchMethodCallByType('Stub_Nette\Application\UI\Control')
             ->matchMethodName('validateControl')
             ->changeMethodNameTo('redrawControl')

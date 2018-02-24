@@ -40,13 +40,17 @@ final class BuilderRector extends AbstractRector
      * @var IdentifierRenamer
      */
     private $identifierRenamer;
+
     /**
      * @var NodeFactory
      */
     private $nodeFactory;
 
-    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, IdentifierRenamer $identifierRenamer, NodeFactory $nodeFactory)
-    {
+    public function __construct(
+        MethodCallAnalyzer $methodCallAnalyzer,
+        IdentifierRenamer $identifierRenamer,
+        NodeFactory $nodeFactory
+    ) {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
         $this->nodeFactory = $nodeFactory;
@@ -86,7 +90,6 @@ final class BuilderRector extends AbstractRector
                 return false;
             }
         }
-
 
         if ($this->methodName) {
             if (! $this->methodCallAnalyzer->isMethod($node, $this->methodName)) {
