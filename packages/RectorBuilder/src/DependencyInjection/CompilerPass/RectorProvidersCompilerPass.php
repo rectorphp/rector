@@ -17,7 +17,10 @@ final class RectorProvidersCompilerPass implements CompilerPassInterface
         $rectorCollectorDefinition = $containerBuilder->getDefinition(RectorCollector::class);
         $rectorNodeTraverserDefinition = $containerBuilder->getDefinition(RectorNodeTraverser::class);
 
-        $rectorProviderDefinitions = DefinitionFinder::findAllByType($containerBuilder, RectorProviderInterface::class);
+        $rectorProviderDefinitions = DefinitionFinder::findAllByType(
+            $containerBuilder,
+            RectorProviderInterface::class
+        );
 
         // see https://symfony.com/doc/current/service_container/expression_language.html
         foreach ($rectorProviderDefinitions as $rectorProviderDefinition) {
