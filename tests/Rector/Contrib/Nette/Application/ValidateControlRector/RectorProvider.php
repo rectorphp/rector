@@ -21,9 +21,9 @@ final class RectorProvider implements RectorProviderInterface
     public function provide(): RectorInterface
     {
         return $this->caseRectorBuilder->create()
-            ->matchMethodCallByType('@todo')
-            ->matchMethodName('@todo')
-            ->changeMethodNameTo('@todo')
-            ->addArgument(2, '@todo');
+            ->matchMethodCallByType('Stub_Nette\Application\UI\Control')
+            ->matchMethodName('validateControl')
+            ->changeMethodNameTo('redrawControl')
+            ->addArgument(1, false);
     }
 }

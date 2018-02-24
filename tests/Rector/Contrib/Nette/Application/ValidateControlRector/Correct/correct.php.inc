@@ -1,10 +1,21 @@
 <?php declare (strict_types=1);
 
-final class CustomControl extends Nette\Application\UI\Control
-{
+namespace {
+    final class CustomControl extends Stub_Nette\Application\UI\Control
+    {
 
+    }
+
+    $myControl = new CustomControl;
+    $myControl->redrawControl();
+    $myControl->redrawControl('snippet', false);
 }
 
-$myControl = new CustomControl;
-$myControl->redrawControl(null, false);
-$myControl->redrawControl('snippet', false);
+
+namespace Stub_Nette\Application\UI
+{
+    class Control
+    {
+
+    }
+}
