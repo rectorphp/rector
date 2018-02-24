@@ -6,6 +6,9 @@ includes:
     - vendor/symplify/easy-coding-standard/config/clean-code.neon
 
 checkers:
+    # sadd temporary before in symplify.neon set
+    - Symplify\CodingStandard\Fixer\LineLength\BreakArrayListFixer
+
     # Metrics
     PHP_CodeSniffer\Standards\Generic\Sniffs\Files\LineLengthSniff:
         absoluteLineLimit: 120
