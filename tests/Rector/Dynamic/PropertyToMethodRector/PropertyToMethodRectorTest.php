@@ -2,9 +2,9 @@
 
 namespace Rector\Tests\Rector\Dynamic\PropertyToMethodRector;
 
-use Rector\Testing\PHPUnit\AbstractConfigurableRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class PropertyToMethodRectorTest extends AbstractConfigurableRectorTestCase
+final class PropertyToMethodRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()

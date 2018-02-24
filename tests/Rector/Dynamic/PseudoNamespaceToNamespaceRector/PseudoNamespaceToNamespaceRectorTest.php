@@ -2,9 +2,9 @@
 
 namespace Rector\Tests\Rector\Dynamic\PseudoNamespaceToNamespaceRector;
 
-use Rector\Testing\PHPUnit\AbstractConfigurableRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class PseudoNamespaceToNamespaceRectorTest extends AbstractConfigurableRectorTestCase
+final class PseudoNamespaceToNamespaceRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()

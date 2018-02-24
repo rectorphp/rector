@@ -2,9 +2,9 @@
 
 namespace Rector\Tests\Rector\Dynamic\FluentReplaceRector;
 
-use Rector\Testing\PHPUnit\AbstractConfigurableRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class FluentReplaceRectorTest extends AbstractConfigurableRectorTestCase
+final class FluentReplaceRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()

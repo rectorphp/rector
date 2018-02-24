@@ -2,9 +2,9 @@
 
 namespace Rector\Tests\Rector\Dynamic\ParentTypehintedArgumentRector;
 
-use Rector\Testing\PHPUnit\AbstractConfigurableRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class ParentTypehintedArgumentRectorTest extends AbstractConfigurableRectorTestCase
+final class ParentTypehintedArgumentRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()
