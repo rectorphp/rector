@@ -12,7 +12,6 @@ class ClassWithNamedService1Controller extends Controller
         if(true){
             return $this->redirectToRoute('rector_is_cool');
         }
-
         return array(
             'form' => $form->createView()
         );

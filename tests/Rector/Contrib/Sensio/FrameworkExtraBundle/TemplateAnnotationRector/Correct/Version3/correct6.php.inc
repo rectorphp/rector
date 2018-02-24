@@ -11,7 +11,6 @@ class ClassWithNamedService1Controller extends Controller
         if(true){
             return $this->redirectToRoute('rector_is_cool');
         }
-
         return $this->render('AppBundle:ClassWithNamedService1:index.html.twig', array(
             'form' => $form->createView()
         ));

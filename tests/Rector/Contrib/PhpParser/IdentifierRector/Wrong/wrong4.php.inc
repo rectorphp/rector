@@ -22,7 +22,6 @@ class SomeClass
         if ($this->node instanceof Node\Expr\Closure) {
             return self::CLOSURE_NAME;
         }
-
         return $this->node->name;
     }
 }

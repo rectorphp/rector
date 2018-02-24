@@ -8,7 +8,6 @@ class SomeClass
     {
         foo();
     }
-
     public function otherFunction()
     {
         bar();
