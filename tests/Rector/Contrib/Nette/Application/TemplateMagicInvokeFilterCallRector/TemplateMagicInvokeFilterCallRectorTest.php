@@ -2,9 +2,11 @@
 
 namespace Rector\Tests\Rector\Contrib\Nette\Application\TemplateMagicInvokeFilterCallRector;
 
-use Rector\Rector\Contrib\Nette\Application\TemplateMagicInvokeFilterCallRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
+/**
+ * @covers \Rector\Rector\Contrib\Nette\Application\TemplateMagicInvokeFilterCallRector
+ */
 final class TemplateMagicInvokeFilterCallRectorTest extends AbstractRectorTestCase
 {
     /**
@@ -25,11 +27,8 @@ final class TemplateMagicInvokeFilterCallRectorTest extends AbstractRectorTestCa
         ];
     }
 
-    /**
-     * @return string[]
-     */
-    protected function getRectorClasses(): array
+    protected function provideConfig(): string
     {
-        return [TemplateMagicInvokeFilterCallRector::class];
+        return __DIR__ . '/config.yml';
     }
 }

@@ -6,7 +6,7 @@ includes:
     - vendor/symplify/easy-coding-standard/config/clean-code.neon
 
 checkers:
-    # sadd temporary before in symplify.neon set
+    # add temporary before in symplify.neon set
     - Symplify\CodingStandard\Fixer\LineLength\BreakArrayListFixer
 
     # Metrics

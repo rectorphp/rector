@@ -27,6 +27,11 @@ final class ExpressionAddingNodeVisitor extends NodeVisitorAbstract
             return $node;
         }
 
-        return array_merge([$node], $this->expressionsToAdd[$node]);
+        $nodes = array_merge([$node], $this->expressionsToAdd[$node]);
+
+        // $this->expressionsToAdd->detach($node);
+        unset($this->expressionsToAdd[$node]);
+
+        return $nodes;
     }
 }

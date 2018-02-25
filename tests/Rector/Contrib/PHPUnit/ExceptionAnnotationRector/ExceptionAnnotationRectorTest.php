@@ -2,9 +2,11 @@
 
 namespace Rector\Tests\Rector\Contrib\PHPUnit\ExceptionAnnotationRector;
 
-use Rector\Rector\Contrib\PHPUnit\ExceptionAnnotationRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
+/**
+ * @covers \Rector\Rector\Contrib\PHPUnit\ExceptionAnnotationRector
+ */
 final class ExceptionAnnotationRectorTest extends AbstractRectorTestCase
 {
     /**
@@ -26,11 +28,8 @@ final class ExceptionAnnotationRectorTest extends AbstractRectorTestCase
         ];
     }
 
-    /**
-     * @return string[]
-     */
-    protected function getRectorClasses(): array
+    protected function provideConfig(): string
     {
-        return [ExceptionAnnotationRector::class];
+        return __DIR__ . '/config.yml';
     }
 }

@@ -2,9 +2,11 @@
 
 namespace Rector\Tests\Rector\Contrib\PHPUnit\SpecificMethod\AssertIssetToSpecificMethodRector;
 
-use Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertIssetToSpecificMethodRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
+/**
+ * @covers \Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertIssetToSpecificMethodRector
+ */
 final class AssertIssetToSpecificMethodRectorTest extends AbstractRectorTestCase
 {
     /**
@@ -25,11 +27,8 @@ final class AssertIssetToSpecificMethodRectorTest extends AbstractRectorTestCase
         ];
     }
 
-    /**
-     * @return string[]
-     */
-    protected function getRectorClasses(): array
+    protected function provideConfig(): string
     {
-        return [AssertIssetToSpecificMethodRector::class];
+        return __DIR__ . '/config.yml';
     }
 }

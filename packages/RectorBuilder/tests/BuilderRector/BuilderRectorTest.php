@@ -2,10 +2,12 @@
 
 namespace Rector\RectorBuilder\Tests\BuilderRector;
 
-use Rector\RectorBuilder\BuilderRector;
-use Rector\Testing\PHPUnit\AbstractConfigurableRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class BuilderRectorTest extends AbstractConfigurableRectorTestCase
+/**
+ * @covers \Rector\RectorBuilder\BuilderRector
+ */
+final class BuilderRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()
@@ -25,16 +27,8 @@ final class BuilderRectorTest extends AbstractConfigurableRectorTestCase
         ];
     }
 
-    /**
-     * @return string[]
-     */
-    protected function getRectorClasses(): array
-    {
-        return [BuilderRector::class];
-    }
-
     protected function provideConfig(): string
     {
-        return __DIR__ . '/config/rector.yml';
+        return __DIR__ . '/config.yml';
     }
 }

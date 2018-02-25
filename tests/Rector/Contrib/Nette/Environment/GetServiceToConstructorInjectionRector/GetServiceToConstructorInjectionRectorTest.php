@@ -2,10 +2,12 @@
 
 namespace Rector\Tests\Rector\Contrib\Nette\Environment\GetServiceToConstructorInjectionRector;
 
-use Rector\Rector\Contrib\Nette\Environment\GetServiceToConstructorInjectionRector;
-use Rector\Testing\PHPUnit\AbstractConfigurableRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class GetServiceToConstructorInjectionRectorTest extends AbstractConfigurableRectorTestCase
+/**
+ * @covers \Rector\Rector\Contrib\Nette\Environment\GetServiceToConstructorInjectionRector
+ */
+final class GetServiceToConstructorInjectionRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()
@@ -25,16 +27,8 @@ final class GetServiceToConstructorInjectionRectorTest extends AbstractConfigura
         ];
     }
 
-    /**
-     * @return string[]
-     */
-    protected function getRectorClasses(): array
-    {
-        return [GetServiceToConstructorInjectionRector::class];
-    }
-
     protected function provideConfig(): string
     {
-        return __DIR__ . '/Source/rector.yml';
+        return __DIR__ . '/config.yml';
     }
 }

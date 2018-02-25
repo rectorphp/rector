@@ -4,38 +4,38 @@ namespace Rector\Console\Output;
 
 use Rector\Console\ConsoleStyle;
 use Rector\Contract\Rector\RectorInterface;
-use Rector\Rector\RectorCollector;
+use Rector\NodeTraverser\RectorNodeTraverser;
 use Rector\Reporting\FileDiff;
 
 final class ProcessCommandReporter
 {
     /**
-     * @var RectorCollector
-     */
-    private $rectorCollector;
-
-    /**
      * @var ConsoleStyle
      */
     private $consoleStyle;
 
-    public function __construct(RectorCollector $rectorCollector, ConsoleStyle $consoleStyle)
+    /**
+     * @var RectorNodeTraverser
+     */
+    private $rectorNodeTraverser;
+
+    public function __construct(RectorNodeTraverser $rectorNodeTraverser, ConsoleStyle $consoleStyle)
     {
-        $this->rectorCollector = $rectorCollector;
         $this->consoleStyle = $consoleStyle;
+        $this->rectorNodeTraverser = $rectorNodeTraverser;
     }
 
     public function reportLoadedRectors(): void
     {
         $this->consoleStyle->title(sprintf(
             '%d Loaded Rector%s',
-            $this->rectorCollector->getRectorCount(),
-            $this->rectorCollector->getRectorCount() === 1 ? '' : 's'
+            $this->rectorNodeTraverser->getRectorCount(),
+            $this->rectorNodeTraverser->getRectorCount() === 1 ? '' : 's'
         ));
 
         $rectorClasses = array_map(function (RectorInterface $rector): string {
             return get_class($rector);
-        }, $this->rectorCollector->getRectors());
+        }, $this->rectorNodeTraverser->getRectors());
 
         $this->consoleStyle->listing($rectorClasses);
     }

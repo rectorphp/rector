@@ -2,9 +2,11 @@
 
 namespace Rector\Tests\Rector\Contrib\PhpParser\UseWithAliasRector;
 
-use Rector\Rector\Contrib\PhpParser\UseWithAliasRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
+/**
+ * @covers \Rector\Rector\Contrib\PhpParser\UseWithAliasRector
+ */
 final class UseWithAliasRectorTest extends AbstractRectorTestCase
 {
     /**
@@ -25,11 +27,8 @@ final class UseWithAliasRectorTest extends AbstractRectorTestCase
         ];
     }
 
-    /**
-     * @return string[]
-     */
-    protected function getRectorClasses(): array
+    protected function provideConfig(): string
     {
-        return [UseWithAliasRector::class];
+        return __DIR__ . '/config.yml';
     }
 }

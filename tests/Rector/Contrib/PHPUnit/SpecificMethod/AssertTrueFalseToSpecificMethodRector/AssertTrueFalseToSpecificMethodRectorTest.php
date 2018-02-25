@@ -2,9 +2,11 @@
 
 namespace Rector\Tests\Rector\Contrib\PHPUnit\SpecificMethod\AssertTrueFalseToSpecificMethodRector;
 
-use Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertTrueFalseToSpecificMethodRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
+/**
+ * @covers \Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertTrueFalseToSpecificMethodRector
+ */
 final class AssertTrueFalseToSpecificMethodRectorTest extends AbstractRectorTestCase
 {
     /**
@@ -25,11 +27,8 @@ final class AssertTrueFalseToSpecificMethodRectorTest extends AbstractRectorTest
         ];
     }
 
-    /**
-     * @return string[]
-     */
-    protected function getRectorClasses(): array
+    protected function provideConfig(): string
     {
-        return [AssertTrueFalseToSpecificMethodRector::class];
+        return __DIR__ . '/config.yml';
     }
 }

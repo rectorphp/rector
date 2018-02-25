@@ -2,10 +2,12 @@
 
 namespace Rector\Tests\Rector\Contrib\Symfony\HttpKernel\GetterToPropertyRector;
 
-use Rector\Rector\Contrib\Symfony\HttpKernel\GetterToPropertyRector;
-use Rector\Testing\PHPUnit\AbstractConfigurableRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class GetterToPropertyRectorTest extends AbstractConfigurableRectorTestCase
+/**
+ * @covers \Rector\Rector\Contrib\Symfony\HttpKernel\GetterToPropertyRector
+ */
+final class GetterToPropertyRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()
@@ -26,14 +28,6 @@ final class GetterToPropertyRectorTest extends AbstractConfigurableRectorTestCas
             [__DIR__ . '/Wrong/wrong3.php.inc', __DIR__ . '/Correct/correct3.php.inc'],
             [__DIR__ . '/Wrong/wrong4.php.inc', __DIR__ . '/Correct/correct4.php.inc'],
         ];
-    }
-
-    /**
-     * @return string[]
-     */
-    protected function getRectorClasses(): array
-    {
-        return [GetterToPropertyRector::class];
     }
 
     protected function provideConfig(): string

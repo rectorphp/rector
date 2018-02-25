@@ -2,9 +2,11 @@
 
 namespace Rector\Tests\Rector\Contrib\Symfony\Form\OptionNameRector;
 
-use Rector\Rector\Contrib\Symfony\Form\OptionNameRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
+/**
+ * @covers \Rector\Rector\Contrib\Symfony\Form\OptionNameRector
+ */
 final class OptionNameRectorTest extends AbstractRectorTestCase
 {
     /**
@@ -25,11 +27,8 @@ final class OptionNameRectorTest extends AbstractRectorTestCase
         ];
     }
 
-    /**
-     * @return string[]
-     */
-    protected function getRectorClasses(): array
+    protected function provideConfig(): string
     {
-        return [OptionNameRector::class];
+        return __DIR__ . '/config.yml';
     }
 }
