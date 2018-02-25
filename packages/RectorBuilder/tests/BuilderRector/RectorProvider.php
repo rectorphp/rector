@@ -2,7 +2,6 @@
 
 namespace Rector\RectorBuilder\Tests\BuilderRector;
 
-use PhpParser\NodeVisitor;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\RectorBuilder\BuilderRectorFactory;
 use Rector\RectorBuilder\Contract\RectorProviderInterface;
@@ -20,7 +19,7 @@ final class RectorProvider implements RectorProviderInterface
     }
 
     /**
-     * @return RectorInterface[]|NodeVisitor[]
+     * @return RectorInterface[]
      */
     public function provide(): array
     {
