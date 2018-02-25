@@ -39,6 +39,7 @@ checkers:
         parent_types_to_suffixes:
             '*Command': 'Command'
             '*RectorProvider': 'RectorProvider'
+            '*Rector': 'Rector'
 
 parameters:
     exclude_checkers:
