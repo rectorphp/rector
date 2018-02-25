@@ -2,9 +2,11 @@
 
 namespace Rector\Tests\Rector\Contrib\Nette\DI\ExpandFunctionToParametersArrayRector;
 
-use Rector\Rector\Contrib\Nette\DI\ExpandFunctionToParametersArrayRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
+/**
+ * @covers \Rector\Rector\Contrib\Nette\DI\ExpandFunctionToParametersArrayRector
+ */
 final class ExpandFunctionToParametersArrayRectorTest extends AbstractRectorTestCase
 {
     /**
@@ -25,11 +27,8 @@ final class ExpandFunctionToParametersArrayRectorTest extends AbstractRectorTest
         ];
     }
 
-    /**
-     * @return string[]
-     */
-    protected function getRectorClasses(): array
+    protected function provideConfig(): string
     {
-        return [ExpandFunctionToParametersArrayRector::class];
+        return __DIR__ . '/config.yml';
     }
 }

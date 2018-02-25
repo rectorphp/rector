@@ -2,9 +2,11 @@
 
 namespace Rector\Tests\Rector\Contrib\PhpParser\IdentifierRector;
 
-use Rector\Rector\Contrib\PhpParser\IdentifierRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
+/**
+ * @covers \Rector\Rector\Contrib\PhpParser\IdentifierRector
+ */
 final class IdentifierRectorTest extends AbstractRectorTestCase
 {
     /**
@@ -28,11 +30,8 @@ final class IdentifierRectorTest extends AbstractRectorTestCase
         ];
     }
 
-    /**
-     * @return string[]
-     */
-    protected function getRectorClasses(): array
+    protected function provideConfig(): string
     {
-        return [IdentifierRector::class];
+        return __DIR__ . '/config.yml';
     }
 }

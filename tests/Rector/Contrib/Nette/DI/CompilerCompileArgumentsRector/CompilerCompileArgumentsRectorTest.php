@@ -2,9 +2,11 @@
 
 namespace Rector\Tests\Rector\Contrib\Nette\DI\CompilerCompileArgumentsRector;
 
-use Rector\Rector\Contrib\Nette\DI\CompilerCompileArgumentsRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
+/**
+ * @covers \Rector\Rector\Contrib\Nette\DI\CompilerCompileArgumentsRector
+ */
 final class CompilerCompileArgumentsRectorTest extends AbstractRectorTestCase
 {
     /**
@@ -26,11 +28,8 @@ final class CompilerCompileArgumentsRectorTest extends AbstractRectorTestCase
         ];
     }
 
-    /**
-     * @return string[]
-     */
-    protected function getRectorClasses(): array
+    protected function provideConfig(): string
     {
-        return [CompilerCompileArgumentsRector::class];
+        return __DIR__ . '/config.yml';
     }
 }

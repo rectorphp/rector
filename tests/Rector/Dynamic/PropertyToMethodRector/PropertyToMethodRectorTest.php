@@ -2,10 +2,9 @@
 
 namespace Rector\Tests\Rector\Dynamic\PropertyToMethodRector;
 
-use Rector\Rector\Dynamic\PropertyToMethodRector;
-use Rector\Testing\PHPUnit\AbstractConfigurableRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class PropertyToMethodRectorTest extends AbstractConfigurableRectorTestCase
+final class PropertyToMethodRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()
@@ -25,16 +24,8 @@ final class PropertyToMethodRectorTest extends AbstractConfigurableRectorTestCas
         ];
     }
 
-    /**
-     * @return string[]
-     */
-    protected function getRectorClasses(): array
-    {
-        return [PropertyToMethodRector::class];
-    }
-
     protected function provideConfig(): string
     {
-        return __DIR__ . '/config/rector.yml';
+        return __DIR__ . '/config.yml';
     }
 }

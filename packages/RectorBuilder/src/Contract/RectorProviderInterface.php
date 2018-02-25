@@ -2,9 +2,13 @@
 
 namespace Rector\RectorBuilder\Contract;
 
+use PhpParser\NodeVisitor;
 use Rector\Contract\Rector\RectorInterface;
 
 interface RectorProviderInterface
 {
-    public function provide(): RectorInterface;
+    /**
+     * @return NodeVisitor[]|RectorInterface[]
+     */
+    public function provide();
 }

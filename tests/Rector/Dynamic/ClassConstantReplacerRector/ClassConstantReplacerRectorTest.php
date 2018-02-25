@@ -2,10 +2,9 @@
 
 namespace Rector\Tests\Rector\Dynamic\ClassConstantReplacerRector;
 
-use Rector\Rector\Dynamic\ClassConstantReplacerRector;
-use Rector\Testing\PHPUnit\AbstractConfigurableRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class ClassConstantReplacerRectorTest extends AbstractConfigurableRectorTestCase
+final class ClassConstantReplacerRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()
@@ -27,14 +26,6 @@ final class ClassConstantReplacerRectorTest extends AbstractConfigurableRectorTe
 
     protected function provideConfig(): string
     {
-        return __DIR__ . '/config/rector.yml';
-    }
-
-    /**
-     * @return string[]
-     */
-    protected function getRectorClasses(): array
-    {
-        return [ClassConstantReplacerRector::class];
+        return __DIR__ . '/config.yml';
     }
 }

@@ -2,9 +2,11 @@
 
 namespace Rector\Tests\Rector\Contrib\Nette\Forms\ChoiceDefaultValueRector;
 
-use Rector\Rector\Contrib\Nette\Forms\ChoiceDefaultValueRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
+/**
+ * @covers \Rector\Rector\Contrib\Nette\Forms\ChoiceDefaultValueRector
+ */
 final class ChoiceDefaultValueRectorTest extends AbstractRectorTestCase
 {
     /**
@@ -26,11 +28,8 @@ final class ChoiceDefaultValueRectorTest extends AbstractRectorTestCase
         ];
     }
 
-    /**
-     * @return string[]
-     */
-    protected function getRectorClasses(): array
+    protected function provideConfig(): string
     {
-        return [ChoiceDefaultValueRector::class];
+        return __DIR__ . '/config.yml';
     }
 }

@@ -28,6 +28,8 @@ parameters:
         - '#Method Rector\\BetterReflection\\Reflector\\SmartClassReflector::reflect\(\) should return Rector\\BetterReflection\\Reflection\\ReflectionClass\|null but returns Rector\\BetterReflection\\Reflection\\Reflection#' # 1
         - '#Parameter \#1 \$node of method Rector\\NodeTypeResolver\\NodeTypeResolver::resolve\(\) expects PhpParser\\Node, PhpParser\\Node\\Expr|string given#' # 1
         - '#Cannot call method render\(\) on phpDocumentor\\Reflection\\DocBlock\\Tag\|string#' # 1
+        - '#Parameter \#1 \$visitor of method PhpParser\\NodeTraverser::addVisitor\(\) expects PhpParser\\NodeVisitor, PhpParser\\NodeVisitor|Rector\\Contract\\Rector\\RectorInterface given#'
+        - '#Method Rector\\NodeTraverser\\RectorNodeTraverser::getRectors\(\) should return array<PhpParser\\NodeTraverser\|Rector\\Contract\\Rector\\RectorInterface> but returns array<PhpParser\\NodeVisitor>#'
 
         # known value of Name of MethodCall
         - '#Call to an undefined method PhpParser\\Node\\Expr\|PhpParser\\Node\\Name::toString\(\)#' # 5

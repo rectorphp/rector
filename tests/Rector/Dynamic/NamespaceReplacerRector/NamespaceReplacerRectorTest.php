@@ -2,10 +2,9 @@
 
 namespace Rector\Tests\Rector\Dynamic\NamespaceReplacerRector;
 
-use Rector\Rector\Dynamic\NamespaceReplacerRector;
-use Rector\Testing\PHPUnit\AbstractConfigurableRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class NamespaceReplacerRectorTest extends AbstractConfigurableRectorTestCase
+final class NamespaceReplacerRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()
@@ -31,14 +30,6 @@ final class NamespaceReplacerRectorTest extends AbstractConfigurableRectorTestCa
 
     protected function provideConfig(): string
     {
-        return __DIR__ . '/config/rector.yml';
-    }
-
-    /**
-     * @return string[]
-     */
-    protected function getRectorClasses(): array
-    {
-        return [NamespaceReplacerRector::class];
+        return __DIR__ . '/config.yml';
     }
 }

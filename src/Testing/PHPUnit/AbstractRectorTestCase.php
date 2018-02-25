@@ -29,7 +29,10 @@ abstract class AbstractRectorTestCase extends TestCase
 
     protected function setUp(): void
     {
-        $this->container = (new ContainerFactory())->createWithConfig(__DIR__ . '/../../config/levels.yml');
+        $config = $this->provideConfig();
+        FileGuard::ensureFileExists($config, get_called_class());
+
+        $this->container = (new ContainerFactory())->createWithConfig($config);
         $this->fileProcessor = $this->container->get(FileProcessor::class);
         $this->parameterProvider = $this->container->get(ParameterProvider::class);
     }
@@ -41,10 +44,7 @@ abstract class AbstractRectorTestCase extends TestCase
 
         $this->parameterProvider->changeParameter('source', [$file]);
 
-        $reconstructedFileContent = $this->fileProcessor->processFileWithRectorsToString(
-            new SplFileInfo($file),
-            $this->getRectorClasses()
-        );
+        $reconstructedFileContent = $this->fileProcessor->processFileToString(new SplFileInfo($file));
 
         $this->assertStringEqualsFile($reconstructedFile, $reconstructedFileContent, sprintf(
             'Original file "%s" did not match the result.',
@@ -52,8 +52,5 @@ abstract class AbstractRectorTestCase extends TestCase
         ));
     }
 
-    /**
-     * @return string[]
-     */
-    abstract protected function getRectorClasses(): array;
+    abstract protected function provideConfig(): string;
 }

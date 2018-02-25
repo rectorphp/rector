@@ -2,10 +2,9 @@
 
 namespace Rector\Tests\Rector\Dynamic\MethodNameReplacerRector;
 
-use Rector\Rector\Dynamic\MethodNameReplacerRector;
-use Rector\Testing\PHPUnit\AbstractConfigurableRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class MethodNameReplacerRectorTest extends AbstractConfigurableRectorTestCase
+final class MethodNameReplacerRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()
@@ -32,16 +31,8 @@ final class MethodNameReplacerRectorTest extends AbstractConfigurableRectorTestC
         ];
     }
 
-    /**
-     * @return string[]
-     */
-    protected function getRectorClasses(): array
-    {
-        return [MethodNameReplacerRector::class];
-    }
-
     protected function provideConfig(): string
     {
-        return __DIR__ . '/config/rector.yml';
+        return __DIR__ . '/config.yml';
     }
 }

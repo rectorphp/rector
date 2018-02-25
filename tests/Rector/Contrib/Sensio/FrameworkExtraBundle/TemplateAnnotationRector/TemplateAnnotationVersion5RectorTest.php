@@ -2,10 +2,12 @@
 
 namespace Rector\Tests\Rector\Contrib\Sensio\FrameworkExtraBundle\TemplateAnnotationRector;
 
-use Rector\Rector\Contrib\Sensio\FrameworkExtraBundle\TemplateAnnotationRector;
-use Rector\Testing\PHPUnit\AbstractConfigurableRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class TemplateAnnotationVersion5RectorTest extends AbstractConfigurableRectorTestCase
+/**
+ * @covers \Rector\Rector\Contrib\Sensio\FrameworkExtraBundle\TemplateAnnotationRector
+ */
+final class TemplateAnnotationVersion5RectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()
@@ -33,16 +35,8 @@ final class TemplateAnnotationVersion5RectorTest extends AbstractConfigurableRec
         ];
     }
 
-    /**
-     * @return string[]
-     */
-    protected function getRectorClasses(): array
-    {
-        return [TemplateAnnotationRector::class];
-    }
-
     protected function provideConfig(): string
     {
-        return __DIR__ . '/Source/version5.yml';
+        return __DIR__ . '/config-version5.yml';
     }
 }

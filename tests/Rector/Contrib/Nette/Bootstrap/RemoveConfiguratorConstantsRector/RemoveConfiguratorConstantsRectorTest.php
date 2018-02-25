@@ -2,9 +2,11 @@
 
 namespace Rector\Tests\Rector\Contrib\Nette\Bootstrap\RemoveConfiguratorConstantsRector;
 
-use Rector\Rector\Contrib\Nette\Bootstrap\RemoveConfiguratorConstantsRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
+/**
+ * @covers \Rector\Rector\Contrib\Nette\Bootstrap\RemoveConfiguratorConstantsRector
+ */
 final class RemoveConfiguratorConstantsRectorTest extends AbstractRectorTestCase
 {
     /**
@@ -25,11 +27,8 @@ final class RemoveConfiguratorConstantsRectorTest extends AbstractRectorTestCase
         ];
     }
 
-    /**
-     * @return string[]
-     */
-    protected function getRectorClasses(): array
+    protected function provideConfig(): string
     {
-        return [RemoveConfiguratorConstantsRector::class];
+        return __DIR__ . '/config.yml';
     }
 }

@@ -2,9 +2,11 @@
 
 namespace Rector\Tests\Rector\Contrib\PHPUnit\SpecificMethod\AssertInstanceOfComparisonRector;
 
-use Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertInstanceOfComparisonRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
+/**
+ * @covers \Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertInstanceOfComparisonRector
+ */
 final class AssertInstanceOfComparisonRectorTest extends AbstractRectorTestCase
 {
     /**
@@ -25,11 +27,8 @@ final class AssertInstanceOfComparisonRectorTest extends AbstractRectorTestCase
         ];
     }
 
-    /**
-     * @return string[]
-     */
-    protected function getRectorClasses(): array
+    protected function provideConfig(): string
     {
-        return [AssertInstanceOfComparisonRector::class];
+        return __DIR__ . '/config.yml';
     }
 }

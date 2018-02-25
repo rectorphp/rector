@@ -2,9 +2,11 @@
 
 namespace Rector\Tests\Rector\Contrib\Symfony\VarDumper\VarDumperTestTraitMethodArgsRector;
 
-use Rector\Rector\Contrib\Symfony\VarDumper\VarDumperTestTraitMethodArgsRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
+/**
+ * @covers \Rector\Rector\Contrib\Symfony\VarDumper\VarDumperTestTraitMethodArgsRector
+ */
 final class VarDumperTestTraitMethodArgsRectorTest extends AbstractRectorTestCase
 {
     /**
@@ -25,11 +27,8 @@ final class VarDumperTestTraitMethodArgsRectorTest extends AbstractRectorTestCas
         ];
     }
 
-    /**
-     * @return string[]
-     */
-    protected function getRectorClasses(): array
+    protected function provideConfig(): string
     {
-        return [VarDumperTestTraitMethodArgsRector::class];
+        return __DIR__ . '/config.yml';
     }
 }

@@ -2,10 +2,9 @@
 
 namespace Rector\Tests\Rector\Dynamic\PseudoNamespaceToNamespaceRector;
 
-use Rector\Rector\Dynamic\PseudoNamespaceToNamespaceRector;
-use Rector\Testing\PHPUnit\AbstractConfigurableRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class PseudoNamespaceToNamespaceRectorTest extends AbstractConfigurableRectorTestCase
+final class PseudoNamespaceToNamespaceRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()
@@ -30,14 +29,6 @@ final class PseudoNamespaceToNamespaceRectorTest extends AbstractConfigurableRec
 
     protected function provideConfig(): string
     {
-        return __DIR__ . '/config/rector.yml';
-    }
-
-    /**
-     * @return string[]
-     */
-    protected function getRectorClasses(): array
-    {
-        return [PseudoNamespaceToNamespaceRector::class];
+        return __DIR__ . '/config.yml';
     }
 }

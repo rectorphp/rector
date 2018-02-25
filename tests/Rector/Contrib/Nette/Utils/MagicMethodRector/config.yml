@@ -1,0 +1,2 @@
+rectors:
+    Rector\Rector\Contrib\Nette\Utils\MagicMethodRector: ~

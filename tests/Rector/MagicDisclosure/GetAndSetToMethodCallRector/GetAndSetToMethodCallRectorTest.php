@@ -2,10 +2,9 @@
 
 namespace Rector\Tests\Rector\MagicDisclosure\GetAndSetToMethodCallRector;
 
-use Rector\Rector\MagicDisclosure\GetAndSetToMethodCallRector;
-use Rector\Testing\PHPUnit\AbstractConfigurableRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class GetAndSetToMethodCallRectorTest extends AbstractConfigurableRectorTestCase
+final class GetAndSetToMethodCallRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()
@@ -28,14 +27,6 @@ final class GetAndSetToMethodCallRectorTest extends AbstractConfigurableRectorTe
 
     protected function provideConfig(): string
     {
-        return __DIR__ . '/config/rector.yml';
-    }
-
-    /**
-     * @return string[]
-     */
-    protected function getRectorClasses(): array
-    {
-        return [GetAndSetToMethodCallRector::class];
+        return __DIR__ . '/config.yml';
     }
 }

@@ -2,9 +2,11 @@
 
 namespace Rector\Tests\Rector\Contrib\Nette\Utils\MagicMethodRector;
 
-use Rector\Rector\Contrib\Nette\Utils\MagicMethodRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
+/**
+ * @covers \Rector\Rector\Contrib\Nette\Utils\MagicMethodRector
+ */
 final class MagicMethodRectorTest extends AbstractRectorTestCase
 {
     /**
@@ -26,11 +28,8 @@ final class MagicMethodRectorTest extends AbstractRectorTestCase
         ];
     }
 
-    /**
-     * @return string[]
-     */
-    protected function getRectorClasses(): array
+    protected function provideConfig(): string
     {
-        return [MagicMethodRector::class];
+        return __DIR__ . '/config.yml';
     }
 }

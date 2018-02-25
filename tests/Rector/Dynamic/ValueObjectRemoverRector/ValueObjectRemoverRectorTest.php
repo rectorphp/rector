@@ -2,10 +2,9 @@
 
 namespace Rector\Tests\Rector\Dynamic\ValueObjectRemoverRector;
 
-use Rector\Rector\Dynamic\ValueObjectRemoverRector;
-use Rector\Testing\PHPUnit\AbstractConfigurableRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class ValueObjectRemoverRectorTest extends AbstractConfigurableRectorTestCase
+final class ValueObjectRemoverRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()
@@ -28,14 +27,6 @@ final class ValueObjectRemoverRectorTest extends AbstractConfigurableRectorTestC
 
     protected function provideConfig(): string
     {
-        return __DIR__ . '/config/rector.yml';
-    }
-
-    /**
-     * @return string[]
-     */
-    protected function getRectorClasses(): array
-    {
-        return [ValueObjectRemoverRector::class];
+        return __DIR__ . '/config.yml';
     }
 }

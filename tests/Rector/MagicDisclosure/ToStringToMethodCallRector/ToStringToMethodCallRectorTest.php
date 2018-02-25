@@ -2,10 +2,9 @@
 
 namespace Rector\Tests\Rector\MagicDisclosure\ToStringToMethodCallRector;
 
-use Rector\Rector\MagicDisclosure\ToStringToMethodCallRector;
-use Rector\Testing\PHPUnit\AbstractConfigurableRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class ToStringToMethodCallRectorTest extends AbstractConfigurableRectorTestCase
+final class ToStringToMethodCallRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()
@@ -27,14 +26,6 @@ final class ToStringToMethodCallRectorTest extends AbstractConfigurableRectorTes
 
     protected function provideConfig(): string
     {
-        return __DIR__ . '/config/rector.yml';
-    }
-
-    /**
-     * @return string[]
-     */
-    protected function getRectorClasses(): array
-    {
-        return [ToStringToMethodCallRector::class];
+        return __DIR__ . '/config.yml';
     }
 }
