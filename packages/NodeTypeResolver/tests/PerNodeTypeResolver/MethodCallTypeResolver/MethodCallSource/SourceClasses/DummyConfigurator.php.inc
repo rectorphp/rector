@@ -2,6 +2,6 @@
 
 namespace SomeNamespace;
 
-final class DummyContainer
+final class DummyConfigurator
 {
 }

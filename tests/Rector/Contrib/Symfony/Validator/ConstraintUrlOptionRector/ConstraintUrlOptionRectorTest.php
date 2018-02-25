@@ -2,9 +2,11 @@
 
 namespace Rector\Tests\Rector\Contrib\Symfony\Validator\ConstraintUrlOptionRector;
 
-use Rector\Rector\Contrib\Symfony\Validator\ConstraintUrlOptionRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
+/**
+ * @covers \Rector\Rector\Contrib\Symfony\Validator\ConstraintUrlOptionRector
+ */
 final class ConstraintUrlOptionRectorTest extends AbstractRectorTestCase
 {
     /**
@@ -25,11 +27,8 @@ final class ConstraintUrlOptionRectorTest extends AbstractRectorTestCase
         ];
     }
 
-    /**
-     * @return string[]
-     */
-    protected function getRectorClasses(): array
+    protected function provideConfig(): string
     {
-        return [ConstraintUrlOptionRector::class];
+        return __DIR__ . '/config.yml';
     }
 }

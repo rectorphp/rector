@@ -36,24 +36,18 @@ final class NestedMethodCallTest extends AbstractNodeTypeResolverTest
     {
         return [
             # form chain method calls
-            [__DIR__ . '/NestedMethodCallSource/FormChainMethodCalls.php.inc', 0, 'addRule', ['Nette\Forms\Rules']],
+            [
+                __DIR__ . '/NestedMethodCallSource/FormChainMethodCalls.php.inc', 0, 'addRule', [
+                    'Stub_Nette\Forms\Rules',
+                ],
+            ],
             [__DIR__ . '/NestedMethodCallSource/FormChainMethodCalls.php.inc', 1, 'addCondition', [
-                'Nette\Forms\Controls\TextInput',
-                'Nette\Forms\Controls\TextBase',
-                'Nette\Forms\Controls\BaseControl',
-                'Nette\ComponentModel\Component',
+                'Stub_Nette\Forms\Controls\TextInput',
+                'Stub_Nette\Forms\Controls\TextArea',
             ]],
             [__DIR__ . '/NestedMethodCallSource/FormChainMethodCalls.php.inc', 2, 'addText', [
-                'Nette\Application\UI\Form',
-                'Nette\ComponentModel\IComponent',
-                'Nette\ComponentModel\IContainer',
-                'ArrayAccess',
-                'Nette\Utils\IHtmlString',
-                'Nette\Application\UI\ISignalReceiver',
-                'Nette\Forms\Form',
-                'Nette\Forms\Container',
-                'Nette\ComponentModel\Container',
-                'Nette\ComponentModel\Component',
+                'Stub_Nette\Application\UI\Form',
+                'Stub_Nette\Forms\Form',
             ]],
 
             # nested different method calls

@@ -3,49 +3,33 @@
 namespace Rector\NodeTraverser;
 
 use PhpParser\NodeTraverser;
-use PhpParser\NodeVisitor;
+use Rector\Contract\Rector\RectorInterface;
+use Rector\RectorBuilder\Contract\RectorProviderInterface;
 
 final class RectorNodeTraverser extends NodeTraverser
 {
-    /**
-     * @var NodeVisitor[]
-     */
-    private $cachedNodeVisitors = [];
-
-    /**
-     * @param string[] $rectorClasses
-     */
-    public function enableOnlyRectorClasses(array $rectorClasses): void
+    public function addRectorProvider(RectorProviderInterface $rectorProvider): void
     {
-        $this->ensureNodeVisitorsAreCached();
-
-        $this->visitors = [];
-
-        foreach ($this->cachedNodeVisitors as $cachedNodeVisitor) {
-            if ($this->isObjectOfTypes($cachedNodeVisitor, $rectorClasses)) {
-                $this->addVisitor($cachedNodeVisitor);
-            }
+        foreach ($rectorProvider->provide() as $rector) {
+            $this->addVisitor($rector);
         }
     }
 
-    private function ensureNodeVisitorsAreCached(): void
+    public function addRector(RectorInterface $rector): void
     {
-        if ($this->cachedNodeVisitors === []) {
-            $this->cachedNodeVisitors = $this->visitors;
-        }
+        $this->addVisitor($rector);
+    }
+
+    public function getRectorCount(): int
+    {
+        return count($this->visitors);
     }
 
     /**
-     * @param string[] $types
+     * @return RectorInterface[]
      */
-    private function isObjectOfTypes(NodeVisitor $nodeVisitor, array $types): bool
+    public function getRectors(): array
     {
-        foreach ($types as $type) {
-            if (is_a($nodeVisitor, $type, true)) {
-                return true;
-            }
-        }
-
-        return false;
+        return $this->visitors;
     }
 }

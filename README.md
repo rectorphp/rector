@@ -415,7 +415,7 @@ rectors:
 
 ## Coding Standards are Outsourced
 
-This package has no intention in formatting your code, as **coding standard tools handle this much better**. We prefer [EasyCodingStandard](https://github.com/Symplify/EasyCodingStandard) with Rector's prepared set: 
+This package has no intention in formatting your code, as **coding standard tools handle this much better**. We prefer [EasyCodingStandard](https://github.com/Symplify/EasyCodingStandard) with Rector's prepared set:
 
 ```bash
 # install
@@ -431,6 +431,7 @@ vendor/bin/ecs check --config vendor/rector/rector/ecs-after-rector.neon --fix
 ## More Detailed Documentation
 
 - [How Rector Works?](/docs/HowItWorks.md)
+- [How to Create Rector with Fluent Builer](/docs/FluentBuilderRector.md)
 - [How to Create Own Rector](/docs/HowToCreateOwnRector.md)
 - [Service Name to Type Provider](/docs/ServiceNameToTypeProvider.md)
 

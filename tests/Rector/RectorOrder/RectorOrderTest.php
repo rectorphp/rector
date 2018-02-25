@@ -2,15 +2,12 @@
 
 namespace Rector\Tests\Rector\RectorOrder;
 
-use Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertComparisonToSpecificMethodRector;
-use Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertFalseStrposToContainsRector;
-use Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertSameBoolNullToSpecificMethodRector;
-use Rector\Testing\PHPUnit\AbstractConfigurableRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
  * Covers https://github.com/rectorphp/rector/pull/266#issuecomment-355725764
  */
-final class RectorOrderTest extends AbstractConfigurableRectorTestCase
+final class RectorOrderTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()
@@ -32,18 +29,6 @@ final class RectorOrderTest extends AbstractConfigurableRectorTestCase
 
     protected function provideConfig(): string
     {
-        return __DIR__ . '/config/rector.yml';
-    }
-
-    /**
-     * @return string[]
-     */
-    protected function getRectorClasses(): array
-    {
-        return [
-            AssertSameBoolNullToSpecificMethodRector::class,
-            AssertComparisonToSpecificMethodRector::class,
-            AssertFalseStrposToContainsRector::class,
-        ];
+        return __DIR__ . '/config.yml';
     }
 }

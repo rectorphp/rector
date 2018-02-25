@@ -2,10 +2,12 @@
 
 namespace Rector\Tests\Rector\Contrib\Symfony\Console\CommandToConstructorInjectionRector;
 
-use Rector\Rector\Contrib\Symfony\Console\CommandToConstructorInjectionRector;
-use Rector\Testing\PHPUnit\AbstractConfigurableRectorTestCase;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class CommandToConstructorInjectionRectorTest extends AbstractConfigurableRectorTestCase
+/**
+ * @covers \Rector\Rector\Contrib\Symfony\Console\CommandToConstructorInjectionRector
+ */
+final class CommandToConstructorInjectionRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()
@@ -25,16 +27,8 @@ final class CommandToConstructorInjectionRectorTest extends AbstractConfigurable
         ];
     }
 
-    /**
-     * @return string[]
-     */
-    protected function getRectorClasses(): array
-    {
-        return [CommandToConstructorInjectionRector::class];
-    }
-
     protected function provideConfig(): string
     {
-        return __DIR__ . '/Source/rector.yml';
+        return __DIR__ . '/config.yml';
     }
 }

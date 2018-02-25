@@ -6,6 +6,9 @@ includes:
     - vendor/symplify/easy-coding-standard/config/clean-code.neon
 
 checkers:
+    # add temporary before in symplify.neon set
+    - Symplify\CodingStandard\Fixer\LineLength\BreakArrayListFixer
+
     # Metrics
     PHP_CodeSniffer\Standards\Generic\Sniffs\Files\LineLengthSniff:
         absoluteLineLimit: 120
@@ -31,6 +34,12 @@ checkers:
         extra_skipped_classes:
             - 'PhpParser\PrettyPrinter\Standard'
             - 'PhpParser\Node'
+
+    Symplify\CodingStandard\Fixer\Naming\ClassNameSuffixByParentFixer:
+        parent_types_to_suffixes:
+            '*Command': 'Command'
+            '*RectorProvider': 'RectorProvider'
+            '*Rector': 'Rector'
 
 parameters:
     exclude_checkers:
