@@ -48,9 +48,20 @@ final class NetteRectorProvider implements RectorInterface
  namespace App\Rector;
  
  use Rector\Contract\Rector\RectorInterface;
++use Rector\RectorBuilder\BuilderRectorFactory;
  
  final class NetteRectorProvider implements RectorInterface
  {
++    /**
++     * @var BuilderRectorFactory
++     */
++    private $builderRectorFactory;
++    
++    public function __construct(BuilderRectorFactory $builderRectorFactory)
++    {
++        $this->builderRectorFactory = $builderRectorFactory;
++    }
++
      /**
       * @return RectorInterface[]
       */
@@ -71,6 +82,9 @@ final class NetteRectorProvider implements RectorInterface
  
 ```yml
 services:
+    _defaults:
+        autowire: true
+
     App\Rector\NetteRectorProvider: ~    
 ```
 
@@ -80,16 +94,4 @@ Now you can load the config and process your code with it:
 
 ```php
 vendor/bin/rector process src --config rector.yml
-```
-
-#### Autowiring Ready!
-
-Do you need autowiring? You can, it's all Symfony config:
-
-```diff
- services:
-+    _defaults:
-+        autowire: true
-
-     App\Rector\NetteRectorProvider: ~    
 ```
