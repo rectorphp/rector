@@ -1,7 +1,7 @@
 # Master Fluent API Builder
 
 You can [add own Rector](/docs/HowToCreateOwnRector.md) that extends `Rector\Rector\AbstractRector`. But it takes lot of code and knowledge to do so.
- 
+
 How about nice fluent API like this?
 
 ```php
@@ -11,7 +11,7 @@ $rector = $this->builderRectorFactory->create()
     ->changeMethodNameTo('redrawControl');
 ```
 
-That can perform followin change: 
+That can perform followin change:
 
 ```diff
 -$control->invalidateControl();
@@ -21,7 +21,7 @@ That can perform followin change:
 Nice and clear change in 4 lines, with autocomplete and typehinting of PHP.
 
 
-## 3 Steps to Build Specific Rector 
+## 3 Steps to Build Specific Rector
 
 ### 1. Implement `Rector\Contract\Rector\RectorInterface`
 
@@ -42,21 +42,21 @@ final class NetteRectorProvider implements RectorInterface
 }
 ```
 
-### 2. Builder the Rector 
- 
+### 2. Builder the Rector
+
 ```diff
  namespace App\Rector;
- 
+
  use Rector\Contract\Rector\RectorInterface;
 +use Rector\RectorBuilder\BuilderRectorFactory;
- 
+
  final class NetteRectorProvider implements RectorInterface
  {
 +    /**
 +     * @var BuilderRectorFactory
 +     */
 +    private $builderRectorFactory;
-+    
++
 +    public function __construct(BuilderRectorFactory $builderRectorFactory)
 +    {
 +        $this->builderRectorFactory = $builderRectorFactory;
@@ -79,13 +79,13 @@ final class NetteRectorProvider implements RectorInterface
 ```
 
 ### 3. Register as Service to `rector.yml`
- 
+
 ```yml
 services:
     _defaults:
         autowire: true
 
-    App\Rector\NetteRectorProvider: ~    
+    App\Rector\NetteRectorProvider: ~
 ```
 
 That's it!

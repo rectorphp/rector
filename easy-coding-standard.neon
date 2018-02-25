@@ -35,6 +35,11 @@ checkers:
             - 'PhpParser\PrettyPrinter\Standard'
             - 'PhpParser\Node'
 
+    Symplify\CodingStandard\Fixer\Naming\ClassNameSuffixByParentFixer:
+        parent_types_to_suffixes:
+            '*Command': 'Command'
+            '*RectorProvider': 'RectorProvider'
+
 parameters:
     exclude_checkers:
         # bugged in php-cs-fixer 2.10
