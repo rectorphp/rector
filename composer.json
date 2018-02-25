@@ -25,7 +25,6 @@
         "symplify/easy-coding-standard": "^3.2",
         "latte/latte": "^2.4",
         "nette/di": "^2.4",
-        "nette/forms": "^2.4",
         "phpstan/phpstan-shim": "^0.9",
         "phpunit/phpunit": "^7.0",
         "slam/php-cs-fixer-extensions": "^1.13",
