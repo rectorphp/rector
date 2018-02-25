@@ -2,6 +2,7 @@
 
 namespace Rector\RectorBuilder\Tests\BuilderRector;
 
+use PhpParser\NodeVisitor;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\RectorBuilder\BuilderRectorFactory;
 use Rector\RectorBuilder\Contract\RectorProviderInterface;
@@ -18,12 +19,17 @@ final class RectorProvider implements RectorProviderInterface
         $this->builderRectorFactory = $builderRectorFactory;
     }
 
-    public function provide(): RectorInterface
+    /**
+     * @return RectorInterface[]|NodeVisitor[]
+     */
+    public function provide(): array
     {
-        return $this->builderRectorFactory->create()
+        $validateToRedrawControlRector = $this->builderRectorFactory->create()
             ->matchMethodCallByType('Stub_Nette\Application\UI\Control')
             ->matchMethodName('validateControl')
             ->changeMethodNameTo('redrawControl')
             ->addArgument(1, false);
+
+        return [$validateToRedrawControlRector];
     }
 }

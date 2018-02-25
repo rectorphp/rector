@@ -2,6 +2,7 @@
 
 namespace Rector\Rector\Contrib\Nette\Application;
 
+use PhpParser\NodeVisitor;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\RectorBuilder\BuilderRectorFactory;
 use Rector\RectorBuilder\Contract\RectorProviderInterface;
@@ -19,18 +20,22 @@ final class ValidateControlRectorProvider implements RectorProviderInterface
     }
 
     /**
-     * Before::
+     * Before:
      * - $myControl->validateControl(?$snippet)
      *
      * After:
      * - $myControl->redrawControl(?$snippet, false);
+     *
+     * @return RectorInterface[]|NodeVisitor[]
      */
-    public function provide(): RectorInterface
+    public function provide(): array
     {
-        return $this->builderRectorFactory->create()
+        $validateToRedrawControlRector = $this->builderRectorFactory->create()
             ->matchMethodCallByType('Nette\Application\UI\Control')
             ->matchMethodName('validateControl')
             ->changeMethodNameTo('redrawControl')
             ->addArgument(1, false);
+
+        return [$validateToRedrawControlRector];
     }
 }

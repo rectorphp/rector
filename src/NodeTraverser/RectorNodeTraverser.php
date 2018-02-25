@@ -10,8 +10,9 @@ final class RectorNodeTraverser extends NodeTraverser
 {
     public function addRectorProvider(RectorProviderInterface $rectorProvider): void
     {
-        // @todo: allow array support
-        $this->addVisitor($rectorProvider->provide());
+        foreach ($rectorProvider->provide() as $rector) {
+            $this->addVisitor($rector);
+        }
     }
 
     public function getRectorCount(): int

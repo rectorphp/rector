@@ -8,7 +8,7 @@ use Rector\Contract\Rector\RectorInterface;
 interface RectorProviderInterface
 {
     /**
-     * @return NodeVisitor
+     * @return NodeVisitor[]|RectorInterface[]
      */
-    public function provide(): RectorInterface;
+    public function provide();
 }
