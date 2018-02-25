@@ -15,13 +15,18 @@ final class RectorNodeTraverser extends NodeTraverser
         }
     }
 
+    public function addRector(RectorInterface $rector): void
+    {
+        $this->addVisitor($rector);
+    }
+
     public function getRectorCount(): int
     {
         return count($this->visitors);
     }
 
     /**
-     * @return RectorInterface[]|NodeTraverser[]
+     * @return RectorInterface[]
      */
     public function getRectors(): array
     {

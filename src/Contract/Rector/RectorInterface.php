@@ -3,8 +3,9 @@
 namespace Rector\Contract\Rector;
 
 use PhpParser\Node;
+use PhpParser\NodeVisitor;
 
-interface RectorInterface
+interface RectorInterface extends NodeVisitor
 {
     public function isCandidate(Node $node): bool;
 

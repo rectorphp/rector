@@ -34,7 +34,7 @@ final class CollectorCompilerPass implements CompilerPassInterface
             $containerBuilder,
             RectorNodeTraverser::class,
             RectorInterface::class,
-            'addVisitor'
+            'addRector'
         );
     }
 }

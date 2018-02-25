@@ -2,7 +2,6 @@
 
 namespace Rector\Rector\Contrib\Nette\Application;
 
-use PhpParser\NodeVisitor;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\RectorBuilder\BuilderRectorFactory;
 use Rector\RectorBuilder\Contract\RectorProviderInterface;
@@ -26,7 +25,7 @@ final class ValidateControlRectorProvider implements RectorProviderInterface
      * After:
      * - $myControl->redrawControl(?$snippet, false);
      *
-     * @return RectorInterface[]|NodeVisitor[]
+     * @return RectorInterface[]
      */
     public function provide(): array
     {
