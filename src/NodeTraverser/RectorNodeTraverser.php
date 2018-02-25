@@ -21,7 +21,7 @@ final class RectorNodeTraverser extends NodeTraverser
     }
 
     /**
-     * @return RectorInterface[]
+     * @return RectorInterface[]|NodeTraverser[]
      */
     public function getRectors(): array
     {
