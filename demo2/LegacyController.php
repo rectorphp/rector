@@ -1,9 +1,12 @@
 <?php declare(strict_types=1);
 
+namespace Demo2;
 
-final class LegacyController
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
+final class LegacyController extends Controller
 {
-    public function actionRelax()
+    public function actionRelax(): void
     {
         $bartender = $this->get('bartender');
         $bartender->makeCoffee();
