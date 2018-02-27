@@ -1,5 +1,7 @@
 <?php declare (strict_types=1);
 
+namespace SomeNamespace;
+
 class ClassWithNamedService4 implements ContainerAwareInterface
 {
     public function render()
