@@ -54,7 +54,7 @@ final class PropertyBuilder
     private function createDocWithVarAnnotation(array $propertyTypes): Doc
     {
         return new Doc('/**'
-            . PHP_EOL . ' * @var ' . implode('|', $propertyTypes)
+            . PHP_EOL . ' * @var \\' . implode('|', $propertyTypes)
             . PHP_EOL . ' */');
     }
 

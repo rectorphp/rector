@@ -3,10 +3,10 @@
 class ClassWithNamedService1 extends Controller
 {
     /**
-     * @var stdClass
+     * @var \stdClass
      */
     private $stdClass;
-    public function __construct(stdClass $stdClass)
+    public function __construct(\stdClass $stdClass)
     {
         $this->stdClass = $stdClass;
     }

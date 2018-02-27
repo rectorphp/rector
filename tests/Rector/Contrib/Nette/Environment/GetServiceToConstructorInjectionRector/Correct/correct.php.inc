@@ -3,10 +3,10 @@
 class SomePresenter
 {
     /**
-     * @var someType
+     * @var \someType
      */
     private $someType;
-    public function __construct(someType $someType)
+    public function __construct(\someType $someType)
     {
         $this->someType = $someType;
     }

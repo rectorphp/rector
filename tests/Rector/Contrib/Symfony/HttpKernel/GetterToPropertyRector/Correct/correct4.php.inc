@@ -5,10 +5,10 @@ namespace SomeNamespace;
 class ClassWithNamedService4 implements ContainerAwareInterface
 {
     /**
-     * @var stdClass
+     * @var \stdClass
      */
     private $stdClass;
-    public function __construct(stdClass $stdClass)
+    public function __construct(\stdClass $stdClass)
     {
         $this->stdClass = $stdClass;
     }
