@@ -1,0 +1,5 @@
+services:
+    _defaults:
+        autowire: true
+
+    Demo1\Rector\RectorProvider: ~
