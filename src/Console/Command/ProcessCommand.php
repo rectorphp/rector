@@ -149,7 +149,7 @@ final class ProcessCommand extends Command
         }
 
         throw new NoRectorsLoadedException(
-            'No rector were found. Registers them in rector.yml config to "rector:" '
+            'No rectors were found. Registers them in rector.yml config to "rector:" '
             . 'section, load them via "--config <file>.yml" or "--level <level>" CLI options.'
         );
     }
