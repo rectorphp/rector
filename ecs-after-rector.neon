@@ -16,3 +16,6 @@ checkers:
 
     # import all namespaces
     - Symplify\CodingStandard\Fixer\Import\ImportNamespacedNameFixer
+
+    # add spaces between class elements
+    - PhpCsFixer\Fixer\ClassNotation\ClassAttributesSeparationFixer
