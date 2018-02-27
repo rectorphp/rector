@@ -8,6 +8,7 @@ use PhpParser\NodeVisitorAbstract;
 use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Builder\ConstructorMethodBuilder;
 use Rector\Builder\PropertyBuilder;
+use Rector\Node\Attribute;
 
 final class PropertyAddingNodeVisitor extends NodeVisitorAbstract
 {
@@ -47,7 +48,7 @@ final class PropertyAddingNodeVisitor extends NodeVisitorAbstract
 
     private function processClassNode(Class_ $classNode): Class_
     {
-        $className = (string) $classNode->name;
+        $className = (string) $classNode->getAttribute(Attribute::CLASS_NAME);
 
         $propertiesForClass = $this->classPropertyCollector->getPropertiesForClass($className);
         if (! count($propertiesForClass)) {
