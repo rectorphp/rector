@@ -40,7 +40,7 @@
         }
     },
     "autoload-dev": {
-        "classmap": ["demo1"],
+        "classmap": ["demo1", "demo2"],
         "psr-4": {
             "Rector\\Tests\\": "tests",
             "Rector\\BetterReflection\\Tests\\": "packages/BetterReflection/tests",
