@@ -4,7 +4,7 @@ namespace Demo1;
 
 final class PHPLive
 {
-    public function organizeConference(): void
+    public function createConference(): void
     {
         echo 'Beer for conference is ready!' . PHP_EOL;
     }

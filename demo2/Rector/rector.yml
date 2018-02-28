@@ -1,3 +1,6 @@
+rectors:
+    Rector\Rector\Contrib\Symfony\HttpKernel\GetterToPropertyRector: ~
+
 services:
     # see https://github.com/rectorphp/rector/blob/master/docs/ServiceNameToTypeProvider.md
     Demo2\Rector\ServiceTypeForNameProvider: ~
@@ -5,6 +8,3 @@ services:
     # this allows autowiring via interface
     Rector\Contract\Bridge\ServiceTypeForNameProviderInterface:
         alias: Demo2\Rector\ServiceTypeForNameProvider
-
-rectors:
-    Rector\Rector\Contrib\Symfony\HttpKernel\GetterToPropertyRector: ~
