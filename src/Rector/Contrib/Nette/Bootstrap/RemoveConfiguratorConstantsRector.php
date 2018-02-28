@@ -5,6 +5,7 @@ namespace Rector\Rector\Contrib\Nette\Bootstrap;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use Rector\Node\Attribute;
 use Rector\Node\NodeFactory;
@@ -42,9 +43,10 @@ final class RemoveConfiguratorConstantsRector extends AbstractRector
      */
     public function refactor(Node $classConstFetchNode): ?Node
     {
+        /** @var Identifier $constantName */
         $constantName = (string) $classConstFetchNode->name;
 
-        $originalConstantValue = strtolower($constantName);
+        $originalConstantValue = $constantName->toLowerString();
 
         return $this->nodeFactory->createString($originalConstantValue);
     }
