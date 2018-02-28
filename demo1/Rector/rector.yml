@@ -1,5 +1,4 @@
-services:
-    _defaults:
-        autowire: true
-
-    Demo1\Rector\RectorProvider: ~
+rectors:
+    Rector\Rector\Dynamic\MethodNameReplacerRector:
+        'Demo1\PHPLive':
+            'organizeConference': 'createConference'
