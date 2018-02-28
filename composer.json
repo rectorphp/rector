@@ -22,10 +22,11 @@
         "symplify/package-builder": "^3.2"
     },
     "require-dev": {
-        "symplify/easy-coding-standard": "^3.2",
         "phpstan/phpstan-shim": "^0.9",
         "phpunit/phpunit": "^7.0",
         "slam/php-cs-fixer-extensions": "^1.13",
+        "symfony/framework-bundle": "^4.0",
+        "symplify/easy-coding-standard": "^3.2",
         "tracy/tracy": "^2.4"
     },
     "autoload": {
@@ -40,6 +41,7 @@
         }
     },
     "autoload-dev": {
+        "classmap": ["demo1", "demo2"],
         "psr-4": {
             "Rector\\Tests\\": "tests",
             "Rector\\BetterReflection\\Tests\\": "packages/BetterReflection/tests",

@@ -15,7 +15,8 @@ checkers:
     - PhpCsFixer\Fixer\Phpdoc\NoEmptyPhpdocFixer
 
     # import all namespaces
-    - Symplify\CodingStandard\Fixer\Import\ImportNamespacedNameFixer
+    Symplify\CodingStandard\Fixer\Import\ImportNamespacedNameFixer:
+        include_doc_blocks: true
 
     # add spaces between class elements
     - PhpCsFixer\Fixer\ClassNotation\ClassAttributesSeparationFixer

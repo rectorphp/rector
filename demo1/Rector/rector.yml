@@ -1,0 +1,4 @@
+rectors:
+    Rector\Rector\Dynamic\MethodNameReplacerRector:
+        'Demo1\PHPLive':
+            'organizeConference': 'createConference'

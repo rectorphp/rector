@@ -1,0 +1,3 @@
+services:
+    bartender:
+        class: 'Demo2\Bartender'
