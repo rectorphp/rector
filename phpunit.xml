@@ -6,10 +6,35 @@
     verbose="true"
 >
     <testsuites>
-        <testsuite name="all-except-phar">
-            <directory>tests</directory>
+        <!-- only contrib open-source project Rectors -->
+        <testsuite name="contrib-rectors">
+            <directory>tests/Rector/Contrib</directory>
+        </testsuite>
+        <!-- only general configurable Rectors -->
+        <testsuite name="general-rectors">
+            <directory>tests/Rector/Dynamic</directory>
+            <directory>tests/Rector/MagicDisclosure</directory>
+        </testsuite>
+        <!-- and the rest -->
+        <testsuite name="main">
             <directory>packages/*/tests</directory>
+            <directory>tests</directory>
+            <exclude>tests/Rector/Dynamic/</exclude>
+            <exclude>tests/Rector/MagicDisclosure/</exclude>
+            <exclude>tests/Rector/Contrib/</exclude>
             <exclude>tests/Phar</exclude>
         </testsuite>
     </testsuites>
+
+    <!-- source to check coverage for -->
+    <filter>
+        <whitelist addUncoveredFilesFromWhitelist="false">
+            <directory suffix="*.php">packages/*/src</directory>
+            <directory>src</directory>
+            <exclude>
+                <directory>../vendor</directory>
+                <directory>../tests/**/*Source/**</directory>
+            </exclude>
+        </whitelist>
+    </filter>
 </phpunit>
