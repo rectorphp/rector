@@ -76,11 +76,16 @@ final class PropertyBuilder
         return false;
     }
 
+    /**
+     * @param string[] $propertyTypes
+     */
     private function implodeTypes(array $propertyTypes): string
     {
         $implodedTypes = '';
         foreach ($propertyTypes as $propertyType) {
-            $implodedTypes .= PropertyNaming::isPhpReservedType($propertyType) ? $propertyType : '\\' . $propertyType . '|';
+            $implodedTypes .= PropertyNaming::isPhpReservedType($propertyType)
+                ? $propertyType
+                : '\\' . $propertyType . '|';
         }
 
         return rtrim($implodedTypes, '|');
