@@ -7,6 +7,7 @@ use PhpParser\Comment\Doc;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property as PhpParserProperty;
 use Rector\Builder\Class_\Property;
+use Rector\Naming\PropertyNaming;
 
 final class PropertyBuilder
 {
@@ -54,7 +55,7 @@ final class PropertyBuilder
     private function createDocWithVarAnnotation(array $propertyTypes): Doc
     {
         return new Doc('/**'
-            . PHP_EOL . ' * @var \\' . implode('|', $propertyTypes)
+            . PHP_EOL . ' * @var ' . $this->implodeTypes($propertyTypes)
             . PHP_EOL . ' */');
     }
 
@@ -73,5 +74,15 @@ final class PropertyBuilder
         }
 
         return false;
+    }
+
+    private function implodeTypes(array $propertyTypes): string
+    {
+        $implodedTypes = '';
+        foreach ($propertyTypes as $propertyType) {
+            $implodedTypes .= PropertyNaming::isPhpReservedType($propertyType) ? $propertyType : '\\' . $propertyType . '|';
+        }
+
+        return rtrim($implodedTypes, '|');
     }
 }

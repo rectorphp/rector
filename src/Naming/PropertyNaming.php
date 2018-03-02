@@ -11,4 +11,21 @@ final class PropertyNaming
 
         return lcfirst($lastNamePart);
     }
+
+    /**
+     * @source https://stackoverflow.com/a/2792045/1348344
+     */
+    public function underscoreToName(string $underscoreName): string
+    {
+        $camelCaseName = str_replace('_', '', ucwords($underscoreName, '_'));
+
+        return lcfirst($camelCaseName);
+    }
+
+    public static function isPhpReservedType(string $type): bool
+    {
+        return in_array($type, [
+            'string', 'bool', 'mixed', 'object', 'iterable', 'array',
+        ], true);
+    }
 }

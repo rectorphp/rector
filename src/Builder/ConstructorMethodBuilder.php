@@ -74,7 +74,7 @@ final class ConstructorMethodBuilder
     {
         $paramBuild = $this->builderFactory->param($propertyName);
         foreach ($propertyTypes as $propertyType) {
-            $paramBuild->setTypeHint(new FullyQualified($propertyType));
+            $paramBuild->setTypeHint($this->nodeFactory->createTypeNamespace($propertyType));
         }
 
         return $paramBuild;
