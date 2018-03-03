@@ -1,33 +1,34 @@
 services:
     Rector\Rector\Dynamic\ArgumentReplacerRector:
-        # added default value
-        -
-            class: 'Symfony\Component\DependencyInjection\ContainerBuilder'
-            method: 'compile'
-            type: 'changed'
-            position: 0
-            default_value: false
+        $argumentChangesByMethodAndType:
+            # added default value
+            -
+                class: 'Symfony\Component\DependencyInjection\ContainerBuilder'
+                method: 'compile'
+                type: 'changed'
+                position: 0
+                default_value: false
 
-        # added default value
-        -
-            class: 'Symfony\Component\DependencyInjection\ContainerBuilder'
-            method: 'addCompilerPass'
-            type: 'changed'
-            position: 2
-            default_value: 0
+            # added default value
+            -
+                class: 'Symfony\Component\DependencyInjection\ContainerBuilder'
+                method: 'addCompilerPass'
+                type: 'changed'
+                position: 2
+                default_value: 0
 
-        # remove argument
-        -
-            class: 'Doctrine\ORM\Persisters\Entity\AbstractEntityInheritancePersister'
-            method: 'getSelectJoinColumnSQL'
-            position: 4
-            type: 'removed'
+            # remove argument
+            -
+                class: 'Doctrine\ORM\Persisters\Entity\AbstractEntityInheritancePersister'
+                method: 'getSelectJoinColumnSQL'
+                position: 4
+                type: 'removed'
 
-        # replace default value
-        -
-            class: 'Symfony\Component\DependencyInjection\Definition'
-            method: 'setScope'
-            position: 0
-            type: 'replace_default_value'
-            replace_map:
-                'Symfony\Component\DependencyInjection\ContainerBuilder::SCOPE_PROTOTYPE': false
+            # replace default value
+            -
+                class: 'Symfony\Component\DependencyInjection\Definition'
+                method: 'setScope'
+                position: 0
+                type: 'replace_default_value'
+                replace_map:
+                    'Symfony\Component\DependencyInjection\ContainerBuilder::SCOPE_PROTOTYPE': false

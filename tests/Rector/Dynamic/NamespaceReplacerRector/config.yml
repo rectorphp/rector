@@ -1,6 +1,7 @@
 services:
     Rector\Rector\Dynamic\NamespaceReplacerRector:
-        'OldNamespace': 'NewNamespace'
-        'OldNamespaceWith\OldSplitNamespace': 'NewNamespaceWith\NewSplitNamespace'
-        'Old\Long\AnyNamespace': 'Short\AnyNamespace'
-        'PHPUnit_Framework_': 'PHPUnit\Framework\'
+        $oldToNewNamespaces:
+            'OldNamespace': 'NewNamespace'
+            'OldNamespaceWith\OldSplitNamespace': 'NewNamespaceWith\NewSplitNamespace'
+            'Old\Long\AnyNamespace': 'Short\AnyNamespace'
+            'PHPUnit_Framework_': 'PHPUnit\Framework\'
