@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Rector\Contrib\Symfony\HttpKernel;
+namespace Rector\Rector\Contrib\Symfony\FrameworkBundle;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
@@ -13,39 +13,32 @@ use Rector\Node\PropertyFetchNodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
 
-/**
- * Converts all:
- * $this->get('some_service') # where "some_service" is name of the service in container.
- *
- * into:
- * $this->someService # where "someService" is type of the service
- */
-final class GetterToPropertyRector extends AbstractRector
+abstract class AbstractToConstructorInjectionRector extends AbstractRector
 {
     /**
      * @var PropertyNaming
      */
-    private $propertyNaming;
+    protected $propertyNaming;
 
     /**
      * @var ClassPropertyCollector
      */
-    private $classPropertyCollector;
+    protected $classPropertyCollector;
 
     /**
      * @var PropertyFetchNodeFactory
      */
-    private $propertyFetchNodeFactory;
+    protected $propertyFetchNodeFactory;
 
     /**
      * @var ServiceTypeForNameProviderInterface
      */
-    private $serviceTypeForNameProvider;
+    protected $serviceTypeForNameProvider;
 
     /**
      * @var MethodCallAnalyzer
      */
-    private $methodCallAnalyzer;
+    protected $methodCallAnalyzer;
 
     public function __construct(
         PropertyNaming $propertyNaming,
@@ -59,19 +52,6 @@ final class GetterToPropertyRector extends AbstractRector
         $this->propertyFetchNodeFactory = $propertyFetchNodeFactory;
         $this->serviceTypeForNameProvider = $serviceTypeForNameProvider;
         $this->methodCallAnalyzer = $methodCallAnalyzer;
-    }
-
-    public function isCandidate(Node $node): bool
-    {
-        if (! $node instanceof MethodCall) {
-            return false;
-        }
-
-        return $this->methodCallAnalyzer->isTypeAndMethod(
-            $node,
-            'Symfony\Bundle\FrameworkBundle\Controller\Controller',
-            'get'
-        );
     }
 
     /**

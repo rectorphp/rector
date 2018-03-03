@@ -1,0 +1,13 @@
+<?php
+
+namespace Symfony\Bundle\FrameworkBundle\Command;
+
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
+class ContainerAwareCommand implements ContainerAwareInterface
+{
+    protected function getContainer(): ContainerInterface
+    {
+    }
+}
