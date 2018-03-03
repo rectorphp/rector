@@ -23,7 +23,7 @@ final class FunctionToMethodCallRector extends AbstractRector
     private $methodCallNodeFactory;
 
     /**
-     * @param string[][] $functionToMethodCall
+     * @param string[] $functionToMethodCall
      */
     public function __construct(array $functionToMethodCall, MethodCallNodeFactory $methodCallNodeFactory)
     {

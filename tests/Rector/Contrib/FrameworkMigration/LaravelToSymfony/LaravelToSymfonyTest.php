@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Contrib\Symfony\FrameworkMigration\LaravelToSymfony;
+namespace Rector\Tests\Rector\Contrib\FrameworkMigration\LaravelToSymfony;
 
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
