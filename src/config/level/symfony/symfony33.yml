@@ -24,23 +24,24 @@ services:
     Rector\Rector\Contrib\Symfony\Console\ConsoleExceptionToErrorEventConstantRector: ~
 
     Rector\Rector\Dynamic\ClassReplacerRector:
-        # console
-        'Symfony\Component\Console\Event\ConsoleExceptionEvent': 'Symfony\Component\Console\Event\ConsoleErrorEvent'
+        $oldToNewClasses:
+            # console
+            'Symfony\Component\Console\Event\ConsoleExceptionEvent': 'Symfony\Component\Console\Event\ConsoleErrorEvent'
 
-        # debug
-        'Symfony\Component\Debug\Exception\ContextErrorException': 'ErrorException'
+            # debug
+            'Symfony\Component\Debug\Exception\ContextErrorException': 'ErrorException'
 
-        # dependency-injection
-        'Symfony\Component\DependencyInjection\DefinitionDecorator': 'Symfony\Component\DependencyInjection\ChildDefinition'
+            # dependency-injection
+            'Symfony\Component\DependencyInjection\DefinitionDecorator': 'Symfony\Component\DependencyInjection\ChildDefinition'
 
-        # framework bundle
-        'Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\AddConsoleCommandPass': 'Symfony\Component\Console\DependencyInjection\AddConsoleCommandPass'
-        'Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\SerializerPass': 'Symfony\Component\Serializer\DependencyInjection\SerializerPass'
-        'Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\FormPass': 'Symfony\Component\Form\DependencyInjection\FormPass'
-        'Symfony\Bundle\FrameworkBundle\EventListener\SessionListener': 'Symfon\Component\HttpKernel\EventListener\SessionListener'
-        'Symfony\Bundle\FrameworkBundle\EventListener\TestSessionListenr': 'Symfony\Component\HttpKernel\EventListener\TestSessionListener'
-        'Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\ConfigCachePass': 'Symfony\Component\Config\DependencyInjection\ConfigCachePass'
-        'Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\PropertyInfoPass': 'Symfony\Component\PropertyInfo\DependencyInjection\PropertyInfoPass'
+            # framework bundle
+            'Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\AddConsoleCommandPass': 'Symfony\Component\Console\DependencyInjection\AddConsoleCommandPass'
+            'Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\SerializerPass': 'Symfony\Component\Serializer\DependencyInjection\SerializerPass'
+            'Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\FormPass': 'Symfony\Component\Form\DependencyInjection\FormPass'
+            'Symfony\Bundle\FrameworkBundle\EventListener\SessionListener': 'Symfon\Component\HttpKernel\EventListener\SessionListener'
+            'Symfony\Bundle\FrameworkBundle\EventListener\TestSessionListenr': 'Symfony\Component\HttpKernel\EventListener\TestSessionListener'
+            'Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\ConfigCachePass': 'Symfony\Component\Config\DependencyInjection\ConfigCachePass'
+            'Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\PropertyInfoPass': 'Symfony\Component\PropertyInfo\DependencyInjection\PropertyInfoPass'
 
     Rector\Rector\Dynamic\MethodNameReplacerRector:
         # dependency-injection

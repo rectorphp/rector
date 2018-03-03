@@ -19,4 +19,5 @@ services:
             'VISIBILITY_MODIFER_MASK': 'VISIBILITY_MODIFIER_MASK'
 
     Rector\Rector\Dynamic\ClassReplacerRector:
-        'PhpParser\BuilderAbstract': 'PhpParser\Builder'
+        $oldToNewClasses:
+            'PhpParser\BuilderAbstract': 'PhpParser\Builder'

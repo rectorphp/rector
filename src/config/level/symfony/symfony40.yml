@@ -10,5 +10,6 @@ services:
     Rector\Rector\Contrib\Symfony\Process\ProcessBuilderGetProcessRector: ~
 
     Rector\Rector\Dynamic\ClassReplacerRector:
-        'Symfony\Component\Validator\Tests\Constraints\AbstractConstraintValidatorTest': 'Symfony\Component\Validator\Test\ConstraintValidatorTestCase'
-        'Symfony\Component\Process\ProcessBuilder': 'Symfony\Component\Process\Process'
+        $oldToNewClasses:
+            'Symfony\Component\Validator\Tests\Constraints\AbstractConstraintValidatorTest': 'Symfony\Component\Validator\Test\ConstraintValidatorTestCase'
+            'Symfony\Component\Process\ProcessBuilder': 'Symfony\Component\Process\Process'
