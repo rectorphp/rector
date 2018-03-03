@@ -29,14 +29,6 @@ use Rector\Rector\AbstractRector;
 final class GetParameterToConstructorInjectionRector extends AbstractRector
 {
     /**
-     * @var string[]
-     */
-    private $getParameterAwareTypes = [
-        'Symfony\Bundle\FrameworkBundle\Controller\Controller',
-        'Symfony\Component\DependencyInjection\ContainerAwareInterface',
-    ];
-
-    /**
      * @var PropertyNaming
      */
     private $propertyNaming;
@@ -74,7 +66,11 @@ final class GetParameterToConstructorInjectionRector extends AbstractRector
             return false;
         }
 
-        return $this->methodCallAnalyzer->isTypesAndMethods($node, $this->getParameterAwareTypes, ['getParameter']);
+        return $this->methodCallAnalyzer->isTypeAndMethod(
+            $node,
+            'Symfony\Bundle\FrameworkBundle\Controller\Controller',
+            'getParameter'
+        );
     }
 
     /**
