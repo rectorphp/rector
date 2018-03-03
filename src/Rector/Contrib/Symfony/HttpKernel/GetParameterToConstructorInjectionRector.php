@@ -33,7 +33,7 @@ final class GetParameterToConstructorInjectionRector extends AbstractRector
      */
     private $getParameterAwareTypes = [
         'Symfony\Bundle\FrameworkBundle\Controller\Controller',
-        'Symfony\Component\DependencyInjection\ContainerAwareInterface'
+        'Symfony\Component\DependencyInjection\ContainerAwareInterface',
     ];
 
     /**

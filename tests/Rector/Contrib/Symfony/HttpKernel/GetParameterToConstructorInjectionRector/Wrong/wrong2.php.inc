@@ -2,13 +2,13 @@
 
 namespace SomeNamespace;
 
-class ClassWithNamedService3 implements ContainerAwareInterface
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
+class ClassWithNamedService3 extends Controller
 {
     public function render()
     {
-        $this->renderTwig([
-            'value' => $this->container->getParameter('some_parameter')
-        ]);
+        $value = $this->getParameter('some_parameter');
 
         $query = new DoctrineQuery();
         $queryId = $query->getParameter('id');
