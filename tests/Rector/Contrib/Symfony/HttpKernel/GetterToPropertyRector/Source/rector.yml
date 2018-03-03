@@ -1,7 +1,6 @@
 services:
     Rector\Rector\Contrib\Symfony\HttpKernel\GetterToPropertyRector: ~
 
-services:
     Rector\Tests\Rector\Contrib\Symfony\HttpKernel\GetterToPropertyRector\Source\DummyProvider: ~
 
     # require for interface autowiring
