@@ -2,7 +2,6 @@
 
 namespace Rector\Rector\Contrib\Symfony\Console;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Name\FullyQualified;
@@ -12,7 +11,7 @@ use Rector\Contract\Bridge\ServiceTypeForNameProviderInterface;
 use Rector\Naming\PropertyNaming;
 use Rector\Node\Attribute;
 use Rector\Node\PropertyFetchNodeFactory;
-use Rector\NodeAnalyzer\Contrib\Symfony\ContainerCallAnalyzer;
+use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -20,28 +19,26 @@ use Rector\Rector\AbstractRector;
  *
  * Before:
  * class MyCommand extends ContainerAwareCommand
- *
- * $this->getContainer()->get('some_service');
+ * {
+ *      // ...
+ *      $this->getContainer()->get('some_service');
+ *      $this->container->get('some_service');
+ * }
  *
  * After:
  * class MyCommand extends Command
- *
- * public function construct(SomeService $someService)
  * {
- *     $this->someService = $someService;
+ *      public function __construct(SomeService $someService)
+ *      {
+ *          $this->someService = $someService;
+ *      }
+ *
+ *      // ...
+ *      $this->someService
  * }
- *
- * ...
- *
- * $this->someService
  */
 final class CommandToConstructorInjectionRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private const COMMAND_CLASS = 'Symfony\Component\Console\Command\Command';
-
     /**
      * @var ClassPropertyCollector
      */
@@ -58,42 +55,50 @@ final class CommandToConstructorInjectionRector extends AbstractRector
     private $propertyFetchNodeFactory;
 
     /**
-     * @var ContainerCallAnalyzer
-     */
-    private $containerCallAnalyzer;
-
-    /**
      * @var ServiceTypeForNameProviderInterface
      */
     private $serviceTypeForNameProvider;
+
+    /**
+     * @var MethodCallAnalyzer
+     */
+    private $methodCallAnalyzer;
+
+    /**
+     * @var string[]
+     */
+    private $containerAwareParentTypes = [
+        'Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand',
+        'Symfony\Bundle\FrameworkBundle\Controller\Controller',
+    ];
 
     public function __construct(
         ClassPropertyCollector $classPropertyCollector,
         PropertyNaming $propertyNaming,
         PropertyFetchNodeFactory $propertyFetchNodeFactory,
-        ContainerCallAnalyzer $containerCallAnalyzer,
-        ServiceTypeForNameProviderInterface $serviceTypeForNameProvider
+        ServiceTypeForNameProviderInterface $serviceTypeForNameProvider,
+        MethodCallAnalyzer $methodCallAnalyzer
     ) {
         $this->classPropertyCollector = $classPropertyCollector;
         $this->propertyNaming = $propertyNaming;
         $this->propertyFetchNodeFactory = $propertyFetchNodeFactory;
-        $this->containerCallAnalyzer = $containerCallAnalyzer;
         $this->serviceTypeForNameProvider = $serviceTypeForNameProvider;
+        $this->methodCallAnalyzer = $methodCallAnalyzer;
     }
 
     public function isCandidate(Node $node): bool
     {
-        $class = (string) $node->getAttribute(Attribute::CLASS_NAME);
-
-        if (! Strings::endsWith($class, 'Command')) {
+        if (! $this->methodCallAnalyzer->isTypeAndMethod(
+            $node,
+            'Symfony\Component\DependencyInjection\ContainerInterface',
+            'get'
+        )) {
             return false;
         }
 
-        if (! $node instanceof MethodCall) {
-            return false;
-        }
+        $parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
 
-        return $this->containerCallAnalyzer->isGetContainerCall($node);
+        return in_array($parentClassName, $this->containerAwareParentTypes, true);
     }
 
     /**
@@ -101,7 +106,7 @@ final class CommandToConstructorInjectionRector extends AbstractRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        $this->replaceParentContainerAwareCommandWithCommand($methodCallNode);
+//        $this->replaceParentContainerAwareCommandWithCommand($methodCallNode);
 
         /** @var String_ $serviceNameArgument */
         $serviceNameArgument = $methodCallNode->args[0]->value;
@@ -123,9 +128,9 @@ final class CommandToConstructorInjectionRector extends AbstractRector
         return $this->propertyFetchNodeFactory->createLocalWithPropertyName($propertyName);
     }
 
-    private function replaceParentContainerAwareCommandWithCommand(Node $node): void
-    {
-        $classNode = $node->getAttribute(Attribute::CLASS_NODE);
-        $classNode->extends = new FullyQualified(self::COMMAND_CLASS);
-    }
+//    private function replaceParentContainerAwareCommandWithCommand(Node $node): void
+//    {
+//        $classNode = $node->getAttribute(Attribute::CLASS_NODE);
+//        $classNode->extends = new FullyQualified(self::COMMAND_CLASS);
+//    }
 }

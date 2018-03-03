@@ -2,7 +2,7 @@
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 
-final class MyCommand extends \Symfony\Component\Console\Command\Command
+final class MyCommand extends ContainerAwareCommand
 {
     /**
      * @var \stdClass
