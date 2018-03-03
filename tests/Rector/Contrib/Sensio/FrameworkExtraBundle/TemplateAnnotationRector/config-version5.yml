@@ -1,4 +1,3 @@
 services:
     Rector\Rector\Contrib\Sensio\FrameworkExtraBundle\TemplateAnnotationRector:
-        arguments:
-            $version: 5
+        $version: 5

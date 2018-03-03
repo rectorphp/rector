@@ -1,6 +1,5 @@
 services:
     Rector\Rector\Dynamic\AnnotationReplacerRector:
-        arguments:
-            $classToAnnotationMap:
-                PHPUnit\Framework\TestCase:
-                    scenario: test
+        $classToAnnotationMap:
+            PHPUnit\Framework\TestCase:
+                scenario: test
