@@ -9,86 +9,88 @@ services:
     # dynamic
 
     Rector\Rector\Dynamic\ClassConstantReplacerRector:
-        # form
-        'Symfony\Component\Form\FormEvents':
-            'PRE_BIND': 'PRE_SUBMIT'
-            'BIND': 'SUBMIT'
-            'POST_BIND': 'POST_SUBMIT'
-        'Symfony\Component\Form\Extension\Core\DataTransformer':
-            'ROUND_HALFEVEN': 'ROUND_HALF_EVEN'
-            'ROUND_HALFUP': 'ROUND_HALF_UP'
-            'ROUND_HALFDOWN': 'ROUND_HALF_DOWN'
+        $oldToNewConstantsByClass:
+            # form
+            'Symfony\Component\Form\FormEvents':
+                'PRE_BIND': 'PRE_SUBMIT'
+                'BIND': 'SUBMIT'
+                'POST_BIND': 'POST_SUBMIT'
+            'Symfony\Component\Form\Extension\Core\DataTransformer':
+                'ROUND_HALFEVEN': 'ROUND_HALF_EVEN'
+                'ROUND_HALFUP': 'ROUND_HALF_UP'
+                'ROUND_HALFDOWN': 'ROUND_HALF_DOWN'
 
     Rector\Rector\Dynamic\MethodNameReplacerRector:
-        # class loader
-        'Symfony\Component\ClassLoader\UniversalClassLoader\UniversalClassLoader':
-              'registerNamespaces': 'addPrefixes'
-              'registerPrefixes': 'addPrefixes'
-              'registerNamespace': 'addPrefix'
-              'registerPrefix': 'addPrefix'
-              'getNamespaces': 'getPrefixes'
-              'getNamespaceFallbacks': 'getFallbackDirs'
-              'getPrefixFallbacks': 'getFallbackDirs'
+        $perClassOldToNewMethods:
+            # class loader
+            'Symfony\Component\ClassLoader\UniversalClassLoader\UniversalClassLoader':
+                  'registerNamespaces': 'addPrefixes'
+                  'registerPrefixes': 'addPrefixes'
+                  'registerNamespace': 'addPrefix'
+                  'registerPrefix': 'addPrefix'
+                  'getNamespaces': 'getPrefixes'
+                  'getNamespaceFallbacks': 'getFallbackDirs'
+                  'getPrefixFallbacks': 'getFallbackDirs'
 
-        # form
-        'Symfony\Component\Form\AbstractType':
-            'getName': 'getBlockPrefix'
-            'setDefaultOptions': 'configureOptions'
-        'Symfony\Component\Form\FormTypeInterface':
-            'getName': 'getBlockPrefix'
-            'setDefaultOptions': 'configureOptions'
-        'Symfony\Component\Form\ResolvedFormTypeInterface':
-            'getName': 'getBlockPrefix'
-        'Symfony\Component\Form\AbstractTypeExtension':
-            'setDefaultOptions': 'configureOptions'
-        'Symfony\Component\Form\Form':
-            'bind': 'submit'
-            'isBound': 'isSubmitted'
+            # form
+            'Symfony\Component\Form\AbstractType':
+                'getName': 'getBlockPrefix'
+                'setDefaultOptions': 'configureOptions'
+            'Symfony\Component\Form\FormTypeInterface':
+                'getName': 'getBlockPrefix'
+                'setDefaultOptions': 'configureOptions'
+            'Symfony\Component\Form\ResolvedFormTypeInterface':
+                'getName': 'getBlockPrefix'
+            'Symfony\Component\Form\AbstractTypeExtension':
+                'setDefaultOptions': 'configureOptions'
+            'Symfony\Component\Form\Form':
+                'bind': 'submit'
+                'isBound': 'isSubmitted'
 
-        # process
-        'Symfony\Component\Process\Process':
-            'setStdin': 'setInput'
-            'getStdin': 'getInput'
+            # process
+            'Symfony\Component\Process\Process':
+                'setStdin': 'setInput'
+                'getStdin': 'getInput'
 
-        # monolog
-        'Symfony\Bridge\Monolog\Logger':
-            'emerg': 'emergency'
-            'crit': 'critical'
-            'err': 'error'
-            'warn': 'warning'
+            # monolog
+            'Symfony\Bridge\Monolog\Logger':
+                'emerg': 'emergency'
+                'crit': 'critical'
+                'err': 'error'
+                'warn': 'warning'
 
-        # http kernel
-        'Symfony\Component\HttpKernel\Log\LoggerInterface':
-              'emerg': 'emergency'
-              'crit': 'critical'
-              'err': 'error'
-              'warn': 'warning'
-        'Symfony\Component\HttpKernel\Log\NullLogger':
-              'emerg': 'emergency'
-              'crit': 'critical'
-              'err': 'error'
-              'warn': 'warning'
+            # http kernel
+            'Symfony\Component\HttpKernel\Log\LoggerInterface':
+                  'emerg': 'emergency'
+                  'crit': 'critical'
+                  'err': 'error'
+                  'warn': 'warning'
+            'Symfony\Component\HttpKernel\Log\NullLogger':
+                  'emerg': 'emergency'
+                  'crit': 'critical'
+                  'err': 'error'
+                  'warn': 'warning'
 
-        # property access
-        Symfony\Component\PropertyAccess\PropertyAccess:
-            'getPropertyAccessor': 'createPropertyAccessor'
+            # property access
+            Symfony\Component\PropertyAccess\PropertyAccess:
+                'getPropertyAccessor': 'createPropertyAccessor'
 
-        # serialazer
-        'Symfony\Component\Serializer\Exception\Exception': 'Symfony\Component\Serializer\Exception\ExceptionInterface'
+            # serialazer
+            'Symfony\Component\Serializer\Exception\Exception': 'Symfony\Component\Serializer\Exception\ExceptionInterface'
 
-        # translator
-        'Symfony\Component\Translation\Dumper\FileDumper':
-            'format': 'formatCatalogue'
-        'Symfony\Component\Translation\Translator':
-            'getMessages': 'getCatalogue'
+            # translator
+            'Symfony\Component\Translation\Dumper\FileDumper':
+                'format': 'formatCatalogue'
+            'Symfony\Component\Translation\Translator':
+                'getMessages': 'getCatalogue'
 
-        # validator
-        'Symfony\Component\Validator\ConstraintViolationInterface':
-            'getMessageParameters': 'getParameters'
-            'getMessagePluralization': 'getPlural'
-        'Symfony\Component\Validator\ConstraintViolation':
-            'getMessageParameters': 'getParameters'
-            'getMessagePluralization': 'getPlural'
+            # validator
+            'Symfony\Component\Validator\ConstraintViolationInterface':
+                'getMessageParameters': 'getParameters'
+                'getMessagePluralization': 'getPlural'
+            'Symfony\Component\Validator\ConstraintViolation':
+                'getMessageParameters': 'getParameters'
+                'getMessagePluralization': 'getPlural'
 
     Rector\Rector\Dynamic\ClassReplacerRector:
         $oldToNewClasses:

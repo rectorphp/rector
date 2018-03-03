@@ -4,7 +4,6 @@ services:
 
     Rector\Rector\Contrib\Nette\Application\ValidateControlRectorProvider: ~
 
-services:
     Rector\Rector\Contrib\Nette\Utils\NetteObjectToSmartTraitRector: ~
     Rector\Rector\Contrib\Nette\Utils\MagicMethodRector: ~
 
@@ -25,50 +24,53 @@ services:
     Rector\Rector\Contrib\Nette\Forms\FormCallbackRector: ~
 
     Rector\Rector\MagicDisclosure\GetAndSetToMethodCallRector:
-        # di
-        'Nette\DI\Container':
-            'get': 'getService'
-            'set': 'setService'
+        $typeToMethodCalls:
+            # di
+            'Nette\DI\Container':
+                'get': 'getService'
+                'set': 'setService'
 
     Rector\Rector\MagicDisclosure\UnsetAndIssetToMethodCallRector:
-        # di
-        'Nette\DI\Container':
-            'isset': 'hasService'
-            'unset': 'removeService'
+        $typeToMethodCalls:
+            # di
+            'Nette\DI\Container':
+                'isset': 'hasService'
+                'unset': 'removeService'
 
     Rector\Rector\Dynamic\MethodNameReplacerRector:
-        # application
-        'Nette\Application\UI\Control':
-            'invalidateControl': 'redrawControl'
+        $perClassOldToNewMethods:
+            # application
+            'Nette\Application\UI\Control':
+                'invalidateControl': 'redrawControl'
 
-        # di
-        'Nette\DI\ServiceDefinition':
-            'setImplementType': 'setImplementMode'
-            'getImplementType': 'getImplementMode'
+            # di
+            'Nette\DI\ServiceDefinition':
+                'setImplementType': 'setImplementMode'
+                'getImplementType': 'getImplementMode'
 
-        # forms
-        'Nette\Bridges\FormsLatte\FormMacros':
-            'renderFormBegin': ['Nette\Bridges\FormsLatte\Runtime', 'renderFormBegin']
-            'renderFormEnd': ['Nette\Bridges\FormsLatte\Runtime', 'renderFormEnd']
+            # forms
+            'Nette\Bridges\FormsLatte\FormMacros':
+                'renderFormBegin': ['Nette\Bridges\FormsLatte\Runtime', 'renderFormBegin']
+                'renderFormEnd': ['Nette\Bridges\FormsLatte\Runtime', 'renderFormEnd']
 
-        # php-generator
-        'Nette\PhpGenerator\ClassType':
-            'addDocument': 'addComment'
-            'setDocuments': 'setComment'
-            'getDocuments': 'getComment'
-        'Nette\PhpGenerator\Method':
-            'addDocument': 'addComment'
-            'setDocuments': 'setComment'
-            'getDocuments': 'getComment'
-        'Nette\PhpGenerator\PhpFile':
-            'addDocument': 'addComment'
-            'setDocuments': 'setComment'
-            'getDocuments': 'getComment'
-        'Nette\PhpGenerator\Property':
-            'addDocument': 'addComment'
-            'setDocuments': 'setComment'
-            'getDocuments': 'getComment'
+            # php-generator
+            'Nette\PhpGenerator\ClassType':
+                'addDocument': 'addComment'
+                'setDocuments': 'setComment'
+                'getDocuments': 'getComment'
+            'Nette\PhpGenerator\Method':
+                'addDocument': 'addComment'
+                'setDocuments': 'setComment'
+                'getDocuments': 'getComment'
+            'Nette\PhpGenerator\PhpFile':
+                'addDocument': 'addComment'
+                'setDocuments': 'setComment'
+                'getDocuments': 'getComment'
+            'Nette\PhpGenerator\Property':
+                'addDocument': 'addComment'
+                'setDocuments': 'setComment'
+                'getDocuments': 'getComment'
 
-        # utils
-        'Nette\Utils\Html':
-            'add': 'addHtml'
+            # utils
+            'Nette\Utils\Html':
+                'add': 'addHtml'

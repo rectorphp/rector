@@ -155,4 +155,5 @@ services:
             'Twig_Extensions_Node_Trans': 'Twig\Extensions\Node\TransNode'
 
     Rector\Rector\Dynamic\PseudoNamespaceToNamespaceRector:
-        - 'Twig_'
+        $configuration:
+            - 'Twig_'
