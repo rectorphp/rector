@@ -11,6 +11,7 @@ use Rector\Naming\PropertyNaming;
 use Rector\Node\Attribute;
 use Rector\Node\PropertyFetchNodeFactory;
 use Rector\NodeAnalyzer\Contrib\Symfony\ContainerCallAnalyzer;
+use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -47,18 +48,25 @@ final class GetterToPropertyRector extends AbstractRector
      */
     private $serviceTypeForNameProvider;
 
+    /**
+     * @var MethodCallAnalyzer
+     */
+    private $methodCallAnalyzer;
+
     public function __construct(
         PropertyNaming $propertyNaming,
         ClassPropertyCollector $classPropertyCollector,
         PropertyFetchNodeFactory $propertyFetchNodeFactory,
         ContainerCallAnalyzer $containerCallAnalyzer,
-        ServiceTypeForNameProviderInterface $serviceTypeForNameProvider
+        ServiceTypeForNameProviderInterface $serviceTypeForNameProvider,
+        MethodCallAnalyzer $methodCallAnalyzer
     ) {
         $this->propertyNaming = $propertyNaming;
         $this->classPropertyCollector = $classPropertyCollector;
         $this->propertyFetchNodeFactory = $propertyFetchNodeFactory;
         $this->containerCallAnalyzer = $containerCallAnalyzer;
         $this->serviceTypeForNameProvider = $serviceTypeForNameProvider;
+        $this->methodCallAnalyzer = $methodCallAnalyzer;
     }
 
     public function isCandidate(Node $node): bool
@@ -67,7 +75,11 @@ final class GetterToPropertyRector extends AbstractRector
             return false;
         }
 
-        return $this->containerCallAnalyzer->isThisCall($node);
+        return $this->methodCallAnalyzer->isTypeAndMethod(
+            $node,
+            'Symfony\Bundle\FrameworkBundle\Controller\Controller',
+            'get'
+        );
     }
 
     /**

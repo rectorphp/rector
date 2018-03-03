@@ -1,9 +1,15 @@
 <?php declare (strict_types=1);
 
-class ClassWithNamedService1 extends Controller
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
+class ClassWithNamedService extends Controller
 {
     public function render()
     {
-        $this->get('some_service')->render();
+        $someService = $this->get('some_service');
+
+        $this->renderTwig([
+            'posts' => $this->get('some_service')->callMe()
+        ]);
     }
 }
