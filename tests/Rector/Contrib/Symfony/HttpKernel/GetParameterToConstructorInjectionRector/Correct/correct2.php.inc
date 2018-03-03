@@ -2,7 +2,7 @@
 
 namespace SomeNamespace;
 
-class ClassWithNamedService2 implements ContainerAwareInterface
+class ClassWithNamedService3 implements ContainerAwareInterface
 {
     /**
      * @var string
@@ -17,5 +17,8 @@ class ClassWithNamedService2 implements ContainerAwareInterface
         $this->renderTwig([
             'value' => $this->someParameter
         ]);
+
+        $query = new DoctrineQuery();
+        $queryId = $query->getParameter('id');
     }
 }

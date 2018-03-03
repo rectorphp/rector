@@ -2,12 +2,15 @@
 
 namespace SomeNamespace;
 
-class ClassWithNamedService2 implements ContainerAwareInterface
+class ClassWithNamedService3 implements ContainerAwareInterface
 {
     public function render()
     {
         $this->renderTwig([
-            'value' => $this->getParameter('some_parameter')
+            'value' => $this->container->getParameter('some_parameter')
         ]);
+
+        $query = new DoctrineQuery();
+        $queryId = $query->getParameter('id');
     }
 }

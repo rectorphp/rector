@@ -1,6 +1,10 @@
 <?php declare (strict_types=1);
 
-class ClassWithNamedService1 extends Controller
+namespace SomeNamespace;
+
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
+final class ClassWithNamedService1 extends Controller
 {
     /**
      * @var string
@@ -13,5 +17,10 @@ class ClassWithNamedService1 extends Controller
     public function render()
     {
         $value = $this->someParameter;
+
+        return [
+            'value' => $this->someParameter,
+            'value2' => $value,
+        ];
     }
 }
