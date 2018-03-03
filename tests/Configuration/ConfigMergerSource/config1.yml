@@ -1,4 +1,0 @@
-services:
-    ClassReplacer:
-        OldClass:
-            oldKey: oldValue
