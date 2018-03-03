@@ -4,7 +4,6 @@ namespace Rector\Rector\Contrib\Symfony\Console;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Contract\Bridge\ServiceTypeForNameProviderInterface;
@@ -106,8 +105,6 @@ final class CommandToConstructorInjectionRector extends AbstractRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-//        $this->replaceParentContainerAwareCommandWithCommand($methodCallNode);
-
         /** @var String_ $serviceNameArgument */
         $serviceNameArgument = $methodCallNode->args[0]->value;
 
@@ -127,10 +124,4 @@ final class CommandToConstructorInjectionRector extends AbstractRector
 
         return $this->propertyFetchNodeFactory->createLocalWithPropertyName($propertyName);
     }
-
-//    private function replaceParentContainerAwareCommandWithCommand(Node $node): void
-//    {
-//        $classNode = $node->getAttribute(Attribute::CLASS_NODE);
-//        $classNode->extends = new FullyQualified(self::COMMAND_CLASS);
-//    }
 }
