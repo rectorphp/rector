@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Rector\Contrib\Symfony\HttpKernel;
+namespace Rector\Rector\Contrib\Symfony\FrameworkBundle;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
@@ -14,13 +14,13 @@ use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
 
 /**
- * Converts all:
- * $this->get('some_service') # where "some_service" is name of the service in container.
+ * Before:
+ * - $this->get('some_service') # where "some_service" is name of the service in container.
  *
- * into:
- * $this->someService # where "someService" is type of the service
+ * After:
+ * - $this->someService # where "someService" is type of the service
  */
-final class GetterToPropertyRector extends AbstractRector
+final class GetToConstructorInjectionRector extends AbstractRector
 {
     /**
      * @var PropertyNaming

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Contrib\Symfony\HttpKernel\GetterToPropertyRector\Source;
+namespace Rector\Tests\Rector\Contrib\Symfony\FrameworkBundle\GetToConstructorInjectionRector\Source;
 
 use Rector\Contract\Bridge\ServiceTypeForNameProviderInterface;
 
