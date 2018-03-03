@@ -1,4 +1,4 @@
-rectors:
+services:
     # dependency-injection
     Rector\Rector\Dynamic\ArgumentReplacerRector:
         # added default value

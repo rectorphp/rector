@@ -1,4 +1,4 @@
-rectors:
+services:
     Rector\Rector\MagicDisclosure\UnsetAndIssetToMethodCallRector:
         'Nette\DI\Container':
             'isset': 'hasService'

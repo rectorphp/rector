@@ -1,4 +1,4 @@
-rectors:
+services:
     Rector\Rector\Dynamic\ArgumentReplacerRector:
         # added default value
         -

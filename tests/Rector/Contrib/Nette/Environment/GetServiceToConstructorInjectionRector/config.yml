@@ -1,4 +1,4 @@
-rectors:
+services:
     Rector\Rector\Contrib\Nette\Environment\GetServiceToConstructorInjectionRector: ~
 
 services:

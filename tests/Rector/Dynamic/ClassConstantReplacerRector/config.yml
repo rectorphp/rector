@@ -1,4 +1,4 @@
-rectors:
+services:
     Rector\Rector\Dynamic\ClassConstantReplacerRector:
         'Symfony\Component\Form\FormEvents':
             'PRE_BIND': 'PRE_SUBMIT'

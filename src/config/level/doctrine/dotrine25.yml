@@ -1,4 +1,4 @@
-rectors:
+services:
     Rector\Rector\Dynamic\ParentTypehintedArgumentRector:
         'Doctrine\ORM\Mapping\ClassMetadataFactory':
             'setEntityManager':

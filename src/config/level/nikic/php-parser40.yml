@@ -1,4 +1,4 @@
-rectors:
+services:
     Rector\Rector\Contrib\PhpParser\IdentifierRector: ~
     Rector\Rector\Contrib\PhpParser\ParamAndStaticVarNameRector: ~
     Rector\Rector\Contrib\PhpParser\CatchAndClosureUseNameRector: ~

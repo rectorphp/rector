@@ -1,4 +1,4 @@
-rectors:
+services:
     Rector\Rector\Dynamic\ClassReplacerRector:
         'Twig_LoaderInterface': 'Twig\Loader\LoaderInterface'
         'Twig_Extension_StringLoader': 'Twig\Extension\StringLoaderExtension'

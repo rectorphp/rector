@@ -1,4 +1,4 @@
-rectors:
+services:
     Rector\Rector\Contrib\Nette\Application\InjectPropertyRector: ~
     Rector\Rector\Dynamic\ClassReplacerRector:
         'Nette\Config\Configurator': 'Nette\Configurator'

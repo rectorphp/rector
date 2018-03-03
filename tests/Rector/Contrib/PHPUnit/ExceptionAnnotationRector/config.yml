@@ -1,2 +1,2 @@
-rectors:
+services:
     Rector\Rector\Contrib\PHPUnit\ExceptionAnnotationRector: ~

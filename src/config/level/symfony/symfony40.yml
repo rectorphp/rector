@@ -1,4 +1,4 @@
-rectors:
+services:
     Rector\Rector\Contrib\Symfony\Validator\ConstraintUrlOptionRector: ~
     Rector\Rector\Contrib\Symfony\Form\FormIsValidRector: ~
     Rector\Rector\Contrib\Symfony\Form\StringFormTypeToClassRector: ~

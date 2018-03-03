@@ -1,4 +1,4 @@
-rectors:
+services:
     Rector\Rector\Dynamic\ClassReplacerRector:
         'Environment': 'Nette\Environment'
         'Image': 'Nette\Image'

@@ -1,4 +1,4 @@
-rectors:
+services:
     Rector\Rector\MagicDisclosure\GetAndSetToMethodCallRector:
         'Nette\DI\Container':
             'get': 'getService'

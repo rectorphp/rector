@@ -1,7 +1,7 @@
 # resources:
 # - https://github.com/symfony/symfony/blob/master/UPGRADE-3.0.md
 
-rectors:
+services:
     Rector\Rector\Contrib\Symfony\HttpKernel\GetRequestRector: ~
     Rector\Rector\Contrib\Symfony\Form\FormTypeGetParentRector: ~
     Rector\Rector\Contrib\Symfony\Form\OptionNameRector: ~
