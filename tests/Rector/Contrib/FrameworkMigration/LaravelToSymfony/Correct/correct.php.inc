@@ -9,6 +9,6 @@ class UserController extends \Symfony\Bundle\FrameworkBundle\Controller\Controll
 {
     public function show(): \Symfony\Component\HttpFoundation\Response
     {
-        return new Response('user.profile');
+        return $this->render('user.profile');
     }
 }

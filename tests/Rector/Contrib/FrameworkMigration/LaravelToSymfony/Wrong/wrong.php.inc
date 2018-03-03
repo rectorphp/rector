@@ -9,6 +9,6 @@ class UserController extends Controller
 {
     public function show(): Response
     {
-        return view('user.profile', []);
+        return view('user.profile');
     }
 }
