@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Contrib\Symfony\HttpKernel\GetParameterToConstructorInjectionRector;
+namespace Rector\Tests\Rector\Contrib\Symfony\FrameworkBundle\GetParameterToConstructorInjectionRector;
 
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
- * @covers \Rector\Rector\Contrib\Symfony\HttpKernel\GetParameterToConstructorInjectionRector
+ * @covers \Rector\Rector\Contrib\Symfony\FrameworkBundle\GetParameterToConstructorInjectionRector
  */
 final class GetParameterToConstructorInjectionRectorTest extends AbstractRectorTestCase
 {

@@ -1,2 +1,0 @@
-rectors:
-    Rector\Rector\Contrib\Symfony\HttpKernel\GetParameterToConstructorInjectionRector: ~

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Rector\Contrib\Symfony\HttpKernel;
+namespace Rector\Rector\Contrib\Symfony\FrameworkBundle;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
