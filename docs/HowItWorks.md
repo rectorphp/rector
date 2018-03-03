@@ -50,13 +50,14 @@ E.g. in this case, first will be changed `@expectedException` annotation to meth
 
 ```yml
 # rector.yml
-rectors:
+services:
     Rector\Rector\Contrib\PHPUnit\ExceptionAnnotationRector: ~
 
     Rector\Rector\Dynamic\MethodNameReplacerRector:
-        'PHPUnit\Framework\TestClass':
-            'setExpectedException': 'expectedException'
-            'setExpectedExceptionRegExp': 'expectedException'
+        $perClassOldToNewMethods:
+                'PHPUnit\Framework\TestClass':
+                    'setExpectedException': 'expectedException'
+                    'setExpectedExceptionRegExp': 'expectedException'
 ```
 
 ### 2.3 Save File/Diff Phase
