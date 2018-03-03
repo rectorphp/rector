@@ -1,7 +1,6 @@
-rectors:
+services:
     Rector\Rector\Contrib\Symfony\FrameworkBundle\GetToConstructorInjectionRector: ~
 
-services:
     Rector\Tests\Rector\Contrib\Symfony\FrameworkBundle\GetToConstructorInjectionRector\Source\DummyProvider: ~
 
     # require for interface autowiring

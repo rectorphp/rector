@@ -107,7 +107,7 @@ Do you need to upgrade to **Symfony 4.0**, for example?
 1. Create `rector.yml` with desired Rectors:
 
     ```yml
-    rectors:
+    services:
         Rector\Rector\Contrib\Nette\Application\InjectPropertyRector: ~
     ```
 
