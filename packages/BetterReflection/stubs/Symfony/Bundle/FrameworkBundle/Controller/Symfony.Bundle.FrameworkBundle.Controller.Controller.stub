@@ -1,8 +1,8 @@
 <?php
 
-namespace Nette;
+namespace Symfony\Bundle\FrameworkBundle\Controller;
 
-class Object
+class Controller
 {
 
 }
