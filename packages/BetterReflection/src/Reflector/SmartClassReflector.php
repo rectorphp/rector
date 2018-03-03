@@ -8,6 +8,7 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
 use Rector\BetterReflection\Reflection\ReflectionClass;
 use Rector\BetterReflection\Reflector\Exception\IdentifierNotFound;
+use Rector\Configuration\Option;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Throwable;
 
@@ -152,7 +153,7 @@ final class SmartClassReflector
      */
     private function getClassReflector(): ClassReflector
     {
-        $currentSource = $this->parameterProvider->provideParameter('source');
+        $currentSource = $this->parameterProvider->provideParameter(Option::SOURCE);
         if ($this->lastSource === $currentSource) {
             return $this->classReflector;
         }

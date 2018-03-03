@@ -5,7 +5,6 @@ namespace Rector\Builder;
 use PhpParser\Builder\Method;
 use PhpParser\Builder\Param;
 use PhpParser\BuilderFactory;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Builder\Class_\Property;
@@ -74,7 +73,7 @@ final class ConstructorMethodBuilder
     {
         $paramBuild = $this->builderFactory->param($propertyName);
         foreach ($propertyTypes as $propertyType) {
-            $paramBuild->setTypeHint(new FullyQualified($propertyType));
+            $paramBuild->setTypeHint($this->nodeFactory->createTypeNamespace($propertyType));
         }
 
         return $paramBuild;

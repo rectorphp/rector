@@ -1,6 +1,8 @@
 <?php declare (strict_types=1);
 
-class ClassWithNamedService1 extends Controller
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
+class ClassWithNamedService extends Controller
 {
     /**
      * @var \stdClass
@@ -12,6 +14,10 @@ class ClassWithNamedService1 extends Controller
     }
     public function render()
     {
-        $this->stdClass->render();
+        $someService = $this->stdClass;
+
+        $this->renderTwig([
+            'posts' => $this->stdClass->callMe()
+        ]);
     }
 }

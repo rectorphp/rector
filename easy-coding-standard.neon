@@ -55,6 +55,7 @@ parameters:
             - */packages/NodeTypeResolver/**/PerNodeTypeResolver/**TypeResolver.php
             - */packages/NodeTypeResolver/**/PerNodeTypeResolver/**TypeResolver/*Test.php
             - packages/BetterReflection/src/Reflector/SmartClassReflector.php
+            - src/NodeAnalyzer/Contrib/Symfony/ControllerMethodAnalyzer.php
         SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff:
             # covariant types
             - */packages/NodeValueResolver/src/PerNodeValueResolver/*ValueResolver.php

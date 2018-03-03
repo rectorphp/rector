@@ -25,6 +25,7 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\TraitUse;
 use Rector\Exception\NotImplementedException;
+use Rector\Naming\PropertyNaming;
 
 final class NodeFactory
 {
@@ -219,5 +220,14 @@ final class NodeFactory
     public function createStaticMethodCallWithArgs(string $class, string $method, array $arguments): StaticCall
     {
         return new StaticCall(new Name($class), new Identifier($method), $arguments);
+    }
+
+    public function createTypeNamespace(string $name): Name
+    {
+        if (PropertyNaming::isPhpReservedType($name)) {
+            return new Name($name);
+        }
+
+        return new FullyQualified($name);
     }
 }

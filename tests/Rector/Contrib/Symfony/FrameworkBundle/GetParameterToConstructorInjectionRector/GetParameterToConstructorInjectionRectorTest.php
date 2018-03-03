@@ -1,13 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Contrib\Symfony\HttpKernel\GetterToPropertyRector;
+namespace Rector\Tests\Rector\Contrib\Symfony\FrameworkBundle\GetParameterToConstructorInjectionRector;
 
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
- * @covers \Rector\Rector\Contrib\Symfony\HttpKernel\GetterToPropertyRector
+ * @covers \Rector\Rector\Contrib\Symfony\FrameworkBundle\GetParameterToConstructorInjectionRector
  */
-final class GetterToPropertyRectorTest extends AbstractRectorTestCase
+final class GetParameterToConstructorInjectionRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()
@@ -24,11 +24,12 @@ final class GetterToPropertyRectorTest extends AbstractRectorTestCase
     {
         return [
             [__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc'],
+            [__DIR__ . '/Wrong/wrong2.php.inc', __DIR__ . '/Correct/correct2.php.inc'],
         ];
     }
 
     protected function provideConfig(): string
     {
-        return __DIR__ . '/Source/rector.yml';
+        return __DIR__ . '/config.yml';
     }
 }

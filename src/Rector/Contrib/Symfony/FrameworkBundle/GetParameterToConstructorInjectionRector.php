@@ -1,12 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Rector\Contrib\Symfony\HttpKernel;
+namespace Rector\Rector\Contrib\Symfony\FrameworkBundle;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\Builder\Class_\ClassPropertyCollector;
-use Rector\Contract\Bridge\ServiceTypeForNameProviderInterface;
 use Rector\Naming\PropertyNaming;
 use Rector\Node\Attribute;
 use Rector\Node\PropertyFetchNodeFactory;
@@ -15,12 +14,19 @@ use Rector\Rector\AbstractRector;
 
 /**
  * Converts all:
- * $this->get('some_service') # where "some_service" is name of the service in container.
+ * - $this->getParameter('someParameter') # where "some_service" is name of parameter
  *
  * into:
- * $this->someService # where "someService" is type of the service
+ * - public function __construct($someParameter)
+ * - {
+ * -      $this->someParameter = $someParameter;
+ * - }
+ *
+ * - ...
+ *
+ * - $this->someService
  */
-final class GetterToPropertyRector extends AbstractRector
+final class GetParameterToConstructorInjectionRector extends AbstractRector
 {
     /**
      * @var PropertyNaming
@@ -38,11 +44,6 @@ final class GetterToPropertyRector extends AbstractRector
     private $propertyFetchNodeFactory;
 
     /**
-     * @var ServiceTypeForNameProviderInterface
-     */
-    private $serviceTypeForNameProvider;
-
-    /**
      * @var MethodCallAnalyzer
      */
     private $methodCallAnalyzer;
@@ -51,13 +52,11 @@ final class GetterToPropertyRector extends AbstractRector
         PropertyNaming $propertyNaming,
         ClassPropertyCollector $classPropertyCollector,
         PropertyFetchNodeFactory $propertyFetchNodeFactory,
-        ServiceTypeForNameProviderInterface $serviceTypeForNameProvider,
         MethodCallAnalyzer $methodCallAnalyzer
     ) {
         $this->propertyNaming = $propertyNaming;
         $this->classPropertyCollector = $classPropertyCollector;
         $this->propertyFetchNodeFactory = $propertyFetchNodeFactory;
-        $this->serviceTypeForNameProvider = $serviceTypeForNameProvider;
         $this->methodCallAnalyzer = $methodCallAnalyzer;
     }
 
@@ -70,7 +69,7 @@ final class GetterToPropertyRector extends AbstractRector
         return $this->methodCallAnalyzer->isTypeAndMethod(
             $node,
             'Symfony\Bundle\FrameworkBundle\Controller\Controller',
-            'get'
+            'getParameter'
         );
     }
 
@@ -81,18 +80,12 @@ final class GetterToPropertyRector extends AbstractRector
     {
         /** @var String_ $stringArgument */
         $stringArgument = $methodCallNode->args[0]->value;
-
-        $serviceName = $stringArgument->value;
-        $serviceType = $this->serviceTypeForNameProvider->provideTypeForName($serviceName);
-        if ($serviceType === null) {
-            return null;
-        }
-
-        $propertyName = $this->propertyNaming->typeToName($serviceType);
+        $parameterName = $stringArgument->value;
+        $propertyName = $this->propertyNaming->underscoreToName($parameterName);
 
         $this->classPropertyCollector->addPropertyForClass(
             (string) $methodCallNode->getAttribute(Attribute::CLASS_NAME),
-            [$serviceType],
+            ['string'], // @todo: resolve type from container provider? see parameter autowire compiler pass
             $propertyName
         );
 
