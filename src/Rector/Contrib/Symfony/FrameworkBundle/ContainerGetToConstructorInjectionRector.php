@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Rector\Contrib\Symfony\Console;
+namespace Rector\Rector\Contrib\Symfony\FrameworkBundle;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
@@ -36,7 +36,7 @@ use Rector\Rector\AbstractRector;
  *      $this->someService
  * }
  */
-final class CommandToConstructorInjectionRector extends AbstractRector
+final class ContainerGetToConstructorInjectionRector extends AbstractRector
 {
     /**
      * @var ClassPropertyCollector

@@ -1,13 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Contrib\Symfony\Console\CommandToConstructorInjectionRector;
+namespace Rector\Tests\Rector\Contrib\Symfony\FrameworkBundle\ContainerGetToConstructorInjectionRector;
 
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
- * @covers \Rector\Rector\Contrib\Symfony\Console\CommandToConstructorInjectionRector
+ * @covers \Rector\Rector\Contrib\Symfony\FrameworkBundle\ContainerGetToConstructorInjectionRector
  */
-final class CommandToConstructorInjectionRectorTest extends AbstractRectorTestCase
+final class ContainerGetToConstructorInjectionRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()
