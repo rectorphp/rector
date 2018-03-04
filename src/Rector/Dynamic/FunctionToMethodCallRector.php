@@ -8,11 +8,16 @@ use PhpParser\Node\Name;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\Rector\AbstractRector;
 
+/**
+ * Before:
+ * - view('...', [])
+ *
+ * After:
+ * - $this->render('...')
+ */
 final class FunctionToMethodCallRector extends AbstractRector
 {
     /**
-     * "view('...')" => "$this->render('...')"
-     *
      * @var string[]
      */
     private $functionToMethodCall = [];
@@ -23,7 +28,7 @@ final class FunctionToMethodCallRector extends AbstractRector
     private $methodCallNodeFactory;
 
     /**
-     * @param string[] $functionToMethodCall
+     * @param string[] $functionToMethodCall e.g. ["view" => ["this", "render"]]
      */
     public function __construct(array $functionToMethodCall, MethodCallNodeFactory $methodCallNodeFactory)
     {
