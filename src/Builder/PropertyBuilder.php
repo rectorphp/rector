@@ -6,7 +6,7 @@ use PhpParser\BuilderFactory;
 use PhpParser\Comment\Doc;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property as PhpParserProperty;
-use Rector\Builder\Class_\Property;
+use Rector\Builder\Class_\VariableInfo;
 use Rector\Naming\PropertyNaming;
 
 final class PropertyBuilder
@@ -27,7 +27,7 @@ final class PropertyBuilder
         $this->statementGlue = $statementGlue;
     }
 
-    public function addPropertyToClass(Class_ $classNode, Property $property): void
+    public function addPropertyToClass(Class_ $classNode, VariableInfo $property): void
     {
         if ($this->doesPropertyAlreadyExist($classNode, $property)) {
             return;
@@ -38,7 +38,7 @@ final class PropertyBuilder
         $this->statementGlue->addAsFirstMethod($classNode, $propertyNode);
     }
 
-    private function buildPrivatePropertyNode(Property $property): PhpParserProperty
+    private function buildPrivatePropertyNode(VariableInfo $property): PhpParserProperty
     {
         $docComment = $this->createDocWithVarAnnotation($property->getTypes());
 
@@ -59,7 +59,7 @@ final class PropertyBuilder
             . PHP_EOL . ' */');
     }
 
-    private function doesPropertyAlreadyExist(Class_ $classNode, Property $property): bool
+    private function doesPropertyAlreadyExist(Class_ $classNode, VariableInfo $property): bool
     {
         foreach ($classNode->stmts as $inClassNode) {
             if (! $inClassNode instanceof PhpParserProperty) {

@@ -222,7 +222,7 @@ final class NodeFactory
         return new StaticCall(new Name($class), new Identifier($method), $arguments);
     }
 
-    public function createTypeNamespace(string $name): Name
+    public function createTypeName(string $name): Name
     {
         if (PropertyNaming::isPhpReservedType($name)) {
             return new Name($name);

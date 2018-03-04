@@ -2,7 +2,7 @@
 
 namespace Rector\Builder\Class_;
 
-final class Property
+final class VariableInfo
 {
     /**
      * @var string
@@ -24,11 +24,11 @@ final class Property
     }
 
     /**
-     * @param string[] $propertyTypes
+     * @param string[] $types
      */
-    public static function createFromNameAndTypes(string $propertyName, array $propertyTypes): self
+    public static function createFromNameAndTypes(string $name, array $types): self
     {
-        return new self($propertyName, $propertyTypes);
+        return new self($name, $types);
     }
 
     public function getName(): string

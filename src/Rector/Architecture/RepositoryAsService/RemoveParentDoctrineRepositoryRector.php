@@ -7,7 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
-use Rector\Builder\Class_\Property;
+use Rector\Builder\Class_\VariableInfo;
 use Rector\Builder\ConstructorMethodBuilder;
 use Rector\Builder\PropertyBuilder;
 use Rector\Node\Attribute;
@@ -59,13 +59,13 @@ final class RemoveParentDoctrineRepositoryRector extends AbstractRector
         $node->extends = null;
 
         // add $repository property
-        $property = Property::createFromNameAndTypes('repository', ['Doctrine\ORM\EntityRepository']);
-        $this->propertyBuilder->addPropertyToClass($node, $property);
+        $parameterInfo = VariableInfo::createFromNameAndTypes('repository', ['Doctrine\ORM\EntityRepository']);
+        $this->propertyBuilder->addPropertyToClass($node, $parameterInfo);
 
         // add repository to constuctor
         $methodCall = new MethodCall(new Variable('entityManager'), 'getRepository');
-        $argument = Property::createFromNameAndTypes('entityManager', ['Doctrine\ORM\EntityManager']);
-        $this->constructorMethodBuilder->addPropertyWithExpression($node, $argument, $methodCall, $property);
+        $propertyInfo = VariableInfo::createFromNameAndTypes('entityManager', ['Doctrine\ORM\EntityManager']);
+        $this->constructorMethodBuilder->addPropertyWithExpression($node, $propertyInfo, $methodCall, $parameterInfo);
 
         return $node;
     }
