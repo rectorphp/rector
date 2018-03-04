@@ -2,6 +2,7 @@
 
 namespace Rector\DependencyInjection;
 
+use Rector\DependencyInjection\CompilerPass\AutowireRectorCompilerPass;
 use Rector\DependencyInjection\CompilerPass\CollectorCompilerPass;
 use Rector\NodeTypeResolver\DependencyInjection\CompilerPass\NodeTypeResolverCollectorCompilerPass;
 use Rector\RectorBuilder\DependencyInjection\CompilerPass\RectorProvidersCompilerPass;
@@ -51,14 +52,13 @@ final class RectorKernel extends Kernel
      */
     public function registerBundles(): array
     {
-        return [
-            new RectorBundle(),
-        ];
+        return [];
     }
 
     protected function build(ContainerBuilder $containerBuilder): void
     {
         $containerBuilder->addCompilerPass(new CollectorCompilerPass());
+        $containerBuilder->addCompilerPass(new AutowireRectorCompilerPass());
         $containerBuilder->addCompilerPass(new RectorProvidersCompilerPass());
         $containerBuilder->addCompilerPass(new NodeTypeResolverCollectorCompilerPass());
     }

@@ -1,15 +1,17 @@
-rectors:
+services:
     Rector\Rector\Dynamic\ParentTypehintedArgumentRector:
-        'Doctrine\ORM\Mapping\ClassMetadataFactory':
-            'setEntityManager':
-                'em': 'Doctrine\ORM\EntityManagerInterface'
-        'Doctrine\ORM\Tools\DebugUnitOfWorkListener':
-            'dumpIdentityMap':
-                'em': 'Doctrine\ORM\EntityManagerInterface'
+        $typehintForArgumentByMethodAndClass:
+            'Doctrine\ORM\Mapping\ClassMetadataFactory':
+                'setEntityManager':
+                    'em': 'Doctrine\ORM\EntityManagerInterface'
+            'Doctrine\ORM\Tools\DebugUnitOfWorkListener':
+                'dumpIdentityMap':
+                    'em': 'Doctrine\ORM\EntityManagerInterface'
 
     Rector\Rector\Dynamic\ArgumentReplacerRector:
-        -
-            class: 'Doctrine\ORM\Persisters\Entity\AbstractEntityInheritancePersister'
-            method: 'getSelectJoinColumnSQL'
-            position: 4
-            type: 'removed'
+        $argumentChangesByMethodAndType:
+            -
+                class: 'Doctrine\ORM\Persisters\Entity\AbstractEntityInheritancePersister'
+                method: 'getSelectJoinColumnSQL'
+                position: 4
+                type: 'removed'

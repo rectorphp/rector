@@ -107,8 +107,8 @@ Do you need to upgrade to **Symfony 4.0**, for example?
 1. Create `rector.yml` with desired Rectors:
 
     ```yml
-    rectors:
-        - Rector\Rector\Contrib\Nette\Application\InjectPropertyRector
+    services:
+        Rector\Rector\Contrib\Nette\Application\InjectPropertyRector: ~
     ```
 
 2. Try Rector on your `/src` directory:
@@ -135,132 +135,142 @@ You can:
 
 ```yml
 # phpunit60.yml
-rectors:
+services:
     Rector\Rector\Dynamic\ClassReplacerRector:
-        # old class: new class
-        'PHPUnit_Framework_TestCase': 'PHPUnit\Framework\TestCase'
+        $oldToNewClasses:
+            # old class: new class
+            'PHPUnit_Framework_TestCase': 'PHPUnit\Framework\TestCase'
 ```
 
 ### Replace some part of the namespace
 
 ```yml
 # better-reflection20.yml
-rectors:
+services:
     Rector\Rector\Dynamic\NamespaceReplacerRector:
-        # old namespace: new namespace
-        'BetterReflection': 'Roave\BetterReflection'
+        $oldToNewNamespaces:
+            # old namespace: new namespace
+            'BetterReflection': 'Roave\BetterReflection'
 ```
 
 ### Change a method name
 
 ```yml
-rectors:
+services:
     Rector\Rector\Dynamic\MethodNameReplacerRector:
-        # class
-        'Nette\Utils\Html':
-            # old method: new method
-            'add': 'addHtml'
+        $perClassOldToNewMethods:
+            # class
+            'Nette\Utils\Html':
+                # old method: new method
+                'add': 'addHtml'
 
-        # or in case of static methods calls
+            # or in case of static methods calls
 
-        # class
-        'Nette\Bridges\FormsLatte\FormMacros':
-            # old method: [new class, new method]
-            'renderFormBegin': ['Nette\Bridges\FormsLatte\Runtime', 'renderFormBegin']
+            # class
+            'Nette\Bridges\FormsLatte\FormMacros':
+                # old method: [new class, new method]
+                'renderFormBegin': ['Nette\Bridges\FormsLatte\Runtime', 'renderFormBegin']
 ```
 
 ### Change a property name
 
 ```yml
-rectors:
+services:
     Rector\Rector\Dynamic\PropertyNameReplacerRector:
-        # class:
-        'PhpParser\Node\Param':
-            # old property: new property
-            'name': 'var'
+        $perClassOldToNewProperties:
+            # class:
+            'PhpParser\Node\Param':
+                # old property: new property
+                'name': 'var'
 ```
 
 ### Change a class constant name
 
 ```yml
-rectors:
+services:
     Rector\Rector\Dynamic\ClassConstantReplacerRector:
-        # class
-        'Symfony\Component\Form\FormEvents':
-            # old constant: new constant
-            'PRE_BIND': 'PRE_SUBMIT'
-            'BIND': 'SUBMIT'
-            'POST_BIND': 'POST_SUBMIT'
+        $oldToNewConstantsByClass:
+            # class
+            'Symfony\Component\Form\FormEvents':
+                # old constant: new constant
+                'PRE_BIND': 'PRE_SUBMIT'
+                'BIND': 'SUBMIT'
+                'POST_BIND': 'POST_SUBMIT'
 ```
 
 ### Change parameters type hinting according to the parent type
 
 ```yml
-rectors:
+services:
     Rector\Rector\Dynamic\ParentTypehintedArgumentRector:
-        # class
-        'PhpParser\Parser':
-            # method
-            'parse':
-                # parameter: typehint
-                'code': 'string'
+        $typehintForArgumentByMethodAndClass:
+            # class
+            'PhpParser\Parser':
+                # method
+                'parse':
+                    # parameter: typehint
+                    'code': 'string'
 ```
 
 ### Change argument value or remove argument
 
 ```yml
-rectors:
+services:
     Rector\Rector\Dynamic\ArgumentReplacerRector:
-        -
-            class: 'Symfony\Component\DependencyInjection\ContainerBuilder'
-            method: 'compile'
-            position: 0
-            # change default value
-            type: 'changed'
-            default_value: false
+        $argumentChangesByMethodAndType:
+            -
+                class: 'Symfony\Component\DependencyInjection\ContainerBuilder'
+                method: 'compile'
+                position: 0
+                # change default value
+                type: 'changed'
+                default_value: false
 
-            # or remove
-            type: 'removed'
+                # or remove
+                type: 'removed'
 
-            # or replace old default value by new one
-            type: 'replace_default_value'
-            replace_map:
-                'Symfony\Component\DependencyInjection\ContainerBuilder::SCOPE_PROTOTYPE': false
+                # or replace old default value by new one
+                type: 'replace_default_value'
+                replace_map:
+                    'Symfony\Component\DependencyInjection\ContainerBuilder::SCOPE_PROTOTYPE': false
 ```
 
 ### Replace the underscore naming `_` with namespaces `\`
 
 ```yml
-rectors:
+services:
     Rector\Rector\Dynamic\PseudoNamespaceToNamespaceRector:
-        # old namespace prefix
-        - 'PHPUnit_'
-        # exclude classes
-        - '!PHPUnit_Framework_MockObject_MockObject'
+        $configuration:
+            # old namespace prefix
+            - 'PHPUnit_'
+            # exclude classes
+            - '!PHPUnit_Framework_MockObject_MockObject'
 ```
 
 ### Modify a property to method
 
 ```yml
-rectors:
+services:
     Rector\Rector\Dynamic\PropertyToMethodRector:
-        # type
-        'Symfony\Component\Translation\Translator':
-            # property to replace
-            'locale':
-                # (prepared key): get method name
-                'get': 'getLocale'
-                # (prepared key): set method name
-                'set': 'setLocale'
+        $perClassPropertyToMethods:
+            # type
+            'Symfony\Component\Translation\Translator':
+                # property to replace
+                'locale':
+                    # (prepared key): get method name
+                    'get': 'getLocale'
+                    # (prepared key): set method name
+                    'set': 'setLocale'
 ```
 
 ### Remove a value object and use simple type
 
 ```yml
-rectors:
+services:
     Rector\Rector\Dynamic\ValueObjectRemoverRector:
-        # type: new simple type
-        'ValueObject\Name': 'string'
+        $valueObjectsToSimpleTypes:
+            # type: new simple type
+            'ValueObject\Name': 'string'
 ```
 
 For example:
@@ -286,12 +296,13 @@ private $name;
 ## Replace Property and Method Annotations
 
 ```yml
-rectors:
+services:
     Rector\Rector\Dynamic\AnnotationReplacerRector:
-        # type
-        PHPUnit\Framework\TestCase:
-            # old annotation: new annotation
-            scenario: test
+        $classToAnnotationMap:
+            # type
+            PHPUnit\Framework\TestCase:
+                # old annotation: new annotation
+                scenario: test
 ```
 
 ```diff
@@ -312,13 +323,14 @@ rectors:
 ### Replace `get/set` magic methods with real ones
 
 ```yml
-rectors:
+services:
     Rector\Rector\MagicDisclosure\GetAndSetToMethodCallRector:
-        # class
-        'Nette\DI\Container':
-            # magic method (prepared keys): new real method
-            'get': 'getService'
-            'set': 'addService'
+        $typeToMethodCalls:
+            # class
+            'Nette\DI\Container':
+                # magic method (prepared keys): new real method
+                'get': 'getService'
+                'set': 'addService'
 ```
 
 For example:
@@ -336,13 +348,14 @@ For example:
 ### Replace `isset/unset` magic methods with real ones
 
 ```yml
-rectors:
+services:
     Rector\Rector\MagicDisclosure\UnsetAndIssetToMethodCallRector:
-        # class
-        'Nette\DI\Container':
-            # magic method (prepared keys): new real method
-            'isset': 'hasService'
-            'unset': 'removeService'
+        $typeToMethodCalls:
+            # class
+            'Nette\DI\Container':
+                # magic method (prepared keys): new real method
+                'isset': 'hasService'
+                'unset': 'removeService'
 ```
 
 For example:
@@ -360,12 +373,13 @@ For example:
 ### Replace `toString` magic method with real one
 
 ```yml
-rectors:
+services:
     Rector\Rector\MagicDisclosure\ToStringToMethodCallRector:
-        # class
-        'Symfony\Component\Config\ConfigCache':
-            # magic method (prepared key): new real method
-            'toString': 'getPath'
+        $typeToMethodCalls:
+            # class
+            'Symfony\Component\Config\ConfigCache':
+                # magic method (prepared key): new real method
+                'toString': 'getPath'
 ```
 
 For example:
@@ -383,7 +397,7 @@ For example:
 ### Remove [Fluent Interface](https://ocramius.github.io/blog/fluent-interfaces-are-evil/)
 
 ```yml
-rectors:
+services:
     Rector\Rector\Dynamic\FluentReplaceRector: ~
 ```
 

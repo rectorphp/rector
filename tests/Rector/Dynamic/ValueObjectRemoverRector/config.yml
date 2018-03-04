@@ -1,3 +1,4 @@
-rectors:
+services:
     Rector\Rector\Dynamic\ValueObjectRemoverRector:
-        'SomeNamespace\SomeValueObject': 'string'
+        $valueObjectsToSimpleTypes:
+            'SomeNamespace\SomeValueObject': 'string'

@@ -1,5 +1,6 @@
-rectors:
+services:
     Rector\Rector\MagicDisclosure\GetAndSetToMethodCallRector:
-        'Nette\DI\Container':
-            'get': 'getService'
-            'set': 'addService'
+        $typeToMethodCalls:
+            'Nette\DI\Container':
+                'get': 'getService'
+                'set': 'addService'

@@ -1,9 +1,10 @@
-rectors:
+services:
     Rector\Rector\Dynamic\ClassReplacerRector:
-        'Environment': 'Nette\Environment'
-        'Image': 'Nette\Image'
-        'IRouter': 'Nette\Application\IRouter'
-        'IHttpRequest': 'Nette\Http\IRequest'
-        'PresenterRequest': 'Nette\Application\Request'
-        'Presenter': 'Nette\Application\UI\Presenter'
-        'Component': 'Nette\ComponentModel\Component'
+        $oldToNewClasses:
+            'Environment': 'Nette\Environment'
+            'Image': 'Nette\Image'
+            'IRouter': 'Nette\Application\IRouter'
+            'IHttpRequest': 'Nette\Http\IRequest'
+            'PresenterRequest': 'Nette\Application\Request'
+            'Presenter': 'Nette\Application\UI\Presenter'
+            'Component': 'Nette\ComponentModel\Component'

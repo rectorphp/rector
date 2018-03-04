@@ -1,5 +1,6 @@
-rectors:
+services:
     Rector\Rector\Dynamic\ClassReplacerRector:
-        OldClass: NewClass
-        'PhpParser\BuilderAbstract': 'PhpParser\Builder'
-        'Twig_Extension': 'Twig\Extension\AbstractExtension'
+        $oldToNewClasses:
+            OldClass: NewClass
+            'PhpParser\BuilderAbstract': 'PhpParser\Builder'
+            'Twig_Extension': 'Twig\Extension\AbstractExtension'

@@ -1,5 +1,6 @@
-rectors:
+services:
     Rector\Rector\MagicDisclosure\UnsetAndIssetToMethodCallRector:
-        'Nette\DI\Container':
-            'isset': 'hasService'
-            'unset': 'removeService'
+        $typeToMethodCalls:
+            'Nette\DI\Container':
+                'isset': 'hasService'
+                'unset': 'removeService'
