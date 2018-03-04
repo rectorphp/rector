@@ -51,12 +51,12 @@ final class BuilderRectorFactory
 
     public function create(): BuilderRector
     {
-        $BuilderRector = new BuilderRector($this->methodCallAnalyzer, $this->identifierRenamer, $this->nodeFactory);
+        $builderRector = new BuilderRector($this->methodCallAnalyzer, $this->identifierRenamer, $this->nodeFactory);
 
         // @required setter DI replacement
-        $BuilderRector->setExpressionAdder($this->expressionAdder);
-        $BuilderRector->setPropertyToClassAdder($this->propertyAdder);
+        $builderRector->setExpressionAdder($this->expressionAdder);
+        $builderRector->setPropertyToClassAdder($this->propertyAdder);
 
-        return $BuilderRector;
+        return $builderRector;
     }
 }

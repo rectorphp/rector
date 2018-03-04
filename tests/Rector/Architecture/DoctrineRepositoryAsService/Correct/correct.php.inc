@@ -3,22 +3,18 @@
 namespace App\Repository;
 
 use App\Entity\Post;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 
 final class PostRepository
 {
     /**
-     * @var EntityRepository
+     * @var \Doctrine\ORM\EntityRepository
      */
     private $repository;
-
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(\Doctrine\ORM\EntityManager $entityManager)
     {
         $this->repository = $entityManager->getRepository(Post::class);
     }
-
-
     /**
      * Our custom method
      *
