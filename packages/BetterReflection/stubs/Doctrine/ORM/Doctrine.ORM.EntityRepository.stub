@@ -1,0 +1,20 @@
+<?php
+
+namespace Doctrine\ORM;
+
+class EntityRepository
+{
+    /**
+     * @return object|null
+     */
+    public function find($id)
+    {
+    }
+
+    /**
+     * @return object[]
+     */
+    public function findBy(array $criteria)
+    {
+    }
+}

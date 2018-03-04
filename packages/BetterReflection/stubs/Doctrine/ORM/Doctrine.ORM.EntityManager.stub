@@ -1,0 +1,14 @@
+<?php
+
+namespace Doctrine\ORM;
+
+class EntityManager
+{
+    /**
+     * @param string $entityName
+     */
+    public function getRepository($entityName): EntityRepository
+    {
+
+    }
+}
