@@ -6,7 +6,6 @@ use PhpParser\Builder\Method;
 use PhpParser\Builder\Param;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
@@ -39,23 +38,26 @@ final class ConstructorMethodBuilder
 
     public function addPropertyWithExpression(
         Class_ $classNode,
-        VariableInfo $argument,
+        VariableInfo $variableInfo,
         Expr $exprNode,
-        VariableInfo $assignProperty
+        VariableInfo $variableInfo
     ): void {
-        $propertyAssignNode = $this->nodeFactory->createPropertyAssignmentWithExpr($assignProperty->getName(), $exprNode);
+        $propertyAssignNode = $this->nodeFactory->createPropertyAssignmentWithExpr(
+            $variableInfo->getName(),
+            $exprNode
+        );
 
         $constructorMethod = $classNode->getMethod('__construct') ?: null;
         /** @var ClassMethod $constructorMethod */
         if ($constructorMethod) {
             // has parameter already?
             foreach ($constructorMethod->params as $constructorParameter) {
-                if ($constructorParameter->var->name === $argument->getName()) {
+                if ($constructorParameter->var->name === $variableInfo->getName()) {
                     return;
                 }
             }
 
-            $constructorMethod->params[] = $this->createParameter($argument->getTypes(), $argument->getName())
+            $constructorMethod->params[] = $this->createParameter($variableInfo->getTypes(), $variableInfo->getName())
                 ->getNode();
 
             $constructorMethod->stmts[] = $propertyAssignNode;
@@ -63,25 +65,25 @@ final class ConstructorMethodBuilder
             return;
         }
 
-        $constructorMethod = $this->createMethodWithPropertyAndAssign('__construct', $argument, $propertyAssignNode);
+        $constructorMethod = $this->createMethodWithPropertyAndAssign($variableInfo, $propertyAssignNode);
         $this->statementGlue->addAsFirstMethod($classNode, $constructorMethod->getNode());
     }
 
-    public function addPropertyAssignToClass(Class_ $classNode, VariableInfo $property): void
+    public function addPropertyAssignToClass(Class_ $classNode, VariableInfo $variableInfo): void
     {
-        $propertyAssignNode = $this->nodeFactory->createPropertyAssignment($property->getName());
+        $propertyAssignNode = $this->nodeFactory->createPropertyAssignment($variableInfo->getName());
 
         $constructorMethod = $classNode->getMethod('__construct') ?: null;
         /** @var ClassMethod $constructorMethod */
         if ($constructorMethod) {
             // has parameter already?
             foreach ($constructorMethod->params as $constructorParameter) {
-                if ($constructorParameter->var->name === $property->getName()) {
+                if ($constructorParameter->var->name === $variableInfo->getName()) {
                     return;
                 }
             }
 
-            $constructorMethod->params[] = $this->createParameter($property->getTypes(), $property->getName())
+            $constructorMethod->params[] = $this->createParameter($variableInfo->getTypes(), $variableInfo->getName())
                 ->getNode();
 
             $constructorMethod->stmts[] = $propertyAssignNode;
@@ -89,7 +91,7 @@ final class ConstructorMethodBuilder
             return;
         }
 
-        $constructorMethod = $this->createMethodWithPropertyAndAssign('__construct', $property, $propertyAssignNode);
+        $constructorMethod = $this->createMethodWithPropertyAndAssign($variableInfo, $propertyAssignNode);
         $this->statementGlue->addAsFirstMethod($classNode, $constructorMethod->getNode());
     }
 
@@ -106,11 +108,11 @@ final class ConstructorMethodBuilder
         return $paramBuild;
     }
 
-    private function createMethodWithPropertyAndAssign(string $name, VariableInfo $variable, Expression $expressionNode): Method
+    private function createMethodWithPropertyAndAssign(VariableInfo $variableInfo, Expression $expressionNode): Method
     {
-        return $this->builderFactory->method($name)
+        return $this->builderFactory->method('__construct')
             ->makePublic()
-            ->addParam($this->createParameter($variable->getTypes(), $variable->getName()))
+            ->addParam($this->createParameter($variableInfo->getTypes(), $variableInfo->getName()))
             ->addStmts([$expressionNode]);
     }
 }

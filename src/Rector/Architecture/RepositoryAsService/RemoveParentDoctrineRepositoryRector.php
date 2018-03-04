@@ -19,6 +19,7 @@ final class RemoveParentDoctrineRepositoryRector extends AbstractRector
      * @var PropertyBuilder
      */
     private $propertyBuilder;
+
     /**
      * @var ConstructorMethodBuilder
      */
