@@ -149,7 +149,11 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractPHPUnitRector
             $oldArguments = $methodCallNode->args;
             unset($oldArguments[0]);
 
-            if ($funcCallOrEmptyNodeName === 'is_a') {
+            if (in_array($funcCallOrEmptyNodeName, ['in_array', 'array_search'], true)
+                && count($funcCallOrEmptyNodeArgs) === 3) {
+                unset($funcCallOrEmptyNodeArgs[2]);
+                $newArguments = array_merge($funcCallOrEmptyNodeArgs, $oldArguments);
+            } elseif ($funcCallOrEmptyNodeName === 'is_a') {
                 $newArguments = array_merge(array_reverse($funcCallOrEmptyNodeArgs), $oldArguments);
             } else {
                 $newArguments = array_merge($funcCallOrEmptyNodeArgs, $oldArguments);
