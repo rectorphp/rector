@@ -1,14 +1,33 @@
 <?php declare(strict_types=1);
 
-namespace App\Controller;
+namespace App\Repository;
 
-use \Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use \Symfony\Component\HttpFoundation\Response;
+use App\Entity\Post;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 
-class UserController extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
+final class PostRepository
 {
-    public function show(): \Symfony\Component\HttpFoundation\Response
+    /**
+     * @var EntityRepository
+     */
+    private $repository;
+
+    public function __construct(EntityManagerInterface $entityManager)
     {
-        return $this->render('user.profile');
+        $this->repository = $entityManager->getRepository(Post::class);
+    }
+
+
+    /**
+     * Our custom method
+     *
+     * @return Post[]
+     */
+    public function findPostsByAuthor(int $authorId): array
+    {
+        return $this->repository->findBy([
+            'author' => $authorId
+        ]);
     }
 }
