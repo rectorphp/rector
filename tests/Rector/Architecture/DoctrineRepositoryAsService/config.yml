@@ -1,2 +1,2 @@
 imports:
-  - { resource: '../../../config/levels/architecture/' }
+  - { resource: '../../../../src/config/level/architecture/doctrine-repository-as-services.yml' }
