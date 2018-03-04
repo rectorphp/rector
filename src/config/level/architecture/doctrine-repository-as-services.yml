@@ -1,1 +1,2 @@
 services:
+    Rector\Rector\Architecture\RepositoryAsService\RemoveParentDoctrineRepositoryRector: ~
