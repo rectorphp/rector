@@ -5,6 +5,7 @@ namespace Rector\Builder;
 use PhpParser\Builder\Method;
 use PhpParser\Builder\Param;
 use PhpParser\BuilderFactory;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Builder\Class_\Property;
@@ -32,6 +33,41 @@ final class ConstructorMethodBuilder
         $this->builderFactory = $builderFactory;
         $this->statementGlue = $statementGlue;
         $this->nodeFactory = $nodeFactory;
+    }
+
+    /**
+     * @todo optimize with the other method
+     */
+    public function addPropertyWithExpression(Class_ $classNode, Property $argument, Expr $exprNode, Property $assignProperty): void
+    {
+        $constructorMethod = $classNode->getMethod('__construct') ?: null;
+
+        $propertyAssignNode = $this->nodeFactory->createPropertyAssignmentWithExpr($assignProperty->getName(), $exprNode);
+
+        /** @var ClassMethod $constructorMethod */
+        if ($constructorMethod) {
+            // has parameter already?
+            foreach ($constructorMethod->params as $constructorParameter) {
+                if ($constructorParameter->var->name === $argument->getName()) {
+                    return;
+                }
+            }
+
+            $constructorMethod->params[] = $this->createParameter($argument->getTypes(), $argument->getName())
+                ->getNode();
+
+            $constructorMethod->stmts[] = $propertyAssignNode;
+
+            return;
+        }
+
+        /** @var Method $constructorMethod */
+        $constructorMethod = $this->builderFactory->method('__construct')
+            ->makePublic()
+            ->addParam($this->createParameter($argument->getTypes(), $argument->getName()))
+            ->addStmts([$propertyAssignNode]);
+
+        $this->statementGlue->addAsFirstMethod($classNode, $constructorMethod->getNode());
     }
 
     public function addPropertyAssignToClass(Class_ $classNode, Property $property): void

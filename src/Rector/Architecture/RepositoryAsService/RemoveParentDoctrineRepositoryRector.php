@@ -4,8 +4,11 @@ namespace Rector\Rector\Architecture\RepositoryAsService;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Builder\Class_\Property;
+use Rector\Builder\ConstructorMethodBuilder;
 use Rector\Builder\PropertyBuilder;
 use Rector\Node\Attribute;
 use Rector\Rector\AbstractRector;
@@ -16,10 +19,15 @@ final class RemoveParentDoctrineRepositoryRector extends AbstractRector
      * @var PropertyBuilder
      */
     private $propertyBuilder;
+    /**
+     * @var ConstructorMethodBuilder
+     */
+    private $constructorMethodBuilder;
 
-    public function __construct(PropertyBuilder $propertyBuilder)
+    public function __construct(PropertyBuilder $propertyBuilder, ConstructorMethodBuilder $constructorMethodBuilder)
     {
         $this->propertyBuilder = $propertyBuilder;
+        $this->constructorMethodBuilder = $constructorMethodBuilder;
     }
 
     public function isCandidate(Node $node): bool
@@ -47,13 +55,17 @@ final class RemoveParentDoctrineRepositoryRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
+        // remove parent class
         $node->extends = null;
 
+        // add $repository property
         $property = Property::createFromNameAndTypes('repository', ['Doctrine\ORM\EntityRepository']);
         $this->propertyBuilder->addPropertyToClass($node, $property);
 
-        //return $this->propertyFetchNodeFactory->createLocalWithPropertyName('repository');
-        // add it  to constuctor
+        // add repository to constuctor
+        $methodCall = new MethodCall(new Variable('entityManager'), 'getRepository');
+        $argument = Property::createFromNameAndTypes('entityManager', ['Doctrine\ORM\EntityManager']);
+        $this->constructorMethodBuilder->addPropertyWithExpression($node, $argument, $methodCall, $property);
 
         return $node;
     }

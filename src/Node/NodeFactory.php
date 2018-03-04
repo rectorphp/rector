@@ -149,6 +149,19 @@ final class NodeFactory
     }
 
     /**
+     * @todo optimize with the other method
+     */
+    public function createPropertyAssignmentWithExpr(string $propertyName, Expr $exprNode): Expression
+    {
+        $assign = new Assign(
+            $this->propertyFetchNodeFactory->createLocalWithPropertyName($propertyName),
+            $exprNode
+        );
+
+        return new Expression($assign);
+    }
+
+    /**
      * Creates $this->values[] = $value;
      */
     public function createPropertyArrayAssignment(string $propertyName, string $argumentName): Expression
