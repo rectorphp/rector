@@ -136,28 +136,15 @@ final class NodeFactory
      */
     public function createPropertyAssignment(string $propertyName): Expression
     {
-        $variable = new Variable($propertyName, [
-            'name' => $propertyName,
-        ]);
+        $variable = new Variable($propertyName, ['name' => $propertyName]);
 
-        $assign = new Assign(
-            $this->propertyFetchNodeFactory->createLocalWithPropertyName($propertyName),
-            $variable
-        );
-
-        return new Expression($assign);
+        return $this->createPropertyAssignmentWithExpr($propertyName, $variable);
     }
 
-    /**
-     * @todo optimize with the other method
-     */
-    public function createPropertyAssignmentWithExpr(string $propertyName, Expr $exprNode): Expression
+    public function createPropertyAssignmentWithExpr(string $propertyName, Expr $rightExprNode): Expression
     {
-        $assign = new Assign(
-            $this->propertyFetchNodeFactory->createLocalWithPropertyName($propertyName),
-            $exprNode
-        );
-
+        $leftExprNode = $this->propertyFetchNodeFactory->createLocalWithPropertyName($propertyName);
+        $assign = new Assign($leftExprNode, $rightExprNode);
         return new Expression($assign);
     }
 

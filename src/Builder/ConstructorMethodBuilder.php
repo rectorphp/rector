@@ -6,8 +6,10 @@ use PhpParser\Builder\Method;
 use PhpParser\Builder\Param;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
 use Rector\Builder\Class_\Property;
 use Rector\Node\NodeFactory;
 
@@ -93,11 +95,7 @@ final class ConstructorMethodBuilder
             return;
         }
 
-        /** @var Method $constructorMethod */
-        $constructorMethod = $this->builderFactory->method('__construct')
-            ->makePublic()
-            ->addParam($this->createParameter($property->getTypes(), $property->getName()))
-            ->addStmts([$propertyAssignNode]);
+        $constructorMethod = $this->createMethodsWithArgumentsAndAssign('__construct', $property, $propertyAssignNode);
 
         $this->statementGlue->addAsFirstMethod($classNode, $constructorMethod->getNode());
     }
@@ -113,5 +111,13 @@ final class ConstructorMethodBuilder
         }
 
         return $paramBuild;
+    }
+
+    private function createMethodsWithArgumentsAndAssign(string $name, Property $property, Expression $expressionNode): Method
+    {
+        return $this->builderFactory->method($name)
+            ->makePublic()
+            ->addParam($this->createParameter($property->getTypes(), $property->getName()))
+            ->addStmts([$expressionNode]);
     }
 }
