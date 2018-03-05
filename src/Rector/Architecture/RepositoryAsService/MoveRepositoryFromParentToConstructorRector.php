@@ -4,6 +4,7 @@ namespace Rector\Rector\Architecture\RepositoryAsService;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
@@ -12,6 +13,7 @@ use Rector\Builder\Class_\VariableInfo;
 use Rector\Builder\ConstructorMethodBuilder;
 use Rector\Builder\PropertyBuilder;
 use Rector\Contract\Bridge\EntityForDoctrineRepositoryProviderInterface;
+use Rector\Exception\Bridge\RectorProviderException;
 use Rector\Node\Attribute;
 use Rector\Node\NodeFactory;
 use Rector\Rector\AbstractRector;
@@ -101,12 +103,20 @@ final class MoveRepositoryFromParentToConstructorRector extends AbstractRector
         $repositoryClassName = (string) $classNode->getAttribute(Attribute::CLASS_NAME);
         $entityClassName = $this->entityForDoctrineRepositoryProvider->provideEntityForRepository($repositoryClassName);
 
+        if ($entityClassName === null) {
+            throw new RectorProviderException(sprintf(
+                'An entity was not provided for "%s" repository by your "%s" class.',
+                $repositoryClassName,
+                get_class($this->entityForDoctrineRepositoryProvider)
+            ));
+        }
+
         $entityClassConstantReferenceNode = $this->nodeFactory->createClassConstantReference($entityClassName);
 
         $getRepositoryMethodCallNode = new MethodCall(
             new Variable('entityManager'),
             'getRepository',
-            [$entityClassConstantReferenceNode]
+            [new Arg($entityClassConstantReferenceNode)]
         );
 
         return $this->nodeFactory->createPropertyAssignmentWithExpr('repository', $getRepositoryMethodCallNode);
