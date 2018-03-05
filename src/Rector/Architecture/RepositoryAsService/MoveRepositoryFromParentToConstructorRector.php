@@ -7,10 +7,12 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Expression;
 use Rector\Builder\Class_\VariableInfo;
 use Rector\Builder\ConstructorMethodBuilder;
 use Rector\Builder\PropertyBuilder;
 use Rector\Node\Attribute;
+use Rector\Node\NodeFactory;
 use Rector\Rector\AbstractRector;
 
 final class MoveRepositoryFromParentToConstructorRector extends AbstractRector
@@ -25,10 +27,19 @@ final class MoveRepositoryFromParentToConstructorRector extends AbstractRector
      */
     private $constructorMethodBuilder;
 
-    public function __construct(PropertyBuilder $propertyBuilder, ConstructorMethodBuilder $constructorMethodBuilder)
-    {
+    /**
+     * @var NodeFactory
+     */
+    private $nodeFactory;
+
+    public function __construct(
+        PropertyBuilder $propertyBuilder,
+        ConstructorMethodBuilder $constructorMethodBuilder,
+        NodeFactory $nodeFactory
+    ) {
         $this->propertyBuilder = $propertyBuilder;
         $this->constructorMethodBuilder = $constructorMethodBuilder;
+        $this->nodeFactory = $nodeFactory;
     }
 
     public function isCandidate(Node $node): bool
@@ -63,15 +74,25 @@ final class MoveRepositoryFromParentToConstructorRector extends AbstractRector
         $propertyInfo = VariableInfo::createFromNameAndTypes('repository', ['Doctrine\ORM\EntityRepository']);
         $this->propertyBuilder->addPropertyToClass($node, $propertyInfo);
 
-        // add repository to constuctor
-        $methodCall = new MethodCall(new Variable('entityManager'), 'getRepository');
-        $this->constructorMethodBuilder->addPropertyAssignWithExpression(
+        // add $entityManager and assign to constuctor
+        $this->constructorMethodBuilder->addParameterAndAssignToConstructorArgumentsOfClass(
             $node,
             VariableInfo::createFromNameAndTypes('entityManager', ['Doctrine\ORM\EntityManager']),
-            $methodCall,
-            $propertyInfo
+            $this->createRepositoryAssign()
         );
 
         return $node;
+    }
+
+    /**
+     * Creates:
+     * "$this->repository = $entityManager->getRepository()"
+     */
+    private function createRepositoryAssign(): Expression
+    {
+        return $this->nodeFactory->createPropertyAssignmentWithExpr(
+            'repository',
+            new MethodCall(new Variable('entityManager'), 'getRepository')
+        );
     }
 }
