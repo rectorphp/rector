@@ -4,7 +4,6 @@ namespace Rector\Builder;
 
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
@@ -46,7 +45,11 @@ final class ConstructorMethodBuilder
             $exprNode
         );
 
-        $this->addVariableAndAssignToConstructorArgumentsOfClass($classNode, $parameterVariableInfo, $propertyAssignNode);
+        $this->addVariableAndAssignToConstructorArgumentsOfClass(
+            $classNode,
+            $parameterVariableInfo,
+            $propertyAssignNode
+        );
     }
 
     public function addPropertyAssignToClass(Class_ $classNode, VariableInfo $variableInfo): void
