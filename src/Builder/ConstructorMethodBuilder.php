@@ -2,7 +2,6 @@
 
 namespace Rector\Builder;
 
-use PhpParser\BuilderFactory;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
@@ -11,11 +10,6 @@ use Rector\Node\NodeFactory;
 
 final class ConstructorMethodBuilder
 {
-    /**
-     * @var BuilderFactory
-     */
-    private $builderFactory;
-
     /**
      * @var StatementGlue
      */
@@ -26,9 +20,8 @@ final class ConstructorMethodBuilder
      */
     private $nodeFactory;
 
-    public function __construct(BuilderFactory $builderFactory, StatementGlue $statementGlue, NodeFactory $nodeFactory)
+    public function __construct(StatementGlue $statementGlue, NodeFactory $nodeFactory)
     {
-        $this->builderFactory = $builderFactory;
         $this->statementGlue = $statementGlue;
         $this->nodeFactory = $nodeFactory;
     }
@@ -58,20 +51,10 @@ final class ConstructorMethodBuilder
             return;
         }
 
-        $constructorMethod = $this->createClassMethodNodeWithParameterAndAssign($variableInfo, $assignNode);
+        $constructorMethod = $this->nodeFactory->createPublicMethod('__construct');
+        $this->addParameterAndAssignToMethod($constructorMethod, $variableInfo, $assignNode);
 
         $this->statementGlue->addAsFirstMethod($classNode, $constructorMethod);
-    }
-
-    private function createClassMethodNodeWithParameterAndAssign(
-        VariableInfo $variableInfo,
-        Expression $expressionNode
-    ): ClassMethod {
-        return $this->builderFactory->method('__construct')
-            ->makePublic()
-            ->addParam($this->nodeFactory->createParamFromVariableInfo($variableInfo))
-            ->addStmts([$expressionNode])
-            ->getNode();
     }
 
     private function addParameterAndAssignToMethod(

@@ -21,6 +21,8 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\TraitUse;
@@ -203,6 +205,11 @@ final class NodeFactory
         return $this->builderFactory->param($name)
             ->setTypeHint($type)
             ->getNode();
+    }
+
+    public function createPublicMethod(string $name): ClassMethod
+    {
+        return new ClassMethod($name, ['flags' => Class_::MODIFIER_PUBLIC]);
     }
 
     public function createParamFromVariableInfo(VariableInfo $variableInfo): Param
