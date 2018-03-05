@@ -24,6 +24,7 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\TraitUse;
+use Rector\Builder\Class_\VariableInfo;
 use Rector\Exception\NotImplementedException;
 use Rector\Naming\PropertyNaming;
 
@@ -202,6 +203,17 @@ final class NodeFactory
         return $this->builderFactory->param($name)
             ->setTypeHint($type)
             ->getNode();
+    }
+
+    public function createParamFromVariableInfo(VariableInfo $variableInfo): Param
+    {
+        $paramBuild = $this->builderFactory->param($variableInfo->getName());
+
+        foreach ($variableInfo->getTypes() as $type) {
+            $paramBuild->setTypeHint($this->createTypeName($type));
+        }
+
+        return $paramBuild->getNode();
     }
 
     public function createString(string $name): String_
