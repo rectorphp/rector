@@ -1,2 +1,10 @@
 imports:
-  - { resource: '../../../../src/config/level/architecture/doctrine-repository-as-services.yml' }
+    - { resource: '../../../../src/config/level/architecture/doctrine-repository-as-services.yml' }
+
+services:
+    # entity name <=> repository provider
+    Rector\Tests\Rector\Architecture\DoctrineRepositoryAsService\Source\EntityForDoctrineRepositoryProvider: ~
+
+    # @todo: add autoaliasing compilerpass or extension for single cases like this; no need to bother user
+    Rector\Contract\Bridge\EntityForDoctrineRepositoryProviderInterface:
+        alias: Rector\Tests\Rector\Architecture\DoctrineRepositoryAsService\Source\EntityForDoctrineRepositoryProvider

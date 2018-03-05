@@ -13,7 +13,7 @@ final class PostRepository
     private $repository;
     public function __construct(\Doctrine\ORM\EntityManager $entityManager)
     {
-        $this->repository = $entityManager->getRepository(Post::class);
+        $this->repository = $entityManager->getRepository(\App\Entity\Post::class);
     }
     /**
      * Our custom method
