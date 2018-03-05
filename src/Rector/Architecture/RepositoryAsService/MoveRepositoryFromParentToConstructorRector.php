@@ -13,7 +13,7 @@ use Rector\Builder\PropertyBuilder;
 use Rector\Node\Attribute;
 use Rector\Rector\AbstractRector;
 
-final class RemoveParentDoctrineRepositoryRector extends AbstractRector
+final class MoveRepositoryFromParentToConstructorRector extends AbstractRector
 {
     /**
      * @var PropertyBuilder
@@ -60,13 +60,17 @@ final class RemoveParentDoctrineRepositoryRector extends AbstractRector
         $node->extends = null;
 
         // add $repository property
-        $parameterInfo = VariableInfo::createFromNameAndTypes('repository', ['Doctrine\ORM\EntityRepository']);
-        $this->propertyBuilder->addPropertyToClass($node, $parameterInfo);
+        $propertyInfo = VariableInfo::createFromNameAndTypes('repository', ['Doctrine\ORM\EntityRepository']);
+        $this->propertyBuilder->addPropertyToClass($node, $propertyInfo);
 
         // add repository to constuctor
         $methodCall = new MethodCall(new Variable('entityManager'), 'getRepository');
-        $propertyInfo = VariableInfo::createFromNameAndTypes('entityManager', ['Doctrine\ORM\EntityManager']);
-        $this->constructorMethodBuilder->addPropertyWithExpression($node, $propertyInfo, $methodCall, $parameterInfo);
+        $this->constructorMethodBuilder->addPropertyAssignWithExpression(
+            $node,
+            VariableInfo::createFromNameAndTypes('entityManager', ['Doctrine\ORM\EntityManager']),
+            $methodCall,
+            $propertyInfo
+        );
 
         return $node;
     }
