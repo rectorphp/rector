@@ -9,6 +9,20 @@ services:
                   'isPresenceRequired': 'requirePresence'
                   'isEmptyAllowed': 'allowEmpty'
 
+    Rector\Rector\Dynamic\PropertyToMethodRector:
+        $perClassPropertyToMethods:
+            'Cake\Controller\Controller':
+                'name':
+                    'get': 'getName'
+                    'set': 'setName'
+                'plugin':
+                    'get': 'getPlugin'
+                    'set': 'setPlugin'
+            'Cake\Form\Form':
+                'validator':
+                    'get': 'getValidator'
+                    'set': 'setValidator'
+
     Rector\Rector\Dynamic\ClassReplacerRector:
         $oldToNewClasses:
             'Cake\Cache\Engine\ApcEngine': 'Cake\Cache\Engine\ApcuEngine'
