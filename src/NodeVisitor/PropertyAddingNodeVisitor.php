@@ -56,7 +56,7 @@ final class PropertyAddingNodeVisitor extends NodeVisitorAbstract
         }
 
         foreach ($propertiesForClass as $property) {
-            $this->constructorMethodBuilder->addPropertyAssignToClass($classNode, $property);
+            $this->constructorMethodBuilder->addSimplePropertyAssignToClass($classNode, $property);
             $this->propertyBuilder->addPropertyToClass($classNode, $property);
         }
 

@@ -3,6 +3,7 @@
 namespace Rector\DependencyInjection;
 
 use Rector\DependencyInjection\CompilerPass\AutowireRectorCompilerPass;
+use Rector\DependencyInjection\CompilerPass\AutowireSinglyImplementedCompilerPass;
 use Rector\DependencyInjection\CompilerPass\CollectorCompilerPass;
 use Rector\NodeTypeResolver\DependencyInjection\CompilerPass\NodeTypeResolverCollectorCompilerPass;
 use Rector\RectorBuilder\DependencyInjection\CompilerPass\RectorProvidersCompilerPass;

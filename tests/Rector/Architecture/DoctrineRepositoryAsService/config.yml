@@ -1,0 +1,6 @@
+imports:
+    - { resource: '../../../../src/config/level/architecture/doctrine-repository-as-services.yml' }
+
+services:
+    # required for EntityForDoctrineRepositoryProvider, added by user
+    Rector\Tests\Rector\Architecture\DoctrineRepositoryAsService\Source\EntityForDoctrineRepositoryProvider: ~

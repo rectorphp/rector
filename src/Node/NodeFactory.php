@@ -21,9 +21,11 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\TraitUse;
+use Rector\Builder\Class_\VariableInfo;
 use Rector\Exception\NotImplementedException;
 use Rector\Naming\PropertyNaming;
 
@@ -136,15 +138,15 @@ final class NodeFactory
      */
     public function createPropertyAssignment(string $propertyName): Expression
     {
-        $variable = new Variable($propertyName, [
-            'name' => $propertyName,
-        ]);
+        $variable = new Variable($propertyName, ['name' => $propertyName]);
 
-        $assign = new Assign(
-            $this->propertyFetchNodeFactory->createLocalWithPropertyName($propertyName),
-            $variable
-        );
+        return $this->createPropertyAssignmentWithExpr($propertyName, $variable);
+    }
 
+    public function createPropertyAssignmentWithExpr(string $propertyName, Expr $rightExprNode): Expression
+    {
+        $leftExprNode = $this->propertyFetchNodeFactory->createLocalWithPropertyName($propertyName);
+        $assign = new Assign($leftExprNode, $rightExprNode);
         return new Expression($assign);
     }
 
@@ -204,6 +206,24 @@ final class NodeFactory
             ->getNode();
     }
 
+    public function createPublicMethod(string $name): ClassMethod
+    {
+        return $this->builderFactory->method($name)
+            ->makePublic()
+            ->getNode();
+    }
+
+    public function createParamFromVariableInfo(VariableInfo $variableInfo): Param
+    {
+        $paramBuild = $this->builderFactory->param($variableInfo->getName());
+
+        foreach ($variableInfo->getTypes() as $type) {
+            $paramBuild->setTypeHint($this->createTypeName($type));
+        }
+
+        return $paramBuild->getNode();
+    }
+
     public function createString(string $name): String_
     {
         return new String_($name);
@@ -222,7 +242,7 @@ final class NodeFactory
         return new StaticCall(new Name($class), new Identifier($method), $arguments);
     }
 
-    public function createTypeNamespace(string $name): Name
+    public function createTypeName(string $name): Name
     {
         if (PropertyNaming::isPhpReservedType($name)) {
             return new Name($name);

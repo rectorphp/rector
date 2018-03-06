@@ -1,11 +1,2 @@
-services:
-    Rector\Rector\Dynamic\ClassReplacerRector:
-        $oldToNewClasses:
-            'Illuminate\Http\Response': 'Symfony\Component\HttpFoundation\Response'
-            'App\Http\Controllers\Controller': 'Symfony\Bundle\FrameworkBundle\Controller\Controller'
-
-
-    # view('...') => $this->render('...')
-    Rector\Rector\Dynamic\FunctionToMethodCallRector:
-        $functionToMethodCall:
-            'view': ['this', 'render']
+imports:
+  - { resource: '../../../../src/config/level/framework-migration/laravel-to-symfony.yml' }

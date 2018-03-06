@@ -2,21 +2,14 @@
 
 namespace Rector\Builder;
 
-use PhpParser\Builder\Method;
-use PhpParser\Builder\Param;
-use PhpParser\BuilderFactory;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Builder\Class_\Property;
+use PhpParser\Node\Stmt\Expression;
+use Rector\Builder\Class_\VariableInfo;
 use Rector\Node\NodeFactory;
 
 final class ConstructorMethodBuilder
 {
-    /**
-     * @var BuilderFactory
-     */
-    private $builderFactory;
-
     /**
      * @var StatementGlue
      */
@@ -27,55 +20,64 @@ final class ConstructorMethodBuilder
      */
     private $nodeFactory;
 
-    public function __construct(BuilderFactory $builderFactory, StatementGlue $statementGlue, NodeFactory $nodeFactory)
+    public function __construct(StatementGlue $statementGlue, NodeFactory $nodeFactory)
     {
-        $this->builderFactory = $builderFactory;
         $this->statementGlue = $statementGlue;
         $this->nodeFactory = $nodeFactory;
     }
 
-    public function addPropertyAssignToClass(Class_ $classNode, Property $property): void
+    /**
+     * Creates:
+     * public function __construct($someProperty)
+     * {
+     *      $this->someProperty = $someProperty;
+     * }
+     */
+    public function addSimplePropertyAssignToClass(Class_ $classNode, VariableInfo $variableInfo): void
     {
-        $constructorMethod = $classNode->getMethod('__construct') ?: null;
+        $propertyAssignNode = $this->nodeFactory->createPropertyAssignment($variableInfo->getName());
+        $this->addParameterAndAssignToConstructorArgumentsOfClass($classNode, $variableInfo, $propertyAssignNode);
+    }
 
-        $propertyAssignNode = $this->nodeFactory->createPropertyAssignment($property->getName());
-
+    public function addParameterAndAssignToConstructorArgumentsOfClass(
+        Class_ $classNode,
+        VariableInfo $variableInfo,
+        Expression $assignNode
+    ): void {
+        $constructorMethod = $classNode->getMethod('__construct');
         /** @var ClassMethod $constructorMethod */
         if ($constructorMethod) {
-            // has parameter already?
-            foreach ($constructorMethod->params as $constructorParameter) {
-                if ($constructorParameter->var->name === $property->getName()) {
-                    return;
-                }
-            }
-
-            $constructorMethod->params[] = $this->createParameter($property->getTypes(), $property->getName())
-                ->getNode();
-
-            $constructorMethod->stmts[] = $propertyAssignNode;
-
+            $this->addParameterAndAssignToMethod($constructorMethod, $variableInfo, $assignNode);
             return;
         }
 
-        /** @var Method $constructorMethod */
-        $constructorMethod = $this->builderFactory->method('__construct')
-            ->makePublic()
-            ->addParam($this->createParameter($property->getTypes(), $property->getName()))
-            ->addStmts([$propertyAssignNode]);
+        $constructorMethod = $this->nodeFactory->createPublicMethod('__construct');
+        $this->addParameterAndAssignToMethod($constructorMethod, $variableInfo, $assignNode);
 
-        $this->statementGlue->addAsFirstMethod($classNode, $constructorMethod->getNode());
+        $this->statementGlue->addAsFirstMethod($classNode, $constructorMethod);
     }
 
-    /**
-     * @param string[] $propertyTypes
-     */
-    private function createParameter(array $propertyTypes, string $propertyName): Param
-    {
-        $paramBuild = $this->builderFactory->param($propertyName);
-        foreach ($propertyTypes as $propertyType) {
-            $paramBuild->setTypeHint($this->nodeFactory->createTypeNamespace($propertyType));
+    private function addParameterAndAssignToMethod(
+        ClassMethod $classMethodNode,
+        VariableInfo $variableInfo,
+        Expression $propertyAssignNode
+    ): void {
+        if ($this->hasMethodParameter($classMethodNode, $variableInfo)) {
+            return;
         }
 
-        return $paramBuild;
+        $classMethodNode->params[] = $this->nodeFactory->createParamFromVariableInfo($variableInfo);
+        $classMethodNode->stmts[] = $propertyAssignNode;
+    }
+
+    private function hasMethodParameter(ClassMethod $classMethodNode, VariableInfo $variableInfo): bool
+    {
+        foreach ($classMethodNode->params as $constructorParameter) {
+            if ($constructorParameter->var->name === $variableInfo->getName()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
