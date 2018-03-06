@@ -1,4 +1,4 @@
-# source: https://github.com/FriendsOfPHP/PHP-CS-Fixer/blob/3.0/UPGRADE-v3.md
+# related: https://github.com/FriendsOfPHP/PHP-CS-Fixer/blob/3.0/UPGRADE-v3.md
 
 services:
     Rector\Rector\Dynamic\ClassReplacerRector:
