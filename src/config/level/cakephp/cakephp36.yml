@@ -1,0 +1,47 @@
+# source: https://book.cakephp.org/3.next/en/appendices/3-6-migration-guide.html
+
+services:
+    Rector\Rector\Dynamic\MethodNameReplacerRector:
+        $perClassOldToNewMethods:
+            'Cake\ORM\Table':
+                 'association': 'getAssociation'
+            'Cake\Validation\ValidationSet':
+                  'isPresenceRequired': 'requirePresence'
+                  'isEmptyAllowed': 'allowEmpty'
+
+    Rector\Rector\Dynamic\PropertyToMethodRector:
+        $perClassPropertyToMethods:
+            'Cake\Controller\Controller':
+                'name':
+                    'get': 'getName'
+                    'set': 'setName'
+                'plugin':
+                    'get': 'getPlugin'
+                    'set': 'setPlugin'
+            'Cake\Form\Form':
+                'validator':
+                    'get': 'getValidator'
+                    'set': 'setValidator'
+
+    Rector\Rector\Dynamic\ClassReplacerRector:
+        $oldToNewClasses:
+            'Cake\Cache\Engine\ApcEngine': 'Cake\Cache\Engine\ApcuEngine'
+            'Cake\Network\Exception\BadRequestException': 'Cake\Http\Exception\BadRequestException'
+            'Cake\Network\Exception\ConflictException': 'Cake\Http\Exception\ConflictException'
+            'Cake\Network\Exception\ForbiddenException': 'Cake\Http\Exception\ForbiddenException'
+            'Cake\Network\Exception\GoneException': 'Cake\Http\Exception\GoneException'
+            'Cake\Network\Exception\HttpException': 'Cake\Http\Exception\HttpException'
+            'Cake\Network\Exception\InternalErrorException': 'Cake\Http\Exception\InternalErrorException'
+            'Cake\Network\Exception\InvalidCsrfTokenException': 'Cake\Http\Exception\InvalidCsrfTokenException'
+            'Cake\Network\Exception\MethodNotAllowedException': 'Cake\Http\Exception\MethodNotAllowedException'
+            'Cake\Network\Exception\NotAcceptableException': 'Cake\Http\Exception\NotAcceptableException'
+            'Cake\Network\Exception\NotFoundException': 'Cake\Http\Exception\NotFoundException'
+            'Cake\Network\Exception\NotImplementedException': 'Cake\Http\Exception\NotImplementedException'
+            'Cake\Network\Exception\ServiceUnavailableException': 'Cake\Http\Exception\ServiceUnavailableException'
+            'Cake\Network\Exception\UnauthorizedException': 'Cake\Http\Exception\UnauthorizedException'
+            'Cake\Network\Exception\UnavailableForLegalReasonsException': 'Cake\Http\Exception\UnavailableForLegalReasonsException'
+            'Cake\Network\Session': 'Cake\Http\Session'
+            'Cake\Network\Session\DatabaseSession': 'Cake\Http\Session\DatabaseSession'
+            'Cake\Network\Session\CacheSession': 'Cake\Http\Session\CacheSession'
+            'Cake\Network\CorsBuilder': 'Cake\Http\CorsBuilder'
+            'Cake\View\Widget\WidgetRegistry': 'Cake\View\Widget\WidgetLocator'
