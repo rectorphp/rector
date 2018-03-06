@@ -102,6 +102,12 @@ Do you need to upgrade to **Symfony 4.0**, for example?
     vendor/bin/rector process src --level symfony33 --dry-run
     ```
 
+3. What levels are on the board?
+
+    ```bash
+    vendor/bin/rector levels
+    ```
+
 ### B. Custom Sets
 
 1. Create `rector.yml` with desired Rectors:
