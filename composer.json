@@ -23,7 +23,7 @@
         "symplify/package-builder": "^3.2"
     },
     "require-dev": {
-        "symplify/easy-coding-standard": "^3.2",
+        "symplify/easy-coding-standard": "^3.2.28",
         "phpstan/phpstan-shim": "^0.9",
         "phpunit/phpunit": "^7.0",
         "slam/php-cs-fixer-extensions": "^1.13",
