@@ -190,3 +190,34 @@ services:
      }
  }
 ```
+
+### Remove [Fluent Interface](https://ocramius.github.io/blog/fluent-interfaces-are-evil/)
+
+```yml
+services:
+    Rector\Rector\Dynamic\FluentReplaceRector: ~
+```
+
+```diff
+ class SomeClass
+ {
+     public function setValue($value)
+     {
+         $this->value = $value;
+-        return $this;
+     }
+
+     public function setAnotherValue($anontherValue)
+     {
+         $this->anotherValue = $anotherValue;
+-        return $this;
+     }
+ }
+
+ $someClass = new SomeClass();
+- $someClass->setValue(5)
++ $someClass->setValue(5);
+-     ->setAnotherValue(10);
++ $someClass->setAnotherValue(10);
+ }
+```
