@@ -4,6 +4,7 @@
     "license": "MIT",
     "authors": [
         { "name": "Tomas Votruba", "email": "tomas.vot@gmail.com", "homepage": "https://tomasvotruba.com" },
+        { "name": "Gabriel Caruso", "email": "carusogabriel34@gmail.com", "homepage": "https://github.com/carusogabriel" },
         { "name": "Rector Contributors", "homepage": "https://github.com/rectorphp/rector/graphs/contributors" }
     ],
     "require": {
@@ -19,10 +20,11 @@
         "symfony/console": "^4.0",
         "symfony/dependency-injection": "^4.0",
         "symfony/finder": "^4.0",
+        "symplify/better-reflection-docblock": "^3.2",
         "symplify/package-builder": "^3.2"
     },
     "require-dev": {
-        "symplify/easy-coding-standard": "^3.2",
+        "symplify/easy-coding-standard": "^3.2.28",
         "phpstan/phpstan-shim": "^0.9",
         "phpunit/phpunit": "^7.0",
         "slam/php-cs-fixer-extensions": "^1.13",

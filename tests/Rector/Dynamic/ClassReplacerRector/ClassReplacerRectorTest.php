@@ -4,6 +4,9 @@ namespace Rector\Tests\Rector\Dynamic\ClassReplacerRector;
 
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
+/**
+ * @covers \Rector\Rector\Dynamic\ClassReplacerRector
+ */
 final class ClassReplacerRectorTest extends AbstractRectorTestCase
 {
     /**

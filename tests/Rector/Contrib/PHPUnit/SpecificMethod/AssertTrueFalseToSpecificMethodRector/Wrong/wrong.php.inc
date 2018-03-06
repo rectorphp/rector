@@ -5,7 +5,7 @@ final class MyTest extends \PHPUnit\Framework\TestCase
     public function test()
     {
         $this->assertTrue(array_key_exists('...', ['...']), 'argument');
-        $this->assertTrue(in_array('...', ['...']), 'argument');
+        $this->assertTrue(in_array('...', ['...'], true), 'argument');
         $this->assertFalse(is_readable('...'));
         $this->assertTrue(empty('...'));
         $this->assertFalse(file_exists('...'));
