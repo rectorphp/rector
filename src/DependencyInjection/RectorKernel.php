@@ -3,6 +3,7 @@
 namespace Rector\DependencyInjection;
 
 use Rector\DependencyInjection\CompilerPass\AutowireRectorCompilerPass;
+use Rector\DependencyInjection\CompilerPass\AutowireSinglyImplementedCompilerPass;
 use Rector\DependencyInjection\CompilerPass\CollectorCompilerPass;
 use Rector\NodeTypeResolver\DependencyInjection\CompilerPass\NodeTypeResolverCollectorCompilerPass;
 use Rector\RectorBuilder\DependencyInjection\CompilerPass\RectorProvidersCompilerPass;
@@ -61,5 +62,6 @@ final class RectorKernel extends Kernel
         $containerBuilder->addCompilerPass(new AutowireRectorCompilerPass());
         $containerBuilder->addCompilerPass(new RectorProvidersCompilerPass());
         $containerBuilder->addCompilerPass(new NodeTypeResolverCollectorCompilerPass());
+        $containerBuilder->addCompilerPass(new AutowireSinglyImplementedCompilerPass());
     }
 }
