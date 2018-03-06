@@ -4,6 +4,7 @@
     "license": "MIT",
     "authors": [
         { "name": "Tomas Votruba", "email": "tomas.vot@gmail.com", "homepage": "https://tomasvotruba.com" },
+        { "name": "Gabriel Caruso", "email": "carusogabriel34@gmail.com", "homepage": "https://github.com/carusogabriel" },
         { "name": "Rector Contributors", "homepage": "https://github.com/rectorphp/rector/graphs/contributors" }
     ],
     "require": {
