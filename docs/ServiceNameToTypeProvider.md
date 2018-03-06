@@ -48,10 +48,6 @@ This operation could be automated on some level, but Kernel and Container API va
     ```yaml
     services:
         StaticProvider: ~
-
-        # this allows autowiring via interface
-        Rector\Contract\Bridge\ServiceTypeForNameProviderInterface:
-            alias: StaticProvider
     ```
 
 That's it!
