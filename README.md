@@ -26,9 +26,9 @@ Rector can:
 
 - [Rename classes](/docs/DynamicRectors.md#replace-a-class-name)
 - [Rename class' methods](/docs/DynamicRectors.md#change-a-method-name)
-- [Rename partial namespace](/docs/DynamicRectors.md#eplace-some-part-of-the-namespace)
+- [Rename partial namespace](/docs/DynamicRectors.md#replace-some-part-of-the-namespace)
 - [Rename pseudo-namespace to namespace](/docs/DynamicRectors.md#replace-the-underscore-naming-_-with-namespaces-)
-- [Add, replace or remove arguments](/docs/DynamicRectors.md#change-a-argument-value)
+- [Add, replace or remove arguments](/docs/DynamicRectors.md#change-argument-value-or-remove-argument)
 - [Add typehints based on new types of parent class or interface](/docs/DynamicRectors.md#remove-a-value-object-and-use-simple-type)
 - And much more...
 
