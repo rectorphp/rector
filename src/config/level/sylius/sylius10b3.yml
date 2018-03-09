@@ -1,0 +1,4 @@
+services:
+    Rector\Rector\Dynamic\NamespaceReplacerRector:
+        $oldToNewNamespaces:
+            'SyliusCoreBundle/Resources/config/serializer': 'SyliusAdminApiBundle/Resources/config/serializer'
