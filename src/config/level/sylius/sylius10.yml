@@ -5,13 +5,9 @@ services:
         $oldToNewClasses:
             'DateTime': 'DateTimeInterface'
             'Sylius\Bundle\CoreBundle\Context\SessionAndChannelBasedCartContext': 'Sylius\Component\Core\Storage\CartStorageInterface'
-            'Sylius\Bundle\CoreBundle\Form\Type\ProductTaxonChoiceType': 'Sylius\Bundle\CoreBundle\Form\Type\Taxon\ProductTaxonAutocompleteChoiceType'
-            'Sylius\Component\Core\TokenAssigner\UniqueTokenGenerator': 'Sylius\Component\Resource\Generator\RandomnessGenerator'
 
-    # @todo, use this and change method name be interface
     Rector\Rector\Dynamic\MethodNameReplacerRector:
             $perClassOldToNewMethods:
-                # class OR INTERFACE ???
                 'Sylius\Component\Core\Repository\OrderRepositoryInterface':
                     'count': 'countPlacedOrders'
                     'countByChannel': 'countFulfilledByChannel'
@@ -23,56 +19,18 @@ services:
                     'getParents ': 'getAncestors'
 
     # @todo, use this and add new argument to a method
-    Rector\Rector\Dynamic\ArgumentAppenderRector:
+    Rector\Rector\Dynamic\ArgumentRector:
         $newArgumentByMethod:
             # findByCodeAndProductCode(string $code, string $productCode) was changed to findByCodesAndProductCode(array $codes, string $productCode)
             -
-                class: 'Sylius\Component\Product\Repository\ProductVariantRepositoryInterface':
+                type: 'add'
+                class: Sylius\Component\Product\Repository\ProductVariantRepositoryInterface:
                 method: 'findByCodesAndProductCode':
                 position: 0 # as append
-                type: 'array'
+                typehint: 'array'
                 property: '$codes'
                 default_value: '[]'
                 can_be_nul: false
-
-            # SenderInterface::send method has been changed: replyTo argument was added
-            -
-                class: 'Sylius\Component\Mailer\Sender\SenderInterface'
-                method: 'send'
-                position: 0 # as append
-                type: 'array'
-                property: 'replyTo'
-                default_value: '[]'
-                can_be_null: false
-
-            # Sylius\Component\Core\Repository\ProductRepositoryInterface::findLatestByChannel(ChannelInterface $channel, int $count) was changed to findLatestByChannel(ChannelInterface $channel, string $locale, int $count). Please provide your current locale to fetch products together with their translations
-            -
-                class: Sylius\Component\Core\Repository\ProductRepositoryInterface
-                method: 'findLatestByChannel'
-                position: 2
-                type: 'string'
-                property: '$locale'
-                default_value: false
-                can_be_null: false
-
-            # Sylius\Component\Core\Repository\ProductRepositoryInterface::findOneBySlug(string $slug) was removed and replaced with more specific findOneByChannelAndSlug(ChannelInterface $channel, string $locale, string $slug)
-            -
-                class: Sylius\Component\Core\Repository\ProductRepositoryInterface
-                method: 'findOneBySlug'
-                position: 1
-                type: 'ChannelInterface'
-                property: '$channel'
-                default_value: false
-                can_be_null: false
-
-            -
-                class: Sylius\Component\Core\Repository\ProductRepositoryInterface
-                method: 'findOneBySlug'
-                position: 2
-                type: 'string'
-                property: '$locale'
-                default_value: false
-                can_be_null: false
 
     Rector\Rector\Dynamic\ParentTypehintedArgumentRector:
         $typehintForArgumentByMethodAndClass:
