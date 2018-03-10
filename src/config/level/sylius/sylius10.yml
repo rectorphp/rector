@@ -20,12 +20,12 @@ services:
 
     # @todo, use this and add new argument to a method
     Rector\Rector\Dynamic\ArgumentRector:
-        $newArgumentByMethod:
+        $argumentByMethod:
             # findByCodeAndProductCode(string $code, string $productCode) was changed to findByCodesAndProductCode(array $codes, string $productCode)
             -
                 type: 'add'
-                class: Sylius\Component\Product\Repository\ProductVariantRepositoryInterface:
-                method: 'findByCodesAndProductCode':
+                class: 'Sylius\Component\Product\Repository\ProductVariantRepositoryInterface'
+                method: 'findByCodesAndProductCode'
                 position: 0 # as append
                 typehint: 'array'
                 property: '$codes'
