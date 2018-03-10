@@ -1,0 +1,99 @@
+# source: https://github.com/Sylius/Sylius/blob/master/UPGRADE-1.0.md#upgrade-from-100-beta3-to-100
+
+services:
+    Rector\Rector\Dynamic\ClassReplacerRector:
+        $oldToNewClasses:
+            'DateTime': 'DateTimeInterface'
+            'Sylius\Bundle\CoreBundle\Context\SessionAndChannelBasedCartContext': 'Sylius\Component\Core\Storage\CartStorageInterface'
+            'Sylius\Bundle\CoreBundle\Form\Type\ProductTaxonChoiceType': 'Sylius\Bundle\CoreBundle\Form\Type\Taxon\ProductTaxonAutocompleteChoiceType'
+            'Sylius\Component\Core\TokenAssigner\UniqueTokenGenerator': 'Sylius\Component\Resource\Generator\RandomnessGenerator'
+
+    # @todo, use this and change method name be interface
+    Rector\Rector\Dynamic\MethodNameReplacerRector:
+            $perClassOldToNewMethods:
+                # class OR INTERFACE ???
+                'Sylius\Component\Core\Repository\OrderRepositoryInterface':
+                    'count': 'countPlacedOrders'
+                    'countByChannel': 'countFulfilledByChannel'
+
+                'Sylius\Component\Product\Repository\ProductVariantRepositoryInterface':
+                    'findByCodeAndProductCode': 'findByCodesAndProductCode'
+
+                'Sylius\Component\Taxonomy\Model\TaxonInterface':
+                    'getParents ': 'getAncestors'
+
+    # @todo, use this and add new argument to a method
+    Rector\Rector\Dynamic\ArgumentAppenderRector:
+        $newArgumentByMethod:
+            # findByCodeAndProductCode(string $code, string $productCode) was changed to findByCodesAndProductCode(array $codes, string $productCode)
+            -
+                class: 'Sylius\Component\Product\Repository\ProductVariantRepositoryInterface':
+                method: 'findByCodesAndProductCode':
+                position: 0 # as append
+                type: 'array'
+                property: '$codes'
+                default_value: '[]'
+                can_be_nul: false
+
+            # SenderInterface::send method has been changed: replyTo argument was added
+            -
+                class: 'Sylius\Component\Mailer\Sender\SenderInterface'
+                method: 'send'
+                position: 0 # as append
+                type: 'array'
+                property: 'replyTo'
+                default_value: '[]'
+                can_be_null: false
+
+            # Sylius\Component\Core\Repository\ProductRepositoryInterface::findLatestByChannel(ChannelInterface $channel, int $count) was changed to findLatestByChannel(ChannelInterface $channel, string $locale, int $count). Please provide your current locale to fetch products together with their translations
+            -
+                class: Sylius\Component\Core\Repository\ProductRepositoryInterface
+                method: 'findLatestByChannel'
+                position: 2
+                type: 'string'
+                property: '$locale'
+                default_value: false
+                can_be_null: false
+
+            # Sylius\Component\Core\Repository\ProductRepositoryInterface::findOneBySlug(string $slug) was removed and replaced with more specific findOneByChannelAndSlug(ChannelInterface $channel, string $locale, string $slug)
+            -
+                class: Sylius\Component\Core\Repository\ProductRepositoryInterface
+                method: 'findOneBySlug'
+                position: 1
+                type: 'ChannelInterface'
+                property: '$channel'
+                default_value: false
+                can_be_null: false
+
+            -
+                class: Sylius\Component\Core\Repository\ProductRepositoryInterface
+                method: 'findOneBySlug'
+                position: 2
+                type: 'string'
+                property: '$locale'
+                default_value: false
+                can_be_null: false
+
+    Rector\Rector\Dynamic\ParentTypehintedArgumentRector:
+        $typehintForArgumentByMethodAndClass:
+            # Constructor of Sylius\Bundle\CoreBundle\Context\SessionAndChannelBasedCartContext has been changed to use Sylius\Component\Core\Storage\CartStorageInterface
+            'Sylius\Bundle\CoreBundle\Context\SessionAndChannelBasedCartContext':
+                '__construct':
+                    '$cartStorage': 'Sylius\Component\Core\Storage\CartStorageInterface'
+
+    # @todo, use this and change typehint of return value
+    Rector\Rector\Dynamic\ReturnTypehintedRector:
+            $returnTypehintByMethod:
+                # OrderInterface::getAdjustmentsRecursively and OrderItemInterface::getAdjustmentsRecursively return types changed from array to Collection
+                'Sylius\Component\Order\Model\OrderInterface':
+                    'getAdjustmentsRecursively':
+                        'array': 'Doctrine\Common\Collections\Collection'
+
+                'Sylius\Component\Order\Model\OrderItemInterface':
+                    'getAdjustmentsRecursively':
+                        'array': 'Doctrine\Common\Collections\Collection'
+
+                # PrioritizedServiceRegistryInterface::all method return type changed from Zend's PriorityQueue to iterable
+                'Sylius\Component\Registry\PrioritizedServiceRegistryInterface':
+                    'all':
+                        'Zend\Stdlib\PriorityQueue': 'iterable'
