@@ -214,6 +214,9 @@ final class ValueObjectRemoverRector extends AbstractRector
         return null;
     }
 
+    /**
+     * @return string[]|null
+     */
     private function matchOriginAndNewType(Node $node): ?array
     {
         $nodeTypes = $this->nodeTypeResolver->resolve($node);

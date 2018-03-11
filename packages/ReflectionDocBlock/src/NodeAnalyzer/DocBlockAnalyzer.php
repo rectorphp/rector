@@ -72,7 +72,7 @@ final class DocBlockAnalyzer
 
         $newContent = Strings::replace($content, '#' . preg_quote($old, '#') . '#', $new, 1);
 
-        $doc = new Doc($newContent, $docComment->getLine(), $docComment->getFilePos(), $docComment->getTokenPos());
+        $doc = new Doc($newContent);
         $node->setDocComment($doc);
     }
 
