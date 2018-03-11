@@ -7,6 +7,7 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -103,9 +104,32 @@ final class ValueObjectRemoverRector extends AbstractRector
 
         if ($node instanceof NullableType) {
             $newType = $this->matchNewType($node->type);
+            if (! $newType) {
+                return $node;
+            }
+
+            $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
+            // method parameter, update docs as well
+            if ($parentNode instanceof Param) {
+                /** @var ClassMethod $classMethodNode */
+                $classMethodNode = $parentNode->getAttribute(Attribute::PARENT_NODE);
+
+                $this->docBlockAnalyzer->replaceInNode(
+                    $classMethodNode,
+                    sprintf('%s|null', $node->type),
+                    sprintf('%s|null', $newType)
+                );
+
+                $this->docBlockAnalyzer->replaceInNode(
+                    $classMethodNode,
+                    sprintf('null|%s', $node->type),
+                    sprintf('null|%s', $newType)
+                );
+            }
 
             return new NullableType($newType);
         }
+
 
         return null;
     }

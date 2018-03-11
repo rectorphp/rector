@@ -61,6 +61,19 @@ final class DocBlockAnalyzer
         $this->saveNewDocBlockToNode($node, $docBlock);
     }
 
+    public function replaceInNode(Node $node, string $old, string $new): void
+    {
+        if (! $node->getDocComment()) {
+            return;
+        }
+
+        $content = $node->getDocComment()->getText();
+        $newContent = Strings::replace($content, '#' . preg_quote($old, '#') . '#', $new, 1);
+
+        $doc = new Doc($newContent);
+        $node->setDocComment($doc);
+    }
+
     public function replaceAnnotationInNode(Node $node, string $oldAnnotation, string $newAnnotation): void
     {
         if (! $node->getDocComment()) {
@@ -68,7 +81,15 @@ final class DocBlockAnalyzer
         }
 
         $oldContent = $node->getDocComment()->getText();
-        $newContent = Strings::replace($oldContent, sprintf('#@%s#', $oldAnnotation), '@' . $newAnnotation);
+
+        $oldAnnotationPattern = preg_quote(sprintf('#@%s#', $oldAnnotation), '\\');
+
+        $newContent = Strings::replace(
+            $oldContent,
+            $oldAnnotationPattern,
+            '@' . $newAnnotation,
+            1
+        );
 
         $doc = new Doc($newContent);
         $node->setDocComment($doc);
