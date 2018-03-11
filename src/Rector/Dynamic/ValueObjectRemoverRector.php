@@ -5,6 +5,7 @@ namespace Rector\Rector\Dynamic;
 use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name;
+use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Property;
 use Rector\Node\Attribute;
@@ -71,6 +72,10 @@ final class ValueObjectRemoverRector extends AbstractRector
             }
         }
 
+        if ($node instanceof NullableType) {
+            return true;
+        }
+
         return false;
     }
 
@@ -94,6 +99,12 @@ final class ValueObjectRemoverRector extends AbstractRector
             }
 
             return new Name($newType);
+        }
+
+        if ($node instanceof NullableType) {
+            $newType = $this->matchNewType($node->type);
+
+            return new NullableType($newType);
         }
 
         return null;
