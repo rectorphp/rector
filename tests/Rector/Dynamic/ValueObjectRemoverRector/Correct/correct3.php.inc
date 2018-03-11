@@ -8,6 +8,9 @@ class SomeValueObject
 
 class ActionClass
 {
+    /**
+     * @param null|string $name
+     */
     public function someFunction(?string $name): ?string
     {
     }
