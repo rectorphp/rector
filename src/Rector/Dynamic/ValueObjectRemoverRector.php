@@ -75,16 +75,8 @@ final class ValueObjectRemoverRector extends AbstractRector
             }
         }
 
-        if ($node instanceof NullableType) {
-            return true;
-        }
-
-        // for docs update
-        if ($node instanceof Variable) {
-            return true;
-        }
-
-        return false;
+        // + Variable for docs update
+        return $node instanceof NullableType || $node instanceof Variable;
     }
 
     /**
@@ -101,62 +93,15 @@ final class ValueObjectRemoverRector extends AbstractRector
         }
 
         if ($node instanceof Name) {
-            $newType = $this->matchNewType($node);
-            if ($newType === null) {
-                return null;
-            }
-
-            return new Name($newType);
+            return $this->refactorName($node);
         }
 
         if ($node instanceof NullableType) {
-            $newType = $this->matchNewType($node->type);
-            if (! $newType) {
-                return $node;
-            }
-
-            $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
-
-            // in method parameter update docs as well
-            if ($parentNode instanceof Param) {
-                /** @var ClassMethod $classMethodNode */
-                $classMethodNode = $parentNode->getAttribute(Attribute::PARENT_NODE);
-
-                $this->renameNullableInDocBlock($classMethodNode, (string) $node->type, $newType);
-            }
-
-            return new NullableType($newType);
+            return $this->refactorNullableType($node);
         }
 
         if ($node instanceof Variable) {
-            $match = $this->matchOriginAndNewType($node);
-            if (! $match) {
-                return $node;
-            }
-
-            [$oldType, $newType] = $match;
-
-            $this->renameNullableInDocBlock($node, $oldType, $newType);
-
-            // @todo use right away?
-            // SingleName - no slashes or partial uses => return
-            if (! Strings::contains($oldType, '\\')) {
-                return $node;
-            }
-
-            // SomeNamespace\SomeName - possibly used only part in docs blocks
-            $oldTypeParts = explode('\\', $oldType);
-            $oldTypeParts = array_reverse($oldTypeParts);
-
-            $oldType = '';
-            foreach ($oldTypeParts as $oldTypePart) {
-                $oldType .= $oldTypePart;
-
-                $this->renameNullableInDocBlock($node, $oldType, $newType);
-                $oldType .= '\\';
-            }
-
-            return $node;
+            return $this->refactorVariableNode($node);
         }
 
         return null;
@@ -247,5 +192,67 @@ final class ValueObjectRemoverRector extends AbstractRector
             sprintf('null|%s', $oldType),
             sprintf('null|%s', $newType)
         );
+    }
+
+    private function refactorNullableType(NullableType $nullableTypeNode): NullableType
+    {
+        $newType = $this->matchNewType($nullableTypeNode->type);
+        if (! $newType) {
+            return $nullableTypeNode;
+        }
+
+        $parentNode = $nullableTypeNode->getAttribute(Attribute::PARENT_NODE);
+
+        // in method parameter update docs as well
+        if ($parentNode instanceof Param) {
+            /** @var ClassMethod $classMethodNode */
+            $classMethodNode = $parentNode->getAttribute(Attribute::PARENT_NODE);
+
+            $this->renameNullableInDocBlock($classMethodNode, (string) $nullableTypeNode->type, $newType);
+        }
+
+        return new NullableType($newType);
+    }
+
+    private function refactorVariableNode(Variable $variableNode): Variable
+    {
+        $match = $this->matchOriginAndNewType($variableNode);
+        if (! $match) {
+            return $variableNode;
+        }
+
+        [$oldType, $newType] = $match;
+
+        $this->renameNullableInDocBlock($variableNode, $oldType, $newType);
+
+        // @todo use right away?
+        // SingleName - no slashes or partial uses => return
+        if (! Strings::contains($oldType, '\\')) {
+            return $variableNode;
+        }
+
+        // SomeNamespace\SomeName - possibly used only part in docs blocks
+        $oldTypeParts = explode('\\', $oldType);
+        $oldTypeParts = array_reverse($oldTypeParts);
+
+        $oldType = '';
+        foreach ($oldTypeParts as $oldTypePart) {
+            $oldType .= $oldTypePart;
+
+            $this->renameNullableInDocBlock($variableNode, $oldType, $newType);
+            $oldType .= '\\';
+        }
+
+        return $variableNode;
+    }
+
+    private function refactorName(Node $nameNode): ?Name
+    {
+        $newType = $this->matchNewType($nameNode);
+        if ($newType === null) {
+            return null;
+        }
+
+        return new Name($newType);
     }
 }
