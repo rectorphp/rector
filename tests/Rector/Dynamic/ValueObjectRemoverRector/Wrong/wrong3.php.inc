@@ -13,5 +13,7 @@ class ActionClass
      */
     public function someFunction(?SomeValueObject $name): ?SomeValueObject
     {
+        /** @var SomeValueObject|null $someValueObject */
+        $someValueObject = new SomeValueObject('value');
     }
 }

@@ -2,8 +2,10 @@
 
 namespace Rector\Rector\Dynamic;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
@@ -77,6 +79,11 @@ final class ValueObjectRemoverRector extends AbstractRector
             return true;
         }
 
+        // for docs update
+        if ($node instanceof Variable) {
+            return true;
+        }
+
         return false;
     }
 
@@ -109,25 +116,49 @@ final class ValueObjectRemoverRector extends AbstractRector
             }
 
             $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
-            // method parameter, update docs as well
+
+            // in method parameter update docs as well
             if ($parentNode instanceof Param) {
                 /** @var ClassMethod $classMethodNode */
                 $classMethodNode = $parentNode->getAttribute(Attribute::PARENT_NODE);
 
-                $this->docBlockAnalyzer->replaceInNode(
-                    $classMethodNode,
-                    sprintf('%s|null', $node->type),
-                    sprintf('%s|null', $newType)
-                );
-
-                $this->docBlockAnalyzer->replaceInNode(
-                    $classMethodNode,
-                    sprintf('null|%s', $node->type),
-                    sprintf('null|%s', $newType)
-                );
+                $this->renameNullableInDocBlock($classMethodNode, (string) $node->type, $newType);
             }
 
             return new NullableType($newType);
+        }
+
+        if ($node instanceof Variable) {
+            $match = $this->matchOriginAndNewType($node);
+            if (! $match) {
+                return $node;
+            }
+
+            [$oldType, $newType] = $match;
+
+            $this->renameNullableInDocBlock($node, $oldType, $newType);
+
+            // @todo use right away?
+            // SingleName - no slashes or partial uses => return
+            if (! Strings::contains($oldType, '\\')) {
+                return $node;
+            }
+
+            // SomeNamespace\SomeName - possibly used only part in docs blocks
+            $oldTypeParts = explode('\\', $oldType);
+            $oldTypeParts = array_reverse($oldTypeParts);
+
+            $oldType = '';
+            foreach ($oldTypeParts as $oldTypePart) {
+                $oldType .= $oldTypePart;
+
+                $this->renameNullableInDocBlock($node, $oldType, $newType);
+                $oldType .= '\\';
+            }
+
+            dump($node->getDocComment());
+
+            return $node;
         }
 
 
@@ -175,14 +206,46 @@ final class ValueObjectRemoverRector extends AbstractRector
     private function matchNewType(Node $node): ?string
     {
         $nodeTypes = $this->nodeTypeResolver->resolve($node);
-        foreach ($nodeTypes as $propertyType) {
-            if (! isset($this->valueObjectsToSimpleTypes[$propertyType])) {
+        foreach ($nodeTypes as $nodeType) {
+            if (! isset($this->valueObjectsToSimpleTypes[$nodeType])) {
                 continue;
             }
 
-            return $this->valueObjectsToSimpleTypes[$propertyType];
+            dump($nodeType);
+            return $this->valueObjectsToSimpleTypes[$nodeType];
         }
 
         return null;
+    }
+
+    private function matchOriginAndNewType(Node $node): ?array
+    {
+        $nodeTypes = $this->nodeTypeResolver->resolve($node);
+        foreach ($nodeTypes as $nodeType) {
+            if (! isset($this->valueObjectsToSimpleTypes[$nodeType])) {
+                continue;
+            }
+
+            return [
+                $nodeType,
+                $this->valueObjectsToSimpleTypes[$nodeType]
+            ];
+        }
+
+        return null;
+    }
+
+    private function renameNullableInDocBlock(Node $node, string $oldType, string $newType): void
+    {
+        $this->docBlockAnalyzer->replaceInNode($node,
+            sprintf('%s|null', $oldType),
+            sprintf('%s|null', $newType)
+        );
+
+        $this->docBlockAnalyzer->replaceInNode(
+            $node,
+            sprintf('null|%s', $oldType),
+            sprintf('null|%s', $newType)
+        );
     }
 }
