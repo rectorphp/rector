@@ -4,6 +4,9 @@ namespace Rector\Tests\Rector\Dynamic\ValueObjectRemoverRector;
 
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
+/**
+ * @covers \Rector\Rector\Dynamic\ValueObjectRemoverRector
+ */
 final class ValueObjectRemoverRectorTest extends AbstractRectorTestCase
 {
     /**
@@ -20,8 +23,9 @@ final class ValueObjectRemoverRectorTest extends AbstractRectorTestCase
     public function provideWrongToFixedFiles(): array
     {
         return [
-            [__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc'],
-            [__DIR__ . '/Wrong/wrong2.php.inc', __DIR__ . '/Correct/correct2.php.inc'],
+//            [__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc'],
+//            [__DIR__ . '/Wrong/wrong2.php.inc', __DIR__ . '/Correct/correct2.php.inc'],
+            [__DIR__ . '/Wrong/wrong3.php.inc', __DIR__ . '/Correct/correct3.php.inc'],
         ];
     }
 
