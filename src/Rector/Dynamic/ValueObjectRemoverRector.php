@@ -156,8 +156,6 @@ final class ValueObjectRemoverRector extends AbstractRector
                 $oldType .= '\\';
             }
 
-            dump($node->getDocComment());
-
             return $node;
         }
 
