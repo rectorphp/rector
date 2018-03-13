@@ -53,15 +53,15 @@ final class PropertyToMethodRector extends AbstractRector
     private $methodCallNodeFactory;
 
     /**
-     * @param string[][][] $perClassOldToNewProperties
+     * @param string[][][] $perClassPropertyToMethods
      */
     public function __construct(
-        array $perClassOldToNewProperties,
+        array $perClassPropertyToMethods,
         PropertyFetchAnalyzer $propertyFetchAnalyzer,
         NodeFactory $nodeFactory,
         MethodCallNodeFactory $methodCallNodeFactory
     ) {
-        $this->perClassPropertyToMethods = $perClassOldToNewProperties;
+        $this->perClassPropertyToMethods = $perClassPropertyToMethods;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
         $this->nodeFactory = $nodeFactory;
         $this->methodCallNodeFactory = $methodCallNodeFactory;
