@@ -1,0 +1,16 @@
+<?php
+
+namespace Nette\DI;
+
+class Container
+{
+    public $parameters;
+
+    public function getParameters()
+    {
+    }
+
+    public function addService(): Container
+    {
+    }
+}

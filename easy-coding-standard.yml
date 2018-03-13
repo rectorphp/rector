@@ -1,11 +1,11 @@
-includes:
-    - vendor/symplify/easy-coding-standard/config/psr2.neon
-    - vendor/symplify/easy-coding-standard/config/php71.neon
-    - vendor/symplify/easy-coding-standard/config/symplify.neon
-    - vendor/symplify/easy-coding-standard/config/common.neon
-    - vendor/symplify/easy-coding-standard/config/clean-code.neon
+imports:
+    - { resource: 'vendor/symplify/easy-coding-standard/config/psr2.yml' }
+    - { resource: 'vendor/symplify/easy-coding-standard/config/php71.yml' }
+    - { resource: 'vendor/symplify/easy-coding-standard/config/symplify.yml' }
+    - { resource: 'vendor/symplify/easy-coding-standard/config/common.yml' }
+    - { resource: 'vendor/symplify/easy-coding-standard/config/clean-code.yml' }
 
-checkers:
+services:
     # Metrics
     PHP_CodeSniffer\Standards\Generic\Sniffs\Files\LineLengthSniff:
         absoluteLineLimit: 120
@@ -15,7 +15,7 @@ checkers:
         absoluteNestingLevel: 3
 
     # Class should be Final or Abstract
-    - SlamCsFixer\FinalInternalClassFixer
+    SlamCsFixer\FinalInternalClassFixer: ~
 
     Symplify\CodingStandard\Sniffs\DependencyInjection\NoClassInstantiationSniff:
         extraAllowedClasses:
@@ -41,37 +41,39 @@ checkers:
 parameters:
     exclude_checkers:
         # bugged in php-cs-fixer 2.10
-        - PhpCsFixer\Fixer\PhpUnit\PhpUnitTestAnnotationFixer
+        - 'PhpCsFixer\Fixer\PhpUnit\PhpUnitTestAnnotationFixer'
 
     skip:
         Symplify\CodingStandard\Fixer\Php\ClassStringToClassConstantFixer:
             # classes might not exist
-            - */src/Rector/Contrib/*/*Rector.php
-            - */src/Rector/Contrib/**/Helper/**.php
-            - */packages/NodeTypeResolver/tests/PerNodeCallerTypeResolver/**Test.php
-            - */packages/NodeTypeResolver/**/PerNodeTypeResolver/**TypeResolver.php
-            - */packages/NodeTypeResolver/**/PerNodeTypeResolver/**TypeResolver/*Test.php
-            - packages/BetterReflection/src/Reflector/SmartClassReflector.php
-            - */src/NodeAnalyzer/*.php
+            - '*/src/Rector/Contrib/*/*Rector.php'
+            - '*/src/Rector/Contrib/**/Helper/**.php'
+            - '*/packages/NodeTypeResolver/tests/PerNodeCallerTypeResolver/**Test.php'
+            - '*/packages/NodeTypeResolver/**/PerNodeTypeResolver/**TypeResolver.php'
+            - '*/packages/NodeTypeResolver/**/PerNodeTypeResolver/**TypeResolver/*Test.php'
+            - 'packages/BetterReflection/src/Reflector/SmartClassReflector.php'
+            - '*/src/NodeAnalyzer/*.php'
         SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff:
             # covariant types
-            - */packages/NodeValueResolver/src/PerNodeValueResolver/*ValueResolver.php
+            - '*/packages/NodeValueResolver/src/PerNodeValueResolver/*ValueResolver.php'
             # missing mixed
-            - src/Node/NodeFactory.php
-            - packages/NodeTypeResolver/tests/AbstractNodeTypeResolverTest.php
+            - 'src/Node/NodeFactory.php'
+            - 'packages/NodeTypeResolver/tests/AbstractNodeTypeResolverTest.php'
         PHP_CodeSniffer\Standards\Generic\Sniffs\CodeAnalysis\EmptyStatementSniff:
             # intentionally
-            - packages/BetterReflection/src/Reflector/SmartClassReflector.php
+            - 'packages/BetterReflection/src/Reflector/SmartClassReflector.php'
 
         Symplify\CodingStandard\Sniffs\Architecture\ExplicitExceptionSniff:
             # before composer/autoload.php Exception
-            - bin/rector_bootstrap.php
+            - 'bin/rector_bootstrap.php'
 
-    skip_codes:
         SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff.MissingParameterTypeHint:
             # forcing "mixed" types
-            - src/Node/NodeFactory.php
-            - packages/NodeTypeResolver/tests/AbstractNodeTypeResolverTest.php
+            - 'src/Node/NodeFactory.php'
+            - 'packages/NodeTypeResolver/tests/AbstractNodeTypeResolverTest.php'
 
         # empty arguments passing
-        - PHP_CodeSniffer\Standards\PEAR\Sniffs\Functions\ValidDefaultValueSniff.NotAtEnd
+        PHP_CodeSniffer\Standards\PEAR\Sniffs\Functions\ValidDefaultValueSniff.NotAtEnd: ~
+
+        # disable forced removal
+        SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff.UselessDocComment: ~
