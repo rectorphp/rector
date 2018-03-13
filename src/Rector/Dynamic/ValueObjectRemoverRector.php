@@ -2,23 +2,18 @@
 
 namespace Rector\Rector\Dynamic;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\Node\Attribute;
-use Rector\NodeTraverserQueue\BetterNodeFinder;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
-use Rector\ReflectionDocBlock\NodeAnalyzer\DocBlockAnalyzer;
 
 final class ValueObjectRemoverRector extends AbstractRector
 {
@@ -28,33 +23,17 @@ final class ValueObjectRemoverRector extends AbstractRector
     private $valueObjectsToSimpleTypes = [];
 
     /**
-     * @var DocBlockAnalyzer
-     */
-    private $docBlockAnalyzer;
-
-    /**
      * @var NodeTypeResolver
      */
     private $nodeTypeResolver;
 
     /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
      * @param string[] $valueObjectsToSimpleTypes
      */
-    public function __construct(
-        array $valueObjectsToSimpleTypes,
-        DocBlockAnalyzer $docBlockAnalyzer,
-        NodeTypeResolver $nodeTypeResolver,
-        BetterNodeFinder $betterNodeFinder
-    ) {
+    public function __construct(array $valueObjectsToSimpleTypes, NodeTypeResolver $nodeTypeResolver)
+    {
         $this->valueObjectsToSimpleTypes = $valueObjectsToSimpleTypes;
-        $this->docBlockAnalyzer = $docBlockAnalyzer;
         $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->betterNodeFinder = $betterNodeFinder;
     }
 
     /**
@@ -85,11 +64,11 @@ final class ValueObjectRemoverRector extends AbstractRector
         }
 
         // + Variable for docs update
-        return $node instanceof NullableType || $node instanceof Variable;
+        return $node instanceof NullableType;
     }
 
     /**
-     * @param New_ $node
+     * @param New_|Property|Name|NullableType $node
      */
     public function refactor(Node $node): ?Node
     {
@@ -107,10 +86,6 @@ final class ValueObjectRemoverRector extends AbstractRector
 
         if ($node instanceof NullableType) {
             return $this->refactorNullableType($node);
-        }
-
-        if ($node instanceof Variable) {
-            return $this->refactorVariableNode($node);
         }
 
         return null;
@@ -149,8 +124,6 @@ final class ValueObjectRemoverRector extends AbstractRector
             return $propertyNode;
         }
 
-        $this->docBlockAnalyzer->replaceVarType($propertyNode, $newType);
-
         return $propertyNode;
     }
 
@@ -168,26 +141,6 @@ final class ValueObjectRemoverRector extends AbstractRector
         return null;
     }
 
-    /**
-     * @return string[]|null
-     */
-    private function matchOriginAndNewType(Node $node): ?array
-    {
-        $nodeTypes = $this->nodeTypeResolver->resolve($node);
-        foreach ($nodeTypes as $nodeType) {
-            if (! isset($this->valueObjectsToSimpleTypes[$nodeType])) {
-                continue;
-            }
-
-            return [
-                $nodeType,
-                $this->valueObjectsToSimpleTypes[$nodeType],
-            ];
-        }
-
-        return null;
-    }
-
     private function refactorNullableType(NullableType $nullableTypeNode): NullableType
     {
         $newType = $this->matchNewType($nullableTypeNode->type);
@@ -195,55 +148,7 @@ final class ValueObjectRemoverRector extends AbstractRector
             return $nullableTypeNode;
         }
 
-        $parentNode = $nullableTypeNode->getAttribute(Attribute::PARENT_NODE);
-
-        // in method parameter update docs as well
-        if ($parentNode instanceof Param) {
-            /** @var ClassMethod $classMethodNode */
-            $classMethodNode = $parentNode->getAttribute(Attribute::PARENT_NODE);
-
-            $this->docBlockAnalyzer->renameNullable($classMethodNode, (string) $nullableTypeNode->type, $newType);
-        }
-
         return new NullableType($newType);
-    }
-
-    private function refactorVariableNode(Variable $variableNode): Variable
-    {
-        $match = $this->matchOriginAndNewType($variableNode);
-        if (! $match) {
-            return $variableNode;
-        }
-
-        [$oldType, $newType] = $match;
-
-        $exprNode = $this->betterNodeFinder->findFirstAncestorInstanceOf($variableNode, Expr::class);
-        $node = $variableNode;
-        if ($exprNode && $exprNode->getAttribute(Attribute::PARENT_NODE)) {
-            $node = $exprNode->getAttribute(Attribute::PARENT_NODE);
-        }
-
-        $this->docBlockAnalyzer->renameNullable($node, $oldType, $newType);
-
-        // @todo use right away?
-        // SingleName - no slashes or partial uses => return
-        if (! Strings::contains($oldType, '\\')) {
-            return $node;
-        }
-
-        // SomeNamespace\SomeName - possibly used only part in docs blocks
-        $oldTypeParts = explode('\\', $oldType);
-        $oldTypeParts = array_reverse($oldTypeParts);
-
-        $oldType = '';
-        foreach ($oldTypeParts as $oldTypePart) {
-            $oldType .= $oldTypePart;
-
-            $this->docBlockAnalyzer->renameNullable($node, $oldType, $newType);
-            $oldType .= '\\';
-        }
-
-        return $variableNode;
     }
 
     private function refactorName(Node $nameNode): ?Name
