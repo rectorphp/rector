@@ -5,70 +5,19 @@ namespace Rector\Rector\Dynamic;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\Node\Attribute;
-use Rector\NodeTraverserQueue\BetterNodeFinder;
-use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\Rector\AbstractRector;
-use Rector\ReflectionDocBlock\NodeAnalyzer\DocBlockAnalyzer;
 
-/**
- * @todo abstract?
- */
-final class ValueObjectRemoverDocBlockRector extends AbstractRector
+final class ValueObjectRemoverDocBlockRector extends AbstractValueObjectRemoverRector
 {
-    /**
-     * @var string[]
-     */
-    private $valueObjectsToSimpleTypes = [];
-
-    /**
-     * @var DocBlockAnalyzer
-     */
-    private $docBlockAnalyzer;
-
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
-     * @param string[] $valueObjectsToSimpleTypes
-     */
-    public function __construct(
-        array $valueObjectsToSimpleTypes,
-        DocBlockAnalyzer $docBlockAnalyzer,
-        NodeTypeResolver $nodeTypeResolver,
-        BetterNodeFinder $betterNodeFinder
-    ) {
-        $this->valueObjectsToSimpleTypes = $valueObjectsToSimpleTypes;
-        $this->docBlockAnalyzer = $docBlockAnalyzer;
-        $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->betterNodeFinder = $betterNodeFinder;
-    }
-
     public function isCandidate(Node $node): bool
     {
         if ($node instanceof Property) {
             return $this->processPropertyCandidate($node);
-        }
-
-        if ($node instanceof Name) {
-            $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
-            if ($parentNode instanceof Param) {
-                return true;
-            }
         }
 
         // + Variable for docs update
@@ -76,7 +25,7 @@ final class ValueObjectRemoverDocBlockRector extends AbstractRector
     }
 
     /**
-     * @param New_ $node
+     * @param Property|NullableType|Variable $node
      */
     public function refactor(Node $node): ?Node
     {
@@ -93,14 +42,6 @@ final class ValueObjectRemoverDocBlockRector extends AbstractRector
         }
 
         return null;
-    }
-
-    /**
-     * @return string[]
-     */
-    private function getValueObjects(): array
-    {
-        return array_keys($this->valueObjectsToSimpleTypes);
     }
 
     private function processPropertyCandidate(Property $propertyNode): bool
@@ -120,40 +61,6 @@ final class ValueObjectRemoverDocBlockRector extends AbstractRector
         $this->docBlockAnalyzer->replaceVarType($propertyNode, $newType);
 
         return $propertyNode;
-    }
-
-    private function matchNewType(Node $node): ?string
-    {
-        $nodeTypes = $this->nodeTypeResolver->resolve($node);
-        foreach ($nodeTypes as $nodeType) {
-            if (! isset($this->valueObjectsToSimpleTypes[$nodeType])) {
-                continue;
-            }
-
-            return $this->valueObjectsToSimpleTypes[$nodeType];
-        }
-
-        return null;
-    }
-
-    /**
-     * @return string[]|null
-     */
-    private function matchOriginAndNewType(Node $node): ?array
-    {
-        $nodeTypes = $this->nodeTypeResolver->resolve($node);
-        foreach ($nodeTypes as $nodeType) {
-            if (! isset($this->valueObjectsToSimpleTypes[$nodeType])) {
-                continue;
-            }
-
-            return [
-                $nodeType,
-                $this->valueObjectsToSimpleTypes[$nodeType],
-            ];
-        }
-
-        return null;
     }
 
     private function refactorNullableType(NullableType $nullableTypeNode): NullableType

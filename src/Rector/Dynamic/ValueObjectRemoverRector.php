@@ -4,18 +4,16 @@ namespace Rector\Rector\Dynamic;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Property;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
-final class ValueObjectRemoverRector extends AbstractRector
+final class ValueObjectRemoverRector extends AbstractValueObjectRemoverRector
 {
     /**
      * @var string[]
@@ -102,14 +100,6 @@ final class ValueObjectRemoverRector extends AbstractRector
         return (bool) array_intersect($classNodeTypes, $this->getValueObjects());
     }
 
-    /**
-     * @return string[]
-     */
-    private function getValueObjects(): array
-    {
-        return array_keys($this->valueObjectsToSimpleTypes);
-    }
-
     private function processPropertyCandidate(Property $propertyNode): bool
     {
         $propertyNodeTypes = $this->nodeTypeResolver->resolve($propertyNode);
@@ -125,20 +115,6 @@ final class ValueObjectRemoverRector extends AbstractRector
         }
 
         return $propertyNode;
-    }
-
-    private function matchNewType(Node $node): ?string
-    {
-        $nodeTypes = $this->nodeTypeResolver->resolve($node);
-        foreach ($nodeTypes as $nodeType) {
-            if (! isset($this->valueObjectsToSimpleTypes[$nodeType])) {
-                continue;
-            }
-
-            return $this->valueObjectsToSimpleTypes[$nodeType];
-        }
-
-        return null;
     }
 
     private function refactorNullableType(NullableType $nullableTypeNode): NullableType
