@@ -20,16 +20,14 @@
         "symfony/console": "^4.0",
         "symfony/dependency-injection": "^4.0",
         "symfony/finder": "^4.0",
-        "symplify/better-reflection-docblock": "^4.0",
-        "symplify/package-builder": "^4.0"
+        "symplify/better-reflection-docblock": "^3.2",
+        "symplify/package-builder": "^3.2"
     },
     "require-dev": {
-        "symplify/easy-coding-standard": "^4.0",
-        "symplify/coding-standard": "^4.0",
-        "symplify/token-runner": "^4.0",
+        "symplify/easy-coding-standard": "^3.2.28",
         "phpstan/phpstan-shim": "^0.9",
         "phpunit/phpunit": "^7.0",
-        "slam/php-cs-fixer-extensions": "^1.14",
+        "slam/php-cs-fixer-extensions": "^1.13",
         "tracy/tracy": "^2.4"
     },
     "autoload": {
@@ -72,7 +70,5 @@
     ],
     "config": {
         "sort-packages": true
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true
+    }
 }
