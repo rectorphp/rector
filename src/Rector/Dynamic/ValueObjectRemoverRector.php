@@ -188,21 +188,6 @@ final class ValueObjectRemoverRector extends AbstractRector
         return null;
     }
 
-    private function renameNullableInDocBlock(Node $node, string $oldType, string $newType): void
-    {
-        $this->docBlockAnalyzer->replaceInNode(
-            $node,
-            sprintf('%s|null', $oldType),
-            sprintf('%s|null', $newType)
-        );
-
-        $this->docBlockAnalyzer->replaceInNode(
-            $node,
-            sprintf('null|%s', $oldType),
-            sprintf('null|%s', $newType)
-        );
-    }
-
     private function refactorNullableType(NullableType $nullableTypeNode): NullableType
     {
         $newType = $this->matchNewType($nullableTypeNode->type);
@@ -217,7 +202,7 @@ final class ValueObjectRemoverRector extends AbstractRector
             /** @var ClassMethod $classMethodNode */
             $classMethodNode = $parentNode->getAttribute(Attribute::PARENT_NODE);
 
-            $this->renameNullableInDocBlock($classMethodNode, (string) $nullableTypeNode->type, $newType);
+            $this->docBlockAnalyzer->renameNullable($classMethodNode, (string) $nullableTypeNode->type, $newType);
         }
 
         return new NullableType($newType);
@@ -238,7 +223,7 @@ final class ValueObjectRemoverRector extends AbstractRector
             $node = $exprNode->getAttribute(Attribute::PARENT_NODE);
         }
 
-        $this->renameNullableInDocBlock($node, $oldType, $newType);
+        $this->docBlockAnalyzer->renameNullable($node, $oldType, $newType);
 
         // @todo use right away?
         // SingleName - no slashes or partial uses => return
@@ -254,7 +239,7 @@ final class ValueObjectRemoverRector extends AbstractRector
         foreach ($oldTypeParts as $oldTypePart) {
             $oldType .= $oldTypePart;
 
-            $this->renameNullableInDocBlock($node, $oldType, $newType);
+            $this->docBlockAnalyzer->renameNullable($node, $oldType, $newType);
             $oldType .= '\\';
         }
 

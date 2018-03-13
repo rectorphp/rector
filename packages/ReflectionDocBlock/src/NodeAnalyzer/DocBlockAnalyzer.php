@@ -61,19 +61,10 @@ final class DocBlockAnalyzer
         $this->saveNewDocBlockToNode($node, $docBlock);
     }
 
-    public function replaceInNode(Node $node, string $old, string $new): void
+    public function renameNullable(Node $node, string $oldType, string $newType): void
     {
-        if (! $node->getDocComment()) {
-            return;
-        }
-
-        $docComment = $node->getDocComment();
-        $content = $docComment->getText();
-
-        $newContent = Strings::replace($content, '#' . preg_quote($old, '#') . '#', $new, 1);
-
-        $doc = new Doc($newContent);
-        $node->setDocComment($doc);
+        $this->replaceInNode($node, sprintf('%s|null', $oldType), sprintf('%s|null', $newType));
+        $this->replaceInNode($node, sprintf('null|%s', $oldType), sprintf('null|%s', $newType));
     }
 
     public function replaceAnnotationInNode(Node $node, string $oldAnnotation, string $newAnnotation): void
@@ -161,6 +152,21 @@ final class DocBlockAnalyzer
         }
 
         $this->saveNewDocBlockToNode($node, $docBlock);
+    }
+
+    private function replaceInNode(Node $node, string $old, string $new): void
+    {
+        if (! $node->getDocComment()) {
+            return;
+        }
+
+        $docComment = $node->getDocComment();
+        $content = $docComment->getText();
+
+        $newContent = Strings::replace($content, '#' . preg_quote($old, '#') . '#', $new, 1);
+
+        $doc = new Doc($newContent);
+        $node->setDocComment($doc);
     }
 
     private function saveNewDocBlockToNode(Node $node, DocBlock $docBlock): void
