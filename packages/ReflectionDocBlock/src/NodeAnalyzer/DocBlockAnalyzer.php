@@ -63,6 +63,15 @@ final class DocBlockAnalyzer
 
     public function renameNullable(Node $node, string $oldType, string $newType): void
     {
+        $docBlock = $this->docBlockFactory->createFromNode($node);
+
+        foreach ($docBlock->getTags() as $tag) {
+            if ($tag instanceof TolerantVar) { // @todo: use own writeable Var
+                dump($tag);
+                die;
+            }
+        }
+
         $this->replaceInNode($node, sprintf('%s|null', $oldType), sprintf('%s|null', $newType));
         $this->replaceInNode($node, sprintf('null|%s', $oldType), sprintf('null|%s', $newType));
     }

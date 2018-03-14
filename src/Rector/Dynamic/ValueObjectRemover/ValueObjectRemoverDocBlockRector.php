@@ -1,8 +1,7 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Rector\Dynamic;
+namespace Rector\Rector\Dynamic\ValueObjectRemover;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Variable;
@@ -11,13 +10,24 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\Node\Attribute;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
 final class ValueObjectRemoverDocBlockRector extends AbstractValueObjectRemoverRector
 {
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('Turns defined value object to simple types in doc blocks', [
+            new CodeSample(
+//@todo!
+)
+        ]);
+    }
+
     public function isCandidate(Node $node): bool
     {
         if ($node instanceof Property) {
-            return $this->processPropertyCandidate($node);
+            return $this->isPropertyCandidate($node);
         }
 
         // + Variable for docs update
@@ -44,7 +54,7 @@ final class ValueObjectRemoverDocBlockRector extends AbstractValueObjectRemoverR
         return null;
     }
 
-    private function processPropertyCandidate(Property $propertyNode): bool
+    private function isPropertyCandidate(Property $propertyNode): bool
     {
         $propertyNodeTypes = $this->nodeTypeResolver->resolve($propertyNode);
 
@@ -53,12 +63,14 @@ final class ValueObjectRemoverDocBlockRector extends AbstractValueObjectRemoverR
 
     private function refactorProperty(Property $propertyNode): Property
     {
-        $newType = $this->matchNewType($propertyNode);
-        if ($newType === null) {
+        $match = $this->matchOriginAndNewType($propertyNode);
+        if ($match === null) {
             return $propertyNode;
         }
 
-        $this->docBlockAnalyzer->replaceVarType($propertyNode, $newType);
+        [$oldType, $newType] = $match;
+
+        $this->docBlockAnalyzer->renameNullable($propertyNode, $oldType, $newType);
 
         return $propertyNode;
     }
@@ -66,7 +78,7 @@ final class ValueObjectRemoverDocBlockRector extends AbstractValueObjectRemoverR
     private function refactorNullableType(NullableType $nullableTypeNode): NullableType
     {
         $newType = $this->matchNewType($nullableTypeNode->type);
-        if (! $newType) {
+        if ($newType === null) {
             return $nullableTypeNode;
         }
 
@@ -99,24 +111,6 @@ final class ValueObjectRemoverDocBlockRector extends AbstractValueObjectRemoverR
         }
 
         $this->docBlockAnalyzer->renameNullable($node, $oldType, $newType);
-
-        // @todo use right away?
-        // SingleName - no slashes or partial uses => return
-        if (! Strings::contains($oldType, '\\')) {
-            return $node;
-        }
-
-        // SomeNamespace\SomeName - possibly used only part in docs blocks
-        $oldTypeParts = explode('\\', $oldType);
-        $oldTypeParts = array_reverse($oldTypeParts);
-
-        $oldType = '';
-        foreach ($oldTypeParts as $oldTypePart) {
-            $oldType .= $oldTypePart;
-
-            $this->docBlockAnalyzer->renameNullable($node, $oldType, $newType);
-            $oldType .= '\\';
-        }
 
         return $variableNode;
     }

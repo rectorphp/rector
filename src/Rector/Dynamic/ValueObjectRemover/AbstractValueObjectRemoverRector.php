@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Rector\Dynamic;
+namespace Rector\Rector\Dynamic\ValueObjectRemover;
 
 use PhpParser\Node;
 use Rector\NodeTraverserQueue\BetterNodeFinder;

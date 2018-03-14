@@ -5,7 +5,8 @@ namespace Rector\Tests\Rector\Dynamic\ValueObjectRemoverRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
- * @covers \Rector\Rector\Dynamic\ValueObjectRemoverRector
+ * @covers \Rector\Rector\Dynamic\ValueObjectRemover\ValueObjectRemoverRector
+ * @covers \Rector\Rector\Dynamic\ValueObjectRemover\ValueObjectRemoverDocBlockRector
  */
 final class ValueObjectRemoverRectorTest extends AbstractRectorTestCase
 {

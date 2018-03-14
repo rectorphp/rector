@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Rector\Dynamic;
+namespace Rector\Rector\Dynamic\ValueObjectRemover;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
@@ -61,7 +61,6 @@ final class ValueObjectRemoverRector extends AbstractValueObjectRemoverRector
             }
         }
 
-        // + Variable for docs update
         return $node instanceof NullableType;
     }
 

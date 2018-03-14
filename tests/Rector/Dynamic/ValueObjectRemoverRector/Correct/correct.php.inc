@@ -13,7 +13,7 @@ class SomeChildOfValueObject extends SomeValueObject
 class ActionClass
 {
     /**
-     * @var string
+     * @var string|null
      */
     private $someChildValueObject;
 

@@ -1,8 +1,8 @@
 services:
     # todo: combine configuration in some way
-    Rector\Rector\Dynamic\ValueObjectRemoverDocBlockRector:
+    Rector\Rector\Dynamic\ValueObjectRemover\ValueObjectRemoverDocBlockRector:
         $valueObjectsToSimpleTypes:
             'SomeNamespace\SomeValueObject': 'string'
-    Rector\Rector\Dynamic\ValueObjectRemoverRector:
+    Rector\Rector\Dynamic\ValueObjectRemover\ValueObjectRemoverRector:
         $valueObjectsToSimpleTypes:
             'SomeNamespace\SomeValueObject': 'string'
