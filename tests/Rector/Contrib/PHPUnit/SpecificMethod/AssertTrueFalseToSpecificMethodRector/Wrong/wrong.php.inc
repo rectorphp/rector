@@ -16,5 +16,6 @@ final class MyTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(is_writable('...'));
         $this->assertFalse(array_search('...', ['...']), 'argument');
         $this->assertTrue(is_a($anything, 'Foo'), 'argument');
+        $this->assertFalse(is_a($anything, Foo::class, true), 'argument');
     }
 }
