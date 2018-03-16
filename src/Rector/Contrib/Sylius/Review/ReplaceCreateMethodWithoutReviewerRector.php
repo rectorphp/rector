@@ -1,0 +1,77 @@
+<?php declare(strict_types=1);
+
+namespace Rector\Rector\Contrib\Sylius\Review;
+
+use PhpParser\Node;
+use Rector\NodeAnalyzer\MethodArgumentAnalyzer;
+use Rector\NodeAnalyzer\MethodCallAnalyzer;
+use Rector\NodeChanger\IdentifierRenamer;
+use Rector\Rector\AbstractRector;
+
+/**
+ * @author Eduard Barnáš <barnas@neoweb.sk>
+ */
+final class ReplaceCreateMethodWithoutReviewerRector extends AbstractRector
+{
+
+    /**
+     * @var MethodCallAnalyzer
+     */
+    private $methodCallAnalyzer;
+
+    /**
+     * @var MethodArgumentAnalyzer
+     */
+    private $methodArgumentAnalyzer;
+
+    /**
+     * @var IdentifierRenamer
+     */
+    private $identifierRenamer;
+
+    /**
+     * @var string
+     */
+    private $oldMethodName = 'createForSubjectWithReviewer';
+
+    /**
+     * @var string
+     */
+    private $newMethodName = 'createForSubject';
+
+    public function __construct(
+        MethodCallAnalyzer $methodCallAnalyzer,
+        MethodArgumentAnalyzer $methodArgumentAnalyzer,
+        IdentifierRenamer $identifierRenamer
+    ) {
+        $this->methodCallAnalyzer = $methodCallAnalyzer;
+        $this->methodArgumentAnalyzer = $methodArgumentAnalyzer;
+        $this->identifierRenamer = $identifierRenamer;
+    }
+
+    public function isCandidate(Node $node): bool
+    {
+        if (! $this->methodCallAnalyzer->isMethod($node, $this->oldMethodName)) {
+            return false;
+        }
+
+        return (! $this->methodArgumentAnalyzer->hasMethodSecondArgument($node) || $this->methodArgumentAnalyzer->isMethodSecondArgumentNull($node));
+    }
+
+    /**
+     * @param MethodCall $methodCallNode
+     */
+    public function refactor(Node $methodCallNode): ?Node
+    {
+        $this->identifierRenamer->renameNode($methodCallNode, $this->newMethodName);
+
+        if ($this->methodArgumentAnalyzer->hasMethodSecondArgument($methodCallNode)) {
+            $methodCallNode->args = [
+                array_shift($methodCallNode->args)
+            ];
+        }
+
+        return $methodCallNode;
+    }
+
+}

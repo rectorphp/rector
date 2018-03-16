@@ -1,6 +1,8 @@
 # source: https://github.com/Sylius/Sylius/blob/master/UPGRADE-1.0.md#upgrade-from-100-beta3-to-100
 
 services:
+    Rector\Rector\Contrib\Sylius\Review\ReplaceCreateMethodWithoutReviewerRector: ~
+
     Rector\Rector\Dynamic\MethodNameReplacerRector:
             $perClassOldToNewMethods:
                 'Sylius\Component\Core\Repository\OrderRepositoryInterface':
@@ -17,17 +19,17 @@ services:
                     'getParents ': 'getAncestors'
 
     # @todo, use this and add new argument to a method
-    Rector\Rector\Dynamic\ArgumentRector:
-        $argumentByMethod:
-             # Add state argument to the getLastPayment($state), where $state is target last payment state. getLastPayment(PaymentInterface::STATE_NEW)
-            -
-                type: 'add'
-                class: 'Sylius\Component\Core\Model\OrderInterface'
-                method: 'getLastPayment'
-                position: 0 # as append | default value is 0, config argument need not be listed
-                typehint: false # default value is false, config argument need not be listed
-                property: '$state'
-                default_value: PaymentInterface::STATE_NEW
+#    Rector\Rector\Dynamic\ArgumentRector:
+#        $argumentByMethod:
+#             # Add state argument to the getLastPayment($state), where $state is target last payment state. getLastPayment(PaymentInterface::STATE_NEW)
+#            -
+#                type: 'add'
+#                class: 'Sylius\Component\Core\Model\OrderInterface'
+#                method: 'getLastPayment'
+#                position: 0 # as append | default value is 0, config argument need not be listed
+#                typehint: false # default value is false, config argument need not be listed
+#                property: '$state'
+#                default_value: PaymentInterface::STATE_NEW
 
     Rector\Rector\Dynamic\ParentTypehintedArgumentRector:
         $typehintForArgumentByMethodAndClass:
@@ -37,21 +39,21 @@ services:
                     '$cartStorage': 'Sylius\Component\Core\Storage\CartStorageInterface'
 
     # @todo, use this and change typehint of return value
-    Rector\Rector\Dynamic\ReturnTypehintRector:
-            $returnTypehintByMethod:
-                # OrderInterface::getAdjustmentsRecursively and OrderItemInterface::getAdjustmentsRecursively return types changed from array to Collection
-                'Sylius\Component\Order\Model\OrderInterface':
-                    'getAdjustmentsRecursively':
-                        'array': 'Doctrine\Common\Collections\Collection'
-
-                'Sylius\Component\Order\Model\OrderItemInterface':
-                    'getAdjustmentsRecursively':
-                        'array': 'Doctrine\Common\Collections\Collection'
-
-                # PrioritizedServiceRegistryInterface::all method return type changed from Zend's PriorityQueue to iterable
-                'Sylius\Component\Registry\PrioritizedServiceRegistryInterface':
-                    'all':
-                        'Zend\Stdlib\PriorityQueue': 'iterable'
+#    Rector\Rector\Dynamic\ReturnTypehintRector:
+#            $returnTypehintByMethod:
+#                # OrderInterface::getAdjustmentsRecursively and OrderItemInterface::getAdjustmentsRecursively return types changed from array to Collection
+#                'Sylius\Component\Order\Model\OrderInterface':
+#                    'getAdjustmentsRecursively':
+#                        'array': 'Doctrine\Common\Collections\Collection'
+#
+#                'Sylius\Component\Order\Model\OrderItemInterface':
+#                    'getAdjustmentsRecursively':
+#                        'array': 'Doctrine\Common\Collections\Collection'
+#
+#                # PrioritizedServiceRegistryInterface::all method return type changed from Zend's PriorityQueue to iterable
+#                'Sylius\Component\Registry\PrioritizedServiceRegistryInterface':
+#                    'all':
+#                        'Zend\Stdlib\PriorityQueue': 'iterable'
 
     Rector\Rector\Dynamic\ClassReplacerRector:
         $oldToNewClasses:
