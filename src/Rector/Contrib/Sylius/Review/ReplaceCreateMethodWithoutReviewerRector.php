@@ -13,7 +13,6 @@ use Rector\Rector\AbstractRector;
  */
 final class ReplaceCreateMethodWithoutReviewerRector extends AbstractRector
 {
-
     /**
      * @var MethodCallAnalyzer
      */
@@ -58,20 +57,16 @@ final class ReplaceCreateMethodWithoutReviewerRector extends AbstractRector
         return (! $this->methodArgumentAnalyzer->hasMethodSecondArgument($node) || $this->methodArgumentAnalyzer->isMethodSecondArgumentNull($node));
     }
 
-    /**
-     * @param MethodCall $methodCallNode
-     */
-    public function refactor(Node $methodCallNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        $this->identifierRenamer->renameNode($methodCallNode, $this->newMethodName);
+        $this->identifierRenamer->renameNode($node, $this->newMethodName);
 
-        if ($this->methodArgumentAnalyzer->hasMethodSecondArgument($methodCallNode)) {
-            $methodCallNode->args = [
-                array_shift($methodCallNode->args)
+        if ($this->methodArgumentAnalyzer->hasMethodSecondArgument($node)) {
+            $node->args = [
+                array_shift($node->args)
             ];
         }
 
-        return $methodCallNode;
+        return $node;
     }
-
 }

@@ -6,6 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Name as NodeName;
 use PhpParser\Node\Scalar\String_;
 
 final class MethodArgumentAnalyzer
@@ -48,12 +49,15 @@ final class MethodArgumentAnalyzer
             return false;
         }
 
+        /** @var MethodCall $node */
         $value = $node->args[1]->value;
         if (! $value instanceof ConstFetch ) {
             return false;
         }
 
-        /** @var MethodCall $node */
-        return $value->name->toLowerString() === 'null';
+        /** @var NodeName $nodeName */
+        $nodeName = $value->name;
+
+        return $nodeName->toLowerString() === 'null';
     }
 }
