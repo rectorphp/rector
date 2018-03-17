@@ -54,7 +54,10 @@ final class ReplaceCreateMethodWithoutReviewerRector extends AbstractRector
             return false;
         }
 
-        return (! $this->methodArgumentAnalyzer->hasMethodSecondArgument($node) || $this->methodArgumentAnalyzer->isMethodSecondArgumentNull($node));
+        return (
+            ! $this->methodArgumentAnalyzer->hasMethodSecondArgument($node)
+            || $this->methodArgumentAnalyzer->isMethodSecondArgumentNull($node)
+        );
     }
 
     public function refactor(Node $node): ?Node
