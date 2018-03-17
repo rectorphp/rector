@@ -18,7 +18,7 @@ require_once __DIR__ . '/rector_bootstrap.php';
 
 try {
     // 1. Detect configuration from --level
-    $configFile = (new LevelConfigShortcutFinder())->resolveLevel(new ArgvInput(), __DIR__ . '/../src/config/level');
+    $configFile = (new LevelConfigShortcutFinder())->resolveLevel(new ArgvInput(), __DIR__ . '/../src/config/levels');
 
     // 2. Or from --config
     if ($configFile === null) {

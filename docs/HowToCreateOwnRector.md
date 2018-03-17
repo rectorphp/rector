@@ -31,7 +31,7 @@ final class MyRector extends AbstractRector
 
 3. Add a Test Case - [see PHPUnit example](https://github.com/rectorphp/rector/blob/master/tests/Rector/Contrib/PHPUnit/ExceptionAnnotationRector/Test.php)
 
-4. Add to specific level, e.g. [`/src/config/level/symfony/symfony33.yml`](/src/config/level/symfony/symfony33.yml)
+4. Add to specific level, e.g. [`/src/config/levels/symfony/symfony33.yml`](/src/config/levels/symfony/symfony33.yml)
 
 5. Submit PR
 
