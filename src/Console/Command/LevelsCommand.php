@@ -45,7 +45,7 @@ final class LevelsCommand extends Command
     private function getAvailbleLevels(): array
     {
         $finder = Finder::create()->files()
-            ->in(__DIR__ . '/../../config/level');
+            ->in(__DIR__ . '/../../../config/level');
 
         $levels = [];
         foreach ($finder->getIterator() as $fileInfo) {
