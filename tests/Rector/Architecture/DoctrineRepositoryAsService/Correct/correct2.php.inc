@@ -1,33 +1,33 @@
 <?php declare(strict_types=1);
 
-namespace App\Controller;
+namespace AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
-use App\Repository\ProductRepository;
+use AppBundle\Repository\PostRepository;
 
-final class ProductController extends Controller
+final class PostController extends Controller
 {
     /**
-     * @var ProductRepository
+     * @var PostRepository
      */
-    private $productRepository;
+    private $postRepository;
 
-    public function __construct(ProductRepository $productRepository)
+    public function __construct(PostRepository $postRepository)
     {
-        $this->productRepository = $productRepository;
+        $this->postRepository = $postRepository;
     }
 
     public function somethingAction(int $id): Response
     {
-        $this->productRepository->findSomething($id);
+        $this->postRepository->findSomething($id);
 
         return new Response();
     }
 
     public function anythingAction(int $id): Response
     {
-        $this->productRepository->findSomething($id);
+        $this->postRepository->findSomething($id);
 
         return new Response();
     }

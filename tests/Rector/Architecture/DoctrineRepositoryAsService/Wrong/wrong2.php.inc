@@ -1,17 +1,17 @@
 <?php declare(strict_types=1);
 
-namespace App\Controller;
+namespace AppBundle\Controller;
 
-use App\Entity\Product;
+use AppBundle\Entity\Post;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
-final class ProductController extends Controller
+final class PostController extends Controller
 {
     public function somethingAction(int $id): Response
     {
         $em = $this->getDoctrine()->getManager();
-        $em->getRepository('SomethingBundle:Product')->findSomething($id);
+        $em->getRepository('AppBundle:Post')->findSomething($id);
 
         return new Response();
     }
@@ -19,7 +19,7 @@ final class ProductController extends Controller
     public function anythingAction(int $id): Response
     {
         $em = $this->getDoctrine()->getManager();
-        $em->getRepository(Product::class)->findSomething($id);
+        $em->getRepository(Post::class)->findSomething($id);
 
         return new Response();
     }
