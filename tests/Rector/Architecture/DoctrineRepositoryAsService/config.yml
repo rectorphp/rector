@@ -4,3 +4,5 @@ imports:
 services:
     # required for EntityForDoctrineRepositoryProvider, added by user
     Rector\Tests\Rector\Architecture\DoctrineRepositoryAsService\Source\EntityForDoctrineRepositoryProvider: ~
+
+    Rector\Tests\Rector\Architecture\DoctrineRepositoryAsService\Source\RepositoryForDoctrineEntityProvider: ~
