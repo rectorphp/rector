@@ -3,3 +3,5 @@ services:
     Rector\Rector\Architecture\RepositoryAsService\ReplaceParentRepositoryCallsByRepositoryPropertyRector: ~
 
     Rector\Rector\Architecture\RepositoryAsService\MoveRepositoryFromParentToConstructorRector: ~
+
+    Rector\Rector\Architecture\RepositoryAsService\ServiceLocatorToDIRector: ~
