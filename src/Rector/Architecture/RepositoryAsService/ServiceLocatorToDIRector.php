@@ -11,6 +11,7 @@ use PhpParser\Node\Scalar\String_;
 use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Contract\Bridge\RepositoryForDoctrineEntityProviderInterface;
 use Rector\Exception\Bridge\RectorProviderException;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Node\Attribute;
 use Rector\Node\PropertyFetchNodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
@@ -69,7 +70,7 @@ final class ServiceLocatorToDIRector extends AbstractRector
     {
         $this->classPropertyCollector->addPropertyForClass(
             (string) $node->getAttribute(Attribute::CLASS_NAME),
-            [$this->repositoryFQN($node)],
+            [$this->repositoryFqn($node)],
             $this->repositoryVariableName($node)
         );
 
@@ -85,37 +86,48 @@ final class ServiceLocatorToDIRector extends AbstractRector
 
     private function repositoryShortName(Node $node): string
     {
-        return end(explode('\\', $this->repositoryFQN($node)));
+        $nameSpaceParts = explode('\\', $this->repositoryFqn($node));
+        return end($nameSpaceParts);
     }
 
-    private function repositoryFQN(Node $node): string
+    private function repositoryFqn(Node $node): string
     {
-        $repositoryArgument = $node->args[0]->value;
-
-        if ($repositoryArgument instanceof String_) {
-            $fqnOrAlias = $repositoryArgument->value;
-        }
-
-        if ($repositoryArgument->class instanceof Name) {
-            $fqnOrAlias = $repositoryArgument->class->getAttribute(Attribute::TYPES)[0];
-        }
-
-        if ($repositoryArgument->class instanceof FullyQualified) {
-            $fqnOrAlias = $repositoryArgument->class->toString();
-        }
+        $entityFqnOrAlias = $this->entityFqnOrAlias($node);
 
         $repositoryClassName = $this->repositoryForDoctrineEntityProvider->provideRepositoryForEntity(
-            $fqnOrAlias
+            $entityFqnOrAlias
         );
 
         if ($repositoryClassName === null) {
             throw new RectorProviderException(sprintf(
                 'A repository was not provided for "%s" entity by your "%s" class.',
-                $fqnOrAlias,
+                $entityFqnOrAlias,
                 get_class($this->repositoryForDoctrineEntityProvider)
             ));
         }
 
         return $repositoryClassName;
+    }
+
+    /**
+     * @throws ShouldNotHappenException
+     */
+    private function entityFqnOrAlias(Node $node): string
+    {
+        $repositoryArgument = $node->args[0]->value;
+
+        if ($repositoryArgument instanceof String_) {
+            return $repositoryArgument->value;
+        }
+
+        if ($repositoryArgument->class instanceof Name) {
+            return $repositoryArgument->class->getAttribute(Attribute::TYPES)[0];
+        }
+
+        if ($repositoryArgument->class instanceof FullyQualified) {
+            return $repositoryArgument->class->toString();
+        }
+
+        throw new ShouldNotHappenException('Unable to resolve repository argument');
     }
 }
