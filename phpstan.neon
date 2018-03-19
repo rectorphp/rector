@@ -1,10 +1,10 @@
 parameters:
     ignoreErrors:
         # false positive, has annotation type above (@todo recheck for possible ignored positives)
-        - '#Access to an undefined property PhpParser\\Node::\$args#' # 12
+        - '#Access to an undefined property PhpParser\\Node::\$args#' # 20
         - '#Access to an undefined property PhpParser\\Node::\$var#' # 2
         - '#Access to an undefined property PhpParser\\Node::\$name#' # 12
-        - '#Parameter \#1 \$node of method Rector\\NodeAnalyzer\\ClassConstAnalyzer::isNames\(\) expects PhpParser\\Node\\Expr\\ClassConstFetch, PhpParser\\Node given#' # 12
+        - '#Parameter \#1 \$node of method Rector\\NodeAnalyzer\\ClassConstAnalyzer::isNames\(\) expects PhpParser\\Node\\Expr\\ClassConstFetch, PhpParser\\Node given#' # 1
         - '#Parameter \#1 \$classNode of method Rector\\NodeTypeResolver\\TypesExtractor\\ConstructorPropertyTypesExtractor::extractFromClassNode\(\) expects PhpParser\\Node\\Stmt\\Class_, PhpParser\\Node\\Stmt\\ClassLike given#' # 1
         - '#Call to an undefined method PhpParser\\Node\\Expr\\BinaryOp::getOperatorSigil\(\)#' # 1
 
@@ -28,27 +28,23 @@ parameters:
         - '#Method Rector\\BetterReflection\\Reflector\\SmartClassReflector::reflect\(\) should return Rector\\BetterReflection\\Reflection\\ReflectionClass\|null but returns Rector\\BetterReflection\\Reflection\\Reflection#' # 1
         - '#Parameter \#1 \$node of method Rector\\NodeTypeResolver\\NodeTypeResolver::resolve\(\) expects PhpParser\\Node, PhpParser\\Node\\Expr|string given#' # 1
         - '#Cannot call method render\(\) on phpDocumentor\\Reflection\\DocBlock\\Tag\|string#' # 1
-        - '#Method Rector\\NodeTraverser\\RectorNodeTraverser::getRectors\(\) should return array<Rector\\Contract\\Rector\\RectorInterface> but returns array<PhpParser\\NodeVisitor>#'
-        - '#Calling method getImmediateMethods\(\) on possibly null value of type Rector\\BetterReflection\\Reflection\\ReflectionClass\|null#'
+        - '#Method Rector\\NodeTraverser\\RectorNodeTraverser::getRectors\(\) should return array<Rector\\Contract\\Rector\\RectorInterface> but returns array<PhpParser\\NodeVisitor>#' # 1
+        - '#Calling method getImmediateMethods\(\) on possibly null value of type Rector\\BetterReflection\\Reflection\\ReflectionClass\|null#' # 1
 
         # known value of Name of MethodCall
-        - '#Call to an undefined method PhpParser\\Node\\Expr\|PhpParser\\Node\\Name::toString\(\)#' # 5
-        - '#Cannot call method toString\(\) on PhpParser\\Node\\Expr\|string#' # 3
+        - '#Call to an undefined method PhpParser\\Node\\Expr\|PhpParser\\Node\\Name::toString\(\)#' # 7
+        - '#Cannot call method toString\(\) on PhpParser\\Node\\Expr\|string#' # 5
 
         # buggy
         - '#Parameter \#1 \$classLikeNode of method Rector\\NodeAnalyzer\\ClassLikeAnalyzer::resolveExtendsTypes\(\) expects PhpParser\\Node\\Stmt\\Class_\|PhpParser\\Node\\Stmt\\Interface_, PhpParser\\Node\\Stmt\\ClassLike given#' # 1
         - '#Parameter \#1 \$functionLikeNode of method Rector\\NodeTypeResolver\\TypeContext::getFunctionReflection\(\) expects PhpParser\\Node\\Expr\\Closure\|PhpParser\\Node\\Stmt\\ClassMethod\|PhpParser\\Node\\Stmt\\Function_, PhpParser\\Node\\FunctionLike given#' # 1
         - '#Access to an undefined property PhpParser\\Node\\Param::\$var#' # 3
         - '#Call to an undefined method PhpParser\\BuilderFactory::args\(\)#' # 1
-        - "#Casting to string something that's already string#" # 5
+        - "#Casting to string something that's already string#" # 3
         - '#Call to an undefined method PhpParser\\Node\\Stmt\\UseUse::getAlias\(\)#' # 2
         - '#Call to an undefined method PhpParser\\PrettyPrinter\\Standard::printFormatPreserving\(\)#' # 1
         - '#Array \(array<Rector\\BetterReflection\\Reflection\\ReflectionClass>\) does not accept Rector\\BetterReflection\\Reflection\\Reflection#' # 1
-        - '#Method Rector\\Rector\\AbstractRector::leaveNode\(\) should return int\|PhpParser\\Node but returns bool#'
-        - '#Access to an undefined property PhpParser\\Node\\Expr::\$(name|var)#'
-
-        # part of test
-        - '#Call to an undefined method Nette\\Utils\\Html::add\(\)#'
+        - '#Access to an undefined property PhpParser\\Node\\Expr::\$(name|var)#' # 2
 
     excludes_analyse:
         # test files

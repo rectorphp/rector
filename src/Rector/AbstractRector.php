@@ -74,7 +74,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
     }
 
     /**
-     * @return int|Node
+     * @return bool|Node
      */
     public function leaveNode(Node $node)
     {
