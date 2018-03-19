@@ -15,12 +15,11 @@ final class RepositoryForDoctrineEntityProvider implements RepositoryForDoctrine
 
     public function provideRepositoryForEntity(string $name): ?string
     {
-        if($this->isAlias($name)){
+        if ($this->isAlias($name)) {
             return $this->resoleFromAlias($name);
         }
 
         return $this->map[$name] ?? null;
-
     }
 
     private function isAlias(string $name): bool
@@ -34,8 +33,8 @@ final class RepositoryForDoctrineEntityProvider implements RepositoryForDoctrine
 
         $pattern = sprintf('/(%s{1}.*%s)/', $namespaceAlias, $simpleClassName);
 
-        foreach($this->map as $key => $value) {
-            if (preg_match($pattern, $key)){
+        foreach ($this->map as $key => $value) {
+            if (preg_match($pattern, $key)) {
                 return $value;
             }
         }

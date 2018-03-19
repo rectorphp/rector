@@ -2,17 +2,16 @@
 
 namespace Rector\Rector\Architecture\RepositoryAsService;
 
+use get_class;
 use Nette\Utils\Strings;
 use PhpParser\Node;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt\Class_;
-use Rector\Builder\Class_\VariableInfo;
-use Rector\Builder\ConstructorMethodBuilder;
+use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Scalar\String_;
+use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Contract\Bridge\RepositoryForDoctrineEntityProviderInterface;
 use Rector\Exception\Bridge\RectorProviderException;
 use Rector\Node\Attribute;
-use Rector\Node\NodeFactory;
 use Rector\Node\PropertyFetchNodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
@@ -33,27 +32,22 @@ final class ServiceLocatorToDIRector extends AbstractRector
      * @var RepositoryForDoctrineEntityProviderInterface
      */
     private $repositoryForDoctrineEntityProvider;
+
     /**
-     * @var ConstructorMethodBuilder
+     * @var ClassPropertyCollector
      */
-    private $constructorMethodBuilder;
-    /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
+    private $classPropertyCollector;
 
     public function __construct(
         MethodCallAnalyzer $methodCallAnalyzer,
         PropertyFetchNodeFactory $propertyFetchNodeFactory,
-        ConstructorMethodBuilder $constructorMethodBuilder,
-        NodeFactory $nodeFactory,
-        RepositoryForDoctrineEntityProviderInterface $repositoryForDoctrineEntityProvider
+        RepositoryForDoctrineEntityProviderInterface $repositoryForDoctrineEntityProvider,
+        ClassPropertyCollector $classPropertyCollector
     ) {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->propertyFetchNodeFactory = $propertyFetchNodeFactory;
         $this->repositoryForDoctrineEntityProvider = $repositoryForDoctrineEntityProvider;
-        $this->constructorMethodBuilder = $constructorMethodBuilder;
-        $this->nodeFactory = $nodeFactory;
+        $this->classPropertyCollector = $classPropertyCollector;
     }
 
     public function isCandidate(Node $node): bool
@@ -64,7 +58,7 @@ final class ServiceLocatorToDIRector extends AbstractRector
 
         $className = $node->getAttribute(Attribute::CLASS_NAME);
 
-        if($className === null){
+        if ($className === null) {
             return false;
         }
 
@@ -73,11 +67,15 @@ final class ServiceLocatorToDIRector extends AbstractRector
 
     public function refactor(Node $node): ?Node
     {
-        return $this->propertyFetchNodeFactory->createLocalWithPropertyName(
+        $this->classPropertyCollector->addPropertyForClass(
+            (string) $node->getAttribute(Attribute::CLASS_NAME),
+            [$this->repositoryFQN($node)],
             $this->repositoryVariableName($node)
         );
 
-        return $node;
+        return $this->propertyFetchNodeFactory->createLocalWithPropertyName(
+            $this->repositoryVariableName($node)
+        );
     }
 
     private function repositoryVariableName(Node $node): string
@@ -94,15 +92,15 @@ final class ServiceLocatorToDIRector extends AbstractRector
     {
         $repositoryArgument = $node->args[0]->value;
 
-        if($repositoryArgument->class === null){
+        if ($repositoryArgument instanceof String_) {
             $fqnOrAlias = $repositoryArgument->value;
         }
 
-        if($repositoryArgument->class instanceof Node\Name){
+        if ($repositoryArgument->class instanceof Name) {
             $fqnOrAlias = $repositoryArgument->class->getAttribute(Attribute::TYPES)[0];
         }
 
-        if($repositoryArgument->class instanceof Node\Name\FullyQualified){
+        if ($repositoryArgument->class instanceof FullyQualified) {
             $fqnOrAlias = $repositoryArgument->class->toString();
         }
 
@@ -114,7 +112,7 @@ final class ServiceLocatorToDIRector extends AbstractRector
             throw new RectorProviderException(sprintf(
                 'A repository was not provided for "%s" entity by your "%s" class.',
                 $fqnOrAlias,
-                \get_class($this->repositoryForDoctrineEntityProvider)
+                get_class($this->repositoryForDoctrineEntityProvider)
             ));
         }
 
