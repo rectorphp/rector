@@ -95,7 +95,7 @@ final class NameTypeResolver implements PerNodeTypeResolverInterface
             return $nameNode->getAttribute(Attribute::CLASS_NAME);
         }
 
-        /** @var Name|null $name */
+        /** @var Name $name */
         $resolvedNameNode = $nameNode->getAttribute(Attribute::RESOLVED_NAME);
         if ($resolvedNameNode instanceof Name) {
             return $resolvedNameNode->toString();

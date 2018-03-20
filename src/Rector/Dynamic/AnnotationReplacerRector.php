@@ -82,7 +82,7 @@ final class AnnotationReplacerRector extends AbstractPHPUnitRector
             return true;
         }
 
-        /** @var Node|null $parentNode */
+        /** @var Node $parentNode */
         $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
         if (! $parentNode) {
             return true;

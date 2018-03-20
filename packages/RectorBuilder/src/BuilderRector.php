@@ -17,17 +17,17 @@ final class BuilderRector extends AbstractRector
     private $methodCallAnalyzer;
 
     /**
-     * @var string|null
+     * @var string
      */
     private $methodCallType;
 
     /**
-     * @var string|null
+     * @var string
      */
     private $methodName;
 
     /**
-     * @var string|null
+     * @var string
      */
     private $newMethodName;
 

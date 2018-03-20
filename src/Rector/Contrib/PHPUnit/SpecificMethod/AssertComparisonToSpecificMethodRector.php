@@ -48,7 +48,7 @@ final class AssertComparisonToSpecificMethodRector extends AbstractPHPUnitRector
     private $identifierRenamer;
 
     /**
-     * @var string|null
+     * @var string
      */
     private $activeOpSignal;
 

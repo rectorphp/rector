@@ -61,7 +61,7 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractPHPUnitRector
     private $nodeFactory;
 
     /**
-     * @var string|null
+     * @var string
      */
     private $activeFuncCallName;
 

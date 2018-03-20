@@ -88,7 +88,7 @@ final class TemplateAnnotationRector extends AbstractRector
      */
     public function refactor(Node $classMethodNode): ?Node
     {
-        /** @var Return_|null $returnNode */
+        /** @var Return_ $returnNode */
         $returnNode = $this->betterNodeFinder->findLastInstanceOf((array) $classMethodNode->stmts, Return_::class);
 
         // create "$this->render('template.file.twig.html', ['key' => 'value']);" method call
