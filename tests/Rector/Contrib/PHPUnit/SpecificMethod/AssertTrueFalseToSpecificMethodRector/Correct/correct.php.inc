@@ -1,6 +1,10 @@
 <?php declare(strict_types=1);
 
-final class MyTest extends \PHPUnit\Framework\TestCase
+abstract class Testing extends \PHPUnit\Framework\TestCase
+{
+}
+
+final class MyTest extends Testing
 {
     public function test()
     {
