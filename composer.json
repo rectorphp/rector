@@ -62,7 +62,7 @@
             "vendor/bin/ecs check bin packages src tests --fix",
             "bin/clean_levels.sh"
         ],
-        "phpstan": "vendor/bin/phpstan.phar analyse packages src tests --level max --configuration phpstan.neon"
+        "phpstan": "vendor/bin/phpstan.phar analyse packages src tests -l max -c phpstan.neon"
     },
     "bin": [
         "bin/rector",
