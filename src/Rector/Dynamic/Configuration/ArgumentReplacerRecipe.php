@@ -110,7 +110,7 @@ final class ArgumentReplacerRecipe
     }
 
     /**
-     * @return mixed|null
+     * @return mixed
      */
     public function getDefaultValue()
     {
