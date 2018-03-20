@@ -15,8 +15,8 @@ abstract class AbstractPHPUnitRector extends AbstractRector
      */
     protected function isInTestClass(Node $node): bool
     {
-        $className = $node->getAttribute(Attribute::CLASS_NAME);
+        $className = (string) $node->getAttribute(Attribute::CLASS_NAME);
 
-        return Strings::endsWith((string) $className, 'Test');
+        return Strings::endsWith($className, 'Test');
     }
 }
