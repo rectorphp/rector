@@ -27,24 +27,24 @@ final class MethodArgumentAnalyzer
 
         if (count($node->args) < 2) {
             return false;
+        }
+
+        return true;
     }
 
-return true;
-}
+    public function isMethodFirstArgumentString(Node $node): bool
+    {
+        if (! $this->hasMethodFirstArgument($node)) {
+            return false;
+        }
 
-public function isMethodFirstArgumentString(Node $node): bool
-{
-    if (! $this->hasMethodFirstArgument($node)) {
-        return false;
+        /** @var MethodCall $node */
+        return $node->args[0]->value instanceof String_;
     }
 
-    /** @var MethodCall $node */
-    return $node->args[0]->value instanceof String_;
-}
-
-public function isMethodSecondArgumentNull(Node $node): bool
-{
-    if (! $this->hasMethodSecondArgument($node)) {
+    public function isMethodSecondArgumentNull(Node $node): bool
+    {
+        if (! $this->hasMethodSecondArgument($node)) {
             return false;
         }
 
