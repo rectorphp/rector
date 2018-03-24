@@ -5,8 +5,8 @@ namespace Rector\Rector\Architecture\RepositoryAsService;
 use get_class;
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Name;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Contract\Bridge\RepositoryForDoctrineEntityProviderInterface;
@@ -120,12 +120,8 @@ final class ServiceLocatorToDIRector extends AbstractRector
             return $repositoryArgument->value;
         }
 
-        if ($repositoryArgument->class instanceof Name) {
-            return $repositoryArgument->class->getAttribute(Attribute::TYPES)[0];
-        }
-
-        if ($repositoryArgument->class instanceof FullyQualified) {
-            return $repositoryArgument->class->toString();
+        if ($repositoryArgument instanceof ClassConstFetch && $repositoryArgument->class instanceof Name) {
+            return $repositoryArgument->class->getAttribute(Attribute::RESOLVED_NAME)->toString();
         }
 
         throw new ShouldNotHappenException('Unable to resolve repository argument');
