@@ -6,7 +6,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Name;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Contract\Bridge\ServiceTypeForNameProviderInterface;
@@ -93,10 +92,6 @@ abstract class AbstractToConstructorInjectionRector extends AbstractRector
 
         if (! $argument instanceof ClassConstFetch) {
             return null;
-        }
-
-        if ($argument->class instanceof FullyQualified) {
-            return $argument->class->toString();
         }
 
         if ($argument->class instanceof Name) {
