@@ -5,7 +5,6 @@ namespace Rector\Rector\Contrib\PHPUnit\SpecificMethod;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Identifier;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
@@ -95,14 +94,9 @@ final class AssertInstanceOfComparisonRector extends AbstractPHPUnitRector
 
     private function renameMethod(MethodCall $methodCallNode): void
     {
-        /** @var Identifier $identifierNode */
-        $identifierNode = $methodCallNode->name;
-        $oldMethodName = $identifierNode->toString();
-
-        if ($oldMethodName === 'assertTrue') {
-            $this->identifierRenamer->renameNode($methodCallNode, 'assertInstanceOf');
-        } else {
-            $this->identifierRenamer->renameNode($methodCallNode, 'assertNotInstanceOf');
-        }
+        $this->identifierRenamer->renameNodeWithMap($methodCallNode, [
+            'assertTrue' => 'assertInstanceOf',
+            'assertFalse' => 'assertNotInstanceOf',
+        ]);
     }
 }

@@ -88,13 +88,10 @@ final class AssertFalseStrposToContainsRector extends AbstractPHPUnitRector
 
     private function renameMethod(MethodCall $methodCallNode): void
     {
-        $oldMethodName = $methodCallNode->name->toString();
-
-        if ($oldMethodName === 'assertFalse') {
-            $this->identifierRenamer->renameNode($methodCallNode, 'assertNotContains');
-        } else {
-            $this->identifierRenamer->renameNode($methodCallNode, 'assertContains');
-        }
+        $this->identifierRenamer->renameNodeWithMap($methodCallNode, [
+            'assertFalse' => 'assertNotContains',
+            'assertNotFalse' => 'assertContains',
+        ]);
     }
 
     private function isNamedFunction(Expr $node): bool

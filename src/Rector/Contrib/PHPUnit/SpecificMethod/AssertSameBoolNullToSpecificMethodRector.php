@@ -5,7 +5,6 @@ namespace Rector\Rector\Contrib\PHPUnit\SpecificMethod;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Identifier;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractPHPUnitRector;
@@ -87,17 +86,12 @@ final class AssertSameBoolNullToSpecificMethodRector extends AbstractPHPUnitRect
 
     private function renameMethod(MethodCall $methodCallNode): void
     {
-        /** @var Identifier $identifierNode */
-        $identifierNode = $methodCallNode->name;
-        $oldMethodName = $identifierNode->toString();
-
         [$sameMethodName, $notSameMethodName] = $this->constValueToNewMethodNames[$this->constantName];
 
-        if ($oldMethodName === 'assertSame' && $sameMethodName) {
-            $this->identifierRenamer->renameNode($methodCallNode, $sameMethodName);
-        } elseif ($oldMethodName === 'assertNotSame' && $notSameMethodName) {
-            $this->identifierRenamer->renameNode($methodCallNode, $notSameMethodName);
-        }
+        $this->identifierRenamer->renameNodeWithMap($methodCallNode, [
+            'assertSame' => $sameMethodName,
+            'assertNotSame' => $notSameMethodName,
+        ]);
     }
 
     private function moveArguments(MethodCall $methodCallNode): void

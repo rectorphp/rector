@@ -6,7 +6,6 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Identifier;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractPHPUnitRector;
@@ -116,16 +115,11 @@ final class AssertComparisonToSpecificMethodRector extends AbstractPHPUnitRector
 
     private function renameMethod(MethodCall $methodCallNode): void
     {
-        /** @var Identifier $identifierNode */
-        $identifierNode = $methodCallNode->name;
-        $oldMethodName = $identifierNode->toString();
-
         [$trueMethodName, $falseMethodName] = $this->defaultOldToNewMethods[$this->activeOpSignal];
 
-        if ($oldMethodName === 'assertTrue' && $trueMethodName) {
-            $this->identifierRenamer->renameNode($methodCallNode, $trueMethodName);
-        } elseif ($oldMethodName === 'assertFalse' && $falseMethodName) {
-            $this->identifierRenamer->renameNode($methodCallNode, $falseMethodName);
-        }
+        $this->identifierRenamer->renameNodeWithMap($methodCallNode, [
+            'assertTrue' => $trueMethodName,
+            'assertFalse' => $falseMethodName,
+        ]);
     }
 }
