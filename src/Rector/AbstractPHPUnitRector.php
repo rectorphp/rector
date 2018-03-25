@@ -4,14 +4,16 @@ namespace Rector\Rector;
 
 use PhpParser\Node;
 use PHPUnit\Framework\TestCase;
-use Rector\Node\Attribute;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 
 abstract class AbstractPHPUnitRector extends AbstractRector
 {
     protected function isInTestClass(Node $node): bool
     {
-        $parentClassName = (string) $node->getAttribute(Attribute::PARENT_CLASS_NAME);
+        $nodeTypeResolver = new NodeTypeResolver();
 
-        return in_array($parentClassName, [TestCase::class, 'PHPUnit_Framework_TestCase'], true);
+        $nodeResolved = $nodeTypeResolver->resolve($node);
+
+        return (bool) ! array_intersect([TestCase::class, 'PHPUnit_Framework_TestCase'], $nodeResolved);
     }
 }
