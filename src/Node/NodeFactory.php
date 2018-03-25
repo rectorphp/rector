@@ -74,7 +74,7 @@ final class NodeFactory
     }
 
     /**
-     * Creates "SomeClass::class"
+     * Creates "\SomeClass::class"
      */
     public function createClassConstantReference(string $className): ClassConstFetch
     {
