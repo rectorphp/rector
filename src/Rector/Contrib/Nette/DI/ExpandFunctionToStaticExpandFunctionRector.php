@@ -46,9 +46,6 @@ final class ExpandFunctionToStaticExpandFunctionRector extends AbstractRector
         $this->nodeFactory = $nodeFactory;
     }
 
-    /**
-     * @param MethodCall $node
-     */
     public function isCandidate(Node $node): bool
     {
         $parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
@@ -56,8 +53,11 @@ final class ExpandFunctionToStaticExpandFunctionRector extends AbstractRector
             return false;
         }
 
-        if (! $this->methodCallAnalyzer->isMethod($node, 'expand')
-            || $this->methodArgumentAnalyzer->isMethodFirstArgumentString($node)) {
+        /** @var MethodCall $methodCallNode */
+        $methodCallNode = $node;
+
+        if (! $this->methodCallAnalyzer->isMethod($methodCallNode, 'expand')
+            || $this->methodArgumentAnalyzer->isMethodFirstArgumentString($methodCallNode)) {
             return false;
         }
 

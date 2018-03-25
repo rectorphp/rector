@@ -67,16 +67,16 @@ final class IdentifierRector extends AbstractRector
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
-    /**
-     * @param PropertyFetch $node
-     */
     public function isCandidate(Node $node): bool
     {
         if (! $this->propertyFetchAnalyzer->isTypes($node, array_keys($this->typeToPropertiesMap))) {
             return false;
         }
 
-        $variableNode = $node->var;
+        /** @var PropertyFetch $propertyFetchNode */
+        $propertyFetchNode = $node;
+
+        $variableNode = $propertyFetchNode->var;
 
         $nodeTypes = $this->nodeTypeResolver->resolve($variableNode);
 

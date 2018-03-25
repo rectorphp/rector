@@ -39,9 +39,6 @@ final class AssertFalseStrposToContainsRector extends AbstractPHPUnitRector
         $this->identifierRenamer = $identifierRenamer;
     }
 
-    /**
-     * @param MethodCall $node
-     */
     public function isCandidate(Node $node): bool
     {
         if (! $this->isInTestClass($node)) {
@@ -52,7 +49,10 @@ final class AssertFalseStrposToContainsRector extends AbstractPHPUnitRector
             return false;
         }
 
-        $firstArgumentValue = $node->args[0]->value;
+        /** @var MethodCall $methodCallNode */
+        $methodCallNode = $node;
+
+        $firstArgumentValue = $methodCallNode->args[0]->value;
         if (! $this->isNamedFunction($firstArgumentValue)) {
             return false;
         }

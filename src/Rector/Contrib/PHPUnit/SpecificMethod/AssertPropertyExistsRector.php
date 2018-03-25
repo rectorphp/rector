@@ -49,9 +49,6 @@ final class AssertPropertyExistsRector extends AbstractPHPUnitRector
         $this->nodeFactory = $nodeFactory;
     }
 
-    /**
-     * @param MethodCall $node
-     */
     public function isCandidate(Node $node): bool
     {
         if (! $this->isInTestClass($node)) {
@@ -62,6 +59,7 @@ final class AssertPropertyExistsRector extends AbstractPHPUnitRector
             return false;
         }
 
+        /** @var MethodCall $methodCallNode */
         $methodCallNode = $node;
 
         /** @var FuncCall $firstArgumentValue */

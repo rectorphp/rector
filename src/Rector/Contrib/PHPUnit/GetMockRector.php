@@ -34,9 +34,6 @@ final class GetMockRector extends AbstractPHPUnitRector
         $this->identifierRenamer = $identifierRenamer;
     }
 
-    /**
-     * @param MethodCall $node
-     */
     public function isCandidate(Node $node): bool
     {
         if (! $this->isInTestClass($node)) {
@@ -50,7 +47,10 @@ final class GetMockRector extends AbstractPHPUnitRector
             return false;
         }
 
-        return count($node->args) === 1;
+        /** @var MethodCall $methodCallNode */
+        $methodCallNode = $node;
+
+        return count($methodCallNode->args) === 1;
     }
 
     /**

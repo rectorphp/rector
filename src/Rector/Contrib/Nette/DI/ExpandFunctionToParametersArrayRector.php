@@ -50,9 +50,6 @@ final class ExpandFunctionToParametersArrayRector extends AbstractRector
         $this->nodeFactory = $nodeFactory;
     }
 
-    /**
-     * @param MethodCall $node
-     */
     public function isCandidate(Node $node): bool
     {
         $parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
@@ -64,7 +61,10 @@ final class ExpandFunctionToParametersArrayRector extends AbstractRector
             return false;
         }
 
-        return $this->methodArgumentAnalyzer->isMethodFirstArgumentString($node);
+        /** @var MethodCall $methodCallNode */
+        $methodCallNode = $node;
+
+        return $this->methodArgumentAnalyzer->isMethodFirstArgumentString($methodCallNode);
     }
 
     /**

@@ -43,9 +43,6 @@ final class RedirectToRouteRector extends AbstractRector
         $this->methodCallNodeFactory = $methodCallNodeFactory;
     }
 
-    /**
-     * @param MethodCall $node
-     */
     public function isCandidate(Node $node): bool
     {
         $parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
@@ -61,7 +58,10 @@ final class RedirectToRouteRector extends AbstractRector
             return false;
         }
 
-        if (! $this->methodCallAnalyzer->isMethod($node->args[0]->value, 'generateUrl')) {
+        /** @var MethodCall $methodCallNode */
+        $methodCallNode = $node;
+
+        if (! $this->methodCallAnalyzer->isMethod($methodCallNode->args[0]->value, 'generateUrl')) {
             return false;
         }
 
