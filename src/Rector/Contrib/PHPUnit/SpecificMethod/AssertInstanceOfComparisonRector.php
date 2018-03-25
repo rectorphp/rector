@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\MethodCall;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
+use Rector\NodeTypeResolver\PerNodeTypeResolver\NameTypeResolver;
 use Rector\Rector\AbstractPHPUnitRector;
 
 /**
@@ -36,14 +37,21 @@ final class AssertInstanceOfComparisonRector extends AbstractPHPUnitRector
      */
     private $nodeFactory;
 
+    /**
+     * @var NameTypeResolver
+     */
+    private $nameTypeResolver;
+
     public function __construct(
         MethodCallAnalyzer $methodCallAnalyzer,
         IdentifierRenamer $identifierRenamer,
-        NodeFactory $nodeFactory
+        NodeFactory $nodeFactory,
+        NameTypeResolver $nameTypeResolver
     ) {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
         $this->nodeFactory = $nodeFactory;
+        $this->nameTypeResolver = $nameTypeResolver;
     }
 
     public function isCandidate(Node $node): bool
@@ -81,7 +89,7 @@ final class AssertInstanceOfComparisonRector extends AbstractPHPUnitRector
         /** @var Instanceof_ $comparison */
         $comparison = $oldArguments[0]->value;
 
-        $className = $comparison->class->toString();
+        $className = $this->nameTypeResolver->resolve($comparison->class)[0];
         $argument = $comparison->expr;
 
         unset($oldArguments[0]);
