@@ -39,6 +39,9 @@ final class AssertFalseStrposToContainsRector extends AbstractPHPUnitRector
         $this->identifierRenamer = $identifierRenamer;
     }
 
+    /**
+     * @param MethodCall $node
+     */
     public function isCandidate(Node $node): bool
     {
         if (! $this->isInTestClass($node)) {

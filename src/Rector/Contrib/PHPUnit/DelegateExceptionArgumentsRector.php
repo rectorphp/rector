@@ -45,6 +45,9 @@ final class DelegateExceptionArgumentsRector extends AbstractPHPUnitRector
         $this->methodCallNodeFactory = $methodCallNodeFactory;
     }
 
+    /**
+     * @param MethodCall $node
+     */
     public function isCandidate(Node $node): bool
     {
         if (! $this->isInTestClass($node)) {
@@ -55,7 +58,6 @@ final class DelegateExceptionArgumentsRector extends AbstractPHPUnitRector
             return false;
         }
 
-        /** @var MethodCall $node */
         return isset($node->args[1]);
     }
 

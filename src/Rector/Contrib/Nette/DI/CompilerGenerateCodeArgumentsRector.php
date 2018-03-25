@@ -34,13 +34,15 @@ final class CompilerGenerateCodeArgumentsRector extends AbstractRector
         $this->identifierRenamer = $identifierRenamer;
     }
 
+    /**
+     * @param MethodCall $node
+     */
     public function isCandidate(Node $node): bool
     {
         if (! $this->methodCallAnalyzer->isTypeAndMethod($node, 'Nette\DI\Compiler', 'generateCode')) {
             return false;
         }
 
-        /** @var MethodCall $node */
         return count($node->args) >= 1;
     }
 

@@ -42,6 +42,9 @@ final class VarDumperTestTraitMethodArgsRector extends AbstractRector
         $this->nodeFactory = $nodeFactory;
     }
 
+    /**
+     * @param StaticCall $node
+     */
     public function isCandidate(Node $node): bool
     {
         if (! $this->methodCallAnalyzer->isTypeAndMethods(
@@ -52,7 +55,6 @@ final class VarDumperTestTraitMethodArgsRector extends AbstractRector
             return false;
         }
 
-        /** @var StaticCall $node */
         if (count($node->args) <= 2 || $node->args[2]->value instanceof ConstFetch) {
             return false;
         }

@@ -46,6 +46,9 @@ final class ExpandFunctionToStaticExpandFunctionRector extends AbstractRector
         $this->nodeFactory = $nodeFactory;
     }
 
+    /**
+     * @param MethodCall $node
+     */
     public function isCandidate(Node $node): bool
     {
         $parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);

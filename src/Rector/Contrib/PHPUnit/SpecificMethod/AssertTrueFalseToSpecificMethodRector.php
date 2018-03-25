@@ -80,6 +80,9 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractPHPUnitRector
         $this->nodeFactory = $nodeFactory;
     }
 
+    /**
+     * @param MethodCall $node
+     */
     public function isCandidate(Node $node): bool
     {
         if (! $this->isInTestClass($node)) {
@@ -90,7 +93,6 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractPHPUnitRector
             return false;
         }
 
-        /** @var MethodCall $node */
         if (! isset($node->args[0])) {
             return false;
         }

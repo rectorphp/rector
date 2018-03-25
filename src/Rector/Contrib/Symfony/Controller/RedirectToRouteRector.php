@@ -3,6 +3,7 @@
 namespace Rector\Rector\Contrib\Symfony\Controller;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\MethodCall;
 use Rector\Node\Attribute;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeAnalyzer\MethodArgumentAnalyzer;
@@ -42,6 +43,9 @@ final class RedirectToRouteRector extends AbstractRector
         $this->methodCallNodeFactory = $methodCallNodeFactory;
     }
 
+    /**
+     * @param MethodCall $node
+     */
     public function isCandidate(Node $node): bool
     {
         $parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
@@ -64,6 +68,9 @@ final class RedirectToRouteRector extends AbstractRector
         return true;
     }
 
+    /**
+     * @param MethodCall $node
+     */
     public function refactor(Node $node): ?Node
     {
         return $this->methodCallNodeFactory->createWithVariableNameMethodNameAndArguments(
@@ -74,10 +81,13 @@ final class RedirectToRouteRector extends AbstractRector
     }
 
     /**
+     * @param MethodCall $node
+     *
      * @return mixed[]
      */
     private function resolveArguments(Node $node): array
     {
+        /** @var MethodCall $generateUrlNode */
         $generateUrlNode = $node->args[0]->value;
 
         $arguments = [];

@@ -26,6 +26,9 @@ final class ContainerBuilderCompileEnvArgumentRector extends AbstractRector
         $this->nodeFactory = $nodeFactory;
     }
 
+    /**
+     * @param MethodCall $node
+     */
     public function isCandidate(Node $node): bool
     {
         $isMethodCall = $this->methodCallAnalyzer->isTypeAndMethods(
@@ -38,7 +41,6 @@ final class ContainerBuilderCompileEnvArgumentRector extends AbstractRector
             return false;
         }
 
-        /** @var MethodCall $node */
         $arguments = $node->args;
 
         // already has an argument

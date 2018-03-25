@@ -31,13 +31,15 @@ final class MethodArgumentAnalyzer
         return true;
     }
 
+    /**
+     * @param MethodCall $node
+     */
     public function isMethodFirstArgumentString(Node $node): bool
     {
         if (! $this->hasMethodFirstArgument($node)) {
             return false;
         }
 
-        /** @var MethodCall $node */
         return $node->args[0]->value instanceof String_;
     }
 }

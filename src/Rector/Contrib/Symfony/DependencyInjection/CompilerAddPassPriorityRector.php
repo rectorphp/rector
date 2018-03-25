@@ -37,6 +37,9 @@ final class CompilerAddPassPriorityRector extends AbstractRector
         $this->nodeFactory = $nodeFactory;
     }
 
+    /**
+     * @param MethodCall $node
+     */
     public function isCandidate(Node $node): bool
     {
         if ($this->methodCallAnalyzer->isTypeAndMethods(
@@ -47,7 +50,6 @@ final class CompilerAddPassPriorityRector extends AbstractRector
             return false;
         }
 
-        /** @var MethodCall $node */
         $args = $node->args;
 
         // has 3 arguments, all is done

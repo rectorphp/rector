@@ -5,7 +5,6 @@ namespace Rector\Rector\Contrib\PhpParser;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\Variable;
 use Rector\Node\Attribute;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
@@ -68,16 +67,17 @@ final class IdentifierRector extends AbstractRector
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
+    /**
+     * @param PropertyFetch $node
+     */
     public function isCandidate(Node $node): bool
     {
         if (! $this->propertyFetchAnalyzer->isTypes($node, array_keys($this->typeToPropertiesMap))) {
             return false;
         }
 
-        /** @var PropertyFetch $node */
         $variableNode = $node->var;
 
-        /** @var Variable $variableNode */
         $nodeTypes = $this->nodeTypeResolver->resolve($variableNode);
 
         $properties = $this->matchTypeToProperties($nodeTypes);

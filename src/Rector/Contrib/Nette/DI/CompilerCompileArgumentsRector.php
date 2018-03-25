@@ -38,13 +38,15 @@ final class CompilerCompileArgumentsRector extends AbstractRector
         $this->identifierRenamer = $identifierRenamer;
     }
 
+    /**
+     * @param MethodCall $node
+     */
     public function isCandidate(Node $node): bool
     {
         if (! $this->methodCallAnalyzer->isTypeAndMethod($node, 'Nette\DI\Compiler', 'compile')) {
             return false;
         }
 
-        /** @var MethodCall $node */
         return count($node->args) >= 1;
     }
 
