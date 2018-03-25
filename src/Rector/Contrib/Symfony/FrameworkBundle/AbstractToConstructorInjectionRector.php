@@ -3,7 +3,9 @@
 namespace Rector\Rector\Contrib\Symfony\FrameworkBundle;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Contract\Bridge\ServiceTypeForNameProviderInterface;
@@ -59,11 +61,8 @@ abstract class AbstractToConstructorInjectionRector extends AbstractRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        /** @var String_ $stringArgument */
-        $stringArgument = $methodCallNode->args[0]->value;
+        $serviceType = $this->serviceType($methodCallNode);
 
-        $serviceName = $stringArgument->value;
-        $serviceType = $this->serviceTypeForNameProvider->provideTypeForName($serviceName);
         if ($serviceType === null) {
             return null;
         }
@@ -77,5 +76,28 @@ abstract class AbstractToConstructorInjectionRector extends AbstractRector
         );
 
         return $this->propertyFetchNodeFactory->createLocalWithPropertyName($propertyName);
+    }
+
+    /**
+     * @param MethodCall $methodCallNode
+     */
+    private function serviceType(Node $methodCallNode): ?string
+    {
+        $argument = $methodCallNode->args[0]->value;
+
+        if ($argument instanceof String_) {
+            $serviceName = $argument->value;
+            return $this->serviceTypeForNameProvider->provideTypeForName($serviceName);
+        }
+
+        if (! $argument instanceof ClassConstFetch) {
+            return null;
+        }
+
+        if ($argument->class instanceof Name) {
+            return $argument->class->getAttribute(Attribute::RESOLVED_NAME)->toString();
+        }
+
+        return null;
     }
 }
