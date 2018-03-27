@@ -1,0 +1,7 @@
+parameters:
+    prefix: 'RectorPhar'
+
+services:
+    Rector\Rector\Dynamic\NamespaceReplacerRector:
+        $oldToNewNamespaces:
+            'Jean85': '%prefix%Jean85'

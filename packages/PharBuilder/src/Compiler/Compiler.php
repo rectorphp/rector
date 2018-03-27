@@ -6,12 +6,8 @@ use FilesystemIterator;
 use Phar;
 use Rector\PharBuilder\Exception\BinFileNotFoundException;
 use Rector\PharBuilder\Filesystem\PathNormalizer;
-use Rector\PharBuilder\Filesystem\PharFilesFinder;
-use Rector\PharBuilder\FinderToPharAdder;
 use Seld\PharUtils\Timestamps;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Finder\Finder;
-use Symfony\Component\Process\Process;
 
 final class Compiler
 {
@@ -19,11 +15,6 @@ final class Compiler
      * @var string
      */
     private $pharName;
-
-    /**
-     * @var PharFilesFinder
-     */
-    private $pharFilesFinder;
 
     /**
      * @var SymfonyStyle
@@ -41,11 +32,6 @@ final class Compiler
     private $pathNormalizer;
 
     /**
-     * @var FinderToPharAdder
-     */
-    private $finderToPharAdder;
-
-    /**
      * @var string
      */
     private $buildDirectory;
@@ -54,17 +40,13 @@ final class Compiler
         string $pharName,
         string $binFileName,
         string $buildDirectory,
-        PharFilesFinder $pharFilesFinder,
         SymfonyStyle $symfonyStyle,
-        PathNormalizer $pathNormalizer,
-        FinderToPharAdder $finderToPharAdder
+        PathNormalizer $pathNormalizer
     ) {
         $this->pharName = $pharName;
-        $this->pharFilesFinder = $pharFilesFinder;
         $this->binFileName = $binFileName;
         $this->symfonyStyle = $symfonyStyle;
         $this->pathNormalizer = $pathNormalizer;
-        $this->finderToPharAdder = $finderToPharAdder;
         $this->buildDirectory = realpath($buildDirectory);
     }
 
@@ -77,23 +59,9 @@ final class Compiler
         $phar->setSignatureAlgorithm(Phar::SHA1);
         $phar->startBuffering();
 
-        // use only dev deps + rebuild dump autoload
-//        $this->symfonyStyle->note('Removing dev packages from composer');
-//        $process = new Process('composer update --no-dev', $buildDirectory);
-//        $process->run();
+        $this->symfonyStyle->note(sprintf('Adding files from directory %s', $this->buildDirectory));
 
-        // dump autoload
-//        $this->symfonyStyle->note('Dumping new composer autoload');
-//        $process = new Process('composer dump-autoload --optimize', $buildDirectory);
-//        $process->run();
-
-        $finder = $this->pharFilesFinder->createForDirectory($this->buildDirectory);
-
-        $fileCount = $this->getFileCountFromFinder($finder);
-        $this->symfonyStyle->note(sprintf('Adding %d files', $fileCount));
-        $this->symfonyStyle->progressStart($fileCount);
-
-        $this->finderToPharAdder->addFinderToPhar($finder, $phar);
+        $phar->buildFromDirectory($this->buildDirectory);
 
         $this->symfonyStyle->newLine(2);
         $this->symfonyStyle->note('Adding bin');
@@ -105,11 +73,6 @@ final class Compiler
 
         $timestamps = new Timestamps($this->pharName);
         $timestamps->save($this->pharName, Phar::SHA1);
-
-        // return dev deps
-//        $this->symfonyStyle->note('Returning dev packages to composer');
-//        $process = new Process('composer update', $buildDirectory);
-//        $process->run();
 
         $this->symfonyStyle->success(sprintf('Phar file "%s" build successful!', $this->pharName));
     }
@@ -144,11 +107,6 @@ EOF;
     private function removeShebang(string $content): string
     {
         return preg_replace('~^#!/usr/bin/env php\s*~', '', $content);
-    }
-
-    private function getFileCountFromFinder(Finder $finder): int
-    {
-        return count(iterator_to_array($finder->getIterator()));
     }
 
     private function ensureBinFileExists(string $binFilePath): void

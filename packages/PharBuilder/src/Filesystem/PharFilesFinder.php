@@ -13,12 +13,12 @@ final class PharFilesFinder
         return (new Finder())
             ->files()
             ->ignoreVCS(true)
-            ->name('*.{yml,php}')
+            ->name('*.{yml,php,json,lock}')
             // "in()" and "path()" have to be split to make SplFileInfo "getRelativePathname()" get path from $directory
             ->in($directory)
-            ->path('#(bin|src|packages)#') // |vendor
+            ->path('#(bin|src|packages|vendor)#') // |vendor
             ->exclude(
-                ['tests', 'docs', 'Tests', 'Testing', 'phpunit', 'sebastianbergman', 'vendor', 'packages/PharBuilder']
+                ['tests', 'docs', 'Tests', 'Testing', 'phpunit', 'sebastianbergman', 'packages/PharBuilder']
             )
             ->sort($this->sortFilesByName());
     }

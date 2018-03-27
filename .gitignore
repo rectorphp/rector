@@ -7,4 +7,5 @@ composer.lock
 
 # phar related
 /build
+/build-phar
 rector.phar
