@@ -5,6 +5,7 @@ namespace Rector\Rector\Contrib\PHPUnit\SpecificMethod;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Identifier;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractPHPUnitRector;
@@ -68,7 +69,10 @@ final class AssertSameBoolNullToSpecificMethodRector extends AbstractPHPUnitRect
             return false;
         }
 
-        $this->constantName = strtolower($firstArgumentValue->name->toString());
+        /** @var Identifier $constatName */
+        $constatName = $firstArgumentValue->name;
+
+        $this->constantName = $constatName->toLowerString();
 
         return isset($this->constValueToNewMethodNames[$this->constantName]);
     }
