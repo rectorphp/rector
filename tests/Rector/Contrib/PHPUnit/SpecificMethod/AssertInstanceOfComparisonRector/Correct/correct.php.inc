@@ -7,7 +7,7 @@ final class MyTest extends \PHPUnit\Framework\TestCase
     public function test()
     {
         $this->assertInstanceOf(Foo::class, $something);
-        $this->assertNotInstanceOf(Foo::class, $something);
-        $this->assertInstanceOf(Baz::class, $something);
+        $this->assertNotInstanceOf(\Namespaced\Foo::class, $something);
+        $this->assertInstanceOf(Bar\Baz::class, $something);
     }
 }

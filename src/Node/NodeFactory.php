@@ -84,6 +84,16 @@ final class NodeFactory
     }
 
     /**
+     * Creates "SomeClass::class"
+     */
+    public function createRelativeClassConstantReference(string $className): ClassConstFetch
+    {
+        $nameNode = new Name($className);
+
+        return new ClassConstFetch($nameNode, 'class');
+    }
+
+    /**
      * Creates "use \SomeTrait;"
      */
     public function createTraitUse(string $traitName): TraitUse
