@@ -71,7 +71,7 @@
         "compile-phar": [
             "rsync -Rr --exclude 'build' . ./build-phar/",
             "bin/rector process ./build-phar/bin/ --config packages/PharBuilder/src/config/rector.yml --dry-run",
-            "packages/PharBuilder/bin/compile",
+            "php -dphar.readonly=0 packages/PharBuilder/bin/compile",
             "rm -rf ./build-phar"
         ]
     },
