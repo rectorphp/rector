@@ -74,11 +74,21 @@ final class NodeFactory
     }
 
     /**
-     * Creates "SomeClass::class"
+     * Creates "\SomeClass::class"
      */
     public function createClassConstantReference(string $className): ClassConstFetch
     {
         $nameNode = new FullyQualified($className);
+
+        return new ClassConstFetch($nameNode, 'class');
+    }
+
+    /**
+     * Creates "SomeClass::class"
+     */
+    public function createRelativeClassConstantReference(string $className): ClassConstFetch
+    {
+        $nameNode = new Name($className);
 
         return new ClassConstFetch($nameNode, 'class');
     }
