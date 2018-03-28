@@ -78,12 +78,13 @@ final class TypeContext
         $this->variableTypes[$variableName] = $variableTypes;
     }
 
-    public function enterClassLike(Class_ $classLikeNode): void
+    public function enterClassLike(ClassLike $classLikeNode): void
     {
         $this->propertyTypes = [];
         $this->classLikeNode = $classLikeNode;
 
         if ($this->classLikeAnalyzer->isNormalClass($classLikeNode)) {
+            /** @var Class_ $classLikeNode */
             $this->propertyTypes = $this->constructorPropertyTypesExtractor->extractFromClassNode($classLikeNode);
         }
     }
