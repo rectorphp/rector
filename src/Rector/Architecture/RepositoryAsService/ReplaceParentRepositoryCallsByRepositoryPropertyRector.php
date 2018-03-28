@@ -62,5 +62,7 @@ final class ReplaceParentRepositoryCallsByRepositoryPropertyRector extends Abstr
         if ($entityRepositoryReflection !== null) {
             return array_keys($entityRepositoryReflection->getImmediateMethods());
         }
+
+        return [];
     }
 }
