@@ -13,6 +13,7 @@ parameters:
         # known values
         - '#Method Rector\\Node\\NodeFactory::create(Null|False)Constant\(\) should return PhpParser\\Node\\Expr\\ConstFetch but returns PhpParser\\Node\\Expr#' # 2
         - '#Method Rector\\Node\\NodeFactory::createNamespace\(\) should return PhpParser\\Node\\Stmt\\Namespace_ but returns PhpParser\\Node#' # 1
+        - '#Calling method getText\(\) on possibly null value of type PhpParser\\Comment\\Doc\|null#' # 3
         - '#Calling method getParentClassNames\(\) on possibly null value of type Rector\\BetterReflection\\Reflection\\ReflectionClass\|null#' # 1
         - '#Instanceof between PhpParser\\Node\\Expr\|string and PhpParser\\Node\\Identifier will always evaluate to false#' # 8
         - '#Method Rector\\NodeTraverserQueue\\BetterNodeFinder::findFirstAncestorInstanceOf\(\) should return PhpParser\\Node\|null but returns object#' # 1
