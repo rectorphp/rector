@@ -81,11 +81,9 @@ final class RedirectToRouteRector extends AbstractRector
     }
 
     /**
-     * @param MethodCall $node
-     *
      * @return mixed[]
      */
-    private function resolveArguments(Node $node): array
+    private function resolveArguments(MethodCall $node): array
     {
         /** @var MethodCall $generateUrlNode */
         $generateUrlNode = $node->args[0]->value;
