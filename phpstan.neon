@@ -41,7 +41,6 @@ parameters:
         - '#Array \(array<Rector\\BetterReflection\\Reflection\\ReflectionClass>\) does not accept Rector\\BetterReflection\\Reflection\\Reflection#' # 1
         - '#Access to an undefined property PhpParser\\Node\\Expr::\$(name|var)#' # 2
         - '#Call to an undefined method PhpParser\\Node\\Expr|PhpParser\\Node\\Name::toCodeString\(\).#' #1
-        - '#Call to an undefined method PhpParser\\Node\\Expr\\BinaryOp::getOperatorSigil\(\)#' # 1
 
     excludes_analyse:
         # test files
