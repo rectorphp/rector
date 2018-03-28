@@ -4,6 +4,7 @@ namespace Rector\Rector\Dynamic;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\Rector\AbstractRector;
@@ -56,7 +57,9 @@ final class FunctionToMethodCallRector extends AbstractRector
      */
     public function refactor(Node $funcCallNode): ?Node
     {
-        $functionName = $funcCallNode->name->toString();
+        /** @var Identifier $identifier */
+        $identifier = $funcCallNode->name;
+        $functionName = $identifier->toString();
 
         [$variableName, $methodName] = $this->functionToMethodCall[$functionName];
 

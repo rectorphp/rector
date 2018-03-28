@@ -32,8 +32,10 @@ final class PropertyFetchAnalyzer
             return false;
         }
 
-        /** @var PropertyFetch $node */
-        $nodePropertyName = $node->name->toString();
+        /** @var Identifier $propertyFetchName */
+        $propertyFetchName = $node->name;
+
+        $nodePropertyName = $propertyFetchName->toString();
 
         return $nodePropertyName === $property;
     }
@@ -126,8 +128,10 @@ final class PropertyFetchAnalyzer
             return false;
         }
 
-        /** @var PropertyFetch $node */
-        return in_array($node->name->toString(), $propertyNames, true);
+        /** @var Identifier $propertyFetchName */
+        $propertyFetchName = $node->name;
+
+        return in_array($propertyFetchName->toString(), $propertyNames, true);
     }
 
     /**
@@ -140,7 +144,10 @@ final class PropertyFetchAnalyzer
             return [];
         }
 
-        return $node->var->getAttribute(Attribute::TYPES);
+        /** @var PropertyFetch $propertyFetchNode */
+        $propertyFetchNode = $node;
+
+        return $propertyFetchNode->var->getAttribute(Attribute::TYPES);
     }
 
     /**

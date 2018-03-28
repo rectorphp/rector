@@ -59,7 +59,7 @@ final class AssertPropertyExistsRector extends AbstractPHPUnitRector
             return false;
         }
 
-        /** @var MethodCall $methodCallAnalyzer */
+        /** @var MethodCall $methodCallNode */
         $methodCallNode = $node;
 
         /** @var FuncCall $firstArgumentValue */
@@ -74,7 +74,7 @@ final class AssertPropertyExistsRector extends AbstractPHPUnitRector
     }
 
     /**
-     * @var MethodCall
+     * @param MethodCall $methodCallNode
      */
     public function refactor(Node $methodCallNode): ?Node
     {

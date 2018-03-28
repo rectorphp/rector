@@ -49,7 +49,10 @@ final class AssertFalseStrposToContainsRector extends AbstractPHPUnitRector
             return false;
         }
 
-        $firstArgumentValue = $node->args[0]->value;
+        /** @var MethodCall $methodCallNode */
+        $methodCallNode = $node;
+
+        $firstArgumentValue = $methodCallNode->args[0]->value;
         if (! $this->isNamedFunction($firstArgumentValue)) {
             return false;
         }

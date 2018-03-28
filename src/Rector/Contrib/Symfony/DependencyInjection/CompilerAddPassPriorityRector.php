@@ -47,8 +47,10 @@ final class CompilerAddPassPriorityRector extends AbstractRector
             return false;
         }
 
-        /** @var MethodCall $node */
-        $args = $node->args;
+        /** @var MethodCall $methodCallNode */
+        $methodCallNode = $node;
+
+        $args = $methodCallNode->args;
 
         // has 3 arguments, all is done
         return count($args) !== 3;

@@ -47,8 +47,10 @@ final class GetMockRector extends AbstractPHPUnitRector
             return false;
         }
 
-        /** @var MethodCall $node */
-        return count($node->args) === 1;
+        /** @var MethodCall $methodCallNode */
+        $methodCallNode = $node;
+
+        return count($methodCallNode->args) === 1;
     }
 
     /**

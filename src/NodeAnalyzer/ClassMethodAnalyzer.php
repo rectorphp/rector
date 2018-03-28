@@ -4,6 +4,7 @@ namespace Rector\NodeAnalyzer;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -32,8 +33,10 @@ final class ClassMethodAnalyzer
             return false;
         }
 
-        /** @var MethodCall $node */
-        return in_array($node->name->toString(), $methods, true);
+        /** @var Identifier $methodName */
+        $methodName = $node->name;
+
+        return in_array($methodName->toString(), $methods, true);
     }
 
     private function isType(Node $node, string $type): bool

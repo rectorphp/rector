@@ -59,6 +59,10 @@ final class ReplaceParentRepositoryCallsByRepositoryPropertyRector extends Abstr
     {
         $entityRepositoryReflection = $this->smartClassReflector->reflect('Doctrine\ORM\EntityRepository');
 
-        return array_keys($entityRepositoryReflection->getImmediateMethods());
+        if ($entityRepositoryReflection !== null) {
+            return array_keys($entityRepositoryReflection->getImmediateMethods());
+        }
+
+        return [];
     }
 }

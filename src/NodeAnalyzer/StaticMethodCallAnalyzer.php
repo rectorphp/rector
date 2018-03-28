@@ -29,8 +29,10 @@ final class StaticMethodCallAnalyzer
             return false;
         }
 
-        /** @var StaticCall $node */
-        return (string) $node->name === $method;
+        /** @var StaticCall $staticCallNode */
+        $staticCallNode = $node;
+
+        return (string) $staticCallNode->name === $method;
     }
 
     /**
@@ -44,16 +46,12 @@ final class StaticMethodCallAnalyzer
             return false;
         }
 
-        /** @var StaticCall $node */
-        $currentMethodName = (string) $node->name;
+        /** @var StaticCall $staticCallNode */
+        $staticCallNode = $node;
 
-        foreach ($methodNames as $methodName) {
-            if ($currentMethodName === $methodName) {
-                return true;
-            }
-        }
+        $currentMethodName = (string) $staticCallNode->name;
 
-        return false;
+        return in_array($currentMethodName, $methodNames, true);
     }
 
     /**
