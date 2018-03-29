@@ -12,11 +12,6 @@ $possibleAutoloadPaths = [
 foreach ($possibleAutoloadPaths as $possibleAutoloadPath) {
     if (is_file($possibleAutoloadPath)) {
         require_once $possibleAutoloadPath;
-
-        if(!class_exists('Rector\Parser\ParserFactory',true)){
-            die('autoload broken');
-        }
-
         return;
     }
 }
