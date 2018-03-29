@@ -70,7 +70,7 @@
         "phpstan": "vendor/bin/phpstan.phar analyse packages src tests --level max --configuration phpstan.neon",
         "compile-phar": [
             "rm -f rector.phar",
-            "rsync -Rr --exclude 'build' . ./build-phar/",
+            "rsync -Rr --exclude-from '.pharignore' . ./build-phar/",
             "bin/rector process ./build-phar/bin/ --config packages/PharBuilder/src/config/rector.yml --dry-run",
             "php -dphar.readonly=0 packages/PharBuilder/bin/compile",
             "rm -rf ./build-phar"
