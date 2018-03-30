@@ -1,0 +1,5 @@
+build
+docs
+tests
+phpunit
+.git

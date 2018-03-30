@@ -3,5 +3,5 @@
 To build `rector.phar` just run:
 
 ```bash
-packages/PharBuilder/bin/compile 
+packages/PharBuilder/bin/compile
 ```

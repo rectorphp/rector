@@ -27,7 +27,7 @@ script:
   # build phar test - 1st group is "build-phar" test step by step; 2nd group is all-together
   - |
     if [[ $BUILD_PHAR != "" ]]; then
-      packages/PharBuilder/bin/compile
+      composer compile-phar
       php rector.phar
       vendor/bin/phpunit --testsuite=phar-build
     fi

@@ -5,13 +5,10 @@ namespace Rector\PharBuilder\Compiler;
 use FilesystemIterator;
 use Phar;
 use Rector\PharBuilder\Exception\BinFileNotFoundException;
+use Rector\PharBuilder\Exception\BuildDirNotCreatedException;
 use Rector\PharBuilder\Filesystem\PathNormalizer;
-use Rector\PharBuilder\Filesystem\PharFilesFinder;
-use Rector\PharBuilder\FinderToPharAdder;
 use Seld\PharUtils\Timestamps;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Finder\Finder;
-use Symfony\Component\Process\Process;
 
 final class Compiler
 {
@@ -19,11 +16,6 @@ final class Compiler
      * @var string
      */
     private $pharName;
-
-    /**
-     * @var PharFilesFinder
-     */
-    private $pharFilesFinder;
 
     /**
      * @var SymfonyStyle
@@ -41,63 +33,54 @@ final class Compiler
     private $pathNormalizer;
 
     /**
-     * @var FinderToPharAdder
+     * @var string
      */
-    private $finderToPharAdder;
+    private $buildPharDirectory;
 
     /**
      * @var string
      */
-    private $buildDirectory;
+    private $pharBaseName;
+
+    /**
+     * @var string
+     */
+    private $pharDirName;
 
     public function __construct(
         string $pharName,
         string $binFileName,
         string $buildDirectory,
-        PharFilesFinder $pharFilesFinder,
         SymfonyStyle $symfonyStyle,
-        PathNormalizer $pathNormalizer,
-        FinderToPharAdder $finderToPharAdder
+        PathNormalizer $pathNormalizer
     ) {
         $this->pharName = $pharName;
-        $this->pharFilesFinder = $pharFilesFinder;
+        $this->pharBaseName = basename($pharName);
+        $this->pharDirName = dirname($pharName);
         $this->binFileName = $binFileName;
         $this->symfonyStyle = $symfonyStyle;
         $this->pathNormalizer = $pathNormalizer;
-        $this->finderToPharAdder = $finderToPharAdder;
-        $this->buildDirectory = realpath($buildDirectory);
+        $this->buildPharDirectory = realpath($buildDirectory);
     }
 
     public function compile(): void
     {
-        $this->symfonyStyle->note(sprintf('Starting PHAR build in "%s" directory', $this->buildDirectory));
+        $this->symfonyStyle->note(sprintf('Starting PHAR build in "%s" directory', $this->buildPharDirectory));
+
+        $this->ensureBuildDirExists();
 
         // flags: KEY_AS_PATHNAME - use relative paths from Finder keys
-        $phar = new Phar($this->pharName, FilesystemIterator::KEY_AS_PATHNAME, $this->pharName);
+        $phar = new Phar($this->pharName, FilesystemIterator::KEY_AS_PATHNAME, $this->pharBaseName);
         $phar->setSignatureAlgorithm(Phar::SHA1);
         $phar->startBuffering();
 
-        // use only dev deps + rebuild dump autoload
-//        $this->symfonyStyle->note('Removing dev packages from composer');
-//        $process = new Process('composer update --no-dev', $buildDirectory);
-//        $process->run();
+        $this->symfonyStyle->note(sprintf('Adding files from directory %s', $this->buildPharDirectory));
 
-        // dump autoload
-//        $this->symfonyStyle->note('Dumping new composer autoload');
-//        $process = new Process('composer dump-autoload --optimize', $buildDirectory);
-//        $process->run();
-
-        $finder = $this->pharFilesFinder->createForDirectory($this->buildDirectory);
-
-        $fileCount = $this->getFileCountFromFinder($finder);
-        $this->symfonyStyle->note(sprintf('Adding %d files', $fileCount));
-        $this->symfonyStyle->progressStart($fileCount);
-
-        $this->finderToPharAdder->addFinderToPhar($finder, $phar);
+        $phar->buildFromDirectory($this->buildPharDirectory);
 
         $this->symfonyStyle->newLine(2);
         $this->symfonyStyle->note('Adding bin');
-        $this->addRectorBin($phar, $this->buildDirectory);
+        $this->addRectorBin($phar, $this->buildPharDirectory);
 
         $this->symfonyStyle->note('Setting stub');
         $phar->setStub($this->getStub());
@@ -105,11 +88,6 @@ final class Compiler
 
         $timestamps = new Timestamps($this->pharName);
         $timestamps->save($this->pharName, Phar::SHA1);
-
-        // return dev deps
-//        $this->symfonyStyle->note('Returning dev packages to composer');
-//        $process = new Process('composer update', $buildDirectory);
-//        $process->run();
 
         $this->symfonyStyle->success(sprintf('Phar file "%s" build successful!', $this->pharName));
     }
@@ -138,17 +116,12 @@ require 'phar://%s/%s';
 __HALT_COMPILER();
 EOF;
 
-        return sprintf($stubTemplate, $this->pharName, $this->pharName, $this->binFileName);
+        return sprintf($stubTemplate, $this->pharBaseName, $this->pharName, $this->binFileName);
     }
 
     private function removeShebang(string $content): string
     {
         return preg_replace('~^#!/usr/bin/env php\s*~', '', $content);
-    }
-
-    private function getFileCountFromFinder(Finder $finder): int
-    {
-        return count(iterator_to_array($finder->getIterator()));
     }
 
     private function ensureBinFileExists(string $binFilePath): void
@@ -161,5 +134,14 @@ EOF;
             'Bin file not found in "%s". Have you set it up in config.yml file?',
             $binFilePath
         ));
+    }
+
+    private function ensureBuildDirExists(): void
+    {
+        if (! is_dir($this->pharDirName) && ! mkdir($this->pharDirName, 0777, true) && ! is_dir($this->pharDirName)) {
+            throw new BuildDirNotCreatedException(
+                sprintf('Directory "%s" was not created', $this->pharDirName)
+            );
+        }
     }
 }
