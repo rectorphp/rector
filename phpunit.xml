@@ -11,5 +11,9 @@
             <directory>packages/*/tests</directory>
             <exclude>tests/Phar</exclude>
         </testsuite>
+        <!-- only Phar -->
+        <testsuite name="phar-build">
+            <directory>tests/Phar</directory>
+        </testsuite>
     </testsuites>
 </phpunit>

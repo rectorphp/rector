@@ -12,12 +12,13 @@ final class PharTest extends TestCase
 {
     public function testBox(): void
     {
-        $rectorPharLocation = __DIR__ . '/../../rector.phar';
+        $rectorPharLocation = __DIR__ . '/../../build/rector.phar';
         $this->assertFileExists($rectorPharLocation);
 
         $process = new Process($rectorPharLocation);
         $exitCode = $process->run();
 
+        // binary needed for this tests
         $this->assertSame('', $process->getErrorOutput());
         $this->assertSame(1, $exitCode);
     }
