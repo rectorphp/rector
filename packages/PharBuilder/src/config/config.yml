@@ -1,6 +1,6 @@
 parameters:
     # customizable (via %ENV()?)
-    pharName: 'rector.phar'
+    pharName: 'build/rector.phar'
     binFileName: 'bin/rector'
     buildDirectory: '%kernel.root_dir%/../../../../build-phar'
 
