@@ -8,12 +8,25 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 
 abstract class AbstractPHPUnitRector extends AbstractRector
 {
+    /**
+     * @var NodeTypeResolver
+     */
+    private $nodeTypeResolver;
+
+    /**
+     * Nasty magic, unable to do that in config autowire _instanceof calls.
+     *
+     * @required
+     */
+    public function setNodeTypeResolver(NodeTypeResolver $nodeTypeResolver): void
+    {
+        $this->nodeTypeResolver = $nodeTypeResolver;
+    }
+
     protected function isInTestClass(Node $node): bool
     {
-        $nodeTypeResolver = new NodeTypeResolver();
+        $nodeResolved = $this->nodeTypeResolver->resolve($node);
 
-        $nodeResolved = $nodeTypeResolver->resolve($node);
-
-        return (bool) ! array_intersect([TestCase::class, 'PHPUnit_Framework_TestCase'], $nodeResolved);
+        return ! array_intersect([TestCase::class, 'PHPUnit_Framework_TestCase'], $nodeResolved);
     }
 }
