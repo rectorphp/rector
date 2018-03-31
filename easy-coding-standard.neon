@@ -46,6 +46,7 @@ parameters:
             - */packages/NodeTypeResolver/**/PerNodeTypeResolver/**TypeResolver.php
             - */packages/NodeTypeResolver/**/PerNodeTypeResolver/**TypeResolver/*Test.php
             - packages/BetterReflection/src/Reflector/SmartClassReflector.php
+            - src/Rector/AbstractPHPUnitRector.php
 
     skip_codes:
         # empty arguments passing

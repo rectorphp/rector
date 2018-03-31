@@ -3,7 +3,6 @@
 namespace Rector\Rector;
 
 use PhpParser\Node;
-use PHPUnit\Framework\TestCase;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
 abstract class AbstractPHPUnitRector extends AbstractRector
@@ -27,6 +26,6 @@ abstract class AbstractPHPUnitRector extends AbstractRector
     {
         $nodeResolved = $this->nodeTypeResolver->resolve($node);
 
-        return ! array_intersect([TestCase::class, 'PHPUnit_Framework_TestCase'], $nodeResolved);
+        return ! array_intersect(['PHPUnit\Framework\TestCase', 'PHPUnit_Framework_TestCase'], $nodeResolved);
     }
 }
