@@ -37,6 +37,10 @@ services:
             '*Rector': 'Rector'
 
 parameters:
+    exclude_checkers:
+        # temporary, before static is removed
+        - 'Symplify\CodingStandard\Sniffs\CleanCode\ForbiddenStaticFunctionSniff'
+
     skip:
         Symplify\CodingStandard\Fixer\Php\ClassStringToClassConstantFixer:
             # classes might not exist
