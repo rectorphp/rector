@@ -16,6 +16,10 @@ final class AssignTypeResolverTest extends AbstractNodeTypeResolverTest
      */
     public function test(string $file, int $nodePosition, array $expectedTypes): void
     {
+        if (PHP_VERSION >= '7.2.0') {
+            $this->markTestSkipped('This test needs PHP 7.1 or lower.');
+        }
+
         $variableNodes = $this->getNodesForFileOfType($file, Variable::class);
 
         $this->assertSame($expectedTypes, $this->nodeTypeResolver->resolve($variableNodes[$nodePosition]));
@@ -53,6 +57,10 @@ final class AssignTypeResolverTest extends AbstractNodeTypeResolverTest
 
     public function testMethodCallOnClassConstant(): void
     {
+        if (PHP_VERSION >= '7.2.0') {
+            $this->markTestSkipped('This test needs PHP 7.1 or lower.');
+        }
+
         $variableNodes = $this->getNodesForFileOfType(__DIR__ . '/Source/ClassConstant.php.inc', Variable::class);
 
         $this->assertSame(
@@ -68,6 +76,10 @@ final class AssignTypeResolverTest extends AbstractNodeTypeResolverTest
 
     public function testMethodCallOnPropertyFetch(): void
     {
+        if (PHP_VERSION >= '7.2.0') {
+            $this->markTestSkipped('This test needs PHP 7.1 or lower.');
+        }
+
         $variableNodes = $this->getNodesForFileOfType(__DIR__ . '/Source/PropertyFetch.php.inc', Variable::class);
 
         $this->assertSame(
