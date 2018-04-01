@@ -3,7 +3,7 @@ language: php
 matrix:
   include:
     - php: 7.1
-      env: STATIC_ANALYSIS=true RUN_RECTOR=true
+      env: BUILD_PHAR=true PHPUNIT_FLAGS="--testsuite=main" STATIC_ANALYSIS=true
     - php: 7.2
       env: PHPUNIT_FLAGS="--coverage-clover coverage.xml --testsuite=contrib-rectors"
     - php: 7.2
@@ -24,8 +24,13 @@ script:
   - phpenv config-rm xdebug.ini || return 0
   - if [[ $STATIC_ANALYSIS != "" ]]; then composer check-cs; fi
   - if [[ $STATIC_ANALYSIS != "" ]]; then composer phpstan; fi
-  # Rector demo run
-  - if [[ $RUN_RECTOR != "" ]]; then bin/rector process src tests --level symfony40 --dry-run; fi
+  # build phar test - 1st group is "build-phar" test step by step; 2nd group is all-together
+  - |
+    if [[ $BUILD_PHAR != "" ]]; then
+      packages/PharBuilder/bin/compile
+      php rector.phar
+      vendor/bin/phpunit --testsuite=phar-build
+    fi
 
 after_script:
   # upload coverage to Coveralls.io

@@ -26,6 +26,9 @@ checkers:
             - 'Rector\BetterReflection\SourceLocator\Located\LocatedSource'
             - 'phpDocumentor\Reflection\Types\*'
             - 'Rector\Reporting\FileDiff'
+            - 'Phar'
+            - 'Symfony\Component\Finder\Finder'
+            - 'Seld\PharUtils\Timestamps'
 
     Symplify\CodingStandard\Fixer\Naming\PropertyNameMatchingTypeFixer:
         extra_skipped_classes:
