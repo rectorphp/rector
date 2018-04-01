@@ -76,6 +76,6 @@ final class ExpandFunctionToStaticExpandFunctionRector extends AbstractRector
             new PropertyFetch($methodCallNode->var, 'parameters'),
         ];
 
-        return $this->builderFactory->StaticCall('Nette\DI\Helpers', 'expand', $arguments);
+        return $this->builderFactory->staticCall('Nette\DI\Helpers', 'expand', $arguments);
     }
 }
