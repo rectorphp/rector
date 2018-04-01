@@ -2,11 +2,11 @@
 
 namespace Rector\Rector\Contrib\Nette\DI;
 
+use PhpParser\BuilderFactory;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use Rector\Node\Attribute;
-use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodArgumentAnalyzer;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
@@ -32,18 +32,18 @@ final class ExpandFunctionToStaticExpandFunctionRector extends AbstractRector
     private $methodArgumentAnalyzer;
 
     /**
-     * @var NodeFactory
+     * @var BuilderFactory
      */
-    private $nodeFactory;
+    private $builderFactory;
 
     public function __construct(
         MethodCallAnalyzer $methodCallAnalyzer,
         MethodArgumentAnalyzer $methodArgumentAnalyzer,
-        NodeFactory $nodeFactory
+        BuilderFactory $builderFactory
     ) {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->methodArgumentAnalyzer = $methodArgumentAnalyzer;
-        $this->nodeFactory = $nodeFactory;
+        $this->builderFactory = $builderFactory;
     }
 
     public function isCandidate(Node $node): bool
@@ -76,6 +76,6 @@ final class ExpandFunctionToStaticExpandFunctionRector extends AbstractRector
             new PropertyFetch($methodCallNode->var, 'parameters'),
         ];
 
-        return $this->nodeFactory->createStaticMethodCallWithArgs('Nette\DI\Helpers', 'expand', $arguments);
+        return $this->builderFactory->StaticCall('Nette\DI\Helpers', 'expand', $arguments);
     }
 }

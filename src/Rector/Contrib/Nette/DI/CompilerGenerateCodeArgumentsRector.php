@@ -2,6 +2,7 @@
 
 namespace Rector\Rector\Contrib\Nette\DI;
 
+use PhpParser\BuilderFactory;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
@@ -28,10 +29,19 @@ final class CompilerGenerateCodeArgumentsRector extends AbstractRector
      */
     private $identifierRenamer;
 
-    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, IdentifierRenamer $identifierRenamer)
-    {
+    /**
+     * @var BuilderFactory
+     */
+    private $builderFactory;
+
+    public function __construct(
+        MethodCallAnalyzer $methodCallAnalyzer,
+        IdentifierRenamer $identifierRenamer,
+        BuilderFactory $builderFactory
+    ) {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
+        $this->builderFactory = $builderFactory;
     }
 
     public function isCandidate(Node $node): bool
@@ -53,7 +63,7 @@ final class CompilerGenerateCodeArgumentsRector extends AbstractRector
     {
         $this->identifierRenamer->renameNode($methodCallNode, 'setClassName');
 
-        $generateCode = new MethodCall($methodCallNode->var, 'generateCode');
+        $generateCode = $this->builderFactory->methodCall($methodCallNode->var, 'generateCode');
         $this->addNodeAfterNode($generateCode, $methodCallNode);
 
         return $methodCallNode;
