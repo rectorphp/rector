@@ -15,7 +15,7 @@
         "nikic/php-parser": "4.0.x-dev",
         "phpdocumentor/reflection-docblock": "^4.3",
         "phpdocumentor/type-resolver": "^0.4",
-        "rector/better-reflection": "^3.0.6",
+        "rector/better-reflection": "^4.0",
         "sebastian/diff": "^3.0",
         "symfony/console": "^4.0",
         "symfony/dependency-injection": "^4.0",
