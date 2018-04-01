@@ -1,21 +1,19 @@
-includes:
-    - vendor/symplify/easy-coding-standard/config/psr2.neon
-    - vendor/symplify/easy-coding-standard/config/php71.neon
-    - vendor/symplify/easy-coding-standard/config/symplify.neon
-    - vendor/symplify/easy-coding-standard/config/common.neon
-    - vendor/symplify/easy-coding-standard/config/clean-code.neon
+imports:
+    - { resource: 'vendor/symplify/easy-coding-standard/config/psr2.yml' }
+    - { resource: 'vendor/symplify/easy-coding-standard/config/php71.yml' }
+    - { resource: 'vendor/symplify/easy-coding-standard/config/symplify.yml' }
+    - { resource: 'vendor/symplify/easy-coding-standard/config/common.yml' }
+    - { resource: 'vendor/symplify/easy-coding-standard/config/clean-code.yml' }
 
-checkers:
+services:
     # Metrics
-    PHP_CodeSniffer\Standards\Generic\Sniffs\Files\LineLengthSniff:
-        absoluteLineLimit: 120
     PHP_CodeSniffer\Standards\Generic\Sniffs\Metrics\CyclomaticComplexitySniff:
         absoluteComplexity: 6
     PHP_CodeSniffer\Standards\Generic\Sniffs\Metrics\NestingLevelSniff:
         absoluteNestingLevel: 3
 
     # Class should be Final or Abstract
-    - SlamCsFixer\FinalInternalClassFixer
+    SlamCsFixer\FinalInternalClassFixer: ~
 
     Symplify\CodingStandard\Sniffs\DependencyInjection\NoClassInstantiationSniff:
         extraAllowedClasses:
@@ -42,14 +40,13 @@ parameters:
     skip:
         Symplify\CodingStandard\Fixer\Php\ClassStringToClassConstantFixer:
             # classes might not exist
-            - */src/Rector/Contrib/*/*Rector.php
-            - */packages/NodeTypeResolver/**/PerNodeTypeResolver/**TypeResolver.php
-            - */packages/NodeTypeResolver/**/PerNodeTypeResolver/**TypeResolver/*Test.php
-            - packages/BetterReflection/src/Reflector/SmartClassReflector.php
-            - src/Rector/AbstractPHPUnitRector.php
+            - '*/src/Rector/Contrib/*/*Rector.php'
+            - '*/packages/NodeTypeResolver/**/PerNodeTypeResolver/**TypeResolver.php'
+            - '*/packages/NodeTypeResolver/**/PerNodeTypeResolver/**TypeResolver/*Test.php'
+            - 'packages/BetterReflection/src/Reflector/SmartClassReflector.php'
+            - 'src/Rector/AbstractPHPUnitRector.php'
 
-    skip_codes:
         # empty arguments passing
         PHP_CodeSniffer\Standards\PEAR\Sniffs\Functions\ValidDefaultValueSniff.NotAtEnd:
-            - src/Rector/Dynamic/Configuration/ArgumentReplacerRecipe.php
-            - src/Rector/Contrib/PHPUnit/SpecificMethod/AssertTrueFalseToSpecificMethodRector.php
+            - 'src/Rector/Dynamic/Configuration/ArgumentReplacerRecipe.php'
+            - 'src/Rector/Contrib/PHPUnit/SpecificMethod/AssertTrueFalseToSpecificMethodRector.php'
