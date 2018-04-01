@@ -36,7 +36,6 @@
             <directory suffix="*.php">packages/*/src</directory>
             <directory>src</directory>
             <exclude>
-                <directory>../vendor</directory>
                 <directory>../tests/**/*Source/**</directory>
             </exclude>
         </whitelist>

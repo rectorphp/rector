@@ -70,13 +70,11 @@ final class SourceLocatorFactory
             return $this->commonLocators;
         }
 
-        $this->commonLocators = [
+        return $this->commonLocators = [
             new AutoloadSourceLocator($this->locator),
             new PhpInternalSourceLocator($this->locator),
             $this->stubSourceLocator,
         ];
-
-        return $this->commonLocators;
     }
 
     /**

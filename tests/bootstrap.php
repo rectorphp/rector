@@ -2,4 +2,5 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
+// performance boost
 gc_disable();
