@@ -8,9 +8,20 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symplify\PackageBuilder\DependencyInjection\DefinitionCollector;
+use Symplify\PackageBuilder\DependencyInjection\DefinitionFinder;
 
 final class NodeTypeResolverCollectorCompilerPass implements CompilerPassInterface
 {
+    /**
+     * @var DefinitionCollector
+     */
+    private $definitionCollector;
+
+    public function __construct()
+    {
+        $this->definitionCollector = (new DefinitionCollector(new DefinitionFinder()));
+    }
+
     public function process(ContainerBuilder $containerBuilder): void
     {
         $this->collectPerNodeTypeResolversToNodeTypeResolver($containerBuilder);
@@ -19,7 +30,7 @@ final class NodeTypeResolverCollectorCompilerPass implements CompilerPassInterfa
 
     private function collectPerNodeTypeResolversToNodeTypeResolver(ContainerBuilder $containerBuilder): void
     {
-        DefinitionCollector::loadCollectorWithType(
+        $this->definitionCollector->loadCollectorWithType(
             $containerBuilder,
             NodeTypeResolver::class,
             PerNodeTypeResolverInterface::class,
@@ -29,7 +40,7 @@ final class NodeTypeResolverCollectorCompilerPass implements CompilerPassInterfa
 
     private function setNodeTypeResolverToAware(ContainerBuilder $containerBuilder): void
     {
-        DefinitionCollector::loadCollectorWithType(
+        $this->definitionCollector->loadCollectorWithType(
             $containerBuilder,
             NodeTypeResolverAwareInterface::class,
             NodeTypeResolver::class,

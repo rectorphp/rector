@@ -7,12 +7,13 @@ use Rector\RectorBuilder\Contract\RectorProviderInterface;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symplify\PackageBuilder\DependencyInjection\DefinitionCollector;
+use Symplify\PackageBuilder\DependencyInjection\DefinitionFinder;
 
 final class RectorProvidersCompilerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $containerBuilder): void
     {
-        DefinitionCollector::loadCollectorWithType(
+        (new DefinitionCollector(new DefinitionFinder()))->loadCollectorWithType(
             $containerBuilder,
             RectorNodeTraverser::class,
             RectorProviderInterface::class,
