@@ -54,9 +54,7 @@ final class PropertyBuilder
      */
     private function createDocWithVarAnnotation(array $propertyTypes): Doc
     {
-        return new Doc('/**'
-            . PHP_EOL . ' * @var ' . $this->implodeTypes($propertyTypes)
-            . PHP_EOL . ' */');
+        return new Doc('/**' . PHP_EOL . ' * @var ' . $this->implodeTypes($propertyTypes) . PHP_EOL . ' */');
     }
 
     private function doesPropertyAlreadyExist(Class_ $classNode, VariableInfo $variableInfo): bool

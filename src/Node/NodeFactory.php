@@ -179,10 +179,7 @@ final class NodeFactory
         string $propertyName,
         String_ $keyNode
     ): ArrayDimFetch {
-        return new ArrayDimFetch(
-            new PropertyFetch($exprNode, $propertyName),
-            $keyNode
-        );
+        return new ArrayDimFetch(new PropertyFetch($exprNode, $propertyName), $keyNode);
     }
 
     /**

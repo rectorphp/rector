@@ -47,11 +47,7 @@ final class ConsoleExceptionToErrorEventConstantRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        if ($this->classConstAnalyzer->isTypeAndNames(
-            $node,
-            self::CONSOLE_EVENTS_CLASS,
-            ['EXCEPTION']
-        )) {
+        if ($this->classConstAnalyzer->isTypeAndNames($node, self::CONSOLE_EVENTS_CLASS, ['EXCEPTION'])) {
             return true;
         }
 

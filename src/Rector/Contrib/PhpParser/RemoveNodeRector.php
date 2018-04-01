@@ -63,10 +63,7 @@ final class RemoveNodeRector extends AbstractRector
      */
     public function refactor(Node $returnNode): ?Node
     {
-        $returnNode->expr = $this->nodeFactory->createClassConstant(
-            'PhpParser\NodeTraverser',
-            'REMOVE_NODE'
-        );
+        $returnNode->expr = $this->nodeFactory->createClassConstant('PhpParser\NodeTraverser', 'REMOVE_NODE');
 
         return $returnNode;
     }

@@ -20,12 +20,7 @@ final class CollectorCompilerPass implements CompilerPassInterface
 
     private function collectCommandsToConsoleApplication(ContainerBuilder $containerBuilder): void
     {
-        DefinitionCollector::loadCollectorWithType(
-            $containerBuilder,
-            Application::class,
-            Command::class,
-            'add'
-        );
+        DefinitionCollector::loadCollectorWithType($containerBuilder, Application::class, Command::class, 'add');
     }
 
     private function collectRectorsToMainNodeTraverser(ContainerBuilder $containerBuilder): void
