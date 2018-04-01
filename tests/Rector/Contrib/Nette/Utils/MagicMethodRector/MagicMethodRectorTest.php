@@ -14,6 +14,10 @@ final class MagicMethodRectorTest extends AbstractRectorTestCase
      */
     public function test(string $wrong, string $fixed): void
     {
+        if (PHP_VERSION > '7.2.0') {
+            $this->markTestSkipped('This test needs PHP 7.1 or lower.');
+        }
+
         $this->doTestFileMatchesExpectedContent($wrong, $fixed);
     }
 
