@@ -23,8 +23,7 @@ final class ConstExprEvaluatorFactory
 
     private function resolveClassConstFetch(ClassConstFetch $classConstFetchNode): string
     {
-        $class = $classConstFetchNode->class->getAttribute(Attribute::RESOLVED_NAME)
-            ->toString();
+        $class = $classConstFetchNode->class->getAttribute(Attribute::RESOLVED_NAME)->toString();
 
         /** @var Identifier $identifierNode */
         $identifierNode = $classConstFetchNode->name;

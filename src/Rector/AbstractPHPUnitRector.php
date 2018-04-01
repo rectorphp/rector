@@ -2,21 +2,30 @@
 
 namespace Rector\Rector;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
-use Rector\Node\Attribute;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 
 abstract class AbstractPHPUnitRector extends AbstractRector
 {
     /**
-     * Check if the file is a PHPUnit TestCase. By default, it should end with "Test", as it is the standard.
-     *
-     * @see https://phpunit.de/getting-started-with-phpunit.html
+     * @var NodeTypeResolver
      */
+    private $nodeTypeResolver;
+
+    /**
+     * Nasty magic, unable to do that in config autowire _instanceof calls.
+     *
+     * @required
+     */
+    public function setNodeTypeResolver(NodeTypeResolver $nodeTypeResolver): void
+    {
+        $this->nodeTypeResolver = $nodeTypeResolver;
+    }
+
     protected function isInTestClass(Node $node): bool
     {
-        $className = (string) $node->getAttribute(Attribute::CLASS_NAME);
+        $nodeResolved = $this->nodeTypeResolver->resolve($node);
 
-        return Strings::endsWith($className, 'Test');
+        return ! array_intersect(['PHPUnit\Framework\TestCase', 'PHPUnit_Framework_TestCase'], $nodeResolved);
     }
 }
