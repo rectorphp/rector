@@ -56,14 +56,6 @@ final class NodeFactory
     }
 
     /**
-     * Creates "false"
-     */
-    public function createFalseConstant(): ConstFetch
-    {
-        return BuilderHelpers::normalizeValue(false);
-    }
-
-    /**
      * Creates "\SomeClass::CONSTANT"
      */
     public function createClassConstant(string $className, string $constantName): ClassConstFetch
