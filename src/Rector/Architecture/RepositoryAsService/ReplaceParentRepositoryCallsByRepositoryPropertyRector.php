@@ -8,6 +8,9 @@ use PhpParser\Node\Identifier;
 use Rector\BetterReflection\Reflector\SmartClassReflector;
 use Rector\Node\PropertyFetchNodeFactory;
 use Rector\Rector\AbstractRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
+use Symfony\Component\DependencyInjection\Definition;
 
 final class ReplaceParentRepositoryCallsByRepositoryPropertyRector extends AbstractRector
 {
@@ -53,6 +56,7 @@ final class ReplaceParentRepositoryCallsByRepositoryPropertyRector extends Abstr
     }
 
     /**
+     * @todo should be part of reflection
      * @return string[]
      */
     private function getEntityRepositoryPublicMethodNames(): array
@@ -64,5 +68,41 @@ final class ReplaceParentRepositoryCallsByRepositoryPropertyRector extends Abstr
         }
 
         return [];
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition(
+            'Handles method calls in child of Doctrine EntityRepository and moves them to "$this->repository" property.',
+            new CodeSample(
+<<<'SAMPLE'
+<?php
+
+use Doctrine\ORM\EntityRepository;
+    
+class SomeRepository extends EntityRepository
+{
+    public function someMethod()
+    {
+        return $this->findAll();
+    }
+}
+SAMPLE
+        ,
+<<<'SAMPLE_TWO'
+<?php
+
+use Doctrine\ORM\EntityRepository;
+    
+class SomeRepository extends EntityRepository
+{
+    public function someMethod()
+    {
+        return $this->repository->findAll();
+    }
+}
+SAMPLE_TWO
+            )
+        );
     }
 }
