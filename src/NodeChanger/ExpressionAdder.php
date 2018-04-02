@@ -64,7 +64,12 @@ final class ExpressionAdder
             Expression::class
         );
 
+        if ($positionExpressionNode === null) {
+            $positionExpressionNode = $positionNode;
+        }
+
         $expressionsToAdd = [$expressionToAdd];
+
         if ($this->expressionsToAdd->contains($positionExpressionNode)) {
             $expressionsToAdd = array_merge($this->expressionsToAdd[$positionExpressionNode], $expressionsToAdd);
         }
