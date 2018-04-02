@@ -12,7 +12,7 @@
         "jean85/pretty-package-versions": "^1.1",
         "nette/robot-loader": "^3.0",
         "nette/utils": "^2.5",
-        "nikic/php-parser": "4.0.x-dev",
+        "nikic/php-parser": "^4.0",
         "phpdocumentor/reflection-docblock": "^4.3",
         "phpdocumentor/type-resolver": "^0.4",
         "rector/better-reflection": "^4.0",
