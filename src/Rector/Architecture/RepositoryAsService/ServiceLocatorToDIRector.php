@@ -63,7 +63,7 @@ final class ServiceLocatorToDIRector extends AbstractRector
             return false;
         }
 
-        return ! Strings::endsWith($node->getAttribute(Attribute::CLASS_NAME), 'Repository');
+        return ! Strings::endsWith($className, 'Repository');
     }
 
     public function refactor(Node $node): ?Node
@@ -98,20 +98,17 @@ final class ServiceLocatorToDIRector extends AbstractRector
             $entityFqnOrAlias
         );
 
-        if ($repositoryClassName === null) {
-            throw new RectorProviderException(sprintf(
-                'A repository was not provided for "%s" entity by your "%s" class.',
-                $entityFqnOrAlias,
-                get_class($this->repositoryForDoctrineEntityProvider)
-            ));
+        if ($repositoryClassName !== null) {
+            return $repositoryClassName;
         }
 
-        return $repositoryClassName;
+        throw new RectorProviderException(sprintf(
+            'A repository was not provided for "%s" entity by your "%s" class.',
+            $entityFqnOrAlias,
+            get_class($this->repositoryForDoctrineEntityProvider)
+        ));
     }
 
-    /**
-     * @throws ShouldNotHappenException
-     */
     private function entityFqnOrAlias(Node $node): string
     {
         $repositoryArgument = $node->args[0]->value;
