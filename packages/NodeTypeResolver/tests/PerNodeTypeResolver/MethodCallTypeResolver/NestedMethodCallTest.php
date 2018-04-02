@@ -17,10 +17,6 @@ final class NestedMethodCallTest extends AbstractNodeTypeResolverTest
      */
     public function test(string $file, int $nodePosition, string $methodName, array $expectedTypes): void
     {
-        if (PHP_VERSION >= '7.2.0') {
-            $this->markTestSkipped('This test needs PHP 7.1 or lower.');
-        }
-
         /** @var MethodCall[] $methodCallNodes */
         $methodCallNodes = $this->getNodesForFileOfType($file, MethodCall::class);
 
@@ -66,10 +62,32 @@ final class NestedMethodCallTest extends AbstractNodeTypeResolverTest
                 'Symfony\Component\DependencyInjection\TaggedContainerInterface',
                 'Symfony\Component\DependencyInjection\Container',
             ]],
+        ];
+    }
 
+    /**
+     * @dataProvider provideDataForPhp71()
+     * @param string[] $expectedTypes
+     */
+    public function testPhp71(string $file, int $nodePosition, string $methodName, array $expectedTypes): void
+    {
+        if (PHP_VERSION >= '7.2.0') {
+            $this->markTestSkipped('This test needs PHP 7.1 or lower.');
+        }
+
+        $this->test($file, $nodePosition, $methodName, $expectedTypes);
+    }
+
+    /**
+     * @return mixed[][]
+     */
+    public function provideDataForPhp71(): array
+    {
+        return [
             # nested method calls
             [__DIR__ . '/NestedMethodCallSource/NestedMethodCalls.php.inc', 0, 'getParameters', ['Nette\DI\Container']],
             [__DIR__ . '/NestedMethodCallSource/NestedMethodCalls.php.inc', 1, 'addService', ['Nette\DI\Container']],
+            # nested method calls
             [__DIR__ . '/NestedMethodCallSource/NestedMethodCalls.php.inc', 2, 'createContainer', [
                 'Nette\Config\Configurator', 'Nette\Object',
             ]],
