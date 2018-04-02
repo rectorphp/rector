@@ -14,7 +14,6 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
@@ -56,21 +55,13 @@ final class NodeFactory
     }
 
     /**
-     * Creates "false"
-     */
-    public function createFalseConstant(): ConstFetch
-    {
-        return BuilderHelpers::normalizeValue(false);
-    }
-
-    /**
      * Creates "\SomeClass::CONSTANT"
      */
     public function createClassConstant(string $className, string $constantName): ClassConstFetch
     {
         $classNameNode = new FullyQualified($className);
 
-        return new ClassConstFetch($classNameNode, $constantName);
+        return $this->builderFactory->classConstFetch($classNameNode, $constantName);
     }
 
     /**
@@ -80,17 +71,7 @@ final class NodeFactory
     {
         $nameNode = new FullyQualified($className);
 
-        return new ClassConstFetch($nameNode, 'class');
-    }
-
-    /**
-     * Creates "SomeClass::class"
-     */
-    public function createRelativeClassConstantReference(string $className): ClassConstFetch
-    {
-        $nameNode = new Name($className);
-
-        return new ClassConstFetch($nameNode, 'class');
+        return $this->builderFactory->classConstFetch($nameNode, 'class');
     }
 
     /**
@@ -247,14 +228,6 @@ final class NodeFactory
     public function createVariable(string $name): Variable
     {
         return new Variable($name);
-    }
-
-    /**
-     * @param mixed[] $arguments
-     */
-    public function createStaticMethodCallWithArgs(string $class, string $method, array $arguments): StaticCall
-    {
-        return new StaticCall(new Name($class), $method, $arguments);
     }
 
     public function createTypeName(string $name): Name

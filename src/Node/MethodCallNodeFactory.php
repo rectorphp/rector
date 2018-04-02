@@ -2,6 +2,7 @@
 
 namespace Rector\Node;
 
+use PhpParser\BuilderFactory;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
@@ -15,9 +16,15 @@ final class MethodCallNodeFactory
      */
     private $nodeFactory;
 
-    public function __construct(NodeFactory $nodeFactory)
+    /**
+     * @var BuilderFactory
+     */
+    private $builderFactory;
+
+    public function __construct(NodeFactory $nodeFactory, BuilderFactory $builderFactory)
     {
         $this->nodeFactory = $nodeFactory;
+        $this->builderFactory = $builderFactory;
     }
 
     /**
@@ -27,7 +34,7 @@ final class MethodCallNodeFactory
     {
         $variableNode = $this->nodeFactory->createVariable($variableName);
 
-        return new MethodCall($variableNode, $methodName);
+        return $this->builderFactory->methodCall($variableNode, $methodName);
     }
 
     /**
@@ -39,7 +46,7 @@ final class MethodCallNodeFactory
             $exprNode = $this->clonePropertyFetch($exprNode);
         }
 
-        $methodCallNode = new MethodCall($exprNode, $methodName);
+        $methodCallNode = $this->builderFactory->methodCall($exprNode, $methodName);
         $exprNode->setAttribute(Attribute::PARENT_NODE, $methodCallNode);
 
         return $methodCallNode;

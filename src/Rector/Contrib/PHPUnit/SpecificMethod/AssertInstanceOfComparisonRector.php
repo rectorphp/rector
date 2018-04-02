@@ -2,10 +2,10 @@
 
 namespace Rector\Rector\Contrib\PHPUnit\SpecificMethod;
 
+use PhpParser\BuilderFactory;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\MethodCall;
-use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractPHPUnitRector;
@@ -32,18 +32,18 @@ final class AssertInstanceOfComparisonRector extends AbstractPHPUnitRector
     private $identifierRenamer;
 
     /**
-     * @var NodeFactory
+     * @var BuilderFactory
      */
-    private $nodeFactory;
+    private $builderFactory;
 
     public function __construct(
         MethodCallAnalyzer $methodCallAnalyzer,
         IdentifierRenamer $identifierRenamer,
-        NodeFactory $nodeFactory
+        BuilderFactory $builderFactory
     ) {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
-        $this->nodeFactory = $nodeFactory;
+        $this->builderFactory = $builderFactory;
     }
 
     public function isCandidate(Node $node): bool
@@ -81,13 +81,13 @@ final class AssertInstanceOfComparisonRector extends AbstractPHPUnitRector
         /** @var Instanceof_ $comparison */
         $comparison = $oldArguments[0]->value;
 
-        $className = $comparison->class->toCodeString();
+        $class = $comparison->class;
         $argument = $comparison->expr;
 
         unset($oldArguments[0]);
 
         $methodCallNode->args = array_merge([
-            $this->nodeFactory->createRelativeClassConstantReference($className),
+            $this->builderFactory->classConstFetch($class, 'class'),
             $argument,
         ], $oldArguments);
     }

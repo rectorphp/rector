@@ -3,9 +3,8 @@
 namespace Rector\Rector\Architecture\RepositoryAsService;
 
 use Nette\Utils\Strings;
+use PhpParser\BuilderFactory;
 use PhpParser\Node;
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Expression;
@@ -40,16 +39,23 @@ final class MoveRepositoryFromParentToConstructorRector extends AbstractRector
      */
     private $entityForDoctrineRepositoryProvider;
 
+    /**
+     * @var BuilderFactory
+     */
+    private $builderFactory;
+
     public function __construct(
         PropertyBuilder $propertyBuilder,
         ConstructorMethodBuilder $constructorMethodBuilder,
         NodeFactory $nodeFactory,
-        EntityForDoctrineRepositoryProviderInterface $entityForDoctrineRepositoryProvider
+        EntityForDoctrineRepositoryProviderInterface $entityForDoctrineRepositoryProvider,
+        BuilderFactory $builderFactory
     ) {
         $this->propertyBuilder = $propertyBuilder;
         $this->constructorMethodBuilder = $constructorMethodBuilder;
         $this->nodeFactory = $nodeFactory;
         $this->entityForDoctrineRepositoryProvider = $entityForDoctrineRepositoryProvider;
+        $this->builderFactory = $builderFactory;
     }
 
     public function isCandidate(Node $node): bool
@@ -113,10 +119,10 @@ final class MoveRepositoryFromParentToConstructorRector extends AbstractRector
 
         $entityClassConstantReferenceNode = $this->nodeFactory->createClassConstantReference($entityClassName);
 
-        $getRepositoryMethodCallNode = new MethodCall(
+        $getRepositoryMethodCallNode = $this->builderFactory->methodCall(
             new Variable('entityManager'),
             'getRepository',
-            [new Arg($entityClassConstantReferenceNode)]
+            [$entityClassConstantReferenceNode]
         );
 
         return $this->nodeFactory->createPropertyAssignmentWithExpr('repository', $getRepositoryMethodCallNode);
