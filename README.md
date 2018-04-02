@@ -40,23 +40,12 @@ composer require --dev rector/rector:'dev-master'
 
 ### Do you Have Conflicts?
 
-Since Rector **uses project's autoload to analyze type of elements**, it cannot be installed as project in standalone directory but **needs to be added as dependency**. Here [`bamarni/composer-bin-plugin`](https://github.com/bamarni/composer-bin-plugin) becomes useful:
+Since Rector **uses project's autoload to analyze type of elements**, it cannot be installed as project in standalone directory but needs to be added as dependency. Here [`bamarni/composer-bin-plugin`](https://github.com/bamarni/composer-bin-plugin) becomes useful.
 
-```bash
-composer require bamarni/composer-bin-plugin --dev
-```
+In case you have conflicts with different `nikic/php-parser` version, e.g. while using PHPStan, you can:
 
-Then, require Rector using `composer bin`:
-
-```bash
-composer bin rector require --dev rector/rector:'dev-master'
-```
-
-And Rector is accessible as:
-
-```bash
-vendor/bin/rector
-```
+ - either use [phpstan-shim](https://github.com/phpstan/phpstan-shim) that solves this for PHPStan
+ - or help with similar [prefixed PHAR for Rector](https://github.com/rectorphp/rector/issues/177)
 
 ### Extra Autoloading
 
