@@ -8,6 +8,8 @@ use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
 final class BuilderRector extends AbstractRector
 {
@@ -116,5 +118,15 @@ final class BuilderRector extends AbstractRector
         }
 
         return $node;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition(
+            'This can handle class renames, method renames and argument changes, based on custom configuration.',
+            [
+                new CodeSample('<?php new OldClass;', '<?php new NewClass;')
+            ]
+        );
     }
 }
