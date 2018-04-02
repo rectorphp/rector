@@ -6,9 +6,9 @@ use Rector\DependencyInjection\ContainerFactory;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symplify\PackageBuilder\Configuration\ConfigFilePathHelper;
-use Symplify\PackageBuilder\Configuration\LevelConfigShortcutFinder;
-use Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
+use Symplify\PackageBuilder\Configuration\ConfigFileFinder;
+use Symplify\PackageBuilder\Configuration\LevelFileFinder;
+use Symplify\PackageBuilder\Console\ThrowableRenderer;
 
 // Performance boost
 gc_disable();
@@ -18,12 +18,12 @@ require_once __DIR__ . '/rector_bootstrap.php';
 
 try {
     // 1. Detect configuration from --level
-    $configFile = (new LevelConfigShortcutFinder())->resolveLevel(new ArgvInput(), __DIR__ . '/../config/level');
+    $configFile = (new LevelFileFinder())->detectFromInputAndDirectory(new ArgvInput(), __DIR__ . '/../config/level');
 
     // 2. Or from --config
     if ($configFile === null) {
-        ConfigFilePathHelper::detectFromInput('rector', new ArgvInput());
-        $configFile = ConfigFilePathHelper::provide('rector', 'rector.yml');
+        ConfigFileFinder::detectFromInput('rector', new ArgvInput());
+        $configFile = ConfigFileFinder::provide('rector', 'rector.yml');
     }
 
     // 2. Build DI container
@@ -44,12 +44,6 @@ try {
     $statusCode = $application->run($input, $output);
     exit($statusCode);
 } catch (Throwable $throwable) {
-    $symfonyStyle = SymfonyStyleFactory::create();
-    $symfonyStyle->error(sprintf(
-        '%s in %s on line %d',
-        $throwable->getMessage(),
-        $throwable->getFile(),
-        $throwable->getLine()
-    ));
+    (new ThrowableRenderer())->render($throwable);
     exit($throwable->getCode());
 }

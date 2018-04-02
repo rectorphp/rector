@@ -58,11 +58,7 @@ final class SetInjectToAddTagRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        if (! $this->methodCallAnalyzer->isTypeAndMethods(
-            $node,
-            $this->relatedClass,
-            [$this->oldMethod]
-        )) {
+        if (! $this->methodCallAnalyzer->isTypeAndMethods($node, $this->relatedClass, [$this->oldMethod])) {
             return false;
         }
 

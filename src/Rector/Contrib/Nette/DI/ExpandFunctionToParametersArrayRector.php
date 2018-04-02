@@ -78,10 +78,6 @@ final class ExpandFunctionToParametersArrayRector extends AbstractRector
         $argument = $methodCallNode->args[0]->value;
         $argument->value = Strings::trim($argument->value, '%');
 
-        return $this->nodeFactory->createVariablePropertyArrayFetch(
-            $methodCallNode->var,
-            'parameters',
-            $argument
-        );
+        return $this->nodeFactory->createVariablePropertyArrayFetch($methodCallNode->var, 'parameters', $argument);
     }
 }

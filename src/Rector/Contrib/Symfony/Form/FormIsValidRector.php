@@ -43,11 +43,7 @@ final class FormIsValidRector extends AbstractRector
             return false;
         }
 
-        if (! $this->methodCallAnalyzer->isTypeAndMethod(
-            $node,
-            'Symfony\Component\Form\Form',
-            'isValid'
-        )) {
+        if (! $this->methodCallAnalyzer->isTypeAndMethod($node, 'Symfony\Component\Form\Form', 'isValid')) {
             return false;
         }
 
