@@ -18,42 +18,12 @@ services:
                 'Sylius\Component\Taxonomy\Model\TaxonInterface':
                     'getParents ': 'getAncestors'
 
-    # @todo, use this and add new argument to a method
-#    Rector\Rector\Dynamic\ArgumentRector:
-#        $argumentByMethod:
-#             # Add state argument to the getLastPayment($state), where $state is target last payment state. getLastPayment(PaymentInterface::STATE_NEW)
-#            -
-#                type: 'add'
-#                class: 'Sylius\Component\Core\Model\OrderInterface'
-#                method: 'getLastPayment'
-#                position: 0 # as append | default value is 0, config argument need not be listed
-#                typehint: false # default value is false, config argument need not be listed
-#                property: '$state'
-#                default_value: PaymentInterface::STATE_NEW
-
     Rector\Rector\Dynamic\ParentTypehintedArgumentRector:
         $typehintForArgumentByMethodAndClass:
             # Constructor of Sylius\Bundle\CoreBundle\Context\SessionAndChannelBasedCartContext has been changed to use Sylius\Component\Core\Storage\CartStorageInterface
             'Sylius\Bundle\CoreBundle\Context\SessionAndChannelBasedCartContext':
                 '__construct':
                     '$cartStorage': 'Sylius\Component\Core\Storage\CartStorageInterface'
-
-    # @todo, use this and change typehint of return value
-#    Rector\Rector\Dynamic\ReturnTypehintRector:
-#            $returnTypehintByMethod:
-#                # OrderInterface::getAdjustmentsRecursively and OrderItemInterface::getAdjustmentsRecursively return types changed from array to Collection
-#                'Sylius\Component\Order\Model\OrderInterface':
-#                    'getAdjustmentsRecursively':
-#                        'array': 'Doctrine\Common\Collections\Collection'
-#
-#                'Sylius\Component\Order\Model\OrderItemInterface':
-#                    'getAdjustmentsRecursively':
-#                        'array': 'Doctrine\Common\Collections\Collection'
-#
-#                # PrioritizedServiceRegistryInterface::all method return type changed from Zend's PriorityQueue to iterable
-#                'Sylius\Component\Registry\PrioritizedServiceRegistryInterface':
-#                    'all':
-#                        'Zend\Stdlib\PriorityQueue': 'iterable'
 
     Rector\Rector\Dynamic\ClassReplacerRector:
         $oldToNewClasses:
