@@ -6,8 +6,10 @@ use PHPUnit\Framework\TestCase;
 
 final class MyTestCsae extends TestCase
 {
+    /**
+     */
     public function provideData(): \Iterator
     {
-        yield ['item'];
+        (yield ['item']);
     }
 }

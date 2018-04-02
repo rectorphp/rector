@@ -3,33 +3,27 @@
 namespace Rector\Rector\Architecture\PHPUnit;
 
 use Nette\Utils\Strings;
-use PhpParser\BuilderFactory;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Yield_;
+use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Node\Attribute;
-use Rector\Node\NodeFactory;
 use Rector\Rector\AbstractPHPUnitRector;
+use Rector\ReflectionDocBlock\NodeAnalyzer\DocBlockAnalyzer;
 
 final class ArrayToYieldDataProviderRector extends AbstractPHPUnitRector
 {
     /**
-     * @var NodeFactory
+     * @var DocBlockAnalyzer
      */
-    private $nodeFactory;
+    private $docBlockAnalyzer;
 
-    /**
-     * @var BuilderFactory
-     */
-    private $builderFactory;
-
-    public function __construct(
-        NodeFactory $nodeFactory,
-        BuilderFactory $builderFactory
-    ) {
-        $this->nodeFactory = $nodeFactory;
-        $this->builderFactory = $builderFactory;
+    public function __construct(DocBlockAnalyzer $docBlockAnalyzer)
+    {
+        $this->docBlockAnalyzer = $docBlockAnalyzer;
     }
 
     public function isCandidate(Node $node): bool
@@ -38,7 +32,7 @@ final class ArrayToYieldDataProviderRector extends AbstractPHPUnitRector
             return false;
         }
 
-        if (! $node instanceof Return_) {
+        if (! $node instanceof ClassMethod) {
             return false;
         }
 
@@ -46,7 +40,7 @@ final class ArrayToYieldDataProviderRector extends AbstractPHPUnitRector
             return false;
         }
 
-        if (! $this->isReturnArrayOfArrays($node)) {
+        if (! $this->hasClassMethodReturnArrayOfArrays($node)) {
             return false;
         }
 
@@ -54,46 +48,70 @@ final class ArrayToYieldDataProviderRector extends AbstractPHPUnitRector
     }
 
     /**
-     * @param Return_ $returnNode
+     * @param ClassMethod $classMethodNode
      */
-    public function refactor(Node $returnNode): ?Node
+    public function refactor(Node $classMethodNode): ?Node
     {
-        /** @var Array_ $arrayNode */
-        $arrayNode = $returnNode->expr;
+        // 1. change return typehint
+        $classMethodNode->returnType = new FullyQualified('Iterator');
 
-        foreach ($arrayNode->items as $arrayItem) {
-            $yieldNode = new Yield_($arrayItem->value);
+        $yieldNodes = [];
 
-            $this->addNodeAfterNode($yieldNode, $returnNode);
+        // 2. turn array items to yield
+        foreach ($classMethodNode->stmts as $key => $stmt) {
+            if (! $stmt instanceof Return_) {
+                continue;
+            }
+
+            /** @var Array_ $arrayNode */
+            $arrayNode = $stmt->expr;
+
+            foreach ($arrayNode->items as $arrayItem) {
+                $yieldNodes[] = new Expression(new Yield_($arrayItem->value));
+            }
+
+            unset($classMethodNode->stmts[$key]);
         }
 
-        $this->removeNode = true;
+        $classMethodNode->stmts = array_merge($classMethodNode->stmts, $yieldNodes);
 
-        return $returnNode;
+        // 3. remove doc block
+        $this->docBlockAnalyzer->removeAnnotationFromNode($classMethodNode, 'return', '');
+
+        return $classMethodNode;
     }
 
-    private function isInProvideMethod(Node $node): bool
+    private function isInProvideMethod(ClassMethod $classMethodNode): bool
     {
-        $methodName = $node->getAttribute(Attribute::METHOD_NAME);
-
-        return (bool) Strings::match((string) $methodName, '#^provide*#');
+        return (bool) Strings::match($classMethodNode->name->toString(), '#^provide*#');
     }
 
-    private function isReturnArrayOfArrays(Return_ $returnNode): bool
+    private function hasClassMethodReturnArrayOfArrays(ClassMethod $classMethodNode): bool
     {
-        if (! $returnNode->expr instanceof Array_) {
+        $statements = $classMethodNode->stmts;
+        if (! $statements) {
             return false;
-        };
+        }
 
-        /** @var Array_ $arrayNode */
-        $arrayNode = $returnNode->expr;
+        foreach ($statements as $statement) {
+            if ($statement instanceof Return_) {
+                if (! $statement->expr instanceof Array_) {
+                    return false;
+                }
 
-        foreach ($arrayNode->items as $arrayItem) {
-            if (! $arrayItem->value instanceof Array_) {
-                return false;
+                /** @var Array_ $arrayNode */
+                $arrayNode = $statement->expr;
+
+                foreach ($arrayNode->items as $arrayItem) {
+                    if (! $arrayItem->value instanceof Array_) {
+                        return false;
+                    }
+                }
+
+                return true;
             }
         }
 
-        return true;
+        return false;
     }
 }
