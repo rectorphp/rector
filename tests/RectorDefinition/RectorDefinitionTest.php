@@ -11,9 +11,8 @@ final class RectorDefinitionTest extends TestCase
     public function test(): void
     {
         $rectorDefinition = new RectorDefinition('Some description', [
-            new CodeSample('Code before', 'Code after')
+            new CodeSample('Code before', 'Code after'),
         ]);
-
 
         $this->assertSame('Some description', $rectorDefinition->getDescription());
 

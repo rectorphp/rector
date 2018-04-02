@@ -8,10 +8,11 @@ final class RectorDefinition
      * @var string
      */
     private $description;
+
     /**
      * @var array|CodeSample[]
      */
-    private $codeSamples;
+    private $codeSamples = [];
 
     /**
      * @param CodeSample[] $codeSamples
@@ -19,7 +20,8 @@ final class RectorDefinition
     public function __construct(string $description, array $codeSamples)
     {
         // array type check
-        array_walk($codeSamples, function (CodeSample $codeSample) {});
+        array_walk($codeSamples, function (CodeSample $codeSample): void {
+        });
 
         $this->description = $description;
         $this->codeSamples = $codeSamples;
