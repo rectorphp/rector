@@ -24,6 +24,7 @@ services:
             - 'Rector\BetterReflection\SourceLocator\Located\LocatedSource'
             - 'phpDocumentor\Reflection\Types\*'
             - 'Rector\Reporting\FileDiff'
+            - 'Rector\RectorDefinition\*'
 
     Symplify\CodingStandard\Fixer\Naming\PropertyNameMatchingTypeFixer:
         extra_skipped_classes:
@@ -32,7 +33,6 @@ services:
 
     Symplify\CodingStandard\Fixer\Naming\ClassNameSuffixByParentFixer:
         parent_types_to_suffixes:
-            '*Command': 'Command'
             '*RectorProvider': 'RectorProvider'
             '*Rector': 'Rector'
 
