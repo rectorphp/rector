@@ -4,7 +4,9 @@ namespace Rector\NodeAnalyzer;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 
 final class MethodArgumentAnalyzer
@@ -41,5 +43,23 @@ final class MethodArgumentAnalyzer
         }
 
         return $node->args[0]->value instanceof String_;
+    }
+
+    public function isMethodSecondArgumentNull(MethodCall $methodCallNode): bool
+    {
+        if (! $this->hasMethodSecondArgument($methodCallNode)) {
+            return false;
+        }
+
+        /** @var MethodCall $methodCallNode */
+        $value = $methodCallNode->args[1]->value;
+        if (! $value instanceof ConstFetch) {
+            return false;
+        }
+
+        /** @var Name $nodeName */
+        $nodeName = $value->name;
+
+        return $nodeName->toLowerString() === 'null';
     }
 }
