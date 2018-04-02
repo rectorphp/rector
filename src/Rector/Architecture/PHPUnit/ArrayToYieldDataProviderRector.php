@@ -2,6 +2,7 @@
 
 namespace Rector\Rector\Architecture\PHPUnit;
 
+use Iterator;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
@@ -10,7 +11,6 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
-use Rector\Node\Attribute;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\ReflectionDocBlock\NodeAnalyzer\DocBlockAnalyzer;
 
@@ -53,7 +53,7 @@ final class ArrayToYieldDataProviderRector extends AbstractPHPUnitRector
     public function refactor(Node $classMethodNode): ?Node
     {
         // 1. change return typehint
-        $classMethodNode->returnType = new FullyQualified('Iterator');
+        $classMethodNode->returnType = new FullyQualified(Iterator::class);
 
         $yieldNodes = [];
 
@@ -99,19 +99,25 @@ final class ArrayToYieldDataProviderRector extends AbstractPHPUnitRector
                     return false;
                 }
 
-                /** @var Array_ $arrayNode */
-                $arrayNode = $statement->expr;
-
-                foreach ($arrayNode->items as $arrayItem) {
-                    if (! $arrayItem->value instanceof Array_) {
-                        return false;
-                    }
-                }
-
-                return true;
+                return $this->isArrayOfArrays($statement->expr);
             }
         }
 
         return false;
+    }
+
+    private function isArrayOfArrays(Node $node): bool
+    {
+        if (! $node instanceof Array_) {
+            return false;
+        }
+
+        foreach ($node->items as $arrayItem) {
+            if (! $arrayItem->value instanceof Array_) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
