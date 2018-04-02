@@ -1,0 +1,9 @@
+<?php
+
+namespace Nette\DI;
+
+class Container
+{
+    public $parameters;
+
+}
