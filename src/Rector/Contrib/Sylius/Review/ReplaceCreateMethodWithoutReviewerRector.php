@@ -9,9 +9,6 @@ use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractRector;
 
-/**
- * @author Eduard Barnáš <barnas@neoweb.sk>
- */
 final class ReplaceCreateMethodWithoutReviewerRector extends AbstractRector
 {
     /**
