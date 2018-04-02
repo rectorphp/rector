@@ -74,12 +74,13 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
     }
 
     /**
-     * @return bool|Node
+     * @return bool|int|Node
      */
     public function leaveNode(Node $node)
     {
         if ($this->removeNode) {
             $this->removeNode = false;
+
             return NodeTraverser::REMOVE_NODE;
         }
 
