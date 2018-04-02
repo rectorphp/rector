@@ -10,6 +10,10 @@ parameters:
         # subtype
         - '#Property PhpParser\\Node\\Param::\$type \(PhpParser\\Node\\Name|PhpParser\\Node\\NullableType\|string\|null\) does not accept PhpParser\\Node\\Identifier|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType#' # 1
 
+        # false positive
+        - '#Parameter \#1 \$methodCallNode of method Rector\\NodeAnalyzer\\MethodArgumentAnalyzer::isMethodSecondArgumentNull\(\) expects PhpParser\\Node\\Expr\\MethodCall, PhpParser\\Node given#'
+        - '#Call to an undefined method PhpParser\\Node\\Name::toLowerString\(\)#'
+
         # known values
         - '#Method Rector\\Node\\NodeFactory::create(Null|False)Constant\(\) should return PhpParser\\Node\\Expr\\ConstFetch but returns PhpParser\\Node\\Expr#' # 2
         - '#Method Rector\\Node\\NodeFactory::createNamespace\(\) should return PhpParser\\Node\\Stmt\\Namespace_ but returns PhpParser\\Node#' # 1

@@ -3,6 +3,7 @@
 namespace Rector\Rector\Contrib\Sylius\Review;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\MethodCall;
 use Rector\NodeAnalyzer\MethodArgumentAnalyzer;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
@@ -58,16 +59,19 @@ final class ReplaceCreateMethodWithoutReviewerRector extends AbstractRector
             || $this->methodArgumentAnalyzer->isMethodSecondArgumentNull($node);
     }
 
-    public function refactor(Node $node): ?Node
+    /**
+     * @param MethodCall $methodCallNode
+     */
+    public function refactor(Node $methodCallNode): ?Node
     {
-        $this->identifierRenamer->renameNode($node, $this->newMethodName);
+        $this->identifierRenamer->renameNode($methodCallNode, $this->newMethodName);
 
-        if ($this->methodArgumentAnalyzer->hasMethodSecondArgument($node)) {
-            $node->args = [
-                array_shift($node->args),
+        if ($this->methodArgumentAnalyzer->hasMethodSecondArgument($methodCallNode)) {
+            $methodCallNode->args = [
+                array_shift($methodCallNode->args),
             ];
         }
 
-        return $node;
+        return $methodCallNode;
     }
 }

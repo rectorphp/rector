@@ -45,14 +45,14 @@ final class MethodArgumentAnalyzer
         return $node->args[0]->value instanceof String_;
     }
 
-    public function isMethodSecondArgumentNull(Node $node): bool
+    public function isMethodSecondArgumentNull(MethodCall $methodCallNode): bool
     {
-        if (! $this->hasMethodSecondArgument($node)) {
+        if (! $this->hasMethodSecondArgument($methodCallNode)) {
             return false;
         }
 
-        /** @var MethodCall $node */
-        $value = $node->args[1]->value;
+        /** @var MethodCall $methodCallNode */
+        $value = $methodCallNode->args[1]->value;
         if (! $value instanceof ConstFetch) {
             return false;
         }
