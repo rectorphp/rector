@@ -59,7 +59,7 @@ final class AssertPropertyExistsRector extends AbstractPHPUnitRector
             return false;
         }
 
-        /** @var MethodCall $methodCallAnalyzer */
+        /** @var MethodCall $methodCallNode */
         $methodCallNode = $node;
 
         /** @var FuncCall $firstArgumentValue */
@@ -74,17 +74,14 @@ final class AssertPropertyExistsRector extends AbstractPHPUnitRector
     }
 
     /**
-     * @var MethodCall
+     * @param MethodCall $methodCallNode
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        $oldMethodName = $methodCallNode->name->toString();
-
-        if ($oldMethodName === 'assertTrue') {
-            $this->identifierRenamer->renameNode($methodCallNode, 'assertClassHasAttribute');
-        } else {
-            $this->identifierRenamer->renameNode($methodCallNode, 'assertClassNotHasAttribute');
-        }
+        $this->identifierRenamer->renameNodeWithMap($methodCallNode, [
+            'assertTrue' => 'assertClassHasAttribute',
+            'assertFalse' => 'assertClassNotHasAttribute',
+        ]);
 
         /** @var Identifier $oldArguments */
         $oldArguments = $methodCallNode->args;

@@ -90,12 +90,14 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractPHPUnitRector
             return false;
         }
 
-        /** @var MethodCall $node */
-        if (! isset($node->args[0])) {
+        /** @var MethodCall $methodCallNode */
+        $methodCallNode = $node;
+
+        if (! isset($methodCallNode->args[0])) {
             return false;
         }
 
-        $firstArgumentValue = $node->args[0]->value;
+        $firstArgumentValue = $methodCallNode->args[0]->value;
 
         $funcCallName = $this->resolveFunctionName($firstArgumentValue);
         if ($funcCallName === null) {
@@ -154,7 +156,9 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractPHPUnitRector
                 unset($funcCallOrEmptyNodeArgs[2]);
                 $newArguments = array_merge($funcCallOrEmptyNodeArgs, $oldArguments);
             } elseif ($funcCallOrEmptyNodeName === 'is_a') {
-                $newArguments = array_merge(array_reverse($funcCallOrEmptyNodeArgs), $oldArguments);
+                [$object, $class] = $funcCallOrEmptyNodeArgs;
+
+                $newArguments = array_merge([$class, $object], $oldArguments);
             } else {
                 $newArguments = array_merge($funcCallOrEmptyNodeArgs, $oldArguments);
             }

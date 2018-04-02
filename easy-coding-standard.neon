@@ -10,7 +10,7 @@ checkers:
     PHP_CodeSniffer\Standards\Generic\Sniffs\Files\LineLengthSniff:
         absoluteLineLimit: 120
     PHP_CodeSniffer\Standards\Generic\Sniffs\Metrics\CyclomaticComplexitySniff:
-        absoluteComplexity: 5
+        absoluteComplexity: 6
     PHP_CodeSniffer\Standards\Generic\Sniffs\Metrics\NestingLevelSniff:
         absoluteNestingLevel: 3
 
@@ -39,39 +39,17 @@ checkers:
             '*Rector': 'Rector'
 
 parameters:
-    exclude_checkers:
-        # bugged in php-cs-fixer 2.10
-        - PhpCsFixer\Fixer\PhpUnit\PhpUnitTestAnnotationFixer
-
     skip:
         Symplify\CodingStandard\Fixer\Php\ClassStringToClassConstantFixer:
             # classes might not exist
             - */src/Rector/Contrib/*/*Rector.php
-            - */src/Rector/Contrib/**/Helper/**.php
-            - */packages/NodeTypeResolver/tests/PerNodeCallerTypeResolver/**Test.php
             - */packages/NodeTypeResolver/**/PerNodeTypeResolver/**TypeResolver.php
             - */packages/NodeTypeResolver/**/PerNodeTypeResolver/**TypeResolver/*Test.php
             - packages/BetterReflection/src/Reflector/SmartClassReflector.php
-            - */src/NodeAnalyzer/*.php
-        SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff:
-            # covariant types
-            - */packages/NodeValueResolver/src/PerNodeValueResolver/*ValueResolver.php
-            # missing mixed
-            - src/Node/NodeFactory.php
-            - packages/NodeTypeResolver/tests/AbstractNodeTypeResolverTest.php
-        PHP_CodeSniffer\Standards\Generic\Sniffs\CodeAnalysis\EmptyStatementSniff:
-            # intentionally
-            - packages/BetterReflection/src/Reflector/SmartClassReflector.php
-
-        Symplify\CodingStandard\Sniffs\Architecture\ExplicitExceptionSniff:
-            # before composer/autoload.php Exception
-            - bin/rector_bootstrap.php
+            - src/Rector/AbstractPHPUnitRector.php
 
     skip_codes:
-        SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff.MissingParameterTypeHint:
-            # forcing "mixed" types
-            - src/Node/NodeFactory.php
-            - packages/NodeTypeResolver/tests/AbstractNodeTypeResolverTest.php
-
         # empty arguments passing
-        - PHP_CodeSniffer\Standards\PEAR\Sniffs\Functions\ValidDefaultValueSniff.NotAtEnd
+        PHP_CodeSniffer\Standards\PEAR\Sniffs\Functions\ValidDefaultValueSniff.NotAtEnd:
+            - src/Rector/Dynamic/Configuration/ArgumentReplacerRecipe.php
+            - src/Rector/Contrib/PHPUnit/SpecificMethod/AssertTrueFalseToSpecificMethodRector.php

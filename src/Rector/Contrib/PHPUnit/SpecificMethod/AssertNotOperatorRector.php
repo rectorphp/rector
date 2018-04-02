@@ -1,22 +1,24 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Rector\Contrib\PHPUnit;
+namespace Rector\Rector\Contrib\PHPUnit\SpecificMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractPHPUnitRector;
 
 /**
- * Before:
- * - $this->getMock('Class')
- * - $this->getMockWithoutInvokingTheOriginalConstructor('Class')
+ * - Before:
+ * - $this->assertTrue(!$foo, 'message');
+ * - $this->assertFalse(!$foo, 'message');
  *
- * After:
- * - $this->createMock('Class')
+ * - After:
+ * - $this->assertFalse($foo, 'message');
+ * - $this->assertTrue($foo, 'message');
  */
-final class GetMockRector extends AbstractPHPUnitRector
+final class AssertNotOperatorRector extends AbstractPHPUnitRector
 {
     /**
      * @var MethodCallAnalyzer
@@ -40,17 +42,16 @@ final class GetMockRector extends AbstractPHPUnitRector
             return false;
         }
 
-        if (! $this->methodCallAnalyzer->isMethods(
-            $node,
-            ['getMock', 'getMockWithoutInvokingTheOriginalConstructor']
-        )) {
+        if (! $this->methodCallAnalyzer->isMethods($node, ['assertTrue', 'assertFalse'])) {
             return false;
         }
 
         /** @var MethodCall $methodCallNode */
         $methodCallNode = $node;
 
-        return count($methodCallNode->args) === 1;
+        $firstArgumentValue = $methodCallNode->args[0]->value;
+
+        return $firstArgumentValue instanceof BooleanNot;
     }
 
     /**
@@ -58,7 +59,22 @@ final class GetMockRector extends AbstractPHPUnitRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        $this->identifierRenamer->renameNode($methodCallNode, 'createMock');
+        $this->identifierRenamer->renameNodeWithMap($methodCallNode, [
+            'assertTrue' => 'assertFalse',
+            'assertFalse' => 'assertTrue',
+        ]);
+
+        $oldArguments = $methodCallNode->args;
+        /** @var BooleanNot $negation */
+        $negation = $oldArguments[0]->value;
+
+        $expression = $negation->expr;
+
+        unset($oldArguments[0]);
+
+        $methodCallNode->args = array_merge([
+            $expression,
+        ], $oldArguments);
 
         return $methodCallNode;
     }

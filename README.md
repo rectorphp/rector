@@ -12,13 +12,13 @@ When you're gonna move from manual work to **instant upgrades**?
 Rector **upgrades your application** for you, with focus on open-source projects:
 
 <p align="center">
-    <a href="/src/config/level/symfony"><img src="/docs/images/symfony.png"></a>
+    <a href="/config/level/symfony"><img src="/docs/images/symfony.png"></a>
     <img src="/docs/images/space.png" width=20>
-    <a href="/src/config/level/nette"><img src="/docs/images/nette.png" height="50"></a>
+    <a href="/config/level/nette"><img src="/docs/images/nette.png" height="50"></a>
     <img src="/docs/images/space.png" width=20>
-    <a href="/src/config/level/phpunit"><img src="/docs/images/phpunit.jpg"></a>
+    <a href="/config/level/phpunit"><img src="/docs/images/phpunit.jpg"></a>
     <img src="/docs/images/space.png" width=20>
-    <a href="/src/config/level/twig"><img src="/docs/images/twig.png"></a>
+    <a href="/config/level/twig"><img src="/docs/images/twig.png"></a>
 </p>
 
 
@@ -70,7 +70,7 @@ vendor/bin/rector process ../project --autoload-file ../project/vendor/autoload.
 
 ### A. Prepared Sets
 
-Featured open-source projects have **prepared sets**. You'll find them in [`/src/config/level`](/src/config/level).
+Featured open-source projects have **prepared sets**. You'll find them in [`/config/level`](/config/level).
 
 Do you need to upgrade to **Symfony 4.0**, for example?
 

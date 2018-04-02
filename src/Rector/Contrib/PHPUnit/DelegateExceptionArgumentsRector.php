@@ -55,8 +55,10 @@ final class DelegateExceptionArgumentsRector extends AbstractPHPUnitRector
             return false;
         }
 
-        /** @var MethodCall $node */
-        return isset($node->args[1]);
+        /** @var MethodCall $methodCallNode */
+        $methodCallNode = $node;
+
+        return isset($methodCallNode->args[1]);
     }
 
     /**

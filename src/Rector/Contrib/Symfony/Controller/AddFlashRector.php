@@ -3,6 +3,7 @@
 namespace Rector\Rector\Contrib\Symfony\Controller;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\MethodCall;
 use Rector\Node\Attribute;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeAnalyzer\ChainMethodCallAnalyzer;
@@ -54,6 +55,9 @@ final class AddFlashRector extends AbstractRector
         return true;
     }
 
+    /**
+     * @param MethodCall $node
+     */
     public function refactor(Node $node): ?Node
     {
         return $this->methodCallNodeFactory->createWithVariableNameMethodNameAndArguments(

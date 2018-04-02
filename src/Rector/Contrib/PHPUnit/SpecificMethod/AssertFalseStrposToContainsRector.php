@@ -49,7 +49,10 @@ final class AssertFalseStrposToContainsRector extends AbstractPHPUnitRector
             return false;
         }
 
-        $firstArgumentValue = $node->args[0]->value;
+        /** @var MethodCall $methodCallNode */
+        $methodCallNode = $node;
+
+        $firstArgumentValue = $methodCallNode->args[0]->value;
         if (! $this->isNamedFunction($firstArgumentValue)) {
             return false;
         }
@@ -88,13 +91,10 @@ final class AssertFalseStrposToContainsRector extends AbstractPHPUnitRector
 
     private function renameMethod(MethodCall $methodCallNode): void
     {
-        $oldMethodName = $methodCallNode->name->toString();
-
-        if ($oldMethodName === 'assertFalse') {
-            $this->identifierRenamer->renameNode($methodCallNode, 'assertNotContains');
-        } else {
-            $this->identifierRenamer->renameNode($methodCallNode, 'assertContains');
-        }
+        $this->identifierRenamer->renameNodeWithMap($methodCallNode, [
+            'assertFalse' => 'assertNotContains',
+            'assertNotFalse' => 'assertContains',
+        ]);
     }
 
     private function isNamedFunction(Expr $node): bool

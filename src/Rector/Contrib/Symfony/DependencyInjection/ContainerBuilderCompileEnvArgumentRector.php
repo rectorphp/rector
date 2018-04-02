@@ -28,18 +28,18 @@ final class ContainerBuilderCompileEnvArgumentRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        $isMethodCall = $this->methodCallAnalyzer->isTypeAndMethods(
+        if ($this->methodCallAnalyzer->isTypeAndMethods(
             $node,
             'Symfony\Component\DependencyInjection\ContainerBuilder',
             ['compile']
-        );
-
-        if ($isMethodCall === false) {
+        ) === false) {
             return false;
         }
 
-        /** @var MethodCall $node */
-        $arguments = $node->args;
+        /** @var MethodCall $methodCallNode */
+        $methodCallNode = $node;
+
+        $arguments = $methodCallNode->args;
 
         // already has an argument
         return count($arguments) !== 1;

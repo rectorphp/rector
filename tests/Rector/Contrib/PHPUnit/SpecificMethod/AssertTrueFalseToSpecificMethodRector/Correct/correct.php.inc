@@ -1,6 +1,10 @@
 <?php declare(strict_types=1);
 
-final class MyTest extends \PHPUnit\Framework\TestCase
+abstract class Testing extends \PHPUnit\Framework\TestCase
+{
+}
+
+final class MyTest extends Testing
 {
     public function test()
     {
@@ -16,5 +20,6 @@ final class MyTest extends \PHPUnit\Framework\TestCase
         $this->assertIsWritable('...');
         $this->assertNotContains('...', ['...'], 'argument');
         $this->assertInstanceOf('Foo', $anything, 'argument');
+        $this->assertNotInstanceOf(Foo::class, $anything, 'argument');
     }
 }

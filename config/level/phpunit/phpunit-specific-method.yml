@@ -1,4 +1,5 @@
 services:
+    Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertNotOperatorRector: ~
     Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertComparisonToSpecificMethodRector: ~
     Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertTrueFalseToSpecificMethodRector: ~
     Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertSameBoolNullToSpecificMethodRector: ~

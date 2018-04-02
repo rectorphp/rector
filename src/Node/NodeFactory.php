@@ -64,7 +64,7 @@ final class NodeFactory
     }
 
     /**
-     * Creates "SomeClass::CONSTANT"
+     * Creates "\SomeClass::CONSTANT"
      */
     public function createClassConstant(string $className, string $constantName): ClassConstFetch
     {
@@ -74,11 +74,21 @@ final class NodeFactory
     }
 
     /**
-     * Creates "SomeClass::class"
+     * Creates "\SomeClass::class"
      */
     public function createClassConstantReference(string $className): ClassConstFetch
     {
         $nameNode = new FullyQualified($className);
+
+        return new ClassConstFetch($nameNode, 'class');
+    }
+
+    /**
+     * Creates "SomeClass::class"
+     */
+    public function createRelativeClassConstantReference(string $className): ClassConstFetch
+    {
+        $nameNode = new Name($className);
 
         return new ClassConstFetch($nameNode, 'class');
     }
@@ -167,6 +177,11 @@ final class NodeFactory
         return new Expression($assign);
     }
 
+    /**
+     * Creates "($arg)"
+     *
+     * @param mixed $argument
+     */
     public function createArg($argument): Arg
     {
         $value = BuilderHelpers::normalizeValue($argument);
@@ -184,7 +199,7 @@ final class NodeFactory
         String_ $keyNode
     ): ArrayDimFetch {
         return new ArrayDimFetch(
-            new PropertyFetch($exprNode, new Identifier($propertyName)),
+            new PropertyFetch($exprNode, $propertyName),
             $keyNode
         );
     }
@@ -239,7 +254,7 @@ final class NodeFactory
      */
     public function createStaticMethodCallWithArgs(string $class, string $method, array $arguments): StaticCall
     {
-        return new StaticCall(new Name($class), new Identifier($method), $arguments);
+        return new StaticCall(new Name($class), $method, $arguments);
     }
 
     public function createTypeName(string $name): Name

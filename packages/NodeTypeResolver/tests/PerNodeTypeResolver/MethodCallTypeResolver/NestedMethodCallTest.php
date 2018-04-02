@@ -17,6 +17,10 @@ final class NestedMethodCallTest extends AbstractNodeTypeResolverTest
      */
     public function test(string $file, int $nodePosition, string $methodName, array $expectedTypes): void
     {
+        if (PHP_VERSION >= '7.2.0') {
+            $this->markTestSkipped('This test needs PHP 7.1 or lower.');
+        }
+
         /** @var MethodCall[] $methodCallNodes */
         $methodCallNodes = $this->getNodesForFileOfType($file, MethodCall::class);
 

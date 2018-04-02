@@ -1,6 +1,10 @@
 <?php declare(strict_types=1);
 
-final class MyTest extends \PHPUnit\Framework\TestCase
+abstract class Testing extends \PHPUnit\Framework\TestCase
+{
+}
+
+final class MyTest extends Testing
 {
     public function test()
     {
@@ -16,5 +20,6 @@ final class MyTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(is_writable('...'));
         $this->assertFalse(array_search('...', ['...']), 'argument');
         $this->assertTrue(is_a($anything, 'Foo'), 'argument');
+        $this->assertFalse(is_a($anything, Foo::class, true), 'argument');
     }
 }

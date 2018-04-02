@@ -42,7 +42,7 @@ final class Application extends SymfonyApplication
     {
         $inputDefinition->addOption(new InputOption(
             'config',
-            null,
+            'c',
             InputOption::VALUE_REQUIRED,
             'Path to config file.',
             getcwd() . '/rector.yml'
@@ -50,7 +50,7 @@ final class Application extends SymfonyApplication
 
         $inputDefinition->addOption(new InputOption(
             'level',
-            null,
+            'l',
             InputOption::VALUE_REQUIRED,
             'Finds config by shortcut name.'
         ));
