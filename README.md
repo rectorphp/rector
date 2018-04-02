@@ -35,7 +35,7 @@ Rector can:
 ## Install
 
 ```bash
-composer require --dev rector/rector:'dev-master'
+composer require --dev rector/rector
 ```
 
 ### Do you Have Conflicts?
