@@ -13,8 +13,11 @@ parameters:
         # false positive
         - '#Parameter \#1 \$methodCallNode of method Rector\\NodeAnalyzer\\MethodArgumentAnalyzer::isMethodSecondArgumentNull\(\) expects PhpParser\\Node\\Expr\\MethodCall, PhpParser\\Node given#'
         - '#Call to an undefined method PhpParser\\Node\\Name::toLowerString\(\)#'
+        - '#Cannot call method toString\(\) on string#'
 
         # known values
+        - '#Argument of an invalid type array<PhpParser\\Node>\|null supplied for foreach, only iterables are supported#'
+
         - '#Method Rector\\Node\\NodeFactory::create(Null|False)Constant\(\) should return PhpParser\\Node\\Expr\\ConstFetch but returns PhpParser\\Node\\Expr#' # 2
         - '#Method Rector\\Node\\NodeFactory::createNamespace\(\) should return PhpParser\\Node\\Stmt\\Namespace_ but returns PhpParser\\Node#' # 1
         - '#Calling method getText\(\) on possibly null value of type PhpParser\\Comment\\Doc\|null#' # 3
