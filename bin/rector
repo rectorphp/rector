@@ -23,7 +23,7 @@ try {
     // 2. Or from --config
     if ($configFile === null) {
         ConfigFileFinder::detectFromInput('rector', new ArgvInput());
-        $configFile = ConfigFileFinder::provide('rector', 'rector.yml');
+        $configFile = ConfigFileFinder::provide('rector', ['rector.yml']);
     }
 
     // 2. Build DI container
