@@ -4,12 +4,15 @@ namespace Rector\Naming;
 
 final class PropertyNaming
 {
-    public function typeToName(string $serviceType): string
+    public function fqnToVariableName(string $fqn): string
     {
-        $serviceNameParts = explode('\\', $serviceType);
-        $lastNamePart = array_pop($serviceNameParts);
+        return lcfirst($this->fqnToShortName($fqn));
+    }
 
-        return lcfirst($lastNamePart);
+    public function fqnToShortName(string $fqn): string
+    {
+        $nameSpaceParts = explode('\\', $fqn);
+        return end($nameSpaceParts);
     }
 
     /**
