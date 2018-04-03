@@ -30,6 +30,14 @@ final class AssertNotOperatorRector extends AbstractPHPUnitRector
      */
     private $identifierRenamer;
 
+    /**
+     * @var string[]
+     */
+    private $renameMethodsMap = [
+        'assertTrue' => 'assertFalse',
+        'assertFalse' => 'assertTrue',
+    ];
+
     public function __construct(MethodCallAnalyzer $methodCallAnalyzer, IdentifierRenamer $identifierRenamer)
     {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
@@ -42,7 +50,7 @@ final class AssertNotOperatorRector extends AbstractPHPUnitRector
             return false;
         }
 
-        if (! $this->methodCallAnalyzer->isMethods($node, ['assertTrue', 'assertFalse'])) {
+        if (! $this->methodCallAnalyzer->isMethods($node, array_keys($this->renameMethodsMap))) {
             return false;
         }
 
@@ -59,10 +67,7 @@ final class AssertNotOperatorRector extends AbstractPHPUnitRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        $this->identifierRenamer->renameNodeWithMap($methodCallNode, [
-            'assertTrue' => 'assertFalse',
-            'assertFalse' => 'assertTrue',
-        ]);
+        $this->identifierRenamer->renameNodeWithMap($methodCallNode, $this->renameMethodsMap);
 
         $oldArguments = $methodCallNode->args;
         /** @var BooleanNot $negation */
