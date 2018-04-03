@@ -39,6 +39,14 @@ final class AssertPropertyExistsRector extends AbstractPHPUnitRector
      */
     private $nodeFactory;
 
+    /**
+     * @var string[]
+     */
+    private $renameMethodsMap = [
+        'assertTrue' => 'assertClassHasAttribute',
+        'assertFalse' => 'assertClassNotHasAttribute',
+    ];
+
     public function __construct(
         MethodCallAnalyzer $methodCallAnalyzer,
         IdentifierRenamer $identifierRenamer,
@@ -55,7 +63,7 @@ final class AssertPropertyExistsRector extends AbstractPHPUnitRector
             return false;
         }
 
-        if (! $this->methodCallAnalyzer->isMethods($node, ['assertTrue', 'assertFalse'])) {
+        if (! $this->methodCallAnalyzer->isMethods($node, array_keys($this->renameMethodsMap))) {
             return false;
         }
 
@@ -78,10 +86,7 @@ final class AssertPropertyExistsRector extends AbstractPHPUnitRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        $this->identifierRenamer->renameNodeWithMap($methodCallNode, [
-            'assertTrue' => 'assertClassHasAttribute',
-            'assertFalse' => 'assertClassNotHasAttribute',
-        ]);
+        $this->identifierRenamer->renameNodeWithMap($methodCallNode, $this->renameMethodsMap);
 
         /** @var Identifier $oldArguments */
         $oldArguments = $methodCallNode->args;

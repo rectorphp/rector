@@ -36,6 +36,14 @@ final class AssertInstanceOfComparisonRector extends AbstractPHPUnitRector
      */
     private $builderFactory;
 
+    /**
+     * @var string[]
+     */
+    private $renameMethodsMap = [
+        'assertTrue' => 'assertInstanceOf',
+        'assertFalse' => 'assertNotInstanceOf',
+    ];
+
     public function __construct(
         MethodCallAnalyzer $methodCallAnalyzer,
         IdentifierRenamer $identifierRenamer,
@@ -52,7 +60,7 @@ final class AssertInstanceOfComparisonRector extends AbstractPHPUnitRector
             return false;
         }
 
-        if (! $this->methodCallAnalyzer->isMethods($node, ['assertTrue', 'assertFalse'])) {
+        if (! $this->methodCallAnalyzer->isMethods($node, array_keys($this->renameMethodsMap))) {
             return false;
         }
 
@@ -69,7 +77,7 @@ final class AssertInstanceOfComparisonRector extends AbstractPHPUnitRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        $this->renameMethod($methodCallNode);
+        $this->identifierRenamer->renameNodeWithMap($methodCallNode, $this->renameMethodsMap);
         $this->changeOrderArguments($methodCallNode);
 
         return $methodCallNode;
@@ -90,13 +98,5 @@ final class AssertInstanceOfComparisonRector extends AbstractPHPUnitRector
             $this->builderFactory->classConstFetch($class, 'class'),
             $argument,
         ], $oldArguments);
-    }
-
-    private function renameMethod(MethodCall $methodCallNode): void
-    {
-        $this->identifierRenamer->renameNodeWithMap($methodCallNode, [
-            'assertTrue' => 'assertInstanceOf',
-            'assertFalse' => 'assertNotInstanceOf',
-        ]);
     }
 }

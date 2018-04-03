@@ -33,6 +33,14 @@ final class AssertFalseStrposToContainsRector extends AbstractPHPUnitRector
      */
     private $identifierRenamer;
 
+    /**
+     * @var string[]
+     */
+    private $renameMethodsMap = [
+        'assertFalse' => 'assertNotContains',
+        'assertNotFalse' => 'assertContains',
+    ];
+
     public function __construct(MethodCallAnalyzer $methodCallAnalyzer, IdentifierRenamer $identifierRenamer)
     {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
@@ -45,7 +53,7 @@ final class AssertFalseStrposToContainsRector extends AbstractPHPUnitRector
             return false;
         }
 
-        if (! $this->methodCallAnalyzer->isMethods($node, ['assertFalse', 'assertNotFalse'])) {
+        if (! $this->methodCallAnalyzer->isMethods($node, array_keys($this->renameMethodsMap))) {
             return false;
         }
 
@@ -67,7 +75,7 @@ final class AssertFalseStrposToContainsRector extends AbstractPHPUnitRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        $this->renameMethod($methodCallNode);
+        $this->identifierRenamer->renameNodeWithMap($methodCallNode, $this->renameMethodsMap);
         $this->changeOrderArguments($methodCallNode);
 
         return $methodCallNode;
@@ -87,14 +95,6 @@ final class AssertFalseStrposToContainsRector extends AbstractPHPUnitRector
         $methodCallNode->args = array_merge([
             $firstArgument, $secondArgument,
         ], $oldArguments);
-    }
-
-    private function renameMethod(MethodCall $methodCallNode): void
-    {
-        $this->identifierRenamer->renameNodeWithMap($methodCallNode, [
-            'assertFalse' => 'assertNotContains',
-            'assertNotFalse' => 'assertContains',
-        ]);
     }
 
     private function isNamedFunction(Expr $node): bool
