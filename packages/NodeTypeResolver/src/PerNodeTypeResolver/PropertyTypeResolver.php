@@ -68,7 +68,7 @@ final class PropertyTypeResolver implements PerNodeTypeResolverInterface
 
         $propertyTypes = $this->typeContext->getTypesForProperty($propertyName);
 
-        if ($propertyTypes) {
+        if (count($propertyTypes) > 0) {
             return $propertyTypes;
         }
 
@@ -94,7 +94,7 @@ final class PropertyTypeResolver implements PerNodeTypeResolverInterface
         foreach ($propertyTypes as $propertyType) {
             $classReflection = $this->smartClassReflector->reflect($propertyType);
 
-            if ($classReflection && $classReflection->getParentClassNames()) {
+            if ($classReflection !== null && count($classReflection->getParentClassNames()) > 0) {
                 $propertyTypes = array_merge($propertyTypes, $classReflection->getParentClassNames());
             }
         }

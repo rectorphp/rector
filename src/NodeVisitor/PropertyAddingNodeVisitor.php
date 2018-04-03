@@ -51,7 +51,7 @@ final class PropertyAddingNodeVisitor extends NodeVisitorAbstract
         $className = (string) $classNode->getAttribute(Attribute::CLASS_NAME);
 
         $propertiesForClass = $this->classPropertyCollector->getPropertiesForClass($className);
-        if (! count($propertiesForClass)) {
+        if (count($propertiesForClass) === 0) {
             return $classNode;
         }
 

@@ -117,7 +117,7 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
      */
     public function afterTraverse(array $nodes): array
     {
-        if ($this->newNamespace) {
+        if ($this->newNamespace !== null) {
             $namespaceNode = $this->nodeFactory->createNamespace($this->newNamespace);
 
             foreach ($nodes as $key => $node) {

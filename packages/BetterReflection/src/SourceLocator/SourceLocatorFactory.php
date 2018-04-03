@@ -47,7 +47,7 @@ final class SourceLocatorFactory
         $sourceLocators = [];
         [$directories, $files] = $this->splitToDirectoriesAndFiles($source);
 
-        if (count($directories)) {
+        if (count($directories) > 0) {
             $sourceLocators[] = new DirectoriesSourceLocator($directories, $this->locator);
         }
 
@@ -66,7 +66,7 @@ final class SourceLocatorFactory
      */
     private function createCommonLocators(): array
     {
-        if ($this->commonLocators) {
+        if (count($this->commonLocators) > 0) {
             return $this->commonLocators;
         }
 

@@ -1,3 +1,6 @@
+includes:
+	- vendor/phpstan/phpstan-strict-rules/rules.neon
+
 parameters:
     ignoreErrors:
         # the # after each ignored error is the number of occurrences

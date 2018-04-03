@@ -49,7 +49,7 @@ final class NamespaceResolver extends NodeVisitorAbstract
     public function enterNode(Node $node): void
     {
         if ($node instanceof Namespace_) {
-            $this->namespaceName = $node->name ? $node->name->toString() : null;
+            $this->namespaceName = $node->name !== null ? $node->name->toString() : null;
             $this->namespaceNode = $node;
             $this->useNodes = $this->betterNodeFinder->findInstanceOf($node, Use_::class);
         }

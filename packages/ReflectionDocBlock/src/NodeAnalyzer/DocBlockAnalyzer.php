@@ -63,7 +63,7 @@ final class DocBlockAnalyzer
 
     public function replaceAnnotationInNode(Node $node, string $oldAnnotation, string $newAnnotation): void
     {
-        if (! $node->getDocComment()) {
+        if ($node->getDocComment() === null) {
             return;
         }
 
@@ -81,7 +81,7 @@ final class DocBlockAnalyzer
     {
         /** @var Var_[] $varTags */
         $varTags = $this->getTagsByName($node, 'var');
-        if (! count($varTags)) {
+        if (count($varTags) === 0) {
             return null;
         }
 
@@ -99,7 +99,7 @@ final class DocBlockAnalyzer
 
         /** @var Param[] $paramTags */
         $paramTags = $this->getTagsByName($node, 'param');
-        if (! count($paramTags)) {
+        if (count($paramTags) === 0) {
             return null;
         }
 

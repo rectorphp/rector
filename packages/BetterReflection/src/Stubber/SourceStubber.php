@@ -34,7 +34,7 @@ final class SourceStubber
 
     private function loadStubs(): void
     {
-        if (count($this->stubs)) {
+        if (count($this->stubs) > 0) {
             return;
         }
 

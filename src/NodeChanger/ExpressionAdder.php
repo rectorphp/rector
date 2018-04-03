@@ -83,7 +83,7 @@ final class ExpressionAdder
      */
     public function addExpressionsToNodes(array $nodes): array
     {
-        if (! count($this->expressionsToAdd)) {
+        if (count($this->expressionsToAdd) === 0) {
             return $nodes;
         }
 

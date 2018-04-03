@@ -54,7 +54,7 @@ final class ClassConstantReplacerRector extends AbstractRector
 
         foreach ($this->oldToNewConstantsByClass as $type => $oldToNewConstants) {
             $matchedType = $this->classConstAnalyzer->matchTypes($node, $this->getTypes());
-            if ($matchedType) {
+            if ($matchedType !== null) {
                 $this->activeType = $matchedType;
 
                 return true;

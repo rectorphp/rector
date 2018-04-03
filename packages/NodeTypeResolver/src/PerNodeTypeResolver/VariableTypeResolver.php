@@ -56,7 +56,7 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface, NodeTy
         }
 
         $variableTypes = $this->typeContext->getTypesForVariable((string) $variableNode->name);
-        if ($variableTypes) {
+        if (count($variableTypes) > 0) {
             return $variableTypes;
         }
 

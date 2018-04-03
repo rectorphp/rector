@@ -57,7 +57,7 @@ final class BetterNodeFinder
     public function findLastInstanceOf($nodes, string $type): ?Node
     {
         $foundInstances = $this->nodeFinder->findInstanceOf($nodes, $type);
-        if (! $foundInstances) {
+        if (count($foundInstances) === 0) {
             return null;
         }
 

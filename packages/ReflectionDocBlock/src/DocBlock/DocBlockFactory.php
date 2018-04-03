@@ -42,7 +42,7 @@ final class DocBlockFactory
             return $this->docBlocksPerNode[$node];
         }
 
-        $docBlockContent = $node->getDocComment() ? $node->getDocComment()->getText() : ' ';
+        $docBlockContent = $node->getDocComment() !== null ? $node->getDocComment()->getText() : ' ';
         $docBlockContext = $this->createContextForNamespace($node);
 
         return $this->docBlocksPerNode[$node] = $this->cleanDocBlockFactory->create(

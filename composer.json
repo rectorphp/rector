@@ -24,10 +24,11 @@
         "symplify/package-builder": "^4.0"
     },
     "require-dev": {
-        "symplify/easy-coding-standard": "^4.0",
         "phpstan/phpstan-shim": "^0.9",
+        "phpstan/phpstan-strict-rules": "^0.9.0",
         "phpunit/phpunit": "^7.0",
         "slam/php-cs-fixer-extensions": "^1.13",
+        "symplify/easy-coding-standard": "^4.0",
         "tracy/tracy": "^2.4"
     },
     "autoload": {

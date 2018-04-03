@@ -71,18 +71,18 @@ final class MethodBuilder
 
         $methodBodyStatement = $this->buildMethodBody($propertyName, $operation, $argumentName);
 
-        if ($methodBodyStatement) {
+        if ($methodBodyStatement !== null) {
             $methodBuild->addStmt($methodBodyStatement);
         }
 
-        if ($propertyType && $operation === 'get') {
+        if ($propertyType !== null && $operation === 'get') {
             $typeHint = Strings::endsWith($propertyType, '[]') ? 'array' : $propertyType;
             $methodBuild->setReturnType(new Name($typeHint));
         }
 
         if ($operation === 'add' || $operation === 'set') {
             $param = $this->builderFactory->param($argumentName);
-            if ($propertyType) {
+            if ($propertyType !== null) {
                 $typeHint = Strings::endsWith($propertyType, '[]') ? 'array' : $propertyType;
                 $param->setTypeHint($typeHint);
             }

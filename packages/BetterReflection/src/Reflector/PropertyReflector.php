@@ -48,7 +48,7 @@ final class PropertyReflector
         $propertyReflection = $this->reflectClassProperty($class, $property);
 
         $type = null;
-        if ($propertyReflection) {
+        if ($propertyReflection !== null) {
             $type = $this->resolveTypeFromReflectionProperty($propertyReflection);
         }
 
