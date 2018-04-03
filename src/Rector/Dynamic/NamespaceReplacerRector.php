@@ -98,7 +98,7 @@ final class NamespaceReplacerRector extends AbstractRector
         if ($node instanceof Name) {
             /** @var FullyQualified|null $resolveName */
             $resolveName = $node->getAttribute(Attribute::RESOLVED_NAME);
-            if ($resolveName) {
+            if ($resolveName !== null) {
                 return $resolveName->toString();
             }
 

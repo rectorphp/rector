@@ -185,7 +185,7 @@ final class ProcessCommand extends Command
     {
         $oldContent = $fileInfo->getContents();
 
-        if ($this->parameterProvider->provideParameter(Option::OPTION_DRY_RUN)) {
+        if ($this->parameterProvider->provideParameter(Option::OPTION_DRY_RUN) !== null) {
             $newContent = $this->fileProcessor->processFileToString($fileInfo);
             if ($newContent !== $oldContent) {
                 $this->fileDiffs[] = new FileDiff(

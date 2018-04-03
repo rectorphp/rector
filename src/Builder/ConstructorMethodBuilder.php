@@ -44,9 +44,9 @@ final class ConstructorMethodBuilder
         VariableInfo $variableInfo,
         Expression $assignNode
     ): void {
+        /** @var ClassMethod|null $constructorMethod */
         $constructorMethod = $classNode->getMethod('__construct');
-        /** @var ClassMethod $constructorMethod */
-        if ($constructorMethod) {
+        if ($constructorMethod !== null) {
             $this->addParameterAndAssignToMethod($constructorMethod, $variableInfo, $assignNode);
             return;
         }

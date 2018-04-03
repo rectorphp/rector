@@ -38,7 +38,7 @@ final class ConstructorPropertyTypesExtractor
     public function extractFromClassNode(Class_ $classNode): array
     {
         $constructorParametersWithTypes = $this->getConstructorParametersWithTypes($classNode);
-        if (! count($constructorParametersWithTypes)) {
+        if (count($constructorParametersWithTypes) === 0) {
             return [];
         }
 
@@ -68,18 +68,16 @@ final class ConstructorPropertyTypesExtractor
 
         $parametersWithTypes = [];
 
-        if ($constructorMethodReflection) {
-            foreach ($constructorMethodReflection->getParameters() as $parameterReflection) {
-                $parameterName = $parameterReflection->getName();
+        foreach ($constructorMethodReflection->getParameters() as $parameterReflection) {
+            $parameterName = $parameterReflection->getName();
 
-                $parameterType = (string) $parameterReflection->getType();
+            $parameterType = (string) $parameterReflection->getType();
 
-                if ($this->typeAnalyzer->isBuiltinType($parameterType)) {
-                    continue;
-                }
-
-                $parametersWithTypes[$parameterName] = [$parameterType];
+            if ($this->typeAnalyzer->isBuiltinType($parameterType)) {
+                continue;
             }
+
+            $parametersWithTypes[$parameterName] = [$parameterType];
         }
 
         return $parametersWithTypes;
@@ -142,7 +140,7 @@ final class ConstructorPropertyTypesExtractor
             $propertyName = $identifierNode->toString();
             $propertyTypes = $constructorParametersWithTypes[$propertyName] ?? null;
 
-            if ($propertyName && $propertyTypes) {
+            if ($propertyName && $propertyTypes !== null) {
                 $propertiesWithTypes[$propertyName] = $propertyTypes;
             }
         }

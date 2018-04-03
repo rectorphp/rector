@@ -25,7 +25,7 @@ final class PhpFilesFinder
             }
         }
 
-        if (count($directories)) {
+        if (count($directories) > 0) {
             $files = array_merge($files, $this->findInDirectories($directories));
         }
 

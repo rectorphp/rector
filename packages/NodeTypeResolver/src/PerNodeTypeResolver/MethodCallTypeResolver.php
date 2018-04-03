@@ -76,7 +76,7 @@ final class MethodCallTypeResolver implements PerNodeTypeResolverInterface, Node
 
         $methodName = $methodCallNode->name->toString();
 
-        if (! $parentCallerTypes || ! $methodName) {
+        if (count($parentCallerTypes) === 0 || ! $methodName) {
             return [];
         }
 
@@ -101,7 +101,7 @@ final class MethodCallTypeResolver implements PerNodeTypeResolverInterface, Node
         string $method
     ): array {
         $methodReturnTypes = $this->methodReflector->resolveReturnTypesForTypesAndMethod($methodCallerTypes, $method);
-        if ($methodReturnTypes) {
+        if (count($methodReturnTypes) > 0) {
             return array_unique($methodReturnTypes);
         }
 

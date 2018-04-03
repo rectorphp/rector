@@ -63,7 +63,7 @@ final class ParamTypeResolver implements PerNodeTypeResolverInterface, NodeTypeR
         // 1. method(ParamType $param)
         if ($paramNode->type) {
             $variableTypes = $this->nodeTypeResolver->resolve($paramNode->type);
-            if ($variableTypes) {
+            if (count($variableTypes) > 0) {
                 $this->typeContext->addVariableWithTypes($variableName, $variableTypes);
 
                 return $variableTypes;

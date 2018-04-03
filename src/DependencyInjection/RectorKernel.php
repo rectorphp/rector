@@ -21,7 +21,7 @@ final class RectorKernel extends Kernel
 
     public function __construct(?string $configFile = '')
     {
-        if ($configFile) {
+        if ($configFile !== null) {
             $this->configFile = $configFile;
         }
 

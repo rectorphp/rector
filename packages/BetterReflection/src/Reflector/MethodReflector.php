@@ -43,12 +43,12 @@ final class MethodReflector
     public function getMethodReturnTypes(string $class, string $methodCallName): array
     {
         $methodReflection = $this->reflectClassMethod($class, $methodCallName);
-        if (! $methodReflection) {
+        if ($methodReflection === null) {
             return [];
         }
 
         $returnType = $methodReflection->getReturnType();
-        if ($returnType) {
+        if ($returnType !== null) {
             return [(string) $returnType];
         }
 
@@ -61,12 +61,12 @@ final class MethodReflector
      */
     public function resolveReturnTypesForTypesAndMethod(array $types, string $method): array
     {
-        if (! count($types)) {
+        if (count($types) === 0) {
             return [];
         }
 
         $returnTypes = $this->resolveFirstMatchingTypeAndMethod($types, $method);
-        if (! $returnTypes) {
+        if (count($returnTypes) === 0) {
             return [];
         }
 
@@ -109,7 +109,7 @@ final class MethodReflector
     {
         foreach ($types as $type) {
             $returnTypes = $this->getMethodReturnTypes($type, $method);
-            if ($returnTypes) {
+            if (count($returnTypes) > 0) {
                 return $this->completeParentClasses($returnTypes);
             }
         }

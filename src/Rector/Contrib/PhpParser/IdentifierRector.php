@@ -105,7 +105,7 @@ final class IdentifierRector extends AbstractRector
     private function matchTypeToProperties(array $nodeTypes): array
     {
         foreach ($nodeTypes as $nodeType) {
-            if ($this->typeToPropertiesMap[$nodeType]) {
+            if (count($this->typeToPropertiesMap[$nodeType]) > 0) {
                 return $this->typeToPropertiesMap[$nodeType];
             }
         }

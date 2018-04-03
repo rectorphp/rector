@@ -79,7 +79,7 @@ final class SmartClassReflector
     {
         // anonymous class
         if ($className === null) {
-            if ($classLikeNode && property_exists($classLikeNode, 'extends')) {
+            if ($classLikeNode !== null && property_exists($classLikeNode, 'extends')) {
                 return [$classLikeNode->extends->toString()];
             }
 
@@ -94,7 +94,7 @@ final class SmartClassReflector
             // intentionally empty
         }
 
-        if ($classLikeNode) {
+        if ($classLikeNode !== null) {
             return $this->resolveClassParentsFromNode($classLikeNode);
         }
 
@@ -158,7 +158,7 @@ final class SmartClassReflector
             return $this->classReflector;
         }
 
-        if ($currentSource) {
+        if ($currentSource !== null) {
             $this->lastSource = $currentSource;
             return $this->classReflector = $this->classReflectorFactory->createWithSource($currentSource);
         }
@@ -168,7 +168,7 @@ final class SmartClassReflector
 
     private function isValidClassName(string $className): bool
     {
-        if (empty($className)) {
+        if ($className === '') {
             return false;
         }
 

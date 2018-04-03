@@ -72,7 +72,7 @@ final class MagicMethodMatcher
             $op = 'get';
         }
 
-        if (! $type && preg_match(
+        if ($type === null && preg_match(
             '#@var[ \t]+(\S+)' . ($op === 'add' ? '\[\]#' : '#'),
             $reflectionProperty->getDocComment(),
             $match

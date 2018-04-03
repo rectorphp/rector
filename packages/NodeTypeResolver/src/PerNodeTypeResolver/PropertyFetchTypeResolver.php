@@ -107,14 +107,14 @@ final class PropertyFetchTypeResolver implements PerNodeTypeResolverInterface, N
     private function resolveTypesFromVariable(Expr $exprNode, string $propertyName): array
     {
         $types = $this->nodeTypeResolver->resolve($exprNode);
-        if (! $types) {
+        if (count($types) === 0) {
             return [];
         }
 
         $type = array_shift($types);
 
         $propertyType = $this->propertyReflector->getPropertyType($type, $propertyName);
-        if (! $propertyType) {
+        if ($propertyType === null) {
             return [];
         }
 

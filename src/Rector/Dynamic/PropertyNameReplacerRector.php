@@ -53,7 +53,7 @@ final class PropertyNameReplacerRector extends AbstractRector
         $this->activeTypes = [];
 
         $matchedTypes = $this->propertyFetchAnalyzer->matchTypes($node, $this->getClasses());
-        if ($matchedTypes) {
+        if (count($matchedTypes) > 0) {
             $this->activeTypes = $matchedTypes;
 
             return true;
@@ -103,7 +103,7 @@ final class PropertyNameReplacerRector extends AbstractRector
     private function matchOldToNewProperties(): array
     {
         foreach ($this->activeTypes as $activeType) {
-            if ($this->perClassOldToNewProperties[$activeType]) {
+            if (count($this->perClassOldToNewProperties[$activeType]) > 0) {
                 return $this->perClassOldToNewProperties[$activeType];
             }
         }

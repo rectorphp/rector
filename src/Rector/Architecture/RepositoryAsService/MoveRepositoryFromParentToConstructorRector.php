@@ -64,7 +64,7 @@ final class MoveRepositoryFromParentToConstructorRector extends AbstractRector
             return false;
         }
 
-        if (! $node->extends) {
+        if ($node->extends === null) {
             return false;
         }
 

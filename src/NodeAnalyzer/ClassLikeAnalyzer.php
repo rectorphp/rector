@@ -95,7 +95,7 @@ final class ClassLikeAnalyzer
      */
     private function resolveExtendsTypes(ClassLike $classLikeNode, ?string $className = null): array
     {
-        if (! $classLikeNode->extends) {
+        if ($classLikeNode->extends === null) {
             return [];
         }
 

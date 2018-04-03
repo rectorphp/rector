@@ -99,13 +99,13 @@ final class TemplateAnnotationRector extends AbstractRector
             $renderArguments
         );
 
-        if (! $returnNode) {
+        if ($returnNode === null) {
             // or add as last statement in the method
             $classMethodNode->stmts[] = new Return_($thisRenderMethodCall);
         }
 
         // replace Return_ node value if exists and is not already in correct format
-        if ($returnNode && ! $returnNode->expr instanceof MethodCall) {
+        if ($returnNode !== null && ! $returnNode->expr instanceof MethodCall) {
             $returnNode->expr = $thisRenderMethodCall;
         }
 
@@ -121,11 +121,11 @@ final class TemplateAnnotationRector extends AbstractRector
     private function resolveRenderArguments(ClassMethod $classMethodNode, ?Return_ $returnNode): array
     {
         $arguments = [$this->resolveTemplateName($classMethodNode)];
-        if (! $returnNode) {
+        if ($returnNode === null) {
             return $this->nodeFactory->createArgs($arguments);
         }
 
-        if ($returnNode->expr instanceof Array_ && count($returnNode->expr->items)) {
+        if ($returnNode->expr instanceof Array_ && count($returnNode->expr->items) > 0) {
             $arguments[] = $returnNode->expr;
         }
 

@@ -73,7 +73,7 @@ final class ParentTypehintedArgumentRector extends AbstractRector
         /** @var ClassLike $classNode */
         $classNode = $node->getAttribute(Attribute::CLASS_NODE);
         $classNodeTypes = $this->nodeTypeResolver->resolve($classNode);
-        if (! $classNodeTypes) {
+        if (count($classNodeTypes) === 0) {
             return false;
         }
 

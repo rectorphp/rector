@@ -95,7 +95,7 @@ final class TypeContext
 
         try {
             $functionReflection = $this->getFunctionReflection($functionLikeNode);
-            if ($functionReflection) {
+            if ($functionReflection !== null) {
                 $this->processFunctionVariableTypes($functionReflection);
             }
         } catch (Throwable $throwable) {
@@ -144,7 +144,7 @@ final class TypeContext
             return null;
         }
 
-        if ($this->classLikeNode) {
+        if ($this->classLikeNode !== null) {
             if ($this->classLikeAnalyzer->isAnonymousClassNode($this->classLikeNode)) {
                 return null;
             }

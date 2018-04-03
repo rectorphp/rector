@@ -89,7 +89,7 @@ final class ArrayToYieldDataProviderRector extends AbstractPHPUnitRector
     private function hasClassMethodReturnArrayOfArrays(ClassMethod $classMethodNode): bool
     {
         $statements = $classMethodNode->stmts;
-        if (! $statements) {
+        if ($statements === null) {
             return false;
         }
 

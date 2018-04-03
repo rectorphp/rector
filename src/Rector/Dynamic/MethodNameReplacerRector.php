@@ -83,14 +83,14 @@ final class MethodNameReplacerRector extends AbstractRector
         $this->activeTypes = [];
 
         $matchedTypes = $this->methodCallAnalyzer->matchTypes($node, $this->getClasses());
-        if ($matchedTypes) {
+        if ($matchedTypes !== null) {
             $this->activeTypes = $matchedTypes;
 
             return true;
         }
 
         $matchedTypes = $this->staticMethodCallAnalyzer->matchTypes($node, $this->getClasses());
-        if ($matchedTypes) {
+        if ($matchedTypes !== null) {
             $this->activeTypes = $matchedTypes;
 
             return true;
@@ -151,7 +151,7 @@ final class MethodNameReplacerRector extends AbstractRector
     private function matchOldToNewMethods(): array
     {
         foreach ($this->activeTypes as $activeType) {
-            if ($this->perClassOldToNewMethods[$activeType]) {
+            if (count($this->perClassOldToNewMethods[$activeType]) > 0) {
                 return $this->perClassOldToNewMethods[$activeType];
             }
         }

@@ -32,11 +32,11 @@ final class NodeConnector extends NodeVisitorAbstract
 
     public function enterNode(Node $node): void
     {
-        if (! empty($this->stack)) {
+        if (count($this->stack) > 0) {
             $node->setAttribute(Attribute::PARENT_NODE, $this->stack[count($this->stack) - 1]);
         }
 
-        if ($this->prev &&
+        if ($this->prev !== null &&
             $this->prev->getAttribute(Attribute::PARENT_NODE) === $node->getAttribute(Attribute::PARENT_NODE)
         ) {
             $node->setAttribute(Attribute::PREVIOUS_NODE, $this->prev);

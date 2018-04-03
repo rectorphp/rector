@@ -85,13 +85,13 @@ final class BuilderRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        if ($this->methodCallType) {
+        if ($this->methodCallType !== null) {
             if (! $this->methodCallAnalyzer->isType($node, $this->methodCallType)) {
                 return false;
             }
         }
 
-        if ($this->methodName) {
+        if ($this->methodName !== null) {
             if (! $this->methodCallAnalyzer->isMethod($node, $this->methodName)) {
                 return false;
             }
@@ -102,11 +102,11 @@ final class BuilderRector extends AbstractRector
 
     public function refactor(Node $node): ?Node
     {
-        if ($this->newMethodName && $node instanceof MethodCall) {
+        if ($this->newMethodName !== null && $node instanceof MethodCall) {
             $this->identifierRenamer->renameNode($node, $this->newMethodName);
         }
 
-        if ($this->newArguments && $node instanceof MethodCall) {
+        if (count($this->newArguments) > 0 && $node instanceof MethodCall) {
             foreach ($this->newArguments as $position => $argument) {
                 // to check adding arguments in order
                 if (! isset($node->args[$position]) && isset($node->args[$position - 1])) {
