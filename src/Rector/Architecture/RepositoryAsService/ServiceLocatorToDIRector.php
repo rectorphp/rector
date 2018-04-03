@@ -12,6 +12,7 @@ use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Contract\Bridge\RepositoryForDoctrineEntityProviderInterface;
 use Rector\Exception\Bridge\RectorProviderException;
 use Rector\Exception\ShouldNotHappenException;
+use Rector\Naming\PropertyNaming;
 use Rector\Node\Attribute;
 use Rector\Node\PropertyFetchNodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
@@ -39,16 +40,23 @@ final class ServiceLocatorToDIRector extends AbstractRector
      */
     private $classPropertyCollector;
 
+    /**
+     * @var PropertyNaming
+     */
+    private $propertyNaming;
+
     public function __construct(
         MethodCallAnalyzer $methodCallAnalyzer,
         PropertyFetchNodeFactory $propertyFetchNodeFactory,
         RepositoryForDoctrineEntityProviderInterface $repositoryForDoctrineEntityProvider,
-        ClassPropertyCollector $classPropertyCollector
+        ClassPropertyCollector $classPropertyCollector,
+        PropertyNaming $propertyNaming
     ) {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->propertyFetchNodeFactory = $propertyFetchNodeFactory;
         $this->repositoryForDoctrineEntityProvider = $repositoryForDoctrineEntityProvider;
         $this->classPropertyCollector = $classPropertyCollector;
+        $this->propertyNaming = $propertyNaming;
     }
 
     public function isCandidate(Node $node): bool
@@ -68,26 +76,17 @@ final class ServiceLocatorToDIRector extends AbstractRector
 
     public function refactor(Node $node): ?Node
     {
+        $repositoryFqn = $this->repositoryFqn($node);
+
         $this->classPropertyCollector->addPropertyForClass(
             (string) $node->getAttribute(Attribute::CLASS_NAME),
-            [$this->repositoryFqn($node)],
-            $this->repositoryVariableName($node)
+            [$repositoryFqn],
+            $this->propertyNaming->fqnToVariableName($repositoryFqn)
         );
 
         return $this->propertyFetchNodeFactory->createLocalWithPropertyName(
-            $this->repositoryVariableName($node)
+            $this->propertyNaming->fqnToVariableName($repositoryFqn)
         );
-    }
-
-    private function repositoryVariableName(Node $node): string
-    {
-        return lcfirst($this->repositoryShortName($node));
-    }
-
-    private function repositoryShortName(Node $node): string
-    {
-        $nameSpaceParts = explode('\\', $this->repositoryFqn($node));
-        return end($nameSpaceParts);
     }
 
     private function repositoryFqn(Node $node): string
