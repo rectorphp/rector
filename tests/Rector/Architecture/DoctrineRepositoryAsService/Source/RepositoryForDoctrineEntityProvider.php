@@ -2,43 +2,17 @@
 
 namespace Rector\Tests\Rector\Architecture\DoctrineRepositoryAsService\Source;
 
-use Rector\Contract\Bridge\RepositoryForDoctrineEntityProviderInterface;
+use Rector\Contract\Bridge\AbstractRepositoryForDoctrineEntityProvider;
 
-final class RepositoryForDoctrineEntityProvider implements RepositoryForDoctrineEntityProviderInterface
+final class RepositoryForDoctrineEntityProvider extends AbstractRepositoryForDoctrineEntityProvider
 {
     /**
-     * @var string[]
+     * @inheritdoc
      */
-    private $map = [
-        'AppBundle\Entity\Post' => 'AppBundle\Repository\PostRepository',
-    ];
-
-    public function provideRepositoryForEntity(string $name): ?string
+    public function provideRepositoriesForEntities(): array
     {
-        if ($this->isAlias($name)) {
-            return $this->resoleFromAlias($name);
-        }
-
-        return $this->map[$name] ?? null;
-    }
-
-    private function isAlias(string $name): bool
-    {
-        return strpos($name, ':') !== false;
-    }
-
-    private function resoleFromAlias(string $name): ?string
-    {
-        [$namespaceAlias, $simpleClassName] = explode(':', $name, 2);
-
-        $pattern = sprintf('/(%s{1}.*%s)/', $namespaceAlias, $simpleClassName);
-
-        foreach ($this->map as $key => $value) {
-            if (preg_match($pattern, $key)) {
-                return $value;
-            }
-        }
-
-        return null;
+        return [
+            'AppBundle\Entity\Post' => 'AppBundle\Repository\PostRepository',
+        ];
     }
 }
