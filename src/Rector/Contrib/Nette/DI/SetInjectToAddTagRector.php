@@ -8,6 +8,8 @@ use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
 final class SetInjectToAddTagRector extends AbstractRector
 {
@@ -54,6 +56,13 @@ final class SetInjectToAddTagRector extends AbstractRector
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
         $this->nodeFactory = $nodeFactory;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('Turns setInject() to tag in Nette\DI\CompilerExtension', [
+            new CodeSample('$serviceDefinition->setInject();', '$serviceDefinition->addTag("inject");'),
+        ]);
     }
 
     public function isCandidate(Node $node): bool

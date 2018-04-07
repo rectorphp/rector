@@ -12,15 +12,11 @@ use Rector\Node\Attribute;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * Covers https://github.com/Kdyby/Doctrine/pull/269/files
- *
- * From:
- * $definition->setEntity('someEntity');
- *
- * To:
- * $definition = new Statement('someEntity', $definition->arguments);
  */
 final class SetEntityToStatementRector extends AbstractRector
 {
@@ -38,6 +34,13 @@ final class SetEntityToStatementRector extends AbstractRector
     {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->nodeFactory = $nodeFactory;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('Turns setDefinition() to Nette\DI\Helpers::expand() value in Nette\DI\CompilerExtension', [
+            new CodeSample('$definition->setEntity("someEntity");', '$definition = new Statement("someEntity", $definition->arguments);'),
+        ]);
     }
 
     public function isCandidate(Node $node): bool
