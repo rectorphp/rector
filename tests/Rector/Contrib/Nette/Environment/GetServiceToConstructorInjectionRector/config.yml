@@ -1,5 +1,0 @@
-services:
-    Rector\Rector\Contrib\Nette\Environment\GetServiceToConstructorInjectionRector: ~
-
-    # service name to type provider
-    Rector\Tests\Rector\Contrib\Nette\Environment\GetServiceToConstructorInjectionRector\Source\DummyProvider: ~
