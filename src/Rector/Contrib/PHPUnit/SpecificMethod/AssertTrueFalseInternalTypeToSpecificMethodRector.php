@@ -34,6 +34,7 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractPH
         'is_float' => 'float',
         'is_int' => 'int',
         'is_integer' => 'integer',
+        'is_iterable' => 'iterable',
         'is_numeric' => 'numeric',
         'is_object' => 'object',
         'is_real' => 'real',
