@@ -9,14 +9,9 @@ use PhpParser\Node\Expr\Variable;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Rector\AbstractRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
-/**
- * Before:
- * - $control->checkAllowedValues = false;
- *
- * After:
- * - $control->checkDefaultValue(false);
- */
 final class ChoiceDefaultValueRector extends AbstractRector
 {
     /**
@@ -35,6 +30,13 @@ final class ChoiceDefaultValueRector extends AbstractRector
     ) {
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
         $this->methodCallNodeFactory = $methodCallNodeFactory;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('Turns checkAllowedValues to method in Nette\Forms Control element', [
+            new CodeSample('$control->checkAllowedValues = false;', '$control->checkDefaultValue(false);'),
+        ]);
     }
 
     public function isCandidate(Node $node): bool

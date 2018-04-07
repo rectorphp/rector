@@ -10,13 +10,11 @@ use Rector\Builder\MethodBuilder;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Rector\AbstractRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 use Rector\ReflectionDocBlock\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\Regex\MagicMethodMatcher;
 
-/**
- * Catches @method annotations at childs of Nette\Object
- * and converts them to real methods
- */
 final class MagicMethodRector extends AbstractRector
 {
     /**
@@ -61,6 +59,13 @@ final class MagicMethodRector extends AbstractRector
         $this->smartClassReflector = $smartClassReflector;
         $this->magicMethodMatcher = $magicMethodMatcher;
         $this->nodeTypeResolver = $nodeTypeResolver;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('Catches @method annotations of Nette\Object instances and converts them to real methods.', [
+            new CodeSample('/** @method getId() */', 'public function getId() { $this->id; }'),
+        ]);
     }
 
     public function isCandidate(Node $node): bool

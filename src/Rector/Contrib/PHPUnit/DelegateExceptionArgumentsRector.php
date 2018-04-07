@@ -9,16 +9,9 @@ use PhpParser\Node\Identifier;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractPHPUnitRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
-/**
- * Before:
- * - $this->setExpectedException(Exception::class, 'Message', 'CODE');
- *
- * After:
- * - $this->setExpectedException(Exception::class);
- * - $this->expectExceptionMessage('Message');
- * - $this->expectExceptionCode('CODE');
- */
 final class DelegateExceptionArgumentsRector extends AbstractPHPUnitRector
 {
     /**
@@ -43,6 +36,19 @@ final class DelegateExceptionArgumentsRector extends AbstractPHPUnitRector
     {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->methodCallNodeFactory = $methodCallNodeFactory;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('Takes setExpectedException() 2nd and next arguments to own methods in PHPUnit.', [
+            new CodeSample('$this->setExpectedException(Exception::class, "Message", "CODE");',
+                <<<'CODE_SAMPLE'
+                $this->setExpectedException(Exception::class); 
+                $this->expectExceptionMessage("Message");
+                $this->expectExceptionCode("CODE");
+CODE_SAMPLE
+            ),
+        ]);
     }
 
     public function isCandidate(Node $node): bool

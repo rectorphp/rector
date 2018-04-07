@@ -9,15 +9,11 @@ use PhpParser\Node\Identifier;
 use Rector\NodeAnalyzer\ClassConstAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * Covers https://forum.nette.org/cs/26250-pojdte-otestovat-nette-2-4-rc
- *
- * Before:
- * - ~Form::FILLED
- *
- * After:
- * - Form::NOT_FILLED
  */
 final class FormNegativeRulesRector extends AbstractRector
 {
@@ -45,6 +41,13 @@ final class FormNegativeRulesRector extends AbstractRector
     {
         $this->classConstAnalyzer = $classConstAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('Turns negative Nette Form rules to their specific new names.', [
+            new CodeSample('$form->addRule(~Form::FILLED);', '$form->addRule(Form::NOT_FILLED);'),
+        ]);
     }
 
     /**
