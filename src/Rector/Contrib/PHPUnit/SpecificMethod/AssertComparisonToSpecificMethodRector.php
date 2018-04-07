@@ -9,16 +9,9 @@ use PhpParser\Node\Expr\MethodCall;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractPHPUnitRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
-/**
- * - Before:
- * - $this->assertTrue($foo === $bar, 'message');
- * - $this->assertFalse($foo >= $bar, 'message');
- *
- * - After:
- * - $this->assertSame($bar, $foo, 'message');
- * - $this->assertLessThanOrEqual($bar, $foo, 'message');
- */
 final class AssertComparisonToSpecificMethodRector extends AbstractPHPUnitRector
 {
     /**
@@ -55,6 +48,14 @@ final class AssertComparisonToSpecificMethodRector extends AbstractPHPUnitRector
     {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('Turns === comparisons to their method name alternatives in PHPUnit Test Case', [
+            new CodeSample('$this->assertTrue($foo === $bar, "message");', '$this->assertSame($bar, $foo, "message");'),
+            new CodeSample('$this->assertFalse($foo >= $bar, "message");', '$this->assertLessThanOrEqual($bar, $foo, "message");'),
+        ]);
     }
 
     public function isCandidate(Node $node): bool
