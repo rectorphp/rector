@@ -16,6 +16,8 @@ use Rector\Exception\Bridge\RectorProviderException;
 use Rector\Node\Attribute;
 use Rector\Node\NodeFactory;
 use Rector\Rector\AbstractRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
 final class MoveRepositoryFromParentToConstructorRector extends AbstractRector
 {
@@ -76,6 +78,11 @@ final class MoveRepositoryFromParentToConstructorRector extends AbstractRector
         $className = $node->getAttribute(Attribute::CLASS_NAME);
 
         return Strings::endsWith($className, 'Repository');
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('...', [new CodeSample('...', '...')]);
     }
 
     /**

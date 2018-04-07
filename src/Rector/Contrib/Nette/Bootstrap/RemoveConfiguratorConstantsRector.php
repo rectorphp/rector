@@ -10,6 +10,8 @@ use PhpParser\Node\Name\FullyQualified;
 use Rector\Node\Attribute;
 use Rector\Node\NodeFactory;
 use Rector\Rector\AbstractRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
 final class RemoveConfiguratorConstantsRector extends AbstractRector
 {
@@ -23,6 +25,13 @@ final class RemoveConfiguratorConstantsRector extends AbstractRector
         $this->nodeFactory = $nodeFactory;
     }
 
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('Turns properties with @inject to private properties and constructor injection', [
+            new CodeSample('$value === Nette\Configurator::DEVELOPMENT', '$value === "development"'),
+        ]);
+    }
+
     public function isCandidate(Node $node): bool
     {
         if (! $node instanceof ClassConstFetch) {
@@ -31,7 +40,7 @@ final class RemoveConfiguratorConstantsRector extends AbstractRector
 
         $className = $this->getClassNameFromClassConstFetch($node);
 
-        if ($className !== $this->getDesiredClass()) {
+        if ($className !== 'Nette\Configurator') {
             return false;
         }
 
@@ -63,10 +72,5 @@ final class RemoveConfiguratorConstantsRector extends AbstractRector
         if ($fqnName !== null) {
             return $fqnName->toString();
         }
-    }
-
-    private function getDesiredClass(): string
-    {
-        return 'Nette\Configurator';
     }
 }

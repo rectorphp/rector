@@ -125,7 +125,7 @@ final class BuilderRector extends AbstractRector
         return new RectorDefinition(
             'This can handle class renames, method renames and argument changes, based on custom configuration.',
             [
-                new CodeSample('<?php new OldClass;', '<?php new NewClass;')
+                new CodeSample('<?php new OldClass;', '<?php new NewClass;'),
             ]
         );
     }

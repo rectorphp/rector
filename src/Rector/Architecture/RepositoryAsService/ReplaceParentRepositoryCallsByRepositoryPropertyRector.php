@@ -10,7 +10,6 @@ use Rector\Node\PropertyFetchNodeFactory;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
-use Symfony\Component\DependencyInjection\Definition;
 
 final class ReplaceParentRepositoryCallsByRepositoryPropertyRector extends AbstractRector
 {
@@ -55,21 +54,6 @@ final class ReplaceParentRepositoryCallsByRepositoryPropertyRector extends Abstr
         return $methodCallNode;
     }
 
-    /**
-     * @todo should be part of reflection
-     * @return string[]
-     */
-    private function getEntityRepositoryPublicMethodNames(): array
-    {
-        $entityRepositoryReflection = $this->smartClassReflector->reflect('Doctrine\ORM\EntityRepository');
-
-        if ($entityRepositoryReflection !== null) {
-            return array_keys($entityRepositoryReflection->getImmediateMethods());
-        }
-
-        return [];
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -88,7 +72,7 @@ class SomeRepository extends EntityRepository
     }
 }
 SAMPLE
-        ,
+                ,
 <<<'SAMPLE_TWO'
 <?php
 
@@ -104,5 +88,20 @@ class SomeRepository extends EntityRepository
 SAMPLE_TWO
             )
         );
+    }
+
+    /**
+     * @todo should be part of reflection
+     * @return string[]
+     */
+    private function getEntityRepositoryPublicMethodNames(): array
+    {
+        $entityRepositoryReflection = $this->smartClassReflector->reflect('Doctrine\ORM\EntityRepository');
+
+        if ($entityRepositoryReflection !== null) {
+            return array_keys($entityRepositoryReflection->getImmediateMethods());
+        }
+
+        return [];
     }
 }

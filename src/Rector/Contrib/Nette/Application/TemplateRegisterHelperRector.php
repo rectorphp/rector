@@ -8,14 +8,9 @@ use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
-/**
- * Before:
- * - $this->template->registerHelper('someFilter', ...);
- *
- * After:
- * - $this->template->getLatte()->addFilter('someFilter', ...)
- */
 final class TemplateRegisterHelperRector extends AbstractRector
 {
     /**
@@ -41,6 +36,16 @@ final class TemplateRegisterHelperRector extends AbstractRector
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
         $this->methodCallNodeFactory = $methodCallNodeFactory;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('Turns properties with @inject to private properties and constructor injection', [
+            new CodeSample(
+                '$this->template->registerHelper("someFilter", ...);',
+                '$this->template->getLatte()->addFilter("someFilter", ...)'
+            ),
+        ]);
     }
 
     public function isCandidate(Node $node): bool
