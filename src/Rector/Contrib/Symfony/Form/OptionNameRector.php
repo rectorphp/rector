@@ -42,7 +42,6 @@ final class OptionNameRector extends AbstractRector
         ]);
     }
 
-
     public function isCandidate(Node $node): bool
     {
         if (! $node instanceof String_) {

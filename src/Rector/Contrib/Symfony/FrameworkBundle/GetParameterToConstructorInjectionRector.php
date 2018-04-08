@@ -11,21 +11,9 @@ use Rector\Node\Attribute;
 use Rector\Node\PropertyFetchNodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
-/**
- * Converts all:
- * - $this->getParameter('someParameter') # where "some_service" is name of parameter
- *
- * into:
- * - public function __construct($someParameter)
- * - {
- * -      $this->someParameter = $someParameter;
- * - }
- *
- * - ...
- *
- * - $this->someService
- */
 final class GetParameterToConstructorInjectionRector extends AbstractRector
 {
     /**
@@ -58,6 +46,40 @@ final class GetParameterToConstructorInjectionRector extends AbstractRector
         $this->classPropertyCollector = $classPropertyCollector;
         $this->propertyFetchNodeFactory = $propertyFetchNodeFactory;
         $this->methodCallAnalyzer = $methodCallAnalyzer;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('Turns fetching of parmaters via getParmaeter() in ContainerAware to constructor injection in Command and Controller in Symfony', [
+            new CodeSample(
+<<<'CODE_SAMPLE'
+class MyCommand extends ContainerAwareCommand
+{
+    public function someMethod()
+    {
+        $this->getParameter('someParameter');
+    }
+}
+CODE_SAMPLE
+                ,
+<<<'CODE_SAMPLE'
+class MyCommand extends Command
+{
+    private $someParameter;
+
+    public function __construct($someParameter)
+    {
+        $this->someParameter = $someParameter;
+    }
+ 
+    public function someMethod()
+    {
+        $this->someParameter;
+    }
+}
+CODE_SAMPLE
+            )
+        ]);
     }
 
     public function isCandidate(Node $node): bool
