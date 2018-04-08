@@ -20,7 +20,7 @@
         "symfony/console": "^4.0",
         "symfony/dependency-injection": "^4.0",
         "symfony/finder": "^4.0",
-        "symplify/better-reflection-docblock": "^4.0",
+        "symplify/better-reflection-docblock": "^4.0.1",
         "symplify/package-builder": "^4.0"
     },
     "require-dev": {
