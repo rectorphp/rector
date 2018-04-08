@@ -35,14 +35,14 @@ final class MethodCallTypeResolverTest extends AbstractNodeTypeResolverTest
                 'AnotherClass',
                 'AnotherParentClass',
             ]],
-//            [__DIR__ . '/MethodCallSource/OnSelfCall.php.inc', 1, [
-//                'SomeClass',
-//                'Nette\Config\Configurator',
-//                'Nette\Object',
-//            ]],
-//            # on method call
-//            [__DIR__ . '/MethodCallSource/OnMethodCallCall.php.inc', 0, ['Nette\DI\Container']],
-//            # on variable call
+            [__DIR__ . '/MethodCallSource/OnSelfCall.php.inc', 1, [
+                'SomeClass',
+                'AnotherClass',
+                'AnotherParentClass',
+            ]],
+            # on method call
+            [__DIR__ . '/MethodCallSource/OnMethodCallCall.php.inc', 0, ['Rector\NodeTypeResolver\Tests\Source\AnotherClass']],
+            # on variable call
 //            [__DIR__ . '/MethodCallSource/OnVariableCall.php.inc', 0, [
 //                'Nette\Config\Configurator',
 //                'Nette\Object',
