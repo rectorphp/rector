@@ -16,13 +16,13 @@ services:
 For example:
 
 ```diff
-- $result = $anotherService['key'];
-+ $result = $anotherService->getService('key');
+- $result = $container['key'];
++ $result = $container->getService('key');
 ```
 
 ```diff
-- $anotherService['key'] = $value;
-+ $anotherService->addService('key', $value);
+- $container['key'] = $value;
++ $container->addService('key', $value);
 ```
 
 ### Replace `isset/unset` magic methods with real ones
@@ -41,13 +41,13 @@ services:
 For example:
 
 ```diff
-- isset($anotherService['key']);
-+ $anotherService->hasService('key');
+- isset($container['key']);
++ $container->hasService('key');
 ```
 
 ```diff
-- unset($anotherService['key']);
-+ $anotherService->removeService('key');
+- unset($container['key']);
++ $container->removeService('key');
 ```
 
 ### Replace `toString` magic method with real one

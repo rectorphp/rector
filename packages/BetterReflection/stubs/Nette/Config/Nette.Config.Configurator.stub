@@ -16,7 +16,7 @@ use Tracy;
 
 
 /**
- * Initial system DI anotherService generator.
+ * Initial system DI container generator.
  *
  * @author     David Grudl
  */
@@ -121,7 +121,7 @@ class Configurator extends Object
             'productionMode' => !$debugMode,
             'environment' => $debugMode ? 'development' : 'production',
             'consoleMode' => PHP_SAPI === 'cli',
-            'anotherService' => array(
+            'container' => array(
                 'class' => 'SystemContainer',
                 'parent' => 'Nette\DI\Container',
             ),
@@ -180,17 +180,17 @@ class Configurator extends Object
 
 
     /**
-     * Returns system DI anotherService.
+     * Returns system DI container.
      * @return \Nette\DI\Container
      */
     public function createContainer()
     {
-        $anotherService = $this->createContainerFactory()->create();
-        $anotherService->initialize();
+        $container = $this->createContainerFactory()->create();
+        $container->initialize();
         if (class_exists('Nette\Environment')) {
-            Nette\Environment::setContext($anotherService); // back compatibility
+            Nette\Environment::setContext($container); // back compatibility
         }
-        return $anotherService;
+        return $container;
     }
 
 
@@ -201,7 +201,7 @@ class Configurator extends Object
     {
         $factory = new DI\ContainerFactory(NULL);
         $factory->autoRebuild = $this->parameters['debugMode'] ? TRUE : 'compat';
-        $factory->class = $this->parameters['anotherService']['class'];
+        $factory->class = $this->parameters['container']['class'];
         $factory->config = array('parameters' => $this->parameters);
         $factory->configFiles = $this->files;
         $factory->tempDirectory = $this->getCacheDirectory() . '/Nette.Configurator';
@@ -216,7 +216,7 @@ class Configurator extends Object
                     $compiler->addExtension($name, new $class);
                 }
             }
-            $factory->parentClass = $config['parameters']['anotherService']['parent'];
+            $factory->parentClass = $config['parameters']['container']['parent'];
             $me->onCompile($me, $compiler);
         };
         return $factory;
