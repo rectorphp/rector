@@ -3,8 +3,11 @@
 namespace Rector\Tests\RectorDefinition;
 
 use PHPUnit\Framework\TestCase;
+use Rector\Exception\RectorDefinition\CodeSamplesMissingException;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use stdClass;
+use TypeError;
 
 final class RectorDefinitionTest extends TestCase
 {
@@ -22,5 +25,17 @@ final class RectorDefinitionTest extends TestCase
         $codeSample = $codeSamples[0];
         $this->assertSame('Code before', $codeSample->getCodeBefore());
         $this->assertSame('Code after', $codeSample->getCodeAfter());
+    }
+
+    public function testInvalidCodeSamplesType(): void
+    {
+        $this->expectException(TypeError::class);
+        new RectorDefinition('Some description', [new stdClass()]);
+    }
+
+    public function testInvalidCodeSamplesCount(): void
+    {
+        $this->expectException(CodeSamplesMissingException::class);
+        new RectorDefinition('Some description', []);
     }
 }
