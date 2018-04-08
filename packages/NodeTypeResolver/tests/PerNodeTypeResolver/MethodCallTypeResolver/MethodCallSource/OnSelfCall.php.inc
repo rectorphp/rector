@@ -1,8 +1,6 @@
 <?php
 
-use Nette\Config\Configurator;
-
-class SomeClass extends Configurator
+class SomeClass extends AnotherClass
 {
     public function createContainer()
     {
@@ -13,4 +11,15 @@ class SomeClass extends Configurator
     {
         return $this->createAnotherContainer();
     }
+}
+
+class AnotherClass extends AnotherParentClass
+{
+
+}
+
+class AnotherParentClass
+{
+
+
 }
