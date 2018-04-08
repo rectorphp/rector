@@ -12,7 +12,6 @@ final class AssignTypeResolverTest extends AbstractNodeTypeResolverTest
 {
     /**
      * @dataProvider provideTypeForNodesAndFilesData()
-     * @NOdataProvider provideTypeForNodesAndFilesDataForPhp71()
      * @param string[] $expectedTypes
      */
     public function test(string $file, int $nodePosition, array $expectedTypes): void
@@ -42,20 +41,10 @@ final class AssignTypeResolverTest extends AbstractNodeTypeResolverTest
             # method call on property fetch
             [__DIR__ . '/Source/PropertyFetch.php.inc', 0, ['SomeClass', 'SomeParentClass']],
             [__DIR__ . '/Source/PropertyFetch.php.inc', 2, ['SomeClass', 'SomeParentClass']],
-        ];
-    }
-
-    /**
-     * @return mixed[][]
-     */
-    public function provideTypeForNodesAndFilesDataForPhp71(): array
-    {
-        return [
 
             # method call on class constant
-            [__DIR__ . '/Source/ClassConstant.php.inc', 0, ['Nette\Config\Configurator', 'Nette\Object']],
-            [__DIR__ . '/Source/ClassConstant.php.inc', 2, ['Nette\Config\Configurator', 'Nette\Object']],
-
+            [__DIR__ . '/Source/ClassConstant.php.inc', 0, ['SomeClass', 'SomeParentClass']],
+            [__DIR__ . '/Source/ClassConstant.php.inc', 2, ['SomeClass', 'SomeParentClass']],
         ];
     }
 }
