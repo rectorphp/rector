@@ -11,18 +11,9 @@ use PhpParser\Node\Stmt\Unset_;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Rector\AbstractRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
-/**
- * __isset/__unset to specific call
- *
- * Example - from:
- * - isset($container['someKey'])
- * - unset($container['someKey'])
- *
- * To
- * - $container->hasService('someKey');
- * - $container->removeService('someKey');
- */
 final class UnsetAndIssetToMethodCallRector extends AbstractRector
 {
     /**
@@ -58,6 +49,14 @@ final class UnsetAndIssetToMethodCallRector extends AbstractRector
         $this->typeToMethodCalls = $typeToMethodCalls;
         $this->methodCallNodeFactory = $methodCallNodeFactory;
         $this->nodeTypeResolver = $nodeTypeResolver;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('[Dynamic] Turns defined __isset/__unset calls to specific method calls.', [
+            new CodeSample('isset($container["someKey"]);', '$container->hasService("someKey");'),
+            new CodeSample('unset($container["someKey"])', '$container->removeService("someKey");')
+        ]);
     }
 
     /**

@@ -13,18 +13,9 @@ use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeAnalyzer\ExpressionAnalyzer;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Rector\AbstractRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
-/**
- * __get/__set to specific call
- *
- * Example - from:
- * - $someService = $container->someService;
- * - $container->someService = $someService;
- *
- * To
- * - $container->getService('someService');
- * - $container->setService('someService', $someService);
- */
 final class GetAndSetToMethodCallRector extends AbstractRector
 {
     /**
@@ -67,6 +58,14 @@ final class GetAndSetToMethodCallRector extends AbstractRector
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
         $this->expressionAnalyzer = $expressionAnalyzer;
         $this->methodCallNodeFactory = $methodCallNodeFactory;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('[Dynamic] Turns defined __get/__set to specific method calls.', [
+            new CodeSample('$someService = $container->someService;', '$container->getService("someService");'),
+            new CodeSample('$container->someService = $someService;', '$container->setService("someService", $someService);')
+        ]);
     }
 
     public function isCandidate(Node $node): bool
