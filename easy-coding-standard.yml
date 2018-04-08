@@ -37,6 +37,9 @@ services:
             '*Rector': 'Rector'
 
 parameters:
+    exclude_files:
+        - '*packages/*/tests/*Source/*.php'
+
     exclude_checkers:
         # temporary, before static is removed
         - 'Symplify\CodingStandard\Sniffs\CleanCode\ForbiddenStaticFunctionSniff'

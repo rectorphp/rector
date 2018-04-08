@@ -1,7 +1,16 @@
 <?php
 
-use Nette\Config\Configurator;
+$someService = new SomeClass;
 
-$configurator = new Configurator;
+$files = $someService->someFiles;
 
-$files = $configurator->files;
+
+class SomeClass extends SomeParentClass
+{
+    public $someFiles;
+}
+
+class SomeParentClass
+{
+
+}

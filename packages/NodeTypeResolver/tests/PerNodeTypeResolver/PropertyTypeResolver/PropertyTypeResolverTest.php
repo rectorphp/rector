@@ -4,6 +4,7 @@ namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\PropertyTypeResolver
 
 use PhpParser\Node\Stmt\Property;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
+use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\PropertyTypeResolver\Source\PropertyType;
 
 /**
  * @covers \Rector\NodeTypeResolver\PerNodeTypeResolver\PropertyTypeResolver
@@ -28,18 +29,11 @@ final class PropertyTypeResolverTest extends AbstractNodeTypeResolverTest
     {
         return [
             # doc block
-            [__DIR__ . '/Source/DocBlockDefinedProperty.php.inc', 0, ['SomeNamespace\PropertyType']],
+            [__DIR__ . '/Source/DefinedProperty.php.inc', 0, [PropertyType::class]],
             # constructor defined property
-            [__DIR__ . '/Source/ConstructorDefinedProperty.php.inc', 0, ['SomeNamespace\PropertyType']],
+            [__DIR__ . '/Source/DefinedProperty.php.inc', 1, [PropertyType::class]],
             # partial doc block
-            [__DIR__ . '/Source/PartialDocBlock.php.inc', 0, [
-                'PhpParser\Node\Stmt\ClassMethod',
-                'PhpParser\Node\Stmt\Function_',
-                'PhpParser\Node\Expr\Closure',
-                'PhpParser\Node\Stmt',
-                'PhpParser\NodeAbstract',
-                'PhpParser\Node\Expr',
-            ]],
+            [__DIR__ . '/Source/DefinedProperty.php.inc', 2, [PropertyType::class]],
         ];
     }
 }

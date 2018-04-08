@@ -1,7 +1,15 @@
 <?php
 
-use Nette\Config\Configurator;
-
-$configurator = new Configurator;
+$configurator = new SomeClass;
 
 $container = $configurator->{__CLASS__}();
+
+class SomeClass extends SomeParentClass
+{
+
+}
+
+class SomeParentClass
+{
+
+}

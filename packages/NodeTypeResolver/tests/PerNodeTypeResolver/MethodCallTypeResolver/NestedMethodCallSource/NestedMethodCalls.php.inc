@@ -1,9 +1,8 @@
 <?php
 
-use Nette\Config\Configurator;
+use Rector\NodeTypeResolver\Tests\Source\ClassWithFluentNonSelfReturn;
 
-$configurator = new Configurator;
-
-$configurator->createContainer()
-    ->addService('name', 'service')
+$classWithFluentNonSelfReturn = new ClassWithFluentNonSelfReturn();
+$classWithFluentNonSelfReturn->createAnotherClass()
+    ->callAndReturnSelf()
     ->getParameters();

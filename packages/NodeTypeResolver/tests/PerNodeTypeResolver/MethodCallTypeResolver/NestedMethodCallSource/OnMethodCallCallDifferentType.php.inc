@@ -1,7 +1,7 @@
 <?php
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Rector\NodeTypeResolver\Tests\Source\ClassWithFluentNonSelfReturn;
 
-$container = new ContainerBuilder();
-$container->register('foo', 'stdClass')
-    ->setScope(ContainerBuilder::SCOPE_PROTOTYPE);
+$classWithFluentNonSelfReturn = new ClassWithFluentNonSelfReturn();
+$classWithFluentNonSelfReturn->createAnotherClass()
+    ->getParameters();

@@ -2,14 +2,14 @@
 
 namespace Rector\BetterReflection\NodeCompiler;
 
-use PhpParser\Node\Stmt\Property as PropertyNode;
+use Rector\NodeTypeResolver\Tests\Source\NestedProperty\ClassWithPropertyLevel1;
 
-class someClass
+class SomeClassWithNestedPublicProperties
 {
     /**
-     * @var PropertyNode
+     * @var ClassWithPropertyLevel1
      */
-    private $node;
+    private $level1;
 
     /**
      * Get the name of the property.
@@ -18,6 +18,6 @@ class someClass
      */
     public function getName() : string
     {
-        return $this->node->props[5]->name->toString();
+        return $this->level1->level2s[5]->level3->someMethod();
     }
 }

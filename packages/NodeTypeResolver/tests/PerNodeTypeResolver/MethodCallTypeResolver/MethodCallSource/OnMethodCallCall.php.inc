@@ -1,8 +1,5 @@
 <?php
 
-use Nette\Config\Configurator;
-
-$configurator = new Configurator;
-
-$configurator->createContainer()
+$someService = new \Rector\NodeTypeResolver\Tests\Source\SomeClass();
+$someService->createAnotherClass()
     ->getParameters();

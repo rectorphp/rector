@@ -1,8 +1,6 @@
 <?php
 
-use Nette\Config\Configurator;
-
-class SomeClass extends Configurator
+class SomeParentCallingClass extends \Rector\NodeTypeResolver\Tests\Source\AnotherClass // AnotherClass
 {
     public function createContainer()
     {

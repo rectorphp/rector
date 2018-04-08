@@ -15,7 +15,9 @@ final class NetteObjectToSmartTraitRectorTest extends AbstractRectorTestCase
     public function test(string $wrong, string $fixed): void
     {
         if (PHP_VERSION >= '7.2.0') {
-            $this->markTestSkipped('This test needs PHP 7.1 or lower.');
+            $this->markTestSkipped(
+                'This test needs PHP 7.1 or lower due to Nette\Object "object" typehint that is reserved keyword in PHP 7.2.'
+            );
         }
 
         $this->doTestFileMatchesExpectedContent($wrong, $fixed);

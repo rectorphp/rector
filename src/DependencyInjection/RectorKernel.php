@@ -11,6 +11,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\Kernel;
 use Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutowireSinglyImplementedCompilerPass;
+use Symplify\PackageBuilder\DependencyInjection\CompilerPass\PublicForTestsCompilerPass;
 
 final class RectorKernel extends Kernel
 {
@@ -63,5 +64,8 @@ final class RectorKernel extends Kernel
         $containerBuilder->addCompilerPass(new RectorProvidersCompilerPass());
         $containerBuilder->addCompilerPass(new NodeTypeResolverCollectorCompilerPass());
         $containerBuilder->addCompilerPass(new AutowireSinglyImplementedCompilerPass());
+
+        // for tests
+        $containerBuilder->addCompilerPass(new PublicForTestsCompilerPass());
     }
 }

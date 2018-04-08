@@ -1,7 +1,4 @@
 <?php
 
-use Nette\Config\Configurator;
-
-$configurator = new Configurator;
-
-$configurator->{__CLASS__}();
+$someService = new \Rector\NodeTypeResolver\Tests\Source\SomeClass();
+$someService->{__CLASS__}();

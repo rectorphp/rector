@@ -4,7 +4,15 @@ class SomeClass
 {
     public function create()
     {
-        $containerBuilder = new Symfony\Component\DependencyInjection\ContainerBuilder;
-        $containerBuilder->compile();
+        $someService = new AnotherClassWithParentInterface;
+        $someService->someMethod();
     }
+}
+
+class AnotherClassWithParentInterface implements ParentInterface
+{
+}
+
+interface ParentInterface
+{
 }

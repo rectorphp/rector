@@ -2,11 +2,9 @@
 
 namespace SomeNamespace;
 
-class AnotherClass
-{
-}
+use Rector\NodeTypeResolver\Tests\Source\AnotherClass;
 
-class SomeClass extends AnotherClass
+class ThisClass extends AnotherClass
 {
     public function getThis()
     {

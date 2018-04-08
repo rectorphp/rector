@@ -1,11 +1,11 @@
 <?php
 
-use Nette\Config\Configurator;
+use Rector\NodeTypeResolver\Tests\Source\AnotherClass;
 
-class MyConfigurator extends Configurator
+class ChildClass extends AnotherClass
 {
-    public function setName()
+    public function getParameters()
     {
-        parent::setName();
+        parent::getParameters();
     }
 }

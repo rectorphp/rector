@@ -28,55 +28,23 @@ final class AssignTypeResolverTest extends AbstractNodeTypeResolverTest
     {
         return [
             # assign of "new <name>"
-            [__DIR__ . '/Source/New.php.inc', 0, [
-                'Symfony\Component\DependencyInjection\ContainerBuilder',
-                'Symfony\Component\DependencyInjection\ResettableContainerInterface',
-                'Symfony\Component\DependencyInjection\ContainerInterface',
-                'Psr\Container\ContainerInterface',
-                'Symfony\Component\DependencyInjection\TaggedContainerInterface',
-                'Symfony\Component\DependencyInjection\Container',
-            ]],
-            [__DIR__ . '/Source/New.php.inc', 1, [
-                'Symfony\Component\DependencyInjection\ContainerBuilder',
-                'Symfony\Component\DependencyInjection\ResettableContainerInterface',
-                'Symfony\Component\DependencyInjection\ContainerInterface',
-                'Psr\Container\ContainerInterface',
-                'Symfony\Component\DependencyInjection\TaggedContainerInterface',
-                'Symfony\Component\DependencyInjection\Container',
-            ]],
-        ];
-    }
+            [__DIR__ . '/Source/New.php.inc', 0, ['AnotherClassWithParentInterface', 'ParentInterface']],
+            [__DIR__ . '/Source/New.php.inc', 1, ['AnotherClassWithParentInterface', 'ParentInterface']],
 
-    /**
-     * @dataProvider provideTypeForNodesAndFilesDataForPhp71()
-     * @param string[] $expectedTypes
-     */
-    public function testPhp71(string $file, int $nodePosition, array $expectedTypes): void
-    {
-        if (PHP_VERSION >= '7.2.0') {
-            $this->markTestSkipped('This test needs PHP 7.1 or lower.');
-        }
-
-        $this->test($file, $nodePosition, $expectedTypes);
-    }
-
-    /**
-     * @return mixed[][]
-     */
-    public function provideTypeForNodesAndFilesDataForPhp71(): array
-    {
-        return [
-            # assign of "new <name>"
-            [__DIR__ . '/Source/MethodCall.php.inc', 0, ['Nette\Config\Configurator', 'Nette\Object']],
-            [__DIR__ . '/Source/MethodCall.php.inc', 2, ['Nette\Config\Configurator', 'Nette\Object']],
             # method call
-            [__DIR__ . '/Source/MethodCall.php.inc', 1, ['Nette\DI\Container']],
-            # method call on class constant
-            [__DIR__ . '/Source/ClassConstant.php.inc', 0, ['Nette\Config\Configurator', 'Nette\Object']],
-            [__DIR__ . '/Source/ClassConstant.php.inc', 2, ['Nette\Config\Configurator', 'Nette\Object']],
+            [__DIR__ . '/Source/MethodCall.php.inc', 1, ['AnotherClass']],
+
+            # assign of "new <name>"
+            [__DIR__ . '/Source/MethodCall.php.inc', 0, ['SomeClass', 'SomeParentClass']],
+            [__DIR__ . '/Source/MethodCall.php.inc', 2, ['SomeClass', 'SomeParentClass']],
+
             # method call on property fetch
-            [__DIR__ . '/Source/PropertyFetch.php.inc', 0, ['Nette\Config\Configurator', 'Nette\Object']],
-            [__DIR__ . '/Source/PropertyFetch.php.inc', 2, ['Nette\Config\Configurator', 'Nette\Object']],
+            [__DIR__ . '/Source/PropertyFetch.php.inc', 0, ['SomeClass', 'SomeParentClass']],
+            [__DIR__ . '/Source/PropertyFetch.php.inc', 2, ['SomeClass', 'SomeParentClass']],
+
+            # method call on class constant
+            [__DIR__ . '/Source/ClassConstant.php.inc', 0, ['SomeClass', 'SomeParentClass']],
+            [__DIR__ . '/Source/ClassConstant.php.inc', 2, ['SomeClass', 'SomeParentClass']],
         ];
     }
 }

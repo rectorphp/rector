@@ -4,6 +4,7 @@ namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\MethodCallTypeResolv
 
 use PhpParser\Node\Expr\MethodCall;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
+use Rector\NodeTypeResolver\Tests\Source\AnotherClass;
 
 /**
  * @covers \Rector\NodeTypeResolver\PerNodeTypeResolver\MethodCallTypeResolver
@@ -16,10 +17,6 @@ final class MethodCallTypeResolverTest extends AbstractNodeTypeResolverTest
      */
     public function test(string $file, int $position, array $expectedTypes): void
     {
-        if (PHP_VERSION >= '7.2.0') {
-            $this->markTestSkipped('This test needs PHP 7.1 or lower.');
-        }
-
         /** @var MethodCall[] $methodCallNodes */
         $methodCallNodes = $this->getNodesForFileOfType($file, MethodCall::class);
         $methodCallNode = $methodCallNodes[$position];
@@ -35,31 +32,32 @@ final class MethodCallTypeResolverTest extends AbstractNodeTypeResolverTest
         return [
             # on self call
             [__DIR__ . '/MethodCallSource/OnSelfCall.php.inc', 0, [
-                'SomeClass',
-                'Nette\Config\Configurator',
-                'Nette\Object',
+                'SomeParentCallingClass',
+                AnotherClass::class,
             ]],
             [__DIR__ . '/MethodCallSource/OnSelfCall.php.inc', 1, [
-                'SomeClass',
-                'Nette\Config\Configurator',
-                'Nette\Object',
+                'SomeParentCallingClass',
+                AnotherClass::class,
             ]],
+
             # on method call
-            [__DIR__ . '/MethodCallSource/OnMethodCallCall.php.inc', 0, ['Nette\DI\Container']],
+            [__DIR__ . '/MethodCallSource/OnMethodCallCall.php.inc', 0, [
+                'Rector\NodeTypeResolver\Tests\Source\AnotherClass',
+            ]],
+
             # on variable call
             [__DIR__ . '/MethodCallSource/OnVariableCall.php.inc', 0, [
-                'Nette\Config\Configurator',
-                'Nette\Object',
+                'Rector\NodeTypeResolver\Tests\Source\SomeClass',
             ]],
+
             # on property call
             [__DIR__ . '/MethodCallSource/OnPropertyCall.php.inc', 0, [
-                'Nette\Config\Configurator',
-                'Nette\Object',
+                'Rector\NodeTypeResolver\Tests\Source\SomeClass',
             ]],
+
             # on magic class call
             [__DIR__ . '/MethodCallSource/OnMagicClassCall.php.inc', 0, [
-                'Nette\Config\Configurator',
-                'Nette\Object',
+                'Rector\NodeTypeResolver\Tests\Source\SomeClass',
             ]],
         ];
     }
