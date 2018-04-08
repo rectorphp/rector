@@ -32,6 +32,10 @@ final class AssignTypeResolverTest extends AbstractNodeTypeResolverTest
             [__DIR__ . '/Source/New.php.inc', 0, ['AnotherClassWithParentInterface', 'ParentInterface']],
             [__DIR__ . '/Source/New.php.inc', 1, ['AnotherClassWithParentInterface', 'ParentInterface']],
 
+            # assign of "new <name>"
+            [__DIR__ . '/Source/MethodCall.php.inc', 0, ['SomeClass', 'SomeParentClass']],
+            [__DIR__ . '/Source/MethodCall.php.inc', 2, ['SomeClass', 'SomeParentClass']],
+
             # method call on property fetch
             [__DIR__ . '/Source/PropertyFetch.php.inc', 0, ['SomeClass', 'SomeParentClass']],
             [__DIR__ . '/Source/PropertyFetch.php.inc', 2, ['SomeClass', 'SomeParentClass']],
@@ -44,9 +48,7 @@ final class AssignTypeResolverTest extends AbstractNodeTypeResolverTest
     public function provideTypeForNodesAndFilesDataForPhp71(): array
     {
         return [
-            # assign of "new <name>"
-            [__DIR__ . '/Source/MethodCall.php.inc', 0, ['Nette\Config\Configurator', 'Nette\Object']],
-            [__DIR__ . '/Source/MethodCall.php.inc', 2, ['Nette\Config\Configurator', 'Nette\Object']],
+
             # method call
             [__DIR__ . '/Source/MethodCall.php.inc', 1, ['Nette\DI\Container']],
             # method call on class constant

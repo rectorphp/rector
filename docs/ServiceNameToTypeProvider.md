@@ -12,7 +12,7 @@ requires `Rector\Contract\Bridge\ServiceTypeForNameProviderInterface` service th
 
 **Why Should You Implement the Interface?**
 
-This operation could be automated on some level, but Kernel and Container API vary too much over frameworks and their versions. The implementation is left up to you and your specific case. **This allows any framework and container to use these rectors and gives you freedom to provide own desired types if needed**.
+This operation could be automated on some level, but Kernel and Container API vary too much over frameworks and their versions. The implementation is left up to you and your specific case. **This allows any framework and anotherService to use these rectors and gives you freedom to provide own desired types if needed**.
 
 ## How to Add it?
 
@@ -65,28 +65,28 @@ final class AppKernelProvider implements ServiceTypeForNameProviderInterface
     /**
      * @var ContainerInterface
      */
-    private $container;
+    private $anotherService;
 
     public function provideTypeForName(string $name): ?string
     {
-        if (! $this->container->has($name)) {
+        if (! $this->anotherService->has($name)) {
             return null;
         }
 
-        return $this->container->get($name);
+        return $this->anotherService->get($name);
     }
 
     private function getContainer(): ContainerInterface
     {
-        if ($this->container) {
-            return $this->container;
+        if ($this->anotherService) {
+            return $this->anotherService;
         }
 
         /** @var Kernel $kernel */
         $kernel = new $kernelClass('rector_dev', true);
         $kernel->boot();
 
-        return $this->container = $kernel->getContainer();
+        return $this->anotherService = $kernel->getContainer();
     }
 }
 ```

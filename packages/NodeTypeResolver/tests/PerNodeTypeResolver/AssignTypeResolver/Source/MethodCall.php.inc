@@ -1,7 +1,18 @@
 <?php
 
-use Nette\Config\Configurator;
+$someService = new SomeClass();
 
-$configurator = new Configurator;
+$anotherService = $someService->createAnotherClass();
 
-$container = $configurator->createContainer();
+class SomeClass extends SomeParentClass
+{
+    public function createAnotherClass(): AnotherClass
+    {
+
+    }
+}
+
+class SomeParentClass
+{
+
+}
