@@ -26,7 +26,7 @@
     "require-dev": {
         "symplify/easy-coding-standard": "^4.0",
         "phpstan/phpstan-shim": "^0.9",
-        "phpunit/phpunit": "^7.0",
+        "phpunit/phpunit": "^7.1",
         "slam/php-cs-fixer-extensions": "^1.13",
         "tracy/tracy": "^2.4"
     },
@@ -70,5 +70,5 @@
     ],
     "config": {
         "sort-packages": true
-    }    
+    }
 }
