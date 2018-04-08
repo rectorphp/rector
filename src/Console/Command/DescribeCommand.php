@@ -62,8 +62,6 @@ final class DescribeCommand extends Command
             $this->describeRector($input, $rector);
         }
 
-        $this->consoleStyle->success('Rector is done!');
-
         return 0;
     }
 

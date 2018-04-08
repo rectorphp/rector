@@ -1,0 +1,24 @@
+services:
+    # differ
+    diffOutputBuilder:
+        class: SebastianBergmann\Diff\Output\StrictUnifiedDiffOutputBuilder
+        arguments:
+            $options:
+                'fromFile': 'Original'
+                'toFile': 'New'
+
+    differ:
+        class: SebastianBergmann\Diff\Differ
+        arguments:
+            - '@diffOutputBuilder'
+
+    # bare differ
+    bareDiffOutputBuilder:
+        class: SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder
+        arguments:
+            $header: ''
+
+    bareDiffer:
+        class: SebastianBergmann\Diff\Differ
+        arguments:
+            - '@bareDiffOutputBuilder'

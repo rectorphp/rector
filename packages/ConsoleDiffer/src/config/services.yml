@@ -1,3 +1,6 @@
+imports:
+    - { resource: 'external-services.yml' }
+
 services:
     _defaults:
         autowire: true
@@ -8,25 +11,3 @@ services:
     Rector\ConsoleDiffer\DifferAndFormatter:
         $differ: '@differ'
         $bareDiffer: '@bareDiffer'
-
-    # differ
-    SebastianBergmann\Diff\Output\StrictUnifiedDiffOutputBuilder:
-        arguments:
-            $options:
-                'fromFile': 'Original'
-                'toFile': 'New'
-
-    differ:
-        class: SebastianBergmann\Diff\Differ
-        arguments:
-            - '@SebastianBergmann\Diff\Output\StrictUnifiedDiffOutputBuilder'
-
-    # bare differ
-    SebastianBergmann\Diff\Output\DiffOnlyOutputBuilder:
-        arguments:
-            $header: ''
-
-    bareDiffer:
-        class: SebastianBergmann\Diff\Differ
-        arguments:
-            - '@SebastianBergmann\Diff\Output\DiffOnlyOutputBuilder'
