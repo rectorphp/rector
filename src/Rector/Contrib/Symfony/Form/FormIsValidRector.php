@@ -10,14 +10,9 @@ use Rector\Node\Attribute;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
-/**
- * Converts all:
- * $form->isValid()
- *
- * into:
- * $form->isSubmitted() && $form->isValid()
- */
 final class FormIsValidRector extends AbstractRector
 {
     /**
@@ -34,6 +29,16 @@ final class FormIsValidRector extends AbstractRector
     {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->methodCallNodeFactory = $methodCallNodeFactory;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('Adds $form->isSubmitted() validatoin to all $form->isValid() calls in Form in Symfony', [
+            new CodeSample(
+                'if ($form->isValid()) { ... };',
+                'if ($form->isSubmitted() && $form->isValid()) { ... };'
+            ),
+        ]);
     }
 
     public function isCandidate(Node $node): bool

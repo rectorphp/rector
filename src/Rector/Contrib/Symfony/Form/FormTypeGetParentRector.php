@@ -8,24 +8,9 @@ use Rector\Node\Attribute;
 use Rector\Node\NodeFactory;
 use Rector\Rector\AbstractRector;
 use Rector\Rector\Contrib\Symfony\Form\Helper\FormTypeStringToTypeProvider;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
-/**
- * Converts all:
- * - getParent() {
- *      return 'collection';
- * }
- * - getExtendedType() {
- *      return 'collection';
- * }
- *
- * into:
- * - getParent() {
- *      return CollectionType::class;
- * }
- * - getExtendedType() {
- *      return CollectionType::class;
- * }
- */
 final class FormTypeGetParentRector extends AbstractRector
 {
     /**
@@ -42,6 +27,20 @@ final class FormTypeGetParentRector extends AbstractRector
     {
         $this->nodeFactory = $nodeFactory;
         $this->formTypeStringToTypeProvider = $formTypeStringToTypeProvider;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('Turns string Form Type references to their CONSTANT alternatives in getParent() and getExtendedType() methods in Form in Symfony', [
+            new CodeSample(
+                'function getParent() { return "collection"; }',
+                'function getParent() { return CollectionType::class; }'
+            ),
+            new CodeSample(
+                'function getExtendedType() { return "collection"; }',
+                'function getExtendedType() { return CollectionType::class; }'
+            )
+        ]);
     }
 
     public function isCandidate(Node $node): bool

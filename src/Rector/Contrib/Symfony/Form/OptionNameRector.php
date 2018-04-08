@@ -9,14 +9,9 @@ use PhpParser\Node\Scalar\String_;
 use Rector\Node\Attribute;
 use Rector\Node\NodeFactory;
 use Rector\Rector\AbstractRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
-/**
- * Converts all:
- * - $builder->add('...', ['precision' => '...', 'virtual' => '...'];
- *
- * into:
- * - $builder->add('...', ['scale' => '...', 'inherit_data' => '...'];
- */
 final class OptionNameRector extends AbstractRector
 {
     /**
@@ -36,6 +31,17 @@ final class OptionNameRector extends AbstractRector
     {
         $this->nodeFactory = $nodeFactory;
     }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('Turns old option names to new ones in FormTypes in Form in Symfony', [
+            new CodeSample(
+                '$builder->add("...", ["precision" => "...", "virtual" => "..."];',
+                '$builder->add("...", ["scale" => "...", "inherit_data" => "..."];'
+            )
+        ]);
+    }
+
 
     public function isCandidate(Node $node): bool
     {
