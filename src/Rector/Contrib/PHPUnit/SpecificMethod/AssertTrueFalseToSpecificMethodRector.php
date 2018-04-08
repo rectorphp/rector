@@ -12,14 +12,9 @@ use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractPHPUnitRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
-/**
- * Before:
- * - $this->assertTrue(is_readable($readmeFile), 'message');
- *
- * After:
- * - $this->assertIsReadable($readmeFile, 'message'));
- */
 final class AssertTrueFalseToSpecificMethodRector extends AbstractPHPUnitRector
 {
     /**
@@ -78,6 +73,13 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractPHPUnitRector
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
         $this->nodeFactory = $nodeFactory;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('Turns true/false comparisons to their method name alternatives in PHPUnit Test Case', [
+            new CodeSample('$this->assertTrue(is_readable($readmeFile), "message");', '$this->assertIsReadable($readmeFile, "message");'),
+        ]);
     }
 
     public function isCandidate(Node $node): bool

@@ -12,16 +12,9 @@ use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractPHPUnitRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
-/**
- * Before:
- * - $this->assertTrue(property_exists(new Class, 'property'), 'message');
- * - $this->assertFalse(property_exists(new Class, 'property'), 'message');
- *
- * After:
- * - $this->assertClassHasAttribute('property', 'Class', 'message');
- * - $this->assertClassNotHasAttribute('property', 'Class', 'message');
- */
 final class AssertPropertyExistsRector extends AbstractPHPUnitRector
 {
     /**
@@ -55,6 +48,14 @@ final class AssertPropertyExistsRector extends AbstractPHPUnitRector
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
         $this->nodeFactory = $nodeFactory;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('Turns property_exists() comparisons to their method name alternatives in PHPUnit Test Case', [
+            new CodeSample('$this->assertTrue(property_exists(new Class, "property"), "message");', '$this->assertClassHasAttribute("property", "Class", "message");'),
+            new CodeSample('$this->assertFalse(property_exists(new Class, "property"), "message");', '$this->assertClassNotHasAttribute("property", "Class", "message");'),
+        ]);
     }
 
     public function isCandidate(Node $node): bool

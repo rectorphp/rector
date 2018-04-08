@@ -10,14 +10,9 @@ use Rector\Node\PropertyFetchNodeFactory;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
-/**
- * Before:
- * - $catchNode->var
- *
- * After:
- * - $catchNode->var->name
- */
 final class CatchAndClosureUseNameRector extends AbstractRector
 {
     /**
@@ -52,6 +47,13 @@ final class CatchAndClosureUseNameRector extends AbstractRector
             ['PhpParser\Node\Stmt\Catch_', 'PhpParser\Node\Expr\ClosureUse'],
             'var'
         );
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('Turns $catchNode->var to its new new ->name property in php-parser', [
+            new CodeSample('$catchNode->var;', '$catchNode->var->name'),
+        ]);
     }
 
     /**
