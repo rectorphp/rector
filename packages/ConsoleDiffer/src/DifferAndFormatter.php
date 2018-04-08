@@ -4,7 +4,6 @@ namespace Rector\ConsoleDiffer;
 
 use Rector\ConsoleDiffer\Console\Formatter\DiffConsoleFormatter;
 use SebastianBergmann\Diff\Differ;
-use SebastianBergmann\Diff\Output\DiffOnlyOutputBuilder;
 
 final class DifferAndFormatter
 {
@@ -23,11 +22,11 @@ final class DifferAndFormatter
      */
     private $bareDiffer;
 
-    public function __construct(Differ $differ, DiffConsoleFormatter $diffConsoleFormatter)
+    public function __construct(Differ $differ, DiffConsoleFormatter $diffConsoleFormatter, Differ $bareDiffer)
     {
         $this->differ = $differ;
         $this->diffConsoleFormatter = $diffConsoleFormatter;
-        $this->bareDiffer = (new Differ(new DiffOnlyOutputBuilder('')));
+        $this->bareDiffer = $bareDiffer;
     }
 
     public function diffAndFormat(string $old, string $new): string
