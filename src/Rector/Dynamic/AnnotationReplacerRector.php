@@ -7,15 +7,10 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\Node\Attribute;
 use Rector\Rector\AbstractPHPUnitRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 use Rector\ReflectionDocBlock\NodeAnalyzer\DocBlockAnalyzer;
 
-/**
- * Before:
- * - @scenario
- *
- * After:
- * - @test
- */
 final class AnnotationReplacerRector extends AbstractPHPUnitRector
 {
     /**
@@ -40,6 +35,18 @@ final class AnnotationReplacerRector extends AbstractPHPUnitRector
     {
         $this->docBlockAnalyzer = $docBlockAnalyzer;
         $this->classToAnnotationMap = $classToAnnotationMap;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('[Dynamic] Turns defined annotations above properties and methods to their new values.', [
+            new CodeSample(
+                '/** @test */
+                 public function someMethod() {};',
+                '/** @scenario */
+                 public function someMethod() {};'
+            )
+        ]);
     }
 
     public function isCandidate(Node $node): bool

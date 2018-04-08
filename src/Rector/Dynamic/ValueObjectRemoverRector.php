@@ -10,6 +10,8 @@ use PhpParser\Node\Stmt\Property;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Rector\AbstractRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 use Rector\ReflectionDocBlock\NodeAnalyzer\DocBlockAnalyzer;
 
 final class ValueObjectRemoverRector extends AbstractRector
@@ -40,6 +42,16 @@ final class ValueObjectRemoverRector extends AbstractRector
         $this->valueObjectsToSimpleTypes = $valueObjectsToSimpleTypes;
         $this->docBlockAnalyzer = $docBlockAnalyzer;
         $this->nodeTypeResolver = $nodeTypeResolver;
+    }
+
+    /**
+     * @todo complete the rest of cases
+     */
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('[Dynamic] Remove values objects and use directly the value.', [
+            new CodeSample('$someValue = new SomeValueObject("just_a_string");', '$someValue = "just_a_string";')
+        ]);
     }
 
     public function isCandidate(Node $node): bool

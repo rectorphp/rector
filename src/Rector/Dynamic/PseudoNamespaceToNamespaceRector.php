@@ -12,6 +12,8 @@ use Rector\Builder\StatementGlue;
 use Rector\Node\Attribute;
 use Rector\Node\NodeFactory;
 use Rector\Rector\AbstractRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
 final class PseudoNamespaceToNamespaceRector extends AbstractRector
 {
@@ -53,6 +55,13 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
         $this->resolvePseudoNamespacePrefixesAndExcludedClasses($configuration);
         $this->nodeFactory = $nodeFactory;
         $this->statementGlue = $statementGlue;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('[Dynamic] Replaces defined Pseudo_Namespaces by Namespace\Ones.', [
+            new CodeSample('$someServie = Some_Object;', '$someServie = Some\Object;')
+        ]);
     }
 
     public function isCandidate(Node $node): bool

@@ -15,19 +15,9 @@ use Rector\BetterReflection\Reflection\TypeAnalyzer;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Rector\AbstractRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
-/**
- * Useful when parent class or interface gets new typehints,
- * that breaks contract with child instances.
- *
- * E.g. interface SomeInterface
- * {
- *      public read($content);
- * }
- *
- * After
- *      public read(string $content);
- */
 final class ParentTypehintedArgumentRector extends AbstractRector
 {
     /**
@@ -62,6 +52,37 @@ final class ParentTypehintedArgumentRector extends AbstractRector
         $this->typehintForArgumentByMethodAndClass = $typehintForArgumentByMethodAndClass;
         $this->typeAnalyzer = $typeAnalyzer;
         $this->nodeTypeResolver = $nodeTypeResolver;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('[Dynamic] Changes defined parent class typehints.', [
+            new CodeSample(
+                <<<'CODE_SAMPLE'
+interface SomeInterface
+{
+    public read(string $content);
+}
+
+class SomeClass implements SomeInterface
+{
+    public read($content);
+}
+CODE_SAMPLE
+                ,
+                <<<'CODE_SAMPLE'
+interface SomeInterface
+{
+    public read(string $content);
+}
+
+class SomeClass implements SomeInterface
+{
+    public read(string $content);
+}
+CODE_SAMPLE
+            ),
+        ]);
     }
 
     public function isCandidate(Node $node): bool

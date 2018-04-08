@@ -15,6 +15,8 @@ use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeAnalyzer\StaticMethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\Rector\Dynamic\Configuration\ArgumentReplacerRecipe;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
 final class ArgumentReplacerRector extends AbstractRector
 {
@@ -63,6 +65,21 @@ final class ArgumentReplacerRector extends AbstractRector
         $this->classMethodAnalyzer = $classMethodAnalyzer;
         $this->staticMethodCallAnalyzer = $staticMethodCallAnalyzer;
         $this->constExprEvaluator = $constExprEvaluator;
+    }
+
+    /**
+     * @todo complete list with all possibilities
+     */
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('[Dynamic] Adds, removes or replaces defined arguments in defined methods and their calls.', [
+            new CodeSample(
+                '$containerBuilder = new Symfony\Component\DependencyInjection\ContainerBuilder;
+        $containerBuilder->compile();',
+                '$containerBuilder = new Symfony\Component\DependencyInjection\ContainerBuilder;
+        $containerBuilder->compile(true);'
+            )
+        ]);
     }
 
     public function isCandidate(Node $node): bool

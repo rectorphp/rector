@@ -8,6 +8,8 @@ use PhpParser\Node\Identifier;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
 final class PropertyNameReplacerRector extends AbstractRector
 {
@@ -46,6 +48,13 @@ final class PropertyNameReplacerRector extends AbstractRector
         $this->perClassOldToNewProperties = $perClassOldToNewProperties;
         $this->identifierRenamer = $identifierRenamer;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('[Dynamic] Replaces defined old properties by new ones.', [
+            new CodeSample('$someObject->someOldProperty;', '$someObject->someNewProperty;'),
+        ]);
     }
 
     public function isCandidate(Node $node): bool
