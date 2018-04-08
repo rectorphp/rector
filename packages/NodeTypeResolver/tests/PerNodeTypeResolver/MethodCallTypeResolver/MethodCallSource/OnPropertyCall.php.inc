@@ -2,18 +2,20 @@
 
 namespace SomeNamespace;
 
-use Nette\Config\Configurator;
-
 class SomeClass
 {
     /**
-     * @var Configurator
+     * @var \Rector\NodeTypeResolver\Tests\Source\SomeClass
      */
-    private $configurator;
+    private $someService;
 
+    public function __construct()
+    {
+        $this->someService = new \Rector\NodeTypeResolver\Tests\Source\SomeClass();
+    }
 
     public function someMethod()
     {
-        $this->configurator->createContainer();
+        $this->someService->createAnotherClass();
     }
 }
