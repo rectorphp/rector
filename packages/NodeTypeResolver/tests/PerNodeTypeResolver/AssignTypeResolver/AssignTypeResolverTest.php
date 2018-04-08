@@ -12,6 +12,7 @@ final class AssignTypeResolverTest extends AbstractNodeTypeResolverTest
 {
     /**
      * @dataProvider provideTypeForNodesAndFilesData()
+     * @NOdataProvider provideTypeForNodesAndFilesDataForPhp71()
      * @param string[] $expectedTypes
      */
     public function test(string $file, int $nodePosition, array $expectedTypes): void
@@ -28,36 +29,13 @@ final class AssignTypeResolverTest extends AbstractNodeTypeResolverTest
     {
         return [
             # assign of "new <name>"
-            [__DIR__ . '/Source/New.php.inc', 0, [
-                'Symfony\Component\DependencyInjection\ContainerBuilder',
-                'Symfony\Component\DependencyInjection\ResettableContainerInterface',
-                'Symfony\Component\DependencyInjection\ContainerInterface',
-                'Psr\Container\ContainerInterface',
-                'Symfony\Component\DependencyInjection\TaggedContainerInterface',
-                'Symfony\Component\DependencyInjection\Container',
-            ]],
-            [__DIR__ . '/Source/New.php.inc', 1, [
-                'Symfony\Component\DependencyInjection\ContainerBuilder',
-                'Symfony\Component\DependencyInjection\ResettableContainerInterface',
-                'Symfony\Component\DependencyInjection\ContainerInterface',
-                'Psr\Container\ContainerInterface',
-                'Symfony\Component\DependencyInjection\TaggedContainerInterface',
-                'Symfony\Component\DependencyInjection\Container',
-            ]],
+            [__DIR__ . '/Source/New.php.inc', 0, ['AnotherClassWithParentInterface', 'ParentInterface']],
+            [__DIR__ . '/Source/New.php.inc', 1, ['AnotherClassWithParentInterface', 'ParentInterface']],
+
+            # method call on property fetch
+            [__DIR__ . '/Source/PropertyFetch.php.inc', 0, ['SomeClass', 'SomeParentClass']],
+            [__DIR__ . '/Source/PropertyFetch.php.inc', 2, ['SomeClass', 'SomeParentClass']],
         ];
-    }
-
-    /**
-     * @dataProvider provideTypeForNodesAndFilesDataForPhp71()
-     * @param string[] $expectedTypes
-     */
-    public function testPhp71(string $file, int $nodePosition, array $expectedTypes): void
-    {
-        if (PHP_VERSION >= '7.2.0') {
-            $this->markTestSkipped('This test needs PHP 7.1 or lower.');
-        }
-
-        $this->test($file, $nodePosition, $expectedTypes);
     }
 
     /**
@@ -74,9 +52,7 @@ final class AssignTypeResolverTest extends AbstractNodeTypeResolverTest
             # method call on class constant
             [__DIR__ . '/Source/ClassConstant.php.inc', 0, ['Nette\Config\Configurator', 'Nette\Object']],
             [__DIR__ . '/Source/ClassConstant.php.inc', 2, ['Nette\Config\Configurator', 'Nette\Object']],
-            # method call on property fetch
-            [__DIR__ . '/Source/PropertyFetch.php.inc', 0, ['Nette\Config\Configurator', 'Nette\Object']],
-            [__DIR__ . '/Source/PropertyFetch.php.inc', 2, ['Nette\Config\Configurator', 'Nette\Object']],
+
         ];
     }
 }
