@@ -4,6 +4,6 @@ namespace Rector\Exception\RectorDefinition;
 
 use Exception;
 
-final class CodeSamplesMissingExceptoin extends Exception
+final class CodeSamplesMissingException extends Exception
 {
 }
