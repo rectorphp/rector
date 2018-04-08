@@ -66,12 +66,16 @@ final class DescribeCommand extends Command
 
             if ($input->getOption(Option::DESCRIBE_WITH_DIFFS)) {
                 foreach ($rectorDefinition->getCodeSamples() as $codeSample) {
-                    $this->consoleStyle->write(
-                        $this->differAndFormatter->diffAndFormat(
-                            $codeSample->getCodeBefore(),
-                            $codeSample->getCodeAfter()
-                        )
+                    $this->consoleStyle->newLine();
+
+                    $formattedDiff = $this->differAndFormatter->bareDiffAndFormat(
+                        $codeSample->getCodeBefore(),
+                        $codeSample->getCodeAfter()
                     );
+
+                    if ($formattedDiff) {
+                        $this->consoleStyle->write($formattedDiff);
+                    }
                 }
             }
 
