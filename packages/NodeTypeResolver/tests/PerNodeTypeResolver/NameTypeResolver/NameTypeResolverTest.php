@@ -16,10 +16,6 @@ final class NameTypeResolverTest extends AbstractNodeTypeResolverTest
      */
     public function test(string $file, int $nodePosition, array $expectedTypes): void
     {
-        if (PHP_VERSION >= '7.2.0') {
-            $this->markTestSkipped('This test needs PHP 7.1 or lower.');
-        }
-
         $nameNodes = $this->getNodesForFileOfType($file, Name::class);
 
         $this->assertSame($expectedTypes, $this->nodeTypeResolver->resolve($nameNodes[$nodePosition]));
@@ -32,7 +28,7 @@ final class NameTypeResolverTest extends AbstractNodeTypeResolverTest
     {
         return [
             # test new
-            [__DIR__ . '/Source/ParentCall.php.inc', 2, ['Nette\Config\Configurator']],
+            [__DIR__ . '/Source/ParentCall.php.inc', 2, ['Rector\NodeTypeResolver\Tests\Source\AnotherClass']],
         ];
     }
 }

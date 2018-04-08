@@ -2,7 +2,7 @@
 
 namespace Rector\NodeTypeResolver\Tests\Source;
 
-final class AnotherClass
+class AnotherClass
 {
     public function getParameters()
     {
