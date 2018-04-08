@@ -4,6 +4,10 @@ namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\PropertyFetchTypeRes
 
 use PhpParser\Node\Expr\PropertyFetch;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
+use Rector\NodeTypeResolver\Tests\Source\NestedProperty\ClassWithPropertyLevel1;
+use Rector\NodeTypeResolver\Tests\Source\NestedProperty\ClassWithPropertyLevel2;
+use Rector\NodeTypeResolver\Tests\Source\NestedProperty\ClassWithPropertyLevel3;
+use Rector\NodeTypeResolver\Tests\Source\NestedProperty\ParentClass;
 
 /**
  * @covers \Rector\NodeTypeResolver\PerNodeTypeResolver\PropertyFetchTypeResolver
@@ -31,13 +35,9 @@ final class PropertyFetchTypeResolverTest extends AbstractNodeTypeResolverTest
     {
         return [
             # doc block
-            [__DIR__ . '/Source/NestedProperty.php.inc', 0, 'name', ['PhpParser\Node\VarLikeIdentifier']],
-            [__DIR__ . '/Source/NestedProperty.php.inc', 1, 'props', ['PhpParser\Node\Stmt\PropertyProperty']],
-            [__DIR__ . '/Source/NestedProperty.php.inc', 2, 'node', [
-                'PhpParser\Node\Stmt\Property',
-                'PhpParser\Node\Stmt',
-                'PhpParser\NodeAbstract',
-            ]],
+            [__DIR__ . '/Source/NestedProperty.php.inc', 0, 'level3', [ClassWithPropertyLevel3::class]],
+            [__DIR__ . '/Source/NestedProperty.php.inc', 1, 'level2s', [ClassWithPropertyLevel2::class]],
+            [__DIR__ . '/Source/NestedProperty.php.inc', 2, 'level1', [ClassWithPropertyLevel1::class, ParentClass::class]]
         ];
     }
 }
