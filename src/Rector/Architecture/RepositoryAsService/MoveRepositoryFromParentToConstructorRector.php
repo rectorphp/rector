@@ -82,7 +82,38 @@ final class MoveRepositoryFromParentToConstructorRector extends AbstractRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('...', [new CodeSample('...', '...')]);
+        return new RectorDefinition('Turns parent EntityRepository class to constructor dependency', [
+            new CodeSample(
+                <<<'CODE_SAMPLE'
+namespace App\Repository;
+
+use Doctrine\ORM\EntityRepository;
+
+final class PostRepository extends EntityRepository
+{
+}
+CODE_SAMPLE
+                ,
+                <<<'CODE_SAMPLE'
+namespace App\Repository;
+
+use App\Entity\Post;
+use Doctrine\ORM\EntityRepository;
+
+final class PostRepository
+{
+    /**
+     * @var \Doctrine\ORM\EntityRepository
+     */
+    private $repository;
+    public function __construct(\Doctrine\ORM\EntityManager $entityManager)
+    {
+        $this->repository = $entityManager->getRepository(\App\Entity\Post::class);
+    }
+}
+CODE_SAMPLE
+            ),
+        ]);
     }
 
     /**
