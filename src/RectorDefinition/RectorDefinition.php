@@ -15,6 +15,7 @@ final class RectorDefinition
     private $codeSamples = [];
 
     /**
+     * @todo require at least 1 item?
      * @param CodeSample[] $codeSamples
      */
     public function __construct(string $description, array $codeSamples)
