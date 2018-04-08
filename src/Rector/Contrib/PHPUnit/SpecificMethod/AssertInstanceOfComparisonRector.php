@@ -50,7 +50,7 @@ final class AssertInstanceOfComparisonRector extends AbstractPHPUnitRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
-            'Turns instanceof comparisons to their method name alternatives in PHPUnit Test Case',
+            'Turns instanceof comparisons to their method name alternatives in PHPUnit TestCase',
             [
                 new CodeSample(
                     '$this->assertTrue($foo instanceof Foo, "message");',

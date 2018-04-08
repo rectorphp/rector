@@ -33,7 +33,7 @@ final class ArrayToYieldDataProviderRector extends AbstractPHPUnitRector
         return new RectorDefinition('Turns method data providers in PHPUnit from arrays to yield', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
-               public function provide()
+               public function provide(): array
                {
                     return [
                         ['item']

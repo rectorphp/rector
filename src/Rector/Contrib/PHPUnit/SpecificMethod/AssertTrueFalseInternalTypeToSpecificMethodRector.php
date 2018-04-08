@@ -72,7 +72,7 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractPH
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
-            'Turns true/false with is_internal() comparisons to their method name alternatives in PHPUnit Test Case',
+            'Turns true/false with internal type comparisons to their method name alternatives in PHPUnit TestCase',
             [
                 new CodeSample(
                     '$this->assertTrue(is_{internal_type}($anything), "message");',

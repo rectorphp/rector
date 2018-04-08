@@ -47,7 +47,7 @@ final class AssertSameBoolNullToSpecificMethodRector extends AbstractPHPUnitRect
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
-            'Turns same with null comparisons to their method name alternatives in PHPUnit Test Case',
+            'Turns same bool and null comparisons to their method name alternatives in PHPUnit TestCase',
             [
                 new CodeSample('$this->assertSame(null, $anything);', '$this->assertNull($anything);'),
                 new CodeSample('$this->assertNotSame(false, $anything);', '$this->assertNotFalse($anything);'),

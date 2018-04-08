@@ -78,7 +78,7 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractPHPUnitRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
-            'Turns true/false comparisons to their method name alternatives in PHPUnit Test Case',
+            'Turns true/false comparisons to their method name alternatives in PHPUnit TestCase when possible',
             [
                 new CodeSample(
                     '$this->assertTrue(is_readable($readmeFile), "message");',

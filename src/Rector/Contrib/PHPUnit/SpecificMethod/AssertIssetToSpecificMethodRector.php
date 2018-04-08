@@ -43,7 +43,7 @@ final class AssertIssetToSpecificMethodRector extends AbstractPHPUnitRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Turns isset comparisons to their method name alternatives in PHPUnit Test Case', [
+        return new RectorDefinition('Turns isset comparisons to their method name alternatives in PHPUnit TestCase', [
             new CodeSample(
                 '$this->assertTrue(isset($anything->foo));',
                 '$this->assertFalse(isset($anything["foo"]), "message");'

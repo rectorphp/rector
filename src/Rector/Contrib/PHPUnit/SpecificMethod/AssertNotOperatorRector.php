@@ -40,7 +40,7 @@ final class AssertNotOperatorRector extends AbstractPHPUnitRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
-            'Turns not-operator comparisons to their method name alternatives in PHPUnit Test Case',
+            'Turns not-operator comparisons to their method name alternatives in PHPUnit TestCase',
             [
                 new CodeSample('$this->assertTrue(!$foo, "message");', '$this->assertFalse($foo, "message");'),
                 new CodeSample('$this->assertFalse(!$foo, "message");', '$this->assertTrue($foo, "message");'),

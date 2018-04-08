@@ -52,7 +52,7 @@ final class AssertComparisonToSpecificMethodRector extends AbstractPHPUnitRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Turns === comparisons to their method name alternatives in PHPUnit Test Case', [
+        return new RectorDefinition('Turns === comparisons to their method name alternatives in PHPUnit TestCase', [
             new CodeSample('$this->assertTrue($foo === $bar, "message");', '$this->assertSame($bar, $foo, "message");'),
             new CodeSample(
                 '$this->assertFalse($foo >= $bar, "message");',

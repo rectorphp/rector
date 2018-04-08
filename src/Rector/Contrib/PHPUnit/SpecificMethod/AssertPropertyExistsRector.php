@@ -53,7 +53,7 @@ final class AssertPropertyExistsRector extends AbstractPHPUnitRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
-            'Turns property_exists() comparisons to their method name alternatives in PHPUnit Test Case',
+            'Turns property_exists() comparisons to their method name alternatives in PHPUnit TestCase',
             [
                 new CodeSample(
                     '$this->assertTrue(property_exists(new Class, "property"), "message");',
