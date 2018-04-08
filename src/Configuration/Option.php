@@ -18,4 +18,9 @@ final class Option
      * @var string
      */
     public const OPTION_DRY_RUN = 'dry-run';
+
+    /**
+     * @var string
+     */
+    public const DESCRIBE_WITH_DIFFS = 'with-diff';
 }
