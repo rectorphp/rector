@@ -8,14 +8,9 @@ use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
-/**
- * Before:
- * - $node->setLine(5);
- *
- * After:
- * - $node->setAttribute('line', 5);
- */
 final class SetLineRector extends AbstractRector
 {
     /**
@@ -41,6 +36,13 @@ final class SetLineRector extends AbstractRector
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
         $this->nodeFactory = $nodeFactory;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('Turns standalone line method to attribute in Node of PHP-Parser', [
+            new CodeSample('$node->setLine(5);', '$node->setAttribute("line", 5);'),
+        ]);
     }
 
     public function isCandidate(Node $node): bool

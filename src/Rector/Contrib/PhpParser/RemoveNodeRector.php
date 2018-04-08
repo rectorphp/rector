@@ -8,23 +8,11 @@ use PhpParser\Node\Stmt\Return_;
 use Rector\Node\Attribute;
 use Rector\Node\NodeFactory;
 use Rector\Rector\AbstractRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * Covers: https://github.com/nikic/PHP-Parser/commit/987c61e935a7d73485b4d73aef7a17a4c1e2e325
- *
- * Before:
- *
- * public function leaveNode()
- * {
- *     return false;
- * }
- *
- * After:
- *
- * public function leaveNode()
- * {
- *     return NodeTraverser::REMOVE_NODE ;
- * }
  */
 final class RemoveNodeRector extends AbstractRector
 {
@@ -36,6 +24,16 @@ final class RemoveNodeRector extends AbstractRector
     public function __construct(NodeFactory $nodeFactory)
     {
         $this->nodeFactory = $nodeFactory;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('Turns integer return to remove node to constant in NodeVisitor of PHP-Parser', [
+            new CodeSample(
+                'public function leaveNode() { return false; }',
+                'public function leaveNode() { return NodeTraverser::REMOVE_NODE; }'
+            ),
+        ]);
     }
 
     public function isCandidate(Node $node): bool

@@ -7,16 +7,9 @@ use PhpParser\Node\Expr\PropertyFetch;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
-/**
- * Before:
- * - $paramNode->name
- * - $staticVarNode->name
- *
- * After:
- * - $paramNode->var->name
- * - $staticVarNode->var->name
- */
 final class ParamAndStaticVarNameRector extends AbstractRector
 {
     /**
@@ -33,6 +26,14 @@ final class ParamAndStaticVarNameRector extends AbstractRector
     {
         $this->identifierRenamer = $identifierRenamer;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('Turns old string var to var->name sub-variable in Node of PHP-Parser', [
+            new CodeSample('$paramNode->name;', '$paramNode->var->name;'),
+            new CodeSample('$staticVarNode->name;', '$staticVarNode->var->name;'),
+        ]);
     }
 
     public function isCandidate(Node $node): bool
