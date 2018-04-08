@@ -1,7 +1,6 @@
 services:
     _defaults:
         autowire: true
-        public: true # for tests
 
     # PhpParser - Parser
     PhpParser\Parser:
