@@ -30,12 +30,15 @@ final class ContainerBuilderCompileEnvArgumentRector extends AbstractRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Turns old default value to parameter in ContinerBuilder->build() method in DI in Symfony', [
-            new CodeSample(
-                '$containerBuilder = new Symfony\Component\DependencyInjection\ContainerBuilder(); $containerBuilder->compile();',
-                '$containerBuilder = new Symfony\Component\DependencyInjection\ContainerBuilder(); $containerBuilder->compile(true);'
-            ),
-        ]);
+        return new RectorDefinition(
+            'Turns old default value to parameter in ContinerBuilder->build() method in DI in Symfony',
+            [
+                new CodeSample(
+                    '$containerBuilder = new Symfony\Component\DependencyInjection\ContainerBuilder(); $containerBuilder->compile();',
+                    '$containerBuilder = new Symfony\Component\DependencyInjection\ContainerBuilder(); $containerBuilder->compile(true);'
+                ),
+            ]
+        );
     }
 
     public function isCandidate(Node $node): bool

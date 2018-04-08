@@ -38,7 +38,7 @@ final class OptionNameRector extends AbstractRector
             new CodeSample(
                 '$builder->add("...", ["precision" => "...", "virtual" => "..."];',
                 '$builder->add("...", ["scale" => "...", "inherit_data" => "..."];'
-            )
+            ),
         ]);
     }
 

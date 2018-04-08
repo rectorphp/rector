@@ -33,12 +33,15 @@ final class FormIsValidRector extends AbstractRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Adds $form->isSubmitted() validatoin to all $form->isValid() calls in Form in Symfony', [
-            new CodeSample(
-                'if ($form->isValid()) { ... };',
-                'if ($form->isSubmitted() && $form->isValid()) { ... };'
-            ),
-        ]);
+        return new RectorDefinition(
+            'Adds $form->isSubmitted() validatoin to all $form->isValid() calls in Form in Symfony',
+            [
+                new CodeSample(
+                    'if ($form->isValid()) { ... };',
+                    'if ($form->isSubmitted() && $form->isValid()) { ... };'
+                ),
+            ]
+        );
     }
 
     public function isCandidate(Node $node): bool

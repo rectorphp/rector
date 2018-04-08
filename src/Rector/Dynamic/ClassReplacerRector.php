@@ -32,7 +32,7 @@ final class ClassReplacerRector extends AbstractRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('[Dynamic] Replaces defined classes by new ones.', [
-            new CodeSample('$value = new SomeOldClass;','$value = new SomeNewClass;')
+            new CodeSample('$value = new SomeOldClass;', '$value = new SomeNewClass;'),
         ]);
     }
 

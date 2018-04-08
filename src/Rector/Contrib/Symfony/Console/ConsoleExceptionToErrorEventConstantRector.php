@@ -43,7 +43,10 @@ final class ConsoleExceptionToErrorEventConstantRector extends AbstractRector
     {
         return new RectorDefinition('Turns old event name with EXCEPTION to ERROR constant in Console in Symfony', [
             new CodeSample('"console.exception"', 'Symfony\Component\Console\ConsoleEvents::ERROR'),
-            new CodeSample('Symfony\Component\Console\ConsoleEvents::EXCEPTION', 'Symfony\Component\Console\ConsoleEvents::ERROR'),
+            new CodeSample(
+                'Symfony\Component\Console\ConsoleEvents::EXCEPTION',
+                'Symfony\Component\Console\ConsoleEvents::ERROR'
+            ),
         ]);
     }
 

@@ -50,8 +50,10 @@ final class GetParameterToConstructorInjectionRector extends AbstractRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Turns fetching of parmaters via getParmaeter() in ContainerAware to constructor injection in Command and Controller in Symfony', [
-            new CodeSample(
+        return new RectorDefinition(
+            'Turns fetching of parmaters via getParmaeter() in ContainerAware to constructor injection in Command and Controller in Symfony',
+            [
+                new CodeSample(
 <<<'CODE_SAMPLE'
 class MyCommand extends ContainerAwareCommand
 {
@@ -61,7 +63,7 @@ class MyCommand extends ContainerAwareCommand
     }
 }
 CODE_SAMPLE
-                ,
+                    ,
 <<<'CODE_SAMPLE'
 class MyCommand extends Command
 {
@@ -78,8 +80,9 @@ class MyCommand extends Command
     }
 }
 CODE_SAMPLE
-            )
-        ]);
+                ),
+            ]
+        );
     }
 
     public function isCandidate(Node $node): bool

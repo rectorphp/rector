@@ -38,9 +38,15 @@ final class SetEntityToStatementRector extends AbstractRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Turns setDefinition() to Nette\DI\Helpers::expand() value in Nette\DI\CompilerExtension', [
-            new CodeSample('$definition->setEntity("someEntity");', '$definition = new Statement("someEntity", $definition->arguments);'),
-        ]);
+        return new RectorDefinition(
+            'Turns setDefinition() to Nette\DI\Helpers::expand() value in Nette\DI\CompilerExtension',
+            [
+                new CodeSample(
+                    '$definition->setEntity("someEntity");',
+                    '$definition = new Statement("someEntity", $definition->arguments);'
+                ),
+            ]
+        );
     }
 
     public function isCandidate(Node $node): bool

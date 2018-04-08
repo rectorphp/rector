@@ -31,16 +31,19 @@ final class FormTypeGetParentRector extends AbstractRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Turns string Form Type references to their CONSTANT alternatives in getParent() and getExtendedType() methods in Form in Symfony', [
-            new CodeSample(
-                'function getParent() { return "collection"; }',
-                'function getParent() { return CollectionType::class; }'
-            ),
-            new CodeSample(
-                'function getExtendedType() { return "collection"; }',
-                'function getExtendedType() { return CollectionType::class; }'
-            )
-        ]);
+        return new RectorDefinition(
+            'Turns string Form Type references to their CONSTANT alternatives in getParent() and getExtendedType() methods in Form in Symfony',
+            [
+                new CodeSample(
+                    'function getParent() { return "collection"; }',
+                    'function getParent() { return CollectionType::class; }'
+                ),
+                new CodeSample(
+                    'function getExtendedType() { return "collection"; }',
+                    'function getExtendedType() { return CollectionType::class; }'
+                ),
+            ]
+        );
     }
 
     public function isCandidate(Node $node): bool

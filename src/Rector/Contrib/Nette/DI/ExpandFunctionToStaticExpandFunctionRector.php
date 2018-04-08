@@ -45,9 +45,15 @@ final class ExpandFunctionToStaticExpandFunctionRector extends AbstractRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Turns expand() to Nette\DI\Helpers::expand() value in Nette\DI\CompilerExtension', [
-            new CodeSample('$builder->expand(object|array)', '\Nette\DI\Helpers::expand(object|array, $builder->parameters);'),
-        ]);
+        return new RectorDefinition(
+            'Turns expand() to Nette\DI\Helpers::expand() value in Nette\DI\CompilerExtension',
+            [
+                new CodeSample(
+                    '$builder->expand(object|array)',
+                    '\Nette\DI\Helpers::expand(object|array, $builder->parameters);'
+                ),
+            ]
+        );
     }
 
     public function isCandidate(Node $node): bool

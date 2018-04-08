@@ -73,7 +73,7 @@ CODE_SAMPLE
 $result = $object->getProperty();
 $object->setProperty($value);
 CODE_SAMPLE
-                ),
+            ),
         ]);
     }
 

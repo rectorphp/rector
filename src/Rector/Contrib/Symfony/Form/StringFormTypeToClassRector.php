@@ -34,12 +34,15 @@ final class StringFormTypeToClassRector extends AbstractRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Turns string Form Type references to their CONSTANT alternatives in FormTypes in Form in Symfony', [
-            new CodeSample(
-                '$form->add("name", "form.type.text");',
-                '$form->add("name", \Symfony\Component\Form\Extension\Core\Type\TextType::class);'
-            )
-        ]);
+        return new RectorDefinition(
+            'Turns string Form Type references to their CONSTANT alternatives in FormTypes in Form in Symfony',
+            [
+                new CodeSample(
+                    '$form->add("name", "form.type.text");',
+                    '$form->add("name", \Symfony\Component\Form\Extension\Core\Type\TextType::class);'
+                ),
+            ]
+        );
     }
 
     public function isCandidate(Node $node): bool

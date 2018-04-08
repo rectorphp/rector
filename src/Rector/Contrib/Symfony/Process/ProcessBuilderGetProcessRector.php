@@ -23,21 +23,24 @@ final class ProcessBuilderGetProcessRector extends AbstractRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Removes $processBuilder->getProcess() calls to $processBuilder in Process in Symfony, because ProcessBuilder was removed. This is part of multi-step Rector and has very narrow focus.', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RectorDefinition(
+            'Removes $processBuilder->getProcess() calls to $processBuilder in Process in Symfony, because ProcessBuilder was removed. This is part of multi-step Rector and has very narrow focus.',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
                 $processBuilder = new Symfony\Component\Process\ProcessBuilder;
                 $process = $processBuilder->getProcess();
                 $commamdLine = $processBuilder->getProcess()->getCommandLine();
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 $processBuilder = new Symfony\Component\Process\ProcessBuilder;
 $process = $processBuilder;
 $commamdLine = $processBuilder->getCommandLine();
 CODE_SAMPLE
-            )
-        ]);
+                ),
+            ]
+        );
     }
 
     public function isCandidate(Node $node): bool

@@ -68,11 +68,16 @@ final class TemplateAnnotationRector extends AbstractRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Turns @Template annotation to explicit method call in Controller of FrameworkExtraBundle in Symfony', [
-            new CodeSample(
-                '/** @Template() */ public function indexAction() { }', 'public function indexAction() {
- return $this->render("index.html.twig"); }'),
-        ]);
+        return new RectorDefinition(
+            'Turns @Template annotation to explicit method call in Controller of FrameworkExtraBundle in Symfony',
+            [
+                new CodeSample(
+                    '/** @Template() */ public function indexAction() { }',
+                    'public function indexAction() {
+ return $this->render("index.html.twig"); }'
+                ),
+            ]
+        );
     }
 
     public function isCandidate(Node $node): bool

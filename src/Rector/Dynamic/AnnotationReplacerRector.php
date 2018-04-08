@@ -39,14 +39,17 @@ final class AnnotationReplacerRector extends AbstractPHPUnitRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('[Dynamic] Turns defined annotations above properties and methods to their new values.', [
-            new CodeSample(
-                '/** @test */
+        return new RectorDefinition(
+            '[Dynamic] Turns defined annotations above properties and methods to their new values.',
+            [
+                new CodeSample(
+                    '/** @test */
                  public function someMethod() {};',
-                '/** @scenario */
+                    '/** @scenario */
                  public function someMethod() {};'
-            )
-        ]);
+                ),
+            ]
+        );
     }
 
     public function isCandidate(Node $node): bool

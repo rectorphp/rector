@@ -72,14 +72,17 @@ final class ArgumentReplacerRector extends AbstractRector
      */
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('[Dynamic] Adds, removes or replaces defined arguments in defined methods and their calls.', [
-            new CodeSample(
-                '$containerBuilder = new Symfony\Component\DependencyInjection\ContainerBuilder;
+        return new RectorDefinition(
+            '[Dynamic] Adds, removes or replaces defined arguments in defined methods and their calls.',
+            [
+                new CodeSample(
+                    '$containerBuilder = new Symfony\Component\DependencyInjection\ContainerBuilder;
         $containerBuilder->compile();',
-                '$containerBuilder = new Symfony\Component\DependencyInjection\ContainerBuilder;
+                    '$containerBuilder = new Symfony\Component\DependencyInjection\ContainerBuilder;
         $containerBuilder->compile(true);'
-            )
-        ]);
+                ),
+            ]
+        );
     }
 
     public function isCandidate(Node $node): bool

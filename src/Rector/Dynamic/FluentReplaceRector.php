@@ -64,7 +64,7 @@ final class FluentReplaceRector extends AbstractRector
                 ->otherFunction();
 CODE_SAMPLE
                 ,
-            <<<'CODE_SAMPLE'
+                <<<'CODE_SAMPLE'
     class SomeClass
     {
         public function someFunction()
@@ -80,7 +80,7 @@ CODE_SAMPLE
     $someClass->someFunction();
     $someClass->otherFunction();
 CODE_SAMPLE
-            )
+            ),
         ]);
     }
 

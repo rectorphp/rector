@@ -63,9 +63,12 @@ final class MagicMethodRector extends AbstractRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Catches @method annotations of Nette\Object instances and converts them to real methods.', [
-            new CodeSample('/** @method getId() */', 'public function getId() { $this->id; }'),
-        ]);
+        return new RectorDefinition(
+            'Catches @method annotations of Nette\Object instances and converts them to real methods.',
+            [
+                new CodeSample('/** @method getId() */', 'public function getId() { $this->id; }'),
+            ]
+        );
     }
 
     public function isCandidate(Node $node): bool

@@ -32,7 +32,7 @@ final class GetMockRector extends AbstractPHPUnitRector
     {
         return new RectorDefinition('Turns getMock*() methods to createMock()', [
             new CodeSample('$this->getMock("Class")', '$this->createMock("Class")'),
-            new CodeSample('$this->getMockWithoutInvokingTheOriginalConstructor("Class")', '$this->createMock("Class"')
+            new CodeSample('$this->getMockWithoutInvokingTheOriginalConstructor("Class")', '$this->createMock("Class"'),
         ]);
     }
 

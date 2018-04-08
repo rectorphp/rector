@@ -49,10 +49,19 @@ final class AssertInstanceOfComparisonRector extends AbstractPHPUnitRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Turns instanceof comparisons to their method name alternatives in PHPUnit Test Case', [
-            new CodeSample('$this->assertTrue($foo instanceof Foo, "message");', '$this->assertFalse($foo instanceof Foo, "message");'),
-            new CodeSample('$this->assertInstanceOf("Foo", $foo, "message");', '$this->assertNotInstanceOf("Foo", $foo, "message");'),
-        ]);
+        return new RectorDefinition(
+            'Turns instanceof comparisons to their method name alternatives in PHPUnit Test Case',
+            [
+                new CodeSample(
+                    '$this->assertTrue($foo instanceof Foo, "message");',
+                    '$this->assertFalse($foo instanceof Foo, "message");'
+                ),
+                new CodeSample(
+                    '$this->assertInstanceOf("Foo", $foo, "message");',
+                    '$this->assertNotInstanceOf("Foo", $foo, "message");'
+                ),
+            ]
+        );
     }
 
     public function isCandidate(Node $node): bool

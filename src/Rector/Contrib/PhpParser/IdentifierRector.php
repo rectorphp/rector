@@ -75,7 +75,7 @@ final class IdentifierRector extends AbstractRector
             new CodeSample(
                 '$constNode = new \PhpParser\Node\Const_; $name = $constNode->name;',
                 '$constNode = new \PhpParser\Node\Const_; $name = $constNode->name->toString();'
-            )
+            ),
         ]);
     }
 

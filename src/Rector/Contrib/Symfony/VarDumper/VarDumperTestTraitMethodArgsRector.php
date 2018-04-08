@@ -37,16 +37,19 @@ final class VarDumperTestTraitMethodArgsRector extends AbstractRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Adds new $format argument in VarDumperTestTrait->assertDumpEquals() in in Validator in Symfony.', [
-            new CodeSample(
-                'VarDumperTestTrait->assertDumpEquals($dump, $data, $mesage = "");',
-                'VarDumperTestTrait->assertDumpEquals($dump, $data, $context = null, $mesage = "");'
-            ),
-            new CodeSample(
-                'VarDumperTestTrait->assertDumpMatchesFormat($dump, $format, $mesage = "");',
-                'VarDumperTestTrait->assertDumpMatchesFormat($dump, $format, $context = null,  $mesage = "");'
-            )
-        ]);
+        return new RectorDefinition(
+            'Adds new $format argument in VarDumperTestTrait->assertDumpEquals() in in Validator in Symfony.',
+            [
+                new CodeSample(
+                    'VarDumperTestTrait->assertDumpEquals($dump, $data, $mesage = "");',
+                    'VarDumperTestTrait->assertDumpEquals($dump, $data, $context = null, $mesage = "");'
+                ),
+                new CodeSample(
+                    'VarDumperTestTrait->assertDumpMatchesFormat($dump, $format, $mesage = "");',
+                    'VarDumperTestTrait->assertDumpMatchesFormat($dump, $format, $context = null,  $mesage = "");'
+                ),
+            ]
+        );
     }
 
     public function isCandidate(Node $node): bool

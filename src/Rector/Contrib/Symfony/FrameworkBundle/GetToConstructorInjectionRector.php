@@ -11,9 +11,11 @@ final class GetToConstructorInjectionRector extends AbstractToConstructorInjecti
 {
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Turns fetching of dependencies via $this->get() to constructor injection in Command and Controller in Symfony', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RectorDefinition(
+            'Turns fetching of dependencies via $this->get() to constructor injection in Command and Controller in Symfony',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 class MyCommand extends ContainerAwareCommand
 {
     public function someMethod()
@@ -23,8 +25,8 @@ class MyCommand extends ContainerAwareCommand
     }
 }
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 class MyCommand extends Command
 {
     public function __construct(SomeService $someService)
@@ -38,8 +40,9 @@ class MyCommand extends Command
     }
 }
 CODE_SAMPLE
-            )
-        ]);
+                ),
+            ]
+        );
     }
 
     public function isCandidate(Node $node): bool

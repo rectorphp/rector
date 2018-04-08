@@ -50,12 +50,27 @@ final class AssertCompareToSpecificMethodRector extends AbstractPHPUnitRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Turns vague php-only method in PHPUnit Test Case to more specific', [
-            new CodeSample('$this->assertSame(10, count($anything), "message");', '$this->assertCount(10, $anything, "message");'),
-            new CodeSample('$this->assertSame($value, {function}($anything), "message");', '$this->assert{function}($value, $anything, "message\");'),
-            new CodeSample('$this->assertEquals($value, {function}($anything), "message");', '$this->assert{function}($value, $anything, "message\");'),
+            new CodeSample(
+                '$this->assertSame(10, count($anything), "message");',
+                '$this->assertCount(10, $anything, "message");'
+            ),
+            new CodeSample(
+                '$this->assertSame($value, {function}($anything), "message");',
+                '$this->assert{function}($value, $anything, "message\");'
+            ),
+            new CodeSample(
+                '$this->assertEquals($value, {function}($anything), "message");',
+                '$this->assert{function}($value, $anything, "message\");'
+            ),
 
-            new CodeSample('$this->assertNotSame($value, {function}($anything), "message");', '$this->assertNot{function}($value, $anything, "message")'),
-            new CodeSample('$this->assertNotEquals($value, {function}($anything), "message");', '$this->assertNot{function}($value, $anything, "message")'),
+            new CodeSample(
+                '$this->assertNotSame($value, {function}($anything), "message");',
+                '$this->assertNot{function}($value, $anything, "message")'
+            ),
+            new CodeSample(
+                '$this->assertNotEquals($value, {function}($anything), "message");',
+                '$this->assertNot{function}($value, $anything, "message")'
+            ),
         ]);
     }
 

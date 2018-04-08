@@ -35,10 +35,13 @@ final class UseWithAliasRector extends AbstractRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Turns use property to method and $node->alias to last name in UseAlias Node of PHP-Parser', [
-            new CodeSample('$node->alias;', '$node->getAlias();'),
-            new CodeSample('$node->name->getLast();', '$node->alias'),
-        ]);
+        return new RectorDefinition(
+            'Turns use property to method and $node->alias to last name in UseAlias Node of PHP-Parser',
+            [
+                new CodeSample('$node->alias;', '$node->getAlias();'),
+                new CodeSample('$node->name->getLast();', '$node->alias'),
+            ]
+        );
     }
 
     public function isCandidate(Node $node): bool

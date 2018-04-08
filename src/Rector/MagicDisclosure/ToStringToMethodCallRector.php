@@ -68,7 +68,7 @@ final class ToStringToMethodCallRector extends AbstractRector
     {
         return new RectorDefinition('[Dynamic] Turns defined __toString() to specific method calls.', [
             new CodeSample('$result = (string) $someValue;', '$result = $someValue->someMethod();'),
-            new CodeSample('$result = $someValue->__toString();', '$result = $someValue->someMethod();')
+            new CodeSample('$result = $someValue->__toString();', '$result = $someValue->someMethod();'),
         ]);
     }
 
