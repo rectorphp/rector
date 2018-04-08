@@ -4,6 +4,7 @@ namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\MethodCallTypeResolv
 
 use PhpParser\Node\Expr\MethodCall;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
+use Rector\NodeTypeResolver\Tests\Source\AnotherClass;
 
 /**
  * @covers \Rector\NodeTypeResolver\PerNodeTypeResolver\MethodCallTypeResolver
@@ -31,14 +32,12 @@ final class MethodCallTypeResolverTest extends AbstractNodeTypeResolverTest
         return [
             # on self call
             [__DIR__ . '/MethodCallSource/OnSelfCall.php.inc', 0, [
-                'SomeClass',
-                'AnotherClass',
-                'AnotherParentClass',
+                'SomeParentCallingClass',
+                AnotherClass::class,
             ]],
             [__DIR__ . '/MethodCallSource/OnSelfCall.php.inc', 1, [
-                'SomeClass',
-                'AnotherClass',
-                'AnotherParentClass',
+                'SomeParentCallingClass',
+                AnotherClass::class,
             ]],
 
             # on method call

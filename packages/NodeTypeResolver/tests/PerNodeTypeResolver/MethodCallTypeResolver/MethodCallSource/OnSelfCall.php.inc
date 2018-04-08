@@ -1,6 +1,6 @@
 <?php
 
-class SomeClass extends AnotherClass
+class SomeParentCallingClass extends \Rector\NodeTypeResolver\Tests\Source\AnotherClass // AnotherClass
 {
     public function createContainer()
     {
@@ -11,15 +11,4 @@ class SomeClass extends AnotherClass
     {
         return $this->createAnotherContainer();
     }
-}
-
-class AnotherClass extends AnotherParentClass
-{
-
-}
-
-class AnotherParentClass
-{
-
-
 }

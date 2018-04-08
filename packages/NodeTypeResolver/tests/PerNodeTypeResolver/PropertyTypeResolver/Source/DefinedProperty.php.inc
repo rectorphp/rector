@@ -5,7 +5,7 @@ namespace SomeNamespace;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\PropertyTypeResolver;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\PropertyTypeResolver\Source\PropertyType;
 
-class SomeClass
+class SomeClassWithProperties
 {
     /**
      * @var PropertyType

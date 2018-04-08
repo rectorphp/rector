@@ -4,6 +4,7 @@ namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\VariableTypeResolver
 
 use PhpParser\Node\Expr\Variable;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
+use Rector\NodeTypeResolver\Tests\Source\AnotherClass;
 
 /**
  * @covers \Rector\NodeTypeResolver\PerNodeTypeResolver\VariableTypeResolver
@@ -28,7 +29,7 @@ final class VariableTypeResolverTest extends AbstractNodeTypeResolverTest
     {
         return [
             # this
-            [__DIR__ . '/Source/This.php.inc', 0, ['SomeNamespace\SomeClass', 'SomeNamespace\AnotherClass']],
+            [__DIR__ . '/Source/This.php.inc', 0, ['SomeNamespace\ThisClass', AnotherClass::class]],
             # new
             [__DIR__ . '/Source/SomeClass.php.inc', 0, ['SomeNamespace\AnotherType']],
             [__DIR__ . '/Source/SomeClass.php.inc', 2, ['SomeNamespace\AnotherType']],
