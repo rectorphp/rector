@@ -9,13 +9,9 @@ use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeAnalyzer\MethodArgumentAnalyzer;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
-/**
- * Before:
- * return $this->redirect($this->generateUrl("homepage"));
- * After:
- * return $this->redirectToRoute("homepage");
- */
 final class RedirectToRouteRector extends AbstractRector
 {
     /**
@@ -41,6 +37,16 @@ final class RedirectToRouteRector extends AbstractRector
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->methodArgumentAnalyzer = $methodArgumentAnalyzer;
         $this->methodCallNodeFactory = $methodCallNodeFactory;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('Turns redirect to route to short helper method in Controller in Symfony', [
+            new CodeSample(
+                '$this->redirect($this->generateUrl("homepage"));',
+                '$this->redirectToRoute("homepage");'
+            ),
+        ]);
     }
 
     public function isCandidate(Node $node): bool

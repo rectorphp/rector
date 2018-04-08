@@ -8,19 +8,13 @@ use PhpParser\Node\Scalar\String_;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\ClassConstAnalyzer;
 use Rector\Rector\AbstractRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
 /**
- * Ref:
+ * Covers:
  * - https://github.com/symfony/symfony/pull/22441/files
  * - https://github.com/symfony/symfony/blob/master/UPGRADE-3.3.md#console
- *
- * Before:
- * - "console.exception"
- * or
- * - Symfony\Component\Console\ConsoleEvents::EXCEPTION
- *
- * After:
- * - Symfony\Component\Console\ConsoleEvents::ERROR
  */
 final class ConsoleExceptionToErrorEventConstantRector extends AbstractRector
 {
@@ -43,6 +37,14 @@ final class ConsoleExceptionToErrorEventConstantRector extends AbstractRector
     {
         $this->classConstAnalyzer = $classConstAnalyzer;
         $this->nodeFactory = $nodeFactory;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('Turns old event name with EXCEPTION to ERROR constant in Console in Symfony', [
+            new CodeSample('"console.exception"', 'Symfony\Component\Console\ConsoleEvents::ERROR'),
+            new CodeSample('Symfony\Component\Console\ConsoleEvents::EXCEPTION', 'Symfony\Component\Console\ConsoleEvents::ERROR'),
+        ]);
     }
 
     public function isCandidate(Node $node): bool
