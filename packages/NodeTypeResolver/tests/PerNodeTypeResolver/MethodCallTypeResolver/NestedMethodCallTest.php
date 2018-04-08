@@ -5,6 +5,8 @@ namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\MethodCallTypeResolv
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
+use Rector\NodeTypeResolver\Tests\Source\AnotherClass;
+use Rector\NodeTypeResolver\Tests\Source\ClassWithFluentNonSelfReturn;
 
 /**
  * @covers \Rector\NodeTypeResolver\PerNodeTypeResolver\MethodCallTypeResolver
@@ -51,45 +53,21 @@ final class NestedMethodCallTest extends AbstractNodeTypeResolverTest
             ]],
 
             # nested different method calls
-            [__DIR__ . '/NestedMethodCallSource/OnMethodCallCallDifferentType.php.inc', 0, 'setScope', [
-                'Symfony\Component\DependencyInjection\Definition',
+            [__DIR__ . '/NestedMethodCallSource/OnMethodCallCallDifferentType.php.inc', 0, 'getParameters', [
+                AnotherClass::class
             ]],
-            [__DIR__ . '/NestedMethodCallSource/OnMethodCallCallDifferentType.php.inc', 1, 'register', [
-                'Symfony\Component\DependencyInjection\ContainerBuilder',
-                'Symfony\Component\DependencyInjection\ResettableContainerInterface',
-                'Symfony\Component\DependencyInjection\ContainerInterface',
-                'Psr\Container\ContainerInterface',
-                'Symfony\Component\DependencyInjection\TaggedContainerInterface',
-                'Symfony\Component\DependencyInjection\Container',
+
+            [__DIR__ . '/NestedMethodCallSource/OnMethodCallCallDifferentType.php.inc', 1, 'createAnotherClass', [
+                ClassWithFluentNonSelfReturn::class,
             ]],
-        ];
-    }
 
-    /**
-     * @dataProvider provideDataForPhp71()
-     * @param string[] $expectedTypes
-     */
-    public function testPhp71(string $file, int $nodePosition, string $methodName, array $expectedTypes): void
-    {
-        if (PHP_VERSION >= '7.2.0') {
-            $this->markTestSkipped('This test needs PHP 7.1 or lower.');
-        }
-
-        $this->test($file, $nodePosition, $methodName, $expectedTypes);
-    }
-
-    /**
-     * @return mixed[][]
-     */
-    public function provideDataForPhp71(): array
-    {
-        return [
             # nested method calls
-            [__DIR__ . '/NestedMethodCallSource/NestedMethodCalls.php.inc', 0, 'getParameters', ['Nette\DI\Container']],
-            [__DIR__ . '/NestedMethodCallSource/NestedMethodCalls.php.inc', 1, 'addService', ['Nette\DI\Container']],
+            [__DIR__ . '/NestedMethodCallSource/NestedMethodCalls.php.inc', 0, 'getParameters', [AnotherClass::class]],
+            [__DIR__ . '/NestedMethodCallSource/NestedMethodCalls.php.inc', 1, 'callAndReturnSelf', [AnotherClass::class]],
+
             # nested method calls
-            [__DIR__ . '/NestedMethodCallSource/NestedMethodCalls.php.inc', 2, 'createContainer', [
-                'Nette\Config\Configurator', 'Nette\Object',
+            [__DIR__ . '/NestedMethodCallSource/NestedMethodCalls.php.inc', 2, 'createAnotherClass', [
+                ClassWithFluentNonSelfReturn::class
             ]],
         ];
     }

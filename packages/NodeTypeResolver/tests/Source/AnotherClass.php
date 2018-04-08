@@ -7,4 +7,11 @@ final class AnotherClass
     public function getParameters()
     {
     }
+
+    /**
+     * @return static
+     */
+    public function callAndReturnSelf()
+    {
+    }
 }
