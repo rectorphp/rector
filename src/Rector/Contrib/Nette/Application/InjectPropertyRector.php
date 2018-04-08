@@ -11,6 +11,8 @@ use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Rector\AbstractRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 use Rector\ReflectionDocBlock\NodeAnalyzer\DocBlockAnalyzer;
 
 final class InjectPropertyRector extends AbstractRector
@@ -61,6 +63,33 @@ final class InjectPropertyRector extends AbstractRector
         $this->addPropertyToCollector($propertyNode);
 
         return $propertyNode;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('Turns properties with @inject to private properties and constructor injection', [
+            new CodeSample(
+                <<<'CODE_SAMPLE'
+                /**
+                 * @var SomeService
+                 * @inject 
+                 */
+                public $someService;
+CODE_SAMPLE
+                ,
+                <<<'CODE_SAMPLE'
+                /**
+                 * @var SomeService
+                 */
+                private $someService;
+                
+                public function __construct(SomeService $someService)
+                {
+                    $this->someService = $someService;
+                }
+CODE_SAMPLE
+            ),
+        ]);
     }
 
     private function addPropertyToCollector(Property $propertyNode): void

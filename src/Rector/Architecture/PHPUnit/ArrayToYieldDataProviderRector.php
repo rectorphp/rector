@@ -12,6 +12,8 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Rector\AbstractPHPUnitRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 use Rector\ReflectionDocBlock\NodeAnalyzer\DocBlockAnalyzer;
 
 final class ArrayToYieldDataProviderRector extends AbstractPHPUnitRector
@@ -24,6 +26,29 @@ final class ArrayToYieldDataProviderRector extends AbstractPHPUnitRector
     public function __construct(DocBlockAnalyzer $docBlockAnalyzer)
     {
         $this->docBlockAnalyzer = $docBlockAnalyzer;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('Turns method data providers in PHPUnit from arrays to yield', [
+            new CodeSample(
+                <<<'CODE_SAMPLE'
+               public function provide(): array
+               {
+                    return [
+                        ['item']
+                    ]
+               }
+CODE_SAMPLE
+                ,
+<<<'CODE_SAMPLE'
+               public function provide(): Iterator
+               {
+                    yield ['item'];
+               }
+CODE_SAMPLE
+            ),
+        ]);
     }
 
     public function isCandidate(Node $node): bool

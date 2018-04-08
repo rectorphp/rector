@@ -7,15 +7,9 @@ use PhpParser\Node\Expr\MethodCall;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractPHPUnitRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
-/**
- * Before:
- * - $this->getMock('Class')
- * - $this->getMockWithoutInvokingTheOriginalConstructor('Class')
- *
- * After:
- * - $this->createMock('Class')
- */
 final class GetMockRector extends AbstractPHPUnitRector
 {
     /**
@@ -32,6 +26,14 @@ final class GetMockRector extends AbstractPHPUnitRector
     {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('Turns getMock*() methods to createMock()', [
+            new CodeSample('$this->getMock("Class")', '$this->createMock("Class")'),
+            new CodeSample('$this->getMockWithoutInvokingTheOriginalConstructor("Class")', '$this->createMock("Class"'),
+        ]);
     }
 
     public function isCandidate(Node $node): bool

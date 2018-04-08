@@ -11,16 +11,9 @@ use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractPHPUnitRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
-/**
- * Before:
- * - $this->assertTrue(is_{internal_type}($anything), 'message');
- * - $this->assertFalse(is_{internal_type}($anything), 'message');
- *
- * After:
- * - $this->assertInternalType({internal_type}, $anything, 'message');
- * - $this->assertNotInternalType({internal_type}, $anything, 'message');
- */
 final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractPHPUnitRector
 {
     /**
@@ -74,6 +67,23 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractPH
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
         $this->nodeFactory = $nodeFactory;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition(
+            'Turns true/false with internal type comparisons to their method name alternatives in PHPUnit TestCase',
+            [
+                new CodeSample(
+                    '$this->assertTrue(is_{internal_type}($anything), "message");',
+                    '$this->assertInternalType({internal_type}, $anything, "message");'
+                ),
+                new CodeSample(
+                    '$this->assertFalse(is_{internal_type}($anything), "message");',
+                    '$this->assertNotInternalType({internal_type}, $anything, "message");'
+                ),
+            ]
+        );
     }
 
     public function isCandidate(Node $node): bool

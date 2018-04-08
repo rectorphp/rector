@@ -15,8 +15,6 @@ services:
     Rector\Rector\Contrib\Nette\DI\SetEntityToStatementRector: ~
     Rector\Rector\Contrib\Nette\DI\ExpandFunctionToParametersArrayRector: ~
     Rector\Rector\Contrib\Nette\DI\ExpandFunctionToStaticExpandFunctionRector: ~
-    Rector\Rector\Contrib\Nette\DI\CompilerCompileArgumentsRector: ~
-    Rector\Rector\Contrib\Nette\DI\CompilerGenerateCodeArgumentsRector: ~
 
     # forms
     Rector\Rector\Contrib\Nette\Forms\ChoiceDefaultValueRector: ~

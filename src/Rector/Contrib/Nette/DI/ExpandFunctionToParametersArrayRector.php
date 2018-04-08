@@ -11,17 +11,11 @@ use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodArgumentAnalyzer;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * Covers https://github.com/Kdyby/Doctrine/pull/298/files
- *
- * From:
- * $builder->expand('argument');
- * $builder->expand('%argument%');
- *
- * To:
- * $builder->parameters['argument'];
- * $builder->parameters['argument'];
  */
 final class ExpandFunctionToParametersArrayRector extends AbstractRector
 {
@@ -48,6 +42,14 @@ final class ExpandFunctionToParametersArrayRector extends AbstractRector
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->methodArgumentAnalyzer = $methodArgumentAnalyzer;
         $this->nodeFactory = $nodeFactory;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('Turns expand() to parameters value in Nette\DI\CompilerExtension', [
+            new CodeSample('$builder->expand("argument");', '$builder->parameters["argument"];'),
+            new CodeSample('$builder->expand("%argument%");', '$builder->parameters["argument"];'),
+        ]);
     }
 
     public function isCandidate(Node $node): bool

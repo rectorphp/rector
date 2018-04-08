@@ -80,7 +80,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
     {
         if ($this->removeNode) {
             $this->removeNode = false;
-
             return NodeTraverser::REMOVE_NODE;
         }
 
@@ -94,9 +93,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
     public function afterTraverse(array $nodes): array
     {
         $nodes = $this->expressionAdder->addExpressionsToNodes($nodes);
-
         $nodes = $this->propertyAdder->addPropertiesToNodes($nodes);
-
         return $nodes;
     }
 

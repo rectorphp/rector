@@ -9,16 +9,9 @@ use PhpParser\Node\Expr\MethodCall;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractPHPUnitRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
-/**
- * - Before:
- * - $this->assertTrue($foo instanceof Foo, 'message');
- * - $this->assertFalse($foo instanceof Foo, 'message');
- *
- * - After:
- * - $this->assertInstanceOf('Foo', $foo, 'message');
- * - $this->assertNotInstanceOf('Foo', $foo, 'message');
- */
 final class AssertInstanceOfComparisonRector extends AbstractPHPUnitRector
 {
     /**
@@ -52,6 +45,23 @@ final class AssertInstanceOfComparisonRector extends AbstractPHPUnitRector
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
         $this->builderFactory = $builderFactory;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition(
+            'Turns instanceof comparisons to their method name alternatives in PHPUnit TestCase',
+            [
+                new CodeSample(
+                    '$this->assertTrue($foo instanceof Foo, "message");',
+                    '$this->assertFalse($foo instanceof Foo, "message");'
+                ),
+                new CodeSample(
+                    '$this->assertInstanceOf("Foo", $foo, "message");',
+                    '$this->assertNotInstanceOf("Foo", $foo, "message");'
+                ),
+            ]
+        );
     }
 
     public function isCandidate(Node $node): bool

@@ -11,16 +11,9 @@ use Rector\Node\MethodCallNodeFactory;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Rector\AbstractRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
-/**
- * Example - from:
- * - $result = $object->property;
- * - $object->property = $value;
- *
- * To
- * - $result = $object->getProperty();
- * - $object->setProperty($value);
- */
 final class PropertyToMethodRector extends AbstractRector
 {
     /**
@@ -65,6 +58,23 @@ final class PropertyToMethodRector extends AbstractRector
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
         $this->nodeFactory = $nodeFactory;
         $this->methodCallNodeFactory = $methodCallNodeFactory;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('[Dynamic] Replaces properties assign calls be defined methods.', [
+            new CodeSample(
+                <<<'CODE_SAMPLE'
+$result = $object->property;
+$object->property = $value;
+CODE_SAMPLE
+                ,
+                <<<'CODE_SAMPLE'
+$result = $object->getProperty();
+$object->setProperty($value);
+CODE_SAMPLE
+            ),
+        ]);
     }
 
     public function isCandidate(Node $node): bool

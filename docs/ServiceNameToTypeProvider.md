@@ -6,7 +6,6 @@ Some Rectors like:
 services:
     Rector\Rector\Contrib\Symfony\Console\CommandToConstructorInjectionRector: ~
     Rector\Rector\Contrib\Symfony\HttpKernel\GetterToPropertyRector: ~
-    Rector\Rector\Contrib\Nette\Environment\GetServiceToConstructorInjectionRector: ~
 ```
 
 requires `Rector\Contract\Bridge\ServiceTypeForNameProviderInterface` service that provides **service type for certain service name**.

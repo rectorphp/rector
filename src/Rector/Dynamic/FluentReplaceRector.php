@@ -10,11 +10,13 @@ use Rector\Node\Attribute;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
 /**
- * This Rector handles 2 things:
- * - removes "$return this;" method bodies
- * - changes fluent calls to standalone calls
+ * Inspiration:
+ * - https://ocramius.github.io/blog/fluent-interfaces-are-evil/
+ * - http://www.yegor256.com/2018/03/13/fluent-interfaces.html
  */
 final class FluentReplaceRector extends AbstractRector
 {
@@ -37,6 +39,49 @@ final class FluentReplaceRector extends AbstractRector
     {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->methodCallNodeFactory = $methodCallNodeFactory;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('[Dynamic] Turns fluent interfaces to classic ones.', [
+            new CodeSample(
+                <<<'CODE_SAMPLE'
+    class SomeClass
+    {
+        public function someFunction()
+        {
+            return $this;
+        }
+    
+        public function otherFunction()
+        {
+            return $this;
+        }
+    }
+        
+    $someClass = new SomeClass();
+    $someClass->someFunction()
+                ->otherFunction();
+CODE_SAMPLE
+                ,
+                <<<'CODE_SAMPLE'
+    class SomeClass
+    {
+        public function someFunction()
+        {
+        }
+    
+        public function otherFunction()
+        {
+        }
+    }
+    
+    $someClass = new SomeClass();
+    $someClass->someFunction();
+    $someClass->otherFunction();
+CODE_SAMPLE
+            ),
+        ]);
     }
 
     public function isCandidate(Node $node): bool

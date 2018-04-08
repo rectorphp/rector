@@ -13,6 +13,8 @@ use Rector\NodeAnalyzer\MethodNameAnalyzer;
 use Rector\NodeAnalyzer\StaticMethodCallAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
 final class MethodNameReplacerRector extends AbstractRector
 {
@@ -76,6 +78,24 @@ final class MethodNameReplacerRector extends AbstractRector
         $this->staticMethodCallAnalyzer = $staticMethodCallAnalyzer;
         $this->methodNameAnalyzer = $methodNameAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('[Dynamic] Turns method names to new ones.', [
+            new CodeSample(
+                <<<'CODE_SAMPLE'
+    $someObject = new SomeClass;
+    $someObject->oldMethod();
+CODE_SAMPLE
+                ,
+                <<<'CODE_SAMPLE'
+    $someObject = new SomeClass;
+    $someObject->newMethod();
+CODE_SAMPLE
+            ),
+            new CodeSample('SomeClass::oldStaticMethod();', 'SomeClass::newStaticMethod();'),
+        ]);
     }
 
     public function isCandidate(Node $node): bool

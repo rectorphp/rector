@@ -11,6 +11,8 @@ use Rector\NodeAnalyzer\Contrib\Symfony\ControllerMethodAnalyzer;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeTraverserQueue\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * Converts all:
@@ -56,6 +58,42 @@ final class GetRequestRector extends AbstractRector
         $this->nodeFactory = $nodeFactory;
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->betterNodeFinder = $betterNodeFinder;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition(
+            'Turns fetching of dependencies via $this->get() to constructor injection in Command and Controller in Symfony',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
+class MyCommand extends ContainerAwareCommand
+{
+    public function someMethod()
+    {
+        // ...
+        $this->get('some_service');
+    }
+}
+CODE_SAMPLE
+                    ,
+                    <<<'CODE_SAMPLE'
+class MyCommand extends Command
+{
+    public function __construct(SomeService $someService)
+    {
+        $this->someService = $someService;
+    }
+
+    public function someMethod()
+    {
+        $this->someService;
+    }
+}
+CODE_SAMPLE
+                ),
+            ]
+        );
     }
 
     public function isCandidate(Node $node): bool

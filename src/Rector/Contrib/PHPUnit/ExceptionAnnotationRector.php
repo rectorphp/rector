@@ -8,6 +8,8 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\Rector\AbstractPHPUnitRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 use Rector\ReflectionDocBlock\NodeAnalyzer\DocBlockAnalyzer;
 
 /**
@@ -47,6 +49,20 @@ final class ExceptionAnnotationRector extends AbstractPHPUnitRector
     {
         $this->methodCallNodeFactory = $methodCallNodeFactory;
         $this->docBlockAnalyzer = $docBlockAnalyzer;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('Takes setExpectedException() 2nd and next arguments to own methods in PHPUnit.', [
+            new CodeSample(
+                '$this->setExpectedException(Exception::class, "Message", "CODE");',
+                <<<'CODE_SAMPLE'
+                $this->setExpectedException(Exception::class); 
+                $this->expectExceptionMessage("Message");
+                $this->expectExceptionCode("CODE");
+CODE_SAMPLE
+            ),
+        ]);
     }
 
     public function isCandidate(Node $node): bool

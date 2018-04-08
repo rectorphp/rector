@@ -9,6 +9,8 @@ use Rector\Builder\StatementGlue;
 use Rector\Node\Attribute;
 use Rector\Node\NodeFactory;
 use Rector\Rector\AbstractRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * Covers https://doc.nette.org/en/2.4/migration-2-4#toc-nette-smartobject.
@@ -39,6 +41,13 @@ final class NetteObjectToSmartTraitRector extends AbstractRector
     {
         $this->statementGlue = $statementGlue;
         $this->nodeFactory = $nodeFactory;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('Checks all Nette\Object instances and turns parent class to trait', [
+            new CodeSample('class SomeClass extends \Nette\Object { } ', 'class SomeClass { use Nette\SmartObject; } '),
+        ]);
     }
 
     public function isCandidate(Node $node): bool

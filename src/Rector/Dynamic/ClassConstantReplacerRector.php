@@ -8,6 +8,8 @@ use PhpParser\Node\Identifier;
 use Rector\NodeAnalyzer\ClassConstAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
 final class ClassConstantReplacerRector extends AbstractRector
 {
@@ -46,6 +48,16 @@ final class ClassConstantReplacerRector extends AbstractRector
         $this->oldToNewConstantsByClass = $oldToNewConstantsByClass;
         $this->classConstAnalyzer = $classConstAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
+    }
+
+    /**
+     * @todo complete list with all possibilities
+     */
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('[Dynamic] Replaces defined class constants in their calls.', [
+            new CodeSample('$value = SomeClass::OLD_CONSTANT;', '$value = SomeClass::NEW_CONSTANT;'),
+        ]);
     }
 
     public function isCandidate(Node $node): bool

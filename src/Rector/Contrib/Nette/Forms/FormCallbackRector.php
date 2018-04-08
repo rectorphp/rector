@@ -9,6 +9,8 @@ use PhpParser\Node\Expr\PropertyFetch;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Rector\AbstractRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * Covers https://doc.nette.org/en/2.4/migration-2-4#toc-nette-smartobject.
@@ -34,6 +36,13 @@ final class FormCallbackRector extends AbstractRector
     {
         $this->nodeFactory = $nodeFactory;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('Turns magic callback assign to callback assign on Nette Form events.', [
+            new CodeSample('$form->onSuccess[] = $this->someMethod;', '$form->onSuccess[] = [$this, someMethod;]'),
+        ]);
     }
 
     /**

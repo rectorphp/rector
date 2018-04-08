@@ -11,20 +11,9 @@ use PhpParser\Node\Name;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractPHPUnitRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
-/**
- * Before:
- * - $this->assertSame(10, count($anything), 'message');
- * - $this->assertSame($value, {function}($anything), 'message');
- * - $this->assertNotSame($value, {function}($anything), 'message');
- * - $this->assertEquals($value, {function}($anything), 'message');
- * - $this->assertNotEquals($value, {function}($anything), 'message');
- *
- * After:
- * - $this->assertCount(10, $anything, 'message');
- * - $this->assert{function}($value, $anything, 'message');
- * - $this->assertNot{function}($value, $anything, 'message');
- */
 final class AssertCompareToSpecificMethodRector extends AbstractPHPUnitRector
 {
     /**
@@ -56,6 +45,32 @@ final class AssertCompareToSpecificMethodRector extends AbstractPHPUnitRector
     {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('Turns vague php-only method in PHPUnit TestCase to more specific', [
+            new CodeSample(
+                '$this->assertSame(10, count($anything), "message");',
+                '$this->assertCount(10, $anything, "message");'
+            ),
+            new CodeSample(
+                '$this->assertSame($value, {function}($anything), "message");',
+                '$this->assert{function}($value, $anything, "message\");'
+            ),
+            new CodeSample(
+                '$this->assertEquals($value, {function}($anything), "message");',
+                '$this->assert{function}($value, $anything, "message\");'
+            ),
+            new CodeSample(
+                '$this->assertNotSame($value, {function}($anything), "message");',
+                '$this->assertNot{function}($value, $anything, "message")'
+            ),
+            new CodeSample(
+                '$this->assertNotEquals($value, {function}($anything), "message");',
+                '$this->assertNot{function}($value, $anything, "message")'
+            ),
+        ]);
     }
 
     public function isCandidate(Node $node): bool

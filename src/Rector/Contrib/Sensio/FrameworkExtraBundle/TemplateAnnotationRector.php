@@ -14,18 +14,10 @@ use Rector\Node\NodeFactory;
 use Rector\NodeTraverserQueue\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
 use Rector\Rector\Contrib\Sensio\Helper\TemplateGuesser;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 use Rector\ReflectionDocBlock\NodeAnalyzer\DocBlockAnalyzer;
 
-/**
- * Converts all:
- * - @Template()
- * - public function indexAction() { }
- *
- * into:
- * - public function indexAction() {
- * -     return $this->render('index.html.twig');
- * - }
- */
 final class TemplateAnnotationRector extends AbstractRector
 {
     /**
@@ -72,6 +64,20 @@ final class TemplateAnnotationRector extends AbstractRector
         $this->nodeFactory = $nodeFactory;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->templateGuesser = $templateGuesser;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition(
+            'Turns @Template annotation to explicit method call in Controller of FrameworkExtraBundle in Symfony',
+            [
+                new CodeSample(
+                    '/** @Template() */ public function indexAction() { }',
+                    'public function indexAction() {
+ return $this->render("index.html.twig"); }'
+                ),
+            ]
+        );
     }
 
     public function isCandidate(Node $node): bool

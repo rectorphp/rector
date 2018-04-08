@@ -8,16 +8,9 @@ use PhpParser\Node\Expr\MethodCall;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractPHPUnitRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
-/**
- * - Before:
- * - $this->assertTrue(!$foo, 'message');
- * - $this->assertFalse(!$foo, 'message');
- *
- * - After:
- * - $this->assertFalse($foo, 'message');
- * - $this->assertTrue($foo, 'message');
- */
 final class AssertNotOperatorRector extends AbstractPHPUnitRector
 {
     /**
@@ -42,6 +35,17 @@ final class AssertNotOperatorRector extends AbstractPHPUnitRector
     {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition(
+            'Turns not-operator comparisons to their method name alternatives in PHPUnit TestCase',
+            [
+                new CodeSample('$this->assertTrue(!$foo, "message");', '$this->assertFalse($foo, "message");'),
+                new CodeSample('$this->assertFalse(!$foo, "message");', '$this->assertTrue($foo, "message");'),
+            ]
+        );
     }
 
     public function isCandidate(Node $node): bool

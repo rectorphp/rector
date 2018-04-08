@@ -7,6 +7,8 @@ use PhpParser\Node\Expr\MethodCall;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
 final class ContainerBuilderCompileEnvArgumentRector extends AbstractRector
 {
@@ -26,6 +28,19 @@ final class ContainerBuilderCompileEnvArgumentRector extends AbstractRector
         $this->nodeFactory = $nodeFactory;
     }
 
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition(
+            'Turns old default value to parameter in ContinerBuilder->build() method in DI in Symfony',
+            [
+                new CodeSample(
+                    '$containerBuilder = new Symfony\Component\DependencyInjection\ContainerBuilder(); $containerBuilder->compile();',
+                    '$containerBuilder = new Symfony\Component\DependencyInjection\ContainerBuilder(); $containerBuilder->compile(true);'
+                ),
+            ]
+        );
+    }
+
     public function isCandidate(Node $node): bool
     {
         if ($this->methodCallAnalyzer->isTypeAndMethods(
@@ -39,10 +54,8 @@ final class ContainerBuilderCompileEnvArgumentRector extends AbstractRector
         /** @var MethodCall $methodCallNode */
         $methodCallNode = $node;
 
-        $arguments = $methodCallNode->args;
-
         // already has an argument
-        return count($arguments) !== 1;
+        return count($methodCallNode->args) !== 1;
     }
 
     /**

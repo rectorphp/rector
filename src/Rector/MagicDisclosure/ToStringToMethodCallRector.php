@@ -10,18 +10,9 @@ use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Rector\AbstractRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
-/**
- * __toString specific call
- *
- * Example - from:
- * - $result = (string) $someValue;
- * - $result = $someValue->__toString();
- *
- * To
- * - $result = $someValue->someMethod();
- * - $result = $someValue->someMethod();
- */
 final class ToStringToMethodCallRector extends AbstractRector
 {
     /**
@@ -71,6 +62,14 @@ final class ToStringToMethodCallRector extends AbstractRector
         $this->identifierRenamer = $identifierRenamer;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->methodCallNodeFactory = $methodCallNodeFactory;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('[Dynamic] Turns defined __toString() to specific method calls.', [
+            new CodeSample('$result = (string) $someValue;', '$result = $someValue->someMethod();'),
+            new CodeSample('$result = $someValue->__toString();', '$result = $someValue->someMethod();'),
+        ]);
     }
 
     public function isCandidate(Node $node): bool

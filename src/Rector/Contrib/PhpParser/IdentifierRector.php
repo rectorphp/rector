@@ -10,6 +10,8 @@ use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Rector\AbstractRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * Covers part of https://github.com/nikic/PHP-Parser/blob/master/UPGRADE-4.0.md
@@ -65,6 +67,16 @@ final class IdentifierRector extends AbstractRector
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
         $this->methodCallNodeFactory = $methodCallNodeFactory;
         $this->nodeTypeResolver = $nodeTypeResolver;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('Turns node string names to Identifier object in php-parser', [
+            new CodeSample(
+                '$constNode = new \PhpParser\Node\Const_; $name = $constNode->name;',
+                '$constNode = new \PhpParser\Node\Const_; $name = $constNode->name->toString();'
+            ),
+        ]);
     }
 
     public function isCandidate(Node $node): bool

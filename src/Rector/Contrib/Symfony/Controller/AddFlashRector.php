@@ -8,14 +8,9 @@ use Rector\Node\Attribute;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeAnalyzer\ChainMethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
-/**
- * Before:
- * - $request->getSession()->getFlashBag()->add('success', 'something');
- *
- * After:
- * - $this->addflash('success', 'something');
- */
 final class AddFlashRector extends AbstractRector
 {
     /**
@@ -34,6 +29,16 @@ final class AddFlashRector extends AbstractRector
     ) {
         $this->methodCallNodeFactory = $methodCallNodeFactory;
         $this->chainMethodCallAnalyzer = $chainMethodCallAnalyzer;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('Turns long flash adding to short helper method in Controller in Symfony', [
+            new CodeSample(
+                '$request->getSession()->getFlashBag()->add("success", "something");',
+                '$this->addflash("success", "something");'
+            ),
+        ]);
     }
 
     public function isCandidate(Node $node): bool

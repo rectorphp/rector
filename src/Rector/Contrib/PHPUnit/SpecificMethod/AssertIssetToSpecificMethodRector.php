@@ -11,16 +11,9 @@ use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractPHPUnitRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
-/**
- * Before:
- * - $this->assertTrue(isset($anything->foo));
- * - $this->assertFalse(isset($anything['foo']), 'message');
- *
- * After:
- * - $this->assertObjectHasAttribute('foo', $anything);
- * - $this->assertArrayNotHasKey('foo', $anything, 'message');
- */
 final class AssertIssetToSpecificMethodRector extends AbstractPHPUnitRector
 {
     /**
@@ -46,6 +39,20 @@ final class AssertIssetToSpecificMethodRector extends AbstractPHPUnitRector
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
         $this->nodeFactory = $nodeFactory;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('Turns isset comparisons to their method name alternatives in PHPUnit TestCase', [
+            new CodeSample(
+                '$this->assertTrue(isset($anything->foo));',
+                '$this->assertFalse(isset($anything["foo"]), "message");'
+            ),
+            new CodeSample(
+                '$this->assertObjectHasAttribute("foo", $anything);',
+                '$this->assertArrayNotHasKey("foo", $anything, "message");'
+            ),
+        ]);
     }
 
     public function isCandidate(Node $node): bool

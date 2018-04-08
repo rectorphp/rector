@@ -11,14 +11,9 @@ use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
-/**
- * Before:
- * - $this->template->someFilter(...);
- *
- * After:
- * - $this->template->getLatte()->invokeFilter('someFilter', ...)
- */
 final class TemplateMagicInvokeFilterCallRector extends AbstractRector
 {
     /**
@@ -51,6 +46,16 @@ final class TemplateMagicInvokeFilterCallRector extends AbstractRector
         $this->identifierRenamer = $identifierRenamer;
         $this->nodeFactory = $nodeFactory;
         $this->methodCallNodeFactory = $methodCallNodeFactory;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('Turns properties with @inject to private properties and constructor injection', [
+            new CodeSample(
+                '$this->template->someFilter(...)',
+                '$this->template->getLatte()->invokeFilter("someFilter", ...)'
+            ),
+        ]);
     }
 
     public function isCandidate(Node $node): bool

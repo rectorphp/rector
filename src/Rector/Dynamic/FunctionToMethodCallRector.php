@@ -8,14 +8,9 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\Rector\AbstractRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
-/**
- * Before:
- * - view('...', [])
- *
- * After:
- * - $this->render('...')
- */
 final class FunctionToMethodCallRector extends AbstractRector
 {
     /**
@@ -35,6 +30,13 @@ final class FunctionToMethodCallRector extends AbstractRector
     {
         $this->functionToMethodCall = $functionToMethodCall;
         $this->methodCallNodeFactory = $methodCallNodeFactory;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('[Dynamic] Turns defined function calls to local method calls.', [
+            new CodeSample('view("...", []);', '$this->render("...", []);'),
+        ]);
     }
 
     public function isCandidate(Node $node): bool

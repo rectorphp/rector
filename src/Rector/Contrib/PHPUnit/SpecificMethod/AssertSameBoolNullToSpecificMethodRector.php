@@ -9,16 +9,9 @@ use PhpParser\Node\Identifier;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractPHPUnitRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
-/**
- * Before:
- * - $this->assertSame(null, $anything);
- * - $this->assertNotSame(false, $anything);
- *
- * After:
- * - $this->assertNull($anything);
- * - $this->assertNotFalse($anything);
- */
 final class AssertSameBoolNullToSpecificMethodRector extends AbstractPHPUnitRector
 {
     /**
@@ -49,6 +42,17 @@ final class AssertSameBoolNullToSpecificMethodRector extends AbstractPHPUnitRect
     {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition(
+            'Turns same bool and null comparisons to their method name alternatives in PHPUnit TestCase',
+            [
+                new CodeSample('$this->assertSame(null, $anything);', '$this->assertNull($anything);'),
+                new CodeSample('$this->assertNotSame(false, $anything);', '$this->assertNotFalse($anything);'),
+            ]
+        );
     }
 
     public function isCandidate(Node $node): bool

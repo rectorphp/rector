@@ -11,6 +11,8 @@ use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
 use Rector\Node\Attribute;
 use Rector\Rector\AbstractRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
 final class NamespaceReplacerRector extends AbstractRector
 {
@@ -27,6 +29,16 @@ final class NamespaceReplacerRector extends AbstractRector
         krsort($oldToNewNamespaces);
 
         $this->oldToNewNamespaces = $oldToNewNamespaces;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('[Dynamic] Replaces old namespace by new one.', [
+            new CodeSample(
+                '$someObject = new SomeOldNamespace\SomeClass;',
+                '$someObject = new SomeNewNamespace\SomeClass;'
+            ),
+        ]);
     }
 
     public function isCandidate(Node $node): bool

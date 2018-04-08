@@ -15,6 +15,9 @@ parameters:
         - '#Call to an undefined method PhpParser\\Node\\Name::toLowerString\(\)#'
         - '#Cannot call method toString\(\) on string#'
 
+        # intentionally incorrect - part of the test
+        - '#Parameter \#2 \$codeSamples of class Rector\\RectorDefinition\\RectorDefinition constructor expects array<Rector\\RectorDefinition\\CodeSample>, array<int, stdClass> given#'
+
         # known values
         - '#Argument of an invalid type array<PhpParser\\Node>\|null supplied for foreach, only iterables are supported#'
 

@@ -8,6 +8,8 @@ use Rector\NodeAnalyzer\MethodArgumentAnalyzer;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
 final class ReplaceCreateMethodWithoutReviewerRector extends AbstractRector
 {
@@ -26,16 +28,6 @@ final class ReplaceCreateMethodWithoutReviewerRector extends AbstractRector
      */
     private $identifierRenamer;
 
-    /**
-     * @var string
-     */
-    private $oldMethodName = 'createForSubjectWithReviewer';
-
-    /**
-     * @var string
-     */
-    private $newMethodName = 'createForSubject';
-
     public function __construct(
         MethodCallAnalyzer $methodCallAnalyzer,
         MethodArgumentAnalyzer $methodArgumentAnalyzer,
@@ -46,9 +38,22 @@ final class ReplaceCreateMethodWithoutReviewerRector extends AbstractRector
         $this->identifierRenamer = $identifierRenamer;
     }
 
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition(
+            'Turns createForSubjectWithReviewer() with null review to standalone method in Sylius',
+            [
+                new CodeSample(
+                    '$this->createForSubjectWithReviewer($subject, null)',
+                    '$this->createForSubject($subject)'
+                ),
+            ]
+        );
+    }
+
     public function isCandidate(Node $node): bool
     {
-        if (! $this->methodCallAnalyzer->isMethod($node, $this->oldMethodName)) {
+        if (! $this->methodCallAnalyzer->isMethod($node, 'createForSubjectWithReviewer')) {
             return false;
         }
 
@@ -61,7 +66,7 @@ final class ReplaceCreateMethodWithoutReviewerRector extends AbstractRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        $this->identifierRenamer->renameNode($methodCallNode, $this->newMethodName);
+        $this->identifierRenamer->renameNode($methodCallNode, 'createForSubject');
 
         if ($this->methodArgumentAnalyzer->hasMethodSecondArgument($methodCallNode)) {
             $methodCallNode->args = [

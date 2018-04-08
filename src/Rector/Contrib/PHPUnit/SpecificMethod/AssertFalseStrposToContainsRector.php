@@ -11,16 +11,9 @@ use PhpParser\Node\Name;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractPHPUnitRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
-/**
- * Before:
- * - $this->assertFalse(strpos($anything, 'foo'), 'message');
- * - $this->assertNotFalse(stripos($anything, 'foo'), 'message');
- *
- * After:
- * - $this->assertNotContains('foo', $anything, 'message');
- * - $this->assertContains('foo', $anything, 'message');
- */
 final class AssertFalseStrposToContainsRector extends AbstractPHPUnitRector
 {
     /**
@@ -45,6 +38,23 @@ final class AssertFalseStrposToContainsRector extends AbstractPHPUnitRector
     {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition(
+            'Turns strpos()/stripos() comparisons to their method name alternatives in PHPUnit TestCase',
+            [
+                new CodeSample(
+                    '$this->assertFalse(strpos($anything, "foo"), "message");',
+                    '$this->assertNotContains("foo", $anything, "message");'
+                ),
+                new CodeSample(
+                    '$this->assertNotFalse(stripos($anything, "foo"), "message");',
+                    '$this->assertContains("foo", $anything, "message");'
+                ),
+            ]
+        );
     }
 
     public function isCandidate(Node $node): bool
