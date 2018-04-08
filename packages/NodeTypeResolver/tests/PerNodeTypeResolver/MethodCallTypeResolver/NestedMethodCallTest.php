@@ -54,7 +54,7 @@ final class NestedMethodCallTest extends AbstractNodeTypeResolverTest
 
             # nested different method calls
             [__DIR__ . '/NestedMethodCallSource/OnMethodCallCallDifferentType.php.inc', 0, 'getParameters', [
-                AnotherClass::class
+                AnotherClass::class,
             ]],
 
             [__DIR__ . '/NestedMethodCallSource/OnMethodCallCallDifferentType.php.inc', 1, 'createAnotherClass', [
@@ -63,11 +63,16 @@ final class NestedMethodCallTest extends AbstractNodeTypeResolverTest
 
             # nested method calls
             [__DIR__ . '/NestedMethodCallSource/NestedMethodCalls.php.inc', 0, 'getParameters', [AnotherClass::class]],
-            [__DIR__ . '/NestedMethodCallSource/NestedMethodCalls.php.inc', 1, 'callAndReturnSelf', [AnotherClass::class]],
+            [
+                __DIR__ . '/NestedMethodCallSource/NestedMethodCalls.php.inc',
+                1,
+                'callAndReturnSelf',
+                [AnotherClass::class],
+            ],
 
             # nested method calls
             [__DIR__ . '/NestedMethodCallSource/NestedMethodCalls.php.inc', 2, 'createAnotherClass', [
-                ClassWithFluentNonSelfReturn::class
+                ClassWithFluentNonSelfReturn::class,
             ]],
         ];
     }

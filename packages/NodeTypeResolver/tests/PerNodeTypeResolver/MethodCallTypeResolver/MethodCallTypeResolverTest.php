@@ -43,22 +43,22 @@ final class MethodCallTypeResolverTest extends AbstractNodeTypeResolverTest
 
             # on method call
             [__DIR__ . '/MethodCallSource/OnMethodCallCall.php.inc', 0, [
-                'Rector\NodeTypeResolver\Tests\Source\AnotherClass'
+                'Rector\NodeTypeResolver\Tests\Source\AnotherClass',
             ]],
 
             # on variable call
             [__DIR__ . '/MethodCallSource/OnVariableCall.php.inc', 0, [
-                'Rector\NodeTypeResolver\Tests\Source\SomeClass'
+                'Rector\NodeTypeResolver\Tests\Source\SomeClass',
             ]],
 
             # on property call
             [__DIR__ . '/MethodCallSource/OnPropertyCall.php.inc', 0, [
-                'Rector\NodeTypeResolver\Tests\Source\SomeClass'
+                'Rector\NodeTypeResolver\Tests\Source\SomeClass',
             ]],
 
             # on magic class call
             [__DIR__ . '/MethodCallSource/OnMagicClassCall.php.inc', 0, [
-                'Rector\NodeTypeResolver\Tests\Source\SomeClass'
+                'Rector\NodeTypeResolver\Tests\Source\SomeClass',
             ]],
         ];
     }

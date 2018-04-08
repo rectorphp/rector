@@ -37,7 +37,12 @@ final class PropertyFetchTypeResolverTest extends AbstractNodeTypeResolverTest
             # doc block
             [__DIR__ . '/Source/NestedProperty.php.inc', 0, 'level3', [ClassWithPropertyLevel3::class]],
             [__DIR__ . '/Source/NestedProperty.php.inc', 1, 'level2s', [ClassWithPropertyLevel2::class]],
-            [__DIR__ . '/Source/NestedProperty.php.inc', 2, 'level1', [ClassWithPropertyLevel1::class, ParentClass::class]]
+            [
+                __DIR__ . '/Source/NestedProperty.php.inc',
+                2,
+                'level1',
+                [ClassWithPropertyLevel1::class, ParentClass::class],
+            ],
         ];
     }
 }
