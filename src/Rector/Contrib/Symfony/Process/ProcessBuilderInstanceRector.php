@@ -7,16 +7,9 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use Rector\NodeAnalyzer\StaticMethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
-/**
- * Part of multi-step Rector
- *
- * Before:
- * - $processBuilder = Symfony\Component\Process\ProcessBuilder::instance($args);
- *
- * After:
- * - $processBuilder = new Symfony\Component\Process\ProcessBuilder($args);
- */
 final class ProcessBuilderInstanceRector extends AbstractRector
 {
     /**
@@ -27,6 +20,13 @@ final class ProcessBuilderInstanceRector extends AbstractRector
     public function __construct(StaticMethodCallAnalyzer $staticMethodCallAnalyzer)
     {
         $this->staticMethodCallAnalyzer = $staticMethodCallAnalyzer;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('Turns ProcessBuilder::instance() to new ProcessBuilder in Process in Symfony. Part of multi-step Rector.', [
+            new CodeSample('$processBuilder = Symfony\Component\Process\ProcessBuilder::instance($args);', '$processBuilder = new Symfony\Component\Process\ProcessBuilder($args);')
+        ]);
     }
 
     public function isCandidate(Node $node): bool

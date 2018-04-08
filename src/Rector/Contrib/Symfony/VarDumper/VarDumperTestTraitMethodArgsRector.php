@@ -9,16 +9,9 @@ use PhpParser\Node\Scalar\String_;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
-/**
- * Converts all:
- * - VarDumperTestTrait->assertDumpEquals($dump, $data, $mesage = '');
- * - VarDumperTestTrait->assertDumpMatchesFormat($dump, $format, $mesage = '');
- *
- * into:
- * - VarDumperTestTrait->assertDumpEquals($dump, $data, $context = null, $mesage = '');
- * - VarDumperTestTrait->assertDumpMatchesFormat($dump, $format, $context = null,  $mesage = '');
- */
 final class VarDumperTestTraitMethodArgsRector extends AbstractRector
 {
     /**
@@ -40,6 +33,20 @@ final class VarDumperTestTraitMethodArgsRector extends AbstractRector
     {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->nodeFactory = $nodeFactory;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('Adds new $format argument in VarDumperTestTrait->assertDumpEquals() in in Validator in Symfony.', [
+            new CodeSample(
+                'VarDumperTestTrait->assertDumpEquals($dump, $data, $mesage = "");',
+                'VarDumperTestTrait->assertDumpEquals($dump, $data, $context = null, $mesage = "");'
+            ),
+            new CodeSample(
+                'VarDumperTestTrait->assertDumpMatchesFormat($dump, $format, $mesage = "");',
+                'VarDumperTestTrait->assertDumpMatchesFormat($dump, $format, $context = null,  $mesage = "");'
+            )
+        ]);
     }
 
     public function isCandidate(Node $node): bool

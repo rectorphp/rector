@@ -8,15 +8,11 @@ use PhpParser\Node\Scalar\String_;
 use Rector\Node\Attribute;
 use Rector\Node\NodeFactory;
 use Rector\Rector\AbstractRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * Ref: https://github.com/symfony/symfony/blob/master/UPGRADE-4.0.md#validator
- *
- * Before:
- * $containt = new Url(['checkDNS' => true]);
- *
- * After:
- * $containt = new Url(['checkDNS' => Url::CHECK_DNS_TYPE_ANY]);
  */
 final class ConstraintUrlOptionRector extends AbstractRector
 {
@@ -33,6 +29,16 @@ final class ConstraintUrlOptionRector extends AbstractRector
     public function __construct(NodeFactory $nodeFactory)
     {
         $this->nodeFactory = $nodeFactory;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('Turns true value to Url::CHECK_DNS_TYPE_ANY in Validator in Symfony.', [
+            new CodeSample(
+                '$constraint = new Url(["checkDNS" => true]);',
+                '$constraint = new Url(["checkDNS" => Url::CHECK_DNS_TYPE_ANY]);'
+            )
+        ]);
     }
 
     public function isCandidate(Node $node): bool
