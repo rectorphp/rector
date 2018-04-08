@@ -2,6 +2,8 @@
 
 namespace Rector\RectorDefinition;
 
+use Rector\Exception\RectorDefinition\CodeSamplesMissingException;
+
 final class RectorDefinition
 {
     /**
@@ -15,14 +17,11 @@ final class RectorDefinition
     private $codeSamples = [];
 
     /**
-     * @todo require at least 1 item?
      * @param CodeSample[] $codeSamples
      */
     public function __construct(string $description, array $codeSamples)
     {
-        // array type check
-        array_walk($codeSamples, function (CodeSample $codeSample): void {
-        });
+        $this->ensureCodeSamplesAreValid($codeSamples);
 
         $this->description = $description;
         $this->codeSamples = $codeSamples;
@@ -39,5 +38,25 @@ final class RectorDefinition
     public function getCodeSamples(): array
     {
         return $this->codeSamples;
+    }
+
+    /**
+     * @param CodeSample[] $codeSamples
+     */
+    private function ensureCodeSamplesAreValid(array $codeSamples): void
+    {
+        // array type check
+        array_walk($codeSamples, function (CodeSample $codeSample): void {
+        });
+
+        if (count($codeSamples)) {
+            return;
+        }
+
+        throw new CodeSamplesMissingException(sprintf(
+            'At least 1 code sample is required for the "%s" class 2nd argument, so docs and examples can be generated. %d given',
+            self::class,
+            count($codeSamples)
+        ));
     }
 }
