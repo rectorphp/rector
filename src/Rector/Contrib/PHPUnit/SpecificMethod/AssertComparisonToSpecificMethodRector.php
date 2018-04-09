@@ -116,17 +116,10 @@ final class AssertComparisonToSpecificMethodRector extends AbstractPHPUnitRector
         /** @var BinaryOp $expression */
         $expression = $oldArguments[0]->value;
 
-        if (in_array(get_class($expression->right), [LNumber::class, ConstFetch::class, String_::class], true)
-        ) {
+        if ($this->isConstantValue($expression->right)) {
             $firstArgument = new Arg($expression->right);
             $secondArgument = new Arg($expression->left);
-        } elseif (in_array(get_class($expression->left), [LNumber::class, ConstFetch::class, String_::class], true)) {
-            $firstArgument = new Arg($expression->left);
-            $secondArgument = new Arg($expression->right);
-        } elseif ($expression->right instanceof Variable && stripos($expression->right->name, 'exp') === 0) {
-            $firstArgument = new Arg($expression->right);
-            $secondArgument = new Arg($expression->left);
-        } elseif ($expression->left instanceof Variable && stripos($expression->left->name, 'exp') === 0) {
+        } elseif ($this->isConstantValue($expression->left)) {
             $firstArgument = new Arg($expression->left);
             $secondArgument = new Arg($expression->right);
         } else {
@@ -150,5 +143,11 @@ final class AssertComparisonToSpecificMethodRector extends AbstractPHPUnitRector
             'assertTrue' => $trueMethodName,
             'assertFalse' => $falseMethodName,
         ]);
+    }
+
+    private function isConstantValue(Node $node): bool
+    {
+        return in_array(get_class($node), [LNumber::class, ConstFetch::class, String_::class], true)
+                || $node instanceof Variable && stripos($node->name, 'exp') === 0;
     }
 }
