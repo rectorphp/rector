@@ -6,6 +6,10 @@ services:
         resource: '../'
         exclude: '../{Node/Attribute.php,Rector/**/*Rector.php,Rector/**/*RectorProvider.php,Reporting/FileDiff.php,Testing,RectorDefinition}'
 
+    # bin entry-point
+    Rector\Console\Application:
+        public: true
+
     Rector\Rector\Contrib\Symfony\Form\Helper\FormTypeStringToTypeProvider: ~
 
     # prepares helper attributes of nodes

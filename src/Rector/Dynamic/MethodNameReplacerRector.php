@@ -85,13 +85,13 @@ final class MethodNameReplacerRector extends AbstractRector
         return new RectorDefinition('[Dynamic] Turns method names to new ones.', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
-    $someObject = new SomeClass;
-    $someObject->oldMethod();
+$someObject = new SomeClass;
+$someObject->oldMethod();
 CODE_SAMPLE
                 ,
                 <<<'CODE_SAMPLE'
-    $someObject = new SomeClass;
-    $someObject->newMethod();
+$someObject = new SomeClass;
+$someObject->newMethod();
 CODE_SAMPLE
             ),
             new CodeSample('SomeClass::oldStaticMethod();', 'SomeClass::newStaticMethod();'),

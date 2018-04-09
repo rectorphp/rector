@@ -95,6 +95,12 @@ Do you need to upgrade to **Symfony 4.0**, for example?
     vendor/bin/rector levels
     ```
 
+4. What does loaded Rectors do?
+
+    ```bash
+    vendor/bin/rector describe  --level symfony33
+    ```
+
 ### B. Custom Sets
 
 1. Create `rector.yml` with desired Rectors:

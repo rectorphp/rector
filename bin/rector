@@ -4,8 +4,6 @@
 use Rector\Console\Application;
 use Rector\DependencyInjection\ContainerFactory;
 use Symfony\Component\Console\Input\ArgvInput;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symplify\PackageBuilder\Configuration\ConfigFileFinder;
 use Symplify\PackageBuilder\Configuration\LevelFileFinder;
 use Symplify\PackageBuilder\Console\ThrowableRenderer;
@@ -35,13 +33,8 @@ try {
     }
 
     // 3. Run Console Application
-    /** @var Application $application */
     $application = $container->get(Application::class);
-    /** @var InputInterface $input */
-    $input = $container->get(InputInterface::class);
-    /** @var OutputInterface $output */
-    $output = $container->get(OutputInterface::class);
-    $statusCode = $application->run($input, $output);
+    $statusCode = $application->run();
     exit($statusCode);
 } catch (Throwable $throwable) {
     (new ThrowableRenderer())->render($throwable);

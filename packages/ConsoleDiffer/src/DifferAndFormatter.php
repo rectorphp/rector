@@ -17,16 +17,42 @@ final class DifferAndFormatter
      */
     private $diffConsoleFormatter;
 
-    public function __construct(Differ $differ, DiffConsoleFormatter $diffConsoleFormatter)
+    /**
+     * @var Differ
+     */
+    private $bareDiffer;
+
+    public function __construct(Differ $differ, DiffConsoleFormatter $diffConsoleFormatter, Differ $bareDiffer)
     {
         $this->differ = $differ;
         $this->diffConsoleFormatter = $diffConsoleFormatter;
+        $this->bareDiffer = $bareDiffer;
     }
 
     public function diffAndFormat(string $old, string $new): string
     {
+        if ($old === $new) {
+            return '';
+        }
+
         $diff = $this->differ->diff($old, $new);
 
         return $this->diffConsoleFormatter->format($diff);
+    }
+
+    /**
+     * Returns only the diff (- and + lines), no extra elements, lines nor ----- around it
+     */
+    public function bareDiffAndFormat(string $old, string $new): string
+    {
+        if ($old === $new) {
+            return '';
+        }
+
+        $diff = $this->bareDiffer->diff($old, $new);
+        // impossible to configure - removed manually
+        $diff = substr($diff, strlen('@@ @@ '));
+
+        return $this->diffConsoleFormatter->bareFormat($diff);
     }
 }

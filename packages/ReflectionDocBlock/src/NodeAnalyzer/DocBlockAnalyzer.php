@@ -6,7 +6,6 @@ use Nette\Utils\Strings;
 use phpDocumentor\Reflection\DocBlock;
 use phpDocumentor\Reflection\DocBlock\Tag;
 use phpDocumentor\Reflection\DocBlock\Tags\Param;
-use phpDocumentor\Reflection\DocBlock\Tags\Var_;
 use phpDocumentor\Reflection\Type;
 use phpDocumentor\Reflection\Types\Boolean;
 use phpDocumentor\Reflection\Types\Integer;
@@ -19,6 +18,7 @@ use Rector\ReflectionDocBlock\DocBlock\AnnotationRemover;
 use Rector\ReflectionDocBlock\DocBlock\DocBlockFactory;
 use Rector\ReflectionDocBlock\DocBlock\TidingSerializer;
 use ReflectionProperty;
+use Symplify\BetterReflectionDocBlock\Tag\TolerantVar;
 
 final class DocBlockAnalyzer
 {
@@ -79,7 +79,7 @@ final class DocBlockAnalyzer
      */
     public function getVarTypes(Node $node): ?array
     {
-        /** @var Var_[] $varTags */
+        /** @var TolerantVar[] $varTags */
         $varTags = $this->getTagsByName($node, 'var');
         if (! count($varTags)) {
             return null;
@@ -131,7 +131,7 @@ final class DocBlockAnalyzer
 
         $tags = $docBlock->getTags();
         foreach ($tags as $tag) {
-            if (! $tag instanceof Var_) {
+            if (! $tag instanceof TolerantVar) {
                 continue;
             }
 
