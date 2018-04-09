@@ -6,6 +6,7 @@ use Rector\Configuration\Option;
 use Rector\Console\ConsoleStyle;
 use Rector\ConsoleDiffer\DifferAndFormatter;
 use Rector\Contract\Rector\RectorInterface;
+use Rector\Exception\NoRectorsLoadedException;
 use Rector\Naming\CommandNaming;
 use Rector\NodeTraverser\RectorNodeTraverser;
 use Rector\RectorDefinition\CodeSample;
@@ -58,6 +59,8 @@ final class DescribeCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $this->ensureSomeRectorsAreRegistered();
+
         foreach ($this->rectorNodeTraverser->getRectors() as $rector) {
             $this->describeRector($input, $rector);
         }
@@ -98,5 +101,17 @@ final class DescribeCommand extends Command
                 $this->consoleStyle->write($formattedDiff);
             }
         }
+    }
+
+    private function ensureSomeRectorsAreRegistered(): void
+    {
+        if ($this->rectorNodeTraverser->getRectorCount() > 0) {
+            return;
+        }
+
+        throw new NoRectorsLoadedException(
+            'No rectors were found. Registers them in rector.yml config to "rector:" '
+            . 'section, load them via "--config <file>.yml" or "--level <level>" CLI options.'
+        );
     }
 }
