@@ -30,8 +30,18 @@ final class DiffConsoleFormatter
 
     public function format(string $diff): string
     {
+        return $this->formatWithTemplate($diff, $this->template);
+    }
+
+    public function bareFormat(string $diff): string
+    {
+        return $this->formatWithTemplate($diff, PHP_EOL .'%s' . PHP_EOL);
+    }
+
+    private function formatWithTemplate(string $diff, string $template): string
+    {
         return sprintf(
-            $this->template,
+            $template,
             implode(PHP_EOL, array_map(function ($string) {
                 // make "+" lines green
                 // make "-" lines red
