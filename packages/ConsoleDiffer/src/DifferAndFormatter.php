@@ -51,7 +51,7 @@ final class DifferAndFormatter
 
         $diff = $this->bareDiffer->diff($old, $new);
         // impossible to configure - removed manually
-        $diff = substr($diff, strlen("@@ @@ "));
+        $diff = substr($diff, strlen('@@ @@ '));
 
         return $this->diffConsoleFormatter->bareFormat($diff);
     }

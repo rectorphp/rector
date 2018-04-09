@@ -82,7 +82,7 @@ final class DescribeCommand extends Command
             $this->describeRectorCodeSamples($rectorDefinition->getCodeSamples());
         }
 
-        $this->consoleStyle->newLine(3);
+        $this->consoleStyle->newLine(2);
     }
 
     /**
@@ -98,8 +98,6 @@ final class DescribeCommand extends Command
             $codeBefore .= $codeSample->getCodeBefore() . $separator;
             $codeAfter .= $codeSample->getCodeAfter() . $separator;
         }
-
-        $this->consoleStyle->newLine();
 
         $formattedDiff = $this->differAndFormatter->bareDiffAndFormat($codeBefore, $codeAfter);
         if ($formattedDiff) {
