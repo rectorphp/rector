@@ -116,10 +116,7 @@ final class AssertComparisonToSpecificMethodRector extends AbstractPHPUnitRector
         /** @var BinaryOp $expression */
         $expression = $oldArguments[0]->value;
 
-        if ($this->isConstantValue($expression->right)) {
-            $firstArgument = new Arg($expression->right);
-            $secondArgument = new Arg($expression->left);
-        } elseif ($this->isConstantValue($expression->left)) {
+        if ($this->isConstantValue($expression->left)) {
             $firstArgument = new Arg($expression->left);
             $secondArgument = new Arg($expression->right);
         } else {
