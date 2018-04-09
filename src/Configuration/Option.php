@@ -22,5 +22,5 @@ final class Option
     /**
      * @var string
      */
-    public const DESCRIBE_WITH_DIFFS = 'with-diff';
+    public const OPTION_NO_DIFFS = 'no-diff';
 }

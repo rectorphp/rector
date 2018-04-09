@@ -49,11 +49,10 @@ final class DescribeCommand extends Command
         $this->setName(CommandNaming::classToName(self::class));
         $this->setDescription('Shows detailed description of loaded Rectors.');
         $this->addOption(
-            Option::DESCRIBE_WITH_DIFFS,
+            Option::OPTION_NO_DIFFS,
             null,
-            InputOption::VALUE_OPTIONAL,
-            'See exemplary diffs.',
-            true
+            InputOption::VALUE_NONE,
+            'Hide examplary diffs.'
         );
     }
 
@@ -78,7 +77,7 @@ final class DescribeCommand extends Command
             $this->consoleStyle->writeln(' * ' . $rectorDefinition->getDescription());
         }
 
-        if ($input->getOption(Option::DESCRIBE_WITH_DIFFS)) {
+        if (! $input->getOption(Option::OPTION_NO_DIFFS)) {
             $this->describeRectorCodeSamples($rectorDefinition->getCodeSamples());
         }
 
