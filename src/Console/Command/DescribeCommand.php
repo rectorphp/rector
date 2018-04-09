@@ -90,17 +90,20 @@ final class DescribeCommand extends Command
      */
     private function describeRectorCodeSamples(array $codeSamples): void
     {
+        $codeBefore = '';
+        $codeAfter = '';
+        $separator = PHP_EOL . PHP_EOL;
+
         foreach ($codeSamples as $codeSample) {
-            $this->consoleStyle->newLine();
+            $codeBefore .= $codeSample->getCodeBefore() . $separator;
+            $codeAfter .= $codeSample->getCodeAfter() . $separator;
+        }
 
-            $formattedDiff = $this->differAndFormatter->bareDiffAndFormat(
-                $codeSample->getCodeBefore(),
-                $codeSample->getCodeAfter()
-            );
+        $this->consoleStyle->newLine();
 
-            if ($formattedDiff) {
-                $this->consoleStyle->write($formattedDiff);
-            }
+        $formattedDiff = $this->differAndFormatter->bareDiffAndFormat($codeBefore, $codeAfter);
+        if ($formattedDiff) {
+            $this->consoleStyle->write($formattedDiff);
         }
     }
 
