@@ -77,9 +77,9 @@ final class ArgumentReplacerRector extends AbstractRector
             [
                 new CodeSample(
                     '$containerBuilder = new Symfony\Component\DependencyInjection\ContainerBuilder;
-        $containerBuilder->compile();',
+$containerBuilder->compile();',
                     '$containerBuilder = new Symfony\Component\DependencyInjection\ContainerBuilder;
-        $containerBuilder->compile(true);'
+$containerBuilder->compile(true);'
                 ),
             ]
         );
