@@ -61,16 +61,17 @@ final class DescribeCommand extends Command
     {
         $this->ensureSomeRectorsAreRegistered();
 
+        $i = 0;
         foreach ($this->rectorNodeTraverser->getRectors() as $rector) {
-            $this->describeRector($input, $rector);
+            $this->describeRector(++$i, $input, $rector);
         }
 
         return 0;
     }
 
-    private function describeRector(InputInterface $input, RectorInterface $rector): void
+    private function describeRector(int $i, InputInterface $input, RectorInterface $rector): void
     {
-        $this->consoleStyle->section(get_class($rector));
+        $this->consoleStyle->section(sprintf('%d) %s', $i, get_class($rector)));
 
         $rectorDefinition = $rector->getDefinition();
         if ($rectorDefinition->getDescription()) {
@@ -81,7 +82,7 @@ final class DescribeCommand extends Command
             $this->describeRectorCodeSamples($rectorDefinition->getCodeSamples());
         }
 
-        $this->consoleStyle->newLine();
+        $this->consoleStyle->newLine(3);
     }
 
     /**
