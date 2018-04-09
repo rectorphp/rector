@@ -5,7 +5,11 @@ namespace Rector\Rector\Contrib\PHPUnit\SpecificMethod;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\BinaryOp;
+use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Scalar\String_;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractPHPUnitRector;
@@ -112,8 +116,23 @@ final class AssertComparisonToSpecificMethodRector extends AbstractPHPUnitRector
         /** @var BinaryOp $expression */
         $expression = $oldArguments[0]->value;
 
-        $firstArgument = new Arg($expression->right);
-        $secondArgument = new Arg($expression->left);
+        if (in_array(get_class($expression->right), [LNumber::class, ConstFetch::class, String_::class], true)
+        ) {
+            $firstArgument = new Arg($expression->right);
+            $secondArgument = new Arg($expression->left);
+        } elseif (in_array(get_class($expression->left), [LNumber::class, ConstFetch::class, String_::class], true)) {
+            $firstArgument = new Arg($expression->left);
+            $secondArgument = new Arg($expression->right);
+        } elseif ($expression->right instanceof Variable && stripos($expression->right->name, 'exp') === 0) {
+            $firstArgument = new Arg($expression->right);
+            $secondArgument = new Arg($expression->left);
+        } elseif ($expression->left instanceof Variable && stripos($expression->left->name, 'exp') === 0) {
+            $firstArgument = new Arg($expression->left);
+            $secondArgument = new Arg($expression->right);
+        } else {
+            $firstArgument = new Arg($expression->right);
+            $secondArgument = new Arg($expression->left);
+        }
 
         unset($oldArguments[0]);
 
