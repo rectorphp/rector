@@ -48,12 +48,7 @@ final class DescribeCommand extends Command
     {
         $this->setName(CommandNaming::classToName(self::class));
         $this->setDescription('Shows detailed description of loaded Rectors.');
-        $this->addOption(
-            Option::OPTION_NO_DIFFS,
-            null,
-            InputOption::VALUE_NONE,
-            'Hide examplary diffs.'
-        );
+        $this->addOption(Option::OPTION_NO_DIFFS, null, InputOption::VALUE_NONE, 'Hide examplary diffs.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
