@@ -9,3 +9,4 @@ services:
     Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertIssetToSpecificMethodRector: ~
     Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertInstanceOfComparisonRector: ~
     Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertPropertyExistsRector: ~
+    Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertRegExpRector: ~
