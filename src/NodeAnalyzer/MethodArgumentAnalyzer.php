@@ -6,7 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Name;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
 
 final class MethodArgumentAnalyzer
@@ -57,7 +57,7 @@ final class MethodArgumentAnalyzer
             return false;
         }
 
-        /** @var Name $nodeName */
+        /** @var Identifier $nodeName */
         $nodeName = $value->name;
 
         return $nodeName->toLowerString() === 'null';

@@ -108,7 +108,7 @@ CODE_SAMPLE
 
     private function isInProvideMethod(ClassMethod $classMethodNode): bool
     {
-        return (bool) Strings::match($classMethodNode->name->toString(), '#^provide*#');
+        return (bool) Strings::match($classMethodNode->name, '#^provide*#');
     }
 
     private function hasClassMethodReturnArrayOfArrays(ClassMethod $classMethodNode): bool
