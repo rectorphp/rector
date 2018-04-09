@@ -17,6 +17,8 @@ use Rector\Node\Attribute;
 use Rector\Node\PropertyFetchNodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
 final class ServiceLocatorToDIRector extends AbstractRector
 {
@@ -57,6 +59,48 @@ final class ServiceLocatorToDIRector extends AbstractRector
         $this->repositoryForDoctrineEntityProvider = $repositoryForDoctrineEntityProvider;
         $this->classPropertyCollector = $classPropertyCollector;
         $this->propertyNaming = $propertyNaming;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition(
+            'Turns "$this->getRepository()" in Symfony Controller to constructor injection and private property access.',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
+class ProductController extends Controller
+{
+    public function someAction()
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->getRepository('SomethingBundle:Product')->findSomething(...);
+    }
+}
+CODE_SAMPLE
+                    ,
+                    <<<'CODE_SAMPLE'
+class ProductController extends Controller
+{
+    /**
+     * @var ProductRepository
+     */ 
+    private $productRepository;
+    
+    public function __construct(ProductRepository $productRepository)
+    {
+        $this->productRepository = $productRepository;
+    }
+
+    public function someAction()
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $this->productRepository->findSomething(...);
+    }
+}
+CODE_SAMPLE
+                ),
+            ]
+        );
     }
 
     public function isCandidate(Node $node): bool
