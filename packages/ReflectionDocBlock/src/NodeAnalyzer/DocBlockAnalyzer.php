@@ -8,7 +8,9 @@ use phpDocumentor\Reflection\DocBlock\Tag;
 use phpDocumentor\Reflection\DocBlock\Tags\Param;
 use phpDocumentor\Reflection\Type;
 use phpDocumentor\Reflection\Types\Boolean;
+use phpDocumentor\Reflection\Types\Compound;
 use phpDocumentor\Reflection\Types\Integer;
+use phpDocumentor\Reflection\Types\Null_;
 use phpDocumentor\Reflection\Types\Object_;
 use phpDocumentor\Reflection\Types\String_;
 use PhpParser\Comment\Doc;
@@ -66,10 +68,41 @@ final class DocBlockAnalyzer
         $docBlock = $this->docBlockFactory->createFromNode($node);
 
         foreach ($docBlock->getTags() as $tag) {
-            if ($tag instanceof TolerantVar) { // @todo: use own writeable Var
+            if ($tag instanceof TolerantVar) {
+                $oldTagType = $tag->getType();
+
+                // this could be abstracted to replace values
+                if ($oldTagType instanceof Compound) {
+                    $newCompoundTagTypes = [];
+
+                    foreach ($oldTagType->getIterator() as $i => $oldTagSubType) {
+                        if ($oldTagSubType instanceof Object_) {
+                            $oldTagValue = (string) $oldTagSubType->getFqsen();
+
+                            // is this value object to be replaced?
+                            if (is_a($oldTagValue, $oldType, true)) {
+                                $newCompoundTagTypes[] = $this->resolveNewTypeObjectFromString($newType);
+                                continue;
+                            }
+                        }
+
+                        $newCompoundTagTypes[] = $oldTagSubType;
+                    }
+
+                    // nothing to replace
+                    if (! count($newCompoundTagTypes)) {
+                        continue;
+                    }
+
+                    // use this as new type
+                    $newCompoundTag = new Compound($newCompoundTagTypes);
+                    $this->setPrivatePropertyValue($tag, 'type', $newCompoundTag);
+                    $this->saveNewDocBlockToNode($node, $docBlock);
+                }
             }
         }
 
+        // is this still needed?
         $this->replaceInNode($node, sprintf('%s|null', $oldType), sprintf('%s|null', $newType));
         $this->replaceInNode($node, sprintf('null|%s', $oldType), sprintf('null|%s', $newType));
     }
