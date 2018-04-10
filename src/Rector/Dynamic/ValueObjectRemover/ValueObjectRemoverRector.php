@@ -22,6 +22,8 @@ final class ValueObjectRemoverRector extends AbstractValueObjectRemoverRector
                 'function someFunction(ValueObject $name) { }',
                 'function someFunction(string $name) { }'
             ),
+            new CodeSample('function someFunction(): ValueObject { }', 'function someFunction(): string { }'),
+            new CodeSample('function someFunction(): ?ValueObject { }', 'function someFunction(): ?string { }'),
         ]);
     }
 
