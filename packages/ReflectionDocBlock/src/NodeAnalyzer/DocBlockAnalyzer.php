@@ -201,6 +201,14 @@ final class DocBlockAnalyzer
     private function saveNewDocBlockToNode(Node $node, DocBlock $docBlock): void
     {
         $docContent = $this->tidingSerializer->getDocComment($docBlock);
+
+        // respect one-liners
+        $originalDocCommentContent = $node->getDocComment()->getText();
+        if (substr_count($originalDocCommentContent, PHP_EOL) <= 1) {
+            $docContent = Strings::replace($docContent, '#\s+#', ' ');
+            $docContent = Strings::replace($docContent, '#/\*\* #', '/*');
+        }
+
         $doc = new Doc($docContent);
         $node->setDocComment($doc);
     }
