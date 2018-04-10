@@ -87,31 +87,7 @@ final class DocBlockAnalyzer
             if ($tag instanceof TolerantVar) {
                 // this could be abstracted to replace values
                 if ($tag->getType() instanceof Compound) {
-                    $newCompoundTagTypes = [];
-
-                    foreach ($tag->getType() as $i => $oldTagSubType) {
-                        if ($oldTagSubType instanceof Object_) {
-                            $oldTagValue = (string) $oldTagSubType->getFqsen();
-
-                            // is this value object to be replaced?
-                            if (is_a($oldTagValue, $oldType, true)) {
-                                $newCompoundTagTypes[] = $this->resolveNewTypeObjectFromString($newType);
-                                continue;
-                            }
-                        }
-
-                        $newCompoundTagTypes[] = $oldTagSubType;
-                    }
-
-                    // nothing to replace
-                    if (! count($newCompoundTagTypes)) {
-                        continue;
-                    }
-
-                    // use this as new type
-                    $newCompoundTag = new Compound($newCompoundTagTypes);
-                    $this->privatesSetter->setPrivateProperty($tag, 'type', $newCompoundTag);
-                    $this->saveNewDocBlockToNode($node, $docBlock);
+                    $this->processCompoundTagType($node, $docBlock, $tag, $tag->getType(), $oldType, $newType);
                 }
             }
         }
@@ -255,5 +231,40 @@ final class DocBlockAnalyzer
         }
 
         throw new NotImplementedException(__METHOD__);
+    }
+
+    private function processCompoundTagType(
+        Node $node,
+        DocBlock $docBlock,
+        TolerantVar $tolerantVar,
+        Compound $compound,
+        string $oldType,
+        string $newType
+    ): void {
+        $newCompoundTagTypes = [];
+
+        foreach ($compound as $i => $oldTagSubType) {
+            if ($oldTagSubType instanceof Object_) {
+                $oldTagValue = (string) $oldTagSubType->getFqsen();
+
+                // is this value object to be replaced?
+                if (is_a($oldTagValue, $oldType, true)) {
+                    $newCompoundTagTypes[] = $this->resolveNewTypeObjectFromString($newType);
+                    continue;
+                }
+            }
+
+            $newCompoundTagTypes[] = $oldTagSubType;
+        }
+
+        // nothing to replace
+        if (! count($newCompoundTagTypes)) {
+            return;
+        }
+
+        // use this as new type
+        $newCompoundTag = new Compound($newCompoundTagTypes);
+        $this->privatesSetter->setPrivateProperty($tolerantVar, 'type', $newCompoundTag);
+        $this->saveNewDocBlockToNode($node, $docBlock);
     }
 }
