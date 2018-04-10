@@ -6,6 +6,7 @@ use get_class;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use Rector\Builder\Class_\ClassPropertyCollector;
@@ -83,9 +84,9 @@ class ProductController extends Controller
 {
     /**
      * @var ProductRepository
-     */ 
+     */
     private $productRepository;
-    
+
     public function __construct(ProductRepository $productRepository)
     {
         $this->productRepository = $productRepository;
@@ -154,7 +155,9 @@ CODE_SAMPLE
 
     private function entityFqnOrAlias(Node $node): string
     {
-        $repositoryArgument = $node->args[0]->value;
+        /** @var MethodCall $methodCall */
+        $methodCall = $node;
+        $repositoryArgument = $methodCall->args[0]->value;
 
         if ($repositoryArgument instanceof String_) {
             return $repositoryArgument->value;
