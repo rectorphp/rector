@@ -1,56 +1,29 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Rector\Dynamic;
+namespace Rector\Rector\Dynamic\ValueObjectRemover;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name;
+use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Property;
 use Rector\Node\Attribute;
-use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
-use Rector\ReflectionDocBlock\NodeAnalyzer\DocBlockAnalyzer;
 
-final class ValueObjectRemoverRector extends AbstractRector
+final class ValueObjectRemoverRector extends AbstractValueObjectRemoverRector
 {
-    /**
-     * @var string[]
-     */
-    private $valueObjectsToSimpleTypes = [];
-
-    /**
-     * @var DocBlockAnalyzer
-     */
-    private $docBlockAnalyzer;
-
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    /**
-     * @param string[] $valueObjectsToSimpleTypes
-     */
-    public function __construct(
-        array $valueObjectsToSimpleTypes,
-        DocBlockAnalyzer $docBlockAnalyzer,
-        NodeTypeResolver $nodeTypeResolver
-    ) {
-        $this->valueObjectsToSimpleTypes = $valueObjectsToSimpleTypes;
-        $this->docBlockAnalyzer = $docBlockAnalyzer;
-        $this->nodeTypeResolver = $nodeTypeResolver;
-    }
-
-    /**
-     * @todo complete the rest of cases
-     */
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('[Dynamic] Remove values objects and use directly the value.', [
-            new CodeSample('$someValue = new SomeValueObject("just_a_string");', '$someValue = "just_a_string";'),
+            new CodeSample('$name = new ValueObject("name");', '$name = "name";'),
+            new CodeSample(
+                'function someFunction(ValueObject $name) { }',
+                'function someFunction(string $name) { }'
+            ),
+            new CodeSample('function someFunction(): ValueObject { }', 'function someFunction(): string { }'),
+            new CodeSample('function someFunction(): ?ValueObject { }', 'function someFunction(): ?string { }'),
         ]);
     }
 
@@ -71,11 +44,11 @@ final class ValueObjectRemoverRector extends AbstractRector
             }
         }
 
-        return false;
+        return $node instanceof NullableType;
     }
 
     /**
-     * @param New_ $node
+     * @param New_|Property|Name|NullableType $node
      */
     public function refactor(Node $node): ?Node
     {
@@ -88,12 +61,11 @@ final class ValueObjectRemoverRector extends AbstractRector
         }
 
         if ($node instanceof Name) {
-            $newType = $this->matchNewType($node);
-            if ($newType === null) {
-                return null;
-            }
+            return $this->refactorName($node);
+        }
 
-            return new Name($newType);
+        if ($node instanceof NullableType) {
+            return $this->refactorNullableType($node);
         }
 
         return null;
@@ -110,14 +82,6 @@ final class ValueObjectRemoverRector extends AbstractRector
         return (bool) array_intersect($classNodeTypes, $this->getValueObjects());
     }
 
-    /**
-     * @return string[]
-     */
-    private function getValueObjects(): array
-    {
-        return array_keys($this->valueObjectsToSimpleTypes);
-    }
-
     private function processPropertyCandidate(Property $propertyNode): bool
     {
         $propertyNodeTypes = $this->nodeTypeResolver->resolve($propertyNode);
@@ -132,22 +96,26 @@ final class ValueObjectRemoverRector extends AbstractRector
             return $propertyNode;
         }
 
-        $this->docBlockAnalyzer->replaceVarType($propertyNode, $newType);
-
         return $propertyNode;
     }
 
-    private function matchNewType(Node $node): ?string
+    private function refactorNullableType(NullableType $nullableTypeNode): NullableType
     {
-        $nodeTypes = $this->nodeTypeResolver->resolve($node);
-        foreach ($nodeTypes as $propertyType) {
-            if (! isset($this->valueObjectsToSimpleTypes[$propertyType])) {
-                continue;
-            }
-
-            return $this->valueObjectsToSimpleTypes[$propertyType];
+        $newType = $this->matchNewType($nullableTypeNode->type);
+        if (! $newType) {
+            return $nullableTypeNode;
         }
 
-        return null;
+        return new NullableType($newType);
+    }
+
+    private function refactorName(Node $nameNode): ?Name
+    {
+        $newType = $this->matchNewType($nameNode);
+        if ($newType === null) {
+            return null;
+        }
+
+        return new Name($newType);
     }
 }

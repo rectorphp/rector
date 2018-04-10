@@ -8,7 +8,9 @@ use phpDocumentor\Reflection\DocBlock\Tag;
 use phpDocumentor\Reflection\DocBlock\Tags\Param;
 use phpDocumentor\Reflection\Type;
 use phpDocumentor\Reflection\Types\Boolean;
+use phpDocumentor\Reflection\Types\Compound;
 use phpDocumentor\Reflection\Types\Integer;
+use phpDocumentor\Reflection\Types\Null_;
 use phpDocumentor\Reflection\Types\Object_;
 use phpDocumentor\Reflection\Types\String_;
 use PhpParser\Comment\Doc;
@@ -17,11 +19,21 @@ use Rector\Exception\NotImplementedException;
 use Rector\ReflectionDocBlock\DocBlock\AnnotationRemover;
 use Rector\ReflectionDocBlock\DocBlock\DocBlockFactory;
 use Rector\ReflectionDocBlock\DocBlock\TidingSerializer;
-use ReflectionProperty;
 use Symplify\BetterReflectionDocBlock\Tag\TolerantVar;
+use Symplify\PackageBuilder\Reflection\PrivatesSetter;
 
 final class DocBlockAnalyzer
 {
+    /**
+     * @var string[]
+     */
+    private $typesToObjects = [
+        'string' => String_::class,
+        'int' => Integer::class,
+        'bool' => Boolean::class,
+        'null' => Null_::class,
+    ];
+
     /**
      * @var DocBlockFactory
      */
@@ -37,6 +49,11 @@ final class DocBlockAnalyzer
      */
     private $annotationRemover;
 
+    /**
+     * @var PrivatesSetter
+     */
+    private $privatesSetter;
+
     public function __construct(
         DocBlockFactory $docBlockFactory,
         TidingSerializer $tidingSerializer,
@@ -45,6 +62,7 @@ final class DocBlockAnalyzer
         $this->docBlockFactory = $docBlockFactory;
         $this->tidingSerializer = $tidingSerializer;
         $this->annotationRemover = $annotationRemover;
+        $this->privatesSetter = new PrivatesSetter();
     }
 
     public function hasAnnotation(Node $node, string $annotation): bool
@@ -61,6 +79,24 @@ final class DocBlockAnalyzer
         $this->saveNewDocBlockToNode($node, $docBlock);
     }
 
+    public function renameNullable(Node $node, string $oldType, string $newType): void
+    {
+        $docBlock = $this->docBlockFactory->createFromNode($node);
+
+        foreach ($docBlock->getTags() as $tag) {
+            if ($tag instanceof TolerantVar) {
+                // this could be abstracted to replace values
+                if ($tag->getType() instanceof Compound) {
+                    $this->processCompoundTagType($node, $docBlock, $tag, $tag->getType(), $oldType, $newType);
+                }
+            }
+        }
+
+        // is this still needed?
+        $this->replaceInNode($node, sprintf('%s|null', $oldType), sprintf('%s|null', $newType));
+        $this->replaceInNode($node, sprintf('null|%s', $oldType), sprintf('null|%s', $newType));
+    }
+
     public function replaceAnnotationInNode(Node $node, string $oldAnnotation, string $newAnnotation): void
     {
         if (! $node->getDocComment()) {
@@ -68,7 +104,10 @@ final class DocBlockAnalyzer
         }
 
         $oldContent = $node->getDocComment()->getText();
-        $newContent = Strings::replace($oldContent, sprintf('#@%s#', $oldAnnotation), '@' . $newAnnotation);
+
+        $oldAnnotationPattern = preg_quote(sprintf('#@%s#', $oldAnnotation), '\\');
+
+        $newContent = Strings::replace($oldContent, $oldAnnotationPattern, '@' . $newAnnotation, 1);
 
         $doc = new Doc($newContent);
         $node->setDocComment($doc);
@@ -88,9 +127,8 @@ final class DocBlockAnalyzer
         $varTag = array_shift($varTags);
 
         $types = explode('|', (string) $varTag);
-        $types = $this->normalizeTypes($types);
 
-        return $types;
+        return $this->normalizeTypes($types);
     }
 
     public function getTypeForParam(Node $node, string $paramName): ?string
@@ -137,7 +175,7 @@ final class DocBlockAnalyzer
 
             $newType = $this->resolveNewTypeObjectFromString($to);
 
-            $this->setPrivatePropertyValue($tag, 'type', $newType);
+            $this->privatesSetter->setPrivateProperty($tag, 'type', $newType);
 
             break;
         }
@@ -145,9 +183,32 @@ final class DocBlockAnalyzer
         $this->saveNewDocBlockToNode($node, $docBlock);
     }
 
+    private function replaceInNode(Node $node, string $old, string $new): void
+    {
+        if (! $node->getDocComment()) {
+            return;
+        }
+
+        $docComment = $node->getDocComment();
+        $content = $docComment->getText();
+
+        $newContent = Strings::replace($content, '#' . preg_quote($old, '#') . '#', $new, 1);
+
+        $doc = new Doc($newContent);
+        $node->setDocComment($doc);
+    }
+
     private function saveNewDocBlockToNode(Node $node, DocBlock $docBlock): void
     {
         $docContent = $this->tidingSerializer->getDocComment($docBlock);
+
+        // respect one-liners
+        $originalDocCommentContent = $node->getDocComment()->getText();
+        if (substr_count($originalDocCommentContent, PHP_EOL) < 1) {
+            $docContent = Strings::replace($docContent, '#\s+#', ' ');
+            $docContent = Strings::replace($docContent, '#/\*\* #', '/*');
+        }
+
         $doc = new Doc($docContent);
         $node->setDocComment($doc);
     }
@@ -171,33 +232,47 @@ final class DocBlockAnalyzer
         return $types;
     }
 
-    /**
-     * Magic untill, since object is read only
-     *
-     * @param object $object
-     * @param mixed $value
-     */
-    private function setPrivatePropertyValue($object, string $name, $value): void
-    {
-        $propertyReflection = new ReflectionProperty(get_class($object), $name);
-        $propertyReflection->setAccessible(true);
-        $propertyReflection->setValue($object, $value);
-    }
-
     private function resolveNewTypeObjectFromString(string $type): Type
     {
-        if ($type === 'string') {
-            return new String_();
-        }
-
-        if ($type === 'int') {
-            return new Integer();
-        }
-
-        if ($type === 'bool') {
-            return new Boolean();
+        if (isset($this->typesToObjects[$type])) {
+            return new $this->typesToObjects[$type]();
         }
 
         throw new NotImplementedException(__METHOD__);
+    }
+
+    private function processCompoundTagType(
+        Node $node,
+        DocBlock $docBlock,
+        TolerantVar $tolerantVar,
+        Compound $compound,
+        string $oldType,
+        string $newType
+    ): void {
+        $newCompoundTagTypes = [];
+
+        foreach ($compound as $i => $oldTagSubType) {
+            if ($oldTagSubType instanceof Object_) {
+                $oldTagValue = (string) $oldTagSubType->getFqsen();
+
+                // is this value object to be replaced?
+                if (is_a($oldTagValue, $oldType, true)) {
+                    $newCompoundTagTypes[] = $this->resolveNewTypeObjectFromString($newType);
+                    continue;
+                }
+            }
+
+            $newCompoundTagTypes[] = $oldTagSubType;
+        }
+
+        // nothing to replace
+        if (! count($newCompoundTagTypes)) {
+            return;
+        }
+
+        // use this as new type
+        $newCompoundTag = new Compound($newCompoundTagTypes);
+        $this->privatesSetter->setPrivateProperty($tolerantVar, 'type', $newCompoundTag);
+        $this->saveNewDocBlockToNode($node, $docBlock);
     }
 }

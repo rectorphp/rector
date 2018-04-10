@@ -2,18 +2,12 @@
 
 namespace SomeNamespace;
 
-class SomeValueObject
-{
-}
-
-class SomeChildOfValueObject extends SomeValueObject
-{
-}
+use Rector\Tests\Rector\Dynamic\ValueObjectRemoverRector\Source\SomeChildOfValueObject;
 
 class ActionClass
 {
     /**
-     * @var SomeChildOfValueObject
+     * @var SomeChildOfValueObject|null
      */
     private $someChildValueObject;
 

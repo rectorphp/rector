@@ -2,7 +2,6 @@
 
 namespace Rector\Rector\Architecture\RepositoryAsService;
 
-use get_class;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
@@ -119,6 +118,9 @@ CODE_SAMPLE
         return ! Strings::endsWith($className, 'Repository');
     }
 
+    /**
+     * @param MethodCall $node
+     */
     public function refactor(Node $node): ?Node
     {
         $repositoryFqn = $this->repositoryFqn($node);
@@ -134,9 +136,9 @@ CODE_SAMPLE
         );
     }
 
-    private function repositoryFqn(Node $node): string
+    private function repositoryFqn(MethodCall $methodCallNode): string
     {
-        $entityFqnOrAlias = $this->entityFqnOrAlias($node);
+        $entityFqnOrAlias = $this->entityFqnOrAlias($methodCallNode);
 
         $repositoryClassName = $this->repositoryForDoctrineEntityProvider->provideRepositoryForEntity(
             $entityFqnOrAlias
@@ -153,11 +155,9 @@ CODE_SAMPLE
         ));
     }
 
-    private function entityFqnOrAlias(Node $node): string
+    private function entityFqnOrAlias(MethodCall $methodCallNode): string
     {
-        /** @var MethodCall $methodCall */
-        $methodCall = $node;
-        $repositoryArgument = $methodCall->args[0]->value;
+        $repositoryArgument = $methodCallNode->args[0]->value;
 
         if ($repositoryArgument instanceof String_) {
             return $repositoryArgument->value;

@@ -34,8 +34,7 @@ final class DocBlockAnalyzerTest extends AbstractContainerAwareTestCase
 
         $this->docBlockAnalyzer->removeAnnotationFromNode($node, 'param');
         $emptyDoc = <<<'EOT'
-/**
- */
+/**/
 EOT;
         $this->assertSame($emptyDoc, $node->getDocComment()->getText());
 

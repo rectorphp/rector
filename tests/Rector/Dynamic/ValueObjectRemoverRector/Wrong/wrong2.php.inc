@@ -2,17 +2,9 @@
 
 namespace SomeNamespace;
 
-class SomeValueObject
-{
-}
-
-class SomeChildOfValueObject extends SomeValueObject
-{
-}
-
 class ActionClass
 {
-    public function someFunction(SomeChildOfValueObject $name)
+    public function someFunction(\Rector\Tests\Rector\Dynamic\ValueObjectRemoverRector\Source\SomeChildOfValueObject $name)
     {
     }
 }

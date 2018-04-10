@@ -18,6 +18,7 @@ services:
     Symplify\CodingStandard\Sniffs\DependencyInjection\NoClassInstantiationSniff:
         extraAllowedClasses:
             - 'PhpParser\Node\*'
+            - 'Symplify\PackageBuilder\Reflection\*'
             - 'PhpParser\Comment\Doc'
             - 'PhpParser\NodeTraverser'
             - 'Rector\DeprecationExtractor\Deprecation\*'
@@ -39,6 +40,7 @@ services:
 parameters:
     exclude_files:
         - '*packages/*/tests/*Source/*.php'
+        - '*tests/*Source/*.php'
 
     exclude_checkers:
         # temporary, before static is removed
