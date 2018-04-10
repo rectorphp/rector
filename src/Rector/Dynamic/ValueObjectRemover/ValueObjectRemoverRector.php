@@ -9,38 +9,19 @@ use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Property;
 use Rector\Node\Attribute;
-use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class ValueObjectRemoverRector extends AbstractValueObjectRemoverRector
 {
-    /**
-     * @var string[]
-     */
-    private $valueObjectsToSimpleTypes = [];
-
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    /**
-     * @param string[] $valueObjectsToSimpleTypes
-     */
-    public function __construct(array $valueObjectsToSimpleTypes, NodeTypeResolver $nodeTypeResolver)
-    {
-        $this->valueObjectsToSimpleTypes = $valueObjectsToSimpleTypes;
-        $this->nodeTypeResolver = $nodeTypeResolver;
-    }
-
-    /**
-     * @todo complete the rest of cases
-     */
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('[Dynamic] Remove values objects and use directly the value.', [
-            new CodeSample('$someValue = new SomeValueObject("just_a_string");', '$someValue = "just_a_string";'),
+            new CodeSample('$name = new ValueObject("name");', '$name = "name";'),
+            new CodeSample(
+                'function someFunction(ValueObject $name) { }',
+                'function someFunction(string $name) { }'
+            ),
         ]);
     }
 

@@ -19,8 +19,31 @@ final class ValueObjectRemoverDocBlockRector extends AbstractValueObjectRemoverR
     {
         return new RectorDefinition('Turns defined value object to simple types in doc blocks', [
             new CodeSample(
-//@todo!
-)
+                <<<'CODE_SAMPLE'
+/**
+ * @var ValueObject|null
+ */
+private $name;
+CODE_SAMPLE
+                ,
+                <<<'CODE_SAMPLE'
+/**
+ * @var string|null
+ */
+private $name;
+CODE_SAMPLE
+            ),
+            new CodeSample(
+                <<<'CODE_SAMPLE'
+/** @var ValueObject|null */
+$name;
+CODE_SAMPLE
+                ,
+                <<<'CODE_SAMPLE'
+/** @var string|null */
+$name;
+CODE_SAMPLE
+            ),
         ]);
     }
 

@@ -67,8 +67,6 @@ final class DocBlockAnalyzer
 
         foreach ($docBlock->getTags() as $tag) {
             if ($tag instanceof TolerantVar) { // @todo: use own writeable Var
-                dump($tag);
-                die;
             }
         }
 
