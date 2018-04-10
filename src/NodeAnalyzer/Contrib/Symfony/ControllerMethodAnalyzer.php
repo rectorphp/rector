@@ -11,6 +11,14 @@ use Rector\Node\Attribute;
 final class ControllerMethodAnalyzer
 {
     /**
+     * @var string[]
+     */
+    private $supportedClasses = [
+        'Symfony\Bundle\FrameworkBundle\Controller\Controller',
+        'Symfony\Bundle\FrameworkBundle\Controller\AbstractController',
+    ];
+
+    /**
      * Detect if is <some>Action() in Controller
      */
     public function isAction(Node $node): bool
@@ -20,9 +28,8 @@ final class ControllerMethodAnalyzer
         }
 
         $parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
-        $controllerClass = 'Symfony\Bundle\FrameworkBundle\Controller\Controller';
 
-        if ($parentClassName !== $controllerClass) {
+        if (! in_array($parentClassName, $this->supportedClasses, true)) {
             return false;
         }
 
