@@ -204,7 +204,7 @@ final class DocBlockAnalyzer
 
         // respect one-liners
         $originalDocCommentContent = $node->getDocComment()->getText();
-        if (substr_count($originalDocCommentContent, PHP_EOL) <= 1) {
+        if (substr_count($originalDocCommentContent, PHP_EOL) < 1) {
             $docContent = Strings::replace($docContent, '#\s+#', ' ');
             $docContent = Strings::replace($docContent, '#/\*\* #', '/*');
         }
