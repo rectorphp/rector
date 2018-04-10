@@ -19,11 +19,21 @@ use Rector\Exception\NotImplementedException;
 use Rector\ReflectionDocBlock\DocBlock\AnnotationRemover;
 use Rector\ReflectionDocBlock\DocBlock\DocBlockFactory;
 use Rector\ReflectionDocBlock\DocBlock\TidingSerializer;
-use ReflectionProperty;
 use Symplify\BetterReflectionDocBlock\Tag\TolerantVar;
+use Symplify\PackageBuilder\Reflection\PrivatesSetter;
 
 final class DocBlockAnalyzer
 {
+    /**
+     * @var string[]
+     */
+    private $typesToObjects = [
+        'string' => String_::class,
+        'int' => Integer::class,
+        'bool' => Boolean::class,
+        'null' => Null_::class,
+    ];
+
     /**
      * @var DocBlockFactory
      */
@@ -39,6 +49,11 @@ final class DocBlockAnalyzer
      */
     private $annotationRemover;
 
+    /**
+     * @var PrivatesSetter
+     */
+    private $privatesSetter;
+
     public function __construct(
         DocBlockFactory $docBlockFactory,
         TidingSerializer $tidingSerializer,
@@ -47,6 +62,7 @@ final class DocBlockAnalyzer
         $this->docBlockFactory = $docBlockFactory;
         $this->tidingSerializer = $tidingSerializer;
         $this->annotationRemover = $annotationRemover;
+        $this->privatesSetter = new PrivatesSetter();
     }
 
     public function hasAnnotation(Node $node, string $annotation): bool
@@ -69,13 +85,11 @@ final class DocBlockAnalyzer
 
         foreach ($docBlock->getTags() as $tag) {
             if ($tag instanceof TolerantVar) {
-                $oldTagType = $tag->getType();
-
                 // this could be abstracted to replace values
-                if ($oldTagType instanceof Compound) {
+                if ($tag->getType() instanceof Compound) {
                     $newCompoundTagTypes = [];
 
-                    foreach ($oldTagType->getIterator() as $i => $oldTagSubType) {
+                    foreach ($tag->getType() as $i => $oldTagSubType) {
                         if ($oldTagSubType instanceof Object_) {
                             $oldTagValue = (string) $oldTagSubType->getFqsen();
 
@@ -96,7 +110,7 @@ final class DocBlockAnalyzer
 
                     // use this as new type
                     $newCompoundTag = new Compound($newCompoundTagTypes);
-                    $this->setPrivatePropertyValue($tag, 'type', $newCompoundTag);
+                    $this->privatesSetter->setPrivateProperty($tag, 'type', $newCompoundTag);
                     $this->saveNewDocBlockToNode($node, $docBlock);
                 }
             }
@@ -137,9 +151,8 @@ final class DocBlockAnalyzer
         $varTag = array_shift($varTags);
 
         $types = explode('|', (string) $varTag);
-        $types = $this->normalizeTypes($types);
 
-        return $types;
+        return $this->normalizeTypes($types);
     }
 
     public function getTypeForParam(Node $node, string $paramName): ?string
@@ -186,7 +199,7 @@ final class DocBlockAnalyzer
 
             $newType = $this->resolveNewTypeObjectFromString($to);
 
-            $this->setPrivatePropertyValue($tag, 'type', $newType);
+            $this->privatesSetter->setPrivateProperty($tag, 'type', $newType);
 
             break;
         }
@@ -235,31 +248,10 @@ final class DocBlockAnalyzer
         return $types;
     }
 
-    /**
-     * Magic untill, since object is read only
-     *
-     * @param object $object
-     * @param mixed $value
-     */
-    private function setPrivatePropertyValue($object, string $name, $value): void
-    {
-        $propertyReflection = new ReflectionProperty(get_class($object), $name);
-        $propertyReflection->setAccessible(true);
-        $propertyReflection->setValue($object, $value);
-    }
-
     private function resolveNewTypeObjectFromString(string $type): Type
     {
-        if ($type === 'string') {
-            return new String_();
-        }
-
-        if ($type === 'int') {
-            return new Integer();
-        }
-
-        if ($type === 'bool') {
-            return new Boolean();
+        if (isset($this->typesToObjects[$type])) {
+            return new $this->typesToObjects[$type]();
         }
 
         throw new NotImplementedException(__METHOD__);
