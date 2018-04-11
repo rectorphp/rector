@@ -1,0 +1,2 @@
+services:
+    Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertRegExpRector: ~
