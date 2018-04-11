@@ -92,7 +92,9 @@ final class AssertRegExpRector extends AbstractPHPUnitRector
         if ($oldFirstArgument instanceof LNumber) {
             $oldCondition = $oldFirstArgument->value;
         } elseif ($oldFirstArgument instanceof ConstFetch) {
-            $oldCondition = $oldFirstArgument->name->toLowerString() === 'true' ? 1 : 0;
+            /** @var Identifier $constFetchName */
+            $constFetchName = $oldFirstArgument->name;
+            $oldCondition = $constFetchName->toLowerString() === 'true' ? 1 : 0;
         }
 
         if (in_array($oldMethodName, ['assertSame', 'assertEquals'], true) && $oldCondition === 1
