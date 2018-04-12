@@ -43,10 +43,6 @@ final class NamespaceReplacerRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        if (! $this->isGivenKind($node, [Namespace_::class, Use_::class, Name::class, FullyQualified::class])) {
-            return false;
-        }
-
         $name = $this->resolveNameFromNode($node);
         if (! $this->isNamespaceToChange($name)) {
             return false;
@@ -137,20 +133,6 @@ final class NamespaceReplacerRector extends AbstractRector
         }
 
         return [];
-    }
-
-    /**
-     * @param string[] $types
-     */
-    private function isGivenKind(Node $node, array $types): bool
-    {
-        foreach ($types as $type) {
-            if ($node instanceof $type) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     /**
