@@ -4,12 +4,12 @@ namespace Rector\Rector\Contrib\PHPUnit\SpecificMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Scalar\LNumber;
-use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Scalar;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractPHPUnitRector;
@@ -144,7 +144,8 @@ final class AssertComparisonToSpecificMethodRector extends AbstractPHPUnitRector
 
     private function isConstantValue(Node $node): bool
     {
-        return in_array(get_class($node), [LNumber::class, ConstFetch::class, String_::class], true)
-                || $node instanceof Variable && stripos($node->name, 'exp') === 0;
+        return in_array(get_class($node), [Array_::class, ConstFetch::class], true)
+              || is_subclass_of($node, Scalar::class)
+              || $node instanceof Variable && stripos($node->name, 'exp') === 0;
     }
 }
