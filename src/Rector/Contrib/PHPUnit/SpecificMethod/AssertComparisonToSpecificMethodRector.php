@@ -4,8 +4,12 @@ namespace Rector\Rector\Contrib\PHPUnit\SpecificMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\BinaryOp;
+use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Scalar;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractPHPUnitRector;
@@ -112,8 +116,13 @@ final class AssertComparisonToSpecificMethodRector extends AbstractPHPUnitRector
         /** @var BinaryOp $expression */
         $expression = $oldArguments[0]->value;
 
-        $firstArgument = new Arg($expression->right);
-        $secondArgument = new Arg($expression->left);
+        if ($this->isConstantValue($expression->left)) {
+            $firstArgument = new Arg($expression->left);
+            $secondArgument = new Arg($expression->right);
+        } else {
+            $firstArgument = new Arg($expression->right);
+            $secondArgument = new Arg($expression->left);
+        }
 
         unset($oldArguments[0]);
 
@@ -131,5 +140,12 @@ final class AssertComparisonToSpecificMethodRector extends AbstractPHPUnitRector
             'assertTrue' => $trueMethodName,
             'assertFalse' => $falseMethodName,
         ]);
+    }
+
+    private function isConstantValue(Node $node): bool
+    {
+        return in_array(get_class($node), [Array_::class, ConstFetch::class], true)
+              || is_subclass_of($node, Scalar::class)
+              || $node instanceof Variable && stripos($node->name, 'exp') === 0;
     }
 }
