@@ -138,10 +138,10 @@ This package has no intention in formatting your code, as **coding standard tool
 composer require --dev symplify/easy-coding-standard
 
 # check
-vendor/bin/ecs check --config vendor/rector/rector/ecs-after-rector.neon
+vendor/bin/ecs check --config vendor/rector/rector/ecs-after-rector.yml
 
 # fix
-vendor/bin/ecs check --config vendor/rector/rector/ecs-after-rector.neon --fix
+vendor/bin/ecs check --config vendor/rector/rector/ecs-after-rector.yml --fix
 ```
 
 ## More Detailed Documentation
