@@ -27,10 +27,16 @@ abstract class AbstractRectorTestCase extends TestCase
      */
     protected $parameterProvider;
 
+    /**
+     * @var FileGuard
+     */
+    private $fileGuard;
+
     protected function setUp(): void
     {
         $config = $this->provideConfig();
-        FileGuard::ensureFileExists($config, get_called_class());
+        $this->fileGuard = new FileGuard();
+        $this->fileGuard->ensureFileExists($config, get_called_class());
 
         $this->container = (new ContainerFactory())->createWithConfig($config);
         $this->fileProcessor = $this->container->get(FileProcessor::class);
@@ -39,8 +45,8 @@ abstract class AbstractRectorTestCase extends TestCase
 
     protected function doTestFileMatchesExpectedContent(string $file, string $reconstructedFile): void
     {
-        FileGuard::ensureFileExists($file, get_called_class());
-        FileGuard::ensureFileExists($reconstructedFile, get_called_class());
+        $this->fileGuard->ensureFileExists($file, get_called_class());
+        $this->fileGuard->ensureFileExists($reconstructedFile, get_called_class());
 
         $this->parameterProvider->changeParameter('source', [$file]);
 
