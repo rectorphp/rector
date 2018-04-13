@@ -55,6 +55,18 @@ Rector relies on project and autoloading of its classes. To specify own autoload
 vendor/bin/rector process ../project --autoload-file ../project/vendor/autoload.php
 ```
 
+Or make use of `rector.yml` config:
+
+```yaml
+# rector.yml
+parameters:
+    autoload_files:
+        - '%kernel.project_dir%/vendor/squizlabs/php_codesniffer/autoload.php'
+
+    autoload_directories:
+        - '%kernel.project_dir%/vendor/project-without-composer'
+```
+
 ## How to Reconstruct your Code
 
 ### A. Prepared Sets
