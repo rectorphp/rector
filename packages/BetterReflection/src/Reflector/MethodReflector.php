@@ -8,6 +8,7 @@ use phpDocumentor\Reflection\Types\Self_;
 use phpDocumentor\Reflection\Types\Static_;
 use Rector\BetterReflection\Reflection\ReflectionMethod;
 use Rector\BetterReflection\Reflector\Exception\IdentifierNotFound;
+use Throwable;
 
 final class MethodReflector
 {
@@ -52,7 +53,13 @@ final class MethodReflector
             return [(string) $returnType];
         }
 
-        return $this->resolveDocBlockReturnTypes($class, $methodReflection->getDocBlockReturnTypes());
+        try {
+            return $this->resolveDocBlockReturnTypes($class, $methodReflection->getDocBlockReturnTypes());
+        } catch (Throwable $throwable) {
+            // fails on PhpCsFixer\FixerConfiguration\FixerConfigurationResolverInterface + @return array<string, mixed>
+            // with error "\PhpCsFixer\FixerConfiguration\array<string," is not a valid Fqsen."
+            return [];
+        }
     }
 
     /**
