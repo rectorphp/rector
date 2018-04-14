@@ -4,6 +4,9 @@ namespace Rector\Tests\Rector\Architecture\PHPUnit;
 
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
+/**
+ * @covers \Rector\Rector\Architecture\PHPUnit\ArrayToYieldDataProviderRector
+ */
 final class ArrayToYieldDataProviderRectorTest extends AbstractRectorTestCase
 {
     /**
@@ -21,6 +24,7 @@ final class ArrayToYieldDataProviderRectorTest extends AbstractRectorTestCase
     {
         return [
             [__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc'],
+            [__DIR__ . '/Wrong/wrong2.php.inc', __DIR__ . '/Correct/correct2.php.inc'],
         ];
     }
 

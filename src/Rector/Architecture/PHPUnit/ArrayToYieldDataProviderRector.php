@@ -11,6 +11,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
+use Rector\Node\Attribute;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -97,7 +98,12 @@ CODE_SAMPLE
             $arrayNode = $stmt->expr;
 
             foreach ($arrayNode->items as $arrayItem) {
-                $yieldNodes[] = new Expression(new Yield_($arrayItem->value));
+                $expressionNode = new Expression(new Yield_($arrayItem->value));
+                if ($arrayItem->getComments()) {
+                    $expressionNode->setAttribute(Attribute::COMMENTS, $arrayItem->getComments());
+                }
+
+                $yieldNodes[] = $expressionNode;
             }
 
             unset($classMethodNode->stmts[$key]);
