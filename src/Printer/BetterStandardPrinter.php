@@ -3,7 +3,9 @@
 namespace Rector\Printer;
 
 use PhpParser\Node\Expr\Yield_;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\PrettyPrinter\Standard;
+use Rector\Node\Attribute;
 
 final class BetterStandardPrinter extends Standard
 {
@@ -30,9 +32,16 @@ final class BetterStandardPrinter extends Standard
         if ($yieldNode->value === null) {
             return 'yield';
         } else {
-            return 'yield '
+            $parentNode = $yieldNode->getAttribute(Attribute::PARENT_NODE);
+            $yieldContent = 'yield '
                 . ($yieldNode->key !== null ? $this->p($yieldNode->key) . ' => ' : '')
                 . $this->p($yieldNode->value);
+
+            if (! $parentNode instanceof Expression) {
+                return $yieldContent;
+            }
+
+            return '(' . $yieldContent . ')';
         }
     }
 }
