@@ -1,0 +1,19 @@
+<?php declare(strict_types=1);
+
+namespace App\Tests;
+
+use PHPUnit\Framework\TestCase;
+
+final class MyTestCsae extends TestCase
+{
+    /**
+     * @return mixed[]
+     */
+    public function provideData(): array
+    {
+        return [
+            # some comment
+            ['item']
+        ];
+    }
+}
