@@ -2,6 +2,7 @@
 
 namespace Rector\Tests\Rector\Contrib\PHPUnit\SpecificMethod\AssertIssetToSpecificMethodRector;
 
+use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
@@ -17,14 +18,9 @@ final class AssertIssetToSpecificMethodRectorTest extends AbstractRectorTestCase
         $this->doTestFileMatchesExpectedContent($wrong, $fixed);
     }
 
-    /**
-     * @return string[][]
-     */
-    public function provideWrongToFixedFiles(): array
+    public function provideWrongToFixedFiles(): Iterator
     {
-        return [
-            [__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc'],
-        ];
+        yield [__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc'];
     }
 
     protected function provideConfig(): string
