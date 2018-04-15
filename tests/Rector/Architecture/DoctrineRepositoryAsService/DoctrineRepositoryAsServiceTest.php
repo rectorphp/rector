@@ -2,6 +2,7 @@
 
 namespace Rector\Tests\Rector\Architecture\DoctrineRepositoryAsService;
 
+use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class DoctrineRepositoryAsServiceTest extends AbstractRectorTestCase
@@ -14,15 +15,10 @@ final class DoctrineRepositoryAsServiceTest extends AbstractRectorTestCase
         $this->doTestFileMatchesExpectedContent($wrong, $fixed);
     }
 
-    /**
-     * @return string[][]
-     */
-    public function provideWrongToFixedFiles(): array
+    public function provideWrongToFixedFiles(): Iterator
     {
-        return [
-            [__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc'],
-            [__DIR__ . '/Wrong/wrong2.php.inc', __DIR__ . '/Correct/correct2.php.inc'],
-        ];
+        yield [__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc'];
+        yield [__DIR__ . '/Wrong/wrong2.php.inc', __DIR__ . '/Correct/correct2.php.inc'];
     }
 
     protected function provideConfig(): string

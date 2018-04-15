@@ -2,6 +2,7 @@
 
 namespace Rector\Tests\Rector\Contrib\Nette\DI\ExpandFunctionToParametersArrayRector;
 
+use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
@@ -17,14 +18,9 @@ final class ExpandFunctionToParametersArrayRectorTest extends AbstractRectorTest
         $this->doTestFileMatchesExpectedContent($wrong, $fixed);
     }
 
-    /**
-     * @return string[][]
-     */
-    public function provideWrongToFixedFiles(): array
+    public function provideWrongToFixedFiles(): Iterator
     {
-        return [
-            [__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc'],
-        ];
+        yield [__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc'];
     }
 
     protected function provideConfig(): string

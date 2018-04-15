@@ -2,6 +2,7 @@
 
 namespace Rector\Tests\Rector\Dynamic\FluentReplaceRector;
 
+use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class FluentReplaceRectorTest extends AbstractRectorTestCase
@@ -14,14 +15,9 @@ final class FluentReplaceRectorTest extends AbstractRectorTestCase
         $this->doTestFileMatchesExpectedContent($wrong, $fixed);
     }
 
-    /**
-     * @return string[][]
-     */
-    public function provideWrongToFixedFiles(): array
+    public function provideWrongToFixedFiles(): Iterator
     {
-        return [
-            [__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc'],
-        ];
+        yield [__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc'];
     }
 
     protected function provideConfig(): string
