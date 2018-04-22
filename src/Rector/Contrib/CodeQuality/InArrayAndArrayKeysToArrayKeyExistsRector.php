@@ -23,18 +23,14 @@ final class InArrayAndArrayKeysToArrayKeyExistsRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        if (! $node instanceof FuncCall) {
+        if (! $this->isInArrayFunction($node)) {
             return false;
         }
 
-        /** @var Name $funcCallName */
-        $funcCallName = $node->name;
+        /** @var FuncCall $inArrayFunction */
+        $inArrayFunction = $node;
 
-        if ($funcCallName->toString() !== 'in_array') {
-            return false;
-        }
-
-        $secondArgument = $node->args[1]->value;
+        $secondArgument = $inArrayFunction->args[1]->value;
         if (! $secondArgument instanceof FuncCall) {
             return false;
         }
@@ -69,5 +65,25 @@ final class InArrayAndArrayKeysToArrayKeyExistsRector extends AbstractRector
         $funcCall->name = new Name('array_key_exists');
 
         return $funcCall;
+    }
+
+    private function isInArrayFunction(Node $node): bool
+    {
+        if (! $node instanceof FuncCall) {
+            return false;
+        }
+
+        /** @var Name $funcCallName */
+        $funcCallName = $node->name;
+
+        if (! $funcCallName instanceof Name) {
+            return false;
+        }
+
+        if ($funcCallName->toString() !== 'in_array') {
+            return false;
+        }
+
+        return true;
     }
 }
