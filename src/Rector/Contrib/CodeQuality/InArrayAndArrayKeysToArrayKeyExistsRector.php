@@ -80,10 +80,6 @@ final class InArrayAndArrayKeysToArrayKeyExistsRector extends AbstractRector
             return false;
         }
 
-        if ($funcCallName->toString() !== 'in_array') {
-            return false;
-        }
-
-        return true;
+        return $funcCallName->toString() === 'in_array';
     }
 }
