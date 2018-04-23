@@ -1,0 +1,2 @@
+services:
+    Rector\Rector\Contrib\CodeQuality\InArrayAndArrayKeysToArrayKeyExistsRector: ~
