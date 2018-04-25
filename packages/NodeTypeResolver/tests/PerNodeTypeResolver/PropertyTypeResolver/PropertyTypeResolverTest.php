@@ -2,6 +2,7 @@
 
 namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\PropertyTypeResolver;
 
+use Iterator;
 use PhpParser\Node\Stmt\Property;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\PropertyTypeResolver\Source\PropertyType;
@@ -22,18 +23,13 @@ final class PropertyTypeResolverTest extends AbstractNodeTypeResolverTest
         $this->assertSame($expectedTypes, $this->nodeTypeResolver->resolve($propertyNodes[$nodePosition]));
     }
 
-    /**
-     * @return mixed[][]
-     */
-    public function provideTypeForNodesAndFilesData(): array
+    public function provideTypeForNodesAndFilesData(): Iterator
     {
-        return [
-            # doc block
-            [__DIR__ . '/Source/DefinedProperty.php.inc', 0, [PropertyType::class]],
-            # constructor defined property
-            [__DIR__ . '/Source/DefinedProperty.php.inc', 1, [PropertyType::class]],
-            # partial doc block
-            [__DIR__ . '/Source/DefinedProperty.php.inc', 2, [PropertyType::class]],
-        ];
+        # doc block
+        yield [__DIR__ . '/Source/DefinedProperty.php.inc', 0, [PropertyType::class]];
+        # constructor defined property
+        yield [__DIR__ . '/Source/DefinedProperty.php.inc', 1, [PropertyType::class]];
+        # partial doc block
+        yield [__DIR__ . '/Source/DefinedProperty.php.inc', 2, [PropertyType::class]];
     }
 }
