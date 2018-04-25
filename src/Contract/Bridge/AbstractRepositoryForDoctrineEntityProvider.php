@@ -4,7 +4,7 @@ namespace Rector\Contract\Bridge;
 
 abstract class AbstractRepositoryForDoctrineEntityProvider implements RepositoryForDoctrineEntityProviderInterface
 {
-    final public function provideRepositoryForEntity(string $name): ?string
+    final public function mapEntityToRepository(string $name): ?string
     {
         if ($this->isAlias($name)) {
             return $this->resoleFromAlias($name);

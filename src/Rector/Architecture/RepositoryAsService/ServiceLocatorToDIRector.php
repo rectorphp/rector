@@ -140,7 +140,7 @@ CODE_SAMPLE
     {
         $entityFqnOrAlias = $this->entityFqnOrAlias($methodCallNode);
 
-        $repositoryClassName = $this->repositoryForDoctrineEntityProvider->provideRepositoryForEntity(
+        $repositoryClassName = $this->repositoryForDoctrineEntityProvider->mapEntityToRepository(
             $entityFqnOrAlias
         );
 
