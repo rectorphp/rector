@@ -3,11 +3,11 @@
 namespace Rector\Bridge;
 
 use Nette\Utils\Strings;
-use Rector\Contract\Bridge\EntityForDoctrineRepositoryProviderInterface;
+use Rector\Contract\Bridge\DoctrineEntityAndRepositoryMapperInterface;
 
-final class DefaultEntityForDoctrineRepositoryProvider implements EntityForDoctrineRepositoryProviderInterface
+final class DefaultDoctrineEntityAndRepositoryMapper implements DoctrineEntityAndRepositoryMapperInterface
 {
-    public function provideEntityForRepository(string $repository): ?string
+    public function mapRepositoryToEntity(string $repository): ?string
     {
         // "SomeRepository" => "Some"
         $withoutSuffix = substr($repository, 0, - strlen('Repository'));

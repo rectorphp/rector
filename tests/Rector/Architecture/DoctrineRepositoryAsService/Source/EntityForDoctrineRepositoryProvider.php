@@ -2,9 +2,9 @@
 
 namespace Rector\Tests\Rector\Architecture\DoctrineRepositoryAsService\Source;
 
-use Rector\Contract\Bridge\EntityForDoctrineRepositoryProviderInterface;
+use Rector\Contract\Bridge\DoctrineEntityAndRepositoryMapperInterface;
 
-final class EntityForDoctrineRepositoryProvider implements EntityForDoctrineRepositoryProviderInterface
+final class EntityForDoctrineRepositoryProvider implements DoctrineEntityAndRepositoryMapperInterface
 {
     /**
      * @var string[]
@@ -13,7 +13,7 @@ final class EntityForDoctrineRepositoryProvider implements EntityForDoctrineRepo
         'App\Repository\PostRepository' => 'App\Entity\Post',
     ];
 
-    public function provideEntityForRepository(string $name): ?string
+    public function mapRepositoryToEntity(string $name): ?string
     {
         return $this->map[$name] ?? null;
     }

@@ -6,4 +6,5 @@ services:
 
     Rector\Rector\Architecture\RepositoryAsService\ServiceLocatorToDIRector: ~
 
-    Rector\Bridge\DefaultEntityForDoctrineRepositoryProvider: ~
+    # default mapper
+    Rector\Bridge\DefaultDoctrineEntityAndRepositoryMapper: ~
