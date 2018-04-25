@@ -5,3 +5,5 @@ services:
     Rector\Rector\Architecture\RepositoryAsService\MoveRepositoryFromParentToConstructorRector: ~
 
     Rector\Rector\Architecture\RepositoryAsService\ServiceLocatorToDIRector: ~
+
+    Rector\Bridge\DefaultEntityForDoctrineRepositoryProvider: ~
