@@ -4,12 +4,14 @@ namespace Rector\Rector\Dynamic;
 
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\Php\TypeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -31,12 +33,21 @@ final class ReturnTypehintRector extends AbstractRector
     private $nodeTypeResolver;
 
     /**
+     * @var TypeAnalyzer
+     */
+    private $typeAnalyzer;
+
+    /**
      * @param mixed[] $typehintForMethodByClass
      */
-    public function __construct(array $typehintForMethodByClass, NodeTypeResolver $nodeTypeResolver)
-    {
+    public function __construct(
+        array $typehintForMethodByClass,
+        NodeTypeResolver $nodeTypeResolver,
+        TypeAnalyzer $typeAnalyzer
+    ) {
         $this->typehintForMethodByClass = $typehintForMethodByClass;
         $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->typeAnalyzer = $typeAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -132,15 +143,18 @@ CODE_SAMPLE
 
     private function processClassMethodNodeWithTypehints(
         ClassMethod $classMethodNode,
-        string $methodReturnTypehint
+        string $newTypehint
     ): ClassMethod {
         // already set
-        if ($classMethodNode->returnType && $classMethodNode->returnType->name === $methodReturnTypehint) {
+        if ($classMethodNode->returnType && $classMethodNode->returnType->name === $newTypehint) {
             return $classMethodNode;
         }
 
-        $classMethodNode->setAttribute(Attribute::ORIGINAL_NODE, null);
-        $classMethodNode->returnType = new Identifier($methodReturnTypehint);
+        if ($this->typeAnalyzer->isPhpReservedType($newTypehint)) {
+            $classMethodNode->returnType = new Identifier($newTypehint);
+        } else {
+            $classMethodNode->returnType = new FullyQualified($newTypehint);
+        }
 
         return $classMethodNode;
     }
