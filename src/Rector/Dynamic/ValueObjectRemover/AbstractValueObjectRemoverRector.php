@@ -78,10 +78,7 @@ abstract class AbstractValueObjectRemoverRector extends AbstractRector
                 continue;
             }
 
-            return [
-                $nodeType,
-                $this->valueObjectsToSimpleTypes[$nodeType],
-            ];
+            return [$nodeType, $this->valueObjectsToSimpleTypes[$nodeType]];
         }
 
         return null;

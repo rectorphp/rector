@@ -38,10 +38,7 @@ final class ParamAndStaticVarNameRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        $types = [
-            'PhpParser\Node\Param',
-            'PhpParser\Node\Stmt\StaticVar',
-        ];
+        $types = ['PhpParser\Node\Param', 'PhpParser\Node\Stmt\StaticVar'];
 
         return $this->propertyFetchAnalyzer->isTypesAndProperty($node, $types, 'name');
     }

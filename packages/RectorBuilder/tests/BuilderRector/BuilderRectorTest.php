@@ -22,9 +22,7 @@ final class BuilderRectorTest extends AbstractRectorTestCase
      */
     public function provideWrongToFixedFiles(): array
     {
-        return [
-            [__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc'],
-        ];
+        return [[__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc']];
     }
 
     protected function provideConfig(): string

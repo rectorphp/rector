@@ -14,9 +14,7 @@ final class LexerFactory
     public function create(): Lexer
     {
         return new Emulative([
-            'usedAttributes' => [
-                'comments', 'startLine', 'endLine', 'startTokenPos', 'endTokenPos',
-            ],
+            'usedAttributes' => ['comments', 'startLine', 'endLine', 'startTokenPos', 'endTokenPos'],
         ]);
     }
 }
