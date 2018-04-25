@@ -130,19 +130,18 @@ CODE_SAMPLE
         return array_intersect($types, $this->getClasses());
     }
 
-    /**
-     * @param string[] $methodReturnTypehint
-     */
     private function processClassMethodNodeWithTypehints(
         ClassMethod $classMethodNode,
         string $methodReturnTypehint
-    ): void {
+    ): ClassMethod {
         // already set
         if ($classMethodNode->returnType && $classMethodNode->returnType->name === $methodReturnTypehint) {
-            return;
+            return $classMethodNode;
         }
 
         $classMethodNode->setAttribute(Attribute::ORIGINAL_NODE, null);
         $classMethodNode->returnType = new Identifier($methodReturnTypehint);
+
+        return $classMethodNode;
     }
 }

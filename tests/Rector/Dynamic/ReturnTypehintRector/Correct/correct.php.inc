@@ -4,7 +4,7 @@ namespace SomeNamespace;
 
 class SomeClass
 {
-    public function parse(): array
+    public function parse() : array
     {
     }
 }
