@@ -4,7 +4,7 @@ namespace App\Tests;
 
 use PHPUnit\Framework\TestCase;
 
-final class MyTestCsae extends TestCase
+final class MyTestCase extends TestCase
 {
     public function provideWrongToFixedFiles(): array
     {
