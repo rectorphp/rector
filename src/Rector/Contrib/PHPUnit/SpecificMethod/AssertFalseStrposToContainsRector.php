@@ -102,9 +102,7 @@ final class AssertFalseStrposToContainsRector extends AbstractPHPUnitRector
 
         unset($oldArguments[0]);
 
-        $methodCallNode->args = array_merge([
-            $firstArgument, $secondArgument,
-        ], $oldArguments);
+        $methodCallNode->args = array_merge([$firstArgument, $secondArgument], $oldArguments);
     }
 
     private function isNamedFunction(Expr $node): bool

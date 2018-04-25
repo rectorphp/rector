@@ -81,10 +81,7 @@ final class ExpandFunctionToStaticExpandFunctionRector extends AbstractRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        $arguments = [
-            $methodCallNode->args[0],
-            new PropertyFetch($methodCallNode->var, 'parameters'),
-        ];
+        $arguments = [$methodCallNode->args[0], new PropertyFetch($methodCallNode->var, 'parameters')];
 
         return $this->builderFactory->staticCall('Nette\DI\Helpers', 'expand', $arguments);
     }

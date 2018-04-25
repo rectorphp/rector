@@ -122,9 +122,7 @@ final class AssertRegExpRector extends AbstractPHPUnitRector
 
         unset($oldArguments[0], $oldArguments[1]);
 
-        $methodCallNode->args = array_merge([
-            $regex, $variable,
-        ], $oldArguments);
+        $methodCallNode->args = array_merge([$regex, $variable], $oldArguments);
     }
 
     private function isNamedFunction(Expr $node): bool

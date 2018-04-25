@@ -81,9 +81,7 @@ final class AssertNotOperatorRector extends AbstractPHPUnitRector
 
         unset($oldArguments[0]);
 
-        $methodCallNode->args = array_merge([
-            $expression,
-        ], $oldArguments);
+        $methodCallNode->args = array_merge([$expression], $oldArguments);
 
         return $methodCallNode;
     }

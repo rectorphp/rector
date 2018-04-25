@@ -31,14 +31,8 @@ final class MethodCallTypeResolverTest extends AbstractNodeTypeResolverTest
     {
         return [
             # on self call
-            [__DIR__ . '/MethodCallSource/OnSelfCall.php.inc', 0, [
-                'SomeParentCallingClass',
-                AnotherClass::class,
-            ]],
-            [__DIR__ . '/MethodCallSource/OnSelfCall.php.inc', 1, [
-                'SomeParentCallingClass',
-                AnotherClass::class,
-            ]],
+            [__DIR__ . '/MethodCallSource/OnSelfCall.php.inc', 0, ['SomeParentCallingClass', AnotherClass::class]],
+            [__DIR__ . '/MethodCallSource/OnSelfCall.php.inc', 1, ['SomeParentCallingClass', AnotherClass::class]],
 
             # on method call
             [__DIR__ . '/MethodCallSource/OnMethodCallCall.php.inc', 0, [

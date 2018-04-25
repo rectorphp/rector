@@ -15,9 +15,7 @@ final class InArrayAndArrayKeysToArrayKeyExistsRector extends AbstractRector
     {
         return new RectorDefinition(
             'Simplify in_array and array_keys functions combination into array_key_exists when array_keys has one argument only',
-            [
-                new CodeSample('in_array("key", array_keys($array), true);', 'array_key_exists("key", $array);'),
-            ]
+            [new CodeSample('in_array("key", array_keys($array), true);', 'array_key_exists("key", $array);')]
         );
     }
 
@@ -58,9 +56,7 @@ final class InArrayAndArrayKeysToArrayKeyExistsRector extends AbstractRector
 
         $array = $array->value->args[0];
 
-        $funcCall->args = [
-            $key, $array,
-        ];
+        $funcCall->args = [$key, $array];
 
         $funcCall->name = new Name('array_key_exists');
 

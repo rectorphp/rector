@@ -103,9 +103,7 @@ CODE_SAMPLE
     {
         // setter
         if ($assignNode->var instanceof PropertyFetch) {
-            $args = $this->nodeFactory->createArgs([
-                $assignNode->expr,
-            ]);
+            $args = $this->nodeFactory->createArgs([$assignNode->expr]);
 
             /** @var Variable $variable */
             $variable = $assignNode->var->var;

@@ -20,7 +20,7 @@ use Rector\ReflectionDocBlock\DocBlock\AnnotationRemover;
 use Rector\ReflectionDocBlock\DocBlock\DocBlockFactory;
 use Rector\ReflectionDocBlock\DocBlock\TidingSerializer;
 use Symplify\BetterReflectionDocBlock\Tag\TolerantVar;
-use Symplify\PackageBuilder\Reflection\PrivatesSetter;
+use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 
 final class DocBlockAnalyzer
 {
@@ -50,9 +50,9 @@ final class DocBlockAnalyzer
     private $annotationRemover;
 
     /**
-     * @var PrivatesSetter
+     * @var PrivatesAccessor
      */
-    private $privatesSetter;
+    private $privatesAccessor;
 
     public function __construct(
         DocBlockFactory $docBlockFactory,
@@ -62,7 +62,7 @@ final class DocBlockAnalyzer
         $this->docBlockFactory = $docBlockFactory;
         $this->tidingSerializer = $tidingSerializer;
         $this->annotationRemover = $annotationRemover;
-        $this->privatesSetter = new PrivatesSetter();
+        $this->privatesAccessor = new PrivatesAccessor();
     }
 
     public function hasAnnotation(Node $node, string $annotation): bool
@@ -175,7 +175,7 @@ final class DocBlockAnalyzer
 
             $newType = $this->resolveNewTypeObjectFromString($to);
 
-            $this->privatesSetter->setPrivateProperty($tag, 'type', $newType);
+            $this->privatesAccessor->setPrivateProperty($tag, 'type', $newType);
 
             break;
         }
@@ -272,7 +272,7 @@ final class DocBlockAnalyzer
 
         // use this as new type
         $newCompoundTag = new Compound($newCompoundTagTypes);
-        $this->privatesSetter->setPrivateProperty($tolerantVar, 'type', $newCompoundTag);
+        $this->privatesAccessor->setPrivateProperty($tolerantVar, 'type', $newCompoundTag);
         $this->saveNewDocBlockToNode($node, $docBlock);
     }
 }
