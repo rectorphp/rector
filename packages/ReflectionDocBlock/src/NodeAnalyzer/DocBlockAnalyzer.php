@@ -200,6 +200,11 @@ final class DocBlockAnalyzer
 
     private function saveNewDocBlockToNode(Node $node, DocBlock $docBlock): void
     {
+        // skip if has no doc comment
+        if ($node->getDocComment() === null) {
+            return;
+        }
+
         $docContent = $this->tidingSerializer->getDocComment($docBlock);
 
         // respect one-liners
