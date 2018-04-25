@@ -4,3 +4,4 @@ services:
             'SomeNamespace\SomeClass':
                 'parse': 'array'
                 'resolve': 'SomeType'
+                'nullable': '?SomeType'

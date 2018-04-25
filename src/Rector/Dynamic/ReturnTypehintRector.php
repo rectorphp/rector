@@ -5,6 +5,7 @@ namespace Rector\Rector\Dynamic;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
@@ -150,8 +151,11 @@ CODE_SAMPLE
             return $classMethodNode;
         }
 
+        // @todo possibly decouple to smth like IdentifierRenamer?
         if ($this->typeAnalyzer->isPhpReservedType($newTypehint)) {
             $classMethodNode->returnType = new Identifier($newTypehint);
+        } elseif ($this->typeAnalyzer->isNullableType($newTypehint)) {
+            $classMethodNode->returnType = new NullableType('\\' . ltrim($newTypehint, '?'));
         } else {
             $classMethodNode->returnType = new FullyQualified($newTypehint);
         }
