@@ -5,3 +5,4 @@ services:
                 'parse': 'array'
                 'resolve': 'SomeType'
                 'nullable': '?SomeType'
+                'clear': ''

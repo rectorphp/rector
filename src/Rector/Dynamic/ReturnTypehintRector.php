@@ -151,6 +151,12 @@ CODE_SAMPLE
             return $classMethodNode;
         }
 
+        // remote it
+        if ($newTypehint === '') {
+            $classMethodNode->returnType = null;
+            return $classMethodNode;
+        }
+
         // @todo possibly decouple to smth like IdentifierRenamer?
         if ($this->typeAnalyzer->isPhpReservedType($newTypehint)) {
             $classMethodNode->returnType = new Identifier($newTypehint);
