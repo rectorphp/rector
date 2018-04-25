@@ -140,9 +140,7 @@ CODE_SAMPLE
     {
         $entityFqnOrAlias = $this->entityFqnOrAlias($methodCallNode);
 
-        $repositoryClassName = $this->doctrineEntityAndRepositoryMapper->mapEntityToRepository(
-            $entityFqnOrAlias
-        );
+        $repositoryClassName = $this->doctrineEntityAndRepositoryMapper->mapEntityToRepository($entityFqnOrAlias);
 
         if ($repositoryClassName !== null) {
             return $repositoryClassName;
