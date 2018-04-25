@@ -5,4 +5,6 @@ namespace Rector\Contract\Bridge;
 interface DoctrineEntityAndRepositoryMapperInterface
 {
     public function mapRepositoryToEntity(string $name): ?string;
+
+    public function mapEntityToRepository(string $name): ?string;
 }

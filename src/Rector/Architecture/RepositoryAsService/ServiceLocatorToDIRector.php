@@ -9,7 +9,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use Rector\Builder\Class_\ClassPropertyCollector;
-use Rector\Contract\Bridge\RepositoryForDoctrineEntityProviderInterface;
+use Rector\Contract\Bridge\DoctrineEntityAndRepositoryMapperInterface;
 use Rector\Exception\Bridge\RectorProviderException;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Naming\PropertyNaming;
@@ -33,9 +33,9 @@ final class ServiceLocatorToDIRector extends AbstractRector
     private $propertyFetchNodeFactory;
 
     /**
-     * @var RepositoryForDoctrineEntityProviderInterface
+     * @var DoctrineEntityAndRepositoryMapperInterface
      */
-    private $repositoryForDoctrineEntityProvider;
+    private $doctrineEntityAndRepositoryMapper;
 
     /**
      * @var ClassPropertyCollector
@@ -50,13 +50,13 @@ final class ServiceLocatorToDIRector extends AbstractRector
     public function __construct(
         MethodCallAnalyzer $methodCallAnalyzer,
         PropertyFetchNodeFactory $propertyFetchNodeFactory,
-        RepositoryForDoctrineEntityProviderInterface $repositoryForDoctrineEntityProvider,
+        DoctrineEntityAndRepositoryMapperInterface $doctrineEntityAndRepositoryMapper,
         ClassPropertyCollector $classPropertyCollector,
         PropertyNaming $propertyNaming
     ) {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->propertyFetchNodeFactory = $propertyFetchNodeFactory;
-        $this->repositoryForDoctrineEntityProvider = $repositoryForDoctrineEntityProvider;
+        $this->doctrineEntityAndRepositoryMapper = $doctrineEntityAndRepositoryMapper;
         $this->classPropertyCollector = $classPropertyCollector;
         $this->propertyNaming = $propertyNaming;
     }
@@ -140,7 +140,7 @@ CODE_SAMPLE
     {
         $entityFqnOrAlias = $this->entityFqnOrAlias($methodCallNode);
 
-        $repositoryClassName = $this->repositoryForDoctrineEntityProvider->mapEntityToRepository(
+        $repositoryClassName = $this->doctrineEntityAndRepositoryMapper->mapEntityToRepository(
             $entityFqnOrAlias
         );
 
@@ -151,7 +151,7 @@ CODE_SAMPLE
         throw new RectorProviderException(sprintf(
             'A repository was not provided for "%s" entity by your "%s" class.',
             $entityFqnOrAlias,
-            get_class($this->repositoryForDoctrineEntityProvider)
+            get_class($this->doctrineEntityAndRepositoryMapper)
         ));
     }
 
