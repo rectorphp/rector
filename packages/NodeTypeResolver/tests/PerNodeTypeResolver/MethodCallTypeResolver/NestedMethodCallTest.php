@@ -2,6 +2,7 @@
 
 namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\MethodCallTypeResolver;
 
+use Iterator;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
@@ -31,49 +32,45 @@ final class NestedMethodCallTest extends AbstractNodeTypeResolverTest
         $this->assertSame($expectedTypes, $this->nodeTypeResolver->resolve($methodCallNode->var));
     }
 
-    /**
-     * @return mixed[][]
-     */
-    public function provideData(): array
+    public function provideData(): Iterator
     {
-        return [
-            # form chain method calls
-            [
-                __DIR__ . '/NestedMethodCallSource/FormChainMethodCalls.php.inc', 0, 'addRule', [
-                    'Stub_Nette\Forms\Rules',
-                ],
+        # form chain method calls
+        yield [
+            __DIR__ . '/NestedMethodCallSource/FormChainMethodCalls.php.inc', 0, 'addRule', [
+                'Stub_Nette\Forms\Rules',
             ],
-            [__DIR__ . '/NestedMethodCallSource/FormChainMethodCalls.php.inc', 1, 'addCondition', [
-                'Stub_Nette\Forms\Controls\TextInput',
-                'Stub_Nette\Forms\Controls\TextArea',
-            ]],
-            [__DIR__ . '/NestedMethodCallSource/FormChainMethodCalls.php.inc', 2, 'addText', [
-                'Stub_Nette\Application\UI\Form',
-                'Stub_Nette\Forms\Form',
-            ]],
-
-            # nested different method calls
-            [__DIR__ . '/NestedMethodCallSource/OnMethodCallCallDifferentType.php.inc', 0, 'getParameters', [
-                AnotherClass::class,
-            ]],
-
-            [__DIR__ . '/NestedMethodCallSource/OnMethodCallCallDifferentType.php.inc', 1, 'createAnotherClass', [
-                ClassWithFluentNonSelfReturn::class,
-            ]],
-
-            # nested method calls
-            [__DIR__ . '/NestedMethodCallSource/NestedMethodCalls.php.inc', 0, 'getParameters', [AnotherClass::class]],
-            [
-                __DIR__ . '/NestedMethodCallSource/NestedMethodCalls.php.inc',
-                1,
-                'callAndReturnSelf',
-                [AnotherClass::class],
-            ],
-
-            # nested method calls
-            [__DIR__ . '/NestedMethodCallSource/NestedMethodCalls.php.inc', 2, 'createAnotherClass', [
-                ClassWithFluentNonSelfReturn::class,
-            ]],
         ];
+        yield [__DIR__ . '/NestedMethodCallSource/FormChainMethodCalls.php.inc', 1, 'addCondition', [
+            'Stub_Nette\Forms\Controls\TextInput',
+            'Stub_Nette\Forms\Controls\TextArea',
+        ]];
+        yield [__DIR__ . '/NestedMethodCallSource/FormChainMethodCalls.php.inc', 2, 'addText', [
+            'Stub_Nette\Application\UI\Form',
+            'Stub_Nette\Forms\Form',
+        ]];
+        # nested different method calls
+        yield [__DIR__ . '/NestedMethodCallSource/OnMethodCallCallDifferentType.php.inc', 0, 'getParameters', [
+            AnotherClass::class,
+        ]];
+        yield [__DIR__ . '/NestedMethodCallSource/OnMethodCallCallDifferentType.php.inc', 1, 'createAnotherClass', [
+            ClassWithFluentNonSelfReturn::class,
+        ]];
+        # nested method calls
+        yield [
+            __DIR__ . '/NestedMethodCallSource/NestedMethodCalls.php.inc',
+            0,
+            'getParameters',
+            [AnotherClass::class],
+        ];
+        yield [
+            __DIR__ . '/NestedMethodCallSource/NestedMethodCalls.php.inc',
+            1,
+            'callAndReturnSelf',
+            [AnotherClass::class],
+        ];
+        # nested method calls
+        yield [__DIR__ . '/NestedMethodCallSource/NestedMethodCalls.php.inc', 2, 'createAnotherClass', [
+            ClassWithFluentNonSelfReturn::class,
+        ]];
     }
 }

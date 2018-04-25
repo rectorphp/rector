@@ -25,6 +25,22 @@ services:
                 '__construct':
                     '$cartStorage': 'Sylius\Component\Core\Storage\CartStorageInterface'
 
+   Rector\Rector\Dynamic\ReturnTypehintRector:
+        $returnTypehintByMethod:
+            # OrderInterface::getAdjustmentsRecursively and OrderItemInterface::getAdjustmentsRecursively return types changed from array to Collection
+            'Sylius\Component\Order\Model\OrderInterface':
+                'getAdjustmentsRecursively':
+                    'array': 'Doctrine\Common\Collections\Collection'
+
+            'Sylius\Component\Order\Model\OrderItemInterface':
+                'getAdjustmentsRecursively':
+                    'array': 'Doctrine\Common\Collections\Collection'
+
+            # PrioritizedServiceRegistryInterface::all method return type changed from Zend's PriorityQueue to iterable
+            'Sylius\Component\Registry\PrioritizedServiceRegistryInterface':
+                'all':
+                    'Zend\Stdlib\PriorityQueue': 'iterable'
+
     Rector\Rector\Dynamic\ClassReplacerRector:
         $oldToNewClasses:
             'DateTime': 'DateTimeInterface'

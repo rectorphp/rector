@@ -2,6 +2,7 @@
 
 namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ClassLikeTypeResolver;
 
+use Iterator;
 use PhpParser\Node\Expr\Variable;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
 
@@ -21,17 +22,12 @@ final class ClassLikeTypeResolverTest extends AbstractNodeTypeResolverTest
         $this->assertSame($expectedTypes, $this->nodeTypeResolver->resolve($variableNodes[$nodePosition]));
     }
 
-    /**
-     * @return mixed[][]
-     */
-    public function provideTypeForNodesAndFilesData(): array
+    public function provideTypeForNodesAndFilesData(): Iterator
     {
-        return [
-            # assign of "new <name>"
-            [__DIR__ . '/Source/ClassWithParent.php.inc', 0, [
-                'SomeNamespace\SomeClass',
-                'SomeNamespace\SomeInterface',
-            ]],
-        ];
+        # assign of "new <name>"
+        yield [__DIR__ . '/Source/ClassWithParent.php.inc', 0, [
+            'SomeNamespace\SomeClass',
+            'SomeNamespace\SomeInterface',
+        ]];
     }
 }

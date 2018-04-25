@@ -2,6 +2,7 @@
 
 namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ParamTypeResolver;
 
+use Iterator;
 use PhpParser\Node\Expr\Variable;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
 
@@ -21,16 +22,11 @@ final class ParamTypeResolverTest extends AbstractNodeTypeResolverTest
         $this->assertSame($expectedTypes, $this->nodeTypeResolver->resolve($variableNodes[$nodePosition]));
     }
 
-    /**
-     * @return mixed[][]
-     */
-    public function provideTypeForNodesAndFilesData(): array
+    public function provideTypeForNodesAndFilesData(): Iterator
     {
-        return [
-            # typehint
-            [__DIR__ . '/Source/MethodParamTypeHint.php.inc', 0, ['SomeNamespace\SubNamespace\Html']],
-            # docblock
-            [__DIR__ . '/Source/MethodParamDocBlock.php.inc', 0, ['SomeNamespace\SubNamespace\Html']],
-        ];
+        # typehint
+        yield [__DIR__ . '/Source/MethodParamTypeHint.php.inc', 0, ['SomeNamespace\SubNamespace\Html']];
+        # docblock
+        yield [__DIR__ . '/Source/MethodParamDocBlock.php.inc', 0, ['SomeNamespace\SubNamespace\Html']];
     }
 }
