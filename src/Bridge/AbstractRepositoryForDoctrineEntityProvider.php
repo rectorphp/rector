@@ -1,6 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Contract\Bridge;
+namespace Rector\Bridge;
+
+use Rector\Contract\Bridge\RepositoryForDoctrineEntityProviderInterface;
 
 abstract class AbstractRepositoryForDoctrineEntityProvider implements RepositoryForDoctrineEntityProviderInterface
 {
