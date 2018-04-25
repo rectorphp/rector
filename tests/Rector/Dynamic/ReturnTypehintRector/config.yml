@@ -3,3 +3,4 @@ services:
         $typehintForMethodByClass:
             'SomeNamespace\SomeClass':
                 'parse': 'array'
+                'resolve': 'SomeType'
