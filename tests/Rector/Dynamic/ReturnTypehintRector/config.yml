@@ -1,0 +1,5 @@
+services:
+    Rector\Rector\Dynamic\ReturnTypehintRector:
+        $typehintForMethodByClass:
+            'SomeNamespace\SomeClass':
+                'parse': 'array'
