@@ -36,7 +36,6 @@
             "Rector\\": "src",
             "Rector\\BetterReflection\\": "packages/BetterReflection/src",
             "Rector\\ConsoleDiffer\\": "packages/ConsoleDiffer/src",
-            "Rector\\RectorBuilder\\": "packages/RectorBuilder/src",
             "Rector\\ReflectionDocBlock\\": "packages/ReflectionDocBlock/src",
             "Rector\\NodeTypeResolver\\": "packages/NodeTypeResolver/src",
             "Rector\\NodeTraverserQueue\\": "packages/NodeTraverserQueue/src"
@@ -46,7 +45,6 @@
         "psr-4": {
             "Rector\\Tests\\": "tests",
             "Rector\\BetterReflection\\Tests\\": "packages/BetterReflection/tests",
-            "Rector\\RectorBuilder\\Tests\\": "packages/RectorBuilder/tests",
             "Rector\\ReflectionDocBlock\\Tests\\": "packages/ReflectionDocBlock/tests",
             "Rector\\NodeTypeResolver\\Tests\\": "packages/NodeTypeResolver/tests",
             "Rector\\NodeTraverserQueue\\Tests\\": "packages/NodeTraverserQueue/tests"
