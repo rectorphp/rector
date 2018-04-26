@@ -7,7 +7,7 @@ use PhpParser\Comment\Doc;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property as PhpParserProperty;
 use Rector\Builder\Class_\VariableInfo;
-use Rector\Naming\PropertyNaming;
+use Rector\Php\TypeAnalyzer;
 
 final class PropertyBuilder
 {
@@ -21,10 +21,19 @@ final class PropertyBuilder
      */
     private $statementGlue;
 
-    public function __construct(BuilderFactory $builderFactory, StatementGlue $statementGlue)
-    {
+    /**
+     * @var TypeAnalyzer
+     */
+    private $typeAnalyzer;
+
+    public function __construct(
+        BuilderFactory $builderFactory,
+        StatementGlue $statementGlue,
+        TypeAnalyzer $typeAnalyzer
+    ) {
         $this->builderFactory = $builderFactory;
         $this->statementGlue = $statementGlue;
+        $this->typeAnalyzer = $typeAnalyzer;
     }
 
     public function addPropertyToClass(Class_ $classNode, VariableInfo $variableInfo): void
@@ -81,7 +90,7 @@ final class PropertyBuilder
     {
         $implodedTypes = '';
         foreach ($propertyTypes as $propertyType) {
-            $implodedTypes .= PropertyNaming::isPhpReservedType($propertyType)
+            $implodedTypes .= $this->typeAnalyzer->isPhpReservedType($propertyType)
                 ? $propertyType
                 : '\\' . $propertyType . '|';
         }
