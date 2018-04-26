@@ -12,7 +12,7 @@ services:
     PHP_CodeSniffer\Standards\Generic\Sniffs\Metrics\NestingLevelSniff:
         absoluteNestingLevel: 3
 
-    # should be part of ECS "common/array.yml"
+    # should be part of ECS "common/array.yml" - will be done in 4.1.2+
     PhpCsFixer\Fixer\ArrayNotation\NoTrailingCommaInSinglelineArrayFixer: ~
 
     # Class should be Final or Abstract
