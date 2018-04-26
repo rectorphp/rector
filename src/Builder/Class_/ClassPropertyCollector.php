@@ -10,11 +10,24 @@ final class ClassPropertyCollector
     private $classProperties = [];
 
     /**
+     * @var VariableInfoFactory
+     */
+    private $variableInfoFactory;
+
+    public function __construct(VariableInfoFactory $variableInfoFactory)
+    {
+        $this->variableInfoFactory = $variableInfoFactory;
+    }
+
+    /**
      * @param string[] $propertyTypes
      */
     public function addPropertyForClass(string $class, array $propertyTypes, string $propertyName): void
     {
-        $this->classProperties[$class][] = VariableInfo::createFromNameAndTypes($propertyName, $propertyTypes);
+        $this->classProperties[$class][] = $this->variableInfoFactory->createFromNameAndTypes(
+            $propertyName,
+            $propertyTypes
+        );
     }
 
     /**

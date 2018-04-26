@@ -8,7 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Expression;
-use Rector\Builder\Class_\VariableInfo;
+use Rector\Builder\Class_\VariableInfoFactory;
 use Rector\Builder\ConstructorMethodBuilder;
 use Rector\Builder\PropertyBuilder;
 use Rector\Contract\Bridge\EntityForDoctrineRepositoryProviderInterface;
@@ -46,18 +46,25 @@ final class MoveRepositoryFromParentToConstructorRector extends AbstractRector
      */
     private $builderFactory;
 
+    /**
+     * @var VariableInfoFactory
+     */
+    private $variableInfoFactory;
+
     public function __construct(
         PropertyBuilder $propertyBuilder,
         ConstructorMethodBuilder $constructorMethodBuilder,
         NodeFactory $nodeFactory,
         EntityForDoctrineRepositoryProviderInterface $entityForDoctrineRepositoryProvider,
-        BuilderFactory $builderFactory
+        BuilderFactory $builderFactory,
+        VariableInfoFactory $variableInfoFactory
     ) {
         $this->propertyBuilder = $propertyBuilder;
         $this->constructorMethodBuilder = $constructorMethodBuilder;
         $this->nodeFactory = $nodeFactory;
         $this->entityForDoctrineRepositoryProvider = $entityForDoctrineRepositoryProvider;
         $this->builderFactory = $builderFactory;
+        $this->variableInfoFactory = $variableInfoFactory;
     }
 
     public function isCandidate(Node $node): bool
@@ -125,13 +132,16 @@ CODE_SAMPLE
         $node->extends = null;
 
         // add $repository property
-        $propertyInfo = VariableInfo::createFromNameAndTypes('repository', ['Doctrine\ORM\EntityRepository']);
+        $propertyInfo = $this->variableInfoFactory->createFromNameAndTypes(
+            'repository',
+            ['Doctrine\ORM\EntityRepository']
+        );
         $this->propertyBuilder->addPropertyToClass($node, $propertyInfo);
 
         // add $entityManager and assign to constuctor
         $this->constructorMethodBuilder->addParameterAndAssignToConstructorArgumentsOfClass(
             $node,
-            VariableInfo::createFromNameAndTypes('entityManager', ['Doctrine\ORM\EntityManager']),
+            $this->variableInfoFactory->createFromNameAndTypes('entityManager', ['Doctrine\ORM\EntityManager']),
             $this->createRepositoryAssign($node)
         );
 

@@ -10,11 +10,12 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Configuration\Rector\ArgumentReplacerRecipe;
+use Rector\Configuration\Rector\ArgumentReplacerRecipeFactory;
 use Rector\NodeAnalyzer\ClassMethodAnalyzer;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeAnalyzer\StaticMethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
-use Rector\Rector\Dynamic\Configuration\ArgumentReplacerRecipe;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
@@ -51,6 +52,11 @@ final class ArgumentReplacerRector extends AbstractRector
     private $constExprEvaluator;
 
     /**
+     * @var ArgumentReplacerRecipeFactory
+     */
+    private $argumentReplacerRecipeFactory;
+
+    /**
      * @param mixed[] $argumentChangesByMethodAndType
      */
     public function __construct(
@@ -58,8 +64,10 @@ final class ArgumentReplacerRector extends AbstractRector
         MethodCallAnalyzer $methodCallAnalyzer,
         ClassMethodAnalyzer $classMethodAnalyzer,
         StaticMethodCallAnalyzer $staticMethodCallAnalyzer,
-        ConstExprEvaluator $constExprEvaluator
+        ConstExprEvaluator $constExprEvaluator,
+        ArgumentReplacerRecipeFactory $argumentReplacerRecipeFactory
     ) {
+        $this->argumentReplacerRecipeFactory = $argumentReplacerRecipeFactory;
         $this->loadArgumentReplacerRecipes($argumentChangesByMethodAndType);
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->classMethodAnalyzer = $classMethodAnalyzer;
@@ -176,7 +184,9 @@ $containerBuilder->compile(true);'
     private function loadArgumentReplacerRecipes(array $configurationArrays): void
     {
         foreach ($configurationArrays as $configurationArray) {
-            $this->argumentReplacerRecipes[] = ArgumentReplacerRecipe::createFromArray($configurationArray);
+            $this->argumentReplacerRecipes[] = $this->argumentReplacerRecipeFactory->createFromArray(
+                $configurationArray
+            );
         }
     }
 
