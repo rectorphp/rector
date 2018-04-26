@@ -24,9 +24,4 @@ final class PropertyNaming
 
         return lcfirst($camelCaseName);
     }
-
-    public static function isPhpReservedType(string $type): bool
-    {
-        return in_array($type, ['string', 'bool', 'mixed', 'object', 'iterable', 'array'], true);
-    }
 }

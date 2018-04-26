@@ -26,7 +26,7 @@ use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\TraitUse;
 use Rector\Builder\Class_\VariableInfo;
 use Rector\Exception\NotImplementedException;
-use Rector\Naming\PropertyNaming;
+use Rector\Php\TypeAnalyzer;
 
 final class NodeFactory
 {
@@ -40,10 +40,19 @@ final class NodeFactory
      */
     private $propertyFetchNodeFactory;
 
-    public function __construct(BuilderFactory $builderFactory, PropertyFetchNodeFactory $propertyFetchNodeFactory)
-    {
+    /**
+     * @var TypeAnalyzer
+     */
+    private $typeAnalyzer;
+
+    public function __construct(
+        BuilderFactory $builderFactory,
+        PropertyFetchNodeFactory $propertyFetchNodeFactory,
+        TypeAnalyzer $typeAnalyzer
+    ) {
         $this->builderFactory = $builderFactory;
         $this->propertyFetchNodeFactory = $propertyFetchNodeFactory;
+        $this->typeAnalyzer = $typeAnalyzer;
     }
 
     /**
@@ -229,7 +238,7 @@ final class NodeFactory
 
     public function createTypeName(string $name): Name
     {
-        if (PropertyNaming::isPhpReservedType($name)) {
+        if ($this->typeAnalyzer->isPhpReservedType($name)) {
             return new Name($name);
         }
 
