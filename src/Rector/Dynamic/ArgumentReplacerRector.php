@@ -10,12 +10,12 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Configuration\Rector\ArgumentReplacerRecipe;
+use Rector\Configuration\Rector\ArgumentReplacerRecipeFactory;
 use Rector\NodeAnalyzer\ClassMethodAnalyzer;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeAnalyzer\StaticMethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
-use Rector\Rector\Dynamic\Configuration\ArgumentReplacerRecipe;
-use Rector\Rector\Dynamic\Configuration\ArgumentReplacerRecipeFactory;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
@@ -67,12 +67,12 @@ final class ArgumentReplacerRector extends AbstractRector
         ConstExprEvaluator $constExprEvaluator,
         ArgumentReplacerRecipeFactory $argumentReplacerRecipeFactory
     ) {
+        $this->argumentReplacerRecipeFactory = $argumentReplacerRecipeFactory;
         $this->loadArgumentReplacerRecipes($argumentChangesByMethodAndType);
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->classMethodAnalyzer = $classMethodAnalyzer;
         $this->staticMethodCallAnalyzer = $staticMethodCallAnalyzer;
         $this->constExprEvaluator = $constExprEvaluator;
-        $this->argumentReplacerRecipeFactory = $argumentReplacerRecipeFactory;
     }
 
     /**

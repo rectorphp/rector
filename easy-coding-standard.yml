@@ -60,5 +60,5 @@ parameters:
 
         # empty arguments passing
         PHP_CodeSniffer\Standards\PEAR\Sniffs\Functions\ValidDefaultValueSniff.NotAtEnd:
-            - 'src/Rector/Dynamic/Configuration/ArgumentReplacerRecipe.php'
+            - 'src/Configuration/Rector/ArgumentReplacerRecipe.php'
             - 'src/Rector/Contrib/PHPUnit/SpecificMethod/AssertTrueFalseToSpecificMethodRector.php'

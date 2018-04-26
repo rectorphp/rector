@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Rector\Dynamic\Configuration;
+namespace Rector\Configuration\Rector;
 
 use Rector\Exception\Rector\InvalidRectorConfigurationException;
 use Rector\Rector\Dynamic\ArgumentReplacerRector;
@@ -35,7 +35,7 @@ final class ArgumentReplacerRecipeFactory
         $this->ensureHasKey($data, 'position');
         $this->ensureHasKey($data, 'type');
 
-        if ($data['type'] === self::TYPE_REPLACED_DEFAULT_VALUE) {
+        if ($data['type'] === ArgumentReplacerRecipe::TYPE_REPLACED_DEFAULT_VALUE) {
             self::ensureHasKey($data, 'replace_map');
         }
     }

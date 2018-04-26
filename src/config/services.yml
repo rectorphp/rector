@@ -4,12 +4,13 @@ services:
 
     Rector\:
         resource: '../'
-        exclude: '../{Node/Attribute.php,Rector/**/*Rector.php,Reporting/FileDiff.php,Testing,RectorDefinition,*/*/*Info.php}'
+        exclude: '../{Node/Attribute.php,Rector/**/*Rector.php,Reporting/FileDiff.php,Testing,RectorDefinition,*/*/*Info.php,Configuration/Rector/ArgumentReplacerRecipe.php}'
 
     # bin entry-point
     Rector\Console\Application:
         public: true
 
+    # extra services
     Rector\Rector\Contrib\Symfony\Form\Helper\FormTypeStringToTypeProvider: ~
 
     # prepares helper attributes of nodes
