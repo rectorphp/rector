@@ -47,7 +47,7 @@ parameters:
 
     exclude_checkers:
         # temporary, before static is removed
-        - 'Symplify\CodingStandard\Sniffs\CleanCode\ForbiddenStaticFunctionSniff'
+        #- 'Symplify\CodingStandard\Sniffs\CleanCode\ForbiddenStaticFunctionSniff'
 
     skip:
         Symplify\CodingStandard\Fixer\Php\ClassStringToClassConstantFixer:

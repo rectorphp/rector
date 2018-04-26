@@ -4,7 +4,7 @@ services:
 
     Rector\:
         resource: '../'
-        exclude: '../{Node/Attribute.php,Rector/**/*Rector.php,Reporting/FileDiff.php,Testing,RectorDefinition}'
+        exclude: '../{Node/Attribute.php,Rector/**/*Rector.php,Reporting/FileDiff.php,Testing,RectorDefinition,*/*/*Info.php}'
 
     # bin entry-point
     Rector\Console\Application:

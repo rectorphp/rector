@@ -17,18 +17,10 @@ final class VariableInfo
     /**
      * @param string[] $types
      */
-    private function __construct(string $name, array $types)
+    public function __construct(string $name, array $types)
     {
         $this->name = $name;
         $this->types = $types;
-    }
-
-    /**
-     * @param string[] $types
-     */
-    public static function createFromNameAndTypes(string $name, array $types): self
-    {
-        return new self($name, $types);
     }
 
     public function getName(): string
