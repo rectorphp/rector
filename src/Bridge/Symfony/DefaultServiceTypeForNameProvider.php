@@ -4,7 +4,7 @@ namespace Rector\Bridge\Symfony;
 
 use Rector\Contract\Bridge\ServiceTypeForNameProviderInterface;
 use Rector\Exception\Configuration\InvalidConfigurationException;
-use Symplify\PackageBuilder\Exception\Yaml\InvalidParametersValueException;
+use Symfony\Component\HttpKernel\Kernel;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
 final class DefaultServiceTypeForNameProvider implements ServiceTypeForNameProviderInterface
@@ -46,17 +46,26 @@ final class DefaultServiceTypeForNameProvider implements ServiceTypeForNameProvi
     {
         if ($kernelClass === null) {
             throw new InvalidConfigurationException(sprintf(
-                'Make sure "%s" pareters is set in rector.yml in "parameters:" section',
+                'Make sure "%s" parameters is set in rector.yml in "parameters:" section',
                 self::KERNEL_CLASS_PARAMETER
             ));
         }
 
         if (! class_exists($kernelClass)) {
-            throw new InvalidParametersValueException(sprintf(
+            throw new InvalidConfigurationException(sprintf(
                 'Kernel class "%s" provided in "parameters > %s" is not autoloadable. ' .
                 'Make sure composer.json of your application is valid and rector is loading "vendor/autoload.php" of your application.',
                 $kernelClass,
                 self::KERNEL_CLASS_PARAMETER
+            ));
+        }
+
+        if (! is_a($kernelClass, Kernel::class, true)) {
+            throw new InvalidConfigurationException(sprintf(
+                'Kernel class "%s" provided in "parameters > %s" is not instance of "%s". Make sure it is.',
+                $kernelClass,
+                'kernel_class',
+                Kernel::class
             ));
         }
     }
