@@ -2,7 +2,6 @@
 
 namespace Rector\Bridge\Symfony;
 
-use Psr\Container\ContainerInterface;
 use Rector\Contract\Bridge\ServiceTypeForNameProviderInterface;
 use Rector\Exception\Configuration\InvalidConfigurationException;
 use Symfony\Component\DependencyInjection\Container;
@@ -21,6 +20,11 @@ final class DefaultServiceTypeForNameProvider implements ServiceTypeForNameProvi
      */
     private $parameterProvider;
 
+    /**
+     * @var Container
+     */
+    private $container;
+
     public function __construct(ParameterProvider $parameterProvider)
     {
         $this->parameterProvider = $parameterProvider;
@@ -34,9 +38,8 @@ final class DefaultServiceTypeForNameProvider implements ServiceTypeForNameProvi
         // make this default, register and require kernel_class paramter, see:
         // https://github.com/rectorphp/rector/issues/428
 
-        // @todo cache this!
         /** @var string $kernelClass */
-        $container = $this->createContainerFromKernelClass($kernelClass);
+        $container = $this->getContainerForKernelClass($kernelClass);
 
         if ($container->has($name)) {
             $definition = $container->get($name);
@@ -89,5 +92,14 @@ final class DefaultServiceTypeForNameProvider implements ServiceTypeForNameProvi
         $debug = (bool) ($options['debug'] ?? $_ENV['APP_DEBUG'] ?? $_SERVER['APP_DEBUG'] ?? true);
 
         return new $kernelClass($environment, $debug);
+    }
+
+    private function getContainerForKernelClass(string $kernelClass): Container
+    {
+        if ($this->container) {
+            return $this->container;
+        }
+
+        return $this->container = $this->createContainerFromKernelClass($kernelClass);
     }
 }
