@@ -16,14 +16,6 @@ final class PostController extends Controller
     {
         $this->postRepository = $postRepository;
     }
-    public function somethingAction(int $id): Response
-    {
-        $em = $this->getDoctrine()->getManager();
-        $this->postRepository->findSomething($id);
-
-        return new Response();
-    }
-
     public function anythingAction(int $id): Response
     {
         $em = $this->getDoctrine()->getManager();

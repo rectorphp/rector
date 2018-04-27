@@ -8,14 +8,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class PostController extends Controller
 {
-    public function somethingAction(int $id): Response
-    {
-        $em = $this->getDoctrine()->getManager();
-        $em->getRepository('AppBundle:Post')->findSomething($id);
-
-        return new Response();
-    }
-
     public function anythingAction(int $id): Response
     {
         $em = $this->getDoctrine()->getManager();

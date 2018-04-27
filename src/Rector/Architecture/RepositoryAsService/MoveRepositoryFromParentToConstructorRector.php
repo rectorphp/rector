@@ -11,7 +11,7 @@ use PhpParser\Node\Stmt\Expression;
 use Rector\Builder\Class_\VariableInfoFactory;
 use Rector\Builder\ConstructorMethodBuilder;
 use Rector\Builder\PropertyBuilder;
-use Rector\Contract\Bridge\EntityForDoctrineRepositoryProviderInterface;
+use Rector\Contract\Bridge\DoctrineEntityAndRepositoryMapperInterface;
 use Rector\Exception\Bridge\RectorProviderException;
 use Rector\Node\Attribute;
 use Rector\Node\NodeFactory;
@@ -37,9 +37,9 @@ final class MoveRepositoryFromParentToConstructorRector extends AbstractRector
     private $nodeFactory;
 
     /**
-     * @var EntityForDoctrineRepositoryProviderInterface
+     * @var DoctrineEntityAndRepositoryMapperInterface
      */
-    private $entityForDoctrineRepositoryProvider;
+    private $doctrineEntityAndRepositoryMapper;
 
     /**
      * @var BuilderFactory
@@ -55,14 +55,14 @@ final class MoveRepositoryFromParentToConstructorRector extends AbstractRector
         PropertyBuilder $propertyBuilder,
         ConstructorMethodBuilder $constructorMethodBuilder,
         NodeFactory $nodeFactory,
-        EntityForDoctrineRepositoryProviderInterface $entityForDoctrineRepositoryProvider,
+        DoctrineEntityAndRepositoryMapperInterface $doctrineEntityAndRepositoryMapper,
         BuilderFactory $builderFactory,
         VariableInfoFactory $variableInfoFactory
     ) {
         $this->propertyBuilder = $propertyBuilder;
         $this->constructorMethodBuilder = $constructorMethodBuilder;
         $this->nodeFactory = $nodeFactory;
-        $this->entityForDoctrineRepositoryProvider = $entityForDoctrineRepositoryProvider;
+        $this->doctrineEntityAndRepositoryMapper = $doctrineEntityAndRepositoryMapper;
         $this->builderFactory = $builderFactory;
         $this->variableInfoFactory = $variableInfoFactory;
     }
@@ -155,13 +155,13 @@ CODE_SAMPLE
     private function createRepositoryAssign(Class_ $classNode): Expression
     {
         $repositoryClassName = (string) $classNode->getAttribute(Attribute::CLASS_NAME);
-        $entityClassName = $this->entityForDoctrineRepositoryProvider->provideEntityForRepository($repositoryClassName);
+        $entityClassName = $this->doctrineEntityAndRepositoryMapper->mapRepositoryToEntity($repositoryClassName);
 
         if ($entityClassName === null) {
             throw new RectorProviderException(sprintf(
                 'An entity was not provided for "%s" repository by your "%s" class.',
                 $repositoryClassName,
-                get_class($this->entityForDoctrineRepositoryProvider)
+                get_class($this->doctrineEntityAndRepositoryMapper)
             ));
         }
 
