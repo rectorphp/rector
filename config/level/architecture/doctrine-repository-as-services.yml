@@ -5,6 +5,3 @@ services:
     Rector\Rector\Architecture\RepositoryAsService\MoveRepositoryFromParentToConstructorRector: ~
 
     Rector\Rector\Architecture\RepositoryAsService\ServiceLocatorToDIRector: ~
-
-    # default mapper
-    Rector\Bridge\DefaultDoctrineEntityAndRepositoryMapper: ~
