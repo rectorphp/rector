@@ -4,7 +4,7 @@ namespace Rector\Tests\Rector\Contrib\Symfony\FrameworkBundle\GetToConstructorIn
 
 use Rector\Exception\Configuration\InvalidConfigurationException;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Tests\Rector\Contrib\Symfony\FrameworkBundle\GetToConstructorInjectionRector\Source\SomeNonKernelClass;
+use Rector\Tests\Rector\Contrib\Symfony\FrameworkBundle\AbstractToConstructorInjectionRectorSource\SomeNonKernelClass;
 use Symfony\Component\HttpKernel\Kernel;
 
 /**
