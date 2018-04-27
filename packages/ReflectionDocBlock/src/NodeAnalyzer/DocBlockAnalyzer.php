@@ -15,10 +15,15 @@ use phpDocumentor\Reflection\Types\Object_;
 use phpDocumentor\Reflection\Types\String_;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use Rector\Exception\NotImplementedException;
 use Rector\ReflectionDocBlock\DocBlock\AnnotationRemover;
 use Rector\ReflectionDocBlock\DocBlock\DocBlockFactory;
 use Rector\ReflectionDocBlock\DocBlock\TidingSerializer;
+use Symplify\BetterPhpDocParser\PhpDocParser\PhpDocInfo;
+use Symplify\BetterPhpDocParser\PhpDocParser\PhpDocInfoFactory;
+use Symplify\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 use Symplify\BetterReflectionDocBlock\Tag\TolerantVar;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 
@@ -54,15 +59,29 @@ final class DocBlockAnalyzer
      */
     private $privatesAccessor;
 
+    /**
+     * @var PhpDocInfoFactory
+     */
+    private $phpDocInfoFactory;
+    /**
+     * @var PhpDocInfoPrinter
+     */
+    private $phpDocInfoPrinter;
+
     public function __construct(
         DocBlockFactory $docBlockFactory,
         TidingSerializer $tidingSerializer,
-        AnnotationRemover $annotationRemover
+        AnnotationRemover $annotationRemover,
+        PhpDocInfoFactory $phpDocInfoFactory,
+        PrivatesAccessor $privatesAccessor,
+        PhpDocInfoPrinter $phpDocInfoPrinter
     ) {
         $this->docBlockFactory = $docBlockFactory;
         $this->tidingSerializer = $tidingSerializer;
         $this->annotationRemover = $annotationRemover;
-        $this->privatesAccessor = new PrivatesAccessor();
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
+        $this->privatesAccessor = $privatesAccessor;
+        $this->phpDocInfoPrinter = $phpDocInfoPrinter;
     }
 
     public function hasAnnotation(Node $node, string $annotation): bool
@@ -75,7 +94,29 @@ final class DocBlockAnalyzer
     public function removeAnnotationFromNode(Node $node, string $name, string $content = ''): void
     {
         $docBlock = $this->docBlockFactory->createFromNode($node);
-        $docBlock = $this->annotationRemover->removeFromDocBlockByNameAndContent($docBlock, $name, $content);
+
+        $phpDocInfo = $this->phpDocInfoFactory->createFrom($node->getDocComment()->getText());
+
+        // add PhpDocInfoManipulator ? - add logic to the Symplify core, starting with test first
+        $phpDocNode = $phpDocInfo->getPhpDocNode();
+
+        $tagsByName = $phpDocNode->getTagsByName('@' . $name);
+
+        foreach ($tagsByName as $tagByName) {
+            if ($content) {
+                if ($tagByName->value === $content) {
+                    $this->removeTagFromPhpDocNode($phpDocNode, $tagByName);
+                }
+            } else {
+                $this->removeTagFromPhpDocNode($phpDocNode, $tagByName);
+            }
+        }
+
+//        dump($phpDocNode);
+        $docBlock = $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo);
+//        die;
+
+//        $docBlock = $this->annotationRemover->removeFromDocBlockByNameAndContent($docBlock, $name, $content);
         $this->saveNewDocBlockToNode($node, $docBlock);
     }
 
@@ -198,24 +239,14 @@ final class DocBlockAnalyzer
         $node->setDocComment($doc);
     }
 
-    private function saveNewDocBlockToNode(Node $node, DocBlock $docBlock): void
+    private function saveNewDocBlockToNode(Node $node, string $docBlock): void
     {
         // skip if has no doc comment
         if ($node->getDocComment() === null) {
             return;
         }
 
-        $docContent = $this->tidingSerializer->getDocComment($docBlock);
-
-        // respect one-liners
-        $originalDocCommentContent = $node->getDocComment()->getText();
-        if (substr_count($originalDocCommentContent, PHP_EOL) < 1) {
-            $docContent = Strings::replace($docContent, '#\s+#', ' ');
-            $docContent = Strings::replace($docContent, '#/\*\* #', '/*');
-        }
-
-        $doc = new Doc($docContent);
-        $node->setDocComment($doc);
+        $node->setDocComment(new Doc($docBlock));
     }
 
     /**
@@ -279,5 +310,17 @@ final class DocBlockAnalyzer
         $newCompoundTag = new Compound($newCompoundTagTypes);
         $this->privatesAccessor->setPrivateProperty($tolerantVar, 'type', $newCompoundTag);
         $this->saveNewDocBlockToNode($node, $docBlock);
+    }
+
+    /**
+     * @todo move to PhpDocInfo
+     */
+    private function removeTagFromPhpDocNode(PhpDocNode $phpDocNode, PhpDocTagNode $phpDocTagNode): void
+    {
+        foreach ($phpDocNode->children as $key => $phpDocChildNode) {
+            if ($phpDocChildNode === $phpDocTagNode) {
+                unset($phpDocNode->children[$key]);
+            }
+        }
     }
 }

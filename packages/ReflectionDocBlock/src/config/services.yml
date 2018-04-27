@@ -1,3 +1,6 @@
+imports:
+    - { resource: '../../../../vendor/symplify/better-phpdoc-parser/src/config/services.yml' }
+
 services:
     _defaults:
         autowire: true
@@ -9,3 +12,5 @@ services:
 
     Symplify\BetterReflectionDocBlock\CleanDocBlockFactory: ~
     Symplify\BetterReflectionDocBlock\FixedSerializer: ~
+
+    Symplify\PackageBuilder\Reflection\PrivatesAccessor: ~
