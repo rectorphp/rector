@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Bridge;
+namespace Rector\Bridge\Doctrine;
 
 use Nette\Utils\Strings;
 use Rector\Contract\Bridge\DoctrineEntityAndRepositoryMapperInterface;
