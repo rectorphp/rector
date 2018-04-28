@@ -49,6 +49,7 @@ final class DescribeCommand extends Command
         $this->setName(CommandNaming::classToName(self::class));
         $this->setDescription('Shows detailed description of loaded Rectors.');
         $this->addOption(Option::OPTION_NO_DIFFS, null, InputOption::VALUE_NONE, 'Hide examplary diffs.');
+        $this->addOption('format', null, InputOption::VALUE_REQUIRED, 'Output format.', 'cli');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -65,18 +66,53 @@ final class DescribeCommand extends Command
 
     private function describeRector(int $i, InputInterface $input, RectorInterface $rector): void
     {
-        $this->consoleStyle->section(sprintf('%d) %s', $i, get_class($rector)));
+        $outputFormat = $input->getOption('format');
 
-        $rectorDefinition = $rector->getDefinition();
-        if ($rectorDefinition->getDescription()) {
-            $this->consoleStyle->writeln(' * ' . $rectorDefinition->getDescription());
+        if ($outputFormat === 'cli') {
+            $this->consoleStyle->section(sprintf('%d) %s', $i, get_class($rector)));
+
+            $rectorDefinition = $rector->getDefinition();
+            if ($rectorDefinition->getDescription()) {
+                $this->consoleStyle->writeln(' * ' . $rectorDefinition->getDescription());
+            }
+
+            if (! $input->getOption(Option::OPTION_NO_DIFFS)) {
+                $this->describeRectorCodeSamples($rectorDefinition->getCodeSamples());
+            }
+
+            $this->consoleStyle->newLine(2);
+        } elseif ($outputFormat === 'md') {
+
+            $this->consoleStyle->writeln('## ' . get_class($rector));
+
+            $rectorDefinition = $rector->getDefinition();
+            if ($rectorDefinition->getDescription()) {
+                $this->consoleStyle->newLine();
+                $this->consoleStyle->writeln($rectorDefinition->getDescription());
+            }
+
+            if (! $input->getOption(Option::OPTION_NO_DIFFS)) {
+                $this->consoleStyle->newLine();
+                $this->consoleStyle->writeln('```diff');
+
+                $codeBefore = '';
+                $codeAfter = '';
+                $separator = PHP_EOL . PHP_EOL;
+
+                foreach ($rectorDefinition->getCodeSamples() as $codeSample) {
+                    $codeBefore .= $codeSample->getCodeBefore() . $separator;
+                    $codeAfter .= $codeSample->getCodeAfter() . $separator;
+                }
+
+                $diff = $this->differAndFormatter->bareDiffAndFormatWithoutColors($codeBefore, $codeAfter);
+
+                $this->consoleStyle->write(trim($diff));
+                $this->consoleStyle->newLine();
+                $this->consoleStyle->writeln('```');
+            }
+
+            $this->consoleStyle->newLine(2);
         }
-
-        if (! $input->getOption(Option::OPTION_NO_DIFFS)) {
-            $this->describeRectorCodeSamples($rectorDefinition->getCodeSamples());
-        }
-
-        $this->consoleStyle->newLine(2);
     }
 
     /**

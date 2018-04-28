@@ -45,14 +45,23 @@ final class DifferAndFormatter
      */
     public function bareDiffAndFormat(string $old, string $new): string
     {
+        $diff = $this->bareDiffAndFormatWithoutColors($old, $new);
+        if ($diff === '') {
+            return '';
+        }
+
+        return $this->diffConsoleFormatter->bareFormat($diff);
+    }
+
+    public function bareDiffAndFormatWithoutColors(string $old, string $new): string
+    {
         if ($old === $new) {
             return '';
         }
 
         $diff = $this->bareDiffer->diff($old, $new);
         // impossible to configure - removed manually
-        $diff = substr($diff, strlen('@@ @@ '));
 
-        return $this->diffConsoleFormatter->bareFormat($diff);
+        return substr($diff, strlen('@@ @@ '));
     }
 }
