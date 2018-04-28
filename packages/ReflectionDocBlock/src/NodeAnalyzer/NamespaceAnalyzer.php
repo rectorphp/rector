@@ -6,6 +6,7 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Use_;
 use Rector\Node\Attribute;
+use Rector\Php\TypeAnalyzer;
 
 /**
  * Inspired by https://github.com/Roave/BetterReflection/blob/master/src/TypesFinder/PhpDocumentor/NamespaceNodeToReflectionTypeContext.php
@@ -14,6 +15,16 @@ use Rector\Node\Attribute;
  */
 final class NamespaceAnalyzer
 {
+    /**
+     * @var TypeAnalyzer
+     */
+    private $typeAnalyzer;
+
+    public function __construct(TypeAnalyzer $typeAnalyzer)
+    {
+        $this->typeAnalyzer = $typeAnalyzer;
+    }
+
     /**
      * @param string[] $types
      */
@@ -38,8 +49,7 @@ final class NamespaceAnalyzer
         }
 
         $type = array_pop($types);
-        // @todo make use of type analyzer
-        if (in_array($type, ['null', 'string'], true)) {
+        if ($this->typeAnalyzer->isPhpReservedType($type)) {
             return $type;
         }
 
