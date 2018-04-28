@@ -10,7 +10,8 @@ use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
 /**
- * Checks "public function methodCall()"
+ * Read-only utils for ClassMethod Node:
+ * public "function" SomeMethod()
  */
 final class ClassMethodAnalyzer
 {

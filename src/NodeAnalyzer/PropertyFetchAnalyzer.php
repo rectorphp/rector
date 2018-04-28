@@ -9,6 +9,10 @@ use Rector\BetterReflection\Reflector\SmartClassReflector;
 use Rector\Node\Attribute;
 use ReflectionProperty;
 
+/**
+ * Read-only utils for PropertyFetch Node:
+ * "$this->property"
+ */
 final class PropertyFetchAnalyzer
 {
     /**

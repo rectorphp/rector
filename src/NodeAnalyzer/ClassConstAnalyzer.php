@@ -8,6 +8,10 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use Rector\Node\Attribute;
 
+/**
+ * Read-only utils for ClassConstAnalyzer Node:
+ * "SomeClass::SOME_CONSTANT"
+ */
 final class ClassConstAnalyzer
 {
     /**

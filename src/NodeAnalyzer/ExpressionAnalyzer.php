@@ -7,6 +7,11 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\Expression;
 
+/**
+ * Read-only utils for Expression Node, basically complete standalone lines:
+ * $var = 1;
+ * $this->variable;
+ */
 final class ExpressionAnalyzer
 {
     public function resolvePropertyFetch(Node $node): ?PropertyFetch

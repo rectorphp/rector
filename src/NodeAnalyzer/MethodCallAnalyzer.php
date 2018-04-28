@@ -9,6 +9,10 @@ use Rector\BetterReflection\Reflector\SmartClassReflector;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use ReflectionMethod;
 
+/**
+ * Read-only utils for MethodCall Node:
+ * "$this->someMethod()"
+ */
 final class MethodCallAnalyzer
 {
     /**

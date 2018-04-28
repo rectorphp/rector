@@ -11,6 +11,10 @@ use PhpParser\Node\Stmt\Interface_;
 use Rector\BetterReflection\Reflector\SmartClassReflector;
 use Rector\Node\Attribute;
 
+/**
+ * Read-only utils for ClassLike|Class_|Trait_|Interface_ Node:
+ * "class" SomeClass, "interface" Interface, "trait" Trait
+ */
 final class ClassLikeAnalyzer
 {
     /**

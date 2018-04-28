@@ -8,6 +8,9 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Node\Attribute;
 
+/**
+ * @todo Move to /Bridge, to make clear separation from Rector core
+ */
 final class ControllerMethodAnalyzer
 {
     /**
