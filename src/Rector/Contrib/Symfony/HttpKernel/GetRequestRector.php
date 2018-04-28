@@ -14,18 +14,6 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
-/**
- * Converts all:
- *     public action()
- *     {
- *         $this->getRequest()->...();
- *
- * into:
- *     public action(Request $request)
- *     {
- *         $request->...();
- *     }
- */
 final class GetRequestRector extends AbstractRector
 {
     /**
@@ -67,27 +55,23 @@ final class GetRequestRector extends AbstractRector
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
-class MyCommand extends ContainerAwareCommand
+class SomeController
 {
-    public function someMethod()
+    public function someAction()
     {
-        // ...
-        $this->get('some_service');
+        $this->getRequest()->...();
     }
 }
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
-class MyCommand extends Command
-{
-    public function __construct(SomeService $someService)
-    {
-        $this->someService = $someService;
-    }
+use Symfony\Component\HttpFoundation\Request;
 
-    public function someMethod()
+class SomeController
+{
+    public action(Request $request)
     {
-        $this->someService;
+        $request->...();
     }
 }
 CODE_SAMPLE
