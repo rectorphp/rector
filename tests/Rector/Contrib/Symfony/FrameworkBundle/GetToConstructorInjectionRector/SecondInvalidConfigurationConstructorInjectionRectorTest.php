@@ -13,8 +13,12 @@ final class SecondInvalidConfigurationConstructorInjectionRectorTest extends Abs
     public function test(): void
     {
         $this->expectException(InvalidConfigurationException::class);
-        $this->expectExceptionMessage(sprintf('Kernel class "%s" provided in "parameters > %s" is not autoloadable. ' .
-                'Make sure composer.json of your application is valid and rector is loading "vendor/autoload.php" of your application.', 'NonExistingClass', 'kernel_class'));
+        $this->expectExceptionMessage(sprintf(
+            'Kernel class "%s" provided in "parameters > %s" is not autoloadable. ' .
+            'Make sure composer.json of your application is valid and rector is loading "vendor/autoload.php" of your application.',
+            'NonExistingClass',
+            'kernel_class'
+        ));
 
         $this->doTestFileMatchesExpectedContent(__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc');
     }
