@@ -15,8 +15,16 @@ use phpDocumentor\Reflection\Types\Object_;
 use phpDocumentor\Reflection\Types\String_;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
+use Rector\BetterReflection\Identifier\Identifier;
 use Rector\Exception\NotImplementedException;
 use Rector\ReflectionDocBlock\DocBlock\DocBlockFactory;
 use Rector\ReflectionDocBlock\DocBlock\TidingSerializer;
@@ -61,19 +69,30 @@ final class DocBlockAnalyzer
      * @var PhpDocInfoPrinter
      */
     private $phpDocInfoPrinter;
+    /**
+     * @var NamespaceAnalyzer
+     */
+    private $namespaceAnalyzer;
+
+    /**
+     * @var Node
+     */
+    private $node;
 
     public function __construct(
         DocBlockFactory $docBlockFactory,
         TidingSerializer $tidingSerializer,
         PhpDocInfoFactory $phpDocInfoFactory,
         PrivatesAccessor $privatesAccessor,
-        PhpDocInfoPrinter $phpDocInfoPrinter
+        PhpDocInfoPrinter $phpDocInfoPrinter,
+        NamespaceAnalyzer $namespaceAnalyzer
     ) {
         $this->docBlockFactory = $docBlockFactory;
         $this->tidingSerializer = $tidingSerializer;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->privatesAccessor = $privatesAccessor;
         $this->phpDocInfoPrinter = $phpDocInfoPrinter;
+        $this->namespaceAnalyzer = $namespaceAnalyzer;
     }
 
     public function hasAnnotation(Node $node, string $annotation): bool
@@ -115,22 +134,48 @@ final class DocBlockAnalyzer
         $this->saveNewDocBlockToNode($node, $docBlock);
     }
 
+    /**
+     * @todo move to PhpDocInfo
+     * @todo no need to check for nullable, just replace types
+     * @todo check one service above, it
+     */
     public function renameNullable(Node $node, string $oldType, string $newType): void
     {
-        $docBlock = $this->docBlockFactory->createFromNode($node);
+        $this->node = $node;
 
-        foreach ($docBlock->getTags() as $tag) {
-            if ($tag instanceof TolerantVar) {
-                // this could be abstracted to replace values
-                if ($tag->getType() instanceof Compound) {
-                    $this->processCompoundTagType($node, $docBlock, $tag, $tag->getType(), $oldType, $newType);
-                }
+//        $docBlock = $this->docBlockFactory->createFromNode($node);
+        $phpDocInfo = $this->phpDocInfoFactory->createFrom($node->getDocComment()->getText());
+
+//        dump($oldType, $newType);
+
+        foreach ($phpDocInfo->getPhpDocNode()->children as $phpDocChildNode) {
+            // @todo is tag with type
+            if (! property_exists($phpDocChildNode, 'value')) {
+                continue;
+            }
+
+            if ($phpDocChildNode->value instanceof VarTagValueNode || $phpDocChildNode->value instanceof ParamTagValueNode || $phpDocChildNode->value instanceof ReturnTagValueNode) {
+                $this->replacePhpDocType($phpDocChildNode->value, $oldType, $newType);
             }
         }
 
-        // is this still needed?
-        $this->replaceInNode($node, sprintf('%s|null', $oldType), sprintf('%s|null', $newType));
-        $this->replaceInNode($node, sprintf('null|%s', $oldType), sprintf('null|%s', $newType));
+        $docBlock = $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo);
+        $this->saveNewDocBlockToNode($node, $docBlock);
+
+//        die;
+//
+//        foreach ($docBlock->getTags() as $tag) {
+//            if ($tag instanceof TolerantVar) {
+//                // this could be abstracted to replace values
+//                if ($tag->getType() instanceof Compound) {
+//                    $this->processCompoundTagType($node, $docBlock, $tag, $tag->getType(), $oldType, $newType);
+//                }
+//            }
+//        }
+
+//        // is this still needed?
+//        $this->replaceInNode($node, sprintf('%s|null', $oldType), sprintf('%s|null', $newType));
+//        $this->replaceInNode($node, sprintf('null|%s', $oldType), sprintf('null|%s', $newType));
     }
 
     public function replaceAnnotationInNode(Node $node, string $oldAnnotation, string $newAnnotation): void
@@ -219,20 +264,20 @@ final class DocBlockAnalyzer
         $this->saveNewDocBlockToNode($node, $docBlock);
     }
 
-    private function replaceInNode(Node $node, string $old, string $new): void
-    {
-        if (! $node->getDocComment()) {
-            return;
-        }
-
-        $docComment = $node->getDocComment();
-        $content = $docComment->getText();
-
-        $newContent = Strings::replace($content, '#' . preg_quote($old, '#') . '#', $new, 1);
-
-        $doc = new Doc($newContent);
-        $node->setDocComment($doc);
-    }
+//    private function replaceInNode(Node $node, string $old, string $new): void
+//    {
+//        if (! $node->getDocComment()) {
+//            return;
+//        }
+//
+//        $docComment = $node->getDocComment();
+//        $content = $docComment->getText();
+//
+//        $newContent = Strings::replace($content, '#' . preg_quote($old, '#') . '#', $new, 1);
+//
+//        $doc = new Doc($newContent);
+//        $node->setDocComment($doc);
+//    }
 
     private function saveNewDocBlockToNode(Node $node, string $docBlock): void
     {
@@ -277,40 +322,40 @@ final class DocBlockAnalyzer
         throw new NotImplementedException(__METHOD__);
     }
 
-    private function processCompoundTagType(
-        Node $node,
-        DocBlock $docBlock,
-        TolerantVar $tolerantVar,
-        Compound $compound,
-        string $oldType,
-        string $newType
-    ): void {
-        $newCompoundTagTypes = [];
-
-        foreach ($compound as $i => $oldTagSubType) {
-            if ($oldTagSubType instanceof Object_) {
-                $oldTagValue = (string) $oldTagSubType->getFqsen();
-
-                // is this value object to be replaced?
-                if (is_a($oldTagValue, $oldType, true)) {
-                    $newCompoundTagTypes[] = $this->resolveNewTypeObjectFromString($newType);
-                    continue;
-                }
-            }
-
-            $newCompoundTagTypes[] = $oldTagSubType;
-        }
-
-        // nothing to replace
-        if (! count($newCompoundTagTypes)) {
-            return;
-        }
-
-        // use this as new type
-        $newCompoundTag = new Compound($newCompoundTagTypes);
-        $this->privatesAccessor->setPrivateProperty($tolerantVar, 'type', $newCompoundTag);
-        $this->saveNewDocBlockToNode($node, $docBlock);
-    }
+//    private function processCompoundTagType(
+//        Node $node,
+//        DocBlock $docBlock,
+//        TolerantVar $tolerantVar,
+//        Compound $compound,
+//        string $oldType,
+//        string $newType
+//    ): void {
+//        $newCompoundTagTypes = [];
+//
+//        foreach ($compound as $i => $oldTagSubType) {
+//            if ($oldTagSubType instanceof Object_) {
+//                $oldTagValue = (string) $oldTagSubType->getFqsen();
+//
+//                // is this value object to be replaced?
+//                if (is_a($oldTagValue, $oldType, true)) {
+//                    $newCompoundTagTypes[] = $this->resolveNewTypeObjectFromString($newType);
+//                    continue;
+//                }
+//            }
+//
+//            $newCompoundTagTypes[] = $oldTagSubType;
+//        }
+//
+//        // nothing to replace
+//        if (! count($newCompoundTagTypes)) {
+//            return;
+//        }
+//
+//        // use this as new type
+//        $newCompoundTag = new Compound($newCompoundTagTypes);
+//        $this->privatesAccessor->setPrivateProperty($tolerantVar, 'type', $newCompoundTag);
+//        $this->saveNewDocBlockToNode($node, $docBlock);
+//    }
 
     /**
      * @todo move to PhpDocInfo
@@ -322,5 +367,36 @@ final class DocBlockAnalyzer
                 unset($phpDocNode->children[$key]);
             }
         }
+    }
+
+    /**
+     * @param VarTagValueNode|ParamTagValueNode|ReturnTagValueNode $phpDocTagValueNode
+     */
+    private function replacePhpDocType(PhpDocTagValueNode $phpDocTagValueNode, string $oldType, string $newType)
+    {
+        $phpDocTagValueNode->type = $this->replaceTypeNode($phpDocTagValueNode->type, $oldType, $newType);
+    }
+
+    private function replaceTypeNode(TypeNode $typeNode, string $oldType, string $newType): TypeNode
+    {
+        if ($typeNode instanceof UnionTypeNode) {
+            foreach ($typeNode->types as $key => $subTypeNode) {
+                $typeNode->types[$key] = $this->replaceTypeNode($subTypeNode, $oldType, $newType);
+            }
+
+            return $typeNode;
+        }
+
+        if ($typeNode instanceof IdentifierTypeNode) {
+            $fqnType = $this->namespaceAnalyzer->resolveTypeToFullyQualified([$typeNode->name], $this->node);
+
+            if (is_a($fqnType, $oldType, true)) {
+                return new IdentifierTypeNode($newType);
+            }
+        }
+
+        // @todo other cases to cover?
+
+        return $typeNode;
     }
 }
