@@ -3,12 +3,10 @@
 namespace Rector\ReflectionDocBlock\NodeAnalyzer;
 
 use Nette\Utils\Strings;
-use phpDocumentor\Reflection\DocBlock;
 use phpDocumentor\Reflection\DocBlock\Tag;
 use phpDocumentor\Reflection\DocBlock\Tags\Param;
 use phpDocumentor\Reflection\Type;
 use phpDocumentor\Reflection\Types\Boolean;
-use phpDocumentor\Reflection\Types\Compound;
 use phpDocumentor\Reflection\Types\Integer;
 use phpDocumentor\Reflection\Types\Null_;
 use phpDocumentor\Reflection\Types\Object_;
@@ -24,10 +22,8 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
-use Rector\BetterReflection\Identifier\Identifier;
 use Rector\Exception\NotImplementedException;
 use Rector\ReflectionDocBlock\DocBlock\DocBlockFactory;
-use Rector\ReflectionDocBlock\DocBlock\TidingSerializer;
 use Symplify\BetterPhpDocParser\PhpDocParser\PhpDocInfo;
 use Symplify\BetterPhpDocParser\PhpDocParser\PhpDocInfoFactory;
 use Symplify\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
@@ -52,11 +48,6 @@ final class DocBlockAnalyzer
     private $docBlockFactory;
 
     /**
-     * @var TidingSerializer
-     */
-    private $tidingSerializer;
-
-    /**
      * @var PrivatesAccessor
      */
     private $privatesAccessor;
@@ -65,10 +56,12 @@ final class DocBlockAnalyzer
      * @var PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
+
     /**
      * @var PhpDocInfoPrinter
      */
     private $phpDocInfoPrinter;
+
     /**
      * @var NamespaceAnalyzer
      */
@@ -81,14 +74,12 @@ final class DocBlockAnalyzer
 
     public function __construct(
         DocBlockFactory $docBlockFactory,
-        TidingSerializer $tidingSerializer,
         PhpDocInfoFactory $phpDocInfoFactory,
         PrivatesAccessor $privatesAccessor,
         PhpDocInfoPrinter $phpDocInfoPrinter,
         NamespaceAnalyzer $namespaceAnalyzer
     ) {
         $this->docBlockFactory = $docBlockFactory;
-        $this->tidingSerializer = $tidingSerializer;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->privatesAccessor = $privatesAccessor;
         $this->phpDocInfoPrinter = $phpDocInfoPrinter;
@@ -258,7 +249,6 @@ final class DocBlockAnalyzer
 
         if (empty($docBlock)) {
             $node->setAttribute('comments', null);
-
         } else {
             $node->setDocComment(new Doc($docBlock));
         }
@@ -307,7 +297,7 @@ final class DocBlockAnalyzer
     /**
      * @param VarTagValueNode|ParamTagValueNode|ReturnTagValueNode $phpDocTagValueNode
      */
-    private function replacePhpDocType(PhpDocTagValueNode $phpDocTagValueNode, string $oldType, string $newType)
+    private function replacePhpDocType(PhpDocTagValueNode $phpDocTagValueNode, string $oldType, string $newType): void
     {
         $phpDocTagValueNode->type = $this->replaceTypeNode($phpDocTagValueNode->type, $oldType, $newType);
     }
@@ -326,8 +316,6 @@ final class DocBlockAnalyzer
             $fqnType = $this->namespaceAnalyzer->resolveTypeToFullyQualified([$typeNode->name], $this->node);
             if (is_a($fqnType, $oldType, true)) {
                 return new IdentifierTypeNode($newType);
-            } else {
-                dump($fqnType, $oldType);
             }
         }
 
