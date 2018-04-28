@@ -41,6 +41,8 @@ final class RectorDefinition
     }
 
     /**
+     * At least 1 sample is required, so both author and reader have the same knowledge.
+     *
      * @param CodeSample[] $codeSamples
      */
     private function ensureCodeSamplesAreValid(array $codeSamples): void
