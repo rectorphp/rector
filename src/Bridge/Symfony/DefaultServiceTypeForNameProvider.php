@@ -2,10 +2,9 @@
 
 namespace Rector\Bridge\Symfony;
 
+use Rector\Bridge\Symfony\DependencyInjection\ContainerFactory;
 use Rector\Configuration\Option;
 use Rector\Contract\Bridge\ServiceTypeForNameProviderInterface;
-use Symfony\Component\DependencyInjection\Container;
-use Symfony\Component\HttpKernel\Kernel;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
 final class DefaultServiceTypeForNameProvider implements ServiceTypeForNameProviderInterface
@@ -16,21 +15,23 @@ final class DefaultServiceTypeForNameProvider implements ServiceTypeForNameProvi
     private $parameterProvider;
 
     /**
-     * @var Container
-     */
-    private $container;
-
-    /**
      * @var SymfonyKernelParameterGuard
      */
     private $symfonyKernelParameterGuard;
 
+    /**
+     * @var ContainerFactory
+     */
+    private $containerFactory;
+
     public function __construct(
         ParameterProvider $parameterProvider,
-        SymfonyKernelParameterGuard $symfonyKernelParameterGuard
+        SymfonyKernelParameterGuard $symfonyKernelParameterGuard,
+        ContainerFactory $containerFactory
     ) {
         $this->parameterProvider = $parameterProvider;
         $this->symfonyKernelParameterGuard = $symfonyKernelParameterGuard;
+        $this->containerFactory = $containerFactory;
     }
 
     public function provideTypeForName(string $name): ?string
@@ -42,7 +43,7 @@ final class DefaultServiceTypeForNameProvider implements ServiceTypeForNameProvi
         // https://github.com/rectorphp/rector/issues/428
 
         /** @var string $kernelClass */
-        $container = $this->getContainerForKernelClass($kernelClass);
+        $container = $this->containerFactory->createFromKernelClass($kernelClass);
 
         if ($container->has($name)) {
             $definition = $container->get($name);
@@ -51,30 +52,5 @@ final class DefaultServiceTypeForNameProvider implements ServiceTypeForNameProvi
         }
 
         return null;
-    }
-
-    private function createContainerFromKernelClass(string $kernelClass): Container
-    {
-        $kernel = $this->createKernelFromKernelClass($kernelClass);
-        $kernel->boot();
-
-        return $kernel->getContainer();
-    }
-
-    private function createKernelFromKernelClass(string $kernelClass): Kernel
-    {
-        $environment = $options['environment'] ?? $_ENV['APP_ENV'] ?? $_SERVER['APP_ENV'] ?? 'test';
-        $debug = (bool) ($options['debug'] ?? $_ENV['APP_DEBUG'] ?? $_SERVER['APP_DEBUG'] ?? true);
-
-        return new $kernelClass($environment, $debug);
-    }
-
-    private function getContainerForKernelClass(string $kernelClass): Container
-    {
-        if ($this->container) {
-            return $this->container;
-        }
-
-        return $this->container = $this->createContainerFromKernelClass($kernelClass);
     }
 }
