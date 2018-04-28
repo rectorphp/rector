@@ -18,7 +18,6 @@ use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use Rector\Exception\NotImplementedException;
-use Rector\ReflectionDocBlock\DocBlock\AnnotationRemover;
 use Rector\ReflectionDocBlock\DocBlock\DocBlockFactory;
 use Rector\ReflectionDocBlock\DocBlock\TidingSerializer;
 use Symplify\BetterPhpDocParser\PhpDocParser\PhpDocInfo;
@@ -50,11 +49,6 @@ final class DocBlockAnalyzer
     private $tidingSerializer;
 
     /**
-     * @var AnnotationRemover
-     */
-    private $annotationRemover;
-
-    /**
      * @var PrivatesAccessor
      */
     private $privatesAccessor;
@@ -71,14 +65,12 @@ final class DocBlockAnalyzer
     public function __construct(
         DocBlockFactory $docBlockFactory,
         TidingSerializer $tidingSerializer,
-        AnnotationRemover $annotationRemover,
         PhpDocInfoFactory $phpDocInfoFactory,
         PrivatesAccessor $privatesAccessor,
         PhpDocInfoPrinter $phpDocInfoPrinter
     ) {
         $this->docBlockFactory = $docBlockFactory;
         $this->tidingSerializer = $tidingSerializer;
-        $this->annotationRemover = $annotationRemover;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->privatesAccessor = $privatesAccessor;
         $this->phpDocInfoPrinter = $phpDocInfoPrinter;
@@ -93,8 +85,6 @@ final class DocBlockAnalyzer
 
     public function removeAnnotationFromNode(Node $node, string $name, string $content = ''): void
     {
-        $docBlock = $this->docBlockFactory->createFromNode($node);
-
         $phpDocInfo = $this->phpDocInfoFactory->createFrom($node->getDocComment()->getText());
 
         // add PhpDocInfoManipulator ? - add logic to the Symplify core, starting with test first
@@ -112,11 +102,8 @@ final class DocBlockAnalyzer
             }
         }
 
-//        dump($phpDocNode);
         $docBlock = $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo);
-//        die;
 
-//        $docBlock = $this->annotationRemover->removeFromDocBlockByNameAndContent($docBlock, $name, $content);
         $this->saveNewDocBlockToNode($node, $docBlock);
     }
 
