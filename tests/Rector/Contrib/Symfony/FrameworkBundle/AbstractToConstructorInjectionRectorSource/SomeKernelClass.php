@@ -27,11 +27,11 @@ final class SomeKernelClass extends Kernel
 
     public function getCacheDir()
     {
-        return sys_get_temp_dir() . '/_tpm';
+        return sys_get_temp_dir() . '/_tmp';
     }
 
     public function getLogDir()
     {
-        return sys_get_temp_dir() . '/_tpm';
+        return sys_get_temp_dir() . '/_tmp';
     }
 }
