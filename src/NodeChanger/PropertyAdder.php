@@ -4,7 +4,7 @@ namespace Rector\NodeChanger;
 
 use PhpParser\Node;
 use PhpParser\NodeTraverser;
-use Rector\NodeVisitor\PropertyAddingNodeVisitor;
+use Rector\PhpParser\NodeVisitor\PropertyAddingNodeVisitor;
 
 /**
  * Adds new properties to class and to constructor
