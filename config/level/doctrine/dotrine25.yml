@@ -8,7 +8,7 @@ services:
                 'dumpIdentityMap':
                     'em': 'Doctrine\ORM\EntityManagerInterface'
 
-    Rector\Rector\Dynamic\ArgumentReplacerRector:
+    Rector\Rector\Dynamic\ArgumentRector:
         $argumentChangesByMethodAndType:
             -
                 class: 'Doctrine\ORM\Persisters\Entity\AbstractEntityInheritancePersister'
