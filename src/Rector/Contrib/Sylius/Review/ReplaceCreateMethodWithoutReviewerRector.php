@@ -57,8 +57,8 @@ final class ReplaceCreateMethodWithoutReviewerRector extends AbstractRector
             return false;
         }
 
-        return ! $this->methodArgumentAnalyzer->hasMethodSecondArgument($node)
-            || $this->methodArgumentAnalyzer->isMethodSecondArgumentNull($node);
+        return ! $this->methodArgumentAnalyzer->hasMethodNthArgument($node, 2)
+            || $this->methodArgumentAnalyzer->isMethodNthArgumentNull($node, 2);
     }
 
     /**
@@ -68,7 +68,7 @@ final class ReplaceCreateMethodWithoutReviewerRector extends AbstractRector
     {
         $this->identifierRenamer->renameNode($methodCallNode, 'createForSubject');
 
-        if ($this->methodArgumentAnalyzer->hasMethodSecondArgument($methodCallNode)) {
+        if ($this->methodArgumentAnalyzer->hasMethodNthArgument($methodCallNode, 2)) {
             $methodCallNode->args = [array_shift($methodCallNode->args)];
         }
 

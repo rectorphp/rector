@@ -32,35 +32,35 @@ final class MethodArgumentAnalyzerTest extends AbstractContainerAwareTestCase
 
     public function testHasMethodFirstArgument(): void
     {
-        $this->assertFalse($this->methodArgumentAnalyzer->hasMethodFirstArgument($this->methodCallNode));
+        $this->assertFalse($this->methodArgumentAnalyzer->hasMethodNthArgument($this->methodCallNode, 1));
 
         $this->methodCallNode->args[] = new Arg(new String_('argument'));
-        $this->assertTrue($this->methodArgumentAnalyzer->hasMethodFirstArgument($this->methodCallNode));
+        $this->assertTrue($this->methodArgumentAnalyzer->hasMethodNthArgument($this->methodCallNode, 1));
     }
 
     public function testHasMethodSecondArgument(): void
     {
         $this->methodCallNode->args[] = new Arg(new String_('argument'));
-        $this->assertFalse($this->methodArgumentAnalyzer->hasMethodSecondArgument($this->methodCallNode));
+        $this->assertFalse($this->methodArgumentAnalyzer->hasMethodNthArgument($this->methodCallNode, 2));
 
         $this->methodCallNode->args[] = new Arg(new String_('argument'));
-        $this->assertTrue($this->methodArgumentAnalyzer->hasMethodSecondArgument($this->methodCallNode));
+        $this->assertTrue($this->methodArgumentAnalyzer->hasMethodNthArgument($this->methodCallNode, 2));
     }
 
     public function testIsFirstArgumentString(): void
     {
-        $this->assertFalse($this->methodArgumentAnalyzer->isMethodFirstArgumentString($this->methodCallNode));
+        $this->assertFalse($this->methodArgumentAnalyzer->isMethodNthArgumentString($this->methodCallNode, 1));
 
         $this->methodCallNode->args[0] = new Arg(new String_('argument'));
-        $this->assertTrue($this->methodArgumentAnalyzer->isMethodFirstArgumentString($this->methodCallNode));
+        $this->assertTrue($this->methodArgumentAnalyzer->isMethodNthArgumentString($this->methodCallNode, 1));
 
         $this->methodCallNode->args[0] = new Arg(new BitwiseNot(new String_('argument')));
-        $this->assertFalse($this->methodArgumentAnalyzer->isMethodFirstArgumentString($this->methodCallNode));
+        $this->assertFalse($this->methodArgumentAnalyzer->isMethodNthArgumentString($this->methodCallNode, 1));
     }
 
     public function testOnNonMethodCall(): void
     {
-        $this->assertFalse($this->methodArgumentAnalyzer->hasMethodFirstArgument(new String_('string')));
-        $this->assertFalse($this->methodArgumentAnalyzer->hasMethodSecondArgument(new String_('string')));
+        $this->assertFalse($this->methodArgumentAnalyzer->hasMethodNthArgument(new String_('string'), 1));
+        $this->assertFalse($this->methodArgumentAnalyzer->hasMethodNthArgument(new String_('string'), 2));
     }
 }

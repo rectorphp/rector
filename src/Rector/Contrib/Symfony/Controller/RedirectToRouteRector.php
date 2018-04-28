@@ -60,7 +60,7 @@ final class RedirectToRouteRector extends AbstractRector
             return false;
         }
 
-        if (! $this->methodArgumentAnalyzer->hasMethodFirstArgument($node)) {
+        if (! $this->methodArgumentAnalyzer->hasMethodNthArgument($node, 1)) {
             return false;
         }
 
