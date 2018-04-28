@@ -66,7 +66,7 @@ final class ExpandFunctionToParametersArrayRector extends AbstractRector
         /** @var MethodCall $methodCallNode */
         $methodCallNode = $node;
 
-        return $this->methodArgumentAnalyzer->isMethodFirstArgumentString($methodCallNode);
+        return $this->methodArgumentAnalyzer->isMethodNthArgumentString($methodCallNode, 1);
     }
 
     /**

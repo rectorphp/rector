@@ -60,7 +60,7 @@ final class AliasToClassRector extends AbstractRector
             return false;
         }
 
-        if (! $this->methodArgumentAnalyzer->isMethodFirstArgumentString($node)) {
+        if (! $this->methodArgumentAnalyzer->isMethodNthArgumentString($node, 1)) {
             return false;
         }
 
