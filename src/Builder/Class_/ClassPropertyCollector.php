@@ -2,6 +2,9 @@
 
 namespace Rector\Builder\Class_;
 
+/**
+ * @todo consider using SplObjectStorage service as in Symplify
+ */
 final class ClassPropertyCollector
 {
     /**

@@ -9,6 +9,14 @@ use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\TraitUse;
 
+/**
+ * @todo worth better naming and decoupling
+ *
+ * Various:
+ * - adds method to class on first position
+ * - adds trait to class
+ * - ...
+ */
 final class StatementGlue
 {
     /**

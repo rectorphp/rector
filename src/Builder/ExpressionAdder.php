@@ -11,7 +11,7 @@ use Rector\PhpParser\NodeVisitor\ExpressionAddingNodeVisitor;
 use SplObjectStorage;
 
 /**
- * This class collects all to-be-added expresssions (expression ~= 1 line in code)
+ * This class collects all to-be-added expresssions (= 1 line in code)
  * and then adds new expressions to list of $nodes
  *
  * From:
