@@ -93,7 +93,7 @@ CODE_SAMPLE
 
         [$oldType, $newType] = $match;
 
-        $this->docBlockAnalyzer->renameNullable($propertyNode, $oldType, $newType);
+        $this->docBlockAnalyzer->changeType($propertyNode, $oldType, $newType);
 
         return $propertyNode;
     }
@@ -117,7 +117,7 @@ CODE_SAMPLE
                 [(string) $nullableTypeNode->type],
                 $nullableTypeNode
             );
-            $this->docBlockAnalyzer->renameNullable($classMethodNode, $oldType, $newType);
+            $this->docBlockAnalyzer->changeType($classMethodNode, $oldType, $newType);
         }
 
         return $nullableTypeNode;
@@ -138,7 +138,7 @@ CODE_SAMPLE
             $node = $exprNode->getAttribute(Attribute::PARENT_NODE);
         }
 
-        $this->docBlockAnalyzer->renameNullable($node, $oldType, $newType);
+        $this->docBlockAnalyzer->changeType($node, $oldType, $newType);
 
         return $variableNode;
     }
