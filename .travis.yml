@@ -26,6 +26,8 @@ script:
   - if [[ $STATIC_ANALYSIS != "" ]]; then composer phpstan; fi
   # Rector demo run
   - if [[ $RUN_RECTOR != "" ]]; then bin/rector process src tests --level symfony40 --dry-run; fi
+  # Rector describe command
+  - if [[ $RUN_RECTOR != "" ]]; then bin/rector describe --level all; fi
 
 after_script:
   # upload coverage to Coveralls.io
