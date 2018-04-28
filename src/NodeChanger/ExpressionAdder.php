@@ -11,6 +11,8 @@ use Rector\NodeVisitor\ExpressionAddingNodeVisitor;
 use SplObjectStorage;
 
 /**
+ * @todo move to NodeBuilder
+ *
  * This class collects all to-be-added expresssions (expression ~= 1 line in code)
  * and then adds new expressions to list of $nodes
  *

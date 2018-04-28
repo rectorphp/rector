@@ -8,6 +8,7 @@ use Rector\NodeVisitor\PropertyAddingNodeVisitor;
 
 /**
  * Adds new properties to class and to constructor
+ * @todo move to NodeBuilder
  */
 final class PropertyAdder
 {

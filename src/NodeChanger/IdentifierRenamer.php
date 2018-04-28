@@ -11,6 +11,9 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Exception\NodeChanger\NodeMissingIdentifierException;
 
+/**
+ * @todo move to NodeBuilder
+ */
 final class IdentifierRenamer
 {
     /**
