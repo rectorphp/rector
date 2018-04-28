@@ -89,7 +89,7 @@ services:
 
 ```yml
 services:
-    Rector\Rector\Dynamic\ArgumentReplacerRector:
+    Rector\Rector\Dynamic\ArgumentRector:
         $argumentChangesByMethodAndType:
             -
                 class: 'Symfony\Component\DependencyInjection\ContainerBuilder'

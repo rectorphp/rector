@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Dynamic\ArgumentReplacerRector;
+namespace Rector\Tests\Rector\Dynamic\ArgumentRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class ArgumentReplacerRectorTest extends AbstractRectorTestCase
+final class ArgumentRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()

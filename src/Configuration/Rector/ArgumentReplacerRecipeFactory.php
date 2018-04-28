@@ -3,7 +3,7 @@
 namespace Rector\Configuration\Rector;
 
 use Rector\Exception\Rector\InvalidRectorConfigurationException;
-use Rector\Rector\Dynamic\ArgumentReplacerRector;
+use Rector\Rector\Dynamic\ArgumentRector;
 
 final class ArgumentReplacerRecipeFactory
 {
@@ -51,7 +51,7 @@ final class ArgumentReplacerRecipeFactory
 
         throw new InvalidRectorConfigurationException(sprintf(
             'Configuration for "%s" Rector should have "%s" key, but is missing.',
-            ArgumentReplacerRector::class,
+            ArgumentRector::class,
             $key
         ));
     }

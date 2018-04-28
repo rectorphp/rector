@@ -1,6 +1,6 @@
 services:
     # dependency-injection
-    Rector\Rector\Dynamic\ArgumentReplacerRector:
+    Rector\Rector\Dynamic\ArgumentRector:
         $argumentChangesByMethodAndType:
             # added default value
             -

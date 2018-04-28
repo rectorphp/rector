@@ -19,7 +19,7 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
-final class ArgumentReplacerRector extends AbstractRector
+final class ArgumentRector extends AbstractRector
 {
     /**
      * @var ArgumentReplacerRecipe[]
