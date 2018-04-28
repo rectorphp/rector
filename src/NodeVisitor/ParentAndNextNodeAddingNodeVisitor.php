@@ -9,7 +9,7 @@ use Rector\Node\Attribute;
 /**
  * See https://github.com/nikic/PHP-Parser/blob/master/doc/5_FAQ.markdown#how-can-the-nextprevious-sibling-of-a-node-be-obtained.
  */
-final class NodeConnector extends NodeVisitorAbstract
+final class ParentAndNextNodeAddingNodeVisitor extends NodeVisitorAbstract
 {
     /**
      * @var Node[]
