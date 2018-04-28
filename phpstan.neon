@@ -12,6 +12,7 @@ parameters:
 
         # false positive
         - '#Parameter \#1 \$methodCallNode of method Rector\\NodeAnalyzer\\MethodArgumentAnalyzer::isMethodSecondArgumentNull\(\) expects PhpParser\\Node\\Expr\\MethodCall, PhpParser\\Node given#'
+        - '#Parameter \#1 \$kernelClass of method Rector\\Bridge\\Symfony\\SymfonyKernelParameterGuard::(ensureKernelClassExists|ensureIsKernelInstance)\(\) expects string, string\|null given#'
 
         # intentionally incorrect - part of the test
         - '#Parameter \#2 \$codeSamples of class Rector\\RectorDefinition\\RectorDefinition constructor expects array<Rector\\RectorDefinition\\CodeSample>, array<int, stdClass> given#'

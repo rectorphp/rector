@@ -25,8 +25,10 @@ final class DefaultServiceTypeForNameProvider implements ServiceTypeForNameProvi
      */
     private $symfonyKernelParameterGuard;
 
-    public function __construct(ParameterProvider $parameterProvider, SymfonyKernelParameterGuard $symfonyKernelParameterGuard)
-    {
+    public function __construct(
+        ParameterProvider $parameterProvider,
+        SymfonyKernelParameterGuard $symfonyKernelParameterGuard
+    ) {
         $this->parameterProvider = $parameterProvider;
         $this->symfonyKernelParameterGuard = $symfonyKernelParameterGuard;
     }

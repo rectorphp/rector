@@ -8,8 +8,6 @@ use Symfony\Component\HttpKernel\Kernel;
 
 final class SymfonyKernelParameterGuard
 {
-
-
     public function ensureKernelClassIsValid(?string $kernelClass): void
     {
         $this->ensureHasValue($kernelClass);
