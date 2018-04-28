@@ -53,6 +53,11 @@ final class NamespaceAnalyzer
             return $type;
         }
 
+        // return \absolute values without prefixing
+        if (Strings::startsWith($type, '\\')) {
+            return ltrim($type, '\\');
+        }
+
         $namespace = $node->getAttribute(Attribute::NAMESPACE_NAME);
 
         return ($namespace ? $namespace . '\\' : '') . $type;
