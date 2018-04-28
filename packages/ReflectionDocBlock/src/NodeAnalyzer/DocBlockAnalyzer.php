@@ -83,8 +83,16 @@ final class DocBlockAnalyzer
         return $docBlock->hasTag($annotation);
     }
 
+    /**
+     * @todo move to PhpDocInfo
+     */
     public function removeAnnotationFromNode(Node $node, string $name, string $content = ''): void
     {
+        // no doc block? skip
+        if ($node->getDocComment() === null) {
+            return;
+        }
+
         $phpDocInfo = $this->phpDocInfoFactory->createFrom($node->getDocComment()->getText());
 
         // add PhpDocInfoManipulator ? - add logic to the Symplify core, starting with test first
