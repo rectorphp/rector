@@ -38,12 +38,13 @@ final class NamespaceAnalyzer
         }
 
         $type = array_pop($types);
-        if ($type === 'null') {
+        // @todo make use of type analyzer
+        if (in_array($type, ['null', 'string'], true)) {
             return $type;
         }
 
         $namespace = $node->getAttribute(Attribute::NAMESPACE_NAME);
 
-        return ($namespace ? $namespace . '\\' : '') . array_pop($types);
+        return ($namespace ? $namespace . '\\' : '') . $type;
     }
 }
