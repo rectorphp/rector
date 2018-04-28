@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\NodeChanger;
+namespace Rector\Builder;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
@@ -11,8 +11,6 @@ use Rector\PhpParser\NodeVisitor\ExpressionAddingNodeVisitor;
 use SplObjectStorage;
 
 /**
- * @todo move to NodeBuilder
- *
  * This class collects all to-be-added expresssions (expression ~= 1 line in code)
  * and then adds new expressions to list of $nodes
  *

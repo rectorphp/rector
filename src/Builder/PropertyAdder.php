@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\NodeChanger;
+namespace Rector\Builder;
 
 use PhpParser\Node;
 use PhpParser\NodeTraverser;
@@ -8,7 +8,6 @@ use Rector\PhpParser\NodeVisitor\PropertyAddingNodeVisitor;
 
 /**
  * Adds new properties to class and to constructor
- * @todo move to NodeBuilder
  */
 final class PropertyAdder
 {

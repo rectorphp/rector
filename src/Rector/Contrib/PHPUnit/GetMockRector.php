@@ -4,8 +4,8 @@ namespace Rector\Rector\Contrib\PHPUnit;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use Rector\Builder\IdentifierRenamer;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
-use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;

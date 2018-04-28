@@ -4,8 +4,8 @@ namespace Rector\Rector\Contrib\PhpParser;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
+use Rector\Builder\IdentifierRenamer;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
-use Rector\NodeChanger\IdentifierRenamer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
