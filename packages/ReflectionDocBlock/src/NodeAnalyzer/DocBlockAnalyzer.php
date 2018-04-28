@@ -24,8 +24,8 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use Rector\Exception\NotImplementedException;
 use Rector\ReflectionDocBlock\DocBlock\DocBlockFactory;
-use Symplify\BetterPhpDocParser\PhpDocParser\PhpDocInfo;
 use Symplify\BetterPhpDocParser\PhpDocParser\PhpDocInfoFactory;
+use Symplify\BetterPhpDocParser\PhpDocParser\TypeResolver;
 use Symplify\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 use Symplify\BetterReflectionDocBlock\Tag\TolerantVar;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
@@ -72,18 +72,25 @@ final class DocBlockAnalyzer
      */
     private $node;
 
+    /**
+     * @var TypeResolver
+     */
+    private $typeResolver;
+
     public function __construct(
         DocBlockFactory $docBlockFactory,
         PhpDocInfoFactory $phpDocInfoFactory,
         PrivatesAccessor $privatesAccessor,
         PhpDocInfoPrinter $phpDocInfoPrinter,
-        NamespaceAnalyzer $namespaceAnalyzer
+        NamespaceAnalyzer $namespaceAnalyzer,
+        TypeResolver $typeResolver
     ) {
         $this->docBlockFactory = $docBlockFactory;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->privatesAccessor = $privatesAccessor;
         $this->phpDocInfoPrinter = $phpDocInfoPrinter;
         $this->namespaceAnalyzer = $namespaceAnalyzer;
+        $this->typeResolver = $typeResolver;
     }
 
     public function hasAnnotation(Node $node, string $annotation): bool
@@ -134,7 +141,7 @@ final class DocBlockAnalyzer
      * @todo no need to check for nullable, just replace types
      * @todo check one service above, it
      */
-    public function renameNullable(Node $node, string $oldType, string $newType): void
+    public function changeType(Node $node, string $oldType, string $newType): void
     {
         $this->node = $node;
 
@@ -179,17 +186,21 @@ final class DocBlockAnalyzer
      */
     public function getVarTypes(Node $node): ?array
     {
-        /** @var TolerantVar[] $varTags */
-        $varTags = $this->getTagsByName($node, 'var');
-        if (! count($varTags)) {
+        if ($node->getDocComment() === null) {
             return null;
         }
 
-        $varTag = array_shift($varTags);
+        $phpDocInfo = $this->phpDocInfoFactory->createFrom($node->getDocComment()->getText());
+        $varTagValue = $phpDocInfo->getVarTagValue();
 
-        $types = explode('|', (string) $varTag);
+        $typesAsString = $this->typeResolver->resolveDocType($varTagValue->type);
 
-        return $this->normalizeTypes($types);
+        $fullyQualifiedTypes = [];
+        foreach (explode('|', $typesAsString) as $type) {
+            $fullyQualifiedTypes[] = $this->namespaceAnalyzer->resolveTypeToFullyQualified([$type], $node);
+        }
+
+        return $fullyQualifiedTypes;
     }
 
     public function getTypeForParam(Node $node, string $paramName): ?string
@@ -256,25 +267,6 @@ final class DocBlockAnalyzer
         } else {
             $node->setDocComment(new Doc($docBlock));
         }
-    }
-
-    /**
-     * @param string[] $types
-     * @return string[]
-     */
-    private function normalizeTypes(array $types): array
-    {
-        // remove preslash: {\]SomeClass
-        $types = array_map(function (string $type) {
-            return ltrim(trim($type), '\\');
-        }, $types);
-
-        // remove arrays: Type{[][][]}
-        $types = array_map(function (string $type) {
-            return rtrim($type, '[]');
-        }, $types);
-
-        return $types;
     }
 
     private function resolveNewTypeObjectFromString(string $type): Type
