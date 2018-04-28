@@ -25,7 +25,7 @@ services:
                 '__construct':
                     '$cartStorage': 'Sylius\Component\Core\Storage\CartStorageInterface'
 
-   Rector\Rector\Dynamic\ReturnTypehintRector:
+    Rector\Rector\Dynamic\ReturnTypehintRector:
         $returnTypehintByMethod:
             # OrderInterface::getAdjustmentsRecursively and OrderItemInterface::getAdjustmentsRecursively return types changed from array to Collection
             'Sylius\Component\Order\Model\OrderInterface':

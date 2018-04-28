@@ -3,7 +3,7 @@
 services:
     Rector\Rector\Dynamic\ClassReplacerRector:
         $oldToNewClasses:
-        	'PhpCsFixer\Fixer\DefinedFixerInterface': 'PhpCsFixer\Fixer\FixerInterface'
+            'PhpCsFixer\Fixer\DefinedFixerInterface': 'PhpCsFixer\Fixer\FixerInterface'
             'PhpCsFixer\Fixer\ConfigurationDefinitionFixerInterface': 'PhpCsFixer\Fixer\ConfigurableFixerInterface'
     # merge interfaces
     # PhpCsFixer\Fixer\FixerInterface + PhpCsFixer\Fixer\DefinedFixerInterface => PhpCsFixer\Fixer\FixerInterface
