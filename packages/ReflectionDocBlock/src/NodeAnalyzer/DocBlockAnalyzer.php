@@ -233,7 +233,12 @@ final class DocBlockAnalyzer
             return;
         }
 
-        $node->setDocComment(new Doc($docBlock));
+        if (empty($docBlock)) {
+            $node->setAttribute('comments', null);
+
+        } else {
+            $node->setDocComment(new Doc($docBlock));
+        }
     }
 
     /**
