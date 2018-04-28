@@ -37,6 +37,11 @@ final class NamespaceAnalyzer
             }
         }
 
+        $type = array_pop($types);
+        if ($type === 'null') {
+            return $type;
+        }
+
         $namespace = $node->getAttribute(Attribute::NAMESPACE_NAME);
 
         return ($namespace ? $namespace . '\\' : '') . array_pop($types);
