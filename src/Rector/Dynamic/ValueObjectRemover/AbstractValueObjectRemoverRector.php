@@ -7,6 +7,7 @@ use Rector\NodeTraverserQueue\BetterNodeFinder;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Rector\AbstractRector;
 use Rector\ReflectionDocBlock\NodeAnalyzer\DocBlockAnalyzer;
+use Rector\ReflectionDocBlock\NodeAnalyzer\NamespaceAnalyzer;
 
 abstract class AbstractValueObjectRemoverRector extends AbstractRector
 {
@@ -31,18 +32,25 @@ abstract class AbstractValueObjectRemoverRector extends AbstractRector
     protected $betterNodeFinder;
 
     /**
+     * @var NamespaceAnalyzer
+     */
+    protected $namespaceAnalyzer;
+
+    /**
      * @param string[] $valueObjectsToSimpleTypes
      */
     public function __construct(
         array $valueObjectsToSimpleTypes,
         DocBlockAnalyzer $docBlockAnalyzer,
         NodeTypeResolver $nodeTypeResolver,
-        BetterNodeFinder $betterNodeFinder
+        BetterNodeFinder $betterNodeFinder,
+        NamespaceAnalyzer $namespaceAnalyzer
     ) {
         $this->valueObjectsToSimpleTypes = $valueObjectsToSimpleTypes;
         $this->docBlockAnalyzer = $docBlockAnalyzer;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->namespaceAnalyzer = $namespaceAnalyzer;
     }
 
     /**

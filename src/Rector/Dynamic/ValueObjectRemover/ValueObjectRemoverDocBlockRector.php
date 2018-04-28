@@ -101,6 +101,7 @@ CODE_SAMPLE
     private function refactorNullableType(NullableType $nullableTypeNode): NullableType
     {
         $newType = $this->matchNewType($nullableTypeNode->type);
+
         if ($newType === null) {
             return $nullableTypeNode;
         }
@@ -112,7 +113,11 @@ CODE_SAMPLE
             /** @var ClassMethod $classMethodNode */
             $classMethodNode = $parentNode->getAttribute(Attribute::PARENT_NODE);
 
-            $this->docBlockAnalyzer->renameNullable($classMethodNode, (string) $nullableTypeNode->type, $newType);
+            $oldType = $this->namespaceAnalyzer->resolveTypeToFullyQualified(
+                [(string) $nullableTypeNode->type],
+                $nullableTypeNode
+            );
+            $this->docBlockAnalyzer->renameNullable($classMethodNode, $oldType, $newType);
         }
 
         return $nullableTypeNode;
