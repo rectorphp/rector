@@ -6,8 +6,6 @@ use PHPUnit\Framework\TestCase;
 
 final class MyTestCsae extends TestCase
 {
-    /**
-     */
     public function provideData(): \Iterator
     {
         # some comment

@@ -4,8 +4,6 @@ namespace AppBundle\Controller;
 
 class ClassWithNamedService1Controller extends Controller
 {
-    /**
-     */
     public function indexAction()
     {
         if(true){

@@ -2,8 +2,6 @@
 
 class ClassWithNamedService1 extends Controller
 {
-    /**
-     */
     public function indexAction()
     {
         return $this->render('someFile.toBe.used');
