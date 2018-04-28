@@ -112,7 +112,11 @@ final class DocBlockAnalyzer
 
         foreach ($tagsByName as $tagByName) {
             if ($content) {
-                if ($tagByName->value === $content) {
+                if ($tagByName->value instanceof ParamTagValueNode) {
+                    if ($tagByName->value->parameterName === '$' . $content) {
+                        $this->removeTagFromPhpDocNode($phpDocNode, $tagByName);
+                    }
+                } elseif ($tagByName->value === $content) {
                     $this->removeTagFromPhpDocNode($phpDocNode, $tagByName);
                 }
             } else {
