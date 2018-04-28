@@ -3,7 +3,6 @@
 namespace Rector\NodeAnalyzer;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Node\Attribute;

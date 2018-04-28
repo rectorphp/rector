@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\NodeAnalyzer\Contrib\Symfony;
+namespace Rector\Bridge\Symfony\NodeAnalyzer;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
@@ -8,9 +8,6 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Node\Attribute;
 
-/**
- * @todo Move to /Bridge, to make clear separation from Rector core
- */
 final class ControllerMethodAnalyzer
 {
     /**
