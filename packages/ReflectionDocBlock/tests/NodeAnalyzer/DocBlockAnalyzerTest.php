@@ -36,10 +36,8 @@ final class DocBlockAnalyzerTest extends AbstractContainerAwareTestCase
         $this->assertNull($node->getDocComment());
 
         $initDoc = <<<'EOT'
-/**
  * @param ParamType $paramName
  * @param AnotherValue $anotherValue
- */
 EOT;
         $node = $this->createNodeWithDoc($initDoc);
         $this->docBlockAnalyzer->removeAnnotationFromNode($node, 'param', 'paramName');
@@ -74,7 +72,7 @@ EOT;
     private function createNodeWithDoc(string $doc): String_
     {
         $node = new String_('string');
-        $node->setDocComment(new Doc(sprintf('/** %s */', $doc)));
+        $node->setDocComment(new Doc(sprintf('/**%s%s%s */', PHP_EOL, $doc, PHP_EOL)));
 
         return $node;
     }
