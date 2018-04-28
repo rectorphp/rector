@@ -1,0 +1,5 @@
+parameters:
+    kernel_class: 'NonExistingClass'
+
+services:
+    Rector\Rector\Contrib\Symfony\FrameworkBundle\GetToConstructorInjectionRector: ~

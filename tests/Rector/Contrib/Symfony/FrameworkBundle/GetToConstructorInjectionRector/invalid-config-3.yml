@@ -1,0 +1,5 @@
+parameters:
+    kernel_class: 'Rector\Tests\Rector\Contrib\Symfony\FrameworkBundle\AbstractToConstructorInjectionRectorSource\SomeNonKernelClass'
+
+services:
+    Rector\Rector\Contrib\Symfony\FrameworkBundle\GetToConstructorInjectionRector: ~

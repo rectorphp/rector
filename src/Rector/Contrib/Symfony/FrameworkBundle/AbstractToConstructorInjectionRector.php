@@ -61,7 +61,7 @@ abstract class AbstractToConstructorInjectionRector extends AbstractRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        $serviceType = $this->serviceType($methodCallNode);
+        $serviceType = $this->getServiceTypeFromMethodCallArgument($methodCallNode);
 
         if ($serviceType === null) {
             return null;
@@ -81,8 +81,12 @@ abstract class AbstractToConstructorInjectionRector extends AbstractRector
     /**
      * @param MethodCall $methodCallNode
      */
-    private function serviceType(Node $methodCallNode): ?string
+    private function getServiceTypeFromMethodCallArgument(Node $methodCallNode): ?string
     {
+        if (! isset($methodCallNode->args[0])) {
+            return null;
+        }
+
         $argument = $methodCallNode->args[0]->value;
 
         if ($argument instanceof String_) {
