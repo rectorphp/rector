@@ -1,0 +1,4 @@
+services:
+    Rector\Rector\Contrib\Doctrine\AliasToClassRector:
+      $aliasesToNamespaces:
+        'App': App\Entity

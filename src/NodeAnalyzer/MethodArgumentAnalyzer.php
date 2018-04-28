@@ -33,9 +33,6 @@ final class MethodArgumentAnalyzer
         return true;
     }
 
-    /**
-     * @param MethodCall $node
-     */
     public function isMethodFirstArgumentString(Node $node): bool
     {
         if (! $this->hasMethodFirstArgument($node)) {
