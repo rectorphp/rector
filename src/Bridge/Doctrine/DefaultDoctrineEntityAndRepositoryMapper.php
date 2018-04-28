@@ -3,7 +3,7 @@
 namespace Rector\Bridge\Doctrine;
 
 use Nette\Utils\Strings;
-use Rector\Contract\Bridge\DoctrineEntityAndRepositoryMapperInterface;
+use Rector\Bridge\Contract\DoctrineEntityAndRepositoryMapperInterface;
 
 final class DefaultDoctrineEntityAndRepositoryMapper implements DoctrineEntityAndRepositoryMapperInterface
 {

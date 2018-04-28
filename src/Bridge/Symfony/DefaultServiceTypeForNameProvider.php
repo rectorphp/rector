@@ -2,9 +2,9 @@
 
 namespace Rector\Bridge\Symfony;
 
+use Rector\Bridge\Contract\ServiceTypeForNameProviderInterface;
 use Rector\Bridge\Symfony\DependencyInjection\ContainerFactory;
 use Rector\Configuration\Option;
-use Rector\Contract\Bridge\ServiceTypeForNameProviderInterface;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
 final class DefaultServiceTypeForNameProvider implements ServiceTypeForNameProviderInterface
