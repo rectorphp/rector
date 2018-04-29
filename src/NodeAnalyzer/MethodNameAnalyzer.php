@@ -6,6 +6,10 @@ use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use Rector\Node\Attribute;
 
+/**
+ * Read-only utils for MethodCall Node:
+ * $this->"someMethod()"
+ */
 final class MethodNameAnalyzer
 {
     /**

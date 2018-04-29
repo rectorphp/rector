@@ -1,17 +1,17 @@
 <?php declare(strict_types=1);
 
-namespace Rector\NodeChanger;
+namespace Rector\Builder;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeTraverser;
 use Rector\NodeTraverserQueue\BetterNodeFinder;
-use Rector\NodeVisitor\ExpressionAddingNodeVisitor;
+use Rector\PhpParser\NodeVisitor\ExpressionAddingNodeVisitor;
 use SplObjectStorage;
 
 /**
- * This class collects all to-be-added expresssions (expression ~= 1 line in code)
+ * This class collects all to-be-added expresssions (= 1 line in code)
  * and then adds new expressions to list of $nodes
  *
  * From:

@@ -3,8 +3,8 @@
 namespace Rector\Rector\Contrib\Symfony\Controller;
 
 use PhpParser\Node;
-use Rector\NodeAnalyzer\Contrib\Symfony\ControllerMethodAnalyzer;
-use Rector\NodeChanger\IdentifierRenamer;
+use Rector\Bridge\Symfony\NodeAnalyzer\ControllerMethodAnalyzer;
+use Rector\Builder\IdentifierRenamer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;

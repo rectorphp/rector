@@ -8,6 +8,10 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
+/**
+ * Read-only utils for StaticCall Node:
+ * "SomeClass::someMethod()"
+ */
 final class StaticMethodCallAnalyzer
 {
     /**

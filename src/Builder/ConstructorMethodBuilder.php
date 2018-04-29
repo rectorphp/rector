@@ -8,6 +8,14 @@ use PhpParser\Node\Stmt\Expression;
 use Rector\Builder\Class_\VariableInfo;
 use Rector\Node\NodeFactory;
 
+/**
+ * Creates new constructor or adds new dependency to already existing one
+ *
+ * public function __construct($someProperty)
+ * {
+ *      $this->someProperty = $someProperty;
+ * }
+ */
 final class ConstructorMethodBuilder
 {
     /**
@@ -26,13 +34,6 @@ final class ConstructorMethodBuilder
         $this->nodeFactory = $nodeFactory;
     }
 
-    /**
-     * Creates:
-     * public function __construct($someProperty)
-     * {
-     *      $this->someProperty = $someProperty;
-     * }
-     */
     public function addSimplePropertyAssignToClass(Class_ $classNode, VariableInfo $variableInfo): void
     {
         $propertyAssignNode = $this->nodeFactory->createPropertyAssignment($variableInfo->getName());

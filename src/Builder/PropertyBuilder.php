@@ -9,6 +9,9 @@ use PhpParser\Node\Stmt\Property as PhpParserProperty;
 use Rector\Builder\Class_\VariableInfo;
 use Rector\Php\TypeAnalyzer;
 
+/**
+ * This class builds properties, and adds them to a class
+ */
 final class PropertyBuilder
 {
     /**
@@ -63,6 +66,7 @@ final class PropertyBuilder
      */
     private function createDocWithVarAnnotation(array $propertyTypes): Doc
     {
+        // @todo resolve with PhpDocInfo
         return new Doc(sprintf('/**%s * @var %s%s */', PHP_EOL, $this->implodeTypes($propertyTypes), PHP_EOL));
     }
 

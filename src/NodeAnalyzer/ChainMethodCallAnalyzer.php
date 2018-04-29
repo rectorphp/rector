@@ -6,6 +6,10 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
+/**
+ * Read-only utils for chain of MethodCall Node:
+ * "$this->methodCall()->chainedMethodCall()"
+ */
 final class ChainMethodCallAnalyzer
 {
     /**

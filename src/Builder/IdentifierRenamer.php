@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\NodeChanger;
+namespace Rector\Builder;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
@@ -11,6 +11,12 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Exception\NodeChanger\NodeMissingIdentifierException;
 
+/**
+ * This class renames node identifier, e.g. ClassMethod rename:
+ *
+ * -public function someMethod()
+ * +public function newMethod()
+ */
 final class IdentifierRenamer
 {
     /**

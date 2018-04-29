@@ -12,6 +12,11 @@ use PhpParser\Node\Stmt\Return_;
 use Rector\Node\NodeFactory;
 use Rector\Node\PropertyFetchNodeFactory;
 
+/**
+ * This class:
+ * - builds methods
+ * - adds methods to existing class
+ */
 final class MethodBuilder
 {
     /**

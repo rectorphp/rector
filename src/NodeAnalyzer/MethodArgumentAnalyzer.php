@@ -8,6 +8,10 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
 
+/**
+ * Read-only utils for MethodCall Node, related to arguments:
+ * "$this->someMethod($argument)"
+ */
 final class MethodArgumentAnalyzer
 {
     public function hasMethodNthArgument(Node $node, int $position): bool

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Contract\Bridge;
+namespace Rector\Bridge\Contract;
 
 interface ServiceTypeForNameProviderInterface
 {

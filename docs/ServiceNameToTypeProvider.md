@@ -8,7 +8,7 @@ services:
     Rector\Rector\Contrib\Symfony\HttpKernel\GetterToPropertyRector: ~
 ```
 
-requires `Rector\Contract\Bridge\ServiceTypeForNameProviderInterface` service that provides **service type for certain service name**.
+requires `Rector\Bridge\Contract\ServiceTypeForNameProviderInterface` service that provides **service type for certain service name**.
 
 **Why Should You Implement the Interface?**
 
@@ -16,7 +16,7 @@ This operation could be automated on some level, but Kernel and Container API va
 
 ## How to Add it?
 
-1. Implement `Rector\Contract\Bridge\ServiceTypeForNameProviderInterface`
+1. Implement `Rector\Bridge\Contract\ServiceTypeForNameProviderInterface`
 2. And add *name* to *type* map.
 
     **Static implementation** would look like this:
@@ -24,7 +24,7 @@ This operation could be automated on some level, but Kernel and Container API va
     ```php
     <?php declare(strict_types=1);
 
-    use Rector\Contract\Bridge\ServiceTypeForNameProviderInterface;
+    use Rector\Bridge\Contract\ServiceTypeForNameProviderInterface;
 
     final class StaticProvidero implements ServiceTypeForNameProviderInterface
     {
@@ -57,7 +57,7 @@ Of couse we have some prepared examples for Kernel, don't you worry.
 
 ```php
 use Psr\Container\ContainerInterface;
-use Rector\Contract\Bridge\ServiceTypeForNameProviderInterface;
+use Rector\Bridge\Contract\ServiceTypeForNameProviderInterface;
 use Symfony\Component\HttpKernel\Kernel;
 
 final class AppKernelProvider implements ServiceTypeForNameProviderInterface
