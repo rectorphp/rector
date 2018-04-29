@@ -171,6 +171,6 @@ final class DescribeCommand extends Command
             $this->consoleStyle->writeln('```');
         }
 
-        $this->consoleStyle->newLine(2);
+        $this->consoleStyle->newLine(1);
     }
 }
