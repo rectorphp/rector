@@ -14,7 +14,6 @@ Handles method calls in child of Doctrine EntityRepository and moves them to "$t
  }
 ```
 
-
 ## Rector\Rector\Architecture\RepositoryAsService\MoveRepositoryFromParentToConstructorRector
 
 Turns parent EntityRepository class to constructor dependency
@@ -38,7 +37,6 @@ namespace App\Repository;
 +    }
  }
 ```
-
 
 ## Rector\Rector\Architecture\RepositoryAsService\ServiceLocatorToDIRector
 
@@ -66,7 +64,6 @@ class ProductController extends Controller
  }
 ```
 
-
 ## Rector\Rector\Architecture\PHPUnit\ArrayToYieldDataProviderRector
 
 Turns method data providers in PHPUnit from arrays to yield
@@ -85,7 +82,6 @@ Turns method data providers in PHPUnit from arrays to yield
                  }
 ```
 
-
 ## Rector\Rector\Dynamic\MethodNameReplacerRector
 
 [Dynamic] Turns method names to new ones.
@@ -99,7 +95,6 @@ $someObject = new SomeClass;
 +SomeClass::newStaticMethod();
 ```
 
-
 ## Rector\Rector\Dynamic\PropertyToMethodRector
 
 [Dynamic] Replaces properties assign calls be defined methods.
@@ -111,7 +106,6 @@ $someObject = new SomeClass;
 +$object->setProperty($value);
 ```
 
-
 ## Rector\Rector\Dynamic\ClassReplacerRector
 
 [Dynamic] Replaces defined classes by new ones.
@@ -121,16 +115,14 @@ $someObject = new SomeClass;
 +$value = new SomeNewClass;
 ```
 
-
 ## Rector\Rector\Contrib\CodeQuality\InArrayAndArrayKeysToArrayKeyExistsRector
 
-Simplify in_array and array_keys functions combination into array_key_exists when array_keys has one argument only
+Simplify `in_array` and `array_keys` functions combination into `array_key_exists` when `array_keys` has one argument only
 
 ```diff
 -in_array("key", array_keys($array), true);
 +array_key_exists("key", $array);
 ```
-
 
 ## Rector\Rector\Dynamic\ParentTypehintedArgumentRector
 
@@ -144,7 +136,6 @@ class SomeClass implements SomeInterface
  }
 ```
 
-
 ## Rector\Rector\Dynamic\ArgumentRector
 
 [Dynamic] Adds, removes or replaces defined arguments in defined methods and their calls.
@@ -155,7 +146,6 @@ $containerBuilder = new Symfony\Component\DependencyInjection\ContainerBuilder;
 +$containerBuilder->compile(true);
 ```
 
-
 ## Rector\Rector\Dynamic\FunctionToMethodCallRector
 
 [Dynamic] Turns defined function calls to local method calls.
@@ -165,25 +155,23 @@ $containerBuilder = new Symfony\Component\DependencyInjection\ContainerBuilder;
 +$this->render("...", []);
 ```
 
-
 ## Rector\Rector\Contrib\Nette\Application\InjectPropertyRector
 
 Turns properties with @inject to private properties and constructor injection
 
 ```diff
 /**
-                  * @var SomeService
--                 * @inject 
-                  */
--                public $someService;
-+                private $someService;
-+                
-+                public function __construct(SomeService $someService)
-+                {
-+                    $this->someService = $someService;
-+                }
+  * @var SomeService
+- * @inject 
+  */
+-public $someService;
++private $someService;
++
++public function __construct(SomeService $someService)
++{
++    $this->someService = $someService;
++}
 ```
-
 
 ## Rector\Rector\Contrib\Nette\Bootstrap\RemoveConfiguratorConstantsRector
 
@@ -194,7 +182,6 @@ Turns properties with @inject to private properties and constructor injection
 +$value === "development"
 ```
 
-
 ## Rector\Rector\Contrib\Nette\DI\SetInjectToAddTagRector
 
 Turns setInject() to tag in Nette\DI\CompilerExtension
@@ -203,7 +190,6 @@ Turns setInject() to tag in Nette\DI\CompilerExtension
 -$serviceDefinition->setInject();
 +$serviceDefinition->addTag("inject");
 ```
-
 
 ## Rector\Rector\Contrib\Nette\Utils\NetteObjectToSmartTraitRector
 
@@ -214,7 +200,6 @@ Checks all Nette\Object instances and turns parent class to trait
 +class SomeClass { use Nette\SmartObject; }
 ```
 
-
 ## Rector\Rector\Contrib\Nette\Utils\MagicMethodRector
 
 Catches @method annotations of Nette\Object instances and converts them to real methods.
@@ -223,7 +208,6 @@ Catches @method annotations of Nette\Object instances and converts them to real 
 -/** @method getId() */
 +public function getId() { $this->id; }
 ```
-
 
 ## Rector\Rector\Contrib\Nette\Application\TemplateMagicInvokeFilterCallRector
 
@@ -234,7 +218,6 @@ Turns properties with @inject to private properties and constructor injection
 +$this->template->getLatte()->invokeFilter("someFilter", ...)
 ```
 
-
 ## Rector\Rector\Contrib\Nette\Application\TemplateRegisterHelperRector
 
 Turns properties with @inject to private properties and constructor injection
@@ -244,7 +227,6 @@ Turns properties with @inject to private properties and constructor injection
 +$this->template->getLatte()->addFilter("someFilter", ...)
 ```
 
-
 ## Rector\Rector\Contrib\Nette\DI\SetEntityToStatementRector
 
 Turns setDefinition() to Nette\DI\Helpers::expand() value in Nette\DI\CompilerExtension
@@ -253,7 +235,6 @@ Turns setDefinition() to Nette\DI\Helpers::expand() value in Nette\DI\CompilerEx
 -$definition->setEntity("someEntity");
 +$definition = new Statement("someEntity", $definition->arguments);
 ```
-
 
 ## Rector\Rector\Contrib\Nette\DI\ExpandFunctionToParametersArrayRector
 
@@ -267,7 +248,6 @@ Turns expand() to parameters value in Nette\DI\CompilerExtension
 +$builder->parameters["argument"];
 ```
 
-
 ## Rector\Rector\Contrib\Nette\DI\ExpandFunctionToStaticExpandFunctionRector
 
 Turns expand() to Nette\DI\Helpers::expand() value in Nette\DI\CompilerExtension
@@ -276,7 +256,6 @@ Turns expand() to Nette\DI\Helpers::expand() value in Nette\DI\CompilerExtension
 -$builder->expand(object|array)
 +\Nette\DI\Helpers::expand(object|array, $builder->parameters);
 ```
-
 
 ## Rector\Rector\Contrib\Nette\Forms\ChoiceDefaultValueRector
 
@@ -287,7 +266,6 @@ Turns checkAllowedValues to method in Nette\Forms Control element
 +$control->checkDefaultValue(false);
 ```
 
-
 ## Rector\Rector\Contrib\Nette\Forms\FormNegativeRulesRector
 
 Turns negative Nette Form rules to their specific new names.
@@ -297,7 +275,6 @@ Turns negative Nette Form rules to their specific new names.
 +$form->addRule(Form::NOT_FILLED);
 ```
 
-
 ## Rector\Rector\Contrib\Nette\Forms\FormCallbackRector
 
 Turns magic callback assign to callback assign on Nette Form events.
@@ -306,7 +283,6 @@ Turns magic callback assign to callback assign on Nette Form events.
 -$form->onSuccess[] = $this->someMethod;
 +$form->onSuccess[] = [$this, someMethod;]
 ```
-
 
 ## Rector\Rector\MagicDisclosure\GetAndSetToMethodCallRector
 
@@ -320,7 +296,6 @@ Turns magic callback assign to callback assign on Nette Form events.
 +$container->setService("someService", $someService);
 ```
 
-
 ## Rector\Rector\MagicDisclosure\UnsetAndIssetToMethodCallRector
 
 [Dynamic] Turns defined __isset/__unset calls to specific method calls.
@@ -333,7 +308,6 @@ Turns magic callback assign to callback assign on Nette Form events.
 +$container->removeService("someKey");
 ```
 
-
 ## Rector\Rector\Contrib\PhpParser\IdentifierRector
 
 Turns node string names to Identifier object in php-parser
@@ -342,7 +316,6 @@ Turns node string names to Identifier object in php-parser
 -$constNode = new \PhpParser\Node\Const_; $name = $constNode->name;
 +$constNode = new \PhpParser\Node\Const_; $name = $constNode->name->toString();
 ```
-
 
 ## Rector\Rector\Contrib\PhpParser\ParamAndStaticVarNameRector
 
@@ -356,7 +329,6 @@ Turns old string var to var->name sub-variable in Node of PHP-Parser
 +$staticVarNode->var->name;
 ```
 
-
 ## Rector\Rector\Contrib\PhpParser\CatchAndClosureUseNameRector
 
 Turns $catchNode->var to its new new ->name property in php-parser
@@ -365,7 +337,6 @@ Turns $catchNode->var to its new new ->name property in php-parser
 -$catchNode->var;
 +$catchNode->var->name
 ```
-
 
 ## Rector\Rector\Contrib\PhpParser\SetLineRector
 
@@ -376,7 +347,6 @@ Turns standalone line method to attribute in Node of PHP-Parser
 +$node->setAttribute("line", 5);
 ```
 
-
 ## Rector\Rector\Contrib\PhpParser\RemoveNodeRector
 
 Turns integer return to remove node to constant in NodeVisitor of PHP-Parser
@@ -385,7 +355,6 @@ Turns integer return to remove node to constant in NodeVisitor of PHP-Parser
 -public function leaveNode() { return false; }
 +public function leaveNode() { return NodeTraverser::REMOVE_NODE; }
 ```
-
 
 ## Rector\Rector\Contrib\PhpParser\UseWithAliasRector
 
@@ -399,7 +368,6 @@ Turns use property to method and $node->alias to last name in UseAlias Node of P
 +$node->alias
 ```
 
-
 ## Rector\Rector\Dynamic\PropertyNameReplacerRector
 
 [Dynamic] Replaces defined old properties by new ones.
@@ -409,7 +377,6 @@ Turns use property to method and $node->alias to last name in UseAlias Node of P
 +$someObject->someNewProperty;
 ```
 
-
 ## Rector\Rector\Dynamic\ClassConstantReplacerRector
 
 [Dynamic] Replaces defined class constants in their calls.
@@ -418,7 +385,6 @@ Turns use property to method and $node->alias to last name in UseAlias Node of P
 -$value = SomeClass::OLD_CONSTANT;
 +$value = SomeClass::NEW_CONSTANT;
 ```
-
 
 ## Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertNotOperatorRector
 
@@ -432,7 +398,6 @@ Turns not-operator comparisons to their method name alternatives in PHPUnit Test
 +$this->assertTrue($foo, "message");
 ```
 
-
 ## Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertComparisonToSpecificMethodRector
 
 Turns comparison operations to their method name alternatives in PHPUnit TestCase
@@ -445,7 +410,6 @@ Turns comparison operations to their method name alternatives in PHPUnit TestCas
 +$this->assertLessThanOrEqual($bar, $foo, "message");
 ```
 
-
 ## Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertTrueFalseToSpecificMethodRector
 
 Turns true/false comparisons to their method name alternatives in PHPUnit TestCase when possible
@@ -454,7 +418,6 @@ Turns true/false comparisons to their method name alternatives in PHPUnit TestCa
 -$this->assertTrue(is_readable($readmeFile), "message");
 +$this->assertIsReadable($readmeFile, "message");
 ```
-
 
 ## Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertSameBoolNullToSpecificMethodRector
 
@@ -468,7 +431,6 @@ Turns same bool and null comparisons to their method name alternatives in PHPUni
 +$this->assertNotFalse($anything);
 ```
 
-
 ## Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertFalseStrposToContainsRector
 
 Turns strpos()/stripos() comparisons to their method name alternatives in PHPUnit TestCase
@@ -481,7 +443,6 @@ Turns strpos()/stripos() comparisons to their method name alternatives in PHPUni
 +$this->assertContains("foo", $anything, "message");
 ```
 
-
 ## Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertTrueFalseInternalTypeToSpecificMethodRector
 
 Turns true/false with internal type comparisons to their method name alternatives in PHPUnit TestCase
@@ -493,7 +454,6 @@ Turns true/false with internal type comparisons to their method name alternative
 -$this->assertFalse(is_{internal_type}($anything), "message");
 +$this->assertNotInternalType({internal_type}, $anything, "message");
 ```
-
 
 ## Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertCompareToSpecificMethodRector
 
@@ -516,7 +476,6 @@ Turns vague php-only method in PHPUnit TestCase to more specific
 +$this->assertNot{function}($value, $anything, "message")
 ```
 
-
 ## Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertIssetToSpecificMethodRector
 
 Turns isset comparisons to their method name alternatives in PHPUnit TestCase
@@ -528,7 +487,6 @@ Turns isset comparisons to their method name alternatives in PHPUnit TestCase
 -$this->assertObjectHasAttribute("foo", $anything);
 +$this->assertArrayNotHasKey("foo", $anything, "message");
 ```
-
 
 ## Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertInstanceOfComparisonRector
 
@@ -542,7 +500,6 @@ Turns instanceof comparisons to their method name alternatives in PHPUnit TestCa
 +$this->assertNotInstanceOf("Foo", $foo, "message");
 ```
 
-
 ## Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertPropertyExistsRector
 
 Turns property_exists() comparisons to their method name alternatives in PHPUnit TestCase
@@ -555,7 +512,6 @@ Turns property_exists() comparisons to their method name alternatives in PHPUnit
 +$this->assertClassNotHasAttribute("property", "Class", "message");
 ```
 
-
 ## Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertRegExpRector
 
 Turns preg_match() comparisons to their method name alternatives in PHPUnit TestCase
@@ -567,7 +523,6 @@ Turns preg_match() comparisons to their method name alternatives in PHPUnit Test
 -$this->assertEquals(false, preg_match("/^Message for ".*"\.$/", $string), $message);
 +$this->assertNotRegExp("/^Message for ".*"\.$/", $string, $message);
 ```
-
 
 ## Rector\Rector\Contrib\PHPUnit\ExceptionAnnotationRector
 
@@ -586,7 +541,6 @@ Takes setExpectedException() 2nd and next arguments to own methods in PHPUnit.
  }
 ```
 
-
 ## Rector\Rector\Contrib\PHPUnit\GetMockRector
 
 Turns getMock*() methods to createMock()
@@ -599,7 +553,6 @@ Turns getMock*() methods to createMock()
 +$this->createMock("Class"
 ```
 
-
 ## Rector\Rector\Dynamic\PseudoNamespaceToNamespaceRector
 
 [Dynamic] Replaces defined Pseudo_Namespaces by Namespace\Ones.
@@ -608,7 +561,6 @@ Turns getMock*() methods to createMock()
 -$someServie = Some_Object;
 +$someServie = Some\Object;
 ```
-
 
 ## Rector\Rector\Contrib\PHPUnit\DelegateExceptionArgumentsRector
 
@@ -621,7 +573,6 @@ Takes setExpectedException() 2nd and next arguments to own methods in PHPUnit.
 +$this->expectExceptionCode("CODE");
 ```
 
-
 ## Rector\Rector\Dynamic\AnnotationReplacerRector
 
 [Dynamic] Turns defined annotations above properties and methods to their new values.
@@ -629,9 +580,8 @@ Takes setExpectedException() 2nd and next arguments to own methods in PHPUnit.
 ```diff
 -/** @test */
 +/** @scenario */
-                  public function someMethod() {};
+ public function someMethod() {};
 ```
-
 
 ## Rector\Rector\Dynamic\NamespaceReplacerRector
 
@@ -641,7 +591,6 @@ Takes setExpectedException() 2nd and next arguments to own methods in PHPUnit.
 -$someObject = new SomeOldNamespace\SomeClass;
 +$someObject = new SomeNewNamespace\SomeClass;
 ```
-
 
 ## Rector\Rector\Contrib\Sensio\FrameworkExtraBundle\TemplateAnnotationRector
 
@@ -653,7 +602,6 @@ Turns @Template annotation to explicit method call in Controller of FrameworkExt
 + return $this->render("index.html.twig"); }
 ```
 
-
 ## Rector\Rector\Contrib\Sylius\Review\ReplaceCreateMethodWithoutReviewerRector
 
 Turns createForSubjectWithReviewer() with null review to standalone method in Sylius
@@ -662,7 +610,6 @@ Turns createForSubjectWithReviewer() with null review to standalone method in Sy
 -$this->createForSubjectWithReviewer($subject, null)
 +$this->createForSubject($subject)
 ```
-
 
 ## Rector\Rector\Dynamic\ReturnTypehintRector
 
@@ -675,7 +622,6 @@ class SomeClass
 +    public getData(): array;
  }
 ```
-
 
 ## Rector\Rector\Contrib\Symfony\FrameworkBundle\ContainerGetToConstructorInjectionRector
 
@@ -701,7 +647,6 @@ Turns fetching of dependencies via $container->get() in ContainerAware to constr
  }
 ```
 
-
 ## Rector\Rector\Contrib\Symfony\FrameworkBundle\GetParameterToConstructorInjectionRector
 
 Turns fetching of parameters via getParmaeter() in ContainerAware to constructor injection in Command and Controller in Symfony
@@ -725,7 +670,6 @@ Turns fetching of parameters via getParmaeter() in ContainerAware to constructor
  }
 ```
 
-
 ## Rector\Rector\Contrib\Symfony\FrameworkBundle\GetToConstructorInjectionRector
 
 Turns fetching of dependencies via $this->get() to constructor injection in Command and Controller in Symfony
@@ -748,7 +692,6 @@ Turns fetching of dependencies via $this->get() to constructor injection in Comm
  }
 ```
 
-
 ## Rector\Rector\Contrib\Symfony\Controller\RedirectToRouteRector
 
 Turns redirect to route to short helper method in Controller in Symfony
@@ -758,7 +701,6 @@ Turns redirect to route to short helper method in Controller in Symfony
 +$this->redirectToRoute("homepage");
 ```
 
-
 ## Rector\Rector\Contrib\Symfony\Controller\AddFlashRector
 
 Turns long flash adding to short helper method in Controller in Symfony
@@ -767,7 +709,6 @@ Turns long flash adding to short helper method in Controller in Symfony
 -$request->getSession()->getFlashBag()->add("success", "something");
 +$this->addflash("success", "something");
 ```
-
 
 ## Rector\Rector\Contrib\Symfony\HttpKernel\GetRequestRector
 
@@ -787,7 +728,6 @@ Turns fetching of dependencies via $this->get() to constructor injection in Comm
  }
 ```
 
-
 ## Rector\Rector\Contrib\Symfony\Form\FormTypeGetParentRector
 
 Turns string Form Type references to their CONSTANT alternatives in getParent() and getExtendedType() methods in Form in Symfony
@@ -800,7 +740,6 @@ Turns string Form Type references to their CONSTANT alternatives in getParent() 
 +function getExtendedType() { return CollectionType::class; }
 ```
 
-
 ## Rector\Rector\Contrib\Symfony\Form\OptionNameRector
 
 Turns old option names to new ones in FormTypes in Form in Symfony
@@ -809,7 +748,6 @@ Turns old option names to new ones in FormTypes in Form in Symfony
 -$builder->add("...", ["precision" => "...", "virtual" => "..."];
 +$builder->add("...", ["scale" => "...", "inherit_data" => "..."];
 ```
-
 
 ## Rector\Rector\Contrib\Symfony\Console\ConsoleExceptionToErrorEventConstantRector
 
@@ -823,7 +761,6 @@ Turns old event name with EXCEPTION to ERROR constant in Console in Symfony
 +Symfony\Component\Console\ConsoleEvents::ERROR
 ```
 
-
 ## Rector\Rector\Contrib\Symfony\Validator\ConstraintUrlOptionRector
 
 Turns true value to Url::CHECK_DNS_TYPE_ANY in Validator in Symfony.
@@ -832,7 +769,6 @@ Turns true value to Url::CHECK_DNS_TYPE_ANY in Validator in Symfony.
 -$constraint = new Url(["checkDNS" => true]);
 +$constraint = new Url(["checkDNS" => Url::CHECK_DNS_TYPE_ANY]);
 ```
-
 
 ## Rector\Rector\Contrib\Symfony\Form\FormIsValidRector
 
@@ -843,7 +779,6 @@ Adds $form->isSubmitted() validatoin to all $form->isValid() calls in Form in Sy
 +if ($form->isSubmitted() && $form->isValid()) { ... };
 ```
 
-
 ## Rector\Rector\Contrib\Symfony\Form\StringFormTypeToClassRector
 
 Turns string Form Type references to their CONSTANT alternatives in FormTypes in Form in Symfony
@@ -852,7 +787,6 @@ Turns string Form Type references to their CONSTANT alternatives in FormTypes in
 -$form->add("name", "form.type.text");
 +$form->add("name", \Symfony\Component\Form\Extension\Core\Type\TextType::class);
 ```
-
 
 ## Rector\Rector\Contrib\Symfony\VarDumper\VarDumperTestTraitMethodArgsRector
 
@@ -866,7 +800,6 @@ Adds new $format argument in VarDumperTestTrait->assertDumpEquals() in in Valida
 +VarDumperTestTrait->assertDumpMatchesFormat($dump, $format, $context = null,  $mesage = "");
 ```
 
-
 ## Rector\Rector\Contrib\Symfony\DependencyInjection\ContainerBuilderCompileEnvArgumentRector
 
 Turns old default value to parameter in ContinerBuilder->build() method in DI in Symfony
@@ -876,7 +809,6 @@ Turns old default value to parameter in ContinerBuilder->build() method in DI in
 +$containerBuilder = new Symfony\Component\DependencyInjection\ContainerBuilder(); $containerBuilder->compile(true);
 ```
 
-
 ## Rector\Rector\Contrib\Symfony\Process\ProcessBuilderInstanceRector
 
 Turns ProcessBuilder::instance() to new ProcessBuilder in Process in Symfony. Part of multi-step Rector.
@@ -885,7 +817,6 @@ Turns ProcessBuilder::instance() to new ProcessBuilder in Process in Symfony. Pa
 -$processBuilder = Symfony\Component\Process\ProcessBuilder::instance($args);
 +$processBuilder = new Symfony\Component\Process\ProcessBuilder($args);
 ```
-
 
 ## Rector\Rector\Contrib\Symfony\Process\ProcessBuilderGetProcessRector
 
@@ -898,5 +829,4 @@ $processBuilder = new Symfony\Component\Process\ProcessBuilder;
 +$process = $processBuilder;
 +$commamdLine = $processBuilder->getCommandLine();
 ```
-
 
