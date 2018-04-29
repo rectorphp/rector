@@ -1,7 +1,5 @@
 # How to use Dynamic Rectors?
 
-
-
 Dynamic Rectors are classes, that are prepared to do specific operation. You can configure them with list of options, so they modify the case you need.
 
 ### Replace a class name
