@@ -151,6 +151,9 @@ final class DescribeCommand extends Command
 
     private function printWithMarkdownFormat(InputInterface $input, RectorInterface $rector): void
     {
+        $this->consoleStyle->writeln('# All Rectors Overview');
+        $this->consoleStyle->newLine();
+
         $this->consoleStyle->writeln('## ' . get_class($rector));
 
         $rectorDefinition = $rector->getDefinition();
