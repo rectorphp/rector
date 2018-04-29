@@ -25,30 +25,13 @@ final class NamespaceAnalyzer
         $this->typeAnalyzer = $typeAnalyzer;
     }
 
-    /**
-     * @param string[] $types
-     */
-    public function resolveTypeToFullyQualified(array $types, Node $node): string
+    public function resolveTypeToFullyQualified(string $type, Node $node): string
     {
-        /** @var Use_[] $useNodes */
-        $useNodes = (array) $node->getAttribute(Attribute::USE_NODES);
-        foreach ($useNodes as $useNode) {
-            $useUseNode = $useNode->uses[0];
-            $nodeUseName = $useUseNode->name->toString();
-
-            foreach ($types as $type) {
-                if (Strings::endsWith($nodeUseName, '\\' . $type)) {
-                    return $nodeUseName;
-                }
-
-                // alias
-                if ($useUseNode->getAlias() && $type === $useUseNode->getAlias()->toString()) {
-                    return $nodeUseName;
-                }
-            }
+        $useStatementMatch = $this->matchUseStatements($type, (array) $node->getAttribute(Attribute::USE_NODES));
+        if ($useStatementMatch) {
+            return $useStatementMatch;
         }
 
-        $type = array_pop($types);
         if ($this->typeAnalyzer->isPhpReservedType($type)) {
             return $type;
         }
@@ -61,5 +44,27 @@ final class NamespaceAnalyzer
         $namespace = $node->getAttribute(Attribute::NAMESPACE_NAME);
 
         return ($namespace ? $namespace . '\\' : '') . $type;
+    }
+
+    /**
+     * @param Use_[] $useNodes
+     */
+    private function matchUseStatements(string $type, array $useNodes): ?string
+    {
+        foreach ($useNodes as $useNode) {
+            $useUseNode = $useNode->uses[0];
+            $nodeUseName = $useUseNode->name->toString();
+
+            if (Strings::endsWith($nodeUseName, '\\' . $type)) {
+                return $nodeUseName;
+            }
+
+            // alias
+            if ($useUseNode->getAlias() && $type === $useUseNode->getAlias()->toString()) {
+                return $nodeUseName;
+            }
+        }
+
+        return null;
     }
 }

@@ -81,7 +81,7 @@ final class ParamTypeResolver implements PerNodeTypeResolverInterface, NodeTypeR
         }
 
         // resolve to FQN
-        $paramType = $this->namespaceAnalyzer->resolveTypeToFullyQualified([$paramType], $paramNode);
+        $paramType = $this->namespaceAnalyzer->resolveTypeToFullyQualified($paramType, $paramNode);
         if ($paramType) {
             $this->typeContext->addVariableWithTypes($variableName, [$paramType]);
         }

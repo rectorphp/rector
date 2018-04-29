@@ -197,7 +197,7 @@ final class DocBlockAnalyzer
 
         $fullyQualifiedTypes = [];
         foreach (explode('|', $typesAsString) as $type) {
-            $fullyQualifiedTypes[] = $this->namespaceAnalyzer->resolveTypeToFullyQualified([$type], $node);
+            $fullyQualifiedTypes[] = $this->namespaceAnalyzer->resolveTypeToFullyQualified($type, $node);
         }
 
         return $fullyQualifiedTypes;
@@ -309,7 +309,7 @@ final class DocBlockAnalyzer
         }
 
         if ($typeNode instanceof IdentifierTypeNode) {
-            $fqnType = $this->namespaceAnalyzer->resolveTypeToFullyQualified([$typeNode->name], $this->node);
+            $fqnType = $this->namespaceAnalyzer->resolveTypeToFullyQualified($typeNode->name, $this->node);
             if (is_a($fqnType, $oldType, true)) {
                 return new IdentifierTypeNode($newType);
             }

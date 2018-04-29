@@ -114,7 +114,7 @@ CODE_SAMPLE
             $classMethodNode = $parentNode->getAttribute(Attribute::PARENT_NODE);
 
             $oldType = $this->namespaceAnalyzer->resolveTypeToFullyQualified(
-                [(string) $nullableTypeNode->type],
+                (string) $nullableTypeNode->type,
                 $nullableTypeNode
             );
             $this->docBlockAnalyzer->changeType($classMethodNode, $oldType, $newType);
