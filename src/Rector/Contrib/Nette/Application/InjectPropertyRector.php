@@ -70,23 +70,23 @@ final class InjectPropertyRector extends AbstractRector
         return new RectorDefinition('Turns properties with @inject to private properties and constructor injection', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
-                /**
-                 * @var SomeService
-                 * @inject 
-                 */
-                public $someService;
+/**
+ * @var SomeService
+ * @inject 
+ */
+public $someService;
 CODE_SAMPLE
                 ,
                 <<<'CODE_SAMPLE'
-                /**
-                 * @var SomeService
-                 */
-                private $someService;
-                
-                public function __construct(SomeService $someService)
-                {
-                    $this->someService = $someService;
-                }
+/**
+ * @var SomeService
+ */
+private $someService;
+
+public function __construct(SomeService $someService)
+{
+    $this->someService = $someService;
+}
 CODE_SAMPLE
             ),
         ]);

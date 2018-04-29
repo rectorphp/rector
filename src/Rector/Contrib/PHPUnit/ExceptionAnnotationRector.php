@@ -12,15 +12,6 @@ use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 use Rector\ReflectionDocBlock\NodeAnalyzer\DocBlockAnalyzer;
 
-/**
- * Before:
- * - @expectedException Exception
- * - @expectedExceptionMessage Message
- *
- * After:
- * - $this->expectException('Exception');
- * - $this->expectExceptionMessage('Message');
- */
 final class ExceptionAnnotationRector extends AbstractPHPUnitRector
 {
     /**
@@ -55,11 +46,24 @@ final class ExceptionAnnotationRector extends AbstractPHPUnitRector
     {
         return new RectorDefinition('Takes setExpectedException() 2nd and next arguments to own methods in PHPUnit.', [
             new CodeSample(
-                '$this->setExpectedException(Exception::class, "Message", "CODE");',
                 <<<'CODE_SAMPLE'
-                $this->setExpectedException(Exception::class); 
-                $this->expectExceptionMessage("Message");
-                $this->expectExceptionCode("CODE");
+/**
+ * @expectedException Exception
+ * @expectedExceptionMessage Message
+ */
+public function test()
+{
+    // tested code
+}
+CODE_SAMPLE
+                ,
+                <<<'CODE_SAMPLE'
+public function test()
+{
+    $this->expectException('Exception');
+    $this->expectExceptionMessage('Message');
+    // tested code
+}
 CODE_SAMPLE
             ),
         ]);

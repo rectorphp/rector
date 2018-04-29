@@ -32,6 +32,8 @@ Rector can:
 - [Add typehints based on new types of parent class or interface](/docs/DynamicRectors.md#remove-a-value-object-and-use-simple-type)
 - And much more...
 
+...just look at overview of [all available Rectors](/docs/AllRectorsOverview.md)
+
 ## Install
 
 ```bash

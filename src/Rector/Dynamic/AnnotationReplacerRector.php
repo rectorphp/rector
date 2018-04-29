@@ -43,10 +43,15 @@ final class AnnotationReplacerRector extends AbstractPHPUnitRector
             '[Dynamic] Turns defined annotations above properties and methods to their new values.',
             [
                 new CodeSample(
-                    '/** @test */
-                 public function someMethod() {};',
-                    '/** @scenario */
-                 public function someMethod() {};'
+                    <<<'CODE_SAMPLE'
+/** @test */
+public function someMethod() {};
+CODE_SAMPLE
+                    ,
+                    <<<'CODE_SAMPLE'
+/** @scenario */
+public function someMethod() {};
+CODE_SAMPLE
                 ),
             ]
         );
