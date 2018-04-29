@@ -53,14 +53,16 @@
         "complete-check": [
             "@check-cs",
             "phpunit",
-            "@phpstan"
+            "@phpstan",
+            "format-documentation"
         ],
         "check-cs": "vendor/bin/ecs check bin packages src tests",
         "fix-cs": [
             "vendor/bin/ecs check bin packages src tests --fix",
             "bin/clean_levels.sh"
         ],
-        "phpstan": "vendor/bin/phpstan.phar analyse packages src tests --level max --configuration phpstan.neon"
+        "phpstan": "vendor/bin/phpstan.phar analyse packages src tests --level max --configuration phpstan.neon",
+        "format-documentation": "bin/rector describe --level all --format md > docs/AllRectorsOverview.md"
     },
     "bin": [
         "bin/rector",

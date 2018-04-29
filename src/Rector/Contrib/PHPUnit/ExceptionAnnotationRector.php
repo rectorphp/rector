@@ -45,7 +45,7 @@ final class ExceptionAnnotationRector extends AbstractPHPUnitRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Takes setExpectedException() 2nd and next arguments to own methods in PHPUnit.', [
+        return new RectorDefinition('Takes `setExpectedException` 2nd and next arguments to own methods in PHPUnit.', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 /**

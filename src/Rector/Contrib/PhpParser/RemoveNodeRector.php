@@ -30,8 +30,19 @@ final class RemoveNodeRector extends AbstractRector
     {
         return new RectorDefinition('Turns integer return to remove node to constant in NodeVisitor of PHP-Parser', [
             new CodeSample(
-                'public function leaveNode() { return false; }',
-                'public function leaveNode() { return NodeTraverser::REMOVE_NODE; }'
+                <<<'CODE_SAMPLE'
+public function leaveNode()
+{
+    return false;
+}
+CODE_SAMPLE
+                ,
+                <<<'CODE_SAMPLE'
+public function leaveNode()
+{
+    return NodeTraverser::REMOVE_NODE;
+}
+CODE_SAMPLE
             ),
         ]);
     }

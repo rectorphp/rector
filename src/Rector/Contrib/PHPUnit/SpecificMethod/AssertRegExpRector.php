@@ -37,7 +37,7 @@ final class AssertRegExpRector extends AbstractPHPUnitRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
-            'Turns preg_match() comparisons to their method name alternatives in PHPUnit TestCase',
+            'Turns `preg_match` comparisons to their method name alternatives in PHPUnit TestCase',
             [
                 new CodeSample(
                     '$this->assertSame(1, preg_match("/^Message for ".*"\.$/", $string), $message);',

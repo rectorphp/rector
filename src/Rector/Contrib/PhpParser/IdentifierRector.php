@@ -73,8 +73,15 @@ final class IdentifierRector extends AbstractRector
     {
         return new RectorDefinition('Turns node string names to Identifier object in php-parser', [
             new CodeSample(
-                '$constNode = new \PhpParser\Node\Const_; $name = $constNode->name;',
-                '$constNode = new \PhpParser\Node\Const_; $name = $constNode->name->toString();'
+                <<<'CODE_SAMPLE'
+$constNode = new \PhpParser\Node\Const_;
+$name = $constNode->name;
+CODE_SAMPLE
+                ,
+                <<<'CODE_SAMPLE'
+'$constNode = new \PhpParser\Node\Const_;
+$name = $constNode->name->toString();'
+CODE_SAMPLE
             ),
         ]);
     }

@@ -41,7 +41,7 @@ final class ReplaceCreateMethodWithoutReviewerRector extends AbstractRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
-            'Turns createForSubjectWithReviewer() with null review to standalone method in Sylius',
+            'Turns `createForSubjectWithReviewer` with null review to standalone method in Sylius',
             [
                 new CodeSample(
                     '$this->createForSubjectWithReviewer($subject, null)',

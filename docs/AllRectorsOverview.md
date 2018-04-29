@@ -70,16 +70,16 @@ Turns method data providers in PHPUnit from arrays to yield
 
 ```diff
 /**
--                 * @return mixed[]
-                  */
--                public function provide(): array
-+                public function provide(): Iterator
-                 {
--                    return [
--                        ['item']
--                    ]
-+                    yield ['item'];
-                 }
+- * @return mixed[]
+  */
+-public function provide(): array
++public function provide(): Iterator
+ {
+-    return [
+-        ['item']
+-    ]
++    yield ['item'];
+ }
 ```
 
 ## Rector\Rector\Dynamic\MethodNameReplacerRector
@@ -286,7 +286,7 @@ Turns magic callback assign to callback assign on Nette Form events.
 
 ## Rector\Rector\MagicDisclosure\GetAndSetToMethodCallRector
 
-[Dynamic] Turns defined __get/__set to specific method calls.
+[Dynamic] Turns defined `__get`/`__set` to specific method calls.
 
 ```diff
 -$someService = $container->someService;
@@ -298,7 +298,7 @@ Turns magic callback assign to callback assign on Nette Form events.
 
 ## Rector\Rector\MagicDisclosure\UnsetAndIssetToMethodCallRector
 
-[Dynamic] Turns defined __isset/__unset calls to specific method calls.
+[Dynamic] Turns defined `__isset`/`__unset` calls to specific method calls.
 
 ```diff
 -isset($container["someKey"]);
@@ -313,8 +313,10 @@ Turns magic callback assign to callback assign on Nette Form events.
 Turns node string names to Identifier object in php-parser
 
 ```diff
--$constNode = new \PhpParser\Node\Const_; $name = $constNode->name;
-+$constNode = new \PhpParser\Node\Const_; $name = $constNode->name->toString();
+-$constNode = new \PhpParser\Node\Const_;
+-$name = $constNode->name;
++'$constNode = new \PhpParser\Node\Const_;
++$name = $constNode->name->toString();'
 ```
 
 ## Rector\Rector\Contrib\PhpParser\ParamAndStaticVarNameRector
@@ -352,8 +354,11 @@ Turns standalone line method to attribute in Node of PHP-Parser
 Turns integer return to remove node to constant in NodeVisitor of PHP-Parser
 
 ```diff
--public function leaveNode() { return false; }
-+public function leaveNode() { return NodeTraverser::REMOVE_NODE; }
+public function leaveNode()
+ {
+-    return false;
++    return NodeTraverser::REMOVE_NODE;
+ }
 ```
 
 ## Rector\Rector\Contrib\PhpParser\UseWithAliasRector
@@ -433,7 +438,7 @@ Turns same bool and null comparisons to their method name alternatives in PHPUni
 
 ## Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertFalseStrposToContainsRector
 
-Turns strpos()/stripos() comparisons to their method name alternatives in PHPUnit TestCase
+Turns `strpos`/`stripos` comparisons to their method name alternatives in PHPUnit TestCase
 
 ```diff
 -$this->assertFalse(strpos($anything, "foo"), "message");
@@ -502,7 +507,7 @@ Turns instanceof comparisons to their method name alternatives in PHPUnit TestCa
 
 ## Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertPropertyExistsRector
 
-Turns property_exists() comparisons to their method name alternatives in PHPUnit TestCase
+Turns `property_exists` comparisons to their method name alternatives in PHPUnit TestCase
 
 ```diff
 -$this->assertTrue(property_exists(new Class, "property"), "message");
@@ -514,7 +519,7 @@ Turns property_exists() comparisons to their method name alternatives in PHPUnit
 
 ## Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertRegExpRector
 
-Turns preg_match() comparisons to their method name alternatives in PHPUnit TestCase
+Turns `preg_match` comparisons to their method name alternatives in PHPUnit TestCase
 
 ```diff
 -$this->assertSame(1, preg_match("/^Message for ".*"\.$/", $string), $message);
@@ -526,7 +531,7 @@ Turns preg_match() comparisons to their method name alternatives in PHPUnit Test
 
 ## Rector\Rector\Contrib\PHPUnit\ExceptionAnnotationRector
 
-Takes setExpectedException() 2nd and next arguments to own methods in PHPUnit.
+Takes `setExpectedException` 2nd and next arguments to own methods in PHPUnit.
 
 ```diff
 -/**
@@ -564,7 +569,7 @@ Turns getMock*() methods to createMock()
 
 ## Rector\Rector\Contrib\PHPUnit\DelegateExceptionArgumentsRector
 
-Takes setExpectedException() 2nd and next arguments to own methods in PHPUnit.
+Takes `setExpectedException` 2nd and next arguments to own methods in PHPUnit.
 
 ```diff
 -$this->setExpectedException(Exception::class, "Message", "CODE");
@@ -597,14 +602,16 @@ Takes setExpectedException() 2nd and next arguments to own methods in PHPUnit.
 Turns @Template annotation to explicit method call in Controller of FrameworkExtraBundle in Symfony
 
 ```diff
--/** @Template() */ public function indexAction() { }
-+public function indexAction() {
-+ return $this->render("index.html.twig"); }
+-/** @Template() */
+ public function indexAction()
+ {
++    return $this->render("index.html.twig");
+ }
 ```
 
 ## Rector\Rector\Contrib\Sylius\Review\ReplaceCreateMethodWithoutReviewerRector
 
-Turns createForSubjectWithReviewer() with null review to standalone method in Sylius
+Turns `createForSubjectWithReviewer` with null review to standalone method in Sylius
 
 ```diff
 -$this->createForSubjectWithReviewer($subject, null)
