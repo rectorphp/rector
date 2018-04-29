@@ -71,23 +71,22 @@ final class DescribeCommand extends Command
     {
         $this->ensureSomeRectorsAreRegistered();
 
+        $outputFormat = $input->getOption(self::OPTION_FORMAT);
+        if ($outputFormat === self::FORMAT_MARKDOWN) {
+            $this->consoleStyle->writeln('# All Rectors Overview');
+            $this->consoleStyle->newLine();
+        }
+
         $i = 0;
         foreach ($this->rectorNodeTraverser->getRectors() as $rector) {
-            $this->describeRector(++$i, $input, $rector);
+            if ($outputFormat === self::FORMAT_CLI) {
+                $this->printWithCliFormat(++$i, $input, $rector);
+            } elseif ($outputFormat === self::FORMAT_MARKDOWN) {
+                $this->printWithMarkdownFormat($input, $rector);
+            }
         }
 
         return 0;
-    }
-
-    private function describeRector(int $i, InputInterface $input, RectorInterface $rector): void
-    {
-        $outputFormat = $input->getOption(self::OPTION_FORMAT);
-
-        if ($outputFormat === self::FORMAT_CLI) {
-            $this->printWithCliFormat($i, $input, $rector);
-        } elseif ($outputFormat === self::FORMAT_MARKDOWN) {
-            $this->printWithMarkdownFormat($input, $rector);
-        }
     }
 
     /**
@@ -151,9 +150,6 @@ final class DescribeCommand extends Command
 
     private function printWithMarkdownFormat(InputInterface $input, RectorInterface $rector): void
     {
-        $this->consoleStyle->writeln('# All Rectors Overview');
-        $this->consoleStyle->newLine();
-
         $this->consoleStyle->writeln('## ' . get_class($rector));
 
         $rectorDefinition = $rector->getDefinition();
