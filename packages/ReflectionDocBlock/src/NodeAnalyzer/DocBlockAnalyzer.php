@@ -123,7 +123,7 @@ final class DocBlockAnalyzer
                     if ($tagByName->value->parameterName === '$' . $content) {
                         $this->removeTagFromPhpDocNode($phpDocNode, $tagByName);
                     }
-                } elseif ($tagByName->value === $content) {
+                } elseif ((string) $tagByName->value === $content) {
                     $this->removeTagFromPhpDocNode($phpDocNode, $tagByName);
                 }
             } else {
