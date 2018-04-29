@@ -63,18 +63,18 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         if ($node instanceof Property) {
-            return $this->refactorProperty($node);
+            $this->refactorProperty($node);
         }
 
         if ($node instanceof NullableType) {
-            return $this->refactorNullableType($node);
+            $this->refactorNullableType($node);
         }
 
         if ($node instanceof Variable) {
-            return $this->refactorVariableNode($node);
+            $this->refactorVariableNode($node);
         }
 
-        return null;
+        return $node;
     }
 
     private function isPropertyCandidate(Property $propertyNode): bool
@@ -84,50 +84,37 @@ CODE_SAMPLE
         return (bool) array_intersect($propertyNodeTypes, $this->getValueObjects());
     }
 
-    private function refactorProperty(Property $propertyNode): Property
+    private function refactorProperty(Property $propertyNode): void
     {
         $match = $this->matchOriginAndNewType($propertyNode);
         if ($match === null) {
-            return $propertyNode;
+            return;
         }
 
         [$oldType, $newType] = $match;
 
         $this->docBlockAnalyzer->changeType($propertyNode, $oldType, $newType);
-
-        return $propertyNode;
     }
 
-    private function refactorNullableType(NullableType $nullableTypeNode): NullableType
+    private function refactorNullableType(NullableType $nullableTypeNode): void
     {
         $newType = $this->matchNewType($nullableTypeNode->type);
-
         if ($newType === null) {
-            return $nullableTypeNode;
+            return;
         }
-
-        $parentNode = $nullableTypeNode->getAttribute(Attribute::PARENT_NODE);
 
         // in method parameter update docs as well
+        $parentNode = $nullableTypeNode->getAttribute(Attribute::PARENT_NODE);
         if ($parentNode instanceof Param) {
-            /** @var ClassMethod $classMethodNode */
-            $classMethodNode = $parentNode->getAttribute(Attribute::PARENT_NODE);
-
-            $oldType = $this->namespaceAnalyzer->resolveTypeToFullyQualified(
-                (string) $nullableTypeNode->type,
-                $nullableTypeNode
-            );
-            $this->docBlockAnalyzer->changeType($classMethodNode, $oldType, $newType);
+            $this->processParamNode($nullableTypeNode, $parentNode, $newType);
         }
-
-        return $nullableTypeNode;
     }
 
-    private function refactorVariableNode(Variable $variableNode): Variable
+    private function refactorVariableNode(Variable $variableNode): void
     {
         $match = $this->matchOriginAndNewType($variableNode);
         if (! $match) {
-            return $variableNode;
+            return;
         }
 
         [$oldType, $newType] = $match;
@@ -139,7 +126,18 @@ CODE_SAMPLE
         }
 
         $this->docBlockAnalyzer->changeType($node, $oldType, $newType);
+    }
 
-        return $variableNode;
+    private function processParamNode(NullableType $nullableTypeNode, Param $paramNode, string $newType): void
+    {
+        /** @var ClassMethod $classMethodNode */
+        $classMethodNode = $paramNode->getAttribute(Attribute::PARENT_NODE);
+
+        $oldType = $this->namespaceAnalyzer->resolveTypeToFullyQualified(
+            (string) $nullableTypeNode->type,
+            $nullableTypeNode
+        );
+
+        $this->docBlockAnalyzer->changeType($classMethodNode, $oldType, $newType);
     }
 }
