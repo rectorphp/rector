@@ -574,10 +574,16 @@ Turns preg_match() comparisons to their method name alternatives in PHPUnit Test
 Takes setExpectedException() 2nd and next arguments to own methods in PHPUnit.
 
 ```diff
--$this->setExpectedException(Exception::class, "Message", "CODE");
-+$this->setExpectedException(Exception::class);
-+$this->expectExceptionMessage("Message");
-+$this->expectExceptionCode("CODE");
+-/**
+- * @expectedException Exception
+- * @expectedExceptionMessage Message
+- */
+ public function test()
+ {
++    $this->expectException('Exception');
++    $this->expectExceptionMessage('Message');
+     // tested code
+ }
 ```
 
 
