@@ -14,7 +14,7 @@ final class InArrayAndArrayKeysToArrayKeyExistsRector extends AbstractRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
-            'Simplify in_array and array_keys functions combination into array_key_exists when array_keys has one argument only',
+            'Simplify `in_array` and `array_keys` functions combination into `array_key_exists` when `array_keys` has one argument only',
             [new CodeSample('in_array("key", array_keys($array), true);', 'array_key_exists("key", $array);')]
         );
     }
