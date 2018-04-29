@@ -28,9 +28,9 @@ final class ProcessBuilderGetProcessRector extends AbstractRector
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
-                $processBuilder = new Symfony\Component\Process\ProcessBuilder;
-                $process = $processBuilder->getProcess();
-                $commamdLine = $processBuilder->getProcess()->getCommandLine();
+$processBuilder = new Symfony\Component\Process\ProcessBuilder;
+$process = $processBuilder->getProcess();
+$commamdLine = $processBuilder->getProcess()->getCommandLine();
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
