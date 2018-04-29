@@ -6,5 +6,6 @@ final class MyTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertFalse(! ($something === false));
         $this->assertTrue(! $something);
+        self::assertTrue(! $something);
     }
 }
