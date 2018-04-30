@@ -7,21 +7,6 @@ final class ArgumentReplacerRecipe
     /**
      * @var string
      */
-    public const TYPE_REMOVED = 'removed';
-
-    /**
-     * @var string
-     */
-    public const TYPE_CHANGED = 'changed';
-
-    /**
-     * @var string
-     */
-    public const TYPE_REPLACED_DEFAULT_VALUE = 'replace_default_value';
-
-    /**
-     * @var string
-     */
     private $class;
 
     /**
@@ -33,11 +18,6 @@ final class ArgumentReplacerRecipe
      * @var int
      */
     private $position;
-
-    /**
-     * @var string
-     */
-    private $type;
 
     /**
      * @var mixed
@@ -57,14 +37,12 @@ final class ArgumentReplacerRecipe
         string $class,
         string $method,
         int $position,
-        string $type,
         $defaultValue = null,
         array $replaceMap
     ) {
         $this->class = $class;
         $this->method = $method;
         $this->position = $position;
-        $this->type = $type;
         $this->defaultValue = $defaultValue;
         $this->replaceMap = $replaceMap;
     }
@@ -82,11 +60,6 @@ final class ArgumentReplacerRecipe
     public function getPosition(): int
     {
         return $this->position;
-    }
-
-    public function getType(): string
-    {
-        return $this->type;
     }
 
     /**

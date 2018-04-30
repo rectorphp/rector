@@ -6,5 +6,4 @@ services:
                 class: Symfony\Component\DependencyInjection\ContainerBuilder
                 method: addCompilerPass
                 position: 2
-                type: added
-                default_value: 0
+                replacement_value: 0

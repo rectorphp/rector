@@ -197,19 +197,18 @@ $containerBuilder->compile(true);'
     private function processArgumentNodes(array $argumentNodes): array
     {
         foreach ($this->activeArgumentReplacerRecipes as $argumentReplacerRecipe) {
-            $type = $argumentReplacerRecipe->getType();
             $position = $argumentReplacerRecipe->getPosition();
 
-            if ($type === ArgumentReplacerRecipe::TYPE_REMOVED) {
-                unset($argumentNodes[$position]);
-            } elseif ($type === ArgumentReplacerRecipe::TYPE_CHANGED) {
-                $argumentNodes[$position] = BuilderHelpers::normalizeValue(
-                    $argumentReplacerRecipe->getDefaultValue()
-                );
-            } elseif ($type === ArgumentReplacerRecipe::TYPE_REPLACED_DEFAULT_VALUE) {
+            if (count($argumentReplacerRecipe->getReplaceMap()) > 0) {
                 $argumentNodes[$position] = $this->processReplacedDefaultValue(
                     $argumentNodes[$position],
                     $argumentReplacerRecipe
+                );
+            } elseif ($argumentReplacerRecipe->getDefaultValue() === null) {
+                unset($argumentNodes[$position]);
+            } else {
+                $argumentNodes[$position] = BuilderHelpers::normalizeValue(
+                    $argumentReplacerRecipe->getDefaultValue()
                 );
             }
         }

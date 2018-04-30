@@ -14,4 +14,4 @@ services:
                 class: 'Doctrine\ORM\Persisters\Entity\AbstractEntityInheritancePersister'
                 method: 'getSelectJoinColumnSQL'
                 position: 4
-                type: 'removed'
+                replacement_value: ~

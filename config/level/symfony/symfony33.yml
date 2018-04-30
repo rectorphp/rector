@@ -6,21 +6,18 @@ services:
             -
                 class: 'Symfony\Component\DependencyInjection\ContainerBuilder'
                 method: 'compile'
-                type: 'changed'
                 position: 2
-                default_value: 0
+                replacement_value: 0
             -
                 class: 'Symfony\Component\DependencyInjection\ContainerBuilder'
                 method: 'addCompilerPass'
-                type: 'changed'
                 position: 2
-                default_value: 0
+                replacement_value: 0
             -
                 class: 'Symfony\Component\DependencyInjection\Compiler\ServiceReferenceGraph'
                 method: 'connect'
                 position: 6
-                type: 'changed'
-                default_value: false
+                replacement_value: false
 
     Rector\Rector\Contrib\Symfony\Console\ConsoleExceptionToErrorEventConstantRector: ~
 

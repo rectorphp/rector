@@ -18,9 +18,8 @@ final class ArgumentReplacerRecipeFactory
             $data['class'],
             $data['method'],
             $data['position'],
-            $data['type'],
-            $data['default_value'] ?? null,
-            $data['replace_map'] ?? []
+            $data['replacement_value'] ?? null,
+            $data['replacement_map'] ?? []
         );
     }
 
@@ -29,15 +28,11 @@ final class ArgumentReplacerRecipeFactory
      */
     private function validateArrayData(array $data): void
     {
+        $this->ensureSingleReplacementStrategy($data);
         $this->ensureHasKey($data, 'class');
         $this->ensureHasKey($data, 'class');
         $this->ensureHasKey($data, 'method');
         $this->ensureHasKey($data, 'position');
-        $this->ensureHasKey($data, 'type');
-
-        if ($data['type'] === ArgumentReplacerRecipe::TYPE_REPLACED_DEFAULT_VALUE) {
-            self::ensureHasKey($data, 'replace_map');
-        }
     }
 
     /**
@@ -54,5 +49,18 @@ final class ArgumentReplacerRecipeFactory
             ArgumentRector::class,
             $key
         ));
+    }
+
+    /**
+     * @param mixed[] $data
+     */
+    private function ensureSingleReplacementStrategy(array $data): void
+    {
+        if (array_key_exists('replacement_value', $data) && isset($data['replacement_map'])) {
+            throw new InvalidRectorConfigurationException(sprintf(
+                'Configuration for "%s" Rector should have single replacement strategy.',
+                ArgumentRector::class
+            ));
+        }
     }
 }
