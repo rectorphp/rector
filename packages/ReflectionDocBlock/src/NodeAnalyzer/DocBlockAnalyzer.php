@@ -13,6 +13,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
+use Symplify\BetterPhpDocParser\PhpDocParser\PhpDocInfo;
 use Symplify\BetterPhpDocParser\PhpDocParser\PhpDocInfoFactory;
 use Symplify\BetterPhpDocParser\PhpDocParser\TypeResolver;
 use Symplify\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
@@ -78,8 +79,7 @@ final class DocBlockAnalyzer
             $phpDocInfo->removeParamTagByParameter($content);
         }
 
-        $docBlock = $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo);
-        $this->saveNewDocBlockToNode($node, $docBlock);
+        $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
     }
 
     /**
@@ -107,8 +107,7 @@ final class DocBlockAnalyzer
             }
         }
 
-        $docBlock = $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo);
-        $this->saveNewDocBlockToNode($node, $docBlock);
+        $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
     }
 
     public function replaceAnnotationInNode(Node $node, string $oldAnnotation, string $newAnnotation): void
@@ -201,20 +200,6 @@ final class DocBlockAnalyzer
         return $phpDocInfo->getTagsByName($name)[0] ?? null;
     }
 
-    private function saveNewDocBlockToNode(Node $node, string $docBlock): void
-    {
-        // skip if has no doc comment
-        if ($node->getDocComment() === null) {
-            return;
-        }
-
-        if (empty($docBlock)) {
-            $node->setAttribute('comments', null);
-        } else {
-            $node->setDocComment(new Doc($docBlock));
-        }
-    }
-
     /**
      * @param VarTagValueNode|ParamTagValueNode|ReturnTagValueNode $phpDocTagValueNode
      */
@@ -244,5 +229,20 @@ final class DocBlockAnalyzer
         }
 
         return $typeNode;
+    }
+
+    private function updateNodeWithPhpDocInfo(Node $node, PhpDocInfo $phpDocInfo): void
+    {
+        // skip if has no doc comment
+        if ($node->getDocComment() === null) {
+            return;
+        }
+
+        $phpDoc = $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo);
+        if (empty($phpDoc)) {
+            $node->setAttribute('comments', null);
+        } else {
+            $node->setDocComment(new Doc($phpDoc));
+        }
     }
 }
