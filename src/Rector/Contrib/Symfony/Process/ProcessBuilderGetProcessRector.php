@@ -24,7 +24,7 @@ final class ProcessBuilderGetProcessRector extends AbstractRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
-            'Removes $processBuilder->getProcess() calls to $processBuilder in Process in Symfony, because ProcessBuilder was removed. This is part of multi-step Rector and has very narrow focus.',
+            'Removes `$processBuilder->getProcess()` calls to $processBuilder in Process in Symfony, because ProcessBuilder was removed. This is part of multi-step Rector and has very narrow focus.',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'

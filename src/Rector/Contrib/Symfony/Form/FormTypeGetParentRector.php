@@ -32,7 +32,7 @@ final class FormTypeGetParentRector extends AbstractRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
-            'Turns string Form Type references to their CONSTANT alternatives in getParent() and getExtendedType() methods in Form in Symfony',
+            'Turns string Form Type references to their CONSTANT alternatives in `getParent()` and `getExtendedType()` methods in Form in Symfony',
             [
                 new CodeSample(
                     'function getParent() { return "collection"; }',

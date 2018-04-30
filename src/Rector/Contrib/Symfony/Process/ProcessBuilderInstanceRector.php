@@ -25,7 +25,7 @@ final class ProcessBuilderInstanceRector extends AbstractRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
-            'Turns ProcessBuilder::instance() to new ProcessBuilder in Process in Symfony. Part of multi-step Rector.',
+            'Turns `ProcessBuilder::instance()` to new ProcessBuilder in Process in Symfony. Part of multi-step Rector.',
             [
                 new CodeSample(
                     '$processBuilder = Symfony\Component\Process\ProcessBuilder::instance($args);',

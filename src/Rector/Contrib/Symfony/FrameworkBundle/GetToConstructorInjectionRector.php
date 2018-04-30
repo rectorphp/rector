@@ -12,7 +12,7 @@ final class GetToConstructorInjectionRector extends AbstractToConstructorInjecti
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
-            'Turns fetching of dependencies via $this->get() to constructor injection in Command and Controller in Symfony',
+            'Turns fetching of dependencies via `$this->get()` to constructor injection in Command and Controller in Symfony',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'

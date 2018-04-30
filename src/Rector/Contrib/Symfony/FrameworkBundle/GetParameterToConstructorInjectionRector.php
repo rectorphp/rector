@@ -51,7 +51,7 @@ final class GetParameterToConstructorInjectionRector extends AbstractRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
-            'Turns fetching of parameters via getParmaeter() in ContainerAware to constructor injection in Command and Controller in Symfony',
+            'Turns fetching of parameters via `getParameter()` in ContainerAware to constructor injection in Command and Controller in Symfony',
             [
                 new CodeSample(
 <<<'CODE_SAMPLE'
@@ -73,7 +73,7 @@ class MyCommand extends Command
     {
         $this->someParameter = $someParameter;
     }
- 
+
     public function someMethod()
     {
         $this->someParameter;

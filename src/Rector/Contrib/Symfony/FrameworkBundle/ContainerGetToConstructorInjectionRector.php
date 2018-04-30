@@ -23,7 +23,7 @@ final class ContainerGetToConstructorInjectionRector extends AbstractToConstruct
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
-            'Turns fetching of dependencies via $container->get() in ContainerAware to constructor injection in Command and Controller in Symfony',
+            'Turns fetching of dependencies via `$container->get()` in ContainerAware to constructor injection in Command and Controller in Symfony',
             [
                 new CodeSample(
 <<<'CODE_SAMPLE'

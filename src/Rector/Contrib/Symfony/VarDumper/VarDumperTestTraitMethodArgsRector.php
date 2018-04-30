@@ -38,7 +38,7 @@ final class VarDumperTestTraitMethodArgsRector extends AbstractRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
-            'Adds new $format argument in VarDumperTestTrait->assertDumpEquals() in in Validator in Symfony.',
+            'Adds new `$format` argument in `VarDumperTestTrait->assertDumpEquals()` in Validator in Symfony.',
             [
                 new CodeSample(
                     'VarDumperTestTrait->assertDumpEquals($dump, $data, $mesage = "");',
