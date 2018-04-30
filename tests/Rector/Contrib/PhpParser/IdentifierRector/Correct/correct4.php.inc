@@ -23,6 +23,6 @@ class SomeClass
             return self::CLOSURE_NAME;
         }
 
-        return $this->node->name->toString();
+        return $this->node->name;
     }
 }
