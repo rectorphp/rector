@@ -160,8 +160,13 @@ final class DocBlockAnalyzer
     public function getTypeForParam(Node $node, string $paramName): ?string
     {
         // @todo should be array as well, use same approach as for @getVarTypes()
+        if ($node->getDocComment() === null) {
+            return null;
+        }
 
-        $paramTagsValues = $this->getParamTagValuesFromNode($node);
+        $paramTagsValues = $this->phpDocInfoFactory->createFrom($node->getDocComment()->getText())
+            ->getParamTagValues();
+
         if (! count($paramTagsValues)) {
             return null;
         }
@@ -218,6 +223,9 @@ final class DocBlockAnalyzer
         $phpDocTagValueNode->type = $this->replaceTypeNode($phpDocTagValueNode->type, $oldType, $newType);
     }
 
+    /**
+     * @todo move to PhpDocManipulator
+     */
     private function replaceTypeNode(TypeNode $typeNode, string $oldType, string $newType): TypeNode
     {
         if ($typeNode instanceof UnionTypeNode) {
@@ -236,19 +244,5 @@ final class DocBlockAnalyzer
         }
 
         return $typeNode;
-    }
-
-    /**
-     * @return ParamTagValueNode[]
-     */
-    private function getParamTagValuesFromNode(Node $node): array
-    {
-        if ($node->getDocComment() === null) {
-            return [];
-        }
-
-        $phpDocInfo = $this->phpDocInfoFactory->createFrom($node->getDocComment()->getText());
-
-        return $phpDocInfo->getParamTagValues();
     }
 }
