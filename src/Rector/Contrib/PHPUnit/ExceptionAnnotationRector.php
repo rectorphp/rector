@@ -45,9 +45,11 @@ final class ExceptionAnnotationRector extends AbstractPHPUnitRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Takes `setExpectedException()` 2nd and next arguments to own methods in PHPUnit.', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RectorDefinition(
+            'Takes `setExpectedException()` 2nd and next arguments to own methods in PHPUnit.',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 /**
  * @expectedException Exception
  * @expectedExceptionMessage Message
@@ -57,8 +59,8 @@ public function test()
     // tested code
 }
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 public function test()
 {
     $this->expectException('Exception');
@@ -66,8 +68,9 @@ public function test()
     // tested code
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+            ]
+        );
     }
 
     public function isCandidate(Node $node): bool
