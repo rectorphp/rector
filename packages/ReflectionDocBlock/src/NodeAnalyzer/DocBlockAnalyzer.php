@@ -13,6 +13,7 @@ use phpDocumentor\Reflection\Types\Object_;
 use phpDocumentor\Reflection\Types\String_;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
+use PHPStan\PhpDoc\Tag\ParamTag;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
@@ -95,9 +96,9 @@ final class DocBlockAnalyzer
 
     public function hasAnnotation(Node $node, string $annotation): bool
     {
-        $docBlock = $this->docBlockFactory->createFromNode($node);
+        $phpDocInfo = $this->phpDocInfoFactory->createFrom($node->getDocComment()->getText());
 
-        return $docBlock->hasTag($annotation);
+        return $phpDocInfo->hasTag($annotation);
     }
 
     public function removeAnnotationFromNode(Node $node, string $name, ?string $content = null): void
@@ -186,36 +187,47 @@ final class DocBlockAnalyzer
         return $fullyQualifiedTypes;
     }
 
+    /**
+     * @todo move to PhpDocInfo
+     * @todo add test for Multi|Types
+     */
     public function getTypeForParam(Node $node, string $paramName): ?string
     {
         // @todo should be array as well, use same approach as for @getVarTypes()
 
-        /** @var Param[] $paramTags */
-        $paramTags = $this->getTagsByName($node, 'param');
-        if (! count($paramTags)) {
+        $paramTagsValues = $this->getParamTagValuesFromNode($node);
+        if (! count($paramTagsValues)) {
             return null;
         }
 
-        foreach ($paramTags as $paramTag) {
-            if ($paramTag->getVariableName() === $paramName) {
-                $type = $paramTag->getType();
-                if ($type instanceof Object_ && $type->getFqsen()) {
-                    return $type->getFqsen()->getName();
-                }
+        foreach ($paramTagsValues as $paramTagsValue) {
+            // @todo validate '$(name)'
+            if ($paramTagsValue->parameterName === '$' . $paramName) {
+                // @todo should be array of found types
+                return (string) $paramTagsValue->type;
             }
         }
+
+        // @todo local type resolve here!
 
         return null;
     }
 
     /**
-     * @return Tag[]|string[]
+     * @return PhpDocTagNode[]
      */
     public function getTagsByName(Node $node, string $name): array
     {
-        $docBlock = $this->docBlockFactory->createFromNode($node);
+        $phpDocInfo = $this->phpDocInfoFactory->createFrom($node->getDocComment()->getText());
 
-        return $docBlock->getTagsByName($name);
+        return $phpDocInfo->getTagsByName($name);
+    }
+
+    public function getTagByName(Node $node, string $name): ?PhpDocTagNode
+    {
+        $phpDocInfo = $this->phpDocInfoFactory->createFrom($node->getDocComment()->getText());
+
+        return $phpDocInfo->getTagsByName($name)[0] ?? null;
     }
 
     public function replaceVarType(Node $node, string $to): void
@@ -287,5 +299,19 @@ final class DocBlockAnalyzer
         }
 
         return $typeNode;
+    }
+
+    /**
+     * @return ParamTagValueNode[]
+     */
+    private function getParamTagValuesFromNode(Node $node): array
+    {
+        if ($node->getDocComment() === null) {
+            return [];
+        }
+
+        $phpDocInfo = $this->phpDocInfoFactory->createFrom($node->getDocComment()->getText());
+
+        return $phpDocInfo->getParamTagValues();
     }
 }
