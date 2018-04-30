@@ -100,10 +100,7 @@ final class DocBlockAnalyzer
         return $docBlock->hasTag($annotation);
     }
 
-    /**
-     * @todo move to PhpDocInfo
-     */
-    public function removeAnnotationFromNode(Node $node, string $name, string $content = ''): void
+    public function removeAnnotationFromNode(Node $node, string $name, ?string $content = null): void
     {
         // no doc block? skip
         if ($node->getDocComment() === null) {
@@ -112,27 +109,11 @@ final class DocBlockAnalyzer
 
         $phpDocInfo = $this->phpDocInfoFactory->createFrom($node->getDocComment()->getText());
 
-        // add PhpDocInfoManipulator ? - add logic to the Symplify core, starting with test first
-        $phpDocNode = $phpDocInfo->getPhpDocNode();
-
-        $tagsByName = $phpDocNode->getTagsByName('@' . $name);
-
-        foreach ($tagsByName as $tagByName) {
-            if ($content) {
-                if ($tagByName->value instanceof ParamTagValueNode) {
-                    if ($tagByName->value->parameterName === '$' . $content) {
-                        $this->removeTagFromPhpDocNode($phpDocNode, $tagByName);
-                    }
-                } elseif ((string) $tagByName->value === $content) {
-                    $this->removeTagFromPhpDocNode($phpDocNode, $tagByName);
-                }
-            } else {
-                $this->removeTagFromPhpDocNode($phpDocNode, $tagByName);
-            }
+        if ($content === null) {
+            $phpDocInfo->removeTagByName($name);
         }
 
         $docBlock = $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo);
-
         $this->saveNewDocBlockToNode($node, $docBlock);
     }
 
@@ -276,18 +257,6 @@ final class DocBlockAnalyzer
         }
 
         throw new NotImplementedException(__METHOD__);
-    }
-
-    /**
-     * @todo move to PhpDocInfo
-     */
-    private function removeTagFromPhpDocNode(PhpDocNode $phpDocNode, PhpDocTagNode $phpDocTagNode): void
-    {
-        foreach ($phpDocNode->children as $key => $phpDocChildNode) {
-            if ($phpDocChildNode === $phpDocTagNode) {
-                unset($phpDocNode->children[$key]);
-            }
-        }
     }
 
     /**
