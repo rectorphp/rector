@@ -40,7 +40,7 @@ final class DocBlockAnalyzerTest extends AbstractContainerAwareTestCase
  * @param AnotherValue $anotherValue
 EOT;
         $node = $this->createNodeWithDoc($initDoc);
-        $this->docBlockAnalyzer->removeAnnotationFromNode($node, 'param', 'paramName');
+        $this->docBlockAnalyzer->removeParamTagByName($node, 'paramName');
 
         $expectedDoc = <<<'EOT'
 /**

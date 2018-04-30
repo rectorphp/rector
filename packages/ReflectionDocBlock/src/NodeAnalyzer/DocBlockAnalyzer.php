@@ -64,6 +64,19 @@ final class DocBlockAnalyzer
         return $phpDocInfo->hasTag($annotation);
     }
 
+    public function removeParamTagByName(Node $node, string $name): void
+    {
+        // no doc block? skip
+        if ($node->getDocComment() === null) {
+            return;
+        }
+
+        $phpDocInfo = $this->phpDocInfoFactory->createFrom($node->getDocComment()->getText());
+        $phpDocInfo->removeParamTagByParameter($name);
+
+        $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
+    }
+
     public function removeAnnotationFromNode(Node $node, string $name, ?string $content = null): void
     {
         // no doc block? skip
@@ -73,10 +86,10 @@ final class DocBlockAnalyzer
 
         $phpDocInfo = $this->phpDocInfoFactory->createFrom($node->getDocComment()->getText());
 
-        if ($content === null) {
+        if ($content) {
+            $phpDocInfo->removeTagByNameAndContent($name, $content);
+        } else {
             $phpDocInfo->removeTagByName($name);
-        } elseif ($name === 'param') {
-            $phpDocInfo->removeParamTagByParameter($content);
         }
 
         $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
