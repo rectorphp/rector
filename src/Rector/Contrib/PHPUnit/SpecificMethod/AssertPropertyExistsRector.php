@@ -6,6 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use Rector\Builder\IdentifierRenamer;
@@ -35,7 +36,15 @@ final class AssertPropertyExistsRector extends AbstractPHPUnitRector
     /**
      * @var string[]
      */
-    private $renameMethodsMap = [
+    private $renameMethodsWithObjectMap = [
+        'assertTrue' => 'assertObjectHasAttribute',
+        'assertFalse' => 'assertObjectNotHasAttribute',
+    ];
+
+    /**
+     * @var string[]
+     */
+    private $renameMethodsWithClassMap = [
         'assertTrue' => 'assertClassHasAttribute',
         'assertFalse' => 'assertClassNotHasAttribute',
     ];
@@ -73,7 +82,7 @@ final class AssertPropertyExistsRector extends AbstractPHPUnitRector
             return false;
         }
 
-        if (! $this->methodCallAnalyzer->isMethods($node, array_keys($this->renameMethodsMap))) {
+        if (! $this->methodCallAnalyzer->isMethods($node, ['assertTrue', 'assertFalse'])) {
             return false;
         }
 
@@ -96,21 +105,27 @@ final class AssertPropertyExistsRector extends AbstractPHPUnitRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        $this->identifierRenamer->renameNodeWithMap($methodCallNode, $this->renameMethodsMap);
-
         /** @var Identifier $oldArguments */
         $oldArguments = $methodCallNode->args;
         $propertyExistsArguments = $oldArguments[0]->value;
         [$firstArgument, $secondArgument] = $propertyExistsArguments->args;
 
-        $className = $firstArgument->value->class->toString();
-        $propertyName = $secondArgument->value->value;
+        if ($firstArgument->value instanceof Variable) {
+            $secondArg = new Variable($firstArgument->value->name);
+            $map = $this->renameMethodsWithObjectMap;
+        } else {
+            $secondArg = $firstArgument->value->class->toString();
+            $map = $this->renameMethodsWithClassMap;
+        }
 
         unset($oldArguments[0]);
 
         $methodCallNode->args = array_merge($this->nodeFactory->createArgs([
-            $propertyName, $className,
+            $secondArgument->value->value,
+            $secondArg,
         ]), $oldArguments);
+
+        $this->identifierRenamer->renameNodeWithMap($methodCallNode, $map);
 
         return $methodCallNode;
     }
