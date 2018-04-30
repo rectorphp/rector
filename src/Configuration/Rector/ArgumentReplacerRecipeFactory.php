@@ -58,7 +58,7 @@ final class ArgumentReplacerRecipeFactory
     {
         if (array_key_exists('replacement_value', $data) && isset($data['replacement_map'])) {
             throw new InvalidRectorConfigurationException(sprintf(
-                'Configuration for "%s" Rector should have single replacement strategy.',
+                'Configuration for "%s" Rector should have single replacement strategy. Specify only one of "replacement_value" and "replacement_map"',
                 ArgumentRector::class
             ));
         }
