@@ -3,19 +3,9 @@
 namespace Rector\ReflectionDocBlock\NodeAnalyzer;
 
 use Nette\Utils\Strings;
-use phpDocumentor\Reflection\DocBlock\Tag;
-use phpDocumentor\Reflection\DocBlock\Tags\Param;
-use phpDocumentor\Reflection\Type;
-use phpDocumentor\Reflection\Types\Boolean;
-use phpDocumentor\Reflection\Types\Integer;
-use phpDocumentor\Reflection\Types\Null_;
-use phpDocumentor\Reflection\Types\Object_;
-use phpDocumentor\Reflection\Types\String_;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
-use PHPStan\PhpDoc\Tag\ParamTag;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
@@ -23,36 +13,12 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
-use Rector\Exception\NotImplementedException;
-use Rector\ReflectionDocBlock\DocBlock\DocBlockFactory;
 use Symplify\BetterPhpDocParser\PhpDocParser\PhpDocInfoFactory;
 use Symplify\BetterPhpDocParser\PhpDocParser\TypeResolver;
 use Symplify\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
-use Symplify\BetterReflectionDocBlock\Tag\TolerantVar;
-use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 
 final class DocBlockAnalyzer
 {
-    /**
-     * @var string[]
-     */
-    private $typesToObjects = [
-        'string' => String_::class,
-        'int' => Integer::class,
-        'bool' => Boolean::class,
-        'null' => Null_::class,
-    ];
-
-    /**
-     * @var DocBlockFactory
-     */
-    private $docBlockFactory;
-
-    /**
-     * @var PrivatesAccessor
-     */
-    private $privatesAccessor;
-
     /**
      * @var PhpDocInfoFactory
      */
@@ -79,16 +45,12 @@ final class DocBlockAnalyzer
     private $typeResolver;
 
     public function __construct(
-        DocBlockFactory $docBlockFactory,
         PhpDocInfoFactory $phpDocInfoFactory,
-        PrivatesAccessor $privatesAccessor,
         PhpDocInfoPrinter $phpDocInfoPrinter,
         NamespaceAnalyzer $namespaceAnalyzer,
         TypeResolver $typeResolver
     ) {
-        $this->docBlockFactory = $docBlockFactory;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
-        $this->privatesAccessor = $privatesAccessor;
         $this->phpDocInfoPrinter = $phpDocInfoPrinter;
         $this->namespaceAnalyzer = $namespaceAnalyzer;
         $this->typeResolver = $typeResolver;
@@ -175,7 +137,11 @@ final class DocBlockAnalyzer
         }
 
         $phpDocInfo = $this->phpDocInfoFactory->createFrom($node->getDocComment()->getText());
+
         $varTagValue = $phpDocInfo->getVarTagValue();
+        if ($varTagValue === null) {
+            return null;
+        }
 
         $typesAsString = $this->typeResolver->resolveDocType($varTagValue->type);
 
@@ -230,26 +196,6 @@ final class DocBlockAnalyzer
         return $phpDocInfo->getTagsByName($name)[0] ?? null;
     }
 
-    public function replaceVarType(Node $node, string $to): void
-    {
-        $docBlock = $this->docBlockFactory->createFromNode($node);
-
-        $tags = $docBlock->getTags();
-        foreach ($tags as $tag) {
-            if (! $tag instanceof TolerantVar) {
-                continue;
-            }
-
-            $newType = $this->resolveNewTypeObjectFromString($to);
-
-            $this->privatesAccessor->setPrivateProperty($tag, 'type', $newType);
-
-            break;
-        }
-
-        $this->saveNewDocBlockToNode($node, $docBlock);
-    }
-
     private function saveNewDocBlockToNode(Node $node, string $docBlock): void
     {
         // skip if has no doc comment
@@ -262,15 +208,6 @@ final class DocBlockAnalyzer
         } else {
             $node->setDocComment(new Doc($docBlock));
         }
-    }
-
-    private function resolveNewTypeObjectFromString(string $type): Type
-    {
-        if (isset($this->typesToObjects[$type])) {
-            return new $this->typesToObjects[$type]();
-        }
-
-        throw new NotImplementedException(__METHOD__);
     }
 
     /**
