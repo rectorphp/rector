@@ -111,6 +111,8 @@ final class DocBlockAnalyzer
 
         if ($content === null) {
             $phpDocInfo->removeTagByName($name);
+        } elseif ($name === 'param') {
+            $phpDocInfo->removeParamTagByParameter($content);
         }
 
         $docBlock = $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo);
