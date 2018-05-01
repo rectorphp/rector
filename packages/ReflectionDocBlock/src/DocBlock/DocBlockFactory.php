@@ -38,6 +38,7 @@ final class DocBlockFactory
 
     public function createFromNode(Node $node): DocBlock
     {
+        // @todo this can change on same node, the getDocComment() is also important
         if (isset($this->docBlocksPerNode[$node])) {
             return $this->docBlocksPerNode[$node];
         }
