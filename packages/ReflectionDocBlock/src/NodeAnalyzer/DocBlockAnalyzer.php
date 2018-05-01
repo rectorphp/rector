@@ -164,7 +164,7 @@ final class DocBlockAnalyzer
 
         $phpDocInfo = $this->phpDocInfoFactory->createFrom($node->getDocComment()->getText());
 
-        return (string) $phpDocInfo->getParamTypeNodeByName($paramName);
+        return (string) $phpDocInfo->getParamTypeNode($paramName);
     }
 
     /**
