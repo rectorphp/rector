@@ -2,19 +2,16 @@
 
 namespace Rector\ReflectionDocBlock\NodeAnalyzer;
 
-use Nette\Utils\Strings;
-use PhpParser\Node;
-use PhpParser\Node\Stmt\Use_;
-use Rector\Node\Attribute;
-use Rector\Php\TypeAnalyzer;
+use Symplify\BetterPhpDocParser\Contract\PhpDocInfoDecoratorInterface;
 use Symplify\BetterPhpDocParser\PhpDocParser\PhpDocInfo;
 
-final class PhpDocInfoFqnTypeDecorator // official interface, collected by compiler pass in BetterPhpDocParser
+final class PhpDocInfoFqnTypeDecorator implements PhpDocInfoDecoratorInterface
 {
-    public function decorate(PhpDocInfo $phpDocInfo)
+    public function decorate(PhpDocInfo $phpDocInfo): void
     {
-        // iterate all the nodes and make types FQN
+        dump('todo');
+        die;
 
-        return $phpDocInfo;
+        // iterate all the nodes and make types FQN
     }
 }
