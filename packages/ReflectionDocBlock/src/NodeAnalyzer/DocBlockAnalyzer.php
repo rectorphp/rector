@@ -66,7 +66,6 @@ final class DocBlockAnalyzer
 
     public function removeParamTagByName(Node $node, string $name): void
     {
-        // no doc block? skip
         if ($node->getDocComment() === null) {
             return;
         }
@@ -79,7 +78,6 @@ final class DocBlockAnalyzer
 
     public function removeAnnotationFromNode(Node $node, string $name, ?string $content = null): void
     {
-        // no doc block? skip
         if ($node->getDocComment() === null) {
             return;
         }
@@ -102,44 +100,34 @@ final class DocBlockAnalyzer
      */
     public function changeType(Node $node, string $oldType, string $newType): void
     {
-        $this->node = $node;
-
         if ($node->getDocComment() === null) {
             return;
         }
 
+        $this->node = $node;
+
         $phpDocInfo = $this->phpDocInfoFactory->createFrom($node->getDocComment()->getText());
 
-        foreach ($phpDocInfo->getPhpDocNode()->children as $phpDocChildNode) {
-            if (! $phpDocChildNode instanceof PhpDocTagNode) {
-                continue;
-            }
-
-            if ($phpDocChildNode->value instanceof VarTagValueNode || $phpDocChildNode->value instanceof ParamTagValueNode || $phpDocChildNode->value instanceof ReturnTagValueNode) {
-                $this->replacePhpDocType($phpDocChildNode->value, $oldType, $newType);
-            }
-        }
+        $phpDocInfo->replacePhpDocTypeByAnother($oldType, $newType);
 
         $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
     }
 
     public function replaceAnnotationInNode(Node $node, string $oldAnnotation, string $newAnnotation): void
     {
-        if (! $node->getDocComment()) {
+        if ($node->getDocComment() === null) {
             return;
         }
 
-        $oldContent = $node->getDocComment()->getText();
+        $phpDocInfo = $this->phpDocInfoFactory->createFrom($node->getDocComment()->getText());
 
-        $oldAnnotationPattern = preg_quote(sprintf('#@%s#', $oldAnnotation), '\\');
+        $phpDocInfo->replaceTagByAnother($oldAnnotation, $newAnnotation);
 
-        $newContent = Strings::replace($oldContent, $oldAnnotationPattern, '@' . $newAnnotation, 1);
-
-        $doc = new Doc($newContent);
-        $node->setDocComment($doc);
+        $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
     }
 
     /**
+     * @todo move to phpdoc info
      * @return string[]|null
      */
     public function getVarTypes(Node $node): ?array
@@ -150,12 +138,12 @@ final class DocBlockAnalyzer
 
         $phpDocInfo = $this->phpDocInfoFactory->createFrom($node->getDocComment()->getText());
 
-        $varTagValue = $phpDocInfo->getVarTagValue();
-        if ($varTagValue === null) {
+        $varType = $phpDocInfo->getVarType();
+        if ($varType === null) {
             return null;
         }
 
-        $typesAsString = $this->typeResolver->resolveDocType($varTagValue->type);
+        $typesAsString = $this->typeResolver->resolveDocType($varType);
 
         $fullyQualifiedTypes = [];
         foreach (explode('|', $typesAsString) as $type) {
@@ -166,82 +154,40 @@ final class DocBlockAnalyzer
     }
 
     /**
-     * @todo move to PhpDocInfo
      * @todo add test for Multi|Types
      */
     public function getTypeForParam(Node $node, string $paramName): ?string
     {
-        // @todo should be array as well, use same approach as for @getVarTypes()
         if ($node->getDocComment() === null) {
             return null;
         }
 
-        $paramTagsValues = $this->phpDocInfoFactory->createFrom($node->getDocComment()->getText())
-            ->getParamTagValues();
+        $phpDocInfo = $this->phpDocInfoFactory->createFrom($node->getDocComment()->getText());
 
-        if (! count($paramTagsValues)) {
-            return null;
-        }
-
-        foreach ($paramTagsValues as $paramTagsValue) {
-            // @todo validate '$(name)'
-            if ($paramTagsValue->parameterName === '$' . $paramName) {
-                // @todo should be array of found types
-                return (string) $paramTagsValue->type;
-            }
-        }
-
-        // @todo local type resolve here!
-
-        return null;
+        return (string) $phpDocInfo->getParamTypeNodeByName($paramName);
     }
 
     /**
+     * @final
      * @return PhpDocTagNode[]
      */
     public function getTagsByName(Node $node, string $name): array
     {
+        if ($node->getDocComment() === null) {
+            return null;
+        }
+
         $phpDocInfo = $this->phpDocInfoFactory->createFrom($node->getDocComment()->getText());
 
         return $phpDocInfo->getTagsByName($name);
     }
 
+    /**
+     * @final
+     */
     public function getTagByName(Node $node, string $name): ?PhpDocTagNode
     {
-        $phpDocInfo = $this->phpDocInfoFactory->createFrom($node->getDocComment()->getText());
-
-        return $phpDocInfo->getTagsByName($name)[0] ?? null;
-    }
-
-    /**
-     * @param VarTagValueNode|ParamTagValueNode|ReturnTagValueNode $phpDocTagValueNode
-     */
-    private function replacePhpDocType(PhpDocTagValueNode $phpDocTagValueNode, string $oldType, string $newType): void
-    {
-        $phpDocTagValueNode->type = $this->replaceTypeNode($phpDocTagValueNode->type, $oldType, $newType);
-    }
-
-    /**
-     * @todo move to PhpDocManipulator
-     */
-    private function replaceTypeNode(TypeNode $typeNode, string $oldType, string $newType): TypeNode
-    {
-        if ($typeNode instanceof UnionTypeNode) {
-            foreach ($typeNode->types as $key => $subTypeNode) {
-                $typeNode->types[$key] = $this->replaceTypeNode($subTypeNode, $oldType, $newType);
-            }
-
-            return $typeNode;
-        }
-
-        if ($typeNode instanceof IdentifierTypeNode) {
-            $fqnType = $this->namespaceAnalyzer->resolveTypeToFullyQualified($typeNode->name, $this->node);
-            if (is_a($fqnType, $oldType, true)) {
-                return new IdentifierTypeNode($newType);
-            }
-        }
-
-        return $typeNode;
+        return $this->getTagsByName($node, $name)[0] ?? null;
     }
 
     private function updateNodeWithPhpDocInfo(Node $node, PhpDocInfo $phpDocInfo): void
@@ -252,10 +198,12 @@ final class DocBlockAnalyzer
         }
 
         $phpDoc = $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo);
-        if (empty($phpDoc)) {
-            $node->setAttribute('comments', null);
-        } else {
+        if ($phpDoc) {
             $node->setDocComment(new Doc($phpDoc));
+            return;
         }
+
+        // no comments, null
+        $node->setAttribute('comments', null);
     }
 }
