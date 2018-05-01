@@ -44,13 +44,9 @@ final class ArgumentDefaultValueReplacerRector extends AbstractArgumentRector
      */
     public function __construct(
         array $argumentChangesByMethodAndType,
-        MethodCallAnalyzer $methodCallAnalyzer,
-        ClassMethodAnalyzer $classMethodAnalyzer,
-        StaticMethodCallAnalyzer $staticMethodCallAnalyzer,
         ConstExprEvaluator $constExprEvaluator,
         ArgumentDefaultValueReplacerRecipeFactory $argumentDefaultValueReplacerRecipeFactory
     ) {
-        parent::__construct($methodCallAnalyzer, $classMethodAnalyzer, $staticMethodCallAnalyzer);
         $this->argumentDefaultValueReplacerRecipeFactory = $argumentDefaultValueReplacerRecipeFactory;
         $this->loadArgumentReplacerRecipes($argumentChangesByMethodAndType);
         $this->constExprEvaluator = $constExprEvaluator;

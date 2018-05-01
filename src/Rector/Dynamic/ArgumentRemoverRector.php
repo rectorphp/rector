@@ -36,12 +36,8 @@ final class ArgumentRemoverRector extends AbstractArgumentRector
      */
     public function __construct(
         array $argumentChangesByMethodAndType,
-        MethodCallAnalyzer $methodCallAnalyzer,
-        ClassMethodAnalyzer $classMethodAnalyzer,
-        StaticMethodCallAnalyzer $staticMethodCallAnalyzer,
         ArgumentRemoverRecipeFactory $argumentRemoverRecipeFactory
     ) {
-        parent::__construct($methodCallAnalyzer, $classMethodAnalyzer, $staticMethodCallAnalyzer);
         $this->argumentRemoverRecipeFactory = $argumentRemoverRecipeFactory;
         $this->loadArgumentReplacerRecipes($argumentChangesByMethodAndType);
     }

@@ -37,12 +37,8 @@ final class ArgumentAdderRector extends AbstractArgumentRector
      */
     public function __construct(
         array $argumentChangesByMethodAndType,
-        MethodCallAnalyzer $methodCallAnalyzer,
-        ClassMethodAnalyzer $classMethodAnalyzer,
-        StaticMethodCallAnalyzer $staticMethodCallAnalyzer,
         ArgumentAdderRecipeFactory $argumentAdderRecipeFactory
     ) {
-        parent::__construct($methodCallAnalyzer, $classMethodAnalyzer, $staticMethodCallAnalyzer);
         $this->argumentAdderRecipeFactory = $argumentAdderRecipeFactory;
         $this->loadArgumentReplacerRecipes($argumentChangesByMethodAndType);
     }
