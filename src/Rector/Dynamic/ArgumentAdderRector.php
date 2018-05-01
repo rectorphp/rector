@@ -9,9 +9,6 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Configuration\Rector\ArgumentAdderRecipe;
 use Rector\Configuration\Rector\ArgumentAdderRecipeFactory;
-use Rector\NodeAnalyzer\ClassMethodAnalyzer;
-use Rector\NodeAnalyzer\MethodCallAnalyzer;
-use Rector\NodeAnalyzer\StaticMethodCallAnalyzer;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 

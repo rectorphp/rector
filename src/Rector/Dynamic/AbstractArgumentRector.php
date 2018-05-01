@@ -31,6 +31,30 @@ abstract class AbstractArgumentRector extends AbstractRector
      */
     private $staticMethodCallAnalyzer;
 
+    /**
+     * @required
+     */
+    final public function setMethodCallAnalyzer(MethodCallAnalyzer $methodCallAnalyzer): void
+    {
+        $this->methodCallAnalyzer = $methodCallAnalyzer;
+    }
+
+    /**
+     * @required
+     */
+    final public function setClassMethodAnalyzer(ClassMethodAnalyzer $classMethodAnalyzer): void
+    {
+        $this->classMethodAnalyzer = $classMethodAnalyzer;
+    }
+
+    /**
+     * @required
+     */
+    final public function setStaticMethodCallAnalyzer(StaticMethodCallAnalyzer $staticMethodCallAnalyzer): void
+    {
+        $this->staticMethodCallAnalyzer = $staticMethodCallAnalyzer;
+    }
+
     protected function isNodeToRecipeMatch(Node $node, AbstractArgumentReplacerRecipe $argumentReplacerRecipe): bool
     {
         $type = $argumentReplacerRecipe->getClass();
@@ -79,32 +103,5 @@ abstract class AbstractArgumentRector extends AbstractRector
     protected function isValidInstance(Node $node): bool
     {
         return $node instanceof ClassMethod || $node instanceof MethodCall || $node instanceof StaticCall;
-    }
-
-    /**
-     * @param MethodCallAnalyzer $methodCallAnalyzer
-     * @required
-     */
-    final public function setMethodCallAnalyzer(MethodCallAnalyzer $methodCallAnalyzer): void
-    {
-        $this->methodCallAnalyzer = $methodCallAnalyzer;
-    }
-
-    /**
-     * @param ClassMethodAnalyzer $classMethodAnalyzer
-     * @required
-     */
-    final public function setClassMethodAnalyzer(ClassMethodAnalyzer $classMethodAnalyzer): void
-    {
-        $this->classMethodAnalyzer = $classMethodAnalyzer;
-    }
-
-    /**
-     * @param StaticMethodCallAnalyzer $staticMethodCallAnalyzer
-     * @required
-     */
-    final public function setStaticMethodCallAnalyzer(StaticMethodCallAnalyzer $staticMethodCallAnalyzer): void
-    {
-        $this->staticMethodCallAnalyzer = $staticMethodCallAnalyzer;
     }
 }

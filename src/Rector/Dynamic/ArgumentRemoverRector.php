@@ -8,9 +8,6 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Configuration\Rector\ArgumentRemoverRecipe;
 use Rector\Configuration\Rector\ArgumentRemoverRecipeFactory;
-use Rector\NodeAnalyzer\ClassMethodAnalyzer;
-use Rector\NodeAnalyzer\MethodCallAnalyzer;
-use Rector\NodeAnalyzer\StaticMethodCallAnalyzer;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
