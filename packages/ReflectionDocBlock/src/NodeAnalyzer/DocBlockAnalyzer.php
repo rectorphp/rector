@@ -138,7 +138,7 @@ final class DocBlockAnalyzer
 
         $phpDocInfo = $this->phpDocInfoFactory->createFrom($node->getDocComment()->getText());
 
-        $varType = $phpDocInfo->getVarType();
+        $varType = $phpDocInfo->getVarTypeNode();
         if ($varType === null) {
             return null;
         }
