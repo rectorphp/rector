@@ -1,23 +1,23 @@
 services:
     # dependency-injection
-    Rector\Rector\Dynamic\ArgumentRector:
+    Rector\Rector\Dynamic\ArgumentAdderRector:
         $argumentChangesByMethodAndType:
             # added default value
             -
                 class: 'Symfony\Component\DependencyInjection\ContainerBuilder'
                 method: 'compile'
                 position: 2
-                replacement_value: 0
+                replacement: 0
             -
                 class: 'Symfony\Component\DependencyInjection\ContainerBuilder'
                 method: 'addCompilerPass'
                 position: 2
-                replacement_value: 0
+                replacement: 0
             -
                 class: 'Symfony\Component\DependencyInjection\Compiler\ServiceReferenceGraph'
                 method: 'connect'
                 position: 6
-                replacement_value: false
+                replacement: false
 
     Rector\Rector\Contrib\Symfony\Console\ConsoleExceptionToErrorEventConstantRector: ~
 

@@ -1,31 +1,31 @@
 services:
-    Rector\Rector\Dynamic\ArgumentRector:
+    Rector\Rector\Dynamic\ArgumentAdderRector:
         $argumentChangesByMethodAndType:
-            # added default value
             -
                 class: 'Symfony\Component\DependencyInjection\ContainerBuilder'
                 method: 'compile'
                 position: 0
-                replacement_value: false
+                replacement: false
 
             # added default value
             -
                 class: 'Symfony\Component\DependencyInjection\ContainerBuilder'
                 method: 'addCompilerPass'
                 position: 2
-                replacement_value: 0
+                replacement: 0
 
-            # remove argument
+    Rector\Rector\Dynamic\ArgumentRemoverRector:
+        $argumentChangesByMethodAndType:
             -
                 class: 'Doctrine\ORM\Persisters\Entity\AbstractEntityInheritancePersister'
                 method: 'getSelectJoinColumnSQL'
                 position: 4
-                replacement_value: ~
 
-            # replace default value
+    Rector\Rector\Dynamic\ArgumentDefaultValueReplacerRector:
+        $argumentChangesByMethodAndType:
             -
                 class: 'Symfony\Component\DependencyInjection\Definition'
                 method: 'setScope'
                 position: 0
-                replacement_map:
+                replacement:
                     'Symfony\Component\DependencyInjection\ContainerBuilder::SCOPE_PROTOTYPE': false
