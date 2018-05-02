@@ -34,24 +34,13 @@ abstract class AbstractArgumentRector extends AbstractRector
     /**
      * @required
      */
-    public function setMethodCallAnalyzer(MethodCallAnalyzer $methodCallAnalyzer): void
-    {
+    public function setRequiredDependencies(
+        MethodCallAnalyzer $methodCallAnalyzer,
+        ClassMethodAnalyzer $classMethodAnalyzer,
+        StaticMethodCallAnalyzer $staticMethodCallAnalyzer
+    ): void {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
-    }
-
-    /**
-     * @required
-     */
-    public function setClassMethodAnalyzer(ClassMethodAnalyzer $classMethodAnalyzer): void
-    {
         $this->classMethodAnalyzer = $classMethodAnalyzer;
-    }
-
-    /**
-     * @required
-     */
-    public function setStaticMethodCallAnalyzer(StaticMethodCallAnalyzer $staticMethodCallAnalyzer): void
-    {
         $this->staticMethodCallAnalyzer = $staticMethodCallAnalyzer;
     }
 
