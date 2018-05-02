@@ -1,0 +1,14 @@
+services:
+    Rector\Rector\Dynamic\ArgumentAdderRector:
+        $argumentChangesByMethodAndType:
+            -
+                class: 'Symfony\Component\DependencyInjection\ContainerBuilder'
+                method: 'compile'
+                position: 0
+                replacement: false
+            # added default value
+            -
+                class: 'Symfony\Component\DependencyInjection\ContainerBuilder'
+                method: 'addCompilerPass'
+                position: 2
+                replacement: 0
