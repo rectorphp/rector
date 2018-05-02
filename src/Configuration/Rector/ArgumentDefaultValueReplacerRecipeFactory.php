@@ -15,7 +15,7 @@ final class ArgumentDefaultValueReplacerRecipeFactory extends AbstractArgumentRe
             $data['class'],
             $data['method'],
             $data['position'],
-            $data['default_value'] ?? []
+            $data['replacement'] ?? []
         );
     }
 }
