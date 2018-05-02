@@ -15,7 +15,7 @@ final class ArgumentAdderRecipeFactory extends AbstractArgumentReplacerRecipeFac
             $data['class'],
             $data['method'],
             $data['position'],
-            $data['replacement'] ?? null
+            $data['default_value'] ?? null
         );
     }
 }

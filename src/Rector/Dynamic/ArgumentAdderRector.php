@@ -110,7 +110,7 @@ $containerBuilder->compile(true);'
         foreach ($this->activeArgumentAdderRecipes as $argumentReplacerRecipe) {
             $position = $argumentReplacerRecipe->getPosition();
 
-            $argumentNodes[$position] = BuilderHelpers::normalizeValue($argumentReplacerRecipe->getReplacement());
+            $argumentNodes[$position] = BuilderHelpers::normalizeValue($argumentReplacerRecipe->getDefaultValue());
         }
 
         return $argumentNodes;

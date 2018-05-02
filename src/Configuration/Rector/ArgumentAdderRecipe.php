@@ -7,22 +7,22 @@ final class ArgumentAdderRecipe extends AbstractArgumentReplacerRecipe
     /**
      * @var mixed
      */
-    private $replacement;
+    private $defaultValue;
 
     /**
-     * @param mixed $replacement
+     * @param mixed $defaultValue
      */
-    public function __construct(string $class, string $method, int $position, $replacement = null)
+    public function __construct(string $class, string $method, int $position, $defaultValue = null)
     {
         parent::__construct($class, $method, $position);
-        $this->replacement = $replacement;
+        $this->defaultValue = $defaultValue;
     }
 
     /**
      * @return mixed|null
      */
-    public function getReplacement()
+    public function getDefaultValue()
     {
-        return $this->replacement;
+        return $this->defaultValue;
     }
 }

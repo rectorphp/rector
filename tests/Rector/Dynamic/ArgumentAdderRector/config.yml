@@ -5,10 +5,10 @@ services:
                 class: 'Symfony\Component\DependencyInjection\ContainerBuilder'
                 method: 'compile'
                 position: 0
-                replacement: false
+                default_value: false
             # added default value
             -
                 class: 'Symfony\Component\DependencyInjection\ContainerBuilder'
                 method: 'addCompilerPass'
                 position: 2
-                replacement: 0
+                default_value: 0
