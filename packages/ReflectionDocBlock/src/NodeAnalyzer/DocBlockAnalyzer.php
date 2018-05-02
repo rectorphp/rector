@@ -5,6 +5,7 @@ namespace Rector\ReflectionDocBlock\NodeAnalyzer;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
+use Rector\PhpParser\CurrentNodeProvider;
 use Symplify\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Symplify\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Symplify\BetterPhpDocParser\PhpDocParser\TypeResolver;
@@ -28,20 +29,20 @@ final class DocBlockAnalyzer
     private $typeResolver;
 
     /**
-     * @var PhpDocInfoFqnTypeDecorator
+     * @var CurrentNodeProvider
      */
-    private $phpDocInfoFqnTypeDecorator;
+    private $currentNodeProvider;
 
     public function __construct(
         PhpDocInfoFactory $phpDocInfoFactory,
         PhpDocInfoPrinter $phpDocInfoPrinter,
         TypeResolver $typeResolver,
-        PhpDocInfoFqnTypeDecorator $phpDocInfoFqnTypeDecorator
+        CurrentNodeProvider $currentNodeProvider
     ) {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->phpDocInfoPrinter = $phpDocInfoPrinter;
         $this->typeResolver = $typeResolver;
-        $this->phpDocInfoFqnTypeDecorator = $phpDocInfoFqnTypeDecorator;
+        $this->currentNodeProvider = $currentNodeProvider;
     }
 
     public function hasAnnotation(Node $node, string $annotation): bool
@@ -74,7 +75,6 @@ final class DocBlockAnalyzer
         }
 
         $phpDocInfo = $this->createPhpDocInfoFromNode($node);
-
         if ($content) {
             $phpDocInfo->removeTagByNameAndContent($name, $content);
         } else {
@@ -84,11 +84,6 @@ final class DocBlockAnalyzer
         $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
     }
 
-    /**
-     * @todo move to PhpDocInfo
-     * @todo no need to check for nullable, just replace types
-     * @todo check one service above, it
-     */
     public function changeType(Node $node, string $oldType, string $newType): void
     {
         if ($node->getDocComment() === null) {
@@ -96,7 +91,6 @@ final class DocBlockAnalyzer
         }
 
         $phpDocInfo = $this->createPhpDocInfoFromNode($node);
-
         $phpDocInfo->replacePhpDocTypeByAnother($oldType, $newType);
 
         $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
@@ -109,7 +103,6 @@ final class DocBlockAnalyzer
         }
 
         $phpDocInfo = $this->createPhpDocInfoFromNode($node);
-
         $phpDocInfo->replaceTagByAnother($oldAnnotation, $newAnnotation);
 
         $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
@@ -193,7 +186,7 @@ final class DocBlockAnalyzer
 
     private function createPhpDocInfoFromNode(Node $node): PhpDocInfo
     {
-        $this->phpDocInfoFqnTypeDecorator->setCurrentPhpParserNode($node);
+        $this->currentNodeProvider->setCurrentNode($node);
 
         return $this->phpDocInfoFactory->createFrom($node->getDocComment()->getText());
     }

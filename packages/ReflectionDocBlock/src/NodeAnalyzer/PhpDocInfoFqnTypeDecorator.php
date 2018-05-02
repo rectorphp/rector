@@ -2,9 +2,9 @@
 
 namespace Rector\ReflectionDocBlock\NodeAnalyzer;
 
-use PhpParser\Node as PhpParserNode;
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use Rector\PhpParser\CurrentNodeProvider;
 use Symplify\BetterPhpDocParser\PhpDocInfo\AbstractPhpDocInfoDecorator;
 use Symplify\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 
@@ -16,18 +16,14 @@ final class PhpDocInfoFqnTypeDecorator extends AbstractPhpDocInfoDecorator
     private $namespaceAnalyzer;
 
     /**
-     * @var PhpParserNode|null
+     * @var CurrentNodeProvider
      */
-    private $phpParserNode;
+    private $currentNodeProvider;
 
-    public function __construct(NamespaceAnalyzer $namespaceAnalyzer)
+    public function __construct(NamespaceAnalyzer $namespaceAnalyzer, CurrentNodeProvider $currentNodeProvider)
     {
         $this->namespaceAnalyzer = $namespaceAnalyzer;
-    }
-
-    public function setCurrentPhpParserNode(PhpParserNode $phpParserNode): void
-    {
-        $this->phpParserNode = $phpParserNode;
+        $this->currentNodeProvider = $currentNodeProvider;
     }
 
     public function decorate(PhpDocInfo $phpDocInfo): void
@@ -41,13 +37,15 @@ final class PhpDocInfoFqnTypeDecorator extends AbstractPhpDocInfoDecorator
             return $node;
         }
 
-        if ($this->phpParserNode === null) {
-            // @todo throw exception with info?
+        if ($this->currentNodeProvider->getCurrentNode() === null) {
             return $node;
         }
 
         /** @var IdentifierTypeNode $node */
-        $node->name = $this->namespaceAnalyzer->resolveTypeToFullyQualified($node->name, $this->phpParserNode);
+        $node->name = $this->namespaceAnalyzer->resolveTypeToFullyQualified(
+            $node->name,
+            $this->currentNodeProvider->getCurrentNode()
+        );
 
         return $node;
     }
