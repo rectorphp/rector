@@ -109,7 +109,6 @@ final class DocBlockAnalyzer
     }
 
     /**
-     * @todo move to phpdoc info
      * @return string[]|null
      */
     public function getVarTypes(Node $node): ?array
