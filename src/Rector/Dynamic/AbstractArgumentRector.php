@@ -34,7 +34,7 @@ abstract class AbstractArgumentRector extends AbstractRector
     /**
      * @required
      */
-    public function setRequiredDependencies(
+    public function setAbstractArgumentRectorDependencies(
         MethodCallAnalyzer $methodCallAnalyzer,
         ClassMethodAnalyzer $classMethodAnalyzer,
         StaticMethodCallAnalyzer $staticMethodCallAnalyzer

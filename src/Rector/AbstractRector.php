@@ -30,7 +30,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
     /**
      * @required
      */
-    public function setRequiredDependencies(PropertyAdder $propertyAdder, ExpressionAdder $expressionAdder): void
+    public function setAbstractRectorDependencies(PropertyAdder $propertyAdder, ExpressionAdder $expressionAdder): void
     {
         $this->propertyAdder = $propertyAdder;
         $this->expressionAdder = $expressionAdder;
