@@ -116,7 +116,7 @@ final class TemplateAnnotationRector extends AbstractRector
         }
 
         // remove annotation
-        $this->docBlockAnalyzer->removeAnnotationFromNode($classMethodNode, 'Template');
+        $this->docBlockAnalyzer->removeTagFromNode($classMethodNode, 'Template');
 
         return $classMethodNode;
     }

@@ -108,7 +108,7 @@ CODE_SAMPLE
 
             $classMethodNode->stmts = array_merge($methodCallExpressions, $classMethodNode->stmts);
 
-            $this->docBlockAnalyzer->removeAnnotationFromNode($classMethodNode, $annotation);
+            $this->docBlockAnalyzer->removeTagFromNode($classMethodNode, $annotation);
         }
 
         return $classMethodNode;

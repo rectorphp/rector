@@ -68,18 +68,26 @@ final class DocBlockAnalyzer
         $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
     }
 
-    public function removeAnnotationFromNode(Node $node, string $name, ?string $content = null): void
+    public function removeTagFromNode(Node $node, string $name): void
     {
         if ($node->getDocComment() === null) {
             return;
         }
 
         $phpDocInfo = $this->createPhpDocInfoFromNode($node);
-        if ($content) {
-            $phpDocInfo->removeTagByNameAndContent($name, $content);
-        } else {
-            $phpDocInfo->removeTagByName($name);
+        $phpDocInfo->removeTagByName($name);
+
+        $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
+    }
+
+    public function removeTagWithContentFromNode(Node $node, string $name, string $content): void
+    {
+        if ($node->getDocComment() === null) {
+            return;
         }
+
+        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
+        $phpDocInfo->removeTagByNameAndContent($name, $content);
 
         $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
     }

@@ -122,7 +122,7 @@ final class MagicMethodRector extends AbstractRector
                 $methodSettings['argumentName']
             );
 
-            $this->docBlockAnalyzer->removeAnnotationFromNode($classNode, 'method', $methodName);
+            $this->docBlockAnalyzer->removeTagWithContentFromNode($classNode, 'method', $methodName);
         }
 
         return $classNode;
