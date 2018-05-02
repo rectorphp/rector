@@ -126,7 +126,12 @@ final class DocBlockAnalyzer
 
         $typesAsString = $this->typeResolver->resolveDocType($varType);
 
-        return explode('|', $typesAsString);
+        $types = explode('|', $typesAsString);
+        foreach ($types as $key => $type) {
+            $types[$key] = ltrim($type, '\\');
+        }
+
+        return $types;
     }
 
     /**
