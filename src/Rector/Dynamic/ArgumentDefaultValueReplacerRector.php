@@ -32,11 +32,6 @@ final class ArgumentDefaultValueReplacerRector extends AbstractArgumentRector
     private $constExprEvaluator;
 
     /**
-     * @var ArgumentDefaultValueReplacerRecipeFactory
-     */
-    private $argumentDefaultValueReplacerRecipeFactory;
-
-    /**
      * @param mixed[] $argumentChangesByMethodAndType
      */
     public function __construct(
@@ -44,8 +39,7 @@ final class ArgumentDefaultValueReplacerRector extends AbstractArgumentRector
         ConstExprEvaluator $constExprEvaluator,
         ArgumentDefaultValueReplacerRecipeFactory $argumentDefaultValueReplacerRecipeFactory
     ) {
-        $this->argumentDefaultValueReplacerRecipeFactory = $argumentDefaultValueReplacerRecipeFactory;
-        $this->loadArgumentReplacerRecipes($argumentChangesByMethodAndType);
+        $this->loadArgumentReplacerRecipes($argumentDefaultValueReplacerRecipeFactory, $argumentChangesByMethodAndType);
         $this->constExprEvaluator = $constExprEvaluator;
     }
 
@@ -107,10 +101,12 @@ $container->register("foo", "stdClass")->setScope(false);'
     /**
      * @param mixed[] $configurationArrays
      */
-    private function loadArgumentReplacerRecipes(array $configurationArrays): void
-    {
+    private function loadArgumentReplacerRecipes(
+        ArgumentDefaultValueReplacerRecipeFactory $argumentDefaultValueReplacerRecipeFactory,
+        array $configurationArrays
+    ): void {
         foreach ($configurationArrays as $configurationArray) {
-            $this->argumentDefaultValueReplacerRecipe[] = $this->argumentDefaultValueReplacerRecipeFactory->createFromArray(
+            $this->argumentDefaultValueReplacerRecipe[] = $argumentDefaultValueReplacerRecipeFactory->createFromArray(
                 $configurationArray
             );
         }

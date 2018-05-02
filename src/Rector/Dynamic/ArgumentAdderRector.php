@@ -25,19 +25,13 @@ final class ArgumentAdderRector extends AbstractArgumentRector
     private $activeArgumentAdderRecipes = [];
 
     /**
-     * @var ArgumentAdderRecipeFactory
-     */
-    private $argumentAdderRecipeFactory;
-
-    /**
      * @param mixed[] $argumentChangesByMethodAndType
      */
     public function __construct(
         array $argumentChangesByMethodAndType,
         ArgumentAdderRecipeFactory $argumentAdderRecipeFactory
     ) {
-        $this->argumentAdderRecipeFactory = $argumentAdderRecipeFactory;
-        $this->loadArgumentReplacerRecipes($argumentChangesByMethodAndType);
+        $this->loadArgumentReplacerRecipes($argumentAdderRecipeFactory, $argumentChangesByMethodAndType);
     }
 
     public function getDefinition(): RectorDefinition
@@ -98,10 +92,12 @@ $containerBuilder->compile(true);'
     /**
      * @param mixed[] $configurationArrays
      */
-    private function loadArgumentReplacerRecipes(array $configurationArrays): void
-    {
+    private function loadArgumentReplacerRecipes(
+        ArgumentAdderRecipeFactory $argumentAdderRecipeFactory,
+        array $configurationArrays
+    ): void {
         foreach ($configurationArrays as $configurationArray) {
-            $this->argumentAdderRecipes[] = $this->argumentAdderRecipeFactory->createFromArray($configurationArray);
+            $this->argumentAdderRecipes[] = $argumentAdderRecipeFactory->createFromArray($configurationArray);
         }
     }
 

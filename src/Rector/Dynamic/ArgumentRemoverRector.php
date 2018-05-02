@@ -24,19 +24,13 @@ final class ArgumentRemoverRector extends AbstractArgumentRector
     private $activeArgumentRemoverRecipes = [];
 
     /**
-     * @var ArgumentRemoverRecipeFactory
-     */
-    private $argumentRemoverRecipeFactory;
-
-    /**
      * @param mixed[] $argumentChangesByMethodAndType
      */
     public function __construct(
         array $argumentChangesByMethodAndType,
         ArgumentRemoverRecipeFactory $argumentRemoverRecipeFactory
     ) {
-        $this->argumentRemoverRecipeFactory = $argumentRemoverRecipeFactory;
-        $this->loadArgumentReplacerRecipes($argumentChangesByMethodAndType);
+        $this->loadArgumentReplacerRecipes($argumentRemoverRecipeFactory, $argumentChangesByMethodAndType);
     }
 
     public function getDefinition(): RectorDefinition
@@ -97,12 +91,12 @@ $containerBuilder->compile();'
     /**
      * @param mixed[] $configurationArrays
      */
-    private function loadArgumentReplacerRecipes(array $configurationArrays): void
-    {
+    private function loadArgumentReplacerRecipes(
+        ArgumentRemoverRecipeFactory $argumentRemoverRecipeFactory,
+        array $configurationArrays
+    ): void {
         foreach ($configurationArrays as $configurationArray) {
-            $this->argumentRemoverRecipes[] = $this->argumentRemoverRecipeFactory->createFromArray(
-                $configurationArray
-            );
+            $this->argumentRemoverRecipes[] = $argumentRemoverRecipeFactory->createFromArray($configurationArray);
         }
     }
 
