@@ -34,7 +34,7 @@ abstract class AbstractArgumentRector extends AbstractRector
     /**
      * @required
      */
-    final public function setMethodCallAnalyzer(MethodCallAnalyzer $methodCallAnalyzer): void
+    public function setMethodCallAnalyzer(MethodCallAnalyzer $methodCallAnalyzer): void
     {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
     }
@@ -42,7 +42,7 @@ abstract class AbstractArgumentRector extends AbstractRector
     /**
      * @required
      */
-    final public function setClassMethodAnalyzer(ClassMethodAnalyzer $classMethodAnalyzer): void
+    public function setClassMethodAnalyzer(ClassMethodAnalyzer $classMethodAnalyzer): void
     {
         $this->classMethodAnalyzer = $classMethodAnalyzer;
     }
@@ -50,7 +50,7 @@ abstract class AbstractArgumentRector extends AbstractRector
     /**
      * @required
      */
-    final public function setStaticMethodCallAnalyzer(StaticMethodCallAnalyzer $staticMethodCallAnalyzer): void
+    public function setStaticMethodCallAnalyzer(StaticMethodCallAnalyzer $staticMethodCallAnalyzer): void
     {
         $this->staticMethodCallAnalyzer = $staticMethodCallAnalyzer;
     }
