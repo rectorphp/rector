@@ -41,6 +41,11 @@ final class PhpDocInfoFqnTypeDecorator extends AbstractPhpDocInfoDecorator
             return $node;
         }
 
+        if ($this->phpParserNode === null) {
+            // @todo throw exception with info?
+            return $node;
+        }
+
         /** @var IdentifierTypeNode $node */
         $node->name = $this->namespaceAnalyzer->resolveTypeToFullyQualified($node->name, $this->phpParserNode);
 

@@ -157,7 +157,7 @@ final class DocBlockAnalyzer
     public function getTagsByName(Node $node, string $name): array
     {
         if ($node->getDocComment() === null) {
-            return null;
+            return [];
         }
 
         $phpDocInfo = $this->createPhpDocInfoFromNode($node);
