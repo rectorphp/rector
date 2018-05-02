@@ -36,11 +36,6 @@ final class DocBlockAnalyzer
     private $namespaceAnalyzer;
 
     /**
-     * @var Node
-     */
-    private $node;
-
-    /**
      * @var TypeResolver
      */
     private $typeResolver;
@@ -103,8 +98,6 @@ final class DocBlockAnalyzer
         if ($node->getDocComment() === null) {
             return;
         }
-
-        $this->node = $node;
 
         $phpDocInfo = $this->phpDocInfoFactory->createFrom($node->getDocComment()->getText());
 
