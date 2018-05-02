@@ -20,14 +20,34 @@ services:
 
     Rector\Rector\Dynamic\ParentTypehintedArgumentRector:
         $typehintForArgumentByMethodAndClass:
-            # Constructor of Sylius\Bundle\CoreBundle\Context\SessionAndChannelBasedCartContext has been changed to use Sylius\Component\Core\Storage\CartStorageInterface
             'Sylius\Bundle\CoreBundle\Context\SessionAndChannelBasedCartContext':
                 '__construct':
                     '$cartStorage': 'Sylius\Component\Core\Storage\CartStorageInterface'
 
+    # @todo add to test cases
+    Rector\Rector\Dynamic\ArgumentAdderRector:
+        $argumentChangesByMethodAndType:
+           # SenderInterface::send method has been changed: replyTo argument was added
+            -
+                class: 'Sylius\Component\Mailer\Sender\SenderInterface'
+                method: 'send'
+                position: 0
+                default_value: '[]'
+                # @todo
+                #type: 'array'
+                #property: 'replyTo' # or rather argument_name
+            -
+                class: 'Sylius\Component\Core\Repository\ProductRepositoryInterface'
+                method: 'findOneBySlug'
+                position: 2
+                default_value: false
+                # @todo
+                #property: '$locale'
+                #type: 'string'
+                #can_be_null: false
+
     Rector\Rector\Dynamic\ReturnTypehintRector:
         $returnTypehintByMethod:
-            # OrderInterface::getAdjustmentsRecursively and OrderItemInterface::getAdjustmentsRecursively return types changed from array to Collection
             'Sylius\Component\Order\Model\OrderInterface':
                 'getAdjustmentsRecursively':
                     'array': 'Doctrine\Common\Collections\Collection'
@@ -36,7 +56,6 @@ services:
                 'getAdjustmentsRecursively':
                     'array': 'Doctrine\Common\Collections\Collection'
 
-            # PrioritizedServiceRegistryInterface::all method return type changed from Zend's PriorityQueue to iterable
             'Sylius\Component\Registry\PrioritizedServiceRegistryInterface':
                 'all':
                     'Zend\Stdlib\PriorityQueue': 'iterable'
