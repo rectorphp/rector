@@ -1,10 +1,7 @@
 <?php declare(strict_types=1);
 
-class SomeClass
-{
-    public function create()
-    {
-        $containerBuilder = new Symfony\Component\DependencyInjection\ContainerBuilder;
-        $containerBuilder->compile(\Symfony\Component\DependencyInjection\ContainerBuilder::SCOPE_PROTOTYPE);
-    }
-}
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+
+$container = new ContainerBuilder();
+$container->register('foo', 'stdClass')
+    ->setScope(ContainerBuilder::SCOPE_PROTOTYPE);
