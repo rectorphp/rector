@@ -21,7 +21,7 @@
         "symfony/dependency-injection": "^4.0",
         "symfony/finder": "^4.0",
         "symplify/better-reflection-docblock": "^4.0",
-        "symplify/better-phpdoc-parser": "dev-master",
+        "symplify/better-phpdoc-parser": "^4.1",
         "symplify/package-builder": "^4.1"
     },
     "require-dev": {

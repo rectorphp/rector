@@ -26,6 +26,7 @@ final class DocBlockAnalyzer
      * @var TypeResolver
      */
     private $typeResolver;
+
     /**
      * @var PhpDocInfoFqnTypeDecorator
      */

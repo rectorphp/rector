@@ -25,7 +25,7 @@ final class PhpDocInfoFqnTypeDecorator extends AbstractPhpDocInfoDecorator
         $this->namespaceAnalyzer = $namespaceAnalyzer;
     }
 
-    public function setCurrentPhpParserNode(PhpParserNode $phpParserNode)
+    public function setCurrentPhpParserNode(PhpParserNode $phpParserNode): void
     {
         $this->phpParserNode = $phpParserNode;
     }
