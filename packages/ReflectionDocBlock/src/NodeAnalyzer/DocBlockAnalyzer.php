@@ -2,17 +2,9 @@
 
 namespace Rector\ReflectionDocBlock\NodeAnalyzer;
 
-use Nette\Utils\Strings;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
-use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
-use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use Symplify\BetterPhpDocParser\PhpDocParser\PhpDocInfo;
 use Symplify\BetterPhpDocParser\PhpDocParser\PhpDocInfoFactory;
 use Symplify\BetterPhpDocParser\PhpDocParser\TypeResolver;
