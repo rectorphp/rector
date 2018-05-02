@@ -31,22 +31,28 @@ final class DocBlockAnalyzer
      * @var TypeResolver
      */
     private $typeResolver;
+    /**
+     * @var PhpDocInfoFqnTypeDecorator
+     */
+    private $phpDocInfoFqnTypeDecorator;
 
     public function __construct(
         PhpDocInfoFactory $phpDocInfoFactory,
         PhpDocInfoPrinter $phpDocInfoPrinter,
         NamespaceAnalyzer $namespaceAnalyzer,
-        TypeResolver $typeResolver
+        TypeResolver $typeResolver,
+        PhpDocInfoFqnTypeDecorator $phpDocInfoFqnTypeDecorator
     ) {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->phpDocInfoPrinter = $phpDocInfoPrinter;
         $this->namespaceAnalyzer = $namespaceAnalyzer;
         $this->typeResolver = $typeResolver;
+        $this->phpDocInfoFqnTypeDecorator = $phpDocInfoFqnTypeDecorator;
     }
 
     public function hasAnnotation(Node $node, string $annotation): bool
     {
-        $phpDocInfo = $this->phpDocInfoFactory->createFrom($node->getDocComment()->getText());
+        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
 
         return $phpDocInfo->hasTag($annotation);
     }
@@ -57,7 +63,7 @@ final class DocBlockAnalyzer
             return;
         }
 
-        $phpDocInfo = $this->phpDocInfoFactory->createFrom($node->getDocComment()->getText());
+        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
         $phpDocInfo->removeParamTagByParameter($name);
 
         $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
@@ -69,7 +75,7 @@ final class DocBlockAnalyzer
             return;
         }
 
-        $phpDocInfo = $this->phpDocInfoFactory->createFrom($node->getDocComment()->getText());
+        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
 
         if ($content) {
             $phpDocInfo->removeTagByNameAndContent($name, $content);
@@ -91,7 +97,7 @@ final class DocBlockAnalyzer
             return;
         }
 
-        $phpDocInfo = $this->phpDocInfoFactory->createFrom($node->getDocComment()->getText());
+        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
 
         $phpDocInfo->replacePhpDocTypeByAnother($oldType, $newType);
 
@@ -104,7 +110,7 @@ final class DocBlockAnalyzer
             return;
         }
 
-        $phpDocInfo = $this->phpDocInfoFactory->createFrom($node->getDocComment()->getText());
+        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
 
         $phpDocInfo->replaceTagByAnother($oldAnnotation, $newAnnotation);
 
@@ -121,7 +127,7 @@ final class DocBlockAnalyzer
             return null;
         }
 
-        $phpDocInfo = $this->phpDocInfoFactory->createFrom($node->getDocComment()->getText());
+        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
 
         $varType = $phpDocInfo->getVarTypeNode();
         if ($varType === null) {
@@ -147,7 +153,7 @@ final class DocBlockAnalyzer
             return null;
         }
 
-        $phpDocInfo = $this->phpDocInfoFactory->createFrom($node->getDocComment()->getText());
+        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
 
         return (string) $phpDocInfo->getParamTypeNode($paramName);
     }
@@ -162,7 +168,7 @@ final class DocBlockAnalyzer
             return null;
         }
 
-        $phpDocInfo = $this->phpDocInfoFactory->createFrom($node->getDocComment()->getText());
+        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
 
         return $phpDocInfo->getTagsByName($name);
     }
@@ -190,5 +196,12 @@ final class DocBlockAnalyzer
 
         // no comments, null
         $node->setAttribute('comments', null);
+    }
+
+    private function createPhpDocInfoFromNode(Node $node): PhpDocInfo
+    {
+        $this->phpDocInfoFqnTypeDecorator->setCurrentPhpParserNode($node);
+
+        return $this->phpDocInfoFactory->createFrom($node->getDocComment()->getText());
     }
 }
