@@ -23,11 +23,6 @@ final class DocBlockAnalyzer
     private $phpDocInfoPrinter;
 
     /**
-     * @var NamespaceAnalyzer
-     */
-    private $namespaceAnalyzer;
-
-    /**
      * @var TypeResolver
      */
     private $typeResolver;
@@ -39,19 +34,21 @@ final class DocBlockAnalyzer
     public function __construct(
         PhpDocInfoFactory $phpDocInfoFactory,
         PhpDocInfoPrinter $phpDocInfoPrinter,
-        NamespaceAnalyzer $namespaceAnalyzer,
         TypeResolver $typeResolver,
         PhpDocInfoFqnTypeDecorator $phpDocInfoFqnTypeDecorator
     ) {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->phpDocInfoPrinter = $phpDocInfoPrinter;
-        $this->namespaceAnalyzer = $namespaceAnalyzer;
         $this->typeResolver = $typeResolver;
         $this->phpDocInfoFqnTypeDecorator = $phpDocInfoFqnTypeDecorator;
     }
 
     public function hasAnnotation(Node $node, string $annotation): bool
     {
+        if ($node->getDocComment() === null) {
+            return false;
+        }
+
         $phpDocInfo = $this->createPhpDocInfoFromNode($node);
 
         return $phpDocInfo->hasTag($annotation);
@@ -136,12 +133,7 @@ final class DocBlockAnalyzer
 
         $typesAsString = $this->typeResolver->resolveDocType($varType);
 
-        $fullyQualifiedTypes = [];
-        foreach (explode('|', $typesAsString) as $type) {
-            $fullyQualifiedTypes[] = $this->namespaceAnalyzer->resolveTypeToFullyQualified($type, $node);
-        }
-
-        return $fullyQualifiedTypes;
+        return explode('|', $typesAsString);
     }
 
     /**
