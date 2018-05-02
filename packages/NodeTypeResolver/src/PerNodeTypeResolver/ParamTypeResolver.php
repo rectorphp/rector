@@ -10,7 +10,6 @@ use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInte
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\TypeContext;
 use Rector\ReflectionDocBlock\NodeAnalyzer\DocBlockAnalyzer;
-use Rector\ReflectionDocBlock\NodeAnalyzer\NamespaceAnalyzer;
 
 final class ParamTypeResolver implements PerNodeTypeResolverInterface, NodeTypeResolverAwareInterface
 {
@@ -29,19 +28,10 @@ final class ParamTypeResolver implements PerNodeTypeResolverInterface, NodeTypeR
      */
     private $docBlockAnalyzer;
 
-    /**
-     * @var NamespaceAnalyzer
-     */
-    private $namespaceAnalyzer;
-
-    public function __construct(
-        TypeContext $typeContext,
-        DocBlockAnalyzer $docBlockAnalyzer,
-        NamespaceAnalyzer $namespaceAnalyzer
-    ) {
+    public function __construct(TypeContext $typeContext, DocBlockAnalyzer $docBlockAnalyzer)
+    {
         $this->typeContext = $typeContext;
         $this->docBlockAnalyzer = $docBlockAnalyzer;
-        $this->namespaceAnalyzer = $namespaceAnalyzer;
     }
 
     /**
@@ -80,12 +70,11 @@ final class ParamTypeResolver implements PerNodeTypeResolverInterface, NodeTypeR
             return [];
         }
 
-        // resolve to FQN
-        $paramType = $this->namespaceAnalyzer->resolveTypeToFullyQualified($paramType, $paramNode);
         if ($paramType) {
             $this->typeContext->addVariableWithTypes($variableName, [$paramType]);
         }
 
+        // already resolved in doc block
         return [$paramType];
     }
 
