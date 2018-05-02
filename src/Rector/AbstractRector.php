@@ -28,23 +28,12 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
     private $propertyAdder;
 
     /**
-     * Nasty magic, unable to do that in config autowire _instanceof calls.
-     *
      * @required
      */
-    public function setExpressionAdder(ExpressionAdder $expressionAdder): void
-    {
-        $this->expressionAdder = $expressionAdder;
-    }
-
-    /**
-     * Nasty magic, unable to do that in config autowire _instanceof calls.
-     *
-     * @required
-     */
-    public function setPropertyToClassAdder(PropertyAdder $propertyAdder): void
+    public function setRequiredDependencies(PropertyAdder $propertyAdder, ExpressionAdder $expressionAdder): void
     {
         $this->propertyAdder = $propertyAdder;
+        $this->expressionAdder = $expressionAdder;
     }
 
     /**
