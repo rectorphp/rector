@@ -5,8 +5,8 @@ namespace Rector\ReflectionDocBlock\NodeAnalyzer;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use Symplify\BetterPhpDocParser\PhpDocParser\PhpDocInfo;
-use Symplify\BetterPhpDocParser\PhpDocParser\PhpDocInfoFactory;
+use Symplify\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Symplify\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Symplify\BetterPhpDocParser\PhpDocParser\TypeResolver;
 use Symplify\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 
