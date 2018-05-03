@@ -73,7 +73,7 @@ final class PropertyTypeResolver implements PerNodeTypeResolverInterface
         }
 
         $propertyTypes = $this->docBlockAnalyzer->getVarTypes($propertyNode);
-        if ($propertyTypes === null || $propertyTypes === ['string']) {
+        if ($propertyTypes === [] || $propertyTypes === ['string']) {
             return [];
         }
 
