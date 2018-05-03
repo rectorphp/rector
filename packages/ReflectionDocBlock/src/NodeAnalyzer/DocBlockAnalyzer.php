@@ -8,7 +8,6 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use Rector\PhpParser\CurrentNodeProvider;
 use Symplify\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Symplify\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Symplify\BetterPhpDocParser\PhpDocParser\TypeResolver;
 use Symplify\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 
 final class DocBlockAnalyzer
@@ -24,11 +23,6 @@ final class DocBlockAnalyzer
     private $phpDocInfoPrinter;
 
     /**
-     * @var TypeResolver
-     */
-    private $typeResolver;
-
-    /**
      * @var CurrentNodeProvider
      */
     private $currentNodeProvider;
@@ -36,12 +30,10 @@ final class DocBlockAnalyzer
     public function __construct(
         PhpDocInfoFactory $phpDocInfoFactory,
         PhpDocInfoPrinter $phpDocInfoPrinter,
-        TypeResolver $typeResolver,
         CurrentNodeProvider $currentNodeProvider
     ) {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->phpDocInfoPrinter = $phpDocInfoPrinter;
-        $this->typeResolver = $typeResolver;
         $this->currentNodeProvider = $currentNodeProvider;
     }
 
@@ -117,29 +109,17 @@ final class DocBlockAnalyzer
     }
 
     /**
-     * @return string[]|null
+     * @return string[]
      */
-    public function getVarTypes(Node $node): ?array
+    public function getVarTypes(Node $node): array
     {
         if ($node->getDocComment() === null) {
-            return null;
+            return [];
         }
 
         $phpDocInfo = $this->createPhpDocInfoFromNode($node);
 
-        $varType = $phpDocInfo->getVarTypeNode();
-        if ($varType === null) {
-            return null;
-        }
-
-        $typesAsString = $this->typeResolver->resolveDocType($varType);
-
-        $types = explode('|', $typesAsString);
-        foreach ($types as $key => $type) {
-            $types[$key] = ltrim($type, '\\');
-        }
-
-        return $types;
+        return $phpDocInfo->getVarTypes();
     }
 
     /**

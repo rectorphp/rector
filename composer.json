@@ -21,8 +21,9 @@
         "symfony/dependency-injection": "^4.0",
         "symfony/finder": "^4.0",
         "symplify/better-reflection-docblock": "^4.0",
-        "symplify/better-phpdoc-parser": "^4.1",
-        "symplify/package-builder": "^4.1"
+        "symplify/better-phpdoc-parser": "dev-master",
+        "symplify/package-builder": "dev-master",
+        "symplify/token-runner": "dev-master"
     },
     "require-dev": {
         "phpstan/phpstan-shim": "^0.9",

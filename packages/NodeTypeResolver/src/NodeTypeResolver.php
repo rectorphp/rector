@@ -36,7 +36,28 @@ final class NodeTypeResolver
         }
 
         $nodeTypes = $this->perNodeTypeResolvers[$nodeClass]->resolve($node);
+        $nodeTypes = $this->cleanPreSlashes($nodeTypes);
+
         $node->setAttribute(Attribute::TYPES, $nodeTypes);
+
+        return $nodeTypes;
+    }
+
+    /**
+     * "\FqnType" => "FqnType"
+     *
+     * @param string[] $nodeTypes
+     * @return string[]
+     */
+    private function cleanPreSlashes(array $nodeTypes): array
+    {
+        foreach ($nodeTypes as $key => $nodeType) {
+            // filter out non-type values
+            if (! is_string($nodeType)) {
+                continue;
+            }
+            $nodeTypes[$key] = ltrim($nodeType, '\\');
+        }
 
         return $nodeTypes;
     }
