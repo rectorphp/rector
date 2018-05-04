@@ -30,7 +30,8 @@
         "phpunit/phpunit": "^7.1",
         "slam/php-cs-fixer-extensions": "^1.15",
         "symfony/var-dumper": "^4.0",
-        "symplify/easy-coding-standard": "^4.1"
+        "symplify/easy-coding-standard": "^4.1",
+        "symplify/coding-standard": "dev-master"
     },
     "autoload": {
         "psr-4": {
