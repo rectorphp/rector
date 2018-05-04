@@ -7,6 +7,7 @@ use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Builder\IdentifierRenamer;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
+use Rector\NodeAnalyzer\StaticMethodCallAnalyzer;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -31,10 +32,19 @@ final class AssertNotOperatorRector extends AbstractPHPUnitRector
         'assertFalse' => 'assertTrue',
     ];
 
-    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, IdentifierRenamer $identifierRenamer)
-    {
+    /**
+     * @var StaticMethodCallAnalyzer
+     */
+    private $staticMethodCallAnalyzer;
+
+    public function __construct(
+        MethodCallAnalyzer $methodCallAnalyzer,
+        StaticMethodCallAnalyzer $staticMethodCallAnalyzer,
+        IdentifierRenamer $identifierRenamer
+    ) {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
+        $this->staticMethodCallAnalyzer = $staticMethodCallAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -54,7 +64,7 @@ final class AssertNotOperatorRector extends AbstractPHPUnitRector
             return false;
         }
 
-        if (! $this->methodCallAnalyzer->isMethods($node, array_keys($this->renameMethodsMap))) {
+        if (! $this->isNormalOrStaticMethods($node)) {
             return false;
         }
 
@@ -84,5 +94,18 @@ final class AssertNotOperatorRector extends AbstractPHPUnitRector
         $methodCallNode->args = array_merge([$expression], $oldArguments);
 
         return $methodCallNode;
+    }
+
+    private function isNormalOrStaticMethods(Node $node): bool
+    {
+        if ($this->methodCallAnalyzer->isMethods($node, array_keys($this->renameMethodsMap))) {
+            return true;
+        }
+
+        if ($this->staticMethodCallAnalyzer->isMethods($node, array_keys($this->renameMethodsMap))) {
+            return true;
+        }
+
+        return false;
     }
 }
