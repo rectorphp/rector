@@ -37,13 +37,18 @@ final class ArgumentAdderRector extends AbstractArgumentRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
-            '[Dynamic] Adds or replaces defined arguments in defined methods and their calls.',
+            '[Dynamic] This Rector adds new default arguments in calls of defined methods and class types.',
             [
                 new CodeSample(
-                    '$containerBuilder = new Symfony\Component\DependencyInjection\ContainerBuilder;
-$containerBuilder->compile();',
-                    '$containerBuilder = new Symfony\Component\DependencyInjection\ContainerBuilder;
-$containerBuilder->compile(true);'
+                    <<<'CODE_SAMPLE'
+$someObject = new SomeClass;
+$someObject->someMethod();
+CODE_SAMPLE
+                    ,
+                    <<<'CODE_SAMPLE'
+$someObject = new SomeClass;
+$someObject->someMethod(true);
+CODE_SAMPLE
                 ),
             ]
         );
