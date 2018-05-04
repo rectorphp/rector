@@ -5,6 +5,11 @@
 Handles method calls in child of Doctrine EntityRepository and moves them to "$this->repository" property.
 
 ```diff
+ <?php
+
+ use Doctrine\ORM\EntityRepository;
+
+ class SomeRepository extends EntityRepository
  {
      public function someMethod()
      {
@@ -129,6 +134,10 @@ Simplify `in_array` and `array_keys` functions combination into `array_key_exist
 [Dynamic] Changes defined parent class typehints.
 
 ```diff
+ interface SomeInterface
+ {
+     public read(string $content);
+ }
 
  class SomeClass implements SomeInterface
  {
