@@ -42,8 +42,6 @@ final class MarkdownDifferAndFormatter
             return '';
         }
 
-        // @todo markdown differ
-
         // @todo here we need complete diff with all the code
         $diff = $this->markdownDiffer->diff($old, $new);
 
