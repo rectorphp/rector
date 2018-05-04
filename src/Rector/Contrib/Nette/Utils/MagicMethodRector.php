@@ -5,6 +5,7 @@ namespace Rector\Rector\Contrib\Nette\Utils;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
+use Rector\BetterPhpDocParser\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\BetterReflection\Reflector\SmartClassReflector;
 use Rector\Builder\MethodBuilder;
 use Rector\Node\Attribute;
@@ -12,7 +13,6 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
-use Rector\ReflectionDocBlock\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\Regex\MagicMethodMatcher;
 
 final class MagicMethodRector extends AbstractRector

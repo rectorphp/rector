@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\ReflectionDocBlock\NodeAnalyzer;
+namespace Rector\BetterPhpDocParser\NodeAnalyzer;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;

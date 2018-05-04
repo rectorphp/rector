@@ -16,7 +16,7 @@ use Rector\Rector\AbstractRector;
 use Rector\Rector\Contrib\Sensio\Helper\TemplateGuesser;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
-use Rector\ReflectionDocBlock\NodeAnalyzer\DocBlockAnalyzer;
+use Rector\BetterPhpDocParser\NodeAnalyzer\DocBlockAnalyzer;
 
 final class TemplateAnnotationRector extends AbstractRector
 {
