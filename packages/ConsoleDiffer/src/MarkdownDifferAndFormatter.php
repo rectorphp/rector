@@ -52,10 +52,11 @@ final class MarkdownDifferAndFormatter
         return $diff;
     }
 
+    /**
+     * Removes UnifiedDiffOutputBuilder generated pre-spaces " \n" => "\n"
+     */
     private function removeTrailingWhitespaces(string $diff): string
     {
-        $diff = preg_replace('#\n( ){1,}\n#', PHP_EOL . PHP_EOL, $diff);
-
         $diff = preg_replace('#( ){1,}\n#', PHP_EOL, $diff);
 
         return rtrim($diff);
