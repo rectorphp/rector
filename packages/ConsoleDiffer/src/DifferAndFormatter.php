@@ -60,8 +60,15 @@ final class DifferAndFormatter
         }
 
         $diff = $this->bareDiffer->diff($old, $new);
-        // impossible to configure - removed manually
 
+        $diff = $this->removeTrailingWhitespaces($diff);
+
+        // impossible to configure - removed manually
         return substr($diff, strlen('@@ @@ '));
+    }
+
+    private function removeTrailingWhitespaces(string $diff): string
+    {
+        return preg_replace('#\n( )\n#', PHP_EOL . PHP_EOL, $diff);
     }
 }
