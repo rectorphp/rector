@@ -2,7 +2,7 @@
 
 namespace Rector\Configuration\Rector;
 
-abstract class AbstractArgumentReplacerRecipe
+abstract class AbstractArgumentRecipe
 {
     /**
      * @var string

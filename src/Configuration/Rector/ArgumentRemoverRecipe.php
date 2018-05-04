@@ -2,6 +2,6 @@
 
 namespace Rector\Configuration\Rector;
 
-final class ArgumentRemoverRecipe extends AbstractArgumentReplacerRecipe
+final class ArgumentRemoverRecipe extends AbstractArgumentRecipe
 {
 }

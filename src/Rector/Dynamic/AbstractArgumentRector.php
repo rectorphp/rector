@@ -8,7 +8,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Configuration\Rector\AbstractArgumentReplacerRecipe;
+use Rector\Configuration\Rector\AbstractArgumentRecipe;
 use Rector\NodeAnalyzer\ClassMethodAnalyzer;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeAnalyzer\StaticMethodCallAnalyzer;
@@ -44,7 +44,7 @@ abstract class AbstractArgumentRector extends AbstractRector
         $this->staticMethodCallAnalyzer = $staticMethodCallAnalyzer;
     }
 
-    protected function isNodeToRecipeMatch(Node $node, AbstractArgumentReplacerRecipe $argumentReplacerRecipe): bool
+    protected function isNodeToRecipeMatch(Node $node, AbstractArgumentRecipe $argumentReplacerRecipe): bool
     {
         $type = $argumentReplacerRecipe->getClass();
         $method = $argumentReplacerRecipe->getMethod();

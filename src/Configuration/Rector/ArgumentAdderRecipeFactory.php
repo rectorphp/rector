@@ -2,7 +2,7 @@
 
 namespace Rector\Configuration\Rector;
 
-final class ArgumentAdderRecipeFactory extends AbstractArgumentReplacerRecipeFactory
+final class ArgumentAdderRecipeFactory extends AbstractArgumentRecipeFactory
 {
     /**
      * @param mixed[] $data

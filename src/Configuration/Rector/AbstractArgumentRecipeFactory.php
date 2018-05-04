@@ -5,7 +5,7 @@ namespace Rector\Configuration\Rector;
 use Rector\Exception\Rector\InvalidRectorConfigurationException;
 use Rector\Rector\Dynamic\AbstractArgumentRector;
 
-abstract class AbstractArgumentReplacerRecipeFactory
+abstract class AbstractArgumentRecipeFactory
 {
     /**
      * @param mixed[] $data
