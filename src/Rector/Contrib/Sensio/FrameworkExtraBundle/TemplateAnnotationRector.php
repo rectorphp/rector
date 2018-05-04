@@ -73,7 +73,9 @@ final class TemplateAnnotationRector extends AbstractRector
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
-/** @Template() */
+/**
+ * @Template()
+ */
 public function indexAction()
 {
 }

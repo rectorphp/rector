@@ -79,7 +79,7 @@ $name = $constNode->name;
 CODE_SAMPLE
                 ,
                 <<<'CODE_SAMPLE'
-'$constNode = new \PhpParser\Node\Const_;
+$constNode = new \PhpParser\Node\Const_;
 $name = $constNode->name->toString();'
 CODE_SAMPLE
             ),
