@@ -44,7 +44,7 @@ final class MarkdownDifferAndFormatter
 
         $diff = $this->markdownDiffer->diff($old, $new);
 
-        // remove first 3 lines, just meta info added by StrictUnifiedDiffOutputBuilder
+        // remove first line, just meta info added by UnifiedDiffOutputBuilder
         $diff = preg_replace("/^(.*\n){1}/", '', $diff);
 
         $diff = $this->removeTrailingWhitespaces($diff);
