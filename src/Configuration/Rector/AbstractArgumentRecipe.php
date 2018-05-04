@@ -2,6 +2,9 @@
 
 namespace Rector\Configuration\Rector;
 
+/**
+ * Naming inspired by: https://github.com/nikic/PHP-Parser/blob/master/lib/PhpParser/Node/Param.php
+ */
 abstract class AbstractArgumentRecipe
 {
     /**
