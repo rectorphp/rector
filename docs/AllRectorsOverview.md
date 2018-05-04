@@ -5,7 +5,7 @@
 Handles method calls in child of Doctrine EntityRepository and moves them to "$this->repository" property.
 
 ```diff
-{
+ {
      public function someMethod()
      {
 -        return $this->findAll();
@@ -19,7 +19,7 @@ Handles method calls in child of Doctrine EntityRepository and moves them to "$t
 Turns parent EntityRepository class to constructor dependency
 
 ```diff
-namespace App\Repository;
+ namespace App\Repository;
 
 +use App\Entity\Post;
  use Doctrine\ORM\EntityRepository;
@@ -43,7 +43,7 @@ namespace App\Repository;
 Turns "$this->getRepository()" in Symfony Controller to constructor injection and private property access.
 
 ```diff
-class ProductController extends Controller
+ class ProductController extends Controller
  {
 +    /**
 +     * @var ProductRepository
@@ -69,7 +69,7 @@ class ProductController extends Controller
 Turns method data providers in PHPUnit from arrays to yield
 
 ```diff
-/**
+ /**
 - * @return mixed[]
   */
 -public function provide(): array
@@ -87,7 +87,7 @@ Turns method data providers in PHPUnit from arrays to yield
 [Dynamic] Turns method names to new ones.
 
 ```diff
-$someObject = new SomeClass;
+ $someObject = new SomeClass;
 -$someObject->oldMethod();
 +$someObject->newMethod();
 
@@ -129,7 +129,8 @@ Simplify `in_array` and `array_keys` functions combination into `array_key_exist
 [Dynamic] Changes defined parent class typehints.
 
 ```diff
-class SomeClass implements SomeInterface
+
+ class SomeClass implements SomeInterface
  {
 -    public read($content);
 +    public read(string $content);
@@ -141,7 +142,7 @@ class SomeClass implements SomeInterface
 [Dynamic] Removes defined arguments in defined methods and their calls.
 
 ```diff
-$containerBuilder = new Symfony\Component\DependencyInjection\ContainerBuilder;
+ $containerBuilder = new Symfony\Component\DependencyInjection\ContainerBuilder;
 -$containerBuilder->compile(true);
 +$containerBuilder->compile();
 ```
@@ -160,7 +161,7 @@ $containerBuilder = new Symfony\Component\DependencyInjection\ContainerBuilder;
 Turns properties with @inject to private properties and constructor injection
 
 ```diff
-/**
+ /**
   * @var SomeService
 - * @inject
   */
@@ -313,7 +314,7 @@ Turns magic callback assign to callback assign on Nette Form events.
 Turns node string names to Identifier object in php-parser
 
 ```diff
-$constNode = new \PhpParser\Node\Const_;
+ $constNode = new \PhpParser\Node\Const_;
 -$name = $constNode->name;
 +$name = $constNode->name->toString();'
 ```
@@ -353,7 +354,7 @@ Turns standalone line method to attribute in Node of PHP-Parser
 Turns integer return to remove node to constant in NodeVisitor of PHP-Parser
 
 ```diff
-public function leaveNode()
+ public function leaveNode()
  {
 -    return false;
 +    return NodeTraverser::REMOVE_NODE;
@@ -624,7 +625,7 @@ Turns `createForSubjectWithReviewer()` with null review to standalone method in 
 [Dynamic] Changes defined return typehint of method and class.
 
 ```diff
-class SomeClass
+ class SomeClass
  {
 -    public getData();
 +    public getData(): array;
@@ -762,7 +763,7 @@ Turns old option names to new ones in FormTypes in Form in Symfony
 [Dynamic] Adds or replaces defined arguments in defined methods and their calls.
 
 ```diff
-$containerBuilder = new Symfony\Component\DependencyInjection\ContainerBuilder;
+ $containerBuilder = new Symfony\Component\DependencyInjection\ContainerBuilder;
 -$containerBuilder->compile();
 +$containerBuilder->compile(true);
 ```
@@ -841,7 +842,7 @@ Turns `ProcessBuilder::instance()` to new ProcessBuilder in Process in Symfony. 
 Removes `$processBuilder->getProcess()` calls to $processBuilder in Process in Symfony, because ProcessBuilder was removed. This is part of multi-step Rector and has very narrow focus.
 
 ```diff
-$processBuilder = new Symfony\Component\Process\ProcessBuilder;
+ $processBuilder = new Symfony\Component\Process\ProcessBuilder;
 -$process = $processBuilder->getProcess();
 -$commamdLine = $processBuilder->getProcess()->getCommandLine();
 +$process = $processBuilder;

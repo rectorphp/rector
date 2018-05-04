@@ -71,6 +71,8 @@ final class DifferAndFormatter
     {
         $diff = preg_replace('#\n( )\n#', PHP_EOL . PHP_EOL, $diff);
 
-        return preg_replace('#( )\n#', PHP_EOL, $diff);
+        $diff = preg_replace('#( )\n#', PHP_EOL, $diff);
+
+        return rtrim($diff);
     }
 }

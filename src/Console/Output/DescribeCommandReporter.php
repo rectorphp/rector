@@ -88,7 +88,7 @@ final class DescribeCommandReporter
 
             $diff = $this->differAndFormatter->bareDiffAndFormatWithoutColors($codeBefore, $codeAfter);
 
-            $this->consoleStyle->write(trim($diff));
+            $this->consoleStyle->write($diff);
             $this->consoleStyle->newLine();
             $this->consoleStyle->writeln('```');
         }
@@ -102,14 +102,17 @@ final class DescribeCommandReporter
      */
     private function joinBeforeAndAfter(array $codeSamples): array
     {
-        $codeBefore = '';
-        $codeAfter = '';
         $separator = PHP_EOL . PHP_EOL;
 
+        $codesBefore = [];
+        $codesAfter = [];
         foreach ($codeSamples as $codeSample) {
-            $codeBefore .= $codeSample->getCodeBefore() . $separator;
-            $codeAfter .= $codeSample->getCodeAfter() . $separator;
+            $codesBefore[] = $codeSample->getCodeBefore();
+            $codesAfter[] = $codeSample->getCodeAfter();
         }
+
+        $codeBefore = implode($separator, $codesBefore);
+        $codeAfter = implode($separator, $codesAfter);
 
         return [$codeBefore, $codeAfter];
     }
