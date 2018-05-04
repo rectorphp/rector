@@ -4,12 +4,10 @@ namespace Rector\Console\Command;
 
 use Rector\Configuration\Option;
 use Rector\Console\ConsoleStyle;
-use Rector\ConsoleDiffer\DifferAndFormatter;
-use Rector\Contract\Rector\RectorInterface;
+use Rector\Console\Output\DescribeCommandReporter;
 use Rector\Exception\NoRectorsLoadedException;
 use Rector\Naming\CommandNaming;
 use Rector\NodeTraverser\RectorNodeTraverser;
-use Rector\RectorDefinition\CodeSample;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -20,12 +18,12 @@ final class DescribeCommand extends Command
     /**
      * @var string
      */
-    private const FORMAT_CLI = 'cli';
+    public const FORMAT_CLI = 'cli';
 
     /**
      * @var string
      */
-    private const FORMAT_MARKDOWN = 'md';
+    public const FORMAT_MARKDOWN = 'md';
 
     /**
      * @var string
@@ -43,20 +41,20 @@ final class DescribeCommand extends Command
     private $rectorNodeTraverser;
 
     /**
-     * @var DifferAndFormatter
+     * @var DescribeCommandReporter
      */
-    private $differAndFormatter;
+    private $describeCommandReporter;
 
     public function __construct(
         ConsoleStyle $consoleStyle,
         RectorNodeTraverser $rectorNodeTraverser,
-        DifferAndFormatter $differAndFormatter
+        DescribeCommandReporter $describeCommandReporter
     ) {
         parent::__construct();
 
         $this->consoleStyle = $consoleStyle;
         $this->rectorNodeTraverser = $rectorNodeTraverser;
-        $this->differAndFormatter = $differAndFormatter;
+        $this->describeCommandReporter = $describeCommandReporter;
     }
 
     protected function configure(): void
@@ -72,34 +70,19 @@ final class DescribeCommand extends Command
         $this->ensureSomeRectorsAreRegistered();
 
         $outputFormat = $input->getOption(self::OPTION_FORMAT);
+
         if ($outputFormat === self::FORMAT_MARKDOWN) {
             $this->consoleStyle->writeln('# All Rectors Overview');
             $this->consoleStyle->newLine();
         }
 
-        $i = 0;
-        foreach ($this->rectorNodeTraverser->getRectors() as $rector) {
-            if ($outputFormat === self::FORMAT_CLI) {
-                $this->printWithCliFormat(++$i, $input, $rector);
-            } elseif ($outputFormat === self::FORMAT_MARKDOWN) {
-                $this->printWithMarkdownFormat($input, $rector);
-            }
-        }
+        $this->describeCommandReporter->reportRectorsInFormat(
+            $this->rectorNodeTraverser->getRectors(),
+            $outputFormat,
+            ! $input->getOption(Option::OPTION_NO_DIFFS)
+        );
 
         return 0;
-    }
-
-    /**
-     * @param CodeSample[] $codeSamples
-     */
-    private function describeRectorCodeSamples(array $codeSamples): void
-    {
-        [$codeBefore, $codeAfter] = $this->joinBeforeAndAfter($codeSamples);
-
-        $formattedDiff = $this->differAndFormatter->bareDiffAndFormat($codeBefore, $codeAfter);
-        if ($formattedDiff) {
-            $this->consoleStyle->write($formattedDiff);
-        }
     }
 
     private function ensureSomeRectorsAreRegistered(): void
@@ -112,65 +95,5 @@ final class DescribeCommand extends Command
             'No rectors were found. Registers them in rector.yml config to "rector:" '
             . 'section, load them via "--config <file>.yml" or "--level <level>" CLI options.'
         );
-    }
-
-    /**
-     * @param CodeSample[] $codeSamples
-     * @return string[]
-     */
-    private function joinBeforeAndAfter(array $codeSamples): array
-    {
-        $codeBefore = '';
-        $codeAfter = '';
-        $separator = PHP_EOL . PHP_EOL;
-
-        foreach ($codeSamples as $codeSample) {
-            $codeBefore .= $codeSample->getCodeBefore() . $separator;
-            $codeAfter .= $codeSample->getCodeAfter() . $separator;
-        }
-
-        return [$codeBefore, $codeAfter];
-    }
-
-    private function printWithCliFormat(int $i, InputInterface $input, RectorInterface $rector): void
-    {
-        $this->consoleStyle->section(sprintf('%d) %s', $i, get_class($rector)));
-
-        $rectorDefinition = $rector->getDefinition();
-        if ($rectorDefinition->getDescription()) {
-            $this->consoleStyle->writeln(' * ' . $rectorDefinition->getDescription());
-        }
-
-        if (! $input->getOption(Option::OPTION_NO_DIFFS)) {
-            $this->describeRectorCodeSamples($rectorDefinition->getCodeSamples());
-        }
-
-        $this->consoleStyle->newLine(2);
-    }
-
-    private function printWithMarkdownFormat(InputInterface $input, RectorInterface $rector): void
-    {
-        $this->consoleStyle->writeln('## ' . get_class($rector));
-
-        $rectorDefinition = $rector->getDefinition();
-        if ($rectorDefinition->getDescription()) {
-            $this->consoleStyle->newLine();
-            $this->consoleStyle->writeln($rectorDefinition->getDescription());
-        }
-
-        if (! $input->getOption(Option::OPTION_NO_DIFFS)) {
-            $this->consoleStyle->newLine();
-            $this->consoleStyle->writeln('```diff');
-
-            [$codeBefore, $codeAfter] = $this->joinBeforeAndAfter($rectorDefinition->getCodeSamples());
-
-            $diff = $this->differAndFormatter->bareDiffAndFormatWithoutColors($codeBefore, $codeAfter);
-
-            $this->consoleStyle->write(trim($diff));
-            $this->consoleStyle->newLine();
-            $this->consoleStyle->writeln('```');
-        }
-
-        $this->consoleStyle->newLine(1);
     }
 }
