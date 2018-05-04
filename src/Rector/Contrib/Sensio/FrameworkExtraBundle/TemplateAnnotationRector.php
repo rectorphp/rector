@@ -116,7 +116,7 @@ final class TemplateAnnotationRector extends AbstractRector
         }
 
         // remove annotation
-        $this->docBlockAnalyzer->removeAnnotationFromNode($classMethodNode, 'Template');
+        $this->docBlockAnalyzer->removeTagFromNode($classMethodNode, 'Template');
 
         return $classMethodNode;
     }
@@ -142,8 +142,8 @@ final class TemplateAnnotationRector extends AbstractRector
 
     private function resolveTemplateName(ClassMethod $classMethodNode): string
     {
-        $templateAnnotation = $this->docBlockAnalyzer->getTagsByName($classMethodNode, 'Template')[0];
-        $content = $templateAnnotation->render();
+        $templateTag = $this->docBlockAnalyzer->getTagByName($classMethodNode, 'Template');
+        $content = (string) $templateTag;
 
         // @todo consider using sth similar to offical parsing
         $annotationContent = Strings::match($content, '#\("(?<filename>.*?)"\)#');

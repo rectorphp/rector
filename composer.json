@@ -21,15 +21,17 @@
         "symfony/dependency-injection": "^4.0",
         "symfony/finder": "^4.0",
         "symplify/better-reflection-docblock": "^4.0",
-        "symplify/better-phpdoc-parser": "^4.1",
-        "symplify/package-builder": "^4.1"
+        "symplify/better-phpdoc-parser": "dev-master",
+        "symplify/package-builder": "dev-master",
+        "symplify/token-runner": "dev-master"
     },
     "require-dev": {
         "phpstan/phpstan-shim": "^0.9",
         "phpunit/phpunit": "^7.1",
         "slam/php-cs-fixer-extensions": "^1.15",
         "symfony/var-dumper": "^4.0",
-        "symplify/easy-coding-standard": "^4.1"
+        "symplify/easy-coding-standard": "dev-master",
+        "symplify/coding-standard": "dev-master"
     },
     "autoload": {
         "psr-4": {

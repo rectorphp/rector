@@ -37,7 +37,6 @@ services:
 
     Symplify\CodingStandard\Fixer\Naming\ClassNameSuffixByParentFixer:
         parent_types_to_suffixes:
-            '*RectorProvider': 'RectorProvider'
             '*Rector': 'Rector'
 
 parameters:

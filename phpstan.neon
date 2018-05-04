@@ -20,6 +20,7 @@ parameters:
         # known values
         - '#Argument of an invalid type array<PhpParser\\Node>\|null supplied for foreach, only iterables are supported#'
         - '#Method (.+) Symfony\\Component\\DependencyInjection\\Container but returns Symfony\\Component\\DependencyInjection\\ContainerInterface#'
+        - '#Access to an undefined property PHPStan\\PhpDocParser\\Ast\\Node::\$name#'
 
         - '#Method Rector\\Node\\NodeFactory::create(Null|False)Constant\(\) should return PhpParser\\Node\\Expr\\ConstFetch but returns PhpParser\\Node\\Expr#' # 2
         - '#Method Rector\\Node\\NodeFactory::createNamespace\(\) should return PhpParser\\Node\\Stmt\\Namespace_ but returns PhpParser\\Node#' # 1

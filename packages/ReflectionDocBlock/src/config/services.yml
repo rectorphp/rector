@@ -4,8 +4,3 @@ services:
 
     Rector\ReflectionDocBlock\:
         resource: '../'
-
-    Rector\BetterReflection\TypesFinder\PhpDocumentor\NamespaceNodeToReflectionTypeContext: ~
-
-    Symplify\BetterReflectionDocBlock\CleanDocBlockFactory: ~
-    Symplify\BetterReflectionDocBlock\FixedSerializer: ~

@@ -112,7 +112,7 @@ CODE_SAMPLE
         $classMethodNode->stmts = array_merge($classMethodNode->stmts, $yieldNodes);
 
         // 3. remove doc block
-        $this->docBlockAnalyzer->removeAnnotationFromNode($classMethodNode, 'return', '');
+        $this->docBlockAnalyzer->removeTagFromNode($classMethodNode, 'return');
 
         return $classMethodNode;
     }

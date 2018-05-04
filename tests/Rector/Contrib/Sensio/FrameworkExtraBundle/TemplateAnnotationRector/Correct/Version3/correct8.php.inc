@@ -2,8 +2,6 @@
 
 class ClassWithNamedService1 extends Controller
 {
-    /**
-     */
     public function indexAction()
     {
         return $this->render('payment/new.html.twig', array(

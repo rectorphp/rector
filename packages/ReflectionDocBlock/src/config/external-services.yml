@@ -1,0 +1,13 @@
+imports:
+    - { resource: '../../../../vendor/symplify/better-phpdoc-parser/src/config/services.yml' }
+
+services:
+    _defaults:
+        autowire: true
+
+    Rector\BetterReflection\TypesFinder\PhpDocumentor\NamespaceNodeToReflectionTypeContext: ~
+
+    Symplify\BetterReflectionDocBlock\CleanDocBlockFactory: ~
+    Symplify\BetterReflectionDocBlock\FixedSerializer: ~
+
+    Symplify\PackageBuilder\Reflection\PrivatesAccessor: ~

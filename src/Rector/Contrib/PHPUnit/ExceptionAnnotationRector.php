@@ -6,6 +6,7 @@ use phpDocumentor\Reflection\DocBlock\Tags\Generic;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
@@ -101,21 +102,21 @@ CODE_SAMPLE
             /** @var Generic[] $tags */
             $tags = $this->docBlockAnalyzer->getTagsByName($classMethodNode, $annotation);
 
-            $methodCallExpressions = array_map(function (Generic $tag) use ($method): Expression {
-                return $this->createMethodCallExpressionFromTag($tag, $method);
+            $methodCallExpressions = array_map(function (PhpDocTagNode $phpDocTagNode) use ($method): Expression {
+                return $this->createMethodCallExpressionFromTag($phpDocTagNode, $method);
             }, $tags);
 
             $classMethodNode->stmts = array_merge($methodCallExpressions, $classMethodNode->stmts);
 
-            $this->docBlockAnalyzer->removeAnnotationFromNode($classMethodNode, $annotation);
+            $this->docBlockAnalyzer->removeTagFromNode($classMethodNode, $annotation);
         }
 
         return $classMethodNode;
     }
 
-    private function createMethodCallExpressionFromTag(Generic $generic, string $method): Expression
+    private function createMethodCallExpressionFromTag(PhpDocTagNode $phpDocTagNode, string $method): Expression
     {
-        $annotationContent = (string) $generic->getDescription();
+        $annotationContent = (string) $phpDocTagNode->value;
         $annotationContent = ltrim($annotationContent, '\\'); // this is needed due to BuilderHelpers
 
         $methodCall = $this->methodCallNodeFactory->createWithVariableNameMethodNameAndArguments(
