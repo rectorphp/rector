@@ -4,7 +4,7 @@ namespace Rector\Console\Output;
 
 use Rector\Console\Command\DescribeCommand;
 use Rector\Console\ConsoleStyle;
-use Rector\ConsoleDiffer\DifferAndFormatter;
+use Rector\ConsoleDiffer\MarkdownDifferAndFormatter;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\RectorDefinition\CodeSample;
 
@@ -16,14 +16,14 @@ final class DescribeCommandReporter
     private $consoleStyle;
 
     /**
-     * @var DifferAndFormatter
+     * @var MarkdownDifferAndFormatter
      */
-    private $differAndFormatter;
+    private $markdownDifferAndFormatter;
 
-    public function __construct(ConsoleStyle $consoleStyle, DifferAndFormatter $differAndFormatter)
+    public function __construct(ConsoleStyle $consoleStyle, MarkdownDifferAndFormatter $markdownDifferAndFormatter)
     {
         $this->consoleStyle = $consoleStyle;
-        $this->differAndFormatter = $differAndFormatter;
+        $this->markdownDifferAndFormatter = $markdownDifferAndFormatter;
     }
 
     /**
@@ -64,7 +64,7 @@ final class DescribeCommandReporter
     {
         [$codeBefore, $codeAfter] = $this->joinBeforeAndAfter($codeSamples);
 
-        $formattedDiff = $this->differAndFormatter->bareDiffAndFormat($codeBefore, $codeAfter);
+        $formattedDiff = $this->markdownDifferAndFormatter->bareDiffAndFormat($codeBefore, $codeAfter);
         if ($formattedDiff) {
             $this->consoleStyle->write($formattedDiff);
         }
@@ -86,7 +86,7 @@ final class DescribeCommandReporter
 
             [$codeBefore, $codeAfter] = $this->joinBeforeAndAfter($rectorDefinition->getCodeSamples());
 
-            $diff = $this->differAndFormatter->bareDiffAndFormatWithoutColors($codeBefore, $codeAfter);
+            $diff = $this->markdownDifferAndFormatter->bareDiffAndFormatWithoutColors($codeBefore, $codeAfter);
 
             $this->consoleStyle->write($diff);
             $this->consoleStyle->newLine();
