@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
+use Rector\BetterPhpDocParser\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\Node\NodeFactory;
 use Rector\NodeTraverserQueue\BetterNodeFinder;
@@ -16,7 +17,6 @@ use Rector\Rector\AbstractRector;
 use Rector\Rector\Contrib\Sensio\Helper\TemplateGuesser;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
-use Rector\BetterPhpDocParser\NodeAnalyzer\DocBlockAnalyzer;
 
 final class TemplateAnnotationRector extends AbstractRector
 {
