@@ -42,20 +42,21 @@ final class MarkdownDifferAndFormatter
             return '';
         }
 
-        // @todo here we need complete diff with all the code
         $diff = $this->markdownDiffer->diff($old, $new);
+
+        // remove first 3 lines, just meta info added by StrictUnifiedDiffOutputBuilder
+        $diff = preg_replace("/^(.*\n){1}/", "", $diff);
 
         $diff = $this->removeTrailingWhitespaces($diff);
 
-        // impossible to configure - removed manually
-        return substr($diff, strlen('@@ @@ '));
+        return $diff;
     }
 
     private function removeTrailingWhitespaces(string $diff): string
     {
-        $diff = preg_replace('#\n( )\n#', PHP_EOL . PHP_EOL, $diff);
+        $diff = preg_replace('#\n( ){1,}\n#', PHP_EOL . PHP_EOL, $diff);
 
-        $diff = preg_replace('#( )\n#', PHP_EOL, $diff);
+        $diff = preg_replace('#( ){1,}\n#', PHP_EOL, $diff);
 
         return rtrim($diff);
     }
