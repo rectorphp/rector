@@ -40,6 +40,27 @@ final class StaticMethodCallAnalyzer
     }
 
     /**
+     * @param string[] $methods
+     */
+    public function isMethods(Node $node, array $methods): bool
+    {
+        if (! $node instanceof StaticCall) {
+            return false;
+        }
+
+        /** @var StaticCall $staticCallNode */
+        $staticCallNode = $node;
+
+        foreach ($methods as $method) {
+            if ((string) $staticCallNode->name === $method) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Checks "SpecificType::oneOfSpecificMethods()"
      *
      * @param string[] $methodNames
