@@ -34,7 +34,7 @@ final class FormIsValidRector extends AbstractRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
-            'Adds $form->isSubmitted() validatoin to all $form->isValid() calls in Form in Symfony',
+            'Adds `$form->isSubmitted()` validatoin to all `$form->isValid()` calls in Form in Symfony',
             [
                 new CodeSample(
                     'if ($form->isValid()) { ... };',

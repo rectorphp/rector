@@ -5,7 +5,12 @@
 Handles method calls in child of Doctrine EntityRepository and moves them to "$this->repository" property.
 
 ```diff
-{
+ <?php
+
+ use Doctrine\ORM\EntityRepository;
+
+ class SomeRepository extends EntityRepository
+ {
      public function someMethod()
      {
 -        return $this->findAll();
@@ -19,7 +24,7 @@ Handles method calls in child of Doctrine EntityRepository and moves them to "$t
 Turns parent EntityRepository class to constructor dependency
 
 ```diff
-namespace App\Repository;
+ namespace App\Repository;
 
 +use App\Entity\Post;
  use Doctrine\ORM\EntityRepository;
@@ -43,7 +48,7 @@ namespace App\Repository;
 Turns "$this->getRepository()" in Symfony Controller to constructor injection and private property access.
 
 ```diff
-class ProductController extends Controller
+ class ProductController extends Controller
  {
 +    /**
 +     * @var ProductRepository
@@ -69,17 +74,17 @@ class ProductController extends Controller
 Turns method data providers in PHPUnit from arrays to yield
 
 ```diff
-/**
--                 * @return mixed[]
-                  */
--                public function provide(): array
-+                public function provide(): Iterator
-                 {
--                    return [
--                        ['item']
--                    ]
-+                    yield ['item'];
-                 }
+ /**
+- * @return mixed[]
+  */
+-public function provide(): array
++public function provide(): Iterator
+ {
+-    return [
+-        ['item']
+-    ]
++    yield ['item'];
+ }
 ```
 
 ## Rector\Rector\Dynamic\MethodNameReplacerRector
@@ -87,7 +92,7 @@ Turns method data providers in PHPUnit from arrays to yield
 [Dynamic] Turns method names to new ones.
 
 ```diff
-$someObject = new SomeClass;
+ $someObject = new SomeClass;
 -$someObject->oldMethod();
 +$someObject->newMethod();
 
@@ -129,21 +134,26 @@ Simplify `in_array` and `array_keys` functions combination into `array_key_exist
 [Dynamic] Changes defined parent class typehints.
 
 ```diff
-class SomeClass implements SomeInterface
+ interface SomeInterface
+ {
+     public read(string $content);
+ }
+
+ class SomeClass implements SomeInterface
  {
 -    public read($content);
 +    public read(string $content);
  }
 ```
 
-## Rector\Rector\Dynamic\ArgumentRector
+## Rector\Rector\Dynamic\ArgumentRemoverRector
 
-[Dynamic] Adds, removes or replaces defined arguments in defined methods and their calls.
+[Dynamic] Removes defined arguments in defined methods and their calls.
 
 ```diff
-$containerBuilder = new Symfony\Component\DependencyInjection\ContainerBuilder;
--$containerBuilder->compile();
-+$containerBuilder->compile(true);
+ $containerBuilder = new Symfony\Component\DependencyInjection\ContainerBuilder;
+-$containerBuilder->compile(true);
++$containerBuilder->compile();
 ```
 
 ## Rector\Rector\Dynamic\FunctionToMethodCallRector
@@ -160,7 +170,7 @@ $containerBuilder = new Symfony\Component\DependencyInjection\ContainerBuilder;
 Turns properties with @inject to private properties and constructor injection
 
 ```diff
-/**
+ /**
   * @var SomeService
 - * @inject
   */
@@ -286,7 +296,7 @@ Turns magic callback assign to callback assign on Nette Form events.
 
 ## Rector\Rector\MagicDisclosure\GetAndSetToMethodCallRector
 
-[Dynamic] Turns defined __get/__set to specific method calls.
+[Dynamic] Turns defined `__get`/`__set` to specific method calls.
 
 ```diff
 -$someService = $container->someService;
@@ -298,7 +308,7 @@ Turns magic callback assign to callback assign on Nette Form events.
 
 ## Rector\Rector\MagicDisclosure\UnsetAndIssetToMethodCallRector
 
-[Dynamic] Turns defined __isset/__unset calls to specific method calls.
+[Dynamic] Turns defined `__isset`/`__unset` calls to specific method calls.
 
 ```diff
 -isset($container["someKey"]);
@@ -313,13 +323,14 @@ Turns magic callback assign to callback assign on Nette Form events.
 Turns node string names to Identifier object in php-parser
 
 ```diff
--$constNode = new \PhpParser\Node\Const_; $name = $constNode->name;
-+$constNode = new \PhpParser\Node\Const_; $name = $constNode->name->toString();
+ $constNode = new \PhpParser\Node\Const_;
+-$name = $constNode->name;
++$name = $constNode->name->toString();'
 ```
 
 ## Rector\Rector\Contrib\PhpParser\ParamAndStaticVarNameRector
 
-Turns old string var to var->name sub-variable in Node of PHP-Parser
+Turns old string `var` to `var->name` sub-variable in Node of PHP-Parser
 
 ```diff
 -$paramNode->name;
@@ -331,7 +342,7 @@ Turns old string var to var->name sub-variable in Node of PHP-Parser
 
 ## Rector\Rector\Contrib\PhpParser\CatchAndClosureUseNameRector
 
-Turns $catchNode->var to its new new ->name property in php-parser
+Turns `$catchNode->var` to its new `name` property in php-parser
 
 ```diff
 -$catchNode->var;
@@ -352,13 +363,16 @@ Turns standalone line method to attribute in Node of PHP-Parser
 Turns integer return to remove node to constant in NodeVisitor of PHP-Parser
 
 ```diff
--public function leaveNode() { return false; }
-+public function leaveNode() { return NodeTraverser::REMOVE_NODE; }
+ public function leaveNode()
+ {
+-    return false;
++    return NodeTraverser::REMOVE_NODE;
+ }
 ```
 
 ## Rector\Rector\Contrib\PhpParser\UseWithAliasRector
 
-Turns use property to method and $node->alias to last name in UseAlias Node of PHP-Parser
+Turns use property to method and `$node->alias` to last name in UseAlias Node of PHP-Parser
 
 ```diff
 -$node->alias;
@@ -433,7 +447,7 @@ Turns same bool and null comparisons to their method name alternatives in PHPUni
 
 ## Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertFalseStrposToContainsRector
 
-Turns strpos()/stripos() comparisons to their method name alternatives in PHPUnit TestCase
+Turns `strpos`/`stripos` comparisons to their method name alternatives in PHPUnit TestCase
 
 ```diff
 -$this->assertFalse(strpos($anything, "foo"), "message");
@@ -502,7 +516,7 @@ Turns instanceof comparisons to their method name alternatives in PHPUnit TestCa
 
 ## Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertPropertyExistsRector
 
-Turns property_exists() comparisons to their method name alternatives in PHPUnit TestCase
+Turns `property_exists` comparisons to their method name alternatives in PHPUnit TestCase
 
 ```diff
 -$this->assertTrue(property_exists(new Class, "property"), "message");
@@ -514,7 +528,7 @@ Turns property_exists() comparisons to their method name alternatives in PHPUnit
 
 ## Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertRegExpRector
 
-Turns preg_match() comparisons to their method name alternatives in PHPUnit TestCase
+Turns `preg_match` comparisons to their method name alternatives in PHPUnit TestCase
 
 ```diff
 -$this->assertSame(1, preg_match("/^Message for ".*"\.$/", $string), $message);
@@ -526,7 +540,7 @@ Turns preg_match() comparisons to their method name alternatives in PHPUnit Test
 
 ## Rector\Rector\Contrib\PHPUnit\ExceptionAnnotationRector
 
-Takes setExpectedException() 2nd and next arguments to own methods in PHPUnit.
+Takes `setExpectedException()` 2nd and next arguments to own methods in PHPUnit.
 
 ```diff
 -/**
@@ -564,7 +578,7 @@ Turns getMock*() methods to createMock()
 
 ## Rector\Rector\Contrib\PHPUnit\DelegateExceptionArgumentsRector
 
-Takes setExpectedException() 2nd and next arguments to own methods in PHPUnit.
+Takes `setExpectedException()` 2nd and next arguments to own methods in PHPUnit.
 
 ```diff
 -$this->setExpectedException(Exception::class, "Message", "CODE");
@@ -597,14 +611,18 @@ Takes setExpectedException() 2nd and next arguments to own methods in PHPUnit.
 Turns @Template annotation to explicit method call in Controller of FrameworkExtraBundle in Symfony
 
 ```diff
--/** @Template() */ public function indexAction() { }
-+public function indexAction() {
-+ return $this->render("index.html.twig"); }
+-/**
+- * @Template()
+- */
+ public function indexAction()
+ {
++    return $this->render("index.html.twig");
+ }
 ```
 
 ## Rector\Rector\Contrib\Sylius\Review\ReplaceCreateMethodWithoutReviewerRector
 
-Turns createForSubjectWithReviewer() with null review to standalone method in Sylius
+Turns `createForSubjectWithReviewer()` with null review to standalone method in Sylius
 
 ```diff
 -$this->createForSubjectWithReviewer($subject, null)
@@ -616,7 +634,7 @@ Turns createForSubjectWithReviewer() with null review to standalone method in Sy
 [Dynamic] Changes defined return typehint of method and class.
 
 ```diff
-class SomeClass
+ class SomeClass
  {
 -    public getData();
 +    public getData(): array;
@@ -625,7 +643,7 @@ class SomeClass
 
 ## Rector\Rector\Contrib\Symfony\FrameworkBundle\ContainerGetToConstructorInjectionRector
 
-Turns fetching of dependencies via $container->get() in ContainerAware to constructor injection in Command and Controller in Symfony
+Turns fetching of dependencies via `$container->get()` in ContainerAware to constructor injection in Command and Controller in Symfony
 
 ```diff
 -class MyCommand extends ContainerAwareCommand
@@ -649,7 +667,7 @@ Turns fetching of dependencies via $container->get() in ContainerAware to constr
 
 ## Rector\Rector\Contrib\Symfony\FrameworkBundle\GetParameterToConstructorInjectionRector
 
-Turns fetching of parameters via getParmaeter() in ContainerAware to constructor injection in Command and Controller in Symfony
+Turns fetching of parameters via `getParameter()` in ContainerAware to constructor injection in Command and Controller in Symfony
 
 ```diff
 -class MyCommand extends ContainerAwareCommand
@@ -672,7 +690,7 @@ Turns fetching of parameters via getParmaeter() in ContainerAware to constructor
 
 ## Rector\Rector\Contrib\Symfony\FrameworkBundle\GetToConstructorInjectionRector
 
-Turns fetching of dependencies via $this->get() to constructor injection in Command and Controller in Symfony
+Turns fetching of dependencies via `$this->get()` to constructor injection in Command and Controller in Symfony
 
 ```diff
 -class MyCommand extends ContainerAwareCommand
@@ -712,7 +730,7 @@ Turns long flash adding to short helper method in Controller in Symfony
 
 ## Rector\Rector\Contrib\Symfony\HttpKernel\GetRequestRector
 
-Turns fetching of dependencies via $this->get() to constructor injection in Command and Controller in Symfony
+Turns fetching of dependencies via `$this->get()` to constructor injection in Command and Controller in Symfony
 
 ```diff
 +use Symfony\Component\HttpFoundation\Request;
@@ -730,7 +748,7 @@ Turns fetching of dependencies via $this->get() to constructor injection in Comm
 
 ## Rector\Rector\Contrib\Symfony\Form\FormTypeGetParentRector
 
-Turns string Form Type references to their CONSTANT alternatives in getParent() and getExtendedType() methods in Form in Symfony
+Turns string Form Type references to their CONSTANT alternatives in `getParent()` and `getExtendedType()` methods in Form in Symfony
 
 ```diff
 -function getParent() { return "collection"; }
@@ -749,6 +767,16 @@ Turns old option names to new ones in FormTypes in Form in Symfony
 +$builder->add("...", ["scale" => "...", "inherit_data" => "..."];
 ```
 
+## Rector\Rector\Dynamic\ArgumentAdderRector
+
+[Dynamic] Adds or replaces defined arguments in defined methods and their calls.
+
+```diff
+ $containerBuilder = new Symfony\Component\DependencyInjection\ContainerBuilder;
+-$containerBuilder->compile();
++$containerBuilder->compile(true);
+```
+
 ## Rector\Rector\Contrib\Symfony\Console\ConsoleExceptionToErrorEventConstantRector
 
 Turns old event name with EXCEPTION to ERROR constant in Console in Symfony
@@ -763,7 +791,7 @@ Turns old event name with EXCEPTION to ERROR constant in Console in Symfony
 
 ## Rector\Rector\Contrib\Symfony\Validator\ConstraintUrlOptionRector
 
-Turns true value to Url::CHECK_DNS_TYPE_ANY in Validator in Symfony.
+Turns true value to `Url::CHECK_DNS_TYPE_ANY` in Validator in Symfony.
 
 ```diff
 -$constraint = new Url(["checkDNS" => true]);
@@ -772,7 +800,7 @@ Turns true value to Url::CHECK_DNS_TYPE_ANY in Validator in Symfony.
 
 ## Rector\Rector\Contrib\Symfony\Form\FormIsValidRector
 
-Adds $form->isSubmitted() validatoin to all $form->isValid() calls in Form in Symfony
+Adds `$form->isSubmitted()` validatoin to all `$form->isValid()` calls in Form in Symfony
 
 ```diff
 -if ($form->isValid()) { ... };
@@ -790,7 +818,7 @@ Turns string Form Type references to their CONSTANT alternatives in FormTypes in
 
 ## Rector\Rector\Contrib\Symfony\VarDumper\VarDumperTestTraitMethodArgsRector
 
-Adds new $format argument in VarDumperTestTrait->assertDumpEquals() in in Validator in Symfony.
+Adds new `$format` argument in `VarDumperTestTrait->assertDumpEquals()` in Validator in Symfony.
 
 ```diff
 -VarDumperTestTrait->assertDumpEquals($dump, $data, $mesage = "");
@@ -811,7 +839,7 @@ Turns old default value to parameter in ContinerBuilder->build() method in DI in
 
 ## Rector\Rector\Contrib\Symfony\Process\ProcessBuilderInstanceRector
 
-Turns ProcessBuilder::instance() to new ProcessBuilder in Process in Symfony. Part of multi-step Rector.
+Turns `ProcessBuilder::instance()` to new ProcessBuilder in Process in Symfony. Part of multi-step Rector.
 
 ```diff
 -$processBuilder = Symfony\Component\Process\ProcessBuilder::instance($args);
@@ -820,10 +848,10 @@ Turns ProcessBuilder::instance() to new ProcessBuilder in Process in Symfony. Pa
 
 ## Rector\Rector\Contrib\Symfony\Process\ProcessBuilderGetProcessRector
 
-Removes $processBuilder->getProcess() calls to $processBuilder in Process in Symfony, because ProcessBuilder was removed. This is part of multi-step Rector and has very narrow focus.
+Removes `$processBuilder->getProcess()` calls to $processBuilder in Process in Symfony, because ProcessBuilder was removed. This is part of multi-step Rector and has very narrow focus.
 
 ```diff
-$processBuilder = new Symfony\Component\Process\ProcessBuilder;
+ $processBuilder = new Symfony\Component\Process\ProcessBuilder;
 -$process = $processBuilder->getProcess();
 -$commamdLine = $processBuilder->getProcess()->getCommandLine();
 +$process = $processBuilder;

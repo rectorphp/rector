@@ -72,9 +72,21 @@ final class TemplateAnnotationRector extends AbstractRector
             'Turns @Template annotation to explicit method call in Controller of FrameworkExtraBundle in Symfony',
             [
                 new CodeSample(
-                    '/** @Template() */ public function indexAction() { }',
-                    'public function indexAction() {
- return $this->render("index.html.twig"); }'
+                    <<<'CODE_SAMPLE'
+/**
+ * @Template()
+ */
+public function indexAction()
+{
+}
+CODE_SAMPLE
+                    ,
+                    <<<'CODE_SAMPLE'
+public function indexAction()
+{
+    return $this->render("index.html.twig");
+}
+CODE_SAMPLE
                 ),
             ]
         );

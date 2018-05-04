@@ -33,7 +33,7 @@ final class ConstraintUrlOptionRector extends AbstractRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Turns true value to Url::CHECK_DNS_TYPE_ANY in Validator in Symfony.', [
+        return new RectorDefinition('Turns true value to `Url::CHECK_DNS_TYPE_ANY` in Validator in Symfony.', [
             new CodeSample(
                 '$constraint = new Url(["checkDNS" => true]);',
                 '$constraint = new Url(["checkDNS" => Url::CHECK_DNS_TYPE_ANY]);'

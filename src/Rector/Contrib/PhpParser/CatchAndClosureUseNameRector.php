@@ -51,7 +51,7 @@ final class CatchAndClosureUseNameRector extends AbstractRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Turns $catchNode->var to its new new ->name property in php-parser', [
+        return new RectorDefinition('Turns `$catchNode->var` to its new `name` property in php-parser', [
             new CodeSample('$catchNode->var;', '$catchNode->var->name'),
         ]);
     }

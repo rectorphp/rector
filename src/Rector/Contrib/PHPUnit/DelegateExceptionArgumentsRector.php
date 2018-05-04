@@ -40,16 +40,19 @@ final class DelegateExceptionArgumentsRector extends AbstractPHPUnitRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Takes setExpectedException() 2nd and next arguments to own methods in PHPUnit.', [
-            new CodeSample(
-                '$this->setExpectedException(Exception::class, "Message", "CODE");',
-                <<<'CODE_SAMPLE'
-$this->setExpectedException(Exception::class); 
+        return new RectorDefinition(
+            'Takes `setExpectedException()` 2nd and next arguments to own methods in PHPUnit.',
+            [
+                new CodeSample(
+                    '$this->setExpectedException(Exception::class, "Message", "CODE");',
+                    <<<'CODE_SAMPLE'
+$this->setExpectedException(Exception::class);
 $this->expectExceptionMessage("Message");
 $this->expectExceptionCode("CODE");
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+            ]
+        );
     }
 
     public function isCandidate(Node $node): bool

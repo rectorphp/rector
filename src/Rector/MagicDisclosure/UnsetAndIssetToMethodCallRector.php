@@ -53,7 +53,7 @@ final class UnsetAndIssetToMethodCallRector extends AbstractRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('[Dynamic] Turns defined __isset/__unset calls to specific method calls.', [
+        return new RectorDefinition('[Dynamic] Turns defined `__isset`/`__unset` calls to specific method calls.', [
             new CodeSample('isset($container["someKey"]);', '$container->hasService("someKey");'),
             new CodeSample('unset($container["someKey"])', '$container->removeService("someKey");'),
         ]);
