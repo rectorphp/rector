@@ -50,6 +50,25 @@ $someObject = new SomeClass;
 $someObject->someMethod(true);
 CODE_SAMPLE
                 ),
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
+class MyCustomClass extends SomeClass
+{
+    public function someMethod()
+    {
+    }
+}
+CODE_SAMPLE
+                    ,
+                    <<<'CODE_SAMPLE'
+class MyCustomClass extends SomeClass
+{
+    public function someMethod($value = true)
+    {
+    }
+}
+CODE_SAMPLE
+                ),
             ]
         );
     }
