@@ -313,9 +313,8 @@ Turns magic callback assign to callback assign on Nette Form events.
 Turns node string names to Identifier object in php-parser
 
 ```diff
--$constNode = new \PhpParser\Node\Const_;
+$constNode = new \PhpParser\Node\Const_;
 -$name = $constNode->name;
-+'$constNode = new \PhpParser\Node\Const_;
 +$name = $constNode->name->toString();'
 ```
 
@@ -602,7 +601,9 @@ Takes `setExpectedException()` 2nd and next arguments to own methods in PHPUnit.
 Turns @Template annotation to explicit method call in Controller of FrameworkExtraBundle in Symfony
 
 ```diff
--/** @Template() */
+-/**
+- * @Template()
+- */
  public function indexAction()
  {
 +    return $this->render("index.html.twig");
