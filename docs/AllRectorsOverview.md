@@ -20,8 +20,10 @@ Turns parent EntityRepository class to constructor dependency
 
 ```diff
 namespace App\Repository;
+
 +use App\Entity\Post;
  use Doctrine\ORM\EntityRepository;
+
 -final class PostRepository extends EntityRepository
 +final class PostRepository
  {
@@ -88,6 +90,7 @@ Turns method data providers in PHPUnit from arrays to yield
 $someObject = new SomeClass;
 -$someObject->oldMethod();
 +$someObject->newMethod();
+
 -SomeClass::oldStaticMethod();
 +SomeClass::newStaticMethod();
 ```
@@ -159,7 +162,8 @@ Turns properties with @inject to private properties and constructor injection
 ```diff
 /**
   * @var SomeService
-- * @inject  */
+- * @inject 
+  */
 -public $someService;
 +private $someService;
 +
@@ -192,7 +196,8 @@ Turns setInject() to tag in Nette\DI\CompilerExtension
 Checks all Nette\Object instances and turns parent class to trait
 
 ```diff
--class SomeClass extends \Nette\Object { }+class SomeClass { use Nette\SmartObject; }
+-class SomeClass extends \Nette\Object { } 
++class SomeClass { use Nette\SmartObject; }
 ```
 
 ## Rector\Rector\Contrib\Nette\Utils\MagicMethodRector
@@ -238,6 +243,7 @@ Turns expand() to parameters value in Nette\DI\CompilerExtension
 ```diff
 -$builder->expand("argument");
 +$builder->parameters["argument"];
+
 -$builder->expand("%argument%");
 +$builder->parameters["argument"];
 ```
@@ -285,6 +291,7 @@ Turns magic callback assign to callback assign on Nette Form events.
 ```diff
 -$someService = $container->someService;
 +$container->getService("someService");
+
 -$container->someService = $someService;
 +$container->setService("someService", $someService);
 ```
@@ -296,6 +303,7 @@ Turns magic callback assign to callback assign on Nette Form events.
 ```diff
 -isset($container["someKey"]);
 +$container->hasService("someKey");
+
 -unset($container["someKey"])
 +$container->removeService("someKey");
 ```
@@ -318,6 +326,7 @@ Turns old string `var` to `var->name` sub-variable in Node of PHP-Parser
 ```diff
 -$paramNode->name;
 +$paramNode->var->name;
+
 -$staticVarNode->name;
 +$staticVarNode->var->name;
 ```
@@ -359,6 +368,7 @@ Turns use property to method and `$node->alias` to last name in UseAlias Node of
 ```diff
 -$node->alias;
 +$node->getAlias();
+
 -$node->name->getLast();
 +$node->alias
 ```
@@ -388,6 +398,7 @@ Turns not-operator comparisons to their method name alternatives in PHPUnit Test
 ```diff
 -$this->assertTrue(!$foo, "message");
 +$this->assertFalse($foo, "message");
+
 -$this->assertFalse(!$foo, "message");
 +$this->assertTrue($foo, "message");
 ```
@@ -399,6 +410,7 @@ Turns comparison operations to their method name alternatives in PHPUnit TestCas
 ```diff
 -$this->assertTrue($foo === $bar, "message");
 +$this->assertSame($bar, $foo, "message");
+
 -$this->assertFalse($foo >= $bar, "message");
 +$this->assertLessThanOrEqual($bar, $foo, "message");
 ```
@@ -419,6 +431,7 @@ Turns same bool and null comparisons to their method name alternatives in PHPUni
 ```diff
 -$this->assertSame(null, $anything);
 +$this->assertNull($anything);
+
 -$this->assertNotSame(false, $anything);
 +$this->assertNotFalse($anything);
 ```
@@ -430,6 +443,7 @@ Turns `strpos`/`stripos` comparisons to their method name alternatives in PHPUni
 ```diff
 -$this->assertFalse(strpos($anything, "foo"), "message");
 +$this->assertNotContains("foo", $anything, "message");
+
 -$this->assertNotFalse(stripos($anything, "foo"), "message");
 +$this->assertContains("foo", $anything, "message");
 ```
@@ -441,6 +455,7 @@ Turns true/false with internal type comparisons to their method name alternative
 ```diff
 -$this->assertTrue(is_{internal_type}($anything), "message");
 +$this->assertInternalType({internal_type}, $anything, "message");
+
 -$this->assertFalse(is_{internal_type}($anything), "message");
 +$this->assertNotInternalType({internal_type}, $anything, "message");
 ```
@@ -452,12 +467,16 @@ Turns vague php-only method in PHPUnit TestCase to more specific
 ```diff
 -$this->assertSame(10, count($anything), "message");
 +$this->assertCount(10, $anything, "message");
+
 -$this->assertSame($value, {function}($anything), "message");
 +$this->assert{function}($value, $anything, "message\");
+
 -$this->assertEquals($value, {function}($anything), "message");
 +$this->assert{function}($value, $anything, "message\");
+
 -$this->assertNotSame($value, {function}($anything), "message");
 +$this->assertNot{function}($value, $anything, "message")
+
 -$this->assertNotEquals($value, {function}($anything), "message");
 +$this->assertNot{function}($value, $anything, "message")
 ```
@@ -469,6 +488,7 @@ Turns isset comparisons to their method name alternatives in PHPUnit TestCase
 ```diff
 -$this->assertTrue(isset($anything->foo));
 +$this->assertFalse(isset($anything["foo"]), "message");
+
 -$this->assertObjectHasAttribute("foo", $anything);
 +$this->assertArrayNotHasKey("foo", $anything, "message");
 ```
@@ -480,6 +500,7 @@ Turns instanceof comparisons to their method name alternatives in PHPUnit TestCa
 ```diff
 -$this->assertTrue($foo instanceof Foo, "message");
 +$this->assertFalse($foo instanceof Foo, "message");
+
 -$this->assertInstanceOf("Foo", $foo, "message");
 +$this->assertNotInstanceOf("Foo", $foo, "message");
 ```
@@ -491,6 +512,7 @@ Turns `property_exists` comparisons to their method name alternatives in PHPUnit
 ```diff
 -$this->assertTrue(property_exists(new Class, "property"), "message");
 +$this->assertClassHasAttribute("property", "Class", "message");
+
 -$this->assertFalse(property_exists(new Class, "property"), "message");
 +$this->assertClassNotHasAttribute("property", "Class", "message");
 ```
@@ -502,6 +524,7 @@ Turns `preg_match` comparisons to their method name alternatives in PHPUnit Test
 ```diff
 -$this->assertSame(1, preg_match("/^Message for ".*"\.$/", $string), $message);
 +$this->assertRegExp("/^Message for ".*"\.$/", $string, $message);
+
 -$this->assertEquals(false, preg_match("/^Message for ".*"\.$/", $string), $message);
 +$this->assertNotRegExp("/^Message for ".*"\.$/", $string, $message);
 ```
@@ -530,6 +553,7 @@ Turns getMock*() methods to createMock()
 ```diff
 -$this->getMock("Class")
 +$this->createMock("Class")
+
 -$this->getMockWithoutInvokingTheOriginalConstructor("Class")
 +$this->createMock("Class"
 ```
@@ -718,6 +742,7 @@ Turns string Form Type references to their CONSTANT alternatives in `getParent()
 ```diff
 -function getParent() { return "collection"; }
 +function getParent() { return CollectionType::class; }
+
 -function getExtendedType() { return "collection"; }
 +function getExtendedType() { return CollectionType::class; }
 ```
@@ -748,6 +773,7 @@ Turns old event name with EXCEPTION to ERROR constant in Console in Symfony
 ```diff
 -"console.exception"
 +Symfony\Component\Console\ConsoleEvents::ERROR
+
 -Symfony\Component\Console\ConsoleEvents::EXCEPTION
 +Symfony\Component\Console\ConsoleEvents::ERROR
 ```
@@ -786,6 +812,7 @@ Adds new `$format` argument in `VarDumperTestTrait->assertDumpEquals()` in Valid
 ```diff
 -VarDumperTestTrait->assertDumpEquals($dump, $data, $mesage = "");
 +VarDumperTestTrait->assertDumpEquals($dump, $data, $context = null, $mesage = "");
+
 -VarDumperTestTrait->assertDumpMatchesFormat($dump, $format, $mesage = "");
 +VarDumperTestTrait->assertDumpMatchesFormat($dump, $format, $context = null,  $mesage = "");
 ```
