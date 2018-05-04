@@ -3,11 +3,11 @@
 namespace Rector\Rector\Dynamic\ValueObjectRemover;
 
 use PhpParser\Node;
+use Rector\BetterPhpDocParser\NodeAnalyzer\DocBlockAnalyzer;
+use Rector\BetterPhpDocParser\NodeAnalyzer\NamespaceAnalyzer;
 use Rector\NodeTraverserQueue\BetterNodeFinder;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Rector\AbstractRector;
-use Rector\ReflectionDocBlock\NodeAnalyzer\DocBlockAnalyzer;
-use Rector\ReflectionDocBlock\NodeAnalyzer\NamespaceAnalyzer;
 
 abstract class AbstractValueObjectRemoverRector extends AbstractRector
 {

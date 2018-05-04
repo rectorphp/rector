@@ -5,5 +5,5 @@ services:
     _defaults:
         autowire: true
 
-    Rector\ReflectionDocBlock\:
+    Rector\BetterPhpDocParser\:
         resource: '../'

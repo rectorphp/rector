@@ -4,12 +4,12 @@ namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Param;
+use Rector\BetterPhpDocParser\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverAwareInterface;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\TypeContext;
-use Rector\ReflectionDocBlock\NodeAnalyzer\DocBlockAnalyzer;
 
 final class ParamTypeResolver implements PerNodeTypeResolverInterface, NodeTypeResolverAwareInterface
 {

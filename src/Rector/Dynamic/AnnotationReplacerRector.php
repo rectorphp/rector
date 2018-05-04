@@ -5,11 +5,11 @@ namespace Rector\Rector\Dynamic;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
+use Rector\BetterPhpDocParser\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\Node\Attribute;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
-use Rector\ReflectionDocBlock\NodeAnalyzer\DocBlockAnalyzer;
 
 final class AnnotationReplacerRector extends AbstractPHPUnitRector
 {

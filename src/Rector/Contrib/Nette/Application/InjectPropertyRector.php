@@ -7,13 +7,13 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\PropertyProperty;
 use PhpParser\Node\VarLikeIdentifier;
+use Rector\BetterPhpDocParser\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
-use Rector\ReflectionDocBlock\NodeAnalyzer\DocBlockAnalyzer;
 
 final class InjectPropertyRector extends AbstractRector
 {
