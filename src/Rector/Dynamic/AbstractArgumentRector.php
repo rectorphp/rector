@@ -44,10 +44,10 @@ abstract class AbstractArgumentRector extends AbstractRector
         $this->staticMethodCallAnalyzer = $staticMethodCallAnalyzer;
     }
 
-    protected function isNodeToRecipeMatch(Node $node, AbstractArgumentRecipe $argumentReplacerRecipe): bool
+    protected function isNodeToRecipeMatch(Node $node, AbstractArgumentRecipe $argumentRecipe): bool
     {
-        $type = $argumentReplacerRecipe->getClass();
-        $method = $argumentReplacerRecipe->getMethod();
+        $type = $argumentRecipe->getClass();
+        $method = $argumentRecipe->getMethod();
 
         if ($this->methodCallAnalyzer->isTypeAndMethods($node, $type, [$method])) {
             return true;
