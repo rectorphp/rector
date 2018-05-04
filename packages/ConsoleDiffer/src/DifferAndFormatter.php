@@ -69,6 +69,8 @@ final class DifferAndFormatter
 
     private function removeTrailingWhitespaces(string $diff): string
     {
-        return preg_replace('#\n( )\n#', PHP_EOL . PHP_EOL, $diff);
+        $diff = preg_replace('#\n( )\n#', PHP_EOL . PHP_EOL, $diff);
+
+        return preg_replace('#( )\n#', PHP_EOL, $diff);
     }
 }

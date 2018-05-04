@@ -162,7 +162,7 @@ Turns properties with @inject to private properties and constructor injection
 ```diff
 /**
   * @var SomeService
-- * @inject 
+- * @inject
   */
 -public $someService;
 +private $someService;
@@ -196,7 +196,7 @@ Turns setInject() to tag in Nette\DI\CompilerExtension
 Checks all Nette\Object instances and turns parent class to trait
 
 ```diff
--class SomeClass extends \Nette\Object { } 
+-class SomeClass extends \Nette\Object { }
 +class SomeClass { use Nette\SmartObject; }
 ```
 
