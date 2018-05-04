@@ -8,11 +8,6 @@ use PhpParser\Node\Stmt\Use_;
 use Rector\Node\Attribute;
 use Rector\Php\TypeAnalyzer;
 
-/**
- * Inspired by https://github.com/Roave/BetterReflection/blob/master/src/TypesFinder/PhpDocumentor/NamespaceNodeToReflectionTypeContext.php
- *
- * Also similar source https://github.com/phpstan/phpstan/blob/master/src/Analyser/NameScope.php
- */
 final class NamespaceAnalyzer
 {
     /**

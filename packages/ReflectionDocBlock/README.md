@@ -26,4 +26,8 @@ var_dump($valueNodeTypes); // ['SomeNamespace\SomeType'];
 
 ### Inspiration
 
-- [Roave\BetterReflection](https://github.com/Roave/BetterReflection/tree/master/src/TypesFinder)
+- [Roave\BetterReflection - TypesFinder](https://github.com/Roave/BetterReflection/tree/master/src/TypesFinder)
+
+- [Roave/BetterReflection - NamespaceNodeToReflectionTypeContext](https://github.com/Roave/BetterReflection/blob/master/src/TypesFinder/PhpDocumentor/NamespaceNodeToReflectionTypeContext.php)
+
+- [phpstan/phpstan - NameScope](https://github.com/phpstan/phpstan/blob/master/src/Analyser/NameScope.php)
