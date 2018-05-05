@@ -5,11 +5,11 @@ namespace Rector\Rector\Architecture\DependencyInjection;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Builder\Class_\VariableInfoFactory;
 use Rector\Builder\ConstructorMethodBuilder;
 use Rector\Builder\PropertyBuilder;
-use Rector\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -43,11 +43,11 @@ final class ActionInjectionToConstructorInjectionRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        if (! $node instanceof ClassMethod) {
+        if (! $node instanceof Class_) {
             return false;
         }
 
-        return Strings::endsWith((string) $node->getAttribute(Attribute::CLASS_NAME), 'Controller');
+        return Strings::endsWith((string) $node->name, 'Controller');
     }
 
     public function getDefinition(): RectorDefinition
@@ -87,13 +87,24 @@ CODE_SAMPLE
     }
 
     /**
-     * @param ClassMethod $node
+     * @param Class_ $classNode
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $classNode): ?Node
     {
-        $classNode = $node->getAttribute(Attribute::CLASS_NODE);
+        foreach ($classNode->stmts as $stmt) {
+            if (! $stmt instanceof ClassMethod) {
+                continue;
+            }
 
-        foreach ($node->params as $paramNode) {
+            $this->processClassMethod($classNode, $stmt);
+        }
+
+        return $classNode;
+    }
+
+    private function processClassMethod(Class_ $classNode, ClassMethod $classMethodNode): void
+    {
+        foreach ($classMethodNode->params as $paramNode) {
             if (! $this->isActionInjectedParamNode($paramNode)) {
                 continue;
             }
@@ -109,8 +120,6 @@ CODE_SAMPLE
             // pass via constructor
             $this->constructorMethodBuilder->addSimplePropertyAssignToClass($classNode, $propertyInfo);
         }
-
-        return $node;
     }
 
     private function isActionInjectedParamNode(Param $paramNode): bool

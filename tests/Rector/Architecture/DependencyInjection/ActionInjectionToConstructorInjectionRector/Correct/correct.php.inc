@@ -3,14 +3,13 @@
 final class SomeController
 {
     /**
-     * @var ProductRepository
+     * @var \ProductRepository
      */
     private $productRepository;
-    public function __construct(ProductRepository $productRepository)
+    public function __construct(\ProductRepository $productRepository)
     {
         $this->productRepository = $productRepository;
     }
-
     public function default()
     {
         $products = $this->productRepository->fetchAll();
