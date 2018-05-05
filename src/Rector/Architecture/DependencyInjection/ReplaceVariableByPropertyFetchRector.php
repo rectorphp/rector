@@ -42,12 +42,22 @@ final class ReplaceVariableByPropertyFetchRector extends AbstractRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
-            'Turns variable to property fetch, as follow up to action injection variable to property change',
+            'Turns variable in controller action to property fetch, as follow up to action injection variable to property change.',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
 final class SomeController
 {
+    /**
+     * @var ProductRepository
+     */
+    private $productRepository;
+    
+    public function __construct(ProductRepository $productRepository)
+    {
+        $this->productRepository = $productRepository;
+    }
+
     public function default()
     {
         $products = $productRepository->fetchAll();
@@ -58,6 +68,16 @@ CODE_SAMPLE
                     <<<'CODE_SAMPLE'
 final class SomeController
 {
+    /**
+     * @var ProductRepository
+     */
+    private $productRepository;
+    
+    public function __construct(ProductRepository $productRepository)
+    {
+        $this->productRepository = $productRepository;
+    }
+
     public function default()
     {
         $products = $this->productRepository->fetchAll();
