@@ -109,17 +109,9 @@ CODE_SAMPLE
                 continue;
             }
 
-            $propertyInfo = $this->variableInfoFactory->createFromNameAndTypes(
-                $paramNode->var->name,
-                [(string) $paramNode->type]
-            );
+            $this->addConstructorDependencyToClassNode($classNode, $paramNode->var->name, [(string) $paramNode->type]);
 
-            // add property
-            $this->propertyBuilder->addPropertyToClass($classNode, $propertyInfo);
-
-            // pass via constructor
-            $this->constructorMethodBuilder->addSimplePropertyAssignToClass($classNode, $propertyInfo);
-
+            // remove arguments
             unset($classMethodNode->params[$key]);
         }
     }
@@ -142,5 +134,19 @@ CODE_SAMPLE
         }
 
         return true;
+    }
+
+    /**
+     * @param string[] $variablesTypes
+     */
+    private function addConstructorDependencyToClassNode(Class_ $classNode, string $variableName, array $variablesTypes): void
+    {
+        $variableInfo = $this->variableInfoFactory->createFromNameAndTypes($variableName, $variablesTypes);
+
+        // add property
+        $this->propertyBuilder->addPropertyToClass($classNode, $variableInfo);
+
+        // pass via constructor
+        $this->constructorMethodBuilder->addSimplePropertyAssignToClass($classNode, $variableInfo);
     }
 }
