@@ -98,7 +98,7 @@ CODE_SAMPLE
             return false;
         }
 
-        return $this->docBlockAnalyzer->hasAnnotation($node, 'Template');
+        return $this->docBlockAnalyzer->hasTag($node, 'Template');
     }
 
     /**

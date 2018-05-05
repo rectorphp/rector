@@ -109,7 +109,7 @@ CODE_SAMPLE
     private function hasAnyAnnotation(Node $node): bool
     {
         foreach ($this->activeAnnotationMap as $oldAnnotation => $newAnnotation) {
-            if ($this->docBlockAnalyzer->hasAnnotation($node, $oldAnnotation)) {
+            if ($this->docBlockAnalyzer->hasTag($node, $oldAnnotation)) {
                 return true;
             }
         }

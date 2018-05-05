@@ -23,8 +23,8 @@ final class DocBlockAnalyzerTest extends AbstractContainerAwareTestCase
     {
         $node = $this->createNodeWithDoc('@param ParamType $paramName');
 
-        $this->assertTrue($this->docBlockAnalyzer->hasAnnotation($node, 'param'));
-        $this->assertFalse($this->docBlockAnalyzer->hasAnnotation($node, 'var'));
+        $this->assertTrue($this->docBlockAnalyzer->hasTag($node, 'param'));
+        $this->assertFalse($this->docBlockAnalyzer->hasTag($node, 'var'));
     }
 
     public function testRemoveAnnotationFromNode(): void
