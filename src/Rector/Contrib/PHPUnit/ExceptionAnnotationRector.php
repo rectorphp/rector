@@ -84,7 +84,7 @@ CODE_SAMPLE
         }
 
         foreach ($this->annotationToMethod as $annotation => $method) {
-            if ($this->docBlockAnalyzer->hasAnnotation($node, $annotation)) {
+            if ($this->docBlockAnalyzer->hasTag($node, $annotation)) {
                 return true;
             }
         }
@@ -98,7 +98,7 @@ CODE_SAMPLE
     public function refactor(Node $classMethodNode): ?Node
     {
         foreach ($this->annotationToMethod as $annotation => $method) {
-            if (! $this->docBlockAnalyzer->hasAnnotation($classMethodNode, $annotation)) {
+            if (! $this->docBlockAnalyzer->hasTag($classMethodNode, $annotation)) {
                 continue;
             }
 

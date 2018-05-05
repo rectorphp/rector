@@ -37,7 +37,7 @@ final class DocBlockAnalyzer
         $this->currentNodeProvider = $currentNodeProvider;
     }
 
-    public function hasAnnotation(Node $node, string $annotation): bool
+    public function hasTag(Node $node, string $name): bool
     {
         if ($node->getDocComment() === null) {
             return false;
@@ -45,7 +45,7 @@ final class DocBlockAnalyzer
 
         $phpDocInfo = $this->createPhpDocInfoFromNode($node);
 
-        return $phpDocInfo->hasTag($annotation);
+        return $phpDocInfo->hasTag($name);
     }
 
     public function removeParamTagByName(Node $node, string $name): void
