@@ -1,5 +1,55 @@
 # All Rectors Overview
 
+## Rector\Rector\Architecture\DependencyInjection\ActionInjectionToConstructorInjectionRector
+
+Turns action injection in Controllers to constructor injection
+
+```diff
+ final class SomeController
+ {
+-    public function default(ProductRepository $productRepository)
++    /**
++     * @var ProductRepository
++     */
++    private $productRepository;
++    public function __construct(ProductRepository $productRepository)
+     {
+-        $products = $productRepository->fetchAll();
++        $this->productRepository = $productRepository;
++    }
++
++    public function default()
++    {
++        $products = $this->productRepository->fetchAll();
+     }
+ }
+```
+
+## Rector\Rector\Architecture\DependencyInjection\ReplaceVariableByPropertyFetchRector
+
+Turns variable in controller action to property fetch, as follow up to action injection variable to property change.
+
+```diff
+ final class SomeController
+ {
+     /**
+      * @var ProductRepository
+      */
+     private $productRepository;
+
+     public function __construct(ProductRepository $productRepository)
+     {
+         $this->productRepository = $productRepository;
+     }
+
+     public function default()
+     {
+-        $products = $productRepository->fetchAll();
++        $products = $this->productRepository->fetchAll();
+     }
+ }
+```
+
 ## Rector\Rector\Architecture\RepositoryAsService\ReplaceParentRepositoryCallsByRepositoryPropertyRector
 
 Handles method calls in child of Doctrine EntityRepository and moves them to "$this->repository" property.
