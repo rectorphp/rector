@@ -7,9 +7,11 @@ use PhpParser\Node;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Builder\Class_\VariableInfo;
 use Rector\Builder\Class_\VariableInfoFactory;
 use Rector\Builder\ConstructorMethodBuilder;
 use Rector\Builder\PropertyBuilder;
+use Rector\Configuration\Rector\Architecture\DependencyInjection\VariablesToPropertyFetchCollection;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -30,15 +32,21 @@ final class ActionInjectionToConstructorInjectionRector extends AbstractRector
      * @var VariableInfoFactory
      */
     private $variableInfoFactory;
+    /**
+     * @var VariablesToPropertyFetchCollection
+     */
+    private $variablesToPropertyFetchCollection;
 
     public function __construct(
         PropertyBuilder $propertyBuilder,
         ConstructorMethodBuilder $constructorMethodBuilder,
-        VariableInfoFactory $variableInfoFactory
+        VariableInfoFactory $variableInfoFactory,
+        VariablesToPropertyFetchCollection $variablesToPropertyFetchCollection
     ) {
         $this->propertyBuilder = $propertyBuilder;
         $this->constructorMethodBuilder = $constructorMethodBuilder;
         $this->variableInfoFactory = $variableInfoFactory;
+        $this->variablesToPropertyFetchCollection = $variablesToPropertyFetchCollection;
     }
 
     public function isCandidate(Node $node): bool
@@ -109,10 +117,14 @@ CODE_SAMPLE
                 continue;
             }
 
-            $this->addConstructorDependencyToClassNode($classNode, $paramNode->var->name, [(string) $paramNode->type]);
+            $variableInfo = $this->variableInfoFactory->createFromNameAndTypes($paramNode->var->name, [(string) $paramNode->type]);
+
+            $this->addConstructorDependencyToClassNode($classNode, $variableInfo);
 
             // remove arguments
             unset($classMethodNode->params[$key]);
+
+            $this->variablesToPropertyFetchCollection->addVariableInfo($variableInfo);
         }
     }
 
@@ -136,13 +148,8 @@ CODE_SAMPLE
         return true;
     }
 
-    /**
-     * @param string[] $variablesTypes
-     */
-    private function addConstructorDependencyToClassNode(Class_ $classNode, string $variableName, array $variablesTypes): void
+    private function addConstructorDependencyToClassNode(Class_ $classNode, VariableInfo $variableInfo): void
     {
-        $variableInfo = $this->variableInfoFactory->createFromNameAndTypes($variableName, $variablesTypes);
-
         // add property
         $this->propertyBuilder->addPropertyToClass($classNode, $variableInfo);
 
