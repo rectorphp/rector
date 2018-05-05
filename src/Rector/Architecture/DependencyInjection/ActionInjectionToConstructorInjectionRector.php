@@ -32,6 +32,7 @@ final class ActionInjectionToConstructorInjectionRector extends AbstractRector
      * @var VariableInfoFactory
      */
     private $variableInfoFactory;
+
     /**
      * @var VariablesToPropertyFetchCollection
      */
@@ -117,7 +118,10 @@ CODE_SAMPLE
                 continue;
             }
 
-            $variableInfo = $this->variableInfoFactory->createFromNameAndTypes($paramNode->var->name, [(string) $paramNode->type]);
+            $variableInfo = $this->variableInfoFactory->createFromNameAndTypes(
+                $paramNode->var->name,
+                [(string) $paramNode->type]
+            );
 
             $this->addConstructorDependencyToClassNode($classNode, $variableInfo);
 

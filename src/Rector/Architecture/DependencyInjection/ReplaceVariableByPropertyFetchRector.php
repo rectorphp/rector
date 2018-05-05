@@ -4,12 +4,12 @@ namespace Rector\Rector\Architecture\DependencyInjection;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
-use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Builder\Class_\VariableInfo;
 use Rector\Configuration\Rector\Architecture\DependencyInjection\VariablesToPropertyFetchCollection;
 use Rector\Node\Attribute;
+use Rector\Node\PropertyFetchNodeFactory;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -26,16 +26,26 @@ final class ReplaceVariableByPropertyFetchRector extends AbstractRector
      */
     private $activeVariableInfo;
 
-    public function __construct(VariablesToPropertyFetchCollection $variablesToPropertyFetchCollection)
-    {
+    /**
+     * @var PropertyFetchNodeFactory
+     */
+    private $propertyFetchNodeFactory;
+
+    public function __construct(
+        VariablesToPropertyFetchCollection $variablesToPropertyFetchCollection,
+        PropertyFetchNodeFactory $propertyFetchNodeFactory
+    ) {
         $this->variablesToPropertyFetchCollection = $variablesToPropertyFetchCollection;
+        $this->propertyFetchNodeFactory = $propertyFetchNodeFactory;
     }
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Turns variable to property fetch, as follow up to action injection variable to property change', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RectorDefinition(
+            'Turns variable to property fetch, as follow up to action injection variable to property change',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 final class SomeController
 {
     public function default()
@@ -44,8 +54,8 @@ final class SomeController
     } 
 }
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 final class SomeController
 {
     public function default()
@@ -54,8 +64,9 @@ final class SomeController
     } 
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+            ]
+        );
     }
 
     public function isCandidate(Node $node): bool
@@ -66,18 +77,7 @@ CODE_SAMPLE
             return false;
         }
 
-        if (! Strings::endsWith((string) $node->getAttribute(Attribute::CLASS_NAME), 'Controller')) {
-            return false;
-        }
-
-        /** @var ClassMethod|null $methodNode */
-        $methodNode = $node->getAttribute(Attribute::METHOD_NODE);
-        if ($methodNode === null) {
-            return false;
-        }
-
-        // is probably in controller action
-        if (! $methodNode->isPublic()) {
+        if (! $this->isInControllerActionMethod($node)) {
             return false;
         }
 
@@ -100,7 +100,22 @@ CODE_SAMPLE
      */
     public function refactor(Node $variableNode): ?Node
     {
-        // @todo NodeFactory
-        return new PropertyFetch(new Variable('this'), $this->activeVariableInfo->getName());
+        return $this->propertyFetchNodeFactory->createLocalWithPropertyName($this->activeVariableInfo->getName());
+    }
+
+    private function isInControllerActionMethod(Node $node): bool
+    {
+        if (! Strings::endsWith((string) $node->getAttribute(Attribute::CLASS_NAME), 'Controller')) {
+            return false;
+        }
+
+        /** @var ClassMethod|null $methodNode */
+        $methodNode = $node->getAttribute(Attribute::METHOD_NODE);
+        if ($methodNode === null) {
+            return false;
+        }
+
+        // is probably in controller action
+        return $methodNode->isPublic();
     }
 }

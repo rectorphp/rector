@@ -11,9 +11,6 @@ final class VariablesToPropertyFetchCollection
      */
     private $variableInfos = [];
 
-    /**
-     * @param string[] $types
-     */
     public function addVariableInfo(VariableInfo $variableInfo): void
     {
         $this->variableInfos[] = $variableInfo;
