@@ -2,7 +2,7 @@
 
 namespace Rector\Configuration\Rector;
 
-final class ArgumentDefaultValueReplacerRecipe extends AbstractArgumentReplacerRecipe
+final class ArgumentDefaultValueReplacerRecipe extends AbstractArgumentRecipe
 {
     /**
      * @var mixed[]

@@ -39,10 +39,15 @@ final class ArgumentRemoverRector extends AbstractArgumentRector
             '[Dynamic] Removes defined arguments in defined methods and their calls.',
             [
                 new CodeSample(
-                    '$containerBuilder = new Symfony\Component\DependencyInjection\ContainerBuilder;
-$containerBuilder->compile(true);',
-                    '$containerBuilder = new Symfony\Component\DependencyInjection\ContainerBuilder;
-$containerBuilder->compile();'
+                    <<<'CODE_SAMPLE'
+$someObject = new SomeClass;
+$someObject->someMethod(true);
+CODE_SAMPLE
+                    ,
+                    <<<'CODE_SAMPLE'
+$someObject = new SomeClass;
+$someObject->someMethod();'
+CODE_SAMPLE
                 ),
             ]
         );

@@ -8,7 +8,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Configuration\Rector\AbstractArgumentReplacerRecipe;
+use Rector\Configuration\Rector\AbstractArgumentRecipe;
 use Rector\NodeAnalyzer\ClassMethodAnalyzer;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeAnalyzer\StaticMethodCallAnalyzer;
@@ -34,31 +34,20 @@ abstract class AbstractArgumentRector extends AbstractRector
     /**
      * @required
      */
-    public function setMethodCallAnalyzer(MethodCallAnalyzer $methodCallAnalyzer): void
-    {
+    public function setAbstractArgumentRectorDependencies(
+        MethodCallAnalyzer $methodCallAnalyzer,
+        ClassMethodAnalyzer $classMethodAnalyzer,
+        StaticMethodCallAnalyzer $staticMethodCallAnalyzer
+    ): void {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
-    }
-
-    /**
-     * @required
-     */
-    public function setClassMethodAnalyzer(ClassMethodAnalyzer $classMethodAnalyzer): void
-    {
         $this->classMethodAnalyzer = $classMethodAnalyzer;
-    }
-
-    /**
-     * @required
-     */
-    public function setStaticMethodCallAnalyzer(StaticMethodCallAnalyzer $staticMethodCallAnalyzer): void
-    {
         $this->staticMethodCallAnalyzer = $staticMethodCallAnalyzer;
     }
 
-    protected function isNodeToRecipeMatch(Node $node, AbstractArgumentReplacerRecipe $argumentReplacerRecipe): bool
+    protected function isNodeToRecipeMatch(Node $node, AbstractArgumentRecipe $argumentRecipe): bool
     {
-        $type = $argumentReplacerRecipe->getClass();
-        $method = $argumentReplacerRecipe->getMethod();
+        $type = $argumentRecipe->getClass();
+        $method = $argumentRecipe->getMethod();
 
         if ($this->methodCallAnalyzer->isTypeAndMethods($node, $type, [$method])) {
             return true;

@@ -49,10 +49,15 @@ final class ArgumentDefaultValueReplacerRector extends AbstractArgumentRector
             '[Dynamic] Replaces defined map of arguments in defined methods and their calls.',
             [
                 new CodeSample(
-                    '$containerBuilder = new Symfony\Component\DependencyInjection\ContainerBuilder;
-$container->register("foo", "stdClass")->setScope(ContainerBuilder::SCOPE_PROTOTYPE);',
-                    '$containerBuilder = new Symfony\Component\DependencyInjection\ContainerBuilder;
-$container->register("foo", "stdClass")->setScope(false);'
+                    <<<'CODE_SAMPLE'
+$someObject = new SomeClass;
+$someObject->someMethod(SomeClass::OLD_CONSTANT);
+CODE_SAMPLE
+                    ,
+                    <<<'CODE_SAMPLE'
+$someObject = new SomeClass;
+$someObject->someMethod(false);'
+CODE_SAMPLE
                 ),
             ]
         );

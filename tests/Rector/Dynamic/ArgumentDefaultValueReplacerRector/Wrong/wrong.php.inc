@@ -4,4 +4,4 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 $container = new ContainerBuilder();
 $container->register('foo', 'stdClass')
-    ->setScope(false);
+    ->setScope(ContainerBuilder::SCOPE_PROTOTYPE);

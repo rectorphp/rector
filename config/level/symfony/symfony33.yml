@@ -7,17 +7,17 @@ services:
                 class: 'Symfony\Component\DependencyInjection\ContainerBuilder'
                 method: 'compile'
                 position: 2
-                replacement: 0
+                default_value: 0
             -
                 class: 'Symfony\Component\DependencyInjection\ContainerBuilder'
                 method: 'addCompilerPass'
                 position: 2
-                replacement: 0
+                default_value: 0
             -
                 class: 'Symfony\Component\DependencyInjection\Compiler\ServiceReferenceGraph'
                 method: 'connect'
                 position: 6
-                replacement: false
+                default_value: false
 
     Rector\Rector\Contrib\Symfony\Console\ConsoleExceptionToErrorEventConstantRector: ~
 

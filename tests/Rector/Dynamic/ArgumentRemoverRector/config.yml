@@ -1,0 +1,7 @@
+services:
+    Rector\Rector\Dynamic\ArgumentRemoverRector:
+        $argumentChangesByMethodAndType:
+            -
+                class: 'Doctrine\ORM\Persisters\Entity\AbstractEntityInheritancePersister'
+                method: 'getSelectJoinColumnSQL'
+                position: 4
