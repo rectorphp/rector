@@ -151,9 +151,9 @@ Simplify `in_array` and `array_keys` functions combination into `array_key_exist
 [Dynamic] Removes defined arguments in defined methods and their calls.
 
 ```diff
- $containerBuilder = new Symfony\Component\DependencyInjection\ContainerBuilder;
--$containerBuilder->compile(true);
-+$containerBuilder->compile();
+ $someObject = new SomeClass;
+-$someObject->someMethod(true);
++$someObject->someMethod();'
 ```
 
 ## Rector\Rector\Dynamic\FunctionToMethodCallRector
@@ -629,6 +629,24 @@ Turns `createForSubjectWithReviewer()` with null review to standalone method in 
 +$this->createForSubject($subject)
 ```
 
+## Rector\Rector\Dynamic\ArgumentAdderRector
+
+[Dynamic] This Rector adds new default arguments in calls of defined methods and class types.
+
+```diff
+ $someObject = new SomeClass;
+-$someObject->someMethod();
++$someObject->someMethod(true);
+
+ class MyCustomClass extends SomeClass
+ {
+-    public function someMethod()
++    public function someMethod($value = true)
+     {
+     }
+ }
+```
+
 ## Rector\Rector\Dynamic\ReturnTypehintRector
 
 [Dynamic] Changes defined return typehint of method and class.
@@ -765,16 +783,6 @@ Turns old option names to new ones in FormTypes in Form in Symfony
 ```diff
 -$builder->add("...", ["precision" => "...", "virtual" => "..."];
 +$builder->add("...", ["scale" => "...", "inherit_data" => "..."];
-```
-
-## Rector\Rector\Dynamic\ArgumentAdderRector
-
-[Dynamic] Adds or replaces defined arguments in defined methods and their calls.
-
-```diff
- $containerBuilder = new Symfony\Component\DependencyInjection\ContainerBuilder;
--$containerBuilder->compile();
-+$containerBuilder->compile(true);
 ```
 
 ## Rector\Rector\Contrib\Symfony\Console\ConsoleExceptionToErrorEventConstantRector
