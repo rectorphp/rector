@@ -104,7 +104,7 @@ CODE_SAMPLE
 
     private function processClassMethod(Class_ $classNode, ClassMethod $classMethodNode): void
     {
-        foreach ($classMethodNode->params as $paramNode) {
+        foreach ($classMethodNode->params as $key => $paramNode) {
             if (! $this->isActionInjectedParamNode($paramNode)) {
                 continue;
             }
@@ -119,6 +119,8 @@ CODE_SAMPLE
 
             // pass via constructor
             $this->constructorMethodBuilder->addSimplePropertyAssignToClass($classNode, $propertyInfo);
+
+            unset($classMethodNode->params[$key]);
         }
     }
 
