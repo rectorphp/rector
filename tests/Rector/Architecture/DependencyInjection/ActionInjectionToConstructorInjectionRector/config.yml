@@ -1,2 +1,5 @@
+parameters:
+    kernel_class: 'Rector\Tests\Rector\Architecture\DependencyInjection\ActionInjectionToConstructorInjectionRector\Source\SomeKernelClass'
+
 imports:
     - { resource: '../../../../../config/level/architecture/action-injection-to-constructor-injection.yml' }

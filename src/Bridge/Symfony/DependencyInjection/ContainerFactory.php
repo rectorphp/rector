@@ -14,7 +14,7 @@ final class ContainerFactory
 
     public function createFromKernelClass(string $kernelClass): Container
     {
-        if ($this->containersByKernelClass[$kernelClass]) {
+        if (isset($this->containersByKernelClass[$kernelClass])) {
             return $this->containersByKernelClass[$kernelClass];
         }
 

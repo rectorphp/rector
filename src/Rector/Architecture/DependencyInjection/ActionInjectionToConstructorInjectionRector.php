@@ -7,11 +7,13 @@ use PhpParser\Node;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Bridge\Contract\ServiceTypeForNameProviderInterface;
 use Rector\Builder\Class_\VariableInfo;
 use Rector\Builder\Class_\VariableInfoFactory;
 use Rector\Builder\ConstructorMethodBuilder;
 use Rector\Builder\PropertyBuilder;
 use Rector\Configuration\Rector\Architecture\DependencyInjection\VariablesToPropertyFetchCollection;
+use Rector\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -38,16 +40,23 @@ final class ActionInjectionToConstructorInjectionRector extends AbstractRector
      */
     private $variablesToPropertyFetchCollection;
 
+    /**
+     * @var ServiceTypeForNameProviderInterface
+     */
+    private $serviceTypeForNameProvider;
+
     public function __construct(
         PropertyBuilder $propertyBuilder,
         ConstructorMethodBuilder $constructorMethodBuilder,
         VariableInfoFactory $variableInfoFactory,
-        VariablesToPropertyFetchCollection $variablesToPropertyFetchCollection
+        VariablesToPropertyFetchCollection $variablesToPropertyFetchCollection,
+        ServiceTypeForNameProviderInterface $serviceTypeForNameProvider
     ) {
         $this->propertyBuilder = $propertyBuilder;
         $this->constructorMethodBuilder = $constructorMethodBuilder;
         $this->variableInfoFactory = $variableInfoFactory;
         $this->variablesToPropertyFetchCollection = $variablesToPropertyFetchCollection;
+        $this->serviceTypeForNameProvider = $serviceTypeForNameProvider;
     }
 
     public function isCandidate(Node $node): bool
@@ -139,6 +148,20 @@ CODE_SAMPLE
         if (empty($typehint)) {
             return false;
         }
+
+        $typehint = (string) $paramNode->getAttribute(Attribute::TYPES)[0] ?? null;
+        if ($typehint === null) {
+            return false;
+        }
+
+        dump($typehint);
+        $hasService = (bool) $this->serviceTypeForNameProvider->provideTypeForName($typehint);
+        dump($hasService);
+
+//
+//        $serviceType = $this->serviceTypeForNameProvider->provideTypeForName($typehint);
+//        dump($serviceType);
+        die;
 
         if (Strings::endsWith($typehint, 'Request')) {
             return false;
