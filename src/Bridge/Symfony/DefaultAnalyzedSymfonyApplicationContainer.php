@@ -52,9 +52,6 @@ final class DefaultAnalyzedSymfonyApplicationContainer implements AnalyzedApplic
     {
         $container = $this->getContainer();
 
-        dump($container);
-        die;
-
         return $container->has($name);
     }
 

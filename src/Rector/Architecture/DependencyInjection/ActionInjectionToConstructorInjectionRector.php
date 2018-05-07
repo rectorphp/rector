@@ -159,7 +159,7 @@ CODE_SAMPLE
             return false;
         }
 
-        return (bool) $this->analyzedApplicationContainer->getTypeForName($typehint);
+        return $this->analyzedApplicationContainer->hasService($typehint);
     }
 
     private function addConstructorDependencyToClassNode(Class_ $classNode, VariableInfo $variableInfo): void

@@ -20,10 +20,7 @@ final class SomeKernelClass extends Kernel
 
     protected function build(ContainerBuilder $containerBuilder): void
     {
-        $someServiceDefinition = $containerBuilder->register('some_service', 'stdClass');
-        // so we can get it by the string name
-        // @todo do this in own provider, not here, people will use private services
-        $someServiceDefinition->setPublic(true);
+        $containerBuilder->register('some_service', 'stdClass');
     }
 
     public function getCacheDir()
