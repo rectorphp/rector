@@ -8,7 +8,7 @@ use Rector\Configuration\Option;
 use Symfony\Component\DependencyInjection\Container;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
-final class DefaultAnalyzedApplicationContainer implements AnalyzedApplicationContainerInterface
+final class DefaultSymfonyAnalyzedApplicationContainer implements AnalyzedApplicationContainerInterface
 {
     /**
      * @var ParameterProvider
@@ -51,6 +51,9 @@ final class DefaultAnalyzedApplicationContainer implements AnalyzedApplicationCo
     public function hasService(string $name): bool
     {
         $container = $this->getContainer();
+
+        dump($container);
+        die;
 
         return $container->has($name);
     }
