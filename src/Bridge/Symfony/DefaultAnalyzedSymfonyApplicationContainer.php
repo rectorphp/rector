@@ -8,7 +8,7 @@ use Rector\Configuration\Option;
 use Symfony\Component\DependencyInjection\Container;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
-final class DefaultSymfonyAnalyzedApplicationContainer implements AnalyzedApplicationContainerInterface
+final class DefaultAnalyzedSymfonyApplicationContainer implements AnalyzedApplicationContainerInterface
 {
     /**
      * @var ParameterProvider
