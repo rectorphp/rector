@@ -129,7 +129,7 @@ CODE_SAMPLE
 
             $variableInfo = $this->variableInfoFactory->createFromNameAndTypes(
                 $paramNode->var->name,
-                [(string) $paramNode->type]
+                $paramNode->getAttribute(Attribute::TYPES)
             );
 
             $this->addConstructorDependencyToClassNode($classNode, $variableInfo);
@@ -154,25 +154,12 @@ CODE_SAMPLE
             return false;
         }
 
-        dump($typehint);
-        $hasService = (bool) $this->serviceTypeForNameProvider->provideTypeForName($typehint);
-        dump($hasService);
-
-//
-//        $serviceType = $this->serviceTypeForNameProvider->provideTypeForName($typehint);
-//        dump($serviceType);
-        die;
-
-        if (Strings::endsWith($typehint, 'Request')) {
-            return false;
-        }
-
         // skip non-classy types
         if (! ctype_upper($typehint[0])) {
             return false;
         }
 
-        return true;
+        return (bool) $this->serviceTypeForNameProvider->provideTypeForName($typehint);
     }
 
     private function addConstructorDependencyToClassNode(Class_ $classNode, VariableInfo $variableInfo): void

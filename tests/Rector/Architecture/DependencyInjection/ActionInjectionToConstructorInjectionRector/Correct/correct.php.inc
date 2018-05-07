@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-use \Rector\Tests\Rector\Architecture\DependencyInjection\ActionInjectionToConstructorInjectionRector\Source\ProductRepository;
+use Rector\Tests\Rector\Architecture\DependencyInjection\ActionInjectionToConstructorInjectionRector\Source\ProductRepository;
 
 final class SomeController
 {
