@@ -7,7 +7,7 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
-use Rector\Bridge\Contract\ServiceTypeForNameProviderInterface;
+use Rector\Bridge\Contract\AnalyzedApplicationContainerInterface;
 use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Naming\PropertyNaming;
 use Rector\Node\Attribute;
@@ -33,9 +33,9 @@ abstract class AbstractToConstructorInjectionRector extends AbstractRector
     protected $propertyFetchNodeFactory;
 
     /**
-     * @var ServiceTypeForNameProviderInterface
+     * @var AnalyzedApplicationContainerInterface
      */
-    protected $serviceTypeForNameProvider;
+    protected $analyzedApplicationContainer;
 
     /**
      * @var MethodCallAnalyzer
@@ -46,13 +46,13 @@ abstract class AbstractToConstructorInjectionRector extends AbstractRector
         PropertyNaming $propertyNaming,
         ClassPropertyCollector $classPropertyCollector,
         PropertyFetchNodeFactory $propertyFetchNodeFactory,
-        ServiceTypeForNameProviderInterface $serviceTypeForNameProvider,
+        AnalyzedApplicationContainerInterface $analyzedApplicationContainer,
         MethodCallAnalyzer $methodCallAnalyzer
     ) {
         $this->propertyNaming = $propertyNaming;
         $this->classPropertyCollector = $classPropertyCollector;
         $this->propertyFetchNodeFactory = $propertyFetchNodeFactory;
-        $this->serviceTypeForNameProvider = $serviceTypeForNameProvider;
+        $this->analyzedApplicationContainer = $analyzedApplicationContainer;
         $this->methodCallAnalyzer = $methodCallAnalyzer;
     }
 
@@ -91,7 +91,7 @@ abstract class AbstractToConstructorInjectionRector extends AbstractRector
 
         if ($argument instanceof String_) {
             $serviceName = $argument->value;
-            return $this->serviceTypeForNameProvider->provideTypeForName($serviceName);
+            return $this->analyzedApplicationContainer->getTypeForName($serviceName);
         }
 
         if (! $argument instanceof ClassConstFetch) {

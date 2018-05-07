@@ -7,7 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Bridge\Contract\ServiceTypeForNameProviderInterface;
+use Rector\Bridge\Contract\AnalyzedApplicationContainerInterface;
 use Rector\Builder\Class_\VariableInfo;
 use Rector\Builder\Class_\VariableInfoFactory;
 use Rector\Builder\ConstructorMethodBuilder;
@@ -41,22 +41,22 @@ final class ActionInjectionToConstructorInjectionRector extends AbstractRector
     private $variablesToPropertyFetchCollection;
 
     /**
-     * @var ServiceTypeForNameProviderInterface
+     * @var AnalyzedApplicationContainerInterface
      */
-    private $serviceTypeForNameProvider;
+    private $analyzedApplicationContainer;
 
     public function __construct(
         PropertyBuilder $propertyBuilder,
         ConstructorMethodBuilder $constructorMethodBuilder,
         VariableInfoFactory $variableInfoFactory,
         VariablesToPropertyFetchCollection $variablesToPropertyFetchCollection,
-        ServiceTypeForNameProviderInterface $serviceTypeForNameProvider
+        AnalyzedApplicationContainerInterface $analyzedApplicationContainer
     ) {
         $this->propertyBuilder = $propertyBuilder;
         $this->constructorMethodBuilder = $constructorMethodBuilder;
         $this->variableInfoFactory = $variableInfoFactory;
         $this->variablesToPropertyFetchCollection = $variablesToPropertyFetchCollection;
-        $this->serviceTypeForNameProvider = $serviceTypeForNameProvider;
+        $this->analyzedApplicationContainer = $analyzedApplicationContainer;
     }
 
     public function isCandidate(Node $node): bool
@@ -159,7 +159,7 @@ CODE_SAMPLE
             return false;
         }
 
-        return (bool) $this->serviceTypeForNameProvider->provideTypeForName($typehint);
+        return (bool) $this->analyzedApplicationContainer->getTypeForName($typehint);
     }
 
     private function addConstructorDependencyToClassNode(Class_ $classNode, VariableInfo $variableInfo): void

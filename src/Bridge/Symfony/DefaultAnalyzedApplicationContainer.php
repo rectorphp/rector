@@ -2,13 +2,13 @@
 
 namespace Rector\Bridge\Symfony;
 
-use Rector\Bridge\Contract\ServiceTypeForNameProviderInterface;
+use Rector\Bridge\Contract\AnalyzedApplicationContainerInterface;
 use Rector\Bridge\Symfony\DependencyInjection\ContainerFactory;
 use Rector\Configuration\Option;
 use Symfony\Component\DependencyInjection\Container;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
-final class DefaultServiceTypeForNameProvider implements ServiceTypeForNameProviderInterface
+final class DefaultAnalyzedApplicationContainer implements AnalyzedApplicationContainerInterface
 {
     /**
      * @var ParameterProvider
@@ -35,7 +35,7 @@ final class DefaultServiceTypeForNameProvider implements ServiceTypeForNameProvi
         $this->containerFactory = $containerFactory;
     }
 
-    public function provideTypeForName(string $name): ?string
+    public function getTypeForName(string $name): ?string
     {
         $container = $this->getContainer();
 
