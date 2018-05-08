@@ -25,7 +25,7 @@ services:
             - 'PhpParser\Comment\Doc'
             - 'PhpParser\NodeTraverser'
             - 'Rector\DeprecationExtractor\Deprecation\*'
-            - 'Rector\BetterReflection\SourceLocator\Located\LocatedSource'
+            - 'Roave\BetterReflection\SourceLocator\Located\LocatedSource'
             - 'phpDocumentor\Reflection\Types\*'
             - 'Rector\Reporting\FileDiff'
             - 'Rector\RectorDefinition\*'

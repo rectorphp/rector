@@ -3,8 +3,8 @@
 namespace Rector\Regex;
 
 use Nette\Utils\Strings;
-use Rector\BetterReflection\Reflection\ReflectionClass;
-use Rector\BetterReflection\Reflection\ReflectionProperty;
+use Roave\BetterReflection\Reflection\ReflectionClass;
+use Roave\BetterReflection\Reflection\ReflectionProperty;
 
 final class MagicMethodMatcher
 {

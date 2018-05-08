@@ -4,8 +4,8 @@ namespace Rector\BetterReflection\Reflector;
 
 use phpDocumentor\Reflection\Types\Array_;
 use phpDocumentor\Reflection\Types\Object_;
-use Rector\BetterReflection\Reflection\ReflectionProperty;
-use Rector\BetterReflection\Reflector\Exception\IdentifierNotFound;
+use Roave\BetterReflection\Reflection\ReflectionProperty;
+use Roave\BetterReflection\Reflector\Exception\IdentifierNotFound;
 
 final class PropertyReflector
 {

@@ -6,9 +6,10 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
-use Rector\BetterReflection\Reflection\ReflectionClass;
-use Rector\BetterReflection\Reflector\Exception\IdentifierNotFound;
 use Rector\Configuration\Option;
+use Roave\BetterReflection\Reflection\ReflectionClass;
+use Roave\BetterReflection\Reflector\ClassReflector;
+use Roave\BetterReflection\Reflector\Exception\IdentifierNotFound;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Throwable;
 
@@ -88,8 +89,9 @@ final class SmartClassReflector
 
         try {
             $classReflection = $this->reflect($className);
-
-            return $classReflection->getParentClassNames();
+            if ($classReflection) {
+                return $classReflection->getParentClassNames();
+            }
         } catch (Throwable $throwable) {
             // intentionally empty
         }

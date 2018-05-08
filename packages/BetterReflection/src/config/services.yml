@@ -6,6 +6,6 @@ services:
         resource: '../'
 
     # nikic\PHP-Parser
-    Rector\BetterReflection\SourceLocator\Ast\Locator: ~
+    Roave\BetterReflection\SourceLocator\Ast\Locator: ~
 
     phpDocumentor\Reflection\FqsenResolver: ~

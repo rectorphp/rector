@@ -3,11 +3,11 @@
 namespace Rector\NodeTraverserQueue;
 
 use PhpParser\Lexer;
-use Rector\BetterReflection\Reflection\ReflectionFunction;
-use Rector\BetterReflection\Reflector\Exception\IdentifierNotFound;
 use Rector\NodeTraverser\RectorNodeTraverser;
 use Rector\NodeTraverser\StandaloneTraverseNodeTraverser;
 use Rector\Parser\Parser;
+use Roave\BetterReflection\Reflection\ReflectionFunction;
+use Roave\BetterReflection\Reflector\Exception\IdentifierNotFound;
 use SplFileInfo;
 
 final class NodeTraverserQueue

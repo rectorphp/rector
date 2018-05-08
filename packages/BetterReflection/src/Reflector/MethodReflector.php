@@ -6,8 +6,8 @@ use phpDocumentor\Reflection\Type;
 use phpDocumentor\Reflection\Types\Object_;
 use phpDocumentor\Reflection\Types\Self_;
 use phpDocumentor\Reflection\Types\Static_;
-use Rector\BetterReflection\Reflection\ReflectionMethod;
-use Rector\BetterReflection\Reflector\Exception\IdentifierNotFound;
+use Roave\BetterReflection\Reflection\ReflectionMethod;
+use Roave\BetterReflection\Reflector\Exception\IdentifierNotFound;
 use Throwable;
 
 final class MethodReflector
