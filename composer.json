@@ -13,11 +13,11 @@
         "nette/robot-loader": "^3.0",
         "nette/utils": "^2.5",
         "nikic/php-parser": "^4.0",
-        "rector/better-reflection": "^4.0",
         "sebastian/diff": "^3.0",
         "symfony/console": "^4.0",
         "symfony/dependency-injection": "^4.0",
         "symfony/finder": "^4.0",
+        "roave/better-reflection": "dev-master#31129a702cb15553b7260aca8df16e1d2a181d2b",
         "symplify/better-phpdoc-parser": "dev-master",
         "symplify/package-builder": "dev-master",
         "symplify/token-runner": "dev-master"
