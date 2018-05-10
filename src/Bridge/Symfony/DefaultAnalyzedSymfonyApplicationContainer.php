@@ -61,9 +61,6 @@ final class DefaultAnalyzedSymfonyApplicationContainer implements AnalyzedApplic
 
         $this->symfonyKernelParameterGuard->ensureKernelClassIsValid($kernelClass);
 
-        // make this default, register and require kernel_class paramter, see:
-        // https://github.com/rectorphp/rector/issues/428
-
         /** @var string $kernelClass */
         return $this->containerFactory->createFromKernelClass($kernelClass);
     }
