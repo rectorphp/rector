@@ -37,7 +37,7 @@ Rector can:
 ## Install
 
 ```bash
-composer require --dev rector/rector
+composer require --dev rector/rector roave/better-reflection:dev-master#f8b3fc6
 ```
 
 ### Do you Have Conflicts?
