@@ -2,21 +2,10 @@
 
 namespace Rector\Bridge\Symfony\DependencyInjection;
 
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Expression;
-use Rector\BetterReflection\BetterReflection;
-use Rector\BetterReflection\Util\Autoload\ClassLoader;
-use Rector\BetterReflection\Util\Autoload\ClassLoaderMethod\FileCacheLoader;
 use Rector\DependencyInjection\CompilerPass\MakeServicesPublicCompilerPass;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Kernel;
-use Symplify\PackageBuilder\DependencyInjection\CompilerPass\PublicForTestsCompilerPass;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 
 final class ContainerFactory
