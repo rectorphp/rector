@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Rector\BetterReflection\Reflection;
+namespace Roave\BetterReflection\Reflection;
 
 /**
  * This interface is used internally by the Generic reflector in order to
