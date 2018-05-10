@@ -1,3 +1,7 @@
+parameters:
+    # default Symfony Kernel class
+    kernel_class: 'App\Kernel'
+
 imports:
   - { resource: '../../packages/**/src/config/*services.yml' }
   - { resource: 'services.yml' }
