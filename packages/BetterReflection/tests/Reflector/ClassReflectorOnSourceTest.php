@@ -2,10 +2,10 @@
 
 namespace Rector\BetterReflection\Tests\Reflector;
 
-use Rector\BetterReflection\Reflection\ReflectionClass;
-use Rector\BetterReflection\Reflector\ClassReflector;
 use Rector\BetterReflection\Reflector\ClassReflectorFactory;
 use Rector\Tests\AbstractContainerAwareTestCase;
+use Roave\BetterReflection\Reflection\ReflectionClass;
+use Roave\BetterReflection\Reflector\ClassReflector;
 
 final class ClassReflectorOnSourceTest extends AbstractContainerAwareTestCase
 {

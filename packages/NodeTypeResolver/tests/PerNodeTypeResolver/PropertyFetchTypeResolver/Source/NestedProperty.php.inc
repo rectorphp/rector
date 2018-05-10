@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\BetterReflection\NodeCompiler;
+namespace Roave\BetterReflection\NodeCompiler;
 
 use Rector\NodeTypeResolver\Tests\Source\NestedProperty\ClassWithPropertyLevel1;
 

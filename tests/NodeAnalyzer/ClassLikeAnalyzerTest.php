@@ -34,7 +34,10 @@ final class ClassLikeAnalyzerTest extends AbstractContainerAwareTestCase
             ['SomeClass'],
             $this->classLikeAnalyzer->resolveTypeAndParentTypes(new Class_('SomeClass'))
         );
+    }
 
+    public function testClassWithParentClass(): void
+    {
         $classWithParent = $this->builderFactory->class('SomeClass')
             ->extend('ParentClass')
             ->getNode();
@@ -51,7 +54,10 @@ final class ClassLikeAnalyzerTest extends AbstractContainerAwareTestCase
             ['SomeInterface'],
             $this->classLikeAnalyzer->resolveTypeAndParentTypes(new Interface_('SomeInterface'))
         );
+    }
 
+    public function testInterfaceWithParentInterface(): void
+    {
         $interfaceWithParent = $this->builderFactory->interface('SomeInterface')
             ->extend('AnotherInterface')
             ->getNode();

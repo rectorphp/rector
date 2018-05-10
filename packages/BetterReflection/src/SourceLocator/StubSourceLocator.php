@@ -2,15 +2,15 @@
 
 namespace Rector\BetterReflection\SourceLocator;
 
-use Rector\BetterReflection\Identifier\Identifier;
-use Rector\BetterReflection\Identifier\IdentifierType;
-use Rector\BetterReflection\Reflection\Reflection;
-use Rector\BetterReflection\Reflector\Exception\IdentifierNotFound;
-use Rector\BetterReflection\Reflector\Reflector;
-use Rector\BetterReflection\SourceLocator\Ast\Locator;
-use Rector\BetterReflection\SourceLocator\Located\LocatedSource;
-use Rector\BetterReflection\SourceLocator\Type\SourceLocator;
 use Rector\BetterReflection\Stubber\SourceStubber;
+use Roave\BetterReflection\Identifier\Identifier;
+use Roave\BetterReflection\Identifier\IdentifierType;
+use Roave\BetterReflection\Reflection\Reflection;
+use Roave\BetterReflection\Reflector\Exception\IdentifierNotFound;
+use Roave\BetterReflection\Reflector\Reflector;
+use Roave\BetterReflection\SourceLocator\Ast\Locator;
+use Roave\BetterReflection\SourceLocator\Located\LocatedSource;
+use Roave\BetterReflection\SourceLocator\Type\SourceLocator;
 
 /**
  * Located class in local stubs, as fallback locator if any other fails.
