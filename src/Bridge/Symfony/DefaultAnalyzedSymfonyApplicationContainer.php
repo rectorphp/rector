@@ -2,12 +2,13 @@
 
 namespace Rector\Bridge\Symfony;
 
-use Rector\Bridge\Contract\ServiceTypeForNameProviderInterface;
+use Rector\Bridge\Contract\AnalyzedApplicationContainerInterface;
 use Rector\Bridge\Symfony\DependencyInjection\ContainerFactory;
 use Rector\Configuration\Option;
+use Symfony\Component\DependencyInjection\Container;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
-final class DefaultServiceTypeForNameProvider implements ServiceTypeForNameProviderInterface
+final class DefaultAnalyzedSymfonyApplicationContainer implements AnalyzedApplicationContainerInterface
 {
     /**
      * @var ParameterProvider
@@ -34,16 +35,9 @@ final class DefaultServiceTypeForNameProvider implements ServiceTypeForNameProvi
         $this->containerFactory = $containerFactory;
     }
 
-    public function provideTypeForName(string $name): ?string
+    public function getTypeForName(string $name): ?string
     {
-        $kernelClass = $this->parameterProvider->provideParameter(Option::KERNEL_CLASS_PARAMETER);
-        $this->symfonyKernelParameterGuard->ensureKernelClassIsValid($kernelClass);
-
-        // make this default, register and require kernel_class paramter, see:
-        // https://github.com/rectorphp/rector/issues/428
-
-        /** @var string $kernelClass */
-        $container = $this->containerFactory->createFromKernelClass($kernelClass);
+        $container = $this->getContainer();
 
         if ($container->has($name)) {
             $definition = $container->get($name);
@@ -52,5 +46,22 @@ final class DefaultServiceTypeForNameProvider implements ServiceTypeForNameProvi
         }
 
         return null;
+    }
+
+    public function hasService(string $name): bool
+    {
+        $container = $this->getContainer();
+
+        return $container->has($name);
+    }
+
+    private function getContainer(): Container
+    {
+        $kernelClass = $this->parameterProvider->provideParameter(Option::KERNEL_CLASS_PARAMETER);
+
+        $this->symfonyKernelParameterGuard->ensureKernelClassIsValid($kernelClass);
+
+        /** @var string $kernelClass */
+        return $this->containerFactory->createFromKernelClass($kernelClass);
     }
 }

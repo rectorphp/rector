@@ -8,4 +8,8 @@ final class SomeController
     {
         $products = $productRepository->fetchAll();
     }
+
+    public function detail(Request $request, Product $product)
+    {
+    }
 }

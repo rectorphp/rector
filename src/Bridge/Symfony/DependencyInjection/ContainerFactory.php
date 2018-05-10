@@ -2,8 +2,11 @@
 
 namespace Rector\Bridge\Symfony\DependencyInjection;
 
+use Rector\DependencyInjection\CompilerPass\MakeServicesPublicCompilerPass;
 use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Kernel;
+use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 
 final class ContainerFactory
 {
@@ -14,19 +17,26 @@ final class ContainerFactory
 
     public function createFromKernelClass(string $kernelClass): Container
     {
-        if ($this->containersByKernelClass[$kernelClass]) {
+        if (isset($this->containersByKernelClass[$kernelClass])) {
             return $this->containersByKernelClass[$kernelClass];
         }
 
         return $this->containersByKernelClass[$kernelClass] = $this->createContainerFromKernelClass($kernelClass);
     }
 
+    /**
+     * Mimics https://github.com/symfony/symfony/blob/226e2f3949c5843b67826aca4839c2c6b95743cf/src/Symfony/Bundle/FrameworkBundle/Command/ContainerDebugCommand.php#L200-L203
+     */
     private function createContainerFromKernelClass(string $kernelClass): Container
     {
         $kernel = $this->createKernelFromKernelClass($kernelClass);
-        $kernel->boot();
 
-        return $kernel->getContainer();
+        /** @var ContainerBuilder $containerBuilder */
+        $containerBuilder = (new PrivatesCaller())->callPrivateMethod($kernel, 'buildContainer');
+        $containerBuilder->getCompilerPassConfig()->addPass(new MakeServicesPublicCompilerPass());
+        $containerBuilder->compile();
+
+        return $containerBuilder;
     }
 
     private function createKernelFromKernelClass(string $kernelClass): Kernel

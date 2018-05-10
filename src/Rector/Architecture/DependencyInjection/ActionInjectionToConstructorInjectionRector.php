@@ -7,11 +7,13 @@ use PhpParser\Node;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Bridge\Contract\AnalyzedApplicationContainerInterface;
 use Rector\Builder\Class_\VariableInfo;
 use Rector\Builder\Class_\VariableInfoFactory;
 use Rector\Builder\ConstructorMethodBuilder;
 use Rector\Builder\PropertyBuilder;
 use Rector\Configuration\Rector\Architecture\DependencyInjection\VariablesToPropertyFetchCollection;
+use Rector\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -38,16 +40,23 @@ final class ActionInjectionToConstructorInjectionRector extends AbstractRector
      */
     private $variablesToPropertyFetchCollection;
 
+    /**
+     * @var AnalyzedApplicationContainerInterface
+     */
+    private $analyzedApplicationContainer;
+
     public function __construct(
         PropertyBuilder $propertyBuilder,
         ConstructorMethodBuilder $constructorMethodBuilder,
         VariableInfoFactory $variableInfoFactory,
-        VariablesToPropertyFetchCollection $variablesToPropertyFetchCollection
+        VariablesToPropertyFetchCollection $variablesToPropertyFetchCollection,
+        AnalyzedApplicationContainerInterface $analyzedApplicationContainer
     ) {
         $this->propertyBuilder = $propertyBuilder;
         $this->constructorMethodBuilder = $constructorMethodBuilder;
         $this->variableInfoFactory = $variableInfoFactory;
         $this->variablesToPropertyFetchCollection = $variablesToPropertyFetchCollection;
+        $this->analyzedApplicationContainer = $analyzedApplicationContainer;
     }
 
     public function isCandidate(Node $node): bool
@@ -120,7 +129,7 @@ CODE_SAMPLE
 
             $variableInfo = $this->variableInfoFactory->createFromNameAndTypes(
                 $paramNode->var->name,
-                [(string) $paramNode->type]
+                $paramNode->getAttribute(Attribute::TYPES)
             );
 
             $this->addConstructorDependencyToClassNode($classNode, $variableInfo);
@@ -140,7 +149,8 @@ CODE_SAMPLE
             return false;
         }
 
-        if (Strings::endsWith($typehint, 'Request')) {
+        $typehint = (string) $paramNode->getAttribute(Attribute::TYPES)[0] ?? null;
+        if ($typehint === null) {
             return false;
         }
 
@@ -149,7 +159,7 @@ CODE_SAMPLE
             return false;
         }
 
-        return true;
+        return $this->analyzedApplicationContainer->hasService($typehint);
     }
 
     private function addConstructorDependencyToClassNode(Class_ $classNode, VariableInfo $variableInfo): void

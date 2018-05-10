@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Contrib\Symfony\FrameworkBundle\AbstractToConstructorInjectionRectorSource;
+namespace Rector\Tests\Rector\Architecture\DependencyInjection\ActionInjectionToConstructorInjectionRector\Source;
 
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -20,7 +20,7 @@ final class SomeKernelClass extends Kernel
 
     protected function build(ContainerBuilder $containerBuilder): void
     {
-        $containerBuilder->register('some_service', 'stdClass');
+        $containerBuilder->register(ProductRepository::class);
     }
 
     public function getCacheDir()

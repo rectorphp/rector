@@ -16,4 +16,8 @@ final class SomeController
     {
         $products = $this->productRepository->fetchAll();
     }
+
+    public function detail(Request $request, Product $product)
+    {
+    }
 }
