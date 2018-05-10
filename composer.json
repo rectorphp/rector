@@ -17,7 +17,7 @@
         "symfony/console": "^4.0",
         "symfony/dependency-injection": "^4.0",
         "symfony/finder": "^4.0",
-        "roave/better-reflection": "dev-master#31129a702cb15553b7260aca8df16e1d2a181d2b",
+        "roave/better-reflection": "dev-master#f8b3fc6",
         "symplify/better-phpdoc-parser": "dev-master",
         "symplify/package-builder": "dev-master",
         "symplify/token-runner": "dev-master"
