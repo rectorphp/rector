@@ -41,13 +41,19 @@ return [
                 'Test',
                 'test'
             ])
-            // Could not scan for classes inside "/var/www/rector/build/vendor/friendsofphp/php-cs-fixer/tests/Test/AbstractFixerTestCase.php" which does not appear to be a file nor a folder
-
         ,
         // to make "composer dump" work
         Finder::create()->append([
             'composer.json',
-        ])
+            // Fixes non-standard php-cs-fixer tests in /src
+            __DIR__ . '/vendor/friendsofphp/php-cs-fixer/tests/TestCase.php'
+        ]),
+
+        // Fixes non-standard php-cs-fixer tests in /src:
+        // "Could not scan for classes inside "/var/www/rector/build/vendor/friendsofphp/php-cs-fixer/tests/Test/AbstractFixerTestCase.php" which does not appear to be a file nor a folder"
+        Finder::create()
+            ->files()
+            ->in(__DIR__ . '/vendor/friendsofphp/php-cs-fixer/tests/Test')
     ],
     'whitelist' => $whitelistedRectorClasses,
     'patchers' => [
