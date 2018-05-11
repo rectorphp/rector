@@ -46,7 +46,9 @@ return [
         Finder::create()->append([
             'composer.json',
             // Fixes non-standard php-cs-fixer tests in /src
-            __DIR__ . '/vendor/friendsofphp/php-cs-fixer/tests/TestCase.php'
+            __DIR__ . '/vendor/friendsofphp/php-cs-fixer/tests/TestCase.php',
+            // dependency for "composer dump"
+            __DIR__ . '/vendor/composer/installed.json'
         ]),
 
         // Fixes non-standard php-cs-fixer tests in /src:
