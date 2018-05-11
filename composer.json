@@ -68,7 +68,8 @@
             "find build/ -type f | xargs sed -i 's/RectorPrefixed\\\\\\\\Rector/Rector/g'",
             "find build/ -type f | xargs sed -i 's/use Symfony/use RectorPrefixed\\\\\\\\Symfony/g'",
             "cp composer.json build/composer.json",
-            "cd build && composer dump-autoload",
+            "composer dump-autoload -d build",
+            "chmod +x build/bin/rector",
             "cd build && php bin/rector"
         ]
     },
