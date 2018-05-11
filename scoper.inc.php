@@ -3,23 +3,6 @@
 require_once __DIR__ . '/vendor/autoload.php';
 
 use Isolated\Symfony\Component\Finder\Finder;
-use Nette\Loaders\RobotLoader;
-use Nette\Utils\Strings;
-
-// whitelist all "Rector\*" classes, so they're not prefixed and people can use them in .yml configs and extends
-// before this gets solved: https://github.com/humbug/php-scoper/issues/192#issuecomment-382157399
-$robotLoader = new RobotLoader();
-$robotLoader->addDirectory(__DIR__ . '/src');
-$robotLoader->addDirectory(__DIR__ . '/packages');
-$robotLoader->excludeDirectory('*tests*');
-$robotLoader->rebuild();
-
-$whitelistedRectorClasses = [];
-foreach ($robotLoader->getIndexedClasses() as $class => $file) {
-    if (Strings::startsWith($class, 'Rector')) {
-        $whitelistedRectorClasses[] = $class;
-    }
-}
 
 return [
     'prefix' => 'RectorPrefixed',
@@ -56,13 +39,6 @@ return [
         Finder::create()
             ->files()
             ->in(__DIR__ . '/vendor/friendsofphp/php-cs-fixer/tests/Test')
-    ],
-    'whitelist' => $whitelistedRectorClasses,
-    'patchers' => [
-        function (string $filePath, string $prefix, string $contents): string {
-            // Change the contents here.
-            return $contents;
-        },
     ],
 ];
 
