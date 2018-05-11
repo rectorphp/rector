@@ -33,6 +33,7 @@ return [
             // dependency for "composer dump"
             __DIR__ . '/vendor/composer/installed.json'
         ]),
+        // 'whitelist' - be careful, this adds aliases to end of each whitelisted class
 
         // Fixes non-standard php-cs-fixer tests in /src:
         // "Could not scan for classes inside "/var/www/rector/build/vendor/friendsofphp/php-cs-fixer/tests/Test/AbstractFixerTestCase.php" which does not appear to be a file nor a folder"
