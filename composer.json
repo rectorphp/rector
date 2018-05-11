@@ -21,6 +21,7 @@
         "symplify/better-phpdoc-parser": "^4.2"
     },
     "require-dev": {
+        "bamarni/composer-bin-plugin": "^1.2",
         "phpstan/phpstan-shim": "^0.9",
         "phpunit/phpunit": "^7.1",
         "slam/php-cs-fixer-extensions": "^1.15",
@@ -61,6 +62,7 @@
         "phpstan": "vendor/bin/phpstan.phar analyse packages src tests --level max --configuration phpstan.neon",
         "update-docs": "bin/rector describe --level all --format md > docs/AllRectorsOverview.md",
         "prefix-rector": [
+            "if [ ! -d vendor/bin ]; then composer bin php-scoper require humbug/php-scoper; fi",
             "rm -rf build/",
             "php php-scoper.phar add-prefix --no-interaction --prefix='RectorPrefixed'",
             "find build/ -type f -name '*.yml' | xargs perl -pi -e 's/((?:\\\\{1,2}\\w+|\\w+\\\\{1,2})(?:\\w+\\\\{0,2})+)/RectorPrefixed\\\\\\1/g'",
