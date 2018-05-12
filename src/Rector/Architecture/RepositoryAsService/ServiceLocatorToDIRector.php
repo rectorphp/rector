@@ -115,14 +115,16 @@ CODE_SAMPLE
             return false;
         }
 
-        /** @var MethodCall $node */
-        if (count($node->args) !== 1) {
+        /** @var MethodCall $methodCallNode */
+        $methodCallNode = $node;
+
+        if (count($methodCallNode->args) !== 1) {
             return false;
         }
 
-        if ($node->args[0]->value instanceof String_) {
+        if ($methodCallNode->args[0]->value instanceof String_) {
             /** @var String_ $string */
-            $string = $node->args[0]->value;
+            $string = $methodCallNode->args[0]->value;
 
             // is alias
             if (Strings::contains($string->value, ':')) {

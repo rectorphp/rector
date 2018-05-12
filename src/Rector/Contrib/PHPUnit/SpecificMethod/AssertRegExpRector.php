@@ -73,7 +73,7 @@ final class AssertRegExpRector extends AbstractPHPUnitRector
             return false;
         }
 
-        $methodName = $secondArgumentValue->name->toString();
+        $methodName = (string) $secondArgumentValue->name;
 
         return $methodName === 'preg_match';
     }

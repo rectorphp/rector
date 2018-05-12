@@ -25,7 +25,7 @@ final class PropertyFetchTypeResolverTest extends AbstractNodeTypeResolverTest
         $propertyFetchNodes = $this->getNodesForFileOfType($file, PropertyFetch::class);
         $propertyFetchNode = $propertyFetchNodes[$nodePosition];
 
-        $this->assertSame($propertyName, $propertyFetchNode->name->toString());
+        $this->assertSame($propertyName, (string) $propertyFetchNode->name);
         $this->assertSame($expectedTypes, $this->nodeTypeResolver->resolve($propertyFetchNode));
     }
 

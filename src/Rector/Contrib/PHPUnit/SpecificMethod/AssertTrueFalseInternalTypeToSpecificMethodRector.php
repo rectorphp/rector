@@ -105,7 +105,7 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractPH
             return false;
         }
 
-        $methodName = $firstArgumentValue->name->toString();
+        $methodName = (string) $firstArgumentValue->name;
 
         return isset($this->oldMethodsToTypes[$methodName]);
     }
@@ -126,7 +126,7 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractPH
         /** @var FuncCall $isFunctionNode */
         $isFunctionNode = $methodCallNode->args[0]->value;
         $argument = $isFunctionNode->args[0]->value;
-        $isFunctionName = $isFunctionNode->name->toString();
+        $isFunctionName = (string) $isFunctionNode->name;
 
         $oldArguments = $methodCallNode->args;
         unset($oldArguments[0]);

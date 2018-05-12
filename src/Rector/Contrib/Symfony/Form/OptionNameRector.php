@@ -58,17 +58,18 @@ final class OptionNameRector extends AbstractRector
         }
 
         $arrayParentNode = $arrayItemParentNode->getAttribute(Attribute::PARENT_NODE);
-        $argParentNode = $arrayParentNode->getAttribute(Attribute::PARENT_NODE);
 
         /** @var MethodCall $argParentNode */
-        $methodCallNode = $argParentNode->getAttribute(Attribute::PARENT_NODE);
+        $argParentNode = $arrayParentNode->getAttribute(Attribute::PARENT_NODE);
 
         /** @var MethodCall|Node $methodCallNode */
+        $methodCallNode = $argParentNode->getAttribute(Attribute::PARENT_NODE);
+
         if (! $methodCallNode instanceof MethodCall) {
             return false;
         }
 
-        return $methodCallNode->name->toString() === 'add';
+        return (string) $methodCallNode->name === 'add';
     }
 
     /**

@@ -22,7 +22,7 @@ final class ReplaceVariableByPropertyFetchRector extends AbstractRector
     private $variablesToPropertyFetchCollection;
 
     /**
-     * @var VariableInfo|null
+     * @var VariableInfo
      */
     private $activeVariableInfo;
 
@@ -52,7 +52,7 @@ final class SomeController
      * @var ProductRepository
      */
     private $productRepository;
-    
+
     public function __construct(ProductRepository $productRepository)
     {
         $this->productRepository = $productRepository;
@@ -61,7 +61,7 @@ final class SomeController
     public function default()
     {
         $products = $productRepository->fetchAll();
-    } 
+    }
 }
 CODE_SAMPLE
                     ,
@@ -72,7 +72,7 @@ final class SomeController
      * @var ProductRepository
      */
     private $productRepository;
-    
+
     public function __construct(ProductRepository $productRepository)
     {
         $this->productRepository = $productRepository;
@@ -81,7 +81,7 @@ final class SomeController
     public function default()
     {
         $products = $this->productRepository->fetchAll();
-    } 
+    }
 }
 CODE_SAMPLE
                 ),
@@ -91,8 +91,6 @@ CODE_SAMPLE
 
     public function isCandidate(Node $node): bool
     {
-        $this->activeVariableInfo = null;
-
         if (! $node instanceof Variable) {
             return false;
         }
