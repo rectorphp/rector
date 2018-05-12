@@ -95,7 +95,7 @@ final class AssertPropertyExistsRector extends AbstractPHPUnitRector
             return false;
         }
 
-        $methodName = $firstArgumentValue->name->toString();
+        $methodName = (string) $firstArgumentValue->name;
 
         return $methodName === 'property_exists';
     }

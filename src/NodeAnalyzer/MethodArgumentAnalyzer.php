@@ -33,16 +33,21 @@ final class MethodArgumentAnalyzer
             return false;
         }
 
-        return $node->args[$position - 1]->value instanceof String_;
+        /** @var MethodCall $methodCallNode */
+        $methodCallNode = $node;
+
+        return $methodCallNode->args[$position - 1]->value instanceof String_;
     }
 
-    public function isMethodNthArgumentNull(Node $methodCallNode, int $position): bool
+    public function isMethodNthArgumentNull(Node $node, int $position): bool
     {
-        if (! $this->hasMethodNthArgument($methodCallNode, $position)) {
+        if (! $this->hasMethodNthArgument($node, $position)) {
             return false;
         }
 
         /** @var MethodCall $methodCallNode */
+        $methodCallNode = $node;
+
         $value = $methodCallNode->args[$position - 1]->value;
         if (! $value instanceof ConstFetch) {
             return false;

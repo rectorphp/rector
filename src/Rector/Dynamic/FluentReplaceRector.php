@@ -52,13 +52,13 @@ final class FluentReplaceRector extends AbstractRector
         {
             return $this;
         }
-    
+
         public function otherFunction()
         {
             return $this;
         }
     }
-        
+
     $someClass = new SomeClass();
     $someClass->someFunction()
                 ->otherFunction();
@@ -70,12 +70,12 @@ CODE_SAMPLE
         public function someFunction()
         {
         }
-    
+
         public function otherFunction()
         {
         }
     }
-    
+
     $someClass = new SomeClass();
     $someClass->someFunction();
     $someClass->otherFunction();
@@ -152,7 +152,7 @@ CODE_SAMPLE
     {
         $nextMethodCallNode = $this->methodCallNodeFactory->createWithVariableAndMethodName(
             $innerMethodCallNode->var,
-            $outerMethodCallNode->name->toString()
+            (string) $outerMethodCallNode->name
         );
 
         $this->addNodeAfterNode($nextMethodCallNode, $innerMethodCallNode);

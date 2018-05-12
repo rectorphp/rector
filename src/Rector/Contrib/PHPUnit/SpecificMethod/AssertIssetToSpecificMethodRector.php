@@ -111,7 +111,7 @@ final class AssertIssetToSpecificMethodRector extends AbstractPHPUnitRector
         unset($oldArgs[0]);
 
         $node->args = array_merge($this->nodeFactory->createArgs([
-            $this->nodeFactory->createString($propertyFetchNode->name->toString()),
+            $this->nodeFactory->createString((string) $propertyFetchNode->name),
             $propertyFetchNode->var,
         ]), $oldArgs);
     }

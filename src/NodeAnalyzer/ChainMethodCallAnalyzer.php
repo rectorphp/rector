@@ -36,20 +36,18 @@ final class ChainMethodCallAnalyzer
         // node chaining is in reverse order than code
         $methods = array_reverse($methods);
 
-        $currentMethodCall = $node;
-
         foreach ($methods as $method) {
-            if ((string) $currentMethodCall->name !== $method) {
+            if ((string) $node->name !== $method) {
                 return false;
             }
 
-            $currentMethodCall = $currentMethodCall->var;
-            if ($currentMethodCall instanceof MethodCall) {
+            $node = $node->var;
+            if ($node instanceof MethodCall) {
                 continue;
             }
         }
 
-        $variableTypes = $this->nodeTypeResolver->resolve($currentMethodCall);
+        $variableTypes = $this->nodeTypeResolver->resolve($node);
 
         return in_array($type, $variableTypes, true);
     }

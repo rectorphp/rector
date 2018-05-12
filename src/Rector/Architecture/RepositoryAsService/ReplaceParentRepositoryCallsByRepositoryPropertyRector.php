@@ -64,7 +64,7 @@ final class ReplaceParentRepositoryCallsByRepositoryPropertyRector extends Abstr
 <?php
 
 use Doctrine\ORM\EntityRepository;
-    
+
 class SomeRepository extends EntityRepository
 {
     public function someMethod()
@@ -78,7 +78,7 @@ SAMPLE
 <?php
 
 use Doctrine\ORM\EntityRepository;
-    
+
 class SomeRepository extends EntityRepository
 {
     public function someMethod()

@@ -3,6 +3,7 @@
 namespace Rector\Rector\Contrib\Doctrine;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\MethodCall;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodArgumentAnalyzer;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
@@ -64,16 +65,22 @@ final class AliasToClassRector extends AbstractRector
             return false;
         }
 
-        return $this->isAliasWithConfiguredEntity($node->args[0]->value->value);
+        /** @var MethodCall $methodCall */
+        $methodCall = $node;
+
+        return $this->isAliasWithConfiguredEntity($methodCall->args[0]->value->value);
     }
 
-    public function refactor(Node $node): ?Node
+    /**
+     * @param MethodCall $methodCall
+     */
+    public function refactor(Node $methodCall): ?Node
     {
-        $node->args[0]->value = $this->nodeFactory->createClassConstantReference(
-            $this->convertAliasToFqn($node->args[0]->value->value)
+        $methodCall->args[0]->value = $this->nodeFactory->createClassConstantReference(
+            $this->convertAliasToFqn($methodCall->args[0]->value->value)
         );
 
-        return $node;
+        return $methodCall;
     }
 
     private function isAlias(string $name): bool
