@@ -11,7 +11,6 @@ parameters:
         - '#Property PhpParser\\Node\\Param::\$type \(PhpParser\\Node\\Name|PhpParser\\Node\\NullableType\|string\|null\) does not accept PhpParser\\Node\\Identifier|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType#' # 1
 
         # false positive
-        - '#Parameter \#1 \$methodCallNode of method Rector\\NodeAnalyzer\\MethodArgumentAnalyzer::isMethodSecondArgumentNull\(\) expects PhpParser\\Node\\Expr\\MethodCall, PhpParser\\Node given#'
         - '#Parameter \#1 \$kernelClass of method Rector\\Bridge\\Symfony\\SymfonyKernelParameterGuard::(ensureKernelClassExists|ensureIsKernelInstance)\(\) expects string, string\|null given#'
 
         # intentionally incorrect - part of the test
@@ -19,23 +18,19 @@ parameters:
 
         # known values
         - '#Argument of an invalid type array<PhpParser\\Node>\|null supplied for foreach, only iterables are supported#'
-        - '#Method (.+) Symfony\\Component\\DependencyInjection\\Container but returns Symfony\\Component\\DependencyInjection\\ContainerInterface#'
         - '#Access to an undefined property PHPStan\\PhpDocParser\\Ast\\Node::\$name#'
         - '#Calling method getName\(\) on possibly null value of type Rector\\Builder\\Class_\\VariableInfo\|null#'
 
         - '#Method Rector\\Node\\NodeFactory::create(Null|False)Constant\(\) should return PhpParser\\Node\\Expr\\ConstFetch but returns PhpParser\\Node\\Expr#' # 2
         - '#Method Rector\\Node\\NodeFactory::createNamespace\(\) should return PhpParser\\Node\\Stmt\\Namespace_ but returns PhpParser\\Node#' # 1
         - '#Calling method getText\(\) on possibly null value of type PhpParser\\Comment\\Doc\|null#' # 3
-        - '#Calling method getParentClassNames\(\) on possibly null value of type Rector\\BetterReflection\\Reflection\\ReflectionClass\|null#' # 1
         - '#Instanceof between PhpParser\\Node\\Expr\|string and PhpParser\\Node\\Identifier will always evaluate to false#' # 8
         - '#Method Rector\\NodeTraverserQueue\\BetterNodeFinder::findFirstAncestorInstanceOf\(\) should return PhpParser\\Node\|null but returns object#' # 1
         - '#Access to an undefined property PhpParser\\Node\\Stmt\\(Class_|ClassLike)::\$namespacedName#' # 3
         - '#Property Rector\\NodeTypeResolver\\NodeVisitor\\NamespaceResolver::\$useNodes \(array<PhpParser\\Node\\Stmt\\Use_>\) does not accept array<PhpParser\\Node>#' # 1
         - '#Parameter \#1 \$classMethodNode of method Rector\\NodeTypeResolver\\TypesExtractor\\ConstructorPropertyTypesExtractor::extractPropertiesFromConstructorMethodNode\(\) expects PhpParser\\Node\\Stmt\\ClassMethod, PhpParser\\Node given#' # 1
         - '#Instanceof between PhpParser\\Node\\Expr\|string and PhpParser\\Node\\Name will always evaluate to false#' # 1
-        - '#Method Rector\\BetterReflection\\Reflector\\SmartClassReflector::reflect\(\) should return Rector\\BetterReflection\\Reflection\\ReflectionClass\|null but returns Rector\\BetterReflection\\Reflection\\Reflection#' # 1
         - '#Parameter \#1 \$node of method Rector\\NodeTypeResolver\\NodeTypeResolver::resolve\(\) expects PhpParser\\Node, PhpParser\\Node\\Expr|string given#' # 1
-        - '#Cannot call method render\(\) on phpDocumentor\\Reflection\\DocBlock\\Tag\|string#' # 1
         - '#Method Rector\\NodeTraverser\\RectorNodeTraverser::getRectors\(\) should return array<Rector\\Contract\\Rector\\RectorInterface> but returns array<PhpParser\\NodeVisitor>#' # 1
 
         # known value of Name of MethodCall
@@ -51,7 +46,6 @@ parameters:
         - "#Casting to string something that's already string#" # 4
         - '#Call to an undefined method PhpParser\\Node\\Stmt\\UseUse::getAlias\(\)#' # 2
         - '#Call to an undefined method PhpParser\\PrettyPrinter\\Standard::printFormatPreserving\(\)#' # 1
-        - '#Array \(array<Rector\\BetterReflection\\Reflection\\ReflectionClass>\) does not accept Rector\\BetterReflection\\Reflection\\Reflection#' # 1
         - '#Access to an undefined property PhpParser\\Node\\Expr::\$(name|var)#' # 2
         - '#Call to an undefined method PhpParser\\Node\\Expr|PhpParser\\Node\\Name::toCodeString\(\).#' #1
 
