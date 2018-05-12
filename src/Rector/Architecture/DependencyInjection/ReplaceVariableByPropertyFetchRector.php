@@ -22,7 +22,7 @@ final class ReplaceVariableByPropertyFetchRector extends AbstractRector
     private $variablesToPropertyFetchCollection;
 
     /**
-     * @var VariableInfo
+     * @var VariableInfo|null
      */
     private $activeVariableInfo;
 
@@ -91,6 +91,8 @@ CODE_SAMPLE
 
     public function isCandidate(Node $node): bool
     {
+        $this->activeVariableInfo = null;
+
         if (! $node instanceof Variable) {
             return false;
         }
