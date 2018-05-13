@@ -17,6 +17,12 @@ php php-scoper.phar add-prefix --no-interaction --prefix='RectorPrefixed'
 (find build/ -type f -name '*.yml' | xargs perl -pi -e 's/((?:\\{1,2}\w+|\w+\\{1,2})(?:\w+\\{0,2})+)/RectorPrefixed\\\1/g')
 
 # un-prefix Rector files, so it's public API, in configs etc.
+# e.g.
+# -use RectorPrefixed\Rector\...
+# +use Rector\...
+
+# "sed" command format help:
+# s/<old-code>/<new-code>/g
 (find build/ -type f | xargs sed -i 's/RectorPrefixed\\Rector/Rector/g')
 (find build/ -type f | xargs sed -i 's/RectorPrefixed\\\\Rector/Rector/g')
 
@@ -26,14 +32,17 @@ php php-scoper.phar add-prefix --no-interaction --prefix='RectorPrefixed'
 # ?todo
 cp composer.json build/composer.json
 
-# rebuild composer dump
+# rebuild composer dump so the new prefixed namespaces are autoloaded
+# the new "RectorPrefixed\" is taken into account thanks to /vendor/composer/installed.json file,
 composer dump-autoload -d build --no-dev
 
 # make bin executable
 chmod +x build/bin/rector
 
-# clear kernel cache to make use of this new one, maybe prefix this cache as well?
-rm -rf /tmp/_rector_cache
+# clear kernel cache to make use of this new one,
+# #todo? maybe prefix this cache as well?
+(find build/ -type f | xargs sed -i 's/_rector_cache/_prefixed_rector_cache/g')
+rm -rf /tmp/_prefixed_rector_cache
 
 # run it to test it
 build/bin/rector
