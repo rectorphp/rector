@@ -54,8 +54,13 @@ final class UnnecessaryTernaryExpressionRector extends AbstractRector
         return ! in_array('null', [$ifConstFetch, $elseConstFetch], true);
     }
 
-    public function refactor(Node $node): ?Node
+    /**
+     * @param Ternary $ternaryExpression
+     */
+    public function refactor(Node $ternaryExpression): ?Node
     {
-        return $node;
+        $ternaryExpression = $ternaryExpression->cond;
+
+        return $ternaryExpression;
     }
 }

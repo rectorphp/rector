@@ -6,4 +6,11 @@ final class MyClass
     {
         return $foo === $bar;
     }
+
+    public function unecessaryTernaryExpression(): bool
+    {
+        $return =  $foo === $bar;
+
+        return $return;
+    }
 }

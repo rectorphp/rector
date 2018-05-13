@@ -6,4 +6,13 @@ final class MyClass
     {
         return $foo === $bar ? true : false;
     }
+
+    public function unecessaryTernaryExpression(): bool
+    {
+        $return =  $foo === $bar
+            ? true
+            : false;
+
+        return $return;
+    }
 }
