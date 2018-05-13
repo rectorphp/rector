@@ -5,8 +5,8 @@ set -x
 
 cd build
 
-git init
-git remote add origin git@github.com:rectorphp/rector-prefixed.git
+# init non-existing .git or fetch existing one
+if [ ! -d .git ]; then git init; git remote add -f origin git@github.com:rectorphp/rector-prefixed.git; else git fetch origin; fi
 
 # to keep only diff commits
 git pull origin master --rebase
