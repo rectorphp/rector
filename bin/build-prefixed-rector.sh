@@ -8,13 +8,13 @@ set -x
 # if [ ! -d vendor/bin ]; then composer bin php-scoper require humbug/php-scoper; fi
 
 # cleanup build
-#rm -rf build/
+rm -rf build/
 
 # prefix current code to /build directory (see "scoper.inc.php" for settings)
-#php php-scoper.phar add-prefix --no-interaction --prefix='RectorPrefixed'
+php php-scoper.phar add-prefix --no-interaction --prefix='RectorPrefixed'
 
-# prefix all ymal files
-(find build/ -type f -name '*.yml' | xargs perl -pi -e 's/((?:\\\\{1,2}\\w+|\\w+\\\\{1,2})(?:\\w+\\\\{0,2})+)/RectorPrefixed\\\\1/g')
+# prefix namespace in *.yml files
+(find build/ -type f -name '*.yml' | xargs perl -pi -e 's/((?:\\{1,2}\w+|\w+\\{1,2})(?:\w+\\{0,2})+)/RectorPrefixed\\\1/g')
 
 # un-prefix Rector files, so it's public API, in configs etc.
 (find build/ -type f | xargs sed -i 's/RectorPrefixed\\Rector/Rector/g')
