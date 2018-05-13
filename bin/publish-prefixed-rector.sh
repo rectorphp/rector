@@ -19,6 +19,6 @@ git fetch origin            # Updates origin/master
 #git rebase origin/master    # Rebases current branch onto origin/master
 
 # https://demisx.github.io/git/rebase/2015/07/02/git-rebase-keep-my-branch-changes.html
-git rebase -Xours origin/master    # Rebases current branch onto origin/master, prefers our "master" in conflicts
+git rebase -Xtheirs origin/master    # Rebases current branch onto origin/master, prefers our "master" in conflicts
 
 git push origin master
