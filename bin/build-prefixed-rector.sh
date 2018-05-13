@@ -46,3 +46,8 @@ rm -rf /tmp/_prefixed_rector_cache
 
 # run it to test it
 build/bin/rector
+
+
+# use new composer package name
+(find build/ -type f | xargs sed -i 's/_rector_cache/_prefixed_rector_cache/g')
+sed -i 's/rector\/rector/rector\/rector-prefixed/g'  build/composer.json
