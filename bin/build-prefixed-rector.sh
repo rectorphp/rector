@@ -47,6 +47,7 @@ rm -rf /tmp/_prefixed_rector_cache
 # run it to test it
 build/bin/rector
 
+# @todo: probably php script that will load it a modify it
 
 # use new composer package name
 (find build/ -type f | xargs sed -i 's/_rector_cache/_prefixed_rector_cache/g')
