@@ -51,11 +51,8 @@ chmod +x build/bin/rector
 (find build/ -type f | xargs sed -i 's/_rector_cache/_prefixed_rector_cache/g')
 rm -rf /tmp/_prefixed_rector_cache
 
+# build composer.json
+bin/build-prefixed-rector-composer-json.php
+
 # run it to test it
 build/bin/rector
-
-# @todo: probably php script that will load it a modify it
-
-# use new composer package name
-(find build/ -type f | xargs sed -i 's/_rector_cache/_prefixed_rector_cache/g')
-sed -i 's/rector\/rector/rector\/rector-prefixed/g'  build/composer.json
