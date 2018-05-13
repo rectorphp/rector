@@ -13,6 +13,16 @@ use Rector\RectorDefinition\RectorDefinition;
 
 final class UnnecessaryTernaryExpressionRector extends AbstractRector
 {
+    /**
+     * @var string
+     */
+    private $ifValue;
+
+    /**
+     * @var string
+     */
+    private $elseValue;
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -48,10 +58,10 @@ final class UnnecessaryTernaryExpressionRector extends AbstractRector
             return false;
         }
 
-        $ifConstFetch = $ifExpression->name->toLowerString();
-        $elseConstFetch = $elseExpression->name->toLowerString();
+        $this->ifValue = $ifExpression->name->toLowerString();
+        $this->elseValue = $elseExpression->name->toLowerString();
 
-        return ! in_array('null', [$ifConstFetch, $elseConstFetch], true);
+        return ! in_array('null', [$this->ifValue, $this->elseValue], true);
     }
 
     /**
@@ -59,8 +69,35 @@ final class UnnecessaryTernaryExpressionRector extends AbstractRector
      */
     public function refactor(Node $ternaryExpression): ?Node
     {
-        $ternaryExpression = $ternaryExpression->cond;
+        /** @var BinaryOp */
+        $binaryOpOperation = $ternaryExpression->cond;
+
+        if ($this->ifValue === 'true' && $this->elseValue === 'false') {
+            $ternaryExpression = $binaryOpOperation;
+        } else {
+            $ternaryExpression = $this->fixBinaryOperation($binaryOpOperation);
+        }
 
         return $ternaryExpression;
+    }
+
+    private function fixBinaryOperation(BinaryOp $operation): BinaryOp
+    {
+        $operandsMap = [
+            '===' => 'NotIdentical',
+            '!==' => 'Identical',
+            '==' => 'NotEqual',
+            '!=' => 'Equal',
+            '<>' => 'Equal',
+            '>' => 'Smaller',
+            '<' => 'Greater',
+            '>=' => 'SmallerOrEqual',
+            '<=' => 'GreaterOrEqual',
+        ];
+
+        $operand = $operation->getOperatorSigil();
+        $binaryOpClassName = 'PhpParser\\Node\\Expr\\BinaryOp\\' . $operandsMap[$operand];
+
+        return new $binaryOpClassName($operation->left, $operation->right);
     }
 }
