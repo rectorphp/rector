@@ -7,6 +7,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\Ternary;
+use PhpParser\Node\Identifier;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -58,8 +59,13 @@ final class UnnecessaryTernaryExpressionRector extends AbstractRector
             return false;
         }
 
-        $this->ifValue = $ifExpression->name->toLowerString();
-        $this->elseValue = $elseExpression->name->toLowerString();
+        /** @var Identifier $ifExpressionName */
+        $ifExpressionName = $ifExpression->name;
+        /** @var Identifier $elseExpressionName */
+        $elseExpressionName = $elseExpression->name;
+
+        $this->ifValue = $ifExpressionName->toLowerString();
+        $this->elseValue = $elseExpressionName->toLowerString();
 
         return ! in_array('null', [$this->ifValue, $this->elseValue], true);
     }
