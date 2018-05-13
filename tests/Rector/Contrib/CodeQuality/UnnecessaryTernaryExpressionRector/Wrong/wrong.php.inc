@@ -34,4 +34,9 @@ final class MyClass
     {
         return $foo ?: $bar;
     }
+
+    public function falsePositiveTernaryExpression(): string
+    {
+        return $foo === '' ? null : $foo;
+    }
 }

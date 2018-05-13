@@ -53,7 +53,7 @@ final class UnnecessaryTernaryExpressionRector extends AbstractRector
         $elseExpression = $ternaryExpression->else;
 
         if (! $ifExpression instanceof ConstFetch
-            && ! $elseExpression instanceof ConstFetch
+            || ! $elseExpression instanceof ConstFetch
         ) {
             return false;
         }
