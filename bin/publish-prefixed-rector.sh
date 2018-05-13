@@ -7,6 +7,10 @@ cd build
 
 git init
 git remote add origin git@github.com:rectorphp/rector-prefixed.git
+
+# to keep only diff commits
+git pull origin master --rebase
+
 git add .
 git commit -m "rebuild prefixed Rector" # date?
-git push origin master -f
+git push origin master
