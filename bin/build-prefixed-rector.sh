@@ -14,7 +14,8 @@ rm -rf build/
 php php-scoper.phar add-prefix --no-interaction --prefix='RectorPrefixed'
 
 # prefix namespace in *.yml files
-(find build/ -type f -name '*.yml' | xargs perl -pi -e 's/((?:\\{1,2}\w+|\w+\\{1,2})(?:\w+\\{0,2})+)/RectorPrefixed\\\1/g')
+# but not in /config, since there is only Rector\ services and "class names"
+(find build/ -path build/config -prune -o -type f -name '*.yml' | xargs perl -pi -e 's/((?:\\{1,2}\w+|\w+\\{1,2})(?:\w+\\{0,2})+)/RectorPrefixed\\\1/g')
 
 # un-prefix Rector files, so it's public API, in configs etc.
 # e.g.
@@ -28,6 +29,12 @@ php php-scoper.phar add-prefix --no-interaction --prefix='RectorPrefixed'
 
 # unprefix container dump - see https://github.com/symfony/symfony/blob/226e2f3949c5843b67826aca4839c2c6b95743cf/src/Symfony/Component/DependencyInjection/Dumper/PhpDumper.php#L897
 (find build/ -type f | xargs sed -i 's/use Symfony/use RectorPrefixed\\\\Symfony/g')
+
+# for cases like: https://github.com/rectorphp/rector-prefixed/blob/6b690e46e54830a944618d3a2bf50a7c2bd13939/src/Bridge/Symfony/NodeAnalyzer/ControllerMethodAnalyzer.php#L16
+# "'" ref https://stackoverflow.com/a/24509931/1348344
+# "prune" ref https://stackoverflow.com/a/4210072/1348344
+(find build/ -path build/vendor -prune -o -type f | xargs sed -i "s/'RectorPrefixed\\/'/g")
+(find build/ -path build/vendor -prune -o -type f | xargs sed -i "s/'RectorPrefixed\\\\/'/g")
 
 # ?todo
 cp composer.json build/composer.json
