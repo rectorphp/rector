@@ -60,21 +60,7 @@
             "bin/clean_levels.sh"
         ],
         "phpstan": "vendor/bin/phpstan.phar analyse packages src tests --level max --configuration phpstan.neon",
-        "update-docs": "bin/rector describe --level all --format md > docs/AllRectorsOverview.md",
-        "prefix-rector": [
-            "if [ ! -d vendor/bin ]; then composer bin php-scoper require humbug/php-scoper; fi",
-            "rm -rf build/",
-            "php php-scoper.phar add-prefix --no-interaction --prefix='RectorPrefixed'",
-            "find build/ -type f -name '*.yml' | xargs perl -pi -e 's/((?:\\\\{1,2}\\w+|\\w+\\\\{1,2})(?:\\w+\\\\{0,2})+)/RectorPrefixed\\\\\\1/g'",
-            "find build/ -type f | xargs sed -i 's/RectorPrefixed\\\\Rector/Rector/g'",
-            "find build/ -type f | xargs sed -i 's/RectorPrefixed\\\\\\\\Rector/Rector/g'",
-            "find build/ -type f | xargs sed -i 's/use Symfony/use RectorPrefixed\\\\\\\\Symfony/g'",
-            "cp composer.json build/composer.json",
-            "composer dump-autoload -d build --no-dev",
-            "chmod +x build/bin/rector",
-            "rm -rf /tmp/_rector_cache",
-            "cd build && php bin/rector"
-        ]
+        "update-docs": "bin/rector describe --level all --format md > docs/AllRectorsOverview.md"
     },
     "bin": [
         "bin/rector",

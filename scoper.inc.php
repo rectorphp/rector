@@ -42,7 +42,3 @@ return [
             ->in(__DIR__ . '/vendor/friendsofphp/php-cs-fixer/tests/Test')
     ],
 ];
-
-## Extra notes
-// composer.json: "find build/ -type f | xargs sed -i 's/use Symfony/use RectorPrefixed\\\\\\\\Symfony/g'" is needed for:
-// https://github.com/symfony/symfony/blob/226e2f3949c5843b67826aca4839c2c6b95743cf/src/Symfony/Component/DependencyInjection/Dumper/PhpDumper.php#L897
