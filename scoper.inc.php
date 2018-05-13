@@ -22,7 +22,8 @@ return [
                 'Tests',
                 'tests',
                 'Test',
-                'test'
+                'test',
+                'vendor-bin'
             ])
         ,
         // to make "composer dump" work
