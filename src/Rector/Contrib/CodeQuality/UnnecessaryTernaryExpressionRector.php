@@ -16,6 +16,7 @@ use PhpParser\Node\Expr\BinaryOp\SmallerOrEqual;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Identifier;
+use Rector\Exception\NotImplementedException;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -109,8 +110,22 @@ final class UnnecessaryTernaryExpressionRector extends AbstractRector
 
     private function inverseBinaryOperation(BinaryOp $operation): BinaryOp
     {
-        $binaryOpClassName = $this->inverseOperandMap[get_class($operation)];
+        $this->ensureBinaryOperationIsSupported($operation);
 
+        $binaryOpClassName = $this->inverseOperandMap[get_class($operation)];
         return new $binaryOpClassName($operation->left, $operation->right);
+    }
+
+    private function ensureBinaryOperationIsSupported(BinaryOp $operation): void
+    {
+        if (isset($this->inverseOperandMap[get_class($operation)])) {
+            return;
+        }
+
+        throw new NotImplementedException(sprintf(
+            '"%s" type is not implemented yet. Add it in %s',
+            get_class($operation),
+            __METHOD__
+        ));
     }
 }
