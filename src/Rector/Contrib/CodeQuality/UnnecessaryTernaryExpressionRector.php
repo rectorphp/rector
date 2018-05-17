@@ -95,20 +95,18 @@ final class UnnecessaryTernaryExpressionRector extends AbstractRector
 
     private function fixBinaryOperation(BinaryOp $operation): BinaryOp
     {
-        $operandsMap = [
-            '===' => NotIdentical::class,
-            '!==' => Identical::class,
-            '==' => NotEqual::class,
-            '!=' => Equal::class,
-            '<>' => Equal::class,
-            '>' => Smaller::class,
-            '<' => Greater::class,
-            '>=' => SmallerOrEqual::class,
-            '<=' => GreaterOrEqual::class,
+        $inverseOperandMap = [
+            Identical::class => NotIdentical::class,
+            NotIdentical::class => Identical::class,
+            Equal::class => NotEqual::class,
+            NotEqual::class => Equal::class,
+            Greater::class => Smaller::class,
+            Smaller::class => Greater::class,
+            GreaterOrEqual::class => SmallerOrEqual::class,
+            SmallerOrEqual::class => GreaterOrEqual::class,
         ];
 
-        $operand = $operation->getOperatorSigil();
-        $binaryOpClassName = $operandsMap[$operand];
+        $binaryOpClassName = $inverseOperandMap[get_class($operation)];
 
         return new $binaryOpClassName($operation->left, $operation->right);
     }
