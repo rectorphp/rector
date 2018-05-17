@@ -83,17 +83,17 @@ final class UnnecessaryTernaryExpressionRector extends AbstractRector
      */
     public function refactor(Node $ternaryNode): ?Node
     {
-        /** @var BinaryOp $binaryOpOperation */
-        $binaryOpOperation = $ternaryNode->cond;
+        /** @var BinaryOp $binaryOperation */
+        $binaryOperation = $ternaryNode->cond;
 
         if ($this->ifValue === 'true' && $this->elseValue === 'false') {
-            return $binaryOpOperation;
+            return $binaryOperation;
         }
 
-        return $this->fixBinaryOperation($binaryOpOperation);
+        return $this->inverseBinaryOperation($binaryOperation);
     }
 
-    private function fixBinaryOperation(BinaryOp $operation): BinaryOp
+    private function inverseBinaryOperation(BinaryOp $operation): BinaryOp
     {
         $inverseOperandMap = [
             Identical::class => NotIdentical::class,
