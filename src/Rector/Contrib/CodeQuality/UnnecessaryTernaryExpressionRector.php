@@ -23,6 +23,20 @@ use Rector\RectorDefinition\RectorDefinition;
 final class UnnecessaryTernaryExpressionRector extends AbstractRector
 {
     /**
+     * @var string[]
+     */
+    private $inverseOperandMap = [
+        Identical::class => NotIdentical::class,
+        NotIdentical::class => Identical::class,
+        Equal::class => NotEqual::class,
+        NotEqual::class => Equal::class,
+        Greater::class => Smaller::class,
+        Smaller::class => Greater::class,
+        GreaterOrEqual::class => SmallerOrEqual::class,
+        SmallerOrEqual::class => GreaterOrEqual::class,
+    ];
+
+    /**
      * @var string
      */
     private $ifValue;
@@ -95,18 +109,7 @@ final class UnnecessaryTernaryExpressionRector extends AbstractRector
 
     private function inverseBinaryOperation(BinaryOp $operation): BinaryOp
     {
-        $inverseOperandMap = [
-            Identical::class => NotIdentical::class,
-            NotIdentical::class => Identical::class,
-            Equal::class => NotEqual::class,
-            NotEqual::class => Equal::class,
-            Greater::class => Smaller::class,
-            Smaller::class => Greater::class,
-            GreaterOrEqual::class => SmallerOrEqual::class,
-            SmallerOrEqual::class => GreaterOrEqual::class,
-        ];
-
-        $binaryOpClassName = $inverseOperandMap[get_class($operation)];
+        $binaryOpClassName = $this->inverseOperandMap[get_class($operation)];
 
         return new $binaryOpClassName($operation->left, $operation->right);
     }
