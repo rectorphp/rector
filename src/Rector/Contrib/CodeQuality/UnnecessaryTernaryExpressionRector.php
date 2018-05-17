@@ -76,9 +76,7 @@ final class UnnecessaryTernaryExpressionRector extends AbstractRector
         $ifExpression = $ternaryExpression->if;
         $elseExpression = $ternaryExpression->else;
 
-        if (! $ifExpression instanceof ConstFetch
-            || ! $elseExpression instanceof ConstFetch
-        ) {
+        if (! $ifExpression instanceof ConstFetch || ! $elseExpression instanceof ConstFetch) {
             return false;
         }
 
