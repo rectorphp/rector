@@ -179,6 +179,15 @@ Simplify `in_array` and `array_keys` functions combination into `array_key_exist
 +array_key_exists("key", $array);
 ```
 
+## Rector\Rector\Contrib\CodeQuality\UnnecessaryTernaryExpressionRector
+
+Remove unnecessary ternary expressions.
+
+```diff
+-$foo === $bar ? true : false;
++$foo === $bar;
+```
+
 ## Rector\Rector\Dynamic\ParentTypehintedArgumentRector
 
 [Dynamic] Changes defined parent class typehints.
