@@ -47,8 +47,8 @@ final class MethodCallTypeResolverTest extends AbstractNodeTypeResolverTest
             'Rector\NodeTypeResolver\Tests\Source\SomeClass',
         ]];
         #on trait method call
-        yield [__DIR__ . '/MethodCallSource/SomeParentClassWithTraitCall.php.inc', 0, [
-            'Doctrine\Common\Persistence\ManagerRegistry',
+        yield [__DIR__ . '/MethodCallSource/SomeClassWithTraitCall.php.inc', 0, [
+            'Rector\NodeTypeResolver\Tests\Source\SomeClass',
         ]];
     }
 }

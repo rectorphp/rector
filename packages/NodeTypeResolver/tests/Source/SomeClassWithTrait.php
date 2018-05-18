@@ -2,17 +2,7 @@
 
 namespace Rector\NodeTypeResolver\Tests\Source;
 
-use Doctrine\Common\Persistence\ManagerRegistry;
-
-class SomeClassWithTrait
+final class SomeClassWithTrait
 {
-    use ControllerTrait;
-}
-
-trait ControllerTrait
-{
-    public function getDoctrine(): ManagerRegistry
-    {
-        return new ManagerRegistry();
-    }
+    use SomeTrait;
 }
