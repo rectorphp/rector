@@ -4,7 +4,7 @@ namespace Rector\NodeTypeResolver\Tests\Source;
 
 trait SomeTrait
 {
-    public function getDoctrine(): SomeClass
+    public function getSomeClass(): SomeClass
     {
         return new SomeClass();
     }

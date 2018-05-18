@@ -1,4 +1,4 @@
 <?php
 
 $someService = new \Rector\NodeTypeResolver\Tests\Source\SomeClassWithTrait();
-$anotherService = $someService->getDoctrine()->getManager();
+$anotherService = $someService->getSomeClass()->createAnotherClass();
