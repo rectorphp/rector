@@ -13,7 +13,9 @@ final class InvalidConfigurationConstructorInjectionRectorTest extends AbstractR
     public function test(): void
     {
         $this->expectException(InvalidConfigurationException::class);
-        $this->expectExceptionMessage('Make sure "kernel_class" parameters is set in rector.yml in "parameters:" section');
+        $this->expectExceptionMessage(
+            'Make sure "kernel_class" parameters is set in rector.yml in "parameters:" section'
+        );
 
         $this->doTestFileMatchesExpectedContent(__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc');
     }
