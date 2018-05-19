@@ -14,8 +14,7 @@ final class InvalidConfigurationConstructorInjectionRectorTest extends AbstractR
     {
         $this->expectException(InvalidConfigurationException::class);
         $this->expectExceptionMessage(
-            'Kernel class "App\Kernel" provided in "parameters > kernel_class" is not autoloadable.'
-            . ' Make sure composer.json of your application is valid and rector is loading "vendor/autoload.php" of your application.'
+            'Make sure "kernel_class" parameters is set in rector.yml in "parameters:" section'
         );
 
         $this->doTestFileMatchesExpectedContent(__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc');
