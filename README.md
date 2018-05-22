@@ -14,6 +14,8 @@ Rector **upgrades your application** for you, with focus on open-source projects
 <p align="center">
     <a href="/config/level/symfony"><img src="/docs/images/symfony.png"></a>
     <img src="/docs/images/space.png" width=20>
+    <a href="/config/level/symfony"><img src="/docs/images/sylius.png"></a>
+    <img src="/docs/images/space.png" width=20>
     <a href="/config/level/nette"><img src="/docs/images/nette.png" height="50"></a>
     <img src="/docs/images/space.png" width=20>
     <a href="/config/level/phpunit"><img src="/docs/images/phpunit.jpg"></a>
