@@ -17,7 +17,7 @@
         "symfony/console": "^4.0",
         "symfony/dependency-injection": "^4.0",
         "symfony/finder": "^4.0",
-        "roave/better-reflection": "dev-master#f8b3fc6",
+        "roave/better-reflection": "^3.0",
         "symplify/better-phpdoc-parser": "^4.2"
     },
     "require-dev": {
