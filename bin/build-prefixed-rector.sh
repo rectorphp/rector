@@ -56,5 +56,8 @@ rm -rf /tmp/_prefixed_rector_cache
 # build composer.json
 bin/build-prefixed-rector-composer-json.php
 
+# build bin/rector
+bin/build-prefixed-rector-bin.php
+
 # run it to test it
 build/bin/rector
