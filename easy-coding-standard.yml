@@ -6,15 +6,6 @@ imports:
     - { resource: 'vendor/symplify/easy-coding-standard/config/clean-code.yml' }
 
 services:
-    # Metrics
-    PHP_CodeSniffer\Standards\Generic\Sniffs\Metrics\CyclomaticComplexitySniff:
-        absoluteComplexity: 6
-    PHP_CodeSniffer\Standards\Generic\Sniffs\Metrics\NestingLevelSniff:
-        absoluteNestingLevel: 3
-
-    # should be part of ECS "common/array.yml" - will be done in 4.1.2+
-    PhpCsFixer\Fixer\ArrayNotation\NoTrailingCommaInSinglelineArrayFixer: ~
-
     # Class should be Final or Abstract
     SlamCsFixer\FinalInternalClassFixer: ~
 
@@ -26,7 +17,6 @@ services:
             - 'PhpParser\NodeTraverser'
             - 'Rector\DeprecationExtractor\Deprecation\*'
             - 'Roave\BetterReflection\SourceLocator\Located\LocatedSource'
-            - 'phpDocumentor\Reflection\Types\*'
             - 'Rector\Reporting\FileDiff'
             - 'Rector\RectorDefinition\*'
 
