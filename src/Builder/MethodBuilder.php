@@ -3,6 +3,7 @@
 namespace Rector\Builder;
 
 use Nette\Utils\Strings;
+use PhpParser\Builder\Method;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
@@ -80,20 +81,8 @@ final class MethodBuilder
             $methodBuild->addStmt($methodBodyStatement);
         }
 
-        if ($propertyType && $operation === 'get') {
-            $typeHint = Strings::endsWith($propertyType, '[]') ? 'array' : $propertyType;
-            $methodBuild->setReturnType(new Name($typeHint));
-        }
-
-        if ($operation === 'add' || $operation === 'set') {
-            $param = $this->builderFactory->param($argumentName);
-            if ($propertyType) {
-                $typeHint = Strings::endsWith($propertyType, '[]') ? 'array' : $propertyType;
-                $param->setTypeHint($typeHint);
-            }
-
-            $methodBuild->addParam($param);
-        }
+        $this->addReturnType($propertyType, $operation, $methodBuild);
+        $this->addParam($propertyType, $operation, $argumentName, $methodBuild);
 
         return $methodBuild->getNode();
     }
@@ -115,5 +104,26 @@ final class MethodBuilder
         }
 
         return null;
+    }
+
+    private function addReturnType(?string $propertyType, string $operation, Method $method): void
+    {
+        if ($propertyType && $operation === 'get') {
+            $typeHint = Strings::endsWith($propertyType, '[]') ? 'array' : $propertyType;
+            $method->setReturnType(new Name($typeHint));
+        }
+    }
+
+    private function addParam(?string $propertyType, string $operation, string $argumentName, Method $method): void
+    {
+        if ($operation === 'add' || $operation === 'set') {
+            $param = $this->builderFactory->param($argumentName);
+            if ($propertyType) {
+                $typeHint = Strings::endsWith($propertyType, '[]') ? 'array' : $propertyType;
+                $param->setTypeHint($typeHint);
+            }
+
+            $method->addParam($param);
+        }
     }
 }

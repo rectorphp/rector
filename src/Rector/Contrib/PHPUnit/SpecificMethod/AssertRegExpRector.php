@@ -89,24 +89,9 @@ final class AssertRegExpRector extends AbstractPHPUnitRector
         $oldCondition = null;
 
         $oldFirstArgument = $methodCallNode->args[0]->value;
-        if ($oldFirstArgument instanceof LNumber) {
-            $oldCondition = $oldFirstArgument->value;
-        } elseif ($oldFirstArgument instanceof ConstFetch) {
-            /** @var Identifier $constFetchName */
-            $constFetchName = $oldFirstArgument->name;
-            $oldCondition = $constFetchName->toLowerString() === 'true' ? 1 : 0;
-        }
+        $oldCondition = $this->resolveOldCondition($oldFirstArgument);
 
-        if (in_array($oldMethodName, ['assertSame', 'assertEquals'], true) && $oldCondition === 1
-            || in_array($oldMethodName, ['assertNotSame', 'assertNotEquals'], true) && $oldCondition === 0
-        ) {
-            $this->identifierRenamer->renameNode($methodCallNode, 'assertRegExp');
-        } elseif (in_array($oldMethodName, ['assertSame', 'assertEquals'], true) && $oldCondition === 0
-            || in_array($oldMethodName, ['assertNotSame', 'assertNotEquals'], true) && $oldCondition === 1
-        ) {
-            $this->identifierRenamer->renameNode($methodCallNode, 'assertNotRegExp');
-        }
-
+        $this->renameMethod($methodCallNode, $oldMethodName, $oldCondition);
         $this->moveFunctionArgumentsUp($methodCallNode);
 
         return $methodCallNode;
@@ -133,5 +118,34 @@ final class AssertRegExpRector extends AbstractPHPUnitRector
 
         $functionName = $node->name;
         return $functionName instanceof Name;
+    }
+
+    private function resolveOldCondition(Node $node): int
+    {
+        if ($node instanceof LNumber) {
+            return $node->value;
+        }
+
+        if ($node instanceof ConstFetch) {
+            /** @var Identifier $constFetchName */
+            $constFetchName = $node->name;
+
+            return $constFetchName->toLowerString() === 'true' ? 1 : 0;
+        }
+    }
+
+    private function renameMethod(Node $methodCallNode, string $oldMethodName, int $oldCondition): void
+    {
+        if (in_array($oldMethodName, ['assertSame', 'assertEquals'], true) && $oldCondition === 1
+            || in_array($oldMethodName, ['assertNotSame', 'assertNotEquals'], true) && $oldCondition === 0
+        ) {
+            $this->identifierRenamer->renameNode($methodCallNode, 'assertRegExp');
+        }
+
+        if (in_array($oldMethodName, ['assertSame', 'assertEquals'], true) && $oldCondition === 0
+            || in_array($oldMethodName, ['assertNotSame', 'assertNotEquals'], true) && $oldCondition === 1
+        ) {
+            $this->identifierRenamer->renameNode($methodCallNode, 'assertNotRegExp');
+        }
     }
 }
