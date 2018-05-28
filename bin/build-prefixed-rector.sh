@@ -3,10 +3,6 @@
 # print each statement before run (https://stackoverflow.com/a/9966150/1348344)
 set -x
 
-# install php-scoper if missing
-# broken due to php-parser 3, see: https://github.com/humbug/php-scoper/pull/203
-# if [ ! -d vendor/bin ]; then composer bin php-scoper require humbug/php-scoper; fi
-
 # cleanup build
 rm -rf build/
 
