@@ -24,6 +24,8 @@ php php-scoper.phar add-prefix --no-interaction --prefix='RectorPrefixed'
 
 # "sed" command format help:
 # s/<old-code>/<new-code>/g
+# s/RectorPrefixed\\Rector / Rector/g
+# "RectorPrefixed\Rector" => "Rector"
 (find build/ -type f | xargs sed -i 's/RectorPrefixed\\Rector/Rector/g')
 (find build/ -type f | xargs sed -i 's/RectorPrefixed\\\\Rector/Rector/g')
 
