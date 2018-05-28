@@ -9,11 +9,16 @@ $possibleAutoloadPaths = [
     getcwd() . '/vendor/autoload.php',
 ];
 
+$isAutoloadFileLoaded = false;
 foreach ($possibleAutoloadPaths as $possibleAutoloadPath) {
     if (is_file($possibleAutoloadPath)) {
         require_once $possibleAutoloadPath;
-        return;
+        $isAutoloadFileLoaded = true;
     }
+}
+
+if ($isAutoloadFileLoaded) {
+    return;
 }
 
 die(sprintf(
