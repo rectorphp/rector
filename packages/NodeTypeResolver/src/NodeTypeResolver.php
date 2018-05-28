@@ -25,6 +25,9 @@ final class NodeTypeResolver
      */
     public function resolve(Node $node): array
     {
+        // @todo move to local cache, so there is only one way to get such types
+        // and that cache can be outsourced to persistent storage
+
         // resolve just once
         if ($node->hasAttribute(Attribute::TYPES)) {
             return $node->getAttribute(Attribute::TYPES);
