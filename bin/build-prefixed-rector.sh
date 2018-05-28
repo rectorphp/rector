@@ -11,7 +11,7 @@ set -x
 rm -rf build/
 
 # prefix current code to /build directory (see "scoper.inc.php" for settings)
-php php-scoper.phar add-prefix --no-interaction --prefix='RectorPrefixed'
+vendor/bin/php-scoper add-prefix --no-interaction
 
 # prefix namespace in *.yml files
 # but not in /config, since there is only Rector\ services and "class names"

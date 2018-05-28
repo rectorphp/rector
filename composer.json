@@ -22,6 +22,7 @@
     },
     "require-dev": {
         "bamarni/composer-bin-plugin": "^1.2",
+        "humbug/php-scoper": "@dev",
         "phpstan/phpstan-shim": "^0.9",
         "phpunit/phpunit": "^7.1",
         "slam/php-cs-fixer-extensions": "^1.15",
