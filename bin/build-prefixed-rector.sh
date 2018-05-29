@@ -34,8 +34,12 @@ vendor/bin/php-scoper add-prefix --no-interaction
 (find build/ -path build/vendor -prune -o -type f | xargs sed -i "s/'RectorPrefixed\\/'/g")
 (find build/ -path build/vendor -prune -o -type f | xargs sed -i "s/'RectorPrefixed\\\\/'/g")
 
+# Symfony Bridge => keep Symfony classes
+
 # \App\\Kernel => App\Kernel
 sed -i 's/\\App\\\\Kernel/App\\Kernel/g' build/src/Bridge/Symfony/DefaultAnalyzedSymfonyApplicationContainer.php
+# RectorPrefixed\Symfony\Component\HttpKernel\Kernel => Symfony\Component\HttpKernel\Kernel
+sed -i 's/RectorPrefixed\\Symfony\\Component/Symfony\\Component/g' build/src/Bridge/Symfony/DependencyInjection/ContainerFactory.php build/src/Bridge/Symfony/SymfonyKernelParameterGuard.php
 
 # ?todo
 cp composer.json build/composer.json
