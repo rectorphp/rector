@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 
-$isDevRepository = file_exists(__DIR__ . '/../vendor/autoload.php');
+// very dummy way to detect rector dev repository, didn't find anything better - improve if you like
+$isDevRepository = file_exists(__DIR__ . '/../README.md');
 
 // load the project with Prefixed Rector
 if (defined('RECTOR_PREFIXED') && ! $isDevRepository) {
@@ -11,7 +12,7 @@ if (defined('RECTOR_PREFIXED') && ! $isDevRepository) {
 }
 
 $possibleAutoloadPaths = [
-    // dev repository
+    // dev repository or prefixed rector
     __DIR__ . '/../vendor/autoload.php',
     // composer require
     __DIR__ . '/../../../../vendor/autoload.php',
