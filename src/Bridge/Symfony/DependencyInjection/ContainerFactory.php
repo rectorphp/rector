@@ -3,6 +3,7 @@
 namespace Rector\Bridge\Symfony\DependencyInjection;
 
 use Rector\DependencyInjection\CompilerPass\MakeServicesPublicCompilerPass;
+use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Kernel;
@@ -30,10 +31,25 @@ final class ContainerFactory
     private function createContainerFromKernelClass(string $kernelClass): Container
     {
         $kernel = $this->createKernelFromKernelClass($kernelClass);
+        // preloads all the extensions
+        $kernel->boot();
 
         /** @var ContainerBuilder $containerBuilder */
         $containerBuilder = (new PrivatesCaller())->callPrivateMethod($kernel, 'buildContainer');
-        $containerBuilder->getCompilerPassConfig()->addPass(new MakeServicesPublicCompilerPass());
+
+        // anonymous class on intention, since this depends on Symfony\DependencyInjection in rector-prefixed
+        $containerBuilder->getCompilerPassConfig()->addPass(new class implements CompilerPassInterface {
+            public function process(ContainerBuilder $containerBuilder) : void
+            {
+                foreach ($containerBuilder->getDefinitions() as $definition) {
+                    $definition->setPublic(true);
+                }
+                foreach ($containerBuilder->getAliases() as $definition) {
+                    $definition->setPublic(true);
+                }
+            }
+        });
+
         $containerBuilder->compile();
 
         return $containerBuilder;
