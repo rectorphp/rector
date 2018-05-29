@@ -39,7 +39,7 @@ Rector can:
 ## Install
 
 ```bash
-composer require --dev rector/rector
+composer require rector/rector --dev
 ```
 
 ### Do you Have Conflicts?
@@ -47,7 +47,7 @@ composer require --dev rector/rector
 Since Rector **uses project's autoload to analyze type of elements**, it cannot be installed as project in standalone directory but needs to be added as dependency. In case you have composer versions conflicts, install prefixed version:
 
 ```bash
-composer require --dev rector/rector-prefixed
+composer require rector/rector-prefixed:@dev --dev
 ```
 
 ### Extra Autoloading
