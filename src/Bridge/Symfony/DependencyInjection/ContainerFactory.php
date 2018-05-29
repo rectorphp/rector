@@ -30,7 +30,7 @@ final class ContainerFactory
     private function createContainerFromKernelClass(string $kernelClass): Container
     {
         $kernel = $this->createKernelFromKernelClass($kernelClass);
-        // preloads all the extensions
+        // preloads all the extensions and $containerBuilder->compile()
         $kernel->boot();
 
         /** @var ContainerBuilder $containerBuilder */
