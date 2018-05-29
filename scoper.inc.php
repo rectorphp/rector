@@ -23,7 +23,8 @@ return [
                 'tests',
                 'Test',
                 'test',
-                'humbug',
+                'humbug/php-scoper',
+                'tracy/tracy',
             ])
         ,
         // to make "composer dump" work
@@ -31,8 +32,9 @@ return [
             'composer.json',
             // Fixes non-standard php-cs-fixer tests in /src
             __DIR__ . '/vendor/friendsofphp/php-cs-fixer/tests/TestCase.php',
-            // Fixes prod dependency of humbug/php-scoper
+            // Files dependencies in prod vendor
             __DIR__ . '/vendor/humbug/php-scoper/src/functions.php',
+            __DIR__ . '/vendor/tracy/tracy/src/shortcuts.php',
             // dependency for "composer dump"
             __DIR__ . '/vendor/composer/installed.json'
         ]),
