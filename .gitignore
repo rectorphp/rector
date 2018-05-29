@@ -3,6 +3,5 @@
 !/temp/.gitkeep
 /example
 /vendor
-/vendor-bin
 /build
 composer.lock
