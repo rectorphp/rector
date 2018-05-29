@@ -39,7 +39,7 @@ vendor/bin/php-scoper add-prefix --no-interaction
 # \App\\Kernel => App\Kernel
 sed -i 's/\\App\\\\Kernel/App\\Kernel/g' build/src/Bridge/Symfony/DefaultAnalyzedSymfonyApplicationContainer.php
 # RectorPrefixed\Symfony\Component\HttpKernel\Kernel => Symfony\Component\HttpKernel\Kernel
-sed -i 's/RectorPrefixed\\Symfony\\Component/Symfony\\Component/g' build/src/Bridge/Symfony/DependencyInjection/ContainerFactory.php build/src/Bridge/Symfony/SymfonyKernelParameterGuard.php
+(find build/src/Bridge/Symfony/ -type f | xargs sed -i 's/RectorPrefixed\\Symfony\\Component/Symfony\\Component/g')
 
 # ?todo
 cp composer.json build/composer.json
