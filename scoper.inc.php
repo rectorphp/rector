@@ -23,7 +23,7 @@ return [
                 'tests',
                 'Test',
                 'test',
-                'vendor-bin'
+                'humbug',
             ])
         ,
         // to make "composer dump" work
@@ -31,6 +31,8 @@ return [
             'composer.json',
             // Fixes non-standard php-cs-fixer tests in /src
             __DIR__ . '/vendor/friendsofphp/php-cs-fixer/tests/TestCase.php',
+            // Fixes prod dependency of humbug/php-scoper
+            __DIR__ . '/vendor/humbug/php-scoper/src/functions.php',
             // dependency for "composer dump"
             __DIR__ . '/vendor/composer/installed.json'
         ]),
