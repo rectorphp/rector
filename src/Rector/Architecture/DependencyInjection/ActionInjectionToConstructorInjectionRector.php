@@ -150,7 +150,7 @@ CODE_SAMPLE
         }
 
         $typehint = (string) $paramNode->getAttribute(Attribute::TYPES)[0] ?? null;
-        if ($typehint === null) {
+        if (! $typehint) {
             return false;
         }
 
