@@ -39,17 +39,16 @@ Rector can:
 ## Install
 
 ```bash
-composer require --dev rector/rector
+composer require rector/rector --dev
 ```
 
 ### Do you Have Conflicts?
 
-Since Rector **uses project's autoload to analyze type of elements**, it cannot be installed as project in standalone directory but needs to be added as dependency. Here [`bamarni/composer-bin-plugin`](https://github.com/bamarni/composer-bin-plugin) becomes useful.
+Since Rector **uses project's autoload to analyze type of elements**, it cannot be installed as project in standalone directory but needs to be added as dependency. In case you have composer versions conflicts, install prefixed version:
 
-In case you have conflicts with different `nikic/php-parser` version, e.g. while using PHPStan, you can:
-
- - either use [phpstan-shim](https://github.com/phpstan/phpstan-shim) that solves this for PHPStan
- - or help with similar [prefixed PHAR for Rector](https://github.com/rectorphp/rector/issues/177)
+```bash
+composer require rector/rector-prefixed:@dev --dev
+```
 
 ### Extra Autoloading
 
