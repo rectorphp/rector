@@ -50,8 +50,6 @@ final class ContainerFactory
             }
         });
 
-        $containerBuilder->compile();
-
         return $containerBuilder;
     }
 
