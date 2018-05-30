@@ -82,7 +82,7 @@ final class NameTypeResolver implements PerNodeTypeResolverInterface
             return [$name];
         }
 
-        $useTraits = array_values(class_uses($classLikeReflection->getName()));
+        $useTraits = array_values((array) class_uses($classLikeReflection->getName()));
 
         $implementedInterfaces = $this->smartClassReflector->resolveClassInterfaces($classLikeReflection);
         $classParents = $this->smartClassReflector->resolveClassParents($classLikeReflection);
