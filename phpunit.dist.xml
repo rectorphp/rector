@@ -15,10 +15,6 @@
             <directory>tests/Rector/Dynamic</directory>
             <directory>tests/Rector/MagicDisclosure</directory>
         </testsuite>
-        <!-- only Phar -->
-        <testsuite name="phar-build">
-            <directory>tests/Phar</directory>
-        </testsuite>
         <!-- and the rest -->
         <testsuite name="main">
             <directory>packages/*/tests</directory>
@@ -26,7 +22,6 @@
             <exclude>tests/Rector/Dynamic/</exclude>
             <exclude>tests/Rector/MagicDisclosure/</exclude>
             <exclude>tests/Rector/Contrib/</exclude>
-            <exclude>tests/Phar</exclude>
         </testsuite>
     </testsuites>
 
