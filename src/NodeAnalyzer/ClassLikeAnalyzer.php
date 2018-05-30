@@ -128,7 +128,7 @@ final class ClassLikeAnalyzer
     }
 
     /**
-     * @param Class_|Trait_
+     * @param Class_|Trait_ $classOrTraitNode
      * @return string[]
      */
     private function resolveUsedTraitTypes(ClassLike $classOrTraitNode): array
