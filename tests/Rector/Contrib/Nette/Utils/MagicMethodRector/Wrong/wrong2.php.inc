@@ -12,7 +12,7 @@ use Nette\Object;
  * @method getItems
  * @method setEnabled (bool)
  */
-class TestClass extends Object
+class SomeClassExtendingNetteObject2 extends Object
 {
     public $name;
     public $enabled;
