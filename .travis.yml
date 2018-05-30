@@ -17,7 +17,7 @@ before_script:
   - if [[ $PHPUNIT_FLAGS = "" ]]; then phpenv config-rm xdebug.ini; fi
 
 script:
-  - vendor/bin/phpunit $PHPUNIT_FLAGS
+  - vendor/bin/paratest $PHPUNIT_FLAGS
   # disable xdebug
   - phpenv config-rm xdebug.ini || return 0
   - if [[ $STATIC_ANALYSIS == true ]]; then composer check-cs; fi
