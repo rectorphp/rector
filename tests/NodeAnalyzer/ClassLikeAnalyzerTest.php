@@ -38,12 +38,12 @@ final class ClassLikeAnalyzerTest extends AbstractContainerAwareTestCase
 
     public function testClassWithParentClass(): void
     {
-        $classWithParent = $this->builderFactory->class('SomeClass')
-            ->extend('ParentClass')
+        $classWithParent = $this->builderFactory->class('AnotherSomeClass')
+            ->extend('AnotherParentClass')
             ->getNode();
 
         $this->assertSame(
-            ['SomeClass', 'ParentClass'],
+            ['AnotherSomeClass', 'AnotherParentClass'],
             $this->classLikeAnalyzer->resolveTypeAndParentTypes($classWithParent)
         );
     }

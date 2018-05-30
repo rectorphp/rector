@@ -96,10 +96,6 @@ final class ClassLikeAnalyzer
             return $node->toString();
         }
 
-        if ($node->name === null) {
-            return '';
-        }
-
         return (string) $node->name;
     }
 
