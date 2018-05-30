@@ -29,5 +29,6 @@ final class ClassLikeTypeResolverTest extends AbstractNodeTypeResolverTest
             'SomeNamespace\SomeClass',
             'SomeNamespace\SomeInterface',
         ]];
+        yield [__DIR__ . '/Source/ClassWithTrait.php.inc', 0, ['SomeNamespace\SomeClass', 'SomeNamespace\SomeTrait']];
     }
 }
