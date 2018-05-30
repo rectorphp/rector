@@ -82,11 +82,12 @@ final class NameTypeResolver implements PerNodeTypeResolverInterface
             return [$name];
         }
 
-        return array_merge(
-            [$name],
-            $this->smartClassReflector->resolveClassInterfaces($classLikeReflection),
-            $this->smartClassReflector->resolveClassParents($classLikeReflection)
-        );
+        $useTraits = array_values(class_uses($classLikeReflection->getName()));
+
+        $implementedInterfaces = $this->smartClassReflector->resolveClassInterfaces($classLikeReflection);
+        $classParents = $this->smartClassReflector->resolveClassParents($classLikeReflection);
+
+        return array_merge([$name], $classParents, $useTraits, $implementedInterfaces);
     }
 
     private function resolveFullyQualifiedName(Node $nameNode, string $name): string
