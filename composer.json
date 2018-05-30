@@ -45,7 +45,8 @@
             "Rector\\BetterPhpDocParser\\Tests\\": "packages/BetterPhpDocParser/tests",
             "Rector\\NodeTypeResolver\\Tests\\": "packages/NodeTypeResolver/tests",
             "Rector\\NodeTraverserQueue\\Tests\\": "packages/NodeTraverserQueue/tests"
-        }
+        },
+        "classmap": ["packages/NodeTypeResolver/tests"]
     },
     "scripts": {
         "complete-check": [

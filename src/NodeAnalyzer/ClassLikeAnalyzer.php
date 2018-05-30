@@ -8,12 +8,17 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
+use PhpParser\Node\Stmt\Trait_;
+use PhpParser\Node\Stmt\TraitUse;
 use Rector\BetterReflection\Reflector\SmartClassReflector;
 use Rector\Node\Attribute;
 
 /**
  * Read-only utils for ClassLike|Class_|Trait_|Interface_ Node:
  * "class" SomeClass, "interface" Interface, "trait" Trait
+ *
+ * @todo decouple to Class_|Trait_|Interface_ TypeResolvers and remove this class
+ * This is used nowhere else
  */
 final class ClassLikeAnalyzer
 {
@@ -57,6 +62,11 @@ final class ClassLikeAnalyzer
 
         if ($classLikeNode instanceof Class_) {
             $types = array_merge($types, $this->resolveImplementsTypes($classLikeNode));
+            $types = array_merge($types, $this->resolveUsedTraitTypes($classLikeNode));
+        }
+
+        if ($classLikeNode instanceof Trait_) {
+            $types = array_merge($types, $this->resolveUsedTraitTypes($classLikeNode));
         }
 
         return $types;
@@ -86,10 +96,6 @@ final class ClassLikeAnalyzer
             return $node->toString();
         }
 
-        if ($node->name === null) {
-            return '';
-        }
-
         return (string) $node->name;
     }
 
@@ -115,5 +121,28 @@ final class ClassLikeAnalyzer
             /** @var FullyQualified $interface */
             return $interface->toString();
         }, $classNode->implements);
+    }
+
+    /**
+     * @param Class_|Trait_ $classOrTraitNode
+     * @return string[]
+     */
+    private function resolveUsedTraitTypes(ClassLike $classOrTraitNode): array
+    {
+        $usedTraits = [];
+
+        foreach ($classOrTraitNode->stmts as $stmt) {
+            if (! $stmt instanceof TraitUse) {
+                continue;
+            }
+
+            foreach ($stmt->traits as $trait) {
+                if ($trait->hasAttribute(Attribute::RESOLVED_NAME)) {
+                    $usedTraits[] = (string) $trait->getAttribute(Attribute::RESOLVED_NAME);
+                }
+            }
+        }
+
+        return $usedTraits;
     }
 }

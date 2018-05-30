@@ -69,7 +69,6 @@ final class MethodCallTypeResolver implements PerNodeTypeResolverInterface, Node
     public function resolve(Node $methodCallNode): array
     {
         $parentCallerTypes = $this->resolveMethodCallVarTypes($methodCallNode);
-
         if (! $methodCallNode->name instanceof Identifier) {
             return [];
         }

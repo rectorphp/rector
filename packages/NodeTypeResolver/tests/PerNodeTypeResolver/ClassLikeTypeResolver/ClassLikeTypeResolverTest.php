@@ -5,6 +5,10 @@ namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ClassLikeTypeResolve
 use Iterator;
 use PhpParser\Node\Expr\Variable;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
+use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ClassLikeTypeResolver\Source\AnotherTrait;
+use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ClassLikeTypeResolver\Source\ClassWithParentInterface;
+use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ClassLikeTypeResolver\Source\ClassWithTrait;
+use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ClassLikeTypeResolver\Source\SomeInterface;
 
 /**
  * @covers \Rector\NodeTypeResolver\PerNodeTypeResolver\ClassLikeTypeResolver
@@ -25,9 +29,10 @@ final class ClassLikeTypeResolverTest extends AbstractNodeTypeResolverTest
     public function provideTypeForNodesAndFilesData(): Iterator
     {
         # assign of "new <name>"
-        yield [__DIR__ . '/Source/ClassWithParent.php.inc', 0, [
-            'SomeNamespace\SomeClass',
-            'SomeNamespace\SomeInterface',
+        yield [__DIR__ . '/Source/ClassWithParentInterface.php', 0, [
+            ClassWithParentInterface::class,
+            SomeInterface::class,
         ]];
+        yield [__DIR__ . '/Source/ClassWithTrait.php', 0, [ClassWithTrait::class, AnotherTrait::class]];
     }
 }
