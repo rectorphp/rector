@@ -5,6 +5,10 @@ namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AssignTypeResolver;
 use Iterator;
 use PhpParser\Node\Expr\Variable;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
+use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AssignTypeResolver\Source\ClassWithInterface;
+use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AssignTypeResolver\Source\ClassWithParent;
+use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AssignTypeResolver\Source\ParentClass;
+use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AssignTypeResolver\Source\ParentInterface;
 
 /**
  * @covers \Rector\NodeTypeResolver\PerNodeTypeResolver\AssignTypeResolver
@@ -24,19 +28,12 @@ final class AssignTypeResolverTest extends AbstractNodeTypeResolverTest
 
     public function provideTypeForNodesAndFilesData(): Iterator
     {
-        # assign of "new <name>"
-        yield [__DIR__ . '/Source/New.php.inc', 0, ['AnotherClassWithParentInterface', 'ParentInterface']];
-        yield [__DIR__ . '/Source/New.php.inc', 1, ['AnotherClassWithParentInterface', 'ParentInterface']];
-        # method call
-        yield [__DIR__ . '/Source/MethodCall.php.inc', 1, ['AnotherClass']];
-        # assign of "new <name>"
-        yield [__DIR__ . '/Source/MethodCall.php.inc', 0, ['SomeClass', 'SomeParentClass']];
-        yield [__DIR__ . '/Source/MethodCall.php.inc', 2, ['SomeClass', 'SomeParentClass']];
-        # method call on property fetch
-        yield [__DIR__ . '/Source/PropertyFetch.php.inc', 0, ['SomeClass', 'SomeParentClass']];
-        yield [__DIR__ . '/Source/PropertyFetch.php.inc', 2, ['SomeClass', 'SomeParentClass']];
-        # method call on class constant
-        yield [__DIR__ . '/Source/ClassConstant.php.inc', 0, ['SomeClass', 'SomeParentClass']];
-        yield [__DIR__ . '/Source/ClassConstant.php.inc', 2, ['SomeClass', 'SomeParentClass']];
+        yield [__DIR__ . '/Source/New.php', 0, [ClassWithInterface::class, ParentInterface::class]];
+        yield [__DIR__ . '/Source/MethodCall.php', 0, [ClassWithParent::class, ParentClass::class]];
+        yield [__DIR__ . '/Source/MethodCall.php', 2, [ClassWithParent::class, ParentClass::class]];
+        yield [__DIR__ . '/Source/PropertyFetch.php', 0, [ClassWithParent::class, ParentClass::class]];
+        yield [__DIR__ . '/Source/PropertyFetch.php', 2, [ClassWithParent::class, ParentClass::class]];
+        yield [__DIR__ . '/Source/ClassConstant.php', 0, [ClassWithParent::class, ParentClass::class]];
+        yield [__DIR__ . '/Source/ClassConstant.php', 2, [ClassWithParent::class, ParentClass::class]];
     }
 }

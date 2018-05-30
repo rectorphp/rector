@@ -4,7 +4,7 @@ namespace SomeNamespace;
 
 use Nette\Object;
 
-class TestClass extends Object
+class SomeClassExtendingNetteObject2 extends Object
 {
     public $name;
     public $enabled;

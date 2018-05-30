@@ -8,7 +8,7 @@ use Nette\Object;
  * @method getValue()
  * @method int getAnotherValue()
  */
-class SomeClass extends Object
+class SomeClassExtendingNetteObject extends Object
 {
     private $value;
     private $anotherValue;
