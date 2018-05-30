@@ -31,7 +31,7 @@ final class ClassLikeTypeResolverTest extends AbstractNodeTypeResolverTest
         # assign of "new <name>"
         yield [__DIR__ . '/Source/ClassWithParentInterface.php', 0, [
             ClassWithParentInterface::class,
-            SomeInterface::class
+            SomeInterface::class,
         ]];
         yield [__DIR__ . '/Source/ClassWithTrait.php', 0, [ClassWithTrait::class, AnotherTrait::class]];
     }
