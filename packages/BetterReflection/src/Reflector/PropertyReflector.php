@@ -5,7 +5,6 @@ namespace Rector\BetterReflection\Reflector;
 use phpDocumentor\Reflection\Types\Array_;
 use phpDocumentor\Reflection\Types\Object_;
 use Roave\BetterReflection\Reflection\ReflectionProperty;
-use Roave\BetterReflection\Reflector\Exception\IdentifierNotFound;
 
 final class PropertyReflector
 {
@@ -26,12 +25,7 @@ final class PropertyReflector
 
     public function reflectClassProperty(string $class, string $method): ?ReflectionProperty
     {
-        try {
-            $classReflection = $this->smartClassReflector->reflect($class);
-        } catch (IdentifierNotFound $identifierNotFoundException) {
-            return null;
-        }
-
+        $classReflection = $this->smartClassReflector->reflect($class);
         if ($classReflection === null) {
             return null;
         }

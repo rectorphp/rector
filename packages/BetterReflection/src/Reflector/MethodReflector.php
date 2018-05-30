@@ -7,7 +7,6 @@ use phpDocumentor\Reflection\Types\Object_;
 use phpDocumentor\Reflection\Types\Self_;
 use phpDocumentor\Reflection\Types\Static_;
 use Roave\BetterReflection\Reflection\ReflectionMethod;
-use Roave\BetterReflection\Reflector\Exception\IdentifierNotFound;
 use Throwable;
 
 final class MethodReflector
@@ -24,12 +23,7 @@ final class MethodReflector
 
     public function reflectClassMethod(string $class, string $method): ?ReflectionMethod
     {
-        try {
-            $classReflection = $this->smartClassReflector->reflect($class);
-        } catch (IdentifierNotFound $identifierNotFoundException) {
-            return null;
-        }
-
+        $classReflection = $this->smartClassReflector->reflect($class);
         if ($classReflection === null) {
             return null;
         }

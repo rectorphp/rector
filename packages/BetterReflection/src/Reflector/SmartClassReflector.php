@@ -108,12 +108,7 @@ final class SmartClassReflector
      */
     public function resolveClassInterfaces(ReflectionClass $reflectionClass): array
     {
-        try {
-            return array_keys($reflectionClass->getInterfaces());
-        } catch (IdentifierNotFound $identifierNotFoundException) {
-            // @todo check if type is needed by any Rector
-            return [];
-        }
+        return array_keys($reflectionClass->getInterfaces());
     }
 
     /**
@@ -121,12 +116,7 @@ final class SmartClassReflector
      */
     public function resolveClassParents(ReflectionClass $reflectionClass): array
     {
-        try {
-            return $reflectionClass->getParentClassNames();
-        } catch (IdentifierNotFound $identifierNotFoundException) {
-            // @todo check if type is needed by any Rector
-            return [];
-        }
+        return $reflectionClass->getParentClassNames();
     }
 
     /**
