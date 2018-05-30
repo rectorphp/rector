@@ -46,7 +46,7 @@
             "Rector\\NodeTypeResolver\\Tests\\": "packages/NodeTypeResolver/tests",
             "Rector\\NodeTraverserQueue\\Tests\\": "packages/NodeTraverserQueue/tests"
         },
-        "classmap": ["packages/NodeTypeResolver/tests"]
+        "classmap": ["packages/NodeTypeResolver/tests/PerNodeTypeResolver"]
     },
     "scripts": {
         "complete-check": [

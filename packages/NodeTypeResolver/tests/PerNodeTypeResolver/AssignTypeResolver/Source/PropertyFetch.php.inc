@@ -1,16 +1,15 @@
 <?php
 
-$someService = new SomeClass;
+$someService = new SomeClass4;
 
 $files = $someService->someFiles;
 
-
-class SomeClass extends SomeParentClass
+class SomeParentClass4
 {
-    public $someFiles;
+
 }
 
-class SomeParentClass
+class SomeClass4 extends SomeParentClass4
 {
-
+    public $someFiles;
 }

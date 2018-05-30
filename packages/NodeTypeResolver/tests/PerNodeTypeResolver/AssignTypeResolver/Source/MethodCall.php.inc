@@ -1,10 +1,10 @@
 <?php
 
-$someService = new SomeClass();
+$someService = new SomeClass2();
 
 $anotherService = $someService->createAnotherClass();
 
-class SomeClass extends SomeParentClass
+class SomeClass2 extends SomeParentClass2
 {
     public function createAnotherClass(): AnotherClass
     {
@@ -12,7 +12,7 @@ class SomeClass extends SomeParentClass
     }
 }
 
-class SomeParentClass
+class SomeParentClass2
 {
 
 }

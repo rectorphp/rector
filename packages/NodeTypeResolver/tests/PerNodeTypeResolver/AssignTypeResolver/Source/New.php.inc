@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-class SomeClass
+class SomeClass3
 {
     public function create()
     {
