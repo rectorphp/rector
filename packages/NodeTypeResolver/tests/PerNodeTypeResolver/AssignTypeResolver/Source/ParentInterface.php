@@ -2,12 +2,7 @@
 
 namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AssignTypeResolver\Source;
 
-final class ClassWithParent extends ParentClass
+interface ParentInterface
 {
-    public $property;
 
-    public function method()
-    {
-
-    }
 }
