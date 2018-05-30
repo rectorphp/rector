@@ -12,20 +12,20 @@
         "jean85/pretty-package-versions": "^1.1",
         "nette/robot-loader": "^3.0",
         "nette/utils": "^2.5",
-        "nikic/php-parser": "^4.0",
+        "nikic/php-parser": "^4.0.1",
         "sebastian/diff": "^3.0",
-        "symfony/console": "^4.0",
-        "symfony/dependency-injection": "^4.0",
-        "symfony/finder": "^4.0",
+        "symfony/console": "^3.4|^4.0",
+        "symfony/dependency-injection": "^3.4|^4.0",
+        "symfony/finder": "^3.4|^4.0",
         "roave/better-reflection": "^3.0",
-        "symplify/better-phpdoc-parser": "^4.2"
+        "symplify/better-phpdoc-parser": "^4.3"
     },
     "require-dev": {
-        "humbug/php-scoper": "@dev",
+        "humbug/php-scoper": "dev-master",
         "phpstan/phpstan-shim": "^0.9",
         "phpunit/phpunit": "^7.1",
         "slam/php-cs-fixer-extensions": "^1.15",
-        "symplify/easy-coding-standard": "^4.2",
+        "symplify/easy-coding-standard": "^4.3",
         "tracy/tracy": "^2.4"
     },
     "autoload": {

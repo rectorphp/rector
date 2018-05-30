@@ -4,6 +4,8 @@ matrix:
   include:
     - php: 7.1
       env: STATIC_ANALYSIS=true RUN_RECTOR=true
+    - php: 7.1
+      env: COMPOSER_FLAGS="--prefer-lowest"
     - php: 7.2
       env: PHPUNIT_FLAGS="--coverage-clover coverage.xml --testsuite=contrib-rectors"
     - php: 7.2
@@ -12,7 +14,7 @@ matrix:
       env: PHPUNIT_FLAGS="--coverage-clover coverage.xml --testsuite=main"
 
 install:
-  - composer install
+  - composer update $COMPOSER_FLAGS
 
 before_script:
   # disable xdebug if not coverage
