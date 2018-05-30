@@ -30,10 +30,10 @@ final class AssignTypeResolverTest extends AbstractNodeTypeResolverTest
     {
         yield [__DIR__ . '/Source/New.php', 0, [ClassWithInterface::class, ParentInterface::class]];
         yield [__DIR__ . '/Source/MethodCall.php', 0, [ClassWithParent::class, ParentClass::class]];
-        yield [__DIR__ . '/Source/MethodCall.php', 2, [ClassWithParent::class, ParentClass::class]];
-        yield [__DIR__ . '/Source/PropertyFetch.php', 0, [ClassWithParent::class, ParentClass::class]];
-        yield [__DIR__ . '/Source/PropertyFetch.php', 2, [ClassWithParent::class, ParentClass::class]];
-        yield [__DIR__ . '/Source/ClassConstant.php', 0, [ClassWithParent::class, ParentClass::class]];
-        yield [__DIR__ . '/Source/ClassConstant.php', 2, [ClassWithParent::class, ParentClass::class]];
+//        yield [__DIR__ . '/Source/MethodCall.php', 2, [ClassWithParent::class, ParentClass::class]];
+//        yield [__DIR__ . '/Source/PropertyFetch.php', 0, [ClassWithParent::class, ParentClass::class]];
+//        yield [__DIR__ . '/Source/PropertyFetch.php', 2, [ClassWithParent::class, ParentClass::class]];
+//        yield [__DIR__ . '/Source/ClassConstant.php', 0, [ClassWithParent::class, ParentClass::class]];
+//        yield [__DIR__ . '/Source/ClassConstant.php', 2, [ClassWithParent::class, ParentClass::class]];
     }
 }

@@ -98,13 +98,8 @@ final class AssignTypeResolver implements PerNodeTypeResolverInterface, NodeType
             return $this->processAssignVariableNode($assignNode);
         }
 
-        // $var = $this->someMethod();
-        if ($assignNode->expr instanceof MethodCall) {
-            return $this->nodeTypeResolver->resolve($assignNode->expr);
-        }
-
-        // $var = new (...);
-        if ($assignNode->expr instanceof New_) {
+        // $var = $this->someMethod(); || $var = new (...);
+        if ($assignNode->expr instanceof MethodCall || $assignNode->expr instanceof New_) {
             return $this->nodeTypeResolver->resolve($assignNode->expr);
         }
 
