@@ -3,7 +3,6 @@
 namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
 
 use PhpParser\Node;
-use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
 use Rector\NodeAnalyzer\ClassLikeAnalyzer;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
@@ -29,11 +28,13 @@ final class InterfaceTypeResolver implements PerNodeTypeResolverInterface
     }
 
     /**
-     * @param ClassLike $classLikeNode
+     * @param Interface_ $interfaceNode
      * @return string[]
      */
-    public function resolve(Node $classLikeNode): array
+    public function resolve(Node $interfaceNode): array
     {
-        return $this->classLikeAnalyzer->resolveTypeAndParentTypes($classLikeNode);
+        $className = $this->classLikeAnalyzer->resolveNameNode($interfaceNode);
+
+        return array_merge([$className], $this->classLikeAnalyzer->resolveExtendsTypes($interfaceNode, $className));
     }
 }

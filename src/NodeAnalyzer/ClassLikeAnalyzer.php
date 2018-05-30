@@ -65,17 +65,13 @@ final class ClassLikeAnalyzer
             $types = array_merge($types, $this->resolveUsedTraitTypes($classLikeNode));
         }
 
-        if ($classLikeNode instanceof Trait_) {
-            $types = array_merge($types, $this->resolveUsedTraitTypes($classLikeNode));
-        }
-
         return $types;
     }
 
     /**
      * @param Name|ClassLike $node
      */
-    private function resolveNameNode(Node $node): string
+    public function resolveNameNode(Node $node): string
     {
         $name = (string) $node->getAttribute(Attribute::CLASS_NAME);
         if ($name) {
@@ -103,7 +99,7 @@ final class ClassLikeAnalyzer
      * @param Class_|Interface_ $classLikeNode
      * @return string[]
      */
-    private function resolveExtendsTypes(ClassLike $classLikeNode, ?string $className = null): array
+    public function resolveExtendsTypes(ClassLike $classLikeNode, ?string $className = null): array
     {
         if (! $classLikeNode->extends) {
             return [];
@@ -113,21 +109,10 @@ final class ClassLikeAnalyzer
     }
 
     /**
-     * @return string[]
-     */
-    private function resolveImplementsTypes(Class_ $classNode): array
-    {
-        return array_map(function (Name $interface): string {
-            /** @var FullyQualified $interface */
-            return $interface->toString();
-        }, $classNode->implements);
-    }
-
-    /**
      * @param Class_|Trait_ $classOrTraitNode
      * @return string[]
      */
-    private function resolveUsedTraitTypes(ClassLike $classOrTraitNode): array
+    public function resolveUsedTraitTypes(ClassLike $classOrTraitNode): array
     {
         $usedTraits = [];
 
@@ -144,5 +129,16 @@ final class ClassLikeAnalyzer
         }
 
         return $usedTraits;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function resolveImplementsTypes(Class_ $classNode): array
+    {
+        return array_map(function (Name $interface): string {
+            /** @var FullyQualified $interface */
+            return $interface->toString();
+        }, $classNode->implements);
     }
 }

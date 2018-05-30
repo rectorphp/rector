@@ -3,9 +3,6 @@
 namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
 
 use PhpParser\Node;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
 use Rector\NodeAnalyzer\ClassLikeAnalyzer;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
@@ -31,11 +28,14 @@ final class TraitTypeResolver implements PerNodeTypeResolverInterface
     }
 
     /**
-     * @param ClassLike $classLikeNode
+     * @param Trait_ $traitNode
      * @return string[]
      */
-    public function resolve(Node $classLikeNode): array
+    public function resolve(Node $traitNode): array
     {
-        return $this->classLikeAnalyzer->resolveTypeAndParentTypes($classLikeNode);
+        $types[] = $this->classLikeAnalyzer->resolveNameNode($traitNode);
+        $types = array_merge($types, $this->classLikeAnalyzer->resolveUsedTraitTypes($traitNode));
+
+        return $types;
     }
 }
