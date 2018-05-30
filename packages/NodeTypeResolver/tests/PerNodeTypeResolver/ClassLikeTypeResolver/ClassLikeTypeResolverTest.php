@@ -5,6 +5,8 @@ namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ClassLikeTypeResolve
 use Iterator;
 use PhpParser\Node\Expr\Variable;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
+use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ClassLikeTypeResolver\Source\AnotherTrait;
+use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ClassLikeTypeResolver\Source\ClassWithTrait;
 
 /**
  * @covers \Rector\NodeTypeResolver\PerNodeTypeResolver\ClassLikeTypeResolver
@@ -29,6 +31,6 @@ final class ClassLikeTypeResolverTest extends AbstractNodeTypeResolverTest
             'SomeNamespace\SomeClass',
             'SomeNamespace\SomeInterface',
         ]];
-        yield [__DIR__ . '/Source/ClassWithTrait.php.inc', 0, ['SomeNamespace\SomeClass', 'SomeNamespace\SomeTrait']];
+        yield [__DIR__ . '/Source/ClassWithTrait.php', 0, [ClassWithTrait::class, AnotherTrait::class]];
     }
 }
