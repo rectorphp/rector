@@ -97,15 +97,15 @@ final class RedirectToRouteRector extends AbstractRector
         $arguments = [];
         $arguments[] = $generateUrlNode->args[0];
 
-        if ($generateUrlNode->args[1]) {
+        if (isset($generateUrlNode->args[1])) {
             $arguments[] = $generateUrlNode->args[1];
         }
 
-        if (! $generateUrlNode->args[1] && $node->args[1]) {
+        if (! isset($generateUrlNode->args[1]) && isset($node->args[1])) {
             $arguments[] = [];
         }
 
-        if ($node->args[1]) {
+        if (isset($node->args[1])) {
             $arguments[] = $node->args[1];
         }
 
