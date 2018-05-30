@@ -24,17 +24,17 @@ script:
   - vendor/bin/phpunit $PHPUNIT_FLAGS
   # disable xdebug
   - phpenv config-rm xdebug.ini || return 0
-  - if [[ $STATIC_ANALYSIS != "" ]]; then composer check-cs; fi
-  - if [[ $STATIC_ANALYSIS != "" ]]; then composer phpstan; fi
+  - if [[ $STATIC_ANALYSIS == true ]]; then composer check-cs; fi
+  - if [[ $STATIC_ANALYSIS == true ]]; then composer phpstan; fi
   # Rector demo run
-  - if [[ $RUN_RECTOR != "" ]]; then bin/rector process src tests --level symfony40 --dry-run; fi
+  - if [[ $RUN_RECTOR == true ]]; then bin/rector process src tests --level symfony40 --dry-run; fi
   # Rector describe command
-  - if [[ $RUN_RECTOR != "" ]]; then bin/rector describe --level all; fi
+  - if [[ $RUN_RECTOR == true ]]; then bin/rector describe --level all; fi
 
 after_script:
   # upload coverage to Coveralls.io
   - |
-    if [[ $PHPUNIT_FLAGS != "" ]]; then
+    if [[ $PHPUNIT_FLAGS == true ]]; then
       wget https://github.com/satooshi/php-coveralls/releases/download/v1.0.1/coveralls.phar
       php coveralls.phar --verbose
     fi
