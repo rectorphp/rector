@@ -4,22 +4,10 @@ namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassLike;
-use Rector\NodeAnalyzer\ClassLikeAnalyzer;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 
-final class ClassTypeResolver implements PerNodeTypeResolverInterface
+final class ClassTypeResolver extends AbstractClassLikeTypeResolver implements PerNodeTypeResolverInterface
 {
-    /**
-     * @var ClassLikeAnalyzer
-     */
-    private $classLikeAnalyzer;
-
-    public function __construct(ClassLikeAnalyzer $classLikeAnalyzer)
-    {
-        $this->classLikeAnalyzer = $classLikeAnalyzer;
-    }
-
     /**
      * @return string[]
      */
@@ -29,11 +17,18 @@ final class ClassTypeResolver implements PerNodeTypeResolverInterface
     }
 
     /**
-     * @param ClassLike $classLikeNode
+     * @param Class_ $classNode
      * @return string[]
      */
-    public function resolve(Node $classLikeNode): array
+    public function resolve(Node $classNode): array
     {
-        return $this->classLikeAnalyzer->resolveTypeAndParentTypes($classLikeNode);
+        $className = $this->resolveNameNode($classNode);
+        $types[] = $className;
+
+        $types = array_merge($types, $this->resolveExtendsTypes($classNode, $className));
+        $types = array_merge($types, $this->resolveImplementsTypes($classNode));
+        $types = array_merge($types, $this->resolveUsedTraitTypes($classNode));
+
+        return $types;
     }
 }
