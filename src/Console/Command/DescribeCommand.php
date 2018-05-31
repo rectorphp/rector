@@ -6,12 +6,12 @@ use Rector\Configuration\Option;
 use Rector\Console\ConsoleStyle;
 use Rector\Console\Output\DescribeCommandReporter;
 use Rector\Exception\NoRectorsLoadedException;
-use Rector\Naming\CommandNaming;
 use Rector\NodeTraverser\RectorNodeTraverser;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symplify\PackageBuilder\Console\Command\CommandNaming;
 
 final class DescribeCommand extends Command
 {

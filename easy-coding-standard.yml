@@ -34,9 +34,6 @@ parameters:
         - '*tests/*Source/*.php'
 
     skip:
-        Symplify\CodingStandard\Sniffs\CleanCode\ForbiddenStaticFunctionSniff:
-            # desired for simple usage
-            - 'src/Naming/CommandNaming.php'
         Symplify\CodingStandard\Fixer\Php\ClassStringToClassConstantFixer:
             # classes might not exist
             - '*/src/Rector/Contrib/*/*Rector.php'

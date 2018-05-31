@@ -11,7 +11,6 @@ use Rector\ConsoleDiffer\DifferAndFormatter;
 use Rector\Exception\Command\FileProcessingException;
 use Rector\Exception\NoRectorsLoadedException;
 use Rector\FileSystem\PhpFilesFinder;
-use Rector\Naming\CommandNaming;
 use Rector\NodeTraverser\RectorNodeTraverser;
 use Rector\Reporting\FileDiff;
 use Symfony\Component\Console\Command\Command;
@@ -20,6 +19,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\SplFileInfo;
+use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Throwable;
 
