@@ -2,7 +2,7 @@
 
 namespace SomeNamespace;
 
-use Nette\Object;
+use Rector\Tests\Rector\Contrib\Nette\Utils\MagicMethodRector\Source\SomeObject;
 
 /**
  * @method void setName(string $var)
@@ -12,7 +12,7 @@ use Nette\Object;
  * @method getItems
  * @method setEnabled (bool)
  */
-class SomeClassExtendingNetteObject2 extends Object
+class SomeClassExtendingNetteObject2 extends SomeObject
 {
     public $name;
     public $enabled;

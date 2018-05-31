@@ -2,13 +2,13 @@
 
 namespace SomeNamespace;
 
-use Nette\Object;
+use Rector\Tests\Rector\Contrib\Nette\Utils\MagicMethodRector\Source\SomeObject;
 
 /**
  * @method getValue()
  * @method int getAnotherValue()
  */
-class SomeClassExtendingNetteObject extends Object
+class SomeClassExtendingNetteObject extends SomeObject
 {
     private $value;
     private $anotherValue;

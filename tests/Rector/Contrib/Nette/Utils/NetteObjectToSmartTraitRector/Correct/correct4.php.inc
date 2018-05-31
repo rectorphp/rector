@@ -1,9 +1,9 @@
 <?php declare (strict_types=1);
 
-use Nette\Object;
+use Rector\Tests\Rector\Contrib\Nette\Utils\NetteObjectToSmartTraitRector\Source\ParentObject;
 
 class ClassWithExternalConstant
 {
-    use \Nette\SmartObject;
+    use \Rector\Tests\Rector\Contrib\Nette\Utils\NetteObjectToSmartTraitRector\Source\SomeTrait;
     public $property;
 }

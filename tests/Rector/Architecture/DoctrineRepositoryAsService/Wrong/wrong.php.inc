@@ -3,9 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Post;
-use Doctrine\ORM\EntityRepository;
+use Rector\Tests\Rector\Architecture\DoctrineRepositoryAsService\Source\EntityRepositoryClass;
 
-final class PostRepository extends EntityRepository
+final class PostRepository extends EntityRepositoryClass
 {
     /**
      * Our custom method

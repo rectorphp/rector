@@ -42,13 +42,16 @@ abstract class AbstractToConstructorInjectionRector extends AbstractRector
      */
     protected $methodCallAnalyzer;
 
-    public function __construct(
+    /**
+     * @required
+     */
+    public function setAbstractToConstructorInjectionRectorDependencies(
         PropertyNaming $propertyNaming,
         ClassPropertyCollector $classPropertyCollector,
         PropertyFetchNodeFactory $propertyFetchNodeFactory,
         AnalyzedApplicationContainerInterface $analyzedApplicationContainer,
         MethodCallAnalyzer $methodCallAnalyzer
-    ) {
+    ): void {
         $this->propertyNaming = $propertyNaming;
         $this->classPropertyCollector = $classPropertyCollector;
         $this->propertyFetchNodeFactory = $propertyFetchNodeFactory;

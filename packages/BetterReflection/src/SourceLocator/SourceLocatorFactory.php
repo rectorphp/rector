@@ -19,19 +19,13 @@ final class SourceLocatorFactory
     private $locator;
 
     /**
-     * @var StubSourceLocator
-     */
-    private $stubSourceLocator;
-
-    /**
      * @var SourceLocator[]
      */
     private $commonLocators = [];
 
-    public function __construct(Locator $locator, StubSourceLocator $stubSourceLocator)
+    public function __construct(Locator $locator)
     {
         $this->locator = $locator;
-        $this->stubSourceLocator = $stubSourceLocator;
     }
 
     public function create(): SourceLocator
@@ -73,7 +67,6 @@ final class SourceLocatorFactory
         return $this->commonLocators = [
             new AutoloadSourceLocator($this->locator),
             new PhpInternalSourceLocator($this->locator),
-            $this->stubSourceLocator,
         ];
     }
 

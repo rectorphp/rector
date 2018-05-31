@@ -23,12 +23,19 @@ final class ReplaceParentRepositoryCallsByRepositoryPropertyRector extends Abstr
      */
     private $propertyFetchNodeFactory;
 
+    /**
+     * @var string
+     */
+    private $entityRepositoryClass;
+
     public function __construct(
         SmartClassReflector $smartClassReflector,
-        PropertyFetchNodeFactory $propertyFetchNodeFactory
+        PropertyFetchNodeFactory $propertyFetchNodeFactory,
+        string $entityRepositoryClass = 'Doctrine\ORM\EntityRepository'
     ) {
         $this->smartClassReflector = $smartClassReflector;
         $this->propertyFetchNodeFactory = $propertyFetchNodeFactory;
+        $this->entityRepositoryClass = $entityRepositoryClass;
     }
 
     public function isCandidate(Node $node): bool
@@ -98,7 +105,7 @@ SAMPLE_TWO
      */
     private function getEntityRepositoryPublicMethodNames(): array
     {
-        $entityRepositoryReflection = $this->smartClassReflector->reflect('Doctrine\ORM\EntityRepository');
+        $entityRepositoryReflection = $this->smartClassReflector->reflect($this->entityRepositoryClass);
 
         if ($entityRepositoryReflection !== null) {
             return array_keys($entityRepositoryReflection->getImmediateMethods());
