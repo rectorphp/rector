@@ -6,5 +6,3 @@ final class ClassWithTrait
 {
     use AnotherTrait;
 }
-
-$someClass = new ClassWithTrait();

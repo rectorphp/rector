@@ -101,7 +101,10 @@ abstract class AbstractClassLikeTypeResolver
     protected function resolveImplementsTypes(Class_ $classNode): array
     {
         return array_map(function (Name $interface): string {
-            /** @var FullyQualified $interface */
+            if ($interface->hasAttribute(Attribute::RESOLVED_NAME)) {
+                return (string) $interface->getAttribute(Attribute::RESOLVED_NAME);
+            }
+
             return $interface->toString();
         }, $classNode->implements);
     }

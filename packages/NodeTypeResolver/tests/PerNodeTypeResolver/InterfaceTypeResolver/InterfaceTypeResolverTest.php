@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ClassTypeResolver;
+namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\InterfaceTypeResolver;
 
 use Iterator;
 use PhpParser\Node\Stmt\Interface_;

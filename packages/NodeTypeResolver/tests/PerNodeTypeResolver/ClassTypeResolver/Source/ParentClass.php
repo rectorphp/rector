@@ -2,7 +2,7 @@
 
 namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ClassTypeResolver\Source;
 
-final class ClassWithParentInterface implements SomeInterface
+class ParentClass
 {
 
 }

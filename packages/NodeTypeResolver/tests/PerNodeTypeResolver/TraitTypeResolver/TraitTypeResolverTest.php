@@ -3,7 +3,6 @@
 namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\TraitTypeResolver;
 
 use Iterator;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Trait_;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\TraitTypeResolver\Source\AnotherTrait;

@@ -3,11 +3,13 @@
 namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ClassTypeResolver;
 
 use Iterator;
-use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\Class_;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ClassTypeResolver\Source\AnotherTrait;
+use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ClassTypeResolver\Source\ClassWithParentClass;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ClassTypeResolver\Source\ClassWithParentInterface;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ClassTypeResolver\Source\ClassWithTrait;
+use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ClassTypeResolver\Source\ParentClass;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ClassTypeResolver\Source\SomeInterface;
 
 /**
@@ -21,7 +23,7 @@ final class ClassTypeResolverTest extends AbstractNodeTypeResolverTest
      */
     public function test(string $file, int $nodePosition, array $expectedTypes): void
     {
-        $variableNodes = $this->getNodesForFileOfType($file, Variable::class);
+        $variableNodes = $this->getNodesForFileOfType($file, Class_::class);
 
         $this->assertSame($expectedTypes, $this->nodeTypeResolver->resolve($variableNodes[$nodePosition]));
     }
@@ -33,6 +35,12 @@ final class ClassTypeResolverTest extends AbstractNodeTypeResolverTest
             ClassWithParentInterface::class,
             SomeInterface::class,
         ]];
+
+        yield [__DIR__ . '/Source/ClassWithParentClass.php', 0, [
+            ClassWithParentClass::class,
+            ParentClass::class,
+        ]];
+
         yield [__DIR__ . '/Source/ClassWithTrait.php', 0, [ClassWithTrait::class, AnotherTrait::class]];
     }
 }
