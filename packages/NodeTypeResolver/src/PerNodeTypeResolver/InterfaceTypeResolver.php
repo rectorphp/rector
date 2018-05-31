@@ -22,8 +22,8 @@ final class InterfaceTypeResolver extends AbstractClassLikeTypeResolver implemen
      */
     public function resolve(Node $interfaceNode): array
     {
-        $className = $this->resolveNameNode($interfaceNode);
+        $interfaceName = $this->resolveNameNode($interfaceNode);
 
-        return array_merge([$className], $this->resolveExtendsTypes($interfaceNode, $className));
+        return array_merge([$interfaceName], $this->resolveExtendsTypes($interfaceNode, $interfaceName));
     }
 }

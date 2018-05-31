@@ -106,6 +106,19 @@ final class SmartClassReflector
     /**
      * @return string[]
      */
+    public function getInterfaceParents(string $className): array
+    {
+        $interfaceReflection = $this->reflect($className);
+        if ($interfaceReflection) {
+            return $interfaceReflection->getInterfaceNames();
+        }
+
+        return [];
+    }
+
+    /**
+     * @return string[]
+     */
     public function resolveClassInterfaces(ReflectionClass $reflectionClass): array
     {
         return array_keys($reflectionClass->getInterfaces());

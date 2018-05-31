@@ -65,6 +65,10 @@ abstract class AbstractClassLikeTypeResolver
             return [];
         }
 
+        if ($classLikeNode instanceof Interface_) {
+            return $this->smartClassReflector->getInterfaceParents($className);
+        }
+
         return $this->smartClassReflector->getClassParents($className, $classLikeNode);
     }
 
