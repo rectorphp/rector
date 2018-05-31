@@ -5,6 +5,7 @@ namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\NameTypeResolver;
 use Iterator;
 use PhpParser\Node\Name;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
+use Rector\NodeTypeResolver\Tests\Source\AnotherClass;
 
 /**
  * @covers \Rector\NodeTypeResolver\PerNodeTypeResolver\NameTypeResolver
@@ -12,7 +13,7 @@ use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTe
 final class NameTypeResolverTest extends AbstractNodeTypeResolverTest
 {
     /**
-     * @dataProvider provideTypeForNodesAndFilesData()
+     * @dataProvider provideData()
      * @param string[] $expectedTypes
      */
     public function test(string $file, int $nodePosition, array $expectedTypes): void
@@ -22,9 +23,9 @@ final class NameTypeResolverTest extends AbstractNodeTypeResolverTest
         $this->assertSame($expectedTypes, $this->nodeTypeResolver->resolve($nameNodes[$nodePosition]));
     }
 
-    public function provideTypeForNodesAndFilesData(): Iterator
+    public function provideData(): Iterator
     {
         # test new
-        yield [__DIR__ . '/Source/ParentCall.php.inc', 2, ['Rector\NodeTypeResolver\Tests\Source\AnotherClass']];
+        yield [__DIR__ . '/Source/ParentCall.php', 2, [AnotherClass::class]];
     }
 }

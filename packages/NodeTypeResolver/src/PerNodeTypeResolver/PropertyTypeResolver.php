@@ -10,14 +10,14 @@ use Rector\BetterReflection\Reflector\SmartClassReflector;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\TypeContext;
+use Rector\Php\TypeAnalyzer;
 
 final class PropertyTypeResolver implements PerNodeTypeResolverInterface
 {
     /**
-     * @todo move to helper service
-     * @var string[]
+     * @var TypeAnalyzer
      */
-    private $scalarTypes = ['string', 'bool', 'array', 'int', 'resource', 'iterable', 'callable', 'object'];
+    private $typeAnalyzer;
 
     /**
      * @var TypeContext
@@ -37,11 +37,13 @@ final class PropertyTypeResolver implements PerNodeTypeResolverInterface
     public function __construct(
         TypeContext $typeContext,
         DocBlockAnalyzer $docBlockAnalyzer,
-        SmartClassReflector $smartClassReflector
+        SmartClassReflector $smartClassReflector,
+        TypeAnalyzer $typeAnalyzer
     ) {
         $this->typeContext = $typeContext;
         $this->docBlockAnalyzer = $docBlockAnalyzer;
         $this->smartClassReflector = $smartClassReflector;
+        $this->typeAnalyzer = $typeAnalyzer;
     }
 
     /**
@@ -109,7 +111,7 @@ final class PropertyTypeResolver implements PerNodeTypeResolverInterface
     private function filterOutScalarTypes(array $propertyTypes): array
     {
         foreach ($propertyTypes as $key => $type) {
-            if (! in_array($type, $this->scalarTypes, true)) {
+            if (! $this->typeAnalyzer->isPhpReservedType($type)) {
                 continue;
             }
 

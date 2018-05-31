@@ -31,7 +31,6 @@ services:
 
 parameters:
     exclude_files:
-        - '*packages/*/tests/*Source/*.php'
         - '*tests/*Source/*.php'
 
     skip:

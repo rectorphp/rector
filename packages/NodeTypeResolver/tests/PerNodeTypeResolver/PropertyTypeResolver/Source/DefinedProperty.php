@@ -1,11 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 
-namespace SomeNamespace;
+namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\PropertyTypeResolver\Source;
 
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\PropertyTypeResolver;
-use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\PropertyTypeResolver\Source\PropertyType;
 
-class SomeClassWithProperties
+final class DefinedProperty
 {
     /**
      * @var PropertyType

@@ -16,7 +16,7 @@ use Rector\NodeTypeResolver\Tests\Source\NestedProperty\ParentClass;
 final class PropertyFetchTypeResolverTest extends AbstractNodeTypeResolverTest
 {
     /**
-     * @dataProvider provideTypeForNodesAndFilesData()
+     * @dataProvider provideData()
      * @param string[] $expectedTypes
      */
     public function test(string $file, int $nodePosition, string $propertyName, array $expectedTypes): void
@@ -29,13 +29,12 @@ final class PropertyFetchTypeResolverTest extends AbstractNodeTypeResolverTest
         $this->assertSame($expectedTypes, $this->nodeTypeResolver->resolve($propertyFetchNode));
     }
 
-    public function provideTypeForNodesAndFilesData(): Iterator
+    public function provideData(): Iterator
     {
-        # doc block
-        yield [__DIR__ . '/Source/NestedProperty.php.inc', 0, 'level3', [ClassWithPropertyLevel3::class]];
-        yield [__DIR__ . '/Source/NestedProperty.php.inc', 1, 'level2s', [ClassWithPropertyLevel2::class]];
+        yield [__DIR__ . '/Source/NestedProperty.php', 0, 'level3', [ClassWithPropertyLevel3::class]];
+        yield [__DIR__ . '/Source/NestedProperty.php', 1, 'level2s', [ClassWithPropertyLevel2::class]];
         yield [
-            __DIR__ . '/Source/NestedProperty.php.inc',
+            __DIR__ . '/Source/NestedProperty.php',
             2,
             'level1',
             [ClassWithPropertyLevel1::class, ParentClass::class],

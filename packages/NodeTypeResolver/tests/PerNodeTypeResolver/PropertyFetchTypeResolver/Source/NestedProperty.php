@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Roave\BetterReflection\NodeCompiler;
+namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\PropertyFetchTypeResolver\Source;
 
 use Rector\NodeTypeResolver\Tests\Source\NestedProperty\ClassWithPropertyLevel1;
 
-class SomeClassWithNestedPublicProperties
+final class NestedProperty
 {
     /**
      * @var ClassWithPropertyLevel1

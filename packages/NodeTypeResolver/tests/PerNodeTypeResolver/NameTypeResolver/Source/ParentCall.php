@@ -2,7 +2,7 @@
 
 use Rector\NodeTypeResolver\Tests\Source\AnotherClass;
 
-class ChildClass extends AnotherClass
+class ParentCall extends AnotherClass
 {
     public function getParameters()
     {
