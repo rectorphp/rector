@@ -47,7 +47,6 @@
             "Rector\\NodeTraverserQueue\\Tests\\": "packages/NodeTraverserQueue/tests"
         },
         "classmap": [
-            "packages/NodeTypeResolver/tests/PerNodeTypeResolver",
             "tests/Rector/Contrib/Nette/Utils"
         ]
     },

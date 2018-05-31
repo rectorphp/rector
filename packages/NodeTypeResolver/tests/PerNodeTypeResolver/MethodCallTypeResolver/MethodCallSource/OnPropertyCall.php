@@ -1,8 +1,8 @@
 <?php
 
-namespace SomeNamespace;
+namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\MethodCallTypeResolver\MethodCallSource;
 
-class SomeClass
+class OnPropertyCall
 {
     /**
      * @var \Rector\NodeTypeResolver\Tests\Source\SomeClass

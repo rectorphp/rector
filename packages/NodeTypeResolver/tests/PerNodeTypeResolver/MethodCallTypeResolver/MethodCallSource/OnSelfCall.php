@@ -1,6 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
-class SomeParentCallingClass extends \Rector\NodeTypeResolver\Tests\Source\AnotherClass
+namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\MethodCallTypeResolver\MethodCallSource;
+
+final class OnSelfCall extends \Rector\NodeTypeResolver\Tests\Source\AnotherClass
 {
     public function createContainer()
     {
