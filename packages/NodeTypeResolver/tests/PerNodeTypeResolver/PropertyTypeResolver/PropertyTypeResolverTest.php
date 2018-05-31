@@ -26,9 +26,9 @@ final class PropertyTypeResolverTest extends AbstractNodeTypeResolverTest
     public function provideData(): Iterator
     {
         # doc block
-//        yield [__DIR__ . '/Source/DefinedProperty.php', 0, [PropertyType::class]];
+        yield [__DIR__ . '/Source/DefinedProperty.php', 0, [PropertyType::class]];
         # constructor defined property
-//        yield [__DIR__ . '/Source/DefinedProperty.php', 1, [PropertyType::class]];
+        yield [__DIR__ . '/Source/DefinedProperty.php', 1, [PropertyType::class]];
         # partial doc block
         yield [__DIR__ . '/Source/DefinedProperty.php', 2, [PropertyType::class]];
     }

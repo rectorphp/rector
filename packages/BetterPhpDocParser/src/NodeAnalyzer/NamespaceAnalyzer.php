@@ -67,7 +67,12 @@ final class NamespaceAnalyzer
             $firstTypePart = array_shift($typeParts);
 
             if ($lastNodeUseNamePart === $firstTypePart) {
-                return implode('\\', $nodeUseNameParts) . '\\' . $lastNodeUseNamePart . '\\' . implode('\\' , $typeParts);
+                return sprintf(
+                    '%s\%s\%s',
+                    implode('\\', $nodeUseNameParts),
+                    $lastNodeUseNamePart,
+                    implode('\\', $typeParts)
+                );
             }
         }
 
