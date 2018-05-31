@@ -13,7 +13,7 @@ use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\PropertyTypeResolver\Sourc
 final class PropertyTypeResolverTest extends AbstractNodeTypeResolverTest
 {
     /**
-     * @dataProvider provideTypeForNodesAndFilesData()
+     * @dataProvider provideData()
      * @param string[] $expectedTypes
      */
     public function test(string $file, int $nodePosition, array $expectedTypes): void
@@ -23,13 +23,13 @@ final class PropertyTypeResolverTest extends AbstractNodeTypeResolverTest
         $this->assertSame($expectedTypes, $this->nodeTypeResolver->resolve($propertyNodes[$nodePosition]));
     }
 
-    public function provideTypeForNodesAndFilesData(): Iterator
+    public function provideData(): Iterator
     {
         # doc block
-        yield [__DIR__ . '/Source/DefinedProperty.php.inc', 0, [PropertyType::class]];
+        yield [__DIR__ . '/Source/DefinedProperty.php', 0, [PropertyType::class]];
         # constructor defined property
-        yield [__DIR__ . '/Source/DefinedProperty.php.inc', 1, [PropertyType::class]];
+        yield [__DIR__ . '/Source/DefinedProperty.php', 1, [PropertyType::class]];
         # partial doc block
-        yield [__DIR__ . '/Source/DefinedProperty.php.inc', 2, [PropertyType::class]];
+        yield [__DIR__ . '/Source/DefinedProperty.php', 2, [PropertyType::class]];
     }
 }

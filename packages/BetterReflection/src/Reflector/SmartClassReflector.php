@@ -7,6 +7,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
 use Rector\Configuration\Option;
+use Rector\Node\Attribute;
 use Roave\BetterReflection\Reflection\ReflectionClass;
 use Roave\BetterReflection\Reflector\ClassReflector;
 use Roave\BetterReflection\Reflector\Exception\IdentifierNotFound;
@@ -106,14 +107,22 @@ final class SmartClassReflector
     /**
      * @return string[]
      */
+    public function getInterfaceParents(string $className): array
+    {
+        $interfaceReflection = $this->reflect($className);
+        if ($interfaceReflection) {
+            return $interfaceReflection->getInterfaceNames();
+        }
+
+        return [];
+    }
+
+    /**
+     * @return string[]
+     */
     public function resolveClassInterfaces(ReflectionClass $reflectionClass): array
     {
-        try {
-            return array_keys($reflectionClass->getInterfaces());
-        } catch (IdentifierNotFound $identifierNotFoundException) {
-            // @todo check if type is needed by any Rector
-            return [];
-        }
+        return array_keys($reflectionClass->getInterfaces());
     }
 
     /**
@@ -121,12 +130,7 @@ final class SmartClassReflector
      */
     public function resolveClassParents(ReflectionClass $reflectionClass): array
     {
-        try {
-            return $reflectionClass->getParentClassNames();
-        } catch (IdentifierNotFound $identifierNotFoundException) {
-            // @todo check if type is needed by any Rector
-            return [];
-        }
+        return $reflectionClass->getParentClassNames();
     }
 
     /**
@@ -139,6 +143,10 @@ final class SmartClassReflector
         }
 
         if ($classLikeNode instanceof Class_) {
+            if ($classLikeNode->extends->hasAttribute(Attribute::RESOLVED_NAME)) {
+                return [(string) $classLikeNode->extends->getAttribute(Attribute::RESOLVED_NAME)];
+            }
+
             return [$classLikeNode->extends->toString()];
         }
 

@@ -5,6 +5,8 @@ namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\VariableTypeResolver
 use Iterator;
 use PhpParser\Node\Expr\Variable;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
+use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\VariableTypeResolver\Source\AnotherType;
+use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\VariableTypeResolver\Source\ThisClass;
 use Rector\NodeTypeResolver\Tests\Source\AnotherClass;
 
 /**
@@ -13,7 +15,7 @@ use Rector\NodeTypeResolver\Tests\Source\AnotherClass;
 final class VariableTypeResolverTest extends AbstractNodeTypeResolverTest
 {
     /**
-     * @dataProvider provideTypeForNodesAndFilesData()
+     * @dataProvider provideData()
      * @param string[] $expectedTypes
      */
     public function test(string $file, int $nodePosition, array $expectedTypes): void
@@ -23,17 +25,17 @@ final class VariableTypeResolverTest extends AbstractNodeTypeResolverTest
         $this->assertSame($expectedTypes, $this->nodeTypeResolver->resolve($variableNodes[$nodePosition]));
     }
 
-    public function provideTypeForNodesAndFilesData(): Iterator
+    public function provideData(): Iterator
     {
-        # this
-        yield [__DIR__ . '/Source/This.php.inc', 0, ['SomeNamespace\ThisClass', AnotherClass::class]];
-        # new
-        yield [__DIR__ . '/Source/SomeClass.php.inc', 0, ['SomeNamespace\AnotherType']];
-        yield [__DIR__ . '/Source/SomeClass.php.inc', 2, ['SomeNamespace\AnotherType']];
-        # assignment
-        yield [__DIR__ . '/Source/SomeClass.php.inc', 1, ['SomeNamespace\AnotherType']];
-        # callback arguments
-        yield [__DIR__ . '/Source/ArgumentTypehint.php.inc', 0, ['SomeNamespace\UseUse']];
-        yield [__DIR__ . '/Source/ArgumentTypehint.php.inc', 1, ['SomeNamespace\UseUse']];
+        yield [__DIR__ . '/Source/ThisClass.php', 0, [ThisClass::class, AnotherClass::class]];
+
+        yield [__DIR__ . '/Source/NewClass.php', 0, [AnotherType::class]];
+        yield [__DIR__ . '/Source/NewClass.php', 2, [AnotherType::class]];
+
+        yield [__DIR__ . '/Source/AssignmentClass.php', 0, [AnotherType::class]];
+        yield [__DIR__ . '/Source/AssignmentClass.php', 1, [AnotherType::class]];
+
+        yield [__DIR__ . '/Source/ArgumentTypehint.php', 0, [AnotherType::class]];
+        yield [__DIR__ . '/Source/ArgumentTypehint.php', 1, [AnotherType::class]];
     }
 }

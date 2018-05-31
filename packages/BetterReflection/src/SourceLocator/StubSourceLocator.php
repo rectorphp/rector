@@ -6,7 +6,6 @@ use Rector\BetterReflection\Stubber\SourceStubber;
 use Roave\BetterReflection\Identifier\Identifier;
 use Roave\BetterReflection\Identifier\IdentifierType;
 use Roave\BetterReflection\Reflection\Reflection;
-use Roave\BetterReflection\Reflector\Exception\IdentifierNotFound;
 use Roave\BetterReflection\Reflector\Reflector;
 use Roave\BetterReflection\SourceLocator\Ast\Locator;
 use Roave\BetterReflection\SourceLocator\Located\LocatedSource;
@@ -47,11 +46,7 @@ final class StubSourceLocator implements SourceLocator
 
         $locatedSource = new LocatedSource($stubFileInfo->getContents(), $stubFileInfo->getRealPath());
 
-        try {
-            return $this->astLocator->findReflection($reflector, $locatedSource, $identifier);
-        } catch (IdentifierNotFound $identifierNotFoundException) {
-            return null;
-        }
+        return $this->astLocator->findReflection($reflector, $locatedSource, $identifier);
     }
 
     /**

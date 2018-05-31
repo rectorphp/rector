@@ -45,6 +45,9 @@ parameters:
         - '#Call to an undefined method PhpParser\\Node\\Expr\\BinaryOp::getOperatorSigil\(\).#' # 1
         - '#Call to an undefined method PhpParser\\Node\\Expr\\ArrayItem::getComments\(\).#' # 2
 
+        # tests or coding standars?
+        - '#Constructor of class [\s\S]+ has an unused parameter \$html#' # 2
+
     excludes_analyse:
         # test files
         - '*tests/Rector/Dynamic/MethodNameReplacerRector/**/SomeClass.php'

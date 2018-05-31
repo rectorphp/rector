@@ -58,6 +58,22 @@ final class NamespaceAnalyzer
             if ($useUseNode->getAlias() && $type === $useUseNode->getAlias()->toString()) {
                 return $nodeUseName;
             }
+
+            // Some\Start <=> Start\End
+            $nodeUseNameParts = explode('\\', $nodeUseName);
+            $typeParts = explode('\\', $type);
+
+            $lastNodeUseNamePart = array_pop($nodeUseNameParts);
+            $firstTypePart = array_shift($typeParts);
+
+            if ($lastNodeUseNamePart === $firstTypePart) {
+                return sprintf(
+                    '%s\%s\%s',
+                    implode('\\', $nodeUseNameParts),
+                    $lastNodeUseNamePart,
+                    implode('\\', $typeParts)
+                );
+            }
         }
 
         return null;

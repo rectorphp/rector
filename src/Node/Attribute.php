@@ -17,7 +17,7 @@ final class Attribute
     public const TYPES = 'types';
 
     /**
-     * System name.
+     * Internal php-parser name.
      * Do not change this even if you want!
      *
      * @var string
@@ -25,7 +25,7 @@ final class Attribute
     public const ORIGINAL_NODE = 'origNode';
 
     /**
-     * System name to be found in @see \PhpParser\NodeVisitor\NameResolver
+     * Internal php-parser name. @see \PhpParser\NodeVisitor\NameResolver
      * Do not change this even if you want!
      *
      * @var string
@@ -106,4 +106,12 @@ final class Attribute
      * @var string
      */
     public const COMMENTS = 'comments';
+
+    /**
+     * Internal php-parser name.
+     * Do not change this even if you want!
+     *
+     * @var string
+     */
+    public const NAMESPACED_NAME = 'namespacedName';
 }
