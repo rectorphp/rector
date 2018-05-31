@@ -47,18 +47,25 @@ final class MagicMethodRector extends AbstractRector
      */
     private $nodeTypeResolver;
 
+    /**
+     * @var string
+     */
+    private $parentClass;
+
     public function __construct(
         MethodBuilder $methodBuilder,
         DocBlockAnalyzer $docBlockAnalyzer,
         SmartClassReflector $smartClassReflector,
         MagicMethodMatcher $magicMethodMatcher,
-        NodeTypeResolver $nodeTypeResolver
+        NodeTypeResolver $nodeTypeResolver,
+        string $parentClass = 'Nette\Object'
     ) {
         $this->methodBuilder = $methodBuilder;
         $this->docBlockAnalyzer = $docBlockAnalyzer;
         $this->smartClassReflector = $smartClassReflector;
         $this->magicMethodMatcher = $magicMethodMatcher;
         $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->parentClass = $parentClass;
     }
 
     public function getDefinition(): RectorDefinition
@@ -151,6 +158,6 @@ CODE_SAMPLE
     {
         $classNodeTypes = $this->nodeTypeResolver->resolve($classNode);
 
-        return in_array('Nette\Object', $classNodeTypes, true);
+        return in_array($this->parentClass, $classNodeTypes, true);
     }
 }

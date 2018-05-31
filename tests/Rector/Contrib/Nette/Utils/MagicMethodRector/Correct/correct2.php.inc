@@ -2,9 +2,9 @@
 
 namespace SomeNamespace;
 
-use Nette\Object;
+use Rector\Tests\Rector\Contrib\Nette\Utils\MagicMethodRector\Source\SomeObject;
 
-class SomeClassExtendingNetteObject2 extends Object
+class SomeClassExtendingNetteObject2 extends SomeObject
 {
     public $name;
     public $enabled;
