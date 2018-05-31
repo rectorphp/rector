@@ -7,6 +7,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
 use Rector\Configuration\Option;
+use Rector\Node\Attribute;
 use Roave\BetterReflection\Reflection\ReflectionClass;
 use Roave\BetterReflection\Reflector\ClassReflector;
 use Roave\BetterReflection\Reflector\Exception\IdentifierNotFound;
@@ -142,6 +143,10 @@ final class SmartClassReflector
         }
 
         if ($classLikeNode instanceof Class_) {
+            if ($classLikeNode->extends->hasAttribute(Attribute::RESOLVED_NAME)) {
+                return [(string) $classLikeNode->extends->getAttribute(Attribute::RESOLVED_NAME)];
+            }
+
             return [$classLikeNode->extends->toString()];
         }
 

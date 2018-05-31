@@ -30,7 +30,6 @@ final class ClassTypeResolverTest extends AbstractNodeTypeResolverTest
 
     public function dataProvider(): Iterator
     {
-        # assign of "new <name>"
         yield [__DIR__ . '/Source/ClassWithParentInterface.php', 0, [
             ClassWithParentInterface::class,
             SomeInterface::class,
@@ -42,5 +41,11 @@ final class ClassTypeResolverTest extends AbstractNodeTypeResolverTest
         ]];
 
         yield [__DIR__ . '/Source/ClassWithTrait.php', 0, [ClassWithTrait::class, AnotherTrait::class]];
+
+        yield [
+            __DIR__ . '/Source/AnonymousClass.php',
+            0,
+            [ParentClass::class, SomeInterface::class, AnotherTrait::class],
+        ];
     }
 }

@@ -23,7 +23,11 @@ final class ClassTypeResolver extends AbstractClassLikeTypeResolver implements P
     public function resolve(Node $classNode): array
     {
         $className = $this->resolveNameNode($classNode);
-        $types[] = $className;
+
+        $types = [];
+        if ($className) {
+            $types[] = $className;
+        }
 
         $types = array_merge($types, $this->resolveExtendsTypes($classNode, $className));
         $types = array_merge($types, $this->resolveImplementsTypes($classNode));
