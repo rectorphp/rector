@@ -2,6 +2,6 @@
 
 class ClassWithExternalConstant
 {
-    use \Nette\SmartObject;
+    use \Rector\Tests\Rector\Contrib\Nette\Utils\NetteObjectToSmartTraitRector\Source\SomeTrait;
     public $property;
 }

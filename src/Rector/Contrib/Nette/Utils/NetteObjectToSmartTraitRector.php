@@ -18,16 +18,6 @@ use Rector\RectorDefinition\RectorDefinition;
 final class NetteObjectToSmartTraitRector extends AbstractRector
 {
     /**
-     * @var string
-     */
-    private const PARENT_CLASS = 'Nette\Object';
-
-    /**
-     * @var string
-     */
-    private const TRAIT_NAME = 'Nette\SmartObject';
-
-    /**
      * @var StatementGlue
      */
     private $statementGlue;
@@ -37,10 +27,26 @@ final class NetteObjectToSmartTraitRector extends AbstractRector
      */
     private $nodeFactory;
 
-    public function __construct(StatementGlue $statementGlue, NodeFactory $nodeFactory)
-    {
+    /**
+     * @var string
+     */
+    private $parentClass;
+
+    /**
+     * @var string
+     */
+    private $traitName;
+
+    public function __construct(
+        StatementGlue $statementGlue,
+        NodeFactory $nodeFactory,
+        string $parentClass = 'Nette\Object',
+        string $traitName = 'Nette\SmartObject'
+    ) {
         $this->statementGlue = $statementGlue;
         $this->nodeFactory = $nodeFactory;
+        $this->parentClass = $parentClass;
+        $this->traitName = $traitName;
     }
 
     public function getDefinition(): RectorDefinition
@@ -59,7 +65,7 @@ final class NetteObjectToSmartTraitRector extends AbstractRector
         /** @var FullyQualified $fullyQualifiedName */
         $fullyQualifiedName = $node->extends->getAttribute(Attribute::RESOLVED_NAME);
 
-        return $fullyQualifiedName->toString() === self::PARENT_CLASS;
+        return $fullyQualifiedName->toString() === $this->parentClass;
     }
 
     /**
@@ -67,7 +73,7 @@ final class NetteObjectToSmartTraitRector extends AbstractRector
      */
     public function refactor(Node $classNode): ?Node
     {
-        $traitUseNode = $this->nodeFactory->createTraitUse(self::TRAIT_NAME);
+        $traitUseNode = $this->nodeFactory->createTraitUse($this->traitName);
         $this->statementGlue->addAsFirstTrait($classNode, $traitUseNode);
 
         $this->removeParentClass($classNode);
