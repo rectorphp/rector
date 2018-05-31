@@ -5,6 +5,11 @@ namespace Rector\Tests\Rector\Architecture\DoctrineRepositoryAsService;
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
+/**
+ * @covers \Rector\Rector\Architecture\RepositoryAsService\ReplaceParentRepositoryCallsByRepositoryPropertyRector
+ * @covers \Rector\Rector\Architecture\RepositoryAsService\MoveRepositoryFromParentToConstructorRector
+ * @covers \Rector\Rector\Architecture\RepositoryAsService\ServiceLocatorToDIRector
+ */
 final class DoctrineRepositoryAsServiceTest extends AbstractRectorTestCase
 {
     /**

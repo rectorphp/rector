@@ -3,10 +3,10 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Post;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Rector\Tests\Rector\Architecture\DoctrineRepositoryAsService\Source\SymfonyController;
 use Symfony\Component\HttpFoundation\Response;
 
-final class PostController extends Controller
+final class PostController extends SymfonyController
 {
     public function anythingAction(int $id): Response
     {

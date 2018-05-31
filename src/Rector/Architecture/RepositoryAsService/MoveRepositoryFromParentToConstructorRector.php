@@ -51,13 +51,25 @@ final class MoveRepositoryFromParentToConstructorRector extends AbstractRector
      */
     private $variableInfoFactory;
 
+    /**
+     * @var string
+     */
+    private $entityRepositoryClass;
+
+    /**
+     * @var string
+     */
+    private $entityManagerClass;
+
     public function __construct(
         PropertyBuilder $propertyBuilder,
         ConstructorMethodBuilder $constructorMethodBuilder,
         NodeFactory $nodeFactory,
         DoctrineEntityAndRepositoryMapperInterface $doctrineEntityAndRepositoryMapper,
         BuilderFactory $builderFactory,
-        VariableInfoFactory $variableInfoFactory
+        VariableInfoFactory $variableInfoFactory,
+        string $entityRepositoryClass = 'Doctrine\ORM\EntityRepository',
+        string $entityManagerClass = 'Doctrine\ORM\EntityManager'
     ) {
         $this->propertyBuilder = $propertyBuilder;
         $this->constructorMethodBuilder = $constructorMethodBuilder;
@@ -65,6 +77,8 @@ final class MoveRepositoryFromParentToConstructorRector extends AbstractRector
         $this->doctrineEntityAndRepositoryMapper = $doctrineEntityAndRepositoryMapper;
         $this->builderFactory = $builderFactory;
         $this->variableInfoFactory = $variableInfoFactory;
+        $this->entityRepositoryClass = $entityRepositoryClass;
+        $this->entityManagerClass = $entityManagerClass;
     }
 
     public function isCandidate(Node $node): bool
@@ -78,7 +92,7 @@ final class MoveRepositoryFromParentToConstructorRector extends AbstractRector
         }
 
         $parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
-        if ($parentClassName !== 'Doctrine\ORM\EntityRepository') {
+        if ($parentClassName !== $this->entityRepositoryClass) {
             return false;
         }
 
@@ -134,14 +148,14 @@ CODE_SAMPLE
         // add $repository property
         $propertyInfo = $this->variableInfoFactory->createFromNameAndTypes(
             'repository',
-            ['Doctrine\ORM\EntityRepository']
+            [$this->entityRepositoryClass]
         );
         $this->propertyBuilder->addPropertyToClass($node, $propertyInfo);
 
         // add $entityManager and assign to constuctor
         $this->constructorMethodBuilder->addParameterAndAssignToConstructorArgumentsOfClass(
             $node,
-            $this->variableInfoFactory->createFromNameAndTypes('entityManager', ['Doctrine\ORM\EntityManager']),
+            $this->variableInfoFactory->createFromNameAndTypes('entityManager', [$this->entityManagerClass]),
             $this->createRepositoryAssign($node)
         );
 
