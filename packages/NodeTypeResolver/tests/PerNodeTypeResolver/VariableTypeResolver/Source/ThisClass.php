@@ -1,6 +1,6 @@
-<?php
+<?php declare(strict_types=1);
 
-namespace SomeNamespace;
+namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\VariableTypeResolver\Source;
 
 use Rector\NodeTypeResolver\Tests\Source\AnotherClass;
 
