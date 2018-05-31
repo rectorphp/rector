@@ -7,11 +7,7 @@ matrix:
     - php: 7.1
       env: COMPOSER_FLAGS="--prefer-lowest"
     - php: 7.2
-      env: PHPUNIT_FLAGS="--coverage-clover coverage.xml --testsuite=contrib-rectors"
-    - php: 7.2
-      env: PHPUNIT_FLAGS="--coverage-clover coverage.xml --testsuite=general-rectors"
-    - php: 7.2
-      env: PHPUNIT_FLAGS="--coverage-clover coverage.xml --testsuite=main"
+      env: PHPUNIT_FLAGS="--coverage-clover coverage.xml"
 
 install:
   - composer update $COMPOSER_FLAGS
@@ -21,7 +17,7 @@ before_script:
   - if [[ $PHPUNIT_FLAGS = "" ]]; then phpenv config-rm xdebug.ini; fi
 
 script:
-  - vendor/bin/phpunit $PHPUNIT_FLAGS
+  - vendor/bin/paratest $PHPUNIT_FLAGS
   # disable xdebug
   - phpenv config-rm xdebug.ini || return 0
   - if [[ $STATIC_ANALYSIS == true ]]; then composer check-cs; fi
