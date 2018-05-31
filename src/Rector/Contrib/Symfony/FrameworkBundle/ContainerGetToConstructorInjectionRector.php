@@ -15,10 +15,18 @@ final class ContainerGetToConstructorInjectionRector extends AbstractToConstruct
     /**
      * @var string[]
      */
-    private $containerAwareParentTypes = [
+    private $containerAwareParentTypes = [];
+
+    /**
+     * @param string[] $containerAwareParentTypes
+     */
+    public function __construct(array $containerAwareParentTypes = [
         'Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand',
         'Symfony\Bundle\FrameworkBundle\Controller\Controller',
-    ];
+    ])
+    {
+        $this->containerAwareParentTypes = $containerAwareParentTypes;
+    }
 
     public function getDefinition(): RectorDefinition
     {

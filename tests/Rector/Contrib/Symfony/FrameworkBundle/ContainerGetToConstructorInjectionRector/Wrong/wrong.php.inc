@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Rector\Tests\Rector\Contrib\Symfony\FrameworkBundle\ContainerGetToConstructorInjectionRector\Source\ContainerAwareParentClass;
 
-final class MyCommand extends ContainerAwareCommand
+final class MyCommand extends ContainerAwareParentClass
 {
     protected function execute()
     {
