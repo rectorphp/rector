@@ -1,4 +1,0 @@
-services:
-    Rector\Rector\Dynamic\NamespaceReplacerRector:
-        $oldToNewNamespaces:
-            'BetterReflection': 'Roave\BetterReflection'
