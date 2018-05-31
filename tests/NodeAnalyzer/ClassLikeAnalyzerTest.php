@@ -18,8 +18,9 @@ final class ClassLikeAnalyzerTest extends AbstractContainerAwareTestCase
         $this->classLikeAnalyzer = $this->container->get(ClassLikeAnalyzer::class);
     }
 
-    public function testAnonymousClass(): void
+    public function test(): void
     {
-        $this->classLikeAnalyzer->isAnonymousClassNode(new Class_(null));
+        $this->assertTrue($this->classLikeAnalyzer->isAnonymousClassNode(new Class_(null)));
+        $this->assertFalse($this->classLikeAnalyzer->isAnonymousClassNode(new Class_('SomeClass')));
     }
 }
