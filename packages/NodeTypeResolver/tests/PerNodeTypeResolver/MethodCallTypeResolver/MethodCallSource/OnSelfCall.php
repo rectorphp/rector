@@ -1,6 +1,6 @@
 <?php
 
-class SomeParentCallingClass extends \Rector\NodeTypeResolver\Tests\Source\AnotherClass // AnotherClass
+class SomeParentCallingClass extends \Rector\NodeTypeResolver\Tests\Source\AnotherClass
 {
     public function createContainer()
     {

@@ -36,40 +36,40 @@ final class NestedMethodCallTest extends AbstractNodeTypeResolverTest
     {
         # form chain method calls
         yield [
-            __DIR__ . '/NestedMethodCallSource/FormChainMethodCalls.php.inc', 0, 'addRule', [
+            __DIR__ . '/NestedMethodCallSource/FormChainMethodCalls.php', 0, 'addRule', [
                 'Stub_Nette\Forms\Rules',
             ],
         ];
-        yield [__DIR__ . '/NestedMethodCallSource/FormChainMethodCalls.php.inc', 1, 'addCondition', [
+        yield [__DIR__ . '/NestedMethodCallSource/FormChainMethodCalls.php', 1, 'addCondition', [
             'Stub_Nette\Forms\Controls\TextInput',
             'Stub_Nette\Forms\Controls\TextArea',
         ]];
-        yield [__DIR__ . '/NestedMethodCallSource/FormChainMethodCalls.php.inc', 2, 'addText', [
+        yield [__DIR__ . '/NestedMethodCallSource/FormChainMethodCalls.php', 2, 'addText', [
             'Stub_Nette\Application\UI\Form',
             'Stub_Nette\Forms\Form',
         ]];
         # nested different method calls
-        yield [__DIR__ . '/NestedMethodCallSource/OnMethodCallCallDifferentType.php.inc', 0, 'getParameters', [
+        yield [__DIR__ . '/NestedMethodCallSource/OnMethodCallCallDifferentType.php', 0, 'getParameters', [
             AnotherClass::class,
         ]];
-        yield [__DIR__ . '/NestedMethodCallSource/OnMethodCallCallDifferentType.php.inc', 1, 'createAnotherClass', [
+        yield [__DIR__ . '/NestedMethodCallSource/OnMethodCallCallDifferentType.php', 1, 'createAnotherClass', [
             ClassWithFluentNonSelfReturn::class,
         ]];
         # nested method calls
         yield [
-            __DIR__ . '/NestedMethodCallSource/NestedMethodCalls.php.inc',
+            __DIR__ . '/NestedMethodCallSource/NestedMethodCalls.php',
             0,
             'getParameters',
             [AnotherClass::class],
         ];
         yield [
-            __DIR__ . '/NestedMethodCallSource/NestedMethodCalls.php.inc',
+            __DIR__ . '/NestedMethodCallSource/NestedMethodCalls.php',
             1,
             'callAndReturnSelf',
             [AnotherClass::class],
         ];
         # nested method calls
-        yield [__DIR__ . '/NestedMethodCallSource/NestedMethodCalls.php.inc', 2, 'createAnotherClass', [
+        yield [__DIR__ . '/NestedMethodCallSource/NestedMethodCalls.php', 2, 'createAnotherClass', [
             ClassWithFluentNonSelfReturn::class,
         ]];
     }

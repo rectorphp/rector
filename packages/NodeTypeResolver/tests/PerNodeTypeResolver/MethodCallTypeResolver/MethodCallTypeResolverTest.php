@@ -28,26 +28,26 @@ final class MethodCallTypeResolverTest extends AbstractNodeTypeResolverTest
     public function provideData(): Iterator
     {
         # on self call
-        yield [__DIR__ . '/MethodCallSource/OnSelfCall.php.inc', 0, ['SomeParentCallingClass', AnotherClass::class]];
-        yield [__DIR__ . '/MethodCallSource/OnSelfCall.php.inc', 1, ['SomeParentCallingClass', AnotherClass::class]];
+        yield [__DIR__ . '/MethodCallSource/OnSelfCall.php', 0, ['SomeParentCallingClass', AnotherClass::class]];
+        yield [__DIR__ . '/MethodCallSource/OnSelfCall.php', 1, ['SomeParentCallingClass', AnotherClass::class]];
         # on method call
-        yield [__DIR__ . '/MethodCallSource/OnMethodCallCall.php.inc', 0, [
+        yield [__DIR__ . '/MethodCallSource/OnMethodCallCall.php', 0, [
             'Rector\NodeTypeResolver\Tests\Source\AnotherClass',
         ]];
         # on variable call
-        yield [__DIR__ . '/MethodCallSource/OnVariableCall.php.inc', 0, [
+        yield [__DIR__ . '/MethodCallSource/OnVariableCall.php', 0, [
             'Rector\NodeTypeResolver\Tests\Source\SomeClass',
         ]];
         # on property call
-        yield [__DIR__ . '/MethodCallSource/OnPropertyCall.php.inc', 0, [
+        yield [__DIR__ . '/MethodCallSource/OnPropertyCall.php', 0, [
             'Rector\NodeTypeResolver\Tests\Source\SomeClass',
         ]];
         # on magic class call
-        yield [__DIR__ . '/MethodCallSource/OnMagicClassCall.php.inc', 0, [
+        yield [__DIR__ . '/MethodCallSource/OnMagicClassCall.php', 0, [
             'Rector\NodeTypeResolver\Tests\Source\SomeClass',
         ]];
         # on trait method call
-        yield [__DIR__ . '/MethodCallSource/SomeClassWithTraitCall.php.inc', 0, [
+        yield [__DIR__ . '/MethodCallSource/SomeClassWithTraitCall.php', 0, [
             'Rector\NodeTypeResolver\Tests\Source\SomeClass',
         ]];
     }
