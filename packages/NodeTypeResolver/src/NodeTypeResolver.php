@@ -3,6 +3,7 @@
 namespace Rector\NodeTypeResolver;
 
 use PhpParser\Node;
+use PhpParser\PrettyPrinter\Standard;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 
@@ -12,6 +13,11 @@ final class NodeTypeResolver
      * @var PerNodeTypeResolverInterface[]
      */
     private $perNodeTypeResolvers = [];
+
+    /**
+     * @var string[][]
+     */
+    private $resolvedTypesByNode = [];
 
     public function addPerNodeTypeResolver(PerNodeTypeResolverInterface $perNodeTypeResolver): void
     {
@@ -25,22 +31,36 @@ final class NodeTypeResolver
      */
     public function resolve(Node $node): array
     {
-        // resolve just once
-        if ($node->hasAttribute(Attribute::TYPES)) {
-            return $node->getAttribute(Attribute::TYPES);
-        }
-
         $nodeClass = get_class($node);
+
         if (! isset($this->perNodeTypeResolvers[$nodeClass])) {
             return [];
         }
 
-        $nodeTypes = $this->perNodeTypeResolvers[$nodeClass]->resolve($node);
-        $nodeTypes = $this->cleanPreSlashes($nodeTypes);
+        $key = spl_object_hash($node);
 
-        $node->setAttribute(Attribute::TYPES, $nodeTypes);
+        if (! isset($this->resolvedTypesByNode[$key])) {
+            $types = $this->perNodeTypeResolvers[$nodeClass]->resolve($node);
+            $types = $this->cleanPreSlashes($types);
+            $this->resolvedTypesByNode[$key] = $types;
+        }
 
-        return $nodeTypes;
+        return $this->resolvedTypesByNode[$key];
+
+//        // @todo move to local cache, so there is only one way to get such types
+//        // and that cache can be outsourced to persistent storage
+//
+//        // resolve just once
+////        if ($node->hasAttribute(Attribute::TYPES)) {
+////            return $node->getAttribute(Attribute::TYPES);
+////        }
+//
+//        $nodeTypes = $this->perNodeTypeResolvers[$nodeClass]->resolve($node);
+//        $nodeTypes = $this->cleanPreSlashes($nodeTypes);
+//
+//        // $node->setAttribute(Attribute::TYPES, $nodeTypes);
+//
+//        return $nodeTypes;
     }
 
     /**
