@@ -66,7 +66,6 @@ final class MethodReflector
             return [];
         }
 
-
         $returnTypes = $this->resolveFirstMatchingTypeAndMethod($types, $method);
         if (! $returnTypes) {
             return [];

@@ -1,9 +1,9 @@
 <?php declare (strict_types=1);
 
 use App\Service\Anything;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Rector\Symfony\Tests\Rector\FrameworkBundle\Source\SymfonyController;
 
-class ClassWithNamedService extends Controller
+class ClassWithNamedService extends SymfonyController
 {
     public function render()
     {

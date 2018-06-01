@@ -35,6 +35,7 @@ final class GetParameterToConstructorInjectionRector extends AbstractRector
      * @var MethodCallAnalyzer
      */
     private $methodCallAnalyzer;
+
     /**
      * @var string
      */
@@ -97,11 +98,7 @@ CODE_SAMPLE
             return false;
         }
 
-        return $this->methodCallAnalyzer->isTypeAndMethod(
-            $node,
-            $this->controllerClass,
-            'getParameter'
-        );
+        return $this->methodCallAnalyzer->isTypeAndMethod($node, $this->controllerClass, 'getParameter');
     }
 
     /**

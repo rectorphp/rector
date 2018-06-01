@@ -49,6 +49,7 @@
             "Rector\\Symfony\\Tests\\": "packages/Symfony/tests"
         },
         "classmap": [
+            "packages/Symfony/tests",
             "tests/Rector/Contrib/Nette/Utils"
         ]
     },

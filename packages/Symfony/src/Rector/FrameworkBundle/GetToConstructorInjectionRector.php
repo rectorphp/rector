@@ -9,6 +9,16 @@ use Rector\RectorDefinition\RectorDefinition;
 
 final class GetToConstructorInjectionRector extends AbstractToConstructorInjectionRector
 {
+    /**
+     * @var string
+     */
+    private $controllerClass;
+
+    public function __construct(string $controllerClass = 'Symfony\Bundle\FrameworkBundle\Controller\Controller')
+    {
+        $this->controllerClass = $controllerClass;
+    }
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -51,10 +61,6 @@ CODE_SAMPLE
             return false;
         }
 
-        return $this->methodCallAnalyzer->isTypeAndMethod(
-            $node,
-            'Symfony\Bundle\FrameworkBundle\Controller\Controller',
-            'get'
-        );
+        return $this->methodCallAnalyzer->isTypeAndMethod($node, $this->controllerClass, 'get');
     }
 }
