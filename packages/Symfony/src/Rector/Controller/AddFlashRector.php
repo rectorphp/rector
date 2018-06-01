@@ -35,8 +35,25 @@ final class AddFlashRector extends AbstractRector
     {
         return new RectorDefinition('Turns long flash adding to short helper method in Controller in Symfony', [
             new CodeSample(
-                '$request->getSession()->getFlashBag()->add("success", "something");',
-                '$this->addflash("success", "something");'
+                <<<'CODE_SAMPLE'
+class SomeController extends Controller
+{
+    public function some(Request $request)
+    {
+        $request->getSession()->getFlashBag()->add("success", "something");
+    }
+}
+CODE_SAMPLE
+                ,
+                <<<'CODE_SAMPLE'
+class SomeController extends Controller
+{
+    public function some(Request $request)
+    {
+        $this->addFlash("success", "something");
+    }
+}
+CODE_SAMPLE
             ),
         ]);
     }

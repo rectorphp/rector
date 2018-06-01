@@ -3,8 +3,8 @@
 namespace Rector\Symfony\Tests\FrameworkBundle\GetToConstructorInjectionRector;
 
 use Rector\Exception\Configuration\InvalidConfigurationException;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Symfony\Tests\FrameworkBundle\AbstractToConstructorInjectionRectorSource\SomeNonKernelClass;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symfony\Component\HttpKernel\Kernel;
 
 /**
