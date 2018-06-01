@@ -20,18 +20,8 @@ final class StandaloneTraverseNodeTraverser
 
     public function addNodeVisitor(NodeVisitor $nodeVisitor): void
     {
-        $this->addNodeVisitors([$nodeVisitor]);
-    }
-
-    /**
-     * @param NodeVisitor[] $nodeVisitors
-     */
-    public function addNodeVisitors(array $nodeVisitors): void
-    {
         $nodeTraverser = new NodeTraverser();
-        foreach ($nodeVisitors as $nodeVisitor) {
-            $nodeTraverser->addVisitor($nodeVisitor);
-        }
+        $nodeTraverser->addVisitor($nodeVisitor);
 
         $this->nodeTraversers[] = $nodeTraverser;
     }
