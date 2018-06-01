@@ -52,7 +52,20 @@ final class NetteObjectToSmartTraitRector extends AbstractRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Checks all Nette\Object instances and turns parent class to trait', [
-            new CodeSample('class SomeClass extends \Nette\Object { } ', 'class SomeClass { use Nette\SmartObject; } '),
+            new CodeSample(
+                <<<'CODE_SAMPLE'
+class SomeClass extends Nette\Object
+{
+}
+CODE_SAMPLE
+                ,
+                <<<'CODE_SAMPLE'
+class SomeClass
+{
+    use Nette\SmartObject;
+}
+CODE_SAMPLE
+            ),
         ]);
     }
 
