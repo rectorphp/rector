@@ -8,7 +8,7 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 /**
  * @covers \Rector\Symfony\Rector\Controller\ActionSuffixRemoverRector
  */
-final class ActionSuffixRemoverRector extends AbstractRectorTestCase
+final class ActionSuffixRemoverRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()

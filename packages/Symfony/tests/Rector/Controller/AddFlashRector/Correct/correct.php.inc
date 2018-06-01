@@ -1,9 +1,9 @@
 <?php declare (strict_types=1);
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Rector\Symfony\Tests\Rector\Source\SymfonyController;
 use Symfony\Component\HttpFoundation\Request;
 
-class AppController extends Controller
+class AppController extends SymfonyController
 {
     public function someAction(Request $request)
     {

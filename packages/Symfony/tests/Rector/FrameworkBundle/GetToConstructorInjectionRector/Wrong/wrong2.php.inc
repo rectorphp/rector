@@ -1,7 +1,7 @@
 <?php declare (strict_types=1);
 
 use App\Service\Anything;
-use Rector\Symfony\Tests\Rector\FrameworkBundle\Source\SymfonyController;
+use Rector\Symfony\Tests\Rector\Source\SymfonyController;
 
 class ClassWithNamedService extends SymfonyController
 {
