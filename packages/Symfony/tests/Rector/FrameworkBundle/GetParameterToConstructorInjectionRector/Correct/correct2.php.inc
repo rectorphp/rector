@@ -2,9 +2,9 @@
 
 namespace SomeNamespace;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Rector\Symfony\Tests\Rector\FrameworkBundle\GetParameterToConstructorInjectionRector\Source\SymfonyController;
 
-class ClassWithNamedService3 extends Controller
+class ClassWithNamedService3 extends SymfonyController
 {
     /**
      * @var string

@@ -35,17 +35,23 @@ final class GetParameterToConstructorInjectionRector extends AbstractRector
      * @var MethodCallAnalyzer
      */
     private $methodCallAnalyzer;
+    /**
+     * @var string
+     */
+    private $controllerClass;
 
     public function __construct(
         PropertyNaming $propertyNaming,
         ClassPropertyCollector $classPropertyCollector,
         PropertyFetchNodeFactory $propertyFetchNodeFactory,
-        MethodCallAnalyzer $methodCallAnalyzer
+        MethodCallAnalyzer $methodCallAnalyzer,
+        string $controllerClass = 'Symfony\Bundle\FrameworkBundle\Controller\Controller'
     ) {
         $this->propertyNaming = $propertyNaming;
         $this->classPropertyCollector = $classPropertyCollector;
         $this->propertyFetchNodeFactory = $propertyFetchNodeFactory;
         $this->methodCallAnalyzer = $methodCallAnalyzer;
+        $this->controllerClass = $controllerClass;
     }
 
     public function getDefinition(): RectorDefinition
@@ -93,7 +99,7 @@ CODE_SAMPLE
 
         return $this->methodCallAnalyzer->isTypeAndMethod(
             $node,
-            'Symfony\Bundle\FrameworkBundle\Controller\Controller',
+            $this->controllerClass,
             'getParameter'
         );
     }

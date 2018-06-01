@@ -1,3 +1,3 @@
-
 services:
-    Rector\Symfony\Rector\FrameworkBundle\GetParameterToConstructorInjectionRector: ~
+    Rector\Symfony\Rector\FrameworkBundle\GetParameterToConstructorInjectionRector:
+        $controllerClass: 'Rector\Symfony\Tests\Rector\FrameworkBundle\GetParameterToConstructorInjectionRector\Source\SymfonyController'
