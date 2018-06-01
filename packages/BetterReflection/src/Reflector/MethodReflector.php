@@ -28,7 +28,7 @@ final class MethodReflector
             return null;
         }
 
-        return $classReflection->getImmediateMethods()[$method] ?? null;
+        return $classReflection->hasMethod($method) ? $classReflection->getMethod($method) : null;
     }
 
     /**
@@ -65,6 +65,7 @@ final class MethodReflector
         if (! count($types)) {
             return [];
         }
+
 
         $returnTypes = $this->resolveFirstMatchingTypeAndMethod($types, $method);
         if (! $returnTypes) {
