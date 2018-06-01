@@ -4,3 +4,4 @@ services:
 
     Rector\Symfony\:
         resource: '../'
+        exclude: '../{Rector/**/*Rector.php}'

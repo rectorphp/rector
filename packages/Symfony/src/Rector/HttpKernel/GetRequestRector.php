@@ -5,7 +5,6 @@ namespace Rector\Symfony\Rector\HttpKernel;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Symfony\Bridge\NodeAnalyzer\ControllerMethodAnalyzer;
 use Rector\Node\Attribute;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
@@ -13,6 +12,7 @@ use Rector\NodeTraverserQueue\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Rector\Symfony\Bridge\NodeAnalyzer\ControllerMethodAnalyzer;
 
 final class GetRequestRector extends AbstractRector
 {

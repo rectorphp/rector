@@ -3,8 +3,8 @@
 namespace Rector\Symfony\Bridge;
 
 use Rector\Bridge\Contract\AnalyzedApplicationContainerInterface;
-use Rector\Symfony\Bridge\DependencyInjection\ContainerFactory;
 use Rector\Configuration\Option;
+use Rector\Symfony\Bridge\DependencyInjection\ContainerFactory;
 use Symfony\Component\DependencyInjection\Container;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 

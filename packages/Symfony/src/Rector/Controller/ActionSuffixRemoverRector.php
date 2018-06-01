@@ -3,11 +3,11 @@
 namespace Rector\Symfony\Rector\Controller;
 
 use PhpParser\Node;
-use Rector\Symfony\Bridge\NodeAnalyzer\ControllerMethodAnalyzer;
 use Rector\Builder\IdentifierRenamer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Rector\Symfony\Bridge\NodeAnalyzer\ControllerMethodAnalyzer;
 
 final class ActionSuffixRemoverRector extends AbstractRector
 {

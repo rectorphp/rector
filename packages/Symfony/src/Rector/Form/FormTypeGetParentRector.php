@@ -7,9 +7,9 @@ use PhpParser\Node\Scalar\String_;
 use Rector\Node\Attribute;
 use Rector\Node\NodeFactory;
 use Rector\Rector\AbstractRector;
-use Rector\Symfony\Rector\Form\Helper\FormTypeStringToTypeProvider;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Rector\Symfony\Rector\Form\Helper\FormTypeStringToTypeProvider;
 
 final class FormTypeGetParentRector extends AbstractRector
 {
