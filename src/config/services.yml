@@ -11,7 +11,7 @@ services:
         public: true
 
     # extra services
-    Rector\Rector\Contrib\Symfony\Form\Helper\FormTypeStringToTypeProvider: ~
+    Rector\Symfony\Rector\Form\Helper\FormTypeStringToTypeProvider: ~
 
     # prepares helper attributes of nodes
     Rector\NodeTraverser\StandaloneTraverseNodeTraverser:

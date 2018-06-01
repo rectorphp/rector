@@ -1,4 +1,0 @@
-services:
-    Rector\Rector\Contrib\Symfony\Console\CommandToConstructorInjectionRector: ~
-
-    Rector\Tests\Rector\Contrib\Symfony\Console\CommandToConstructorInjectionRector\Source\DummyProvider: ~

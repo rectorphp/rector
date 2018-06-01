@@ -19,7 +19,7 @@ services:
                 position: 6
                 default_value: false
 
-    Rector\Rector\Contrib\Symfony\Console\ConsoleExceptionToErrorEventConstantRector: ~
+    Rector\Symfony\Rector\Console\ConsoleExceptionToErrorEventConstantRector: ~
 
     Rector\Rector\Dynamic\ClassReplacerRector:
         $oldToNewClasses:

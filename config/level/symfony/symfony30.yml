@@ -2,9 +2,9 @@
 # - https://github.com/symfony/symfony/blob/master/UPGRADE-3.0.md
 
 services:
-    Rector\Rector\Contrib\Symfony\HttpKernel\GetRequestRector: ~
-    Rector\Rector\Contrib\Symfony\Form\FormTypeGetParentRector: ~
-    Rector\Rector\Contrib\Symfony\Form\OptionNameRector: ~
+    Rector\Symfony\Rector\HttpKernel\GetRequestRector: ~
+    Rector\Symfony\Rector\Form\FormTypeGetParentRector: ~
+    Rector\Symfony\Rector\Form\OptionNameRector: ~
 
     # dynamic
 

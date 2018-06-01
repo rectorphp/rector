@@ -1,12 +1,12 @@
 services:
-    Rector\Rector\Contrib\Symfony\Validator\ConstraintUrlOptionRector: ~
-    Rector\Rector\Contrib\Symfony\Form\FormIsValidRector: ~
-    Rector\Rector\Contrib\Symfony\Form\StringFormTypeToClassRector: ~
-    Rector\Rector\Contrib\Symfony\VarDumper\VarDumperTestTraitMethodArgsRector: ~
-    Rector\Rector\Contrib\Symfony\DependencyInjection\ContainerBuilderCompileEnvArgumentRector: ~
+    Rector\Symfony\Rector\Validator\ConstraintUrlOptionRector: ~
+    Rector\Symfony\Rector\Form\FormIsValidRector: ~
+    Rector\Symfony\Rector\Form\StringFormTypeToClassRector: ~
+    Rector\Symfony\Rector\VarDumper\VarDumperTestTraitMethodArgsRector: ~
+    Rector\Symfony\Rector\DependencyInjection\ContainerBuilderCompileEnvArgumentRector: ~
 
-    Rector\Rector\Contrib\Symfony\Process\ProcessBuilderInstanceRector: ~
-    Rector\Rector\Contrib\Symfony\Process\ProcessBuilderGetProcessRector: ~
+    Rector\Symfony\Rector\Process\ProcessBuilderInstanceRector: ~
+    Rector\Symfony\Rector\Process\ProcessBuilderGetProcessRector: ~
 
     Rector\Rector\Dynamic\ClassReplacerRector:
         $oldToNewClasses:

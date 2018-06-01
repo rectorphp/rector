@@ -1,0 +1,3 @@
+
+services:
+    Rector\Symfony\Rector\FrameworkBundle\GetParameterToConstructorInjectionRector: ~
