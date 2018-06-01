@@ -28,6 +28,7 @@ final class RedirectToRouteRector extends AbstractRector
      * @var MethodCallNodeFactory
      */
     private $methodCallNodeFactory;
+
     /**
      * @var string
      */
