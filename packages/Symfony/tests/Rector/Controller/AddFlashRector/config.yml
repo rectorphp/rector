@@ -1,2 +1,3 @@
 services:
-    Rector\Symfony\Rector\Controller\AddFlashRector: ~
+    Rector\Symfony\Rector\Controller\AddFlashRector:
+        $controllerClass: 'Rector\Symfony\Tests\Rector\Source\SymfonyController'

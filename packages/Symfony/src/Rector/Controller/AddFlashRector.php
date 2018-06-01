@@ -23,12 +23,19 @@ final class AddFlashRector extends AbstractRector
      */
     private $chainMethodCallAnalyzer;
 
+    /**
+     * @var string
+     */
+    private $controllerClass;
+
     public function __construct(
         MethodCallNodeFactory $methodCallNodeFactory,
-        ChainMethodCallAnalyzer $chainMethodCallAnalyzer
+        ChainMethodCallAnalyzer $chainMethodCallAnalyzer,
+        string $controllerClass = 'Symfony\Bundle\FrameworkBundle\Controller\Controller'
     ) {
         $this->methodCallNodeFactory = $methodCallNodeFactory;
         $this->chainMethodCallAnalyzer = $chainMethodCallAnalyzer;
+        $this->controllerClass = $controllerClass;
     }
 
     public function getDefinition(): RectorDefinition
@@ -61,7 +68,7 @@ CODE_SAMPLE
     public function isCandidate(Node $node): bool
     {
         $parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
-        if ($parentClassName !== 'Symfony\Bundle\FrameworkBundle\Controller\Controller') {
+        if ($parentClassName !== $this->controllerClass) {
             return false;
         }
 
