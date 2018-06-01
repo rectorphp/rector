@@ -5,7 +5,7 @@ namespace Rector\Rector\Contrib\Symfony\HttpKernel;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Bridge\Symfony\NodeAnalyzer\ControllerMethodAnalyzer;
+use Rector\Symfony\Bridge\NodeAnalyzer\ControllerMethodAnalyzer;
 use Rector\Node\Attribute;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;

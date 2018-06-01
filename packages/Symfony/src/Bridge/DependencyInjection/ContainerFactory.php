@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Bridge\Symfony\DependencyInjection;
+namespace Rector\Symfony\Bridge\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\Container;

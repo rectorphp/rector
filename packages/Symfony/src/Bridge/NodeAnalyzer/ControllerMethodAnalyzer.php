@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Bridge\Symfony\NodeAnalyzer;
+namespace Rector\Symfony\Bridge\NodeAnalyzer;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;

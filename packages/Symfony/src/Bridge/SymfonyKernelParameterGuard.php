@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Bridge\Symfony;
+namespace Rector\Symfony\Bridge;
 
 use Rector\Configuration\Option;
 use Rector\Exception\Configuration\InvalidConfigurationException;

@@ -35,7 +35,8 @@
             "Rector\\ConsoleDiffer\\": "packages/ConsoleDiffer/src",
             "Rector\\BetterPhpDocParser\\": "packages/BetterPhpDocParser/src",
             "Rector\\NodeTypeResolver\\": "packages/NodeTypeResolver/src",
-            "Rector\\NodeTraverserQueue\\": "packages/NodeTraverserQueue/src"
+            "Rector\\NodeTraverserQueue\\": "packages/NodeTraverserQueue/src",
+            "Rector\\Symfony\\": "packages/Symfony/src"
         }
     },
     "autoload-dev": {

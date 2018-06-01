@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Bridge\Symfony;
+namespace Rector\Symfony\Bridge;
 
 use Rector\Bridge\Contract\AnalyzedApplicationContainerInterface;
-use Rector\Bridge\Symfony\DependencyInjection\ContainerFactory;
+use Rector\Symfony\Bridge\DependencyInjection\ContainerFactory;
 use Rector\Configuration\Option;
 use Symfony\Component\DependencyInjection\Container;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
