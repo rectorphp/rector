@@ -49,6 +49,7 @@ class SomeController
     }
 }
 CODE_SAMPLE
+            )
         ]);
     }
 
