@@ -112,7 +112,7 @@ abstract class AbstractClassLikeTypeResolver
 
         foreach ($traitUse->traits as $trait) {
             if ($trait->hasAttribute(Attribute::RESOLVED_NAME)) {
-                $usedTraits[] = (string)$trait->getAttribute(Attribute::RESOLVED_NAME);
+                $usedTraits[] = (string) $trait->getAttribute(Attribute::RESOLVED_NAME);
             }
         }
 
