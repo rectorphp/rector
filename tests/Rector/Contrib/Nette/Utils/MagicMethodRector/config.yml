@@ -1,4 +1,0 @@
-services:
-    Rector\Rector\Contrib\Nette\Utils\MagicMethodRector:
-        arguments:
-            $parentClass: 'Rector\Tests\Rector\Contrib\Nette\Utils\MagicMethodRector\Source\SomeObject'

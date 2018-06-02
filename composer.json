@@ -37,7 +37,8 @@
             "Rector\\NodeTypeResolver\\": "packages/NodeTypeResolver/src",
             "Rector\\NodeTraverserQueue\\": "packages/NodeTraverserQueue/src",
             "Rector\\Symfony\\": "packages/Symfony/src",
-            "Rector\\Sensio\\": "packages/Sensio/src"
+            "Rector\\Sensio\\": "packages/Sensio/src",
+            "Rector\\Nette\\": "packages/Nette/src"
         }
     },
     "autoload-dev": {
@@ -48,11 +49,11 @@
             "Rector\\NodeTypeResolver\\Tests\\": "packages/NodeTypeResolver/tests",
             "Rector\\NodeTraverserQueue\\Tests\\": "packages/NodeTraverserQueue/tests",
             "Rector\\Symfony\\Tests\\": "packages/Symfony/tests",
-            "Rector\\Sensio\\Tests\\": "packages/Sensio/tests"
+            "Rector\\Sensio\\Tests\\": "packages/Sensio/tests",
+            "Rector\\Nette\\Tests\\": "packages/Nette/tests"
         },
         "classmap": [
-            "packages/Symfony/tests",
-            "tests/Rector/Contrib/Nette/Utils"
+            "packages/Symfony/tests"
         ]
     },
     "scripts": {

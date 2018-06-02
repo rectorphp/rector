@@ -1,0 +1,3 @@
+services:
+    Rector\Nette\Rector\DI\ExpandFunctionToParametersArrayRector:
+        $compilerExtensionClass: 'Rector\Nette\Tests\Rector\DI\Source\NetteCompilerExtension'

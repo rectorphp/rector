@@ -1,20 +1,20 @@
 services:
-    Rector\Rector\Contrib\Nette\Utils\NetteObjectToSmartTraitRector: ~
-    Rector\Rector\Contrib\Nette\Utils\MagicMethodRector: ~
+    Rector\Nette\Rector\Utils\NetteObjectToSmartTraitRector: ~
+    Rector\Nette\Rector\Utils\MagicMethodRector: ~
 
     # application
-    Rector\Rector\Contrib\Nette\Application\TemplateMagicInvokeFilterCallRector: ~
-    Rector\Rector\Contrib\Nette\Application\TemplateRegisterHelperRector: ~
+    Rector\Nette\Rector\Application\TemplateMagicInvokeFilterCallRector: ~
+    Rector\Nette\Rector\Application\TemplateRegisterHelperRector: ~
 
     # di
-    Rector\Rector\Contrib\Nette\DI\SetEntityToStatementRector: ~
-    Rector\Rector\Contrib\Nette\DI\ExpandFunctionToParametersArrayRector: ~
-    Rector\Rector\Contrib\Nette\DI\ExpandFunctionToStaticExpandFunctionRector: ~
+    Rector\Nette\Rector\DI\SetEntityToStatementRector: ~
+    Rector\Nette\Rector\DI\ExpandFunctionToParametersArrayRector: ~
+    Rector\Nette\Rector\DI\ExpandFunctionToStaticExpandFunctionRector: ~
 
     # forms
-    Rector\Rector\Contrib\Nette\Forms\ChoiceDefaultValueRector: ~
-    Rector\Rector\Contrib\Nette\Forms\FormNegativeRulesRector: ~
-    Rector\Rector\Contrib\Nette\Forms\FormCallbackRector: ~
+    Rector\Nette\Rector\Forms\ChoiceDefaultValueRector: ~
+    Rector\Nette\Rector\Forms\FormNegativeRulesRector: ~
+    Rector\Nette\Rector\Forms\FormCallbackRector: ~
 
     Rector\Rector\MagicDisclosure\GetAndSetToMethodCallRector:
         $typeToMethodCalls:

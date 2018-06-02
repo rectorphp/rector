@@ -122,7 +122,7 @@ Do you need to upgrade to **Symfony 4.0**, for example?
 
     ```yml
     services:
-        Rector\Rector\Contrib\Nette\Application\InjectPropertyRector: ~
+        Rector\Nette\Rector\Application\InjectPropertyRector: ~
     ```
 
 2. Try Rector on your `/src` directory:
