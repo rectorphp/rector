@@ -718,7 +718,7 @@ Turns `createForSubjectWithReviewer()` with null review to standalone method in 
  }
 ```
 
-## Rector\Rector\Contrib\Symfony\FrameworkBundle\ContainerGetToConstructorInjectionRector
+## Rector\Symfony\Rector\FrameworkBundle\ContainerGetToConstructorInjectionRector
 
 Turns fetching of dependencies via `$container->get()` in ContainerAware to constructor injection in Command and Controller in Symfony
 
@@ -742,7 +742,7 @@ Turns fetching of dependencies via `$container->get()` in ContainerAware to cons
  }
 ```
 
-## Rector\Rector\Contrib\Symfony\FrameworkBundle\GetParameterToConstructorInjectionRector
+## Rector\Symfony\Rector\FrameworkBundle\GetParameterToConstructorInjectionRector
 
 Turns fetching of parameters via `getParameter()` in ContainerAware to constructor injection in Command and Controller in Symfony
 
@@ -765,7 +765,7 @@ Turns fetching of parameters via `getParameter()` in ContainerAware to construct
  }
 ```
 
-## Rector\Rector\Contrib\Symfony\FrameworkBundle\GetToConstructorInjectionRector
+## Rector\Symfony\Rector\FrameworkBundle\GetToConstructorInjectionRector
 
 Turns fetching of dependencies via `$this->get()` to constructor injection in Command and Controller in Symfony
 
@@ -787,7 +787,7 @@ Turns fetching of dependencies via `$this->get()` to constructor injection in Co
  }
 ```
 
-## Rector\Rector\Contrib\Symfony\Controller\RedirectToRouteRector
+## Rector\Symfony\Rector\Controller\RedirectToRouteRector
 
 Turns redirect to route to short helper method in Controller in Symfony
 
@@ -796,7 +796,7 @@ Turns redirect to route to short helper method in Controller in Symfony
 +$this->redirectToRoute("homepage");
 ```
 
-## Rector\Rector\Contrib\Symfony\Controller\AddFlashRector
+## Rector\Symfony\Rector\Controller\AddFlashRector
 
 Turns long flash adding to short helper method in Controller in Symfony
 
@@ -805,7 +805,7 @@ Turns long flash adding to short helper method in Controller in Symfony
 +$this->addflash("success", "something");
 ```
 
-## Rector\Rector\Contrib\Symfony\HttpKernel\GetRequestRector
+## Rector\Symfony\Rector\HttpKernel\GetRequestRector
 
 Turns fetching of dependencies via `$this->get()` to constructor injection in Command and Controller in Symfony
 
@@ -823,7 +823,7 @@ Turns fetching of dependencies via `$this->get()` to constructor injection in Co
  }
 ```
 
-## Rector\Rector\Contrib\Symfony\Form\FormTypeGetParentRector
+## Rector\Symfony\Rector\Form\FormTypeGetParentRector
 
 Turns string Form Type references to their CONSTANT alternatives in `getParent()` and `getExtendedType()` methods in Form in Symfony
 
@@ -835,7 +835,7 @@ Turns string Form Type references to their CONSTANT alternatives in `getParent()
 +function getExtendedType() { return CollectionType::class; }
 ```
 
-## Rector\Rector\Contrib\Symfony\Form\OptionNameRector
+## Rector\Symfony\Rector\Form\OptionNameRector
 
 Turns old option names to new ones in FormTypes in Form in Symfony
 
@@ -844,7 +844,7 @@ Turns old option names to new ones in FormTypes in Form in Symfony
 +$builder->add("...", ["scale" => "...", "inherit_data" => "..."];
 ```
 
-## Rector\Rector\Contrib\Symfony\Console\ConsoleExceptionToErrorEventConstantRector
+## Rector\Symfony\Rector\Console\ConsoleExceptionToErrorEventConstantRector
 
 Turns old event name with EXCEPTION to ERROR constant in Console in Symfony
 
@@ -856,7 +856,7 @@ Turns old event name with EXCEPTION to ERROR constant in Console in Symfony
 +Symfony\Component\Console\ConsoleEvents::ERROR
 ```
 
-## Rector\Rector\Contrib\Symfony\Validator\ConstraintUrlOptionRector
+## Rector\Symfony\Rector\Validator\ConstraintUrlOptionRector
 
 Turns true value to `Url::CHECK_DNS_TYPE_ANY` in Validator in Symfony.
 
@@ -865,7 +865,7 @@ Turns true value to `Url::CHECK_DNS_TYPE_ANY` in Validator in Symfony.
 +$constraint = new Url(["checkDNS" => Url::CHECK_DNS_TYPE_ANY]);
 ```
 
-## Rector\Rector\Contrib\Symfony\Form\FormIsValidRector
+## Rector\Symfony\Rector\Form\FormIsValidRector
 
 Adds `$form->isSubmitted()` validatoin to all `$form->isValid()` calls in Form in Symfony
 
@@ -874,7 +874,7 @@ Adds `$form->isSubmitted()` validatoin to all `$form->isValid()` calls in Form i
 +if ($form->isSubmitted() && $form->isValid()) { ... };
 ```
 
-## Rector\Rector\Contrib\Symfony\Form\StringFormTypeToClassRector
+## Rector\Symfony\Rector\Form\StringFormTypeToClassRector
 
 Turns string Form Type references to their CONSTANT alternatives in FormTypes in Form in Symfony
 
@@ -883,7 +883,7 @@ Turns string Form Type references to their CONSTANT alternatives in FormTypes in
 +$form->add("name", \Symfony\Component\Form\Extension\Core\Type\TextType::class);
 ```
 
-## Rector\Rector\Contrib\Symfony\VarDumper\VarDumperTestTraitMethodArgsRector
+## Rector\Symfony\Rector\VarDumper\VarDumperTestTraitMethodArgsRector
 
 Adds new `$format` argument in `VarDumperTestTrait->assertDumpEquals()` in Validator in Symfony.
 
@@ -895,7 +895,7 @@ Adds new `$format` argument in `VarDumperTestTrait->assertDumpEquals()` in Valid
 +VarDumperTestTrait->assertDumpMatchesFormat($dump, $format, $context = null,  $mesage = "");
 ```
 
-## Rector\Rector\Contrib\Symfony\DependencyInjection\ContainerBuilderCompileEnvArgumentRector
+## Rector\Symfony\Rector\DependencyInjection\ContainerBuilderCompileEnvArgumentRector
 
 Turns old default value to parameter in ContinerBuilder->build() method in DI in Symfony
 
@@ -904,7 +904,7 @@ Turns old default value to parameter in ContinerBuilder->build() method in DI in
 +$containerBuilder = new Symfony\Component\DependencyInjection\ContainerBuilder(); $containerBuilder->compile(true);
 ```
 
-## Rector\Rector\Contrib\Symfony\Process\ProcessBuilderInstanceRector
+## Rector\Symfony\Rector\Process\ProcessBuilderInstanceRector
 
 Turns `ProcessBuilder::instance()` to new ProcessBuilder in Process in Symfony. Part of multi-step Rector.
 
@@ -913,7 +913,7 @@ Turns `ProcessBuilder::instance()` to new ProcessBuilder in Process in Symfony. 
 +$processBuilder = new Symfony\Component\Process\ProcessBuilder($args);
 ```
 
-## Rector\Rector\Contrib\Symfony\Process\ProcessBuilderGetProcessRector
+## Rector\Symfony\Rector\Process\ProcessBuilderGetProcessRector
 
 Removes `$processBuilder->getProcess()` calls to $processBuilder in Process in Symfony, because ProcessBuilder was removed. This is part of multi-step Rector and has very narrow focus.
 

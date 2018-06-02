@@ -35,7 +35,8 @@
             "Rector\\ConsoleDiffer\\": "packages/ConsoleDiffer/src",
             "Rector\\BetterPhpDocParser\\": "packages/BetterPhpDocParser/src",
             "Rector\\NodeTypeResolver\\": "packages/NodeTypeResolver/src",
-            "Rector\\NodeTraverserQueue\\": "packages/NodeTraverserQueue/src"
+            "Rector\\NodeTraverserQueue\\": "packages/NodeTraverserQueue/src",
+            "Rector\\Symfony\\": "packages/Symfony/src"
         }
     },
     "autoload-dev": {
@@ -44,9 +45,11 @@
             "Rector\\BetterReflection\\Tests\\": "packages/BetterReflection/tests",
             "Rector\\BetterPhpDocParser\\Tests\\": "packages/BetterPhpDocParser/tests",
             "Rector\\NodeTypeResolver\\Tests\\": "packages/NodeTypeResolver/tests",
-            "Rector\\NodeTraverserQueue\\Tests\\": "packages/NodeTraverserQueue/tests"
+            "Rector\\NodeTraverserQueue\\Tests\\": "packages/NodeTraverserQueue/tests",
+            "Rector\\Symfony\\Tests\\": "packages/Symfony/tests"
         },
         "classmap": [
+            "packages/Symfony/tests",
             "tests/Rector/Contrib/Nette/Utils"
         ]
     },

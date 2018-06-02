@@ -4,8 +4,8 @@ Some Rectors like:
 
 ```yaml
 services:
-    Rector\Rector\Contrib\Symfony\Console\CommandToConstructorInjectionRector: ~
-    Rector\Rector\Contrib\Symfony\HttpKernel\GetterToPropertyRector: ~
+    Rector\Symfony\Rector\Console\CommandToConstructorInjectionRector: ~
+    Rector\Symfony\Rector\HttpKernel\GetterToPropertyRector: ~
 ```
 
 requires `Rector\Bridge\Contract\ServiceTypeForNameProviderInterface` service that provides **service type for certain service name**.

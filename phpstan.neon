@@ -11,7 +11,7 @@ parameters:
         - '#Property PhpParser\\Node\\Param::\$type \(PhpParser\\Node\\Name|PhpParser\\Node\\NullableType\|string\|null\) does not accept PhpParser\\Node\\Identifier|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType#' # 3
 
         # false positive
-        - '#Parameter \#1 \$kernelClass of method Rector\\Bridge\\Symfony\\SymfonyKernelParameterGuard::(ensureKernelClassExists|ensureIsKernelInstance)\(\) expects string, string\|null given#' # 2
+        - '#Parameter \#1 \$kernelClass of method Rector\\Symfony\\Bridge\\SymfonyKernelParameterGuard::(ensureKernelClassExists|ensureIsKernelInstance)\(\) expects string, string\|null given#' # 2
 
         # intentionally incorrect - part of the test
         - '#Parameter \#2 \$codeSamples of class Rector\\RectorDefinition\\RectorDefinition constructor expects array<Rector\\RectorDefinition\\CodeSample>, array<int, stdClass> given#' # 1

@@ -1,0 +1,12 @@
+parameters:
+    controller_class: '...'
+
+services:
+    _defaults:
+        autowire: true
+#        bind:
+#            $controllerClass: '%controller_class%'
+
+    Rector\Symfony\:
+        resource: '../'
+        exclude: '../{Rector/**/*Rector.php}'
