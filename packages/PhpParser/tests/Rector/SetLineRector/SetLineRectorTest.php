@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Contrib\PhpParser\SetLineRector;
+namespace Rector\PhpParser\Tests\Rector\SetLineRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
- * @covers \Rector\Rector\Contrib\PhpParser\SetLineRector
+ * @covers \Rector\PhpParser\Rector\SetLineRector
  */
 final class SetLineRectorTest extends AbstractRectorTestCase
 {

@@ -36,7 +36,7 @@ parameters:
     skip:
         Symplify\CodingStandard\Fixer\Php\ClassStringToClassConstantFixer:
             # classes might not exist
-            - '*/packages/*/Rector/*/*Rector.php'
+            - '*/packages/*/src/Rector/*Rector.php'
             - '*/src/Rector/Contrib/*/*Rector.php'
             - '*/packages/NodeTypeResolver/**/PerNodeTypeResolver/**TypeResolver.php'
             - '*/packages/NodeTypeResolver/**/PerNodeTypeResolver/**TypeResolver/*Test.php'

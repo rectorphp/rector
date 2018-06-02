@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Contrib\PhpParser\IdentifierRector;
+namespace Rector\PhpParser\Tests\Rector\IdentifierRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
- * @covers \Rector\Rector\Contrib\PhpParser\IdentifierRector
+ * @covers \Rector\PhpParser\Rector\IdentifierRector
  */
 final class IdentifierRectorTest extends AbstractRectorTestCase
 {

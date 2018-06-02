@@ -1,14 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Contrib\PhpParser\CatchAndClosureUseNameRector;
+namespace Rector\PhpParser\Tests\Rector\RemoveNodeRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
- * @covers \Rector\Rector\Contrib\PhpParser\CatchAndClosureUseNameRector
+ * @covers \Rector\PhpParser\Rector\RemoveNodeRector
  */
-final class CatchAndClosureUseNameRectorTest extends AbstractRectorTestCase
+final class RemoveNodeRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()
@@ -21,6 +21,7 @@ final class CatchAndClosureUseNameRectorTest extends AbstractRectorTestCase
     public function provideWrongToFixedFiles(): Iterator
     {
         yield [__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc'];
+        yield [__DIR__ . '/Wrong/wrong2.php.inc', __DIR__ . '/Correct/correct2.php.inc'];
     }
 
     protected function provideConfig(): string
