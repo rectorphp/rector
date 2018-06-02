@@ -78,21 +78,15 @@ abstract class AbstractClassLikeTypeResolver
      */
     protected function resolveUsedTraitTypes(ClassLike $classOrTraitNode): array
     {
-        $usedTraits = [];
-
         foreach ($classOrTraitNode->stmts as $stmt) {
             if (! $stmt instanceof TraitUse) {
                 continue;
             }
 
-            foreach ($stmt->traits as $trait) {
-                if ($trait->hasAttribute(Attribute::RESOLVED_NAME)) {
-                    $usedTraits[] = (string) $trait->getAttribute(Attribute::RESOLVED_NAME);
-                }
-            }
+            return $this->resolveTraitNamesFromTraitUse($stmt);
         }
 
-        return $usedTraits;
+        return [];
     }
 
     /**
@@ -107,5 +101,21 @@ abstract class AbstractClassLikeTypeResolver
 
             return $interface->toString();
         }, $classNode->implements);
+    }
+
+    /**
+     * @return string[]
+     */
+    private function resolveTraitNamesFromTraitUse(TraitUse $traitUse): array
+    {
+        $usedTraits = [];
+
+        foreach ($traitUse->traits as $trait) {
+            if ($trait->hasAttribute(Attribute::RESOLVED_NAME)) {
+                $usedTraits[] = (string)$trait->getAttribute(Attribute::RESOLVED_NAME);
+            }
+        }
+
+        return $usedTraits;
     }
 }
