@@ -119,7 +119,7 @@ Turns "$this->getRepository()" in Symfony Controller to constructor injection an
  }
 ```
 
-## Rector\Rector\Architecture\PHPUnit\ArrayToYieldDataProviderRector
+## Rector\PHPUnit\Rector\ArrayToYieldDataProviderRector
 
 Turns method data providers in PHPUnit from arrays to yield
 

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Rector\Architecture\PHPUnit;
+namespace Rector\PHPUnit\Rector;
 
 use Iterator;
 use Nette\Utils\Strings;
