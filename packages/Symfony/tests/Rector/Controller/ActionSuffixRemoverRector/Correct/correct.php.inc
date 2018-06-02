@@ -1,8 +1,8 @@
 <?php declare (strict_types=1);
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Rector\Symfony\Tests\Rector\Source\SymfonyController;
 
-class AppController extends Controller
+class AppController extends SymfonyController
 {
     public function index()
     {
