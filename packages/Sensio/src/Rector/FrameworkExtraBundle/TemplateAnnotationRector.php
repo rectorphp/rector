@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Rector\Contrib\Sensio\FrameworkExtraBundle;
+namespace Rector\Sensio\Rector\FrameworkExtraBundle;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
@@ -14,7 +14,7 @@ use Rector\Node\MethodCallNodeFactory;
 use Rector\Node\NodeFactory;
 use Rector\NodeTraverserQueue\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
-use Rector\Rector\Contrib\Sensio\Helper\TemplateGuesser;
+use Rector\Sensio\Helper\TemplateGuesser;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 

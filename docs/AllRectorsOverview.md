@@ -665,7 +665,7 @@ Takes `setExpectedException()` 2nd and next arguments to own methods in PHPUnit.
 +$someObject = new SomeNewNamespace\SomeClass;
 ```
 
-## Rector\Rector\Contrib\Sensio\FrameworkExtraBundle\TemplateAnnotationRector
+## Rector\Sensio\Rector\FrameworkExtraBundle\TemplateAnnotationRector
 
 Turns @Template annotation to explicit method call in Controller of FrameworkExtraBundle in Symfony
 

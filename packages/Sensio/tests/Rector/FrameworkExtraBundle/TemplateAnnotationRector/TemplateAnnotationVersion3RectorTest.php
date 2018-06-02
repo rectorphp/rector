@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Contrib\Sensio\FrameworkExtraBundle\TemplateAnnotationRector;
+namespace Rector\Sensio\Tests\Rector\Rector\FrameworkExtraBundle\TemplateAnnotationRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
- * @covers \Rector\Rector\Contrib\Sensio\FrameworkExtraBundle\TemplateAnnotationRector
+ * @covers \Rector\Sensio\Rector\FrameworkExtraBundle\TemplateAnnotationRector
  */
 final class TemplateAnnotationVersion3RectorTest extends AbstractRectorTestCase
 {
