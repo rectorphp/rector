@@ -28,6 +28,11 @@ abstract class AbstractRectorTestCase extends TestCase
     protected $parameterProvider;
 
     /**
+     * @var bool
+     */
+    protected $rebuildFreshContainer = false;
+
+    /**
      * @var FileGuard
      */
     private $fileGuard;
@@ -36,11 +41,6 @@ abstract class AbstractRectorTestCase extends TestCase
      * @var ContainerInterface[]
      */
     private static $containersPerConfig = [];
-
-    /**
-     * @var bool
-     */
-    protected $rebuildFreshContainer = false;
 
     protected function setUp(): void
     {
