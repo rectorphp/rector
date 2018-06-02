@@ -32,13 +32,25 @@ abstract class AbstractRectorTestCase extends TestCase
      */
     private $fileGuard;
 
+    /**
+     * @var ContainerInterface[]
+     */
+    private static $containersPerConfig = [];
+
     protected function setUp(): void
     {
         $config = $this->provideConfig();
         $this->fileGuard = new FileGuard();
         $this->fileGuard->ensureFileExists($config, get_called_class());
 
-        $this->container = (new ContainerFactory())->createWithConfig($config);
+        $key = md5_file($config);
+
+        if (isset(self::$containersPerConfig[$key])) {
+            $this->container = self::$containersPerConfig[$key];
+        } else {
+            self::$containersPerConfig[$key] = $this->container = (new ContainerFactory())->createWithConfig($config);
+        }
+
         $this->fileProcessor = $this->container->get(FileProcessor::class);
         $this->parameterProvider = $this->container->get(ParameterProvider::class);
     }
