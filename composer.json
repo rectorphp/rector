@@ -36,7 +36,8 @@
             "Rector\\BetterPhpDocParser\\": "packages/BetterPhpDocParser/src",
             "Rector\\NodeTypeResolver\\": "packages/NodeTypeResolver/src",
             "Rector\\NodeTraverserQueue\\": "packages/NodeTraverserQueue/src",
-            "Rector\\Symfony\\": "packages/Symfony/src"
+            "Rector\\Symfony\\": "packages/Symfony/src",
+            "Rector\\Sensio\\": "packages/Sensio/src"
         }
     },
     "autoload-dev": {
@@ -46,7 +47,8 @@
             "Rector\\BetterPhpDocParser\\Tests\\": "packages/BetterPhpDocParser/tests",
             "Rector\\NodeTypeResolver\\Tests\\": "packages/NodeTypeResolver/tests",
             "Rector\\NodeTraverserQueue\\Tests\\": "packages/NodeTraverserQueue/tests",
-            "Rector\\Symfony\\Tests\\": "packages/Symfony/tests"
+            "Rector\\Symfony\\Tests\\": "packages/Symfony/tests",
+            "Rector\\Sensio\\Tests\\": "packages/Sensio/tests"
         },
         "classmap": [
             "packages/Symfony/tests",
