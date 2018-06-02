@@ -1,14 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Contrib\PhpParser\ParamAndStaticVarNameRector;
+namespace Rector\PhpParser\Tests\Rector\UseWithAliasRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
- * @covers \Rector\Rector\Contrib\PhpParser\ParamAndStaticVarNameRector
+ * @covers \Rector\PhpParser\Rector\UseWithAliasRector
  */
-final class ParamAndStaticVarNameRectorTest extends AbstractRectorTestCase
+final class UseWithAliasRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()

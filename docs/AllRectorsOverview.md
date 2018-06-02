@@ -377,7 +377,7 @@ Turns magic callback assign to callback assign on Nette Form events.
 +$container->removeService("someKey");
 ```
 
-## Rector\Rector\Contrib\PhpParser\IdentifierRector
+## Rector\PhpParser\Rector\IdentifierRector
 
 Turns node string names to Identifier object in php-parser
 
@@ -387,7 +387,7 @@ Turns node string names to Identifier object in php-parser
 +$name = $constNode->name->toString();'
 ```
 
-## Rector\Rector\Contrib\PhpParser\ParamAndStaticVarNameRector
+## Rector\PhpParser\Rector\ParamAndStaticVarNameRector
 
 Turns old string `var` to `var->name` sub-variable in Node of PHP-Parser
 
@@ -399,7 +399,7 @@ Turns old string `var` to `var->name` sub-variable in Node of PHP-Parser
 +$staticVarNode->var->name;
 ```
 
-## Rector\Rector\Contrib\PhpParser\CatchAndClosureUseNameRector
+## Rector\PhpParser\Rector\CatchAndClosureUseNameRector
 
 Turns `$catchNode->var` to its new `name` property in php-parser
 
@@ -408,7 +408,7 @@ Turns `$catchNode->var` to its new `name` property in php-parser
 +$catchNode->var->name
 ```
 
-## Rector\Rector\Contrib\PhpParser\SetLineRector
+## Rector\PhpParser\Rector\SetLineRector
 
 Turns standalone line method to attribute in Node of PHP-Parser
 
@@ -417,7 +417,7 @@ Turns standalone line method to attribute in Node of PHP-Parser
 +$node->setAttribute("line", 5);
 ```
 
-## Rector\Rector\Contrib\PhpParser\RemoveNodeRector
+## Rector\PhpParser\Rector\RemoveNodeRector
 
 Turns integer return to remove node to constant in NodeVisitor of PHP-Parser
 
@@ -429,7 +429,7 @@ Turns integer return to remove node to constant in NodeVisitor of PHP-Parser
  }
 ```
 
-## Rector\Rector\Contrib\PhpParser\UseWithAliasRector
+## Rector\PhpParser\Rector\UseWithAliasRector
 
 Turns use property to method and `$node->alias` to last name in UseAlias Node of PHP-Parser
 

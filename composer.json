@@ -40,7 +40,8 @@
             "Rector\\Sensio\\": "packages/Sensio/src",
             "Rector\\Nette\\": "packages/Nette/src",
             "Rector\\Sylius\\": "packages/Sylius/src",
-            "Rector\\PHPUnit\\": "packages/PHPUnit/src"
+            "Rector\\PHPUnit\\": "packages/PHPUnit/src",
+            "Rector\\PhpParser\\": "packages/PhpParser/src"
         }
     },
     "autoload-dev": {
@@ -54,7 +55,8 @@
             "Rector\\Sensio\\Tests\\": "packages/Sensio/tests",
             "Rector\\Nette\\Tests\\": "packages/Nette/tests",
             "Rector\\Sylius\\Tests\\": "packages/Sylius/tests",
-            "Rector\\PHPUnit\\Tests\\": "packages/PHPUnit/tests"
+            "Rector\\PHPUnit\\Tests\\": "packages/PHPUnit/tests",
+            "Rector\\PhpParser\\Tests\\": "packages/PhpParser/tests"
         },
         "classmap": [
             "packages/Symfony/tests"
