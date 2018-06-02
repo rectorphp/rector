@@ -119,7 +119,11 @@ CODE_SAMPLE
 
     private function isInProvideMethod(ClassMethod $classMethodNode): bool
     {
-        return (bool) Strings::match($classMethodNode->name, '#^provide*#');
+        if (! $classMethodNode->isPublic()) {
+            return false;
+        }
+
+        return (bool) Strings::match($classMethodNode->name, '#^(provide|dataProvider)*#');
     }
 
     private function hasClassMethodReturnArrayOfArrays(ClassMethod $classMethodNode): bool
