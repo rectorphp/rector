@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Architecture\PHPUnit;
+namespace Rector\PHPUnit\Tests\Rector\ArrayToYieldDataProviderRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
- * @covers \Rector\Rector\Architecture\PHPUnit\ArrayToYieldDataProviderRector
+ * @covers \Rector\PHPUnit\Rector\ArrayToYieldDataProviderRector
  */
 final class ArrayToYieldDataProviderRectorTest extends AbstractRectorTestCase
 {

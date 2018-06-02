@@ -57,11 +57,6 @@ final class SmartClassReflector
             return null;
         }
 
-        // correct native class typos
-        if ($className === 'DomDocument') {
-            $className = 'DOMDocument';
-        }
-
         try {
             return $this->perClassNameClassReflections[$className] = $this->getClassReflector()->reflect($className);
         } catch (IdentifierNotFound $throwable) {

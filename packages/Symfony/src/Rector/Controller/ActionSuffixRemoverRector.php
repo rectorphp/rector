@@ -29,6 +29,31 @@ final class ActionSuffixRemoverRector extends AbstractRector
         $this->identifierRenamer = $identifierRenamer;
     }
 
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('Removes Action suffixes from methods in Symfony Controllers', [
+            new CodeSample(
+                <<<'CODE_SAMPLE'
+class SomeController
+{
+    public function indexAction()
+    {
+    }
+}
+CODE_SAMPLE
+                ,
+                <<<'CODE_SAMPLE'
+class SomeController
+{
+    public function index()
+    {
+    }
+}
+CODE_SAMPLE
+            ),
+        ]);
+    }
+
     public function isCandidate(Node $node): bool
     {
         return $this->controllerMethodAnalyzer->isAction($node);
@@ -39,12 +64,5 @@ final class ActionSuffixRemoverRector extends AbstractRector
         $this->identifierRenamer->removeSuffix($node, 'Action');
 
         return $node;
-    }
-
-    public function getDefinition(): RectorDefinition
-    {
-        return new RectorDefinition('Removes Action suffixes from methods in Symfony Controllers', [
-            new CodeSample('public function indexAction(){...}', 'public function index(){...}'),
-        ]);
     }
 }

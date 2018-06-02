@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Rector\Architecture\PHPUnit;
+namespace Rector\PHPUnit\Rector;
 
 use Iterator;
 use Nette\Utils\Strings;
@@ -94,17 +94,11 @@ CODE_SAMPLE
                 continue;
             }
 
-            /** @var Array_ $arrayNode */
-            $arrayNode = $stmt->expr;
-
-            foreach ($arrayNode->items as $arrayItem) {
-                $expressionNode = new Expression(new Yield_($arrayItem->value));
-                if ($arrayItem->getComments()) {
-                    $expressionNode->setAttribute(Attribute::COMMENTS, $arrayItem->getComments());
-                }
-
-                $yieldNodes[] = $expressionNode;
+            if (! $stmt->expr instanceof Array_) {
+                continue;
             }
+
+            $yieldNodes = $this->turnArrayToYieldNodes($stmt->expr);
 
             unset($classMethodNode->stmts[$key]);
         }
@@ -119,7 +113,11 @@ CODE_SAMPLE
 
     private function isInProvideMethod(ClassMethod $classMethodNode): bool
     {
-        return (bool) Strings::match($classMethodNode->name, '#^provide*#');
+        if (! $classMethodNode->isPublic()) {
+            return false;
+        }
+
+        return (bool) Strings::match($classMethodNode->name, '#^(provide|dataProvider)*#');
     }
 
     private function hasClassMethodReturnArrayOfArrays(ClassMethod $classMethodNode): bool
@@ -130,13 +128,15 @@ CODE_SAMPLE
         }
 
         foreach ($statements as $statement) {
-            if ($statement instanceof Return_) {
-                if (! $statement->expr instanceof Array_) {
-                    return false;
-                }
-
-                return $this->isArrayOfArrays($statement->expr);
+            if (! $statement instanceof Return_) {
+                continue;
             }
+
+            if (! $statement->expr instanceof Array_) {
+                return false;
+            }
+
+            return $this->isArrayOfArrays($statement->expr);
         }
 
         return false;
@@ -155,5 +155,24 @@ CODE_SAMPLE
         }
 
         return true;
+    }
+
+    /**
+     * @return Yield_[]
+     */
+    private function turnArrayToYieldNodes(Array_ $arrayNode): array
+    {
+        $yieldNodes = [];
+
+        foreach ($arrayNode->items as $arrayItem) {
+            $expressionNode = new Expression(new Yield_($arrayItem->value));
+            if ($arrayItem->getComments()) {
+                $expressionNode->setAttribute(Attribute::COMMENTS, $arrayItem->getComments());
+            }
+
+            $yieldNodes[] = $expressionNode;
+        }
+
+        return $yieldNodes;
     }
 }
