@@ -134,13 +134,15 @@ CODE_SAMPLE
         }
 
         foreach ($statements as $statement) {
-            if ($statement instanceof Return_) {
-                if (! $statement->expr instanceof Array_) {
-                    return false;
-                }
-
-                return $this->isArrayOfArrays($statement->expr);
+            if (! $statement instanceof Return_) {
+                continue;
             }
+
+            if (! $statement->expr instanceof Array_) {
+                return false;
+            }
+
+            return $this->isArrayOfArrays($statement->expr);
         }
 
         return false;
