@@ -159,19 +159,11 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractPHPUnitRector
             $oldArguments = $methodCallNode->args;
             unset($oldArguments[0]);
 
-            if (in_array($funcCallOrEmptyNodeName, ['in_array', 'array_search'], true)
-                && count($funcCallOrEmptyNodeArgs) === 3) {
-                unset($funcCallOrEmptyNodeArgs[2]);
-                $newArguments = array_merge($funcCallOrEmptyNodeArgs, $oldArguments);
-            } elseif ($funcCallOrEmptyNodeName === 'is_a') {
-                [$object, $class] = $funcCallOrEmptyNodeArgs;
-
-                $newArguments = array_merge([$class, $object], $oldArguments);
-            } else {
-                $newArguments = array_merge($funcCallOrEmptyNodeArgs, $oldArguments);
-            }
-
-            $methodCallNode->args = $newArguments;
+            $methodCallNode->args = $this->buildNewArguments(
+                $funcCallOrEmptyNodeName,
+                $funcCallOrEmptyNodeArgs,
+                $oldArguments
+            );
         }
 
         if ($funcCallOrEmptyNode instanceof Empty_) {
@@ -210,5 +202,31 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractPHPUnitRector
         }
 
         return $this->defaultOldToNewMethods;
+    }
+
+    /**
+     * @param mixed[] $funcCallOrEmptyNodeArgs
+     * @param mixed[] $oldArguments
+     * @return mixed[]
+     */
+    private function buildNewArguments(
+        string $funcCallOrEmptyNodeName,
+        array $funcCallOrEmptyNodeArgs,
+        array $oldArguments
+    ): array {
+        if (in_array($funcCallOrEmptyNodeName, ['in_array', 'array_search'], true)
+            && count($funcCallOrEmptyNodeArgs) === 3) {
+            unset($funcCallOrEmptyNodeArgs[2]);
+
+            return array_merge($funcCallOrEmptyNodeArgs, $oldArguments);
+        }
+
+        if ($funcCallOrEmptyNodeName === 'is_a') {
+            [$object, $class] = $funcCallOrEmptyNodeArgs;
+
+            return array_merge([$class, $object], $oldArguments);
+        }
+
+        return array_merge($funcCallOrEmptyNodeArgs, $oldArguments);
     }
 }
