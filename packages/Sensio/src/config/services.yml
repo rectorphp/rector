@@ -2,6 +2,6 @@ services:
     _defaults:
         autowire: true
 
-    Rector\Symfony\:
+    Rector\Sensio\:
         resource: '../'
         exclude: '../{Rector/**/*Rector.php}'

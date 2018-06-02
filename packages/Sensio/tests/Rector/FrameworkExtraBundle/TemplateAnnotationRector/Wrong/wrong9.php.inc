@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
-class AppController extends AbstractController
+use Rector\Sensio\Tests\Rector\FrameworkExtraBundle\TemplateAnnotationRector\Source\SymfonyController;
+
+class AppController extends SymfonyController
 {
     /**
      * @Template()
