@@ -24,23 +24,12 @@ final class StatementGlue
      */
     public function addAsFirstMethod(Class_ $classNode, Node $node): void
     {
-        foreach ($classNode->stmts as $key => $classElementNode) {
-            if ($classElementNode instanceof ClassMethod) {
-                $classNode->stmts = $this->insertBefore($classNode->stmts, $node, $key);
-
-                return;
-            }
+        if ($this->tryInsertBeforeFirstMethod($classNode, $node)) {
+            return;
         }
 
-        $previousElement = null;
-        foreach ($classNode->stmts as $key => $classElementNode) {
-            if ($previousElement instanceof Property && ! $classElementNode instanceof Property) {
-                $classNode->stmts = $this->insertBefore($classNode->stmts, $node, $key);
-
-                return;
-            }
-
-            $previousElement = $classElementNode;
+        if ($this->tryInsertAfterLastProperty($classNode, $node)) {
+            return;
         }
 
         $classNode->stmts[] = $node;
@@ -72,6 +61,35 @@ final class StatementGlue
         array_splice($nodes, $key, 0, [$node]);
 
         return $nodes;
+    }
+
+    private function tryInsertBeforeFirstMethod(Class_ $classNode, Node $node): bool
+    {
+        foreach ($classNode->stmts as $key => $classElementNode) {
+            if ($classElementNode instanceof ClassMethod) {
+                $classNode->stmts = $this->insertBefore($classNode->stmts, $node, $key);
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function tryInsertAfterLastProperty(Class_ $classNode, Node $node): bool
+    {
+        $previousElement = null;
+        foreach ($classNode->stmts as $key => $classElementNode) {
+            if ($previousElement instanceof Property && ! $classElementNode instanceof Property) {
+                $classNode->stmts = $this->insertBefore($classNode->stmts, $node, $key);
+
+                return true;
+            }
+
+            $previousElement = $classElementNode;
+        }
+
+        return false;
     }
 
     private function addStatementToClassBeforeTypes(Class_ $classNode, Node $node, string ...$types): void
