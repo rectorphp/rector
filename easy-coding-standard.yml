@@ -48,3 +48,7 @@ parameters:
         # empty arguments passing
         PHP_CodeSniffer\Standards\PEAR\Sniffs\Functions\ValidDefaultValueSniff.NotAtEnd:
             - 'packages/PHPUnit/src/Rector/SpecificMethod/AssertTrueFalseToSpecificMethodRector.php'
+
+        Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
+            # @todo needs refactoring to Broker pattern
+            - 'packages/BetterReflection/src/Reflector/SmartClassReflector.php'
