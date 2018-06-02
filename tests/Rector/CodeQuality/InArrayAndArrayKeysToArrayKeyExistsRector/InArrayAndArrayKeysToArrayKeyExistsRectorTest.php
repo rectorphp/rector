@@ -1,14 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Contrib\CodeQuality\UnnecessaryTernaryExpressionRector;
+namespace Rector\Tests\Rector\CodeQuality\InArrayAndArrayKeysToArrayKeyExistsRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
- * @covers \Rector\Rector\Contrib\CodeQuality\UnnecessaryTernaryExpressionRector
+ * @covers \Rector\Rector\CodeQuality\InArrayAndArrayKeysToArrayKeyExistsRector
  */
-final class UnnecessaryTernaryExpressionRectorTest extends AbstractRectorTestCase
+final class InArrayAndArrayKeysToArrayKeyExistsRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()

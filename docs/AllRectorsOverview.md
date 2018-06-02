@@ -170,7 +170,7 @@ Turns method data providers in PHPUnit from arrays to yield
 +$value = new SomeNewClass;
 ```
 
-## Rector\Rector\Contrib\CodeQuality\InArrayAndArrayKeysToArrayKeyExistsRector
+## Rector\Rector\CodeQuality\InArrayAndArrayKeysToArrayKeyExistsRector
 
 Simplify `in_array` and `array_keys` functions combination into `array_key_exists` when `array_keys` has one argument only
 
@@ -179,7 +179,7 @@ Simplify `in_array` and `array_keys` functions combination into `array_key_exist
 +array_key_exists("key", $array);
 ```
 
-## Rector\Rector\Contrib\CodeQuality\UnnecessaryTernaryExpressionRector
+## Rector\Rector\CodeQuality\UnnecessaryTernaryExpressionRector
 
 Remove unnecessary ternary expressions.
 
