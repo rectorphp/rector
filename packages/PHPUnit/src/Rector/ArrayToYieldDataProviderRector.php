@@ -94,17 +94,11 @@ CODE_SAMPLE
                 continue;
             }
 
-            /** @var Array_ $arrayNode */
-            $arrayNode = $stmt->expr;
-
-            foreach ($arrayNode->items as $arrayItem) {
-                $expressionNode = new Expression(new Yield_($arrayItem->value));
-                if ($arrayItem->getComments()) {
-                    $expressionNode->setAttribute(Attribute::COMMENTS, $arrayItem->getComments());
-                }
-
-                $yieldNodes[] = $expressionNode;
+            if (! $stmt->expr instanceof Array_) {
+                continue;
             }
+
+            $yieldNodes = $this->turnArrayToYieldNodes($stmt->expr);
 
             unset($classMethodNode->stmts[$key]);
         }
@@ -161,5 +155,24 @@ CODE_SAMPLE
         }
 
         return true;
+    }
+
+    /**
+     * @return Yield_[]
+     */
+    private function turnArrayToYieldNodes(Array_ $arrayNode): array
+    {
+        $yieldNodes = [];
+
+        foreach ($arrayNode->items as $arrayItem) {
+            $expressionNode = new Expression(new Yield_($arrayItem->value));
+            if ($arrayItem->getComments()) {
+                $expressionNode->setAttribute(Attribute::COMMENTS, $arrayItem->getComments());
+            }
+
+            $yieldNodes[] = $expressionNode;
+        }
+
+        return $yieldNodes;
     }
 }
