@@ -22,6 +22,7 @@
         "rector/composer-plugin": "@dev"
     },
     "require-dev": {
+        "composer/composer": "^1.6",
         "humbug/php-scoper": "dev-master",
         "phpstan/phpstan-shim": "^0.9",
         "phpunit/phpunit": "^7.1",
