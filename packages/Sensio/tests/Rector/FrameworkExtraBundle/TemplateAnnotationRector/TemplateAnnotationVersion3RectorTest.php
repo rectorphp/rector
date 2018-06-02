@@ -10,6 +10,13 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
  */
 final class TemplateAnnotationVersion3RectorTest extends AbstractRectorTestCase
 {
+    protected function setUp(): void
+    {
+        $this->rebuildFreshContainer = true;
+
+        parent::setUp();
+    }
+
     /**
      * @dataProvider provideWrongToFixedFiles()
      */
