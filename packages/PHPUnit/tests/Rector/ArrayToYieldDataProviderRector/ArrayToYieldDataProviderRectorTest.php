@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\PHPUnit\Tests\ArrayToYieldDataProviderRector;
+namespace Rector\PHPUnit\Tests\Rector\ArrayToYieldDataProviderRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
