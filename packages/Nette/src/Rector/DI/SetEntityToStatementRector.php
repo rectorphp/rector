@@ -36,8 +36,8 @@ final class SetEntityToStatementRector extends AbstractRector
     private $compilerExtensionClass;
 
     public function __construct(
-MethodCallAnalyzer $methodCallAnalyzer,
- NodeFactory $nodeFactory,
+        MethodCallAnalyzer $methodCallAnalyzer,
+        NodeFactory $nodeFactory,
         string $compilerExtensionClass = 'Nette\DI\CompilerExtension'
     ) {
         $this->methodCallAnalyzer = $methodCallAnalyzer;

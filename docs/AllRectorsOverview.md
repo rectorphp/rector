@@ -679,7 +679,7 @@ Turns @Template annotation to explicit method call in Controller of FrameworkExt
  }
 ```
 
-## Rector\Rector\Contrib\Sylius\Review\ReplaceCreateMethodWithoutReviewerRector
+## Rector\Sylius\Rector\Review\ReplaceCreateMethodWithoutReviewerRector
 
 Turns `createForSubjectWithReviewer()` with null review to standalone method in Sylius
 

@@ -1,7 +1,7 @@
 # source: https://github.com/Sylius/Sylius/blob/master/UPGRADE-1.0.md#upgrade-from-100-beta3-to-100
 
 services:
-    Rector\Rector\Contrib\Sylius\Review\ReplaceCreateMethodWithoutReviewerRector: ~
+    Rector\Sylius\Rector\Review\ReplaceCreateMethodWithoutReviewerRector: ~
 
     Rector\Rector\Dynamic\MethodNameReplacerRector:
             $perClassOldToNewMethods:
