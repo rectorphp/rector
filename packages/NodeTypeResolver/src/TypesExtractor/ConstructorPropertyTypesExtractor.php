@@ -68,18 +68,16 @@ final class ConstructorPropertyTypesExtractor
 
         $parametersWithTypes = [];
 
-        if ($constructorMethodReflection) {
-            foreach ($constructorMethodReflection->getParameters() as $parameterReflection) {
-                $parameterName = $parameterReflection->getName();
+        foreach ($constructorMethodReflection->getParameters() as $parameterReflection) {
+            $parameterName = $parameterReflection->getName();
 
-                $parameterType = (string) $parameterReflection->getType();
+            $parameterType = (string) $parameterReflection->getType();
 
-                if ($this->typeAnalyzer->isBuiltinType($parameterType)) {
-                    continue;
-                }
-
-                $parametersWithTypes[$parameterName] = [$parameterType];
+            if ($this->typeAnalyzer->isBuiltinType($parameterType)) {
+                continue;
             }
+
+            $parametersWithTypes[$parameterName] = [$parameterType];
         }
 
         return $parametersWithTypes;
