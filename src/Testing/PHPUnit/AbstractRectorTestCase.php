@@ -37,6 +37,11 @@ abstract class AbstractRectorTestCase extends TestCase
      */
     private static $containersPerConfig = [];
 
+    /**
+     * @var bool
+     */
+    protected $rebuildFreshContainer = false;
+
     protected function setUp(): void
     {
         $config = $this->provideConfig();
@@ -45,7 +50,7 @@ abstract class AbstractRectorTestCase extends TestCase
 
         $key = md5_file($config);
 
-        if (isset(self::$containersPerConfig[$key])) {
+        if (isset(self::$containersPerConfig[$key]) && $this->rebuildFreshContainer === false) {
             $this->container = self::$containersPerConfig[$key];
         } else {
             self::$containersPerConfig[$key] = $this->container = (new ContainerFactory())->createWithConfig($config);
