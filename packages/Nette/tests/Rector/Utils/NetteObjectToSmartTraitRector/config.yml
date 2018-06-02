@@ -1,0 +1,5 @@
+services:
+    Rector\Nette\Rector\Utils\NetteObjectToSmartTraitRector:
+        arguments:
+            $parentClass: 'Rector\Nette\Tests\Rector\Utils\NetteObjectToSmartTraitRector\Source\ParentObject'
+            $traitName: 'Rector\Nette\Tests\Rector\Utils\NetteObjectToSmartTraitRector\Source\SomeTrait'

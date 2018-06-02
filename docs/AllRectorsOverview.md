@@ -224,7 +224,7 @@ Remove unnecessary ternary expressions.
 +$this->render("...", []);
 ```
 
-## Rector\Rector\Contrib\Nette\Application\InjectPropertyRector
+## Rector\Nette\Rector\Application\InjectPropertyRector
 
 Turns properties with @inject to private properties and constructor injection
 
@@ -242,7 +242,7 @@ Turns properties with @inject to private properties and constructor injection
 +}
 ```
 
-## Rector\Rector\Contrib\Nette\Bootstrap\RemoveConfiguratorConstantsRector
+## Rector\Nette\Rector\Bootstrap\RemoveConfiguratorConstantsRector
 
 Turns properties with @inject to private properties and constructor injection
 
@@ -251,7 +251,7 @@ Turns properties with @inject to private properties and constructor injection
 +$value === "development"
 ```
 
-## Rector\Rector\Contrib\Nette\DI\SetInjectToAddTagRector
+## Rector\Nette\Rector\DI\SetInjectToAddTagRector
 
 Turns setInject() to tag in Nette\DI\CompilerExtension
 
@@ -260,7 +260,7 @@ Turns setInject() to tag in Nette\DI\CompilerExtension
 +$serviceDefinition->addTag("inject");
 ```
 
-## Rector\Rector\Contrib\Nette\Utils\NetteObjectToSmartTraitRector
+## Rector\Nette\Rector\Utils\NetteObjectToSmartTraitRector
 
 Checks all Nette\Object instances and turns parent class to trait
 
@@ -269,7 +269,7 @@ Checks all Nette\Object instances and turns parent class to trait
 +class SomeClass { use Nette\SmartObject; }
 ```
 
-## Rector\Rector\Contrib\Nette\Utils\MagicMethodRector
+## Rector\Nette\Rector\Utils\MagicMethodRector
 
 Catches @method annotations of Nette\Object instances and converts them to real methods.
 
@@ -278,7 +278,7 @@ Catches @method annotations of Nette\Object instances and converts them to real 
 +public function getId() { $this->id; }
 ```
 
-## Rector\Rector\Contrib\Nette\Application\TemplateMagicInvokeFilterCallRector
+## Rector\Nette\Rector\Application\TemplateMagicInvokeFilterCallRector
 
 Turns properties with @inject to private properties and constructor injection
 
@@ -287,7 +287,7 @@ Turns properties with @inject to private properties and constructor injection
 +$this->template->getLatte()->invokeFilter("someFilter", ...)
 ```
 
-## Rector\Rector\Contrib\Nette\Application\TemplateRegisterHelperRector
+## Rector\Nette\Rector\Application\TemplateRegisterHelperRector
 
 Turns properties with @inject to private properties and constructor injection
 
@@ -296,7 +296,7 @@ Turns properties with @inject to private properties and constructor injection
 +$this->template->getLatte()->addFilter("someFilter", ...)
 ```
 
-## Rector\Rector\Contrib\Nette\DI\SetEntityToStatementRector
+## Rector\Nette\Rector\DI\SetEntityToStatementRector
 
 Turns setDefinition() to Nette\DI\Helpers::expand() value in Nette\DI\CompilerExtension
 
@@ -305,7 +305,7 @@ Turns setDefinition() to Nette\DI\Helpers::expand() value in Nette\DI\CompilerEx
 +$definition = new Statement("someEntity", $definition->arguments);
 ```
 
-## Rector\Rector\Contrib\Nette\DI\ExpandFunctionToParametersArrayRector
+## Rector\Nette\Rector\DI\ExpandFunctionToParametersArrayRector
 
 Turns expand() to parameters value in Nette\DI\CompilerExtension
 
@@ -317,7 +317,7 @@ Turns expand() to parameters value in Nette\DI\CompilerExtension
 +$builder->parameters["argument"];
 ```
 
-## Rector\Rector\Contrib\Nette\DI\ExpandFunctionToStaticExpandFunctionRector
+## Rector\Nette\Rector\DI\ExpandFunctionToStaticExpandFunctionRector
 
 Turns expand() to Nette\DI\Helpers::expand() value in Nette\DI\CompilerExtension
 
@@ -326,7 +326,7 @@ Turns expand() to Nette\DI\Helpers::expand() value in Nette\DI\CompilerExtension
 +\Nette\DI\Helpers::expand(object|array, $builder->parameters);
 ```
 
-## Rector\Rector\Contrib\Nette\Forms\ChoiceDefaultValueRector
+## Rector\Nette\Rector\Forms\ChoiceDefaultValueRector
 
 Turns checkAllowedValues to method in Nette\Forms Control element
 
@@ -335,7 +335,7 @@ Turns checkAllowedValues to method in Nette\Forms Control element
 +$control->checkDefaultValue(false);
 ```
 
-## Rector\Rector\Contrib\Nette\Forms\FormNegativeRulesRector
+## Rector\Nette\Rector\Forms\FormNegativeRulesRector
 
 Turns negative Nette Form rules to their specific new names.
 
@@ -344,7 +344,7 @@ Turns negative Nette Form rules to their specific new names.
 +$form->addRule(Form::NOT_FILLED);
 ```
 
-## Rector\Rector\Contrib\Nette\Forms\FormCallbackRector
+## Rector\Nette\Rector\Forms\FormCallbackRector
 
 Turns magic callback assign to callback assign on Nette Form events.
 

@@ -1,5 +1,5 @@
 services:
-    Rector\Rector\Contrib\Nette\Application\InjectPropertyRector: ~
+    Rector\Nette\Rector\Application\InjectPropertyRector: ~
     Rector\Rector\Dynamic\ClassReplacerRector:
         $oldToNewClasses:
             'Nette\Config\Configurator': 'Nette\Configurator'
