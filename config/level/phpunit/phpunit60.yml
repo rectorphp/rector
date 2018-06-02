@@ -1,6 +1,6 @@
 services:
-    Rector\Rector\Contrib\PHPUnit\ExceptionAnnotationRector: ~
-    Rector\Rector\Contrib\PHPUnit\GetMockRector: ~
+    Rector\PHPUnit\Rector\ExceptionAnnotationRector: ~
+    Rector\PHPUnit\Rector\GetMockRector: ~
 
     # ref. https://github.com/sebastianbergmann/phpunit/compare/5.7.9...6.0.0
     Rector\Rector\Dynamic\PseudoNamespaceToNamespaceRector:
@@ -10,7 +10,7 @@ services:
             - '!PHPUnit_Framework_MockObject_MockObject'
 
     # handles 2nd and 3rd argument of setExpectedException
-    Rector\Rector\Contrib\PHPUnit\DelegateExceptionArgumentsRector: ~
+    Rector\PHPUnit\Rector\DelegateExceptionArgumentsRector: ~
 
     Rector\Rector\Dynamic\MethodNameReplacerRector:
         $perClassOldToNewMethods:
