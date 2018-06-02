@@ -51,7 +51,7 @@ E.g. in this case, first will be changed `@expectedException` annotation to meth
 ```yml
 # rector.yml
 services:
-    Rector\Rector\Contrib\PHPUnit\ExceptionAnnotationRector: ~
+    Rector\PHPUnit\Rector\ExceptionAnnotationRector: ~
 
     Rector\Rector\Dynamic\MethodNameReplacerRector:
         $perClassOldToNewMethods:

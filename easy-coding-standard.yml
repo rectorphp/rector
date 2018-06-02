@@ -45,4 +45,4 @@ parameters:
 
         # empty arguments passing
         PHP_CodeSniffer\Standards\PEAR\Sniffs\Functions\ValidDefaultValueSniff.NotAtEnd:
-            - 'src/Rector/Contrib/PHPUnit/SpecificMethod/AssertTrueFalseToSpecificMethodRector.php'
+            - 'packages/PHPUnit/src/Rector/SpecificMethod/AssertTrueFalseToSpecificMethodRector.php'

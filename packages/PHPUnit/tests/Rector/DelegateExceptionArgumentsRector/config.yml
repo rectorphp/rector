@@ -1,0 +1,2 @@
+services:
+    Rector\PHPUnit\Rector\DelegateExceptionArgumentsRector: ~

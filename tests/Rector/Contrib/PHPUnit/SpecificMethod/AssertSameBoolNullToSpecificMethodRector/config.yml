@@ -1,2 +1,0 @@
-services:
-    Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertSameBoolNullToSpecificMethodRector: ~

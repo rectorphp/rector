@@ -459,7 +459,7 @@ Turns use property to method and `$node->alias` to last name in UseAlias Node of
 +$value = SomeClass::NEW_CONSTANT;
 ```
 
-## Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertNotOperatorRector
+## Rector\PHPUnit\Rector\SpecificMethod\AssertNotOperatorRector
 
 Turns not-operator comparisons to their method name alternatives in PHPUnit TestCase
 
@@ -471,7 +471,7 @@ Turns not-operator comparisons to their method name alternatives in PHPUnit Test
 +$this->assertTrue($foo, "message");
 ```
 
-## Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertComparisonToSpecificMethodRector
+## Rector\PHPUnit\Rector\SpecificMethod\AssertComparisonToSpecificMethodRector
 
 Turns comparison operations to their method name alternatives in PHPUnit TestCase
 
@@ -483,7 +483,7 @@ Turns comparison operations to their method name alternatives in PHPUnit TestCas
 +$this->assertLessThanOrEqual($bar, $foo, "message");
 ```
 
-## Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertTrueFalseToSpecificMethodRector
+## Rector\PHPUnit\Rector\SpecificMethod\AssertTrueFalseToSpecificMethodRector
 
 Turns true/false comparisons to their method name alternatives in PHPUnit TestCase when possible
 
@@ -492,7 +492,7 @@ Turns true/false comparisons to their method name alternatives in PHPUnit TestCa
 +$this->assertIsReadable($readmeFile, "message");
 ```
 
-## Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertSameBoolNullToSpecificMethodRector
+## Rector\PHPUnit\Rector\SpecificMethod\AssertSameBoolNullToSpecificMethodRector
 
 Turns same bool and null comparisons to their method name alternatives in PHPUnit TestCase
 
@@ -504,7 +504,7 @@ Turns same bool and null comparisons to their method name alternatives in PHPUni
 +$this->assertNotFalse($anything);
 ```
 
-## Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertFalseStrposToContainsRector
+## Rector\PHPUnit\Rector\SpecificMethod\AssertFalseStrposToContainsRector
 
 Turns `strpos`/`stripos` comparisons to their method name alternatives in PHPUnit TestCase
 
@@ -516,7 +516,7 @@ Turns `strpos`/`stripos` comparisons to their method name alternatives in PHPUni
 +$this->assertContains("foo", $anything, "message");
 ```
 
-## Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertTrueFalseInternalTypeToSpecificMethodRector
+## Rector\PHPUnit\Rector\SpecificMethod\AssertTrueFalseInternalTypeToSpecificMethodRector
 
 Turns true/false with internal type comparisons to their method name alternatives in PHPUnit TestCase
 
@@ -528,7 +528,7 @@ Turns true/false with internal type comparisons to their method name alternative
 +$this->assertNotInternalType({internal_type}, $anything, "message");
 ```
 
-## Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertCompareToSpecificMethodRector
+## Rector\PHPUnit\Rector\SpecificMethod\AssertCompareToSpecificMethodRector
 
 Turns vague php-only method in PHPUnit TestCase to more specific
 
@@ -549,7 +549,7 @@ Turns vague php-only method in PHPUnit TestCase to more specific
 +$this->assertNot{function}($value, $anything, "message")
 ```
 
-## Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertIssetToSpecificMethodRector
+## Rector\PHPUnit\Rector\SpecificMethod\AssertIssetToSpecificMethodRector
 
 Turns isset comparisons to their method name alternatives in PHPUnit TestCase
 
@@ -561,7 +561,7 @@ Turns isset comparisons to their method name alternatives in PHPUnit TestCase
 +$this->assertArrayNotHasKey("foo", $anything, "message");
 ```
 
-## Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertInstanceOfComparisonRector
+## Rector\PHPUnit\Rector\SpecificMethod\AssertInstanceOfComparisonRector
 
 Turns instanceof comparisons to their method name alternatives in PHPUnit TestCase
 
@@ -573,7 +573,7 @@ Turns instanceof comparisons to their method name alternatives in PHPUnit TestCa
 +$this->assertNotInstanceOf("Foo", $foo, "message");
 ```
 
-## Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertPropertyExistsRector
+## Rector\PHPUnit\Rector\SpecificMethod\AssertPropertyExistsRector
 
 Turns `property_exists` comparisons to their method name alternatives in PHPUnit TestCase
 
@@ -585,7 +585,7 @@ Turns `property_exists` comparisons to their method name alternatives in PHPUnit
 +$this->assertClassNotHasAttribute("property", "Class", "message");
 ```
 
-## Rector\Rector\Contrib\PHPUnit\SpecificMethod\AssertRegExpRector
+## Rector\PHPUnit\Rector\SpecificMethod\AssertRegExpRector
 
 Turns `preg_match` comparisons to their method name alternatives in PHPUnit TestCase
 
@@ -597,7 +597,7 @@ Turns `preg_match` comparisons to their method name alternatives in PHPUnit Test
 +$this->assertNotRegExp("/^Message for ".*"\.$/", $string, $message);
 ```
 
-## Rector\Rector\Contrib\PHPUnit\ExceptionAnnotationRector
+## Rector\PHPUnit\Rector\ExceptionAnnotationRector
 
 Takes `setExpectedException()` 2nd and next arguments to own methods in PHPUnit.
 
@@ -614,7 +614,7 @@ Takes `setExpectedException()` 2nd and next arguments to own methods in PHPUnit.
  }
 ```
 
-## Rector\Rector\Contrib\PHPUnit\GetMockRector
+## Rector\PHPUnit\Rector\GetMockRector
 
 Turns getMock*() methods to createMock()
 
@@ -635,7 +635,7 @@ Turns getMock*() methods to createMock()
 +$someServie = Some\Object;
 ```
 
-## Rector\Rector\Contrib\PHPUnit\DelegateExceptionArgumentsRector
+## Rector\PHPUnit\Rector\DelegateExceptionArgumentsRector
 
 Takes `setExpectedException()` 2nd and next arguments to own methods in PHPUnit.
 
