@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Rector\Contrib\Doctrine;
+namespace Rector\Doctrine\Rector;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
