@@ -1,0 +1,20 @@
+{
+    "name": "rector/composer-plugin",
+    "description": "Rector plugin to composer, that takes care of BC break updates.",
+    "type": "composer-plugin",
+    "require": {
+        "php": "^7.1",
+        "composer-plugin-api": "^1.0"
+    },
+    "require-dev": {
+        "composer/composer": "^1.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Rector\\ComposerPlugin\\": "src"
+        }
+    },
+    "extra": {
+        "class": "Rector\\ComposerPlugin\\Plugin"
+    }
+}
