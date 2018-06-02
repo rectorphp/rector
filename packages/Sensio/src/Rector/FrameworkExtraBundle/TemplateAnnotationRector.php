@@ -14,9 +14,9 @@ use Rector\Node\MethodCallNodeFactory;
 use Rector\Node\NodeFactory;
 use Rector\NodeTraverserQueue\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
-use Rector\Sensio\Helper\TemplateGuesser;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Rector\Sensio\Helper\TemplateGuesser;
 
 final class TemplateAnnotationRector extends AbstractRector
 {

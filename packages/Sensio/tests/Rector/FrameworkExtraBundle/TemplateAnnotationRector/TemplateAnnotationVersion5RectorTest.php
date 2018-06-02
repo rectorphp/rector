@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Sensio\Tests\Rector\Rector\FrameworkExtraBundle\TemplateAnnotationRector;
+namespace Rector\Sensio\Tests\Rector\FrameworkExtraBundle\TemplateAnnotationRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
