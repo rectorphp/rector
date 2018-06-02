@@ -4,10 +4,7 @@
     "type": "composer-plugin",
     "require": {
         "php": "^7.1",
-        "composer-plugin-api": "^1.0"
-    },
-    "require-dev": {
-        "composer/composer": "^1.6"
+        "composer-plugin-api": "^1.1"
     },
     "autoload": {
         "psr-4": {
