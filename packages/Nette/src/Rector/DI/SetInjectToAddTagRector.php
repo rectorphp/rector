@@ -42,6 +42,7 @@ final class SetInjectToAddTagRector extends AbstractRector
      * @var string[]
      */
     private $newArguments = ['inject'];
+
     /**
      * @var string
      */
