@@ -38,7 +38,8 @@
             "Rector\\NodeTraverserQueue\\": "packages/NodeTraverserQueue/src",
             "Rector\\Symfony\\": "packages/Symfony/src",
             "Rector\\Sensio\\": "packages/Sensio/src",
-            "Rector\\Nette\\": "packages/Nette/src"
+            "Rector\\Nette\\": "packages/Nette/src",
+            "Rector\\Sylius\\": "packages/Sylius/src"
         }
     },
     "autoload-dev": {
@@ -50,7 +51,8 @@
             "Rector\\NodeTraverserQueue\\Tests\\": "packages/NodeTraverserQueue/tests",
             "Rector\\Symfony\\Tests\\": "packages/Symfony/tests",
             "Rector\\Sensio\\Tests\\": "packages/Sensio/tests",
-            "Rector\\Nette\\Tests\\": "packages/Nette/tests"
+            "Rector\\Nette\\Tests\\": "packages/Nette/tests",
+            "Rector\\Sylius\\Tests\\": "packages/Sylius/tests"
         },
         "classmap": [
             "packages/Symfony/tests"

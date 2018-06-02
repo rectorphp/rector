@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Contrib\Sylius\Review;
+namespace Rector\Sylius\Tests\Rector\Review;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
- * @covers \Rector\Rector\Contrib\Sylius\Review\ReplaceCreateMethodWithoutReviewerRector
+ * @covers \Rector\Sylius\Rector\Review\ReplaceCreateMethodWithoutReviewerRector
  */
 final class ReplaceCreateMethodWithoutReviewerRectorTest extends AbstractRectorTestCase
 {

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Rector\Contrib\Sylius\Review;
+namespace Rector\Sylius\Rector\Review;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
