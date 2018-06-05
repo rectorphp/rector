@@ -6,4 +6,5 @@
 /build
 composer.lock
 
-/demo
+/demo/app/cache
+/demo/app/logs
