@@ -5,3 +5,6 @@
 /vendor
 /build
 composer.lock
+
+/demo/app/cache
+/demo/app/logs
