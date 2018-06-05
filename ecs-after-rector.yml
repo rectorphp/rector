@@ -1,4 +1,4 @@
-checkers:
+services:
     # remove unused "use" statements
     PhpCsFixer\Fixer\Import\NoUnusedImportsFixer: ~
 
