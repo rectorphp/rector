@@ -1,0 +1,4 @@
+services:
+    some_service:
+        class: App\SomeService
+        public: true
