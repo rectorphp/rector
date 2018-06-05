@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-use Symfony\Component\HttpKernel\Tests\Controller\AbstractController;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-final class SomeController extends AbstractController
+final class SomeController extends Controller
 {
     public function demo()
     {

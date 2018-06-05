@@ -3,9 +3,9 @@
 namespace App;
 
 use Symfony\Component\Config\Loader\LoaderInterface;
-use Symfony\Component\HttpKernel\Bundle\BundleInterface;
+use Symfony\Component\HttpKernel\Kernel as SymfonyKernel;
 
-final class Kernel extends \Symfony\Component\HttpKernel\Kernel
+final class Kernel extends SymfonyKernel
 {
     public function registerBundles(): array
     {
