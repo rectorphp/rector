@@ -62,7 +62,8 @@
         },
         "classmap": [
             "packages",
-            "tests"
+            "tests",
+            "demo"
         ]
     },
     "scripts": {
