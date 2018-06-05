@@ -47,9 +47,7 @@ final class StatementGlue
     public function insertBeforeAndFollowWithNewline(array $nodes, Node $node, int $key): array
     {
         $nodes = $this->insertBefore($nodes, $node, $key);
-        $nodes = $this->insertBefore($nodes, new Nop(), $key);
-
-        return $nodes;
+        return $this->insertBefore($nodes, new Nop(), $key);
     }
 
     /**

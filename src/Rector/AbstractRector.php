@@ -82,8 +82,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements RectorInter
     public function afterTraverse(array $nodes): array
     {
         $nodes = $this->expressionAdder->addExpressionsToNodes($nodes);
-        $nodes = $this->propertyAdder->addPropertiesToNodes($nodes);
-        return $nodes;
+        return $this->propertyAdder->addPropertiesToNodes($nodes);
     }
 
     protected function addNodeAfterNode(Expr $newNode, Node $positionNode): void

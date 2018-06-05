@@ -31,8 +31,6 @@ final class ClassTypeResolver extends AbstractClassLikeTypeResolver implements P
 
         $types = array_merge($types, $this->resolveExtendsTypes($classNode, $className));
         $types = array_merge($types, $this->resolveImplementsTypes($classNode));
-        $types = array_merge($types, $this->resolveUsedTraitTypes($classNode));
-
-        return $types;
+        return array_merge($types, $this->resolveUsedTraitTypes($classNode));
     }
 }

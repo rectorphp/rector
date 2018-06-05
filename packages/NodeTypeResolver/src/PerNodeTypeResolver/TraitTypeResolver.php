@@ -23,8 +23,6 @@ final class TraitTypeResolver extends AbstractClassLikeTypeResolver implements P
     public function resolve(Node $traitNode): array
     {
         $types[] = $this->resolveNameNode($traitNode);
-        $types = array_merge($types, $this->resolveUsedTraitTypes($traitNode));
-
-        return $types;
+        return array_merge($types, $this->resolveUsedTraitTypes($traitNode));
     }
 }
