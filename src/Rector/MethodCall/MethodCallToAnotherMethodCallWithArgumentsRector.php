@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Nette\Rector\DI;
+namespace Rector\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
@@ -72,13 +72,14 @@ final class MethodCallToAnotherMethodCallWithArgumentsRector extends AbstractRec
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Turns old method call with specfici type to new one with arguments', [
-            new CodeSample(<<<'CODE_SAMPLE'
+            new CodeSample(
+                <<<'CODE_SAMPLE'
 $serviceDefinition = new Nette\DI\ServiceDefinition;
 $serviceDefinition->setInject();
 $END
 CODE_SAMPLE
-            ,
-            <<<'CODE_SAMPLE'
+                ,
+                <<<'CODE_SAMPLE'
 $serviceDefinition = new Nette\DI\ServiceDefinition;
 $serviceDefinition->addTag('inject');
 CODE_SAMPLE

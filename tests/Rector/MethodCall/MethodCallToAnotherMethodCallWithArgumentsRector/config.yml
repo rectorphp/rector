@@ -1,3 +1,3 @@
 services:
-    Rector\Nette\Rector\DI\MethodCallToAnotherMethodCallWithArgumentsRector:
+    Rector\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector:
         $serviceDefinitionClass: 'Rector\Nette\Tests\Rector\DI\SetInjectToAddTagRector\Source\NetteServiceDefinition'

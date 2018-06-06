@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Nette\Tests\Rector\DI\MethodCallToAnotherMethodCallWithArgumentsRector;
+namespace Rector\Tests\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
