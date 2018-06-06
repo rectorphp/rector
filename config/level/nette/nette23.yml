@@ -1,3 +1,0 @@
-services:
-    Rector\Nette\Rector\Bootstrap\RemoveConfiguratorConstantsRector: ~
-    Rector\Nette\Rector\DI\SetInjectToAddTagRector: ~

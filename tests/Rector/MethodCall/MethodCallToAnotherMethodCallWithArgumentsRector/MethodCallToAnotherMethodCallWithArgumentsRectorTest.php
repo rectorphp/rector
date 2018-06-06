@@ -1,14 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Nette\Tests\Rector\DI\SetInjectToAddTagRector;
+namespace Rector\Tests\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
- * @covers \Rector\Nette\Rector\DI\SetInjectToAddTagRector
+ * @covers \Rector\Nette\Rector\DI\MethodCallToAnotherMethodCallWithArgumentsRector
  */
-final class SetInjectToAddTagRectorTest extends AbstractRectorTestCase
+final class MethodCallToAnotherMethodCallWithArgumentsRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()
