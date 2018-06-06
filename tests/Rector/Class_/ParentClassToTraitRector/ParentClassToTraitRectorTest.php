@@ -1,14 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Nette\Tests\Rector\Utils\NetteObjectToSmartTraitRector;
+namespace Rector\Tests\Rector\Class_\ParentClassToTraitRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
- * @covers \Rector\Nette\Rector\Utils\NetteObjectToSmartTraitRector
+ * @covers \Rector\Nette\Rector\Utils\ParentClassToTraitRector
  */
-final class NetteObjectToSmartTraitRectorTest extends AbstractRectorTestCase
+final class ParentClassToTraitRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Nette\Rector\Utils;
+namespace Rector\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
@@ -13,9 +13,11 @@ use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 /**
- * Covers https://doc.nette.org/en/2.4/migration-2-4#toc-nette-smartobject.
+ * Can handle cases like:
+ * - https://doc.nette.org/en/2.4/migration-2-4#toc-nette-smartobject
+ * - @todo Controller/AbstractConstroller to ControllerTrait in Symfony
  */
-final class NetteObjectToSmartTraitRector extends AbstractRector
+final class ParentClassToTraitRector extends AbstractRector
 {
     /**
      * @var StatementGlue
@@ -51,7 +53,7 @@ final class NetteObjectToSmartTraitRector extends AbstractRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Checks all Nette\Object instances and turns parent class to trait', [
+        return new RectorDefinition('Replaces parent class to specific trait', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass extends Nette\Object
