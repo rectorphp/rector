@@ -6,7 +6,7 @@ use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
- * @covers \Rector\Nette\Rector\DI\MethodCallToAnotherMethodCallWithArgumentsRector
+ * @covers \Rector\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector
  */
 final class MethodCallToAnotherMethodCallWithArgumentsRectorTest extends AbstractRectorTestCase
 {
