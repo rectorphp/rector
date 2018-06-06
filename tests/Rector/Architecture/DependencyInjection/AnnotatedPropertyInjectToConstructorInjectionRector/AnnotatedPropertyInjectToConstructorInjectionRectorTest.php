@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Nette\Tests\Rector\Application\AnnotatedPropertyInjectToConstructorInjectionRector;
+namespace Rector\Tests\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

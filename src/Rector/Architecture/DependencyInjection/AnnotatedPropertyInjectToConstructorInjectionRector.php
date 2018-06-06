@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Nette\Rector\Application;
+namespace Rector\Rector\Architecture\DependencyInjection;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
@@ -79,15 +79,15 @@ final class AnnotatedPropertyInjectToConstructorInjectionRector extends Abstract
             [
                 new CodeSample(
                     sprintf(
-                    <<<'CODE_SAMPLE'
+                        <<<'CODE_SAMPLE'
 /**
  * @var SomeService
  * @%s 
  */
 public $someService;
 CODE_SAMPLE
-                ,
-                    $this->annotation
+                        ,
+                        $this->annotation
                     ),
                     <<<'CODE_SAMPLE'
 /**
