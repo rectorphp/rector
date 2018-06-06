@@ -1,14 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Nette\Tests\Rector\Application\InjectPropertyRector;
+namespace Rector\Nette\Tests\Rector\Application\AnnotatedPropertyInjectToConstructorInjectionRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
- * @covers \Rector\Nette\Rector\Application\InjectPropertyRector
+ * @covers \Rector\Nette\Rector\Application\AnnotatedPropertyInjectToConstructorInjectionRector
  */
-final class InjectPropertyRectorTest extends AbstractRectorTestCase
+final class AnnotatedPropertyInjectToConstructorInjectionRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()

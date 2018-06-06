@@ -15,7 +15,7 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
-final class InjectPropertyRector extends AbstractRector
+final class AnnotatedPropertyInjectToConstructorInjectionRector extends AbstractRector
 {
     /**
      * @var ClassPropertyCollector
