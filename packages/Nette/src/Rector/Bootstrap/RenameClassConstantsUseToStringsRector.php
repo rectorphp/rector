@@ -5,7 +5,6 @@ namespace Rector\Nette\Rector\Bootstrap;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use Rector\Node\Attribute;
 use Rector\Node\NodeFactory;
@@ -13,17 +12,12 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
-final class RemoveConfiguratorConstantsRector extends AbstractRector
+final class RenameClassConstantsUseToStringsRector extends AbstractRector
 {
     /**
      * @var NodeFactory
      */
     private $nodeFactory;
-
-    /**
-     * @var string
-     */
-    private $oldClassConstant;
 
     /**
      * @var string
@@ -43,7 +37,7 @@ final class RemoveConfiguratorConstantsRector extends AbstractRector
         string $class = 'Nette\Configurator',
         array $oldConstantToNewValue = [
             'DEVELOPMENT' => 'development',
-            'PRODUCTION' => 'production'
+            'PRODUCTION' => 'production',
         ]
     ) {
         $this->nodeFactory = $nodeFactory;
