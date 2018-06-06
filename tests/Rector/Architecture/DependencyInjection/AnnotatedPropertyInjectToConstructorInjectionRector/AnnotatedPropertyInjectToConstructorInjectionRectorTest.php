@@ -6,7 +6,7 @@ use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
- * @covers \Rector\Nette\Rector\Application\AnnotatedPropertyInjectToConstructorInjectionRector
+ * @covers \Rector\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector
  */
 final class AnnotatedPropertyInjectToConstructorInjectionRectorTest extends AbstractRectorTestCase
 {
