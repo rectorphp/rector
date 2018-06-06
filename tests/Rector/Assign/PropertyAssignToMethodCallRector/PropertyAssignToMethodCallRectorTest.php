@@ -1,14 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Nette\Tests\Rector\Forms\ChoiceDefaultValueRector;
+namespace Rector\Tests\Rector\Assign\PropertyAssignToMethodCallRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
- * @covers \Rector\Nette\Rector\Forms\ChoiceDefaultValueRector
+ * @covers \Rector\Rector\Assign\PropertyAssignToMethodCallRector
  */
-final class ChoiceDefaultValueRectorTest extends AbstractRectorTestCase
+final class PropertyAssignToMethodCallRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Nette\Rector\Forms;
+namespace Rector\Rector\Assign;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
@@ -12,7 +12,7 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
-final class ChoiceDefaultValueRector extends AbstractRector
+final class PropertyAssignToMethodCallRector extends AbstractRector
 {
     /**
      * @var PropertyFetchAnalyzer
@@ -24,18 +24,42 @@ final class ChoiceDefaultValueRector extends AbstractRector
      */
     private $methodCallNodeFactory;
 
+    /**
+     * @var string[]
+     */
+    private $types;
+
+    /**
+     * @var string
+     */
+    private $oldPropertyName;
+
+    /**
+     * @var string
+     */
+    private $newMethodName;
+
+    /**
+     * @param string[]
+     */
     public function __construct(
         PropertyFetchAnalyzer $propertyFetchAnalyzer,
-        MethodCallNodeFactory $methodCallNodeFactory
+        MethodCallNodeFactory $methodCallNodeFactory,
+        array $types = ['Nette\Forms\Controls\MultiChoiceControl', 'Nette\Forms\Controls\ChoiceControl'],
+        string $oldPropertyName = 'checkAllowedValues',
+        string $newMethodName = 'checkDefaultValue'
     ) {
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
         $this->methodCallNodeFactory = $methodCallNodeFactory;
+        $this->types = $types;
+        $this->oldPropertyName = $oldPropertyName;
+        $this->newMethodName = $newMethodName;
     }
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Turns checkAllowedValues to method in Nette\Forms Control element', [
-            new CodeSample('$control->checkAllowedValues = false;', '$control->checkDefaultValue(false);'),
+        return new RectorDefinition('Turns property assign of specific type and property name to method call', [
+            new CodeSample('$control->oldProperty = false;', '$control->newMethodCall(false);'),
         ]);
     }
 
@@ -47,8 +71,8 @@ final class ChoiceDefaultValueRector extends AbstractRector
 
         return $this->propertyFetchAnalyzer->isTypesAndProperty(
             $node->var,
-            ['Nette\Forms\Controls\MultiChoiceControl', 'Nette\Forms\Controls\ChoiceControl'],
-            'checkAllowedValues'
+            $this->types,
+            $this->oldPropertyName
         );
     }
 
@@ -65,7 +89,7 @@ final class ChoiceDefaultValueRector extends AbstractRector
 
         return $this->methodCallNodeFactory->createWithVariableMethodNameAndArguments(
             $propertyNode,
-            'checkDefaultValue',
+            $this->newMethodName,
             [$assignNode->expr]
         );
     }
