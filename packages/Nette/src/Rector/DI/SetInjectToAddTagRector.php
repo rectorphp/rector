@@ -31,39 +31,63 @@ final class SetInjectToAddTagRector extends AbstractRector
     /**
      * @var string
      */
-    private $oldMethod = 'setInject';
+    private $oldMethod;
 
     /**
      * @var string
      */
-    private $newMethod = 'addTag';
+    private $newMethod;
 
     /**
      * @var string[]
      */
-    private $newArguments = ['inject'];
+    private $newArguments;
 
     /**
      * @var string
      */
     private $serviceDefinitionClass;
 
+    /**
+     * @var string
+     */
+    private $newMethodArgument;
+
+    /**
+     * @param string[] $newMethodArguments
+     */
     public function __construct(
         MethodCallAnalyzer $methodCallAnalyzer,
         IdentifierRenamer $identifierRenamer,
         NodeFactory $nodeFactory,
-        string $serviceDefinitionClass = 'Nette\DI\ServiceDefinition'
+        string $serviceDefinitionClass = 'Nette\DI\ServiceDefinition',
+        string $oldMethod = 'setInject',
+        string $newMethod = 'addTag',
+        array $newMethodArguments = ['inject']
     ) {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
         $this->nodeFactory = $nodeFactory;
         $this->serviceDefinitionClass = $serviceDefinitionClass;
+        $this->oldMethod = $oldMethod;
+        $this->newMethod = $newMethod;
+        $this->newMethodArgument = $newMethodArguments;
     }
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Turns setInject() to tag in Nette\DI\CompilerExtension', [
-            new CodeSample('$serviceDefinition->setInject();', '$serviceDefinition->addTag("inject");'),
+        return new RectorDefinition('Turns old method call with specfici type to new one with arguments', [
+            new CodeSample(<<<'CODE_SAMPLE'
+$serviceDefinition = new Nette\DI\ServiceDefinition;
+$serviceDefinition->setInject();
+$END
+CODE_SAMPLE
+            ,
+            <<<'CODE_SAMPLE'
+$serviceDefinition = new Nette\DI\ServiceDefinition;
+$serviceDefinition->addTag('inject');
+CODE_SAMPLE
+            ),
         ]);
     }
 
