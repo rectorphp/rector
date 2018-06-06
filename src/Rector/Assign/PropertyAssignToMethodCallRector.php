@@ -27,7 +27,7 @@ final class PropertyAssignToMethodCallRector extends AbstractRector
     /**
      * @var string[]
      */
-    private $types;
+    private $types = [];
 
     /**
      * @var string
@@ -40,7 +40,7 @@ final class PropertyAssignToMethodCallRector extends AbstractRector
     private $newMethodName;
 
     /**
-     * @param string[]
+     * @param string[] $types
      */
     public function __construct(
         PropertyFetchAnalyzer $propertyFetchAnalyzer,
@@ -69,11 +69,7 @@ final class PropertyAssignToMethodCallRector extends AbstractRector
             return false;
         }
 
-        return $this->propertyFetchAnalyzer->isTypesAndProperty(
-            $node->var,
-            $this->types,
-            $this->oldPropertyName
-        );
+        return $this->propertyFetchAnalyzer->isTypesAndProperty($node->var, $this->types, $this->oldPropertyName);
     }
 
     /**

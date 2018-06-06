@@ -63,7 +63,10 @@ final class GetAndSetToMethodCallRector extends AbstractRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('[Dynamic] Turns defined `__get`/`__set` to specific method calls.', [
-            new CodeSample('$someService = $container->someService;', '$someService = $container->getService("someService");'),
+            new CodeSample(
+                '$someService = $container->someService;',
+                '$someService = $container->getService("someService");'
+            ),
             new CodeSample(
                 '$container->someService = $someService;',
                 '$container->setService("someService", $someService);'
