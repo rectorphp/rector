@@ -1,14 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Nette\Tests\Rector\Application\InjectPropertyRector;
+namespace Rector\Tests\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
- * @covers \Rector\Nette\Rector\Application\InjectPropertyRector
+ * @covers \Rector\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector
  */
-final class InjectPropertyRectorTest extends AbstractRectorTestCase
+final class ConfiguredWithAutowiredTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()
@@ -20,11 +20,11 @@ final class InjectPropertyRectorTest extends AbstractRectorTestCase
 
     public function provideWrongToFixedFiles(): Iterator
     {
-        yield [__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc'];
+        yield [__DIR__ . '/Wrong/wrong2.php.inc', __DIR__ . '/Correct/correct2.php.inc'];
     }
 
     protected function provideConfig(): string
     {
-        return __DIR__ . '/config.yml';
+        return __DIR__ . '/config-with-autowired.yml';
     }
 }

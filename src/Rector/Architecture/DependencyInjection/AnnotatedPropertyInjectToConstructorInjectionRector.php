@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Nette\Rector\Application;
+namespace Rector\Rector\Architecture\DependencyInjection;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
@@ -15,7 +15,13 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
-final class InjectPropertyRector extends AbstractRector
+/**
+ * Can cover these cases:
+ * - https://doc.nette.org/en/2.4/di-usage#toc-inject-annotations
+ * - https://github.com/Kdyby/Autowired/blob/master/docs/en/index.md#autowired-properties
+ * - http://jmsyst.com/bundles/JMSDiExtraBundle/master/annotations
+ */
+final class AnnotatedPropertyInjectToConstructorInjectionRector extends AbstractRector
 {
     /**
      * @var ClassPropertyCollector
@@ -32,14 +38,21 @@ final class InjectPropertyRector extends AbstractRector
      */
     private $nodeTypeResolver;
 
+    /**
+     * @var string
+     */
+    private $annotation;
+
     public function __construct(
         ClassPropertyCollector $classPropertyCollector,
         DocBlockAnalyzer $docBlockAnalyzer,
-        NodeTypeResolver $nodeTypeResolver
+        NodeTypeResolver $nodeTypeResolver,
+        string $annotation = 'inject'
     ) {
         $this->classPropertyCollector = $classPropertyCollector;
         $this->docBlockAnalyzer = $docBlockAnalyzer;
         $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->annotation = $annotation;
     }
 
     public function isCandidate(Node $node): bool
@@ -48,7 +61,11 @@ final class InjectPropertyRector extends AbstractRector
             return false;
         }
 
-        return $this->docBlockAnalyzer->hasTag($node, 'inject');
+        if ($node->isPrivate()) {
+            return false;
+        }
+
+        return $this->docBlockAnalyzer->hasTag($node, $this->annotation);
     }
 
     /**
@@ -56,7 +73,7 @@ final class InjectPropertyRector extends AbstractRector
      */
     public function refactor(Node $propertyNode): Node
     {
-        $this->docBlockAnalyzer->removeTagFromNode($propertyNode, 'inject');
+        $this->docBlockAnalyzer->removeTagFromNode($propertyNode, $this->annotation);
 
         $propertyNode->flags = Class_::MODIFIER_PRIVATE;
 
@@ -67,17 +84,19 @@ final class InjectPropertyRector extends AbstractRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Turns properties with @inject to private properties and constructor injection', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RectorDefinition(
+            'Turns non-private properties with @annotation to private properties and constructor injection',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 /**
  * @var SomeService
- * @inject 
+ * @annotation
  */
 public $someService;
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 /**
  * @var SomeService
  */
@@ -88,8 +107,9 @@ public function __construct(SomeService $someService)
     $this->someService = $someService;
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+            ]
+        );
     }
 
     private function addPropertyToCollector(Property $propertyNode): void
