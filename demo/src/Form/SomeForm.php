@@ -2,11 +2,13 @@
 
 namespace App\Form;
 
+use Symfony\Component\Form\FormBuilder;
+
 final class SomeForm
 {
     public function build()
     {
-        $formBuilder = new \Symfony\Component\Form\FormBuilder;
+        $formBuilder = new FormBuilder;
         $formBuilder->add('task', 'form.type.text');
 
         // not just a string, but specific type
