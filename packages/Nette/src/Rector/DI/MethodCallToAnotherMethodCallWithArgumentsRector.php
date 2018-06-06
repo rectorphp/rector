@@ -11,7 +11,7 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
-final class SetInjectToAddTagRector extends AbstractRector
+final class MethodCallToAnotherMethodCallWithArgumentsRector extends AbstractRector
 {
     /**
      * @var MethodCallAnalyzer
@@ -39,19 +39,14 @@ final class SetInjectToAddTagRector extends AbstractRector
     private $newMethod;
 
     /**
-     * @var string[]
-     */
-    private $newArguments;
-
-    /**
      * @var string
      */
     private $serviceDefinitionClass;
 
     /**
-     * @var string
+     * @var string[]
      */
-    private $newMethodArgument;
+    private $newMethodArguments = [];
 
     /**
      * @param string[] $newMethodArguments
@@ -71,7 +66,7 @@ final class SetInjectToAddTagRector extends AbstractRector
         $this->serviceDefinitionClass = $serviceDefinitionClass;
         $this->oldMethod = $oldMethod;
         $this->newMethod = $newMethod;
-        $this->newMethodArgument = $newMethodArguments;
+        $this->newMethodArguments = $newMethodArguments;
     }
 
     public function getDefinition(): RectorDefinition
@@ -106,7 +101,7 @@ CODE_SAMPLE
     public function refactor(Node $methodCallNode): ?Node
     {
         $this->identifierRenamer->renameNode($methodCallNode, $this->newMethod);
-        $methodCallNode->args = $this->nodeFactory->createArgs($this->newArguments);
+        $methodCallNode->args = $this->nodeFactory->createArgs($this->newMethodArguments);
 
         return $methodCallNode;
     }
