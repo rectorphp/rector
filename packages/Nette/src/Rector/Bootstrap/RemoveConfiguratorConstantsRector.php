@@ -20,14 +20,40 @@ final class RemoveConfiguratorConstantsRector extends AbstractRector
      */
     private $nodeFactory;
 
-    public function __construct(NodeFactory $nodeFactory)
-    {
+    /**
+     * @var string
+     */
+    private $oldClassConstant;
+
+    /**
+     * @var string
+     */
+    private $class;
+
+    /**
+     * @var string[]
+     */
+    private $oldConstantToNewValue = [];
+
+    /**
+     * @param string[] $oldConstantToNewValue
+     */
+    public function __construct(
+        NodeFactory $nodeFactory,
+        string $class = 'Nette\Configurator',
+        array $oldConstantToNewValue = [
+            'DEVELOPMENT' => 'development',
+            'PRODUCTION' => 'production'
+        ]
+    ) {
         $this->nodeFactory = $nodeFactory;
+        $this->class = $class;
+        $this->oldConstantToNewValue = $oldConstantToNewValue;
     }
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Turns properties with @inject to private properties and constructor injection', [
+        return new RectorDefinition('Replaces constant by value', [
             new CodeSample('$value === Nette\Configurator::DEVELOPMENT', '$value === "development"'),
         ]);
     }
@@ -40,11 +66,11 @@ final class RemoveConfiguratorConstantsRector extends AbstractRector
 
         $className = $this->getClassNameFromClassConstFetch($node);
 
-        if ($className !== 'Nette\Configurator') {
+        if ($className !== $this->class) {
             return false;
         }
 
-        return in_array((string) $node->name, ['DEVELOPMENT', 'PRODUCTION'], true);
+        return in_array((string) $node->name, array_keys($this->oldConstantToNewValue), true);
     }
 
     /**
@@ -52,12 +78,9 @@ final class RemoveConfiguratorConstantsRector extends AbstractRector
      */
     public function refactor(Node $classConstFetchNode): ?Node
     {
-        /** @var Identifier $constantName */
-        $constantName = $classConstFetchNode->name;
+        $newValue = $this->oldConstantToNewValue[$classConstFetchNode->name->toString()];
 
-        $originalConstantValue = $constantName->toLowerString();
-
-        return $this->nodeFactory->createString($originalConstantValue);
+        return $this->nodeFactory->createString($newValue);
     }
 
     private function getClassNameFromClassConstFetch(ClassConstFetch $classConstFetchNode): string
