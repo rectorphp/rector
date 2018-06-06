@@ -15,6 +15,12 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * Can cover these cases:
+ * - https://doc.nette.org/en/2.4/di-usage#toc-inject-annotations
+ * - https://github.com/Kdyby/Autowired/blob/master/docs/en/index.md#autowired-properties
+ * - http://jmsyst.com/bundles/JMSDiExtraBundle/master/annotations
+ */
 final class AnnotatedPropertyInjectToConstructorInjectionRector extends AbstractRector
 {
     /**
@@ -55,6 +61,10 @@ final class AnnotatedPropertyInjectToConstructorInjectionRector extends Abstract
             return false;
         }
 
+        if ($node->isPrivate()) {
+            return false;
+        }
+
         return $this->docBlockAnalyzer->hasTag($node, $this->annotation);
     }
 
@@ -75,20 +85,17 @@ final class AnnotatedPropertyInjectToConstructorInjectionRector extends Abstract
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
-            'Turns public properties with ' . $this->annotation . ' to private properties and constructor injection',
+            'Turns public properties with @annotation to private properties and constructor injection',
             [
                 new CodeSample(
-                    sprintf(
-                        <<<'CODE_SAMPLE'
+                    <<<'CODE_SAMPLE'
 /**
  * @var SomeService
- * @%s 
+ * @annotation
  */
 public $someService;
 CODE_SAMPLE
-                        ,
-                        $this->annotation
-                    ),
+                    ,
                     <<<'CODE_SAMPLE'
 /**
  * @var SomeService
