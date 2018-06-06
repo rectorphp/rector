@@ -1,14 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Nette\Tests\Rector\Bootstrap\RemoveConfiguratorConstantsRector;
+namespace Rector\Tests\Rector\Constant\RenameClassConstantsUseToStringsRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
- * @covers \Rector\Nette\Rector\Bootstrap\RemoveConfiguratorConstantsRector
+ * @covers \Rector\Rector\Constant\RenameClassConstantsUseToStringsRector
  */
-final class RemoveConfiguratorConstantsRectorTest extends AbstractRectorTestCase
+final class RenameClassConstantsUseToStringsRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()

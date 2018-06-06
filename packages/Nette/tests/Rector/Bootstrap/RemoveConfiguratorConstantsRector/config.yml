@@ -1,2 +1,0 @@
-services:
-    Rector\Nette\Rector\Bootstrap\RemoveConfiguratorConstantsRector: ~
