@@ -85,7 +85,7 @@ final class AnnotatedPropertyInjectToConstructorInjectionRector extends Abstract
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
-            'Turns public properties with @annotation to private properties and constructor injection',
+            'Turns non-private properties with @annotation to private properties and constructor injection',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
