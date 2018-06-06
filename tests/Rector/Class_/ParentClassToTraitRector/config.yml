@@ -1,0 +1,5 @@
+services:
+    Rector\Rector\Class_\ParentClassToTraitRector:
+        arguments:
+            $parentClass: 'Rector\Tests\Rector\Class_\ParentClassToTraitRector\Source\ParentObject'
+            $traitName: 'Rector\Tests\Rector\Class_\ParentClassToTraitRector\Source\SomeTrait'

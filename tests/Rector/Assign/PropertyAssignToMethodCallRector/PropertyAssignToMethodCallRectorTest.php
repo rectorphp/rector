@@ -1,14 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector;
+namespace Rector\Tests\Rector\Assign\PropertyAssignToMethodCallRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
- * @covers \Rector\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector
+ * @covers \Rector\Rector\Assign\PropertyAssignToMethodCallRector
  */
-final class MethodCallToAnotherMethodCallWithArgumentsRectorTest extends AbstractRectorTestCase
+final class PropertyAssignToMethodCallRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()
@@ -21,6 +21,7 @@ final class MethodCallToAnotherMethodCallWithArgumentsRectorTest extends Abstrac
     public function provideWrongToFixedFiles(): Iterator
     {
         yield [__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc'];
+        yield [__DIR__ . '/Wrong/wrong2.php.inc', __DIR__ . '/Correct/correct2.php.inc'];
     }
 
     protected function provideConfig(): string

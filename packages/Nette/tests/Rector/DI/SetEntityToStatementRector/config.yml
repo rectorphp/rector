@@ -1,3 +1,0 @@
-services:
-    Rector\Nette\Rector\DI\SetEntityToStatementRector:
-        $compilerExtensionClass: 'Rector\Nette\Tests\Rector\DI\Source\NetteCompilerExtension'
