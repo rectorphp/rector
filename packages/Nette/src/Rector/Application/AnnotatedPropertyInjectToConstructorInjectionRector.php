@@ -32,14 +32,21 @@ final class AnnotatedPropertyInjectToConstructorInjectionRector extends Abstract
      */
     private $nodeTypeResolver;
 
+    /**
+     * @var string
+     */
+    private $annotation;
+
     public function __construct(
         ClassPropertyCollector $classPropertyCollector,
         DocBlockAnalyzer $docBlockAnalyzer,
-        NodeTypeResolver $nodeTypeResolver
+        NodeTypeResolver $nodeTypeResolver,
+        string $annotation = 'inject'
     ) {
         $this->classPropertyCollector = $classPropertyCollector;
         $this->docBlockAnalyzer = $docBlockAnalyzer;
         $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->annotation = $annotation;
     }
 
     public function isCandidate(Node $node): bool
@@ -48,7 +55,7 @@ final class AnnotatedPropertyInjectToConstructorInjectionRector extends Abstract
             return false;
         }
 
-        return $this->docBlockAnalyzer->hasTag($node, 'inject');
+        return $this->docBlockAnalyzer->hasTag($node, $this->annotation);
     }
 
     /**
@@ -56,7 +63,7 @@ final class AnnotatedPropertyInjectToConstructorInjectionRector extends Abstract
      */
     public function refactor(Node $propertyNode): Node
     {
-        $this->docBlockAnalyzer->removeTagFromNode($propertyNode, 'inject');
+        $this->docBlockAnalyzer->removeTagFromNode($propertyNode, $this->annotation);
 
         $propertyNode->flags = Class_::MODIFIER_PRIVATE;
 
@@ -67,17 +74,22 @@ final class AnnotatedPropertyInjectToConstructorInjectionRector extends Abstract
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Turns properties with @inject to private properties and constructor injection', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RectorDefinition(
+            'Turns public properties with ' . $this->annotation . ' to private properties and constructor injection',
+            [
+                new CodeSample(
+                    sprintf(
+                    <<<'CODE_SAMPLE'
 /**
  * @var SomeService
- * @inject 
+ * @%s 
  */
 public $someService;
 CODE_SAMPLE
                 ,
-                <<<'CODE_SAMPLE'
+                    $this->annotation
+                    ),
+                    <<<'CODE_SAMPLE'
 /**
  * @var SomeService
  */
@@ -88,8 +100,9 @@ public function __construct(SomeService $someService)
     $this->someService = $someService;
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+            ]
+        );
     }
 
     private function addPropertyToCollector(Property $propertyNode): void
