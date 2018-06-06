@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Nette\Rector\Bootstrap;
+namespace Rector\Rector\Constant;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
@@ -72,7 +72,7 @@ final class RenameClassConstantsUseToStringsRector extends AbstractRector
      */
     public function refactor(Node $classConstFetchNode): ?Node
     {
-        $newValue = $this->oldConstantToNewValue[$classConstFetchNode->name->toString()];
+        $newValue = $this->oldConstantToNewValue[(string) $classConstFetchNode->name];
 
         return $this->nodeFactory->createString($newValue);
     }
