@@ -18,9 +18,11 @@
         "symfony/dependency-injection": "^3.4|^4.0",
         "symfony/finder": "^3.4|^4.0",
         "roave/better-reflection": "^3.0",
-        "symplify/better-phpdoc-parser": "^4.3"
+        "symplify/better-phpdoc-parser": "^4.3",
+        "rector/composer-plugin": "@dev"
     },
     "require-dev": {
+        "composer/composer": "^1.6",
         "humbug/php-scoper": "dev-master",
         "phpstan/phpstan-shim": "^0.9",
         "phpunit/phpunit": "^7.1",
@@ -64,6 +66,12 @@
             "packages/Symfony/tests"
         ]
     },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "packages/ComposerPlugin"
+        }
+    ],
     "scripts": {
         "complete-check": [
             "@check-cs",
