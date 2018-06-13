@@ -1,0 +1,4 @@
+services:
+    Rector\Rector\Interface_\MergeInterfacesRector:
+        $oldToNewInterfaces:
+            'Rector\Tests\Rector\MagicDisclosure\GetAndSetToMethodCallRector\Source\SomeOldInterface': 'Rector\Tests\Rector\MagicDisclosure\GetAndSetToMethodCallRector\Source\SomeInterface'
