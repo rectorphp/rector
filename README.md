@@ -1,6 +1,6 @@
 # Rector - Upgrade your Legacy App to Modern Codebase
 
-Rector is under development phase in 2018, to figure out the best way to use it in applications, polish API of Rector classes and get feedback from community. Please consider this while using it and report issues or post ideas you'll come up with while using. Thank you!
+Rector is an upgrading and **re**fa**ctor**ing tool. It is under development phase in 2018, to figure out the best way to use it in applications, polish API of Rector classes and get feedback from community. Please consider this while using it and report issues or post ideas you'll come up with while using. Thank you!
 
 When you're gonna move from manual work to **instant upgrades**?
 
