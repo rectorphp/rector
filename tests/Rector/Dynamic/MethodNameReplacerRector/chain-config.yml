@@ -1,0 +1,7 @@
+services:
+    Rector\Rector\Dynamic\MethodNameReplacerRector:
+        $perClassOldToNewMethods:
+            # Console
+            'Symfony\Component\Console\Helper\TableStyle':
+                  'oldMethod': 'newMethod'
+                  'anotherOldMethod': 'anotherNewMethod'
