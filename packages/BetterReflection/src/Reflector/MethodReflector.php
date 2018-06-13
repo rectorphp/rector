@@ -6,6 +6,7 @@ use phpDocumentor\Reflection\Type;
 use phpDocumentor\Reflection\Types\Object_;
 use phpDocumentor\Reflection\Types\Self_;
 use phpDocumentor\Reflection\Types\Static_;
+use phpDocumentor\Reflection\Types\This;
 use Roave\BetterReflection\Reflection\ReflectionMethod;
 use Throwable;
 
@@ -94,7 +95,7 @@ final class MethodReflector
                 $types[] = ltrim((string) $returnType->getFqsen(), '\\');
             }
 
-            if ($returnType instanceof Static_ || $returnType instanceof Self_) {
+            if ($returnType instanceof Static_ || $returnType instanceof Self_ || $returnType instanceof This) {
                 $types[] = $class;
             }
         }
