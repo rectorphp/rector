@@ -5,6 +5,7 @@ set -x
 
 # cleanup build
 rm -rf build/
+mkdir build
 
 # prefix current code to /build directory (see "scoper.inc.php" for settings)
 vendor/bin/php-scoper add-prefix --no-interaction
@@ -41,7 +42,6 @@ sed -i 's/\\App\\\\Kernel/App\\Kernel/g' build/src/Bridge/Symfony/DefaultAnalyze
 # RectorPrefixed\Symfony\Component\HttpKernel\Kernel => Symfony\Component\HttpKernel\Kernel
 (find build/src/Bridge/Symfony/ -type f | xargs sed -i 's/RectorPrefixed\\Symfony\\Component/Symfony\\Component/g')
 
-# ?todo
 cp composer.json build/composer.json
 
 # rebuild composer dump so the new prefixed namespaces are autoloaded
