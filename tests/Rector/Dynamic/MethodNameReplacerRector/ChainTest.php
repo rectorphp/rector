@@ -5,6 +5,9 @@ namespace Rector\Tests\Rector\Dynamic\MethodNameReplacerRector;
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
+/**
+ * @covers \Rector\Rector\Dynamic\MethodNameReplacerRector
+ */
 final class ChainTest extends AbstractRectorTestCase
 {
     /**
