@@ -3,6 +3,7 @@
 namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverAwareInterface;
@@ -58,6 +59,10 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface, NodeTy
         $variableTypes = $this->typeContext->getTypesForVariable((string) $variableNode->name);
         if ($variableTypes) {
             return $variableTypes;
+        }
+
+        if ($variableNode->getAttribute(Attribute::PARENT_NODE) instanceof Assign) {
+            return $this->nodeTypeResolver->resolve($variableNode->getAttribute(Attribute::PARENT_NODE));
         }
 
         return [];
