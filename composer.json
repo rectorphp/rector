@@ -21,7 +21,7 @@
         "symplify/better-phpdoc-parser": "^4.3"
     },
     "require-dev": {
-        "humbug/php-scoper": "dev-master",
+        "humbug/php-scoper": "^0.8",
         "phpstan/phpstan-shim": "^0.9",
         "phpunit/phpunit": "^7.1",
         "slam/php-cs-fixer-extensions": "^1.15",
