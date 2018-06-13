@@ -119,24 +119,6 @@ Turns "$this->getRepository()" in Symfony Controller to constructor injection an
  }
 ```
 
-## Rector\PHPUnit\Rector\ArrayToYieldDataProviderRector
-
-Turns method data providers in PHPUnit from arrays to yield
-
-```diff
- /**
-- * @return mixed[]
-  */
--public function provide(): array
-+public function provide(): Iterator
- {
--    return [
--        ['item']
--    ]
-+    yield ['item'];
- }
-```
-
 ## Rector\Rector\Dynamic\MethodNameReplacerRector
 
 [Dynamic] Turns method names to new ones.
@@ -222,159 +204,6 @@ Remove unnecessary ternary expressions.
 ```diff
 -view("...", []);
 +$this->render("...", []);
-```
-
-## Rector\Nette\Rector\Application\InjectPropertyRector
-
-Turns properties with @inject to private properties and constructor injection
-
-```diff
- /**
-  * @var SomeService
-- * @inject
-  */
--public $someService;
-+private $someService;
-+
-+public function __construct(SomeService $someService)
-+{
-+    $this->someService = $someService;
-+}
-```
-
-## Rector\Nette\Rector\Bootstrap\RemoveConfiguratorConstantsRector
-
-Turns properties with @inject to private properties and constructor injection
-
-```diff
--$value === Nette\Configurator::DEVELOPMENT
-+$value === "development"
-```
-
-## Rector\Nette\Rector\DI\SetInjectToAddTagRector
-
-Turns setInject() to tag in Nette\DI\CompilerExtension
-
-```diff
--$serviceDefinition->setInject();
-+$serviceDefinition->addTag("inject");
-```
-
-## Rector\Nette\Rector\Utils\NetteObjectToSmartTraitRector
-
-Checks all Nette\Object instances and turns parent class to trait
-
-```diff
--class SomeClass extends \Nette\Object { }
-+class SomeClass { use Nette\SmartObject; }
-```
-
-## Rector\Nette\Rector\Utils\MagicMethodRector
-
-Catches @method annotations of Nette\Object instances and converts them to real methods.
-
-```diff
--/** @method getId() */
-+public function getId() { $this->id; }
-```
-
-## Rector\Nette\Rector\Application\TemplateMagicInvokeFilterCallRector
-
-Turns properties with @inject to private properties and constructor injection
-
-```diff
--$this->template->someFilter(...)
-+$this->template->getLatte()->invokeFilter("someFilter", ...)
-```
-
-## Rector\Nette\Rector\Application\TemplateRegisterHelperRector
-
-Turns properties with @inject to private properties and constructor injection
-
-```diff
--$this->template->registerHelper("someFilter", ...);
-+$this->template->getLatte()->addFilter("someFilter", ...)
-```
-
-## Rector\Nette\Rector\DI\SetEntityToStatementRector
-
-Turns setDefinition() to Nette\DI\Helpers::expand() value in Nette\DI\CompilerExtension
-
-```diff
--$definition->setEntity("someEntity");
-+$definition = new Statement("someEntity", $definition->arguments);
-```
-
-## Rector\Nette\Rector\DI\ExpandFunctionToParametersArrayRector
-
-Turns expand() to parameters value in Nette\DI\CompilerExtension
-
-```diff
--$builder->expand("argument");
-+$builder->parameters["argument"];
-
--$builder->expand("%argument%");
-+$builder->parameters["argument"];
-```
-
-## Rector\Nette\Rector\DI\ExpandFunctionToStaticExpandFunctionRector
-
-Turns expand() to Nette\DI\Helpers::expand() value in Nette\DI\CompilerExtension
-
-```diff
--$builder->expand(object|array)
-+\Nette\DI\Helpers::expand(object|array, $builder->parameters);
-```
-
-## Rector\Nette\Rector\Forms\ChoiceDefaultValueRector
-
-Turns checkAllowedValues to method in Nette\Forms Control element
-
-```diff
--$control->checkAllowedValues = false;
-+$control->checkDefaultValue(false);
-```
-
-## Rector\Nette\Rector\Forms\FormNegativeRulesRector
-
-Turns negative Nette Form rules to their specific new names.
-
-```diff
--$form->addRule(~Form::FILLED);
-+$form->addRule(Form::NOT_FILLED);
-```
-
-## Rector\Nette\Rector\Forms\FormCallbackRector
-
-Turns magic callback assign to callback assign on Nette Form events.
-
-```diff
--$form->onSuccess[] = $this->someMethod;
-+$form->onSuccess[] = [$this, someMethod;]
-```
-
-## Rector\Rector\MagicDisclosure\GetAndSetToMethodCallRector
-
-[Dynamic] Turns defined `__get`/`__set` to specific method calls.
-
-```diff
--$someService = $container->someService;
-+$container->getService("someService");
-
--$container->someService = $someService;
-+$container->setService("someService", $someService);
-```
-
-## Rector\Rector\MagicDisclosure\UnsetAndIssetToMethodCallRector
-
-[Dynamic] Turns defined `__isset`/`__unset` calls to specific method calls.
-
-```diff
--isset($container["someKey"]);
-+$container->hasService("someKey");
-
--unset($container["someKey"])
-+$container->removeService("someKey");
 ```
 
 ## Rector\PhpParser\Rector\IdentifierRector
@@ -597,6 +426,24 @@ Turns `preg_match` comparisons to their method name alternatives in PHPUnit Test
 +$this->assertNotRegExp("/^Message for ".*"\.$/", $string, $message);
 ```
 
+## Rector\PHPUnit\Rector\ArrayToYieldDataProviderRector
+
+Turns method data providers in PHPUnit from arrays to yield
+
+```diff
+ /**
+- * @return mixed[]
+  */
+-public function provide(): array
++public function provide(): Iterator
+ {
+-    return [
+-        ['item']
+-    ]
++    yield ['item'];
+ }
+```
+
 ## Rector\PHPUnit\Rector\ExceptionAnnotationRector
 
 Takes `setExpectedException()` 2nd and next arguments to own methods in PHPUnit.
@@ -654,15 +501,6 @@ Takes `setExpectedException()` 2nd and next arguments to own methods in PHPUnit.
 -/** @test */
 +/** @scenario */
  public function someMethod() {};
-```
-
-## Rector\Rector\Dynamic\NamespaceReplacerRector
-
-[Dynamic] Replaces old namespace by new one.
-
-```diff
--$someObject = new SomeOldNamespace\SomeClass;
-+$someObject = new SomeNewNamespace\SomeClass;
 ```
 
 ## Rector\Sensio\Rector\FrameworkExtraBundle\TemplateAnnotationRector
@@ -801,8 +639,14 @@ Turns redirect to route to short helper method in Controller in Symfony
 Turns long flash adding to short helper method in Controller in Symfony
 
 ```diff
--$request->getSession()->getFlashBag()->add("success", "something");
-+$this->addflash("success", "something");
+ class SomeController extends Controller
+ {
+     public function some(Request $request)
+     {
+-        $request->getSession()->getFlashBag()->add("success", "something");
++        $this->addFlash("success", "something");
+     }
+ }
 ```
 
 ## Rector\Symfony\Rector\HttpKernel\GetRequestRector
