@@ -1,11 +1,8 @@
 #!/usr/bin/env php
 <?php declare(strict_types=1);
 
+use Psr\Container\ContainerInterface;
 use Rector\Console\Application;
-use Rector\DependencyInjection\ContainerFactory;
-use Symfony\Component\Console\Input\ArgvInput;
-use Symplify\PackageBuilder\Configuration\ConfigFileFinder;
-use Symplify\PackageBuilder\Configuration\LevelFileFinder;
 use Symplify\PackageBuilder\Console\ThrowableRenderer;
 
 // Performance boost
@@ -15,27 +12,11 @@ gc_disable();
 require_once __DIR__ . '/rector_bootstrap.php';
 
 try {
-    // 1. Detect configuration from --level
-    $configFile = (new LevelFileFinder())->detectFromInputAndDirectory(new ArgvInput(), __DIR__ . '/../config/level');
+    /** @var ContainerInterface $container */
+    $container = require_once __DIR__ . '/rector_container.php';
 
-    // 2. Or from --config
-    if ($configFile === null) {
-        ConfigFileFinder::detectFromInput('rector', new ArgvInput());
-        $configFile = ConfigFileFinder::provide('rector', ['rector.yml', 'rector.yaml']);
-    }
-
-    // 2. Build DI container
-    $containerFactory = new ContainerFactory();
-    if ($configFile) {
-        $container = $containerFactory->createWithConfig($configFile);
-    } else {
-        $container = $containerFactory->create();
-    }
-
-    // 3. Run Console Application
     $application = $container->get(Application::class);
-    $statusCode = $application->run();
-    exit($statusCode);
+    exit($application->run());
 } catch (Throwable $throwable) {
     (new ThrowableRenderer())->render($throwable);
     exit($throwable->getCode());
