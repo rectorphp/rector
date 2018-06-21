@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\MagicDisclosure\GetAndSetToMethodCallRector\Source;
+namespace Rector\Tests\Rector\Interface_\MergeInterfacesRector\Source;
 
 interface SomeInterface
 {
