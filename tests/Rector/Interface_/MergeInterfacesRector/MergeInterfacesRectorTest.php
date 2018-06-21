@@ -8,7 +8,7 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 /**
  * @covers \Rector\Rector\Interface_\MergeInterfacesRector
  */
-final class MergeInterfacesRectorTestTest extends AbstractRectorTestCase
+final class MergeInterfacesRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()

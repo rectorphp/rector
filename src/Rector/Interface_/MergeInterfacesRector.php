@@ -3,6 +3,7 @@
 namespace Rector\Rector\Interface_;
 
 use PhpParser\Node;
+use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Node\Attribute;
 use Rector\Rector\AbstractRector;
@@ -61,7 +62,7 @@ CODE_SAMPLE
         foreach ($node->implements as $implement) {
             $interface = (string) $implement->getAttribute(Attribute::RESOLVED_NAME);
 
-            if (in_array($interface, array_keys($this->oldToNewInterfaces))) {
+            if (in_array($interface, array_keys($this->oldToNewInterfaces), true)) {
                 return true;
             }
         }
@@ -77,14 +78,32 @@ CODE_SAMPLE
         foreach ($classNode->implements as $key => $implement) {
             $interface = (string) $implement->getAttribute(Attribute::RESOLVED_NAME);
 
-            if (in_array($interface, array_keys($this->oldToNewInterfaces))) {
-                $classNode->implements[$key] = new Node\Name($this->oldToNewInterfaces[$interface]);
+            if (in_array($interface, array_keys($this->oldToNewInterfaces), true)) {
+                $classNode->implements[$key] = new Name($this->oldToNewInterfaces[$interface]);
             }
         }
 
-        // @todo array unique
-        // $classNode->implements = array_unique($classNode->implements);
+        $this->makeImplementsUnique($classNode);
 
         return $classNode;
+    }
+
+    private function makeImplementsUnique(Class_ $classNode): void
+    {
+        $alreadyAddedNames = [];
+        foreach ($classNode->implements as $key => $name) {
+            if ($name->hasAttribute(Attribute::RESOLVED_NAME)) {
+                $fqnName = (string) $name->getAttribute(Attribute::RESOLVED_NAME);
+            } else {
+                $fqnName = $name->toString();
+            }
+
+            if (in_array($fqnName, $alreadyAddedNames, true)) {
+                unset($classNode->implements[$key]);
+                continue;
+            }
+
+            $alreadyAddedNames[] = $fqnName;
+        }
     }
 }
