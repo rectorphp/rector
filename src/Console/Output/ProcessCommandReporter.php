@@ -6,6 +6,8 @@ use Rector\Console\ConsoleStyle;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\NodeTraverser\RectorNodeTraverser;
 use Rector\Reporting\FileDiff;
+use Rector\YamlRector\Contract\YamlRectorInterface;
+use Rector\YamlRector\YamlFileProcessor;
 
 final class ProcessCommandReporter
 {
@@ -19,25 +21,36 @@ final class ProcessCommandReporter
      */
     private $rectorNodeTraverser;
 
-    public function __construct(RectorNodeTraverser $rectorNodeTraverser, ConsoleStyle $consoleStyle)
-    {
+    /**
+     * @var YamlFileProcessor
+     */
+    private $yamlFileProcessor;
+
+    public function __construct(
+        RectorNodeTraverser $rectorNodeTraverser,
+        ConsoleStyle $consoleStyle,
+        YamlFileProcessor $yamlFileProcessor
+    ) {
         $this->consoleStyle = $consoleStyle;
         $this->rectorNodeTraverser = $rectorNodeTraverser;
+        $this->yamlFileProcessor = $yamlFileProcessor;
     }
 
     public function reportLoadedRectors(): void
     {
-        $this->consoleStyle->title(sprintf(
-            '%d Loaded Rector%s',
-            $this->rectorNodeTraverser->getRectorCount(),
-            $this->rectorNodeTraverser->getRectorCount() === 1 ? '' : 's'
-        ));
+        $rectorCount = $this->rectorNodeTraverser->getRectorCount() + $this->yamlFileProcessor->getYamlRectorsCount();
+
+        $this->consoleStyle->title(sprintf('%d Loaded Rector%s', $rectorCount, $rectorCount === 1 ? '' : 's'));
 
         $rectorClasses = array_map(function (RectorInterface $rector): string {
             return get_class($rector);
         }, $this->rectorNodeTraverser->getRectors());
 
-        $this->consoleStyle->listing($rectorClasses);
+        $yamlRectorClasses = array_map(function (YamlRectorInterface $yamlRector): string {
+            return get_class($yamlRector);
+        }, $this->yamlFileProcessor->getYamlRectors());
+
+        $this->consoleStyle->listing($rectorClasses + $yamlRectorClasses);
     }
 
     /**

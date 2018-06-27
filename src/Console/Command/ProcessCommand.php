@@ -150,13 +150,13 @@ final class ProcessCommand extends Command
         // php
         $files = $this->phpFilesFinder->findInDirectoriesAndFiles($source);
 
-        $this->processCommandReporter->reportLoadedRectors();
-
-        $this->processFiles($files);
-
         // yaml
         $yamlFiles = $this->yamlFilesFinder->findInDirectoriesAndFiles($source);
-        $this->processYamlFiles($yamlFiles);
+        $allFiles = $files + $yamlFiles;
+
+        $this->processCommandReporter->reportLoadedRectors();
+
+        $this->processFiles($allFiles);
 
         $this->processCommandReporter->reportFileDiffs($this->fileDiffs);
         $this->processCommandReporter->reportChangedFiles($this->changedFiles);
@@ -167,7 +167,7 @@ final class ProcessCommand extends Command
 
     private function ensureSomeRectorsAreRegistered(): void
     {
-        if ($this->rectorNodeTraverser->getRectorCount() > 0) {
+        if ($this->rectorNodeTraverser->getRectorCount() > 0 || $this->yamlFileProcessor->getYamlRectorsCount() > 0) {
             return;
         }
 
@@ -188,38 +188,17 @@ final class ProcessCommand extends Command
 
         foreach ($fileInfos as $fileInfo) {
             try {
-                $this->processFile($fileInfo);
+                // php
+                if ($fileInfo->getExtension() === 'php') {
+                    $this->processFile($fileInfo);
+                // yml
+                } elseif ($fileInfo->getExtension() === 'yml') {
+                    $this->processYamlFile($fileInfo);
+                }
             } catch (Throwable $throwable) {
                 $this->consoleStyle->newLine();
                 throw new FileProcessingException(
                     sprintf('Processing of "%s" file failed.', $fileInfo->getPathname()),
-                    $throwable->getCode(),
-                    $throwable
-                );
-            }
-
-            $this->consoleStyle->progressAdvance();
-        }
-
-        $this->consoleStyle->newLine(2);
-    }
-
-    /**
-     * @param SplFileInfo[] $fileInfos
-     */
-    private function processYamlFiles(array $fileInfos): void
-    {
-        $totalFiles = count($fileInfos);
-        $this->consoleStyle->title(sprintf('Processing %d YAML file%s', $totalFiles, $totalFiles === 1 ? '' : 's'));
-        $this->consoleStyle->progressStart($totalFiles);
-
-        foreach ($fileInfos as $fileInfo) {
-            try {
-                $this->processYamlFile($fileInfo);
-            } catch (Throwable $throwable) {
-                $this->consoleStyle->newLine();
-                throw new FileProcessingException(
-                    sprintf('Processing of "%s" YAML file failed.', $fileInfo->getPathname()),
                     $throwable->getCode(),
                     $throwable
                 );

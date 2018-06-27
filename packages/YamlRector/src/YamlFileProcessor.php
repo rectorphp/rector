@@ -17,6 +17,14 @@ final class YamlFileProcessor
         $this->yamlRectors[] = $yamlRector;
     }
 
+    /**
+     * @return YamlRectorInterface[]
+     */
+    public function getYamlRectors(): array
+    {
+        return $this->yamlRectors;
+    }
+
     public function processFileInfo(SplFileInfo $splFileInfo): string
     {
         $content = $splFileInfo->getContents();
@@ -30,5 +38,10 @@ final class YamlFileProcessor
         }
 
         return $content;
+    }
+
+    public function getYamlRectorsCount(): int
+    {
+        return count($this->yamlRectors);
     }
 }
