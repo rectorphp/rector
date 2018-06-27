@@ -2,6 +2,7 @@
 
 namespace Rector\Console\Command;
 
+use Nette\Utils\FileSystem;
 use Rector\Application\FileProcessor;
 use Rector\Autoloading\AdditionalAutoloader;
 use Rector\Configuration\Option;
@@ -13,6 +14,8 @@ use Rector\Exception\NoRectorsLoadedException;
 use Rector\FileSystem\PhpFilesFinder;
 use Rector\NodeTraverser\RectorNodeTraverser;
 use Rector\Reporting\FileDiff;
+use Rector\YamlRector\FileSystem\YamlFilesFinder;
+use Rector\YamlRector\YamlFileProcessor;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -75,6 +78,16 @@ final class ProcessCommand extends Command
      */
     private $rectorNodeTraverser;
 
+    /**
+     * @var YamlFilesFinder
+     */
+    private $yamlFilesFinder;
+
+    /**
+     * @var YamlFileProcessor
+     */
+    private $yamlFileProcessor;
+
     public function __construct(
         FileProcessor $fileProcessor,
         ConsoleStyle $consoleStyle,
@@ -83,7 +96,9 @@ final class ProcessCommand extends Command
         ParameterProvider $parameterProvider,
         DifferAndFormatter $differAndFormatter,
         AdditionalAutoloader $additionalAutoloader,
-        RectorNodeTraverser $rectorNodeTraverser
+        RectorNodeTraverser $rectorNodeTraverser,
+        YamlFilesFinder $yamlFilesFinder,
+        YamlFileProcessor $yamlFileProcessor
     ) {
         parent::__construct();
 
@@ -95,6 +110,8 @@ final class ProcessCommand extends Command
         $this->differAndFormatter = $differAndFormatter;
         $this->additionalAutoloader = $additionalAutoloader;
         $this->rectorNodeTraverser = $rectorNodeTraverser;
+        $this->yamlFilesFinder = $yamlFilesFinder;
+        $this->yamlFileProcessor = $yamlFileProcessor;
     }
 
     protected function configure(): void
@@ -129,11 +146,17 @@ final class ProcessCommand extends Command
         $source = $input->getArgument(Option::SOURCE);
         $this->parameterProvider->changeParameter(Option::SOURCE, $source);
         $this->parameterProvider->changeParameter(Option::OPTION_DRY_RUN, $input->getOption(Option::OPTION_DRY_RUN));
+
+        // php
         $files = $this->phpFilesFinder->findInDirectoriesAndFiles($source);
 
         $this->processCommandReporter->reportLoadedRectors();
 
         $this->processFiles($files);
+
+        // yaml
+        $yamlFiles = $this->yamlFilesFinder->findInDirectoriesAndFiles($source);
+        $this->processYamlFiles($yamlFiles);
 
         $this->processCommandReporter->reportFileDiffs($this->fileDiffs);
         $this->processCommandReporter->reportChangedFiles($this->changedFiles);
@@ -181,6 +204,33 @@ final class ProcessCommand extends Command
         $this->consoleStyle->newLine(2);
     }
 
+    /**
+     * @param SplFileInfo[] $fileInfos
+     */
+    private function processYamlFiles(array $fileInfos): void
+    {
+        $totalFiles = count($fileInfos);
+        $this->consoleStyle->title(sprintf('Processing %d YAML file%s', $totalFiles, $totalFiles === 1 ? '' : 's'));
+        $this->consoleStyle->progressStart($totalFiles);
+
+        foreach ($fileInfos as $fileInfo) {
+            try {
+                $this->processYamlFile($fileInfo);
+            } catch (Throwable $throwable) {
+                $this->consoleStyle->newLine();
+                throw new FileProcessingException(
+                    sprintf('Processing of "%s" YAML file failed.', $fileInfo->getPathname()),
+                    $throwable->getCode(),
+                    $throwable
+                );
+            }
+
+            $this->consoleStyle->progressAdvance();
+        }
+
+        $this->consoleStyle->newLine(2);
+    }
+
     private function processFile(SplFileInfo $fileInfo): void
     {
         $oldContent = $fileInfo->getContents();
@@ -197,6 +247,28 @@ final class ProcessCommand extends Command
             $newContent = $this->fileProcessor->processFile($fileInfo);
             if ($newContent !== $oldContent) {
                 $this->changedFiles[] = $fileInfo->getPathname();
+            }
+        }
+    }
+
+    private function processYamlFile(SplFileInfo $fileInfo): void
+    {
+        $oldContent = $fileInfo->getContents();
+
+        if ($this->parameterProvider->provideParameter(Option::OPTION_DRY_RUN)) {
+            $newContent = $this->yamlFileProcessor->processFileInfo($fileInfo);
+            if ($newContent !== $oldContent) {
+                $this->fileDiffs[] = new FileDiff(
+                    $fileInfo->getPathname(),
+                    $this->differAndFormatter->diffAndFormat($oldContent, $newContent)
+                );
+            }
+        } else {
+            $newContent = $this->yamlFileProcessor->processFileInfo($fileInfo);
+            if ($newContent !== $oldContent) {
+                $this->changedFiles[] = $fileInfo->getPathname();
+
+                FileSystem::write($fileInfo->getPathname(), $newContent);
             }
         }
     }
