@@ -2,6 +2,7 @@
 
 namespace Rector\Console\Command;
 
+use Nette\Utils\FileSystem;
 use Rector\Application\FileProcessor;
 use Rector\Autoloading\AdditionalAutoloader;
 use Rector\Configuration\Option;
@@ -10,9 +11,10 @@ use Rector\Console\Output\ProcessCommandReporter;
 use Rector\ConsoleDiffer\DifferAndFormatter;
 use Rector\Exception\Command\FileProcessingException;
 use Rector\Exception\NoRectorsLoadedException;
-use Rector\FileSystem\PhpFilesFinder;
+use Rector\FileSystem\FilesFinder;
 use Rector\NodeTraverser\RectorNodeTraverser;
 use Rector\Reporting\FileDiff;
+use Rector\YamlRector\YamlFileProcessor;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -36,9 +38,9 @@ final class ProcessCommand extends Command
     private $consoleStyle;
 
     /**
-     * @var PhpFilesFinder
+     * @var FilesFinder
      */
-    private $phpFilesFinder;
+    private $filesFinder;
 
     /**
      * @var ProcessCommandReporter
@@ -75,26 +77,33 @@ final class ProcessCommand extends Command
      */
     private $rectorNodeTraverser;
 
+    /**
+     * @var YamlFileProcessor
+     */
+    private $yamlFileProcessor;
+
     public function __construct(
         FileProcessor $fileProcessor,
         ConsoleStyle $consoleStyle,
-        PhpFilesFinder $phpFilesFinder,
+        FilesFinder $phpFilesFinder,
         ProcessCommandReporter $processCommandReporter,
         ParameterProvider $parameterProvider,
         DifferAndFormatter $differAndFormatter,
         AdditionalAutoloader $additionalAutoloader,
-        RectorNodeTraverser $rectorNodeTraverser
+        RectorNodeTraverser $rectorNodeTraverser,
+        YamlFileProcessor $yamlFileProcessor
     ) {
         parent::__construct();
 
         $this->fileProcessor = $fileProcessor;
         $this->consoleStyle = $consoleStyle;
-        $this->phpFilesFinder = $phpFilesFinder;
+        $this->filesFinder = $phpFilesFinder;
         $this->processCommandReporter = $processCommandReporter;
         $this->parameterProvider = $parameterProvider;
         $this->differAndFormatter = $differAndFormatter;
         $this->additionalAutoloader = $additionalAutoloader;
         $this->rectorNodeTraverser = $rectorNodeTraverser;
+        $this->yamlFileProcessor = $yamlFileProcessor;
     }
 
     protected function configure(): void
@@ -129,11 +138,14 @@ final class ProcessCommand extends Command
         $source = $input->getArgument(Option::SOURCE);
         $this->parameterProvider->changeParameter(Option::SOURCE, $source);
         $this->parameterProvider->changeParameter(Option::OPTION_DRY_RUN, $input->getOption(Option::OPTION_DRY_RUN));
-        $files = $this->phpFilesFinder->findInDirectoriesAndFiles($source);
+
+        $phpFiles = $this->filesFinder->findInDirectoriesAndFiles($source, ['php']);
+        $yamlFiles = $this->filesFinder->findInDirectoriesAndFiles($source, ['yml', 'yaml']);
+        $allFiles = $phpFiles + $yamlFiles;
 
         $this->processCommandReporter->reportLoadedRectors();
 
-        $this->processFiles($files);
+        $this->processFiles($allFiles);
 
         $this->processCommandReporter->reportFileDiffs($this->fileDiffs);
         $this->processCommandReporter->reportChangedFiles($this->changedFiles);
@@ -144,7 +156,7 @@ final class ProcessCommand extends Command
 
     private function ensureSomeRectorsAreRegistered(): void
     {
-        if ($this->rectorNodeTraverser->getRectorCount() > 0) {
+        if ($this->rectorNodeTraverser->getRectorCount() > 0 || $this->yamlFileProcessor->getYamlRectorsCount() > 0) {
             return;
         }
 
@@ -165,7 +177,13 @@ final class ProcessCommand extends Command
 
         foreach ($fileInfos as $fileInfo) {
             try {
-                $this->processFile($fileInfo);
+                // php
+                if ($fileInfo->getExtension() === 'php') {
+                    $this->processFile($fileInfo);
+                // yml
+                } elseif ($fileInfo->getExtension() === 'yml') {
+                    $this->processYamlFile($fileInfo);
+                }
             } catch (Throwable $throwable) {
                 $this->consoleStyle->newLine();
                 throw new FileProcessingException(
@@ -197,6 +215,28 @@ final class ProcessCommand extends Command
             $newContent = $this->fileProcessor->processFile($fileInfo);
             if ($newContent !== $oldContent) {
                 $this->changedFiles[] = $fileInfo->getPathname();
+            }
+        }
+    }
+
+    private function processYamlFile(SplFileInfo $fileInfo): void
+    {
+        $oldContent = $fileInfo->getContents();
+
+        if ($this->parameterProvider->provideParameter(Option::OPTION_DRY_RUN)) {
+            $newContent = $this->yamlFileProcessor->processFileInfo($fileInfo);
+            if ($newContent !== $oldContent) {
+                $this->fileDiffs[] = new FileDiff(
+                    $fileInfo->getPathname(),
+                    $this->differAndFormatter->diffAndFormat($oldContent, $newContent)
+                );
+            }
+        } else {
+            $newContent = $this->yamlFileProcessor->processFileInfo($fileInfo);
+            if ($newContent !== $oldContent) {
+                $this->changedFiles[] = $fileInfo->getPathname();
+
+                FileSystem::write($fileInfo->getPathname(), $newContent);
             }
         }
     }

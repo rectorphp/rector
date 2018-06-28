@@ -2,17 +2,19 @@
 
 namespace Rector\FileSystem;
 
+use Nette\Utils\Strings;
 use Rector\Exception\FileSystem\DirectoryNotFoundException;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
-final class PhpFilesFinder
+final class FilesFinder
 {
     /**
      * @param string[] $source
+     * @param string[] $suffixes
      * @return SplFileInfo[]
      */
-    public function findInDirectoriesAndFiles(array $source): array
+    public function findInDirectoriesAndFiles(array $source, array $suffixes): array
     {
         $files = [];
         $directories = [];
@@ -26,7 +28,7 @@ final class PhpFilesFinder
         }
 
         if (count($directories)) {
-            $files = array_merge($files, $this->findInDirectories($directories));
+            $files = array_merge($files, $this->findInDirectories($directories, $suffixes));
         }
 
         return $files;
@@ -34,15 +36,18 @@ final class PhpFilesFinder
 
     /**
      * @param string[] $directories
+     * @param string[] $suffixes
      * @return SplFileInfo[]
      */
-    private function findInDirectories(array $directories): array
+    private function findInDirectories(array $directories, array $suffixes): array
     {
         $this->ensureDirectoriesExist($directories);
 
+        $suffixes = $this->normalizeSuffixesToPattern($suffixes);
+
         $finder = Finder::create()
             ->files()
-            ->name('*.php')
+            ->name($suffixes)
             ->in($directories)
             ->exclude(['examples', 'Examples', 'stubs', 'Stubs', 'fixtures', 'Fixtures', 'polyfill', 'Polyfill'])
             ->notName('*polyfill*')
@@ -63,5 +68,18 @@ final class PhpFilesFinder
 
             throw new DirectoryNotFoundException(sprintf('Directory "%s" was not found.', $directory));
         }
+    }
+
+    /**
+     * @param string[] $suffixes
+     */
+    private function normalizeSuffixesToPattern(array $suffixes): string
+    {
+        $suffixesPattern = '';
+        foreach ($suffixes as $suffix) {
+            $suffixesPattern = Strings::startsWith($suffix, '*.') ? $suffix : '*.' . $suffix;
+        }
+
+        return $suffixesPattern;
     }
 }

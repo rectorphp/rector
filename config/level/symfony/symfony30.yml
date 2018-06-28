@@ -2,6 +2,16 @@
 # - https://github.com/symfony/symfony/blob/master/UPGRADE-3.0.md
 
 services:
+    # yaml
+    # covers https://github.com/symfony/symfony/blob/3.0/UPGRADE-3.0.md#security
+    Rector\YamlRector\Rector\RenameSubKeyYamlRector:
+        $pathsToNewKeys:
+            'security > firewalls > default > anonymous > key': 'secret'
+            'security > firewalls > default > http_digest > key': 'secret'
+            'security > firewalls > default > remember_me > key': 'secret'
+
+    # php
+
     Rector\Symfony\Rector\HttpKernel\GetRequestRector: ~
     Rector\Symfony\Rector\Form\FormTypeGetParentRector: ~
     Rector\Symfony\Rector\Form\OptionNameRector: ~

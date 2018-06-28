@@ -1,0 +1,6 @@
+main_key:
+    new_sub_key: value
+
+sub:
+    main_key:
+        old_sub_key: value

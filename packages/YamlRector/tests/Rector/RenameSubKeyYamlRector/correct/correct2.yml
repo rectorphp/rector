@@ -1,0 +1,7 @@
+security:
+    # ...
+    firewalls:
+        default:
+            # ...
+            anonymous:
+                new_key: "%secret%"

@@ -42,7 +42,8 @@
             "Rector\\Sylius\\": "packages/Sylius/src",
             "Rector\\PHPUnit\\": "packages/PHPUnit/src",
             "Rector\\PhpParser\\": "packages/PhpParser/src",
-            "Rector\\Doctrine\\": "packages/Doctrine/src"
+            "Rector\\Doctrine\\": "packages/Doctrine/src",
+            "Rector\\YamlRector\\": "packages/YamlRector/src"
         }
     },
     "autoload-dev": {
@@ -58,7 +59,8 @@
             "Rector\\Sylius\\Tests\\": "packages/Sylius/tests",
             "Rector\\PHPUnit\\Tests\\": "packages/PHPUnit/tests",
             "Rector\\PhpParser\\Tests\\": "packages/PhpParser/tests",
-            "Rector\\Doctrine\\Tests\\": "packages/Doctrine/tests"
+            "Rector\\Doctrine\\Tests\\": "packages/Doctrine/tests",
+            "Rector\\YamlRector\\Tests\\": "packages/YamlRector/tests"
         },
         "classmap": [
             "packages/Symfony/tests"

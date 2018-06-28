@@ -1,0 +1,7 @@
+services:
+    _defaults:
+        autowire: true
+
+    Rector\YamlRector\:
+        resource: '../'
+        exclude: '../{Rector/*Rector.php}'

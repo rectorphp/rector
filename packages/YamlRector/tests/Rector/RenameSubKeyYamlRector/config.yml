@@ -1,0 +1,7 @@
+services:
+    Rector\YamlRector\Rector\RenameSubKeyYamlRector:
+        $pathsToNewKeys:
+            'main_key > old_sub_key': 'new_sub_key'
+            'security > firewalls > default > anonymous > old_key': 'new_key'
+            'security > firewalls > default > http_digest > old_key': 'new_key'
+            'security > firewalls > default > remember_me > old_key': 'new_key'
