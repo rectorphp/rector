@@ -1,3 +1,10 @@
+security:
+    # our local security
+    firewalls:
+        default:
+            remember_me:
+                key: "%secret%"
+
 services:
     some_service:
         class: App\SomeService

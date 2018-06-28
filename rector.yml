@@ -4,9 +4,13 @@ services:
     Rector\Symfony\Rector\FrameworkBundle\GetToConstructorInjectionRector: ~
     # bin/rector process demo/src/Controller --dry-run
 
-    # case 2
+    # case 2 - Symfony
     Rector\Symfony\Rector\Form\StringFormTypeToClassRector: ~
     # bin/rector process demo/src/Form --dry-run
 
-    # case 3
+    # case 3 - PHPUnit
     # bin/rector process demo/tests --level phpunit60 --dry-run
+
+    # case 4 - Yaml
+    # bin/rector process demo/tests --level symfony30 --dry-run
+
