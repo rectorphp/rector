@@ -10,3 +10,7 @@ services:
 
     # case 3
     # bin/rector process demo/tests --level phpunit60 --dry-run
+
+    # case 4
+    # bin/rector process demo/tests --level symfony30 --dry-run
+
