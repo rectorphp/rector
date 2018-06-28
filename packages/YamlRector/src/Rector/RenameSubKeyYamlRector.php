@@ -8,39 +8,77 @@ use Rector\YamlRector\Contract\YamlRectorInterface;
 final class RenameSubKeyYamlRector implements YamlRectorInterface
 {
     /**
-     * @var string
+     * @var string[]
      */
-    private $mainKey;
+    private $pathsToNewKeys = [];
 
     /**
-     * @var string
+     * @var string|null
      */
-    private $subKey;
+    private $activePathPattern;
 
     /**
-     * @var string
+     * @var string[]
      */
-    private $newKey;
+    private $activePathSteps = [];
 
-    public function __construct(string $mainKey, string $subKey, string $newKey)
+    /**
+     * @var string|null
+     */
+    private $activeNewKey;
+
+    /**
+     * @param string[] $pathsToNewKeys
+     */
+    public function __construct(array $pathsToNewKeys)
     {
-        $this->mainKey = $mainKey;
-        $this->subKey = $subKey;
-        $this->newKey = $newKey;
+        $this->pathsToNewKeys = $pathsToNewKeys;
     }
 
     public function isCandidate(string $content): bool
     {
-        return (bool) Strings::match($content, $this->createPattern());
+        $this->activePathPattern = null;
+        $this->activePathSteps = [];
+        $this->activeNewKey = null;
+
+        foreach ($this->pathsToNewKeys as $path => $newKey) {
+            $pathSteps = Strings::split($path, '#[\s+]?>[\s+]?#');
+            $pathPattern = $this->createPattern($pathSteps);
+
+            if ((bool) Strings::match($content, $pathPattern)) {
+                $this->activePathSteps = $pathSteps;
+                $this->activePathPattern = $pathPattern;
+                $this->activeNewKey = $newKey;
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function refactor(string $content): string
     {
-        return Strings::replace($content, $this->createPattern(), '$1' . $this->newKey . '$3');
+        $replacement = '';
+        for ($i = 1; $i < count($this->activePathSteps); ++$i) {
+            $replacement .= '$' . $i;
+        }
+
+        $replacement .= preg_quote($this->activeNewKey) . ': ';
+        $replacement .= '$' . ($i + 1);
+
+        return Strings::replace($content, $this->activePathPattern, $replacement);
     }
 
-    private function createPattern(): string
+    /**
+     * @param string[] $pathSteps
+     */
+    private function createPattern(array $pathSteps): string
     {
-        return sprintf('#(^%s:\s+)(%s)(:)#s', preg_quote($this->mainKey), preg_quote($this->subKey));
+        $pattern = '';
+        foreach ($pathSteps as $pathStep) {
+            $pattern .= sprintf('(%s:\s+)', preg_quote($pathStep));
+        }
+
+        return '#^' . $pattern . '#s';
     }
 }

@@ -1,5 +1,4 @@
 services:
     Rector\YamlRector\Rector\RenameSubKeyYamlRector:
-        - 'main_key'
-        - 'old_sub_key'
-        - 'new_sub_key'
+        $pathsToNewKeys:
+            'main_key > old_sub_key': 'new_sub_key'
