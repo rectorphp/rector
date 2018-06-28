@@ -2,7 +2,6 @@
 
 namespace Rector\FileSystem;
 
-use Nette\Utils\Strings;
 use Rector\Exception\FileSystem\DirectoryNotFoundException;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
@@ -43,11 +42,11 @@ final class FilesFinder
     {
         $this->ensureDirectoriesExist($directories);
 
-        $suffixes = $this->normalizeSuffixesToPattern($suffixes);
+        $suffixesPattern = $this->normalizeSuffixesToPattern($suffixes);
 
         $finder = Finder::create()
             ->files()
-            ->name($suffixes)
+            ->name($suffixesPattern)
             ->in($directories)
             ->exclude(['examples', 'Examples', 'stubs', 'Stubs', 'fixtures', 'Fixtures', 'polyfill', 'Polyfill'])
             ->notName('*polyfill*')
@@ -75,11 +74,8 @@ final class FilesFinder
      */
     private function normalizeSuffixesToPattern(array $suffixes): string
     {
-        $suffixesPattern = '';
-        foreach ($suffixes as $suffix) {
-            $suffixesPattern = Strings::startsWith($suffix, '*.') ? $suffix : '*.' . $suffix;
-        }
+        $suffixesPattern = implode('|', $suffixes);
 
-        return $suffixesPattern;
+        return '#\.(' . $suffixesPattern . ')$#';
     }
 }

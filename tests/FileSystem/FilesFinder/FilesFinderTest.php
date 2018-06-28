@@ -33,9 +33,10 @@ final class FilesFinderTest extends AbstractContainerAwareTestCase
 
     public function provideData(): Iterator
     {
-        yield [['*.php'], 1, 'SomeFile.php'];
-        yield [['*.yml'], 1, 'some_config.yml'];
         yield [['php'], 1, 'SomeFile.php'];
         yield [['yml'], 1, 'some_config.yml'];
+        yield [['yaml'], 1, 'other_config.yaml'];
+        yield [['php'], 1, 'SomeFile.php'];
+        yield [['yaml', 'yml'], 2, 'some_config.yml'];
     }
 }
