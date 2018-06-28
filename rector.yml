@@ -12,5 +12,5 @@ services:
     # bin/rector process demo/tests --level phpunit60 --dry-run
 
     # case 4 - Yaml
-    # bin/rector process demo/tests --level symfony30 --dry-run
+    # bin/rector process demo/config --level symfony30 --dry-run
 
