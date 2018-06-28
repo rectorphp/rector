@@ -148,7 +148,8 @@ final class ProcessCommand extends Command
         $this->parameterProvider->changeParameter(Option::OPTION_DRY_RUN, $input->getOption(Option::OPTION_DRY_RUN));
 
         $phpFiles = $this->filesFinder->findInDirectoriesAndFiles($source, ['php']);
-        $yamlFiles = $this->filesFinder->findInDirectoriesAndFiles($source, ['yml', 'yaml']);
+        // @todo fix
+        $yamlFiles = $this->filesFinder->findInDirectoriesAndFiles($source, ['yml']);
         $allFiles = $phpFiles + $yamlFiles;
 
         $this->processCommandReporter->reportLoadedRectors();
