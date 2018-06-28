@@ -77,7 +77,7 @@ final class FilesFinder
     {
         $suffixesPattern = '';
         foreach ($suffixes as $suffix) {
-            $suffixesPattern = Strings::startsWith($suffix, '*') ? $suffix : '*' . $suffix;
+            $suffixesPattern = Strings::startsWith($suffix, '*.') ? $suffix : '*.' . $suffix;
         }
 
         return $suffixesPattern;
