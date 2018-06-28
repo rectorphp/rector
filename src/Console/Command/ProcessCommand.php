@@ -11,10 +11,9 @@ use Rector\Console\Output\ProcessCommandReporter;
 use Rector\ConsoleDiffer\DifferAndFormatter;
 use Rector\Exception\Command\FileProcessingException;
 use Rector\Exception\NoRectorsLoadedException;
-use Rector\FileSystem\PhpFilesFinder;
+use Rector\FileSystem\FilesFinder;
 use Rector\NodeTraverser\RectorNodeTraverser;
 use Rector\Reporting\FileDiff;
-use Rector\YamlRector\FileSystem\YamlFilesFinder;
 use Rector\YamlRector\YamlFileProcessor;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -39,9 +38,9 @@ final class ProcessCommand extends Command
     private $consoleStyle;
 
     /**
-     * @var PhpFilesFinder
+     * @var FilesFinder
      */
-    private $phpFilesFinder;
+    private $filesFinder;
 
     /**
      * @var ProcessCommandReporter
@@ -79,11 +78,6 @@ final class ProcessCommand extends Command
     private $rectorNodeTraverser;
 
     /**
-     * @var YamlFilesFinder
-     */
-    private $yamlFilesFinder;
-
-    /**
      * @var YamlFileProcessor
      */
     private $yamlFileProcessor;
@@ -91,26 +85,24 @@ final class ProcessCommand extends Command
     public function __construct(
         FileProcessor $fileProcessor,
         ConsoleStyle $consoleStyle,
-        PhpFilesFinder $phpFilesFinder,
+        FilesFinder $phpFilesFinder,
         ProcessCommandReporter $processCommandReporter,
         ParameterProvider $parameterProvider,
         DifferAndFormatter $differAndFormatter,
         AdditionalAutoloader $additionalAutoloader,
         RectorNodeTraverser $rectorNodeTraverser,
-        YamlFilesFinder $yamlFilesFinder,
         YamlFileProcessor $yamlFileProcessor
     ) {
         parent::__construct();
 
         $this->fileProcessor = $fileProcessor;
         $this->consoleStyle = $consoleStyle;
-        $this->phpFilesFinder = $phpFilesFinder;
+        $this->filesFinder = $phpFilesFinder;
         $this->processCommandReporter = $processCommandReporter;
         $this->parameterProvider = $parameterProvider;
         $this->differAndFormatter = $differAndFormatter;
         $this->additionalAutoloader = $additionalAutoloader;
         $this->rectorNodeTraverser = $rectorNodeTraverser;
-        $this->yamlFilesFinder = $yamlFilesFinder;
         $this->yamlFileProcessor = $yamlFileProcessor;
     }
 
@@ -147,12 +139,9 @@ final class ProcessCommand extends Command
         $this->parameterProvider->changeParameter(Option::SOURCE, $source);
         $this->parameterProvider->changeParameter(Option::OPTION_DRY_RUN, $input->getOption(Option::OPTION_DRY_RUN));
 
-        // php
-        $files = $this->phpFilesFinder->findInDirectoriesAndFiles($source);
-
-        // yaml
-        $yamlFiles = $this->yamlFilesFinder->findInDirectoriesAndFiles($source);
-        $allFiles = $files + $yamlFiles;
+        $phpFiles = $this->filesFinder->findInDirectoriesAndFiles($source, ['*.php']);
+        $yamlFiles = $this->filesFinder->findInDirectoriesAndFiles($source, ['*.yml', '*.yaml']);
+        $allFiles = $phpFiles + $yamlFiles;
 
         $this->processCommandReporter->reportLoadedRectors();
 

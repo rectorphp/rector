@@ -1,18 +1,20 @@
 <?php declare(strict_types=1);
 
-namespace Rector\YamlRector\FileSystem;
+namespace Rector\FileSystem;
 
-use PhpCsFixer\Finder;
+use Nette\Utils\Strings;
 use Rector\Exception\FileSystem\DirectoryNotFoundException;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
-final class YamlFilesFinder
+final class FilesFinder
 {
     /**
      * @param string[] $source
+     * @param string[] $suffixes
      * @return SplFileInfo[]
      */
-    public function findInDirectoriesAndFiles(array $source): array
+    public function findInDirectoriesAndFiles(array $source, array $suffixes): array
     {
         $files = [];
         $directories = [];
@@ -26,7 +28,7 @@ final class YamlFilesFinder
         }
 
         if (count($directories)) {
-            $files = array_merge($files, $this->findInDirectories($directories));
+            $files = array_merge($files, $this->findInDirectories($directories, $suffixes));
         }
 
         return $files;
@@ -34,17 +36,19 @@ final class YamlFilesFinder
 
     /**
      * @param string[] $directories
-     * @return \SplFileInfo[]
+     * @param string[] $suffixes
+     * @return SplFileInfo[]
      */
-    private function findInDirectories(array $directories): array
+    private function findInDirectories(array $directories, array $suffixes): array
     {
         $this->ensureDirectoriesExist($directories);
 
+        $suffixes = $this->normalizeSuffixesToPattern($suffixes);
+
         $finder = Finder::create()
             ->files()
-            ->name('*.yml')
+            ->name($suffixes)
             ->in($directories)
-            // @todo abstract
             ->exclude(['examples', 'Examples', 'stubs', 'Stubs', 'fixtures', 'Fixtures', 'polyfill', 'Polyfill'])
             ->notName('*polyfill*')
             ->sortByName();
@@ -64,5 +68,18 @@ final class YamlFilesFinder
 
             throw new DirectoryNotFoundException(sprintf('Directory "%s" was not found.', $directory));
         }
+    }
+
+    /**
+     * @param string[] $suffixes
+     */
+    private function normalizeSuffixesToPattern(array $suffixes): string
+    {
+        $suffixesPattern = '';
+        foreach ($suffixes as $suffix) {
+            $suffixesPattern = Strings::startsWith($suffix, '*') ? $suffix : '*' . $suffix;
+        }
+
+        return $suffixesPattern;
     }
 }
