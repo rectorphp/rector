@@ -59,12 +59,14 @@ final class RenameSubKeyYamlRector implements YamlRectorInterface
     public function refactor(string $content): string
     {
         $replacement = '';
-        for ($i = 1; $i < count($this->activePathSteps); ++$i) {
+
+        $final = 2 * count($this->activePathSteps);
+        for ($i = 1; $i < $final - 1; ++$i) {
             $replacement .= '$' . $i;
         }
 
-        $replacement .= preg_quote($this->activeNewKey) . ': ';
-        $replacement .= '$' . ($i + 1);
+        $replacement .= preg_quote($this->activeNewKey);
+        $replacement .= '$' . ($i + 3);
 
         return Strings::replace($content, $this->activePathPattern, $replacement);
     }
@@ -75,8 +77,13 @@ final class RenameSubKeyYamlRector implements YamlRectorInterface
     private function createPattern(array $pathSteps): string
     {
         $pattern = '';
-        foreach ($pathSteps as $pathStep) {
-            $pattern .= sprintf('(%s:\s+)', preg_quote($pathStep));
+        foreach ($pathSteps as $key => $pathStep) {
+            if ($key === (count($pathSteps) - 1)) {
+                // last only up-to the key name
+                $pattern .= sprintf('(%s)(.*?)', preg_quote($pathStep));
+            } else {
+                $pattern .= sprintf('(%s:\s+)(.*?)', preg_quote($pathStep));
+            }
         }
 
         return '#^' . $pattern . '#s';

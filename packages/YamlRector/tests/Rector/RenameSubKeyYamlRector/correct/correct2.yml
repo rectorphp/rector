@@ -3,8 +3,5 @@ security:
     firewalls:
         default:
             # ...
-            anonymous: { secret: "%secret%" }
-            remember_me:
-                secret: "%secret%"
-            http_digest:
-                secret: "%secret%"
+            anonymous:
+                new_key: "%secret%"

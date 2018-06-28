@@ -21,6 +21,7 @@ final class RenameSubKeyYamlRectorTest extends AbstractYamlRectorTest
     public function provideWrongToFixedFiles(): Iterator
     {
         yield [__DIR__ . '/wrong/wrong.yml', __DIR__ . '/correct/correct.yml'];
+        yield [__DIR__ . '/wrong/wrong2.yml', __DIR__ . '/correct/correct2.yml'];
     }
 
     protected function provideConfig(): string
