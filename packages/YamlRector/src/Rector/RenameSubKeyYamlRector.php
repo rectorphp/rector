@@ -52,17 +52,16 @@ final class RenameSubKeyYamlRector implements YamlRectorInterface
         $pathParts = $this->splitPathToParts($path);
 
         $pattern = '';
-        foreach ($pathParts as $key => $pathPart) {
-            if ($key === (count($pathParts) - 1)) {
-                // last only up-to the key name
+        foreach ($pathParts as $nesting => $pathPart) {
+            if ($nesting === (count($pathParts) - 1)) {
+                // last only up-to the key name + the rest
                 $pattern .= sprintf('(%s)(.*?)', preg_quote($pathPart));
             } else {
-                // see https://regex101.com/r/n8XPbV/3/ for ([^:]*?)
-                $pattern .= sprintf('(%s:\s+)([^:]*?)', preg_quote($pathPart));
+                $pattern .= sprintf('(%s:)([\n \S+]+)', preg_quote($pathPart));
             }
         }
 
-        return '#^' . $pattern . '#ms';
+        return '#^' . $pattern . '#m';
     }
 
     private function createReplacementFromPathAndNewKey(string $path, string $newKey): string
@@ -87,6 +86,7 @@ final class RenameSubKeyYamlRector implements YamlRectorInterface
      */
     private function splitPathToParts(string $path): array
     {
+        // split by " > " or ">"
         return Strings::split($path, '#[\s+]?>[\s+]?#');
     }
 }
