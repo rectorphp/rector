@@ -49,7 +49,7 @@ final class RenameSubKeyYamlRector implements YamlRectorInterface
 
     private function createPatternFromPath(string $path): string
     {
-        $pathParts = Strings::split($path, '#[\s+]?>[\s+]?#');
+        $pathParts = $this->splitPathToParts($path);
 
         $pattern = '';
         foreach ($pathParts as $key => $pathPart) {
@@ -65,14 +65,11 @@ final class RenameSubKeyYamlRector implements YamlRectorInterface
         return '#^' . $pattern . '#ms';
     }
 
-    /**
-     * @param string[] $pathSteps
-     */
     private function createReplacementFromPathAndNewKey(string $path, string $newKey): string
     {
         $replacement = '';
 
-        $pathParts = Strings::split($path, '#[\s+]?>[\s+]?#');
+        $pathParts = $this->splitPathToParts($path);
 
         $final = 2 * count($pathParts);
         for ($i = 1; $i < $final - 1; ++$i) {
@@ -83,5 +80,13 @@ final class RenameSubKeyYamlRector implements YamlRectorInterface
         $replacement .= '$' . ($i + 3);
 
         return $replacement;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function splitPathToParts(string $path): array
+    {
+        return Strings::split($path, '#[\s+]?>[\s+]?#');
     }
 }
