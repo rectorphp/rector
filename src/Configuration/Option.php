@@ -27,5 +27,10 @@ final class Option
     /**
      * @var string
      */
+    public const OPTION_WITH_STYLE = 'with-style';
+
+    /**
+     * @var string
+     */
     public const KERNEL_CLASS_PARAMETER = 'kernel_class';
 }

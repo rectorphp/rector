@@ -21,6 +21,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\SplFileInfo;
+use Symfony\Component\Process\Process;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Throwable;
@@ -127,6 +128,13 @@ final class ProcessCommand extends Command
             InputOption::VALUE_REQUIRED,
             'File with extra autoload'
         );
+
+        $this->addOption(
+            Option::OPTION_WITH_STYLE,
+            null,
+            InputOption::VALUE_NONE,
+            'Apply basic coding style afterwards to make code look nicer'
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -149,6 +157,16 @@ final class ProcessCommand extends Command
 
         $this->processCommandReporter->reportFileDiffs($this->fileDiffs);
         $this->processCommandReporter->reportChangedFiles($this->changedFiles);
+
+        if ($input->getOption(Option::OPTION_WITH_STYLE)) {
+            $command = sprintf('vendor/bin/ecs check %s --config ecs-after-rector.yml --fix', implode(' ', $source));
+
+            $process = new Process($command);
+            $process->run();
+
+            $this->consoleStyle->success('Basic coding standard is done');
+        }
+
         $this->consoleStyle->success('Rector is done!');
 
         return 0;
