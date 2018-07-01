@@ -143,19 +143,14 @@ You don't have to always write PHP code. Many projects change only classes or me
 - [Dynamic Rectors](/docs/DynamicRectors.md)
 - [Turn Magic to Methods](/docs/MagicDisclosureRectors.md)
 
-## Coding Standards are Outsourced
+## How to Apply Coding Standards?
 
-This package has no intention in formatting your code, as **coding standard tools handle this much better**. We prefer [EasyCodingStandard](https://github.com/Symplify/EasyCodingStandard) with Rector's prepared set:
+Rector uses [EasyCodingStandard](https://github.com/Symplify/EasyCodingStandard) to improve the code style of changed files, like import namespaces, make 1 empty line between class elements etc.
+
+It's always better to use own project's prepared set, but if you don't have the option yet, just use `--with-style` option to handle these basic cases:
 
 ```bash
-# install
-composer require --dev symplify/easy-coding-standard
-
-# check
-vendor/bin/ecs check --config vendor/rector/rector/ecs-after-rector.yml
-
-# fix
-vendor/bin/ecs check --config vendor/rector/rector/ecs-after-rector.yml --fix
+vendor/bin/rector process src --with-style
 ```
 
 ## More Detailed Documentation
