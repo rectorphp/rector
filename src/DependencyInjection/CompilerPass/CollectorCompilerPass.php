@@ -20,7 +20,7 @@ final class CollectorCompilerPass implements CompilerPassInterface
 
     public function __construct()
     {
-        $this->definitionCollector = (new DefinitionCollector(new DefinitionFinder()));
+        $this->definitionCollector = new DefinitionCollector(new DefinitionFinder());
     }
 
     public function process(ContainerBuilder $containerBuilder): void
