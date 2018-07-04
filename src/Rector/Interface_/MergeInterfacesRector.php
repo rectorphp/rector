@@ -62,7 +62,7 @@ CODE_SAMPLE
         foreach ($node->implements as $implement) {
             $interface = (string) $implement->getAttribute(Attribute::RESOLVED_NAME);
 
-            if (in_array($interface, array_keys($this->oldToNewInterfaces), true)) {
+            if (array_key_exists($interface, $this->oldToNewInterfaces)) {
                 return true;
             }
         }
@@ -78,7 +78,7 @@ CODE_SAMPLE
         foreach ($classNode->implements as $key => $implement) {
             $interface = (string) $implement->getAttribute(Attribute::RESOLVED_NAME);
 
-            if (in_array($interface, array_keys($this->oldToNewInterfaces), true)) {
+            if (array_key_exists($interface, $this->oldToNewInterfaces)) {
                 $classNode->implements[$key] = new Name($this->oldToNewInterfaces[$interface]);
             }
         }
