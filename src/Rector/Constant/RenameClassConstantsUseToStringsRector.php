@@ -64,7 +64,7 @@ final class RenameClassConstantsUseToStringsRector extends AbstractRector
             return false;
         }
 
-        return in_array((string) $node->name, array_keys($this->oldConstantToNewValue), true);
+        return array_key_exists((string) $node->name, $this->oldConstantToNewValue);
     }
 
     /**

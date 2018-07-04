@@ -4,7 +4,6 @@ namespace Rector\Tests\Rector\Architecture\DependencyInjection\ActionInjectionTo
 
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\HttpKernel\Kernel;
 
 final class SomeKernelClass extends Kernel
