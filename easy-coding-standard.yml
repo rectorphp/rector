@@ -7,7 +7,7 @@ imports:
 
 services:
     Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
-        maxCognitiveComplexity: 6
+        maxCognitiveComplexity: 8
 
     # Class should be Final or Abstract
     SlamCsFixer\FinalInternalClassFixer: ~
@@ -28,9 +28,9 @@ services:
             - 'PhpParser\PrettyPrinter\Standard'
             - 'PhpParser\Node'
 
-    Symplify\CodingStandard\Fixer\Naming\ClassNameSuffixByParentFixer:
-        parent_types_to_suffixes:
-            '*Rector': 'Rector'
+    Symplify\CodingStandard\Sniffs\Naming\ClassNameSuffixByParentSniff:
+        extraParentTypesToSuffixes:
+            - 'Rector'
 
 parameters:
     exclude_files:
