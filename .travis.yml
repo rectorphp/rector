@@ -3,7 +3,7 @@ language: php
 matrix:
   include:
     - php: 7.1
-      env: STATIC_ANALYSIS=true RUN_RECTOR=true
+      env: STATIC_ANALYSIS=true RUN_RECTOR=true MONOREPO_SPLIT=true
     - php: 7.1
       env: COMPOSER_FLAGS="--prefer-lowest"
     - php: 7.2
@@ -37,6 +37,12 @@ after_script:
     if [[ $PHPUNIT_FLAGS == true ]]; then
       wget https://github.com/satooshi/php-coveralls/releases/download/v1.0.1/coveralls.phar
       php coveralls.phar --verbose
+    fi
+
+  # split monorepo sub-packages
+  - |
+    if [[ $MONOREPO_SPLIT != "" ]]; then
+        vendor/bin/monorepo-builder split -v
     fi
 
 cache:
