@@ -26,13 +26,15 @@ script:
   - phpenv config-rm xdebug.ini || return 0
   - |
     if [[ $STATIC_ANALYSIS == true ]]; then
-        composer check-cs
-        composer phpstan
+      composer check-cs
+      composer phpstan
     fi
   # Rector demo run
-  - if [[ $RUN_RECTOR == true ]]; then bin/rector process src tests --level symfony40 --dry-run; fi
-  # Rector describe command
-  - if [[ $RUN_RECTOR == true ]]; then bin/rector describe --level all; fi
+  - |
+    if [[ $RUN_RECTOR == true ]]; then
+      bin/rector process src tests --level symfony40 --dry-run
+      bin/rector describe --level all
+    fi
 
 after_script:
   # upload coverage to Coveralls.io
@@ -42,9 +44,9 @@ after_script:
       php coveralls.phar --verbose
     fi
 
-  # split monorepo sub-packages
+  # split monorepo to packages - only on merge to master
   - |
-    if [[ $MONOREPO_SPLIT == "" ]]; then
+    if [[ $TRAVIS_EVENT_TYPE == "push" && $MONOREPO_SPLIT == true && $TRAVIS_BRANCH == "master" ]]; then
         vendor/bin/monorepo-builder split -v
     fi
 
