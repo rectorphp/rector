@@ -18,14 +18,17 @@ install:
 
 before_script:
   # disable xdebug if not coverage
-  - if [[ $PHPUNIT_FLAGS = "" ]]; then phpenv config-rm xdebug.ini; fi
+  - if [[ $PHPUNIT_FLAGS == "" ]]; then phpenv config-rm xdebug.ini; fi
 
 script:
   - vendor/bin/phpunit $PHPUNIT_FLAGS
   # disable xdebug
   - phpenv config-rm xdebug.ini || return 0
-  - if [[ $STATIC_ANALYSIS == true ]]; then composer check-cs; fi
-  - if [[ $STATIC_ANALYSIS == true ]]; then composer phpstan; fi
+  - |
+    if [[ $STATIC_ANALYSIS == true ]]; then
+        composer check-cs
+        composer phpstan
+    fi
   # Rector demo run
   - if [[ $RUN_RECTOR == true ]]; then bin/rector process src tests --level symfony40 --dry-run; fi
   # Rector describe command
@@ -41,7 +44,7 @@ after_script:
 
   # split monorepo sub-packages
   - |
-    if [[ $MONOREPO_SPLIT != "" ]]; then
+    if [[ $MONOREPO_SPLIT == "" ]]; then
         vendor/bin/monorepo-builder split -v
     fi
 
