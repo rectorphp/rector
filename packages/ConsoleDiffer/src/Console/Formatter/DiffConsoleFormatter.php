@@ -57,7 +57,7 @@ final class DiffConsoleFormatter
                 }
 
                 return $string;
-            }, preg_split("#\n\r|\n#", OutputFormatter::escape(rtrim($diff)))))
+            }, (array) preg_split("#\n\r|\n#", OutputFormatter::escape(rtrim($diff)))))
         );
     }
 }

@@ -23,12 +23,12 @@ final class RectorKernel extends Kernel
 
     public function __construct(?string $configFile = '')
     {
-        if ($configFile) {
+        if (! is_null($configFile)) {
             $this->configFile = $configFile;
         }
 
         // debug: true is require to invalidate container on service files change
-        parent::__construct('cli' . sha1($configFile), true);
+        parent::__construct('cli' . sha1($this->configFile), true);
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader): void

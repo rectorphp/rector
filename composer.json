@@ -23,7 +23,7 @@
     },
     "require-dev": {
         "humbug/php-scoper": "^0.8.1",
-        "phpstan/phpstan-shim": "^0.9",
+        "phpstan/phpstan": "^0.10.1",
         "phpunit/phpunit": "^7.1",
         "slam/php-cs-fixer-extensions": "^1.15",
         "symplify/easy-coding-standard": "^4.5",
@@ -79,7 +79,7 @@
             "vendor/bin/ecs check bin packages src tests --fix",
             "bin/clean_levels.sh"
         ],
-        "phpstan": "vendor/bin/phpstan.phar analyse packages src tests --level max --configuration phpstan.neon",
+        "phpstan": "vendor/bin/phpstan analyse --configuration phpstan.neon",
         "update-docs": "bin/rector describe --level all --format md > docs/AllRectorsOverview.md"
     },
     "bin": [

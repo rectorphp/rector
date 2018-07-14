@@ -1,4 +1,9 @@
 parameters:
+    level: max
+    paths:
+        - %currentWorkingDirectory%/packages
+        - %currentWorkingDirectory%/src
+        - %currentWorkingDirectory%/tests
     ignoreErrors:
         # the # after each ignored error is the number of occurrences
 
@@ -17,33 +22,20 @@ parameters:
         - '#Parameter \#2 \$codeSamples of class Rector\\RectorDefinition\\RectorDefinition constructor expects array<Rector\\RectorDefinition\\CodeSample>, array<int, stdClass> given#' # 1
 
         # known values
-        - '#Argument of an invalid type array<PhpParser\\Node>\|null supplied for foreach, only iterables are supported#' # 1
         - '#Access to an undefined property PHPStan\\PhpDocParser\\Ast\\Node::\$name#' # 2
-        - '#Calling method getName\(\) on possibly null value of type Rector\\Builder\\Class_\\VariableInfo\|null#' # 1
-
+        - '#Cannot call method getText\(\) on PhpParser\\Comment\\Doc|null#' #3
         - '#Method Rector\\Node\\NodeFactory::createNullConstant\(\) should return PhpParser\\Node\\Expr\\ConstFetch but returns PhpParser\\Node\\Expr#' # 1
         - '#Method Rector\\Node\\NodeFactory::createNamespace\(\) should return PhpParser\\Node\\Stmt\\Namespace_ but returns PhpParser\\Node#' # 1
-        - '#Calling method getText\(\) on possibly null value of type PhpParser\\Comment\\Doc\|null#' # 3
-        - '#Instanceof between PhpParser\\Node\\Expr\|string and PhpParser\\Node\\(Identifier|Name) will always evaluate to false#' # 9
-        - '#Method Rector\\NodeTraverserQueue\\BetterNodeFinder::findFirstAncestorInstanceOf\(\) should return PhpParser\\Node\|null but returns object#' # 1
-        - '#Access to an undefined property PhpParser\\Node\\Stmt\\(Class_|ClassLike)::\$namespacedName#' # 3
         - '#Property Rector\\NodeTypeResolver\\NodeVisitor\\NamespaceResolver::\$useNodes \(array<PhpParser\\Node\\Stmt\\Use_>\) does not accept array<PhpParser\\Node>#' # 1
-        - '#Parameter \#1 \$classMethodNode of method Rector\\NodeTypeResolver\\TypesExtractor\\ConstructorPropertyTypesExtractor::extractPropertiesFromConstructorMethodNode\(\) expects PhpParser\\Node\\Stmt\\ClassMethod, PhpParser\\Node given#' # 1
         - '#Parameter \#1 \$node of method Rector\\NodeTypeResolver\\NodeTypeResolver::resolve\(\) expects PhpParser\\Node, PhpParser\\Node\\Expr|string given#' # 3
         - '#Method Rector\\NodeTraverser\\RectorNodeTraverser::getRectors\(\) should return array<Rector\\Contract\\Rector\\RectorInterface> but returns array<PhpParser\\NodeVisitor>#' # 1
 
         # buggy
+        - "#Casting to array<string, string> something that's already array<string, string>#"
         - '#Access to an undefined property PhpParser\\Node\\Expr::\$value#' # 2
-        - '#Parameter \#1 \$classLikeNode of method Rector\\NodeAnalyzer\\ClassLikeAnalyzer::resolveExtendsTypes\(\) expects PhpParser\\Node\\Stmt\\Class_\|PhpParser\\Node\\Stmt\\Interface_, PhpParser\\Node\\Stmt\\ClassLike given#' # 1
         - '#Parameter \#1 \$functionLikeNode of method Rector\\NodeTypeResolver\\TypeContext::getFunctionReflection\(\) expects PhpParser\\Node\\Expr\\Closure\|PhpParser\\Node\\Stmt\\ClassMethod\|PhpParser\\Node\\Stmt\\Function_, PhpParser\\Node\\FunctionLike given#' # 1
-        - '#Access to an undefined property PhpParser\\Node\\Param::\$var#' # 4
-        - '#Call to an undefined method PhpParser\\BuilderFactory::(args|classConstFetch|methodCall|staticCall)\(\)#' # 9
-        - "#Casting to string something that's already string#" # 4
-        - '#Call to an undefined method PhpParser\\Node\\Stmt\\UseUse::getAlias\(\)#' # 2
-        - '#Call to an undefined method PhpParser\\PrettyPrinter\\Standard::printFormatPreserving\(\)#' # 1
         - '#Access to an undefined property PhpParser\\Node\\Expr::\$(name|var)#' # 2
-        - '#Call to an undefined method PhpParser\\Node\\Expr\\BinaryOp::getOperatorSigil\(\).#' # 1
-        - '#Call to an undefined method PhpParser\\Node\\Expr\\ArrayItem::getComments\(\).#' # 2
+        - '#Cannot cast PhpParser\\Node\\Expr|string to string.#' #26
 
         # tests or coding standars?
         - '#Constructor of class [\s\S]+ has an unused parameter \$html#' # 2
@@ -54,4 +46,4 @@ parameters:
         - '*packages/BetterReflection/tests/Reflector/NotLoadedSource/SomeClass.php'
 
     # clean once upon a time
-    reportUnmatchedIgnoredErrors: false
+    reportUnmatchedIgnoredErrors: true

@@ -14,7 +14,7 @@ abstract class AbstractContainerAwareTestCase extends TestCase
     protected $container;
 
     /**
-     * @var ContainerInterface
+     * @var ContainerInterface|null
      */
     private static $cachedContainer;
 
