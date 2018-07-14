@@ -122,12 +122,12 @@ final class ConstructorPropertyTypesExtractor
     ): array {
         $propertiesWithTypes = [];
 
+        /** @var Expression $inConstructorNode */
         foreach ((array) $classMethodNode->stmts as $inConstructorNode) {
             if (! $this->isAssignThisNode($inConstructorNode)) {
                 continue;
             }
 
-            /** @var Expression $inConstructorNode */
             /** @var Assign $assignNode */
             $assignNode = $inConstructorNode->expr;
 

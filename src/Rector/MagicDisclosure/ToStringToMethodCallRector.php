@@ -74,7 +74,7 @@ final class ToStringToMethodCallRector extends AbstractRector
 
     public function isCandidate(Node $node): bool
     {
-        if ($node instanceof String_ && $node->expr) {
+        if ($node instanceof String_) {
             return $this->processStringCandidate($node);
         }
 

@@ -54,7 +54,7 @@ final class TemplateGuesser
     private function resolveForVersion5(string $namespace, string $class, string $method): string
     {
         $bundle = Strings::match($namespace, '/(?<bundle>[A-Za-z]*Bundle)/')['bundle'] ?? '';
-        $bundle = preg_replace('/Bundle$/', '', $bundle);
+        $bundle = (string) preg_replace('/Bundle$/', '', $bundle);
         $bundle = $bundle ? '@' . $bundle . '/' : '';
 
         $controller = $this->resolveControllerVersion5($class);
