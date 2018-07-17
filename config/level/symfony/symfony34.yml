@@ -7,3 +7,11 @@ services:
             ' !php/object:': ' !php/object '
             ' !php/const:': ' !php/const '
             ' !str': ' !!str'
+
+    Rector\Rector\Dynamic\ArgumentRemoverRector:
+        $argumentChangesByMethodAndType:
+            -
+                class: 'Symfony\Component\Yaml\Yaml'
+                method: 'parse'
+                position: 2
+                value: 'Symfony\Component\Yaml\Yaml::PARSE_KEYS_AS_STRINGS'
