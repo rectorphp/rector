@@ -1,6 +1,9 @@
-main_key:
-    old_sub_key: value
-
-sub:
-    main_key:
-        old_sub_key: value
+security:
+    # ...
+    firewalls:
+        default:
+            # ...
+            anonymous:
+                old_key: "%secret%"
+            remember_me:
+                old_key: "%secret%"

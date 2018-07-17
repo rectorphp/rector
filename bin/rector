@@ -9,11 +9,11 @@ use Symplify\PackageBuilder\Console\ThrowableRenderer;
 gc_disable();
 
 // Require Composer autoload.php
-require_once __DIR__ . '/rector_bootstrap.php';
+require_once __DIR__ . '/bootstrap.php';
 
 try {
     /** @var ContainerInterface $container */
-    $container = require_once __DIR__ . '/rector_container.php';
+    $container = require_once __DIR__ . '/container.php';
 
     $application = $container->get(Application::class);
     exit($application->run());

@@ -13,21 +13,6 @@ final class RenameSubKeyYamlRector implements YamlRectorInterface
     private $pathsToNewKeys = [];
 
     /**
-     * @var string|null
-     */
-    private $activePathPattern;
-
-    /**
-     * @var string[]
-     */
-    private $activePathSteps = [];
-
-    /**
-     * @var string|null
-     */
-    private $activeNewKey;
-
-    /**
      * @param string[] $pathsToNewKeys
      */
     public function __construct(array $pathsToNewKeys)
@@ -37,18 +22,10 @@ final class RenameSubKeyYamlRector implements YamlRectorInterface
 
     public function isCandidate(string $content): bool
     {
-        $this->activePathPattern = null;
-        $this->activePathSteps = [];
-        $this->activeNewKey = null;
-
         foreach ($this->pathsToNewKeys as $path => $newKey) {
-            $pathSteps = Strings::split($path, '#[\s+]?>[\s+]?#');
-            $pathPattern = $this->createPattern($pathSteps);
+            $pathPattern = $this->createPatternFromPath($path);
 
             if ((bool) Strings::match($content, $pathPattern)) {
-                $this->activePathSteps = $pathSteps;
-                $this->activePathPattern = $pathPattern;
-                $this->activeNewKey = $newKey;
                 return true;
             }
         }
@@ -58,34 +35,58 @@ final class RenameSubKeyYamlRector implements YamlRectorInterface
 
     public function refactor(string $content): string
     {
+        foreach ($this->pathsToNewKeys as $path => $newKey) {
+            $pathPattern = $this->createPatternFromPath($path);
+
+            while (Strings::match($content, $pathPattern)) {
+                $replacement = $this->createReplacementFromPathAndNewKey($path, $newKey);
+                $content = Strings::replace($content, $pathPattern, $replacement, 1);
+            }
+        }
+
+        return $content;
+    }
+
+    private function createPatternFromPath(string $path): string
+    {
+        $pathParts = $this->splitPathToParts($path);
+
+        $pattern = '';
+        foreach ($pathParts as $nesting => $pathPart) {
+            if ($nesting === (count($pathParts) - 1)) {
+                // last only up-to the key name + the rest
+                $pattern .= sprintf('(%s)(.*?)', preg_quote($pathPart));
+            } else {
+                $pattern .= sprintf('(%s:)([\n \S+]+)', preg_quote($pathPart));
+            }
+        }
+
+        return '#^' . $pattern . '#m';
+    }
+
+    private function createReplacementFromPathAndNewKey(string $path, string $newKey): string
+    {
         $replacement = '';
 
-        $final = 2 * count($this->activePathSteps);
+        $pathParts = $this->splitPathToParts($path);
+
+        $final = 2 * count($pathParts);
         for ($i = 1; $i < $final - 1; ++$i) {
             $replacement .= '$' . $i;
         }
 
-        $replacement .= preg_quote($this->activeNewKey);
+        $replacement .= preg_quote($newKey);
         $replacement .= '$' . ($i + 3);
 
-        return Strings::replace($content, $this->activePathPattern, $replacement);
+        return $replacement;
     }
 
     /**
-     * @param string[] $pathSteps
+     * @return string[]
      */
-    private function createPattern(array $pathSteps): string
+    private function splitPathToParts(string $path): array
     {
-        $pattern = '';
-        foreach ($pathSteps as $key => $pathStep) {
-            if ($key === (count($pathSteps) - 1)) {
-                // last only up-to the key name
-                $pattern .= sprintf('(%s)(.*?)', preg_quote($pathStep));
-            } else {
-                $pattern .= sprintf('(%s:\s+)(.*?)', preg_quote($pathStep));
-            }
-        }
-
-        return '#^' . $pattern . '#s';
+        // split by " > " or ">"
+        return Strings::split($path, '#[\s+]?>[\s+]?#');
     }
 }
