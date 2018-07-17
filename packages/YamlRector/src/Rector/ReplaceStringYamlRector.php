@@ -3,6 +3,8 @@
 namespace Rector\YamlRector\Rector;
 
 use Nette\Utils\Strings;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 use Rector\YamlRector\Contract\YamlRectorInterface;
 
 final class ReplaceStringYamlRector implements YamlRectorInterface
@@ -18,6 +20,13 @@ final class ReplaceStringYamlRector implements YamlRectorInterface
     public function __construct(array $oldToNewString)
     {
         $this->oldToNewString = $oldToNewString;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('Replaces one string by another. Use only for very specific strings only.', [
+            new CodeSample('key: !super_old_complex', 'key: !super_old_complex'),
+        ]);
     }
 
     public function isCandidate(string $content): bool

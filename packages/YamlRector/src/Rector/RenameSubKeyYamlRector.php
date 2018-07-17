@@ -3,6 +3,8 @@
 namespace Rector\YamlRector\Rector;
 
 use Nette\Utils\Strings;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 use Rector\YamlRector\Contract\YamlRectorInterface;
 
 final class RenameSubKeyYamlRector implements YamlRectorInterface
@@ -18,6 +20,13 @@ final class RenameSubKeyYamlRector implements YamlRectorInterface
     public function __construct(array $pathsToNewKeys)
     {
         $this->pathsToNewKeys = $pathsToNewKeys;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('Replaces specifically nested key by another.', [
+            new CodeSample('key > another_key > old_key: value', 'key > another_key > new_key: value'),
+        ]);
     }
 
     public function isCandidate(string $content): bool
