@@ -2,6 +2,7 @@
 
 namespace Rector\Rector\Dynamic;
 
+use Nette\Utils\Strings;
 use PhpParser\BuilderHelpers;
 use PhpParser\ConstExprEvaluator;
 use PhpParser\Node;
@@ -11,6 +12,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Configuration\Rector\ArgumentDefaultValueReplacerRecipe;
 use Rector\Configuration\Rector\ArgumentDefaultValueReplacerRecipeFactory;
+use Rector\Node\NodeFactory;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
@@ -32,15 +34,22 @@ final class ArgumentDefaultValueReplacerRector extends AbstractArgumentRector
     private $constExprEvaluator;
 
     /**
+     * @var NodeFactory
+     */
+    private $nodeFactory;
+
+    /**
      * @param mixed[] $argumentChangesByMethodAndType
      */
     public function __construct(
         array $argumentChangesByMethodAndType,
         ConstExprEvaluator $constExprEvaluator,
-        ArgumentDefaultValueReplacerRecipeFactory $argumentDefaultValueReplacerRecipeFactory
+        ArgumentDefaultValueReplacerRecipeFactory $argumentDefaultValueReplacerRecipeFactory,
+        NodeFactory $nodeFactory
     ) {
         $this->loadArgumentReplacerRecipes($argumentDefaultValueReplacerRecipeFactory, $argumentChangesByMethodAndType);
         $this->constExprEvaluator = $constExprEvaluator;
+        $this->nodeFactory = $nodeFactory;
     }
 
     public function getDefinition(): RectorDefinition
@@ -143,11 +152,36 @@ CODE_SAMPLE
 
         $replaceMap = $argumentDefaultValueReplacerRecipe->getReplacement();
         foreach ($replaceMap as $oldValue => $newValue) {
-            if ($resolvedValue === $oldValue) {
+            if ($this->isMatch($oldValue, $resolvedValue)) {
+                // class constants, turn string to composite
+                if (Strings::contains($newValue, '::')) {
+                    [$class, $constant] = explode('::', $newValue);
+                    $classConstantFetchNode = $this->nodeFactory->createClassConstant($class, $constant);
+
+                    return new Arg($classConstantFetchNode);
+                }
+
                 return new Arg(BuilderHelpers::normalizeValue($newValue));
             }
         }
 
         return $argNode;
+    }
+
+    /**
+     * @param mixed $oldValue
+     * @param mixed $resolvedValue
+     */
+    private function isMatch($oldValue, $resolvedValue): bool
+    {
+        if ($oldValue === 'true' && $resolvedValue === true) {
+            return true;
+        }
+
+        if ($oldValue === 'false' && $resolvedValue === false) {
+            return true;
+        }
+
+        return $resolvedValue === $oldValue;
     }
 }
