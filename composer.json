@@ -19,6 +19,7 @@
         "symfony/dependency-injection": "^3.4|^4.0",
         "symfony/finder": "^3.4|^4.0",
         "symplify/better-phpdoc-parser": "^4.5",
+        "symplify/changelog-linker": "^4.5",
         "symplify/monorepo-builder": "^4.5"
     },
     "require-dev": {
@@ -80,16 +81,14 @@
             "bin/clean_levels.sh"
         ],
         "phpstan": "vendor/bin/phpstan.phar analyse packages src tests --level max --configuration phpstan.neon",
-        "update-docs": "bin/rector describe --level all --format md > docs/AllRectorsOverview.md"
+        "update-docs": "bin/rector describe --level all --format md > docs/AllRectorsOverview.md",
+        "changelog": [
+            "vendor/bin/changelog-linker dump-merges",
+            "vendor/bin/changelog-linker linkify"
+        ]
     },
-    "bin": [
-        "bin/rector",
-        "bin/rector_bootstrap.php",
-        "bin/rector_container.php"
-    ],
+    "bin": ["bin/rector"],
     "config": {
         "sort-packages": true
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true
+    }
 }
