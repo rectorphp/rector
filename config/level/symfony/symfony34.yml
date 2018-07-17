@@ -1,13 +1,15 @@
 services:
+    # yaml
+    Rector\YamlRector\Rector\ReplaceStringYamlRector:
+        $oldToNewString:
+            ' !php/object:': ' !php/object '
+            ' !php/const:': ' !php/const '
+            ' !str': ' !!str'
+
     Rector\Rector\Dynamic\ArgumentRemoverRector:
         $argumentChangesByMethodAndType:
             -
-                class: 'Doctrine\ORM\Persisters\Entity\AbstractEntityInheritancePersister'
-                method: 'getSelectJoinColumnSQL'
-                position: 4
-
-            -
                 class: 'Symfony\Component\Yaml\Yaml'
                 method: 'parse'
-                position: 1
+                position: 2
                 value: 'Symfony\Component\Yaml\Yaml::PARSE_KEYS_AS_STRINGS'

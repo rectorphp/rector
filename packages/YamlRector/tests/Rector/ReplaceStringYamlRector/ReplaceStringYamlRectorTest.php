@@ -1,11 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Dynamic\ArgumentRemoverRector;
+namespace Rector\YamlRector\Tests\Rector\ReplaceStringYamlRector;
 
 use Iterator;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\YamlRector\Tests\AbstractYamlRectorTest;
 
-final class ArgumentRemoverRectorTest extends AbstractRectorTestCase
+/**
+ * @covers \Rector\YamlRector\Rector\ReplaceStringYamlRector
+ */
+final class ReplaceStringYamlRectorTest extends AbstractYamlRectorTest
 {
     /**
      * @dataProvider provideWrongToFixedFiles()
@@ -17,8 +20,8 @@ final class ArgumentRemoverRectorTest extends AbstractRectorTestCase
 
     public function provideWrongToFixedFiles(): Iterator
     {
-//        yield [__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc'];
-        yield [__DIR__ . '/Wrong/wrong2.php.inc', __DIR__ . '/Correct/correct2.php.inc'];
+        yield [__DIR__ . '/wrong/wrong.yml', __DIR__ . '/correct/correct.yml'];
+        yield [__DIR__ . '/wrong/wrong2.yml', __DIR__ . '/correct/correct2.yml'];
     }
 
     protected function provideConfig(): string

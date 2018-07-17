@@ -3,11 +3,15 @@
 namespace Rector\Rector\Dynamic;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Configuration\Rector\ArgumentRemoverRecipe;
 use Rector\Configuration\Rector\ArgumentRemoverRecipeFactory;
+use Rector\Node\Attribute;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
@@ -106,16 +110,46 @@ CODE_SAMPLE
     }
 
     /**
-     * @param mixed[] $argumentNodes
+     * @param Arg[]|Param[] $argumentNodes
      * @return mixed[]
      */
     private function processArgumentNodes(array $argumentNodes): array
     {
         foreach ($this->activeArgumentRemoverRecipes as $activeArgumentRemoverRecipe) {
             $position = $activeArgumentRemoverRecipe->getPosition();
-            unset($argumentNodes[$position]);
+
+            if ($activeArgumentRemoverRecipe->getValue() === null) {
+                unset($argumentNodes[$position]);
+            } elseif ($this->isArgumentValueMatch($argumentNodes[$position], $activeArgumentRemoverRecipe)) {
+                unset($argumentNodes[$position]);
+            }
         }
 
         return $argumentNodes;
+    }
+
+    /**
+     * @param Arg|Param $argOrParamNode
+     */
+    private function isArgumentValueMatch($argOrParamNode, ArgumentRemoverRecipe $argumentRemoverRecipe): bool
+    {
+        // only argument specific value can be removed
+        if (! $argOrParamNode instanceof Arg) {
+            return false;
+        }
+
+        $valueNode = $argOrParamNode->value;
+
+        if ($valueNode instanceof ClassConstFetch) {
+            $valueNodeAsString = $valueNode->class->getAttribute(Attribute::RESOLVED_NAME)->toString()
+                . '::'
+                . $valueNode->name->toString();
+
+            if ($valueNodeAsString === $argumentRemoverRecipe->getValue()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

@@ -1,0 +1,5 @@
+services:
+    Rector\YamlRector\Rector\ReplaceStringYamlRector:
+        $oldToNewString:
+            ' !!php/object': ' !php/object'
+            ' !php/object:': ' !php/object '

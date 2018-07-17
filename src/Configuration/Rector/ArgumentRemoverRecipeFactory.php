@@ -11,6 +11,6 @@ final class ArgumentRemoverRecipeFactory extends AbstractArgumentRecipeFactory
     {
         $this->validateArrayData($data);
 
-        return new ArgumentRemoverRecipe($data['class'], $data['method'], $data['position']);
+        return new ArgumentRemoverRecipe($data['class'], $data['method'], $data['position'], $data['value'] ?? null);
     }
 }

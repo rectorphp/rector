@@ -3,6 +3,7 @@ parameters:
         # the # after each ignored error is the number of occurrences
 
         # false positive, has annotation type above (@todo recheck for possible ignored positives)
+        - '#Cannot call method toString\(\) on PhpParser\\Node\\Expr\\Error\|string#' # 1
         - '#Access to an undefined property PhpParser\\Node::\$name#' # 11
         - '#Parameter \#1 \$node of method Rector\\NodeAnalyzer\\ClassConstAnalyzer::isNames\(\) expects PhpParser\\Node\\Expr\\ClassConstFetch, PhpParser\\Node given#' # 1
         - '#Parameter \#1 \$classNode of method Rector\\NodeTypeResolver\\TypesExtractor\\ConstructorPropertyTypesExtractor::extractFromClassNode\(\) expects PhpParser\\Node\\Stmt\\Class_, PhpParser\\Node\\Stmt\\ClassLike given#' # 1
