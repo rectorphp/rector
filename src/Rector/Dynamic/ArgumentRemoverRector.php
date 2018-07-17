@@ -7,6 +7,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Configuration\Rector\ArgumentRemoverRecipe;
 use Rector\Configuration\Rector\ArgumentRemoverRecipeFactory;
@@ -109,7 +110,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Arg[] $argumentNodes
+     * @param Arg[]|Param[] $argumentNodes
      * @return mixed[]
      */
     private function processArgumentNodes(array $argumentNodes): array
@@ -127,9 +128,17 @@ CODE_SAMPLE
         return $argumentNodes;
     }
 
-    private function isArgumentValueMatch(Arg $argNode, ArgumentRemoverRecipe $argumentRemoverRecipe): bool
+    /**
+     * @param Arg|Param $argOrParamNode
+     */
+    private function isArgumentValueMatch($argOrParamNode, ArgumentRemoverRecipe $argumentRemoverRecipe): bool
     {
-        $valueNode = $argNode->value;
+        // only argument specific value can be removed
+        if (! $argOrParamNode instanceof Arg) {
+            return false;
+        }
+
+        $valueNode = $argOrParamNode->value;
 
         if ($valueNode instanceof ClassConstFetch) {
             $valueNodeAsString = $valueNode->class->getAttribute(Attribute::RESOLVED_NAME)->toString()
