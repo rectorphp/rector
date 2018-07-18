@@ -8,7 +8,12 @@ services:
                 before: 'Symfony\Component\DependencyInjection\ContainerBuilder::SCOPE_PROTOTYPE'
                 after: false
 
-
+            -
+                class: 'Symfony\Component\Yaml\Yaml'
+                method: 'parse'
+                position: 1
+                before: ['false', 'false', 'true']
+                after: 'Symfony\Component\Yaml\Yaml::PARSE_OBJECT_FOR_MAP'
 
             -
                 class: 'Symfony\Component\Yaml\Yaml'
@@ -16,13 +21,6 @@ services:
                 position: 1
                 before: ['false', 'true']
                 after: 'Symfony\Component\Yaml\Yaml::PARSE_OBJECT'
-#
-#            -
-#                class: 'Symfony\Component\Yaml\Yaml'
-#                method: 'parse'
-#                position: 1
-#                replacement:
-#                    ['false', 'false', 'true']: 'Symfony\Component\Yaml\Yaml::PARSE_OBJECT_FOR_MAP'
 
             -
                 class: 'Symfony\Component\Yaml\Yaml'
