@@ -2,8 +2,27 @@
 
 namespace Rector\Configuration\Rector;
 
-final class ArgumentDefaultValueReplacerRecipe extends AbstractArgumentRecipe
+use Rector\Configuration\Rector\Guard\RecipeGuard;
+use Rector\Contract\Configuration\Rector\ArgumentRecipeInterface;
+use Rector\Rector\Dynamic\ArgumentDefaultValueReplacerRector;
+
+final class ArgumentDefaultValueReplacerRecipe implements ArgumentRecipeInterface
 {
+    /**
+     * @var string
+     */
+    private $class;
+
+    /**
+     * @var string
+     */
+    private $method;
+
+    /**
+     * @var int
+     */
+    private $position;
+
     /**
      * @var mixed
      */
@@ -18,11 +37,42 @@ final class ArgumentDefaultValueReplacerRecipe extends AbstractArgumentRecipe
      * @param mixed $before
      * @param mixed $after
      */
-    public function __construct(string $class, string $method, int $position, $before, $after)
+    private function __construct(string $class, string $method, int $position, $before, $after)
     {
-        parent::__construct($class, $method, $position);
         $this->before = $before;
         $this->after = $after;
+        $this->class = $class;
+        $this->method = $method;
+        $this->position = $position;
+    }
+
+    /**
+     * @param mixed[] $array
+     */
+    public static function createFromArray(array $array): self
+    {
+        RecipeGuard::ensureHasKeys(
+            $array,
+            ['class', 'method', 'position', 'before', 'after'],
+            ArgumentDefaultValueReplacerRector::class
+        );
+
+        return new self($array['class'], $array['method'], $array['position'], $array['before'], $array['after']);
+    }
+
+    public function getClass(): string
+    {
+        return $this->class;
+    }
+
+    public function getMethod(): string
+    {
+        return $this->method;
+    }
+
+    public function getPosition(): int
+    {
+        return $this->position;
     }
 
     /**

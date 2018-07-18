@@ -49,3 +49,7 @@ parameters:
         # empty arguments passing
         PHP_CodeSniffer\Standards\PEAR\Sniffs\Functions\ValidDefaultValueSniff.NotAtEnd:
             - 'packages/PHPUnit/src/Rector/SpecificMethod/AssertTrueFalseToSpecificMethodRector.php'
+
+        Symplify\CodingStandard\Sniffs\CleanCode\ForbiddenStaticFunctionSniff:
+            - 'src/Configuration/Rector/Guard/RecipeGuard.php'
+            - 'src/Configuration/Rector/*Recipe.php'

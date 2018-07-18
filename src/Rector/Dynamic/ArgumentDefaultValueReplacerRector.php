@@ -11,7 +11,6 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Configuration\Rector\ArgumentDefaultValueReplacerRecipe;
-use Rector\Configuration\Rector\ArgumentDefaultValueReplacerRecipeFactory;
 use Rector\Node\NodeFactory;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -44,10 +43,14 @@ final class ArgumentDefaultValueReplacerRector extends AbstractArgumentRector
     public function __construct(
         array $argumentChangesByMethodAndType,
         ConstExprEvaluator $constExprEvaluator,
-        ArgumentDefaultValueReplacerRecipeFactory $argumentDefaultValueReplacerRecipeFactory,
         NodeFactory $nodeFactory
     ) {
-        $this->loadArgumentReplacerRecipes($argumentDefaultValueReplacerRecipeFactory, $argumentChangesByMethodAndType);
+        foreach ($argumentChangesByMethodAndType as $configurationArray) {
+            $this->argumentDefaultValueReplacerRecipe[] = ArgumentDefaultValueReplacerRecipe::createFromArray(
+                $configurationArray
+            );
+        }
+
         $this->constExprEvaluator = $constExprEvaluator;
         $this->nodeFactory = $nodeFactory;
     }
@@ -110,20 +113,6 @@ CODE_SAMPLE
         }
 
         return $argumentReplacerRecipes;
-    }
-
-    /**
-     * @param mixed[] $configurationArrays
-     */
-    private function loadArgumentReplacerRecipes(
-        ArgumentDefaultValueReplacerRecipeFactory $argumentDefaultValueReplacerRecipeFactory,
-        array $configurationArrays
-    ): void {
-        foreach ($configurationArrays as $configurationArray) {
-            $this->argumentDefaultValueReplacerRecipe[] = $argumentDefaultValueReplacerRecipeFactory->createFromArray(
-                $configurationArray
-            );
-        }
     }
 
     /**
