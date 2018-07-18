@@ -21,6 +21,11 @@ final class RenameSubKeyYamlRector implements YamlRectorInterface
     private $pathResolver;
 
     /**
+     * @var int
+     */
+    private $replacePathsCount = 0;
+
+    /**
      * @param string[] $pathsToNewKeys
      */
     public function __construct(array $pathsToNewKeys, PathResolver $pathResolver)
@@ -53,10 +58,10 @@ final class RenameSubKeyYamlRector implements YamlRectorInterface
     {
         foreach ($this->pathsToNewKeys as $path => $newKey) {
             $pathPattern = $this->createPatternFromPath($path);
+            $replacePattern = $this->createReplacePatternFromNewKey($newKey);
 
             while (Strings::match($content, $pathPattern)) {
-                $replacement = $this->createReplacementFromPathAndNewKey($path, $newKey);
-                $content = Strings::replace($content, $pathPattern, $replacement, 1);
+                $content = Strings::replace($content, $pathPattern, $replacePattern, 1);
             }
         }
 
@@ -67,35 +72,33 @@ final class RenameSubKeyYamlRector implements YamlRectorInterface
     {
         $pathParts = $this->pathResolver->splitPathToParts($path);
 
+        $this->replacePathsCount = 0;
+
         $pattern = '';
         foreach ($pathParts as $nesting => $pathPart) {
             $pattern .= sprintf('(%s)', preg_quote($pathPart));
+            ++$this->replacePathsCount;
 
             if ($nesting === (count($pathParts) - 1)) {
                 // last only up-to the key name + the rest
                 $pattern .= '(.*?)';
+                ++$this->replacePathsCount;
             } else {
                 $pattern .= '([\n \S+]+)';
+                ++$this->replacePathsCount;
             }
         }
 
         return '#^' . $pattern . '#m';
     }
 
-    private function createReplacementFromPathAndNewKey(string $path, string $newKey): string
+    private function createReplacePatternFromNewKey(string $newKey): string
     {
-        $replacement = '';
-
-        $pathParts = $this->pathResolver->splitPathToParts($path);
-
-        $final = 2 * count($pathParts);
-        for ($i = 1; $i < $final - 1; ++$i) {
-            $replacement .= '$' . $i;
+        $replacePattern = '';
+        for ($i = 1; $i < ($this->replacePathsCount - 1); ++$i) {
+            $replacePattern .= '$' . $i;
         }
 
-        $replacement .= preg_quote($newKey);
-        $replacement .= '$' . ($i + 3);
-
-        return $replacement;
+        return $replacePattern . $newKey . '$' . $this->replacePathsCount;
     }
 }

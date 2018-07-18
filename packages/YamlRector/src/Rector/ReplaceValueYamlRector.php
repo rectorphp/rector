@@ -63,13 +63,7 @@ final class ReplaceValueYamlRector implements YamlRectorInterface
             $pathPattern = $this->createPatternFromPath($path, $oldValue);
             if (Strings::match($content, $pathPattern)) {
                 $newValue = current($keys);
-
-                $replacePattern = '';
-                for ($i = 1; $i < $this->replacePathsCount; ++$i) {
-                    $replacePattern .= '$' . $i;
-                }
-
-                $replacePattern .= '\'' . $newValue . '\'$' . ($this->replacePathsCount + 1);
+                $replacePattern = $this->createReplacePatternFromNewValue($newValue);
 
                 $content = Strings::replace($content, $pathPattern, $replacePattern, 1);
             }
@@ -103,5 +97,15 @@ final class ReplaceValueYamlRector implements YamlRectorInterface
         }
 
         return '#^' . $pattern . '#m';
+    }
+
+    private function createReplacePatternFromNewValue(string $value): string
+    {
+        $replacePattern = '';
+        for ($i = 1; $i < $this->replacePathsCount; ++$i) {
+            $replacePattern .= '$' . $i;
+        }
+
+        return $replacePattern . sprintf("'%s$%d'", $value, $this->replacePathsCount + 1);
     }
 }
