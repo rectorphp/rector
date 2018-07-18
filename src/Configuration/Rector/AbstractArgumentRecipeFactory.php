@@ -18,7 +18,7 @@ abstract class AbstractArgumentRecipeFactory
 
         throw new InvalidRectorConfigurationException(sprintf(
             'Configuration for "%s" Rector should have "%s" key, but is missing.',
-            AbstractArgumentRector::class,
+            get_called_class(),
             $key
         ));
     }
