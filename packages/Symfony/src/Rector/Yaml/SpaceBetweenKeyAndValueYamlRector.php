@@ -9,6 +9,11 @@ use Rector\YamlRector\Contract\YamlRectorInterface;
 
 final class SpaceBetweenKeyAndValueYamlRector implements YamlRectorInterface
 {
+    /**
+     * @var string
+     */
+    private const KEY_WITHOUT_SPACE_AFTER_PATTERN = '#(\w+)\:(\/?\w+)#';
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Mappings with a colon (:) that is not followed by a whitespace will get one', [
@@ -18,11 +23,11 @@ final class SpaceBetweenKeyAndValueYamlRector implements YamlRectorInterface
 
     public function isCandidate(string $content): bool
     {
-        return (bool) Strings::matchAll($content, '#(\S+)\:(\S+)#');
+        return (bool) Strings::matchAll($content, self::KEY_WITHOUT_SPACE_AFTER_PATTERN);
     }
 
     public function refactor(string $content): string
     {
-        return Strings::replace($content, '#(\S+)\:(\S+)#', '$1: $2');
+        return Strings::replace($content, self::KEY_WITHOUT_SPACE_AFTER_PATTERN, '$1: $2');
     }
 }
