@@ -2,8 +2,27 @@
 
 namespace Rector\Configuration\Rector;
 
-final class ArgumentAdderRecipe extends AbstractArgumentRecipe
+use Rector\Configuration\Rector\Guard\RecipeGuard;
+use Rector\Contract\Configuration\Rector\ArgumentRecipeInterface;
+use Rector\Rector\Dynamic\ArgumentAdderRector;
+
+final class ArgumentAdderRecipe implements ArgumentRecipeInterface
 {
+    /**
+     * @var string
+     */
+    private $class;
+
+    /**
+     * @var string
+     */
+    private $method;
+
+    /**
+     * @var int
+     */
+    private $position;
+
     /**
      * @var mixed
      */
@@ -12,10 +31,37 @@ final class ArgumentAdderRecipe extends AbstractArgumentRecipe
     /**
      * @param mixed $defaultValue
      */
-    public function __construct(string $class, string $method, int $position, $defaultValue = null)
+    private function __construct(string $class, string $method, int $position, $defaultValue = null)
     {
-        parent::__construct($class, $method, $position);
+        $this->class = $class;
+        $this->method = $method;
+        $this->position = $position;
         $this->defaultValue = $defaultValue;
+    }
+
+    /**
+     * @param mixed[] $array
+     */
+    public static function createFromArray(array $array): self
+    {
+        RecipeGuard::ensureHasKeys($array, ['class', 'method', 'position'], ArgumentAdderRector::class);
+
+        return new self($array['class'], $array['method'], $array['position'], $array['default_value'] ?? null);
+    }
+
+    public function getClass(): string
+    {
+        return $this->class;
+    }
+
+    public function getMethod(): string
+    {
+        return $this->method;
+    }
+
+    public function getPosition(): int
+    {
+        return $this->position;
     }
 
     /**

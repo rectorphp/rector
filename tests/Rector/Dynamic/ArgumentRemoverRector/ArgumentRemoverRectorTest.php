@@ -5,6 +5,9 @@ namespace Rector\Tests\Rector\Dynamic\ArgumentRemoverRector;
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
+/**
+ * @covers \Rector\Rector\Dynamic\ArgumentRemoverRector
+ */
 final class ArgumentRemoverRectorTest extends AbstractRectorTestCase
 {
     /**

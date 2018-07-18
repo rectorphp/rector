@@ -70,7 +70,10 @@ final class NodeFactory
     {
         $classNameNode = new FullyQualified($className);
 
-        return $this->builderFactory->classConstFetch($classNameNode, $constantName);
+        $classConstFetchNode = $this->builderFactory->classConstFetch($classNameNode, $constantName);
+        $classConstFetchNode->class->setAttribute(Attribute::RESOLVED_NAME, $classNameNode);
+
+        return $classConstFetchNode;
     }
 
     /**

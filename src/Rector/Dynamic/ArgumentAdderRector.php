@@ -8,7 +8,6 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Configuration\Rector\ArgumentAdderRecipe;
-use Rector\Configuration\Rector\ArgumentAdderRecipeFactory;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
@@ -27,11 +26,11 @@ final class ArgumentAdderRector extends AbstractArgumentRector
     /**
      * @param mixed[] $argumentChangesByMethodAndType
      */
-    public function __construct(
-        array $argumentChangesByMethodAndType,
-        ArgumentAdderRecipeFactory $argumentAdderRecipeFactory
-    ) {
-        $this->loadArgumentReplacerRecipes($argumentAdderRecipeFactory, $argumentChangesByMethodAndType);
+    public function __construct(array $argumentChangesByMethodAndType)
+    {
+        foreach ($argumentChangesByMethodAndType as $configurationArray) {
+            $this->argumentAdderRecipes[] = ArgumentAdderRecipe::createFromArray($configurationArray);
+        }
     }
 
     public function getDefinition(): RectorDefinition
@@ -111,18 +110,6 @@ CODE_SAMPLE
         }
 
         return $argumentReplacerRecipes;
-    }
-
-    /**
-     * @param mixed[] $configurationArrays
-     */
-    private function loadArgumentReplacerRecipes(
-        ArgumentAdderRecipeFactory $argumentAdderRecipeFactory,
-        array $configurationArrays
-    ): void {
-        foreach ($configurationArrays as $configurationArray) {
-            $this->argumentAdderRecipes[] = $argumentAdderRecipeFactory->createFromArray($configurationArray);
-        }
     }
 
     /**

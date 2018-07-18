@@ -10,7 +10,6 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Configuration\Rector\ArgumentRemoverRecipe;
-use Rector\Configuration\Rector\ArgumentRemoverRecipeFactory;
 use Rector\Node\Attribute;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -30,11 +29,11 @@ final class ArgumentRemoverRector extends AbstractArgumentRector
     /**
      * @param mixed[] $argumentChangesByMethodAndType
      */
-    public function __construct(
-        array $argumentChangesByMethodAndType,
-        ArgumentRemoverRecipeFactory $argumentRemoverRecipeFactory
-    ) {
-        $this->loadArgumentReplacerRecipes($argumentRemoverRecipeFactory, $argumentChangesByMethodAndType);
+    public function __construct(array $argumentChangesByMethodAndType)
+    {
+        foreach ($argumentChangesByMethodAndType as $configurationArray) {
+            $this->argumentRemoverRecipes[] = ArgumentRemoverRecipe::createFromArray($configurationArray);
+        }
     }
 
     public function getDefinition(): RectorDefinition
@@ -95,18 +94,6 @@ CODE_SAMPLE
         }
 
         return $argumentReplacerRecipes;
-    }
-
-    /**
-     * @param mixed[] $configurationArrays
-     */
-    private function loadArgumentReplacerRecipes(
-        ArgumentRemoverRecipeFactory $argumentRemoverRecipeFactory,
-        array $configurationArrays
-    ): void {
-        foreach ($configurationArrays as $configurationArray) {
-            $this->argumentRemoverRecipes[] = $argumentRemoverRecipeFactory->createFromArray($configurationArray);
-        }
     }
 
     /**

@@ -2,27 +2,92 @@
 
 namespace Rector\Configuration\Rector;
 
-final class ArgumentDefaultValueReplacerRecipe extends AbstractArgumentRecipe
+use Rector\Configuration\Rector\Guard\RecipeGuard;
+use Rector\Contract\Configuration\Rector\ArgumentRecipeInterface;
+use Rector\Rector\Dynamic\ArgumentDefaultValueReplacerRector;
+
+final class ArgumentDefaultValueReplacerRecipe implements ArgumentRecipeInterface
 {
     /**
-     * @var mixed[]
+     * @var string
      */
-    private $replacement = [];
+    private $class;
 
     /**
-     * @param mixed $replacement
+     * @var string
      */
-    public function __construct(string $class, string $method, int $position, $replacement = [])
+    private $method;
+
+    /**
+     * @var int
+     */
+    private $position;
+
+    /**
+     * @var mixed
+     */
+    private $before;
+
+    /**
+     * @var mixed
+     */
+    private $after;
+
+    /**
+     * @param mixed $before
+     * @param mixed $after
+     */
+    private function __construct(string $class, string $method, int $position, $before, $after)
     {
-        parent::__construct($class, $method, $position);
-        $this->replacement = $replacement;
+        $this->before = $before;
+        $this->after = $after;
+        $this->class = $class;
+        $this->method = $method;
+        $this->position = $position;
     }
 
     /**
-     * @return mixed[]
+     * @param mixed[] $array
      */
-    public function getReplacement(): array
+    public static function createFromArray(array $array): self
     {
-        return $this->replacement;
+        RecipeGuard::ensureHasKeys(
+            $array,
+            ['class', 'method', 'position', 'before', 'after'],
+            ArgumentDefaultValueReplacerRector::class
+        );
+
+        return new self($array['class'], $array['method'], $array['position'], $array['before'], $array['after']);
+    }
+
+    public function getClass(): string
+    {
+        return $this->class;
+    }
+
+    public function getMethod(): string
+    {
+        return $this->method;
+    }
+
+    public function getPosition(): int
+    {
+        return $this->position;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBefore()
+    {
+        return $this->before;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAfter()
+    {
+        return $this->after;
     }
 }
