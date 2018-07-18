@@ -11,8 +11,9 @@ final class SpaceBetweenKeyAndValueYamlRector implements YamlRectorInterface
 {
     /**
      * @var string
+     * @see https://regex101.com/r/UDlB41/2/
      */
-    private const KEY_WITHOUT_SPACE_AFTER_PATTERN = '#(\w+)\:(\/?\w+)#';
+    private const KEY_WITHOUT_SPACE_AFTER_PATTERN = '#(\w+):([^ ,\[\]{}:\n])#';
 
     public function getDefinition(): RectorDefinition
     {
