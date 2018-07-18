@@ -6,6 +6,7 @@ use Nette\Utils\Strings;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 use Rector\YamlRector\Contract\YamlRectorInterface;
+use Rector\YamlRector\PathResolver;
 
 final class RenameSubKeyYamlRector implements YamlRectorInterface
 {
@@ -15,11 +16,17 @@ final class RenameSubKeyYamlRector implements YamlRectorInterface
     private $pathsToNewKeys = [];
 
     /**
+     * @var PathResolver
+     */
+    private $pathResolver;
+
+    /**
      * @param string[] $pathsToNewKeys
      */
-    public function __construct(array $pathsToNewKeys)
+    public function __construct(array $pathsToNewKeys, PathResolver $pathResolver)
     {
         $this->pathsToNewKeys = $pathsToNewKeys;
+        $this->pathResolver = $pathResolver;
     }
 
     public function getDefinition(): RectorDefinition
@@ -58,7 +65,7 @@ final class RenameSubKeyYamlRector implements YamlRectorInterface
 
     private function createPatternFromPath(string $path): string
     {
-        $pathParts = $this->splitPathToParts($path);
+        $pathParts = $this->pathResolver->splitPathToParts($path);
 
         $pattern = '';
         foreach ($pathParts as $nesting => $pathPart) {
@@ -79,7 +86,7 @@ final class RenameSubKeyYamlRector implements YamlRectorInterface
     {
         $replacement = '';
 
-        $pathParts = $this->splitPathToParts($path);
+        $pathParts = $this->pathResolver->splitPathToParts($path);
 
         $final = 2 * count($pathParts);
         for ($i = 1; $i < $final - 1; ++$i) {
@@ -90,14 +97,5 @@ final class RenameSubKeyYamlRector implements YamlRectorInterface
         $replacement .= '$' . ($i + 3);
 
         return $replacement;
-    }
-
-    /**
-     * @return string[]
-     */
-    private function splitPathToParts(string $path): array
-    {
-        // split by " > " or ">"
-        return Strings::split($path, '#[\s+]?>[\s+]?#');
     }
 }
