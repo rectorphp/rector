@@ -20,12 +20,12 @@ final class ArgumentDefaultValueReplacerRector extends AbstractArgumentRector
     /**
      * @var ArgumentDefaultValueReplacerRecipe[]
      */
-    private $argumentDefaultValueReplacerRecipe = [];
+    private $recipes = [];
 
     /**
      * @var ArgumentDefaultValueReplacerRecipe[]
      */
-    private $activeArgumentDefaultValueReplacerRecipes = [];
+    private $activeRecipe = [];
 
     /**
      * @var ConstExprEvaluator
@@ -46,9 +46,7 @@ final class ArgumentDefaultValueReplacerRector extends AbstractArgumentRector
         NodeFactory $nodeFactory
     ) {
         foreach ($argumentChangesByMethodAndType as $configurationArray) {
-            $this->argumentDefaultValueReplacerRecipe[] = ArgumentDefaultValueReplacerRecipe::createFromArray(
-                $configurationArray
-            );
+            $this->recipes[] = ArgumentDefaultValueReplacerRecipe::createFromArray($configurationArray);
         }
 
         $this->constExprEvaluator = $constExprEvaluator;
@@ -81,9 +79,9 @@ CODE_SAMPLE
             return false;
         }
 
-        $this->activeArgumentDefaultValueReplacerRecipes = $this->matchArgumentChanges($node);
+        $this->activeRecipe = $this->matchArgumentChanges($node);
 
-        return (bool) $this->activeArgumentDefaultValueReplacerRecipes;
+        return (bool) $this->activeRecipe;
     }
 
     /**
@@ -91,7 +89,9 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): Node
     {
+        /** @var Arg[] $argumentsOrParameters */
         $argumentsOrParameters = $this->getNodeArgumentsOrParameters($node);
+
         $argumentsOrParameters = $this->processArgumentNodes($argumentsOrParameters);
 
         $this->setNodeArgumentsOrParameters($node, $argumentsOrParameters);
@@ -104,73 +104,152 @@ CODE_SAMPLE
      */
     private function matchArgumentChanges(Node $node): array
     {
-        $argumentReplacerRecipes = [];
+        $matchedRecipes = [];
 
-        foreach ($this->argumentDefaultValueReplacerRecipe as $argumentDefaultValueReplacerRecipe) {
-            if ($this->isNodeToRecipeMatch($node, $argumentDefaultValueReplacerRecipe)) {
-                $argumentReplacerRecipes[] = $argumentDefaultValueReplacerRecipe;
+        foreach ($this->recipes as $recipe) {
+            if ($this->isNodeToRecipeMatch($node, $recipe)) {
+                $matchedRecipes[] = $recipe;
             }
         }
 
-        return $argumentReplacerRecipes;
+        return $matchedRecipes;
     }
 
     /**
-     * @param mixed[] $argumentNodes
+     * @param Arg[] $argumentNodes
      * @return mixed[]
      */
     private function processArgumentNodes(array $argumentNodes): array
     {
-        foreach ($this->activeArgumentDefaultValueReplacerRecipes as $argumentDefaultValueReplacerRecipe) {
-            $position = $argumentDefaultValueReplacerRecipe->getPosition();
-
-            $argumentNodes[$position] = $this->processReplacedDefaultValue(
-                $argumentNodes[$position],
-                $argumentDefaultValueReplacerRecipe
-            );
+        foreach ($this->activeRecipe as $recipe) {
+            if (is_scalar($recipe->getBefore())) {
+                // simple 1 argument match
+                $argumentNodes = $this->processScalarReplacement($argumentNodes, $recipe);
+            } elseif (is_array($recipe->getBefore())) {
+                // multiple items in a row match
+                $argumentNodes = $this->processArrayReplacement($argumentNodes, $recipe);
+            }
         }
 
         return $argumentNodes;
     }
 
-    private function processReplacedDefaultValue(
+    private function processArgNode(
         Arg $argNode,
         ArgumentDefaultValueReplacerRecipe $argumentDefaultValueReplacerRecipe
     ): Arg {
-        $resolvedValue = $this->constExprEvaluator->evaluateDirectly($argNode->value);
+        $argumentValue = $this->resolveArgumentValue($argNode);
         $valueBefore = $argumentDefaultValueReplacerRecipe->getBefore();
 
-        if (! $this->isMatch($valueBefore, $resolvedValue)) {
+        if ($argumentValue !== $valueBefore) {
             return $argNode;
         }
 
-        $valueAfter = $argumentDefaultValueReplacerRecipe->getAfter();
+        return $this->normalizeValueAfterToArgument($argumentDefaultValueReplacerRecipe->getAfter());
+    }
 
+    /**
+     * @return mixed
+     */
+    private function resolveArgumentValue(Arg $argNode)
+    {
+        $resolvedValue = $this->constExprEvaluator->evaluateDirectly($argNode->value);
+        if ($resolvedValue === true) {
+            return 'true';
+        }
+
+        if ($resolvedValue === false) {
+            return 'false';
+        }
+
+        return $resolvedValue;
+    }
+
+    /**
+     * @param mixed $value
+     */
+    private function normalizeValueAfterToArgument($value): Arg
+    {
         // class constants → turn string to composite
-        if (Strings::contains($valueAfter, '::')) {
-            [$class, $constant] = explode('::', $valueAfter);
+        if (Strings::contains($value, '::')) {
+            [$class, $constant] = explode('::', $value);
             $classConstantFetchNode = $this->nodeFactory->createClassConstant($class, $constant);
 
             return new Arg($classConstantFetchNode);
         }
 
-        return new Arg(BuilderHelpers::normalizeValue($valueAfter));
+        return new Arg(BuilderHelpers::normalizeValue($value));
     }
 
     /**
-     * @param mixed $oldValue
-     * @param mixed $resolvedValue
+     * @param Arg[] $argumentNodes
+     * @return Arg[]
      */
-    private function isMatch($oldValue, $resolvedValue): bool
-    {
-        if ($oldValue === 'true' && $resolvedValue === true) {
-            return true;
+    private function processScalarReplacement(
+        array $argumentNodes,
+        ArgumentDefaultValueReplacerRecipe $argumentDefaultValueReplacerRecipe
+    ): array {
+        $argumentNodes[$argumentDefaultValueReplacerRecipe->getPosition()] = $this->processArgNode(
+            $argumentNodes[$argumentDefaultValueReplacerRecipe->getPosition()],
+            $argumentDefaultValueReplacerRecipe
+        );
+
+        return $argumentNodes;
+    }
+
+    /**
+     * @param Arg[] $argumentNodes
+     * @return Arg[]
+     */
+    private function processArrayReplacement(
+        array $argumentNodes,
+        ArgumentDefaultValueReplacerRecipe $argumentDefaultValueReplacerRecipe
+    ): array {
+        $argumentValues = $this->resolveArgumentValuesToBeforeRecipe(
+            $argumentNodes,
+            $argumentDefaultValueReplacerRecipe
+        );
+
+        if ($argumentValues !== $argumentDefaultValueReplacerRecipe->getBefore()) {
+            return $argumentNodes;
         }
 
-        if ($oldValue === 'false' && $resolvedValue === false) {
-            return true;
+        if (is_string($argumentDefaultValueReplacerRecipe->getAfter())) {
+            $argumentNodes[$argumentDefaultValueReplacerRecipe->getPosition()] = $this->normalizeValueAfterToArgument(
+                $argumentDefaultValueReplacerRecipe->getAfter()
+            );
+
+            // clear following arguments
+            $argumentCountToClear = count($argumentDefaultValueReplacerRecipe->getBefore()) - 1;
+            for ($i = 1; $i <= $argumentCountToClear; ++$i) {
+                $position = $argumentDefaultValueReplacerRecipe->getPosition() + $i;
+                unset($argumentNodes[$position]);
+            }
         }
 
-        return $resolvedValue === $oldValue;
+        return $argumentNodes;
+    }
+
+    /**
+     * @param Arg[] $argumentNodes
+     * @return mixed
+     */
+    private function resolveArgumentValuesToBeforeRecipe(
+        array $argumentNodes,
+        ArgumentDefaultValueReplacerRecipe $argumentDefaultValueReplacerRecipe
+    ) {
+        $argumentValues = [];
+
+        $beforeArgumentCount = count($argumentDefaultValueReplacerRecipe->getBefore());
+
+        for ($i = 0; $i < $beforeArgumentCount; ++$i) {
+            if (isset($argumentNodes[$argumentDefaultValueReplacerRecipe->getPosition() + $i])) {
+                $argumentValues[] = $this->resolveArgumentValue(
+                    $argumentNodes[$argumentDefaultValueReplacerRecipe->getPosition() + $i]
+                );
+            }
+        }
+
+        return $argumentValues;
     }
 }
