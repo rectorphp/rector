@@ -149,23 +149,23 @@ CODE_SAMPLE
         ArgumentDefaultValueReplacerRecipe $argumentDefaultValueReplacerRecipe
     ): Arg {
         $resolvedValue = $this->constExprEvaluator->evaluateDirectly($argNode->value);
+        $valueBefore = $argumentDefaultValueReplacerRecipe->getBefore();
 
-        $replaceMap = $argumentDefaultValueReplacerRecipe->getReplacement();
-        foreach ($replaceMap as $oldValue => $newValue) {
-            if ($this->isMatch($oldValue, $resolvedValue)) {
-                // class constants, turn string to composite
-                if (Strings::contains($newValue, '::')) {
-                    [$class, $constant] = explode('::', $newValue);
-                    $classConstantFetchNode = $this->nodeFactory->createClassConstant($class, $constant);
-
-                    return new Arg($classConstantFetchNode);
-                }
-
-                return new Arg(BuilderHelpers::normalizeValue($newValue));
-            }
+        if (! $this->isMatch($valueBefore, $resolvedValue)) {
+            return $argNode;
         }
 
-        return $argNode;
+        $valueAfter = $argumentDefaultValueReplacerRecipe->getAfter();
+
+        // class constants → turn string to composite
+        if (Strings::contains($valueAfter, '::')) {
+            [$class, $constant] = explode('::', $valueAfter);
+            $classConstantFetchNode = $this->nodeFactory->createClassConstant($class, $constant);
+
+            return new Arg($classConstantFetchNode);
+        }
+
+        return new Arg(BuilderHelpers::normalizeValue($valueAfter));
     }
 
     /**

@@ -11,11 +11,15 @@ final class ArgumentDefaultValueReplacerRecipeFactory extends AbstractArgumentRe
     {
         $this->validateArrayData($data);
 
+        $this->ensureHasKey($data, 'before');
+        $this->ensureHasKey($data, 'after');
+
         return new ArgumentDefaultValueReplacerRecipe(
             $data['class'],
             $data['method'],
             $data['position'],
-            $data['replacement'] ?? []
+            $data['before'],
+            $data['after']
         );
     }
 }

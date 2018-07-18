@@ -5,24 +5,39 @@ namespace Rector\Configuration\Rector;
 final class ArgumentDefaultValueReplacerRecipe extends AbstractArgumentRecipe
 {
     /**
-     * @var mixed[]
+     * @var mixed
      */
-    private $replacement = [];
+    private $before;
 
     /**
-     * @param mixed $replacement
+     * @var mixed
      */
-    public function __construct(string $class, string $method, int $position, $replacement = [])
+    private $after;
+
+    /**
+     * @param mixed $before
+     * @param mixed $after
+     */
+    public function __construct(string $class, string $method, int $position, $before, $after)
     {
         parent::__construct($class, $method, $position);
-        $this->replacement = $replacement;
+        $this->before = $before;
+        $this->after = $after;
     }
 
     /**
-     * @return mixed[]
+     * @return mixed
      */
-    public function getReplacement(): array
+    public function getBefore()
     {
-        return $this->replacement;
+        return $this->before;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAfter()
+    {
+        return $this->after;
     }
 }
