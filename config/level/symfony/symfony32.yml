@@ -1,4 +1,8 @@
 services:
+    # yaml
+    # covers https://github.com/symfony/symfony/blob/3.4/UPGRADE-3.2.md#yaml
+    Rector\Symfony\Rector\Yaml\SpaceBetweenKeyAndValueYamlRector: ~
+
     # dependency-injection
     Rector\Rector\Dynamic\ArgumentAdderRector:
         $argumentChangesByMethodAndType:
