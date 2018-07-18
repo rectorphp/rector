@@ -1,0 +1,11 @@
+key:
+    key:value
+
+about_us:
+    key:value
+    key:/value
+    controller: App\Controller\CompanyController::about
+
+{1:""}
+
+{foo:bar,bar:foo,false:false,null:null,integer:12}
