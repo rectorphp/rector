@@ -35,3 +35,17 @@ services:
                 position: 1
                 before: 'true'
                 after: 'Symfony\Component\Yaml\Yaml::PARSE_EXCEPTION_ON_INVALID_TYPE'
+
+            -
+                class: 'Symfony\Component\Yaml\Yaml'
+                method: 'dump'
+                position: 3
+                before: ['false', 'true']
+                after: 'Symfony\Component\Yaml\Yaml::DUMP_OBJECT'
+
+            -
+                class: 'Symfony\Component\Yaml\Yaml'
+                method: 'dump'
+                position: 3
+                before: 'true'
+                after: 'Symfony\Component\Yaml\Yaml::DUMP_EXCEPTION_ON_INVALID_TYPE'
