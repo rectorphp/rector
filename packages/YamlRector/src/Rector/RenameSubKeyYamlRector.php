@@ -62,11 +62,13 @@ final class RenameSubKeyYamlRector implements YamlRectorInterface
 
         $pattern = '';
         foreach ($pathParts as $nesting => $pathPart) {
+            $pattern .= sprintf('(%s)', preg_quote($pathPart));
+
             if ($nesting === (count($pathParts) - 1)) {
                 // last only up-to the key name + the rest
-                $pattern .= sprintf('(%s)(.*?)', preg_quote($pathPart));
+                $pattern .= '(.*?)';
             } else {
-                $pattern .= sprintf('(%s:)([\n \S+]+)', preg_quote($pathPart));
+                $pattern .= '([\n \S+]+)';
             }
         }
 
