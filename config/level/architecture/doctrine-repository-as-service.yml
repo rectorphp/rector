@@ -3,11 +3,6 @@ parameters:
     entity_manager_class: 'Doctrine\ORM\EntityManager'
 
 services:
-#    _defaults:
-#        bind:
-#            $entityRepositoryClass: '%entity_repository_class%'
-#            $entityManagerClass: '%entity_manager_class%'
-
     # order matters, this needs to be first to correctly detect parent repository
     Rector\Rector\Architecture\RepositoryAsService\ReplaceParentRepositoryCallsByRepositoryPropertyRector: ~
     Rector\Rector\Architecture\RepositoryAsService\MoveRepositoryFromParentToConstructorRector: ~
