@@ -3,7 +3,7 @@
 
 use Nette\Utils\Strings;
 
-require_once __DIR__ . '/rector_bootstrap.php';
+require_once __DIR__ . '/bootstrap.php';
 
 $binPath = __DIR__ . '/../build/bin/rector';
 

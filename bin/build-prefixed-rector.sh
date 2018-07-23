@@ -20,8 +20,8 @@ vendor/bin/php-scoper add-prefix --no-interaction
 # +use Rector\...
 
 # "sed" command format help:
-# s/<old-code>/<new-code>/g
-# s/RectorPrefixed\\Rector / Rector/g
+# s#<old-code>#<new-code>#g
+# s#RectorPrefixed\\Rector#Rector#g
 # "RectorPrefixed\Rector" => "Rector"
 (find build/ -type f | xargs sed -i 's/RectorPrefixed\\Rector/Rector/g')
 (find build/ -type f | xargs sed -i 's/RectorPrefixed\\\\Rector/Rector/g')
@@ -32,15 +32,15 @@ vendor/bin/php-scoper add-prefix --no-interaction
 # for cases like: https://github.com/rectorphp/rector-prefixed/blob/6b690e46e54830a944618d3a2bf50a7c2bd13939/src/Bridge/Symfony/NodeAnalyzer/ControllerMethodAnalyzer.php#L16
 # "'" ref https://stackoverflow.com/a/24509931/1348344
 # "prune" ref https://stackoverflow.com/a/4210072/1348344
-(find build/ -path build/vendor -prune -o -type f | xargs sed -i "s/'RectorPrefixed\\/'/g")
-(find build/ -path build/vendor -prune -o -type f | xargs sed -i "s/'RectorPrefixed\\\\/'/g")
+(find build/ -path build/vendor -prune -o -type f | xargs sed -i "s#'RectorPrefixed\\#'#g")
+(find build/ -path build/vendor -prune -o -type f | xargs sed -i "s#'RectorPrefixed\\\\#'#g")
 
 # Symfony Bridge => keep Symfony classes
 
 # \App\\Kernel => App\Kernel
-sed -i 's/\\App\\\\Kernel/App\\Kernel/g' build/src/Bridge/Symfony/DefaultAnalyzedSymfonyApplicationContainer.php
+sed -i 's#\\App\\\\Kernel#App\\Kernel#g' build/src/Bridge/Symfony/DefaultAnalyzedSymfonyApplicationContainer.php
 # RectorPrefixed\Symfony\Component\HttpKernel\Kernel => Symfony\Component\HttpKernel\Kernel
-(find build/src/Bridge/Symfony/ -type f | xargs sed -i 's/RectorPrefixed\\Symfony\\Component/Symfony\\Component/g')
+(find build/src/Bridge/Symfony/ -type f | xargs sed -i 's#RectorPrefixed\\Symfony\\Component#Symfony\\Component#g')
 
 cp composer.json build/composer.json
 
@@ -53,7 +53,7 @@ chmod +x build/bin/rector
 
 # clear kernel cache to make use of this new one,
 # #todo? maybe prefix this cache as well?
-(find build/ -type f | xargs sed -i 's/_rector_cache/_prefixed_rector_cache/g')
+(find build/ -type f | xargs sed -i 's#_rector_cache#_prefixed_rector_cache#g')
 rm -rf /tmp/_prefixed_rector_cache
 
 # build composer.json
