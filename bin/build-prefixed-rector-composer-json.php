@@ -3,7 +3,7 @@
 
 use Nette\Utils\Json;
 
-require_once __DIR__ . '/rector_bootstrap.php';
+require_once __DIR__ . '/bootstrap.php';
 
 // load
 $composerJsonPath = __DIR__ . '/../build/composer.json';
