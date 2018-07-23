@@ -12,8 +12,6 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
  * Bind parameters by default:
  * - from "%value_name%"
  * - to "$valueName"
- *
- * Extension of @see \Symfony\Component\DependencyInjection\Compiler\ResolveParameterPlaceHoldersPass
  */
 final class AutoBindParametersCompilerPass extends AbstractRecursivePass
 {
@@ -22,6 +20,7 @@ final class AutoBindParametersCompilerPass extends AbstractRecursivePass
         $boundArguments = $this->createBoundArgumentsFromParameterBag($containerBuilder->getParameterBag());
 
         foreach ($containerBuilder->getDefinitions() as $definition) {
+            // config binding has priority over default one
             $bindings = array_merge($definition->getBindings(), $boundArguments);
             $definition->setBindings($bindings);
         }
@@ -40,7 +39,14 @@ final class AutoBindParametersCompilerPass extends AbstractRecursivePass
             }
 
             $parameterGuess = '$' . $this->undescoredToCamelCase($name);
-            $boundArguments[$parameterGuess] = new BoundArgument($value);
+
+            $boundArgument = new BoundArgument($value);
+
+            // set used so it doesn't end on exceptions
+            [$value, $identifier, $isUsed] = $boundArgument->getValues();
+            $boundArgument->setValues([$value, $identifier, true]);
+
+            $boundArguments[$parameterGuess] = $boundArgument;
         }
 
         return $boundArguments;

@@ -76,7 +76,7 @@ final class RectorKernel extends Kernel
         // for tests
         $containerBuilder->addCompilerPass(new PublicForTestsCompilerPass());
 
-        // needs to run after @see \Symfony\Component\DependencyInjection\Compiler\ResolveParameterPlaceHoldersPass
-        $containerBuilder->addCompilerPass(new AutoBindParametersCompilerPass(), PassConfig::TYPE_OPTIMIZE, 100);
+        // needs to run before @see \Symfony\Component\DependencyInjection\Compiler\ResolveParameterPlaceHoldersPass
+        $containerBuilder->addCompilerPass(new AutoBindParametersCompilerPass());
     }
 }
