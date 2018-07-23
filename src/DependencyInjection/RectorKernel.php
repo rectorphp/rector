@@ -2,12 +2,14 @@
 
 namespace Rector\DependencyInjection;
 
+use Rector\DependencyInjection\CompilerPass\AutoBindParametersCompilerPass;
 use Rector\DependencyInjection\CompilerPass\AutowireRectorCompilerPass;
 use Rector\DependencyInjection\CompilerPass\CollectorCompilerPass;
 use Rector\NodeTypeResolver\DependencyInjection\CompilerPass\NodeTypeResolverCollectorCompilerPass;
 use Rector\YamlRector\DependencyInjection\CompilerPass\AutowireYamlRectorCompilerPass;
 use Rector\YamlRector\DependencyInjection\YamlRectorCollectorCompilerPass;
 use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\Kernel;
@@ -73,5 +75,8 @@ final class RectorKernel extends Kernel
 
         // for tests
         $containerBuilder->addCompilerPass(new PublicForTestsCompilerPass());
+
+        // needs to run after @see \Symfony\Component\DependencyInjection\Compiler\ResolveParameterPlaceHoldersPass
+        $containerBuilder->addCompilerPass(new AutoBindParametersCompilerPass(), PassConfig::TYPE_OPTIMIZE, 100);
     }
 }

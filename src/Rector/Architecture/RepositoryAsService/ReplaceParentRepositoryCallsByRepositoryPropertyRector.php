@@ -31,7 +31,7 @@ final class ReplaceParentRepositoryCallsByRepositoryPropertyRector extends Abstr
     public function __construct(
         SmartClassReflector $smartClassReflector,
         PropertyFetchNodeFactory $propertyFetchNodeFactory,
-        string $entityRepositoryClass = 'Doctrine\ORM\EntityRepository'
+        string $entityRepositoryClass
     ) {
         $this->smartClassReflector = $smartClassReflector;
         $this->propertyFetchNodeFactory = $propertyFetchNodeFactory;
