@@ -3,4 +3,4 @@ parameters:
     entity_manager_class: 'Rector\Tests\Rector\Architecture\DoctrineRepositoryAsService\Source\EntityManagerClass'
 
 imports:
-    - { resource: '../../../../config/level/architecture/doctrine-repository-as-services.yml' }
+    - { resource: '../../../../config/level/architecture/doctrine-repository-as-service.yml' }
