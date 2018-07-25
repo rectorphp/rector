@@ -111,7 +111,7 @@ final class PropertyFetchTypeResolver implements PerNodeTypeResolverInterface, N
             return [];
         }
 
-        $type = array_shift($types);
+        $type = (string) array_shift($types);
 
         $propertyType = $this->propertyReflector->getPropertyType($type, $propertyName);
         if (! $propertyType) {

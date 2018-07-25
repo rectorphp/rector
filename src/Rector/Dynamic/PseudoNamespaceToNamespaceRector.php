@@ -6,6 +6,7 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\UseUse;
 use Rector\Builder\StatementGlue;
@@ -121,7 +122,7 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
     }
 
     /**
-     * @param Node[] $nodes
+     * @param Stmt[] $nodes
      * @return Node[]
      */
     public function afterTraverse(array $nodes): array

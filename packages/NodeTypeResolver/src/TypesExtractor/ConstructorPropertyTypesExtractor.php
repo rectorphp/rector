@@ -55,7 +55,7 @@ final class ConstructorPropertyTypesExtractor
     }
 
     /**
-     * @return string[] { parameterName => parameterType }
+     * @return string[][] { parameterName => parameterTypes }
      */
     private function getConstructorParametersWithTypes(Class_ $classNode): array
     {
@@ -113,7 +113,7 @@ final class ConstructorPropertyTypesExtractor
     }
 
     /**
-     * @param string[] $constructorParametersWithTypes
+     * @param string[][] $constructorParametersWithTypes
      * @return string[][]
      */
     private function extractPropertiesFromConstructorMethodNode(
@@ -122,12 +122,12 @@ final class ConstructorPropertyTypesExtractor
     ): array {
         $propertiesWithTypes = [];
 
+        /** @var Expression $inConstructorNode */
         foreach ((array) $classMethodNode->stmts as $inConstructorNode) {
             if (! $this->isAssignThisNode($inConstructorNode)) {
                 continue;
             }
 
-            /** @var Expression $inConstructorNode */
             /** @var Assign $assignNode */
             $assignNode = $inConstructorNode->expr;
 

@@ -3,6 +3,7 @@
 namespace Rector\Builder;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Nop;
@@ -22,7 +23,7 @@ final class StatementGlue
     /**
      * @param ClassMethod|Property|ClassMethod $node
      */
-    public function addAsFirstMethod(Class_ $classNode, Node $node): void
+    public function addAsFirstMethod(Class_ $classNode, Stmt $node): void
     {
         if ($this->tryInsertBeforeFirstMethod($classNode, $node)) {
             return;
@@ -35,33 +36,33 @@ final class StatementGlue
         $classNode->stmts[] = $node;
     }
 
-    public function addAsFirstTrait(Class_ $classNode, Node $node): void
+    public function addAsFirstTrait(Class_ $classNode, Stmt $node): void
     {
         $this->addStatementToClassBeforeTypes($classNode, $node, TraitUse::class, Property::class);
     }
 
     /**
-     * @param Node[] $nodes
-     * @return Node[] $nodes
+     * @param Stmt[] $nodes
+     * @return Stmt[] $nodes
      */
-    public function insertBeforeAndFollowWithNewline(array $nodes, Node $node, int $key): array
+    public function insertBeforeAndFollowWithNewline(array $nodes, Stmt $node, int $key): array
     {
         $nodes = $this->insertBefore($nodes, $node, $key);
         return $this->insertBefore($nodes, new Nop(), $key);
     }
 
     /**
-     * @param Node[] $nodes
-     * @return Node[] $nodes
+     * @param Stmt[] $nodes
+     * @return Stmt[] $nodes
      */
-    public function insertBefore(array $nodes, Node $node, int $key): array
+    public function insertBefore(array $nodes, Stmt $node, int $key): array
     {
         array_splice($nodes, $key, 0, [$node]);
 
         return $nodes;
     }
 
-    private function tryInsertBeforeFirstMethod(Class_ $classNode, Node $node): bool
+    private function tryInsertBeforeFirstMethod(Class_ $classNode, Stmt $node): bool
     {
         foreach ($classNode->stmts as $key => $classElementNode) {
             if ($classElementNode instanceof ClassMethod) {
@@ -74,7 +75,7 @@ final class StatementGlue
         return false;
     }
 
-    private function tryInsertAfterLastProperty(Class_ $classNode, Node $node): bool
+    private function tryInsertAfterLastProperty(Class_ $classNode, Stmt $node): bool
     {
         $previousElement = null;
         foreach ($classNode->stmts as $key => $classElementNode) {
@@ -90,7 +91,7 @@ final class StatementGlue
         return false;
     }
 
-    private function addStatementToClassBeforeTypes(Class_ $classNode, Node $node, string ...$types): void
+    private function addStatementToClassBeforeTypes(Class_ $classNode, Stmt $node, string ...$types): void
     {
         foreach ($types as $type) {
             foreach ($classNode->stmts as $key => $classElementNode) {

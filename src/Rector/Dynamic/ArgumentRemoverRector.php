@@ -130,7 +130,7 @@ CODE_SAMPLE
         if ($valueNode instanceof ClassConstFetch) {
             $valueNodeAsString = $valueNode->class->getAttribute(Attribute::RESOLVED_NAME)->toString()
                 . '::'
-                . $valueNode->name->toString();
+                . (string) $valueNode->name;
 
             if ($valueNodeAsString === $argumentRemoverRecipe->getValue()) {
                 return true;

@@ -2,6 +2,7 @@
 
 namespace Rector\ConsoleDiffer\Console\Formatter;
 
+use Nette\Utils\Strings;
 use Symfony\Component\Console\Formatter\OutputFormatter;
 
 /**
@@ -57,7 +58,7 @@ final class DiffConsoleFormatter
                 }
 
                 return $string;
-            }, preg_split("#\n\r|\n#", OutputFormatter::escape(rtrim($diff)))))
+            }, Strings::split(OutputFormatter::escape(rtrim($diff)), "#\n\r|\n#")))
         );
     }
 }

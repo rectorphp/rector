@@ -93,8 +93,9 @@ final class AssertFalseStrposToContainsRector extends AbstractPHPUnitRector
 
     public function changeOrderArguments(MethodCall $methodCallNode): void
     {
-        /** @var Identifier $oldArguments */
         $oldArguments = $methodCallNode->args;
+
+        /** @var Identifier $oldArguments */
         $strposArguments = $oldArguments[0]->value;
 
         $firstArgument = $strposArguments->args[1];

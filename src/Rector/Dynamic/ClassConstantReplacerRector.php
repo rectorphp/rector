@@ -90,7 +90,7 @@ final class ClassConstantReplacerRector extends AbstractRector
 
         $newConstantName = $configuration[$constantName];
 
-        if (! isset($newConstantName)) {
+        if ($newConstantName === '') {
             return $classConstFetchNode;
         }
 

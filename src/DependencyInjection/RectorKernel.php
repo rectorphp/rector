@@ -9,7 +9,6 @@ use Rector\NodeTypeResolver\DependencyInjection\CompilerPass\NodeTypeResolverCol
 use Rector\YamlRector\DependencyInjection\CompilerPass\AutowireYamlRectorCompilerPass;
 use Rector\YamlRector\DependencyInjection\YamlRectorCollectorCompilerPass;
 use Symfony\Component\Config\Loader\LoaderInterface;
-use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\Kernel;
@@ -31,7 +30,7 @@ final class RectorKernel extends Kernel
         }
 
         // debug: true is require to invalidate container on service files change
-        parent::__construct('cli' . sha1($configFile), true);
+        parent::__construct('cli' . sha1((string) $configFile), true);
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader): void

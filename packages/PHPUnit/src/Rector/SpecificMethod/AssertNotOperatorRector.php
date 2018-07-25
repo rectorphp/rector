@@ -3,6 +3,7 @@
 namespace Rector\PHPUnit\Rector\SpecificMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Builder\IdentifierRenamer;
@@ -91,7 +92,7 @@ final class AssertNotOperatorRector extends AbstractPHPUnitRector
 
         unset($oldArguments[0]);
 
-        $methodCallNode->args = array_merge([$expression], $oldArguments);
+        $methodCallNode->args = array_merge([new Arg($expression)], $oldArguments);
 
         return $methodCallNode;
     }

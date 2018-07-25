@@ -53,7 +53,7 @@ final class MethodCallNodeFactory
     }
 
     /**
-     * @param Arg[] $arguments
+     * @param Arg[]|string[] $arguments
      */
     public function createWithVariableNameMethodNameAndArguments(
         string $variableName,

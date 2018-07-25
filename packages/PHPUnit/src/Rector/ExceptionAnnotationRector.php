@@ -109,7 +109,7 @@ CODE_SAMPLE
                 return $this->createMethodCallExpressionFromTag($phpDocTagNode, $method);
             }, $tags);
 
-            $classMethodNode->stmts = array_merge($methodCallExpressions, $classMethodNode->stmts);
+            $classMethodNode->stmts = array_merge($methodCallExpressions, (array) $classMethodNode->stmts);
 
             $this->docBlockAnalyzer->removeTagFromNode($classMethodNode, $annotation);
         }

@@ -5,6 +5,7 @@ namespace Rector\BetterPhpDocParser\NodeAnalyzer;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\PhpParser\CurrentNodeProvider;
 use Symplify\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Symplify\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
@@ -179,6 +180,12 @@ final class DocBlockAnalyzer
     private function createPhpDocInfoFromNode(Node $node): PhpDocInfo
     {
         $this->currentNodeProvider->setCurrentNode($node);
+        if ($node->getDocComment() === null) {
+            throw new ShouldNotHappenException(sprintf(
+                'Node must have a comment. Check `$node->getDocComment() !== null` before passing it to %s',
+                __METHOD__
+            ));
+        }
 
         return $this->phpDocInfoFactory->createFrom($node->getDocComment()->getText());
     }
