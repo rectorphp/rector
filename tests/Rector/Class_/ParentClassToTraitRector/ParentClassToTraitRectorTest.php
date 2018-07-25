@@ -6,7 +6,7 @@ use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
- * @covers \Rector\Nette\Rector\Utils\ParentClassToTraitRector
+ * @covers \Rector\Rector\Class_\ParentClassToTraitRector
  */
 final class ParentClassToTraitRectorTest extends AbstractRectorTestCase
 {
