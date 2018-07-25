@@ -33,11 +33,12 @@ script:
     fi
 
 after_script:
-  # upload coverage to Coveralls.io
+
+  # upload coverage.xml to Coveralls
   - |
-    if [[ $PHPUNIT_FLAGS == true ]]; then
-      wget https://github.com/satooshi/php-coveralls/releases/download/v1.0.1/coveralls.phar
-      php coveralls.phar --verbose
+    if [[ $PHPUNIT_FLAGS != "" ]]; then
+      wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.1.0/php-coveralls.phar;
+      php php-coveralls.phar --verbose;
     fi
 
   # split monorepo to packages - only on merge to master
