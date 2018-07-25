@@ -40,7 +40,6 @@
             "Rector\\NodeTraverserQueue\\": "packages/NodeTraverserQueue/src",
             "Rector\\Symfony\\": "packages/Symfony/src",
             "Rector\\Sensio\\": "packages/Sensio/src",
-            "Rector\\Nette\\": "packages/Nette/src",
             "Rector\\Sylius\\": "packages/Sylius/src",
             "Rector\\PHPUnit\\": "packages/PHPUnit/src",
             "Rector\\PhpParser\\": "packages/PhpParser/src",
