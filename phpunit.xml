@@ -6,9 +6,19 @@
     verbose="true"
 >
     <testsuites>
-        <testsuite name="all-except-phar">
-            <directory>tests</directory>
+        <testsuite name="main">
             <directory>packages/*/tests</directory>
+            <directory>tests</directory>
         </testsuite>
     </testsuites>
+
+    <filter>
+        <whitelist addUncoveredFilesFromWhitelist="false">
+            <directory suffix="*.php">packages/*/src</directory>
+            <directory>src</directory>
+            <exclude>
+                <directory>../tests/**/*Source/**</directory>
+            </exclude>
+        </whitelist>
+    </filter>
 </phpunit>
