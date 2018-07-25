@@ -105,10 +105,13 @@ final class AssertPropertyExistsRector extends AbstractPHPUnitRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        /** @var Identifier $oldArguments */
         $oldArguments = $methodCallNode->args;
-        $propertyExistsArguments = $oldArguments[0]->value;
-        [$firstArgument, $secondArgument] = $propertyExistsArguments->args;
+
+        /** @var Identifier $oldArguments */
+        $propertyExistsMethodCall = $oldArguments[0]->value;
+
+        /** @var MethodCall $propertyExistsMethodCall */
+        [$firstArgument, $secondArgument] = $propertyExistsMethodCall->args;
 
         if ($firstArgument->value instanceof Variable) {
             $secondArg = new Variable($firstArgument->value->name);

@@ -11,6 +11,10 @@ final class AutowireRectorCompilerPass implements CompilerPassInterface
     public function process(ContainerBuilder $containerBuilder): void
     {
         foreach ($containerBuilder->getDefinitions() as $definition) {
+            if ($definition->getClass() === null) {
+                continue;
+            }
+
             if (! is_a($definition->getClass(), RectorInterface::class, true)) {
                 continue;
             }

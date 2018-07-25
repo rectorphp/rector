@@ -2,6 +2,41 @@ parameters:
     ignoreErrors:
         # the # after each ignored error is the number of occurrences
 
+        # 0.10.2
+        # false positives & ->toString() methods
+        - '#Cannot cast PhpParser\\Node\\Expr\|string to string#' # 8
+        - '#Offset string does not exist on string#' # 1
+        - '#Cannot cast PhpParser\\Node\\Expr\\Error\|PhpParser\\Node\\Identifier to string#'
+        - '#Cannot cast PhpParser\\Node\\Expr\|PhpParser\\Node\\Identifier to string#' # 4
+        - '#Cannot cast PhpParser\\Node\\Expr\|PhpParser\\Node\\Identifier|string to string#' # 3
+        - '#Cannot cast PhpParser\\Node\\Expr\|PhpParser\\Node\\Name to string#'
+        - '#Instanceof between PhpParser\\Node\\Expr|PhpParser\\Node\\Identifier and PhpParser\\Node\\Name will always evaluate to false#'
+
+        - '#Array \(array<array<PhpParser\\Node\\Stmt>>\) does not accept array<PhpParser\\Node\\Stmt|null>#'
+
+        # already fixed, invalidated cache?
+        - '#Access to an undefined property PhpParser\\Node\\Expr::\$args#'
+        - '#Parameter \#1 \$classMethodNode of method Rector\\NodeTypeResolver\\TypesExtractor\\ConstructorPropertyTypesExtractor::extractPropertiesFromConstructorMethodNode\(\) expects PhpParser\\Node\\Stmt\\ClassMethod, PhpParser\\Node\\Stmt given#'
+        # class_uses() returns also false actually
+        - "#Casting to array<string, string> something that's already array<string, string>#"
+
+        # irelevant
+        - '#Call to function in_array\(\) with arguments string, array<array<string\|false>> and true will always evaluate to false#'
+
+        # known values
+        - '#Parameter \#2 \$str of function explode expects string, string\|null given#'
+        - '#Cannot call method getName\(\) on Rector\\Builder\\Class_\\VariableInfo\|null#'
+        - '#Cannot call method getBasename\(\) on Symfony\\Component\\Finder\\SplFileInfo\|null#'
+        - '#Parameter \#2 \$value of method Rector\\YamlRector\\Rector\\ReplaceValueYamlRector::createPatternFromPath\(\) expects string, int\|string\|null given#' # 2
+        - '#Cannot call method getText\(\) on PhpParser\\Comment\\Doc\|null#'
+
+        # Error php-parser token
+        - '#Access to an undefined property PhpParser\\Node\\Expr\\Error\|PhpParser\\Node\\Expr\\Variable::\$name#'
+
+        # SplFileInfo::getRealPath() false positive
+        - '#Parameter \#1 \$file of function file_put_contents expects string, string\|false given#'
+        - '#Parameter \#1 \$filePath of method Rector\\Parser\\Parser::parseFile\(\) expects string, string\|false given#'
+
         # false positive, has annotation type above (@todo recheck for possible ignored positives)
         - '#Cannot call method toString\(\) on PhpParser\\Node\\Expr\\Error\|string#' # 1
         - '#Access to an undefined property PhpParser\\Node::\$name#' # 11

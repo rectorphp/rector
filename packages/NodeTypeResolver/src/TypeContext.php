@@ -149,13 +149,14 @@ final class TypeContext
                 return null;
             }
 
-            $className = $this->classLikeNode->namespacedName->toString();
-            $methodName = $functionLikeNode->name;
+            $className = (string) $this->classLikeNode->namespacedName;
+            $methodName = (string) $functionLikeNode->name;
+
             return $this->methodReflector->reflectClassMethod($className, $methodName);
         }
 
         /** @var Function_ $functionLikeNode */
-        $functionName = $functionLikeNode->name;
+        $functionName = (string) $functionLikeNode->name;
 
         $namespacedFunctionName = $this->prefixFunctionWithNamespace($functionLikeNode, $functionName);
         if (function_exists($namespacedFunctionName)) {

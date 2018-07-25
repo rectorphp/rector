@@ -2,6 +2,7 @@
 
 namespace Rector\Parser;
 
+use Nette\Utils\FileSystem;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\Parser as NikicParser;
@@ -32,7 +33,7 @@ final class Parser
             return $this->nodesByFile[$filePath];
         }
 
-        $fileContent = file_get_contents($filePath);
+        $fileContent = FileSystem::read($filePath);
         $this->nodesByFile[$filePath] = (array) $this->nikicParser->parse($fileContent);
 
         return $this->nodesByFile[$filePath];

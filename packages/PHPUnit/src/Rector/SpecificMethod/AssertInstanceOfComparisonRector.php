@@ -4,6 +4,7 @@ namespace Rector\PHPUnit\Rector\SpecificMethod;
 
 use PhpParser\BuilderFactory;
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Builder\IdentifierRenamer;
@@ -105,8 +106,8 @@ final class AssertInstanceOfComparisonRector extends AbstractPHPUnitRector
         unset($oldArguments[0]);
 
         $methodCallNode->args = array_merge([
-            $this->builderFactory->classConstFetch($class, 'class'),
-            $argument,
+            new Arg($this->builderFactory->classConstFetch($class, 'class')),
+            new Arg($argument),
         ], $oldArguments);
     }
 }

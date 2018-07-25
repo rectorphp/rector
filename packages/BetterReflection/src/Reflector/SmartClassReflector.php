@@ -138,6 +138,11 @@ final class SmartClassReflector
         }
 
         if ($classLikeNode instanceof Class_) {
+            // no parent class
+            if ($classLikeNode->extends === null) {
+                return [];
+            }
+
             if ($classLikeNode->extends->hasAttribute(Attribute::RESOLVED_NAME)) {
                 return [(string) $classLikeNode->extends->getAttribute(Attribute::RESOLVED_NAME)];
             }

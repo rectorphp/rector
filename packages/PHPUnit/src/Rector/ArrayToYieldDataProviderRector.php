@@ -89,7 +89,7 @@ CODE_SAMPLE
         $yieldNodes = [];
 
         // 2. turn array items to yield
-        foreach ($classMethodNode->stmts as $key => $stmt) {
+        foreach ((array) $classMethodNode->stmts as $key => $stmt) {
             if (! $stmt instanceof Return_) {
                 continue;
             }
@@ -103,7 +103,7 @@ CODE_SAMPLE
             unset($classMethodNode->stmts[$key]);
         }
 
-        $classMethodNode->stmts = array_merge($classMethodNode->stmts, $yieldNodes);
+        $classMethodNode->stmts = array_merge((array) $classMethodNode->stmts, $yieldNodes);
 
         // 3. remove doc block
         $this->docBlockAnalyzer->removeTagFromNode($classMethodNode, 'return');
@@ -158,7 +158,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @return Yield_[]
+     * @return Expression[]
      */
     private function turnArrayToYieldNodes(Array_ $arrayNode): array
     {
