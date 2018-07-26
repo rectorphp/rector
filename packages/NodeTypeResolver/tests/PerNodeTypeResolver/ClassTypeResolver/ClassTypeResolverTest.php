@@ -35,17 +35,17 @@ final class ClassTypeResolverTest extends AbstractNodeTypeResolverTest
             SomeInterface::class,
         ]];
 
-        yield [__DIR__ . '/Source/ClassWithParentClass.php', 0, [
-            ClassWithParentClass::class,
-            ParentClass::class,
-        ]];
-
-        yield [__DIR__ . '/Source/ClassWithTrait.php', 0, [ClassWithTrait::class, AnotherTrait::class]];
-
-        yield [
-            __DIR__ . '/Source/AnonymousClass.php',
-            0,
-            [ParentClass::class, SomeInterface::class, AnotherTrait::class],
-        ];
+//        yield [__DIR__ . '/Source/ClassWithParentClass.php', 0, [
+//            ClassWithParentClass::class,
+//            ParentClass::class,
+//        ]];
+//
+//        yield [__DIR__ . '/Source/ClassWithTrait.php', 0, [ClassWithTrait::class, AnotherTrait::class]];
+//
+//        yield [
+//            __DIR__ . '/Source/AnonymousClass.php',
+//            0,
+//            [ParentClass::class, SomeInterface::class, AnotherTrait::class],
+//        ];
     }
 }

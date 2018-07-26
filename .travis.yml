@@ -33,7 +33,6 @@ script:
     fi
 
 after_script:
-
   # upload coverage.xml to Coveralls
 #  - |
 #    if [[ $PHPUNIT_FLAGS != "" ]]; then

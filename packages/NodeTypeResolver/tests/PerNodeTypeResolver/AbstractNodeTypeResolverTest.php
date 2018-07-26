@@ -7,7 +7,7 @@ use Rector\NodeTraverserQueue\BetterNodeFinder;
 use Rector\NodeTraverserQueue\NodeTraverserQueue;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Tests\AbstractContainerAwareTestCase;
-use SplFileInfo;
+use Symfony\Component\Finder\SplFileInfo;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
 abstract class AbstractNodeTypeResolverTest extends AbstractContainerAwareTestCase
@@ -55,7 +55,7 @@ abstract class AbstractNodeTypeResolverTest extends AbstractContainerAwareTestCa
      */
     protected function getNodesForFile(string $file): array
     {
-        $fileInfo = new SplFileInfo($file);
+        $fileInfo = new SplFileInfo($file, '', '');
 
         $this->parameterProvider->changeParameter('source', [$file]);
 

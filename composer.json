@@ -13,6 +13,7 @@
         "nette/robot-loader": "^3.0.3",
         "nette/utils": "^2.5",
         "nikic/php-parser": "^4.0.1",
+        "phpstan/phpstan": "^0.10.2",
         "roave/better-reflection": "^3.0",
         "sebastian/diff": "^3.0",
         "symfony/console": "^3.4|^4.0",
@@ -24,7 +25,6 @@
     },
     "require-dev": {
         "humbug/php-scoper": "^0.8.1",
-        "phpstan/phpstan": "^0.10.2",
         "phpunit/phpunit": "^7.1",
         "slam/php-cs-fixer-extensions": "^1.15",
         "symplify/easy-coding-standard": "^4.6",

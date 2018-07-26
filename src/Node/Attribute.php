@@ -114,4 +114,11 @@ final class Attribute
      * @var string
      */
     public const NAMESPACED_NAME = 'namespacedName';
+
+    /**
+     * PHPStan-based type scope.
+     *
+     * @var string
+     */
+    public const SCOPE = 'scope';
 }
