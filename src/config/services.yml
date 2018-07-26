@@ -1,7 +1,4 @@
 services:
-    _defaults:
-        autowire: true
-
     Rector\:
         resource: '../'
         exclude: '../{Node/Attribute.php,Rector/**/*Rector.php,Reporting/FileDiff.php,Testing,RectorDefinition,*/*/*Info.php,Configuration/Rector/*Recipe.php}'

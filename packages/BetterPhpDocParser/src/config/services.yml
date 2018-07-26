@@ -5,8 +5,5 @@ imports:
     - { resource: '../../../../../../symplify/better-phpdoc-parser/src/config/services.yml', ignore_errors: true }
 
 services:
-    _defaults:
-        autowire: true
-
     Rector\BetterPhpDocParser\:
         resource: '../'

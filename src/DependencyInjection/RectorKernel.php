@@ -3,10 +3,9 @@
 namespace Rector\DependencyInjection;
 
 use Rector\DependencyInjection\CompilerPass\AutoBindParametersCompilerPass;
-use Rector\DependencyInjection\CompilerPass\AutowireRectorCompilerPass;
+use Rector\DependencyInjection\CompilerPass\AutowireDefaultCompilerPass;
 use Rector\DependencyInjection\CompilerPass\CollectorCompilerPass;
 use Rector\NodeTypeResolver\DependencyInjection\CompilerPass\NodeTypeResolverCollectorCompilerPass;
-use Rector\YamlRector\DependencyInjection\CompilerPass\AutowireYamlRectorCompilerPass;
 use Rector\YamlRector\DependencyInjection\YamlRectorCollectorCompilerPass;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -64,8 +63,7 @@ final class RectorKernel extends Kernel
     {
         $containerBuilder->addCompilerPass(new CollectorCompilerPass());
         $containerBuilder->addCompilerPass(new YamlRectorCollectorCompilerPass());
-        $containerBuilder->addCompilerPass(new AutowireRectorCompilerPass());
-        $containerBuilder->addCompilerPass(new AutowireYamlRectorCompilerPass());
+        $containerBuilder->addCompilerPass(new AutowireDefaultCompilerPass());
         $containerBuilder->addCompilerPass(new NodeTypeResolverCollectorCompilerPass());
         $containerBuilder->addCompilerPass(new AutowireSinglyImplementedCompilerPass());
 
