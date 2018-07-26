@@ -4,10 +4,8 @@ namespace Rector\DependencyInjection;
 
 use Rector\DependencyInjection\CompilerPass\AutoBindParametersCompilerPass;
 use Rector\DependencyInjection\CompilerPass\AutowireDefaultCompilerPass;
-use Rector\DependencyInjection\CompilerPass\AutowireRectorCompilerPass;
 use Rector\DependencyInjection\CompilerPass\CollectorCompilerPass;
 use Rector\NodeTypeResolver\DependencyInjection\CompilerPass\NodeTypeResolverCollectorCompilerPass;
-use Rector\YamlRector\DependencyInjection\CompilerPass\AutowireYamlRectorCompilerPass;
 use Rector\YamlRector\DependencyInjection\YamlRectorCollectorCompilerPass;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

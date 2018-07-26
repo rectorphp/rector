@@ -1,7 +1,4 @@
 services:
-    _defaults:
-        autowire: true
-
     # PhpParser - Parser
     PhpParser\Parser:
         factory: ['@Rector\Parser\ParserFactory', 'create']
