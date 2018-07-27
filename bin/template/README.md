@@ -27,4 +27,4 @@ bin/publish-prefixed-rector.sh
 
 ## How to Contribute
 
-This is an automatically generated repository. See [`bin/build-prefixed-rector-bin.php`](https://github.com/rectorphp/rector/blob/master/bin/build-prefixed-rector-bin.php) in original repository for more.
+This is an automatically generated repository. See [`bin/build-prefixed-rector-bin.sh`](https://github.com/rectorphp/rector/blob/master/bin/build-prefixed-rector-bin.sh) in original repository for more.
