@@ -56,16 +56,15 @@ final class RenameSubKeyYamlRector implements YamlRectorInterface
 
     public function refactor(string $content): string
     {
-        foreach ($this->pathsToNewKeys as $path => $newKey) {
-            $pathPattern = $this->createPatternFromPath($path);
-            $replacePattern = $this->createReplacePatternFromNewKey($newKey);
+        // @see https://stackoverflow.com/a/32185032/1348344
+        // this means: split by newline followed by main key
+        $contentMainKeyParts = Strings::split($content, '#\n(?=[\w])#');
 
-            while (Strings::match($content, $pathPattern)) {
-                $content = Strings::replace($content, $pathPattern, $replacePattern, 1);
-            }
+        foreach ($contentMainKeyParts as $key => $contentMainKeyPart) {
+            $contentMainKeyParts[$key] = $this->processSingleMainGroup($contentMainKeyPart);
         }
 
-        return $content;
+        return implode(PHP_EOL, $contentMainKeyParts);
     }
 
     private function createPatternFromPath(string $path): string
@@ -100,5 +99,19 @@ final class RenameSubKeyYamlRector implements YamlRectorInterface
         }
 
         return $replacePattern . $newKey . '$' . $this->replacePathsCount;
+    }
+
+    private function processSingleMainGroup(string $content): string
+    {
+        foreach ($this->pathsToNewKeys as $path => $newKey) {
+            $pathPattern = $this->createPatternFromPath($path);
+            $replacePattern = $this->createReplacePatternFromNewKey($newKey);
+
+            while (Strings::match($content, $pathPattern)) {
+                $content = Strings::replace($content, $pathPattern, $replacePattern, 1);
+            }
+        }
+
+        return $content;
     }
 }

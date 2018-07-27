@@ -56,7 +56,6 @@
             "Rector\\NodeTraverserQueue\\Tests\\": "packages/NodeTraverserQueue/tests",
             "Rector\\Symfony\\Tests\\": "packages/Symfony/tests",
             "Rector\\Sensio\\Tests\\": "packages/Sensio/tests",
-            "Rector\\Nette\\Tests\\": "packages/Nette/tests",
             "Rector\\Sylius\\Tests\\": "packages/Sylius/tests",
             "Rector\\PHPUnit\\Tests\\": "packages/PHPUnit/tests",
             "Rector\\PhpParser\\Tests\\": "packages/PhpParser/tests",
