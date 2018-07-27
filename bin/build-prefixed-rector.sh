@@ -43,6 +43,8 @@ sed -i 's#\\App\\\\Kernel#App\\Kernel#g' build/src/Bridge/Symfony/DefaultAnalyze
 (find build/src/Bridge/Symfony/ -type f | xargs sed -i 's#RectorPrefixed\\Symfony\\Component#Symfony\\Component#g')
 
 cp composer.json build/composer.json
+cp template/README.md build/README.md
+cp template/.travis.yml build/.travis.yml
 
 # rebuild composer dump so the new prefixed namespaces are autoloaded
 # the new "RectorPrefixed\" is taken into account thanks to /vendor/composer/installed.json file,
