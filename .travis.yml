@@ -6,12 +6,8 @@ matrix:
       env: STATIC_ANALYSIS=true RUN_RECTOR=true MONOREPO_SPLIT=true
     - php: 7.1
       env: COMPOSER_FLAGS="--prefer-lowest"
-    - php: 7.2
-      env: PHPUNIT_FLAGS="--coverage-clover coverage.xml --testsuite=contrib-rectors"
-    - php: 7.2
-      env: PHPUNIT_FLAGS="--coverage-clover coverage.xml --testsuite=general-rectors"
-    - php: 7.2
-      env: PHPUNIT_FLAGS="--coverage-clover coverage.xml --testsuite=main"
+#    - php: 7.2
+#      env: PHPUNIT_FLAGS="--coverage-clover coverage.xml"
 
 install:
   - composer update $COMPOSER_FLAGS
@@ -37,12 +33,13 @@ script:
     fi
 
 after_script:
-  # upload coverage to Coveralls.io
-  - |
-    if [[ $PHPUNIT_FLAGS == true ]]; then
-      wget https://github.com/satooshi/php-coveralls/releases/download/v1.0.1/coveralls.phar
-      php coveralls.phar --verbose
-    fi
+
+  # upload coverage.xml to Coveralls
+#  - |
+#    if [[ $PHPUNIT_FLAGS != "" ]]; then
+#      wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.1.0/php-coveralls.phar;
+#      php php-coveralls.phar --verbose;
+#    fi
 
   # split monorepo to packages - only on merge to master
   - |

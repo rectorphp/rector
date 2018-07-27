@@ -9,7 +9,7 @@ use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\TraitTypeResolver\Source\A
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\TraitTypeResolver\Source\TraitWithTrait;
 
 /**
- * @covers \Rector\NodeTypeResolver\PerNodeTypeResolver\ClassLikeTypeResolver
+ * @covers \Rector\NodeTypeResolver\PerNodeTypeResolver\TraitTypeResolver
  */
 final class TraitTypeResolverTest extends AbstractNodeTypeResolverTest
 {
