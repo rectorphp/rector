@@ -149,6 +149,7 @@ final class ProcessCommand extends Command
 
         $phpFiles = $this->filesFinder->findInDirectoriesAndFiles($source, ['php']);
         $yamlFiles = $this->filesFinder->findInDirectoriesAndFiles($source, ['yml', 'yaml']);
+
         $allFiles = $phpFiles + $yamlFiles;
 
         $this->processCommandReporter->reportLoadedRectors();
