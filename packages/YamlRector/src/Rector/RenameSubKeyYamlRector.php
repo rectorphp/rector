@@ -57,6 +57,7 @@ final class RenameSubKeyYamlRector implements YamlRectorInterface
     public function refactor(string $content): string
     {
         // @see https://stackoverflow.com/a/32185032/1348344
+        // this means: split by newline followed by main key
         $contentMainKeyParts = Strings::split($content, '#\n(?=[\w])#');
 
         foreach ($contentMainKeyParts as $key => $contentMainKeyPart) {
