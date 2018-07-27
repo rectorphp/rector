@@ -16,6 +16,15 @@ Since Rector **uses project's autoload to analyze type of elements**, it cannot 
 composer require rector/rector-prefixed:@dev --dev
 ```
 
+## Build & Deploy
+
+Go to [`rector/rector` repository](https://github.com/rectorphp/rector) and run:
+
+```bash
+bin/build-prefixed-rector.sh
+bin/publish-prefixed-rector.sh
+```
+
 ## How to Contribute
 
 This is an automatically generated repository. See [`bin/build-prefixed-rector-bin.php`](https://github.com/rectorphp/rector/blob/master/bin/build-prefixed-rector-bin.php) in original repository for more.
