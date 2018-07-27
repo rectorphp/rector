@@ -10,7 +10,7 @@ When you're gonna move from manual work to **instant upgrades**?
 
 ![Rector-showcase](docs/images/rector-showcase.gif)
 
-Rector **instantly upgrades PHP & Yaml code of your application**, with focus on open-source projects:
+Rector **instantly upgrades PHP & YAML code of your application**, with focus on open-source projects:
 
 <p align="center">
     <a href="/config/level/symfony"><img src="/docs/images/symfony.png"></a>

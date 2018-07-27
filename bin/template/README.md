@@ -3,7 +3,7 @@
 [![Build Status](https://img.shields.io/travis/rectorphp/rector-prefixed/master.svg?style=flat-square)](https://travis-ci.org/rectorphp/rector-prefixed)
 [![Downloads](https://img.shields.io/packagist/dt/rector/rector-prefixed.svg?style=flat-square)](https://packagist.org/packages/rector/rector)
 
-Rector **instantly upgrades PHP & Yaml code of your application**, with focus on open-source projects.
+Rector **instantly upgrades PHP & YAML code of your application**, with focus on open-source projects.
 Read more about it in [original repository](https://github.com/rectorphp/rector).
 
 <br>
