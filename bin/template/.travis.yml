@@ -5,7 +5,7 @@ php:
   - 7.2
 
 script:
-  - bin/rector process src tests --level symfony40 --dry-run
+  - bin/rector process src --level symfony40 --dry-run
   - bin/rector describe --level all
 
 notifications:
