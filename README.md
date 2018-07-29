@@ -41,13 +41,9 @@ Rector can:
 composer require rector/rector:@dev --dev
 ```
 
-### Do you Have Conflicts?
+**Do you have conflicts on `composer require`?**
 
-Since Rector **uses project's autoload to analyze type of elements**, it cannot be installed as project in standalone directory but needs to be added as dependency. In case you have composer versions conflicts, install prefixed version:
-
-```bash
-composer require rector/rector-prefixed:@dev --dev
-```
+Install [prefixed version](https://github.com/rectorphp/rector-prefixed) with isolated dependencies.
 
 ### Extra Autoloading
 
