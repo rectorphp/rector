@@ -1,0 +1,12 @@
+language: php
+
+php:
+  - 7.1
+  - 7.2
+
+script:
+  - bin/rector process src --level symfony40 --dry-run
+  - bin/rector describe --level all
+
+notifications:
+  email: never

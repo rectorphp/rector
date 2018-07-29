@@ -1,6 +1,6 @@
 # Rector - Upgrade your Legacy App to Modern Codebase
 
-Rector is an upgrading and **re**fa**ctor**ing tool. It is under development phase in 2018, to figure out the best way to use it in applications, polish API of Rector classes and get feedback from community. Please consider this while using it and report issues or post ideas you'll come up with while using. Thank you!
+Rector is a **rec**onstruc**tor** tool - it instantly upgrades and refactors your code to a modern one. It is under development phase in 2018, to figure out the best way to use it in applications, polish API of Rector classes and get feedback from community. Please consider this while using it and report issues or post ideas you'll come up with while using. Thank you!
 
 When you're gonna move from manual work to **instant upgrades**?
 
@@ -10,7 +10,7 @@ When you're gonna move from manual work to **instant upgrades**?
 
 ![Rector-showcase](docs/images/rector-showcase.gif)
 
-Rector **instantly upgrades PHP & Yaml code of your application**, with focus on open-source projects:
+Rector **instantly upgrades PHP & YAML code of your application**, with focus on open-source projects:
 
 <p align="center">
     <a href="/config/level/symfony"><img src="/docs/images/symfony.png"></a>

@@ -7,7 +7,7 @@
 ### Added
 
 - [#508] [Rector] Add MergeInterfaceRector
-- [#509] Add Yaml refactoring support
+- [#509] Add YAML refactoring support
 - [#512] Add --with-style option to apply basic style [closes [#506]]
 
 ### Changed
