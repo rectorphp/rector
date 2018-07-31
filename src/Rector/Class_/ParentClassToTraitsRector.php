@@ -30,28 +30,21 @@ final class ParentClassToTraitsRector extends AbstractRector
     private $nodeFactory;
 
     /**
-     * @var string
-     */
-    private $parentClass;
-
-    /**
      * @var string[]
      */
-    private $traitNames = [];
+    private $parentClassToTraits = [];
 
     /**
-     * @param string[] $traitNames
+     * @param string[] $parentClassToTraits { parent class => [ traits ] }
      */
     public function __construct(
         StatementGlue $statementGlue,
         NodeFactory $nodeFactory,
-        string $parentClass = 'Nette\Object',
-        array $traitNames = ['Nette\SmartObject']
+        array $parentClassToTraits
     ) {
         $this->statementGlue = $statementGlue;
         $this->nodeFactory = $nodeFactory;
-        $this->parentClass = $parentClass;
-        $this->traitNames = $traitNames;
+        $this->parentClassToTraits = $parentClassToTraits;
     }
 
     public function getDefinition(): RectorDefinition
@@ -80,10 +73,9 @@ CODE_SAMPLE
             return false;
         }
 
-        /** @var FullyQualified $fullyQualifiedName */
-        $fullyQualifiedName = $node->extends->getAttribute(Attribute::RESOLVED_NAME);
+        $nodeParentClassName = $this->getClassNodeParentClassName($node);
 
-        return $fullyQualifiedName->toString() === $this->parentClass;
+        return isset($this->parentClassToTraits[$nodeParentClassName]);
     }
 
     /**
@@ -91,7 +83,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $classNode): ?Node
     {
-        foreach ($this->traitNames as $traitName) {
+        $nodeParentClassName = $this->getClassNodeParentClassName($classNode);
+        $traitNames = $this->parentClassToTraits[$nodeParentClassName];
+
+        foreach ($traitNames as $traitName) {
             $traitUseNode = $this->nodeFactory->createTraitUse($traitName);
             $this->statementGlue->addAsFirstTrait($classNode, $traitUseNode);
         }
@@ -104,5 +99,13 @@ CODE_SAMPLE
     private function removeParentClass(Class_ $classNode): void
     {
         $classNode->extends = null;
+    }
+
+    private function getClassNodeParentClassName(Class_ $classNode): string
+    {
+        /** @var FullyQualified $fullyQualifiedName */
+        $fullyQualifiedName = $classNode->extends->getAttribute(Attribute::RESOLVED_NAME);
+
+        return $fullyQualifiedName->toString();
     }
 }
