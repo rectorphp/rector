@@ -6,6 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use Rector\Node\Attribute;
+use Rector\NodeModifier\VisibilityModifier;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -18,11 +19,17 @@ final class ChangePropertyVisibilityRector extends AbstractRector
     private $propertyToVisibilityByClass = [];
 
     /**
+     * @var VisibilityModifier
+     */
+    private $visibilityModifier;
+
+    /**
      * @param string[] $propertyToVisibilityByClass
      */
-    public function __construct(array $propertyToVisibilityByClass)
+    public function __construct(array $propertyToVisibilityByClass, VisibilityModifier $visibilityModifier)
     {
         $this->propertyToVisibilityByClass = $propertyToVisibilityByClass;
+        $this->visibilityModifier = $visibilityModifier;
     }
 
     public function getDefinition(): RectorDefinition
@@ -90,7 +97,7 @@ CODE_SAMPLE
 
         $newVisibility = $this->propertyToVisibilityByClass[$nodeParentClassName][$propertyName];
 
-        $this->removeOriginalVisibilityFromFlags($propertyNode);
+        $this->visibilityModifier->removeOriginalVisibilityFromFlags($propertyNode);
 
         if ($newVisibility === 'public') {
             $propertyNode->flags |= Class_::MODIFIER_PUBLIC;
@@ -105,23 +112,5 @@ CODE_SAMPLE
         }
 
         return $propertyNode;
-    }
-
-    /**
-     * This way "abstract", "static", "final" are kept
-     */
-    private function removeOriginalVisibilityFromFlags(Property $propertyNode): void
-    {
-        if ($propertyNode->isPublic()) {
-            $propertyNode->flags -= Class_::MODIFIER_PUBLIC;
-        }
-
-        if ($propertyNode->isProtected()) {
-            $propertyNode->flags -= Class_::MODIFIER_PROTECTED;
-        }
-
-        if ($propertyNode->isPrivate()) {
-            $propertyNode->flags -= Class_::MODIFIER_PRIVATE;
-        }
     }
 }
