@@ -3,7 +3,6 @@
 namespace Rector\Rector\Visibility;
 
 use PhpParser\Node;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use Rector\Node\Attribute;
 use Rector\NodeModifier\VisibilityModifier;
@@ -92,25 +91,19 @@ CODE_SAMPLE
      */
     public function refactor(Node $propertyNode): ?Node
     {
+        $this->visibilityModifier->removeOriginalVisibilityFromFlags($propertyNode);
+
+        $newVisibility = $this->resolveNewVisibilityForNode($propertyNode);
+        $this->visibilityModifier->addVisibilityFlag($propertyNode, $newVisibility);
+
+        return $propertyNode;
+    }
+
+    private function resolveNewVisibilityForNode(Property $propertyNode): string
+    {
         $nodeParentClassName = $propertyNode->getAttribute(Attribute::PARENT_CLASS_NAME);
         $propertyName = $propertyNode->props[0]->name->toString();
 
-        $newVisibility = $this->propertyToVisibilityByClass[$nodeParentClassName][$propertyName];
-
-        $this->visibilityModifier->removeOriginalVisibilityFromFlags($propertyNode);
-
-        if ($newVisibility === 'public') {
-            $propertyNode->flags |= Class_::MODIFIER_PUBLIC;
-        }
-
-        if ($newVisibility === 'protected') {
-            $propertyNode->flags |= Class_::MODIFIER_PROTECTED;
-        }
-
-        if ($newVisibility === 'private') {
-            $propertyNode->flags |= Class_::MODIFIER_PRIVATE;
-        }
-
-        return $propertyNode;
+        return $this->propertyToVisibilityByClass[$nodeParentClassName][$propertyName];
     }
 }
