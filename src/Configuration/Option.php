@@ -32,5 +32,10 @@ final class Option
     /**
      * @var string
      */
+    public const OPTION_LEVEL = 'level';
+
+    /**
+     * @var string
+     */
     public const KERNEL_CLASS_PARAMETER = 'kernel_class';
 }

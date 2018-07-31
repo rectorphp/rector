@@ -7,6 +7,7 @@ use Rector\Console\ConsoleStyle;
 use Rector\ConsoleDiffer\MarkdownDifferAndFormatter;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\RectorDefinition\CodeSample;
+use Rector\YamlRector\Contract\YamlRectorInterface;
 
 final class DescribeCommandReporter
 {
@@ -41,7 +42,10 @@ final class DescribeCommandReporter
         }
     }
 
-    private function printWithCliFormat(int $i, bool $showDiffs, RectorInterface $rector): void
+    /**
+     * @param RectorInterface|YamlRectorInterface $rector
+     */
+    private function printWithCliFormat(int $i, bool $showDiffs, $rector): void
     {
         $this->consoleStyle->section(sprintf('%d) %s', $i, get_class($rector)));
 

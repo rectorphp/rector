@@ -2,11 +2,16 @@
 
 namespace Rector\Console\Command;
 
+use Nette\Loaders\RobotLoader;
 use Rector\Configuration\Option;
 use Rector\Console\ConsoleStyle;
 use Rector\Console\Output\DescribeCommandReporter;
+use Rector\Contract\Rector\RectorInterface;
 use Rector\Guard\RectorGuard;
 use Rector\NodeTraverser\RectorNodeTraverser;
+use Rector\YamlRector\Contract\YamlRectorInterface;
+use Rector\YamlRector\YamlFileProcessor;
+use ReflectionClass;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -50,11 +55,17 @@ final class DescribeCommand extends Command
      */
     private $rectorGuard;
 
+    /**
+     * @var YamlFileProcessor
+     */
+    private $yamlFileProcessor;
+
     public function __construct(
         ConsoleStyle $consoleStyle,
         RectorNodeTraverser $rectorNodeTraverser,
         DescribeCommandReporter $describeCommandReporter,
-        RectorGuard $rectorGuard
+        RectorGuard $rectorGuard,
+        YamlFileProcessor $yamlFileProcessor
     ) {
         parent::__construct();
 
@@ -62,6 +73,7 @@ final class DescribeCommand extends Command
         $this->rectorNodeTraverser = $rectorNodeTraverser;
         $this->describeCommandReporter = $describeCommandReporter;
         $this->rectorGuard = $rectorGuard;
+        $this->yamlFileProcessor = $yamlFileProcessor;
     }
 
     protected function configure(): void
@@ -76,19 +88,64 @@ final class DescribeCommand extends Command
     {
         $this->rectorGuard->ensureSomeRectorsAreRegistered();
 
+        $rectors = $this->getRectorsByInput($input);
+
         $outputFormat = $input->getOption(self::OPTION_FORMAT);
 
         if ($outputFormat === self::FORMAT_MARKDOWN) {
-            $this->consoleStyle->writeln('# All Rectors Overview');
+            if ($input->getOption(Option::OPTION_LEVEL) === 'all') {
+                $headline = '# All Rectors Overview';
+            } else {
+                $headline = '# Rectors Overview';
+            }
+            $this->consoleStyle->writeln($headline);
             $this->consoleStyle->newLine();
         }
 
         $this->describeCommandReporter->reportRectorsInFormat(
-            $this->rectorNodeTraverser->getRectors(),
+            $rectors,
             $outputFormat,
             ! $input->getOption(Option::OPTION_NO_DIFFS)
         );
 
         return 0;
+    }
+
+    /**
+     * @return RectorInterface[]|YamlRectorInterface[]
+     */
+    private function getRectorsByInput(InputInterface $input): array
+    {
+        if ($input->getOption(Option::OPTION_LEVEL) === 'all') {
+            $robotLoader = $this->createRobotLoaderForAllRectors();
+            $robotLoader->rebuild();
+
+            $rectors = [];
+            foreach ($robotLoader->getIndexedClasses() as $class => $filename) {
+                $reflectionClass = new ReflectionClass($class);
+                if ($reflectionClass->isAbstract()) {
+                    continue;
+                }
+
+                /** @var RectorInterface|YamlRectorInterface $rector */
+                $rectors[] = $reflectionClass->newInstanceWithoutConstructor();
+            }
+
+            return $rectors;
+        }
+
+        return $this->rectorNodeTraverser->getRectors() + $this->yamlFileProcessor->getYamlRectors();
+    }
+
+    private function createRobotLoaderForAllRectors(): RobotLoader
+    {
+        $robotLoader = new RobotLoader();
+
+        $robotLoader->addDirectory(__DIR__ . '/../../Rector');
+        $robotLoader->addDirectory(__DIR__ . '/../../../packages');
+        $robotLoader->setTempDirectory(sys_get_temp_dir() . '/_rector_finder');
+        $robotLoader->acceptFiles = '*Rector.php';
+
+        return $robotLoader;
     }
 }
