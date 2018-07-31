@@ -21,10 +21,9 @@ composer require rector/rector-prefixed:@dev --dev
 Go to [`rector/rector` repository](https://github.com/rectorphp/rector) and run:
 
 ```bash
-bin/build-prefixed-rector.sh
-bin/publish-prefixed-rector.sh
+composer build-rector-prefixed
 ```
 
 ## How to Contribute
 
-This is an automatically generated repository. See [`bin/build-prefixed-rector-bin.sh`](https://github.com/rectorphp/rector/blob/master/bin/build-prefixed-rector-bin.sh) in original repository for more.
+This is an automatically generated repository. See `composer build-rector-prefixed`(https://github.com/rectorphp/rector/blob/master/composer.json) in original repository for more.
