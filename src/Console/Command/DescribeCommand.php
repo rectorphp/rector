@@ -2,11 +2,16 @@
 
 namespace Rector\Console\Command;
 
+use Nette\Loaders\RobotLoader;
 use Rector\Configuration\Option;
 use Rector\Console\ConsoleStyle;
 use Rector\Console\Output\DescribeCommandReporter;
-use Rector\Exception\NoRectorsLoadedException;
+use Rector\Contract\Rector\RectorInterface;
+use Rector\Guard\RectorGuard;
 use Rector\NodeTraverser\RectorNodeTraverser;
+use Rector\YamlRector\Contract\YamlRectorInterface;
+use Rector\YamlRector\YamlFileProcessor;
+use ReflectionClass;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -45,16 +50,30 @@ final class DescribeCommand extends Command
      */
     private $describeCommandReporter;
 
+    /**
+     * @var RectorGuard
+     */
+    private $rectorGuard;
+
+    /**
+     * @var YamlFileProcessor
+     */
+    private $yamlFileProcessor;
+
     public function __construct(
         ConsoleStyle $consoleStyle,
         RectorNodeTraverser $rectorNodeTraverser,
-        DescribeCommandReporter $describeCommandReporter
+        DescribeCommandReporter $describeCommandReporter,
+        RectorGuard $rectorGuard,
+        YamlFileProcessor $yamlFileProcessor
     ) {
         parent::__construct();
 
         $this->consoleStyle = $consoleStyle;
         $this->rectorNodeTraverser = $rectorNodeTraverser;
         $this->describeCommandReporter = $describeCommandReporter;
+        $this->rectorGuard = $rectorGuard;
+        $this->yamlFileProcessor = $yamlFileProcessor;
     }
 
     protected function configure(): void
@@ -67,17 +86,24 @@ final class DescribeCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->ensureSomeRectorsAreRegistered();
+        $this->rectorGuard->ensureSomeRectorsAreRegistered();
+
+        $rectors = $this->getRectorsByInput($input);
 
         $outputFormat = $input->getOption(self::OPTION_FORMAT);
 
         if ($outputFormat === self::FORMAT_MARKDOWN) {
-            $this->consoleStyle->writeln('# All Rectors Overview');
+            if ($input->getOption(Option::OPTION_LEVEL) === 'all') {
+                $headline = '# All Rectors Overview';
+            } else {
+                $headline = '# Rectors Overview';
+            }
+            $this->consoleStyle->writeln($headline);
             $this->consoleStyle->newLine();
         }
 
         $this->describeCommandReporter->reportRectorsInFormat(
-            $this->rectorNodeTraverser->getRectors(),
+            $rectors,
             $outputFormat,
             ! $input->getOption(Option::OPTION_NO_DIFFS)
         );
@@ -85,15 +111,41 @@ final class DescribeCommand extends Command
         return 0;
     }
 
-    private function ensureSomeRectorsAreRegistered(): void
+    /**
+     * @return RectorInterface[]|YamlRectorInterface[]
+     */
+    private function getRectorsByInput(InputInterface $input): array
     {
-        if ($this->rectorNodeTraverser->getRectorCount() > 0) {
-            return;
+        if ($input->getOption(Option::OPTION_LEVEL) === 'all') {
+            $robotLoader = $this->createRobotLoaderForAllRectors();
+            $robotLoader->rebuild();
+
+            $rectors = [];
+            foreach ($robotLoader->getIndexedClasses() as $class => $filename) {
+                $reflectionClass = new ReflectionClass($class);
+                if ($reflectionClass->isAbstract()) {
+                    continue;
+                }
+
+                /** @var RectorInterface|YamlRectorInterface $rector */
+                $rectors[] = $reflectionClass->newInstanceWithoutConstructor();
+            }
+
+            return $rectors;
         }
 
-        throw new NoRectorsLoadedException(
-            'No rectors were found. Registers them in rector.yml config to "rector:" '
-            . 'section, load them via "--config <file>.yml" or "--level <level>" CLI options.'
-        );
+        return $this->rectorNodeTraverser->getRectors() + $this->yamlFileProcessor->getYamlRectors();
+    }
+
+    private function createRobotLoaderForAllRectors(): RobotLoader
+    {
+        $robotLoader = new RobotLoader();
+
+        $robotLoader->addDirectory(__DIR__ . '/../../Rector');
+        $robotLoader->addDirectory(__DIR__ . '/../../../packages');
+        $robotLoader->setTempDirectory(sys_get_temp_dir() . '/_rector_finder');
+        $robotLoader->acceptFiles = ['*Rector.php'];
+
+        return $robotLoader;
     }
 }
