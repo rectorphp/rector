@@ -86,6 +86,9 @@ CODE_SAMPLE
         $nodeParentClassName = $this->getClassNodeParentClassName($classNode);
         $traitNames = $this->parentClassToTraits[$nodeParentClassName];
 
+        // keep the Trait order the way it is in config
+        $traitNames = array_reverse($traitNames);
+
         foreach ($traitNames as $traitName) {
             $traitUseNode = $this->nodeFactory->createTraitUse($traitName);
             $this->statementGlue->addAsFirstTrait($classNode, $traitUseNode);
