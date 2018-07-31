@@ -2,6 +2,8 @@
 
 namespace Rector\Console\Output;
 
+use Nette\Utils\Arrays;
+use Nette\Utils\Strings;
 use Rector\Console\Command\DescribeCommand;
 use Rector\Console\ConsoleStyle;
 use Rector\ConsoleDiffer\MarkdownDifferAndFormatter;
@@ -33,11 +35,23 @@ final class DescribeCommandReporter
     public function reportRectorsInFormat(array $rectors, string $outputFormat, bool $showDiffs): void
     {
         $i = 0;
-        foreach ($rectors as $rector) {
-            if ($outputFormat === DescribeCommand::FORMAT_CLI) {
+        if ($outputFormat === DescribeCommand::FORMAT_CLI) {
+            foreach ($rectors as $rector) {
                 $this->printWithCliFormat(++$i, $showDiffs, $rector);
-            } elseif ($outputFormat === DescribeCommand::FORMAT_MARKDOWN) {
-                $this->printWithMarkdownFormat($showDiffs, $rector);
+            }
+            return;
+        }
+
+        if ($outputFormat === DescribeCommand::FORMAT_MARKDOWN) {
+            $rectorsByGroup = $this->groupRectors($rectors);
+
+            foreach ($rectorsByGroup as $group => $rectors) {
+                $this->consoleStyle->writeln('## ' . $group);
+                $this->consoleStyle->newLine();
+
+                foreach ($rectors as $rector) {
+                    $this->printWithMarkdownFormat($showDiffs, $rector);
+                }
             }
         }
     }
@@ -79,7 +93,14 @@ final class DescribeCommandReporter
      */
     private function printWithMarkdownFormat(bool $showDiffs, $rector): void
     {
-        $this->consoleStyle->writeln('## ' . get_class($rector));
+        $rectorClass = get_class($rector);
+        $rectorClassParts = explode('\\', $rectorClass);
+        $headline = $rectorClassParts[count($rectorClassParts) - 1];
+
+        $this->consoleStyle->writeln(sprintf('### `%s`', $headline));
+
+        $this->consoleStyle->newLine();
+        $this->consoleStyle->writeln(sprintf('- class: `%s`', $rectorClass));
 
         $rectorDefinition = $rector->getDefinition();
         if ($rectorDefinition->getDescription()) {
@@ -92,10 +113,9 @@ final class DescribeCommandReporter
             $this->consoleStyle->writeln('```diff');
 
             [$codeBefore, $codeAfter] = $this->joinBeforeAndAfter($rectorDefinition->getCodeSamples());
-
             $diff = $this->markdownDifferAndFormatter->bareDiffAndFormatWithoutColors($codeBefore, $codeAfter);
-
             $this->consoleStyle->write($diff);
+
             $this->consoleStyle->newLine();
             $this->consoleStyle->writeln('```');
         }
@@ -122,5 +142,43 @@ final class DescribeCommandReporter
         $codeAfter = implode($separator, $codesAfter);
 
         return [$codeBefore, $codeAfter];
+    }
+
+    /**
+     * @param RectorInterface[]|YamlRectorInterface[] $rectors
+     * @return RectorInterface[][]|YamlRectorInterface[]
+     */
+    private function groupRectors(array $rectors): array
+    {
+        $rectorsByGroup = [];
+        foreach ($rectors as $rector) {
+            $rectorGroup = $this->detectGroupFromRectorClass(get_class($rector));
+            $rectorsByGroup[$rectorGroup][] = $rector;
+        }
+
+        return $rectorsByGroup;
+    }
+
+    private function detectGroupFromRectorClass($rectorClass)
+    {
+        $rectorClassParts = explode('\\', $rectorClass);
+
+        // basic Rectors
+        if (Strings::startsWith($rectorClass, 'Rector\Rector') || Strings::startsWith($rectorClass, 'Rector\YamlRector')) {
+            return $rectorClassParts[count($rectorClassParts) - 2];
+        }
+
+        // Rector/<PackageGroup>/Rector/SomeRector
+        if (count($rectorClassParts) === 4) {
+            return $rectorClassParts[1];
+        }
+
+        // Rector/<PackageGroup>/Rector/<PackageSubGroup>/SomeRector
+        if (count($rectorClassParts) === 5) {
+            return $rectorClassParts[1] . '\\' . $rectorClassParts[3];
+        }
+
+        // fallback
+        return $rectorClassParts[count($rectorClassParts) - 2];
     }
 }
