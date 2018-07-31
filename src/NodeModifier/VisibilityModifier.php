@@ -4,6 +4,7 @@ namespace Rector\NodeModifier;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\Exception\InvalidNodeTypeException;
@@ -11,11 +12,16 @@ use Rector\Exception\InvalidNodeTypeException;
 final class VisibilityModifier
 {
     /**
+     * @var string[]
+     */
+    private $allowedNodeTypes = [ClassMethod::class, Property::class, ClassConst::class];
+
+    /**
      * This way "abstract", "static", "final" are kept
      *
-     * @param ClassMethod|Property $node
+     * @param ClassMethod|Property|ClassConst $node
      */
-    public function removeOriginalVisibilityFromFlags($node): void
+    public function removeOriginalVisibilityFromFlags(Node $node): void
     {
         $this->ensureIsClassMethodOrProperty($node, __METHOD__);
 
@@ -32,16 +38,38 @@ final class VisibilityModifier
         }
     }
 
+    /**
+     * @param ClassMethod|Property|ClassConst $node
+     */
+    public function addVisibilityFlag(Node $node, string $visibility): void
+    {
+        $this->ensureIsClassMethodOrProperty($node, __METHOD__);
+
+        if ($visibility === 'public') {
+            $node->flags |= Class_::MODIFIER_PUBLIC;
+        }
+
+        if ($visibility === 'protected') {
+            $node->flags |= Class_::MODIFIER_PROTECTED;
+        }
+
+        if ($visibility === 'private') {
+            $node->flags |= Class_::MODIFIER_PRIVATE;
+        }
+    }
+
     private function ensureIsClassMethodOrProperty(Node $node, string $location): void
     {
-        if ($node instanceof ClassMethod || $node instanceof Property) {
-            return;
+        foreach ($this->allowedNodeTypes as $allowedNodeType) {
+            if (is_a($node, $allowedNodeType, true)) {
+                return;
+            }
         }
 
         throw new InvalidNodeTypeException(sprintf(
             '"%s" only accepts "%s" types. "%s" given.',
             $location,
-            implode('", "', [ClassMethod::class, Property::class]),
+            implode('", "', $this->allowedNodeTypes),
             get_class($node)
         ));
     }
