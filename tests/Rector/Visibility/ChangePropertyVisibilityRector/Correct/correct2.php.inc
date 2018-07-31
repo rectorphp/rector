@@ -4,9 +4,5 @@ use Rector\Tests\Rector\Visibility\ChangePropertyVisibilityRector\Source\ParentO
 
 class ClassThatInherits extends ParentObject
 {
-    public $toBePublicProperty;
-
-    protected $toBeProtectedProperty;
-
-    private $toBePrivateProperty;
+    public static $toBePublicStaticProperty;
 }

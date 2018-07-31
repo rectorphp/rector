@@ -90,14 +90,38 @@ CODE_SAMPLE
 
         $newVisibility = $this->propertyToVisibilityByClass[$nodeParentClassName][$propertyName];
 
-        if ($newVisibility === 'public') {
-            if ($propertyNode->isPublic()) {
-                return $propertyNode;
-            }
+        $this->removeOriginalVisibilityFromFlags($propertyNode);
 
-            $propertyNode->flags = Class_::MODIFIER_PUBLIC;
+        if ($newVisibility === 'public') {
+            $propertyNode->flags |= Class_::MODIFIER_PUBLIC;
+        }
+
+        if ($newVisibility === 'protected') {
+            $propertyNode->flags |= Class_::MODIFIER_PROTECTED;
+        }
+
+        if ($newVisibility === 'private') {
+            $propertyNode->flags |= Class_::MODIFIER_PRIVATE;
         }
 
         return $propertyNode;
+    }
+
+    /**
+     * This way "abstract", "static", "final" are kept
+     */
+    private function removeOriginalVisibilityFromFlags(Property $propertyNode): void
+    {
+        if ($propertyNode->isPublic()) {
+            $propertyNode->flags -= Class_::MODIFIER_PUBLIC;
+        }
+
+        if ($propertyNode->isProtected()) {
+            $propertyNode->flags -= Class_::MODIFIER_PROTECTED;
+        }
+
+        if ($propertyNode->isPrivate()) {
+            $propertyNode->flags -= Class_::MODIFIER_PRIVATE;
+        }
     }
 }

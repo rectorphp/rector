@@ -4,5 +4,7 @@ namespace Rector\Tests\Rector\Visibility\ChangePropertyVisibilityRector\Source;
 
 class ParentObject
 {
-    public $property;
+    public $toBePublicProperty;
+    protected $toBeProtectedProperty;
+    private $toBePrivateProperty;
 }
