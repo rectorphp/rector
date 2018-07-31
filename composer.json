@@ -84,7 +84,7 @@
             "vendor/bin/changelog-linker dump-merges --in-categories",
             "vendor/bin/changelog-linker linkify"
         ],
-        "build-rector-prefixed": [
+        "publish-prefixed": [
             "bin/build-prefixed-rector.sh",
             "bin/publish-prefixed-rector.sh"
         ]

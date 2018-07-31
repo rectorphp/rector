@@ -41,10 +41,11 @@ after_script:
 #      php php-coveralls.phar --verbose;
 #    fi
 
-  # split monorepo to packages - only on merge to master
+  # split monorepo to packages - only on merge to master + publish prefixed version
   - |
     if [[ $TRAVIS_EVENT_TYPE == "push" && $MONOREPO_SPLIT == true && $TRAVIS_BRANCH == "master" ]]; then
         vendor/bin/monorepo-builder split -v
+        composer publish-prefixed
     fi
 
 cache:
