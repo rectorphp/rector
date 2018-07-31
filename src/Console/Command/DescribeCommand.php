@@ -5,7 +5,7 @@ namespace Rector\Console\Command;
 use Rector\Configuration\Option;
 use Rector\Console\ConsoleStyle;
 use Rector\Console\Output\DescribeCommandReporter;
-use Rector\Exception\NoRectorsLoadedException;
+use Rector\Guard\RectorGuard;
 use Rector\NodeTraverser\RectorNodeTraverser;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -45,16 +45,23 @@ final class DescribeCommand extends Command
      */
     private $describeCommandReporter;
 
+    /**
+     * @var RectorGuard
+     */
+    private $rectorGuard;
+
     public function __construct(
         ConsoleStyle $consoleStyle,
         RectorNodeTraverser $rectorNodeTraverser,
-        DescribeCommandReporter $describeCommandReporter
+        DescribeCommandReporter $describeCommandReporter,
+        RectorGuard $rectorGuard
     ) {
         parent::__construct();
 
         $this->consoleStyle = $consoleStyle;
         $this->rectorNodeTraverser = $rectorNodeTraverser;
         $this->describeCommandReporter = $describeCommandReporter;
+        $this->rectorGuard = $rectorGuard;
     }
 
     protected function configure(): void
@@ -67,7 +74,7 @@ final class DescribeCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->ensureSomeRectorsAreRegistered();
+        $this->rectorGuard->ensureSomeRectorsAreRegistered();
 
         $outputFormat = $input->getOption(self::OPTION_FORMAT);
 
@@ -83,17 +90,5 @@ final class DescribeCommand extends Command
         );
 
         return 0;
-    }
-
-    private function ensureSomeRectorsAreRegistered(): void
-    {
-        if ($this->rectorNodeTraverser->getRectorCount() > 0) {
-            return;
-        }
-
-        throw new NoRectorsLoadedException(
-            'No rectors were found. Registers them in rector.yml config to "rector:" '
-            . 'section, load them via "--config <file>.yml" or "--level <level>" CLI options.'
-        );
     }
 }

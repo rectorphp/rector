@@ -10,9 +10,8 @@ use Rector\Console\ConsoleStyle;
 use Rector\Console\Output\ProcessCommandReporter;
 use Rector\ConsoleDiffer\DifferAndFormatter;
 use Rector\Exception\Command\FileProcessingException;
-use Rector\Exception\NoRectorsLoadedException;
 use Rector\FileSystem\FilesFinder;
-use Rector\NodeTraverser\RectorNodeTraverser;
+use Rector\Guard\RectorGuard;
 use Rector\Reporting\FileDiff;
 use Rector\YamlRector\YamlFileProcessor;
 use Symfony\Component\Console\Command\Command;
@@ -74,14 +73,14 @@ final class ProcessCommand extends Command
     private $additionalAutoloader;
 
     /**
-     * @var RectorNodeTraverser
-     */
-    private $rectorNodeTraverser;
-
-    /**
      * @var YamlFileProcessor
      */
     private $yamlFileProcessor;
+
+    /**
+     * @var RectorGuard
+     */
+    private $rectorGuard;
 
     public function __construct(
         FileProcessor $fileProcessor,
@@ -91,8 +90,8 @@ final class ProcessCommand extends Command
         ParameterProvider $parameterProvider,
         DifferAndFormatter $differAndFormatter,
         AdditionalAutoloader $additionalAutoloader,
-        RectorNodeTraverser $rectorNodeTraverser,
-        YamlFileProcessor $yamlFileProcessor
+        YamlFileProcessor $yamlFileProcessor,
+        RectorGuard $rectorGuard
     ) {
         parent::__construct();
 
@@ -103,8 +102,8 @@ final class ProcessCommand extends Command
         $this->parameterProvider = $parameterProvider;
         $this->differAndFormatter = $differAndFormatter;
         $this->additionalAutoloader = $additionalAutoloader;
-        $this->rectorNodeTraverser = $rectorNodeTraverser;
         $this->yamlFileProcessor = $yamlFileProcessor;
+        $this->rectorGuard = $rectorGuard;
     }
 
     protected function configure(): void
@@ -141,7 +140,7 @@ final class ProcessCommand extends Command
     {
         $this->additionalAutoloader->autoloadWithInput($input);
 
-        $this->ensureSomeRectorsAreRegistered();
+        $this->rectorGuard->ensureSomeRectorsAreRegistered();
 
         $source = $input->getArgument(Option::SOURCE);
         $this->parameterProvider->changeParameter(Option::SOURCE, $source);
@@ -170,18 +169,6 @@ final class ProcessCommand extends Command
         $this->consoleStyle->success('Rector is done!');
 
         return 0;
-    }
-
-    private function ensureSomeRectorsAreRegistered(): void
-    {
-        if ($this->rectorNodeTraverser->getRectorCount() > 0 || $this->yamlFileProcessor->getYamlRectorsCount() > 0) {
-            return;
-        }
-
-        throw new NoRectorsLoadedException(
-            'No rectors were found. Registers them in rector.yml config to "rector:" '
-            . 'section, load them via "--config <file>.yml" or "--level <level>" CLI options.'
-        );
     }
 
     /**
