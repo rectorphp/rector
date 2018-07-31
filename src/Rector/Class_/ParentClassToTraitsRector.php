@@ -15,9 +15,9 @@ use Rector\RectorDefinition\RectorDefinition;
 /**
  * Can handle cases like:
  * - https://doc.nette.org/en/2.4/migration-2-4#toc-nette-smartobject
- * - @todo Controller/AbstractConstroller to ControllerTrait in Symfony
+ * - https://github.com/silverstripe/silverstripe-upgrader/issues/71#issue-320145944
  */
-final class ParentClassToTraitRector extends AbstractRector
+final class ParentClassToTraitsRector extends AbstractRector
 {
     /**
      * @var StatementGlue
@@ -30,30 +30,26 @@ final class ParentClassToTraitRector extends AbstractRector
     private $nodeFactory;
 
     /**
-     * @var string
+     * @var string[]
      */
-    private $parentClass;
+    private $parentClassToTraits = [];
 
     /**
-     * @var string
+     * @param string[] $parentClassToTraits { parent class => [ traits ] }
      */
-    private $traitName;
-
     public function __construct(
         StatementGlue $statementGlue,
         NodeFactory $nodeFactory,
-        string $parentClass = 'Nette\Object',
-        string $traitName = 'Nette\SmartObject'
+        array $parentClassToTraits
     ) {
         $this->statementGlue = $statementGlue;
         $this->nodeFactory = $nodeFactory;
-        $this->parentClass = $parentClass;
-        $this->traitName = $traitName;
+        $this->parentClassToTraits = $parentClassToTraits;
     }
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Replaces parent class to specific trait', [
+        return new RectorDefinition('Replaces parent class to specific traits', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass extends Nette\Object
@@ -77,10 +73,9 @@ CODE_SAMPLE
             return false;
         }
 
-        /** @var FullyQualified $fullyQualifiedName */
-        $fullyQualifiedName = $node->extends->getAttribute(Attribute::RESOLVED_NAME);
+        $nodeParentClassName = $this->getClassNodeParentClassName($node);
 
-        return $fullyQualifiedName->toString() === $this->parentClass;
+        return isset($this->parentClassToTraits[$nodeParentClassName]);
     }
 
     /**
@@ -88,8 +83,16 @@ CODE_SAMPLE
      */
     public function refactor(Node $classNode): ?Node
     {
-        $traitUseNode = $this->nodeFactory->createTraitUse($this->traitName);
-        $this->statementGlue->addAsFirstTrait($classNode, $traitUseNode);
+        $nodeParentClassName = $this->getClassNodeParentClassName($classNode);
+        $traitNames = $this->parentClassToTraits[$nodeParentClassName];
+
+        // keep the Trait order the way it is in config
+        $traitNames = array_reverse($traitNames);
+
+        foreach ($traitNames as $traitName) {
+            $traitUseNode = $this->nodeFactory->createTraitUse($traitName);
+            $this->statementGlue->addAsFirstTrait($classNode, $traitUseNode);
+        }
 
         $this->removeParentClass($classNode);
 
@@ -99,5 +102,13 @@ CODE_SAMPLE
     private function removeParentClass(Class_ $classNode): void
     {
         $classNode->extends = null;
+    }
+
+    private function getClassNodeParentClassName(Class_ $classNode): string
+    {
+        /** @var FullyQualified $fullyQualifiedName */
+        $fullyQualifiedName = $classNode->extends->getAttribute(Attribute::RESOLVED_NAME);
+
+        return $fullyQualifiedName->toString();
     }
 }

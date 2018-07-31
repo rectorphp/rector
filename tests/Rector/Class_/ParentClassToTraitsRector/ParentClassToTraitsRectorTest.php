@@ -1,14 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Class_\ParentClassToTraitRector;
+namespace Rector\Tests\Rector\Class_\ParentClassToTraitsRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
- * @covers \Rector\Rector\Class_\ParentClassToTraitRector
+ * @covers \Rector\Rector\Class_\ParentClassToTraitsRector
  */
-final class ParentClassToTraitRectorTest extends AbstractRectorTestCase
+final class ParentClassToTraitsRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()
@@ -24,6 +24,7 @@ final class ParentClassToTraitRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Wrong/wrong2.php.inc', __DIR__ . '/Correct/correct2.php.inc'];
         yield [__DIR__ . '/Wrong/wrong3.php.inc', __DIR__ . '/Correct/correct3.php.inc'];
         yield [__DIR__ . '/Wrong/wrong4.php.inc', __DIR__ . '/Correct/correct4.php.inc'];
+        yield [__DIR__ . '/Wrong/wrong5.php.inc', __DIR__ . '/Correct/correct5.php.inc'];
     }
 
     protected function provideConfig(): string
