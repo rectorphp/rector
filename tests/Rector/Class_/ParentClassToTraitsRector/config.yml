@@ -6,3 +6,4 @@ services:
                     - 'Rector\Tests\Rector\Class_\ParentClassToTraitsRector\Source\SomeTrait'
                 'Rector\Tests\Rector\Class_\ParentClassToTraitsRector\Source\AnotherParentObject':
                     - 'Rector\Tests\Rector\Class_\ParentClassToTraitsRector\Source\SomeTrait'
+                    - 'Rector\Tests\Rector\Class_\ParentClassToTraitsRector\Source\SomeAnotherTrait'
