@@ -89,13 +89,19 @@ CODE_SAMPLE
      */
     public function refactor(Node $classConstantNode): ?Node
     {
-        $constantName = $classConstantNode->consts[0]->name->toString();
         $this->visibilityModifier->removeOriginalVisibilityFromFlags($classConstantNode);
 
-        $nodeParentClassName = $classConstantNode->getAttribute(Attribute::PARENT_CLASS_NAME);
-        $newVisibility = $this->constantToVisibilityByClass[$nodeParentClassName][$constantName];
+        $newVisibility = $this->resolveNewVisibilityForNode($classConstantNode);
         $this->visibilityModifier->addVisibilityFlag($classConstantNode, $newVisibility);
 
         return $classConstantNode;
+    }
+
+    private function resolveNewVisibilityForNode(ClassConst $classConstantNode): string
+    {
+        $nodeParentClassName = $classConstantNode->getAttribute(Attribute::PARENT_CLASS_NAME);
+        $constantName = $classConstantNode->consts[0]->name->toString();
+
+        return $this->constantToVisibilityByClass[$nodeParentClassName][$constantName];
     }
 }

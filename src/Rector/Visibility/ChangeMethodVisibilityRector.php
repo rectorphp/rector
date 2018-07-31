@@ -3,7 +3,6 @@
 namespace Rector\Rector\Visibility;
 
 use PhpParser\Node;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Node\Attribute;
 use Rector\NodeModifier\VisibilityModifier;
@@ -98,25 +97,20 @@ CODE_SAMPLE
      */
     public function refactor(Node $classMethodNode): ?Node
     {
-        $nodeParentClassName = $classMethodNode->getAttribute(Attribute::PARENT_CLASS_NAME);
-        $methodName = $classMethodNode->name->toString();
-
-        $newVisibility = $this->methodToVisibilityByClass[$nodeParentClassName][$methodName];
-
         $this->visibilityModifier->removeOriginalVisibilityFromFlags($classMethodNode);
 
-        if ($newVisibility === 'public') {
-            $classMethodNode->flags |= Class_::MODIFIER_PUBLIC;
-        }
+        $newVisibility = $this->resolveNewVisibilityForNode($classMethodNode);
 
-        if ($newVisibility === 'protected') {
-            $classMethodNode->flags |= Class_::MODIFIER_PROTECTED;
-        }
-
-        if ($newVisibility === 'private') {
-            $classMethodNode->flags |= Class_::MODIFIER_PRIVATE;
-        }
+        $this->visibilityModifier->addVisibilityFlag($classMethodNode, $newVisibility);
 
         return $classMethodNode;
+    }
+
+    private function resolveNewVisibilityForNode(ClassMethod $classMethodNode): string
+    {
+        $methodName = $classMethodNode->name->toString();
+        $nodeParentClassName = $classMethodNode->getAttribute(Attribute::PARENT_CLASS_NAME);
+
+        return $this->methodToVisibilityByClass[$nodeParentClassName][$methodName];
     }
 }
