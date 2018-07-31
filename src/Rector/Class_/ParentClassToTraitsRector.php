@@ -15,9 +15,9 @@ use Rector\RectorDefinition\RectorDefinition;
 /**
  * Can handle cases like:
  * - https://doc.nette.org/en/2.4/migration-2-4#toc-nette-smartobject
- * - @todo Controller/AbstractConstroller to ControllerTrait in Symfony
+ * - https://github.com/silverstripe/silverstripe-upgrader/issues/71#issue-320145944
  */
-final class ParentClassToTraitRector extends AbstractRector
+final class ParentClassToTraitsRector extends AbstractRector
 {
     /**
      * @var StatementGlue
@@ -35,25 +35,28 @@ final class ParentClassToTraitRector extends AbstractRector
     private $parentClass;
 
     /**
-     * @var string
+     * @var string[]
      */
-    private $traitName;
+    private $traitNames = [];
 
+    /**
+     * @param string[] $traitNames
+     */
     public function __construct(
         StatementGlue $statementGlue,
         NodeFactory $nodeFactory,
         string $parentClass = 'Nette\Object',
-        string $traitName = 'Nette\SmartObject'
+        array $traitNames = ['Nette\SmartObject']
     ) {
         $this->statementGlue = $statementGlue;
         $this->nodeFactory = $nodeFactory;
         $this->parentClass = $parentClass;
-        $this->traitName = $traitName;
+        $this->traitNames = $traitNames;
     }
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Replaces parent class to specific trait', [
+        return new RectorDefinition('Replaces parent class to specific traits', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass extends Nette\Object
@@ -88,8 +91,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $classNode): ?Node
     {
-        $traitUseNode = $this->nodeFactory->createTraitUse($this->traitName);
-        $this->statementGlue->addAsFirstTrait($classNode, $traitUseNode);
+        foreach ($this->traitNames as $traitName) {
+            $traitUseNode = $this->nodeFactory->createTraitUse($traitName);
+            $this->statementGlue->addAsFirstTrait($classNode, $traitUseNode);
+        }
 
         $this->removeParentClass($classNode);
 

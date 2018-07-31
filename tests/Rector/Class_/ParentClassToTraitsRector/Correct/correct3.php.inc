@@ -2,6 +2,6 @@
 
 class ClassWithExternalConstant
 {
-    use \Rector\Tests\Rector\Class_\ParentClassToTraitRector\Source\SomeTrait;
+    use \Rector\Tests\Rector\Class_\ParentClassToTraitsRector\Source\SomeTrait;
     public $property;
 }
