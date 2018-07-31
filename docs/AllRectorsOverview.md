@@ -688,6 +688,16 @@ Turns old option names to new ones in FormTypes in Form in Symfony
 +$builder->add("...", ["scale" => "...", "inherit_data" => "..."];
 ```
 
+## Rector\Rector\Dynamic\ArgumentDefaultValueReplacerRector
+
+[Dynamic] Replaces defined map of arguments in defined methods and their calls.
+
+```diff
+ $someObject = new SomeClass;
+-$someObject->someMethod(SomeClass::OLD_CONSTANT);
++$someObject->someMethod(false);'
+```
+
 ## Rector\Symfony\Rector\Console\ConsoleExceptionToErrorEventConstantRector
 
 Turns old event name with EXCEPTION to ERROR constant in Console in Symfony
