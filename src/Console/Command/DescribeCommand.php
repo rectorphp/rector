@@ -144,7 +144,7 @@ final class DescribeCommand extends Command
         $robotLoader->addDirectory(__DIR__ . '/../../Rector');
         $robotLoader->addDirectory(__DIR__ . '/../../../packages');
         $robotLoader->setTempDirectory(sys_get_temp_dir() . '/_rector_finder');
-        $robotLoader->acceptFiles = '*Rector.php';
+        $robotLoader->acceptFiles = ['*Rector.php'];
 
         return $robotLoader;
     }

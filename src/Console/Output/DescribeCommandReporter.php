@@ -28,7 +28,7 @@ final class DescribeCommandReporter
     }
 
     /**
-     * @param RectorInterface[] $rectors
+     * @param RectorInterface[]|YamlRectorInterface[] $rectors
      */
     public function reportRectorsInFormat(array $rectors, string $outputFormat, bool $showDiffs): void
     {
@@ -74,7 +74,10 @@ final class DescribeCommandReporter
         }
     }
 
-    private function printWithMarkdownFormat(bool $showDiffs, RectorInterface $rector): void
+    /**
+     * @param RectorInterface|YamlRectorInterface $rector
+     */
+    private function printWithMarkdownFormat(bool $showDiffs, $rector): void
     {
         $this->consoleStyle->writeln('## ' . get_class($rector));
 

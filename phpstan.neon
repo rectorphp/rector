@@ -24,6 +24,7 @@ parameters:
         - '#Call to function in_array\(\) with arguments string, array<array<string\|false>> and true will always evaluate to false#'
 
         # known values
+        - '#Method Rector\\Console\\Command\\DescribeCommand::getRectorsByInput\(\) should return array<Rector\\Contract\\Rector\\RectorInterface|Rector\\YamlRector\\Contract \\YamlRectorInterface> but returns array<int, object>#'
         - '#Cannot call method getAttribute\(\) on PhpParser\\Node\\Name\|null#'
         - '#Parameter \#2 \$str of function explode expects string, string\|null given#'
         - '#Cannot call method getName\(\) on Rector\\Builder\\Class_\\VariableInfo\|null#'
