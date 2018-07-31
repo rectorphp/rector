@@ -2,7 +2,6 @@
 
 namespace Rector\Console\Output;
 
-use Nette\Utils\Arrays;
 use Nette\Utils\Strings;
 use Rector\Console\Command\DescribeCommand;
 use Rector\Console\ConsoleStyle;
@@ -34,24 +33,23 @@ final class DescribeCommandReporter
      */
     public function reportRectorsInFormat(array $rectors, string $outputFormat, bool $showDiffs): void
     {
-        $i = 0;
         if ($outputFormat === DescribeCommand::FORMAT_CLI) {
+            $i = 0;
             foreach ($rectors as $rector) {
                 $this->printWithCliFormat(++$i, $showDiffs, $rector);
             }
             return;
         }
 
-        if ($outputFormat === DescribeCommand::FORMAT_MARKDOWN) {
-            $rectorsByGroup = $this->groupRectors($rectors);
+        $rectorsByGroup = $this->groupRectors($rectors);
+        $this->printMenu($rectorsByGroup);
 
-            foreach ($rectorsByGroup as $group => $rectors) {
-                $this->consoleStyle->writeln('## ' . $group);
-                $this->consoleStyle->newLine();
+        foreach ($rectorsByGroup as $group => $rectors) {
+            $this->consoleStyle->writeln('## ' . $group);
+            $this->consoleStyle->newLine();
 
-                foreach ($rectors as $rector) {
-                    $this->printWithMarkdownFormat($showDiffs, $rector);
-                }
+            foreach ($rectors as $rector) {
+                $this->printWithMarkdownFormat($showDiffs, $rector);
             }
         }
     }
@@ -159,12 +157,12 @@ final class DescribeCommandReporter
         return $rectorsByGroup;
     }
 
-    private function detectGroupFromRectorClass($rectorClass)
+    private function detectGroupFromRectorClass(string $rectorClass): string
     {
         $rectorClassParts = explode('\\', $rectorClass);
 
         // basic Rectors
-        if (Strings::startsWith($rectorClass, 'Rector\Rector') || Strings::startsWith($rectorClass, 'Rector\YamlRector')) {
+        if (Strings::match($rectorClass, '#^Rector\(Yaml)?Rector#')) {
             return $rectorClassParts[count($rectorClassParts) - 2];
         }
 
@@ -180,5 +178,20 @@ final class DescribeCommandReporter
 
         // fallback
         return $rectorClassParts[count($rectorClassParts) - 2];
+    }
+
+    /**
+     * @param RectorInterface[][]|YamlRectorInterface[][] $rectorsByGroup
+     */
+    private function printMenu(array $rectorsByGroup): void
+    {
+        foreach ($rectorsByGroup as $group => $rectors) {
+            $escapedGroup = str_replace('\\', '', $group);
+            $escapedGroup = Strings::webalize($escapedGroup, '_');
+
+            $this->consoleStyle->writeln(sprintf('- [%s](#%s)', $group, $escapedGroup));
+        }
+
+        $this->consoleStyle->newLine();
     }
 }

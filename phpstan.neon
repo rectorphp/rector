@@ -14,6 +14,10 @@ parameters:
 
         - '#Array \(array<array<PhpParser\\Node\\Stmt>>\) does not accept array<PhpParser\\Node\\Stmt|null>#'
 
+        # invalid array
+        - '#Argument of an invalid type array<Rector\\Contract\\Rector\\RectorInterface>|Rector\\YamlRector\\Contract\\YamlRectorInterface supplied for foreach, only iterables are supported#'
+        - '#Method Rector\\Console\\Output\\DescribeCommandReporter::groupRectors() should return array<array<Rector\\Contract\\Rector\\RectorInterface>|Rector\\YamlRector\\Contract\\YamlRectorInterface> but returns array<string, array<int,Rector\\Contract\\Rector\\RectorInterface|Rector\\YamlRector\\Contract\\YamlRectorInterface>>#'
+
         # already fixed, invalidated cache?
         - '#Access to an undefined property PhpParser\\Node\\Expr::\$args#'
         - '#Parameter \#1 \$classMethodNode of method Rector\\NodeTypeResolver\\TypesExtractor\\ConstructorPropertyTypesExtractor::extractPropertiesFromConstructorMethodNode\(\) expects PhpParser\\Node\\Stmt\\ClassMethod, PhpParser\\Node\\Stmt given#'

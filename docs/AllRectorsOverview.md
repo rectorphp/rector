@@ -1,5 +1,35 @@
 # All Rectors Overview
 
+- [Assign](#assign)
+- [Dynamic](#dynamic)
+- [ValueObjectRemover](#valueobjectremover)
+- [MethodCall](#methodcall)
+- [MagicDisclosure](#magicdisclosure)
+- [DependencyInjection](#dependencyinjection)
+- [RepositoryAsService](#repositoryasservice)
+- [Interface_](#interface_)
+- [Visibility](#visibility)
+- [CodeQuality](#codequality)
+- [Constant](#constant)
+- [Class_](#class_)
+- [Rector](#rector)
+- [PHPUnit](#phpunit)
+- [PHPUnit\SpecificMethod](#phpunitspecificmethod)
+- [Sylius\Review](#syliusreview)
+- [Symfony\HttpKernel](#symfonyhttpkernel)
+- [Symfony\Controller](#symfonycontroller)
+- [Symfony\Validator](#symfonyvalidator)
+- [Symfony\Console](#symfonyconsole)
+- [Symfony\Yaml](#symfonyyaml)
+- [Symfony\DependencyInjection](#symfonydependencyinjection)
+- [Symfony\VarDumper](#symfonyvardumper)
+- [Symfony\FrameworkBundle](#symfonyframeworkbundle)
+- [Symfony\Form](#symfonyform)
+- [Symfony\Process](#symfonyprocess)
+- [Doctrine](#doctrine)
+- [PhpParser](#phpparser)
+- [Sensio\FrameworkExtraBundle](#sensioframeworkextrabundle)
+
 ## Assign
 
 ### `PropertyAssignToMethodCallRector`
