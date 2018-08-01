@@ -7,7 +7,7 @@ use PhpParser\Node\Stmt\Property;
 use Rector\Node\Attribute;
 use Rector\NodeModifier\VisibilityModifier;
 use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class ChangePropertyVisibilityRector extends AbstractRector
@@ -35,7 +35,7 @@ final class ChangePropertyVisibilityRector extends AbstractRector
     {
         return new RectorDefinition(
             'Change visibility of property from parent class.',
-            [new CodeSample(
+            [new ConfiguredCodeSample(
 <<<'CODE_SAMPLE'
 class FrameworkClass
 {
@@ -59,6 +59,14 @@ class MyClass extends FrameworkClass
     protected $someProperty;
 }
 CODE_SAMPLE
+                ,
+                [
+                    '$propertyToVisibilityByClass' => [
+                        'FrameworkClass' => [
+                            'someProperty' => 'protected',
+                        ],
+                    ],
+                ]
             )]
         );
     }

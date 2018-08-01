@@ -7,7 +7,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Node\Attribute;
 use Rector\NodeModifier\VisibilityModifier;
 use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class ChangeMethodVisibilityRector extends AbstractRector
@@ -35,7 +35,7 @@ final class ChangeMethodVisibilityRector extends AbstractRector
     {
         return new RectorDefinition(
             'Change visibility of method from parent class.',
-            [new CodeSample(
+            [new ConfiguredCodeSample(
 <<<'CODE_SAMPLE'
 class FrameworkClass
 {
@@ -67,6 +67,14 @@ class MyClass extends FrameworkClass
     }
 }
 CODE_SAMPLE
+                ,
+                [
+                    '$methodToVisibilityByClass' => [
+                        'FrameworkClass' => [
+                            'someMethod' => 'protected',
+                        ],
+                    ],
+                ]
             )]
         );
     }
