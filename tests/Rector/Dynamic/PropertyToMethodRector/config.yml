@@ -1,7 +1,0 @@
-services:
-    Rector\Rector\Dynamic\PropertyToMethodRector:
-        $perClassPropertyToMethods:
-            'Translator':
-                'locale':
-                    'get': 'getLocale'
-                    'set': 'setLocale'

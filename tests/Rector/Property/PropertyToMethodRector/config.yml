@@ -1,0 +1,7 @@
+services:
+    Rector\Rector\Property\PropertyToMethodRector:
+        $perClassPropertyToMethods:
+            'Translator':
+                'locale':
+                    'get': 'getLocale'
+                    'set': 'setLocale'

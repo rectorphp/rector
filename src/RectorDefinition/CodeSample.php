@@ -2,7 +2,9 @@
 
 namespace Rector\RectorDefinition;
 
-final class CodeSample
+use Rector\Contract\RectorDefinition\CodeSampleInterface;
+
+final class CodeSample implements CodeSampleInterface
 {
     /**
      * @var string

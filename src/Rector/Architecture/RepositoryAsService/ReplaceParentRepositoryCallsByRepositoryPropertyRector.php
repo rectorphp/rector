@@ -67,7 +67,7 @@ final class ReplaceParentRepositoryCallsByRepositoryPropertyRector extends Abstr
             'Handles method calls in child of Doctrine EntityRepository and moves them to "$this->repository" property.',
             [
                 new CodeSample(
-<<<'SAMPLE'
+<<<'CODE_SAMPLE'
 <?php
 
 use Doctrine\ORM\EntityRepository;
@@ -79,9 +79,9 @@ class SomeRepository extends EntityRepository
         return $this->findAll();
     }
 }
-SAMPLE
+CODE_SAMPLE
                     ,
-<<<'SAMPLE_TWO'
+<<<'CODE_SAMPLE'
 <?php
 
 use Doctrine\ORM\EntityRepository;
@@ -93,7 +93,7 @@ class SomeRepository extends EntityRepository
         return $this->repository->findAll();
     }
 }
-SAMPLE_TWO
+CODE_SAMPLE
                 ),
             ]
         );

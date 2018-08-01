@@ -6,7 +6,7 @@ services:
     Rector\PhpParser\Rector\RemoveNodeRector: ~
     Rector\PhpParser\Rector\UseWithAliasRector: ~
 
-    Rector\Rector\Dynamic\PropertyNameReplacerRector:
+    Rector\Rector\Property\PropertyNameReplacerRector:
         $perClassOldToNewProperties:
             'PhpParser\Node\Stmt\Class_':
                 'type': 'flags'
@@ -20,6 +20,6 @@ services:
             'PhpParser\Node\Stmt\Class_':
                 'VISIBILITY_MODIFER_MASK': 'VISIBILITY_MODIFIER_MASK'
 
-    Rector\Rector\Dynamic\ClassReplacerRector:
+    Rector\Rector\Class_\ClassReplacerRector:
         $oldToNewClasses:
             'PhpParser\BuilderAbstract': 'PhpParser\Builder'

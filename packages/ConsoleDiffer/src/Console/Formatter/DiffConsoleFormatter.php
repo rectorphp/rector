@@ -34,11 +34,6 @@ final class DiffConsoleFormatter
         return $this->formatWithTemplate($diff, $this->template);
     }
 
-    public function bareFormat(string $diff): string
-    {
-        return $this->formatWithTemplate($diff, PHP_EOL . '%s' . PHP_EOL);
-    }
-
     private function formatWithTemplate(string $diff, string $template): string
     {
         return sprintf(

@@ -102,7 +102,7 @@ services:
                 'getMessageParameters': 'getParameters'
                 'getMessagePluralization': 'getPlural'
 
-    Rector\Rector\Dynamic\ClassReplacerRector:
+    Rector\Rector\Class_\ClassReplacerRector:
         $oldToNewClasses:
             # class loader
             'Symfony\Component\ClassLoader\UniversalClassLoader\UniversalClassLoader': 'Symfony\Component\ClassLoader\ClassLoader' # partial with method rename

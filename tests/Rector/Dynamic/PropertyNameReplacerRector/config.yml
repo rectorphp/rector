@@ -1,5 +1,0 @@
-services:
-    Rector\Rector\Dynamic\PropertyNameReplacerRector:
-        $perClassOldToNewProperties:
-            'SomeClass':
-                'oldProperty': 'newProperty'

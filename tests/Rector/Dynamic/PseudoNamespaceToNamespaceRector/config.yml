@@ -1,6 +1,0 @@
-services:
-    Rector\Rector\Dynamic\PseudoNamespaceToNamespaceRector:
-        $configuration:
-            - 'PHPUnit_'
-            # exclude this class
-            - '!PHPUnit_Framework_MockObject_MockObject'

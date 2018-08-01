@@ -4,7 +4,7 @@ namespace Rector\Configuration\Rector;
 
 use Rector\Configuration\Rector\Guard\RecipeGuard;
 use Rector\Contract\Configuration\Rector\ArgumentRecipeInterface;
-use Rector\Rector\Dynamic\ArgumentRemoverRector;
+use Rector\Rector\Argument\ArgumentRemoverRector;
 
 final class ArgumentRemoverRecipe implements ArgumentRecipeInterface
 {

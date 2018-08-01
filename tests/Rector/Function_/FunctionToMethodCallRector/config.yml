@@ -1,0 +1,4 @@
+services:
+    Rector\Rector\Function_\FunctionToMethodCallRector:
+        $functionToMethodCall:
+            'view': ['this', 'render']

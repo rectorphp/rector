@@ -9,7 +9,7 @@ services:
                   'isPresenceRequired': 'requirePresence'
                   'isEmptyAllowed': 'allowEmpty'
 
-    Rector\Rector\Dynamic\PropertyToMethodRector:
+    Rector\Rector\Property\PropertyToMethodRector:
         $perClassPropertyToMethods:
             'Cake\Controller\Controller':
                 'name':
@@ -23,7 +23,7 @@ services:
                     'get': 'getValidator'
                     'set': 'setValidator'
 
-    Rector\Rector\Dynamic\ClassReplacerRector:
+    Rector\Rector\Class_\ClassReplacerRector:
         $oldToNewClasses:
             'Cake\Cache\Engine\ApcEngine': 'Cake\Cache\Engine\ApcuEngine'
             'Cake\Network\Exception\BadRequestException': 'Cake\Http\Exception\BadRequestException'

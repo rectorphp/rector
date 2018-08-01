@@ -21,7 +21,7 @@ services:
 
     Rector\Symfony\Rector\Console\ConsoleExceptionToErrorEventConstantRector: ~
 
-    Rector\Rector\Dynamic\ClassReplacerRector:
+    Rector\Rector\Class_\ClassReplacerRector:
         $oldToNewClasses:
             # console
             'Symfony\Component\Console\Event\ConsoleExceptionEvent': 'Symfony\Component\Console\Event\ConsoleErrorEvent'

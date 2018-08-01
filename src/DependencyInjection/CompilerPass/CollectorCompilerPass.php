@@ -2,7 +2,7 @@
 
 namespace Rector\DependencyInjection\CompilerPass;
 
-use Rector\Contract\Rector\RectorInterface;
+use Rector\Contract\Rector\PhpRectorInterface;
 use Rector\NodeTraverser\RectorNodeTraverser;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
@@ -39,7 +39,7 @@ final class CollectorCompilerPass implements CompilerPassInterface
         $this->definitionCollector->loadCollectorWithType(
             $containerBuilder,
             RectorNodeTraverser::class,
-            RectorInterface::class,
+            PhpRectorInterface::class,
             'addRector'
         );
     }

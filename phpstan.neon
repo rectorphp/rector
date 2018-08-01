@@ -14,10 +14,6 @@ parameters:
 
         - '#Array \(array<array<PhpParser\\Node\\Stmt>>\) does not accept array<PhpParser\\Node\\Stmt|null>#'
 
-        # invalid array
-        - '#Argument of an invalid type array<Rector\\Contract\\Rector\\RectorInterface>|Rector\\YamlRector\\Contract\\YamlRectorInterface supplied for foreach, only iterables are supported#'
-        - '#Method Rector\\Console\\Output\\DescribeCommandReporter::groupRectors() should return array<array<Rector\\Contract\\Rector\\RectorInterface>|Rector\\YamlRector\\Contract\\YamlRectorInterface> but returns array<string, array<int,Rector\\Contract\\Rector\\RectorInterface|Rector\\YamlRector\\Contract\\YamlRectorInterface>>#'
-
         # already fixed, invalidated cache?
         - '#Access to an undefined property PhpParser\\Node\\Expr::\$args#'
         - '#Parameter \#1 \$classMethodNode of method Rector\\NodeTypeResolver\\TypesExtractor\\ConstructorPropertyTypesExtractor::extractPropertiesFromConstructorMethodNode\(\) expects PhpParser\\Node\\Stmt\\ClassMethod, PhpParser\\Node\\Stmt given#'
@@ -28,7 +24,6 @@ parameters:
         - '#Call to function in_array\(\) with arguments string, array<array<string\|false>> and true will always evaluate to false#'
 
         # known values
-        - '#Method Rector\\Console\\Command\\DescribeCommand::getRectorsByInput\(\) should return array<Rector\\Contract\\Rector\\RectorInterface|Rector\\YamlRector\\Contract \\YamlRectorInterface> but returns array<int, object>#'
         - '#Cannot call method getAttribute\(\) on PhpParser\\Node\\Name\|null#'
         - '#Parameter \#2 \$str of function explode expects string, string\|null given#'
         - '#Cannot call method getName\(\) on Rector\\Builder\\Class_\\VariableInfo\|null#'
@@ -55,7 +50,10 @@ parameters:
         - '#Parameter \#1 \$kernelClass of method Rector\\Symfony\\Bridge\\SymfonyKernelParameterGuard::(ensureKernelClassExists|ensureIsKernelInstance)\(\) expects string, string\|null given#' # 2
 
         # intentionally incorrect - part of the test
-        - '#Parameter \#2 \$codeSamples of class Rector\\RectorDefinition\\RectorDefinition constructor expects array<Rector\\RectorDefinition\\CodeSample>, array<int, stdClass> given#' # 1
+        - '#Parameter \#2 \$codeSamples of class Rector\\RectorDefinition\\RectorDefinition constructor expects array<Rector\\Contract\\RectorDefinition\\CodeSampleInterface>, array<int, stdClass> given#' # 1
+
+        # invalid interface type resolution
+        - '#Method Rector\\NodeTraverser\\RectorNodeTraverser::getRectors\(\) should return array<Rector\\Contract\\Rector\\PhpRectorInterface> but returns array<PhpParser\\NodeVisitor>#' # 1
 
         # known values
         - '#Access to an undefined property PHPStan\\PhpDocParser\\Ast\\Node::\$name#' # 2
@@ -65,7 +63,6 @@ parameters:
         - '#Method Rector\\NodeTraverserQueue\\BetterNodeFinder::findFirstAncestorInstanceOf\(\) should return PhpParser\\Node\|null but returns object#' # 1
         - '#Property Rector\\NodeTypeResolver\\NodeVisitor\\NamespaceResolver::\$useNodes \(array<PhpParser\\Node\\Stmt\\Use_>\) does not accept array<PhpParser\\Node>#' # 1
         - '#Parameter \#1 \$node of method Rector\\NodeTypeResolver\\NodeTypeResolver::resolve\(\) expects PhpParser\\Node, PhpParser\\Node\\Expr|string given#' # 3
-        - '#Method Rector\\NodeTraverser\\RectorNodeTraverser::getRectors\(\) should return array<Rector\\Contract\\Rector\\RectorInterface> but returns array<PhpParser\\NodeVisitor>#' # 1
 
         # buggy
         - '#Access to an undefined property PhpParser\\Node\\Expr::\$value#' # 2
@@ -74,6 +71,7 @@ parameters:
 
         # tests or coding standars?
         - '#Constructor of class [\s\S]+ has an unused parameter \$html#' # 2
+        - '#Call to an undefined method Nette\\Utils\\Html::add\(\)#' # 1
 
     excludes_analyse:
         # test files

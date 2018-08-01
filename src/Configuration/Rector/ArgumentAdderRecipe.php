@@ -4,7 +4,7 @@ namespace Rector\Configuration\Rector;
 
 use Rector\Configuration\Rector\Guard\RecipeGuard;
 use Rector\Contract\Configuration\Rector\ArgumentRecipeInterface;
-use Rector\Rector\Dynamic\ArgumentAdderRector;
+use Rector\Rector\Argument\ArgumentAdderRector;
 
 final class ArgumentAdderRecipe implements ArgumentRecipeInterface
 {

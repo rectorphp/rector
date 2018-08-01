@@ -1,9 +1,0 @@
-services:
-    Rector\Rector\Dynamic\ParentTypehintedArgumentRector:
-        $typehintForArgumentByMethodAndClass:
-            'PhpParser\Parser':
-                'parse':
-                    'code': 'string'
-            'Doctrine\ORM\Mapping\ClassMetadataFactory':
-                'setEntityManager':
-                    'em': 'Doctrine\ORM\EntityManagerInterface'

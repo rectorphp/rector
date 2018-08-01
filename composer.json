@@ -63,7 +63,8 @@
             "Rector\\YamlRector\\Tests\\": "packages/YamlRector/tests"
         },
         "classmap": [
-            "packages/Symfony/tests"
+            "packages/Symfony/tests",
+            "tests"
         ]
     },
     "scripts": {
@@ -79,7 +80,7 @@
             "bin/clean_levels.sh"
         ],
         "phpstan": "vendor/bin/phpstan analyse packages src tests --level max",
-        "update-docs": "bin/rector describe --all --format md > docs/AllRectorsOverview.md",
+        "update-docs": "bin/rector generate-rector-overview > docs/AllRectorsOverview.md",
         "changelog": [
             "vendor/bin/changelog-linker dump-merges --in-categories",
             "vendor/bin/changelog-linker linkify"

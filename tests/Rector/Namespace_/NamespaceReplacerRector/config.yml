@@ -1,0 +1,7 @@
+services:
+    Rector\Rector\Namespace_\NamespaceReplacerRector:
+        $oldToNewNamespaces:
+            'OldNamespace': 'NewNamespace'
+            'OldNamespaceWith\OldSplitNamespace': 'NewNamespaceWith\NewSplitNamespace'
+            'Old\Long\AnyNamespace': 'Short\AnyNamespace'
+            'PHPUnit_Framework_': 'PHPUnit\Framework\'

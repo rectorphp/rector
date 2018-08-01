@@ -1,0 +1,7 @@
+services:
+    Rector\Rector\Constant\ClassConstantReplacerRector:
+        $oldToNewConstantsByClass:
+            'Symfony\Component\Form\FormEvents':
+                'PRE_BIND': 'PRE_SUBMIT'
+                'BIND': 'SUBMIT'
+                'POST_BIND': 'POST_SUBMIT'

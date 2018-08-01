@@ -4,7 +4,7 @@ namespace Rector\Configuration\Rector;
 
 use Rector\Configuration\Rector\Guard\RecipeGuard;
 use Rector\Contract\Configuration\Rector\ArgumentRecipeInterface;
-use Rector\Rector\Dynamic\ArgumentDefaultValueReplacerRector;
+use Rector\Rector\Argument\ArgumentDefaultValueReplacerRector;
 
 final class ArgumentDefaultValueReplacerRecipe implements ArgumentRecipeInterface
 {

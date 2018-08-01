@@ -7,7 +7,7 @@ Dynamic Rectors are classes, that are prepared to do specific operation. You can
 ```yml
 # phpunit60.yml
 services:
-    Rector\Rector\Dynamic\ClassReplacerRector:
+    Rector\Rector\Class_\ClassReplacerRector:
         $oldToNewClasses:
             # old class: new class
             'PHPUnit_Framework_TestCase': 'PHPUnit\Framework\TestCase'
@@ -47,7 +47,7 @@ services:
 
 ```yml
 services:
-    Rector\Rector\Dynamic\PropertyNameReplacerRector:
+    Rector\Rector\Property\PropertyNameReplacerRector:
         $perClassOldToNewProperties:
             # class:
             'PhpParser\Node\Param':
@@ -122,7 +122,7 @@ services:
 
 ```yml
 services:
-    Rector\Rector\Dynamic\PropertyToMethodRector:
+    Rector\Rector\Property\PropertyToMethodRector:
         $perClassPropertyToMethods:
             # type
             'Symfony\Component\Translation\Translator':
@@ -138,7 +138,7 @@ services:
 
 ```yml
 services:
-    Rector\Rector\Dynamic\ValueObjectRemoverRector:
+    Rector\Rector\DomainDrivenDesign\ValueObjectRemoverRector:
         $valueObjectsToSimpleTypes:
             # type: new simple type
             'ValueObject\Name': 'string'

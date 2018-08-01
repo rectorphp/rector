@@ -8,7 +8,7 @@ services:
     Rector\Symfony\Rector\Process\ProcessBuilderInstanceRector: ~
     Rector\Symfony\Rector\Process\ProcessBuilderGetProcessRector: ~
 
-    Rector\Rector\Dynamic\ClassReplacerRector:
+    Rector\Rector\Class_\ClassReplacerRector:
         $oldToNewClasses:
             'Symfony\Component\Validator\Tests\Constraints\AbstractConstraintValidatorTest': 'Symfony\Component\Validator\Test\ConstraintValidatorTestCase'
             'Symfony\Component\Process\ProcessBuilder': 'Symfony\Component\Process\Process'

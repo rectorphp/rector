@@ -51,7 +51,7 @@ services:
                 'all':
                     'Zend\Stdlib\PriorityQueue': 'iterable'
 
-    Rector\Rector\Dynamic\ClassReplacerRector:
+    Rector\Rector\Class_\ClassReplacerRector:
         $oldToNewClasses:
             'DateTime': 'DateTimeInterface'
             'Sylius\Bundle\CoreBundle\Context\SessionAndChannelBasedCartContext': 'Sylius\Component\Core\Storage\CartStorageInterface'

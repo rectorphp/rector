@@ -2,6 +2,7 @@
 
 namespace Rector\Rector\MagicDisclosure;
 
+use Nette\DI\Container;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Isset_;
@@ -11,7 +12,7 @@ use PhpParser\Node\Stmt\Unset_;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class UnsetAndIssetToMethodCallRector extends AbstractRector
@@ -53,9 +54,31 @@ final class UnsetAndIssetToMethodCallRector extends AbstractRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('[Dynamic] Turns defined `__isset`/`__unset` calls to specific method calls.', [
-            new CodeSample('isset($container["someKey"]);', '$container->hasService("someKey");'),
-            new CodeSample('unset($container["someKey"])', '$container->removeService("someKey");'),
+        return new RectorDefinition('Turns defined `__isset`/`__unset` calls to specific method calls.', [
+            new ConfiguredCodeSample(
+                'isset($container["someKey"]);',
+                '$container->hasService("someKey");',
+                [
+                    '$typeToMethodCalls' => [
+                        Container::class => [
+                            'isset' => 'hasService',
+                        ],
+                    ],
+                ]
+            ),
+            new ConfiguredCodeSample(
+                'unset($container["someKey"])',
+                '$container->removeService("someKey");',
+                [
+                    [
+                        '$typeToMethodCalls' => [
+                            Container::class => [
+                                'unset' => 'removeService',
+                            ],
+                        ],
+                    ],
+                ]
+            ),
         ]);
     }
 
