@@ -111,7 +111,7 @@ CODE_SAMPLE
                     [
                         '$annotation' => 'inject',
                     ]
-                    ),
+                ),
             ]
         );
     }

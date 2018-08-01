@@ -68,8 +68,8 @@ final class MoveRepositoryFromParentToConstructorRector extends AbstractRector
         DoctrineEntityAndRepositoryMapperInterface $doctrineEntityAndRepositoryMapper,
         BuilderFactory $builderFactory,
         VariableInfoFactory $variableInfoFactory,
-        string $entityRepositoryClass = 'Doctrine\ORM\EntityRepository',
-        string $entityManagerClass = 'Doctrine\ORM\EntityManager'
+        string $entityRepositoryClass,
+        string $entityManagerClass
     ) {
         $this->propertyBuilder = $propertyBuilder;
         $this->constructorMethodBuilder = $constructorMethodBuilder;
@@ -138,7 +138,7 @@ CODE_SAMPLE
                     '$entityRepositoryClass' => 'Doctrine\ORM\EntityRepository',
                     '$entityManagerClass' => 'Doctrine\ORM\EntityManager',
                 ]
-                ),
+            ),
         ]);
     }
 

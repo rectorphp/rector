@@ -11,6 +11,7 @@ use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class ToStringToMethodCallRector extends AbstractRector
@@ -67,8 +68,25 @@ final class ToStringToMethodCallRector extends AbstractRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Turns defined __toString() to specific method calls.', [
-            new CodeSample('$result = (string) $someValue;', '$result = $someValue->someMethod();'),
-            new CodeSample('$result = $someValue->__toString();', '$result = $someValue->someMethod();'),
+            new ConfiguredCodeSample(
+<<<'CODE_SAMPLE'
+$result = (string) $someValue;
+$result = $someValue->__toString();
+CODE_SAMPLE
+                ,
+<<<'CODE_SAMPLE'
+$result = $someValue->someMethod();
+$result = $someValue->someMethod();
+CODE_SAMPLE
+                ,
+                [
+                    '$typeToMethodCalls' => [
+                        'SomeObject' => [
+                            'toString' => 'getPath'
+                       ]
+                   ]
+                ]
+            ),
         ]);
     }
 

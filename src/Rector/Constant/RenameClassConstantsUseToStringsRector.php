@@ -9,7 +9,6 @@ use PhpParser\Node\Name\FullyQualified;
 use Rector\Node\Attribute;
 use Rector\Node\NodeFactory;
 use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
@@ -33,11 +32,8 @@ final class RenameClassConstantsUseToStringsRector extends AbstractRector
     /**
      * @param string[] $oldConstantToNewValue
      */
-    public function __construct(
-        NodeFactory $nodeFactory,
-        string $class,
-        array $oldConstantToNewValue
-    ) {
+    public function __construct(NodeFactory $nodeFactory, string $class, array $oldConstantToNewValue)
+    {
         $this->nodeFactory = $nodeFactory;
         $this->class = $class;
         $this->oldConstantToNewValue = $oldConstantToNewValue;
@@ -54,7 +50,7 @@ final class RenameClassConstantsUseToStringsRector extends AbstractRector
                     '$oldConstantToNewValue' => [
                         'DEVELOPMENT' => 'development',
                         'PRODUCTION' => 'production',
-                    ]
+                    ],
                 ]
             ),
         ]);

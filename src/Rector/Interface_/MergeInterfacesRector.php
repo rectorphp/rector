@@ -8,6 +8,7 @@ use PhpParser\Node\Stmt\Class_;
 use Rector\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 /**
@@ -33,7 +34,7 @@ final class MergeInterfacesRector extends AbstractRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Merges old interface to a new one, that already has its methods', [
-            new CodeSample(
+            new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass implements SomeInterface, SomeOldInterface
 {
@@ -45,6 +46,11 @@ class SomeClass implements SomeInterface
 {
 }
 CODE_SAMPLE
+                , [
+                '$oldToNewInterfaces' => [
+                    'SomeOldInterface' => 'SomeInterface'
+                ]
+            ]
             ),
         ]);
     }

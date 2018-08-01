@@ -8,7 +8,7 @@ use Rector\Builder\IdentifierRenamer;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class MethodCallToAnotherMethodCallWithArgumentsRector extends AbstractRector
@@ -55,10 +55,10 @@ final class MethodCallToAnotherMethodCallWithArgumentsRector extends AbstractRec
         MethodCallAnalyzer $methodCallAnalyzer,
         IdentifierRenamer $identifierRenamer,
         NodeFactory $nodeFactory,
-        string $serviceDefinitionClass = 'Nette\DI\ServiceDefinition',
-        string $oldMethod = 'setInject',
-        string $newMethod = 'addTag',
-        array $newMethodArguments = ['inject']
+        string $serviceDefinitionClass,
+        string $oldMethod,
+        string $newMethod,
+        array $newMethodArguments
     ) {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
@@ -72,7 +72,7 @@ final class MethodCallToAnotherMethodCallWithArgumentsRector extends AbstractRec
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Turns old method call with specfici type to new one with arguments', [
-            new CodeSample(
+            new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 $serviceDefinition = new Nette\DI\ServiceDefinition;
 $serviceDefinition->setInject();
@@ -82,7 +82,13 @@ CODE_SAMPLE
 $serviceDefinition = new Nette\DI\ServiceDefinition;
 $serviceDefinition->addTag('inject');
 CODE_SAMPLE
-            ),
+            , [
+                '$serviceDefinitionClass' => 'Nette\DI\ServiceDefinition',
+                '$oldMethod' => 'setInject',
+                '$newMethod' => 'addTag',
+                '$newMethodArguments' => ['inject']
+            ]
+        )
         ]);
     }
 

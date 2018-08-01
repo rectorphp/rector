@@ -14,6 +14,7 @@ use Rector\NodeAnalyzer\ExpressionAnalyzer;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class GetAndSetToMethodCallRector extends AbstractRector
@@ -63,14 +64,28 @@ final class GetAndSetToMethodCallRector extends AbstractRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Turns defined `__get`/`__set` to specific method calls.', [
-            new CodeSample(
-                '$someService = $container->someService;',
-                '$someService = $container->getService("someService");'
-            ),
-            new CodeSample(
+            new ConfiguredCodeSample(
                 '$container->someService = $someService;',
-                '$container->setService("someService", $someService);'
+                '$container->setService("someService", $someService);',
+                [
+                    '$typeToMethodCalls' => [
+                        'SomeContainer' => [
+                            'set' => 'addService',
+                        ]
+                    ]
+                ]
             ),
+            new ConfiguredCodeSample(
+                '$someService = $container->someService;',
+                '$someService = $container->getService("someService");',
+                [
+                    '$typeToMethodCalls' => [
+                        'SomeContainer' => [
+                            'get' => 'getService',
+                        ]
+                    ]
+                ]
+            )
         ]);
     }
 

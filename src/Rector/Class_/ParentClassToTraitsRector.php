@@ -9,7 +9,6 @@ use Rector\Builder\StatementGlue;
 use Rector\Node\Attribute;
 use Rector\Node\NodeFactory;
 use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
@@ -65,9 +64,11 @@ class SomeClass
 }
 CODE_SAMPLE
                 ,
-                ['$parentClassToTraits' => [
-                    'Nette\Object' => ['Nette\SmartObject']
-                ]]
+                [
+                    '$parentClassToTraits' => [
+                        'Nette\Object' => ['Nette\SmartObject'],
+                    ],
+                ]
             ),
         ]);
     }

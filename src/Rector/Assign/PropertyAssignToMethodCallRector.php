@@ -46,9 +46,9 @@ final class PropertyAssignToMethodCallRector extends AbstractRector
     public function __construct(
         PropertyFetchAnalyzer $propertyFetchAnalyzer,
         MethodCallNodeFactory $methodCallNodeFactory,
-        array $types = ['Nette\Forms\Controls\MultiChoiceControl', 'Nette\Forms\Controls\ChoiceControl'],
-        string $oldPropertyName = 'checkAllowedValues',
-        string $newMethodName = 'checkDefaultValue'
+        array $types,
+        string $oldPropertyName,
+        string $newMethodName
     ) {
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
         $this->methodCallNodeFactory = $methodCallNodeFactory;
