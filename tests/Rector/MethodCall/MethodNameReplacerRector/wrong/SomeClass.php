@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Dynamic\MethodNameReplacerRector\Wrong;
+namespace Rector\Tests\Rector\MethodCall\MethodNameReplacerRector\Wrong;
 
 use Nette\Utils\Html;
 

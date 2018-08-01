@@ -1,5 +1,5 @@
 services:
-    Rector\Rector\Dynamic\ParentTypehintedArgumentRector:
+    Rector\Rector\Typehint\ParentTypehintedArgumentRector:
         $typehintForArgumentByMethodAndClass:
             'PhpParser\Parser':
                 'parse':
