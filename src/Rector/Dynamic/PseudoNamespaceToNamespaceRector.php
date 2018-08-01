@@ -60,7 +60,7 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('[Dynamic] Replaces defined Pseudo_Namespaces by Namespace\Ones.', [
+        return new RectorDefinition('Replaces defined Pseudo_Namespaces by Namespace\Ones.', [
             new CodeSample('$someServie = Some_Object;', '$someServie = Some\Object;'),
         ]);
     }

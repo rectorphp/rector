@@ -56,7 +56,7 @@ final class ParentTypehintedArgumentRector extends AbstractRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('[Dynamic] Changes defined parent class typehints.', [
+        return new RectorDefinition('Changes defined parent class typehints.', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 interface SomeInterface

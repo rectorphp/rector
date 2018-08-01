@@ -52,7 +52,7 @@ final class ReturnTypehintRector extends AbstractRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('[Dynamic] Changes defined return typehint of method and class.', [
+        return new RectorDefinition('Changes defined return typehint of method and class.', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass

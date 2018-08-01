@@ -82,7 +82,7 @@ final class MethodNameReplacerRector extends AbstractRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('[Dynamic] Turns method names to new ones.', [
+        return new RectorDefinition('Turns method names to new ones.', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 $someObject = new SomeClass;

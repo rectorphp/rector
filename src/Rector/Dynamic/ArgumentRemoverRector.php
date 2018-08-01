@@ -39,7 +39,7 @@ final class ArgumentRemoverRector extends AbstractArgumentRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
-            '[Dynamic] Removes defined arguments in defined methods and their calls.',
+            'Removes defined arguments in defined methods and their calls.',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'

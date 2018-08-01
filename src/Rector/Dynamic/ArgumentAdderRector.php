@@ -36,7 +36,7 @@ final class ArgumentAdderRector extends AbstractArgumentRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
-            '[Dynamic] This Rector adds new default arguments in calls of defined methods and class types.',
+            'This Rector adds new default arguments in calls of defined methods and class types.',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'

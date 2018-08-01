@@ -52,7 +52,7 @@ final class PropertyNameReplacerRector extends AbstractRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('[Dynamic] Replaces defined old properties by new ones.', [
+        return new RectorDefinition('Replaces defined old properties by new ones.', [
             new CodeSample('$someObject->someOldProperty;', '$someObject->someNewProperty;'),
         ]);
     }

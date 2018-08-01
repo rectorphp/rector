@@ -34,7 +34,7 @@ final class FunctionToMethodCallRector extends AbstractRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('[Dynamic] Turns defined function calls to local method calls.', [
+        return new RectorDefinition('Turns defined function calls to local method calls.', [
             new CodeSample('view("...", []);', '$this->render("...", []);'),
         ]);
     }

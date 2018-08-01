@@ -16,7 +16,7 @@ final class ValueObjectRemoverRector extends AbstractValueObjectRemoverRector
 {
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('[Dynamic] Remove values objects and use directly the value.', [
+        return new RectorDefinition('Remove values objects and use directly the value.', [
             new CodeSample('$name = new ValueObject("name");', '$name = "name";'),
             new CodeSample(
                 'function someFunction(ValueObject $name) { }',

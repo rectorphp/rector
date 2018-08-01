@@ -56,7 +56,7 @@ final class ArgumentDefaultValueReplacerRector extends AbstractArgumentRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
-            '[Dynamic] Replaces defined map of arguments in defined methods and their calls.',
+            'Replaces defined map of arguments in defined methods and their calls.',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'

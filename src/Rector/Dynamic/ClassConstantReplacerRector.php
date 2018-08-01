@@ -55,7 +55,7 @@ final class ClassConstantReplacerRector extends AbstractRector
      */
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('[Dynamic] Replaces defined class constants in their calls.', [
+        return new RectorDefinition('Replaces defined class constants in their calls.', [
             new CodeSample('$value = SomeClass::OLD_CONSTANT;', '$value = SomeClass::NEW_CONSTANT;'),
         ]);
     }

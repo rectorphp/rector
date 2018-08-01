@@ -43,7 +43,7 @@ final class FluentReplaceRector extends AbstractRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('[Dynamic] Turns fluent interfaces to classic ones.', [
+        return new RectorDefinition('Turns fluent interfaces to classic ones.', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
     class SomeClass

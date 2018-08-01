@@ -33,7 +33,7 @@ final class NamespaceReplacerRector extends AbstractRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('[Dynamic] Replaces old namespace by new one.', [
+        return new RectorDefinition('Replaces old namespace by new one.', [
             new ConfiguredCodeSample(
                 '$someObject = new SomeOldNamespace\SomeClass;',
                 '$someObject = new SomeNewNamespace\SomeClass;',

@@ -62,7 +62,7 @@ final class PropertyToMethodRector extends AbstractRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('[Dynamic] Replaces properties assign calls be defined methods.', [
+        return new RectorDefinition('Replaces properties assign calls be defined methods.', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 $result = $object->property;

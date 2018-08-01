@@ -2,6 +2,7 @@
 
 namespace Rector\ConsoleDiffer;
 
+use Nette\Utils\Strings;
 use SebastianBergmann\Diff\Differ;
 
 final class MarkdownDifferAndFormatter
@@ -25,7 +26,7 @@ final class MarkdownDifferAndFormatter
         $diff = $this->markdownDiffer->diff($old, $new);
 
         // remove first line, just meta info added by UnifiedDiffOutputBuilder
-        $diff = preg_replace("/^(.*\n){1}/", '', $diff);
+        $diff = Strings::replace($diff, '#^(.*\n){1}#');
 
         return $this->removeTrailingWhitespaces($diff);
     }

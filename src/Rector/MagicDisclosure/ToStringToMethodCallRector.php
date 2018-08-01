@@ -66,7 +66,7 @@ final class ToStringToMethodCallRector extends AbstractRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('[Dynamic] Turns defined __toString() to specific method calls.', [
+        return new RectorDefinition('Turns defined __toString() to specific method calls.', [
             new CodeSample('$result = (string) $someValue;', '$result = $someValue->someMethod();'),
             new CodeSample('$result = $someValue->__toString();', '$result = $someValue->someMethod();'),
         ]);

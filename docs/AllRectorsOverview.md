@@ -1,18 +1,5 @@
 # All Rectors Overview
 
-- [Assign](#assign)
-- [Dynamic](#dynamic)
-- [ValueObjectRemover](#valueobjectremover)
-- [MethodCall](#methodcall)
-- [MagicDisclosure](#magicdisclosure)
-- [DependencyInjection](#dependencyinjection)
-- [RepositoryAsService](#repositoryasservice)
-- [Interface_](#interface_)
-- [Visibility](#visibility)
-- [CodeQuality](#codequality)
-- [Constant](#constant)
-- [Class_](#class_)
-- [Rector](#rector)
 - [PHPUnit](#phpunit)
 - [PHPUnit\SpecificMethod](#phpunitspecificmethod)
 - [Sylius\Review](#syliusreview)
@@ -29,647 +16,6 @@
 - [Doctrine](#doctrine)
 - [PhpParser](#phpparser)
 - [Sensio\FrameworkExtraBundle](#sensioframeworkextrabundle)
-
-## Assign
-
-### `PropertyAssignToMethodCallRector`
-
-- class: `Rector\Rector\Assign\PropertyAssignToMethodCallRector`
-
-Turns property assign of specific type and property name to method call
-
-```diff
--$control->oldProperty = false;
-+$control->newMethodCall(false);
-```
-
-## Dynamic
-
-### `NamespaceReplacerRector`
-
-- class: `Rector\Rector\Dynamic\NamespaceReplacerRector`
-
-[Dynamic] Replaces old namespace by new one.
-
-```diff
--$someObject = new SomeOldNamespace\SomeClass;
-+$someObject = new SomeNewNamespace\SomeClass;
-```
-
-### `ReturnTypehintRector`
-
-- class: `Rector\Rector\Dynamic\ReturnTypehintRector`
-
-[Dynamic] Changes defined return typehint of method and class.
-
-```diff
- class SomeClass
- {
--    public getData();
-+    public getData(): array;
- }
-```
-
-### `FluentReplaceRector`
-
-- class: `Rector\Rector\Dynamic\FluentReplaceRector`
-
-[Dynamic] Turns fluent interfaces to classic ones.
-
-```diff
-     class SomeClass
-     {
-         public function someFunction()
-         {
--            return $this;
-         }
-
-         public function otherFunction()
-         {
--            return $this;
-         }
-     }
-
-     $someClass = new SomeClass();
--    $someClass->someFunction()
--                ->otherFunction();
-+    $someClass->someFunction();
-+    $someClass->otherFunction();
-```
-
-### `FunctionToMethodCallRector`
-
-- class: `Rector\Rector\Dynamic\FunctionToMethodCallRector`
-
-[Dynamic] Turns defined function calls to local method calls.
-
-```diff
--view("...", []);
-+$this->render("...", []);
-```
-
-### `ArgumentAdderRector`
-
-- class: `Rector\Rector\Dynamic\ArgumentAdderRector`
-
-[Dynamic] This Rector adds new default arguments in calls of defined methods and class types.
-
-```diff
- $someObject = new SomeClass;
--$someObject->someMethod();
-+$someObject->someMethod(true);
-
- class MyCustomClass extends SomeClass
- {
--    public function someMethod()
-+    public function someMethod($value = true)
-     {
-     }
- }
-```
-
-### `ClassReplacerRector`
-
-- class: `Rector\Rector\Dynamic\ClassReplacerRector`
-
-[Dynamic] Replaces defined classes by new ones.
-
-```diff
--$value = new SomeOldClass;
-+$value = new SomeNewClass;
-```
-
-### `PropertyToMethodRector`
-
-- class: `Rector\Rector\Dynamic\PropertyToMethodRector`
-
-[Dynamic] Replaces properties assign calls be defined methods.
-
-```diff
--$result = $object->property;
--$object->property = $value;
-+$result = $object->getProperty();
-+$object->setProperty($value);
-```
-
-### `MethodNameReplacerRector`
-
-- class: `Rector\Rector\Dynamic\MethodNameReplacerRector`
-
-[Dynamic] Turns method names to new ones.
-
-```diff
- $someObject = new SomeClass;
--$someObject->oldMethod();
-+$someObject->newMethod();
-
--SomeClass::oldStaticMethod();
-+SomeClass::newStaticMethod();
-```
-
-### `PropertyNameReplacerRector`
-
-- class: `Rector\Rector\Dynamic\PropertyNameReplacerRector`
-
-[Dynamic] Replaces defined old properties by new ones.
-
-```diff
--$someObject->someOldProperty;
-+$someObject->someNewProperty;
-```
-
-### `ArgumentRemoverRector`
-
-- class: `Rector\Rector\Dynamic\ArgumentRemoverRector`
-
-[Dynamic] Removes defined arguments in defined methods and their calls.
-
-```diff
- $someObject = new SomeClass;
--$someObject->someMethod(true);
-+$someObject->someMethod();'
-```
-
-### `ArgumentDefaultValueReplacerRector`
-
-- class: `Rector\Rector\Dynamic\ArgumentDefaultValueReplacerRector`
-
-[Dynamic] Replaces defined map of arguments in defined methods and their calls.
-
-```diff
- $someObject = new SomeClass;
--$someObject->someMethod(SomeClass::OLD_CONSTANT);
-+$someObject->someMethod(false);'
-```
-
-### `AnnotationReplacerRector`
-
-- class: `Rector\Rector\Dynamic\AnnotationReplacerRector`
-
-[Dynamic] Turns defined annotations above properties and methods to their new values.
-
-```diff
--/** @test */
-+/** @scenario */
- public function someMethod() {};
-```
-
-### `PseudoNamespaceToNamespaceRector`
-
-- class: `Rector\Rector\Dynamic\PseudoNamespaceToNamespaceRector`
-
-[Dynamic] Replaces defined Pseudo_Namespaces by Namespace\Ones.
-
-```diff
--$someServie = Some_Object;
-+$someServie = Some\Object;
-```
-
-### `ParentTypehintedArgumentRector`
-
-- class: `Rector\Rector\Dynamic\ParentTypehintedArgumentRector`
-
-[Dynamic] Changes defined parent class typehints.
-
-```diff
- interface SomeInterface
- {
-     public read(string $content);
- }
-
- class SomeClass implements SomeInterface
- {
--    public read($content);
-+    public read(string $content);
- }
-```
-
-### `ClassConstantReplacerRector`
-
-- class: `Rector\Rector\Dynamic\ClassConstantReplacerRector`
-
-[Dynamic] Replaces defined class constants in their calls.
-
-```diff
--$value = SomeClass::OLD_CONSTANT;
-+$value = SomeClass::NEW_CONSTANT;
-```
-
-## ValueObjectRemover
-
-### `ValueObjectRemoverDocBlockRector`
-
-- class: `Rector\Rector\Dynamic\ValueObjectRemover\ValueObjectRemoverDocBlockRector`
-
-Turns defined value object to simple types in doc blocks
-
-```diff
- /**
-- * @var ValueObject|null
-+ * @var string|null
-  */
- private $name;
-
--/** @var ValueObject|null */
-+/** @var string|null */
- $name;
-```
-
-### `ValueObjectRemoverRector`
-
-- class: `Rector\Rector\Dynamic\ValueObjectRemover\ValueObjectRemoverRector`
-
-[Dynamic] Remove values objects and use directly the value.
-
-```diff
--$name = new ValueObject("name");
-+$name = "name";
-
--function someFunction(ValueObject $name) { }
-+function someFunction(string $name) { }
-
--function someFunction(): ValueObject { }
-+function someFunction(): string { }
-
--function someFunction(): ?ValueObject { }
-+function someFunction(): ?string { }
-```
-
-## MethodCall
-
-### `MethodCallToAnotherMethodCallWithArgumentsRector`
-
-- class: `Rector\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector`
-
-Turns old method call with specfici type to new one with arguments
-
-```diff
- $serviceDefinition = new Nette\DI\ServiceDefinition;
--$serviceDefinition->setInject();
--$END
-+$serviceDefinition->addTag('inject');
-```
-
-## MagicDisclosure
-
-### `ToStringToMethodCallRector`
-
-- class: `Rector\Rector\MagicDisclosure\ToStringToMethodCallRector`
-
-[Dynamic] Turns defined __toString() to specific method calls.
-
-```diff
--$result = (string) $someValue;
-+$result = $someValue->someMethod();
-
--$result = $someValue->__toString();
-+$result = $someValue->someMethod();
-```
-
-### `GetAndSetToMethodCallRector`
-
-- class: `Rector\Rector\MagicDisclosure\GetAndSetToMethodCallRector`
-
-[Dynamic] Turns defined `__get`/`__set` to specific method calls.
-
-```diff
--$someService = $container->someService;
-+$someService = $container->getService("someService");
-
--$container->someService = $someService;
-+$container->setService("someService", $someService);
-```
-
-### `UnsetAndIssetToMethodCallRector`
-
-- class: `Rector\Rector\MagicDisclosure\UnsetAndIssetToMethodCallRector`
-
-[Dynamic] Turns defined `__isset`/`__unset` calls to specific method calls.
-
-```diff
--isset($container["someKey"]);
-+$container->hasService("someKey");
-
--unset($container["someKey"])
-+$container->removeService("someKey");
-```
-
-## DependencyInjection
-
-### `AnnotatedPropertyInjectToConstructorInjectionRector`
-
-- class: `Rector\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector`
-
-Turns non-private properties with @annotation to private properties and constructor injection
-
-```diff
- /**
-  * @var SomeService
-- * @annotation
-  */
--public $someService;
-+private $someService;
-+
-+public function __construct(SomeService $someService)
-+{
-+    $this->someService = $someService;
-+}
-```
-
-### `ReplaceVariableByPropertyFetchRector`
-
-- class: `Rector\Rector\Architecture\DependencyInjection\ReplaceVariableByPropertyFetchRector`
-
-Turns variable in controller action to property fetch, as follow up to action injection variable to property change.
-
-```diff
- final class SomeController
- {
-     /**
-      * @var ProductRepository
-      */
-     private $productRepository;
-
-     public function __construct(ProductRepository $productRepository)
-     {
-         $this->productRepository = $productRepository;
-     }
-
-     public function default()
-     {
--        $products = $productRepository->fetchAll();
-+        $products = $this->productRepository->fetchAll();
-     }
- }
-```
-
-### `ActionInjectionToConstructorInjectionRector`
-
-- class: `Rector\Rector\Architecture\DependencyInjection\ActionInjectionToConstructorInjectionRector`
-
-Turns action injection in Controllers to constructor injection
-
-```diff
- final class SomeController
- {
--    public function default(ProductRepository $productRepository)
-+    /**
-+     * @var ProductRepository
-+     */
-+    private $productRepository;
-+    public function __construct(ProductRepository $productRepository)
-     {
--        $products = $productRepository->fetchAll();
-+        $this->productRepository = $productRepository;
-+    }
-+
-+    public function default()
-+    {
-+        $products = $this->productRepository->fetchAll();
-     }
- }
-```
-
-## RepositoryAsService
-
-### `ReplaceParentRepositoryCallsByRepositoryPropertyRector`
-
-- class: `Rector\Rector\Architecture\RepositoryAsService\ReplaceParentRepositoryCallsByRepositoryPropertyRector`
-
-Handles method calls in child of Doctrine EntityRepository and moves them to "$this->repository" property.
-
-```diff
- <?php
-
- use Doctrine\ORM\EntityRepository;
-
- class SomeRepository extends EntityRepository
- {
-     public function someMethod()
-     {
--        return $this->findAll();
-+        return $this->repository->findAll();
-     }
- }
-```
-
-### `ServiceLocatorToDIRector`
-
-- class: `Rector\Rector\Architecture\RepositoryAsService\ServiceLocatorToDIRector`
-
-Turns "$this->getRepository()" in Symfony Controller to constructor injection and private property access.
-
-```diff
- class ProductController extends Controller
- {
-+    /**
-+     * @var ProductRepository
-+     */
-+    private $productRepository;
-+
-+    public function __construct(ProductRepository $productRepository)
-+    {
-+        $this->productRepository = $productRepository;
-+    }
-+
-     public function someAction()
-     {
-         $entityManager = $this->getDoctrine()->getManager();
--        $entityManager->getRepository('SomethingBundle:Product')->findSomething(...);
-+        $this->productRepository->findSomething(...);
-     }
- }
-```
-
-### `MoveRepositoryFromParentToConstructorRector`
-
-- class: `Rector\Rector\Architecture\RepositoryAsService\MoveRepositoryFromParentToConstructorRector`
-
-Turns parent EntityRepository class to constructor dependency
-
-```diff
- namespace App\Repository;
-
-+use App\Entity\Post;
- use Doctrine\ORM\EntityRepository;
-
--final class PostRepository extends EntityRepository
-+final class PostRepository
- {
-+    /**
-+     * @var \Doctrine\ORM\EntityRepository
-+     */
-+    private $repository;
-+    public function __construct(\Doctrine\ORM\EntityManager $entityManager)
-+    {
-+        $this->repository = $entityManager->getRepository(\App\Entity\Post::class);
-+    }
- }
-```
-
-## Interface_
-
-### `MergeInterfacesRector`
-
-- class: `Rector\Rector\Interface_\MergeInterfacesRector`
-
-Merges old interface to a new one, that already has its methods
-
-```diff
--class SomeClass implements SomeInterface, SomeOldInterface
-+class SomeClass implements SomeInterface
- {
- }
-```
-
-## Visibility
-
-### `ChangeMethodVisibilityRector`
-
-- class: `Rector\Rector\Visibility\ChangeMethodVisibilityRector`
-
-Change visibility of method from parent class.
-
-```diff
- class FrameworkClass
- {
-     protected someMethod()
-     {
-     }
- }
-
- class MyClass extends FrameworkClass
- {
--    public someMethod()
-+    protected someMethod()
-     {
-     }
- }
-```
-
-### `ChangePropertyVisibilityRector`
-
-- class: `Rector\Rector\Visibility\ChangePropertyVisibilityRector`
-
-Change visibility of property from parent class.
-
-```diff
- class FrameworkClass
- {
-     protected $someProperty;
- }
-
- class MyClass extends FrameworkClass
- {
--    public $someProperty;
-+    protected $someProperty;
- }
-```
-
-### `ChangeConstantVisibilityRector`
-
-- class: `Rector\Rector\Visibility\ChangeConstantVisibilityRector`
-
-Change visibility of constant from parent class.
-
-```diff
- class FrameworkClass
- {
-     protected const SOME_CONSTANT = 1;
- }
-
- class MyClass extends FrameworkClass
- {
--    public const SOME_CONSTANT = 1;
-+    protected const SOME_CONSTANT = 1;
- }
-```
-
-## CodeQuality
-
-### `InArrayAndArrayKeysToArrayKeyExistsRector`
-
-- class: `Rector\Rector\CodeQuality\InArrayAndArrayKeysToArrayKeyExistsRector`
-
-Simplify `in_array` and `array_keys` functions combination into `array_key_exists` when `array_keys` has one argument only
-
-```diff
--in_array("key", array_keys($array), true);
-+array_key_exists("key", $array);
-```
-
-### `UnnecessaryTernaryExpressionRector`
-
-- class: `Rector\Rector\CodeQuality\UnnecessaryTernaryExpressionRector`
-
-Remove unnecessary ternary expressions.
-
-```diff
--$foo === $bar ? true : false;
-+$foo === $bar;
-```
-
-## Constant
-
-### `RenameClassConstantsUseToStringsRector`
-
-- class: `Rector\Rector\Constant\RenameClassConstantsUseToStringsRector`
-
-Replaces constant by value
-
-```diff
--$value === Nette\Configurator::DEVELOPMENT
-+$value === "development"
-```
-
-## Class_
-
-### `ParentClassToTraitsRector`
-
-- class: `Rector\Rector\Class_\ParentClassToTraitsRector`
-
-Replaces parent class to specific traits
-
-```diff
--class SomeClass extends Nette\Object
-+class SomeClass
- {
-+    use Nette\SmartObject;
- }
-```
-
-## Rector
-
-### `ReplaceStringYamlRector`
-
-- class: `Rector\YamlRector\Rector\ReplaceStringYamlRector`
-
-Replaces one string by another. Use only for very specific strings only.
-
-```diff
-
-```
-
-### `ReplaceValueYamlRector`
-
-- class: `Rector\YamlRector\Rector\ReplaceValueYamlRector`
-
-Replaces specifically nested key value by another.
-
-```diff
-
-```
-
-### `RenameSubKeyYamlRector`
-
-- class: `Rector\YamlRector\Rector\RenameSubKeyYamlRector`
-
-Replaces specifically nested key by another.
-
-```diff
--key > another_key > old_key: value
-+key > another_key > new_key: value
-```
 
 ## PHPUnit
 
@@ -1323,6 +669,628 @@ Turns @Template annotation to explicit method call in Controller of FrameworkExt
  public function indexAction()
  {
 +    return $this->render("index.html.twig");
+ }
+```
+
+---
+- [Assign](#assign)
+- [Dynamic](#dynamic)
+- [ValueObjectRemover](#valueobjectremover)
+- [MethodCall](#methodcall)
+- [MagicDisclosure](#magicdisclosure)
+- [DependencyInjection](#dependencyinjection)
+- [RepositoryAsService](#repositoryasservice)
+- [Interface_](#interface_)
+- [Visibility](#visibility)
+- [CodeQuality](#codequality)
+- [Constant](#constant)
+- [Class_](#class_)
+
+## Assign
+
+### `PropertyAssignToMethodCallRector`
+
+- class: `Rector\Rector\Assign\PropertyAssignToMethodCallRector`
+
+Turns property assign of specific type and property name to method call
+
+```diff
+-$control->oldProperty = false;
++$control->newMethodCall(false);
+```
+
+## Dynamic
+
+### `NamespaceReplacerRector`
+
+- class: `Rector\Rector\Dynamic\NamespaceReplacerRector`
+
+Replaces old namespace by new one.
+
+```diff
+-$someObject = new SomeOldNamespace\SomeClass;
++$someObject = new SomeNewNamespace\SomeClass;
+```
+
+### `ReturnTypehintRector`
+
+- class: `Rector\Rector\Dynamic\ReturnTypehintRector`
+
+Changes defined return typehint of method and class.
+
+```diff
+ class SomeClass
+ {
+-    public getData();
++    public getData(): array;
+ }
+```
+
+### `FluentReplaceRector`
+
+- class: `Rector\Rector\Dynamic\FluentReplaceRector`
+
+Turns fluent interfaces to classic ones.
+
+```diff
+     class SomeClass
+     {
+         public function someFunction()
+         {
+-            return $this;
+         }
+
+         public function otherFunction()
+         {
+-            return $this;
+         }
+     }
+
+     $someClass = new SomeClass();
+-    $someClass->someFunction()
+-                ->otherFunction();
++    $someClass->someFunction();
++    $someClass->otherFunction();
+```
+
+### `FunctionToMethodCallRector`
+
+- class: `Rector\Rector\Dynamic\FunctionToMethodCallRector`
+
+Turns defined function calls to local method calls.
+
+```diff
+-view("...", []);
++$this->render("...", []);
+```
+
+### `ArgumentAdderRector`
+
+- class: `Rector\Rector\Dynamic\ArgumentAdderRector`
+
+This Rector adds new default arguments in calls of defined methods and class types.
+
+```diff
+ $someObject = new SomeClass;
+-$someObject->someMethod();
++$someObject->someMethod(true);
+
+ class MyCustomClass extends SomeClass
+ {
+-    public function someMethod()
++    public function someMethod($value = true)
+     {
+     }
+ }
+```
+
+### `ClassReplacerRector`
+
+- class: `Rector\Rector\Dynamic\ClassReplacerRector`
+
+Replaces defined classes by new ones.
+
+```diff
+-$value = new SomeOldClass;
++$value = new SomeNewClass;
+```
+
+### `PropertyToMethodRector`
+
+- class: `Rector\Rector\Dynamic\PropertyToMethodRector`
+
+Replaces properties assign calls be defined methods.
+
+```diff
+-$result = $object->property;
+-$object->property = $value;
++$result = $object->getProperty();
++$object->setProperty($value);
+```
+
+### `MethodNameReplacerRector`
+
+- class: `Rector\Rector\Dynamic\MethodNameReplacerRector`
+
+Turns method names to new ones.
+
+```diff
+ $someObject = new SomeClass;
+-$someObject->oldMethod();
++$someObject->newMethod();
+
+-SomeClass::oldStaticMethod();
++SomeClass::newStaticMethod();
+```
+
+### `PropertyNameReplacerRector`
+
+- class: `Rector\Rector\Dynamic\PropertyNameReplacerRector`
+
+Replaces defined old properties by new ones.
+
+```diff
+-$someObject->someOldProperty;
++$someObject->someNewProperty;
+```
+
+### `ArgumentRemoverRector`
+
+- class: `Rector\Rector\Dynamic\ArgumentRemoverRector`
+
+Removes defined arguments in defined methods and their calls.
+
+```diff
+ $someObject = new SomeClass;
+-$someObject->someMethod(true);
++$someObject->someMethod();'
+```
+
+### `ArgumentDefaultValueReplacerRector`
+
+- class: `Rector\Rector\Dynamic\ArgumentDefaultValueReplacerRector`
+
+Replaces defined map of arguments in defined methods and their calls.
+
+```diff
+ $someObject = new SomeClass;
+-$someObject->someMethod(SomeClass::OLD_CONSTANT);
++$someObject->someMethod(false);'
+```
+
+### `AnnotationReplacerRector`
+
+- class: `Rector\Rector\Dynamic\AnnotationReplacerRector`
+
+Turns defined annotations above properties and methods to their new values.
+
+```diff
+-/** @test */
++/** @scenario */
+ public function someMethod() {};
+```
+
+### `PseudoNamespaceToNamespaceRector`
+
+- class: `Rector\Rector\Dynamic\PseudoNamespaceToNamespaceRector`
+
+Replaces defined Pseudo_Namespaces by Namespace\Ones.
+
+```diff
+-$someServie = Some_Object;
++$someServie = Some\Object;
+```
+
+### `ParentTypehintedArgumentRector`
+
+- class: `Rector\Rector\Dynamic\ParentTypehintedArgumentRector`
+
+Changes defined parent class typehints.
+
+```diff
+ interface SomeInterface
+ {
+     public read(string $content);
+ }
+
+ class SomeClass implements SomeInterface
+ {
+-    public read($content);
++    public read(string $content);
+ }
+```
+
+### `ClassConstantReplacerRector`
+
+- class: `Rector\Rector\Dynamic\ClassConstantReplacerRector`
+
+Replaces defined class constants in their calls.
+
+```diff
+-$value = SomeClass::OLD_CONSTANT;
++$value = SomeClass::NEW_CONSTANT;
+```
+
+## ValueObjectRemover
+
+### `ValueObjectRemoverDocBlockRector`
+
+- class: `Rector\Rector\Dynamic\ValueObjectRemover\ValueObjectRemoverDocBlockRector`
+
+Turns defined value object to simple types in doc blocks
+
+```diff
+ /**
+- * @var ValueObject|null
++ * @var string|null
+  */
+ private $name;
+
+-/** @var ValueObject|null */
++/** @var string|null */
+ $name;
+```
+
+### `ValueObjectRemoverRector`
+
+- class: `Rector\Rector\Dynamic\ValueObjectRemover\ValueObjectRemoverRector`
+
+Remove values objects and use directly the value.
+
+```diff
+-$name = new ValueObject("name");
++$name = "name";
+
+-function someFunction(ValueObject $name) { }
++function someFunction(string $name) { }
+
+-function someFunction(): ValueObject { }
++function someFunction(): string { }
+
+-function someFunction(): ?ValueObject { }
++function someFunction(): ?string { }
+```
+
+## MethodCall
+
+### `MethodCallToAnotherMethodCallWithArgumentsRector`
+
+- class: `Rector\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector`
+
+Turns old method call with specfici type to new one with arguments
+
+```diff
+ $serviceDefinition = new Nette\DI\ServiceDefinition;
+-$serviceDefinition->setInject();
+-$END
++$serviceDefinition->addTag('inject');
+```
+
+## MagicDisclosure
+
+### `ToStringToMethodCallRector`
+
+- class: `Rector\Rector\MagicDisclosure\ToStringToMethodCallRector`
+
+Turns defined __toString() to specific method calls.
+
+```diff
+-$result = (string) $someValue;
++$result = $someValue->someMethod();
+
+-$result = $someValue->__toString();
++$result = $someValue->someMethod();
+```
+
+### `GetAndSetToMethodCallRector`
+
+- class: `Rector\Rector\MagicDisclosure\GetAndSetToMethodCallRector`
+
+Turns defined `__get`/`__set` to specific method calls.
+
+```diff
+-$someService = $container->someService;
++$someService = $container->getService("someService");
+
+-$container->someService = $someService;
++$container->setService("someService", $someService);
+```
+
+### `UnsetAndIssetToMethodCallRector`
+
+- class: `Rector\Rector\MagicDisclosure\UnsetAndIssetToMethodCallRector`
+
+Turns defined `__isset`/`__unset` calls to specific method calls.
+
+```diff
+-isset($container["someKey"]);
++$container->hasService("someKey");
+
+-unset($container["someKey"])
++$container->removeService("someKey");
+```
+
+## DependencyInjection
+
+### `AnnotatedPropertyInjectToConstructorInjectionRector`
+
+- class: `Rector\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector`
+
+Turns non-private properties with @annotation to private properties and constructor injection
+
+```diff
+ /**
+  * @var SomeService
+- * @annotation
+  */
+-public $someService;
++private $someService;
++
++public function __construct(SomeService $someService)
++{
++    $this->someService = $someService;
++}
+```
+
+### `ReplaceVariableByPropertyFetchRector`
+
+- class: `Rector\Rector\Architecture\DependencyInjection\ReplaceVariableByPropertyFetchRector`
+
+Turns variable in controller action to property fetch, as follow up to action injection variable to property change.
+
+```diff
+ final class SomeController
+ {
+     /**
+      * @var ProductRepository
+      */
+     private $productRepository;
+
+     public function __construct(ProductRepository $productRepository)
+     {
+         $this->productRepository = $productRepository;
+     }
+
+     public function default()
+     {
+-        $products = $productRepository->fetchAll();
++        $products = $this->productRepository->fetchAll();
+     }
+ }
+```
+
+### `ActionInjectionToConstructorInjectionRector`
+
+- class: `Rector\Rector\Architecture\DependencyInjection\ActionInjectionToConstructorInjectionRector`
+
+Turns action injection in Controllers to constructor injection
+
+```diff
+ final class SomeController
+ {
+-    public function default(ProductRepository $productRepository)
++    /**
++     * @var ProductRepository
++     */
++    private $productRepository;
++    public function __construct(ProductRepository $productRepository)
+     {
+-        $products = $productRepository->fetchAll();
++        $this->productRepository = $productRepository;
++    }
++
++    public function default()
++    {
++        $products = $this->productRepository->fetchAll();
+     }
+ }
+```
+
+## RepositoryAsService
+
+### `ReplaceParentRepositoryCallsByRepositoryPropertyRector`
+
+- class: `Rector\Rector\Architecture\RepositoryAsService\ReplaceParentRepositoryCallsByRepositoryPropertyRector`
+
+Handles method calls in child of Doctrine EntityRepository and moves them to "$this->repository" property.
+
+```diff
+ <?php
+
+ use Doctrine\ORM\EntityRepository;
+
+ class SomeRepository extends EntityRepository
+ {
+     public function someMethod()
+     {
+-        return $this->findAll();
++        return $this->repository->findAll();
+     }
+ }
+```
+
+### `ServiceLocatorToDIRector`
+
+- class: `Rector\Rector\Architecture\RepositoryAsService\ServiceLocatorToDIRector`
+
+Turns "$this->getRepository()" in Symfony Controller to constructor injection and private property access.
+
+```diff
+ class ProductController extends Controller
+ {
++    /**
++     * @var ProductRepository
++     */
++    private $productRepository;
++
++    public function __construct(ProductRepository $productRepository)
++    {
++        $this->productRepository = $productRepository;
++    }
++
+     public function someAction()
+     {
+         $entityManager = $this->getDoctrine()->getManager();
+-        $entityManager->getRepository('SomethingBundle:Product')->findSomething(...);
++        $this->productRepository->findSomething(...);
+     }
+ }
+```
+
+### `MoveRepositoryFromParentToConstructorRector`
+
+- class: `Rector\Rector\Architecture\RepositoryAsService\MoveRepositoryFromParentToConstructorRector`
+
+Turns parent EntityRepository class to constructor dependency
+
+```diff
+ namespace App\Repository;
+
++use App\Entity\Post;
+ use Doctrine\ORM\EntityRepository;
+
+-final class PostRepository extends EntityRepository
++final class PostRepository
+ {
++    /**
++     * @var \Doctrine\ORM\EntityRepository
++     */
++    private $repository;
++    public function __construct(\Doctrine\ORM\EntityManager $entityManager)
++    {
++        $this->repository = $entityManager->getRepository(\App\Entity\Post::class);
++    }
+ }
+```
+
+## Interface_
+
+### `MergeInterfacesRector`
+
+- class: `Rector\Rector\Interface_\MergeInterfacesRector`
+
+Merges old interface to a new one, that already has its methods
+
+```diff
+-class SomeClass implements SomeInterface, SomeOldInterface
++class SomeClass implements SomeInterface
+ {
+ }
+```
+
+## Visibility
+
+### `ChangeMethodVisibilityRector`
+
+- class: `Rector\Rector\Visibility\ChangeMethodVisibilityRector`
+
+Change visibility of method from parent class.
+
+```diff
+ class FrameworkClass
+ {
+     protected someMethod()
+     {
+     }
+ }
+
+ class MyClass extends FrameworkClass
+ {
+-    public someMethod()
++    protected someMethod()
+     {
+     }
+ }
+```
+
+### `ChangePropertyVisibilityRector`
+
+- class: `Rector\Rector\Visibility\ChangePropertyVisibilityRector`
+
+Change visibility of property from parent class.
+
+```diff
+ class FrameworkClass
+ {
+     protected $someProperty;
+ }
+
+ class MyClass extends FrameworkClass
+ {
+-    public $someProperty;
++    protected $someProperty;
+ }
+```
+
+### `ChangeConstantVisibilityRector`
+
+- class: `Rector\Rector\Visibility\ChangeConstantVisibilityRector`
+
+Change visibility of constant from parent class.
+
+```diff
+ class FrameworkClass
+ {
+     protected const SOME_CONSTANT = 1;
+ }
+
+ class MyClass extends FrameworkClass
+ {
+-    public const SOME_CONSTANT = 1;
++    protected const SOME_CONSTANT = 1;
+ }
+```
+
+## CodeQuality
+
+### `InArrayAndArrayKeysToArrayKeyExistsRector`
+
+- class: `Rector\Rector\CodeQuality\InArrayAndArrayKeysToArrayKeyExistsRector`
+
+Simplify `in_array` and `array_keys` functions combination into `array_key_exists` when `array_keys` has one argument only
+
+```diff
+-in_array("key", array_keys($array), true);
++array_key_exists("key", $array);
+```
+
+### `UnnecessaryTernaryExpressionRector`
+
+- class: `Rector\Rector\CodeQuality\UnnecessaryTernaryExpressionRector`
+
+Remove unnecessary ternary expressions.
+
+```diff
+-$foo === $bar ? true : false;
++$foo === $bar;
+```
+
+## Constant
+
+### `RenameClassConstantsUseToStringsRector`
+
+- class: `Rector\Rector\Constant\RenameClassConstantsUseToStringsRector`
+
+Replaces constant by value
+
+```diff
+-$value === Nette\Configurator::DEVELOPMENT
++$value === "development"
+```
+
+## Class_
+
+### `ParentClassToTraitsRector`
+
+- class: `Rector\Rector\Class_\ParentClassToTraitsRector`
+
+Replaces parent class to specific traits
+
+```diff
+-class SomeClass extends Nette\Object
++class SomeClass
+ {
++    use Nette\SmartObject;
  }
 ```
 
