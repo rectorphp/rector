@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Rector\Dynamic;
+namespace Rector\Rector\Function_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
@@ -8,7 +8,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class FunctionToMethodCallRector extends AbstractRector
@@ -35,7 +35,15 @@ final class FunctionToMethodCallRector extends AbstractRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Turns defined function calls to local method calls.', [
-            new CodeSample('view("...", []);', '$this->render("...", []);'),
+            new ConfiguredCodeSample(
+                'view("...", []);',
+                '$this->render("...", []);',
+                [
+                    '$functionToMethodCall' => [
+                        'view' => ['this', 'render'],
+                    ],
+                ]
+            ),
         ]);
     }
 

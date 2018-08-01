@@ -8,7 +8,6 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Use_;
 use Rector\Node\Attribute;
 use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
@@ -38,8 +37,8 @@ final class ClassReplacerRector extends AbstractRector
                 '$value = new SomeNewClass;',
                 [
                     '$oldToNewClasses' => [
-                        'SomeOldClass' => 'SomeNewClass'
-                    ]
+                        'SomeOldClass' => 'SomeNewClass',
+                    ],
                 ]
             ),
         ]);

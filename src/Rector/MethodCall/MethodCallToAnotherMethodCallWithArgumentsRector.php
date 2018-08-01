@@ -82,13 +82,14 @@ CODE_SAMPLE
 $serviceDefinition = new Nette\DI\ServiceDefinition;
 $serviceDefinition->addTag('inject');
 CODE_SAMPLE
-            , [
-                '$serviceDefinitionClass' => 'Nette\DI\ServiceDefinition',
-                '$oldMethod' => 'setInject',
-                '$newMethod' => 'addTag',
-                '$newMethodArguments' => ['inject']
-            ]
-        )
+                ,
+                [
+                    '$serviceDefinitionClass' => 'Nette\DI\ServiceDefinition',
+                    '$oldMethod' => 'setInject',
+                    '$newMethod' => 'addTag',
+                    '$newMethodArguments' => ['inject'],
+                ]
+            ),
         ]);
     }
 

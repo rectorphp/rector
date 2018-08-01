@@ -13,7 +13,6 @@ use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeAnalyzer\ExpressionAnalyzer;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
@@ -71,8 +70,8 @@ final class GetAndSetToMethodCallRector extends AbstractRector
                     '$typeToMethodCalls' => [
                         'SomeContainer' => [
                             'set' => 'addService',
-                        ]
-                    ]
+                        ],
+                    ],
                 ]
             ),
             new ConfiguredCodeSample(
@@ -82,10 +81,10 @@ final class GetAndSetToMethodCallRector extends AbstractRector
                     '$typeToMethodCalls' => [
                         'SomeContainer' => [
                             'get' => 'getService',
-                        ]
-                    ]
+                        ],
+                    ],
                 ]
-            )
+            ),
         ]);
     }
 

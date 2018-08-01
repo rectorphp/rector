@@ -11,7 +11,6 @@ use Rector\Node\MethodCallNodeFactory;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
@@ -78,9 +77,9 @@ CODE_SAMPLE
                 [
                     '$perClassPropertyToMethods' => [
                         'SomeObject' => [
-                            'property' => ['getProperty', 'setProperty']
-                        ]
-                    ]
+                            'property' => ['getProperty', 'setProperty'],
+                        ],
+                    ],
                 ]
             ),
         ]);

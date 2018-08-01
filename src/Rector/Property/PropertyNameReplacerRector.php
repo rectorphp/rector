@@ -59,11 +59,11 @@ final class PropertyNameReplacerRector extends AbstractRector
                 [
                     '$perClassOldToNewProperties' => [
                         'SomeClass' => [
-                            'someOldProperty' => 'someNewProperty'
-                        ]
-                    ]
+                            'someOldProperty' => 'someNewProperty',
+                        ],
+                    ],
                 ]
-            )
+            ),
         ]);
     }
 

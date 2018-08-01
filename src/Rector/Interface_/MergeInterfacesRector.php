@@ -7,7 +7,6 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Node\Attribute;
 use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
@@ -46,11 +45,12 @@ class SomeClass implements SomeInterface
 {
 }
 CODE_SAMPLE
-                , [
-                '$oldToNewInterfaces' => [
-                    'SomeOldInterface' => 'SomeInterface'
+                ,
+                [
+                    '$oldToNewInterfaces' => [
+                        'SomeOldInterface' => 'SomeInterface',
+                    ],
                 ]
-            ]
             ),
         ]);
     }

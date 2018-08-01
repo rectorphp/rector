@@ -10,7 +10,6 @@ use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
@@ -82,9 +81,9 @@ CODE_SAMPLE
                 [
                     '$typeToMethodCalls' => [
                         'SomeObject' => [
-                            'toString' => 'getPath'
-                       ]
-                   ]
+                            'toString' => 'getPath',
+                        ],
+                    ],
                 ]
             ),
         ]);
