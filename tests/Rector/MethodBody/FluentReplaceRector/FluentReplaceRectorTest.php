@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Dynamic\FluentReplaceRector;
+namespace Rector\Tests\Rector\MethodBody\FluentReplaceRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

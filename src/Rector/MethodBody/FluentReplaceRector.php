@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Rector\Dynamic;
+namespace Rector\Rector\MethodBody;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
@@ -46,39 +46,39 @@ final class FluentReplaceRector extends AbstractRector
         return new RectorDefinition('Turns fluent interfaces to classic ones.', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
-    class SomeClass
+class SomeClass
+{
+    public function someFunction()
     {
-        public function someFunction()
-        {
-            return $this;
-        }
-
-        public function otherFunction()
-        {
-            return $this;
-        }
+        return $this;
     }
 
-    $someClass = new SomeClass();
-    $someClass->someFunction()
-                ->otherFunction();
+    public function otherFunction()
+    {
+        return $this;
+    }
+}
+
+$someClass = new SomeClass();
+$someClass->someFunction()
+            ->otherFunction();
 CODE_SAMPLE
                 ,
                 <<<'CODE_SAMPLE'
-    class SomeClass
+class SomeClass
+{
+    public function someFunction()
     {
-        public function someFunction()
-        {
-        }
-
-        public function otherFunction()
-        {
-        }
     }
 
-    $someClass = new SomeClass();
-    $someClass->someFunction();
-    $someClass->otherFunction();
+    public function otherFunction()
+    {
+    }
+}
+
+$someClass = new SomeClass();
+$someClass->someFunction();
+$someClass->otherFunction();
 CODE_SAMPLE
             ),
         ]);
