@@ -3,41 +3,20 @@
 namespace Rector\Console\Command;
 
 use Nette\Loaders\RobotLoader;
+use Rector\Configuration\Option;
 use Rector\Console\ConsoleStyle;
 use Rector\Console\Output\DescribeCommandReporter;
 use Rector\Contract\Rector\RectorInterface;
-use Rector\Guard\RectorGuard;
 use Rector\NodeTraverser\RectorNodeTraverser;
 use Rector\YamlRector\YamlFileProcessor;
 use ReflectionClass;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 
 final class DescribeCommand extends Command
 {
-    /**
-     * @var string
-     */
-    public const FORMAT_CLI = 'cli';
-
-    /**
-     * @var string
-     */
-    public const FORMAT_MARKDOWN = 'md';
-
-    /**
-     * @var string
-     */
-    private const OPTION_ALL = 'all';
-
-    /**
-     * @var string
-     */
-    private const OPTION_FORMAT = 'format';
-
     /**
      * @var ConsoleStyle
      */
@@ -54,11 +33,6 @@ final class DescribeCommand extends Command
     private $describeCommandReporter;
 
     /**
-     * @var RectorGuard
-     */
-    private $rectorGuard;
-
-    /**
      * @var YamlFileProcessor
      */
     private $yamlFileProcessor;
@@ -67,7 +41,6 @@ final class DescribeCommand extends Command
         ConsoleStyle $consoleStyle,
         RectorNodeTraverser $rectorNodeTraverser,
         DescribeCommandReporter $describeCommandReporter,
-        RectorGuard $rectorGuard,
         YamlFileProcessor $yamlFileProcessor
     ) {
         parent::__construct();
@@ -75,7 +48,6 @@ final class DescribeCommand extends Command
         $this->consoleStyle = $consoleStyle;
         $this->rectorNodeTraverser = $rectorNodeTraverser;
         $this->describeCommandReporter = $describeCommandReporter;
-        $this->rectorGuard = $rectorGuard;
         $this->yamlFileProcessor = $yamlFileProcessor;
     }
 
@@ -83,21 +55,12 @@ final class DescribeCommand extends Command
     {
         $this->setName(CommandNaming::classToName(self::class));
         $this->setDescription('Shows detailed description of loaded Rectors.');
-        $this->addOption(self::OPTION_FORMAT, null, InputOption::VALUE_REQUIRED, 'Output format.', self::FORMAT_CLI);
-        $this->addOption(self::OPTION_ALL, null, InputOption::VALUE_NONE, 'Describe all Rectors');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        if (! $input->getOption(self::OPTION_ALL)) {
-            $this->rectorGuard->ensureSomeRectorsAreRegistered();
-        }
-
-        $outputFormat = $input->getOption(self::OPTION_FORMAT);
-
-        $this->writeHeadline($input, $outputFormat);
-
-        $this->describeCommandReporter->reportRectorsInFormat($this->getRectorsByInput($input), $outputFormat);
+        $this->writeHeadline($input);
+        $this->describeCommandReporter->reportRectorsInFormat($this->getRectorsByInput($input));
 
         return 0;
     }
@@ -107,7 +70,7 @@ final class DescribeCommand extends Command
      */
     private function getRectorsByInput(InputInterface $input): array
     {
-        if (! $input->getOption(self::OPTION_ALL)) {
+        if ($input->getOption(Option::OPTION_LEVEL)) {
             return $this->rectorNodeTraverser->getRectors() + $this->yamlFileProcessor->getYamlRectors();
         }
 
@@ -140,13 +103,12 @@ final class DescribeCommand extends Command
         return $robotLoader;
     }
 
-    private function writeHeadline(InputInterface $input, string $outputFormat): void
+    private function writeHeadline(InputInterface $input): void
     {
-        if ($outputFormat !== self::FORMAT_MARKDOWN) {
-            return;
-        }
-
-        $headline = $input->getOption(self::OPTION_ALL) ? '# All Rectors Overview' : '# Rectors Overview';
+        $headline = $input->getOption(Option::OPTION_LEVEL) ? sprintf(
+            '# Rectors for %s level',
+            $input->getOption(Option::OPTION_LEVEL)
+        ) : '# All Rectors Overview';
         $this->consoleStyle->writeln($headline);
         $this->consoleStyle->newLine();
     }

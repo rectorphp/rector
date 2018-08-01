@@ -3,7 +3,6 @@
 namespace Rector\NodeTraverser;
 
 use PhpParser\NodeTraverser;
-use PhpParser\NodeVisitor;
 use Rector\Contract\Rector\PhpRectorInterface;
 
 final class RectorNodeTraverser extends NodeTraverser
