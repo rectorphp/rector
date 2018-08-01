@@ -81,11 +81,6 @@ class SomeClass implements SomeInterface
     public read(string $content);
 }
 CODE_SAMPLE
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> 7732517c... misc
                 ,
                 [
                     '$typehintForArgumentByMethodAndClass' => [
@@ -96,12 +91,7 @@ CODE_SAMPLE
                         ],
                     ],
                 ]
-<<<<<<< HEAD
->>>>>>> 70b22375... fixup! misc
             ),
-=======
-                ),
->>>>>>> 7732517c... misc
         ]);
     }
 
