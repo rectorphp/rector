@@ -2,7 +2,6 @@
 
 services:
     # @todo, use this and return typehint
-    # https://github.com/rectorphp/rector/blob/master/docs/DynamicRectors.md#change-parameters-type-hinting-according-to-the-parent-type
     Rector\Rector\Dynamic\ReturnTypehintRector:
         $typehintForMethodByClass:
             # class

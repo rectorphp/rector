@@ -23,17 +23,17 @@ Rector **instantly upgrades PHP & YAML code of your application**, with focus on
 </p>
 
 
-Rector can:
+**Rector can**:
 
-- [Rename classes](/docs/DynamicRectors.md#replace-a-class-name)
-- [Rename class' methods](/docs/DynamicRectors.md#change-a-method-name)
-- [Rename partial namespace](/docs/DynamicRectors.md#replace-some-part-of-the-namespace)
-- [Rename pseudo-namespace to namespace](/docs/DynamicRectors.md#replace-the-underscore-naming-_-with-namespaces-)
-- [Add, replace or remove arguments](/docs/DynamicRectors.md#change-argument-value-or-remove-argument)
-- [Add typehints based on new types of parent class or interface](/docs/DynamicRectors.md#remove-a-value-object-and-use-simple-type)
+- Rename classes, methods and properties
+- Rename partial namespace
+- Rename pseudo-namespace to namespace
+- Add, replace or remove arguments
+- Add arguments or return typehint
+- Change visibility of constant, property or method
 - And much more...
 
-...just look at overview of [all available Rectors](/docs/AllRectorsOverview.md)
+...just **look at overview of [all available Rectors](/docs/AllRectorsOverview.md)** with before/after diffs and configuration examples. It's all you really need to use build your own sets.
 
 ## Install
 
@@ -125,13 +125,6 @@ Do you need to upgrade to **Symfony 4.0**, for example?
     ```bash
     vendor/bin/rector process src
     ```
-
-## Configure Rectors for your Case
-
-You don't have to always write PHP code. Many projects change only classes or method names, so it would be too much work for a simple task.
-
-- [Dynamic Rectors](/docs/DynamicRectors.md)
-- [Turn Magic to Methods](/docs/MagicDisclosureRectors.md)
 
 ## How to Apply Coding Standards?
 
