@@ -33,6 +33,11 @@ final class DescribeCommand extends Command
     /**
      * @var string
      */
+    private const OPTION_ALL = 'all';
+
+    /**
+     * @var string
+     */
     private const OPTION_FORMAT = 'format';
 
     /**
@@ -82,28 +87,21 @@ final class DescribeCommand extends Command
         $this->setDescription('Shows detailed description of loaded Rectors.');
         $this->addOption(Option::OPTION_NO_DIFFS, null, InputOption::VALUE_NONE, 'Hide examplary diffs.');
         $this->addOption(self::OPTION_FORMAT, null, InputOption::VALUE_REQUIRED, 'Output format.', self::FORMAT_CLI);
+        $this->addOption(self::OPTION_ALL, null, InputOption::VALUE_NONE, 'Describe all Rectors');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->rectorGuard->ensureSomeRectorsAreRegistered();
-
-        $rectors = $this->getRectorsByInput($input);
+        if (! $input->getOption(self::OPTION_ALL)) {
+            $this->rectorGuard->ensureSomeRectorsAreRegistered();
+        }
 
         $outputFormat = $input->getOption(self::OPTION_FORMAT);
 
-        if ($outputFormat === self::FORMAT_MARKDOWN) {
-            if ($input->getOption(Option::OPTION_LEVEL) === 'all') {
-                $headline = '# All Rectors Overview';
-            } else {
-                $headline = '# Rectors Overview';
-            }
-            $this->consoleStyle->writeln($headline);
-            $this->consoleStyle->newLine();
-        }
+        $this->writeHeadline($input, $outputFormat);
 
         $this->describeCommandReporter->reportRectorsInFormat(
-            $rectors,
+            $this->getRectorsByInput($input),
             $outputFormat,
             ! $input->getOption(Option::OPTION_NO_DIFFS)
         );
@@ -116,25 +114,25 @@ final class DescribeCommand extends Command
      */
     private function getRectorsByInput(InputInterface $input): array
     {
-        if ($input->getOption(Option::OPTION_LEVEL) === 'all') {
-            $robotLoader = $this->createRobotLoaderForAllRectors();
-            $robotLoader->rebuild();
-
-            $rectors = [];
-            foreach ($robotLoader->getIndexedClasses() as $class => $filename) {
-                $reflectionClass = new ReflectionClass($class);
-                if ($reflectionClass->isAbstract()) {
-                    continue;
-                }
-
-                /** @var RectorInterface|YamlRectorInterface $rector */
-                $rectors[] = $reflectionClass->newInstanceWithoutConstructor();
-            }
-
-            return $rectors;
+        if (! $input->getOption(self::OPTION_ALL)) {
+            return $this->rectorNodeTraverser->getRectors() + $this->yamlFileProcessor->getYamlRectors();
         }
 
-        return $this->rectorNodeTraverser->getRectors() + $this->yamlFileProcessor->getYamlRectors();
+        $robotLoader = $this->createRobotLoaderForAllRectors();
+        $robotLoader->rebuild();
+
+        $rectors = [];
+        foreach ($robotLoader->getIndexedClasses() as $class => $filename) {
+            $reflectionClass = new ReflectionClass($class);
+            if ($reflectionClass->isAbstract()) {
+                continue;
+            }
+
+            /** @var RectorInterface|YamlRectorInterface $rector */
+            $rectors[] = $reflectionClass->newInstanceWithoutConstructor();
+        }
+
+        return $rectors;
     }
 
     private function createRobotLoaderForAllRectors(): RobotLoader
@@ -147,5 +145,16 @@ final class DescribeCommand extends Command
         $robotLoader->acceptFiles = ['*Rector.php'];
 
         return $robotLoader;
+    }
+
+    private function writeHeadline(InputInterface $input, string $outputFormat): void
+    {
+        if ($outputFormat !== self::FORMAT_MARKDOWN) {
+            return;
+        }
+
+        $headline = $input->getOption(self::OPTION_ALL) ? '# All Rectors Overview' : '# Rectors Overview';
+        $this->consoleStyle->writeln($headline);
+        $this->consoleStyle->newLine();
     }
 }

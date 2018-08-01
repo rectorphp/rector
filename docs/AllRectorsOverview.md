@@ -1,6 +1,40 @@
 # All Rectors Overview
 
-## Rector\Rector\Assign\PropertyAssignToMethodCallRector
+- [Assign](#assign)
+- [Dynamic](#dynamic)
+- [ValueObjectRemover](#valueobjectremover)
+- [MethodCall](#methodcall)
+- [MagicDisclosure](#magicdisclosure)
+- [DependencyInjection](#dependencyinjection)
+- [RepositoryAsService](#repositoryasservice)
+- [Interface_](#interface_)
+- [Visibility](#visibility)
+- [CodeQuality](#codequality)
+- [Constant](#constant)
+- [Class_](#class_)
+- [Rector](#rector)
+- [PHPUnit](#phpunit)
+- [PHPUnit\SpecificMethod](#phpunitspecificmethod)
+- [Sylius\Review](#syliusreview)
+- [Symfony\HttpKernel](#symfonyhttpkernel)
+- [Symfony\Controller](#symfonycontroller)
+- [Symfony\Validator](#symfonyvalidator)
+- [Symfony\Console](#symfonyconsole)
+- [Symfony\Yaml](#symfonyyaml)
+- [Symfony\DependencyInjection](#symfonydependencyinjection)
+- [Symfony\VarDumper](#symfonyvardumper)
+- [Symfony\FrameworkBundle](#symfonyframeworkbundle)
+- [Symfony\Form](#symfonyform)
+- [Symfony\Process](#symfonyprocess)
+- [Doctrine](#doctrine)
+- [PhpParser](#phpparser)
+- [Sensio\FrameworkExtraBundle](#sensioframeworkextrabundle)
+
+## Assign
+
+### `PropertyAssignToMethodCallRector`
+
+- class: `Rector\Rector\Assign\PropertyAssignToMethodCallRector`
 
 Turns property assign of specific type and property name to method call
 
@@ -9,7 +43,11 @@ Turns property assign of specific type and property name to method call
 +$control->newMethodCall(false);
 ```
 
-## Rector\Rector\Dynamic\NamespaceReplacerRector
+## Dynamic
+
+### `NamespaceReplacerRector`
+
+- class: `Rector\Rector\Dynamic\NamespaceReplacerRector`
 
 [Dynamic] Replaces old namespace by new one.
 
@@ -18,7 +56,9 @@ Turns property assign of specific type and property name to method call
 +$someObject = new SomeNewNamespace\SomeClass;
 ```
 
-## Rector\Rector\Dynamic\ReturnTypehintRector
+### `ReturnTypehintRector`
+
+- class: `Rector\Rector\Dynamic\ReturnTypehintRector`
 
 [Dynamic] Changes defined return typehint of method and class.
 
@@ -30,7 +70,9 @@ Turns property assign of specific type and property name to method call
  }
 ```
 
-## Rector\Rector\Dynamic\FluentReplaceRector
+### `FluentReplaceRector`
+
+- class: `Rector\Rector\Dynamic\FluentReplaceRector`
 
 [Dynamic] Turns fluent interfaces to classic ones.
 
@@ -55,7 +97,9 @@ Turns property assign of specific type and property name to method call
 +    $someClass->otherFunction();
 ```
 
-## Rector\Rector\Dynamic\FunctionToMethodCallRector
+### `FunctionToMethodCallRector`
+
+- class: `Rector\Rector\Dynamic\FunctionToMethodCallRector`
 
 [Dynamic] Turns defined function calls to local method calls.
 
@@ -64,7 +108,9 @@ Turns property assign of specific type and property name to method call
 +$this->render("...", []);
 ```
 
-## Rector\Rector\Dynamic\ArgumentAdderRector
+### `ArgumentAdderRector`
+
+- class: `Rector\Rector\Dynamic\ArgumentAdderRector`
 
 [Dynamic] This Rector adds new default arguments in calls of defined methods and class types.
 
@@ -82,7 +128,9 @@ Turns property assign of specific type and property name to method call
  }
 ```
 
-## Rector\Rector\Dynamic\ClassReplacerRector
+### `ClassReplacerRector`
+
+- class: `Rector\Rector\Dynamic\ClassReplacerRector`
 
 [Dynamic] Replaces defined classes by new ones.
 
@@ -91,7 +139,9 @@ Turns property assign of specific type and property name to method call
 +$value = new SomeNewClass;
 ```
 
-## Rector\Rector\Dynamic\PropertyToMethodRector
+### `PropertyToMethodRector`
+
+- class: `Rector\Rector\Dynamic\PropertyToMethodRector`
 
 [Dynamic] Replaces properties assign calls be defined methods.
 
@@ -102,7 +152,9 @@ Turns property assign of specific type and property name to method call
 +$object->setProperty($value);
 ```
 
-## Rector\Rector\Dynamic\MethodNameReplacerRector
+### `MethodNameReplacerRector`
+
+- class: `Rector\Rector\Dynamic\MethodNameReplacerRector`
 
 [Dynamic] Turns method names to new ones.
 
@@ -115,7 +167,9 @@ Turns property assign of specific type and property name to method call
 +SomeClass::newStaticMethod();
 ```
 
-## Rector\Rector\Dynamic\PropertyNameReplacerRector
+### `PropertyNameReplacerRector`
+
+- class: `Rector\Rector\Dynamic\PropertyNameReplacerRector`
 
 [Dynamic] Replaces defined old properties by new ones.
 
@@ -124,7 +178,9 @@ Turns property assign of specific type and property name to method call
 +$someObject->someNewProperty;
 ```
 
-## Rector\Rector\Dynamic\ArgumentRemoverRector
+### `ArgumentRemoverRector`
+
+- class: `Rector\Rector\Dynamic\ArgumentRemoverRector`
 
 [Dynamic] Removes defined arguments in defined methods and their calls.
 
@@ -134,7 +190,9 @@ Turns property assign of specific type and property name to method call
 +$someObject->someMethod();'
 ```
 
-## Rector\Rector\Dynamic\ArgumentDefaultValueReplacerRector
+### `ArgumentDefaultValueReplacerRector`
+
+- class: `Rector\Rector\Dynamic\ArgumentDefaultValueReplacerRector`
 
 [Dynamic] Replaces defined map of arguments in defined methods and their calls.
 
@@ -144,7 +202,9 @@ Turns property assign of specific type and property name to method call
 +$someObject->someMethod(false);'
 ```
 
-## Rector\Rector\Dynamic\AnnotationReplacerRector
+### `AnnotationReplacerRector`
+
+- class: `Rector\Rector\Dynamic\AnnotationReplacerRector`
 
 [Dynamic] Turns defined annotations above properties and methods to their new values.
 
@@ -154,7 +214,9 @@ Turns property assign of specific type and property name to method call
  public function someMethod() {};
 ```
 
-## Rector\Rector\Dynamic\PseudoNamespaceToNamespaceRector
+### `PseudoNamespaceToNamespaceRector`
+
+- class: `Rector\Rector\Dynamic\PseudoNamespaceToNamespaceRector`
 
 [Dynamic] Replaces defined Pseudo_Namespaces by Namespace\Ones.
 
@@ -163,7 +225,9 @@ Turns property assign of specific type and property name to method call
 +$someServie = Some\Object;
 ```
 
-## Rector\Rector\Dynamic\ParentTypehintedArgumentRector
+### `ParentTypehintedArgumentRector`
+
+- class: `Rector\Rector\Dynamic\ParentTypehintedArgumentRector`
 
 [Dynamic] Changes defined parent class typehints.
 
@@ -180,7 +244,22 @@ Turns property assign of specific type and property name to method call
  }
 ```
 
-## Rector\Rector\Dynamic\ValueObjectRemover\ValueObjectRemoverDocBlockRector
+### `ClassConstantReplacerRector`
+
+- class: `Rector\Rector\Dynamic\ClassConstantReplacerRector`
+
+[Dynamic] Replaces defined class constants in their calls.
+
+```diff
+-$value = SomeClass::OLD_CONSTANT;
++$value = SomeClass::NEW_CONSTANT;
+```
+
+## ValueObjectRemover
+
+### `ValueObjectRemoverDocBlockRector`
+
+- class: `Rector\Rector\Dynamic\ValueObjectRemover\ValueObjectRemoverDocBlockRector`
 
 Turns defined value object to simple types in doc blocks
 
@@ -196,7 +275,9 @@ Turns defined value object to simple types in doc blocks
  $name;
 ```
 
-## Rector\Rector\Dynamic\ValueObjectRemover\ValueObjectRemoverRector
+### `ValueObjectRemoverRector`
+
+- class: `Rector\Rector\Dynamic\ValueObjectRemover\ValueObjectRemoverRector`
 
 [Dynamic] Remove values objects and use directly the value.
 
@@ -214,16 +295,11 @@ Turns defined value object to simple types in doc blocks
 +function someFunction(): ?string { }
 ```
 
-## Rector\Rector\Dynamic\ClassConstantReplacerRector
+## MethodCall
 
-[Dynamic] Replaces defined class constants in their calls.
+### `MethodCallToAnotherMethodCallWithArgumentsRector`
 
-```diff
--$value = SomeClass::OLD_CONSTANT;
-+$value = SomeClass::NEW_CONSTANT;
-```
-
-## Rector\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector
+- class: `Rector\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector`
 
 Turns old method call with specfici type to new one with arguments
 
@@ -234,7 +310,11 @@ Turns old method call with specfici type to new one with arguments
 +$serviceDefinition->addTag('inject');
 ```
 
-## Rector\Rector\MagicDisclosure\ToStringToMethodCallRector
+## MagicDisclosure
+
+### `ToStringToMethodCallRector`
+
+- class: `Rector\Rector\MagicDisclosure\ToStringToMethodCallRector`
 
 [Dynamic] Turns defined __toString() to specific method calls.
 
@@ -246,7 +326,9 @@ Turns old method call with specfici type to new one with arguments
 +$result = $someValue->someMethod();
 ```
 
-## Rector\Rector\MagicDisclosure\GetAndSetToMethodCallRector
+### `GetAndSetToMethodCallRector`
+
+- class: `Rector\Rector\MagicDisclosure\GetAndSetToMethodCallRector`
 
 [Dynamic] Turns defined `__get`/`__set` to specific method calls.
 
@@ -258,7 +340,9 @@ Turns old method call with specfici type to new one with arguments
 +$container->setService("someService", $someService);
 ```
 
-## Rector\Rector\MagicDisclosure\UnsetAndIssetToMethodCallRector
+### `UnsetAndIssetToMethodCallRector`
+
+- class: `Rector\Rector\MagicDisclosure\UnsetAndIssetToMethodCallRector`
 
 [Dynamic] Turns defined `__isset`/`__unset` calls to specific method calls.
 
@@ -270,7 +354,11 @@ Turns old method call with specfici type to new one with arguments
 +$container->removeService("someKey");
 ```
 
-## Rector\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector
+## DependencyInjection
+
+### `AnnotatedPropertyInjectToConstructorInjectionRector`
+
+- class: `Rector\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector`
 
 Turns non-private properties with @annotation to private properties and constructor injection
 
@@ -288,7 +376,9 @@ Turns non-private properties with @annotation to private properties and construc
 +}
 ```
 
-## Rector\Rector\Architecture\DependencyInjection\ReplaceVariableByPropertyFetchRector
+### `ReplaceVariableByPropertyFetchRector`
+
+- class: `Rector\Rector\Architecture\DependencyInjection\ReplaceVariableByPropertyFetchRector`
 
 Turns variable in controller action to property fetch, as follow up to action injection variable to property change.
 
@@ -313,7 +403,9 @@ Turns variable in controller action to property fetch, as follow up to action in
  }
 ```
 
-## Rector\Rector\Architecture\DependencyInjection\ActionInjectionToConstructorInjectionRector
+### `ActionInjectionToConstructorInjectionRector`
+
+- class: `Rector\Rector\Architecture\DependencyInjection\ActionInjectionToConstructorInjectionRector`
 
 Turns action injection in Controllers to constructor injection
 
@@ -338,7 +430,11 @@ Turns action injection in Controllers to constructor injection
  }
 ```
 
-## Rector\Rector\Architecture\RepositoryAsService\ReplaceParentRepositoryCallsByRepositoryPropertyRector
+## RepositoryAsService
+
+### `ReplaceParentRepositoryCallsByRepositoryPropertyRector`
+
+- class: `Rector\Rector\Architecture\RepositoryAsService\ReplaceParentRepositoryCallsByRepositoryPropertyRector`
 
 Handles method calls in child of Doctrine EntityRepository and moves them to "$this->repository" property.
 
@@ -357,7 +453,9 @@ Handles method calls in child of Doctrine EntityRepository and moves them to "$t
  }
 ```
 
-## Rector\Rector\Architecture\RepositoryAsService\ServiceLocatorToDIRector
+### `ServiceLocatorToDIRector`
+
+- class: `Rector\Rector\Architecture\RepositoryAsService\ServiceLocatorToDIRector`
 
 Turns "$this->getRepository()" in Symfony Controller to constructor injection and private property access.
 
@@ -383,7 +481,9 @@ Turns "$this->getRepository()" in Symfony Controller to constructor injection an
  }
 ```
 
-## Rector\Rector\Architecture\RepositoryAsService\MoveRepositoryFromParentToConstructorRector
+### `MoveRepositoryFromParentToConstructorRector`
+
+- class: `Rector\Rector\Architecture\RepositoryAsService\MoveRepositoryFromParentToConstructorRector`
 
 Turns parent EntityRepository class to constructor dependency
 
@@ -407,7 +507,11 @@ Turns parent EntityRepository class to constructor dependency
  }
 ```
 
-## Rector\Rector\Interface_\MergeInterfacesRector
+## Interface_
+
+### `MergeInterfacesRector`
+
+- class: `Rector\Rector\Interface_\MergeInterfacesRector`
 
 Merges old interface to a new one, that already has its methods
 
@@ -418,7 +522,11 @@ Merges old interface to a new one, that already has its methods
  }
 ```
 
-## Rector\Rector\Visibility\ChangeMethodVisibilityRector
+## Visibility
+
+### `ChangeMethodVisibilityRector`
+
+- class: `Rector\Rector\Visibility\ChangeMethodVisibilityRector`
 
 Change visibility of method from parent class.
 
@@ -439,7 +547,9 @@ Change visibility of method from parent class.
  }
 ```
 
-## Rector\Rector\Visibility\ChangePropertyVisibilityRector
+### `ChangePropertyVisibilityRector`
+
+- class: `Rector\Rector\Visibility\ChangePropertyVisibilityRector`
 
 Change visibility of property from parent class.
 
@@ -456,7 +566,9 @@ Change visibility of property from parent class.
  }
 ```
 
-## Rector\Rector\Visibility\ChangeConstantVisibilityRector
+### `ChangeConstantVisibilityRector`
+
+- class: `Rector\Rector\Visibility\ChangeConstantVisibilityRector`
 
 Change visibility of constant from parent class.
 
@@ -473,7 +585,11 @@ Change visibility of constant from parent class.
  }
 ```
 
-## Rector\Rector\CodeQuality\InArrayAndArrayKeysToArrayKeyExistsRector
+## CodeQuality
+
+### `InArrayAndArrayKeysToArrayKeyExistsRector`
+
+- class: `Rector\Rector\CodeQuality\InArrayAndArrayKeysToArrayKeyExistsRector`
 
 Simplify `in_array` and `array_keys` functions combination into `array_key_exists` when `array_keys` has one argument only
 
@@ -482,7 +598,9 @@ Simplify `in_array` and `array_keys` functions combination into `array_key_exist
 +array_key_exists("key", $array);
 ```
 
-## Rector\Rector\CodeQuality\UnnecessaryTernaryExpressionRector
+### `UnnecessaryTernaryExpressionRector`
+
+- class: `Rector\Rector\CodeQuality\UnnecessaryTernaryExpressionRector`
 
 Remove unnecessary ternary expressions.
 
@@ -491,7 +609,11 @@ Remove unnecessary ternary expressions.
 +$foo === $bar;
 ```
 
-## Rector\Rector\Constant\RenameClassConstantsUseToStringsRector
+## Constant
+
+### `RenameClassConstantsUseToStringsRector`
+
+- class: `Rector\Rector\Constant\RenameClassConstantsUseToStringsRector`
 
 Replaces constant by value
 
@@ -500,7 +622,11 @@ Replaces constant by value
 +$value === "development"
 ```
 
-## Rector\Rector\Class_\ParentClassToTraitsRector
+## Class_
+
+### `ParentClassToTraitsRector`
+
+- class: `Rector\Rector\Class_\ParentClassToTraitsRector`
 
 Replaces parent class to specific traits
 
@@ -512,7 +638,11 @@ Replaces parent class to specific traits
  }
 ```
 
-## Rector\YamlRector\Rector\ReplaceStringYamlRector
+## Rector
+
+### `ReplaceStringYamlRector`
+
+- class: `Rector\YamlRector\Rector\ReplaceStringYamlRector`
 
 Replaces one string by another. Use only for very specific strings only.
 
@@ -520,7 +650,9 @@ Replaces one string by another. Use only for very specific strings only.
 
 ```
 
-## Rector\YamlRector\Rector\ReplaceValueYamlRector
+### `ReplaceValueYamlRector`
+
+- class: `Rector\YamlRector\Rector\ReplaceValueYamlRector`
 
 Replaces specifically nested key value by another.
 
@@ -528,7 +660,9 @@ Replaces specifically nested key value by another.
 
 ```
 
-## Rector\YamlRector\Rector\RenameSubKeyYamlRector
+### `RenameSubKeyYamlRector`
+
+- class: `Rector\YamlRector\Rector\RenameSubKeyYamlRector`
 
 Replaces specifically nested key by another.
 
@@ -537,7 +671,11 @@ Replaces specifically nested key by another.
 +key > another_key > new_key: value
 ```
 
-## Rector\PHPUnit\Rector\ExceptionAnnotationRector
+## PHPUnit
+
+### `ExceptionAnnotationRector`
+
+- class: `Rector\PHPUnit\Rector\ExceptionAnnotationRector`
 
 Takes `setExpectedException()` 2nd and next arguments to own methods in PHPUnit.
 
@@ -554,7 +692,58 @@ Takes `setExpectedException()` 2nd and next arguments to own methods in PHPUnit.
  }
 ```
 
-## Rector\PHPUnit\Rector\SpecificMethod\AssertNotOperatorRector
+### `DelegateExceptionArgumentsRector`
+
+- class: `Rector\PHPUnit\Rector\DelegateExceptionArgumentsRector`
+
+Takes `setExpectedException()` 2nd and next arguments to own methods in PHPUnit.
+
+```diff
+-$this->setExpectedException(Exception::class, "Message", "CODE");
++$this->setExpectedException(Exception::class);
++$this->expectExceptionMessage("Message");
++$this->expectExceptionCode("CODE");
+```
+
+### `ArrayToYieldDataProviderRector`
+
+- class: `Rector\PHPUnit\Rector\ArrayToYieldDataProviderRector`
+
+Turns method data providers in PHPUnit from arrays to yield
+
+```diff
+ /**
+- * @return mixed[]
+  */
+-public function provide(): array
++public function provide(): Iterator
+ {
+-    return [
+-        ['item']
+-    ]
++    yield ['item'];
+ }
+```
+
+### `GetMockRector`
+
+- class: `Rector\PHPUnit\Rector\GetMockRector`
+
+Turns getMock*() methods to createMock()
+
+```diff
+-$this->getMock("Class")
++$this->createMock("Class")
+
+-$this->getMockWithoutInvokingTheOriginalConstructor("Class")
++$this->createMock("Class"
+```
+
+## PHPUnit\SpecificMethod
+
+### `AssertNotOperatorRector`
+
+- class: `Rector\PHPUnit\Rector\SpecificMethod\AssertNotOperatorRector`
 
 Turns not-operator comparisons to their method name alternatives in PHPUnit TestCase
 
@@ -566,7 +755,9 @@ Turns not-operator comparisons to their method name alternatives in PHPUnit Test
 +$this->assertTrue($foo, "message");
 ```
 
-## Rector\PHPUnit\Rector\SpecificMethod\AssertComparisonToSpecificMethodRector
+### `AssertComparisonToSpecificMethodRector`
+
+- class: `Rector\PHPUnit\Rector\SpecificMethod\AssertComparisonToSpecificMethodRector`
 
 Turns comparison operations to their method name alternatives in PHPUnit TestCase
 
@@ -578,7 +769,9 @@ Turns comparison operations to their method name alternatives in PHPUnit TestCas
 +$this->assertLessThanOrEqual($bar, $foo, "message");
 ```
 
-## Rector\PHPUnit\Rector\SpecificMethod\AssertPropertyExistsRector
+### `AssertPropertyExistsRector`
+
+- class: `Rector\PHPUnit\Rector\SpecificMethod\AssertPropertyExistsRector`
 
 Turns `property_exists` comparisons to their method name alternatives in PHPUnit TestCase
 
@@ -590,7 +783,9 @@ Turns `property_exists` comparisons to their method name alternatives in PHPUnit
 +$this->assertClassNotHasAttribute("property", "Class", "message");
 ```
 
-## Rector\PHPUnit\Rector\SpecificMethod\AssertTrueFalseInternalTypeToSpecificMethodRector
+### `AssertTrueFalseInternalTypeToSpecificMethodRector`
+
+- class: `Rector\PHPUnit\Rector\SpecificMethod\AssertTrueFalseInternalTypeToSpecificMethodRector`
 
 Turns true/false with internal type comparisons to their method name alternatives in PHPUnit TestCase
 
@@ -602,7 +797,9 @@ Turns true/false with internal type comparisons to their method name alternative
 +$this->assertNotInternalType({internal_type}, $anything, "message");
 ```
 
-## Rector\PHPUnit\Rector\SpecificMethod\AssertIssetToSpecificMethodRector
+### `AssertIssetToSpecificMethodRector`
+
+- class: `Rector\PHPUnit\Rector\SpecificMethod\AssertIssetToSpecificMethodRector`
 
 Turns isset comparisons to their method name alternatives in PHPUnit TestCase
 
@@ -614,7 +811,9 @@ Turns isset comparisons to their method name alternatives in PHPUnit TestCase
 +$this->assertArrayNotHasKey("foo", $anything, "message");
 ```
 
-## Rector\PHPUnit\Rector\SpecificMethod\AssertFalseStrposToContainsRector
+### `AssertFalseStrposToContainsRector`
+
+- class: `Rector\PHPUnit\Rector\SpecificMethod\AssertFalseStrposToContainsRector`
 
 Turns `strpos`/`stripos` comparisons to their method name alternatives in PHPUnit TestCase
 
@@ -626,7 +825,9 @@ Turns `strpos`/`stripos` comparisons to their method name alternatives in PHPUni
 +$this->assertContains("foo", $anything, "message");
 ```
 
-## Rector\PHPUnit\Rector\SpecificMethod\AssertSameBoolNullToSpecificMethodRector
+### `AssertSameBoolNullToSpecificMethodRector`
+
+- class: `Rector\PHPUnit\Rector\SpecificMethod\AssertSameBoolNullToSpecificMethodRector`
 
 Turns same bool and null comparisons to their method name alternatives in PHPUnit TestCase
 
@@ -638,7 +839,9 @@ Turns same bool and null comparisons to their method name alternatives in PHPUni
 +$this->assertNotFalse($anything);
 ```
 
-## Rector\PHPUnit\Rector\SpecificMethod\AssertCompareToSpecificMethodRector
+### `AssertCompareToSpecificMethodRector`
+
+- class: `Rector\PHPUnit\Rector\SpecificMethod\AssertCompareToSpecificMethodRector`
 
 Turns vague php-only method in PHPUnit TestCase to more specific
 
@@ -659,7 +862,9 @@ Turns vague php-only method in PHPUnit TestCase to more specific
 +$this->assertNot{function}($value, $anything, "message")
 ```
 
-## Rector\PHPUnit\Rector\SpecificMethod\AssertRegExpRector
+### `AssertRegExpRector`
+
+- class: `Rector\PHPUnit\Rector\SpecificMethod\AssertRegExpRector`
 
 Turns `preg_match` comparisons to their method name alternatives in PHPUnit TestCase
 
@@ -671,7 +876,9 @@ Turns `preg_match` comparisons to their method name alternatives in PHPUnit Test
 +$this->assertNotRegExp("/^Message for ".*"\.$/", $string, $message);
 ```
 
-## Rector\PHPUnit\Rector\SpecificMethod\AssertInstanceOfComparisonRector
+### `AssertInstanceOfComparisonRector`
+
+- class: `Rector\PHPUnit\Rector\SpecificMethod\AssertInstanceOfComparisonRector`
 
 Turns instanceof comparisons to their method name alternatives in PHPUnit TestCase
 
@@ -683,7 +890,9 @@ Turns instanceof comparisons to their method name alternatives in PHPUnit TestCa
 +$this->assertNotInstanceOf("Foo", $foo, "message");
 ```
 
-## Rector\PHPUnit\Rector\SpecificMethod\AssertTrueFalseToSpecificMethodRector
+### `AssertTrueFalseToSpecificMethodRector`
+
+- class: `Rector\PHPUnit\Rector\SpecificMethod\AssertTrueFalseToSpecificMethodRector`
 
 Turns true/false comparisons to their method name alternatives in PHPUnit TestCase when possible
 
@@ -692,48 +901,11 @@ Turns true/false comparisons to their method name alternatives in PHPUnit TestCa
 +$this->assertIsReadable($readmeFile, "message");
 ```
 
-## Rector\PHPUnit\Rector\DelegateExceptionArgumentsRector
+## Sylius\Review
 
-Takes `setExpectedException()` 2nd and next arguments to own methods in PHPUnit.
+### `ReplaceCreateMethodWithoutReviewerRector`
 
-```diff
--$this->setExpectedException(Exception::class, "Message", "CODE");
-+$this->setExpectedException(Exception::class);
-+$this->expectExceptionMessage("Message");
-+$this->expectExceptionCode("CODE");
-```
-
-## Rector\PHPUnit\Rector\ArrayToYieldDataProviderRector
-
-Turns method data providers in PHPUnit from arrays to yield
-
-```diff
- /**
-- * @return mixed[]
-  */
--public function provide(): array
-+public function provide(): Iterator
- {
--    return [
--        ['item']
--    ]
-+    yield ['item'];
- }
-```
-
-## Rector\PHPUnit\Rector\GetMockRector
-
-Turns getMock*() methods to createMock()
-
-```diff
--$this->getMock("Class")
-+$this->createMock("Class")
-
--$this->getMockWithoutInvokingTheOriginalConstructor("Class")
-+$this->createMock("Class"
-```
-
-## Rector\Sylius\Rector\Review\ReplaceCreateMethodWithoutReviewerRector
+- class: `Rector\Sylius\Rector\Review\ReplaceCreateMethodWithoutReviewerRector`
 
 Turns `createForSubjectWithReviewer()` with null review to standalone method in Sylius
 
@@ -742,7 +914,11 @@ Turns `createForSubjectWithReviewer()` with null review to standalone method in 
 +$this->createForSubject($subject)
 ```
 
-## Rector\Symfony\Rector\HttpKernel\GetRequestRector
+## Symfony\HttpKernel
+
+### `GetRequestRector`
+
+- class: `Rector\Symfony\Rector\HttpKernel\GetRequestRector`
 
 Turns fetching of dependencies via `$this->get()` to constructor injection in Command and Controller in Symfony
 
@@ -760,7 +936,11 @@ Turns fetching of dependencies via `$this->get()` to constructor injection in Co
  }
 ```
 
-## Rector\Symfony\Rector\Controller\AddFlashRector
+## Symfony\Controller
+
+### `AddFlashRector`
+
+- class: `Rector\Symfony\Rector\Controller\AddFlashRector`
 
 Turns long flash adding to short helper method in Controller in Symfony
 
@@ -775,7 +955,9 @@ Turns long flash adding to short helper method in Controller in Symfony
  }
 ```
 
-## Rector\Symfony\Rector\Controller\RedirectToRouteRector
+### `RedirectToRouteRector`
+
+- class: `Rector\Symfony\Rector\Controller\RedirectToRouteRector`
 
 Turns redirect to route to short helper method in Controller in Symfony
 
@@ -784,7 +966,9 @@ Turns redirect to route to short helper method in Controller in Symfony
 +$this->redirectToRoute("homepage");
 ```
 
-## Rector\Symfony\Rector\Controller\ActionSuffixRemoverRector
+### `ActionSuffixRemoverRector`
+
+- class: `Rector\Symfony\Rector\Controller\ActionSuffixRemoverRector`
 
 Removes Action suffixes from methods in Symfony Controllers
 
@@ -798,7 +982,11 @@ Removes Action suffixes from methods in Symfony Controllers
  }
 ```
 
-## Rector\Symfony\Rector\Validator\ConstraintUrlOptionRector
+## Symfony\Validator
+
+### `ConstraintUrlOptionRector`
+
+- class: `Rector\Symfony\Rector\Validator\ConstraintUrlOptionRector`
 
 Turns true value to `Url::CHECK_DNS_TYPE_ANY` in Validator in Symfony.
 
@@ -807,7 +995,11 @@ Turns true value to `Url::CHECK_DNS_TYPE_ANY` in Validator in Symfony.
 +$constraint = new Url(["checkDNS" => Url::CHECK_DNS_TYPE_ANY]);
 ```
 
-## Rector\Symfony\Rector\Console\ConsoleExceptionToErrorEventConstantRector
+## Symfony\Console
+
+### `ConsoleExceptionToErrorEventConstantRector`
+
+- class: `Rector\Symfony\Rector\Console\ConsoleExceptionToErrorEventConstantRector`
 
 Turns old event name with EXCEPTION to ERROR constant in Console in Symfony
 
@@ -819,7 +1011,11 @@ Turns old event name with EXCEPTION to ERROR constant in Console in Symfony
 +Symfony\Component\Console\ConsoleEvents::ERROR
 ```
 
-## Rector\Symfony\Rector\Yaml\SpaceBetweenKeyAndValueYamlRector
+## Symfony\Yaml
+
+### `SpaceBetweenKeyAndValueYamlRector`
+
+- class: `Rector\Symfony\Rector\Yaml\SpaceBetweenKeyAndValueYamlRector`
 
 Mappings with a colon (:) that is not followed by a whitespace will get one
 
@@ -828,7 +1024,9 @@ Mappings with a colon (:) that is not followed by a whitespace will get one
 +key: value
 ```
 
-## Rector\Symfony\Rector\Yaml\SessionStrictTrueByDefaultYamlRector
+### `SessionStrictTrueByDefaultYamlRector`
+
+- class: `Rector\Symfony\Rector\Yaml\SessionStrictTrueByDefaultYamlRector`
 
 session > use_strict_mode is true by default and can be removed
 
@@ -837,7 +1035,11 @@ session > use_strict_mode is true by default and can be removed
 +session:
 ```
 
-## Rector\Symfony\Rector\DependencyInjection\ContainerBuilderCompileEnvArgumentRector
+## Symfony\DependencyInjection
+
+### `ContainerBuilderCompileEnvArgumentRector`
+
+- class: `Rector\Symfony\Rector\DependencyInjection\ContainerBuilderCompileEnvArgumentRector`
 
 Turns old default value to parameter in ContinerBuilder->build() method in DI in Symfony
 
@@ -846,7 +1048,11 @@ Turns old default value to parameter in ContinerBuilder->build() method in DI in
 +$containerBuilder = new Symfony\Component\DependencyInjection\ContainerBuilder(); $containerBuilder->compile(true);
 ```
 
-## Rector\Symfony\Rector\VarDumper\VarDumperTestTraitMethodArgsRector
+## Symfony\VarDumper
+
+### `VarDumperTestTraitMethodArgsRector`
+
+- class: `Rector\Symfony\Rector\VarDumper\VarDumperTestTraitMethodArgsRector`
 
 Adds new `$format` argument in `VarDumperTestTrait->assertDumpEquals()` in Validator in Symfony.
 
@@ -858,7 +1064,11 @@ Adds new `$format` argument in `VarDumperTestTrait->assertDumpEquals()` in Valid
 +VarDumperTestTrait->assertDumpMatchesFormat($dump, $format, $context = null,  $mesage = "");
 ```
 
-## Rector\Symfony\Rector\FrameworkBundle\GetParameterToConstructorInjectionRector
+## Symfony\FrameworkBundle
+
+### `GetParameterToConstructorInjectionRector`
+
+- class: `Rector\Symfony\Rector\FrameworkBundle\GetParameterToConstructorInjectionRector`
 
 Turns fetching of parameters via `getParameter()` in ContainerAware to constructor injection in Command and Controller in Symfony
 
@@ -881,7 +1091,9 @@ Turns fetching of parameters via `getParameter()` in ContainerAware to construct
  }
 ```
 
-## Rector\Symfony\Rector\FrameworkBundle\GetToConstructorInjectionRector
+### `GetToConstructorInjectionRector`
+
+- class: `Rector\Symfony\Rector\FrameworkBundle\GetToConstructorInjectionRector`
 
 Turns fetching of dependencies via `$this->get()` to constructor injection in Command and Controller in Symfony
 
@@ -903,7 +1115,9 @@ Turns fetching of dependencies via `$this->get()` to constructor injection in Co
  }
 ```
 
-## Rector\Symfony\Rector\FrameworkBundle\ContainerGetToConstructorInjectionRector
+### `ContainerGetToConstructorInjectionRector`
+
+- class: `Rector\Symfony\Rector\FrameworkBundle\ContainerGetToConstructorInjectionRector`
 
 Turns fetching of dependencies via `$container->get()` in ContainerAware to constructor injection in Command and Controller in Symfony
 
@@ -927,7 +1141,11 @@ Turns fetching of dependencies via `$container->get()` in ContainerAware to cons
  }
 ```
 
-## Rector\Symfony\Rector\Form\FormIsValidRector
+## Symfony\Form
+
+### `FormIsValidRector`
+
+- class: `Rector\Symfony\Rector\Form\FormIsValidRector`
 
 Adds `$form->isSubmitted()` validatoin to all `$form->isValid()` calls in Form in Symfony
 
@@ -936,7 +1154,9 @@ Adds `$form->isSubmitted()` validatoin to all `$form->isValid()` calls in Form i
 +if ($form->isSubmitted() && $form->isValid()) { ... };
 ```
 
-## Rector\Symfony\Rector\Form\OptionNameRector
+### `OptionNameRector`
+
+- class: `Rector\Symfony\Rector\Form\OptionNameRector`
 
 Turns old option names to new ones in FormTypes in Form in Symfony
 
@@ -945,7 +1165,9 @@ Turns old option names to new ones in FormTypes in Form in Symfony
 +$builder->add("...", ["scale" => "...", "inherit_data" => "..."];
 ```
 
-## Rector\Symfony\Rector\Form\StringFormTypeToClassRector
+### `StringFormTypeToClassRector`
+
+- class: `Rector\Symfony\Rector\Form\StringFormTypeToClassRector`
 
 Turns string Form Type references to their CONSTANT alternatives in FormTypes in Form in Symfony
 
@@ -954,7 +1176,9 @@ Turns string Form Type references to their CONSTANT alternatives in FormTypes in
 +$form->add("name", \Symfony\Component\Form\Extension\Core\Type\TextType::class);
 ```
 
-## Rector\Symfony\Rector\Form\FormTypeGetParentRector
+### `FormTypeGetParentRector`
+
+- class: `Rector\Symfony\Rector\Form\FormTypeGetParentRector`
 
 Turns string Form Type references to their CONSTANT alternatives in `getParent()` and `getExtendedType()` methods in Form in Symfony
 
@@ -966,7 +1190,11 @@ Turns string Form Type references to their CONSTANT alternatives in `getParent()
 +function getExtendedType() { return CollectionType::class; }
 ```
 
-## Rector\Symfony\Rector\Process\ProcessBuilderGetProcessRector
+## Symfony\Process
+
+### `ProcessBuilderGetProcessRector`
+
+- class: `Rector\Symfony\Rector\Process\ProcessBuilderGetProcessRector`
 
 Removes `$processBuilder->getProcess()` calls to $processBuilder in Process in Symfony, because ProcessBuilder was removed. This is part of multi-step Rector and has very narrow focus.
 
@@ -978,7 +1206,9 @@ Removes `$processBuilder->getProcess()` calls to $processBuilder in Process in S
 +$commamdLine = $processBuilder->getCommandLine();
 ```
 
-## Rector\Symfony\Rector\Process\ProcessBuilderInstanceRector
+### `ProcessBuilderInstanceRector`
+
+- class: `Rector\Symfony\Rector\Process\ProcessBuilderInstanceRector`
 
 Turns `ProcessBuilder::instance()` to new ProcessBuilder in Process in Symfony. Part of multi-step Rector.
 
@@ -987,7 +1217,11 @@ Turns `ProcessBuilder::instance()` to new ProcessBuilder in Process in Symfony. 
 +$processBuilder = new Symfony\Component\Process\ProcessBuilder($args);
 ```
 
-## Rector\Doctrine\Rector\AliasToClassRector
+## Doctrine
+
+### `AliasToClassRector`
+
+- class: `Rector\Doctrine\Rector\AliasToClassRector`
 
 Replaces doctrine alias with class.
 
@@ -996,7 +1230,11 @@ Replaces doctrine alias with class.
 +$em->getRepository(\App\Entity\Post::class);
 ```
 
-## Rector\PhpParser\Rector\RemoveNodeRector
+## PhpParser
+
+### `RemoveNodeRector`
+
+- class: `Rector\PhpParser\Rector\RemoveNodeRector`
 
 Turns integer return to remove node to constant in NodeVisitor of PHP-Parser
 
@@ -1008,7 +1246,9 @@ Turns integer return to remove node to constant in NodeVisitor of PHP-Parser
  }
 ```
 
-## Rector\PhpParser\Rector\ParamAndStaticVarNameRector
+### `ParamAndStaticVarNameRector`
+
+- class: `Rector\PhpParser\Rector\ParamAndStaticVarNameRector`
 
 Turns old string `var` to `var->name` sub-variable in Node of PHP-Parser
 
@@ -1020,7 +1260,9 @@ Turns old string `var` to `var->name` sub-variable in Node of PHP-Parser
 +$staticVarNode->var->name;
 ```
 
-## Rector\PhpParser\Rector\IdentifierRector
+### `IdentifierRector`
+
+- class: `Rector\PhpParser\Rector\IdentifierRector`
 
 Turns node string names to Identifier object in php-parser
 
@@ -1030,7 +1272,9 @@ Turns node string names to Identifier object in php-parser
 +$name = $constNode->name->toString();'
 ```
 
-## Rector\PhpParser\Rector\CatchAndClosureUseNameRector
+### `CatchAndClosureUseNameRector`
+
+- class: `Rector\PhpParser\Rector\CatchAndClosureUseNameRector`
 
 Turns `$catchNode->var` to its new `name` property in php-parser
 
@@ -1039,7 +1283,9 @@ Turns `$catchNode->var` to its new `name` property in php-parser
 +$catchNode->var->name
 ```
 
-## Rector\PhpParser\Rector\SetLineRector
+### `SetLineRector`
+
+- class: `Rector\PhpParser\Rector\SetLineRector`
 
 Turns standalone line method to attribute in Node of PHP-Parser
 
@@ -1048,7 +1294,9 @@ Turns standalone line method to attribute in Node of PHP-Parser
 +$node->setAttribute("line", 5);
 ```
 
-## Rector\PhpParser\Rector\UseWithAliasRector
+### `UseWithAliasRector`
+
+- class: `Rector\PhpParser\Rector\UseWithAliasRector`
 
 Turns use property to method and `$node->alias` to last name in UseAlias Node of PHP-Parser
 
@@ -1060,7 +1308,11 @@ Turns use property to method and `$node->alias` to last name in UseAlias Node of
 +$node->alias
 ```
 
-## Rector\Sensio\Rector\FrameworkExtraBundle\TemplateAnnotationRector
+## Sensio\FrameworkExtraBundle
+
+### `TemplateAnnotationRector`
+
+- class: `Rector\Sensio\Rector\FrameworkExtraBundle\TemplateAnnotationRector`
 
 Turns @Template annotation to explicit method call in Controller of FrameworkExtraBundle in Symfony
 

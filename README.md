@@ -108,7 +108,13 @@ Do you need to upgrade to **Symfony 4.0**, for example?
 4. What does loaded Rectors do?
 
     ```bash
-    vendor/bin/rector describe  --level symfony33
+    vendor/bin/rector describe --level symfony33
+    ```
+
+5. What all Rectors do?
+
+    ```bash
+    vendor/bin/rector describe --all
     ```
 
 ### B. Custom Sets
