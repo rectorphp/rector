@@ -3,7 +3,6 @@
 namespace Rector\Console\Command;
 
 use Nette\Loaders\RobotLoader;
-use Rector\Configuration\Option;
 use Rector\Console\ConsoleStyle;
 use Rector\Console\Output\DescribeCommandReporter;
 use Rector\Contract\Rector\RectorInterface;
@@ -84,7 +83,6 @@ final class DescribeCommand extends Command
     {
         $this->setName(CommandNaming::classToName(self::class));
         $this->setDescription('Shows detailed description of loaded Rectors.');
-        $this->addOption(Option::OPTION_NO_DIFFS, null, InputOption::VALUE_NONE, 'Hide examplary diffs.');
         $this->addOption(self::OPTION_FORMAT, null, InputOption::VALUE_REQUIRED, 'Output format.', self::FORMAT_CLI);
         $this->addOption(self::OPTION_ALL, null, InputOption::VALUE_NONE, 'Describe all Rectors');
     }
@@ -99,11 +97,7 @@ final class DescribeCommand extends Command
 
         $this->writeHeadline($input, $outputFormat);
 
-        $this->describeCommandReporter->reportRectorsInFormat(
-            $this->getRectorsByInput($input),
-            $outputFormat,
-            ! $input->getOption(Option::OPTION_NO_DIFFS)
-        );
+        $this->describeCommandReporter->reportRectorsInFormat($this->getRectorsByInput($input), $outputFormat);
 
         return 0;
     }

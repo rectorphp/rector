@@ -7,6 +7,7 @@ use Rector\Console\Command\DescribeCommand;
 use Rector\Console\ConsoleStyle;
 use Rector\ConsoleDiffer\MarkdownDifferAndFormatter;
 use Rector\Contract\Rector\RectorInterface;
+use Rector\Contract\RectorDefinition\CodeSampleInterface;
 use Rector\RectorDefinition\CodeSample;
 
 final class DescribeCommandReporter
@@ -30,12 +31,12 @@ final class DescribeCommandReporter
     /**
      * @param RectorInterface[] $rectors
      */
-    public function reportRectorsInFormat(array $rectors, string $outputFormat, bool $showDiffs): void
+    public function reportRectorsInFormat(array $rectors, string $outputFormat): void
     {
         if ($outputFormat === DescribeCommand::FORMAT_CLI) {
             $i = 0;
             foreach ($rectors as $rector) {
-                $this->printWithCliFormat(++$i, $showDiffs, $rector);
+                $this->printWithCliFormat(++$i, $rector);
             }
             return;
         }
@@ -48,12 +49,12 @@ final class DescribeCommandReporter
             $this->consoleStyle->newLine();
 
             foreach ($rectors as $rector) {
-                $this->printWithMarkdownFormat($showDiffs, $rector);
+                $this->printWithMarkdownFormat($rector);
             }
         }
     }
 
-    private function printWithCliFormat(int $i, bool $showDiffs, RectorInterface $rector): void
+    private function printWithCliFormat(int $i, RectorInterface $rector): void
     {
         $this->consoleStyle->section(sprintf('%d) %s', $i, get_class($rector)));
 
@@ -62,15 +63,13 @@ final class DescribeCommandReporter
             $this->consoleStyle->writeln(' * ' . $rectorDefinition->getDescription());
         }
 
-        if ($showDiffs) {
-            $this->describeRectorCodeSamples($rectorDefinition->getCodeSamples());
-        }
+        $this->describeRectorCodeSamples($rectorDefinition->getCodeSamples());
 
         $this->consoleStyle->newLine(2);
     }
 
     /**
-     * @param CodeSample[] $codeSamples
+     * @param CodeSampleInterface[] $codeSamples
      */
     private function describeRectorCodeSamples(array $codeSamples): void
     {
@@ -82,7 +81,7 @@ final class DescribeCommandReporter
         }
     }
 
-    private function printWithMarkdownFormat(bool $showDiffs, RectorInterface $rector): void
+    private function printWithMarkdownFormat(RectorInterface $rector): void
     {
         $rectorClass = get_class($rector);
         $rectorClassParts = explode('\\', $rectorClass);
@@ -99,23 +98,21 @@ final class DescribeCommandReporter
             $this->consoleStyle->writeln($rectorDefinition->getDescription());
         }
 
-        if ($showDiffs) {
-            $this->consoleStyle->newLine();
-            $this->consoleStyle->writeln('```diff');
+        $this->consoleStyle->newLine();
+        $this->consoleStyle->writeln('```diff');
 
-            [$codeBefore, $codeAfter] = $this->joinBeforeAndAfter($rectorDefinition->getCodeSamples());
-            $diff = $this->markdownDifferAndFormatter->bareDiffAndFormatWithoutColors($codeBefore, $codeAfter);
-            $this->consoleStyle->write($diff);
+        [$codeBefore, $codeAfter] = $this->joinBeforeAndAfter($rectorDefinition->getCodeSamples());
+        $diff = $this->markdownDifferAndFormatter->bareDiffAndFormatWithoutColors($codeBefore, $codeAfter);
+        $this->consoleStyle->write($diff);
 
-            $this->consoleStyle->newLine();
-            $this->consoleStyle->writeln('```');
-        }
+        $this->consoleStyle->newLine();
+        $this->consoleStyle->writeln('```');
 
         $this->consoleStyle->newLine(1);
     }
 
     /**
-     * @param CodeSample[] $codeSamples
+     * @param CodeSampleInterface[] $codeSamples
      * @return string[]
      */
     private function joinBeforeAndAfter(array $codeSamples): array

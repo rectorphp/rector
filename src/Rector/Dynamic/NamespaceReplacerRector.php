@@ -11,7 +11,6 @@ use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
 use Rector\Node\Attribute;
 use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
@@ -40,8 +39,8 @@ final class NamespaceReplacerRector extends AbstractRector
                 '$someObject = new SomeNewNamespace\SomeClass;',
                 [
                     'oldToNewNamespaces' => [
-                        'SomeOldNamespace' => 'SomeNewNamespace'
-                    ]
+                        'SomeOldNamespace' => 'SomeNewNamespace',
+                    ],
                 ]
             ),
         ]);

@@ -18,7 +18,7 @@ final class RectorDefinition
     private $codeSamples = [];
 
     /**
-     * @param CodeSample[] $codeSamples
+     * @param CodeSampleInterface[] $codeSamples
      */
     public function __construct(string $description, array $codeSamples)
     {
