@@ -7,12 +7,13 @@ use Nette\Utils\Strings;
 use Rector\Console\ConsoleStyle;
 use Rector\ConsoleDiffer\MarkdownDifferAndFormatter;
 use Rector\Contract\Rector\RectorInterface;
-use Rector\Contract\RectorDefinition\CodeSampleInterface;
 use Rector\Exception\ShouldNotHappenException;
+use Rector\RectorDefinition\ConfiguredCodeSample;
 use ReflectionClass;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Yaml\Yaml;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 
 final class GenerateRectorOverviewCommand extends Command
@@ -101,38 +102,33 @@ final class GenerateRectorOverviewCommand extends Command
             $this->consoleStyle->writeln($rectorDefinition->getDescription());
         }
 
-        $this->consoleStyle->newLine();
-        $this->consoleStyle->writeln('```diff');
+        foreach ($rectorDefinition->getCodeSamples() as $codeSample) {
+            $this->consoleStyle->newLine();
 
-        [$codeBefore, $codeAfter] = $this->joinBeforeAndAfter($rectorDefinition->getCodeSamples());
-        $diff = $this->markdownDifferAndFormatter->bareDiffAndFormatWithoutColors($codeBefore, $codeAfter);
-        $this->consoleStyle->write($diff);
+            if ($codeSample instanceof ConfiguredCodeSample) {
+                $configuration = [
+                    'services' => [
+                        get_class($rector) => $codeSample->getConfiguration(),
+                    ],
+                ];
 
-        $this->consoleStyle->newLine();
-        $this->consoleStyle->writeln('```');
+                $configuration = Yaml::dump($configuration, Yaml::DUMP_MULTI_LINE_LITERAL_BLOCK);
 
-        $this->consoleStyle->newLine(1);
-    }
+                $this->printCodeWrapped($configuration, 'yaml');
 
-    /**
-     * @param CodeSampleInterface[] $codeSamples
-     * @return string[]
-     */
-    private function joinBeforeAndAfter(array $codeSamples): array
-    {
-        $separator = PHP_EOL . PHP_EOL;
+                $this->consoleStyle->newLine();
+                $this->consoleStyle->writeln('↓');
+                $this->consoleStyle->newLine();
+            }
 
-        $codesBefore = [];
-        $codesAfter = [];
-        foreach ($codeSamples as $codeSample) {
-            $codesBefore[] = $codeSample->getCodeBefore();
-            $codesAfter[] = $codeSample->getCodeAfter();
+            $diff = $this->markdownDifferAndFormatter->bareDiffAndFormatWithoutColors(
+                $codeSample->getCodeBefore(),
+                $codeSample->getCodeAfter()
+            );
+            $this->printCodeWrapped($diff, 'diff');
         }
 
-        $codeBefore = implode($separator, $codesBefore);
-        $codeAfter = implode($separator, $codesAfter);
-
-        return [$codeBefore, $codeAfter];
+        $this->consoleStyle->newLine(1);
     }
 
     /**
@@ -147,6 +143,7 @@ final class GenerateRectorOverviewCommand extends Command
             $rectorsByGroup[$rectorGroup][] = $rector;
         }
 
+        // sort groups by name to make them more readable
         ksort($rectorsByGroup);
 
         return $rectorsByGroup;
@@ -157,12 +154,12 @@ final class GenerateRectorOverviewCommand extends Command
         $rectorClassParts = explode('\\', $rectorClass);
 
         // basic Rectors
-        if (Strings::match($rectorClass, '#^Rector\\\\Rector\\\\#')) {
+        if (Strings::startsWith($rectorClass, 'Rector\Rector\\')) {
             return $rectorClassParts[count($rectorClassParts) - 2];
         }
 
         // Yaml
-        if (Strings::match($rectorClass, '#^Rector\\\\YamlRector\\\\#')) {
+        if (Strings::startsWith($rectorClass, 'Rector\YamlRector\\')) {
             return 'Yaml';
         }
 
@@ -185,7 +182,7 @@ final class GenerateRectorOverviewCommand extends Command
     /**
      * @param RectorInterface[][] $rectorsByGroup
      */
-    private function printMenu(array $rectorsByGroup): void
+    private function printGroupsMenu(array $rectorsByGroup): void
     {
         foreach ($rectorsByGroup as $group => $rectors) {
             $escapedGroup = str_replace('\\', '', $group);
@@ -252,7 +249,7 @@ final class GenerateRectorOverviewCommand extends Command
      */
     private function printRectorsByGroup(array $rectorsByGroup): void
     {
-        $this->printMenu($rectorsByGroup);
+        $this->printGroupsMenu($rectorsByGroup);
 
         foreach ($rectorsByGroup as $group => $rectors) {
             $this->consoleStyle->writeln('## ' . $group);
@@ -262,5 +259,13 @@ final class GenerateRectorOverviewCommand extends Command
                 $this->printRector($rector);
             }
         }
+    }
+
+    /**
+     * @param mixed $configuration
+     */
+    private function printCodeWrapped($configuration, string $format): void
+    {
+        $this->consoleStyle->writeln(sprintf('```%s%s%s%s```', $format, PHP_EOL, $configuration, PHP_EOL));
     }
 }

@@ -38,7 +38,7 @@ final class NamespaceReplacerRector extends AbstractRector
                 '$someObject = new SomeOldNamespace\SomeClass;',
                 '$someObject = new SomeNewNamespace\SomeClass;',
                 [
-                    'oldToNewNamespaces' => [
+                    '$oldToNewNamespaces' => [
                         'SomeOldNamespace' => 'SomeNewNamespace',
                     ],
                 ]

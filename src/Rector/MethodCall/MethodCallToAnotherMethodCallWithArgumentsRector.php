@@ -76,7 +76,6 @@ final class MethodCallToAnotherMethodCallWithArgumentsRector extends AbstractRec
                 <<<'CODE_SAMPLE'
 $serviceDefinition = new Nette\DI\ServiceDefinition;
 $serviceDefinition->setInject();
-$END
 CODE_SAMPLE
                 ,
                 <<<'CODE_SAMPLE'
