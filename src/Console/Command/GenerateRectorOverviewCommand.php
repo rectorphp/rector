@@ -46,12 +46,20 @@ final class GenerateRectorOverviewCommand extends Command
         $this->consoleStyle->writeln('# All Rectors Overview');
         $this->consoleStyle->newLine();
 
-        // @todo menu to project + general rectors
+        $this->consoleStyle->writeln('- [Projects](#projects)');
+        $this->consoleStyle->writeln('- [General](#general)');
+        $this->consoleStyle->newLine();
+
+        $this->consoleStyle->writeln('## Projects');
+        $this->consoleStyle->newLine();
 
         $rectorsByGroup = $this->groupRectors($this->getProjectsRectors());
         $this->printRectorsByGroup($rectorsByGroup);
 
         $this->consoleStyle->writeln('---');
+
+        $this->consoleStyle->writeln('## General');
+        $this->consoleStyle->newLine();
 
         $rectorsByGroup = $this->groupRectors($this->getGeneralRectors());
         $this->printRectorsByGroup($rectorsByGroup);
@@ -138,6 +146,8 @@ final class GenerateRectorOverviewCommand extends Command
             $rectorGroup = $this->detectGroupFromRectorClass(get_class($rector));
             $rectorsByGroup[$rectorGroup][] = $rector;
         }
+
+        ksort($rectorsByGroup);
 
         return $rectorsByGroup;
     }
