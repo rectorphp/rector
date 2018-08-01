@@ -10,6 +10,7 @@ use Rector\Node\Attribute;
 use Rector\Node\NodeFactory;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class RenameClassConstantsUseToStringsRector extends AbstractRector
@@ -34,11 +35,8 @@ final class RenameClassConstantsUseToStringsRector extends AbstractRector
      */
     public function __construct(
         NodeFactory $nodeFactory,
-        string $class = 'Nette\Configurator',
-        array $oldConstantToNewValue = [
-            'DEVELOPMENT' => 'development',
-            'PRODUCTION' => 'production',
-        ]
+        string $class,
+        array $oldConstantToNewValue
     ) {
         $this->nodeFactory = $nodeFactory;
         $this->class = $class;
@@ -48,7 +46,17 @@ final class RenameClassConstantsUseToStringsRector extends AbstractRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Replaces constant by value', [
-            new CodeSample('$value === Nette\Configurator::DEVELOPMENT', '$value === "development"'),
+            new ConfiguredCodeSample(
+                '$value === Nette\Configurator::DEVELOPMENT',
+                '$value === "development"',
+                [
+                    '$class' => 'Nette\Configurator',
+                    '$oldConstantToNewValue' => [
+                        'DEVELOPMENT' => 'development',
+                        'PRODUCTION' => 'production',
+                    ]
+                ]
+            ),
         ]);
     }
 

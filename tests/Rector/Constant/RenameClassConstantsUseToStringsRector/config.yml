@@ -1,2 +1,6 @@
 services:
-    Rector\Rector\Constant\RenameClassConstantsUseToStringsRector: ~
+    Rector\Rector\Constant\RenameClassConstantsUseToStringsRector:
+        $class: 'Nette\Configurator'
+        $oldConstantToNewValue:
+            'DEVELOPMENT': 'development'
+            'PRODUCTION': 'production'
