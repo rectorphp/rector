@@ -11,20 +11,21 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Configuration\Rector\ArgumentRemoverRecipe;
 use Rector\Node\Attribute;
-use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use SomeClass;
 
 final class ArgumentRemoverRector extends AbstractArgumentRector
 {
     /**
      * @var ArgumentRemoverRecipe[]
      */
-    private $argumentRemoverRecipes = [];
+    private $recipes = [];
 
     /**
      * @var ArgumentRemoverRecipe[]
      */
-    private $activeArgumentRemoverRecipes = [];
+    private $activeRecipes = [];
 
     /**
      * @param mixed[] $argumentChangesByMethodAndType
@@ -32,7 +33,7 @@ final class ArgumentRemoverRector extends AbstractArgumentRector
     public function __construct(array $argumentChangesByMethodAndType)
     {
         foreach ($argumentChangesByMethodAndType as $configurationArray) {
-            $this->argumentRemoverRecipes[] = ArgumentRemoverRecipe::createFromArray($configurationArray);
+            $this->recipes[] = ArgumentRemoverRecipe::createFromArray($configurationArray);
         }
     }
 
@@ -41,7 +42,7 @@ final class ArgumentRemoverRector extends AbstractArgumentRector
         return new RectorDefinition(
             'Removes defined arguments in defined methods and their calls.',
             [
-                new CodeSample(
+                new ConfiguredCodeSample(
                     <<<'CODE_SAMPLE'
 $someObject = new SomeClass;
 $someObject->someMethod(true);
@@ -51,6 +52,15 @@ CODE_SAMPLE
 $someObject = new SomeClass;
 $someObject->someMethod();'
 CODE_SAMPLE
+                    ,
+                    [
+                        '$argumentChangesByMethodAndType' => [
+                            'class' => SomeClass::class,
+                            'method' => 'someMethod',
+                            'position' => 0,
+                            'value' => 'true',
+                        ],
+                    ]
                 ),
             ]
         );
@@ -62,9 +72,9 @@ CODE_SAMPLE
             return false;
         }
 
-        $this->activeArgumentRemoverRecipes = $this->matchArgumentChanges($node);
+        $this->activeRecipes = $this->matchArgumentChanges($node);
 
-        return (bool) $this->activeArgumentRemoverRecipes;
+        return (bool) $this->activeRecipes;
     }
 
     /**
@@ -87,7 +97,7 @@ CODE_SAMPLE
     {
         $argumentReplacerRecipes = [];
 
-        foreach ($this->argumentRemoverRecipes as $argumentRemoverRecipe) {
+        foreach ($this->recipes as $argumentRemoverRecipe) {
             if ($this->isNodeToRecipeMatch($node, $argumentRemoverRecipe)) {
                 $argumentReplacerRecipes[] = $argumentRemoverRecipe;
             }
@@ -102,7 +112,7 @@ CODE_SAMPLE
      */
     private function processArgumentNodes(array $argumentNodes): array
     {
-        foreach ($this->activeArgumentRemoverRecipes as $activeArgumentRemoverRecipe) {
+        foreach ($this->activeRecipes as $activeArgumentRemoverRecipe) {
             $position = $activeArgumentRemoverRecipe->getPosition();
 
             if ($activeArgumentRemoverRecipe->getValue() === null) {

@@ -12,8 +12,9 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Configuration\Rector\ArgumentDefaultValueReplacerRecipe;
 use Rector\Node\NodeFactory;
-use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use SomeClass;
 
 final class ArgumentDefaultValueReplacerRector extends AbstractArgumentRector
 {
@@ -58,7 +59,7 @@ final class ArgumentDefaultValueReplacerRector extends AbstractArgumentRector
         return new RectorDefinition(
             'Replaces defined map of arguments in defined methods and their calls.',
             [
-                new CodeSample(
+                new ConfiguredCodeSample(
                     <<<'CODE_SAMPLE'
 $someObject = new SomeClass;
 $someObject->someMethod(SomeClass::OLD_CONSTANT);
@@ -68,6 +69,16 @@ CODE_SAMPLE
 $someObject = new SomeClass;
 $someObject->someMethod(false);'
 CODE_SAMPLE
+                    ,
+                    [
+                        '$argumentChangesByMethodAndType' => [
+                            'class' => SomeClass::class,
+                            'method' => 'someMethod',
+                            'position' => 0,
+                            'before' => 'SomeClass::OLD_CONSTANT',
+                            'after' => 'false',
+                        ],
+                    ]
                 ),
             ]
         );

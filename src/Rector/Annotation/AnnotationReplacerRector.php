@@ -5,10 +5,11 @@ namespace Rector\Rector\Annotation;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
+use PHPUnit\Framework\TestCase;
 use Rector\BetterPhpDocParser\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\Node\Attribute;
 use Rector\Rector\AbstractPHPUnitRector;
-use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class AnnotationReplacerRector extends AbstractPHPUnitRector
@@ -42,16 +43,34 @@ final class AnnotationReplacerRector extends AbstractPHPUnitRector
         return new RectorDefinition(
             'Turns defined annotations above properties and methods to their new values.',
             [
-                new CodeSample(
+                new ConfiguredCodeSample(
                     <<<'CODE_SAMPLE'
-/** @test */
-public function someMethod() {};
+class SomeTest extends PHPUnit\Framework\TestCase
+{
+    /** @test */
+    public function someMethod()
+    {
+    }
+}
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
-/** @scenario */
-public function someMethod() {};
+class SomeTest extends PHPUnit\Framework\TestCase
+{
+    /** @scenario */
+    public function someMethod()
+    {
+    }
+}
 CODE_SAMPLE
+                    ,
+                    [
+                        '$classToAnnotationMap' => [
+                            TestCase::class => [
+                                'test' => 'scenario',
+                            ],
+                        ],
+                    ]
                 ),
             ]
         );

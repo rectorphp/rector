@@ -9,7 +9,7 @@ use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Property;
 use Rector\Node\Attribute;
-use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class ValueObjectRemoverRector extends AbstractValueObjectRemoverRector
@@ -17,13 +17,42 @@ final class ValueObjectRemoverRector extends AbstractValueObjectRemoverRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Remove values objects and use directly the value.', [
-            new CodeSample('$name = new ValueObject("name");', '$name = "name";'),
-            new CodeSample(
-                'function someFunction(ValueObject $name) { }',
-                'function someFunction(string $name) { }'
+            new ConfiguredCodeSample(
+                '$name = new ValueObject("name");',
+                '$name = "name";',
+                [
+                    '$valueObjectsToSimpleTypes' => [
+                        'ValueObject' => 'string',
+                    ],
+                ]
             ),
-            new CodeSample('function someFunction(): ValueObject { }', 'function someFunction(): string { }'),
-            new CodeSample('function someFunction(): ?ValueObject { }', 'function someFunction(): ?string { }'),
+            new ConfiguredCodeSample(
+                'function someFunction(ValueObject $name) { }',
+                'function someFunction(string $name) { }',
+                [
+                    '$valueObjectsToSimpleTypes' => [
+                        'ValueObject' => 'string',
+                    ],
+                ]
+            ),
+            new ConfiguredCodeSample(
+                'function someFunction(): ValueObject { }',
+                'function someFunction(): string { }',
+                [
+                    '$valueObjectsToSimpleTypes' => [
+                        'ValueObject' => 'string',
+                    ],
+                ]
+            ),
+            new ConfiguredCodeSample(
+                'function someFunction(): ?ValueObject { }',
+                'function someFunction(): ?string { }',
+                [
+                    '$valueObjectsToSimpleTypes' => [
+                        'ValueObject' => 'string',
+                    ],
+                ]
+            ),
         ]);
     }
 

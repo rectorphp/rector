@@ -13,8 +13,9 @@ use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeAnalyzer\MethodNameAnalyzer;
 use Rector\NodeAnalyzer\StaticMethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use SomeClass;
 
 final class MethodNameReplacerRector extends AbstractRector
 {
@@ -83,7 +84,7 @@ final class MethodNameReplacerRector extends AbstractRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Turns method names to new ones.', [
-            new CodeSample(
+            new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 $someObject = new SomeClass;
 $someObject->oldMethod();
@@ -93,8 +94,26 @@ CODE_SAMPLE
 $someObject = new SomeClass;
 $someObject->newMethod();
 CODE_SAMPLE
+                ,
+                [
+                    '$perClassOldToNewMethods' => [
+                        SomeClass::class => [
+                            'oldMethod' => 'newMethod',
+                        ],
+                    ],
+                ]
             ),
-            new CodeSample('SomeClass::oldStaticMethod();', 'SomeClass::newStaticMethod();'),
+            new ConfiguredCodeSample(
+                'SomeClass::oldStaticMethod();',
+                'SomeClass::newStaticMethod();',
+                [
+                    '$perClassOldToNewMethods' => [
+                        SomeClass::class => [
+                            'oldMethod' => [SomeClass::class, 'newMethod'],
+                        ],
+                    ],
+                ]
+            ),
         ]);
     }
 

@@ -8,20 +8,21 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Configuration\Rector\ArgumentAdderRecipe;
-use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use SomeClass;
 
 final class ArgumentAdderRector extends AbstractArgumentRector
 {
     /**
      * @var ArgumentAdderRecipe[]
      */
-    private $argumentAdderRecipes = [];
+    private $recipes = [];
 
     /**
      * @var ArgumentAdderRecipe[]
      */
-    private $activeArgumentAdderRecipes = [];
+    private $activeRecipes = [];
 
     /**
      * @param mixed[] $argumentChangesByMethodAndType
@@ -29,7 +30,7 @@ final class ArgumentAdderRector extends AbstractArgumentRector
     public function __construct(array $argumentChangesByMethodAndType)
     {
         foreach ($argumentChangesByMethodAndType as $configurationArray) {
-            $this->argumentAdderRecipes[] = ArgumentAdderRecipe::createFromArray($configurationArray);
+            $this->recipes[] = ArgumentAdderRecipe::createFromArray($configurationArray);
         }
     }
 
@@ -38,7 +39,7 @@ final class ArgumentAdderRector extends AbstractArgumentRector
         return new RectorDefinition(
             'This Rector adds new default arguments in calls of defined methods and class types.',
             [
-                new CodeSample(
+                new ConfiguredCodeSample(
                     <<<'CODE_SAMPLE'
 $someObject = new SomeClass;
 $someObject->someMethod();
@@ -48,8 +49,17 @@ CODE_SAMPLE
 $someObject = new SomeClass;
 $someObject->someMethod(true);
 CODE_SAMPLE
+                    ,
+                    [
+                        '$argumentChangesByMethodAndType' => [
+                            'class' => SomeClass::class,
+                            'method' => 'someMethod',
+                            'position' => 0,
+                            'default_value' => 'true',
+                        ],
+                    ]
                 ),
-                new CodeSample(
+                new ConfiguredCodeSample(
                     <<<'CODE_SAMPLE'
 class MyCustomClass extends SomeClass
 {
@@ -67,6 +77,15 @@ class MyCustomClass extends SomeClass
     }
 }
 CODE_SAMPLE
+                    ,
+                    [
+                        '$argumentChangesByMethodAndType' => [
+                            'class' => SomeClass::class,
+                            'method' => 'someMethod',
+                            'position' => 0,
+                            'default_value' => 'true',
+                        ],
+                    ]
                 ),
             ]
         );
@@ -78,9 +97,9 @@ CODE_SAMPLE
             return false;
         }
 
-        $this->activeArgumentAdderRecipes = $this->matchArgumentChanges($node);
+        $this->activeRecipes = $this->matchArgumentChanges($node);
 
-        return (bool) $this->activeArgumentAdderRecipes;
+        return (bool) $this->activeRecipes;
     }
 
     /**
@@ -103,7 +122,7 @@ CODE_SAMPLE
     {
         $argumentReplacerRecipes = [];
 
-        foreach ($this->argumentAdderRecipes as $argumentReplacerRecipe) {
+        foreach ($this->recipes as $argumentReplacerRecipe) {
             if ($this->isNodeToRecipeMatch($node, $argumentReplacerRecipe)) {
                 $argumentReplacerRecipes[] = $argumentReplacerRecipe;
             }
@@ -118,7 +137,7 @@ CODE_SAMPLE
      */
     private function processArgumentNodes(array $argumentNodes): array
     {
-        foreach ($this->activeArgumentAdderRecipes as $argumentReplacerRecipe) {
+        foreach ($this->activeRecipes as $argumentReplacerRecipe) {
             $position = $argumentReplacerRecipe->getPosition();
 
             $argumentNodes[$position] = BuilderHelpers::normalizeValue($argumentReplacerRecipe->getDefaultValue());

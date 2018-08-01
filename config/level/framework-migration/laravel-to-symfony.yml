@@ -6,6 +6,6 @@ services:
 
 
     # view('...') => $this->render('...')
-    Rector\Rector\Dynamic\FunctionToMethodCallRector:
+    Rector\Rector\Function_\FunctionToMethodCallRector:
         $functionToMethodCall:
             'view': ['this', 'render']

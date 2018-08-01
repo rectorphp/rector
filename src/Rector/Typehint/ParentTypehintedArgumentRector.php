@@ -15,7 +15,7 @@ use Rector\BetterReflection\Reflection\TypeAnalyzer;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class ParentTypehintedArgumentRector extends AbstractRector
@@ -57,7 +57,7 @@ final class ParentTypehintedArgumentRector extends AbstractRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Changes defined parent class typehints.', [
-            new CodeSample(
+            new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 interface SomeInterface
 {
@@ -81,7 +81,27 @@ class SomeClass implements SomeInterface
     public read(string $content);
 }
 CODE_SAMPLE
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 7732517c... misc
+                ,
+                [
+                    '$typehintForArgumentByMethodAndClass' => [
+                        'SomeInterface' => [
+                            'read' => [
+                                '$content' => 'string',
+                            ],
+                        ],
+                    ],
+                ]
+<<<<<<< HEAD
+>>>>>>> 70b22375... fixup! misc
             ),
+=======
+                ),
+>>>>>>> 7732517c... misc
         ]);
     }
 

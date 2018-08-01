@@ -13,8 +13,9 @@ use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Php\TypeAnalyzer;
 use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use SomeClass;
 
 final class ReturnTypehintRector extends AbstractRector
 {
@@ -53,7 +54,7 @@ final class ReturnTypehintRector extends AbstractRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Changes defined return typehint of method and class.', [
-            new CodeSample(
+            new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass
 {
@@ -67,6 +68,14 @@ class SomeClass
     public getData(): array;
 }
 CODE_SAMPLE
+                ,
+                [
+                    '$typehintForMethodByClass' => [
+                        SomeClass::class => [
+                            'getData' => 'array',
+                        ],
+                    ],
+                ]
             ),
         ]);
     }

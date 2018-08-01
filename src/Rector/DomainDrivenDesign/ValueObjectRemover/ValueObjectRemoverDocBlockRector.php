@@ -10,7 +10,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\Node\Attribute;
-use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class ValueObjectRemoverDocBlockRector extends AbstractValueObjectRemoverRector
@@ -18,7 +18,7 @@ final class ValueObjectRemoverDocBlockRector extends AbstractValueObjectRemoverR
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Turns defined value object to simple types in doc blocks', [
-            new CodeSample(
+            new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 /**
  * @var ValueObject|null
@@ -32,8 +32,14 @@ CODE_SAMPLE
  */
 private $name;
 CODE_SAMPLE
+                ,
+                [
+                    '$valueObjectsToSimpleTypes' => [
+                        'ValueObject' => 'string',
+                    ],
+                ]
             ),
-            new CodeSample(
+            new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 /** @var ValueObject|null */
 $name;
@@ -43,6 +49,12 @@ CODE_SAMPLE
 /** @var string|null */
 $name;
 CODE_SAMPLE
+                ,
+                [
+                    '$valueObjectsToSimpleTypes' => [
+                        'ValueObject' => 'string',
+                    ],
+                ]
             ),
         ]);
     }
