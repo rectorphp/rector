@@ -1,5 +1,5 @@
 services:
-    Rector\Rector\Dynamic\ArgumentRemoverRector:
+    Rector\Rector\Argument\ArgumentRemoverRector:
         $argumentChangesByMethodAndType:
             -
                 class: 'Doctrine\ORM\Persisters\Entity\AbstractEntityInheritancePersister'

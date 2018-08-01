@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Dynamic\ArgumentRemoverRector;
+namespace Rector\Tests\Rector\Argument\ArgumentRemoverRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

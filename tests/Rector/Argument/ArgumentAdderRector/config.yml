@@ -1,5 +1,5 @@
 services:
-    Rector\Rector\Dynamic\ArgumentAdderRector:
+    Rector\Rector\Argument\ArgumentAdderRector:
         $argumentChangesByMethodAndType:
             -
                 class: 'Symfony\Component\DependencyInjection\ContainerBuilder'

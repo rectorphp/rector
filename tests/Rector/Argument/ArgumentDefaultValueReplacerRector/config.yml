@@ -1,5 +1,5 @@
 services:
-    Rector\Rector\Dynamic\ArgumentDefaultValueReplacerRector:
+    Rector\Rector\Argument\ArgumentDefaultValueReplacerRector:
         $argumentChangesByMethodAndType:
             -
                 class: 'Symfony\Component\DependencyInjection\Definition'
