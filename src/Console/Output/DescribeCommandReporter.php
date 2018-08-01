@@ -8,7 +8,6 @@ use Rector\Console\ConsoleStyle;
 use Rector\ConsoleDiffer\MarkdownDifferAndFormatter;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\RectorDefinition\CodeSample;
-use Rector\YamlRector\Contract\YamlRectorInterface;
 
 final class DescribeCommandReporter
 {
@@ -29,7 +28,7 @@ final class DescribeCommandReporter
     }
 
     /**
-     * @param RectorInterface[]|YamlRectorInterface[] $rectors
+     * @param RectorInterface[] $rectors
      */
     public function reportRectorsInFormat(array $rectors, string $outputFormat, bool $showDiffs): void
     {
@@ -54,10 +53,7 @@ final class DescribeCommandReporter
         }
     }
 
-    /**
-     * @param RectorInterface|YamlRectorInterface $rector
-     */
-    private function printWithCliFormat(int $i, bool $showDiffs, $rector): void
+    private function printWithCliFormat(int $i, bool $showDiffs, RectorInterface $rector): void
     {
         $this->consoleStyle->section(sprintf('%d) %s', $i, get_class($rector)));
 
@@ -86,10 +82,7 @@ final class DescribeCommandReporter
         }
     }
 
-    /**
-     * @param RectorInterface|YamlRectorInterface $rector
-     */
-    private function printWithMarkdownFormat(bool $showDiffs, $rector): void
+    private function printWithMarkdownFormat(bool $showDiffs, RectorInterface $rector): void
     {
         $rectorClass = get_class($rector);
         $rectorClassParts = explode('\\', $rectorClass);
@@ -143,8 +136,8 @@ final class DescribeCommandReporter
     }
 
     /**
-     * @param RectorInterface[]|YamlRectorInterface[] $rectors
-     * @return RectorInterface[][]|YamlRectorInterface[]
+     * @param RectorInterface[] $rectors
+     * @return RectorInterface[][]
      */
     private function groupRectors(array $rectors): array
     {
@@ -181,7 +174,7 @@ final class DescribeCommandReporter
     }
 
     /**
-     * @param RectorInterface[][]|YamlRectorInterface[][] $rectorsByGroup
+     * @param RectorInterface[][] $rectorsByGroup
      */
     private function printMenu(array $rectorsByGroup): void
     {

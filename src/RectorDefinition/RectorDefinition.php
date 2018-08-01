@@ -12,7 +12,7 @@ final class RectorDefinition
     private $description;
 
     /**
-     * @var array|CodeSample[]
+     * @var CodeSample[]
      */
     private $codeSamples = [];
 

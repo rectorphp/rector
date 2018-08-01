@@ -3,13 +3,14 @@
 namespace Rector\NodeTraverser;
 
 use PhpParser\NodeTraverser;
+use Rector\Contract\Rector\PhpRectorInterface;
 use Rector\Contract\Rector\RectorInterface;
 
 final class RectorNodeTraverser extends NodeTraverser
 {
-    public function addRector(RectorInterface $rector): void
+    public function addRector(PhpRectorInterface $phpRector): void
     {
-        $this->addVisitor($rector);
+        $this->addVisitor($phpRector);
     }
 
     public function getRectorCount(): int

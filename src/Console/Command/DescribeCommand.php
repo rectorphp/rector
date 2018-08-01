@@ -9,7 +9,6 @@ use Rector\Console\Output\DescribeCommandReporter;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\Guard\RectorGuard;
 use Rector\NodeTraverser\RectorNodeTraverser;
-use Rector\YamlRector\Contract\YamlRectorInterface;
 use Rector\YamlRector\YamlFileProcessor;
 use ReflectionClass;
 use Symfony\Component\Console\Command\Command;
@@ -110,7 +109,7 @@ final class DescribeCommand extends Command
     }
 
     /**
-     * @return RectorInterface[]|YamlRectorInterface[]
+     * @return RectorInterface[]
      */
     private function getRectorsByInput(InputInterface $input): array
     {
@@ -128,7 +127,7 @@ final class DescribeCommand extends Command
                 continue;
             }
 
-            /** @var RectorInterface|YamlRectorInterface $rector */
+            /** @var RectorInterface $rector */
             $rectors[] = $reflectionClass->newInstanceWithoutConstructor();
         }
 

@@ -8,9 +8,9 @@ use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Builder\ExpressionAdder;
 use Rector\Builder\PropertyAdder;
-use Rector\Contract\Rector\RectorInterface;
+use Rector\Contract\Rector\PhpRectorInterface;
 
-abstract class AbstractRector extends NodeVisitorAbstract implements RectorInterface
+abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorInterface
 {
     /**
      * @var bool
