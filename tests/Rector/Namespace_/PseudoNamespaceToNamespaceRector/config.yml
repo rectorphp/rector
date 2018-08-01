@@ -1,5 +1,5 @@
 services:
-    Rector\Rector\Dynamic\PseudoNamespaceToNamespaceRector:
+    Rector\Rector\Namespace_\PseudoNamespaceToNamespaceRector:
         $configuration:
             - 'PHPUnit_'
             # exclude this class

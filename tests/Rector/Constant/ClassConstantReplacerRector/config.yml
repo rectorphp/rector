@@ -1,5 +1,5 @@
 services:
-    Rector\Rector\Dynamic\ClassConstantReplacerRector:
+    Rector\Rector\Constant\ClassConstantReplacerRector:
         $oldToNewConstantsByClass:
             'Symfony\Component\Form\FormEvents':
                 'PRE_BIND': 'PRE_SUBMIT'

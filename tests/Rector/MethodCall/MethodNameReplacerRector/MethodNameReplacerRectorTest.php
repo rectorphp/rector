@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Dynamic\MethodNameReplacerRector;
+namespace Rector\Tests\Rector\MethodCall\MethodNameReplacerRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
- * @covers \Rector\Rector\Dynamic\MethodNameReplacerRector
+ * @covers \Rector\Rector\MethodCall\MethodNameReplacerRector
  */
 final class MethodNameReplacerRectorTest extends AbstractRectorTestCase
 {

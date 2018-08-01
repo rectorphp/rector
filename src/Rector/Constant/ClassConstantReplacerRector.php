@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Rector\Dynamic;
+namespace Rector\Rector\Constant;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
@@ -8,7 +8,7 @@ use PhpParser\Node\Identifier;
 use Rector\Builder\IdentifierRenamer;
 use Rector\NodeAnalyzer\ClassConstAnalyzer;
 use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class ClassConstantReplacerRector extends AbstractRector
@@ -56,7 +56,17 @@ final class ClassConstantReplacerRector extends AbstractRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Replaces defined class constants in their calls.', [
-            new CodeSample('$value = SomeClass::OLD_CONSTANT;', '$value = SomeClass::NEW_CONSTANT;'),
+            new ConfiguredCodeSample(
+                '$value = SomeClass::OLD_CONSTANT;',
+                '$value = SomeClass::NEW_CONSTANT;',
+                [
+                    '$oldToNewConstantsByClass' => [
+                        'SomeClass' => [
+                            'OLD_CONSTANT' => 'NEW_CONSTANT',
+                        ],
+                    ],
+                ]
+            ),
         ]);
     }
 
