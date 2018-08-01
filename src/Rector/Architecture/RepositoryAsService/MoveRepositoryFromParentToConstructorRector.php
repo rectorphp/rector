@@ -16,7 +16,7 @@ use Rector\Exception\Bridge\RectorProviderException;
 use Rector\Node\Attribute;
 use Rector\Node\NodeFactory;
 use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class MoveRepositoryFromParentToConstructorRector extends AbstractRector
@@ -104,7 +104,7 @@ final class MoveRepositoryFromParentToConstructorRector extends AbstractRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Turns parent EntityRepository class to constructor dependency', [
-            new CodeSample(
+            new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 namespace App\Repository;
 
@@ -133,7 +133,12 @@ final class PostRepository
     }
 }
 CODE_SAMPLE
-            ),
+                ,
+                [
+                    '$entityRepositoryClass' => 'Doctrine\ORM\EntityRepository',
+                    '$entityManagerClass' => 'Doctrine\ORM\EntityManager',
+                ]
+                ),
         ]);
     }
 

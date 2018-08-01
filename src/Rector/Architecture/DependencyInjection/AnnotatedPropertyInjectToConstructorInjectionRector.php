@@ -12,7 +12,7 @@ use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 /**
@@ -47,7 +47,7 @@ final class AnnotatedPropertyInjectToConstructorInjectionRector extends Abstract
         ClassPropertyCollector $classPropertyCollector,
         DocBlockAnalyzer $docBlockAnalyzer,
         NodeTypeResolver $nodeTypeResolver,
-        string $annotation = 'inject'
+        string $annotation
     ) {
         $this->classPropertyCollector = $classPropertyCollector;
         $this->docBlockAnalyzer = $docBlockAnalyzer;
@@ -87,11 +87,11 @@ final class AnnotatedPropertyInjectToConstructorInjectionRector extends Abstract
         return new RectorDefinition(
             'Turns non-private properties with @annotation to private properties and constructor injection',
             [
-                new CodeSample(
+                new ConfiguredCodeSample(
                     <<<'CODE_SAMPLE'
 /**
  * @var SomeService
- * @annotation
+ * @inject
  */
 public $someService;
 CODE_SAMPLE
@@ -107,7 +107,11 @@ public function __construct(SomeService $someService)
     $this->someService = $someService;
 }
 CODE_SAMPLE
-                ),
+                    ,
+                    [
+                        '$annotation' => 'inject',
+                    ]
+                    ),
             ]
         );
     }

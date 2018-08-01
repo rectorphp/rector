@@ -9,7 +9,7 @@ use PhpParser\Node\Expr\Variable;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class PropertyAssignToMethodCallRector extends AbstractRector
@@ -40,6 +40,7 @@ final class PropertyAssignToMethodCallRector extends AbstractRector
     private $newMethodName;
 
     /**
+     * @todo check via https://github.com/rectorphp/rector/issues/548
      * @param string[] $types
      */
     public function __construct(
@@ -59,7 +60,23 @@ final class PropertyAssignToMethodCallRector extends AbstractRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Turns property assign of specific type and property name to method call', [
-            new CodeSample('$control->oldProperty = false;', '$control->newMethodCall(false);'),
+            new ConfiguredCodeSample(
+<<<'CODE_SAMPLE'
+$someObject = new SomeClass; 
+$someObject->oldProperty = false;
+CODE_SAMPLE
+                ,
+<<<'CODE_SAMPLE'
+$someObject = new SomeClass;
+$someObject->newMethodCall(false);
+CODE_SAMPLE
+                ,
+                [
+                    '$types' => ['SomeClass'],
+                    '$oldPropertyName' => 'oldProperty',
+                    '$newMethodName' => 'newMethodCall',
+                ]
+            ),
         ]);
     }
 

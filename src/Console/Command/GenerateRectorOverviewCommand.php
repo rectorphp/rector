@@ -261,11 +261,8 @@ final class GenerateRectorOverviewCommand extends Command
         }
     }
 
-    /**
-     * @param mixed $configuration
-     */
-    private function printCodeWrapped($configuration, string $format): void
+    private function printCodeWrapped(string $content, string $format): void
     {
-        $this->consoleStyle->writeln(sprintf('```%s%s%s%s```', $format, PHP_EOL, $configuration, PHP_EOL));
+        $this->consoleStyle->writeln(sprintf('```%s%s%s%s```', $format, PHP_EOL, trim($content), PHP_EOL));
     }
 }
