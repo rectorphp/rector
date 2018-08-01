@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Dynamic\ClassReplacerRector;
+namespace Rector\Tests\Rector\Class_\ClassReplacerRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
- * @covers \Rector\Rector\Dynamic\ClassReplacerRector
+ * @covers \Rector\Rector\Class_\ClassReplacerRector
  */
 final class ClassReplacerRectorTest extends AbstractRectorTestCase
 {

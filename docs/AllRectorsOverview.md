@@ -797,7 +797,7 @@ Replaces defined classes by new ones.
 
 ### `PropertyToMethodRector`
 
-- class: `Rector\Rector\Dynamic\PropertyToMethodRector`
+- class: `Rector\Rector\Property\PropertyToMethodRector`
 
 Replaces properties assign calls be defined methods.
 
@@ -825,7 +825,7 @@ Turns method names to new ones.
 
 ### `PropertyNameReplacerRector`
 
-- class: `Rector\Rector\Dynamic\PropertyNameReplacerRector`
+- class: `Rector\Rector\Property\PropertyNameReplacerRector`
 
 Replaces defined old properties by new ones.
 

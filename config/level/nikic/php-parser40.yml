@@ -6,7 +6,7 @@ services:
     Rector\PhpParser\Rector\RemoveNodeRector: ~
     Rector\PhpParser\Rector\UseWithAliasRector: ~
 
-    Rector\Rector\Dynamic\PropertyNameReplacerRector:
+    Rector\Rector\Property\PropertyNameReplacerRector:
         $perClassOldToNewProperties:
             'PhpParser\Node\Stmt\Class_':
                 'type': 'flags'

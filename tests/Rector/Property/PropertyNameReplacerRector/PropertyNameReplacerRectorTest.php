@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Dynamic\PropertyNameReplacerRector;
+namespace Rector\Tests\Rector\Property\PropertyNameReplacerRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

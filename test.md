@@ -718,6 +718,8 @@ session > use_strict_mode is true by default and can be removed
 ---
 ## General
 
+- [Annotation](#annotation)
+- [Argument](#argument)
 - [Assign](#assign)
 - [Class_](#class_)
 - [CodeQuality](#codequality)
@@ -727,9 +729,73 @@ session > use_strict_mode is true by default and can be removed
 - [Interface_](#interface_)
 - [MagicDisclosure](#magicdisclosure)
 - [MethodCall](#methodcall)
+- [Namespace_](#namespace_)
 - [RepositoryAsService](#repositoryasservice)
+- [Typehint](#typehint)
 - [ValueObjectRemover](#valueobjectremover)
 - [Visibility](#visibility)
+
+## Annotation
+
+### `AnnotationReplacerRector`
+
+- class: `Rector\Rector\Annotation\AnnotationReplacerRector`
+
+Turns defined annotations above properties and methods to their new values.
+
+```diff
+-/** @test */
++/** @scenario */
+ public function someMethod() {};
+```
+
+## Argument
+
+### `ArgumentAdderRector`
+
+- class: `Rector\Rector\Argument\ArgumentAdderRector`
+
+This Rector adds new default arguments in calls of defined methods and class types.
+
+```diff
+ $someObject = new SomeClass;
+-$someObject->someMethod();
++$someObject->someMethod(true);
+```
+
+```diff
+ class MyCustomClass extends SomeClass
+ {
+-    public function someMethod()
++    public function someMethod($value = true)
+     {
+     }
+ }
+```
+
+### `ArgumentRemoverRector`
+
+- class: `Rector\Rector\Argument\ArgumentRemoverRector`
+
+Removes defined arguments in defined methods and their calls.
+
+```diff
+ $someObject = new SomeClass;
+-$someObject->someMethod(true);
++$someObject->someMethod();'
+```
+
+### `ArgumentDefaultValueReplacerRector`
+
+- class: `Rector\Rector\Argument\ArgumentDefaultValueReplacerRector`
+
+Replaces defined map of arguments in defined methods and their calls.
+
+```diff
+ $someObject = new SomeClass;
+-$someObject->someMethod(SomeClass::OLD_CONSTANT);
++$someObject->someMethod(false);'
+```
 
 ## Assign
 
@@ -831,6 +897,27 @@ services:
 +$value === "development"
 ```
 
+### `ClassConstantReplacerRector`
+
+- class: `Rector\Rector\Constant\ClassConstantReplacerRector`
+
+Replaces defined class constants in their calls.
+
+```yaml
+services:
+    Rector\Rector\Constant\ClassConstantReplacerRector:
+        $oldToNewConstantsByClass:
+            SomeClass:
+                OLD_CONSTANT: NEW_CONSTANT
+```
+
+↓
+
+```diff
+-$value = SomeClass::OLD_CONSTANT;
++$value = SomeClass::NEW_CONSTANT;
+```
+
 ## DependencyInjection
 
 ### `AnnotatedPropertyInjectToConstructorInjectionRector`
@@ -917,40 +1004,6 @@ Turns action injection in Controllers to constructor injection
 
 ## Dynamic
 
-### `NamespaceReplacerRector`
-
-- class: `Rector\Rector\Dynamic\NamespaceReplacerRector`
-
-Replaces old namespace by new one.
-
-```yaml
-services:
-    Rector\Rector\Dynamic\NamespaceReplacerRector:
-        $oldToNewNamespaces:
-            SomeOldNamespace: SomeNewNamespace
-```
-
-↓
-
-```diff
--$someObject = new SomeOldNamespace\SomeClass;
-+$someObject = new SomeNewNamespace\SomeClass;
-```
-
-### `ReturnTypehintRector`
-
-- class: `Rector\Rector\Dynamic\ReturnTypehintRector`
-
-Changes defined return typehint of method and class.
-
-```diff
- class SomeClass
- {
--    public getData();
-+    public getData(): array;
- }
-```
-
 ### `FluentReplaceRector`
 
 - class: `Rector\Rector\Dynamic\FluentReplaceRector`
@@ -989,28 +1042,6 @@ Turns defined function calls to local method calls.
 +$this->render("...", []);
 ```
 
-### `ArgumentAdderRector`
-
-- class: `Rector\Rector\Dynamic\ArgumentAdderRector`
-
-This Rector adds new default arguments in calls of defined methods and class types.
-
-```diff
- $someObject = new SomeClass;
--$someObject->someMethod();
-+$someObject->someMethod(true);
-```
-
-```diff
- class MyCustomClass extends SomeClass
- {
--    public function someMethod()
-+    public function someMethod($value = true)
-     {
-     }
- }
-```
-
 ### `ClassReplacerRector`
 
 - class: `Rector\Rector\Dynamic\ClassReplacerRector`
@@ -1024,7 +1055,7 @@ Replaces defined classes by new ones.
 
 ### `PropertyToMethodRector`
 
-- class: `Rector\Rector\Dynamic\PropertyToMethodRector`
+- class: `Rector\Rector\Property\PropertyToMethodRector`
 
 Replaces properties assign calls be defined methods.
 
@@ -1035,109 +1066,15 @@ Replaces properties assign calls be defined methods.
 +$object->setProperty($value);
 ```
 
-### `MethodNameReplacerRector`
-
-- class: `Rector\Rector\Dynamic\MethodNameReplacerRector`
-
-Turns method names to new ones.
-
-```diff
- $someObject = new SomeClass;
--$someObject->oldMethod();
-+$someObject->newMethod();
-```
-
-```diff
--SomeClass::oldStaticMethod();
-+SomeClass::newStaticMethod();
-```
-
 ### `PropertyNameReplacerRector`
 
-- class: `Rector\Rector\Dynamic\PropertyNameReplacerRector`
+- class: `Rector\Rector\Property\PropertyNameReplacerRector`
 
 Replaces defined old properties by new ones.
 
 ```diff
 -$someObject->someOldProperty;
 +$someObject->someNewProperty;
-```
-
-### `ArgumentRemoverRector`
-
-- class: `Rector\Rector\Dynamic\ArgumentRemoverRector`
-
-Removes defined arguments in defined methods and their calls.
-
-```diff
- $someObject = new SomeClass;
--$someObject->someMethod(true);
-+$someObject->someMethod();'
-```
-
-### `ArgumentDefaultValueReplacerRector`
-
-- class: `Rector\Rector\Dynamic\ArgumentDefaultValueReplacerRector`
-
-Replaces defined map of arguments in defined methods and their calls.
-
-```diff
- $someObject = new SomeClass;
--$someObject->someMethod(SomeClass::OLD_CONSTANT);
-+$someObject->someMethod(false);'
-```
-
-### `AnnotationReplacerRector`
-
-- class: `Rector\Rector\Dynamic\AnnotationReplacerRector`
-
-Turns defined annotations above properties and methods to their new values.
-
-```diff
--/** @test */
-+/** @scenario */
- public function someMethod() {};
-```
-
-### `PseudoNamespaceToNamespaceRector`
-
-- class: `Rector\Rector\Dynamic\PseudoNamespaceToNamespaceRector`
-
-Replaces defined Pseudo_Namespaces by Namespace\Ones.
-
-```diff
--$someServie = Some_Object;
-+$someServie = Some\Object;
-```
-
-### `ParentTypehintedArgumentRector`
-
-- class: `Rector\Rector\Dynamic\ParentTypehintedArgumentRector`
-
-Changes defined parent class typehints.
-
-```diff
- interface SomeInterface
- {
-     public read(string $content);
- }
-
- class SomeClass implements SomeInterface
- {
--    public read($content);
-+    public read(string $content);
- }
-```
-
-### `ClassConstantReplacerRector`
-
-- class: `Rector\Rector\Dynamic\ClassConstantReplacerRector`
-
-Replaces defined class constants in their calls.
-
-```diff
--$value = SomeClass::OLD_CONSTANT;
-+$value = SomeClass::NEW_CONSTANT;
 ```
 
 ## Interface_
@@ -1288,6 +1225,56 @@ services:
 +$serviceDefinition->addTag('inject');
 ```
 
+### `MethodNameReplacerRector`
+
+- class: `Rector\Rector\MethodCall\MethodNameReplacerRector`
+
+Turns method names to new ones.
+
+```diff
+ $someObject = new SomeClass;
+-$someObject->oldMethod();
++$someObject->newMethod();
+```
+
+```diff
+-SomeClass::oldStaticMethod();
++SomeClass::newStaticMethod();
+```
+
+## Namespace_
+
+### `NamespaceReplacerRector`
+
+- class: `Rector\Rector\Namespace_\NamespaceReplacerRector`
+
+Replaces old namespace by new one.
+
+```yaml
+services:
+    Rector\Rector\Namespace_\NamespaceReplacerRector:
+        $oldToNewNamespaces:
+            SomeOldNamespace: SomeNewNamespace
+```
+
+↓
+
+```diff
+-$someObject = new SomeOldNamespace\SomeClass;
++$someObject = new SomeNewNamespace\SomeClass;
+```
+
+### `PseudoNamespaceToNamespaceRector`
+
+- class: `Rector\Rector\Namespace_\PseudoNamespaceToNamespaceRector`
+
+Replaces defined Pseudo_Namespaces by Namespace\Ones.
+
+```diff
+-$someServie = Some_Object;
++$someServie = Some\Object;
+```
+
 ## RepositoryAsService
 
 ### `ReplaceParentRepositoryCallsByRepositoryPropertyRector`
@@ -1371,6 +1358,41 @@ services:
 +    {
 +        $this->repository = $entityManager->getRepository(\App\Entity\Post::class);
 +    }
+ }
+```
+
+## Typehint
+
+### `ReturnTypehintRector`
+
+- class: `Rector\Rector\Typehint\ReturnTypehintRector`
+
+Changes defined return typehint of method and class.
+
+```diff
+ class SomeClass
+ {
+-    public getData();
++    public getData(): array;
+ }
+```
+
+### `ParentTypehintedArgumentRector`
+
+- class: `Rector\Rector\Typehint\ParentTypehintedArgumentRector`
+
+Changes defined parent class typehints.
+
+```diff
+ interface SomeInterface
+ {
+     public read(string $content);
+ }
+
+ class SomeClass implements SomeInterface
+ {
+-    public read($content);
++    public read(string $content);
  }
 ```
 

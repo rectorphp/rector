@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Rector\Dynamic;
+namespace Rector\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Name;
@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\Use_;
 use Rector\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class ClassReplacerRector extends AbstractRector
@@ -32,7 +33,15 @@ final class ClassReplacerRector extends AbstractRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Replaces defined classes by new ones.', [
-            new CodeSample('$value = new SomeOldClass;', '$value = new SomeNewClass;'),
+            new ConfiguredCodeSample(
+                '$value = new SomeOldClass;',
+                '$value = new SomeNewClass;',
+                [
+                    '$oldToNewClasses' => [
+                        'SomeOldClass' => 'SomeNewClass'
+                    ]
+                ]
+            ),
         ]);
     }
 

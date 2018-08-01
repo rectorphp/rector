@@ -9,7 +9,7 @@ services:
                   'isPresenceRequired': 'requirePresence'
                   'isEmptyAllowed': 'allowEmpty'
 
-    Rector\Rector\Dynamic\PropertyToMethodRector:
+    Rector\Rector\Property\PropertyToMethodRector:
         $perClassPropertyToMethods:
             'Cake\Controller\Controller':
                 'name':

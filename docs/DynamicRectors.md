@@ -47,7 +47,7 @@ services:
 
 ```yml
 services:
-    Rector\Rector\Dynamic\PropertyNameReplacerRector:
+    Rector\Rector\Property\PropertyNameReplacerRector:
         $perClassOldToNewProperties:
             # class:
             'PhpParser\Node\Param':
@@ -122,7 +122,7 @@ services:
 
 ```yml
 services:
-    Rector\Rector\Dynamic\PropertyToMethodRector:
+    Rector\Rector\Property\PropertyToMethodRector:
         $perClassPropertyToMethods:
             # type
             'Symfony\Component\Translation\Translator':

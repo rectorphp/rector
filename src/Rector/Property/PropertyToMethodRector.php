@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Rector\Dynamic;
+namespace Rector\Rector\Property;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
@@ -12,6 +12,7 @@ use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class PropertyToMethodRector extends AbstractRector
@@ -63,7 +64,7 @@ final class PropertyToMethodRector extends AbstractRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Replaces properties assign calls be defined methods.', [
-            new CodeSample(
+            new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 $result = $object->property;
 $object->property = $value;
@@ -73,6 +74,14 @@ CODE_SAMPLE
 $result = $object->getProperty();
 $object->setProperty($value);
 CODE_SAMPLE
+                ,
+                [
+                    '$perClassPropertyToMethods' => [
+                        'SomeObject' => [
+                            'property' => ['getProperty', 'setProperty']
+                        ]
+                    ]
+                ]
             ),
         ]);
     }

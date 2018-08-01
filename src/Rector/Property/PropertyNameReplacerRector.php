@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Rector\Dynamic;
+namespace Rector\Rector\Property;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -8,7 +8,7 @@ use PhpParser\Node\Identifier;
 use Rector\Builder\IdentifierRenamer;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class PropertyNameReplacerRector extends AbstractRector
@@ -53,7 +53,17 @@ final class PropertyNameReplacerRector extends AbstractRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Replaces defined old properties by new ones.', [
-            new CodeSample('$someObject->someOldProperty;', '$someObject->someNewProperty;'),
+            new ConfiguredCodeSample(
+                '$someObject->someOldProperty;',
+                '$someObject->someNewProperty;',
+                [
+                    '$perClassOldToNewProperties' => [
+                        'SomeClass' => [
+                            'someOldProperty' => 'someNewProperty'
+                        ]
+                    ]
+                ]
+            )
         ]);
     }
 

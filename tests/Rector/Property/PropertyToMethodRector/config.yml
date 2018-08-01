@@ -1,5 +1,5 @@
 services:
-    Rector\Rector\Dynamic\PropertyToMethodRector:
+    Rector\Rector\Property\PropertyToMethodRector:
         $perClassPropertyToMethods:
             'Translator':
                 'locale':

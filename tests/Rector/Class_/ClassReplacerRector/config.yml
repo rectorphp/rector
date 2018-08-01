@@ -1,5 +1,5 @@
 services:
-    Rector\Rector\Dynamic\ClassReplacerRector:
+    Rector\Rector\Class_\ClassReplacerRector:
         $oldToNewClasses:
             OldClass: NewClass
             'PhpParser\BuilderAbstract': 'PhpParser\Builder'

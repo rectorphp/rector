@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Dynamic\PropertyToMethodRector;
+namespace Rector\Tests\Rector\Property_\PropertyToMethodRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
