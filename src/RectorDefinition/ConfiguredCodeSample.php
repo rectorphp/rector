@@ -4,7 +4,7 @@ namespace Rector\RectorDefinition;
 
 use Rector\Contract\RectorDefinition\CodeSampleInterface;
 
-final class CodeSample implements CodeSampleInterface
+final class ConfiguredCodeSample implements CodeSampleInterface
 {
     /**
      * @var string
@@ -16,10 +16,19 @@ final class CodeSample implements CodeSampleInterface
      */
     private $codeAfter;
 
-    public function __construct(string $codeBefore, string $codeAfter)
+    /**
+     * @var mixed[]
+     */
+    private $configuration = [];
+
+    /**
+     * @param mixed[] $configuration
+     */
+    public function __construct(string $codeBefore, string $codeAfter, array $configuration)
     {
         $this->codeBefore = $codeBefore;
         $this->codeAfter = $codeAfter;
+        $this->configuration = $configuration;
     }
 
     public function getCodeBefore(): string
@@ -30,5 +39,13 @@ final class CodeSample implements CodeSampleInterface
     public function getCodeAfter(): string
     {
         return $this->codeAfter;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    public function getConfiguration(): array
+    {
+        return $this->configuration;
     }
 }

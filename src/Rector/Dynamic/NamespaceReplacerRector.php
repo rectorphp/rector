@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\Use_;
 use Rector\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class NamespaceReplacerRector extends AbstractRector
@@ -34,9 +35,14 @@ final class NamespaceReplacerRector extends AbstractRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('[Dynamic] Replaces old namespace by new one.', [
-            new CodeSample(
+            new ConfiguredCodeSample(
                 '$someObject = new SomeOldNamespace\SomeClass;',
-                '$someObject = new SomeNewNamespace\SomeClass;'
+                '$someObject = new SomeNewNamespace\SomeClass;',
+                [
+                    'oldToNewNamespaces' => [
+                        'SomeOldNamespace' => 'SomeNewNamespace'
+                    ]
+                ]
             ),
         ]);
     }
