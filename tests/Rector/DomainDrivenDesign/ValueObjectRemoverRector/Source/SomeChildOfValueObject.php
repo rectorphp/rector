@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Dynamic\ValueObjectRemoverRector\Source;
+namespace Rector\Tests\Rector\DomainDrivenDesign\ValueObjectRemoverRector\Source;
 
 class SomeChildOfValueObject extends SomeValueObject
 {

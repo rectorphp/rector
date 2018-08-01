@@ -1,13 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Dynamic\ValueObjectRemoverRector;
+namespace Rector\Tests\Rector\DomainDrivenDesign\ValueObjectRemoverRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
- * @covers \Rector\Rector\Dynamic\ValueObjectRemover\ValueObjectRemoverRector
- * @covers \Rector\Rector\Dynamic\ValueObjectRemover\ValueObjectRemoverDocBlockRector
+ * @covers \Rector\Rector\DomainDrivenDesign\ValueObjectRemover\ValueObjectRemoverRector
+ * @covers \Rector\Rector\DomainDrivenDesign\ValueObjectRemover\ValueObjectRemoverDocBlockRector
  */
 final class ValueObjectRemoverRectorTest extends AbstractRectorTestCase
 {

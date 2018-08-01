@@ -786,7 +786,7 @@ This Rector adds new default arguments in calls of defined methods and class typ
 
 ### `ClassReplacerRector`
 
-- class: `Rector\Rector\Dynamic\ClassReplacerRector`
+- class: `Rector\Rector\Class_\ClassReplacerRector`
 
 Replaces defined classes by new ones.
 

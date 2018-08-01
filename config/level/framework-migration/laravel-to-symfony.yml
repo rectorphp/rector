@@ -1,5 +1,5 @@
 services:
-    Rector\Rector\Dynamic\ClassReplacerRector:
+    Rector\Rector\Class_\ClassReplacerRector:
         $oldToNewClasses:
             'Illuminate\Http\Response': 'Symfony\Component\HttpFoundation\Response'
             'App\Http\Controllers\Controller': 'Symfony\Bundle\FrameworkBundle\Controller\Controller'

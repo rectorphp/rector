@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Rector\Dynamic\ValueObjectRemover;
+namespace Rector\Rector\DomainDrivenDesign\ValueObjectRemover;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\New_;

@@ -2,7 +2,7 @@
 
 namespace SomeNamespace;
 
-use Rector\Tests\Rector\Dynamic\ValueObjectRemoverRector\Source\SomeChildOfValueObject;
+use Rector\Tests\Rector\DomainDrivenDesign\ValueObjectRemoverRector\Source\SomeChildOfValueObject;
 
 class ActionClass
 {

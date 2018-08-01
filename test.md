@@ -1044,7 +1044,7 @@ Turns defined function calls to local method calls.
 
 ### `ClassReplacerRector`
 
-- class: `Rector\Rector\Dynamic\ClassReplacerRector`
+- class: `Rector\Rector\Class_\ClassReplacerRector`
 
 Replaces defined classes by new ones.
 

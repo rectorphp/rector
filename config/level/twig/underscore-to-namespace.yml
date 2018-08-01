@@ -1,5 +1,5 @@
 services:
-    Rector\Rector\Dynamic\ClassReplacerRector:
+    Rector\Rector\Class_\ClassReplacerRector:
         $oldToNewClasses:
             'Twig_LoaderInterface': 'Twig\Loader\LoaderInterface'
             'Twig_Extension_StringLoader': 'Twig\Extension\StringLoaderExtension'
