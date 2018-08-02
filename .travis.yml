@@ -29,7 +29,7 @@ script:
   - |
     if [[ $RUN_RECTOR == true ]]; then
       bin/rector process src tests --level symfony40 --dry-run
-      bin/rector describe --level all
+      bin/rector generate-rector-overview
     fi
 
 after_script:
