@@ -63,8 +63,7 @@
             "Rector\\YamlRector\\Tests\\": "packages/YamlRector/tests"
         },
         "classmap": [
-            "packages/Symfony/tests",
-            "tests"
+            "packages/Symfony/tests"
         ]
     },
     "scripts": {
