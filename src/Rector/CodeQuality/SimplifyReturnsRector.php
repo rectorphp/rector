@@ -21,7 +21,7 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
-final class SimplifyIfElseReturnsRector extends AbstractRector
+final class SimplifyReturnsRector extends AbstractRector
 {
     /**
      * @var string[]

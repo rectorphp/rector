@@ -1,14 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\CodeQuality\SimplifyIfElseReturnsRector;
+namespace Rector\Tests\Rector\CodeQuality\SimplifyReturnsRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
- * @covers \Rector\Rector\CodeQuality\SimplifyIfElseReturnsRector
+ * @covers \Rector\Rector\CodeQuality\SimplifyReturnsRector
  */
-final class SimplifyIfElseReturnsRectorTest extends AbstractRectorTestCase
+final class SimplifyReturnsRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()
