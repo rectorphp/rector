@@ -73,18 +73,6 @@ final class DocBlockAnalyzer
         $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
     }
 
-    public function removeTagWithContentFromNode(Node $node, string $name, string $content): void
-    {
-        if ($node->getDocComment() === null) {
-            return;
-        }
-
-        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
-        $phpDocInfo->removeTagByNameAndContent($name, $content);
-
-        $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
-    }
-
     public function changeType(Node $node, string $oldType, string $newType): void
     {
         if ($node->getDocComment() === null) {

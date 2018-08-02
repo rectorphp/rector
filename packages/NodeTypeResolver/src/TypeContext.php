@@ -63,13 +63,6 @@ final class TypeContext
         $this->classLikeAnalyzer = $classLikeAnalyzer;
     }
 
-    public function startFile(): void
-    {
-        $this->variableTypes = [];
-        $this->propertyTypes = [];
-        $this->classLikeNode = null;
-    }
-
     /**
      * @param string[] $variableTypes
      */
@@ -86,21 +79,6 @@ final class TypeContext
         if ($this->classLikeAnalyzer->isNormalClass($classLikeNode)) {
             /** @var Class_ $classLikeNode */
             $this->propertyTypes = $this->constructorPropertyTypesExtractor->extractFromClassNode($classLikeNode);
-        }
-    }
-
-    public function enterFunction(FunctionLike $functionLikeNode): void
-    {
-        $this->variableTypes = [];
-
-        try {
-            $functionReflection = $this->getFunctionReflection($functionLikeNode);
-            if ($functionReflection) {
-                $this->processFunctionVariableTypes($functionReflection);
-            }
-        } catch (Throwable $throwable) {
-            // function not autoloaded
-            return;
         }
     }
 

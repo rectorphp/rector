@@ -37,24 +37,6 @@ final class MethodCallAnalyzer
     }
 
     /**
-     * @param string[] $types
-     * @param string[] $methods
-     */
-    public function isTypesAndMethods(Node $node, array $types, array $methods): bool
-    {
-        if (! $node instanceof MethodCall) {
-            return false;
-        }
-
-        $callerNodeTypes = $this->nodeTypeResolver->resolve($node->var);
-        if (! array_intersect($types, $callerNodeTypes)) {
-            return false;
-        }
-
-        return $this->isMethods($node, $methods);
-    }
-
-    /**
      * Checks "$this->classOfSpecificType->specificMethodName()"
      *
      * @param string[] $methods
@@ -145,20 +127,6 @@ final class MethodCallAnalyzer
         $nodeTypes = $this->nodeTypeResolver->resolve($node->var);
 
         return array_intersect($nodeTypes, $types) ? $nodeTypes : null;
-    }
-
-    public function isTypeAndMagic(Node $node, string $type): bool
-    {
-        if (! $this->isType($node, $type)) {
-            return false;
-        }
-
-        /** @var MethodCall $node */
-        $nodeMethodName = $node->name->name;
-
-        $publicMethodNames = $this->getPublicMethodNamesForType($type);
-
-        return ! in_array($nodeMethodName, $publicMethodNames, true);
     }
 
     /**
