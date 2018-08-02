@@ -45,8 +45,14 @@ parameters:
             - '*/packages/NodeTypeResolver/**/PerNodeTypeResolver/**TypeResolver.php'
             - '*/packages/NodeTypeResolver/**/PerNodeTypeResolver/**TypeResolver/*Test.php'
             - 'packages/BetterReflection/src/Reflector/SmartClassReflector.php'
+            - 'tests/NodeAnalyzer/ClassLikeAnalyzerTest.php'
+            - 'tests/NodeValueResolver/ConstExprEvaluatorFactoryTest.php'
             - 'src/Rector/AbstractPHPUnitRector.php'
             - 'src/Rector/Class_/ParentClassToTraitsRector.php'
+            # example in description
+            - 'src/Rector/Assign/PropertyAssignToMethodCallRector.php'
+            - 'src/Rector/Constant/ClassConstantReplacerRector.php'
+            - 'src/Rector/Property/PropertyNameReplacerRector.php'
 
         # empty arguments passing
         PHP_CodeSniffer\Standards\PEAR\Sniffs\Functions\ValidDefaultValueSniff.NotAtEnd:

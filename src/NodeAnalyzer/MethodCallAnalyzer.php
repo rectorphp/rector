@@ -5,9 +5,7 @@ namespace Rector\NodeAnalyzer;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
-use Rector\BetterReflection\Reflector\SmartClassReflector;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use ReflectionMethod;
 
 /**
  * Read-only utils for MethodCall Node:
@@ -16,23 +14,12 @@ use ReflectionMethod;
 final class MethodCallAnalyzer
 {
     /**
-     * @var SmartClassReflector
-     */
-    private $smartClassReflector;
-
-    /**
-     * @var string[][]
-     */
-    private $publicMethodNamesForType = [];
-
-    /**
      * @var NodeTypeResolver
      */
     private $nodeTypeResolver;
 
-    public function __construct(SmartClassReflector $smartClassReflector, NodeTypeResolver $nodeTypeResolver)
+    public function __construct(NodeTypeResolver $nodeTypeResolver)
     {
-        $this->smartClassReflector = $smartClassReflector;
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
@@ -127,24 +114,5 @@ final class MethodCallAnalyzer
         $nodeTypes = $this->nodeTypeResolver->resolve($node->var);
 
         return array_intersect($nodeTypes, $types) ? $nodeTypes : null;
-    }
-
-    /**
-     * @return string[]
-     */
-    private function getPublicMethodNamesForType(string $type): array
-    {
-        if (isset($this->publicMethodNamesForType[$type])) {
-            return $this->publicMethodNamesForType[$type];
-        }
-
-        $classReflection = $this->smartClassReflector->reflect($type);
-        if ($classReflection === null) {
-            return [];
-        }
-
-        $publicMethods = $classReflection->getMethods(ReflectionMethod::IS_PUBLIC);
-
-        return $this->publicMethodNamesForType[$type] = array_keys($publicMethods);
     }
 }

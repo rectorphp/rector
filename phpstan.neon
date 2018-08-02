@@ -66,7 +66,6 @@ parameters:
 
         # buggy
         - '#Access to an undefined property PhpParser\\Node\\Expr::\$value#' # 2
-        - '#Parameter \#1 \$functionLikeNode of method Rector\\NodeTypeResolver\\TypeContext::getFunctionReflection\(\) expects PhpParser\\Node\\Expr\\Closure\|PhpParser\\Node\\Stmt\\ClassMethod\|PhpParser\\Node\\Stmt\\Function_, PhpParser\\Node\\FunctionLike given#' # 1
         - '#Access to an undefined property PhpParser\\Node\\Expr::\$(name|var)#' # 2
 
         # tests or coding standars?
