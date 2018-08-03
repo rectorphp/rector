@@ -21,4 +21,13 @@ final class MyClass
             return false;
         }
     }
+
+    public function unnecessaryIf(): bool
+    {
+        if (1 === true) {
+            return true;
+        }
+
+        return false;
+    }
 }

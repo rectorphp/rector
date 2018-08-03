@@ -97,15 +97,27 @@ CODE_SAMPLE
             return false;
         }
 
-        $nextNode = $returnNode->getAttribute(Attribute::NEXT_NODE);
+        $nextNodeAfterReturn = $returnNode->getAttribute(Attribute::NEXT_NODE);
+        $nextNodeAfterIf = $node->getAttribute(Attribute::NEXT_NODE);
 
-        if (! $nextNode instanceof Else_) {
+        if (! $nextNodeAfterReturn instanceof Else_ && !$nextNodeAfterIf instanceof Return_) {
             return false;
         }
 
-        $elseNode = $nextNode;
+        if ($nextNodeAfterIf !== null) {
+            $returnExpr = $nextNodeAfterIf->expr;
+            if (! $returnExpr instanceof ConstFetch) {
+                return false;
+            }
 
-        $elseExpr = $elseNode->stmts[0];
+            $constFetchNode = $returnExpr;
+
+            return $constFetchNode->name->toLowerString() === 'false';
+        }
+
+        $nextNode = $nextNodeAfterReturn;
+
+        $elseExpr = $nextNode->stmts[0];
 
         if (! $elseExpr instanceof Return_) {
             return false;
@@ -124,6 +136,12 @@ CODE_SAMPLE
 
     public function refactor(Node $node): ?Node
     {
+        $nextPossibleNode = $node->getAttribute(Attribute::NEXT_NODE);
+
+        if ($nextPossibleNode !== null) {
+            // remove next node
+        }
+
         return new Return_($this->condition);
     }
 }

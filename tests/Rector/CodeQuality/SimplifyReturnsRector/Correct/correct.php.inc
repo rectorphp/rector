@@ -13,4 +13,9 @@ final class MyClass
 
         return $foo >= true;
     }
+
+    public function unnecessaryIf(): bool
+    {
+        return 1 === true;
+    }
 }
