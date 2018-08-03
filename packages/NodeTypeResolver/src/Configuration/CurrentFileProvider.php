@@ -21,7 +21,7 @@ final class CurrentFileProvider
     {
         if ($this->splFileInfo === null) {
             throw new ShouldNotHappenException(
-                'splFileInfo was not set. Did you forget to call setCurrentFile() first?'
+                '$splFileInfo property was not set. Did you forget to call setCurrentFile() first?'
             );
         }
 

@@ -5,7 +5,8 @@ namespace App\Repository;
 use App\Entity\Post;
 use Doctrine\ORM\EntityRepository;
 
-final class PostRepository
+// @todo this class is analysed twice by PHPStan and thus it fails - restart it!
+final class Post_Repository
 {
     /**
      * @var \Doctrine\ORM\EntityRepository
