@@ -71,12 +71,11 @@ parameters:
 
         # tests or coding standars?
         - '#Constructor of class [\s\S]+ has an unused parameter \$html#' # 2
-        - '#Call to an undefined method Nette\\Utils\\Html::add\(\)#' # 1
 
         # A test class
         - '#Class SomeClass not found#'
 
     excludes_analyse:
         # test files
-        - '*tests/Rector/Dynamic/MethodNameReplacerRector/**/SomeClass.php'
+        - '*tests/Rector/MethodCall/MethodNameReplacerRector/**/SomeClass.php'
         - '*packages/BetterReflection/tests/Reflector/NotLoadedSource/SomeClass.php'

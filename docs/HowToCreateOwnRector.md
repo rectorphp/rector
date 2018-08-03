@@ -1,6 +1,6 @@
 ## 6 Steps to Add New Rector
 
-In case you need a transformation that you didn't find in Dynamic Rectors, you can create your own:
+In case you need a transformation that you didn't find in General Rectors, you can create your own:
 
 1. Just extend `Rector\Rector\AbstractRector` class. It will prepare **2 methods**:
 

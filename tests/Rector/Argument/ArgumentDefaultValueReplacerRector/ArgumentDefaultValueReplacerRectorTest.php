@@ -6,7 +6,7 @@ use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
- * @covers \Rector\Rector\Dynamic\ArgumentDefaultValueReplacerRector
+ * @covers \Rector\Rector\Argument\ArgumentDefaultValueReplacerRector
  */
 final class ArgumentDefaultValueReplacerRectorTest extends AbstractRectorTestCase
 {

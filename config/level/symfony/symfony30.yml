@@ -15,7 +15,7 @@ services:
     Rector\Symfony\Rector\Form\FormTypeGetParentRector: ~
     Rector\Symfony\Rector\Form\OptionNameRector: ~
 
-    # dynamic
+    # general
     Rector\Rector\Constant\ClassConstantReplacerRector:
         $oldToNewConstantsByClass:
             # form
