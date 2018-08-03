@@ -2,18 +2,21 @@
 
 namespace Rector\DependencyInjection;
 
-use Rector\DependencyInjection\CompilerPass\AutoBindParametersCompilerPass;
-use Rector\DependencyInjection\CompilerPass\AutowireDefaultCompilerPass;
 use Rector\DependencyInjection\CompilerPass\CollectorCompilerPass;
 use Rector\NodeTypeResolver\DependencyInjection\CompilerPass\NodeTypeResolverCollectorCompilerPass;
 use Rector\YamlRector\DependencyInjection\YamlRectorCollectorCompilerPass;
+use Symfony\Component\Config\Loader\DelegatingLoader;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\Kernel;
 use Symplify\BetterPhpDocParser\DependencyInjection\CompilerPass\CollectDecoratorsToPhpDocInfoFactoryCompilerPass;
+use Symplify\EasyCodingStandard\DependencyInjection\DelegatingLoaderFactory;
+use Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutoBindParametersCompilerPass;
+use Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutowireDefaultCompilerPass;
 use Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutowireSinglyImplementedCompilerPass;
-use Symplify\PackageBuilder\DependencyInjection\CompilerPass\PublicForTestsCompilerPass;
+use Symplify\PackageBuilder\DependencyInjection\CompilerPass\PublicDefaultCompilerPass;
 
 final class RectorKernel extends Kernel
 {
@@ -65,14 +68,23 @@ final class RectorKernel extends Kernel
         $containerBuilder->addCompilerPass(new YamlRectorCollectorCompilerPass());
         $containerBuilder->addCompilerPass(new AutowireDefaultCompilerPass());
         $containerBuilder->addCompilerPass(new NodeTypeResolverCollectorCompilerPass());
-        $containerBuilder->addCompilerPass(new AutowireSinglyImplementedCompilerPass());
 
         // for symplify/better-php-doc-parser
         $containerBuilder->addCompilerPass(new CollectDecoratorsToPhpDocInfoFactoryCompilerPass());
 
-        // for tests
-        $containerBuilder->addCompilerPass(new PublicForTestsCompilerPass());
+        // for defaults
+        $containerBuilder->addCompilerPass(new PublicDefaultCompilerPass());
+        $containerBuilder->addCompilerPass(new AutowireSinglyImplementedCompilerPass());
 
         $containerBuilder->addCompilerPass(new AutoBindParametersCompilerPass());
+    }
+
+    /**
+     * This allows to use "%vendor%" variables in imports
+     * @param ContainerInterface|ContainerBuilder $container
+     */
+    protected function getContainerLoader(ContainerInterface $container): DelegatingLoader
+    {
+        return (new DelegatingLoaderFactory())->createFromContainerBuilderAndKernel($container, $this);
     }
 }

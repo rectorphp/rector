@@ -1,8 +1,5 @@
 imports:
-    # in monorepo
-    - { resource: '../../../../vendor/symplify/better-phpdoc-parser/src/config/services.yml',  ignore_errors: true }
-    # as dependency
-    - { resource: '../../../../../../symplify/better-phpdoc-parser/src/config/services.yml', ignore_errors: true }
+    - { resource: '%vendor%/symplify/better-phpdoc-parser/src/config/services.yml' }
 
 services:
     Rector\BetterPhpDocParser\:

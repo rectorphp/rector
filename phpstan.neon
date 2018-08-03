@@ -45,6 +45,7 @@ parameters:
 
         # subtype
         - '#Property PhpParser\\Node\\Param::\$type \(PhpParser\\Node\\Name|PhpParser\\Node\\NullableType\|string\|null\) does not accept PhpParser\\Node\\Identifier|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType#' # 3
+        - '#Parameter \#1 \$containerBuilder of method Symplify\\EasyCodingStandard\\DependencyInjection\\DelegatingLoaderFactory::createFromContainerBuilderAndKernel\(\) expects Symfony\\Component\\DependencyInjection\\ContainerBuilder, Symfony\\Component\\DependencyInjection\\ContainerInterface given#' # 1
 
         # false positive
         - '#Parameter \#1 \$kernelClass of method Rector\\Symfony\\Bridge\\SymfonyKernelParameterGuard::(ensureKernelClassExists|ensureIsKernelInstance)\(\) expects string, string\|null given#' # 2
@@ -71,6 +72,9 @@ parameters:
         # tests or coding standars?
         - '#Constructor of class [\s\S]+ has an unused parameter \$html#' # 2
         - '#Call to an undefined method Nette\\Utils\\Html::add\(\)#' # 1
+
+        # A test class
+        - '#Class SomeClass not found#'
 
     excludes_analyse:
         # test files
