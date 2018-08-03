@@ -11,6 +11,16 @@ if (defined('RECTOR_PREFIXED') && ! $isDevRepository) {
     }
 }
 
+// autoload project even from non-root use
+$autoloadInWorkingDirectory = getcwd() . '/vendor/autoload.php';
+if (is_file($autoloadInWorkingDirectory)) {
+    require_once $autoloadInWorkingDirectory;
+}
+
+if (class_exists('Rector\DependencyInjection\RectorKernel')) {
+    return;
+}
+
 $possibleAutoloadPaths = [
     // dev repository or prefixed rector
     __DIR__ . '/../vendor/autoload.php',
