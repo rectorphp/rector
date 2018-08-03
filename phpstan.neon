@@ -72,9 +72,6 @@ parameters:
         # tests or coding standars?
         - '#Constructor of class [\s\S]+ has an unused parameter \$html#' # 2
 
-        # A test class
-        - '#Class SomeClass not found#'
-
     excludes_analyse:
         # test files
         - '*tests/Rector/MethodCall/MethodNameReplacerRector/**/SomeClass.php'
