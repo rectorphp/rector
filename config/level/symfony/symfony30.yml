@@ -11,14 +11,12 @@ services:
             'security > firewalls > default > remember_me > key': 'secret'
 
     # php
-
     Rector\Symfony\Rector\HttpKernel\GetRequestRector: ~
     Rector\Symfony\Rector\Form\FormTypeGetParentRector: ~
     Rector\Symfony\Rector\Form\OptionNameRector: ~
 
     # dynamic
-
-    Rector\Rector\Dynamic\ClassConstantReplacerRector:
+    Rector\Rector\Constant\ClassConstantReplacerRector:
         $oldToNewConstantsByClass:
             # form
             'Symfony\Component\Form\FormEvents':
@@ -30,7 +28,7 @@ services:
                 'ROUND_HALFUP': 'ROUND_HALF_UP'
                 'ROUND_HALFDOWN': 'ROUND_HALF_DOWN'
 
-    Rector\Rector\Dynamic\MethodNameReplacerRector:
+    Rector\Rector\MethodCall\MethodNameReplacerRector:
         $perClassOldToNewMethods:
             # class loader
             'Symfony\Component\ClassLoader\UniversalClassLoader\UniversalClassLoader':

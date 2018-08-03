@@ -1,7 +1,7 @@
 # source: https://book.cakephp.org/3.next/en/appendices/3-6-migration-guide.html
 
 services:
-    Rector\Rector\Dynamic\MethodNameReplacerRector:
+    Rector\Rector\MethodCall\MethodNameReplacerRector:
         $perClassOldToNewMethods:
             'Cake\ORM\Table':
                  'association': 'getAssociation'

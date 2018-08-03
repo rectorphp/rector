@@ -5,7 +5,7 @@ services:
     Rector\Symfony\Rector\Yaml\SpaceBetweenKeyAndValueYamlRector: ~
 
     # dependency-injection
-    Rector\Rector\Dynamic\ArgumentAdderRector:
+    Rector\Rector\Argument\ArgumentAdderRector:
         $argumentChangesByMethodAndType:
             -
                 class: Symfony\Component\DependencyInjection\ContainerBuilder

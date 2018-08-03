@@ -6,7 +6,7 @@ services:
             ' !!php/object': ' !php/object'
 
     # replace args
-    Rector\Rector\Dynamic\ArgumentDefaultValueReplacerRector:
+    Rector\Rector\Argument\ArgumentDefaultValueReplacerRector:
         $argumentChangesByMethodAndType:
             # covers https://github.com/symfony/symfony/blob/3.4/UPGRADE-3.1.md#yaml
             -

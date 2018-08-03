@@ -2,7 +2,7 @@
 
 services:
     # @todo, use this and return typehint
-    Rector\Rector\Dynamic\ReturnTypehintRector:
+    Rector\Rector\Typehint\ReturnTypehintRector:
         $typehintForMethodByClass:
             # class
             'Sylius\Bundle\AdminApiBundle\Model\ClientManager':

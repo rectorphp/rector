@@ -3,7 +3,7 @@
 services:
     Rector\Sylius\Rector\Review\ReplaceCreateMethodWithoutReviewerRector: ~
 
-    Rector\Rector\Dynamic\MethodNameReplacerRector:
+    Rector\Rector\MethodCall\MethodNameReplacerRector:
             $perClassOldToNewMethods:
                 'Sylius\Component\Core\Repository\OrderRepositoryInterface':
                     'count': 'countPlacedOrders'
@@ -18,13 +18,13 @@ services:
                 'Sylius\Component\Taxonomy\Model\TaxonInterface':
                     'getParents ': 'getAncestors'
 
-    Rector\Rector\Dynamic\ParentTypehintedArgumentRector:
+    Rector\Rector\Typehint\ParentTypehintedArgumentRector:
         $typehintForArgumentByMethodAndClass:
             'Sylius\Bundle\CoreBundle\Context\SessionAndChannelBasedCartContext':
                 '__construct':
                     '$cartStorage': 'Sylius\Component\Core\Storage\CartStorageInterface'
 
-    Rector\Rector\Dynamic\ArgumentAdderRector:
+    Rector\Rector\Argument\ArgumentAdderRector:
         $argumentChangesByMethodAndType:
             -
                 class: 'Sylius\Component\Mailer\Sender\SenderInterface'
@@ -37,7 +37,7 @@ services:
                 position: 2
                 default_value: false
 
-    Rector\Rector\Dynamic\ReturnTypehintRector:
+    Rector\Rector\Typehint\ReturnTypehintRector:
         $returnTypehintByMethod:
             'Sylius\Component\Order\Model\OrderInterface':
                 'getAdjustmentsRecursively':

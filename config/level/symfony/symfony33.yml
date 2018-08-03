@@ -1,6 +1,6 @@
 services:
     # dependency-injection
-    Rector\Rector\Dynamic\ArgumentAdderRector:
+    Rector\Rector\Argument\ArgumentAdderRector:
         $argumentChangesByMethodAndType:
             # added default value
             -
@@ -41,7 +41,7 @@ services:
             'Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\ConfigCachePass': 'Symfony\Component\Config\DependencyInjection\ConfigCachePass'
             'Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\PropertyInfoPass': 'Symfony\Component\PropertyInfo\DependencyInjection\PropertyInfoPass'
 
-    Rector\Rector\Dynamic\MethodNameReplacerRector:
+    Rector\Rector\MethodCall\MethodNameReplacerRector:
         $perClassOldToNewMethods:
             # dependency-injection
             'Symfony\Component\DependencyInjection\Container':

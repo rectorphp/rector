@@ -9,7 +9,7 @@ services:
             ' !php/const:': ' !php/const '
             ' !str': ' !!str'
 
-    Rector\Rector\Dynamic\ArgumentRemoverRector:
+    Rector\Rector\Argument\ArgumentRemoverRector:
         $argumentChangesByMethodAndType:
             -
                 class: 'Symfony\Component\Yaml\Yaml'
