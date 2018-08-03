@@ -32,6 +32,7 @@ final class NodeTraverserQueue
      * @var StandaloneTraverseNodeTraverser
      */
     private $standaloneTraverseNodeTraverser;
+
     /**
      * @var CurrentFileProvider
      */

@@ -11,7 +11,9 @@ parameters:
         - '#Cannot cast PhpParser\\Node\\Expr\|PhpParser\\Node\\Identifier|string to string#' # 3
         - '#Cannot cast PhpParser\\Node\\Expr\|PhpParser\\Node\\Name to string#'
         - '#Instanceof between PhpParser\\Node\\Expr|PhpParser\\Node\\Identifier and PhpParser\\Node\\Name will always evaluate to false#'
-
+        - '#Parameter \#1 \$file of static method PHPStan\\Analyser\\ScopeContext::create\(\) expects string, string\|false given#'
+        - '#Parameter \#1 \$files of method PHPStan\\Analyser\\NodeScopeResolver::setAnalysedFiles\(\) expects array<string>, array<int, string\|false> given#'
+ClassTypeResolverTest.php
         - '#Array \(array<array<PhpParser\\Node\\Stmt>>\) does not accept array<PhpParser\\Node\\Stmt|null>#'
 
         # already fixed, invalidated cache?
@@ -71,6 +73,12 @@ parameters:
 
         # tests or coding standars?
         - '#Constructor of class [\s\S]+ has an unused parameter \$html#' # 2
+
+        # too strict
+        - '#Parameter \#1 \$currentWorkingDirectory of class PHPStan\\DependencyInjection\\ContainerFactory constructor expects string, string\|false given#' # 1
+
+        # known value
+        - '#Property Rector\\NodeTypeResolver\\NodeVisitor\\PHPStanScopeNodeVisitor::\$nodeScopeResolver \(PHPStan\\Analyser\\NodeScopeResolver\) does not accept object#'
 
     excludes_analyse:
         # test files

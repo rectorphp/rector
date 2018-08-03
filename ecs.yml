@@ -22,6 +22,7 @@ services:
             - 'Roave\BetterReflection\SourceLocator\Located\LocatedSource'
             - 'Rector\Reporting\FileDiff'
             - 'Rector\RectorDefinition\*'
+            - 'PHPStan\Analyser\Scope'
 
     Symplify\CodingStandard\Fixer\Naming\PropertyNameMatchingTypeFixer:
         extra_skipped_classes:

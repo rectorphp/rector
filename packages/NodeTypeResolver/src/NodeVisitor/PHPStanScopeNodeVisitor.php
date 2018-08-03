@@ -4,6 +4,7 @@ namespace Rector\NodeTypeResolver\NodeVisitor;
 
 use Nette\DI\Container;
 use PhpParser\Node;
+use PhpParser\Node\Stmt;
 use PhpParser\NodeVisitorAbstract;
 use PhpParser\PrettyPrinter\Standard;
 use PHPStan\Analyser\NodeScopeResolver;
@@ -25,12 +26,12 @@ final class PHPStanScopeNodeVisitor extends NodeVisitorAbstract
     /**
      * @var NodeScopeResolver
      */
-    private $nodeScopeResolver = null;
+    private $nodeScopeResolver;
 
     /**
      * @var Scope
      */
-    private $scope = null;
+    private $scope;
 
     /**
      * @var Container
@@ -52,7 +53,7 @@ final class PHPStanScopeNodeVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @param Node\Stmt[] $nodes
+     * @param Stmt[] $nodes
      */
     public function beforeTraverse(array $nodes): void
     {
@@ -79,9 +80,10 @@ final class PHPStanScopeNodeVisitor extends NodeVisitorAbstract
      */
     public function enterNode(Node $node)
     {
+        $this->nodeScopeResolver->setAnalysedFiles([$this->currentFileProvider->getSplFileInfo()->getRealPath()]);
+
         // it needs to be done here, because all other NodeVisitors enterNode() methods have to be run
-        $this->nodeScopeResolver->processNodes([$node], $this->scope, function (Node $node, Scope $scope) {
-            dump($this->scope->isInClass());
+        $this->nodeScopeResolver->processNodes([$node], $this->scope, function (Node $node, Scope $scope): void {
             // Record scope
             $this->scope = $scope;
             $node->setAttribute(Attribute::SCOPE, $scope);

@@ -2,6 +2,7 @@
 
 namespace Rector\NodeTypeResolver\Configuration;
 
+use Rector\Exception\ShouldNotHappenException;
 use Symfony\Component\Finder\SplFileInfo;
 
 final class CurrentFileProvider
@@ -18,6 +19,12 @@ final class CurrentFileProvider
 
     public function getSplFileInfo(): SplFileInfo
     {
+        if ($this->splFileInfo === null) {
+            throw new ShouldNotHappenException(
+                'splFileInfo was not set. Did you forget to call setCurrentFile() first?'
+            );
+        }
+
         return $this->splFileInfo;
     }
 }

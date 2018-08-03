@@ -4,7 +4,7 @@ namespace Rector\Application;
 
 use Rector\NodeTraverserQueue\NodeTraverserQueue;
 use Rector\Printer\FormatPerservingPrinter;
-use SplFileInfo;
+use Symfony\Component\Finder\SplFileInfo;
 
 final class FileProcessor
 {
