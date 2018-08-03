@@ -4,17 +4,11 @@
 $isDevRepository = file_exists(__DIR__ . '/../README.md') || \file_exists(__DIR__ . '/../../build');
 
 // load the project with Prefixed Rector
-if (defined('RECTOR_PREFIXED') && ! $isDevRepository) {
+if (! $isDevRepository) {
     $projectAutoload = getcwd() . '/vendor/autoload.php';
     if (is_file($projectAutoload)) {
         require_once $projectAutoload;
     }
-}
-
-// autoload project even from non-root use
-$autoloadInWorkingDirectory = getcwd() . '/vendor/autoload.php';
-if (is_file($autoloadInWorkingDirectory)) {
-    require_once $autoloadInWorkingDirectory;
 }
 
 if (class_exists('Rector\DependencyInjection\RectorKernel')) {

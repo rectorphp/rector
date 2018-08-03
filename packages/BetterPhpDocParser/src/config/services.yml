@@ -1,5 +1,7 @@
 imports:
-    - { resource: '%vendor%/symplify/better-phpdoc-parser/src/config/services.yml' }
+    # to cover prefixed rector and projects autoload
+    - { resource: '%vendor%/symplify/better-phpdoc-parser/src/config/services.yml', ignore_errors: true }
+    - { resource: '%cwd%/symplify/better-phpdoc-parser/src/config/services.yml', ignore_errors: true }
 
 services:
     Rector\BetterPhpDocParser\:
