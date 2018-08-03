@@ -26,7 +26,7 @@ final class TypeNodeVisitor extends NodeVisitorAbstract
             throw new ShouldNotHappenException(sprintf(
                 'The "%s" Node attribute should be resolved by "%s" in previous run.',
                 Attribute::SCOPE,
-                PHPStanScopeNodeVisitor::class
+                PHPStanScopeResolver::class
             ));
         }
 

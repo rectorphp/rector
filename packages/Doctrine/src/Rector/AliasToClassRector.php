@@ -61,7 +61,7 @@ CODE_SAMPLE
 $entityManager = new Doctrine\EntityManager();
 $entityManager->getRepository(\App\Entity\Post::class);
 CODE_SAMPLE
-            )
+            ),
         ]);
     }
 

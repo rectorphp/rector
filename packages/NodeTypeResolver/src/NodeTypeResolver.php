@@ -6,7 +6,7 @@ use PhpParser\Node;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
-use Rector\NodeTypeResolver\NodeVisitor\PHPStanScopeNodeVisitor;
+use Rector\NodeTypeResolver\NodeVisitor\PHPStanScopeResolver;
 
 final class NodeTypeResolver
 {
@@ -31,7 +31,7 @@ final class NodeTypeResolver
             throw new ShouldNotHappenException(sprintf(
                 'The "%s" Node attribute should be resolved by "%s" in previous run.',
                 Attribute::SCOPE,
-                PHPStanScopeNodeVisitor::class
+                PHPStanScopeResolver::class
             ));
         }
 
