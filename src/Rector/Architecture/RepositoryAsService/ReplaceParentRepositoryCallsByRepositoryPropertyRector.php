@@ -44,6 +44,8 @@ final class ReplaceParentRepositoryCallsByRepositoryPropertyRector extends Abstr
             return false;
         }
 
+        // of type...
+
         if (! $node->name instanceof Identifier) {
             return false;
         }

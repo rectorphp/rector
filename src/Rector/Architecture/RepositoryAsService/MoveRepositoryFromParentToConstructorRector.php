@@ -81,26 +81,6 @@ final class MoveRepositoryFromParentToConstructorRector extends AbstractRector
         $this->entityManagerClass = $entityManagerClass;
     }
 
-    public function isCandidate(Node $node): bool
-    {
-        if (! $node instanceof Class_) {
-            return false;
-        }
-
-        if (! $node->extends) {
-            return false;
-        }
-
-        $parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
-        if ($parentClassName !== $this->entityRepositoryClass) {
-            return false;
-        }
-
-        $className = $node->getAttribute(Attribute::CLASS_NAME);
-
-        return Strings::endsWith($className, 'Repository');
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Turns parent EntityRepository class to constructor dependency', [
@@ -140,6 +120,26 @@ CODE_SAMPLE
                 ]
             ),
         ]);
+    }
+
+    public function isCandidate(Node $node): bool
+    {
+        if (! $node instanceof Class_) {
+            return false;
+        }
+
+        if (! $node->extends) {
+            return false;
+        }
+
+        $parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
+        if ($parentClassName !== $this->entityRepositoryClass) {
+            return false;
+        }
+
+        $className = $node->getAttribute(Attribute::CLASS_NAME);
+
+        return Strings::endsWith($className, 'Repository');
     }
 
     /**
