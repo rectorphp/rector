@@ -5,10 +5,12 @@ namespace Rector\Rector\MagicDisclosure;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Cast\String_;
 use PhpParser\Node\Expr\MethodCall;
+use PHPStan\Analyser\Scope;
 use Rector\Builder\IdentifierRenamer;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\NodeTypeResolver\ScopeToTypesResolver;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -44,6 +46,10 @@ final class ToStringToMethodCallRector extends AbstractRector
      * @var MethodCallNodeFactory
      */
     private $methodCallNodeFactory;
+    /**
+     * @var ScopeToTypesResolver
+     */
+    private $scopeToTypesResolver;
 
     /**
      * Type to method call()
@@ -55,25 +61,29 @@ final class ToStringToMethodCallRector extends AbstractRector
         MethodCallAnalyzer $methodCallAnalyzer,
         IdentifierRenamer $identifierRenamer,
         NodeTypeResolver $nodeTypeResolver,
-        MethodCallNodeFactory $methodCallNodeFactory
+        MethodCallNodeFactory $methodCallNodeFactory,
+        ScopeToTypesResolver $scopeToTypesResolver
     ) {
         $this->typeToMethodCalls = $typeToMethodCalls;
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->methodCallNodeFactory = $methodCallNodeFactory;
+        $this->scopeToTypesResolver = $scopeToTypesResolver;
     }
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Turns defined __toString() to specific method calls.', [
+        return new RectorDefinition('Turns defined code uses of "__toString()" method  to specific method calls.', [
             new ConfiguredCodeSample(
 <<<'CODE_SAMPLE'
+$someValue = new SomeObject;
 $result = (string) $someValue;
 $result = $someValue->__toString();
 CODE_SAMPLE
                 ,
 <<<'CODE_SAMPLE'
+$someValue = new SomeObject;
 $result = $someValue->someMethod();
 $result = $someValue->someMethod();
 CODE_SAMPLE
@@ -121,7 +131,7 @@ CODE_SAMPLE
 
     private function processStringCandidate(String_ $stringNode): bool
     {
-        $nodeTypes = $this->nodeTypeResolver->resolve($stringNode->expr);
+        $nodeTypes = $this->scopeToTypesResolver->resolveScopeToTypes($stringNode->expr);
 
         foreach ($this->typeToMethodCalls as $type => $transformation) {
             if (in_array($type, $nodeTypes, true)) {

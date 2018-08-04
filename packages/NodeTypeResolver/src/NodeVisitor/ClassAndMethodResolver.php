@@ -53,7 +53,7 @@ final class ClassAndMethodResolver extends NodeVisitorAbstract
     /**
      * @param Node[] $nodes
      */
-    public function beforeTraverse(array $nodes): void
+    public function afterTraverse(array $nodes): void
     {
         $this->classNode = null;
         $this->className = null;
