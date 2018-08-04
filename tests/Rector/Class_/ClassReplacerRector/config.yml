@@ -1,5 +1,5 @@
 services:
     Rector\Rector\Class_\ClassReplacerRector:
         $oldToNewClasses:
-            'SomeNamespace\OldClass': 'SomeNamespace\NewClass'
+            'SomeNamespace\OldClass': 'Rector\Tests\Rector\Class_\ClassReplacerRector\Source\NewClass'
             'PhpParser\BuilderAbstract': 'PhpParser\Builder'

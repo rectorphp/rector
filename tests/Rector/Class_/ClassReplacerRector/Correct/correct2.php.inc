@@ -2,7 +2,7 @@
 
 namespace SomeNamespace;
 
-class MyCustomValidatorTest extends NewClass
+class MyCustomValidatorTest extends \Rector\Tests\Rector\Class_\ClassReplacerRector\Source\NewClass
 {
     // ...
 }
