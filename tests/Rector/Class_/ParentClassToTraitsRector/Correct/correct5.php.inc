@@ -4,7 +4,6 @@ use Rector\Tests\Rector\Class_\ParentClassToTraitsRector\Source\AnotherParentObj
 
 class ClassWithMultipleTraits
 {
-    use \SilverStripe\Core\Extensible;
-    use \SilverStripe\Core\Injector\Injectable;
-    use \SilverStripe\Core\Config\Configurable;
+    use \Rector\Tests\Rector\Class_\ParentClassToTraitsRector\Source\SomeTrait;
+    use \Rector\Tests\Rector\Class_\ParentClassToTraitsRector\Source\SecondTrait;
 }

@@ -79,19 +79,10 @@ final class PHPStanNodeScopeResolver
     ) {
         $phpstanContainer = (new ContainerFactory(getcwd()))->create(sys_get_temp_dir(), []);
 
-        /** @var NodeScopeResolver nodeScopeResolver */
-        $this->nodeScopeResolver = $phpstanContainer->getByType(NodeScopeResolver::class);
-
-        /** @var Broker $broker */
         $this->phpstanBroker = $phpstanContainer->getByType(Broker::class);
-
-        /** @var Standard $printer */
         $this->phpstanPrinter = $phpstanContainer->getByType(Standard::class);
-
-        /** @var TypeSpecifier $typeSpecifier */
+        $this->nodeScopeResolver = $phpstanContainer->getByType(NodeScopeResolver::class);
         $this->phpstanTypeSpecifier = $phpstanContainer->getByType(TypeSpecifier::class);
-
-        /** @var ScopeFactory $scopeFactory */
         $this->phpstanScopeFactory = $phpstanContainer->getByType(ScopeFactory::class);
 
         $this->currentFileProvider = $currentFileProvider;
@@ -105,16 +96,11 @@ final class PHPStanNodeScopeResolver
      */
     public function processNodes(array $nodes): array
     {
-        $nodeTraverser = new NodeTraverser();
-        $nodeTraverser->addVisitor(new NameResolver());
-        $nodeTraverser->traverse($nodes);
-
-        // load analysed files
-        $source = $this->parameterProvider->provideParameter(Option::SOURCE);
-        $phpFiles = $this->filesFinder->findInDirectoriesAndFiles($source, ['php']);
-        $this->nodeScopeResolver->setAnalysedFiles($phpFiles);
+        $this->resolveNamespacedNamesForNodes($nodes);
 
         $this->scope = $this->createScopeByFile($this->currentFileProvider->getSplFileInfo());
+
+        $this->setAnalysedFiles();
 
         $this->nodeScopeResolver->processNodes(
             $nodes,
@@ -140,5 +126,22 @@ final class PHPStanNodeScopeResolver
             $this->phpstanTypeSpecifier,
             $scopeContext
         );
+    }
+
+    /**
+     * @param Stmt[] $nodes
+     */
+    private function resolveNamespacedNamesForNodes(array $nodes): void
+    {
+        $nodeTraverser = new NodeTraverser();
+        $nodeTraverser->addVisitor(new NameResolver());
+        $nodeTraverser->traverse($nodes);
+    }
+
+    private function setAnalysedFiles(): void
+    {
+        $source = $this->parameterProvider->provideParameter(Option::SOURCE);
+        $phpFiles = $this->filesFinder->findInDirectoriesAndFiles($source, ['php']);
+        $this->nodeScopeResolver->setAnalysedFiles($phpFiles);
     }
 }

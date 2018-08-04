@@ -22,11 +22,11 @@ final class StandaloneTraverseNodeTraverser
     /**
      * @var PHPStanNodeScopeResolver
      */
-    private $PHPStanNodeScopeResolver;
+    private $phpStanNodeScopeResolver;
 
-    public function __construct(PHPStanNodeScopeResolver $PHPStanNodeScopeResolver)
+    public function __construct(PHPStanNodeScopeResolver $phpStanNodeScopeResolver)
     {
-        $this->PHPStanNodeScopeResolver = $PHPStanNodeScopeResolver;
+        $this->phpStanNodeScopeResolver = $phpStanNodeScopeResolver;
     }
 
     public function addNodeVisitor(NodeVisitor $nodeVisitor): void
@@ -43,7 +43,7 @@ final class StandaloneTraverseNodeTraverser
      */
     public function traverse(array $nodes): array
     {
-        $nodes = $this->PHPStanNodeScopeResolver->processNodes($nodes);
+        $nodes = $this->phpStanNodeScopeResolver->processNodes($nodes);
 
         foreach ($this->nodeTraversers as $nodeTraverser) {
             $nodes = $nodeTraverser->traverse($nodes);
