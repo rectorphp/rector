@@ -4,7 +4,7 @@ namespace Rector\NodeTypeResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
-use PhpParser\NodeTraverser;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\PrettyPrinter\Standard;
 use PHPStan\Analyser\NodeScopeResolver;
@@ -15,6 +15,7 @@ use PHPStan\Analyser\TypeSpecifier;
 use PHPStan\Broker\Broker;
 use PHPStan\DependencyInjection\ContainerFactory;
 use Rector\Configuration\Option;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\FileSystem\FilesFinder;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Configuration\CurrentFileProvider;
@@ -100,6 +101,8 @@ final class PHPStanNodeScopeResolver
 
         $this->setAnalysedFiles();
 
+        $this->ensureNameResolverWasRun($nodes);
+
         $this->nodeScopeResolver->processNodes(
             $nodes,
             $this->scope,
@@ -126,20 +129,31 @@ final class PHPStanNodeScopeResolver
         );
     }
 
-    /**
-     * @param Stmt[] $nodes
-     */
-    private function resolveNamespacedNamesForNodes(array $nodes): void
-    {
-        $nodeTraverser = new NodeTraverser();
-        $nodeTraverser->addVisitor(new NameResolver());
-        $nodeTraverser->traverse($nodes);
-    }
-
     private function setAnalysedFiles(): void
     {
         $source = $this->parameterProvider->provideParameter(Option::SOURCE);
         $phpFiles = $this->filesFinder->findInDirectoriesAndFiles($source, ['php']);
         $this->nodeScopeResolver->setAnalysedFiles($phpFiles);
+    }
+
+    /**
+     * @param Stmt[] $nodes
+     */
+    private function ensureNameResolverWasRun(array $nodes): void
+    {
+        foreach ($nodes as $node) {
+            if ($node instanceof Class_) {
+                if (! isset($node->namespacedName)) {
+                    throw new ShouldNotHappenException(sprintf(
+                        '"%s" node needs "namespacedNode" property set via "%s" Node Traverser. Did you forget to run it before calling "%s->processNodes()"?.',
+                        get_class($node),
+                        NameResolver::class,
+                        self::class
+                    ));
+                } else {
+                    return;
+                }
+            }
+        }
     }
 }
