@@ -43,14 +43,7 @@ final class StandaloneTraverseNodeTraverser
      */
     public function traverse(array $nodes): array
     {
-//        $this->PHPStanScopeNodeVisitor->setAnalysedFiles([]);
-
-        // required for PHPStan
-
         $nodes = $this->PHPStanNodeScopeResolver->processNodes($nodes);
-
-//        dump($nodes);
-//        die;
 
         foreach ($this->nodeTraversers as $nodeTraverser) {
             $nodes = $nodeTraverser->traverse($nodes);

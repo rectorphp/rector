@@ -2,9 +2,12 @@
 
 namespace SomeNamespace;
 
-use Symfony\Component\Validator\Tests\Constraints\AbstractConstraintValidatorTest;
-
-class MyCustomValidatorTest extends \Symfony\Component\Validator\Test\ConstraintValidatorTestCase
+class MyCustomValidatorTest extends NewClass
 {
     // ...
+}
+
+class OldClass
+{
+
 }
