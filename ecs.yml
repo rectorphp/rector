@@ -55,6 +55,9 @@ parameters:
             - 'src/Rector/Assign/PropertyAssignToMethodCallRector.php'
             - 'src/Rector/Constant/ClassConstantReplacerRector.php'
             - 'src/Rector/Property/PropertyNameReplacerRector.php'
+            - 'src/Rector/Annotation/AnnotationReplacerRector.php'
+            - 'src/Rector/Argument/ArgumentAdderRector.php'
+            - 'packages/BetterReflection/tests/Reflector/ClassReflectorOnSourceTest.php'
 
         # empty arguments passing
         PHP_CodeSniffer\Standards\PEAR\Sniffs\Functions\ValidDefaultValueSniff.NotAtEnd:

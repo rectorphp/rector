@@ -20,9 +20,10 @@ final class CurrentFileProvider
     public function getSplFileInfo(): SplFileInfo
     {
         if ($this->splFileInfo === null) {
-            throw new ShouldNotHappenException(
-                '$splFileInfo property was not set. Did you forget to call setCurrentFile() first?'
-            );
+            throw new ShouldNotHappenException(sprintf(
+                '$splFileInfo property was not set. Did you forget to call %s->setCurrentFile() first?',
+                self::class
+            ));
         }
 
         return $this->splFileInfo;

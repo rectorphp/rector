@@ -10,7 +10,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Configuration\Rector\ArgumentAdderRecipe;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
-use SomeClass;
 
 final class ArgumentAdderRector extends AbstractArgumentRector
 {
@@ -52,7 +51,7 @@ CODE_SAMPLE
                     ,
                     [
                         '$argumentChangesByMethodAndType' => [
-                            'class' => SomeClass::class,
+                            'class' => 'SomeClass',
                             'method' => 'someMethod',
                             'position' => 0,
                             'default_value' => 'true',
@@ -80,7 +79,7 @@ CODE_SAMPLE
                     ,
                     [
                         '$argumentChangesByMethodAndType' => [
-                            'class' => SomeClass::class,
+                            'class' => 'SomeClass',
                             'method' => 'someMethod',
                             'position' => 0,
                             'default_value' => 'true',

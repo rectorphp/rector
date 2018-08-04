@@ -5,7 +5,7 @@ namespace Rector\NodeAnalyzer;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
-use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\NodeTypeResolver\ScopeToTypesResolver;
 
 /**
  * Read-only utils for MethodCall Node:
@@ -14,13 +14,13 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class MethodCallAnalyzer
 {
     /**
-     * @var NodeTypeResolver
+     * @var ScopeToTypesResolver
      */
-    private $nodeTypeResolver;
+    private $scopeToTypesResolver;
 
-    public function __construct(NodeTypeResolver $nodeTypeResolver)
+    public function __construct(ScopeToTypesResolver $scopeToTypesResolver)
     {
-        $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->scopeToTypesResolver = $scopeToTypesResolver;
     }
 
     /**
@@ -96,9 +96,9 @@ final class MethodCallAnalyzer
             return false;
         }
 
-        $callerNodeTypes = $this->nodeTypeResolver->resolve($node->var);
+        $calledNodeTypes2 = $this->scopeToTypesResolver->resolveScopeToTypes($node->var);
 
-        return in_array($type, $callerNodeTypes, true);
+        return in_array($type, $calledNodeTypes2, true);
     }
 
     /**
@@ -111,7 +111,7 @@ final class MethodCallAnalyzer
             return null;
         }
 
-        $nodeTypes = $this->nodeTypeResolver->resolve($node->var);
+        $nodeTypes = $this->scopeToTypesResolver->resolveScopeToTypes($node->var);
 
         return array_intersect($nodeTypes, $types) ? $nodeTypes : null;
     }

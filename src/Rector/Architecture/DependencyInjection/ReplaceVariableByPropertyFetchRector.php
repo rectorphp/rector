@@ -10,6 +10,7 @@ use Rector\Builder\Class_\VariableInfo;
 use Rector\Configuration\Rector\Architecture\DependencyInjection\VariablesToPropertyFetchCollection;
 use Rector\Node\Attribute;
 use Rector\Node\PropertyFetchNodeFactory;
+use Rector\NodeTypeResolver\ScopeToTypesResolver;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -31,12 +32,19 @@ final class ReplaceVariableByPropertyFetchRector extends AbstractRector
      */
     private $propertyFetchNodeFactory;
 
+    /**
+     * @var ScopeToTypesResolver
+     */
+    private $scopeToTypesResolver;
+
     public function __construct(
         VariablesToPropertyFetchCollection $variablesToPropertyFetchCollection,
-        PropertyFetchNodeFactory $propertyFetchNodeFactory
+        PropertyFetchNodeFactory $propertyFetchNodeFactory,
+        ScopeToTypesResolver $scopeToTypesResolver
     ) {
         $this->variablesToPropertyFetchCollection = $variablesToPropertyFetchCollection;
         $this->propertyFetchNodeFactory = $propertyFetchNodeFactory;
+        $this->scopeToTypesResolver = $scopeToTypesResolver;
     }
 
     public function getDefinition(): RectorDefinition
@@ -106,7 +114,8 @@ CODE_SAMPLE
                 continue;
             }
 
-            if ($node->getAttribute(Attribute::TYPES) === $variableInfo->getTypes()) {
+            $nodeTypes = $this->scopeToTypesResolver->resolveScopeToTypes($node);
+            if ($nodeTypes === $variableInfo->getTypes()) {
                 $this->activeVariableInfo = $variableInfo;
                 return true;
             }

@@ -3,10 +3,8 @@
 namespace Rector\NodeTypeResolver;
 
 use PhpParser\Node;
-use Rector\Exception\ShouldNotHappenException;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
-use Rector\NodeTypeResolver\NodeVisitor\PHPStanScopeResolver;
 
 final class NodeTypeResolver
 {
@@ -27,18 +25,7 @@ final class NodeTypeResolver
      */
     public function resolve(Node $node): array
     {
-        if (! $node->hasAttribute(Attribute::SCOPE)) {
-            throw new ShouldNotHappenException(sprintf(
-                'The "%s" Node attribute should be resolved by "%s" in previous run.',
-                Attribute::SCOPE,
-                PHPStanScopeResolver::class
-            ));
-        }
-
-        // resolve just once
-        if ($node->hasAttribute(Attribute::TYPES)) {
-            return $node->getAttribute(Attribute::TYPES);
-        }
+        // @todo some cache per object hash?
 
         $nodeClass = get_class($node);
         if (! isset($this->perNodeTypeResolvers[$nodeClass])) {
@@ -46,11 +33,11 @@ final class NodeTypeResolver
         }
 
         $nodeTypes = $this->perNodeTypeResolvers[$nodeClass]->resolve($node);
-        $nodeTypes = $this->cleanPreSlashes($nodeTypes);
 
+        // temporary fallback
         $node->setAttribute(Attribute::TYPES, $nodeTypes);
 
-        return $nodeTypes;
+        return $this->cleanPreSlashes($nodeTypes);
     }
 
     /**

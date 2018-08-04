@@ -24,7 +24,5 @@ services:
             - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\ClassAndMethodResolver']]
             - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\NamespaceResolver']]
 
-#            - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\PHPStanScopeNodeVisitor']]
-
-            - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\TypeNodeVisitor']]
+#            - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\TypeNodeVisitor']]
 
