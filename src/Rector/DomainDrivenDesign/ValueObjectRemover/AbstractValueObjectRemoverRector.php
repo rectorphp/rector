@@ -7,6 +7,7 @@ use Rector\BetterPhpDocParser\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\BetterPhpDocParser\NodeAnalyzer\NamespaceAnalyzer;
 use Rector\NodeTraverserQueue\BetterNodeFinder;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\NodeTypeResolver\ScopeToTypesResolver;
 use Rector\Rector\AbstractRector;
 
 abstract class AbstractValueObjectRemoverRector extends AbstractRector
@@ -37,6 +38,11 @@ abstract class AbstractValueObjectRemoverRector extends AbstractRector
     protected $namespaceAnalyzer;
 
     /**
+     * @var ScopeToTypesResolver
+     */
+    protected $scopeToTypesResolver;
+
+    /**
      * @param string[] $valueObjectsToSimpleTypes
      */
     public function __construct(
@@ -44,13 +50,15 @@ abstract class AbstractValueObjectRemoverRector extends AbstractRector
         DocBlockAnalyzer $docBlockAnalyzer,
         NodeTypeResolver $nodeTypeResolver,
         BetterNodeFinder $betterNodeFinder,
-        NamespaceAnalyzer $namespaceAnalyzer
+        NamespaceAnalyzer $namespaceAnalyzer,
+        ScopeToTypesResolver $scopeToTypesResolver
     ) {
         $this->valueObjectsToSimpleTypes = $valueObjectsToSimpleTypes;
         $this->docBlockAnalyzer = $docBlockAnalyzer;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->namespaceAnalyzer = $namespaceAnalyzer;
+        $this->scopeToTypesResolver = $scopeToTypesResolver;
     }
 
     /**
@@ -81,6 +89,7 @@ abstract class AbstractValueObjectRemoverRector extends AbstractRector
     protected function matchOriginAndNewType(Node $node): ?array
     {
         $nodeTypes = $this->nodeTypeResolver->resolve($node);
+
         foreach ($nodeTypes as $nodeType) {
             if (! isset($this->valueObjectsToSimpleTypes[$nodeType])) {
                 continue;
