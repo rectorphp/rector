@@ -4,6 +4,6 @@ services:
             'PhpParser\Parser':
                 'parse':
                     'code': 'string'
-            'Doctrine\ORM\Mapping\ClassMetadataFactory':
+            'Rector\Tests\Rector\Typehint\ParentTypehintedArgumentRector\Source\ClassMetadataFactory':
                 'setEntityManager':
                     'em': 'Doctrine\ORM\EntityManagerInterface'

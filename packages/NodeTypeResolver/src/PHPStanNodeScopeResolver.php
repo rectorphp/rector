@@ -148,15 +148,16 @@ final class PHPStanNodeScopeResolver
     {
         foreach ($nodes as $node) {
             if ($node instanceof Class_) {
-                if (! isset($node->namespacedName)) {
-                    throw new ShouldNotHappenException(sprintf(
-                        '"%s" node needs "namespacedNode" property set via "%s" Node Traverser. Did you forget to run it before calling "%s->processNodes()"?.',
-                        get_class($node),
-                        NameResolver::class,
-                        self::class
-                    ));
+                if (isset($node->namespacedName)) {
+                    return;
                 }
-                return;
+
+                throw new ShouldNotHappenException(sprintf(
+                    '"%s" node needs "namespacedNode" property set via "%s" Node Traverser. Did you forget to run it before calling "%s->processNodes()"?.',
+                    get_class($node),
+                    NameResolver::class,
+                    self::class
+                ));
             }
         }
     }

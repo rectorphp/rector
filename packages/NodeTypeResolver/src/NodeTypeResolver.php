@@ -34,9 +34,6 @@ final class NodeTypeResolver
 
         $nodeTypes = $this->perNodeTypeResolvers[$nodeClass]->resolve($node);
 
-        // temporary fallback
-//        $node->setAttribute(Attribute::TYPES, $nodeTypes);
-
         return $this->cleanPreSlashes($nodeTypes);
     }
 

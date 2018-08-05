@@ -4,6 +4,7 @@ namespace Rector\NodeTypeResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Variable;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\IntersectionType;
 use PHPStan\Type\ObjectType;
@@ -33,7 +34,7 @@ final class ScopeToTypesResolver
 
         // awww :(
         $types = [];
-        if ($node instanceof Expr\Variable && $node->name === 'this') {
+        if ($node instanceof Variable && $node->name === 'this') {
             $types[] = $nodeScope->getClassReflection()->getName();
             $types = array_merge($types, $nodeScope->getClassReflection()->getParentClassesNames());
 
@@ -47,8 +48,6 @@ final class ScopeToTypesResolver
         if (! $node instanceof Expr) {
             return $this->resolveNonExprNodeToTypes($node);
         }
-
-
 
         $types = [];
 
