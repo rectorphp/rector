@@ -5,7 +5,9 @@ namespace Rector\NodeAnalyzer;
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Identifier;
+use PHPStan\Analyser\Scope;
 use Rector\BetterReflection\Reflector\SmartClassReflector;
+use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use ReflectionProperty;
 
@@ -87,6 +89,10 @@ final class PropertyFetchAnalyzer
         $identifierNode = $node->name;
 
         $nodePropertyName = $identifierNode->toString();
+
+        /** @var Scope $nodeScope */
+        $nodeScope = $node->getAttribute(Attribute::SCOPE);
+
 
         $publicPropertyNames = $this->getPublicPropertyNamesForType($type);
 

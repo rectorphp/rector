@@ -20,6 +20,7 @@ use Rector\NodeTypeResolver\Configuration\CurrentFileProvider;
 use Rector\Printer\BetterStandardPrinter;
 use Symfony\Component\Finder\SplFileInfo;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
+use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 
 /**
  * @inspired by https://github.com/silverstripe/silverstripe-upgrader/blob/532182b23e854d02e0b27e68ebc394f436de0682/src/UpgradeRule/PHP/Visitor/PHPStanScopeVisitor.php
@@ -103,7 +104,19 @@ final class PHPStanNodeScopeResolver
                 // the class reflection is resolved AFTER entering to class node
                 // so we need to get it from the first after this one
                 if ($node instanceof Class_) {
-                    $scope = $scope->enterClass($this->phpstanBroker->getClass((string) $node->namespacedName));
+                    if (isset($node->namespacedName)) {
+                        $scope = $scope->enterClass($this->phpstanBroker->getClass((string) $node->namespacedName));
+                    } else {
+                        // possibly anonymous class
+                        $privatesAccessor = (new PrivatesAccessor);
+                        $anonymousClassReflection = $privatesAccessor->getPrivateProperty(
+                            $this->nodeScopeResolver, 'anonymousClassReflection'
+                        );
+
+                        if ($anonymousClassReflection) {
+                            $scope = $scope->enterAnonymousClass($anonymousClassReflection);
+                        }
+                    }
                 }
 
                 $node->setAttribute(Attribute::SCOPE, $scope);

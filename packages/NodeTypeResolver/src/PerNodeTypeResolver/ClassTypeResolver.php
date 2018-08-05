@@ -9,7 +9,7 @@ use PHPStan\Reflection\ClassReflection;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 
-final class ClassTypeResolver extends AbstractClassLikeTypeResolver implements PerNodeTypeResolverInterface
+final class ClassTypeResolver implements PerNodeTypeResolverInterface
 {
     /**
      * @return string[]
@@ -32,9 +32,21 @@ final class ClassTypeResolver extends AbstractClassLikeTypeResolver implements P
         $classReflection = $classNodeScope->getClassReflection();
 
         $types = [];
-        $types[] = $classReflection->getName();
+
+        if (! $classReflection->isAnonymous()) {
+            $types[] = $classReflection->getName();
+        }
+
+        // parent classes
         $types = array_merge($types, $classReflection->getParentClassesNames());
+
+        // interfaces
         foreach ($classReflection->getInterfaces() as $classReflection) {
+            $types[] = $classReflection->getName();
+        }
+
+        // traits
+        foreach ($classReflection->getTraits() as $classReflection) {
             $types[] = $classReflection->getName();
         }
 
