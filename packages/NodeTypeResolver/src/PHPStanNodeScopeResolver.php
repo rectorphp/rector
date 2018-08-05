@@ -109,9 +109,9 @@ final class PHPStanNodeScopeResolver
                         $scope = $scope->enterClass($this->phpstanBroker->getClass((string) $node->namespacedName));
                     } else {
                         // possibly anonymous class
-                        $privatesAccessor = (new PrivatesAccessor);
-                        $anonymousClassReflection = $privatesAccessor->getPrivateProperty(
-                            $this->nodeScopeResolver, 'anonymousClassReflection'
+                        $anonymousClassReflection = (new PrivatesAccessor())->getPrivateProperty(
+                            $this->nodeScopeResolver,
+                            'anonymousClassReflection'
                         );
 
                         if ($anonymousClassReflection) {

@@ -93,7 +93,6 @@ final class PropertyFetchAnalyzer
         /** @var Scope $nodeScope */
         $nodeScope = $node->getAttribute(Attribute::SCOPE);
 
-
         $publicPropertyNames = $this->getPublicPropertyNamesForType($type);
 
         return ! in_array($nodePropertyName, $publicPropertyNames, true);
