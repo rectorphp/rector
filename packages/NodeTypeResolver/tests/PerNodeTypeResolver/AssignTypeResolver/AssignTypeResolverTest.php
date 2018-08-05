@@ -26,7 +26,8 @@ final class AssignTypeResolverTest extends AbstractNodeTypeResolverTest
 
         /** @var ScopeToTypesResolver $scopeToTypesResolver */
         $scopeToTypesResolver = $this->container->get(ScopeToTypesResolver::class);
-        $variableNodeType = $scopeToTypesResolver->resolveScopeToTypes($variableNodes[$nodePosition]);
+
+//        $variableNodeType = $scopeToTypesResolver->resolveScopeToTypes($variableNodes[$nodePosition]);
 
         $this->assertSame($expectedTypes, $this->nodeTypeResolver->resolve($variableNodes[$nodePosition]));
     }

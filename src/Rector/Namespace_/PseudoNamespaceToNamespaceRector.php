@@ -8,7 +8,6 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\UseUse;
 use Rector\Builder\StatementGlue;
 use Rector\Node\Attribute;
 use Rector\Node\NodeFactory;
@@ -22,11 +21,6 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
      * @var string[]
      */
     private $pseudoNamespacePrefixes = [];
-
-    /**
-     * @var string[]
-     */
-    private $oldToNewUseStatements = [];
 
     /**
      * @var string|null
@@ -49,23 +43,30 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
     private $excludedClasses = [];
 
     /**
-     * @param string[] $configuration
+     * @param string[] $pseudoNamespacePrefixes
+     * @param string[] $excludedClasses
      */
-    public function __construct(array $configuration, NodeFactory $nodeFactory, StatementGlue $statementGlue)
-    {
-        $this->resolvePseudoNamespacePrefixesAndExcludedClasses($configuration);
+    public function __construct(
+        array $pseudoNamespacePrefixes,
+        array $excludedClasses,
+        NodeFactory $nodeFactory,
+        StatementGlue $statementGlue
+    ) {
         $this->nodeFactory = $nodeFactory;
         $this->statementGlue = $statementGlue;
+        $this->pseudoNamespacePrefixes = $pseudoNamespacePrefixes;
+        $this->excludedClasses = $excludedClasses;
     }
 
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Replaces defined Pseudo_Namespaces by Namespace\Ones.', [
             new ConfiguredCodeSample(
-                '$someServie = Some_Object;',
-                '$someServie = Some\Object;',
+                '$someService = Some_Object;',
+                '$someService = Some\Object;',
                 [
-                    '$configuraion' => ['Some_'],
+                    '$pseudoNamespacePrefixes' => ['Some_'],
+                    '$excludedClasses' => [],
                 ]
             ),
         ]);
@@ -97,17 +98,12 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
     public function refactor(Node $nameOrIdentifierNode): ?Node
     {
         $oldName = $this->resolveNameFromNode($nameOrIdentifierNode);
+
         $newNameParts = explode('_', $oldName);
         $parentNode = $nameOrIdentifierNode->getAttribute(Attribute::PARENT_NODE);
         $lastNewNamePart = $newNameParts[count($newNameParts) - 1];
 
         if ($nameOrIdentifierNode instanceof Name) {
-            if ($parentNode instanceof UseUse) {
-                $this->oldToNewUseStatements[$oldName] = $lastNewNamePart;
-            } elseif (isset($this->oldToNewUseStatements[$oldName])) {
-                $newNameParts = [$this->oldToNewUseStatements[$oldName]];
-            }
-
             $nameOrIdentifierNode->parts = $newNameParts;
 
             return $nameOrIdentifierNode;
@@ -146,7 +142,6 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
         }
 
         $this->newNamespace = null;
-        $this->oldToNewUseStatements = [];
 
         return $nodes;
     }
@@ -158,19 +153,5 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
         }
 
         return null;
-    }
-
-    /**
-     * @param string[] $configuration
-     */
-    private function resolvePseudoNamespacePrefixesAndExcludedClasses(array $configuration): void
-    {
-        foreach ($configuration as $item) {
-            if (Strings::startsWith($item, '!')) {
-                $this->excludedClasses[] = ltrim($item, '!');
-            } else {
-                $this->pseudoNamespacePrefixes[] = $item;
-            }
-        }
     }
 }

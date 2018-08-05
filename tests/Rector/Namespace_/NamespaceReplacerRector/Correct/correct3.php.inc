@@ -8,6 +8,6 @@ class SomeClass
 {
     public function someClass()
     {
-        return new NewSplitNamespace\SomeClass;
+        return new \NewNamespaceWith\NewSplitNamespace\SomeClass;
     }
 }

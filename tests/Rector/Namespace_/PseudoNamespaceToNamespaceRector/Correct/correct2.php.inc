@@ -6,6 +6,6 @@ class SomeTest
 {
     public function create()
     {
-        $specialClass = new SpecialClass;
+        $specialClass = new \PHPUnit\SpecialClass;
     }
 }

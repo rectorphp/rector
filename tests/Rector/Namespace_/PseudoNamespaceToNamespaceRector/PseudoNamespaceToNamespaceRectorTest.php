@@ -5,6 +5,9 @@ namespace Rector\Tests\Rector\Namespace_\PseudoNamespaceToNamespaceRector;
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
+/**
+ * @covers \Rector\Rector\Namespace_\PseudoNamespaceToNamespaceRector
+ */
 final class PseudoNamespaceToNamespaceRectorTest extends AbstractRectorTestCase
 {
     /**

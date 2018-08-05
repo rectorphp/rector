@@ -3,10 +3,10 @@
 namespace Rector\NodeTraverser;
 
 use PhpParser\Node;
-use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeTraverserInterface;
 use PhpParser\NodeVisitor;
+use PhpParser\NodeVisitor\NameResolver;
 use Rector\NodeTypeResolver\PHPStanNodeScopeResolver;
 
 /**

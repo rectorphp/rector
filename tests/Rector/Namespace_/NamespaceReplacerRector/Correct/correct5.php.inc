@@ -6,6 +6,6 @@ class SomeClass
 {
     public function someClass()
     {
-        return new SomeClass;
+        return new \Short\AnyNamespace\SomeClass;
     }
 }

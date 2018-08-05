@@ -3,7 +3,6 @@
 namespace Rector\NodeTypeResolver;
 
 use PhpParser\Node;
-use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\PrettyPrinter\Standard;
@@ -92,8 +91,8 @@ final class PHPStanNodeScopeResolver
     }
 
     /**
-     * @param Stmt[] $nodes
-     * @return Stmt[]
+     * @param Node[] $nodes
+     * @return Node[]
      */
     public function processNodes(array $nodes): array
     {
@@ -143,7 +142,7 @@ final class PHPStanNodeScopeResolver
     }
 
     /**
-     * @param Stmt[] $nodes
+     * @param Node[] $nodes
      */
     private function ensureNameResolverWasRun(array $nodes): void
     {

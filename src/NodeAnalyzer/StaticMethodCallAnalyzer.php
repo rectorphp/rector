@@ -6,7 +6,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
-use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\ScopeToTypesResolver;
 
 /**
