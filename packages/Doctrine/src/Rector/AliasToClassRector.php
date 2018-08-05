@@ -53,12 +53,12 @@ final class AliasToClassRector extends AbstractRector
         return new RectorDefinition('Replaces doctrine alias with class.', [
             new CodeSample(
 <<<'CODE_SAMPLE'
-$entityManager = new EntityManager();
+$entityManager = new Doctrine\ORM\EntityManager();
 $entityManager->getRepository("AppBundle:Post");
 CODE_SAMPLE
                 ,
 <<<'CODE_SAMPLE'
-$entityManager = new Doctrine\EntityManager();
+$entityManager = new Doctrine\ORM\EntityManager();
 $entityManager->getRepository(\App\Entity\Post::class);
 CODE_SAMPLE
             ),

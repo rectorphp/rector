@@ -4,7 +4,7 @@ namespace Roave\BetterReflection\NodeCompiler;
 
 use PhpParser\Node;
 
-class SomeClass
+class FourthClass
 {
     /**
      * @var Node\Stmt\ClassMethod|Node\Stmt\Function_|Node\Expr\Closure

@@ -123,6 +123,7 @@ final class PropertyFetchAnalyzer
         }
 
         $varNodeTypes = $this->nodeTypeResolver->resolve($node->var);
+
         return (bool) array_intersect($varNodeTypes, $types);
     }
 
