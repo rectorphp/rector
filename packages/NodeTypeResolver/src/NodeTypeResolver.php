@@ -3,7 +3,6 @@
 namespace Rector\NodeTypeResolver;
 
 use PhpParser\Node;
-use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 
 final class NodeTypeResolver
