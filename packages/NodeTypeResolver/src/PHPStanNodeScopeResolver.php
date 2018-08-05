@@ -4,6 +4,7 @@ namespace Rector\NodeTypeResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Interface_;
 use PhpParser\NodeVisitor\NameResolver;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPStan\Analyser\Scope;
@@ -103,7 +104,7 @@ final class PHPStanNodeScopeResolver
             function (Node $node, Scope $scope): void {
                 // the class reflection is resolved AFTER entering to class node
                 // so we need to get it from the first after this one
-                if ($node instanceof Class_) {
+                if ($node instanceof Class_ || $node instanceof Interface_) {
                     if (isset($node->namespacedName)) {
                         $scope = $scope->enterClass($this->phpstanBroker->getClass((string) $node->namespacedName));
                     } else {

@@ -4,9 +4,12 @@ namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Trait_;
+use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
+use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 
-final class TraitTypeResolver extends AbstractClassLikeTypeResolver implements PerNodeTypeResolverInterface
+final class TraitTypeResolver implements PerNodeTypeResolverInterface
 {
     /**
      * @return string[]
@@ -22,6 +25,15 @@ final class TraitTypeResolver extends AbstractClassLikeTypeResolver implements P
      */
     public function resolve(Node $traitNode): array
     {
+        /** @var Scope $traitNodeScope */
+        $traitNodeScope = $traitNode->getAttribute(Attribute::SCOPE);
+
+        /** @var ClassReflection $classReflection */
+        $classReflection = $traitNodeScope->getClassReflection();
+
+        dump($classReflection);
+        die;
+
         $types[] = $this->resolveNameNode($traitNode);
         return array_merge($types, $this->resolveUsedTraitTypes($traitNode));
     }

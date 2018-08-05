@@ -4,9 +4,12 @@ namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Interface_;
+use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
+use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 
-final class InterfaceTypeResolver extends AbstractClassLikeTypeResolver implements PerNodeTypeResolverInterface
+final class InterfaceTypeResolver implements PerNodeTypeResolverInterface
 {
     /**
      * @return string[]
@@ -22,8 +25,20 @@ final class InterfaceTypeResolver extends AbstractClassLikeTypeResolver implemen
      */
     public function resolve(Node $interfaceNode): array
     {
-        $interfaceName = $this->resolveNameNode($interfaceNode);
+        /** @var Scope $interfaceNodeScope */
+        $interfaceNodeScope = $interfaceNode->getAttribute(Attribute::SCOPE);
 
-        return array_merge([$interfaceName], $this->resolveExtendsTypes($interfaceNode, $interfaceName));
+        /** @var ClassReflection $classReflection */
+        $classReflection = $interfaceNodeScope->getClassReflection();
+
+        $types = [];
+        $types[] = $classReflection->getName();
+
+        // interfaces
+        foreach ($classReflection->getInterfaces() as $classReflection) {
+            $types[] = $classReflection->getName();
+        }
+
+        return $types;
     }
 }
