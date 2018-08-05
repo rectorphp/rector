@@ -132,8 +132,14 @@ final class PHPStanNodeScopeResolver
     private function setAnalysedFiles(): void
     {
         $source = $this->parameterProvider->provideParameter(Option::SOURCE);
-        $phpFiles = $this->filesFinder->findInDirectoriesAndFiles($source, ['php']);
-        $this->nodeScopeResolver->setAnalysedFiles($phpFiles);
+        $phpFileInfos = $this->filesFinder->findInDirectoriesAndFiles($source, ['php']);
+
+        $filePaths = [];
+        foreach ($phpFileInfos as $phpFileInfo) {
+            $filePaths[] = $phpFileInfo->getRealPath();
+        }
+
+        $this->nodeScopeResolver->setAnalysedFiles($filePaths);
     }
 
     /**
@@ -150,9 +156,8 @@ final class PHPStanNodeScopeResolver
                         NameResolver::class,
                         self::class
                     ));
-                } else {
-                    return;
                 }
+                return;
             }
         }
     }

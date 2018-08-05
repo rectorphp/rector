@@ -160,7 +160,7 @@ CODE_SAMPLE
 
         $paramNodeTypes = $this->scopeToTypesResolver->resolveScopeToTypes($paramNode);
 
-        $typehint = (string) $paramNodeTypes[0] ?? null;
+        $typehint = $paramNodeTypes[0] ?? null;
         if (! $typehint) {
             return false;
         }

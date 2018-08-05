@@ -5,7 +5,6 @@ namespace Rector\NodeAnalyzer;
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Identifier;
-use PHPStan\Analyser\Scope;
 use Rector\BetterReflection\Reflector\SmartClassReflector;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\ScopeToTypesResolver;

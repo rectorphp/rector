@@ -2,6 +2,9 @@ parameters:
     ignoreErrors:
         # the # after each ignored error is the number of occurrences
 
+        # Nette Container
+        - '#Property Rector\\NodeTypeResolver\\PHPStanNodeScopeResolver::\$(.*?) does not accept object#'
+
         # 0.10.2
         # false positives & ->toString() methods
         - '#Cannot cast PhpParser\\Node\\Expr\|string to string#' # 8
@@ -12,7 +15,6 @@ parameters:
         - '#Cannot cast PhpParser\\Node\\Expr\|PhpParser\\Node\\Name to string#'
         - '#Instanceof between PhpParser\\Node\\Expr|PhpParser\\Node\\Identifier and PhpParser\\Node\\Name will always evaluate to false#'
         - '#Parameter \#1 \$file of static method PHPStan\\Analyser\\ScopeContext::create\(\) expects string, string\|false given#'
-        - '#Parameter \#1 \$files of method PHPStan\\Analyser\\NodeScopeResolver::setAnalysedFiles\(\) expects array<string>, array<int, string\|false> given#'
         - '#Array \(array<array<PhpParser\\Node\\Stmt>>\) does not accept array<PhpParser\\Node\\Stmt|null>#'
 
         # already fixed, invalidated cache?
@@ -75,9 +77,6 @@ parameters:
 
         # too strict
         - '#Parameter \#1 \$currentWorkingDirectory of class PHPStan\\DependencyInjection\\ContainerFactory constructor expects string, string\|false given#' # 1
-
-        # known value
-        - '#Property Rector\\NodeTypeResolver\\NodeVisitor\\PHPStanScopeNodeVisitor::\$nodeScopeResolver \(PHPStan\\Analyser\\NodeScopeResolver\) does not accept object#'
 
     excludes_analyse:
         # test files

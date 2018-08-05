@@ -3,14 +3,11 @@
 namespace Rector\NodeTraverser;
 
 use PhpParser\Node;
+use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeTraverserInterface;
 use PhpParser\NodeVisitor;
-use PhpParser\NodeVisitor\CloningVisitor;
-use Rector\NodeTypeResolver\NodeVisitor\ClassAndMethodResolver;
-use Rector\NodeTypeResolver\NodeVisitor\NamespaceResolver;
 use Rector\NodeTypeResolver\PHPStanNodeScopeResolver;
-use Rector\PhpParser\NodeVisitor\ParentAndNextNodeAddingNodeVisitor;
 
 /**
  * Oppose to NodeTraverser, that traverse ONE node by ALL NodeVisitors,
@@ -26,31 +23,11 @@ final class StandaloneTraverseNodeTraverser
     /**
      * @var PHPStanNodeScopeResolver
      */
-    private $phpStanNodeScopeResolver;
+    private $pHPStanNodeScopeResolver;
 
-    /**
-     * @var CloningVisitor
-     */
-    private $cloningVisitor;
-
-    /**
-     * @var ParentAndNextNodeAddingNodeVisitor
-     */
-    private $parentAndNextNodeAddingNodeVisitor;
-
-    /**
-     * @var ClassAndMethodResolver
-     */
-    private $classAndMethodResolver;
-
-    /**
-     * @var NamespaceResolver
-     */
-    private $namespaceResolver;
-
-    public function __construct(PHPStanNodeScopeResolver $phpStanNodeScopeResolver)
+    public function __construct(PHPStanNodeScopeResolver $pHPStanNodeScopeResolver)
     {
-        $this->phpStanNodeScopeResolver = $phpStanNodeScopeResolver;
+        $this->pHPStanNodeScopeResolver = $pHPStanNodeScopeResolver;
     }
 
     public function addNodeVisitor(NodeVisitor $nodeVisitor): void
@@ -67,10 +44,10 @@ final class StandaloneTraverseNodeTraverser
     public function traverse(array $nodes): array
     {
         $nodeTraverser = new NodeTraverser();
-        $nodeTraverser->addVisitor(new NodeVisitor\NameResolver());
+        $nodeTraverser->addVisitor(new NameResolver());
         $nodes = $nodeTraverser->traverse($nodes);
 
-        $nodes = $this->phpStanNodeScopeResolver->processNodes($nodes);
+        $nodes = $this->pHPStanNodeScopeResolver->processNodes($nodes);
 
         foreach ($this->nodeTraversers as $nodeTraverser) {
             $nodes = $nodeTraverser->traverse($nodes);

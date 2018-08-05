@@ -10,7 +10,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Unset_;
 use Rector\Node\MethodCallNodeFactory;
-use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\NodeTypeResolver\ScopeToTypesResolver;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -33,9 +33,9 @@ final class UnsetAndIssetToMethodCallRector extends AbstractRector
     private $methodCallNodeFactory;
 
     /**
-     * @var NodeTypeResolver
+     * @var ScopeToTypesResolver
      */
-    private $nodeTypeResolver;
+    private $scopeToTypesResolver;
 
     /**
      * Type to method call()
@@ -45,11 +45,11 @@ final class UnsetAndIssetToMethodCallRector extends AbstractRector
     public function __construct(
         array $typeToMethodCalls,
         MethodCallNodeFactory $methodCallNodeFactory,
-        NodeTypeResolver $nodeTypeResolver
+        ScopeToTypesResolver $scopeToTypesResolver
     ) {
         $this->typeToMethodCalls = $typeToMethodCalls;
         $this->methodCallNodeFactory = $methodCallNodeFactory;
-        $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->scopeToTypesResolver = $scopeToTypesResolver;
     }
 
     public function getDefinition(): RectorDefinition
@@ -157,10 +157,10 @@ final class UnsetAndIssetToMethodCallRector extends AbstractRector
 
     private function matchArrayDimFetch(ArrayDimFetch $arrayDimFetchNode): bool
     {
-        $variableNodeTypes = $this->nodeTypeResolver->resolve($arrayDimFetchNode->var);
+        $varNodeTypes = $this->scopeToTypesResolver->resolveScopeToTypes($arrayDimFetchNode->var);
 
         foreach ($this->typeToMethodCalls as $type => $transformation) {
-            if (in_array($type, $variableNodeTypes, true)) {
+            if (in_array($type, $varNodeTypes, true)) {
                 $this->activeTransformation = $transformation;
 
                 return true;

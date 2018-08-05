@@ -5,11 +5,9 @@ namespace Rector\Rector\MagicDisclosure;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Cast\String_;
 use PhpParser\Node\Expr\MethodCall;
-use PHPStan\Analyser\Scope;
 use Rector\Builder\IdentifierRenamer;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
-use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\ScopeToTypesResolver;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
@@ -38,14 +36,10 @@ final class ToStringToMethodCallRector extends AbstractRector
     private $identifierRenamer;
 
     /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    /**
      * @var MethodCallNodeFactory
      */
     private $methodCallNodeFactory;
+
     /**
      * @var ScopeToTypesResolver
      */
@@ -60,14 +54,12 @@ final class ToStringToMethodCallRector extends AbstractRector
         array $typeToMethodCalls,
         MethodCallAnalyzer $methodCallAnalyzer,
         IdentifierRenamer $identifierRenamer,
-        NodeTypeResolver $nodeTypeResolver,
         MethodCallNodeFactory $methodCallNodeFactory,
         ScopeToTypesResolver $scopeToTypesResolver
     ) {
         $this->typeToMethodCalls = $typeToMethodCalls;
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
-        $this->nodeTypeResolver = $nodeTypeResolver;
         $this->methodCallNodeFactory = $methodCallNodeFactory;
         $this->scopeToTypesResolver = $scopeToTypesResolver;
     }
