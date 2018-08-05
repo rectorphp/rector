@@ -7,7 +7,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\Node\Attribute;
-use Rector\NodeTypeResolver\ScopeToTypesResolver;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -30,9 +30,9 @@ final class AnnotationReplacerRector extends AbstractPHPUnitRector
     private $activeAnnotationMap = [];
 
     /**
-     * @var ScopeToTypesResolver
+     * @var NodeTypeResolver
      */
-    private $scopeToTypesResolver;
+    private $nodeTypeResolver;
 
     /**
      * @param string[][] $classToAnnotationMap
@@ -40,11 +40,11 @@ final class AnnotationReplacerRector extends AbstractPHPUnitRector
     public function __construct(
         array $classToAnnotationMap,
         DocBlockAnalyzer $docBlockAnalyzer,
-        ScopeToTypesResolver $scopeToTypesResolver
+        NodeTypeResolver $nodeTypeResolver
     ) {
         $this->docBlockAnalyzer = $docBlockAnalyzer;
         $this->classToAnnotationMap = $classToAnnotationMap;
-        $this->scopeToTypesResolver = $scopeToTypesResolver;
+        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     public function getDefinition(): RectorDefinition
@@ -97,7 +97,7 @@ CODE_SAMPLE
 
         /** @var Node $parentNode */
         $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
-        $parentNodeTypes = $this->scopeToTypesResolver->resolveScopeToTypes($parentNode);
+        $parentNodeTypes = $this->nodeTypeResolver->resolve($parentNode);
 
         foreach ($this->classToAnnotationMap as $type => $annotationMap) {
             if (! in_array($type, $parentNodeTypes, true)) {

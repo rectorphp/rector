@@ -13,7 +13,7 @@ use Rector\Builder\Class_\VariableInfoFactory;
 use Rector\Builder\ConstructorMethodBuilder;
 use Rector\Builder\PropertyBuilder;
 use Rector\Configuration\Rector\Architecture\DependencyInjection\VariablesToPropertyFetchCollection;
-use Rector\NodeTypeResolver\ScopeToTypesResolver;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -46,9 +46,9 @@ final class ActionInjectionToConstructorInjectionRector extends AbstractRector
     private $analyzedApplicationContainer;
 
     /**
-     * @var ScopeToTypesResolver
+     * @var NodeTypeResolver
      */
-    private $scopeToTypesResolver;
+    private $nodeTypeResolver;
 
     public function __construct(
         PropertyBuilder $propertyBuilder,
@@ -56,14 +56,14 @@ final class ActionInjectionToConstructorInjectionRector extends AbstractRector
         VariableInfoFactory $variableInfoFactory,
         VariablesToPropertyFetchCollection $variablesToPropertyFetchCollection,
         AnalyzedApplicationContainerInterface $analyzedApplicationContainer,
-        ScopeToTypesResolver $scopeToTypesResolver
+        NodeTypeResolver $nodeTypeResolver
     ) {
         $this->propertyBuilder = $propertyBuilder;
         $this->constructorMethodBuilder = $constructorMethodBuilder;
         $this->variableInfoFactory = $variableInfoFactory;
         $this->variablesToPropertyFetchCollection = $variablesToPropertyFetchCollection;
         $this->analyzedApplicationContainer = $analyzedApplicationContainer;
-        $this->scopeToTypesResolver = $scopeToTypesResolver;
+        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     public function isCandidate(Node $node): bool
@@ -134,7 +134,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $paramNodeTypes = $this->scopeToTypesResolver->resolveScopeToTypes($paramNode);
+            $paramNodeTypes = $this->nodeTypeResolver->resolve($paramNode);
 
             $variableInfo = $this->variableInfoFactory->createFromNameAndTypes(
                 $paramNode->var->name,
@@ -158,7 +158,7 @@ CODE_SAMPLE
             return false;
         }
 
-        $paramNodeTypes = $this->scopeToTypesResolver->resolveScopeToTypes($paramNode);
+        $paramNodeTypes = $this->nodeTypeResolver->resolve($paramNode);
 
         $typehint = $paramNodeTypes[0] ?? null;
         if (! $typehint) {

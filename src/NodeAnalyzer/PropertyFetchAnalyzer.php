@@ -6,7 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Identifier;
 use Rector\BetterReflection\Reflector\SmartClassReflector;
-use Rector\NodeTypeResolver\ScopeToTypesResolver;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 use ReflectionProperty;
 
 /**
@@ -26,14 +26,14 @@ final class PropertyFetchAnalyzer
     private $smartClassReflector;
 
     /**
-     * @var ScopeToTypesResolver
+     * @var NodeTypeResolver
      */
-    private $scopeToTypesResolver;
+    private $nodeTypeResolver;
 
-    public function __construct(SmartClassReflector $smartClassReflector, ScopeToTypesResolver $scopeToTypesResolver)
+    public function __construct(SmartClassReflector $smartClassReflector, NodeTypeResolver $nodeTypeResolver)
     {
         $this->smartClassReflector = $smartClassReflector;
-        $this->scopeToTypesResolver = $scopeToTypesResolver;
+        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     public function isTypeAndProperty(Node $node, string $type, string $property): bool
@@ -59,7 +59,7 @@ final class PropertyFetchAnalyzer
             return false;
         }
 
-        $varNodeTypes = $this->scopeToTypesResolver->resolveScopeToTypes($node->var);
+        $varNodeTypes = $this->nodeTypeResolver->resolve($node->var);
         if (! array_intersect($types, $varNodeTypes)) {
             return false;
         }
@@ -78,7 +78,7 @@ final class PropertyFetchAnalyzer
             return false;
         }
 
-        $varNodeTypes = $this->scopeToTypesResolver->resolveScopeToTypes($node->var);
+        $varNodeTypes = $this->nodeTypeResolver->resolve($node->var);
         if (! in_array($type, $varNodeTypes, true)) {
             return false;
         }
@@ -117,7 +117,7 @@ final class PropertyFetchAnalyzer
             return false;
         }
 
-        $varNodeTypes = $this->scopeToTypesResolver->resolveScopeToTypes($node->var);
+        $varNodeTypes = $this->nodeTypeResolver->resolve($node->var);
         return (bool) array_intersect($varNodeTypes, $types);
     }
 
@@ -149,7 +149,7 @@ final class PropertyFetchAnalyzer
         /** @var PropertyFetch $propertyFetchNode */
         $propertyFetchNode = $node;
 
-        return $this->scopeToTypesResolver->resolveScopeToTypes($propertyFetchNode->var);
+        return $this->nodeTypeResolver->resolve($propertyFetchNode->var);
     }
 
     /**
@@ -177,7 +177,7 @@ final class PropertyFetchAnalyzer
             return false;
         }
 
-        $varNodeTypes = $this->scopeToTypesResolver->resolveScopeToTypes($node->var);
+        $varNodeTypes = $this->nodeTypeResolver->resolve($node->var);
 
         return in_array($type, $varNodeTypes, true);
     }

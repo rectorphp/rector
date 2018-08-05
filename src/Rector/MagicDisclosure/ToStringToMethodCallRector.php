@@ -8,7 +8,7 @@ use PhpParser\Node\Expr\MethodCall;
 use Rector\Builder\IdentifierRenamer;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
-use Rector\NodeTypeResolver\ScopeToTypesResolver;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -41,9 +41,9 @@ final class ToStringToMethodCallRector extends AbstractRector
     private $methodCallNodeFactory;
 
     /**
-     * @var ScopeToTypesResolver
+     * @var NodeTypeResolver
      */
-    private $scopeToTypesResolver;
+    private $nodeTypeResolver;
 
     /**
      * Type to method call()
@@ -55,13 +55,13 @@ final class ToStringToMethodCallRector extends AbstractRector
         MethodCallAnalyzer $methodCallAnalyzer,
         IdentifierRenamer $identifierRenamer,
         MethodCallNodeFactory $methodCallNodeFactory,
-        ScopeToTypesResolver $scopeToTypesResolver
+        NodeTypeResolver $nodeTypeResolver
     ) {
         $this->typeToMethodCalls = $typeToMethodCalls;
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
         $this->methodCallNodeFactory = $methodCallNodeFactory;
-        $this->scopeToTypesResolver = $scopeToTypesResolver;
+        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     public function getDefinition(): RectorDefinition
@@ -123,7 +123,7 @@ CODE_SAMPLE
 
     private function processStringCandidate(String_ $stringNode): bool
     {
-        $nodeTypes = $this->scopeToTypesResolver->resolveScopeToTypes($stringNode->expr);
+        $nodeTypes = $this->nodeTypeResolver->resolve($stringNode->expr);
 
         foreach ($this->typeToMethodCalls as $type => $transformation) {
             if (in_array($type, $nodeTypes, true)) {

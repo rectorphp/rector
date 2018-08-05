@@ -7,7 +7,6 @@ use Rector\BetterPhpDocParser\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\BetterPhpDocParser\NodeAnalyzer\NamespaceAnalyzer;
 use Rector\NodeTraverserQueue\BetterNodeFinder;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\NodeTypeResolver\ScopeToTypesResolver;
 use Rector\Rector\AbstractRector;
 
 abstract class AbstractValueObjectRemoverRector extends AbstractRector
@@ -38,11 +37,6 @@ abstract class AbstractValueObjectRemoverRector extends AbstractRector
     protected $namespaceAnalyzer;
 
     /**
-     * @var ScopeToTypesResolver
-     */
-    protected $scopeToTypesResolver;
-
-    /**
      * @param string[] $valueObjectsToSimpleTypes
      */
     public function __construct(
@@ -50,15 +44,13 @@ abstract class AbstractValueObjectRemoverRector extends AbstractRector
         DocBlockAnalyzer $docBlockAnalyzer,
         NodeTypeResolver $nodeTypeResolver,
         BetterNodeFinder $betterNodeFinder,
-        NamespaceAnalyzer $namespaceAnalyzer,
-        ScopeToTypesResolver $scopeToTypesResolver
+        NamespaceAnalyzer $namespaceAnalyzer
     ) {
         $this->valueObjectsToSimpleTypes = $valueObjectsToSimpleTypes;
         $this->docBlockAnalyzer = $docBlockAnalyzer;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->namespaceAnalyzer = $namespaceAnalyzer;
-        $this->scopeToTypesResolver = $scopeToTypesResolver;
     }
 
     /**

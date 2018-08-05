@@ -4,7 +4,7 @@ namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AssignTypeResolver;
 
 use Iterator;
 use PhpParser\Node\Expr\Variable;
-use Rector\NodeTypeResolver\ScopeToTypesResolver;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AssignTypeResolver\Source\ClassWithInterface;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AssignTypeResolver\Source\ClassWithParent;
@@ -24,10 +24,10 @@ final class AssignTypeResolverTest extends AbstractNodeTypeResolverTest
     {
         $variableNodes = $this->getNodesForFileOfType($file, Variable::class);
 
-        /** @var ScopeToTypesResolver $scopeToTypesResolver */
-        $scopeToTypesResolver = $this->container->get(ScopeToTypesResolver::class);
+        /** @var NodeTypeResolver $scopeToTypesResolver */
+        $scopeToTypesResolver = $this->container->get(NodeTypeResolver::class);
 
-//        $variableNodeType = $scopeToTypesResolver->resolveScopeToTypes($variableNodes[$nodePosition]);
+//        $variableNodeType = $scopeToTypesResolver->resolve($variableNodes[$nodePosition]);
 
         $this->assertSame($expectedTypes, $this->nodeTypeResolver->resolve($variableNodes[$nodePosition]));
     }

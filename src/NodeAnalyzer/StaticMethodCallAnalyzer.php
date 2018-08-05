@@ -6,7 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
-use Rector\NodeTypeResolver\ScopeToTypesResolver;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 
 /**
  * Read-only utils for StaticCall Node:
@@ -15,13 +15,13 @@ use Rector\NodeTypeResolver\ScopeToTypesResolver;
 final class StaticMethodCallAnalyzer
 {
     /**
-     * @var ScopeToTypesResolver
+     * @var NodeTypeResolver
      */
-    private $scopeToTypesResolver;
+    private $nodeTypeResolver;
 
-    public function __construct(ScopeToTypesResolver $scopeToTypesResolver)
+    public function __construct(NodeTypeResolver $nodeTypeResolver)
     {
-        $this->scopeToTypesResolver = $scopeToTypesResolver;
+        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     /**
@@ -97,7 +97,7 @@ final class StaticMethodCallAnalyzer
             return null;
         }
 
-        $nodeTypes = $this->scopeToTypesResolver->resolveScopeToTypes($node->class);
+        $nodeTypes = $this->nodeTypeResolver->resolve($node->class);
 
         return array_intersect($nodeTypes, $types) ? $nodeTypes : null;
     }
@@ -111,7 +111,7 @@ final class StaticMethodCallAnalyzer
             return false;
         }
 
-        $classTypes = $this->scopeToTypesResolver->resolveScopeToTypes($node->class);
+        $classTypes = $this->nodeTypeResolver->resolve($node->class);
 
         return in_array($type, $classTypes, true);
     }

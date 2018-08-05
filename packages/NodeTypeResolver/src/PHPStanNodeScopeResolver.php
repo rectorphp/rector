@@ -96,11 +96,10 @@ final class PHPStanNodeScopeResolver
      */
     public function processNodes(array $nodes): array
     {
-        $this->scope = $this->createScopeByFile($this->currentFileProvider->getSplFileInfo());
-
-        $this->setAnalysedFiles();
-
         $this->ensureNameResolverWasRun($nodes);
+
+        $this->scope = $this->createScopeByFile($this->currentFileProvider->getSplFileInfo());
+        $this->setAnalysedFiles();
 
         $this->nodeScopeResolver->processNodes(
             $nodes,
