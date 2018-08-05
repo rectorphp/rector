@@ -8,15 +8,26 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
+use Rector\NodeTypeResolver\Reflection\ClassReflectionTypesResolver;
 
 final class ClassTypeResolver implements PerNodeTypeResolverInterface
 {
+    /**
+     * @var ClassReflectionTypesResolver
+     */
+    private $classReflectionTypesResolver;
+
     /**
      * @return string[]
      */
     public function getNodeClasses(): array
     {
         return [Class_::class];
+    }
+
+    public function __construct(ClassReflectionTypesResolver $classReflectionTypesResolver)
+    {
+        $this->classReflectionTypesResolver = $classReflectionTypesResolver;
     }
 
     /**
@@ -31,25 +42,6 @@ final class ClassTypeResolver implements PerNodeTypeResolverInterface
         /** @var ClassReflection $classReflection */
         $classReflection = $classNodeScope->getClassReflection();
 
-        $types = [];
-
-        if (! $classReflection->isAnonymous()) {
-            $types[] = $classReflection->getName();
-        }
-
-        // parent classes
-        $types = array_merge($types, $classReflection->getParentClassesNames());
-
-        // interfaces
-        foreach ($classReflection->getInterfaces() as $classReflection) {
-            $types[] = $classReflection->getName();
-        }
-
-        // traits
-        foreach ($classReflection->getTraits() as $classReflection) {
-            $types[] = $classReflection->getName();
-        }
-
-        return $types;
+        return $this->classReflectionTypesResolver->resolve($classReflection);
     }
 }

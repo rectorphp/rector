@@ -8,10 +8,12 @@ use PhpParser\Node\Expr\Variable;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\IntersectionType;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
+use Rector\NodeTypeResolver\Reflection\ClassReflectionTypesResolver;
 
 final class NodeTypeResolver
 {
@@ -19,6 +21,15 @@ final class NodeTypeResolver
      * @var PerNodeTypeResolverInterface[]
      */
     private $perNodeTypeResolvers = [];
+    /**
+     * @var ClassReflectionTypesResolver
+     */
+    private $classReflectionTypesResolver;
+
+    public function __construct(ClassReflectionTypesResolver $classReflectionTypesResolver)
+    {
+        $this->classReflectionTypesResolver = $classReflectionTypesResolver;
+    }
 
     public function addPerNodeTypeResolver(PerNodeTypeResolverInterface $perNodeTypeResolver): void
     {
@@ -32,11 +43,25 @@ final class NodeTypeResolver
      */
     public function resolve(Node $node): array
     {
+        /** @var Scope $nodeScope */
+        $nodeScope = $node->getAttribute(Attribute::SCOPE);
+
         if ($node instanceof Variable) {
-            $nodeTypes = $this->perNodeTypeResolvers[Variable::class]->resolve($node);
-            if (count($nodeTypes)) {
-                return $nodeTypes;
+            $variableName = (string) $node->name;
+
+            if ($nodeScope->hasVariableType($variableName)) {
+                $type = $nodeScope->getVariableType($variableName);
+                if ($type instanceof ThisType) {
+                    return $this->classReflectionTypesResolver->resolve($nodeScope->getClassReflection());
+                } else {
+                    return $this->resolveObjectTypesToStrings($type);
+                }
             }
+
+//            $nodeTypes = $this->perNodeTypeResolvers[Variable::class]->resolve($node);
+//            if (count($nodeTypes)) {
+//                return $nodeTypes;
+//            }
         }
 
         if ($node instanceof Expr) {
@@ -63,15 +88,15 @@ final class NodeTypeResolver
 
         $types = [];
         // @todo decouple - resolve $this
-        if ($exprNode instanceof Variable && $exprNode->name === 'this') {
-            $types[] = $nodeScope->getClassReflection()->getName();
-            $types = array_merge($types, $nodeScope->getClassReflection()->getParentClassesNames());
-            foreach ($nodeScope->getClassReflection()->getInterfaces() as $classReflection) {
-                $types[] = $classReflection->getName();
-            }
-
-            return $types;
-        }
+//        if ($exprNode instanceof Variable && $exprNode->name === 'this') {
+//            $types[] = $nodeScope->getClassReflection()->getName();
+//            $types = array_merge($types, $nodeScope->getClassReflection()->getParentClassesNames());
+//            foreach ($nodeScope->getClassReflection()->getInterfaces() as $classReflection) {
+//                $types[] = $classReflection->getName();
+//            }
+//
+//            return $types;
+//        }
 
         $type = $nodeScope->getType($exprNode);
 
