@@ -17,17 +17,17 @@ final class ClassTypeResolver implements PerNodeTypeResolverInterface
      */
     private $classReflectionTypesResolver;
 
+    public function __construct(ClassReflectionTypesResolver $classReflectionTypesResolver)
+    {
+        $this->classReflectionTypesResolver = $classReflectionTypesResolver;
+    }
+
     /**
      * @return string[]
      */
     public function getNodeClasses(): array
     {
         return [Class_::class];
-    }
-
-    public function __construct(ClassReflectionTypesResolver $classReflectionTypesResolver)
-    {
-        $this->classReflectionTypesResolver = $classReflectionTypesResolver;
     }
 
     /**

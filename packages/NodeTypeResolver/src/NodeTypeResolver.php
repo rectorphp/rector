@@ -6,6 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Variable;
 use PHPStan\Analyser\Scope;
+use PHPStan\TrinaryLogic;
 use PHPStan\Type\IntersectionType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ThisType;
@@ -21,6 +22,7 @@ final class NodeTypeResolver
      * @var PerNodeTypeResolverInterface[]
      */
     private $perNodeTypeResolvers = [];
+
     /**
      * @var ClassReflectionTypesResolver
      */
@@ -49,13 +51,15 @@ final class NodeTypeResolver
         if ($node instanceof Variable) {
             $variableName = (string) $node->name;
 
-            if ($nodeScope->hasVariableType($variableName)) {
+            if ($nodeScope->hasVariableType($variableName) === TrinaryLogic::createYes()) {
                 $type = $nodeScope->getVariableType($variableName);
+
+                // this
                 if ($type instanceof ThisType) {
                     return $this->classReflectionTypesResolver->resolve($nodeScope->getClassReflection());
-                } else {
-                    return $this->resolveObjectTypesToStrings($type);
                 }
+
+                return $this->resolveObjectTypesToStrings($type);
             }
 
 //            $nodeTypes = $this->perNodeTypeResolvers[Variable::class]->resolve($node);

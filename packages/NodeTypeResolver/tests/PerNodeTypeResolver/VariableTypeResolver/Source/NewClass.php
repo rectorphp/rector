@@ -12,6 +12,7 @@ final class NewClass
     public function getValue(): SecondType
     {
         $variable = new AnotherType;
+        $variable->test();
         $assignedVariable = $variable;
     }
 }
