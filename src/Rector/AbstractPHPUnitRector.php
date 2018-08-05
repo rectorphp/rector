@@ -3,6 +3,9 @@
 namespace Rector\Rector;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\Class_;
+use Rector\Exception\ShouldNotHappenException;
+use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
 abstract class AbstractPHPUnitRector extends AbstractRector
@@ -24,8 +27,19 @@ abstract class AbstractPHPUnitRector extends AbstractRector
 
     protected function isInTestClass(Node $node): bool
     {
-        $nodeResolved = $this->nodeTypeResolver->resolve($node);
+        /** @var Class_|null $classNode */
+        $classNode = $node->getAttribute(Attribute::CLASS_NODE);
 
-        return ! array_intersect(['PHPUnit\Framework\TestCase', 'PHPUnit_Framework_TestCase'], $nodeResolved);
+        if ($classNode === null) {
+            throw new ShouldNotHappenException(sprintf(
+                '"%s" should be set in "%s"',
+                Attribute::CLASS_NODE,
+                __METHOD__
+            ));
+        }
+
+        $nodeTypes = $this->nodeTypeResolver->resolve($classNode);
+
+        return (bool) array_intersect(['PHPUnit\Framework\TestCase', 'PHPUnit_Framework_TestCase'], $nodeTypes);
     }
 }

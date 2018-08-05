@@ -53,6 +53,10 @@ final class AssertRegExpRector extends AbstractPHPUnitRector
 
     public function isCandidate(Node $node): bool
     {
+        if (! $node instanceof MethodCall) {
+            return false;
+        }
+
         if (! $this->isInTestClass($node)) {
             return false;
         }

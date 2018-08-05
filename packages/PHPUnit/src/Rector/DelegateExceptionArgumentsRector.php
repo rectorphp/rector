@@ -57,6 +57,10 @@ CODE_SAMPLE
 
     public function isCandidate(Node $node): bool
     {
+        if (! $node instanceof MethodCall) {
+            return false;
+        }
+
         if (! $this->isInTestClass($node)) {
             return false;
         }
