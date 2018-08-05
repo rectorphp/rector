@@ -13,7 +13,6 @@ parameters:
         - '#Cannot cast PhpParser\\Node\\Expr\|PhpParser\\Node\\Identifier to string#' # 4
         - '#Cannot cast PhpParser\\Node\\Expr\|PhpParser\\Node\\Identifier|string to string#' # 3
         - '#Cannot cast PhpParser\\Node\\Expr\|PhpParser\\Node\\Name to string#'
-        - '#Instanceof between PhpParser\\Node\\Expr|PhpParser\\Node\\Identifier and PhpParser\\Node\\Name will always evaluate to false#'
         - '#Parameter \#1 \$file of static method PHPStan\\Analyser\\ScopeContext::create\(\) expects string, string\|false given#'
         - '#Array \(array<array<PhpParser\\Node\\Stmt>>\) does not accept array<PhpParser\\Node\\Stmt|null>#'
         - '#Parameter \#1 \$files of method PHPStan\\Analyser\\NodeScopeResolver::setAnalysedFiles\(\) expects array<string>, array<int, string\|false> given#'
@@ -28,6 +27,7 @@ parameters:
         - '#Call to function in_array\(\) with arguments string, array<array<string\|false>> and true will always evaluate to false#'
 
         # known values
+        - '#Cannot call method (\w+)\(\) on PHPStan\\Reflection\\ClassReflection\|null#'
         - '#Cannot call method getAttribute\(\) on PhpParser\\Node\\Name\|null#'
         - '#Parameter \#2 \$str of function explode expects string, string\|null given#'
         - '#Cannot call method getName\(\) on Rector\\Builder\\Class_\\VariableInfo\|null#'

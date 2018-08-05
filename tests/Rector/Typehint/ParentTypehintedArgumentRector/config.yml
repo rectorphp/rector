@@ -1,7 +1,7 @@
 services:
     Rector\Rector\Typehint\ParentTypehintedArgumentRector:
         $typehintForArgumentByMethodAndClass:
-            'PhpParser\Parser':
+            'Rector\Tests\Rector\Typehint\ParentTypehintedArgumentRector\Source\ParserInterface':
                 'parse':
                     'code': 'string'
             'Rector\Tests\Rector\Typehint\ParentTypehintedArgumentRector\Source\ClassMetadataFactory':

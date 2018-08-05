@@ -5,7 +5,6 @@ namespace Rector\NodeTypeResolver;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\NodeVisitor\NameResolver;
-use PhpParser\PrettyPrinter\Standard;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPStan\Analyser\Scope;
 use PHPStan\Analyser\ScopeContext;
@@ -18,6 +17,7 @@ use Rector\Exception\ShouldNotHappenException;
 use Rector\FileSystem\FilesFinder;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Configuration\CurrentFileProvider;
+use Rector\Printer\BetterStandardPrinter;
 use Symfony\Component\Finder\SplFileInfo;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
@@ -31,11 +31,6 @@ final class PHPStanNodeScopeResolver
      * @var NodeScopeResolver
      */
     private $nodeScopeResolver;
-
-    /**
-     * @var Scope
-     */
-    private $scope;
 
     /**
      * @var CurrentFileProvider
@@ -58,11 +53,6 @@ final class PHPStanNodeScopeResolver
     private $phpstanBroker;
 
     /**
-     * @var Standard
-     */
-    private $phpstanPrinter;
-
-    /**
      * @var TypeSpecifier
      */
     private $phpstanTypeSpecifier;
@@ -72,15 +62,21 @@ final class PHPStanNodeScopeResolver
      */
     private $phpstanScopeFactory;
 
+    /**
+     * @var BetterStandardPrinter
+     */
+    private $betterStandardPrinter;
+
     public function __construct(
         CurrentFileProvider $currentFileProvider,
         ParameterProvider $parameterProvider,
+        BetterStandardPrinter $betterStandardPrinter,
         FilesFinder $filesFinder
     ) {
         $phpstanContainer = (new ContainerFactory(getcwd()))->create(sys_get_temp_dir(), []);
 
         $this->phpstanBroker = $phpstanContainer->getByType(Broker::class);
-        $this->phpstanPrinter = $phpstanContainer->getByType(Standard::class);
+
         $this->nodeScopeResolver = $phpstanContainer->getByType(NodeScopeResolver::class);
         $this->phpstanTypeSpecifier = $phpstanContainer->getByType(TypeSpecifier::class);
         $this->phpstanScopeFactory = $phpstanContainer->getByType(ScopeFactory::class);
@@ -88,6 +84,7 @@ final class PHPStanNodeScopeResolver
         $this->currentFileProvider = $currentFileProvider;
         $this->parameterProvider = $parameterProvider;
         $this->filesFinder = $filesFinder;
+        $this->betterStandardPrinter = $betterStandardPrinter;
     }
 
     /**
@@ -97,15 +94,18 @@ final class PHPStanNodeScopeResolver
     public function processNodes(array $nodes): array
     {
         $this->ensureNameResolverWasRun($nodes);
-
-        $this->scope = $this->createScopeByFile($this->currentFileProvider->getSplFileInfo());
         $this->setAnalysedFiles();
 
         $this->nodeScopeResolver->processNodes(
             $nodes,
-            $this->scope,
+            $this->createScopeByFile($this->currentFileProvider->getSplFileInfo()),
             function (Node $node, Scope $scope): void {
-                $this->scope = $scope;
+                // the class reflection is resolved AFTER entering to class node
+                // so we need to get it from the first after this one
+                if ($node instanceof Class_) {
+                    $scope = $scope->enterClass($this->phpstanBroker->getClass((string) $node->namespacedName));
+                }
+
                 $node->setAttribute(Attribute::SCOPE, $scope);
             }
         );
@@ -121,7 +121,7 @@ final class PHPStanNodeScopeResolver
         return new Scope(
             $this->phpstanScopeFactory,
             $this->phpstanBroker,
-            $this->phpstanPrinter,
+            $this->betterStandardPrinter,
             $this->phpstanTypeSpecifier,
             $scopeContext
         );

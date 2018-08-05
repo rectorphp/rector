@@ -104,9 +104,6 @@ CODE_SAMPLE
         /** @var ClassLike $classNode */
         $classNode = $node->getAttribute(Attribute::CLASS_NODE);
         $classNodeTypes = $this->nodeTypeResolver->resolve($classNode);
-        if (! $classNodeTypes) {
-            return false;
-        }
 
         return $this->isTypeMatch($classNodeTypes);
     }

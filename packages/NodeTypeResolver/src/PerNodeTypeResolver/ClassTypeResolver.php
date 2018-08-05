@@ -4,6 +4,9 @@ namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
+use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
+use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 
 final class ClassTypeResolver extends AbstractClassLikeTypeResolver implements PerNodeTypeResolverInterface
@@ -22,15 +25,19 @@ final class ClassTypeResolver extends AbstractClassLikeTypeResolver implements P
      */
     public function resolve(Node $classNode): array
     {
-        $className = $this->resolveNameNode($classNode);
+        /** @var Scope $classNodeScope */
+        $classNodeScope = $classNode->getAttribute(Attribute::SCOPE);
+
+        /** @var ClassReflection $classReflection */
+        $classReflection = $classNodeScope->getClassReflection();
 
         $types = [];
-        if ($className) {
-            $types[] = $className;
+        $types[] = $classReflection->getName();
+        $types = array_merge($types, $classReflection->getParentClassesNames());
+        foreach ($classReflection->getInterfaces() as $classReflection) {
+            $types[] = $classReflection->getName();
         }
 
-        $types = array_merge($types, $this->resolveExtendsTypes($classNode, $className));
-        $types = array_merge($types, $this->resolveImplementsTypes($classNode));
-        return array_merge($types, $this->resolveUsedTraitTypes($classNode));
+        return $types;
     }
 }

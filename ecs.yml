@@ -67,3 +67,7 @@ parameters:
         Symplify\CodingStandard\Sniffs\CleanCode\ForbiddenStaticFunctionSniff:
             - 'src/Configuration/Rector/Guard/RecipeGuard.php'
             - 'src/Configuration/Rector/*Recipe.php'
+
+        Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
+            # @todo fix later
+            - 'packages/NodeTypeResolver/src/NodeTypeResolver.php'

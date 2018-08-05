@@ -39,7 +39,6 @@ final class NodeTypeResolver
             }
         }
 
-
         if ($node instanceof Expr) {
             return $this->resolveExprNode($node);
         }

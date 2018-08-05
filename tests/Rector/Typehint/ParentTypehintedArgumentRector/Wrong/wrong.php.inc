@@ -2,7 +2,9 @@
 
 namespace SomeNamespace;
 
-class SomeClass implements \PhpParser\Parser
+use Rector\Tests\Rector\Typehint\ParentTypehintedArgumentRector\Source\ParserInterface;
+
+class SomeClassImplementingParserInterface implements ParserInterface
 {
     public function parse($code, \PhpParser\ErrorHandler $errorHandler = null)
     {
