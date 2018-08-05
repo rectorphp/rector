@@ -1,7 +1,7 @@
 services:
     Rector\Rector\Property\PropertyToMethodRector:
         $perClassPropertyToMethods:
-            'Translator':
+            'Rector\Tests\Rector\Property\PropertyToMethodRector\Source\Translator':
                 'locale':
                     'get': 'getLocale'
                     'set': 'setLocale'

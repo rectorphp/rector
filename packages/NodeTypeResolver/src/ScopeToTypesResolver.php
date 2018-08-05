@@ -28,12 +28,27 @@ final class ScopeToTypesResolver
     public function resolveScopeToTypes(Node $node): array
     {
         // @todo check via exception
+        /** @var Scope $nodeScope */
         $nodeScope = $node->getAttribute(Attribute::SCOPE);
 
         // awww :(
+        $types = [];
+        if ($node instanceof Expr\Variable && $node->name === 'this') {
+            $types[] = $nodeScope->getClassReflection()->getName();
+            $types = array_merge($types, $nodeScope->getClassReflection()->getParentClassesNames());
+
+            foreach ($nodeScope->getClassReflection()->getInterfaces() as $classReflection) {
+                $types[] = $classReflection->getName();
+            }
+
+            return $types;
+        }
+
         if (! $node instanceof Expr) {
             return $this->resolveNonExprNodeToTypes($node);
         }
+
+
 
         $types = [];
 

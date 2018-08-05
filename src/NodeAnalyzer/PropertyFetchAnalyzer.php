@@ -178,11 +178,8 @@ final class PropertyFetchAnalyzer
             return false;
         }
 
-        $variableNodeTypes = $node->var->getAttribute(Attribute::TYPES);
-        if ($variableNodeTypes === null) {
-            return false;
-        }
+        $varNodeTypes = $this->scopeToTypesResolver->resolveScopeToTypes($node->var);
 
-        return in_array($type, $variableNodeTypes, true);
+        return in_array($type, $varNodeTypes, true);
     }
 }

@@ -17,10 +17,6 @@ use Rector\RectorDefinition\RectorDefinition;
 final class PropertyToMethodRector extends AbstractRector
 {
     /**
-     * class => [
-     *     property => [getMethod, setMethod]
-     * ]
-     *
      * @var string[][][]
      */
     private $perClassPropertyToMethods = [];
@@ -138,6 +134,7 @@ CODE_SAMPLE
     {
         foreach ($this->perClassPropertyToMethods as $class => $propertyToMethods) {
             $properties = array_keys($propertyToMethods);
+
             if ($this->propertyFetchAnalyzer->isTypeAndProperties($propertyFetchNode, $class, $properties)) {
                 /** @var Identifier $identifierNode */
                 $identifierNode = $propertyFetchNode->name;
