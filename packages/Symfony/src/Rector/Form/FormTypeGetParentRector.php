@@ -23,10 +23,26 @@ final class FormTypeGetParentRector extends AbstractRector
      */
     private $formTypeStringToTypeProvider;
 
-    public function __construct(NodeFactory $nodeFactory, FormTypeStringToTypeProvider $formTypeStringToTypeProvider)
-    {
+    /**
+     * @var string
+     */
+    private $abstractTypeClass;
+
+    /**
+     * @var string
+     */
+    private $abstractTypeExtensionClass;
+
+    public function __construct(
+        NodeFactory $nodeFactory,
+        FormTypeStringToTypeProvider $formTypeStringToTypeProvider,
+        string $abstractTypeClass = 'Symfony\Component\Form\AbstractType',
+        string $abstractTypeExtensionClass = 'Symfony\Component\Form\AbstractTypeExtension'
+    ) {
         $this->nodeFactory = $nodeFactory;
         $this->formTypeStringToTypeProvider = $formTypeStringToTypeProvider;
+        $this->abstractTypeClass = $abstractTypeClass;
+        $this->abstractTypeExtensionClass = $abstractTypeExtensionClass;
     }
 
     public function getDefinition(): RectorDefinition
@@ -56,11 +72,11 @@ final class FormTypeGetParentRector extends AbstractRector
             return false;
         }
 
-        if ($this->isParentTypeAndMethod($node, 'Symfony\Component\Form\AbstractType', 'getParent')) {
+        if ($this->isParentTypeAndMethod($node, $this->abstractTypeClass, 'getParent')) {
             return true;
         }
 
-        return $this->isParentTypeAndMethod($node, 'Symfony\Component\Form\AbstractTypeExtension', 'getExtendedType');
+        return $this->isParentTypeAndMethod($node, $this->abstractTypeExtensionClass, 'getExtendedType');
     }
 
     /**

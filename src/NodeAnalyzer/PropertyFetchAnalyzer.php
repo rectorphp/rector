@@ -62,6 +62,7 @@ final class PropertyFetchAnalyzer
         }
 
         $varNodeTypes = $this->nodeTypeResolver->resolve($node->var);
+
         if (! array_intersect($types, $varNodeTypes)) {
             return false;
         }
@@ -81,6 +82,7 @@ final class PropertyFetchAnalyzer
         }
 
         $varNodeTypes = $this->nodeTypeResolver->resolve($node->var);
+
         if (! in_array($type, $varNodeTypes, true)) {
             return false;
         }

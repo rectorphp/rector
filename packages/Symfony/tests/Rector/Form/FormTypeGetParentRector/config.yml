@@ -1,2 +1,4 @@
 services:
-    Rector\Symfony\Rector\Form\FormTypeGetParentRector: ~
+    Rector\Symfony\Rector\Form\FormTypeGetParentRector:
+        $abstractTypeClass: 'Rector\Symfony\Tests\Rector\Form\FormTypeGetParentRector\Source\AbstractType'
+        $abstractTypeExtensionClass: 'Rector\Symfony\Tests\Rector\Form\FormTypeGetParentRector\Source\AbstractTypeExtension'

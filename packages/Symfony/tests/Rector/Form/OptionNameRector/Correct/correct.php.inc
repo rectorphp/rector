@@ -1,6 +1,6 @@
 <?php
 
-use Symfony\Component\Form\AbstractType;
+use Rector\Symfony\Tests\Rector\Form\OptionNameRector\Source\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class RegistrationFormType extends AbstractType

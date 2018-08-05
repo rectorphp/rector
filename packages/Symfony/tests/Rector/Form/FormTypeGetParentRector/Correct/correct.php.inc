@@ -1,6 +1,6 @@
 <?php declare (strict_types=1);
 
-use Symfony\Component\Form\AbstractType;
+use Rector\Symfony\Tests\Rector\Form\FormTypeGetParentRector\Source\AbstractType;
 
 class PermissionCollectionType extends AbstractType
 {

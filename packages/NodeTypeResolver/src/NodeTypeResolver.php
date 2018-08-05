@@ -48,24 +48,12 @@ final class NodeTypeResolver
         /** @var Scope $nodeScope */
         $nodeScope = $node->getAttribute(Attribute::SCOPE);
 
+        if ($nodeScope === null) {
+            return [];
+        }
+
         if ($node instanceof Variable) {
-            $variableName = (string) $node->name;
-
-            if ($nodeScope->hasVariableType($variableName) === TrinaryLogic::createYes()) {
-                $type = $nodeScope->getVariableType($variableName);
-
-                // this
-                if ($type instanceof ThisType) {
-                    return $this->classReflectionTypesResolver->resolve($nodeScope->getClassReflection());
-                }
-
-                return $this->resolveObjectTypesToStrings($type);
-            }
-
-//            $nodeTypes = $this->perNodeTypeResolvers[Variable::class]->resolve($node);
-//            if (count($nodeTypes)) {
-//                return $nodeTypes;
-//            }
+            return $this->resolveVariableNode($node, $nodeScope);
         }
 
         if ($node instanceof Expr) {
@@ -73,13 +61,11 @@ final class NodeTypeResolver
         }
 
         $nodeClass = get_class($node);
-        if (! isset($this->perNodeTypeResolvers[$nodeClass])) {
-            return [];
+        if (isset($this->perNodeTypeResolvers[$nodeClass])) {
+            return $this->perNodeTypeResolvers[$nodeClass]->resolve($node);
         }
 
-        $nodeTypes = $this->perNodeTypeResolvers[$nodeClass]->resolve($node);
-
-        return $this->cleanPreSlashes($nodeTypes);
+        return [];
     }
 
     /**
@@ -90,40 +76,9 @@ final class NodeTypeResolver
         /** @var Scope $nodeScope */
         $nodeScope = $exprNode->getAttribute(Attribute::SCOPE);
 
-        $types = [];
-        // @todo decouple - resolve $this
-//        if ($exprNode instanceof Variable && $exprNode->name === 'this') {
-//            $types[] = $nodeScope->getClassReflection()->getName();
-//            $types = array_merge($types, $nodeScope->getClassReflection()->getParentClassesNames());
-//            foreach ($nodeScope->getClassReflection()->getInterfaces() as $classReflection) {
-//                $types[] = $classReflection->getName();
-//            }
-//
-//            return $types;
-//        }
-
         $type = $nodeScope->getType($exprNode);
 
         return $this->resolveObjectTypesToStrings($type);
-    }
-
-    /**
-     * "\FqnType" => "FqnType"
-     *
-     * @param string[] $nodeTypes
-     * @return string[]
-     */
-    private function cleanPreSlashes(array $nodeTypes): array
-    {
-        foreach ($nodeTypes as $key => $nodeType) {
-            // filter out non-type values
-            if (! is_string($nodeType)) {
-                continue;
-            }
-            $nodeTypes[$key] = ltrim($nodeType, '\\');
-        }
-
-        return $nodeTypes;
     }
 
     /**
@@ -156,5 +111,26 @@ final class NodeTypeResolver
         }
 
         return $types;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function resolveVariableNode(Variable $variableNode, Scope $nodeScope): array
+    {
+        $variableName = (string) $variableNode->name;
+
+        if ($nodeScope->hasVariableType($variableName) === TrinaryLogic::createYes()) {
+            $type = $nodeScope->getVariableType($variableName);
+
+            // this
+            if ($type instanceof ThisType) {
+                return $this->classReflectionTypesResolver->resolve($nodeScope->getClassReflection());
+            }
+
+            return $this->resolveObjectTypesToStrings($type);
+        }
+
+        return [];
     }
 }
