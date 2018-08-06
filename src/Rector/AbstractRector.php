@@ -50,16 +50,20 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
      */
     final public function enterNode(Node $node)
     {
-        if ($this->isCandidate($node)) {
-            $newNode = $this->refactor($node);
-            if ($newNode !== null) {
-                return $newNode;
+        if (method_exists($this, 'getNodeType')) {
+            if (! is_a($node, $this->getNodeType(), true)) { // == basically "isCandidate()" condition
+                return null;
             }
-
-            return NodeTraverser::DONT_TRAVERSE_CHILDREN;
+        } elseif (! $this->isCandidate($node)) {
+            return null;
         }
 
-        return null;
+        $newNode = $this->refactor($node);
+        if ($newNode !== null) {
+            return $newNode;
+        }
+
+        return NodeTraverser::DONT_TRAVERSE_CHILDREN;
     }
 
     /**
