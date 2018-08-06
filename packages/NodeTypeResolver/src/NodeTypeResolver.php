@@ -6,7 +6,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\Property;
 use PHPStan\Analyser\Scope;
 use PHPStan\Broker\Broker;
 use PHPStan\TrinaryLogic;
@@ -19,7 +18,6 @@ use Rector\BetterPhpDocParser\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Reflection\ClassReflectionTypesResolver;
-use Rector\Php\TypeAnalyzer;
 
 final class NodeTypeResolver
 {
@@ -39,11 +37,6 @@ final class NodeTypeResolver
     private $docBlockAnalyzer;
 
     /**
-     * @var TypeAnalyzer
-     */
-    private $typeAnalyzer;
-
-    /**
      * @var Broker
      */
     private $broker;
@@ -51,12 +44,10 @@ final class NodeTypeResolver
     public function __construct(
         ClassReflectionTypesResolver $classReflectionTypesResolver,
         DocBlockAnalyzer $docBlockAnalyzer,
-        TypeAnalyzer $typeAnalyzer,
         Broker $broker
     ) {
         $this->classReflectionTypesResolver = $classReflectionTypesResolver;
         $this->docBlockAnalyzer = $docBlockAnalyzer;
-        $this->typeAnalyzer = $typeAnalyzer;
         $this->broker = $broker;
     }
 
@@ -89,23 +80,6 @@ final class NodeTypeResolver
 
         if ($node instanceof Expr) {
             return $this->resolveExprNode($node);
-        }
-
-        if ($node instanceof Property) {
-            // doc
-            $propertyTypes = $this->docBlockAnalyzer->getVarTypes($node);
-            if ($propertyTypes === []) {
-                return [];
-            }
-
-            $propertyTypes = $this->filterOutScalarTypes($propertyTypes);
-
-            foreach ($propertyTypes as $propertyType) {
-                $propertyClassReflection = $this->broker->getClass($propertyType);
-                $propertyTypes += $this->classReflectionTypesResolver->resolve($propertyClassReflection);
-            }
-
-            return $propertyTypes;
         }
 
         $nodeClass = get_class($node);
@@ -202,23 +176,5 @@ final class NodeTypeResolver
         }
 
         return array_unique($variableTypes);
-    }
-
-    /**
-     * @param string[] $propertyTypes
-     * @return string[]
-     */
-    private function filterOutScalarTypes(array $propertyTypes): array
-    {
-        foreach ($propertyTypes as $key => $type) {
-            if (! $this->typeAnalyzer->isPhpReservedType($type)) {
-                continue;
-            }
-            unset($propertyTypes[$key]);
-        }
-        if ($propertyTypes === ['null']) {
-            return [];
-        }
-        return $propertyTypes;
     }
 }
