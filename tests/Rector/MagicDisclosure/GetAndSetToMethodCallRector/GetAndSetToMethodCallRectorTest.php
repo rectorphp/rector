@@ -5,6 +5,9 @@ namespace Rector\Tests\Rector\MagicDisclosure\GetAndSetToMethodCallRector;
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
+/**
+ * @covers \Rector\Rector\MagicDisclosure\GetAndSetToMethodCallRector
+ */
 final class GetAndSetToMethodCallRectorTest extends AbstractRectorTestCase
 {
     /**

@@ -2,8 +2,6 @@
 
 namespace Rector\NodeTypeResolver;
 
-use Rector\NodeAnalyzer\ClassLikeAnalyzer;
-
 /**
  * Inspired by https://github.com/nikic/PHP-Parser/blob/9373a8e9f551516bc8e42aedeacd1b4f635d27fc/lib/PhpParser/NameContext.php.
  */
@@ -18,17 +16,6 @@ final class TypeContext
      * @var string[][]
      */
     private $propertyTypes = [];
-
-    /**
-     * @var ClassLikeAnalyzer
-     */
-    private $classLikeAnalyzer;
-
-    public function __construct(
-        ClassLikeAnalyzer $classLikeAnalyzer
-    ) {
-        $this->classLikeAnalyzer = $classLikeAnalyzer;
-    }
 
     /**
      * @param string[] $variableTypes

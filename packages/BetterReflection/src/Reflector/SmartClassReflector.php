@@ -2,17 +2,11 @@
 
 namespace Rector\BetterReflection\Reflector;
 
-use PhpParser\Node\Name;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\Interface_;
 use Rector\Configuration\Option;
-use Rector\Node\Attribute;
 use Roave\BetterReflection\Reflection\ReflectionClass;
 use Roave\BetterReflection\Reflector\ClassReflector;
 use Roave\BetterReflection\Reflector\Exception\IdentifierNotFound;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
-use Throwable;
 
 final class SmartClassReflector
 {
@@ -69,50 +63,6 @@ final class SmartClassReflector
     }
 
     /**
-     * @todo validate at least one is passed, or split to 2 methods?
-     * @return string[]
-     */
-    public function getClassParents(?string $className = null, ?ClassLike $classLikeNode = null): array
-    {
-        // anonymous class
-        if ($className === null) {
-            if ($classLikeNode && property_exists($classLikeNode, 'extends')) {
-                return [$classLikeNode->extends->toString()];
-            }
-
-            return [];
-        }
-
-        try {
-            $classReflection = $this->reflect($className);
-            if ($classReflection) {
-                return $classReflection->getParentClassNames();
-            }
-        } catch (Throwable $throwable) {
-            // intentionally empty
-        }
-
-        if ($classLikeNode) {
-            return $this->resolveClassParentsFromNode($classLikeNode);
-        }
-
-        return [];
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getInterfaceParents(string $className): array
-    {
-        $interfaceReflection = $this->reflect($className);
-        if ($interfaceReflection) {
-            return $interfaceReflection->getInterfaceNames();
-        }
-
-        return [];
-    }
-
-    /**
      * @return string[]
      */
     public function resolveClassInterfaces(ReflectionClass $reflectionClass): array
@@ -126,35 +76,6 @@ final class SmartClassReflector
     public function resolveClassParents(ReflectionClass $reflectionClass): array
     {
         return $reflectionClass->getParentClassNames();
-    }
-
-    /**
-     * @return string[]
-     */
-    private function resolveClassParentsFromNode(ClassLike $classLikeNode): array
-    {
-        if (! property_exists($classLikeNode, 'extends')) {
-            return [];
-        }
-
-        if ($classLikeNode instanceof Class_) {
-            // no parent class
-            if ($classLikeNode->extends === null) {
-                return [];
-            }
-
-            if ($classLikeNode->extends->hasAttribute(Attribute::RESOLVED_NAME)) {
-                return [(string) $classLikeNode->extends->getAttribute(Attribute::RESOLVED_NAME)];
-            }
-
-            return [$classLikeNode->extends->toString()];
-        }
-
-        if ($classLikeNode instanceof Interface_) {
-            return array_map(function (Name $interface): string {
-                return $interface->toString();
-            }, $classLikeNode->extends);
-        }
     }
 
     /**
