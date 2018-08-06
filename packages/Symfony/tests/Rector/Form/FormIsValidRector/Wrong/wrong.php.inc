@@ -1,5 +1,7 @@
 <?php declare (strict_types=1);
 
+namespace Rector\Tests\FormIsValidRector;
+
 class SomeController
 {
     public function action()

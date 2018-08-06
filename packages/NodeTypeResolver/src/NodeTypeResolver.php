@@ -5,16 +5,22 @@ namespace Rector\NodeTypeResolver;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\Property;
 use PHPStan\Analyser\Scope;
+use PHPStan\Broker\Broker;
 use PHPStan\TrinaryLogic;
 use PHPStan\Type\IntersectionType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
+use Rector\BetterPhpDocParser\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Reflection\ClassReflectionTypesResolver;
+use Rector\Php\TypeAnalyzer;
+use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 
 final class NodeTypeResolver
 {
@@ -28,9 +34,24 @@ final class NodeTypeResolver
      */
     private $classReflectionTypesResolver;
 
-    public function __construct(ClassReflectionTypesResolver $classReflectionTypesResolver)
-    {
+    /**
+     * @var DocBlockAnalyzer
+     */
+    private $docBlockAnalyzer;
+
+    /**
+     * @var TypeAnalyzer
+     */
+    private $typeAnalyzer;
+
+    public function __construct(
+        ClassReflectionTypesResolver $classReflectionTypesResolver,
+        DocBlockAnalyzer $docBlockAnalyzer,
+        TypeAnalyzer $typeAnalyzer
+    ) {
         $this->classReflectionTypesResolver = $classReflectionTypesResolver;
+        $this->docBlockAnalyzer = $docBlockAnalyzer;
+        $this->typeAnalyzer = $typeAnalyzer;
     }
 
     public function addPerNodeTypeResolver(PerNodeTypeResolverInterface $perNodeTypeResolver): void
@@ -52,12 +73,36 @@ final class NodeTypeResolver
             return [];
         }
 
+        if ($node instanceof Param) {
+            // @todo resolve parents etc.
+            return [$node->type->toString()];
+        }
+
         if ($node instanceof Variable) {
             return $this->resolveVariableNode($node, $nodeScope);
         }
 
         if ($node instanceof Expr) {
             return $this->resolveExprNode($node);
+        }
+
+        if ($node instanceof Property) {
+            // doc
+            $propertyTypes = $this->docBlockAnalyzer->getVarTypes($node);
+            if ($propertyTypes === []) {
+                return [];
+            }
+
+            $propertyTypes = $this->filterOutScalarTypes($propertyTypes);
+
+            /** @var Broker $broker */
+            $broker = (new PrivatesAccessor())->getPrivateProperty($nodeScope, 'broker');
+            foreach ($propertyTypes as $propertyType) {
+                $propertyClassReflection = $broker->getClass($propertyType);
+                $propertyTypes += $this->classReflectionTypesResolver->resolve($propertyClassReflection);
+            }
+
+            return $propertyTypes;
         }
 
         $nodeClass = get_class($node);
@@ -82,6 +127,7 @@ final class NodeTypeResolver
     }
 
     /**
+     * @todo make use of recursion
      * @return string[]
      */
     private function resolveObjectTypesToStrings(Type $type): array
@@ -94,7 +140,6 @@ final class NodeTypeResolver
 
         if ($type instanceof UnionType) {
             foreach ($type->getTypes() as $type) {
-                // @todo recursion
                 if ($type instanceof ObjectType) {
                     $types[] = $type->getClassName();
                 }
@@ -103,7 +148,6 @@ final class NodeTypeResolver
 
         if ($type instanceof IntersectionType) {
             foreach ($type->getTypes() as $type) {
-                // @todo recursion
                 if ($type instanceof ObjectType) {
                     $types[] = $type->getClassName();
                 }
@@ -128,9 +172,52 @@ final class NodeTypeResolver
                 return $this->classReflectionTypesResolver->resolve($nodeScope->getClassReflection());
             }
 
-            return $this->resolveObjectTypesToStrings($type);
+            $types = $this->resolveObjectTypesToStrings($type);
+
+            // complete parents
+            $broker = (new PrivatesAccessor())->getPrivateProperty($nodeScope, 'broker');
+            foreach ($types as $type) {
+                $propertyClassReflection = $broker->getClass($type);
+                $types = array_merge($types, $this->classReflectionTypesResolver->resolve($propertyClassReflection));
+            }
+
+            return array_unique($types);
         }
 
-        return [];
+        // get from annotation
+        $variableTypes = $this->docBlockAnalyzer->getVarTypes($variableNode);
+
+        $broker = (new PrivatesAccessor())->getPrivateProperty($nodeScope, 'broker');
+        foreach ($variableTypes as $i => $type) {
+            if (! class_exists($type)) {
+                unset($variableTypes[$i]);
+                continue;
+            }
+            $propertyClassReflection = $broker->getClass($type);
+            $variableTypes = array_merge(
+                $variableTypes,
+                $this->classReflectionTypesResolver->resolve($propertyClassReflection)
+            );
+        }
+
+        return array_unique($variableTypes);
+    }
+
+    /**
+     * @param string[] $propertyTypes
+     * @return string[]
+     */
+    private function filterOutScalarTypes(array $propertyTypes): array
+    {
+        foreach ($propertyTypes as $key => $type) {
+            if (! $this->typeAnalyzer->isPhpReservedType($type)) {
+                continue;
+            }
+            unset($propertyTypes[$key]);
+        }
+        if ($propertyTypes === ['null']) {
+            return [];
+        }
+        return $propertyTypes;
     }
 }

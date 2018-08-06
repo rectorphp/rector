@@ -125,6 +125,7 @@ CODE_SAMPLE
     private function refactorVariableNode(Variable $variableNode): void
     {
         $match = $this->matchOriginAndNewType($variableNode);
+
         if (! $match) {
             return;
         }

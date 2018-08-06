@@ -4,7 +4,7 @@ namespace SomeNamespace;
 
 use Rector\Tests\Rector\DomainDrivenDesign\ValueObjectRemoverRector\Source\SomeValueObject;
 
-class ActionClass
+class ThirdActionClass
 {
     /**
      * @param null|SomeValueObject $name
