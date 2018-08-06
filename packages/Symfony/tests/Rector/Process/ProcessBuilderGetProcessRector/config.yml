@@ -1,2 +1,3 @@
 services:
-    Rector\Symfony\Rector\Process\ProcessBuilderGetProcessRector: ~
+    Rector\Symfony\Rector\Process\ProcessBuilderGetProcessRector:
+        $processBuilderClass: 'Rector\Symfony\Tests\Rector\Process\ProcessBuilderGetProcessRector\Source\ProcessBuilder'

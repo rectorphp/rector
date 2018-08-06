@@ -27,12 +27,10 @@ parameters:
         - '#Call to function in_array\(\) with arguments string, array<array<string\|false>> and true will always evaluate to false#'
 
         # known values
-        - '#Cannot call method (\w+)\(\) on PHPStan\\Reflection\\ClassReflection\|null#'
+        - '#Parameter \#1 \$classReflection of method Rector\\NodeTypeResolver\\Reflection\\ClassReflectionTypesResolver::resolve\(\) expects PHPStan\\Reflection\\ClassReflection, PHPStan\\Reflection\\ClassReflection|null given#'
         - '#Cannot call method getAttribute\(\) on PhpParser\\Node\\Name\|null#'
-        - '#Parameter \#2 \$str of function explode expects string, string\|null given#'
         - '#Cannot call method getName\(\) on Rector\\Builder\\Class_\\VariableInfo\|null#'
         - '#Cannot call method getBasename\(\) on Symfony\\Component\\Finder\\SplFileInfo\|null#'
-        - '#Parameter \#2 \$value of method Rector\\YamlRector\\Rector\\ReplaceValueYamlRector::createPatternFromPath\(\) expects string, int\|string\|null given#' # 2
         - '#Cannot call method getText\(\) on PhpParser\\Comment\\Doc\|null#'
 
         # Error php-parser token
@@ -50,9 +48,6 @@ parameters:
         # subtype
         - '#Property PhpParser\\Node\\Param::\$type \(PhpParser\\Node\\Name|PhpParser\\Node\\NullableType\|string\|null\) does not accept PhpParser\\Node\\Identifier|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType#' # 3
         - '#Parameter \#1 \$containerBuilder of method Symplify\\EasyCodingStandard\\DependencyInjection\\DelegatingLoaderFactory::createFromContainerBuilderAndKernel\(\) expects Symfony\\Component\\DependencyInjection\\ContainerBuilder, Symfony\\Component\\DependencyInjection\\ContainerInterface given#' # 1
-
-        # false positive
-        - '#Parameter \#1 \$kernelClass of method Rector\\Symfony\\Bridge\\SymfonyKernelParameterGuard::(ensureKernelClassExists|ensureIsKernelInstance)\(\) expects string, string\|null given#' # 2
 
         # intentionally incorrect - part of the test
         - '#Parameter \#2 \$codeSamples of class Rector\\RectorDefinition\\RectorDefinition constructor expects array<Rector\\Contract\\RectorDefinition\\CodeSampleInterface>, array<int, stdClass> given#' # 1
@@ -83,3 +78,4 @@ parameters:
         # test files
         - '*tests/Rector/MethodCall/MethodNameReplacerRector/**/SomeClass.php'
         - '*packages/BetterReflection/tests/Reflector/NotLoadedSource/SomeClass.php'
+        - 'packages/NodeTypeResolver/tests/PerNodeTypeResolver/VariableTypeResolver/Source/NewClass.php'

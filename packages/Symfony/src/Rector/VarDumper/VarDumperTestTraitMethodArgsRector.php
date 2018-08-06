@@ -23,6 +23,7 @@ final class VarDumperTestTraitMethodArgsRector extends AbstractRector
      * @var NodeFactory
      */
     private $nodeFactory;
+
     /**
      * @var string
      */
@@ -32,8 +33,7 @@ final class VarDumperTestTraitMethodArgsRector extends AbstractRector
         MethodCallAnalyzer $methodCallAnalyzer,
         NodeFactory $nodeFactory,
         string $traitName = 'Symfony\Component\VarDumper\Test\VarDumperTestTrait'
-    )
-    {
+    ) {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->nodeFactory = $nodeFactory;
         $this->traitName = $traitName;

@@ -1,2 +1,3 @@
 services:
-    Rector\Symfony\Rector\Form\FormIsValidRector: ~
+    Rector\Symfony\Rector\Form\FormIsValidRector:
+        $formClass: 'Rector\Symfony\Tests\Rector\Form\FormIsValidRector\Source\Form'

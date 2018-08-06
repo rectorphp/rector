@@ -2,11 +2,13 @@
 
 namespace Rector\Tests\FormIsValidRector;
 
+use Rector\Symfony\Tests\Rector\Form\FormIsValidRector\Source\Form;
+
 class SomeController
 {
     public function action()
     {
-        $form = new \Symfony\Component\Form\Form;
+        $form = new Form();
 
         if ($form->isValid()) {
             $this->processForm($form);

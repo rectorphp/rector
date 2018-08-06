@@ -71,3 +71,4 @@ parameters:
         Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
             # @todo fix later
             - 'packages/NodeTypeResolver/src/NodeTypeResolver.php'
+            - 'packages/NodeTypeResolver/src/PHPStanNodeScopeResolver.php'
