@@ -10,7 +10,6 @@ use PHPStan\Broker\Broker;
 use PHPStan\Type\ObjectType;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 
 /**
  * Read-only utils for PropertyFetch Node:
@@ -23,9 +22,15 @@ final class PropertyFetchAnalyzer
      */
     private $nodeTypeResolver;
 
-    public function __construct(NodeTypeResolver $nodeTypeResolver)
+    /**
+     * @var Broker
+     */
+    private $broker;
+
+    public function __construct(NodeTypeResolver $nodeTypeResolver, Broker $broker)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->broker = $broker;
     }
 
     public function isTypeAndProperty(Node $node, string $type, string $property): bool
@@ -149,14 +154,11 @@ final class PropertyFetchAnalyzer
             $propertyFetchType = $propertyFetchType->getClassName();
         }
 
-        /** @var Broker $broker */
-        $broker = (new PrivatesAccessor())->getPrivateProperty($nodeScope, 'broker');
-
-        if (! $broker->hasClass($propertyFetchType)) {
+        if (! $this->broker->hasClass($propertyFetchType)) {
             return false;
         }
 
-        $classReflection = $broker->getClass($propertyFetchType);
+        $classReflection = $this->broker->getClass($propertyFetchType);
         if (! $classReflection->hasProperty($propertyName)) {
             return false;
         }

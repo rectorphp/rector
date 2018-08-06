@@ -8,18 +8,13 @@ use PhpParser\Node\Stmt\Interface_;
 use PhpParser\NodeVisitor\NameResolver;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPStan\Analyser\Scope;
-use PHPStan\Analyser\ScopeContext;
-use PHPStan\Analyser\ScopeFactory;
-use PHPStan\Analyser\TypeSpecifier;
 use PHPStan\Broker\Broker;
-use PHPStan\DependencyInjection\ContainerFactory;
 use Rector\Configuration\Option;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\FileSystem\FilesFinder;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Configuration\CurrentFileProvider;
-use Rector\Printer\BetterStandardPrinter;
-use Symfony\Component\Finder\SplFileInfo;
+use Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 
@@ -50,43 +45,29 @@ final class PHPStanNodeScopeResolver
     private $filesFinder;
 
     /**
-     * @var Broker
-     */
-    private $phpstanBroker;
-
-    /**
-     * @var TypeSpecifier
-     */
-    private $phpstanTypeSpecifier;
-
-    /**
      * @var ScopeFactory
      */
-    private $phpstanScopeFactory;
+    private $scopeFactory;
 
     /**
-     * @var BetterStandardPrinter
+     * @var Broker
      */
-    private $betterStandardPrinter;
+    private $broker;
 
     public function __construct(
         CurrentFileProvider $currentFileProvider,
         ParameterProvider $parameterProvider,
-        BetterStandardPrinter $betterStandardPrinter,
-        FilesFinder $filesFinder
+        FilesFinder $filesFinder,
+        ScopeFactory $scopeFactory,
+        NodeScopeResolver $nodeScopeResolver,
+        Broker $broker
     ) {
-        $phpstanContainer = (new ContainerFactory(getcwd()))->create(sys_get_temp_dir(), []);
-
-        $this->phpstanBroker = $phpstanContainer->getByType(Broker::class);
-
-        $this->nodeScopeResolver = $phpstanContainer->getByType(NodeScopeResolver::class);
-        $this->phpstanTypeSpecifier = $phpstanContainer->getByType(TypeSpecifier::class);
-        $this->phpstanScopeFactory = $phpstanContainer->getByType(ScopeFactory::class);
-
         $this->currentFileProvider = $currentFileProvider;
         $this->parameterProvider = $parameterProvider;
         $this->filesFinder = $filesFinder;
-        $this->betterStandardPrinter = $betterStandardPrinter;
+        $this->scopeFactory = $scopeFactory;
+        $this->nodeScopeResolver = $nodeScopeResolver;
+        $this->broker = $broker;
     }
 
     /**
@@ -100,13 +81,13 @@ final class PHPStanNodeScopeResolver
 
         $this->nodeScopeResolver->processNodes(
             $nodes,
-            $this->createScopeByFile($this->currentFileProvider->getSplFileInfo()),
+            $this->scopeFactory->createFromFileInfo($this->currentFileProvider->getSplFileInfo()),
             function (Node $node, Scope $scope): void {
                 // the class reflection is resolved AFTER entering to class node
                 // so we need to get it from the first after this one
                 if ($node instanceof Class_ || $node instanceof Interface_) {
                     if (isset($node->namespacedName)) {
-                        $scope = $scope->enterClass($this->phpstanBroker->getClass((string) $node->namespacedName));
+                        $scope = $scope->enterClass($this->broker->getClass((string) $node->namespacedName));
                     } else {
                         // possibly anonymous class
                         $anonymousClassReflection = (new PrivatesAccessor())->getPrivateProperty(
@@ -125,20 +106,6 @@ final class PHPStanNodeScopeResolver
         );
 
         return $nodes;
-    }
-
-    private function createScopeByFile(SplFileInfo $splFileInfo): Scope
-    {
-        $scopeContext = ScopeContext::create($splFileInfo->getRealPath());
-
-        // Reset scope for new file
-        return new Scope(
-            $this->phpstanScopeFactory,
-            $this->phpstanBroker,
-            $this->betterStandardPrinter,
-            $this->phpstanTypeSpecifier,
-            $scopeContext
-        );
     }
 
     private function setAnalysedFiles(): void

@@ -2,9 +2,6 @@ parameters:
     ignoreErrors:
         # the # after each ignored error is the number of occurrences
 
-        # Nette Container
-        - '#Property Rector\\NodeTypeResolver\\PHPStanNodeScopeResolver::\$(.*?) does not accept object#'
-
         # 0.10.2
         # false positives & ->toString() methods
         - '#Cannot cast PhpParser\\Node\\Expr\|string to string#' # 8
@@ -19,8 +16,9 @@ parameters:
 
         # already fixed, invalidated cache?
         - '#Access to an undefined property PhpParser\\Node\\Expr::\$args#'
-        # class_uses() returns also false actually
-        - "#Casting to array<string, string> something that's already array<string, string>#"
+
+        # nette container
+        - '#Method Rector\\NodeTypeResolver\\DependencyInjection\\PHPStanServicesFactory::create(.*?)() should return (.*?) but returns object#'
 
         # irelevant
         - '#Call to function in_array\(\) with arguments string, array<array<string\|false>> and true will always evaluate to false#'

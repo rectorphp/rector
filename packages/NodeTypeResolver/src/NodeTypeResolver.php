@@ -20,7 +20,6 @@ use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Reflection\ClassReflectionTypesResolver;
 use Rector\Php\TypeAnalyzer;
-use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 
 final class NodeTypeResolver
 {
@@ -44,14 +43,21 @@ final class NodeTypeResolver
      */
     private $typeAnalyzer;
 
+    /**
+     * @var Broker
+     */
+    private $broker;
+
     public function __construct(
         ClassReflectionTypesResolver $classReflectionTypesResolver,
         DocBlockAnalyzer $docBlockAnalyzer,
-        TypeAnalyzer $typeAnalyzer
+        TypeAnalyzer $typeAnalyzer,
+        Broker $broker
     ) {
         $this->classReflectionTypesResolver = $classReflectionTypesResolver;
         $this->docBlockAnalyzer = $docBlockAnalyzer;
         $this->typeAnalyzer = $typeAnalyzer;
+        $this->broker = $broker;
     }
 
     public function addPerNodeTypeResolver(PerNodeTypeResolverInterface $perNodeTypeResolver): void
@@ -94,10 +100,8 @@ final class NodeTypeResolver
 
             $propertyTypes = $this->filterOutScalarTypes($propertyTypes);
 
-            /** @var Broker $broker */
-            $broker = (new PrivatesAccessor())->getPrivateProperty($nodeScope, 'broker');
             foreach ($propertyTypes as $propertyType) {
-                $propertyClassReflection = $broker->getClass($propertyType);
+                $propertyClassReflection = $this->broker->getClass($propertyType);
                 $propertyTypes += $this->classReflectionTypesResolver->resolve($propertyClassReflection);
             }
 
@@ -174,9 +178,8 @@ final class NodeTypeResolver
             $types = $this->resolveObjectTypesToStrings($type);
 
             // complete parents
-            $broker = (new PrivatesAccessor())->getPrivateProperty($nodeScope, 'broker');
             foreach ($types as $type) {
-                $propertyClassReflection = $broker->getClass($type);
+                $propertyClassReflection = $this->broker->getClass($type);
                 $types = array_merge($types, $this->classReflectionTypesResolver->resolve($propertyClassReflection));
             }
 
@@ -186,13 +189,12 @@ final class NodeTypeResolver
         // get from annotation
         $variableTypes = $this->docBlockAnalyzer->getVarTypes($variableNode);
 
-        $broker = (new PrivatesAccessor())->getPrivateProperty($nodeScope, 'broker');
         foreach ($variableTypes as $i => $type) {
             if (! class_exists($type)) {
                 unset($variableTypes[$i]);
                 continue;
             }
-            $propertyClassReflection = $broker->getClass($type);
+            $propertyClassReflection = $this->broker->getClass($type);
             $variableTypes = array_merge(
                 $variableTypes,
                 $this->classReflectionTypesResolver->resolve($propertyClassReflection)
