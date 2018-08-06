@@ -1,8 +1,0 @@
-services:
-    Rector\BetterReflection\:
-        resource: '../'
-
-    # nikic\PHP-Parser
-    Roave\BetterReflection\SourceLocator\Ast\Locator: ~
-
-    phpDocumentor\Reflection\FqsenResolver: ~

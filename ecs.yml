@@ -19,7 +19,6 @@ services:
             - 'PhpParser\Comment\Doc'
             - 'PhpParser\NodeTraverser'
             - 'Rector\DeprecationExtractor\Deprecation\*'
-            - 'Roave\BetterReflection\SourceLocator\Located\LocatedSource'
             - 'Rector\Reporting\FileDiff'
             - 'Rector\RectorDefinition\*'
             - 'PHPStan\Analyser\Scope'
@@ -47,7 +46,6 @@ parameters:
             - 'src/Rector/Constant/RenameClassConstantsUseToStringsRector.php'
             - '*/packages/NodeTypeResolver/**/PerNodeTypeResolver/**TypeResolver.php'
             - '*/packages/NodeTypeResolver/**/PerNodeTypeResolver/**TypeResolver/*Test.php'
-            - 'packages/BetterReflection/src/Reflector/SmartClassReflector.php'
             - 'tests/NodeAnalyzer/ClassLikeAnalyzerTest.php'
             - 'tests/NodeValueResolver/ConstExprEvaluatorFactoryTest.php'
             - 'src/Rector/AbstractPHPUnitRector.php'
@@ -58,7 +56,6 @@ parameters:
             - 'src/Rector/Property/PropertyNameReplacerRector.php'
             - 'src/Rector/Annotation/AnnotationReplacerRector.php'
             - 'src/Rector/Argument/ArgumentAdderRector.php'
-            - 'packages/BetterReflection/tests/Reflector/ClassReflectorOnSourceTest.php'
 
         # empty arguments passing
         PHP_CodeSniffer\Standards\PEAR\Sniffs\Functions\ValidDefaultValueSniff.NotAtEnd:

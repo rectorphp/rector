@@ -5,7 +5,8 @@ namespace Rector\Rector\Architecture\RepositoryAsService;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
-use Rector\BetterReflection\Reflector\SmartClassReflector;
+use PHPStan\Broker\Broker;
+use Rector\Node\Attribute;
 use Rector\Node\PropertyFetchNodeFactory;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -13,11 +14,6 @@ use Rector\RectorDefinition\RectorDefinition;
 
 final class ReplaceParentRepositoryCallsByRepositoryPropertyRector extends AbstractRector
 {
-    /**
-     * @var SmartClassReflector
-     */
-    private $smartClassReflector;
-
     /**
      * @var PropertyFetchNodeFactory
      */
@@ -28,39 +24,19 @@ final class ReplaceParentRepositoryCallsByRepositoryPropertyRector extends Abstr
      */
     private $entityRepositoryClass;
 
+    /**
+     * @var Broker
+     */
+    private $broker;
+
     public function __construct(
-        SmartClassReflector $smartClassReflector,
         PropertyFetchNodeFactory $propertyFetchNodeFactory,
-        string $entityRepositoryClass
+        string $entityRepositoryClass,
+        Broker $broker
     ) {
-        $this->smartClassReflector = $smartClassReflector;
         $this->propertyFetchNodeFactory = $propertyFetchNodeFactory;
         $this->entityRepositoryClass = $entityRepositoryClass;
-    }
-
-    public function isCandidate(Node $node): bool
-    {
-        if (! $node instanceof MethodCall) {
-            return false;
-        }
-
-        // of type...
-
-        if (! $node->name instanceof Identifier) {
-            return false;
-        }
-
-        return in_array($node->name->toString(), $this->getEntityRepositoryPublicMethodNames(), true);
-    }
-
-    /**
-     * @param MethodCall $methodCallNode
-     */
-    public function refactor(Node $methodCallNode): ?Node
-    {
-        $methodCallNode->var = $this->propertyFetchNodeFactory->createLocalWithPropertyName('repository');
-
-        return $methodCallNode;
+        $this->broker = $broker;
     }
 
     public function getDefinition(): RectorDefinition
@@ -69,7 +45,7 @@ final class ReplaceParentRepositoryCallsByRepositoryPropertyRector extends Abstr
             'Handles method calls in child of Doctrine EntityRepository and moves them to "$this->repository" property.',
             [
                 new CodeSample(
-<<<'CODE_SAMPLE'
+                    <<<'CODE_SAMPLE'
 <?php
 
 use Doctrine\ORM\EntityRepository;
@@ -83,7 +59,7 @@ class SomeRepository extends EntityRepository
 }
 CODE_SAMPLE
                     ,
-<<<'CODE_SAMPLE'
+                    <<<'CODE_SAMPLE'
 <?php
 
 use Doctrine\ORM\EntityRepository;
@@ -101,18 +77,37 @@ CODE_SAMPLE
         );
     }
 
-    /**
-     * @todo should be part of reflection
-     * @return string[]
-     */
-    private function getEntityRepositoryPublicMethodNames(): array
+    public function isCandidate(Node $node): bool
     {
-        $entityRepositoryReflection = $this->smartClassReflector->reflect($this->entityRepositoryClass);
-
-        if ($entityRepositoryReflection !== null) {
-            return array_keys($entityRepositoryReflection->getImmediateMethods());
+        if (! $node instanceof MethodCall) {
+            return false;
         }
 
-        return [];
+        // of type...
+
+        if (! $node->name instanceof Identifier) {
+            return false;
+        }
+
+        $methodName = $node->name->toString();
+
+        $entityClassReflection = $this->broker->getClass($this->entityRepositoryClass);
+        if (! $entityClassReflection->hasMethod($methodName)) {
+            return false;
+        }
+
+        $methodReflection = $entityClassReflection->getMethod($methodName, $node->getAttribute(Attribute::SCOPE));
+
+        return $methodReflection->isPublic();
+    }
+
+    /**
+     * @param MethodCall $methodCallNode
+     */
+    public function refactor(Node $methodCallNode): ?Node
+    {
+        $methodCallNode->var = $this->propertyFetchNodeFactory->createLocalWithPropertyName('repository');
+
+        return $methodCallNode;
     }
 }

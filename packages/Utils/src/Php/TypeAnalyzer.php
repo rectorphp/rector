@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\BetterReflection\Reflection;
+namespace Rector\Utils\Php;
 
 final class TypeAnalyzer
 {

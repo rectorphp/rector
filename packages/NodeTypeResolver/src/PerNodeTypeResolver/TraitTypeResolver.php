@@ -5,7 +5,7 @@ namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Trait_;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
-use Roave\BetterReflection\Reflection\ReflectionClass;
+use ReflectionClass;
 
 final class TraitTypeResolver implements PerNodeTypeResolverInterface
 {
@@ -23,7 +23,7 @@ final class TraitTypeResolver implements PerNodeTypeResolverInterface
      */
     public function resolve(Node $traitNode): array
     {
-        $traitReflection = ReflectionClass::createFromName((string) $traitNode->namespacedName);
+        $traitReflection = new ReflectionClass((string) $traitNode->namespacedName);
 
         $types = [];
         $types[] = $traitReflection->getName();

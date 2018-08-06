@@ -14,7 +14,6 @@
         "nette/utils": "^2.5",
         "nikic/php-parser": "^4.0.1",
         "phpstan/phpstan": "^0.10.2",
-        "roave/better-reflection": "^3.0",
         "sebastian/diff": "^3.0",
         "symfony/console": "^3.4|^4.0",
         "symfony/dependency-injection": "^3.4|^4.0",
@@ -33,7 +32,6 @@
     "autoload": {
         "psr-4": {
             "Rector\\": "src",
-            "Rector\\BetterReflection\\": "packages/BetterReflection/src",
             "Rector\\ConsoleDiffer\\": "packages/ConsoleDiffer/src",
             "Rector\\BetterPhpDocParser\\": "packages/BetterPhpDocParser/src",
             "Rector\\NodeTypeResolver\\": "packages/NodeTypeResolver/src",
@@ -44,6 +42,7 @@
             "Rector\\PHPUnit\\": "packages/PHPUnit/src",
             "Rector\\PhpParser\\": "packages/PhpParser/src",
             "Rector\\Doctrine\\": "packages/Doctrine/src",
+            "Rector\\Utils\\": "packages/Utils/src",
             "Rector\\YamlRector\\": "packages/YamlRector/src"
         }
     },
