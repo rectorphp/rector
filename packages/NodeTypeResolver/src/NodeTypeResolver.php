@@ -4,7 +4,6 @@ namespace Rector\NodeTypeResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Variable;
 use PHPStan\Analyser\Scope;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
@@ -45,27 +44,21 @@ final class NodeTypeResolver
             return [];
         }
 
-        if ($node instanceof Expr && ! $node instanceof Variable) {
-            return $this->resolveExprNode($node);
-        }
-
+        // nodes that cannot be resolver by PHPStan
         $nodeClass = get_class($node);
         if (isset($this->perNodeTypeResolvers[$nodeClass])) {
             return $this->perNodeTypeResolvers[$nodeClass]->resolve($node);
         }
 
-        return [];
-    }
+        if (! $node instanceof Expr) {
+            return [];
+        }
 
-    /**
-     * @return string[]
-     */
-    private function resolveExprNode(Expr $exprNode): array
-    {
+        // PHPStan
         /** @var Scope $nodeScope */
-        $nodeScope = $exprNode->getAttribute(Attribute::SCOPE);
+        $nodeScope = $node->getAttribute(Attribute::SCOPE);
 
-        $type = $nodeScope->getType($exprNode);
+        $type = $nodeScope->getType($node);
 
         return $this->typeToStringResolver->resolve($type);
     }
