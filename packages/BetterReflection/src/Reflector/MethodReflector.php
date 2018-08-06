@@ -58,28 +58,6 @@ final class MethodReflector
     }
 
     /**
-     * @param string[] $types
-     * @return string[]
-     */
-    public function resolveReturnTypesForTypesAndMethod(array $types, string $method): array
-    {
-        if (! count($types)) {
-            return [];
-        }
-
-        $returnTypes = $this->resolveFirstMatchingTypeAndMethod($types, $method);
-        if (! $returnTypes) {
-            return [];
-        }
-
-        if ($returnTypes[0] === $types[0]) { // self/static
-            return $types;
-        }
-
-        return $returnTypes;
-    }
-
-    /**
      * @param string[]|Type[] $returnTypes
      * @return string[]
      */

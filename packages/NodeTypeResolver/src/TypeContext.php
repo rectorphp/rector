@@ -2,10 +2,7 @@
 
 namespace Rector\NodeTypeResolver;
 
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassLike;
 use Rector\NodeAnalyzer\ClassLikeAnalyzer;
-use Rector\NodeTypeResolver\TypesExtractor\ConstructorPropertyTypesExtractor;
 
 /**
  * Inspired by https://github.com/nikic/PHP-Parser/blob/9373a8e9f551516bc8e42aedeacd1b4f635d27fc/lib/PhpParser/NameContext.php.
@@ -23,20 +20,13 @@ final class TypeContext
     private $propertyTypes = [];
 
     /**
-     * @var ConstructorPropertyTypesExtractor
-     */
-    private $constructorPropertyTypesExtractor;
-
-    /**
      * @var ClassLikeAnalyzer
      */
     private $classLikeAnalyzer;
 
     public function __construct(
-        ConstructorPropertyTypesExtractor $constructorPropertyTypesExtractor,
         ClassLikeAnalyzer $classLikeAnalyzer
     ) {
-        $this->constructorPropertyTypesExtractor = $constructorPropertyTypesExtractor;
         $this->classLikeAnalyzer = $classLikeAnalyzer;
     }
 
@@ -46,16 +36,6 @@ final class TypeContext
     public function addVariableWithTypes(string $variableName, array $variableTypes): void
     {
         $this->variableTypes[$variableName] = $variableTypes;
-    }
-
-    public function enterClassLike(ClassLike $classLikeNode): void
-    {
-        $this->propertyTypes = [];
-
-        if ($this->classLikeAnalyzer->isNormalClass($classLikeNode)) {
-            /** @var Class_ $classLikeNode */
-            $this->propertyTypes = $this->constructorPropertyTypesExtractor->extractFromClassNode($classLikeNode);
-        }
     }
 
     /**
