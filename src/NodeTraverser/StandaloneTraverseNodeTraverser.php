@@ -7,6 +7,7 @@ use PhpParser\NodeTraverser;
 use PhpParser\NodeTraverserInterface;
 use PhpParser\NodeVisitor;
 use PhpParser\NodeVisitor\NameResolver;
+use Rector\NodeTypeResolver\PHPStan\Scope\NodeScopeResolver;
 use Rector\NodeTypeResolver\PHPStanNodeScopeResolver;
 
 /**
@@ -21,13 +22,13 @@ final class StandaloneTraverseNodeTraverser
     private $nodeTraversers = [];
 
     /**
-     * @var PHPStanNodeScopeResolver
+     * @var NodeScopeResolver
      */
-    private $pHPStanNodeScopeResolver;
+    private $nodeScopeResolver;
 
-    public function __construct(PHPStanNodeScopeResolver $pHPStanNodeScopeResolver)
+    public function __construct(NodeScopeResolver $nodeScopeResolver)
     {
-        $this->pHPStanNodeScopeResolver = $pHPStanNodeScopeResolver;
+        $this->nodeScopeResolver = $nodeScopeResolver;
     }
 
     public function addNodeVisitor(NodeVisitor $nodeVisitor): void
@@ -47,7 +48,7 @@ final class StandaloneTraverseNodeTraverser
         $nodeTraverser->addVisitor(new NameResolver());
         $nodes = $nodeTraverser->traverse($nodes);
 
-        $nodes = $this->pHPStanNodeScopeResolver->processNodes($nodes);
+        $nodes = $this->nodeScopeResolver->processNodes($nodes);
 
         foreach ($this->nodeTraversers as $nodeTraverser) {
             $nodes = $nodeTraverser->traverse($nodes);
