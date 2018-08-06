@@ -1,6 +1,10 @@
 <?php declare (strict_types=1);
 
-class SomeTest extends \PHPUnit\Framework\TestCase
+namespace Rector\Tests\RectorOrder;
+
+use PHPUnit\Framework\TestCase;
+
+class SomeTest extends TestCase
 {
     public function test()
     {
