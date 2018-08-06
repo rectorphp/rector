@@ -8,7 +8,6 @@ use PhpParser\NodeTraverserInterface;
 use PhpParser\NodeVisitor;
 use PhpParser\NodeVisitor\NameResolver;
 use Rector\NodeTypeResolver\PHPStan\Scope\NodeScopeResolver;
-use Rector\NodeTypeResolver\PHPStanNodeScopeResolver;
 
 /**
  * Oppose to NodeTraverser, that traverse ONE node by ALL NodeVisitors,
