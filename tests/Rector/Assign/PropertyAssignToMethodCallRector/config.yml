@@ -1,5 +1,7 @@
 services:
     Rector\Rector\Assign\PropertyAssignToMethodCallRector:
-        $types: ['Nette\Forms\Controls\MultiChoiceControl', 'Nette\Forms\Controls\ChoiceControl']
+        $types:
+            - 'Rector\Tests\Rector\Assign\PropertyAssignToMethodCallRector\Source\ChoiceControl'
+            - 'Rector\Tests\Rector\Assign\PropertyAssignToMethodCallRector\Source\MultiChoiceControl'
         $oldPropertyName: 'checkAllowedValues'
         $newMethodName: 'checkDefaultValue'

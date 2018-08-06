@@ -66,9 +66,8 @@ final class NodeTypeResolver
      */
     public function resolve(Node $node): array
     {
-        /** @var Scope $nodeScope */
+        /** @var Scope|null $nodeScope */
         $nodeScope = $node->getAttribute(Attribute::SCOPE);
-
         if ($nodeScope === null) {
             return [];
         }
