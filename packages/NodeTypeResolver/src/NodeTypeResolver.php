@@ -5,7 +5,6 @@ namespace Rector\NodeTypeResolver;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Param;
 use PHPStan\Analyser\Scope;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
@@ -44,11 +43,6 @@ final class NodeTypeResolver
         $nodeScope = $node->getAttribute(Attribute::SCOPE);
         if ($nodeScope === null) {
             return [];
-        }
-
-        if ($node instanceof Param) {
-            // @todo resolve parents etc.
-            return [$node->type->toString()];
         }
 
         if ($node instanceof Expr && ! $node instanceof Variable) {
