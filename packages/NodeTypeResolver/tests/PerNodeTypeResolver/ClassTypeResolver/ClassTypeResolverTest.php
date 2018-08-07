@@ -46,7 +46,7 @@ final class ClassTypeResolverTest extends AbstractNodeTypeResolverTest
         yield [
             __DIR__ . '/Source/AnonymousClass.php',
             0,
-            [ParentClass::class, SomeInterface::class /*, AnotherTrait::class */],
+            [ParentClass::class, SomeInterface::class],
         ];
     }
 }
