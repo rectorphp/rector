@@ -4,6 +4,5 @@ services:
             'Rector\Tests\Rector\Class_\ParentClassToTraitsRector\Source\ParentObject':
                 - 'Rector\Tests\Rector\Class_\ParentClassToTraitsRector\Source\SomeTrait'
             'Rector\Tests\Rector\Class_\ParentClassToTraitsRector\Source\AnotherParentObject':
-                - 'SilverStripe\Core\Extensible'
-                - 'SilverStripe\Core\Injector\Injectable'
-                - 'SilverStripe\Core\Config\Configurable'
+                - 'Rector\Tests\Rector\Class_\ParentClassToTraitsRector\Source\SomeTrait'
+                - 'Rector\Tests\Rector\Class_\ParentClassToTraitsRector\Source\SecondTrait'

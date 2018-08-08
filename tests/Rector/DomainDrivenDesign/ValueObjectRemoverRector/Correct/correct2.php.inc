@@ -2,7 +2,7 @@
 
 namespace SomeNamespace;
 
-class ActionClass
+class SecondActionClass
 {
     public function someFunction(string $name)
     {

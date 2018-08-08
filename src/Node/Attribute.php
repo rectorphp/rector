@@ -10,13 +10,6 @@ namespace Rector\Node;
 final class Attribute
 {
     /**
-     * Class, interface or trait FQN types.
-     *
-     * @var string
-     */
-    public const TYPES = 'types';
-
-    /**
      * Internal php-parser name.
      * Do not change this even if you want!
      *
@@ -114,4 +107,11 @@ final class Attribute
      * @var string
      */
     public const NAMESPACED_NAME = 'namespacedName';
+
+    /**
+     * PHPStan-based type scope.
+     *
+     * @var string
+     */
+    public const SCOPE = 'scope';
 }

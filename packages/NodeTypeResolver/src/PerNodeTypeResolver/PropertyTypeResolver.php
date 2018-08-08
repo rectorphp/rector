@@ -4,25 +4,18 @@ namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
-use PhpParser\Node\VarLikeIdentifier;
+use PHPStan\Broker\Broker;
 use Rector\BetterPhpDocParser\NodeAnalyzer\DocBlockAnalyzer;
-use Rector\BetterReflection\Reflector\SmartClassReflector;
-use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
-use Rector\NodeTypeResolver\TypeContext;
+use Rector\NodeTypeResolver\Reflection\ClassReflectionTypesResolver;
 use Rector\Php\TypeAnalyzer;
 
 final class PropertyTypeResolver implements PerNodeTypeResolverInterface
 {
     /**
-     * @var TypeAnalyzer
+     * @var ClassReflectionTypesResolver
      */
-    private $typeAnalyzer;
-
-    /**
-     * @var TypeContext
-     */
-    private $typeContext;
+    private $classReflectionTypesResolver;
 
     /**
      * @var DocBlockAnalyzer
@@ -30,19 +23,24 @@ final class PropertyTypeResolver implements PerNodeTypeResolverInterface
     private $docBlockAnalyzer;
 
     /**
-     * @var SmartClassReflector
+     * @var Broker
      */
-    private $smartClassReflector;
+    private $broker;
+
+    /**
+     * @var TypeAnalyzer
+     */
+    private $typeAnalyzer;
 
     public function __construct(
-        TypeContext $typeContext,
+        ClassReflectionTypesResolver $classReflectionTypesResolver,
         DocBlockAnalyzer $docBlockAnalyzer,
-        SmartClassReflector $smartClassReflector,
+        Broker $broker,
         TypeAnalyzer $typeAnalyzer
     ) {
-        $this->typeContext = $typeContext;
+        $this->classReflectionTypesResolver = $classReflectionTypesResolver;
         $this->docBlockAnalyzer = $docBlockAnalyzer;
-        $this->smartClassReflector = $smartClassReflector;
+        $this->broker = $broker;
         $this->typeAnalyzer = $typeAnalyzer;
     }
 
@@ -60,48 +58,20 @@ final class PropertyTypeResolver implements PerNodeTypeResolverInterface
      */
     public function resolve(Node $propertyNode): array
     {
-        /** @var VarLikeIdentifier $varLikeIdentifierNode */
-        $varLikeIdentifierNode = $propertyNode->props[0]->name;
-
-        $propertyName = $varLikeIdentifierNode->toString();
-
-        $classNode = $propertyNode->getAttribute(Attribute::CLASS_NODE);
-        $this->typeContext->enterClassLike($classNode);
-
-        $propertyTypes = $this->typeContext->getTypesForProperty($propertyName);
-
-        if ($propertyTypes) {
-            return $propertyTypes;
-        }
-
+        // doc
         $propertyTypes = $this->docBlockAnalyzer->getVarTypes($propertyNode);
-        if ($propertyTypes === [] || $propertyTypes === ['string']) {
+        if ($propertyTypes === []) {
             return [];
         }
 
         $propertyTypes = $this->filterOutScalarTypes($propertyTypes);
-        $propertyTypes = $this->addParentClasses($propertyTypes);
 
-        $this->typeContext->addPropertyTypes($propertyName, $propertyTypes);
-
-        return $propertyTypes;
-    }
-
-    /**
-     * @param string[] $propertyTypes
-     * @return string[]
-     */
-    private function addParentClasses(array $propertyTypes): array
-    {
         foreach ($propertyTypes as $propertyType) {
-            $classReflection = $this->smartClassReflector->reflect($propertyType);
-
-            if ($classReflection && $classReflection->getParentClassNames()) {
-                $propertyTypes = array_merge($propertyTypes, $classReflection->getParentClassNames());
-            }
+            $propertyClassReflection = $this->broker->getClass($propertyType);
+            $propertyTypes += $this->classReflectionTypesResolver->resolve($propertyClassReflection);
         }
 
-        return array_values(array_unique($propertyTypes));
+        return $propertyTypes;
     }
 
     /**
@@ -114,7 +84,6 @@ final class PropertyTypeResolver implements PerNodeTypeResolverInterface
             if (! $this->typeAnalyzer->isPhpReservedType($type)) {
                 continue;
             }
-
             unset($propertyTypes[$key]);
         }
 

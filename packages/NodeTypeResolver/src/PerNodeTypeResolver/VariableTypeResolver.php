@@ -3,29 +3,48 @@
 namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
+use PHPStan\Broker\Broker;
+use PHPStan\TrinaryLogic;
+use PHPStan\Type\ThisType;
+use Rector\BetterPhpDocParser\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\Node\Attribute;
-use Rector\NodeTypeResolver\Contract\NodeTypeResolverAwareInterface;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
-use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\NodeTypeResolver\TypeContext;
+use Rector\NodeTypeResolver\PHPStan\Type\TypeToStringResolver;
+use Rector\NodeTypeResolver\Reflection\ClassReflectionTypesResolver;
 
-final class VariableTypeResolver implements PerNodeTypeResolverInterface, NodeTypeResolverAwareInterface
+final class VariableTypeResolver implements PerNodeTypeResolverInterface
 {
     /**
-     * @var TypeContext
+     * @var ClassReflectionTypesResolver
      */
-    private $typeContext;
+    private $classReflectionTypesResolver;
 
     /**
-     * @var NodeTypeResolver
+     * @var DocBlockAnalyzer
      */
-    private $nodeTypeResolver;
+    private $docBlockAnalyzer;
 
-    public function __construct(TypeContext $typeContext)
-    {
-        $this->typeContext = $typeContext;
+    /**
+     * @var Broker
+     */
+    private $broker;
+
+    /**
+     * @var TypeToStringResolver
+     */
+    private $typeToStringResolver;
+
+    public function __construct(
+        ClassReflectionTypesResolver $classReflectionTypesResolver,
+        DocBlockAnalyzer $docBlockAnalyzer,
+        Broker $broker,
+        TypeToStringResolver $typeToStringResolver
+    ) {
+        $this->classReflectionTypesResolver = $classReflectionTypesResolver;
+        $this->docBlockAnalyzer = $docBlockAnalyzer;
+        $this->broker = $broker;
+        $this->typeToStringResolver = $typeToStringResolver;
     }
 
     /**
@@ -42,34 +61,44 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface, NodeTy
      */
     public function resolve(Node $variableNode): array
     {
-        if ($variableNode->name === 'this') {
-            $classNode = $variableNode->getAttribute(Attribute::CLASS_NODE);
-            if ($classNode === null) {
-                // don't know yet
-                return [];
+        $nodeScope = $variableNode->getAttribute(Attribute::SCOPE);
+
+        $variableName = (string) $variableNode->name;
+
+        if ($nodeScope->hasVariableType($variableName) === TrinaryLogic::createYes()) {
+            $type = $nodeScope->getVariableType($variableName);
+
+            // this
+            if ($type instanceof ThisType) {
+                return $this->classReflectionTypesResolver->resolve($nodeScope->getClassReflection());
             }
 
-            return $this->nodeTypeResolver->resolve($classNode);
+            $types = $this->typeToStringResolver->resolve($type);
+
+            // complete parents
+            foreach ($types as $type) {
+                $propertyClassReflection = $this->broker->getClass($type);
+                $types = array_merge($types, $this->classReflectionTypesResolver->resolve($propertyClassReflection));
+            }
+
+            return array_unique($types);
         }
 
-        if ($variableNode->name instanceof Variable) {
-            return $this->nodeTypeResolver->resolve($variableNode->name);
+        // get from annotation
+        $variableTypes = $this->docBlockAnalyzer->getVarTypes($variableNode);
+
+        foreach ($variableTypes as $i => $type) {
+            if (! class_exists($type)) {
+                unset($variableTypes[$i]);
+                continue;
+            }
+            $propertyClassReflection = $this->broker->getClass($type);
+            $variableTypes = array_merge(
+                $variableTypes,
+                $this->classReflectionTypesResolver->resolve($propertyClassReflection)
+            );
         }
 
-        $variableTypes = $this->typeContext->getTypesForVariable((string) $variableNode->name);
-        if ($variableTypes) {
-            return $variableTypes;
-        }
-
-        if ($variableNode->getAttribute(Attribute::PARENT_NODE) instanceof Assign) {
-            return $this->nodeTypeResolver->resolve($variableNode->getAttribute(Attribute::PARENT_NODE));
-        }
-
-        return [];
-    }
-
-    public function setNodeTypeResolver(NodeTypeResolver $nodeTypeResolver): void
-    {
-        $this->nodeTypeResolver = $nodeTypeResolver;
+        return array_unique($variableTypes);
     }
 }

@@ -1,10 +1,12 @@
 <?php declare (strict_types=1);
 
+use Rector\Tests\Rector\Assign\PropertyAssignToMethodCallRector\Source\MultiChoiceControl;
+
 class SomePresenter
 {
     public function createForm()
     {
-        $control = new Nette\Forms\Controls\MultiChoiceControl;
+        $control = new MultiChoiceControl();
         $control->checkAllowedValues = false;
     }
 }

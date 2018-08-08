@@ -25,10 +25,19 @@ final class FormIsValidRector extends AbstractRector
      */
     private $methodCallNodeFactory;
 
-    public function __construct(MethodCallNodeFactory $methodCallNodeFactory, MethodCallAnalyzer $methodCallAnalyzer)
-    {
+    /**
+     * @var string
+     */
+    private $formClass;
+
+    public function __construct(
+        MethodCallNodeFactory $methodCallNodeFactory,
+        MethodCallAnalyzer $methodCallAnalyzer,
+        string $formClass = 'Symfony\Component\Form\Form'
+    ) {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->methodCallNodeFactory = $methodCallNodeFactory;
+        $this->formClass = $formClass;
     }
 
     public function getDefinition(): RectorDefinition
@@ -37,8 +46,15 @@ final class FormIsValidRector extends AbstractRector
             'Adds `$form->isSubmitted()` validatoin to all `$form->isValid()` calls in Form in Symfony',
             [
                 new CodeSample(
-                    'if ($form->isValid()) { ... };',
-                    'if ($form->isSubmitted() && $form->isValid()) { ... };'
+                    <<<'CODE_SAMPLE'
+if ($form->isValid()) { 
+}
+CODE_SAMPLE
+                    ,
+<<<'CODE_SAMPLE'
+if ($form->isSubmitted() && $form->isValid()) {
+}
+CODE_SAMPLE
                 ),
             ]
         );
@@ -51,7 +67,7 @@ final class FormIsValidRector extends AbstractRector
             return false;
         }
 
-        if (! $this->methodCallAnalyzer->isTypeAndMethod($node, 'Symfony\Component\Form\Form', 'isValid')) {
+        if (! $this->methodCallAnalyzer->isTypeAndMethod($node, $this->formClass, 'isValid')) {
             return false;
         }
 

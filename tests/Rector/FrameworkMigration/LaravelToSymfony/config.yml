@@ -1,2 +1,0 @@
-imports:
-  - { resource: '../../../../config/level/framework-migration/laravel-to-symfony.yml' }

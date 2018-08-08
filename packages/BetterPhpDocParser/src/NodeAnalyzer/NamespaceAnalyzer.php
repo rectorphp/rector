@@ -54,6 +54,11 @@ final class NamespaceAnalyzer
                 return $nodeUseName;
             }
 
+            // exactly the same
+            if ($type === $useUseNode->name->toString()) {
+                return $type;
+            }
+
             // alias
             if ($type === $useUseNode->getAlias()->toString()) {
                 return $nodeUseName;

@@ -2,25 +2,30 @@
 
 namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Stmt\Namespace_;
-use Rector\BetterReflection\Reflector\SmartClassReflector;
+use PHPStan\Broker\Broker;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
+use Rector\NodeTypeResolver\Reflection\ClassReflectionTypesResolver;
 
 final class NameTypeResolver implements PerNodeTypeResolverInterface
 {
     /**
-     * @var SmartClassReflector
+     * @var Broker
      */
-    private $smartClassReflector;
+    private $broker;
 
-    public function __construct(SmartClassReflector $smartClassReflector)
+    /**
+     * @var ClassReflectionTypesResolver
+     */
+    private $classReflectionTypesResolver;
+
+    public function __construct(Broker $broker, ClassReflectionTypesResolver $classReflectionTypesResolver)
     {
-        $this->smartClassReflector = $smartClassReflector;
+        $this->broker = $broker;
+        $this->classReflectionTypesResolver = $classReflectionTypesResolver;
     }
 
     /**
@@ -41,53 +46,11 @@ final class NameTypeResolver implements PerNodeTypeResolverInterface
             return [$nameNode->getAttribute(Attribute::PARENT_CLASS_NAME)];
         }
 
-        if ($this->shouldSkip($nameNode, $nameNode->toString())) {
-            return [];
-        }
-
         $fullyQualifiedName = $this->resolveFullyQualifiedName($nameNode, $nameNode->toString());
 
-        // known types, for performance
-        if ($fullyQualifiedName === 'PHPUnit\Framework\TestCase') {
-            return ['PHPUnit\Framework\TestCase'];
-        }
+        $classReflection = $this->broker->getClass($fullyQualifiedName);
 
-        // skip tests, since they are autoloaded and decoupled from the prod code
-        // reflection is too performance heavy
-        if (Strings::contains($fullyQualifiedName, 'Tests') && Strings::endsWith($fullyQualifiedName, 'Test')) {
-            return [$fullyQualifiedName];
-        }
-
-        return $this->reflectClassLike($fullyQualifiedName);
-    }
-
-    private function shouldSkip(Node $nameNode, string $stringName): bool
-    {
-        // is simple name?
-        if (in_array($stringName, ['true', 'false', 'stdClass'], true)) {
-            return true;
-        }
-
-        // is parent namespace?
-        return $nameNode->getAttribute(Attribute::PARENT_NODE) instanceof Namespace_;
-    }
-
-    /**
-     * @return string[]
-     */
-    private function reflectClassLike(string $name): array
-    {
-        $classLikeReflection = $this->smartClassReflector->reflect($name);
-        if ($classLikeReflection === null) {
-            return [$name];
-        }
-
-        $useTraits = array_values((array) class_uses($classLikeReflection->getName()));
-
-        $implementedInterfaces = $this->smartClassReflector->resolveClassInterfaces($classLikeReflection);
-        $classParents = $this->smartClassReflector->resolveClassParents($classLikeReflection);
-
-        return array_merge([$name], $classParents, $useTraits, $implementedInterfaces);
+        return $this->classReflectionTypesResolver->resolve($classReflection);
     }
 
     private function resolveFullyQualifiedName(Node $nameNode, string $name): string

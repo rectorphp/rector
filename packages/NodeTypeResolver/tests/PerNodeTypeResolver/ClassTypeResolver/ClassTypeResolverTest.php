@@ -42,10 +42,11 @@ final class ClassTypeResolverTest extends AbstractNodeTypeResolverTest
 
         yield [__DIR__ . '/Source/ClassWithTrait.php', 0, [ClassWithTrait::class, AnotherTrait::class]];
 
+        // traits in anonymous classes are ignored in PHPStan
         yield [
             __DIR__ . '/Source/AnonymousClass.php',
             0,
-            [ParentClass::class, SomeInterface::class, AnotherTrait::class],
+            [ParentClass::class, SomeInterface::class],
         ];
     }
 }

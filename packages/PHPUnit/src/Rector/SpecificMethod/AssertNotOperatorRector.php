@@ -6,6 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
 use Rector\Builder\IdentifierRenamer;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeAnalyzer\StaticMethodCallAnalyzer;
@@ -61,6 +62,10 @@ final class AssertNotOperatorRector extends AbstractPHPUnitRector
 
     public function isCandidate(Node $node): bool
     {
+        if (! $node instanceof MethodCall && ! $node instanceof StaticCall) {
+            return false;
+        }
+
         if (! $this->isInTestClass($node)) {
             return false;
         }

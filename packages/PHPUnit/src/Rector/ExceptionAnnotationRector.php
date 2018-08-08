@@ -75,11 +75,11 @@ CODE_SAMPLE
 
     public function isCandidate(Node $node): bool
     {
-        if (! $this->isInTestClass($node)) {
+        if (! $node instanceof ClassMethod) {
             return false;
         }
 
-        if (! $node instanceof ClassMethod) {
+        if (! $this->isInTestClass($node)) {
             return false;
         }
 

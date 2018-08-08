@@ -5,8 +5,9 @@ namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Trait_;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
+use ReflectionClass;
 
-final class TraitTypeResolver extends AbstractClassLikeTypeResolver implements PerNodeTypeResolverInterface
+final class TraitTypeResolver implements PerNodeTypeResolverInterface
 {
     /**
      * @return string[]
@@ -22,7 +23,15 @@ final class TraitTypeResolver extends AbstractClassLikeTypeResolver implements P
      */
     public function resolve(Node $traitNode): array
     {
-        $types[] = $this->resolveNameNode($traitNode);
-        return array_merge($types, $this->resolveUsedTraitTypes($traitNode));
+        $traitReflection = new ReflectionClass((string) $traitNode->namespacedName);
+
+        $types = [];
+        $types[] = $traitReflection->getName();
+
+        foreach ($traitReflection->getTraits() as $usedTraitReflection) {
+            $types[] = $usedTraitReflection->getName();
+        }
+
+        return $types;
     }
 }

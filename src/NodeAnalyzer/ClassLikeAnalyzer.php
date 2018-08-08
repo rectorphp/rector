@@ -15,9 +15,4 @@ final class ClassLikeAnalyzer
     {
         return $node instanceof Class_ && $node->isAnonymous();
     }
-
-    public function isNormalClass(Node $node): bool
-    {
-        return $node instanceof Class_ && ! $node->isAnonymous();
-    }
 }

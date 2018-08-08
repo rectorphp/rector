@@ -13,7 +13,7 @@ use Rector\Builder\Class_\VariableInfoFactory;
 use Rector\Builder\ConstructorMethodBuilder;
 use Rector\Builder\PropertyBuilder;
 use Rector\Configuration\Rector\Architecture\DependencyInjection\VariablesToPropertyFetchCollection;
-use Rector\Node\Attribute;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -45,18 +45,25 @@ final class ActionInjectionToConstructorInjectionRector extends AbstractRector
      */
     private $analyzedApplicationContainer;
 
+    /**
+     * @var NodeTypeResolver
+     */
+    private $nodeTypeResolver;
+
     public function __construct(
         PropertyBuilder $propertyBuilder,
         ConstructorMethodBuilder $constructorMethodBuilder,
         VariableInfoFactory $variableInfoFactory,
         VariablesToPropertyFetchCollection $variablesToPropertyFetchCollection,
-        AnalyzedApplicationContainerInterface $analyzedApplicationContainer
+        AnalyzedApplicationContainerInterface $analyzedApplicationContainer,
+        NodeTypeResolver $nodeTypeResolver
     ) {
         $this->propertyBuilder = $propertyBuilder;
         $this->constructorMethodBuilder = $constructorMethodBuilder;
         $this->variableInfoFactory = $variableInfoFactory;
         $this->variablesToPropertyFetchCollection = $variablesToPropertyFetchCollection;
         $this->analyzedApplicationContainer = $analyzedApplicationContainer;
+        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     public function isCandidate(Node $node): bool
@@ -127,9 +134,11 @@ CODE_SAMPLE
                 continue;
             }
 
+            $paramNodeTypes = $this->nodeTypeResolver->resolve($paramNode);
+
             $variableInfo = $this->variableInfoFactory->createFromNameAndTypes(
                 $paramNode->var->name,
-                $paramNode->getAttribute(Attribute::TYPES)
+                $paramNodeTypes
             );
 
             $this->addConstructorDependencyToClassNode($classNode, $variableInfo);
@@ -149,7 +158,9 @@ CODE_SAMPLE
             return false;
         }
 
-        $typehint = (string) $paramNode->getAttribute(Attribute::TYPES)[0] ?? null;
+        $paramNodeTypes = $this->nodeTypeResolver->resolve($paramNode);
+
+        $typehint = $paramNodeTypes[0] ?? null;
         if (! $typehint) {
             return false;
         }

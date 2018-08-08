@@ -81,6 +81,7 @@ abstract class AbstractValueObjectRemoverRector extends AbstractRector
     protected function matchOriginAndNewType(Node $node): ?array
     {
         $nodeTypes = $this->nodeTypeResolver->resolve($node);
+
         foreach ($nodeTypes as $nodeType) {
             if (! isset($this->valueObjectsToSimpleTypes[$nodeType])) {
                 continue;

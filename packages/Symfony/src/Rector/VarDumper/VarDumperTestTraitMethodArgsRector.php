@@ -15,11 +15,6 @@ use Rector\RectorDefinition\RectorDefinition;
 final class VarDumperTestTraitMethodArgsRector extends AbstractRector
 {
     /**
-     * @var string
-     */
-    private const TRAIT_NAME = 'Symfony\Component\VarDumper\Test\VarDumperTestTrait';
-
-    /**
      * @var MethodCallAnalyzer
      */
     private $methodCallAnalyzer;
@@ -29,10 +24,19 @@ final class VarDumperTestTraitMethodArgsRector extends AbstractRector
      */
     private $nodeFactory;
 
-    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, NodeFactory $nodeFactory)
-    {
+    /**
+     * @var string
+     */
+    private $traitName;
+
+    public function __construct(
+        MethodCallAnalyzer $methodCallAnalyzer,
+        NodeFactory $nodeFactory,
+        string $traitName = 'Symfony\Component\VarDumper\Test\VarDumperTestTrait'
+    ) {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->nodeFactory = $nodeFactory;
+        $this->traitName = $traitName;
     }
 
     public function getDefinition(): RectorDefinition
@@ -41,12 +45,12 @@ final class VarDumperTestTraitMethodArgsRector extends AbstractRector
             'Adds new `$format` argument in `VarDumperTestTrait->assertDumpEquals()` in Validator in Symfony.',
             [
                 new CodeSample(
-                    'VarDumperTestTrait->assertDumpEquals($dump, $data, $mesage = "");',
-                    'VarDumperTestTrait->assertDumpEquals($dump, $data, $context = null, $mesage = "");'
+                    '$varDumperTestTrait->assertDumpEquals($dump, $data, $mesage = "");',
+                    '$varDumperTestTrait->assertDumpEquals($dump, $data, $context = null, $mesage = "");'
                 ),
                 new CodeSample(
-                    'VarDumperTestTrait->assertDumpMatchesFormat($dump, $format, $mesage = "");',
-                    'VarDumperTestTrait->assertDumpMatchesFormat($dump, $format, $context = null,  $mesage = "");'
+                    '$varDumperTestTrait->assertDumpMatchesFormat($dump, $format, $mesage = "");',
+                    '$varDumperTestTrait->assertDumpMatchesFormat($dump, $format, $context = null,  $mesage = "");'
                 ),
             ]
         );
@@ -56,7 +60,7 @@ final class VarDumperTestTraitMethodArgsRector extends AbstractRector
     {
         if (! $this->methodCallAnalyzer->isTypeAndMethods(
             $node,
-            self::TRAIT_NAME,
+            $this->traitName,
             ['assertDumpEquals', 'assertDumpMatchesFormat']
         )) {
             return false;

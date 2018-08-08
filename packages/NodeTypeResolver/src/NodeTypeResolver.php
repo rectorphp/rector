@@ -3,8 +3,11 @@
 namespace Rector\NodeTypeResolver;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PHPStan\Analyser\Scope;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
+use Rector\NodeTypeResolver\PHPStan\Type\TypeToStringResolver;
 
 final class NodeTypeResolver
 {
@@ -12,6 +15,16 @@ final class NodeTypeResolver
      * @var PerNodeTypeResolverInterface[]
      */
     private $perNodeTypeResolvers = [];
+
+    /**
+     * @var TypeToStringResolver
+     */
+    private $typeToStringResolver;
+
+    public function __construct(TypeToStringResolver $typeToStringResolver)
+    {
+        $this->typeToStringResolver = $typeToStringResolver;
+    }
 
     public function addPerNodeTypeResolver(PerNodeTypeResolverInterface $perNodeTypeResolver): void
     {
@@ -25,40 +38,28 @@ final class NodeTypeResolver
      */
     public function resolve(Node $node): array
     {
-        // resolve just once
-        if ($node->hasAttribute(Attribute::TYPES)) {
-            return $node->getAttribute(Attribute::TYPES);
-        }
-
-        $nodeClass = get_class($node);
-        if (! isset($this->perNodeTypeResolvers[$nodeClass])) {
+        /** @var Scope|null $nodeScope */
+        $nodeScope = $node->getAttribute(Attribute::SCOPE);
+        if ($nodeScope === null) {
             return [];
         }
 
-        $nodeTypes = $this->perNodeTypeResolvers[$nodeClass]->resolve($node);
-        $nodeTypes = $this->cleanPreSlashes($nodeTypes);
-
-        $node->setAttribute(Attribute::TYPES, $nodeTypes);
-
-        return $nodeTypes;
-    }
-
-    /**
-     * "\FqnType" => "FqnType"
-     *
-     * @param string[] $nodeTypes
-     * @return string[]
-     */
-    private function cleanPreSlashes(array $nodeTypes): array
-    {
-        foreach ($nodeTypes as $key => $nodeType) {
-            // filter out non-type values
-            if (! is_string($nodeType)) {
-                continue;
-            }
-            $nodeTypes[$key] = ltrim($nodeType, '\\');
+        // nodes that cannot be resolver by PHPStan
+        $nodeClass = get_class($node);
+        if (isset($this->perNodeTypeResolvers[$nodeClass])) {
+            return $this->perNodeTypeResolvers[$nodeClass]->resolve($node);
         }
 
-        return $nodeTypes;
+        if (! $node instanceof Expr) {
+            return [];
+        }
+
+        // PHPStan
+        /** @var Scope $nodeScope */
+        $nodeScope = $node->getAttribute(Attribute::SCOPE);
+
+        $type = $nodeScope->getType($node);
+
+        return $this->typeToStringResolver->resolve($type);
     }
 }

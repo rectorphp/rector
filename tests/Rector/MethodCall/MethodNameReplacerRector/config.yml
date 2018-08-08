@@ -1,9 +1,9 @@
 services:
     Rector\Rector\MethodCall\MethodNameReplacerRector:
         $perClassOldToNewMethods:
-            'Symfony\Component\Form\AbstractType':
+            'Rector\Tests\Rector\MethodCall\MethodNameReplacerRector\Source\AbstractType':
                   'setDefaultOptions': 'configureOptions'
             'Nette\Utils\Html':
                   'add': 'addHtml'
-            'Nette\Bridges\FormsLatte\FormMacros':
+            'Rector\Tests\Rector\MethodCall\MethodNameReplacerRector\Source\FormMacros':
                   'renderFormBegin': ['Nette\Bridges\FormsLatte\Runtime', 'renderFormBegin']

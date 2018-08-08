@@ -10,25 +10,24 @@ parameters:
         - '#Cannot cast PhpParser\\Node\\Expr\|PhpParser\\Node\\Identifier to string#' # 4
         - '#Cannot cast PhpParser\\Node\\Expr\|PhpParser\\Node\\Identifier|string to string#' # 3
         - '#Cannot cast PhpParser\\Node\\Expr\|PhpParser\\Node\\Name to string#'
-        - '#Instanceof between PhpParser\\Node\\Expr|PhpParser\\Node\\Identifier and PhpParser\\Node\\Name will always evaluate to false#'
-
+        - '#Parameter \#1 \$file of static method PHPStan\\Analyser\\ScopeContext::create\(\) expects string, string\|false given#'
         - '#Array \(array<array<PhpParser\\Node\\Stmt>>\) does not accept array<PhpParser\\Node\\Stmt|null>#'
+        - '#Parameter \#1 \$files of method PHPStan\\Analyser\\NodeScopeResolver::setAnalysedFiles\(\) expects array<string>, array<int, string\|false> given#'
 
         # already fixed, invalidated cache?
         - '#Access to an undefined property PhpParser\\Node\\Expr::\$args#'
-        - '#Parameter \#1 \$classMethodNode of method Rector\\NodeTypeResolver\\TypesExtractor\\ConstructorPropertyTypesExtractor::extractPropertiesFromConstructorMethodNode\(\) expects PhpParser\\Node\\Stmt\\ClassMethod, PhpParser\\Node\\Stmt given#'
-        # class_uses() returns also false actually
-        - "#Casting to array<string, string> something that's already array<string, string>#"
+
+        # nette container
+        - '#Method Rector\\NodeTypeResolver\\DependencyInjection\\PHPStanServicesFactory::create(.*?)() should return (.*?) but returns object#'
 
         # irelevant
         - '#Call to function in_array\(\) with arguments string, array<array<string\|false>> and true will always evaluate to false#'
 
         # known values
+        - '#Parameter \#1 \$classReflection of method Rector\\NodeTypeResolver\\Reflection\\ClassReflectionTypesResolver::resolve\(\) expects PHPStan\\Reflection\\ClassReflection, PHPStan\\Reflection\\ClassReflection|null given#'
         - '#Cannot call method getAttribute\(\) on PhpParser\\Node\\Name\|null#'
-        - '#Parameter \#2 \$str of function explode expects string, string\|null given#'
         - '#Cannot call method getName\(\) on Rector\\Builder\\Class_\\VariableInfo\|null#'
         - '#Cannot call method getBasename\(\) on Symfony\\Component\\Finder\\SplFileInfo\|null#'
-        - '#Parameter \#2 \$value of method Rector\\YamlRector\\Rector\\ReplaceValueYamlRector::createPatternFromPath\(\) expects string, int\|string\|null given#' # 2
         - '#Cannot call method getText\(\) on PhpParser\\Comment\\Doc\|null#'
 
         # Error php-parser token
@@ -41,14 +40,10 @@ parameters:
         # false positive, has annotation type above (@todo recheck for possible ignored positives)
         - '#Access to an undefined property PhpParser\\Node::\$name#' # 11
         - '#Parameter \#1 \$node of method Rector\\NodeAnalyzer\\ClassConstAnalyzer::isNames\(\) expects PhpParser\\Node\\Expr\\ClassConstFetch, PhpParser\\Node given#' # 1
-        - '#Parameter \#1 \$classNode of method Rector\\NodeTypeResolver\\TypesExtractor\\ConstructorPropertyTypesExtractor::extractFromClassNode\(\) expects PhpParser\\Node\\Stmt\\Class_, PhpParser\\Node\\Stmt\\ClassLike given#' # 1
 
         # subtype
         - '#Property PhpParser\\Node\\Param::\$type \(PhpParser\\Node\\Name|PhpParser\\Node\\NullableType\|string\|null\) does not accept PhpParser\\Node\\Identifier|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType#' # 3
         - '#Parameter \#1 \$containerBuilder of method Symplify\\EasyCodingStandard\\DependencyInjection\\DelegatingLoaderFactory::createFromContainerBuilderAndKernel\(\) expects Symfony\\Component\\DependencyInjection\\ContainerBuilder, Symfony\\Component\\DependencyInjection\\ContainerInterface given#' # 1
-
-        # false positive
-        - '#Parameter \#1 \$kernelClass of method Rector\\Symfony\\Bridge\\SymfonyKernelParameterGuard::(ensureKernelClassExists|ensureIsKernelInstance)\(\) expects string, string\|null given#' # 2
 
         # intentionally incorrect - part of the test
         - '#Parameter \#2 \$codeSamples of class Rector\\RectorDefinition\\RectorDefinition constructor expects array<Rector\\Contract\\RectorDefinition\\CodeSampleInterface>, array<int, stdClass> given#' # 1
@@ -72,7 +67,11 @@ parameters:
         # tests or coding standars?
         - '#Constructor of class [\s\S]+ has an unused parameter \$html#' # 2
 
+        # too strict
+        - '#Parameter \#1 \$currentWorkingDirectory of class PHPStan\\DependencyInjection\\ContainerFactory constructor expects string, string\|false given#' # 1
+
     excludes_analyse:
         # test files
         - '*tests/Rector/MethodCall/MethodNameReplacerRector/**/SomeClass.php'
         - '*packages/BetterReflection/tests/Reflector/NotLoadedSource/SomeClass.php'
+        - 'packages/NodeTypeResolver/tests/PerNodeTypeResolver/VariableTypeResolver/Source/NewClass.php'

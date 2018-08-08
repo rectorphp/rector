@@ -1,6 +1,6 @@
 services:
     Rector\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector:
-        $serviceDefinitionClass: 'Rector\Nette\Tests\Rector\DI\SetInjectToAddTagRector\Source\NetteServiceDefinition'
+        $serviceDefinitionClass: 'Rector\Tests\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector\Source\NetteServiceDefinition'
         $oldMethod: 'setInject'
         $newMethod: 'addTag'
         $newMethodArguments: ['inject']

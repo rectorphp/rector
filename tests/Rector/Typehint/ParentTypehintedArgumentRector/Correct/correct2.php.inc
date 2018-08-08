@@ -2,9 +2,9 @@
 
 namespace SomeNamespace;
 
-use Doctrine\ORM\EntityManager;
+use Rector\Tests\Rector\Typehint\ParentTypehintedArgumentRector\Source\ClassMetadataFactory;
 
-class MyMetadataFactory extends \Doctrine\ORM\Mapping\ClassMetadataFactory
+class MyMetadataFactory extends ClassMetadataFactory
 {
     public function setEntityManager(\Doctrine\ORM\EntityManagerInterface $em)
     {

@@ -64,8 +64,16 @@ final class GetAndSetToMethodCallRector extends AbstractRector
     {
         return new RectorDefinition('Turns defined `__get`/`__set` to specific method calls.', [
             new ConfiguredCodeSample(
-                '$container->someService = $someService;',
-                '$container->setService("someService", $someService);',
+<<<'CODE_SAMPLE'
+$container = new SomeContainer;
+$container->someService = $someService;
+CODE_SAMPLE
+                ,
+<<<'CODE_SAMPLE'
+$container = new SomeContainer;
+$container->setService("someService", $someService);
+CODE_SAMPLE
+                ,
                 [
                     '$typeToMethodCalls' => [
                         'SomeContainer' => [
@@ -75,8 +83,16 @@ final class GetAndSetToMethodCallRector extends AbstractRector
                 ]
             ),
             new ConfiguredCodeSample(
-                '$someService = $container->someService;',
-                '$someService = $container->getService("someService");',
+                <<<'CODE_SAMPLE'
+$container = new SomeContainer;
+$someService = $container->someService;
+CODE_SAMPLE
+                ,
+                <<<'CODE_SAMPLE'
+$container = new SomeContainer;
+$someService = $container->getService("someService");
+CODE_SAMPLE
+                ,
                 [
                     '$typeToMethodCalls' => [
                         'SomeContainer' => [

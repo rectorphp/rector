@@ -19,9 +19,10 @@ services:
             - 'PhpParser\Comment\Doc'
             - 'PhpParser\NodeTraverser'
             - 'Rector\DeprecationExtractor\Deprecation\*'
-            - 'Roave\BetterReflection\SourceLocator\Located\LocatedSource'
             - 'Rector\Reporting\FileDiff'
             - 'Rector\RectorDefinition\*'
+            - 'PHPStan\Analyser\Scope'
+            - 'PhpParser\NodeVisitor\NameResolver'
 
     Symplify\CodingStandard\Fixer\Naming\PropertyNameMatchingTypeFixer:
         extra_skipped_classes:
@@ -45,7 +46,6 @@ parameters:
             - 'src/Rector/Constant/RenameClassConstantsUseToStringsRector.php'
             - '*/packages/NodeTypeResolver/**/PerNodeTypeResolver/**TypeResolver.php'
             - '*/packages/NodeTypeResolver/**/PerNodeTypeResolver/**TypeResolver/*Test.php'
-            - 'packages/BetterReflection/src/Reflector/SmartClassReflector.php'
             - 'tests/NodeAnalyzer/ClassLikeAnalyzerTest.php'
             - 'tests/NodeValueResolver/ConstExprEvaluatorFactoryTest.php'
             - 'src/Rector/AbstractPHPUnitRector.php'
@@ -54,6 +54,8 @@ parameters:
             - 'src/Rector/Assign/PropertyAssignToMethodCallRector.php'
             - 'src/Rector/Constant/ClassConstantReplacerRector.php'
             - 'src/Rector/Property/PropertyNameReplacerRector.php'
+            - 'src/Rector/Annotation/AnnotationReplacerRector.php'
+            - 'src/Rector/Argument/ArgumentAdderRector.php'
 
         # empty arguments passing
         PHP_CodeSniffer\Standards\PEAR\Sniffs\Functions\ValidDefaultValueSniff.NotAtEnd:
@@ -62,3 +64,11 @@ parameters:
         Symplify\CodingStandard\Sniffs\CleanCode\ForbiddenStaticFunctionSniff:
             - 'src/Configuration/Rector/Guard/RecipeGuard.php'
             - 'src/Configuration/Rector/*Recipe.php'
+
+        Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
+            # @todo fix later
+            - 'packages/NodeTypeResolver/src/NodeTypeResolver.php'
+            - 'packages/NodeTypeResolver/src/PHPStan/Scope/NodeScopeResolver.php'
+
+        Symplify\CodingStandard\Fixer\Naming\PropertyNameMatchingTypeFixer:
+            - 'packages/NodeTypeResolver/src/PHPStan/Scope/NodeScopeResolver.php'

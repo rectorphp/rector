@@ -2,6 +2,7 @@
 
 namespace SomeNamespace;
 
+use Rector\Symfony\Tests\Rector\FrameworkBundle\GetParameterToConstructorInjectionRector\Source\DoctrineQuery;
 use Rector\Symfony\Tests\Rector\Source\SymfonyController;
 
 class ClassWithNamedService3 extends SymfonyController

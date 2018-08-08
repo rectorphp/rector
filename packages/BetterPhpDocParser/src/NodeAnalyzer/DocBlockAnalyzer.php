@@ -80,6 +80,7 @@ final class DocBlockAnalyzer
         }
 
         $phpDocInfo = $this->createPhpDocInfoFromNode($node);
+
         $phpDocInfo->replacePhpDocTypeByAnother($oldType, $newType);
 
         $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);

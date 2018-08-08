@@ -28,14 +28,9 @@ final class VariableTypeResolverTest extends AbstractNodeTypeResolverTest
     public function provideData(): Iterator
     {
         yield [__DIR__ . '/Source/ThisClass.php', 0, [ThisClass::class, AnotherClass::class]];
-
-        yield [__DIR__ . '/Source/NewClass.php', 0, [AnotherType::class]];
-        yield [__DIR__ . '/Source/NewClass.php', 2, [AnotherType::class]];
-
-        yield [__DIR__ . '/Source/AssignmentClass.php', 0, [AnotherType::class]];
-        yield [__DIR__ . '/Source/AssignmentClass.php', 1, [AnotherType::class]];
-
-        yield [__DIR__ . '/Source/ArgumentTypehint.php', 0, [AnotherType::class]];
+        yield [__DIR__ . '/Source/NewClass.php', 1, [AnotherType::class]];
+        yield [__DIR__ . '/Source/NewClass.php', 3, [AnotherType::class]];
+        yield [__DIR__ . '/Source/AssignmentClass.php', 2, [AnotherType::class]];
         yield [__DIR__ . '/Source/ArgumentTypehint.php', 1, [AnotherType::class]];
     }
 }

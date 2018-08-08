@@ -24,7 +24,7 @@ final class ParentAndNextNodeAddingNodeVisitor extends NodeVisitorAbstract
     /**
      * @param Node[] $nodes
      */
-    public function beforeTraverse(array $nodes): void
+    public function afterTraverse(array $nodes): void
     {
         $this->stack = [];
         $this->prev = null;

@@ -154,23 +154,6 @@ final class NodeFactory
     }
 
     /**
-     * Creates $this->values[] = $value;
-     */
-    public function createPropertyArrayAssignment(string $propertyName, string $argumentName): Expression
-    {
-        $variable = new Variable($argumentName, [
-            'name' => $argumentName,
-        ]);
-
-        $assign = new Assign(
-            $this->propertyFetchNodeFactory->createLocalArrayFetchWithPropertyName($propertyName),
-            $variable
-        );
-
-        return new Expression($assign);
-    }
-
-    /**
      * Creates "($arg)"
      *
      * @param mixed $argument
@@ -180,18 +163,6 @@ final class NodeFactory
         $value = BuilderHelpers::normalizeValue($argument);
 
         return new Arg($value);
-    }
-
-    /**
-     * Creates:
-     * - $variable->property['key'];
-     */
-    public function createVariablePropertyArrayFetch(
-        Expr $exprNode,
-        string $propertyName,
-        String_ $keyNode
-    ): ArrayDimFetch {
-        return new ArrayDimFetch(new PropertyFetch($exprNode, $propertyName), $keyNode);
     }
 
     /**

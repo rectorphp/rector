@@ -157,10 +157,10 @@ final class UnsetAndIssetToMethodCallRector extends AbstractRector
 
     private function matchArrayDimFetch(ArrayDimFetch $arrayDimFetchNode): bool
     {
-        $variableNodeTypes = $this->nodeTypeResolver->resolve($arrayDimFetchNode->var);
+        $varNodeTypes = $this->nodeTypeResolver->resolve($arrayDimFetchNode->var);
 
         foreach ($this->typeToMethodCalls as $type => $transformation) {
-            if (in_array($type, $variableNodeTypes, true)) {
+            if (in_array($type, $varNodeTypes, true)) {
                 $this->activeTransformation = $transformation;
 
                 return true;

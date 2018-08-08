@@ -36,14 +36,14 @@ final class ToStringToMethodCallRector extends AbstractRector
     private $identifierRenamer;
 
     /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    /**
      * @var MethodCallNodeFactory
      */
     private $methodCallNodeFactory;
+
+    /**
+     * @var NodeTypeResolver
+     */
+    private $nodeTypeResolver;
 
     /**
      * Type to method call()
@@ -54,26 +54,28 @@ final class ToStringToMethodCallRector extends AbstractRector
         array $typeToMethodCalls,
         MethodCallAnalyzer $methodCallAnalyzer,
         IdentifierRenamer $identifierRenamer,
-        NodeTypeResolver $nodeTypeResolver,
-        MethodCallNodeFactory $methodCallNodeFactory
+        MethodCallNodeFactory $methodCallNodeFactory,
+        NodeTypeResolver $nodeTypeResolver
     ) {
         $this->typeToMethodCalls = $typeToMethodCalls;
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
-        $this->nodeTypeResolver = $nodeTypeResolver;
         $this->methodCallNodeFactory = $methodCallNodeFactory;
+        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Turns defined __toString() to specific method calls.', [
+        return new RectorDefinition('Turns defined code uses of "__toString()" method  to specific method calls.', [
             new ConfiguredCodeSample(
 <<<'CODE_SAMPLE'
+$someValue = new SomeObject;
 $result = (string) $someValue;
 $result = $someValue->__toString();
 CODE_SAMPLE
                 ,
 <<<'CODE_SAMPLE'
+$someValue = new SomeObject;
 $result = $someValue->someMethod();
 $result = $someValue->someMethod();
 CODE_SAMPLE

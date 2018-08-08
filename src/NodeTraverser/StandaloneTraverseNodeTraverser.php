@@ -6,6 +6,8 @@ use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeTraverserInterface;
 use PhpParser\NodeVisitor;
+use PhpParser\NodeVisitor\NameResolver;
+use Rector\NodeTypeResolver\PHPStan\Scope\NodeScopeResolver;
 
 /**
  * Oppose to NodeTraverser, that traverse ONE node by ALL NodeVisitors,
@@ -18,11 +20,20 @@ final class StandaloneTraverseNodeTraverser
      */
     private $nodeTraversers = [];
 
+    /**
+     * @var NodeScopeResolver
+     */
+    private $nodeScopeResolver;
+
+    public function __construct(NodeScopeResolver $nodeScopeResolver)
+    {
+        $this->nodeScopeResolver = $nodeScopeResolver;
+    }
+
     public function addNodeVisitor(NodeVisitor $nodeVisitor): void
     {
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor($nodeVisitor);
-
         $this->nodeTraversers[] = $nodeTraverser;
     }
 
@@ -32,6 +43,12 @@ final class StandaloneTraverseNodeTraverser
      */
     public function traverse(array $nodes): array
     {
+        $nodeTraverser = new NodeTraverser();
+        $nodeTraverser->addVisitor(new NameResolver());
+        $nodes = $nodeTraverser->traverse($nodes);
+
+        $nodes = $this->nodeScopeResolver->processNodes($nodes);
+
         foreach ($this->nodeTraversers as $nodeTraverser) {
             $nodes = $nodeTraverser->traverse($nodes);
         }

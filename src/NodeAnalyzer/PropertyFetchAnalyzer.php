@@ -5,9 +5,11 @@ namespace Rector\NodeAnalyzer;
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Identifier;
-use Rector\BetterReflection\Reflector\SmartClassReflector;
+use PHPStan\Analyser\Scope;
+use PHPStan\Broker\Broker;
+use PHPStan\Type\ObjectType;
 use Rector\Node\Attribute;
-use ReflectionProperty;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 
 /**
  * Read-only utils for PropertyFetch Node:
@@ -16,18 +18,19 @@ use ReflectionProperty;
 final class PropertyFetchAnalyzer
 {
     /**
-     * @var string[][]
+     * @var NodeTypeResolver
      */
-    private $publicPropertyNamesForType = [];
+    private $nodeTypeResolver;
 
     /**
-     * @var SmartClassReflector
+     * @var Broker
      */
-    private $smartClassReflector;
+    private $broker;
 
-    public function __construct(SmartClassReflector $smartClassReflector)
+    public function __construct(NodeTypeResolver $nodeTypeResolver, Broker $broker)
     {
-        $this->smartClassReflector = $smartClassReflector;
+        $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->broker = $broker;
     }
 
     public function isTypeAndProperty(Node $node, string $type, string $property): bool
@@ -53,12 +56,9 @@ final class PropertyFetchAnalyzer
             return false;
         }
 
-        $variableNodeTypes = $node->var->getAttribute(Attribute::TYPES);
-        if ($variableNodeTypes === null) {
-            return false;
-        }
+        $varNodeTypes = $this->nodeTypeResolver->resolve($node->var);
 
-        if (! array_intersect($types, $variableNodeTypes)) {
+        if (! array_intersect($types, $varNodeTypes)) {
             return false;
         }
 
@@ -76,19 +76,12 @@ final class PropertyFetchAnalyzer
             return false;
         }
 
-        $variableNodeTypes = $node->var->getAttribute(Attribute::TYPES);
-        if (! in_array($type, $variableNodeTypes, true)) {
+        $varNodeTypes = $this->nodeTypeResolver->resolve($node->var);
+        if (! in_array($type, $varNodeTypes, true)) {
             return false;
         }
 
-        /** @var Identifier $identifierNode */
-        $identifierNode = $node->name;
-
-        $nodePropertyName = $identifierNode->toString();
-
-        $publicPropertyNames = $this->getPublicPropertyNamesForType($type);
-
-        return ! in_array($nodePropertyName, $publicPropertyNames, true);
+        return ! $this->hasPublicProperty($node, (string) $node->name);
     }
 
     /**
@@ -115,12 +108,9 @@ final class PropertyFetchAnalyzer
             return false;
         }
 
-        $variableNodeTypes = $node->var->getAttribute(Attribute::TYPES);
-        if ($variableNodeTypes === null) {
-            return false;
-        }
+        $varNodeTypes = $this->nodeTypeResolver->resolve($node->var);
 
-        return (bool) array_intersect($variableNodeTypes, $types);
+        return (bool) array_intersect($varNodeTypes, $types);
     }
 
     /**
@@ -151,26 +141,31 @@ final class PropertyFetchAnalyzer
         /** @var PropertyFetch $propertyFetchNode */
         $propertyFetchNode = $node;
 
-        return $propertyFetchNode->var->getAttribute(Attribute::TYPES);
+        return $this->nodeTypeResolver->resolve($propertyFetchNode->var);
     }
 
-    /**
-     * @return string[]
-     */
-    private function getPublicPropertyNamesForType(string $type): array
+    private function hasPublicProperty(PropertyFetch $node, string $propertyName): bool
     {
-        if (isset($this->publicPropertyNamesForType[$type])) {
-            return $this->publicPropertyNamesForType[$type];
+        /** @var Scope $nodeScope */
+        $nodeScope = $node->getAttribute(Attribute::SCOPE);
+
+        $propertyFetchType = $nodeScope->getType($node->var);
+        if ($propertyFetchType instanceof ObjectType) {
+            $propertyFetchType = $propertyFetchType->getClassName();
         }
 
-        $classReflection = $this->smartClassReflector->reflect($type);
-        if ($classReflection === null) {
-            return [];
+        if (! $this->broker->hasClass($propertyFetchType)) {
+            return false;
         }
 
-        $publicProperties = $classReflection->getProperties(ReflectionProperty::IS_PUBLIC);
+        $classReflection = $this->broker->getClass($propertyFetchType);
+        if (! $classReflection->hasProperty($propertyName)) {
+            return false;
+        }
 
-        return $this->publicPropertyNamesForType[$type] = array_keys($publicProperties);
+        $propertyReflection = $classReflection->getProperty($propertyName, $nodeScope);
+
+        return $propertyReflection->isPublic();
     }
 
     private function isType(Node $node, string $type): bool
@@ -179,11 +174,8 @@ final class PropertyFetchAnalyzer
             return false;
         }
 
-        $variableNodeTypes = $node->var->getAttribute(Attribute::TYPES);
-        if ($variableNodeTypes === null) {
-            return false;
-        }
+        $varNodeTypes = $this->nodeTypeResolver->resolve($node->var);
 
-        return in_array($type, $variableNodeTypes, true);
+        return in_array($type, $varNodeTypes, true);
     }
 }

@@ -6,7 +6,7 @@ use NewNamespace;
 
 class SomeClass
 {
-    public function someClass(NewNamespace\SubNamespace $argument)
+    public function someClass(\NewNamespace\SubNamespace $argument)
     {
     }
 }

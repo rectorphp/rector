@@ -1,6 +1,6 @@
 <?php declare (strict_types=1);
 
-use Symfony\Component\Form\AbstractTypeExtension;
+use Rector\Symfony\Tests\Rector\Form\FormTypeGetParentRector\Source\AbstractTypeExtension;
 
 class TypeExtension extends AbstractTypeExtension
 {

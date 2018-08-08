@@ -5,6 +5,9 @@ namespace Rector\Tests\Rector\Property\PropertyToMethodRector;
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
+/**
+ * @see \Rector\Rector\Property\PropertyToMethodRector
+ */
 final class PropertyToMethodRectorTest extends AbstractRectorTestCase
 {
     /**

@@ -7,7 +7,7 @@ use Psr\Container\ContainerInterface;
 use Rector\Application\FileProcessor;
 use Rector\DependencyInjection\ContainerFactory;
 use Rector\FileSystem\FileGuard;
-use SplFileInfo;
+use Symfony\Component\Finder\SplFileInfo;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
 abstract class AbstractRectorTestCase extends TestCase
@@ -67,7 +67,8 @@ abstract class AbstractRectorTestCase extends TestCase
 
         $this->parameterProvider->changeParameter('source', [$file]);
 
-        $reconstructedFileContent = $this->fileProcessor->processFileToString(new SplFileInfo($file));
+        $splFileInfo = new SplFileInfo($file, '', '');
+        $reconstructedFileContent = $this->fileProcessor->processFileToString($splFileInfo);
 
         $this->assertStringEqualsFile($reconstructedFile, $reconstructedFileContent, sprintf(
             'Original file "%s" did not match the result.',

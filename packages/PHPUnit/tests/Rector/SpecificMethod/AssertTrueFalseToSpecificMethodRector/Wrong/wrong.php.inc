@@ -1,5 +1,7 @@
 <?php declare(strict_types=1);
 
+namespace Tests\AssertTrueFalseToSpecificMethodRector;
+
 abstract class Testing extends \PHPUnit\Framework\TestCase
 {
 }

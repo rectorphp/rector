@@ -96,9 +96,9 @@ final class MethodCallAnalyzer
             return false;
         }
 
-        $callerNodeTypes = $this->nodeTypeResolver->resolve($node->var);
+        $calledNodeTypes = $this->nodeTypeResolver->resolve($node->var);
 
-        return in_array($type, $callerNodeTypes, true);
+        return in_array($type, $calledNodeTypes, true);
     }
 
     /**

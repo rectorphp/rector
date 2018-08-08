@@ -16,9 +16,17 @@ final class ProcessBuilderGetProcessRector extends AbstractRector
      */
     private $methodCallAnalyzer;
 
-    public function __construct(MethodCallAnalyzer $methodCallAnalyzer)
-    {
+    /**
+     * @var string
+     */
+    private $processBuilderClass;
+
+    public function __construct(
+        MethodCallAnalyzer $methodCallAnalyzer,
+        string $processBuilderClass = 'Symfony\Component\Process\ProcessBuilder'
+    ) {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
+        $this->processBuilderClass = $processBuilderClass;
     }
 
     public function getDefinition(): RectorDefinition
@@ -45,11 +53,7 @@ CODE_SAMPLE
 
     public function isCandidate(Node $node): bool
     {
-        return $this->methodCallAnalyzer->isTypeAndMethod(
-            $node,
-            'Symfony\Component\Process\ProcessBuilder',
-            'getProcess'
-        );
+        return $this->methodCallAnalyzer->isTypeAndMethod($node, $this->processBuilderClass, 'getProcess');
     }
 
     /**

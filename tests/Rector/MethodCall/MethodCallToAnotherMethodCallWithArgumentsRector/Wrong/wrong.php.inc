@@ -1,6 +1,6 @@
 <?php declare (strict_types=1);
 
-use Rector\Nette\Tests\Rector\DI\SetInjectToAddTagRector\Source\NetteServiceDefinition;
+use Rector\Tests\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector\Source\NetteServiceDefinition;
 
 class SomeNetteExtension
 {

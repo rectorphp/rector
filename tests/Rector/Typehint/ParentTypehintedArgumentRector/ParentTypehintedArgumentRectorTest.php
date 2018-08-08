@@ -5,6 +5,9 @@ namespace Rector\Tests\Rector\Typehint\ParentTypehintedArgumentRector;
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
+/**
+ * @covers \Rector\Rector\Typehint\ParentTypehintedArgumentRector
+ */
 final class ParentTypehintedArgumentRectorTest extends AbstractRectorTestCase
 {
     /**

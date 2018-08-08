@@ -5,10 +5,9 @@ namespace Rector\NodeTraverserQueue;
 use PhpParser\Lexer;
 use Rector\NodeTraverser\RectorNodeTraverser;
 use Rector\NodeTraverser\StandaloneTraverseNodeTraverser;
+use Rector\NodeTypeResolver\Configuration\CurrentFileProvider;
 use Rector\Parser\Parser;
-use Roave\BetterReflection\Reflection\ReflectionFunction;
-use Roave\BetterReflection\Reflector\Exception\IdentifierNotFound;
-use SplFileInfo;
+use Symfony\Component\Finder\SplFileInfo;
 
 final class NodeTraverserQueue
 {
@@ -32,16 +31,23 @@ final class NodeTraverserQueue
      */
     private $standaloneTraverseNodeTraverser;
 
+    /**
+     * @var CurrentFileProvider
+     */
+    private $currentFileProvider;
+
     public function __construct(
         Parser $parser,
         Lexer $lexer,
         RectorNodeTraverser $rectorNodeTraverser,
-        StandaloneTraverseNodeTraverser $standaloneTraverseNodeTraverser
+        StandaloneTraverseNodeTraverser $standaloneTraverseNodeTraverser,
+        CurrentFileProvider $currentFileProvider
     ) {
         $this->parser = $parser;
         $this->lexer = $lexer;
         $this->rectorNodeTraverser = $rectorNodeTraverser;
         $this->standaloneTraverseNodeTraverser = $standaloneTraverseNodeTraverser;
+        $this->currentFileProvider = $currentFileProvider;
     }
 
     /**
@@ -49,23 +55,14 @@ final class NodeTraverserQueue
      */
     public function processFileInfo(SplFileInfo $fileInfo): array
     {
+        $this->currentFileProvider->setCurrentFile($fileInfo);
+
         $oldStmts = $this->parser->parseFile($fileInfo->getRealPath());
         $oldTokens = $this->lexer->getTokens();
 
-        try {
-            $newStmts = $this->standaloneTraverseNodeTraverser->traverse($oldStmts);
-            $newStmts = $this->rectorNodeTraverser->traverse($newStmts);
+        $newStmts = $this->standaloneTraverseNodeTraverser->traverse($oldStmts);
+        $newStmts = $this->rectorNodeTraverser->traverse($newStmts);
 
-            return [$newStmts, $oldStmts, $oldTokens];
-        } catch (IdentifierNotFound $identifierNotFoundException) {
-            // could not locate function, skip and keep original
-            $identifierType = $identifierNotFoundException->getIdentifier()->getType()->getName();
-            if ($identifierType === ReflectionFunction::class) {
-                // keep original
-                return [$oldStmts, $oldStmts, $oldStmts];
-            }
-
-            throw $identifierNotFoundException;
-        }
+        return [$newStmts, $oldStmts, $oldTokens];
     }
 }
