@@ -2,10 +2,12 @@
 
 use Rector\Symfony\Tests\FrameworkBundle\ContainerGetToConstructorInjectionRector\Source\ContainerAwareParentClass;
 
-final class MyCommand extends ContainerAwareParentClass
+final class AnotherCommand extends ContainerAwareParentClass
 {
     protected function execute()
     {
         $someService = $this->getContainer()->get('translator');
+
+        $someService = $this->getContainer()->get('translator')->translateSomething();
     }
 }

@@ -2,7 +2,7 @@
 
 use Rector\Symfony\Tests\FrameworkBundle\ContainerGetToConstructorInjectionRector\Source\ContainerAwareParentClass;
 
-final class MyCommand extends ContainerAwareParentClass
+final class AnotherCommand extends ContainerAwareParentClass
 {
     /**
      * @var \Rector\Symfony\Tests\Rector\FrameworkBundle\AbstractToConstructorInjectionRectorSource\SomeTranslator
@@ -15,5 +15,7 @@ final class MyCommand extends ContainerAwareParentClass
     protected function execute()
     {
         $someService = $this->someTranslator;
+
+        $someService = $this->someTranslator->translateSomething();
     }
 }
