@@ -49,7 +49,6 @@
     "autoload-dev": {
         "psr-4": {
             "Rector\\Tests\\": "tests",
-            "Rector\\BetterReflection\\Tests\\": "packages/BetterReflection/tests",
             "Rector\\BetterPhpDocParser\\Tests\\": "packages/BetterPhpDocParser/tests",
             "Rector\\NodeTypeResolver\\Tests\\": "packages/NodeTypeResolver/tests",
             "Rector\\NodeTraverserQueue\\Tests\\": "packages/NodeTraverserQueue/tests",
