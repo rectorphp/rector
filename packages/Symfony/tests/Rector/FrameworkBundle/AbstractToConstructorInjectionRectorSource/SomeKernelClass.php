@@ -21,6 +21,9 @@ final class SomeKernelClass extends Kernel
     protected function build(ContainerBuilder $containerBuilder): void
     {
         $containerBuilder->register('some_service', 'stdClass');
+        //Symfony\Component\Translation\TranslatorInterface  alias for "translator.data_collector"
+        //translator                                         alias for "translator.data_collector"
+        //translator.data_collector                          Symfony\Component\Translation\DataCollectorTranslator
     }
 
     public function getCacheDir()
