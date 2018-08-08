@@ -35,7 +35,7 @@ final class ContainerGetToConstructorInjectionRector extends AbstractToConstruct
             [
                 new CodeSample(
 <<<'CODE_SAMPLE'
-class MyCommand extends ContainerAwareCommand
+final class SomeCommand extends ContainerAwareCommand
 {
     public function someMethod()
     {
@@ -47,7 +47,7 @@ class MyCommand extends ContainerAwareCommand
 CODE_SAMPLE
                     ,
 <<<'CODE_SAMPLE'
-class MyCommand extends Command
+final class SomeCommand extends Command
 {
     public function __construct(SomeService $someService)
     {

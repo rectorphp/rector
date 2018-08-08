@@ -5,15 +5,15 @@ use Rector\Symfony\Tests\FrameworkBundle\ContainerGetToConstructorInjectionRecto
 final class MyCommand extends ContainerAwareParentClass
 {
     /**
-     * @var \Symfony\Component\Translation\TranslatorInterface
+     * @var \Rector\Symfony\Tests\Rector\FrameworkBundle\AbstractToConstructorInjectionRectorSource\SomeTranslator
      */
-    private $translator;
-    public function __construct(\Symfony\Component\Translation\TranslatorInterface $translator)
+    private $someTranslator;
+    public function __construct(\Rector\Symfony\Tests\Rector\FrameworkBundle\AbstractToConstructorInjectionRectorSource\SomeTranslator $someTranslator)
     {
-        $this->translator = $translator;
+        $this->someTranslator = $someTranslator;
     }
     protected function execute()
     {
-        $someService = $this->translator;
+        $someService = $this->someTranslator;
     }
 }
