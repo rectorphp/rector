@@ -7,9 +7,12 @@ use Rector\NodeTypeResolver\DependencyInjection\CompilerPass\NodeTypeResolverCol
 use Rector\YamlRector\DependencyInjection\YamlRectorCollectorCompilerPass;
 use Symfony\Component\Config\Loader\DelegatingLoader;
 use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\Config\Loader\LoaderResolver;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Loader\GlobFileLoader;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
+use Symfony\Component\HttpKernel\Config\FileLocator;
 use Symfony\Component\HttpKernel\Kernel;
 use Symplify\BetterPhpDocParser\DependencyInjection\CompilerPass\CollectDecoratorsToPhpDocInfoFactoryCompilerPass;
 use Symplify\EasyCodingStandard\DependencyInjection\DelegatingLoaderFactory;
@@ -17,6 +20,8 @@ use Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutoBindParametersC
 use Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutowireDefaultCompilerPass;
 use Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutowireSinglyImplementedCompilerPass;
 use Symplify\PackageBuilder\DependencyInjection\CompilerPass\PublicDefaultCompilerPass;
+use Symplify\PackageBuilder\Yaml\AbstractParameterMergingYamlFileLoader;
+use Symplify\PackageBuilder\Yaml\FileLoader\ParameterImportsYamlFileLoader;
 
 final class RectorKernel extends Kernel
 {
@@ -85,6 +90,13 @@ final class RectorKernel extends Kernel
      */
     protected function getContainerLoader(ContainerInterface $container): DelegatingLoader
     {
-        return (new DelegatingLoaderFactory())->createFromContainerBuilderAndKernel($container, $this);
+        $kernelFileLocator = new FileLocator($this);
+
+        $loaderResolver = new LoaderResolver([
+            new GlobFileLoader($container, $kernelFileLocator),
+            new ParameterImportsYamlFileLoader($container, $kernelFileLocator),
+        ]);
+
+        return new DelegatingLoader($loaderResolver);
     }
 }
