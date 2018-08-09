@@ -2,7 +2,7 @@
 
 namespace Rector\Symfony\Tests\Rector\FrameworkBundle\AbstractToConstructorInjectionRectorSource;
 
-final class SomeTranslator
+final class SomeTranslator implements SomeTranslatorInterface
 {
 
 }

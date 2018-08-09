@@ -4,9 +4,12 @@ namespace Rector\Symfony\Bridge;
 
 use Rector\Bridge\Contract\AnalyzedApplicationContainerInterface;
 use Rector\Configuration\Option;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Symfony\Bridge\DependencyInjection\ContainerFactory;
 use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
+use Throwable;
 
 final class DefaultAnalyzedSymfonyApplicationContainer implements AnalyzedApplicationContainerInterface
 {
@@ -39,13 +42,37 @@ final class DefaultAnalyzedSymfonyApplicationContainer implements AnalyzedApplic
     {
         $container = $this->getContainer();
 
-        if ($container->has($name)) {
-            $definition = $container->get($name);
-
-            return get_class($definition);
+        if (! $container->has($name)) {
+            return null;
         }
 
-        return null;
+        try {
+            $service = $container->get($name);
+        } catch (Throwable $throwable) {
+            throw new ShouldNotHappenException(sprintf(
+                'Service type for "%s" name was not found in container of your Symfony application.',
+                $name
+            ));
+        }
+
+        $serviceClass = get_class($service);
+        if ($container->has($serviceClass)) {
+            return $serviceClass;
+        }
+
+        // the type was not found in container → use it's interface or parent
+        // mimics: \Symfony\Component\DependencyInjection\Compiler\AutowirePass::getAliasesSuggestionForType()
+        foreach (class_implements($serviceClass) + class_parents($serviceClass) as $parent) {
+            if ($container->has($parent) && ! $container->findDefinition($parent)->isAbstract()) {
+                return $parent;
+            }
+        }
+
+        throw new ShouldNotHappenException(sprintf(
+            'Type "%s" was found for "%s" service name in container of your Symfony application, but it is not accessible.',
+            get_class($service),
+            $name
+        ));
     }
 
     public function hasService(string $name): bool
@@ -55,6 +82,9 @@ final class DefaultAnalyzedSymfonyApplicationContainer implements AnalyzedApplic
         return $container->has($name);
     }
 
+    /**
+     * @return ContainerBuilder
+     */
     private function getContainer(): Container
     {
         $kernelClass = $this->parameterProvider->provideParameter(Option::KERNEL_CLASS_PARAMETER);

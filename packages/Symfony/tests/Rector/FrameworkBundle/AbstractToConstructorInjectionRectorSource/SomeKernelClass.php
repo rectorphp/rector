@@ -22,10 +22,10 @@ final class SomeKernelClass extends Kernel
 
     protected function build(ContainerBuilder $containerBuilder): void
     {
-        $containerBuilder->register('some_service', 'stdClass');
+        $containerBuilder->register('stdClass', 'stdClass');
+        $containerBuilder->setAlias('some_service', 'stdClass');
 
         $containerBuilder->register('translator.data_collector', SomeTranslator::class);
-
         $containerBuilder->setAlias('translator', 'translator.data_collector');
         $containerBuilder->setAlias(SomeTranslatorInterface::class, 'translator.data_collector');
     }

@@ -2,6 +2,8 @@
 
 namespace Rector\Naming;
 
+use Nette\Utils\Strings;
+
 final class PropertyNaming
 {
     public function fqnToVariableName(string $fqn): string
@@ -12,7 +14,13 @@ final class PropertyNaming
     public function fqnToShortName(string $fqn): string
     {
         $nameSpaceParts = explode('\\', $fqn);
-        return end($nameSpaceParts);
+        $lastNamePart = end($nameSpaceParts);
+
+        if (Strings::endsWith($lastNamePart, 'Interface')) {
+            return Strings::substring($lastNamePart, 0, - strlen('Interface'));
+        }
+
+        return $lastNamePart;
     }
 
     /**
