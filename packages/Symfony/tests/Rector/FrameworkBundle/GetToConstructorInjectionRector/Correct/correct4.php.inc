@@ -12,7 +12,6 @@ class ClassWithNamedServiceAndParentTrait extends ParentClassWithGetTrait
     {
         $this->someTranslator = $someTranslator;
     }
-
     public function render()
     {
         $this->someTranslator;

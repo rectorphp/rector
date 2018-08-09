@@ -31,20 +31,24 @@ final class ClassAndInterfaceTypeResolverTest extends AbstractNodeTypeResolverTe
 
     public function dataProvider(): Iterator
     {
-//        yield [__DIR__ . '/Source/ClassWithParentInterface.php', 0, [
-//            ClassWithParentInterface::class,
-//            SomeInterface::class,
-//        ]];
-//
-//        yield [__DIR__ . '/Source/ClassWithParentClass.php', 0, [
-//            ClassWithParentClass::class,
-//            ParentClass::class,
-//        ]];
+        yield [__DIR__ . '/Source/ClassWithParentInterface.php', 0, [
+            ClassWithParentInterface::class,
+            SomeInterface::class,
+        ]];
 
-//        yield [__DIR__ . '/Source/ClassWithTrait.php', 0, [ClassWithTrait::class, AnotherTrait::class]];
+        yield [__DIR__ . '/Source/ClassWithParentClass.php', 0, [
+            ClassWithParentClass::class,
+            ParentClass::class,
+        ]];
 
-        yield [__DIR__ . '/Source/ClassWithParentTrait.php', 0, [ClassWithParentTrait::class, ClassWithTrait::class, AnotherTrait::class]];
+        yield [__DIR__ . '/Source/ClassWithTrait.php', 0, [ClassWithTrait::class, AnotherTrait::class]];
 
-//        yield [__DIR__ . '/Source/AnonymousClass.php', 0, [ParentClass::class, SomeInterface::class]];
+        yield [
+            __DIR__ . '/Source/ClassWithParentTrait.php',
+            0,
+            [ClassWithParentTrait::class, ClassWithTrait::class, AnotherTrait::class],
+        ];
+
+        yield [__DIR__ . '/Source/AnonymousClass.php', 0, [ParentClass::class, SomeInterface::class]];
     }
 }
