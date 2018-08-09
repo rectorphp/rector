@@ -48,7 +48,10 @@ final class ClassAndInterfaceTypeResolverTest extends AbstractNodeTypeResolverTe
             0,
             [ClassWithParentTrait::class, ClassWithTrait::class, AnotherTrait::class],
         ];
-//
-        yield [__DIR__ . '/Source/AnonymousClass.php', 0, [ParentClass::class, SomeInterface::class, AnotherTrait::class]];
+        yield [
+            __DIR__ . '/Source/AnonymousClass.php',
+            0,
+            [ParentClass::class, SomeInterface::class, AnotherTrait::class],
+        ];
     }
 }
