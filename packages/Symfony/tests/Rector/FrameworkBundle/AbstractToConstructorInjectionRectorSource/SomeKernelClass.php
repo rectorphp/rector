@@ -2,6 +2,8 @@
 
 namespace Rector\Symfony\Tests\FrameworkBundle\AbstractToConstructorInjectionRectorSource;
 
+use Rector\Symfony\Tests\Rector\FrameworkBundle\AbstractToConstructorInjectionRectorSource\SomeTranslator;
+use Rector\Symfony\Tests\Rector\FrameworkBundle\AbstractToConstructorInjectionRectorSource\SomeTranslatorInterface;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -21,6 +23,11 @@ final class SomeKernelClass extends Kernel
     protected function build(ContainerBuilder $containerBuilder): void
     {
         $containerBuilder->register('some_service', 'stdClass');
+
+        $containerBuilder->register('translator.data_collector', SomeTranslator::class);
+
+        $containerBuilder->setAlias('translator', 'translator.data_collector');
+        $containerBuilder->setAlias(SomeTranslatorInterface::class, 'translator.data_collector');
     }
 
     public function getCacheDir()
