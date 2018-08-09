@@ -25,7 +25,7 @@ final class ContainerFactory
     }
 
     /**
-     * Mimics https://github.com/symfony/symfony/blob/226e2f3949c5843b67826aca4839c2c6b95743cf/src/Symfony/Bundle/FrameworkBundle/Command/ContainerDebugCommand.php#L200-L203
+     * Mimics https://github.com/symfony/symfony/blob/f834c9262b411aa5793fcea23694e3ad3b5acbb4/src/Symfony/Bundle/FrameworkBundle/Command/ContainerDebugCommand.php#L200-L203
      */
     private function createContainerFromKernelClass(string $kernelClass): Container
     {
@@ -35,19 +35,8 @@ final class ContainerFactory
 
         /** @var ContainerBuilder $containerBuilder */
         $containerBuilder = (new PrivatesCaller())->callPrivateMethod($kernel, 'buildContainer');
-
-        // anonymous class on intention, since this depends on Symfony\DependencyInjection in rector-prefixed
-        $containerBuilder->getCompilerPassConfig()->addPass(new class() implements CompilerPassInterface {
-            public function process(ContainerBuilder $containerBuilder): void
-            {
-                foreach ($containerBuilder->getDefinitions() as $definition) {
-                    $definition->setPublic(true);
-                }
-                foreach ($containerBuilder->getAliases() as $definition) {
-                    $definition->setPublic(true);
-                }
-            }
-        });
+        $containerBuilder->getCompilerPassConfig()->setRemovingPasses([]);
+        $containerBuilder->compile();
 
         return $containerBuilder;
     }
