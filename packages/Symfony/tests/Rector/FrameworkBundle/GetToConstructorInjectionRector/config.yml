@@ -4,3 +4,4 @@ parameters:
 services:
     Rector\Symfony\Rector\FrameworkBundle\GetToConstructorInjectionRector:
         $controllerClass: 'Rector\Symfony\Tests\Rector\Source\SymfonyController'
+        $traitClass: 'Rector\Symfony\Tests\Rector\FrameworkBundle\GetToConstructorInjectionRector\Source\GetTrait'
