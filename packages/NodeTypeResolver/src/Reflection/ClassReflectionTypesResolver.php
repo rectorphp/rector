@@ -32,13 +32,13 @@ final class ClassReflectionTypesResolver
         $types = array_merge($types, $classReflection->getParentClassesNames());
 
         // interfaces
-        foreach ($classReflection->getInterfaces() as $classReflection) {
-            $types[] = $classReflection->getName();
+        foreach ($classReflection->getInterfaces() as $interfaceReflection) {
+            $types[] = $interfaceReflection->getName();
         }
 
         // traits
-        foreach ($classReflection->getTraits() as $classReflection) {
-            $types[] = $classReflection->getName();
+        foreach ($classReflection->getTraits() as $traitReflection) {
+            $types[] = $traitReflection->getName();
         }
 
         // to cover traits of parent classes
