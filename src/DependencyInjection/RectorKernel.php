@@ -6,11 +6,11 @@ use Rector\DependencyInjection\CompilerPass\CollectorCompilerPass;
 use Rector\NodeTypeResolver\DependencyInjection\CompilerPass\NodeTypeResolverCollectorCompilerPass;
 use Rector\YamlRector\DependencyInjection\YamlRectorCollectorCompilerPass;
 use Symfony\Component\Config\Loader\DelegatingLoader;
+use Symfony\Component\Config\Loader\GlobFileLoader;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\Config\Loader\LoaderResolver;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\DependencyInjection\Loader\GlobFileLoader;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\Config\FileLocator;
 use Symfony\Component\HttpKernel\Kernel;
@@ -91,7 +91,7 @@ final class RectorKernel extends Kernel
         $kernelFileLocator = new FileLocator($this);
 
         $loaderResolver = new LoaderResolver([
-            new GlobFileLoader($container, $kernelFileLocator),
+            new GlobFileLoader($kernelFileLocator),
             new ParameterImportsYamlFileLoader($container, $kernelFileLocator),
         ]);
 
