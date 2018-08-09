@@ -14,9 +14,17 @@ final class GetToConstructorInjectionRector extends AbstractToConstructorInjecti
      */
     private $controllerClass;
 
-    public function __construct(string $controllerClass = 'Symfony\Bundle\FrameworkBundle\Controller\Controller')
-    {
+    /**
+     * @var string
+     */
+    private $traitClass;
+
+    public function __construct(
+        string $controllerClass = 'Symfony\Bundle\FrameworkBundle\Controller\Controller',
+        string $traitClass = 'Symfony\Bundle\FrameworkBundle\Controller\ControllerTrait'
+    ) {
         $this->controllerClass = $controllerClass;
+        $this->traitClass = $traitClass;
     }
 
     public function getDefinition(): RectorDefinition
@@ -61,6 +69,10 @@ CODE_SAMPLE
             return false;
         }
 
-        return $this->methodCallAnalyzer->isTypeAndMethod($node, $this->controllerClass, 'get');
+        if ($this->methodCallAnalyzer->isTypeAndMethod($node, $this->controllerClass, 'get')) {
+            return true;
+        }
+
+        return $this->methodCallAnalyzer->isTypeAndMethod($node, $this->traitClass, 'get');
     }
 }
