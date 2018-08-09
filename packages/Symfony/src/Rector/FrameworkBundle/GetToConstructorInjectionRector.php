@@ -19,6 +19,9 @@ final class GetToConstructorInjectionRector extends AbstractToConstructorInjecti
      */
     private $traitClass;
 
+    /**
+     * @todo merge to $getMethodAwareTypes
+     */
     public function __construct(
         string $controllerClass = 'Symfony\Bundle\FrameworkBundle\Controller\Controller',
         string $traitClass = 'Symfony\Bundle\FrameworkBundle\Controller\ControllerTrait'

@@ -4,6 +4,7 @@ parameters:
 
         # missuse of interface and class
         - '#Parameter \#1 (.*?) expects Symfony\\Component\\DependencyInjection\\ContainerBuilder, Symfony\\Component\\DependencyInjection\\ContainerInterface given#' # 2
+        - '#Method Rector\\Symfony\\Bridge\\DefaultAnalyzedSymfonyApplicationContainer::getContainer\(\) should return Symfony\\Component\\DependencyInjection\\ContainerBuilder but returns Symfony\\Component\\DependencyInjection\\Container#' # 1
 
         # 0.10.2
         # false positives & ->toString() methods

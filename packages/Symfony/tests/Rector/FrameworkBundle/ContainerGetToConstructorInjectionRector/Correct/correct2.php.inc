@@ -5,10 +5,10 @@ use Rector\Symfony\Tests\FrameworkBundle\ContainerGetToConstructorInjectionRecto
 final class AnotherCommand extends ContainerAwareParentClass
 {
     /**
-     * @var \Rector\Symfony\Tests\Rector\FrameworkBundle\AbstractToConstructorInjectionRectorSource\SomeTranslator
+     * @var \Rector\Symfony\Tests\Rector\FrameworkBundle\AbstractToConstructorInjectionRectorSource\SomeTranslatorInterface
      */
     private $someTranslator;
-    public function __construct(\Rector\Symfony\Tests\Rector\FrameworkBundle\AbstractToConstructorInjectionRectorSource\SomeTranslator $someTranslator)
+    public function __construct(\Rector\Symfony\Tests\Rector\FrameworkBundle\AbstractToConstructorInjectionRectorSource\SomeTranslatorInterface $someTranslator)
     {
         $this->someTranslator = $someTranslator;
     }
