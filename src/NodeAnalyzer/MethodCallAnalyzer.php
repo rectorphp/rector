@@ -30,7 +30,7 @@ final class MethodCallAnalyzer
      */
     public function isTypeAndMethods(Node $node, string $type, array $methods): bool
     {
-        if (! $this->isType($node, $type)) {
+        if (! $this->isTypes($node, [$type])) {
             return false;
         }
 
@@ -45,7 +45,24 @@ final class MethodCallAnalyzer
      */
     public function isTypeAndMethod(Node $node, string $type, string $method): bool
     {
-        if (! $this->isType($node, $type)) {
+        if (! $this->isTypes($node, [$type])) {
+            return false;
+        }
+
+        /** @var Identifier $methodName */
+        $methodName = $node->name;
+
+        return $methodName->toString() === $method;
+    }
+
+    /**
+     * Checks "$this->classOfSpecificType->specificMethodName()"
+     *
+     * @param string[] $types
+     */
+    public function isTypesAndMethod(Node $node, array $types, string $method): bool
+    {
+        if (! $this->isTypes($node, $types)) {
             return false;
         }
 
@@ -88,20 +105,6 @@ final class MethodCallAnalyzer
     }
 
     /**
-     * Checks "$this->methodCall()"
-     */
-    public function isType(Node $node, string $type): bool
-    {
-        if (! $node instanceof MethodCall) {
-            return false;
-        }
-
-        $calledNodeTypes = $this->nodeTypeResolver->resolve($node->var);
-
-        return in_array($type, $calledNodeTypes, true);
-    }
-
-    /**
      * @param string[] $types
      * @return string[]
      */
@@ -114,5 +117,19 @@ final class MethodCallAnalyzer
         $nodeTypes = $this->nodeTypeResolver->resolve($node->var);
 
         return array_intersect($nodeTypes, $types) ? $nodeTypes : null;
+    }
+
+    /**
+     * @param string[] $types
+     */
+    private function isTypes(Node $node, array $types): bool
+    {
+        if (! $node instanceof MethodCall) {
+            return false;
+        }
+
+        $calledNodeTypes = $this->nodeTypeResolver->resolve($node->var);
+
+        return (bool) array_intersect($types, $calledNodeTypes);
     }
 }

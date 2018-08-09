@@ -69,10 +69,6 @@ CODE_SAMPLE
             return false;
         }
 
-        if ($this->methodCallAnalyzer->isTypeAndMethod($node, $this->controllerClass, 'get')) {
-            return true;
-        }
-
-        return $this->methodCallAnalyzer->isTypeAndMethod($node, $this->traitClass, 'get');
+        return $this->methodCallAnalyzer->isTypesAndMethod($node, [$this->controllerClass, $this->traitClass], 'get');
     }
 }
