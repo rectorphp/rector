@@ -2,25 +2,10 @@
 
 This package detects **class, interface and trait types** for classes, variables and properties. Those types are resolved by `NodeTypeResolver` service.
 
-Anonymous classes are included, e.g.:
+Includes also:
 
-```php
-$someAnonymousClass = new class extends SomeClass
-{
-}
-```
-
-includes types:
-
-```php
-['SomeClass']
-```
-
-## How it works?
-
-1. Traverse all nodes
-2. Detect variable assigns, property use, method arguments
-3. Resolve types
+- Anonymous classes
+- Traits of parent classes
 
 ## How it helps you?
 
@@ -78,5 +63,4 @@ final class SomeRector
 
 ### Inspiration
 
-- https://github.com/Roave/BetterReflection/pull/224
-- https://github.com/phpactor/worse-reflection/blob/master/lib/Core/Inference/SymbolContextResolver.php
+@todo phpstan + silverstripe
