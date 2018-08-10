@@ -18,7 +18,7 @@ use Rector\NodeTypeResolver\Node\MetadataAttribute;
  * @todo should be checked by CS for the "NodeVisitor" suffix
  * it's confusing otherwise
  */
-final class ClassAndMethodResolver extends NodeVisitorAbstract
+final class ClassAndMethodResolverNodeVisitor extends NodeVisitorAbstract
 {
     /**
      * @var ClassLike|null

@@ -9,7 +9,7 @@ use PhpParser\NodeVisitorAbstract;
 use Rector\NodeTraverserQueue\BetterNodeFinder;
 use Rector\NodeTypeResolver\Node\MetadataAttribute;
 
-final class NamespaceResolver extends NodeVisitorAbstract
+final class NamespaceResolverNodeVisitor extends NodeVisitorAbstract
 {
     /**
      * @var string|null

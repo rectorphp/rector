@@ -21,5 +21,5 @@ services:
             - ['addNodeVisitor', ['@PhpParser\NodeVisitor\NameResolver']]
             - ['addNodeVisitor', ['@PhpParser\NodeVisitor\CloningVisitor']]
             - ['addNodeVisitor', ['@Rector\PhpParser\NodeVisitor\ParentAndNextNodeAddingNodeVisitor']]
-            - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\ClassAndMethodResolver']]
-            - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\NamespaceResolver']]
+            - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\ClassAndMethodResolverNodeVisitor']]
+            - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\NamespaceResolverNodeVisitor']]
