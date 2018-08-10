@@ -5,8 +5,8 @@ namespace Rector\NodeTypeResolver;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PHPStan\Analyser\Scope;
-use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
+use Rector\NodeTypeResolver\Node\TypeAttribute;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeToStringResolver;
 
 final class NodeTypeResolver
@@ -39,7 +39,7 @@ final class NodeTypeResolver
     public function resolve(Node $node): array
     {
         /** @var Scope|null $nodeScope */
-        $nodeScope = $node->getAttribute(Attribute::SCOPE);
+        $nodeScope = $node->getAttribute(TypeAttribute::SCOPE);
         if ($nodeScope === null) {
             return [];
         }
@@ -56,7 +56,7 @@ final class NodeTypeResolver
 
         // PHPStan
         /** @var Scope $nodeScope */
-        $nodeScope = $node->getAttribute(Attribute::SCOPE);
+        $nodeScope = $node->getAttribute(TypeAttribute::SCOPE);
 
         $type = $nodeScope->getType($node);
 

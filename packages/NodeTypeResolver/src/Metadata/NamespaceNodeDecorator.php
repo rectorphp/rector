@@ -1,15 +1,15 @@
 <?php declare(strict_types=1);
 
-namespace Rector\NodeTypeResolver\NodeVisitor;
+namespace Rector\NodeTypeResolver\Metadata;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
-use PhpParser\NodeVisitorAbstract;
-use Rector\Node\Attribute;
 use Rector\NodeTraverserQueue\BetterNodeFinder;
+use Rector\NodeTypeResolver\Contract\Metadata\NodeDecoratorInterface;
+use Rector\NodeTypeResolver\Node\MetadataAttribute;
 
-final class NamespaceResolver extends NodeVisitorAbstract
+final class NamespaceNodeDecorator implements NodeDecoratorInterface
 {
     /**
      * @var string|null
@@ -36,17 +36,14 @@ final class NamespaceResolver extends NodeVisitorAbstract
         $this->betterNodeFinder = $betterNodeFinder;
     }
 
-    /**
-     * @param Node[] $nodes
-     */
-    public function beforeTraverse(array $nodes): void
+    public function reset(): void
     {
         $this->namespaceName = null;
         $this->namespaceNode = null;
         $this->useNodes = [];
     }
 
-    public function enterNode(Node $node): void
+    public function decorateNode(Node $node): void
     {
         if ($node instanceof Namespace_) {
             $this->namespaceName = $node->name ? $node->name->toString() : null;
@@ -54,8 +51,8 @@ final class NamespaceResolver extends NodeVisitorAbstract
             $this->useNodes = $this->betterNodeFinder->findInstanceOf($node, Use_::class);
         }
 
-        $node->setAttribute(Attribute::NAMESPACE_NAME, $this->namespaceName);
-        $node->setAttribute(Attribute::NAMESPACE_NODE, $this->namespaceNode);
-        $node->setAttribute(Attribute::USE_NODES, $this->useNodes);
+        $node->setAttribute(MetadataAttribute::NAMESPACE_NAME, $this->namespaceName);
+        $node->setAttribute(MetadataAttribute::NAMESPACE_NODE, $this->namespaceNode);
+        $node->setAttribute(MetadataAttribute::USE_NODES, $this->useNodes);
     }
 }

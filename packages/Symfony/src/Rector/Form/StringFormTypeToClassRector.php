@@ -4,8 +4,8 @@ namespace Rector\Symfony\Rector\Form;
 
 use PhpParser\Node;
 use PhpParser\Node\Scalar\String_;
-use Rector\Node\Attribute;
 use Rector\Node\NodeFactory;
+use Rector\NodeTypeResolver\Node\MetadataAttribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -32,6 +32,9 @@ final class StringFormTypeToClassRector extends AbstractRector
         $this->formTypeStringToTypeProvider = $formTypeStringToTypeProvider;
     }
 
+    /**
+     * @todo add custom form types
+     */
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -55,9 +58,7 @@ final class StringFormTypeToClassRector extends AbstractRector
             return false;
         }
 
-        $methodCallName = (string) $node->getAttribute(Attribute::METHOD_CALL);
-
-        return $methodCallName === 'add';
+        return (string) $node->getAttribute(MetadataAttribute::METHOD_CALL_NAME) === 'add';
     }
 
     /**

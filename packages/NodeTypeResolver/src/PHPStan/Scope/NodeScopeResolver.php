@@ -12,8 +12,8 @@ use PHPStan\Broker\Broker;
 use Rector\Configuration\Option;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\FileSystem\FilesFinder;
-use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Configuration\CurrentFileProvider;
+use Rector\NodeTypeResolver\Node\TypeAttribute;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 
@@ -85,22 +85,10 @@ final class NodeScopeResolver
                 // the class reflection is resolved AFTER entering to class node
                 // so we need to get it from the first after this one
                 if ($node instanceof Class_ || $node instanceof Interface_) {
-                    if (isset($node->namespacedName)) {
-                        $scope = $scope->enterClass($this->broker->getClass((string) $node->namespacedName));
-                    } else {
-                        // possibly anonymous class
-                        $anonymousClassReflection = (new PrivatesAccessor())->getPrivateProperty(
-                            $this->phpStanNodeScopeResolver,
-                            'anonymousClassReflection'
-                        );
-
-                        if ($anonymousClassReflection) {
-                            $scope = $scope->enterAnonymousClass($anonymousClassReflection);
-                        }
-                    }
+                    $scope = $this->resolveClassOrInterfaceNode($node, $scope);
                 }
 
-                $node->setAttribute(Attribute::SCOPE, $scope);
+                $node->setAttribute(TypeAttribute::SCOPE, $scope);
             }
         );
 
@@ -139,5 +127,27 @@ final class NodeScopeResolver
                 ));
             }
         }
+    }
+
+    /**
+     * @param Class_|Interface_ $classOrInterfaceNode
+     */
+    private function resolveClassOrInterfaceNode(Node $classOrInterfaceNode, Scope $scope): Scope
+    {
+        if (isset($classOrInterfaceNode->namespacedName)) {
+            return $scope->enterClass($this->broker->getClass((string) $classOrInterfaceNode->namespacedName));
+        }
+
+        // possibly anonymous class
+        $anonymousClassReflection = (new PrivatesAccessor())->getPrivateProperty(
+            $this->phpStanNodeScopeResolver,
+            'anonymousClassReflection'
+        );
+
+        if ($anonymousClassReflection) {
+            return $scope->enterAnonymousClass($anonymousClassReflection);
+        }
+
+        return $scope;
     }
 }

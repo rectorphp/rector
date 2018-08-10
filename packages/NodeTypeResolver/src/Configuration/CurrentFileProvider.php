@@ -5,6 +5,9 @@ namespace Rector\NodeTypeResolver\Configuration;
 use Rector\Exception\ShouldNotHappenException;
 use Symfony\Component\Finder\SplFileInfo;
 
+/**
+ * @todo try to avoid this and pass to NodeTypeResolver directly
+ */
 final class CurrentFileProvider
 {
     /**

@@ -4,8 +4,8 @@ namespace Rector\Rector\Visibility;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
-use Rector\Node\Attribute;
 use Rector\NodeModifier\VisibilityModifier;
+use Rector\NodeTypeResolver\Node\MetadataAttribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -78,12 +78,12 @@ CODE_SAMPLE
         }
 
         // doesn't have a parent class
-        if (! $node->hasAttribute(Attribute::PARENT_CLASS_NAME)) {
+        if (! $node->hasAttribute(MetadataAttribute::PARENT_CLASS_NAME)) {
             return false;
         }
 
         // @todo or better types?
-        $nodeParentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
+        $nodeParentClassName = $node->getAttribute(MetadataAttribute::PARENT_CLASS_NAME);
         if (! isset($this->propertyToVisibilityByClass[$nodeParentClassName])) {
             return false;
         }
@@ -109,7 +109,7 @@ CODE_SAMPLE
 
     private function resolveNewVisibilityForNode(Property $propertyNode): string
     {
-        $nodeParentClassName = $propertyNode->getAttribute(Attribute::PARENT_CLASS_NAME);
+        $nodeParentClassName = $propertyNode->getAttribute(MetadataAttribute::PARENT_CLASS_NAME);
         $propertyName = $propertyNode->props[0]->name->toString();
 
         return $this->propertyToVisibilityByClass[$nodeParentClassName][$propertyName];

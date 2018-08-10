@@ -5,10 +5,10 @@ namespace Rector\Symfony\Rector\HttpKernel;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Node\Attribute;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeTraverserQueue\BetterNodeFinder;
+use Rector\NodeTypeResolver\Node\MetadataAttribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -122,7 +122,7 @@ CODE_SAMPLE
             return false;
         }
 
-        $methodNode = $node->getAttribute(Attribute::METHOD_NODE);
+        $methodNode = $node->getAttribute(MetadataAttribute::METHOD_NODE);
 
         return $this->controllerMethodAnalyzer->isAction($methodNode);
     }

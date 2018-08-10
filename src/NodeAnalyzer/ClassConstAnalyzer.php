@@ -7,6 +7,7 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use Rector\Node\Attribute;
+use Rector\NodeTypeResolver\Node\MetadataAttribute;
 
 /**
  * Read-only utils for ClassConstAnalyzer Node:
@@ -74,6 +75,6 @@ final class ClassConstAnalyzer
         }
 
         // e.g. "$form::FILLED"
-        return (string) $classConstFetchNode->class->getAttribute(Attribute::CLASS_NAME);
+        return (string) $classConstFetchNode->class->getAttribute(MetadataAttribute::CLASS_NAME);
     }
 }

@@ -28,26 +28,6 @@ final class Attribute
     /**
      * @var string
      */
-    public const CLASS_NAME = 'className';
-
-    /**
-     * @var string
-     */
-    public const METHOD_NAME = 'methodName';
-
-    /**
-     * @var string
-     */
-    public const PARENT_CLASS_NAME = 'parentClassName';
-
-    /**
-     * @var string
-     */
-    public const CLASS_NODE = 'classNode';
-
-    /**
-     * @var string
-     */
     public const PARENT_NODE = 'parentNode';
 
     /**
@@ -63,55 +43,5 @@ final class Attribute
     /**
      * @var string
      */
-    public const USE_STATEMENTS = 'useStatements';
-
-    /**
-     * @var string
-     */
-    public const NAMESPACE_NAME = 'namespace';
-
-    /**
-     * @var string
-     */
-    public const METHOD_CALL = 'methodCall';
-
-    /**
-     * @var string
-     */
-    public const METHOD_NODE = 'methodNode';
-
-    /**
-     * @var string
-     */
-    public const NAMESPACE_NODE = 'namespaceNode';
-
-    /**
-     * @var string
-     */
-    public const USE_NODES = 'useNodes';
-
-    /**
-     * @var string
-     */
-    public const RETURN_TYPES = 'returnTypes';
-
-    /**
-     * @var string
-     */
     public const COMMENTS = 'comments';
-
-    /**
-     * Internal php-parser name.
-     * Do not change this even if you want!
-     *
-     * @var string
-     */
-    public const NAMESPACED_NAME = 'namespacedName';
-
-    /**
-     * PHPStan-based type scope.
-     *
-     * @var string
-     */
-    public const SCOPE = 'scope';
 }

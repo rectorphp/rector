@@ -25,7 +25,7 @@ final class ScopeFactory
     /**
      * @var PHPStanScopeFactory
      */
-    private $pHPStanScopeFactory;
+    private $phpStanScopeFactory;
 
     /**
      * @var BetterStandardPrinter
@@ -35,19 +35,19 @@ final class ScopeFactory
     public function __construct(
         Broker $broker,
         TypeSpecifier $typeSpecifier,
-        PHPStanScopeFactory $pHPStanScopeFactory,
+        PHPStanScopeFactory $phpStanScopeFactory,
         BetterStandardPrinter $betterStandardPrinter
     ) {
         $this->broker = $broker;
         $this->typeSpecifier = $typeSpecifier;
-        $this->pHPStanScopeFactory = $pHPStanScopeFactory;
+        $this->phpStanScopeFactory = $phpStanScopeFactory;
         $this->betterStandardPrinter = $betterStandardPrinter;
     }
 
     public function createFromFileInfo(SplFileInfo $splFileInfo): Scope
     {
         return new Scope(
-            $this->pHPStanScopeFactory,
+            $this->phpStanScopeFactory,
             $this->broker,
             $this->betterStandardPrinter,
             $this->typeSpecifier,

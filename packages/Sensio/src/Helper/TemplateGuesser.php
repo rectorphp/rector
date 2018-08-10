@@ -5,14 +5,14 @@ namespace Rector\Sensio\Helper;
 use Nette\Utils\Strings;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Exception\ShouldNotHappenException;
-use Rector\Node\Attribute;
+use Rector\NodeTypeResolver\Node\MetadataAttribute;
 
 final class TemplateGuesser
 {
     public function resolveFromClassMethodNode(ClassMethod $classMethodNode, int $version = 5): string
     {
-        $namespace = (string) $classMethodNode->getAttribute(Attribute::NAMESPACE_NAME);
-        $class = (string) $classMethodNode->getAttribute(Attribute::CLASS_NAME);
+        $namespace = (string) $classMethodNode->getAttribute(MetadataAttribute::NAMESPACE_NAME);
+        $class = (string) $classMethodNode->getAttribute(MetadataAttribute::CLASS_NAME);
         $method = (string) $classMethodNode->name;
 
         if ($version === 3) {

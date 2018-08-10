@@ -22,11 +22,6 @@ final class Option
     /**
      * @var string
      */
-    public const OPTION_NO_DIFFS = 'no-diff';
-
-    /**
-     * @var string
-     */
     public const OPTION_WITH_STYLE = 'with-style';
 
     /**

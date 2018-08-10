@@ -13,6 +13,7 @@ use Rector\Naming\PropertyNaming;
 use Rector\Node\Attribute;
 use Rector\Node\PropertyFetchNodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
+use Rector\NodeTypeResolver\Node\MetadataAttribute;
 use Rector\Rector\AbstractRector;
 
 abstract class AbstractToConstructorInjectionRector extends AbstractRector
@@ -73,7 +74,7 @@ abstract class AbstractToConstructorInjectionRector extends AbstractRector
         $propertyName = $this->propertyNaming->fqnToVariableName($serviceType);
 
         $this->classPropertyCollector->addPropertyForClass(
-            (string) $methodCallNode->getAttribute(Attribute::CLASS_NAME),
+            (string) $methodCallNode->getAttribute(MetadataAttribute::CLASS_NAME),
             [$serviceType],
             $propertyName
         );
