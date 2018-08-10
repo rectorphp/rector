@@ -66,11 +66,6 @@ parameters:
             - 'src/Configuration/Rector/Guard/RecipeGuard.php'
             - 'src/Configuration/Rector/*Recipe.php'
 
-        Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
-            # @todo fix later
-            - 'packages/NodeTypeResolver/src/NodeTypeResolver.php'
-            - 'packages/NodeTypeResolver/src/PHPStan/Scope/NodeScopeResolver.php'
-
         Symplify\CodingStandard\Fixer\Naming\PropertyNameMatchingTypeFixer:
             - 'packages/NodeTypeResolver/src/PHPStan/Scope/NodeScopeResolver.php'
 
