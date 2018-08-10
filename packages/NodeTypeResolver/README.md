@@ -188,8 +188,26 @@ foreach ($nodes as $node) {
 }
 ```
 
+3. Add CompilerPass to your Kernel
+
+```php
+<?php declare(strict_types=1);
+
+use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Rector\NodeTypeResolver\DependencyInjection\CompilerPass\NodeTypeResolverCollectorCompilerPass;
+
+class AppKernel extends Kernel
+{
+    protected function build(ContainerBuilder $containerBuilder): void
+    {
+        $containerBuilder->addCompilerPass(new NodeTypeResolverCollectorCompilerPass());
+    }
+} 
+```
+
 And that's it!
 
 ### Inspiration
 
-@todo silverstripe
+- [PHPStanScopeVisitor](https://github.com/silverstripe/silverstripe-upgrader/blob/532182b23e854d02e0b27e68ebc394f436de0682/src/UpgradeRule/PHP/Visitor/PHPStanScopeVisitor.php) in [SilverStripe](https://github.com/silverstripe/) - Thank you ❤️️  
