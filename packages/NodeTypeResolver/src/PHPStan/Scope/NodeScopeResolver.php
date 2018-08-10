@@ -12,8 +12,8 @@ use PHPStan\Broker\Broker;
 use Rector\Configuration\Option;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\FileSystem\FilesFinder;
-use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Configuration\CurrentFileProvider;
+use Rector\NodeTypeResolver\Node\TypeAttribute;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 
@@ -100,7 +100,7 @@ final class NodeScopeResolver
                     }
                 }
 
-                $node->setAttribute(Attribute::SCOPE, $scope);
+                $node->setAttribute(TypeAttribute::SCOPE, $scope);
             }
         );
 

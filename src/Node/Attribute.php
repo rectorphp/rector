@@ -44,11 +44,4 @@ final class Attribute
      * @var string
      */
     public const COMMENTS = 'comments';
-
-    /**
-     * PHPStan-based type scope.
-     *
-     * @var string
-     */
-    public const SCOPE = 'scope';
 }
