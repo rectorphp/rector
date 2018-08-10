@@ -73,7 +73,7 @@ final class Attribute
     /**
      * @var string
      */
-    public const METHOD_CALL = 'methodCall';
+    public const METHOD_CALL_NAME = 'methodCallName';
 
     /**
      * @var string

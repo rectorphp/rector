@@ -9,28 +9,7 @@ Includes also:
 
 ## How it helps you?
 
-### 1. You can get `class`
-
-```php
-$class = (string) $node->getAttribute(Attribute::CLASS_NAME);
-
-if (Strings::endsWith($class, 'Command')) {
-    // we are in Command class
-}
-
-// to be sure it's console command
-
-/** @var PhpParser\Node\Name\FullyQualified $fqnName */
-$classNode = $node->getAttribute(Attribute::CLASS_NODE);
-
-$fqnName = $classNode->extends->getAttribute(Attribute::RESOLVED_NAME);
-
-if ($fqnName->toString() === 'Symfony\Component\Console\Command') {
-    // we are sure it's child of Symfony\Console Command class
-}
-```
-
-### 2. Get Types of Certain Elements
+### 1. Get Types of Node
 
 ```php
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -60,6 +39,28 @@ final class SomeRector
 ```
 
 ...in any Rector you create.
+
+
+### 2. Helped
+
+```php
+$class = (string) $node->getAttribute(Attribute::CLASS_NAME);
+
+if (Strings::endsWith($class, 'Command')) {
+    // we are in Command class
+}
+
+// to be sure it's console command
+
+/** @var PhpParser\Node\Name\FullyQualified $fqnName */
+$classNode = $node->getAttribute(Attribute::CLASS_NODE);
+
+$fqnName = $classNode->extends->getAttribute(Attribute::RESOLVED_NAME);
+
+if ($fqnName->toString() === 'Symfony\Component\Console\Command') {
+    // we are sure it's child of Symfony\Console Command class
+}
+```
 
 ### Inspiration
 

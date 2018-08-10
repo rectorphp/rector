@@ -32,6 +32,9 @@ final class StringFormTypeToClassRector extends AbstractRector
         $this->formTypeStringToTypeProvider = $formTypeStringToTypeProvider;
     }
 
+    /**
+     * @todo add custom form types
+     */
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -55,9 +58,7 @@ final class StringFormTypeToClassRector extends AbstractRector
             return false;
         }
 
-        $methodCallName = (string) $node->getAttribute(Attribute::METHOD_CALL);
-
-        return $methodCallName === 'add';
+        return (string) $node->getAttribute(Attribute::METHOD_CALL_NAME) === 'add';
     }
 
     /**

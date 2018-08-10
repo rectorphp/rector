@@ -21,7 +21,7 @@ use Rector\Node\Attribute;
  * - @see Attribute::PARENT_CLASS_NAME with current class node
  * - @see Attribute::METHOD_NAME with current method name
  * - @see Attribute::METHOD_NODE with current method node
- * - @see Attribute::METHOD_CALL with current method call
+ * - @see Attribute::METHOD_CALL_NAME with current method call
  */
 final class ClassAndMethodResolver extends NodeVisitorAbstract
 {
@@ -48,7 +48,7 @@ final class ClassAndMethodResolver extends NodeVisitorAbstract
     /**
      * @var string|null
      */
-    private $methodCall;
+    private $methodCallName;
 
     /**
      * @param Node[] $nodes
@@ -59,7 +59,7 @@ final class ClassAndMethodResolver extends NodeVisitorAbstract
         $this->className = null;
         $this->methodName = null;
         $this->methodNode = null;
-        $this->methodCall = null;
+        $this->methodCallName = null;
     }
 
     public function enterNode(Node $node): void
@@ -75,7 +75,7 @@ final class ClassAndMethodResolver extends NodeVisitorAbstract
     public function leaveNode(Node $node): void
     {
         if ($node instanceof Expression) {
-            $this->methodCall = null;
+            $this->methodCallName = null;
         }
     }
 
@@ -117,11 +117,11 @@ final class ClassAndMethodResolver extends NodeVisitorAbstract
         }
 
         if ($node instanceof MethodCall && $node->name instanceof Identifier) {
-            $this->methodCall = $node->name->toString();
+            $this->methodCallName = $node->name->toString();
         }
 
         $node->setAttribute(Attribute::METHOD_NAME, $this->methodName);
         $node->setAttribute(Attribute::METHOD_NODE, $this->methodNode);
-        $node->setAttribute(Attribute::METHOD_CALL, $this->methodCall);
+        $node->setAttribute(Attribute::METHOD_CALL_NAME, $this->methodCallName);
     }
 }
