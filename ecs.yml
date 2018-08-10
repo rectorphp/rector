@@ -32,6 +32,7 @@ services:
     Symplify\CodingStandard\Sniffs\Naming\ClassNameSuffixByParentSniff:
         extraParentTypesToSuffixes:
             - 'Rector'
+            - 'NodeVisitorAbstract'
 
 parameters:
     exclude_files:
@@ -72,3 +73,7 @@ parameters:
 
         Symplify\CodingStandard\Fixer\Naming\PropertyNameMatchingTypeFixer:
             - 'packages/NodeTypeResolver/src/PHPStan/Scope/NodeScopeResolver.php'
+
+        Symplify\CodingStandard\Sniffs\Naming\ClassNameSuffixByParentSniff:
+            # hidden API
+            - 'src/Rector/AbstractRector.php'
