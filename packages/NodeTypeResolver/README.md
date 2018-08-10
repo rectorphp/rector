@@ -1,20 +1,21 @@
 # Node Type Resolver
 
-This package detects **class, interface and trait types** for classes, variables and properties. Those types are resolved by `NodeTypeResolver` service.
+This package detects **class, interface and trait types** for classes, variables and properties. Those types are resolved by `NodeTypeResolver` service. It uses PHPStan for `PhpParser\Node\Expr` nodes and own type resolvers for other nodes like `PhpParser\Node\Stmt\Class_`, `PhpParser\Node\Stmt\Interface_` or `PhpParser\Node\Stmt\Trait_`.  
 
-Includes also:
+## Install
 
-- Anonymous classes
-- Traits of parent classes
+```bash
+composer require rector/node-type-resolver
+```
 
-## How it helps you?
+## Usage
 
 ### 1. Get Types of Node
 
 ```php
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
-final class SomeRector
+final class SomeNodeProcessor
 {
     /**
      * @var NodeTypeResolver
@@ -26,7 +27,7 @@ final class SomeRector
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
-    public function refactor(Node $node): ?Node
+    public function process(Node $node)
     {
         /** @var string[] $nodeTypes */
         $nodeTypes = $this->nodeTypeResolver->resolve($node);
@@ -34,6 +35,8 @@ final class SomeRector
         if (in_array('Nette\Application\UI\Form', $nodeTypes, true) {
             // this is Nette\Application\UI\Form variable
         }
+        
+        // continue
     }
 }
 ```
@@ -41,27 +44,146 @@ final class SomeRector
 ...in any Rector you create.
 
 
-### 2. Helped
+### 2. Helper Attributes
+
+These attributes are always available anywhere inside the Node tree. That means that `CLASS_NAME` is available **in every node that is in the class**. That way you can easily get class name on `Property` node.
+
+#### Namespaces
 
 ```php
-$class = (string) $node->getAttribute(Attribute::CLASS_NAME);
+<?php declare(strict_types=1);
 
-if (Strings::endsWith($class, 'Command')) {
-    // we are in Command class
-}
+use Rector\Node\Attribute;
 
-// to be sure it's console command
+// string name of current namespace
+$namespaceName = $node->setAttribute(Attribute::NAMESPACE_NAME, $this->namespaceName);
 
-/** @var PhpParser\Node\Name\FullyQualified $fqnName */
+// instance of "PhpParser\Node\Stmt\Namespace_" 
+$namespaceNode = $node->setAttribute(Attribute::NAMESPACE_NODE, $this->namespaceNode);
+
+// instances of "PhpParser\Node\Stmt\Use_"
+$useNodes = $node->setAttribute(Attribute::USE_NODES, $this->useNodes);
+```
+
+#### Classes
+
+```php
+<?php declare(strict_types=1);
+
+use Rector\Node\Attribute;
+
+// string name of current class
+$className = $node->getAttribute(Attribute::CLASS_NAME);
+
+// instance of "PhpParser\Node\Stmt\Class_"
 $classNode = $node->getAttribute(Attribute::CLASS_NODE);
 
-$fqnName = $classNode->extends->getAttribute(Attribute::RESOLVED_NAME);
+// string name of current class
+$parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
+```
 
-if ($fqnName->toString() === 'Symfony\Component\Console\Command') {
-    // we are sure it's child of Symfony\Console Command class
+#### Methods
+
+```php
+<?php declare(strict_types=1);
+
+use Rector\Node\Attribute;
+
+// string name of current method
+$methodName = $node->getAttribute(Attribute::METHOD_NAME);
+
+// instance of "PhpParser\Node\Stmt\ClassMethod"
+$methodNode = $node->getAttribute(Attribute::METHOD_NODE);
+
+// string name of current method call ($this->get => "get")
+$methodCallName = $node->getAttribute(Attribute::METHOD_NAME);
+```
+
+
+#### Setup
+
+1. Import `services.yml` in your config
+
+```yaml
+# your-app/config.yml
+imports:
+    - { resource: 'vendor/rector/node-type-resolver/config/services.yml' }
+```
+
+2. Add NodeVisitors to your NodeTraverse in config  
+
+```yaml
+# your-app/config.yml
+services:
+    YourApp\NodeTraverser:
+        calls:
+            // @todo depends on NameResolver from PhpParser
+            - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\ClassAndMethodResolver']]
+            - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\NamespaceResolver']]        
+```
+
+or if you create NodeTraverser in a factory:
+
+```php
+<?php declare(strict_types=1);
+
+namespace YourApp;
+
+use PhpParser\NodeTraverser;
+use Rector\NodeTypeResolver\NodeVisitor\ClassAndMethodResolver;
+use Rector\NodeTypeResolver\NodeVisitor\NamespaceResolver;
+
+final class NodeTraverserFactory
+{
+    /**
+     * @var ClassAndMethodResolver
+     */
+    private $classAndMethodResolver;
+    
+    /**
+     * @var NamespaceResolver  
+     */
+    private $namespaceResolver;
+    
+    public function __construct(
+        ClassAndMethodResolver $classAndMethodResolver, 
+        NamespaceResolver $namespaceResolver
+    ) {
+        $this->classAndMethodResolver = $classAndMethodResolver;
+        $this->namespaceResolver = $namespaceResolver;
+    }
+    
+    public function create(): NodeTraverser
+    {
+        $nodeTraverser = new NodeTraverser();
+        $nodeTraverser->addVisitor($this->namespaceResolver);
+        $nodeTraverser->addVisitor($this->classAndMethodResolver);
+        
+        // your own NodeVisitors
+        $nodeTraverser->addVisitor(...);
+        
+        return $nodeTraverser;
+    }
 }
 ```
 
+3. And get attributes anywhere you need it
+
+```php
+<?php declare(strict_types=1);
+
+$nodes = $this->parser->parseFile(...);
+$nodes = $nodeTraverser->traverse($nodes);
+
+/** @var \PhpParser\Node $node */
+foreach ($nodes as $node) {
+    $className = $node->getAttribute(Attributes::CLASS_NAME);
+    var_dump($className);
+}
+```
+
+And that's it!
+
 ### Inspiration
 
-@todo phpstan + silverstripe
+@todo silverstripe

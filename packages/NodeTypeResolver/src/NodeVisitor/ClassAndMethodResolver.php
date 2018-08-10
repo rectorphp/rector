@@ -14,6 +14,9 @@ use PhpParser\NodeVisitorAbstract;
 use Rector\Node\Attribute;
 
 /**
+ * @todo should be checked by CS for the "NodeVisitor" suffix
+ * it's confusing otherwise
+ *
  * Adds attributes to all nested nodes:
  *
  * - @see Attribute::CLASS_NAME with current class name
