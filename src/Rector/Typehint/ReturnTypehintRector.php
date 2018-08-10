@@ -9,7 +9,7 @@ use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Node\Attribute;
+use Rector\NodeTypeResolver\Node\MetadataAttribute;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Php\TypeAnalyzer;
 use Rector\Rector\AbstractRector;
@@ -87,7 +87,7 @@ CODE_SAMPLE
         }
 
         /** @var ClassLike $classNode */
-        $classNode = $node->getAttribute(Attribute::CLASS_NODE);
+        $classNode = $node->getAttribute(MetadataAttribute::CLASS_NODE);
         $classNodeTypes = $this->nodeTypeResolver->resolve($classNode);
         if (! $classNodeTypes) {
             return false;
@@ -102,7 +102,7 @@ CODE_SAMPLE
     public function refactor(Node $classMethodNode): ?Node
     {
         /** @var Class_ $classMethodNode */
-        $classNode = $classMethodNode->getAttribute(Attribute::CLASS_NODE);
+        $classNode = $classMethodNode->getAttribute(MetadataAttribute::CLASS_NODE);
         $classNodeTypes = $this->nodeTypeResolver->resolve($classNode);
 
         $matchingTypes = $this->getMatchingTypesForClassNode($classNodeTypes);

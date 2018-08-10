@@ -53,16 +53,16 @@ These attributes are always available anywhere inside the Node tree. That means 
 ```php
 <?php declare(strict_types=1);
 
-use Rector\Node\Attribute;
+use Rector\NodeTypeResolver\Node\MetadataAttribute;
 
 // string name of current namespace
-$namespaceName = $node->setAttribute(Attribute::NAMESPACE_NAME, $this->namespaceName);
+$namespaceName = $node->setAttribute(MetadataAttribute::NAMESPACE_NAME, $this->namespaceName);
 
 // instance of "PhpParser\Node\Stmt\Namespace_" 
-$namespaceNode = $node->setAttribute(Attribute::NAMESPACE_NODE, $this->namespaceNode);
+$namespaceNode = $node->setAttribute(MetadataAttribute::NAMESPACE_NODE, $this->namespaceNode);
 
 // instances of "PhpParser\Node\Stmt\Use_"
-$useNodes = $node->setAttribute(Attribute::USE_NODES, $this->useNodes);
+$useNodes = $node->setAttribute(MetadataAttribute::USE_NODES, $this->useNodes);
 ```
 
 #### Classes
@@ -70,16 +70,16 @@ $useNodes = $node->setAttribute(Attribute::USE_NODES, $this->useNodes);
 ```php
 <?php declare(strict_types=1);
 
-use Rector\Node\Attribute;
+use Rector\NodeTypeResolver\Node\MetadataAttribute;
 
 // string name of current class
-$className = $node->getAttribute(Attribute::CLASS_NAME);
+$className = $node->getAttribute(MetadataAttribute::CLASS_NAME);
 
 // instance of "PhpParser\Node\Stmt\Class_"
-$classNode = $node->getAttribute(Attribute::CLASS_NODE);
+$classNode = $node->getAttribute(MetadataAttribute::CLASS_NODE);
 
 // string name of current class
-$parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
+$parentClassName = $node->getAttribute(MetadataAttribute::PARENT_CLASS_NAME);
 ```
 
 #### Methods
@@ -87,18 +87,17 @@ $parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
 ```php
 <?php declare(strict_types=1);
 
-use Rector\Node\Attribute;
+use Rector\NodeTypeResolver\Node\MetadataAttribute;
 
 // string name of current method
-$methodName = $node->getAttribute(Attribute::METHOD_NAME);
+$methodName = $node->getAttribute(MetadataAttribute::METHOD_NAME);
 
 // instance of "PhpParser\Node\Stmt\ClassMethod"
-$methodNode = $node->getAttribute(Attribute::METHOD_NODE);
+$methodNode = $node->getAttribute(MetadataAttribute::METHOD_NODE);
 
 // string name of current method call ($this->get => "get")
-$methodCallName = $node->getAttribute(Attribute::METHOD_NAME);
+$methodCallName = $node->getAttribute(MetadataAttribute::METHOD_NAME);
 ```
-
 
 #### Setup
 
@@ -117,7 +116,9 @@ imports:
 services:
     YourApp\NodeTraverser:
         calls:
-            // @todo depends on NameResolver from PhpParser
+            // @todo depends on NameResolver from PhpParser - or resolve instead of it?
+            // @todo maybe add MetadataNodeVisitor and decouple these 2 into services, that would fix
+            // the previous issue
             - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\ClassAndMethodResolver']]
             - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\NamespaceResolver']]        
 ```
@@ -172,12 +173,17 @@ final class NodeTraverserFactory
 ```php
 <?php declare(strict_types=1);
 
+use Rector\NodeTypeResolver\Node\MetadataAttribute;
+
+/** @var PhpParser\NodeTraverser $nodeTraverser */
+$nodeTraverser = ...; // from DI container or manually created
+
 $nodes = $this->parser->parseFile(...);
 $nodes = $nodeTraverser->traverse($nodes);
 
-/** @var \PhpParser\Node $node */
+/** @var PhpParser\Node $node */
 foreach ($nodes as $node) {
-    $className = $node->getAttribute(Attributes::CLASS_NAME);
+    $className = $node->getAttribute(MetadataAttribute::CLASS_NAME);
     var_dump($className);
 }
 ```

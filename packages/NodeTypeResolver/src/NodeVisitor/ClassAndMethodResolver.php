@@ -12,19 +12,11 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Node\Attribute;
+use Rector\NodeTypeResolver\Node\MetadataAttribute;
 
 /**
  * @todo should be checked by CS for the "NodeVisitor" suffix
  * it's confusing otherwise
- *
- * Adds attributes to all nested nodes:
- *
- * - @see Attribute::CLASS_NAME with current class name
- * - @see Attribute::CLASS_NODE with current class node
- * - @see Attribute::PARENT_CLASS_NAME with current class node
- * - @see Attribute::METHOD_NAME with current method name
- * - @see Attribute::METHOD_NODE with current method node
- * - @see Attribute::METHOD_CALL_NAME with current method call
  */
 final class ClassAndMethodResolver extends NodeVisitorAbstract
 {
@@ -89,8 +81,8 @@ final class ClassAndMethodResolver extends NodeVisitorAbstract
             $this->className = $node->namespacedName->toString();
         }
 
-        $node->setAttribute(Attribute::CLASS_NODE, $this->classNode);
-        $node->setAttribute(Attribute::CLASS_NAME, $this->className);
+        $node->setAttribute(MetadataAttribute::CLASS_NODE, $this->classNode);
+        $node->setAttribute(MetadataAttribute::CLASS_NAME, $this->className);
 
         if ($this->classNode instanceof Class_) {
             $this->setParentClassName($this->classNode, $node);
@@ -104,12 +96,11 @@ final class ClassAndMethodResolver extends NodeVisitorAbstract
         }
 
         $parentClassResolvedName = $classNode->extends->getAttribute(Attribute::RESOLVED_NAME);
-
         if ($parentClassResolvedName instanceof FullyQualified) {
             $parentClassResolvedName = $parentClassResolvedName->toString();
         }
 
-        $node->setAttribute(Attribute::PARENT_CLASS_NAME, $parentClassResolvedName);
+        $node->setAttribute(MetadataAttribute::PARENT_CLASS_NAME, $parentClassResolvedName);
     }
 
     private function processMethod(Node $node): void
@@ -123,8 +114,8 @@ final class ClassAndMethodResolver extends NodeVisitorAbstract
             $this->methodCallName = $node->name->toString();
         }
 
-        $node->setAttribute(Attribute::METHOD_NAME, $this->methodName);
-        $node->setAttribute(Attribute::METHOD_NODE, $this->methodNode);
-        $node->setAttribute(Attribute::METHOD_CALL_NAME, $this->methodCallName);
+        $node->setAttribute(MetadataAttribute::METHOD_NAME, $this->methodName);
+        $node->setAttribute(MetadataAttribute::METHOD_NODE, $this->methodNode);
+        $node->setAttribute(MetadataAttribute::METHOD_CALL_NAME, $this->methodCallName);
     }
 }

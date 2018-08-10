@@ -8,8 +8,8 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Builder\Class_\VariableInfo;
 use Rector\Configuration\Rector\Architecture\DependencyInjection\VariablesToPropertyFetchCollection;
-use Rector\Node\Attribute;
 use Rector\Node\PropertyFetchNodeFactory;
+use Rector\NodeTypeResolver\Node\MetadataAttribute;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -134,12 +134,12 @@ CODE_SAMPLE
 
     private function isInControllerActionMethod(Node $node): bool
     {
-        if (! Strings::endsWith((string) $node->getAttribute(Attribute::CLASS_NAME), 'Controller')) {
+        if (! Strings::endsWith((string) $node->getAttribute(MetadataAttribute::CLASS_NAME), 'Controller')) {
             return false;
         }
 
         /** @var ClassMethod|null $methodNode */
-        $methodNode = $node->getAttribute(Attribute::METHOD_NODE);
+        $methodNode = $node->getAttribute(MetadataAttribute::METHOD_NODE);
         if ($methodNode === null) {
             return false;
         }

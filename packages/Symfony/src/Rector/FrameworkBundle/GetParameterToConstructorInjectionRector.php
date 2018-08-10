@@ -7,9 +7,9 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Naming\PropertyNaming;
-use Rector\Node\Attribute;
 use Rector\Node\PropertyFetchNodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
+use Rector\NodeTypeResolver\Node\MetadataAttribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -112,7 +112,7 @@ CODE_SAMPLE
         $propertyName = $this->propertyNaming->underscoreToName($parameterName);
 
         $this->classPropertyCollector->addPropertyForClass(
-            (string) $methodCallNode->getAttribute(Attribute::CLASS_NAME),
+            (string) $methodCallNode->getAttribute(MetadataAttribute::CLASS_NAME),
             ['string'], // @todo: resolve type from container provider? see parameter autowire compiler pass
             $propertyName
         );

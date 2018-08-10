@@ -4,8 +4,8 @@ namespace Rector\Rector\Visibility;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassConst;
-use Rector\Node\Attribute;
 use Rector\NodeModifier\VisibilityModifier;
+use Rector\NodeTypeResolver\Node\MetadataAttribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -79,11 +79,11 @@ CODE_SAMPLE
         }
 
         // doesn't have a parent class
-        if (! $node->hasAttribute(Attribute::PARENT_CLASS_NAME)) {
+        if (! $node->hasAttribute(MetadataAttribute::PARENT_CLASS_NAME)) {
             return false;
         }
 
-        $nodeParentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
+        $nodeParentClassName = $node->getAttribute(MetadataAttribute::PARENT_CLASS_NAME);
         if (! isset($this->constantToVisibilityByClass[$nodeParentClassName])) {
             return false;
         }
@@ -108,7 +108,7 @@ CODE_SAMPLE
 
     private function resolveNewVisibilityForNode(ClassConst $classConstantNode): string
     {
-        $nodeParentClassName = $classConstantNode->getAttribute(Attribute::PARENT_CLASS_NAME);
+        $nodeParentClassName = $classConstantNode->getAttribute(MetadataAttribute::PARENT_CLASS_NAME);
         $constantName = $classConstantNode->consts[0]->name->toString();
 
         return $this->constantToVisibilityByClass[$nodeParentClassName][$constantName];
