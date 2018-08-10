@@ -109,18 +109,14 @@ imports:
     - { resource: 'vendor/rector/node-type-resolver/config/services.yml' }
 ```
 
-2. Add NodeVisitors to your NodeTraverse in config  
+2. Add NodeVisitor to your NodeTraverse in config  
 
 ```yaml
 # your-app/config.yml
 services:
     YourApp\NodeTraverser:
         calls:
-            // @todo depends on NameResolver from PhpParser - or resolve instead of it?
-            // @todo maybe add MetadataNodeVisitor and decouple these 2 into services, that would fix
-            // the previous issue
-            - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\ClassAndMethodResolver']]
-            - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\NamespaceResolver']]        
+            - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\MetadataNodeVisitor']]
 ```
 
 or if you create NodeTraverser in a factory:
@@ -131,34 +127,24 @@ or if you create NodeTraverser in a factory:
 namespace YourApp;
 
 use PhpParser\NodeTraverser;
-use Rector\NodeTypeResolver\NodeVisitor\ClassAndMethodResolver;
-use Rector\NodeTypeResolver\NodeVisitor\NamespaceResolver;
+use Rector\NodeTypeResolver\NodeVisitor\MetadataNodeVisitor;
 
 final class NodeTraverserFactory
 {
     /**
-     * @var ClassAndMethodResolver
+     * @var MetadataNodeVisitor  
      */
-    private $classAndMethodResolver;
+    private $metadataNodeVisitor;
     
-    /**
-     * @var NamespaceResolver  
-     */
-    private $namespaceResolver;
-    
-    public function __construct(
-        ClassAndMethodResolver $classAndMethodResolver, 
-        NamespaceResolver $namespaceResolver
-    ) {
-        $this->classAndMethodResolver = $classAndMethodResolver;
-        $this->namespaceResolver = $namespaceResolver;
+    public function __construct(MetadataNodeVisitor $metadataNodeVisitor)
+    {
+        $this->metadataNodeVisitor = $metadataNodeVisitor;
     }
     
     public function create(): NodeTraverser
     {
         $nodeTraverser = new NodeTraverser();
-        $nodeTraverser->addVisitor($this->namespaceResolver);
-        $nodeTraverser->addVisitor($this->classAndMethodResolver);
+        $nodeTraverser->addVisitor($this->metadataNodeVisitor);
         
         // your own NodeVisitors
         $nodeTraverser->addVisitor(...);

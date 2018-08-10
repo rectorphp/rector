@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\NodeTypeResolver\NodeVisitor;
+namespace Rector\NodeTypeResolver\Metadata;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
@@ -10,15 +10,11 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use PhpParser\NodeVisitorAbstract;
 use Rector\Node\Attribute;
+use Rector\NodeTypeResolver\Contract\Metadata\NodeDecoratorInterface;
 use Rector\NodeTypeResolver\Node\MetadataAttribute;
 
-/**
- * @todo should be checked by CS for the "NodeVisitor" suffix
- * it's confusing otherwise
- */
-final class ClassAndMethodResolverNodeVisitor extends NodeVisitorAbstract
+final class ClassAndMethodNodeDecorator implements NodeDecoratorInterface
 {
     /**
      * @var ClassLike|null
@@ -45,19 +41,7 @@ final class ClassAndMethodResolverNodeVisitor extends NodeVisitorAbstract
      */
     private $methodCallName;
 
-    /**
-     * @param Node[] $nodes
-     */
-    public function afterTraverse(array $nodes): void
-    {
-        $this->classNode = null;
-        $this->className = null;
-        $this->methodName = null;
-        $this->methodNode = null;
-        $this->methodCallName = null;
-    }
-
-    public function enterNode(Node $node): void
+    public function decorateNode(Node $node): void
     {
         if ($node instanceof Class_ && $node->isAnonymous()) {
             return;
@@ -65,13 +49,19 @@ final class ClassAndMethodResolverNodeVisitor extends NodeVisitorAbstract
 
         $this->processClass($node);
         $this->processMethod($node);
-    }
 
-    public function leaveNode(Node $node): void
-    {
         if ($node instanceof Expression) {
             $this->methodCallName = null;
         }
+    }
+
+    public function reset(): void
+    {
+        $this->classNode = null;
+        $this->className = null;
+        $this->methodName = null;
+        $this->methodNode = null;
+        $this->methodCallName = null;
     }
 
     private function processClass(Node $node): void
