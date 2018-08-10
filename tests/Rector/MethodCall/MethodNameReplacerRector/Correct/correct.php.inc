@@ -2,7 +2,7 @@
 
 use Rector\Tests\Rector\MethodCall\MethodNameReplacerRector\Source\AbstractType;
 
-class MyType extends AbstractType
+class MyCustomType extends AbstractType
 {
     public function configureOptions(SomeResolver $resolver)
     {

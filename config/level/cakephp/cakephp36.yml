@@ -4,10 +4,10 @@ services:
     Rector\Rector\MethodCall\MethodNameReplacerRector:
         $perClassOldToNewMethods:
             'Cake\ORM\Table':
-                 'association': 'getAssociation'
+                'association': 'getAssociation'
             'Cake\Validation\ValidationSet':
-                  'isPresenceRequired': 'requirePresence'
-                  'isEmptyAllowed': 'allowEmpty'
+                'isPresenceRequired': 'requirePresence'
+                'isEmptyAllowed': 'allowEmpty'
 
     Rector\Rector\Property\PropertyToMethodRector:
         $perClassPropertyToMethods:
