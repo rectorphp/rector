@@ -1,0 +1,5 @@
+services:
+    Rector\Rector\Function_\FunctionToMethodCallRector:
+        $functionToMethodCall:
+            'GuzzleHttp\json_decode': ['GuzzleHttp\Utils', 'jsonDecode']
+            'GuzzleHttp\get_path': ['GuzzleHttp\Utils': 'getPath']
