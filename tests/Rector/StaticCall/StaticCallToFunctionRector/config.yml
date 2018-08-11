@@ -1,0 +1,4 @@
+services:
+    Rector\Rector\StaticCall\StaticCallToFunctionRector:
+        $staticCallToFunction:
+            Rector\Tests\Rector\StaticCall\StaticCallToFunctionRector\Source\SomeOldStaticClass::render: 'view'
