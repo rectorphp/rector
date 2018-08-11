@@ -2,3 +2,4 @@ services:
     Rector\Rector\Function_\FunctionToStaticCallRector:
         $functionToMethodCall:
             'view': ['SomeStaticClass', 'render']
+            'SomeNamespaced\view': ['AnotherStaticClass', 'render']
