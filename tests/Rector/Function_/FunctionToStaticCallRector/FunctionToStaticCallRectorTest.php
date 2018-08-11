@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Function_\FunctionToMethodCallRector;
+namespace Rector\Tests\Rector\Function_\FunctionToStaticCallRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
@@ -8,7 +8,7 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 /**
  * @see \Rector\Rector\Function_\FunctionToStaticCallRector
  */
-final class FunctionToMethodCallRectorTest extends AbstractRectorTestCase
+final class FunctionToStaticCallRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()
