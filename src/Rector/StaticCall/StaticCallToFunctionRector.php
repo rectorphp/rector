@@ -14,7 +14,7 @@ use Rector\RectorDefinition\RectorDefinition;
 final class StaticCallToFunctionRector extends AbstractRector
 {
     /**
-     * @var string[][]
+     * @var string[]
      */
     private $staticCallToFunction = [];
 
