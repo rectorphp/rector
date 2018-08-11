@@ -31,8 +31,9 @@
 Replaces doctrine alias with class.
 
 ```diff
--$em->getRepository("AppBundle:Post");
-+$em->getRepository(\App\Entity\Post::class);
+ $entityManager = new Doctrine\ORM\EntityManager();
+-$entityManager->getRepository("AppBundle:Post");
++$entityManager->getRepository(\App\Entity\Post::class);
 ```
 
 ## PHPUnit
@@ -332,7 +333,7 @@ Turns old string `var` to `var->name` sub-variable in Node of PHP-Parser
 Turns node string names to Identifier object in php-parser
 
 ```diff
- $constNode = new \PhpParser\Node\Const_;
+ $constNode = new PhpParser\Node\Const_;
 -$name = $constNode->name;
 +$name = $constNode->name->toString();'
 ```
@@ -492,8 +493,9 @@ Turns old default value to parameter in ContinerBuilder->build() method in DI in
 Adds `$form->isSubmitted()` validatoin to all `$form->isValid()` calls in Form in Symfony
 
 ```diff
--if ($form->isValid()) { ... };
-+if ($form->isSubmitted() && $form->isValid()) { ... };
+-if ($form->isValid()) {
++if ($form->isSubmitted() && $form->isValid()) {
+ }
 ```
 
 ### `OptionNameRector`
@@ -503,6 +505,7 @@ Adds `$form->isSubmitted()` validatoin to all `$form->isValid()` calls in Form i
 Turns old option names to new ones in FormTypes in Form in Symfony
 
 ```diff
+ $builder = new FormBuilder;
 -$builder->add("...", ["precision" => "...", "virtual" => "..."];
 +$builder->add("...", ["scale" => "...", "inherit_data" => "..."];
 ```
@@ -592,8 +595,8 @@ Turns fetching of dependencies via `$this->get()` to constructor injection in Co
 Turns fetching of dependencies via `$container->get()` in ContainerAware to constructor injection in Command and Controller in Symfony
 
 ```diff
--class MyCommand extends ContainerAwareCommand
-+class MyCommand extends Command
+-final class SomeCommand extends ContainerAwareCommand
++final class SomeCommand extends Command
  {
 +    public function __construct(SomeService $someService)
 +    {
@@ -682,13 +685,13 @@ Turns true value to `Url::CHECK_DNS_TYPE_ANY` in Validator in Symfony.
 Adds new `$format` argument in `VarDumperTestTrait->assertDumpEquals()` in Validator in Symfony.
 
 ```diff
--VarDumperTestTrait->assertDumpEquals($dump, $data, $mesage = "");
-+VarDumperTestTrait->assertDumpEquals($dump, $data, $context = null, $mesage = "");
+-$varDumperTestTrait->assertDumpEquals($dump, $data, $mesage = "");
++$varDumperTestTrait->assertDumpEquals($dump, $data, $context = null, $mesage = "");
 ```
 
 ```diff
--VarDumperTestTrait->assertDumpMatchesFormat($dump, $format, $mesage = "");
-+VarDumperTestTrait->assertDumpMatchesFormat($dump, $format, $context = null,  $mesage = "");
+-$varDumperTestTrait->assertDumpMatchesFormat($dump, $format, $mesage = "");
++$varDumperTestTrait->assertDumpMatchesFormat($dump, $format, $context = null,  $mesage = "");
 ```
 
 ## Symfony\Yaml
@@ -758,8 +761,11 @@ services:
 ```diff
  class SomeTest extends PHPUnit\Framework\TestCase
  {
--    /** @test */
-+    /** @scenario */
+-    /**
+-     * @test
++    /**
++     * @scenario
+      */
      public function someMethod()
      {
      }
@@ -1142,7 +1148,7 @@ services:
 
 - class: `Rector\Rector\MagicDisclosure\ToStringToMethodCallRector`
 
-Turns defined __toString() to specific method calls.
+Turns defined code uses of "__toString()" method  to specific method calls.
 
 ```yaml
 services:
@@ -1155,6 +1161,7 @@ services:
 ↓
 
 ```diff
+ $someValue = new SomeObject;
 -$result = (string) $someValue;
 -$result = $someValue->__toString();
 +$result = $someValue->someMethod();
@@ -1178,6 +1185,7 @@ services:
 ↓
 
 ```diff
+ $container = new SomeContainer;
 -$container->someService = $someService;
 +$container->setService("someService", $someService);
 ```
@@ -1193,6 +1201,7 @@ services:
 ↓
 
 ```diff
+ $container = new SomeContainer;
 -$someService = $container->someService;
 +$someService = $container->getService("someService");
 ```
@@ -1311,9 +1320,15 @@ services:
 +$someObject->newMethod();
 ```
 
+### `StaticMethodNameReplacerRector`
+
+- class: `Rector\Rector\MethodCall\StaticMethodNameReplacerRector`
+
+Turns method names to new ones.
+
 ```yaml
 services:
-    Rector\Rector\MethodCall\MethodNameReplacerRector:
+    Rector\Rector\MethodCall\StaticMethodNameReplacerRector:
         $perClassOldToNewMethods:
             SomeClass:
                 oldMethod:
@@ -1359,15 +1374,16 @@ Replaces defined Pseudo_Namespaces by Namespace\Ones.
 ```yaml
 services:
     Rector\Rector\Namespace_\PseudoNamespaceToNamespaceRector:
-        $configuraion:
+        $pseudoNamespacePrefixes:
             - Some_
+        $excludedClasses: {  }
 ```
 
 ↓
 
 ```diff
--$someServie = Some_Object;
-+$someServie = Some\Object;
+-$someService = Some_Object;
++$someService = Some\Object;
 ```
 
 ## Property

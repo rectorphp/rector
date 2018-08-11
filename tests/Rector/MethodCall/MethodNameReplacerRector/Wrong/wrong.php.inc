@@ -1,3 +1,19 @@
 <?php declare (strict_types=1);
 
-Nette\Utils\Html::add('someContent');
+use Rector\Tests\Rector\MethodCall\MethodNameReplacerRector\Source\AbstractType;
+
+class MyCustomType extends AbstractType
+{
+    public function setDefaultOptions(SomeResolver $resolver)
+    {
+        parent::setDefaultOptions($resolver);
+    }
+}
+
+class AnotherClass
+{
+    public function setDefaultOptions(SomeResolver $resolver)
+    {
+        parent::setDefaultOptions($resolver);
+    }
+}

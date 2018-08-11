@@ -3,25 +3,22 @@
 namespace Rector\Rector\MethodCall;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
 use Rector\Builder\IdentifierRenamer;
 use Rector\Node\Attribute;
-use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeAnalyzer\MethodNameAnalyzer;
+use Rector\NodeAnalyzer\StaticMethodCallAnalyzer;
 use Rector\NodeTypeResolver\Node\MetadataAttribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 use SomeClass;
 
-final class MethodNameReplacerRector extends AbstractRector
+final class StaticMethodNameReplacerRector extends AbstractRector
 {
     /**
-     * class => [
-     *     oldMethod => newMethod
-     * ]
-     *
      * @var string[][]
      */
     private $perClassOldToNewMethods = [];
@@ -32,9 +29,9 @@ final class MethodNameReplacerRector extends AbstractRector
     private $activeTypes = [];
 
     /**
-     * @var MethodCallAnalyzer
+     * @var StaticMethodCallAnalyzer
      */
-    private $methodCallAnalyzer;
+    private $staticMethodCallAnalyzer;
 
     /**
      * @var MethodNameAnalyzer
@@ -51,12 +48,12 @@ final class MethodNameReplacerRector extends AbstractRector
      */
     public function __construct(
         array $perClassOldToNewMethods,
-        MethodCallAnalyzer $methodCallAnalyzer,
+        StaticMethodCallAnalyzer $staticMethodCallAnalyzer,
         MethodNameAnalyzer $methodNameAnalyzer,
         IdentifierRenamer $identifierRenamer
     ) {
         $this->perClassOldToNewMethods = $perClassOldToNewMethods;
-        $this->methodCallAnalyzer = $methodCallAnalyzer;
+        $this->staticMethodCallAnalyzer = $staticMethodCallAnalyzer;
         $this->methodNameAnalyzer = $methodNameAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
     }
@@ -65,20 +62,12 @@ final class MethodNameReplacerRector extends AbstractRector
     {
         return new RectorDefinition('Turns method names to new ones.', [
             new ConfiguredCodeSample(
-                <<<'CODE_SAMPLE'
-$someObject = new SomeClass;
-$someObject->oldMethod();
-CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
-$someObject = new SomeClass;
-$someObject->newMethod();
-CODE_SAMPLE
-                ,
+                'SomeClass::oldStaticMethod();',
+                'SomeClass::newStaticMethod();',
                 [
                     '$perClassOldToNewMethods' => [
                         SomeClass::class => [
-                            'oldMethod' => 'newMethod',
+                            'oldMethod' => [SomeClass::class, 'newMethod'],
                         ],
                     ],
                 ]
@@ -90,7 +79,7 @@ CODE_SAMPLE
     {
         $this->activeTypes = [];
 
-        $matchedTypes = $this->methodCallAnalyzer->matchTypes($node, $this->getClasses());
+        $matchedTypes = $this->staticMethodCallAnalyzer->matchTypes($node, $this->getClasses());
         if ($matchedTypes) {
             $this->activeTypes = $matchedTypes;
 
@@ -101,7 +90,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Identifier|MethodCall $node
+     * @param Identifier|StaticCall $node
      */
     public function refactor(Node $node): ?Node
     {
@@ -119,6 +108,10 @@ CODE_SAMPLE
             return $node;
         }
 
+        if ($node instanceof StaticCall && $this->isClassRename($oldToNewMethods)) {
+            return $this->resolveClassRename($node, $oldToNewMethods, $methodName);
+        }
+
         $this->identifierRenamer->renameNode($node, $oldToNewMethods[$methodName]);
 
         return $node;
@@ -130,6 +123,16 @@ CODE_SAMPLE
     private function getClasses(): array
     {
         return array_keys($this->perClassOldToNewMethods);
+    }
+
+    /**
+     * @param mixed[] $oldToNewMethods
+     */
+    private function isClassRename(array $oldToNewMethods): bool
+    {
+        $firstMethodConfiguration = current($oldToNewMethods);
+
+        return is_array($firstMethodConfiguration);
     }
 
     /**
@@ -157,7 +160,7 @@ CODE_SAMPLE
         }
 
         $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
-        if ($parentNode instanceof MethodCall) {
+        if ($parentNode instanceof StaticCall) {
             return false;
         }
 
@@ -190,5 +193,18 @@ CODE_SAMPLE
         $node->name = $oldToNewMethods[$methodName];
 
         return $node;
+    }
+
+    /**
+     * @param string[] $oldToNewMethods
+     */
+    private function resolveClassRename(StaticCall $staticCallNode, array $oldToNewMethods, string $methodName): Node
+    {
+        [$newClass, $newMethod] = $oldToNewMethods[$methodName];
+
+        $staticCallNode->class = new Name($newClass);
+        $this->identifierRenamer->renameNode($staticCallNode, $newMethod);
+
+        return $staticCallNode;
     }
 }
