@@ -19,31 +19,14 @@ final class InArrayAndArrayKeysToArrayKeyExistsRector extends AbstractRector
         );
     }
 
+    public function getNodeType(): string
+    {
+        return FuncCall::class;
+    }
+
+    /** @todo remove */
     public function isCandidate(Node $node): bool
     {
-        if (! $this->isInArrayFunction($node)) {
-            return false;
-        }
-
-        /** @var FuncCall $inArrayFunction */
-        $inArrayFunction = $node;
-
-        $secondArgument = $inArrayFunction->args[1]->value;
-        if (! $secondArgument instanceof FuncCall) {
-            return false;
-        }
-
-        /** @var Name $functionName */
-        $functionName = $secondArgument->name;
-
-        if ($functionName->toString() !== 'array_keys') {
-            return false;
-        }
-
-        if (count($secondArgument->args) > 1) {
-            return false;
-        }
-
         return true;
     }
 
@@ -52,6 +35,29 @@ final class InArrayAndArrayKeysToArrayKeyExistsRector extends AbstractRector
      */
     public function refactor(Node $funcCall): ?Node
     {
+        if (! $this->isInArrayFunction($funcCall)) {
+            return null;
+        }
+
+        /** @var FuncCall $inArrayFunction */
+        $inArrayFunction = $funcCall;
+
+        $secondArgument = $inArrayFunction->args[1]->value;
+        if (! $secondArgument instanceof FuncCall) {
+            return null;
+        }
+
+        /** @var Name $functionName */
+        $functionName = $secondArgument->name;
+
+        if ($functionName->toString() !== 'array_keys') {
+            return null;
+        }
+
+        if (count($secondArgument->args) > 1) {
+            return null;
+        }
+
         [$key, $array] = $funcCall->args;
 
         $array = $array->value->args[0];
@@ -63,14 +69,13 @@ final class InArrayAndArrayKeysToArrayKeyExistsRector extends AbstractRector
         return $funcCall;
     }
 
-    private function isInArrayFunction(Node $node): bool
+    /**
+     * @param FuncCall $funcCall
+     */
+    private function isInArrayFunction(Node $funcCall): bool
     {
-        if (! $node instanceof FuncCall) {
-            return false;
-        }
-
         /** @var Name $funcCallName */
-        $funcCallName = $node->name;
+        $funcCallName = $funcCall->name;
 
         if (! $funcCallName instanceof Name) {
             return false;
