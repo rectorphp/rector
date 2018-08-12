@@ -42,7 +42,7 @@ final class StaticCallToFunctionRector extends AbstractRector
         return new RectorDefinition('Turns static call to function call.', [
             new ConfiguredCodeSample(
                 'OldClass::oldMethod("args");',
-                'new_functoin("args");',
+                'new_function("args");',
                 [
                     '$staticCallToFunction' => [
                         'OldClass::oldMethod' => 'new_function',

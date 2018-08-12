@@ -1,0 +1,4 @@
+services:
+    Rector\Rector\Function_\FunctionReplaceRector:
+        $oldFunctionToNewFunction:
+            'view': 'Laravel\Templating\render'
