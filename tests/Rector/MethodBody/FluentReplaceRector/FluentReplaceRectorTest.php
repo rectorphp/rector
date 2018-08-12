@@ -5,6 +5,10 @@ namespace Rector\Tests\Rector\MethodBody\FluentReplaceRector;
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
+/**
+ * @see \Rector\Rector\MethodBody\FluentReplaceRector
+ * @see \Rector\Rector\MethodBody\ReturnThisRemoveRector
+ */
 final class FluentReplaceRectorTest extends AbstractRectorTestCase
 {
     /**

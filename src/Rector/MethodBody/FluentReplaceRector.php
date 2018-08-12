@@ -4,11 +4,8 @@ namespace Rector\Rector\MethodBody;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt\Return_;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
-use Rector\NodeTypeResolver\Node\MetadataAttribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -17,6 +14,7 @@ use Rector\RectorDefinition\RectorDefinition;
  * Inspiration:
  * - https://ocramius.github.io/blog/fluent-interfaces-are-evil/
  * - http://www.yegor256.com/2018/03/13/fluent-interfaces.html
+ * - https://github.com/guzzle/guzzle/commit/668209c895049759377593eed129e0949d9565b7#diff-810cdcfdd8a6b9e1fc0d1e96d7786874
  */
 final class FluentReplaceRector extends AbstractRector
 {
@@ -43,7 +41,7 @@ final class FluentReplaceRector extends AbstractRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Turns fluent interfaces to classic ones.', [
+        return new RectorDefinition('Turns fluent interface calls to classic ones.', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass
@@ -69,10 +67,12 @@ class SomeClass
 {
     public function someFunction()
     {
+        return $this;
     }
 
     public function otherFunction()
     {
+        return $this;
     }
 }
 
@@ -84,50 +84,26 @@ CODE_SAMPLE
         ]);
     }
 
-    public function isCandidate(Node $node): bool
+    public function getNodeType(): string
     {
-        // @todo this run has to be first, dual run?
-        if ($node instanceof Return_) {
-            if (! $node->expr instanceof Variable) {
-                return false;
-            }
-
-            return $node->expr->name === 'this';
-        }
-
-        if ($node instanceof MethodCall) {
-            return $this->isMethodCallCandidate($node);
-        }
-
-        return false;
+        return MethodCall::class;
     }
 
     /**
-     * @param Return_|MethodCall $node
+     * @param MethodCall $methodCallNode
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $methodCallNode): ?Node
     {
-        if ($node instanceof Return_) {
-            $this->removeNode = true;
-
-            $className = $node->getAttribute(MetadataAttribute::CLASS_NAME);
-            $methodName = $node->getAttribute(MetadataAttribute::METHOD_NAME);
-
-            $this->relatedTypesAndMethods[$className][] = $methodName;
-
-            return null;
+        if (! $this->isMethodCallCandidate($methodCallNode)) {
+            return $methodCallNode;
         }
 
-        if ($node instanceof MethodCall) {
-            /** @var MethodCall $innerMethodCallNode */
-            $innerMethodCallNode = $node->var;
+        /** @var MethodCall $innerMethodCallNode */
+        $innerMethodCallNode = $methodCallNode->var;
 
-            $this->decoupleMethodCall($node, $innerMethodCallNode);
+        $this->decoupleMethodCall($methodCallNode, $innerMethodCallNode);
 
-            return $innerMethodCallNode;
-        }
-
-        return $node;
+        return $innerMethodCallNode;
     }
 
     private function isMethodCallCandidate(MethodCall $methodCallNode): bool
@@ -136,6 +112,8 @@ CODE_SAMPLE
         if (! $methodCallNode->var instanceof MethodCall) {
             return false;
         }
+
+        // @todo collector service
 
         foreach ($this->relatedTypesAndMethods as $type => $methods) {
             if (! $this->methodCallAnalyzer->isTypeAndMethods($methodCallNode->var, $type, $methods)) {

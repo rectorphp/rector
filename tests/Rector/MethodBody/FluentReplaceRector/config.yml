@@ -1,2 +1,4 @@
 services:
+    # have to be run first
+    Rector\Rector\MethodBody\ReturnThisRemoveRector: ~
     Rector\Rector\MethodBody\FluentReplaceRector: ~
