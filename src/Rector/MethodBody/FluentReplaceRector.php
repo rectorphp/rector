@@ -4,6 +4,7 @@ namespace Rector\Rector\MethodBody;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use Rector\Builder\MethodCall\ClearedFluentMethodCollector;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
@@ -19,11 +20,6 @@ use Rector\RectorDefinition\RectorDefinition;
 final class FluentReplaceRector extends AbstractRector
 {
     /**
-     * @var string[][]
-     */
-    private $relatedTypesAndMethods = [];
-
-    /**
      * @var MethodCallAnalyzer
      */
     private $methodCallAnalyzer;
@@ -33,10 +29,19 @@ final class FluentReplaceRector extends AbstractRector
      */
     private $methodCallNodeFactory;
 
-    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, MethodCallNodeFactory $methodCallNodeFactory)
-    {
+    /**
+     * @var ClearedFluentMethodCollector
+     */
+    private $fluentMethodCollector;
+
+    public function __construct(
+        MethodCallAnalyzer $methodCallAnalyzer,
+        MethodCallNodeFactory $methodCallNodeFactory,
+        ClearedFluentMethodCollector $fluentMethodCollector
+    ) {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->methodCallNodeFactory = $methodCallNodeFactory;
+        $this->fluentMethodCollector = $fluentMethodCollector;
     }
 
     public function getDefinition(): RectorDefinition
@@ -113,9 +118,7 @@ CODE_SAMPLE
             return false;
         }
 
-        // @todo collector service
-
-        foreach ($this->relatedTypesAndMethods as $type => $methods) {
+        foreach ($this->fluentMethodCollector->getMethodsByClass() as $type => $methods) {
             if (! $this->methodCallAnalyzer->isTypeAndMethods($methodCallNode->var, $type, $methods)) {
                 continue;
             }

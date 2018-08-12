@@ -5,6 +5,8 @@ namespace Rector\Rector\MethodBody;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Return_;
+use Rector\Builder\MethodCall\ClearedFluentMethodCollector;
+use Rector\NodeTypeResolver\Node\MetadataAttribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -17,6 +19,16 @@ use Rector\RectorDefinition\RectorDefinition;
  */
 final class ReturnThisRemoveRector extends AbstractRector
 {
+    /**
+     * @var ClearedFluentMethodCollector
+     */
+    private $fluentMethodCollector;
+
+    public function __construct(ClearedFluentMethodCollector $fluentMethodCollector)
+    {
+        $this->fluentMethodCollector = $fluentMethodCollector;
+    }
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Removes "return $this;" form fluent interfaces.', [
@@ -71,6 +83,12 @@ CODE_SAMPLE
         }
 
         $this->removeNode = true;
+
+        /** @var string $className */
+        $className = $returnNode->getAttribute(MetadataAttribute::CLASS_NAME);
+        /** @var string $methodName */
+        $methodName = $returnNode->getAttribute(MetadataAttribute::METHOD_NAME);
+        $this->fluentMethodCollector->addClassAndMethod($className, $methodName);
 
         return null;
     }
