@@ -736,6 +736,7 @@ session > use_strict_mode is true by default and can be removed
 - [Namespace_](#namespace_)
 - [Property](#property)
 - [RepositoryAsService](#repositoryasservice)
+- [StaticCall](#staticcall)
 - [Typehint](#typehint)
 - [ValueObjectRemover](#valueobjectremover)
 - [Visibility](#visibility)
@@ -1116,6 +1117,48 @@ services:
 ```diff
 -view("...", []);
 +$this->render("...", []);
+```
+
+### `FunctionToStaticCallRector`
+
+- class: `Rector\Rector\Function_\FunctionToStaticCallRector`
+
+Turns defined function call to static method call.
+
+```yaml
+services:
+    Rector\Rector\Function_\FunctionToStaticCallRector:
+        $functionToStaticCall:
+            view:
+                - SomeStaticClass
+                - render
+```
+
+↓
+
+```diff
+-view("...", []);
++SomeClass::render("...", []);
+```
+
+### `FunctionReplaceRector`
+
+- class: `Rector\Rector\Function_\FunctionReplaceRector`
+
+Turns defined function call new one.
+
+```yaml
+services:
+    Rector\Rector\Function_\FunctionReplaceRector:
+        $functionToStaticCall:
+            view: Laravel\Templating\render
+```
+
+↓
+
+```diff
+-view("...", []);
++Laravel\Templating\render("...", []);
 ```
 
 ## Interface_
@@ -1518,6 +1561,28 @@ services:
 +        $this->repository = $entityManager->getRepository(\App\Entity\Post::class);
 +    }
  }
+```
+
+## StaticCall
+
+### `StaticCallToFunctionRector`
+
+- class: `Rector\Rector\StaticCall\StaticCallToFunctionRector`
+
+Turns static call to function call.
+
+```yaml
+services:
+    Rector\Rector\StaticCall\StaticCallToFunctionRector:
+        $staticCallToFunction:
+            'OldClass::oldMethod': new_function
+```
+
+↓
+
+```diff
+-OldClass::oldMethod("args");
++new_function("args");
 ```
 
 ## Typehint
