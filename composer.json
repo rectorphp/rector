@@ -25,7 +25,7 @@
     },
     "require-dev": {
         "humbug/php-scoper": "^0.9.1",
-        "phpunit/phpunit": "^7.1",
+        "phpunit/phpunit": "^7.2",
         "slam/php-cs-fixer-extensions": "^1.15",
         "symplify/easy-coding-standard": "^4.7",
         "tracy/tracy": "^2.4"
