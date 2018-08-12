@@ -7,7 +7,15 @@ use PhpParser\NodeVisitor;
 
 interface PhpRectorInterface extends NodeVisitor, RectorInterface
 {
-    public function isCandidate(Node $node): bool;
+    /**
+     * A node this Rector listens to
+     *
+     * @return string
+     */
+//    public function getNodeType(): string
+
+//    @todo remove after swtich to getNodeType()
+    //    public function isCandidate(Node $node): bool;
 
     public function refactor(Node $node): ?Node;
 }

@@ -49,17 +49,11 @@ final class FunctionToStaticCallRector extends AbstractRector
         return FuncCall::class;
     }
 
-    public function isCandidate(Node $node): bool
-    {
-        return true;
-    }
-
+    /**
+     * @param FuncCall $node
+     */
     public function refactor(Node $node): ?Node
     {
-        if (! $node instanceof FuncCall) {
-            return $node;
-        }
-
         // anonymous function
         if (! $node->name instanceof Name) {
             return $node;
