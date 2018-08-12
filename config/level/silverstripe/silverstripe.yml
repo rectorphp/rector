@@ -1,7 +1,5 @@
 # various versions
-
 services:
     # https://github.com/silverstripe/silverstripe-upgrader/issues/76
-    Rector\Rector\Function_\FunctionToStaticCallRector:
-        $functionToStaticCall:
-            defined: 'Environment::getEnv'
+    Rector\Silverstripe\Rector\ConstantToStaticCallRector: ~
+    Rector\Silverstripe\Rector\DefineConstantToStaticCallRector: ~
