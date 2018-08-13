@@ -4,7 +4,7 @@ namespace Rector\NodeTypeResolver\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
-use Rector\NodeTypeResolver\Tests\DependencyInjection\NodeTypeResolverContainerFactory;
+use Rector\NodeTypeResolver\DependencyInjection\NodeTypeResolverContainerFactory;
 
 abstract class AbstractNodeTypeResolverContainerAwareTestCase extends TestCase
 {
@@ -26,7 +26,9 @@ abstract class AbstractNodeTypeResolverContainerAwareTestCase extends TestCase
     public function __construct(?string $name = null, array $data = [], string $dataName = '')
     {
         if (self::$cachedContainer === null) {
-            self::$cachedContainer = (new NodeTypeResolverContainerFactory())->create();
+            self::$cachedContainer = (new NodeTypeResolverContainerFactory())->createWithConfig(
+                __DIR__ . '/config/config.tests.yml'
+            );
         }
 
         $this->container = self::$cachedContainer;

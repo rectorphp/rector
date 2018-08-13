@@ -12,7 +12,7 @@ services:
 
     Rector\NodeTypeResolver\:
         resource: '../'
-        exclude: '../{Contract}'
+        exclude: '../{Contract,DependencyInjection/NodeTypeResolverKernel.php,DependencyInjection/NodeTypeResolverContainerFactory.php}'
 
     Rector\PhpParser\CurrentNodeProvider: ~
 
