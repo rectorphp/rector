@@ -11,12 +11,6 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
-/**
- * Inspiration:
- * - https://ocramius.github.io/blog/fluent-interfaces-are-evil/
- * - http://www.yegor256.com/2018/03/13/fluent-interfaces.html
- * - https://github.com/guzzle/guzzle/commit/668209c895049759377593eed129e0949d9565b7#diff-810cdcfdd8a6b9e1fc0d1e96d7786874
- */
 final class FluentReplaceRector extends AbstractRector
 {
     /**
@@ -32,16 +26,16 @@ final class FluentReplaceRector extends AbstractRector
     /**
      * @var ClearedFluentMethodCollector
      */
-    private $fluentMethodCollector;
+    private $clearedFluentMethodCollector;
 
     public function __construct(
         MethodCallAnalyzer $methodCallAnalyzer,
         MethodCallNodeFactory $methodCallNodeFactory,
-        ClearedFluentMethodCollector $fluentMethodCollector
+        ClearedFluentMethodCollector $clearedFluentMethodCollector
     ) {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->methodCallNodeFactory = $methodCallNodeFactory;
-        $this->fluentMethodCollector = $fluentMethodCollector;
+        $this->clearedFluentMethodCollector = $clearedFluentMethodCollector;
     }
 
     public function getDefinition(): RectorDefinition
@@ -118,7 +112,7 @@ CODE_SAMPLE
             return false;
         }
 
-        foreach ($this->fluentMethodCollector->getMethodsByClass() as $type => $methods) {
+        foreach ($this->clearedFluentMethodCollector->getMethodsByClass() as $type => $methods) {
             if (! $this->methodCallAnalyzer->isTypeAndMethods($methodCallNode->var, $type, $methods)) {
                 continue;
             }

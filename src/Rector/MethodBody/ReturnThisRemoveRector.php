@@ -7,32 +7,46 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Builder\MethodCall\ClearedFluentMethodCollector;
 use Rector\NodeTypeResolver\Node\MetadataAttribute;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use SomeClass;
 
-/**
- * Inspiration:
- * - https://ocramius.github.io/blog/fluent-interfaces-are-evil/
- * - http://www.yegor256.com/2018/03/13/fluent-interfaces.html
- * - https://github.com/guzzle/guzzle/commit/668209c895049759377593eed129e0949d9565b7#diff-810cdcfdd8a6b9e1fc0d1e96d7786874
- */
 final class ReturnThisRemoveRector extends AbstractRector
 {
     /**
      * @var ClearedFluentMethodCollector
      */
-    private $fluentMethodCollector;
+    private $clearedFluentMethodCollector;
 
-    public function __construct(ClearedFluentMethodCollector $fluentMethodCollector)
-    {
-        $this->fluentMethodCollector = $fluentMethodCollector;
+    /**
+     * @var string[]
+     */
+    private $classesToDefluent = [];
+
+    /**
+     * @var NodeTypeResolver
+     */
+    private $nodeTypeResolver;
+
+    /**
+     * @param string[] $classesToDefluent
+     */
+    public function __construct(
+        array $classesToDefluent,
+        ClearedFluentMethodCollector $clearedFluentMethodCollector,
+        NodeTypeResolver $nodeTypeResolver
+    ) {
+        $this->clearedFluentMethodCollector = $clearedFluentMethodCollector;
+        $this->classesToDefluent = $classesToDefluent;
+        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Removes "return $this;" form fluent interfaces.', [
-            new CodeSample(
+        return new RectorDefinition('Removes "return $this;" from *fluent interfaces* for specified classes.', [
+            new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass
 {
@@ -60,6 +74,10 @@ class SomeClass
     }
 }
 CODE_SAMPLE
+                ,
+                [
+                    '$classesToDefluent' => [SomeClass::class],
+                ]
             ),
         ]);
     }
@@ -82,13 +100,18 @@ CODE_SAMPLE
             return $returnNode;
         }
 
+        $thisNodeTypes = $this->nodeTypeResolver->resolve($returnNode->expr);
+        if (! (bool) array_intersect($thisNodeTypes, $this->classesToDefluent)) {
+            return $returnNode;
+        }
+
         $this->removeNode = true;
 
         /** @var string $className */
         $className = $returnNode->getAttribute(MetadataAttribute::CLASS_NAME);
         /** @var string $methodName */
         $methodName = $returnNode->getAttribute(MetadataAttribute::METHOD_NAME);
-        $this->fluentMethodCollector->addClassAndMethod($className, $methodName);
+        $this->clearedFluentMethodCollector->addClassAndMethod($className, $methodName);
 
         return null;
     }
