@@ -5,6 +5,7 @@ namespace Rector\Rector\MethodBody;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Return_;
+use Rector\BetterPhpDocParser\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\Builder\MethodCall\ClearedFluentMethodCollector;
 use Rector\NodeTypeResolver\Node\MetadataAttribute;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -31,16 +32,23 @@ final class ReturnThisRemoveRector extends AbstractRector
     private $nodeTypeResolver;
 
     /**
+     * @var DocBlockAnalyzer
+     */
+    private $docBlockAnalyzer;
+
+    /**
      * @param string[] $classesToDefluent
      */
     public function __construct(
         array $classesToDefluent,
         ClearedFluentMethodCollector $clearedFluentMethodCollector,
-        NodeTypeResolver $nodeTypeResolver
+        NodeTypeResolver $nodeTypeResolver,
+        DocBlockAnalyzer $docBlockAnalyzer
     ) {
         $this->clearedFluentMethodCollector = $clearedFluentMethodCollector;
         $this->classesToDefluent = $classesToDefluent;
         $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->docBlockAnalyzer = $docBlockAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -106,6 +114,9 @@ CODE_SAMPLE
         }
 
         $this->removeNode = true;
+
+        $methodNode = $returnNode->getAttribute(MetadataAttribute::METHOD_NODE);
+        $this->docBlockAnalyzer->removeTagFromNode($methodNode, 'return');
 
         /** @var string $className */
         $className = $returnNode->getAttribute(MetadataAttribute::CLASS_NAME);
