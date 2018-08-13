@@ -48,7 +48,7 @@ final class NodeScopeAndMetadataDecorator
      * @param Node[] $nodes
      * @return Node[]
      */
-    public function decorateNodesAndFile(array $nodes, string $filePath): array
+    public function decorateNodesFromFile(array $nodes, string $filePath): array
     {
         $nodeTraverser = new NodeTraverser();
         // specially rewrite nodes for PHPStan

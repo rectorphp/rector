@@ -112,7 +112,6 @@ imports:
 2. Use `Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator` wherever you need.  
 
 ```php
-
 <?php declare(strict_types=1);
 
 namespace YourApp;
@@ -141,14 +140,13 @@ final class SomeClass
         $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
     }
     
-    public function run() 
+    public function run(): void
     {
         $someFilePath = __DIR__ . '/SomeFile.php';
         $someFileContent = file_get_contents($someFilePath);
         $nodes = $this->parser->parse($someFileContent);
         
-        // @todo use filePath?
-        $decoratedNodes = $this->nodeScopeAndMetadataDecorator->decorateNodesAndFile($nodes, $someFilePath);
+        $decoratedNodes = $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($nodes, $someFilePath);
         
         foreach ($decoratedNodes as $node) {
             $className = $node->getAttribute(MetadataAttribute::CLASS_NAME);
