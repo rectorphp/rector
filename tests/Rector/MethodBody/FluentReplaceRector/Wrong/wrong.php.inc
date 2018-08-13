@@ -1,32 +1,19 @@
 <?php
 
-namespace SomeNamespace;
+namespace Rector\Tests\Rector\MethodBody\FluentReplaceRector;
 
-class SomeClass
-{
-    public function someFunction()
-    {
-        foo();
-        return $this;
-    }
-
-    public function otherFunction()
-    {
-        bar();
-        return $this;
-    }
-}
+use Rector\Tests\Rector\MethodBody\FluentReplaceRector\Source\FluentInterfaceClass;
 
 class ActionClass
 {
     /**
-     * @var SomeClass
+     * @var FluentInterfaceClass
      */
     private $someClass;
 
     public function someFunction()
     {
-        $this->someClass = new SomeClass();
+        $this->someClass = new FluentInterfaceClass();
 
         $this->someClass->someFunction()
                         ->otherFunction();

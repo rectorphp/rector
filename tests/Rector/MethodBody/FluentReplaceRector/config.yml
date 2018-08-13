@@ -1,9 +1,6 @@
 parameters:
     classes_to_defluent:
-        - 'SomeNamespace\SomeClass'
-        - 'SomeNamespace\SomeClassWithReturnAnnotations'
+        - 'Rector\Tests\Rector\MethodBody\FluentReplaceRector\Source\FluentInterfaceClass'
 
 services:
-    # have to be run first
-    Rector\Rector\MethodBody\ReturnThisRemoveRector: ~
     Rector\Rector\MethodBody\FluentReplaceRector: ~

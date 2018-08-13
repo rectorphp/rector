@@ -1,0 +1,7 @@
+parameters:
+    classes_to_defluent:
+        - 'SomeNamespace\SomeClass'
+        - 'SomeNamespace\SomeClassWithReturnAnnotations'
+
+services:
+    Rector\Rector\MethodBody\ReturnThisRemoveRector: ~
