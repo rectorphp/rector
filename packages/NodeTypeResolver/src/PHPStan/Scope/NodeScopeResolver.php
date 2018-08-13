@@ -5,14 +5,11 @@ namespace Rector\NodeTypeResolver\PHPStan\Scope;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Interface_;
-use PhpParser\NodeVisitor\NameResolver;
 use PHPStan\Analyser\NodeScopeResolver as PHPStanNodeScopeResolver;
 use PHPStan\Analyser\Scope;
 use PHPStan\Broker\Broker;
 use Rector\Configuration\Option;
-use Rector\Exception\ShouldNotHappenException;
 use Rector\FileSystem\FilesFinder;
-use Rector\NodeTypeResolver\Configuration\CurrentFileProvider;
 use Rector\NodeTypeResolver\Node\TypeAttribute;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
@@ -27,11 +24,6 @@ final class NodeScopeResolver
      * @var PHPStanNodeScopeResolver
      */
     private $phpStanNodeScopeResolver;
-
-    /**
-     * @var CurrentFileProvider
-     */
-    private $currentFileProvider;
 
     /**
      * @var ParameterProvider
@@ -54,14 +46,12 @@ final class NodeScopeResolver
     private $broker;
 
     public function __construct(
-        CurrentFileProvider $currentFileProvider,
         ParameterProvider $parameterProvider,
         FilesFinder $filesFinder,
         ScopeFactory $scopeFactory,
         PHPStanNodeScopeResolver $phpStanNodeScopeResolver,
         Broker $broker
     ) {
-        $this->currentFileProvider = $currentFileProvider;
         $this->parameterProvider = $parameterProvider;
         $this->filesFinder = $filesFinder;
         $this->scopeFactory = $scopeFactory;
@@ -73,14 +63,13 @@ final class NodeScopeResolver
      * @param Node[] $nodes
      * @return Node[]
      */
-    public function processNodes(array $nodes): array
+    public function processNodes(array $nodes, string $filePath): array
     {
-        $this->ensureNameResolverWasRun($nodes);
         $this->setAnalysedFiles();
 
         $this->phpStanNodeScopeResolver->processNodes(
             $nodes,
-            $this->scopeFactory->createFromFileInfo($this->currentFileProvider->getSplFileInfo()),
+            $this->scopeFactory->createFromFile($filePath),
             function (Node $node, Scope $scope): void {
                 // the class reflection is resolved AFTER entering to class node
                 // so we need to get it from the first after this one
@@ -106,27 +95,6 @@ final class NodeScopeResolver
         }
 
         $this->phpStanNodeScopeResolver->setAnalysedFiles($filePaths);
-    }
-
-    /**
-     * @param Node[] $nodes
-     */
-    private function ensureNameResolverWasRun(array $nodes): void
-    {
-        foreach ($nodes as $node) {
-            if ($node instanceof Class_) {
-                if (isset($node->namespacedName)) {
-                    return;
-                }
-
-                throw new ShouldNotHappenException(sprintf(
-                    '"%s" node needs "namespacedNode" property set via "%s" Node Traverser. Did you forget to run it before calling "%s->processNodes()"?.',
-                    get_class($node),
-                    NameResolver::class,
-                    self::class
-                ));
-            }
-        }
     }
 
     /**

@@ -109,87 +109,54 @@ imports:
     - { resource: 'vendor/rector/node-type-resolver/config/services.yml' }
 ```
 
-2. Add NodeVisitor to your NodeTraverse in config  
-
-```yaml
-# your-app/config.yml
-services:
-    YourApp\NodeTraverser:
-        calls:
-            - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\MetadataNodeVisitor']]
-```
-
-or if you create NodeTraverser in a factory:
+2. Use `Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator` wherever you need.  
 
 ```php
 <?php declare(strict_types=1);
 
 namespace YourApp;
 
-use PhpParser\NodeTraverser;
-use Rector\NodeTypeResolver\NodeVisitor\MetadataNodeVisitor;
+use PhpParser\Parser;
+use Rector\NodeTypeResolver\Node\MetadataAttribute;
+use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 
-final class NodeTraverserFactory
+final class SomeClass
 {
     /**
-     * @var MetadataNodeVisitor  
+     * @var Parser 
      */
-    private $metadataNodeVisitor;
+    private $parser;
     
-    public function __construct(MetadataNodeVisitor $metadataNodeVisitor)
-    {
-        $this->metadataNodeVisitor = $metadataNodeVisitor;
+    /**
+     * @var NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator
+     */
+    private $nodeScopeAndMetadataDecorator;
+    
+    public function __construct(
+        Parser $parser,
+        NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator
+    ) {
+        $this->parser = $parser;
+        $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
     }
     
-    public function create(): NodeTraverser
+    public function run(): void
     {
-        $nodeTraverser = new NodeTraverser();
-        $nodeTraverser->addVisitor($this->metadataNodeVisitor);
+        $someFilePath = __DIR__ . '/SomeFile.php';
+        $someFileContent = file_get_contents($someFilePath);
+        $nodes = $this->parser->parse($someFileContent);
         
-        // your own NodeVisitors
-        $nodeTraverser->addVisitor(...);
+        $decoratedNodes = $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($nodes, $someFilePath);
         
-        return $nodeTraverser;
+        foreach ($decoratedNodes as $node) {
+            $className = $node->getAttribute(MetadataAttribute::CLASS_NAME);
+            // "string" with class name
+            var_dump($className);
+        }
+        
+        // do whatever you need :)
     }
 }
-```
-
-3. And get attributes anywhere you need it
-
-```php
-<?php declare(strict_types=1);
-
-use Rector\NodeTypeResolver\Node\MetadataAttribute;
-
-/** @var PhpParser\NodeTraverser $nodeTraverser */
-$nodeTraverser = ...; // from DI container or manually created
-
-$nodes = $this->parser->parseFile(...);
-$nodes = $nodeTraverser->traverse($nodes);
-
-/** @var PhpParser\Node $node */
-foreach ($nodes as $node) {
-    $className = $node->getAttribute(MetadataAttribute::CLASS_NAME);
-    var_dump($className);
-}
-```
-
-3. Add CompilerPass to your Kernel
-
-```php
-<?php declare(strict_types=1);
-
-use Symfony\Component\HttpKernel\Kernel;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Rector\NodeTypeResolver\DependencyInjection\CompilerPass\NodeTypeResolverCollectorCompilerPass;
-
-class AppKernel extends Kernel
-{
-    protected function build(ContainerBuilder $containerBuilder): void
-    {
-        $containerBuilder->addCompilerPass(new NodeTypeResolverCollectorCompilerPass());
-    }
-} 
 ```
 
 And that's it!

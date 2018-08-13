@@ -3,9 +3,9 @@
 namespace Rector\NodeTraverserQueue;
 
 use PhpParser\Lexer;
+use PhpParser\Node;
 use Rector\NodeTraverser\RectorNodeTraverser;
-use Rector\NodeTraverser\StandaloneTraverseNodeTraverser;
-use Rector\NodeTypeResolver\Configuration\CurrentFileProvider;
+use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 use Rector\Parser\Parser;
 use Symfony\Component\Finder\SplFileInfo;
 
@@ -27,40 +27,31 @@ final class NodeTraverserQueue
     private $rectorNodeTraverser;
 
     /**
-     * @var StandaloneTraverseNodeTraverser
+     * @var NodeScopeAndMetadataDecorator
      */
-    private $standaloneTraverseNodeTraverser;
-
-    /**
-     * @var CurrentFileProvider
-     */
-    private $currentFileProvider;
+    private $nodeScopeAndMetadataDecorator;
 
     public function __construct(
         Parser $parser,
         Lexer $lexer,
         RectorNodeTraverser $rectorNodeTraverser,
-        StandaloneTraverseNodeTraverser $standaloneTraverseNodeTraverser,
-        CurrentFileProvider $currentFileProvider
+        NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator
     ) {
         $this->parser = $parser;
         $this->lexer = $lexer;
         $this->rectorNodeTraverser = $rectorNodeTraverser;
-        $this->standaloneTraverseNodeTraverser = $standaloneTraverseNodeTraverser;
-        $this->currentFileProvider = $currentFileProvider;
+        $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
     }
 
     /**
-     * @return mixed[]
+     * @return Node[][]|mixed[]
      */
     public function processFileInfo(SplFileInfo $fileInfo): array
     {
-        $this->currentFileProvider->setCurrentFile($fileInfo);
-
         $oldStmts = $this->parser->parseFile($fileInfo->getRealPath());
         $oldTokens = $this->lexer->getTokens();
 
-        $newStmts = $this->standaloneTraverseNodeTraverser->traverse($oldStmts);
+        $newStmts = $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($oldStmts, $fileInfo->getRealPath());
         $newStmts = $this->rectorNodeTraverser->traverse($newStmts);
 
         return [$newStmts, $oldStmts, $oldTokens];

@@ -1,7 +1,14 @@
 services:
+    _defaults:
+        # for "Rector\NodeTypeResolver\NodeTypeResolverFactory" standalone usage
+        public: true
+
     Rector\NodeTypeResolver\:
         resource: '../'
         exclude: '../{Contract}'
+
+    Rector\NodeTypeResolver\NodeTypeResolver:
+        factory: ['@Rector\NodeTypeResolver\NodeTypeResolverFactory', 'create']
 
     # PHPStan
     PHPStan\Broker\Broker:

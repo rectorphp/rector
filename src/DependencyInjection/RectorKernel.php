@@ -3,7 +3,6 @@
 namespace Rector\DependencyInjection;
 
 use Rector\DependencyInjection\CompilerPass\CollectorCompilerPass;
-use Rector\NodeTypeResolver\DependencyInjection\CompilerPass\NodeTypeResolverCollectorCompilerPass;
 use Rector\YamlRector\DependencyInjection\YamlRectorCollectorCompilerPass;
 use Symfony\Component\Config\Loader\DelegatingLoader;
 use Symfony\Component\Config\Loader\GlobFileLoader;
@@ -70,7 +69,6 @@ final class RectorKernel extends Kernel
         $containerBuilder->addCompilerPass(new CollectorCompilerPass());
         $containerBuilder->addCompilerPass(new YamlRectorCollectorCompilerPass());
         $containerBuilder->addCompilerPass(new AutowireDefaultCompilerPass());
-        $containerBuilder->addCompilerPass(new NodeTypeResolverCollectorCompilerPass());
 
         // for symplify/better-php-doc-parser
         $containerBuilder->addCompilerPass(new CollectDecoratorsToPhpDocInfoFactoryCompilerPass());

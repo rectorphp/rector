@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\PhpParser\NodeVisitor;
+namespace Rector\NodeTypeResolver\NodeVisitor;
 
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
@@ -9,7 +9,7 @@ use Rector\Node\Attribute;
 /**
  * See https://github.com/nikic/PHP-Parser/blob/master/doc/5_FAQ.markdown#how-can-the-nextprevious-sibling-of-a-node-be-obtained.
  */
-final class ParentAndNextNodeAddingNodeVisitor extends NodeVisitorAbstract
+final class ParentAndNextNodeVisitor extends NodeVisitorAbstract
 {
     /**
      * @var Node[]
