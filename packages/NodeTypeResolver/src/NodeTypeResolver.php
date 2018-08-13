@@ -67,7 +67,13 @@ final class NodeTypeResolver
         }
 
         // complete parent types - parent classes, interfaces and traits
-        foreach ($types as $type) {
+        foreach ($types as $i => $type) {
+            // remove scalar types and other non-existing ones
+            if ($type === 'null') {
+                unset($types[$i]);
+                continue;
+            }
+
             $types += $this->classReflectionTypesResolver->resolve($this->broker->getClass($type));
         }
 

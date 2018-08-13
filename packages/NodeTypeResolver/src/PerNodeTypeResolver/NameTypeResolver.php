@@ -5,30 +5,12 @@ namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
-use PHPStan\Broker\Broker;
 use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\MetadataAttribute;
-use Rector\NodeTypeResolver\Reflection\ClassReflectionTypesResolver;
 
 final class NameTypeResolver implements PerNodeTypeResolverInterface
 {
-    /**
-     * @var Broker
-     */
-    private $broker;
-
-    /**
-     * @var ClassReflectionTypesResolver
-     */
-    private $classReflectionTypesResolver;
-
-    public function __construct(Broker $broker, ClassReflectionTypesResolver $classReflectionTypesResolver)
-    {
-        $this->broker = $broker;
-        $this->classReflectionTypesResolver = $classReflectionTypesResolver;
-    }
-
     /**
      * @return string[]
      */
@@ -47,11 +29,7 @@ final class NameTypeResolver implements PerNodeTypeResolverInterface
             return [$nameNode->getAttribute(MetadataAttribute::PARENT_CLASS_NAME)];
         }
 
-        $fullyQualifiedName = $this->resolveFullyQualifiedName($nameNode, $nameNode->toString());
-
-        $classReflection = $this->broker->getClass($fullyQualifiedName);
-
-        return $this->classReflectionTypesResolver->resolve($classReflection);
+        return [$this->resolveFullyQualifiedName($nameNode, $nameNode->toString())];
     }
 
     private function resolveFullyQualifiedName(Node $nameNode, string $name): string
