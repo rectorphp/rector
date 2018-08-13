@@ -23,7 +23,7 @@ services:
     Symplify\PackageBuilder\Parameter\ParameterProvider: ~
     PhpParser\NodeVisitor\CloningVisitor: ~
     PhpParser\NodeFinder: ~
-    Rector\NodeTraverserQueue\BetterNodeFinder: ~
+    Rector\Utils\BetterNodeFinder: ~
 
     # factory to remove dependency on CompilerPass and make install DX smoother
     Rector\NodeTypeResolver\NodeTypeResolver:

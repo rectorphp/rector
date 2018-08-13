@@ -3,10 +3,10 @@
 namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver;
 
 use PhpParser\Node;
-use Rector\NodeTraverserQueue\BetterNodeFinder;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\Tests\AbstractNodeTypeResolverContainerAwareTestCase;
 use Rector\NodeTypeResolver\Tests\StandaloneNodeTraverserQueue;
+use Rector\Utils\BetterNodeFinder;
 use Symfony\Component\Finder\SplFileInfo;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 

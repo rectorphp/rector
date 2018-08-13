@@ -60,6 +60,7 @@
             "Rector\\Sylius\\Tests\\": "packages/Sylius/tests",
             "Rector\\PHPUnit\\Tests\\": "packages/PHPUnit/tests",
             "Rector\\PhpParser\\Tests\\": "packages/PhpParser/tests",
+            "Rector\\Utils\\Tests\\": "packages/Utils/tests",
             "Rector\\Doctrine\\Tests\\": "packages/Doctrine/tests",
             "Rector\\YamlRector\\Tests\\": "packages/YamlRector/tests"
         },

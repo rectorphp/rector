@@ -5,9 +5,9 @@ namespace Rector\Rector\DomainDrivenDesign\ValueObjectRemover;
 use PhpParser\Node;
 use Rector\BetterPhpDocParser\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\BetterPhpDocParser\NodeAnalyzer\NamespaceAnalyzer;
-use Rector\NodeTraverserQueue\BetterNodeFinder;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Rector\AbstractRector;
+use Rector\Utils\BetterNodeFinder;
 
 abstract class AbstractValueObjectRemoverRector extends AbstractRector
 {

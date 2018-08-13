@@ -6,8 +6,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeTraverser;
-use Rector\NodeTraverserQueue\BetterNodeFinder;
 use Rector\PhpParser\NodeVisitor\ExpressionAddingNodeVisitor;
+use Rector\Utils\BetterNodeFinder;
 use SplObjectStorage;
 
 /**

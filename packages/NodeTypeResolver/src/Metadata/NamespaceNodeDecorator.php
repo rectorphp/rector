@@ -5,9 +5,9 @@ namespace Rector\NodeTypeResolver\Metadata;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
-use Rector\NodeTraverserQueue\BetterNodeFinder;
 use Rector\NodeTypeResolver\Contract\Metadata\NodeDecoratorInterface;
 use Rector\NodeTypeResolver\Node\MetadataAttribute;
+use Rector\Utils\BetterNodeFinder;
 
 final class NamespaceNodeDecorator implements NodeDecoratorInterface
 {
