@@ -109,25 +109,7 @@ imports:
     - { resource: 'vendor/rector/node-type-resolver/config/services.yml' }
 ```
 
-2. Add CompilerPass to your Kernel
-
-```php
-<?php declare(strict_types=1);
-
-use Symfony\Component\HttpKernel\Kernel;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Rector\NodeTypeResolver\DependencyInjection\CompilerPass\NodeTypeResolverCollectorCompilerPass;
-
-class AppKernel extends Kernel
-{
-    protected function build(ContainerBuilder $containerBuilder): void
-    {
-        $containerBuilder->addCompilerPass(new NodeTypeResolverCollectorCompilerPass());
-    }
-} 
-```
-
-3. Use `Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator` wherever you need.  
+2. Use `Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator` wherever you need.  
 
 ```php
 

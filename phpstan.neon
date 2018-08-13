@@ -2,6 +2,8 @@ parameters:
     ignoreErrors:
         # the # after each ignored error is the number of occurrences
 
+        - '#Parameter \#2 \$filePath of method Rector\\NodeTypeResolver\\NodeScopeAndMetadataDecorator::decorateNodesAndFile\(\) expects string, string\|false given#'
+
         # missuse of interface and class
         - '#Parameter \#1 (.*?) expects Symfony\\Component\\DependencyInjection\\ContainerBuilder, Symfony\\Component\\DependencyInjection\\ContainerInterface given#' # 2
         - '#Method Rector\\Symfony\\Bridge\\DefaultAnalyzedSymfonyApplicationContainer::getContainer\(\) should return Symfony\\Component\\DependencyInjection\\ContainerBuilder but returns Symfony\\Component\\DependencyInjection\\Container#' # 1
@@ -14,12 +16,14 @@ parameters:
         - '#Cannot cast PhpParser\\Node\\Expr\|PhpParser\\Node\\Identifier to string#' # 4
         - '#Cannot cast PhpParser\\Node\\Expr\|PhpParser\\Node\\Identifier|string to string#' # 3
         - '#Cannot cast PhpParser\\Node\\Expr\|PhpParser\\Node\\Name to string#'
-        - '#Parameter \#1 \$file of static method PHPStan\\Analyser\\ScopeContext::create\(\) expects string, string\|false given#'
         - '#Array \(array<array<PhpParser\\Node\\Stmt>>\) does not accept array<PhpParser\\Node\\Stmt|null>#'
         - '#Parameter \#1 \$files of method PHPStan\\Analyser\\NodeScopeResolver::setAnalysedFiles\(\) expects array<string>, array<int, string\|false> given#'
 
         # already fixed, invalidated cache?
         - '#Access to an undefined property PhpParser\\Node\\Expr::\$args#'
+
+        # symfony container autowire interface falsy
+        - '#Call to an undefined method Symfony\\Component\\DependencyInjection\\ContainerInterface::getServiceIds\(\)#'
 
         # nette container
         - '#Method Rector\\NodeTypeResolver\\DependencyInjection\\PHPStanServicesFactory::create(.*?)() should return (.*?) but returns object#'
