@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\BetterPhpDocParser\NodeAnalyzer;
+namespace Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer;
 
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;

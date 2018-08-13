@@ -1,0 +1,5 @@
+imports:
+    # to cover prefixed rector and projects autoload - monorepo
+    - { resource: '../../../../vendor/symplify/better-phpdoc-parser/src/config/services.yml' , ignore_errors: true }
+    # @todo resolve location for standalone package
+    - { resource: 'services.yml' }

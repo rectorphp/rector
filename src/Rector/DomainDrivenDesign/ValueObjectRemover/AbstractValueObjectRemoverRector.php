@@ -3,9 +3,10 @@
 namespace Rector\Rector\DomainDrivenDesign\ValueObjectRemover;
 
 use PhpParser\Node;
-use Rector\BetterPhpDocParser\NodeAnalyzer\DocBlockAnalyzer;
-use Rector\BetterPhpDocParser\NodeAnalyzer\NamespaceAnalyzer;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
+use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\NamespaceAnalyzer;
+use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\NamespaceAnalyzer as RectorNamespaceAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\Utils\BetterNodeFinder;
 
@@ -44,13 +45,13 @@ abstract class AbstractValueObjectRemoverRector extends AbstractRector
         DocBlockAnalyzer $docBlockAnalyzer,
         NodeTypeResolver $nodeTypeResolver,
         BetterNodeFinder $betterNodeFinder,
-        NamespaceAnalyzer $namespaceAnalyzer
+        RectorNamespaceAnalyzer $rectorNamespaceAnalyzer
     ) {
         $this->valueObjectsToSimpleTypes = $valueObjectsToSimpleTypes;
         $this->docBlockAnalyzer = $docBlockAnalyzer;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->betterNodeFinder = $betterNodeFinder;
-        $this->namespaceAnalyzer = $namespaceAnalyzer;
+        $this->namespaceAnalyzer = $rectorNamespaceAnalyzer;
     }
 
     /**

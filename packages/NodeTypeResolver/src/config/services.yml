@@ -1,8 +1,5 @@
 imports:
-    # to cover prefixed rector and projects autoload - monorepo
-    - { resource: '../../../../vendor/symplify/better-phpdoc-parser/src/config/services.yml', ignore_errors: true }
-    # @todo resolve location for standalone package
-
+    - { resource: 'external-services.yml' }
 
 services:
     _defaults:
@@ -17,27 +14,11 @@ services:
     Rector\PhpParser\CurrentNodeProvider: ~
 
     Rector\Php\TypeAnalyzer: ~
-    Rector\BetterPhpDocParser\NodeAnalyzer\DocBlockAnalyzer: ~
+    Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer: ~
     Rector\Printer\BetterStandardPrinter: ~
     Rector\FileSystem\FilesFinder: ~
-    Symplify\PackageBuilder\Parameter\ParameterProvider: ~
-    PhpParser\NodeVisitor\CloningVisitor: ~
-    PhpParser\NodeFinder: ~
     Rector\Utils\BetterNodeFinder: ~
 
     # factory to remove dependency on CompilerPass and make install DX smoother
     Rector\NodeTypeResolver\NodeTypeResolver:
         factory: ['@Rector\NodeTypeResolver\NodeTypeResolverFactory', 'create']
-
-    # PHPStan
-    PHPStan\Broker\Broker:
-        factory: ['@Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory', 'createBroker']
-
-    PHPStan\Analyser\NodeScopeResolver:
-        factory: ['@Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory', 'createNodeScopeResolver']
-
-    PHPStan\Analyser\TypeSpecifier:
-        factory: ['@Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory', 'createTypeSpecifier']
-
-    PHPStan\Analyser\ScopeFactory:
-        factory: ['@Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory', 'createScopeFactory']

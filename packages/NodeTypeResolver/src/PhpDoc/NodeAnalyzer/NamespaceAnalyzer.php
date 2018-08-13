@@ -1,8 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Rector\BetterPhpDocParser\NodeAnalyzer;
+namespace Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer;
 
 use Nette\Utils\Strings;
+
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Use_;
 use Rector\NodeTypeResolver\Node\MetadataAttribute;
