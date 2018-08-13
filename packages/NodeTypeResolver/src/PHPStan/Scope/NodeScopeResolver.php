@@ -12,8 +12,8 @@ use PHPStan\Broker\Broker;
 use Rector\Configuration\Option;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\FileSystem\FilesFinder;
-use Rector\NodeTypeResolver\Configuration\CurrentFileProvider;
 use Rector\NodeTypeResolver\Node\TypeAttribute;
+use Symfony\Component\Finder\SplFileInfo;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 
@@ -27,11 +27,6 @@ final class NodeScopeResolver
      * @var PHPStanNodeScopeResolver
      */
     private $phpStanNodeScopeResolver;
-
-    /**
-     * @var CurrentFileProvider
-     */
-    private $currentFileProvider;
 
     /**
      * @var ParameterProvider
@@ -54,14 +49,12 @@ final class NodeScopeResolver
     private $broker;
 
     public function __construct(
-        CurrentFileProvider $currentFileProvider,
         ParameterProvider $parameterProvider,
         FilesFinder $filesFinder,
         ScopeFactory $scopeFactory,
         PHPStanNodeScopeResolver $phpStanNodeScopeResolver,
         Broker $broker
     ) {
-        $this->currentFileProvider = $currentFileProvider;
         $this->parameterProvider = $parameterProvider;
         $this->filesFinder = $filesFinder;
         $this->scopeFactory = $scopeFactory;
@@ -73,14 +66,14 @@ final class NodeScopeResolver
      * @param Node[] $nodes
      * @return Node[]
      */
-    public function processNodes(array $nodes): array
+    public function processNodes(array $nodes, SplFileInfo $fileInfo): array
     {
         $this->ensureNameResolverWasRun($nodes);
         $this->setAnalysedFiles();
 
         $this->phpStanNodeScopeResolver->processNodes(
             $nodes,
-            $this->scopeFactory->createFromFileInfo($this->currentFileProvider->getSplFileInfo()),
+            $this->scopeFactory->createFromFileInfo($fileInfo),
             function (Node $node, Scope $scope): void {
                 // the class reflection is resolved AFTER entering to class node
                 // so we need to get it from the first after this one

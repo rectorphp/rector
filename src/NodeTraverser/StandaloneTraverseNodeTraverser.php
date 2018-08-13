@@ -43,12 +43,6 @@ final class StandaloneTraverseNodeTraverser
      */
     public function traverse(array $nodes): array
     {
-        $nodeTraverser = new NodeTraverser();
-        $nodeTraverser->addVisitor(new NameResolver());
-        $nodes = $nodeTraverser->traverse($nodes);
-
-        $nodes = $this->nodeScopeResolver->processNodes($nodes);
-
         foreach ($this->nodeTraversers as $nodeTraverser) {
             $nodes = $nodeTraverser->traverse($nodes);
         }

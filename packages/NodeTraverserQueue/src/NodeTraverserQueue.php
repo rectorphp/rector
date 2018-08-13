@@ -3,9 +3,11 @@
 namespace Rector\NodeTraverserQueue;
 
 use PhpParser\Lexer;
+use PhpParser\NodeTraverser;
+use PhpParser\NodeVisitor\NameResolver;
 use Rector\NodeTraverser\RectorNodeTraverser;
 use Rector\NodeTraverser\StandaloneTraverseNodeTraverser;
-use Rector\NodeTypeResolver\Configuration\CurrentFileProvider;
+use Rector\NodeTypeResolver\PHPStan\Scope\NodeScopeResolver;
 use Rector\Parser\Parser;
 use Symfony\Component\Finder\SplFileInfo;
 
@@ -32,22 +34,22 @@ final class NodeTraverserQueue
     private $standaloneTraverseNodeTraverser;
 
     /**
-     * @var CurrentFileProvider
+     * @var NodeScopeResolver
      */
-    private $currentFileProvider;
+    private $nodeScopeResolver;
 
     public function __construct(
         Parser $parser,
         Lexer $lexer,
         RectorNodeTraverser $rectorNodeTraverser,
         StandaloneTraverseNodeTraverser $standaloneTraverseNodeTraverser,
-        CurrentFileProvider $currentFileProvider
+        NodeScopeResolver $nodeScopeResolver
     ) {
         $this->parser = $parser;
         $this->lexer = $lexer;
         $this->rectorNodeTraverser = $rectorNodeTraverser;
         $this->standaloneTraverseNodeTraverser = $standaloneTraverseNodeTraverser;
-        $this->currentFileProvider = $currentFileProvider;
+        $this->nodeScopeResolver = $nodeScopeResolver;
     }
 
     /**
@@ -55,12 +57,18 @@ final class NodeTraverserQueue
      */
     public function processFileInfo(SplFileInfo $fileInfo): array
     {
-        $this->currentFileProvider->setCurrentFile($fileInfo);
-
         $oldStmts = $this->parser->parseFile($fileInfo->getRealPath());
         $oldTokens = $this->lexer->getTokens();
 
-        $newStmts = $this->standaloneTraverseNodeTraverser->traverse($oldStmts);
+        $newStmts = $oldStmts;
+
+        // @todo use NodeTypeResolverNodeTraverses
+        $nodeTraverser = new NodeTraverser();
+        $nodeTraverser->addVisitor(new NameResolver());
+        $newStmts = $nodeTraverser->traverse($newStmts);
+        $this->nodeScopeResolver->processNodes($newStmts, $fileInfo);
+
+        $newStmts = $this->standaloneTraverseNodeTraverser->traverse($newStmts);
         $newStmts = $this->rectorNodeTraverser->traverse($newStmts);
 
         return [$newStmts, $oldStmts, $oldTokens];
