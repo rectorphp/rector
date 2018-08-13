@@ -41,6 +41,7 @@ final class PhpDocInfoFqnTypeDecorator extends AbstractPhpDocInfoDecorator
             return $node;
         }
 
+        // @todo check PHPStan for this
         /** @var IdentifierTypeNode $node */
         $node->name = $this->namespaceAnalyzer->resolveTypeToFullyQualified(
             $node->name,

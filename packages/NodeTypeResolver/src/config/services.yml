@@ -1,12 +1,31 @@
+imports:
+    # to cover prefixed rector and projects autoload - monorepo
+    - { resource: '../../../../vendor/symplify/better-phpdoc-parser/src/config/services.yml', ignore_errors: true }
+    # @todo resolve location for standalone package
+
+
 services:
     _defaults:
         # for "Rector\NodeTypeResolver\NodeTypeResolverFactory" standalone usage
         public: true
+        autowire: true
 
     Rector\NodeTypeResolver\:
         resource: '../'
         exclude: '../{Contract}'
 
+    Rector\PhpParser\CurrentNodeProvider: ~
+
+    Rector\Php\TypeAnalyzer: ~
+    Rector\BetterPhpDocParser\NodeAnalyzer\DocBlockAnalyzer: ~
+    Rector\Printer\BetterStandardPrinter: ~
+    Rector\FileSystem\FilesFinder: ~
+    Symplify\PackageBuilder\Parameter\ParameterProvider: ~
+    PhpParser\NodeVisitor\CloningVisitor: ~
+    PhpParser\NodeFinder: ~
+    Rector\NodeTraverserQueue\BetterNodeFinder: ~
+
+    # factory to remove dependency on CompilerPass and make install DX smoother
     Rector\NodeTypeResolver\NodeTypeResolver:
         factory: ['@Rector\NodeTypeResolver\NodeTypeResolverFactory', 'create']
 

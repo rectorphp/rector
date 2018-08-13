@@ -1,8 +1,7 @@
 parameters:
     ignoreErrors:
         # the # after each ignored error is the number of occurrences
-
-        - '#Parameter \#2 \$filePath of method Rector\\NodeTypeResolver\\(.*?)::decorateNodesFromFile\(\) expects string, string\|false given#'
+        - '#Parameter \#2 \$filePath of method Rector\\(.*?)::decorateNodesFromFile\(\) expects string, string\|false given#'
 
         # missuse of interface and class
         - '#Parameter \#1 (.*?) expects Symfony\\Component\\DependencyInjection\\ContainerBuilder, Symfony\\Component\\DependencyInjection\\ContainerInterface given#' # 2

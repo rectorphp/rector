@@ -13,6 +13,9 @@ composer require rector/node-type-resolver
 ### 1. Get Types of Node
 
 ```php
+<?php declare(strict_types=1);
+
+use PhpParser\Node;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
 final class SomeNodeProcessor
@@ -32,8 +35,8 @@ final class SomeNodeProcessor
         /** @var string[] $nodeTypes */
         $nodeTypes = $this->nodeTypeResolver->resolve($node);
 
-        if (in_array('Nette\Application\UI\Form', $nodeTypes, true) {
-            // this is Nette\Application\UI\Form variable
+        if (in_array('Nette\Application\UI\Form', $nodeTypes, true)) {
+            // this is "Nette\Application\UI\Form" variable
         }
         
         // continue
@@ -53,6 +56,8 @@ These attributes are always available anywhere inside the Node tree. That means 
 ```php
 <?php declare(strict_types=1);
 
+//@todo examples of dump
+
 use Rector\NodeTypeResolver\Node\MetadataAttribute;
 
 // string name of current namespace
@@ -69,6 +74,8 @@ $useNodes = $node->setAttribute(MetadataAttribute::USE_NODES, $this->useNodes);
 
 ```php
 <?php declare(strict_types=1);
+
+//@todo examples of dump
 
 use Rector\NodeTypeResolver\Node\MetadataAttribute;
 
@@ -89,6 +96,8 @@ $parentClassName = $node->getAttribute(MetadataAttribute::PARENT_CLASS_NAME);
 
 use Rector\NodeTypeResolver\Node\MetadataAttribute;
 
+//@todo examples of dump
+
 // string name of current method
 $methodName = $node->getAttribute(MetadataAttribute::METHOD_NAME);
 
@@ -99,7 +108,9 @@ $methodNode = $node->getAttribute(MetadataAttribute::METHOD_NODE);
 $methodCallName = $node->getAttribute(MetadataAttribute::METHOD_NAME);
 ```
 
-#### Setup
+@todo move up as first step
+
+## Setup
 
 1. Import `services.yml` in your config
 

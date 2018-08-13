@@ -4,13 +4,13 @@ namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver;
 
 use PhpParser\Node;
 use Rector\NodeTraverserQueue\BetterNodeFinder;
-use Rector\NodeTraverserQueue\NodeTraverserQueue;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\Tests\AbstractContainerAwareTestCase;
+use Rector\NodeTypeResolver\Tests\AbstractNodeTypeResolverContainerAwareTestCase;
+use Rector\NodeTypeResolver\Tests\StandaloneNodeTraverserQueue;
 use Symfony\Component\Finder\SplFileInfo;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
-abstract class AbstractNodeTypeResolverTest extends AbstractContainerAwareTestCase
+abstract class AbstractNodeTypeResolverTest extends AbstractNodeTypeResolverContainerAwareTestCase
 {
     /**
      * @var BetterNodeFinder
@@ -23,9 +23,9 @@ abstract class AbstractNodeTypeResolverTest extends AbstractContainerAwareTestCa
     protected $nodeTypeResolver;
 
     /**
-     * @var NodeTraverserQueue
+     * @var StandaloneNodeTraverserQueue
      */
-    private $nodeTraverserQueue;
+    private $standaloneNodeTraverserQueue;
 
     /**
      * @var ParameterProvider
@@ -35,7 +35,7 @@ abstract class AbstractNodeTypeResolverTest extends AbstractContainerAwareTestCa
     protected function setUp(): void
     {
         $this->betterNodeFinder = $this->container->get(BetterNodeFinder::class);
-        $this->nodeTraverserQueue = $this->container->get(NodeTraverserQueue::class);
+        $this->standaloneNodeTraverserQueue = $this->container->get(StandaloneNodeTraverserQueue::class);
         $this->parameterProvider = $this->container->get(ParameterProvider::class);
         $this->nodeTypeResolver = $this->container->get(NodeTypeResolver::class);
     }
@@ -59,8 +59,6 @@ abstract class AbstractNodeTypeResolverTest extends AbstractContainerAwareTestCa
 
         $this->parameterProvider->changeParameter('source', [$file]);
 
-        [$newStmts,] = $this->nodeTraverserQueue->processFileInfo($fileInfo);
-
-        return $newStmts;
+        return $this->standaloneNodeTraverserQueue->processFileInfo($fileInfo);
     }
 }
