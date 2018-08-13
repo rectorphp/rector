@@ -8,7 +8,6 @@ use PHPStan\Analyser\ScopeFactory as PHPStanScopeFactory;
 use PHPStan\Analyser\TypeSpecifier;
 use PHPStan\Broker\Broker;
 use Rector\Printer\BetterStandardPrinter;
-use Symfony\Component\Finder\SplFileInfo;
 
 final class ScopeFactory
 {
@@ -44,14 +43,14 @@ final class ScopeFactory
         $this->betterStandardPrinter = $betterStandardPrinter;
     }
 
-    public function createFromFileInfo(SplFileInfo $splFileInfo): Scope
+    public function createFromFile(string $filePath): Scope
     {
         return new Scope(
             $this->phpStanScopeFactory,
             $this->broker,
             $this->betterStandardPrinter,
             $this->typeSpecifier,
-            ScopeContext::create($splFileInfo->getRealPath())
+            ScopeContext::create($filePath)
         );
     }
 }

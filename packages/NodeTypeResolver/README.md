@@ -161,15 +161,16 @@ final class SomeClass
     
     public function run() 
     {
-        $someFile = __DIR__ . '/SomeFile.php';
-        $someFileContent = file_get_contents($someFile);
+        $someFilePath = __DIR__ . '/SomeFile.php';
+        $someFileContent = file_get_contents($someFilePath);
         $nodes = $this->parser->parse($someFileContent);
         
         // @todo use filePath?
-        $decoratedNodes = $this->nodeScopeAndMetadataDecorator->decorateNodesAndSplFileInfo($nodes, new \SplFileInfo(__DIR__ . '/SomeFile.php'));
+        $decoratedNodes = $this->nodeScopeAndMetadataDecorator->decorateNodesAndFile($nodes, $someFilePath);
         
         foreach ($decoratedNodes as $node) {
             $className = $node->getAttribute(MetadataAttribute::CLASS_NAME);
+            // "string" with class name
             var_dump($className);
         }
         
@@ -177,7 +178,6 @@ final class SomeClass
     }
 }
 ```
-
 
 And that's it!
 

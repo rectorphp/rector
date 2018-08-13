@@ -11,7 +11,6 @@ use PHPStan\Broker\Broker;
 use Rector\Configuration\Option;
 use Rector\FileSystem\FilesFinder;
 use Rector\NodeTypeResolver\Node\TypeAttribute;
-use Symfony\Component\Finder\SplFileInfo;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 
@@ -64,13 +63,13 @@ final class NodeScopeResolver
      * @param Node[] $nodes
      * @return Node[]
      */
-    public function processNodes(array $nodes, SplFileInfo $fileInfo): array
+    public function processNodes(array $nodes, string $filePath): array
     {
         $this->setAnalysedFiles();
 
         $this->phpStanNodeScopeResolver->processNodes(
             $nodes,
-            $this->scopeFactory->createFromFileInfo($fileInfo),
+            $this->scopeFactory->createFromFile($filePath),
             function (Node $node, Scope $scope): void {
                 // the class reflection is resolved AFTER entering to class node
                 // so we need to get it from the first after this one

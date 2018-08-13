@@ -9,7 +9,6 @@ use PhpParser\NodeVisitor\NameResolver;
 use Rector\NodeTypeResolver\NodeVisitor\MetadataNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\ParentAndNextNodeVisitor;
 use Rector\NodeTypeResolver\PHPStan\Scope\NodeScopeResolver;
-use Symfony\Component\Finder\SplFileInfo;
 
 final class NodeScopeAndMetadataDecorator
 {
@@ -49,14 +48,14 @@ final class NodeScopeAndMetadataDecorator
      * @param Node[] $nodes
      * @return Node[]
      */
-    public function decorateNodesAndSplFileInfo(array $nodes, SplFileInfo $splFileInfo): array
+    public function decorateNodesAndFile(array $nodes, string $filePath): array
     {
         $nodeTraverser = new NodeTraverser();
         // specially rewrite nodes for PHPStan
         $nodeTraverser->addVisitor(new NameResolver());
         $nodes = $nodeTraverser->traverse($nodes);
 
-        $nodes = $this->nodeScopeResolver->processNodes($nodes, $splFileInfo);
+        $nodes = $this->nodeScopeResolver->processNodes($nodes, $filePath);
 
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor(new NameResolver(null, [
