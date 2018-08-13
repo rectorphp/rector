@@ -1,14 +1,26 @@
 language: php
 
-php:
-    - 7.1
-    - 7.2
+matrix:
+    include:
+    - php: 7.1
+      env: PHPUNIT_FLAGS="--coverage-clover coverage.xml"
+    - php: 7.1
+      env: COMPOSER_FLAGS="--prefer-lowest"
+    - php: 7.2
 
 install:
-    - composer install
+    - composer update $COMPOSER_FLAGS
 
 script:
-    - vendor/bin/phpunit
+    - vendor/bin/phpunit $PHPUNIT_FLAGS
+
+after_script:
+    # upload coverage.xml to Coveralls
+    - |
+        if [[ $PHPUNIT_FLAGS != "" ]]; then
+            wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.1.0/php-coveralls.phar;
+            php php-coveralls.phar --verbose;
+        fi
 
 notifications:
     email: never
