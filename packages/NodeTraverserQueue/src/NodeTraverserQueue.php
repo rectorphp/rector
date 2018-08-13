@@ -3,9 +3,9 @@
 namespace Rector\NodeTraverserQueue;
 
 use PhpParser\Lexer;
+use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\CloningVisitor;
-use PhpParser\NodeVisitor\NameResolver;
 use Rector\NodeTraverser\RectorNodeTraverser;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 use Rector\NodeTypeResolver\NodeVisitor\MetadataNodeVisitor;
@@ -36,11 +36,6 @@ final class NodeTraverserQueue
     private $nodeScopeAndMetadataDecorator;
 
     /**
-     * @var NameResolver
-     */
-    private $nameResolver;
-
-    /**
      * @var CloningVisitor
      */
     private $cloningVisitor;
@@ -60,7 +55,6 @@ final class NodeTraverserQueue
         Lexer $lexer,
         RectorNodeTraverser $rectorNodeTraverser,
         NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator,
-        NameResolver $nameResolver,
         CloningVisitor $cloningVisitor,
         ParentAndNextNodeAddingNodeVisitor $parentAndNextNodeAddingNodeVisitor,
         MetadataNodeVisitor $metadataNodeVisitor
@@ -69,16 +63,13 @@ final class NodeTraverserQueue
         $this->lexer = $lexer;
         $this->rectorNodeTraverser = $rectorNodeTraverser;
         $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
-        $this->nameResolver = $nameResolver;
         $this->cloningVisitor = $cloningVisitor;
         $this->parentAndNextNodeAddingNodeVisitor = $parentAndNextNodeAddingNodeVisitor;
         $this->metadataNodeVisitor = $metadataNodeVisitor;
     }
 
-    # adds current class and method to all nodes via attribute
-
     /**
-     * @return mixed[]
+     * @return Node[][]|mixed[]
      */
     public function processFileInfo(SplFileInfo $fileInfo): array
     {
@@ -87,15 +78,8 @@ final class NodeTraverserQueue
 
         $newStmts = $this->nodeScopeAndMetadataDecorator->processNodesAndSplFileInfo($oldStmts, $fileInfo);
 
-        $nodeTraverser = (new NodeTraverser());
-        $nodeTraverser->addVisitor($this->nameResolver);
-        $newStmts = $nodeTraverser->traverse($newStmts);
-
-        $nodeTraverser = (new NodeTraverser());
+        $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor($this->cloningVisitor);
-        $newStmts = $nodeTraverser->traverse($newStmts);
-
-        $nodeTraverser = (new NodeTraverser());
         $nodeTraverser->addVisitor($this->parentAndNextNodeAddingNodeVisitor);
         $newStmts = $nodeTraverser->traverse($newStmts);
 

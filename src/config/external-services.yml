@@ -8,12 +8,6 @@ services:
     PhpParser\BuilderFactory: ~
 
     PhpParser\NodeVisitor\CloningVisitor:
-    PhpParser\NodeVisitor\NameResolver:
-        arguments:
-            $options:
-                # keep nodes the same, so the code can be saved without name changes
-                'replaceNodes': false
-
     PhpParser\NodeTraverser: ~
 
     # value resolver

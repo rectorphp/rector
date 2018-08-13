@@ -5,12 +5,10 @@ namespace Rector\NodeTypeResolver\PHPStan\Scope;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Interface_;
-use PhpParser\NodeVisitor\NameResolver;
 use PHPStan\Analyser\NodeScopeResolver as PHPStanNodeScopeResolver;
 use PHPStan\Analyser\Scope;
 use PHPStan\Broker\Broker;
 use Rector\Configuration\Option;
-use Rector\Exception\ShouldNotHappenException;
 use Rector\FileSystem\FilesFinder;
 use Rector\NodeTypeResolver\Node\TypeAttribute;
 use Symfony\Component\Finder\SplFileInfo;
@@ -68,7 +66,6 @@ final class NodeScopeResolver
      */
     public function processNodes(array $nodes, SplFileInfo $fileInfo): array
     {
-        $this->ensureNameResolverWasRun($nodes);
         $this->setAnalysedFiles();
 
         $this->phpStanNodeScopeResolver->processNodes(
@@ -99,27 +96,6 @@ final class NodeScopeResolver
         }
 
         $this->phpStanNodeScopeResolver->setAnalysedFiles($filePaths);
-    }
-
-    /**
-     * @param Node[] $nodes
-     */
-    private function ensureNameResolverWasRun(array $nodes): void
-    {
-        foreach ($nodes as $node) {
-            if ($node instanceof Class_) {
-                if (isset($node->namespacedName)) {
-                    return;
-                }
-
-                throw new ShouldNotHappenException(sprintf(
-                    '"%s" node needs "namespacedNode" property set via "%s" Node Traverser. Did you forget to run it before calling "%s->processNodes()"?.',
-                    get_class($node),
-                    NameResolver::class,
-                    self::class
-                ));
-            }
-        }
     }
 
     /**

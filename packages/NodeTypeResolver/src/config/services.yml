@@ -3,6 +3,7 @@ services:
         resource: '../'
         exclude: '../{Contract}'
 
+
     # PHPStan
     PHPStan\Broker\Broker:
         factory: ['@Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory', 'createBroker']

@@ -20,7 +20,6 @@ final class ControllerMethodAnalyzer
         }
 
         $parentClassName = $node->getAttribute(MetadataAttribute::PARENT_CLASS_NAME);
-
         if (! Strings::endsWith($parentClassName, 'Controller')) {
             return false;
         }

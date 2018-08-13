@@ -50,6 +50,7 @@ final class ClassAndMethodNodeDecorator implements NodeDecoratorInterface
         $this->processClass($node);
         $this->processMethod($node);
 
+        // possibly new method call
         if ($node instanceof Expression) {
             $this->methodCallName = null;
         }

@@ -34,13 +34,18 @@ final class NodeScopeAndMetadataDecorator
     public function processNodesAndSplFileInfo(array $nodes, SplFileInfo $splFileInfo): array
     {
         $nodeTraverser = new NodeTraverser();
+        // specially rewrite nodes for PHPStan
         $nodeTraverser->addVisitor(new NameResolver());
         $nodes = $nodeTraverser->traverse($nodes);
 
-        $nodeTraverser = new NodeTraverser();
-        $nodeTraverser->addVisitor($this->metadataNodeVisitor);
-        $nodes = $nodeTraverser->traverse($nodes);
+        $nodes = $this->nodeScopeResolver->processNodes($nodes, $splFileInfo);
 
-        return $this->nodeScopeResolver->processNodes($nodes, $splFileInfo);
+        $nodeTraverser = new NodeTraverser();
+        $nodeTraverser->addVisitor(new NameResolver(null, [
+            'replaceNodes' => false,
+        ]));
+        $nodeTraverser->addVisitor($this->metadataNodeVisitor);
+
+        return $nodeTraverser->traverse($nodes);
     }
 }

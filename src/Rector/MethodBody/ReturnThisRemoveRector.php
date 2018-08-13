@@ -4,6 +4,7 @@ namespace Rector\Rector\MethodBody;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use Rector\BetterPhpDocParser\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\NodeTypeResolver\Node\MetadataAttribute;
@@ -107,6 +108,7 @@ CODE_SAMPLE
 
         $this->removeNode = true;
 
+        /** @var ClassMethod $methodNode */
         $methodNode = $returnNode->getAttribute(MetadataAttribute::METHOD_NODE);
         $this->docBlockAnalyzer->removeTagFromNode($methodNode, 'return');
 
