@@ -6,7 +6,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Return_;
 use Rector\BetterPhpDocParser\NodeAnalyzer\DocBlockAnalyzer;
-use Rector\Builder\MethodCall\ClearedFluentMethodCollector;
 use Rector\NodeTypeResolver\Node\MetadataAttribute;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Rector\AbstractRector;
@@ -16,11 +15,6 @@ use SomeClass;
 
 final class ReturnThisRemoveRector extends AbstractRector
 {
-    /**
-     * @var ClearedFluentMethodCollector
-     */
-    private $clearedFluentMethodCollector;
-
     /**
      * @var string[]
      */
@@ -41,11 +35,9 @@ final class ReturnThisRemoveRector extends AbstractRector
      */
     public function __construct(
         array $classesToDefluent,
-        ClearedFluentMethodCollector $clearedFluentMethodCollector,
         NodeTypeResolver $nodeTypeResolver,
         DocBlockAnalyzer $docBlockAnalyzer
     ) {
-        $this->clearedFluentMethodCollector = $clearedFluentMethodCollector;
         $this->classesToDefluent = $classesToDefluent;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->docBlockAnalyzer = $docBlockAnalyzer;
@@ -117,12 +109,6 @@ CODE_SAMPLE
 
         $methodNode = $returnNode->getAttribute(MetadataAttribute::METHOD_NODE);
         $this->docBlockAnalyzer->removeTagFromNode($methodNode, 'return');
-
-        /** @var string $className */
-        $className = $returnNode->getAttribute(MetadataAttribute::CLASS_NAME);
-        /** @var string $methodName */
-        $methodName = $returnNode->getAttribute(MetadataAttribute::METHOD_NAME);
-        $this->clearedFluentMethodCollector->addClassAndMethod($className, $methodName);
 
         return null;
     }

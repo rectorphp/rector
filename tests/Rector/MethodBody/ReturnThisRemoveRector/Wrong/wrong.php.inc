@@ -1,6 +1,6 @@
 <?php
 
-namespace SomeNamespace;
+namespace Rector\Tests\Rector\MethodBody\ReturnThisRemoveRector;
 
 class SomeClass
 {
@@ -14,21 +14,5 @@ class SomeClass
     {
         bar();
         return $this;
-    }
-}
-
-class ActionClass
-{
-    /**
-     * @var SomeClass
-     */
-    private $someClass;
-
-    public function someFunction()
-    {
-        $this->someClass = new SomeClass();
-
-        $this->someClass->someFunction()
-                        ->otherFunction();
     }
 }
