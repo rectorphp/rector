@@ -51,8 +51,7 @@ final class NodeTraverserQueue
         $oldStmts = $this->parser->parseFile($fileInfo->getRealPath());
         $oldTokens = $this->lexer->getTokens();
 
-        $newStmts = $this->nodeScopeAndMetadataDecorator->processNodesAndSplFileInfo($oldStmts, $fileInfo);
-
+        $newStmts = $this->nodeScopeAndMetadataDecorator->decorateNodesAndSplFileInfo($oldStmts, $fileInfo);
         $newStmts = $this->rectorNodeTraverser->traverse($newStmts);
 
         return [$newStmts, $oldStmts, $oldTokens];

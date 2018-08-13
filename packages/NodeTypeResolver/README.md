@@ -109,72 +109,7 @@ imports:
     - { resource: 'vendor/rector/node-type-resolver/config/services.yml' }
 ```
 
-2. Add NodeVisitor to your NodeTraverse in config  
-
-```yaml
-# your-app/config.yml
-services:
-    YourApp\NodeTraverser:
-        calls:
-            - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\MetadataNodeVisitor']]
-```
-
-or if you create NodeTraverser in a factory:
-
-```php
-<?php declare(strict_types=1);
-
-namespace YourApp;
-
-use PhpParser\NodeTraverser;
-use Rector\NodeTypeResolver\NodeVisitor\MetadataNodeVisitor;
-
-final class NodeTraverserFactory
-{
-    /**
-     * @var MetadataNodeVisitor  
-     */
-    private $metadataNodeVisitor;
-    
-    public function __construct(MetadataNodeVisitor $metadataNodeVisitor)
-    {
-        $this->metadataNodeVisitor = $metadataNodeVisitor;
-    }
-    
-    public function create(): NodeTraverser
-    {
-        $nodeTraverser = new NodeTraverser();
-        $nodeTraverser->addVisitor($this->metadataNodeVisitor);
-        
-        // your own NodeVisitors
-        $nodeTraverser->addVisitor(...);
-        
-        return $nodeTraverser;
-    }
-}
-```
-
-3. And get attributes anywhere you need it
-
-```php
-<?php declare(strict_types=1);
-
-use Rector\NodeTypeResolver\Node\MetadataAttribute;
-
-/** @var PhpParser\NodeTraverser $nodeTraverser */
-$nodeTraverser = ...; // from DI container or manually created
-
-$nodes = $this->parser->parseFile(...);
-$nodes = $nodeTraverser->traverse($nodes);
-
-/** @var PhpParser\Node $node */
-foreach ($nodes as $node) {
-    $className = $node->getAttribute(MetadataAttribute::CLASS_NAME);
-    var_dump($className);
-}
-```
-
-3. Add CompilerPass to your Kernel
+2. Add CompilerPass to your Kernel
 
 ```php
 <?php declare(strict_types=1);
@@ -191,6 +126,58 @@ class AppKernel extends Kernel
     }
 } 
 ```
+
+3. Use `Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator` wherever you need.  
+
+```php
+
+<?php declare(strict_types=1);
+
+namespace YourApp;
+
+use PhpParser\Parser;
+use Rector\NodeTypeResolver\Node\MetadataAttribute;
+use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
+
+final class SomeClass
+{
+    /**
+     * @var Parser 
+     */
+    private $parser;
+    
+    /**
+     * @var NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator
+     */
+    private $nodeScopeAndMetadataDecorator;
+    
+    public function __construct(
+        Parser $parser,
+        NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator
+    ) {
+        $this->parser = $parser;
+        $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
+    }
+    
+    public function run() 
+    {
+        $someFile = __DIR__ . '/SomeFile.php';
+        $someFileContent = file_get_contents($someFile);
+        $nodes = $this->parser->parse($someFileContent);
+        
+        // @todo use filePath?
+        $decoratedNodes = $this->nodeScopeAndMetadataDecorator->decorateNodesAndSplFileInfo($nodes, new \SplFileInfo(__DIR__ . '/SomeFile.php'));
+        
+        foreach ($decoratedNodes as $node) {
+            $className = $node->getAttribute(MetadataAttribute::CLASS_NAME);
+            var_dump($className);
+        }
+        
+        // do whatever you need :)
+    }
+}
+```
+
 
 And that's it!
 

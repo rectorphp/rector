@@ -7,8 +7,8 @@ use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\CloningVisitor;
 use PhpParser\NodeVisitor\NameResolver;
 use Rector\NodeTypeResolver\NodeVisitor\MetadataNodeVisitor;
+use Rector\NodeTypeResolver\NodeVisitor\ParentAndNextNodeVisitor;
 use Rector\NodeTypeResolver\PHPStan\Scope\NodeScopeResolver;
-use Rector\PhpParser\NodeVisitor\ParentAndNextNodeAddingNodeVisitor;
 use Symfony\Component\Finder\SplFileInfo;
 
 final class NodeScopeAndMetadataDecorator
@@ -24,24 +24,24 @@ final class NodeScopeAndMetadataDecorator
     private $metadataNodeVisitor;
 
     /**
-     * @var ParentAndNextNodeAddingNodeVisitor
-     */
-    private $parentAndNextNodeAddingNodeVisitor;
-
-    /**
      * @var CloningVisitor
      */
     private $cloningVisitor;
 
+    /**
+     * @var ParentAndNextNodeVisitor
+     */
+    private $parentAndNextNodeVisitor;
+
     public function __construct(
         NodeScopeResolver $nodeScopeResolver,
         MetadataNodeVisitor $metadataNodeVisitor,
-        ParentAndNextNodeAddingNodeVisitor $parentAndNextNodeAddingNodeVisitor,
+        ParentAndNextNodeVisitor $parentAndNextNodeVisitor,
         CloningVisitor $cloningVisitor
     ) {
         $this->nodeScopeResolver = $nodeScopeResolver;
         $this->metadataNodeVisitor = $metadataNodeVisitor;
-        $this->parentAndNextNodeAddingNodeVisitor = $parentAndNextNodeAddingNodeVisitor;
+        $this->parentAndNextNodeVisitor = $parentAndNextNodeVisitor;
         $this->cloningVisitor = $cloningVisitor;
     }
 
@@ -49,7 +49,7 @@ final class NodeScopeAndMetadataDecorator
      * @param Node[] $nodes
      * @return Node[]
      */
-    public function processNodesAndSplFileInfo(array $nodes, SplFileInfo $splFileInfo): array
+    public function decorateNodesAndSplFileInfo(array $nodes, SplFileInfo $splFileInfo): array
     {
         $nodeTraverser = new NodeTraverser();
         // specially rewrite nodes for PHPStan
@@ -67,7 +67,7 @@ final class NodeScopeAndMetadataDecorator
 
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor($this->cloningVisitor); // needed also for format preserving printing
-        $nodeTraverser->addVisitor($this->parentAndNextNodeAddingNodeVisitor);
+        $nodeTraverser->addVisitor($this->parentAndNextNodeVisitor);
         $nodes = $nodeTraverser->traverse($nodes);
 
         $nodeTraverser = new NodeTraverser();
