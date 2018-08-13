@@ -1,6 +1,8 @@
 <?php declare(strict_types=1);
 
 use Rector\Tests\Rector\Architecture\DependencyInjection\ActionInjectionToConstructorInjectionRector\Source\ProductRepository;
+use Rector\Tests\Rector\Architecture\DependencyInjection\ActionInjectionToConstructorInjectionRector\Source\SomeProduct;
+use Rector\Tests\Rector\Architecture\DependencyInjection\ActionInjectionToConstructorInjectionRector\Source\SomeRequest;
 
 final class SomeController
 {
@@ -8,8 +10,7 @@ final class SomeController
     {
         $products = $productRepository->fetchAll();
     }
-
-    public function detail(Request $request, Product $product)
+    public function detail(SomeRequest $request, SomeProduct $product)
     {
     }
 }

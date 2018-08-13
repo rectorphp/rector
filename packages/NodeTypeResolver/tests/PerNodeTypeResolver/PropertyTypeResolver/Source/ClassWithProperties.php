@@ -8,4 +8,9 @@ final class MethodParamDocBlock
      * @var Html
      */
     public $htmlProperty;
+
+    /**
+     * @var ClassThatExtendsHtml
+     */
+    public $anotherHtmlProperty;
 }

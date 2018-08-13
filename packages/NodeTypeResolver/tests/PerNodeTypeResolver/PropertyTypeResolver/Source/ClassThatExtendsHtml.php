@@ -2,7 +2,8 @@
 
 namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\PropertyTypeResolver\Source;
 
-class Html
+class ClassThatExtendsHtml extends
+    Html
 {
 
 }

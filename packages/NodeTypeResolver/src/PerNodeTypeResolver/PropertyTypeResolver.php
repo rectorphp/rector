@@ -3,46 +3,20 @@
 namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Property;
-use PHPStan\Broker\Broker;
+use Rector\NodeTypeResolver\Contract\NodeTypeResolverAwareInterface;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
-use Rector\NodeTypeResolver\Reflection\ClassReflectionTypesResolver;
-use Rector\Php\TypeAnalyzer;
+use Rector\NodeTypeResolver\Node\TypeAttribute;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 
-final class PropertyTypeResolver implements PerNodeTypeResolverInterface
+final class PropertyTypeResolver implements PerNodeTypeResolverInterface, NodeTypeResolverAwareInterface
 {
     /**
-     * @var ClassReflectionTypesResolver
+     * @var NodeTypeResolver
      */
-    private $classReflectionTypesResolver;
-
-    /**
-     * @var DocBlockAnalyzer
-     */
-    private $docBlockAnalyzer;
-
-    /**
-     * @var Broker
-     */
-    private $broker;
-
-    /**
-     * @var TypeAnalyzer
-     */
-    private $typeAnalyzer;
-
-    public function __construct(
-        ClassReflectionTypesResolver $classReflectionTypesResolver,
-        DocBlockAnalyzer $docBlockAnalyzer,
-        Broker $broker,
-        TypeAnalyzer $typeAnalyzer
-    ) {
-        $this->classReflectionTypesResolver = $classReflectionTypesResolver;
-        $this->docBlockAnalyzer = $docBlockAnalyzer;
-        $this->broker = $broker;
-        $this->typeAnalyzer = $typeAnalyzer;
-    }
+    private $nodeTypeResolver;
 
     /**
      * @return string[]
@@ -58,39 +32,15 @@ final class PropertyTypeResolver implements PerNodeTypeResolverInterface
      */
     public function resolve(Node $propertyNode): array
     {
-        // doc
-        $propertyTypes = $this->docBlockAnalyzer->getVarTypes($propertyNode);
-        if ($propertyTypes === []) {
-            return [];
-        }
+        // fake property to local PropertyFetch → PHPStan understand that
+        $propertyFetchNode = new PropertyFetch(new Variable('this'), (string) $propertyNode->props[0]->name);
+        $propertyFetchNode->setAttribute(TypeAttribute::SCOPE, $propertyNode->getAttribute(TypeAttribute::SCOPE));
 
-        $propertyTypes = $this->filterOutScalarTypes($propertyTypes);
-
-        foreach ($propertyTypes as $propertyType) {
-            $propertyClassReflection = $this->broker->getClass($propertyType);
-            $propertyTypes += $this->classReflectionTypesResolver->resolve($propertyClassReflection);
-        }
-
-        return $propertyTypes;
+        return $this->nodeTypeResolver->resolve($propertyFetchNode);
     }
 
-    /**
-     * @param string[] $propertyTypes
-     * @return string[]
-     */
-    private function filterOutScalarTypes(array $propertyTypes): array
+    public function setNodeTypeResolver(NodeTypeResolver $nodeTypeResolver): void
     {
-        foreach ($propertyTypes as $key => $type) {
-            if (! $this->typeAnalyzer->isPhpReservedType($type)) {
-                continue;
-            }
-            unset($propertyTypes[$key]);
-        }
-
-        if ($propertyTypes === ['null']) {
-            return [];
-        }
-
-        return $propertyTypes;
+        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 }

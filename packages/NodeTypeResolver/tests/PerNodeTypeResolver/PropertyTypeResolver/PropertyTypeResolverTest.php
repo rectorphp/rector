@@ -5,6 +5,7 @@ namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\PropertyTypeResolver
 use Iterator;
 use PhpParser\Node\Stmt\Property;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
+use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\PropertyTypeResolver\Source\ClassThatExtendsHtml;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\PropertyTypeResolver\Source\Html;
 
 /**
@@ -25,5 +26,6 @@ final class PropertyTypeResolverTest extends AbstractNodeTypeResolverTest
     public function provideData(): Iterator
     {
         yield [__DIR__ . '/Source/ClassWithProperties.php', 0, [Html::class]];
+        yield [__DIR__ . '/Source/ClassWithProperties.php', 1, [ClassThatExtendsHtml::class, Html::class]];
     }
 }
