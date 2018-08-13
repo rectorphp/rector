@@ -1,3 +1,5 @@
 services:
     Rector\Utils\:
         resource: '../'
+
+    PhpParser\NodeFinder: ~

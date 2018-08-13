@@ -1,0 +1,12 @@
+services:
+    _defaults:
+        autowire: true
+        public: true
+
+    PhpParser\ParserFactory: ~
+    PhpParser\Parser:
+        factory: ['@PhpParser\ParserFactory', 'create']
+        arguments:
+            $kind: !php/const PhpParser\ParserFactory::PREFER_PHP7
+
+    Rector\NodeTypeResolver\Tests\StandaloneNodeTraverserQueue: ~

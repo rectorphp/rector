@@ -7,12 +7,12 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
-use Rector\NodeTraverserQueue\BetterNodeFinder;
 use Rector\NodeTypeResolver\Node\MetadataAttribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 use Rector\Symfony\Bridge\NodeAnalyzer\ControllerMethodAnalyzer;
+use Rector\Utils\BetterNodeFinder;
 
 final class GetRequestRector extends AbstractRector
 {

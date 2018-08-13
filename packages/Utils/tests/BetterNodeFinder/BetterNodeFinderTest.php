@@ -1,16 +1,26 @@
 <?php declare(strict_types=1);
 
-namespace Rector\NodeTraverserQueue\Tests;
+namespace Rector\Utils\Tests\BetterNodeFinder;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
-use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
+use PhpParser\NodeFinder;
+use PhpParser\NodeTraverser;
+use PhpParser\ParserFactory;
+use PHPUnit\Framework\TestCase;
+use Rector\NodeTypeResolver\NodeVisitor\ParentAndNextNodeVisitor;
+use Rector\Utils\BetterNodeFinder;
 
-final class BetterNodeFinderTest extends AbstractNodeTypeResolverTest
+final class BetterNodeFinderTest extends TestCase
 {
+    /**
+     * @var BetterNodeFinder
+     */
+    private $betterNodeFinder;
+
     /**
      * @var Node[]
      */
@@ -18,9 +28,8 @@ final class BetterNodeFinderTest extends AbstractNodeTypeResolverTest
 
     protected function setUp(): void
     {
-        parent::setUp();
-
-        $this->nodes = $this->getNodesForFile(__DIR__ . '/BetterNodeFinderSource/SomeFile.php.inc');
+        $this->betterNodeFinder = new BetterNodeFinder(new NodeFinder());
+        $this->nodes = $this->createNodesFromFile(__DIR__ . '/Source/SomeFile.php.inc');
     }
 
     public function testFindFirstAncestorInstanceOf(): void
@@ -28,6 +37,9 @@ final class BetterNodeFinderTest extends AbstractNodeTypeResolverTest
         /** @var Variable $variableNode */
         $variableNode = $this->betterNodeFinder->findFirstInstanceOf($this->nodes, Variable::class);
         $classNode = $this->betterNodeFinder->findFirstInstanceOf($this->nodes, Class_::class);
+
+        $this->assertInstanceOf(Variable::class, $variableNode);
+        $this->assertInstanceOf(Class_::class, $classNode);
 
         $classLikeNode = $this->betterNodeFinder->findFirstAncestorInstanceOf($variableNode, ClassLike::class);
         $this->assertSame($classLikeNode, $classNode);
@@ -39,5 +51,19 @@ final class BetterNodeFinderTest extends AbstractNodeTypeResolverTest
         $variableNode = $this->betterNodeFinder->findFirstInstanceOf($this->nodes, Variable::class);
 
         $this->assertNull($this->betterNodeFinder->findFirstAncestorInstanceOf($variableNode, Array_::class));
+    }
+
+    /**
+     * @return Node[]
+     */
+    private function createNodesFromFile(string $filePath): array
+    {
+        $phpParser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
+        $nodes = $phpParser->parse(file_get_contents($filePath));
+
+        $nodeTraverser = new NodeTraverser();
+        $nodeTraverser->addVisitor(new ParentAndNextNodeVisitor());
+
+        return $nodeTraverser->traverse($nodes);
     }
 }

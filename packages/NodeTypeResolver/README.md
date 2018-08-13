@@ -1,6 +1,7 @@
 # Node Type Resolver
 
-This package detects **class, interface and trait types** for classes, variables and properties. Those types are resolved by `NodeTypeResolver` service. It uses PHPStan for `PhpParser\Node\Expr` nodes and own type resolvers for other nodes like `PhpParser\Node\Stmt\Class_`, `PhpParser\Node\Stmt\Interface_` or `PhpParser\Node\Stmt\Trait_`.  
+This package detects **class, interface and trait types** for classes, variables and properties. Those types are resolved by `NodeTypeResolver` service. It uses PHPStan for `PhpParser\Node\Expr` nodes and own type resolvers for other nodes like `PhpParser\Node\Stmt\Class_`, `PhpParser\Node\Stmt\Interface_` or `PhpParser\Node\Stmt\Trait_`.
+
 
 ## Install
 
@@ -8,43 +9,104 @@ This package detects **class, interface and trait types** for classes, variables
 composer require rector/node-type-resolver
 ```
 
-## Usage
+You first need to integrate `Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator` to you application. It will traverse nodes and decorate with attributes that you can use right away and also attributes that are required for  `Rector\NodeTypeResolver\NodeTypeResolver`.
 
-### 1. Get Types of Node
+This package works best in Symfony Kernel application, but is also available in standalone use thanks to decoupled container factory.
+
+### A. Symfony Application
+
+Import `services.yml` in your Symfony config:
+
+```yaml
+# your-app/config.yml
+imports:
+    - { resource: 'vendor/rector/node-type-resolver/config/services.yml' }
+```
+
+Require `Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator` in the constructor:
 
 ```php
-use Rector\NodeTypeResolver\NodeTypeResolver;
+<?php declare(strict_types=1);
 
-final class SomeNodeProcessor
+namespace YourApp;
+
+use PhpParser\Parser;
+use Rector\NodeTypeResolver\Node\MetadataAttribute;
+use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
+
+final class SomeClass
 {
     /**
-     * @var NodeTypeResolver
+     * @var Parser
      */
-    private $nodeTypeResolver;
+    private $parser;
 
-    public function __construct(NodeTypeResolver $nodeTypeResolver)
-    {
-        $this->nodeTypeResolver = $nodeTypeResolver;
+    /**
+     * @var NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator
+     */
+    private $nodeScopeAndMetadataDecorator;
+
+    public function __construct(
+        Parser $parser,
+        NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator
+    ) {
+        $this->parser = $parser;
+        $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
     }
 
-    public function process(Node $node)
+    public function run(): void
     {
-        /** @var string[] $nodeTypes */
-        $nodeTypes = $this->nodeTypeResolver->resolve($node);
+        $someFilePath = __DIR__ . '/SomeFile.php';
+        $nodes = $this->parser->parse(file_get_contents($someFilePath));
 
-        if (in_array('Nette\Application\UI\Form', $nodeTypes, true) {
-            // this is Nette\Application\UI\Form variable
+        $decoratedNodes = $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($nodes, $someFilePath);
+
+        foreach ($decoratedNodes as $node) {
+            $className = $node->getAttribute(MetadataAttribute::CLASS_NAME);
+            // "string" with class name
+            var_dump($className);
         }
-        
-        // continue
+
+        // do whatever you need :)
     }
 }
 ```
 
-...in any Rector you create.
+### B. Standalone PHP Code
+
+```php
+<?php declare(strict_types=1);
+
+use Rector\NodeTypeResolver\DependencyInjection\NodeTypeResolverContainerFactory;
+use Rector\NodeTypeResolver\Node\MetadataAttribute;
+use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
+use PhpParser\ParserFactory;
+
+$phpParser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
+
+$someFilePath = __DIR__ . '/SomeFile.php';
+$nodes = $phpParser->parse(file_get_contents($someFilePath));
+
+$nodeTypeResolverContainer = (new NodeTypeResolverContainerFactory())->create();
+/** @var NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator */
+$nodeScopeAndMetadataDecorator = $nodeTypeResolverContainer->get(NodeScopeAndMetadataDecorator::class);
+$decoratedNodes = $nodeScopeAndMetadataDecorator->decorateNodesFromFile($nodes, $someFilePath);
+
+foreach ($decoratedNodes as $node) {
+    $className = $node->getAttribute(MetadataAttribute::CLASS_NAME);
+    // "string" with class name
+    var_dump($className);
+}
+```
 
 
-### 2. Helper Attributes
+---
+
+## Usage
+
+After this integration you have new attributes you can work with.
+
+### Attributes
 
 These attributes are always available anywhere inside the Node tree. That means that `CLASS_NAME` is available **in every node that is in the class**. That way you can easily get class name on `Property` node.
 
@@ -53,12 +115,14 @@ These attributes are always available anywhere inside the Node tree. That means 
 ```php
 <?php declare(strict_types=1);
 
+//@todo examples of dump
+
 use Rector\NodeTypeResolver\Node\MetadataAttribute;
 
 // string name of current namespace
 $namespaceName = $node->setAttribute(MetadataAttribute::NAMESPACE_NAME, $this->namespaceName);
 
-// instance of "PhpParser\Node\Stmt\Namespace_" 
+// instance of "PhpParser\Node\Stmt\Namespace_"
 $namespaceNode = $node->setAttribute(MetadataAttribute::NAMESPACE_NODE, $this->namespaceNode);
 
 // instances of "PhpParser\Node\Stmt\Use_"
@@ -69,6 +133,8 @@ $useNodes = $node->setAttribute(MetadataAttribute::USE_NODES, $this->useNodes);
 
 ```php
 <?php declare(strict_types=1);
+
+//@todo examples of dump
 
 use Rector\NodeTypeResolver\Node\MetadataAttribute;
 
@@ -89,6 +155,8 @@ $parentClassName = $node->getAttribute(MetadataAttribute::PARENT_CLASS_NAME);
 
 use Rector\NodeTypeResolver\Node\MetadataAttribute;
 
+//@todo examples of dump
+
 // string name of current method
 $methodName = $node->getAttribute(MetadataAttribute::METHOD_NAME);
 
@@ -99,68 +167,32 @@ $methodNode = $node->getAttribute(MetadataAttribute::METHOD_NODE);
 $methodCallName = $node->getAttribute(MetadataAttribute::METHOD_NAME);
 ```
 
-#### Setup
+### Get Types of Node
 
-1. Import `services.yml` in your config
+`Rector\NodeTypeResolver\NodeTypeResolver` helps you detect object types for any node that can have one.
 
-```yaml
-# your-app/config.yml
-imports:
-    - { resource: 'vendor/rector/node-type-resolver/config/services.yml' }
-```
-
-2. Use `Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator` wherever you need.  
+Get it via constructor or `$container->get(Rector\NodeTypeResolver\NodeTypeResolver::class)`;
 
 ```php
 <?php declare(strict_types=1);
 
-namespace YourApp;
+use PhpParser\Node\Stmt\Class_;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 
-use PhpParser\Parser;
-use Rector\NodeTypeResolver\Node\MetadataAttribute;
-use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
+// previously processed nodes
+$nodes = [...];
+/** @var NodeTypeResolver $nodeTypeResolver */
+$nodeTypeResolver = ...;
 
-final class SomeClass
-{
-    /**
-     * @var Parser 
-     */
-    private $parser;
-    
-    /**
-     * @var NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator
-     */
-    private $nodeScopeAndMetadataDecorator;
-    
-    public function __construct(
-        Parser $parser,
-        NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator
-    ) {
-        $this->parser = $parser;
-        $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
-    }
-    
-    public function run(): void
-    {
-        $someFilePath = __DIR__ . '/SomeFile.php';
-        $someFileContent = file_get_contents($someFilePath);
-        $nodes = $this->parser->parse($someFileContent);
-        
-        $decoratedNodes = $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($nodes, $someFilePath);
-        
-        foreach ($decoratedNodes as $node) {
-            $className = $node->getAttribute(MetadataAttribute::CLASS_NAME);
-            // "string" with class name
-            var_dump($className);
-        }
-        
-        // do whatever you need :)
+foreach ($nodes as $node) {
+    if ($node instanceof Class_) {
+        $classNodeTypes = $nodeTypeResolver->resolve($node);
+        var_dump($classNodeTypes); // array of strings
     }
 }
 ```
 
-And that's it!
-
 ### Inspiration
 
-- [PHPStanScopeVisitor](https://github.com/silverstripe/silverstripe-upgrader/blob/532182b23e854d02e0b27e68ebc394f436de0682/src/UpgradeRule/PHP/Visitor/PHPStanScopeVisitor.php) in [SilverStripe](https://github.com/silverstripe/) - Thank you ❤️️  
+Huge thanks for inspiration of this integration belongs to [PHPStanScopeVisitor](https://github.com/silverstripe/silverstripe-upgrader/blob/532182b23e854d02e0b27e68ebc394f436de0682/src/UpgradeRule/PHP/Visitor/PHPStanScopeVisitor.php) by [SilverStripe](https://github.com/silverstripe/) - Thank you ❤️️ !
+
