@@ -35,15 +35,12 @@ final class NodeScopeAndMetadataDecorator
     {
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor(new NameResolver());
-        $nodeTraverser->traverse($nodes);
+        $nodes = $nodeTraverser->traverse($nodes);
 
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor($this->metadataNodeVisitor);
-        $nodeTraverser->traverse($nodes);
-
         $nodes = $nodeTraverser->traverse($nodes);
-        $this->nodeScopeResolver->processNodes($nodes, $splFileInfo);
 
-        return $nodes;
+        return $this->nodeScopeResolver->processNodes($nodes, $splFileInfo);
     }
 }

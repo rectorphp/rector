@@ -3,22 +3,5 @@ services:
         resource: '../'
         exclude: '../{Node/Attribute.php,Rector/**/*Rector.php,Reporting/FileDiff.php,Testing,RectorDefinition,*/*/*Info.php,Configuration/Rector/*Recipe.php}'
 
-    # bin entry-point
-    Rector\Console\Application:
-        public: true
-
     # extra services
     Rector\Symfony\Rector\Form\Helper\FormTypeStringToTypeProvider: ~
-
-    # prepares helper attributes of nodes
-    Rector\NodeTraverser\StandaloneTraverseNodeTraverser:
-        # order matters, so the next NodeVisitor can work with previous' attributes
-        calls:
-            # adds FQN names for elements
-            # adds previous, next and parent node via attribute
-            # adds current class and method to all nodes via attribute
-            # adds current namespace to all nodes via attribute (have to be before TypeResolver)
-            - ['addNodeVisitor', ['@PhpParser\NodeVisitor\NameResolver']]
-            - ['addNodeVisitor', ['@PhpParser\NodeVisitor\CloningVisitor']]
-            - ['addNodeVisitor', ['@Rector\PhpParser\NodeVisitor\ParentAndNextNodeAddingNodeVisitor']]
-            - ['addNodeVisitor', ['@Rector\NodeTypeResolver\NodeVisitor\MetadataNodeVisitor']]
