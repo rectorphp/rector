@@ -1,6 +1,6 @@
 <?php
 
-namespace SomeNamespace;
+namespace Rector\Tests\Rector\MethodBody\ReturnThisRemoveRector;
 
 class SomeClassWithReturnAnnotations
 {

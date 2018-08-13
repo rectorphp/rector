@@ -4,81 +4,62 @@ namespace Rector\Rector\MethodBody;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
-use Rector\Builder\MethodCall\ClearedFluentMethodCollector;
 use Rector\Node\MethodCallNodeFactory;
-use Rector\NodeAnalyzer\MethodCallAnalyzer;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use SomeClass;
 
 final class FluentReplaceRector extends AbstractRector
 {
-    /**
-     * @var MethodCallAnalyzer
-     */
-    private $methodCallAnalyzer;
-
     /**
      * @var MethodCallNodeFactory
      */
     private $methodCallNodeFactory;
 
     /**
-     * @var ClearedFluentMethodCollector
+     * @var string[]
      */
-    private $clearedFluentMethodCollector;
+    private $classesToDefluent = [];
 
+    /**
+     * @var NodeTypeResolver
+     */
+    private $nodeTypeResolver;
+
+    /**
+     * @param string[] $classesToDefluent
+     */
     public function __construct(
-        MethodCallAnalyzer $methodCallAnalyzer,
+        array $classesToDefluent,
         MethodCallNodeFactory $methodCallNodeFactory,
-        ClearedFluentMethodCollector $clearedFluentMethodCollector
+        NodeTypeResolver $nodeTypeResolver
     ) {
-        $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->methodCallNodeFactory = $methodCallNodeFactory;
-        $this->clearedFluentMethodCollector = $clearedFluentMethodCollector;
+        $this->classesToDefluent = $classesToDefluent;
+        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Turns fluent interface calls to classic ones.', [
-            new CodeSample(
+            new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
-class SomeClass
-{
-    public function someFunction()
-    {
-        return $this;
-    }
-
-    public function otherFunction()
-    {
-        return $this;
-    }
-}
-
 $someClass = new SomeClass();
 $someClass->someFunction()
             ->otherFunction();
 CODE_SAMPLE
                 ,
                 <<<'CODE_SAMPLE'
-class SomeClass
-{
-    public function someFunction()
-    {
-        return $this;
-    }
-
-    public function otherFunction()
-    {
-        return $this;
-    }
-}
-
 $someClass = new SomeClass();
 $someClass->someFunction();
 $someClass->otherFunction();
 CODE_SAMPLE
+                ,
+                [
+                    '$classesToDefluent' => [SomeClass::class],
+                ]
             ),
         ]);
     }
@@ -93,7 +74,14 @@ CODE_SAMPLE
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        if (! $this->isMethodCallCandidate($methodCallNode)) {
+        // is chain method call
+        if (! $methodCallNode->var instanceof MethodCall) {
+            return $methodCallNode;
+        }
+
+        // is matching type
+        $methodCallNodeTypes = $this->nodeTypeResolver->resolve($methodCallNode->var->var);
+        if (! array_intersect($this->classesToDefluent, $methodCallNodeTypes)) {
             return $methodCallNode;
         }
 
@@ -103,24 +91,6 @@ CODE_SAMPLE
         $this->decoupleMethodCall($methodCallNode, $innerMethodCallNode);
 
         return $innerMethodCallNode;
-    }
-
-    private function isMethodCallCandidate(MethodCall $methodCallNode): bool
-    {
-        // is chain method call
-        if (! $methodCallNode->var instanceof MethodCall) {
-            return false;
-        }
-
-        foreach ($this->clearedFluentMethodCollector->getMethodsByClass() as $type => $methods) {
-            if (! $this->methodCallAnalyzer->isTypeAndMethods($methodCallNode->var, $type, $methods)) {
-                continue;
-            }
-
-            return true;
-        }
-
-        return false;
     }
 
     private function decoupleMethodCall(MethodCall $outerMethodCallNode, MethodCall $innerMethodCallNode): void

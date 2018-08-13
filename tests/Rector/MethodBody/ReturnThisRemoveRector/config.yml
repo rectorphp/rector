@@ -1,0 +1,7 @@
+parameters:
+    classes_to_defluent:
+        - 'Rector\Tests\Rector\MethodBody\ReturnThisRemoveRector\SomeClass'
+        - 'Rector\Tests\Rector\MethodBody\ReturnThisRemoveRector\SomeClassWithReturnAnnotations'
+
+services:
+    Rector\Rector\MethodBody\ReturnThisRemoveRector: ~
