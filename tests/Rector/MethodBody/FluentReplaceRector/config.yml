@@ -1,2 +1,9 @@
+parameters:
+    classes_to_defluent:
+        - 'SomeNamespace\SomeClass'
+        - 'SomeNamespace\SomeClassWithReturnAnnotations'
+
 services:
+    # have to be run first
+    Rector\Rector\MethodBody\ReturnThisRemoveRector: ~
     Rector\Rector\MethodBody\FluentReplaceRector: ~

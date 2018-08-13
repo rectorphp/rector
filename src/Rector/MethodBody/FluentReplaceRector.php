@@ -4,27 +4,15 @@ namespace Rector\Rector\MethodBody;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt\Return_;
+use Rector\Builder\MethodCall\ClearedFluentMethodCollector;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
-use Rector\NodeTypeResolver\Node\MetadataAttribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
-/**
- * Inspiration:
- * - https://ocramius.github.io/blog/fluent-interfaces-are-evil/
- * - http://www.yegor256.com/2018/03/13/fluent-interfaces.html
- */
 final class FluentReplaceRector extends AbstractRector
 {
-    /**
-     * @var string[][]
-     */
-    private $relatedTypesAndMethods = [];
-
     /**
      * @var MethodCallAnalyzer
      */
@@ -35,15 +23,24 @@ final class FluentReplaceRector extends AbstractRector
      */
     private $methodCallNodeFactory;
 
-    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, MethodCallNodeFactory $methodCallNodeFactory)
-    {
+    /**
+     * @var ClearedFluentMethodCollector
+     */
+    private $clearedFluentMethodCollector;
+
+    public function __construct(
+        MethodCallAnalyzer $methodCallAnalyzer,
+        MethodCallNodeFactory $methodCallNodeFactory,
+        ClearedFluentMethodCollector $clearedFluentMethodCollector
+    ) {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->methodCallNodeFactory = $methodCallNodeFactory;
+        $this->clearedFluentMethodCollector = $clearedFluentMethodCollector;
     }
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Turns fluent interfaces to classic ones.', [
+        return new RectorDefinition('Turns fluent interface calls to classic ones.', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass
@@ -69,10 +66,12 @@ class SomeClass
 {
     public function someFunction()
     {
+        return $this;
     }
 
     public function otherFunction()
     {
+        return $this;
     }
 }
 
@@ -84,50 +83,26 @@ CODE_SAMPLE
         ]);
     }
 
-    public function isCandidate(Node $node): bool
+    public function getNodeType(): string
     {
-        // @todo this run has to be first, dual run?
-        if ($node instanceof Return_) {
-            if (! $node->expr instanceof Variable) {
-                return false;
-            }
-
-            return $node->expr->name === 'this';
-        }
-
-        if ($node instanceof MethodCall) {
-            return $this->isMethodCallCandidate($node);
-        }
-
-        return false;
+        return MethodCall::class;
     }
 
     /**
-     * @param Return_|MethodCall $node
+     * @param MethodCall $methodCallNode
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $methodCallNode): ?Node
     {
-        if ($node instanceof Return_) {
-            $this->removeNode = true;
-
-            $className = $node->getAttribute(MetadataAttribute::CLASS_NAME);
-            $methodName = $node->getAttribute(MetadataAttribute::METHOD_NAME);
-
-            $this->relatedTypesAndMethods[$className][] = $methodName;
-
-            return null;
+        if (! $this->isMethodCallCandidate($methodCallNode)) {
+            return $methodCallNode;
         }
 
-        if ($node instanceof MethodCall) {
-            /** @var MethodCall $innerMethodCallNode */
-            $innerMethodCallNode = $node->var;
+        /** @var MethodCall $innerMethodCallNode */
+        $innerMethodCallNode = $methodCallNode->var;
 
-            $this->decoupleMethodCall($node, $innerMethodCallNode);
+        $this->decoupleMethodCall($methodCallNode, $innerMethodCallNode);
 
-            return $innerMethodCallNode;
-        }
-
-        return $node;
+        return $innerMethodCallNode;
     }
 
     private function isMethodCallCandidate(MethodCall $methodCallNode): bool
@@ -137,7 +112,7 @@ CODE_SAMPLE
             return false;
         }
 
-        foreach ($this->relatedTypesAndMethods as $type => $methods) {
+        foreach ($this->clearedFluentMethodCollector->getMethodsByClass() as $type => $methods) {
             if (! $this->methodCallAnalyzer->isTypeAndMethods($methodCallNode->var, $type, $methods)) {
                 continue;
             }

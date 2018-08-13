@@ -1,4 +1,16 @@
+parameters:
+    classes_to_defluent:
+        - 'GuzzleHttp\Collection'
+        - 'GuzzleHttp\Url'
+        - 'GuzzleHttp\Query'
+        - 'GuzzleHttp\Post\PostBody'
+        - 'GuzzleHttp\Cookie\SetCookie'
+
 services:
+    # covers https://github.com/guzzle/guzzle/commit/668209c895049759377593eed129e0949d9565b7#diff-810cdcfdd8a6b9e1fc0d1e96d7786874
+    Rector\Rector\MethodBody\ReturnThisRemoveRector: ~
+    Rector\Rector\MethodBody\FluentReplaceRector: ~
+
     Rector\Rector\Function_\FunctionToMethodCallRector:
         $functionToMethodCall:
             'GuzzleHttp\json_decode': ['GuzzleHttp\Utils', 'jsonDecode']
