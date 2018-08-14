@@ -6,7 +6,7 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\NodeTypeResolver\Node\MetadataAttribute;
+use Rector\NodeTypeResolver\Node\Attribute;
 
 final class ControllerMethodAnalyzer
 {
@@ -19,7 +19,7 @@ final class ControllerMethodAnalyzer
             return false;
         }
 
-        $parentClassName = $node->getAttribute(MetadataAttribute::PARENT_CLASS_NAME);
+        $parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
         if (! Strings::endsWith($parentClassName, 'Controller')) {
             return false;
         }

@@ -10,10 +10,9 @@ use PhpParser\Node\Scalar\String_;
 use Rector\Bridge\Contract\AnalyzedApplicationContainerInterface;
 use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Naming\PropertyNaming;
-use Rector\Node\Attribute;
 use Rector\Node\PropertyFetchNodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
-use Rector\NodeTypeResolver\Node\MetadataAttribute;
+use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 
 abstract class AbstractToConstructorInjectionRector extends AbstractRector
@@ -74,7 +73,7 @@ abstract class AbstractToConstructorInjectionRector extends AbstractRector
         $propertyName = $this->propertyNaming->fqnToVariableName($serviceType);
 
         $this->classPropertyCollector->addPropertyForClass(
-            (string) $methodCallNode->getAttribute(MetadataAttribute::CLASS_NAME),
+            (string) $methodCallNode->getAttribute(Attribute::CLASS_NAME),
             [$serviceType],
             $propertyName
         );

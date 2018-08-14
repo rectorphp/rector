@@ -1,13 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace Rector\BetterPhpDocParser\Tests\NodeAnalyzer;
+namespace Rector\NodeTypeResolver\Tests\PhpDoc\NodeAnalyzer;
 
 use PhpParser\Comment\Doc;
 use PhpParser\Node\Scalar\String_;
-use Rector\BetterPhpDocParser\NodeAnalyzer\DocBlockAnalyzer;
-use Rector\Tests\AbstractContainerAwareTestCase;
+use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
+use Rector\NodeTypeResolver\Tests\AbstractNodeTypeResolverContainerAwareTestCase;
 
-final class DocBlockAnalyzerTest extends AbstractContainerAwareTestCase
+final class DocBlockAnalyzerTest extends AbstractNodeTypeResolverContainerAwareTestCase
 {
     /**
      * @var DocBlockAnalyzer

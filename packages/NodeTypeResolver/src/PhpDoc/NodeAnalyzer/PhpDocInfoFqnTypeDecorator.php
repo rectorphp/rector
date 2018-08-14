@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\BetterPhpDocParser\NodeAnalyzer;
+namespace Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer;
 
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
@@ -41,7 +41,6 @@ final class PhpDocInfoFqnTypeDecorator extends AbstractPhpDocInfoDecorator
             return $node;
         }
 
-        // @todo check PHPStan for this
         /** @var IdentifierTypeNode $node */
         $node->name = $this->namespaceAnalyzer->resolveTypeToFullyQualified(
             $node->name,

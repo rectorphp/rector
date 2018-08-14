@@ -6,7 +6,7 @@ use PhpParser\ConstExprEvaluator;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Identifier;
-use Rector\Node\Attribute;
+use Rector\NodeTypeResolver\Node\Attribute;
 
 final class ConstExprEvaluatorFactory
 {

@@ -4,7 +4,7 @@ namespace Rector\NodeAnalyzer;
 
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
-use Rector\NodeTypeResolver\Node\MetadataAttribute;
+use Rector\NodeTypeResolver\Node\Attribute;
 
 /**
  * Read-only utils for MethodCall Node:
@@ -21,7 +21,7 @@ final class MethodNameAnalyzer
             return false;
         }
 
-        $parentClassName = $node->getAttribute(MetadataAttribute::PARENT_CLASS_NAME);
+        $parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
         if (! $parentClassName) {
             return false;
         }

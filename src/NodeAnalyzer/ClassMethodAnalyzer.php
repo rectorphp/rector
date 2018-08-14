@@ -5,7 +5,7 @@ namespace Rector\NodeAnalyzer;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\NodeTypeResolver\Node\MetadataAttribute;
+use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
 /**
@@ -45,7 +45,7 @@ final class ClassMethodAnalyzer
             return false;
         }
 
-        $classNode = $node->getAttribute(MetadataAttribute::CLASS_NODE);
+        $classNode = $node->getAttribute(Attribute::CLASS_NODE);
         $nodeTypes = $this->nodeTypeResolver->resolve($classNode);
 
         return in_array($type, $nodeTypes, true);

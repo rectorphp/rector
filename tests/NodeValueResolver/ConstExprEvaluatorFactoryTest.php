@@ -6,7 +6,7 @@ use PhpParser\BuilderFactory;
 use PhpParser\ConstExprEvaluator;
 use PhpParser\Node\Name;
 use PHPUnit\Framework\TestCase;
-use Rector\Node\Attribute;
+use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\NodeValueResolver\ConstExprEvaluatorFactory;
 
 final class ConstExprEvaluatorFactoryTest extends TestCase

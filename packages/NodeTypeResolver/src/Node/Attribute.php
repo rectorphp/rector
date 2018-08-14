@@ -2,8 +2,13 @@
 
 namespace Rector\NodeTypeResolver\Node;
 
-final class MetadataAttribute
+final class Attribute
 {
+    /**
+     * @var string
+     */
+    public const SCOPE = 'scope';
+
     /**
      * @var string
      */
@@ -48,4 +53,35 @@ final class MetadataAttribute
      * @var string
      */
     public const METHOD_CALL_NAME = 'methodCallName';
+
+    /**
+     * Internal php-parser name.
+     * Do not change this even if you want!
+     *
+     * @var string
+     */
+    public const ORIGINAL_NODE = 'origNode';
+
+    /**
+     * Internal php-parser name. @see \PhpParser\NodeVisitor\NameResolver
+     * Do not change this even if you want!
+     *
+     * @var string
+     */
+    public const RESOLVED_NAME = 'resolvedName';
+
+    /**
+     * @var string
+     */
+    public const PARENT_NODE = 'parentNode';
+
+    /**
+     * @var string
+     */
+    public const PREVIOUS_NODE = 'prevNode';
+
+    /**
+     * @var string
+     */
+    public const NEXT_NODE = 'nextNode';
 }

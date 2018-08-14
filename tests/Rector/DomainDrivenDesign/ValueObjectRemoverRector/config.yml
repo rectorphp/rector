@@ -1,9 +1,4 @@
 services:
-    # todo: combine configuration in some way
-    Rector\Rector\DomainDrivenDesign\ValueObjectRemover\ValueObjectRemoverDocBlockRector:
-        $valueObjectsToSimpleTypes:
-            'Rector\Tests\Rector\DomainDrivenDesign\ValueObjectRemoverRector\Source\SomeValueObject': 'string'
-
     Rector\Rector\DomainDrivenDesign\ValueObjectRemover\ValueObjectRemoverRector:
         $valueObjectsToSimpleTypes:
             'Rector\Tests\Rector\DomainDrivenDesign\ValueObjectRemoverRector\Source\SomeValueObject': 'string'

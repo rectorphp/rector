@@ -4,7 +4,7 @@ namespace Rector\Utils;
 
 use PhpParser\Node;
 use PhpParser\NodeFinder;
-use Rector\Node\Attribute;
+use Rector\NodeTypeResolver\Node\Attribute;
 
 final class BetterNodeFinder
 {

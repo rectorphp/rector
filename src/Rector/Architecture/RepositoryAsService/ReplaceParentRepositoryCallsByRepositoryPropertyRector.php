@@ -7,7 +7,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use PHPStan\Broker\Broker;
 use Rector\Node\PropertyFetchNodeFactory;
-use Rector\NodeTypeResolver\Node\TypeAttribute;
+use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -96,7 +96,7 @@ CODE_SAMPLE
             return false;
         }
 
-        $methodReflection = $entityClassReflection->getMethod($methodName, $node->getAttribute(TypeAttribute::SCOPE));
+        $methodReflection = $entityClassReflection->getMethod($methodName, $node->getAttribute(Attribute::SCOPE));
 
         return $methodReflection->isPublic();
     }

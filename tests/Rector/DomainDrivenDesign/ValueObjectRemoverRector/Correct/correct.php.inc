@@ -1,13 +1,13 @@
 <?php
 
-namespace SomeNamespace;
+namespace Rector\Tests\Rector\DomainDrivenDesign\ValueObjectRemoverRector;
 
 use Rector\Tests\Rector\DomainDrivenDesign\ValueObjectRemoverRector\Source\SomeChildOfValueObject;
 
 class ActionClass
 {
     /**
-     * @var string|null
+     * @var SomeChildOfValueObject|null
      */
     private $someChildValueObject;
 

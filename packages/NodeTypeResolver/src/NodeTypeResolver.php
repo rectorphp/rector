@@ -5,9 +5,12 @@ namespace Rector\NodeTypeResolver;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PHPStan\Analyser\Scope;
+use PHPStan\Broker\Broker;
+use Rector\NodeTypeResolver\Contract\NodeTypeResolverAwareInterface;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
-use Rector\NodeTypeResolver\Node\TypeAttribute;
+use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeToStringResolver;
+use Rector\NodeTypeResolver\Reflection\ClassReflectionTypesResolver;
 
 final class NodeTypeResolver
 {
@@ -21,15 +24,35 @@ final class NodeTypeResolver
      */
     private $typeToStringResolver;
 
-    public function __construct(TypeToStringResolver $typeToStringResolver)
-    {
+    /**
+     * @var Broker
+     */
+    private $broker;
+
+    /**
+     * @var ClassReflectionTypesResolver
+     */
+    private $classReflectionTypesResolver;
+
+    public function __construct(
+        TypeToStringResolver $typeToStringResolver,
+        Broker $broker,
+        ClassReflectionTypesResolver $classReflectionTypesResolver
+    ) {
         $this->typeToStringResolver = $typeToStringResolver;
+        $this->broker = $broker;
+        $this->classReflectionTypesResolver = $classReflectionTypesResolver;
     }
 
     public function addPerNodeTypeResolver(PerNodeTypeResolverInterface $perNodeTypeResolver): void
     {
         foreach ($perNodeTypeResolver->getNodeClasses() as $nodeClass) {
             $this->perNodeTypeResolvers[$nodeClass] = $perNodeTypeResolver;
+        }
+
+        // in-code setter injection to drop CompilerPass requirement for 3rd party package install
+        if ($perNodeTypeResolver instanceof NodeTypeResolverAwareInterface) {
+            $perNodeTypeResolver->setNodeTypeResolver($this);
         }
     }
 
@@ -38,8 +61,32 @@ final class NodeTypeResolver
      */
     public function resolve(Node $node): array
     {
+        $types = $this->resolveFirstTypes($node);
+        if ($types === []) {
+            return $types;
+        }
+
+        // complete parent types - parent classes, interfaces and traits
+        foreach ($types as $i => $type) {
+            // remove scalar types and other non-existing ones
+            if ($type === 'null') {
+                unset($types[$i]);
+                continue;
+            }
+
+            $types += $this->classReflectionTypesResolver->resolve($this->broker->getClass($type));
+        }
+
+        return $types;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function resolveFirstTypes(Node $node): array
+    {
         /** @var Scope|null $nodeScope */
-        $nodeScope = $node->getAttribute(TypeAttribute::SCOPE);
+        $nodeScope = $node->getAttribute(Attribute::SCOPE);
         if ($nodeScope === null) {
             return [];
         }
@@ -56,8 +103,7 @@ final class NodeTypeResolver
 
         // PHPStan
         /** @var Scope $nodeScope */
-        $nodeScope = $node->getAttribute(TypeAttribute::SCOPE);
-
+        $nodeScope = $node->getAttribute(Attribute::SCOPE);
         $type = $nodeScope->getType($node);
 
         return $this->typeToStringResolver->resolve($type);

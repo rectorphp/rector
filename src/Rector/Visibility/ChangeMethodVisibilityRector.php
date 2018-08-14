@@ -5,7 +5,7 @@ namespace Rector\Rector\Visibility;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\NodeModifier\VisibilityModifier;
-use Rector\NodeTypeResolver\Node\MetadataAttribute;
+use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -86,11 +86,11 @@ CODE_SAMPLE
         }
 
         // doesn't have a parent class
-        if (! $node->hasAttribute(MetadataAttribute::PARENT_CLASS_NAME)) {
+        if (! $node->hasAttribute(Attribute::PARENT_CLASS_NAME)) {
             return false;
         }
 
-        $nodeParentClassName = $node->getAttribute(MetadataAttribute::PARENT_CLASS_NAME);
+        $nodeParentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
         if (! isset($this->methodToVisibilityByClass[$nodeParentClassName])) {
             return false;
         }
@@ -117,7 +117,7 @@ CODE_SAMPLE
     private function resolveNewVisibilityForNode(ClassMethod $classMethodNode): string
     {
         $methodName = $classMethodNode->name->toString();
-        $nodeParentClassName = $classMethodNode->getAttribute(MetadataAttribute::PARENT_CLASS_NAME);
+        $nodeParentClassName = $classMethodNode->getAttribute(Attribute::PARENT_CLASS_NAME);
 
         return $this->methodToVisibilityByClass[$nodeParentClassName][$methodName];
     }

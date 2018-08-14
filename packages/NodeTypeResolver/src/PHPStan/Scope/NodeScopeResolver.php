@@ -10,7 +10,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Broker\Broker;
 use Rector\Configuration\Option;
 use Rector\FileSystem\FilesFinder;
-use Rector\NodeTypeResolver\Node\TypeAttribute;
+use Rector\NodeTypeResolver\Node\Attribute;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 
@@ -77,7 +77,7 @@ final class NodeScopeResolver
                     $scope = $this->resolveClassOrInterfaceNode($node, $scope);
                 }
 
-                $node->setAttribute(TypeAttribute::SCOPE, $scope);
+                $node->setAttribute(Attribute::SCOPE, $scope);
             }
         );
 

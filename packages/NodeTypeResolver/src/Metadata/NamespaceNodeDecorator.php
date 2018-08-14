@@ -6,7 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
 use Rector\NodeTypeResolver\Contract\Metadata\NodeDecoratorInterface;
-use Rector\NodeTypeResolver\Node\MetadataAttribute;
+use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Utils\BetterNodeFinder;
 
 final class NamespaceNodeDecorator implements NodeDecoratorInterface
@@ -51,8 +51,8 @@ final class NamespaceNodeDecorator implements NodeDecoratorInterface
             $this->useNodes = $this->betterNodeFinder->findInstanceOf($node, Use_::class);
         }
 
-        $node->setAttribute(MetadataAttribute::NAMESPACE_NAME, $this->namespaceName);
-        $node->setAttribute(MetadataAttribute::NAMESPACE_NODE, $this->namespaceNode);
-        $node->setAttribute(MetadataAttribute::USE_NODES, $this->useNodes);
+        $node->setAttribute(Attribute::NAMESPACE_NAME, $this->namespaceName);
+        $node->setAttribute(Attribute::NAMESPACE_NODE, $this->namespaceNode);
+        $node->setAttribute(Attribute::USE_NODES, $this->useNodes);
     }
 }

@@ -31,6 +31,7 @@ parameters:
         - '#Call to function in_array\(\) with arguments string, array<array<string\|false>> and true will always evaluate to false#'
 
         # known values
+        - '#Cannot call method getName\(\) on PHPStan\\Reflection\\ClassReflection\|null#' # 1
         - '#Parameter \#1 \$classReflection of method Rector\\NodeTypeResolver\\Reflection\\ClassReflectionTypesResolver::resolve\(\) expects PHPStan\\Reflection\\ClassReflection, PHPStan\\Reflection\\ClassReflection|null given#'
         - '#Cannot call method getAttribute\(\) on PhpParser\\Node\\Name\|null#'
         - '#Cannot call method getName\(\) on Rector\\Builder\\Class_\\VariableInfo\|null#'
@@ -70,9 +71,6 @@ parameters:
         - '#Access to an undefined property PhpParser\\Node\\Expr::\$value#' # 2
         - '#Access to an undefined property PhpParser\\Node\\Expr::\$(name|var)#' # 2
 
-        # tests or coding standars?
-        - '#Constructor of class [\s\S]+ has an unused parameter \$html#' # 2
-
         # tests - known values
         - '#Parameter \#1 \$code of method PhpParser\\Parser::parse\(\) expects string, string\|false given#' # 1
 
@@ -84,3 +82,7 @@ parameters:
         - '*tests/Rector/MethodCall/MethodNameReplacerRector/**/SomeClass.php'
         - '*packages/BetterReflection/tests/Reflector/NotLoadedSource/SomeClass.php'
         - 'packages/NodeTypeResolver/tests/PerNodeTypeResolver/VariableTypeResolver/Source/NewClass.php'
+        # tests files
+        - '*tests/**/Wrong/*'
+        - '*tests/**/Correct/*'
+        - '*tests/**/Source/*'

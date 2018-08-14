@@ -1,0 +1,22 @@
+services:
+    _defaults:
+        # for "Rector\NodeTypeResolver\NodeTypeResolverFactory" standalone usage
+        public: true
+        autowire: true
+
+    Symplify\PackageBuilder\Parameter\ParameterProvider: ~
+    PhpParser\NodeVisitor\CloningVisitor: ~
+    PhpParser\NodeFinder: ~
+
+    # PHPStan
+    PHPStan\Broker\Broker:
+        factory: ['@Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory', 'createBroker']
+
+    PHPStan\Analyser\NodeScopeResolver:
+        factory: ['@Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory', 'createNodeScopeResolver']
+
+    PHPStan\Analyser\TypeSpecifier:
+        factory: ['@Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory', 'createTypeSpecifier']
+
+    PHPStan\Analyser\ScopeFactory:
+        factory: ['@Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory', 'createScopeFactory']

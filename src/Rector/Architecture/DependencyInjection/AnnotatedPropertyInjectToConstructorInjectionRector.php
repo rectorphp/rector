@@ -7,10 +7,10 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\PropertyProperty;
 use PhpParser\Node\VarLikeIdentifier;
-use Rector\BetterPhpDocParser\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\Builder\Class_\ClassPropertyCollector;
-use Rector\NodeTypeResolver\Node\MetadataAttribute;
+use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -129,7 +129,7 @@ CODE_SAMPLE
         $propertyName = $varLikeIdentifierNode->name;
 
         $this->classPropertyCollector->addPropertyForClass(
-            (string) $propertyNode->getAttribute(MetadataAttribute::CLASS_NAME),
+            (string) $propertyNode->getAttribute(Attribute::CLASS_NAME),
             $propertyTypes,
             $propertyName
         );

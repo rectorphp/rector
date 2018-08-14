@@ -22,7 +22,7 @@ final class NodeTypeResolverKernel extends Kernel
 
     public function registerContainerConfiguration(LoaderInterface $loader): void
     {
-        $loader->load(__DIR__ . '/../../src/config/services.yml');
+        $loader->load(__DIR__ . '/../../src/config/config.yml');
 
         if ($this->config) {
             $loader->load($this->config);
