@@ -4,6 +4,7 @@ namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
+use PHPStan\Analyser\Scope;
 use PHPStan\TrinaryLogic;
 use PHPStan\Type\ThisType;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
@@ -13,11 +14,6 @@ use Rector\NodeTypeResolver\PHPStan\Type\TypeToStringResolver;
 
 final class VariableTypeResolver implements PerNodeTypeResolverInterface
 {
-    /**
-     * @var ClassReflectionTypesResolver
-     */
-    private $classReflectionTypesResolver;
-
     /**
      * @var DocBlockAnalyzer
      */
@@ -48,6 +44,7 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface
      */
     public function resolve(Node $variableNode): array
     {
+        /** @var Scope $nodeScope */
         $nodeScope = $variableNode->getAttribute(Attribute::SCOPE);
 
         $variableName = (string) $variableNode->name;
@@ -57,7 +54,7 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface
 
             // this
             if ($type instanceof ThisType) {
-                return $this->classReflectionTypesResolver->resolve($nodeScope->getClassReflection());
+                return [$nodeScope->getClassReflection()->getName()];
             }
 
             return $this->typeToStringResolver->resolve($type);

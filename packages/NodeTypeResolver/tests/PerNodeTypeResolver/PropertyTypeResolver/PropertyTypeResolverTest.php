@@ -7,6 +7,8 @@ use PhpParser\Node\Stmt\Property;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\PropertyTypeResolver\Source\ClassThatExtendsHtml;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\PropertyTypeResolver\Source\Html;
+use Rector\Tests\Rector\DomainDrivenDesign\ValueObjectRemoverDocBlockRector\Source\SomeChildOfValueObject;
+use Rector\Tests\Rector\DomainDrivenDesign\ValueObjectRemoverDocBlockRector\Source\SomeValueObject;
 
 /**
  * @covers \Rector\NodeTypeResolver\PerNodeTypeResolver\PropertyTypeResolver
@@ -27,5 +29,8 @@ final class PropertyTypeResolverTest extends AbstractNodeTypeResolverTest
     {
         yield [__DIR__ . '/Source/ClassWithProperties.php', 0, [Html::class]];
         yield [__DIR__ . '/Source/ClassWithProperties.php', 1, [ClassThatExtendsHtml::class, Html::class]];
+
+        // mimics failing test from DomainDrivenDesign set
+        yield [__DIR__ . '/Source/wrong.php', 0, [SomeChildOfValueObject::class, SomeValueObject::class]];
     }
 }
