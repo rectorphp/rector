@@ -3,7 +3,7 @@
 namespace Rector\Symfony\Rector\FrameworkBundle;
 
 use PhpParser\Node;
-use Rector\NodeTypeResolver\Node\MetadataAttribute;
+use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
@@ -77,7 +77,7 @@ CODE_SAMPLE
             return false;
         }
 
-        $parentClassName = $node->getAttribute(MetadataAttribute::PARENT_CLASS_NAME);
+        $parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
 
         return in_array($parentClassName, $this->containerAwareParentTypes, true);
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace SomeNamespace;
+namespace Rector\Tests\Rector\DomainDrivenDesign\ValueObjectRemoverRector;
 
 use Rector\Tests\Rector\DomainDrivenDesign\ValueObjectRemoverRector\Source\SomeChildOfValueObject;
 

@@ -10,9 +10,8 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Contract\Metadata\NodeDecoratorInterface;
-use Rector\NodeTypeResolver\Node\MetadataAttribute;
+use Rector\NodeTypeResolver\Node\Attribute;
 
 final class ClassAndMethodNodeDecorator implements NodeDecoratorInterface
 {
@@ -72,8 +71,8 @@ final class ClassAndMethodNodeDecorator implements NodeDecoratorInterface
             $this->className = $node->namespacedName->toString();
         }
 
-        $node->setAttribute(MetadataAttribute::CLASS_NODE, $this->classNode);
-        $node->setAttribute(MetadataAttribute::CLASS_NAME, $this->className);
+        $node->setAttribute(Attribute::CLASS_NODE, $this->classNode);
+        $node->setAttribute(Attribute::CLASS_NAME, $this->className);
 
         if ($this->classNode instanceof Class_) {
             $this->setParentClassName($this->classNode, $node);
@@ -91,7 +90,7 @@ final class ClassAndMethodNodeDecorator implements NodeDecoratorInterface
             $parentClassResolvedName = $parentClassResolvedName->toString();
         }
 
-        $node->setAttribute(MetadataAttribute::PARENT_CLASS_NAME, $parentClassResolvedName);
+        $node->setAttribute(Attribute::PARENT_CLASS_NAME, $parentClassResolvedName);
     }
 
     private function processMethod(Node $node): void
@@ -105,8 +104,8 @@ final class ClassAndMethodNodeDecorator implements NodeDecoratorInterface
             $this->methodCallName = $node->name->toString();
         }
 
-        $node->setAttribute(MetadataAttribute::METHOD_NAME, $this->methodName);
-        $node->setAttribute(MetadataAttribute::METHOD_NODE, $this->methodNode);
-        $node->setAttribute(MetadataAttribute::METHOD_CALL_NAME, $this->methodCallName);
+        $node->setAttribute(Attribute::METHOD_NAME, $this->methodName);
+        $node->setAttribute(Attribute::METHOD_NODE, $this->methodNode);
+        $node->setAttribute(Attribute::METHOD_CALL_NAME, $this->methodCallName);
     }
 }

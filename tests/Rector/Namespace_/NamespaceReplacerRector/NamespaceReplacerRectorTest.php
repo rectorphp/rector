@@ -5,6 +5,9 @@ namespace Rector\Tests\Rector\Namespace_\NamespaceReplacerRector;
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
+/**
+ * @covers \Rector\Rector\Namespace_\NamespaceReplacerRector
+ */
 final class NamespaceReplacerRectorTest extends AbstractRectorTestCase
 {
     /**

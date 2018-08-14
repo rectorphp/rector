@@ -6,7 +6,7 @@ use Nette\Utils\Strings;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Use_;
-use Rector\NodeTypeResolver\Node\MetadataAttribute;
+use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Php\TypeAnalyzer;
 
 final class NamespaceAnalyzer
@@ -23,10 +23,7 @@ final class NamespaceAnalyzer
 
     public function resolveTypeToFullyQualified(string $type, Node $node): string
     {
-        $useStatementMatch = $this->matchUseStatements(
-            $type,
-            (array) $node->getAttribute(MetadataAttribute::USE_NODES)
-        );
+        $useStatementMatch = $this->matchUseStatements($type, (array) $node->getAttribute(Attribute::USE_NODES));
         if ($useStatementMatch) {
             return $useStatementMatch;
         }
@@ -40,7 +37,7 @@ final class NamespaceAnalyzer
             return ltrim($type, '\\');
         }
 
-        $namespace = $node->getAttribute(MetadataAttribute::NAMESPACE_NAME);
+        $namespace = $node->getAttribute(Attribute::NAMESPACE_NAME);
 
         return ($namespace ? $namespace . '\\' : '') . $type;
     }

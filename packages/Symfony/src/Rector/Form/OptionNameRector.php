@@ -6,8 +6,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
-use Rector\Node\Attribute;
 use Rector\Node\NodeFactory;
+use Rector\NodeTypeResolver\Node\Attribute as RectorAttribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -59,18 +59,18 @@ CODE_SAMPLE
             return false;
         }
 
-        $arrayItemParentNode = $node->getAttribute(Attribute::PARENT_NODE);
+        $arrayItemParentNode = $node->getAttribute(RectorAttribute::PARENT_NODE);
         if (! $arrayItemParentNode instanceof ArrayItem) {
             return false;
         }
 
-        $arrayParentNode = $arrayItemParentNode->getAttribute(Attribute::PARENT_NODE);
+        $arrayParentNode = $arrayItemParentNode->getAttribute(RectorAttribute::PARENT_NODE);
 
         /** @var MethodCall $argParentNode */
-        $argParentNode = $arrayParentNode->getAttribute(Attribute::PARENT_NODE);
+        $argParentNode = $arrayParentNode->getAttribute(RectorAttribute::PARENT_NODE);
 
         /** @var MethodCall|Node $methodCallNode */
-        $methodCallNode = $argParentNode->getAttribute(Attribute::PARENT_NODE);
+        $methodCallNode = $argParentNode->getAttribute(RectorAttribute::PARENT_NODE);
 
         if (! $methodCallNode instanceof MethodCall) {
             return false;

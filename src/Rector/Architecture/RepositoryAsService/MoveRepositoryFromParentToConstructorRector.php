@@ -14,7 +14,7 @@ use Rector\Builder\ConstructorMethodBuilder;
 use Rector\Builder\PropertyBuilder;
 use Rector\Exception\Bridge\RectorProviderException;
 use Rector\Node\NodeFactory;
-use Rector\NodeTypeResolver\Node\MetadataAttribute;
+use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -132,12 +132,12 @@ CODE_SAMPLE
             return false;
         }
 
-        $parentClassName = $node->getAttribute(MetadataAttribute::PARENT_CLASS_NAME);
+        $parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
         if ($parentClassName !== $this->entityRepositoryClass) {
             return false;
         }
 
-        $className = $node->getAttribute(MetadataAttribute::CLASS_NAME);
+        $className = $node->getAttribute(Attribute::CLASS_NAME);
 
         return Strings::endsWith($className, 'Repository');
     }
@@ -173,7 +173,7 @@ CODE_SAMPLE
      */
     private function createRepositoryAssign(Class_ $classNode): Expression
     {
-        $repositoryClassName = (string) $classNode->getAttribute(MetadataAttribute::CLASS_NAME);
+        $repositoryClassName = (string) $classNode->getAttribute(Attribute::CLASS_NAME);
         $entityClassName = $this->doctrineEntityAndRepositoryMapper->mapRepositoryToEntity($repositoryClassName);
 
         if ($entityClassName === null) {

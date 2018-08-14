@@ -8,7 +8,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Broker\Broker;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverAwareInterface;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
-use Rector\NodeTypeResolver\Node\TypeAttribute;
+use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeToStringResolver;
 use Rector\NodeTypeResolver\Reflection\ClassReflectionTypesResolver;
 
@@ -86,7 +86,7 @@ final class NodeTypeResolver
     private function resolveFirstTypes(Node $node): array
     {
         /** @var Scope|null $nodeScope */
-        $nodeScope = $node->getAttribute(TypeAttribute::SCOPE);
+        $nodeScope = $node->getAttribute(Attribute::SCOPE);
         if ($nodeScope === null) {
             return [];
         }
@@ -103,7 +103,7 @@ final class NodeTypeResolver
 
         // PHPStan
         /** @var Scope $nodeScope */
-        $nodeScope = $node->getAttribute(TypeAttribute::SCOPE);
+        $nodeScope = $node->getAttribute(Attribute::SCOPE);
         $type = $nodeScope->getType($node);
 
         return $this->typeToStringResolver->resolve($type);

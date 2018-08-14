@@ -24,6 +24,7 @@ use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\TraitUse;
 use Rector\Builder\Class_\VariableInfo;
 use Rector\Exception\NotImplementedException;
+use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Php\TypeAnalyzer;
 
 final class NodeFactory

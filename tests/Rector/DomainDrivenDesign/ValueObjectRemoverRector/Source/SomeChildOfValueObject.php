@@ -4,5 +4,4 @@ namespace Rector\Tests\Rector\DomainDrivenDesign\ValueObjectRemoverRector\Source
 
 class SomeChildOfValueObject extends SomeValueObject
 {
-
 }

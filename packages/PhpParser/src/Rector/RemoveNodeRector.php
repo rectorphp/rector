@@ -6,7 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Node\NodeFactory;
-use Rector\NodeTypeResolver\Node\MetadataAttribute;
+use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -57,7 +57,7 @@ CODE_SAMPLE
             return false;
         }
 
-        $methodName = $node->getAttribute(MetadataAttribute::METHOD_NAME);
+        $methodName = $node->getAttribute(Attribute::METHOD_NAME);
         if ($methodName !== 'leaveNode') {
             return false;
         }

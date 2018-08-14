@@ -6,7 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Use_;
-use Rector\Node\Attribute;
+use Rector\NodeTypeResolver\Node\Attribute as RectorAttribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -83,9 +83,10 @@ final class ClassReplacerRector extends AbstractRector
 
     private function resolveNameNodeFromNode(Node $node): ?Name
     {
+        // @todo use NodeTypeResolver?
         if ($node instanceof Name) {
             // resolved name has priority, as it is FQN
-            $resolvedName = $node->getAttribute(Attribute::RESOLVED_NAME);
+            $resolvedName = $node->getAttribute(RectorAttribute::RESOLVED_NAME);
             if ($resolvedName instanceof FullyQualified) {
                 return $resolvedName;
             }

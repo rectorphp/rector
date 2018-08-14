@@ -6,7 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeAnalyzer\ChainMethodCallAnalyzer;
-use Rector\NodeTypeResolver\Node\MetadataAttribute;
+use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -67,7 +67,7 @@ CODE_SAMPLE
 
     public function isCandidate(Node $node): bool
     {
-        $parentClassName = $node->getAttribute(MetadataAttribute::PARENT_CLASS_NAME);
+        $parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
         if ($parentClassName !== $this->controllerClass) {
             return false;
         }

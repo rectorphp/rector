@@ -8,6 +8,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
+use Rector\NodeTypeResolver\Node\Attribute;
 
 final class MethodCallNodeFactory
 {

@@ -5,9 +5,8 @@ namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
-use Rector\Node\Attribute;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
-use Rector\NodeTypeResolver\Node\MetadataAttribute;
+use Rector\NodeTypeResolver\Node\Attribute;
 
 final class NameTypeResolver implements PerNodeTypeResolverInterface
 {
@@ -26,7 +25,7 @@ final class NameTypeResolver implements PerNodeTypeResolverInterface
     public function resolve(Node $nameNode): array
     {
         if ($nameNode->toString() === 'parent') {
-            return [$nameNode->getAttribute(MetadataAttribute::PARENT_CLASS_NAME)];
+            return [$nameNode->getAttribute(Attribute::PARENT_CLASS_NAME)];
         }
 
         return [$this->resolveFullyQualifiedName($nameNode, $nameNode->toString())];
@@ -35,7 +34,7 @@ final class NameTypeResolver implements PerNodeTypeResolverInterface
     private function resolveFullyQualifiedName(Node $nameNode, string $name): string
     {
         if (in_array($name, ['self', 'static', 'this'], true)) {
-            return $nameNode->getAttribute(MetadataAttribute::CLASS_NAME);
+            return $nameNode->getAttribute(Attribute::CLASS_NAME);
         }
 
         /** @var Name|null $name */

@@ -7,10 +7,9 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use Rector\Builder\IdentifierRenamer;
-use Rector\Node\Attribute;
 use Rector\NodeAnalyzer\MethodNameAnalyzer;
 use Rector\NodeAnalyzer\StaticMethodCallAnalyzer;
-use Rector\NodeTypeResolver\Node\MetadataAttribute;
+use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -169,7 +168,7 @@ final class StaticMethodNameReplacerRector extends AbstractRector
         }
 
         /** @var Identifier $node */
-        $parentClassName = $node->getAttribute(MetadataAttribute::PARENT_CLASS_NAME);
+        $parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
 
         /** @var Identifier $node */
         if (! isset($this->perClassOldToNewMethods[$parentClassName][$node->name])) {

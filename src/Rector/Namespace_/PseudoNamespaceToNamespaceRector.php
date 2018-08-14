@@ -9,8 +9,8 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Builder\StatementGlue;
-use Rector\Node\Attribute;
 use Rector\Node\NodeFactory;
+use Rector\NodeTypeResolver\Node\Attribute as RectorAttribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -100,7 +100,7 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
         $oldName = $this->resolveNameFromNode($nameOrIdentifierNode);
 
         $newNameParts = explode('_', $oldName);
-        $parentNode = $nameOrIdentifierNode->getAttribute(Attribute::PARENT_NODE);
+        $parentNode = $nameOrIdentifierNode->getAttribute(RectorAttribute::PARENT_NODE);
         $lastNewNamePart = $newNameParts[count($newNameParts) - 1];
 
         if ($nameOrIdentifierNode instanceof Name) {

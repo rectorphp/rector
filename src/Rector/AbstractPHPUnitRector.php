@@ -5,7 +5,7 @@ namespace Rector\Rector;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Exception\ShouldNotHappenException;
-use Rector\NodeTypeResolver\Node\MetadataAttribute;
+use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
 abstract class AbstractPHPUnitRector extends AbstractRector
@@ -28,12 +28,12 @@ abstract class AbstractPHPUnitRector extends AbstractRector
     protected function isInTestClass(Node $node): bool
     {
         /** @var Class_|null $classNode */
-        $classNode = $node->getAttribute(MetadataAttribute::CLASS_NODE);
+        $classNode = $node->getAttribute(Attribute::CLASS_NODE);
 
         if ($classNode === null) {
             throw new ShouldNotHappenException(sprintf(
                 '"%s" should be set in "%s"',
-                MetadataAttribute::CLASS_NODE,
+                Attribute::CLASS_NODE,
                 __METHOD__
             ));
         }

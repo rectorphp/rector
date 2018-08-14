@@ -5,7 +5,7 @@ namespace Rector\Printer;
 use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\PrettyPrinter\Standard;
-use Rector\Node\Attribute;
+use Rector\NodeTypeResolver\Node\Attribute;
 
 final class BetterStandardPrinter extends Standard
 {

@@ -13,10 +13,9 @@ use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Exception\Bridge\RectorProviderException;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Naming\PropertyNaming;
-use Rector\Node\Attribute;
 use Rector\Node\PropertyFetchNodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
-use Rector\NodeTypeResolver\Node\MetadataAttribute;
+use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -110,7 +109,7 @@ CODE_SAMPLE
             return false;
         }
 
-        $className = $node->getAttribute(MetadataAttribute::CLASS_NAME);
+        $className = $node->getAttribute(Attribute::CLASS_NAME);
         if ($className === null) {
             return false;
         }
@@ -143,7 +142,7 @@ CODE_SAMPLE
         $repositoryFqn = $this->repositoryFqn($node);
 
         $this->classPropertyCollector->addPropertyForClass(
-            (string) $node->getAttribute(MetadataAttribute::CLASS_NAME),
+            (string) $node->getAttribute(Attribute::CLASS_NAME),
             [$repositoryFqn],
             $this->propertyNaming->fqnToVariableName($repositoryFqn)
         );

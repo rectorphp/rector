@@ -7,7 +7,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
-use Rector\NodeTypeResolver\Node\MetadataAttribute;
+use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -122,7 +122,7 @@ CODE_SAMPLE
             return false;
         }
 
-        $methodNode = $node->getAttribute(MetadataAttribute::METHOD_NODE);
+        $methodNode = $node->getAttribute(Attribute::METHOD_NODE);
 
         return $this->controllerMethodAnalyzer->isAction($methodNode);
     }

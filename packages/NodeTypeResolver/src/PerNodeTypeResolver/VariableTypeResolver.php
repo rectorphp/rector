@@ -7,7 +7,7 @@ use PhpParser\Node\Expr\Variable;
 use PHPStan\TrinaryLogic;
 use PHPStan\Type\ThisType;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
-use Rector\NodeTypeResolver\Node\TypeAttribute;
+use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeToStringResolver;
 
@@ -48,7 +48,7 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface
      */
     public function resolve(Node $variableNode): array
     {
-        $nodeScope = $variableNode->getAttribute(TypeAttribute::SCOPE);
+        $nodeScope = $variableNode->getAttribute(Attribute::SCOPE);
 
         $variableName = (string) $variableNode->name;
 
