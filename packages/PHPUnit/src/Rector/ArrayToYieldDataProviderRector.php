@@ -167,7 +167,7 @@ CODE_SAMPLE
         foreach ($arrayNode->items as $arrayItem) {
             $expressionNode = new Expression(new Yield_($arrayItem->value));
             if ($arrayItem->getComments()) {
-                $expressionNode->setAttribute(Attribute::COMMENTS, $arrayItem->getComments());
+                $expressionNode->setAttribute('comments', $arrayItem->getComments());
             }
 
             $yieldNodes[] = $expressionNode;
