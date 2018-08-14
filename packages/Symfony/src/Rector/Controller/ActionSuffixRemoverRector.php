@@ -54,13 +54,16 @@ CODE_SAMPLE
         ]);
     }
 
-    public function isCandidate(Node $node): bool
+    public function getNodeType(): string
     {
-        return $this->controllerMethodAnalyzer->isAction($node);
+        return Node::class;
     }
 
     public function refactor(Node $node): ?Node
     {
+        if ($this->controllerMethodAnalyzer->isAction($node) === false) {
+            return null;
+        }
         $this->identifierRenamer->removeSuffix($node, 'Action');
 
         return $node;

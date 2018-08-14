@@ -80,13 +80,9 @@ CODE_SAMPLE
         ]);
     }
 
-    public function isCandidate(Node $node): bool
+    public function getNodeType(): string
     {
-        if (! $node instanceof Assign) {
-            return false;
-        }
-
-        return $this->propertyFetchAnalyzer->isTypesAndProperty($node->var, $this->types, $this->oldPropertyName);
+        return Assign::class;
     }
 
     /**
@@ -94,6 +90,16 @@ CODE_SAMPLE
      */
     public function refactor(Node $assignNode): ?Node
     {
+        if (! $assignNode instanceof Assign) {
+            return null;
+        }
+        if ($this->propertyFetchAnalyzer->isTypesAndProperty(
+            $assignNode->var,
+            $this->types,
+            $this->oldPropertyName
+        ) === false) {
+            return null;
+        }
         /** @var PropertyFetch $propertyFetchNode */
         $propertyFetchNode = $assignNode->var;
 

@@ -73,23 +73,9 @@ CODE_SAMPLE
         );
     }
 
-    public function isCandidate(Node $node): bool
+    public function getNodeType(): string
     {
-        if (! $node instanceof ClassMethod) {
-            return false;
-        }
-
-        if (! $this->isInTestClass($node)) {
-            return false;
-        }
-
-        foreach ($this->annotationToMethod as $annotation => $method) {
-            if ($this->docBlockAnalyzer->hasTag($node, $annotation)) {
-                return true;
-            }
-        }
-
-        return false;
+        return ClassMethod::class;
     }
 
     /**
@@ -97,6 +83,17 @@ CODE_SAMPLE
      */
     public function refactor(Node $classMethodNode): ?Node
     {
+        if (! $classMethodNode instanceof ClassMethod) {
+            return null;
+        }
+        if (! $this->isInTestClass($classMethodNode)) {
+            return null;
+        }
+        foreach ($this->annotationToMethod as $annotation => $method) {
+            if ($this->docBlockAnalyzer->hasTag($classMethodNode, $annotation)) {
+            }
+        }
+        return null;
         foreach ($this->annotationToMethod as $annotation => $method) {
             if (! $this->docBlockAnalyzer->hasTag($classMethodNode, $annotation)) {
                 continue;

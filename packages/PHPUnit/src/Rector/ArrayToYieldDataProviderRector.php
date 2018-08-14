@@ -56,25 +56,9 @@ CODE_SAMPLE
         ]);
     }
 
-    public function isCandidate(Node $node): bool
+    public function getNodeType(): string
     {
-        if (! $node instanceof ClassMethod) {
-            return false;
-        }
-
-        if (! $this->isInTestClass($node)) {
-            return false;
-        }
-
-        if (! $this->isInProvideMethod($node)) {
-            return false;
-        }
-
-        if (! $this->hasClassMethodReturnArrayOfArrays($node)) {
-            return false;
-        }
-
-        return true;
+        return ClassMethod::class;
     }
 
     /**
@@ -82,6 +66,19 @@ CODE_SAMPLE
      */
     public function refactor(Node $classMethodNode): ?Node
     {
+        if (! $classMethodNode instanceof ClassMethod) {
+            return null;
+        }
+        if (! $this->isInTestClass($classMethodNode)) {
+            return null;
+        }
+        if (! $this->isInProvideMethod($classMethodNode)) {
+            return null;
+        }
+        if (! $this->hasClassMethodReturnArrayOfArrays($classMethodNode)) {
+            return null;
+        }
+
         // 1. change return typehint
         $classMethodNode->returnType = new FullyQualified(Iterator::class);
 

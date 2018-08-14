@@ -48,11 +48,6 @@ final class FunctionReplaceRector extends AbstractRector
         return FuncCall::class;
     }
 
-    public function isCandidate(Node $node): bool
-    {
-        return true;
-    }
-
     /**
      * @param FuncCall $node
      */

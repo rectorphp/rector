@@ -89,16 +89,22 @@ CODE_SAMPLE
         );
     }
 
-    public function isCandidate(Node $node): bool
+    public function getNodeType(): string
+    {
+        return [ClassMethod::class, Property::class];
+    }
+
+    /**
+     * @param ClassMethod|Property $node
+     */
+    public function refactor(Node $node): ?Node
     {
         if ($this->shouldSkip($node)) {
-            return false;
+            return null;
         }
-
         /** @var Node $parentNode */
         $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
         $parentNodeTypes = $this->nodeTypeResolver->resolve($parentNode);
-
         foreach ($this->classToAnnotationMap as $type => $annotationMap) {
             if (! in_array($type, $parentNodeTypes, true)) {
                 continue;
@@ -107,18 +113,9 @@ CODE_SAMPLE
             $this->activeAnnotationMap = $annotationMap;
 
             if ($this->hasAnyAnnotation($node)) {
-                return true;
             }
         }
-
-        return false;
-    }
-
-    /**
-     * @param ClassMethod|Property $node
-     */
-    public function refactor(Node $node): ?Node
-    {
+        return null;
         foreach ($this->activeAnnotationMap as $oldAnnotation => $newAnnotation) {
             $this->docBlockAnalyzer->replaceAnnotationInNode($node, $oldAnnotation, $newAnnotation);
         }

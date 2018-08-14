@@ -104,24 +104,9 @@ CODE_SAMPLE
         ]);
     }
 
-    public function isCandidate(Node $node): bool
+    public function getNodeType(): string
     {
-        $this->activeTransformation = [];
-
-        $propertyFetchNode = $this->expressionAnalyzer->resolvePropertyFetch($node);
-        if ($propertyFetchNode === null) {
-            return false;
-        }
-
-        foreach ($this->typeToMethodCalls as $type => $transformation) {
-            if ($this->propertyFetchAnalyzer->isMagicOnType($propertyFetchNode, $type)) {
-                $this->activeTransformation = $transformation;
-
-                return true;
-            }
-        }
-
-        return false;
+        return Expression::class;
     }
 
     /**
@@ -129,6 +114,17 @@ CODE_SAMPLE
      */
     public function refactor(Node $expressionNode): ?Node
     {
+        $this->activeTransformation = [];
+        $propertyFetchNode = $this->expressionAnalyzer->resolvePropertyFetch($expressionNode);
+        if ($propertyFetchNode === null) {
+            return null;
+        }
+        foreach ($this->typeToMethodCalls as $type => $transformation) {
+            if ($this->propertyFetchAnalyzer->isMagicOnType($propertyFetchNode, $type)) {
+                $this->activeTransformation = $transformation;
+            }
+        }
+        return null;
         /** @var Assign $assignNode */
         $assignNode = $expressionNode->expr;
 

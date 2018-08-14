@@ -62,21 +62,9 @@ final class FormTypeGetParentRector extends AbstractRector
         );
     }
 
-    public function isCandidate(Node $node): bool
+    public function getNodeType(): string
     {
-        if (! $node instanceof String_) {
-            return false;
-        }
-
-        if (! $this->formTypeStringToTypeProvider->hasClassForName($node->value)) {
-            return false;
-        }
-
-        if ($this->isParentTypeAndMethod($node, $this->abstractTypeClass, 'getParent')) {
-            return true;
-        }
-
-        return $this->isParentTypeAndMethod($node, $this->abstractTypeExtensionClass, 'getExtendedType');
+        return String_::class;
     }
 
     /**
@@ -84,6 +72,17 @@ final class FormTypeGetParentRector extends AbstractRector
      */
     public function refactor(Node $stringNode): ?Node
     {
+        if (! $stringNode instanceof String_) {
+            return null;
+        }
+        if (! $this->formTypeStringToTypeProvider->hasClassForName($stringNode->value)) {
+            return null;
+        }
+        if ($this->isParentTypeAndMethod($stringNode, $this->abstractTypeClass, 'getParent')) {
+        }
+        if ($this->isParentTypeAndMethod($stringNode, $this->abstractTypeExtensionClass, 'getExtendedType') === false) {
+            return null;
+        }
         $class = $this->formTypeStringToTypeProvider->getClassForName($stringNode->value);
 
         return $this->nodeFactory->createClassConstantReference($class);

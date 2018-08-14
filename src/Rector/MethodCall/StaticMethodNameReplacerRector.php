@@ -74,18 +74,9 @@ final class StaticMethodNameReplacerRector extends AbstractRector
         ]);
     }
 
-    public function isCandidate(Node $node): bool
+    public function getNodeType(): string
     {
-        $this->activeTypes = [];
-
-        $matchedTypes = $this->staticMethodCallAnalyzer->matchTypes($node, $this->getClasses());
-        if ($matchedTypes) {
-            $this->activeTypes = $matchedTypes;
-
-            return true;
-        }
-
-        return $this->isMethodName($node, $this->getClasses());
+        return [Identifier::class, StaticCall::class];
     }
 
     /**
@@ -93,6 +84,14 @@ final class StaticMethodNameReplacerRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
+        $this->activeTypes = [];
+        $matchedTypes = $this->staticMethodCallAnalyzer->matchTypes($node, $this->getClasses());
+        if ($matchedTypes) {
+            $this->activeTypes = $matchedTypes;
+        }
+        if ($this->isMethodName($node, $this->getClasses()) === false) {
+            return null;
+        }
         if ($node instanceof Identifier) {
             return $this->resolveIdentifier($node);
         }

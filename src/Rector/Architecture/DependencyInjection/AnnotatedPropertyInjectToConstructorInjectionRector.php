@@ -55,17 +55,9 @@ final class AnnotatedPropertyInjectToConstructorInjectionRector extends Abstract
         $this->annotation = $annotation;
     }
 
-    public function isCandidate(Node $node): bool
+    public function getNodeType(): string
     {
-        if (! $node instanceof Property) {
-            return false;
-        }
-
-        if ($node->isPrivate()) {
-            return false;
-        }
-
-        return $this->docBlockAnalyzer->hasTag($node, $this->annotation);
+        return Property::class;
     }
 
     /**
@@ -73,6 +65,15 @@ final class AnnotatedPropertyInjectToConstructorInjectionRector extends Abstract
      */
     public function refactor(Node $propertyNode): Node
     {
+        if (! $propertyNode instanceof Property) {
+            return null;
+        }
+        if ($propertyNode->isPrivate()) {
+            return null;
+        }
+        if ($this->docBlockAnalyzer->hasTag($propertyNode, $this->annotation) === false) {
+            return null;
+        }
         $this->docBlockAnalyzer->removeTagFromNode($propertyNode, $this->annotation);
 
         $propertyNode->flags = Class_::MODIFIER_PRIVATE;

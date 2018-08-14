@@ -49,34 +49,9 @@ CODE_SAMPLE
         ]);
     }
 
-    public function isCandidate(Node $node): bool
+    public function getNodeType(): string
     {
-        if (! $node instanceof String_) {
-            return false;
-        }
-
-        if (! isset($this->oldToNewOption[$node->value])) {
-            return false;
-        }
-
-        $arrayItemParentNode = $node->getAttribute(Attribute::PARENT_NODE);
-        if (! $arrayItemParentNode instanceof ArrayItem) {
-            return false;
-        }
-
-        $arrayParentNode = $arrayItemParentNode->getAttribute(Attribute::PARENT_NODE);
-
-        /** @var MethodCall $argParentNode */
-        $argParentNode = $arrayParentNode->getAttribute(Attribute::PARENT_NODE);
-
-        /** @var MethodCall|Node $methodCallNode */
-        $methodCallNode = $argParentNode->getAttribute(Attribute::PARENT_NODE);
-
-        if (! $methodCallNode instanceof MethodCall) {
-            return false;
-        }
-
-        return (string) $methodCallNode->name === 'add';
+        return String_::class;
     }
 
     /**
@@ -84,6 +59,27 @@ CODE_SAMPLE
      */
     public function refactor(Node $stringNode): ?Node
     {
+        if (! $stringNode instanceof String_) {
+            return null;
+        }
+        if (! isset($this->oldToNewOption[$stringNode->value])) {
+            return null;
+        }
+        $arrayItemParentNode = $stringNode->getAttribute(Attribute::PARENT_NODE);
+        if (! $arrayItemParentNode instanceof ArrayItem) {
+            return null;
+        }
+        $arrayParentNode = $arrayItemParentNode->getAttribute(Attribute::PARENT_NODE);
+        /** @var MethodCall $argParentNode */
+        $argParentNode = $arrayParentNode->getAttribute(Attribute::PARENT_NODE);
+        /** @var MethodCall|Node $methodCallNode */
+        $methodCallNode = $argParentNode->getAttribute(Attribute::PARENT_NODE);
+        if (! $methodCallNode instanceof MethodCall) {
+            return null;
+        }
+        if (((string) $methodCallNode->name === 'add') === false) {
+            return null;
+        }
         return $this->nodeFactory->createString($this->oldToNewOption[$stringNode->value]);
     }
 }

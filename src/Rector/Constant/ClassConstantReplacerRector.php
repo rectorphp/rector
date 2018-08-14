@@ -70,20 +70,9 @@ final class ClassConstantReplacerRector extends AbstractRector
         ]);
     }
 
-    public function isCandidate(Node $node): bool
+    public function getNodeType(): string
     {
-        $this->activeType = null;
-
-        foreach ($this->oldToNewConstantsByClass as $type => $oldToNewConstants) {
-            $matchedType = $this->classConstAnalyzer->matchTypes($node, $this->getTypes());
-            if ($matchedType) {
-                $this->activeType = $matchedType;
-
-                return true;
-            }
-        }
-
-        return false;
+        return ClassConstFetch::class;
     }
 
     /**
@@ -91,6 +80,14 @@ final class ClassConstantReplacerRector extends AbstractRector
      */
     public function refactor(Node $classConstFetchNode): ?Node
     {
+        $this->activeType = null;
+        foreach ($this->oldToNewConstantsByClass as $type => $oldToNewConstants) {
+            $matchedType = $this->classConstAnalyzer->matchTypes($classConstFetchNode, $this->getTypes());
+            if ($matchedType) {
+                $this->activeType = $matchedType;
+            }
+        }
+        return null;
         $configuration = $this->oldToNewConstantsByClass[$this->activeType];
 
         /** @var Identifier $identifierNode */

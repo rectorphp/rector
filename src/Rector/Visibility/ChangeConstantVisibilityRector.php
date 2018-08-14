@@ -72,25 +72,9 @@ CODE_SAMPLE
         );
     }
 
-    public function isCandidate(Node $node): bool
+    public function getNodeType(): string
     {
-        if (! $node instanceof ClassConst) {
-            return false;
-        }
-
-        // doesn't have a parent class
-        if (! $node->hasAttribute(Attribute::PARENT_CLASS_NAME)) {
-            return false;
-        }
-
-        $nodeParentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
-        if (! isset($this->constantToVisibilityByClass[$nodeParentClassName])) {
-            return false;
-        }
-
-        $constantName = $node->consts[0]->name->toString();
-
-        return isset($this->constantToVisibilityByClass[$nodeParentClassName][$constantName]);
+        return ClassConst::class;
     }
 
     /**
@@ -98,6 +82,21 @@ CODE_SAMPLE
      */
     public function refactor(Node $classConstantNode): ?Node
     {
+        if (! $classConstantNode instanceof ClassConst) {
+            return null;
+        }
+        // doesn't have a parent class
+        if (! $classConstantNode->hasAttribute(Attribute::PARENT_CLASS_NAME)) {
+            return null;
+        }
+        $nodeParentClassName = $classConstantNode->getAttribute(Attribute::PARENT_CLASS_NAME);
+        if (! isset($this->constantToVisibilityByClass[$nodeParentClassName])) {
+            return null;
+        }
+        $constantName = $classConstantNode->consts[0]->name->toString();
+        if (isset($this->constantToVisibilityByClass[$nodeParentClassName][$constantName]) === false) {
+            return null;
+        }
         $this->visibilityModifier->removeOriginalVisibilityFromFlags($classConstantNode);
 
         $newVisibility = $this->resolveNewVisibilityForNode($classConstantNode);

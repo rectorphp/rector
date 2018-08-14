@@ -65,26 +65,9 @@ final class AssertInstanceOfComparisonRector extends AbstractPHPUnitRector
         );
     }
 
-    public function isCandidate(Node $node): bool
+    public function getNodeType(): string
     {
-        if (! $node instanceof MethodCall) {
-            return false;
-        }
-
-        if (! $this->isInTestClass($node)) {
-            return false;
-        }
-
-        if (! $this->methodCallAnalyzer->isMethods($node, array_keys($this->renameMethodsMap))) {
-            return false;
-        }
-
-        /** @var MethodCall $methodCallNode */
-        $methodCallNode = $node;
-
-        $firstArgumentValue = $methodCallNode->args[0]->value;
-
-        return $firstArgumentValue instanceof Instanceof_;
+        return MethodCall::class;
     }
 
     /**
@@ -92,6 +75,21 @@ final class AssertInstanceOfComparisonRector extends AbstractPHPUnitRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
+        if (! $methodCallNode instanceof MethodCall) {
+            return null;
+        }
+        if (! $this->isInTestClass($methodCallNode)) {
+            return null;
+        }
+        if (! $this->methodCallAnalyzer->isMethods($methodCallNode, array_keys($this->renameMethodsMap))) {
+            return null;
+        }
+        /** @var MethodCall $methodCallNode */
+        $methodCallNode = $methodCallNode;
+        $firstArgumentValue = $methodCallNode->args[0]->value;
+        if ($firstArgumentValue instanceof Instanceof_ === false) {
+            return null;
+        }
         $this->identifierRenamer->renameNodeWithMap($methodCallNode, $this->renameMethodsMap);
         $this->changeOrderArguments($methodCallNode);
 

@@ -72,24 +72,9 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
         ]);
     }
 
-    public function isCandidate(Node $node): bool
+    public function getNodeType(): string
     {
-        $name = $this->resolveNameFromNode($node);
-        if ($name === null) {
-            return false;
-        }
-
-        if (in_array($name, $this->excludedClasses, true)) {
-            return false;
-        }
-
-        foreach ($this->pseudoNamespacePrefixes as $pseudoNamespacePrefix) {
-            if (Strings::startsWith($name, $pseudoNamespacePrefix)) {
-                return true;
-            }
-        }
-
-        return false;
+        return [Name::class, Identifier::class];
     }
 
     /**
@@ -97,6 +82,18 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
      */
     public function refactor(Node $nameOrIdentifierNode): ?Node
     {
+        $name = $this->resolveNameFromNode($nameOrIdentifierNode);
+        if ($name === null) {
+            return null;
+        }
+        if (in_array($name, $this->excludedClasses, true)) {
+            return null;
+        }
+        foreach ($this->pseudoNamespacePrefixes as $pseudoNamespacePrefix) {
+            if (Strings::startsWith($name, $pseudoNamespacePrefix)) {
+            }
+        }
+        return null;
         $oldName = $this->resolveNameFromNode($nameOrIdentifierNode);
 
         $newNameParts = explode('_', $oldName);

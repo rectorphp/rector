@@ -90,15 +90,9 @@ CODE_SAMPLE
         );
     }
 
-    public function isCandidate(Node $node): bool
+    public function getNodeType(): string
     {
-        if (! $this->isValidInstance($node)) {
-            return false;
-        }
-
-        $this->activeRecipes = $this->matchArgumentChanges($node);
-
-        return (bool) $this->activeRecipes;
+        return [MethodCall::class, StaticCall::class, ClassMethod::class];
     }
 
     /**
@@ -106,6 +100,13 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): Node
     {
+        if (! $this->isValidInstance($node)) {
+            return null;
+        }
+        $this->activeRecipes = $this->matchArgumentChanges($node);
+        if ((bool) $this->activeRecipes === false) {
+            return null;
+        }
         $argumentsOrParameters = $this->getNodeArgumentsOrParameters($node);
         $argumentsOrParameters = $this->processArgumentNodes($argumentsOrParameters);
 

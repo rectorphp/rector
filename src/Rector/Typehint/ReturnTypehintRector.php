@@ -80,20 +80,9 @@ CODE_SAMPLE
         ]);
     }
 
-    public function isCandidate(Node $node): bool
+    public function getNodeType(): string
     {
-        if (! $node instanceof ClassMethod) {
-            return false;
-        }
-
-        /** @var ClassLike $classNode */
-        $classNode = $node->getAttribute(Attribute::CLASS_NODE);
-        $classNodeTypes = $this->nodeTypeResolver->resolve($classNode);
-        if (! $classNodeTypes) {
-            return false;
-        }
-
-        return $this->isTypeMatch($classNodeTypes);
+        return ClassMethod::class;
     }
 
     /**
@@ -101,6 +90,18 @@ CODE_SAMPLE
      */
     public function refactor(Node $classMethodNode): ?Node
     {
+        if (! $classMethodNode instanceof ClassMethod) {
+            return null;
+        }
+        /** @var ClassLike $classNode */
+        $classNode = $classMethodNode->getAttribute(Attribute::CLASS_NODE);
+        $classNodeTypes = $this->nodeTypeResolver->resolve($classNode);
+        if (! $classNodeTypes) {
+            return null;
+        }
+        if ($this->isTypeMatch($classNodeTypes) === false) {
+            return null;
+        }
         /** @var Class_ $classMethodNode */
         $classNode = $classMethodNode->getAttribute(Attribute::CLASS_NODE);
         $classNodeTypes = $this->nodeTypeResolver->resolve($classNode);

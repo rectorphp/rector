@@ -97,31 +97,9 @@ CODE_SAMPLE
         );
     }
 
-    public function isCandidate(Node $node): bool
+    public function getNodeType(): string
     {
-        $this->activeVariableInfo = null;
-
-        if (! $node instanceof Variable) {
-            return false;
-        }
-
-        if (! $this->isInControllerActionMethod($node)) {
-            return false;
-        }
-
-        foreach ($this->variablesToPropertyFetchCollection->getVariableInfos() as $variableInfo) {
-            if ($node->name !== $variableInfo->getName()) {
-                continue;
-            }
-
-            $nodeTypes = $this->nodeTypeResolver->resolve($node);
-            if ($nodeTypes === $variableInfo->getTypes()) {
-                $this->activeVariableInfo = $variableInfo;
-                return true;
-            }
-        }
-
-        return false;
+        return Variable::class;
     }
 
     /**
@@ -129,6 +107,24 @@ CODE_SAMPLE
      */
     public function refactor(Node $variableNode): ?Node
     {
+        $this->activeVariableInfo = null;
+        if (! $variableNode instanceof Variable) {
+            return null;
+        }
+        if (! $this->isInControllerActionMethod($variableNode)) {
+            return null;
+        }
+        foreach ($this->variablesToPropertyFetchCollection->getVariableInfos() as $variableInfo) {
+            if ($variableNode->name !== $variableInfo->getName()) {
+                continue;
+            }
+
+            $nodeTypes = $this->nodeTypeResolver->resolve($variableNode);
+            if ($nodeTypes === $variableInfo->getTypes()) {
+                $this->activeVariableInfo = $variableInfo;
+            }
+        }
+        return null;
         return $this->propertyFetchNodeFactory->createLocalWithPropertyName($this->activeVariableInfo->getName());
     }
 

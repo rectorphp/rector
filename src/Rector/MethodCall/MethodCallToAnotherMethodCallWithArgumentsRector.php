@@ -93,13 +93,9 @@ CODE_SAMPLE
         ]);
     }
 
-    public function isCandidate(Node $node): bool
+    public function getNodeType(): string
     {
-        if (! $this->methodCallAnalyzer->isTypeAndMethods($node, $this->serviceDefinitionClass, [$this->oldMethod])) {
-            return false;
-        }
-
-        return true;
+        return MethodCall::class;
     }
 
     /**
@@ -107,6 +103,14 @@ CODE_SAMPLE
      */
     public function refactor(Node $methodCallNode): ?Node
     {
+        if (! $this->methodCallAnalyzer->isTypeAndMethods(
+            $methodCallNode,
+            $this->serviceDefinitionClass,
+            [$this->oldMethod]
+        )) {
+            return null;
+        }
+
         $this->identifierRenamer->renameNode($methodCallNode, $this->newMethod);
         $methodCallNode->args = $this->nodeFactory->createArgs($this->newMethodArguments);
 

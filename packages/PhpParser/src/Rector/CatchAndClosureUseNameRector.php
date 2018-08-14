@@ -40,13 +40,9 @@ final class CatchAndClosureUseNameRector extends AbstractRector
         $this->propertyFetchNodeFactory = $propertyFetchNodeFactory;
     }
 
-    public function isCandidate(Node $node): bool
+    public function getNodeType(): string
     {
-        return $this->propertyFetchAnalyzer->isTypesAndProperty(
-            $node,
-            ['PhpParser\Node\Stmt\Catch_', 'PhpParser\Node\Expr\ClosureUse'],
-            'var'
-        );
+        return PropertyFetch::class;
     }
 
     public function getDefinition(): RectorDefinition
@@ -61,6 +57,13 @@ final class CatchAndClosureUseNameRector extends AbstractRector
      */
     public function refactor(Node $propertyFetchNode): ?Node
     {
+        if ($this->propertyFetchAnalyzer->isTypesAndProperty(
+            $propertyFetchNode,
+            ['PhpParser\Node\Stmt\Catch_', 'PhpParser\Node\Expr\ClosureUse'],
+            'var'
+        ) === false) {
+            return null;
+        }
         $parentNode = $propertyFetchNode->getAttribute(Attribute::PARENT_NODE);
         if ($parentNode instanceof PropertyFetch) {
             return $propertyFetchNode;

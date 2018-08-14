@@ -60,18 +60,9 @@ CODE_SAMPLE
         );
     }
 
-    public function isCandidate(Node $node): bool
+    public function getNodeType(): string
     {
-        // skip just added calls
-        if ($node->getAttribute(Attribute::ORIGINAL_NODE) === null) {
-            return false;
-        }
-
-        if (! $this->methodCallAnalyzer->isTypeAndMethod($node, $this->formClass, 'isValid')) {
-            return false;
-        }
-
-        return $node->getAttribute(Attribute::PREVIOUS_NODE) === null;
+        return MethodCall::class;
     }
 
     /**
@@ -79,6 +70,16 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        // skip just added calls
+        if ($node->getAttribute(Attribute::ORIGINAL_NODE) === null) {
+            return null;
+        }
+        if (! $this->methodCallAnalyzer->isTypeAndMethod($node, $this->formClass, 'isValid')) {
+            return null;
+        }
+        if (($node->getAttribute(Attribute::PREVIOUS_NODE) === null) === false) {
+            return null;
+        }
         /** @var Variable $variableNode */
         $variableNode = $node->var;
         $variableName = (string) $variableNode->name;

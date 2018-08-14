@@ -50,17 +50,9 @@ final class ConsoleExceptionToErrorEventConstantRector extends AbstractRector
         ]);
     }
 
-    public function isCandidate(Node $node): bool
+    public function getNodeType(): string
     {
-        if ($this->classConstAnalyzer->isTypeAndNames($node, self::CONSOLE_EVENTS_CLASS, ['EXCEPTION'])) {
-            return true;
-        }
-
-        if (! $node instanceof String_) {
-            return false;
-        }
-
-        return $node->value === 'console.exception';
+        return [ClassConstFetch::class, String_::class];
     }
 
     /**
@@ -68,6 +60,14 @@ final class ConsoleExceptionToErrorEventConstantRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
+        if ($this->classConstAnalyzer->isTypeAndNames($node, self::CONSOLE_EVENTS_CLASS, ['EXCEPTION'])) {
+        }
+        if (! $node instanceof String_) {
+            return null;
+        }
+        if (($node->value === 'console.exception') === false) {
+            return null;
+        }
         return $this->nodeFactory->createClassConstant(self::CONSOLE_EVENTS_CLASS, 'ERROR');
     }
 }

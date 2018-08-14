@@ -52,23 +52,9 @@ final class StaticCallToFunctionRector extends AbstractRector
         ]);
     }
 
-    public function isCandidate(Node $node): bool
+    public function getNodeType(): string
     {
-        if (! $node instanceof StaticCall) {
-            return false;
-        }
-
-        $staticCalls = array_keys($this->staticCallToFunction);
-        foreach ($staticCalls as $staticCall) {
-            [$class, $method] = explode('::', $staticCall);
-            if ($this->staticMethodCallAnalyzer->isTypeAndMethod($node, $class, $method)) {
-                $this->activeStaticCall = $staticCall;
-
-                return true;
-            }
-        }
-
-        return false;
+        return StaticCall::class;
     }
 
     /**
@@ -76,6 +62,17 @@ final class StaticCallToFunctionRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $node instanceof StaticCall) {
+            return null;
+        }
+        $staticCalls = array_keys($this->staticCallToFunction);
+        foreach ($staticCalls as $staticCall) {
+            [$class, $method] = explode('::', $staticCall);
+            if ($this->staticMethodCallAnalyzer->isTypeAndMethod($node, $class, $method)) {
+                $this->activeStaticCall = $staticCall;
+            }
+        }
+        return null;
         $newFunctionName = $this->staticCallToFunction[$this->activeStaticCall];
 
         return new FuncCall(new FullyQualified($newFunctionName), $node->args);

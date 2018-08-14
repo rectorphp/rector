@@ -51,9 +51,9 @@ CODE_SAMPLE
         );
     }
 
-    public function isCandidate(Node $node): bool
+    public function getNodeType(): string
     {
-        return $this->methodCallAnalyzer->isTypeAndMethod($node, $this->processBuilderClass, 'getProcess');
+        return MethodCall::class;
     }
 
     /**
@@ -61,6 +61,13 @@ CODE_SAMPLE
      */
     public function refactor(Node $methodCallNode): ?Node
     {
+        if ($this->methodCallAnalyzer->isTypeAndMethod(
+            $methodCallNode,
+            $this->processBuilderClass,
+            'getProcess'
+        ) === false) {
+            return null;
+        }
         return $methodCallNode->var;
     }
 }

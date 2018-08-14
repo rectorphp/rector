@@ -81,23 +81,9 @@ CODE_SAMPLE
         ]);
     }
 
-    public function isCandidate(Node $node): bool
+    public function getNodeType(): string
     {
-        if (! $node instanceof Assign) {
-            return false;
-        }
-
-        // setter
-        if ($node->var instanceof PropertyFetch) {
-            return $this->processPropertyFetchCandidate($node->var, 'set');
-        }
-
-        // getter
-        if ($node->expr instanceof PropertyFetch) {
-            return $this->processPropertyFetchCandidate($node->expr, 'get');
-        }
-
-        return false;
+        return Assign::class;
     }
 
     /**
@@ -105,6 +91,22 @@ CODE_SAMPLE
      */
     public function refactor(Node $assignNode): ?Node
     {
+        if (! $assignNode instanceof Assign) {
+            return null;
+        }
+        // setter
+        if ($assignNode->var instanceof PropertyFetch) {
+            if ($this->processPropertyFetchCandidate($assignNode->var, 'set') === false) {
+                return null;
+            }
+        }
+        // getter
+        if ($assignNode->expr instanceof PropertyFetch) {
+            if ($this->processPropertyFetchCandidate($assignNode->expr, 'get') === false) {
+                return null;
+            }
+        }
+        return null;
         // setter
         if ($assignNode->var instanceof PropertyFetch) {
             $args = $this->nodeFactory->createArgs([$assignNode->expr]);

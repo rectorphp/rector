@@ -60,26 +60,9 @@ final class AssertNotOperatorRector extends AbstractPHPUnitRector
         );
     }
 
-    public function isCandidate(Node $node): bool
+    public function getNodeType(): string
     {
-        if (! $node instanceof MethodCall && ! $node instanceof StaticCall) {
-            return false;
-        }
-
-        if (! $this->isInTestClass($node)) {
-            return false;
-        }
-
-        if (! $this->isNormalOrStaticMethods($node)) {
-            return false;
-        }
-
-        /** @var MethodCall $methodCallNode */
-        $methodCallNode = $node;
-
-        $firstArgumentValue = $methodCallNode->args[0]->value;
-
-        return $firstArgumentValue instanceof BooleanNot;
+        return MethodCall::class;
     }
 
     /**
@@ -87,6 +70,21 @@ final class AssertNotOperatorRector extends AbstractPHPUnitRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
+        if (! $methodCallNode instanceof MethodCall && ! $methodCallNode instanceof StaticCall) {
+            return null;
+        }
+        if (! $this->isInTestClass($methodCallNode)) {
+            return null;
+        }
+        if (! $this->isNormalOrStaticMethods($methodCallNode)) {
+            return null;
+        }
+        /** @var MethodCall $methodCallNode */
+        $methodCallNode = $methodCallNode;
+        $firstArgumentValue = $methodCallNode->args[0]->value;
+        if ($firstArgumentValue instanceof BooleanNot === false) {
+            return null;
+        }
         $this->identifierRenamer->renameNodeWithMap($methodCallNode, $this->renameMethodsMap);
 
         $oldArguments = $methodCallNode->args;

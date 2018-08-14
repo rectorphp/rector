@@ -55,33 +55,9 @@ final class AssertIssetToSpecificMethodRector extends AbstractPHPUnitRector
         ]);
     }
 
-    public function isCandidate(Node $node): bool
+    public function getNodeType(): string
     {
-        if (! $node instanceof MethodCall) {
-            return false;
-        }
-
-        if (! $this->isInTestClass($node)) {
-            return false;
-        }
-
-        if (! $this->methodCallAnalyzer->isMethods($node, ['assertTrue', 'assertFalse'])) {
-            return false;
-        }
-
-        /** @var MethodCall $methodCallNode */
-        $methodCallNode = $node;
-
-        $firstArgumentValue = $methodCallNode->args[0]->value;
-
-        // is property access
-        if (! $firstArgumentValue instanceof Isset_) {
-            return false;
-        }
-
-        $variableNodeClass = get_class($firstArgumentValue->vars[0]);
-
-        return in_array($variableNodeClass, [ArrayDimFetch::class, PropertyFetch::class], true);
+        return MethodCall::class;
     }
 
     /**
@@ -89,6 +65,26 @@ final class AssertIssetToSpecificMethodRector extends AbstractPHPUnitRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
+        if (! $methodCallNode instanceof MethodCall) {
+            return null;
+        }
+        if (! $this->isInTestClass($methodCallNode)) {
+            return null;
+        }
+        if (! $this->methodCallAnalyzer->isMethods($methodCallNode, ['assertTrue', 'assertFalse'])) {
+            return null;
+        }
+        /** @var MethodCall $methodCallNode */
+        $methodCallNode = $methodCallNode;
+        $firstArgumentValue = $methodCallNode->args[0]->value;
+        // is property access
+        if (! $firstArgumentValue instanceof Isset_) {
+            return null;
+        }
+        $variableNodeClass = get_class($firstArgumentValue->vars[0]);
+        if (in_array($variableNodeClass, [ArrayDimFetch::class, PropertyFetch::class], true) === false) {
+            return null;
+        }
         /** @var Isset_ $issetNode */
         $issetNode = $methodCallNode->args[0]->value;
 

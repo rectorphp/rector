@@ -86,22 +86,9 @@ CODE_SAMPLE
         ]);
     }
 
-    public function isCandidate(Node $node): bool
+    public function getNodeType(): string
     {
-        if (! $this->propertyFetchAnalyzer->isTypes($node, array_keys($this->typeToPropertiesMap))) {
-            return false;
-        }
-
-        /** @var PropertyFetch $propertyFetchNode */
-        $propertyFetchNode = $node;
-
-        $variableNode = $propertyFetchNode->var;
-
-        $nodeTypes = $this->nodeTypeResolver->resolve($variableNode);
-
-        $properties = $this->matchTypeToProperties($nodeTypes);
-
-        return $this->propertyFetchAnalyzer->isProperties($node, $properties);
+        return PropertyFetch::class;
     }
 
     /**
@@ -109,6 +96,17 @@ CODE_SAMPLE
      */
     public function refactor(Node $propertyFetchNode): ?Node
     {
+        if (! $this->propertyFetchAnalyzer->isTypes($propertyFetchNode, array_keys($this->typeToPropertiesMap))) {
+            return null;
+        }
+        /** @var PropertyFetch $propertyFetchNode */
+        $propertyFetchNode = $propertyFetchNode;
+        $variableNode = $propertyFetchNode->var;
+        $nodeTypes = $this->nodeTypeResolver->resolve($variableNode);
+        $properties = $this->matchTypeToProperties($nodeTypes);
+        if ($this->propertyFetchAnalyzer->isProperties($propertyFetchNode, $properties) === false) {
+            return null;
+        }
         $parentNode = $propertyFetchNode->getAttribute(Attribute::PARENT_NODE);
         if ($parentNode instanceof MethodCall) {
             return $propertyFetchNode;

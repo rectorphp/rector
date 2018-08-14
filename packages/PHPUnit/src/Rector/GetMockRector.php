@@ -39,27 +39,9 @@ final class GetMockRector extends AbstractPHPUnitRector
         ]);
     }
 
-    public function isCandidate(Node $node): bool
+    public function getNodeType(): string
     {
-        if (! $node instanceof MethodCall) {
-            return false;
-        }
-
-        if (! $this->isInTestClass($node)) {
-            return false;
-        }
-
-        if (! $this->methodCallAnalyzer->isMethods(
-            $node,
-            ['getMock', 'getMockWithoutInvokingTheOriginalConstructor']
-        )) {
-            return false;
-        }
-
-        /** @var MethodCall $methodCallNode */
-        $methodCallNode = $node;
-
-        return count($methodCallNode->args) === 1;
+        return MethodCall::class;
     }
 
     /**
@@ -67,6 +49,23 @@ final class GetMockRector extends AbstractPHPUnitRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
+        if (! $methodCallNode instanceof MethodCall) {
+            return null;
+        }
+        if (! $this->isInTestClass($methodCallNode)) {
+            return null;
+        }
+        if (! $this->methodCallAnalyzer->isMethods(
+            $methodCallNode,
+            ['getMock', 'getMockWithoutInvokingTheOriginalConstructor']
+        )) {
+            return null;
+        }
+        /** @var MethodCall $methodCallNode */
+        $methodCallNode = $methodCallNode;
+        if ((count($methodCallNode->args) === 1) === false) {
+            return null;
+        }
         $this->identifierRenamer->renameNode($methodCallNode, 'createMock');
 
         return $methodCallNode;

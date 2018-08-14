@@ -71,27 +71,9 @@ CODE_SAMPLE
         );
     }
 
-    public function isCandidate(Node $node): bool
+    public function getNodeType(): string
     {
-        if (! $node instanceof Property) {
-            return false;
-        }
-
-        // doesn't have a parent class
-        if (! $node->hasAttribute(Attribute::PARENT_CLASS_NAME)) {
-            return false;
-        }
-
-        // @todo or better types?
-        $nodeParentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
-        if (! isset($this->propertyToVisibilityByClass[$nodeParentClassName])) {
-            return false;
-        }
-
-        $propertyProperty = $node->props[0];
-        $propertyName = $propertyProperty->name->toString();
-
-        return isset($this->propertyToVisibilityByClass[$nodeParentClassName][$propertyName]);
+        return Property::class;
     }
 
     /**
@@ -99,6 +81,23 @@ CODE_SAMPLE
      */
     public function refactor(Node $propertyNode): ?Node
     {
+        if (! $propertyNode instanceof Property) {
+            return null;
+        }
+        // doesn't have a parent class
+        if (! $propertyNode->hasAttribute(Attribute::PARENT_CLASS_NAME)) {
+            return null;
+        }
+        // @todo or better types?
+        $nodeParentClassName = $propertyNode->getAttribute(Attribute::PARENT_CLASS_NAME);
+        if (! isset($this->propertyToVisibilityByClass[$nodeParentClassName])) {
+            return null;
+        }
+        $propertyProperty = $propertyNode->props[0];
+        $propertyName = $propertyProperty->name->toString();
+        if (isset($this->propertyToVisibilityByClass[$nodeParentClassName][$propertyName]) === false) {
+            return null;
+        }
         $this->visibilityModifier->removeOriginalVisibilityFromFlags($propertyNode);
 
         $newVisibility = $this->resolveNewVisibilityForNode($propertyNode);

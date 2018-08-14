@@ -47,19 +47,9 @@ final class FunctionToMethodCallRector extends AbstractRector
         ]);
     }
 
-    public function isCandidate(Node $node): bool
+    public function getNodeType(): string
     {
-        if (! $node instanceof FuncCall) {
-            return false;
-        }
-
-        if (! $node->name instanceof Name) {
-            return false;
-        }
-
-        $functionName = $node->name->toString();
-
-        return isset($this->functionToMethodCall[$functionName]);
+        return FuncCall::class;
     }
 
     /**
@@ -67,6 +57,16 @@ final class FunctionToMethodCallRector extends AbstractRector
      */
     public function refactor(Node $funcCallNode): ?Node
     {
+        if (! $funcCallNode instanceof FuncCall) {
+            return null;
+        }
+        if (! $funcCallNode->name instanceof Name) {
+            return null;
+        }
+        $functionName = $funcCallNode->name->toString();
+        if (isset($this->functionToMethodCall[$functionName]) === false) {
+            return null;
+        }
         /** @var Identifier $identifier */
         $identifier = $funcCallNode->name;
         $functionName = $identifier->toString();

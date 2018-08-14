@@ -91,17 +91,9 @@ CODE_SAMPLE
         ]);
     }
 
-    public function isCandidate(Node $node): bool
+    public function getNodeType(): string
     {
-        if ($node instanceof String_) {
-            return $this->processStringCandidate($node);
-        }
-
-        if ($node instanceof MethodCall) {
-            return $this->processMethodCallCandidate($node);
-        }
-
-        return false;
+        return [String_::class, MethodCall::class];
     }
 
     /**
@@ -109,6 +101,17 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if ($node instanceof String_) {
+            if ($this->processStringCandidate($node) === false) {
+                return null;
+            }
+        }
+        if ($node instanceof MethodCall) {
+            if ($this->processMethodCallCandidate($node) === false) {
+                return null;
+            }
+        }
+        return null;
         if ($node instanceof String_) {
             return $this->methodCallNodeFactory->createWithVariableAndMethodName(
                 $node->expr,

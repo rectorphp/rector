@@ -92,13 +92,9 @@ CODE_SAMPLE
         );
     }
 
-    public function isCandidate(Node $node): bool
+    public function getNodeType(): string
     {
-        if (! $node instanceof ClassMethod) {
-            return false;
-        }
-
-        return $this->docBlockAnalyzer->hasTag($node, 'Template');
+        return ClassMethod::class;
     }
 
     /**
@@ -106,6 +102,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $classMethodNode): ?Node
     {
+        if (! $classMethodNode instanceof ClassMethod) {
+            return null;
+        }
+        if ($this->docBlockAnalyzer->hasTag($classMethodNode, 'Template') === false) {
+            return null;
+        }
         /** @var Return_|null $returnNode */
         $returnNode = $this->betterNodeFinder->findLastInstanceOf((array) $classMethodNode->stmts, Return_::class);
 

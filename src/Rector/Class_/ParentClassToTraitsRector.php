@@ -73,15 +73,9 @@ CODE_SAMPLE
         ]);
     }
 
-    public function isCandidate(Node $node): bool
+    public function getNodeType(): string
     {
-        if (! $node instanceof Class_ || $node->extends === null || $node->isAnonymous()) {
-            return false;
-        }
-
-        $nodeParentClassName = $this->getClassNodeParentClassName($node);
-
-        return isset($this->parentClassToTraits[$nodeParentClassName]);
+        return Class_::class;
     }
 
     /**
@@ -89,6 +83,13 @@ CODE_SAMPLE
      */
     public function refactor(Node $classNode): ?Node
     {
+        if (! $classNode instanceof Class_ || $classNode->extends === null || $classNode->isAnonymous()) {
+            return null;
+        }
+        $nodeParentClassName = $this->getClassNodeParentClassName($classNode);
+        if (isset($this->parentClassToTraits[$nodeParentClassName]) === false) {
+            return null;
+        }
         $nodeParentClassName = $this->getClassNodeParentClassName($classNode);
         $traitNames = $this->parentClassToTraits[$nodeParentClassName];
 

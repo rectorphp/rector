@@ -43,9 +43,9 @@ final class ProcessBuilderInstanceRector extends AbstractRector
         );
     }
 
-    public function isCandidate(Node $node): bool
+    public function getNodeType(): string
     {
-        return $this->staticMethodCallAnalyzer->isTypeAndMethod($node, $this->processBuilderClass, 'create');
+        return StaticCall::class;
     }
 
     /**
@@ -53,6 +53,13 @@ final class ProcessBuilderInstanceRector extends AbstractRector
      */
     public function refactor(Node $staticCallNode): ?Node
     {
+        if ($this->staticMethodCallAnalyzer->isTypeAndMethod(
+            $staticCallNode,
+            $this->processBuilderClass,
+            'create'
+        ) === false) {
+            return null;
+        }
         return new New_($staticCallNode->class, $staticCallNode->args);
     }
 }

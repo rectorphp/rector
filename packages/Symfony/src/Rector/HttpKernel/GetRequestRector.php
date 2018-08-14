@@ -80,13 +80,9 @@ CODE_SAMPLE
         );
     }
 
-    public function isCandidate(Node $node): bool
+    public function getNodeType(): string
     {
-        if ($this->isActionWithGetRequestInBody($node)) {
-            return true;
-        }
-
-        return $this->isGetRequestInAction($node);
+        return [ClassMethod::class, MethodCall::class];
     }
 
     /**
@@ -94,6 +90,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $classMethodOrMethodCallNode): ?Node
     {
+        if ($this->isActionWithGetRequestInBody($classMethodOrMethodCallNode)) {
+        }
+        if ($this->isGetRequestInAction($classMethodOrMethodCallNode) === false) {
+            return null;
+        }
         if ($classMethodOrMethodCallNode instanceof ClassMethod) {
             $requestParam = $this->nodeFactory->createParam('request', 'Symfony\Component\HttpFoundation\Request');
 

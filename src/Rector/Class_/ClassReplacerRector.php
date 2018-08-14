@@ -44,18 +44,9 @@ final class ClassReplacerRector extends AbstractRector
         ]);
     }
 
-    public function isCandidate(Node $node): bool
+    public function getNodeType(): string
     {
-        if (! $node instanceof Name) {
-            return false;
-        }
-
-        $nameNode = $this->resolveNameNodeFromNode($node);
-        if ($nameNode === null) {
-            return false;
-        }
-
-        return isset($this->oldToNewClasses[$nameNode->toString()]);
+        return Name::class;
     }
 
     /**
@@ -63,6 +54,16 @@ final class ClassReplacerRector extends AbstractRector
      */
     public function refactor(Node $nameNode): ?Node
     {
+        if (! $nameNode instanceof Name) {
+            return null;
+        }
+        $nameNode = $this->resolveNameNodeFromNode($nameNode);
+        if ($nameNode === null) {
+            return null;
+        }
+        if (isset($this->oldToNewClasses[$nameNode->toString()]) === false) {
+            return null;
+        }
         if ($nameNode instanceof Name) {
             $newName = $this->resolveNewNameFromNode($nameNode);
 

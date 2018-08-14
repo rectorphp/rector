@@ -47,24 +47,9 @@ CODE_SAMPLE
         ]);
     }
 
-    public function isCandidate(Node $node): bool
+    public function getNodeType(): string
     {
-        if (! $node instanceof Return_) {
-            return false;
-        }
-
-        if (! $node->expr instanceof ConstFetch) {
-            return false;
-        }
-
-        $methodName = $node->getAttribute(Attribute::METHOD_NAME);
-        if ($methodName !== 'leaveNode') {
-            return false;
-        }
-
-        $value = $node->expr->name->toString();
-
-        return $value === 'false';
+        return Return_::class;
     }
 
     /**
@@ -72,6 +57,20 @@ CODE_SAMPLE
      */
     public function refactor(Node $returnNode): ?Node
     {
+        if (! $returnNode instanceof Return_) {
+            return null;
+        }
+        if (! $returnNode->expr instanceof ConstFetch) {
+            return null;
+        }
+        $methodName = $returnNode->getAttribute(Attribute::METHOD_NAME);
+        if ($methodName !== 'leaveNode') {
+            return null;
+        }
+        $value = $returnNode->expr->name->toString();
+        if (($value === 'false') === false) {
+            return null;
+        }
         $returnNode->expr = $this->nodeFactory->createClassConstant('PhpParser\NodeTraverser', 'REMOVE_NODE');
 
         return $returnNode;

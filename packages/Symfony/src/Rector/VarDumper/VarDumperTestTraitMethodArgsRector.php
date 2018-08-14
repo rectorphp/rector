@@ -56,24 +56,9 @@ final class VarDumperTestTraitMethodArgsRector extends AbstractRector
         );
     }
 
-    public function isCandidate(Node $node): bool
+    public function getNodeType(): string
     {
-        if (! $this->methodCallAnalyzer->isTypeAndMethods(
-            $node,
-            $this->traitName,
-            ['assertDumpEquals', 'assertDumpMatchesFormat']
-        )) {
-            return false;
-        }
-
-        /** @var StaticCall $staticCallNode */
-        $staticCallNode = $node;
-
-        if (count($staticCallNode->args) <= 2 || $staticCallNode->args[2]->value instanceof ConstFetch) {
-            return false;
-        }
-
-        return true;
+        return StaticCall::class;
     }
 
     /**
@@ -81,6 +66,19 @@ final class VarDumperTestTraitMethodArgsRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $this->methodCallAnalyzer->isTypeAndMethods(
+            $node,
+            $this->traitName,
+            ['assertDumpEquals', 'assertDumpMatchesFormat']
+        )) {
+            return null;
+        }
+        /** @var StaticCall $staticCallNode */
+        $staticCallNode = $node;
+        if (count($staticCallNode->args) <= 2 || $staticCallNode->args[2]->value instanceof ConstFetch) {
+            return null;
+        }
+
         $methodArguments = $node->args;
 
         if ($methodArguments[2]->value instanceof String_) {
