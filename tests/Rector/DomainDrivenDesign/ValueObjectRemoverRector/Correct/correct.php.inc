@@ -7,7 +7,7 @@ use Rector\Tests\Rector\DomainDrivenDesign\ValueObjectRemoverRector\Source\SomeC
 class ActionClass
 {
     /**
-     * @var string|null
+     * @var SomeChildOfValueObject|null
      */
     private $someChildValueObject;
 

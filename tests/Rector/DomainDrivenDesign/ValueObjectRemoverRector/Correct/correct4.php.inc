@@ -8,7 +8,7 @@ class FourthActionClass
 {
     public function someFunction(?string $name): ?string
     {
-        /** @var string|null $someValueObject */
+        /** @var SomeValueObject|null $someValueObject */
         $someValueObject = 'value';
     }
 }

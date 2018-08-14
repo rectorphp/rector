@@ -7,7 +7,7 @@ use Rector\Tests\Rector\DomainDrivenDesign\ValueObjectRemoverRector\Source\SomeV
 class ThirdActionClass
 {
     /**
-     * @param null|string $name
+     * @param null|SomeValueObject $name
      */
     public function someFunction(?string $name): ?string
     {
