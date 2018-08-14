@@ -8,7 +8,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Property;
-use Rector\NodeTypeResolver\Node\Attribute as RectorAttribute;
+use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
@@ -67,7 +67,7 @@ final class ValueObjectRemoverRector extends AbstractValueObjectRemoverRector
         }
 
         if ($node instanceof Name) {
-            $parentNode = $node->getAttribute(RectorAttribute::PARENT_NODE);
+            $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
             if ($parentNode instanceof Param) {
                 return true;
             }

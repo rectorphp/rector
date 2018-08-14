@@ -12,7 +12,7 @@ use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Naming\PropertyNaming;
 use Rector\Node\PropertyFetchNodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
-use Rector\NodeTypeResolver\Node\Attribute as RectorAttribute;
+use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 
 abstract class AbstractToConstructorInjectionRector extends AbstractRector
@@ -73,7 +73,7 @@ abstract class AbstractToConstructorInjectionRector extends AbstractRector
         $propertyName = $this->propertyNaming->fqnToVariableName($serviceType);
 
         $this->classPropertyCollector->addPropertyForClass(
-            (string) $methodCallNode->getAttribute(RectorAttribute::CLASS_NAME),
+            (string) $methodCallNode->getAttribute(Attribute::CLASS_NAME),
             [$serviceType],
             $propertyName
         );
@@ -102,7 +102,7 @@ abstract class AbstractToConstructorInjectionRector extends AbstractRector
         }
 
         if ($argument->class instanceof Name) {
-            return $argument->class->getAttribute(RectorAttribute::RESOLVED_NAME)->toString();
+            return $argument->class->getAttribute(Attribute::RESOLVED_NAME)->toString();
         }
 
         return null;

@@ -7,7 +7,7 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
 use Rector\Node\NodeFactory;
-use Rector\NodeTypeResolver\Node\Attribute as RectorAttribute;
+use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -84,7 +84,7 @@ final class RenameClassConstantsUseToStringsRector extends AbstractRector
     private function getClassNameFromClassConstFetch(ClassConstFetch $classConstFetchNode): string
     {
         /** @var FullyQualified|null $fqnName */
-        $fqnName = $classConstFetchNode->class->getAttribute(RectorAttribute::RESOLVED_NAME);
+        $fqnName = $classConstFetchNode->class->getAttribute(Attribute::RESOLVED_NAME);
 
         if ($fqnName === null && $classConstFetchNode->class instanceof Variable) {
             return (string) $classConstFetchNode->class->name;

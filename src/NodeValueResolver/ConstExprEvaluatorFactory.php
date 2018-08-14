@@ -6,7 +6,7 @@ use PhpParser\ConstExprEvaluator;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Identifier;
-use Rector\NodeTypeResolver\Node\Attribute as RectorAttribute;
+use Rector\NodeTypeResolver\Node\Attribute;
 
 final class ConstExprEvaluatorFactory
 {
@@ -23,7 +23,7 @@ final class ConstExprEvaluatorFactory
 
     private function resolveClassConstFetch(ClassConstFetch $classConstFetchNode): string
     {
-        $class = $classConstFetchNode->class->getAttribute(RectorAttribute::RESOLVED_NAME)->toString();
+        $class = $classConstFetchNode->class->getAttribute(Attribute::RESOLVED_NAME)->toString();
 
         /** @var Identifier $identifierNode */
         $identifierNode = $classConstFetchNode->name;

@@ -7,7 +7,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Builder\StatementGlue;
 use Rector\Node\NodeFactory;
-use Rector\NodeTypeResolver\Node\Attribute as RectorAttribute;
+use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -113,7 +113,7 @@ CODE_SAMPLE
     private function getClassNodeParentClassName(Class_ $classNode): string
     {
         /** @var FullyQualified $fullyQualifiedName */
-        $fullyQualifiedName = $classNode->extends->getAttribute(RectorAttribute::RESOLVED_NAME);
+        $fullyQualifiedName = $classNode->extends->getAttribute(Attribute::RESOLVED_NAME);
 
         return $fullyQualifiedName->toString();
     }

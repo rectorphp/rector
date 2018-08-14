@@ -5,7 +5,7 @@ namespace Rector\Rector\Annotation;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
-use Rector\NodeTypeResolver\Node\Attribute as RectorAttribute;
+use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\Rector\AbstractPHPUnitRector;
@@ -96,7 +96,7 @@ CODE_SAMPLE
         }
 
         /** @var Node $parentNode */
-        $parentNode = $node->getAttribute(RectorAttribute::PARENT_NODE);
+        $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
         $parentNodeTypes = $this->nodeTypeResolver->resolve($parentNode);
 
         foreach ($this->classToAnnotationMap as $type => $annotationMap) {
@@ -133,7 +133,7 @@ CODE_SAMPLE
         }
 
         /** @var Node|null $parentNode */
-        $parentNode = $node->getAttribute(RectorAttribute::PARENT_NODE);
+        $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
         if (! $parentNode) {
             return true;
         }

@@ -8,7 +8,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
-use Rector\NodeTypeResolver\Node\Attribute as RectorAttribute;
+use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -63,7 +63,7 @@ CODE_SAMPLE
     public function isCandidate(Node $node): bool
     {
         // skip just added calls
-        if ($node->getAttribute(RectorAttribute::ORIGINAL_NODE) === null) {
+        if ($node->getAttribute(Attribute::ORIGINAL_NODE) === null) {
             return false;
         }
 
@@ -71,7 +71,7 @@ CODE_SAMPLE
             return false;
         }
 
-        return $node->getAttribute(RectorAttribute::PREVIOUS_NODE) === null;
+        return $node->getAttribute(Attribute::PREVIOUS_NODE) === null;
     }
 
     /**

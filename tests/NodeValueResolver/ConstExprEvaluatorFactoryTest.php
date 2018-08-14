@@ -6,7 +6,7 @@ use PhpParser\BuilderFactory;
 use PhpParser\ConstExprEvaluator;
 use PhpParser\Node\Name;
 use PHPUnit\Framework\TestCase;
-use Rector\NodeTypeResolver\Node\Attribute as RectorAttribute;
+use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\NodeValueResolver\ConstExprEvaluatorFactory;
 
 final class ConstExprEvaluatorFactoryTest extends TestCase
@@ -24,7 +24,7 @@ final class ConstExprEvaluatorFactoryTest extends TestCase
     public function test(): void
     {
         $classConstFetchNode = (new BuilderFactory())->classConstFetch('SomeClass', 'SOME_CONSTANT');
-        $classConstFetchNode->class->setAttribute(RectorAttribute::RESOLVED_NAME, new Name('SomeClassResolveName'));
+        $classConstFetchNode->class->setAttribute(Attribute::RESOLVED_NAME, new Name('SomeClassResolveName'));
 
         $this->assertSame(
             'SomeClassResolveName::SOME_CONSTANT',
