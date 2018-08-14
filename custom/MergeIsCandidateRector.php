@@ -1,0 +1,317 @@
+<?php declare(strict_types=1);
+
+namespace Rector\Custom;
+
+use PhpParser\BuilderFactory;
+use PhpParser\Node;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Expr\BinaryOp\Identical;
+use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Nop;
+use PhpParser\Node\Stmt\Return_;
+use PhpParser\Node\Stmt\If_;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
+use Rector\Builder\StatementGlue;
+use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
+use Rector\NodeTypeResolver\PHPStan\Type\TypeToStringResolver;
+use Rector\Rector\AbstractRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
+use Rector\Utils\NodeTraverser\CallableNodeTraverser;
+
+final class MergeIsCandidateRector extends AbstractRector
+{
+    /**
+     * @var NodeTypeResolver
+     */
+    private $nodeTypeResolver;
+
+    /**
+     * @var BuilderFactory
+     */
+    private $builderFactory;
+
+    /**
+     * @var DocBlockAnalyzer
+     */
+    private $docBlockAnalyzer;
+
+    /**
+     * @var TypeToStringResolver
+     */
+    private $typeToStringResolver;
+    /**
+     * @var StatementGlue
+     */
+    private $statementGlue;
+
+    /**
+     * @var CallableNodeTraverser
+     */
+    private $callbackNodeTraverser;
+
+    public function __construct(
+        NodeTypeResolver $nodeTypeResolver,
+        BuilderFactory $builderFactory,
+        DocBlockAnalyzer $docBlockAnalyzer,
+        TypeToStringResolver $typeToStringResolver,
+        CallableNodeTraverser $callbackNodeTraverser
+    ) {
+        $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->builderFactory = $builderFactory;
+        $this->docBlockAnalyzer = $docBlockAnalyzer;
+        $this->typeToStringResolver = $typeToStringResolver;
+        $this->callbackNodeTraverser = $callbackNodeTraverser;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition(
+            'Finds all "Rector\Rector\AbstractRector" instances, merges "isCandidate()" method to "refactor()" method and creates "getNodeType()" method by @param annotation of "refactor()" method.',
+            [new CodeSample('', '')]
+        );
+    }
+
+    public function getNodeType(): string
+    {
+        return Class_::class;
+    }
+
+    /**
+     * @param Class_ $classNode
+     */
+    public function refactor(Node $classNode): ?Node
+    {
+        $nodeTypes = $this->nodeTypeResolver->resolve($classNode);
+
+        if (! in_array('Rector\Rector\AbstractRector', $nodeTypes, true) || $classNode->isAbstract()) {
+            return $classNode;
+        }
+
+        // has "isCandidate()" method?
+        if (! $this->hasClassIsCandidateMethod($classNode)) {
+            return $classNode;
+        }
+
+        [$isCandidateClassMethodPosition, $isCandidateClassMethod] = $this->getClassMethodByName($classNode, 'isCandidate');
+        [$refactorClassMethodPosition, $refactorClassMethod] = $this->getClassMethodByName($classNode, 'refactor');
+
+        if ($refactorClassMethod === null) {
+            return $classNode;
+        }
+
+        // 1. replace "isCandidate()" method by "getNodeType()" method
+        $classNode->stmts[$isCandidateClassMethodPosition] = $this->createGetNodeTypeClassMethod($refactorClassMethod);
+
+        // 2. add contents of "isCandidate()" method to start of "refactor()" method
+        $this->replaceReturnFalseWithReturnNull($isCandidateClassMethod);
+
+        // 3. rename used variable "$node" to "$specificTypeParam"
+        $this->renameNodeToParamNode($isCandidateClassMethod, $refactorClassMethod->params[0]->var->name);
+
+        // 4. turn last return in "isCondition()" with early return
+        $this->replaceLastReturnWithIf($isCandidateClassMethod);
+
+        // 5. return true makes no sense anymore, just continue
+        $this->removeReturnTrue($isCandidateClassMethod);
+
+        // 6. remove first "instanceof", already covered by getNodeType()
+        $isCandidateClassMethod = $this->removeFirstInstanceOf($isCandidateClassMethod);
+
+        $refactorClassMethod->stmts = array_merge($isCandidateClassMethod->stmts, $refactorClassMethod->stmts);
+
+        $classNode->stmts[$refactorClassMethodPosition] = $refactorClassMethod;
+
+        return $classNode;
+    }
+
+    private function hasClassIsCandidateMethod(Class_ $classNode): bool
+    {
+        return (bool) $this->getClassMethodByName($classNode, 'isCandidate');
+    }
+
+    /**
+     * @return int[]|ClassMethod[]|null
+     */
+    private function getClassMethodByName(Class_ $classNode, string $name)
+    {
+        foreach ($classNode->stmts as $i => $stmt) {
+            if (! $stmt instanceof ClassMethod) {
+                continue;
+            }
+
+            if ((string) $stmt->name === $name) {
+                return [$i, $stmt];
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function resolveParamTagValueNodeToStrings(ParamTagValueNode $paramTagValueNode): array
+    {
+        $types = [];
+
+        if ($paramTagValueNode->type instanceof UnionTypeNode) {
+            foreach ($paramTagValueNode->type->types as $type) {
+                $types[] = (string) $type;
+            }
+        } elseif ($paramTagValueNode->type instanceof IdentifierTypeNode) {
+            $types[] = $paramTagValueNode->type->name;
+        } else {
+            dump($paramTagValueNode->type);
+            // todo: resolve
+            die;
+        }
+
+        return $types;
+    }
+
+    private function createGetNodeTypeClassMethod(ClassMethod $refactorClassMethod): ClassMethod
+    {
+        $paramTypes = $this->resolveSingleParamTypesFromClassMethod($refactorClassMethod);
+
+        if (count($paramTypes) > 1) {
+            $nodeToBeReturned = new Array_();
+            foreach ($paramTypes as $paramType) {
+                $classConstFetchNode = $this->createClassConstFetchFromClassName($paramType);
+                $nodeToBeReturned->items[] = new ArrayItem($classConstFetchNode);
+            }
+
+        } elseif (count($paramTypes) === 1) {
+            $nodeToBeReturned = $this->createClassConstFetchFromClassName($paramTypes[0]);
+        } else { // fallback to basic node
+            $nodeToBeReturned = $this->createClassConstFetchFromClassName('PhpParser\\Node');
+        }
+
+        return $this->builderFactory->method('getNodeType')
+            ->makePublic()
+            ->setReturnType('string')
+            ->addStmt(new Return_($nodeToBeReturned))
+            ->getNode();
+    }
+
+    /**
+     * @return string[]
+     */
+    private function resolveSingleParamTypesFromClassMethod(ClassMethod $classMethod): array
+    {
+        // add getNodeType() by $refactorClassMethod "@param" doc type
+        $paramNode = $this->docBlockAnalyzer->getTagByName($classMethod, 'param');
+        if ($paramNode === null) {
+            return [];
+        }
+
+        /** @var ParamTagValueNode $paramTagValueNode */
+        $paramTagValueNode = $paramNode->value;
+
+        return $this->resolveParamTagValueNodeToStrings($paramTagValueNode);
+    }
+
+    private function createClassConstFetchFromClassName(string $className): ClassConstFetch
+    {
+        return new ClassConstFetch(new FullyQualified($className), 'class');
+    }
+
+    private function replaceReturnFalseWithReturnNull(ClassMethod $classMethod): void
+    {
+        $this->callbackNodeTraverser->traverseNodesWithCallable([$classMethod], function (Node $node): ?Node {
+            if (!$node instanceof Return_ || !$node->expr instanceof ConstFetch) {
+                return null;
+            }
+
+            if ((string) $node->expr->name === 'false') {
+                return new Return_(new ConstFetch(new Name('null')));
+            }
+
+            return null;
+        });
+    }
+
+    private function renameNodeToParamNode(ClassMethod $classMethod, string $nodeName): void
+    {
+        $this->callbackNodeTraverser->traverseNodesWithCallable([$classMethod], function (Node $node) use ($nodeName): ?Node {
+            if (! $node instanceof Variable || $node->name !== 'node') {
+                return null;
+            }
+
+            $node->name = $nodeName;
+
+            return $node;
+        });
+    }
+
+    private function replaceLastReturnWithIf(ClassMethod $classMethod): void
+    {
+        $this->callbackNodeTraverser->traverseNodesWithCallable([$classMethod], function (Node $node): ?Node {
+            if (! $node instanceof Return_) {
+                return null;
+            }
+
+            if ($node->expr instanceof ConstFetch) {
+                return null;
+            }
+
+            $identicalCondition = new Identical($node->expr,  new ConstFetch(new Name('false')));
+            return new If_($identicalCondition, [
+                'stmts' => [
+                    new Return_(new ConstFetch(new Name('null')))
+                ]
+            ]);
+        });
+    }
+
+    private function removeReturnTrue(ClassMethod $classMethod): void
+    {
+        $this->callbackNodeTraverser->traverseNodesWithCallable([$classMethod], function (Node $node): ?Node {
+            if (! $node instanceof Return_ || ! $node->expr instanceof ConstFetch || (string) $node->expr->name !== 'true') {
+                return null;
+            }
+
+            return new Nop();
+        });
+    }
+
+    private function removeFirstInstanceOf(ClassMethod $classMethod): ClassMethod
+    {
+        if (! isset($classMethod->stmts[0])) {
+            return $classMethod;
+        }
+
+        if (! $classMethod->stmts[0] instanceof If_) {
+            return $classMethod;
+        }
+
+        /** @var If_ $ifNode */
+        $ifNode = $classMethod->stmts[0];
+        if (! $ifNode->stmts[0] instanceof Return_) {
+            return $classMethod;
+        }
+
+        /** @var Return_ $returnNode */
+        $returnNode = $ifNode->stmts[0];
+        if (! $returnNode->expr instanceof ConstFetch) {
+            return $classMethod;
+        }
+
+        $constFetchNode = $returnNode->expr;
+        if ($constFetchNode->name->toString() === null) {
+            unset($classMethod->stmts[0]);
+        }
+
+        return $classMethod;
+    }
+}

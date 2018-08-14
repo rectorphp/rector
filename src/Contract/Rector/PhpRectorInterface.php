@@ -19,6 +19,8 @@ interface PhpRectorInterface extends NodeVisitor, RectorInterface
 
     /**
      * Process Node of matched type
+     *
+     * @return null|Node|void
      */
-    public function refactor(Node $node): ?Node;
+    public function refactor(Node $node);
 }

@@ -61,6 +61,8 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         }
 
         $newNode = $this->refactor($node);
+
+        // nothing has changed, return original node
         if ($newNode !== null) {
             return $newNode;
         }

@@ -45,7 +45,8 @@
             "Rector\\Doctrine\\": "packages/Doctrine/src",
             "Rector\\Utils\\": "packages/Utils/src",
             "Rector\\YamlRector\\": "packages/YamlRector/src"
-        }
+        },
+        "classmap": ["custom"]
     },
     "autoload-dev": {
         "psr-4": {
