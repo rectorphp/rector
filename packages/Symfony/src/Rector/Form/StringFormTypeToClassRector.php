@@ -48,9 +48,12 @@ final class StringFormTypeToClassRector extends AbstractRector
         );
     }
 
-    public function getNodeType(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        return String_::class;
+        return [String_::class];
     }
 
     /**
@@ -58,9 +61,6 @@ final class StringFormTypeToClassRector extends AbstractRector
      */
     public function refactor(Node $stringNode): ?Node
     {
-        if (! $stringNode instanceof String_) {
-            return null;
-        }
         if (! $this->formTypeStringToTypeProvider->hasClassForNameWithPrefix($stringNode->value)) {
             return null;
         }

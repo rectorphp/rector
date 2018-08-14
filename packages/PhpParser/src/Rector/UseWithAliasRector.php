@@ -44,9 +44,12 @@ final class UseWithAliasRector extends AbstractRector
         );
     }
 
-    public function getNodeType(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        return PropertyFetch::class;
+        return [PropertyFetch::class];
     }
 
     /**

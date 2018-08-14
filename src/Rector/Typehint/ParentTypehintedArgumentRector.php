@@ -95,9 +95,12 @@ CODE_SAMPLE
         ]);
     }
 
-    public function getNodeType(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        return ClassMethod::class;
+        return [ClassMethod::class];
     }
 
     /**
@@ -105,9 +108,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $classMethodNode): ?Node
     {
-        if (! $classMethodNode instanceof ClassMethod) {
-            return null;
-        }
         /** @var ClassLike $classNode */
         $classNode = $classMethodNode->getAttribute(Attribute::CLASS_NODE);
         $classNodeTypes = $this->nodeTypeResolver->resolve($classNode);

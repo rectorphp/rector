@@ -82,9 +82,12 @@ final class MergeIsCandidateRector extends AbstractRector
         );
     }
 
-    public function getNodeType(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        return Class_::class;
+        return [Class_::class];
     }
 
     /**
@@ -184,22 +187,23 @@ final class MergeIsCandidateRector extends AbstractRector
     {
         $paramTypes = $this->resolveSingleParamTypesFromClassMethod($refactorClassMethod);
 
+        $nodeToBeReturned = new Array_();
+
         if (count($paramTypes) > 1) {
-            $nodeToBeReturned = new Array_();
             foreach ($paramTypes as $paramType) {
                 $classConstFetchNode = $this->createClassConstFetchFromClassName($paramType);
                 $nodeToBeReturned->items[] = new ArrayItem($classConstFetchNode);
             }
 
         } elseif (count($paramTypes) === 1) {
-            $nodeToBeReturned = $this->createClassConstFetchFromClassName($paramTypes[0]);
+            $nodeToBeReturned->items[] = $this->createClassConstFetchFromClassName($paramTypes[0]);
         } else { // fallback to basic node
-            $nodeToBeReturned = $this->createClassConstFetchFromClassName('PhpParser\\Node');
+            $nodeToBeReturned->items[] = $this->createClassConstFetchFromClassName('PhpParser\\Node');
         }
 
-        return $this->builderFactory->method('getNodeType')
+        return $this->builderFactory->method('getNodeTypes')
             ->makePublic()
-            ->setReturnType('string')
+            ->setReturnType('array')
             ->addStmt(new Return_($nodeToBeReturned))
             ->getNode();
     }

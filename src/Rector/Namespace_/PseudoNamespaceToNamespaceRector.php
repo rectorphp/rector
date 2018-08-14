@@ -72,7 +72,10 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
         ]);
     }
 
-    public function getNodeType(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
         return [Name::class, Identifier::class];
     }
@@ -86,14 +89,15 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
         if ($name === null) {
             return null;
         }
+
         if (in_array($name, $this->excludedClasses, true)) {
             return null;
         }
-        foreach ($this->pseudoNamespacePrefixes as $pseudoNamespacePrefix) {
-            if (Strings::startsWith($name, $pseudoNamespacePrefix)) {
-            }
+
+        if (! $this->isNamespaceMatch($name)) {
+            return null;
         }
-        return null;
+
         $oldName = $this->resolveNameFromNode($nameOrIdentifierNode);
 
         $newNameParts = explode('_', $oldName);
@@ -150,5 +154,16 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
         }
 
         return null;
+    }
+
+    private function isNamespaceMatch(string $name): bool
+    {
+        foreach ($this->pseudoNamespacePrefixes as $pseudoNamespacePrefix) {
+            if (Strings::startsWith($name, $pseudoNamespacePrefix)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

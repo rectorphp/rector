@@ -86,9 +86,12 @@ CODE_SAMPLE
         ]);
     }
 
-    public function getNodeType(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        return PropertyFetch::class;
+        return [PropertyFetch::class];
     }
 
     /**
@@ -99,8 +102,7 @@ CODE_SAMPLE
         if (! $this->propertyFetchAnalyzer->isTypes($propertyFetchNode, array_keys($this->typeToPropertiesMap))) {
             return null;
         }
-        /** @var PropertyFetch $propertyFetchNode */
-        $propertyFetchNode = $propertyFetchNode;
+
         $variableNode = $propertyFetchNode->var;
         $nodeTypes = $this->nodeTypeResolver->resolve($variableNode);
         $properties = $this->matchTypeToProperties($nodeTypes);

@@ -57,9 +57,12 @@ final class AssertFalseStrposToContainsRector extends AbstractPHPUnitRector
         );
     }
 
-    public function getNodeType(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        return MethodCall::class;
+        return [MethodCall::class];
     }
 
     /**
@@ -67,9 +70,6 @@ final class AssertFalseStrposToContainsRector extends AbstractPHPUnitRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        if (! $methodCallNode instanceof MethodCall) {
-            return null;
-        }
         if (! $this->isInTestClass($methodCallNode)) {
             return null;
         }

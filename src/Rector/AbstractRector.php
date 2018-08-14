@@ -50,24 +50,21 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
      */
     final public function enterNode(Node $node)
     {
-        if (method_exists($this, 'getNodeType')) {
-            if (! is_a($node, $this->getNodeType(), true)) { // == basically "isCandidate()" condition
-                return null;
-            }
-        } elseif (method_exists($this, 'isCandidate')) {
-            if (! $this->isCandidate($node)) {
-                return null;
-            }
+        $nodeClass = get_class($node);
+        if (! $this->isMatchingNodeType($nodeClass)) {
+            return null;
         }
 
         $newNode = $this->refactor($node);
-
-        // nothing has changed, return original node
         if ($newNode !== null) {
             return $newNode;
         }
 
-        return NodeTraverser::DONT_TRAVERSE_CHILDREN;
+        if ($this->removeNode) {
+            return NodeTraverser::DONT_TRAVERSE_CHILDREN;
+        }
+
+        return null;
     }
 
     /**
@@ -96,5 +93,16 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     protected function addNodeAfterNode(Expr $newNode, Node $positionNode): void
     {
         $this->expressionAdder->addNodeAfterNode($newNode, $positionNode);
+    }
+
+    private function isMatchingNodeType(string $nodeClass): bool
+    {
+        foreach ($this->getNodeTypes() as $nodeType) {
+            if (is_a($nodeClass, $nodeType, true)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

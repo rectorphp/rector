@@ -55,9 +55,12 @@ CODE_SAMPLE
         ]);
     }
 
-    public function getNodeType(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        return Class_::class;
+        return [Class_::class];
     }
 
     /**
@@ -65,19 +68,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $classNode): ?Node
     {
-        if (! $classNode instanceof Class_) {
-            return null;
-        }
         if (! $classNode->implements) {
             return null;
         }
-        foreach ($classNode->implements as $implement) {
-            $interface = (string) $implement->getAttribute(Attribute::RESOLVED_NAME);
 
-            if (array_key_exists($interface, $this->oldToNewInterfaces)) {
-            }
-        }
-        return null;
         foreach ($classNode->implements as $key => $implement) {
             $interface = (string) $implement->getAttribute(Attribute::RESOLVED_NAME);
 

@@ -59,13 +59,9 @@ abstract class AbstractToConstructorInjectionRector extends AbstractRector
         $this->methodCallAnalyzer = $methodCallAnalyzer;
     }
 
-    /**
-     * @param MethodCall $methodCallNode
-     */
-    public function refactor(Node $methodCallNode): ?Node
+    protected function processMethodCallNode(MethodCall $methodCallNode): ?Node
     {
         $serviceType = $this->getServiceTypeFromMethodCallArgument($methodCallNode);
-
         if ($serviceType === null) {
             return null;
         }

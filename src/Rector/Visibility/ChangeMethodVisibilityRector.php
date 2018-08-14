@@ -79,9 +79,12 @@ CODE_SAMPLE
         );
     }
 
-    public function getNodeType(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        return ClassMethod::class;
+        return [ClassMethod::class];
     }
 
     /**
@@ -89,9 +92,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $classMethodNode): ?Node
     {
-        if (! $classMethodNode instanceof ClassMethod) {
-            return null;
-        }
         // doesn't have a parent class
         if (! $classMethodNode->hasAttribute(Attribute::PARENT_CLASS_NAME)) {
             return null;

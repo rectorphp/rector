@@ -80,9 +80,12 @@ CODE_SAMPLE
         ]);
     }
 
-    public function getNodeType(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        return Assign::class;
+        return [Assign::class];
     }
 
     /**
@@ -90,9 +93,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $assignNode): ?Node
     {
-        if (! $assignNode instanceof Assign) {
-            return null;
-        }
         if ($this->propertyFetchAnalyzer->isTypesAndProperty(
             $assignNode->var,
             $this->types,
@@ -100,6 +100,7 @@ CODE_SAMPLE
         ) === false) {
             return null;
         }
+
         /** @var PropertyFetch $propertyFetchNode */
         $propertyFetchNode = $assignNode->var;
 

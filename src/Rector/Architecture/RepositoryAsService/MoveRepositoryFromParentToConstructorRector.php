@@ -122,9 +122,12 @@ CODE_SAMPLE
         ]);
     }
 
-    public function getNodeType(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        return Class_::class;
+        return [Class_::class];
     }
 
     /**
@@ -132,20 +135,20 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $node instanceof Class_) {
-            return null;
-        }
         if (! $node->extends) {
             return null;
         }
+
         $parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
         if ($parentClassName !== $this->entityRepositoryClass) {
             return null;
         }
+
         $className = $node->getAttribute(Attribute::CLASS_NAME);
         if (Strings::endsWith($className, 'Repository') === false) {
             return null;
         }
+
         // remove parent class
         $node->extends = null;
 

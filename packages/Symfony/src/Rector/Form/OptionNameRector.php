@@ -49,9 +49,12 @@ CODE_SAMPLE
         ]);
     }
 
-    public function getNodeType(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        return String_::class;
+        return [String_::class];
     }
 
     /**
@@ -59,27 +62,30 @@ CODE_SAMPLE
      */
     public function refactor(Node $stringNode): ?Node
     {
-        if (! $stringNode instanceof String_) {
-            return null;
-        }
         if (! isset($this->oldToNewOption[$stringNode->value])) {
             return null;
         }
+
         $arrayItemParentNode = $stringNode->getAttribute(Attribute::PARENT_NODE);
         if (! $arrayItemParentNode instanceof ArrayItem) {
             return null;
         }
+
         $arrayParentNode = $arrayItemParentNode->getAttribute(Attribute::PARENT_NODE);
+
         /** @var MethodCall $argParentNode */
         $argParentNode = $arrayParentNode->getAttribute(Attribute::PARENT_NODE);
+
         /** @var MethodCall|Node $methodCallNode */
         $methodCallNode = $argParentNode->getAttribute(Attribute::PARENT_NODE);
         if (! $methodCallNode instanceof MethodCall) {
             return null;
         }
-        if (((string) $methodCallNode->name === 'add') === false) {
+
+        if ((string) $methodCallNode->name !== 'add') {
             return null;
         }
+
         return $this->nodeFactory->createString($this->oldToNewOption[$stringNode->value]);
     }
 }

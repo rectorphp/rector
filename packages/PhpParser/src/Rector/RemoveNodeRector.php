@@ -47,9 +47,12 @@ CODE_SAMPLE
         ]);
     }
 
-    public function getNodeType(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        return Return_::class;
+        return [Return_::class];
     }
 
     /**
@@ -57,20 +60,20 @@ CODE_SAMPLE
      */
     public function refactor(Node $returnNode): ?Node
     {
-        if (! $returnNode instanceof Return_) {
-            return null;
-        }
         if (! $returnNode->expr instanceof ConstFetch) {
             return null;
         }
+
         $methodName = $returnNode->getAttribute(Attribute::METHOD_NAME);
         if ($methodName !== 'leaveNode') {
             return null;
         }
+
         $value = $returnNode->expr->name->toString();
-        if (($value === 'false') === false) {
+        if ($value !== 'false') {
             return null;
         }
+
         $returnNode->expr = $this->nodeFactory->createClassConstant('PhpParser\NodeTraverser', 'REMOVE_NODE');
 
         return $returnNode;

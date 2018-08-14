@@ -7,7 +7,6 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
  * @covers \Rector\Rector\DomainDrivenDesign\ValueObjectRemover\ValueObjectRemoverRector
- * @covers \Rector\Rector\DomainDrivenDesign\ValueObjectRemover\ValueObjectRemoverDocBlockRector
  */
 final class ValueObjectRemoverRectorTest extends AbstractRectorTestCase
 {

@@ -19,11 +19,6 @@ final class ArgumentAdderRector extends AbstractArgumentRector
     private $recipes = [];
 
     /**
-     * @var ArgumentAdderRecipe[]
-     */
-    private $activeRecipes = [];
-
-    /**
      * @param mixed[] $argumentChangesByMethodAndType
      */
     public function __construct(array $argumentChangesByMethodAndType)
@@ -90,7 +85,10 @@ CODE_SAMPLE
         );
     }
 
-    public function getNodeType(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
         return [MethodCall::class, StaticCall::class, ClassMethod::class];
     }
@@ -98,17 +96,15 @@ CODE_SAMPLE
     /**
      * @param MethodCall|StaticCall|ClassMethod $node
      */
-    public function refactor(Node $node): Node
+    public function refactor(Node $node): ?Node
     {
-        if (! $this->isValidInstance($node)) {
+        $matchedRecipes = $this->matchArgumentChanges($node);
+        if ((bool) $matchedRecipes === false) {
             return null;
         }
-        $this->activeRecipes = $this->matchArgumentChanges($node);
-        if ((bool) $this->activeRecipes === false) {
-            return null;
-        }
+
         $argumentsOrParameters = $this->getNodeArgumentsOrParameters($node);
-        $argumentsOrParameters = $this->processArgumentNodes($argumentsOrParameters);
+        $argumentsOrParameters = $this->processArgumentNodes($argumentsOrParameters, $matchedRecipes);
 
         $this->setNodeArgumentsOrParameters($node, $argumentsOrParameters);
 
@@ -133,11 +129,12 @@ CODE_SAMPLE
 
     /**
      * @param mixed[] $argumentNodes
+     * @param ArgumentAdderRecipe[] $argumentAdderRecipes
      * @return mixed[]
      */
-    private function processArgumentNodes(array $argumentNodes): array
+    private function processArgumentNodes(array $argumentNodes, array $argumentAdderRecipes): array
     {
-        foreach ($this->activeRecipes as $argumentReplacerRecipe) {
+        foreach ($argumentAdderRecipes as $argumentReplacerRecipe) {
             $position = $argumentReplacerRecipe->getPosition();
 
             $argumentNodes[$position] = BuilderHelpers::normalizeValue($argumentReplacerRecipe->getDefaultValue());

@@ -60,34 +60,35 @@ final class AssertNotOperatorRector extends AbstractPHPUnitRector
         );
     }
 
-    public function getNodeType(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        return MethodCall::class;
+        return [MethodCall::class, StaticCall::class];
     }
 
     /**
-     * @param MethodCall $methodCallNode
+     * @param MethodCall|StaticCall $node
      */
-    public function refactor(Node $methodCallNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (! $methodCallNode instanceof MethodCall && ! $methodCallNode instanceof StaticCall) {
+        if (! $this->isInTestClass($node)) {
             return null;
         }
-        if (! $this->isInTestClass($methodCallNode)) {
-            return null;
-        }
-        if (! $this->isNormalOrStaticMethods($methodCallNode)) {
-            return null;
-        }
-        /** @var MethodCall $methodCallNode */
-        $methodCallNode = $methodCallNode;
-        $firstArgumentValue = $methodCallNode->args[0]->value;
-        if ($firstArgumentValue instanceof BooleanNot === false) {
-            return null;
-        }
-        $this->identifierRenamer->renameNodeWithMap($methodCallNode, $this->renameMethodsMap);
 
-        $oldArguments = $methodCallNode->args;
+        if (! $this->isNormalOrStaticMethods($node)) {
+            return null;
+        }
+
+        $firstArgumentValue = $node->args[0]->value;
+        if (! $firstArgumentValue instanceof BooleanNot) {
+            return null;
+        }
+
+        $this->identifierRenamer->renameNodeWithMap($node, $this->renameMethodsMap);
+
+        $oldArguments = $node->args;
         /** @var BooleanNot $negation */
         $negation = $oldArguments[0]->value;
 
@@ -95,9 +96,9 @@ final class AssertNotOperatorRector extends AbstractPHPUnitRector
 
         unset($oldArguments[0]);
 
-        $methodCallNode->args = array_merge([new Arg($expression)], $oldArguments);
+        $node->args = array_merge([new Arg($expression)], $oldArguments);
 
-        return $methodCallNode;
+        return $node;
     }
 
     private function isNormalOrStaticMethods(Node $node): bool

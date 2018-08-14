@@ -71,9 +71,12 @@ CODE_SAMPLE
         );
     }
 
-    public function getNodeType(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        return Property::class;
+        return [Property::class];
     }
 
     /**
@@ -81,9 +84,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $propertyNode): ?Node
     {
-        if (! $propertyNode instanceof Property) {
-            return null;
-        }
         // doesn't have a parent class
         if (! $propertyNode->hasAttribute(Attribute::PARENT_CLASS_NAME)) {
             return null;

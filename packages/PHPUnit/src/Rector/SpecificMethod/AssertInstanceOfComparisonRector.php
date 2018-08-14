@@ -65,9 +65,12 @@ final class AssertInstanceOfComparisonRector extends AbstractPHPUnitRector
         );
     }
 
-    public function getNodeType(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        return MethodCall::class;
+        return [MethodCall::class];
     }
 
     /**
@@ -75,17 +78,12 @@ final class AssertInstanceOfComparisonRector extends AbstractPHPUnitRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        if (! $methodCallNode instanceof MethodCall) {
-            return null;
-        }
         if (! $this->isInTestClass($methodCallNode)) {
             return null;
         }
         if (! $this->methodCallAnalyzer->isMethods($methodCallNode, array_keys($this->renameMethodsMap))) {
             return null;
         }
-        /** @var MethodCall $methodCallNode */
-        $methodCallNode = $methodCallNode;
         $firstArgumentValue = $methodCallNode->args[0]->value;
         if ($firstArgumentValue instanceof Instanceof_ === false) {
             return null;

@@ -55,9 +55,12 @@ final class AssertIssetToSpecificMethodRector extends AbstractPHPUnitRector
         ]);
     }
 
-    public function getNodeType(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        return MethodCall::class;
+        return [MethodCall::class];
     }
 
     /**
@@ -65,17 +68,12 @@ final class AssertIssetToSpecificMethodRector extends AbstractPHPUnitRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        if (! $methodCallNode instanceof MethodCall) {
-            return null;
-        }
         if (! $this->isInTestClass($methodCallNode)) {
             return null;
         }
         if (! $this->methodCallAnalyzer->isMethods($methodCallNode, ['assertTrue', 'assertFalse'])) {
             return null;
         }
-        /** @var MethodCall $methodCallNode */
-        $methodCallNode = $methodCallNode;
         $firstArgumentValue = $methodCallNode->args[0]->value;
         // is property access
         if (! $firstArgumentValue instanceof Isset_) {

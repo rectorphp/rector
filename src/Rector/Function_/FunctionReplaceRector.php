@@ -41,11 +41,11 @@ final class FunctionReplaceRector extends AbstractRector
     }
 
     /**
-     * future compatibility
+     * @return string[]
      */
-    public function getNodeType(): string
+    public function getNodeTypes(): array
     {
-        return FuncCall::class;
+        return [FuncCall::class];
     }
 
     /**
@@ -53,10 +53,6 @@ final class FunctionReplaceRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $node instanceof FuncCall) {
-            return $node;
-        }
-
         // anonymous function
         if (! $node->name instanceof Name) {
             return $node;

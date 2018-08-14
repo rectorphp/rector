@@ -10,17 +10,12 @@ interface PhpRectorInterface extends NodeVisitor, RectorInterface
     /**
      * A node this Rector listens to
      *
-     * @return string
+     * @return string[]
      */
-//    public function getNodeType(): string
-
-//    @todo remove after swtich to getNodeType()
-    //    public function isCandidate(Node $node): bool;
+    public function getNodeTypes(): array;
 
     /**
      * Process Node of matched type
-     *
-     * @return null|Node|void
      */
-    public function refactor(Node $node);
+    public function refactor(Node $node): ?Node;
 }

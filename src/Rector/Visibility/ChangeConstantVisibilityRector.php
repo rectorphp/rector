@@ -72,9 +72,12 @@ CODE_SAMPLE
         );
     }
 
-    public function getNodeType(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        return ClassConst::class;
+        return [ClassConst::class];
     }
 
     /**
@@ -82,9 +85,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $classConstantNode): ?Node
     {
-        if (! $classConstantNode instanceof ClassConst) {
-            return null;
-        }
         // doesn't have a parent class
         if (! $classConstantNode->hasAttribute(Attribute::PARENT_CLASS_NAME)) {
             return null;

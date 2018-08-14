@@ -4,7 +4,7 @@ namespace Rector\Symfony\Rector\VarDumper;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ConstFetch;
-use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
@@ -56,38 +56,36 @@ final class VarDumperTestTraitMethodArgsRector extends AbstractRector
         );
     }
 
-    public function getNodeType(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        return StaticCall::class;
+        return [MethodCall::class];
     }
 
     /**
-     * @param StaticCall $node
+     * @param MethodCall $methodCallNode
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $methodCallNode): ?Node
     {
         if (! $this->methodCallAnalyzer->isTypeAndMethods(
-            $node,
+            $methodCallNode,
             $this->traitName,
             ['assertDumpEquals', 'assertDumpMatchesFormat']
         )) {
             return null;
         }
-        /** @var StaticCall $staticCallNode */
-        $staticCallNode = $node;
-        if (count($staticCallNode->args) <= 2 || $staticCallNode->args[2]->value instanceof ConstFetch) {
+
+        if (count($methodCallNode->args) <= 2 || $methodCallNode->args[2]->value instanceof ConstFetch) {
             return null;
         }
 
-        $methodArguments = $node->args;
+        if ($methodCallNode->args[2]->value instanceof String_) {
+            $methodCallNode->args[3] = $methodCallNode->args[2];
+            $methodCallNode->args[2] = $this->nodeFactory->createArg($this->nodeFactory->createNullConstant());
 
-        if ($methodArguments[2]->value instanceof String_) {
-            $methodArguments[3] = $methodArguments[2];
-            $methodArguments[2] = $this->nodeFactory->createArg($this->nodeFactory->createNullConstant());
-
-            $node->args = $methodArguments;
-
-            return $node;
+            return $methodCallNode;
         }
 
         return null;

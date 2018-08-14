@@ -59,7 +59,10 @@ CODE_SAMPLE
         ]);
     }
 
-    public function getNodeType(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
         return [Property::class, NullableType::class, Variable::class];
     }
@@ -69,27 +72,22 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node instanceof Property) {
-            if ($this->isPropertyCandidate($node) === false) {
-                return null;
-            }
-        }
-        if (($node instanceof NullableType || $node instanceof Variable) === false) {
-            return null;
-        }
-        if ($node instanceof Property) {
+        if ($node instanceof Property && $this->isPropertyCandidate($node)) {
             $this->refactorProperty($node);
+            return $node;
         }
 
         if ($node instanceof NullableType) {
             $this->refactorNullableType($node);
+            return $node;
         }
 
         if ($node instanceof Variable) {
             $this->refactorVariableNode($node);
+            return $node;
         }
 
-        return $node;
+        return null;
     }
 
     private function isPropertyCandidate(Property $propertyNode): bool

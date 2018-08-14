@@ -74,7 +74,10 @@ final class StaticMethodNameReplacerRector extends AbstractRector
         ]);
     }
 
-    public function getNodeType(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
         return [Identifier::class, StaticCall::class];
     }
@@ -84,35 +87,15 @@ final class StaticMethodNameReplacerRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        $this->activeTypes = [];
-        $matchedTypes = $this->staticMethodCallAnalyzer->matchTypes($node, $this->getClasses());
-        if ($matchedTypes) {
-            $this->activeTypes = $matchedTypes;
-        }
-        if ($this->isMethodName($node, $this->getClasses()) === false) {
-            return null;
-        }
         if ($node instanceof Identifier) {
-            return $this->resolveIdentifier($node);
+            return $this->processIdentifierNode($node);
         }
 
-        $oldToNewMethods = $this->matchOldToNewMethods();
-
-        /** @var Identifier $identifierNode */
-        $identifierNode = $node->name;
-
-        $methodName = $identifierNode->toString();
-        if (! isset($oldToNewMethods[$methodName])) {
-            return $node;
+        if ($node instanceof StaticCall) {
+            return $this->processStaticCallNode($node);
         }
 
-        if ($node instanceof StaticCall && $this->isClassRename($oldToNewMethods)) {
-            return $this->resolveClassRename($node, $oldToNewMethods, $methodName);
-        }
-
-        $this->identifierRenamer->renameNode($node, $oldToNewMethods[$methodName]);
-
-        return $node;
+        return null;
     }
 
     /**
@@ -179,7 +162,7 @@ final class StaticMethodNameReplacerRector extends AbstractRector
         return true;
     }
 
-    private function resolveIdentifier(Identifier $node): Node
+    private function resolveIdentifier(Identifier $node): Identifier
     {
         $oldToNewMethods = $this->matchOldToNewMethods();
 
@@ -204,5 +187,47 @@ final class StaticMethodNameReplacerRector extends AbstractRector
         $this->identifierRenamer->renameNode($staticCallNode, $newMethod);
 
         return $staticCallNode;
+    }
+
+    private function processIdentifierNode(Identifier $node): ?Identifier
+    {
+        $this->activeTypes = [];
+        $matchedTypes = $this->staticMethodCallAnalyzer->matchTypes($node, $this->getClasses());
+        if ($matchedTypes) {
+            $this->activeTypes = $matchedTypes;
+        }
+
+        if ($this->isMethodName($node, $this->getClasses()) === false) {
+            return null;
+        }
+
+        return $this->resolveIdentifier($node);
+    }
+
+    private function processStaticCallNode(StaticCall $node): ?Node
+    {
+        $this->activeTypes = [];
+        $matchedTypes = $this->staticMethodCallAnalyzer->matchTypes($node, $this->getClasses());
+        if ($matchedTypes) {
+            $this->activeTypes = $matchedTypes;
+        }
+
+        $oldToNewMethods = $this->matchOldToNewMethods();
+
+        /** @var Identifier $identifierNode */
+        $identifierNode = $node->name;
+
+        $methodName = $identifierNode->toString();
+        if (! isset($oldToNewMethods[$methodName])) {
+            return $node;
+        }
+
+        if ($this->isClassRename($oldToNewMethods)) {
+            return $this->resolveClassRename($node, $oldToNewMethods, $methodName);
+        }
+
+        $this->identifierRenamer->renameNode($node, $oldToNewMethods[$methodName]);
+
+        return $node;
     }
 }

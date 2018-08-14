@@ -24,11 +24,6 @@ final class ArgumentDefaultValueReplacerRector extends AbstractArgumentRector
     private $recipes = [];
 
     /**
-     * @var ArgumentDefaultValueReplacerRecipe[]
-     */
-    private $activeRecipe = [];
-
-    /**
      * @var ConstExprEvaluator
      */
     private $constExprEvaluator;
@@ -84,7 +79,10 @@ CODE_SAMPLE
         );
     }
 
-    public function getNodeType(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
         return [MethodCall::class, StaticCall::class, ClassMethod::class];
     }
@@ -92,19 +90,17 @@ CODE_SAMPLE
     /**
      * @param MethodCall|StaticCall|ClassMethod $node
      */
-    public function refactor(Node $node): Node
+    public function refactor(Node $node): ?Node
     {
-        if (! $this->isValidInstance($node)) {
+        $matchedRecipes = $this->matchArgumentChanges($node);
+        if (! $matchedRecipes) {
             return null;
         }
-        $this->activeRecipe = $this->matchArgumentChanges($node);
-        if ((bool) $this->activeRecipe === false) {
-            return null;
-        }
+
         /** @var Arg[] $argumentsOrParameters */
         $argumentsOrParameters = $this->getNodeArgumentsOrParameters($node);
 
-        $argumentsOrParameters = $this->processArgumentNodes($argumentsOrParameters);
+        $argumentsOrParameters = $this->processArgumentNodes($argumentsOrParameters, $matchedRecipes);
 
         $this->setNodeArgumentsOrParameters($node, $argumentsOrParameters);
 
@@ -129,11 +125,12 @@ CODE_SAMPLE
 
     /**
      * @param Arg[] $argumentNodes
+     * @param ArgumentDefaultValueReplacerRecipe[] $matchedRecipes
      * @return mixed[]
      */
-    private function processArgumentNodes(array $argumentNodes): array
+    private function processArgumentNodes(array $argumentNodes, array $matchedRecipes): array
     {
-        foreach ($this->activeRecipe as $recipe) {
+        foreach ($matchedRecipes as $recipe) {
             if (is_scalar($recipe->getBefore())) {
                 // simple 1 argument match
                 $argumentNodes = $this->processScalarReplacement($argumentNodes, $recipe);

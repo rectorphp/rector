@@ -24,11 +24,6 @@ final class StaticCallToFunctionRector extends AbstractRector
     private $staticMethodCallAnalyzer;
 
     /**
-     * @var string|null
-     */
-    private $activeStaticCall;
-
-    /**
      * @param string[] $staticCallToFunction
      */
     public function __construct(array $staticCallToFunction, StaticMethodCallAnalyzer $staticMethodCallAnalyzer)
@@ -52,9 +47,12 @@ final class StaticCallToFunctionRector extends AbstractRector
         ]);
     }
 
-    public function getNodeType(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        return StaticCall::class;
+        return [StaticCall::class];
     }
 
     /**
@@ -62,18 +60,20 @@ final class StaticCallToFunctionRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $node instanceof StaticCall) {
-            return null;
-        }
         $staticCalls = array_keys($this->staticCallToFunction);
+        $activeStaticCall = null;
         foreach ($staticCalls as $staticCall) {
             [$class, $method] = explode('::', $staticCall);
             if ($this->staticMethodCallAnalyzer->isTypeAndMethod($node, $class, $method)) {
-                $this->activeStaticCall = $staticCall;
+                $activeStaticCall = $staticCall;
             }
         }
-        return null;
-        $newFunctionName = $this->staticCallToFunction[$this->activeStaticCall];
+
+        if (! isset($this->staticCallToFunction[$activeStaticCall])) {
+            return null;
+        }
+
+        $newFunctionName = $this->staticCallToFunction[$activeStaticCall];
 
         return new FuncCall(new FullyQualified($newFunctionName), $node->args);
     }

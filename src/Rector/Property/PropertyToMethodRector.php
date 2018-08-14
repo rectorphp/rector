@@ -81,9 +81,12 @@ CODE_SAMPLE
         ]);
     }
 
-    public function getNodeType(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        return Assign::class;
+        return [Assign::class];
     }
 
     /**
@@ -91,9 +94,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $assignNode): ?Node
     {
-        if (! $assignNode instanceof Assign) {
-            return null;
-        }
         // setter
         if ($assignNode->var instanceof PropertyFetch) {
             if ($this->processPropertyFetchCandidate($assignNode->var, 'set') === false) {
@@ -106,7 +106,7 @@ CODE_SAMPLE
                 return null;
             }
         }
-        return null;
+
         // setter
         if ($assignNode->var instanceof PropertyFetch) {
             $args = $this->nodeFactory->createArgs([$assignNode->expr]);

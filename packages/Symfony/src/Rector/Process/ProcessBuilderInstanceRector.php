@@ -43,9 +43,12 @@ final class ProcessBuilderInstanceRector extends AbstractRector
         );
     }
 
-    public function getNodeType(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        return StaticCall::class;
+        return [StaticCall::class];
     }
 
     /**
@@ -60,6 +63,7 @@ final class ProcessBuilderInstanceRector extends AbstractRector
         ) === false) {
             return null;
         }
+
         return new New_($staticCallNode->class, $staticCallNode->args);
     }
 }

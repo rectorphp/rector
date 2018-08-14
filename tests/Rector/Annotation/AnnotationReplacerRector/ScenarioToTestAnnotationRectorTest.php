@@ -5,6 +5,9 @@ namespace Rector\Tests\Rector\Annotation\AnnotationReplacerRector;
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
+/**
+ * @see \Rector\Rector\Annotation\AnnotationReplacerRector
+ */
 final class ScenarioToTestAnnotationRectorTest extends AbstractRectorTestCase
 {
     /**

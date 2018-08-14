@@ -87,9 +87,12 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractPH
         );
     }
 
-    public function getNodeType(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        return MethodCall::class;
+        return [MethodCall::class];
     }
 
     /**
@@ -97,17 +100,12 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractPH
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        if (! $methodCallNode instanceof MethodCall) {
-            return null;
-        }
         if (! $this->isInTestClass($methodCallNode)) {
             return null;
         }
         if (! $this->methodCallAnalyzer->isMethods($methodCallNode, array_keys($this->renameMethodsMap))) {
             return null;
         }
-        /** @var MethodCall $methodCallNode */
-        $methodCallNode = $methodCallNode;
         /** @var FuncCall $firstArgumentValue */
         $firstArgumentValue = $methodCallNode->args[0]->value;
         if (! $this->isNamedFunction($firstArgumentValue)) {

@@ -11,6 +11,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @todo fix
+ */
 final class ClassReplacerRector extends AbstractRector
 {
     /**
@@ -44,9 +47,12 @@ final class ClassReplacerRector extends AbstractRector
         ]);
     }
 
-    public function getNodeType(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        return Name::class;
+        return [Name::class];
     }
 
     /**
@@ -54,32 +60,17 @@ final class ClassReplacerRector extends AbstractRector
      */
     public function refactor(Node $nameNode): ?Node
     {
-        if (! $nameNode instanceof Name) {
+        $resolvedNameNode = $this->resolveNameNodeFromNode($nameNode);
+        if ($resolvedNameNode === null) {
             return null;
         }
-        $nameNode = $this->resolveNameNodeFromNode($nameNode);
-        if ($nameNode === null) {
-            return null;
-        }
-        if (isset($this->oldToNewClasses[$nameNode->toString()]) === false) {
-            return null;
-        }
-        if ($nameNode instanceof Name) {
-            $newName = $this->resolveNewNameFromNode($nameNode);
 
+        $newName = $this->oldToNewClasses[$resolvedNameNode->toString()] ?? null;
+        if ($newName) {
             return new FullyQualified($newName);
         }
 
         return null;
-    }
-
-    private function resolveNewNameFromNode(Node $node): string
-    {
-        $nameNode = $this->resolveNameNodeFromNode($node);
-
-        if ($nameNode !== null) {
-            return $this->oldToNewClasses[$nameNode->toString()];
-        }
     }
 
     private function resolveNameNodeFromNode(Node $node): ?Name

@@ -19,9 +19,12 @@ final class InArrayAndArrayKeysToArrayKeyExistsRector extends AbstractRector
         );
     }
 
-    public function getNodeType(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        return FuncCall::class;
+        return [FuncCall::class];
     }
 
     /**
@@ -32,12 +35,12 @@ final class InArrayAndArrayKeysToArrayKeyExistsRector extends AbstractRector
         if (! $this->isInArrayFunction($funcCall)) {
             return null;
         }
-        /** @var FuncCall $inArrayFunction */
-        $inArrayFunction = $funcCall;
-        $secondArgument = $inArrayFunction->args[1]->value;
+
+        $secondArgument = $funcCall->args[1]->value;
         if (! $secondArgument instanceof FuncCall) {
             return null;
         }
+
         /** @var Name $functionName */
         $functionName = $secondArgument->name;
         if ($functionName->toString() !== 'array_keys') {
@@ -58,15 +61,9 @@ final class InArrayAndArrayKeysToArrayKeyExistsRector extends AbstractRector
         return $funcCall;
     }
 
-    private function isInArrayFunction(Node $node): bool
+    private function isInArrayFunction(FuncCall $funcCallNode): bool
     {
-        if (! $node instanceof FuncCall) {
-            return false;
-        }
-
-        /** @var Name $funcCallName */
-        $funcCallName = $node->name;
-
+        $funcCallName = $funcCallNode->name;
         if (! $funcCallName instanceof Name) {
             return false;
         }

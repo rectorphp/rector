@@ -41,29 +41,32 @@ final class ConstraintUrlOptionRector extends AbstractRector
         ]);
     }
 
-    public function getNodeType(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        return ConstFetch::class;
+        return [ConstFetch::class];
     }
 
     /**
-     * @param ConstFetch $node
+     * @param ConstFetch $constFetchNode
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $constFetchNode): ?Node
     {
-        if (! $node instanceof ConstFetch) {
+        if ($constFetchNode->name->toString() !== 'true') {
             return null;
         }
-        if ($node->name->toString() !== 'true') {
-            return null;
-        }
-        $prevNode = $node->getAttribute(Attribute::PREVIOUS_NODE);
+
+        $prevNode = $constFetchNode->getAttribute(Attribute::PREVIOUS_NODE);
         if (! $prevNode instanceof String_) {
             return null;
         }
-        if (($prevNode->value === 'checkDNS') === false) {
+
+        if ($prevNode->value !== 'checkDNS') {
             return null;
         }
+
         return $this->nodeFactory->createClassConstant(self::URL_CONSTRAINT_CLASS, 'CHECK_DNS_TYPE_ANY');
     }
 }

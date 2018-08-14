@@ -36,9 +36,12 @@ final class ParamAndStaticVarNameRector extends AbstractRector
         ]);
     }
 
-    public function getNodeType(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        return PropertyFetch::class;
+        return [PropertyFetch::class];
     }
 
     /**
@@ -50,6 +53,7 @@ final class ParamAndStaticVarNameRector extends AbstractRector
         if ($this->propertyFetchAnalyzer->isTypesAndProperty($propertyFetchNode, $types, 'name') === false) {
             return null;
         }
+
         $this->identifierRenamer->renameNode($propertyFetchNode, 'var');
 
         return new PropertyFetch($propertyFetchNode, 'name');

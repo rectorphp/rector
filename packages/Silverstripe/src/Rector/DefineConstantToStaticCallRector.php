@@ -21,9 +21,12 @@ final class DefineConstantToStaticCallRector extends AbstractRector
         ]);
     }
 
-    public function getNodeType(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        return FuncCall::class;
+        return [FuncCall::class];
     }
 
     /**
@@ -32,17 +35,17 @@ final class DefineConstantToStaticCallRector extends AbstractRector
     public function refactor(Node $node): ?Node
     {
         if (count($node->args) !== 1) {
-            return $node;
+            return null;
         }
 
         $argumentValue = $node->args[0]->value;
         if (! $argumentValue instanceof String_) {
-            return $node;
+            return null;
         }
 
         // @todo make configurable
         if (! Strings::startsWith($argumentValue->value, 'SS_')) {
-            return $node;
+            return null;
         }
 
         // @todo make configurable

@@ -3,6 +3,7 @@
 namespace Rector\Symfony\Rector\Controller;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Builder\IdentifierRenamer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -54,9 +55,12 @@ CODE_SAMPLE
         ]);
     }
 
-    public function getNodeType(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        return Node::class;
+        return [ClassMethod::class];
     }
 
     public function refactor(Node $node): ?Node

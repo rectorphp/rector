@@ -77,9 +77,12 @@ CODE_SAMPLE
         );
     }
 
-    public function getNodeType(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        return MethodCall::class;
+        return [MethodCall::class];
     }
 
     /**
@@ -87,9 +90,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        if (! $methodCallNode instanceof MethodCall) {
-            return null;
-        }
         // of type...
         if (! $methodCallNode->name instanceof Identifier) {
             return null;

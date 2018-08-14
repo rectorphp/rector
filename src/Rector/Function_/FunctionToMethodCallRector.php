@@ -47,9 +47,12 @@ final class FunctionToMethodCallRector extends AbstractRector
         ]);
     }
 
-    public function getNodeType(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        return FuncCall::class;
+        return [FuncCall::class];
     }
 
     /**
@@ -57,9 +60,6 @@ final class FunctionToMethodCallRector extends AbstractRector
      */
     public function refactor(Node $funcCallNode): ?Node
     {
-        if (! $funcCallNode instanceof FuncCall) {
-            return null;
-        }
         if (! $funcCallNode->name instanceof Name) {
             return null;
         }

@@ -6,7 +6,6 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Builder\Class_\VariableInfo;
 use Rector\Configuration\Rector\Architecture\DependencyInjection\VariablesToPropertyFetchCollection;
 use Rector\Node\PropertyFetchNodeFactory;
 use Rector\NodeTypeResolver\Node\Attribute;
@@ -21,11 +20,6 @@ final class ReplaceVariableByPropertyFetchRector extends AbstractRector
      * @var VariablesToPropertyFetchCollection
      */
     private $variablesToPropertyFetchCollection;
-
-    /**
-     * @var VariableInfo|null
-     */
-    private $activeVariableInfo;
 
     /**
      * @var PropertyFetchNodeFactory
@@ -97,9 +91,12 @@ CODE_SAMPLE
         );
     }
 
-    public function getNodeType(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        return Variable::class;
+        return [Variable::class];
     }
 
     /**
@@ -107,13 +104,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $variableNode): ?Node
     {
-        $this->activeVariableInfo = null;
-        if (! $variableNode instanceof Variable) {
-            return null;
-        }
+        $activeVariableInfo = null;
         if (! $this->isInControllerActionMethod($variableNode)) {
             return null;
         }
+
         foreach ($this->variablesToPropertyFetchCollection->getVariableInfos() as $variableInfo) {
             if ($variableNode->name !== $variableInfo->getName()) {
                 continue;
@@ -121,11 +116,16 @@ CODE_SAMPLE
 
             $nodeTypes = $this->nodeTypeResolver->resolve($variableNode);
             if ($nodeTypes === $variableInfo->getTypes()) {
-                $this->activeVariableInfo = $variableInfo;
+                $activeVariableInfo = $variableInfo;
+                break;
             }
         }
-        return null;
-        return $this->propertyFetchNodeFactory->createLocalWithPropertyName($this->activeVariableInfo->getName());
+
+        if ($activeVariableInfo === null) {
+            return null;
+        }
+
+        return $this->propertyFetchNodeFactory->createLocalWithPropertyName($activeVariableInfo->getName());
     }
 
     private function isInControllerActionMethod(Node $node): bool

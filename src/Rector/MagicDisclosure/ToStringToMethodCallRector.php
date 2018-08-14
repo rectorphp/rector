@@ -91,7 +91,10 @@ CODE_SAMPLE
         ]);
     }
 
-    public function getNodeType(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
         return [String_::class, MethodCall::class];
     }
@@ -101,25 +104,16 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node instanceof String_) {
-            if ($this->processStringCandidate($node) === false) {
-                return null;
-            }
-        }
-        if ($node instanceof MethodCall) {
-            if ($this->processMethodCallCandidate($node) === false) {
-                return null;
-            }
-        }
-        return null;
-        if ($node instanceof String_) {
+        if ($node instanceof String_ && $this->processStringCandidate($node)) {
             return $this->methodCallNodeFactory->createWithVariableAndMethodName(
                 $node->expr,
                 $this->activeTransformation
             );
         }
 
-        $this->identifierRenamer->renameNode($node, $this->activeTransformation);
+        if ($node instanceof MethodCall && $this->processMethodCallCandidate($node)) {
+            $this->identifierRenamer->renameNode($node, $this->activeTransformation);
+        }
 
         return $node;
     }

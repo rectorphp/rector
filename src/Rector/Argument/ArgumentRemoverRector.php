@@ -66,7 +66,10 @@ CODE_SAMPLE
         );
     }
 
-    public function getNodeType(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
         return [MethodCall::class, StaticCall::class, ClassMethod::class];
     }
@@ -74,11 +77,8 @@ CODE_SAMPLE
     /**
      * @param MethodCall|StaticCall|ClassMethod $node
      */
-    public function refactor(Node $node): Node
+    public function refactor(Node $node): ?Node
     {
-        if (! $this->isValidInstance($node)) {
-            return null;
-        }
         $this->activeRecipes = $this->matchArgumentChanges($node);
         if ((bool) $this->activeRecipes === false) {
             return null;

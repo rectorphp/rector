@@ -73,9 +73,12 @@ CODE_SAMPLE
         ]);
     }
 
-    public function getNodeType(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        return Class_::class;
+        return [Class_::class];
     }
 
     /**
@@ -83,14 +86,15 @@ CODE_SAMPLE
      */
     public function refactor(Node $classNode): ?Node
     {
-        if (! $classNode instanceof Class_ || $classNode->extends === null || $classNode->isAnonymous()) {
+        if ($classNode->extends === null || $classNode->isAnonymous()) {
             return null;
         }
+
         $nodeParentClassName = $this->getClassNodeParentClassName($classNode);
         if (isset($this->parentClassToTraits[$nodeParentClassName]) === false) {
             return null;
         }
-        $nodeParentClassName = $this->getClassNodeParentClassName($classNode);
+
         $traitNames = $this->parentClassToTraits[$nodeParentClassName];
 
         // keep the Trait order the way it is in config

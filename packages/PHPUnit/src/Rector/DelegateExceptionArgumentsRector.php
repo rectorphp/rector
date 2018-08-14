@@ -55,9 +55,12 @@ CODE_SAMPLE
         );
     }
 
-    public function getNodeType(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        return MethodCall::class;
+        return [MethodCall::class];
     }
 
     /**
@@ -65,20 +68,17 @@ CODE_SAMPLE
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        if (! $methodCallNode instanceof MethodCall) {
-            return null;
-        }
         if (! $this->isInTestClass($methodCallNode)) {
             return null;
         }
         if (! $this->methodCallAnalyzer->isMethods($methodCallNode, array_keys($this->oldToNewMethod))) {
             return null;
         }
-        /** @var MethodCall $methodCallNode */
-        $methodCallNode = $methodCallNode;
+
         if (isset($methodCallNode->args[1]) === false) {
             return null;
         }
+
         /** @var Identifier $identifierNode */
         $identifierNode = $methodCallNode->name;
         $oldMethodName = $identifierNode->name;
