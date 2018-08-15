@@ -1,6 +1,21 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Custom;
+/**
+ * This class was used to automate huge refactoring in https://github.com/rectorphp/rector/pull/584
+ *
+ * It helped with 7-step refactoring of 96 files:
+ * - 1. replace "isCandidate()" method by "getNodeType()" method
+ * - 2. rename "return false;" to "return null;" to respect "refactor(Node $node): ?Node" typehint
+ * - 3. rename used variable "$node" to "$specificTypeParam"
+ * - 4. turn last return in "isCondition()" with early return
+ * - 5. return true makes no sense anymore, just continue
+ * - 6. remove first "instanceof", already covered by getNodeType()
+ * - 7. add contents of "isCandidate()" method to start of "refactor()" method
+ *
+ * It took ~2 hours to setup. Saved work of 5-6 hours and much more stress :)
+ */
+
+namespace Rector\Examples;
 
 use PhpParser\BuilderFactory;
 use PhpParser\Node;
@@ -116,7 +131,7 @@ final class MergeIsCandidateRector extends AbstractRector
         // 1. replace "isCandidate()" method by "getNodeType()" method
         $classNode->stmts[$isCandidateClassMethodPosition] = $this->createGetNodeTypeClassMethod($refactorClassMethod);
 
-        // 2. add contents of "isCandidate()" method to start of "refactor()" method
+        // 2. rename "return false;" to "return null;" to respect "refactor(Node $node): ?Node" typehint
         $this->replaceReturnFalseWithReturnNull($isCandidateClassMethod);
 
         // 3. rename used variable "$node" to "$specificTypeParam"
@@ -131,6 +146,7 @@ final class MergeIsCandidateRector extends AbstractRector
         // 6. remove first "instanceof", already covered by getNodeType()
         $isCandidateClassMethod = $this->removeFirstInstanceOf($isCandidateClassMethod);
 
+        // 7. add contents of "isCandidate()" method to start of "refactor()" method
         $refactorClassMethod->stmts = array_merge($isCandidateClassMethod->stmts, $refactorClassMethod->stmts);
 
         $classNode->stmts[$refactorClassMethodPosition] = $refactorClassMethod;
