@@ -26,7 +26,7 @@ final class RectorGuard
 
     public function ensureSomeRectorsAreRegistered(): void
     {
-        if ($this->rectorNodeTraverser->getRectorCount() > 0 || $this->yamlFileProcessor->getYamlRectorsCount() > 0) {
+        if ($this->rectorNodeTraverser->getRectorCount() || $this->yamlFileProcessor->getYamlRectorsCount()) {
             return;
         }
 
