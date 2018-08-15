@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\NodeTraverserQueue\Exception;
+namespace Rector\Exception\Application;
 
 use Exception;
 use SplFileInfo;
@@ -13,7 +13,7 @@ final class FileProcessingException extends Exception
         $message = sprintf(
             'Processing file "%s" failed. ' . PHP_EOL . PHP_EOL . '%s',
             $fileInfo->getRealPath(),
-            $throwable->getMessage()
+            $throwable
         );
 
         parent::__construct($message);

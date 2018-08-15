@@ -55,34 +55,12 @@ final class AssertSameBoolNullToSpecificMethodRector extends AbstractPHPUnitRect
         );
     }
 
-    public function isCandidate(Node $node): bool
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        if (! $node instanceof MethodCall) {
-            return false;
-        }
-
-        if (! $this->isInTestClass($node)) {
-            return false;
-        }
-
-        if (! $this->methodCallAnalyzer->isMethods($node, ['assertSame', 'assertNotSame'])) {
-            return false;
-        }
-
-        /** @var MethodCall $methodCallNode */
-        $methodCallNode = $node;
-
-        $firstArgumentValue = $methodCallNode->args[0]->value;
-        if (! $firstArgumentValue instanceof ConstFetch) {
-            return false;
-        }
-
-        /** @var Identifier $constatName */
-        $constatName = $firstArgumentValue->name;
-
-        $this->constantName = $constatName->toLowerString();
-
-        return isset($this->constValueToNewMethodNames[$this->constantName]);
+        return [MethodCall::class];
     }
 
     /**
@@ -90,6 +68,27 @@ final class AssertSameBoolNullToSpecificMethodRector extends AbstractPHPUnitRect
      */
     public function refactor(Node $methodCallNode): ?Node
     {
+        if (! $methodCallNode instanceof MethodCall) {
+            return null;
+        }
+        if (! $this->isInTestClass($methodCallNode)) {
+            return null;
+        }
+        if (! $this->methodCallAnalyzer->isMethods($methodCallNode, ['assertSame', 'assertNotSame'])) {
+            return null;
+        }
+        /** @var MethodCall $methodCallNode */
+        $methodCallNode = $methodCallNode;
+        $firstArgumentValue = $methodCallNode->args[0]->value;
+        if (! $firstArgumentValue instanceof ConstFetch) {
+            return null;
+        }
+        /** @var Identifier $constatName */
+        $constatName = $firstArgumentValue->name;
+        $this->constantName = $constatName->toLowerString();
+        if (isset($this->constValueToNewMethodNames[$this->constantName]) === false) {
+            return null;
+        }
         $this->renameMethod($methodCallNode);
         $this->moveArguments($methodCallNode);
 

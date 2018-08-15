@@ -65,20 +65,12 @@ CODE_SAMPLE
         ]);
     }
 
-    public function isCandidate(Node $node): bool
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        if (! $this->methodCallAnalyzer->isMethod($node, 'getRepository')) {
-            return false;
-        }
-
-        if (! $this->methodArgumentAnalyzer->isMethodNthArgumentString($node, 1)) {
-            return false;
-        }
-
-        /** @var MethodCall $methodCall */
-        $methodCall = $node;
-
-        return $this->isAliasWithConfiguredEntity($methodCall->args[0]->value->value);
+        return [MethodCall::class];
     }
 
     /**
@@ -86,6 +78,17 @@ CODE_SAMPLE
      */
     public function refactor(Node $methodCall): ?Node
     {
+        if (! $this->methodCallAnalyzer->isMethod($methodCall, 'getRepository')) {
+            return null;
+        }
+        if (! $this->methodArgumentAnalyzer->isMethodNthArgumentString($methodCall, 1)) {
+            return null;
+        }
+        /** @var MethodCall $methodCall */
+        $methodCall = $methodCall;
+        if ($this->isAliasWithConfiguredEntity($methodCall->args[0]->value->value) === false) {
+            return null;
+        }
         $methodCall->args[0]->value = $this->nodeFactory->createClassConstantReference(
             $this->convertAliasToFqn($methodCall->args[0]->value->value)
         );

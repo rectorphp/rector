@@ -22,9 +22,12 @@ final class ConstantToStaticCallRector extends AbstractRector
         ]);
     }
 
-    public function getNodeType(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        return ConstFetch::class;
+        return [ConstFetch::class];
     }
 
     /**

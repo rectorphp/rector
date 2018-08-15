@@ -3,6 +3,7 @@
 namespace Rector\Symfony\Rector\Controller;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Builder\IdentifierRenamer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -54,13 +55,19 @@ CODE_SAMPLE
         ]);
     }
 
-    public function isCandidate(Node $node): bool
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        return $this->controllerMethodAnalyzer->isAction($node);
+        return [ClassMethod::class];
     }
 
     public function refactor(Node $node): ?Node
     {
+        if ($this->controllerMethodAnalyzer->isAction($node) === false) {
+            return null;
+        }
         $this->identifierRenamer->removeSuffix($node, 'Action');
 
         return $node;

@@ -4,7 +4,7 @@ namespace Rector\Symfony\Rector\VarDumper;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ConstFetch;
-use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
@@ -56,40 +56,36 @@ final class VarDumperTestTraitMethodArgsRector extends AbstractRector
         );
     }
 
-    public function isCandidate(Node $node): bool
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        if (! $this->methodCallAnalyzer->isTypeAndMethods(
-            $node,
-            $this->traitName,
-            ['assertDumpEquals', 'assertDumpMatchesFormat']
-        )) {
-            return false;
-        }
-
-        /** @var StaticCall $staticCallNode */
-        $staticCallNode = $node;
-
-        if (count($staticCallNode->args) <= 2 || $staticCallNode->args[2]->value instanceof ConstFetch) {
-            return false;
-        }
-
-        return true;
+        return [MethodCall::class];
     }
 
     /**
-     * @param StaticCall $node
+     * @param MethodCall $methodCallNode
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $methodCallNode): ?Node
     {
-        $methodArguments = $node->args;
+        if (! $this->methodCallAnalyzer->isTypeAndMethods(
+            $methodCallNode,
+            $this->traitName,
+            ['assertDumpEquals', 'assertDumpMatchesFormat']
+        )) {
+            return null;
+        }
 
-        if ($methodArguments[2]->value instanceof String_) {
-            $methodArguments[3] = $methodArguments[2];
-            $methodArguments[2] = $this->nodeFactory->createArg($this->nodeFactory->createNullConstant());
+        if (count($methodCallNode->args) <= 2 || $methodCallNode->args[2]->value instanceof ConstFetch) {
+            return null;
+        }
 
-            $node->args = $methodArguments;
+        if ($methodCallNode->args[2]->value instanceof String_) {
+            $methodCallNode->args[3] = $methodCallNode->args[2];
+            $methodCallNode->args[2] = $this->nodeFactory->createArg($this->nodeFactory->createNullConstant());
 
-            return $node;
+            return $methodCallNode;
         }
 
         return null;

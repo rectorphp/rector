@@ -85,18 +85,12 @@ CODE_SAMPLE
         ]);
     }
 
-    public function isCandidate(Node $node): bool
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        $this->activeTypes = [];
-
-        $matchedTypes = $this->methodCallAnalyzer->matchTypes($node, $this->getClasses());
-        if ($matchedTypes) {
-            $this->activeTypes = $matchedTypes;
-
-            return true;
-        }
-
-        return $this->isMethodName($node, $this->getClasses());
+        return [Identifier::class, MethodCall::class];
     }
 
     /**
@@ -105,22 +99,14 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         if ($node instanceof Identifier) {
-            return $this->resolveIdentifier($node);
+            return $this->processIdentifierNode($node);
         }
 
-        $oldToNewMethods = $this->matchOldToNewMethods();
-
-        /** @var Identifier $identifierNode */
-        $identifierNode = $node->name;
-
-        $methodName = $identifierNode->toString();
-        if (! isset($oldToNewMethods[$methodName])) {
-            return $node;
+        if ($node instanceof MethodCall) {
+            return $this->processMethodCall($node);
         }
 
-        $this->identifierRenamer->renameNode($node, $oldToNewMethods[$methodName]);
-
-        return $node;
+        return null;
     }
 
     /**
@@ -177,7 +163,7 @@ CODE_SAMPLE
         return true;
     }
 
-    private function resolveIdentifier(Identifier $node): Node
+    private function resolveIdentifier(Identifier $node): Identifier
     {
         $oldToNewMethods = $this->matchOldToNewMethods();
 
@@ -187,6 +173,46 @@ CODE_SAMPLE
         }
 
         $node->name = $oldToNewMethods[$methodName];
+
+        return $node;
+    }
+
+    private function processIdentifierNode(Identifier $identifierNode): ?Identifier
+    {
+        $this->activeTypes = [];
+
+        $matchedTypes = $this->methodCallAnalyzer->matchTypes($identifierNode, $this->getClasses());
+
+        if ($matchedTypes) {
+            $this->activeTypes = $matchedTypes;
+        }
+
+        if ($this->isMethodName($identifierNode, $this->getClasses()) === false) {
+            return null;
+        }
+
+        return $this->resolveIdentifier($identifierNode);
+    }
+
+    private function processMethodCall(MethodCall $node): ?MethodCall
+    {
+        $this->activeTypes = [];
+        $matchedTypes = $this->methodCallAnalyzer->matchTypes($node, $this->getClasses());
+        if ($matchedTypes) {
+            $this->activeTypes = $matchedTypes;
+        }
+
+        $oldToNewMethods = $this->matchOldToNewMethods();
+
+        /** @var Identifier $identifierNode */
+        $identifierNode = $node->name;
+
+        $methodName = $identifierNode->toString();
+        if (! isset($oldToNewMethods[$methodName])) {
+            return $node;
+        }
+
+        $this->identifierRenamer->renameNode($node, $oldToNewMethods[$methodName]);
 
         return $node;
     }

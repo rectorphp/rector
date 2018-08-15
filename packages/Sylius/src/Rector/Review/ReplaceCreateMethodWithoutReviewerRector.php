@@ -51,14 +51,12 @@ final class ReplaceCreateMethodWithoutReviewerRector extends AbstractRector
         );
     }
 
-    public function isCandidate(Node $node): bool
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        if (! $this->methodCallAnalyzer->isMethod($node, 'createForSubjectWithReviewer')) {
-            return false;
-        }
-
-        return ! $this->methodArgumentAnalyzer->hasMethodNthArgument($node, 2)
-            || $this->methodArgumentAnalyzer->isMethodNthArgumentNull($node, 2);
+        return [MethodCall::class];
     }
 
     /**
@@ -66,6 +64,13 @@ final class ReplaceCreateMethodWithoutReviewerRector extends AbstractRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
+        if (! $this->methodCallAnalyzer->isMethod($methodCallNode, 'createForSubjectWithReviewer')) {
+            return null;
+        }
+        if ((! $this->methodArgumentAnalyzer->hasMethodNthArgument($methodCallNode, 2)
+            || $this->methodArgumentAnalyzer->isMethodNthArgumentNull($methodCallNode, 2)) === false) {
+            return null;
+        }
         $this->identifierRenamer->renameNode($methodCallNode, 'createForSubject');
 
         if ($this->methodArgumentAnalyzer->hasMethodNthArgument($methodCallNode, 2)) {

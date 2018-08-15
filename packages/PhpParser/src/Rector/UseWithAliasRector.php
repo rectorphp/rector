@@ -44,9 +44,12 @@ final class UseWithAliasRector extends AbstractRector
         );
     }
 
-    public function isCandidate(Node $node): bool
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        return $this->propertyFetchAnalyzer->isTypeAndProperty($node, 'PhpParser\Node\Stmt\UseUse', 'alias');
+        return [PropertyFetch::class];
     }
 
     /**
@@ -54,6 +57,13 @@ final class UseWithAliasRector extends AbstractRector
      */
     public function refactor(Node $propertyFetchNode): ?Node
     {
+        if ($this->propertyFetchAnalyzer->isTypeAndProperty(
+            $propertyFetchNode,
+            'PhpParser\Node\Stmt\UseUse',
+            'alias'
+        ) === false) {
+            return null;
+        }
         $getAliasMethodCall = $this->methodCallNodeFactory->createWithVariableAndMethodName(
             $propertyFetchNode->var,
             'getAlias'

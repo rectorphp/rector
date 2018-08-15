@@ -71,36 +71,12 @@ final class AssertComparisonToSpecificMethodRector extends AbstractPHPUnitRector
         );
     }
 
-    public function isCandidate(Node $node): bool
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        if (! $node instanceof MethodCall) {
-            return false;
-        }
-
-        if (! $this->isInTestClass($node)) {
-            return false;
-        }
-
-        if (! $this->methodCallAnalyzer->isMethods($node, ['assertTrue', 'assertFalse'])) {
-            return false;
-        }
-
-        /** @var MethodCall $methodCallNode */
-        $methodCallNode = $node;
-
-        $firstArgumentValue = $methodCallNode->args[0]->value;
-        if (! $firstArgumentValue instanceof BinaryOp) {
-            return false;
-        }
-
-        $opCallSignal = $firstArgumentValue->getOperatorSigil();
-        if (! isset($this->defaultOldToNewMethods[$opCallSignal])) {
-            return false;
-        }
-
-        $this->activeOpSignal = $opCallSignal;
-
-        return true;
+        return [MethodCall::class];
     }
 
     /**
@@ -108,6 +84,22 @@ final class AssertComparisonToSpecificMethodRector extends AbstractPHPUnitRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
+        if (! $this->isInTestClass($methodCallNode)) {
+            return null;
+        }
+        if (! $this->methodCallAnalyzer->isMethods($methodCallNode, ['assertTrue', 'assertFalse'])) {
+            return null;
+        }
+        $firstArgumentValue = $methodCallNode->args[0]->value;
+        if (! $firstArgumentValue instanceof BinaryOp) {
+            return null;
+        }
+        $opCallSignal = $firstArgumentValue->getOperatorSigil();
+        if (! isset($this->defaultOldToNewMethods[$opCallSignal])) {
+            return null;
+        }
+        $this->activeOpSignal = $opCallSignal;
+
         $this->renameMethod($methodCallNode);
         $this->changeOrderArguments($methodCallNode);
 

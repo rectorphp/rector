@@ -83,28 +83,11 @@ final class UnsetAndIssetToMethodCallRector extends AbstractRector
     }
 
     /**
-     * Detects "isset($value['someKey']);"
-     * or "unset($value['someKey']);"
+     * @return string[]
      */
-    public function isCandidate(Node $node): bool
+    public function getNodeTypes(): array
     {
-        $this->activeTransformation = [];
-
-        if (! $node instanceof Isset_ && ! $node instanceof Unset_) {
-            return false;
-        }
-
-        foreach ($node->vars as $var) {
-            if (! $var instanceof ArrayDimFetch) {
-                continue;
-            }
-
-            if ($this->matchArrayDimFetch($var)) {
-                return true;
-            }
-        }
-
-        return false;
+        return [Isset_::class, Unset_::class];
     }
 
     /**
@@ -112,6 +95,18 @@ final class UnsetAndIssetToMethodCallRector extends AbstractRector
      */
     public function refactor(Node $issetOrUnsetNode): ?Node
     {
+        $this->activeTransformation = [];
+
+        foreach ($issetOrUnsetNode->vars as $var) {
+            if (! $var instanceof ArrayDimFetch) {
+                continue;
+            }
+
+            if (! $this->matchArrayDimFetch($var)) {
+                return null;
+            }
+        }
+
         $method = $this->resolveMethod($issetOrUnsetNode);
         if ($method === null) {
             return $issetOrUnsetNode;

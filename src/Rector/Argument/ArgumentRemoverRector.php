@@ -66,22 +66,23 @@ CODE_SAMPLE
         );
     }
 
-    public function isCandidate(Node $node): bool
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        if (! $this->isValidInstance($node)) {
-            return false;
-        }
-
-        $this->activeRecipes = $this->matchArgumentChanges($node);
-
-        return (bool) $this->activeRecipes;
+        return [MethodCall::class, StaticCall::class, ClassMethod::class];
     }
 
     /**
      * @param MethodCall|StaticCall|ClassMethod $node
      */
-    public function refactor(Node $node): Node
+    public function refactor(Node $node): ?Node
     {
+        $this->activeRecipes = $this->matchArgumentChanges($node);
+        if ((bool) $this->activeRecipes === false) {
+            return null;
+        }
         $argumentsOrParameters = $this->getNodeArgumentsOrParameters($node);
         $argumentsOrParameters = $this->processArgumentNodes($argumentsOrParameters);
 

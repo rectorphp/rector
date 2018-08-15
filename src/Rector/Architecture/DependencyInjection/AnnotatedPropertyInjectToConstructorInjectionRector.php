@@ -55,33 +55,6 @@ final class AnnotatedPropertyInjectToConstructorInjectionRector extends Abstract
         $this->annotation = $annotation;
     }
 
-    public function isCandidate(Node $node): bool
-    {
-        if (! $node instanceof Property) {
-            return false;
-        }
-
-        if ($node->isPrivate()) {
-            return false;
-        }
-
-        return $this->docBlockAnalyzer->hasTag($node, $this->annotation);
-    }
-
-    /**
-     * @param Property $propertyNode
-     */
-    public function refactor(Node $propertyNode): Node
-    {
-        $this->docBlockAnalyzer->removeTagFromNode($propertyNode, $this->annotation);
-
-        $propertyNode->flags = Class_::MODIFIER_PRIVATE;
-
-        $this->addPropertyToCollector($propertyNode);
-
-        return $propertyNode;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -114,6 +87,37 @@ CODE_SAMPLE
                 ),
             ]
         );
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
+    {
+        return [Property::class];
+    }
+
+    /**
+     * @param Property $propertyNode
+     */
+    public function refactor(Node $propertyNode): ?Node
+    {
+        if ($propertyNode->isPrivate()) {
+            return null;
+        }
+
+        if (! $this->docBlockAnalyzer->hasTag($propertyNode, $this->annotation)) {
+            return null;
+        }
+
+        $this->docBlockAnalyzer->removeTagFromNode($propertyNode, $this->annotation);
+
+        // set to private
+        $propertyNode->flags = Class_::MODIFIER_PRIVATE;
+
+        $this->addPropertyToCollector($propertyNode);
+
+        return $propertyNode;
     }
 
     private function addPropertyToCollector(Property $propertyNode): void

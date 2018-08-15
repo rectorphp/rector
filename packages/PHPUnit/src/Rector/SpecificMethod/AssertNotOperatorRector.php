@@ -60,36 +60,35 @@ final class AssertNotOperatorRector extends AbstractPHPUnitRector
         );
     }
 
-    public function isCandidate(Node $node): bool
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        if (! $node instanceof MethodCall && ! $node instanceof StaticCall) {
-            return false;
-        }
-
-        if (! $this->isInTestClass($node)) {
-            return false;
-        }
-
-        if (! $this->isNormalOrStaticMethods($node)) {
-            return false;
-        }
-
-        /** @var MethodCall $methodCallNode */
-        $methodCallNode = $node;
-
-        $firstArgumentValue = $methodCallNode->args[0]->value;
-
-        return $firstArgumentValue instanceof BooleanNot;
+        return [MethodCall::class, StaticCall::class];
     }
 
     /**
-     * @param MethodCall $methodCallNode
+     * @param MethodCall|StaticCall $node
      */
-    public function refactor(Node $methodCallNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        $this->identifierRenamer->renameNodeWithMap($methodCallNode, $this->renameMethodsMap);
+        if (! $this->isInTestClass($node)) {
+            return null;
+        }
 
-        $oldArguments = $methodCallNode->args;
+        if (! $this->isNormalOrStaticMethods($node)) {
+            return null;
+        }
+
+        $firstArgumentValue = $node->args[0]->value;
+        if (! $firstArgumentValue instanceof BooleanNot) {
+            return null;
+        }
+
+        $this->identifierRenamer->renameNodeWithMap($node, $this->renameMethodsMap);
+
+        $oldArguments = $node->args;
         /** @var BooleanNot $negation */
         $negation = $oldArguments[0]->value;
 
@@ -97,9 +96,9 @@ final class AssertNotOperatorRector extends AbstractPHPUnitRector
 
         unset($oldArguments[0]);
 
-        $methodCallNode->args = array_merge([new Arg($expression)], $oldArguments);
+        $node->args = array_merge([new Arg($expression)], $oldArguments);
 
-        return $methodCallNode;
+        return $node;
     }
 
     private function isNormalOrStaticMethods(Node $node): bool

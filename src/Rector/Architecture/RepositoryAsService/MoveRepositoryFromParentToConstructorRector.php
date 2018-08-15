@@ -122,24 +122,12 @@ CODE_SAMPLE
         ]);
     }
 
-    public function isCandidate(Node $node): bool
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        if (! $node instanceof Class_) {
-            return false;
-        }
-
-        if (! $node->extends) {
-            return false;
-        }
-
-        $parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
-        if ($parentClassName !== $this->entityRepositoryClass) {
-            return false;
-        }
-
-        $className = $node->getAttribute(Attribute::CLASS_NAME);
-
-        return Strings::endsWith($className, 'Repository');
+        return [Class_::class];
     }
 
     /**
@@ -147,6 +135,20 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $node->extends) {
+            return null;
+        }
+
+        $parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
+        if ($parentClassName !== $this->entityRepositoryClass) {
+            return null;
+        }
+
+        $className = $node->getAttribute(Attribute::CLASS_NAME);
+        if (Strings::endsWith($className, 'Repository') === false) {
+            return null;
+        }
+
         // remove parent class
         $node->extends = null;
 

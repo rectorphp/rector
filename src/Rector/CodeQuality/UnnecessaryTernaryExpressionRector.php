@@ -37,16 +37,6 @@ final class UnnecessaryTernaryExpressionRector extends AbstractRector
         SmallerOrEqual::class => GreaterOrEqual::class,
     ];
 
-    /**
-     * @var string
-     */
-    private $ifValue;
-
-    /**
-     * @var string
-     */
-    private $elseValue;
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -55,40 +45,12 @@ final class UnnecessaryTernaryExpressionRector extends AbstractRector
         );
     }
 
-    public function isCandidate(Node $node): bool
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        if (! $node instanceof Ternary) {
-            return false;
-        }
-
-        /** @var Ternary $ternaryExpression */
-        $ternaryExpression = $node;
-
-        if (! $ternaryExpression->if instanceof Expr) {
-            return false;
-        }
-
-        $condition = $ternaryExpression->cond;
-        if (! $condition instanceof BinaryOp) {
-            return false;
-        }
-
-        $ifExpression = $ternaryExpression->if;
-        $elseExpression = $ternaryExpression->else;
-
-        if (! $ifExpression instanceof ConstFetch || ! $elseExpression instanceof ConstFetch) {
-            return false;
-        }
-
-        /** @var Identifier $ifExpressionName */
-        $ifExpressionName = $ifExpression->name;
-        /** @var Identifier $elseExpressionName */
-        $elseExpressionName = $elseExpression->name;
-
-        $this->ifValue = $ifExpressionName->toLowerString();
-        $this->elseValue = $elseExpressionName->toLowerString();
-
-        return ! in_array('null', [$this->ifValue, $this->elseValue], true);
+        return [Ternary::class];
     }
 
     /**
@@ -96,10 +58,38 @@ final class UnnecessaryTernaryExpressionRector extends AbstractRector
      */
     public function refactor(Node $ternaryNode): ?Node
     {
+        /** @var Ternary $ternaryExpression */
+        $ternaryExpression = $ternaryNode;
+        if (! $ternaryExpression->if instanceof Expr) {
+            return null;
+        }
+
+        $condition = $ternaryExpression->cond;
+        if (! $condition instanceof BinaryOp) {
+            return null;
+        }
+
+        $ifExpression = $ternaryExpression->if;
+        $elseExpression = $ternaryExpression->else;
+        if (! $ifExpression instanceof ConstFetch || ! $elseExpression instanceof ConstFetch) {
+            return null;
+        }
+
+        /** @var Identifier $ifExpressionName */
+        $ifExpressionName = $ifExpression->name;
+
+        /** @var Identifier $elseExpressionName */
+        $elseExpressionName = $elseExpression->name;
+
+        $ifValue = $ifExpressionName->toLowerString();
+        $elseValue = $elseExpressionName->toLowerString();
+        if (! in_array('null', [$ifValue, $elseValue], true) === false) {
+            return null;
+        }
         /** @var BinaryOp $binaryOperation */
         $binaryOperation = $ternaryNode->cond;
 
-        if ($this->ifValue === 'true' && $this->elseValue === 'false') {
+        if ($ifValue === 'true' && $elseValue === 'false') {
             return $binaryOperation;
         }
 

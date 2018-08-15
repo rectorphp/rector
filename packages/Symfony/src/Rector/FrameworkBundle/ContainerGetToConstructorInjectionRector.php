@@ -3,6 +3,7 @@
 namespace Rector\Symfony\Rector\FrameworkBundle;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\MethodCall;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -67,18 +68,32 @@ CODE_SAMPLE
         );
     }
 
-    public function isCandidate(Node $node): bool
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
+    {
+        return [MethodCall::class];
+    }
+
+    /**
+     * @param MethodCall $methodCallNode
+     */
+    public function refactor(Node $methodCallNode): ?Node
     {
         if (! $this->methodCallAnalyzer->isTypeAndMethod(
-            $node,
+            $methodCallNode,
             'Symfony\Component\DependencyInjection\ContainerInterface',
             'get'
         )) {
-            return false;
+            return null;
         }
 
-        $parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
+        $parentClassName = $methodCallNode->getAttribute(Attribute::PARENT_CLASS_NAME);
+        if (! in_array($parentClassName, $this->containerAwareParentTypes, true)) {
+            return null;
+        }
 
-        return in_array($parentClassName, $this->containerAwareParentTypes, true);
+        return $this->processMethodCallNode($methodCallNode);
     }
 }

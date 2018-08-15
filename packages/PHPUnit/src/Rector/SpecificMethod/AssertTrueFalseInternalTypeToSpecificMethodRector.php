@@ -87,32 +87,12 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractPH
         );
     }
 
-    public function isCandidate(Node $node): bool
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        if (! $node instanceof MethodCall) {
-            return false;
-        }
-
-        if (! $this->isInTestClass($node)) {
-            return false;
-        }
-
-        if (! $this->methodCallAnalyzer->isMethods($node, array_keys($this->renameMethodsMap))) {
-            return false;
-        }
-
-        /** @var MethodCall $methodCallNode */
-        $methodCallNode = $node;
-
-        /** @var FuncCall $firstArgumentValue */
-        $firstArgumentValue = $methodCallNode->args[0]->value;
-        if (! $this->isNamedFunction($firstArgumentValue)) {
-            return false;
-        }
-
-        $methodName = (string) $firstArgumentValue->name;
-
-        return isset($this->oldMethodsToTypes[$methodName]);
+        return [MethodCall::class];
     }
 
     /**
@@ -120,6 +100,21 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractPH
      */
     public function refactor(Node $methodCallNode): ?Node
     {
+        if (! $this->isInTestClass($methodCallNode)) {
+            return null;
+        }
+        if (! $this->methodCallAnalyzer->isMethods($methodCallNode, array_keys($this->renameMethodsMap))) {
+            return null;
+        }
+        /** @var FuncCall $firstArgumentValue */
+        $firstArgumentValue = $methodCallNode->args[0]->value;
+        if (! $this->isNamedFunction($firstArgumentValue)) {
+            return null;
+        }
+        $methodName = (string) $firstArgumentValue->name;
+        if (isset($this->oldMethodsToTypes[$methodName]) === false) {
+            return null;
+        }
         $this->identifierRenamer->renameNodeWithMap($methodCallNode, $this->renameMethodsMap);
         $this->moveFunctionArgumentsUp($methodCallNode);
 

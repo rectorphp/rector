@@ -72,6 +72,8 @@ abstract class AbstractArgumentRector extends AbstractRector
         if ($node instanceof ClassMethod) {
             return $node->params;
         }
+
+        return [];
     }
 
     /**
@@ -87,10 +89,5 @@ abstract class AbstractArgumentRector extends AbstractRector
         if ($node instanceof ClassMethod) {
             $node->params = $argumentsOrParameters;
         }
-    }
-
-    protected function isValidInstance(Node $node): bool
-    {
-        return $node instanceof ClassMethod || $node instanceof MethodCall || $node instanceof StaticCall;
     }
 }

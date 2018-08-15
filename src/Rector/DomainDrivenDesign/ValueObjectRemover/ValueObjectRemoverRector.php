@@ -56,24 +56,12 @@ final class ValueObjectRemoverRector extends AbstractValueObjectRemoverRector
         ]);
     }
 
-    public function isCandidate(Node $node): bool
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        if ($node instanceof New_) {
-            return $this->processNewCandidate($node);
-        }
-
-        if ($node instanceof Property) {
-            return $this->processPropertyCandidate($node);
-        }
-
-        if ($node instanceof Name) {
-            $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
-            if ($parentNode instanceof Param) {
-                return true;
-            }
-        }
-
-        return $node instanceof NullableType;
+        return [New_::class, Property::class, Name::class, NullableType::class];
     }
 
     /**
@@ -81,15 +69,20 @@ final class ValueObjectRemoverRector extends AbstractValueObjectRemoverRector
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node instanceof New_) {
+        if ($node instanceof New_ && $this->processNewCandidate($node)) {
             return $node->args[0];
         }
 
-        if ($node instanceof Property) {
+        if ($node instanceof Property && $this->processPropertyCandidate($node)) {
             return $this->refactorProperty($node);
         }
 
         if ($node instanceof Name) {
+            $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
+            if (! $parentNode instanceof Param) {
+                return null;
+            }
+
             return $this->refactorName($node);
         }
 

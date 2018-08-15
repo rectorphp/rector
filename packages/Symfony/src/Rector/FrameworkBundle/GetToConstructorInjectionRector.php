@@ -10,14 +10,9 @@ use Rector\RectorDefinition\RectorDefinition;
 final class GetToConstructorInjectionRector extends AbstractToConstructorInjectionRector
 {
     /**
-     * @var string
+     * @var string[]
      */
-    private $controllerClass;
-
-    /**
-     * @var string
-     */
-    private $traitClass;
+    private $getMethodAwareTypes = [];
 
     /**
      * @todo merge to $getMethodAwareTypes
@@ -26,8 +21,8 @@ final class GetToConstructorInjectionRector extends AbstractToConstructorInjecti
         string $controllerClass = 'Symfony\Bundle\FrameworkBundle\Controller\Controller',
         string $traitClass = 'Symfony\Bundle\FrameworkBundle\Controller\ControllerTrait'
     ) {
-        $this->controllerClass = $controllerClass;
-        $this->traitClass = $traitClass;
+        $this->getMethodAwareTypes[] = $controllerClass;
+        $this->getMethodAwareTypes[] = $traitClass;
     }
 
     public function getDefinition(): RectorDefinition
@@ -66,12 +61,23 @@ CODE_SAMPLE
         );
     }
 
-    public function isCandidate(Node $node): bool
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        if (! $node instanceof MethodCall) {
-            return false;
+        return [MethodCall::class];
+    }
+
+    /**
+     * @param MethodCall $methodCallNode
+     */
+    public function refactor(Node $methodCallNode): ?Node
+    {
+        if (! $this->methodCallAnalyzer->isTypesAndMethod($methodCallNode, $this->getMethodAwareTypes, 'get')) {
+            return null;
         }
 
-        return $this->methodCallAnalyzer->isTypesAndMethod($node, [$this->controllerClass, $this->traitClass], 'get');
+        return $this->processMethodCallNode($methodCallNode);
     }
 }

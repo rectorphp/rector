@@ -45,9 +45,12 @@ final class SetLineRector extends AbstractRector
         ]);
     }
 
-    public function isCandidate(Node $node): bool
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        return $this->methodCallAnalyzer->isTypeAndMethod($node, 'PhpParser\Node', 'setLine');
+        return [MethodCall::class];
     }
 
     /**
@@ -55,6 +58,9 @@ final class SetLineRector extends AbstractRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
+        if ($this->methodCallAnalyzer->isTypeAndMethod($methodCallNode, 'PhpParser\Node', 'setLine') === false) {
+            return null;
+        }
         $this->identifierRenamer->renameNode($methodCallNode, 'setAttribute');
 
         $methodCallNode->args[1] = $methodCallNode->args[0];

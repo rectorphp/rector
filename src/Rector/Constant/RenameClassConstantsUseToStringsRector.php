@@ -56,19 +56,12 @@ final class RenameClassConstantsUseToStringsRector extends AbstractRector
         ]);
     }
 
-    public function isCandidate(Node $node): bool
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        if (! $node instanceof ClassConstFetch) {
-            return false;
-        }
-
-        $className = $this->getClassNameFromClassConstFetch($node);
-
-        if ($className !== $this->class) {
-            return false;
-        }
-
-        return array_key_exists((string) $node->name, $this->oldConstantToNewValue);
+        return [ClassConstFetch::class];
     }
 
     /**
@@ -76,6 +69,13 @@ final class RenameClassConstantsUseToStringsRector extends AbstractRector
      */
     public function refactor(Node $classConstFetchNode): ?Node
     {
+        $className = $this->getClassNameFromClassConstFetch($classConstFetchNode);
+        if ($className !== $this->class) {
+            return null;
+        }
+        if (array_key_exists((string) $classConstFetchNode->name, $this->oldConstantToNewValue) === false) {
+            return null;
+        }
         $newValue = $this->oldConstantToNewValue[(string) $classConstFetchNode->name];
 
         return $this->nodeFactory->createString($newValue);

@@ -29,11 +29,6 @@ final class GetAndSetToMethodCallRector extends AbstractRector
     private $propertyFetchAnalyzer;
 
     /**
-     * @var string[]
-     */
-    private $activeTransformation = [];
-
-    /**
      * @var ExpressionAnalyzer
      */
     private $expressionAnalyzer;
@@ -104,24 +99,12 @@ CODE_SAMPLE
         ]);
     }
 
-    public function isCandidate(Node $node): bool
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        $this->activeTransformation = [];
-
-        $propertyFetchNode = $this->expressionAnalyzer->resolvePropertyFetch($node);
-        if ($propertyFetchNode === null) {
-            return false;
-        }
-
-        foreach ($this->typeToMethodCalls as $type => $transformation) {
-            if ($this->propertyFetchAnalyzer->isMagicOnType($propertyFetchNode, $type)) {
-                $this->activeTransformation = $transformation;
-
-                return true;
-            }
-        }
-
-        return false;
+        return [Expression::class];
     }
 
     /**
@@ -129,13 +112,30 @@ CODE_SAMPLE
      */
     public function refactor(Node $expressionNode): ?Node
     {
+        $activeTransformation = null;
+        $propertyFetchNode = $this->expressionAnalyzer->resolvePropertyFetch($expressionNode);
+        if ($propertyFetchNode === null) {
+            return null;
+        }
+
+        foreach ($this->typeToMethodCalls as $type => $transformation) {
+            if ($this->propertyFetchAnalyzer->isMagicOnType($propertyFetchNode, $type)) {
+                $activeTransformation = $transformation;
+                break;
+            }
+        }
+
+        if ($activeTransformation === null) {
+            return null;
+        }
+
         /** @var Assign $assignNode */
         $assignNode = $expressionNode->expr;
 
         if ($assignNode->expr instanceof PropertyFetch) {
             /** @var PropertyFetch $propertyFetchNode */
             $propertyFetchNode = $assignNode->expr;
-            $method = $this->activeTransformation['get'];
+            $method = $activeTransformation['get'];
             $assignNode->expr = $this->createMethodCallNodeFromPropertyFetchNode($propertyFetchNode, $method);
 
             return $expressionNode;
@@ -143,7 +143,7 @@ CODE_SAMPLE
 
         /** @var Assign $assignNode */
         $assignNode = $expressionNode->expr;
-        $method = $this->activeTransformation['set'];
+        $method = $activeTransformation['set'];
         $expressionNode->expr = $this->createMethodCallNodeFromAssignNode($assignNode, $method);
 
         return $expressionNode;

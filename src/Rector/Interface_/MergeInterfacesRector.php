@@ -55,25 +55,12 @@ CODE_SAMPLE
         ]);
     }
 
-    public function isCandidate(Node $node): bool
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        if (! $node instanceof Class_) {
-            return false;
-        }
-
-        if (! $node->implements) {
-            return false;
-        }
-
-        foreach ($node->implements as $implement) {
-            $interface = (string) $implement->getAttribute(Attribute::RESOLVED_NAME);
-
-            if (array_key_exists($interface, $this->oldToNewInterfaces)) {
-                return true;
-            }
-        }
-
-        return false;
+        return [Class_::class];
     }
 
     /**
@@ -81,6 +68,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $classNode): ?Node
     {
+        if (! $classNode->implements) {
+            return null;
+        }
+
         foreach ($classNode->implements as $key => $implement) {
             $interface = (string) $implement->getAttribute(Attribute::RESOLVED_NAME);
 

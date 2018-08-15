@@ -56,29 +56,12 @@ final class RedirectToRouteRector extends AbstractRector
         ]);
     }
 
-    public function isCandidate(Node $node): bool
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        $parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
-        if ($parentClassName !== $this->controllerClass) {
-            return false;
-        }
-
-        if (! $this->methodCallAnalyzer->isMethod($node, 'redirect')) {
-            return false;
-        }
-
-        if (! $this->methodArgumentAnalyzer->hasMethodNthArgument($node, 1)) {
-            return false;
-        }
-
-        /** @var MethodCall $methodCallNode */
-        $methodCallNode = $node;
-
-        if (! $this->methodCallAnalyzer->isMethod($methodCallNode->args[0]->value, 'generateUrl')) {
-            return false;
-        }
-
-        return true;
+        return [MethodCall::class];
     }
 
     /**
@@ -86,6 +69,22 @@ final class RedirectToRouteRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
+        $parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
+        if ($parentClassName !== $this->controllerClass) {
+            return null;
+        }
+        if (! $this->methodCallAnalyzer->isMethod($node, 'redirect')) {
+            return null;
+        }
+        if (! $this->methodArgumentAnalyzer->hasMethodNthArgument($node, 1)) {
+            return null;
+        }
+        /** @var MethodCall $methodCallNode */
+        $methodCallNode = $node;
+        if (! $this->methodCallAnalyzer->isMethod($methodCallNode->args[0]->value, 'generateUrl')) {
+            return null;
+        }
+
         return $this->methodCallNodeFactory->createWithVariableNameMethodNameAndArguments(
             'this',
             'redirectToRoute',

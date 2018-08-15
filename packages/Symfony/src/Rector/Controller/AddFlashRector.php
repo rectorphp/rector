@@ -65,23 +65,12 @@ CODE_SAMPLE
         ]);
     }
 
-    public function isCandidate(Node $node): bool
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        $parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
-        if ($parentClassName !== $this->controllerClass) {
-            return false;
-        }
-
-        if (! $this->chainMethodCallAnalyzer->isTypeAndChainCalls(
-            $node,
-            'Symfony\Component\HttpFoundation\Request',
-            ['getSession', 'getFlashBag', 'add']
-        )
-        ) {
-            return false;
-        }
-
-        return true;
+        return [MethodCall::class];
     }
 
     /**
@@ -89,6 +78,19 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        $parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
+        if ($parentClassName !== $this->controllerClass) {
+            return null;
+        }
+        if (! $this->chainMethodCallAnalyzer->isTypeAndChainCalls(
+            $node,
+            'Symfony\Component\HttpFoundation\Request',
+            ['getSession', 'getFlashBag', 'add']
+        )
+        ) {
+            return null;
+        }
+
         return $this->methodCallNodeFactory->createWithVariableNameMethodNameAndArguments(
             'this',
             'addFlash',

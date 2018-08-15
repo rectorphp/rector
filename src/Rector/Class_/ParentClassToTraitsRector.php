@@ -73,15 +73,12 @@ CODE_SAMPLE
         ]);
     }
 
-    public function isCandidate(Node $node): bool
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        if (! $node instanceof Class_ || $node->extends === null || $node->isAnonymous()) {
-            return false;
-        }
-
-        $nodeParentClassName = $this->getClassNodeParentClassName($node);
-
-        return isset($this->parentClassToTraits[$nodeParentClassName]);
+        return [Class_::class];
     }
 
     /**
@@ -89,7 +86,15 @@ CODE_SAMPLE
      */
     public function refactor(Node $classNode): ?Node
     {
+        if ($classNode->extends === null || $classNode->isAnonymous()) {
+            return null;
+        }
+
         $nodeParentClassName = $this->getClassNodeParentClassName($classNode);
+        if (isset($this->parentClassToTraits[$nodeParentClassName]) === false) {
+            return null;
+        }
+
         $traitNames = $this->parentClassToTraits[$nodeParentClassName];
 
         // keep the Trait order the way it is in config

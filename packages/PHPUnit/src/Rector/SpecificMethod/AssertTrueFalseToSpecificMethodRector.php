@@ -88,37 +88,12 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractPHPUnitRector
         );
     }
 
-    public function isCandidate(Node $node): bool
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        if (! $node instanceof MethodCall) {
-            return false;
-        }
-
-        if (! $this->isInTestClass($node)) {
-            return false;
-        }
-
-        if (! $this->methodCallAnalyzer->isMethods($node, ['assertTrue', 'assertFalse'])) {
-            return false;
-        }
-
-        /** @var MethodCall $methodCallNode */
-        $methodCallNode = $node;
-
-        if (! isset($methodCallNode->args[0])) {
-            return false;
-        }
-
-        $firstArgumentValue = $methodCallNode->args[0]->value;
-
-        $funcCallName = $this->resolveFunctionName($firstArgumentValue);
-        if ($funcCallName === null) {
-            return false;
-        }
-
-        $this->activeFuncCallName = $funcCallName;
-
-        return isset($this->activeOldToNewMethods[$funcCallName]);
+        return [MethodCall::class];
     }
 
     /**
@@ -126,6 +101,29 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractPHPUnitRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
+        if (! $methodCallNode instanceof MethodCall) {
+            return null;
+        }
+        if (! $this->isInTestClass($methodCallNode)) {
+            return null;
+        }
+        if (! $this->methodCallAnalyzer->isMethods($methodCallNode, ['assertTrue', 'assertFalse'])) {
+            return null;
+        }
+        /** @var MethodCall $methodCallNode */
+        $methodCallNode = $methodCallNode;
+        if (! isset($methodCallNode->args[0])) {
+            return null;
+        }
+        $firstArgumentValue = $methodCallNode->args[0]->value;
+        $funcCallName = $this->resolveFunctionName($firstArgumentValue);
+        if ($funcCallName === null) {
+            return null;
+        }
+        $this->activeFuncCallName = $funcCallName;
+        if (isset($this->activeOldToNewMethods[$funcCallName]) === false) {
+            return null;
+        }
         $this->renameMethod($methodCallNode);
         $this->moveFunctionArgumentsUp($methodCallNode);
 

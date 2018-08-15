@@ -80,29 +80,32 @@ CODE_SAMPLE
         );
     }
 
-    public function isCandidate(Node $node): bool
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        if ($this->isActionWithGetRequestInBody($node)) {
-            return true;
-        }
-
-        return $this->isGetRequestInAction($node);
+        return [ClassMethod::class, MethodCall::class];
     }
 
     /**
-     * @param ClassMethod|MethodCall $classMethodOrMethodCallNode
+     * @param ClassMethod|MethodCall $node
      */
-    public function refactor(Node $classMethodOrMethodCallNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if ($classMethodOrMethodCallNode instanceof ClassMethod) {
-            $requestParam = $this->nodeFactory->createParam('request', 'Symfony\Component\HttpFoundation\Request');
-
-            $classMethodOrMethodCallNode->params[] = $requestParam;
-
-            return $classMethodOrMethodCallNode;
+        if ($this->isGetRequestInAction($node)) {
+            return $this->nodeFactory->createVariable('request');
         }
 
-        return $this->nodeFactory->createVariable('request');
+        if ($this->isActionWithGetRequestInBody($node)) {
+            $requestParam = $this->nodeFactory->createParam('request', 'Symfony\Component\HttpFoundation\Request');
+
+            $node->params[] = $requestParam;
+
+            return $node;
+        }
+
+        return null;
     }
 
     private function isActionWithGetRequestInBody(Node $node): bool

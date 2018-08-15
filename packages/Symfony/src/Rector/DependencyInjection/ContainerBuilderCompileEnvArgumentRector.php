@@ -41,21 +41,12 @@ final class ContainerBuilderCompileEnvArgumentRector extends AbstractRector
         );
     }
 
-    public function isCandidate(Node $node): bool
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        if ($this->methodCallAnalyzer->isTypeAndMethods(
-            $node,
-            'Symfony\Component\DependencyInjection\ContainerBuilder',
-            ['compile']
-        ) === false) {
-            return false;
-        }
-
-        /** @var MethodCall $methodCallNode */
-        $methodCallNode = $node;
-
-        // already has an argument
-        return count($methodCallNode->args) !== 1;
+        return [MethodCall::class];
     }
 
     /**
@@ -63,6 +54,18 @@ final class ContainerBuilderCompileEnvArgumentRector extends AbstractRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
+        if ($this->methodCallAnalyzer->isTypeAndMethods(
+            $methodCallNode,
+            'Symfony\Component\DependencyInjection\ContainerBuilder',
+            ['compile']
+        ) === false) {
+            return null;
+        }
+        /** @var MethodCall $methodCallNode */
+        $methodCallNode = $methodCallNode;
+        if ((count($methodCallNode->args) !== 1) === false) {
+            return null;
+        }
         $methodCallNode->args = $this->nodeFactory->createArgs([true]);
 
         return $methodCallNode;

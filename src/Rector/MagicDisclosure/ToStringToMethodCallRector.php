@@ -91,17 +91,12 @@ CODE_SAMPLE
         ]);
     }
 
-    public function isCandidate(Node $node): bool
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        if ($node instanceof String_) {
-            return $this->processStringCandidate($node);
-        }
-
-        if ($node instanceof MethodCall) {
-            return $this->processMethodCallCandidate($node);
-        }
-
-        return false;
+        return [String_::class, MethodCall::class];
     }
 
     /**
@@ -109,14 +104,16 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node instanceof String_) {
+        if ($node instanceof String_ && $this->processStringCandidate($node)) {
             return $this->methodCallNodeFactory->createWithVariableAndMethodName(
                 $node->expr,
                 $this->activeTransformation
             );
         }
 
-        $this->identifierRenamer->renameNode($node, $this->activeTransformation);
+        if ($node instanceof MethodCall && $this->processMethodCallCandidate($node)) {
+            $this->identifierRenamer->renameNode($node, $this->activeTransformation);
+        }
 
         return $node;
     }

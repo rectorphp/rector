@@ -83,9 +83,12 @@ CODE_SAMPLE
         ]);
     }
 
-    public function getNodeType(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        return Return_::class;
+        return [Return_::class];
     }
 
     /**

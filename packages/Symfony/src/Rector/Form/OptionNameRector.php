@@ -49,19 +49,26 @@ CODE_SAMPLE
         ]);
     }
 
-    public function isCandidate(Node $node): bool
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        if (! $node instanceof String_) {
-            return false;
+        return [String_::class];
+    }
+
+    /**
+     * @param String_ $stringNode
+     */
+    public function refactor(Node $stringNode): ?Node
+    {
+        if (! isset($this->oldToNewOption[$stringNode->value])) {
+            return null;
         }
 
-        if (! isset($this->oldToNewOption[$node->value])) {
-            return false;
-        }
-
-        $arrayItemParentNode = $node->getAttribute(Attribute::PARENT_NODE);
+        $arrayItemParentNode = $stringNode->getAttribute(Attribute::PARENT_NODE);
         if (! $arrayItemParentNode instanceof ArrayItem) {
-            return false;
+            return null;
         }
 
         $arrayParentNode = $arrayItemParentNode->getAttribute(Attribute::PARENT_NODE);
@@ -71,19 +78,14 @@ CODE_SAMPLE
 
         /** @var MethodCall|Node $methodCallNode */
         $methodCallNode = $argParentNode->getAttribute(Attribute::PARENT_NODE);
-
         if (! $methodCallNode instanceof MethodCall) {
-            return false;
+            return null;
         }
 
-        return (string) $methodCallNode->name === 'add';
-    }
+        if ((string) $methodCallNode->name !== 'add') {
+            return null;
+        }
 
-    /**
-     * @param String_ $stringNode
-     */
-    public function refactor(Node $stringNode): ?Node
-    {
         return $this->nodeFactory->createString($this->oldToNewOption[$stringNode->value]);
     }
 }

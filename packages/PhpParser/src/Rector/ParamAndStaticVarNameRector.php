@@ -36,11 +36,12 @@ final class ParamAndStaticVarNameRector extends AbstractRector
         ]);
     }
 
-    public function isCandidate(Node $node): bool
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        $types = ['PhpParser\Node\Param', 'PhpParser\Node\Stmt\StaticVar'];
-
-        return $this->propertyFetchAnalyzer->isTypesAndProperty($node, $types, 'name');
+        return [PropertyFetch::class];
     }
 
     /**
@@ -48,6 +49,11 @@ final class ParamAndStaticVarNameRector extends AbstractRector
      */
     public function refactor(Node $propertyFetchNode): ?Node
     {
+        $types = ['PhpParser\Node\Param', 'PhpParser\Node\Stmt\StaticVar'];
+        if ($this->propertyFetchAnalyzer->isTypesAndProperty($propertyFetchNode, $types, 'name') === false) {
+            return null;
+        }
+
         $this->identifierRenamer->renameNode($propertyFetchNode, 'var');
 
         return new PropertyFetch($propertyFetchNode, 'name');

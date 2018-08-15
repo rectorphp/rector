@@ -103,35 +103,12 @@ CODE_SAMPLE
         );
     }
 
-    public function isCandidate(Node $node): bool
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        if (! $this->methodCallAnalyzer->isMethod($node, 'getRepository')) {
-            return false;
-        }
-
-        $className = $node->getAttribute(Attribute::CLASS_NAME);
-        if ($className === null) {
-            return false;
-        }
-
-        /** @var MethodCall $methodCallNode */
-        $methodCallNode = $node;
-
-        if (count($methodCallNode->args) !== 1) {
-            return false;
-        }
-
-        if ($methodCallNode->args[0]->value instanceof String_) {
-            /** @var String_ $string */
-            $string = $methodCallNode->args[0]->value;
-
-            // is alias
-            if (Strings::contains($string->value, ':')) {
-                return false;
-            }
-        }
-
-        return ! Strings::endsWith($className, 'Repository');
+        return [MethodCall::class];
     }
 
     /**
@@ -139,6 +116,30 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $this->methodCallAnalyzer->isMethod($node, 'getRepository')) {
+            return null;
+        }
+        $className = $node->getAttribute(Attribute::CLASS_NAME);
+        if ($className === null) {
+            return null;
+        }
+        /** @var MethodCall $methodCallNode */
+        $methodCallNode = $node;
+        if (count($methodCallNode->args) !== 1) {
+            return null;
+        }
+        if ($methodCallNode->args[0]->value instanceof String_) {
+            /** @var String_ $string */
+            $string = $methodCallNode->args[0]->value;
+
+            // is alias
+            if (Strings::contains($string->value, ':')) {
+                return null;
+            }
+        }
+        if (! Strings::endsWith($className, 'Repository') === false) {
+            return null;
+        }
         $repositoryFqn = $this->repositoryFqn($node);
 
         $this->classPropertyCollector->addPropertyForClass(

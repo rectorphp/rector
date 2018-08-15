@@ -46,18 +46,26 @@ final class NamespaceReplacerRector extends AbstractRector
         ]);
     }
 
-    public function isCandidate(Node $node): bool
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
+    {
+        return [Namespace_::class, Use_::class, Name::class];
+    }
+
+    /**
+     * @param Namespace_|Use_|Name $node
+     */
+    public function refactor(Node $node): ?Node
     {
         $name = $this->resolveNameFromNode($node);
         if (! $this->isNamespaceToChange($name)) {
-            return false;
+            return null;
         }
-
-        return ! $this->isClassFullyQualifiedName($node);
-    }
-
-    public function refactor(Node $node): ?Node
-    {
+        if (! $this->isClassFullyQualifiedName($node) === false) {
+            return null;
+        }
         if ($node instanceof Namespace_) {
             $newName = $this->resolveNewNameFromNode($node);
 

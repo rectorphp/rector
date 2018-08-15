@@ -24,11 +24,6 @@ final class StaticCallToFunctionRector extends AbstractRector
     private $staticMethodCallAnalyzer;
 
     /**
-     * @var string|null
-     */
-    private $activeStaticCall;
-
-    /**
      * @param string[] $staticCallToFunction
      */
     public function __construct(array $staticCallToFunction, StaticMethodCallAnalyzer $staticMethodCallAnalyzer)
@@ -52,23 +47,12 @@ final class StaticCallToFunctionRector extends AbstractRector
         ]);
     }
 
-    public function isCandidate(Node $node): bool
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        if (! $node instanceof StaticCall) {
-            return false;
-        }
-
-        $staticCalls = array_keys($this->staticCallToFunction);
-        foreach ($staticCalls as $staticCall) {
-            [$class, $method] = explode('::', $staticCall);
-            if ($this->staticMethodCallAnalyzer->isTypeAndMethod($node, $class, $method)) {
-                $this->activeStaticCall = $staticCall;
-
-                return true;
-            }
-        }
-
-        return false;
+        return [StaticCall::class];
     }
 
     /**
@@ -76,7 +60,20 @@ final class StaticCallToFunctionRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        $newFunctionName = $this->staticCallToFunction[$this->activeStaticCall];
+        $staticCalls = array_keys($this->staticCallToFunction);
+        $activeStaticCall = null;
+        foreach ($staticCalls as $staticCall) {
+            [$class, $method] = explode('::', $staticCall);
+            if ($this->staticMethodCallAnalyzer->isTypeAndMethod($node, $class, $method)) {
+                $activeStaticCall = $staticCall;
+            }
+        }
+
+        if (! isset($this->staticCallToFunction[$activeStaticCall])) {
+            return null;
+        }
+
+        $newFunctionName = $this->staticCallToFunction[$activeStaticCall];
 
         return new FuncCall(new FullyQualified($newFunctionName), $node->args);
     }

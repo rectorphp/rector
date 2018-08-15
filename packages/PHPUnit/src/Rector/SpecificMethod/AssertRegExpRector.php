@@ -51,35 +51,12 @@ final class AssertRegExpRector extends AbstractPHPUnitRector
         );
     }
 
-    public function isCandidate(Node $node): bool
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        if (! $node instanceof MethodCall) {
-            return false;
-        }
-
-        if (! $this->isInTestClass($node)) {
-            return false;
-        }
-
-        if (! $this->methodCallAnalyzer->isMethods(
-            $node,
-            ['assertSame', 'assertEquals', 'assertNotSame', 'assertNotEquals']
-        )) {
-            return false;
-        }
-
-        /** @var MethodCall $methodCallNode */
-        $methodCallNode = $node;
-
-        /** @var FuncCall $secondArgumentValue */
-        $secondArgumentValue = $methodCallNode->args[1]->value;
-        if (! $this->isNamedFunction($secondArgumentValue)) {
-            return false;
-        }
-
-        $methodName = (string) $secondArgumentValue->name;
-
-        return $methodName === 'preg_match';
+        return [MethodCall::class];
     }
 
     /**
@@ -87,6 +64,29 @@ final class AssertRegExpRector extends AbstractPHPUnitRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
+        if (! $methodCallNode instanceof MethodCall) {
+            return null;
+        }
+        if (! $this->isInTestClass($methodCallNode)) {
+            return null;
+        }
+        if (! $this->methodCallAnalyzer->isMethods(
+            $methodCallNode,
+            ['assertSame', 'assertEquals', 'assertNotSame', 'assertNotEquals']
+        )) {
+            return null;
+        }
+        /** @var MethodCall $methodCallNode */
+        $methodCallNode = $methodCallNode;
+        /** @var FuncCall $secondArgumentValue */
+        $secondArgumentValue = $methodCallNode->args[1]->value;
+        if (! $this->isNamedFunction($secondArgumentValue)) {
+            return null;
+        }
+        $methodName = (string) $secondArgumentValue->name;
+        if (($methodName === 'preg_match') === false) {
+            return null;
+        }
         /** @var Identifier $identifierNode */
         $identifierNode = $methodCallNode->name;
         $oldMethodName = $identifierNode->toString();

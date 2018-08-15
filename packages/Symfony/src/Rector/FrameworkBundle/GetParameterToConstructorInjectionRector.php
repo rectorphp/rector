@@ -92,13 +92,12 @@ CODE_SAMPLE
         );
     }
 
-    public function isCandidate(Node $node): bool
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        if (! $node instanceof MethodCall) {
-            return false;
-        }
-
-        return $this->methodCallAnalyzer->isTypeAndMethod($node, $this->controllerClass, 'getParameter');
+        return [MethodCall::class];
     }
 
     /**
@@ -106,6 +105,13 @@ CODE_SAMPLE
      */
     public function refactor(Node $methodCallNode): ?Node
     {
+        if ($this->methodCallAnalyzer->isTypeAndMethod(
+            $methodCallNode,
+            $this->controllerClass,
+            'getParameter'
+        ) === false) {
+            return null;
+        }
         /** @var String_ $stringArgument */
         $stringArgument = $methodCallNode->args[0]->value;
         $parameterName = $stringArgument->value;

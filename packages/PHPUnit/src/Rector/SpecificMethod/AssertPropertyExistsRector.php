@@ -76,32 +76,12 @@ final class AssertPropertyExistsRector extends AbstractPHPUnitRector
         );
     }
 
-    public function isCandidate(Node $node): bool
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        if (! $node instanceof MethodCall) {
-            return false;
-        }
-
-        if (! $this->isInTestClass($node)) {
-            return false;
-        }
-
-        if (! $this->methodCallAnalyzer->isMethods($node, ['assertTrue', 'assertFalse'])) {
-            return false;
-        }
-
-        /** @var MethodCall $methodCallNode */
-        $methodCallNode = $node;
-
-        /** @var FuncCall $firstArgumentValue */
-        $firstArgumentValue = $methodCallNode->args[0]->value;
-        if (! $this->isNamedFunction($firstArgumentValue)) {
-            return false;
-        }
-
-        $methodName = (string) $firstArgumentValue->name;
-
-        return $methodName === 'property_exists';
+        return [MethodCall::class];
     }
 
     /**
@@ -109,6 +89,26 @@ final class AssertPropertyExistsRector extends AbstractPHPUnitRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
+        if (! $methodCallNode instanceof MethodCall) {
+            return null;
+        }
+        if (! $this->isInTestClass($methodCallNode)) {
+            return null;
+        }
+        if (! $this->methodCallAnalyzer->isMethods($methodCallNode, ['assertTrue', 'assertFalse'])) {
+            return null;
+        }
+        /** @var MethodCall $methodCallNode */
+        $methodCallNode = $methodCallNode;
+        /** @var FuncCall $firstArgumentValue */
+        $firstArgumentValue = $methodCallNode->args[0]->value;
+        if (! $this->isNamedFunction($firstArgumentValue)) {
+            return null;
+        }
+        $methodName = (string) $firstArgumentValue->name;
+        if (($methodName === 'property_exists') === false) {
+            return null;
+        }
         $oldArguments = $methodCallNode->args;
 
         /** @var Identifier $oldArguments */

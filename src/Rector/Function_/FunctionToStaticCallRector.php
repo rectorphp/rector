@@ -42,11 +42,11 @@ final class FunctionToStaticCallRector extends AbstractRector
     }
 
     /**
-     * future compatibility
+     * @return string[]
      */
-    public function getNodeType(): string
+    public function getNodeTypes(): array
     {
-        return FuncCall::class;
+        return [FuncCall::class];
     }
 
     /**

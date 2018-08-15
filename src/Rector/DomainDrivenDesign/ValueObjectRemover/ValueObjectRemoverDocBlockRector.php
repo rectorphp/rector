@@ -59,14 +59,12 @@ CODE_SAMPLE
         ]);
     }
 
-    public function isCandidate(Node $node): bool
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        if ($node instanceof Property) {
-            return $this->isPropertyCandidate($node);
-        }
-
-        // + Variable for docs update
-        return $node instanceof NullableType || $node instanceof Variable;
+        return [Property::class, NullableType::class, Variable::class];
     }
 
     /**
@@ -74,19 +72,22 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node instanceof Property) {
+        if ($node instanceof Property && $this->isPropertyCandidate($node)) {
             $this->refactorProperty($node);
+            return $node;
         }
 
         if ($node instanceof NullableType) {
             $this->refactorNullableType($node);
+            return $node;
         }
 
         if ($node instanceof Variable) {
             $this->refactorVariableNode($node);
+            return $node;
         }
 
-        return $node;
+        return null;
     }
 
     private function isPropertyCandidate(Property $propertyNode): bool

@@ -19,32 +19,12 @@ final class InArrayAndArrayKeysToArrayKeyExistsRector extends AbstractRector
         );
     }
 
-    public function isCandidate(Node $node): bool
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        if (! $this->isInArrayFunction($node)) {
-            return false;
-        }
-
-        /** @var FuncCall $inArrayFunction */
-        $inArrayFunction = $node;
-
-        $secondArgument = $inArrayFunction->args[1]->value;
-        if (! $secondArgument instanceof FuncCall) {
-            return false;
-        }
-
-        /** @var Name $functionName */
-        $functionName = $secondArgument->name;
-
-        if ($functionName->toString() !== 'array_keys') {
-            return false;
-        }
-
-        if (count($secondArgument->args) > 1) {
-            return false;
-        }
-
-        return true;
+        return [FuncCall::class];
     }
 
     /**
@@ -52,6 +32,24 @@ final class InArrayAndArrayKeysToArrayKeyExistsRector extends AbstractRector
      */
     public function refactor(Node $funcCall): ?Node
     {
+        if (! $this->isInArrayFunction($funcCall)) {
+            return null;
+        }
+
+        $secondArgument = $funcCall->args[1]->value;
+        if (! $secondArgument instanceof FuncCall) {
+            return null;
+        }
+
+        /** @var Name $functionName */
+        $functionName = $secondArgument->name;
+        if ($functionName->toString() !== 'array_keys') {
+            return null;
+        }
+        if (count($secondArgument->args) > 1) {
+            return null;
+        }
+
         [$key, $array] = $funcCall->args;
 
         $array = $array->value->args[0];
@@ -63,15 +61,9 @@ final class InArrayAndArrayKeysToArrayKeyExistsRector extends AbstractRector
         return $funcCall;
     }
 
-    private function isInArrayFunction(Node $node): bool
+    private function isInArrayFunction(FuncCall $funcCallNode): bool
     {
-        if (! $node instanceof FuncCall) {
-            return false;
-        }
-
-        /** @var Name $funcCallName */
-        $funcCallName = $node->name;
-
+        $funcCallName = $funcCallNode->name;
         if (! $funcCallName instanceof Name) {
             return false;
         }

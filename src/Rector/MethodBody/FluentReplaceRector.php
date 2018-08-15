@@ -64,9 +64,12 @@ CODE_SAMPLE
         ]);
     }
 
-    public function getNodeType(): string
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        return MethodCall::class;
+        return [MethodCall::class];
     }
 
     /**

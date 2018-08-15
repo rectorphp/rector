@@ -79,25 +79,12 @@ CODE_SAMPLE
         );
     }
 
-    public function isCandidate(Node $node): bool
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        if (! $node instanceof ClassMethod) {
-            return false;
-        }
-
-        // doesn't have a parent class
-        if (! $node->hasAttribute(Attribute::PARENT_CLASS_NAME)) {
-            return false;
-        }
-
-        $nodeParentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
-        if (! isset($this->methodToVisibilityByClass[$nodeParentClassName])) {
-            return false;
-        }
-
-        $methodName = $node->name->toString();
-
-        return isset($this->methodToVisibilityByClass[$nodeParentClassName][$methodName]);
+        return [ClassMethod::class];
     }
 
     /**
@@ -105,6 +92,18 @@ CODE_SAMPLE
      */
     public function refactor(Node $classMethodNode): ?Node
     {
+        // doesn't have a parent class
+        if (! $classMethodNode->hasAttribute(Attribute::PARENT_CLASS_NAME)) {
+            return null;
+        }
+        $nodeParentClassName = $classMethodNode->getAttribute(Attribute::PARENT_CLASS_NAME);
+        if (! isset($this->methodToVisibilityByClass[$nodeParentClassName])) {
+            return null;
+        }
+        $methodName = $classMethodNode->name->toString();
+        if (isset($this->methodToVisibilityByClass[$nodeParentClassName][$methodName]) === false) {
+            return null;
+        }
         $this->visibilityModifier->removeOriginalVisibilityFromFlags($classMethodNode);
 
         $newVisibility = $this->resolveNewVisibilityForNode($classMethodNode);

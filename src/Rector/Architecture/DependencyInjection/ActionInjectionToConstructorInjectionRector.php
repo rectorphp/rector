@@ -66,13 +66,12 @@ final class ActionInjectionToConstructorInjectionRector extends AbstractRector
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
-    public function isCandidate(Node $node): bool
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        if (! $node instanceof Class_) {
-            return false;
-        }
-
-        return Strings::endsWith((string) $node->name, 'Controller');
+        return [Class_::class];
     }
 
     public function getDefinition(): RectorDefinition
@@ -116,12 +115,14 @@ CODE_SAMPLE
      */
     public function refactor(Node $classNode): ?Node
     {
-        foreach ($classNode->stmts as $stmt) {
-            if (! $stmt instanceof ClassMethod) {
-                continue;
-            }
+        if (Strings::endsWith((string) $classNode->name, 'Controller') === false) {
+            return null;
+        }
 
-            $this->processClassMethod($classNode, $stmt);
+        foreach ($classNode->stmts as $stmt) {
+            if ($stmt instanceof ClassMethod) {
+                $this->processClassMethod($classNode, $stmt);
+            }
         }
 
         return $classNode;

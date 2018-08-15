@@ -67,18 +67,12 @@ final class PropertyNameReplacerRector extends AbstractRector
         ]);
     }
 
-    public function isCandidate(Node $node): bool
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        $this->activeTypes = [];
-
-        $matchedTypes = $this->propertyFetchAnalyzer->matchTypes($node, $this->getClasses());
-        if ($matchedTypes) {
-            $this->activeTypes = $matchedTypes;
-
-            return true;
-        }
-
-        return false;
+        return [PropertyFetch::class];
     }
 
     /**
@@ -86,6 +80,13 @@ final class PropertyNameReplacerRector extends AbstractRector
      */
     public function refactor(Node $propertyFetchNode): ?Node
     {
+        $this->activeTypes = [];
+        $matchedTypes = $this->propertyFetchAnalyzer->matchTypes($propertyFetchNode, $this->getClasses());
+
+        if ($matchedTypes) {
+            $this->activeTypes = $matchedTypes;
+        }
+
         $oldToNewProperties = $this->matchOldToNewProperties();
 
         /** @var Identifier $identifierNode */

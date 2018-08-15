@@ -77,28 +77,12 @@ CODE_SAMPLE
         );
     }
 
-    public function isCandidate(Node $node): bool
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        if (! $node instanceof MethodCall) {
-            return false;
-        }
-
-        // of type...
-
-        if (! $node->name instanceof Identifier) {
-            return false;
-        }
-
-        $methodName = $node->name->toString();
-
-        $entityClassReflection = $this->broker->getClass($this->entityRepositoryClass);
-        if (! $entityClassReflection->hasMethod($methodName)) {
-            return false;
-        }
-
-        $methodReflection = $entityClassReflection->getMethod($methodName, $node->getAttribute(Attribute::SCOPE));
-
-        return $methodReflection->isPublic();
+        return [MethodCall::class];
     }
 
     /**
@@ -106,6 +90,22 @@ CODE_SAMPLE
      */
     public function refactor(Node $methodCallNode): ?Node
     {
+        // of type...
+        if (! $methodCallNode->name instanceof Identifier) {
+            return null;
+        }
+        $methodName = $methodCallNode->name->toString();
+        $entityClassReflection = $this->broker->getClass($this->entityRepositoryClass);
+        if (! $entityClassReflection->hasMethod($methodName)) {
+            return null;
+        }
+        $methodReflection = $entityClassReflection->getMethod(
+            $methodName,
+            $methodCallNode->getAttribute(Attribute::SCOPE)
+        );
+        if ($methodReflection->isPublic() === false) {
+            return null;
+        }
         $methodCallNode->var = $this->propertyFetchNodeFactory->createLocalWithPropertyName('repository');
 
         return $methodCallNode;

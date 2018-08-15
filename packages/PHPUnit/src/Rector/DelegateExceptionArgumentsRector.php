@@ -55,24 +55,12 @@ CODE_SAMPLE
         );
     }
 
-    public function isCandidate(Node $node): bool
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        if (! $node instanceof MethodCall) {
-            return false;
-        }
-
-        if (! $this->isInTestClass($node)) {
-            return false;
-        }
-
-        if (! $this->methodCallAnalyzer->isMethods($node, array_keys($this->oldToNewMethod))) {
-            return false;
-        }
-
-        /** @var MethodCall $methodCallNode */
-        $methodCallNode = $node;
-
-        return isset($methodCallNode->args[1]);
+        return [MethodCall::class];
     }
 
     /**
@@ -80,6 +68,17 @@ CODE_SAMPLE
      */
     public function refactor(Node $methodCallNode): ?Node
     {
+        if (! $this->isInTestClass($methodCallNode)) {
+            return null;
+        }
+        if (! $this->methodCallAnalyzer->isMethods($methodCallNode, array_keys($this->oldToNewMethod))) {
+            return null;
+        }
+
+        if (isset($methodCallNode->args[1]) === false) {
+            return null;
+        }
+
         /** @var Identifier $identifierNode */
         $identifierNode = $methodCallNode->name;
         $oldMethodName = $identifierNode->name;

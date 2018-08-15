@@ -2,7 +2,11 @@
 
 namespace Rector\Application;
 
-use Rector\NodeTraverserQueue\NodeTraverserQueue;
+use PhpParser\Lexer;
+use PhpParser\Node;
+use Rector\NodeTraverser\RectorNodeTraverser;
+use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
+use Rector\Parser\Parser;
 use Rector\Printer\FormatPerservingPrinter;
 use Symfony\Component\Finder\SplFileInfo;
 
@@ -14,21 +18,42 @@ final class FileProcessor
     private $formatPerservingPrinter;
 
     /**
-     * @var NodeTraverserQueue
+     * @var Parser
      */
-    private $nodeTraverserQueue;
+    private $parser;
+
+    /**
+     * @var Lexer
+     */
+    private $lexer;
+
+    /**
+     * @var RectorNodeTraverser
+     */
+    private $rectorNodeTraverser;
+
+    /**
+     * @var NodeScopeAndMetadataDecorator
+     */
+    private $nodeScopeAndMetadataDecorator;
 
     public function __construct(
         FormatPerservingPrinter $formatPerservingPrinter,
-        NodeTraverserQueue $nodeTraverserQueue
+        Parser $parser,
+        Lexer $lexer,
+        RectorNodeTraverser $rectorNodeTraverser,
+        NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator
     ) {
         $this->formatPerservingPrinter = $formatPerservingPrinter;
-        $this->nodeTraverserQueue = $nodeTraverserQueue;
+        $this->parser = $parser;
+        $this->lexer = $lexer;
+        $this->rectorNodeTraverser = $rectorNodeTraverser;
+        $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
     }
 
     public function processFile(SplFileInfo $fileInfo): string
     {
-        [$newStmts, $oldStmts, $oldTokens] = $this->nodeTraverserQueue->processFileInfo($fileInfo);
+        [$newStmts, $oldStmts, $oldTokens] = $this->parseAndTraverseFileInfoToNodes($fileInfo);
 
         return $this->formatPerservingPrinter->printToFile($fileInfo, $newStmts, $oldStmts, $oldTokens);
     }
@@ -38,8 +63,22 @@ final class FileProcessor
      */
     public function processFileToString(SplFileInfo $fileInfo): string
     {
-        [$newStmts, $oldStmts, $oldTokens] = $this->nodeTraverserQueue->processFileInfo($fileInfo);
+        [$newStmts, $oldStmts, $oldTokens] = $this->parseAndTraverseFileInfoToNodes($fileInfo);
 
         return $this->formatPerservingPrinter->printToString($newStmts, $oldStmts, $oldTokens);
+    }
+
+    /**
+     * @return Node[][]|mixed[]
+     */
+    private function parseAndTraverseFileInfoToNodes(SplFileInfo $fileInfo): array
+    {
+        $oldStmts = $this->parser->parseFile($fileInfo->getRealPath());
+        $oldTokens = $this->lexer->getTokens();
+
+        $newStmts = $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($oldStmts, $fileInfo->getRealPath());
+        $newStmts = $this->rectorNodeTraverser->traverse($newStmts);
+
+        return [$newStmts, $oldStmts, $oldTokens];
     }
 }
