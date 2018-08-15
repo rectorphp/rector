@@ -64,7 +64,7 @@ parameters:
         - '#Method Rector\\Node\\NodeFactory::createNullConstant\(\) should return PhpParser\\Node\\Expr\\ConstFetch but returns PhpParser\\Node\\Expr#' # 1
         - '#Method Rector\\Node\\NodeFactory::createNamespace\(\) should return PhpParser\\Node\\Stmt\\Namespace_ but returns PhpParser\\Node#' # 1
         - '#Method Rector\\Utils\\BetterNodeFinder::findFirstAncestorInstanceOf\(\) should return PhpParser\\Node\|null but returns object#' # 1
-        - '#Property Rector\\NodeTypeResolver\\Metadata\\NamespaceNodeDecorator::\$useNodes \(array<PhpParser\\Node\\Stmt\\Use_>\) does not accept array<PhpParser\\Node>#' # 1
+        - '#Property Rector\\NodeTypeResolver\\NodeVisitor\\NamespaceNodeVisitor::\$useNodes \(array<PhpParser\\Node\\Stmt\\Use_>\) does not accept array<PhpParser\\Node>#' # 1
         - '#Parameter \#1 \$node of method Rector\\NodeTypeResolver\\NodeTypeResolver::resolve\(\) expects PhpParser\\Node, PhpParser\\Node\\Expr|string given#' # 3
 
         # buggy
