@@ -45,6 +45,11 @@ final class NodeScopeResolver
      */
     private $broker;
 
+    /**
+     * @var bool
+     */
+    private $areSetAnalyzedFiles = false;
+
     public function __construct(
         ParameterProvider $parameterProvider,
         FilesFinder $filesFinder,
@@ -86,6 +91,10 @@ final class NodeScopeResolver
 
     private function setAnalysedFiles(): void
     {
+        if ($this->areSetAnalyzedFiles) {
+            return;
+        }
+
         $source = $this->parameterProvider->provideParameter(Option::SOURCE);
         $phpFileInfos = $this->filesFinder->findInDirectoriesAndFiles($source, ['php']);
 
@@ -95,6 +104,8 @@ final class NodeScopeResolver
         }
 
         $this->phpStanNodeScopeResolver->setAnalysedFiles($filePaths);
+
+        $this->areSetAnalyzedFiles = true;
     }
 
     /**
