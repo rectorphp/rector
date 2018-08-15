@@ -35,7 +35,6 @@
             "Rector\\": "src",
             "Rector\\ConsoleDiffer\\": "packages/ConsoleDiffer/src",
             "Rector\\NodeTypeResolver\\": "packages/NodeTypeResolver/src",
-            "Rector\\NodeTraverserQueue\\": "packages/NodeTraverserQueue/src",
             "Rector\\Symfony\\": "packages/Symfony/src",
             "Rector\\Silverstripe\\": "packages/Silverstripe/src",
             "Rector\\Sensio\\": "packages/Sensio/src",
@@ -51,7 +50,6 @@
         "psr-4": {
             "Rector\\Tests\\": "tests",
             "Rector\\NodeTypeResolver\\Tests\\": "packages/NodeTypeResolver/tests",
-            "Rector\\NodeTraverserQueue\\Tests\\": "packages/NodeTraverserQueue/tests",
             "Rector\\Symfony\\Tests\\": "packages/Symfony/tests",
             "Rector\\Silverstripe\\Tests\\": "packages/Silverstripe/tests",
             "Rector\\Sensio\\Tests\\": "packages/Sensio/tests",

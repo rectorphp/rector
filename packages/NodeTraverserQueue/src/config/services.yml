@@ -1,6 +1,0 @@
-services:
-    Rector\NodeTraverserQueue\:
-        resource: '../'
-        exclude: '../{Exception}'
-
-    PhpParser\NodeFinder: ~
