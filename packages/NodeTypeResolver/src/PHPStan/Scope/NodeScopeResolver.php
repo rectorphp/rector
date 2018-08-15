@@ -8,10 +8,7 @@ use PhpParser\Node\Stmt\Interface_;
 use PHPStan\Analyser\NodeScopeResolver as PHPStanNodeScopeResolver;
 use PHPStan\Analyser\Scope;
 use PHPStan\Broker\Broker;
-use Rector\Configuration\Option;
-use Rector\FileSystem\FilesFinder;
 use Rector\NodeTypeResolver\Node\Attribute;
-use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 
 /**
@@ -26,16 +23,6 @@ final class NodeScopeResolver
     private $phpStanNodeScopeResolver;
 
     /**
-     * @var ParameterProvider
-     */
-    private $parameterProvider;
-
-    /**
-     * @var FilesFinder
-     */
-    private $filesFinder;
-
-    /**
      * @var ScopeFactory
      */
     private $scopeFactory;
@@ -45,20 +32,11 @@ final class NodeScopeResolver
      */
     private $broker;
 
-    /**
-     * @var bool
-     */
-    private $areSetAnalyzedFiles = false;
-
     public function __construct(
-        ParameterProvider $parameterProvider,
-        FilesFinder $filesFinder,
         ScopeFactory $scopeFactory,
         PHPStanNodeScopeResolver $phpStanNodeScopeResolver,
         Broker $broker
     ) {
-        $this->parameterProvider = $parameterProvider;
-        $this->filesFinder = $filesFinder;
         $this->scopeFactory = $scopeFactory;
         $this->phpStanNodeScopeResolver = $phpStanNodeScopeResolver;
         $this->broker = $broker;
@@ -70,7 +48,7 @@ final class NodeScopeResolver
      */
     public function processNodes(array $nodes, string $filePath): array
     {
-        $this->setAnalysedFiles();
+        $this->phpStanNodeScopeResolver->setAnalysedFiles([$filePath]);
 
         $this->phpStanNodeScopeResolver->processNodes(
             $nodes,
@@ -87,25 +65,6 @@ final class NodeScopeResolver
         );
 
         return $nodes;
-    }
-
-    private function setAnalysedFiles(): void
-    {
-        if ($this->areSetAnalyzedFiles) {
-            return;
-        }
-
-        $source = $this->parameterProvider->provideParameter(Option::SOURCE);
-        $phpFileInfos = $this->filesFinder->findInDirectoriesAndFiles($source, ['php']);
-
-        $filePaths = [];
-        foreach ($phpFileInfos as $phpFileInfo) {
-            $filePaths[] = $phpFileInfo->getRealPath();
-        }
-
-        $this->phpStanNodeScopeResolver->setAnalysedFiles($filePaths);
-
-        $this->areSetAnalyzedFiles = true;
     }
 
     /**

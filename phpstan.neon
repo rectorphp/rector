@@ -16,7 +16,6 @@ parameters:
         - '#Cannot cast PhpParser\\Node\\Expr\|PhpParser\\Node\\Identifier|string to string#' # 3
         - '#Cannot cast PhpParser\\Node\\Expr\|PhpParser\\Node\\Name to string#'
         - '#Array \(array<array<PhpParser\\Node\\Stmt>>\) does not accept array<PhpParser\\Node\\Stmt|null>#'
-        - '#Parameter \#1 \$files of method PHPStan\\Analyser\\NodeScopeResolver::setAnalysedFiles\(\) expects array<string>, array<int, string\|false> given#'
 
         # already fixed, invalidated cache?
         - '#Access to an undefined property PhpParser\\Node\\Expr::\$args#'
