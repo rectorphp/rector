@@ -16,7 +16,7 @@ use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ClassAndInterfaceTypeResol
 /**
  * @covers \Rector\NodeTypeResolver\PerNodeTypeResolver\ClassAndInterfaceTypeResolver
  */
-final class ClassAndInterfaceTypeResolverTest extends AbstractNodeTypeResolverTest
+final class ClassTypeResolverTest extends AbstractNodeTypeResolverTest
 {
     /**
      * @dataProvider dataProvider()
