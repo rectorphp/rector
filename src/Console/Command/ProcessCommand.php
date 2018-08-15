@@ -146,13 +146,13 @@ final class ProcessCommand extends Command
         $this->parameterProvider->changeParameter(Option::SOURCE, $source);
         $this->parameterProvider->changeParameter(Option::OPTION_DRY_RUN, $input->getOption(Option::OPTION_DRY_RUN));
 
-        $phpFiles = $this->filesFinder->findInDirectoriesAndFiles($source, ['php']);
-        $yamlFiles = $this->filesFinder->findInDirectoriesAndFiles($source, ['yml', 'yaml']);
-        $allFiles = $phpFiles + $yamlFiles;
+        $phpFileInfos = $this->filesFinder->findInDirectoriesAndFiles($source, ['php']);
+        $yamlFileInfos = $this->filesFinder->findInDirectoriesAndFiles($source, ['yml', 'yaml']);
+        $allFileInfos = $phpFileInfos + $yamlFileInfos;
 
         $this->processCommandReporter->reportLoadedRectors();
 
-        $this->processFiles($allFiles);
+        $this->processFileInfos($allFileInfos);
 
         $this->processCommandReporter->reportFileDiffs($this->fileDiffs);
         $this->processCommandReporter->reportChangedFiles($this->changedFiles);
@@ -174,7 +174,7 @@ final class ProcessCommand extends Command
     /**
      * @param SplFileInfo[] $fileInfos
      */
-    private function processFiles(array $fileInfos): void
+    private function processFileInfos(array $fileInfos): void
     {
         $totalFiles = count($fileInfos);
         $this->consoleStyle->title(sprintf('Processing %d file%s', $totalFiles, $totalFiles === 1 ? '' : 's'));
