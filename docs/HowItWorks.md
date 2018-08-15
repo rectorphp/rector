@@ -13,15 +13,25 @@
 The iteration of files, nodes and Rectors respects this life cycle:
 
 ```php
+<?php declare(strict_types=1);
+
+use Rector\Contract\Rector\PhpRectorInterface;
+use PhpParser\Parser;
+
+/** @var SplFileInfo[] $fileInfos */
 foreach ($fileInfos as $fileInfo) {
     // 1 file => nodes
-    $nodes = $phpParser->parseFileInfo($fileInfo);
+    /** @var Parser $phpParser */
+    $nodes = $phpParser->parse(file_get_contents($fileInfo->getRealPath());
 
     // nodes => 1 node
     foreach ($nodes as $node) { // rather traverse all of them
+        /** @var PhpRectorInterface[] $rectors */
         foreach ($rectors as $rector) {
-            if ($rector->isCandidate($node)) {
-                $rector->reconstruct($node);
+            foreach ($rector->getNodeTypes() as $nodeType) {
+                if (is_a($node, $nodeType, true)) {
+                    $rector->refactor($node);
+                }
             }
         }
     }
@@ -30,13 +40,13 @@ foreach ($fileInfos as $fileInfo) {
 
 ### 2.1 Prepare Phase
 
-- File is parsed by [`nikic/php-parser`](https://github.com/nikic/PHP-Parser), 4.0-dev (this is important, because this version support writing modified tree back to file)
+- File is parsed by [`nikic/php-parser`](https://github.com/nikic/PHP-Parser), 4.0 that supports writing modified tree back to a file
 - Then nodes (array of objects by parser) are traversed by `StandaloneTraverseNodeTraverser` to prepare it's metadata, e.g. class name, method node the node is in, namespace name etc. added by `$node->setAttribute(Attribute::CLASS_NODE, 'value')`.
 
 ### 2.2 Rectify Phase
 
 - When all nodes are ready, applicies iterates all active Rector
-- Each nodes is passed to `$rector->isCandidate($node)` method to see, if this Rector should do some work on it, e.g. is this class name called `OldClassName`?
+- Each nodes is compared to `$rector->getNodeTypes()` method to see, if this Rector should do some work on it, e.g. is this class name called `OldClassName`?
 - If it doesn't match, it goes to next node.
 - If it matches, the `$rector->reconstruct($node)` method is called
 - Active Rector changes all what he should and returns changed node
@@ -48,7 +58,7 @@ foreach ($fileInfos as $fileInfo) {
 E.g. in this case, first will be changed `@expectedException` annotation to method,
  then a method `setExpectedException` to `expectedException`.
 
-```yml
+```yaml
 # rector.yml
 services:
     Rector\PHPUnit\Rector\ExceptionAnnotationRector: ~
@@ -73,5 +83,7 @@ services:
 
 ### Similar Projects
 
-- [ClangMR](https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/41342.pdf) for C++ by Google (closed source) - almost idential workflow, develope independly though
+- [ClangMR](https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/41342.pdf) for C++ by Google (closed source) - almost idential workflow, developed independently though
 - [facebook/jscodeshift](https://github.com/facebook/jscodeshift) for Javascript
+- [silverstripe/silverstripe-upgrader](https://github.com/silverstripe/silverstripe-upgrader) for PHP CMS, Silverstripe
+- [dereuromark/upgrade](https://github.com/dereuromark/upgrade) for PHP Framework, CakePHP
