@@ -84,8 +84,9 @@
             "vendor/bin/changelog-linker linkify"
         ],
         "publish-prefixed": [
-            "bin/build-prefixed-rector.sh",
-            "bin/publish-prefixed-rector.sh"
+            "bin/rector-prefixed/build-prefixed-rector.sh",
+            "bin/rector-prefixed/build-composer-json.php",
+            "bin/rector-prefixed/publish-to-github.sh"
         ]
     },
     "bin": ["bin/rector"],
