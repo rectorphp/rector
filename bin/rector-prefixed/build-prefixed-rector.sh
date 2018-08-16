@@ -61,7 +61,7 @@ chmod +x build/bin/rector
 rm -rf /tmp/_prefixed_rector_cache
 
 # build composer.json
-bin/build-prefixed-rector-composer-json.php
+bin/rector-prefixed/build-composer-json.php
 
 # run it to test it
 build/bin/rector
