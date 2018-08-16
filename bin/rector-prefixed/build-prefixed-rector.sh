@@ -36,12 +36,16 @@ vendor/bin/php-scoper add-prefix --no-interaction
 (find build/ -path build/vendor -prune -o -type f | xargs sed -i "s#'RectorPrefixed\\#'#g")
 (find build/ -path build/vendor -prune -o -type f | xargs sed -i "s#'RectorPrefixed\\\\#'#g")
 
+# Nette string validator
+# callable|Nette\\DI\\Statement|array:1 => callable|RectorPrefixed\\Nette\\DI\\Statement|array:1
+sed -i 's#|Nette\\\\DI#|RectorPrefixed\\\\Nette\\\\DI#g' build/vendor/nette/di/src/DI/Compiler.php
+
 # Symfony Bridge => keep Symfony classes
 
-# \App\\Kernel => App\Kernel
-sed -i 's#\\App\\\\Kernel#App\\Kernel#g' build/src/Bridge/Symfony/DefaultAnalyzedSymfonyApplicationContainer.php
+# RectorPrefixed\App\\Kernel => App\Kernel
+sed -i 's#RectorPrefixed\\App\\\\Kernel#App\\Kernel#g' build/packages/Symfony/src/Bridge/DefaultAnalyzedSymfonyApplicationContainer.php
 # RectorPrefixed\Symfony\Component\HttpKernel\Kernel => Symfony\Component\HttpKernel\Kernel
-(find build/src/Bridge/Symfony/ -type f | xargs sed -i 's#RectorPrefixed\\Symfony\\Component#Symfony\\Component#g')
+(find build/packages/Symfony/src/Bridge -type f | xargs sed -i 's#RectorPrefixed\\Symfony\\Component#Symfony\\Component#g')
 
 # copy template files
 cp composer.json build/composer.json
