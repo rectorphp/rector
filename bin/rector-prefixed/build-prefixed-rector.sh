@@ -43,7 +43,7 @@ sed -i 's#|Nette\\\\DI#|RectorPrefixed\\\\Nette\\\\DI#g' build/vendor/nette/di/s
 # Symfony Bridge => keep Symfony classes
 
 # RectorPrefixed\App\\Kernel => App\Kernel
-sed -i 's#RectorPrefixed\\App\\\\Kernel#App\\Kernel#g' build/packages/Symfony/src/Bridge/DefaultAnalyzedSymfonyApplicationContainer.php
+sed -i 's#RectorPrefixed\\\\App\\\\Kernel#App\\Kernel#g' build/packages/Symfony/src/Bridge/DefaultAnalyzedSymfonyApplicationContainer.php
 # RectorPrefixed\Symfony\Component\HttpKernel\Kernel => Symfony\Component\HttpKernel\Kernel
 (find build/packages/Symfony/src/Bridge -type f | xargs sed -i 's#RectorPrefixed\\Symfony\\Component#Symfony\\Component#g')
 
