@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\NodeTypeResolver\Metadata;
+namespace Rector\NodeTypeResolver\NodeVisitor;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
@@ -10,10 +10,10 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use Rector\NodeTypeResolver\Contract\Metadata\NodeDecoratorInterface;
+use PhpParser\NodeVisitorAbstract;
 use Rector\NodeTypeResolver\Node\Attribute;
 
-final class ClassAndMethodNodeDecorator implements NodeDecoratorInterface
+final class ClassAndMethodNodeVisitor extends NodeVisitorAbstract
 {
     /**
      * @var ClassLike|null
@@ -40,10 +40,28 @@ final class ClassAndMethodNodeDecorator implements NodeDecoratorInterface
      */
     private $methodCallName;
 
-    public function decorateNode(Node $node): void
+    /**
+     * @param Node[] $nodes
+     * @return null|Node[]
+     */
+    public function beforeTraverse(array $nodes): ?array
+    {
+        $this->classNode = null;
+        $this->className = null;
+        $this->methodName = null;
+        $this->methodNode = null;
+        $this->methodCallName = null;
+
+        return null;
+    }
+
+    /**
+     * @return int|null|Node|void
+     */
+    public function enterNode(Node $node)
     {
         if ($node instanceof Class_ && $node->isAnonymous()) {
-            return;
+            return $node;
         }
 
         $this->processClass($node);
@@ -53,15 +71,8 @@ final class ClassAndMethodNodeDecorator implements NodeDecoratorInterface
         if ($node instanceof Expression) {
             $this->methodCallName = null;
         }
-    }
 
-    public function reset(): void
-    {
-        $this->classNode = null;
-        $this->className = null;
-        $this->methodName = null;
-        $this->methodNode = null;
-        $this->methodCallName = null;
+        return $node;
     }
 
     private function processClass(Node $node): void

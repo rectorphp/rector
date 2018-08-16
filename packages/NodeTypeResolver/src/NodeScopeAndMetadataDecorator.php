@@ -6,7 +6,8 @@ use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\CloningVisitor;
 use PhpParser\NodeVisitor\NameResolver;
-use Rector\NodeTypeResolver\NodeVisitor\MetadataNodeVisitor;
+use Rector\NodeTypeResolver\NodeVisitor\ClassAndMethodNodeVisitor;
+use Rector\NodeTypeResolver\NodeVisitor\NamespaceNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\ParentAndNextNodeVisitor;
 use Rector\NodeTypeResolver\PHPStan\Scope\NodeScopeResolver;
 
@@ -18,11 +19,6 @@ final class NodeScopeAndMetadataDecorator
     private $nodeScopeResolver;
 
     /**
-     * @var MetadataNodeVisitor
-     */
-    private $metadataNodeVisitor;
-
-    /**
      * @var CloningVisitor
      */
     private $cloningVisitor;
@@ -32,16 +28,28 @@ final class NodeScopeAndMetadataDecorator
      */
     private $parentAndNextNodeVisitor;
 
+    /**
+     * @var ClassAndMethodNodeVisitor
+     */
+    private $classAndMethodNodeVisitor;
+
+    /**
+     * @var NamespaceNodeVisitor
+     */
+    private $namespaceNodeVisitor;
+
     public function __construct(
         NodeScopeResolver $nodeScopeResolver,
-        MetadataNodeVisitor $metadataNodeVisitor,
         ParentAndNextNodeVisitor $parentAndNextNodeVisitor,
-        CloningVisitor $cloningVisitor
+        CloningVisitor $cloningVisitor,
+        ClassAndMethodNodeVisitor $classAndMethodNodeVisitor,
+        NamespaceNodeVisitor $namespaceNodeVisitor
     ) {
         $this->nodeScopeResolver = $nodeScopeResolver;
-        $this->metadataNodeVisitor = $metadataNodeVisitor;
         $this->parentAndNextNodeVisitor = $parentAndNextNodeVisitor;
         $this->cloningVisitor = $cloningVisitor;
+        $this->classAndMethodNodeVisitor = $classAndMethodNodeVisitor;
+        $this->namespaceNodeVisitor = $namespaceNodeVisitor;
     }
 
     /**
@@ -67,10 +75,8 @@ final class NodeScopeAndMetadataDecorator
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor($this->cloningVisitor); // needed also for format preserving printing
         $nodeTraverser->addVisitor($this->parentAndNextNodeVisitor);
-        $nodes = $nodeTraverser->traverse($nodes);
-
-        $nodeTraverser = new NodeTraverser();
-        $nodeTraverser->addVisitor($this->metadataNodeVisitor);
+        $nodeTraverser->addVisitor($this->classAndMethodNodeVisitor);
+        $nodeTraverser->addVisitor($this->namespaceNodeVisitor);
 
         return $nodeTraverser->traverse($nodes);
     }

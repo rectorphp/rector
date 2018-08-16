@@ -1,15 +1,15 @@
 <?php declare(strict_types=1);
 
-namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\InterfaceTypeResolver;
+namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ClassAndInterfaceTypeResolver;
 
 use Iterator;
 use PhpParser\Node\Stmt\Interface_;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
-use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\InterfaceTypeResolver\Source\SomeInterface;
-use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\InterfaceTypeResolver\Source\SomeParentInterface;
+use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ClassAndInterfaceTypeResolver\Source\SomeInterfaceWithParentInterface;
+use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ClassAndInterfaceTypeResolver\Source\SomeParentInterface;
 
 /**
- * @covers \Rector\NodeTypeResolver\PerNodeTypeResolver\InterfaceTypeResolver
+ * @covers \Rector\NodeTypeResolver\PerNodeTypeResolver\ClassAndInterfaceTypeResolver
  */
 final class InterfaceTypeResolverTest extends AbstractNodeTypeResolverTest
 {
@@ -26,6 +26,10 @@ final class InterfaceTypeResolverTest extends AbstractNodeTypeResolverTest
 
     public function dataProvider(): Iterator
     {
-        yield [__DIR__ . '/Source/SomeInterface.php', 0, [SomeInterface::class, SomeParentInterface::class]];
+        yield [
+            __DIR__ . '/Source/SomeInterfaceWithParentInterface.php',
+            0,
+            [SomeInterfaceWithParentInterface::class, SomeParentInterface::class],
+        ];
     }
 }

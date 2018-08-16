@@ -6,15 +6,12 @@ matrix:
       env: STATIC_ANALYSIS=true RUN_RECTOR=true MONOREPO_SPLIT=true
     - php: 7.1
       env: COMPOSER_FLAGS="--prefer-lowest"
-#    - php: 7.2
-#      env: PHPUNIT_FLAGS="--coverage-clover coverage.xml"
 
 install:
   - composer update $COMPOSER_FLAGS
 
 before_script:
-  # disable xdebug if not coverage
-  - if [[ $PHPUNIT_FLAGS == "" ]]; then phpenv config-rm xdebug.ini; fi
+  - phpenv config-rm xdebug.ini
 
 script:
   - vendor/bin/phpunit $PHPUNIT_FLAGS
@@ -33,13 +30,6 @@ script:
     fi
 
 after_script:
-  # upload coverage.xml to Coveralls
-#  - |
-#    if [[ $PHPUNIT_FLAGS != "" ]]; then
-#      wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.1.0/php-coveralls.phar;
-#      php php-coveralls.phar --verbose;
-#    fi
-
   # split monorepo to packages - only on merge to master + publish prefixed version
   - |
     if [[ $TRAVIS_EVENT_TYPE == "push" && $MONOREPO_SPLIT == true && $TRAVIS_BRANCH == "master" ]]; then

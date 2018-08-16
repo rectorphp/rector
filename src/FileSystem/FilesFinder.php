@@ -9,12 +9,22 @@ use Symfony\Component\Finder\SplFileInfo;
 final class FilesFinder
 {
     /**
+     * @var SplFileInfo[][]
+     */
+    private $fileInfosBySourceAndSuffixes = [];
+
+    /**
      * @param string[] $source
      * @param string[] $suffixes
      * @return SplFileInfo[]
      */
     public function findInDirectoriesAndFiles(array $source, array $suffixes): array
     {
+        $cacheKey = md5(serialize($source) . serialize($suffixes));
+        if (isset($this->fileInfosBySourceAndSuffixes[$cacheKey])) {
+            return $this->fileInfosBySourceAndSuffixes[$cacheKey];
+        }
+
         $files = [];
         $directories = [];
 
@@ -30,7 +40,7 @@ final class FilesFinder
             $files = array_merge($files, $this->findInDirectories($directories, $suffixes));
         }
 
-        return $files;
+        return $this->fileInfosBySourceAndSuffixes[$cacheKey] = $files;
     }
 
     /**
@@ -49,8 +59,7 @@ final class FilesFinder
             ->name($suffixesPattern)
             ->in($directories)
             ->exclude(['examples', 'Examples', 'stubs', 'Stubs', 'fixtures', 'Fixtures', 'polyfill', 'Polyfill'])
-            ->notName('*polyfill*')
-            ->sortByName();
+            ->notName('*polyfill*');
 
         return iterator_to_array($finder->getIterator());
     }

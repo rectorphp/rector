@@ -6,7 +6,6 @@ When you're gonna move from manual work to **instant upgrades**?
 
 [![Build Status](https://img.shields.io/travis/rectorphp/rector/master.svg?style=flat-square)](https://travis-ci.org/rectorphp/rector)
 [![Downloads](https://img.shields.io/packagist/dt/rector/rector.svg?style=flat-square)](https://packagist.org/packages/rector/rector)
-<!--[![Coverage Status](https://img.shields.io/coveralls/RectorPHP/Rector/master.svg?style=flat-square)](https://coveralls.io/github/rectorphp/rector?branch=master)-->
 
 ![Rector-showcase](docs/images/rector-showcase.gif)
 
