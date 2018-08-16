@@ -10,9 +10,10 @@ mkdir build
 # prefix current code to /build directory (see "scoper.inc.php" for settings)
 vendor/bin/php-scoper add-prefix --no-interaction
 
-# prefix namespace in *.yml files
-# but not in /config, since there is only Rector\ services and "class names"
-(find build/ -path build/config -prune -o -type f -name '*.yml' | xargs perl -pi -e 's/((?:\\{1,2}\w+|\w+\\{1,2})(?:\w+\\{0,2})+)/RectorPrefixed\\\1/g')
+# prefix namespace in *.yml, *.yaml and *.neon files
+# but not in /config, since there is only Rector\ services and "class names" that are not prefixed
+# ref https://unix.stackexchange.com/a/15309/74260
+(find build/ -path build/config -prune -o -type f \( -name \*.yml -o -name \*.yaml -o -name \*.neon \) | xargs perl -pi -e 's/((?:\\{1,2}\w+|\w+\\{1,2})(?:\w+\\{0,2})+)/RectorPrefixed\\\1/g')
 
 # un-prefix Rector files, so it's public API, in configs etc.
 # e.g.
@@ -42,9 +43,10 @@ sed -i 's#\\App\\\\Kernel#App\\Kernel#g' build/src/Bridge/Symfony/DefaultAnalyze
 # RectorPrefixed\Symfony\Component\HttpKernel\Kernel => Symfony\Component\HttpKernel\Kernel
 (find build/src/Bridge/Symfony/ -type f | xargs sed -i 's#RectorPrefixed\\Symfony\\Component#Symfony\\Component#g')
 
+# copy template files
 cp composer.json build/composer.json
-cp bin/template/README.md build/README.md
-cp bin/template/.travis.yml build/.travis.yml
+cp bin/rector-prefixed/template/README.md build/README.md
+cp bin/rector-prefixed/template/.travis.yml build/.travis.yml
 
 # rebuild composer dump so the new prefixed namespaces are autoloaded
 # the new "RectorPrefixed\" is taken into account thanks to /vendor/composer/installed.json file,
