@@ -34,7 +34,7 @@ after_script:
   - |
     if [[ $TRAVIS_EVENT_TYPE == "push" && $MONOREPO_SPLIT == true && $TRAVIS_BRANCH == "master" ]]; then
         vendor/bin/monorepo-builder split -v
-        composer publish-prefixed
+        composer rector-prefixed
     fi
 
 cache:
