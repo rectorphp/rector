@@ -1,4 +1,8 @@
 services:
+    _defaults:
+        public: true
+        autowire: true
+
     Rector\PhpParser\:
         resource: '../'
         exclude: '../{Rector/**/*Rector.php}'

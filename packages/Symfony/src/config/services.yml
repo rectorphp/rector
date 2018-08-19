@@ -1,4 +1,8 @@
 services:
+    _defaults:
+        public: true
+        autowire: true
+
     Rector\Symfony\:
         resource: '../'
         exclude: '../{Rector/**/*Rector.php}'
