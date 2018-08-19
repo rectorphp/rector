@@ -16,7 +16,7 @@ use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
-use Rector\Node\Attribute;
+use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -37,11 +37,6 @@ final class SimplifyReturnsRector extends AbstractRector
         SmallerOrEqual::class,
     ];
 
-    /**
-     * @var BinaryOp
-     */
-    private $condition;
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -60,27 +55,29 @@ CODE_SAMPLE
         );
     }
 
-    public function isCandidate(Node $node): bool
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
     {
-        if (! $node instanceof If_) {
-            return false;
-        }
+        return [If_::class];
+    }
 
-        $condition = $node->cond;
+    /**
+     * @param If_ $ifNode
+     */
+    public function refactor(Node $ifNode): ?Node
+    {
+        $condition = $ifNode->cond;
 
         if (! in_array(get_class($condition), $this->binaryOperations, true)) {
-            return false;
+            return null;
         }
 
-        /** @var BinaryOp $binaryOperation */
-        $binaryOperation = $condition;
-
-        $this->condition = $binaryOperation;
-
-        $nextNode = $this->condition->getAttribute(Attribute::NEXT_NODE);
+        $nextNode = $condition->getAttribute(Attribute::NEXT_NODE);
 
         if (! $nextNode instanceof Return_) {
-            return false;
+            return null;
         }
 
         $returnNode = $nextNode;
@@ -88,31 +85,35 @@ CODE_SAMPLE
         $returnExpr = $returnNode->expr;
 
         if (! $returnExpr instanceof ConstFetch) {
-            return false;
+            return null;
         }
 
         $constFetchNode = $returnExpr;
 
         if ($constFetchNode->name->toLowerString() !== 'true') {
-            return false;
+            return null;
         }
 
         $nextNodeAfterReturn = $returnNode->getAttribute(Attribute::NEXT_NODE);
-        $nextNodeAfterIf = $node->getAttribute(Attribute::NEXT_NODE);
+        $nextNodeAfterIf = $ifNode->getAttribute(Attribute::NEXT_NODE);
 
         if (! $nextNodeAfterReturn instanceof Else_ && !$nextNodeAfterIf instanceof Return_) {
-            return false;
+            return null;
         }
 
         if ($nextNodeAfterIf !== null) {
             $returnExpr = $nextNodeAfterIf->expr;
             if (! $returnExpr instanceof ConstFetch) {
-                return false;
+                return null;
             }
 
             $constFetchNode = $returnExpr;
 
-            return $constFetchNode->name->toLowerString() === 'false';
+            if ($constFetchNode->name->toLowerString() !== 'false') {
+                return null;
+            }
+
+            // continue
         }
 
         $nextNode = $nextNodeAfterReturn;
@@ -120,28 +121,27 @@ CODE_SAMPLE
         $elseExpr = $nextNode->stmts[0];
 
         if (! $elseExpr instanceof Return_) {
-            return false;
+            return null;
         }
 
         $returnExpr = $elseExpr->expr;
 
         if (! $returnExpr instanceof ConstFetch) {
-            return false;
+            return null;
         }
 
         $constFetchNode = $returnExpr;
 
-        return $constFetchNode->name->toLowerString() === 'false';
-    }
+        if ($constFetchNode->name->toLowerString() !== 'false') {
+            return null;
+        }
 
-    public function refactor(Node $node): ?Node
-    {
-        $nextPossibleNode = $node->getAttribute(Attribute::NEXT_NODE);
+        $nextPossibleNode = $ifNode->getAttribute(Attribute::NEXT_NODE);
 
         if ($nextPossibleNode !== null) {
             // remove next node
         }
 
-        return new Return_($this->condition);
+        return new Return_($condition);
     }
 }
