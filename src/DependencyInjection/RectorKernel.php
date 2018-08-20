@@ -2,7 +2,10 @@
 
 namespace Rector\DependencyInjection;
 
+use Rector\Contract\Rector\PhpRectorInterface;
+use Rector\DependencyInjection\CompilerPass\AutowireInterfacesCompilerPass;
 use Rector\DependencyInjection\CompilerPass\CollectorCompilerPass;
+use Rector\YamlRector\Contract\YamlRectorInterface;
 use Rector\YamlRector\DependencyInjection\YamlRectorCollectorCompilerPass;
 use Symfony\Component\Config\Loader\DelegatingLoader;
 use Symfony\Component\Config\Loader\GlobFileLoader;
@@ -15,9 +18,7 @@ use Symfony\Component\HttpKernel\Config\FileLocator;
 use Symfony\Component\HttpKernel\Kernel;
 use Symplify\BetterPhpDocParser\DependencyInjection\CompilerPass\CollectDecoratorsToPhpDocInfoFactoryCompilerPass;
 use Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutoBindParametersCompilerPass;
-use Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutowireDefaultCompilerPass;
 use Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutowireSinglyImplementedCompilerPass;
-use Symplify\PackageBuilder\DependencyInjection\CompilerPass\PublicDefaultCompilerPass;
 use Symplify\PackageBuilder\Yaml\FileLoader\ParameterImportsYamlFileLoader;
 
 final class RectorKernel extends Kernel
@@ -68,14 +69,18 @@ final class RectorKernel extends Kernel
     {
         $containerBuilder->addCompilerPass(new CollectorCompilerPass());
         $containerBuilder->addCompilerPass(new YamlRectorCollectorCompilerPass());
-        $containerBuilder->addCompilerPass(new AutowireDefaultCompilerPass());
 
         // for symplify/better-php-doc-parser
         $containerBuilder->addCompilerPass(new CollectDecoratorsToPhpDocInfoFactoryCompilerPass());
 
         // for defaults
-        $containerBuilder->addCompilerPass(new PublicDefaultCompilerPass());
         $containerBuilder->addCompilerPass(new AutowireSinglyImplementedCompilerPass());
+
+        // autowire
+        $containerBuilder->addCompilerPass(new AutowireInterfacesCompilerPass([
+            PhpRectorInterface::class,
+            YamlRectorInterface::class,
+        ]));
 
         $containerBuilder->addCompilerPass(new AutoBindParametersCompilerPass());
     }

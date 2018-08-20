@@ -1,4 +1,8 @@
 services:
+    _defaults:
+        public: true
+        autowire: true
+
     # differ
     diffOutputBuilder:
         class: SebastianBergmann\Diff\Output\StrictUnifiedDiffOutputBuilder
