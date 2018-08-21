@@ -47,10 +47,10 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
      * @param string[] $excludedClasses
      */
     public function __construct(
-        array $pseudoNamespacePrefixes,
-        array $excludedClasses,
         NodeFactory $nodeFactory,
-        StatementGlue $statementGlue
+        StatementGlue $statementGlue,
+        array $pseudoNamespacePrefixes,
+        array $excludedClasses = []
     ) {
         $this->nodeFactory = $nodeFactory;
         $this->statementGlue = $statementGlue;
