@@ -1,4 +1,4 @@
 services:
-    some_service:
-        class: App\SomeService
+    some_demo_service:
+        class: App\SomeDemoService
         public: true

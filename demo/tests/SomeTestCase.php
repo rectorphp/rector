@@ -2,7 +2,7 @@
 
 namespace App\Tests;
 
-use App\SomeService;
+use App\SomeDemoService;
 
 final class SomeTestCase extends \PHPUnit_Framework_TestCase
 {
@@ -12,7 +12,7 @@ final class SomeTestCase extends \PHPUnit_Framework_TestCase
      */
     public function test()
     {
-        $someService = new SomeService();
+        $someService = new SomeDemoService();
         $someService->someMethod();
     }
 }

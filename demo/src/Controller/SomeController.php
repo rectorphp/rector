@@ -8,7 +8,7 @@ final class SomeController extends Controller
 {
     public function demo()
     {
-        $someService = $this->get('some_service');
+        $someService = $this->get('some_demo_service');
 
         $someData = $someService->someMethod();
 

@@ -2,7 +2,7 @@
 
 namespace App;
 
-final class SomeService
+final class SomeDemoService
 {
     public function someMethod()
     {
