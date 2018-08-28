@@ -6,7 +6,6 @@ php:
 
 script:
   - bin/rector process src --level symfony40 --dry-run
-  - bin/rector describe --level all
 
 notifications:
   email: never
