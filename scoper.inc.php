@@ -26,6 +26,8 @@ return [
                 'humbug/php-scoper',
                 'tracy/tracy',
             ])
+            // depends on PHPUnit that is not part of the prefixed package
+            ->exclude(__DIR__ . '/src/Testing')
         ,
         // to make "composer dump" work
         Finder::create()->append([
