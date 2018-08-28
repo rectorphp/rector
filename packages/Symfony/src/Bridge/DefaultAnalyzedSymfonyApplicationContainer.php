@@ -68,11 +68,8 @@ final class DefaultAnalyzedSymfonyApplicationContainer implements AnalyzedApplic
             }
         }
 
-        throw new ShouldNotHappenException(sprintf(
-            'Type "%s" was found for "%s" service name in container of your Symfony application, but it is not accessible.',
-            get_class($service),
-            $name
-        ));
+        // the best guess
+        return $serviceClass;
     }
 
     public function hasService(string $name): bool
