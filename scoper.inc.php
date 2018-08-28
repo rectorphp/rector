@@ -12,6 +12,8 @@ return [
             ->ignoreVCS(true)
             // ↓ this is regex!
             ->notName('#LICENSE|.*\\.md|.*\\.dist|Makefile|composer\\.json|composer\\.lock|.*\\.sh#')
+            // depends on PHPUnit that is not part of the prefixed package
+            ->notName('#AbstractRectorTestCase\\.php#')
             ->in(__DIR__ .'/bin')
             ->in(__DIR__ .'/config')
             ->in(__DIR__ .'/packages')
@@ -26,8 +28,6 @@ return [
                 'humbug/php-scoper',
                 'tracy/tracy',
             ])
-            // depends on PHPUnit that is not part of the prefixed package
-            ->exclude(__DIR__ . '/src/Testing')
         ,
         // to make "composer dump" work
         Finder::create()->append([
