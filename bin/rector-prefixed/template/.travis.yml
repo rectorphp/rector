@@ -8,4 +8,4 @@ script:
   - bin/rector process src --level symfony40 --dry-run
 
 notifications:
-  email: never
+  email: false
