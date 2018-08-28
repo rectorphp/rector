@@ -8,7 +8,13 @@ cd build
 # init non-existing .git or fetch existing one
 if [ ! -d .git ]; then
     git init
-    git remote add -f origin git@github.com:rectorphp/rector-prefixed.git
+    # travis needs token to push
+    if [ $TRAVIS == true ]; then
+        git remote add -f origin https://$GITHUB_TOKEN@github.com/rectorphp/rector-prefixed.git
+    else
+        git remote add -f origin git@github.com:rectorphp/rector-prefixed.git
+    fi
+
 else
     git fetch origin
 fi
