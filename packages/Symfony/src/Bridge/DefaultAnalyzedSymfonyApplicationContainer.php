@@ -88,6 +88,7 @@ final class DefaultAnalyzedSymfonyApplicationContainer implements AnalyzedApplic
     private function getContainer(): Container
     {
         $kernelClass = $this->parameterProvider->provideParameter(Option::KERNEL_CLASS_PARAMETER);
+
         if ($kernelClass === null) {
             $kernelClass = $this->getDefaultKernelClass();
         }
