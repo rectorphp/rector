@@ -60,6 +60,7 @@ parameters:
             - 'src/Rector/Property/PropertyNameReplacerRector.php'
             - 'src/Rector/Annotation/AnnotationReplacerRector.php'
             - 'src/Rector/Argument/ArgumentAdderRector.php'
+            - 'src/Bridge/DefaultAnalyzedSymfonyApplicationContainer.php'
 
         # empty arguments passing
         PHP_CodeSniffer\Standards\PEAR\Sniffs\Functions\ValidDefaultValueSniff.NotAtEnd:

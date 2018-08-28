@@ -1,0 +1,18 @@
+# rector.yml
+services:
+    # case 1
+    Rector\Symfony\Rector\FrameworkBundle\GetToConstructorInjectionRector: ~
+    # bin/rector process demo/src/Controller --dry-run
+    # bin/rector process demo/src/Controller --with-style
+
+    # case 2 - Symfony
+    Rector\Symfony\Rector\Form\StringFormTypeToClassRector: ~
+    # bin/rector process demo/src/Form --dry-run
+    # bin/rector process demo/src/Form --with-style
+
+    # case 3 - PHPUnit
+    # bin/rector process demo/tests --level phpunit60 --dry-run
+    # bin/rector process demo/tests --level phpunit60 --with-style
+
+    # case 4 - Yaml
+    # bin/rector process demo/config --level symfony30 --dry-run

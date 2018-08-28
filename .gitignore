@@ -1,4 +1,3 @@
-/rector.yml
 /temp
 !/temp/.gitkeep
 /example
@@ -6,4 +5,5 @@
 /build
 composer.lock
 
-/demo
+/demo/app/cache
+/demo/app/logs
