@@ -37,14 +37,8 @@ final class AdditionalAutoloader
     public function autoloadWithInput(InputInterface $input): void
     {
         $this->autoloadFileFromInput($input);
-
-        if ($this->autoloadDirectories) {
-            $this->autoloadDirectories($this->autoloadDirectories);
-        }
-
-        if ($this->autoloadFiles) {
-            $this->autoloadFiles($this->autoloadFiles);
-        }
+        $this->autoloadDirectories($this->autoloadDirectories);
+        $this->autoloadFiles($this->autoloadFiles);
     }
 
     private function autoloadFileFromInput(InputInterface $input): void
@@ -63,6 +57,10 @@ final class AdditionalAutoloader
      */
     private function autoloadDirectories(array $directories): void
     {
+        if (! count($directories)) {
+            return;
+        }
+
         $robotLoader = new RobotLoader();
         $robotLoader->ignoreDirs[] = '*Fixtures';
         // last argument is workaround: https://github.com/nette/robot-loader/issues/12
