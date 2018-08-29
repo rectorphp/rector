@@ -1,0 +1,5 @@
+services:
+    Rector\Rector\Class_\ClassReplacerRector:
+        $oldToNewClasses:
+            # see https://stackoverflow.com/a/43495506/1348344
+            Twig_Function_Node: 'Twig_SimpleFunction'
