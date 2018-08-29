@@ -2,8 +2,10 @@
 
 namespace Rector\Console\Command;
 
+use Nette\Utils\Strings;
 use Rector\Console\ConsoleStyle;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\Finder;
@@ -27,11 +29,16 @@ final class LevelsCommand extends Command
     {
         $this->setName(CommandNaming::classToName(self::class));
         $this->setDescription('List available levels.');
+        $this->addArgument('name', InputArgument::OPTIONAL, 'Filter levels by provded name');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $levels = $this->getAvailbleLevels();
+
+        if ($input->getArgument('name')) {
+            $levels = $this->filterLevelsByName($input, $levels);
+        }
 
         $this->consoleStyle->title(sprintf('%d available levels:', count($levels)));
         $this->consoleStyle->listing($levels);
@@ -55,5 +62,18 @@ final class LevelsCommand extends Command
         sort($levels);
 
         return array_unique($levels);
+    }
+
+    /**
+     * @param string[] $levels
+     * @return string[]
+     */
+    private function filterLevelsByName(InputInterface $input, array $levels): array
+    {
+        $name = $input->getArgument('name');
+
+        return array_filter($levels, function (string $level) use ($name): bool {
+            return (bool) Strings::match($level, sprintf('#%s#', $name));
+        });
     }
 }

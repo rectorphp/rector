@@ -1,3 +1,2 @@
-imports:
-    # underscore naming to namespaced classes changes
-    - { resource: 'underscore-to-namespace.yml' }
+services:
+    Rector\Twig\Rector\SimpleFunctionAndFilterRector: ~
