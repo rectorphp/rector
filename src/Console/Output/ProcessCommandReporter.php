@@ -6,7 +6,6 @@ use Rector\Console\ConsoleStyle;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\NodeTraverser\RectorNodeTraverser;
 use Rector\Reporting\FileDiff;
-use Rector\YamlRector\Contract\YamlRectorInterface;
 use Rector\YamlRector\YamlFileProcessor;
 
 final class ProcessCommandReporter
@@ -42,15 +41,15 @@ final class ProcessCommandReporter
 
         $this->consoleStyle->title(sprintf('%d Loaded Rector%s', $rectorCount, $rectorCount === 1 ? '' : 's'));
 
+        $allRectors = array_merge(
+            $this->rectorNodeTraverser->getRectors() + $this->yamlFileProcessor->getYamlRectors()
+        );
+
         $rectorClasses = array_map(function (RectorInterface $rector): string {
             return get_class($rector);
-        }, $this->rectorNodeTraverser->getRectors());
+        }, $allRectors);
 
-        $yamlRectorClasses = array_map(function (YamlRectorInterface $yamlRector): string {
-            return get_class($yamlRector);
-        }, $this->yamlFileProcessor->getYamlRectors());
-
-        $this->consoleStyle->listing($rectorClasses + $yamlRectorClasses);
+        $this->consoleStyle->listing($rectorClasses);
     }
 
     /**
