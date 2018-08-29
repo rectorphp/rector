@@ -64,6 +64,15 @@ parameters:
         - '%kernel.project_dir%/vendor/project-without-composer'
 ```
 
+You can also exclude files or directories - use regex or [fnmatch](http://php.net/manual/en/function.fnmatch.php):
+
+```yaml
+# rector.yml
+parameters:
+    exclude_paths:
+        - '*/src/*/Tests/*'
+```
+
 ## How to Reconstruct your Code
 
 ### A. Prepared Sets

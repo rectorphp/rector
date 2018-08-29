@@ -1,0 +1,3 @@
+parameters:
+    excluded_paths:
+        - '*/ShouldBeExcluded/*'

@@ -4,6 +4,6 @@ imports:
   - { resource: 'external-services.yml' }
 
 parameters:
-    excluded_paths: []
+    exclude_paths: []
     autoload_directories: []
     autoload_files: []
