@@ -64,7 +64,7 @@
         },
         "classmap": [
             "packages",
-            "tests"
+            "tests/Rector"
         ]
     },
     "scripts": {
