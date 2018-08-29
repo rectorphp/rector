@@ -33,46 +33,31 @@ final class SimpleFunctionAndFilterRector extends AbstractRector
     private $nodeTypeResolver;
 
     /**
-     * @var string
-     */
-    private $oldFunctionClass;
-
-    /**
-     * @var string
-     */
-    private $newFunctionClass;
-
-    /**
      * @var CallableNodeTraverser
      */
     private $callableNodeTraverser;
 
     /**
-     * @var string
+     * @var string[]
      */
-    private $oldFilterClass;
+    private $oldToNewClasses = [];
 
     /**
-     * @var string
+     * @param string[] $oldToNewClasses
      */
-    private $newFilterClass;
-
     public function __construct(
         NodeTypeResolver $nodeTypeResolver,
         CallableNodeTraverser $callableNodeTraverser,
         string $twigExtensionClass = 'Twig_Extension',
-        string $oldFunctionClass = 'Twig_Function_Method',
-        string $newFunctionClass = 'Twig_SimpleFunction',
-        string $oldFilterClass = 'Twig_Filter_Method',
-        string $newFilterClass = 'Twig_SimpleFilter'
+        array $oldToNewClasses = [
+            'Twig_Function_Method' => 'Twig_SimpleFunction',
+            'Twig_Filter_Method' => 'Twig_SimpleFilter',
+        ]
     ) {
         $this->twigExtensionClass = $twigExtensionClass;
         $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->oldFunctionClass = $oldFunctionClass;
-        $this->newFunctionClass = $newFunctionClass;
         $this->callableNodeTraverser = $callableNodeTraverser;
-        $this->oldFilterClass = $oldFilterClass;
-        $this->newFilterClass = $newFilterClass;
+        $this->oldToNewClasses = $oldToNewClasses;
     }
 
     public function getDefinition(): RectorDefinition
@@ -149,9 +134,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->callableNodeTraverser->traverseNodesWithCallable([$returnNode->expr], function (Node $node) use (
-            $methodName
-        ) {
+        $this->callableNodeTraverser->traverseNodesWithCallable([$returnNode->expr], function (Node $node) {
             if (! $node instanceof ArrayItem) {
                 return null;
             }
@@ -162,19 +145,7 @@ CODE_SAMPLE
 
             $newNodeTypes = $this->nodeTypeResolver->resolve($node->value);
 
-            // @todo map by method
-            if ($methodName === 'getFunctions') {
-                return $this->processArrayItem(
-                    $node,
-                    $this->oldFunctionClass,
-                    $this->newFunctionClass,
-                    $newNodeTypes
-                );
-            }
-
-            if ($methodName === 'getFilters') {
-                return $this->processArrayItem($node, $this->oldFilterClass, $this->newFilterClass, $newNodeTypes);
-            }
+            return $this->processArrayItem($node, $newNodeTypes);
         });
 
         return $returnNode;
@@ -183,11 +154,15 @@ CODE_SAMPLE
     /**
      * @param string[] $newNodeTypes
      */
-    private function processArrayItem(ArrayItem $node, string $oldClass, string $newClass, array $newNodeTypes): ?Node
+    private function processArrayItem(ArrayItem $node, array $newNodeTypes): ?Node
     {
-        if (! in_array($oldClass, $newNodeTypes, true)) {
+        $matchedOldClasses = array_intersect(array_keys($this->oldToNewClasses), $newNodeTypes);
+        if (! $matchedOldClasses) {
             return null;
         }
+
+        $matchedOldClass = array_pop($matchedOldClasses);
+        $matchedNewClass = $this->oldToNewClasses[$matchedOldClass];
 
         if (! $node->key instanceof String_) {
             return null;
@@ -201,18 +176,16 @@ CODE_SAMPLE
         $filterName = $node->key->value;
 
         $node->key = null;
-
-        $node->value->class = new FullyQualified($newClass);
+        $node->value->class = new FullyQualified($matchedNewClass);
 
         $oldArguments = $node->value->args;
-
-        $arrayItems = [];
 
         if ($oldArguments[0]->value instanceof Array_) {
             // already array, just shift it
             $node->value->args = array_merge([new Arg(new String_($filterName))], $oldArguments);
         } else {
             // not array yet, wrap to one
+            $arrayItems = [];
             foreach ($oldArguments as $oldArgument) {
                 $arrayItems[] = new ArrayItem($oldArgument->value);
             }
