@@ -78,7 +78,7 @@ final class ParseFileRector extends AbstractRector
         $possibleFileNode = $staticCallNode->args[0]->value;
         $possibleFileNodeAsString = $this->betterStandardPrinter->prettyPrint([$possibleFileNode]);
 
-        if (Strings::match($possibleFileNodeAsString, '#yml|yaml\'$#')) {
+        if (Strings::match($possibleFileNodeAsString, '#yml|yaml(\'|")$#')) {
             return true;
         }
 
