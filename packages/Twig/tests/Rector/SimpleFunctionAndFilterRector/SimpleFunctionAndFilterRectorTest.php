@@ -1,14 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Twig\Tests\Rector\SimpleFunctionRector;
+namespace Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
- * @see \Rector\Twig\Rector\SimpleFunctionRector
+ * @see \Rector\Twig\Rector\SimpleFunctionAndFilterRector
  */
-final class SimpleFunctionRectorTest extends AbstractRectorTestCase
+final class SimpleFunctionAndFilterRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()
@@ -21,6 +21,7 @@ final class SimpleFunctionRectorTest extends AbstractRectorTestCase
     public function provideWrongToFixedFiles(): Iterator
     {
         yield [__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc'];
+        yield [__DIR__ . '/Wrong/wrong2.php.inc', __DIR__ . '/Correct/correct2.php.inc'];
     }
 
     protected function provideConfig(): string

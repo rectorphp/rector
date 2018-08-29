@@ -1,0 +1,8 @@
+services:
+    Rector\Twig\Rector\SimpleFunctionAndFilterRector:
+        arguments:
+            $twigExtensionClass: 'Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector\Source\TwigExtension'
+            $twigOldFunctionClass: 'Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector\Source\TwigFunctionMethod'
+            $twigNewFunctionClass: 'Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector\Source\TwigSimpleFunction'
+            $twigOldFilterClass: 'Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector\Source\TwigFilterMethod'
+            $twigNewFilterClass: 'Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector\Source\TwigSimpleFilter'
