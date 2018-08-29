@@ -1,0 +1,6 @@
+services:
+    Rector\Twig\Rector\SimpleFunctionRector:
+        arguments:
+            $twigExtensionClass: 'Rector\Twig\Tests\Rector\SimpleFunctionRector\Source\TwigExtension'
+            $twigFunctionMethodClass: 'Rector\Twig\Tests\Rector\SimpleFunctionRector\Source\TwigFunctionMethod'
+            $twigSimpleFunctionClass: 'Rector\Twig\Tests\Rector\SimpleFunctionRector\Source\TwigSimpleFunction'

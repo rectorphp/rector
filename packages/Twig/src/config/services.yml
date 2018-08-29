@@ -1,0 +1,8 @@
+services:
+    _defaults:
+        public: true
+        autowire: true
+
+    Rector\Twig\:
+        resource: '../'
+        exclude: '../{Rector/**/*Rector.php}'
