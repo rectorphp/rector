@@ -35,12 +35,12 @@ final class SimpleFunctionAndFilterRector extends AbstractRector
     /**
      * @var string
      */
-    private $twigOldFunctionClass;
+    private $oldFunctionClass;
 
     /**
      * @var string
      */
-    private $twigNewFunctionClass;
+    private $newFunctionClass;
 
     /**
      * @var CallableNodeTraverser
@@ -50,29 +50,29 @@ final class SimpleFunctionAndFilterRector extends AbstractRector
     /**
      * @var string
      */
-    private $twigOldFilterClass;
+    private $oldFilterClass;
 
     /**
      * @var string
      */
-    private $twigNewFilterClass;
+    private $newFilterClass;
 
     public function __construct(
         NodeTypeResolver $nodeTypeResolver,
         CallableNodeTraverser $callableNodeTraverser,
         string $twigExtensionClass = 'Twig_Extension',
-        string $twigOldFunctionClass = 'Twig_Function_Method',
-        string $twigNewFunctionClass = 'Twig_SimpleFunction',
-        string $twigOldFilterClass = 'Twig_Filter_Method',
-        string $twigNewFilterClass = 'Twig_SimpleFilter'
+        string $oldFunctionClass = 'Twig_Function_Method',
+        string $newFunctionClass = 'Twig_SimpleFunction',
+        string $oldFilterClass = 'Twig_Filter_Method',
+        string $newFilterClass = 'Twig_SimpleFilter'
     ) {
         $this->twigExtensionClass = $twigExtensionClass;
         $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->twigOldFunctionClass = $twigOldFunctionClass;
-        $this->twigNewFunctionClass = $twigNewFunctionClass;
+        $this->oldFunctionClass = $oldFunctionClass;
+        $this->newFunctionClass = $newFunctionClass;
         $this->callableNodeTraverser = $callableNodeTraverser;
-        $this->twigOldFilterClass = $twigOldFilterClass;
-        $this->twigNewFilterClass = $twigNewFilterClass;
+        $this->oldFilterClass = $oldFilterClass;
+        $this->newFilterClass = $newFilterClass;
     }
 
     public function getDefinition(): RectorDefinition
@@ -162,22 +162,18 @@ CODE_SAMPLE
 
             $newNodeTypes = $this->nodeTypeResolver->resolve($node->value);
 
+            // @todo map by method
             if ($methodName === 'getFunctions') {
                 return $this->processArrayItem(
                     $node,
-                    $this->twigOldFunctionClass,
-                    $this->twigNewFunctionClass,
+                    $this->oldFunctionClass,
+                    $this->newFunctionClass,
                     $newNodeTypes
                 );
             }
 
             if ($methodName === 'getFilters') {
-                return $this->processArrayItem(
-                    $node,
-                    $this->twigOldFilterClass,
-                    $this->twigNewFilterClass,
-                    $newNodeTypes
-                );
+                return $this->processArrayItem($node, $this->oldFilterClass, $this->newFilterClass, $newNodeTypes);
             }
         });
 
@@ -211,14 +207,21 @@ CODE_SAMPLE
         $oldArguments = $node->value->args;
 
         $arrayItems = [];
-        foreach ($oldArguments as $oldArgument) {
-            $arrayItems[] = new ArrayItem($oldArgument->value);
-        }
 
-        $node->value->args[0] = new Arg(new String_($filterName));
-        $node->value->args[1] = new Arg(new Array_($arrayItems, [
-            'kind' => Array_::KIND_SHORT,
-        ]));
+        if ($oldArguments[0]->value instanceof Array_) {
+            // already array, just shift it
+            $node->value->args = array_merge([new Arg(new String_($filterName))], $oldArguments);
+        } else {
+            // not array yet, wrap to one
+            foreach ($oldArguments as $oldArgument) {
+                $arrayItems[] = new ArrayItem($oldArgument->value);
+            }
+
+            $node->value->args[0] = new Arg(new String_($filterName));
+            $node->value->args[1] = new Arg(new Array_($arrayItems, [
+                'kind' => Array_::KIND_SHORT,
+            ]));
+        }
 
         return $node;
     }

@@ -2,7 +2,7 @@ services:
     Rector\Twig\Rector\SimpleFunctionAndFilterRector:
         arguments:
             $twigExtensionClass: 'Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector\Source\TwigExtension'
-            $twigOldFunctionClass: 'Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector\Source\TwigFunctionMethod'
-            $twigNewFunctionClass: 'Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector\Source\TwigSimpleFunction'
-            $twigOldFilterClass: 'Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector\Source\TwigFilterMethod'
-            $twigNewFilterClass: 'Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector\Source\TwigSimpleFilter'
+            $oldFunctionClass: 'Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector\Source\TwigFunctionMethod'
+            $newFunctionClass: 'Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector\Source\TwigSimpleFunction'
+            $oldFilterClass: 'Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector\Source\TwigFilterMethod'
+            $newFilterClass: 'Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector\Source\TwigSimpleFilter'
