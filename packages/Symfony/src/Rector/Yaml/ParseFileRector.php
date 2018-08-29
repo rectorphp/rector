@@ -8,6 +8,9 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
+use PHPStan\Analyser\Scope;
+use PHPStan\Type\Constant\ConstantStringType;
+use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Printer\BetterStandardPrinter;
 use Rector\Rector\AbstractRector;
@@ -76,10 +79,28 @@ final class ParseFileRector extends AbstractRector
     private function isArgumentYamlFile(StaticCall $staticCallNode): bool
     {
         $possibleFileNode = $staticCallNode->args[0]->value;
+
         $possibleFileNodeAsString = $this->betterStandardPrinter->prettyPrint([$possibleFileNode]);
 
-        if (Strings::match($possibleFileNodeAsString, '#yml|yaml(\'|")$#')) {
+        // is yml/yaml file
+        if (Strings::match($possibleFileNodeAsString, '#\.(yml|yaml)(\'|")$#')) {
             return true;
+        }
+
+        // is probably a file variable
+        if (Strings::match($possibleFileNodeAsString, '#\File$#')) {
+            return true;
+        }
+
+        // try to detect current value
+        /** @var Scope $nodeScope */
+        $nodeScope = $possibleFileNode->getAttribute(Attribute::SCOPE);
+        $nodeType = $nodeScope->getType($possibleFileNode);
+
+        if ($nodeType instanceof ConstantStringType) {
+            if (Strings::match($nodeType->getValue(), '#\.(yml|yaml)$#')) {
+                return true;
+            }
         }
 
         return false;

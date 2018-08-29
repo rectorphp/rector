@@ -7,6 +7,3 @@ $parsedFile = Yaml::parse('someFile.yaml');
 $parsedFile = Yaml::parse("someFile.yaml");
 $parsedFile = Yaml::parse($directory . "someFile.yaml");
 $parsedFile = Yaml::parse(__DIR__ . 'someFile.yaml');
-
-$someFile = __DIR__ . 'someFile.yaml';
-$parsedFile = Yaml::parse($someFile);
