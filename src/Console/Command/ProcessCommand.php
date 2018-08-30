@@ -138,8 +138,6 @@ final class ProcessCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->additionalAutoloader->autoloadWithInput($input);
-
         $this->rectorGuard->ensureSomeRectorsAreRegistered();
 
         $source = $input->getArgument(Option::SOURCE);
@@ -149,6 +147,8 @@ final class ProcessCommand extends Command
         $phpFileInfos = $this->filesFinder->findInDirectoriesAndFiles($source, ['php']);
         $yamlFileInfos = $this->filesFinder->findInDirectoriesAndFiles($source, ['yml', 'yaml']);
         $allFileInfos = $phpFileInfos + $yamlFileInfos;
+
+        $this->additionalAutoloader->autoloadWithInputAndSource($input, $source);
 
         $this->processCommandReporter->reportLoadedRectors();
 

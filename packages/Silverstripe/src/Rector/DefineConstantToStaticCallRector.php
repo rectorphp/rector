@@ -6,6 +6,7 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use Rector\Rector\AbstractRector;
@@ -35,6 +36,14 @@ final class DefineConstantToStaticCallRector extends AbstractRector
     public function refactor(Node $node): ?Node
     {
         if (count($node->args) !== 1) {
+            return null;
+        }
+
+        if (! $node->name instanceof Name) {
+            return null;
+        }
+
+        if ($node->name->toString() !== 'defined') {
             return null;
         }
 

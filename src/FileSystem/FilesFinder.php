@@ -3,7 +3,8 @@
 namespace Rector\FileSystem;
 
 use Nette\Utils\Strings;
-use Rector\Exception\FileSystem\DirectoryNotFoundException;
+use Rector\Utils\FilesystemTweaker;
+use SplFileInfo as NativeSplFileInfo;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
@@ -20,11 +21,17 @@ final class FilesFinder
     private $excludePaths = [];
 
     /**
+     * @var FilesystemTweaker
+     */
+    private $filesystemTweaker;
+
+    /**
      * @param string[] $excludePaths
      */
-    public function __construct(array $excludePaths)
+    public function __construct(array $excludePaths, FilesystemTweaker $filesystemTweaker)
     {
         $this->excludePaths = $excludePaths;
+        $this->filesystemTweaker = $filesystemTweaker;
     }
 
     /**
@@ -39,22 +46,16 @@ final class FilesFinder
             return $this->fileInfosBySourceAndSuffixes[$cacheKey];
         }
 
-        $files = [];
-        $directories = [];
+        [$files, $directories] = $this->filesystemTweaker->splitSourceToDirectoriesAndFiles($source);
 
-        foreach ($source as $singleSource) {
-            if (is_file($singleSource)) {
-                $files[] = new SplFileInfo($singleSource, '', '');
-            } else {
-                $directories[] = $singleSource;
-            }
+        $splFileInfos = [];
+        foreach ($files as $file) {
+            $splFileInfos[] = new SplFileInfo($file, '', '');
         }
 
-        if (count($directories)) {
-            $files = array_merge($files, $this->findInDirectories($directories, $suffixes));
-        }
+        $splFileInfos = array_merge($splFileInfos, $this->findInDirectories($directories, $suffixes));
 
-        return $this->fileInfosBySourceAndSuffixes[$cacheKey] = $files;
+        return $this->fileInfosBySourceAndSuffixes[$cacheKey] = $splFileInfos;
     }
 
     /**
@@ -64,39 +65,27 @@ final class FilesFinder
      */
     private function findInDirectories(array $directories, array $suffixes): array
     {
-        $this->ensureDirectoriesExist($directories);
+        if (! count($directories)) {
+            return [];
+        }
+
+        $absoluteDirectories = $this->filesystemTweaker->resolveDirectoriesWithFnmatch($directories);
+        if (! $absoluteDirectories) {
+            return [];
+        }
 
         $suffixesPattern = $this->normalizeSuffixesToPattern($suffixes);
 
         $finder = Finder::create()
             ->files()
+            ->in($absoluteDirectories)
             ->name($suffixesPattern)
-            ->in($directories)
             ->exclude(['examples', 'Examples', 'stubs', 'Stubs', 'fixtures', 'Fixtures', 'polyfill', 'Polyfill'])
             ->notName('*polyfill*');
 
-        $splFileInfos = iterator_to_array($finder->getIterator());
-        if (! $this->excludePaths) {
-            return $splFileInfos;
-        }
+        $this->addFilterWithExcludedPaths($finder);
 
-        // to overcome magic behavior: https://github.com/symfony/symfony/pull/26396/files
-        /** @var SplFileInfo[] $splFileInfos */
-        return $this->filterOutFilesByPatterns($splFileInfos, $this->excludePaths);
-    }
-
-    /**
-     * @param string[] $directories
-     */
-    private function ensureDirectoriesExist(array $directories): void
-    {
-        foreach ($directories as $directory) {
-            if (file_exists($directory)) {
-                continue;
-            }
-
-            throw new DirectoryNotFoundException(sprintf('Directory "%s" was not found.', $directory));
-        }
+        return iterator_to_array($finder->getIterator());
     }
 
     /**
@@ -109,29 +98,22 @@ final class FilesFinder
         return '#\.(' . $suffixesPattern . ')$#';
     }
 
-    /**
-     * @param SplFileInfo[] $splFileInfos
-     * @param string[] $patternsToExclude
-     * @return SplFileInfo[]
-     */
-    private function filterOutFilesByPatterns(array $splFileInfos, array $patternsToExclude): array
+    private function addFilterWithExcludedPaths(Finder $finder): void
     {
-        $filteredFiles = [];
-
-        foreach ($splFileInfos as $relativePath => $splFileInfo) {
-            foreach ($patternsToExclude as $patternToExclude) {
-                if (Strings::match($splFileInfo->getRealPath(), $patternToExclude)) {
-                    continue;
-                }
-
-                if (fnmatch($splFileInfo->getRealPath(), $patternToExclude)) {
-                    continue;
-                }
-
-                $filteredFiles[$relativePath] = $splFileInfo;
-            }
+        if (! $this->excludePaths) {
+            return;
         }
 
-        return $filteredFiles;
+        $finder->filter(function (NativeSplFileInfo $splFileInfo) {
+            foreach ($this->excludePaths as $excludePath) {
+                if (Strings::match($splFileInfo->getRealPath(), $excludePath)) {
+                    return true;
+                }
+
+                return fnmatch($splFileInfo->getRealPath(), $excludePath);
+            }
+
+            return false;
+        });
     }
 }

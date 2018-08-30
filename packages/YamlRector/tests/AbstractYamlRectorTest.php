@@ -32,7 +32,7 @@ abstract class AbstractYamlRectorTest extends TestCase
         $this->fileGuard = new FileGuard();
         $this->fileGuard->ensureFileExists($config, get_called_class());
 
-        $this->container = (new ContainerFactory())->createWithConfig($config);
+        $this->container = (new ContainerFactory())->createWithConfigFiles([$config]);
 
         $this->yamlFileProcessor = $this->container->get(YamlFileProcessor::class);
     }

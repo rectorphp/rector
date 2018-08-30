@@ -2,11 +2,11 @@ language: php
 
 matrix:
     include:
-    - php: 7.1
-      env: PHPUNIT_FLAGS="--coverage-clover coverage.xml"
-    - php: 7.1
-      env: COMPOSER_FLAGS="--prefer-lowest"
-    - php: 7.2
+        - php: 7.1
+          env: PHPUNIT_FLAGS="--coverage-clover coverage.xml"
+        - php: 7.1
+          env: COMPOSER_FLAGS="--prefer-lowest"
+        - php: 7.2
 
 install:
     - composer update $COMPOSER_FLAGS
@@ -23,4 +23,4 @@ after_script:
         fi
 
 notifications:
-    email: never
+    email: false

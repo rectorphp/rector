@@ -42,4 +42,4 @@ cache:
     - $HOME/.composer/cache
 
 notifications:
-  email: never
+  email: false

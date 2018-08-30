@@ -107,7 +107,13 @@ Do you need to upgrade to **Symfony 4.0**, for example?
     vendor/bin/rector process src --level symfony33 --dry-run
     ```
 
-3. What levels are on the board?
+3. To process just specific subdirectories, you can use [fnmatch](http://php.net/manual/en/function.fnmatch.php) pattern with `*`:
+
+   ```bash
+   vendor/bin/rector process "src/Symfony/Component/*/Tests" --level phpunit60 --dry-run
+   ```
+
+4. What levels are on the board?
 
     ```bash
     vendor/bin/rector levels

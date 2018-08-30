@@ -5,8 +5,12 @@ namespace Rector\Autoloading;
 use Nette\Loaders\RobotLoader;
 use Rector\Configuration\Option;
 use Rector\FileSystem\FileGuard;
+use Rector\Utils\FilesystemTweaker;
 use Symfony\Component\Console\Input\InputInterface;
 
+/**
+ * Should it pass autoload files/directories to PHPStan analyzer?
+ */
 final class AdditionalAutoloader
 {
     /**
@@ -25,20 +29,42 @@ final class AdditionalAutoloader
     private $autoloadDirectories = [];
 
     /**
+     * @var FilesystemTweaker
+     */
+    private $filesystemTweaker;
+
+    /**
      * @param string[] $autoloadFiles
      * @param string[] $autoloadDirectories
      */
-    public function __construct(array $autoloadFiles, array $autoloadDirectories)
-    {
+    public function __construct(
+        array $autoloadFiles,
+        array $autoloadDirectories,
+        FileGuard $fileGuard,
+        FilesystemTweaker $filesystemTweaker
+    ) {
         $this->autoloadFiles = $autoloadFiles;
         $this->autoloadDirectories = $autoloadDirectories;
+        $this->fileGuard = $fileGuard;
+        $this->filesystemTweaker = $filesystemTweaker;
     }
 
-    public function autoloadWithInput(InputInterface $input): void
+    /**
+     * @param string[] $source
+     */
+    public function autoloadWithInputAndSource(InputInterface $input, array $source): void
     {
         $this->autoloadFileFromInput($input);
         $this->autoloadDirectories($this->autoloadDirectories);
         $this->autoloadFiles($this->autoloadFiles);
+
+        [$files, $directories] = $this->filesystemTweaker->splitSourceToDirectoriesAndFiles($source);
+        $this->autoloadFiles($files);
+
+        $absoluteDirectories = $this->filesystemTweaker->resolveDirectoriesWithFnmatch($directories);
+        if (count($absoluteDirectories)) {
+            $this->autoloadDirectories($absoluteDirectories);
+        }
     }
 
     private function autoloadFileFromInput(InputInterface $input): void

@@ -82,6 +82,7 @@ CODE_SAMPLE
         if ($parentClassName !== $this->controllerClass) {
             return null;
         }
+
         if (! $this->chainMethodCallAnalyzer->isTypeAndChainCalls(
             $node,
             'Symfony\Component\HttpFoundation\Request',
