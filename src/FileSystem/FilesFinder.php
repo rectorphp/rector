@@ -65,14 +65,19 @@ final class FilesFinder
             ->exclude(['examples', 'Examples', 'stubs', 'Stubs', 'fixtures', 'Fixtures', 'polyfill', 'Polyfill'])
             ->notName('*polyfill*');
 
-        $splFileInfos = iterator_to_array($finder->getIterator());
-        if (! $this->excludePaths) {
-            return $splFileInfos;
+        if ($this->excludePaths) {
+            $finder->filter(function (NativeSplFileInfo $splFileInfo) {
+                foreach ($this->excludePaths as $excludePath) {
+                    if (Strings::match($splFileInfo->getRealPath(), $excludePath)) {
+                        return true;
+                    }
+
+                    return fnmatch($splFileInfo->getRealPath(), $excludePath);
+                }
+            });
         }
 
-        // to overcome magic behavior: https://github.com/symfony/symfony/pull/26396/files
-        /** @var SplFileInfo[] $splFileInfos */
-        return $this->filterOutFilesByPatterns($splFileInfos, $this->excludePaths);
+        return iterator_to_array($finder->getIterator());
     }
 
     private function ensureFileExists(string $file): void
@@ -104,33 +109,7 @@ final class FilesFinder
     }
 
     /**
-     * @param SplFileInfo[] $splFileInfos
-     * @param string[] $patternsToExclude
-     * @return SplFileInfo[]
-     */
-    private function filterOutFilesByPatterns(array $splFileInfos, array $patternsToExclude): array
-    {
-        $filteredFiles = [];
-
-        foreach ($splFileInfos as $relativePath => $splFileInfo) {
-            foreach ($patternsToExclude as $patternToExclude) {
-                if (Strings::match($splFileInfo->getRealPath(), $patternToExclude)) {
-                    continue;
-                }
-
-                if (fnmatch($splFileInfo->getRealPath(), $patternToExclude)) {
-                    continue;
-                }
-
-                $filteredFiles[$relativePath] = $splFileInfo;
-            }
-        }
-
-        return $filteredFiles;
-
-    }
-
-    /**
+     * @todo decouple
      * @param string[] $source
      * @return string[][]|SplFileInfo[]
      */
