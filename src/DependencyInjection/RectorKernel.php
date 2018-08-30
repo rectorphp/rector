@@ -24,26 +24,29 @@ use Symplify\PackageBuilder\Yaml\FileLoader\ParameterImportsYamlFileLoader;
 final class RectorKernel extends Kernel
 {
     /**
-     * @var string
+     * @var string[]
      */
-    private $configFile;
+    private $extraConfigFiles = [];
 
-    public function __construct(?string $configFile = '')
+    /**
+     * @param string[] $configFiles
+     */
+    public function __construct(array $configFiles = [])
     {
-        if ($configFile) {
-            $this->configFile = $configFile;
-        }
+        $this->extraConfigFiles = $configFiles;
 
-        // debug: true is require to invalidate container on service files change
-        parent::__construct('cli' . sha1((string) $configFile), true);
+        $configFilesHash = md5(serialize($configFiles));
+
+        // debug: require to invalidate container on service files change
+        parent::__construct('cli_' . $configFilesHash, true);
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader): void
     {
         $loader->load(__DIR__ . '/../config/config.yml');
 
-        if ($this->configFile) {
-            $loader->load($this->configFile);
+        foreach ($this->extraConfigFiles as $extraConfigFile) {
+            $loader->load($extraConfigFile);
         }
     }
 

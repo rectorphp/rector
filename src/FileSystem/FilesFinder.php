@@ -56,6 +56,10 @@ final class FilesFinder
     private function findInDirectories(array $directories, array $suffixes): array
     {
         $absoluteDirectories = $this->resolveAbsoluteDirectories($directories);
+        if (! $absoluteDirectories) {
+            return [];
+        }
+
         $suffixesPattern = $this->normalizeSuffixesToPattern($suffixes);
 
         $finder = Finder::create()
@@ -65,17 +69,7 @@ final class FilesFinder
             ->exclude(['examples', 'Examples', 'stubs', 'Stubs', 'fixtures', 'Fixtures', 'polyfill', 'Polyfill'])
             ->notName('*polyfill*');
 
-        if ($this->excludePaths) {
-            $finder->filter(function (NativeSplFileInfo $splFileInfo) {
-                foreach ($this->excludePaths as $excludePath) {
-                    if (Strings::match($splFileInfo->getRealPath(), $excludePath)) {
-                        return true;
-                    }
-
-                    return fnmatch($splFileInfo->getRealPath(), $excludePath);
-                }
-            });
-        }
+        $this->addFilterWithExcludedPaths($finder);
 
         return iterator_to_array($finder->getIterator());
     }
@@ -140,18 +134,7 @@ final class FilesFinder
 
         foreach ($directories as $directory) {
             if (Strings::contains($directory, '*')) { // is fnmatch for directories
-                $directoriesFinder = Finder::create()
-                    ->in(getcwd())
-                    ->directories()
-                    ->filter(function (NativeSplFileInfo $splFileInfo) use ($directory) {
-                        // keep only file that match specific pattern
-                        return fnmatch('*' . $directory . '*', $splFileInfo->getRealPath());
-                    });
-
-                $absoluteDirectories = array_merge(
-                    $absoluteDirectories,
-                    iterator_to_array($directoriesFinder->getIterator())
-                );
+                $absoluteDirectories = array_merge($absoluteDirectories, glob($directory, GLOB_ONLYDIR));
             } else { // is classic directory
                 $this->ensureDirectoryExists($directory);
                 $absoluteDirectories[] = $directory;
@@ -159,5 +142,24 @@ final class FilesFinder
         }
 
         return $absoluteDirectories;
+    }
+
+    private function addFilterWithExcludedPaths(Finder $finder): void
+    {
+        if (! $this->excludePaths) {
+            return;
+        }
+
+        $finder->filter(function (NativeSplFileInfo $splFileInfo) {
+            foreach ($this->excludePaths as $excludePath) {
+                if (Strings::match($splFileInfo->getRealPath(), $excludePath)) {
+                    return true;
+                }
+
+                return fnmatch($splFileInfo->getRealPath(), $excludePath);
+            }
+
+            return false;
+        });
     }
 }

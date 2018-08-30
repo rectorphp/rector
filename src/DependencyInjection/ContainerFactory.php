@@ -16,9 +16,12 @@ final class ContainerFactory
         return $appKernel->getContainer();
     }
 
-    public function createWithConfig(string $config): ContainerInterface
+    /**
+     * @param string[] $configFiles
+     */
+    public function createWithConfigFiles(array $configFiles): ContainerInterface
     {
-        $appKernel = new RectorKernel($config);
+        $appKernel = new RectorKernel($configFiles);
         $appKernel->boot();
         // this is require to keep CLI verbosity independent on AppKernel dev/prod mode
         putenv('SHELL_VERBOSITY=0');

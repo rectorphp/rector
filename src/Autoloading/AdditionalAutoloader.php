@@ -3,10 +3,14 @@
 namespace Rector\Autoloading;
 
 use Nette\Loaders\RobotLoader;
+use Nette\Utils\Strings;
 use Rector\Configuration\Option;
 use Rector\FileSystem\FileGuard;
 use Symfony\Component\Console\Input\InputInterface;
 
+/**
+ * Should it pass autoload files/directories to PHPStan analyzer?
+ */
 final class AdditionalAutoloader
 {
     /**
@@ -28,10 +32,11 @@ final class AdditionalAutoloader
      * @param string[] $autoloadFiles
      * @param string[] $autoloadDirectories
      */
-    public function __construct(array $autoloadFiles, array $autoloadDirectories)
+    public function __construct(array $autoloadFiles, array $autoloadDirectories, FileGuard $fileGuard)
     {
         $this->autoloadFiles = $autoloadFiles;
         $this->autoloadDirectories = $autoloadDirectories;
+        $this->fileGuard = $fileGuard;
     }
 
     public function autoloadWithInput(InputInterface $input): void
@@ -39,6 +44,32 @@ final class AdditionalAutoloader
         $this->autoloadFileFromInput($input);
         $this->autoloadDirectories($this->autoloadDirectories);
         $this->autoloadFiles($this->autoloadFiles);
+    }
+
+    /**
+     * @param string[] $source
+     */
+    public function autoloadWithInputAndSource(InputInterface $input, array $source): void
+    {
+        $this->autoloadWithInput($input);
+
+        [$files, $directories] = $this->splitSourceToDirectoriesAndFiles($source);
+
+        // @todo include the files so people don't have to do it manually?
+
+        $absoluteDirectories = [];
+
+        foreach ($directories as $directory) {
+            if (Strings::contains($directory, '*')) { // is fnmatch for directories
+                $absoluteDirectories = array_merge($absoluteDirectories, glob($directory, GLOB_ONLYDIR));
+            } else { // is classic directory
+                $absoluteDirectories[] = $directory;
+            }
+        }
+
+        if (count($absoluteDirectories)) {
+            $this->autoloadDirectories($absoluteDirectories);
+        }
     }
 
     private function autoloadFileFromInput(InputInterface $input): void
@@ -50,6 +81,27 @@ final class AdditionalAutoloader
         }
 
         $this->autoloadFiles([$autoloadFile]);
+    }
+
+    /**
+     * @todo decouple to standalone Finder/File something
+     * @param string[] $source
+     * @return string[][]|string[]
+     */
+    private function splitSourceToDirectoriesAndFiles(array $source): array
+    {
+        $files = [];
+        $directories = [];
+
+        foreach ($source as $singleSource) {
+            if (is_file($singleSource)) {
+                $files[] = $singleSource;
+            } else {
+                $directories[] = $singleSource;
+            }
+        }
+
+        return [$files, $directories];
     }
 
     /**
