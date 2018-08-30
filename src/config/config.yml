@@ -2,3 +2,8 @@ imports:
   - { resource: '../../packages/**/src/config/config.yml' }
   - { resource: 'services.yml' }
   - { resource: 'external-services.yml' }
+
+parameters:
+    exclude_paths: []
+    autoload_directories: []
+    autoload_files: []

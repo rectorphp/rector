@@ -1,6 +1,9 @@
 imports:
     - { resource: 'external-services.yml' }
 
+parameters:
+    exclude_paths: [] # for FilesFinder
+
 services:
     _defaults:
         # for "Rector\NodeTypeResolver\NodeTypeResolverFactory" standalone usage

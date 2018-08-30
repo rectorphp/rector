@@ -2,6 +2,7 @@
 
 namespace Rector\FileSystem;
 
+use Nette\Utils\Strings;
 use Rector\Exception\FileSystem\DirectoryNotFoundException;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
@@ -12,6 +13,19 @@ final class FilesFinder
      * @var SplFileInfo[][]
      */
     private $fileInfosBySourceAndSuffixes = [];
+
+    /**
+     * @var string[]
+     */
+    private $excludePaths = [];
+
+    /**
+     * @param string[] $excludePaths
+     */
+    public function __construct(array $excludePaths)
+    {
+        $this->excludePaths = $excludePaths;
+    }
 
     /**
      * @param string[] $source
@@ -61,7 +75,14 @@ final class FilesFinder
             ->exclude(['examples', 'Examples', 'stubs', 'Stubs', 'fixtures', 'Fixtures', 'polyfill', 'Polyfill'])
             ->notName('*polyfill*');
 
-        return iterator_to_array($finder->getIterator());
+        $splFileInfos = iterator_to_array($finder->getIterator());
+        if (! $this->excludePaths) {
+            return $splFileInfos;
+        }
+
+        // to overcome magic behavior: https://github.com/symfony/symfony/pull/26396/files
+        /** @var SplFileInfo[] $splFileInfos */
+        return $this->filterOutFilesByPatterns($splFileInfos, $this->excludePaths);
     }
 
     /**
@@ -86,5 +107,31 @@ final class FilesFinder
         $suffixesPattern = implode('|', $suffixes);
 
         return '#\.(' . $suffixesPattern . ')$#';
+    }
+
+    /**
+     * @param SplFileInfo[] $splFileInfos
+     * @param string[] $patternsToExclude
+     * @return SplFileInfo[]
+     */
+    private function filterOutFilesByPatterns(array $splFileInfos, array $patternsToExclude): array
+    {
+        $filteredFiles = [];
+
+        foreach ($splFileInfos as $relativePath => $splFileInfo) {
+            foreach ($patternsToExclude as $patternToExclude) {
+                if (Strings::match($splFileInfo->getRealPath(), $patternToExclude)) {
+                    continue;
+                }
+
+                if (fnmatch($splFileInfo->getRealPath(), $patternToExclude)) {
+                    continue;
+                }
+
+                $filteredFiles[$relativePath] = $splFileInfo;
+            }
+        }
+
+        return $filteredFiles;
     }
 }

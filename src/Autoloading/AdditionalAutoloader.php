@@ -6,40 +6,39 @@ use Nette\Loaders\RobotLoader;
 use Rector\Configuration\Option;
 use Rector\FileSystem\FileGuard;
 use Symfony\Component\Console\Input\InputInterface;
-use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
 final class AdditionalAutoloader
 {
-    /**
-     * @var string
-     */
-    private const AUTOLOAD_DIRECTORIES_PARAMETER = 'autoload_directories';
-
-    /**
-     * @var string
-     */
-    private const AUTOLOAD_FILES_PARAMETER = 'autoload_files';
-
-    /**
-     * @var ParameterProvider
-     */
-    private $parameterProvider;
-
     /**
      * @var FileGuard
      */
     private $fileGuard;
 
-    public function __construct(ParameterProvider $parameterProvider, FileGuard $fileGuard)
+    /**
+     * @var string[]
+     */
+    private $autoloadFiles = [];
+
+    /**
+     * @var string[]
+     */
+    private $autoloadDirectories = [];
+
+    /**
+     * @param string[] $autoloadFiles
+     * @param string[] $autoloadDirectories
+     */
+    public function __construct(array $autoloadFiles, array $autoloadDirectories)
     {
-        $this->parameterProvider = $parameterProvider;
-        $this->fileGuard = $fileGuard;
+        $this->autoloadFiles = $autoloadFiles;
+        $this->autoloadDirectories = $autoloadDirectories;
     }
 
     public function autoloadWithInput(InputInterface $input): void
     {
         $this->autoloadFileFromInput($input);
-        $this->autoloadDirectoriesFromParameter($this->parameterProvider);
+        $this->autoloadDirectories($this->autoloadDirectories);
+        $this->autoloadFiles($this->autoloadFiles);
     }
 
     private function autoloadFileFromInput(InputInterface $input): void
@@ -53,28 +52,19 @@ final class AdditionalAutoloader
         $this->autoloadFiles([$autoloadFile]);
     }
 
-    private function autoloadDirectoriesFromParameter(ParameterProvider $parameterProvider): void
-    {
-        $autoloadDirectories = $parameterProvider->provideParameter(self::AUTOLOAD_DIRECTORIES_PARAMETER);
-        if ($autoloadDirectories !== null) {
-            $this->autoloadDirectories($autoloadDirectories);
-        }
-
-        $autoloadFiles = $parameterProvider->provideParameter(self::AUTOLOAD_FILES_PARAMETER);
-        if ($autoloadFiles !== null) {
-            $this->autoloadFiles($autoloadFiles);
-        }
-    }
-
     /**
      * @param string[] $directories
      */
     private function autoloadDirectories(array $directories): void
     {
+        if (! count($directories)) {
+            return;
+        }
+
         $robotLoader = new RobotLoader();
         $robotLoader->ignoreDirs[] = '*Fixtures';
         // last argument is workaround: https://github.com/nette/robot-loader/issues/12
-        $robotLoader->setTempDirectory(__DIR__ . '/../../temp/_rector_robot_loader');
+        $robotLoader->setTempDirectory(sys_get_temp_dir() . '/_rector_robot_loader');
 
         foreach ($directories as $autoloadDirectory) {
             $robotLoader->addDirectory($autoloadDirectory);

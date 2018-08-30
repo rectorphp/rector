@@ -3,8 +3,10 @@
 namespace Rector\NodeTypeResolver\DependencyInjection;
 
 use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\Kernel;
+use Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutoBindParametersCompilerPass;
 
 final class NodeTypeResolverKernel extends Kernel
 {
@@ -45,5 +47,10 @@ final class NodeTypeResolverKernel extends Kernel
     public function getLogDir(): string
     {
         return sys_get_temp_dir() . '/_rector_type_resolver_test_log';
+    }
+
+    protected function build(ContainerBuilder $containerBuilder): void
+    {
+        $containerBuilder->addCompilerPass(new AutoBindParametersCompilerPass());
     }
 }

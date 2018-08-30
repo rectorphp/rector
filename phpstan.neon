@@ -41,6 +41,7 @@ parameters:
         - '#Access to an undefined property PhpParser\\Node\\Expr\\Error\|PhpParser\\Node\\Expr\\Variable::\$name#'
 
         # SplFileInfo::getRealPath() false positive
+        - '#Parameter \#1 \$pattern of function fnmatch expects string, string\|false given#'
         - '#Parameter \#1 \$file of function file_put_contents expects string, string\|false given#'
         - '#Parameter \#1 \$filePath of method Rector\\Parser\\Parser::parseFile\(\) expects string, string\|false given#'
 
