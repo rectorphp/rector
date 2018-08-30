@@ -26,6 +26,9 @@ parameters:
         # nette container
         - '#Method Rector\\NodeTypeResolver\\DependencyInjection\\PHPStanServicesFactory::create(.*?)() should return (.*?) but returns object#'
 
+        # false postive - type is set by annotatoin above
+        - '#Access to an undefined property PhpParser\\Node::\$(args|var)#'
+
         # irelevant
         - '#Call to function in_array\(\) with arguments string, array<array<string\|false>> and true will always evaluate to false#'
 
