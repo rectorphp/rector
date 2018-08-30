@@ -49,19 +49,14 @@ final class AdditionalAutoloader
         $this->filesystemTweaker = $filesystemTweaker;
     }
 
-    public function autoloadWithInput(InputInterface $input): void
-    {
-        $this->autoloadFileFromInput($input);
-        $this->autoloadDirectories($this->autoloadDirectories);
-        $this->autoloadFiles($this->autoloadFiles);
-    }
-
     /**
      * @param string[] $source
      */
     public function autoloadWithInputAndSource(InputInterface $input, array $source): void
     {
-        $this->autoloadWithInput($input);
+        $this->autoloadFileFromInput($input);
+        $this->autoloadDirectories($this->autoloadDirectories);
+        $this->autoloadFiles($this->autoloadFiles);
 
         [$files, $directories] = $this->filesystemTweaker->splitSourceToDirectoriesAndFiles($source);
         $this->autoloadFiles($files);
