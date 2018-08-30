@@ -3,7 +3,7 @@
 namespace Rector\FileSystem;
 
 use Nette\Utils\Strings;
-use Rector\Exception\FileSystem\DirectoryNotFoundException;
+use Rector\Utils\FilesystemTweaker;
 use SplFileInfo as NativeSplFileInfo;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
@@ -21,11 +21,17 @@ final class FilesFinder
     private $excludePaths = [];
 
     /**
+     * @var FilesystemTweaker
+     */
+    private $filesystemTweaker;
+
+    /**
      * @param string[] $excludePaths
      */
-    public function __construct(array $excludePaths)
+    public function __construct(array $excludePaths, FilesystemTweaker $filesystemTweaker)
     {
         $this->excludePaths = $excludePaths;
+        $this->filesystemTweaker = $filesystemTweaker;
     }
 
     /**
@@ -40,10 +46,14 @@ final class FilesFinder
             return $this->fileInfosBySourceAndSuffixes[$cacheKey];
         }
 
-        [$splFileInfos, $directories] = $this->splitSourceToDirectoriesAndFiles($source);
-        if (count($directories)) {
-            $splFileInfos = array_merge($splFileInfos, $this->findInDirectories($directories, $suffixes));
+        [$files, $directories] = $this->filesystemTweaker->splitSourceToDirectoriesAndFiles($source);
+
+        $splFileInfos = [];
+        foreach ($files as $file) {
+            $splFileInfos[] = new SplFileInfo($file, '', '');
         }
+
+        $splFileInfos = array_merge($splFileInfos, $this->findInDirectories($directories, $suffixes));
 
         return $this->fileInfosBySourceAndSuffixes[$cacheKey] = $splFileInfos;
     }
@@ -55,7 +65,11 @@ final class FilesFinder
      */
     private function findInDirectories(array $directories, array $suffixes): array
     {
-        $absoluteDirectories = $this->resolveAbsoluteDirectories($directories);
+        if (! count($directories)) {
+            return [];
+        }
+
+        $absoluteDirectories = $this->filesystemTweaker->resolveDirectoriesWithFnmatch($directories);
         if (! $absoluteDirectories) {
             return [];
         }
@@ -74,24 +88,6 @@ final class FilesFinder
         return iterator_to_array($finder->getIterator());
     }
 
-    private function ensureFileExists(string $file): void
-    {
-        if (file_exists($file)) {
-            return;
-        }
-
-        throw new DirectoryNotFoundException(sprintf('File "%s" was not found.', $file));
-    }
-
-    private function ensureDirectoryExists(string $directory): void
-    {
-        if (file_exists($directory)) {
-            return;
-        }
-
-        throw new DirectoryNotFoundException(sprintf('Directory "%s" was not found.', $directory));
-    }
-
     /**
      * @param string[] $suffixes
      */
@@ -100,48 +96,6 @@ final class FilesFinder
         $suffixesPattern = implode('|', $suffixes);
 
         return '#\.(' . $suffixesPattern . ')$#';
-    }
-
-    /**
-     * @todo decouple
-     * @param string[] $source
-     * @return string[][]|SplFileInfo[]
-     */
-    private function splitSourceToDirectoriesAndFiles(array $source): array
-    {
-        $files = [];
-        $directories = [];
-
-        foreach ($source as $singleSource) {
-            if (is_file($singleSource)) {
-                $this->ensureFileExists($singleSource);
-                $files[] = new SplFileInfo($singleSource, '', '');
-            } else {
-                $directories[] = $singleSource;
-            }
-        }
-
-        return [$files, $directories];
-    }
-
-    /**
-     * @param string[] $directories
-     * @return string[]
-     */
-    private function resolveAbsoluteDirectories(array $directories): array
-    {
-        $absoluteDirectories = [];
-
-        foreach ($directories as $directory) {
-            if (Strings::contains($directory, '*')) { // is fnmatch for directories
-                $absoluteDirectories = array_merge($absoluteDirectories, glob($directory, GLOB_ONLYDIR));
-            } else { // is classic directory
-                $this->ensureDirectoryExists($directory);
-                $absoluteDirectories[] = $directory;
-            }
-        }
-
-        return $absoluteDirectories;
     }
 
     private function addFilterWithExcludedPaths(Finder $finder): void
