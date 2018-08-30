@@ -12,10 +12,11 @@
         "symfony/dependency-injection": "^3.4|^4.0",
         "symfony/finder": "^3.4|^4.0",
         "symplify/better-phpdoc-parser": "^4.7",
+        "rector/utils": "dev-master",
         "symplify/package-builder": "^4.7"
     },
     "require-dev": {
-        "phpunit/phpunit": "^7.2"
+        "phpunit/phpunit": "^7.3"
     },
     "autoload": {
         "psr-4": {

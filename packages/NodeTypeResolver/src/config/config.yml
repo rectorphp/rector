@@ -4,4 +4,7 @@ imports:
     # to cover installed as dependency
     - { resource: '../../../../../../symplify/better-phpdoc-parser/src/config/services.yml' , ignore_errors: true }
 
+    # rector/utils package
+    - { resource: '../../../Utils/src/config/services.yml' }
+
     - { resource: 'services.yml' }
