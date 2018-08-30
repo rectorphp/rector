@@ -4,6 +4,7 @@ namespace Rector\FileSystem;
 
 use Nette\Utils\Strings;
 use Rector\Exception\FileSystem\DirectoryNotFoundException;
+use SplFileInfo as NativeSplFileInfo;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
@@ -39,22 +40,12 @@ final class FilesFinder
             return $this->fileInfosBySourceAndSuffixes[$cacheKey];
         }
 
-        $files = [];
-        $directories = [];
-
-        foreach ($source as $singleSource) {
-            if (is_file($singleSource)) {
-                $files[] = new SplFileInfo($singleSource, '', '');
-            } else {
-                $directories[] = $singleSource;
-            }
-        }
-
+        [$splFileInfos, $directories] = $this->splitSourceToDirectoriesAndFiles($source);
         if (count($directories)) {
-            $files = array_merge($files, $this->findInDirectories($directories, $suffixes));
+            $splFileInfos = array_merge($splFileInfos, $this->findInDirectories($directories, $suffixes));
         }
 
-        return $this->fileInfosBySourceAndSuffixes[$cacheKey] = $files;
+        return $this->fileInfosBySourceAndSuffixes[$cacheKey] = $splFileInfos;
     }
 
     /**
@@ -64,14 +55,13 @@ final class FilesFinder
      */
     private function findInDirectories(array $directories, array $suffixes): array
     {
-        $this->ensureDirectoriesExist($directories);
-
+        $absoluteDirectories = $this->resolveAbsoluteDirectories($directories);
         $suffixesPattern = $this->normalizeSuffixesToPattern($suffixes);
 
         $finder = Finder::create()
             ->files()
+            ->in($absoluteDirectories)
             ->name($suffixesPattern)
-            ->in($directories)
             ->exclude(['examples', 'Examples', 'stubs', 'Stubs', 'fixtures', 'Fixtures', 'polyfill', 'Polyfill'])
             ->notName('*polyfill*');
 
@@ -85,18 +75,22 @@ final class FilesFinder
         return $this->filterOutFilesByPatterns($splFileInfos, $this->excludePaths);
     }
 
-    /**
-     * @param string[] $directories
-     */
-    private function ensureDirectoriesExist(array $directories): void
+    private function ensureFileExists(string $file): void
     {
-        foreach ($directories as $directory) {
-            if (file_exists($directory)) {
-                continue;
-            }
-
-            throw new DirectoryNotFoundException(sprintf('Directory "%s" was not found.', $directory));
+        if (file_exists($file)) {
+            return;
         }
+
+        throw new DirectoryNotFoundException(sprintf('File "%s" was not found.', $file));
+    }
+
+    private function ensureDirectoryExists(string $directory): void
+    {
+        if (file_exists($directory)) {
+            return;
+        }
+
+        throw new DirectoryNotFoundException(sprintf('Directory "%s" was not found.', $directory));
     }
 
     /**
@@ -133,5 +127,58 @@ final class FilesFinder
         }
 
         return $filteredFiles;
+
+    }
+
+    /**
+     * @param string[] $source
+     * @return string[][]|SplFileInfo[]
+     */
+    private function splitSourceToDirectoriesAndFiles(array $source): array
+    {
+        $files = [];
+        $directories = [];
+
+        foreach ($source as $singleSource) {
+            if (is_file($singleSource)) {
+                $this->ensureFileExists($singleSource);
+                $files[] = new SplFileInfo($singleSource, '', '');
+            } else {
+                $directories[] = $singleSource;
+            }
+        }
+
+        return [$files, $directories];
+    }
+
+    /**
+     * @param string[] $directories
+     * @return string[]
+     */
+    private function resolveAbsoluteDirectories(array $directories): array
+    {
+        $absoluteDirectories = [];
+
+        foreach ($directories as $directory) {
+            if (Strings::contains($directory, '*')) { // is fnmatch for directories
+                $directoriesFinder = Finder::create()
+                    ->in(getcwd())
+                    ->directories()
+                    ->filter(function (NativeSplFileInfo $splFileInfo) use ($directory) {
+                        // keep only file that match specific pattern
+                        return fnmatch('*' . $directory . '*', $splFileInfo->getRealPath());
+                    });
+
+                $absoluteDirectories = array_merge(
+                    $absoluteDirectories,
+                    iterator_to_array($directoriesFinder->getIterator())
+                );
+            } else { // is classic directory
+                $this->ensureDirectoryExists($directory);
+                $absoluteDirectories[] = $directory;
+            }
+        }
+
+        return $absoluteDirectories;
     }
 }

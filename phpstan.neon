@@ -17,6 +17,9 @@ parameters:
         - '#Cannot cast PhpParser\\Node\\Expr\|PhpParser\\Node\\Name to string#'
         - '#Array \(array<array<PhpParser\\Node\\Stmt>>\) does not accept array<PhpParser\\Node\\Stmt|null>#'
 
+        # array miss types
+        - '#Method Rector\\FileSystem\\FilesFinder::splitSourceToDirectoriesAndFiles\(\) should return array<array<string>\|Symfony\\Component\\Finder\\SplFileInfo> but returns array<int, array<int, string\|Symfony\\Component\\Finder\\SplFileInfo>>#'
+
         # already fixed, invalidated cache?
         - '#Access to an undefined property PhpParser\\Node\\Expr::\$args#'
 
@@ -44,6 +47,10 @@ parameters:
         - '#Parameter \#1 \$pattern of function fnmatch expects string, string\|false given#'
         - '#Parameter \#1 \$file of function file_put_contents expects string, string\|false given#'
         - '#Parameter \#1 \$filePath of method Rector\\Parser\\Parser::parseFile\(\) expects string, string\|false given#'
+        - '#Parameter \#2 \$filename of function fnmatch expects string, string\|false given#'
+
+        # getcwd false postive
+        - '#Parameter \#1 \$dirs of method Symfony\\Component\\Finder\\Finder::in\(\) expects array\|string, string\|false given#'
 
         # false positive, has annotation type above (@todo recheck for possible ignored positives)
         - '#Access to an undefined property PhpParser\\Node::\$name#' # 11
