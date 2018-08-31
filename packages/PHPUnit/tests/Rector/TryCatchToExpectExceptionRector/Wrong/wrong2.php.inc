@@ -8,8 +8,9 @@ final class MyTest extends \PHPUnit\Framework\TestCase
             $someService->run();
             $someService->moreCalls();
         } catch (Throwable $exception) {
+            $this->assertSame(1000, $exception->getCode());
             $this->assertInstanceOf(RuntimeException::class, $exception);
-            $this->assertContains('There was an error executing the following script', $exception->getMessage());
+            $this->assertEquals('There was an error executing the following script', $exception->getMessage());
         }
     }
 }

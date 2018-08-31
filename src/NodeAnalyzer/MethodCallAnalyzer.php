@@ -141,6 +141,31 @@ final class MethodCallAnalyzer
     }
 
     /**
+     * Matches:
+     * - "$<variableName>-><methodName>()"
+     */
+    public function isMethodCallNameAndVariableName(Node $node, string $methodName, string $variableName): bool
+    {
+        if (! $node instanceof MethodCall) {
+            return false;
+        }
+
+        if (! $node->var instanceof Variable) {
+            return false;
+        }
+
+        if ((string) $node->name !== $methodName) {
+            return false;
+        }
+
+        if ($node->var->name !== $variableName) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * @param string[] $types
      */
     private function isTypes(Node $node, array $types): bool

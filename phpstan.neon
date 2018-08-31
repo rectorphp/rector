@@ -33,6 +33,7 @@ parameters:
         - '#Call to function in_array\(\) with arguments string, array<array<string\|false>> and true will always evaluate to false#'
 
         # known values
+        - '#Parameter \#1 \$methodCallNode of method Rector\\PHPUnit\\Rector\\TryCatchToExpectExceptionRector::renameMethodCallAndKeepFirstArgument\(\) expects PhpParser\\Node\\Expr\\MethodCall, PhpParser\\Node given#'
         - '#Access to an undefined property PhpParser\\Node\\Expr\\MethodCall\|PhpParser\\Node\\Stmt\\ClassMethod::\$params#'
         - '#Cannot call method getName\(\) on PHPStan\\Reflection\\ClassReflection\|null#' # 1
         - '#Parameter \#1 \$classReflection of method Rector\\NodeTypeResolver\\Reflection\\ClassReflectionTypesResolver::resolve\(\) expects PHPStan\\Reflection\\ClassReflection, PHPStan\\Reflection\\ClassReflection|null given#'

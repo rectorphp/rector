@@ -4,6 +4,7 @@ final class MyTest extends \PHPUnit\Framework\TestCase
 {
     public function test()
     {
+        $this->expectExceptionCode(1000);
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('There was an error executing the following script');
         $someService->run();
