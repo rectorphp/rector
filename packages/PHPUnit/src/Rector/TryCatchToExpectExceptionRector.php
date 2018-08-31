@@ -6,6 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\TryCatch;
@@ -148,7 +149,17 @@ CODE_SAMPLE
             return;
         }
 
-        $this->newExpressions[] = $this->renameMethodCallAndKeepFirstArgument($node, 'expectExceptionMessageRegExp');
+        $expression = $this->renameMethodCallAndKeepFirstArgument($node, 'expectExceptionMessageRegExp');
+        /** @var MethodCall $methodCallNode */
+        $methodCallNode = $expression->expr;
+        // put regex between "#...#" to create match
+        if ($methodCallNode->args[0]->value instanceof String_) {
+            /** @var String_ $oldStringNode */
+            $oldStringNode = $methodCallNode->args[0]->value;
+            $methodCallNode->args[0]->value = new String_('#' . preg_quote($oldStringNode->value) . '#');
+        }
+
+        $this->newExpressions[] = $expression;
     }
 
     private function processExceptionCode(Node $node, Variable $exceptionVariable): void

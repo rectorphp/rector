@@ -8,7 +8,7 @@ final class MyTest extends TestCase
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('There was an error executing the following script');
-        $this->expectExceptionMessageRegExp('There was an error executing the following script');
+        $this->expectExceptionMessageRegExp('#There was an error executing the following script#');
         $someService->run();
     }
 }
