@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\TryCatch;
+use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -18,6 +19,16 @@ final class TryCatchToExpectExceptionRector extends AbstractPHPUnitRector
      * @var Expression[]
      */
     private $newExpressions = [];
+
+    /**
+     * @var MethodCallAnalyzer
+     */
+    private $methodCallAnalyzer;
+
+    public function __construct(MethodCallAnalyzer $methodCallAnalyzer)
+    {
+        $this->methodCallAnalyzer = $methodCallAnalyzer;
+    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -83,7 +94,7 @@ CODE_SAMPLE
 
     private function processAssertInstanceOf(Node $node, Variable $exceptionVariableNode): void
     {
-        if (! $this->isThisMethodCallWithNames($node, ['assertInstanceOf'])) {
+        if (! $this->methodCallAnalyzer->isThisMethodCallWithNames($node, ['assertInstanceOf'])) {
             return;
         }
 
@@ -100,7 +111,10 @@ CODE_SAMPLE
 
     private function processExceptionMessage(Node $node, Variable $exceptionVariable): void
     {
-        if (! $this->isThisMethodCallWithNames($node, ['assertContains', 'assertSame', 'assertEquals'])) {
+        if (! $this->methodCallAnalyzer->isThisMethodCallWithNames(
+            $node,
+            ['assertContains', 'assertSame', 'assertEquals']
+        )) {
             return;
         }
 
@@ -126,28 +140,6 @@ CODE_SAMPLE
         $this->newExpressions[] = new Expression(new MethodCall($node->var, 'expectExceptionMessage', [
             $node->args[0],
         ]));
-    }
-
-    /**
-     * @todo move to MethodCallAnalyzer
-     *
-     * @param string[] $methodNames
-     */
-    private function isThisMethodCallWithNames(Node $node, array $methodNames): bool
-    {
-        if (! $node instanceof MethodCall) {
-            return false;
-        }
-
-        if (! $node->var instanceof Variable) {
-            return false;
-        }
-
-        if ($node->var->name !== 'this') {
-            return false;
-        }
-
-        return in_array((string) $node->name, $methodNames, true);
     }
 
     /**
