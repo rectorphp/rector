@@ -142,6 +142,36 @@ CODE_SAMPLE
         ]));
     }
 
+    private function processExceptionCode(Node $node, Variable $exceptionVariable): void
+    {
+        if (! $this->methodCallAnalyzer->isThisMethodCallWithNames($node, ['assertSame', 'assertEquals'])) {
+            return;
+        }
+
+        /** @var MethodCall $node */
+        $secondArgument = $node->args[1]->value;
+        // looking for "$exception->getCode()"
+        if (! $secondArgument instanceof MethodCall) {
+            return;
+        }
+
+        if (! $secondArgument->var instanceof Variable) {
+            return;
+        }
+
+        if ((string) $secondArgument->name !== 'getCode') {
+            return;
+        }
+
+        if ($exceptionVariable->name !== $secondArgument->var->name) {
+            return;
+        }
+
+        $this->newExpressions[] = new Expression(new MethodCall($node->var, 'expectExceptionCode', [
+            $node->args[0],
+        ]));
+    }
+
     /**
      * @return Expression[]|null
      */
@@ -166,6 +196,7 @@ CODE_SAMPLE
 
             $this->processAssertInstanceOf($catchedStmt->expr, $exceptionVariable);
             $this->processExceptionMessage($catchedStmt->expr, $exceptionVariable);
+            $this->processExceptionCode($catchedStmt->expr, $exceptionVariable);
         }
 
         // return all statements
