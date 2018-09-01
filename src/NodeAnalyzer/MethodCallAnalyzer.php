@@ -4,6 +4,7 @@ namespace Rector\NodeAnalyzer;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
@@ -117,6 +118,51 @@ final class MethodCallAnalyzer
         $nodeTypes = $this->nodeTypeResolver->resolve($node->var);
 
         return array_intersect($nodeTypes, $types) ? $nodeTypes : null;
+    }
+
+    /**
+     * @param string[] $methodNames
+     */
+    public function isThisMethodCallWithNames(Node $node, array $methodNames): bool
+    {
+        if (! $node instanceof MethodCall) {
+            return false;
+        }
+
+        if (! $node->var instanceof Variable) {
+            return false;
+        }
+
+        if ($node->var->name !== 'this') {
+            return false;
+        }
+
+        return in_array((string) $node->name, $methodNames, true);
+    }
+
+    /**
+     * Matches:
+     * - "$<variableName>-><methodName>()"
+     */
+    public function isMethodCallNameAndVariableName(Node $node, string $methodName, string $variableName): bool
+    {
+        if (! $node instanceof MethodCall) {
+            return false;
+        }
+
+        if (! $node->var instanceof Variable) {
+            return false;
+        }
+
+        if ((string) $node->name !== $methodName) {
+            return false;
+        }
+
+        if ($node->var->name !== $variableName) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
