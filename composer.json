@@ -18,16 +18,16 @@
         "symfony/console": "^3.4|^4.0",
         "symfony/dependency-injection": "^3.4|^4.0",
         "symfony/finder": "^3.4|^4.0",
-        "symplify/better-phpdoc-parser": "^4.6.1",
-        "symplify/changelog-linker": "^4.6.1",
-        "symplify/package-builder": "^4.6.1",
-        "symplify/monorepo-builder": "^4.6.1"
+        "symplify/better-phpdoc-parser": "^4.7",
+        "symplify/package-builder": "^4.7"
     },
     "require-dev": {
         "humbug/php-scoper": "^0.9.1",
         "phpunit/phpunit": "^7.3",
         "slam/php-cs-fixer-extensions": "^1.15",
-        "symplify/easy-coding-standard": "^4.6.1",
+        "symplify/changelog-linker": "^4.7",
+        "symplify/easy-coding-standard": "^4.7",
+        "symplify/monorepo-builder": "^4.7",
         "tracy/tracy": "^2.5"
     },
     "autoload": {
