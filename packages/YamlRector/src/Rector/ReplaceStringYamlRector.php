@@ -31,7 +31,7 @@ final class ReplaceStringYamlRector implements YamlRectorInterface
 
     public function isCandidate(string $content): bool
     {
-        foreach ($this->oldToNewString as $oldString => $newString) {
+        foreach (array_keys($this->oldToNewString) as $oldString) {
             $oldStringPattern = $this->createPatternFromString($oldString);
 
             if ((bool) Strings::match($content, $oldStringPattern)) {

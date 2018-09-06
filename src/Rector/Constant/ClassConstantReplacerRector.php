@@ -78,15 +78,7 @@ final class ClassConstantReplacerRector extends AbstractRector
      */
     public function refactor(Node $classConstFetchNode): ?Node
     {
-        $activeType = null;
-        foreach ($this->oldToNewConstantsByClass as $type => $oldToNewConstants) {
-            $matchedType = $this->classConstAnalyzer->matchTypes($classConstFetchNode, $this->getTypes());
-            if ($matchedType) {
-                $activeType = $matchedType;
-                break;
-            }
-        }
-
+        $activeType = $this->classConstAnalyzer->matchTypes($classConstFetchNode, $this->getTypes());
         if ($activeType === null) {
             return null;
         }

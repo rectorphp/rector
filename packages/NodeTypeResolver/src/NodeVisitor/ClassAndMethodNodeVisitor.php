@@ -42,7 +42,7 @@ final class ClassAndMethodNodeVisitor extends NodeVisitorAbstract
 
     /**
      * @param Node[] $nodes
-     * @return null|Node[]
+     * @return Node[]|null
      */
     public function beforeTraverse(array $nodes): ?array
     {
@@ -56,7 +56,7 @@ final class ClassAndMethodNodeVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @return int|null|Node|void
+     * @return int|Node|void|null
      */
     public function enterNode(Node $node)
     {

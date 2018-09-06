@@ -226,7 +226,7 @@ CODE_SAMPLE
     private function renameMethodCallAndKeepFirstArgument(MethodCall $methodCallNode, string $methodName): Expression
     {
         $methodCallNode->name = new Identifier($methodName);
-        foreach ($methodCallNode->args as $i => $arg) {
+        foreach (array_keys($methodCallNode->args) as $i) {
             // keep first arg
             if ($i === 0) {
                 continue;

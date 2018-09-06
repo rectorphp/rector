@@ -168,7 +168,7 @@ final class NamespaceReplacerRector extends AbstractRector
         $fullyQualifiedNode = $parentNode->class;
 
         $newClassName = $fullyQualifiedNode->toString();
-        foreach ($this->oldToNewNamespaces as $oldNamespace => $newNamespace) {
+        foreach (array_keys($this->oldToNewNamespaces) as $oldNamespace) {
             if ($newClassName === $oldNamespace) {
                 return true;
             }

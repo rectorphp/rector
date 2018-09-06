@@ -184,7 +184,7 @@ final class GenerateRectorOverviewCommand extends Command
      */
     private function printGroupsMenu(array $rectorsByGroup): void
     {
-        foreach ($rectorsByGroup as $group => $rectors) {
+        foreach (array_keys($rectorsByGroup) as $group) {
             $escapedGroup = str_replace('\\', '', $group);
             $escapedGroup = Strings::webalize($escapedGroup, '_');
 
@@ -223,7 +223,7 @@ final class GenerateRectorOverviewCommand extends Command
         $robotLoader->rebuild();
 
         $rectors = [];
-        foreach ($robotLoader->getIndexedClasses() as $class => $filename) {
+        foreach (array_keys($robotLoader->getIndexedClasses()) as $class) {
             $reflectionClass = new ReflectionClass($class);
             if ($reflectionClass->isAbstract()) {
                 continue;

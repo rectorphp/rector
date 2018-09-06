@@ -43,7 +43,7 @@ final class RenameSubKeyYamlRector implements YamlRectorInterface
 
     public function isCandidate(string $content): bool
     {
-        foreach ($this->pathsToNewKeys as $path => $newKey) {
+        foreach (array_keys($this->pathsToNewKeys) as $path) {
             $pathPattern = $this->createPatternFromPath($path);
 
             if ((bool) Strings::match($content, $pathPattern)) {
