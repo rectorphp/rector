@@ -46,16 +46,15 @@ abstract class AbstractRectorTestCase extends TestCase
     {
         $configFile = $this->provideConfig();
         $this->fileGuard = new FileGuard();
-        $this->fileGuard->ensureFileExists($configFile, get_called_class());
+        $this->fileGuard->ensureFileExists($configFile, static::class);
 
         $key = md5_file($configFile);
 
         if (isset(self::$containersPerConfig[$key]) && $this->rebuildFreshContainer === false) {
             $this->container = self::$containersPerConfig[$key];
         } else {
-            self::$containersPerConfig[$key] = $this->container = (new ContainerFactory())->createWithConfigFiles(
-                [$configFile]
-            );
+            $this->container = (new ContainerFactory())->createWithConfigFiles([$configFile]);
+            self::$containersPerConfig[$key] = $this->container;
         }
 
         $this->fileProcessor = $this->container->get(FileProcessor::class);
@@ -64,8 +63,8 @@ abstract class AbstractRectorTestCase extends TestCase
 
     protected function doTestFileMatchesExpectedContent(string $file, string $reconstructedFile): void
     {
-        $this->fileGuard->ensureFileExists($file, get_called_class());
-        $this->fileGuard->ensureFileExists($reconstructedFile, get_called_class());
+        $this->fileGuard->ensureFileExists($file, static::class);
+        $this->fileGuard->ensureFileExists($reconstructedFile, static::class);
 
         $this->parameterProvider->changeParameter('source', [$file]);
 

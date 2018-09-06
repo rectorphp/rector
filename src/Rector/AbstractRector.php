@@ -46,7 +46,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     }
 
     /**
-     * @return null|int|Node
+     * @return int|Node|null
      */
     final public function enterNode(Node $node)
     {

@@ -11,7 +11,7 @@ use Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutoBindParametersC
 final class NodeTypeResolverKernel extends Kernel
 {
     /**
-     * @var null|string
+     * @var string|null
      */
     private $config;
 

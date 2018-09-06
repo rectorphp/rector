@@ -30,7 +30,7 @@ abstract class AbstractYamlRectorTest extends TestCase
     {
         $config = $this->provideConfig();
         $this->fileGuard = new FileGuard();
-        $this->fileGuard->ensureFileExists($config, get_called_class());
+        $this->fileGuard->ensureFileExists($config, static::class);
 
         $this->container = (new ContainerFactory())->createWithConfigFiles([$config]);
 
@@ -39,8 +39,8 @@ abstract class AbstractYamlRectorTest extends TestCase
 
     protected function doTestFileMatchesExpectedContent(string $file, string $reconstructedFile): void
     {
-        $this->fileGuard->ensureFileExists($file, get_called_class());
-        $this->fileGuard->ensureFileExists($reconstructedFile, get_called_class());
+        $this->fileGuard->ensureFileExists($file, static::class);
+        $this->fileGuard->ensureFileExists($reconstructedFile, static::class);
 
         $reconstructedFileContent = $this->yamlFileProcessor->processFileInfo(new SplFileInfo($file, '', ''));
 

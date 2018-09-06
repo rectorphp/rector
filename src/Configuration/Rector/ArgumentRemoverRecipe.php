@@ -9,7 +9,7 @@ use Rector\Rector\Argument\ArgumentRemoverRector;
 final class ArgumentRemoverRecipe implements ArgumentRecipeInterface
 {
     /**
-     * @var null|string
+     * @var string|null
      */
     private $value;
 
