@@ -6,6 +6,7 @@ matrix:
       env: STATIC_ANALYSIS=true RUN_RECTOR=true MONOREPO_SPLIT=true
     - php: 7.1
       env: COMPOSER_FLAGS="--prefer-lowest"
+    - php: 7.2
 
 install:
   - composer update $COMPOSER_FLAGS
