@@ -4,6 +4,7 @@ namespace Rector\Symfony\Rector\HttpKernel;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
@@ -114,19 +115,64 @@ CODE_SAMPLE
             return false;
         }
 
-        return (bool) $this->betterNodeFinder->find($node, function (Node $node) {
+        // "$this->getRequest()"
+        $isGetRequestMethod = (bool) $this->betterNodeFinder->find($node, function (Node $node) {
             return $this->methodCallAnalyzer->isMethod($node, 'getRequest');
         });
+
+        if ($isGetRequestMethod) {
+            return true;
+        }
+
+        // "$this->get('request')"
+        /** @var MethodCall[] $getMethodCalls */
+        $getMethodCalls = $this->betterNodeFinder->find($node, function (Node $node) {
+            return $this->methodCallAnalyzer->isMethod($node, 'get');
+        });
+
+        foreach ($getMethodCalls as $getMethodCall) {
+            if ($this->isGetMethodCallWithRequestParameters($getMethodCall)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function isGetRequestInAction(Node $node): bool
     {
-        if (! $this->methodCallAnalyzer->isMethod($node, 'getRequest')) {
+        if (! $node instanceof MethodCall) {
+            return false;
+        }
+
+        if (! $this->methodCallAnalyzer->isMethods(
+            $node,
+            ['getRequest']
+        ) && ! $this->isGetMethodCallWithRequestParameters($node)) {
             return false;
         }
 
         $methodNode = $node->getAttribute(Attribute::METHOD_NODE);
-
         return $this->controllerMethodAnalyzer->isAction($methodNode);
+    }
+
+    private function isGetMethodCallWithRequestParameters(MethodCall $methodCall): bool
+    {
+        if ((string) $methodCall->name !== 'get') {
+            return false;
+        }
+
+        if (count($methodCall->args) !== 1) {
+            return false;
+        }
+
+        if (! $methodCall->args[0]->value instanceof String_) {
+            return false;
+        }
+
+        /** @var String_ $stringValue */
+        $stringValue = $methodCall->args[0]->value;
+
+        return $stringValue->value === 'request';
     }
 }

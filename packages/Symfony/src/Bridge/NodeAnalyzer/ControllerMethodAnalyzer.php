@@ -20,13 +20,17 @@ final class ControllerMethodAnalyzer
         }
 
         $parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
-        if (! Strings::endsWith($parentClassName, 'Controller')) {
-            return false;
+
+        if (Strings::endsWith($parentClassName, 'Controller')) {
+            return true;
         }
 
         /** @var Identifier $identifierNode */
         $identifierNode = $node->name;
+        if (Strings::endsWith($identifierNode->toString(), 'Action')) {
+            return true;
+        }
 
-        return Strings::endsWith($identifierNode->toString(), 'Action');
+        return $node->isPublic();
     }
 }
