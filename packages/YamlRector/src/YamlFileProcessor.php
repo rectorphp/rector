@@ -30,10 +30,6 @@ final class YamlFileProcessor
         $content = $splFileInfo->getContents();
 
         foreach ($this->yamlRectors as $yamlRector) {
-            if (! $yamlRector->isCandidate($content)) {
-                continue;
-            }
-
             $content = $yamlRector->refactor($content);
         }
 
