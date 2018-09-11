@@ -177,7 +177,7 @@ final class NodeFactory
     public function createParam(string $name, string $type): Param
     {
         return $this->builderFactory->param($name)
-            ->setTypeHint($type)
+            ->setTypeHint(new FullyQualified($type))
             ->getNode();
     }
 
