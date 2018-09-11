@@ -22,13 +22,12 @@ final class SpaceBetweenKeyAndValueYamlRector implements YamlRectorInterface
         ]);
     }
 
-    public function isCandidate(string $content): bool
-    {
-        return (bool) Strings::matchAll($content, self::KEY_WITHOUT_SPACE_AFTER_PATTERN);
-    }
-
     public function refactor(string $content): string
     {
+        if (! (bool) Strings::matchAll($content, self::KEY_WITHOUT_SPACE_AFTER_PATTERN)) {
+            return $content;
+        }
+
         return Strings::replace($content, self::KEY_WITHOUT_SPACE_AFTER_PATTERN, '$1: $2');
     }
 }

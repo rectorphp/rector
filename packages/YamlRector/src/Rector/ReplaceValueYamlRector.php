@@ -41,32 +41,20 @@ final class ReplaceValueYamlRector implements YamlRectorInterface
         ]);
     }
 
-    public function isCandidate(string $content): bool
-    {
-        foreach ($this->oldToNewKeyByPaths as $path => $keys) {
-            $oldValue = key($keys);
-
-            $pathPattern = $this->createPatternFromPath($path, $oldValue);
-            if ((bool) Strings::match($content, $pathPattern)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     public function refactor(string $content): string
     {
         foreach ($this->oldToNewKeyByPaths as $path => $keys) {
             $oldValue = key($keys);
 
             $pathPattern = $this->createPatternFromPath($path, $oldValue);
-            if (Strings::match($content, $pathPattern)) {
-                $newValue = current($keys);
-                $replacePattern = $this->createReplacePatternFromNewValue($newValue);
-
-                $content = Strings::replace($content, $pathPattern, $replacePattern, 1);
+            if (! Strings::match($content, $pathPattern)) {
+                continue;
             }
+
+            $newValue = current($keys);
+            $replacePattern = $this->createReplacePatternFromNewValue($newValue);
+
+            $content = Strings::replace($content, $pathPattern, $replacePattern, 1);
         }
 
         return $content;

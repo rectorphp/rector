@@ -21,13 +21,12 @@ final class SessionStrictTrueByDefaultYamlRector implements YamlRectorInterface
         ]);
     }
 
-    public function isCandidate(string $content): bool
-    {
-        return (bool) Strings::matchAll($content, self::USE_STRICT_MODE_PATTERN);
-    }
-
     public function refactor(string $content): string
     {
+        if (! (bool) Strings::matchAll($content, self::USE_STRICT_MODE_PATTERN)) {
+            return $content;
+        }
+
         return Strings::replace($content, self::USE_STRICT_MODE_PATTERN, '$1$2');
     }
 }

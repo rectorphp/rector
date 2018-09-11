@@ -41,19 +41,6 @@ final class RenameSubKeyYamlRector implements YamlRectorInterface
         ]);
     }
 
-    public function isCandidate(string $content): bool
-    {
-        foreach (array_keys($this->pathsToNewKeys) as $path) {
-            $pathPattern = $this->createPatternFromPath($path);
-
-            if ((bool) Strings::match($content, $pathPattern)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     public function refactor(string $content): string
     {
         // @see https://stackoverflow.com/a/32185032/1348344
