@@ -28,6 +28,7 @@
         "symplify/changelog-linker": "^4.8",
         "symplify/easy-coding-standard": "^4.8",
         "symplify/monorepo-builder": "^4.8",
+        "symplify/phpstan-extensions": "dev-master",
         "tracy/tracy": "^2.5"
     },
     "autoload": {
