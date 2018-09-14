@@ -105,15 +105,18 @@ final class FilesFinder
         }
 
         $finder->filter(function (NativeSplFileInfo $splFileInfo) {
+            // return false to remove file
             foreach ($this->excludePaths as $excludePath) {
                 if (Strings::match($splFileInfo->getRealPath(), $excludePath)) {
-                    return true;
+                    return false;
                 }
 
-                return fnmatch($splFileInfo->getRealPath(), $excludePath);
+                if (fnmatch($splFileInfo->getRealPath(), $excludePath)) {
+                    return false;
+                }
             }
 
-            return false;
+            return true;
         });
     }
 }
