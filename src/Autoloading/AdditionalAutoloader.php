@@ -34,19 +34,27 @@ final class AdditionalAutoloader
     private $filesystemTweaker;
 
     /**
+     * @var string[]
+     */
+    private $excludePaths = [];
+
+    /**
      * @param string[] $autoloadFiles
      * @param string[] $autoloadDirectories
+     * @param string[] $excludePaths
      */
     public function __construct(
         array $autoloadFiles,
         array $autoloadDirectories,
         FileGuard $fileGuard,
-        FilesystemTweaker $filesystemTweaker
+        FilesystemTweaker $filesystemTweaker,
+        array $excludePaths
     ) {
         $this->autoloadFiles = $autoloadFiles;
         $this->autoloadDirectories = $autoloadDirectories;
         $this->fileGuard = $fileGuard;
         $this->filesystemTweaker = $filesystemTweaker;
+        $this->excludePaths = $excludePaths;
     }
 
     /**
@@ -89,6 +97,9 @@ final class AdditionalAutoloader
 
         $robotLoader = new RobotLoader();
         $robotLoader->ignoreDirs[] = '*Fixtures';
+        foreach ($this->excludePaths as $excludePath) {
+            $robotLoader->ignoreDirs[] = $excludePath;
+        }
         // last argument is workaround: https://github.com/nette/robot-loader/issues/12
         $robotLoader->setTempDirectory(sys_get_temp_dir() . '/_rector_robot_loader');
 
