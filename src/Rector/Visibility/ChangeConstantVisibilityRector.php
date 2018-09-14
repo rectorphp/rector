@@ -14,7 +14,7 @@ use Rector\Tests\Rector\Visibility\ChangeConstantVisibilityRector\Source\ParentO
 final class ChangeConstantVisibilityRector extends AbstractRector
 {
     /**
-     * @var string[] { class => [ method name => visibility ] }
+     * @var string[][] { class => [ method name => visibility ] }
      */
     private $constantToVisibilityByClass = [];
 
@@ -24,7 +24,7 @@ final class ChangeConstantVisibilityRector extends AbstractRector
     private $visibilityModifier;
 
     /**
-     * @param string[] $constantToVisibilityByClass
+     * @param string[][] $constantToVisibilityByClass
      */
     public function __construct(array $constantToVisibilityByClass, VisibilityModifier $visibilityModifier)
     {

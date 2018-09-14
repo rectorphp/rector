@@ -35,10 +35,10 @@ final class MethodCallAnalyzer
             return false;
         }
 
-        /** @var Identifier $methodCallNode */
-        $methodName = $node->name;
+        /** @var MethodCall $node */
+        $methodName = (string) $node->name;
 
-        return in_array($methodName->toString(), $methods, true);
+        return in_array($methodName, $methods, true);
     }
 
     /**
@@ -50,10 +50,10 @@ final class MethodCallAnalyzer
             return false;
         }
 
-        /** @var Identifier $methodName */
-        $methodName = $node->name;
+        /** @var MethodCall $node */
+        $methodName = (string) $node->name;
 
-        return $methodName->toString() === $method;
+        return $methodName === $method;
     }
 
     /**
@@ -67,10 +67,10 @@ final class MethodCallAnalyzer
             return false;
         }
 
-        /** @var Identifier $methodName */
-        $methodName = $node->name;
+        /** @var MethodCall $node */
+        $methodName = (string) $node->name;
 
-        return $methodName->toString() === $method;
+        return $methodName === $method;
     }
 
     /**

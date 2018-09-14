@@ -33,10 +33,10 @@ final class ClassMethodAnalyzer
             return false;
         }
 
-        /** @var Identifier $methodName */
-        $methodName = $node->name;
+        /** @var ClassMethod $node */
+        $methodName = (string) $node->name;
 
-        return in_array($methodName->toString(), $methods, true);
+        return in_array($methodName, $methods, true);
     }
 
     private function isType(Node $node, string $type): bool
