@@ -24,7 +24,6 @@
     "require-dev": {
         "humbug/php-scoper": "^0.9.2",
         "phpunit/phpunit": "^7.3",
-        "slam/php-cs-fixer-extensions": "^1.17",
         "symplify/changelog-linker": "^4.8",
         "symplify/easy-coding-standard": "^4.8",
         "symplify/monorepo-builder": "^4.8",

@@ -9,9 +9,6 @@ services:
     Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
         maxCognitiveComplexity: 8
 
-    # Class should be Final or Abstract
-    SlamCsFixer\FinalInternalClassFixer: ~
-
     Symplify\CodingStandard\Fixer\Order\MethodOrderByTypeFixer:
         method_order_by_type:
             Rector\Contract\Rector\PhpRectorInterface:
