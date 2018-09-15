@@ -193,7 +193,6 @@ final class MergeIsCandidateRector extends AbstractRector
         } else {
             dump($paramTagValueNode->type);
             // todo: resolve
-            die;
         }
 
         return $types;

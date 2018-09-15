@@ -14,9 +14,11 @@ services:
     # clean empty doc blocks, e.g. after annotation removal
     PhpCsFixer\Fixer\Phpdoc\NoEmptyPhpdocFixer: ~
 
-    # import all namespaces
-    Symplify\CodingStandard\Fixer\Import\ImportNamespacedNameFixer:
-        include_doc_blocks: true
+    # import namespaces for classes, constants and functions
+    # configuration: https://github.com/slevomat/coding-standard#slevomatcodingstandardnamespacesreferenceusednamesonly-
+    SlevomatCodingStandard\Sniffs\Namespaces\ReferenceUsedNamesOnlySniff:
+        allowFallbackGlobalFunctions: true
+        allowFallbackGlobalConstants: true
 
     # add spaces between class elements
     PhpCsFixer\Fixer\ClassNotation\ClassAttributesSeparationFixer: ~

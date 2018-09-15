@@ -1,5 +1,5 @@
 includes:
-     - 'vendor/symplify/phpstan-extensions/src/config/config.neon'
+     - 'vendor/symplify/phpstan-extensions/config/config.neon'
 
 parameters:
     excludes_analyse:

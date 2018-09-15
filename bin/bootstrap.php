@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 
 // very dummy way to detect rector dev repository, didn't find anything better - improve if you like
-$isDevRepository = file_exists(__DIR__ . '/../README.md') || \file_exists(__DIR__ . '/../../build');
+$isDevRepository = file_exists(__DIR__ . '/../README.md') || file_exists(__DIR__ . '/../../build');
 
 // load the project with Prefixed Rector
 if (! $isDevRepository) {

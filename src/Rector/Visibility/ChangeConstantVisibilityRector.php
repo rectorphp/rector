@@ -37,7 +37,7 @@ final class ChangeConstantVisibilityRector extends AbstractRector
         return new RectorDefinition(
             'Change visibility of constant from parent class.',
             [new ConfiguredCodeSample(
-<<<'CODE_SAMPLE'
+                <<<'CODE_SAMPLE'
 class FrameworkClass
 {
     protected const SOME_CONSTANT = 1;
@@ -49,7 +49,7 @@ class MyClass extends FrameworkClass
 }
 CODE_SAMPLE
                 ,
-<<<'CODE_SAMPLE'
+                <<<'CODE_SAMPLE'
 class FrameworkClass
 {
     protected const SOME_CONSTANT = 1;
