@@ -39,12 +39,10 @@ final class PropertyFetchAnalyzer
             return false;
         }
 
-        /** @var Identifier $propertyFetchName */
-        $propertyFetchName = $node->name;
+        /** @var PropertyFetch $node */
+        $propertyFetchName = (string) $node->name;
 
-        $nodePropertyName = $propertyFetchName->toString();
-
-        return $nodePropertyName === $property;
+        return $propertyFetchName === $property;
     }
 
     /**
@@ -122,10 +120,10 @@ final class PropertyFetchAnalyzer
             return false;
         }
 
-        /** @var Identifier $propertyFetchName */
-        $propertyFetchName = $node->name;
+        /** @var PropertyFetch $node */
+        $propertyFetchName = (string) $node->name;
 
-        return in_array($propertyFetchName->toString(), $propertyNames, true);
+        return in_array($propertyFetchName, $propertyNames, true);
     }
 
     /**

@@ -1,4 +1,17 @@
+includes:
+     - 'vendor/symplify/phpstan-extensions/config/config.neon'
+
 parameters:
+    excludes_analyse:
+        # test files
+        - '*tests/Rector/MethodCall/MethodNameReplacerRector/**/SomeClass.php'
+        - '*packages/BetterReflection/tests/Reflector/NotLoadedSource/SomeClass.php'
+        - 'packages/NodeTypeResolver/tests/PerNodeTypeResolver/VariableTypeResolver/Source/NewClass.php'
+        # tests files
+        - '*tests/**/Wrong/*'
+        - '*tests/**/Correct/*'
+        - '*tests/**/Source/*'
+
     ignoreErrors:
         # the # after each ignored error is the number of occurrences
         - '#Parameter \#2 \$filePath of method Rector\\(.*?)::decorateNodesFromFile\(\) expects string, string\|false given#'
@@ -80,13 +93,3 @@ parameters:
 
         # too strict
         - '#Parameter \#1 \$currentWorkingDirectory of class PHPStan\\DependencyInjection\\ContainerFactory constructor expects string, string\|false given#' # 1
-
-    excludes_analyse:
-        # test files
-        - '*tests/Rector/MethodCall/MethodNameReplacerRector/**/SomeClass.php'
-        - '*packages/BetterReflection/tests/Reflector/NotLoadedSource/SomeClass.php'
-        - 'packages/NodeTypeResolver/tests/PerNodeTypeResolver/VariableTypeResolver/Source/NewClass.php'
-        # tests files
-        - '*tests/**/Wrong/*'
-        - '*tests/**/Correct/*'
-        - '*tests/**/Source/*'

@@ -30,6 +30,7 @@ final class IdentifierRenamer
     {
         $this->ensureNodeHasIdentifier($node);
 
+        /** @var ClassConstFetch|MethodCall|PropertyFetch|StaticCall|ClassMethod $node */
         $node->name = new Identifier($newMethodName);
     }
 
@@ -40,6 +41,7 @@ final class IdentifierRenamer
     {
         $this->ensureNodeHasIdentifier($node);
 
+        /** @var ClassConstFetch|MethodCall|PropertyFetch|StaticCall|ClassMethod $node */
         $oldNodeMethodName = $node->name->toString();
 
         $node->name = new Identifier($renameMethodMap[$oldNodeMethodName]);
@@ -49,6 +51,7 @@ final class IdentifierRenamer
     {
         $this->ensureNodeHasIdentifier($node);
 
+        /** @var ClassConstFetch|MethodCall|PropertyFetch|StaticCall|ClassMethod $node */
         $node->name = new Identifier(preg_replace(sprintf('/%s$/', $suffixToRemove), '', $node->name));
     }
 
