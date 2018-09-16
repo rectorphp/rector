@@ -123,7 +123,7 @@ CODE_SAMPLE
     private function matchOldToNewMethods(): array
     {
         foreach ($this->activeTypes as $activeType) {
-            if ($this->perClassOldToNewMethods[$activeType]) {
+            if (isset($this->perClassOldToNewMethods[$activeType])) {
                 return $this->perClassOldToNewMethods[$activeType];
             }
         }
