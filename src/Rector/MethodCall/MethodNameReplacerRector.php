@@ -204,10 +204,13 @@ CODE_SAMPLE
 
         $oldToNewMethods = $this->matchOldToNewMethods();
 
-        /** @var Identifier $identifierNode */
-        $identifierNode = $node->name;
+        // e.g. $this->{$arg}()
+        if (! is_string($node->name) && ! $node->name instanceof Identifier) {
+            return $node;
+        }
 
-        $methodName = $identifierNode->toString();
+        /** @var Identifier|string $node->name */
+        $methodName = (string) $node->name;
         if (! isset($oldToNewMethods[$methodName])) {
             return $node;
         }

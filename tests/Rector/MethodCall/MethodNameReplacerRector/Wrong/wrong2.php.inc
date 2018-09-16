@@ -2,3 +2,4 @@
 
 $html = new \Nette\Utils\Html();
 $html->add('someContent');
+$html->{$value}();
