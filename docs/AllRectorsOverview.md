@@ -1835,4 +1835,3 @@ services:
 +    protected const SOME_CONSTANT = 1;
  }
 ```
-
