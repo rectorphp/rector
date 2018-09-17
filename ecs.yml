@@ -20,6 +20,7 @@ services:
             - 'Rector\RectorDefinition\*'
             - 'PHPStan\Analyser\Scope'
             - 'PhpParser\NodeVisitor\NameResolver'
+            - 'Rector\Application\Error'
 
     Symplify\CodingStandard\Fixer\Naming\PropertyNameMatchingTypeFixer:
         extra_skipped_classes:
