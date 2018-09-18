@@ -10,6 +10,7 @@ use Rector\Autoloading\AdditionalAutoloader;
 use Rector\Configuration\Option;
 use Rector\Console\ConsoleStyle;
 use Rector\Console\Output\ProcessCommandReporter;
+use Rector\Console\Shell;
 use Rector\ConsoleDiffer\DifferAndFormatter;
 use Rector\FileSystem\FilesFinder;
 use Rector\Guard\RectorGuard;
@@ -165,7 +166,7 @@ final class ProcessCommand extends Command
 
         if ($this->errors) {
             $this->processCommandReporter->reportErrors($this->errors);
-            return 1;
+            return Shell::CODE_ERROR;
         }
 
         if ($input->getOption(Option::OPTION_WITH_STYLE)) {
@@ -179,7 +180,7 @@ final class ProcessCommand extends Command
 
         $this->consoleStyle->success('Rector is done!');
 
-        return 0;
+        return Shell::CODE_SUCCESS;
     }
 
     /**
