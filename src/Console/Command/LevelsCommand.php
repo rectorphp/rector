@@ -4,6 +4,7 @@ namespace Rector\Console\Command;
 
 use Nette\Utils\Strings;
 use Rector\Console\ConsoleStyle;
+use Rector\Console\Shell;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -43,7 +44,7 @@ final class LevelsCommand extends Command
         $this->consoleStyle->title(sprintf('%d available levels:', count($levels)));
         $this->consoleStyle->listing($levels);
 
-        return 0;
+        return Shell::CODE_SUCCESS;
     }
 
     /**

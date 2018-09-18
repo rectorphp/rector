@@ -3,13 +3,15 @@
 namespace Rector\Console\Command;
 
 use Nette\Utils\FileSystem;
+use PHPStan\AnalysedCodeException;
+use Rector\Application\Error;
 use Rector\Application\FileProcessor;
 use Rector\Autoloading\AdditionalAutoloader;
 use Rector\Configuration\Option;
 use Rector\Console\ConsoleStyle;
 use Rector\Console\Output\ProcessCommandReporter;
+use Rector\Console\Shell;
 use Rector\ConsoleDiffer\DifferAndFormatter;
-use Rector\Exception\Command\FileProcessingException;
 use Rector\FileSystem\FilesFinder;
 use Rector\Guard\RectorGuard;
 use Rector\Reporting\FileDiff;
@@ -81,6 +83,11 @@ final class ProcessCommand extends Command
      * @var RectorGuard
      */
     private $rectorGuard;
+
+    /**
+     * @var Error[]
+     */
+    private $errors = [];
 
     public function __construct(
         FileProcessor $fileProcessor,
@@ -157,6 +164,11 @@ final class ProcessCommand extends Command
         $this->processCommandReporter->reportFileDiffs($this->fileDiffs);
         $this->processCommandReporter->reportChangedFiles($this->changedFiles);
 
+        if ($this->errors) {
+            $this->processCommandReporter->reportErrors($this->errors);
+            return Shell::CODE_ERROR;
+        }
+
         if ($input->getOption(Option::OPTION_WITH_STYLE)) {
             $command = sprintf('vendor/bin/ecs check %s --config ecs-after-rector.yml --fix', implode(' ', $source));
 
@@ -168,7 +180,7 @@ final class ProcessCommand extends Command
 
         $this->consoleStyle->success('Rector is done!');
 
-        return 0;
+        return Shell::CODE_SUCCESS;
     }
 
     /**
@@ -189,13 +201,15 @@ final class ProcessCommand extends Command
                 } elseif ($fileInfo->getExtension() === 'yml') {
                     $this->processYamlFile($fileInfo);
                 }
-            } catch (Throwable $throwable) {
-                $this->consoleStyle->newLine();
-                throw new FileProcessingException(
-                    sprintf('Processing of "%s" file failed.', $fileInfo->getPathname()),
-                    $throwable->getCode(),
-                    $throwable
+            } catch (AnalysedCodeException $analysedCodeException) {
+                $message = sprintf(
+                    'Analyze error: %s Try to include your files in "parameters > autoload_files" or "parameters > autoload_directories".%sSee https://github.com/rectorphp/rector#extra-autoloading',
+                    $analysedCodeException->getMessage(),
+                    PHP_EOL
                 );
+                $this->errors[] = new Error($fileInfo, $message, null);
+            } catch (Throwable $throwable) {
+                $this->errors[] = new Error($fileInfo, $throwable->getMessage(), $throwable->getCode());
             }
 
             $this->consoleStyle->progressAdvance();

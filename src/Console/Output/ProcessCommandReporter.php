@@ -2,6 +2,7 @@
 
 namespace Rector\Console\Output;
 
+use Rector\Application\Error;
 use Rector\Console\ConsoleStyle;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\NodeTraverser\RectorNodeTraverser;
@@ -90,6 +91,27 @@ final class ProcessCommandReporter
             $this->consoleStyle->newLine();
             $this->consoleStyle->writeln($fileDiff->getDiff());
             $this->consoleStyle->newLine();
+        }
+    }
+
+    /**
+     * @param Error[] $errors
+     */
+    public function reportErrors(array $errors): void
+    {
+        foreach ($errors as $error) {
+            $message = sprintf(
+                'Could not process "%s" file, due to: %s"%s".',
+                $error->getFileInfo()->getPathname(),
+                PHP_EOL,
+                $error->getMessage()
+            );
+
+            if ($error->getLine()) {
+                $message .= ' On line: ' . $error->getLine();
+            }
+
+            $this->consoleStyle->error($message);
         }
     }
 }

@@ -5,6 +5,7 @@ namespace Rector\Console\Command;
 use Nette\Loaders\RobotLoader;
 use Nette\Utils\Strings;
 use Rector\Console\ConsoleStyle;
+use Rector\Console\Shell;
 use Rector\ConsoleDiffer\MarkdownDifferAndFormatter;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\Exception\ShouldNotHappenException;
@@ -65,8 +66,7 @@ final class GenerateRectorOverviewCommand extends Command
         $rectorsByGroup = $this->groupRectors($this->getGeneralRectors());
         $this->printRectorsByGroup($rectorsByGroup);
 
-        // success
-        return 0;
+        return Shell::CODE_SUCCESS;
     }
 
     /**
