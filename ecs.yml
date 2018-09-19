@@ -12,9 +12,12 @@ services:
     Symplify\CodingStandard\Fixer\Order\MethodOrderByTypeFixer:
         method_order_by_type:
             Rector\Contract\Rector\PhpRectorInterface:
-            - 'getDefinition'
-            - 'getNodeTypes'
-            - 'refactor'
+                - 'getDefinition'
+                - 'getNodeTypes'
+                - 'refactor'
+            Rector\YamlRector\Contract\YamlRectorInterface:
+                - 'getDefinition'
+                - 'refactor'
 
     Symplify\CodingStandard\Sniffs\DependencyInjection\NoClassInstantiationSniff:
         extraAllowedClasses:
