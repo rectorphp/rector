@@ -5,6 +5,9 @@ namespace Rector\Tests\Rector\Property\PropertyNameReplacerRector;
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
+/**
+ * @covers \Rector\Rector\Property\PropertyNameReplacerRector
+ */
 final class PropertyNameReplacerRectorTest extends AbstractRectorTestCase
 {
     /**
