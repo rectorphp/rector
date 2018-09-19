@@ -40,19 +40,19 @@ final class CatchAndClosureUseNameRector extends AbstractRector
         $this->propertyFetchNodeFactory = $propertyFetchNodeFactory;
     }
 
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('Turns `$catchNode->var` to its new `name` property in php-parser', [
+            new CodeSample('$catchNode->var;', '$catchNode->var->name'),
+        ]);
+    }
+
     /**
      * @return string[]
      */
     public function getNodeTypes(): array
     {
         return [PropertyFetch::class];
-    }
-
-    public function getDefinition(): RectorDefinition
-    {
-        return new RectorDefinition('Turns `$catchNode->var` to its new `name` property in php-parser', [
-            new CodeSample('$catchNode->var;', '$catchNode->var->name'),
-        ]);
     }
 
     /**

@@ -66,14 +66,6 @@ final class ActionInjectionToConstructorInjectionRector extends AbstractRector
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
-    /**
-     * @return string[]
-     */
-    public function getNodeTypes(): array
-    {
-        return [Class_::class];
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Turns action injection in Controllers to constructor injection', [
@@ -108,6 +100,14 @@ final class SomeController
 CODE_SAMPLE
             ),
         ]);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
+    {
+        return [Class_::class];
     }
 
     /**

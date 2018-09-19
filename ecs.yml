@@ -9,6 +9,13 @@ services:
     Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
         maxCognitiveComplexity: 8
 
+    Symplify\CodingStandard\Fixer\Order\MethodOrderByTypeFixer:
+        method_order_by_type:
+            Rector\Contract\Rector\PhpRectorInterface:
+            - 'getDefinition'
+            - 'getNodeTypes'
+            - 'refactor'
+
     Symplify\CodingStandard\Sniffs\DependencyInjection\NoClassInstantiationSniff:
         extraAllowedClasses:
             - 'PhpParser\Node\*'
