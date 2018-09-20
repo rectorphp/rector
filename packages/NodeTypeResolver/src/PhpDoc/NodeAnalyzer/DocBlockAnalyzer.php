@@ -2,6 +2,7 @@
 
 namespace Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer;
 
+use Nette\Utils\Strings;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
@@ -44,9 +45,9 @@ final class DocBlockAnalyzer
             return false;
         }
 
-        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
-
-        return $phpDocInfo->hasTag($name);
+        return Strings::contains($node->getDocComment()->getText(), '@' . $name);
+//        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
+//        return $phpDocInfo->hasTag($name);
     }
 
     public function removeParamTagByName(Node $node, string $name): void
