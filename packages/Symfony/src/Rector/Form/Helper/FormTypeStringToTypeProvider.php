@@ -45,6 +45,10 @@ final class FormTypeStringToTypeProvider
 
     public function hasClassForNameWithPrefix(string $name): bool
     {
+        if (! Strings::startsWith($name, 'form.type.')) {
+            return false;
+        }
+
         $name = $this->removeFormTypePrefix($name);
 
         return $this->hasClassForName($name);

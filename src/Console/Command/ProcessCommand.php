@@ -200,30 +200,7 @@ final class ProcessCommand extends Command
         $this->consoleStyle->progressStart($totalFiles);
 
         foreach ($fileInfos as $fileInfo) {
-            try {
-                // php
-                if ($fileInfo->getExtension() === 'php') {
-                    $this->processFile($fileInfo);
-                // yml
-                } elseif ($fileInfo->getExtension() === 'yml') {
-                    $this->processYamlFile($fileInfo);
-                }
-            } catch (AnalysedCodeException $analysedCodeException) {
-                if ($shouldHideAutoloadErrors) {
-                    continue;
-                }
-
-                $message = sprintf(
-                    'Analyze error: %s Try to include your files in "parameters > autoload_files" or "parameters > autoload_directories".%sSee https://github.com/rectorphp/rector#extra-autoloading',
-                    $analysedCodeException->getMessage(),
-                    PHP_EOL
-                );
-
-                $this->errors[] = new Error($fileInfo, $message, null);
-            } catch (Throwable $throwable) {
-                $this->errors[] = new Error($fileInfo, $throwable->getMessage(), $throwable->getCode());
-            }
-
+            $this->processFileInfo($fileInfo, $shouldHideAutoloadErrors);
             $this->consoleStyle->progressAdvance();
         }
 
@@ -269,6 +246,33 @@ final class ProcessCommand extends Command
 
                 FileSystem::write($fileInfo->getPathname(), $newContent);
             }
+        }
+    }
+
+    private function processFileInfo(SplFileInfo $fileInfo, bool $shouldHideAutoloadErrors): void
+    {
+        try {
+            // php
+            if ($fileInfo->getExtension() === 'php') {
+                $this->processFile($fileInfo);
+            // yml
+            } elseif ($fileInfo->getExtension() === 'yml') {
+                $this->processYamlFile($fileInfo);
+            }
+        } catch (AnalysedCodeException $analysedCodeException) {
+            if ($shouldHideAutoloadErrors) {
+                return;
+            }
+
+            $message = sprintf(
+                'Analyze error: %s Try to include your files in "parameters > autoload_files" or "parameters > autoload_directories".%sSee https://github.com/rectorphp/rector#extra-autoloading',
+                $analysedCodeException->getMessage(),
+                PHP_EOL
+            );
+
+            $this->errors[] = new Error($fileInfo, $message, null);
+        } catch (Throwable $throwable) {
+            $this->errors[] = new Error($fileInfo, $throwable->getMessage(), $throwable->getCode());
         }
     }
 }

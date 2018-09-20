@@ -3,9 +3,10 @@
 namespace Rector\Symfony\Rector\Form;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\Node\NodeFactory;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -26,9 +27,25 @@ final class StringFormTypeToClassRector extends AbstractRector
      */
     private $formTypeStringToTypeProvider;
 
-    public function __construct(NodeFactory $nodeFactory, FormTypeStringToTypeProvider $formTypeStringToTypeProvider)
-    {
+    /**
+     * @var string
+     */
+    private $formBuilderClass;
+
+    /**
+     * @var MethodCallAnalyzer
+     */
+    private $methodCallAnalyzer;
+
+    public function __construct(
+        NodeFactory $nodeFactory,
+        FormTypeStringToTypeProvider $formTypeStringToTypeProvider,
+        MethodCallAnalyzer $methodCallAnalyzer,
+        string $formBuilderClass = 'Symfony\Component\Form\FormBuilderInterface'
+    ) {
         $this->nodeFactory = $nodeFactory;
+        $this->formBuilderClass = $formBuilderClass;
+        $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->formTypeStringToTypeProvider = $formTypeStringToTypeProvider;
     }
 
@@ -41,8 +58,15 @@ final class StringFormTypeToClassRector extends AbstractRector
             'Turns string Form Type references to their CONSTANT alternatives in FormTypes in Form in Symfony',
             [
                 new CodeSample(
-                    '$form->add("name", "form.type.text");',
-                    '$form->add("name", \Symfony\Component\Form\Extension\Core\Type\TextType::class);'
+<<<'CODE_SAMPLE'
+$formBuilder = new Symfony\Component\Form\FormBuilder;
+$formBuilder->add('name', 'form.type.text');
+CODE_SAMPLE
+                    ,
+                    <<<'CODE_SAMPLE'
+$formBuilder = new Symfony\Component\Form\FormBuilder;
+$form->add('name', \Symfony\Component\Form\Extension\Core\Type\TextType::class);
+CODE_SAMPLE
                 ),
             ]
         );
@@ -53,22 +77,40 @@ final class StringFormTypeToClassRector extends AbstractRector
      */
     public function getNodeTypes(): array
     {
-        return [String_::class];
+        return [MethodCall::class];
     }
 
     /**
-     * @param String_ $stringNode
+     * @param MethodCall $methodCallNode
      */
-    public function refactor(Node $stringNode): ?Node
+    public function refactor(Node $methodCallNode): ?Node
     {
+        if (! $this->methodCallAnalyzer->isTypeAndMethod($methodCallNode, $this->formBuilderClass, 'add')) {
+            return null;
+        }
+
+        // just one argument
+        if (! isset($methodCallNode->args[1])) {
+            return null;
+        }
+
+        // not a string
+        if (! $methodCallNode->args[1]->value instanceof String_) {
+            return null;
+        }
+
+        /** @var String_ $stringNode */
+        $stringNode = $methodCallNode->args[1]->value;
+
+        // not a form type string
         if (! $this->formTypeStringToTypeProvider->hasClassForNameWithPrefix($stringNode->value)) {
             return null;
         }
-        if (((string) $stringNode->getAttribute(Attribute::METHOD_CALL_NAME) === 'add') === false) {
-            return null;
-        }
+
         $class = $this->formTypeStringToTypeProvider->getClassForNameWithPrefix($stringNode->value);
 
-        return $this->nodeFactory->createClassConstantReference($class);
+        $methodCallNode->args[1]->value = $this->nodeFactory->createClassConstantReference($class);
+
+        return $methodCallNode;
     }
 }

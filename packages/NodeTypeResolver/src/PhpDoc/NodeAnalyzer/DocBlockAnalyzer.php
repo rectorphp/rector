@@ -46,8 +46,6 @@ final class DocBlockAnalyzer
         }
 
         return Strings::contains($node->getDocComment()->getText(), '@' . $name);
-//        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
-//        return $phpDocInfo->hasTag($name);
     }
 
     public function removeParamTagByName(Node $node, string $name): void
