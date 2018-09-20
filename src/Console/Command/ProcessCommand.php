@@ -141,6 +141,13 @@ final class ProcessCommand extends Command
             InputOption::VALUE_NONE,
             'Apply basic coding style afterwards to make code look nicer'
         );
+
+        $this->addOption(
+            'hide-autoload-errors',
+            null,
+            InputOption::VALUE_NONE,
+            'Hide autoload errors for the moment.'
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -159,7 +166,7 @@ final class ProcessCommand extends Command
 
         $this->processCommandReporter->reportLoadedRectors();
 
-        $this->processFileInfos($allFileInfos);
+        $this->processFileInfos($allFileInfos, (bool) $input->getOption('hide-autoload-errors'));
 
         $this->processCommandReporter->reportFileDiffs($this->fileDiffs);
         $this->processCommandReporter->reportChangedFiles($this->changedFiles);
@@ -186,7 +193,7 @@ final class ProcessCommand extends Command
     /**
      * @param SplFileInfo[] $fileInfos
      */
-    private function processFileInfos(array $fileInfos): void
+    private function processFileInfos(array $fileInfos, bool $shouldHideAutoloadErrors): void
     {
         $totalFiles = count($fileInfos);
         $this->consoleStyle->title(sprintf('Processing %d file%s', $totalFiles, $totalFiles === 1 ? '' : 's'));
@@ -202,11 +209,16 @@ final class ProcessCommand extends Command
                     $this->processYamlFile($fileInfo);
                 }
             } catch (AnalysedCodeException $analysedCodeException) {
+                if ($shouldHideAutoloadErrors) {
+                    continue;
+                }
+
                 $message = sprintf(
                     'Analyze error: %s Try to include your files in "parameters > autoload_files" or "parameters > autoload_directories".%sSee https://github.com/rectorphp/rector#extra-autoloading',
                     $analysedCodeException->getMessage(),
                     PHP_EOL
                 );
+
                 $this->errors[] = new Error($fileInfo, $message, null);
             } catch (Throwable $throwable) {
                 $this->errors[] = new Error($fileInfo, $throwable->getMessage(), $throwable->getCode());
