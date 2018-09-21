@@ -5,6 +5,8 @@ namespace Rector\Utils;
 use Nette\Utils\Strings;
 use Rector\Exception\FileSystem\DirectoryNotFoundException;
 use Rector\Exception\FileSystem\FileNotFoundException;
+use function Safe\glob;
+use function Safe\sprintf;
 
 final class FilesystemTweaker
 {

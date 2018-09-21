@@ -26,6 +26,7 @@ use Symfony\Component\Process\Process;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Throwable;
+use function Safe\sprintf;
 
 final class ProcessCommand extends Command
 {

@@ -1,9 +1,12 @@
 includes:
      - 'vendor/symplify/phpstan-extensions/config/config.neon'
+     - 'vendor/thecodingmachine/phpstan-strict-rules/phpstan-strict-rules.neon'
+     - 'vendor/thecodingmachine/phpstan-safe-rule/phpstan-safe-rule.neon'
 
 parameters:
     excludes_analyse:
         # test files
+        - '*packages/NodeTypeResolver/tests/Source/AnotherClass.php'
         - '*tests/Rector/MethodCall/MethodNameReplacerRector/**/SomeClass.php'
         - '*packages/BetterReflection/tests/Reflector/NotLoadedSource/SomeClass.php'
         - 'packages/NodeTypeResolver/tests/PerNodeTypeResolver/VariableTypeResolver/Source/NewClass.php'
@@ -58,10 +61,11 @@ parameters:
         # Error php-parser token
         - '#Access to an undefined property PhpParser\\Node\\Expr\\Error\|PhpParser\\Node\\Expr\\Variable::\$name#'
 
-        # SplFileInfo::getRealPath() false positive
-        - '#Parameter \#1 \$pattern of function fnmatch expects string, string\|false given#'
-        - '#Parameter \#1 \$file of function file_put_contents expects string, string\|false given#'
+        # SplFileInfo::getRealPath() strict
         - '#Parameter \#1 \$filePath of method Rector\\Parser\\Parser::parseFile\(\) expects string, string\|false given#'
+        - '#Parameter \#2 \$filename of function fnmatch expects string, string\|false given#'
+        - '#Parameter \#1 \$filename of function Safe\\file_put_contents expects string, string\|false given#'
+        - '#Parameter \#2 \$args of function Safe\\sprintf expects float\|int\|string\|null, string\|false given#'
 
         # false positive, has annotation type above (@todo recheck for possible ignored positives)
         - '#Access to an undefined property PhpParser\\Node::\$name#' # 11
@@ -89,8 +93,9 @@ parameters:
         - '#Access to an undefined property PhpParser\\Node\\Expr::\$value#' # 2
         - '#Access to an undefined property PhpParser\\Node\\Expr::\$(name|var)#' # 2
 
-        # tests - known values
-        - '#Parameter \#1 \$code of method PhpParser\\Parser::parse\(\) expects string, string\|false given#' # 1
+        # variadic false positive
+        - '#In method "Rector\\Node\\NodeFactory::createArray", parameter \$items can be type-hinted to "array"#'
+        - '#In method "Rector\\Builder\\StatementGlue::addStatementToClassBeforeTypes", parameter \$types type is "array". Please provide a \@param annotation to further specify the type of the array. For instance: \@param int\[\] \$types#'
 
-        # too strict
-        - '#Parameter \#1 \$currentWorkingDirectory of class PHPStan\\DependencyInjection\\ContainerFactory constructor expects string, string\|false given#' # 1
+        # intentionally
+        - '#Empty catch block#'

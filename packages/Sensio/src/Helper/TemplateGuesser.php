@@ -6,6 +6,7 @@ use Nette\Utils\Strings;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\Attribute;
+use function Safe\sprintf;
 
 final class TemplateGuesser
 {

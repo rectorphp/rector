@@ -16,6 +16,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Yaml\Yaml;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
+use function Safe\ksort;
+use function Safe\sprintf;
 
 final class GenerateRectorOverviewCommand extends Command
 {

@@ -3,6 +3,7 @@
 namespace Rector\Console;
 
 use Symfony\Component\Console\Style\SymfonyStyle;
+use function Safe\sprintf;
 
 final class ConsoleStyle extends SymfonyStyle
 {

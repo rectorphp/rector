@@ -13,6 +13,8 @@ use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use function Safe\krsort;
+use function Safe\substr;
 
 final class NamespaceReplacerRector extends AbstractRector
 {

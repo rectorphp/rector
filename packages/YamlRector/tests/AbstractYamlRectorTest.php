@@ -8,6 +8,7 @@ use Rector\DependencyInjection\ContainerFactory;
 use Rector\FileSystem\FileGuard;
 use Rector\YamlRector\YamlFileProcessor;
 use Symfony\Component\Finder\SplFileInfo;
+use function Safe\sprintf;
 
 abstract class AbstractYamlRectorTest extends TestCase
 {
@@ -44,10 +45,11 @@ abstract class AbstractYamlRectorTest extends TestCase
 
         $reconstructedFileContent = $this->yamlFileProcessor->processFileInfo(new SplFileInfo($file, '', ''));
 
-        $this->assertStringEqualsFile($reconstructedFile, $reconstructedFileContent, sprintf(
-            'Original file "%s" did not match the result.',
-            $file
-        ));
+        $this->assertStringEqualsFile(
+            $reconstructedFile,
+            $reconstructedFileContent,
+            sprintf('Original file "%s" did not match the result.', $file)
+        );
     }
 
     abstract protected function provideConfig(): string;

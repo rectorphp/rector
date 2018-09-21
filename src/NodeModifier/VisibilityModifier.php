@@ -8,6 +8,7 @@ use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\Exception\InvalidNodeTypeException;
+use function Safe\sprintf;
 
 final class VisibilityModifier
 {

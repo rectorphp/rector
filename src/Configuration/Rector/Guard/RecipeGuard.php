@@ -3,6 +3,7 @@
 namespace Rector\Configuration\Rector\Guard;
 
 use Rector\Exception\Rector\InvalidRectorConfigurationException;
+use function Safe\sprintf;
 
 final class RecipeGuard
 {

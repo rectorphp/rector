@@ -108,10 +108,10 @@ final class AdditionalAutoloader
             $robotLoader->addDirectory($autoloadDirectory);
         }
 
-        // sometimes tests can include ambiguous classes
         try {
             $robotLoader->register();
         } catch (Throwable $throwable) {
+            // sometimes tests can include ambiguous classes
         }
     }
 

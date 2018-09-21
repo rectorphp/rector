@@ -9,6 +9,7 @@ use Rector\DependencyInjection\ContainerFactory;
 use Rector\FileSystem\FileGuard;
 use Symfony\Component\Finder\SplFileInfo;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
+use function Safe\sprintf;
 
 abstract class AbstractRectorTestCase extends TestCase
 {
@@ -71,10 +72,11 @@ abstract class AbstractRectorTestCase extends TestCase
         $splFileInfo = new SplFileInfo($file, '', '');
         $reconstructedFileContent = $this->fileProcessor->processFileToString($splFileInfo);
 
-        $this->assertStringEqualsFile($reconstructedFile, $reconstructedFileContent, sprintf(
-            'Original file "%s" did not match the result.',
-            $file
-        ));
+        $this->assertStringEqualsFile(
+            $reconstructedFile,
+            $reconstructedFileContent,
+            sprintf('Original file "%s" did not match the result.', $file)
+        );
     }
 
     abstract protected function provideConfig(): string;

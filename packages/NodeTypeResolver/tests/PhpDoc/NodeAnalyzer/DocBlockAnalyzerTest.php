@@ -6,6 +6,7 @@ use PhpParser\Comment\Doc;
 use PhpParser\Node\Scalar\String_;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\NodeTypeResolver\Tests\AbstractNodeTypeResolverContainerAwareTestCase;
+use function Safe\sprintf;
 
 final class DocBlockAnalyzerTest extends AbstractNodeTypeResolverContainerAwareTestCase
 {

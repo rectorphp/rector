@@ -13,6 +13,9 @@ use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see https://thephp.cc/news/2016/02/questioning-phpunit-best-practices
+ */
 final class ExceptionAnnotationRector extends AbstractPHPUnitRector
 {
     /**

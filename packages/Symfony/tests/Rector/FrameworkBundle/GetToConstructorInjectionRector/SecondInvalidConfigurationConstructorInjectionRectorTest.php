@@ -4,6 +4,7 @@ namespace Rector\Symfony\Tests\FrameworkBundle\GetToConstructorInjectionRector;
 
 use Rector\Exception\Configuration\InvalidConfigurationException;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use function Safe\sprintf;
 
 /**
  * @covers \Rector\Symfony\Rector\FrameworkBundle\GetToConstructorInjectionRector

@@ -5,6 +5,7 @@ namespace Rector\Printer;
 use PhpParser\Node;
 use PhpParser\PrettyPrinter\Standard;
 use SplFileInfo;
+use function Safe\file_put_contents;
 
 final class FormatPerservingPrinter
 {

@@ -11,6 +11,7 @@ use Rector\PhpParser\CurrentNodeProvider;
 use Symplify\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Symplify\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Symplify\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
+use function Safe\sprintf;
 
 final class DocBlockAnalyzer
 {
