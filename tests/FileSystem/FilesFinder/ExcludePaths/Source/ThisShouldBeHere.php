@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Configuration\ExcludePaths\Source;
+namespace Rector\Tests\FileSystem\FilesFinder\ExcludePaths\Source;
 
 final class ThisShouldBeHere
 {
