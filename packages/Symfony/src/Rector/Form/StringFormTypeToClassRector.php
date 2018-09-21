@@ -103,13 +103,12 @@ CODE_SAMPLE
         $stringNode = $methodCallNode->args[1]->value;
 
         // not a form type string
-        if (! $this->formTypeStringToTypeProvider->hasClassForNameWithPrefix($stringNode->value)) {
+        $formClass = $this->formTypeStringToTypeProvider->matchClassForNameWithPrefix($stringNode->value);
+        if ($formClass === null) {
             return null;
         }
 
-        $class = $this->formTypeStringToTypeProvider->getClassForNameWithPrefix($stringNode->value);
-
-        $methodCallNode->args[1]->value = $this->nodeFactory->createClassConstantReference($class);
+        $methodCallNode->args[1]->value = $this->nodeFactory->createClassConstantReference($formClass);
 
         return $methodCallNode;
     }

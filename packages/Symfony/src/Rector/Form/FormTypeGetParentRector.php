@@ -75,7 +75,8 @@ final class FormTypeGetParentRector extends AbstractRector
      */
     public function refactor(Node $stringNode): ?Node
     {
-        if (! $this->formTypeStringToTypeProvider->hasClassForName($stringNode->value)) {
+        $formClass = $this->formTypeStringToTypeProvider->matchClassForNameWithPrefix($stringNode->value);
+        if ($formClass === null) {
             return null;
         }
 
@@ -85,9 +86,7 @@ final class FormTypeGetParentRector extends AbstractRector
             return null;
         }
 
-        $class = $this->formTypeStringToTypeProvider->getClassForName($stringNode->value);
-
-        return $this->nodeFactory->createClassConstantReference($class);
+        return $this->nodeFactory->createClassConstantReference($formClass);
     }
 
     private function isParentTypeAndMethod(Node $node, string $type, string $method): bool
