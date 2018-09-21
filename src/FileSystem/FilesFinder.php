@@ -111,7 +111,7 @@ final class FilesFinder
                     return false;
                 }
 
-                if (fnmatch($splFileInfo->getRealPath(), $excludePath)) {
+                if (fnmatch($excludePath, $splFileInfo->getRealPath())) {
                     return false;
                 }
             }
