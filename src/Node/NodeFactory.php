@@ -178,7 +178,7 @@ final class NodeFactory
     public function createParam(string $name, string $type): Param
     {
         return $this->builderFactory->param($name)
-            ->setTypeHint(new FullyQualified($type))
+            ->setType(new FullyQualified($type))
             ->getNode();
     }
 
@@ -194,7 +194,7 @@ final class NodeFactory
         $paramBuild = $this->builderFactory->param($variableInfo->getName());
 
         foreach ($variableInfo->getTypes() as $type) {
-            $paramBuild->setTypeHint($this->createTypeName($type));
+            $paramBuild->setType($this->createTypeName($type));
         }
 
         return $paramBuild->getNode();
@@ -207,7 +207,7 @@ final class NodeFactory
 
     public function createVariable(string $name): Variable
     {
-        return new Variable($name);
+        return $this->builderFactory->var($name);
     }
 
     public function createTypeName(string $name): Name
