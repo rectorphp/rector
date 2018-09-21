@@ -252,11 +252,9 @@ final class ProcessCommand extends Command
     private function processFileInfo(SplFileInfo $fileInfo, bool $shouldHideAutoloadErrors): void
     {
         try {
-            // php
             if ($fileInfo->getExtension() === 'php') {
                 $this->processFile($fileInfo);
-            // yml
-            } elseif ($fileInfo->getExtension() === 'yml') {
+            } elseif (in_array($fileInfo->getExtension(), ['yml', 'yaml'], true)) {
                 $this->processYamlFile($fileInfo);
             }
         } catch (AnalysedCodeException $analysedCodeException) {
