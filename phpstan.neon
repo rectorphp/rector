@@ -16,9 +16,6 @@ parameters:
         - '*tests/**/Source/*'
 
     ignoreErrors:
-        # the # after each ignored error is the number of occurrences
-        - '#Parameter \#2 \$filePath of method Rector\\(.*?)::decorateNodesFromFile\(\) expects string, string\|false given#'
-
         # missuse of interface and class
         - '#Parameter \#1 (.*?) expects Symfony\\Component\\DependencyInjection\\ContainerBuilder, Symfony\\Component\\DependencyInjection\\ContainerInterface given#' # 2
         - '#Method Rector\\Symfony\\Bridge\\DefaultAnalyzedSymfonyApplicationContainer::getContainer\(\) should return Symfony\\Component\\DependencyInjection\\ContainerBuilder but returns Symfony\\Component\\DependencyInjection\\Container#' # 1
@@ -61,12 +58,6 @@ parameters:
         # Error php-parser token
         - '#Access to an undefined property PhpParser\\Node\\Expr\\Error\|PhpParser\\Node\\Expr\\Variable::\$name#'
 
-        # SplFileInfo::getRealPath() strict
-        - '#Parameter \#1 \$filePath of method Rector\\Parser\\Parser::parseFile\(\) expects string, string\|false given#'
-        - '#Parameter \#2 \$filename of function fnmatch expects string, string\|false given#'
-        - '#Parameter \#1 \$filename of function Safe\\file_put_contents expects string, string\|false given#'
-        - '#Parameter \#2 \$args of function Safe\\sprintf expects float\|int\|string\|null, string\|false given#'
-
         # false positive, has annotation type above (@todo recheck for possible ignored positives)
         - '#Access to an undefined property PhpParser\\Node::\$name#' # 11
         - '#Parameter \#1 \$node of method Rector\\NodeAnalyzer\\ClassConstAnalyzer::isNames\(\) expects PhpParser\\Node\\Expr\\ClassConstFetch, PhpParser\\Node given#' # 1
@@ -99,3 +90,9 @@ parameters:
 
         # intentionally
         - '#Empty catch block#'
+
+services:
+    -
+    	class: Rector\Tests\PHPStan\Type\SplFileInfoTolerantDynamicMethodReturnTypeExtension
+    	tags:
+    		- phpstan.broker.dynamicMethodReturnTypeExtension
