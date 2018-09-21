@@ -30,6 +30,11 @@ final class DocBlockAnalyzer
      */
     private $currentNodeProvider;
 
+    /**
+     * @var PhpDocInfo[]
+     */
+    private $cachedPhpDocInfoByNode = [];
+
     public function __construct(
         PhpDocInfoFactory $phpDocInfoFactory,
         PhpDocInfoPrinter $phpDocInfoPrinter,
@@ -168,6 +173,11 @@ final class DocBlockAnalyzer
 
     private function createPhpDocInfoFromNode(Node $node): PhpDocInfo
     {
+        $key = spl_object_hash($node);
+        if (isset($this->cachedPhpDocInfoByNode[$key])) {
+            return $this->cachedPhpDocInfoByNode[$key];
+        }
+
         $this->currentNodeProvider->setCurrentNode($node);
         if ($node->getDocComment() === null) {
             throw new ShouldNotHappenException(sprintf(
@@ -176,6 +186,8 @@ final class DocBlockAnalyzer
             ));
         }
 
-        return $this->phpDocInfoFactory->createFrom($node->getDocComment()->getText());
+        return $this->cachedPhpDocInfoByNode[$key] = $this->phpDocInfoFactory->createFrom(
+            $node->getDocComment()->getText()
+        );
     }
 }
