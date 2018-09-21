@@ -3,6 +3,7 @@
 namespace Rector\DependencyInjection;
 
 use Psr\Container\ContainerInterface;
+use function Safe\putenv;
 
 final class ContainerFactory
 {

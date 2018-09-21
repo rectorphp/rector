@@ -71,11 +71,11 @@ final class MethodCallNodeFactory
      * @param mixed[] $arguments
      */
     public function createWithVariableMethodNameAndArguments(
-        Variable $variableNode,
+        Expr $exprNode,
         string $method,
         array $arguments
     ): MethodCall {
-        $methodCall = $this->createWithVariableAndMethodName($variableNode, $method);
+        $methodCall = $this->createWithVariableAndMethodName($exprNode, $method);
         $methodCall->args = $this->nodeFactory->createArgs($arguments);
 
         return $methodCall;

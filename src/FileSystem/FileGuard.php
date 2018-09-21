@@ -3,6 +3,7 @@
 namespace Rector\FileSystem;
 
 use Rector\Exception\FileSystem\FileNotFoundException;
+use function Safe\sprintf;
 
 final class FileGuard
 {

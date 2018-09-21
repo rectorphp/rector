@@ -2,19 +2,30 @@
 
 namespace Rector\Node;
 
+use PhpParser\BuilderFactory;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 
 final class PropertyFetchNodeFactory
 {
     /**
+     * @var BuilderFactory
+     */
+    private $builderFactory;
+
+    public function __construct(BuilderFactory $builderFactory)
+    {
+        $this->builderFactory = $builderFactory;
+    }
+
+    /**
      * Creates "$variable->property"
      */
-    public function createWithVariableNameAndPropertyName(string $variable, string $property): PropertyFetch
+    public function createWithVariableNameAndPropertyName(string $variable, string $propertyName): PropertyFetch
     {
-        $variableNode = new Variable($variable);
+        $variableNode = $this->builderFactory->var($variable);
 
-        return new PropertyFetch($variableNode, $property);
+        return $this->builderFactory->propertyFetch($variableNode, $propertyName);
     }
 
     /**
@@ -26,7 +37,7 @@ final class PropertyFetchNodeFactory
             'name' => $propertyName,
         ]);
 
-        return new PropertyFetch($localVariable, $propertyName);
+        return $this->builderFactory->propertyFetch($localVariable, $propertyName);
     }
 
     /**
@@ -38,6 +49,6 @@ final class PropertyFetchNodeFactory
             'name' => $propertyName,
         ]);
 
-        return new PropertyFetch($localVariable, $propertyName . '[]');
+        return $this->builderFactory->propertyFetch($localVariable, $propertyName . '[]');
     }
 }

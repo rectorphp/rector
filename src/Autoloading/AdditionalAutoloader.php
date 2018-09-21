@@ -7,6 +7,7 @@ use Rector\Configuration\Option;
 use Rector\FileSystem\FileGuard;
 use Rector\Utils\FilesystemTweaker;
 use Symfony\Component\Console\Input\InputInterface;
+use Throwable;
 
 /**
  * Should it pass autoload files/directories to PHPStan analyzer?
@@ -107,7 +108,11 @@ final class AdditionalAutoloader
             $robotLoader->addDirectory($autoloadDirectory);
         }
 
-        $robotLoader->register();
+        try {
+            $robotLoader->register();
+        } catch (Throwable $throwable) {
+            // sometimes tests can include ambiguous classes
+        }
     }
 
     /**

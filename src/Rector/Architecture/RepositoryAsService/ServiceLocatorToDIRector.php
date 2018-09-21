@@ -19,6 +19,7 @@ use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use function Safe\sprintf;
 
 final class ServiceLocatorToDIRector extends AbstractRector
 {

@@ -50,11 +50,6 @@ final class Attribute
     public const METHOD_NODE = 'methodNode';
 
     /**
-     * @var string
-     */
-    public const METHOD_CALL_NAME = 'methodCallName';
-
-    /**
      * Internal php-parser name.
      * Do not change this even if you want!
      *

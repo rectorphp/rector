@@ -10,6 +10,9 @@ use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Throwable;
+use function Safe\class_implements;
+use function Safe\class_parents;
+use function Safe\sprintf;
 
 final class DefaultAnalyzedSymfonyApplicationContainer implements AnalyzedApplicationContainerInterface
 {
@@ -52,7 +55,7 @@ final class DefaultAnalyzedSymfonyApplicationContainer implements AnalyzedApplic
             throw new ShouldNotHappenException(sprintf(
                 'Service type for "%s" name was not found in container of your Symfony application.',
                 $name
-            ));
+            ), $throwable->getCode(), $throwable);
         }
 
         $serviceClass = get_class($service);

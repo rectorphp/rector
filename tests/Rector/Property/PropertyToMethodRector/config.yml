@@ -5,3 +5,10 @@ services:
                 'locale':
                     'get': 'getLocale'
                     'set': 'setLocale'
+
+            'Rector\Tests\Rector\Property\PropertyToMethodRector\Wrong\SomeClassWithParameters':
+                'parameter':
+                    'get':
+                        method: 'getConfig'
+                        arguments:
+                            - 'parameter'

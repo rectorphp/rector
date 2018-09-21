@@ -6,6 +6,7 @@ use Jean85\PrettyVersions;
 use Symfony\Component\Console\Application as SymfonyApplication;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputOption;
+use function Safe\getcwd;
 
 final class Application extends SymfonyApplication
 {

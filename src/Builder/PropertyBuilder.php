@@ -8,6 +8,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property as PhpParserProperty;
 use Rector\Builder\Class_\VariableInfo;
 use Rector\Php\TypeAnalyzer;
+use function Safe\sprintf;
 
 /**
  * This class builds properties, and adds them to a class

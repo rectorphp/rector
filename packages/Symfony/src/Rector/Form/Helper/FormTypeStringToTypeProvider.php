@@ -43,32 +43,16 @@ final class FormTypeStringToTypeProvider
         'entity' => 'Symfony\Bridge\Doctrine\Form\Type\EntityType',
     ];
 
-    public function hasClassForNameWithPrefix(string $name): bool
+    public function matchClassForNameWithPrefix(string $name): ?string
     {
-        $name = $this->removeFormTypePrefix($name);
+        if (Strings::startsWith($name, 'form.type.')) {
+            $name = Strings::substring($name, strlen('form.type.'));
+        }
 
-        return $this->hasClassForName($name);
-    }
+        if (! isset(self::$nameToTypeMap[$name])) {
+            return null;
+        }
 
-    public function getClassForNameWithPrefix(string $name): string
-    {
-        $name = $this->removeFormTypePrefix($name);
-
-        return $this->getClassForName($name);
-    }
-
-    public function hasClassForName(string $name): bool
-    {
-        return array_key_exists($name, self::$nameToTypeMap);
-    }
-
-    public function getClassForName(string $name): string
-    {
         return self::$nameToTypeMap[$name];
-    }
-
-    private function removeFormTypePrefix(string $name): string
-    {
-        return Strings::substring($name, strlen('form.type.'));
     }
 }

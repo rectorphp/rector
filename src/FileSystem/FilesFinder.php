@@ -107,11 +107,11 @@ final class FilesFinder
         $finder->filter(function (NativeSplFileInfo $splFileInfo) {
             // return false to remove file
             foreach ($this->excludePaths as $excludePath) {
-                if (Strings::match($splFileInfo->getRealPath(), $excludePath)) {
+                if (Strings::match($splFileInfo->getRealPath(), '#' . preg_quote($excludePath, '#') . '#')) {
                     return false;
                 }
 
-                if (fnmatch($splFileInfo->getRealPath(), $excludePath)) {
+                if (fnmatch($excludePath, $splFileInfo->getRealPath())) {
                     return false;
                 }
             }

@@ -26,6 +26,7 @@ use Symfony\Component\Process\Process;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Throwable;
+use function Safe\sprintf;
 
 final class ProcessCommand extends Command
 {
@@ -141,6 +142,13 @@ final class ProcessCommand extends Command
             InputOption::VALUE_NONE,
             'Apply basic coding style afterwards to make code look nicer'
         );
+
+        $this->addOption(
+            Option::HIDE_AUTOLOAD_ERRORS,
+            null,
+            InputOption::VALUE_NONE,
+            'Hide autoload errors for the moment.'
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -159,7 +167,7 @@ final class ProcessCommand extends Command
 
         $this->processCommandReporter->reportLoadedRectors();
 
-        $this->processFileInfos($allFileInfos);
+        $this->processFileInfos($allFileInfos, (bool) $input->getOption(Option::HIDE_AUTOLOAD_ERRORS));
 
         $this->processCommandReporter->reportFileDiffs($this->fileDiffs);
         $this->processCommandReporter->reportChangedFiles($this->changedFiles);
@@ -186,32 +194,14 @@ final class ProcessCommand extends Command
     /**
      * @param SplFileInfo[] $fileInfos
      */
-    private function processFileInfos(array $fileInfos): void
+    private function processFileInfos(array $fileInfos, bool $shouldHideAutoloadErrors): void
     {
         $totalFiles = count($fileInfos);
         $this->consoleStyle->title(sprintf('Processing %d file%s', $totalFiles, $totalFiles === 1 ? '' : 's'));
         $this->consoleStyle->progressStart($totalFiles);
 
         foreach ($fileInfos as $fileInfo) {
-            try {
-                // php
-                if ($fileInfo->getExtension() === 'php') {
-                    $this->processFile($fileInfo);
-                // yml
-                } elseif ($fileInfo->getExtension() === 'yml') {
-                    $this->processYamlFile($fileInfo);
-                }
-            } catch (AnalysedCodeException $analysedCodeException) {
-                $message = sprintf(
-                    'Analyze error: %s Try to include your files in "parameters > autoload_files" or "parameters > autoload_directories".%sSee https://github.com/rectorphp/rector#extra-autoloading',
-                    $analysedCodeException->getMessage(),
-                    PHP_EOL
-                );
-                $this->errors[] = new Error($fileInfo, $message, null);
-            } catch (Throwable $throwable) {
-                $this->errors[] = new Error($fileInfo, $throwable->getMessage(), $throwable->getCode());
-            }
-
+            $this->processFileInfo($fileInfo, $shouldHideAutoloadErrors);
             $this->consoleStyle->progressAdvance();
         }
 
@@ -257,6 +247,31 @@ final class ProcessCommand extends Command
 
                 FileSystem::write($fileInfo->getPathname(), $newContent);
             }
+        }
+    }
+
+    private function processFileInfo(SplFileInfo $fileInfo, bool $shouldHideAutoloadErrors): void
+    {
+        try {
+            if ($fileInfo->getExtension() === 'php') {
+                $this->processFile($fileInfo);
+            } elseif (in_array($fileInfo->getExtension(), ['yml', 'yaml'], true)) {
+                $this->processYamlFile($fileInfo);
+            }
+        } catch (AnalysedCodeException $analysedCodeException) {
+            if ($shouldHideAutoloadErrors) {
+                return;
+            }
+
+            $message = sprintf(
+                'Analyze error: %s Try to include your files in "parameters > autoload_files" or "parameters > autoload_directories".%sSee https://github.com/rectorphp/rector#extra-autoloading',
+                $analysedCodeException->getMessage(),
+                PHP_EOL
+            );
+
+            $this->errors[] = new Error($fileInfo, $message, null);
+        } catch (Throwable $throwable) {
+            $this->errors[] = new Error($fileInfo, $throwable->getMessage(), $throwable->getCode());
         }
     }
 }

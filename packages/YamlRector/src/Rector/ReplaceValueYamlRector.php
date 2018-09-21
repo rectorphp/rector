@@ -7,6 +7,7 @@ use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 use Rector\YamlRector\Contract\YamlRectorInterface;
 use Rector\YamlRector\PathResolver;
+use function Safe\sprintf;
 
 final class ReplaceValueYamlRector implements YamlRectorInterface
 {

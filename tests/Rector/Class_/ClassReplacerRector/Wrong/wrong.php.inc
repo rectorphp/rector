@@ -369,7 +369,7 @@ final class SourceStubber
         $parameterType = $parameterReflection->getType();
 
         if (null !== $parameterReflection->getType()) {
-            $parameterNode->setTypeHint($this->formatType($parameterType));
+            $parameterNode->setType($this->formatType($parameterType));
         }
 
         return $parameterNode;

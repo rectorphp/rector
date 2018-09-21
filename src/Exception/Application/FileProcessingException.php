@@ -5,6 +5,7 @@ namespace Rector\Exception\Application;
 use Exception;
 use SplFileInfo;
 use Throwable;
+use function Safe\sprintf;
 
 final class FileProcessingException extends Exception
 {

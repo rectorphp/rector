@@ -2,6 +2,7 @@
 
 namespace Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer;
 
+use Nette\Utils\Strings;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
@@ -10,6 +11,7 @@ use Rector\PhpParser\CurrentNodeProvider;
 use Symplify\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Symplify\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Symplify\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
+use function Safe\sprintf;
 
 final class DocBlockAnalyzer
 {
@@ -28,6 +30,11 @@ final class DocBlockAnalyzer
      */
     private $currentNodeProvider;
 
+    /**
+     * @var PhpDocInfo[]
+     */
+    private $cachedPhpDocInfoByNode = [];
+
     public function __construct(
         PhpDocInfoFactory $phpDocInfoFactory,
         PhpDocInfoPrinter $phpDocInfoPrinter,
@@ -44,9 +51,7 @@ final class DocBlockAnalyzer
             return false;
         }
 
-        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
-
-        return $phpDocInfo->hasTag($name);
+        return Strings::contains($node->getDocComment()->getText(), '@' . $name);
     }
 
     public function removeParamTagByName(Node $node, string $name): void
@@ -168,6 +173,11 @@ final class DocBlockAnalyzer
 
     private function createPhpDocInfoFromNode(Node $node): PhpDocInfo
     {
+        $key = spl_object_hash($node);
+        if (isset($this->cachedPhpDocInfoByNode[$key])) {
+            return $this->cachedPhpDocInfoByNode[$key];
+        }
+
         $this->currentNodeProvider->setCurrentNode($node);
         if ($node->getDocComment() === null) {
             throw new ShouldNotHappenException(sprintf(
@@ -176,6 +186,8 @@ final class DocBlockAnalyzer
             ));
         }
 
-        return $this->phpDocInfoFactory->createFrom($node->getDocComment()->getText());
+        return $this->cachedPhpDocInfoByNode[$key] = $this->phpDocInfoFactory->createFrom(
+            $node->getDocComment()->getText()
+        );
     }
 }

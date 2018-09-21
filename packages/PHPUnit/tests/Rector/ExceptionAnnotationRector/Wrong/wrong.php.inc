@@ -8,5 +8,6 @@ final class MyTest extends \PHPUnit_Framework_TestCase
     public function test()
     {
         // some code
+
     }
 }

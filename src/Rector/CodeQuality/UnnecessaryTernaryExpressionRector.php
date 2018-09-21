@@ -20,6 +20,7 @@ use Rector\Exception\NotImplementedException;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use function Safe\sprintf;
 
 final class UnnecessaryTernaryExpressionRector extends AbstractRector
 {

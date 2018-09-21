@@ -8,6 +8,7 @@ use Rector\Contract\Rector\RectorInterface;
 use Rector\NodeTraverser\RectorNodeTraverser;
 use Rector\Reporting\FileDiff;
 use Rector\YamlRector\YamlFileProcessor;
+use function Safe\sprintf;
 
 final class ProcessCommandReporter
 {
@@ -62,11 +63,9 @@ final class ProcessCommandReporter
             return;
         }
 
-        $this->consoleStyle->title(sprintf(
-            '%d Changed file%s',
-            count($changedFiles),
-            count($changedFiles) === 1 ? '' : 's'
-        ));
+        $this->consoleStyle->title(
+            sprintf('%d Changed file%s', count($changedFiles), count($changedFiles) === 1 ? '' : 's')
+        );
         $this->consoleStyle->listing($changedFiles);
     }
 
@@ -79,11 +78,9 @@ final class ProcessCommandReporter
             return;
         }
 
-        $this->consoleStyle->title(sprintf(
-            '%d file%s with changes',
-            count($fileDiffs),
-            count($fileDiffs) === 1 ? '' : 's'
-        ));
+        $this->consoleStyle->title(
+            sprintf('%d file%s with changes', count($fileDiffs), count($fileDiffs) === 1 ? '' : 's')
+        );
 
         $i = 0;
         foreach ($fileDiffs as $fileDiff) {

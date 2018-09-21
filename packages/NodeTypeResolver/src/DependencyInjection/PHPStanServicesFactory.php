@@ -8,6 +8,7 @@ use PHPStan\Analyser\ScopeFactory;
 use PHPStan\Analyser\TypeSpecifier;
 use PHPStan\Broker\Broker;
 use PHPStan\DependencyInjection\ContainerFactory;
+use function Safe\getcwd;
 
 final class PHPStanServicesFactory
 {

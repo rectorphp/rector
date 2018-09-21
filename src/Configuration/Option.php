@@ -33,4 +33,9 @@ final class Option
      * @var string
      */
     public const KERNEL_CLASS_PARAMETER = 'kernel_class';
+
+    /**
+     * @var string
+     */
+    public const HIDE_AUTOLOAD_ERRORS = 'hide-autoload-errors';
 }

@@ -13,6 +13,7 @@ use PhpParser\ParserFactory;
 use PHPUnit\Framework\TestCase;
 use Rector\NodeTypeResolver\NodeVisitor\ParentAndNextNodeVisitor;
 use Rector\Utils\BetterNodeFinder;
+use function Safe\file_get_contents;
 
 final class BetterNodeFinderTest extends TestCase
 {

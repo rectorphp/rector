@@ -12,14 +12,15 @@
         "jean85/pretty-package-versions": "^1.2",
         "nette/robot-loader": "^3.1",
         "nette/utils": "^2.5",
-        "nikic/php-parser": "^4.0.3",
+        "nikic/php-parser": "^4.0.4",
         "phpstan/phpstan": "^0.10.3",
         "sebastian/diff": "^3.0",
         "symfony/console": "^3.4|^4.1",
         "symfony/dependency-injection": "^3.4|^4.1",
         "symfony/finder": "^3.4|^4.1",
         "symplify/better-phpdoc-parser": "^5.0",
-        "symplify/package-builder": "^5.0"
+        "symplify/package-builder": "^5.0",
+        "thecodingmachine/safe": "^0.1.4"
     },
     "require-dev": {
         "humbug/php-scoper": "^0.9.2",
@@ -28,6 +29,8 @@
         "symplify/easy-coding-standard": "^5.0",
         "symplify/monorepo-builder": "^5.0",
         "symplify/phpstan-extensions": "^5.0",
+        "thecodingmachine/phpstan-safe-rule": "^0.1.0",
+        "thecodingmachine/phpstan-strict-rules": "^0.10.3",
         "tracy/tracy": "^2.5"
     },
     "autoload": {

@@ -22,11 +22,6 @@ final class PropertyToMethodRector extends AbstractRector
     private $perClassPropertyToMethods = [];
 
     /**
-     * @var string
-     */
-    private $activeMethod;
-
-    /**
      * @var PropertyFetchAnalyzer
      */
     private $propertyFetchAnalyzer;
@@ -73,7 +68,32 @@ CODE_SAMPLE
                 [
                     '$perClassPropertyToMethods' => [
                         'SomeObject' => [
-                            'property' => ['getProperty', 'setProperty'],
+                            'property' => [
+                                'get' => 'getProperty',
+                                'set' => 'setProperty',
+                            ],
+                        ],
+                    ],
+                ]
+            ),
+            new ConfiguredCodeSample(
+                <<<'CODE_SAMPLE'
+$result = $object->property;
+CODE_SAMPLE
+                ,
+                <<<'CODE_SAMPLE'
+$result = $object->getProperty('someArg');
+CODE_SAMPLE
+                ,
+                [
+                    '$perClassPropertyToMethods' => [
+                        'SomeObject' => [
+                            'property' => [
+                                'get' => [
+                                    'method' => 'getConfig',
+                                    'arguments' => ['someArg'],
+                                ],
+                            ],
                         ],
                     ],
                 ]
@@ -94,45 +114,80 @@ CODE_SAMPLE
      */
     public function refactor(Node $assignNode): ?Node
     {
-        // setter
         if ($assignNode->var instanceof PropertyFetch) {
-            if ($this->processPropertyFetchCandidate($assignNode->var, 'set') === false) {
-                return null;
-            }
+            return $this->processSetter($assignNode);
         }
-        // getter
+
         if ($assignNode->expr instanceof PropertyFetch) {
-            if ($this->processPropertyFetchCandidate($assignNode->expr, 'get') === false) {
-                return null;
-            }
-        }
-
-        // setter
-        if ($assignNode->var instanceof PropertyFetch) {
-            $args = $this->nodeFactory->createArgs([$assignNode->expr]);
-
-            /** @var Variable $variable */
-            $variable = $assignNode->var->var;
-
-            return $this->methodCallNodeFactory->createWithVariableMethodNameAndArguments(
-                $variable,
-                $this->activeMethod,
-                $args
-            );
-        }
-
-        // getter
-        if ($assignNode->expr instanceof PropertyFetch) {
-            $assignNode->expr = $this->methodCallNodeFactory->createWithVariableAndMethodName(
-                $assignNode->expr->var,
-                $this->activeMethod
-            );
+            return $this->processGetter($assignNode);
         }
 
         return null;
     }
 
-    private function processPropertyFetchCandidate(PropertyFetch $propertyFetchNode, string $type): bool
+    private function processSetter(Assign $assignNode): ?Node
+    {
+        /** @var PropertyFetch $propertyFetchNode */
+        $propertyFetchNode = $assignNode->var;
+
+        $newMethodMatch = $this->matchPropertyFetchCandidate($propertyFetchNode);
+        if ($newMethodMatch === null) {
+            return null;
+        }
+
+        $args = $this->nodeFactory->createArgs([$assignNode->expr]);
+
+        /** @var Variable $variable */
+        $variable = $propertyFetchNode->var;
+
+        return $this->methodCallNodeFactory->createWithVariableMethodNameAndArguments(
+            $variable,
+            $newMethodMatch['set'],
+            $args
+        );
+    }
+
+    private function processGetter(Assign $assignNode): ?Node
+    {
+        /** @var PropertyFetch $propertyFetchNode */
+        $propertyFetchNode = $assignNode->expr;
+
+        $newMethodMatch = $this->matchPropertyFetchCandidate($propertyFetchNode);
+        if ($newMethodMatch === null) {
+            return null;
+        }
+
+        // simple method name
+        if (is_string($newMethodMatch['get'])) {
+            $assignNode->expr = $this->methodCallNodeFactory->createWithVariableAndMethodName(
+                $propertyFetchNode->var,
+                $newMethodMatch['get']
+            );
+
+            return $assignNode;
+
+            // method with argument
+        }
+
+        if (is_array($newMethodMatch['get'])) {
+            $args = $this->nodeFactory->createArgs($newMethodMatch['get']['arguments']);
+
+            $assignNode->expr = $this->methodCallNodeFactory->createWithVariableMethodNameAndArguments(
+                $propertyFetchNode->var,
+                $newMethodMatch['get']['method'],
+                $args
+            );
+
+            return $assignNode;
+        }
+
+        return $assignNode;
+    }
+
+    /**
+     * @return mixed[]|null
+     */
+    private function matchPropertyFetchCandidate(PropertyFetch $propertyFetchNode): ?array
     {
         foreach ($this->perClassPropertyToMethods as $class => $propertyToMethods) {
             $properties = array_keys($propertyToMethods);
@@ -141,12 +196,10 @@ CODE_SAMPLE
                 /** @var Identifier $identifierNode */
                 $identifierNode = $propertyFetchNode->name;
 
-                $this->activeMethod = $propertyToMethods[$identifierNode->toString()][$type];
-
-                return true;
+                return $propertyToMethods[$identifierNode->toString()]; //[$type];
             }
         }
 
-        return false;
+        return null;
     }
 }
