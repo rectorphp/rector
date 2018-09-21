@@ -11,6 +11,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Throwable;
 use function Safe\class_implements;
+use function Safe\class_parents;
 use function Safe\sprintf;
 
 final class DefaultAnalyzedSymfonyApplicationContainer implements AnalyzedApplicationContainerInterface

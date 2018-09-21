@@ -21,9 +21,13 @@ final class DiffConsoleFormatter
 
     public function __construct()
     {
-        $this->template = sprintf('<comment>    ---------- begin diff ----------</comment>' .
-        '%s%%s%s' .
-        '<comment>    ----------- end diff -----------</comment>', PHP_EOL, PHP_EOL);
+        $this->template = sprintf(
+            '<comment>    ---------- begin diff ----------</comment>' .
+            '%s%%s%s' .
+            '<comment>    ----------- end diff -----------</comment>',
+            PHP_EOL,
+            PHP_EOL
+        );
     }
 
     public function format(string $diff): string

@@ -3,13 +3,10 @@
 namespace Rector\NodeTypeResolver\NodeVisitor;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeVisitorAbstract;
 use Rector\NodeTypeResolver\Node\Attribute;
 
@@ -36,11 +33,6 @@ final class ClassAndMethodNodeVisitor extends NodeVisitorAbstract
     private $methodNode;
 
     /**
-     * @var string|null
-     */
-    private $methodCallName;
-
-    /**
      * @param Node[] $nodes
      * @return Node[]|null
      */
@@ -50,7 +42,6 @@ final class ClassAndMethodNodeVisitor extends NodeVisitorAbstract
         $this->className = null;
         $this->methodName = null;
         $this->methodNode = null;
-        $this->methodCallName = null;
 
         return null;
     }
@@ -66,11 +57,6 @@ final class ClassAndMethodNodeVisitor extends NodeVisitorAbstract
 
         $this->processClass($node);
         $this->processMethod($node);
-
-        // possibly new method call
-        if ($node instanceof Expression) {
-            $this->methodCallName = null;
-        }
 
         return $node;
     }
@@ -111,12 +97,7 @@ final class ClassAndMethodNodeVisitor extends NodeVisitorAbstract
             $this->methodName = (string) $node->name;
         }
 
-        if ($node instanceof MethodCall && $node->name instanceof Identifier) {
-            $this->methodCallName = $node->name->toString();
-        }
-
         $node->setAttribute(Attribute::METHOD_NAME, $this->methodName);
         $node->setAttribute(Attribute::METHOD_NODE, $this->methodNode);
-        $node->setAttribute(Attribute::METHOD_CALL_NAME, $this->methodCallName);
     }
 }
