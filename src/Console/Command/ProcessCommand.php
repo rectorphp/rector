@@ -143,7 +143,7 @@ final class ProcessCommand extends Command
         );
 
         $this->addOption(
-            'hide-autoload-errors',
+            Option::HIDE_AUTOLOAD_ERRORS,
             null,
             InputOption::VALUE_NONE,
             'Hide autoload errors for the moment.'
@@ -166,7 +166,7 @@ final class ProcessCommand extends Command
 
         $this->processCommandReporter->reportLoadedRectors();
 
-        $this->processFileInfos($allFileInfos, (bool) $input->getOption('hide-autoload-errors'));
+        $this->processFileInfos($allFileInfos, (bool) $input->getOption(Option::HIDE_AUTOLOAD_ERRORS));
 
         $this->processCommandReporter->reportFileDiffs($this->fileDiffs);
         $this->processCommandReporter->reportChangedFiles($this->changedFiles);
