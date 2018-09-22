@@ -1,0 +1,5 @@
+services:
+    Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector:
+        $methodNamesByTypes:
+            'Rector\CakePHP\Tests\Rector\MethodCall\ModalToGetSetRector\Source\SomeModelType':
+                - 'config'
