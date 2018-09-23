@@ -102,40 +102,46 @@ CODE_SAMPLE
                 continue;
             }
 
-            $newNames = $methodNamesToGetAndSetNames[$methodCallNode->name->toString()];
-            if ($newNames === null) {
+            $config = $methodNamesToGetAndSetNames[$methodCallNode->name->toString()];
+            if ($config === null) {
                 $currentMethodName = $methodCallNode->name->toString();
 
-                return [
-                   'get' => 'get' . ucfirst($currentMethodName),
-                   'set' => 'set' . ucfirst($currentMethodName) ,
+                $config = [
+                    'get' => 'get' . ucfirst($currentMethodName),
+                    'set' => 'set' . ucfirst($currentMethodName),
                 ];
             }
 
-            return $newNames;
+            // default minimal argument count for setter
+            $config['minimal_argument_count'] = $config['minimal_argument_count'] ?? 1;
+
+            return $config;
         }
 
         return null;
     }
 
     /**
-     * @param mixed[] $typeAndMethodNames
+     * @param mixed[] $config
      */
-    private function resolveNewMethodNameByCondition(MethodCall $methodCallNode, array $typeAndMethodNames): string
+    private function resolveNewMethodNameByCondition(MethodCall $methodCallNode, array $config): string
     {
-        // default:
-        // - has arguments? => set
-        // - get
-        // "minimal_argument_count" : 2
-        // "first_argument_type" : array
-
-        if (
-            count($methodCallNode->args) >= 2 ||
-            (isset($methodCallNode->args[0]) && $methodCallNode->args[0]->value instanceof Array_)
-        ) {
-            return $typeAndMethodNames['set'];
+        if (count($methodCallNode->args) >= $config['minimal_argument_count']) {
+            return $config['set'];
         }
 
-        return $typeAndMethodNames['get'];
+        if (isset($methodCallNode->args[0])) {
+            // first argument type that is considered setter
+            if (isset($config['first_argument_type_to_set'])) {
+                $argumentType = $config['first_argument_type_to_set'];
+                $argumentValue = $methodCallNode->args[0]->value;
+
+                if ($argumentType === 'array' && $argumentValue instanceof Array_) {
+                    return $config['set'];
+                }
+            }
+        }
+
+        return $config['get'];
     }
 }
