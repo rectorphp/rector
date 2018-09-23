@@ -79,32 +79,63 @@ CODE_SAMPLE
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        if (! $this->isTypeAndMethodsMatch($methodCallNode)) {
+        $typeAndMethodNames = $this->matchTypeAndMethodName($methodCallNode);
+        if ($typeAndMethodNames === null) {
             return null;
         }
 
-        $methodName = $methodCallNode->name->toString();
-
         // @todo important, maybe unique condition
-        if (count(
-            $methodCallNode->args
-        ) >= 2 || isset($methodCallNode->args[0]) && $methodCallNode->args[0]->value instanceof Array_) {
-            $methodCallNode->name = new Identifier('set' . ucfirst($methodName));
-        } else {
-            $methodCallNode->name = new Identifier('get' . ucfirst($methodName));
-        }
+        $newName = $this->resolveNewMethodNameByCondition($methodCallNode, $typeAndMethodNames);
+        $methodCallNode->name = new Identifier($newName);
 
         return $methodCallNode;
     }
 
-    private function isTypeAndMethodsMatch(MethodCall $methodCallNode): bool
+    /**
+     * @return string[]
+     */
+    private function matchTypeAndMethodName(MethodCall $methodCallNode): ?array
     {
-        foreach ($this->methodNamesByTypes as $type => $methodNames) {
-            if ($this->methodCallAnalyzer->isTypeAndMethods($methodCallNode, $type, $methodNames)) {
-                return true;
+        foreach ($this->methodNamesByTypes as $type => $methodNamesToGetAndSetNames) {
+            $methodNames = array_keys($methodNamesToGetAndSetNames);
+            if (! $this->methodCallAnalyzer->isTypeAndMethods($methodCallNode, $type, $methodNames)) {
+                continue;
             }
+
+            $newNames = $methodNamesToGetAndSetNames[$methodCallNode->name->toString()];
+            if ($newNames === null) {
+                $currentMethodName = $methodCallNode->name->toString();
+
+                return [
+                   'get' => 'get' . ucfirst($currentMethodName),
+                   'set' => 'set' . ucfirst($currentMethodName) ,
+                ];
+            }
+
+            return $newNames;
         }
 
-        return false;
+        return null;
+    }
+
+    /**
+     * @param mixed[] $typeAndMethodNames
+     */
+    private function resolveNewMethodNameByCondition(MethodCall $methodCallNode, array $typeAndMethodNames): string
+    {
+        // default:
+        // - has arguments? => set
+        // - get
+        // "minimal_argument_count" : 2
+        // "first_argument_type" : array
+
+        if (
+            count($methodCallNode->args) >= 2 ||
+            (isset($methodCallNode->args[0]) && $methodCallNode->args[0]->value instanceof Array_)
+        ) {
+            return $typeAndMethodNames['set'];
+        }
+
+        return $typeAndMethodNames['get'];
     }
 }
