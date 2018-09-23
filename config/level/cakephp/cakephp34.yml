@@ -20,7 +20,7 @@ services:
                 - 'autoQuoting' # (now enableAutoQuoting()/isAutoQuotingEnabled('
             Cake\Database\Expression\FunctionExpression:
                 - 'name'
-            Cake\Database\Expression\QueryExpression:
+            #Cake\Database\Expression\QueryExpression:
                 #- 'tieWith' #() (now setConjunction()/getConjunction('
             Cake\Database\Expression\ValuesExpression:
                 - 'columns'
@@ -67,7 +67,7 @@ services:
             Cake\ORM\EagerLoadable:
                 - 'config'
                 #- 'setter part of canBeJoined() (now setCanBeJoined('
-            Cake\ORM\EagerLoader:
+#            Cake\ORM\EagerLoader:
                 #- 'matching' #() (getMatching() will have to be called after setMatching() to keep the old behavio'
                 #- 'autoFields' #() (now enableAutoFields()/isAutoFieldsEnabled('
             Cake\ORM\Locator\TableLocator:
@@ -126,3 +126,44 @@ services:
                 - 'name'
                 - 'className'
                 #- 'autoLayout' #() (now enableAutoLayout()/isAutoLayoutEnabled('
+
+    Rector\Rector\MethodCall\MethodNameReplacerRector:
+        $perClassOldToNewMethods:
+            Cake\Network\Request:
+                param: 'getParam'
+                data: 'getData'
+                query: 'getQuery'
+                cookie: 'getCookie'
+                method: 'getMethod'
+                setInput: 'withBody'
+
+            Cake\Network\Response:
+                location: 'withLocation'
+                disableCache: 'withDisabledCache'
+                type: 'withType'
+                charset: 'withCharset'
+                cache: 'withCache'
+                modified: 'withModified'
+                expires: 'withExpires'
+                sharable: 'withSharable'
+                maxAge: 'withMaxAge'
+                vary: 'withVary'
+                etag: 'withEtag'
+                compress: 'withCompression'
+                length: 'withLength'
+                mustRevalidate: 'withMustRevalidate'
+                notModified: 'withNotModified'
+                cookie: 'withCookie'
+                file: 'withFile'
+                download: 'withDownload'
+
+            Cake\Event\Event:
+                'name': 'getName'
+                'subject': 'getSubject'
+                'result': 'getResult'
+                'data': 'getData'
+
+            Cake\View\Helper\FormHelper:
+                input: 'control'
+                inputs: 'controls'
+                allInputs: 'allControls'
