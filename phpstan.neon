@@ -88,9 +88,6 @@ parameters:
         - '#In method "Rector\\Node\\NodeFactory::createArray", parameter \$items can be type-hinted to "array"#'
         - '#In method "Rector\\Builder\\StatementGlue::addStatementToClassBeforeTypes", parameter \$types type is "array". Please provide a \@param annotation to further specify the type of the array. For instance: \@param int\[\] \$types#'
 
-        # intentionally
-        - '#Empty catch block#'
-
 services:
     -
     	class: Rector\Tests\PHPStan\Type\SplFileInfoTolerantDynamicMethodReturnTypeExtension

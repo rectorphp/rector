@@ -4,7 +4,6 @@ services:
             'Rector\CakePHP\Tests\Rector\MethodCall\ModalToGetSetRector\Source\SomeModelType':
                 config:
                     get: 'getConfig'
-                    set: 'setConfig'
                     minimal_argument_count: 2
                     first_argument_type_to_set: 'array'
                 customMethod:
@@ -12,3 +11,4 @@ services:
                     set: 'customMethodSetName'
                     minimal_argument_count: 2
                     first_argument_type_to_set: 'array'
+                method: ~

@@ -97,20 +97,18 @@ CODE_SAMPLE
     private function matchTypeAndMethodName(MethodCall $methodCallNode): ?array
     {
         foreach ($this->methodNamesByTypes as $type => $methodNamesToGetAndSetNames) {
+            /** @var string[] $methodNames */
             $methodNames = array_keys($methodNamesToGetAndSetNames);
             if (! $this->methodCallAnalyzer->isTypeAndMethods($methodCallNode, $type, $methodNames)) {
                 continue;
             }
 
-            $config = $methodNamesToGetAndSetNames[$methodCallNode->name->toString()];
-            if ($config === null) {
-                $currentMethodName = $methodCallNode->name->toString();
+            $currentMethodName = (string) $methodCallNode->name;
+            $config = $methodNamesToGetAndSetNames[$currentMethodName];
 
-                $config = [
-                    'get' => 'get' . ucfirst($currentMethodName),
-                    'set' => 'set' . ucfirst($currentMethodName),
-                ];
-            }
+            // default
+            $config['set'] = $config['set'] ?? 'set' . ucfirst($currentMethodName);
+            $config['get'] = $config['get'] ?? 'get' . ucfirst($currentMethodName);
 
             // default minimal argument count for setter
             $config['minimal_argument_count'] = $config['minimal_argument_count'] ?? 1;
