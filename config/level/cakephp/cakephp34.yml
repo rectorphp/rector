@@ -244,17 +244,31 @@ services:
         $oldToNewClasses:
             Cake\Database\Schema\Table: 'Cake\Database\Schema\TableSchema'
 
-    # @todo
-    # https://book.cakephp.org/3.0/en/appendices/3-4-migration-guide.html#adopting-immutable-responses
-    # immutable responses - 2 changes: rename methods + non-fluent → fluent
-    # before
-    #    $response = $this->response;
-    #    $response->location('/login')
-    #    $response->header('X-something', 'a value');
-    # afer: fluent or assign - return new object
-    #    $this->response = $this->response
-    #    ->withLocation('/login')
-    #    ->withHeader('X-something', 'a value');
+    Rector\Rector\MethodBody\NormalToFluentRector:
+        $fluentMethodsByType:
+            Cake\Network\Response:
+                # https://book.cakephp.org/3.0/en/appendices/3-4-migration-guide.html#adopting-immutable-responses
+                # renames are done by MethodNameReplacerRector above
+                - 'withLocation'
+                - 'withHeader'
+                - 'withLocation'
+                - 'withDisabledCache'
+                - 'withType'
+                - 'withCharset'
+                - 'withCache'
+                - 'withModified'
+                - 'withExpires'
+                - 'withSharable'
+                - 'withMaxAge'
+                - 'withVary'
+                - 'withEtag'
+                - 'withCompression'
+                - 'withLength'
+                - 'withMustRevalidate'
+                - 'withNotModified'
+                - 'withCookie'
+                - 'withFile'
+                - 'withDownload'
 
     # @todo
     # The fieldList option for Cake\ORM\Table::newEntity() and patchEntity() has been renamed to fields to be more consistent with other parts of the ORM.
