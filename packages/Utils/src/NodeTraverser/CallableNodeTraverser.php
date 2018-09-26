@@ -28,7 +28,8 @@ final class CallableNodeTraverser
 
             public function enterNode(Node $node): ?Node
             {
-                return ($this->callable)($node);
+                $callable = $this->callable;
+                return $callable($node);
             }
         });
 
