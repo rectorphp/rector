@@ -48,7 +48,7 @@ final class ParameterGuider
     private function throwException(string $providedParameterName, string $correctParameterName): void
     {
         throw new ParameterTypoException(sprintf(
-            'Parameter "%s" does not exist. Use "%s" instead.',
+            'Parameter "parameters > %s" does not exist. Use "parameters > %s" instead.',
             $providedParameterName,
             $correctParameterName
         ));
