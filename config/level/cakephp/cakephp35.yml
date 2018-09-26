@@ -1,36 +1,87 @@
 # source: https://book.cakephp.org/3.0/en/appendices/3-5-migration-guide.html
 
 services:
-    Rector\Rector\Property\PropertyToMethodRector:
-        $perClassPropertyToMethods:
-            'Cake\Network\Request':
-                'params':
-                    'get':
-                        method: 'getAttribute'
-                        arguments:
-                            - 'params'
-                'data':
-                    'get': 'getData'
-                'query':
-                    'get': 'getQueryParams'
-                'cookies':
-                    'get': 'getCookie'
-                'base':
-                    'get':
-                        method: 'getAttribute'
-                        arguments:
-                            - 'base'
-                'webroot':
-                    'get':
-                        method: 'getAttribute'
-                        arguments:
-                            - 'webroot'
-
     Rector\Rector\Class_\ClassReplacerRector:
         $oldToNewClasses:
-            'Cake\Http\Client\CookieCollection ': 'Cake\Http\Cookie\CookieCollection'
+            Cake\Http\Client\CookieCollection: 'Cake\Http\Cookie\CookieCollection'
+            Cake\Console\ShellDispatcher: 'Cake\Console\CommandRunner'
+            Cake\Database\Schema\TableSchema:
+                column: 'getColumn'
+                constraint: 'getConstraint'
+                index: 'getIndex'
 
-    Rector\Rector\Property\PropertyNameReplacerRector:
-        $perClassOldToNewProperties:
-            'Cake\Network\Request':
-                '_session': 'session'
+    Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector:
+        $methodNamesByTypes:
+            Cake\Cache\Cache:
+                config: ~
+                registry: ~
+            Cake\Console\Shell:
+                io: ~
+            Cake\Console\ConsoleIo:
+                outputAs: ~
+            Cake\Console\ConsoleOutput:
+                outputAs: ~
+            Cake\Database\Connection:
+                logger: ~
+            Cake\Database\TypedResultInterface:
+                returnType: ~
+            Cake\Database\TypedResultTrait:
+                returnType: ~
+            Cake\Database\Log\LoggingStatement:
+                logger: ~
+            Cake\Datasource\ModelAwareTrait:
+                modelType: ~
+            Cake\Database\Query:
+                valueBinder:
+                    get: 'getValueBinder'
+                    set: 'valueBinder'
+            Cake\Database\Schema\TableSchema:
+                columnType: ~
+            Cake\Datasource\QueryTrait:
+                eagerLoaded:
+                    get: 'isEagerLoaded'
+                    set: 'eagerLoaded'
+            Cake\Event\EventDispatcherInterface:
+                eventManager: ~
+            Cake\Event\EventDispatcherTrait:
+                eventManager: ~
+            Cake\Error\Debugger:
+                outputAs:
+                    get: 'getOutputFormat'
+                    set: 'setOutputFormat'
+            Cake\Http\ServerRequest:
+                env:
+                    get: 'getEnv'
+                    set: 'withEnv'
+                charset:
+                    get: 'getCharset'
+                    set: 'withCharset'
+            Cake\I18n\I18n:
+                locale: ~
+                translator: ~
+                defaultLocale: ~
+                defaultFormatter: ~
+            Cake\ORM\Association\BelongsToMany:
+                sort: ~
+            Cake\ORM\LocatorAwareTrait:
+                tableLocator: ~
+            Cake\ORM\Table:
+                validator: ~
+            Cake\Routing\RouteBuilder:
+                extensions: ~
+                routeClass: ~
+            Cake\Routing\RouteCollection:
+                extensions: ~
+            Cake\TestSuite\TestFixture:
+                schema: ~
+            Cake\Utility\Security:
+                salt: ~
+            Cake\View\View:
+                template: ~
+                layout: ~
+                theme: ~
+                templatePath: ~
+                layoutPath: ~
+                autoLayout:
+                    get: 'isAutoLayoutEnabled'
+                    set: 'enableAutoLayout'
