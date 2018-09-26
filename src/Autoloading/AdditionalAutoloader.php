@@ -7,6 +7,7 @@ use Rector\Configuration\Option;
 use Rector\FileSystem\FileGuard;
 use Rector\Utils\FilesystemTweaker;
 use Symfony\Component\Console\Input\InputInterface;
+use Symplify\PackageBuilder\FileSystem\FileSystem;
 
 /**
  * Should it pass autoload files/directories to PHPStan analyzer?
@@ -21,12 +22,7 @@ final class AdditionalAutoloader
     /**
      * @var string[]
      */
-    private $autoloadFiles = [];
-
-    /**
-     * @var string[]
-     */
-    private $autoloadDirectories = [];
+    private $autoloadPaths = [];
 
     /**
      * @var FilesystemTweaker
@@ -39,21 +35,25 @@ final class AdditionalAutoloader
     private $excludePaths = [];
 
     /**
-     * @param string[] $autoloadFiles
-     * @param string[] $autoloadDirectories
+     * @var FileSystem
+     */
+    private $fileSystem;
+
+    /**
+     * @param string[] $autoloadPaths
      * @param string[] $excludePaths
      */
     public function __construct(
-        array $autoloadFiles,
-        array $autoloadDirectories,
         FileGuard $fileGuard,
         FilesystemTweaker $filesystemTweaker,
+        FileSystem $fileSystem,
+        array $autoloadPaths,
         array $excludePaths
     ) {
-        $this->autoloadFiles = $autoloadFiles;
-        $this->autoloadDirectories = $autoloadDirectories;
         $this->fileGuard = $fileGuard;
         $this->filesystemTweaker = $filesystemTweaker;
+        $this->fileSystem = $fileSystem;
+        $this->autoloadPaths = $autoloadPaths;
         $this->excludePaths = $excludePaths;
     }
 
@@ -62,9 +62,11 @@ final class AdditionalAutoloader
      */
     public function autoloadWithInputAndSource(InputInterface $input, array $source): void
     {
+        [$autoloadFiles, $autoloadDirectories] = $this->fileSystem->separateFilesAndDirectories($this->autoloadPaths);
+
         $this->autoloadFileFromInput($input);
-        $this->autoloadDirectories($this->autoloadDirectories);
-        $this->autoloadFiles($this->autoloadFiles);
+        $this->autoloadDirectories($autoloadDirectories);
+        $this->autoloadFiles($autoloadFiles);
 
         [$files, $directories] = $this->filesystemTweaker->splitSourceToDirectoriesAndFiles($source);
         $this->autoloadFiles($files);

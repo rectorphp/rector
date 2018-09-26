@@ -9,3 +9,6 @@ services:
 
     # extra services
     Rector\Symfony\Rector\Form\Helper\FormTypeStringToTypeProvider: ~
+
+    Symfony\Component\Console\Application:
+        alias: 'Rector\Console\Application'
