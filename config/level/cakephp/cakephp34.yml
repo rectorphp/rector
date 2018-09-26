@@ -31,7 +31,7 @@ services:
     Rector\Rector\Property\PropertyNameReplacerRector:
         $perClassOldToNewProperties:
             Cake\Network\Request:
-                _session: '_session'
+                _session: 'session'
 
     Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector:
         $methodNamesByTypes:
