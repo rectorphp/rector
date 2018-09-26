@@ -18,7 +18,7 @@
         "symfony/console": "^3.4|^4.1",
         "symfony/dependency-injection": "^3.4|^4.1",
         "symfony/finder": "^3.4|^4.1",
-        "symplify/better-phpdoc-parser": "^5.0",
+        "symplify/better-phpdoc-parser": "^5.0.1",
         "symplify/package-builder": "^5.0",
         "thecodingmachine/safe": "^0.1.4"
     },
