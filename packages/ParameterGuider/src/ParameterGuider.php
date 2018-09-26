@@ -17,7 +17,8 @@ final class ParameterGuider
      */
     private static $parametersWithMissplacedNames = [
         // correct paremter => regex catching invalid values
-        'exclude_paths' => '#exclude(d)?_(path(s)?|dir(s)?|file(s)?)#'
+        'exclude_paths' => '#exclude(d)?_(path(s)?|dir(s)?|file(s)?)#',
+        'autoload_paths' => '#autoload(d)?_(path(s)?|dir(s)?|file(s)?)#'
     ];
 
     /**
