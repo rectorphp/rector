@@ -5,6 +5,7 @@ namespace Rector\ParameterGuider;
 use Nette\Utils\Strings;
 use Rector\ParameterGuider\Exception\ParameterTypoException;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use function Safe\sprintf;
 
 /**
  * This class makes sure there are no typos in parameter names,
@@ -13,20 +14,17 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 final class ParameterGuider
 {
     /**
-     * @var array
+     * @var string[]
      */
     private static $parametersWithMissplacedNames = [
         // correct paremter => regex catching invalid values
         'exclude_paths' => '#exclude(d)?_(path(s)?|dir(s)?|file(s)?)#',
-        'autoload_paths' => '#autoload(d)?_(path(s)?|dir(s)?|file(s)?)#'
+        'autoload_paths' => '#autoload(d)?_(path(s)?|dir(s)?|file(s)?)#',
     ];
 
-    /**
-     * @param mixed[] $parameters
-     */
-    public function processParameters(ParameterBagInterface $parametersBag): void
+    public function processParameters(ParameterBagInterface $parameterBag): void
     {
-        $parameterNames = array_keys($parametersBag->all());
+        $parameterNames = array_keys($parameterBag->all());
 
         foreach ($parameterNames as $parameterName) {
             foreach (self::$parametersWithMissplacedNames as $correctParameterName => $missplacedNamePattern) {

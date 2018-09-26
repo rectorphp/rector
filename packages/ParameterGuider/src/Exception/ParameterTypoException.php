@@ -6,5 +6,4 @@ use Exception;
 
 final class ParameterTypoException extends Exception
 {
-
 }

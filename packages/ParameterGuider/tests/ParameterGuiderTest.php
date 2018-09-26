@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\ParameterGuider;
+namespace Rector\ParameterGuider\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Rector\DependencyInjection\ContainerFactory;

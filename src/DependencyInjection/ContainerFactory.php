@@ -4,8 +4,8 @@ namespace Rector\DependencyInjection;
 
 use Psr\Container\ContainerInterface;
 use Rector\ParameterGuider\ParameterGuider;
-use function Safe\putenv;
 use Symfony\Component\DependencyInjection\Container;
+use function Safe\putenv;
 
 final class ContainerFactory
 {
