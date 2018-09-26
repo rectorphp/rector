@@ -7,5 +7,4 @@ imports:
 
 parameters:
     exclude_paths: []
-    autoload_directories: []
-    autoload_files: []
+    autoload_paths: []

@@ -56,14 +56,12 @@ Or make use of `rector.yml` config:
 ```yaml
 # rector.yml
 parameters:
-    autoload_files:
+    autoload_paths:
         - '%kernel.project_dir%/vendor/squizlabs/php_codesniffer/autoload.php'
-
-    autoload_directories:
         - '%kernel.project_dir%/vendor/project-without-composer'
 ```
 
-You can also exclude files or directories - use regex or [fnmatch](http://php.net/manual/en/function.fnmatch.php):
+You can also **exclude files or directories** - use regex or [fnmatch](http://php.net/manual/en/function.fnmatch.php):
 
 ```yaml
 # rector.yml

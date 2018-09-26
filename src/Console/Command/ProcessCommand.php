@@ -264,7 +264,7 @@ final class ProcessCommand extends Command
             }
 
             $message = sprintf(
-                'Analyze error: %s Try to include your files in "parameters > autoload_files" or "parameters > autoload_directories".%sSee https://github.com/rectorphp/rector#extra-autoloading',
+                'Analyze error: %s Try to include your files in "parameters > autoload_paths".%sSee https://github.com/rectorphp/rector#extra-autoloading',
                 $analysedCodeException->getMessage(),
                 PHP_EOL
             );
