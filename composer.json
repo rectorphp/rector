@@ -39,6 +39,7 @@
             "Rector\\ConsoleDiffer\\": "packages/ConsoleDiffer/src",
             "Rector\\NodeTypeResolver\\": "packages/NodeTypeResolver/src",
             "Rector\\Symfony\\": "packages/Symfony/src",
+            "Rector\\CakePHP\\": "packages/CakePHP/src",
             "Rector\\Silverstripe\\": "packages/Silverstripe/src",
             "Rector\\Sensio\\": "packages/Sensio/src",
             "Rector\\Sylius\\": "packages/Sylius/src",
@@ -54,6 +55,7 @@
         "psr-4": {
             "Rector\\Tests\\": "tests",
             "Rector\\NodeTypeResolver\\Tests\\": "packages/NodeTypeResolver/tests",
+            "Rector\\CakePHP\\Tests\\": "packages/CakePHP/tests",
             "Rector\\Symfony\\Tests\\": "packages/Symfony/tests",
             "Rector\\Silverstripe\\Tests\\": "packages/Silverstripe/tests",
             "Rector\\Sensio\\Tests\\": "packages/Sensio/tests",

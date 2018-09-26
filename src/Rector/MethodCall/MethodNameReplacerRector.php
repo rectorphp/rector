@@ -12,7 +12,6 @@ use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
-use SomeClass;
 
 final class MethodNameReplacerRector extends AbstractRector
 {
@@ -76,7 +75,7 @@ CODE_SAMPLE
                 ,
                 [
                     '$perClassOldToNewMethods' => [
-                        SomeClass::class => [
+                        'SomeClass' => [
                             'oldMethod' => 'newMethod',
                         ],
                     ],

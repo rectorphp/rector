@@ -6,6 +6,10 @@ imports:
     - { resource: 'vendor/symplify/easy-coding-standard/config/clean-code.yml' }
 
 services:
+    Symplify\CodingStandard\Fixer\Php\ClassStringToClassConstantFixer:
+        allow_classes:
+            - 'SomeClass' # from PHPUnit
+
     Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
         maxCognitiveComplexity: 8
 
@@ -84,3 +88,7 @@ parameters:
         Symplify\CodingStandard\Sniffs\Naming\ClassNameSuffixByParentSniff:
             # hidden API
             - 'src/Rector/AbstractRector.php'
+
+        Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
+            # tough logic
+            - 'src/Rector/MethodBody/NormalToFluentRector.php'
