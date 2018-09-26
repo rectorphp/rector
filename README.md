@@ -18,8 +18,11 @@ Rector **instantly upgrades PHP & YAML code of your application**, with focus on
     <a href="/config/level/phpunit"><img src="/docs/images/phpunit.jpg"></a>
     <img src="/docs/images/space.png" width=20>
     <a href="/config/level/twig"><img src="/docs/images/twig.png"></a>
+    <img src="/docs/images/space.png" width=20>
+    <a href="/config/level/cakephp"><img src="/docs/images/cakephp.jpg"></a>
+    <img src="/docs/images/space.png" width=20>
+    <a href="/config/level/laravel"><img src="/docs/images/silverstripe.jpg"></a>
 </p>
-
 
 **Rector can**:
 
