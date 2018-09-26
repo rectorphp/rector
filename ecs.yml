@@ -88,3 +88,7 @@ parameters:
         Symplify\CodingStandard\Sniffs\Naming\ClassNameSuffixByParentSniff:
             # hidden API
             - 'src/Rector/AbstractRector.php'
+
+        Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
+            # tough logic
+            - 'src/Rector/MethodBody/NormalToFluentRector.php'
