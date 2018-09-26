@@ -8,3 +8,4 @@ composer.lock
 
 /demo
 rector-symfony.yml
+.phpunit.result.cache
