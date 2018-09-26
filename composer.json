@@ -41,6 +41,7 @@
             "Rector\\Symfony\\": "packages/Symfony/src",
             "Rector\\CakePHP\\": "packages/CakePHP/src",
             "Rector\\Silverstripe\\": "packages/Silverstripe/src",
+            "Rector\\ParameterGuider\\": "packages/ParameterGuider/src",
             "Rector\\Sensio\\": "packages/Sensio/src",
             "Rector\\Sylius\\": "packages/Sylius/src",
             "Rector\\PHPUnit\\": "packages/PHPUnit/src",
