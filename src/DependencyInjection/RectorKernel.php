@@ -16,7 +16,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\Config\FileLocator;
 use Symfony\Component\HttpKernel\Kernel;
-use Symplify\BetterPhpDocParser\DependencyInjection\CompilerPass\CollectDecoratorsToPhpDocInfoFactoryCompilerPass;
 use Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutoBindParametersCompilerPass;
 use Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutowireSinglyImplementedCompilerPass;
 use Symplify\PackageBuilder\Yaml\FileLoader\ParameterImportsYamlFileLoader;
@@ -72,9 +71,6 @@ final class RectorKernel extends Kernel
     {
         $containerBuilder->addCompilerPass(new CollectorCompilerPass());
         $containerBuilder->addCompilerPass(new YamlRectorCollectorCompilerPass());
-
-        // for symplify/better-php-doc-parser
-        $containerBuilder->addCompilerPass(new CollectDecoratorsToPhpDocInfoFactoryCompilerPass());
 
         // for defaults
         $containerBuilder->addCompilerPass(new AutowireSinglyImplementedCompilerPass());

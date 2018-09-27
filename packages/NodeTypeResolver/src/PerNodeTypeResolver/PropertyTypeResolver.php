@@ -32,7 +32,7 @@ final class PropertyTypeResolver implements PerNodeTypeResolverInterface, NodeTy
      */
     public function resolve(Node $propertyNode): array
     {
-        // fake property to local PropertyFetch → PHPStan understand that
+        // fake property to local PropertyFetch → PHPStan understands that
         $propertyFetchNode = new PropertyFetch(new Variable('this'), (string) $propertyNode->props[0]->name);
         $propertyFetchNode->setAttribute(Attribute::SCOPE, $propertyNode->getAttribute(Attribute::SCOPE));
 

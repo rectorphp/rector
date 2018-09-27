@@ -6,6 +6,8 @@ imports:
     - { resource: 'vendor/symplify/easy-coding-standard/config/clean-code.yml' }
 
 services:
+    SlevomatCodingStandard\Sniffs\Functions\UnusedParameterSniff: ~
+
     Symplify\CodingStandard\Fixer\Php\ClassStringToClassConstantFixer:
         allow_classes:
             - 'SomeClass' # from PHPUnit
@@ -92,3 +94,10 @@ parameters:
         Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
             # tough logic
             - 'src/Rector/MethodBody/NormalToFluentRector.php'
+
+        SlevomatCodingStandard\Sniffs\Functions\UnusedParameterSniff.UnusedParameter:
+            # enforced by interface
+            - '*Command.php'
+            - '*NodeVisitor.php'
+            # array type check
+            - 'src/RectorDefinition/RectorDefinition.php'

@@ -8,8 +8,7 @@ class ClassWithInjects5
      * @var SomeProductWithTrait
      */
     private $property;
-
-    public function __construct(SomeProductWithTrait $property)
+    public function __construct(\Rector\Tests\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeProductWithTrait $property)
     {
         $this->property = $property;
     }

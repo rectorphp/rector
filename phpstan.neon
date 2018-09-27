@@ -92,6 +92,6 @@ parameters:
 
 services:
     -
-    	class: Rector\Tests\PHPStan\Type\SplFileInfoTolerantDynamicMethodReturnTypeExtension
-    	tags:
-    		- phpstan.broker.dynamicMethodReturnTypeExtension
+        class: Symplify\PHPStanExtensions\Type\SplFileInfoTolerantDynamicMethodReturnTypeExtension
+        tags:
+            - phpstan.broker.dynamicMethodReturnTypeExtension

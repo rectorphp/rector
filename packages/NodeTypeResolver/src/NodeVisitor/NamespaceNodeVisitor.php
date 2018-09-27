@@ -44,7 +44,9 @@ final class NamespaceNodeVisitor extends NodeVisitorAbstract
     {
         $this->namespaceName = null;
         $this->namespaceNode = null;
-        $this->useNodes = [];
+
+        // init basic use nodes for non-namespaced code
+        $this->useNodes = $this->betterNodeFinder->findInstanceOf($nodes, Use_::class);
 
         return null;
     }

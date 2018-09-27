@@ -4,7 +4,6 @@ namespace Rector\FileSystem;
 
 use Nette\Utils\Strings;
 use Rector\Utils\FilesystemTweaker;
-use SplFileInfo as NativeSplFileInfo;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
@@ -104,7 +103,7 @@ final class FilesFinder
             return;
         }
 
-        $finder->filter(function (NativeSplFileInfo $splFileInfo) {
+        $finder->filter(function (SplFileInfo $splFileInfo) {
             // return false to remove file
             foreach ($this->excludePaths as $excludePath) {
                 if (Strings::match($splFileInfo->getRealPath(), '#' . preg_quote($excludePath, '#') . '#')) {

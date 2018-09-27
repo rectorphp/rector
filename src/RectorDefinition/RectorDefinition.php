@@ -49,8 +49,8 @@ final class RectorDefinition
      */
     private function ensureCodeSamplesAreValid(array $codeSamples): void
     {
-        // array type check
         array_walk($codeSamples, function (CodeSampleInterface $codeSample): void {
+            // array type check
         });
 
         if (count($codeSamples)) {
