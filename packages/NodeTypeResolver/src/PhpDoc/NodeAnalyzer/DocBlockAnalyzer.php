@@ -7,6 +7,7 @@ use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use Rector\Exception\ShouldNotHappenException;
+use Rector\NodeTypeResolver\Exception\MissingTagException;
 use Rector\PhpParser\CurrentNodeProvider;
 use Symplify\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Symplify\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
@@ -149,9 +150,13 @@ final class DocBlockAnalyzer
     /**
      * @final
      */
-    public function getTagByName(Node $node, string $name): ?PhpDocTagNode
+    public function getTagByName(Node $node, string $name): PhpDocTagNode
     {
-        return $this->getTagsByName($node, $name)[0] ?? null;
+        if (! $this->hasTag($node, $name)) {
+            throw new MissingTagException('Tag "%s" was not found at "%s" node.', $name, get_class($node));
+        }
+
+        return $this->getTagsByName($node, $name)[0];
     }
 
     private function updateNodeWithPhpDocInfo(Node $node, PhpDocInfo $phpDocInfo): void

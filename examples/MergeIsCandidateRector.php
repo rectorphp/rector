@@ -229,10 +229,11 @@ final class MergeIsCandidateRector extends AbstractRector
     private function resolveSingleParamTypesFromClassMethod(ClassMethod $classMethod): array
     {
         // add getNodeType() by $refactorClassMethod "@param" doc type
-        $paramNode = $this->docBlockAnalyzer->getTagByName($classMethod, 'param');
-        if ($paramNode === null) {
+        if (! $this->docBlockAnalyzer->hasTag($classMethod, 'param')) {
             return [];
         }
+
+        $paramNode = $this->docBlockAnalyzer->getTagByName($classMethod, 'param');
 
         /** @var ParamTagValueNode $paramTagValueNode */
         $paramTagValueNode = $paramNode->value;
