@@ -1,19 +1,19 @@
 <?php declare (strict_types=1);
 
-class ClassWithInjects
+class ClassWithInjects2
 {
     /**
      * @var stdClass
+     * @autowired
      */
-    private $property;
+    public $property;
 
     /**
      * @var DateTimeInterface
-     * @inject
      */
-    public $otherProperty;
-    public function __construct(\stdClass $property)
+    private $otherProperty;
+    public function __construct(\DateTimeInterface $otherProperty)
     {
-        $this->property = $property;
+        $this->otherProperty = $otherProperty;
     }
 }
