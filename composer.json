@@ -20,6 +20,7 @@
         "symfony/finder": "^3.4|^4.1",
         "symfony/process": "^3.4|^4.1",
         "symplify/better-phpdoc-parser": "^5.0.2",
+        "symplify/easy-coding-standard": "^5.0.2",
         "symplify/package-builder": "^5.0.2",
         "thecodingmachine/safe": "^0.1.4"
     },
@@ -27,7 +28,6 @@
         "humbug/php-scoper": "^0.9.2",
         "phpunit/phpunit": "^7.3",
         "symplify/changelog-linker": "^5.0.2",
-        "symplify/easy-coding-standard": "^5.0.2",
         "symplify/monorepo-builder": "^5.0.2",
         "symplify/phpstan-extensions": "dev-master#b6919ae",
         "thecodingmachine/phpstan-safe-rule": "^0.1.0",
