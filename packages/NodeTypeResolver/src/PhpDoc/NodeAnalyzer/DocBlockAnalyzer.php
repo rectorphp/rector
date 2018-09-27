@@ -32,18 +32,20 @@ final class DocBlockAnalyzer
     private $currentNodeProvider;
 
     /**
-     * @var PhpDocInfo[]
+     * @var PhpDocInfoFqnTypeDecorator
      */
-    private $cachedPhpDocInfoByNode = [];
+    private $phpDocInfoFqnTypeDecorator;
 
     public function __construct(
         PhpDocInfoFactory $phpDocInfoFactory,
         PhpDocInfoPrinter $phpDocInfoPrinter,
-        CurrentNodeProvider $currentNodeProvider
+        CurrentNodeProvider $currentNodeProvider,
+        PhpDocInfoFqnTypeDecorator $phpDocInfoFqnTypeDecorator
     ) {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->phpDocInfoPrinter = $phpDocInfoPrinter;
         $this->currentNodeProvider = $currentNodeProvider;
+        $this->phpDocInfoFqnTypeDecorator = $phpDocInfoFqnTypeDecorator;
     }
 
     public function hasTag(Node $node, string $name): bool
@@ -61,7 +63,7 @@ final class DocBlockAnalyzer
             return;
         }
 
-        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
+        $phpDocInfo = $this->createPhpDocInfoWithFqnTypesFromNode($node);
         $phpDocInfo->removeParamTagByParameter($name);
 
         $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
@@ -85,7 +87,7 @@ final class DocBlockAnalyzer
             return;
         }
 
-        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
+        $phpDocInfo = $this->createPhpDocInfoWithFqnTypesFromNode($node);
 
         $phpDocInfo->replacePhpDocTypeByAnother($oldType, $newType);
 
@@ -113,7 +115,7 @@ final class DocBlockAnalyzer
             return [];
         }
 
-        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
+        $phpDocInfo = $this->createPhpDocInfoWithFqnTypesFromNode($node);
 
         return $phpDocInfo->getVarTypes();
     }
@@ -127,7 +129,7 @@ final class DocBlockAnalyzer
             return null;
         }
 
-        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
+        $phpDocInfo = $this->createPhpDocInfoWithFqnTypesFromNode($node);
 
         return (string) $phpDocInfo->getParamTypeNode($paramName);
     }
@@ -142,7 +144,7 @@ final class DocBlockAnalyzer
             return [];
         }
 
-        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
+        $phpDocInfo = $this->createPhpDocInfoWithFqnTypesFromNode($node);
 
         return $phpDocInfo->getTagsByName($name);
     }
@@ -178,11 +180,6 @@ final class DocBlockAnalyzer
 
     private function createPhpDocInfoFromNode(Node $node): PhpDocInfo
     {
-        $key = spl_object_hash($node);
-        if (isset($this->cachedPhpDocInfoByNode[$key])) {
-            return $this->cachedPhpDocInfoByNode[$key];
-        }
-
         $this->currentNodeProvider->setCurrentNode($node);
         if ($node->getDocComment() === null) {
             throw new ShouldNotHappenException(sprintf(
@@ -191,8 +188,15 @@ final class DocBlockAnalyzer
             ));
         }
 
-        return $this->cachedPhpDocInfoByNode[$key] = $this->phpDocInfoFactory->createFrom(
-            $node->getDocComment()->getText()
-        );
+        return $this->phpDocInfoFactory->createFrom($node->getDocComment()->getText());
+    }
+
+    private function createPhpDocInfoWithFqnTypesFromNode(Node $node): PhpDocInfo
+    {
+        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
+
+        $this->phpDocInfoFqnTypeDecorator->decorate($phpDocInfo);
+
+        return $phpDocInfo;
     }
 }
