@@ -1,16 +1,16 @@
 <?php declare (strict_types=1);
 
-class ClassWithInjects
+class ClassWithInjects2
 {
     /**
      * @var stdClass
      * @autowired
      */
-    protected $property;
+    public $property;
 
     /**
      * @var DateTimeInterface
      * @inject
      */
-    public $otherProperty;
+    protected $otherProperty;
 }
