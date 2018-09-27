@@ -9,7 +9,7 @@ class ClassWithInjects6
      */
     private $property;
 
-    public function __construct(SomeProductWithParent $property)
+    public function __construct(\Rector\Tests\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeProductWithParent $property)
     {
         $this->property = $property;
     }
