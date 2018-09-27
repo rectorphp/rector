@@ -5,8 +5,7 @@ namespace Rector\Rector\Architecture\DependencyInjection;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
-use PhpParser\Node\Stmt\PropertyProperty;
-use PhpParser\Node\VarLikeIdentifier;
+use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -34,14 +33,14 @@ final class AnnotatedPropertyInjectToConstructorInjectionRector extends Abstract
     private $docBlockAnalyzer;
 
     /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    /**
      * @var string
      */
     private $annotation;
+
+    /**
+     * @var NodeTypeResolver
+     */
+    private $nodeTypeResolver;
 
     public function __construct(
         ClassPropertyCollector $classPropertyCollector,
@@ -51,8 +50,8 @@ final class AnnotatedPropertyInjectToConstructorInjectionRector extends Abstract
     ) {
         $this->classPropertyCollector = $classPropertyCollector;
         $this->docBlockAnalyzer = $docBlockAnalyzer;
-        $this->nodeTypeResolver = $nodeTypeResolver;
         $this->annotation = $annotation;
+        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     public function getDefinition(): RectorDefinition
@@ -110,6 +109,11 @@ CODE_SAMPLE
             return null;
         }
 
+        // it needs @var tag as well, to get the type
+        if (! $this->docBlockAnalyzer->hasTag($propertyNode, 'var')) {
+            return null;
+        }
+
         $this->docBlockAnalyzer->removeTagFromNode($propertyNode, $this->annotation);
 
         // set to private
@@ -122,20 +126,13 @@ CODE_SAMPLE
 
     private function addPropertyToCollector(Property $propertyNode): void
     {
-        $propertyTypes = $this->nodeTypeResolver->resolve($propertyNode);
-
-        /** @var PropertyProperty $propertyPropertyNode */
         $propertyPropertyNode = $propertyNode->props[0];
+        $className = (string) $propertyPropertyNode->getAttribute(Attribute::CLASS_NAME);
 
-        /** @var VarLikeIdentifier $varLikeIdentifierNode */
-        $varLikeIdentifierNode = $propertyPropertyNode->name;
+        $mainPropertyType = $this->nodeTypeResolver->resolve($propertyNode)[0];
 
-        $propertyName = $varLikeIdentifierNode->name;
+        $propertyName = (string) $propertyPropertyNode->name;
 
-        $this->classPropertyCollector->addPropertyForClass(
-            (string) $propertyNode->getAttribute(Attribute::CLASS_NAME),
-            $propertyTypes,
-            $propertyName
-        );
+        $this->classPropertyCollector->addPropertyForClass($className, [$mainPropertyType], $propertyName);
     }
 }
