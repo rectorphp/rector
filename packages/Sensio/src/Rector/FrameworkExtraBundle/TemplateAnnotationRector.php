@@ -105,7 +105,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $classMethodNode): ?Node
     {
-        if ($this->docBlockAnalyzer->hasTag($classMethodNode, 'Template') === false) {
+        if (! $this->docBlockAnalyzer->hasTag($classMethodNode, 'Template')) {
             return null;
         }
         /** @var Return_|null $returnNode */
