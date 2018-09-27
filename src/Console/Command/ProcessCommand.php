@@ -178,12 +178,22 @@ final class ProcessCommand extends Command
         }
 
         if ($input->getOption(Option::OPTION_WITH_STYLE)) {
-            $command = sprintf('vendor/bin/ecs check %s --config ecs-after-rector.yml --fix', implode(' ', $source));
+            $command = sprintf(
+                'vendor/bin/ecs check %s --config %s --fix',
+                implode(' ', $source),
+                __DIR__ . '/../../../ecs-after-rector.yml'
+            );
 
             $process = new Process($command);
             $process->run();
 
-            $this->consoleStyle->success('Basic coding standard is done');
+            if ($process->isSuccessful()) {
+                $this->consoleStyle->success('Basic coding standard is done');
+            } else {
+                $this->consoleStyle->error(
+                    sprintf('Basic coding standard was not applied due to: "%s"', $process->getErrorOutput())
+                );
+            }
         }
 
         $this->consoleStyle->success('Rector is done!');
