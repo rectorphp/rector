@@ -3,7 +3,7 @@
 namespace Rector\Exception\Application;
 
 use Exception;
-use SplFileInfo;
+use Symfony\Component\Finder\SplFileInfo;
 use Throwable;
 use function Safe\sprintf;
 

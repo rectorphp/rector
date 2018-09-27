@@ -5,7 +5,6 @@ namespace Rector\Rector\Architecture\DependencyInjection;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
-use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\NodeTypeResolver\NodeTypeResolver;
