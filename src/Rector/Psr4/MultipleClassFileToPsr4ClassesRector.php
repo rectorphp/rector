@@ -1,0 +1,225 @@
+<?php declare(strict_types=1);
+
+namespace Rector\Rector\Psr4;
+
+use PhpParser\Lexer;
+use PhpParser\Node;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Namespace_;
+use Rector\FileSystemRector\Contract\FileSystemRectorInterface;
+use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
+use Rector\Parser\Parser;
+use Rector\Printer\FormatPerservingPrinter;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
+use Rector\Utils\BetterNodeFinder;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\SplFileInfo;
+
+final class MultipleClassFileToPsr4ClassesRector implements FileSystemRectorInterface
+{
+    /**
+     * @var BetterNodeFinder
+     */
+    private $betterNodeFinder;
+
+    /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    /**
+     * @var Parser
+     */
+    private $parser;
+
+    /**
+     * @var Lexer
+     */
+    private $lexer;
+
+    /**
+     * @var FormatPerservingPrinter
+     */
+    private $formatPerservingPrinter;
+
+    /**
+     * @var NodeScopeAndMetadataDecorator
+     */
+    private $nodeScopeAndMetadataDecorator;
+
+    public function __construct(
+        BetterNodeFinder $betterNodeFinder,
+        Filesystem $filesystem,
+        Parser $parser,
+        Lexer $lexer,
+        FormatPerservingPrinter $formatPerservingPrinter,
+        NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator
+    ) {
+        $this->betterNodeFinder = $betterNodeFinder;
+        $this->filesystem = $filesystem;
+        $this->parser = $parser;
+        $this->lexer = $lexer;
+        $this->formatPerservingPrinter = $formatPerservingPrinter;
+        $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
+    }
+
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition(
+            'Turns namespaced classes in one file to standalone PSR-4 classes.',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
+namespace App\Exceptions;
+
+use Exception;
+
+final class FirstException extends Exception 
+{
+    
+}
+
+final class SecondException extends Exception
+{
+    
+}
+CODE_SAMPLE
+                    ,
+                    <<<'CODE_SAMPLE'
+// new file: "app/Exceptions/FirstException.php"
+namespace App\Exceptions;
+
+use Exception;
+
+final class FirstException extends Exception 
+{
+    
+}
+
+// new file: "app/Exceptions/SecondException.php"
+namespace App\Exceptions;
+
+use Exception;
+
+final class SecondException extends Exception
+{
+    
+}
+CODE_SAMPLE
+                ),
+            ]
+        );
+    }
+
+    public function refactor(SplFileInfo $fileInfo): void
+    {
+        $oldStmts = $this->parser->parseFile($fileInfo->getRealPath());
+
+        // needed for format preserving
+        $newStmts = $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($oldStmts, $fileInfo->getRealPath());
+
+        /** @var Namespace_[] $namespaceNodes */
+        $namespaceNodes = $this->betterNodeFinder->findInstanceOf($newStmts, Namespace_::class);
+
+        if ($this->shouldSkip($fileInfo, $newStmts, $namespaceNodes)) {
+            return;
+        }
+
+        foreach ($namespaceNodes as $namespaceNode) {
+            $newStmtsSet = $this->removeAllOtherNamespaces($newStmts, $namespaceNode);
+
+            foreach ($newStmtsSet as $newStmt) {
+                if (! $newStmt instanceof Namespace_) {
+                    continue;
+                }
+
+                /** @var Class_[] $namespacedClassNodes */
+                $namespacedClassNodes = $this->betterNodeFinder->findInstanceOf($newStmt->stmts, Class_::class);
+
+                foreach ($namespacedClassNodes as $classNode) {
+                    $this->removeAllClassesFromNamespaceNode($newStmt);
+                    $newStmt->stmts[] = $classNode;
+
+                    // reindex from 0, for the printer
+                    $newStmt->stmts = array_values($newStmt->stmts);
+
+                    $fileDestination = $this->createClassFileDestination($classNode, $fileInfo);
+
+                    $fileContent = $this->formatPerservingPrinter->printToString(
+                        $newStmtsSet,
+                        $oldStmts,
+                        $this->lexer->getTokens()
+                    );
+
+                    $this->filesystem->dumpFile($fileDestination, $fileContent);
+                }
+            }
+        }
+    }
+
+    private function createClassFileDestination(Class_ $classNode, SplFileInfo $fileInfo): string
+    {
+        $currentDirectory = dirname($fileInfo->getRealPath());
+
+        return $currentDirectory . DIRECTORY_SEPARATOR . (string) $classNode->name . '.php';
+    }
+
+    private function removeAllClassesFromNamespaceNode(Namespace_ $namespaceNode): void
+    {
+        foreach ($namespaceNode->stmts as $key => $namespaceStatement) {
+            if ($namespaceStatement instanceof Class_) {
+                unset($namespaceNode->stmts[$key]);
+            }
+        }
+    }
+
+    /**
+     * @param Node[] $nodes
+     * @return Node[]
+     */
+    private function removeAllOtherNamespaces(array $nodes, Namespace_ $namespaceNode): array
+    {
+        foreach ($nodes as $key => $stmt) {
+            if ($stmt instanceof Namespace_ && $stmt !== $namespaceNode) {
+                unset($nodes[$key]);
+            }
+        }
+
+        // reindex from 0, for the printer
+        return array_values($nodes);
+    }
+
+    /**
+     * @param Node[] $nodes
+     * @param Namespace_[] $namespaceNodes
+     */
+    private function shouldSkip(SplFileInfo $fileInfo, array $nodes, array $namespaceNodes): bool
+    {
+        // process only namespaced file
+        if (! $namespaceNodes) {
+            return true;
+        }
+
+        /** @var Class_[] $classNodes */
+        $classNodes = $this->betterNodeFinder->findInstanceOf($nodes, Class_::class);
+
+        $nonAnonymousClassNodes = array_filter($classNodes, function (Class_ $classNode) {
+            return $classNode->name;
+        });
+
+        // only process file with multiple classes || class with non PSR-4 format
+        if (! $nonAnonymousClassNodes) {
+            return true;
+        }
+
+        if (count($nonAnonymousClassNodes) === 1) {
+            $nonAnonymousClassNode = $nonAnonymousClassNodes[0];
+            if ((string) $nonAnonymousClassNode->name === $fileInfo->getFilename()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+}

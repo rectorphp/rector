@@ -5,11 +5,13 @@
 
 ## Projects
 
+- [CakePHP\MethodCall](#cakephpmethodcall)
 - [Doctrine](#doctrine)
 - [PHPUnit](#phpunit)
 - [PHPUnit\SpecificMethod](#phpunitspecificmethod)
 - [PhpParser](#phpparser)
 - [Sensio\FrameworkExtraBundle](#sensioframeworkextrabundle)
+- [Silverstripe](#silverstripe)
 - [Sylius\Review](#syliusreview)
 - [Symfony\Console](#symfonyconsole)
 - [Symfony\Controller](#symfonycontroller)
@@ -21,6 +23,29 @@
 - [Symfony\Validator](#symfonyvalidator)
 - [Symfony\VarDumper](#symfonyvardumper)
 - [Symfony\Yaml](#symfonyyaml)
+- [Twig](#twig)
+
+## CakePHP\MethodCall
+
+### `ModalToGetSetRector`
+
+- class: `Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector`
+
+Changes combined set/get `value()` to specific `getValue()` or `setValue(x)`.
+
+```diff
+ $object = new InstanceConfigTrait;
+
+-$config = $object->config();
+-$config = $object->config('key');
++$config = $object->getConfig();
++$config = $object->getConfig('key');
+
+-$object->config('key', 'value');
+-$object->config(['key' => 'value']);
++$object->setConfig('key', 'value');
++$object->setConfig(['key' => 'value']);
+```
 
 ## Doctrine
 
@@ -88,6 +113,24 @@ Turns method data providers in PHPUnit from arrays to yield
 -    ]
 +    yield ['item'];
  }
+```
+
+### `TryCatchToExpectExceptionRector`
+
+- class: `Rector\PHPUnit\Rector\TryCatchToExpectExceptionRector`
+
+Turns try/catch to expectException() call
+
+```diff
+-try {
+-	$someService->run();
+-} catch (Throwable $exception) {
+-    $this->assertInstanceOf(RuntimeException::class, $e);
+-    $this->assertContains('There was an error executing the following script', $e->getMessage());
+-}
++$this->expectException(RuntimeException::class);
++$this->expectExceptionMessage('There was an error executing the following script');
++$someService->run();
 ```
 
 ### `GetMockRector`
@@ -394,6 +437,30 @@ Turns @Template annotation to explicit method call in Controller of FrameworkExt
  }
 ```
 
+## Silverstripe
+
+### `ConstantToStaticCallRector`
+
+- class: `Rector\Silverstripe\Rector\ConstantToStaticCallRector`
+
+Turns defined constant to static method call.
+
+```diff
+-SS_DATABASE_NAME;
++Environment::getEnv("SS_DATABASE_NAME");
+```
+
+### `DefineConstantToStaticCallRector`
+
+- class: `Rector\Silverstripe\Rector\DefineConstantToStaticCallRector`
+
+Turns defined function call to static method call.
+
+```diff
+-defined("SS_DATABASE_NAME");
++Environment::getEnv("SS_DATABASE_NAME");
+```
+
 ## Sylius\Review
 
 ### `ReplaceCreateMethodWithoutReviewerRector`
@@ -517,8 +584,9 @@ Turns old option names to new ones in FormTypes in Form in Symfony
 Turns string Form Type references to their CONSTANT alternatives in FormTypes in Form in Symfony
 
 ```diff
--$form->add("name", "form.type.text");
-+$form->add("name", \Symfony\Component\Form\Extension\Core\Type\TextType::class);
+ $formBuilder = new Symfony\Component\Form\FormBuilder;
+-$formBuilder->add('name', 'form.type.text');
++$form->add('name', \Symfony\Component\Form\Extension\Core\Type\TextType::class);
 ```
 
 ### `FormTypeGetParentRector`
@@ -718,6 +786,47 @@ session > use_strict_mode is true by default and can be removed
 +session:
 ```
 
+### `ParseFileRector`
+
+- class: `Rector\Symfony\Rector\Yaml\ParseFileRector`
+
+session > use_strict_mode is true by default and can be removed
+
+```diff
+-session > use_strict_mode: true
++session:
+```
+
+## Twig
+
+### `SimpleFunctionAndFilterRector`
+
+- class: `Rector\Twig\Rector\SimpleFunctionAndFilterRector`
+
+Changes Twig_Function_Method to Twig_SimpleFunction calls in TwigExtension.
+
+```diff
+ class SomeExtension extends Twig_Extension
+ {
+     public function getFunctions()
+     {
+         return [
+-            'is_mobile' => new Twig_Function_Method($this, 'isMobile'),
++             new Twig_SimpleFunction('is_mobile', [$this, 'isMobile']),
+         ];
+     }
+
+-    public function getFilters()
++    public function getFilteres()
+     {
+         return [
+-            'is_mobile' => new Twig_Filter_Method($this, 'isMobile'),
++             new Twig_SimpleFilter('is_mobile', [$this, 'isMobile']),
+         ];
+     }
+ }
+```
+
 ---
 ## General
 
@@ -735,6 +844,7 @@ session > use_strict_mode is true by default and can be removed
 - [MethodCall](#methodcall)
 - [Namespace_](#namespace_)
 - [Property](#property)
+- [Psr4](#psr4)
 - [RepositoryAsService](#repositoryasservice)
 - [StaticCall](#staticcall)
 - [Typehint](#typehint)
@@ -1292,7 +1402,64 @@ services:
 
 - class: `Rector\Rector\MethodBody\FluentReplaceRector`
 
-Turns fluent interfaces to classic ones.
+Turns fluent interface calls to classic ones.
+
+```yaml
+services:
+    Rector\Rector\MethodBody\FluentReplaceRector:
+        $classesToDefluent:
+            - SomeClass
+```
+
+↓
+
+```diff
+ $someClass = new SomeClass();
+-$someClass->someFunction()
+-            ->otherFunction();
++$someClass->someFunction();
++$someClass->otherFunction();
+```
+
+### `NormalToFluentRector`
+
+- class: `Rector\Rector\MethodBody\NormalToFluentRector`
+
+Turns fluent interface calls to classic ones.
+
+```yaml
+services:
+    Rector\Rector\MethodBody\NormalToFluentRector:
+        $fluentMethodsByType:
+            SomeClass:
+                - someFunction
+                - otherFunction
+```
+
+↓
+
+```diff
+ $someObject = new SomeClass();
+-$someObject->someFunction();
+-$someObject->otherFunction();
++$someObject->someFunction()
++    ->otherFunction();
+```
+
+### `ReturnThisRemoveRector`
+
+- class: `Rector\Rector\MethodBody\ReturnThisRemoveRector`
+
+Removes "return $this;" from *fluent interfaces* for specified classes.
+
+```yaml
+services:
+    Rector\Rector\MethodBody\ReturnThisRemoveRector:
+        $classesToDefluent:
+            - SomeClass
+```
+
+↓
 
 ```diff
  class SomeClass
@@ -1307,12 +1474,6 @@ Turns fluent interfaces to classic ones.
 -        return $this;
      }
  }
-
- $someClass = new SomeClass();
--$someClass->someFunction()
--            ->otherFunction();
-+$someClass->someFunction();
-+$someClass->otherFunction();
 ```
 
 ## MethodCall
@@ -1443,8 +1604,8 @@ services:
         $perClassPropertyToMethods:
             SomeObject:
                 property:
-                    - getProperty
-                    - setProperty
+                    get: getProperty
+                    set: setProperty
 ```
 
 ↓
@@ -1454,6 +1615,25 @@ services:
 -$object->property = $value;
 +$result = $object->getProperty();
 +$object->setProperty($value);
+```
+
+```yaml
+services:
+    Rector\Rector\Property\PropertyToMethodRector:
+        $perClassPropertyToMethods:
+            SomeObject:
+                property:
+                    get:
+                        method: getConfig
+                        arguments:
+                            - someArg
+```
+
+↓
+
+```diff
+-$result = $object->property;
++$result = $object->getProperty('someArg');
 ```
 
 ### `PropertyNameReplacerRector`
@@ -1475,6 +1655,36 @@ services:
 ```diff
 -$someObject->someOldProperty;
 +$someObject->someNewProperty;
+```
+
+## Psr4
+
+### `MultipleClassFileToPsr4ClassesRector`
+
+- class: `Rector\Rector\Psr4\MultipleClassFileToPsr4ClassesRector`
+
+Turns namespaced classes in one file to standalone PSR-4 classes.
+
+```diff
++// new file: "app/Exceptions/FirstException.php"
+ namespace App\Exceptions;
+
+ use Exception;
+
+ final class FirstException extends Exception
+ {
+
+ }
++
++// new file: "app/Exceptions/SecondException.php"
++namespace App\Exceptions;
++
++use Exception;
+
+ final class SecondException extends Exception
+ {
+
+ }
 ```
 
 ## RepositoryAsService

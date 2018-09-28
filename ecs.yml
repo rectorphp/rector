@@ -54,6 +54,7 @@ parameters:
         # tests files
         - '*tests/*/Wrong/*'
         - '*tests/*/Correct/*'
+        - '*tests/*/Expected/*'
 
     skip:
         Symplify\CodingStandard\Fixer\Php\ClassStringToClassConstantFixer:
@@ -99,5 +100,6 @@ parameters:
             # enforced by interface
             - '*Command.php'
             - '*NodeVisitor.php'
+            - '*CompilerPass.php'
             # array type check
             - 'src/RectorDefinition/RectorDefinition.php'

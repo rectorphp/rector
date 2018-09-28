@@ -37,15 +37,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     }
 
     /**
-     * @param Node[] $nodes
-     * @return Node[]
-     */
-    final public function beforeTraverse(array $nodes): array
-    {
-        return $nodes;
-    }
-
-    /**
      * @return int|Node|null
      */
     final public function enterNode(Node $node)
