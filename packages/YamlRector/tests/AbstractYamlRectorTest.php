@@ -7,7 +7,7 @@ use Psr\Container\ContainerInterface;
 use Rector\DependencyInjection\ContainerFactory;
 use Rector\FileSystem\FileGuard;
 use Rector\YamlRector\YamlFileProcessor;
-use Symfony\Component\Finder\SplFileInfo;
+use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 use function Safe\sprintf;
 
 abstract class AbstractYamlRectorTest extends TestCase
@@ -40,10 +40,9 @@ abstract class AbstractYamlRectorTest extends TestCase
 
     protected function doTestFileMatchesExpectedContent(string $file, string $reconstructedFile): void
     {
-        $this->fileGuard->ensureFileExists($file, static::class);
         $this->fileGuard->ensureFileExists($reconstructedFile, static::class);
 
-        $reconstructedFileContent = $this->yamlFileProcessor->processFileInfo(new SplFileInfo($file, '', ''));
+        $reconstructedFileContent = $this->yamlFileProcessor->processFileInfo(new SmartFileInfo($file));
 
         $this->assertStringEqualsFile(
             $reconstructedFile,

@@ -13,6 +13,7 @@ use Rector\Console\Output\ProcessCommandReporter;
 use Rector\Console\Shell;
 use Rector\ConsoleDiffer\DifferAndFormatter;
 use Rector\FileSystem\FilesFinder;
+use Rector\FileSystemRector\FileSystemFileProcessor;
 use Rector\Guard\RectorGuard;
 use Rector\Reporting\FileDiff;
 use Rector\YamlRector\YamlFileProcessor;
@@ -90,6 +91,11 @@ final class ProcessCommand extends Command
      */
     private $errors = [];
 
+    /**
+     * @var FileSystemFileProcessor
+     */
+    private $fileSystemFileProcessor;
+
     public function __construct(
         FileProcessor $fileProcessor,
         ConsoleStyle $consoleStyle,
@@ -99,7 +105,8 @@ final class ProcessCommand extends Command
         DifferAndFormatter $differAndFormatter,
         AdditionalAutoloader $additionalAutoloader,
         YamlFileProcessor $yamlFileProcessor,
-        RectorGuard $rectorGuard
+        RectorGuard $rectorGuard,
+        FileSystemFileProcessor $fileSystemFileProcessor
     ) {
         parent::__construct();
 
@@ -112,6 +119,7 @@ final class ProcessCommand extends Command
         $this->additionalAutoloader = $additionalAutoloader;
         $this->yamlFileProcessor = $yamlFileProcessor;
         $this->rectorGuard = $rectorGuard;
+        $this->fileSystemFileProcessor = $fileSystemFileProcessor;
     }
 
     protected function configure(): void
@@ -218,6 +226,33 @@ final class ProcessCommand extends Command
         $this->consoleStyle->newLine(2);
     }
 
+    private function processFileInfo(SplFileInfo $fileInfo, bool $shouldHideAutoloadErrors): void
+    {
+        try {
+            if ($fileInfo->getExtension() === 'php') {
+                $this->processFile($fileInfo);
+            } elseif (in_array($fileInfo->getExtension(), ['yml', 'yaml'], true)) {
+                $this->processYamlFile($fileInfo);
+            }
+
+            $this->processFileSystemFile($fileInfo);
+        } catch (AnalysedCodeException $analysedCodeException) {
+            if ($shouldHideAutoloadErrors) {
+                return;
+            }
+
+            $message = sprintf(
+                'Analyze error: "%s". Try to include your files in "parameters > autoload_paths".%sSee https://github.com/rectorphp/rector#extra-autoloading',
+                $analysedCodeException->getMessage(),
+                PHP_EOL
+            );
+
+            $this->errors[] = new Error($fileInfo, $message, null);
+        } catch (Throwable $throwable) {
+            $this->errors[] = new Error($fileInfo, $throwable->getMessage(), $throwable->getCode());
+        }
+    }
+
     private function processFile(SplFileInfo $fileInfo): void
     {
         $oldContent = $fileInfo->getContents();
@@ -260,28 +295,8 @@ final class ProcessCommand extends Command
         }
     }
 
-    private function processFileInfo(SplFileInfo $fileInfo, bool $shouldHideAutoloadErrors): void
+    private function processFileSystemFile(SplFileInfo $fileInfo): void
     {
-        try {
-            if ($fileInfo->getExtension() === 'php') {
-                $this->processFile($fileInfo);
-            } elseif (in_array($fileInfo->getExtension(), ['yml', 'yaml'], true)) {
-                $this->processYamlFile($fileInfo);
-            }
-        } catch (AnalysedCodeException $analysedCodeException) {
-            if ($shouldHideAutoloadErrors) {
-                return;
-            }
-
-            $message = sprintf(
-                'Analyze error: %s Try to include your files in "parameters > autoload_paths".%sSee https://github.com/rectorphp/rector#extra-autoloading',
-                $analysedCodeException->getMessage(),
-                PHP_EOL
-            );
-
-            $this->errors[] = new Error($fileInfo, $message, null);
-        } catch (Throwable $throwable) {
-            $this->errors[] = new Error($fileInfo, $throwable->getMessage(), $throwable->getCode());
-        }
+        $this->fileSystemFileProcessor->processFileInfo($fileInfo);
     }
 }

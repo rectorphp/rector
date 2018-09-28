@@ -7,7 +7,7 @@ use Psr\Container\ContainerInterface;
 use Rector\Application\FileProcessor;
 use Rector\DependencyInjection\ContainerFactory;
 use Rector\FileSystem\FileGuard;
-use Symfony\Component\Finder\SplFileInfo;
+use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use function Safe\sprintf;
 
@@ -64,13 +64,11 @@ abstract class AbstractRectorTestCase extends TestCase
 
     protected function doTestFileMatchesExpectedContent(string $file, string $reconstructedFile): void
     {
-        $this->fileGuard->ensureFileExists($file, static::class);
         $this->fileGuard->ensureFileExists($reconstructedFile, static::class);
 
         $this->parameterProvider->changeParameter('source', [$file]);
 
-        $splFileInfo = new SplFileInfo($file, '', '');
-        $reconstructedFileContent = $this->fileProcessor->processFileToString($splFileInfo);
+        $reconstructedFileContent = $this->fileProcessor->processFileToString(new SmartFileInfo($file));
 
         $this->assertStringEqualsFile(
             $reconstructedFile,

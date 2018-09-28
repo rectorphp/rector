@@ -5,6 +5,8 @@ namespace Rector\DependencyInjection;
 use Rector\Contract\Rector\PhpRectorInterface;
 use Rector\DependencyInjection\CompilerPass\AutowireInterfacesCompilerPass;
 use Rector\DependencyInjection\CompilerPass\CollectorCompilerPass;
+use Rector\FileSystemRector\Contract\FileSystemRectorInterface;
+use Rector\FileSystemRector\DependencyInjection\FileSystemRectorCollectorCompilerPass;
 use Rector\YamlRector\Contract\YamlRectorInterface;
 use Rector\YamlRector\DependencyInjection\YamlRectorCollectorCompilerPass;
 use Symfony\Component\Config\Loader\DelegatingLoader;
@@ -69,16 +71,19 @@ final class RectorKernel extends Kernel
 
     protected function build(ContainerBuilder $containerBuilder): void
     {
+        // collect all Rector services to its runners
         $containerBuilder->addCompilerPass(new CollectorCompilerPass());
         $containerBuilder->addCompilerPass(new YamlRectorCollectorCompilerPass());
+        $containerBuilder->addCompilerPass(new FileSystemRectorCollectorCompilerPass());
 
         // for defaults
         $containerBuilder->addCompilerPass(new AutowireSinglyImplementedCompilerPass());
 
-        // autowire
+        // autowire Rectors by default (mainly for 3rd party code)
         $containerBuilder->addCompilerPass(new AutowireInterfacesCompilerPass([
             PhpRectorInterface::class,
             YamlRectorInterface::class,
+            FileSystemRectorInterface::class,
         ]));
 
         $containerBuilder->addCompilerPass(new AutoBindParametersCompilerPass());

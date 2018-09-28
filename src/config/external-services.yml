@@ -17,6 +17,8 @@ services:
     PhpParser\ConstExprEvaluator:
         factory: ['@Rector\NodeValueResolver\ConstExprEvaluatorFactory', 'create']
 
+    Symfony\Component\Filesystem\Filesystem: ~
+
     # Symfony\Console
     Symfony\Component\Console\Style\SymfonyStyle: ~
 

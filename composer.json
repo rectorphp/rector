@@ -50,7 +50,8 @@
             "Rector\\PhpParser\\": "packages/PhpParser/src",
             "Rector\\Doctrine\\": "packages/Doctrine/src",
             "Rector\\Utils\\": "packages/Utils/src",
-            "Rector\\YamlRector\\": "packages/YamlRector/src"
+            "Rector\\YamlRector\\": "packages/YamlRector/src",
+            "Rector\\FileSystemRector\\": "packages/FileSystemRector/src"
         }
     },
     "autoload-dev": {
@@ -67,12 +68,18 @@
             "Rector\\Utils\\Tests\\": "packages/Utils/tests",
             "Rector\\Twig\\Tests\\": "packages/Twig/tests",
             "Rector\\Doctrine\\Tests\\": "packages/Doctrine/tests",
-            "Rector\\YamlRector\\Tests\\": "packages/YamlRector/tests"
+            "Rector\\YamlRector\\Tests\\": "packages/YamlRector/tests",
+            "Rector\\FileSystemRector\\Tests\\": "packages/FileSystemRector/tests"
         },
         "classmap": [
             "packages",
             "tests/Issues",
             "tests/Rector"
+        ],
+        "files": [
+            "tests/Rector/Psr4/MultipleClassFileToPsr4ClassesRector/Source/exceptions.php",
+            "tests/Rector/Psr4/MultipleClassFileToPsr4ClassesRector/Source/nette-exceptions.php",
+            "tests/Rector/Psr4/MultipleClassFileToPsr4ClassesRector/Source/exception.php"
         ]
     },
     "scripts": {

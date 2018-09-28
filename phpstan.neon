@@ -54,7 +54,6 @@ parameters:
         - '#Cannot call method getName\(\) on PHPStan\\Reflection\\ClassReflection\|null#' # 1
         - '#Parameter \#1 \$classReflection of method Rector\\NodeTypeResolver\\Reflection\\ClassReflectionTypesResolver::resolve\(\) expects PHPStan\\Reflection\\ClassReflection, PHPStan\\Reflection\\ClassReflection|null given#'
         - '#Cannot call method getAttribute\(\) on PhpParser\\Node\\Name\|null#'
-        - '#Cannot call method getBasename\(\) on Symfony\\Component\\Finder\\SplFileInfo\|null#'
         - '#Cannot call method getText\(\) on PhpParser\\Comment\\Doc\|null#'
 
         # Error php-parser token
