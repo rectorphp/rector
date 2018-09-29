@@ -4,8 +4,10 @@ namespace Rector\Printer;
 
 use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Property;
 use PhpParser\PrettyPrinter\Standard;
 use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\Php\Rector\TypedPropertyRector;
 use function Safe\sprintf;
 
 final class BetterStandardPrinter extends Standard
@@ -44,5 +46,18 @@ final class BetterStandardPrinter extends Standard
             $this->p($yieldNode->value),
             $shouldAddBrackets ? ')' : ''
         );
+    }
+
+    /**
+     * Print property with PHP 7.4 type
+     */
+    protected function pStmt_Property(Property $node): string
+    {
+        $type = $node->getAttribute(TypedPropertyRector::PHP74_PROPERTY_TYPE);
+
+        return $node->flags === 0 ? 'var ' : $this->pModifiers($node->flags) .
+            ($type ? $type . ' ' : '') .
+            $this->pCommaSeparated($node->props) .
+            ';';
     }
 }

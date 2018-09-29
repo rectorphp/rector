@@ -121,6 +121,20 @@ final class DocBlockAnalyzer
     }
 
     /**
+     * @return string[]
+     */
+    public function getNonFqnVarTypes(Node $node): array
+    {
+        if ($node->getDocComment() === null) {
+            return [];
+        }
+
+        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
+
+        return $phpDocInfo->getVarTypes();
+    }
+
+    /**
      * @todo add test for Multi|Types
      */
     public function getTypeForParam(Node $node, string $paramName): ?string
