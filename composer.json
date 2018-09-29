@@ -105,6 +105,11 @@
             "bin/rector-prefixed/publish-to-github.sh"
         ]
     },
+    "scripts-descriptions": {
+        "rector-prefixed": "Builds new version of rector/rector-prefixed and pushes it to Github",
+        "update-docs": "Regenerate descriptions of all Rectors to docs/AllRectorsOverview.md file",
+        "changelog": "Generates new changelog for new merged PRs into CHANGELOG.md"
+    },
     "bin": ["bin/rector"],
     "config": {
         "sort-packages": true
