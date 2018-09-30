@@ -103,3 +103,7 @@ parameters:
             - '*CompilerPass.php'
             # array type check
             - 'src/RectorDefinition/RectorDefinition.php'
+
+        Symplify\CodingStandard\Sniffs\ControlStructure\SprintfOverContactSniff:
+            # respects inherited pattern for better comparing
+            - 'src/Printer/BetterStandardPrinter.php'

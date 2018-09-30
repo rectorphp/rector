@@ -9,7 +9,7 @@ require_once __DIR__ . '/../bootstrap.php';
 $buildDestination = getenv('BUILD_DESTINATION');
 
 // load
-$composerJsonPath =  $buildDestination . '/composer.json';
+$composerJsonPath = $buildDestination . '/composer.json';
 $composerContent = Json::decode(FileSystem::read($composerJsonPath), Json::FORCE_ARRAY);
 
 // remove unused sections
