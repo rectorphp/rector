@@ -20,7 +20,7 @@ Import `services.yml` in your Symfony config:
 ```yaml
 # your-app/config.yml
 imports:
-    - { resource: 'vendor/rector/node-type-resolver/config/services.yml' }
+    - { resource: 'vendor/rector/node-type-resolver/config/config.yml' }
 ```
 
 Require `Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator` in the constructor:
