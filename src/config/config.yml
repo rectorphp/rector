@@ -8,3 +8,10 @@ imports:
 parameters:
     exclude_paths: []
     autoload_paths: []
+
+    # see https://github.com/symplify/packagebuilder#collect-services-in-short-configs
+    collectors:
+        -
+            main_type: 'Rector\NodeTraverser\RectorNodeTraverser'
+            collected_type: 'Rector\Contract\Rector\PhpRectorInterface'
+            add_method: 'addRector'
