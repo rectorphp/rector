@@ -12,16 +12,19 @@ use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\Config\Loader\LoaderResolver;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\Config\FileLocator;
 use Symfony\Component\HttpKernel\Kernel;
 use Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutoBindParametersCompilerPass;
 use Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutowireSinglyImplementedCompilerPass;
 use Symplify\PackageBuilder\DependencyInjection\CompilerPass\ConfigurableCollectorCompilerPass;
+use Symplify\PackageBuilder\HttpKernel\SimpleKernelTrait;
 use Symplify\PackageBuilder\Yaml\FileLoader\ParameterImportsYamlFileLoader;
+use Symplify\PackageBuilder\Yaml\FileLoader\ParameterMergingYamlFileLoader;
 
 final class RectorKernel extends Kernel
 {
+    use SimpleKernelTrait;
+
     /**
      * @var string[]
      */
@@ -47,24 +50,6 @@ final class RectorKernel extends Kernel
         foreach ($this->extraConfigFiles as $extraConfigFile) {
             $loader->load($extraConfigFile);
         }
-    }
-
-    public function getCacheDir(): string
-    {
-        return sys_get_temp_dir() . '/_rector_cache';
-    }
-
-    public function getLogDir(): string
-    {
-        return sys_get_temp_dir() . '/_rector_log';
-    }
-
-    /**
-     * @return BundleInterface[]
-     */
-    public function registerBundles(): array
-    {
-        return [];
     }
 
     protected function build(ContainerBuilder $containerBuilder): void
@@ -95,6 +80,7 @@ final class RectorKernel extends Kernel
 
         $loaderResolver = new LoaderResolver([
             new GlobFileLoader($kernelFileLocator),
+            new ParameterMergingYamlFileLoader($container, $kernelFileLocator),
             new ParameterImportsYamlFileLoader($container, $kernelFileLocator),
         ]);
 
