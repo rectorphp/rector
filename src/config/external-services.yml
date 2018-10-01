@@ -21,12 +21,22 @@ services:
 
     # Symfony\Console
     Symfony\Component\Console\Style\SymfonyStyle: ~
-
     Symfony\Component\Console\Input\ArgvInput: ~
-
     Symfony\Component\Console\Output\ConsoleOutput: ~
     Symfony\Component\Console\Output\OutputInterface:
         alias: Symfony\Component\Console\Output\ConsoleOutput
 
-    Symplify\PackageBuilder\Parameter\ParameterProvider: ~
     Symplify\PackageBuilder\FileSystem\FileSystem: ~
+
+    # parameters
+    Symplify\PackageBuilder\Parameter\ParameterProvider: ~
+
+    # see https://github.com/symplify/packagebuilder#prevent-parameter-typos
+    Symfony\Component\EventDispatcher\EventDispatcher: ~
+    Symplify\PackageBuilder\EventSubscriber\ParameterTypoProofreaderEventSubscriber: ~
+    Symplify\PackageBuilder\Parameter\ParameterTypoProofreader:
+        $correctToTypos:
+            exclude_paths:
+                - '#exclude(d)?_(path(s)?|dir(s)?|file(s)?)#'
+            autoload_paths:
+                - '#autoload(d)?_(path(s)?|dir(s)?|file(s)?)#'

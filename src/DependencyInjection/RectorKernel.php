@@ -20,6 +20,7 @@ use Symfony\Component\HttpKernel\Config\FileLocator;
 use Symfony\Component\HttpKernel\Kernel;
 use Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutoBindParametersCompilerPass;
 use Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutowireSinglyImplementedCompilerPass;
+use Symplify\PackageBuilder\DependencyInjection\CompilerPass\ConfigurableCollectorCompilerPass;
 use Symplify\PackageBuilder\Yaml\FileLoader\ParameterImportsYamlFileLoader;
 
 final class RectorKernel extends Kernel
@@ -87,6 +88,7 @@ final class RectorKernel extends Kernel
         ]));
 
         $containerBuilder->addCompilerPass(new AutoBindParametersCompilerPass());
+        $containerBuilder->addCompilerPass(new ConfigurableCollectorCompilerPass());
     }
 
     /**

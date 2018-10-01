@@ -1,7 +1,0 @@
-services:
-    _defaults:
-        autowire: true
-        public: true
-
-    Rector\ParameterGuider\:
-        resource: '../src'

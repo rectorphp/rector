@@ -19,17 +19,17 @@
         "symfony/dependency-injection": "^3.4|^4.1",
         "symfony/finder": "^3.4|^4.1",
         "symfony/process": "^3.4|^4.1",
-        "symplify/better-phpdoc-parser": "^5.0.2",
-        "symplify/easy-coding-standard": "^5.0.2",
-        "symplify/package-builder": "^5.0.2",
+        "symplify/better-phpdoc-parser": "^5.2",
+        "symplify/easy-coding-standard": "^5.2",
+        "symplify/package-builder": "^5.2",
         "thecodingmachine/safe": "^0.1.4"
     },
     "require-dev": {
         "humbug/php-scoper": "^0.9.2",
         "phpunit/phpunit": "^7.3",
-        "symplify/changelog-linker": "^5.0.2",
-        "symplify/monorepo-builder": "^5.0.2",
-        "symplify/phpstan-extensions": "dev-master#b6919ae",
+        "symplify/changelog-linker": "^5.2",
+        "symplify/monorepo-builder": "^5.2",
+        "symplify/phpstan-extensions": "^5.1",
         "thecodingmachine/phpstan-safe-rule": "^0.1.0",
         "thecodingmachine/phpstan-strict-rules": "^0.10.3",
         "tracy/tracy": "^2.5"
@@ -43,7 +43,6 @@
             "Rector\\CakePHP\\": "packages/CakePHP/src",
             "Rector\\Php\\": "packages/Php/src",
             "Rector\\Silverstripe\\": "packages/Silverstripe/src",
-            "Rector\\ParameterGuider\\": "packages/ParameterGuider/src",
             "Rector\\Sensio\\": "packages/Sensio/src",
             "Rector\\Sylius\\": "packages/Sylius/src",
             "Rector\\PHPUnit\\": "packages/PHPUnit/src",
@@ -78,7 +77,6 @@
             "packages/Doctrine/tests",
             "packages/FileSystemRector/tests",
             "packages/NodeTypeResolver/tests",
-            "packages/ParameterGuider/tests",
             "packages/PhpParser/tests",
             "packages/PHPUnit/tests",
             "packages/Sensio/tests",
@@ -127,5 +125,7 @@
     "bin": ["bin/rector"],
     "config": {
         "sort-packages": true
-    }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
