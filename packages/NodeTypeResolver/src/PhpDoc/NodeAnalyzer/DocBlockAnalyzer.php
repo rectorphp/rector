@@ -12,6 +12,7 @@ use Rector\PhpParser\CurrentNodeProvider;
 use Symplify\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Symplify\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Symplify\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
+use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 use function Safe\sprintf;
 
 final class DocBlockAnalyzer
@@ -201,6 +202,11 @@ final class DocBlockAnalyzer
                 __METHOD__
             ));
         }
+
+        // $this->phpDocInfoDecorators needs to be nulled, or FQN is made by default due to collector
+        // @todo resolve propperty and decouple node traversing from: \Symplify\BetterPhpDocParser\PhpDocInfo\AbstractPhpDocInfoDecorator into a service + remove parent dependcy of
+        // @see \Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\PhpDocInfoFqnTypeDecorator
+        (new PrivatesAccessor())->setPrivateProperty($this->phpDocInfoFactory, 'phpDocInfoDecorators', []);
 
         return $this->phpDocInfoFactory->createFrom($node->getDocComment()->getText());
     }

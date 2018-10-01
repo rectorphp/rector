@@ -50,11 +50,6 @@ final class PhpDocInfoFqnTypeDecorator extends AbstractPhpDocInfoDecorator
         return $node;
     }
 
-    private function isClassyType(string $name): bool
-    {
-        return ctype_upper($name[0]);
-    }
-
     private function shouldSkip(Node $node): bool
     {
         if (! $node instanceof IdentifierTypeNode) {
@@ -66,5 +61,10 @@ final class PhpDocInfoFqnTypeDecorator extends AbstractPhpDocInfoDecorator
         }
 
         return false;
+    }
+
+    private function isClassyType(string $name): bool
+    {
+        return ctype_upper($name[0]);
     }
 }
