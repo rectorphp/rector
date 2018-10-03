@@ -8,7 +8,7 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 /**
  * @covers \Rector\Rector\Visibility\ChangeMethodVisibilityRector
  */
-final class ChangePropertyVisibilityRectorTest extends AbstractRectorTestCase
+final class ChangeMethodVisibilityRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()

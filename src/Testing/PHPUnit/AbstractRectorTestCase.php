@@ -2,6 +2,7 @@
 
 namespace Rector\Testing\PHPUnit;
 
+use PHPStan\AnalysedCodeException;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Rector\Application\FileProcessor;
@@ -68,7 +69,14 @@ abstract class AbstractRectorTestCase extends TestCase
 
         $this->parameterProvider->changeParameter('source', [$file]);
 
-        $reconstructedFileContent = $this->fileProcessor->processFileToString(new SmartFileInfo($file));
+        try {
+            $reconstructedFileContent = $this->fileProcessor->processFileToString(new SmartFileInfo($file));
+        } catch (AnalysedCodeException $analysedCodeException) {
+            // change message to include responsible file
+            $message = sprintf('Analyze error in "%s" file:%s%s', $file, PHP_EOL, $analysedCodeException->getMessage());
+            $exceptionClass = get_class($analysedCodeException);
+            throw new $exceptionClass($message);
+        }
 
         $this->assertStringEqualsFile(
             $reconstructedFile,

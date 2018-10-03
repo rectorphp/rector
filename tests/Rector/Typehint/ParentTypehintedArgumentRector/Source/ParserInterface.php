@@ -4,5 +4,5 @@ namespace Rector\Tests\Rector\Typehint\ParentTypehintedArgumentRector\Source;
 
 interface ParserInterface
 {
-    public function parse(string $code, \PhpParser\ErrorHandler $errorHandler = null);
+    public function parse($code, \PhpParser\ErrorHandler $errorHandler = null);
 }

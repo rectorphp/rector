@@ -4,7 +4,7 @@ use Rector\Tests\Rector\Visibility\ChangeMethodVisibilityRector\Source\ParentObj
 
 class ClassThatInherits extends ParentObject
 {
-    private function toBePublicStaticMethod() {
+    static function toBePublicStaticMethod() {
 
     }
 }
