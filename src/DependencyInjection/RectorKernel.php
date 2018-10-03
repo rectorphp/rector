@@ -4,26 +4,27 @@ namespace Rector\DependencyInjection;
 
 use Rector\Contract\Rector\PhpRectorInterface;
 use Rector\DependencyInjection\CompilerPass\AutowireInterfacesCompilerPass;
-use Rector\DependencyInjection\CompilerPass\CollectorCompilerPass;
 use Rector\FileSystemRector\Contract\FileSystemRectorInterface;
-use Rector\FileSystemRector\DependencyInjection\FileSystemRectorCollectorCompilerPass;
 use Rector\YamlRector\Contract\YamlRectorInterface;
-use Rector\YamlRector\DependencyInjection\YamlRectorCollectorCompilerPass;
 use Symfony\Component\Config\Loader\DelegatingLoader;
 use Symfony\Component\Config\Loader\GlobFileLoader;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\Config\Loader\LoaderResolver;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\Config\FileLocator;
 use Symfony\Component\HttpKernel\Kernel;
 use Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutoBindParametersCompilerPass;
 use Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutowireSinglyImplementedCompilerPass;
+use Symplify\PackageBuilder\DependencyInjection\CompilerPass\ConfigurableCollectorCompilerPass;
+use Symplify\PackageBuilder\HttpKernel\SimpleKernelTrait;
 use Symplify\PackageBuilder\Yaml\FileLoader\ParameterImportsYamlFileLoader;
+use Symplify\PackageBuilder\Yaml\FileLoader\ParameterMergingYamlFileLoader;
 
 final class RectorKernel extends Kernel
 {
+    use SimpleKernelTrait;
+
     /**
      * @var string[]
      */
@@ -51,30 +52,10 @@ final class RectorKernel extends Kernel
         }
     }
 
-    public function getCacheDir(): string
-    {
-        return sys_get_temp_dir() . '/_rector_cache';
-    }
-
-    public function getLogDir(): string
-    {
-        return sys_get_temp_dir() . '/_rector_log';
-    }
-
-    /**
-     * @return BundleInterface[]
-     */
-    public function registerBundles(): array
-    {
-        return [];
-    }
-
     protected function build(ContainerBuilder $containerBuilder): void
     {
         // collect all Rector services to its runners
-        $containerBuilder->addCompilerPass(new CollectorCompilerPass());
-        $containerBuilder->addCompilerPass(new YamlRectorCollectorCompilerPass());
-        $containerBuilder->addCompilerPass(new FileSystemRectorCollectorCompilerPass());
+        $containerBuilder->addCompilerPass(new ConfigurableCollectorCompilerPass());
 
         // for defaults
         $containerBuilder->addCompilerPass(new AutowireSinglyImplementedCompilerPass());
@@ -99,6 +80,7 @@ final class RectorKernel extends Kernel
 
         $loaderResolver = new LoaderResolver([
             new GlobFileLoader($kernelFileLocator),
+            new ParameterMergingYamlFileLoader($container, $kernelFileLocator),
             new ParameterImportsYamlFileLoader($container, $kernelFileLocator),
         ]);
 
