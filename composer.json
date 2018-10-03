@@ -19,16 +19,16 @@
         "symfony/dependency-injection": "^3.4|^4.1",
         "symfony/finder": "^3.4|^4.1",
         "symfony/process": "^3.4|^4.1",
-        "symplify/better-phpdoc-parser": "^5.2",
-        "symplify/easy-coding-standard": "^5.2",
-        "symplify/package-builder": "^5.2",
+        "symplify/better-phpdoc-parser": "^5.1",
+        "symplify/easy-coding-standard": "^5.1",
+        "symplify/package-builder": "^5.1",
         "thecodingmachine/safe": "^0.1.4"
     },
     "require-dev": {
         "humbug/php-scoper": "^0.9.2",
         "phpunit/phpunit": "^7.3",
-        "symplify/changelog-linker": "^5.2",
-        "symplify/monorepo-builder": "^5.2",
+        "symplify/changelog-linker": "^5.1",
+        "symplify/monorepo-builder": "^5.1",
         "symplify/phpstan-extensions": "^5.1",
         "thecodingmachine/phpstan-safe-rule": "^0.1.0",
         "thecodingmachine/phpstan-strict-rules": "^0.10.3",
@@ -125,7 +125,5 @@
     "bin": ["bin/rector"],
     "config": {
         "sort-packages": true
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true
+    }
 }
