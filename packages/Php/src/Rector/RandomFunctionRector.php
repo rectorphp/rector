@@ -3,7 +3,10 @@
 namespace Rector\Php\Rector;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Name;
+use PhpParser\Node\Scalar\LNumber;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -43,12 +46,12 @@ final class RandomFunctionRector extends AbstractRector
     {
         foreach ($this->oldToNewFunctionNames as $oldFunctionName => $newFunctionName) {
             if ((string) $funcCallNode->name === $oldFunctionName) {
-                $funcCallNode->name = new Node\Name($newFunctionName);
+                $funcCallNode->name = new Name($newFunctionName);
 
                 // special case: random_int(); → random_int(0, getrandmax());
                 if ($newFunctionName === 'random_int' && count($funcCallNode->args) === 0) {
-                    $funcCallNode->args[0] = new Node\Arg(new Node\Scalar\LNumber(0));
-                    $funcCallNode->args[1] = new Node\Arg(new FuncCall(new Node\Name('mt_getrandmax')));
+                    $funcCallNode->args[0] = new Arg(new LNumber(0));
+                    $funcCallNode->args[1] = new Arg(new FuncCall(new Name('mt_getrandmax')));
                 }
 
                 return $funcCallNode;
