@@ -12,7 +12,6 @@ use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 /**
- * @group php7
  * @source https://wiki.php.net/rfc/typed_properties_v2#proposal
  */
 final class ExceptionHandlerTypehintRector extends AbstractRector
