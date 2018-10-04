@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Function_\FunctionReplacerRector;
+namespace Rector\Tests\Rector\Function_\FunctionReplaceRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
@@ -8,7 +8,7 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 /**
  * @see \Rector\Rector\Function_\FunctionReplaceRector
  */
-final class FunctionReplacerRectorTest extends AbstractRectorTestCase
+final class FunctionReplaceRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()

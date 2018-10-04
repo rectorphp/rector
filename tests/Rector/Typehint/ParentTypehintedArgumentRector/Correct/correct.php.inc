@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace SomeNamespace;
+namespace Rector\Tests\Rector\Typehint\ParentTypehintedArgumentRector\Wrong;
 
 use Rector\Tests\Rector\Typehint\ParentTypehintedArgumentRector\Source\ParserInterface;
 

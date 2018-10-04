@@ -1,16 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Architecture\DoctrineRepositoryAsService;
+namespace Rector\Php\Tests\Rector\ExceptionHandlerTypehintRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
- * @covers \Rector\Rector\Architecture\RepositoryAsService\ReplaceParentRepositoryCallsByRepositoryPropertyRector
- * @covers \Rector\Rector\Architecture\RepositoryAsService\MoveRepositoryFromParentToConstructorRector
- * @covers \Rector\Rector\Architecture\RepositoryAsService\ServiceLocatorToDIRector
+ * @covers \Rector\Php\Rector\ExceptionHandlerTypehintRector
  */
-final class DoctrineRepositoryAsServiceTest extends AbstractRectorTestCase
+final class ExceptionHandlerTypehintRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()
@@ -23,7 +21,6 @@ final class DoctrineRepositoryAsServiceTest extends AbstractRectorTestCase
     public function provideWrongToFixedFiles(): Iterator
     {
         yield [__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc'];
-        yield [__DIR__ . '/Wrong/PostController.php', __DIR__ . '/Correct/correct2.php.inc'];
     }
 
     protected function provideConfig(): string

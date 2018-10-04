@@ -1,5 +1,7 @@
 <?php declare(strict_types=1);
 
+namespace Rector\Tests\Rector\Namespace_\PseudoNamespaceToNamespaceRector\Wrong;
+
 use PHPUnit_SpecialClass;
 
 class SomeTest

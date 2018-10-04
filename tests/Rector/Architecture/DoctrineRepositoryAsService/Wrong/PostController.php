@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace AppBundle\Controller;
+namespace Rector\Tests\Rector\Architecture\DoctrineRepositoryAsService\Wrong;
 
 use AppBundle\Entity\Post;
 use Rector\Tests\Rector\Architecture\DoctrineRepositoryAsService\Source\SymfonyController;

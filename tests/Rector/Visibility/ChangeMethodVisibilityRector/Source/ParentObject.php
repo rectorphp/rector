@@ -4,11 +4,11 @@ namespace Rector\Tests\Rector\Visibility\ChangeMethodVisibilityRector\Source;
 
 class ParentObject
 {
-    public function toBePublicMethod() {
+    private function toBePublicMethod() {
 
     }
 
-    public function toBePublicStaticMethod() {
+    static function toBePublicStaticMethod() {
 
     }
 
