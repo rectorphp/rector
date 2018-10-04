@@ -1,17 +1,16 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Php\Tests\Rector\PowToExpRector;
+namespace Rector\Php\Tests\Rector\RandomFunctionRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
- * @covers \Rector\Php\Rector\PowToExpRector
+ * @covers \Rector\Php\Rector\RandomFunctionRector
  *
- * Some tests copied from:
- * - https://github.com/FriendsOfPHP/PHP-CS-Fixer/commit/14660432d9d0b66bf65135d793b52872cc6eccbc#diff-b412676c923661ef450f4a0903c5442a
+ * Some tests copied from https://github.com/FriendsOfPHP/PHP-CS-Fixer/blob/2.12/tests/Fixer/Alias/RandomApiMigrationFixerTest.php
  */
-final class PowToExpRectorTest extends AbstractRectorTestCase
+final class RandomFunctionRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()
