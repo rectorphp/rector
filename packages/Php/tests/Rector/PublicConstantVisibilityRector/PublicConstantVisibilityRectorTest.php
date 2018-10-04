@@ -1,17 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Php\Tests\Rector\PowToExpRector;
+namespace Rector\Php\Tests\Rector\PublicConstantVisibilityRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
- * @covers \Rector\Php\Rector\PowToExpRector
- *
- * Some tests copied from:
- * - https://github.com/FriendsOfPHP/PHP-CS-Fixer/commit/14660432d9d0b66bf65135d793b52872cc6eccbc#diff-b412676c923661ef450f4a0903c5442a
+ * @covers \Rector\Php\Rector\PublicConstantVisibilityRector
  */
-final class PowToExpRectorTest extends AbstractRectorTestCase
+final class PublicConstantVisibilityRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()
@@ -23,7 +20,7 @@ final class PowToExpRectorTest extends AbstractRectorTestCase
 
     public function provideWrongToFixedFiles(): Iterator
     {
-        yield [__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc'];
+        yield [__DIR__ . '/Wrong/SomeClass.php', __DIR__ . '/Correct/correct.php.inc'];
     }
 
     protected function provideConfig(): string
