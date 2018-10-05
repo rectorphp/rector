@@ -3,3 +3,4 @@ services:
     Rector\Php\Rector\Ternary\TernaryToNullCoalescingRector: ~
     Rector\Php\Rector\FuncCall\RandomFunctionRector: ~
     Rector\Php\Rector\FunctionLike\ExceptionHandlerTypehintRector: ~
+    Rector\Php\Rector\FuncCall\MultiDirnameRector: ~
