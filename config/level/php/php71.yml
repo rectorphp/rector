@@ -1,2 +1,2 @@
 services:
-    Rector\Php\Rector\IsIterableRector: ~
+    Rector\Php\Rector\BinaryOp\IsIterableRector: ~

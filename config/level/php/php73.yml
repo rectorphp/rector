@@ -1,2 +1,2 @@
 services:
-    Rector\Php\Rector\IsCountableRector: ~
+    Rector\Php\Rector\BinaryOp\IsCountableRector: ~

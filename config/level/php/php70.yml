@@ -1,4 +1,5 @@
 services:
-    Rector\Php\Rector\ExceptionHandlerTypehintRector: ~
-    Rector\Php\Rector\TernaryToNullCoalescingRector: ~
-    Rector\Php\Rector\RandomFunctionRector: ~
+    Rector\Php\Rector\FunctionLike\Php4ConstructorRector: ~
+    Rector\Php\Rector\Ternary\TernaryToNullCoalescingRector: ~
+    Rector\Php\Rector\FuncCall\RandomFunctionRector: ~
+    Rector\Php\Rector\FunctionLike\ExceptionHandlerTypehintRector: ~
