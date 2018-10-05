@@ -181,12 +181,8 @@
             "packages/Sensio/tests/Rector/FrameworkExtraBundle/TemplateAnnotationRector/Wrong",
             "packages/Php/tests/Rector/Property/TypedPropertyRector/Wrong",
             "packages/Php/tests/Rector/FunctionLike/ExceptionHandlerTypehintRector/Wrong",
-            "packages/Php/tests/Rector/FunctionLike/Php4ConstructorRector/Wrong"
-        ],
-        "files": [
-            "tests/Rector/Psr4/MultipleClassFileToPsr4ClassesRector/Source/exceptions.php",
-            "tests/Rector/Psr4/MultipleClassFileToPsr4ClassesRector/Source/nette-exceptions.php",
-            "tests/Rector/Psr4/MultipleClassFileToPsr4ClassesRector/Source/exception.php"
+            "packages/Php/tests/Rector/FunctionLike/Php4ConstructorRector/Wrong",
+            "tests/Rector/Psr4/MultipleClassFileToPsr4ClassesRector/Source"
         ]
     },
     "scripts": {
