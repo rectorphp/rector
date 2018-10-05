@@ -1,8 +1,7 @@
 services:
     Rector\Rector\Typehint\ReturnTypehintRector:
-        $typehintForMethodByClass:
-            'SomeNamespace\SomeClass':
-                'parse': 'array'
-                'resolve': 'SomeType'
-                'nullable': '?SomeType'
-                'clear': ''
+        'SomeNamespace\SomeClass':
+            'parse': 'array'
+            'resolve': 'SomeType'
+            'nullable': '?SomeType'
+            'clear': ''

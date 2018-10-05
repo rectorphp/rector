@@ -1,4 +1,3 @@
 services:
     Rector\Rector\DomainDrivenDesign\ValueObjectRemover\ValueObjectRemoverRector:
-        $valueObjectsToSimpleTypes:
-            'Rector\Tests\Rector\DomainDrivenDesign\ValueObjectRemoverRector\Source\SomeValueObject': 'string'
+        'Rector\Tests\Rector\DomainDrivenDesign\ValueObjectRemoverRector\Source\SomeValueObject': 'string'

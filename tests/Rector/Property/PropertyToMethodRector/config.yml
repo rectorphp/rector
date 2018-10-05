@@ -1,14 +1,13 @@
 services:
     Rector\Rector\Property\PropertyToMethodRector:
-        $perClassPropertyToMethods:
-            'Rector\Tests\Rector\Property\PropertyToMethodRector\Source\Translator':
-                'locale':
-                    'get': 'getLocale'
-                    'set': 'setLocale'
+        'Rector\Tests\Rector\Property\PropertyToMethodRector\Source\Translator':
+            'locale':
+                'get': 'getLocale'
+                'set': 'setLocale'
 
-            'Rector\Tests\Rector\Property\PropertyToMethodRector\Wrong\SomeClassWithParameters':
-                'parameter':
-                    'get':
-                        method: 'getConfig'
-                        arguments:
-                            - 'parameter'
+        'Rector\Tests\Rector\Property\PropertyToMethodRector\Wrong\SomeClassWithParameters':
+            'parameter':
+                'get':
+                    method: 'getConfig'
+                    arguments:
+                        - 'parameter'

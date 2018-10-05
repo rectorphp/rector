@@ -3,8 +3,7 @@
 services:
     # @todo, use this and return typehint
     Rector\Rector\Typehint\ReturnTypehintRector:
-        $typehintForMethodByClass:
-            # class
-            'Sylius\Bundle\CoreBundle\Templating\Helper\VariantResolverHelper':
-                # method
-                'resolveVariant': '?Sylius\Component\Product\Model\ProductVariantInterface'
+        # class
+        Sylius\Bundle\CoreBundle\Templating\Helper\VariantResolverHelper:
+            # method
+            'resolveVariant': '?Sylius\Component\Product\Model\ProductVariantInterface'

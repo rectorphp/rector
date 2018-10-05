@@ -2,273 +2,267 @@
 
 services:
     Rector\Rector\Property\PropertyToMethodRector:
-        $perClassPropertyToMethods:
-            Cake\Network\Request:
-                params:
-                    get:
-                        method: 'getAttribute'
-                        arguments: ['params']
+        Cake\Network\Request:
+            params:
+                get:
+                    method: 'getAttribute'
+                    arguments: ['params']
 
-                data:
-                    get: 'getData'
-                query:
-                    get: 'getQueryParams'
-                cookies:
-                    get: 'getCookie'
-                base:
-                    get:
-                        method: 'getAttribute'
-                        arguments: ['base']
-                webroot:
-                    get:
-                        method: 'getAttribute'
-                        arguments: ['webroot']
-                here:
-                    get:
-                        method: 'getAttribute'
-                        arguments: ['here']
+            data:
+                get: 'getData'
+            query:
+                get: 'getQueryParams'
+            cookies:
+                get: 'getCookie'
+            base:
+                get:
+                    method: 'getAttribute'
+                    arguments: ['base']
+            webroot:
+                get:
+                    method: 'getAttribute'
+                    arguments: ['webroot']
+            here:
+                get:
+                    method: 'getAttribute'
+                    arguments: ['here']
 
     Rector\Rector\Property\PropertyNameReplacerRector:
-        $perClassOldToNewProperties:
-            Cake\Network\Request:
-                _session: 'session'
+        Cake\Network\Request:
+            _session: 'session'
 
     Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector:
-        $methodNamesByTypes:
-            Cake\Core\InstanceConfigTrait:
-                config: ~
-            Cake\Core\StaticConfigTrait:
-                config: ~
-                dsnClassMap: ~
-            Cake\Console\ConsoleOptionParser:
-                command: ~
-                description: ~
-                epilog: ~
-            Cake\Database\Connection:
-                driver: ~
-                schemaCollection: ~
-                useSavePoints:
-                    set: 'enableSavePoints'
-                    get: 'isSavePointsEnabled'
-            Cake\Database\Driver:
-                autoQuoting:
-                    set: 'enableAutoQuoting'
-                    get: 'isAutoQuotingEnabled'
-            Cake\Database\Expression\FunctionExpression:
-                name: ~
-            Cake\Database\Expression\QueryExpression:
-                tieWith:
-                    set: 'setConjunction'
-                    get: 'getConjunction'
-            Cake\Database\Expression\ValuesExpression:
-                columns: ~
-                values: ~
-                query: ~
-            Cake\Database\Query:
-                connection: ~
-                selectTypeMap: ~
-                bufferResults:
-                    set: 'enableBufferedResults'
-                    get: 'isBufferedResultsEnabled'
-            Cake\Database\Schema\CachedCollection:
-                cacheMetadata: ~
-            Cake\Database\Schema\TableSchema:
-                options: ~
-                temporary:
-                    set: 'setTemporary'
-                    get: 'isTemporary'
-            Cake\Database\TypeMap:
-                defaults: ~
-                types: ~
-            Cake\Database\TypeMapTrait:
-                typeMap: ~
-                defaultTypes: ~
-            Cake\ORM\Association:
-                name: ~
-                cascadeCallbacks: ~
-                source: ~
-                target: ~
-                conditions: ~
-                bindingKey: ~
-                foreignKey: ~
-                dependent: ~
-                joinType: ~
-                property: ~
-                strategy: ~
-                finder: ~
-            Cake\ORM\Association\BelongsToMany:
-                targetForeignKey: ~
-                saveStrategy: ~
-                conditions: ~
-            Cake\ORM\Association\HasMany:
-                saveStrategy: ~
-                foreignKey: ~
-                sort: ~
-            Cake\ORM\Association\HasOne:
-                foreignKey: ~
-            Cake\ORM\EagerLoadable:
-                config: ~
-                canBeJoined:
-                    set: 'setCanBeJoined'
-                    get: 'canBeJoined'
-            Cake\ORM\EagerLoader:
-                matching:
-                    set: 'setMatching'
-                    get: 'getMatching'
-                    # note: will have to be called after setMatching() to keep the old behavior
-                    # ref: https://github.com/cakephp/cakephp/blob/4feee5463641e05c068b4d1d31dc5ee882b4240f/src/ORM/EagerLoader.php#L330
-                autoFields:
-                    set: 'enableAutoFields'
-                    get: 'isAutoFieldsEnabled'
-            Cake\ORM\Locator\TableLocator:
-                config: ~
-            Cake\ORM\Query:
-                eagerLoader: ~
-                hydrate:
-                    set: 'enableHydration'
-                    get: 'isHydrationEnabled'
-                autoFields:
-                    set: 'enableAutoFields'
-                    get: 'isAutoFieldsEnabled'
-            Cake\ORM\Table:
-                table: ~
-                alias: ~
-                registryAlias: ~
-                connection: ~
-                schema: ~
-                primaryKey: ~
-                displayField: ~
-                entityClass: ~
-            Cake\Mailer\Email:
-                from: ~
-                sender: ~
-                replyTo: ~
-                readReceipt: ~
-                returnPath: ~
-                to: ~
-                cc: ~
-                bcc: ~
-                charset: ~
-                headerCharset: ~
-                emailPattern: ~
-                subject: ~
-                # template: have to be changed manually, non A → B change + array case
-                viewRender:
-                    set: 'setViewRenderer'
-                    get: 'getViewRenderer'
-                viewVars: ~
-                theme: ~
-                helpers: ~
-                emailFormat: ~
-                transport: ~
-                messageId: ~
-                domain: ~
-                attachments: ~
-                configTransport: ~
-                profile: ~
-            Cake\Validation\Validator:
-                provider: ~
-            Cake\View\StringTemplateTrait:
-                templates: ~
-            Cake\View\ViewBuilder:
-                templatePath: ~
-                layoutPath: ~
-                plugin: ~
-                helpers: ~
-                theme: ~
-                template: ~
-                layout: ~
-                options: ~
-                name: ~
-                className: ~
-                autoLayout:
-                    set: 'enableAutoLayout'
-                    get: 'isAutoLayoutEnabled'
+        Cake\Core\InstanceConfigTrait:
+            config: ~
+        Cake\Core\StaticConfigTrait:
+            config: ~
+            dsnClassMap: ~
+        Cake\Console\ConsoleOptionParser:
+            command: ~
+            description: ~
+            epilog: ~
+        Cake\Database\Connection:
+            driver: ~
+            schemaCollection: ~
+            useSavePoints:
+                set: 'enableSavePoints'
+                get: 'isSavePointsEnabled'
+        Cake\Database\Driver:
+            autoQuoting:
+                set: 'enableAutoQuoting'
+                get: 'isAutoQuotingEnabled'
+        Cake\Database\Expression\FunctionExpression:
+            name: ~
+        Cake\Database\Expression\QueryExpression:
+            tieWith:
+                set: 'setConjunction'
+                get: 'getConjunction'
+        Cake\Database\Expression\ValuesExpression:
+            columns: ~
+            values: ~
+            query: ~
+        Cake\Database\Query:
+            connection: ~
+            selectTypeMap: ~
+            bufferResults:
+                set: 'enableBufferedResults'
+                get: 'isBufferedResultsEnabled'
+        Cake\Database\Schema\CachedCollection:
+            cacheMetadata: ~
+        Cake\Database\Schema\TableSchema:
+            options: ~
+            temporary:
+                set: 'setTemporary'
+                get: 'isTemporary'
+        Cake\Database\TypeMap:
+            defaults: ~
+            types: ~
+        Cake\Database\TypeMapTrait:
+            typeMap: ~
+            defaultTypes: ~
+        Cake\ORM\Association:
+            name: ~
+            cascadeCallbacks: ~
+            source: ~
+            target: ~
+            conditions: ~
+            bindingKey: ~
+            foreignKey: ~
+            dependent: ~
+            joinType: ~
+            property: ~
+            strategy: ~
+            finder: ~
+        Cake\ORM\Association\BelongsToMany:
+            targetForeignKey: ~
+            saveStrategy: ~
+            conditions: ~
+        Cake\ORM\Association\HasMany:
+            saveStrategy: ~
+            foreignKey: ~
+            sort: ~
+        Cake\ORM\Association\HasOne:
+            foreignKey: ~
+        Cake\ORM\EagerLoadable:
+            config: ~
+            canBeJoined:
+                set: 'setCanBeJoined'
+                get: 'canBeJoined'
+        Cake\ORM\EagerLoader:
+            matching:
+                set: 'setMatching'
+                get: 'getMatching'
+                # note: will have to be called after setMatching() to keep the old behavior
+                # ref: https://github.com/cakephp/cakephp/blob/4feee5463641e05c068b4d1d31dc5ee882b4240f/src/ORM/EagerLoader.php#L330
+            autoFields:
+                set: 'enableAutoFields'
+                get: 'isAutoFieldsEnabled'
+        Cake\ORM\Locator\TableLocator:
+            config: ~
+        Cake\ORM\Query:
+            eagerLoader: ~
+            hydrate:
+                set: 'enableHydration'
+                get: 'isHydrationEnabled'
+            autoFields:
+                set: 'enableAutoFields'
+                get: 'isAutoFieldsEnabled'
+        Cake\ORM\Table:
+            table: ~
+            alias: ~
+            registryAlias: ~
+            connection: ~
+            schema: ~
+            primaryKey: ~
+            displayField: ~
+            entityClass: ~
+        Cake\Mailer\Email:
+            from: ~
+            sender: ~
+            replyTo: ~
+            readReceipt: ~
+            returnPath: ~
+            to: ~
+            cc: ~
+            bcc: ~
+            charset: ~
+            headerCharset: ~
+            emailPattern: ~
+            subject: ~
+            # template: have to be changed manually, non A → B change + array case
+            viewRender:
+                set: 'setViewRenderer'
+                get: 'getViewRenderer'
+            viewVars: ~
+            theme: ~
+            helpers: ~
+            emailFormat: ~
+            transport: ~
+            messageId: ~
+            domain: ~
+            attachments: ~
+            configTransport: ~
+            profile: ~
+        Cake\Validation\Validator:
+            provider: ~
+        Cake\View\StringTemplateTrait:
+            templates: ~
+        Cake\View\ViewBuilder:
+            templatePath: ~
+            layoutPath: ~
+            plugin: ~
+            helpers: ~
+            theme: ~
+            template: ~
+            layout: ~
+            options: ~
+            name: ~
+            className: ~
+            autoLayout:
+                set: 'enableAutoLayout'
+                get: 'isAutoLayoutEnabled'
+
     Rector\Rector\MethodCall\MethodNameReplacerRector:
-        $perClassOldToNewMethods:
-            Cake\Network\Request:
-                param: 'getParam'
-                data: 'getData'
-                query: 'getQuery'
-                cookie: 'getCookie'
-                method: 'getMethod'
-                setInput: 'withBody'
-            Cake\Network\Response:
-                location: 'withLocation'
-                disableCache: 'withDisabledCache'
-                type: 'withType'
-                charset: 'withCharset'
-                cache: 'withCache'
-                modified: 'withModified'
-                expires: 'withExpires'
-                sharable: 'withSharable'
-                maxAge: 'withMaxAge'
-                vary: 'withVary'
-                etag: 'withEtag'
-                compress: 'withCompression'
-                length: 'withLength'
-                mustRevalidate: 'withMustRevalidate'
-                notModified: 'withNotModified'
-                cookie: 'withCookie'
-                file: 'withFile'
-                download: 'withDownload'
-                # psr-7
-                header: 'getHeader'
-                body: 'withBody'
-                statusCode: 'getStatusCode'
-                protocol: 'getProtocolVersion'
-            Cake\Event\Event:
-                'name': 'getName'
-                'subject': 'getSubject'
-                'result': 'getResult'
-                'data': 'getData'
-            Cake\View\Helper\FormHelper:
-                input: 'control'
-                inputs: 'controls'
-                allInputs: 'allControls'
-            Cake\Mailer\Mailer:
-                layout: 'setLayout'
-            Cake\Routing\Route\Route:
-                parse: 'parseRequest'
-            Cake\Routing\Router:
-                parse: 'parseRequest'
+        Cake\Network\Request:
+            param: 'getParam'
+            data: 'getData'
+            query: 'getQuery'
+            cookie: 'getCookie'
+            method: 'getMethod'
+            setInput: 'withBody'
+        Cake\Network\Response:
+            location: 'withLocation'
+            disableCache: 'withDisabledCache'
+            type: 'withType'
+            charset: 'withCharset'
+            cache: 'withCache'
+            modified: 'withModified'
+            expires: 'withExpires'
+            sharable: 'withSharable'
+            maxAge: 'withMaxAge'
+            vary: 'withVary'
+            etag: 'withEtag'
+            compress: 'withCompression'
+            length: 'withLength'
+            mustRevalidate: 'withMustRevalidate'
+            notModified: 'withNotModified'
+            cookie: 'withCookie'
+            file: 'withFile'
+            download: 'withDownload'
+            # psr-7
+            header: 'getHeader'
+            body: 'withBody'
+            statusCode: 'getStatusCode'
+            protocol: 'getProtocolVersion'
+        Cake\Event\Event:
+            'name': 'getName'
+            'subject': 'getSubject'
+            'result': 'getResult'
+            'data': 'getData'
+        Cake\View\Helper\FormHelper:
+            input: 'control'
+            inputs: 'controls'
+            allInputs: 'allControls'
+        Cake\Mailer\Mailer:
+            layout: 'setLayout'
+        Cake\Routing\Route\Route:
+            parse: 'parseRequest'
+        Cake\Routing\Router:
+            parse: 'parseRequest'
 
     Rector\Rector\Visibility\ChangeMethodVisibilityRector:
-        $methodToVisibilityByClass:
-            Cake\Mailer\MailerAwareTrait:
-                getMailer: 'protected'
-            Cake\View\CellTrait:
-                cell: 'protected'
+        Cake\Mailer\MailerAwareTrait:
+            getMailer: 'protected'
+        Cake\View\CellTrait:
+            cell: 'protected'
 
     Rector\Rector\Class_\ClassReplacerRector:
-        $oldToNewClasses:
-            Cake\Database\Schema\Table: 'Cake\Database\Schema\TableSchema'
+        Cake\Database\Schema\Table: 'Cake\Database\Schema\TableSchema'
 
     Rector\Rector\MethodBody\NormalToFluentRector:
-        $fluentMethodsByType:
-            Cake\Network\Response:
-                # https://book.cakephp.org/3.0/en/appendices/3-4-migration-guide.html#adopting-immutable-responses
-                # renames are done by MethodNameReplacerRector above
-                - 'withLocation'
-                - 'withHeader'
-                - 'withLocation'
-                - 'withDisabledCache'
-                - 'withType'
-                - 'withCharset'
-                - 'withCache'
-                - 'withModified'
-                - 'withExpires'
-                - 'withSharable'
-                - 'withMaxAge'
-                - 'withVary'
-                - 'withEtag'
-                - 'withCompression'
-                - 'withLength'
-                - 'withMustRevalidate'
-                - 'withNotModified'
-                - 'withCookie'
-                - 'withFile'
-                - 'withDownload'
+        Cake\Network\Response:
+            # https://book.cakephp.org/3.0/en/appendices/3-4-migration-guide.html#adopting-immutable-responses
+            # renames are done by MethodNameReplacerRector above
+            - 'withLocation'
+            - 'withHeader'
+            - 'withLocation'
+            - 'withDisabledCache'
+            - 'withType'
+            - 'withCharset'
+            - 'withCache'
+            - 'withModified'
+            - 'withExpires'
+            - 'withSharable'
+            - 'withMaxAge'
+            - 'withVary'
+            - 'withEtag'
+            - 'withCompression'
+            - 'withLength'
+            - 'withMustRevalidate'
+            - 'withNotModified'
+            - 'withCookie'
+            - 'withFile'
+            - 'withDownload'
 
     # @todo
     # The fieldList option for Cake\ORM\Table::newEntity() and patchEntity() has been renamed to fields to be more consistent with other parts of the ORM.

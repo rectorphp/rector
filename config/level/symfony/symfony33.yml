@@ -1,48 +1,45 @@
 services:
     # dependency-injection
     Rector\Rector\Argument\ArgumentAdderRector:
-        $argumentChangesByMethodAndType:
-            # added default value
-            -
-                class: 'Symfony\Component\DependencyInjection\ContainerBuilder'
-                method: 'compile'
-                position: 2
-                default_value: 0
-            -
-                class: 'Symfony\Component\DependencyInjection\ContainerBuilder'
-                method: 'addCompilerPass'
-                position: 2
-                default_value: 0
-            -
-                class: 'Symfony\Component\DependencyInjection\Compiler\ServiceReferenceGraph'
-                method: 'connect'
-                position: 6
-                default_value: false
+        # added default value
+        -
+            class: 'Symfony\Component\DependencyInjection\ContainerBuilder'
+            method: 'compile'
+            position: 2
+            default_value: 0
+        -
+            class: 'Symfony\Component\DependencyInjection\ContainerBuilder'
+            method: 'addCompilerPass'
+            position: 2
+            default_value: 0
+        -
+            class: 'Symfony\Component\DependencyInjection\Compiler\ServiceReferenceGraph'
+            method: 'connect'
+            position: 6
+            default_value: false
 
     Rector\Symfony\Rector\Console\ConsoleExceptionToErrorEventConstantRector: ~
 
     Rector\Rector\Class_\ClassReplacerRector:
-        $oldToNewClasses:
-            # console
-            'Symfony\Component\Console\Event\ConsoleExceptionEvent': 'Symfony\Component\Console\Event\ConsoleErrorEvent'
+        # console
+        'Symfony\Component\Console\Event\ConsoleExceptionEvent': 'Symfony\Component\Console\Event\ConsoleErrorEvent'
 
-            # debug
-            'Symfony\Component\Debug\Exception\ContextErrorException': 'ErrorException'
+        # debug
+        'Symfony\Component\Debug\Exception\ContextErrorException': 'ErrorException'
 
-            # dependency-injection
-            'Symfony\Component\DependencyInjection\DefinitionDecorator': 'Symfony\Component\DependencyInjection\ChildDefinition'
+        # dependency-injection
+        'Symfony\Component\DependencyInjection\DefinitionDecorator': 'Symfony\Component\DependencyInjection\ChildDefinition'
 
-            # framework bundle
-            'Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\AddConsoleCommandPass': 'Symfony\Component\Console\DependencyInjection\AddConsoleCommandPass'
-            'Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\SerializerPass': 'Symfony\Component\Serializer\DependencyInjection\SerializerPass'
-            'Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\FormPass': 'Symfony\Component\Form\DependencyInjection\FormPass'
-            'Symfony\Bundle\FrameworkBundle\EventListener\SessionListener': 'Symfon\Component\HttpKernel\EventListener\SessionListener'
-            'Symfony\Bundle\FrameworkBundle\EventListener\TestSessionListenr': 'Symfony\Component\HttpKernel\EventListener\TestSessionListener'
-            'Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\ConfigCachePass': 'Symfony\Component\Config\DependencyInjection\ConfigCachePass'
-            'Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\PropertyInfoPass': 'Symfony\Component\PropertyInfo\DependencyInjection\PropertyInfoPass'
+        # framework bundle
+        'Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\AddConsoleCommandPass': 'Symfony\Component\Console\DependencyInjection\AddConsoleCommandPass'
+        'Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\SerializerPass': 'Symfony\Component\Serializer\DependencyInjection\SerializerPass'
+        'Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\FormPass': 'Symfony\Component\Form\DependencyInjection\FormPass'
+        'Symfony\Bundle\FrameworkBundle\EventListener\SessionListener': 'Symfon\Component\HttpKernel\EventListener\SessionListener'
+        'Symfony\Bundle\FrameworkBundle\EventListener\TestSessionListenr': 'Symfony\Component\HttpKernel\EventListener\TestSessionListener'
+        'Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\ConfigCachePass': 'Symfony\Component\Config\DependencyInjection\ConfigCachePass'
+        'Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\PropertyInfoPass': 'Symfony\Component\PropertyInfo\DependencyInjection\PropertyInfoPass'
 
     Rector\Rector\MethodCall\MethodNameReplacerRector:
-        $perClassOldToNewMethods:
-            # dependency-injection
-            'Symfony\Component\DependencyInjection\Container':
-                'isFrozen': 'isCompiled'
+        # dependency-injection
+        'Symfony\Component\DependencyInjection\Container':
+            'isFrozen': 'isCompiled'

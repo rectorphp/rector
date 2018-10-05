@@ -13,10 +13,8 @@ services:
     Rector\Rector\MethodBody\FluentReplaceRector: ~
 
     Rector\Rector\Function_\FunctionToMethodCallRector:
-        $functionToMethodCall:
-            'GuzzleHttp\json_decode': ['GuzzleHttp\Utils', 'jsonDecode']
-            'GuzzleHttp\get_path': ['GuzzleHttp\Utils': 'getPath']
+        'GuzzleHttp\json_decode': ['GuzzleHttp\Utils', 'jsonDecode']
+        'GuzzleHttp\get_path': ['GuzzleHttp\Utils': 'getPath']
     Rector\Rector\StaticCall\StaticCallToFunctionRector:
-        $staticCallToFunction:
-            'GuzzleHttp\Utils::setPath': 'GuzzleHttp\set_path'
-            'GuzzleHttp\Pool::batch': 'GuzzleHttp\Pool\batch'
+        'GuzzleHttp\Utils::setPath': 'GuzzleHttp\set_path'
+        'GuzzleHttp\Pool::batch': 'GuzzleHttp\Pool\batch'

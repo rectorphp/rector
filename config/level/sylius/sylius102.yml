@@ -3,8 +3,7 @@
 services:
     # @todo, use this and return typehint
     Rector\Rector\Typehint\ReturnTypehintRector:
-        $typehintForMethodByClass:
-            # class
-            'Sylius\Bundle\AdminApiBundle\Model\ClientManager':
-                # method
-                'findClientByPublicId': '?Sylius\Bundle\AdminApiBundle\Model\ClientInterface'
+        # class
+        'Sylius\Bundle\AdminApiBundle\Model\ClientManager':
+            # method
+            'findClientByPublicId': '?Sylius\Bundle\AdminApiBundle\Model\ClientInterface'

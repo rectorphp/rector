@@ -1,8 +1,7 @@
 services:
     Rector\Rector\Class_\ParentClassToTraitsRector:
-        $parentClassToTraits:
-            'Rector\Tests\Rector\Class_\ParentClassToTraitsRector\Source\ParentObject':
-                - 'Rector\Tests\Rector\Class_\ParentClassToTraitsRector\Source\SomeTrait'
-            'Rector\Tests\Rector\Class_\ParentClassToTraitsRector\Source\AnotherParentObject':
-                - 'Rector\Tests\Rector\Class_\ParentClassToTraitsRector\Source\SomeTrait'
-                - 'Rector\Tests\Rector\Class_\ParentClassToTraitsRector\Source\SecondTrait'
+        'Rector\Tests\Rector\Class_\ParentClassToTraitsRector\Source\ParentObject':
+            - 'Rector\Tests\Rector\Class_\ParentClassToTraitsRector\Source\SomeTrait'
+        'Rector\Tests\Rector\Class_\ParentClassToTraitsRector\Source\AnotherParentObject':
+            - 'Rector\Tests\Rector\Class_\ParentClassToTraitsRector\Source\SomeTrait'
+            - 'Rector\Tests\Rector\Class_\ParentClassToTraitsRector\Source\SecondTrait'

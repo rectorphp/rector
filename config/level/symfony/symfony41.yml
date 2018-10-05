@@ -1,6 +1,5 @@
 services:
     Rector\YamlRector\Rector\ReplaceValueYamlRector:
-        $oldToNewKeyByPaths:
-            # covers https://github.com/symfony/twig-bundle/commit/993c9f28d6d6ed0d9d3f45de80e512424b4cf88b
-            'twig > strict_variables':
-                'false': '%%kernel.debug%%'
+        # covers https://github.com/symfony/twig-bundle/commit/993c9f28d6d6ed0d9d3f45de80e512424b4cf88b
+        'twig > strict_variables':
+            'false': '%%kernel.debug%%'

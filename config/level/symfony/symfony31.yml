@@ -1,52 +1,50 @@
 services:
     # yaml
     Rector\YamlRector\Rector\ReplaceStringYamlRector:
-        $oldToNewString:
-            # https://github.com/symfony/symfony/pull/17462
-            ' !!php/object': ' !php/object'
+        # https://github.com/symfony/symfony/pull/17462
+        ' !!php/object': ' !php/object'
 
     # replace args
     Rector\Rector\Argument\ArgumentDefaultValueReplacerRector:
-        $argumentChangesByMethodAndType:
-            # covers https://github.com/symfony/symfony/blob/3.4/UPGRADE-3.1.md#yaml
-            -
-                class: 'Symfony\Component\Yaml\Yaml'
-                method: 'parse'
-                position: 1
-                before: ['false', 'false', 'true']
-                after: 'Symfony\Component\Yaml\Yaml::PARSE_OBJECT_FOR_MAP'
+        # covers https://github.com/symfony/symfony/blob/3.4/UPGRADE-3.1.md#yaml
+        -
+            class: 'Symfony\Component\Yaml\Yaml'
+            method: 'parse'
+            position: 1
+            before: ['false', 'false', 'true']
+            after: 'Symfony\Component\Yaml\Yaml::PARSE_OBJECT_FOR_MAP'
 
-            -
-                class: 'Symfony\Component\Yaml\Yaml'
-                method: 'parse'
-                position: 1
-                before: ['false', 'true']
-                after: 'Symfony\Component\Yaml\Yaml::PARSE_OBJECT'
+        -
+            class: 'Symfony\Component\Yaml\Yaml'
+            method: 'parse'
+            position: 1
+            before: ['false', 'true']
+            after: 'Symfony\Component\Yaml\Yaml::PARSE_OBJECT'
 
-            -
-                class: 'Symfony\Component\Yaml\Yaml'
-                method: 'parse'
-                position: 1
-                before: 'true'
-                after: 'Symfony\Component\Yaml\Yaml::PARSE_EXCEPTION_ON_INVALID_TYPE'
+        -
+            class: 'Symfony\Component\Yaml\Yaml'
+            method: 'parse'
+            position: 1
+            before: 'true'
+            after: 'Symfony\Component\Yaml\Yaml::PARSE_EXCEPTION_ON_INVALID_TYPE'
 
-            -
-                class: 'Symfony\Component\Yaml\Yaml'
-                method: 'parse'
-                position: 1
-                before: 'false'
-                after: 0
+        -
+            class: 'Symfony\Component\Yaml\Yaml'
+            method: 'parse'
+            position: 1
+            before: 'false'
+            after: 0
 
-            -
-                class: 'Symfony\Component\Yaml\Yaml'
-                method: 'dump'
-                position: 3
-                before: ['false', 'true']
-                after: 'Symfony\Component\Yaml\Yaml::DUMP_OBJECT'
+        -
+            class: 'Symfony\Component\Yaml\Yaml'
+            method: 'dump'
+            position: 3
+            before: ['false', 'true']
+            after: 'Symfony\Component\Yaml\Yaml::DUMP_OBJECT'
 
-            -
-                class: 'Symfony\Component\Yaml\Yaml'
-                method: 'dump'
-                position: 3
-                before: 'true'
-                after: 'Symfony\Component\Yaml\Yaml::DUMP_EXCEPTION_ON_INVALID_TYPE'
+        -
+            class: 'Symfony\Component\Yaml\Yaml'
+            method: 'dump'
+            position: 3
+            before: 'true'
+            after: 'Symfony\Component\Yaml\Yaml::DUMP_EXCEPTION_ON_INVALID_TYPE'

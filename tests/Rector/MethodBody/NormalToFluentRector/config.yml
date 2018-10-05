@@ -1,7 +1,6 @@
 services:
     Rector\Rector\MethodBody\NormalToFluentRector:
-        $fluentMethodsByType:
-            Rector\Tests\Rector\MethodBody\NormalToFluentRector\Source\FluentInterfaceClass:
-                - 'someFunction'
-                - 'otherFunction'
-                - 'joinThisAsWell'
+        Rector\Tests\Rector\MethodBody\NormalToFluentRector\Source\FluentInterfaceClass:
+            - 'someFunction'
+            - 'otherFunction'
+            - 'joinThisAsWell'

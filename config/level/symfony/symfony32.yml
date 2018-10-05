@@ -6,9 +6,8 @@ services:
 
     # dependency-injection
     Rector\Rector\Argument\ArgumentAdderRector:
-        $argumentChangesByMethodAndType:
-            -
-                class: Symfony\Component\DependencyInjection\ContainerBuilder
-                method: addCompilerPass
-                position: 2
-                default_value: 0
+        -
+            class: Symfony\Component\DependencyInjection\ContainerBuilder
+            method: addCompilerPass
+            position: 2
+            default_value: 0

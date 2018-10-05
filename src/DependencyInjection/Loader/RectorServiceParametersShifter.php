@@ -145,7 +145,7 @@ final class RectorServiceParametersShifter
         $arrayParameters = [];
         foreach ($constructorMethodReflection->getParameters() as $reflectionParameter) {
             if (! $reflectionParameter->isArray()) {
-                return [];
+                continue;
             }
 
             $arrayParameters[] = $reflectionParameter->getName();
