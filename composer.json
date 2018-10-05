@@ -179,8 +179,8 @@
             "packages/PhpParser/tests/Rector/SetLineRector/Wrong",
             "packages/CakePHP/tests/Rector/MethodCall/ModalToGetSetRector/Wrong",
             "packages/Sensio/tests/Rector/FrameworkExtraBundle/TemplateAnnotationRector/Wrong",
-            "packages/Php/tests/Rector/TypedPropertyRector/Wrong",
-            "packages/Php/tests/Rector/ExceptionHandlerTypehintRector/Wrong"
+            "packages/Php/tests/Rector/Property/TypedPropertyRector/Wrong",
+            "packages/Php/tests/Rector/FunctionLike/ExceptionHandlerTypehintRector/Wrong"
         ],
         "files": [
             "tests/Rector/Psr4/MultipleClassFileToPsr4ClassesRector/Source/exceptions.php",
