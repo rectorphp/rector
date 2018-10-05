@@ -7,7 +7,7 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\PrettyPrinter\Standard;
 use Rector\NodeTypeResolver\Node\Attribute;
-use Rector\Php\Rector\TypedPropertyRector;
+use Rector\Php\Rector\Property\TypedPropertyRector;
 use function Safe\sprintf;
 
 final class BetterStandardPrinter extends Standard
