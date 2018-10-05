@@ -1,5 +1,3 @@
 services:
     Rector\Php\Rector\Name\ReservedObjectRector:
-        # todo make work even without these explicit variables
-        $reservedKeywordsToReplacements:
-            'ReservedObject': 'SmartObject'
+        'ReservedObject': 'SmartObject'

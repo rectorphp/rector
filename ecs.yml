@@ -28,7 +28,7 @@ services:
     Symplify\CodingStandard\Sniffs\DependencyInjection\NoClassInstantiationSniff:
         extraAllowedClasses:
             - 'PhpParser\Node\*'
-            - 'Symplify\PackageBuilder\Reflection\*'
+            - 'Symplify\PackageBuilder\*'
             - 'PhpParser\Comment\Doc'
             - 'PhpParser\NodeTraverser'
             - 'Rector\DeprecationExtractor\Deprecation\*'
@@ -37,6 +37,7 @@ services:
             - 'PHPStan\Analyser\Scope'
             - 'PhpParser\NodeVisitor\NameResolver'
             - 'Rector\Application\Error'
+            - 'Rector\DependencyInjection\Loader\*'
 
     Symplify\CodingStandard\Fixer\Naming\PropertyNameMatchingTypeFixer:
         extra_skipped_classes:
@@ -109,3 +110,7 @@ parameters:
             - 'src/Printer/BetterStandardPrinter.php'
 
         PHP_CodeSniffer\Standards\Generic\Sniffs\CodeAnalysis\AssignmentInConditionSniff.FoundInWhileCondition: ~
+
+        SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff.MissingParameterTypeHint:
+            # 3rd party parent code
+            - 'src/DependencyInjection/Loader/TolerantRectorYamlFileLoader.php'
