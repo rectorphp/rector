@@ -1,9 +1,2 @@
 imports:
     - { resource: 'services.yml' }
-
-parameters:
-    collectors:
-        -
-            main_type: 'Rector\YamlRector\YamlFileProcessor'
-            collected_type: 'Rector\YamlRector\Contract\YamlRectorInterface'
-            add_method: 'addYamlRector'
