@@ -1,3 +1,0 @@
-parameters:
-    directories_to_repositories:
-        packages/NodeTypeResolver: 'git@github.com:rectorphp/node-type-resolver.git'

@@ -1,10 +1,12 @@
 imports:
-    # to cover prefixed rector and projects autoload - monorepo
-    - { resource: '../../../../vendor/symplify/better-phpdoc-parser/src/config/config.yml' , ignore_errors: true }
-    # to cover installed as dependency
-    - { resource: '../../../../../../symplify/better-phpdoc-parser/src/config/config.yml' , ignore_errors: true }
-
-    # rector/utils package
-    - { resource: '../../../Utils/src/config/services.yml' }
-
     - { resource: 'services.yml' }
+    - { resource: '%vendor%/symplify/better-phpdoc-parser/src/config/config.yml' }
+
+parameters:
+    collectors:
+        -
+            main_type: 'Rector\NodeTypeResolver\NodeTypeResolver'
+            collected_type: 'Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface'
+            add_method: 'addPerNodeTypeResolver'
+
+

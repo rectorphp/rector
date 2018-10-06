@@ -5,10 +5,10 @@ namespace Rector\NodeTypeResolver\Tests\PhpDoc\NodeAnalyzer;
 use PhpParser\Comment\Doc;
 use PhpParser\Node\Scalar\String_;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
-use Rector\NodeTypeResolver\Tests\AbstractNodeTypeResolverContainerAwareTestCase;
+use Rector\Tests\AbstractContainerAwareTestCase;
 use function Safe\sprintf;
 
-final class DocBlockAnalyzerTest extends AbstractNodeTypeResolverContainerAwareTestCase
+final class DocBlockAnalyzerTest extends AbstractContainerAwareTestCase
 {
     /**
      * @var DocBlockAnalyzer

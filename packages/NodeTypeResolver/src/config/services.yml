@@ -6,13 +6,12 @@ parameters:
 
 services:
     _defaults:
-        # for "Rector\NodeTypeResolver\NodeTypeResolverFactory" standalone usage
         public: true
         autowire: true
 
     Rector\NodeTypeResolver\:
         resource: '../'
-        exclude: '../{Contract,DependencyInjection/NodeTypeResolverKernel.php,DependencyInjection/NodeTypeResolverContainerFactory.php}'
+        exclude: '../{Contract}'
 
     Rector\PhpParser\CurrentNodeProvider: ~
 
@@ -21,7 +20,3 @@ services:
     Rector\Printer\BetterStandardPrinter: ~
     Rector\FileSystem\FilesFinder: ~
     Rector\Utils\BetterNodeFinder: ~
-
-    # factory to remove dependency on CompilerPass and make install DX smoother
-    Rector\NodeTypeResolver\NodeTypeResolver:
-        factory: ['@Rector\NodeTypeResolver\NodeTypeResolverFactory', 'create']
