@@ -52,18 +52,6 @@ final class NodeTypeResolver
         }
     }
 
-    private function addPerNodeTypeResolver(PerNodeTypeResolverInterface $perNodeTypeResolver): void
-    {
-        foreach ($perNodeTypeResolver->getNodeClasses() as $nodeClass) {
-            $this->perNodeTypeResolvers[$nodeClass] = $perNodeTypeResolver;
-        }
-
-        // in-code setter injection to drop CompilerPass requirement for 3rd party package install
-        if ($perNodeTypeResolver instanceof NodeTypeResolverAwareInterface) {
-            $perNodeTypeResolver->setNodeTypeResolver($this);
-        }
-    }
-
     /**
      * @return string[]
      */
@@ -86,6 +74,18 @@ final class NodeTypeResolver
         }
 
         return $types;
+    }
+
+    private function addPerNodeTypeResolver(PerNodeTypeResolverInterface $perNodeTypeResolver): void
+    {
+        foreach ($perNodeTypeResolver->getNodeClasses() as $nodeClass) {
+            $this->perNodeTypeResolvers[$nodeClass] = $perNodeTypeResolver;
+        }
+
+        // in-code setter injection to drop CompilerPass requirement for 3rd party package install
+        if ($perNodeTypeResolver instanceof NodeTypeResolverAwareInterface) {
+            $perNodeTypeResolver->setNodeTypeResolver($this);
+        }
     }
 
     /**

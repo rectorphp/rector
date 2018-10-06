@@ -7,9 +7,14 @@ use Rector\Contract\Rector\PhpRectorInterface;
 
 final class RectorNodeTraverser extends NodeTraverser
 {
-    public function addRector(PhpRectorInterface $phpRector): void
+    /**
+     * @param PhpRectorInterface[] $phpRectors
+     */
+    public function __construct(array $phpRectors = [])
     {
-        $this->addVisitor($phpRector);
+        foreach ($phpRectors as $phpRector) {
+            $this->addVisitor($phpRector);
+        }
     }
 
     public function getRectorCount(): int
