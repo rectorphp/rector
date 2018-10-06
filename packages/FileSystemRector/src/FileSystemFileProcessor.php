@@ -12,9 +12,12 @@ final class FileSystemFileProcessor
      */
     private $fileSystemRectors = [];
 
-    public function addFileSystemRector(FileSystemRectorInterface $fileSystemRector): void
+    /**
+     * @param FileSystemRectorInterface[] $fileSystemRectors
+     */
+    public function __construct(array $fileSystemRectors = [])
     {
-        $this->fileSystemRectors[] = $fileSystemRector;
+        $this->fileSystemRectors = $fileSystemRectors;
     }
 
     /**
