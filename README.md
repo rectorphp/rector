@@ -39,7 +39,7 @@ Rector **instantly upgrades PHP & YAML code of your application**, with focus on
 ## Install
 
 ```bash
-composer require rector/rector:@dev --dev
+composer require rector/rector --dev
 ```
 
 **Do you have conflicts on `composer require`?**
