@@ -1,9 +1,2 @@
 imports:
     - { resource: 'services.yml' }
-
-parameters:
-    collectors:
-        -
-            main_type: 'Rector\FileSystemRector\FileSystemFileProcessor'
-            collected_type: 'Rector\FileSystemRector\Contract\FileSystemRectorInterface'
-            add_method: 'addFileSystemRector'

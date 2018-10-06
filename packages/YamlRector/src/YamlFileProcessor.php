@@ -12,9 +12,12 @@ final class YamlFileProcessor
      */
     private $yamlRectors = [];
 
-    public function addYamlRector(YamlRectorInterface $yamlRector): void
+    /**
+     * @param YamlRectorInterface[] $yamlRectors
+     */
+    public function __construct(array $yamlRectors = [])
     {
-        $this->yamlRectors[] = $yamlRector;
+        $this->yamlRectors = $yamlRectors;
     }
 
     /**

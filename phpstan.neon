@@ -55,8 +55,6 @@ parameters:
         - '#Cannot call method getAttribute\(\) on PhpParser\\Node\\Name\|null#'
         - '#Cannot call method getText\(\) on PhpParser\\Comment\\Doc\|null#'
 
-
-
         # Error php-parser token
         - '#Access to an undefined property PhpParser\\Node\\Expr\\Error\|PhpParser\\Node\\Expr\\Variable::\$name#'
 
@@ -89,6 +87,9 @@ parameters:
         # variadic false positive
         - '#In method "Rector\\Node\\NodeFactory::createArray", parameter \$items can be type-hinted to "array"#'
         - '#In method "Rector\\Builder\\StatementGlue::addStatementToClassBeforeTypes", parameter \$types type is "array". Please provide a \@param annotation to further specify the type of the array. For instance: \@param int\[\] \$types#'
+
+        # not really needed, empty
+        - '#Rector\\NodeTraverser\\RectorNodeTraverser::__construct\(\) does not call parent constructor from PhpParser\\NodeTraverser#'
 
 services:
     -

@@ -1,17 +1,10 @@
 imports:
-  - { resource: '../../packages/**/src/config/config.yml' }
-  # new config location
-  - { resource: '../../packages/**/config/config.yml' }
-  - { resource: 'services.yml' }
-  - { resource: 'external-services.yml' }
+    - { resource: '../../packages/**/src/config/config.yml' }
+    # new config location
+    - { resource: '../../packages/**/config/config.yml' }
+    - { resource: 'services.yml' }
+    - { resource: 'external-services.yml' }
 
 parameters:
     exclude_paths: []
     autoload_paths: []
-
-    # see https://github.com/symplify/packagebuilder#collect-services-in-short-configs
-    collectors:
-        -
-            main_type: 'Rector\NodeTraverser\RectorNodeTraverser'
-            collected_type: 'Rector\Contract\Rector\PhpRectorInterface'
-            add_method: 'addRector'
