@@ -3,29 +3,35 @@
 namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver;
 
 use PhpParser\Node;
+use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\NodeTypeResolver\Tests\AbstractNodeTypeResolverContainerAwareTestCase;
-use Rector\NodeTypeResolver\Tests\StandaloneNodeTraverserQueue;
+use Rector\Parser\Parser;
+use Rector\Tests\AbstractContainerAwareTestCase;
 use Rector\Utils\BetterNodeFinder;
-use Symfony\Component\Finder\SplFileInfo;
+use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
-abstract class AbstractNodeTypeResolverTest extends AbstractNodeTypeResolverContainerAwareTestCase
+abstract class AbstractNodeTypeResolverTest extends AbstractContainerAwareTestCase
 {
-    /**
-     * @var BetterNodeFinder
-     */
-    protected $betterNodeFinder;
-
     /**
      * @var NodeTypeResolver
      */
     protected $nodeTypeResolver;
 
     /**
-     * @var StandaloneNodeTraverserQueue
+     * @var BetterNodeFinder
      */
-    private $standaloneNodeTraverserQueue;
+    private $betterNodeFinder;
+
+    /**
+     * @var Parser
+     */
+    private $parser;
+
+    /**
+     * @var NodeScopeAndMetadataDecorator
+     */
+    private $nodeScopeAndMetadataDecorator;
 
     /**
      * @var ParameterProvider
@@ -35,9 +41,10 @@ abstract class AbstractNodeTypeResolverTest extends AbstractNodeTypeResolverCont
     protected function setUp(): void
     {
         $this->betterNodeFinder = $this->container->get(BetterNodeFinder::class);
-        $this->standaloneNodeTraverserQueue = $this->container->get(StandaloneNodeTraverserQueue::class);
         $this->parameterProvider = $this->container->get(ParameterProvider::class);
         $this->nodeTypeResolver = $this->container->get(NodeTypeResolver::class);
+        $this->parser = $this->container->get(Parser::class);
+        $this->nodeScopeAndMetadataDecorator = $this->container->get(NodeScopeAndMetadataDecorator::class);
     }
 
     /**
@@ -53,12 +60,14 @@ abstract class AbstractNodeTypeResolverTest extends AbstractNodeTypeResolverCont
     /**
      * @return Node[]
      */
-    protected function getNodesForFile(string $file): array
+    private function getNodesForFile(string $file): array
     {
-        $fileInfo = new SplFileInfo($file, '', '');
+        $smartFileInfo = new SmartFileInfo($file);
 
         $this->parameterProvider->changeParameter('source', [$file]);
 
-        return $this->standaloneNodeTraverserQueue->processFileInfo($fileInfo);
+        $nodes = $this->parser->parseFile($smartFileInfo->getRealPath());
+
+        return $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($nodes, $smartFileInfo->getRealPath());
     }
 }

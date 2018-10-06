@@ -3,7 +3,7 @@ language: php
 matrix:
   include:
     - php: 7.1
-      env: STATIC_ANALYSIS=true RUN_RECTOR=true MONOREPO_SPLIT=true
+      env: STATIC_ANALYSIS=true RUN_RECTOR=true
     #- php: 7.1
     #  env: COMPOSER_FLAGS="--prefer-lowest"
     - php: 7.2
@@ -28,14 +28,6 @@ script:
     if [[ $RUN_RECTOR == true ]]; then
       bin/rector process src --level symfony40 --dry-run
       bin/rector generate-rector-overview >> rector-overview.md
-    fi
-
-after_script:
-  # split monorepo to packages - only on merge to master + publish prefixed version
-  - |
-    if [[ $TRAVIS_EVENT_TYPE == "push" && $MONOREPO_SPLIT == true && $TRAVIS_BRANCH == "master" ]]; then
-        vendor/bin/monorepo-builder split -v
-        composer rector-prefixed
     fi
 
 cache:

@@ -35,9 +35,6 @@ parameters:
         # already fixed, invalidated cache?
         - '#Access to an undefined property PhpParser\\Node\\Expr::\$args#'
 
-        # symfony container autowire interface falsy
-        - '#Call to an undefined method Symfony\\Component\\DependencyInjection\\ContainerInterface::getServiceIds\(\)#'
-
         # nette container
         - '#Method Rector\\NodeTypeResolver\\DependencyInjection\\PHPStanServicesFactory::create(.*?)() should return (.*?) but returns object#'
 

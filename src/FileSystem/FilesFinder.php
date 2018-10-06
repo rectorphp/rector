@@ -6,6 +6,7 @@ use Nette\Utils\Strings;
 use Rector\Utils\FilesystemTweaker;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
+use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
 final class FilesFinder
 {
@@ -49,7 +50,7 @@ final class FilesFinder
 
         $splFileInfos = [];
         foreach ($files as $file) {
-            $splFileInfos[] = new SplFileInfo($file, '', '');
+            $splFileInfos[] = new SmartFileInfo($file);
         }
 
         $splFileInfos = array_merge($splFileInfos, $this->findInDirectories($directories, $suffixes));

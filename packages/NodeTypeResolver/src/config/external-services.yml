@@ -1,12 +1,7 @@
 services:
     _defaults:
-        # for "Rector\NodeTypeResolver\NodeTypeResolverFactory" standalone usage
         public: true
         autowire: true
-
-    Symplify\PackageBuilder\Parameter\ParameterProvider: ~
-    PhpParser\NodeVisitor\CloningVisitor: ~
-    PhpParser\NodeFinder: ~
 
     # PHPStan
     PHPStan\Broker\Broker:
