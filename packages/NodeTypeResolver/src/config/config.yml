@@ -1,12 +1,3 @@
 imports:
     - { resource: 'services.yml' }
     - { resource: '%vendor%/symplify/better-phpdoc-parser/src/config/config.yml' }
-
-parameters:
-    collectors:
-        -
-            main_type: 'Rector\NodeTypeResolver\NodeTypeResolver'
-            collected_type: 'Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface'
-            add_method: 'addPerNodeTypeResolver'
-
-

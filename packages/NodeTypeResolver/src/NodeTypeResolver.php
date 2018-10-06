@@ -34,6 +34,9 @@ final class NodeTypeResolver
      */
     private $classReflectionTypesResolver;
 
+    /**
+     * @param PerNodeTypeResolverInterface[] $perNodeTypeResolvers
+     */
     public function __construct(
         TypeToStringResolver $typeToStringResolver,
         Broker $broker,
@@ -43,9 +46,13 @@ final class NodeTypeResolver
         $this->typeToStringResolver = $typeToStringResolver;
         $this->broker = $broker;
         $this->classReflectionTypesResolver = $classReflectionTypesResolver;
+
+        foreach ($perNodeTypeResolvers as $perNodeTypeResolver) {
+            $this->addPerNodeTypeResolver($perNodeTypeResolver);
+        }
     }
 
-    public function addPerNodeTypeResolver(PerNodeTypeResolverInterface $perNodeTypeResolver): void
+    private function addPerNodeTypeResolver(PerNodeTypeResolverInterface $perNodeTypeResolver): void
     {
         foreach ($perNodeTypeResolver->getNodeClasses() as $nodeClass) {
             $this->perNodeTypeResolvers[$nodeClass] = $perNodeTypeResolver;
