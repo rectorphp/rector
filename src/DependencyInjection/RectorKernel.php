@@ -3,7 +3,6 @@
 namespace Rector\DependencyInjection;
 
 use Rector\Contract\Rector\PhpRectorInterface;
-use Rector\DependencyInjection\CompilerPass\AutowireInterfacesCompilerPass;
 use Rector\DependencyInjection\Loader\TolerantRectorYamlFileLoader;
 use Rector\FileSystemRector\Contract\FileSystemRectorInterface;
 use Rector\YamlRector\Contract\YamlRectorInterface;
@@ -16,6 +15,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Config\FileLocator;
 use Symfony\Component\HttpKernel\Kernel;
 use Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutoBindParametersCompilerPass;
+use Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPass;
+use Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutowireInterfacesCompilerPass;
 use Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutowireSinglyImplementedCompilerPass;
 use Symplify\PackageBuilder\DependencyInjection\CompilerPass\ConfigurableCollectorCompilerPass;
 use Symplify\PackageBuilder\HttpKernel\SimpleKernelTrait;
@@ -58,6 +59,7 @@ final class RectorKernel extends Kernel
 
         // for defaults
         $containerBuilder->addCompilerPass(new AutowireSinglyImplementedCompilerPass());
+        $containerBuilder->addCompilerPass(new AutowireArrayParameterCompilerPass());
 
         // autowire Rectors by default (mainly for 3rd party code)
         $containerBuilder->addCompilerPass(new AutowireInterfacesCompilerPass([

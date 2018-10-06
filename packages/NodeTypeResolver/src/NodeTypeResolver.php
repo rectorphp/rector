@@ -37,7 +37,8 @@ final class NodeTypeResolver
     public function __construct(
         TypeToStringResolver $typeToStringResolver,
         Broker $broker,
-        ClassReflectionTypesResolver $classReflectionTypesResolver
+        ClassReflectionTypesResolver $classReflectionTypesResolver,
+        array $perNodeTypeResolvers = []
     ) {
         $this->typeToStringResolver = $typeToStringResolver;
         $this->broker = $broker;

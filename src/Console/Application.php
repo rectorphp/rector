@@ -4,6 +4,7 @@ namespace Rector\Console;
 
 use Jean85\PrettyVersions;
 use Symfony\Component\Console\Application as SymfonyApplication;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputOption;
 use function Safe\getcwd;
@@ -15,9 +16,14 @@ final class Application extends SymfonyApplication
      */
     private const NAME = 'Rector';
 
-    public function __construct()
+    /**
+     * @param Command[] $commands
+     */
+    public function __construct(array $commands = [])
     {
         parent::__construct(self::NAME, PrettyVersions::getVersion('rector/rector')->getPrettyVersion());
+
+        $this->addCommands($commands);
     }
 
     protected function getDefaultInputDefinition(): InputDefinition

@@ -55,8 +55,6 @@ parameters:
         - '#Cannot call method getAttribute\(\) on PhpParser\\Node\\Name\|null#'
         - '#Cannot call method getText\(\) on PhpParser\\Comment\\Doc\|null#'
 
-
-
         # Error php-parser token
         - '#Access to an undefined property PhpParser\\Node\\Expr\\Error\|PhpParser\\Node\\Expr\\Variable::\$name#'
 
