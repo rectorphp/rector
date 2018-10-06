@@ -1,6 +1,5 @@
 services:
     Rector\Rector\Class_\ClassReplacerRector:
-        $oldToNewClasses:
-            'PHP_CodeSniffer_Sniffs_Sniff': 'PHP_CodeSniffer\Sniffs\Sniff'
-            'PHP_CodeSniffer_File': 'PHP_CodeSniffer\Files\File'
-            'PHP_CodeSniffer_Tokens': 'PHP_CodeSniffer\Util\Tokens'
+        'PHP_CodeSniffer_Sniffs_Sniff': 'PHP_CodeSniffer\Sniffs\Sniff'
+        'PHP_CodeSniffer_File': 'PHP_CodeSniffer\Files\File'
+        'PHP_CodeSniffer_Tokens': 'PHP_CodeSniffer\Util\Tokens'

@@ -1,9 +1,8 @@
 services:
     Rector\Rector\Typehint\ParentTypehintedArgumentRector:
-        $typehintForArgumentByMethodAndClass:
-            Rector\Tests\Rector\Typehint\ParentTypehintedArgumentRector\Source\ParserInterface:
-                parse:
-                    code: 'string'
-            Rector\Tests\Rector\Typehint\ParentTypehintedArgumentRector\Source\ClassMetadataFactory:
-                setEntityManager:
-                    em: 'Doctrine\ORM\EntityManagerInterface'
+        Rector\Tests\Rector\Typehint\ParentTypehintedArgumentRector\Source\ParserInterface:
+            parse:
+                code: 'string'
+        Rector\Tests\Rector\Typehint\ParentTypehintedArgumentRector\Source\ClassMetadataFactory:
+            setEntityManager:
+                em: 'Doctrine\ORM\EntityManagerInterface'

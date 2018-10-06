@@ -1,6 +1,5 @@
 services:
     Rector\Rector\MagicDisclosure\GetAndSetToMethodCallRector:
-        $typeToMethodCalls:
-            'Rector\Tests\Rector\MagicDisclosure\GetAndSetToMethodCallRector\Source\SomeContainer':
-                'get': 'getService'
-                'set': 'addService'
+        'Rector\Tests\Rector\MagicDisclosure\GetAndSetToMethodCallRector\Source\SomeContainer':
+            'get': 'getService'
+            'set': 'addService'

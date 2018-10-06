@@ -1,8 +1,7 @@
 services:
     Rector\Rector\Visibility\ChangeMethodVisibilityRector:
-        $methodToVisibilityByClass:
-            'Rector\Tests\Rector\Visibility\ChangeMethodVisibilityRector\Source\ParentObject':
-                'toBePublicMethod': 'public'
-                'toBeProtectedMethod': 'protected'
-                'toBePrivateMethod': 'private'
-                'toBePublicStaticMethod': 'public'
+        'Rector\Tests\Rector\Visibility\ChangeMethodVisibilityRector\Source\ParentObject':
+            'toBePublicMethod': 'public'
+            'toBeProtectedMethod': 'protected'
+            'toBePrivateMethod': 'private'
+            'toBePublicStaticMethod': 'public'

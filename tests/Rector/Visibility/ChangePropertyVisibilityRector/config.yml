@@ -1,8 +1,7 @@
 services:
     Rector\Rector\Visibility\ChangePropertyVisibilityRector:
-        $propertyToVisibilityByClass:
-            'Rector\Tests\Rector\Visibility\ChangePropertyVisibilityRector\Source\ParentObject':
-                'toBePublicProperty': 'public'
-                'toBeProtectedProperty': 'protected'
-                'toBePrivateProperty': 'private'
-                'toBePublicStaticProperty': 'public'
+        'Rector\Tests\Rector\Visibility\ChangePropertyVisibilityRector\Source\ParentObject':
+            'toBePublicProperty': 'public'
+            'toBeProtectedProperty': 'protected'
+            'toBePrivateProperty': 'private'
+            'toBePublicStaticProperty': 'public'

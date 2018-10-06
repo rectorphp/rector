@@ -7,19 +7,16 @@ services:
     Rector\PhpParser\Rector\UseWithAliasRector: ~
 
     Rector\Rector\Property\PropertyNameReplacerRector:
-        $perClassOldToNewProperties:
-            'PhpParser\Node\Stmt\Class_':
-                'type': 'flags'
-            'PhpParser\Node\Stmt\ClassMethod':
-                'type': 'flags'
-            'PhpParser\Node\Stmt\Property':
-                'type': 'flags'
+        'PhpParser\Node\Stmt\Class_':
+            'type': 'flags'
+        'PhpParser\Node\Stmt\ClassMethod':
+            'type': 'flags'
+        'PhpParser\Node\Stmt\Property':
+            'type': 'flags'
 
     Rector\Rector\Constant\ClassConstantReplacerRector:
-        $oldToNewConstantsByClass:
-            'PhpParser\Node\Stmt\Class_':
-                'VISIBILITY_MODIFER_MASK': 'VISIBILITY_MODIFIER_MASK'
+        'PhpParser\Node\Stmt\Class_':
+            'VISIBILITY_MODIFER_MASK': 'VISIBILITY_MODIFIER_MASK'
 
     Rector\Rector\Class_\ClassReplacerRector:
-        $oldToNewClasses:
-            'PhpParser\BuilderAbstract': 'PhpParser\Builder'
+        'PhpParser\BuilderAbstract': 'PhpParser\Builder'

@@ -4,15 +4,13 @@ services:
     Rector\Symfony\Rector\Yaml\SessionStrictTrueByDefaultYamlRector: ~
 
     Rector\YamlRector\Rector\ReplaceStringYamlRector:
-        $oldToNewString:
-            ' !php/object:': ' !php/object '
-            ' !php/const:': ' !php/const '
-            ' !str': ' !!str'
+        ' !php/object:': ' !php/object '
+        ' !php/const:': ' !php/const '
+        ' !str': ' !!str'
 
     Rector\Rector\Argument\ArgumentRemoverRector:
-        $argumentChangesByMethodAndType:
-            -
-                class: 'Symfony\Component\Yaml\Yaml'
-                method: 'parse'
-                position: 2
-                value: 'Symfony\Component\Yaml\Yaml::PARSE_KEYS_AS_STRINGS'
+        -
+            class: 'Symfony\Component\Yaml\Yaml'
+            method: 'parse'
+            position: 2
+            value: 'Symfony\Component\Yaml\Yaml::PARSE_KEYS_AS_STRINGS'

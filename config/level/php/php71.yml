@@ -1,5 +1,4 @@
 services:
     Rector\Php\Rector\BinaryOp\IsIterableRector: ~
     Rector\Php\Rector\Name\ReservedObjectRector:
-        $reservedKeywordsToReplacements:
-            Object: 'BaseObject'
+        Object: 'BaseObject'

@@ -1,4 +1,3 @@
 services:
     Rector\Rector\Interface_\MergeInterfacesRector:
-        $oldToNewInterfaces:
-            'Rector\Tests\Rector\Interface_\MergeInterfacesRector\Source\SomeOldInterface': 'Rector\Tests\Rector\Interface_\MergeInterfacesRector\Source\SomeInterface'
+        'Rector\Tests\Rector\Interface_\MergeInterfacesRector\Source\SomeOldInterface': 'Rector\Tests\Rector\Interface_\MergeInterfacesRector\Source\SomeInterface'

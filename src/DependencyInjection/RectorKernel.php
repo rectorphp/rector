@@ -4,6 +4,7 @@ namespace Rector\DependencyInjection;
 
 use Rector\Contract\Rector\PhpRectorInterface;
 use Rector\DependencyInjection\CompilerPass\AutowireInterfacesCompilerPass;
+use Rector\DependencyInjection\Loader\TolerantRectorYamlFileLoader;
 use Rector\FileSystemRector\Contract\FileSystemRectorInterface;
 use Rector\YamlRector\Contract\YamlRectorInterface;
 use Symfony\Component\Config\Loader\DelegatingLoader;
@@ -18,8 +19,6 @@ use Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutoBindParametersC
 use Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutowireSinglyImplementedCompilerPass;
 use Symplify\PackageBuilder\DependencyInjection\CompilerPass\ConfigurableCollectorCompilerPass;
 use Symplify\PackageBuilder\HttpKernel\SimpleKernelTrait;
-use Symplify\PackageBuilder\Yaml\FileLoader\ParameterImportsYamlFileLoader;
-use Symplify\PackageBuilder\Yaml\FileLoader\ParameterMergingYamlFileLoader;
 
 final class RectorKernel extends Kernel
 {
@@ -80,8 +79,7 @@ final class RectorKernel extends Kernel
 
         $loaderResolver = new LoaderResolver([
             new GlobFileLoader($kernelFileLocator),
-            new ParameterMergingYamlFileLoader($container, $kernelFileLocator),
-            new ParameterImportsYamlFileLoader($container, $kernelFileLocator),
+            new TolerantRectorYamlFileLoader($container, $kernelFileLocator),
         ]);
 
         return new DelegatingLoader($loaderResolver);

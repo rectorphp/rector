@@ -14,7 +14,6 @@ services:
     Rector\PHPUnit\Rector\DelegateExceptionArgumentsRector: ~
 
     Rector\Rector\MethodCall\MethodNameReplacerRector:
-        $perClassOldToNewMethods:
-            'PHPUnit\Framework\TestClass':
-                'setExpectedException': 'expectedException'
-                'setExpectedExceptionRegExp': 'expectedException'
+        'PHPUnit\Framework\TestClass':
+            'setExpectedException': 'expectedException'
+            'setExpectedExceptionRegExp': 'expectedException'

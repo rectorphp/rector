@@ -4,64 +4,59 @@ services:
     Rector\Sylius\Rector\Review\ReplaceCreateMethodWithoutReviewerRector: ~
 
     Rector\Rector\MethodCall\MethodNameReplacerRector:
-            $perClassOldToNewMethods:
-                'Sylius\Component\Core\Repository\OrderRepositoryInterface':
-                    'count': 'countPlacedOrders'
-                    'countByChannel': 'countFulfilledByChannel'
+        'Sylius\Component\Core\Repository\OrderRepositoryInterface':
+            'count': 'countPlacedOrders'
+            'countByChannel': 'countFulfilledByChannel'
 
-                'Sylius\Component\Product\Repository\ProductVariantRepositoryInterface':
-                    'findByCodeAndProductCode': 'findByCodesAndProductCode'
+        'Sylius\Component\Product\Repository\ProductVariantRepositoryInterface':
+            'findByCodeAndProductCode': 'findByCodesAndProductCode'
 
-                'Sylius\Component\Core\Model\OrderInterface':
-                      getLastNewPayment: 'getLastPayment'
+        'Sylius\Component\Core\Model\OrderInterface':
+              getLastNewPayment: 'getLastPayment'
 
-                'Sylius\Component\Taxonomy\Model\TaxonInterface':
-                    'getParents ': 'getAncestors'
+        'Sylius\Component\Taxonomy\Model\TaxonInterface':
+            'getParents ': 'getAncestors'
 
     Rector\Rector\Typehint\ParentTypehintedArgumentRector:
-        $typehintForArgumentByMethodAndClass:
-            'Sylius\Bundle\CoreBundle\Context\SessionAndChannelBasedCartContext':
-                '__construct':
-                    '$cartStorage': 'Sylius\Component\Core\Storage\CartStorageInterface'
+        'Sylius\Bundle\CoreBundle\Context\SessionAndChannelBasedCartContext':
+            '__construct':
+                '$cartStorage': 'Sylius\Component\Core\Storage\CartStorageInterface'
 
     Rector\Rector\Argument\ArgumentAdderRector:
-        $argumentChangesByMethodAndType:
-            -
-                class: 'Sylius\Component\Mailer\Sender\SenderInterface'
-                method: 'send'
-                position: 0
-                default_value: '[]'
-            -
-                class: 'Sylius\Component\Core\Repository\ProductRepositoryInterface'
-                method: 'findOneBySlug'
-                position: 2
-                default_value: false
+        -
+            class: 'Sylius\Component\Mailer\Sender\SenderInterface'
+            method: 'send'
+            position: 0
+            default_value: '[]'
+        -
+            class: 'Sylius\Component\Core\Repository\ProductRepositoryInterface'
+            method: 'findOneBySlug'
+            position: 2
+            default_value: false
 
     Rector\Rector\Typehint\ReturnTypehintRector:
-        $returnTypehintByMethod:
-            'Sylius\Component\Order\Model\OrderInterface':
-                'getAdjustmentsRecursively':
-                    'array': 'Doctrine\Common\Collections\Collection'
+        'Sylius\Component\Order\Model\OrderInterface':
+            'getAdjustmentsRecursively':
+                'array': 'Doctrine\Common\Collections\Collection'
 
-            'Sylius\Component\Order\Model\OrderItemInterface':
-                'getAdjustmentsRecursively':
-                    'array': 'Doctrine\Common\Collections\Collection'
+        'Sylius\Component\Order\Model\OrderItemInterface':
+            'getAdjustmentsRecursively':
+                'array': 'Doctrine\Common\Collections\Collection'
 
-            'Sylius\Component\Registry\PrioritizedServiceRegistryInterface':
-                'all':
-                    'Zend\Stdlib\PriorityQueue': 'iterable'
+        'Sylius\Component\Registry\PrioritizedServiceRegistryInterface':
+            'all':
+                'Zend\Stdlib\PriorityQueue': 'iterable'
 
     Rector\Rector\Class_\ClassReplacerRector:
-        $oldToNewClasses:
-            'DateTime': 'DateTimeInterface'
-            'Sylius\Bundle\CoreBundle\Context\SessionAndChannelBasedCartContext': 'Sylius\Component\Core\Storage\CartStorageInterface'
-            'Sylius\Bundle\CoreBundle\EmailManager\ShipmentEmailManager': 'Sylius\Bundle\AdminBundle\EmailManager\ShipmentEmailManager'
-            'Sylius\Bundle\CoreBundle\EmailManager\ShipmentEmailManagerInterface': 'Sylius\Bundle\AdminBundle\EmailManager\ShipmentEmailManagerInterface'
-            'Sylius\Bundle\CoreBundle\EmailManager\ContactEmailManager': 'Sylius\Bundle\ShopBundle\EmailManager\ContactEmailManager'
-            'Sylius\Bundle\CoreBundle\EmailManager\ContactEmailManagerInterface': 'Sylius\Bundle\ShopBundle\EmailManager\ContactEmailManagerInterface'
-            'Sylius\Bundle\CoreBundle\EmailManager\OrderEmailManager': 'Sylius\Bundle\ShopBundle\EmailManager\OrderEmailManager'
-            'Sylius\Bundle\CoreBundle\EmailManager\OrderEmailManagerInterface': 'Sylius\Bundle\ShopBundle\EmailManager\OrderEmailManagerInterface'
-            'Sylius\Bundle\CoreBundle\EventListener\UserMailerListener': 'Sylius\Bundle\ShopBundle\EventListener\UserMailerListener'
-            'Sylius\Bundle\CoreBundle\Form\Type\ProductTaxonChoiceType': 'Sylius\Bundle\CoreBundle\Form\Type\Taxon\ProductTaxonAutocompleteChoiceType'
-            'Sylius\Component\Order\Factory\AddToCartCommandFactoryInterface': 'Sylius\Bundle\OrderBundle\Factory\AddToCartCommandFactoryInterface'
-            'Sylius\Bundle\ResourceBundle\Model\ResourceLogEntry': 'Sylius\Component\Resource\Model\ResourceLogEntry'
+        'DateTime': 'DateTimeInterface'
+        'Sylius\Bundle\CoreBundle\Context\SessionAndChannelBasedCartContext': 'Sylius\Component\Core\Storage\CartStorageInterface'
+        'Sylius\Bundle\CoreBundle\EmailManager\ShipmentEmailManager': 'Sylius\Bundle\AdminBundle\EmailManager\ShipmentEmailManager'
+        'Sylius\Bundle\CoreBundle\EmailManager\ShipmentEmailManagerInterface': 'Sylius\Bundle\AdminBundle\EmailManager\ShipmentEmailManagerInterface'
+        'Sylius\Bundle\CoreBundle\EmailManager\ContactEmailManager': 'Sylius\Bundle\ShopBundle\EmailManager\ContactEmailManager'
+        'Sylius\Bundle\CoreBundle\EmailManager\ContactEmailManagerInterface': 'Sylius\Bundle\ShopBundle\EmailManager\ContactEmailManagerInterface'
+        'Sylius\Bundle\CoreBundle\EmailManager\OrderEmailManager': 'Sylius\Bundle\ShopBundle\EmailManager\OrderEmailManager'
+        'Sylius\Bundle\CoreBundle\EmailManager\OrderEmailManagerInterface': 'Sylius\Bundle\ShopBundle\EmailManager\OrderEmailManagerInterface'
+        'Sylius\Bundle\CoreBundle\EventListener\UserMailerListener': 'Sylius\Bundle\ShopBundle\EventListener\UserMailerListener'
+        'Sylius\Bundle\CoreBundle\Form\Type\ProductTaxonChoiceType': 'Sylius\Bundle\CoreBundle\Form\Type\Taxon\ProductTaxonAutocompleteChoiceType'
+        'Sylius\Component\Order\Factory\AddToCartCommandFactoryInterface': 'Sylius\Bundle\OrderBundle\Factory\AddToCartCommandFactoryInterface'
+        'Sylius\Bundle\ResourceBundle\Model\ResourceLogEntry': 'Sylius\Component\Resource\Model\ResourceLogEntry'
