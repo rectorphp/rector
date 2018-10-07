@@ -46,7 +46,6 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface
     {
         /** @var Scope $nodeScope */
         $nodeScope = $variableNode->getAttribute(Attribute::SCOPE);
-
         $variableName = (string) $variableNode->name;
 
         if ($nodeScope->hasVariableType($variableName) === TrinaryLogic::createYes()) {

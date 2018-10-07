@@ -4,3 +4,4 @@ services:
     Rector\Php\Rector\FuncCall\RandomFunctionRector: ~
     Rector\Php\Rector\FunctionLike\ExceptionHandlerTypehintRector: ~
     Rector\Php\Rector\FuncCall\MultiDirnameRector: ~
+    Rector\Php\Rector\List_\ListSplitStringRector: ~
