@@ -52,20 +52,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $assignNode): ?Node
     {
-        if (! $this->isListToEachAssign($assignNode)) {
-            return $assignNode;
-        }
-
-        // assign should be top level, e.g. not in a while loop
-        if (! $assignNode->getAttribute(Attribute::PARENT_NODE) instanceof Expression) {
+        if ($this->shouldSkip($assignNode)) {
             return $assignNode;
         }
 
         /** @var List_ $listNode */
         $listNode = $assignNode->var;
-        if (count($listNode->items) !== 2) {
-            return $listNode;
-        }
 
         /** @var FuncCall $eachFuncCall */
         $eachFuncCall = $assignNode->expr;
@@ -90,21 +82,17 @@ CODE_SAMPLE
         // $key = key($values);
         // $value = current($values);
         // next($values); - only inside a loop
-        if ($listNode->items[0] && $listNode->items[1]) {
-            $currentFuncCall = $this->createFuncCallWithNameAndArgs('current', $eachFuncCall->args);
-            $assignCurrentNode = new Assign($listNode->items[1]->value, $currentFuncCall);
-            $this->addNodeAfterNode($assignCurrentNode, $assignNode);
+        $currentFuncCall = $this->createFuncCallWithNameAndArgs('current', $eachFuncCall->args);
+        $assignCurrentNode = new Assign($listNode->items[1]->value, $currentFuncCall);
+        $this->addNodeAfterNode($assignCurrentNode, $assignNode);
 
-            if ($this->isInsideDoWhile($assignNode)) {
-                $nextFuncCall = $this->createFuncCallWithNameAndArgs('next', $eachFuncCall->args);
-                $this->addNodeAfterNode($nextFuncCall, $assignNode);
-            }
-
-            $keyFuncCall = $this->createFuncCallWithNameAndArgs('key', $eachFuncCall->args);
-            return new Assign($listNode->items[0]->value, $keyFuncCall);
+        if ($this->isInsideDoWhile($assignNode)) {
+            $nextFuncCall = $this->createFuncCallWithNameAndArgs('next', $eachFuncCall->args);
+            $this->addNodeAfterNode($nextFuncCall, $assignNode);
         }
 
-        return $assignNode;
+        $keyFuncCall = $this->createFuncCallWithNameAndArgs('key', $eachFuncCall->args);
+        return new Assign($listNode->items[0]->value, $keyFuncCall);
     }
 
     private function isListToEachAssign(Assign $assignNode): bool
@@ -137,5 +125,27 @@ CODE_SAMPLE
         $parentParentNode = $parentNode->getAttribute(Attribute::PARENT_NODE);
 
         return $parentParentNode instanceof Do_;
+    }
+
+    private function shouldSkip(Assign $assignNode): bool
+    {
+        if (! $this->isListToEachAssign($assignNode)) {
+            return true;
+        }
+
+        // assign should be top level, e.g. not in a while loop
+        if (! $assignNode->getAttribute(Attribute::PARENT_NODE) instanceof Expression) {
+            return true;
+        }
+
+        /** @var List_ $listNode */
+        $listNode = $assignNode->var;
+
+        if (count($listNode->items) !== 2) {
+            return true;
+        }
+
+        // empty list → cannot handle
+        return $listNode->items[0] === null && $listNode->items[1] === null;
     }
 }

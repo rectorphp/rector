@@ -73,6 +73,7 @@ parameters:
 
         # known values
         - '#Access to an undefined property PHPStan\\PhpDocParser\\Ast\\Node::\$name#' # 2
+        - '#Cannot access property \$value on PhpParser\\Node\\Expr\\ArrayItem\|null#'
 
         - '#Method Rector\\Node\\NodeFactory::createNullConstant\(\) should return PhpParser\\Node\\Expr\\ConstFetch but returns PhpParser\\Node\\Expr#' # 1
         - '#Method Rector\\Node\\NodeFactory::createNamespace\(\) should return PhpParser\\Node\\Stmt\\Namespace_ but returns PhpParser\\Node#' # 1

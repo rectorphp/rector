@@ -114,3 +114,7 @@ parameters:
         SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff.MissingParameterTypeHint:
             # 3rd party parent code
             - 'src/DependencyInjection/Loader/TolerantRectorYamlFileLoader.php'
+
+        Symplify\CodingStandard\Sniffs\Debug\CommentedOutCodeSniff.Found:
+            # notes
+            - 'packages/Php/src/Rector/Each/ListEachRector.php'
