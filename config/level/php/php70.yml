@@ -5,3 +5,7 @@ services:
     Rector\Php\Rector\FunctionLike\ExceptionHandlerTypehintRector: ~
     Rector\Php\Rector\FuncCall\MultiDirnameRector: ~
     Rector\Php\Rector\List_\ListSplitStringRector: ~
+    Rector\Php\Rector\List_\EmptyListRector: ~
+
+    # be careful, run this just once, since it can keep swapping order back and forth
+    Rector\Php\Rector\List_\ListSwapArrayOrderRector: ~
