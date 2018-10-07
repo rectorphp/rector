@@ -2,6 +2,7 @@
 
 namespace Rector\Printer;
 
+use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
@@ -59,5 +60,18 @@ final class BetterStandardPrinter extends Standard
             ($type ? $type . ' ' : '') .
             $this->pCommaSeparated($node->props) .
             ';';
+    }
+
+    /**
+     * Print arrays in short [] by default,
+     * to prevent manual explicit array shortening.
+     */
+    protected function pExpr_Array(Array_ $node): string
+    {
+        if (! $node->hasAttribute('kind')) {
+            $node->setAttribute('kind', Array_::KIND_SHORT);
+        }
+
+        return parent::pExpr_Array($node);
     }
 }

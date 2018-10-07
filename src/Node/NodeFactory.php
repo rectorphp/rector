@@ -120,9 +120,7 @@ final class NodeFactory
             }
         }
 
-        return new Array_($arrayItems, [
-            'kind' => Array_::KIND_SHORT,
-        ]);
+        return new Array_($arrayItems);
     }
 
     /**

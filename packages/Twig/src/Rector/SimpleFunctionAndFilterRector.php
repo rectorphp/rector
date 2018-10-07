@@ -191,9 +191,7 @@ CODE_SAMPLE
             }
 
             $node->value->args[0] = new Arg(new String_($filterName));
-            $node->value->args[1] = new Arg(new Array_($arrayItems, [
-                'kind' => Array_::KIND_SHORT,
-            ]));
+            $node->value->args[1] = new Arg(new Array_($arrayItems));
         }
 
         return $node;
