@@ -9,3 +9,5 @@ services:
 
     # be careful, run this just once, since it can keep swapping order back and forth
     Rector\Php\Rector\List_\ListSwapArrayOrderRector: ~
+
+    Rector\Php\Rector\FuncCall\CallUserFuncRector: ~
