@@ -2,3 +2,5 @@ services:
     Rector\Php\Rector\BinaryOp\IsIterableRector: ~
     Rector\Php\Rector\Name\ReservedObjectRector:
         Object: 'BaseObject'
+
+    Rector\Php\Rector\TryCatch\MultiExceptionCatchRector: ~
