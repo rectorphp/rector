@@ -96,6 +96,8 @@ parameters:
         Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
             # tough logic
             - 'src/Rector/MethodBody/NormalToFluentRector.php'
+            # copied 3rd party logic
+            - 'packages/Php/src/EregToPcreTransformer.php'
 
         SlevomatCodingStandard\Sniffs\Functions\UnusedParameterSniff.UnusedParameter:
             # enforced by interface
