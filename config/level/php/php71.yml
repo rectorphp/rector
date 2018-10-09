@@ -4,3 +4,4 @@ services:
         Object: 'BaseObject'
 
     Rector\Php\Rector\TryCatch\MultiExceptionCatchRector: ~
+    Rector\Php\Rector\Assign\AssignArrayToStringRector: ~

@@ -3,6 +3,7 @@
 namespace Rector\Utils;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeFinder;
 use Rector\NodeTypeResolver\Node\Attribute;
 
@@ -79,5 +80,50 @@ final class BetterNodeFinder
     public function findFirst($nodes, callable $filter): ?Node
     {
         return $this->nodeFinder->findFirst($nodes, $filter);
+    }
+
+    public function findFirstPrevious(Node $node, callable $filter): ?Node
+    {
+        if (! $node instanceof Expression) {
+            $expression = $node->getAttribute(Attribute::PARENT_NODE);
+            if ($expression instanceof Expression) {
+                $node = $expression;
+            }
+        }
+
+        $foundNode = $this->findFirst([$node], $filter);
+        // we found what we need
+        if ($foundNode) {
+            return $foundNode;
+        }
+
+        // move to next expression
+        $previousExpression = $this->getPreviousExpression($node);
+        if ($previousExpression === null) {
+            return null;
+        }
+
+        return $this->findFirstPrevious($previousExpression, $filter);
+    }
+
+    private function getPreviousExpression(Node $node): ?Expression
+    {
+        $previousExpression = $node->getAttribute(Attribute::PREVIOUS_NODE);
+
+        while (! $previousExpression instanceof Expression && $previousExpression !== null) {
+            $previousExpression = $previousExpression->getAttribute(Attribute::PREVIOUS_NODE);
+            if ($previousExpression instanceof Expression) {
+                return $previousExpression;
+            }
+
+            if ($previousExpression instanceof Node) {
+                $previousExpression = $previousExpression->getAttribute(Attribute::PARENT_NODE);
+                if ($previousExpression instanceof Expression) {
+                    return $previousExpression;
+                }
+            }
+        }
+
+        return $previousExpression;
     }
 }

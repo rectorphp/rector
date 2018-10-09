@@ -19,6 +19,8 @@ final class NodeTypeAnalyzer
         /** @var Scope $nodeScope */
         $nodeScope = $node->getAttribute(Attribute::SCOPE);
 
-        return $nodeScope->getType($node) instanceof StringType;
+        $nodeType = $nodeScope->getType($node);
+
+        return $nodeType instanceof StringType;
     }
 }
