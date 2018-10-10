@@ -86,6 +86,8 @@ parameters:
         # buggy
         - '#Access to an undefined property PhpParser\\Node\\Expr::\$value#' # 2
         - '#Access to an undefined property PhpParser\\Node\\Expr::\$(name|var)#' # 2
+        - '#Access to an undefined property PhpParser\\Node\\Stmt::\$expr#'
+        - '#Binary operation "\+" between int\|string and 1 results in an error#'
 
         # variadic false positive
         - '#In method "Rector\\Node\\NodeFactory::createArray", parameter \$items can be type-hinted to "array"#'
