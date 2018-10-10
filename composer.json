@@ -183,6 +183,7 @@
             "packages/Php/tests/Rector/FunctionLike/ExceptionHandlerTypehintRector/Wrong",
             "packages/Php/tests/Rector/FunctionLike/Php4ConstructorRector/Wrong",
             "packages/Php/tests/Rector/Assign/AssignArrayToStringRector/Wrong",
+            "packages/Php/tests/Rector/FuncCall/CountOnNullRector/Wrong",
             "tests/Rector/Psr4/MultipleClassFileToPsr4ClassesRector/Source"
         ]
     },

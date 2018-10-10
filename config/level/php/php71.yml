@@ -5,3 +5,4 @@ services:
 
     Rector\Php\Rector\TryCatch\MultiExceptionCatchRector: ~
     Rector\Php\Rector\Assign\AssignArrayToStringRector: ~
+    Rector\Php\Rector\FuncCall\CountOnNullRector: ~
