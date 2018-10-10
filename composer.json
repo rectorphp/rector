@@ -12,7 +12,7 @@
         "jean85/pretty-package-versions": "^1.2",
         "nette/robot-loader": "^3.1",
         "nette/utils": "^2.5",
-        "nikic/php-parser": "^4.0.4",
+        "nikic/php-parser": "^4.1",
         "phpstan/phpstan": "^0.10.3",
         "sebastian/diff": "^3.0",
         "symfony/console": "^3.4|^4.1",
@@ -183,6 +183,7 @@
             "packages/Php/tests/Rector/FunctionLike/ExceptionHandlerTypehintRector/Wrong",
             "packages/Php/tests/Rector/FunctionLike/Php4ConstructorRector/Wrong",
             "packages/Php/tests/Rector/Assign/AssignArrayToStringRector/Wrong",
+            "packages/Php/tests/Rector/FuncCall/CountOnNullRector/Wrong",
             "tests/Rector/Psr4/MultipleClassFileToPsr4ClassesRector/Source"
         ]
     },

@@ -29,7 +29,6 @@ parameters:
         - '#Offset string does not exist on string#' # 1
         - '#Cannot cast PhpParser\\Node\\Expr\\Error\|PhpParser\\Node\\Identifier to string#'
         - '#Cannot cast PhpParser\\Node\\Expr\|PhpParser\\Node\\Identifier to string#' # 4
-        - '#Cannot cast PhpParser\\Node\\Expr\|PhpParser\\Node\\Identifier|string to string#' # 3
         - '#Cannot cast PhpParser\\Node\\Expr\|PhpParser\\Node\\Name to string#'
         - '#Array \(array<array<PhpParser\\Node\\Stmt>>\) does not accept array<PhpParser\\Node\\Stmt|null>#'
         - '#Property Rector\\DependencyInjection\\Loader\\RectorServiceParametersShifter::\$serviceKeywords \(array<string>\) does not accept ReflectionProperty#'
