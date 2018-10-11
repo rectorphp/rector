@@ -79,4 +79,14 @@ final class Attribute
      * @var string
      */
     public const NEXT_NODE = 'nextNode';
+
+    /**
+     * @var string
+     */
+    public const PREVIOUS_EXPRESSION = 'previousExpression';
+
+    /**
+     * @var string
+     */
+    public const CURRENT_EXPRESSION = 'currentExpression';
 }
