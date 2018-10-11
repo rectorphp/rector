@@ -7,6 +7,7 @@ use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\CloningVisitor;
 use PhpParser\NodeVisitor\NameResolver;
 use Rector\NodeTypeResolver\NodeVisitor\ClassAndMethodNodeVisitor;
+use Rector\NodeTypeResolver\NodeVisitor\ExpressionNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\NamespaceNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\ParentAndNextNodeVisitor;
 use Rector\NodeTypeResolver\PHPStan\Scope\NodeScopeResolver;
@@ -38,18 +39,25 @@ final class NodeScopeAndMetadataDecorator
      */
     private $namespaceNodeVisitor;
 
+    /**
+     * @var ExpressionNodeVisitor
+     */
+    private $expressionNodeVisitor;
+
     public function __construct(
         NodeScopeResolver $nodeScopeResolver,
         ParentAndNextNodeVisitor $parentAndNextNodeVisitor,
         CloningVisitor $cloningVisitor,
         ClassAndMethodNodeVisitor $classAndMethodNodeVisitor,
-        NamespaceNodeVisitor $namespaceNodeVisitor
+        NamespaceNodeVisitor $namespaceNodeVisitor,
+        ExpressionNodeVisitor $expressionNodeVisitor
     ) {
         $this->nodeScopeResolver = $nodeScopeResolver;
         $this->parentAndNextNodeVisitor = $parentAndNextNodeVisitor;
         $this->cloningVisitor = $cloningVisitor;
         $this->classAndMethodNodeVisitor = $classAndMethodNodeVisitor;
         $this->namespaceNodeVisitor = $namespaceNodeVisitor;
+        $this->expressionNodeVisitor = $expressionNodeVisitor;
     }
 
     /**
@@ -77,6 +85,7 @@ final class NodeScopeAndMetadataDecorator
         $nodeTraverser->addVisitor($this->parentAndNextNodeVisitor);
         $nodeTraverser->addVisitor($this->classAndMethodNodeVisitor);
         $nodeTraverser->addVisitor($this->namespaceNodeVisitor);
+        $nodeTraverser->addVisitor($this->expressionNodeVisitor);
 
         return $nodeTraverser->traverse($nodes);
     }

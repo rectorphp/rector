@@ -84,12 +84,7 @@ final class BetterNodeFinder
 
     public function findFirstPrevious(Node $node, callable $filter): ?Node
     {
-        if (! $node instanceof Expression) {
-            $expression = $node->getAttribute(Attribute::PARENT_NODE);
-            if ($expression instanceof Expression) {
-                $node = $expression;
-            }
-        }
+        $node = $node instanceof Expression ? $node : $node->getAttribute(Attribute::CURRENT_EXPRESSION);
 
         $foundNode = $this->findFirst([$node], $filter);
         // we found what we need
@@ -98,32 +93,11 @@ final class BetterNodeFinder
         }
 
         // move to next expression
-        $previousExpression = $this->getPreviousExpression($node);
+        $previousExpression = $node->getAttribute(Attribute::PREVIOUS_EXPRESSION);
         if ($previousExpression === null) {
             return null;
         }
 
         return $this->findFirstPrevious($previousExpression, $filter);
-    }
-
-    private function getPreviousExpression(Node $node): ?Expression
-    {
-        $previousExpression = $node->getAttribute(Attribute::PREVIOUS_NODE);
-
-        while (! $previousExpression instanceof Expression && $previousExpression !== null) {
-            $previousExpression = $previousExpression->getAttribute(Attribute::PREVIOUS_NODE);
-            if ($previousExpression instanceof Expression) {
-                return $previousExpression;
-            }
-
-            if ($previousExpression instanceof Node) {
-                $previousExpression = $previousExpression->getAttribute(Attribute::PARENT_NODE);
-                if ($previousExpression instanceof Expression) {
-                    return $previousExpression;
-                }
-            }
-        }
-
-        return $previousExpression;
     }
 }
