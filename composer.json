@@ -31,7 +31,7 @@
         "symplify/monorepo-builder": "^5.2",
         "symplify/phpstan-extensions": "^5.2",
         "thecodingmachine/phpstan-safe-rule": "^0.1.0",
-        "thecodingmachine/phpstan-strict-rules": "^0.10.3",
+        "thecodingmachine/phpstan-strict-rules": "^0.10.4",
         "tracy/tracy": "^2.5"
     },
     "autoload": {
