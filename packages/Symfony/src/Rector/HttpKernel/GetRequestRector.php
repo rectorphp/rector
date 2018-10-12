@@ -3,6 +3,7 @@
 namespace Rector\Symfony\Rector\HttpKernel;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -158,6 +159,11 @@ CODE_SAMPLE
 
     private function isGetMethodCallWithRequestParameters(MethodCall $methodCall): bool
     {
+        // we can only resolve clear string names
+        if ($methodCall->name instanceof Expr) {
+            return false;
+        }
+
         if ((string) $methodCall->name !== 'get') {
             return false;
         }
