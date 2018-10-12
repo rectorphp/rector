@@ -19,10 +19,16 @@ final class TolerantRectorYamlFileLoader extends AbstractParameterMergingYamlFil
      */
     private $rectorServiceParametersShifter;
 
+    /**
+     * @var ClassExistenceValidator
+     */
+    private $classExistenceValidator;
+
     public function __construct(ContainerBuilder $containerBuilder, FileLocatorInterface $fileLocator)
     {
         $this->parameterInImportResolver = new ParameterInImportResolver();
         $this->rectorServiceParametersShifter = new RectorServiceParametersShifter();
+        $this->classExistenceValidator = new ClassExistenceValidator();
 
         parent::__construct($containerBuilder, $fileLocator);
     }
@@ -38,6 +44,8 @@ final class TolerantRectorYamlFileLoader extends AbstractParameterMergingYamlFil
         if ($configuration === null) {
             return [];
         }
+
+        $this->classExistenceValidator->ensureClassesAreValid($configuration, $file);
 
         $configuration = $this->rectorServiceParametersShifter->process($configuration);
 
