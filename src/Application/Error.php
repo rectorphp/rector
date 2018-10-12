@@ -2,12 +2,12 @@
 
 namespace Rector\Application;
 
-use Symfony\Component\Finder\SplFileInfo;
+use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
 final class Error
 {
     /**
-     * @var SplFileInfo
+     * @var SmartFileInfo
      */
     private $fileInfo;
 
@@ -21,14 +21,14 @@ final class Error
      */
     private $line;
 
-    public function __construct(SplFileInfo $fileInfo, string $message, ?int $line)
+    public function __construct(SmartFileInfo $smartFileInfo, string $message, ?int $line)
     {
-        $this->fileInfo = $fileInfo;
+        $this->fileInfo = $smartFileInfo;
         $this->message = $message;
         $this->line = $line;
     }
 
-    public function getFileInfo(): SplFileInfo
+    public function getFileInfo(): SmartFileInfo
     {
         return $this->fileInfo;
     }

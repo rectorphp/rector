@@ -14,7 +14,7 @@ use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 use Rector\Utils\BetterNodeFinder;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Finder\SplFileInfo;
+use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
 final class MultipleClassFileToPsr4ClassesRector implements FileSystemRectorInterface
 {
@@ -112,17 +112,20 @@ CODE_SAMPLE
         );
     }
 
-    public function refactor(SplFileInfo $fileInfo): void
+    public function refactor(SmartFileInfo $smartFileInfo): void
     {
-        $oldStmts = $this->parser->parseFile($fileInfo->getRealPath());
+        $oldStmts = $this->parser->parseFile($smartFileInfo->getRealPath());
 
         // needed for format preserving
-        $newStmts = $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($oldStmts, $fileInfo->getRealPath());
+        $newStmts = $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile(
+            $oldStmts,
+            $smartFileInfo->getRealPath()
+        );
 
         /** @var Namespace_[] $namespaceNodes */
         $namespaceNodes = $this->betterNodeFinder->findInstanceOf($newStmts, Namespace_::class);
 
-        if ($this->shouldSkip($fileInfo, $newStmts, $namespaceNodes)) {
+        if ($this->shouldSkip($smartFileInfo, $newStmts, $namespaceNodes)) {
             return;
         }
 
@@ -144,7 +147,7 @@ CODE_SAMPLE
                     // reindex from 0, for the printer
                     $newStmt->stmts = array_values($newStmt->stmts);
 
-                    $fileDestination = $this->createClassFileDestination($classNode, $fileInfo);
+                    $fileDestination = $this->createClassFileDestination($classNode, $smartFileInfo);
 
                     $fileContent = $this->formatPerservingPrinter->printToString(
                         $newStmtsSet,
@@ -158,9 +161,9 @@ CODE_SAMPLE
         }
     }
 
-    private function createClassFileDestination(Class_ $classNode, SplFileInfo $fileInfo): string
+    private function createClassFileDestination(Class_ $classNode, SmartFileInfo $smartFileInfo): string
     {
-        $currentDirectory = dirname($fileInfo->getRealPath());
+        $currentDirectory = dirname($smartFileInfo->getRealPath());
 
         return $currentDirectory . DIRECTORY_SEPARATOR . (string) $classNode->name . '.php';
     }
@@ -194,7 +197,7 @@ CODE_SAMPLE
      * @param Node[] $nodes
      * @param Namespace_[] $namespaceNodes
      */
-    private function shouldSkip(SplFileInfo $fileInfo, array $nodes, array $namespaceNodes): bool
+    private function shouldSkip(SmartFileInfo $smartFileInfo, array $nodes, array $namespaceNodes): bool
     {
         // process only namespaced file
         if (! $namespaceNodes) {
@@ -215,7 +218,7 @@ CODE_SAMPLE
 
         if (count($nonAnonymousClassNodes) === 1) {
             $nonAnonymousClassNode = $nonAnonymousClassNodes[0];
-            if ((string) $nonAnonymousClassNode->name === $fileInfo->getFilename()) {
+            if ((string) $nonAnonymousClassNode->name === $smartFileInfo->getFilename()) {
                 return true;
             }
         }

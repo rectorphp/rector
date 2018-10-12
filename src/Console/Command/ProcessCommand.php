@@ -22,9 +22,9 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\Process\Process;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
+use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Throwable;
 use function Safe\sprintf;
@@ -210,7 +210,7 @@ final class ProcessCommand extends Command
     }
 
     /**
-     * @param SplFileInfo[] $fileInfos
+     * @param SmartFileInfo[] $fileInfos
      */
     private function processFileInfos(array $fileInfos, bool $shouldHideAutoloadErrors): void
     {
@@ -226,7 +226,7 @@ final class ProcessCommand extends Command
         $this->consoleStyle->newLine(2);
     }
 
-    private function processFileInfo(SplFileInfo $fileInfo, bool $shouldHideAutoloadErrors): void
+    private function processFileInfo(SmartFileInfo $fileInfo, bool $shouldHideAutoloadErrors): void
     {
         try {
             if ($fileInfo->getExtension() === 'php') {
@@ -253,7 +253,7 @@ final class ProcessCommand extends Command
         }
     }
 
-    private function processFile(SplFileInfo $fileInfo): void
+    private function processFile(SmartFileInfo $fileInfo): void
     {
         $oldContent = $fileInfo->getContents();
 
@@ -273,7 +273,7 @@ final class ProcessCommand extends Command
         }
     }
 
-    private function processYamlFile(SplFileInfo $fileInfo): void
+    private function processYamlFile(SmartFileInfo $fileInfo): void
     {
         $oldContent = $fileInfo->getContents();
 
@@ -295,7 +295,7 @@ final class ProcessCommand extends Command
         }
     }
 
-    private function processFileSystemFile(SplFileInfo $fileInfo): void
+    private function processFileSystemFile(SmartFileInfo $fileInfo): void
     {
         $this->fileSystemFileProcessor->processFileInfo($fileInfo);
     }

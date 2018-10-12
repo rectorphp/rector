@@ -2,10 +2,10 @@
 
 namespace Rector\Printer;
 
+use Nette\Utils\FileSystem;
 use PhpParser\Node;
 use PhpParser\PrettyPrinter\Standard;
-use Symfony\Component\Finder\SplFileInfo;
-use function Safe\file_put_contents;
+use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
 final class FormatPerservingPrinter
 {
@@ -24,11 +24,11 @@ final class FormatPerservingPrinter
      * @param Node[] $oldStmts
      * @param Node[] $oldTokens
      */
-    public function printToFile(SplFileInfo $fileInfo, array $newStmts, array $oldStmts, array $oldTokens): string
+    public function printToFile(SmartFileInfo $fileInfo, array $newStmts, array $oldStmts, array $oldTokens): string
     {
         $newContent = $this->printToString($newStmts, $oldStmts, $oldTokens);
 
-        file_put_contents($fileInfo->getRealPath(), $newContent);
+        FileSystem::write($fileInfo->getRealPath(), $newContent);
 
         return $newContent;
     }

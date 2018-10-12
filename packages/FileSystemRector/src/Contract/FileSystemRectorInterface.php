@@ -3,9 +3,9 @@
 namespace Rector\FileSystemRector\Contract;
 
 use Rector\Contract\Rector\RectorInterface;
-use Symfony\Component\Finder\SplFileInfo;
+use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
 interface FileSystemRectorInterface extends RectorInterface
 {
-    public function refactor(SplFileInfo $fileInfo): void;
+    public function refactor(SmartFileInfo $smartFileInfo): void;
 }

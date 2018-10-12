@@ -5,7 +5,7 @@ namespace Rector\Tests\FileSystem\FilesFinder;
 use Iterator;
 use Rector\FileSystem\FilesFinder;
 use Rector\Tests\AbstractContainerAwareTestCase;
-use Symfony\Component\Finder\SplFileInfo;
+use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 use function Safe\sort;
 
 final class FilesFinderTest extends AbstractContainerAwareTestCase
@@ -28,7 +28,7 @@ final class FilesFinderTest extends AbstractContainerAwareTestCase
         $foundFiles = $this->filesFinder->findInDirectoriesAndFiles([__DIR__ . '/FilesFinderSource'], [$suffix]);
         $this->assertCount($count, $foundFiles);
 
-        /** @var SplFileInfo $foundFile */
+        /** @var SmartFileInfo $foundFile */
         $foundFile = array_pop($foundFiles);
         $this->assertSame($expectedFileName, $foundFile->getBasename());
     }
