@@ -36,6 +36,7 @@ final class ConstFetchAnalyzer
         if (! $node instanceof ConstFetch) {
             return false;
         }
+
         return $node->name->toLowerString() === $name;
     }
 }
