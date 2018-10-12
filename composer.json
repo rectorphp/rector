@@ -121,6 +121,7 @@
             "tests/Rector/Architecture/DoctrineRepositoryAsService/Wrong",
             "tests/Rector/Interface_/MergeInterfacesRector/Wrong",
             "tests/Rector/Visibility/ChangeMethodVisibilityRector/Wrong",
+            "tests/Rector/CodeQuality/CombinedAssignRector/Wrong",
             "tests/Rector/Visibility/ChangePropertyVisibilityRector/Wrong",
             "tests/Rector/Visibility/ChangeConstantVisibilityRector/Wrong",
             "tests/Rector/Annotation/AnnotationReplacerRector/Wrong",
