@@ -5,13 +5,14 @@ namespace Rector\DependencyInjection\Loader;
 use Nette\Utils\Strings;
 use Rector\Exception\DependencyInjection\ClassNotFoundException;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
+use function Safe\sprintf;
 
 final class ClassExistenceValidator
 {
     /**
      * @var string
      */
-    private const CLASS_PART_PATTERN = '[A-Z]\w*[a-z]\w*';
+    private const CLASSY_PATTERN = '#^[\\\\]?[A-Z]\w*(\\\\[A-Z]\w*)*$#';
 
     /**
      * @var string
@@ -33,7 +34,7 @@ final class ClassExistenceValidator
             }
 
             // not a class
-            if (! Strings::match($class, $this->getClassyPattern())) {
+            if (! Strings::match($class, self::CLASSY_PATTERN)) {
                 continue;
             }
 
@@ -47,10 +48,5 @@ final class ClassExistenceValidator
                 (new SmartFileInfo($file))->getRelativeFilePath()
             ));
         }
-    }
-
-    private function getClassyPattern(): string
-    {
-        return sprintf('#^%s(\\\\%s)+\z#', self::CLASS_PART_PATTERN, self::CLASS_PART_PATTERN);
     }
 }
