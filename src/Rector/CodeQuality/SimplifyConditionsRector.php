@@ -4,6 +4,14 @@ namespace Rector\Rector\CodeQuality;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp;
+use PhpParser\Node\Expr\BinaryOp\Identical;
+use PhpParser\Node\Expr\BinaryOp\NotIdentical;
+use PhpParser\Node\Expr\BinaryOp\Equal;
+use PhpParser\Node\Expr\BinaryOp\NotEqual;
+use PhpParser\Node\Expr\BinaryOp\Greater;
+use PhpParser\Node\Expr\BinaryOp\Smaller;
+use PhpParser\Node\Expr\BinaryOp\SmallerOrEqual;
+use PhpParser\Node\Expr\BinaryOp\GreaterOrEqual;
 use PhpParser\Node\Expr\BooleanNot;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -15,14 +23,14 @@ final class SimplifyConditionsRector extends AbstractRector
      * @var string[]
      */
     private $binaryOpClassMap = [
-        BinaryOp\Identical::class => BinaryOp\NotIdentical::class,
-        BinaryOp\NotIdentical::class => BinaryOp\Identical::class,
-        BinaryOp\Equal::class => BinaryOp\NotEqual::class,
-        BinaryOp\NotEqual::class => BinaryOp\Equal::class,
-        BinaryOp\Greater::class => BinaryOp\SmallerOrEqual::class,
-        BinaryOp\Smaller::class => BinaryOp\GreaterOrEqual::class,
-        BinaryOp\GreaterOrEqual::class => BinaryOp\Smaller::class,
-        BinaryOp\SmallerOrEqual::class => BinaryOp\Greater::class,
+        Identical::class => NotIdentical::class,
+        NotIdentical::class => Identical::class,
+        Equal::class => NotEqual::class,
+        NotEqual::class => Equal::class,
+        Greater::class => SmallerOrEqual::class,
+        Smaller::class => GreaterOrEqual::class,
+        GreaterOrEqual::class => Smaller::class,
+        SmallerOrEqual::class => Greater::class,
     ];
 
     public function getDefinition(): RectorDefinition
@@ -50,7 +58,13 @@ final class SimplifyConditionsRector extends AbstractRector
             return $notNode;
         }
 
-        $newBinaryOp = $this->binaryOpClassMap[get_class($notNode->expr)];
+        $binaryOpType = get_class($notNode->expr);
+
+        if (! isset($this->binaryOpClassMap[$binaryOpType])) {
+            return $notNode;
+        }
+
+        $newBinaryOp = $this->binaryOpClassMap[$binaryOpType];
 
         return new $newBinaryOp($notNode->expr->left, $notNode->expr->right);
     }
