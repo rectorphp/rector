@@ -3,7 +3,7 @@
 namespace Rector\YamlRector;
 
 use Rector\YamlRector\Contract\YamlRectorInterface;
-use Symfony\Component\Finder\SplFileInfo;
+use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
 final class YamlFileProcessor
 {
@@ -28,9 +28,9 @@ final class YamlFileProcessor
         return $this->yamlRectors;
     }
 
-    public function processFileInfo(SplFileInfo $splFileInfo): string
+    public function processFileInfo(SmartFileInfo $smartFileInfo): string
     {
-        $content = $splFileInfo->getContents();
+        $content = $smartFileInfo->getContents();
 
         foreach ($this->yamlRectors as $yamlRector) {
             $content = $yamlRector->refactor($content);

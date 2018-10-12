@@ -3,17 +3,18 @@
 namespace Rector\Exception\Application;
 
 use Exception;
-use Symfony\Component\Finder\SplFileInfo;
+use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 use Throwable;
 use function Safe\sprintf;
 
 final class FileProcessingException extends Exception
 {
-    public function __construct(SplFileInfo $fileInfo, Throwable $throwable)
+    public function __construct(SmartFileInfo $smartFileInfo, Throwable $throwable)
     {
         $message = sprintf(
-            'Processing file "%s" failed. ' . PHP_EOL . PHP_EOL . '%s',
-            $fileInfo->getRealPath(),
+            'Processing file "%s" failed. %s%s',
+            $smartFileInfo->getRealPath(),
+            PHP_EOL . PHP_EOL,
             $throwable
         );
 

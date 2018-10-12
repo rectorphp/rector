@@ -27,6 +27,7 @@ services:
         alias: Symfony\Component\Console\Output\ConsoleOutput
 
     Symplify\PackageBuilder\FileSystem\FileSystem: ~
+    Symplify\PackageBuilder\FileSystem\FinderSanitizer: ~
 
     # parameters
     Symplify\PackageBuilder\Parameter\ParameterProvider: ~

@@ -6,12 +6,13 @@ use Nette\Utils\Strings;
 use Rector\Utils\FilesystemTweaker;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
+use Symplify\PackageBuilder\FileSystem\FinderSanitizer;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
 final class FilesFinder
 {
     /**
-     * @var SplFileInfo[][]
+     * @var SmartFileInfo[][]
      */
     private $fileInfosBySourceAndSuffixes = [];
 
@@ -26,18 +27,27 @@ final class FilesFinder
     private $filesystemTweaker;
 
     /**
+     * @var FinderSanitizer
+     */
+    private $finderSanitizer;
+
+    /**
      * @param string[] $excludePaths
      */
-    public function __construct(array $excludePaths, FilesystemTweaker $filesystemTweaker)
-    {
+    public function __construct(
+        array $excludePaths,
+        FilesystemTweaker $filesystemTweaker,
+        FinderSanitizer $finderSanitizer
+    ) {
         $this->excludePaths = $excludePaths;
         $this->filesystemTweaker = $filesystemTweaker;
+        $this->finderSanitizer = $finderSanitizer;
     }
 
     /**
      * @param string[] $source
      * @param string[] $suffixes
-     * @return SplFileInfo[]
+     * @return SmartFileInfo[]
      */
     public function findInDirectoriesAndFiles(array $source, array $suffixes): array
     {
@@ -48,20 +58,20 @@ final class FilesFinder
 
         [$files, $directories] = $this->filesystemTweaker->splitSourceToDirectoriesAndFiles($source);
 
-        $splFileInfos = [];
+        $smartFileInfos = [];
         foreach ($files as $file) {
-            $splFileInfos[] = new SmartFileInfo($file);
+            $smartFileInfos[] = new SmartFileInfo($file);
         }
 
-        $splFileInfos = array_merge($splFileInfos, $this->findInDirectories($directories, $suffixes));
+        $smartFileInfos = array_merge($smartFileInfos, $this->findInDirectories($directories, $suffixes));
 
-        return $this->fileInfosBySourceAndSuffixes[$cacheKey] = $splFileInfos;
+        return $this->fileInfosBySourceAndSuffixes[$cacheKey] = $smartFileInfos;
     }
 
     /**
      * @param string[] $directories
      * @param string[] $suffixes
-     * @return SplFileInfo[]
+     * @return SmartFileInfo[]
      */
     private function findInDirectories(array $directories, array $suffixes): array
     {
@@ -85,7 +95,7 @@ final class FilesFinder
 
         $this->addFilterWithExcludedPaths($finder);
 
-        return iterator_to_array($finder->getIterator());
+        return $this->finderSanitizer->sanitize($finder);
     }
 
     /**

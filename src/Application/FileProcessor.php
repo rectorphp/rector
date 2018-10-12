@@ -8,7 +8,7 @@ use Rector\NodeTraverser\RectorNodeTraverser;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 use Rector\Parser\Parser;
 use Rector\Printer\FormatPerservingPrinter;
-use Symfony\Component\Finder\SplFileInfo;
+use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
 final class FileProcessor
 {
@@ -51,19 +51,19 @@ final class FileProcessor
         $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
     }
 
-    public function processFile(SplFileInfo $fileInfo): string
+    public function processFile(SmartFileInfo $smartFileInfo): string
     {
-        [$newStmts, $oldStmts, $oldTokens] = $this->parseAndTraverseFileInfoToNodes($fileInfo);
+        [$newStmts, $oldStmts, $oldTokens] = $this->parseAndTraverseFileInfoToNodes($smartFileInfo);
 
-        return $this->formatPerservingPrinter->printToFile($fileInfo, $newStmts, $oldStmts, $oldTokens);
+        return $this->formatPerservingPrinter->printToFile($smartFileInfo, $newStmts, $oldStmts, $oldTokens);
     }
 
     /**
      * See https://github.com/nikic/PHP-Parser/issues/344#issuecomment-298162516.
      */
-    public function processFileToString(SplFileInfo $fileInfo): string
+    public function processFileToString(SmartFileInfo $smartFileInfo): string
     {
-        [$newStmts, $oldStmts, $oldTokens] = $this->parseAndTraverseFileInfoToNodes($fileInfo);
+        [$newStmts, $oldStmts, $oldTokens] = $this->parseAndTraverseFileInfoToNodes($smartFileInfo);
 
         return $this->formatPerservingPrinter->printToString($newStmts, $oldStmts, $oldTokens);
     }
@@ -71,12 +71,15 @@ final class FileProcessor
     /**
      * @return Node[][]|mixed[]
      */
-    private function parseAndTraverseFileInfoToNodes(SplFileInfo $fileInfo): array
+    private function parseAndTraverseFileInfoToNodes(SmartFileInfo $smartFileInfo): array
     {
-        $oldStmts = $this->parser->parseFile($fileInfo->getRealPath());
+        $oldStmts = $this->parser->parseFile($smartFileInfo->getRealPath());
         $oldTokens = $this->lexer->getTokens();
 
-        $newStmts = $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($oldStmts, $fileInfo->getRealPath());
+        $newStmts = $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile(
+            $oldStmts,
+            $smartFileInfo->getRealPath()
+        );
         $newStmts = $this->rectorNodeTraverser->traverse($newStmts);
 
         return [$newStmts, $oldStmts, $oldTokens];

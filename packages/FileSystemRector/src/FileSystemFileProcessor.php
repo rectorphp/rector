@@ -3,7 +3,7 @@
 namespace Rector\FileSystemRector;
 
 use Rector\FileSystemRector\Contract\FileSystemRectorInterface;
-use Symfony\Component\Finder\SplFileInfo;
+use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
 final class FileSystemFileProcessor
 {
@@ -28,10 +28,10 @@ final class FileSystemFileProcessor
         return $this->fileSystemRectors;
     }
 
-    public function processFileInfo(SplFileInfo $fileInfo): void
+    public function processFileInfo(SmartFileInfo $smartFileInfo): void
     {
         foreach ($this->fileSystemRectors as $fileSystemRector) {
-            $fileSystemRector->refactor($fileInfo);
+            $fileSystemRector->refactor($smartFileInfo);
         }
     }
 
