@@ -1,3 +1,5 @@
 services:
     Rector\Php\Rector\BinaryOp\IsCountableRector: ~
     Rector\Php\Rector\FuncCall\ArrayKeyFirstLastRector: ~
+    Rector\Php\Rector\FuncCall\SensitiveDefineRector: ~
+    Rector\Php\Rector\ConstFetch\SensitiveConstantNameRector: ~
