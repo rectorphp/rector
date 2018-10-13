@@ -3,14 +3,13 @@
 namespace Rector\PHPUnit\Rector\SpecificMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
 use Rector\Builder\IdentifierRenamer;
 use Rector\Node\NodeFactory;
+use Rector\NodeAnalyzer\CallAnalyzer;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
@@ -49,14 +48,21 @@ final class AssertPropertyExistsRector extends AbstractPHPUnitRector
         'assertFalse' => 'assertClassNotHasAttribute',
     ];
 
+    /**
+     * @var CallAnalyzer
+     */
+    private $callAnalyzer;
+
     public function __construct(
         MethodCallAnalyzer $methodCallAnalyzer,
         IdentifierRenamer $identifierRenamer,
-        NodeFactory $nodeFactory
+        NodeFactory $nodeFactory,
+        CallAnalyzer $callAnalyzer
     ) {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
         $this->nodeFactory = $nodeFactory;
+        $this->callAnalyzer = $callAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -92,23 +98,22 @@ final class AssertPropertyExistsRector extends AbstractPHPUnitRector
         if (! $methodCallNode instanceof MethodCall) {
             return null;
         }
+
         if (! $this->isInTestClass($methodCallNode)) {
             return null;
         }
+
         if (! $this->methodCallAnalyzer->isMethods($methodCallNode, ['assertTrue', 'assertFalse'])) {
             return null;
         }
-        /** @var MethodCall $methodCallNode */
-        $methodCallNode = $methodCallNode;
+
         /** @var FuncCall $firstArgumentValue */
         $firstArgumentValue = $methodCallNode->args[0]->value;
-        if (! $this->isNamedFunction($firstArgumentValue)) {
+
+        if (! $this->callAnalyzer->isName($firstArgumentValue, 'property_exists')) {
             return null;
         }
-        $methodName = (string) $firstArgumentValue->name;
-        if (($methodName === 'property_exists') === false) {
-            return null;
-        }
+
         $oldArguments = $methodCallNode->args;
 
         /** @var Identifier $oldArguments */
@@ -135,15 +140,5 @@ final class AssertPropertyExistsRector extends AbstractPHPUnitRector
         $this->identifierRenamer->renameNodeWithMap($methodCallNode, $map);
 
         return $methodCallNode;
-    }
-
-    private function isNamedFunction(Expr $node): bool
-    {
-        if (! $node instanceof FuncCall) {
-            return false;
-        }
-
-        $functionName = $node->name;
-        return $functionName instanceof Name;
     }
 }

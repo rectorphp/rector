@@ -15,6 +15,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
+use Rector\NodeAnalyzer\CallAnalyzer;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Php\EregToPcreTransformer;
 use Rector\Rector\AbstractRector;
@@ -45,9 +46,15 @@ final class EregToPregMatchRector extends AbstractRector
      */
     private $eregToPcreTransformer;
 
-    public function __construct(EregToPcreTransformer $eregToPcreTransformer)
+    /**
+     * @var CallAnalyzer
+     */
+    private $callAnalyzer;
+
+    public function __construct(EregToPcreTransformer $eregToPcreTransformer, CallAnalyzer $callAnalyzer)
     {
         $this->eregToPcreTransformer = $eregToPcreTransformer;
+        $this->callAnalyzer = $callAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -71,7 +78,7 @@ final class EregToPregMatchRector extends AbstractRector
      */
     public function refactor(Node $funcCallNode): ?Node
     {
-        $functionName = (string) $funcCallNode->name;
+        $functionName = $this->callAnalyzer->resolveName($funcCallNode);
 
         if (! isset($this->oldNamesToNewOnes[$functionName])) {
             return $funcCallNode;

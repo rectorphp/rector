@@ -4,12 +4,11 @@ namespace Rector\PHPUnit\Rector\SpecificMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Name;
 use Rector\Builder\IdentifierRenamer;
 use Rector\Node\NodeFactory;
+use Rector\NodeAnalyzer\CallAnalyzer;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
@@ -20,7 +19,7 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractPH
     /**
      * @var string[]
      */
-    private $oldMethodsToTypes = [
+    private $oldFunctionsToTypes = [
         'is_array' => 'array',
         'is_bool' => 'bool',
         'is_callable' => 'callable',
@@ -60,14 +59,21 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractPH
      */
     private $nodeFactory;
 
+    /**
+     * @var CallAnalyzer
+     */
+    private $callAnalyzer;
+
     public function __construct(
         MethodCallAnalyzer $methodCallAnalyzer,
         IdentifierRenamer $identifierRenamer,
-        NodeFactory $nodeFactory
+        NodeFactory $nodeFactory,
+        CallAnalyzer $callAnalyzer
     ) {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
         $this->nodeFactory = $nodeFactory;
+        $this->callAnalyzer = $callAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -108,11 +114,9 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractPH
         }
         /** @var FuncCall $firstArgumentValue */
         $firstArgumentValue = $methodCallNode->args[0]->value;
-        if (! $this->isNamedFunction($firstArgumentValue)) {
-            return null;
-        }
-        $methodName = (string) $firstArgumentValue->name;
-        if (isset($this->oldMethodsToTypes[$methodName]) === false) {
+
+        $functionName = $this->callAnalyzer->resolveName($firstArgumentValue);
+        if (isset($this->oldFunctionsToTypes[$functionName]) === false) {
             return null;
         }
         $this->identifierRenamer->renameNodeWithMap($methodCallNode, $this->renameMethodsMap);
@@ -133,18 +137,8 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractPH
         unset($oldArguments[0]);
 
         $methodCallNode->args = array_merge([
-            new Arg($this->nodeFactory->createString($this->oldMethodsToTypes[$isFunctionName])),
+            new Arg($this->nodeFactory->createString($this->oldFunctionsToTypes[$isFunctionName])),
             $argument,
         ], $oldArguments);
-    }
-
-    private function isNamedFunction(Expr $node): bool
-    {
-        if (! $node instanceof FuncCall) {
-            return false;
-        }
-
-        $functionName = $node->name;
-        return $functionName instanceof Name;
     }
 }

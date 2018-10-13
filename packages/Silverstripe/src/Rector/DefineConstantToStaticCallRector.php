@@ -6,15 +6,25 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
+use Rector\NodeAnalyzer\CallAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class DefineConstantToStaticCallRector extends AbstractRector
 {
+    /**
+     * @var CallAnalyzer
+     */
+    private $callAnalyzer;
+
+    public function __construct(CallAnalyzer $callAnalyzer)
+    {
+        $this->callAnalyzer = $callAnalyzer;
+    }
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Turns defined function call to static method call.', [
@@ -39,11 +49,7 @@ final class DefineConstantToStaticCallRector extends AbstractRector
             return null;
         }
 
-        if (! $node->name instanceof Name) {
-            return null;
-        }
-
-        if ($node->name->toString() !== 'defined') {
+        if (! $this->callAnalyzer->isName($node, 'defined')) {
             return null;
         }
 

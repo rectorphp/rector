@@ -7,6 +7,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\LNumber;
+use Rector\NodeAnalyzer\CallAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -22,6 +23,16 @@ final class RandomFunctionRector extends AbstractRector
         'mt_rand' => 'random_int',
         'rand' => 'random_int',
     ];
+
+    /**
+     * @var CallAnalyzer
+     */
+    private $callAnalyzer;
+
+    public function __construct(CallAnalyzer $callAnalyzer)
+    {
+        $this->callAnalyzer = $callAnalyzer;
+    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -44,8 +55,10 @@ final class RandomFunctionRector extends AbstractRector
      */
     public function refactor(Node $funcCallNode): ?Node
     {
+        $currentFunction = $this->callAnalyzer->resolveName($funcCallNode);
+
         foreach ($this->oldToNewFunctionNames as $oldFunctionName => $newFunctionName) {
-            if ((string) $funcCallNode->name === $oldFunctionName) {
+            if ($currentFunction === $oldFunctionName) {
                 $funcCallNode->name = new Name($newFunctionName);
 
                 // special case: random_int(); → random_int(0, getrandmax());

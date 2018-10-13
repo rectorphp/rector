@@ -6,6 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Scalar\LNumber;
+use Rector\NodeAnalyzer\FuncCallAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -16,6 +17,16 @@ final class MultiDirnameRector extends AbstractRector
      * @var int
      */
     private $nestingLevel = 0;
+
+    /**
+     * @var FuncCallAnalyzer
+     */
+    private $funcCallAnalyzer;
+
+    public function __construct(FuncCallAnalyzer $funcCallAnalyzer)
+    {
+        $this->funcCallAnalyzer = $funcCallAnalyzer;
+    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -40,7 +51,7 @@ final class MultiDirnameRector extends AbstractRector
     {
         $this->nestingLevel = 0;
 
-        if (! $this->isDirnameFuncCall($funcCallNode)) {
+        if (! $this->funcCallAnalyzer->isName($funcCallNode, 'dirname')) {
             return $funcCallNode;
         }
 
@@ -64,7 +75,7 @@ final class MultiDirnameRector extends AbstractRector
 
     private function matchNestedDirnameFuncCall(Node $node): ?FuncCall
     {
-        if (! $this->isDirnameFuncCall($node)) {
+        if (! $this->funcCallAnalyzer->isName($node, 'dirname')) {
             return null;
         }
 
@@ -87,27 +98,10 @@ final class MultiDirnameRector extends AbstractRector
             ++$this->nestingLevel;
         }
 
-        if ($this->isDirnameFuncCall($node->args[0]->value)) {
+        if ($this->funcCallAnalyzer->isName($node->args[0]->value, 'dirname')) {
             return $node->args[0]->value;
         }
 
         return null;
-    }
-
-    private function isDirnameFuncCall(Node $node): bool
-    {
-        if (! $node instanceof FuncCall) {
-            return false;
-        }
-
-        if ((string) $node->name !== 'dirname') {
-            return false;
-        }
-
-        if (! isset($node->args[0])) {
-            return false;
-        }
-
-        return true;
     }
 }

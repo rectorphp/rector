@@ -10,7 +10,7 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
-final class SimplifyFuncGetArgsCountRector extends AbstractRector
+final class SimplifyStrposLowerRector extends AbstractRector
 {
     /**
      * @var FuncCallAnalyzer
@@ -25,8 +25,8 @@ final class SimplifyFuncGetArgsCountRector extends AbstractRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
-            'Simplify count of func_get_args() to fun_num_args()',
-            [new CodeSample('count(func_get_args());', 'func_num_args();')]
+            'Simplify strpos(strtolower(), "...") calls',
+            [new CodeSample('strpos(strtolower($var), "...")"', 'stripos($var, "...")"')]
         );
     }
 
@@ -39,11 +39,15 @@ final class SimplifyFuncGetArgsCountRector extends AbstractRector
     }
 
     /**
-     * @param FuncCall $node
+     * @param FuncCall $node;
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->funcCallAnalyzer->isName($node, 'count')) {
+        if (! $this->funcCallAnalyzer->isName($node, 'strpos')) {
+            return $node;
+        }
+
+        if (! isset($node->args[0])) {
             return $node;
         }
 
@@ -53,11 +57,15 @@ final class SimplifyFuncGetArgsCountRector extends AbstractRector
 
         /** @var FuncCall $innerFuncCall */
         $innerFuncCall = $node->args[0]->value;
-
-        if (! $this->funcCallAnalyzer->isName($innerFuncCall, 'func_get_args')) {
+        if (! $this->funcCallAnalyzer->isName($innerFuncCall, 'strtolower')) {
             return $node;
         }
 
-        return new FuncCall(new Name('func_num_args'));
+        // pop 1 level up
+        $node->args[0] = $innerFuncCall->args[0];
+
+        $node->name = new Name('stripos');
+
+        return $node;
     }
 }

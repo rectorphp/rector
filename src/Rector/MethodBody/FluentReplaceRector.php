@@ -5,6 +5,7 @@ namespace Rector\Rector\MethodBody;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Node\MethodCallNodeFactory;
+use Rector\NodeAnalyzer\CallAnalyzer;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
@@ -29,16 +30,23 @@ final class FluentReplaceRector extends AbstractRector
     private $nodeTypeResolver;
 
     /**
+     * @var CallAnalyzer
+     */
+    private $callAnalyzer;
+
+    /**
      * @param string[] $classesToDefluent
      */
     public function __construct(
         array $classesToDefluent,
         MethodCallNodeFactory $methodCallNodeFactory,
-        NodeTypeResolver $nodeTypeResolver
+        NodeTypeResolver $nodeTypeResolver,
+        CallAnalyzer $callAnalyzer
     ) {
         $this->methodCallNodeFactory = $methodCallNodeFactory;
         $this->classesToDefluent = $classesToDefluent;
         $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->callAnalyzer = $callAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -100,7 +108,7 @@ CODE_SAMPLE
     {
         $nextMethodCallNode = $this->methodCallNodeFactory->createWithVariableAndMethodName(
             $innerMethodCallNode->var,
-            (string) $outerMethodCallNode->name
+            $this->callAnalyzer->resolveName($outerMethodCallNode)
         );
 
         $this->addNodeAfterNode($nextMethodCallNode, $innerMethodCallNode);
