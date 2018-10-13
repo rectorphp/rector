@@ -9,6 +9,8 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
+use Rector\NodeAnalyzer\CallAnalyzer;
+use Rector\NodeAnalyzer\FuncCallAnalyzer;
 use Rector\Printer\BetterStandardPrinter;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -35,9 +37,24 @@ final class ArrayKeyFirstLastRector extends AbstractRector
         'end' => 'array_key_last',
     ];
 
-    public function __construct(BetterStandardPrinter $betterStandardPrinter)
-    {
+    /**
+     * @var FuncCallAnalyzer
+     */
+    private $funcCallAnalyzer;
+
+    /**
+     * @var CallAnalyzer
+     */
+    private $callAnalyzer;
+
+    public function __construct(
+        BetterStandardPrinter $betterStandardPrinter,
+        FuncCallAnalyzer $funcCallAnalyzer,
+        CallAnalyzer $callAnalyzer
+    ) {
         $this->betterStandardPrinter = $betterStandardPrinter;
+        $this->funcCallAnalyzer = $funcCallAnalyzer;
+        $this->callAnalyzer = $callAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -102,8 +119,9 @@ CODE_SAMPLE
             }
 
             $funcCallNode = $stmt->expr;
+
             /** @var FuncCall $funcCallNode */
-            $currentFuncCallName = (string) $funcCallNode->name;
+            $currentFuncCallName = $this->callAnalyzer->resolveName($funcCallNode);
 
             /** @var Assign $assignNode */
             $assignNode = $functionLikeNode->stmts[$key + 1]->expr;
@@ -134,7 +152,7 @@ CODE_SAMPLE
             return false;
         }
 
-        return in_array((string) $node->name, array_keys($this->previousToNewFunctions), true);
+        return $this->callAnalyzer->isNames($node, array_keys($this->previousToNewFunctions));
     }
 
     private function isAssignMatch(Node $node): bool
@@ -147,7 +165,7 @@ CODE_SAMPLE
             return false;
         }
 
-        return (string) $node->expr->name === 'key';
+        return $this->funcCallAnalyzer->isName($node->expr, 'key');
     }
 
     private function areFuncCallNodesArgsEqual(FuncCall $firstFuncCallNode, FuncCall $secondFuncCallNode): bool

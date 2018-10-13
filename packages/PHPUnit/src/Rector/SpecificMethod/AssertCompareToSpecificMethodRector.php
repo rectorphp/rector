@@ -3,12 +3,11 @@
 namespace Rector\PHPUnit\Rector\SpecificMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
 use Rector\Builder\IdentifierRenamer;
+use Rector\NodeAnalyzer\CallAnalyzer;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
@@ -41,10 +40,19 @@ final class AssertCompareToSpecificMethodRector extends AbstractPHPUnitRector
      */
     private $activeFuncCallName;
 
-    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, IdentifierRenamer $identifierRenamer)
-    {
+    /**
+     * @var CallAnalyzer
+     */
+    private $callAnalyzer;
+
+    public function __construct(
+        MethodCallAnalyzer $methodCallAnalyzer,
+        IdentifierRenamer $identifierRenamer,
+        CallAnalyzer $callAnalyzer
+    ) {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
+        $this->callAnalyzer = $callAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -95,18 +103,19 @@ final class AssertCompareToSpecificMethodRector extends AbstractPHPUnitRector
         )) {
             return null;
         }
-        /** @var MethodCall $methodCallNode */
-        $methodCallNode = $methodCallNode;
         /** @var FuncCall $secondArgumentValue */
         $secondArgumentValue = $methodCallNode->args[1]->value;
-        if (! $this->isNamedFunction($secondArgumentValue)) {
+
+        $resolvedFuncCallName = $this->callAnalyzer->resolveName($secondArgumentValue);
+        if ($resolvedFuncCallName === null) {
             return null;
         }
-        $methodName = (string) $secondArgumentValue->name;
-        $this->activeFuncCallName = $methodName;
-        if (isset($this->defaultOldToNewMethods[$methodName]) === false) {
+
+        $this->activeFuncCallName = $resolvedFuncCallName;
+        if (! isset($this->defaultOldToNewMethods[$this->activeFuncCallName])) {
             return null;
         }
+
         $this->renameMethod($methodCallNode);
         $this->moveFunctionArgumentsUp($methodCallNode);
 
@@ -136,15 +145,5 @@ final class AssertCompareToSpecificMethodRector extends AbstractPHPUnitRector
         /** @var FuncCall $secondArgument */
         $secondArgument = $methodCallNode->args[1]->value;
         $methodCallNode->args[1] = $secondArgument->args[0];
-    }
-
-    private function isNamedFunction(Expr $node): bool
-    {
-        if (! $node instanceof FuncCall) {
-            return false;
-        }
-
-        $functionName = $node->name;
-        return $functionName instanceof Name;
     }
 }

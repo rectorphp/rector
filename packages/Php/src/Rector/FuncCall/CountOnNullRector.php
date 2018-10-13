@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\LNumber;
+use Rector\NodeAnalyzer\FuncCallAnalyzer;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\NodeTypeResolver\NodeTypeAnalyzer;
 use Rector\Rector\AbstractRector;
@@ -27,9 +28,15 @@ final class CountOnNullRector extends AbstractRector
      */
     private $nodeTypeAnalyzer;
 
-    public function __construct(NodeTypeAnalyzer $nodeTypeAnalyzer)
+    /**
+     * @var FuncCallAnalyzer
+     */
+    private $funcCallAnalyzer;
+
+    public function __construct(NodeTypeAnalyzer $nodeTypeAnalyzer, FuncCallAnalyzer $funcCallAnalyzer)
     {
         $this->nodeTypeAnalyzer = $nodeTypeAnalyzer;
+        $this->funcCallAnalyzer = $funcCallAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -63,7 +70,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $funcCallNode): ?Node
     {
-        if ((string) $funcCallNode->name !== 'count') {
+        if (! $this->funcCallAnalyzer->isName($funcCallNode, 'count')) {
             return $funcCallNode;
         }
 

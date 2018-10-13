@@ -4,7 +4,6 @@ namespace Rector\NodeAnalyzer;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Name;
 
 /**
  * Read-only utils for FuncCall Node:
@@ -12,6 +11,16 @@ use PhpParser\Node\Name;
  */
 final class FuncCallAnalyzer
 {
+    /**
+     * @var CallAnalyzer
+     */
+    private $callAnalyzer;
+
+    public function __construct(CallAnalyzer $callAnalyzer)
+    {
+        $this->callAnalyzer = $callAnalyzer;
+    }
+
     /**
      * Checks "specificFunction()"
      */
@@ -21,10 +30,6 @@ final class FuncCallAnalyzer
             return false;
         }
 
-        if (! $node->name instanceof Name) {
-            return false;
-        }
-
-        return (string) $node->name === $name;
+        return $this->callAnalyzer->resolveName($node) === $name;
     }
 }

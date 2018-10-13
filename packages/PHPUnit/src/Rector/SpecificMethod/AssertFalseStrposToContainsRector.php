@@ -3,12 +3,10 @@
 namespace Rector\PHPUnit\Rector\SpecificMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
 use Rector\Builder\IdentifierRenamer;
+use Rector\NodeAnalyzer\CallAnalyzer;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
@@ -16,6 +14,14 @@ use Rector\RectorDefinition\RectorDefinition;
 
 final class AssertFalseStrposToContainsRector extends AbstractPHPUnitRector
 {
+    /**
+     * @var string[]
+     */
+    private $renameMethodsMap = [
+        'assertFalse' => 'assertNotContains',
+        'assertNotFalse' => 'assertContains',
+    ];
+
     /**
      * @var MethodCallAnalyzer
      */
@@ -27,17 +33,18 @@ final class AssertFalseStrposToContainsRector extends AbstractPHPUnitRector
     private $identifierRenamer;
 
     /**
-     * @var string[]
+     * @var CallAnalyzer
      */
-    private $renameMethodsMap = [
-        'assertFalse' => 'assertNotContains',
-        'assertNotFalse' => 'assertContains',
-    ];
+    private $callAnalyzer;
 
-    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, IdentifierRenamer $identifierRenamer)
-    {
+    public function __construct(
+        MethodCallAnalyzer $methodCallAnalyzer,
+        IdentifierRenamer $identifierRenamer,
+        CallAnalyzer $callAnalyzer
+    ) {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
+        $this->callAnalyzer = $callAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -73,17 +80,16 @@ final class AssertFalseStrposToContainsRector extends AbstractPHPUnitRector
         if (! $this->isInTestClass($methodCallNode)) {
             return null;
         }
+
         if (! $this->methodCallAnalyzer->isMethods($methodCallNode, array_keys($this->renameMethodsMap))) {
             return null;
         }
+
         $firstArgumentValue = $methodCallNode->args[0]->value;
-        if (! $this->isNamedFunction($firstArgumentValue)) {
+        if (! $this->callAnalyzer->isNames($firstArgumentValue, ['strpos', 'stripos'])) {
             return null;
         }
-        $strposNode = $firstArgumentValue->name->toString();
-        if (in_array($strposNode, ['strpos', 'stripos'], true) === false) {
-            return null;
-        }
+
         $this->identifierRenamer->renameNodeWithMap($methodCallNode, $this->renameMethodsMap);
         $this->changeOrderArguments($methodCallNode);
 
@@ -103,14 +109,5 @@ final class AssertFalseStrposToContainsRector extends AbstractPHPUnitRector
         unset($oldArguments[0]);
 
         $methodCallNode->args = array_merge([$firstArgument, $secondArgument], $oldArguments);
-    }
-
-    private function isNamedFunction(Expr $node): bool
-    {
-        if (! $node instanceof FuncCall) {
-            return false;
-        }
-
-        return $node->name instanceof Name;
     }
 }

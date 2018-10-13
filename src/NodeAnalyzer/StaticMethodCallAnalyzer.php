@@ -4,8 +4,6 @@ namespace Rector\NodeAnalyzer;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
 /**
@@ -19,9 +17,15 @@ final class StaticMethodCallAnalyzer
      */
     private $nodeTypeResolver;
 
-    public function __construct(NodeTypeResolver $nodeTypeResolver)
+    /**
+     * @var CallAnalyzer
+     */
+    private $callAnalyzer;
+
+    public function __construct(NodeTypeResolver $nodeTypeResolver, CallAnalyzer $callAnalyzer)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->callAnalyzer = $callAnalyzer;
     }
 
     /**
@@ -33,10 +37,8 @@ final class StaticMethodCallAnalyzer
             return false;
         }
 
-        /** @var StaticCall $staticCallNode */
-        $staticCallNode = $node;
-
-        return (string) $staticCallNode->name === $method;
+        /** @var StaticCall $node */
+        return $this->callAnalyzer->isName($node, $method);
     }
 
     /**
@@ -48,16 +50,16 @@ final class StaticMethodCallAnalyzer
             return false;
         }
 
-        /** @var StaticCall $staticCallNode */
-        $staticCallNode = $node;
+        return in_array($this->callAnalyzer->resolveName($node), $methods, true);
+    }
 
-        foreach ($methods as $method) {
-            if ((string) $staticCallNode->name === $method) {
-                return true;
-            }
+    public function isMethod(Node $node, string $method): bool
+    {
+        if (! $node instanceof StaticCall) {
+            return false;
         }
 
-        return false;
+        return $this->callAnalyzer->resolveName($node) === $method;
     }
 
     /**
@@ -71,12 +73,8 @@ final class StaticMethodCallAnalyzer
             return false;
         }
 
-        /** @var StaticCall $staticCallNode */
-        $staticCallNode = $node;
-
-        $currentMethodName = (string) $staticCallNode->name;
-
-        return in_array($currentMethodName, $methodNames, true);
+        /** @var StaticCall $node */
+        return $this->callAnalyzer->isNames($node, $methodNames);
     }
 
     /**
@@ -86,14 +84,6 @@ final class StaticMethodCallAnalyzer
     public function matchTypes(Node $node, array $types): ?array
     {
         if (! $node instanceof StaticCall) {
-            return null;
-        }
-
-        if (! $node->name instanceof Identifier) {
-            return null;
-        }
-
-        if (! $node->class instanceof Name) {
             return null;
         }
 

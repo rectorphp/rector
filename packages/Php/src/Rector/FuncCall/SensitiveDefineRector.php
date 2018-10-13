@@ -4,6 +4,7 @@ namespace Rector\Php\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
+use Rector\NodeAnalyzer\FuncCallAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -13,6 +14,16 @@ use Rector\RectorDefinition\RectorDefinition;
  */
 final class SensitiveDefineRector extends AbstractRector
 {
+    /**
+     * @var FuncCallAnalyzer
+     */
+    private $funcCallAnalyzer;
+
+    public function __construct(FuncCallAnalyzer $funcCallAnalyzer)
+    {
+        $this->funcCallAnalyzer = $funcCallAnalyzer;
+    }
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -44,7 +55,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $funcCallNode): ?Node
     {
-        if ((string) $funcCallNode->name !== 'define') {
+        if (! $this->funcCallAnalyzer->isName($funcCallNode, 'define')) {
             return $funcCallNode;
         }
 

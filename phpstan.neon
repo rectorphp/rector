@@ -41,8 +41,8 @@ parameters:
 
         # false postive - type is set by annotatoin above
         - '#Access to an undefined property PhpParser\\Node::\$(args|var)#'
-        - '#Call to function is_string\(\) with PhpParser\\Node\\Expr\|PhpParser\\Node\\Identifier will always evaluate to false#'
         - '#Method Rector\\Php\\Rector\\TryCatch\\MultiExceptionCatchRector\:\:collectCatchKeysByContent\(\) should return array<array<int\>\> but returns array<string, array<int, int\|string\>\>#'
+        - '#Parameter \#1 \$node of method Rector\\NodeAnalyzer\\CallAnalyzer::(isName|isNames)\(\) expects PhpParser\\Node\\Expr\\FuncCall\|PhpParser\\Node\\Expr\\MethodCall\|PhpParser\\Node\\Expr\\StaticCall, PhpParser\\(Node|Node\\Expr) given#'
 
         # irelevant
         - '#Call to function in_array\(\) with arguments string, array<array<string\|false>> and true will always evaluate to false#'
@@ -98,6 +98,9 @@ parameters:
 
         # intentionally
         - '#In method "(.*?)", caught "Throwable" must be rethrown. Either catch a more specific exception or add a "throw" clause in the "catch" block to propagate the exception#'
+
+        # incorrect 3rd party code typehinting
+        - '#Instanceof between PhpParser\\Node\\Expr and PhpParser\\Node\\Identifier will always evaluate to false#'
 
 services:
     -

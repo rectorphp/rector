@@ -7,6 +7,7 @@ use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\Node\NodeFactory;
+use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -27,9 +28,15 @@ final class OptionNameRector extends AbstractRector
      */
     private $nodeFactory;
 
-    public function __construct(NodeFactory $nodeFactory)
+    /**
+     * @var MethodCallAnalyzer
+     */
+    private $methodCallAnalyzer;
+
+    public function __construct(NodeFactory $nodeFactory, MethodCallAnalyzer $methodCallAnalyzer)
     {
         $this->nodeFactory = $nodeFactory;
+        $this->methodCallAnalyzer = $methodCallAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -82,7 +89,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ((string) $methodCallNode->name !== 'add') {
+        if (! $this->methodCallAnalyzer->isMethod($methodCallNode, 'add')) {
             return null;
         }
 

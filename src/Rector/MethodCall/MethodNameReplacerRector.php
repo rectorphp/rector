@@ -6,6 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use Rector\Builder\IdentifierRenamer;
+use Rector\NodeAnalyzer\CallAnalyzer;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeAnalyzer\MethodNameAnalyzer;
 use Rector\NodeTypeResolver\Node\Attribute;
@@ -45,18 +46,25 @@ final class MethodNameReplacerRector extends AbstractRector
     private $identifierRenamer;
 
     /**
+     * @var CallAnalyzer
+     */
+    private $callAnalyzer;
+
+    /**
      * @param string[][] $perClassOldToNewMethods
      */
     public function __construct(
         array $perClassOldToNewMethods,
         MethodCallAnalyzer $methodCallAnalyzer,
         MethodNameAnalyzer $methodNameAnalyzer,
-        IdentifierRenamer $identifierRenamer
+        IdentifierRenamer $identifierRenamer,
+        CallAnalyzer $callAnalyzer
     ) {
         $this->perClassOldToNewMethods = $perClassOldToNewMethods;
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->methodNameAnalyzer = $methodNameAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
+        $this->callAnalyzer = $callAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -203,18 +211,12 @@ CODE_SAMPLE
 
         $oldToNewMethods = $this->matchOldToNewMethods();
 
-        // e.g. $this->{$arg}()
-        if (! is_string($node->name) && ! $node->name instanceof Identifier) {
+        $currentMethodName = $this->callAnalyzer->resolveName($node);
+        if (! isset($oldToNewMethods[$currentMethodName])) {
             return $node;
         }
 
-        /** @var Identifier|string $node->name */
-        $methodName = (string) $node->name;
-        if (! isset($oldToNewMethods[$methodName])) {
-            return $node;
-        }
-
-        $this->identifierRenamer->renameNode($node, $oldToNewMethods[$methodName]);
+        $this->identifierRenamer->renameNode($node, $oldToNewMethods[$currentMethodName]);
 
         return $node;
     }

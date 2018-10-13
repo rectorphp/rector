@@ -5,7 +5,6 @@ namespace Rector\NodeAnalyzer;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Identifier;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
 /**
@@ -19,9 +18,15 @@ final class MethodCallAnalyzer
      */
     private $nodeTypeResolver;
 
-    public function __construct(NodeTypeResolver $nodeTypeResolver)
+    /**
+     * @var CallAnalyzer
+     */
+    private $callAnalyzer;
+
+    public function __construct(NodeTypeResolver $nodeTypeResolver, CallAnalyzer $callAnalyzer)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->callAnalyzer = $callAnalyzer;
     }
 
     /**
@@ -35,10 +40,7 @@ final class MethodCallAnalyzer
             return false;
         }
 
-        /** @var MethodCall $node */
-        $methodName = (string) $node->name;
-
-        return in_array($methodName, $methods, true);
+        return $this->callAnalyzer->isNames($node, $methods);
     }
 
     /**
@@ -50,10 +52,7 @@ final class MethodCallAnalyzer
             return false;
         }
 
-        /** @var MethodCall $node */
-        $methodName = (string) $node->name;
-
-        return $methodName === $method;
+        return $this->callAnalyzer->isName($node, $method);
     }
 
     /**
@@ -67,10 +66,7 @@ final class MethodCallAnalyzer
             return false;
         }
 
-        /** @var MethodCall $node */
-        $methodName = (string) $node->name;
-
-        return $methodName === $method;
+        return $this->callAnalyzer->isName($node, $method);
     }
 
     /**
@@ -82,11 +78,7 @@ final class MethodCallAnalyzer
             return false;
         }
 
-        if (! $node->name instanceof Identifier) {
-            return false;
-        }
-
-        return $node->name->name === $methodName;
+        return $this->callAnalyzer->isName($node, $methodName);
     }
 
     /**
@@ -98,11 +90,7 @@ final class MethodCallAnalyzer
             return false;
         }
 
-        if (! $node->name instanceof Identifier) {
-            return false;
-        }
-
-        return in_array($node->name->name, $methods, true);
+        return $this->callAnalyzer->isNames($node, $methods);
     }
 
     /**
@@ -137,7 +125,7 @@ final class MethodCallAnalyzer
             return false;
         }
 
-        return in_array((string) $node->name, $methodNames, true);
+        return $this->callAnalyzer->isNames($node, $methodNames);
     }
 
     /**
@@ -154,15 +142,11 @@ final class MethodCallAnalyzer
             return false;
         }
 
-        if ((string) $node->name !== $methodName) {
+        if (! $this->callAnalyzer->isName($node, $methodName)) {
             return false;
         }
 
-        if ($node->var->name !== $variableName) {
-            return false;
-        }
-
-        return true;
+        return $node->var->name === $variableName;
     }
 
     /**

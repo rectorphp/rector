@@ -3,14 +3,14 @@
 namespace Rector\PHPUnit\Rector\SpecificMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\LNumber;
 use Rector\Builder\IdentifierRenamer;
+use Rector\NodeAnalyzer\CallAnalyzer;
+use Rector\NodeAnalyzer\FuncCallAnalyzer;
 use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
@@ -28,10 +28,26 @@ final class AssertRegExpRector extends AbstractPHPUnitRector
      */
     private $identifierRenamer;
 
-    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, IdentifierRenamer $identifierRenamer)
-    {
+    /**
+     * @var FuncCallAnalyzer
+     */
+    private $funcCallAnalyzer;
+
+    /**
+     * @var CallAnalyzer
+     */
+    private $callAnalyzer;
+
+    public function __construct(
+        MethodCallAnalyzer $methodCallAnalyzer,
+        IdentifierRenamer $identifierRenamer,
+        FuncCallAnalyzer $funcCallAnalyzer,
+        CallAnalyzer $callAnalyzer
+    ) {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
+        $this->funcCallAnalyzer = $funcCallAnalyzer;
+        $this->callAnalyzer = $callAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -76,20 +92,15 @@ final class AssertRegExpRector extends AbstractPHPUnitRector
         )) {
             return null;
         }
-        /** @var MethodCall $methodCallNode */
-        $methodCallNode = $methodCallNode;
+
         /** @var FuncCall $secondArgumentValue */
         $secondArgumentValue = $methodCallNode->args[1]->value;
-        if (! $this->isNamedFunction($secondArgumentValue)) {
+
+        if (! $this->funcCallAnalyzer->isName($secondArgumentValue, 'preg_match')) {
             return null;
         }
-        $methodName = (string) $secondArgumentValue->name;
-        if (($methodName === 'preg_match') === false) {
-            return null;
-        }
-        /** @var Identifier $identifierNode */
-        $identifierNode = $methodCallNode->name;
-        $oldMethodName = $identifierNode->toString();
+
+        $oldMethodName = $this->callAnalyzer->resolveName($methodCallNode);
         $oldCondition = null;
 
         $oldFirstArgument = $methodCallNode->args[0]->value;
@@ -112,16 +123,6 @@ final class AssertRegExpRector extends AbstractPHPUnitRector
         unset($oldArguments[0], $oldArguments[1]);
 
         $methodCallNode->args = array_merge([$regex, $variable], $oldArguments);
-    }
-
-    private function isNamedFunction(Expr $node): bool
-    {
-        if (! $node instanceof FuncCall) {
-            return false;
-        }
-
-        $functionName = $node->name;
-        return $functionName instanceof Name;
     }
 
     private function resolveOldCondition(Node $node): int

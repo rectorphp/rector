@@ -5,12 +5,23 @@ namespace Rector\Rector\CodeQuality;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
+use Rector\NodeAnalyzer\FuncCallAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class SimplifyStrposLowerRector extends AbstractRector
 {
+    /**
+     * @var FuncCallAnalyzer
+     */
+    private $funcCallAnalyzer;
+
+    public function __construct(FuncCallAnalyzer $funcCallAnalyzer)
+    {
+        $this->funcCallAnalyzer = $funcCallAnalyzer;
+    }
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -32,7 +43,7 @@ final class SimplifyStrposLowerRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        if ((string) $node->name !== 'strpos') {
+        if (! $this->funcCallAnalyzer->isName($node, 'strpos')) {
             return $node;
         }
 
@@ -46,7 +57,7 @@ final class SimplifyStrposLowerRector extends AbstractRector
 
         /** @var FuncCall $innerFuncCall */
         $innerFuncCall = $node->args[0]->value;
-        if ((string) $innerFuncCall->name !== 'strtolower') {
+        if (! $this->funcCallAnalyzer->isName($innerFuncCall, 'strtolower')) {
             return $node;
         }
 

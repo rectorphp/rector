@@ -2,5 +2,5 @@
 
 stripos($string, 'find-me');
 
-//$funcName = 'strpos';
-//$funcName(strtolower($string), 'find-me');
+$funcName = 'strpos';
+$funcName(strtolower($string), 'find-me');

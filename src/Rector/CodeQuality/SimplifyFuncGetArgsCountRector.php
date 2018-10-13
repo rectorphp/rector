@@ -5,12 +5,23 @@ namespace Rector\Rector\CodeQuality;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
+use Rector\NodeAnalyzer\FuncCallAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class SimplifyFuncGetArgsCountRector extends AbstractRector
 {
+    /**
+     * @var FuncCallAnalyzer
+     */
+    private $funcCallAnalyzer;
+
+    public function __construct(FuncCallAnalyzer $funcCallAnalyzer)
+    {
+        $this->funcCallAnalyzer = $funcCallAnalyzer;
+    }
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -32,7 +43,7 @@ final class SimplifyFuncGetArgsCountRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        if ((string) $node->name !== 'count') {
+        if (! $this->funcCallAnalyzer->isName($node, 'count')) {
             return $node;
         }
 
@@ -42,7 +53,8 @@ final class SimplifyFuncGetArgsCountRector extends AbstractRector
 
         /** @var FuncCall $innerFuncCall */
         $innerFuncCall = $node->args[0]->value;
-        if ((string) $innerFuncCall->name !== 'func_get_args') {
+
+        if (! $this->funcCallAnalyzer->isName($innerFuncCall, 'func_get_args')) {
             return $node;
         }
 

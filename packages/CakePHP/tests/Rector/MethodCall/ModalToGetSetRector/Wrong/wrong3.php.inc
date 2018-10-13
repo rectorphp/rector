@@ -6,3 +6,6 @@ $object = new Source\SomeModelType;
 
 $config = $object->method();
 $config = $object->method('key');
+
+$otherObject = 'var';
+$config = $object->$otherObject('key');
