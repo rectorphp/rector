@@ -1,3 +1,4 @@
 services:
     Rector\Rector\CodeQuality\InArrayAndArrayKeysToArrayKeyExistsRector: ~
     Rector\Rector\CodeQuality\UnnecessaryTernaryExpressionRector: ~
+    Rector\Rector\CodeQuality\SimplifyConditionsRector: ~
