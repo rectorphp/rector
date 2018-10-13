@@ -37,6 +37,7 @@
     "autoload": {
         "psr-4": {
             "Rector\\": "src",
+            "Rector\\ContributorTools\\": "packages/ContributorTools/src",
             "Rector\\ConsoleDiffer\\": "packages/ConsoleDiffer/src",
             "Rector\\NodeTypeResolver\\": "packages/NodeTypeResolver/src",
             "Rector\\Symfony\\": "packages/Symfony/src",

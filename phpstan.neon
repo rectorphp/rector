@@ -16,6 +16,7 @@ parameters:
         - '*tests/**/Source/*'
         # intetionally original
         - 'packages/Php/src/EregToPcreTransformer.php'
+        - '*/packages/ContributorTools/templates/*'
 
     ignoreErrors:
         # missuse of interface and class

@@ -1,0 +1,8 @@
+package: 'CodeQuality'
+name: 'SimplifyConfigRector' # w/wo suffix
+node_types:
+    - 'FuncCall'
+
+description: 'It adds man to hi'
+code_before: 'hi'
+code_after: 'hi man'
