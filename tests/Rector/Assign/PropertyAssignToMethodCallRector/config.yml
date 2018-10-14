@@ -1,7 +1,7 @@
 services:
     Rector\Rector\Assign\PropertyAssignToMethodCallRector:
-        $types:
-            - 'Rector\Tests\Rector\Assign\PropertyAssignToMethodCallRector\Source\ChoiceControl'
-            - 'Rector\Tests\Rector\Assign\PropertyAssignToMethodCallRector\Source\MultiChoiceControl'
-        $oldPropertyName: 'checkAllowedValues'
-        $newMethodName: 'checkDefaultValue'
+        Rector\Tests\Rector\Assign\PropertyAssignToMethodCallRector\Source\ChoiceControl:
+            checkAllowedValues: 'checkDefaultValue'
+        Rector\Tests\Rector\Assign\PropertyAssignToMethodCallRector\Source\MultiChoiceControl:
+            checkAllowedValues: 'checkDefaultValue'
+
