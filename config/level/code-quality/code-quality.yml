@@ -2,3 +2,8 @@ services:
     Rector\Rector\CodeQuality\InArrayAndArrayKeysToArrayKeyExistsRector: ~
     Rector\Rector\CodeQuality\UnnecessaryTernaryExpressionRector: ~
     Rector\Rector\CodeQuality\SimplifyConditionsRector: ~
+    Rector\Rector\CodeQuality\SimplifyStrposLowerRector: ~
+    Rector\Rector\CodeQuality\SimplifyFuncGetArgsCountRector: ~
+    Rector\Rector\CodeQuality\SimplifyArraySearchRector: ~
+    Rector\Rector\CodeQuality\GetClassToInstanceOfRector: ~
+    Rector\Rector\CodeQuality\CombinedAssignRector: ~
