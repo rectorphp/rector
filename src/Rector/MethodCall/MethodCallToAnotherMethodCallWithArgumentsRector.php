@@ -29,44 +29,23 @@ final class MethodCallToAnotherMethodCallWithArgumentsRector extends AbstractRec
     private $nodeFactory;
 
     /**
-     * @var string
+     * @var mixed[][][]
      */
-    private $oldMethod;
+    private $oldMethodsToNewMethodsWithArgsByType = [];
 
     /**
-     * @var string
-     */
-    private $newMethod;
-
-    /**
-     * @var string
-     */
-    private $serviceDefinitionClass;
-
-    /**
-     * @var string[]
-     */
-    private $newMethodArguments = [];
-
-    /**
-     * @param string[] $newMethodArguments
+     * @param mixed[][][] $oldMethodsToNewMethodsWithArgsByType
      */
     public function __construct(
         MethodCallAnalyzer $methodCallAnalyzer,
         IdentifierRenamer $identifierRenamer,
         NodeFactory $nodeFactory,
-        string $serviceDefinitionClass,
-        string $oldMethod,
-        string $newMethod,
-        array $newMethodArguments
+        array $oldMethodsToNewMethodsWithArgsByType
     ) {
         $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
         $this->nodeFactory = $nodeFactory;
-        $this->serviceDefinitionClass = $serviceDefinitionClass;
-        $this->oldMethod = $oldMethod;
-        $this->newMethod = $newMethod;
-        $this->newMethodArguments = $newMethodArguments;
+        $this->oldMethodsToNewMethodsWithArgsByType = $oldMethodsToNewMethodsWithArgsByType;
     }
 
     public function getDefinition(): RectorDefinition
@@ -84,10 +63,9 @@ $serviceDefinition->addTag('inject');
 CODE_SAMPLE
                 ,
                 [
-                    '$serviceDefinitionClass' => 'Nette\DI\ServiceDefinition',
-                    '$oldMethod' => 'setInject',
-                    '$newMethod' => 'addTag',
-                    '$newMethodArguments' => ['inject'],
+                    'Nette\DI\ServiceDefinition' => [
+                        'setInject' => [['addTag', ['inject']]],
+                    ],
                 ]
             ),
         ]);
@@ -106,16 +84,24 @@ CODE_SAMPLE
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        if (! $this->methodCallAnalyzer->isTypeAndMethods(
-            $methodCallNode,
-            $this->serviceDefinitionClass,
-            [$this->oldMethod]
-        )) {
-            return null;
-        }
+        foreach ($this->oldMethodsToNewMethodsWithArgsByType as $type => $oldMethodsToNewMethodsWithArgs) {
+            // @todo is type should be possibly part of AbstractRector
+            // @todo is name should be possibly part of AbstractRector
+            if (! $this->methodCallAnalyzer->isTypes($methodCallNode, [$type])) {
+                continue;
+            }
 
-        $this->identifierRenamer->renameNode($methodCallNode, $this->newMethod);
-        $methodCallNode->args = $this->nodeFactory->createArgs($this->newMethodArguments);
+            foreach ($oldMethodsToNewMethodsWithArgs as $oldMethod => $newMethodsWithArgs) {
+                if (! $this->methodCallAnalyzer->isMethod($methodCallNode, $oldMethod)) {
+                    continue;
+                }
+
+                $this->identifierRenamer->renameNode($methodCallNode, $newMethodsWithArgs[0]);
+                $methodCallNode->args = $this->nodeFactory->createArgs($newMethodsWithArgs[1]);
+
+                return $methodCallNode;
+            }
+        }
 
         return $methodCallNode;
     }
