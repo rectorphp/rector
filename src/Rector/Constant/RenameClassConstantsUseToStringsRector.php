@@ -20,23 +20,17 @@ final class RenameClassConstantsUseToStringsRector extends AbstractRector
     private $nodeFactory;
 
     /**
-     * @var string
+     * @var string[][]
      */
-    private $class;
+    private $oldConstantsToNewValuesByType = [];
 
     /**
-     * @var string[]
+     * @param string[][] $oldConstantsToNewValuesByType
      */
-    private $oldConstantToNewValue = [];
-
-    /**
-     * @param string[] $oldConstantToNewValue
-     */
-    public function __construct(NodeFactory $nodeFactory, string $class, array $oldConstantToNewValue)
+    public function __construct(NodeFactory $nodeFactory, array $oldConstantsToNewValuesByType)
     {
         $this->nodeFactory = $nodeFactory;
-        $this->class = $class;
-        $this->oldConstantToNewValue = $oldConstantToNewValue;
+        $this->oldConstantsToNewValuesByType = $oldConstantsToNewValuesByType;
     }
 
     public function getDefinition(): RectorDefinition
@@ -46,8 +40,7 @@ final class RenameClassConstantsUseToStringsRector extends AbstractRector
                 '$value === Nette\Configurator::DEVELOPMENT',
                 '$value === "development"',
                 [
-                    '$class' => 'Nette\Configurator',
-                    '$oldConstantToNewValue' => [
+                    'Nette\Configurator' => [
                         'DEVELOPMENT' => 'development',
                         'PRODUCTION' => 'production',
                     ],
@@ -70,15 +63,20 @@ final class RenameClassConstantsUseToStringsRector extends AbstractRector
     public function refactor(Node $classConstFetchNode): ?Node
     {
         $className = $this->getClassNameFromClassConstFetch($classConstFetchNode);
-        if ($className !== $this->class) {
-            return null;
-        }
-        if (array_key_exists((string) $classConstFetchNode->name, $this->oldConstantToNewValue) === false) {
-            return null;
-        }
-        $newValue = $this->oldConstantToNewValue[(string) $classConstFetchNode->name];
 
-        return $this->nodeFactory->createString($newValue);
+        foreach ($this->oldConstantsToNewValuesByType as $type => $oldConstantsToNewValues) {
+            if ($className !== $type) {
+                continue;
+            }
+
+            foreach ($oldConstantsToNewValues as $oldConstant => $newValue) {
+                if ((string) $classConstFetchNode->name === $oldConstant) {
+                    return $this->nodeFactory->createString($newValue);
+                }
+            }
+        }
+
+        return $classConstFetchNode;
     }
 
     private function getClassNameFromClassConstFetch(ClassConstFetch $classConstFetchNode): string
