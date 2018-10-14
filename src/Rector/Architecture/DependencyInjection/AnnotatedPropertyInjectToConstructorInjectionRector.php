@@ -7,7 +7,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\NodeTypeResolver\Node\Attribute;
-use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
@@ -36,21 +35,14 @@ final class AnnotatedPropertyInjectToConstructorInjectionRector extends Abstract
      */
     private $annotation;
 
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
     public function __construct(
         ClassPropertyCollector $classPropertyCollector,
         DocBlockAnalyzer $docBlockAnalyzer,
-        NodeTypeResolver $nodeTypeResolver,
         string $annotation
     ) {
         $this->classPropertyCollector = $classPropertyCollector;
         $this->docBlockAnalyzer = $docBlockAnalyzer;
         $this->annotation = $annotation;
-        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     public function getDefinition(): RectorDefinition
@@ -128,7 +120,7 @@ CODE_SAMPLE
         $propertyPropertyNode = $propertyNode->props[0];
         $className = (string) $propertyPropertyNode->getAttribute(Attribute::CLASS_NAME);
 
-        $mainPropertyType = $this->nodeTypeResolver->resolve($propertyNode)[0];
+        $mainPropertyType = $this->getTypes($propertyNode)[0];
 
         $propertyName = (string) $propertyPropertyNode->name;
 

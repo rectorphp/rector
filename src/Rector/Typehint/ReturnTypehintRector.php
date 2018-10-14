@@ -10,12 +10,10 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\NodeTypeResolver\Node\Attribute;
-use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Php\TypeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
-use SomeClass;
 
 final class ReturnTypehintRector extends AbstractRector
 {
@@ -29,11 +27,6 @@ final class ReturnTypehintRector extends AbstractRector
     private $typehintForMethodByClass = [];
 
     /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    /**
      * @var TypeAnalyzer
      */
     private $typeAnalyzer;
@@ -41,13 +34,9 @@ final class ReturnTypehintRector extends AbstractRector
     /**
      * @param mixed[] $typehintForMethodByClass
      */
-    public function __construct(
-        array $typehintForMethodByClass,
-        NodeTypeResolver $nodeTypeResolver,
-        TypeAnalyzer $typeAnalyzer
-    ) {
+    public function __construct(array $typehintForMethodByClass, TypeAnalyzer $typeAnalyzer)
+    {
         $this->typehintForMethodByClass = $typehintForMethodByClass;
-        $this->nodeTypeResolver = $nodeTypeResolver;
         $this->typeAnalyzer = $typeAnalyzer;
     }
 
@@ -71,7 +60,7 @@ CODE_SAMPLE
                 ,
                 [
                     '$typehintForMethodByClass' => [
-                        SomeClass::class => [
+                        'SomeClass' => [
                             'getData' => 'array',
                         ],
                     ],
@@ -104,7 +93,7 @@ CODE_SAMPLE
         }
         /** @var Class_ $classMethodNode */
         $classNode = $classMethodNode->getAttribute(Attribute::CLASS_NODE);
-        $classNodeTypes = $this->nodeTypeResolver->resolve($classNode);
+        $classNodeTypes = $this->getTypes($classNode);
 
         $matchingTypes = $this->getMatchingTypesForClassNode($classNodeTypes);
 

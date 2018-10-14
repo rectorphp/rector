@@ -9,7 +9,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Configuration\Rector\Architecture\DependencyInjection\VariablesToPropertyFetchCollection;
 use Rector\Node\PropertyFetchNodeFactory;
 use Rector\NodeTypeResolver\Node\Attribute;
-use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -26,19 +25,12 @@ final class ReplaceVariableByPropertyFetchRector extends AbstractRector
      */
     private $propertyFetchNodeFactory;
 
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
     public function __construct(
         VariablesToPropertyFetchCollection $variablesToPropertyFetchCollection,
-        PropertyFetchNodeFactory $propertyFetchNodeFactory,
-        NodeTypeResolver $nodeTypeResolver
+        PropertyFetchNodeFactory $propertyFetchNodeFactory
     ) {
         $this->variablesToPropertyFetchCollection = $variablesToPropertyFetchCollection;
         $this->propertyFetchNodeFactory = $propertyFetchNodeFactory;
-        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     public function getDefinition(): RectorDefinition
@@ -114,8 +106,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $nodeTypes = $this->nodeTypeResolver->resolve($variableNode);
-            if ($nodeTypes === $variableInfo->getTypes()) {
+            if ($this->isTypes($variableNode, $variableInfo->getTypes())) {
                 $activeVariableInfo = $variableInfo;
                 break;
             }

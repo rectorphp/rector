@@ -12,7 +12,6 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Type\Constant\ConstantStringType;
 use Rector\NodeAnalyzer\StaticMethodCallAnalyzer;
 use Rector\NodeTypeResolver\Node\Attribute;
-use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Printer\BetterStandardPrinter;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -20,11 +19,6 @@ use Rector\RectorDefinition\RectorDefinition;
 
 final class ParseFileRector extends AbstractRector
 {
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
     /**
      * @var BetterStandardPrinter
      */
@@ -36,11 +30,9 @@ final class ParseFileRector extends AbstractRector
     private $staticMethodCallAnalyzer;
 
     public function __construct(
-        NodeTypeResolver $nodeTypeResolver,
         BetterStandardPrinter $betterStandardPrinter,
         StaticMethodCallAnalyzer $staticMethodCallAnalyzer
     ) {
-        $this->nodeTypeResolver = $nodeTypeResolver;
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->staticMethodCallAnalyzer = $staticMethodCallAnalyzer;
     }
@@ -71,8 +63,7 @@ final class ParseFileRector extends AbstractRector
             return null;
         }
 
-        $staticCallNodeTypes = $this->nodeTypeResolver->resolve($staticCallNode->class);
-        if (! in_array('Symfony\Component\Yaml\Yaml', $staticCallNodeTypes, true)) {
+        if (! $this->isType($staticCallNode->class, 'Symfony\Component\Yaml\Yaml')) {
             return null;
         }
 

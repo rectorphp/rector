@@ -61,11 +61,11 @@ final class GetMockRector extends AbstractPHPUnitRector
         )) {
             return null;
         }
-        /** @var MethodCall $methodCallNode */
-        $methodCallNode = $methodCallNode;
-        if ((count($methodCallNode->args) === 1) === false) {
+
+        if (count($methodCallNode->args) !== 1) {
             return null;
         }
+
         $this->identifierRenamer->renameNode($methodCallNode, 'createMock');
 
         return $methodCallNode;

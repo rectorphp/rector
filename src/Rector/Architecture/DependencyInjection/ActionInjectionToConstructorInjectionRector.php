@@ -13,7 +13,6 @@ use Rector\Builder\Class_\VariableInfoFactory;
 use Rector\Builder\ConstructorMethodBuilder;
 use Rector\Builder\PropertyBuilder;
 use Rector\Configuration\Rector\Architecture\DependencyInjection\VariablesToPropertyFetchCollection;
-use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -45,25 +44,18 @@ final class ActionInjectionToConstructorInjectionRector extends AbstractRector
      */
     private $analyzedApplicationContainer;
 
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
     public function __construct(
         PropertyBuilder $propertyBuilder,
         ConstructorMethodBuilder $constructorMethodBuilder,
         VariableInfoFactory $variableInfoFactory,
         VariablesToPropertyFetchCollection $variablesToPropertyFetchCollection,
-        AnalyzedApplicationContainerInterface $analyzedApplicationContainer,
-        NodeTypeResolver $nodeTypeResolver
+        AnalyzedApplicationContainerInterface $analyzedApplicationContainer
     ) {
         $this->propertyBuilder = $propertyBuilder;
         $this->constructorMethodBuilder = $constructorMethodBuilder;
         $this->variableInfoFactory = $variableInfoFactory;
         $this->variablesToPropertyFetchCollection = $variablesToPropertyFetchCollection;
         $this->analyzedApplicationContainer = $analyzedApplicationContainer;
-        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     public function getDefinition(): RectorDefinition
@@ -135,7 +127,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $paramNodeTypes = $this->nodeTypeResolver->resolve($paramNode);
+            $paramNodeTypes = $this->getTypes($paramNode);
 
             $variableInfo = $this->variableInfoFactory->createFromNameAndTypes(
                 $paramNode->var->name,

@@ -26,7 +26,7 @@ trait TypeAnalyzerTrait
 
     public function isType(Node $node, string $type): bool
     {
-        $nodeTypes = $this->nodeTypeResolver->resolve($node);
+        $nodeTypes = $this->getTypes($node);
         return in_array($type, $nodeTypes, true);
     }
 
@@ -35,7 +35,15 @@ trait TypeAnalyzerTrait
      */
     public function isTypes(Node $node, array $types): bool
     {
-        $nodeTypes = $this->nodeTypeResolver->resolve($node);
+        $nodeTypes = $this->getTypes($node);
         return (bool) array_intersect($types, $nodeTypes);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getTypes(Node $node): array
+    {
+        return $this->nodeTypeResolver->resolve($node);
     }
 }
