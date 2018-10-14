@@ -4,6 +4,7 @@ namespace Rector\Rector\Assign;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use Rector\Node\MethodCallNodeFactory;
@@ -25,36 +26,21 @@ final class PropertyAssignToMethodCallRector extends AbstractRector
     private $methodCallNodeFactory;
 
     /**
-     * @var string[]
+     * @var string[][]
      */
-    private $types = [];
+    private $oldPropertiesToNewMethodCallsByType = [];
 
     /**
-     * @var string
-     */
-    private $oldPropertyName;
-
-    /**
-     * @var string
-     */
-    private $newMethodName;
-
-    /**
-     * @todo check via https://github.com/rectorphp/rector/issues/548
-     * @param string[] $types
+     * @param string[][] $oldPropertiesToNewMethodCallsByType
      */
     public function __construct(
         PropertyFetchAnalyzer $propertyFetchAnalyzer,
         MethodCallNodeFactory $methodCallNodeFactory,
-        array $types,
-        string $oldPropertyName,
-        string $newMethodName
+        array $oldPropertiesToNewMethodCallsByType
     ) {
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
         $this->methodCallNodeFactory = $methodCallNodeFactory;
-        $this->types = $types;
-        $this->oldPropertyName = $oldPropertyName;
-        $this->newMethodName = $newMethodName;
+        $this->oldPropertiesToNewMethodCallsByType = $oldPropertiesToNewMethodCallsByType;
     }
 
     public function getDefinition(): RectorDefinition
@@ -72,9 +58,12 @@ $someObject->newMethodCall(false);
 CODE_SAMPLE
                 ,
                 [
-                    '$types' => ['SomeClass'],
-                    '$oldPropertyName' => 'oldProperty',
-                    '$newMethodName' => 'newMethodCall',
+                    '$oldPropertiesToNewMethodCallsByType' => [
+                        'SomeClass' => [
+                            'oldPropertyName' => 'oldProperty',
+                            'newMethodName' => 'newMethodCall',
+                        ],
+                    ],
                 ]
             ),
         ]);
@@ -93,24 +82,43 @@ CODE_SAMPLE
      */
     public function refactor(Node $assignNode): ?Node
     {
-        if ($this->propertyFetchAnalyzer->isTypesAndProperty(
-            $assignNode->var,
-            $this->types,
-            $this->oldPropertyName
-        ) === false) {
-            return null;
+        foreach ($this->oldPropertiesToNewMethodCallsByType as $type => $oldPropertiesToNewMethodCalls) {
+            if (! $this->propertyFetchAnalyzer->isTypeAndProperties(
+                $assignNode->var,
+                $type,
+                array_keys($oldPropertiesToNewMethodCalls)
+            )) {
+                continue;
+            }
+
+            /** @var PropertyFetch $propertyFetchNode */
+            $propertyFetchNode = $assignNode->var;
+
+            return $this->processPropertyFetch($propertyFetchNode, $oldPropertiesToNewMethodCalls, $assignNode->expr);
         }
 
-        /** @var PropertyFetch $propertyFetchNode */
-        $propertyFetchNode = $assignNode->var;
+        return $assignNode;
+    }
 
+    /**
+     * @param string[] $oldPropertiesToNewMethodCalls
+     */
+    private function processPropertyFetch(
+        PropertyFetch $propertyFetchNode,
+        array $oldPropertiesToNewMethodCalls,
+        Node $assignedNode
+    ): MethodCall {
         /** @var Variable $propertyNode */
         $propertyNode = $propertyFetchNode->var;
 
-        return $this->methodCallNodeFactory->createWithVariableMethodNameAndArguments(
-            $propertyNode,
-            $this->newMethodName,
-            [$assignNode->expr]
-        );
+        foreach ($oldPropertiesToNewMethodCalls as $oldProperty => $newMethodCall) {
+            if ((string) $propertyFetchNode->name === $oldProperty) {
+                return $this->methodCallNodeFactory->createWithVariableMethodNameAndArguments(
+                    $propertyNode,
+                    $newMethodCall,
+                    [$assignedNode]
+                );
+            }
+        }
     }
 }

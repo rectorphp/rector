@@ -152,7 +152,7 @@ final class MethodCallAnalyzer
     /**
      * @param string[] $types
      */
-    private function isTypes(Node $node, array $types): bool
+    public function isTypes(Node $node, array $types): bool
     {
         if (! $node instanceof MethodCall) {
             return false;
