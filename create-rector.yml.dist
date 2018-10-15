@@ -1,0 +1,8 @@
+package: 'CodeQuality'
+name: 'SimplifyMirrorAssignRector' # w/wo suffix
+node_types:
+    - 'Assign'
+
+description: 'Removes unneeded $a = $a assigns'
+code_before: "$a = $a;"
+code_after: ""
