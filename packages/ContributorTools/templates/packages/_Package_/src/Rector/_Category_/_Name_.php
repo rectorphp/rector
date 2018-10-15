@@ -13,8 +13,8 @@ final class _Name_ extends AbstractRector
     {
         return new RectorDefinition('_Description_', [
             new CodeSample(
-                '_CodeBefore_',
-                '_CodeAfter_'
+                _CodeBeforeExample_,
+                _CodeAfterExample_
             )
         ]);
     }
