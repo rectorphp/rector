@@ -1,8 +1,0 @@
-package: 'CodeQuality'
-name: 'SimplifyInArrayValuesRector' # w/wo suffix
-node_types:
-    - 'FuncCall'
-
-description: 'Removes unneeded array_values() in in_array() call'
-code_before: "in_array('key', array_values($array), true);"
-code_after: "in_array('key', $array, true);"

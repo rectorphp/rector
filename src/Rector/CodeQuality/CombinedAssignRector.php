@@ -30,7 +30,6 @@ use PhpParser\Node\Expr\BinaryOp\Plus;
 use PhpParser\Node\Expr\BinaryOp\Pow;
 use PhpParser\Node\Expr\BinaryOp\ShiftLeft;
 use PhpParser\Node\Expr\BinaryOp\ShiftRight;
-use Rector\Printer\BetterStandardPrinter;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -54,16 +53,6 @@ final class CombinedAssignRector extends AbstractRector
         ShiftLeft::class => AssignShiftLeft::class,
         ShiftRight::class => AssignShiftRight::class,
     ];
-
-    /**
-     * @var BetterStandardPrinter
-     */
-    private $betterStandardPrinter;
-
-    public function __construct(BetterStandardPrinter $betterStandardPrinter)
-    {
-        $this->betterStandardPrinter = $betterStandardPrinter;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -106,12 +95,5 @@ final class CombinedAssignRector extends AbstractRector
 
         /** @var AssignOp $newAssignNodeClass */
         return new $newAssignNodeClass($node->var, $binaryNode->right);
-    }
-
-    private function areNodesEqual(Node $firstNode, Node $secondNode): bool
-    {
-        return $this->betterStandardPrinter->prettyPrint([$firstNode]) === $this->betterStandardPrinter->prettyPrint(
-            [$secondNode]
-        );
     }
 }
