@@ -3,8 +3,12 @@
 namespace Rector\Rector;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Stmt\ClassMethod;
+use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
 /**
@@ -42,12 +46,33 @@ trait TypeAnalyzerTrait
     }
 
     /**
+     * @param string[] $types
+     * @return string[]
+     */
+    public function matchTypes(Node $node, array $types): array
+    {
+        return $this->isTypes($node, $types) ? $this->getTypes($node) : [];
+    }
+
+    /**
      * @return string[]
      */
     public function getTypes(Node $node): array
     {
+        if ($node instanceof ClassMethod) {
+            return $this->nodeTypeResolver->resolve($node->getAttribute(Attribute::CLASS_NODE));
+        }
+
         if ($node instanceof MethodCall || $node instanceof PropertyFetch) {
             return $this->nodeTypeResolver->resolve($node->var);
+        }
+
+        if ($node instanceof StaticCall) {
+            return $this->nodeTypeResolver->resolve($node->class);
+        }
+
+        if ($node instanceof ClassConstFetch) {
+            return $this->nodeTypeResolver->resolve($node->class);
         }
 
         return $this->nodeTypeResolver->resolve($node);

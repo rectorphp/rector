@@ -4,9 +4,7 @@ namespace Rector\Rector\Constant;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Identifier;
 use Rector\Builder\IdentifierRenamer;
-use Rector\NodeAnalyzer\ClassConstAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -18,14 +16,9 @@ final class ClassConstantReplacerRector extends AbstractRector
      *      OLD_CONSTANT => NEW_CONSTANT
      * ]
      *
-     * @var string[]
+     * @var string[][]
      */
     private $oldToNewConstantsByClass = [];
-
-    /**
-     * @var ClassConstAnalyzer
-     */
-    private $classConstAnalyzer;
 
     /**
      * @var IdentifierRenamer
@@ -33,15 +26,11 @@ final class ClassConstantReplacerRector extends AbstractRector
     private $identifierRenamer;
 
     /**
-     * @param string[] $oldToNewConstantsByClass
+     * @param string[][] $oldToNewConstantsByClass
      */
-    public function __construct(
-        array $oldToNewConstantsByClass,
-        ClassConstAnalyzer $classConstAnalyzer,
-        IdentifierRenamer $identifierRenamer
-    ) {
+    public function __construct(array $oldToNewConstantsByClass, IdentifierRenamer $identifierRenamer)
+    {
         $this->oldToNewConstantsByClass = $oldToNewConstantsByClass;
-        $this->classConstAnalyzer = $classConstAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
     }
 
@@ -78,28 +67,22 @@ final class ClassConstantReplacerRector extends AbstractRector
      */
     public function refactor(Node $classConstFetchNode): ?Node
     {
-        $activeType = $this->classConstAnalyzer->matchTypes(
-            $classConstFetchNode,
-            array_keys($this->oldToNewConstantsByClass)
-        );
-        if ($activeType === null) {
-            return null;
+        $currentConstantName = (string) $classConstFetchNode->name;
+
+        foreach ($this->oldToNewConstantsByClass as $type => $oldToNewConstants) {
+            if (! $this->isType($classConstFetchNode, $type)) {
+                continue;
+            }
+
+            foreach ($oldToNewConstants as $oldConstant => $newConstant) {
+                if ($currentConstantName !== $oldConstant) {
+                    continue;
+                }
+
+                $this->identifierRenamer->renameNode($classConstFetchNode, $newConstant);
+                return $classConstFetchNode;
+            }
         }
-
-        $configuration = $this->oldToNewConstantsByClass[$activeType];
-
-        /** @var Identifier $identifierNode */
-        $identifierNode = $classConstFetchNode->name;
-
-        $constantName = $identifierNode->toString();
-
-        $newConstantName = $configuration[$constantName];
-
-        if ($newConstantName === '') {
-            return $classConstFetchNode;
-        }
-
-        $this->identifierRenamer->renameNode($classConstFetchNode, $newConstantName);
 
         return $classConstFetchNode;
     }

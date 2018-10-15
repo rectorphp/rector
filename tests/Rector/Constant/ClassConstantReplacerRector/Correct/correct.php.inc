@@ -2,14 +2,14 @@
 
 namespace SomeNamespace;
 
-use Symfony\Component\Form\FormEvents;
+use Rector\Tests\Rector\Constant\ClassConstantReplacerRector\Source\LocalFormEvents;
 
 class SomeClass
 {
     public function subscribe()
     {
         return [
-            FormEvents::PRE_SUBMIT
+            LocalFormEvents::PRE_SUBMIT
         ];
     }
 }

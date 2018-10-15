@@ -7,7 +7,6 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use Rector\Builder\IdentifierRenamer;
 use Rector\NodeAnalyzer\CallAnalyzer;
-use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeAnalyzer\MethodNameAnalyzer;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
@@ -31,11 +30,6 @@ final class MethodNameReplacerRector extends AbstractRector
     private $activeTypes = [];
 
     /**
-     * @var MethodCallAnalyzer
-     */
-    private $methodCallAnalyzer;
-
-    /**
      * @var MethodNameAnalyzer
      */
     private $methodNameAnalyzer;
@@ -55,13 +49,11 @@ final class MethodNameReplacerRector extends AbstractRector
      */
     public function __construct(
         array $perClassOldToNewMethods,
-        MethodCallAnalyzer $methodCallAnalyzer,
         MethodNameAnalyzer $methodNameAnalyzer,
         IdentifierRenamer $identifierRenamer,
         CallAnalyzer $callAnalyzer
     ) {
         $this->perClassOldToNewMethods = $perClassOldToNewMethods;
-        $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->methodNameAnalyzer = $methodNameAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
         $this->callAnalyzer = $callAnalyzer;
@@ -188,7 +180,7 @@ CODE_SAMPLE
     {
         $this->activeTypes = [];
 
-        $matchedTypes = $this->methodCallAnalyzer->matchTypes($identifierNode, $this->getClasses());
+        $matchedTypes = $this->matchTypes($identifierNode, $this->getClasses());
 
         if ($matchedTypes) {
             $this->activeTypes = $matchedTypes;
@@ -204,7 +196,7 @@ CODE_SAMPLE
     private function processMethodCall(MethodCall $node): ?MethodCall
     {
         $this->activeTypes = [];
-        $matchedTypes = $this->methodCallAnalyzer->matchTypes($node, $this->getClasses());
+        $matchedTypes = $this->matchTypes($node, $this->getClasses());
         if ($matchedTypes) {
             $this->activeTypes = $matchedTypes;
         }

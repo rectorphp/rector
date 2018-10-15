@@ -49,11 +49,15 @@ abstract class AbstractArgumentRector extends AbstractRector
         $type = $argumentRecipe->getClass();
         $method = $argumentRecipe->getMethod();
 
-        if ($this->methodCallAnalyzer->isTypeAndMethods($node, $type, [$method])) {
+        if (! $this->isType($node, $type)) {
+            return false;
+        }
+
+        if ($this->methodCallAnalyzer->isMethod($node, $method)) {
             return true;
         }
 
-        if ($this->staticMethodCallAnalyzer->isTypeAndMethods($node, $type, [$method])) {
+        if ($this->staticMethodCallAnalyzer->isMethod($node, $method)) {
             return true;
         }
 

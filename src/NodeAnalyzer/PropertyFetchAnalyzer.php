@@ -45,29 +45,6 @@ final class PropertyFetchAnalyzer
         return $propertyFetchName === $property;
     }
 
-    /**
-     * @param string[] $types
-     */
-    public function isTypesAndProperty(Node $node, array $types, string $property): bool
-    {
-        if (! $node instanceof PropertyFetch) {
-            return false;
-        }
-
-        $varNodeTypes = $this->nodeTypeResolver->resolve($node->var);
-
-        if (! array_intersect($types, $varNodeTypes)) {
-            return false;
-        }
-
-        /** @var Identifier $identifierNode */
-        $identifierNode = $node->name;
-
-        $nodePropertyName = $identifierNode->toString();
-
-        return $nodePropertyName === $property;
-    }
-
     public function isMagicOnType(Node $node, string $type): bool
     {
         if (! $node instanceof PropertyFetch) {

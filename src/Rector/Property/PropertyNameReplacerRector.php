@@ -6,7 +6,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Identifier;
 use Rector\Builder\IdentifierRenamer;
-use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -33,21 +32,12 @@ final class PropertyNameReplacerRector extends AbstractRector
     private $identifierRenamer;
 
     /**
-     * @var PropertyFetchAnalyzer
-     */
-    private $propertyFetchAnalyzer;
-
-    /**
      * @param string[][] $perClassOldToNewProperties
      */
-    public function __construct(
-        array $perClassOldToNewProperties,
-        IdentifierRenamer $identifierRenamer,
-        PropertyFetchAnalyzer $propertyFetchAnalyzer
-    ) {
+    public function __construct(array $perClassOldToNewProperties, IdentifierRenamer $identifierRenamer)
+    {
         $this->perClassOldToNewProperties = $perClassOldToNewProperties;
         $this->identifierRenamer = $identifierRenamer;
-        $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -81,7 +71,7 @@ final class PropertyNameReplacerRector extends AbstractRector
     public function refactor(Node $propertyFetchNode): ?Node
     {
         $this->activeTypes = [];
-        $matchedTypes = $this->propertyFetchAnalyzer->matchTypes($propertyFetchNode, $this->getClasses());
+        $matchedTypes = $this->matchTypes($propertyFetchNode, $this->getClasses());
 
         if ($matchedTypes) {
             $this->activeTypes = $matchedTypes;

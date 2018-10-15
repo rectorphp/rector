@@ -56,20 +56,6 @@ final class MethodCallAnalyzer
     }
 
     /**
-     * Checks "$this->classOfSpecificType->specificMethodName()"
-     *
-     * @param string[] $types
-     */
-    public function isTypesAndMethod(Node $node, array $types, string $method): bool
-    {
-        if (! $this->isTypes($node, $types)) {
-            return false;
-        }
-
-        return $this->callAnalyzer->isName($node, $method);
-    }
-
-    /**
      * Checks "$this->specificNameMethod()"
      */
     public function isMethod(Node $node, string $methodName): bool

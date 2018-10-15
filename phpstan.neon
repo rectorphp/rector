@@ -92,7 +92,7 @@ parameters:
 
         # variadic false positive
         - '#In method "Rector\\Node\\NodeFactory::createArray", parameter \$items can be type-hinted to "array"#'
-        - '#In method "(.*?)", parameter \$types type is "array". Please provide a \@param annotation to further specify the type of the array. For instance: \@param int\[\] \$types#'
+        - '#In method (.*?) type is "array". Please provide a \@(param|return) annotation to further specify the type of the array. For instance: \@(param|return) int\[\]#'
 
         # not really needed, empty
         - '#Rector\\NodeTraverser\\RectorNodeTraverser::__construct\(\) does not call parent constructor from PhpParser\\NodeTraverser#'
