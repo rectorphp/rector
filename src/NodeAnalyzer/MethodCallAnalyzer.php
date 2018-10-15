@@ -30,18 +30,6 @@ final class MethodCallAnalyzer
     }
 
     /**
-     * Checks "$this->classOfSpecificType->specificMethodName()"
-     */
-    public function isTypeAndMethod(Node $node, string $type, string $method): bool
-    {
-        if (! $this->isTypes($node, [$type])) {
-            return false;
-        }
-
-        return $this->callAnalyzer->isName($node, $method);
-    }
-
-    /**
      * @param string[] $types
      * @return string[]
      */
@@ -95,19 +83,5 @@ final class MethodCallAnalyzer
         }
 
         return $node->var->name === $variableName;
-    }
-
-    /**
-     * @param string[] $types
-     */
-    public function isTypes(Node $node, array $types): bool
-    {
-        if (! $node instanceof MethodCall) {
-            return false;
-        }
-
-        $calledNodeTypes = $this->nodeTypeResolver->resolve($node->var);
-
-        return (bool) array_intersect($types, $calledNodeTypes);
     }
 }

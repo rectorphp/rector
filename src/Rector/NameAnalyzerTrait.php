@@ -3,6 +3,7 @@
 namespace Rector\Rector;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -30,11 +31,15 @@ trait NameAnalyzerTrait
     public function isName(Node $node, string $name): bool
     {
         if ($node instanceof MethodCall || $node instanceof StaticCall) {
-            return $this->callAnalyzer->isName($node, $name);
+            return $this->isName($node, $name);
         }
 
         if ($node instanceof ClassMethod) {
             return (string) $node->name === $name;
+        }
+
+        if ($node instanceof FuncCall) {
+            return $this->callAnalyzer->isName($node, $name);
         }
 
         return false;
@@ -51,6 +56,10 @@ trait NameAnalyzerTrait
 
         if ($node instanceof ClassMethod) {
             return in_array((string) $node->name, $names, true);
+        }
+
+        if ($node instanceof FuncCall) {
+            return $this->callAnalyzer->isNames($node, $names);
         }
 
         return false;

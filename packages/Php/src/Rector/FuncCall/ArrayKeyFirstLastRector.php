@@ -10,7 +10,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
 use Rector\NodeAnalyzer\CallAnalyzer;
-use Rector\NodeAnalyzer\FuncCallAnalyzer;
 use Rector\Printer\BetterStandardPrinter;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -38,22 +37,13 @@ final class ArrayKeyFirstLastRector extends AbstractRector
     ];
 
     /**
-     * @var FuncCallAnalyzer
-     */
-    private $funcCallAnalyzer;
-
-    /**
      * @var CallAnalyzer
      */
     private $callAnalyzer;
 
-    public function __construct(
-        BetterStandardPrinter $betterStandardPrinter,
-        FuncCallAnalyzer $funcCallAnalyzer,
-        CallAnalyzer $callAnalyzer
-    ) {
+    public function __construct(BetterStandardPrinter $betterStandardPrinter, CallAnalyzer $callAnalyzer)
+    {
         $this->betterStandardPrinter = $betterStandardPrinter;
-        $this->funcCallAnalyzer = $funcCallAnalyzer;
         $this->callAnalyzer = $callAnalyzer;
     }
 
@@ -152,7 +142,7 @@ CODE_SAMPLE
             return false;
         }
 
-        return $this->callAnalyzer->isNames($node, array_keys($this->previousToNewFunctions));
+        return $this->isNames($node, array_keys($this->previousToNewFunctions));
     }
 
     private function isAssignMatch(Node $node): bool
@@ -165,7 +155,7 @@ CODE_SAMPLE
             return false;
         }
 
-        return $this->funcCallAnalyzer->isName($node->expr, 'key');
+        return $this->isName($node->expr, 'key');
     }
 
     private function areFuncCallNodesArgsEqual(FuncCall $firstFuncCallNode, FuncCall $secondFuncCallNode): bool

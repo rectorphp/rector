@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use Rector\Builder\IdentifierRenamer;
 use Rector\Node\NodeFactory;
-use Rector\NodeAnalyzer\CallAnalyzer;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -42,19 +41,10 @@ final class AssertPropertyExistsRector extends AbstractPHPUnitRector
         'assertFalse' => 'assertClassNotHasAttribute',
     ];
 
-    /**
-     * @var CallAnalyzer
-     */
-    private $callAnalyzer;
-
-    public function __construct(
-        IdentifierRenamer $identifierRenamer,
-        NodeFactory $nodeFactory,
-        CallAnalyzer $callAnalyzer
-    ) {
+    public function __construct(IdentifierRenamer $identifierRenamer, NodeFactory $nodeFactory)
+    {
         $this->identifierRenamer = $identifierRenamer;
         $this->nodeFactory = $nodeFactory;
-        $this->callAnalyzer = $callAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -102,7 +92,7 @@ final class AssertPropertyExistsRector extends AbstractPHPUnitRector
         /** @var FuncCall $firstArgumentValue */
         $firstArgumentValue = $methodCallNode->args[0]->value;
 
-        if (! $this->callAnalyzer->isName($firstArgumentValue, 'property_exists')) {
+        if (! $this->isName($firstArgumentValue, 'property_exists')) {
             return null;
         }
 
