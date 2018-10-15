@@ -1,14 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace Rector\_Package_\Tests\Rector\_Category_\_Name_;
+namespace Rector\CodeQuality\Tests\Rector\FuncCall\SimplifyInArrayValuesRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
- * @covers \Rector\_Package_\Rector\_Category_\_Name_
+ * @covers \Rector\CodeQuality\Rector\FuncCall\SimplifyInArrayValuesRector
  */
-final class _Name_Test extends AbstractRectorTestCase
+final class SimplifyInArrayValuesRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()
