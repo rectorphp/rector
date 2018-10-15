@@ -93,25 +93,25 @@ CODE_SAMPLE
     }
 
     /**
-     * @param MethodCall $methodCallNode
+     * @param MethodCall $node
      */
-    public function refactor(Node $methodCallNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (! $this->isType($methodCallNode, $this->controllerClass)) {
+        if (! $this->isType($node, $this->controllerClass)) {
             return null;
         }
 
-        if (! $this->isName($methodCallNode, 'getParameter')) {
+        if (! $this->isName($node, 'getParameter')) {
             return null;
         }
 
         /** @var String_ $stringArgument */
-        $stringArgument = $methodCallNode->args[0]->value;
+        $stringArgument = $node->args[0]->value;
         $parameterName = $stringArgument->value;
         $propertyName = $this->propertyNaming->underscoreToName($parameterName);
 
         $this->classPropertyCollector->addPropertyForClass(
-            (string) $methodCallNode->getAttribute(Attribute::CLASS_NAME),
+            (string) $node->getAttribute(Attribute::CLASS_NAME),
             ['string'], // @todo: resolve type from container provider? see parameter autowire compiler pass
             $propertyName
         );

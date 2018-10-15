@@ -109,22 +109,22 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Return_ $returnNode
+     * @param Return_ $node
      */
-    public function refactor(Node $returnNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        $classNode = $returnNode->getAttribute(Attribute::CLASS_NODE);
+        $classNode = $node->getAttribute(Attribute::CLASS_NODE);
         if (! $this->isTypes($classNode, [$this->twigExtensionClass])) {
             return null;
         }
 
-        $methodName = $returnNode->getAttribute(Attribute::METHOD_NAME);
+        $methodName = $node->getAttribute(Attribute::METHOD_NAME);
 
         if (! in_array($methodName, ['getFunctions', 'getFilters'], true)) {
             return null;
         }
 
-        $this->callableNodeTraverser->traverseNodesWithCallable([$returnNode->expr], function (Node $node) {
+        $this->callableNodeTraverser->traverseNodesWithCallable([$node->expr], function (Node $node) {
             if (! $node instanceof ArrayItem) {
                 return null;
             }
@@ -138,7 +138,7 @@ CODE_SAMPLE
             return $this->processArrayItem($node, $newNodeTypes);
         });
 
-        return $returnNode;
+        return $node;
     }
 
     /**

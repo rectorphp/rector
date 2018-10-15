@@ -40,20 +40,20 @@ CODE_SAMPLE
     }
 
     /**
-     * @param FuncCall $funcCallNode
+     * @param FuncCall $node
      */
-    public function refactor(Node $funcCallNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (! $this->isName($funcCallNode, 'define')) {
-            return $funcCallNode;
+        if (! $this->isName($node, 'define')) {
+            return $node;
         }
 
-        if (! isset($funcCallNode->args[2])) {
-            return $funcCallNode;
+        if (! isset($node->args[2])) {
+            return $node;
         }
 
-        unset($funcCallNode->args[2]);
+        unset($node->args[2]);
 
-        return $funcCallNode;
+        return $node;
     }
 }

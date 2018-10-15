@@ -4,22 +4,15 @@ namespace Rector\Rector\Assign;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use Rector\Node\MethodCallNodeFactory;
-use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class PropertyAssignToMethodCallRector extends AbstractRector
 {
-    /**
-     * @var PropertyFetchAnalyzer
-     */
-    private $propertyFetchAnalyzer;
-
     /**
      * @var MethodCallNodeFactory
      */
@@ -34,11 +27,9 @@ final class PropertyAssignToMethodCallRector extends AbstractRector
      * @param string[][] $oldPropertiesToNewMethodCallsByType
      */
     public function __construct(
-        PropertyFetchAnalyzer $propertyFetchAnalyzer,
         MethodCallNodeFactory $methodCallNodeFactory,
         array $oldPropertiesToNewMethodCallsByType
     ) {
-        $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
         $this->methodCallNodeFactory = $methodCallNodeFactory;
         $this->oldPropertiesToNewMethodCallsByType = $oldPropertiesToNewMethodCallsByType;
     }
@@ -78,47 +69,37 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Assign $assignNode
+     * @param Assign $node
      */
-    public function refactor(Node $assignNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        foreach ($this->oldPropertiesToNewMethodCallsByType as $type => $oldPropertiesToNewMethodCalls) {
-            if (! $this->propertyFetchAnalyzer->isTypeAndProperties(
-                $assignNode->var,
-                $type,
-                array_keys($oldPropertiesToNewMethodCalls)
-            )) {
-                continue;
-            }
-
-            /** @var PropertyFetch $propertyFetchNode */
-            $propertyFetchNode = $assignNode->var;
-
-            return $this->processPropertyFetch($propertyFetchNode, $oldPropertiesToNewMethodCalls, $assignNode->expr);
+        if (! $node->var instanceof PropertyFetch) {
+            return null;
         }
 
-        return $assignNode;
-    }
+        $propertyFetchNode = $node->var;
 
-    /**
-     * @param string[] $oldPropertiesToNewMethodCalls
-     */
-    private function processPropertyFetch(
-        PropertyFetch $propertyFetchNode,
-        array $oldPropertiesToNewMethodCalls,
-        Node $assignedNode
-    ): MethodCall {
         /** @var Variable $propertyNode */
         $propertyNode = $propertyFetchNode->var;
 
-        foreach ($oldPropertiesToNewMethodCalls as $oldProperty => $newMethodCall) {
-            if ((string) $propertyFetchNode->name === $oldProperty) {
+        foreach ($this->oldPropertiesToNewMethodCallsByType as $type => $oldPropertiesToNewMethodCalls) {
+            if (! $this->isType($propertyFetchNode, $type)) {
+                continue;
+            }
+
+            foreach ($oldPropertiesToNewMethodCalls as $oldProperty => $newMethodCall) {
+                if (! $this->isName($propertyFetchNode, $oldProperty)) {
+                    continue;
+                }
+
                 return $this->methodCallNodeFactory->createWithVariableMethodNameAndArguments(
                     $propertyNode,
                     $newMethodCall,
-                    [$assignedNode]
+                    [$node->expr]
                 );
             }
         }
+
+        return $node;
     }
 }

@@ -56,27 +56,27 @@ final class AssertFalseStrposToContainsRector extends AbstractPHPUnitRector
     }
 
     /**
-     * @param MethodCall $methodCallNode
+     * @param MethodCall $node
      */
-    public function refactor(Node $methodCallNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (! $this->isInTestClass($methodCallNode)) {
+        if (! $this->isInTestClass($node)) {
             return null;
         }
 
-        if (! $this->isNames($methodCallNode, array_keys($this->renameMethodsMap))) {
+        if (! $this->isNames($node, array_keys($this->renameMethodsMap))) {
             return null;
         }
 
-        $firstArgumentValue = $methodCallNode->args[0]->value;
+        $firstArgumentValue = $node->args[0]->value;
         if (! $this->isNames($firstArgumentValue, ['strpos', 'stripos'])) {
             return null;
         }
 
-        $this->identifierRenamer->renameNodeWithMap($methodCallNode, $this->renameMethodsMap);
-        $this->changeOrderArguments($methodCallNode);
+        $this->identifierRenamer->renameNodeWithMap($node, $this->renameMethodsMap);
+        $this->changeOrderArguments($node);
 
-        return $methodCallNode;
+        return $node;
     }
 
     public function changeOrderArguments(MethodCall $methodCallNode): void

@@ -73,30 +73,30 @@ final class AssertPropertyExistsRector extends AbstractPHPUnitRector
     }
 
     /**
-     * @param MethodCall $methodCallNode
+     * @param MethodCall $node
      */
-    public function refactor(Node $methodCallNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (! $methodCallNode instanceof MethodCall) {
+        if (! $node instanceof MethodCall) {
             return null;
         }
 
-        if (! $this->isInTestClass($methodCallNode)) {
+        if (! $this->isInTestClass($node)) {
             return null;
         }
 
-        if (! $this->isNames($methodCallNode, ['assertTrue', 'assertFalse'])) {
+        if (! $this->isNames($node, ['assertTrue', 'assertFalse'])) {
             return null;
         }
 
         /** @var FuncCall $firstArgumentValue */
-        $firstArgumentValue = $methodCallNode->args[0]->value;
+        $firstArgumentValue = $node->args[0]->value;
 
         if (! $this->isName($firstArgumentValue, 'property_exists')) {
             return null;
         }
 
-        $oldArguments = $methodCallNode->args;
+        $oldArguments = $node->args;
 
         /** @var Identifier $oldArguments */
         $propertyExistsMethodCall = $oldArguments[0]->value;
@@ -114,13 +114,13 @@ final class AssertPropertyExistsRector extends AbstractPHPUnitRector
 
         unset($oldArguments[0]);
 
-        $methodCallNode->args = array_merge($this->nodeFactory->createArgs([
+        $node->args = array_merge($this->nodeFactory->createArgs([
             $secondArgument->value->value,
             $secondArg,
         ]), $oldArguments);
 
-        $this->identifierRenamer->renameNodeWithMap($methodCallNode, $map);
+        $this->identifierRenamer->renameNodeWithMap($node, $map);
 
-        return $methodCallNode;
+        return $node;
     }
 }

@@ -34,18 +34,18 @@ final class MultiDirnameRector extends AbstractRector
     }
 
     /**
-     * @param FuncCall $funcCallNode
+     * @param FuncCall $node
      */
-    public function refactor(Node $funcCallNode): ?Node
+    public function refactor(Node $node): ?Node
     {
         $this->nestingLevel = 0;
 
-        if (! $this->isName($funcCallNode, 'dirname')) {
-            return $funcCallNode;
+        if (! $this->isName($node, 'dirname')) {
+            return $node;
         }
 
-        $activeFuncCallNode = $funcCallNode;
-        $lastFuncCallNode = $funcCallNode;
+        $activeFuncCallNode = $node;
+        $lastFuncCallNode = $node;
 
         while ($activeFuncCallNode = $this->matchNestedDirnameFuncCall($activeFuncCallNode)) {
             $lastFuncCallNode = $activeFuncCallNode;
@@ -56,10 +56,10 @@ final class MultiDirnameRector extends AbstractRector
             return $activeFuncCallNode;
         }
 
-        $funcCallNode->args[0] = $lastFuncCallNode->args[0];
-        $funcCallNode->args[1] = new Arg(new LNumber($this->nestingLevel));
+        $node->args[0] = $lastFuncCallNode->args[0];
+        $node->args[1] = new Arg(new LNumber($this->nestingLevel));
 
-        return $funcCallNode;
+        return $node;
     }
 
     private function matchNestedDirnameFuncCall(Node $node): ?FuncCall

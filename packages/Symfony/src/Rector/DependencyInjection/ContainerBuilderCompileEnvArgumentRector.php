@@ -43,24 +43,24 @@ final class ContainerBuilderCompileEnvArgumentRector extends AbstractRector
     }
 
     /**
-     * @param MethodCall $methodCallNode
+     * @param MethodCall $node
      */
-    public function refactor(Node $methodCallNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (! $this->isType($methodCallNode, 'Symfony\Component\DependencyInjection\ContainerBuilder')) {
+        if (! $this->isType($node, 'Symfony\Component\DependencyInjection\ContainerBuilder')) {
             return null;
         }
 
-        if (! $this->isName($methodCallNode, 'compile')) {
+        if (! $this->isName($node, 'compile')) {
             return null;
         }
 
-        if ((count($methodCallNode->args) !== 1) === false) {
+        if ((count($node->args) !== 1) === false) {
             return null;
         }
 
-        $methodCallNode->args = $this->nodeFactory->createArgs([true]);
+        $node->args = $this->nodeFactory->createArgs([true]);
 
-        return $methodCallNode;
+        return $node;
     }
 }

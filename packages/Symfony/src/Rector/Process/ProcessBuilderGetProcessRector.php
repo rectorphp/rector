@@ -51,18 +51,18 @@ CODE_SAMPLE
     }
 
     /**
-     * @param MethodCall $methodCallNode
+     * @param MethodCall $node
      */
-    public function refactor(Node $methodCallNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (! $this->isType($methodCallNode, $this->processBuilderClass)) {
+        if (! $this->isType($node, $this->processBuilderClass)) {
             return null;
         }
 
-        if (! $this->isName($methodCallNode, 'getProcess')) {
+        if (! $this->isName($node, 'getProcess')) {
             return null;
         }
 
-        return $methodCallNode->var;
+        return $node->var;
     }
 }

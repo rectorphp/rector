@@ -11,7 +11,6 @@ use Rector\Bridge\Contract\AnalyzedApplicationContainerInterface;
 use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Naming\PropertyNaming;
 use Rector\Node\PropertyFetchNodeFactory;
-use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 
@@ -38,25 +37,18 @@ abstract class AbstractToConstructorInjectionRector extends AbstractRector
     protected $analyzedApplicationContainer;
 
     /**
-     * @var MethodCallAnalyzer
-     */
-    protected $methodCallAnalyzer;
-
-    /**
      * @required
      */
     public function setAbstractToConstructorInjectionRectorDependencies(
         PropertyNaming $propertyNaming,
         ClassPropertyCollector $classPropertyCollector,
         PropertyFetchNodeFactory $propertyFetchNodeFactory,
-        AnalyzedApplicationContainerInterface $analyzedApplicationContainer,
-        MethodCallAnalyzer $methodCallAnalyzer
+        AnalyzedApplicationContainerInterface $analyzedApplicationContainer
     ): void {
         $this->propertyNaming = $propertyNaming;
         $this->classPropertyCollector = $classPropertyCollector;
         $this->propertyFetchNodeFactory = $propertyFetchNodeFactory;
         $this->analyzedApplicationContainer = $analyzedApplicationContainer;
-        $this->methodCallAnalyzer = $methodCallAnalyzer;
     }
 
     protected function processMethodCallNode(MethodCall $methodCallNode): ?Node

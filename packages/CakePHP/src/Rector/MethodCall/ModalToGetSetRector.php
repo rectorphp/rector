@@ -75,20 +75,20 @@ CODE_SAMPLE
     }
 
     /**
-     * @param MethodCall $methodCallNode
+     * @param MethodCall $node
      */
-    public function refactor(Node $methodCallNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        $typeAndMethodNames = $this->matchTypeAndMethodName($methodCallNode);
+        $typeAndMethodNames = $this->matchTypeAndMethodName($node);
         if ($typeAndMethodNames === null) {
             return null;
         }
 
         // @todo important, maybe unique condition
-        $newName = $this->resolveNewMethodNameByCondition($methodCallNode, $typeAndMethodNames);
-        $methodCallNode->name = new Identifier($newName);
+        $newName = $this->resolveNewMethodNameByCondition($node, $typeAndMethodNames);
+        $node->name = new Identifier($newName);
 
-        return $methodCallNode;
+        return $node;
     }
 
     /**

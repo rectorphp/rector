@@ -3,9 +3,12 @@
 namespace Rector\Rector;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\NodeAnalyzer\CallAnalyzer;
 
@@ -30,19 +33,7 @@ trait NameAnalyzerTrait
 
     public function isName(Node $node, string $name): bool
     {
-        if ($node instanceof MethodCall || $node instanceof StaticCall) {
-            return $this->isName($node, $name);
-        }
-
-        if ($node instanceof ClassMethod) {
-            return (string) $node->name === $name;
-        }
-
-        if ($node instanceof FuncCall) {
-            return $this->callAnalyzer->isName($node, $name);
-        }
-
-        return false;
+        return $this->getName($node) === $name;
     }
 
     /**
@@ -50,18 +41,24 @@ trait NameAnalyzerTrait
      */
     public function isNames(Node $node, array $names): bool
     {
-        if ($node instanceof MethodCall || $node instanceof StaticCall) {
-            return $this->callAnalyzer->isNames($node, $names);
+        return in_array($this->getName($node), $names, true);
+    }
+
+    public function getName(Node $node): ?string
+    {
+        if ($node instanceof Variable) {
+            // be careful, can be expression!
+            return (string) $node->name;
         }
 
-        if ($node instanceof ClassMethod) {
-            return in_array((string) $node->name, $names, true);
+        if ($node instanceof MethodCall || $node instanceof StaticCall || $node instanceof FuncCall) {
+            return $this->callAnalyzer->resolveName($node);
         }
 
-        if ($node instanceof FuncCall) {
-            return $this->callAnalyzer->isNames($node, $names);
+        if ($node instanceof ClassMethod || $node instanceof ClassConstFetch || $node instanceof PropertyFetch) {
+            return (string) $node->name;
         }
 
-        return false;
+        return null;
     }
 }

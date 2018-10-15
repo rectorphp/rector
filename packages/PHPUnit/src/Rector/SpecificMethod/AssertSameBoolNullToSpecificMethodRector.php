@@ -57,20 +57,18 @@ final class AssertSameBoolNullToSpecificMethodRector extends AbstractPHPUnitRect
     }
 
     /**
-     * @param MethodCall $methodCallNode
+     * @param MethodCall $node
      */
-    public function refactor(Node $methodCallNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (! $methodCallNode instanceof MethodCall) {
+        if (! $this->isInTestClass($node)) {
             return null;
         }
-        if (! $this->isInTestClass($methodCallNode)) {
+
+        if (! $this->isNames($node, ['assertSame', 'assertNotSame'])) {
             return null;
         }
-        if (! $this->isNames($methodCallNode, ['assertSame', 'assertNotSame'])) {
-            return null;
-        }
-        $firstArgumentValue = $methodCallNode->args[0]->value;
+        $firstArgumentValue = $node->args[0]->value;
         if (! $firstArgumentValue instanceof ConstFetch) {
             return null;
         }
@@ -80,10 +78,10 @@ final class AssertSameBoolNullToSpecificMethodRector extends AbstractPHPUnitRect
         if (isset($this->constValueToNewMethodNames[$this->constantName]) === false) {
             return null;
         }
-        $this->renameMethod($methodCallNode);
-        $this->moveArguments($methodCallNode);
+        $this->renameMethod($node);
+        $this->moveArguments($node);
 
-        return $methodCallNode;
+        return $node;
     }
 
     private function renameMethod(MethodCall $methodCallNode): void

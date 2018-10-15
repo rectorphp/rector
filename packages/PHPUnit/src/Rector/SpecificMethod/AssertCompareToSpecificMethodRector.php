@@ -80,20 +80,20 @@ final class AssertCompareToSpecificMethodRector extends AbstractPHPUnitRector
     }
 
     /**
-     * @param MethodCall $methodCallNode
+     * @param MethodCall $node
      */
-    public function refactor(Node $methodCallNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (! $this->isInTestClass($methodCallNode)) {
+        if (! $this->isInTestClass($node)) {
             return null;
         }
 
-        if (! $this->isNames($methodCallNode, ['assertSame', 'assertNotSame', 'assertEquals', 'assertNotEquals'])) {
+        if (! $this->isNames($node, ['assertSame', 'assertNotSame', 'assertEquals', 'assertNotEquals'])) {
             return null;
         }
 
         /** @var FuncCall $secondArgumentValue */
-        $secondArgumentValue = $methodCallNode->args[1]->value;
+        $secondArgumentValue = $node->args[1]->value;
 
         $resolvedFuncCallName = $this->callAnalyzer->resolveName($secondArgumentValue);
         if ($resolvedFuncCallName === null) {
@@ -105,10 +105,10 @@ final class AssertCompareToSpecificMethodRector extends AbstractPHPUnitRector
             return null;
         }
 
-        $this->renameMethod($methodCallNode);
-        $this->moveFunctionArgumentsUp($methodCallNode);
+        $this->renameMethod($node);
+        $this->moveFunctionArgumentsUp($node);
 
-        return $methodCallNode;
+        return $node;
     }
 
     private function renameMethod(MethodCall $methodCallNode): void

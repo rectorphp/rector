@@ -58,15 +58,15 @@ CODE_SAMPLE
     }
 
     /**
-     * @param String_ $stringNode
+     * @param String_ $node
      */
-    public function refactor(Node $stringNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (! isset($this->oldToNewOption[$stringNode->value])) {
+        if (! isset($this->oldToNewOption[$node->value])) {
             return null;
         }
 
-        $arrayItemParentNode = $stringNode->getAttribute(Attribute::PARENT_NODE);
+        $arrayItemParentNode = $node->getAttribute(Attribute::PARENT_NODE);
         if (! $arrayItemParentNode instanceof ArrayItem) {
             return null;
         }
@@ -86,6 +86,6 @@ CODE_SAMPLE
             return null;
         }
 
-        return $this->nodeFactory->createString($this->oldToNewOption[$stringNode->value]);
+        return $this->nodeFactory->createString($this->oldToNewOption[$node->value]);
     }
 }

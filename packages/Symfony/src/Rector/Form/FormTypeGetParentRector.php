@@ -71,17 +71,17 @@ final class FormTypeGetParentRector extends AbstractRector
     }
 
     /**
-     * @param String_ $stringNode
+     * @param String_ $node
      */
-    public function refactor(Node $stringNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        $formClass = $this->formTypeStringToTypeProvider->matchClassForNameWithPrefix($stringNode->value);
+        $formClass = $this->formTypeStringToTypeProvider->matchClassForNameWithPrefix($node->value);
         if ($formClass === null) {
             return null;
         }
 
-        if (! $this->isParentTypeAndMethod($stringNode, $this->abstractTypeClass, 'getParent') &&
-            ! $this->isParentTypeAndMethod($stringNode, $this->abstractTypeExtensionClass, 'getExtendedType')
+        if (! $this->isParentTypeAndMethod($node, $this->abstractTypeClass, 'getParent') &&
+            ! $this->isParentTypeAndMethod($node, $this->abstractTypeExtensionClass, 'getExtendedType')
         ) {
             return null;
         }

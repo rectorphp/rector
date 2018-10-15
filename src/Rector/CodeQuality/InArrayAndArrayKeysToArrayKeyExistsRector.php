@@ -28,15 +28,15 @@ final class InArrayAndArrayKeysToArrayKeyExistsRector extends AbstractRector
     }
 
     /**
-     * @param FuncCall $funcCall
+     * @param FuncCall $node
      */
-    public function refactor(Node $funcCall): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (! $this->isInArrayFunction($funcCall)) {
+        if (! $this->isInArrayFunction($node)) {
             return null;
         }
 
-        $secondArgument = $funcCall->args[1]->value;
+        $secondArgument = $node->args[1]->value;
         if (! $secondArgument instanceof FuncCall) {
             return null;
         }
@@ -50,15 +50,15 @@ final class InArrayAndArrayKeysToArrayKeyExistsRector extends AbstractRector
             return null;
         }
 
-        [$key, $array] = $funcCall->args;
+        [$key, $array] = $node->args;
 
         $array = $array->value->args[0];
 
-        $funcCall->args = [$key, $array];
+        $node->args = [$key, $array];
 
-        $funcCall->name = new Name('array_key_exists');
+        $node->name = new Name('array_key_exists');
 
-        return $funcCall;
+        return $node;
     }
 
     private function isInArrayFunction(FuncCall $funcCallNode): bool

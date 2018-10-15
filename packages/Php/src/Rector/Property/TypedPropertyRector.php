@@ -95,47 +95,47 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Property $propertyNode
+     * @param Property $node
      */
-    public function refactor(Node $propertyNode): ?Node
+    public function refactor(Node $node): ?Node
     {
         // non FQN, so they are 1:1 to possible imported doc type
-        $varTypes = $this->docBlockAnalyzer->getNonFqnVarTypes($propertyNode);
+        $varTypes = $this->docBlockAnalyzer->getNonFqnVarTypes($node);
 
         // too many types to handle
         if (count($varTypes) > 2) {
-            return $propertyNode;
+            return $node;
         }
 
         $this->isNullableType = in_array('null', $varTypes, true);
 
         // exactly 1 type only can be changed || 2 types with nullable; nothing else
         if (count($varTypes) !== 1 && (count($varTypes) === 2 && ! $this->isNullableType)) {
-            return $propertyNode;
+            return $node;
         }
 
         $propertyType = $this->getPropertyTypeWithoutNull($varTypes);
         $propertyType = $this->shortenLongType($propertyType);
         if (! $this->typeAnalyzer->isPropertyTypeHintableType($propertyType)) {
-            return $propertyNode;
+            return $node;
         }
 
-        if (! $this->matchesDocTypeAndDefaultValueType($propertyType, $propertyNode)) {
-            return $propertyNode;
+        if (! $this->matchesDocTypeAndDefaultValueType($propertyType, $node)) {
+            return $node;
         }
 
         if ($this->isNullableType) {
             $propertyType = '?' . $propertyType;
         }
 
-        $this->docBlockAnalyzer->removeTagFromNode($propertyNode, 'var');
+        $this->docBlockAnalyzer->removeTagFromNode($node, 'var');
 
-        $propertyNode->setAttribute(self::PHP74_PROPERTY_TYPE, $propertyType);
+        $node->setAttribute(self::PHP74_PROPERTY_TYPE, $propertyType);
 
         // invoke the print, because only attribute has changed
-        $propertyNode->setAttribute(Attribute::ORIGINAL_NODE, null);
+        $node->setAttribute(Attribute::ORIGINAL_NODE, null);
 
-        return $propertyNode;
+        return $node;
     }
 
     private function matchesDocTypeAndDefaultValueType(string $propertyType, Property $propertyNode): bool

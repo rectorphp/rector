@@ -57,36 +57,36 @@ CODE_SAMPLE
     }
 
     /**
-     * @param MethodCall $methodCallNode
+     * @param MethodCall $node
      */
-    public function refactor(Node $methodCallNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (! $this->isInTestClass($methodCallNode)) {
+        if (! $this->isInTestClass($node)) {
             return null;
         }
 
-        if (! $this->isNames($methodCallNode, array_keys($this->oldToNewMethod))) {
+        if (! $this->isNames($node, array_keys($this->oldToNewMethod))) {
             return null;
         }
 
-        if (isset($methodCallNode->args[1]) === false) {
+        if (isset($node->args[1]) === false) {
             return null;
         }
 
         /** @var Identifier $identifierNode */
-        $identifierNode = $methodCallNode->name;
+        $identifierNode = $node->name;
         $oldMethodName = $identifierNode->name;
 
-        $this->addNewMethodCall($methodCallNode, $this->oldToNewMethod[$oldMethodName], $methodCallNode->args[1]);
-        unset($methodCallNode->args[1]);
+        $this->addNewMethodCall($node, $this->oldToNewMethod[$oldMethodName], $node->args[1]);
+        unset($node->args[1]);
 
         // add exception code method call
-        if (isset($methodCallNode->args[2])) {
-            $this->addNewMethodCall($methodCallNode, 'expectExceptionCode', $methodCallNode->args[2]);
-            unset($methodCallNode->args[2]);
+        if (isset($node->args[2])) {
+            $this->addNewMethodCall($node, 'expectExceptionCode', $node->args[2]);
+            unset($node->args[2]);
         }
 
-        return $methodCallNode;
+        return $node;
     }
 
     private function addNewMethodCall(MethodCall $methodCallNode, string $methodName, Arg $argNode): void

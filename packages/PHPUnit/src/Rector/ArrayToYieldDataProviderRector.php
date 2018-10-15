@@ -65,27 +65,29 @@ CODE_SAMPLE
     }
 
     /**
-     * @param ClassMethod $classMethodNode
+     * @param ClassMethod $node
      */
-    public function refactor(Node $classMethodNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (! $this->isInTestClass($classMethodNode)) {
+        if (! $this->isInTestClass($node)) {
             return null;
         }
-        if (! $this->isInProvideMethod($classMethodNode)) {
+
+        if (! $this->isInProvideMethod($node)) {
             return null;
         }
-        if (! $this->hasClassMethodReturnArrayOfArrays($classMethodNode)) {
+
+        if (! $this->hasClassMethodReturnArrayOfArrays($node)) {
             return null;
         }
 
         // 1. change return typehint
-        $classMethodNode->returnType = new FullyQualified(Iterator::class);
+        $node->returnType = new FullyQualified(Iterator::class);
 
         $yieldNodes = [];
 
         // 2. turn array items to yield
-        foreach ((array) $classMethodNode->stmts as $key => $stmt) {
+        foreach ((array) $node->stmts as $key => $stmt) {
             if (! $stmt instanceof Return_) {
                 continue;
             }
@@ -96,15 +98,15 @@ CODE_SAMPLE
 
             $yieldNodes = $this->turnArrayToYieldNodes($stmt->expr);
 
-            unset($classMethodNode->stmts[$key]);
+            unset($node->stmts[$key]);
         }
 
-        $classMethodNode->stmts = array_merge((array) $classMethodNode->stmts, $yieldNodes);
+        $node->stmts = array_merge((array) $node->stmts, $yieldNodes);
 
         // 3. remove doc block
-        $this->docBlockAnalyzer->removeTagFromNode($classMethodNode, 'return');
+        $this->docBlockAnalyzer->removeTagFromNode($node, 'return');
 
-        return $classMethodNode;
+        return $node;
     }
 
     private function isInProvideMethod(ClassMethod $classMethodNode): bool

@@ -5,7 +5,6 @@ namespace Rector\PhpParser\Rector;
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
 use Rector\Node\MethodCallNodeFactory;
-use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -16,20 +15,12 @@ use Rector\RectorDefinition\RectorDefinition;
 final class UseWithAliasRector extends AbstractRector
 {
     /**
-     * @var PropertyFetchAnalyzer
-     */
-    private $propertyFetchAnalyzer;
-
-    /**
      * @var MethodCallNodeFactory
      */
     private $methodCallNodeFactory;
 
-    public function __construct(
-        PropertyFetchAnalyzer $propertyFetchAnalyzer,
-        MethodCallNodeFactory $methodCallNodeFactory
-    ) {
-        $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
+    public function __construct(MethodCallNodeFactory $methodCallNodeFactory)
+    {
         $this->methodCallNodeFactory = $methodCallNodeFactory;
     }
 
@@ -53,19 +44,20 @@ final class UseWithAliasRector extends AbstractRector
     }
 
     /**
-     * @param PropertyFetch $propertyFetchNode
+     * @param PropertyFetch $node
      */
-    public function refactor(Node $propertyFetchNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if ($this->propertyFetchAnalyzer->isTypeAndProperty(
-            $propertyFetchNode,
-            'PhpParser\Node\Stmt\UseUse',
-            'alias'
-        ) === false) {
+        if (! $this->isType($node, 'PhpParser\Node\Stmt\UseUse')) {
             return null;
         }
+
+        if (! $this->isName($node, 'alias')) {
+            return null;
+        }
+
         $getAliasMethodCall = $this->methodCallNodeFactory->createWithVariableAndMethodName(
-            $propertyFetchNode->var,
+            $node->var,
             'getAlias'
         );
 

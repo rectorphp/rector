@@ -80,30 +80,30 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Property $propertyNode
+     * @param Property $node
      */
-    public function refactor(Node $propertyNode): ?Node
+    public function refactor(Node $node): ?Node
     {
         // doesn't have a parent class
-        if (! $propertyNode->hasAttribute(Attribute::PARENT_CLASS_NAME)) {
+        if (! $node->hasAttribute(Attribute::PARENT_CLASS_NAME)) {
             return null;
         }
         // @todo or better types?
-        $nodeParentClassName = $propertyNode->getAttribute(Attribute::PARENT_CLASS_NAME);
+        $nodeParentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
         if (! isset($this->propertyToVisibilityByClass[$nodeParentClassName])) {
             return null;
         }
-        $propertyProperty = $propertyNode->props[0];
+        $propertyProperty = $node->props[0];
         $propertyName = $propertyProperty->name->toString();
         if (isset($this->propertyToVisibilityByClass[$nodeParentClassName][$propertyName]) === false) {
             return null;
         }
-        $this->visibilityModifier->removeOriginalVisibilityFromFlags($propertyNode);
+        $this->visibilityModifier->removeOriginalVisibilityFromFlags($node);
 
-        $newVisibility = $this->resolveNewVisibilityForNode($propertyNode);
-        $this->visibilityModifier->addVisibilityFlag($propertyNode, $newVisibility);
+        $newVisibility = $this->resolveNewVisibilityForNode($node);
+        $this->visibilityModifier->addVisibilityFlag($node, $newVisibility);
 
-        return $propertyNode;
+        return $node;
     }
 
     private function resolveNewVisibilityForNode(Property $propertyNode): string

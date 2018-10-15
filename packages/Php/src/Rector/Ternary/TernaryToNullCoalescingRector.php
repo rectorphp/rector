@@ -46,28 +46,28 @@ final class TernaryToNullCoalescingRector extends AbstractRector
     }
 
     /**
-     * @param Ternary $ternaryNode
+     * @param Ternary $node
      */
-    public function refactor(Node $ternaryNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if ($ternaryNode->cond instanceof Isset_) {
-            $coalesceNode = $this->processTernaryWithIsset($ternaryNode);
+        if ($node->cond instanceof Isset_) {
+            $coalesceNode = $this->processTernaryWithIsset($node);
             if ($coalesceNode) {
                 return $coalesceNode;
             }
         }
 
-        if ($ternaryNode->cond instanceof Identical) {
-            [$checkedNode, $fallbackNode] = [$ternaryNode->else, $ternaryNode->if];
-        } elseif ($ternaryNode->cond instanceof NotIdentical) {
-            [$checkedNode, $fallbackNode] = [$ternaryNode->if, $ternaryNode->else];
+        if ($node->cond instanceof Identical) {
+            [$checkedNode, $fallbackNode] = [$node->else, $node->if];
+        } elseif ($node->cond instanceof NotIdentical) {
+            [$checkedNode, $fallbackNode] = [$node->if, $node->else];
         } else {
             // not a match
-            return $ternaryNode;
+            return $node;
         }
 
         /** @var Identical|NotIdentical $ternaryCompareNode */
-        $ternaryCompareNode = $ternaryNode->cond;
+        $ternaryCompareNode = $node->cond;
 
         if ($this->isNullMatch($ternaryCompareNode->left, $ternaryCompareNode->right, $checkedNode)) {
             return new Coalesce($checkedNode, $fallbackNode);
@@ -77,7 +77,7 @@ final class TernaryToNullCoalescingRector extends AbstractRector
             return new Coalesce($checkedNode, $fallbackNode);
         }
 
-        return $ternaryNode;
+        return $node;
     }
 
     private function processTernaryWithIsset(Ternary $ternaryNode): ?Coalesce

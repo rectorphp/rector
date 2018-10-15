@@ -88,31 +88,31 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Property $propertyNode
+     * @param Property $node
      */
-    public function refactor(Node $propertyNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if ($propertyNode->isPrivate()) {
+        if ($node->isPrivate()) {
             return null;
         }
 
-        if (! $this->docBlockAnalyzer->hasTag($propertyNode, $this->annotation)) {
+        if (! $this->docBlockAnalyzer->hasTag($node, $this->annotation)) {
             return null;
         }
 
         // it needs @var tag as well, to get the type
-        if (! $this->docBlockAnalyzer->hasTag($propertyNode, 'var')) {
+        if (! $this->docBlockAnalyzer->hasTag($node, 'var')) {
             return null;
         }
 
-        $this->docBlockAnalyzer->removeTagFromNode($propertyNode, $this->annotation);
+        $this->docBlockAnalyzer->removeTagFromNode($node, $this->annotation);
 
         // set to private
-        $propertyNode->flags = Class_::MODIFIER_PRIVATE;
+        $node->flags = Class_::MODIFIER_PRIVATE;
 
-        $this->addPropertyToCollector($propertyNode);
+        $this->addPropertyToCollector($node);
 
-        return $propertyNode;
+        return $node;
     }
 
     private function addPropertyToCollector(Property $propertyNode): void

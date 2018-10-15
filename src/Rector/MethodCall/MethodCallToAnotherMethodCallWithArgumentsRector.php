@@ -72,28 +72,28 @@ CODE_SAMPLE
     }
 
     /**
-     * @param MethodCall $methodCallNode
+     * @param MethodCall $node
      */
-    public function refactor(Node $methodCallNode): ?Node
+    public function refactor(Node $node): ?Node
     {
         foreach ($this->oldMethodsToNewMethodsWithArgsByType as $type => $oldMethodsToNewMethodsWithArgs) {
             // @todo is name should be possibly part of AbstractRector
-            if (! $this->isType($methodCallNode, $type)) {
+            if (! $this->isType($node, $type)) {
                 continue;
             }
 
             foreach ($oldMethodsToNewMethodsWithArgs as $oldMethod => $newMethodsWithArgs) {
-                if (! $this->isName($methodCallNode, $oldMethod)) {
+                if (! $this->isName($node, $oldMethod)) {
                     continue;
                 }
 
-                $this->identifierRenamer->renameNode($methodCallNode, $newMethodsWithArgs[0]);
-                $methodCallNode->args = $this->nodeFactory->createArgs($newMethodsWithArgs[1]);
+                $this->identifierRenamer->renameNode($node, $newMethodsWithArgs[0]);
+                $node->args = $this->nodeFactory->createArgs($newMethodsWithArgs[1]);
 
-                return $methodCallNode;
+                return $node;
             }
         }
 
-        return $methodCallNode;
+        return $node;
     }
 }

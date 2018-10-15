@@ -86,25 +86,25 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Function_|ClassMethod $functionLikeNode
+     * @param Function_|ClassMethod $node
      */
-    public function refactor(Node $functionLikeNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if ($functionLikeNode->stmts === null) {
-            return $functionLikeNode;
+        if ($node->stmts === null) {
+            return $node;
         }
 
-        foreach ($functionLikeNode->stmts as $key => $stmt) {
+        foreach ($node->stmts as $key => $stmt) {
             /** @var Expression $stmt */
             if (! $this->isFuncCallMatch($stmt->expr)) {
                 continue;
             }
 
-            if (! isset($functionLikeNode->stmts[$key + 1])) {
+            if (! isset($node->stmts[$key + 1])) {
                 continue;
             }
 
-            if (! $this->isAssignMatch($functionLikeNode->stmts[$key + 1]->expr)) {
+            if (! $this->isAssignMatch($node->stmts[$key + 1]->expr)) {
                 continue;
             }
 
@@ -114,7 +114,7 @@ CODE_SAMPLE
             $currentFuncCallName = $this->callAnalyzer->resolveName($funcCallNode);
 
             /** @var Assign $assignNode */
-            $assignNode = $functionLikeNode->stmts[$key + 1]->expr;
+            $assignNode = $node->stmts[$key + 1]->expr;
 
             /** @var FuncCall $assignFuncCallNode */
             $assignFuncCallNode = $assignNode->expr;
@@ -127,13 +127,13 @@ CODE_SAMPLE
             $assignNode->expr->name = new Name($this->previousToNewFunctions[$currentFuncCallName]);
 
             // remove unused node
-            unset($functionLikeNode->stmts[$key]);
+            unset($node->stmts[$key]);
         }
 
         // reindex for printer
-        $functionLikeNode->stmts = array_values($functionLikeNode->stmts);
+        $node->stmts = array_values($node->stmts);
 
-        return $functionLikeNode;
+        return $node;
     }
 
     private function isFuncCallMatch(Node $node): bool

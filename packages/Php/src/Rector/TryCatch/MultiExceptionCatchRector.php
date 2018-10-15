@@ -62,15 +62,15 @@ CODE_SAMPLE
     }
 
     /**
-     * @param TryCatch $tryCatchNode
+     * @param TryCatch $node
      */
-    public function refactor(Node $tryCatchNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (count($tryCatchNode->catches) < 2) {
-            return $tryCatchNode;
+        if (count($node->catches) < 2) {
+            return $node;
         }
 
-        $catchKeysByContent = $this->collectCatchKeysByContent($tryCatchNode);
+        $catchKeysByContent = $this->collectCatchKeysByContent($node);
 
         foreach ($catchKeysByContent as $keys) {
             // no duplicates
@@ -78,19 +78,19 @@ CODE_SAMPLE
                 continue;
             }
 
-            $collectedTypes = $this->collectTypesFromCatchedByIds($tryCatchNode, $keys);
+            $collectedTypes = $this->collectTypesFromCatchedByIds($node, $keys);
             $firstTryKey = array_shift($keys);
-            $tryCatchNode->catches[$firstTryKey]->types = $collectedTypes;
+            $node->catches[$firstTryKey]->types = $collectedTypes;
 
             foreach ($keys as $key) {
-                unset($tryCatchNode->catches[$key]);
+                unset($node->catches[$key]);
             }
         }
 
         // reindex from 0 for printer
-        $tryCatchNode->catches = array_values($tryCatchNode->catches);
+        $node->catches = array_values($node->catches);
 
-        return $tryCatchNode;
+        return $node;
     }
 
     /**

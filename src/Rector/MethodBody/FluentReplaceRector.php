@@ -73,24 +73,24 @@ CODE_SAMPLE
     }
 
     /**
-     * @param MethodCall $methodCallNode
+     * @param MethodCall $node
      */
-    public function refactor(Node $methodCallNode): ?Node
+    public function refactor(Node $node): ?Node
     {
         // is chain method call
-        if (! $methodCallNode->var instanceof MethodCall) {
-            return $methodCallNode;
+        if (! $node->var instanceof MethodCall) {
+            return $node;
         }
 
         // is matching type
-        if (! $this->isTypes($methodCallNode->var, $this->classesToDefluent)) {
-            return $methodCallNode;
+        if (! $this->isTypes($node->var, $this->classesToDefluent)) {
+            return $node;
         }
 
         /** @var MethodCall $innerMethodCallNode */
-        $innerMethodCallNode = $methodCallNode->var;
+        $innerMethodCallNode = $node->var;
 
-        $this->decoupleMethodCall($methodCallNode, $innerMethodCallNode);
+        $this->decoupleMethodCall($node, $innerMethodCallNode);
 
         return $innerMethodCallNode;
     }

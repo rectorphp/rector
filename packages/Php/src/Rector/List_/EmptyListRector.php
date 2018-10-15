@@ -31,18 +31,18 @@ final class EmptyListRector extends AbstractRector
     }
 
     /**
-     * @param List_ $listNode
+     * @param List_ $node
      */
-    public function refactor(Node $listNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        foreach ($listNode->items as $item) {
+        foreach ($node->items as $item) {
             if ($item !== null) {
-                return $listNode;
+                return $node;
             }
         }
 
-        $listNode->items[0] = new Variable('unusedGenerated');
+        $node->items[0] = new Variable('unusedGenerated');
 
-        return $listNode;
+        return $node;
     }
 }

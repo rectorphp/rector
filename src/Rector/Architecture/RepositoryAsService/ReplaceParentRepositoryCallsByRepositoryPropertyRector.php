@@ -86,28 +86,26 @@ CODE_SAMPLE
     }
 
     /**
-     * @param MethodCall $methodCallNode
+     * @param MethodCall $node
      */
-    public function refactor(Node $methodCallNode): ?Node
+    public function refactor(Node $node): ?Node
     {
         // of type...
-        if (! $methodCallNode->name instanceof Identifier) {
+        if (! $node->name instanceof Identifier) {
             return null;
         }
-        $methodName = $methodCallNode->name->toString();
+
+        $methodName = $node->name->toString();
         $entityClassReflection = $this->broker->getClass($this->entityRepositoryClass);
         if (! $entityClassReflection->hasMethod($methodName)) {
             return null;
         }
-        $methodReflection = $entityClassReflection->getMethod(
-            $methodName,
-            $methodCallNode->getAttribute(Attribute::SCOPE)
-        );
+        $methodReflection = $entityClassReflection->getMethod($methodName, $node->getAttribute(Attribute::SCOPE));
         if ($methodReflection->isPublic() === false) {
             return null;
         }
-        $methodCallNode->var = $this->propertyFetchNodeFactory->createLocalWithPropertyName('repository');
+        $node->var = $this->propertyFetchNodeFactory->createLocalWithPropertyName('repository');
 
-        return $methodCallNode;
+        return $node;
     }
 }

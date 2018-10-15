@@ -67,27 +67,27 @@ CODE_SAMPLE
     }
 
     /**
-     * @param MethodCall $methodCall
+     * @param MethodCall $node
      */
-    public function refactor(Node $methodCall): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (! $this->isName($methodCall, 'getRepository')) {
+        if (! $this->isName($node, 'getRepository')) {
             return null;
         }
 
-        if (! $this->methodArgumentAnalyzer->isMethodNthArgumentString($methodCall, 1)) {
+        if (! $this->methodArgumentAnalyzer->isMethodNthArgumentString($node, 1)) {
             return null;
         }
-        /** @var MethodCall $methodCall */
-        $methodCall = $methodCall;
-        if ($this->isAliasWithConfiguredEntity($methodCall->args[0]->value->value) === false) {
+
+        if ($this->isAliasWithConfiguredEntity($node->args[0]->value->value) === false) {
             return null;
         }
-        $methodCall->args[0]->value = $this->nodeFactory->createClassConstantReference(
-            $this->convertAliasToFqn($methodCall->args[0]->value->value)
+
+        $node->args[0]->value = $this->nodeFactory->createClassConstantReference(
+            $this->convertAliasToFqn($node->args[0]->value->value)
         );
 
-        return $methodCall;
+        return $node;
     }
 
     private function isAlias(string $name): bool

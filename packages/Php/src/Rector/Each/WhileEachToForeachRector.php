@@ -63,18 +63,18 @@ CODE_SAMPLE
     }
 
     /**
-     * @param While_ $whileNode
+     * @param While_ $node
      */
-    public function refactor(Node $whileNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (! $whileNode->cond instanceof Assign) {
-            return $whileNode;
+        if (! $node->cond instanceof Assign) {
+            return $node;
         }
 
         /** @var Assign $assignNode */
-        $assignNode = $whileNode->cond;
+        $assignNode = $node->cond;
         if (! $this->isListToEachAssign($assignNode)) {
-            return $whileNode;
+            return $node;
         }
 
         /** @var FuncCall $eachFuncCall */
@@ -93,7 +93,7 @@ CODE_SAMPLE
         /** @var ArrayItem $valueItem */
         $valueItem = array_pop($listNode->items);
         $foreachNode = new Foreach_($foreachedExpr, $valueItem, [
-            'stmts' => $whileNode->stmts,
+            'stmts' => $node->stmts,
         ]);
 
         // is key included? add it to foreach

@@ -58,37 +58,35 @@ final class AssertRegExpRector extends AbstractPHPUnitRector
     }
 
     /**
-     * @param MethodCall $methodCallNode
+     * @param MethodCall $node
      */
-    public function refactor(Node $methodCallNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (! $methodCallNode instanceof MethodCall) {
+        if (! $this->isInTestClass($node)) {
             return null;
         }
-        if (! $this->isInTestClass($methodCallNode)) {
-            return null;
-        }
-        if (! $this->isNames($methodCallNode, ['assertSame', 'assertEquals', 'assertNotSame', 'assertNotEquals'])) {
+
+        if (! $this->isNames($node, ['assertSame', 'assertEquals', 'assertNotSame', 'assertNotEquals'])) {
             return null;
         }
 
         /** @var FuncCall $secondArgumentValue */
-        $secondArgumentValue = $methodCallNode->args[1]->value;
+        $secondArgumentValue = $node->args[1]->value;
 
         if (! $this->isName($secondArgumentValue, 'preg_match')) {
             return null;
         }
 
-        $oldMethodName = $this->callAnalyzer->resolveName($methodCallNode);
+        $oldMethodName = $this->callAnalyzer->resolveName($node);
         $oldCondition = null;
 
-        $oldFirstArgument = $methodCallNode->args[0]->value;
+        $oldFirstArgument = $node->args[0]->value;
         $oldCondition = $this->resolveOldCondition($oldFirstArgument);
 
-        $this->renameMethod($methodCallNode, $oldMethodName, $oldCondition);
-        $this->moveFunctionArgumentsUp($methodCallNode);
+        $this->renameMethod($node, $oldMethodName, $oldCondition);
+        $this->moveFunctionArgumentsUp($node);
 
-        return $methodCallNode;
+        return $node;
     }
 
     private function moveFunctionArgumentsUp(MethodCall $methodCallNode): void

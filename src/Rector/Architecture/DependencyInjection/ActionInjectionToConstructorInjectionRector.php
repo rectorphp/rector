@@ -103,21 +103,21 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Class_ $classNode
+     * @param Class_ $node
      */
-    public function refactor(Node $classNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (Strings::endsWith((string) $classNode->name, 'Controller') === false) {
+        if (Strings::endsWith((string) $node->name, 'Controller') === false) {
             return null;
         }
 
-        foreach ($classNode->stmts as $stmt) {
+        foreach ($node->stmts as $stmt) {
             if ($stmt instanceof ClassMethod) {
-                $this->processClassMethod($classNode, $stmt);
+                $this->processClassMethod($node, $stmt);
             }
         }
 
-        return $classNode;
+        return $node;
     }
 
     private function processClassMethod(Class_ $classNode, ClassMethod $classMethodNode): void

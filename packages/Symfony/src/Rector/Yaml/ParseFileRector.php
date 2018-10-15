@@ -46,26 +46,26 @@ final class ParseFileRector extends AbstractRector
     /**
      * Process Node of matched type
      *
-     * @param StaticCall $staticCallNode
+     * @param StaticCall $node
      */
-    public function refactor(Node $staticCallNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (! $this->isName($staticCallNode, 'parse')) {
+        if (! $this->isName($node, 'parse')) {
             return null;
         }
 
-        if (! $this->isType($staticCallNode->class, 'Symfony\Component\Yaml\Yaml')) {
+        if (! $this->isType($node->class, 'Symfony\Component\Yaml\Yaml')) {
             return null;
         }
 
-        if (! $this->isArgumentYamlFile($staticCallNode)) {
+        if (! $this->isArgumentYamlFile($node)) {
             return null;
         }
 
-        $fileGetContentsFunCallNode = new FuncCall(new Name('file_get_contents'), [$staticCallNode->args[0]]);
-        $staticCallNode->args[0] = new Arg($fileGetContentsFunCallNode);
+        $fileGetContentsFunCallNode = new FuncCall(new Name('file_get_contents'), [$node->args[0]]);
+        $node->args[0] = new Arg($fileGetContentsFunCallNode);
 
-        return $staticCallNode;
+        return $node;
     }
 
     private function isArgumentYamlFile(StaticCall $staticCallNode): bool

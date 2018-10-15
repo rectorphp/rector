@@ -108,12 +108,12 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Expression $expressionNode
+     * @param Expression $node
      */
-    public function refactor(Node $expressionNode): ?Node
+    public function refactor(Node $node): ?Node
     {
         $activeTransformation = null;
-        $propertyFetchNode = $this->expressionAnalyzer->resolvePropertyFetch($expressionNode);
+        $propertyFetchNode = $this->expressionAnalyzer->resolvePropertyFetch($node);
         if ($propertyFetchNode === null) {
             return null;
         }
@@ -130,7 +130,7 @@ CODE_SAMPLE
         }
 
         /** @var Assign $assignNode */
-        $assignNode = $expressionNode->expr;
+        $assignNode = $node->expr;
 
         if ($assignNode->expr instanceof PropertyFetch) {
             /** @var PropertyFetch $propertyFetchNode */
@@ -138,15 +138,15 @@ CODE_SAMPLE
             $method = $activeTransformation['get'];
             $assignNode->expr = $this->createMethodCallNodeFromPropertyFetchNode($propertyFetchNode, $method);
 
-            return $expressionNode;
+            return $node;
         }
 
         /** @var Assign $assignNode */
-        $assignNode = $expressionNode->expr;
+        $assignNode = $node->expr;
         $method = $activeTransformation['set'];
-        $expressionNode->expr = $this->createMethodCallNodeFromAssignNode($assignNode, $method);
+        $node->expr = $this->createMethodCallNodeFromAssignNode($assignNode, $method);
 
-        return $expressionNode;
+        return $node;
     }
 
     private function createMethodCallNodeFromPropertyFetchNode(

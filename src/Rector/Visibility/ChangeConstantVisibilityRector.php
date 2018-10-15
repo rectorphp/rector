@@ -81,28 +81,28 @@ CODE_SAMPLE
     }
 
     /**
-     * @param ClassConst $classConstantNode
+     * @param ClassConst $node
      */
-    public function refactor(Node $classConstantNode): ?Node
+    public function refactor(Node $node): ?Node
     {
         // doesn't have a parent class
-        if (! $classConstantNode->hasAttribute(Attribute::PARENT_CLASS_NAME)) {
+        if (! $node->hasAttribute(Attribute::PARENT_CLASS_NAME)) {
             return null;
         }
-        $nodeParentClassName = $classConstantNode->getAttribute(Attribute::PARENT_CLASS_NAME);
+        $nodeParentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
         if (! isset($this->constantToVisibilityByClass[$nodeParentClassName])) {
             return null;
         }
-        $constantName = $classConstantNode->consts[0]->name->toString();
+        $constantName = $node->consts[0]->name->toString();
         if (isset($this->constantToVisibilityByClass[$nodeParentClassName][$constantName]) === false) {
             return null;
         }
-        $this->visibilityModifier->removeOriginalVisibilityFromFlags($classConstantNode);
+        $this->visibilityModifier->removeOriginalVisibilityFromFlags($node);
 
-        $newVisibility = $this->resolveNewVisibilityForNode($classConstantNode);
-        $this->visibilityModifier->addVisibilityFlag($classConstantNode, $newVisibility);
+        $newVisibility = $this->resolveNewVisibilityForNode($node);
+        $this->visibilityModifier->addVisibilityFlag($node, $newVisibility);
 
-        return $classConstantNode;
+        return $node;
     }
 
     private function resolveNewVisibilityForNode(ClassConst $classConstantNode): string

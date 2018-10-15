@@ -57,27 +57,27 @@ final class VarDumperTestTraitMethodArgsRector extends AbstractRector
     }
 
     /**
-     * @param MethodCall $methodCallNode
+     * @param MethodCall $node
      */
-    public function refactor(Node $methodCallNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (! $this->isType($methodCallNode, $this->traitName)) {
+        if (! $this->isType($node, $this->traitName)) {
             return null;
         }
 
-        if (! $this->isNames($methodCallNode, ['assertDumpEquals', 'assertDumpMatchesFormat'])) {
+        if (! $this->isNames($node, ['assertDumpEquals', 'assertDumpMatchesFormat'])) {
             return null;
         }
 
-        if (count($methodCallNode->args) <= 2 || $methodCallNode->args[2]->value instanceof ConstFetch) {
+        if (count($node->args) <= 2 || $node->args[2]->value instanceof ConstFetch) {
             return null;
         }
 
-        if ($methodCallNode->args[2]->value instanceof String_) {
-            $methodCallNode->args[3] = $methodCallNode->args[2];
-            $methodCallNode->args[2] = $this->nodeFactory->createArg($this->nodeFactory->createNullConstant());
+        if ($node->args[2]->value instanceof String_) {
+            $node->args[3] = $node->args[2];
+            $node->args[2] = $this->nodeFactory->createArg($this->nodeFactory->createNullConstant());
 
-            return $methodCallNode;
+            return $node;
         }
 
         return null;

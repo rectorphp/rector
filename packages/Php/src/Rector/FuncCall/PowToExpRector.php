@@ -28,20 +28,20 @@ final class PowToExpRector extends AbstractRector
     }
 
     /**
-     * @param FuncCall $funcCallNode
+     * @param FuncCall $node
      */
-    public function refactor(Node $funcCallNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (! $this->isName($funcCallNode, 'pow')) {
-            return $funcCallNode;
+        if (! $this->isName($node, 'pow')) {
+            return $node;
         }
 
-        if (count($funcCallNode->args) !== 2) {
-            return $funcCallNode;
+        if (count($node->args) !== 2) {
+            return $node;
         }
 
-        $firstArgument = $funcCallNode->args[0]->value;
-        $secondArgument = $funcCallNode->args[1]->value;
+        $firstArgument = $node->args[0]->value;
+        $secondArgument = $node->args[1]->value;
 
         return new Pow($firstArgument, $secondArgument);
     }

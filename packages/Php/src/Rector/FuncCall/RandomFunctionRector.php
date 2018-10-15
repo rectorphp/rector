@@ -7,7 +7,6 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\LNumber;
-use Rector\NodeAnalyzer\CallAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -23,16 +22,6 @@ final class RandomFunctionRector extends AbstractRector
         'mt_rand' => 'random_int',
         'rand' => 'random_int',
     ];
-
-    /**
-     * @var CallAnalyzer
-     */
-    private $callAnalyzer;
-
-    public function __construct(CallAnalyzer $callAnalyzer)
-    {
-        $this->callAnalyzer = $callAnalyzer;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -51,26 +40,24 @@ final class RandomFunctionRector extends AbstractRector
     }
 
     /**
-     * @param FuncCall $funcCallNode
+     * @param FuncCall $node
      */
-    public function refactor(Node $funcCallNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        $currentFunction = $this->callAnalyzer->resolveName($funcCallNode);
-
         foreach ($this->oldToNewFunctionNames as $oldFunctionName => $newFunctionName) {
-            if ($currentFunction === $oldFunctionName) {
-                $funcCallNode->name = new Name($newFunctionName);
+            if ($this->isName($node, $oldFunctionName)) {
+                $node->name = new Name($newFunctionName);
 
                 // special case: random_int(); → random_int(0, getrandmax());
-                if ($newFunctionName === 'random_int' && count($funcCallNode->args) === 0) {
-                    $funcCallNode->args[0] = new Arg(new LNumber(0));
-                    $funcCallNode->args[1] = new Arg(new FuncCall(new Name('mt_getrandmax')));
+                if ($newFunctionName === 'random_int' && count($node->args) === 0) {
+                    $node->args[0] = new Arg(new LNumber(0));
+                    $node->args[1] = new Arg(new FuncCall(new Name('mt_getrandmax')));
                 }
 
-                return $funcCallNode;
+                return $node;
             }
         }
 
-        return $funcCallNode;
+        return $node;
     }
 }

@@ -66,12 +66,12 @@ final class PropertyNameReplacerRector extends AbstractRector
     }
 
     /**
-     * @param PropertyFetch $propertyFetchNode
+     * @param PropertyFetch $node
      */
-    public function refactor(Node $propertyFetchNode): ?Node
+    public function refactor(Node $node): ?Node
     {
         $this->activeTypes = [];
-        $matchedTypes = $this->matchTypes($propertyFetchNode, $this->getClasses());
+        $matchedTypes = $this->matchTypes($node, $this->getClasses());
 
         if ($matchedTypes) {
             $this->activeTypes = $matchedTypes;
@@ -80,12 +80,12 @@ final class PropertyNameReplacerRector extends AbstractRector
         $oldToNewProperties = $this->matchOldToNewProperties();
 
         /** @var Identifier $identifierNode */
-        $identifierNode = $propertyFetchNode->name;
+        $identifierNode = $node->name;
 
         $propertyName = $identifierNode->toString();
 
         if (! isset($oldToNewProperties[$propertyName])) {
-            return $propertyFetchNode;
+            return $node;
         }
 
         foreach ($oldToNewProperties as $oldProperty => $newProperty) {
@@ -93,10 +93,10 @@ final class PropertyNameReplacerRector extends AbstractRector
                 continue;
             }
 
-            $this->identifierRenamer->renameNode($propertyFetchNode, $newProperty);
+            $this->identifierRenamer->renameNode($node, $newProperty);
         }
 
-        return $propertyFetchNode;
+        return $node;
     }
 
     /**

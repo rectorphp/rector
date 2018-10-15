@@ -58,26 +58,26 @@ final class CallUserMethodRector extends AbstractRector
     }
 
     /**
-     * @param FuncCall $funcCallNode
+     * @param FuncCall $node
      */
-    public function refactor(Node $funcCallNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        $newName = $this->matchNewFunctionName($funcCallNode);
+        $newName = $this->matchNewFunctionName($node);
         if ($newName === null) {
-            return $funcCallNode;
+            return $node;
         }
 
-        $funcCallNode->name = new Name($newName);
+        $node->name = new Name($newName);
 
-        $argNodes = $funcCallNode->args;
+        $argNodes = $node->args;
 
-        $funcCallNode->args[0] = new Arg($this->nodeFactory->createArray($argNodes[1]->value, $argNodes[0]->value));
-        unset($funcCallNode->args[1]);
+        $node->args[0] = new Arg($this->nodeFactory->createArray($argNodes[1]->value, $argNodes[0]->value));
+        unset($node->args[1]);
 
         // reindex from 0
-        $funcCallNode->args = array_values($funcCallNode->args);
+        $node->args = array_values($node->args);
 
-        return $funcCallNode;
+        return $node;
     }
 
     private function matchNewFunctionName(FuncCall $funcCallNode): ?string

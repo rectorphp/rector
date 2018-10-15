@@ -48,10 +48,10 @@ CODE_SAMPLE
     }
 
     /**
-     * @param BooleanOr $booleanOrNode
+     * @param BooleanOr $node
      */
-    public function refactor(Node $booleanOrNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        return $this->dualCheckToAble->processBooleanOr($booleanOrNode, 'Countable', 'is_countable') ?: $booleanOrNode;
+        return $this->dualCheckToAble->processBooleanOr($node, 'Countable', 'is_countable') ?: $node;
     }
 }

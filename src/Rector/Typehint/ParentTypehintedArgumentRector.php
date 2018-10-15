@@ -93,24 +93,24 @@ CODE_SAMPLE
     }
 
     /**
-     * @param ClassMethod $classMethodNode
+     * @param ClassMethod $node
      */
-    public function refactor(Node $classMethodNode): ?Node
+    public function refactor(Node $node): ?Node
     {
         /** @var ClassLike $classNode */
-        $classNode = $classMethodNode->getAttribute(Attribute::CLASS_NODE);
+        $classNode = $node->getAttribute(Attribute::CLASS_NODE);
 
         $classNodeTypes = $this->getTypes($classNode);
         if ($this->isTypeMatch($classNodeTypes) === false) {
             return null;
         }
 
-        $classNodeTypes = $this->getTypes($classMethodNode);
+        $classNodeTypes = $this->getTypes($node);
 
         $matchingTypes = $this->getMatchingTypesForClassNode($classNodeTypes);
 
         /** @var Identifier $identifierNode */
-        $identifierNode = $classMethodNode->name;
+        $identifierNode = $node->name;
 
         $methodName = $identifierNode->toString();
 
@@ -119,12 +119,12 @@ CODE_SAMPLE
 
             foreach ($configuration as $method => $parametersToTypehints) {
                 if ($methodName === $method) {
-                    return $this->processClassMethodNodeWithTypehints($classMethodNode, $parametersToTypehints);
+                    return $this->processClassMethodNodeWithTypehints($node, $parametersToTypehints);
                 }
             }
         }
 
-        return $classMethodNode;
+        return $node;
     }
 
     /**

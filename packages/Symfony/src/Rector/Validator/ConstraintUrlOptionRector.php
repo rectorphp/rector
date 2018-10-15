@@ -50,15 +50,15 @@ final class ConstraintUrlOptionRector extends AbstractRector
     }
 
     /**
-     * @param ConstFetch $constFetchNode
+     * @param ConstFetch $node
      */
-    public function refactor(Node $constFetchNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if ($constFetchNode->name->toString() !== 'true') {
+        if ($node->name->toString() !== 'true') {
             return null;
         }
 
-        $prevNode = $constFetchNode->getAttribute(Attribute::PREVIOUS_NODE);
+        $prevNode = $node->getAttribute(Attribute::PREVIOUS_NODE);
         if (! $prevNode instanceof String_) {
             return null;
         }

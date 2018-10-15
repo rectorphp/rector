@@ -48,10 +48,10 @@ CODE_SAMPLE
     }
 
     /**
-     * @param BooleanOr $booleanOrNode
+     * @param BooleanOr $node
      */
-    public function refactor(Node $booleanOrNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        return $this->dualCheckToAble->processBooleanOr($booleanOrNode, 'Traversable', 'is_iterable') ?: $booleanOrNode;
+        return $this->dualCheckToAble->processBooleanOr($node, 'Traversable', 'is_iterable') ?: $node;
     }
 }

@@ -6,7 +6,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Scalar\String_;
 use Rector\Node\NodeFactory;
-use Rector\NodeAnalyzer\ClassConstAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -24,18 +23,12 @@ final class ConsoleExceptionToErrorEventConstantRector extends AbstractRector
     private const CONSOLE_EVENTS_CLASS = 'Symfony\Component\Console\ConsoleEvents';
 
     /**
-     * @var ClassConstAnalyzer
-     */
-    private $classConstAnalyzer;
-
-    /**
      * @var NodeFactory
      */
     private $nodeFactory;
 
-    public function __construct(ClassConstAnalyzer $classConstAnalyzer, NodeFactory $nodeFactory)
+    public function __construct(NodeFactory $nodeFactory)
     {
-        $this->classConstAnalyzer = $classConstAnalyzer;
         $this->nodeFactory = $nodeFactory;
     }
 
@@ -63,7 +56,7 @@ final class ConsoleExceptionToErrorEventConstantRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->classConstAnalyzer->isTypeAndNames($node, self::CONSOLE_EVENTS_CLASS, ['EXCEPTION'])) {
+        if ($this->isType($node, self::CONSOLE_EVENTS_CLASS) && $this->isName($node, 'EXCEPTION')) {
             return $this->nodeFactory->createClassConstant(self::CONSOLE_EVENTS_CLASS, 'ERROR');
         }
 

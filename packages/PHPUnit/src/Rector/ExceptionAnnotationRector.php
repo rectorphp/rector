@@ -85,32 +85,32 @@ CODE_SAMPLE
     }
 
     /**
-     * @param ClassMethod $classMethodNode
+     * @param ClassMethod $node
      */
-    public function refactor(Node $classMethodNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (! $this->isInTestClass($classMethodNode)) {
+        if (! $this->isInTestClass($node)) {
             return null;
         }
 
         foreach ($this->annotationToMethod as $annotation => $method) {
-            if (! $this->docBlockAnalyzer->hasTag($classMethodNode, $annotation)) {
+            if (! $this->docBlockAnalyzer->hasTag($node, $annotation)) {
                 continue;
             }
 
             /** @var Generic[] $tags */
-            $tags = $this->docBlockAnalyzer->getTagsByName($classMethodNode, $annotation);
+            $tags = $this->docBlockAnalyzer->getTagsByName($node, $annotation);
 
             $methodCallExpressions = array_map(function (PhpDocTagNode $phpDocTagNode) use ($method): Expression {
                 return $this->createMethodCallExpressionFromTag($phpDocTagNode, $method);
             }, $tags);
 
-            $classMethodNode->stmts = array_merge($methodCallExpressions, (array) $classMethodNode->stmts);
+            $node->stmts = array_merge($methodCallExpressions, (array) $node->stmts);
 
-            $this->docBlockAnalyzer->removeTagFromNode($classMethodNode, $annotation);
+            $this->docBlockAnalyzer->removeTagFromNode($node, $annotation);
         }
 
-        return $classMethodNode;
+        return $node;
     }
 
     private function createMethodCallExpressionFromTag(PhpDocTagNode $phpDocTagNode, string $method): Expression

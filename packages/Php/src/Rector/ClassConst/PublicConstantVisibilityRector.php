@@ -44,22 +44,22 @@ CODE_SAMPLE
     }
 
     /**
-     * @param ClassConst $classConstNode
+     * @param ClassConst $node
      */
-    public function refactor(Node $classConstNode): ?Node
+    public function refactor(Node $node): ?Node
     {
         // already non-public
-        if (! $classConstNode->isPublic()) {
-            return $classConstNode;
+        if (! $node->isPublic()) {
+            return $node;
         }
 
         // explicitly public
-        if ($classConstNode->flags !== 0) {
-            return $classConstNode;
+        if ($node->flags !== 0) {
+            return $node;
         }
 
-        $classConstNode->flags = Class_::MODIFIER_PUBLIC;
+        $node->flags = Class_::MODIFIER_PUBLIC;
 
-        return $classConstNode;
+        return $node;
     }
 }

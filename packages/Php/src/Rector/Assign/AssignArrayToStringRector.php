@@ -93,16 +93,16 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Assign $assignNode
+     * @param Assign $node
      */
-    public function refactor(Node $assignNode): ?Node
+    public function refactor(Node $node): ?Node
     {
         // only array with no explicit key assign, e.g. "$value[] = 5";
-        if (! $assignNode->var instanceof ArrayDimFetch || $assignNode->var->dim !== null) {
-            return $assignNode;
+        if (! $node->var instanceof ArrayDimFetch || $node->var->dim !== null) {
+            return $node;
         }
 
-        $arrayDimFetchNode = $assignNode->var;
+        $arrayDimFetchNode = $node->var;
 
         /** @var Variable|PropertyFetch|StaticPropertyFetch|Expr $variableNode */
         $variableNode = $arrayDimFetchNode->var;
@@ -110,20 +110,20 @@ CODE_SAMPLE
         // set default value to property
         if ($variableNode instanceof PropertyFetch || $variableNode instanceof StaticPropertyFetch) {
             if ($this->processProperty($variableNode)) {
-                return $assignNode;
+                return $node;
             }
         }
 
         // fallback to variable, property or static property = '' set
-        if ($this->processVariable($assignNode, $variableNode)) {
-            return $assignNode;
+        if ($this->processVariable($node, $variableNode)) {
+            return $node;
         }
 
         // there is "$string[] = ...;", which would cause error in PHP 7+
         // fallback - if no array init found, retype to (array)
         $retypeArrayAssignNode = new Assign($arrayDimFetchNode->var, new ArrayCast($arrayDimFetchNode->var));
 
-        $this->addNodeAfterNode(clone $assignNode, $assignNode);
+        $this->addNodeAfterNode(clone $node, $node);
 
         return $retypeArrayAssignNode;
     }

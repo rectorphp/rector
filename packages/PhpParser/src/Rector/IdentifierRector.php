@@ -6,7 +6,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use Rector\Node\MethodCallNodeFactory;
-use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -17,11 +16,6 @@ use Rector\RectorDefinition\RectorDefinition;
  */
 final class IdentifierRector extends AbstractRector
 {
-    /**
-     * @var PropertyFetchAnalyzer
-     */
-    private $propertyFetchAnalyzer;
-
     /**
      * @var string[][]
      */
@@ -53,11 +47,8 @@ final class IdentifierRector extends AbstractRector
      */
     private $methodCallNodeFactory;
 
-    public function __construct(
-        PropertyFetchAnalyzer $propertyFetchAnalyzer,
-        MethodCallNodeFactory $methodCallNodeFactory
-    ) {
-        $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
+    public function __construct(MethodCallNodeFactory $methodCallNodeFactory)
+    {
         $this->methodCallNodeFactory = $methodCallNodeFactory;
     }
 
@@ -97,7 +88,7 @@ CODE_SAMPLE
 
         $nodeTypes = $this->getTypes($node);
         $properties = $this->matchTypeToProperties($nodeTypes);
-        if (! $this->propertyFetchAnalyzer->isProperties($node, $properties)) {
+        if (! $this->isNames($node, $properties)) {
             return null;
         }
 

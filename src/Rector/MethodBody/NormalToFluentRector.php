@@ -64,23 +64,23 @@ CODE_SAMPLE
     }
 
     /**
-     * @param ClassMethod $classMethodNode
+     * @param ClassMethod $node
      */
-    public function refactor(Node $classMethodNode): ?Node
+    public function refactor(Node $node): ?Node
     {
         // process only existing statements
-        if ($classMethodNode->stmts === null) {
-            return $classMethodNode;
+        if ($node->stmts === null) {
+            return $node;
         }
 
-        $classMethodStatementCount = count($classMethodNode->stmts);
+        $classMethodStatementCount = count($node->stmts);
 
         // iterate from bottom to up, so we can merge
         for ($i = $classMethodStatementCount - 1; $i >= 0; --$i) {
-            $stmt = $classMethodNode->stmts[$i];
+            $stmt = $node->stmts[$i];
 
             // we look only for 2+ stmts
-            if (! isset($classMethodNode->stmts[$i - 1])) {
+            if (! isset($node->stmts[$i - 1])) {
                 continue;
             }
 
@@ -89,7 +89,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $prevStmt = $classMethodNode->stmts[$i - 1];
+            $prevStmt = $node->stmts[$i - 1];
             if (! $prevStmt instanceof Expression) {
                 continue;
             }
@@ -97,7 +97,7 @@ CODE_SAMPLE
             // here are 2 method calls statements in a row, while current one is first one
             if (! $this->isBothMethodCallMatch($stmt, $prevStmt)) {
                 if (count($this->collectedMethodCalls) >= 2) {
-                    $this->fluentizeCollectedMethodCalls($classMethodNode);
+                    $this->fluentizeCollectedMethodCalls($node);
                 }
 
                 // reset for new type
@@ -112,9 +112,9 @@ CODE_SAMPLE
         }
 
         // recount keys from 0, for needs of printer
-        $classMethodNode->stmts = array_values($classMethodNode->stmts);
+        $node->stmts = array_values($node->stmts);
 
-        return $classMethodNode;
+        return $node;
     }
 
     private function matchMethodCall(MethodCall $methodCallNode): ?string

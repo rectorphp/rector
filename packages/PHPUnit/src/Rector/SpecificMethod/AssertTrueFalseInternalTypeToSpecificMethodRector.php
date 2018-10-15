@@ -94,29 +94,29 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractPH
     }
 
     /**
-     * @param MethodCall $methodCallNode
+     * @param MethodCall $node
      */
-    public function refactor(Node $methodCallNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (! $this->isInTestClass($methodCallNode)) {
+        if (! $this->isInTestClass($node)) {
             return null;
         }
 
-        if (! $this->isNames($methodCallNode, array_keys($this->renameMethodsMap))) {
+        if (! $this->isNames($node, array_keys($this->renameMethodsMap))) {
             return null;
         }
 
         /** @var FuncCall $firstArgumentValue */
-        $firstArgumentValue = $methodCallNode->args[0]->value;
+        $firstArgumentValue = $node->args[0]->value;
 
         $functionName = $this->callAnalyzer->resolveName($firstArgumentValue);
         if (isset($this->oldFunctionsToTypes[$functionName]) === false) {
             return null;
         }
-        $this->identifierRenamer->renameNodeWithMap($methodCallNode, $this->renameMethodsMap);
-        $this->moveFunctionArgumentsUp($methodCallNode);
+        $this->identifierRenamer->renameNodeWithMap($node, $this->renameMethodsMap);
+        $this->moveFunctionArgumentsUp($node);
 
-        return $methodCallNode;
+        return $node;
     }
 
     private function moveFunctionArgumentsUp(MethodCall $methodCallNode): void

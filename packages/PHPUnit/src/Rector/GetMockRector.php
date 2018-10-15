@@ -41,24 +41,24 @@ final class GetMockRector extends AbstractPHPUnitRector
     }
 
     /**
-     * @param MethodCall $methodCallNode
+     * @param MethodCall $node
      */
-    public function refactor(Node $methodCallNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (! $this->isInTestClass($methodCallNode)) {
+        if (! $this->isInTestClass($node)) {
             return null;
         }
 
-        if (! $this->isNames($methodCallNode, ['getMock', 'getMockWithoutInvokingTheOriginalConstructor'])) {
+        if (! $this->isNames($node, ['getMock', 'getMockWithoutInvokingTheOriginalConstructor'])) {
             return null;
         }
 
-        if (count($methodCallNode->args) !== 1) {
+        if (count($node->args) !== 1) {
             return null;
         }
 
-        $this->identifierRenamer->renameNode($methodCallNode, 'createMock');
+        $this->identifierRenamer->renameNode($node, 'createMock');
 
-        return $methodCallNode;
+        return $node;
     }
 }
