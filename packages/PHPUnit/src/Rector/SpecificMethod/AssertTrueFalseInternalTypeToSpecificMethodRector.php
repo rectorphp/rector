@@ -100,7 +100,7 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractPH
         $firstArgumentValue = $node->args[0]->value;
 
         $functionName = $this->getName($firstArgumentValue);
-        if (isset($this->oldFunctionsToTypes[$functionName]) === false) {
+        if (! isset($this->oldFunctionsToTypes[$functionName])) {
             return null;
         }
         $this->identifierRenamer->renameNodeWithMap($node, $this->renameMethodsMap);

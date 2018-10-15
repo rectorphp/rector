@@ -167,7 +167,7 @@ CODE_SAMPLE
             return 'true';
         }
 
-        if ($resolvedValue === false) {
+        if (! $resolvedValue) {
             return 'false';
         }
 

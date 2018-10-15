@@ -88,7 +88,7 @@ CODE_SAMPLE
         if (! $classNodeTypes) {
             return null;
         }
-        if ($this->isTypeMatch($classNodeTypes) === false) {
+        if (! $this->isTypeMatch($classNodeTypes)) {
             return null;
         }
         /** @var Class_ $node */

@@ -101,7 +101,7 @@ CODE_SAMPLE
         $classNode = $node->getAttribute(Attribute::CLASS_NODE);
 
         $classNodeTypes = $this->getTypes($classNode);
-        if ($this->isTypeMatch($classNodeTypes) === false) {
+        if (! $this->isTypeMatch($classNodeTypes)) {
             return null;
         }
 

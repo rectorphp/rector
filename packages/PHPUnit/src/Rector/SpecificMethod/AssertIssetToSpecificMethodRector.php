@@ -72,7 +72,7 @@ final class AssertIssetToSpecificMethodRector extends AbstractPHPUnitRector
             return null;
         }
         $variableNodeClass = get_class($firstArgumentValue->vars[0]);
-        if (in_array($variableNodeClass, [ArrayDimFetch::class, PropertyFetch::class], true) === false) {
+        if (! in_array($variableNodeClass, [ArrayDimFetch::class, PropertyFetch::class], true)) {
             return null;
         }
         /** @var Isset_ $issetNode */

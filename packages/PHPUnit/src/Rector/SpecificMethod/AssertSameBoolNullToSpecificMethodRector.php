@@ -75,7 +75,7 @@ final class AssertSameBoolNullToSpecificMethodRector extends AbstractPHPUnitRect
         /** @var Identifier $constatName */
         $constatName = $firstArgumentValue->name;
         $this->constantName = $constatName->toLowerString();
-        if (isset($this->constValueToNewMethodNames[$this->constantName]) === false) {
+        if (! isset($this->constValueToNewMethodNames[$this->constantName])) {
             return null;
         }
         $this->renameMethod($node);

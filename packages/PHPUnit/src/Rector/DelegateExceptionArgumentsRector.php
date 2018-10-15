@@ -69,7 +69,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (isset($node->args[1]) === false) {
+        if (! isset($node->args[1])) {
             return null;
         }
 

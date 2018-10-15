@@ -1,8 +1,9 @@
 <?php declare(strict_types=1);
 
 namespace Rector\Php\Tests\Rector\FuncCall\CountOnNullRector\Source;
+use Countable;
 
-final class CountableClass implements \Countable
+final class CountableClass implements Countable
 {
     public function count()
     {

@@ -95,7 +95,7 @@ CODE_SAMPLE
         }
         $propertyProperty = $node->props[0];
         $propertyName = $propertyProperty->name->toString();
-        if (isset($this->propertyToVisibilityByClass[$nodeParentClassName][$propertyName]) === false) {
+        if (! isset($this->propertyToVisibilityByClass[$nodeParentClassName][$propertyName])) {
             return null;
         }
         $this->visibilityModifier->removeOriginalVisibilityFromFlags($node);

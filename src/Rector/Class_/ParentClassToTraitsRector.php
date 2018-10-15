@@ -91,7 +91,7 @@ CODE_SAMPLE
         }
 
         $nodeParentClassName = $this->getClassNodeParentClassName($node);
-        if (isset($this->parentClassToTraits[$nodeParentClassName]) === false) {
+        if (! isset($this->parentClassToTraits[$nodeParentClassName])) {
             return null;
         }
 

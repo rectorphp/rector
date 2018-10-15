@@ -6,7 +6,6 @@ use Rector\Symfony\Tests\Rector\FrameworkBundle\AbstractToConstructorInjectionRe
 use Rector\Symfony\Tests\Rector\FrameworkBundle\AbstractToConstructorInjectionRectorSource\SomeTranslatorInterface;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\HttpKernel\Kernel;
 
 final class SomeKernelClass extends Kernel

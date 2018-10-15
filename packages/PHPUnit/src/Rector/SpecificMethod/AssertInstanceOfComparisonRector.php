@@ -77,7 +77,7 @@ final class AssertInstanceOfComparisonRector extends AbstractPHPUnitRector
         }
 
         $firstArgumentValue = $node->args[0]->value;
-        if ($firstArgumentValue instanceof Instanceof_ === false) {
+        if (! $firstArgumentValue instanceof Instanceof_) {
             return null;
         }
         $this->identifierRenamer->renameNodeWithMap($node, $this->renameMethodsMap);

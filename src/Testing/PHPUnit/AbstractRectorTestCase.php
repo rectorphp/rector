@@ -52,7 +52,7 @@ abstract class AbstractRectorTestCase extends TestCase
 
         $key = md5_file($configFile);
 
-        if (isset(self::$containersPerConfig[$key]) && $this->rebuildFreshContainer === false) {
+        if (isset(self::$containersPerConfig[$key]) && ! $this->rebuildFreshContainer) {
             $this->container = self::$containersPerConfig[$key];
         } else {
             $this->container = (new ContainerFactory())->createWithConfigFiles([$configFile]);

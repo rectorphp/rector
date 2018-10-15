@@ -107,7 +107,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (Strings::endsWith((string) $node->name, 'Controller') === false) {
+        if (! Strings::endsWith((string) $node->name, 'Controller')) {
             return null;
         }
 
