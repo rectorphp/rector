@@ -8,18 +8,18 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
-use Rector\NodeAnalyzer\CallAnalyzer;
+use Rector\NodeAnalyzer\NameResolver;
 
 final class DualCheckToAble
 {
     /**
-     * @var CallAnalyzer
+     * @var NameResolver
      */
-    private $callAnalyzer;
+    private $nameResolver;
 
-    public function __construct(CallAnalyzer $callAnalyzer)
+    public function __construct(NameResolver $nameResolver)
     {
-        $this->callAnalyzer = $callAnalyzer;
+        $this->nameResolver = $nameResolver;
     }
 
     public function processBooleanOr(BooleanOr $booleanOrNode, string $type, string $newMethodName): ?FuncCall
@@ -37,7 +37,7 @@ final class DualCheckToAble
         }
 
         /** @var FuncCall $funcCallNode */
-        if (! $this->callAnalyzer->isName($funcCallNode, 'is_array')) {
+        if ($this->nameResolver->resolve($funcCallNode) !== 'is_array') {
             return null;
         }
 

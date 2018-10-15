@@ -18,14 +18,14 @@ final class ChainMethodCallAnalyzer
     private $nodeTypeResolver;
 
     /**
-     * @var CallAnalyzer
+     * @var NameResolver
      */
-    private $callAnalyzer;
+    private $nameResolver;
 
-    public function __construct(NodeTypeResolver $nodeTypeResolver, CallAnalyzer $callAnalyzer)
+    public function __construct(NodeTypeResolver $nodeTypeResolver, NameResolver $nameResolver)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->callAnalyzer = $callAnalyzer;
+        $this->nameResolver = $nameResolver;
     }
 
     /**
@@ -43,7 +43,7 @@ final class ChainMethodCallAnalyzer
         $methods = array_reverse($methods);
 
         foreach ($methods as $method) {
-            $activeMethodName = $this->callAnalyzer->resolveName($node);
+            $activeMethodName = $this->nameResolver->resolve($node);
             if ($activeMethodName !== $method) {
                 return false;
             }
