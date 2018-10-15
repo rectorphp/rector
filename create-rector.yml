@@ -1,8 +1,8 @@
 package: 'CodeQuality'
-name: 'SimplifyConfigRector' # w/wo suffix
+name: 'SimplifyInArrayValuesRector' # w/wo suffix
 node_types:
     - 'FuncCall'
 
-description: 'It adds man to hi'
-code_before: 'hi'
-code_after: 'hi man'
+description: 'Removes unneeded array_values() in in_array() call'
+code_before: "in_array('key', array_values($array), true);"
+code_after: "in_array('key', $array, true);"
