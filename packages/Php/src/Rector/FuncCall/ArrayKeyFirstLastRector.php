@@ -9,7 +9,6 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
-use Rector\NodeAnalyzer\CallAnalyzer;
 use Rector\Printer\BetterStandardPrinter;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -36,15 +35,9 @@ final class ArrayKeyFirstLastRector extends AbstractRector
         'end' => 'array_key_last',
     ];
 
-    /**
-     * @var CallAnalyzer
-     */
-    private $callAnalyzer;
-
-    public function __construct(BetterStandardPrinter $betterStandardPrinter, CallAnalyzer $callAnalyzer)
+    public function __construct(BetterStandardPrinter $betterStandardPrinter)
     {
         $this->betterStandardPrinter = $betterStandardPrinter;
-        $this->callAnalyzer = $callAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -111,7 +104,7 @@ CODE_SAMPLE
             $funcCallNode = $stmt->expr;
 
             /** @var FuncCall $funcCallNode */
-            $currentFuncCallName = $this->callAnalyzer->resolveName($funcCallNode);
+            $currentFuncCallName = $this->getName($funcCallNode);
 
             /** @var Assign $assignNode */
             $assignNode = $node->stmts[$key + 1]->expr;

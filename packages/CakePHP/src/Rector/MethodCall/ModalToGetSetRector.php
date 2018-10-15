@@ -6,7 +6,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
-use Rector\NodeAnalyzer\CallAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -23,17 +22,11 @@ final class ModalToGetSetRector extends AbstractRector
     private $methodNamesByTypes = [];
 
     /**
-     * @var CallAnalyzer
-     */
-    private $callAnalyzer;
-
-    /**
      * @param mixed[] $methodNamesByTypes
      */
-    public function __construct(array $methodNamesByTypes, CallAnalyzer $callAnalyzer)
+    public function __construct(array $methodNamesByTypes)
     {
         $this->methodNamesByTypes = $methodNamesByTypes;
-        $this->callAnalyzer = $callAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -107,7 +100,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $currentMethodName = $this->callAnalyzer->resolveName($methodCallNode);
+            $currentMethodName = $this->getName($methodCallNode);
             $config = $methodNamesToGetAndSetNames[$currentMethodName];
 
             // default

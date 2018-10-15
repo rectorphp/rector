@@ -7,7 +7,6 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use Rector\Builder\IdentifierRenamer;
-use Rector\NodeAnalyzer\CallAnalyzer;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -34,15 +33,9 @@ final class AssertCompareToSpecificMethodRector extends AbstractPHPUnitRector
      */
     private $activeFuncCallName;
 
-    /**
-     * @var CallAnalyzer
-     */
-    private $callAnalyzer;
-
-    public function __construct(IdentifierRenamer $identifierRenamer, CallAnalyzer $callAnalyzer)
+    public function __construct(IdentifierRenamer $identifierRenamer)
     {
         $this->identifierRenamer = $identifierRenamer;
-        $this->callAnalyzer = $callAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -95,7 +88,7 @@ final class AssertCompareToSpecificMethodRector extends AbstractPHPUnitRector
         /** @var FuncCall $secondArgumentValue */
         $secondArgumentValue = $node->args[1]->value;
 
-        $resolvedFuncCallName = $this->callAnalyzer->resolveName($secondArgumentValue);
+        $resolvedFuncCallName = $this->getName($secondArgumentValue);
         if ($resolvedFuncCallName === null) {
             return null;
         }

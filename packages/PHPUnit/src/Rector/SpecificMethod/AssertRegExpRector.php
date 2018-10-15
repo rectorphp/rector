@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\LNumber;
 use Rector\Builder\IdentifierRenamer;
-use Rector\NodeAnalyzer\CallAnalyzer;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -21,15 +20,9 @@ final class AssertRegExpRector extends AbstractPHPUnitRector
      */
     private $identifierRenamer;
 
-    /**
-     * @var CallAnalyzer
-     */
-    private $callAnalyzer;
-
-    public function __construct(IdentifierRenamer $identifierRenamer, CallAnalyzer $callAnalyzer)
+    public function __construct(IdentifierRenamer $identifierRenamer)
     {
         $this->identifierRenamer = $identifierRenamer;
-        $this->callAnalyzer = $callAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -77,7 +70,7 @@ final class AssertRegExpRector extends AbstractPHPUnitRector
             return null;
         }
 
-        $oldMethodName = $this->callAnalyzer->resolveName($node);
+        $oldMethodName = $this->getName($node);
         $oldCondition = null;
 
         $oldFirstArgument = $node->args[0]->value;

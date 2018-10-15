@@ -7,7 +7,6 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use Rector\Node\NodeFactory;
-use Rector\NodeAnalyzer\CallAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -27,15 +26,9 @@ final class CallUserMethodRector extends AbstractRector
         'call_user_method_array' => 'call_user_func_array',
     ];
 
-    /**
-     * @var CallAnalyzer
-     */
-    private $callAnalyzer;
-
-    public function __construct(NodeFactory $nodeFactory, CallAnalyzer $callAnalyzer)
+    public function __construct(NodeFactory $nodeFactory)
     {
         $this->nodeFactory = $nodeFactory;
-        $this->callAnalyzer = $callAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -82,7 +75,7 @@ final class CallUserMethodRector extends AbstractRector
 
     private function matchNewFunctionName(FuncCall $funcCallNode): ?string
     {
-        $currentFunction = $this->callAnalyzer->resolveName($funcCallNode);
+        $currentFunction = $this->getName($funcCallNode);
         return $this->oldToNewFunctions[$currentFunction] ?? null;
     }
 }

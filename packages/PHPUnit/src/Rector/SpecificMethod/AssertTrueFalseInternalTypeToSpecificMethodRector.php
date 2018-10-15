@@ -8,7 +8,6 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Builder\IdentifierRenamer;
 use Rector\Node\NodeFactory;
-use Rector\NodeAnalyzer\CallAnalyzer;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -53,19 +52,10 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractPH
      */
     private $nodeFactory;
 
-    /**
-     * @var CallAnalyzer
-     */
-    private $callAnalyzer;
-
-    public function __construct(
-        IdentifierRenamer $identifierRenamer,
-        NodeFactory $nodeFactory,
-        CallAnalyzer $callAnalyzer
-    ) {
+    public function __construct(IdentifierRenamer $identifierRenamer, NodeFactory $nodeFactory)
+    {
         $this->identifierRenamer = $identifierRenamer;
         $this->nodeFactory = $nodeFactory;
-        $this->callAnalyzer = $callAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -109,7 +99,7 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractPH
         /** @var FuncCall $firstArgumentValue */
         $firstArgumentValue = $node->args[0]->value;
 
-        $functionName = $this->callAnalyzer->resolveName($firstArgumentValue);
+        $functionName = $this->getName($firstArgumentValue);
         if (isset($this->oldFunctionsToTypes[$functionName]) === false) {
             return null;
         }
