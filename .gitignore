@@ -9,3 +9,6 @@ composer.lock
 /demo
 rector-symfony.yml
 .phpunit.result.cache
+
+# often customized locally - example on Github is just fine
+create-rector.yml
