@@ -1,0 +1,66 @@
+# source: https://book.cakephp.org/3.next/en/appendices/3-7-migration-guide.html
+
+services:
+    Rector\Rector\MethodCall\MethodNameReplacerRector:
+        Cake\Form\Form:
+            'errors': 'getErrors'
+        Cake\Validation\Validation:
+            cc: 'creditCard'
+        Cake\Filesystem\Folder:
+            normalizePath: 'correctSlashFor'
+
+    Rector\Rector\Property\PropertyToMethodRector:
+        Cake\View\View:
+            request:
+                get: 'getRequest'
+                set: 'setRequest'
+            response:
+                get: 'getResponse'
+                set: 'setResponse'
+            templatePath:
+                get: 'getTemplatePath'
+                set: 'setTemplatePath'
+            template:
+                get: 'getTemplate'
+                set: 'setTemplate'
+            layout:
+                get: 'getLayout'
+                set: 'setLayout'
+            layoutPath:
+                get: 'getLayoutPath'
+                set: 'setLayoutPath'
+            autoLayout:
+                get: 'enableAutoLayout'
+                set: 'isAutoLayoutEnabled'
+            theme:
+                get: 'getTheme'
+                set: 'setTheme'
+            subDir:
+                get: 'getSubDir'
+                set: 'setSubDir'
+            plugin:
+                get: 'getPlugin'
+                set: 'setPlugin'
+            name:
+                get: 'getName'
+                set: 'setName'
+            elementCache:
+                get: 'getElementCache'
+                set: 'setElementCache'
+            helpers:
+                get: 'helpers'
+
+    Rector\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector:
+        Cake\Database\Query:
+            join: ['clause', ['join']]
+            from: ['clause', ['from']]
+
+    Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector:
+        Cake\Database\Connection:
+            logQueries:
+                set: 'enableQueryLogging'
+                get: 'isQueryLoggingEnabled'
+        Cake\ORM\Association:
+            className:
+                set: 'setClassName'
+                get: 'getClassName'
