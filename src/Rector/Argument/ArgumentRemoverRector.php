@@ -80,7 +80,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $this->activeRecipes = $this->matchArgumentChanges($node);
-        if (! (bool) $this->activeRecipes) {
+        if (! $this->activeRecipes) {
             return null;
         }
         $argumentsOrParameters = $this->getNodeArgumentsOrParameters($node);

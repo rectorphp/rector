@@ -99,7 +99,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $matchedRecipes = $this->matchArgumentChanges($node);
-        if (! (bool) $matchedRecipes) {
+        if (! $matchedRecipes) {
             return null;
         }
 
