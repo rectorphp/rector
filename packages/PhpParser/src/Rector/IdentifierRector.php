@@ -8,7 +8,6 @@ use PhpParser\Node\Expr\PropertyFetch;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\NodeTypeResolver\Node\Attribute;
-use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -54,19 +53,12 @@ final class IdentifierRector extends AbstractRector
      */
     private $methodCallNodeFactory;
 
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
     public function __construct(
         PropertyFetchAnalyzer $propertyFetchAnalyzer,
-        MethodCallNodeFactory $methodCallNodeFactory,
-        NodeTypeResolver $nodeTypeResolver
+        MethodCallNodeFactory $methodCallNodeFactory
     ) {
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
         $this->methodCallNodeFactory = $methodCallNodeFactory;
-        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     public function getDefinition(): RectorDefinition
@@ -103,12 +95,12 @@ CODE_SAMPLE
             return null;
         }
 
-        $variableNode = $propertyFetchNode->var;
-        $nodeTypes = $this->nodeTypeResolver->resolve($variableNode);
+        $nodeTypes = $this->getTypes($propertyFetchNode->var);
         $properties = $this->matchTypeToProperties($nodeTypes);
-        if ($this->propertyFetchAnalyzer->isProperties($propertyFetchNode, $properties) === false) {
+        if (! $this->propertyFetchAnalyzer->isProperties($propertyFetchNode, $properties)) {
             return null;
         }
+
         $parentNode = $propertyFetchNode->getAttribute(Attribute::PARENT_NODE);
         if ($parentNode instanceof MethodCall) {
             return $propertyFetchNode;

@@ -12,7 +12,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\NodeTypeResolver\Node\Attribute;
-use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -37,21 +36,12 @@ final class ParentTypehintedArgumentRector extends AbstractRector
     private $typeAnalyzer;
 
     /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    /**
      * @param mixed[] $typehintForArgumentByMethodAndClass
      */
-    public function __construct(
-        array $typehintForArgumentByMethodAndClass,
-        TypeAnalyzer $typeAnalyzer,
-        NodeTypeResolver $nodeTypeResolver
-    ) {
+    public function __construct(array $typehintForArgumentByMethodAndClass, TypeAnalyzer $typeAnalyzer)
+    {
         $this->typehintForArgumentByMethodAndClass = $typehintForArgumentByMethodAndClass;
         $this->typeAnalyzer = $typeAnalyzer;
-        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     public function getDefinition(): RectorDefinition
@@ -110,7 +100,8 @@ CODE_SAMPLE
     {
         /** @var ClassLike $classNode */
         $classNode = $classMethodNode->getAttribute(Attribute::CLASS_NODE);
-        $classNodeTypes = $this->nodeTypeResolver->resolve($classNode);
+
+        $classNodeTypes = $this->getTypes($classNode);
         if ($this->isTypeMatch($classNodeTypes) === false) {
             return null;
         }

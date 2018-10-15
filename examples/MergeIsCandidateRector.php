@@ -47,11 +47,6 @@ use Rector\Utils\NodeTraverser\CallableNodeTraverser;
 final class MergeIsCandidateRector extends AbstractRector
 {
     /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    /**
      * @var BuilderFactory
      */
     private $builderFactory;
@@ -76,13 +71,11 @@ final class MergeIsCandidateRector extends AbstractRector
     private $callbackNodeTraverser;
 
     public function __construct(
-        NodeTypeResolver $nodeTypeResolver,
         BuilderFactory $builderFactory,
         DocBlockAnalyzer $docBlockAnalyzer,
         TypeToStringResolver $typeToStringResolver,
         CallableNodeTraverser $callbackNodeTraverser
     ) {
-        $this->nodeTypeResolver = $nodeTypeResolver;
         $this->builderFactory = $builderFactory;
         $this->docBlockAnalyzer = $docBlockAnalyzer;
         $this->typeToStringResolver = $typeToStringResolver;
@@ -110,9 +103,10 @@ final class MergeIsCandidateRector extends AbstractRector
      */
     public function refactor(Node $classNode): ?Node
     {
-        $nodeTypes = $this->nodeTypeResolver->resolve($classNode);
-
-        if (! in_array('Rector\Rector\AbstractRector', $nodeTypes, true) || $classNode->isAbstract()) {
+        if ($this->isType($classNode, 'Rector\Rector\AbstractRector')) {
+            return $classNode;
+        }
+        if (! $classNode->isAbstract()) {
             return $classNode;
         }
 

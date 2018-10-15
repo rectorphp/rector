@@ -78,7 +78,10 @@ final class ClassConstantReplacerRector extends AbstractRector
      */
     public function refactor(Node $classConstFetchNode): ?Node
     {
-        $activeType = $this->classConstAnalyzer->matchTypes($classConstFetchNode, $this->getTypes());
+        $activeType = $this->classConstAnalyzer->matchTypes(
+            $classConstFetchNode,
+            array_keys($this->oldToNewConstantsByClass)
+        );
         if ($activeType === null) {
             return null;
         }
@@ -99,13 +102,5 @@ final class ClassConstantReplacerRector extends AbstractRector
         $this->identifierRenamer->renameNode($classConstFetchNode, $newConstantName);
 
         return $classConstFetchNode;
-    }
-
-    /**
-     * @return string[]
-     */
-    private function getTypes(): array
-    {
-        return array_keys($this->oldToNewConstantsByClass);
     }
 }

@@ -12,6 +12,8 @@ use Rector\Contract\Rector\PhpRectorInterface;
 
 abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorInterface
 {
+    use TypeAnalyzerTrait;
+
     /**
      * @var bool
      */

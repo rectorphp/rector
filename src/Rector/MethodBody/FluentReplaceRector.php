@@ -6,7 +6,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeAnalyzer\CallAnalyzer;
-use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -25,11 +24,6 @@ final class FluentReplaceRector extends AbstractRector
     private $classesToDefluent = [];
 
     /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    /**
      * @var CallAnalyzer
      */
     private $callAnalyzer;
@@ -40,12 +34,10 @@ final class FluentReplaceRector extends AbstractRector
     public function __construct(
         array $classesToDefluent,
         MethodCallNodeFactory $methodCallNodeFactory,
-        NodeTypeResolver $nodeTypeResolver,
         CallAnalyzer $callAnalyzer
     ) {
         $this->methodCallNodeFactory = $methodCallNodeFactory;
         $this->classesToDefluent = $classesToDefluent;
-        $this->nodeTypeResolver = $nodeTypeResolver;
         $this->callAnalyzer = $callAnalyzer;
     }
 
@@ -91,8 +83,7 @@ CODE_SAMPLE
         }
 
         // is matching type
-        $methodCallNodeTypes = $this->nodeTypeResolver->resolve($methodCallNode->var->var);
-        if (! array_intersect($this->classesToDefluent, $methodCallNodeTypes)) {
+        if (! $this->isTypes($methodCallNode->var->var, $this->classesToDefluent)) {
             return $methodCallNode;
         }
 

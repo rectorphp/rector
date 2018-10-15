@@ -11,7 +11,6 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\NodeTypeResolver\Node\Attribute;
-use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -28,11 +27,6 @@ final class SimpleFunctionAndFilterRector extends AbstractRector
     private $twigExtensionClass;
 
     /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    /**
      * @var CallableNodeTraverser
      */
     private $callableNodeTraverser;
@@ -46,7 +40,6 @@ final class SimpleFunctionAndFilterRector extends AbstractRector
      * @param string[] $oldToNewClasses
      */
     public function __construct(
-        NodeTypeResolver $nodeTypeResolver,
         CallableNodeTraverser $callableNodeTraverser,
         string $twigExtensionClass = 'Twig_Extension',
         array $oldToNewClasses = [
@@ -55,7 +48,6 @@ final class SimpleFunctionAndFilterRector extends AbstractRector
         ]
     ) {
         $this->twigExtensionClass = $twigExtensionClass;
-        $this->nodeTypeResolver = $nodeTypeResolver;
         $this->callableNodeTraverser = $callableNodeTraverser;
         $this->oldToNewClasses = $oldToNewClasses;
     }
@@ -122,9 +114,7 @@ CODE_SAMPLE
     public function refactor(Node $returnNode): ?Node
     {
         $classNode = $returnNode->getAttribute(Attribute::CLASS_NODE);
-        $classNodeTypes = $this->nodeTypeResolver->resolve($classNode);
-
-        if (! in_array($this->twigExtensionClass, $classNodeTypes, true)) {
+        if (! $this->isTypes($classNode, [$this->twigExtensionClass])) {
             return null;
         }
 
