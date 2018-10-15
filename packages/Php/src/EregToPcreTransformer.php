@@ -111,7 +111,7 @@ final class EregToPcreTransformer
                     if ($s[$i] === '[' &&
                         $i + 1 < $l && strpos('.=:', $s[$i + 1]) !== false) {
                         $ii = strpos($s, ']', $i);
-                        if (! $ii) {
+                        if ($ii === false) {
                             throw new InvalidEregException('"[" does not have a matching ' . '"]"');
                         }
                         $ccls = substr($s, $i + 1, $ii - ($i + 1));
@@ -208,7 +208,7 @@ final class EregToPcreTransformer
                 ++$i;
             } elseif ($c === '{') {
                 $ii = strpos($s, '}', $i);
-                if (! $ii) {
+                if ($ii === false) {
                     throw new InvalidEregException('"{" does not have a matching "}"');
                 }
                 $bound = substr($s, $i + 1, $ii - ($i + 1));
