@@ -30,9 +30,14 @@ trait BetterStandardPrinterTrait
      */
     public function areNodesEqual($firstNode, $secondNode): bool
     {
-        $firstContent = $this->betterStandardPrinter->prettyPrint(is_array($firstNode) ? $firstNode : [$firstNode]);
-        $secondContent = $this->betterStandardPrinter->prettyPrint(is_array($secondNode) ? $secondNode : [$secondNode]);
+        return $this->print($firstNode) === $this->print($secondNode);
+    }
 
-        return $firstContent === $secondContent;
+    /**
+     * @param Node|Node[] $node
+     */
+    public function print($node): string
+    {
+        return $this->betterStandardPrinter->prettyPrint(is_array($node) ? $node : [$node]);
     }
 }

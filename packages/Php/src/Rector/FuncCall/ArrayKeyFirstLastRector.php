@@ -9,7 +9,6 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
-use Rector\Printer\BetterStandardPrinter;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -23,22 +22,12 @@ use Rector\RectorDefinition\RectorDefinition;
 final class ArrayKeyFirstLastRector extends AbstractRector
 {
     /**
-     * @var BetterStandardPrinter
-     */
-    private $betterStandardPrinter;
-
-    /**
      * @var string[]
      */
     private $previousToNewFunctions = [
         'reset' => 'array_key_first',
         'end' => 'array_key_last',
     ];
-
-    public function __construct(BetterStandardPrinter $betterStandardPrinter)
-    {
-        $this->betterStandardPrinter = $betterStandardPrinter;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -157,7 +146,6 @@ CODE_SAMPLE
             return false;
         }
 
-        return $this->betterStandardPrinter->prettyPrint([$firstFuncCallNode->args[0]])
-            === $this->betterStandardPrinter->prettyPrint([$secondFuncCallNode->args[0]]);
+        return $this->areNodesEqual($firstFuncCallNode->args[0], $secondFuncCallNode->args[0]);
     }
 }

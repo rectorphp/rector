@@ -11,23 +11,12 @@ use PhpParser\Node\Name;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\Constant\ConstantStringType;
 use Rector\NodeTypeResolver\Node\Attribute;
-use Rector\Printer\BetterStandardPrinter;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class ParseFileRector extends AbstractRector
 {
-    /**
-     * @var BetterStandardPrinter
-     */
-    private $betterStandardPrinter;
-
-    public function __construct(BetterStandardPrinter $betterStandardPrinter)
-    {
-        $this->betterStandardPrinter = $betterStandardPrinter;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('session > use_strict_mode is true by default and can be removed', [
@@ -72,7 +61,7 @@ final class ParseFileRector extends AbstractRector
     {
         $possibleFileNode = $staticCallNode->args[0]->value;
 
-        $possibleFileNodeAsString = $this->betterStandardPrinter->prettyPrint([$possibleFileNode]);
+        $possibleFileNodeAsString = $this->print($possibleFileNode);
 
         // is yml/yaml file
         if (Strings::match($possibleFileNodeAsString, '#\.(yml|yaml)(\'|")$#')) {

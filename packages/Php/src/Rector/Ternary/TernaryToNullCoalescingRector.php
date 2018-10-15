@@ -9,23 +9,12 @@ use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\Ternary;
-use Rector\Printer\BetterStandardPrinter;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class TernaryToNullCoalescingRector extends AbstractRector
 {
-    /**
-     * @var BetterStandardPrinter
-     */
-    private $betterStandardPrinter;
-
-    public function __construct(BetterStandardPrinter $betterStandardPrinter)
-    {
-        $this->betterStandardPrinter = $betterStandardPrinter;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -94,10 +83,7 @@ final class TernaryToNullCoalescingRector extends AbstractRector
             return null;
         }
 
-        $ifContent = $this->betterStandardPrinter->prettyPrint([$ternaryNode->if]);
-        $varNodeContent = $this->betterStandardPrinter->prettyPrint([$issetNode->vars[0]]);
-
-        if ($ifContent === $varNodeContent) {
+        if ($this->areNodesEqual($ternaryNode->if, $issetNode->vars[0])) {
             return new Coalesce($ternaryNode->if, $ternaryNode->else);
         }
 
@@ -110,10 +96,7 @@ final class TernaryToNullCoalescingRector extends AbstractRector
             return false;
         }
 
-        $firstNodeContent = $this->betterStandardPrinter->prettyPrint([$firstNode]);
-        $secondNodeContent = $this->betterStandardPrinter->prettyPrint([$secondNode]);
-
-        return $firstNodeContent === $secondNodeContent;
+        return $this->areNodesEqual($firstNode, $secondNode);
     }
 
     private function isNullConstant(Node $node): bool
