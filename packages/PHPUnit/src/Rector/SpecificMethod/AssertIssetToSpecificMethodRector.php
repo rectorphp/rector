@@ -9,18 +9,12 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use Rector\Builder\IdentifierRenamer;
 use Rector\Node\NodeFactory;
-use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class AssertIssetToSpecificMethodRector extends AbstractPHPUnitRector
 {
-    /**
-     * @var MethodCallAnalyzer
-     */
-    private $methodCallAnalyzer;
-
     /**
      * @var IdentifierRenamer
      */
@@ -31,12 +25,8 @@ final class AssertIssetToSpecificMethodRector extends AbstractPHPUnitRector
      */
     private $nodeFactory;
 
-    public function __construct(
-        MethodCallAnalyzer $methodCallAnalyzer,
-        IdentifierRenamer $identifierRenamer,
-        NodeFactory $nodeFactory
-    ) {
-        $this->methodCallAnalyzer = $methodCallAnalyzer;
+    public function __construct(IdentifierRenamer $identifierRenamer, NodeFactory $nodeFactory)
+    {
         $this->identifierRenamer = $identifierRenamer;
         $this->nodeFactory = $nodeFactory;
     }
@@ -71,7 +61,7 @@ final class AssertIssetToSpecificMethodRector extends AbstractPHPUnitRector
         if (! $this->isInTestClass($methodCallNode)) {
             return null;
         }
-        if (! $this->methodCallAnalyzer->isMethods($methodCallNode, ['assertTrue', 'assertFalse'])) {
+        if (! $this->isNames($methodCallNode, ['assertTrue', 'assertFalse'])) {
             return null;
         }
         $firstArgumentValue = $methodCallNode->args[0]->value;

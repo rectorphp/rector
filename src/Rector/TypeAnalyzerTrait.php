@@ -20,7 +20,7 @@ trait TypeAnalyzerTrait
     /**
      * @var NodeTypeResolver
      */
-    protected $nodeTypeResolver;
+    private $nodeTypeResolver;
 
     /**
      * @required

@@ -6,18 +6,12 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Builder\IdentifierRenamer;
 use Rector\NodeAnalyzer\MethodArgumentAnalyzer;
-use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class ReplaceCreateMethodWithoutReviewerRector extends AbstractRector
 {
-    /**
-     * @var MethodCallAnalyzer
-     */
-    private $methodCallAnalyzer;
-
     /**
      * @var MethodArgumentAnalyzer
      */
@@ -29,11 +23,9 @@ final class ReplaceCreateMethodWithoutReviewerRector extends AbstractRector
     private $identifierRenamer;
 
     public function __construct(
-        MethodCallAnalyzer $methodCallAnalyzer,
         MethodArgumentAnalyzer $methodArgumentAnalyzer,
         IdentifierRenamer $identifierRenamer
     ) {
-        $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->methodArgumentAnalyzer = $methodArgumentAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
     }
@@ -64,7 +56,7 @@ final class ReplaceCreateMethodWithoutReviewerRector extends AbstractRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        if (! $this->methodCallAnalyzer->isMethod($methodCallNode, 'createForSubjectWithReviewer')) {
+        if (! $this->isName($methodCallNode, 'createForSubjectWithReviewer')) {
             return null;
         }
         if ((! $this->methodArgumentAnalyzer->hasMethodNthArgument($methodCallNode, 2)

@@ -7,7 +7,6 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use Rector\Node\MethodCallNodeFactory;
-use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -23,18 +22,12 @@ final class DelegateExceptionArgumentsRector extends AbstractPHPUnitRector
     ];
 
     /**
-     * @var MethodCallAnalyzer
-     */
-    private $methodCallAnalyzer;
-
-    /**
      * @var MethodCallNodeFactory
      */
     private $methodCallNodeFactory;
 
-    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, MethodCallNodeFactory $methodCallNodeFactory)
+    public function __construct(MethodCallNodeFactory $methodCallNodeFactory)
     {
-        $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->methodCallNodeFactory = $methodCallNodeFactory;
     }
 
@@ -71,7 +64,8 @@ CODE_SAMPLE
         if (! $this->isInTestClass($methodCallNode)) {
             return null;
         }
-        if (! $this->methodCallAnalyzer->isMethods($methodCallNode, array_keys($this->oldToNewMethod))) {
+
+        if (! $this->isNames($methodCallNode, array_keys($this->oldToNewMethod))) {
             return null;
         }
 

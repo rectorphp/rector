@@ -7,7 +7,6 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use Rector\NodeAnalyzer\CallAnalyzer;
-use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -18,11 +17,6 @@ use Rector\RectorDefinition\RectorDefinition;
  */
 final class ModalToGetSetRector extends AbstractRector
 {
-    /**
-     * @var MethodCallAnalyzer
-     */
-    private $methodCallAnalyzer;
-
     /**
      * @var mixed[]
      */
@@ -36,12 +30,8 @@ final class ModalToGetSetRector extends AbstractRector
     /**
      * @param mixed[] $methodNamesByTypes
      */
-    public function __construct(
-        MethodCallAnalyzer $methodCallAnalyzer,
-        array $methodNamesByTypes,
-        CallAnalyzer $callAnalyzer
-    ) {
-        $this->methodCallAnalyzer = $methodCallAnalyzer;
+    public function __construct(array $methodNamesByTypes, CallAnalyzer $callAnalyzer)
+    {
         $this->methodNamesByTypes = $methodNamesByTypes;
         $this->callAnalyzer = $callAnalyzer;
     }
@@ -109,7 +99,11 @@ CODE_SAMPLE
         foreach ($this->methodNamesByTypes as $type => $methodNamesToGetAndSetNames) {
             /** @var string[] $methodNames */
             $methodNames = array_keys($methodNamesToGetAndSetNames);
-            if (! $this->methodCallAnalyzer->isTypeAndMethods($methodCallNode, $type, $methodNames)) {
+            if (! $this->isType($methodCallNode, $type)) {
+                continue;
+            }
+
+            if (! $this->isNames($methodCallNode, $methodNames)) {
                 continue;
             }
 

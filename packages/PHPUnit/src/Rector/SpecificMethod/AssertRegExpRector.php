@@ -11,18 +11,12 @@ use PhpParser\Node\Scalar\LNumber;
 use Rector\Builder\IdentifierRenamer;
 use Rector\NodeAnalyzer\CallAnalyzer;
 use Rector\NodeAnalyzer\FuncCallAnalyzer;
-use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class AssertRegExpRector extends AbstractPHPUnitRector
 {
-    /**
-     * @var MethodCallAnalyzer
-     */
-    private $methodCallAnalyzer;
-
     /**
      * @var IdentifierRenamer
      */
@@ -39,12 +33,10 @@ final class AssertRegExpRector extends AbstractPHPUnitRector
     private $callAnalyzer;
 
     public function __construct(
-        MethodCallAnalyzer $methodCallAnalyzer,
         IdentifierRenamer $identifierRenamer,
         FuncCallAnalyzer $funcCallAnalyzer,
         CallAnalyzer $callAnalyzer
     ) {
-        $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
         $this->funcCallAnalyzer = $funcCallAnalyzer;
         $this->callAnalyzer = $callAnalyzer;
@@ -86,10 +78,7 @@ final class AssertRegExpRector extends AbstractPHPUnitRector
         if (! $this->isInTestClass($methodCallNode)) {
             return null;
         }
-        if (! $this->methodCallAnalyzer->isMethods(
-            $methodCallNode,
-            ['assertSame', 'assertEquals', 'assertNotSame', 'assertNotEquals']
-        )) {
+        if (! $this->isNames($methodCallNode, ['assertSame', 'assertEquals', 'assertNotSame', 'assertNotEquals'])) {
             return null;
         }
 

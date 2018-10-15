@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\MethodCall;
 use Rector\Builder\IdentifierRenamer;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\CallAnalyzer;
-use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -45,11 +44,6 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractPH
     ];
 
     /**
-     * @var MethodCallAnalyzer
-     */
-    private $methodCallAnalyzer;
-
-    /**
      * @var IdentifierRenamer
      */
     private $identifierRenamer;
@@ -65,12 +59,10 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractPH
     private $callAnalyzer;
 
     public function __construct(
-        MethodCallAnalyzer $methodCallAnalyzer,
         IdentifierRenamer $identifierRenamer,
         NodeFactory $nodeFactory,
         CallAnalyzer $callAnalyzer
     ) {
-        $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
         $this->nodeFactory = $nodeFactory;
         $this->callAnalyzer = $callAnalyzer;
@@ -109,9 +101,11 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractPH
         if (! $this->isInTestClass($methodCallNode)) {
             return null;
         }
-        if (! $this->methodCallAnalyzer->isMethods($methodCallNode, array_keys($this->renameMethodsMap))) {
+
+        if (! $this->isNames($methodCallNode, array_keys($this->renameMethodsMap))) {
             return null;
         }
+
         /** @var FuncCall $firstArgumentValue */
         $firstArgumentValue = $methodCallNode->args[0]->value;
 

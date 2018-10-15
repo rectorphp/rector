@@ -81,11 +81,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        if (! $this->methodCallAnalyzer->isTypeAndMethod(
-            $methodCallNode,
-            'Symfony\Component\DependencyInjection\ContainerInterface',
-            'get'
-        )) {
+        if (! $this->isType($methodCallNode, 'Symfony\Component\DependencyInjection\ContainerInterface')) {
+            return null;
+        }
+
+        if (! $this->isName($methodCallNode, 'get')) {
             return null;
         }
 

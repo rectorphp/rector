@@ -10,18 +10,12 @@ use PhpParser\Node\Identifier;
 use Rector\Builder\IdentifierRenamer;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\CallAnalyzer;
-use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class AssertPropertyExistsRector extends AbstractPHPUnitRector
 {
-    /**
-     * @var MethodCallAnalyzer
-     */
-    private $methodCallAnalyzer;
-
     /**
      * @var IdentifierRenamer
      */
@@ -54,12 +48,10 @@ final class AssertPropertyExistsRector extends AbstractPHPUnitRector
     private $callAnalyzer;
 
     public function __construct(
-        MethodCallAnalyzer $methodCallAnalyzer,
         IdentifierRenamer $identifierRenamer,
         NodeFactory $nodeFactory,
         CallAnalyzer $callAnalyzer
     ) {
-        $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
         $this->nodeFactory = $nodeFactory;
         $this->callAnalyzer = $callAnalyzer;
@@ -103,7 +95,7 @@ final class AssertPropertyExistsRector extends AbstractPHPUnitRector
             return null;
         }
 
-        if (! $this->methodCallAnalyzer->isMethods($methodCallNode, ['assertTrue', 'assertFalse'])) {
+        if (! $this->isNames($methodCallNode, ['assertTrue', 'assertFalse'])) {
             return null;
         }
 

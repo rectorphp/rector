@@ -6,18 +6,12 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Builder\IdentifierRenamer;
 use Rector\Node\NodeFactory;
-use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class SetLineRector extends AbstractRector
 {
-    /**
-     * @var MethodCallAnalyzer
-     */
-    private $methodCallAnalyzer;
-
     /**
      * @var IdentifierRenamer
      */
@@ -28,12 +22,8 @@ final class SetLineRector extends AbstractRector
      */
     private $nodeFactory;
 
-    public function __construct(
-        MethodCallAnalyzer $methodCallAnalyzer,
-        IdentifierRenamer $identifierRenamer,
-        NodeFactory $nodeFactory
-    ) {
-        $this->methodCallAnalyzer = $methodCallAnalyzer;
+    public function __construct(IdentifierRenamer $identifierRenamer, NodeFactory $nodeFactory)
+    {
         $this->identifierRenamer = $identifierRenamer;
         $this->nodeFactory = $nodeFactory;
     }
@@ -54,18 +44,23 @@ final class SetLineRector extends AbstractRector
     }
 
     /**
-     * @param MethodCall $methodCallNode
+     * @param MethodCall $node
      */
-    public function refactor(Node $methodCallNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if ($this->methodCallAnalyzer->isTypeAndMethod($methodCallNode, 'PhpParser\Node', 'setLine') === false) {
+        if (! $this->isType($node, 'PhpParser\Node')) {
             return null;
         }
-        $this->identifierRenamer->renameNode($methodCallNode, 'setAttribute');
 
-        $methodCallNode->args[1] = $methodCallNode->args[0];
-        $methodCallNode->args[0] = $this->nodeFactory->createArg($this->nodeFactory->createString('line'));
+        if (! $this->isName($node, 'setLine')) {
+            return null;
+        }
 
-        return $methodCallNode;
+        $this->identifierRenamer->renameNode($node, 'setAttribute');
+
+        $node->args[1] = $node->args[0];
+        $node->args[0] = $this->nodeFactory->createArg($this->nodeFactory->createString('line'));
+
+        return $node;
     }
 }

@@ -6,7 +6,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\Node\NodeFactory;
-use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -32,20 +31,13 @@ final class StringFormTypeToClassRector extends AbstractRector
      */
     private $formBuilderClass;
 
-    /**
-     * @var MethodCallAnalyzer
-     */
-    private $methodCallAnalyzer;
-
     public function __construct(
         NodeFactory $nodeFactory,
         FormTypeStringToTypeProvider $formTypeStringToTypeProvider,
-        MethodCallAnalyzer $methodCallAnalyzer,
         string $formBuilderClass = 'Symfony\Component\Form\FormBuilderInterface'
     ) {
         $this->nodeFactory = $nodeFactory;
         $this->formBuilderClass = $formBuilderClass;
-        $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->formTypeStringToTypeProvider = $formTypeStringToTypeProvider;
     }
 
@@ -81,26 +73,30 @@ CODE_SAMPLE
     }
 
     /**
-     * @param MethodCall $methodCallNode
+     * @param MethodCall $node
      */
-    public function refactor(Node $methodCallNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (! $this->methodCallAnalyzer->isTypeAndMethod($methodCallNode, $this->formBuilderClass, 'add')) {
+        if (! $this->isType($node, $this->formBuilderClass)) {
+            return null;
+        }
+
+        if (! $this->isName($node, 'add')) {
             return null;
         }
 
         // just one argument
-        if (! isset($methodCallNode->args[1])) {
+        if (! isset($node->args[1])) {
             return null;
         }
 
         // not a string
-        if (! $methodCallNode->args[1]->value instanceof String_) {
+        if (! $node->args[1]->value instanceof String_) {
             return null;
         }
 
         /** @var String_ $stringNode */
-        $stringNode = $methodCallNode->args[1]->value;
+        $stringNode = $node->args[1]->value;
 
         // not a form type string
         $formClass = $this->formTypeStringToTypeProvider->matchClassForNameWithPrefix($stringNode->value);
@@ -108,8 +104,8 @@ CODE_SAMPLE
             return null;
         }
 
-        $methodCallNode->args[1]->value = $this->nodeFactory->createClassConstantReference($formClass);
+        $node->args[1]->value = $this->nodeFactory->createClassConstantReference($formClass);
 
-        return $methodCallNode;
+        return $node;
     }
 }

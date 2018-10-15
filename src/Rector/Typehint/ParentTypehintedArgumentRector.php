@@ -8,7 +8,6 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\NodeTypeResolver\Node\Attribute;
@@ -105,9 +104,8 @@ CODE_SAMPLE
         if ($this->isTypeMatch($classNodeTypes) === false) {
             return null;
         }
-        /** @var Class_ $classMethodNode */
-        $classNode = $classMethodNode->getAttribute(Attribute::CLASS_NODE);
-        $classNodeTypes = $this->nodeTypeResolver->resolve($classNode);
+
+        $classNodeTypes = $this->getTypes($classMethodNode);
 
         $matchingTypes = $this->getMatchingTypesForClassNode($classNodeTypes);
 

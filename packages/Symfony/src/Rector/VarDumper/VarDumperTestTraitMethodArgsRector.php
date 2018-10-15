@@ -7,18 +7,12 @@ use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\Node\NodeFactory;
-use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class VarDumperTestTraitMethodArgsRector extends AbstractRector
 {
-    /**
-     * @var MethodCallAnalyzer
-     */
-    private $methodCallAnalyzer;
-
     /**
      * @var NodeFactory
      */
@@ -30,11 +24,9 @@ final class VarDumperTestTraitMethodArgsRector extends AbstractRector
     private $traitName;
 
     public function __construct(
-        MethodCallAnalyzer $methodCallAnalyzer,
         NodeFactory $nodeFactory,
         string $traitName = 'Symfony\Component\VarDumper\Test\VarDumperTestTrait'
     ) {
-        $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->nodeFactory = $nodeFactory;
         $this->traitName = $traitName;
     }
@@ -69,11 +61,11 @@ final class VarDumperTestTraitMethodArgsRector extends AbstractRector
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        if (! $this->methodCallAnalyzer->isTypeAndMethods(
-            $methodCallNode,
-            $this->traitName,
-            ['assertDumpEquals', 'assertDumpMatchesFormat']
-        )) {
+        if (! $this->isType($methodCallNode, $this->traitName)) {
+            return null;
+        }
+
+        if (! $this->isNames($methodCallNode, ['assertDumpEquals', 'assertDumpMatchesFormat'])) {
             return null;
         }
 

@@ -7,7 +7,6 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use Rector\Builder\IdentifierRenamer;
 use Rector\NodeAnalyzer\CallAnalyzer;
-use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -23,11 +22,6 @@ final class AssertFalseStrposToContainsRector extends AbstractPHPUnitRector
     ];
 
     /**
-     * @var MethodCallAnalyzer
-     */
-    private $methodCallAnalyzer;
-
-    /**
      * @var IdentifierRenamer
      */
     private $identifierRenamer;
@@ -37,12 +31,8 @@ final class AssertFalseStrposToContainsRector extends AbstractPHPUnitRector
      */
     private $callAnalyzer;
 
-    public function __construct(
-        MethodCallAnalyzer $methodCallAnalyzer,
-        IdentifierRenamer $identifierRenamer,
-        CallAnalyzer $callAnalyzer
-    ) {
-        $this->methodCallAnalyzer = $methodCallAnalyzer;
+    public function __construct(IdentifierRenamer $identifierRenamer, CallAnalyzer $callAnalyzer)
+    {
         $this->identifierRenamer = $identifierRenamer;
         $this->callAnalyzer = $callAnalyzer;
     }
@@ -81,7 +71,7 @@ final class AssertFalseStrposToContainsRector extends AbstractPHPUnitRector
             return null;
         }
 
-        if (! $this->methodCallAnalyzer->isMethods($methodCallNode, array_keys($this->renameMethodsMap))) {
+        if (! $this->isNames($methodCallNode, array_keys($this->renameMethodsMap))) {
             return null;
         }
 

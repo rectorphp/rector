@@ -133,7 +133,7 @@ CODE_SAMPLE
                 return null;
             }
 
-            $newNodeTypes = $this->nodeTypeResolver->resolve($node->value);
+            $newNodeTypes = $this->getTypes($node->value);
 
             return $this->processArrayItem($node, $newNodeTypes);
         });

@@ -78,7 +78,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->methodCallAnalyzer->isMethod($methodCallNode, 'get')) {
+        if (! $this->isName($methodCallNode, 'get')) {
             return null;
         }
 

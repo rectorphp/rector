@@ -6,7 +6,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name\FullyQualified;
-use Rector\NodeAnalyzer\StaticMethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -19,17 +18,11 @@ final class StaticCallToFunctionRector extends AbstractRector
     private $staticCallToFunction = [];
 
     /**
-     * @var StaticMethodCallAnalyzer
-     */
-    private $staticMethodCallAnalyzer;
-
-    /**
      * @param string[] $staticCallToFunction
      */
-    public function __construct(array $staticCallToFunction, StaticMethodCallAnalyzer $staticMethodCallAnalyzer)
+    public function __construct(array $staticCallToFunction)
     {
         $this->staticCallToFunction = $staticCallToFunction;
-        $this->staticMethodCallAnalyzer = $staticMethodCallAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -64,7 +57,7 @@ final class StaticCallToFunctionRector extends AbstractRector
         $activeStaticCall = null;
         foreach ($staticCalls as $staticCall) {
             [$class, $method] = explode('::', $staticCall);
-            if ($this->staticMethodCallAnalyzer->isTypeAndMethod($node, $class, $method)) {
+            if ($this->isType($node, $class) && $this->isName($node, $method)) {
                 $activeStaticCall = $staticCall;
             }
         }

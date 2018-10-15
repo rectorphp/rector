@@ -84,7 +84,7 @@ CODE_SAMPLE
     {
         /** @var ClassLike $classNode */
         $classNode = $classMethodNode->getAttribute(Attribute::CLASS_NODE);
-        $classNodeTypes = $this->nodeTypeResolver->resolve($classNode);
+        $classNodeTypes = $this->getTypes($classNode);
         if (! $classNodeTypes) {
             return null;
         }

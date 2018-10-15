@@ -10,7 +10,6 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use Rector\Builder\IdentifierRenamer;
 use Rector\Node\NodeFactory;
-use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -41,11 +40,6 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractPHPUnitRector
     private $activeOldToNewMethods = [];
 
     /**
-     * @var MethodCallAnalyzer
-     */
-    private $methodCallAnalyzer;
-
-    /**
      * @var IdentifierRenamer
      */
     private $identifierRenamer;
@@ -65,12 +59,10 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractPHPUnitRector
      */
     public function __construct(
         array $activeMethods = [],
-        MethodCallAnalyzer $methodCallAnalyzer,
         IdentifierRenamer $identifierRenamer,
         NodeFactory $nodeFactory
     ) {
         $this->activeOldToNewMethods = $this->filterActiveOldToNewMethods($activeMethods);
-        $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
         $this->nodeFactory = $nodeFactory;
     }
@@ -107,11 +99,11 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractPHPUnitRector
         if (! $this->isInTestClass($methodCallNode)) {
             return null;
         }
-        if (! $this->methodCallAnalyzer->isMethods($methodCallNode, ['assertTrue', 'assertFalse'])) {
+
+        if (! $this->isNames($methodCallNode, ['assertTrue', 'assertFalse'])) {
             return null;
         }
-        /** @var MethodCall $methodCallNode */
-        $methodCallNode = $methodCallNode;
+
         if (! isset($methodCallNode->args[0])) {
             return null;
         }

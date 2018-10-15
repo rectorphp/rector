@@ -11,7 +11,6 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar;
 use Rector\Builder\IdentifierRenamer;
-use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -34,11 +33,6 @@ final class AssertComparisonToSpecificMethodRector extends AbstractPHPUnitRector
     ];
 
     /**
-     * @var MethodCallAnalyzer
-     */
-    private $methodCallAnalyzer;
-
-    /**
      * @var IdentifierRenamer
      */
     private $identifierRenamer;
@@ -48,9 +42,8 @@ final class AssertComparisonToSpecificMethodRector extends AbstractPHPUnitRector
      */
     private $activeOpSignal;
 
-    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, IdentifierRenamer $identifierRenamer)
+    public function __construct(IdentifierRenamer $identifierRenamer)
     {
-        $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
     }
 
@@ -87,9 +80,11 @@ final class AssertComparisonToSpecificMethodRector extends AbstractPHPUnitRector
         if (! $this->isInTestClass($methodCallNode)) {
             return null;
         }
-        if (! $this->methodCallAnalyzer->isMethods($methodCallNode, ['assertTrue', 'assertFalse'])) {
+
+        if (! $this->isNames($methodCallNode, ['assertTrue', 'assertFalse'])) {
             return null;
         }
+
         $firstArgumentValue = $methodCallNode->args[0]->value;
         if (! $firstArgumentValue instanceof BinaryOp) {
             return null;

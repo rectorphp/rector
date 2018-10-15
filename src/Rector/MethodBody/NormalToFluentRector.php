@@ -6,7 +6,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -19,11 +18,6 @@ final class NormalToFluentRector extends AbstractRector
     private $fluentMethodsByType = [];
 
     /**
-     * @var MethodCallAnalyzer
-     */
-    private $methodCallAnalyzer;
-
-    /**
      * @var MethodCall[]
      */
     private $collectedMethodCalls = [];
@@ -31,10 +25,9 @@ final class NormalToFluentRector extends AbstractRector
     /**
      * @param string[] $fluentMethodsByType
      */
-    public function __construct(array $fluentMethodsByType, MethodCallAnalyzer $methodCallAnalyzer)
+    public function __construct(array $fluentMethodsByType)
     {
         $this->fluentMethodsByType = $fluentMethodsByType;
-        $this->methodCallAnalyzer = $methodCallAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -127,7 +120,11 @@ CODE_SAMPLE
     private function matchMethodCall(MethodCall $methodCallNode): ?string
     {
         foreach ($this->fluentMethodsByType as $type => $methodNames) {
-            if ($this->methodCallAnalyzer->isTypeAndMethods($methodCallNode, $type, $methodNames)) {
+            if (! $this->isType($methodCallNode, $type)) {
+                continue;
+            }
+
+            if ($this->isNames($methodCallNode, $methodNames)) {
                 return $type;
             }
         }

@@ -151,10 +151,8 @@ CODE_SAMPLE
             return false;
         }
 
-        $paramNodeTypes = $this->nodeTypeResolver->resolve($paramNode);
-
-        $typehint = $paramNodeTypes[0] ?? null;
-        if (! $typehint) {
+        $typehint = $this->getTypes($paramNode)[0] ?? null;
+        if ($typehint === null) {
             return false;
         }
 
@@ -163,6 +161,7 @@ CODE_SAMPLE
             return false;
         }
 
+        /** @var string $typehint */
         return $this->analyzedApplicationContainer->hasService($typehint);
     }
 

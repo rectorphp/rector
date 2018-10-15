@@ -6,7 +6,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeAnalyzer\MethodArgumentAnalyzer;
-use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -14,11 +13,6 @@ use Rector\RectorDefinition\RectorDefinition;
 
 final class RedirectToRouteRector extends AbstractRector
 {
-    /**
-     * @var MethodCallAnalyzer
-     */
-    private $methodCallAnalyzer;
-
     /**
      * @var MethodArgumentAnalyzer
      */
@@ -35,12 +29,10 @@ final class RedirectToRouteRector extends AbstractRector
     private $controllerClass;
 
     public function __construct(
-        MethodCallAnalyzer $methodCallAnalyzer,
         MethodArgumentAnalyzer $methodArgumentAnalyzer,
         MethodCallNodeFactory $methodCallNodeFactory,
         string $controllerClass = 'Symfony\Bundle\FrameworkBundle\Controller\Controller'
     ) {
-        $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->methodArgumentAnalyzer = $methodArgumentAnalyzer;
         $this->methodCallNodeFactory = $methodCallNodeFactory;
         $this->controllerClass = $controllerClass;
@@ -73,15 +65,14 @@ final class RedirectToRouteRector extends AbstractRector
         if ($parentClassName !== $this->controllerClass) {
             return null;
         }
-        if (! $this->methodCallAnalyzer->isMethod($node, 'redirect')) {
+        if (! $this->isName($node, 'redirect')) {
             return null;
         }
         if (! $this->methodArgumentAnalyzer->hasMethodNthArgument($node, 1)) {
             return null;
         }
-        /** @var MethodCall $methodCallNode */
-        $methodCallNode = $node;
-        if (! $this->methodCallAnalyzer->isMethod($methodCallNode->args[0]->value, 'generateUrl')) {
+
+        if (! $this->isName($node->args[0]->value, 'generateUrl')) {
             return null;
         }
 

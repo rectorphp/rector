@@ -10,7 +10,6 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\Constant\ConstantStringType;
-use Rector\NodeAnalyzer\StaticMethodCallAnalyzer;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Printer\BetterStandardPrinter;
 use Rector\Rector\AbstractRector;
@@ -24,17 +23,9 @@ final class ParseFileRector extends AbstractRector
      */
     private $betterStandardPrinter;
 
-    /**
-     * @var StaticMethodCallAnalyzer
-     */
-    private $staticMethodCallAnalyzer;
-
-    public function __construct(
-        BetterStandardPrinter $betterStandardPrinter,
-        StaticMethodCallAnalyzer $staticMethodCallAnalyzer
-    ) {
+    public function __construct(BetterStandardPrinter $betterStandardPrinter)
+    {
         $this->betterStandardPrinter = $betterStandardPrinter;
-        $this->staticMethodCallAnalyzer = $staticMethodCallAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -59,7 +50,7 @@ final class ParseFileRector extends AbstractRector
      */
     public function refactor(Node $staticCallNode): ?Node
     {
-        if (! $this->staticMethodCallAnalyzer->isMethods($staticCallNode, ['parse'])) {
+        if (! $this->isName($staticCallNode, 'parse')) {
             return null;
         }
 

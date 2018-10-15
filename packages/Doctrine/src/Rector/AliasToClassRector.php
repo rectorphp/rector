@@ -6,7 +6,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodArgumentAnalyzer;
-use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -14,11 +13,6 @@ use function Safe\sprintf;
 
 final class AliasToClassRector extends AbstractRector
 {
-    /**
-     * @var MethodCallAnalyzer
-     */
-    private $methodCallAnalyzer;
-
     /**
      * @var string[]
      */
@@ -39,11 +33,9 @@ final class AliasToClassRector extends AbstractRector
      */
     public function __construct(
         array $aliasesToNamespaces,
-        MethodCallAnalyzer $methodCallAnalyzer,
         MethodArgumentAnalyzer $methodArgumentAnalyzer,
         NodeFactory $nodeFactory
     ) {
-        $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->aliasesToNamespaces = $aliasesToNamespaces;
         $this->nodeFactory = $nodeFactory;
         $this->methodArgumentAnalyzer = $methodArgumentAnalyzer;
@@ -79,9 +71,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $methodCall): ?Node
     {
-        if (! $this->methodCallAnalyzer->isMethod($methodCall, 'getRepository')) {
+        if (! $this->isName($methodCall, 'getRepository')) {
             return null;
         }
+
         if (! $this->methodArgumentAnalyzer->isMethodNthArgumentString($methodCall, 1)) {
             return null;
         }

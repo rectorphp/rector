@@ -7,7 +7,6 @@ use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use Rector\Builder\IdentifierRenamer;
-use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -24,11 +23,6 @@ final class AssertSameBoolNullToSpecificMethodRector extends AbstractPHPUnitRect
     ];
 
     /**
-     * @var MethodCallAnalyzer
-     */
-    private $methodCallAnalyzer;
-
-    /**
      * @var IdentifierRenamer
      */
     private $identifierRenamer;
@@ -38,9 +32,8 @@ final class AssertSameBoolNullToSpecificMethodRector extends AbstractPHPUnitRect
      */
     private $constantName;
 
-    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, IdentifierRenamer $identifierRenamer)
+    public function __construct(IdentifierRenamer $identifierRenamer)
     {
-        $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
     }
 
@@ -74,11 +67,9 @@ final class AssertSameBoolNullToSpecificMethodRector extends AbstractPHPUnitRect
         if (! $this->isInTestClass($methodCallNode)) {
             return null;
         }
-        if (! $this->methodCallAnalyzer->isMethods($methodCallNode, ['assertSame', 'assertNotSame'])) {
+        if (! $this->isNames($methodCallNode, ['assertSame', 'assertNotSame'])) {
             return null;
         }
-        /** @var MethodCall $methodCallNode */
-        $methodCallNode = $methodCallNode;
         $firstArgumentValue = $methodCallNode->args[0]->value;
         if (! $firstArgumentValue instanceof ConstFetch) {
             return null;
