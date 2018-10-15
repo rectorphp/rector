@@ -13,6 +13,7 @@ use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BinaryOp\Smaller;
 use PhpParser\Node\Expr\BinaryOp\SmallerOrEqual;
 use PhpParser\Node\Expr\BooleanNot;
+use Rector\NodeAnalyzer\ConstFetchAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -22,7 +23,7 @@ final class SimplifyConditionsRector extends AbstractRector
     /**
      * @var string[]
      */
-    private $binaryOpClassMap = [
+    private $binaryOpClassesToInversedClasses = [
         Identical::class => NotIdentical::class,
         NotIdentical::class => Identical::class,
         Equal::class => NotEqual::class,
@@ -32,6 +33,16 @@ final class SimplifyConditionsRector extends AbstractRector
         GreaterOrEqual::class => Smaller::class,
         SmallerOrEqual::class => Greater::class,
     ];
+
+    /**
+     * @var ConstFetchAnalyzer
+     */
+    private $constFetchAnalyzer;
+
+    public function __construct(ConstFetchAnalyzer $constFetchAnalyzer)
+    {
+        $this->constFetchAnalyzer = $constFetchAnalyzer;
+    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -46,26 +57,82 @@ final class SimplifyConditionsRector extends AbstractRector
      */
     public function getNodeTypes(): array
     {
-        return [BooleanNot::class];
+        return [BooleanNot::class, Identical::class];
     }
 
     /**
-     * @param BooleanNot $notNode
+     * @param BooleanNot|Identical $node
      */
-    public function refactor(Node $notNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (! $notNode->expr instanceof BinaryOp) {
-            return $notNode;
+        if ($node instanceof BooleanNot) {
+            return $this->processBooleanNot($node);
         }
 
-        $binaryOpType = get_class($notNode->expr);
+        if ($node instanceof Identical) {
+            return $this->processIdenticalAndNotIdentical($node);
+        }
+    }
 
-        if (! isset($this->binaryOpClassMap[$binaryOpType])) {
-            return $notNode;
+    private function processBooleanNot(BooleanNot $node): Node
+    {
+        if (! $node->expr instanceof BinaryOp) {
+            return $node;
         }
 
-        $newBinaryOp = $this->binaryOpClassMap[$binaryOpType];
+        if ($this->shouldSkip($node->expr)) {
+            return $node;
+        }
 
-        return new $newBinaryOp($notNode->expr->left, $notNode->expr->right);
+        return $this->createInversedBooleanOp($node->expr);
+    }
+
+    private function processIdenticalAndNotIdentical(BinaryOp $node): Node
+    {
+        if ($node->left instanceof Identical || $node->left instanceof NotIdentical) {
+            $subBinaryOpNode = $node->left;
+            $shouldInverse = $this->constFetchAnalyzer->isFalse($node->right);
+        } elseif ($node->right instanceof Identical || $node->right instanceof NotIdentical) {
+            $subBinaryOpNode = $node->right;
+            $shouldInverse = $this->constFetchAnalyzer->isFalse($node->left);
+        } else {
+            return $node;
+        }
+
+        if ($shouldInverse) {
+            return $this->createInversedBooleanOp($subBinaryOpNode);
+        }
+
+        return $subBinaryOpNode;
+    }
+
+    private function createInversedBooleanOp(BinaryOp $binaryOpNode): BinaryOp
+    {
+        $binaryOpNodeClass = get_class($binaryOpNode);
+
+        // we can't invert that
+        if (! isset($this->binaryOpClassesToInversedClasses[$binaryOpNodeClass])) {
+            return $binaryOpNode;
+        }
+
+        $inversedBinaryOpNodeClass = $this->binaryOpClassesToInversedClasses[$binaryOpNodeClass];
+
+        return new $inversedBinaryOpNodeClass($binaryOpNode->left, $binaryOpNode->right);
+    }
+
+    /**
+     * Skip too nested binary || binary > binary combinations
+     */
+    private function shouldSkip(BinaryOp $binaryOpNode): bool
+    {
+        if ($binaryOpNode->left instanceof BinaryOp) {
+            return true;
+        }
+
+        if ($binaryOpNode->right instanceof BinaryOp) {
+            return true;
+        }
+
+        return false;
     }
 }
