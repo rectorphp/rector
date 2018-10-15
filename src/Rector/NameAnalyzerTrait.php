@@ -19,7 +19,7 @@ trait NameAnalyzerTrait
     /**
      * @required
      */
-    public function setCallAnalyzer(NameResolver $nameResolver): void
+    public function setNameResolver(NameResolver $nameResolver): void
     {
         $this->nameResolver = $nameResolver;
     }
