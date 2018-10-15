@@ -85,6 +85,6 @@ final class ConfigurationFactory
             }
         }
 
-        return $fqnNodeTypes;
+        return array_unique($fqnNodeTypes);
     }
 }
