@@ -59,8 +59,9 @@ parameters:
         # Error php-parser token
         - '#Access to an undefined property PhpParser\\Node\\Expr\\Error\|PhpParser\\Node\\Expr\\Variable::\$name#'
 
-        # false positive, has annotation type above (@todo recheck for possible ignored positives)
+        # false positive, has annotation type above
         - '#Access to an undefined property PhpParser\\Node::\$name#' # 11
+        - '#Access to an undefined property PhpParser\\Node\\Expr::\$expr#'
 
         # subtype
         - '#Property PhpParser\\Node\\Param::\$type \(PhpParser\\Node\\Name|PhpParser\\Node\\NullableType\|string\|null\) does not accept PhpParser\\Node\\Identifier|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType#' # 3

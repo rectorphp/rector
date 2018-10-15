@@ -4,6 +4,8 @@ namespace Rector\ContributorTools\Command;
 
 use Nette\Utils\FileSystem;
 use Nette\Utils\Strings;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Name\FullyQualified;
 use Rector\Console\ConsoleStyle;
@@ -92,13 +94,13 @@ final class CreateRectorCommand extends Command
             $this->consoleStyle->note(sprintf('New file "%s" was generated', $destination));
         }
 
-        $this->consoleStyle->success(sprintf('New Rector "%s" is ready!', $configuration->getName()));
-
-        if ($testCasePath) {
-            $this->consoleStyle->note(
-                sprintf('Now make these tests green:%svendor/bin/phpunit %s', PHP_EOL, $testCasePath)
-            );
-        }
+        $this->consoleStyle->success(sprintf(
+            'New Rector "%s" is ready!%sNow make these tests green again:%svendor/bin/phpunit %s',
+            $configuration->getName(),
+            PHP_EOL . PHP_EOL,
+            PHP_EOL,
+            $testCasePath
+        ));
 
         return ShellCode::SUCCESS;
     }
@@ -117,11 +119,11 @@ final class CreateRectorCommand extends Command
             '_CodeAfter_' => $configuration->getCodeAfter(),
         ];
 
-        $nodeTypesPhp = [];
+        $arrayNodes = [];
         foreach ($configuration->getNodeTypes() as $nodeType) {
-            $nodeTypesPhp[] = new ClassConstFetch(new FullyQualified($nodeType), 'class');
+            $arrayNodes[] = new ArrayItem(new ClassConstFetch(new FullyQualified($nodeType), 'class'));
         }
-        $data['_NodeTypes_Php_'] = $this->betterStandardPrinter->prettyPrint($nodeTypesPhp);
+        $data['_NodeTypes_Php_'] = $this->betterStandardPrinter->prettyPrint([new Array_($arrayNodes)]);
 
         $data['_NodeTypes_Doc_'] = '\\' . implode('|\\', $configuration->getNodeTypes());
 

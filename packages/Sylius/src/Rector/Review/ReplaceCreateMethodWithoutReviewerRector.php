@@ -60,8 +60,10 @@ final class ReplaceCreateMethodWithoutReviewerRector extends AbstractRector
             return null;
         }
 
-        if ((! $this->methodArgumentAnalyzer->hasMethodNthArgument($node, 2)
-            || $this->methodArgumentAnalyzer->isMethodNthArgumentNull($node, 2)) === false) {
+        if (
+            $this->methodArgumentAnalyzer->hasMethodNthArgument($node, 2)
+            && ! $this->methodArgumentAnalyzer->isMethodNthArgumentNull($node, 2)
+        ) {
             return null;
         }
 

@@ -101,7 +101,7 @@ CODE_SAMPLE
             return null;
         }
         $methodReflection = $entityClassReflection->getMethod($methodName, $node->getAttribute(Attribute::SCOPE));
-        if ($methodReflection->isPublic() === false) {
+        if (! $methodReflection->isPublic()) {
             return null;
         }
         $node->var = $this->propertyFetchNodeFactory->createLocalWithPropertyName('repository');

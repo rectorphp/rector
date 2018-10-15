@@ -188,7 +188,7 @@ final class StaticMethodNameReplacerRector extends AbstractRector
             $this->activeTypes = $matchedTypes;
         }
 
-        if ($this->isMethodName($node, $this->getClasses()) === false) {
+        if (! $this->isMethodName($node, $this->getClasses())) {
             return null;
         }
 

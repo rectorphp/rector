@@ -130,7 +130,7 @@ CODE_SAMPLE
                 return null;
             }
         }
-        if (! Strings::endsWith($className, 'Repository') === false) {
+        if (Strings::endsWith($className, 'Repository')) {
             return null;
         }
         $repositoryFqn = $this->repositoryFqn($node);

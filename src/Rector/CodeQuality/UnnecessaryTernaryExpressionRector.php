@@ -84,7 +84,7 @@ final class UnnecessaryTernaryExpressionRector extends AbstractRector
 
         $ifValue = $ifExpressionName->toLowerString();
         $elseValue = $elseExpressionName->toLowerString();
-        if (! in_array('null', [$ifValue, $elseValue], true) === false) {
+        if (in_array('null', [$ifValue, $elseValue], true)) {
             return null;
         }
         /** @var BinaryOp $binaryOperation */

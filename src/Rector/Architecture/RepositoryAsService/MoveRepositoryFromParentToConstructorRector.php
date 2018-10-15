@@ -146,7 +146,7 @@ CODE_SAMPLE
         }
 
         $className = $node->getAttribute(Attribute::CLASS_NAME);
-        if (Strings::endsWith($className, 'Repository') === false) {
+        if (! Strings::endsWith($className, 'Repository')) {
             return null;
         }
 

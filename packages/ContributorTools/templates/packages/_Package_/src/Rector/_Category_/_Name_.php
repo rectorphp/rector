@@ -24,7 +24,7 @@ final class _Name_ extends AbstractRector
      */
     public function getNodeTypes(): array
     {
-        return [_NodeTypes_Php_];
+        return _NodeTypes_Php_;
     }
 
     /**

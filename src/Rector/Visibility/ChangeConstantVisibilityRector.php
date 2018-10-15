@@ -94,7 +94,7 @@ CODE_SAMPLE
             return null;
         }
         $constantName = $node->consts[0]->name->toString();
-        if (isset($this->constantToVisibilityByClass[$nodeParentClassName][$constantName]) === false) {
+        if (! isset($this->constantToVisibilityByClass[$nodeParentClassName][$constantName])) {
             return null;
         }
         $this->visibilityModifier->removeOriginalVisibilityFromFlags($node);

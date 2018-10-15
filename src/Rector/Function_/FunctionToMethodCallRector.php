@@ -65,7 +65,7 @@ final class FunctionToMethodCallRector extends AbstractRector
         }
 
         $functionName = $this->getName($node);
-        if (isset($this->functionToMethodCall[$functionName]) === false) {
+        if (! isset($this->functionToMethodCall[$functionName])) {
             return null;
         }
         /** @var Identifier $identifier */

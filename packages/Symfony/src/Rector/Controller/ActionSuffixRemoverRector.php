@@ -65,7 +65,7 @@ CODE_SAMPLE
 
     public function refactor(Node $node): ?Node
     {
-        if ($this->controllerMethodAnalyzer->isAction($node) === false) {
+        if (! $this->controllerMethodAnalyzer->isAction($node)) {
             return null;
         }
         $this->identifierRenamer->removeSuffix($node, 'Action');

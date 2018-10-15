@@ -66,7 +66,7 @@ final class NamespaceReplacerRector extends AbstractRector
             return null;
         }
 
-        if (! $this->isClassFullyQualifiedName($node) === false) {
+        if ($this->isClassFullyQualifiedName($node)) {
             return null;
         }
 

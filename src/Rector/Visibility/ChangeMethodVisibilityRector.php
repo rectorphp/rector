@@ -102,7 +102,7 @@ CODE_SAMPLE
             return null;
         }
         $methodName = $node->name->toString();
-        if (isset($this->methodToVisibilityByClass[$nodeParentClassName][$methodName]) === false) {
+        if (! isset($this->methodToVisibilityByClass[$nodeParentClassName][$methodName])) {
             return null;
         }
         $this->visibilityModifier->removeOriginalVisibilityFromFlags($node);

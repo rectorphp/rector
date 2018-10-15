@@ -79,7 +79,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->isAliasWithConfiguredEntity($node->args[0]->value->value) === false) {
+        if (! $this->isAliasWithConfiguredEntity($node->args[0]->value->value)) {
             return null;
         }
 

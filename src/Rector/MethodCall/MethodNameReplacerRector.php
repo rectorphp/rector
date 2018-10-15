@@ -178,7 +178,7 @@ CODE_SAMPLE
             $this->activeTypes = $matchedTypes;
         }
 
-        if ($this->isMethodName($identifierNode, $this->getClasses()) === false) {
+        if (! $this->isMethodName($identifierNode, $this->getClasses())) {
             return null;
         }
 
