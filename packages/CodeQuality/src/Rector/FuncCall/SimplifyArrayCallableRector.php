@@ -25,6 +25,12 @@ final class SimplifyArrayCallableRector extends AbstractRector
     private $functionsWithCallableArgumentPosition = [
         'array_filter' => 1,
         'array_map' => 0,
+        'array_walk' => 1,
+        'array_reduce' => 1,
+        'usort' => 1,
+        'uksort' => 1,
+        'uasort' => 1,
+        'array_walk_recursive' => 1,
     ];
 
     public function getDefinition(): RectorDefinition
