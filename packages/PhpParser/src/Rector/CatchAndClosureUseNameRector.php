@@ -56,32 +56,32 @@ final class CatchAndClosureUseNameRector extends AbstractRector
     }
 
     /**
-     * @param PropertyFetch $propertyFetchNode
+     * @param PropertyFetch $node
      */
-    public function refactor(Node $propertyFetchNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if ($this->propertyFetchAnalyzer->isTypesAndProperty(
-            $propertyFetchNode,
-            ['PhpParser\Node\Stmt\Catch_', 'PhpParser\Node\Expr\ClosureUse'],
-            'var'
-        ) === false) {
+        if (! $this->isTypes($node, ['PhpParser\Node\Stmt\Catch_', 'PhpParser\Node\Expr\ClosureUse'])) {
+            return $node;
+        }
+
+        if (! $this->propertyFetchAnalyzer->isProperties($node, ['var'])) {
             return null;
         }
 
-        $parentNode = $propertyFetchNode->getAttribute(Attribute::PARENT_NODE);
+        $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
         if ($parentNode instanceof PropertyFetch) {
-            return $propertyFetchNode;
+            return $node;
         }
 
         /** @var Variable $variableNode */
-        $variableNode = $propertyFetchNode->var;
+        $variableNode = $node->var;
 
-        $propertyFetchNode->var = $this->propertyFetchNodeFactory->createWithVariableNameAndPropertyName(
+        $node->var = $this->propertyFetchNodeFactory->createWithVariableNameAndPropertyName(
             (string) $variableNode->name,
             'var'
         );
-        $this->identifierRenamer->renameNode($propertyFetchNode, 'name');
+        $this->identifierRenamer->renameNode($node, 'name');
 
-        return $propertyFetchNode;
+        return $node;
     }
 }

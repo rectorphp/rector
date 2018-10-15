@@ -3,6 +3,8 @@
 namespace Rector\Rector;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\PropertyFetch;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
 /**
@@ -44,6 +46,10 @@ trait TypeAnalyzerTrait
      */
     public function getTypes(Node $node): array
     {
+        if ($node instanceof MethodCall || $node instanceof PropertyFetch) {
+            return $this->nodeTypeResolver->resolve($node->var);
+        }
+
         return $this->nodeTypeResolver->resolve($node);
     }
 }

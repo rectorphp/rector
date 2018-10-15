@@ -85,9 +85,8 @@ CODE_SAMPLE
     public function refactor(Node $methodCallNode): ?Node
     {
         foreach ($this->oldMethodsToNewMethodsWithArgsByType as $type => $oldMethodsToNewMethodsWithArgs) {
-            // @todo is type should be possibly part of AbstractRector
             // @todo is name should be possibly part of AbstractRector
-            if (! $this->methodCallAnalyzer->isTypes($methodCallNode, [$type])) {
+            if (! $this->isType($methodCallNode, $type)) {
                 continue;
             }
 

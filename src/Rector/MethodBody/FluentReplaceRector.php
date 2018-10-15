@@ -83,7 +83,7 @@ CODE_SAMPLE
         }
 
         // is matching type
-        if (! $this->isTypes($methodCallNode->var->var, $this->classesToDefluent)) {
+        if (! $this->isTypes($methodCallNode->var, $this->classesToDefluent)) {
             return $methodCallNode;
         }
 

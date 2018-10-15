@@ -74,7 +74,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $methodCallNode): ?Node
     {
-        if (! $this->methodCallAnalyzer->isTypesAndMethod($methodCallNode, $this->getMethodAwareTypes, 'get')) {
+        if (! $this->isTypes($methodCallNode, $this->getMethodAwareTypes)) {
+            return null;
+        }
+
+        if (! $this->methodCallAnalyzer->isMethod($methodCallNode, 'get')) {
             return null;
         }
 
