@@ -6,8 +6,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
-use Rector\NodeAnalyzer\CallAnalyzer;
-use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -19,31 +17,16 @@ use Rector\RectorDefinition\RectorDefinition;
 final class ModalToGetSetRector extends AbstractRector
 {
     /**
-     * @var MethodCallAnalyzer
-     */
-    private $methodCallAnalyzer;
-
-    /**
      * @var mixed[]
      */
     private $methodNamesByTypes = [];
 
     /**
-     * @var CallAnalyzer
-     */
-    private $callAnalyzer;
-
-    /**
      * @param mixed[] $methodNamesByTypes
      */
-    public function __construct(
-        MethodCallAnalyzer $methodCallAnalyzer,
-        array $methodNamesByTypes,
-        CallAnalyzer $callAnalyzer
-    ) {
-        $this->methodCallAnalyzer = $methodCallAnalyzer;
+    public function __construct(array $methodNamesByTypes)
+    {
         $this->methodNamesByTypes = $methodNamesByTypes;
-        $this->callAnalyzer = $callAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -85,20 +68,20 @@ CODE_SAMPLE
     }
 
     /**
-     * @param MethodCall $methodCallNode
+     * @param MethodCall $node
      */
-    public function refactor(Node $methodCallNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        $typeAndMethodNames = $this->matchTypeAndMethodName($methodCallNode);
+        $typeAndMethodNames = $this->matchTypeAndMethodName($node);
         if ($typeAndMethodNames === null) {
             return null;
         }
 
         // @todo important, maybe unique condition
-        $newName = $this->resolveNewMethodNameByCondition($methodCallNode, $typeAndMethodNames);
-        $methodCallNode->name = new Identifier($newName);
+        $newName = $this->resolveNewMethodNameByCondition($node, $typeAndMethodNames);
+        $node->name = new Identifier($newName);
 
-        return $methodCallNode;
+        return $node;
     }
 
     /**
@@ -109,11 +92,15 @@ CODE_SAMPLE
         foreach ($this->methodNamesByTypes as $type => $methodNamesToGetAndSetNames) {
             /** @var string[] $methodNames */
             $methodNames = array_keys($methodNamesToGetAndSetNames);
-            if (! $this->methodCallAnalyzer->isTypeAndMethods($methodCallNode, $type, $methodNames)) {
+            if (! $this->isType($methodCallNode, $type)) {
                 continue;
             }
 
-            $currentMethodName = $this->callAnalyzer->resolveName($methodCallNode);
+            if (! $this->isNames($methodCallNode, $methodNames)) {
+                continue;
+            }
+
+            $currentMethodName = $this->getName($methodCallNode);
             $config = $methodNamesToGetAndSetNames[$currentMethodName];
 
             // default

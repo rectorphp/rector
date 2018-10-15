@@ -15,7 +15,6 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
-use Rector\NodeAnalyzer\CallAnalyzer;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Php\EregToPcreTransformer;
 use Rector\Rector\AbstractRector;
@@ -46,15 +45,9 @@ final class EregToPregMatchRector extends AbstractRector
      */
     private $eregToPcreTransformer;
 
-    /**
-     * @var CallAnalyzer
-     */
-    private $callAnalyzer;
-
-    public function __construct(EregToPcreTransformer $eregToPcreTransformer, CallAnalyzer $callAnalyzer)
+    public function __construct(EregToPcreTransformer $eregToPcreTransformer)
     {
         $this->eregToPcreTransformer = $eregToPcreTransformer;
-        $this->callAnalyzer = $callAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -74,36 +67,36 @@ final class EregToPregMatchRector extends AbstractRector
     }
 
     /**
-     * @param FuncCall $funcCallNode
+     * @param FuncCall $node
      */
-    public function refactor(Node $funcCallNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        $functionName = $this->callAnalyzer->resolveName($funcCallNode);
+        $functionName = $this->getName($node);
 
         if (! isset($this->oldNamesToNewOnes[$functionName])) {
-            return $funcCallNode;
+            return $node;
         }
 
-        $patternNode = $funcCallNode->args[0]->value;
+        $patternNode = $node->args[0]->value;
         if ($patternNode instanceof String_) {
-            $this->processStringPattern($funcCallNode, $patternNode, $functionName);
+            $this->processStringPattern($node, $patternNode, $functionName);
         } elseif ($patternNode instanceof Variable) {
-            $this->processVariablePattern($funcCallNode, $patternNode, $functionName);
+            $this->processVariablePattern($node, $patternNode, $functionName);
         }
 
-        $this->processSplitLimitArgument($funcCallNode, $functionName);
+        $this->processSplitLimitArgument($node, $functionName);
 
-        $funcCallNode->name = new Name($this->oldNamesToNewOnes[$functionName]);
+        $node->name = new Name($this->oldNamesToNewOnes[$functionName]);
 
         // ereg|eregi 3rd argument return value fix
-        if (in_array($functionName, ['ereg', 'eregi'], true) && isset($funcCallNode->args[2])) {
-            $parentNode = $funcCallNode->getAttribute(Attribute::PARENT_NODE);
+        if (in_array($functionName, ['ereg', 'eregi'], true) && isset($node->args[2])) {
+            $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
             if ($parentNode instanceof Assign) {
-                return $this->createTernaryWithStrlenOfFirstMatch($funcCallNode);
+                return $this->createTernaryWithStrlenOfFirstMatch($node);
             }
         }
 
-        return $funcCallNode;
+        return $node;
     }
 
     private function processStringPattern(FuncCall $funcCallNode, String_ $patternNode, string $functionName): void

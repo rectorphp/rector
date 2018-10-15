@@ -82,15 +82,15 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Class_ $classNode
+     * @param Class_ $node
      */
-    public function refactor(Node $classNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if ($classNode->extends === null || $classNode->isAnonymous()) {
+        if ($node->extends === null || $node->isAnonymous()) {
             return null;
         }
 
-        $nodeParentClassName = $this->getClassNodeParentClassName($classNode);
+        $nodeParentClassName = $this->getClassNodeParentClassName($node);
         if (isset($this->parentClassToTraits[$nodeParentClassName]) === false) {
             return null;
         }
@@ -102,12 +102,12 @@ CODE_SAMPLE
 
         foreach ($traitNames as $traitName) {
             $traitUseNode = $this->nodeFactory->createTraitUse($traitName);
-            $this->statementGlue->addAsFirstTrait($classNode, $traitUseNode);
+            $this->statementGlue->addAsFirstTrait($node, $traitUseNode);
         }
 
-        $this->removeParentClass($classNode);
+        $this->removeParentClass($node);
 
-        return $classNode;
+        return $node;
     }
 
     private function removeParentClass(Class_ $classNode): void

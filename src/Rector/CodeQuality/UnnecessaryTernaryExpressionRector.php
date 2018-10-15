@@ -55,12 +55,12 @@ final class UnnecessaryTernaryExpressionRector extends AbstractRector
     }
 
     /**
-     * @param Ternary $ternaryNode
+     * @param Ternary $node
      */
-    public function refactor(Node $ternaryNode): ?Node
+    public function refactor(Node $node): ?Node
     {
         /** @var Ternary $ternaryExpression */
-        $ternaryExpression = $ternaryNode;
+        $ternaryExpression = $node;
         if (! $ternaryExpression->if instanceof Expr) {
             return null;
         }
@@ -88,7 +88,7 @@ final class UnnecessaryTernaryExpressionRector extends AbstractRector
             return null;
         }
         /** @var BinaryOp $binaryOperation */
-        $binaryOperation = $ternaryNode->cond;
+        $binaryOperation = $node->cond;
 
         if ($ifValue === 'true' && $elseValue === 'false') {
             return $binaryOperation;

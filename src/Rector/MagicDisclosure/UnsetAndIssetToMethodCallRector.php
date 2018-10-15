@@ -81,13 +81,13 @@ final class UnsetAndIssetToMethodCallRector extends AbstractRector
     }
 
     /**
-     * @param Isset_|Unset_ $issetOrUnsetNode
+     * @param Isset_|Unset_ $node
      */
-    public function refactor(Node $issetOrUnsetNode): ?Node
+    public function refactor(Node $node): ?Node
     {
         $this->activeTransformation = [];
 
-        foreach ($issetOrUnsetNode->vars as $var) {
+        foreach ($node->vars as $var) {
             if (! $var instanceof ArrayDimFetch) {
                 continue;
             }
@@ -97,13 +97,13 @@ final class UnsetAndIssetToMethodCallRector extends AbstractRector
             }
         }
 
-        $method = $this->resolveMethod($issetOrUnsetNode);
+        $method = $this->resolveMethod($node);
         if ($method === null) {
-            return $issetOrUnsetNode;
+            return $node;
         }
 
         /** @var ArrayDimFetch $arrayDimFetchNode */
-        $arrayDimFetchNode = $issetOrUnsetNode->vars[0];
+        $arrayDimFetchNode = $node->vars[0];
 
         /** @var Variable $variableNode */
         $variableNode = $arrayDimFetchNode->var;
@@ -116,7 +116,7 @@ final class UnsetAndIssetToMethodCallRector extends AbstractRector
             [$key]
         );
 
-        if ($issetOrUnsetNode instanceof Unset_) {
+        if ($node instanceof Unset_) {
             // wrap it, so add ";" in the end of line
             return new Expression($methodCall);
         }

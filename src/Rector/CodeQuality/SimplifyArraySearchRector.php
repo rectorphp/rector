@@ -11,7 +11,6 @@ use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use Rector\NodeAnalyzer\ConstFetchAnalyzer;
-use Rector\NodeAnalyzer\FuncCallAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -19,18 +18,12 @@ use Rector\RectorDefinition\RectorDefinition;
 final class SimplifyArraySearchRector extends AbstractRector
 {
     /**
-     * @var FuncCallAnalyzer
-     */
-    private $funcCallAnalyzer;
-
-    /**
      * @var ConstFetchAnalyzer
      */
     private $constFetchAnalyzer;
 
-    public function __construct(FuncCallAnalyzer $funcCallAnalyzer, ConstFetchAnalyzer $constFetchAnalyzer)
+    public function __construct(ConstFetchAnalyzer $constFetchAnalyzer)
     {
-        $this->funcCallAnalyzer = $funcCallAnalyzer;
         $this->constFetchAnalyzer = $constFetchAnalyzer;
     }
 
@@ -84,13 +77,13 @@ final class SimplifyArraySearchRector extends AbstractRector
      */
     private function matchArraySearchFuncCallAndBoolConstFetch(BinaryOp $binaryOpNode): ?array
     {
-        if ($this->funcCallAnalyzer->isName($binaryOpNode->left, 'array_search') &&
+        if ($this->isName($binaryOpNode->left, 'array_search') &&
             $this->constFetchAnalyzer->isBool($binaryOpNode->right)
         ) {
             $arraySearchFuncCallNode = $binaryOpNode->left;
             $boolConstFetchNode = $binaryOpNode->right;
         } elseif ($this->constFetchAnalyzer->isBool($binaryOpNode->left) &&
-            $this->funcCallAnalyzer->isName($binaryOpNode->right, 'array_search')
+            $this->isName($binaryOpNode->right, 'array_search')
         ) {
             $arraySearchFuncCallNode = $binaryOpNode->right;
             $boolConstFetchNode = $binaryOpNode->left;

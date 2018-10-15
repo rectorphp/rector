@@ -103,21 +103,21 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Class_ $classNode
+     * @param Class_ $node
      */
-    public function refactor(Node $classNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (Strings::endsWith((string) $classNode->name, 'Controller') === false) {
+        if (Strings::endsWith((string) $node->name, 'Controller') === false) {
             return null;
         }
 
-        foreach ($classNode->stmts as $stmt) {
+        foreach ($node->stmts as $stmt) {
             if ($stmt instanceof ClassMethod) {
-                $this->processClassMethod($classNode, $stmt);
+                $this->processClassMethod($node, $stmt);
             }
         }
 
-        return $classNode;
+        return $node;
     }
 
     private function processClassMethod(Class_ $classNode, ClassMethod $classMethodNode): void
@@ -151,10 +151,8 @@ CODE_SAMPLE
             return false;
         }
 
-        $paramNodeTypes = $this->nodeTypeResolver->resolve($paramNode);
-
-        $typehint = $paramNodeTypes[0] ?? null;
-        if (! $typehint) {
+        $typehint = $this->getTypes($paramNode)[0] ?? null;
+        if ($typehint === null) {
             return false;
         }
 
@@ -163,6 +161,7 @@ CODE_SAMPLE
             return false;
         }
 
+        /** @var string $typehint */
         return $this->analyzedApplicationContainer->hasService($typehint);
     }
 

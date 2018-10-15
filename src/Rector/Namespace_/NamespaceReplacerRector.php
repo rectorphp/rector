@@ -65,12 +65,13 @@ final class NamespaceReplacerRector extends AbstractRector
         if (! $this->isNamespaceToChange($name)) {
             return null;
         }
+
         if (! $this->isClassFullyQualifiedName($node) === false) {
             return null;
         }
+
         if ($node instanceof Namespace_) {
             $newName = $this->resolveNewNameFromNode($node);
-
             $node->name = new Name($newName);
 
             return $node;
@@ -78,7 +79,6 @@ final class NamespaceReplacerRector extends AbstractRector
 
         if ($node instanceof Use_) {
             $newName = $this->resolveNewNameFromNode($node);
-
             $node->uses[0]->name = new Name($newName);
 
             return $node;

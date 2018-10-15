@@ -70,14 +70,18 @@ CODE_SAMPLE
     }
 
     /**
-     * @param MethodCall $methodCallNode
+     * @param MethodCall $node
      */
-    public function refactor(Node $methodCallNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (! $this->methodCallAnalyzer->isTypesAndMethod($methodCallNode, $this->getMethodAwareTypes, 'get')) {
+        if (! $this->isTypes($node, $this->getMethodAwareTypes)) {
             return null;
         }
 
-        return $this->processMethodCallNode($methodCallNode);
+        if (! $this->isName($node, 'get')) {
+            return null;
+        }
+
+        return $this->processMethodCallNode($node);
     }
 }

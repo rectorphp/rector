@@ -7,7 +7,6 @@ use PhpParser\Node\Expr\Cast\String_;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Builder\IdentifierRenamer;
 use Rector\Node\MethodCallNodeFactory;
-use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -23,11 +22,6 @@ final class ToStringToMethodCallRector extends AbstractRector
      * @var string
      */
     private $activeTransformation;
-
-    /**
-     * @var MethodCallAnalyzer
-     */
-    private $methodCallAnalyzer;
 
     /**
      * @var IdentifierRenamer
@@ -46,12 +40,10 @@ final class ToStringToMethodCallRector extends AbstractRector
      */
     public function __construct(
         array $typeToMethodCalls,
-        MethodCallAnalyzer $methodCallAnalyzer,
         IdentifierRenamer $identifierRenamer,
         MethodCallNodeFactory $methodCallNodeFactory
     ) {
         $this->typeToMethodCalls = $typeToMethodCalls;
-        $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
         $this->methodCallNodeFactory = $methodCallNodeFactory;
     }
@@ -128,11 +120,17 @@ CODE_SAMPLE
     private function processMethodCallCandidate(MethodCall $methodCallNode): bool
     {
         foreach ($this->typeToMethodCalls as $type => $transformation) {
-            if ($this->methodCallAnalyzer->isTypeAndMethod($methodCallNode, $type, '__toString')) {
-                $this->activeTransformation = $transformation['toString'];
-
-                return true;
+            if (! $this->isType($methodCallNode, $type)) {
+                continue;
             }
+
+            if (! $this->isName($methodCallNode, '__toString')) {
+                continue;
+            }
+
+            $this->activeTransformation = $transformation['toString'];
+
+            return true;
         }
 
         return false;

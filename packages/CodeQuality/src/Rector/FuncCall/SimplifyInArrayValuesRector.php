@@ -4,23 +4,12 @@ namespace Rector\CodeQuality\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
-use Rector\NodeAnalyzer\CallAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class SimplifyInArrayValuesRector extends AbstractRector
 {
-    /**
-     * @var CallAnalyzer
-     */
-    private $callAnalyzer;
-
-    public function __construct(CallAnalyzer $callAnalyzer)
-    {
-        $this->callAnalyzer = $callAnalyzer;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Removes unneeded array_values() in in_array() call', [
@@ -41,8 +30,7 @@ final class SimplifyInArrayValuesRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        // @todo shorten to "isName()" trait
-        if (! $this->callAnalyzer->isName($node, 'in_array')) {
+        if (! $this->isName($node, 'in_array')) {
             return $node;
         }
 
@@ -52,7 +40,7 @@ final class SimplifyInArrayValuesRector extends AbstractRector
 
         /** @var FuncCall $innerFunCall */
         $innerFunCall = $node->args[1]->value;
-        if (! $this->callAnalyzer->isName($innerFunCall, 'array_values')) {
+        if (! $this->isName($innerFunCall, 'array_values')) {
             return $node;
         }
 

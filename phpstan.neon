@@ -43,7 +43,6 @@ parameters:
         # false postive - type is set by annotatoin above
         - '#Access to an undefined property PhpParser\\Node::\$(args|var)#'
         - '#Method Rector\\Php\\Rector\\TryCatch\\MultiExceptionCatchRector\:\:collectCatchKeysByContent\(\) should return array<array<int\>\> but returns array<string, array<int, int\|string\>\>#'
-        - '#Parameter \#1 \$node of method Rector\\NodeAnalyzer\\CallAnalyzer::(isName|isNames)\(\) expects PhpParser\\Node\\Expr\\FuncCall\|PhpParser\\Node\\Expr\\MethodCall\|PhpParser\\Node\\Expr\\StaticCall, PhpParser\\(Node|Node\\Expr) given#'
 
         # irelevant
         - '#Call to function in_array\(\) with arguments string, array<array<string\|false>> and true will always evaluate to false#'
@@ -51,7 +50,6 @@ parameters:
         # known values
         - '#Array \(array<PhpParser\\Node\\Expr\\MethodCall>\) does not accept PhpParser\\Node\\Expr#'
         - '#Cannot access property \$expr on PhpParser\\Node\\Stmt\|null#'
-        - '#Parameter \#1 \$methodCallNode of method Rector\\PHPUnit\\Rector\\TryCatchToExpectExceptionRector::renameMethodCallAndKeepFirstArgument\(\) expects PhpParser\\Node\\Expr\\MethodCall, PhpParser\\Node given#'
         - '#Access to an undefined property PhpParser\\Node\\Expr\\MethodCall\|PhpParser\\Node\\Stmt\\ClassMethod::\$params#'
         - '#Cannot call method getName\(\) on PHPStan\\Reflection\\ClassReflection\|null#' # 1
         - '#Parameter \#1 \$classReflection of method Rector\\NodeTypeResolver\\Reflection\\ClassReflectionTypesResolver::resolve\(\) expects PHPStan\\Reflection\\ClassReflection, PHPStan\\Reflection\\ClassReflection|null given#'
@@ -63,7 +61,6 @@ parameters:
 
         # false positive, has annotation type above (@todo recheck for possible ignored positives)
         - '#Access to an undefined property PhpParser\\Node::\$name#' # 11
-        - '#Parameter \#1 \$node of method Rector\\NodeAnalyzer\\ClassConstAnalyzer::isNames\(\) expects PhpParser\\Node\\Expr\\ClassConstFetch, PhpParser\\Node given#' # 1
 
         # subtype
         - '#Property PhpParser\\Node\\Param::\$type \(PhpParser\\Node\\Name|PhpParser\\Node\\NullableType\|string\|null\) does not accept PhpParser\\Node\\Identifier|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType#' # 3
@@ -92,7 +89,7 @@ parameters:
 
         # variadic false positive
         - '#In method "Rector\\Node\\NodeFactory::createArray", parameter \$items can be type-hinted to "array"#'
-        - '#In method "(.*?)", parameter \$types type is "array". Please provide a \@param annotation to further specify the type of the array. For instance: \@param int\[\] \$types#'
+        - '#In method (.*?) type is "array". Please provide a \@(param|return) annotation to further specify the type of the array. For instance: \@(param|return) int\[\]#'
 
         # not really needed, empty
         - '#Rector\\NodeTraverser\\RectorNodeTraverser::__construct\(\) does not call parent constructor from PhpParser\\NodeTraverser#'

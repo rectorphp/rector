@@ -101,18 +101,18 @@ CODE_SAMPLE
     }
 
     /**
-     * @param ClassMethod $classMethodNode
+     * @param ClassMethod $node
      */
-    public function refactor(Node $classMethodNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (! $this->docBlockAnalyzer->hasTag($classMethodNode, 'Template')) {
+        if (! $this->docBlockAnalyzer->hasTag($node, 'Template')) {
             return null;
         }
         /** @var Return_|null $returnNode */
-        $returnNode = $this->betterNodeFinder->findLastInstanceOf((array) $classMethodNode->stmts, Return_::class);
+        $returnNode = $this->betterNodeFinder->findLastInstanceOf((array) $node->stmts, Return_::class);
 
         // create "$this->render('template.file.twig.html', ['key' => 'value']);" method call
-        $renderArguments = $this->resolveRenderArguments($classMethodNode, $returnNode);
+        $renderArguments = $this->resolveRenderArguments($node, $returnNode);
         $thisRenderMethodCall = $this->methodCallNodeFactory->createWithVariableNameMethodNameAndArguments(
             'this',
             'render',
@@ -121,7 +121,7 @@ CODE_SAMPLE
 
         if (! $returnNode) {
             // or add as last statement in the method
-            $classMethodNode->stmts[] = new Return_($thisRenderMethodCall);
+            $node->stmts[] = new Return_($thisRenderMethodCall);
         }
 
         // replace Return_ node value if exists and is not already in correct format
@@ -130,9 +130,9 @@ CODE_SAMPLE
         }
 
         // remove annotation
-        $this->docBlockAnalyzer->removeTagFromNode($classMethodNode, 'Template');
+        $this->docBlockAnalyzer->removeTagFromNode($node, 'Template');
 
-        return $classMethodNode;
+        return $node;
     }
 
     /**

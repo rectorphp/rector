@@ -8,7 +8,6 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\NodeTypeResolver\Node\Attribute;
@@ -94,25 +93,24 @@ CODE_SAMPLE
     }
 
     /**
-     * @param ClassMethod $classMethodNode
+     * @param ClassMethod $node
      */
-    public function refactor(Node $classMethodNode): ?Node
+    public function refactor(Node $node): ?Node
     {
         /** @var ClassLike $classNode */
-        $classNode = $classMethodNode->getAttribute(Attribute::CLASS_NODE);
+        $classNode = $node->getAttribute(Attribute::CLASS_NODE);
 
         $classNodeTypes = $this->getTypes($classNode);
         if ($this->isTypeMatch($classNodeTypes) === false) {
             return null;
         }
-        /** @var Class_ $classMethodNode */
-        $classNode = $classMethodNode->getAttribute(Attribute::CLASS_NODE);
-        $classNodeTypes = $this->nodeTypeResolver->resolve($classNode);
+
+        $classNodeTypes = $this->getTypes($node);
 
         $matchingTypes = $this->getMatchingTypesForClassNode($classNodeTypes);
 
         /** @var Identifier $identifierNode */
-        $identifierNode = $classMethodNode->name;
+        $identifierNode = $node->name;
 
         $methodName = $identifierNode->toString();
 
@@ -121,12 +119,12 @@ CODE_SAMPLE
 
             foreach ($configuration as $method => $parametersToTypehints) {
                 if ($methodName === $method) {
-                    return $this->processClassMethodNodeWithTypehints($classMethodNode, $parametersToTypehints);
+                    return $this->processClassMethodNodeWithTypehints($node, $parametersToTypehints);
                 }
             }
         }
 
-        return $classMethodNode;
+        return $node;
     }
 
     /**

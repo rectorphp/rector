@@ -88,29 +88,30 @@ CODE_SAMPLE
     }
 
     /**
-     * @param ClassMethod $classMethodNode
+     * @param ClassMethod $node
      */
-    public function refactor(Node $classMethodNode): ?Node
+    public function refactor(Node $node): ?Node
     {
         // doesn't have a parent class
-        if (! $classMethodNode->hasAttribute(Attribute::PARENT_CLASS_NAME)) {
+        if (! $node->hasAttribute(Attribute::PARENT_CLASS_NAME)) {
             return null;
         }
-        $nodeParentClassName = $classMethodNode->getAttribute(Attribute::PARENT_CLASS_NAME);
+
+        $nodeParentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
         if (! isset($this->methodToVisibilityByClass[$nodeParentClassName])) {
             return null;
         }
-        $methodName = $classMethodNode->name->toString();
+        $methodName = $node->name->toString();
         if (isset($this->methodToVisibilityByClass[$nodeParentClassName][$methodName]) === false) {
             return null;
         }
-        $this->visibilityModifier->removeOriginalVisibilityFromFlags($classMethodNode);
+        $this->visibilityModifier->removeOriginalVisibilityFromFlags($node);
 
-        $newVisibility = $this->resolveNewVisibilityForNode($classMethodNode);
+        $newVisibility = $this->resolveNewVisibilityForNode($node);
 
-        $this->visibilityModifier->addVisibilityFlag($classMethodNode, $newVisibility);
+        $this->visibilityModifier->addVisibilityFlag($node, $newVisibility);
 
-        return $classMethodNode;
+        return $node;
     }
 
     private function resolveNewVisibilityForNode(ClassMethod $classMethodNode): string

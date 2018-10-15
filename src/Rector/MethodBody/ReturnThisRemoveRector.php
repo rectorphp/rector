@@ -82,26 +82,26 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Return_ $returnNode
+     * @param Return_ $node
      */
-    public function refactor(Node $returnNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (! $returnNode->expr instanceof Variable) {
-            return $returnNode;
+        if (! $node->expr instanceof Variable) {
+            return $node;
         }
 
-        if ($returnNode->expr->name !== 'this') {
-            return $returnNode;
+        if ($node->expr->name !== 'this') {
+            return $node;
         }
 
-        if (! $this->isTypes($returnNode->expr, $this->classesToDefluent)) {
-            return $returnNode;
+        if (! $this->isTypes($node->expr, $this->classesToDefluent)) {
+            return $node;
         }
 
         $this->removeNode = true;
 
         /** @var ClassMethod $methodNode */
-        $methodNode = $returnNode->getAttribute(Attribute::METHOD_NODE);
+        $methodNode = $node->getAttribute(Attribute::METHOD_NODE);
         $this->docBlockAnalyzer->removeTagFromNode($methodNode, 'return');
 
         return null;

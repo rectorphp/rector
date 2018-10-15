@@ -56,19 +56,20 @@ final class FunctionToMethodCallRector extends AbstractRector
     }
 
     /**
-     * @param FuncCall $funcCallNode
+     * @param FuncCall $node
      */
-    public function refactor(Node $funcCallNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (! $funcCallNode->name instanceof Name) {
+        if (! $node->name instanceof Name) {
             return null;
         }
-        $functionName = $funcCallNode->name->toString();
+
+        $functionName = $this->getName($node);
         if (isset($this->functionToMethodCall[$functionName]) === false) {
             return null;
         }
         /** @var Identifier $identifier */
-        $identifier = $funcCallNode->name;
+        $identifier = $node->name;
         $functionName = $identifier->toString();
 
         [$variableName, $methodName] = $this->functionToMethodCall[$functionName];
@@ -78,7 +79,7 @@ final class FunctionToMethodCallRector extends AbstractRector
             $methodName
         );
 
-        $methodCallNode->args = $funcCallNode->args;
+        $methodCallNode->args = $node->args;
 
         return $methodCallNode;
     }

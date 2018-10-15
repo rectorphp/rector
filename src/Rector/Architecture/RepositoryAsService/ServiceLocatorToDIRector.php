@@ -14,7 +14,6 @@ use Rector\Exception\Bridge\RectorProviderException;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Naming\PropertyNaming;
 use Rector\Node\PropertyFetchNodeFactory;
-use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -23,11 +22,6 @@ use function Safe\sprintf;
 
 final class ServiceLocatorToDIRector extends AbstractRector
 {
-    /**
-     * @var MethodCallAnalyzer
-     */
-    private $methodCallAnalyzer;
-
     /**
      * @var PropertyFetchNodeFactory
      */
@@ -49,13 +43,11 @@ final class ServiceLocatorToDIRector extends AbstractRector
     private $propertyNaming;
 
     public function __construct(
-        MethodCallAnalyzer $methodCallAnalyzer,
         PropertyFetchNodeFactory $propertyFetchNodeFactory,
         DoctrineEntityAndRepositoryMapperInterface $doctrineEntityAndRepositoryMapper,
         ClassPropertyCollector $classPropertyCollector,
         PropertyNaming $propertyNaming
     ) {
-        $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->propertyFetchNodeFactory = $propertyFetchNodeFactory;
         $this->doctrineEntityAndRepositoryMapper = $doctrineEntityAndRepositoryMapper;
         $this->classPropertyCollector = $classPropertyCollector;
@@ -117,7 +109,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->methodCallAnalyzer->isMethod($node, 'getRepository')) {
+        if (! $this->isName($node, 'getRepository')) {
             return null;
         }
         $className = $node->getAttribute(Attribute::CLASS_NAME);

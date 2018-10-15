@@ -47,33 +47,33 @@ final class ListSwapArrayOrderRector extends AbstractRector
     }
 
     /**
-     * @param Assign $assignNode
+     * @param Assign $node
      */
-    public function refactor(Node $assignNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (! $assignNode->var instanceof List_) {
-            return $assignNode;
+        if (! $node->var instanceof List_) {
+            return $node;
         }
 
         $printerVars = [];
 
         /** @var ArrayItem $item */
-        foreach ($assignNode->var->items as $item) {
+        foreach ($node->var->items as $item) {
             if ($item->value instanceof ArrayDimFetch) {
                 $printerVars[] = $this->betterStandardPrinter->prettyPrint([$item->value->var]);
             } else {
-                return $assignNode;
+                return $node;
             }
         }
 
         // relevant only in 1 variable type
         if (count(array_unique($printerVars)) !== 1) {
-            return $assignNode;
+            return $node;
         }
 
         // wrap with array_reverse, to reflect reverse assign order in left
-        $assignNode->expr = new FuncCall(new Name('array_reverse'), [new Arg($assignNode->expr)]);
+        $node->expr = new FuncCall(new Name('array_reverse'), [new Arg($node->expr)]);
 
-        return $assignNode;
+        return $node;
     }
 }

@@ -9,8 +9,6 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
-use Rector\NodeAnalyzer\CallAnalyzer;
-use Rector\NodeAnalyzer\FuncCallAnalyzer;
 use Rector\Printer\BetterStandardPrinter;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -37,24 +35,9 @@ final class ArrayKeyFirstLastRector extends AbstractRector
         'end' => 'array_key_last',
     ];
 
-    /**
-     * @var FuncCallAnalyzer
-     */
-    private $funcCallAnalyzer;
-
-    /**
-     * @var CallAnalyzer
-     */
-    private $callAnalyzer;
-
-    public function __construct(
-        BetterStandardPrinter $betterStandardPrinter,
-        FuncCallAnalyzer $funcCallAnalyzer,
-        CallAnalyzer $callAnalyzer
-    ) {
+    public function __construct(BetterStandardPrinter $betterStandardPrinter)
+    {
         $this->betterStandardPrinter = $betterStandardPrinter;
-        $this->funcCallAnalyzer = $funcCallAnalyzer;
-        $this->callAnalyzer = $callAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -96,35 +79,35 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Function_|ClassMethod $functionLikeNode
+     * @param Function_|ClassMethod $node
      */
-    public function refactor(Node $functionLikeNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if ($functionLikeNode->stmts === null) {
-            return $functionLikeNode;
+        if ($node->stmts === null) {
+            return $node;
         }
 
-        foreach ($functionLikeNode->stmts as $key => $stmt) {
+        foreach ($node->stmts as $key => $stmt) {
             /** @var Expression $stmt */
             if (! $this->isFuncCallMatch($stmt->expr)) {
                 continue;
             }
 
-            if (! isset($functionLikeNode->stmts[$key + 1])) {
+            if (! isset($node->stmts[$key + 1])) {
                 continue;
             }
 
-            if (! $this->isAssignMatch($functionLikeNode->stmts[$key + 1]->expr)) {
+            if (! $this->isAssignMatch($node->stmts[$key + 1]->expr)) {
                 continue;
             }
 
             $funcCallNode = $stmt->expr;
 
             /** @var FuncCall $funcCallNode */
-            $currentFuncCallName = $this->callAnalyzer->resolveName($funcCallNode);
+            $currentFuncCallName = $this->getName($funcCallNode);
 
             /** @var Assign $assignNode */
-            $assignNode = $functionLikeNode->stmts[$key + 1]->expr;
+            $assignNode = $node->stmts[$key + 1]->expr;
 
             /** @var FuncCall $assignFuncCallNode */
             $assignFuncCallNode = $assignNode->expr;
@@ -137,13 +120,13 @@ CODE_SAMPLE
             $assignNode->expr->name = new Name($this->previousToNewFunctions[$currentFuncCallName]);
 
             // remove unused node
-            unset($functionLikeNode->stmts[$key]);
+            unset($node->stmts[$key]);
         }
 
         // reindex for printer
-        $functionLikeNode->stmts = array_values($functionLikeNode->stmts);
+        $node->stmts = array_values($node->stmts);
 
-        return $functionLikeNode;
+        return $node;
     }
 
     private function isFuncCallMatch(Node $node): bool
@@ -152,7 +135,7 @@ CODE_SAMPLE
             return false;
         }
 
-        return $this->callAnalyzer->isNames($node, array_keys($this->previousToNewFunctions));
+        return $this->isNames($node, array_keys($this->previousToNewFunctions));
     }
 
     private function isAssignMatch(Node $node): bool
@@ -165,7 +148,7 @@ CODE_SAMPLE
             return false;
         }
 
-        return $this->funcCallAnalyzer->isName($node->expr, 'key');
+        return $this->isName($node->expr, 'key');
     }
 
     private function areFuncCallNodesArgsEqual(FuncCall $firstFuncCallNode, FuncCall $secondFuncCallNode): bool

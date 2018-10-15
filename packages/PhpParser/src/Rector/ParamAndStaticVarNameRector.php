@@ -5,7 +5,6 @@ namespace Rector\PhpParser\Rector;
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
 use Rector\Builder\IdentifierRenamer;
-use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -17,15 +16,9 @@ final class ParamAndStaticVarNameRector extends AbstractRector
      */
     private $identifierRenamer;
 
-    /**
-     * @var PropertyFetchAnalyzer
-     */
-    private $propertyFetchAnalyzer;
-
-    public function __construct(IdentifierRenamer $identifierRenamer, PropertyFetchAnalyzer $propertyFetchAnalyzer)
+    public function __construct(IdentifierRenamer $identifierRenamer)
     {
         $this->identifierRenamer = $identifierRenamer;
-        $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -45,17 +38,20 @@ final class ParamAndStaticVarNameRector extends AbstractRector
     }
 
     /**
-     * @param PropertyFetch $propertyFetchNode
+     * @param PropertyFetch $node
      */
-    public function refactor(Node $propertyFetchNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        $types = ['PhpParser\Node\Param', 'PhpParser\Node\Stmt\StaticVar'];
-        if ($this->propertyFetchAnalyzer->isTypesAndProperty($propertyFetchNode, $types, 'name') === false) {
+        if (! $this->isTypes($node->var, ['PhpParser\Node\Param', 'PhpParser\Node\Stmt\StaticVar'])) {
             return null;
         }
 
-        $this->identifierRenamer->renameNode($propertyFetchNode, 'var');
+        if (! $this->isName($node, 'name')) {
+            return null;
+        }
 
-        return new PropertyFetch($propertyFetchNode, 'name');
+        $this->identifierRenamer->renameNode($node, 'var');
+
+        return new PropertyFetch($node, 'name');
     }
 }

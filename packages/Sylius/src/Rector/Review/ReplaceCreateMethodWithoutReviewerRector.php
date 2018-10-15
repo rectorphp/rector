@@ -6,18 +6,12 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Builder\IdentifierRenamer;
 use Rector\NodeAnalyzer\MethodArgumentAnalyzer;
-use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class ReplaceCreateMethodWithoutReviewerRector extends AbstractRector
 {
-    /**
-     * @var MethodCallAnalyzer
-     */
-    private $methodCallAnalyzer;
-
     /**
      * @var MethodArgumentAnalyzer
      */
@@ -29,11 +23,9 @@ final class ReplaceCreateMethodWithoutReviewerRector extends AbstractRector
     private $identifierRenamer;
 
     public function __construct(
-        MethodCallAnalyzer $methodCallAnalyzer,
         MethodArgumentAnalyzer $methodArgumentAnalyzer,
         IdentifierRenamer $identifierRenamer
     ) {
-        $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->methodArgumentAnalyzer = $methodArgumentAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
     }
@@ -60,23 +52,25 @@ final class ReplaceCreateMethodWithoutReviewerRector extends AbstractRector
     }
 
     /**
-     * @param MethodCall $methodCallNode
+     * @param MethodCall $node
      */
-    public function refactor(Node $methodCallNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (! $this->methodCallAnalyzer->isMethod($methodCallNode, 'createForSubjectWithReviewer')) {
+        if (! $this->isName($node, 'createForSubjectWithReviewer')) {
             return null;
         }
-        if ((! $this->methodArgumentAnalyzer->hasMethodNthArgument($methodCallNode, 2)
-            || $this->methodArgumentAnalyzer->isMethodNthArgumentNull($methodCallNode, 2)) === false) {
+
+        if ((! $this->methodArgumentAnalyzer->hasMethodNthArgument($node, 2)
+            || $this->methodArgumentAnalyzer->isMethodNthArgumentNull($node, 2)) === false) {
             return null;
         }
-        $this->identifierRenamer->renameNode($methodCallNode, 'createForSubject');
 
-        if ($this->methodArgumentAnalyzer->hasMethodNthArgument($methodCallNode, 2)) {
-            $methodCallNode->args = [array_shift($methodCallNode->args)];
+        $this->identifierRenamer->renameNode($node, 'createForSubject');
+
+        if ($this->methodArgumentAnalyzer->hasMethodNthArgument($node, 2)) {
+            $node->args = [array_shift($node->args)];
         }
 
-        return $methodCallNode;
+        return $node;
     }
 }

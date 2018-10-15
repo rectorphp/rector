@@ -9,18 +9,12 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use Rector\Builder\IdentifierRenamer;
 use Rector\Node\NodeFactory;
-use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class AssertIssetToSpecificMethodRector extends AbstractPHPUnitRector
 {
-    /**
-     * @var MethodCallAnalyzer
-     */
-    private $methodCallAnalyzer;
-
     /**
      * @var IdentifierRenamer
      */
@@ -31,12 +25,8 @@ final class AssertIssetToSpecificMethodRector extends AbstractPHPUnitRector
      */
     private $nodeFactory;
 
-    public function __construct(
-        MethodCallAnalyzer $methodCallAnalyzer,
-        IdentifierRenamer $identifierRenamer,
-        NodeFactory $nodeFactory
-    ) {
-        $this->methodCallAnalyzer = $methodCallAnalyzer;
+    public function __construct(IdentifierRenamer $identifierRenamer, NodeFactory $nodeFactory)
+    {
         $this->identifierRenamer = $identifierRenamer;
         $this->nodeFactory = $nodeFactory;
     }
@@ -64,17 +54,19 @@ final class AssertIssetToSpecificMethodRector extends AbstractPHPUnitRector
     }
 
     /**
-     * @param MethodCall $methodCallNode
+     * @param MethodCall $node
      */
-    public function refactor(Node $methodCallNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (! $this->isInTestClass($methodCallNode)) {
+        if (! $this->isInTestClass($node)) {
             return null;
         }
-        if (! $this->methodCallAnalyzer->isMethods($methodCallNode, ['assertTrue', 'assertFalse'])) {
+
+        if (! $this->isNames($node, ['assertTrue', 'assertFalse'])) {
             return null;
         }
-        $firstArgumentValue = $methodCallNode->args[0]->value;
+
+        $firstArgumentValue = $node->args[0]->value;
         // is property access
         if (! $firstArgumentValue instanceof Isset_) {
             return null;
@@ -84,17 +76,17 @@ final class AssertIssetToSpecificMethodRector extends AbstractPHPUnitRector
             return null;
         }
         /** @var Isset_ $issetNode */
-        $issetNode = $methodCallNode->args[0]->value;
+        $issetNode = $node->args[0]->value;
 
         $issetNodeArg = $issetNode->vars[0];
 
         if ($issetNodeArg instanceof PropertyFetch) {
-            $this->refactorPropertyFetchNode($methodCallNode, $issetNodeArg);
+            $this->refactorPropertyFetchNode($node, $issetNodeArg);
         } elseif ($issetNodeArg instanceof ArrayDimFetch) {
-            $this->refactorArrayDimFetchNode($methodCallNode, $issetNodeArg);
+            $this->refactorArrayDimFetchNode($node, $issetNodeArg);
         }
 
-        return $methodCallNode;
+        return $node;
     }
 
     private function refactorPropertyFetchNode(MethodCall $node, PropertyFetch $propertyFetchNode): void

@@ -6,7 +6,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Node\NodeFactory;
 use Rector\NodeAnalyzer\MethodArgumentAnalyzer;
-use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -14,11 +13,6 @@ use function Safe\sprintf;
 
 final class AliasToClassRector extends AbstractRector
 {
-    /**
-     * @var MethodCallAnalyzer
-     */
-    private $methodCallAnalyzer;
-
     /**
      * @var string[]
      */
@@ -39,11 +33,9 @@ final class AliasToClassRector extends AbstractRector
      */
     public function __construct(
         array $aliasesToNamespaces,
-        MethodCallAnalyzer $methodCallAnalyzer,
         MethodArgumentAnalyzer $methodArgumentAnalyzer,
         NodeFactory $nodeFactory
     ) {
-        $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->aliasesToNamespaces = $aliasesToNamespaces;
         $this->nodeFactory = $nodeFactory;
         $this->methodArgumentAnalyzer = $methodArgumentAnalyzer;
@@ -75,26 +67,27 @@ CODE_SAMPLE
     }
 
     /**
-     * @param MethodCall $methodCall
+     * @param MethodCall $node
      */
-    public function refactor(Node $methodCall): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (! $this->methodCallAnalyzer->isMethod($methodCall, 'getRepository')) {
+        if (! $this->isName($node, 'getRepository')) {
             return null;
         }
-        if (! $this->methodArgumentAnalyzer->isMethodNthArgumentString($methodCall, 1)) {
+
+        if (! $this->methodArgumentAnalyzer->isMethodNthArgumentString($node, 1)) {
             return null;
         }
-        /** @var MethodCall $methodCall */
-        $methodCall = $methodCall;
-        if ($this->isAliasWithConfiguredEntity($methodCall->args[0]->value->value) === false) {
+
+        if ($this->isAliasWithConfiguredEntity($node->args[0]->value->value) === false) {
             return null;
         }
-        $methodCall->args[0]->value = $this->nodeFactory->createClassConstantReference(
-            $this->convertAliasToFqn($methodCall->args[0]->value->value)
+
+        $node->args[0]->value = $this->nodeFactory->createClassConstantReference(
+            $this->convertAliasToFqn($node->args[0]->value->value)
         );
 
-        return $methodCall;
+        return $node;
     }
 
     private function isAlias(string $name): bool

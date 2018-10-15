@@ -78,27 +78,27 @@ CODE_SAMPLE
     }
 
     /**
-     * @param ClassMethod $classMethodNode
+     * @param ClassMethod $node
      */
-    public function refactor(Node $classMethodNode): ?Node
+    public function refactor(Node $node): ?Node
     {
         /** @var ClassLike $classNode */
-        $classNode = $classMethodNode->getAttribute(Attribute::CLASS_NODE);
-        $classNodeTypes = $this->nodeTypeResolver->resolve($classNode);
+        $classNode = $node->getAttribute(Attribute::CLASS_NODE);
+        $classNodeTypes = $this->getTypes($classNode);
         if (! $classNodeTypes) {
             return null;
         }
         if ($this->isTypeMatch($classNodeTypes) === false) {
             return null;
         }
-        /** @var Class_ $classMethodNode */
-        $classNode = $classMethodNode->getAttribute(Attribute::CLASS_NODE);
+        /** @var Class_ $node */
+        $classNode = $node->getAttribute(Attribute::CLASS_NODE);
         $classNodeTypes = $this->getTypes($classNode);
 
         $matchingTypes = $this->getMatchingTypesForClassNode($classNodeTypes);
 
         /** @var Identifier $identifierNode */
-        $identifierNode = $classMethodNode->name;
+        $identifierNode = $node->name;
 
         $methodName = $identifierNode->toString();
 
@@ -107,12 +107,12 @@ CODE_SAMPLE
 
             foreach ($configuration as $method => $methodReturnTypehint) {
                 if ($methodName === $method) {
-                    return $this->processClassMethodNodeWithTypehints($classMethodNode, $methodReturnTypehint);
+                    return $this->processClassMethodNodeWithTypehints($node, $methodReturnTypehint);
                 }
             }
         }
 
-        return $classMethodNode;
+        return $node;
     }
 
     /**

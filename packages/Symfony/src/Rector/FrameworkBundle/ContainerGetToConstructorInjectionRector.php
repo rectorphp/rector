@@ -77,23 +77,23 @@ CODE_SAMPLE
     }
 
     /**
-     * @param MethodCall $methodCallNode
+     * @param MethodCall $node
      */
-    public function refactor(Node $methodCallNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (! $this->methodCallAnalyzer->isTypeAndMethod(
-            $methodCallNode,
-            'Symfony\Component\DependencyInjection\ContainerInterface',
-            'get'
-        )) {
+        if (! $this->isType($node, 'Symfony\Component\DependencyInjection\ContainerInterface')) {
             return null;
         }
 
-        $parentClassName = $methodCallNode->getAttribute(Attribute::PARENT_CLASS_NAME);
+        if (! $this->isName($node, 'get')) {
+            return null;
+        }
+
+        $parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
         if (! in_array($parentClassName, $this->containerAwareParentTypes, true)) {
             return null;
         }
 
-        return $this->processMethodCallNode($methodCallNode);
+        return $this->processMethodCallNode($node);
     }
 }

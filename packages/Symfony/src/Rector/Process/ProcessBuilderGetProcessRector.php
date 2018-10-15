@@ -4,7 +4,6 @@ namespace Rector\Symfony\Rector\Process;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
-use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -12,20 +11,12 @@ use Rector\RectorDefinition\RectorDefinition;
 final class ProcessBuilderGetProcessRector extends AbstractRector
 {
     /**
-     * @var MethodCallAnalyzer
-     */
-    private $methodCallAnalyzer;
-
-    /**
      * @var string
      */
     private $processBuilderClass;
 
-    public function __construct(
-        MethodCallAnalyzer $methodCallAnalyzer,
-        string $processBuilderClass = 'Symfony\Component\Process\ProcessBuilder'
-    ) {
-        $this->methodCallAnalyzer = $methodCallAnalyzer;
+    public function __construct(string $processBuilderClass = 'Symfony\Component\Process\ProcessBuilder')
+    {
         $this->processBuilderClass = $processBuilderClass;
     }
 
@@ -60,17 +51,18 @@ CODE_SAMPLE
     }
 
     /**
-     * @param MethodCall $methodCallNode
+     * @param MethodCall $node
      */
-    public function refactor(Node $methodCallNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if ($this->methodCallAnalyzer->isTypeAndMethod(
-            $methodCallNode,
-            $this->processBuilderClass,
-            'getProcess'
-        ) === false) {
+        if (! $this->isType($node, $this->processBuilderClass)) {
             return null;
         }
-        return $methodCallNode->var;
+
+        if (! $this->isName($node, 'getProcess')) {
+            return null;
+        }
+
+        return $node->var;
     }
 }

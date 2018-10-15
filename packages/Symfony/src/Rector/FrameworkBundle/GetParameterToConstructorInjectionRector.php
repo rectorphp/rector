@@ -8,7 +8,6 @@ use PhpParser\Node\Scalar\String_;
 use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Naming\PropertyNaming;
 use Rector\Node\PropertyFetchNodeFactory;
-use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -32,11 +31,6 @@ final class GetParameterToConstructorInjectionRector extends AbstractRector
     private $propertyFetchNodeFactory;
 
     /**
-     * @var MethodCallAnalyzer
-     */
-    private $methodCallAnalyzer;
-
-    /**
      * @var string
      */
     private $controllerClass;
@@ -45,13 +39,11 @@ final class GetParameterToConstructorInjectionRector extends AbstractRector
         PropertyNaming $propertyNaming,
         ClassPropertyCollector $classPropertyCollector,
         PropertyFetchNodeFactory $propertyFetchNodeFactory,
-        MethodCallAnalyzer $methodCallAnalyzer,
         string $controllerClass = 'Symfony\Bundle\FrameworkBundle\Controller\Controller'
     ) {
         $this->propertyNaming = $propertyNaming;
         $this->classPropertyCollector = $classPropertyCollector;
         $this->propertyFetchNodeFactory = $propertyFetchNodeFactory;
-        $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->controllerClass = $controllerClass;
     }
 
@@ -101,24 +93,25 @@ CODE_SAMPLE
     }
 
     /**
-     * @param MethodCall $methodCallNode
+     * @param MethodCall $node
      */
-    public function refactor(Node $methodCallNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if ($this->methodCallAnalyzer->isTypeAndMethod(
-            $methodCallNode,
-            $this->controllerClass,
-            'getParameter'
-        ) === false) {
+        if (! $this->isType($node, $this->controllerClass)) {
             return null;
         }
+
+        if (! $this->isName($node, 'getParameter')) {
+            return null;
+        }
+
         /** @var String_ $stringArgument */
-        $stringArgument = $methodCallNode->args[0]->value;
+        $stringArgument = $node->args[0]->value;
         $parameterName = $stringArgument->value;
         $propertyName = $this->propertyNaming->underscoreToName($parameterName);
 
         $this->classPropertyCollector->addPropertyForClass(
-            (string) $methodCallNode->getAttribute(Attribute::CLASS_NAME),
+            (string) $node->getAttribute(Attribute::CLASS_NAME),
             ['string'], // @todo: resolve type from container provider? see parameter autowire compiler pass
             $propertyName
         );

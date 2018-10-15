@@ -11,23 +11,12 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
-use Rector\NodeAnalyzer\CallAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class GetClassToInstanceOfRector extends AbstractRector
 {
-    /**
-     * @var CallAnalyzer
-     */
-    private $callAnalyzer;
-
-    public function __construct(CallAnalyzer $callAnalyzer)
-    {
-        $this->callAnalyzer = $callAnalyzer;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -94,7 +83,7 @@ final class GetClassToInstanceOfRector extends AbstractRector
             return false;
         }
 
-        return $this->callAnalyzer->isName($node, 'get_class');
+        return $this->isName($node, 'get_class');
     }
 
     private function matchClassName(Node $node): ?string

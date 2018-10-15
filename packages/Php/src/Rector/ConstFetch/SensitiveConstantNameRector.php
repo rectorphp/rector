@@ -108,24 +108,24 @@ CODE_SAMPLE
     }
 
     /**
-     * @param ConstFetch $constFetchNode
+     * @param ConstFetch $node
      */
-    public function refactor(Node $constFetchNode): ?Node
+    public function refactor(Node $node): ?Node
     {
         // is system constant?
-        if (in_array(strtoupper((string) $constFetchNode->name), $this->phpReservedConstants, true)) {
-            return $constFetchNode;
+        if (in_array(strtoupper((string) $node->name), $this->phpReservedConstants, true)) {
+            return $node;
         }
 
-        $currentConstantName = (string) $constFetchNode->name;
+        $currentConstantName = (string) $node->name;
 
         // is uppercase, all good
         if ($currentConstantName === strtoupper($currentConstantName)) {
-            return $constFetchNode;
+            return $node;
         }
 
-        $constFetchNode->name = new FullyQualified(strtoupper($currentConstantName));
+        $node->name = new FullyQualified(strtoupper($currentConstantName));
 
-        return $constFetchNode;
+        return $node;
     }
 }

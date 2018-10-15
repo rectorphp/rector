@@ -64,25 +64,25 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Class_ $classNode
+     * @param Class_ $node
      */
-    public function refactor(Node $classNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (! $classNode->implements) {
+        if (! $node->implements) {
             return null;
         }
 
-        foreach ($classNode->implements as $key => $implement) {
+        foreach ($node->implements as $key => $implement) {
             $interface = (string) $implement->getAttribute(Attribute::RESOLVED_NAME);
 
             if (array_key_exists($interface, $this->oldToNewInterfaces)) {
-                $classNode->implements[$key] = new Name($this->oldToNewInterfaces[$interface]);
+                $node->implements[$key] = new Name($this->oldToNewInterfaces[$interface]);
             }
         }
 
-        $this->makeImplementsUnique($classNode);
+        $this->makeImplementsUnique($node);
 
-        return $classNode;
+        return $node;
     }
 
     private function makeImplementsUnique(Class_ $classNode): void

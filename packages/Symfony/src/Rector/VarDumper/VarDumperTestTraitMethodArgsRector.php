@@ -7,18 +7,12 @@ use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\Node\NodeFactory;
-use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class VarDumperTestTraitMethodArgsRector extends AbstractRector
 {
-    /**
-     * @var MethodCallAnalyzer
-     */
-    private $methodCallAnalyzer;
-
     /**
      * @var NodeFactory
      */
@@ -30,11 +24,9 @@ final class VarDumperTestTraitMethodArgsRector extends AbstractRector
     private $traitName;
 
     public function __construct(
-        MethodCallAnalyzer $methodCallAnalyzer,
         NodeFactory $nodeFactory,
         string $traitName = 'Symfony\Component\VarDumper\Test\VarDumperTestTrait'
     ) {
-        $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->nodeFactory = $nodeFactory;
         $this->traitName = $traitName;
     }
@@ -65,27 +57,27 @@ final class VarDumperTestTraitMethodArgsRector extends AbstractRector
     }
 
     /**
-     * @param MethodCall $methodCallNode
+     * @param MethodCall $node
      */
-    public function refactor(Node $methodCallNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (! $this->methodCallAnalyzer->isTypeAndMethods(
-            $methodCallNode,
-            $this->traitName,
-            ['assertDumpEquals', 'assertDumpMatchesFormat']
-        )) {
+        if (! $this->isType($node, $this->traitName)) {
             return null;
         }
 
-        if (count($methodCallNode->args) <= 2 || $methodCallNode->args[2]->value instanceof ConstFetch) {
+        if (! $this->isNames($node, ['assertDumpEquals', 'assertDumpMatchesFormat'])) {
             return null;
         }
 
-        if ($methodCallNode->args[2]->value instanceof String_) {
-            $methodCallNode->args[3] = $methodCallNode->args[2];
-            $methodCallNode->args[2] = $this->nodeFactory->createArg($this->nodeFactory->createNullConstant());
+        if (count($node->args) <= 2 || $node->args[2]->value instanceof ConstFetch) {
+            return null;
+        }
 
-            return $methodCallNode;
+        if ($node->args[2]->value instanceof String_) {
+            $node->args[3] = $node->args[2];
+            $node->args[2] = $this->nodeFactory->createArg($this->nodeFactory->createNullConstant());
+
+            return $node;
         }
 
         return null;

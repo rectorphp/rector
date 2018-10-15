@@ -69,40 +69,40 @@ CODE_SAMPLE
     }
 
     /**
-     * @param ClassMethod $classMethodNode
+     * @param ClassMethod $node
      */
-    public function refactor(Node $classMethodNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        $namespace = $classMethodNode->getAttribute(Attribute::NAMESPACE_NAME);
+        $namespace = $node->getAttribute(Attribute::NAMESPACE_NAME);
         // catch only classes without namespace
         if ($namespace) {
-            return $classMethodNode;
+            return $node;
         }
 
         /** @var Class_ $classNode */
-        $classNode = $classMethodNode->getAttribute(Attribute::CLASS_NODE);
+        $classNode = $node->getAttribute(Attribute::CLASS_NODE);
 
         // anonymous class → skip
-        if ($classNode->name === null || $classMethodNode->isAbstract() || $classMethodNode->isStatic()) {
-            return $classMethodNode;
+        if ($classNode->name === null || $node->isAbstract() || $node->isStatic()) {
+            return $node;
         }
 
         // process parent call references first
-        $this->processClassMethodStatementsForParentConstructorCalls($classMethodNode);
+        $this->processClassMethodStatementsForParentConstructorCalls($node);
 
         // not PSR-4 constructor
-        if (strtolower((string) $classNode->name) !== strtolower((string) $classMethodNode->name)) {
-            return $classMethodNode;
+        if (strtolower((string) $classNode->name) !== strtolower((string) $node->name)) {
+            return $node;
         }
 
         // does it already have a __construct method?
         if (! in_array('__construct', $this->getClassMethodNames($classNode), true)) {
-            $classMethodNode->name = new Identifier('__construct');
+            $node->name = new Identifier('__construct');
         }
 
-        if (count($classMethodNode->stmts) === 1) {
+        if (count($node->stmts) === 1) {
             /** @var Expression $stmt */
-            $stmt = $classMethodNode->stmts[0];
+            $stmt = $node->stmts[0];
 
             if ($this->isThisConstructCall($stmt->expr)) {
                 $this->removeNode = true;
@@ -111,7 +111,7 @@ CODE_SAMPLE
             }
         }
 
-        return $classMethodNode;
+        return $node;
     }
 
     /**

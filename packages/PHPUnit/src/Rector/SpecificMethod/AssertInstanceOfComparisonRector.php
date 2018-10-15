@@ -8,18 +8,12 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Builder\IdentifierRenamer;
-use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class AssertInstanceOfComparisonRector extends AbstractPHPUnitRector
 {
-    /**
-     * @var MethodCallAnalyzer
-     */
-    private $methodCallAnalyzer;
-
     /**
      * @var IdentifierRenamer
      */
@@ -38,12 +32,8 @@ final class AssertInstanceOfComparisonRector extends AbstractPHPUnitRector
         'assertFalse' => 'assertNotInstanceOf',
     ];
 
-    public function __construct(
-        MethodCallAnalyzer $methodCallAnalyzer,
-        IdentifierRenamer $identifierRenamer,
-        BuilderFactory $builderFactory
-    ) {
-        $this->methodCallAnalyzer = $methodCallAnalyzer;
+    public function __construct(IdentifierRenamer $identifierRenamer, BuilderFactory $builderFactory)
+    {
         $this->identifierRenamer = $identifierRenamer;
         $this->builderFactory = $builderFactory;
     }
@@ -74,24 +64,26 @@ final class AssertInstanceOfComparisonRector extends AbstractPHPUnitRector
     }
 
     /**
-     * @param MethodCall $methodCallNode
+     * @param MethodCall $node
      */
-    public function refactor(Node $methodCallNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (! $this->isInTestClass($methodCallNode)) {
+        if (! $this->isInTestClass($node)) {
             return null;
         }
-        if (! $this->methodCallAnalyzer->isMethods($methodCallNode, array_keys($this->renameMethodsMap))) {
+
+        if (! $this->isNames($node, array_keys($this->renameMethodsMap))) {
             return null;
         }
-        $firstArgumentValue = $methodCallNode->args[0]->value;
+
+        $firstArgumentValue = $node->args[0]->value;
         if ($firstArgumentValue instanceof Instanceof_ === false) {
             return null;
         }
-        $this->identifierRenamer->renameNodeWithMap($methodCallNode, $this->renameMethodsMap);
-        $this->changeOrderArguments($methodCallNode);
+        $this->identifierRenamer->renameNodeWithMap($node, $this->renameMethodsMap);
+        $this->changeOrderArguments($node);
 
-        return $methodCallNode;
+        return $node;
     }
 
     public function changeOrderArguments(MethodCall $methodCallNode): void

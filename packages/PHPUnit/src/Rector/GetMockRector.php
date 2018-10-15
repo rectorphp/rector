@@ -5,7 +5,6 @@ namespace Rector\PHPUnit\Rector;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Builder\IdentifierRenamer;
-use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -13,18 +12,12 @@ use Rector\RectorDefinition\RectorDefinition;
 final class GetMockRector extends AbstractPHPUnitRector
 {
     /**
-     * @var MethodCallAnalyzer
-     */
-    private $methodCallAnalyzer;
-
-    /**
      * @var IdentifierRenamer
      */
     private $identifierRenamer;
 
-    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, IdentifierRenamer $identifierRenamer)
+    public function __construct(IdentifierRenamer $identifierRenamer)
     {
-        $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
     }
 
@@ -48,26 +41,24 @@ final class GetMockRector extends AbstractPHPUnitRector
     }
 
     /**
-     * @param MethodCall $methodCallNode
+     * @param MethodCall $node
      */
-    public function refactor(Node $methodCallNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (! $this->isInTestClass($methodCallNode)) {
-            return null;
-        }
-        if (! $this->methodCallAnalyzer->isMethods(
-            $methodCallNode,
-            ['getMock', 'getMockWithoutInvokingTheOriginalConstructor']
-        )) {
+        if (! $this->isInTestClass($node)) {
             return null;
         }
 
-        if (count($methodCallNode->args) !== 1) {
+        if (! $this->isNames($node, ['getMock', 'getMockWithoutInvokingTheOriginalConstructor'])) {
             return null;
         }
 
-        $this->identifierRenamer->renameNode($methodCallNode, 'createMock');
+        if (count($node->args) !== 1) {
+            return null;
+        }
 
-        return $methodCallNode;
+        $this->identifierRenamer->renameNode($node, 'createMock');
+
+        return $node;
     }
 }

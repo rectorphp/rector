@@ -5,7 +5,6 @@ namespace Rector\Rector\MethodBody;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Node\MethodCallNodeFactory;
-use Rector\NodeAnalyzer\CallAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -24,21 +23,12 @@ final class FluentReplaceRector extends AbstractRector
     private $classesToDefluent = [];
 
     /**
-     * @var CallAnalyzer
-     */
-    private $callAnalyzer;
-
-    /**
      * @param string[] $classesToDefluent
      */
-    public function __construct(
-        array $classesToDefluent,
-        MethodCallNodeFactory $methodCallNodeFactory,
-        CallAnalyzer $callAnalyzer
-    ) {
+    public function __construct(array $classesToDefluent, MethodCallNodeFactory $methodCallNodeFactory)
+    {
         $this->methodCallNodeFactory = $methodCallNodeFactory;
         $this->classesToDefluent = $classesToDefluent;
-        $this->callAnalyzer = $callAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -73,24 +63,24 @@ CODE_SAMPLE
     }
 
     /**
-     * @param MethodCall $methodCallNode
+     * @param MethodCall $node
      */
-    public function refactor(Node $methodCallNode): ?Node
+    public function refactor(Node $node): ?Node
     {
         // is chain method call
-        if (! $methodCallNode->var instanceof MethodCall) {
-            return $methodCallNode;
+        if (! $node->var instanceof MethodCall) {
+            return $node;
         }
 
         // is matching type
-        if (! $this->isTypes($methodCallNode->var->var, $this->classesToDefluent)) {
-            return $methodCallNode;
+        if (! $this->isTypes($node->var, $this->classesToDefluent)) {
+            return $node;
         }
 
         /** @var MethodCall $innerMethodCallNode */
-        $innerMethodCallNode = $methodCallNode->var;
+        $innerMethodCallNode = $node->var;
 
-        $this->decoupleMethodCall($methodCallNode, $innerMethodCallNode);
+        $this->decoupleMethodCall($node, $innerMethodCallNode);
 
         return $innerMethodCallNode;
     }
@@ -99,7 +89,7 @@ CODE_SAMPLE
     {
         $nextMethodCallNode = $this->methodCallNodeFactory->createWithVariableAndMethodName(
             $innerMethodCallNode->var,
-            $this->callAnalyzer->resolveName($outerMethodCallNode)
+            $this->getName($outerMethodCallNode)
         );
 
         $this->addNodeAfterNode($nextMethodCallNode, $innerMethodCallNode);

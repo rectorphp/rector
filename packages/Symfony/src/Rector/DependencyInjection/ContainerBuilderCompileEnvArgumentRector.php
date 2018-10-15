@@ -5,7 +5,6 @@ namespace Rector\Symfony\Rector\DependencyInjection;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Node\NodeFactory;
-use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -13,18 +12,12 @@ use Rector\RectorDefinition\RectorDefinition;
 final class ContainerBuilderCompileEnvArgumentRector extends AbstractRector
 {
     /**
-     * @var MethodCallAnalyzer
-     */
-    private $methodCallAnalyzer;
-
-    /**
      * @var NodeFactory
      */
     private $nodeFactory;
 
-    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, NodeFactory $nodeFactory)
+    public function __construct(NodeFactory $nodeFactory)
     {
-        $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->nodeFactory = $nodeFactory;
     }
 
@@ -50,24 +43,24 @@ final class ContainerBuilderCompileEnvArgumentRector extends AbstractRector
     }
 
     /**
-     * @param MethodCall $methodCallNode
+     * @param MethodCall $node
      */
-    public function refactor(Node $methodCallNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if ($this->methodCallAnalyzer->isTypeAndMethods(
-            $methodCallNode,
-            'Symfony\Component\DependencyInjection\ContainerBuilder',
-            ['compile']
-        ) === false) {
+        if (! $this->isType($node, 'Symfony\Component\DependencyInjection\ContainerBuilder')) {
             return null;
         }
-        /** @var MethodCall $methodCallNode */
-        $methodCallNode = $methodCallNode;
-        if ((count($methodCallNode->args) !== 1) === false) {
-            return null;
-        }
-        $methodCallNode->args = $this->nodeFactory->createArgs([true]);
 
-        return $methodCallNode;
+        if (! $this->isName($node, 'compile')) {
+            return null;
+        }
+
+        if ((count($node->args) !== 1) === false) {
+            return null;
+        }
+
+        $node->args = $this->nodeFactory->createArgs([true]);
+
+        return $node;
     }
 }

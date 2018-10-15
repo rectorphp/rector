@@ -8,8 +8,6 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Builder\IdentifierRenamer;
 use Rector\Node\NodeFactory;
-use Rector\NodeAnalyzer\CallAnalyzer;
-use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -45,11 +43,6 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractPH
     ];
 
     /**
-     * @var MethodCallAnalyzer
-     */
-    private $methodCallAnalyzer;
-
-    /**
      * @var IdentifierRenamer
      */
     private $identifierRenamer;
@@ -59,21 +52,10 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractPH
      */
     private $nodeFactory;
 
-    /**
-     * @var CallAnalyzer
-     */
-    private $callAnalyzer;
-
-    public function __construct(
-        MethodCallAnalyzer $methodCallAnalyzer,
-        IdentifierRenamer $identifierRenamer,
-        NodeFactory $nodeFactory,
-        CallAnalyzer $callAnalyzer
-    ) {
-        $this->methodCallAnalyzer = $methodCallAnalyzer;
+    public function __construct(IdentifierRenamer $identifierRenamer, NodeFactory $nodeFactory)
+    {
         $this->identifierRenamer = $identifierRenamer;
         $this->nodeFactory = $nodeFactory;
-        $this->callAnalyzer = $callAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -102,27 +84,29 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractPH
     }
 
     /**
-     * @param MethodCall $methodCallNode
+     * @param MethodCall $node
      */
-    public function refactor(Node $methodCallNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (! $this->isInTestClass($methodCallNode)) {
+        if (! $this->isInTestClass($node)) {
             return null;
         }
-        if (! $this->methodCallAnalyzer->isMethods($methodCallNode, array_keys($this->renameMethodsMap))) {
-            return null;
-        }
-        /** @var FuncCall $firstArgumentValue */
-        $firstArgumentValue = $methodCallNode->args[0]->value;
 
-        $functionName = $this->callAnalyzer->resolveName($firstArgumentValue);
+        if (! $this->isNames($node, array_keys($this->renameMethodsMap))) {
+            return null;
+        }
+
+        /** @var FuncCall $firstArgumentValue */
+        $firstArgumentValue = $node->args[0]->value;
+
+        $functionName = $this->getName($firstArgumentValue);
         if (isset($this->oldFunctionsToTypes[$functionName]) === false) {
             return null;
         }
-        $this->identifierRenamer->renameNodeWithMap($methodCallNode, $this->renameMethodsMap);
-        $this->moveFunctionArgumentsUp($methodCallNode);
+        $this->identifierRenamer->renameNodeWithMap($node, $this->renameMethodsMap);
+        $this->moveFunctionArgumentsUp($node);
 
-        return $methodCallNode;
+        return $node;
     }
 
     private function moveFunctionArgumentsUp(MethodCall $methodCallNode): void

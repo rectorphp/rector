@@ -6,7 +6,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use Rector\Node\MethodCallNodeFactory;
-use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -17,11 +16,6 @@ use Rector\RectorDefinition\RectorDefinition;
  */
 final class IdentifierRector extends AbstractRector
 {
-    /**
-     * @var PropertyFetchAnalyzer
-     */
-    private $propertyFetchAnalyzer;
-
     /**
      * @var string[][]
      */
@@ -53,11 +47,8 @@ final class IdentifierRector extends AbstractRector
      */
     private $methodCallNodeFactory;
 
-    public function __construct(
-        PropertyFetchAnalyzer $propertyFetchAnalyzer,
-        MethodCallNodeFactory $methodCallNodeFactory
-    ) {
-        $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
+    public function __construct(MethodCallNodeFactory $methodCallNodeFactory)
+    {
         $this->methodCallNodeFactory = $methodCallNodeFactory;
     }
 
@@ -87,26 +78,26 @@ CODE_SAMPLE
     }
 
     /**
-     * @param PropertyFetch $propertyFetchNode
+     * @param PropertyFetch $node
      */
-    public function refactor(Node $propertyFetchNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (! $this->propertyFetchAnalyzer->isTypes($propertyFetchNode, array_keys($this->typeToPropertiesMap))) {
+        if (! $this->isTypes($node, array_keys($this->typeToPropertiesMap))) {
             return null;
         }
 
-        $nodeTypes = $this->getTypes($propertyFetchNode->var);
+        $nodeTypes = $this->getTypes($node);
         $properties = $this->matchTypeToProperties($nodeTypes);
-        if (! $this->propertyFetchAnalyzer->isProperties($propertyFetchNode, $properties)) {
+        if (! $this->isNames($node, $properties)) {
             return null;
         }
 
-        $parentNode = $propertyFetchNode->getAttribute(Attribute::PARENT_NODE);
+        $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
         if ($parentNode instanceof MethodCall) {
-            return $propertyFetchNode;
+            return $node;
         }
 
-        return $this->methodCallNodeFactory->createWithVariableAndMethodName($propertyFetchNode, 'toString');
+        return $this->methodCallNodeFactory->createWithVariableAndMethodName($node, 'toString');
     }
 
     /**
@@ -116,7 +107,7 @@ CODE_SAMPLE
     private function matchTypeToProperties(array $nodeTypes): array
     {
         foreach ($nodeTypes as $nodeType) {
-            if ($this->typeToPropertiesMap[$nodeType]) {
+            if (isset($this->typeToPropertiesMap[$nodeType])) {
                 return $this->typeToPropertiesMap[$nodeType];
             }
         }

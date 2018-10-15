@@ -9,9 +9,6 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\LNumber;
 use Rector\Builder\IdentifierRenamer;
-use Rector\NodeAnalyzer\CallAnalyzer;
-use Rector\NodeAnalyzer\FuncCallAnalyzer;
-use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -19,35 +16,13 @@ use Rector\RectorDefinition\RectorDefinition;
 final class AssertRegExpRector extends AbstractPHPUnitRector
 {
     /**
-     * @var MethodCallAnalyzer
-     */
-    private $methodCallAnalyzer;
-
-    /**
      * @var IdentifierRenamer
      */
     private $identifierRenamer;
 
-    /**
-     * @var FuncCallAnalyzer
-     */
-    private $funcCallAnalyzer;
-
-    /**
-     * @var CallAnalyzer
-     */
-    private $callAnalyzer;
-
-    public function __construct(
-        MethodCallAnalyzer $methodCallAnalyzer,
-        IdentifierRenamer $identifierRenamer,
-        FuncCallAnalyzer $funcCallAnalyzer,
-        CallAnalyzer $callAnalyzer
-    ) {
-        $this->methodCallAnalyzer = $methodCallAnalyzer;
+    public function __construct(IdentifierRenamer $identifierRenamer)
+    {
         $this->identifierRenamer = $identifierRenamer;
-        $this->funcCallAnalyzer = $funcCallAnalyzer;
-        $this->callAnalyzer = $callAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -76,40 +51,35 @@ final class AssertRegExpRector extends AbstractPHPUnitRector
     }
 
     /**
-     * @param MethodCall $methodCallNode
+     * @param MethodCall $node
      */
-    public function refactor(Node $methodCallNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (! $methodCallNode instanceof MethodCall) {
+        if (! $this->isInTestClass($node)) {
             return null;
         }
-        if (! $this->isInTestClass($methodCallNode)) {
-            return null;
-        }
-        if (! $this->methodCallAnalyzer->isMethods(
-            $methodCallNode,
-            ['assertSame', 'assertEquals', 'assertNotSame', 'assertNotEquals']
-        )) {
+
+        if (! $this->isNames($node, ['assertSame', 'assertEquals', 'assertNotSame', 'assertNotEquals'])) {
             return null;
         }
 
         /** @var FuncCall $secondArgumentValue */
-        $secondArgumentValue = $methodCallNode->args[1]->value;
+        $secondArgumentValue = $node->args[1]->value;
 
-        if (! $this->funcCallAnalyzer->isName($secondArgumentValue, 'preg_match')) {
+        if (! $this->isName($secondArgumentValue, 'preg_match')) {
             return null;
         }
 
-        $oldMethodName = $this->callAnalyzer->resolveName($methodCallNode);
+        $oldMethodName = $this->getName($node);
         $oldCondition = null;
 
-        $oldFirstArgument = $methodCallNode->args[0]->value;
+        $oldFirstArgument = $node->args[0]->value;
         $oldCondition = $this->resolveOldCondition($oldFirstArgument);
 
-        $this->renameMethod($methodCallNode, $oldMethodName, $oldCondition);
-        $this->moveFunctionArgumentsUp($methodCallNode);
+        $this->renameMethod($node, $oldMethodName, $oldCondition);
+        $this->moveFunctionArgumentsUp($node);
 
-        return $methodCallNode;
+        return $node;
     }
 
     private function moveFunctionArgumentsUp(MethodCall $methodCallNode): void

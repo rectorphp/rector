@@ -8,12 +8,10 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use Rector\Builder\IdentifierRenamer;
 use Rector\NodeAnalyzer\MethodNameAnalyzer;
-use Rector\NodeAnalyzer\StaticMethodCallAnalyzer;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
-use SomeClass;
 
 final class StaticMethodNameReplacerRector extends AbstractRector
 {
@@ -26,11 +24,6 @@ final class StaticMethodNameReplacerRector extends AbstractRector
      * @var string[]
      */
     private $activeTypes = [];
-
-    /**
-     * @var StaticMethodCallAnalyzer
-     */
-    private $staticMethodCallAnalyzer;
 
     /**
      * @var MethodNameAnalyzer
@@ -47,12 +40,10 @@ final class StaticMethodNameReplacerRector extends AbstractRector
      */
     public function __construct(
         array $perClassOldToNewMethods,
-        StaticMethodCallAnalyzer $staticMethodCallAnalyzer,
         MethodNameAnalyzer $methodNameAnalyzer,
         IdentifierRenamer $identifierRenamer
     ) {
         $this->perClassOldToNewMethods = $perClassOldToNewMethods;
-        $this->staticMethodCallAnalyzer = $staticMethodCallAnalyzer;
         $this->methodNameAnalyzer = $methodNameAnalyzer;
         $this->identifierRenamer = $identifierRenamer;
     }
@@ -65,8 +56,8 @@ final class StaticMethodNameReplacerRector extends AbstractRector
                 'SomeClass::newStaticMethod();',
                 [
                     '$perClassOldToNewMethods' => [
-                        SomeClass::class => [
-                            'oldMethod' => [SomeClass::class, 'newMethod'],
+                        'SomeClass' => [
+                            'oldMethod' => ['SomeClass', 'newMethod'],
                         ],
                     ],
                 ]
@@ -122,7 +113,7 @@ final class StaticMethodNameReplacerRector extends AbstractRector
     private function matchOldToNewMethods(): array
     {
         foreach ($this->activeTypes as $activeType) {
-            if ($this->perClassOldToNewMethods[$activeType]) {
+            if (isset($this->perClassOldToNewMethods[$activeType])) {
                 return $this->perClassOldToNewMethods[$activeType];
             }
         }
@@ -192,7 +183,7 @@ final class StaticMethodNameReplacerRector extends AbstractRector
     private function processIdentifierNode(Identifier $node): ?Identifier
     {
         $this->activeTypes = [];
-        $matchedTypes = $this->staticMethodCallAnalyzer->matchTypes($node, $this->getClasses());
+        $matchedTypes = $this->matchTypes($node, $this->getClasses());
         if ($matchedTypes) {
             $this->activeTypes = $matchedTypes;
         }
@@ -207,7 +198,7 @@ final class StaticMethodNameReplacerRector extends AbstractRector
     private function processStaticCallNode(StaticCall $node): ?Node
     {
         $this->activeTypes = [];
-        $matchedTypes = $this->staticMethodCallAnalyzer->matchTypes($node, $this->getClasses());
+        $matchedTypes = $this->matchTypes($node, $this->getClasses());
         if ($matchedTypes) {
             $this->activeTypes = $matchedTypes;
         }

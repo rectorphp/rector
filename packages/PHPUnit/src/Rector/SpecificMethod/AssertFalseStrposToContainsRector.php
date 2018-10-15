@@ -6,8 +6,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use Rector\Builder\IdentifierRenamer;
-use Rector\NodeAnalyzer\CallAnalyzer;
-use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -23,28 +21,13 @@ final class AssertFalseStrposToContainsRector extends AbstractPHPUnitRector
     ];
 
     /**
-     * @var MethodCallAnalyzer
-     */
-    private $methodCallAnalyzer;
-
-    /**
      * @var IdentifierRenamer
      */
     private $identifierRenamer;
 
-    /**
-     * @var CallAnalyzer
-     */
-    private $callAnalyzer;
-
-    public function __construct(
-        MethodCallAnalyzer $methodCallAnalyzer,
-        IdentifierRenamer $identifierRenamer,
-        CallAnalyzer $callAnalyzer
-    ) {
-        $this->methodCallAnalyzer = $methodCallAnalyzer;
+    public function __construct(IdentifierRenamer $identifierRenamer)
+    {
         $this->identifierRenamer = $identifierRenamer;
-        $this->callAnalyzer = $callAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -73,27 +56,27 @@ final class AssertFalseStrposToContainsRector extends AbstractPHPUnitRector
     }
 
     /**
-     * @param MethodCall $methodCallNode
+     * @param MethodCall $node
      */
-    public function refactor(Node $methodCallNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (! $this->isInTestClass($methodCallNode)) {
+        if (! $this->isInTestClass($node)) {
             return null;
         }
 
-        if (! $this->methodCallAnalyzer->isMethods($methodCallNode, array_keys($this->renameMethodsMap))) {
+        if (! $this->isNames($node, array_keys($this->renameMethodsMap))) {
             return null;
         }
 
-        $firstArgumentValue = $methodCallNode->args[0]->value;
-        if (! $this->callAnalyzer->isNames($firstArgumentValue, ['strpos', 'stripos'])) {
+        $firstArgumentValue = $node->args[0]->value;
+        if (! $this->isNames($firstArgumentValue, ['strpos', 'stripos'])) {
             return null;
         }
 
-        $this->identifierRenamer->renameNodeWithMap($methodCallNode, $this->renameMethodsMap);
-        $this->changeOrderArguments($methodCallNode);
+        $this->identifierRenamer->renameNodeWithMap($node, $this->renameMethodsMap);
+        $this->changeOrderArguments($node);
 
-        return $methodCallNode;
+        return $node;
     }
 
     public function changeOrderArguments(MethodCall $methodCallNode): void

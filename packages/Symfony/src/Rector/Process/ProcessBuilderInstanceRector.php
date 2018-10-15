@@ -5,7 +5,6 @@ namespace Rector\Symfony\Rector\Process;
 use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
-use Rector\NodeAnalyzer\StaticMethodCallAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -13,20 +12,12 @@ use Rector\RectorDefinition\RectorDefinition;
 final class ProcessBuilderInstanceRector extends AbstractRector
 {
     /**
-     * @var StaticMethodCallAnalyzer
-     */
-    private $staticMethodCallAnalyzer;
-
-    /**
      * @var string
      */
     private $processBuilderClass;
 
-    public function __construct(
-        StaticMethodCallAnalyzer $staticMethodCallAnalyzer,
-        string $processBuilderClass = 'Symfony\Component\Process\ProcessBuilder'
-    ) {
-        $this->staticMethodCallAnalyzer = $staticMethodCallAnalyzer;
+    public function __construct(string $processBuilderClass = 'Symfony\Component\Process\ProcessBuilder')
+    {
         $this->processBuilderClass = $processBuilderClass;
     }
 
@@ -52,18 +43,18 @@ final class ProcessBuilderInstanceRector extends AbstractRector
     }
 
     /**
-     * @param StaticCall $staticCallNode
+     * @param StaticCall $node
      */
-    public function refactor(Node $staticCallNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if ($this->staticMethodCallAnalyzer->isTypeAndMethod(
-            $staticCallNode,
-            $this->processBuilderClass,
-            'create'
-        ) === false) {
+        if (! $this->isType($node, $this->processBuilderClass)) {
             return null;
         }
 
-        return new New_($staticCallNode->class, $staticCallNode->args);
+        if (! $this->isName($node, 'create')) {
+            return null;
+        }
+
+        return new New_($node->class, $node->args);
     }
 }

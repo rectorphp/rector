@@ -7,7 +7,6 @@ use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\Node\NodeFactory;
-use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -28,15 +27,9 @@ final class OptionNameRector extends AbstractRector
      */
     private $nodeFactory;
 
-    /**
-     * @var MethodCallAnalyzer
-     */
-    private $methodCallAnalyzer;
-
-    public function __construct(NodeFactory $nodeFactory, MethodCallAnalyzer $methodCallAnalyzer)
+    public function __construct(NodeFactory $nodeFactory)
     {
         $this->nodeFactory = $nodeFactory;
-        $this->methodCallAnalyzer = $methodCallAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -65,15 +58,15 @@ CODE_SAMPLE
     }
 
     /**
-     * @param String_ $stringNode
+     * @param String_ $node
      */
-    public function refactor(Node $stringNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (! isset($this->oldToNewOption[$stringNode->value])) {
+        if (! isset($this->oldToNewOption[$node->value])) {
             return null;
         }
 
-        $arrayItemParentNode = $stringNode->getAttribute(Attribute::PARENT_NODE);
+        $arrayItemParentNode = $node->getAttribute(Attribute::PARENT_NODE);
         if (! $arrayItemParentNode instanceof ArrayItem) {
             return null;
         }
@@ -89,10 +82,10 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->methodCallAnalyzer->isMethod($methodCallNode, 'add')) {
+        if (! $this->isName($methodCallNode, 'add')) {
             return null;
         }
 
-        return $this->nodeFactory->createString($this->oldToNewOption[$stringNode->value]);
+        return $this->nodeFactory->createString($this->oldToNewOption[$node->value]);
     }
 }

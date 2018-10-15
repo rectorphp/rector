@@ -6,7 +6,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Identifier;
 use Rector\Builder\IdentifierRenamer;
-use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -33,21 +32,12 @@ final class PropertyNameReplacerRector extends AbstractRector
     private $identifierRenamer;
 
     /**
-     * @var PropertyFetchAnalyzer
-     */
-    private $propertyFetchAnalyzer;
-
-    /**
      * @param string[][] $perClassOldToNewProperties
      */
-    public function __construct(
-        array $perClassOldToNewProperties,
-        IdentifierRenamer $identifierRenamer,
-        PropertyFetchAnalyzer $propertyFetchAnalyzer
-    ) {
+    public function __construct(array $perClassOldToNewProperties, IdentifierRenamer $identifierRenamer)
+    {
         $this->perClassOldToNewProperties = $perClassOldToNewProperties;
         $this->identifierRenamer = $identifierRenamer;
-        $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -76,12 +66,12 @@ final class PropertyNameReplacerRector extends AbstractRector
     }
 
     /**
-     * @param PropertyFetch $propertyFetchNode
+     * @param PropertyFetch $node
      */
-    public function refactor(Node $propertyFetchNode): ?Node
+    public function refactor(Node $node): ?Node
     {
         $this->activeTypes = [];
-        $matchedTypes = $this->propertyFetchAnalyzer->matchTypes($propertyFetchNode, $this->getClasses());
+        $matchedTypes = $this->matchTypes($node, $this->getClasses());
 
         if ($matchedTypes) {
             $this->activeTypes = $matchedTypes;
@@ -90,12 +80,12 @@ final class PropertyNameReplacerRector extends AbstractRector
         $oldToNewProperties = $this->matchOldToNewProperties();
 
         /** @var Identifier $identifierNode */
-        $identifierNode = $propertyFetchNode->name;
+        $identifierNode = $node->name;
 
         $propertyName = $identifierNode->toString();
 
         if (! isset($oldToNewProperties[$propertyName])) {
-            return $propertyFetchNode;
+            return $node;
         }
 
         foreach ($oldToNewProperties as $oldProperty => $newProperty) {
@@ -103,10 +93,10 @@ final class PropertyNameReplacerRector extends AbstractRector
                 continue;
             }
 
-            $this->identifierRenamer->renameNode($propertyFetchNode, $newProperty);
+            $this->identifierRenamer->renameNode($node, $newProperty);
         }
 
-        return $propertyFetchNode;
+        return $node;
     }
 
     /**

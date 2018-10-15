@@ -48,19 +48,19 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Assign $assignNode
+     * @param Assign $node
      */
-    public function refactor(Node $assignNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if ($this->shouldSkip($assignNode)) {
-            return $assignNode;
+        if ($this->shouldSkip($node)) {
+            return $node;
         }
 
         /** @var List_ $listNode */
-        $listNode = $assignNode->var;
+        $listNode = $node->var;
 
         /** @var FuncCall $eachFuncCall */
-        $eachFuncCall = $assignNode->expr;
+        $eachFuncCall = $node->expr;
 
         // only key: list($key, ) = each($values);
         if ($listNode->items[0] && $listNode->items[1] === null) {
@@ -71,7 +71,7 @@ CODE_SAMPLE
         // only value: list(, $value) = each($values);
         if ($listNode->items[1] && $listNode->items[0] === null) {
             $nextFuncCall = $this->createFuncCallWithNameAndArgs('next', $eachFuncCall->args);
-            $this->addNodeAfterNode($nextFuncCall, $assignNode);
+            $this->addNodeAfterNode($nextFuncCall, $node);
 
             $currentFuncCall = $this->createFuncCallWithNameAndArgs('current', $eachFuncCall->args);
             return new Assign($listNode->items[1]->value, $currentFuncCall);
@@ -84,11 +84,11 @@ CODE_SAMPLE
         // next($values); - only inside a loop
         $currentFuncCall = $this->createFuncCallWithNameAndArgs('current', $eachFuncCall->args);
         $assignCurrentNode = new Assign($listNode->items[1]->value, $currentFuncCall);
-        $this->addNodeAfterNode($assignCurrentNode, $assignNode);
+        $this->addNodeAfterNode($assignCurrentNode, $node);
 
-        if ($this->isInsideDoWhile($assignNode)) {
+        if ($this->isInsideDoWhile($node)) {
             $nextFuncCall = $this->createFuncCallWithNameAndArgs('next', $eachFuncCall->args);
-            $this->addNodeAfterNode($nextFuncCall, $assignNode);
+            $this->addNodeAfterNode($nextFuncCall, $node);
         }
 
         $keyFuncCall = $this->createFuncCallWithNameAndArgs('key', $eachFuncCall->args);

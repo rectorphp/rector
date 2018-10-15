@@ -56,26 +56,26 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Return_ $returnNode
+     * @param Return_ $node
      */
-    public function refactor(Node $returnNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (! $returnNode->expr instanceof ConstFetch) {
+        if (! $node->expr instanceof ConstFetch) {
             return null;
         }
 
-        $methodName = $returnNode->getAttribute(Attribute::METHOD_NAME);
+        $methodName = $node->getAttribute(Attribute::METHOD_NAME);
         if ($methodName !== 'leaveNode') {
             return null;
         }
 
-        $value = $returnNode->expr->name->toString();
+        $value = $node->expr->name->toString();
         if ($value !== 'false') {
             return null;
         }
 
-        $returnNode->expr = $this->nodeFactory->createClassConstant('PhpParser\NodeTraverser', 'REMOVE_NODE');
+        $node->expr = $this->nodeFactory->createClassConstant('PhpParser\NodeTraverser', 'REMOVE_NODE');
 
-        return $returnNode;
+        return $node;
     }
 }

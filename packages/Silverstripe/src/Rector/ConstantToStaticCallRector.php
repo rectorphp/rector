@@ -31,18 +31,18 @@ final class ConstantToStaticCallRector extends AbstractRector
     }
 
     /**
-     * @param ConstFetch $constFetchNode
+     * @param ConstFetch $node
      */
-    public function refactor(Node $constFetchNode): ?Node
+    public function refactor(Node $node): ?Node
     {
         // @todo make configurable
-        if (! Strings::startsWith($constFetchNode->name->toString(), 'SS_')) {
-            return $constFetchNode;
+        if (! Strings::startsWith($node->name->toString(), 'SS_')) {
+            return $node;
         }
 
         // @todo make configurable
         $staticCallNode = new StaticCall(new FullyQualified('Environment'), 'getEnv');
-        $staticCallNode->args[] = new Arg(new String_($constFetchNode->name->toString()));
+        $staticCallNode->args[] = new Arg(new String_($node->name->toString()));
 
         return $staticCallNode;
     }

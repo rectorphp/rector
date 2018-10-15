@@ -7,7 +7,6 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use Rector\Node\NodeFactory;
-use Rector\NodeAnalyzer\CallAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -27,15 +26,9 @@ final class CallUserMethodRector extends AbstractRector
         'call_user_method_array' => 'call_user_func_array',
     ];
 
-    /**
-     * @var CallAnalyzer
-     */
-    private $callAnalyzer;
-
-    public function __construct(NodeFactory $nodeFactory, CallAnalyzer $callAnalyzer)
+    public function __construct(NodeFactory $nodeFactory)
     {
         $this->nodeFactory = $nodeFactory;
-        $this->callAnalyzer = $callAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -58,31 +51,31 @@ final class CallUserMethodRector extends AbstractRector
     }
 
     /**
-     * @param FuncCall $funcCallNode
+     * @param FuncCall $node
      */
-    public function refactor(Node $funcCallNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        $newName = $this->matchNewFunctionName($funcCallNode);
+        $newName = $this->matchNewFunctionName($node);
         if ($newName === null) {
-            return $funcCallNode;
+            return $node;
         }
 
-        $funcCallNode->name = new Name($newName);
+        $node->name = new Name($newName);
 
-        $argNodes = $funcCallNode->args;
+        $argNodes = $node->args;
 
-        $funcCallNode->args[0] = new Arg($this->nodeFactory->createArray($argNodes[1]->value, $argNodes[0]->value));
-        unset($funcCallNode->args[1]);
+        $node->args[0] = new Arg($this->nodeFactory->createArray($argNodes[1]->value, $argNodes[0]->value));
+        unset($node->args[1]);
 
         // reindex from 0
-        $funcCallNode->args = array_values($funcCallNode->args);
+        $node->args = array_values($node->args);
 
-        return $funcCallNode;
+        return $node;
     }
 
     private function matchNewFunctionName(FuncCall $funcCallNode): ?string
     {
-        $currentFunction = $this->callAnalyzer->resolveName($funcCallNode);
+        $currentFunction = $this->getName($funcCallNode);
         return $this->oldToNewFunctions[$currentFunction] ?? null;
     }
 }

@@ -99,31 +99,32 @@ final class MergeIsCandidateRector extends AbstractRector
     }
 
     /**
-     * @param Class_ $classNode
+     * @param Class_ $node
      */
-    public function refactor(Node $classNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if ($this->isType($classNode, 'Rector\Rector\AbstractRector')) {
-            return $classNode;
+        if ($this->isType($node, 'Rector\Rector\AbstractRector')) {
+            return $node;
         }
-        if (! $classNode->isAbstract()) {
-            return $classNode;
+
+        if (! $node->isAbstract()) {
+            return $node;
         }
 
         // has "isCandidate()" method?
-        if (! $this->hasClassIsCandidateMethod($classNode)) {
-            return $classNode;
+        if (! $this->hasClassIsCandidateMethod($node)) {
+            return $node;
         }
 
-        [$isCandidateClassMethodPosition, $isCandidateClassMethod] = $this->getClassMethodByName($classNode, 'isCandidate');
-        [$refactorClassMethodPosition, $refactorClassMethod] = $this->getClassMethodByName($classNode, 'refactor');
+        [$isCandidateClassMethodPosition, $isCandidateClassMethod] = $this->getClassMethodByName($node, 'isCandidate');
+        [$refactorClassMethodPosition, $refactorClassMethod] = $this->getClassMethodByName($node, 'refactor');
 
         if ($refactorClassMethod === null) {
-            return $classNode;
+            return $node;
         }
 
         // 1. replace "isCandidate()" method by "getNodeType()" method
-        $classNode->stmts[$isCandidateClassMethodPosition] = $this->createGetNodeTypeClassMethod($refactorClassMethod);
+        $node->stmts[$isCandidateClassMethodPosition] = $this->createGetNodeTypeClassMethod($refactorClassMethod);
 
         // 2. rename "return false;" to "return null;" to respect "refactor(Node $node): ?Node" typehint
         $this->replaceReturnFalseWithReturnNull($isCandidateClassMethod);
@@ -143,9 +144,9 @@ final class MergeIsCandidateRector extends AbstractRector
         // 7. add contents of "isCandidate()" method to start of "refactor()" method
         $refactorClassMethod->stmts = array_merge($isCandidateClassMethod->stmts, $refactorClassMethod->stmts);
 
-        $classNode->stmts[$refactorClassMethodPosition] = $refactorClassMethod;
+        $node->stmts[$refactorClassMethodPosition] = $refactorClassMethod;
 
-        return $classNode;
+        return $node;
     }
 
     private function hasClassIsCandidateMethod(Class_ $classNode): bool

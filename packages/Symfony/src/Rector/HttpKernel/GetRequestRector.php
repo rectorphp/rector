@@ -7,7 +7,6 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Node\NodeFactory;
-use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -28,24 +27,17 @@ final class GetRequestRector extends AbstractRector
     private $nodeFactory;
 
     /**
-     * @var MethodCallAnalyzer
-     */
-    private $methodCallAnalyzer;
-
-    /**
      * @var BetterNodeFinder
      */
     private $betterNodeFinder;
 
     public function __construct(
         ControllerMethodAnalyzer $controllerMethodAnalyzer,
-        MethodCallAnalyzer $methodCallAnalyzer,
         NodeFactory $nodeFactory,
         BetterNodeFinder $betterNodeFinder
     ) {
         $this->controllerMethodAnalyzer = $controllerMethodAnalyzer;
         $this->nodeFactory = $nodeFactory;
-        $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->betterNodeFinder = $betterNodeFinder;
     }
 
@@ -117,7 +109,7 @@ CODE_SAMPLE
 
         // "$this->getRequest()"
         $isGetRequestMethod = (bool) $this->betterNodeFinder->find($node, function (Node $node) {
-            return $this->methodCallAnalyzer->isMethod($node, 'getRequest');
+            return $this->isName($node, 'getRequest');
         });
 
         if ($isGetRequestMethod) {
@@ -127,7 +119,7 @@ CODE_SAMPLE
         // "$this->get('request')"
         /** @var MethodCall[] $getMethodCalls */
         $getMethodCalls = $this->betterNodeFinder->find($node, function (Node $node) {
-            return $this->methodCallAnalyzer->isMethod($node, 'get');
+            return $this->isName($node, 'get');
         });
 
         foreach ($getMethodCalls as $getMethodCall) {
@@ -145,10 +137,7 @@ CODE_SAMPLE
             return false;
         }
 
-        if (! $this->methodCallAnalyzer->isMethods(
-            $node,
-            ['getRequest']
-        ) && ! $this->isGetMethodCallWithRequestParameters($node)) {
+        if (! $this->isNames($node, ['getRequest']) && ! $this->isGetMethodCallWithRequestParameters($node)) {
             return false;
         }
 
@@ -158,7 +147,7 @@ CODE_SAMPLE
 
     private function isGetMethodCallWithRequestParameters(MethodCall $methodCall): bool
     {
-        if (! $this->methodCallAnalyzer->isMethod($methodCall, 'get')) {
+        if (! $this->isName($methodCall, 'get')) {
             return false;
         }
 

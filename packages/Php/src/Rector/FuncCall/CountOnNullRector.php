@@ -11,7 +11,6 @@ use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\LNumber;
-use Rector\NodeAnalyzer\FuncCallAnalyzer;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\NodeTypeResolver\NodeTypeAnalyzer;
 use Rector\Rector\AbstractRector;
@@ -28,15 +27,9 @@ final class CountOnNullRector extends AbstractRector
      */
     private $nodeTypeAnalyzer;
 
-    /**
-     * @var FuncCallAnalyzer
-     */
-    private $funcCallAnalyzer;
-
-    public function __construct(NodeTypeAnalyzer $nodeTypeAnalyzer, FuncCallAnalyzer $funcCallAnalyzer)
+    public function __construct(NodeTypeAnalyzer $nodeTypeAnalyzer)
     {
         $this->nodeTypeAnalyzer = $nodeTypeAnalyzer;
-        $this->funcCallAnalyzer = $funcCallAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -66,28 +59,28 @@ CODE_SAMPLE
     }
 
     /**
-     * @param FuncCall $funcCallNode
+     * @param FuncCall $node
      */
-    public function refactor(Node $funcCallNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (! $this->funcCallAnalyzer->isName($funcCallNode, 'count')) {
-            return $funcCallNode;
+        if (! $this->isName($node, 'count')) {
+            return $node;
         }
 
         // check if it has some condition before already, if so, probably it's already handled
-        $parentNode = $funcCallNode->getAttribute(Attribute::PARENT_NODE);
+        $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
         if ($parentNode instanceof Ternary) {
-            return $funcCallNode;
+            return $node;
         }
 
-        if (! isset($funcCallNode->args[0])) {
-            return $funcCallNode;
+        if (! isset($node->args[0])) {
+            return $node;
         }
 
-        $countedNode = $funcCallNode->args[0]->value;
+        $countedNode = $node->args[0]->value;
 
         if ($this->nodeTypeAnalyzer->isCountableType($countedNode)) {
-            return $funcCallNode;
+            return $node;
         }
 
         $conditionNode = new BooleanOr(
@@ -95,10 +88,10 @@ CODE_SAMPLE
             new Instanceof_($countedNode, new FullyQualified('Countable'))
         );
 
-        $ternaryNode = new Ternary($conditionNode, $funcCallNode, new LNumber(0));
+        $ternaryNode = new Ternary($conditionNode, $node, new LNumber(0));
 
         // needed to prevent infinity loop re-resolution
-        $funcCallNode->setAttribute(Attribute::PARENT_NODE, $ternaryNode);
+        $node->setAttribute(Attribute::PARENT_NODE, $ternaryNode);
 
         return $ternaryNode;
     }

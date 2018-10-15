@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\Node\NodeFactory;
-use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -20,11 +19,6 @@ final class PropertyToMethodRector extends AbstractRector
      * @var string[][][]
      */
     private $perClassPropertyToMethods = [];
-
-    /**
-     * @var PropertyFetchAnalyzer
-     */
-    private $propertyFetchAnalyzer;
 
     /**
      * @var NodeFactory
@@ -41,12 +35,10 @@ final class PropertyToMethodRector extends AbstractRector
      */
     public function __construct(
         array $perClassPropertyToMethods,
-        PropertyFetchAnalyzer $propertyFetchAnalyzer,
         NodeFactory $nodeFactory,
         MethodCallNodeFactory $methodCallNodeFactory
     ) {
         $this->perClassPropertyToMethods = $perClassPropertyToMethods;
-        $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
         $this->nodeFactory = $nodeFactory;
         $this->methodCallNodeFactory = $methodCallNodeFactory;
     }
@@ -110,16 +102,16 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Assign $assignNode
+     * @param Assign $node
      */
-    public function refactor(Node $assignNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if ($assignNode->var instanceof PropertyFetch) {
-            return $this->processSetter($assignNode);
+        if ($node->var instanceof PropertyFetch) {
+            return $this->processSetter($node);
         }
 
-        if ($assignNode->expr instanceof PropertyFetch) {
-            return $this->processGetter($assignNode);
+        if ($node->expr instanceof PropertyFetch) {
+            return $this->processGetter($node);
         }
 
         return null;
@@ -189,15 +181,21 @@ CODE_SAMPLE
      */
     private function matchPropertyFetchCandidate(PropertyFetch $propertyFetchNode): ?array
     {
-        foreach ($this->perClassPropertyToMethods as $class => $propertyToMethods) {
+        foreach ($this->perClassPropertyToMethods as $type => $propertyToMethods) {
             $properties = array_keys($propertyToMethods);
 
-            if ($this->propertyFetchAnalyzer->isTypeAndProperties($propertyFetchNode, $class, $properties)) {
-                /** @var Identifier $identifierNode */
-                $identifierNode = $propertyFetchNode->name;
-
-                return $propertyToMethods[$identifierNode->toString()]; //[$type];
+            if (! $this->isType($propertyFetchNode, $type)) {
+                continue;
             }
+
+            if (! $this->isNames($propertyFetchNode, $properties)) {
+                continue;
+            }
+
+            /** @var Identifier $identifierNode */
+            $identifierNode = $propertyFetchNode->name;
+
+            return $propertyToMethods[$identifierNode->toString()]; //[$type];
         }
 
         return null;

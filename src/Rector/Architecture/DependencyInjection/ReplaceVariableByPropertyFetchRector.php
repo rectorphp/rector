@@ -92,21 +92,21 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Variable $variableNode
+     * @param Variable $node
      */
-    public function refactor(Node $variableNode): ?Node
+    public function refactor(Node $node): ?Node
     {
         $activeVariableInfo = null;
-        if (! $this->isInControllerActionMethod($variableNode)) {
+        if (! $this->isInControllerActionMethod($node)) {
             return null;
         }
 
         foreach ($this->variablesToPropertyFetchCollection->getVariableInfos() as $variableInfo) {
-            if ($variableNode->name !== $variableInfo->getName()) {
+            if ($node->name !== $variableInfo->getName()) {
                 continue;
             }
 
-            if ($this->isTypes($variableNode, $variableInfo->getTypes())) {
+            if ($this->isTypes($node, $variableInfo->getTypes())) {
                 $activeVariableInfo = $variableInfo;
                 break;
             }

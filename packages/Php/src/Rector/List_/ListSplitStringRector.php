@@ -47,20 +47,20 @@ final class ListSplitStringRector extends AbstractRector
     }
 
     /**
-     * @param Assign $assignNode
+     * @param Assign $node
      */
-    public function refactor(Node $assignNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (! $assignNode->var instanceof List_) {
-            return $assignNode;
+        if (! $node->var instanceof List_) {
+            return $node;
         }
 
-        if (! $this->nodeTypeAnalyzer->isStringType($assignNode->expr)) {
-            return $assignNode;
+        if (! $this->nodeTypeAnalyzer->isStringType($node->expr)) {
+            return $node;
         }
 
-        $assignNode->expr = new FuncCall(new Name('str_split'), [new Arg($assignNode->expr)]);
+        $node->expr = new FuncCall(new Name('str_split'), [new Arg($node->expr)]);
 
-        return $assignNode;
+        return $node;
     }
 }

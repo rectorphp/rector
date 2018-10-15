@@ -5,23 +5,12 @@ namespace Rector\Php\Rector\FuncCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\Pow;
 use PhpParser\Node\Expr\FuncCall;
-use Rector\NodeAnalyzer\FuncCallAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class PowToExpRector extends AbstractRector
 {
-    /**
-     * @var FuncCallAnalyzer
-     */
-    private $funcCallAnalyzer;
-
-    public function __construct(FuncCallAnalyzer $funcCallAnalyzer)
-    {
-        $this->funcCallAnalyzer = $funcCallAnalyzer;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -39,20 +28,20 @@ final class PowToExpRector extends AbstractRector
     }
 
     /**
-     * @param FuncCall $funcCallNode
+     * @param FuncCall $node
      */
-    public function refactor(Node $funcCallNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (! $this->funcCallAnalyzer->isName($funcCallNode, 'pow')) {
-            return $funcCallNode;
+        if (! $this->isName($node, 'pow')) {
+            return $node;
         }
 
-        if (count($funcCallNode->args) !== 2) {
-            return $funcCallNode;
+        if (count($node->args) !== 2) {
+            return $node;
         }
 
-        $firstArgument = $funcCallNode->args[0]->value;
-        $secondArgument = $funcCallNode->args[1]->value;
+        $firstArgument = $node->args[0]->value;
+        $secondArgument = $node->args[1]->value;
 
         return new Pow($firstArgument, $secondArgument);
     }

@@ -8,19 +8,12 @@ use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use Rector\Builder\IdentifierRenamer;
-use Rector\NodeAnalyzer\MethodCallAnalyzer;
-use Rector\NodeAnalyzer\StaticMethodCallAnalyzer;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class AssertNotOperatorRector extends AbstractPHPUnitRector
 {
-    /**
-     * @var MethodCallAnalyzer
-     */
-    private $methodCallAnalyzer;
-
     /**
      * @var IdentifierRenamer
      */
@@ -34,19 +27,9 @@ final class AssertNotOperatorRector extends AbstractPHPUnitRector
         'assertFalse' => 'assertTrue',
     ];
 
-    /**
-     * @var StaticMethodCallAnalyzer
-     */
-    private $staticMethodCallAnalyzer;
-
-    public function __construct(
-        MethodCallAnalyzer $methodCallAnalyzer,
-        StaticMethodCallAnalyzer $staticMethodCallAnalyzer,
-        IdentifierRenamer $identifierRenamer
-    ) {
-        $this->methodCallAnalyzer = $methodCallAnalyzer;
+    public function __construct(IdentifierRenamer $identifierRenamer)
+    {
         $this->identifierRenamer = $identifierRenamer;
-        $this->staticMethodCallAnalyzer = $staticMethodCallAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -77,7 +60,7 @@ final class AssertNotOperatorRector extends AbstractPHPUnitRector
             return null;
         }
 
-        if (! $this->isNormalOrStaticMethods($node)) {
+        if (! $this->isNames($node, array_keys($this->renameMethodsMap))) {
             return null;
         }
 
@@ -99,18 +82,5 @@ final class AssertNotOperatorRector extends AbstractPHPUnitRector
         $node->args = array_merge([new Arg($expression)], $oldArguments);
 
         return $node;
-    }
-
-    private function isNormalOrStaticMethods(Node $node): bool
-    {
-        if ($this->methodCallAnalyzer->isMethods($node, array_keys($this->renameMethodsMap))) {
-            return true;
-        }
-
-        if ($this->staticMethodCallAnalyzer->isMethods($node, array_keys($this->renameMethodsMap))) {
-            return true;
-        }
-
-        return false;
     }
 }

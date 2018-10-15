@@ -7,7 +7,6 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use Rector\Node\MethodCallNodeFactory;
-use Rector\NodeAnalyzer\MethodCallAnalyzer;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -23,18 +22,12 @@ final class DelegateExceptionArgumentsRector extends AbstractPHPUnitRector
     ];
 
     /**
-     * @var MethodCallAnalyzer
-     */
-    private $methodCallAnalyzer;
-
-    /**
      * @var MethodCallNodeFactory
      */
     private $methodCallNodeFactory;
 
-    public function __construct(MethodCallAnalyzer $methodCallAnalyzer, MethodCallNodeFactory $methodCallNodeFactory)
+    public function __construct(MethodCallNodeFactory $methodCallNodeFactory)
     {
-        $this->methodCallAnalyzer = $methodCallAnalyzer;
         $this->methodCallNodeFactory = $methodCallNodeFactory;
     }
 
@@ -64,35 +57,36 @@ CODE_SAMPLE
     }
 
     /**
-     * @param MethodCall $methodCallNode
+     * @param MethodCall $node
      */
-    public function refactor(Node $methodCallNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (! $this->isInTestClass($methodCallNode)) {
-            return null;
-        }
-        if (! $this->methodCallAnalyzer->isMethods($methodCallNode, array_keys($this->oldToNewMethod))) {
+        if (! $this->isInTestClass($node)) {
             return null;
         }
 
-        if (isset($methodCallNode->args[1]) === false) {
+        if (! $this->isNames($node, array_keys($this->oldToNewMethod))) {
+            return null;
+        }
+
+        if (isset($node->args[1]) === false) {
             return null;
         }
 
         /** @var Identifier $identifierNode */
-        $identifierNode = $methodCallNode->name;
+        $identifierNode = $node->name;
         $oldMethodName = $identifierNode->name;
 
-        $this->addNewMethodCall($methodCallNode, $this->oldToNewMethod[$oldMethodName], $methodCallNode->args[1]);
-        unset($methodCallNode->args[1]);
+        $this->addNewMethodCall($node, $this->oldToNewMethod[$oldMethodName], $node->args[1]);
+        unset($node->args[1]);
 
         // add exception code method call
-        if (isset($methodCallNode->args[2])) {
-            $this->addNewMethodCall($methodCallNode, 'expectExceptionCode', $methodCallNode->args[2]);
-            unset($methodCallNode->args[2]);
+        if (isset($node->args[2])) {
+            $this->addNewMethodCall($node, 'expectExceptionCode', $node->args[2]);
+            unset($node->args[2]);
         }
 
-        return $methodCallNode;
+        return $node;
     }
 
     private function addNewMethodCall(MethodCall $methodCallNode, string $methodName, Arg $argNode): void
