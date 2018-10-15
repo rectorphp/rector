@@ -5,7 +5,6 @@ namespace Rector\Php\Rector\TryCatch;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\TryCatch;
-use Rector\Printer\BetterStandardPrinter;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -15,16 +14,6 @@ use Rector\RectorDefinition\RectorDefinition;
  */
 final class MultiExceptionCatchRector extends AbstractRector
 {
-    /**
-     * @var BetterStandardPrinter
-     */
-    private $betterStandardPrinter;
-
-    public function __construct(BetterStandardPrinter $betterStandardPrinter)
-    {
-        $this->betterStandardPrinter = $betterStandardPrinter;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -100,7 +89,7 @@ CODE_SAMPLE
     {
         $catchKeysByContent = [];
         foreach ($tryCatchNode->catches as $key => $catch) {
-            $catchContent = $this->betterStandardPrinter->prettyPrint($catch->stmts);
+            $catchContent = $this->print($catch->stmts);
             /** @var int $key */
             $catchKeysByContent[$catchContent][] = $key;
         }

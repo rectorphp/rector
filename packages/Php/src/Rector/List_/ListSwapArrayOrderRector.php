@@ -10,7 +10,6 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\List_;
 use PhpParser\Node\Name;
-use Rector\Printer\BetterStandardPrinter;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -20,16 +19,6 @@ use Rector\RectorDefinition\RectorDefinition;
  */
 final class ListSwapArrayOrderRector extends AbstractRector
 {
-    /**
-     * @var BetterStandardPrinter
-     */
-    private $betterStandardPrinter;
-
-    public function __construct(BetterStandardPrinter $betterStandardPrinter)
-    {
-        $this->betterStandardPrinter = $betterStandardPrinter;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -60,7 +49,7 @@ final class ListSwapArrayOrderRector extends AbstractRector
         /** @var ArrayItem $item */
         foreach ($node->var->items as $item) {
             if ($item->value instanceof ArrayDimFetch) {
-                $printerVars[] = $this->betterStandardPrinter->prettyPrint([$item->value->var]);
+                $printerVars[] = $this->print($item->value->var);
             } else {
                 return $node;
             }

@@ -14,7 +14,6 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\PropertyProperty;
 use Rector\NodeTypeResolver\NodeTypeAnalyzer;
-use Rector\Printer\BetterStandardPrinter;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -49,21 +48,14 @@ final class AssignArrayToStringRector extends AbstractRector
      */
     private $betterNodeFinder;
 
-    /**
-     * @var BetterStandardPrinter
-     */
-    private $betterStandardPrinter;
-
     public function __construct(
         NodeTypeAnalyzer $nodeTypeAnalyzer,
         CallableNodeTraverser $callableNodeTraverser,
-        BetterNodeFinder $betterNodeFinder,
-        BetterStandardPrinter $betterStandardPrinter
+        BetterNodeFinder $betterNodeFinder
     ) {
         $this->nodeTypeAnalyzer = $nodeTypeAnalyzer;
         $this->callableNodeTraverser = $callableNodeTraverser;
         $this->betterNodeFinder = $betterNodeFinder;
-        $this->betterStandardPrinter = $betterStandardPrinter;
     }
 
     public function getDefinition(): RectorDefinition
@@ -156,7 +148,7 @@ CODE_SAMPLE
             return false;
         }
 
-        $variableNodeContent = $this->betterStandardPrinter->prettyPrint([$variableNode]);
+        $variableNodeContent = $this->print($variableNode);
 
         $variableAssign = $this->betterNodeFinder->findFirstPrevious($assignNode, function (Node $node) use (
             $variableNodeContent
@@ -165,7 +157,7 @@ CODE_SAMPLE
                 return false;
             }
 
-            if ($this->betterStandardPrinter->prettyPrint([$node->var]) !== $variableNodeContent) {
+            if ($this->print($node->var) !== $variableNodeContent) {
                 return false;
             }
 
