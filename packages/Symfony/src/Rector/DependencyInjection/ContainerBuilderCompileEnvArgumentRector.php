@@ -55,7 +55,7 @@ final class ContainerBuilderCompileEnvArgumentRector extends AbstractRector
             return null;
         }
 
-        if ((count($node->args) !== 1) === false) {
+        if (count($node->args) === 1) {
             return null;
         }
 
