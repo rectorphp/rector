@@ -79,7 +79,7 @@ final class ConfigurationFactory
         $fqnNodeTypes = [];
         foreach ($nodeTypes as $nodeType) {
             foreach ($nodeClasses as $nodeClass) {
-                if (Strings::endsWith($nodeClass, $nodeType)) {
+                if (Strings::endsWith($nodeClass, '\\' . $nodeType)) {
                     $fqnNodeTypes[] = $nodeClass;
                 }
             }
