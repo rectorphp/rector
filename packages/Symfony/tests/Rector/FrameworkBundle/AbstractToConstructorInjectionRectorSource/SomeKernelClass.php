@@ -2,6 +2,7 @@
 
 namespace Rector\Symfony\Tests\FrameworkBundle\AbstractToConstructorInjectionRectorSource;
 
+use Rector\Symfony\Tests\Rector\FrameworkBundle\AbstractToConstructorInjectionRectorSource\SomeEntityManager;
 use Rector\Symfony\Tests\Rector\FrameworkBundle\AbstractToConstructorInjectionRectorSource\SomeTranslator;
 use Rector\Symfony\Tests\Rector\FrameworkBundle\AbstractToConstructorInjectionRectorSource\SomeTranslatorInterface;
 use Symfony\Component\Config\Loader\LoaderInterface;
@@ -27,6 +28,8 @@ final class SomeKernelClass extends Kernel
         $containerBuilder->register('translator.data_collector', SomeTranslator::class);
         $containerBuilder->setAlias('translator', 'translator.data_collector');
         $containerBuilder->setAlias(SomeTranslatorInterface::class, 'translator.data_collector');
+
+        $containerBuilder->register('entity.manager', SomeEntityManager::class);
     }
 
     public function getCacheDir()

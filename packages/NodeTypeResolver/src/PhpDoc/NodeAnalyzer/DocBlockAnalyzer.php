@@ -6,6 +6,8 @@ use Nette\Utils\Strings;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Exception\MissingTagException;
 use Rector\PhpParser\CurrentNodeProvider;
@@ -71,7 +73,7 @@ final class DocBlockAnalyzer
         $phpDocInfo = $this->createPhpDocInfoWithFqnTypesFromNode($node);
 
         // is namespaced annotation?
-        if (Strings::contains($name, '\\')) {
+        if ($this->isNamespaced($name)) {
             $this->fqnAnnotationTypeDecorator->decorate($phpDocInfo, $node);
         }
 
@@ -98,8 +100,7 @@ final class DocBlockAnalyzer
 
         $phpDocInfo = $this->createPhpDocInfoFromNode($node);
 
-        // is namespaced annotation?
-        if (Strings::contains($name, '\\')) {
+        if ($this->isNamespaced($name)) {
             $this->fqnAnnotationTypeDecorator->decorate($phpDocInfo, $node);
         }
 
@@ -186,7 +187,22 @@ final class DocBlockAnalyzer
 
         $phpDocInfo = $this->createPhpDocInfoWithFqnTypesFromNode($node);
 
+        if ($this->isNamespaced($name)) {
+            $this->fqnAnnotationTypeDecorator->decorate($phpDocInfo, $node);
+        }
+
         return $phpDocInfo->getTagsByName($name);
+    }
+
+    public function addVarTag(Node $node, string $type): void
+    {
+        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
+        $phpDocNode = $phpDocInfo->getPhpDocNode();
+
+        $varTagValueNode = new VarTagValueNode(new IdentifierTypeNode('\\' . $type), '', '');
+        $phpDocNode->children[] = new PhpDocTagNode('@var', $varTagValueNode);
+
+        $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
     }
 
     /**
@@ -243,5 +259,10 @@ final class DocBlockAnalyzer
         $this->phpDocInfoFqnTypeDecorator->decorate($phpDocInfo);
 
         return $phpDocInfo;
+    }
+
+    private function isNamespaced(string $name): bool
+    {
+        return Strings::contains($name, '\\');
     }
 }

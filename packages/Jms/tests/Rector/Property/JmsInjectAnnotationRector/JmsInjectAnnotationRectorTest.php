@@ -1,14 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector;
+namespace Rector\Jms\Tests\Rector\Property\JmsInjectAnnotationRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
- * @covers \Rector\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector
+ * @covers \Rector\Jms\Rector\Property\JmsInjectAnnotationRector
  */
-final class JmsRectorTest extends AbstractRectorTestCase
+final class JmsInjectAnnotationRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()
@@ -20,11 +20,12 @@ final class JmsRectorTest extends AbstractRectorTestCase
 
     public function provideWrongToFixedFiles(): Iterator
     {
-        yield [__DIR__ . '/Wrong/wrong7.php.inc', __DIR__ . '/Correct/correct7.php.inc'];
+        yield [__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc'];
+        yield [__DIR__ . '/Wrong/wrong2.php.inc', __DIR__ . '/Correct/correct2.php.inc'];
     }
 
     protected function provideConfig(): string
     {
-        return __DIR__ . '/jms-config.yml';
+        return __DIR__ . '/config.yml';
     }
 }
