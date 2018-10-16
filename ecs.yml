@@ -106,6 +106,7 @@ parameters:
             - '*NodeVisitor.php'
             - '*CompilerPass.php'
             - 'packages/Php/src/Rector/Unset_/UnsetCastRector.php'
+            - 'packages/Php/src/Rector/String_/BarewordStringRector.php'
             # array type check
             - 'src/RectorDefinition/RectorDefinition.php'
 

@@ -62,6 +62,8 @@ parameters:
         # false positive, has annotation type above
         - '#Access to an undefined property PhpParser\\Node::\$name#' # 11
         - '#Access to an undefined property PhpParser\\Node\\Expr::\$expr#'
+        # false positive
+        - '#Call to function in_array\(\) with arguments string, array\(\) and true will always evaluate to false#'
 
         # subtype
         - '#Property PhpParser\\Node\\Param::\$type \(PhpParser\\Node\\Name|PhpParser\\Node\\NullableType\|string\|null\) does not accept PhpParser\\Node\\Identifier|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType#' # 3

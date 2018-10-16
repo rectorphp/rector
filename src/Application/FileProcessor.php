@@ -5,6 +5,7 @@ namespace Rector\Application;
 use PhpParser\Lexer;
 use PhpParser\Node;
 use Rector\NodeTraverser\RectorNodeTraverser;
+use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 use Rector\Parser\Parser;
 use Rector\Printer\FormatPerservingPrinter;
@@ -37,22 +38,31 @@ final class FileProcessor
      */
     private $nodeScopeAndMetadataDecorator;
 
+    /**
+     * @var CurrentFileInfoProvider
+     */
+    private $currentFileInfoProvider;
+
     public function __construct(
         FormatPerservingPrinter $formatPerservingPrinter,
         Parser $parser,
         Lexer $lexer,
         RectorNodeTraverser $rectorNodeTraverser,
-        NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator
+        NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator,
+        CurrentFileInfoProvider $currentFileInfoProvider
     ) {
         $this->formatPerservingPrinter = $formatPerservingPrinter;
         $this->parser = $parser;
         $this->lexer = $lexer;
         $this->rectorNodeTraverser = $rectorNodeTraverser;
         $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
+        $this->currentFileInfoProvider = $currentFileInfoProvider;
     }
 
     public function processFile(SmartFileInfo $smartFileInfo): string
     {
+        $this->currentFileInfoProvider->setCurrentFileInfo($smartFileInfo);
+
         [$newStmts, $oldStmts, $oldTokens] = $this->parseAndTraverseFileInfoToNodes($smartFileInfo);
 
         return $this->formatPerservingPrinter->printToFile($smartFileInfo, $newStmts, $oldStmts, $oldTokens);
@@ -63,6 +73,8 @@ final class FileProcessor
      */
     public function processFileToString(SmartFileInfo $smartFileInfo): string
     {
+        $this->currentFileInfoProvider->setCurrentFileInfo($smartFileInfo);
+
         [$newStmts, $oldStmts, $oldTokens] = $this->parseAndTraverseFileInfoToNodes($smartFileInfo);
 
         return $this->formatPerservingPrinter->printToString($newStmts, $oldStmts, $oldTokens);

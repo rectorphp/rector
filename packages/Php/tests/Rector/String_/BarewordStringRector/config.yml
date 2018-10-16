@@ -1,0 +1,2 @@
+services:
+    Rector\Php\Rector\String_\BarewordStringRector: ~
