@@ -37,16 +37,23 @@ final class DocBlockAnalyzer
      */
     private $phpDocInfoFqnTypeDecorator;
 
+    /**
+     * @var FqnAnnotationTypeDecorator
+     */
+    private $fqnAnnotationTypeDecorator;
+
     public function __construct(
         PhpDocInfoFactory $phpDocInfoFactory,
         PhpDocInfoPrinter $phpDocInfoPrinter,
         CurrentNodeProvider $currentNodeProvider,
-        PhpDocInfoFqnTypeDecorator $phpDocInfoFqnTypeDecorator
+        PhpDocInfoFqnTypeDecorator $phpDocInfoFqnTypeDecorator,
+        FqnAnnotationTypeDecorator $fqnAnnotationTypeDecorator
     ) {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->phpDocInfoPrinter = $phpDocInfoPrinter;
         $this->currentNodeProvider = $currentNodeProvider;
         $this->phpDocInfoFqnTypeDecorator = $phpDocInfoFqnTypeDecorator;
+        $this->fqnAnnotationTypeDecorator = $fqnAnnotationTypeDecorator;
     }
 
     public function hasTag(Node $node, string $name): bool
@@ -55,7 +62,20 @@ final class DocBlockAnalyzer
             return false;
         }
 
-        return Strings::contains($node->getDocComment()->getText(), '@' . $name);
+        // simple check
+        if (Strings::contains($node->getDocComment()->getText(), '@' . $name)) {
+            return true;
+        }
+
+        // advanced check, e.g. for "Namespaced\Annotations\DI"
+        $phpDocInfo = $this->createPhpDocInfoWithFqnTypesFromNode($node);
+
+        // is namespaced annotation?
+        if (Strings::contains($name, '\\')) {
+            $this->fqnAnnotationTypeDecorator->decorate($phpDocInfo, $node);
+        }
+
+        return $phpDocInfo->hasTag($name);
     }
 
     public function removeParamTagByName(Node $node, string $name): void
@@ -77,8 +97,13 @@ final class DocBlockAnalyzer
         }
 
         $phpDocInfo = $this->createPhpDocInfoFromNode($node);
-        $phpDocInfo->removeTagByName($name);
 
+        // is namespaced annotation?
+        if (Strings::contains($name, '\\')) {
+            $this->fqnAnnotationTypeDecorator->decorate($phpDocInfo, $node);
+        }
+
+        $phpDocInfo->removeTagByName($name);
         $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
     }
 
