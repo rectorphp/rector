@@ -5,7 +5,6 @@ namespace Rector\Rector\Architecture\DependencyInjection;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
-use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\Rector\AbstractRector;
@@ -22,11 +21,6 @@ use Rector\RectorDefinition\RectorDefinition;
 final class AnnotatedPropertyInjectToConstructorInjectionRector extends AbstractRector
 {
     /**
-     * @var ClassPropertyCollector
-     */
-    private $classPropertyCollector;
-
-    /**
      * @var DocBlockAnalyzer
      */
     private $docBlockAnalyzer;
@@ -36,12 +30,8 @@ final class AnnotatedPropertyInjectToConstructorInjectionRector extends Abstract
      */
     private $annotation;
 
-    public function __construct(
-        ClassPropertyCollector $classPropertyCollector,
-        DocBlockAnalyzer $docBlockAnalyzer,
-        string $annotation
-    ) {
-        $this->classPropertyCollector = $classPropertyCollector;
+    public function __construct(DocBlockAnalyzer $docBlockAnalyzer, string $annotation)
+    {
         $this->docBlockAnalyzer = $docBlockAnalyzer;
         $this->annotation = $annotation;
     }
@@ -121,6 +111,6 @@ CODE_SAMPLE
 
         $propertyName = (string) $propertyPropertyNode->name;
 
-        $this->classPropertyCollector->addPropertyForClass($className, [$mainPropertyType], $propertyName);
+        $this->addPropertyToClass($className, $mainPropertyType, $propertyName);
     }
 }

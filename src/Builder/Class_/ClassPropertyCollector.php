@@ -19,14 +19,11 @@ final class ClassPropertyCollector
         $this->variableInfoFactory = $variableInfoFactory;
     }
 
-    /**
-     * @param string[] $propertyTypes
-     */
-    public function addPropertyForClass(string $class, array $propertyTypes, string $propertyName): void
+    public function addPropertyForClass(string $class, string $propertyType, string $propertyName): void
     {
         $this->classProperties[$class][] = $this->variableInfoFactory->createFromNameAndTypes(
             $propertyName,
-            $propertyTypes
+            [$propertyType]
         );
     }
 

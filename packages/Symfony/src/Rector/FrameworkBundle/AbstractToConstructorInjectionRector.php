@@ -60,9 +60,9 @@ abstract class AbstractToConstructorInjectionRector extends AbstractRector
 
         $propertyName = $this->propertyNaming->fqnToVariableName($serviceType);
 
-        $this->classPropertyCollector->addPropertyForClass(
+        $this->addPropertyToClass(
             (string) $methodCallNode->getAttribute(Attribute::CLASS_NAME),
-            [$serviceType],
+            $serviceType,
             $propertyName
         );
 
