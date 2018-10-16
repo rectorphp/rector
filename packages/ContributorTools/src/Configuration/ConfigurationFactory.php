@@ -7,7 +7,6 @@ use Nette\Utils\Strings;
 use Rector\ContributorTools\Exception\ConfigurationException;
 use Rector\Exception\FileSystem\FileNotFoundException;
 use Symfony\Component\Yaml\Yaml;
-use function Safe\getcwd;
 use function Safe\sprintf;
 
 final class ConfigurationFactory
@@ -71,7 +70,7 @@ final class ConfigurationFactory
     {
         $robotLoader = new RobotLoader();
         $robotLoader->addDirectory(__DIR__ . '/../../../../vendor/nikic/php-parser/lib/PhpParser/Node');
-        $robotLoader->setTempDirectory(getcwd() . '_robotloader_nodes');
+        $robotLoader->setTempDirectory(sys_get_temp_dir() . '/_robotloader_nodes');
         $robotLoader->rebuild();
 
         $nodeClasses = array_keys($robotLoader->getIndexedClasses());
