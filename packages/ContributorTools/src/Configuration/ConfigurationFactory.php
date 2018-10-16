@@ -7,7 +7,6 @@ use Nette\Utils\Strings;
 use Rector\ContributorTools\Exception\ConfigurationException;
 use Rector\Exception\FileSystem\FileNotFoundException;
 use Symfony\Component\Yaml\Yaml;
-use function Safe\getcwd;
 use function Safe\sprintf;
 
 final class ConfigurationFactory
