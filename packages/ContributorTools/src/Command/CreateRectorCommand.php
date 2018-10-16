@@ -116,7 +116,9 @@ final class CreateRectorCommand extends Command
             '_Description_' => $configuration->getDescription(),
             '_Name_' => $configuration->getName(),
             '_CodeBefore_' => $configuration->getCodeBefore(),
+            '_CodeBeforeExample_' => $this->prepareCodeForDefinition($configuration->getCodeBefore()),
             '_CodeAfter_' => $configuration->getCodeAfter(),
+            '_CodeAfterExample_' => $this->prepareCodeForDefinition($configuration->getCodeAfter()),
         ];
 
         $arrayNodes = [];
@@ -136,5 +138,16 @@ final class CreateRectorCommand extends Command
     private function applyData(string $content, array $data): string
     {
         return str_replace(array_keys($data), array_values($data), $content);
+    }
+
+    private function prepareCodeForDefinition(string $code): string
+    {
+        if (Strings::contains($code, PHP_EOL)) {
+            // multi lines
+            return sprintf("<<<'CODE_SAMPLE'%s%sCODE_SAMPLE%s", PHP_EOL, $code, PHP_EOL);
+        }
+
+        // single line
+        return "'" . str_replace("'", '"', $code) . "'";
     }
 }
