@@ -17,6 +17,7 @@ use Rector\RectorDefinition\RectorDefinition;
  * - https://doc.nette.org/en/2.4/di-usage#toc-inject-annotations
  * - https://github.com/Kdyby/Autowired/blob/master/docs/en/index.md#autowired-properties
  * - http://jmsyst.com/bundles/JMSDiExtraBundle/master/annotations
+ * - https://github.com/rectorphp/rector/issues/700#issue-370301169
  */
 final class AnnotatedPropertyInjectToConstructorInjectionRector extends AbstractRector
 {
@@ -92,10 +93,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node->isPrivate()) {
-            return null;
-        }
-
         if (! $this->docBlockAnalyzer->hasTag($node, $this->annotation)) {
             return null;
         }

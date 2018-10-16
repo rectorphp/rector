@@ -2,6 +2,7 @@
 
 use Rector\Tests\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeInterface;
 use JMS\DiExtraBundle\Annotation as DI;
+use Rector\Tests\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeProductWithInterface;
 
 class ClassWithInjects7
 {
@@ -10,4 +11,10 @@ class ClassWithInjects7
      * @DI\Inject("irelevant")
      */
     private $session;
+
+    /**
+     * @var SomeProductWithInterface
+     * @DI\Inject
+     */
+    private $product;
 }
