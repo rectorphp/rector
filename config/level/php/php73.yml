@@ -21,3 +21,4 @@ services:
         mbereg_search_setpos: 'mb_ereg_search_setpos'
 
     Rector\Php\Rector\FuncCall\StringifyStrNeedlesRector: ~
+    Rector\Php\Rector\FuncCall\JsonThrowOnErrorRector: ~

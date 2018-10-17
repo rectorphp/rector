@@ -42,6 +42,11 @@ final class Configuration
     private $description;
 
     /**
+     * @var string
+     */
+    private $source;
+
+    /**
      * @param string[] $nodeTypes
      */
     public function __construct(
@@ -51,7 +56,8 @@ final class Configuration
         array $nodeTypes,
         string $description,
         string $codeBefore,
-        string $codeAfter
+        string $codeAfter,
+        string $source
     ) {
         $this->package = $package;
         $this->setName($name);
@@ -60,6 +66,7 @@ final class Configuration
         $this->codeBefore = $codeBefore;
         $this->codeAfter = $codeAfter;
         $this->description = $description;
+        $this->source = $source;
     }
 
     public function getDescription(): string
@@ -98,6 +105,11 @@ final class Configuration
     public function getCodeAfter(): string
     {
         return $this->codeAfter;
+    }
+
+    public function getSource(): string
+    {
+        return $this->source;
     }
 
     private function setName(string $name): void

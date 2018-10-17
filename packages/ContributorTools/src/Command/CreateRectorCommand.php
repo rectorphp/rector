@@ -121,6 +121,7 @@ final class CreateRectorCommand extends Command
             '_CodeBeforeExample_' => $this->prepareCodeForDefinition($configuration->getCodeBefore()),
             '_CodeAfter_' => trim($configuration->getCodeAfter()) . PHP_EOL,
             '_CodeAfterExample_' => $this->prepareCodeForDefinition($configuration->getCodeAfter()),
+            '_Source_' => $this->prepareSourceDocBlock($configuration->getSource()),
         ];
 
         $arrayNodes = [];
@@ -151,5 +152,20 @@ final class CreateRectorCommand extends Command
 
         // single line
         return "'" . str_replace("'", '"', $code) . "'";
+    }
+
+    private function prepareSourceDocBlock(string $source): string
+    {
+        if (! $source) {
+            return $source;
+        }
+
+        $sourceDocBlock = <<<'CODE_SAMPLE'
+/**
+ * @see %s
+ */
+CODE_SAMPLE;
+
+        return sprintf($sourceDocBlock, $source);
     }
 }

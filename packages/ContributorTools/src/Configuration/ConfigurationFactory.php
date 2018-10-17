@@ -25,7 +25,8 @@ final class ConfigurationFactory
             $this->resolveFullyQualifiedNodeTypes($config['node_types']),
             $config['description'],
             $config['code_before'],
-            $config['code_after']
+            $config['code_after'],
+            $config['source']
         );
     }
 
@@ -43,7 +44,7 @@ final class ConfigurationFactory
      */
     private function ensureConfigIsValid(array $config, string $configFile): void
     {
-        $requiredKeys = ['package', 'name', 'node_types', 'code_before', 'code_after', 'description'];
+        $requiredKeys = ['package', 'name', 'node_types', 'code_before', 'code_after', 'description', 'source'];
         if (count(array_intersect(array_keys($config), $requiredKeys)) === count($requiredKeys)) {
             if (count($config['node_types']) < 1) {
                 throw new ConfigurationException(sprintf(
