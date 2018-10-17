@@ -13,7 +13,6 @@ use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\PropertyProperty;
-use Rector\NodeTypeResolver\NodeTypeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -29,11 +28,6 @@ use Rector\Utils\NodeTraverser\CallableNodeTraverser;
 final class AssignArrayToStringRector extends AbstractRector
 {
     /**
-     * @var NodeTypeAnalyzer
-     */
-    private $nodeTypeAnalyzer;
-
-    /**
      * @var CallableNodeTraverser
      */
     private $callableNodeTraverser;
@@ -48,12 +42,8 @@ final class AssignArrayToStringRector extends AbstractRector
      */
     private $betterNodeFinder;
 
-    public function __construct(
-        NodeTypeAnalyzer $nodeTypeAnalyzer,
-        CallableNodeTraverser $callableNodeTraverser,
-        BetterNodeFinder $betterNodeFinder
-    ) {
-        $this->nodeTypeAnalyzer = $nodeTypeAnalyzer;
+    public function __construct(CallableNodeTraverser $callableNodeTraverser, BetterNodeFinder $betterNodeFinder)
+    {
         $this->callableNodeTraverser = $callableNodeTraverser;
         $this->betterNodeFinder = $betterNodeFinder;
     }
@@ -144,7 +134,7 @@ CODE_SAMPLE
      */
     private function processVariable(Assign $assignNode, Expr $variableNode): bool
     {
-        if (! $this->nodeTypeAnalyzer->isStringType($variableNode)) {
+        if (! $this->isStringType($variableNode)) {
             return false;
         }
 

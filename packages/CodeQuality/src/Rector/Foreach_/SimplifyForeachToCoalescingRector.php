@@ -21,7 +21,7 @@ final class SimplifyForeachToCoalescingRector extends AbstractRector
     /**
      * @var Return_|null
      */
-    private $returnToBeRemoved;
+    private $returnNode;
 
     public function getDefinition(): RectorDefinition
     {
@@ -49,23 +49,14 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Foreach_::class, Return_::class];
+        return [Foreach_::class];
     }
 
     /**
-     * @param Foreach_|Return_ $node
+     * @param Foreach_ $node
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node instanceof Return_) {
-            if ($node === $this->returnToBeRemoved) {
-                $this->returnToBeRemoved = null;
-                $this->removeNode = true;
-            }
-
-            return null;
-        }
-
         if ($this->shouldSkip($node)) {
             return null;
         }
@@ -149,15 +140,16 @@ CODE_SAMPLE
 
         // is next node Return?
         if ($foreachNode->getAttribute(Attribute::NEXT_NODE) instanceof Return_) {
-            $this->returnToBeRemoved = $foreachNode->getAttribute(Attribute::NEXT_NODE);
+            $this->returnNode = $foreachNode->getAttribute(Attribute::NEXT_NODE);
+            $this->removeNode($this->returnNode);
         }
 
         $coalesceNode = new Coalesce(new ArrayDimFetch(
             $foreachNode->expr,
             $checkedNode
-        ), $this->returnToBeRemoved ? $this->returnToBeRemoved->expr : $checkedNode);
+        ), $this->returnNode ? $this->returnNode->expr : $checkedNode);
 
-        if ($this->returnToBeRemoved) {
+        if ($this->returnNode) {
             return new Return_($coalesceNode);
         }
 

@@ -88,13 +88,13 @@ CODE_SAMPLE
         if (! $node->hasAttribute(Attribute::PARENT_CLASS_NAME)) {
             return null;
         }
-        // @todo or better types?
+
         $nodeParentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
         if (! isset($this->propertyToVisibilityByClass[$nodeParentClassName])) {
             return null;
         }
-        $propertyProperty = $node->props[0];
-        $propertyName = $propertyProperty->name->toString();
+
+        $propertyName = $this->getName($node);
         if (! isset($this->propertyToVisibilityByClass[$nodeParentClassName][$propertyName])) {
             return null;
         }

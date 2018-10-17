@@ -47,12 +47,10 @@ final class DefineConstantToStaticCallRector extends AbstractRector
             return null;
         }
 
-        // @todo make configurable
         if (! Strings::startsWith($argumentValue->value, 'SS_')) {
             return null;
         }
 
-        // @todo make configurable
         $staticCallNode = new StaticCall(new FullyQualified('Environment'), 'getEnv');
         $staticCallNode->args = $node->args;
 

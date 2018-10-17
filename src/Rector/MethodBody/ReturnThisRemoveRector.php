@@ -98,7 +98,7 @@ CODE_SAMPLE
             return $node;
         }
 
-        $this->removeNode = true;
+        $this->removeNode($node);
 
         /** @var ClassMethod $methodNode */
         $methodNode = $node->getAttribute(Attribute::METHOD_NODE);

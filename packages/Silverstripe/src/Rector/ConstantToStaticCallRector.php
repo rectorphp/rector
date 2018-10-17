@@ -35,12 +35,10 @@ final class ConstantToStaticCallRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        // @todo make configurable
         if (! Strings::startsWith($node->name->toString(), 'SS_')) {
             return $node;
         }
 
-        // @todo make configurable
         $staticCallNode = new StaticCall(new FullyQualified('Environment'), 'getEnv');
         $staticCallNode->args[] = new Arg(new String_($node->name->toString()));
 

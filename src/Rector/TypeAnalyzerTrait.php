@@ -2,14 +2,21 @@
 
 namespace Rector\Rector;
 
+use Countable;
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Analyser\Scope;
+use PHPStan\Type\Constant\ConstantArrayType;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\StringType;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use function Safe\class_implements;
 
 /**
  * This could be part of @see AbstractRector, but decopuling to trait
@@ -52,6 +59,40 @@ trait TypeAnalyzerTrait
     public function matchTypes(Node $node, array $types): array
     {
         return $this->isTypes($node, $types) ? $this->getTypes($node) : [];
+    }
+
+    public function isStringType(Node $node): bool
+    {
+        if (! $node instanceof Expr) {
+            return false;
+        }
+
+        /** @var Scope $nodeScope */
+        $nodeScope = $node->getAttribute(Attribute::SCOPE);
+        $nodeType = $nodeScope->getType($node);
+
+        return $nodeType instanceof StringType;
+    }
+
+    public function isCountableType(Node $node): bool
+    {
+        if (! $node instanceof Expr) {
+            return false;
+        }
+
+        /** @var Scope $nodeScope */
+        $nodeScope = $node->getAttribute(Attribute::SCOPE);
+        $nodeType = $nodeScope->getType($node);
+        if ($nodeType instanceof ConstantArrayType) {
+            return true;
+        }
+
+        if ($nodeType instanceof ObjectType) {
+            $className = $nodeType->getClassName();
+            return in_array(Countable::class, class_implements($className), true);
+        }
+
+        return false;
     }
 
     /**

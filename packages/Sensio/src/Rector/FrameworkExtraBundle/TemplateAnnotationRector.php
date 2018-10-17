@@ -159,9 +159,7 @@ CODE_SAMPLE
         $templateTag = $this->docBlockAnalyzer->getTagByName($classMethodNode, 'Template');
         $content = (string) $templateTag;
 
-        // @todo consider using sth similar to offical parsing
-        $annotationContent = Strings::match($content, '#\("(?<filename>.*?)"\)#');
-
+        $annotationContent = Strings::match($content, '#\(("|\')(?<filename>.*?)("|\')\)#');
         if (isset($annotationContent['filename'])) {
             return $annotationContent['filename'];
         }

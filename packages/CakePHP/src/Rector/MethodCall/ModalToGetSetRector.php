@@ -125,16 +125,20 @@ CODE_SAMPLE
             return $config['set'];
         }
 
-        if (isset($methodCallNode->args[0])) {
-            // first argument type that is considered setter
-            if (isset($config['first_argument_type_to_set'])) {
-                $argumentType = $config['first_argument_type_to_set'];
-                $argumentValue = $methodCallNode->args[0]->value;
+        if (! isset($methodCallNode->args[0])) {
+            return $config['get'];
+        }
 
-                if ($argumentType === 'array' && $argumentValue instanceof Array_) {
-                    return $config['set'];
-                }
-            }
+        // first argument type that is considered setter
+        if (! isset($config['first_argument_type_to_set'])) {
+            return $config['get'];
+        }
+
+        $argumentType = $config['first_argument_type_to_set'];
+        $argumentValue = $methodCallNode->args[0]->value;
+
+        if ($argumentType === 'array' && $argumentValue instanceof Array_) {
+            return $config['set'];
         }
 
         return $config['get'];

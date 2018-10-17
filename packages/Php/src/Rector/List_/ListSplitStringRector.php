@@ -8,7 +8,6 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\List_;
 use PhpParser\Node\Name;
-use Rector\NodeTypeResolver\NodeTypeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -20,16 +19,6 @@ use Rector\RectorDefinition\RectorDefinition;
  */
 final class ListSplitStringRector extends AbstractRector
 {
-    /**
-     * @var NodeTypeAnalyzer
-     */
-    private $nodeTypeAnalyzer;
-
-    public function __construct(NodeTypeAnalyzer $nodeTypeAnalyzer)
-    {
-        $this->nodeTypeAnalyzer = $nodeTypeAnalyzer;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -55,7 +44,7 @@ final class ListSplitStringRector extends AbstractRector
             return $node;
         }
 
-        if (! $this->nodeTypeAnalyzer->isStringType($node->expr)) {
+        if (! $this->isStringType($node->expr)) {
             return $node;
         }
 

@@ -1405,7 +1405,7 @@ services:
 
 ### `CombinedAssignRector`
 
-- class: `Rector\Rector\CodeQuality\CombinedAssignRector`
+- class: `Rector\CodeQuality\Rector\CombinedAssignRector`
 
 Simplify $value = $value + 5; assignments to shorter ones
 
@@ -1416,7 +1416,7 @@ Simplify $value = $value + 5; assignments to shorter ones
 
 ### `InArrayAndArrayKeysToArrayKeyExistsRector`
 
-- class: `Rector\Rector\CodeQuality\InArrayAndArrayKeysToArrayKeyExistsRector`
+- class: `Rector\CodeQuality\Rector\InArrayAndArrayKeysToArrayKeyExistsRector`
 
 Simplify `in_array` and `array_keys` functions combination into `array_key_exists` when `array_keys` has one argument only
 
@@ -1427,7 +1427,7 @@ Simplify `in_array` and `array_keys` functions combination into `array_key_exist
 
 ### `UnnecessaryTernaryExpressionRector`
 
-- class: `Rector\Rector\CodeQuality\UnnecessaryTernaryExpressionRector`
+- class: `Rector\CodeQuality\Rector\UnnecessaryTernaryExpressionRector`
 
 Remove unnecessary ternary expressions.
 
@@ -1438,7 +1438,7 @@ Remove unnecessary ternary expressions.
 
 ### `SimplifyConditionsRector`
 
-- class: `Rector\Rector\CodeQuality\SimplifyConditionsRector`
+- class: `Rector\CodeQuality\Rector\SimplifyConditionsRector`
 
 Simplify conditions
 
@@ -2226,13 +2226,13 @@ services:
 
 ### `ValueObjectRemoverDocBlockRector`
 
-- class: `Rector\Rector\DomainDrivenDesign\ValueObjectRemover\ValueObjectRemoverDocBlockRector`
+- class: `Rector\DomainDrivenDesign\Rector\ValueObjectRemover\ValueObjectRemoverDocBlockRector`
 
 Turns defined value object to simple types in doc blocks
 
 ```yaml
 services:
-    Rector\Rector\DomainDrivenDesign\ValueObjectRemover\ValueObjectRemoverDocBlockRector:
+    Rector\DomainDrivenDesign\Rector\ValueObjectRemover\ValueObjectRemoverDocBlockRector:
         $valueObjectsToSimpleTypes:
             ValueObject: string
 ```
@@ -2249,7 +2249,7 @@ services:
 
 ```yaml
 services:
-    Rector\Rector\DomainDrivenDesign\ValueObjectRemover\ValueObjectRemoverDocBlockRector:
+    Rector\DomainDrivenDesign\Rector\ValueObjectRemover\ValueObjectRemoverDocBlockRector:
         $valueObjectsToSimpleTypes:
             ValueObject: string
 ```
@@ -2264,13 +2264,13 @@ services:
 
 ### `ValueObjectRemoverRector`
 
-- class: `Rector\Rector\DomainDrivenDesign\ValueObjectRemover\ValueObjectRemoverRector`
+- class: `Rector\DomainDrivenDesign\Rector\ValueObjectRemover\ValueObjectRemoverRector`
 
 Remove values objects and use directly the value.
 
 ```yaml
 services:
-    Rector\Rector\DomainDrivenDesign\ValueObjectRemover\ValueObjectRemoverRector:
+    Rector\DomainDrivenDesign\Rector\ValueObjectRemover\ValueObjectRemoverRector:
         $valueObjectsToSimpleTypes:
             ValueObject: string
 ```
@@ -2284,7 +2284,7 @@ services:
 
 ```yaml
 services:
-    Rector\Rector\DomainDrivenDesign\ValueObjectRemover\ValueObjectRemoverRector:
+    Rector\DomainDrivenDesign\Rector\ValueObjectRemover\ValueObjectRemoverRector:
         $valueObjectsToSimpleTypes:
             ValueObject: string
 ```
@@ -2298,7 +2298,7 @@ services:
 
 ```yaml
 services:
-    Rector\Rector\DomainDrivenDesign\ValueObjectRemover\ValueObjectRemoverRector:
+    Rector\DomainDrivenDesign\Rector\ValueObjectRemover\ValueObjectRemoverRector:
         $valueObjectsToSimpleTypes:
             ValueObject: string
 ```
@@ -2312,7 +2312,7 @@ services:
 
 ```yaml
 services:
-    Rector\Rector\DomainDrivenDesign\ValueObjectRemover\ValueObjectRemoverRector:
+    Rector\DomainDrivenDesign\Rector\ValueObjectRemover\ValueObjectRemoverRector:
         $valueObjectsToSimpleTypes:
             ValueObject: string
 ```

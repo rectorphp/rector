@@ -105,7 +105,7 @@ CODE_SAMPLE
             $stmt = $node->stmts[0];
 
             if ($this->isThisConstructCall($stmt->expr)) {
-                $this->removeNode = true;
+                $this->removeNode($node);
 
                 return null;
             }

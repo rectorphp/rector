@@ -1,9 +1,6 @@
 # source: https://github.com/Sylius/Sylius/blob/master/UPGRADE-1.0.md#upgrade-from-101-to-102
 
 services:
-    # @todo, use this and return typehint
     Rector\Rector\Typehint\ReturnTypehintRector:
-        # class
-        'Sylius\Bundle\AdminApiBundle\Model\ClientManager':
-            # method
-            'findClientByPublicId': '?Sylius\Bundle\AdminApiBundle\Model\ClientInterface'
+        Sylius\Bundle\AdminApiBundle\Model\ClientManager:
+            findClientByPublicId: '?Sylius\Bundle\AdminApiBundle\Model\ClientInterface'
