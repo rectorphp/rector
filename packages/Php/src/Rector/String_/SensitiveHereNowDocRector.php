@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Php\Rector\String;
+namespace Rector\Php\Rector\String_;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;

@@ -1,14 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Php\Tests\Rector\String_\BarewordStringRector;
+namespace Rector\Php\Tests\Rector\String_\SensitiveHereNowDocRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
- * @covers \Rector\Php\Rector\String_\BarewordStringRector
+ * @covers \Rector\Php\Rector\String_\SensitiveHereNowDocRector
  */
-final class BarewordStringRectorTest extends AbstractRectorTestCase
+final class SensitiveHereNowDocRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()
