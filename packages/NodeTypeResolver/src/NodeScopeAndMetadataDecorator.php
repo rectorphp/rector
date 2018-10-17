@@ -8,6 +8,7 @@ use PhpParser\NodeVisitor\CloningVisitor;
 use PhpParser\NodeVisitor\NameResolver;
 use Rector\NodeTypeResolver\NodeVisitor\ClassAndMethodNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\ExpressionNodeVisitor;
+use Rector\NodeTypeResolver\NodeVisitor\FileInfoNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\NamespaceNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\ParentAndNextNodeVisitor;
 use Rector\NodeTypeResolver\PHPStan\Scope\NodeScopeResolver;
@@ -44,13 +45,19 @@ final class NodeScopeAndMetadataDecorator
      */
     private $expressionNodeVisitor;
 
+    /**
+     * @var FileInfoNodeVisitor
+     */
+    private $fileInfoNodeVisitor;
+
     public function __construct(
         NodeScopeResolver $nodeScopeResolver,
         ParentAndNextNodeVisitor $parentAndNextNodeVisitor,
         CloningVisitor $cloningVisitor,
         ClassAndMethodNodeVisitor $classAndMethodNodeVisitor,
         NamespaceNodeVisitor $namespaceNodeVisitor,
-        ExpressionNodeVisitor $expressionNodeVisitor
+        ExpressionNodeVisitor $expressionNodeVisitor,
+        FileInfoNodeVisitor $fileInfoNodeVisitor
     ) {
         $this->nodeScopeResolver = $nodeScopeResolver;
         $this->parentAndNextNodeVisitor = $parentAndNextNodeVisitor;
@@ -58,6 +65,7 @@ final class NodeScopeAndMetadataDecorator
         $this->classAndMethodNodeVisitor = $classAndMethodNodeVisitor;
         $this->namespaceNodeVisitor = $namespaceNodeVisitor;
         $this->expressionNodeVisitor = $expressionNodeVisitor;
+        $this->fileInfoNodeVisitor = $fileInfoNodeVisitor;
     }
 
     /**
@@ -86,6 +94,7 @@ final class NodeScopeAndMetadataDecorator
         $nodeTraverser->addVisitor($this->classAndMethodNodeVisitor);
         $nodeTraverser->addVisitor($this->namespaceNodeVisitor);
         $nodeTraverser->addVisitor($this->expressionNodeVisitor);
+        $nodeTraverser->addVisitor($this->fileInfoNodeVisitor);
 
         return $nodeTraverser->traverse($nodes);
     }

@@ -89,4 +89,9 @@ final class Attribute
      * @var string
      */
     public const CURRENT_EXPRESSION = 'currentExpression';
+
+    /**
+     * @var string
+     */
+    public const FILE_INFO = 'fileInfo';
 }
