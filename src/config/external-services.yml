@@ -29,8 +29,8 @@ services:
     Symplify\PackageBuilder\FileSystem\FileSystem: ~
     Symplify\PackageBuilder\FileSystem\FinderSanitizer: ~
 
-    # parameters
     Symplify\PackageBuilder\Parameter\ParameterProvider: ~
+    Symplify\PackageBuilder\Reflection\PrivatesCaller: ~
 
     # see https://github.com/symplify/packagebuilder#prevent-parameter-typos
     Symfony\Component\EventDispatcher\EventDispatcher: ~
