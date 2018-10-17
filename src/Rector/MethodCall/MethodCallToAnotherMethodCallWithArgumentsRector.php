@@ -77,7 +77,6 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         foreach ($this->oldMethodsToNewMethodsWithArgsByType as $type => $oldMethodsToNewMethodsWithArgs) {
-            // @todo is name should be possibly part of AbstractRector
             if (! $this->isType($node, $type)) {
                 continue;
             }

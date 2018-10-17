@@ -1,9 +1,6 @@
 # source: https://github.com/Sylius/Sylius/blob/master/UPGRADE-1.0.md#upgrade-from-108-to-109
 
 services:
-    # @todo, use this and return typehint
     Rector\Rector\Typehint\ReturnTypehintRector:
-        # class
         Sylius\Bundle\CoreBundle\Templating\Helper\VariantResolverHelper:
-            # method
-            'resolveVariant': '?Sylius\Component\Product\Model\ProductVariantInterface'
+            resolveVariant: '?Sylius\Component\Product\Model\ProductVariantInterface'
