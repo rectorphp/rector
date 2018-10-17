@@ -94,6 +94,8 @@ final class CreateRectorCommand extends Command
             $this->consoleStyle->note(sprintf('New file "%s" was generated', $destination));
         }
 
+        // @todo make Rector class clickable in CLI output, so we can just jump right in
+        // probably absolute path might help
         $this->consoleStyle->success(sprintf(
             'New Rector "%s" is ready!%sNow make these tests green again:%svendor/bin/phpunit %s',
             $configuration->getName(),
