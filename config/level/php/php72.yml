@@ -3,3 +3,9 @@ services:
     Rector\Php\Rector\Each\ListEachRector: ~
     Rector\Php\Rector\Unset_\UnsetCastRector: ~
     Rector\Php\Rector\String_\BarewordStringRector: ~
+
+    Rector\Rector\Function_\FunctionReplaceRector:
+        jpeg2wbmp: 'imagecreatefromjpeg' # and imagewbmp
+        png2wbmp: 'imagecreatefrompng' # or imagewbmp
+        gmp_random: 'gmp_random_bits' # or gmp_random_range
+        read_exif_data: 'exif_read_data'
