@@ -12,11 +12,21 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\PropertyProperty;
 
 final class NameResolver
 {
     public function resolve(Node $node): ?string
     {
+        if ($node instanceof Property) {
+            if (! count($node->props)) {
+                return null;
+            }
+
+            return $this->resolve($node->props[0]);
+        }
+
         if ($node instanceof MethodCall || $node instanceof StaticCall || $node instanceof FuncCall) {
             if ($node->name instanceof Name || $node->name instanceof Identifier) {
                 return $node->name->toString();
@@ -27,7 +37,7 @@ final class NameResolver
             }
         }
 
-        if ($node instanceof Variable || $node instanceof ClassMethod || $node instanceof ClassConstFetch || $node instanceof PropertyFetch) {
+        if ($node instanceof PropertyProperty || $node instanceof Variable || $node instanceof ClassMethod || $node instanceof ClassConstFetch || $node instanceof PropertyFetch) {
             // be careful, can be expression!
             return (string) $node->name;
         }
