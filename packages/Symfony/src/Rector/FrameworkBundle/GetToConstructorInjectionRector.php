@@ -15,14 +15,14 @@ final class GetToConstructorInjectionRector extends AbstractToConstructorInjecti
     private $getMethodAwareTypes = [];
 
     /**
-     * @todo merge to $getMethodAwareTypes
+     * @param string[] $getMethodAwareTypes
      */
-    public function __construct(
-        string $controllerClass = 'Symfony\Bundle\FrameworkBundle\Controller\Controller',
-        string $traitClass = 'Symfony\Bundle\FrameworkBundle\Controller\ControllerTrait'
-    ) {
-        $this->getMethodAwareTypes[] = $controllerClass;
-        $this->getMethodAwareTypes[] = $traitClass;
+    public function __construct(array $getMethodAwareTypes = [
+        'Symfony\Bundle\FrameworkBundle\Controller\Controller',
+        'Symfony\Bundle\FrameworkBundle\Controller\ControllerTrait',
+    ])
+    {
+        $this->getMethodAwareTypes = $getMethodAwareTypes;
     }
 
     public function getDefinition(): RectorDefinition
