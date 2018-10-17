@@ -61,7 +61,8 @@ final class BarewordStringRector extends AbstractRector
             }
         });
 
-        include $fileInfo->getRealPath();
+        // @todo how to load without running it? how does composer do that?
+        require $fileInfo->getRealPath();
 
         // restore
         set_error_handler($previousErrorHandler);
