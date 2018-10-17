@@ -11,6 +11,9 @@ use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 use function Safe\sprintf;
 
+/**
+ * @see https://wiki.php.net/rfc/flexible_heredoc_nowdoc_syntaxes
+ */
 final class SensitiveHereNowDocRector extends AbstractRector
 {
     /**
