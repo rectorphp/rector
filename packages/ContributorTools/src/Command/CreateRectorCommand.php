@@ -115,9 +115,9 @@ final class CreateRectorCommand extends Command
             '_Category_' => $configuration->getCategory(),
             '_Description_' => $configuration->getDescription(),
             '_Name_' => $configuration->getName(),
-            '_CodeBefore_' => $configuration->getCodeBefore(),
+            '_CodeBefore_' => trim($configuration->getCodeBefore()) . PHP_EOL,
             '_CodeBeforeExample_' => $this->prepareCodeForDefinition($configuration->getCodeBefore()),
-            '_CodeAfter_' => $configuration->getCodeAfter(),
+            '_CodeAfter_' => trim($configuration->getCodeAfter()) . PHP_EOL,
             '_CodeAfterExample_' => $this->prepareCodeForDefinition($configuration->getCodeAfter()),
         ];
 
