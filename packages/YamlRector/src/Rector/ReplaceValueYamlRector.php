@@ -61,9 +61,6 @@ final class ReplaceValueYamlRector implements YamlRectorInterface
         return $content;
     }
 
-    /**
-     * @todo decouple Path helper
-     */
     private function createPatternFromPath(string $path, string $value): string
     {
         $this->replacePathsCount = 0;
