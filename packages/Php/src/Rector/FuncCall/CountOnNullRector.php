@@ -12,7 +12,6 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\LNumber;
 use Rector\NodeTypeResolver\Node\Attribute;
-use Rector\NodeTypeResolver\NodeTypeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -22,16 +21,6 @@ use Rector\RectorDefinition\RectorDefinition;
  */
 final class CountOnNullRector extends AbstractRector
 {
-    /**
-     * @var NodeTypeAnalyzer
-     */
-    private $nodeTypeAnalyzer;
-
-    public function __construct(NodeTypeAnalyzer $nodeTypeAnalyzer)
-    {
-        $this->nodeTypeAnalyzer = $nodeTypeAnalyzer;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -79,7 +68,7 @@ CODE_SAMPLE
 
         $countedNode = $node->args[0]->value;
 
-        if ($this->nodeTypeAnalyzer->isCountableType($countedNode)) {
+        if ($this->isCountableType($countedNode)) {
             return $node;
         }
 
