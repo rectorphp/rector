@@ -1,0 +1,4 @@
+<?php
+
+$value = (unset) $value;
+

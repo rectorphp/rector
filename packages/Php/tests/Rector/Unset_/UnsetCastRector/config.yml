@@ -1,0 +1,2 @@
+services:
+    Rector\Php\Rector\Unset_\UnsetCastRector: ~
