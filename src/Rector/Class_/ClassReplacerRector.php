@@ -11,9 +11,6 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
-/**
- * @todo fix
- */
 final class ClassReplacerRector extends AbstractRector
 {
     /**
@@ -29,15 +26,32 @@ final class ClassReplacerRector extends AbstractRector
         $this->oldToNewClasses = $oldToNewClasses;
     }
 
-    /**
-     * @todo complete list with all possibilities
-     */
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Replaces defined classes by new ones.', [
             new ConfiguredCodeSample(
-                '$value = new SomeOldClass;',
-                '$value = new SomeNewClass;',
+                <<<'CODE_SAMPLE'
+use SomeOldClass;
+
+function (SomeOldClass $someOldClass): SomeOldClass
+{
+    if ($someOldClass instanceof SomeOldClass) {
+        return new SomeOldClass; 
+    }
+}
+CODE_SAMPLE
+                ,
+                <<<'CODE_SAMPLE'
+use SomeNewClass;
+
+function (SomeNewClass $someOldClass): SomeNewClass
+{
+    if ($someOldClass instanceof SomeNewClass) {
+        return new SomeNewClass;
+    }
+}
+CODE_SAMPLE
+                ,
                 [
                     '$oldToNewClasses' => [
                         'SomeOldClass' => 'SomeNewClass',
@@ -75,7 +89,6 @@ final class ClassReplacerRector extends AbstractRector
 
     private function resolveNameNodeFromNode(Node $node): ?Name
     {
-        // @todo use NodeTypeResolver?
         if ($node instanceof Name) {
             // resolved name has priority, as it is FQN
             $resolvedName = $node->getAttribute(Attribute::RESOLVED_NAME);
