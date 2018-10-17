@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\DomainDrivenDesign\Tests\Rector\ValueObjectRemoverDocBlockRector;
+namespace Rector\DomainDrivenDesign\Tests\Rector\ValueObjectRemoverRector;
 
-use Rector\DomainDrivenDesign\Tests\Rector\ValueObjectRemoverDocBlockRector\Source\SomeChildOfValueObject;
+use Rector\DomainDrivenDesign\Tests\Rector\ValueObjectRemoverRector\Source\SomeChildOfValueObject;
 
 class ActionClass
 {

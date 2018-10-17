@@ -2226,13 +2226,13 @@ services:
 
 ### `ValueObjectRemoverDocBlockRector`
 
-- class: `Rector\Rector\DomainDrivenDesign\ValueObjectRemover\ValueObjectRemoverDocBlockRector`
+- class: `Rector\DomainDrivenDesign\Rector\ValueObjectRemover\ValueObjectRemoverDocBlockRector`
 
 Turns defined value object to simple types in doc blocks
 
 ```yaml
 services:
-    Rector\Rector\DomainDrivenDesign\ValueObjectRemover\ValueObjectRemoverDocBlockRector:
+    Rector\DomainDrivenDesign\Rector\ValueObjectRemover\ValueObjectRemoverDocBlockRector:
         $valueObjectsToSimpleTypes:
             ValueObject: string
 ```
@@ -2249,7 +2249,7 @@ services:
 
 ```yaml
 services:
-    Rector\Rector\DomainDrivenDesign\ValueObjectRemover\ValueObjectRemoverDocBlockRector:
+    Rector\DomainDrivenDesign\Rector\ValueObjectRemover\ValueObjectRemoverDocBlockRector:
         $valueObjectsToSimpleTypes:
             ValueObject: string
 ```
@@ -2264,13 +2264,13 @@ services:
 
 ### `ValueObjectRemoverRector`
 
-- class: `Rector\Rector\DomainDrivenDesign\ValueObjectRemover\ValueObjectRemoverRector`
+- class: `Rector\DomainDrivenDesign\Rector\ValueObjectRemover\ValueObjectRemoverRector`
 
 Remove values objects and use directly the value.
 
 ```yaml
 services:
-    Rector\Rector\DomainDrivenDesign\ValueObjectRemover\ValueObjectRemoverRector:
+    Rector\DomainDrivenDesign\Rector\ValueObjectRemover\ValueObjectRemoverRector:
         $valueObjectsToSimpleTypes:
             ValueObject: string
 ```
@@ -2284,7 +2284,7 @@ services:
 
 ```yaml
 services:
-    Rector\Rector\DomainDrivenDesign\ValueObjectRemover\ValueObjectRemoverRector:
+    Rector\DomainDrivenDesign\Rector\ValueObjectRemover\ValueObjectRemoverRector:
         $valueObjectsToSimpleTypes:
             ValueObject: string
 ```
@@ -2298,7 +2298,7 @@ services:
 
 ```yaml
 services:
-    Rector\Rector\DomainDrivenDesign\ValueObjectRemover\ValueObjectRemoverRector:
+    Rector\DomainDrivenDesign\Rector\ValueObjectRemover\ValueObjectRemoverRector:
         $valueObjectsToSimpleTypes:
             ValueObject: string
 ```
@@ -2312,7 +2312,7 @@ services:
 
 ```yaml
 services:
-    Rector\Rector\DomainDrivenDesign\ValueObjectRemover\ValueObjectRemoverRector:
+    Rector\DomainDrivenDesign\Rector\ValueObjectRemover\ValueObjectRemoverRector:
         $valueObjectsToSimpleTypes:
             ValueObject: string
 ```
