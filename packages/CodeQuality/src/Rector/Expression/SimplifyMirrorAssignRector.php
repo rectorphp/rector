@@ -37,7 +37,7 @@ final class SimplifyMirrorAssignRector extends AbstractRector
         $assignNode = $node->expr;
 
         if ($this->areNodesEqual($assignNode->var, $assignNode->expr)) {
-            $this->removeNode = true;
+            $this->removeNode($node);
         }
 
         return null;

@@ -18,11 +18,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     use BetterStandardPrinterTrait;
 
     /**
-     * @var bool
-     */
-    protected $removeNode = false;
-
-    /**
      * @var ExpressionAdder
      */
     private $expressionAdder;
@@ -31,6 +26,11 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
      * @var PropertyAdder
      */
     private $propertyAdder;
+
+    /**
+     * @var Node[]
+     */
+    private $nodesToBeRemoved = [];
 
     /**
      * @required
@@ -56,11 +56,12 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
             return $newNode;
         }
 
-        if ($this->removeNode) {
-            return NodeTraverser::DONT_TRAVERSE_CHILDREN;
-        }
-
         return null;
+    }
+
+    public function removeNode(Node $node): void
+    {
+        $this->nodesToBeRemoved[] = $node;
     }
 
     /**
@@ -68,8 +69,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
      */
     public function leaveNode(Node $node)
     {
-        if ($this->removeNode) {
-            $this->removeNode = false;
+        if (in_array($node, $this->nodesToBeRemoved, true)) {
             return NodeTraverser::REMOVE_NODE;
         }
 
