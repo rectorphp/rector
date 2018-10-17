@@ -20,6 +20,7 @@ use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\PackageBuilder\FileSystem\FinderSanitizer;
 use function Safe\getcwd;
+use function Safe\sort;
 use function Safe\sprintf;
 
 final class CreateRectorCommand extends Command
@@ -78,6 +79,7 @@ final class CreateRectorCommand extends Command
         $smartFileInfos = $this->finderSanitizer->sanitize($finder);
 
         $testCasePath = null;
+        $generatedFiles = [];
         foreach ($smartFileInfos as $smartFileInfo) {
             $destination = $smartFileInfo->getRelativeFilePathFromDirectory(self::TEMPLATES_DIRECTORY);
             $destination = $this->applyData($destination, $data);
@@ -91,15 +93,17 @@ final class CreateRectorCommand extends Command
 
             FileSystem::write($destination, $content);
 
-            $this->consoleStyle->note(sprintf('New file "%s" was generated', $destination));
+            $generatedFiles[] = $destination;
         }
 
         // @todo make Rector class clickable in CLI output, so we can just jump right in
         // probably absolute path might help
+        $this->consoleStyle->title(sprintf('New files generated for "%s"', $configuration->getName()));
+        sort($generatedFiles);
+        $this->consoleStyle->listing($generatedFiles);
+
         $this->consoleStyle->success(sprintf(
-            'New Rector "%s" is ready!%sNow make these tests green again:%svendor/bin/phpunit %s',
-            $configuration->getName(),
-            PHP_EOL . PHP_EOL,
+            'Now make these tests green again:%svendor/bin/phpunit %s',
             PHP_EOL,
             $testCasePath
         ));
