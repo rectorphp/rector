@@ -3,3 +3,4 @@ services:
     Rector\Php\Rector\FuncCall\ArrayKeyFirstLastRector: ~
     Rector\Php\Rector\FuncCall\SensitiveDefineRector: ~
     Rector\Php\Rector\ConstFetch\SensitiveConstantNameRector: ~
+    Rector\Php\Rector\String\SensitiveHereNowDocRector: ~
