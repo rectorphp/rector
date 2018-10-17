@@ -9,6 +9,7 @@
         <testsuite name="main">
             <directory>packages/*/tests</directory>
             <directory>tests</directory>
+            <exclude>packages/ContributorTools/templates/*</exclude>
         </testsuite>
     </testsuites>
 
