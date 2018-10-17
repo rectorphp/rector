@@ -13,7 +13,6 @@ use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BinaryOp\Smaller;
 use PhpParser\Node\Expr\BinaryOp\SmallerOrEqual;
 use PhpParser\Node\Expr\BooleanNot;
-use Rector\NodeAnalyzer\ConstFetchAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -33,16 +32,6 @@ final class SimplifyConditionsRector extends AbstractRector
         GreaterOrEqual::class => Smaller::class,
         SmallerOrEqual::class => Greater::class,
     ];
-
-    /**
-     * @var ConstFetchAnalyzer
-     */
-    private $constFetchAnalyzer;
-
-    public function __construct(ConstFetchAnalyzer $constFetchAnalyzer)
-    {
-        $this->constFetchAnalyzer = $constFetchAnalyzer;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -91,10 +80,10 @@ final class SimplifyConditionsRector extends AbstractRector
     {
         if ($node->left instanceof Identical || $node->left instanceof NotIdentical) {
             $subBinaryOpNode = $node->left;
-            $shouldInverse = $this->constFetchAnalyzer->isFalse($node->right);
+            $shouldInverse = $this->isFalse($node->right);
         } elseif ($node->right instanceof Identical || $node->right instanceof NotIdentical) {
             $subBinaryOpNode = $node->right;
-            $shouldInverse = $this->constFetchAnalyzer->isFalse($node->left);
+            $shouldInverse = $this->isFalse($node->left);
         } else {
             return $node;
         }

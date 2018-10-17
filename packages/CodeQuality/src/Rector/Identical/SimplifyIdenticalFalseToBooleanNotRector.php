@@ -6,23 +6,12 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BooleanNot;
-use Rector\NodeAnalyzer\ConstFetchAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class SimplifyIdenticalFalseToBooleanNotRector extends AbstractRector
 {
-    /**
-     * @var ConstFetchAnalyzer
-     */
-    private $constFetchAnalyzer;
-
-    public function __construct(ConstFetchAnalyzer $constFetchAnalyzer)
-    {
-        $this->constFetchAnalyzer = $constFetchAnalyzer;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Changes === false to negate !', [
@@ -43,10 +32,10 @@ final class SimplifyIdenticalFalseToBooleanNotRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->constFetchAnalyzer->isFalse($node->right)) {
+        if ($this->isFalse($node->right)) {
             $comparedNode = $node->left;
             $shouldUnwrap = $node->left instanceof BooleanNot;
-        } elseif ($this->constFetchAnalyzer->isFalse($node->left)) {
+        } elseif ($this->isFalse($node->left)) {
             $comparedNode = $node->right;
             $shouldUnwrap = $node->right instanceof BooleanNot;
         } else {
