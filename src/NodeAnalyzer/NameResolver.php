@@ -3,6 +3,7 @@
 namespace Rector\NodeAnalyzer;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
@@ -38,7 +39,10 @@ final class NameResolver
         }
 
         if ($node instanceof PropertyProperty || $node instanceof Variable || $node instanceof ClassMethod || $node instanceof ClassConstFetch || $node instanceof PropertyFetch) {
-            // be careful, can be expression!
+            // e.g. "${$name} = 5;", we don't know the value for sure
+            if ($node->name instanceof Expr) {
+                return null;
+            }
             return (string) $node->name;
         }
 
