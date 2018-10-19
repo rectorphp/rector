@@ -7,6 +7,7 @@ use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Scalar\String_;
 use Rector\Builder\IdentifierRenamer;
 use Rector\Node\NodeFactory;
 use Rector\Rector\AbstractPHPUnitRector;
@@ -101,7 +102,7 @@ final class AssertIssetToSpecificMethodRector extends AbstractPHPUnitRector
         unset($oldArgs[0]);
 
         $node->args = array_merge($this->nodeFactory->createArgs([
-            $this->nodeFactory->createString((string) $propertyFetchNode->name),
+            new String_($this->getName($propertyFetchNode)),
             $propertyFetchNode->var,
         ]), $oldArgs);
     }

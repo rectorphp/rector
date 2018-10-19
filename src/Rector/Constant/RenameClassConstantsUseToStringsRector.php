@@ -6,7 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
-use Rector\Node\NodeFactory;
+use PhpParser\Node\Scalar\String_;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
@@ -15,11 +15,6 @@ use Rector\RectorDefinition\RectorDefinition;
 final class RenameClassConstantsUseToStringsRector extends AbstractRector
 {
     /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
-
-    /**
      * @var string[][]
      */
     private $oldConstantsToNewValuesByType = [];
@@ -27,9 +22,8 @@ final class RenameClassConstantsUseToStringsRector extends AbstractRector
     /**
      * @param string[][] $oldConstantsToNewValuesByType
      */
-    public function __construct(NodeFactory $nodeFactory, array $oldConstantsToNewValuesByType)
+    public function __construct(array $oldConstantsToNewValuesByType)
     {
-        $this->nodeFactory = $nodeFactory;
         $this->oldConstantsToNewValuesByType = $oldConstantsToNewValuesByType;
     }
 
@@ -71,7 +65,7 @@ final class RenameClassConstantsUseToStringsRector extends AbstractRector
 
             foreach ($oldConstantsToNewValues as $oldConstant => $newValue) {
                 if ((string) $node->name === $oldConstant) {
-                    return $this->nodeFactory->createString($newValue);
+                    return new String_($newValue);
                 }
             }
         }

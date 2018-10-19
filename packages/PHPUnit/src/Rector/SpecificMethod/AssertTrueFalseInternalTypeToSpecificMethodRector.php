@@ -6,8 +6,8 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Scalar\String_;
 use Rector\Builder\IdentifierRenamer;
-use Rector\Node\NodeFactory;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -47,15 +47,9 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractPH
      */
     private $identifierRenamer;
 
-    /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
-
-    public function __construct(IdentifierRenamer $identifierRenamer, NodeFactory $nodeFactory)
+    public function __construct(IdentifierRenamer $identifierRenamer)
     {
         $this->identifierRenamer = $identifierRenamer;
-        $this->nodeFactory = $nodeFactory;
     }
 
     public function getDefinition(): RectorDefinition
@@ -121,7 +115,7 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractPH
         unset($oldArguments[0]);
 
         $methodCallNode->args = array_merge([
-            new Arg($this->nodeFactory->createString($this->oldFunctionsToTypes[$isFunctionName])),
+            new Arg(new String_($this->oldFunctionsToTypes[$isFunctionName])),
             $argument,
         ], $oldArguments);
     }

@@ -2,20 +2,20 @@
 
 use Rector\Tests\Rector\Architecture\DependencyInjection\ActionInjectionToConstructorInjectionRector\Source\SomeProduct;
 
-class ClassWithInjects8Parent
-{
-    /**
-     * @var DateTimeInterface
-     * @inject
-     */
-    public $dateTime;
-}
-
-class ClassWithInjects8 extends ClassWithInjects8Parent
+class ClassWithInjects9 extends ClassWithInjects9Parent
 {
     /**
      * @var SomeProduct
      * @inject
      */
     public $property;
+}
+
+class ClassWithInjects9Parent
+{
+    /**
+     * @var DateTimeInterface
+     * @inject
+     */
+    public $dateTime;
 }

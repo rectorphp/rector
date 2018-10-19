@@ -6,7 +6,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
-use Rector\Node\NodeFactory;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -21,16 +20,6 @@ final class OptionNameRector extends AbstractRector
         'precision' => 'scale',
         'virtual' => 'inherit_data',
     ];
-
-    /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
-
-    public function __construct(NodeFactory $nodeFactory)
-    {
-        $this->nodeFactory = $nodeFactory;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -86,6 +75,6 @@ CODE_SAMPLE
             return null;
         }
 
-        return $this->nodeFactory->createString($this->oldToNewOption[$node->value]);
+        return new String_($this->oldToNewOption[$node->value]);
     }
 }

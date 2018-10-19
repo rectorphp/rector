@@ -9,7 +9,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Bridge\Contract\AnalyzedApplicationContainerInterface;
 use Rector\Builder\Class_\VariableInfo;
-use Rector\Builder\Class_\VariableInfoFactory;
 use Rector\Builder\ConstructorMethodBuilder;
 use Rector\Builder\PropertyBuilder;
 use Rector\Configuration\Rector\Architecture\DependencyInjection\VariablesToPropertyFetchCollection;
@@ -30,11 +29,6 @@ final class ActionInjectionToConstructorInjectionRector extends AbstractRector
     private $constructorMethodBuilder;
 
     /**
-     * @var VariableInfoFactory
-     */
-    private $variableInfoFactory;
-
-    /**
      * @var VariablesToPropertyFetchCollection
      */
     private $variablesToPropertyFetchCollection;
@@ -47,13 +41,11 @@ final class ActionInjectionToConstructorInjectionRector extends AbstractRector
     public function __construct(
         PropertyBuilder $propertyBuilder,
         ConstructorMethodBuilder $constructorMethodBuilder,
-        VariableInfoFactory $variableInfoFactory,
         VariablesToPropertyFetchCollection $variablesToPropertyFetchCollection,
         AnalyzedApplicationContainerInterface $analyzedApplicationContainer
     ) {
         $this->propertyBuilder = $propertyBuilder;
         $this->constructorMethodBuilder = $constructorMethodBuilder;
-        $this->variableInfoFactory = $variableInfoFactory;
         $this->variablesToPropertyFetchCollection = $variablesToPropertyFetchCollection;
         $this->analyzedApplicationContainer = $analyzedApplicationContainer;
     }
@@ -129,11 +121,7 @@ CODE_SAMPLE
 
             $paramNodeTypes = $this->getTypes($paramNode);
 
-            $variableInfo = $this->variableInfoFactory->createFromNameAndTypes(
-                $paramNode->var->name,
-                $paramNodeTypes
-            );
-
+            $variableInfo = new VariableInfo($paramNode->var->name, $paramNodeTypes);
             $this->addConstructorDependencyToClassNode($classNode, $variableInfo);
 
             // remove arguments

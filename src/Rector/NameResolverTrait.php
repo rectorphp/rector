@@ -9,7 +9,7 @@ use Rector\NodeAnalyzer\NameResolver;
  * This could be part of @see AbstractRector, but decopuling to trait
  * makes clear what code has 1 purpose.
  */
-trait NameAnalyzerTrait
+trait NameResolverTrait
 {
     /**
      * @var NameResolver
