@@ -108,8 +108,10 @@ CODE_SAMPLE
 
     private function resolveNewVisibilityForNode(Property $propertyNode): string
     {
+        /** @var string $nodeParentClassName */
         $nodeParentClassName = $propertyNode->getAttribute(Attribute::PARENT_CLASS_NAME);
-        $propertyName = $propertyNode->props[0]->name->toString();
+        /** @var string $propertyName */
+        $propertyName = $this->getName($propertyNode);
 
         return $this->propertyToVisibilityByClass[$nodeParentClassName][$propertyName];
     }

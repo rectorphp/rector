@@ -104,12 +104,9 @@ CODE_SAMPLE
 
     private function addPropertyToCollector(Property $propertyNode): void
     {
-        $propertyPropertyNode = $propertyNode->props[0];
-        $className = (string) $propertyPropertyNode->getAttribute(Attribute::CLASS_NAME);
-
+        $className = (string) $propertyNode->getAttribute(Attribute::CLASS_NAME);
         $mainPropertyType = $this->getTypes($propertyNode)[0];
-
-        $propertyName = (string) $propertyPropertyNode->name;
+        $propertyName = $this->getName($propertyNode);
 
         $this->addPropertyToClass($className, $mainPropertyType, $propertyName);
     }

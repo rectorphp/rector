@@ -116,7 +116,7 @@ CODE_SAMPLE
         $this->addPropertyToClass(
             (string) $node->getAttribute(Attribute::CLASS_NAME),
             $type,
-            (string) $node->props[0]->name
+            $this->getName($node)
         );
 
         return $node;
