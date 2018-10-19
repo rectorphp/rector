@@ -5,6 +5,7 @@ namespace Rector\Console\Command;
 use Nette\Utils\FileSystem;
 use PHPStan\AnalysedCodeException;
 use Rector\Application\Error;
+use Rector\Application\ErrorCollector;
 use Rector\Application\FileProcessor;
 use Rector\Autoloading\AdditionalAutoloader;
 use Rector\Configuration\Option;
@@ -87,14 +88,14 @@ final class ProcessCommand extends Command
     private $rectorGuard;
 
     /**
-     * @var Error[]
-     */
-    private $errors = [];
-
-    /**
      * @var FileSystemFileProcessor
      */
     private $fileSystemFileProcessor;
+
+    /**
+     * @var ErrorCollector
+     */
+    private $errorCollector;
 
     public function __construct(
         FileProcessor $fileProcessor,
@@ -106,7 +107,8 @@ final class ProcessCommand extends Command
         AdditionalAutoloader $additionalAutoloader,
         YamlFileProcessor $yamlFileProcessor,
         RectorGuard $rectorGuard,
-        FileSystemFileProcessor $fileSystemFileProcessor
+        FileSystemFileProcessor $fileSystemFileProcessor,
+        ErrorCollector $errorCollector
     ) {
         parent::__construct();
 
@@ -120,6 +122,7 @@ final class ProcessCommand extends Command
         $this->yamlFileProcessor = $yamlFileProcessor;
         $this->rectorGuard = $rectorGuard;
         $this->fileSystemFileProcessor = $fileSystemFileProcessor;
+        $this->errorCollector = $errorCollector;
     }
 
     protected function configure(): void
@@ -180,28 +183,13 @@ final class ProcessCommand extends Command
         $this->processCommandReporter->reportFileDiffs($this->fileDiffs);
         $this->processCommandReporter->reportChangedFiles($this->changedFiles);
 
-        if ($this->errors) {
-            $this->processCommandReporter->reportErrors($this->errors);
+        if ($this->errorCollector->getErrors()) {
+            $this->processCommandReporter->reportErrors($this->errorCollector->getErrors());
             return Shell::CODE_ERROR;
         }
 
         if ($input->getOption(Option::OPTION_WITH_STYLE)) {
-            $command = sprintf(
-                'vendor/bin/ecs check %s --config %s --fix',
-                implode(' ', $source),
-                __DIR__ . '/../../../ecs-after-rector.yml'
-            );
-
-            $process = new Process($command);
-            $process->run();
-
-            if ($process->isSuccessful()) {
-                $this->consoleStyle->success('Basic coding standard is done');
-            } else {
-                $this->consoleStyle->error(
-                    sprintf('Basic coding standard was not applied due to: "%s"', $process->getErrorOutput())
-                );
-            }
+            $this->runStyle($source);
         }
 
         $this->consoleStyle->success('Rector is done!');
@@ -235,7 +223,7 @@ final class ProcessCommand extends Command
                 $this->processYamlFile($fileInfo);
             }
 
-            $this->processFileSystemFile($fileInfo);
+            $this->fileSystemFileProcessor->processFileInfo($fileInfo);
         } catch (AnalysedCodeException $analysedCodeException) {
             if ($shouldHideAutoloadErrors) {
                 return;
@@ -247,9 +235,9 @@ final class ProcessCommand extends Command
                 PHP_EOL
             );
 
-            $this->errors[] = new Error($fileInfo, $message, null);
+            $this->errorCollector->addError(new Error($fileInfo, $message));
         } catch (Throwable $throwable) {
-            $this->errors[] = new Error($fileInfo, $throwable->getMessage(), $throwable->getCode());
+            $this->errorCollector->addError(new Error($fileInfo, $throwable->getMessage(), $throwable->getCode()));
         }
     }
 
@@ -295,8 +283,27 @@ final class ProcessCommand extends Command
         }
     }
 
-    private function processFileSystemFile(SmartFileInfo $fileInfo): void
+    /**
+     * @param string[] $source
+     */
+    private function runStyle(array $source): void
     {
-        $this->fileSystemFileProcessor->processFileInfo($fileInfo);
+        $command = sprintf(
+            'vendor/bin/ecs check %s --config %s --fix',
+            implode(' ', $source),
+            __DIR__ . '/../../../ecs-after-rector.yml'
+        );
+
+        $process = new Process($command);
+        $process->run();
+
+        if ($process->isSuccessful()) {
+            $this->consoleStyle->success('Basic coding standard is done');
+            return;
+        }
+
+        $this->consoleStyle->error(
+            sprintf('Basic coding standard was not applied due to: "%s"', $process->getErrorOutput())
+        );
     }
 }

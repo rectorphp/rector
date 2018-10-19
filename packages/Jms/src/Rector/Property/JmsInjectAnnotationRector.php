@@ -6,12 +6,15 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
+use Rector\Application\Error;
+use Rector\Application\ErrorCollector;
 use Rector\Bridge\Contract\AnalyzedApplicationContainerInterface;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use function Safe\sprintf;
 
 /**
  * @see https://jmsyst.com/bundles/JMSDiExtraBundle/master/annotations#inject
@@ -33,12 +36,19 @@ final class JmsInjectAnnotationRector extends AbstractRector
      */
     private $analyzedApplicationContainer;
 
+    /**
+     * @var ErrorCollector
+     */
+    private $errorCollector;
+
     public function __construct(
         DocBlockAnalyzer $docBlockAnalyzer,
-        AnalyzedApplicationContainerInterface $analyzedApplicationContainer
+        AnalyzedApplicationContainerInterface $analyzedApplicationContainer,
+        ErrorCollector $errorCollector
     ) {
         $this->docBlockAnalyzer = $docBlockAnalyzer;
         $this->analyzedApplicationContainer = $analyzedApplicationContainer;
+        $this->errorCollector = $errorCollector;
     }
 
     public function getDefinition(): RectorDefinition
@@ -122,6 +132,8 @@ CODE_SAMPLE
             if ($this->analyzedApplicationContainer->hasService($serviceName)) {
                 return $this->analyzedApplicationContainer->getTypeForName($serviceName);
             }
+            // collect error
+            $this->errorCollector->addErrorWithRectorMessage($this, sprintf('Service "%s" not found.', $serviceName));
         }
 
         $varTypes = $this->docBlockAnalyzer->getVarTypes($node);
