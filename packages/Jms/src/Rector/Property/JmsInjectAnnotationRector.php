@@ -92,19 +92,10 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var PhpDocTagNode $injectTagNode */
-        $injectTagNode = $this->docBlockAnalyzer->getTagByName($node, self::INJECT_ANNOTATION);
-
-        $serviceName = $this->resolveServiceNameFromInjectTag($injectTagNode);
-        if ($serviceName === null) {
+        $type = $this->resolveType($node);
+        if ($type === null) {
             return null;
         }
-
-        if (! $this->analyzedApplicationContainer->hasService($serviceName)) {
-            return null;
-        }
-
-        $type = $this->analyzedApplicationContainer->getTypeForName($serviceName);
 
         if (! $this->docBlockAnalyzer->hasTag($node, 'var')) {
             $this->docBlockAnalyzer->addVarTag($node, $type);
@@ -119,6 +110,26 @@ CODE_SAMPLE
         );
 
         return $node;
+    }
+
+    private function resolveType(Node $node): ?string
+    {
+        /** @var PhpDocTagNode $injectTagNode */
+        $injectTagNode = $this->docBlockAnalyzer->getTagByName($node, self::INJECT_ANNOTATION);
+
+        $serviceName = $this->resolveServiceNameFromInjectTag($injectTagNode);
+        if ($serviceName) {
+            if ($this->analyzedApplicationContainer->hasService($serviceName)) {
+                return $this->analyzedApplicationContainer->getTypeForName($serviceName);
+            }
+        }
+
+        $varTypes = $this->docBlockAnalyzer->getVarTypes($node);
+        if (! count($varTypes)) {
+            return null;
+        }
+
+        return array_shift($varTypes);
     }
 
     private function resolveServiceNameFromInjectTag(PhpDocTagNode $phpDocTagNode): ?string
