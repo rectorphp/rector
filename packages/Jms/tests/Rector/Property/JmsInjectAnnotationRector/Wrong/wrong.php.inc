@@ -12,6 +12,11 @@ class SomeController
     private $entityManager;
 
     /**
+     * @DI\Inject("translator", strict = false, required = false)
+     */
+    private $translator;
+
+    /**
      * @DI\Inject("%kernel.cache_dir%")
      */
     private $cacheDir;
