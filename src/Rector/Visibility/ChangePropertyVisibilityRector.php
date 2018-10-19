@@ -110,6 +110,7 @@ CODE_SAMPLE
     {
         /** @var string $nodeParentClassName */
         $nodeParentClassName = $propertyNode->getAttribute(Attribute::PARENT_CLASS_NAME);
+
         /** @var string $propertyName */
         $propertyName = $this->getName($propertyNode);
 

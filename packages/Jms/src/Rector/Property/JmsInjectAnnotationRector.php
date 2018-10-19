@@ -78,6 +78,11 @@ class SomeController
      * @var EntityManager
      */
     private $entityManager;
+    
+    public function __construct(EntityManager $entityManager)
+    {
+        $this->entityManager = entityManager;
+    }
 }
 CODE_SAMPLE
                 ),
