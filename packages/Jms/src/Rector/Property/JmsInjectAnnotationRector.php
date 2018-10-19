@@ -131,29 +131,42 @@ CODE_SAMPLE
     {
         $injectTagNode = $this->docBlockAnalyzer->getTagByName($node, self::INJECT_ANNOTATION);
 
-        $serviceName = $this->resolveServiceNameFromInjectTag($injectTagNode);
+        $serviceName = $this->resolveServiceName($injectTagNode, $node);
         if ($serviceName) {
             if ($this->analyzedApplicationContainer->hasService($serviceName)) {
                 return $this->analyzedApplicationContainer->getTypeForName($serviceName);
             }
 
             // collect error
-            $this->errorCollector->addErrorWithRectorMessage($this, sprintf('Service "%s" not found.', $serviceName));
+            $this->errorCollector->addErrorWithRectorMessage(
+                $this,
+                sprintf('Service "%s" was not found in DI Container of your Symfony App.', $serviceName)
+            );
         }
 
         $varTypes = $this->docBlockAnalyzer->getVarTypes($node);
-        if (! count($varTypes)) {
-            return null;
+        if (count($varTypes)) {
+            return array_shift($varTypes);
         }
 
-        return array_shift($varTypes);
+        return null;
     }
 
-    private function resolveServiceNameFromInjectTag(PhpDocTagNode $phpDocTagNode): ?string
+    private function resolveServiceName(PhpDocTagNode $phpDocTagNode, Node $node): ?string
     {
         $injectTagContent = (string) $phpDocTagNode->value;
         $match = Strings::match($injectTagContent, '#(\'|")(?<serviceName>[\w\._-]+)(\'|")#');
 
-        return $match['serviceName'] ?? null;
+        if ($match['serviceName']) {
+            return $match['serviceName'];
+        }
+
+        $match = Strings::match($injectTagContent, '#(\'|")%(?<prameterName>[\w\._-]+)%(\'|")#');
+        // it's parameter, we don't resolve that here
+        if (isset($match['parameterName'])) {
+            return null;
+        }
+
+        return $this->getName($node);
     }
 }
