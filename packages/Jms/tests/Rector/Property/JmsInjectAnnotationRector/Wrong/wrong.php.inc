@@ -10,4 +10,9 @@ class SomeController
      * @DI\Inject("entity.manager")
      */
     private $entityManager;
+
+    /**
+     * @DI\Inject("%kernel.cache_dir%")
+     */
+    private $cacheDir;
 }

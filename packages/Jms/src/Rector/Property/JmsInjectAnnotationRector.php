@@ -124,7 +124,6 @@ CODE_SAMPLE
 
     private function resolveType(Node $node): ?string
     {
-        /** @var PhpDocTagNode $injectTagNode */
         $injectTagNode = $this->docBlockAnalyzer->getTagByName($node, self::INJECT_ANNOTATION);
 
         $serviceName = $this->resolveServiceNameFromInjectTag($injectTagNode);
@@ -132,6 +131,7 @@ CODE_SAMPLE
             if ($this->analyzedApplicationContainer->hasService($serviceName)) {
                 return $this->analyzedApplicationContainer->getTypeForName($serviceName);
             }
+
             // collect error
             $this->errorCollector->addErrorWithRectorMessage($this, sprintf('Service "%s" not found.', $serviceName));
         }
@@ -147,7 +147,7 @@ CODE_SAMPLE
     private function resolveServiceNameFromInjectTag(PhpDocTagNode $phpDocTagNode): ?string
     {
         $injectTagContent = (string) $phpDocTagNode->value;
-        $match = Strings::match($injectTagContent, '#(\'|")(?<serviceName>.*?)(\'|")#');
+        $match = Strings::match($injectTagContent, '#(\'|")(?<serviceName>[\w\._-]+)(\'|")#');
 
         return $match['serviceName'] ?? null;
     }
