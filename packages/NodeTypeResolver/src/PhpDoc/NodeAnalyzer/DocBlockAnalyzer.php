@@ -71,7 +71,6 @@ final class DocBlockAnalyzer
         // advanced check, e.g. for "Namespaced\Annotations\DI"
         $phpDocInfo = $this->createPhpDocInfoWithFqnTypesFromNode($node);
 
-        // is namespaced annotation?
         if ($this->isNamespaced($name)) {
             $this->fqnAnnotationTypeDecorator->decorate($phpDocInfo, $node);
         }
@@ -158,20 +157,6 @@ final class DocBlockAnalyzer
         $phpDocInfo = $this->createPhpDocInfoFromNode($node);
 
         return $phpDocInfo->getVarTypes();
-    }
-
-    /**
-     * @todo add test for Multi|Types
-     */
-    public function getTypeForParam(Node $node, string $paramName): ?string
-    {
-        if ($node->getDocComment() === null) {
-            return null;
-        }
-
-        $phpDocInfo = $this->createPhpDocInfoWithFqnTypesFromNode($node);
-
-        return (string) $phpDocInfo->getParamTypeNode($paramName);
     }
 
     /**

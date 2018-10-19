@@ -61,15 +61,6 @@ CODE_SAMPLE;
         $this->assertSame(['int'], $this->docBlockAnalyzer->getVarTypes($node));
     }
 
-    public function testGetParamTypeFor(): void
-    {
-        $node = $this->createNodeWithDoc('
-           * @param ParamType $paramName
-        ');
-
-        $this->assertSame('ParamType', $this->docBlockAnalyzer->getTypeForParam($node, 'paramName'));
-    }
-
     private function createNodeWithDoc(string $doc): String_
     {
         $node = new String_('string');
