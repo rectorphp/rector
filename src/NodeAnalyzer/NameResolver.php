@@ -4,17 +4,7 @@ namespace Rector\NodeAnalyzer;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
-use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
-use PhpParser\Node\Stmt\PropertyProperty;
 
 final class NameResolver
 {
@@ -28,24 +18,15 @@ final class NameResolver
             return $this->resolve($node->props[0]);
         }
 
-        if ($node instanceof MethodCall || $node instanceof StaticCall || $node instanceof FuncCall) {
-            if ($node->name instanceof Name || $node->name instanceof Identifier) {
-                return $node->name->toString();
-            }
-
-            if (is_string($node->name)) {
-                return $node->name;
-            }
+        if (! property_exists($node, 'name')) {
+            return null;
         }
 
-        if ($node instanceof PropertyProperty || $node instanceof Variable || $node instanceof ClassMethod || $node instanceof ClassConstFetch || $node instanceof PropertyFetch) {
-            // e.g. "${$name} = 5;", we don't know the value for sure
-            if ($node->name instanceof Expr) {
-                return null;
-            }
-            return (string) $node->name;
+        // unable to resolve
+        if ($node->name instanceof Expr) {
+            return null;
         }
 
-        return null;
+        return (string) $node->name;
     }
 }

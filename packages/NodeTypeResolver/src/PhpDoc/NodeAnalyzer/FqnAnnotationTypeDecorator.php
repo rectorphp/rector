@@ -5,7 +5,6 @@ namespace Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer;
 use Nette\Utils\Reflection;
 use Nette\Utils\Strings;
 use PhpParser\Node;
-use PhpParser\Node\Stmt\Class_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use Rector\NodeTypeResolver\Node\Attribute;
 use ReflectionClass;
@@ -23,6 +22,7 @@ final class FqnAnnotationTypeDecorator
             }
 
             $tagShortName = ltrim($phpDocChildNode->name, '@');
+
             // probably not a class like type
             if (ctype_lower($tagShortName[0])) {
                 continue;
@@ -36,12 +36,10 @@ final class FqnAnnotationTypeDecorator
 
     private function resolveTagFqnName(Node $node, string $tagShortName): string
     {
-        $classNode = $node->getAttribute(Attribute::CLASS_NODE);
-        if (! $classNode instanceof Class_) {
+        $className = $node->getAttribute(Attribute::CLASS_NAME);
+        if (! $className) {
             return $tagShortName;
         }
-
-        $className = (string) $classNode->name;
 
         return Reflection::expandClassName($tagShortName, new ReflectionClass($className));
     }

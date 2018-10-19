@@ -19,17 +19,17 @@
         "symfony/dependency-injection": "^3.4|^4.1",
         "symfony/finder": "^3.4|^4.1",
         "symfony/process": "^3.4|^4.1",
-        "symplify/better-phpdoc-parser": "^5.1",
-        "symplify/easy-coding-standard": "^5.1",
-        "symplify/package-builder": "^5.1",
+        "symplify/better-phpdoc-parser": "^5.2",
+        "symplify/easy-coding-standard": "^5.2",
+        "symplify/package-builder": "^5.2",
         "thecodingmachine/safe": "^0.1.4"
     },
     "require-dev": {
         "humbug/php-scoper": "^0.9.2",
         "phpunit/phpunit": "^7.3",
-        "symplify/changelog-linker": "^5.1",
-        "symplify/monorepo-builder": "^5.1",
-        "symplify/phpstan-extensions": "^5.1",
+        "symplify/changelog-linker": "^5.2",
+        "symplify/monorepo-builder": "^5.2",
+        "symplify/phpstan-extensions": "^5.2",
         "thecodingmachine/phpstan-safe-rule": "^0.1.0",
         "thecodingmachine/phpstan-strict-rules": "^0.10.4",
         "tracy/tracy": "^2.5"
@@ -45,6 +45,7 @@
             "Rector\\Symfony\\": "packages/Symfony/src",
             "Rector\\CakePHP\\": "packages/CakePHP/src",
             "Rector\\Php\\": "packages/Php/src",
+            "Rector\\Jms\\": "packages/Jms/src",
             "Rector\\Silverstripe\\": "packages/Silverstripe/src",
             "Rector\\Sensio\\": "packages/Sensio/src",
             "Rector\\Sylius\\": "packages/Sylius/src",
@@ -65,6 +66,7 @@
             "Rector\\CodeQuality\\Tests\\": "packages/CodeQuality/tests",
             "Rector\\DomainDrivenDesign\\Tests\\": "packages/DomainDrivenDesign/tests",
             "Rector\\Php\\Tests\\": "packages/Php/tests",
+            "Rector\\Jms\\Tests\\": "packages/Jms/tests",
             "Rector\\Symfony\\Tests\\": "packages/Symfony/tests",
             "Rector\\Silverstripe\\Tests\\": "packages/Silverstripe/tests",
             "Rector\\Sensio\\Tests\\": "packages/Sensio/tests",
@@ -176,6 +178,7 @@
             "packages/Symfony/tests/Rector/Process/ProcessBuilderGetProcessRector/Wrong",
             "packages/Symfony/tests/Rector/Process/ProcessBuilderInstanceRector/Wrong",
             "packages/Twig/tests/Rector/SimpleFunctionAndFilterRector/Wrong",
+            "packages/Jms/tests/Rector/Property/JmsInjectAnnotationRector/Wrong",
             "packages/Doctrine/tests/Rector/AliasToClassRector/Wrong",
             "packages/PhpParser/tests/Rector/RemoveNodeRector/Wrong",
             "packages/PhpParser/tests/Rector/IdentifierRector/Wrong",
@@ -224,5 +227,7 @@
     "bin": ["bin/rector"],
     "config": {
         "sort-packages": true
-    }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }

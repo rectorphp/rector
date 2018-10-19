@@ -6,13 +6,14 @@ use Nette\Utils\Strings;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Exception\MissingTagException;
 use Rector\PhpParser\CurrentNodeProvider;
 use Symplify\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Symplify\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Symplify\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
-use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 use function Safe\sprintf;
 
 final class DocBlockAnalyzer
@@ -70,8 +71,7 @@ final class DocBlockAnalyzer
         // advanced check, e.g. for "Namespaced\Annotations\DI"
         $phpDocInfo = $this->createPhpDocInfoWithFqnTypesFromNode($node);
 
-        // is namespaced annotation?
-        if (Strings::contains($name, '\\')) {
+        if ($this->isNamespaced($name)) {
             $this->fqnAnnotationTypeDecorator->decorate($phpDocInfo, $node);
         }
 
@@ -98,8 +98,7 @@ final class DocBlockAnalyzer
 
         $phpDocInfo = $this->createPhpDocInfoFromNode($node);
 
-        // is namespaced annotation?
-        if (Strings::contains($name, '\\')) {
+        if ($this->isNamespaced($name)) {
             $this->fqnAnnotationTypeDecorator->decorate($phpDocInfo, $node);
         }
 
@@ -161,20 +160,6 @@ final class DocBlockAnalyzer
     }
 
     /**
-     * @todo add test for Multi|Types
-     */
-    public function getTypeForParam(Node $node, string $paramName): ?string
-    {
-        if ($node->getDocComment() === null) {
-            return null;
-        }
-
-        $phpDocInfo = $this->createPhpDocInfoWithFqnTypesFromNode($node);
-
-        return (string) $phpDocInfo->getParamTypeNode($paramName);
-    }
-
-    /**
      * @final
      * @return PhpDocTagNode[]
      */
@@ -186,7 +171,22 @@ final class DocBlockAnalyzer
 
         $phpDocInfo = $this->createPhpDocInfoWithFqnTypesFromNode($node);
 
+        if ($this->isNamespaced($name)) {
+            $this->fqnAnnotationTypeDecorator->decorate($phpDocInfo, $node);
+        }
+
         return $phpDocInfo->getTagsByName($name);
+    }
+
+    public function addVarTag(Node $node, string $type): void
+    {
+        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
+        $phpDocNode = $phpDocInfo->getPhpDocNode();
+
+        $varTagValueNode = new VarTagValueNode(new IdentifierTypeNode('\\' . $type), '', '');
+        $phpDocNode->children[] = new PhpDocTagNode('@var', $varTagValueNode);
+
+        $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
     }
 
     /**
@@ -198,7 +198,9 @@ final class DocBlockAnalyzer
             throw new MissingTagException('Tag "%s" was not found at "%s" node.', $name, get_class($node));
         }
 
-        return $this->getTagsByName($node, $name)[0];
+        /** @var PhpDocTagNode[] $foundTags */
+        $foundTags = $this->getTagsByName($node, $name);
+        return array_shift($foundTags);
     }
 
     private function updateNodeWithPhpDocInfo(Node $node, PhpDocInfo $phpDocInfo): void
@@ -228,11 +230,6 @@ final class DocBlockAnalyzer
             ));
         }
 
-        // $this->phpDocInfoDecorators needs to be nulled, or FQN is made by default due to collector
-        // @todo resolve propperty and decouple node traversing from: \Symplify\BetterPhpDocParser\PhpDocInfo\AbstractPhpDocInfoDecorator into a service + remove parent dependcy of
-        // @see \Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\PhpDocInfoFqnTypeDecorator
-        (new PrivatesAccessor())->setPrivateProperty($this->phpDocInfoFactory, 'phpDocInfoDecorators', []);
-
         return $this->phpDocInfoFactory->createFrom($node->getDocComment()->getText());
     }
 
@@ -243,5 +240,10 @@ final class DocBlockAnalyzer
         $this->phpDocInfoFqnTypeDecorator->decorate($phpDocInfo);
 
         return $phpDocInfo;
+    }
+
+    private function isNamespaced(string $name): bool
+    {
+        return Strings::contains($name, '\\');
     }
 }

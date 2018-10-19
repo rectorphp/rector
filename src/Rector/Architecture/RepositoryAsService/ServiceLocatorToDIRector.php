@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use Rector\Bridge\Contract\DoctrineEntityAndRepositoryMapperInterface;
-use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Exception\Bridge\RectorProviderException;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Naming\PropertyNaming;
@@ -33,11 +32,6 @@ final class ServiceLocatorToDIRector extends AbstractRector
     private $doctrineEntityAndRepositoryMapper;
 
     /**
-     * @var ClassPropertyCollector
-     */
-    private $classPropertyCollector;
-
-    /**
      * @var PropertyNaming
      */
     private $propertyNaming;
@@ -45,12 +39,10 @@ final class ServiceLocatorToDIRector extends AbstractRector
     public function __construct(
         PropertyFetchNodeFactory $propertyFetchNodeFactory,
         DoctrineEntityAndRepositoryMapperInterface $doctrineEntityAndRepositoryMapper,
-        ClassPropertyCollector $classPropertyCollector,
         PropertyNaming $propertyNaming
     ) {
         $this->propertyFetchNodeFactory = $propertyFetchNodeFactory;
         $this->doctrineEntityAndRepositoryMapper = $doctrineEntityAndRepositoryMapper;
-        $this->classPropertyCollector = $classPropertyCollector;
         $this->propertyNaming = $propertyNaming;
     }
 
@@ -135,9 +127,9 @@ CODE_SAMPLE
         }
         $repositoryFqn = $this->repositoryFqn($node);
 
-        $this->classPropertyCollector->addPropertyForClass(
+        $this->addPropertyToClass(
             (string) $node->getAttribute(Attribute::CLASS_NAME),
-            [$repositoryFqn],
+            $repositoryFqn,
             $this->propertyNaming->fqnToVariableName($repositoryFqn)
         );
 

@@ -5,7 +5,6 @@ namespace Rector\Symfony\Rector\FrameworkBundle;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
-use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Naming\PropertyNaming;
 use Rector\Node\PropertyFetchNodeFactory;
 use Rector\NodeTypeResolver\Node\Attribute;
@@ -21,11 +20,6 @@ final class GetParameterToConstructorInjectionRector extends AbstractRector
     private $propertyNaming;
 
     /**
-     * @var ClassPropertyCollector
-     */
-    private $classPropertyCollector;
-
-    /**
      * @var PropertyFetchNodeFactory
      */
     private $propertyFetchNodeFactory;
@@ -37,12 +31,10 @@ final class GetParameterToConstructorInjectionRector extends AbstractRector
 
     public function __construct(
         PropertyNaming $propertyNaming,
-        ClassPropertyCollector $classPropertyCollector,
         PropertyFetchNodeFactory $propertyFetchNodeFactory,
         string $controllerClass = 'Symfony\Bundle\FrameworkBundle\Controller\Controller'
     ) {
         $this->propertyNaming = $propertyNaming;
-        $this->classPropertyCollector = $classPropertyCollector;
         $this->propertyFetchNodeFactory = $propertyFetchNodeFactory;
         $this->controllerClass = $controllerClass;
     }
@@ -110,9 +102,9 @@ CODE_SAMPLE
         $parameterName = $stringArgument->value;
         $propertyName = $this->propertyNaming->underscoreToName($parameterName);
 
-        $this->classPropertyCollector->addPropertyForClass(
+        $this->addPropertyToClass(
             (string) $node->getAttribute(Attribute::CLASS_NAME),
-            ['string'], // @todo: resolve type from container provider? see parameter autowire compiler pass
+            'string', // @todo: resolve type from container provider? see parameter autowire compiler pass
             $propertyName
         );
 

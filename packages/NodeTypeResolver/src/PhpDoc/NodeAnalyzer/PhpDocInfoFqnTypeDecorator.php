@@ -5,10 +5,10 @@ namespace Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer;
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use Rector\PhpParser\CurrentNodeProvider;
-use Symplify\BetterPhpDocParser\PhpDocInfo\AbstractPhpDocInfoDecorator;
+use Symplify\BetterPhpDocParser\Ast\NodeTraverser;
 use Symplify\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 
-final class PhpDocInfoFqnTypeDecorator extends AbstractPhpDocInfoDecorator
+final class PhpDocInfoFqnTypeDecorator
 {
     /**
      * @var NamespaceAnalyzer
@@ -20,18 +20,29 @@ final class PhpDocInfoFqnTypeDecorator extends AbstractPhpDocInfoDecorator
      */
     private $currentNodeProvider;
 
-    public function __construct(NamespaceAnalyzer $namespaceAnalyzer, CurrentNodeProvider $currentNodeProvider)
-    {
+    /**
+     * @var NodeTraverser
+     */
+    private $nodeTraverser;
+
+    public function __construct(
+        NamespaceAnalyzer $namespaceAnalyzer,
+        CurrentNodeProvider $currentNodeProvider,
+        NodeTraverser $nodeTraverser
+    ) {
         $this->namespaceAnalyzer = $namespaceAnalyzer;
         $this->currentNodeProvider = $currentNodeProvider;
+        $this->nodeTraverser = $nodeTraverser;
     }
 
     public function decorate(PhpDocInfo $phpDocInfo): void
     {
-        $this->traverseNodes($phpDocInfo->getPhpDocNode());
+        $this->nodeTraverser->traverseWithCallable($phpDocInfo->getPhpDocNode(), function (Node $node) {
+            return $this->traverseNode($node);
+        });
     }
 
-    protected function traverseNode(Node $node): Node
+    private function traverseNode(Node $node): Node
     {
         if ($this->shouldSkip($node)) {
             return $node;

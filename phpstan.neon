@@ -4,6 +4,8 @@ includes:
      - 'vendor/thecodingmachine/phpstan-safe-rule/phpstan-safe-rule.neon'
 
 parameters:
+    reportUnmatchedIgnoredErrors: false
+
     excludes_analyse:
         # test files
         - '*packages/NodeTypeResolver/tests/Source/AnotherClass.php'
@@ -43,6 +45,7 @@ parameters:
         # false postive - type is set by annotatoin above
         - '#Access to an undefined property PhpParser\\Node::\$(args|var)#'
         - '#Method Rector\\Php\\Rector\\TryCatch\\MultiExceptionCatchRector\:\:collectCatchKeysByContent\(\) should return array<array<int\>\> but returns array<string, array<int, int\|string\>\>#'
+        - '#Method Rector\\NodeTypeResolver\\PhpDoc\\NodeAnalyzer\\DocBlockAnalyzer::getTagByName\(\) should return PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagNode but returns PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagNode\|null#'
 
         # irelevant
         - '#Call to function in_array\(\) with arguments string, array<array<string\|false>> and true will always evaluate to false#'

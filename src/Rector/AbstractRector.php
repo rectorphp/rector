@@ -16,6 +16,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     use NameAnalyzerTrait;
     use ConstFetchAnalyzerTrait;
     use BetterStandardPrinterTrait;
+    use ClassPropertyCollectorTrait;
 
     /**
      * @var ExpressionAdder
