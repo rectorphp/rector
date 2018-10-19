@@ -1,11 +1,11 @@
 <?php
 
-var_dump('SOME_STRING');
+is_bool('SOME_STRING');
 
-var_dump(true);
-var_dump(false);
-var_dump(NULL);
-var_dump(__DIR__);
+is_bool(true);
+is_bool(false);
+is_bool(NULL);
+is_bool(__DIR__);
 
 const THIS_EXISTS = 'yes';
-var_dump(THIS_EXISTS);
+is_bool(THIS_EXISTS);

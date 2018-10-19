@@ -61,7 +61,8 @@ final class BarewordStringRector extends AbstractRector
             }
         });
 
-        // @todo how to load without running it? how does composer do that?
+        // this duplicates the way composer handles it
+        // @see https://github.com/composer/composer/issues/6232
         require $fileInfo->getRealPath();
 
         // restore
