@@ -10,7 +10,7 @@ use Rector\Builder\ConstructorMethodBuilder;
 use Rector\Builder\PropertyBuilder;
 use Rector\NodeTypeResolver\Node\Attribute;
 
-final class PropertyAddingNodeVisitor extends NodeVisitorAbstract
+final class ConstructorInjectionNodeVisitor extends NodeVisitorAbstract
 {
     /**
      * @var ConstructorMethodBuilder
