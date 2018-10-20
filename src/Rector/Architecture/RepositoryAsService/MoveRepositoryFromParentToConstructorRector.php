@@ -9,7 +9,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Bridge\Contract\DoctrineEntityAndRepositoryMapperInterface;
-use Rector\Builder\Class_\VariableInfoFactory;
+use Rector\Builder\Class_\VariableInfo;
 use Rector\Builder\ConstructorMethodBuilder;
 use Rector\Builder\PropertyBuilder;
 use Rector\Exception\Bridge\RectorProviderException;
@@ -48,11 +48,6 @@ final class MoveRepositoryFromParentToConstructorRector extends AbstractRector
     private $builderFactory;
 
     /**
-     * @var VariableInfoFactory
-     */
-    private $variableInfoFactory;
-
-    /**
      * @var string
      */
     private $entityRepositoryClass;
@@ -68,7 +63,6 @@ final class MoveRepositoryFromParentToConstructorRector extends AbstractRector
         NodeFactory $nodeFactory,
         DoctrineEntityAndRepositoryMapperInterface $doctrineEntityAndRepositoryMapper,
         BuilderFactory $builderFactory,
-        VariableInfoFactory $variableInfoFactory,
         string $entityRepositoryClass,
         string $entityManagerClass
     ) {
@@ -77,7 +71,6 @@ final class MoveRepositoryFromParentToConstructorRector extends AbstractRector
         $this->nodeFactory = $nodeFactory;
         $this->doctrineEntityAndRepositoryMapper = $doctrineEntityAndRepositoryMapper;
         $this->builderFactory = $builderFactory;
-        $this->variableInfoFactory = $variableInfoFactory;
         $this->entityRepositoryClass = $entityRepositoryClass;
         $this->entityManagerClass = $entityManagerClass;
     }
@@ -154,16 +147,13 @@ CODE_SAMPLE
         $node->extends = null;
 
         // add $repository property
-        $propertyInfo = $this->variableInfoFactory->createFromNameAndTypes(
-            'repository',
-            [$this->entityRepositoryClass]
-        );
+        $propertyInfo = new VariableInfo('repository', [$this->entityRepositoryClass]);
         $this->propertyBuilder->addPropertyToClass($node, $propertyInfo);
 
         // add $entityManager and assign to constuctor
-        $this->constructorMethodBuilder->addParameterAndAssignToConstructorArgumentsOfClass(
+        $this->constructorMethodBuilder->addConstructorDependency(
             $node,
-            $this->variableInfoFactory->createFromNameAndTypes('entityManager', [$this->entityManagerClass]),
+            new VariableInfo('entityManager', [$this->entityManagerClass]),
             $this->createRepositoryAssign($node)
         );
 

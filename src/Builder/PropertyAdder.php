@@ -4,7 +4,7 @@ namespace Rector\Builder;
 
 use PhpParser\Node;
 use PhpParser\NodeTraverser;
-use Rector\PhpParser\NodeVisitor\PropertyAddingNodeVisitor;
+use Rector\PhpParser\NodeVisitor\ConstructorInjectionNodeVisitor;
 
 /**
  * Adds new properties to class and to constructor
@@ -16,10 +16,10 @@ final class PropertyAdder
      */
     private $nodeTraverser;
 
-    public function __construct(PropertyAddingNodeVisitor $propertyAddingNodeVisitor)
+    public function __construct(ConstructorInjectionNodeVisitor $constructorInjectionNodeVisitor)
     {
         $this->nodeTraverser = new NodeTraverser();
-        $this->nodeTraverser->addVisitor($propertyAddingNodeVisitor);
+        $this->nodeTraverser->addVisitor($constructorInjectionNodeVisitor);
     }
 
     /**

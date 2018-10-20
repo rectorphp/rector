@@ -198,11 +198,6 @@ final class NodeFactory
         return $paramBuild->getNode();
     }
 
-    public function createString(string $name): String_
-    {
-        return new String_($name);
-    }
-
     public function createVariable(string $name): Variable
     {
         return $this->builderFactory->var($name);
