@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Name\FullyQualified;
+use Rector\CodingStyle\AfterRectorCodingStyle;
 use Rector\Console\ConsoleStyle;
 use Rector\ContributorTools\Configuration\Configuration;
 use Rector\ContributorTools\Configuration\ConfigurationFactory;
@@ -16,7 +17,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\Finder;
-use Symfony\Component\Process\Process;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\PackageBuilder\FileSystem\FinderSanitizer;
@@ -57,17 +57,24 @@ final class CreateRectorCommand extends Command
      */
     private $generatedFiles = [];
 
+    /**
+     * @var AfterRectorCodingStyle
+     */
+    private $afterRectorCodingStyle;
+
     public function __construct(
         ConsoleStyle $consoleStyle,
         ConfigurationFactory $configurationFactory,
         BetterStandardPrinter $betterStandardPrinter,
-        FinderSanitizer $finderSanitizer
+        FinderSanitizer $finderSanitizer,
+        AfterRectorCodingStyle $afterRectorCodingStyle
     ) {
         parent::__construct();
         $this->consoleStyle = $consoleStyle;
         $this->configurationFactory = $configurationFactory;
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->finderSanitizer = $finderSanitizer;
+        $this->afterRectorCodingStyle = $afterRectorCodingStyle;
     }
 
     protected function configure(): void
@@ -97,7 +104,7 @@ final class CreateRectorCommand extends Command
             }
         }
 
-        $this->runStyle($this->generatedFiles);
+        $this->applyCodingStyle();
 
         $this->printSuccess($configuration, $testCasePath);
 
@@ -190,29 +197,13 @@ CODE_SAMPLE;
         ));
     }
 
-    /**
-     * @param string[] $source
-     */
-    private function runStyle(array $source): void
+    private function applyCodingStyle(): void
     {
         // filter only .php files
-        $source = array_filter($source, function (string $file) {
+        $generatedPhpFiles = array_filter($this->generatedFiles, function (string $file) {
             return Strings::endsWith($file, '.php');
         });
 
-        $command = sprintf(
-            'vendor/bin/ecs check %s --config %s --fix',
-            implode(' ', $source),
-            __DIR__ . '/../../../../ecs-after-rector.yml'
-        );
-
-        $process = new Process($command);
-        $process->run();
-
-        if (! $process->isSuccessful()) {
-            $this->consoleStyle->error(
-                sprintf('Basic coding standard was not applied due to: "%s"', $process->getErrorOutput())
-            );
-        }
+        $this->afterRectorCodingStyle->apply($generatedPhpFiles);
     }
 }
