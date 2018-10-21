@@ -19,10 +19,10 @@ use Symfony\Component\Finder\Finder;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\PackageBuilder\FileSystem\FinderSanitizer;
+use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 use function Safe\getcwd;
 use function Safe\sort;
 use function Safe\sprintf;
-use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
 final class CreateRectorCommand extends Command
 {
@@ -51,6 +51,11 @@ final class CreateRectorCommand extends Command
      */
     private $finderSanitizer;
 
+    /**
+     * @var string[]
+     */
+    private $generatedFiles = [];
+
     public function __construct(
         ConsoleStyle $consoleStyle,
         ConfigurationFactory $configurationFactory,
@@ -76,34 +81,22 @@ final class CreateRectorCommand extends Command
         $data = $this->prepareData($configuration);
 
         $testCasePath = null;
-        $generatedFiles = [];
+
         foreach ($this->findTemplateFileInfos() as $smartFileInfo) {
             $destination = $smartFileInfo->getRelativeFilePathFromDirectory(self::TEMPLATES_DIRECTORY);
             $destination = $this->applyData($destination, $data);
 
-            $content = FileSystem::read($smartFileInfo->getRealPath());
-            $content = $this->applyData($content, $data);
-
-            if (Strings::endsWith($destination, 'Test.php')) {
-                $testCasePath = dirname($destination);
-            }
-
+            $content = $this->applyData($smartFileInfo->getContents(), $data);
             FileSystem::write($destination, $content);
 
-            $generatedFiles[] = $destination;
+            $this->generatedFiles[] = $destination;
+
+            if (! $testCasePath && Strings::endsWith($destination, 'Test.php')) {
+                $testCasePath = dirname($destination);
+            }
         }
 
-        // @todo make Rector class clickable in CLI output, so we can just jump right in
-        // probably absolute path might help
-        $this->consoleStyle->title(sprintf('New files generated for "%s"', $configuration->getName()));
-        sort($generatedFiles);
-        $this->consoleStyle->listing($generatedFiles);
-
-        $this->consoleStyle->success(sprintf(
-            'Now make these tests green again:%svendor/bin/phpunit %s',
-            PHP_EOL,
-            $testCasePath
-        ));
+        $this->printSuccess($configuration, $testCasePath);
 
         return ShellCode::SUCCESS;
     }
@@ -179,5 +172,18 @@ CODE_SAMPLE;
             ->in(self::TEMPLATES_DIRECTORY);
 
         return $this->finderSanitizer->sanitize($finder);
+    }
+
+    private function printSuccess(Configuration $configuration, string $testCasePath): void
+    {
+        $this->consoleStyle->title(sprintf('New files generated for "%s"', $configuration->getName()));
+        sort($this->generatedFiles);
+        $this->consoleStyle->listing($this->generatedFiles);
+
+        $this->consoleStyle->success(sprintf(
+            'Now make these tests green again:%svendor/bin/phpunit %s',
+            PHP_EOL,
+            $testCasePath
+        ));
     }
 }

@@ -11,6 +11,16 @@ final class PropertyNaming
         return lcfirst($this->fqnToShortName($fqn));
     }
 
+    /**
+     * @source https://stackoverflow.com/a/2792045/1348344
+     */
+    public function underscoreToName(string $underscoreName): string
+    {
+        $camelCaseName = str_replace('_', '', ucwords($underscoreName, '_'));
+
+        return lcfirst($camelCaseName);
+    }
+
     private function fqnToShortName(string $fqn): string
     {
         if (! Strings::contains($fqn, '\\')) {
@@ -23,15 +33,5 @@ final class PropertyNaming
         }
 
         return $lastNamePart;
-    }
-
-    /**
-     * @source https://stackoverflow.com/a/2792045/1348344
-     */
-    public function underscoreToName(string $underscoreName): string
-    {
-        $camelCaseName = str_replace('_', '', ucwords($underscoreName, '_'));
-
-        return lcfirst($camelCaseName);
     }
 }
