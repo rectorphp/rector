@@ -10,6 +10,8 @@ I mean, why do it manually if 80 % can Rector handle for you?
 
 Rector **instantly upgrades PHP & YAML code of your application**, with focus on open-source projects:
 
+<br>
+
 <p align="center">
     <a href="/config/level/php"><img src="/docs/images/php.png"></a>
     <img src="/docs/images/space.png" width=20>
@@ -25,6 +27,8 @@ Rector **instantly upgrades PHP & YAML code of your application**, with focus on
     <img src="/docs/images/space.png" width=20>
     <a href="/config/level/silverstripe"><img src="/docs/images/silverstripe.jpg"></a>
 </p>
+
+<br>
 
 **Rector can**:
 
