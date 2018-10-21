@@ -4,7 +4,6 @@ namespace Rector\Rector\Function_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
@@ -53,21 +52,15 @@ final class FunctionReplaceRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        // anonymous function
-        if (! $node->name instanceof Name) {
-            return null;
-        }
-
-        $functionName = $node->name->toString();
+        $functionName = $this->getName($node);
         if (! isset($this->oldFunctionToNewFunction[$functionName])) {
             return null;
         }
 
         $newFunctionName = $this->oldFunctionToNewFunction[$functionName];
 
-        $functCallNode = new FuncCall(new FullyQualified($newFunctionName));
-        $functCallNode->args = $node->args;
+        $node->name = new FullyQualified($newFunctionName);
 
-        return $functCallNode;
+        return $node;
     }
 }
