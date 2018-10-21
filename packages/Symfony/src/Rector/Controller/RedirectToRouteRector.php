@@ -5,7 +5,6 @@ namespace Rector\Symfony\Rector\Controller;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Node\MethodCallNodeFactory;
-use Rector\NodeAnalyzer\MethodArgumentAnalyzer;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -13,11 +12,6 @@ use Rector\RectorDefinition\RectorDefinition;
 
 final class RedirectToRouteRector extends AbstractRector
 {
-    /**
-     * @var MethodArgumentAnalyzer
-     */
-    private $methodArgumentAnalyzer;
-
     /**
      * @var MethodCallNodeFactory
      */
@@ -29,11 +23,9 @@ final class RedirectToRouteRector extends AbstractRector
     private $controllerClass;
 
     public function __construct(
-        MethodArgumentAnalyzer $methodArgumentAnalyzer,
         MethodCallNodeFactory $methodCallNodeFactory,
         string $controllerClass = 'Symfony\Bundle\FrameworkBundle\Controller\Controller'
     ) {
-        $this->methodArgumentAnalyzer = $methodArgumentAnalyzer;
         $this->methodCallNodeFactory = $methodCallNodeFactory;
         $this->controllerClass = $controllerClass;
     }
@@ -68,7 +60,8 @@ final class RedirectToRouteRector extends AbstractRector
         if (! $this->isName($node, 'redirect')) {
             return null;
         }
-        if (! $this->methodArgumentAnalyzer->hasMethodNthArgument($node, 1)) {
+
+        if (! isset($node->args[0])) {
             return null;
         }
 

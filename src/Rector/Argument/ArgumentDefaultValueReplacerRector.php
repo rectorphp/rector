@@ -163,6 +163,7 @@ CODE_SAMPLE
     private function resolveArgumentValue(Arg $argNode)
     {
         $resolvedValue = $this->constExprEvaluator->evaluateDirectly($argNode->value);
+
         if ($resolvedValue === true) {
             return 'true';
         }

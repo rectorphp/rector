@@ -54,7 +54,7 @@ final class ConstraintUrlOptionRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isName($node, 'true')) {
+        if (! $this->isTrue($node)) {
             return null;
         }
 
