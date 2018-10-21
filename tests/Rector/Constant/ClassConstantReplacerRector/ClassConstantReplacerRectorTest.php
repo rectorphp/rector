@@ -5,6 +5,9 @@ namespace Rector\Tests\Rector\Constant\ClassConstantReplacerRector;
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
+/**
+ * @see \Rector\Rector\Constant\ClassConstantReplacerRector
+ */
 final class ClassConstantReplacerRectorTest extends AbstractRectorTestCase
 {
     /**

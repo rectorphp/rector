@@ -1,13 +1,9 @@
 services:
     Rector\Rector\Argument\ArgumentAdderRector:
-        -
-            class: 'Symfony\Component\DependencyInjection\ContainerBuilder'
-            method: 'compile'
-            position: 0
-            default_value: false
-        # added default value
-        -
-            class: 'Symfony\Component\DependencyInjection\ContainerBuilder'
-            method: 'addCompilerPass'
-            position: 2
-            default_value: 0
+        Rector\Tests\Rector\Argument\ArgumentAdderRector\Source\ContainerBuilder:
+            compile:
+                0:
+                    isCompiled: false
+            addCompilerPass:
+                2:
+                    priority: 0

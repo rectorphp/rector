@@ -11,7 +11,6 @@ use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
-use SomeClass;
 
 final class ReturnThisRemoveRector extends AbstractRector
 {
@@ -67,7 +66,7 @@ class SomeClass
 CODE_SAMPLE
                 ,
                 [
-                    '$classesToDefluent' => [SomeClass::class],
+                    '$classesToDefluent' => ['SomeExampleClass'],
                 ]
             ),
         ]);

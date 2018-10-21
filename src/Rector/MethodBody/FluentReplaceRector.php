@@ -8,7 +8,6 @@ use Rector\Node\MethodCallNodeFactory;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
-use SomeClass;
 
 final class FluentReplaceRector extends AbstractRector
 {
@@ -48,7 +47,7 @@ $someClass->otherFunction();
 CODE_SAMPLE
                 ,
                 [
-                    '$classesToDefluent' => [SomeClass::class],
+                    '$classesToDefluent' => ['SomeExampleClass'],
                 ]
             ),
         ]);

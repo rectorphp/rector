@@ -20,6 +20,8 @@ parameters:
         # intetionally original
         - 'packages/Php/src/EregToPcreTransformer.php'
         - '*/packages/ContributorTools/templates/*'
+        # part of composer
+        - 'tests/Composer/AutoloadWrongCasesEventSubscriber.php'
 
     ignoreErrors:
         # missuse of interface and class
@@ -93,7 +95,6 @@ parameters:
         - '#Parameter \#1 \$node of method Rector\\NodeTypeResolver\\NodeTypeResolver::resolve\(\) expects PhpParser\\Node, PhpParser\\Node\\Expr|string given#' # 3
 
         # buggy
-        - '#Access to an undefined property PhpParser\\Node\\Expr::\$value#' # 2
         - '#Access to an undefined property PhpParser\\Node\\Expr::\$(name|var)#' # 2
         - '#Access to an undefined property PhpParser\\Node\\Stmt::\$expr#'
         - '#Binary operation "\+" between int\|string and 1 results in an error#'
@@ -107,9 +108,6 @@ parameters:
 
         # intentionally
         - '#In method "(.*?)", caught "Throwable" must be rethrown. Either catch a more specific exception or add a "throw" clause in the "catch" block to propagate the exception#'
-
-        # incorrect 3rd party code typehinting
-        - '#Instanceof between PhpParser\\Node\\Expr and PhpParser\\Node\\Identifier will always evaluate to false#'
 
 services:
     -

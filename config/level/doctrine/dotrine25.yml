@@ -8,8 +8,6 @@ services:
                 'em': 'Doctrine\ORM\EntityManagerInterface'
 
     Rector\Rector\Argument\ArgumentRemoverRector:
-        -
-            class: 'Doctrine\ORM\Persisters\Entity\AbstractEntityInheritancePersister'
-            method: 'getSelectJoinColumnSQL'
-            position: 4
-
+        Doctrine\ORM\Persisters\Entity\AbstractEntityInheritancePersister:
+            getSelectJoinColumnSQL:
+                 4: ~

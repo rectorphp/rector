@@ -5,6 +5,9 @@ namespace Rector\Tests\Rector\MagicDisclosure\ToStringToMethodCallRector;
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
+/**
+ * @covers \Rector\Rector\MagicDisclosure\ToStringToMethodCallRector
+ */
 final class ToStringToMethodCallRectorTest extends AbstractRectorTestCase
 {
     /**

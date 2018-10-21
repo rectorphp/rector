@@ -23,32 +23,30 @@ services:
                 '$cartStorage': 'Sylius\Component\Core\Storage\CartStorageInterface'
 
     Rector\Rector\Argument\ArgumentAdderRector:
-        -
-            class: 'Sylius\Component\Mailer\Sender\SenderInterface'
-            method: 'send'
-            position: 0
-            default_value: '[]'
-        -
-            class: 'Sylius\Component\Core\Repository\ProductRepositoryInterface'
-            method: 'findOneBySlug'
-            position: 2
-            default_value: false
+        Sylius\Component\Mailer\Sender\SenderInterface:
+            send:
+                0:
+                    code: '[]'
+        Sylius\Component\Core\Repository\ProductRepositoryInterface:
+            findOneBySlug:
+                2:
+                    __unknown__: false
 
     Rector\Rector\Typehint\ReturnTypehintRector:
-        'Sylius\Component\Order\Model\OrderInterface':
-            'getAdjustmentsRecursively':
+        Sylius\Component\Order\Model\OrderInterface:
+            getAdjustmentsRecursively:
                 'array': 'Doctrine\Common\Collections\Collection'
 
-        'Sylius\Component\Order\Model\OrderItemInterface':
-            'getAdjustmentsRecursively':
+        Sylius\Component\Order\Model\OrderItemInterface:
+            getAdjustmentsRecursively:
                 'array': 'Doctrine\Common\Collections\Collection'
 
-        'Sylius\Component\Registry\PrioritizedServiceRegistryInterface':
-            'all':
+        Sylius\Component\Registry\PrioritizedServiceRegistryInterface:
+            all:
                 'Zend\Stdlib\PriorityQueue': 'iterable'
 
     Rector\Rector\Class_\ClassReplacerRector:
-        'DateTime': 'DateTimeInterface'
+        DateTime: 'DateTimeInterface'
         'Sylius\Bundle\CoreBundle\Context\SessionAndChannelBasedCartContext': 'Sylius\Component\Core\Storage\CartStorageInterface'
         'Sylius\Bundle\CoreBundle\EmailManager\ShipmentEmailManager': 'Sylius\Bundle\AdminBundle\EmailManager\ShipmentEmailManager'
         'Sylius\Bundle\CoreBundle\EmailManager\ShipmentEmailManagerInterface': 'Sylius\Bundle\AdminBundle\EmailManager\ShipmentEmailManagerInterface'
