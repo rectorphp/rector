@@ -4,6 +4,7 @@ namespace Rector\NodeTypeResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Broker\Broker;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverAwareInterface;
@@ -41,7 +42,7 @@ final class NodeTypeResolver
         TypeToStringResolver $typeToStringResolver,
         Broker $broker,
         ClassReflectionTypesResolver $classReflectionTypesResolver,
-        array $perNodeTypeResolvers = []
+        array $perNodeTypeResolvers
     ) {
         $this->typeToStringResolver = $typeToStringResolver;
         $this->broker = $broker;
@@ -114,6 +115,13 @@ final class NodeTypeResolver
         $nodeScope = $node->getAttribute(Attribute::SCOPE);
         $type = $nodeScope->getType($node);
 
-        return $this->typeToStringResolver->resolve($type);
+        $typesInStrings = $this->typeToStringResolver->resolve($type);
+
+        // hot fix for phpstan not resolving chain method calls
+        if ($node instanceof MethodCall && ! $typesInStrings) {
+            return $this->resolveFirstTypes($node->var);
+        }
+
+        return $typesInStrings;
     }
 }

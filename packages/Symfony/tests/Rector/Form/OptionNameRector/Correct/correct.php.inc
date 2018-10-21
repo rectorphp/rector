@@ -1,11 +1,13 @@
 <?php
 
+namespace Rector\Symfony\Tests\Form\OptionNameRector\Wrong;
+
 use Rector\Symfony\Tests\Rector\Form\OptionNameRector\Source\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
+use Rector\Symfony\Tests\Rector\Form\OptionNameRector\Source\FormBuilder;
 
 class RegistrationFormType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilder $builder, array $options)
     {
         $builder
             ->add('name', 'text', array('label' => 'form.name'))
