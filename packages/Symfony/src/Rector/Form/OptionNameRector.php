@@ -3,10 +3,10 @@
 namespace Rector\Symfony\Rector\Form;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
-use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -20,6 +20,16 @@ final class OptionNameRector extends AbstractRector
         'precision' => 'scale',
         'virtual' => 'inherit_data',
     ];
+
+    /**
+     * @var string
+     */
+    private $formBuilderType;
+
+    public function __construct(string $formBuilderType = 'Symfony\Component\Form\FormBuilderInterface')
+    {
+        $this->formBuilderType = $formBuilderType;
+    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -43,38 +53,51 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [String_::class];
+        return [MethodCall::class];
     }
 
     /**
-     * @param String_ $node
+     * @param MethodCall $node
      */
     public function refactor(Node $node): ?Node
     {
-        if (! isset($this->oldToNewOption[$node->value])) {
+        if (! $this->isName($node, 'add')) {
             return null;
         }
 
-        $arrayItemParentNode = $node->getAttribute(Attribute::PARENT_NODE);
-        if (! $arrayItemParentNode instanceof ArrayItem) {
+        if (! $this->isType($node, $this->formBuilderType)) {
             return null;
         }
 
-        $arrayParentNode = $arrayItemParentNode->getAttribute(Attribute::PARENT_NODE);
-
-        /** @var MethodCall $argParentNode */
-        $argParentNode = $arrayParentNode->getAttribute(Attribute::PARENT_NODE);
-
-        /** @var MethodCall|Node $methodCallNode */
-        $methodCallNode = $argParentNode->getAttribute(Attribute::PARENT_NODE);
-        if (! $methodCallNode instanceof MethodCall) {
+        if (! isset($node->args[2])) {
             return null;
         }
 
-        if (! $this->isName($methodCallNode, 'add')) {
+        $optionsNode = $node->args[2]->value;
+        if (! $optionsNode instanceof Array_) {
             return null;
         }
 
-        return new String_($this->oldToNewOption[$node->value]);
+        /** @var ArrayItem[] $optionsNodes */
+        foreach ($optionsNode->items as $arrayItemNode) {
+            if (! $arrayItemNode->key instanceof String_) {
+                continue;
+            }
+
+            $this->processStringKey($arrayItemNode->key);
+        }
+
+        return $node;
+    }
+
+    private function processStringKey(String_ $stringKeyNode): void
+    {
+        $currentOptionName = $stringKeyNode->value;
+
+        foreach ($this->oldToNewOption as $oldOption => $newOption) {
+            if ($currentOptionName === $oldOption) {
+                $stringKeyNode->value = $newOption;
+            }
+        }
     }
 }
