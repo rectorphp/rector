@@ -16,6 +16,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Process\Process;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\PackageBuilder\FileSystem\FinderSanitizer;
@@ -95,6 +96,8 @@ final class CreateRectorCommand extends Command
                 $testCasePath = dirname($destination);
             }
         }
+
+        $this->runStyle($this->generatedFiles);
 
         $this->printSuccess($configuration, $testCasePath);
 
@@ -185,5 +188,31 @@ CODE_SAMPLE;
             PHP_EOL,
             $testCasePath
         ));
+    }
+
+    /**
+     * @param string[] $source
+     */
+    private function runStyle(array $source): void
+    {
+        // filter only .php files
+        $source = array_filter($source, function (string $file) {
+            return Strings::endsWith($file, '.php');
+        });
+
+        $command = sprintf(
+            'vendor/bin/ecs check %s --config %s --fix',
+            implode(' ', $source),
+            __DIR__ . '/../../../../ecs-after-rector.yml'
+        );
+
+        $process = new Process($command);
+        $process->run();
+
+        if (! $process->isSuccessful()) {
+            $this->consoleStyle->error(
+                sprintf('Basic coding standard was not applied due to: "%s"', $process->getErrorOutput())
+            );
+        }
     }
 }
