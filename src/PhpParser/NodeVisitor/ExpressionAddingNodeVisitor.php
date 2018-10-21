@@ -19,7 +19,7 @@ final class ExpressionAddingNodeVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @return Node[]|Node
+     * @return Node[]|Node|null
      */
     public function leaveNode(Node $node)
     {

@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
+use Rector\NodeAnalyzer\ForeachAnalyzer;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -22,6 +23,16 @@ final class SimplifyForeachToCoalescingRector extends AbstractRector
      * @var Return_|null
      */
     private $returnNode;
+
+    /**
+     * @var ForeachAnalyzer
+     */
+    private $foreachAnalyzer;
+
+    public function __construct(ForeachAnalyzer $foreachAnalyzer)
+    {
+        $this->foreachAnalyzer = $foreachAnalyzer;
+    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -57,65 +68,27 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->shouldSkip($node)) {
+        if (! $node->keyVar) {
             return null;
         }
 
-        return $this->processForeachNode($node);
-    }
-
-    private function shouldSkip(Foreach_ $foreachNode): bool
-    {
-        if (! $foreachNode->keyVar) {
-            return true;
-        }
-
-        if (count($foreachNode->stmts) !== 1) {
-            return true;
-        }
-
-        $insideForeachStmt = $foreachNode->stmts[0];
-        if (! $insideForeachStmt instanceof If_) {
-            return true;
-        }
-
-        if (! $insideForeachStmt->cond instanceof Identical) {
-            return true;
-        }
-
-        if (count($insideForeachStmt->stmts) !== 1) {
-            return true;
-        }
-
-        return false;
-    }
-
-    private function processForeachNode(Foreach_ $node): ?Node
-    {
-        /** @var If_ $insideForeachStmt */
-        $insideForeachStmt = $node->stmts[0];
-
-        $returnOrAssignNode = $insideForeachStmt->stmts[0];
-
-        /** @var Return_|Assign|null $insideReturnOrAssignNode */
-        $insideReturnOrAssignNode = $returnOrAssignNode instanceof Expression ? $returnOrAssignNode->expr : $returnOrAssignNode;
-        if ($insideReturnOrAssignNode === null) {
+        /** @var Return_|Assign|null $returnOrAssignNode */
+        $returnOrAssignNode = $this->matchReturnOrAssignNode($node);
+        if (! $returnOrAssignNode) {
             return null;
         }
 
         // return $newValue;
         // we don't return the node value
-        if (! $this->areNodesEqual($node->valueVar, $insideReturnOrAssignNode->expr)) {
+        if (! $this->areNodesEqual($node->valueVar, $returnOrAssignNode->expr)) {
             return null;
         }
 
-        if ($insideReturnOrAssignNode instanceof Return_) {
-            return $this->processForeachNodeWithReturnInside($node, $insideReturnOrAssignNode);
+        if ($returnOrAssignNode instanceof Return_) {
+            return $this->processForeachNodeWithReturnInside($node, $returnOrAssignNode);
         }
 
-        if ($insideReturnOrAssignNode instanceof Assign) {
-            return $this->processForeachNodeWithAssignInside($node, $insideReturnOrAssignNode);
-        }
+        return $this->processForeachNodeWithAssignInside($node, $returnOrAssignNode);
     }
 
     private function processForeachNodeWithReturnInside(Foreach_ $foreachNode, Return_ $returnNode): ?Node
@@ -178,5 +151,37 @@ CODE_SAMPLE
         ), $checkedNode));
 
         return new Expression($assignNode);
+    }
+
+    /**
+     * @return Assign|Return_|null
+     */
+    private function matchReturnOrAssignNode(Foreach_ $foreachNode): ?Node
+    {
+        return $this->foreachAnalyzer->matchOnlyStmt($foreachNode, function (Node $node): ?Node {
+            if (! $node instanceof If_) {
+                return null;
+            }
+
+            if (! $node->cond instanceof Identical) {
+                return null;
+            }
+
+            if (count($node->stmts) !== 1) {
+                return null;
+            }
+
+            if ($node->stmts[0] instanceof Expression) {
+                $innerNode = $node->stmts[0]->expr;
+            } else {
+                $innerNode = $node->stmts[0];
+            }
+
+            if ($innerNode instanceof Assign || $innerNode instanceof Return_) {
+                return $innerNode;
+            }
+
+            return null;
+        });
     }
 }

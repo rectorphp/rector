@@ -153,7 +153,7 @@ final class StaticMethodNameReplacerRector extends AbstractRector
         return true;
     }
 
-    private function resolveIdentifier(Identifier $node): Identifier
+    private function resolveIdentifier(Identifier $node): ?Identifier
     {
         $oldToNewMethods = $this->matchOldToNewMethods();
 

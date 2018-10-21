@@ -27,6 +27,7 @@ final class PropertyNaming
             return $fqn;
         }
 
+        /** @var string $lastNamePart */
         $lastNamePart = Strings::after($fqn, '\\', - 1);
         if (Strings::endsWith($lastNamePart, 'Interface')) {
             return Strings::substring($lastNamePart, 0, - strlen('Interface'));

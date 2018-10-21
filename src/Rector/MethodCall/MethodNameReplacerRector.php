@@ -154,7 +154,7 @@ CODE_SAMPLE
         return true;
     }
 
-    private function resolveIdentifier(Identifier $node): Identifier
+    private function resolveIdentifier(Identifier $node): ?Identifier
     {
         $oldToNewMethods = $this->matchOldToNewMethods();
 
