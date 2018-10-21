@@ -64,7 +64,7 @@ final class RenameClassConstantsUseToStringsRector extends AbstractRector
             }
 
             foreach ($oldConstantsToNewValues as $oldConstant => $newValue) {
-                if ((string) $node->name === $oldConstant) {
+                if ($this->isName($node, $oldConstant)) {
                     return new String_($newValue);
                 }
             }
@@ -73,7 +73,7 @@ final class RenameClassConstantsUseToStringsRector extends AbstractRector
         return $node;
     }
 
-    private function getClassNameFromClassConstFetch(ClassConstFetch $classConstFetchNode): string
+    private function getClassNameFromClassConstFetch(ClassConstFetch $classConstFetchNode): ?string
     {
         /** @var FullyQualified|null $fqnName */
         $fqnName = $classConstFetchNode->class->getAttribute(Attribute::RESOLVED_NAME);

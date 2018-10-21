@@ -107,16 +107,15 @@ CODE_SAMPLE
         }
         $this->visibilityModifier->removeOriginalVisibilityFromFlags($node);
 
-        $newVisibility = $this->resolveNewVisibilityForNode($node);
+        $newVisibility = $this->resolveNewVisibilityForNode($node, $methodName);
 
         $this->visibilityModifier->addVisibilityFlag($node, $newVisibility);
 
         return $node;
     }
 
-    private function resolveNewVisibilityForNode(ClassMethod $classMethodNode): string
+    private function resolveNewVisibilityForNode(ClassMethod $classMethodNode, string $methodName): string
     {
-        $methodName = $this->getName($classMethodNode);
         $nodeParentClassName = $classMethodNode->getAttribute(Attribute::PARENT_CLASS_NAME);
 
         return $this->methodToVisibilityByClass[$nodeParentClassName][$methodName];

@@ -3,7 +3,6 @@
 namespace Rector\Builder;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -27,17 +26,17 @@ final class IdentifierRenamer
      */
     private $nameResolver;
 
-    public function __construct(NameResolver $nameResolver)
-    {
-        $this->nameResolver = $nameResolver;
-    }
-
     /**
      * @var string[]
      */
     private $nodeClassesWithIdentifier = [
         ClassConstFetch::class, MethodCall::class, PropertyFetch::class, StaticCall::class, ClassMethod::class,
     ];
+
+    public function __construct(NameResolver $nameResolver)
+    {
+        $this->nameResolver = $nameResolver;
+    }
 
     public function renameNode(Node $node, string $newMethodName): void
     {
