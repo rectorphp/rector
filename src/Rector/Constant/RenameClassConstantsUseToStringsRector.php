@@ -79,7 +79,7 @@ final class RenameClassConstantsUseToStringsRector extends AbstractRector
         $fqnName = $classConstFetchNode->class->getAttribute(Attribute::RESOLVED_NAME);
 
         if ($fqnName === null && $classConstFetchNode->class instanceof Variable) {
-            return (string) $classConstFetchNode->class->name;
+            return $this->getName($classConstFetchNode->class);
         }
 
         if ($fqnName !== null) {

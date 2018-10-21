@@ -3,6 +3,7 @@
 namespace Rector\Builder;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -10,6 +11,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Exception\NodeChanger\NodeMissingIdentifierException;
+use Rector\NodeAnalyzer\NameResolver;
 use function Safe\sprintf;
 
 /**
@@ -20,6 +22,16 @@ use function Safe\sprintf;
  */
 final class IdentifierRenamer
 {
+    /**
+     * @var NameResolver
+     */
+    private $nameResolver;
+
+    public function __construct(NameResolver $nameResolver)
+    {
+        $this->nameResolver = $nameResolver;
+    }
+
     /**
      * @var string[]
      */
@@ -42,8 +54,10 @@ final class IdentifierRenamer
     {
         $this->ensureNodeHasIdentifier($node);
 
-        /** @var ClassConstFetch|MethodCall|PropertyFetch|StaticCall|ClassMethod $node */
-        $oldNodeMethodName = $node->name->toString();
+        $oldNodeMethodName = $this->nameResolver->resolve($node);
+        if (! $oldNodeMethodName) {
+            return;
+        }
 
         $node->name = new Identifier($renameMethodMap[$oldNodeMethodName]);
     }

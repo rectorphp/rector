@@ -4,12 +4,21 @@ namespace Rector\NodeAnalyzer;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\Property;
 
 final class NameResolver
 {
     public function resolve(Node $node): ?string
     {
+        if ($node instanceof ClassConst) {
+            if (! count($node->consts)) {
+                return null;
+            }
+
+            return $this->resolve($node->consts[0]);
+        }
+
         if ($node instanceof Property) {
             if (! count($node->props)) {
                 return null;

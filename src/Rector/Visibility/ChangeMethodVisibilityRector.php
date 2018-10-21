@@ -101,7 +101,7 @@ CODE_SAMPLE
         if (! isset($this->methodToVisibilityByClass[$nodeParentClassName])) {
             return null;
         }
-        $methodName = $node->name->toString();
+        $methodName = $this->getName($node);
         if (! isset($this->methodToVisibilityByClass[$nodeParentClassName][$methodName])) {
             return null;
         }
@@ -116,7 +116,7 @@ CODE_SAMPLE
 
     private function resolveNewVisibilityForNode(ClassMethod $classMethodNode): string
     {
-        $methodName = $classMethodNode->name->toString();
+        $methodName = $this->getName($classMethodNode);
         $nodeParentClassName = $classMethodNode->getAttribute(Attribute::PARENT_CLASS_NAME);
 
         return $this->methodToVisibilityByClass[$nodeParentClassName][$methodName];

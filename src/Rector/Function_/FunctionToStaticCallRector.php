@@ -59,7 +59,7 @@ final class FunctionToStaticCallRector extends AbstractRector
             return null;
         }
 
-        $functionName = $node->name->toString();
+        $functionName = $this->getName($node);
         if (! isset($this->functionToStaticCall[$functionName])) {
             return null;
         }
