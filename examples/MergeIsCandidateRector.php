@@ -244,11 +244,11 @@ final class MergeIsCandidateRector extends AbstractRector
     private function replaceReturnFalseWithReturnNull(ClassMethod $classMethod): void
     {
         $this->callbackNodeTraverser->traverseNodesWithCallable([$classMethod], function (Node $node): ?Node {
-            if (!$node instanceof Return_ || !$node->expr instanceof ConstFetch) {
+            if (! $node instanceof Return_ || ! $node->expr instanceof ConstFetch) {
                 return null;
             }
 
-            if ((string) $node->expr->name === 'false') {
+            if ($this->isFalse($node->expr)) {
                 return new Return_(new ConstFetch(new Name('null')));
             }
 

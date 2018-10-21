@@ -15,7 +15,6 @@ use PhpParser\Node\Expr\BinaryOp\Smaller;
 use PhpParser\Node\Expr\BinaryOp\SmallerOrEqual;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\Ternary;
-use PhpParser\Node\Identifier;
 use Rector\Exception\NotImplementedException;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -76,21 +75,14 @@ final class UnnecessaryTernaryExpressionRector extends AbstractRector
             return null;
         }
 
-        /** @var Identifier $ifExpressionName */
-        $ifExpressionName = $ifExpression->name;
-
-        /** @var Identifier $elseExpressionName */
-        $elseExpressionName = $elseExpression->name;
-
-        $ifValue = $ifExpressionName->toLowerString();
-        $elseValue = $elseExpressionName->toLowerString();
-        if (in_array('null', [$ifValue, $elseValue], true)) {
+        if ($this->isNull($ifExpression) || $this->isNull($elseExpression)) {
             return null;
         }
+
         /** @var BinaryOp $binaryOperation */
         $binaryOperation = $node->cond;
 
-        if ($ifValue === 'true' && $elseValue === 'false') {
+        if ($this->isTrue($ifExpression) && $this->isFalse($elseExpression)) {
             return $binaryOperation;
         }
 
