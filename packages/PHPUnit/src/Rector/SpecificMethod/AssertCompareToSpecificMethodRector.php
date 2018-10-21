@@ -85,8 +85,10 @@ final class AssertCompareToSpecificMethodRector extends AbstractPHPUnitRector
             return null;
         }
 
-        /** @var FuncCall $secondArgumentValue */
         $secondArgumentValue = $node->args[1]->value;
+        if (! $secondArgumentValue instanceof FuncCall) {
+            return null;
+        }
 
         $resolvedFuncCallName = $this->getName($secondArgumentValue);
         if ($resolvedFuncCallName === null) {
