@@ -9,5 +9,8 @@ final class MyTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('string', gettype($something));
         $this->assertEquals('string', $something['property']());
         $this->assertNotSame($foo[1]->result, count($this->results));
+        $this->assertSame(1, $count);
+        $this->assertNotSame(2, $foo->count());
+        $this->assertEquals($count, $foo->sizeof);
     }
 }
