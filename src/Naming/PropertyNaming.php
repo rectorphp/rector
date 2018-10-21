@@ -13,7 +13,13 @@ final class PropertyNaming
 
     public function fqnToShortName(string $fqn): string
     {
+        if (! Strings::contains($fqn, '\\')) {
+            return $fqn;
+        }
+
         $nameSpaceParts = explode('\\', $fqn);
+
+        /** @var string $lastNamePart */
         $lastNamePart = end($nameSpaceParts);
 
         if (Strings::endsWith($lastNamePart, 'Interface')) {

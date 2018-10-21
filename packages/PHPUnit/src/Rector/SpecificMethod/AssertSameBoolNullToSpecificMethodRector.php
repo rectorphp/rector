@@ -14,7 +14,7 @@ use Rector\RectorDefinition\RectorDefinition;
 final class AssertSameBoolNullToSpecificMethodRector extends AbstractPHPUnitRector
 {
     /**
-     * @var string[][]|false[][]
+     * @var string[][]
      */
     private $constValueToNewMethodNames = [
         'null' => ['assertNull', 'assertNotNull'],

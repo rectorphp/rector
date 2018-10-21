@@ -18,7 +18,7 @@ use Rector\RectorDefinition\RectorDefinition;
 final class AssertComparisonToSpecificMethodRector extends AbstractPHPUnitRector
 {
     /**
-     * @var string[][]|false[][]
+     * @var string[][]
      */
     private $defaultOldToNewMethods = [
         '===' => ['assertSame', 'assertNotSame'],
