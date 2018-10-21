@@ -6,7 +6,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\LNumber;
 use Rector\Builder\IdentifierRenamer;
 use Rector\Rector\AbstractPHPUnitRector;
@@ -102,10 +101,7 @@ final class AssertRegExpRector extends AbstractPHPUnitRector
         }
 
         if ($node instanceof ConstFetch) {
-            /** @var Identifier $constFetchName */
-            $constFetchName = $node->name;
-
-            return $constFetchName->toLowerString() === 'true' ? 1 : 0;
+            return $this->isTrue($node) ? 1 : 0;
         }
     }
 

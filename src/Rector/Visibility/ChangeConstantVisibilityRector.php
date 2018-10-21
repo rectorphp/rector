@@ -89,11 +89,13 @@ CODE_SAMPLE
         if (! $node->hasAttribute(Attribute::PARENT_CLASS_NAME)) {
             return null;
         }
+
         $nodeParentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
         if (! isset($this->constantToVisibilityByClass[$nodeParentClassName])) {
             return null;
         }
-        $constantName = $node->consts[0]->name->toString();
+
+        $constantName = $this->getName($node);
         if (! isset($this->constantToVisibilityByClass[$nodeParentClassName][$constantName])) {
             return null;
         }
@@ -108,7 +110,7 @@ CODE_SAMPLE
     private function resolveNewVisibilityForNode(ClassConst $classConstantNode): string
     {
         $nodeParentClassName = $classConstantNode->getAttribute(Attribute::PARENT_CLASS_NAME);
-        $constantName = $classConstantNode->consts[0]->name->toString();
+        $constantName = $this->getName($classConstantNode);
 
         return $this->constantToVisibilityByClass[$nodeParentClassName][$constantName];
     }

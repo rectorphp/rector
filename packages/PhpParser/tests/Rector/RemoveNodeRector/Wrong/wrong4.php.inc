@@ -2,15 +2,10 @@
 
 namespace Rector\PhpParser\Tests\Rector\RemoveNodeRector\Wrong;
 
-class MyAbstractVisitor extends \PhpParser\NodeVisitorAbstract
-{
-
-}
-
-class Visitor3 extends MyAbstractVisitor
+class Visitor4 extends \PhpParser\NodeVisitorAbstract
 {
     public function leaveNode(\PhpParser\Node $node)
     {
-        return false;
+        return FALSE;
     }
 }

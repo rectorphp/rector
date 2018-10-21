@@ -4,8 +4,8 @@ namespace Rector\Doctrine\Rector;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Scalar\String_;
 use Rector\Node\NodeFactory;
-use Rector\NodeAnalyzer\MethodArgumentAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -24,21 +24,12 @@ final class AliasToClassRector extends AbstractRector
     private $nodeFactory;
 
     /**
-     * @var MethodArgumentAnalyzer
-     */
-    private $methodArgumentAnalyzer;
-
-    /**
      * @param string[] $aliasesToNamespaces
      */
-    public function __construct(
-        array $aliasesToNamespaces,
-        MethodArgumentAnalyzer $methodArgumentAnalyzer,
-        NodeFactory $nodeFactory
-    ) {
+    public function __construct(array $aliasesToNamespaces, NodeFactory $nodeFactory)
+    {
         $this->aliasesToNamespaces = $aliasesToNamespaces;
         $this->nodeFactory = $nodeFactory;
-        $this->methodArgumentAnalyzer = $methodArgumentAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -75,11 +66,17 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->methodArgumentAnalyzer->isMethodNthArgumentString($node, 1)) {
+        if (! isset($node->args[0])) {
             return null;
         }
 
-        if (! $this->isAliasWithConfiguredEntity($node->args[0]->value->value)) {
+        if (! $node->args[0]->value instanceof String_) {
+            return null;
+        }
+
+        /** @var String_ $stringNode */
+        $stringNode = $node->args[0]->value;
+        if (! $this->isAliasWithConfiguredEntity($stringNode->value)) {
             return null;
         }
 

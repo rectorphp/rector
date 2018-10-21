@@ -95,11 +95,13 @@ CODE_SAMPLE
             return null;
         }
 
-        $methodName = $node->name->toString();
+        $methodName = $this->getName($node);
+
         $entityClassReflection = $this->broker->getClass($this->entityRepositoryClass);
         if (! $entityClassReflection->hasMethod($methodName)) {
             return null;
         }
+
         $methodReflection = $entityClassReflection->getMethod($methodName, $node->getAttribute(Attribute::SCOPE));
         if (! $methodReflection->isPublic()) {
             return null;

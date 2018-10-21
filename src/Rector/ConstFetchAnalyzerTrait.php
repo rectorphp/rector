@@ -38,4 +38,9 @@ trait ConstFetchAnalyzerTrait
     {
         return $this->constFetchAnalyzer->isBool($node);
     }
+
+    public function isNull(Node $node): bool
+    {
+        return $this->constFetchAnalyzer->isNull($node);
+    }
 }

@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Exception\NodeChanger\NodeMissingIdentifierException;
+use Rector\NodeAnalyzer\NameResolver;
 use function Safe\sprintf;
 
 /**
@@ -21,11 +22,21 @@ use function Safe\sprintf;
 final class IdentifierRenamer
 {
     /**
+     * @var NameResolver
+     */
+    private $nameResolver;
+
+    /**
      * @var string[]
      */
     private $nodeClassesWithIdentifier = [
         ClassConstFetch::class, MethodCall::class, PropertyFetch::class, StaticCall::class, ClassMethod::class,
     ];
+
+    public function __construct(NameResolver $nameResolver)
+    {
+        $this->nameResolver = $nameResolver;
+    }
 
     public function renameNode(Node $node, string $newMethodName): void
     {
@@ -42,8 +53,10 @@ final class IdentifierRenamer
     {
         $this->ensureNodeHasIdentifier($node);
 
-        /** @var ClassConstFetch|MethodCall|PropertyFetch|StaticCall|ClassMethod $node */
-        $oldNodeMethodName = $node->name->toString();
+        $oldNodeMethodName = $this->nameResolver->resolve($node);
+        if (! $oldNodeMethodName) {
+            return;
+        }
 
         $node->name = new Identifier($renameMethodMap[$oldNodeMethodName]);
     }

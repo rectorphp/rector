@@ -5,7 +5,6 @@ namespace Rector\Sylius\Rector\Review;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Builder\IdentifierRenamer;
-use Rector\NodeAnalyzer\MethodArgumentAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -13,20 +12,12 @@ use Rector\RectorDefinition\RectorDefinition;
 final class ReplaceCreateMethodWithoutReviewerRector extends AbstractRector
 {
     /**
-     * @var MethodArgumentAnalyzer
-     */
-    private $methodArgumentAnalyzer;
-
-    /**
      * @var IdentifierRenamer
      */
     private $identifierRenamer;
 
-    public function __construct(
-        MethodArgumentAnalyzer $methodArgumentAnalyzer,
-        IdentifierRenamer $identifierRenamer
-    ) {
-        $this->methodArgumentAnalyzer = $methodArgumentAnalyzer;
+    public function __construct(IdentifierRenamer $identifierRenamer)
+    {
         $this->identifierRenamer = $identifierRenamer;
     }
 
@@ -60,15 +51,13 @@ final class ReplaceCreateMethodWithoutReviewerRector extends AbstractRector
             return null;
         }
 
-        if ($this->methodArgumentAnalyzer->hasMethodNthArgument($node, 2)
-            && ! $this->methodArgumentAnalyzer->isMethodNthArgumentNull($node, 2)
-        ) {
+        if (isset($node->args[1]) && ! $this->isNull($node->args[1]->value)) {
             return null;
         }
 
         $this->identifierRenamer->renameNode($node, 'createForSubject');
 
-        if ($this->methodArgumentAnalyzer->hasMethodNthArgument($node, 2)) {
+        if (isset($node->args[1])) {
             $node->args = [array_shift($node->args)];
         }
 

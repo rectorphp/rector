@@ -32,7 +32,7 @@ final class InArrayAndArrayKeysToArrayKeyExistsRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isInArrayFunction($node)) {
+        if (! $this->isName($node, 'in_array')) {
             return null;
         }
 
@@ -41,33 +41,20 @@ final class InArrayAndArrayKeysToArrayKeyExistsRector extends AbstractRector
             return null;
         }
 
-        /** @var Name $functionName */
-        $functionName = $secondArgument->name;
-        if ($functionName->toString() !== 'array_keys') {
+        if (! $this->isName($secondArgument, 'array_keys')) {
             return null;
         }
+
         if (count($secondArgument->args) > 1) {
             return null;
         }
 
         [$key, $array] = $node->args;
-
         $array = $array->value->args[0];
 
+        $node->name = new Name('array_key_exists');
         $node->args = [$key, $array];
 
-        $node->name = new Name('array_key_exists');
-
         return $node;
-    }
-
-    private function isInArrayFunction(FuncCall $funcCallNode): bool
-    {
-        $funcCallName = $funcCallNode->name;
-        if (! $funcCallName instanceof Name) {
-            return false;
-        }
-
-        return $funcCallName->toString() === 'in_array';
     }
 }

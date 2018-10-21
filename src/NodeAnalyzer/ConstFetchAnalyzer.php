@@ -11,26 +11,31 @@ use PhpParser\Node\Expr\ConstFetch;
  */
 final class ConstFetchAnalyzer
 {
+    public function isBool(Node $node): bool
+    {
+        return $this->isTrue($node) || $this->isFalse($node);
+    }
+
     public function isFalse(Node $node): bool
     {
-        if (! $node instanceof ConstFetch) {
-            return false;
-        }
-
-        return $node->name->toLowerString() === 'false';
+        return $this->isConstantWithLowercasedName($node, 'false');
     }
 
     public function isTrue(Node $node): bool
     {
+        return $this->isConstantWithLowercasedName($node, 'true');
+    }
+
+    public function isNull(Node $node): bool
+    {
+        return $this->isConstantWithLowercasedName($node, 'null');
+    }
+
+    private function isConstantWithLowercasedName(Node $node, string $name): bool
+    {
         if (! $node instanceof ConstFetch) {
             return false;
         }
-
-        return $node->name->toLowerString() === 'true';
-    }
-
-    public function isBool(Node $node): bool
-    {
-        return $this->isTrue($node) || $this->isFalse($node);
+        return $node->name->toLowerString() === $name;
     }
 }

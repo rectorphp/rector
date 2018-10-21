@@ -69,8 +69,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $value = $node->expr->name->toString();
-        if ($value !== 'false') {
+        if (! $this->isFalse($node->expr)) {
             return null;
         }
 

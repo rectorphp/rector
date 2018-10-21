@@ -101,22 +101,21 @@ CODE_SAMPLE
         if (! isset($this->methodToVisibilityByClass[$nodeParentClassName])) {
             return null;
         }
-        $methodName = $node->name->toString();
+        $methodName = $this->getName($node);
         if (! isset($this->methodToVisibilityByClass[$nodeParentClassName][$methodName])) {
             return null;
         }
         $this->visibilityModifier->removeOriginalVisibilityFromFlags($node);
 
-        $newVisibility = $this->resolveNewVisibilityForNode($node);
+        $newVisibility = $this->resolveNewVisibilityForNode($node, $methodName);
 
         $this->visibilityModifier->addVisibilityFlag($node, $newVisibility);
 
         return $node;
     }
 
-    private function resolveNewVisibilityForNode(ClassMethod $classMethodNode): string
+    private function resolveNewVisibilityForNode(ClassMethod $classMethodNode, string $methodName): string
     {
-        $methodName = $classMethodNode->name->toString();
         $nodeParentClassName = $classMethodNode->getAttribute(Attribute::PARENT_CLASS_NAME);
 
         return $this->methodToVisibilityByClass[$nodeParentClassName][$methodName];
