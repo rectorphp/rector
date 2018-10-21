@@ -68,13 +68,13 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         if (! $node->cond instanceof Assign) {
-            return $node;
+            return null;
         }
 
         /** @var Assign $assignNode */
         $assignNode = $node->cond;
         if (! $this->isListToEachAssign($assignNode)) {
-            return $node;
+            return null;
         }
 
         /** @var FuncCall $eachFuncCall */

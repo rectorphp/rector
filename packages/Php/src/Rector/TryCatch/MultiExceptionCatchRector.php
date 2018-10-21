@@ -56,7 +56,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         if (count($node->catches) < 2) {
-            return $node;
+            return null;
         }
 
         $catchKeysByContent = $this->collectCatchKeysByContent($node);

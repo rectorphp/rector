@@ -41,11 +41,11 @@ final class ListSplitStringRector extends AbstractRector
     public function refactor(Node $node): ?Node
     {
         if (! $node->var instanceof List_) {
-            return $node;
+            return null;
         }
 
         if (! $this->isStringType($node->expr)) {
-            return $node;
+            return null;
         }
 
         $node->expr = new FuncCall(new Name('str_split'), [new Arg($node->expr)]);

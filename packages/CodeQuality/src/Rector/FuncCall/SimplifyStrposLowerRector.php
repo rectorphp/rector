@@ -33,21 +33,21 @@ final class SimplifyStrposLowerRector extends AbstractRector
     public function refactor(Node $node): ?Node
     {
         if (! $this->isName($node, 'strpos')) {
-            return $node;
+            return null;
         }
 
         if (! isset($node->args[0])) {
-            return $node;
+            return null;
         }
 
         if (! $node->args[0]->value instanceof FuncCall) {
-            return $node;
+            return null;
         }
 
         /** @var FuncCall $innerFuncCall */
         $innerFuncCall = $node->args[0]->value;
         if (! $this->isName($innerFuncCall, 'strtolower')) {
-            return $node;
+            return null;
         }
 
         // pop 1 level up

@@ -53,7 +53,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         if ($this->shouldSkip($node)) {
-            return $node;
+            return null;
         }
 
         /** @var List_ $listNode */

@@ -56,19 +56,16 @@ final class FunctionToStaticCallRector extends AbstractRector
     {
         // anonymous function
         if (! $node->name instanceof Name) {
-            return $node;
+            return null;
         }
 
         $functionName = $node->name->toString();
         if (! isset($this->functionToStaticCall[$functionName])) {
-            return $node;
+            return null;
         }
 
         [$className, $methodName] = $this->functionToStaticCall[$functionName];
 
-        $staticCallNode = new StaticCall(new FullyQualified($className), $methodName);
-        $staticCallNode->args = $node->args;
-
-        return $staticCallNode;
+        return new StaticCall(new FullyQualified($className), $methodName, $node->args);
     }
 }

@@ -73,7 +73,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         if ($node->stmts === null) {
-            return $node;
+            return null;
         }
 
         foreach ($node->stmts as $key => $stmt) {

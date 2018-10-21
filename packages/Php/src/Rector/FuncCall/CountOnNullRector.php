@@ -53,23 +53,23 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         if (! $this->isName($node, 'count')) {
-            return $node;
+            return null;
         }
 
         // check if it has some condition before already, if so, probably it's already handled
         $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
         if ($parentNode instanceof Ternary) {
-            return $node;
+            return null;
         }
 
         if (! isset($node->args[0])) {
-            return $node;
+            return null;
         }
 
         $countedNode = $node->args[0]->value;
 
         if ($this->isCountableType($countedNode)) {
-            return $node;
+            return null;
         }
 
         $conditionNode = new BooleanOr(

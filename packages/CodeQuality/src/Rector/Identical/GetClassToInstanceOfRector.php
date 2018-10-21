@@ -56,7 +56,7 @@ final class GetClassToInstanceOfRector extends AbstractRector
 
             $className = $this->matchClassName($node->right);
         } else {
-            return $node;
+            return null;
         }
 
         $instanceOfNode = new Instanceof_($varNode, new FullyQualified($className));

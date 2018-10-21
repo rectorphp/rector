@@ -159,7 +159,7 @@ final class StaticMethodNameReplacerRector extends AbstractRector
 
         $methodName = $node->name;
         if (! isset($oldToNewMethods[$methodName])) {
-            return $node;
+            return null;
         }
 
         $node->name = $oldToNewMethods[$methodName];
@@ -210,7 +210,7 @@ final class StaticMethodNameReplacerRector extends AbstractRector
 
         $methodName = $identifierNode->toString();
         if (! isset($oldToNewMethods[$methodName])) {
-            return $node;
+            return null;
         }
 
         if ($this->isClassRename($oldToNewMethods)) {

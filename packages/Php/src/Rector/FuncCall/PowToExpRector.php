@@ -33,11 +33,11 @@ final class PowToExpRector extends AbstractRector
     public function refactor(Node $node): ?Node
     {
         if (! $this->isName($node, 'pow')) {
-            return $node;
+            return null;
         }
 
         if (count($node->args) !== 2) {
-            return $node;
+            return null;
         }
 
         $firstArgument = $node->args[0]->value;

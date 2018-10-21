@@ -87,15 +87,15 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         if (! $node->expr instanceof Variable) {
-            return $node;
+            return null;
         }
 
-        if ($node->expr->name !== 'this') {
-            return $node;
+        if (! $this->isName($node->expr, 'this')) {
+            return null;
         }
 
         if (! $this->isTypes($node->expr, $this->classesToDefluent)) {
-            return $node;
+            return null;
         }
 
         $this->removeNode($node);

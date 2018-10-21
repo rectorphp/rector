@@ -39,21 +39,21 @@ final class SimplifyIdenticalFalseToBooleanNotRector extends AbstractRector
             $comparedNode = $node->right;
             $shouldUnwrap = $node->right instanceof BooleanNot;
         } else {
-            return $node;
+            return null;
         }
 
         if ($shouldUnwrap) {
             /** @var BooleanNot $comparedNode */
             $comparedNode = $comparedNode->expr;
             if ($this->shouldSkip($comparedNode)) {
-                return $node;
+                return null;
             }
 
             return $comparedNode;
         }
 
         if ($this->shouldSkip($comparedNode)) {
-            return $node;
+            return null;
         }
 
         return new BooleanNot($comparedNode);

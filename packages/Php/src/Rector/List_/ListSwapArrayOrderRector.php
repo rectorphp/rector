@@ -41,7 +41,7 @@ final class ListSwapArrayOrderRector extends AbstractRector
     public function refactor(Node $node): ?Node
     {
         if (! $node->var instanceof List_) {
-            return $node;
+            return null;
         }
 
         $printerVars = [];
@@ -51,13 +51,13 @@ final class ListSwapArrayOrderRector extends AbstractRector
             if ($item->value instanceof ArrayDimFetch) {
                 $printerVars[] = $this->print($item->value->var);
             } else {
-                return $node;
+                return null;
             }
         }
 
         // relevant only in 1 variable type
         if (count(array_unique($printerVars)) !== 1) {
-            return $node;
+            return null;
         }
 
         // wrap with array_reverse, to reflect reverse assign order in left

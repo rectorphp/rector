@@ -24,7 +24,7 @@ final class ExpressionAddingNodeVisitor extends NodeVisitorAbstract
     public function leaveNode(Node $node)
     {
         if (! isset($this->expressionsToAdd[$node])) {
-            return $node;
+            return null;
         }
 
         $nodes = array_merge([$node], $this->expressionsToAdd[$node]);

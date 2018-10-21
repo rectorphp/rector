@@ -70,7 +70,7 @@ CODE_SAMPLE
     {
         // process only existing statements
         if ($node->stmts === null) {
-            return $node;
+            return null;
         }
 
         $classMethodStatementCount = count($node->stmts);

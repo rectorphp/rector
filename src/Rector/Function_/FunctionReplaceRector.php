@@ -55,12 +55,12 @@ final class FunctionReplaceRector extends AbstractRector
     {
         // anonymous function
         if (! $node->name instanceof Name) {
-            return $node;
+            return null;
         }
 
         $functionName = $node->name->toString();
         if (! isset($this->oldFunctionToNewFunction[$functionName])) {
-            return $node;
+            return null;
         }
 
         $newFunctionName = $this->oldFunctionToNewFunction[$functionName];

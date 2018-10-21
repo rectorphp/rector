@@ -57,11 +57,11 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         if (! $this->isInTestClass($node)) {
-            return $node;
+            return null;
         }
 
         if (! $node->stmts) {
-            return $node;
+            return null;
         }
 
         $proccesed = [];

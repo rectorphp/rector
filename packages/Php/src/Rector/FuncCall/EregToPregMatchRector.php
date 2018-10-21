@@ -74,7 +74,7 @@ final class EregToPregMatchRector extends AbstractRector
         $functionName = $this->getName($node);
 
         if (! isset($this->oldNamesToNewOnes[$functionName])) {
-            return $node;
+            return null;
         }
 
         $patternNode = $node->args[0]->value;

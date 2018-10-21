@@ -40,7 +40,7 @@ final class ConstructorInjectionNodeVisitor extends NodeVisitorAbstract
     public function enterNode(Node $node): ?Node
     {
         if (! $node instanceof Class_ || $node->isAnonymous()) {
-            return $node;
+            return null;
         }
 
         return $this->processClassNode($node);

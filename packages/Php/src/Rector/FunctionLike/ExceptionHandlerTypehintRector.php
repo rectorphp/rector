@@ -51,18 +51,18 @@ CODE_SAMPLE
     {
         // exception handle has 1 param exactly
         if (count($node->params) !== 1) {
-            return $node;
+            return null;
         }
 
         $paramNode = $node->params[0];
         // handle only Exception typehint
         if ((string) $paramNode->type !== 'Exception') {
-            return $node;
+            return null;
         }
 
         // is probably handling exceptions
         if (! Strings::match((string) $node->name, '#handle#i')) {
-            return $node;
+            return null;
         }
 
         $paramNode->type = new FullyQualified('Throwable');

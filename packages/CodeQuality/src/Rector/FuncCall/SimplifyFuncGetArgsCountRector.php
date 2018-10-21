@@ -33,11 +33,11 @@ final class SimplifyFuncGetArgsCountRector extends AbstractRector
     public function refactor(Node $node): ?Node
     {
         if (! $this->isName($node, 'count')) {
-            return $node;
+            return null;
         }
 
         if (! $node->args[0]->value instanceof FuncCall) {
-            return $node;
+            return null;
         }
 
         /** @var FuncCall $innerFuncCall */

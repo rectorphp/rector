@@ -11,7 +11,12 @@ final class AfterRectorCodingStyle
     /**
      * @var string
      */
-    private const ECS_BIN_PATH = __DIR__ . '/../../ecs-after-rector.yml';
+    private const ECS_BIN_PATH = 'vendor/bin/ecs';
+
+    /**
+     * @var string
+     */
+    private const ECS_AFTER_RECTOR_CONFIG = __DIR__ . '/../../ecs-after-rector.yml';
 
     /**
      * @param string[] $source
@@ -20,7 +25,12 @@ final class AfterRectorCodingStyle
     {
         $this->validate();
 
-        $command = sprintf('vendor/bin/ecs check %s --config %s --fix', implode(' ', $source), self::ECS_BIN_PATH);
+        $command = sprintf(
+            '%s check %s --config %s --fix',
+            self::ECS_BIN_PATH,
+            implode(' ', $source),
+            self::ECS_AFTER_RECTOR_CONFIG
+        );
 
         $process = new Process($command);
         $process->run();
