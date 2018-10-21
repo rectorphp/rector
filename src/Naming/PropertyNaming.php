@@ -11,17 +11,13 @@ final class PropertyNaming
         return lcfirst($this->fqnToShortName($fqn));
     }
 
-    public function fqnToShortName(string $fqn): string
+    private function fqnToShortName(string $fqn): string
     {
         if (! Strings::contains($fqn, '\\')) {
             return $fqn;
         }
 
-        $nameSpaceParts = explode('\\', $fqn);
-
-        /** @var string $lastNamePart */
-        $lastNamePart = end($nameSpaceParts);
-
+        $lastNamePart = Strings::after($fqn, '\\', - 1);
         if (Strings::endsWith($lastNamePart, 'Interface')) {
             return Strings::substring($lastNamePart, 0, - strlen('Interface'));
         }
