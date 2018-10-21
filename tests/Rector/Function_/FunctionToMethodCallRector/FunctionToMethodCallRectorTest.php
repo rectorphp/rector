@@ -5,6 +5,9 @@ namespace Rector\Tests\Rector\Function_\FunctionToMethodCallRector;
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
+/**
+ * @see \Rector\Rector\Function_\FunctionToMethodCallRector
+ */
 final class FunctionToMethodCallRectorTest extends AbstractRectorTestCase
 {
     /**

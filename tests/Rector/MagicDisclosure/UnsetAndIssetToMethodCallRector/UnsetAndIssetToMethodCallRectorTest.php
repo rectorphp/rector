@@ -5,6 +5,9 @@ namespace Rector\Tests\Rector\MagicDisclosure\UnsetAndIssetToMethodCallRector;
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
+/**
+ * @covers \Rector\Rector\MagicDisclosure\UnsetAndIssetToMethodCallRector
+ */
 final class UnsetAndIssetToMethodCallRectorTest extends AbstractRectorTestCase
 {
     /**
