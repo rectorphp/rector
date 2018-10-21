@@ -22,6 +22,7 @@ use Symplify\PackageBuilder\FileSystem\FinderSanitizer;
 use function Safe\getcwd;
 use function Safe\sort;
 use function Safe\sprintf;
+use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
 final class CreateRectorCommand extends Command
 {
@@ -74,13 +75,9 @@ final class CreateRectorCommand extends Command
         $configuration = $this->configurationFactory->createFromConfigFile(getcwd() . '/create-rector.yml');
         $data = $this->prepareData($configuration);
 
-        $finder = Finder::create()->files()
-            ->in(self::TEMPLATES_DIRECTORY);
-        $smartFileInfos = $this->finderSanitizer->sanitize($finder);
-
         $testCasePath = null;
         $generatedFiles = [];
-        foreach ($smartFileInfos as $smartFileInfo) {
+        foreach ($this->findTemplateFileInfos() as $smartFileInfo) {
             $destination = $smartFileInfo->getRelativeFilePathFromDirectory(self::TEMPLATES_DIRECTORY);
             $destination = $this->applyData($destination, $data);
 
@@ -171,5 +168,16 @@ final class CreateRectorCommand extends Command
 CODE_SAMPLE;
 
         return sprintf($sourceDocBlock, $source);
+    }
+
+    /**
+     * @return SmartFileInfo[]
+     */
+    private function findTemplateFileInfos(): array
+    {
+        $finder = Finder::create()->files()
+            ->in(self::TEMPLATES_DIRECTORY);
+
+        return $this->finderSanitizer->sanitize($finder);
     }
 }

@@ -6,3 +6,4 @@ node_types:
 description: 'Removes unneeded $a = $a assigns'
 code_before: "$a = $a;"
 code_after: ""
+source: "" # e.g. link to RFC or headline in upgrade guide
