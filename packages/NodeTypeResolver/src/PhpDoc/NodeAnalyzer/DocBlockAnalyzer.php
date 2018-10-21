@@ -10,7 +10,6 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Exception\MissingTagException;
-use Rector\PhpParser\CurrentNodeProvider;
 use Symplify\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Symplify\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Symplify\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
@@ -29,11 +28,6 @@ final class DocBlockAnalyzer
     private $phpDocInfoPrinter;
 
     /**
-     * @var CurrentNodeProvider
-     */
-    private $currentNodeProvider;
-
-    /**
      * @var PhpDocInfoFqnTypeDecorator
      */
     private $phpDocInfoFqnTypeDecorator;
@@ -46,13 +40,11 @@ final class DocBlockAnalyzer
     public function __construct(
         PhpDocInfoFactory $phpDocInfoFactory,
         PhpDocInfoPrinter $phpDocInfoPrinter,
-        CurrentNodeProvider $currentNodeProvider,
         PhpDocInfoFqnTypeDecorator $phpDocInfoFqnTypeDecorator,
         FqnAnnotationTypeDecorator $fqnAnnotationTypeDecorator
     ) {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->phpDocInfoPrinter = $phpDocInfoPrinter;
-        $this->currentNodeProvider = $currentNodeProvider;
         $this->phpDocInfoFqnTypeDecorator = $phpDocInfoFqnTypeDecorator;
         $this->fqnAnnotationTypeDecorator = $fqnAnnotationTypeDecorator;
     }
@@ -222,7 +214,6 @@ final class DocBlockAnalyzer
 
     private function createPhpDocInfoFromNode(Node $node): PhpDocInfo
     {
-        $this->currentNodeProvider->setCurrentNode($node);
         if ($node->getDocComment() === null) {
             throw new ShouldNotHappenException(sprintf(
                 'Node must have a comment. Check `$node->getDocComment() !== null` before passing it to %s',
@@ -237,7 +228,7 @@ final class DocBlockAnalyzer
     {
         $phpDocInfo = $this->createPhpDocInfoFromNode($node);
 
-        $this->phpDocInfoFqnTypeDecorator->decorate($phpDocInfo);
+        $this->phpDocInfoFqnTypeDecorator->decorate($phpDocInfo, $node);
 
         return $phpDocInfo;
     }

@@ -2,9 +2,9 @@
 
 namespace Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer;
 
-use PHPStan\PhpDocParser\Ast\Node;
+use PhpParser\Node;
+use PHPStan\PhpDocParser\Ast\Node as PhpDocNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use Rector\PhpParser\CurrentNodeProvider;
 use Symplify\BetterPhpDocParser\Ast\NodeTraverser;
 use Symplify\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 
@@ -16,58 +16,52 @@ final class PhpDocInfoFqnTypeDecorator
     private $namespaceAnalyzer;
 
     /**
-     * @var CurrentNodeProvider
-     */
-    private $currentNodeProvider;
-
-    /**
      * @var NodeTraverser
      */
     private $nodeTraverser;
 
-    public function __construct(
-        NamespaceAnalyzer $namespaceAnalyzer,
-        CurrentNodeProvider $currentNodeProvider,
-        NodeTraverser $nodeTraverser
-    ) {
+    /**
+     * @var Node
+     */
+    private $currentNode;
+
+    public function __construct(NamespaceAnalyzer $namespaceAnalyzer, NodeTraverser $nodeTraverser)
+    {
         $this->namespaceAnalyzer = $namespaceAnalyzer;
-        $this->currentNodeProvider = $currentNodeProvider;
         $this->nodeTraverser = $nodeTraverser;
     }
 
-    public function decorate(PhpDocInfo $phpDocInfo): void
+    public function decorate(PhpDocInfo $phpDocInfo, Node $node): void
     {
-        $this->nodeTraverser->traverseWithCallable($phpDocInfo->getPhpDocNode(), function (Node $node) {
-            return $this->traverseNode($node);
+        $this->currentNode = $node;
+
+        $this->nodeTraverser->traverseWithCallable($phpDocInfo->getPhpDocNode(), function (PhpDocNode $phpDocNode) {
+            return $this->traverseNode($phpDocNode);
         });
     }
 
-    private function traverseNode(Node $node): Node
+    private function traverseNode(PhpDocNode $phpDocNode): PhpDocNode
     {
-        if ($this->shouldSkip($node)) {
-            return $node;
+        if ($this->shouldSkip($phpDocNode)) {
+            return $phpDocNode;
         }
 
-        if ($this->currentNodeProvider->getCurrentNode() === null) {
-            return $node;
-        }
-
-        /** @var IdentifierTypeNode $node */
-        $node->name = $this->namespaceAnalyzer->resolveTypeToFullyQualified(
-            $node->name,
-            $this->currentNodeProvider->getCurrentNode()
+        /** @var IdentifierTypeNode $phpDocNode */
+        $phpDocNode->name = $this->namespaceAnalyzer->resolveTypeToFullyQualified(
+            $phpDocNode->name,
+            $this->currentNode
         );
 
-        return $node;
+        return $phpDocNode;
     }
 
-    private function shouldSkip(Node $node): bool
+    private function shouldSkip(PhpDocNode $phpDocNode): bool
     {
-        if (! $node instanceof IdentifierTypeNode) {
+        if (! $phpDocNode instanceof IdentifierTypeNode) {
             return true;
         }
 
-        if (! $this->isClassyType($node->name)) {
+        if (! $this->isClassyType($phpDocNode->name)) {
             return true;
         }
 
