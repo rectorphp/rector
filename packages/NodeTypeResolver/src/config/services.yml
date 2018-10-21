@@ -13,8 +13,6 @@ services:
         resource: '../'
         exclude: '../{Contract}'
 
-    Rector\PhpParser\CurrentNodeProvider: ~
-
     Rector\Php\TypeAnalyzer: ~
     Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer: ~
     Rector\Printer\BetterStandardPrinter: ~
