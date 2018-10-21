@@ -52,6 +52,7 @@ parameters:
         - '#Call to function in_array\(\) with arguments string, array<array<string\|false>> and true will always evaluate to false#'
 
         # known values
+        - '#Method Rector\\ContributorTools\\Configuration\\ConfigurationFactory::resolveCategoryFromFqnNodeTypes\(\) should return string but returns string\|false#'
         - '#Array \(array<PhpParser\\Node\\Expr\\MethodCall>\) does not accept PhpParser\\Node\\Expr#'
         - '#Cannot access property \$expr on PhpParser\\Node\\Stmt\|null#'
         - '#Access to an undefined property PhpParser\\Node\\Expr\\MethodCall\|PhpParser\\Node\\Stmt\\ClassMethod::\$params#'
@@ -64,8 +65,11 @@ parameters:
         - '#Access to an undefined property PhpParser\\Node\\Expr\\Error\|PhpParser\\Node\\Expr\\Variable::\$name#'
 
         # false positive, has annotation type above
+        - '#Parameter \#1 \$node of method Rector\\PHPUnit\\Rector\\Foreach_\\SimplifyForeachInstanceOfRector\:\:resolveVar\(\) expects PhpParser\\Node\\Expr\\MethodCall\|PhpParser\\Node\\Expr\\StaticCall, PhpParser\\Node given#'
         - '#Access to an undefined property PhpParser\\Node::\$name#' # 11
         - '#Access to an undefined property PhpParser\\Node\\Expr::\$expr#'
+        - '#Method Rector\\CodeQuality\\Rector\\Foreach_\\SimplifyForeachToCoalescingRector\:\:matchReturnOrAssignNode\(\) should return PhpParser\\Node\\Expr\\Assign\|PhpParser\\Node\\Stmt\\Return_\|null but returns PhpParser\\Node\|null#'
+
         # false positive
         - '#Call to function in_array\(\) with arguments string, array\(\) and true will always evaluate to false#'
 

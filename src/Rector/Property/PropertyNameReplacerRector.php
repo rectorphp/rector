@@ -85,7 +85,7 @@ final class PropertyNameReplacerRector extends AbstractRector
         $propertyName = $identifierNode->toString();
 
         if (! isset($oldToNewProperties[$propertyName])) {
-            return $node;
+            return null;
         }
 
         foreach ($oldToNewProperties as $oldProperty => $newProperty) {

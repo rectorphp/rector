@@ -52,7 +52,7 @@ final class ClassAndMethodNodeVisitor extends NodeVisitorAbstract
     public function enterNode(Node $node)
     {
         if ($node instanceof Class_ && $node->isAnonymous()) {
-            return $node;
+            return null;
         }
 
         $this->processClass($node);

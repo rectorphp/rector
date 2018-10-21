@@ -18,10 +18,13 @@ final class ConfigurationFactory
         $config = (array) Yaml::parseFile($configFile);
         $this->ensureConfigIsValid($config, $configFile);
 
+        $fqnNodeTypes = $this->resolveFullyQualifiedNodeTypes($config['node_types']);
+        $category = $this->resolveCategoryFromFqnNodeTypes($fqnNodeTypes);
+
         return new Configuration(
             $config['package'],
             $config['name'],
-            $config['node_types'][0],
+            $category,
             $this->resolveFullyQualifiedNodeTypes($config['node_types']),
             $config['description'],
             $config['code_before'],
@@ -81,10 +84,23 @@ final class ConfigurationFactory
             foreach ($nodeClasses as $nodeClass) {
                 if (Strings::endsWith($nodeClass, '\\' . $nodeType)) {
                     $fqnNodeTypes[] = $nodeClass;
+                // in case of forgotten _
+                } elseif (Strings::endsWith($nodeClass, '\\' . $nodeType . '_')) {
+                    $fqnNodeTypes[] = $nodeClass;
                 }
             }
         }
 
         return array_unique($fqnNodeTypes);
+    }
+
+    /**
+     * @param string[] $fqnNodeTypes
+     */
+    private function resolveCategoryFromFqnNodeTypes(array $fqnNodeTypes): string
+    {
+        $fqnNodeType = $fqnNodeTypes[0];
+
+        return Strings::after($fqnNodeType, '\\', -1);
     }
 }

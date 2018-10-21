@@ -45,11 +45,11 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         if (! $this->isName($node, 'define')) {
-            return $node;
+            return null;
         }
 
         if (! isset($node->args[2])) {
-            return $node;
+            return null;
         }
 
         unset($node->args[2]);

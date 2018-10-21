@@ -99,7 +99,7 @@ final class UnsetAndIssetToMethodCallRector extends AbstractRector
 
         $method = $this->resolveMethod($node);
         if ($method === null) {
-            return $node;
+            return null;
         }
 
         /** @var ArrayDimFetch $arrayDimFetchNode */

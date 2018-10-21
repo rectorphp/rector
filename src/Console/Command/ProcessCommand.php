@@ -8,6 +8,7 @@ use Rector\Application\Error;
 use Rector\Application\ErrorCollector;
 use Rector\Application\FileProcessor;
 use Rector\Autoloading\AdditionalAutoloader;
+use Rector\CodingStyle\AfterRectorCodingStyle;
 use Rector\Configuration\Option;
 use Rector\Console\ConsoleStyle;
 use Rector\Console\Output\ProcessCommandReporter;
@@ -23,7 +24,6 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Process\Process;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
@@ -97,6 +97,11 @@ final class ProcessCommand extends Command
      */
     private $errorCollector;
 
+    /**
+     * @var AfterRectorCodingStyle
+     */
+    private $afterRectorCodingStyle;
+
     public function __construct(
         FileProcessor $fileProcessor,
         ConsoleStyle $consoleStyle,
@@ -108,7 +113,8 @@ final class ProcessCommand extends Command
         YamlFileProcessor $yamlFileProcessor,
         RectorGuard $rectorGuard,
         FileSystemFileProcessor $fileSystemFileProcessor,
-        ErrorCollector $errorCollector
+        ErrorCollector $errorCollector,
+        AfterRectorCodingStyle $afterRectorCodingStyle
     ) {
         parent::__construct();
 
@@ -123,6 +129,7 @@ final class ProcessCommand extends Command
         $this->rectorGuard = $rectorGuard;
         $this->fileSystemFileProcessor = $fileSystemFileProcessor;
         $this->errorCollector = $errorCollector;
+        $this->afterRectorCodingStyle = $afterRectorCodingStyle;
     }
 
     protected function configure(): void
@@ -189,7 +196,7 @@ final class ProcessCommand extends Command
         }
 
         if ($input->getOption(Option::OPTION_WITH_STYLE)) {
-            $this->runStyle($source);
+            $this->afterRectorCodingStyle->apply($source);
         }
 
         $this->consoleStyle->success('Rector is done!');
@@ -281,29 +288,5 @@ final class ProcessCommand extends Command
                 FileSystem::write($fileInfo->getPathname(), $newContent);
             }
         }
-    }
-
-    /**
-     * @param string[] $source
-     */
-    private function runStyle(array $source): void
-    {
-        $command = sprintf(
-            'vendor/bin/ecs check %s --config %s --fix',
-            implode(' ', $source),
-            __DIR__ . '/../../../ecs-after-rector.yml'
-        );
-
-        $process = new Process($command);
-        $process->run();
-
-        if ($process->isSuccessful()) {
-            $this->consoleStyle->success('Basic coding standard is done');
-            return;
-        }
-
-        $this->consoleStyle->error(
-            sprintf('Basic coding standard was not applied due to: "%s"', $process->getErrorOutput())
-        );
     }
 }

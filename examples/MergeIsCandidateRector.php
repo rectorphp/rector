@@ -104,23 +104,23 @@ final class MergeIsCandidateRector extends AbstractRector
     public function refactor(Node $node): ?Node
     {
         if ($this->isType($node, 'Rector\Rector\AbstractRector')) {
-            return $node;
+            return null;
         }
 
         if (! $node->isAbstract()) {
-            return $node;
+            return null;
         }
 
         // has "isCandidate()" method?
         if (! $this->hasClassIsCandidateMethod($node)) {
-            return $node;
+            return null;
         }
 
         [$isCandidateClassMethodPosition, $isCandidateClassMethod] = $this->getClassMethodByName($node, 'isCandidate');
         [$refactorClassMethodPosition, $refactorClassMethod] = $this->getClassMethodByName($node, 'refactor');
 
         if ($refactorClassMethod === null) {
-            return $node;
+            return null;
         }
 
         // 1. replace "isCandidate()" method by "getNodeType()" method

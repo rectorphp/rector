@@ -76,7 +76,7 @@ CODE_SAMPLE
         $namespace = $node->getAttribute(Attribute::NAMESPACE_NAME);
         // catch only classes without namespace
         if ($namespace) {
-            return $node;
+            return null;
         }
 
         /** @var Class_ $classNode */
@@ -84,7 +84,7 @@ CODE_SAMPLE
 
         // anonymous class → skip
         if ($classNode->name === null || $node->isAbstract() || $node->isStatic()) {
-            return $node;
+            return null;
         }
 
         // process parent call references first
@@ -92,7 +92,7 @@ CODE_SAMPLE
 
         // not PSR-4 constructor
         if (strtolower((string) $classNode->name) !== strtolower((string) $node->name)) {
-            return $node;
+            return null;
         }
 
         // does it already have a __construct method?

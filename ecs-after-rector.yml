@@ -17,6 +17,7 @@ services:
     # import namespaces for classes, constants and functions
     # configuration: https://github.com/slevomat/coding-standard#slevomatcodingstandardnamespacesreferenceusednamesonly-
     SlevomatCodingStandard\Sniffs\Namespaces\ReferenceUsedNamesOnlySniff:
+        searchAnnotations: true
         allowFallbackGlobalFunctions: true
         allowFallbackGlobalConstants: true
 

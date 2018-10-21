@@ -104,24 +104,24 @@ CODE_SAMPLE
 
         // too many types to handle
         if (count($varTypes) > 2) {
-            return $node;
+            return null;
         }
 
         $this->isNullableType = in_array('null', $varTypes, true);
 
         // exactly 1 type only can be changed || 2 types with nullable; nothing else
         if (count($varTypes) !== 1 && (count($varTypes) === 2 && ! $this->isNullableType)) {
-            return $node;
+            return null;
         }
 
         $propertyType = $this->getPropertyTypeWithoutNull($varTypes);
         $propertyType = $this->shortenLongType($propertyType);
         if (! $this->typeAnalyzer->isPropertyTypeHintableType($propertyType)) {
-            return $node;
+            return null;
         }
 
         if (! $this->matchesDocTypeAndDefaultValueType($propertyType, $node)) {
-            return $node;
+            return null;
         }
 
         if ($this->isNullableType) {

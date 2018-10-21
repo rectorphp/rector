@@ -94,7 +94,7 @@ CODE_SAMPLE
 
         $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
         if ($parentNode instanceof MethodCall) {
-            return $node;
+            return null;
         }
 
         return $this->methodCallNodeFactory->createWithVariableAndMethodName($node, 'toString');

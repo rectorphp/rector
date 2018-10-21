@@ -53,7 +53,7 @@ final class CatchAndClosureUseNameRector extends AbstractRector
     public function refactor(Node $node): ?Node
     {
         if (! $this->isTypes($node, ['PhpParser\Node\Stmt\Catch_', 'PhpParser\Node\Expr\ClosureUse'])) {
-            return $node;
+            return null;
         }
 
         if (! $this->isName($node, 'var')) {
@@ -62,7 +62,7 @@ final class CatchAndClosureUseNameRector extends AbstractRector
 
         $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
         if ($parentNode instanceof PropertyFetch) {
-            return $node;
+            return null;
         }
 
         /** @var Variable $variableNode */

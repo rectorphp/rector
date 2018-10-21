@@ -50,12 +50,12 @@ CODE_SAMPLE
     {
         // already non-public
         if (! $node->isPublic()) {
-            return $node;
+            return null;
         }
 
         // explicitly public
         if ($node->flags !== 0) {
-            return $node;
+            return null;
         }
 
         $node->flags = Class_::MODIFIER_PUBLIC;

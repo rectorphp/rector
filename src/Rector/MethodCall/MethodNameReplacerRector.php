@@ -154,13 +154,13 @@ CODE_SAMPLE
         return true;
     }
 
-    private function resolveIdentifier(Identifier $node): Identifier
+    private function resolveIdentifier(Identifier $node): ?Identifier
     {
         $oldToNewMethods = $this->matchOldToNewMethods();
 
         $methodName = $node->name;
         if (! isset($oldToNewMethods[$methodName])) {
-            return $node;
+            return null;
         }
 
         $node->name = $oldToNewMethods[$methodName];
@@ -197,7 +197,7 @@ CODE_SAMPLE
 
         $currentMethodName = $this->getName($node);
         if (! isset($oldToNewMethods[$currentMethodName])) {
-            return $node;
+            return null;
         }
 
         $this->identifierRenamer->renameNode($node, $oldToNewMethods[$currentMethodName]);

@@ -57,7 +57,7 @@ final class CallUserMethodRector extends AbstractRector
     {
         $newName = $this->matchNewFunctionName($node);
         if ($newName === null) {
-            return $node;
+            return null;
         }
 
         $node->name = new Name($newName);

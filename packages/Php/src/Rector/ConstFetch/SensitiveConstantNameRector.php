@@ -114,14 +114,14 @@ CODE_SAMPLE
     {
         // is system constant?
         if (in_array(strtoupper((string) $node->name), $this->phpReservedConstants, true)) {
-            return $node;
+            return null;
         }
 
         $currentConstantName = (string) $node->name;
 
         // is uppercase, all good
         if ($currentConstantName === strtoupper($currentConstantName)) {
-            return $node;
+            return null;
         }
 
         $node->name = new FullyQualified(strtoupper($currentConstantName));

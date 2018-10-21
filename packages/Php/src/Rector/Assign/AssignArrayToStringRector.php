@@ -81,7 +81,7 @@ CODE_SAMPLE
     {
         // only array with no explicit key assign, e.g. "$value[] = 5";
         if (! $node->var instanceof ArrayDimFetch || $node->var->dim !== null) {
-            return $node;
+            return null;
         }
 
         $arrayDimFetchNode = $node->var;

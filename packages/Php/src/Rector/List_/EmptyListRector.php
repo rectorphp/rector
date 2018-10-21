@@ -37,7 +37,7 @@ final class EmptyListRector extends AbstractRector
     {
         foreach ($node->items as $item) {
             if ($item !== null) {
-                return $node;
+                return null;
             }
         }
 

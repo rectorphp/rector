@@ -76,19 +76,19 @@ final class CombinedAssignRector extends AbstractRector
     public function refactor(Node $node): ?Node
     {
         if (! $node->expr instanceof BinaryOp) {
-            return $node;
+            return null;
         }
 
         /** @var BinaryOp $binaryNode */
         $binaryNode = $node->expr;
 
         if (! $this->areNodesEqual($node->var, $binaryNode->left)) {
-            return $node;
+            return null;
         }
 
         $binaryNodeClass = get_class($binaryNode);
         if (! isset($this->binaryOpClassToAssignOpClass[$binaryNodeClass])) {
-            return $node;
+            return null;
         }
 
         $newAssignNodeClass = $this->binaryOpClassToAssignOpClass[$binaryNodeClass];

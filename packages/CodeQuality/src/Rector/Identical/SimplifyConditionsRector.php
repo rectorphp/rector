@@ -63,20 +63,20 @@ final class SimplifyConditionsRector extends AbstractRector
         }
     }
 
-    private function processBooleanNot(BooleanNot $node): Node
+    private function processBooleanNot(BooleanNot $node): ?Node
     {
         if (! $node->expr instanceof BinaryOp) {
-            return $node;
+            return null;
         }
 
         if ($this->shouldSkip($node->expr)) {
-            return $node;
+            return null;
         }
 
         return $this->createInversedBooleanOp($node->expr);
     }
 
-    private function processIdenticalAndNotIdentical(BinaryOp $node): Node
+    private function processIdenticalAndNotIdentical(BinaryOp $node): ?Node
     {
         if ($node->left instanceof Identical || $node->left instanceof NotIdentical) {
             $subBinaryOpNode = $node->left;
@@ -85,7 +85,7 @@ final class SimplifyConditionsRector extends AbstractRector
             $subBinaryOpNode = $node->right;
             $shouldInverse = $this->isFalse($node->left);
         } else {
-            return $node;
+            return null;
         }
 
         if ($shouldInverse) {

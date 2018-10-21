@@ -31,17 +31,17 @@ final class SimplifyInArrayValuesRector extends AbstractRector
     public function refactor(Node $node): ?Node
     {
         if (! $this->isName($node, 'in_array')) {
-            return $node;
+            return null;
         }
 
         if (! $node->args[1]->value instanceof FuncCall) {
-            return $node;
+            return null;
         }
 
         /** @var FuncCall $innerFunCall */
         $innerFunCall = $node->args[1]->value;
         if (! $this->isName($innerFunCall, 'array_values')) {
-            return $node;
+            return null;
         }
 
         $node->args[1] = $innerFunCall->args[0];

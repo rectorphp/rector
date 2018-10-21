@@ -44,7 +44,7 @@ final class SimplifyArraySearchRector extends AbstractRector
     {
         $match = $this->matchArraySearchFuncCallAndBoolConstFetch($node);
         if ($match === null) {
-            return $node;
+            return null;
         }
 
         [$arraySearchFuncCallNode, $boolConstFetchNode] = $match;

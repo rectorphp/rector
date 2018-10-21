@@ -1,7 +1,7 @@
 services:
     Rector\Rector\Argument\ArgumentRemoverRector:
         -
-            class: 'Doctrine\ORM\Persisters\Entity\AbstractEntityInheritancePersister'
+            class: 'Rector\Tests\Rector\Argument\ArgumentRemoverRector\Source\Persister'
             method: 'getSelectJoinColumnSQL'
             position: 4
 

@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Name\FullyQualified;
+use Rector\CodingStyle\AfterRectorCodingStyle;
 use Rector\Console\ConsoleStyle;
 use Rector\ContributorTools\Configuration\Configuration;
 use Rector\ContributorTools\Configuration\ConfigurationFactory;
@@ -19,6 +20,7 @@ use Symfony\Component\Finder\Finder;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\PackageBuilder\FileSystem\FinderSanitizer;
+use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 use function Safe\getcwd;
 use function Safe\sort;
 use function Safe\sprintf;
@@ -50,17 +52,29 @@ final class CreateRectorCommand extends Command
      */
     private $finderSanitizer;
 
+    /**
+     * @var string[]
+     */
+    private $generatedFiles = [];
+
+    /**
+     * @var AfterRectorCodingStyle
+     */
+    private $afterRectorCodingStyle;
+
     public function __construct(
         ConsoleStyle $consoleStyle,
         ConfigurationFactory $configurationFactory,
         BetterStandardPrinter $betterStandardPrinter,
-        FinderSanitizer $finderSanitizer
+        FinderSanitizer $finderSanitizer,
+        AfterRectorCodingStyle $afterRectorCodingStyle
     ) {
         parent::__construct();
         $this->consoleStyle = $consoleStyle;
         $this->configurationFactory = $configurationFactory;
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->finderSanitizer = $finderSanitizer;
+        $this->afterRectorCodingStyle = $afterRectorCodingStyle;
     }
 
     protected function configure(): void
@@ -74,39 +88,25 @@ final class CreateRectorCommand extends Command
         $configuration = $this->configurationFactory->createFromConfigFile(getcwd() . '/create-rector.yml');
         $data = $this->prepareData($configuration);
 
-        $finder = Finder::create()->files()
-            ->in(self::TEMPLATES_DIRECTORY);
-        $smartFileInfos = $this->finderSanitizer->sanitize($finder);
-
         $testCasePath = null;
-        $generatedFiles = [];
-        foreach ($smartFileInfos as $smartFileInfo) {
+
+        foreach ($this->findTemplateFileInfos() as $smartFileInfo) {
             $destination = $smartFileInfo->getRelativeFilePathFromDirectory(self::TEMPLATES_DIRECTORY);
             $destination = $this->applyData($destination, $data);
 
-            $content = FileSystem::read($smartFileInfo->getRealPath());
-            $content = $this->applyData($content, $data);
-
-            if (Strings::endsWith($destination, 'Test.php')) {
-                $testCasePath = dirname($destination);
-            }
-
+            $content = $this->applyData($smartFileInfo->getContents(), $data);
             FileSystem::write($destination, $content);
 
-            $generatedFiles[] = $destination;
+            $this->generatedFiles[] = $destination;
+
+            if (! $testCasePath && Strings::endsWith($destination, 'Test.php')) {
+                $testCasePath = dirname($destination);
+            }
         }
 
-        // @todo make Rector class clickable in CLI output, so we can just jump right in
-        // probably absolute path might help
-        $this->consoleStyle->title(sprintf('New files generated for "%s"', $configuration->getName()));
-        sort($generatedFiles);
-        $this->consoleStyle->listing($generatedFiles);
+        $this->applyCodingStyle();
 
-        $this->consoleStyle->success(sprintf(
-            'Now make these tests green again:%svendor/bin/phpunit %s',
-            PHP_EOL,
-            $testCasePath
-        ));
+        $this->printSuccess($configuration, $testCasePath);
 
         return ShellCode::SUCCESS;
     }
@@ -171,5 +171,39 @@ final class CreateRectorCommand extends Command
 CODE_SAMPLE;
 
         return sprintf($sourceDocBlock, $source);
+    }
+
+    /**
+     * @return SmartFileInfo[]
+     */
+    private function findTemplateFileInfos(): array
+    {
+        $finder = Finder::create()->files()
+            ->in(self::TEMPLATES_DIRECTORY);
+
+        return $this->finderSanitizer->sanitize($finder);
+    }
+
+    private function printSuccess(Configuration $configuration, string $testCasePath): void
+    {
+        $this->consoleStyle->title(sprintf('New files generated for "%s"', $configuration->getName()));
+        sort($this->generatedFiles);
+        $this->consoleStyle->listing($this->generatedFiles);
+
+        $this->consoleStyle->success(sprintf(
+            'Now make these tests green again:%svendor/bin/phpunit %s',
+            PHP_EOL,
+            $testCasePath
+        ));
+    }
+
+    private function applyCodingStyle(): void
+    {
+        // filter only .php files
+        $generatedPhpFiles = array_filter($this->generatedFiles, function (string $file) {
+            return Strings::endsWith($file, '.php');
+        });
+
+        $this->afterRectorCodingStyle->apply($generatedPhpFiles);
     }
 }

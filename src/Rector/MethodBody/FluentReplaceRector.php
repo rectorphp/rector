@@ -69,12 +69,12 @@ CODE_SAMPLE
     {
         // is chain method call
         if (! $node->var instanceof MethodCall) {
-            return $node;
+            return null;
         }
 
         // is matching type
         if (! $this->isTypes($node->var, $this->classesToDefluent)) {
-            return $node;
+            return null;
         }
 
         /** @var MethodCall $innerMethodCallNode */

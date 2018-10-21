@@ -41,7 +41,7 @@ final class MultiDirnameRector extends AbstractRector
         $this->nestingLevel = 0;
 
         if (! $this->isName($node, 'dirname')) {
-            return $node;
+            return null;
         }
 
         $activeFuncCallNode = $node;

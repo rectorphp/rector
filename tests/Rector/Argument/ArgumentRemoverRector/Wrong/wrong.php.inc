@@ -2,7 +2,7 @@
 
 namespace SomeNamespace;
 
-class SomeClassExtendingAbstractEntityInheritancePersister extends \Doctrine\ORM\Persisters\Entity\AbstractEntityInheritancePersister
+class SomeClassExtendingAbstractEntityInheritancePersister extends \Rector\Tests\Rector\Argument\ArgumentRemoverRector\Source\Persister
 {
     public function getSelectJoinColumnSQL($tableAlias, $joinColumnName, $quotedColumnName, $type, $className)
     {
