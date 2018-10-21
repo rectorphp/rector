@@ -3,10 +3,6 @@
 namespace Rector\Tests\Composer;
 
 use Composer\Script\Event;
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
-use Symfony\Component\Finder\Finder;
-use Symfony\Component\Finder\SplFileInfo;
 
 final class AutoloadWrongCasesEventSubscriber
 {
@@ -18,12 +14,12 @@ final class AutoloadWrongCasesEventSubscriber
     /**
      * @see https://www.drupal.org/files/issues/vendor-classmap-2468499-14.patch
      */
-    public static function preAutoloadDump(Event $event)
+    public static function preAutoloadDump(Event $event): void
     {
         $paths = [
             __DIR__ . '/../../tests/Rector/*',
             __DIR__ . '/../../tests/Issues/*',
-            __DIR__ . '/../../packages/*'
+            __DIR__ . '/../../packages/*',
         ];
 
         foreach ($paths as $path) {
@@ -41,7 +37,7 @@ final class AutoloadWrongCasesEventSubscriber
      */
     private static function getWrongDirectoriesInPath(string $path): array
     {
-        $globResult = self::glob_recursive($path, GLOB_ONLYDIR);
+        $globResult = self::globRecursive($path, GLOB_ONLYDIR);
 
         return array_filter($globResult, function ($name) {
             return strpos($name, '/Wrong');
@@ -50,13 +46,14 @@ final class AutoloadWrongCasesEventSubscriber
 
     /**
      * @see https://stackoverflow.com/a/12109100/1348344
+     * @return string[]
      */
-    private static function glob_recursive(string $pattern, $flags = 0)
+    private static function globRecursive(string $pattern, int $flags = 0): array
     {
         $files = glob($pattern, $flags);
 
-        foreach (glob(dirname($pattern).'/*', GLOB_ONLYDIR|GLOB_NOSORT) as $dir) {
-            $files = array_merge($files, self::glob_recursive($dir.'/'.basename($pattern), $flags));
+        foreach (glob(dirname($pattern) . '/*', GLOB_ONLYDIR | GLOB_NOSORT) as $dir) {
+            $files = array_merge($files, self::globRecursive($dir . '/' . basename($pattern), $flags));
         }
 
         return $files;

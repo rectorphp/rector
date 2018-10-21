@@ -2,39 +2,35 @@
 
 namespace Rector\Rector\Argument;
 
+use PhpParser\ConstExprEvaluator;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Configuration\Rector\ArgumentRemoverRecipe;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
-use SomeClass;
 
-final class ArgumentRemoverRector extends AbstractArgumentRector
+final class ArgumentRemoverRector extends AbstractRector
 {
     /**
-     * @var ArgumentRemoverRecipe[]
+     * @var mixed[]
      */
-    private $recipes = [];
+    private $positionsByMethodNameByClassType = [];
 
     /**
-     * @var ArgumentRemoverRecipe[]
+     * @var ConstExprEvaluator
      */
-    private $activeRecipes = [];
+    private $constExprEvaluator;
 
     /**
-     * @param mixed[] $argumentChangesByMethodAndType
+     * @param mixed[] $positionsByMethodNameByClassType
      */
-    public function __construct(array $argumentChangesByMethodAndType)
+    public function __construct(array $positionsByMethodNameByClassType, ConstExprEvaluator $constExprEvaluator)
     {
-        foreach ($argumentChangesByMethodAndType as $configurationArray) {
-            $this->recipes[] = ArgumentRemoverRecipe::createFromArray($configurationArray);
-        }
+        $this->positionsByMethodNameByClassType = $positionsByMethodNameByClassType;
+        $this->constExprEvaluator = $constExprEvaluator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -54,11 +50,12 @@ $someObject->someMethod();'
 CODE_SAMPLE
                     ,
                     [
-                        '$argumentChangesByMethodAndType' => [
-                            'class' => SomeClass::class,
-                            'method' => 'someMethod',
-                            'position' => 0,
-                            'value' => 'true',
+                        'ExampleClass' => [
+                            'someMethod' => [
+                                0 => [
+                                    'value' => 'true',
+                                ],
+                            ],
                         ],
                     ]
                 ),
@@ -79,71 +76,60 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $this->activeRecipes = $this->matchArgumentChanges($node);
-        if (! $this->activeRecipes) {
-            return null;
-        }
-        $argumentsOrParameters = $this->getNodeArgumentsOrParameters($node);
-        $argumentsOrParameters = $this->processArgumentNodes($argumentsOrParameters);
+        foreach ($this->positionsByMethodNameByClassType as $type => $positionByMethodName) {
+            if (! $this->isType($node, $type)) {
+                continue;
+            }
 
-        $this->setNodeArgumentsOrParameters($node, $argumentsOrParameters);
+            foreach ($positionByMethodName as $methodName => $positions) {
+                if (! $this->isName($node, $methodName)) {
+                    continue;
+                }
+
+                foreach ($positions as $position => $match) {
+                    $this->processPosition($node, $position, $match);
+                }
+            }
+        }
 
         return $node;
     }
 
     /**
-     * @return ArgumentRemoverRecipe[]
+     * @param ClassMethod|StaticCall|MethodCall $node
+     * @param mixed[]|null $match
      */
-    private function matchArgumentChanges(Node $node): array
+    private function processPosition(Node $node, int $position, ?array $match): void
     {
-        $argumentReplacerRecipes = [];
-
-        foreach ($this->recipes as $argumentRemoverRecipe) {
-            if ($this->isNodeToRecipeMatch($node, $argumentRemoverRecipe)) {
-                $argumentReplacerRecipes[] = $argumentRemoverRecipe;
+        if ($match === null) {
+            if ($node instanceof MethodCall || $node instanceof StaticCall) {
+                unset($node->args[$position]);
+            } elseif ($node instanceof ClassMethod) {
+                unset($node->params[$position]);
             }
         }
 
-        return $argumentReplacerRecipes;
-    }
+        if ($match) {
+            // only argument specific value can be removed
+            if ($node instanceof ClassMethod || ! isset($node->args[$position])) {
+                return;
+            }
 
-    /**
-     * @param Arg[]|Param[] $argumentNodes
-     * @return mixed[]
-     */
-    private function processArgumentNodes(array $argumentNodes): array
-    {
-        foreach ($this->activeRecipes as $activeArgumentRemoverRecipe) {
-            $position = $activeArgumentRemoverRecipe->getPosition();
-
-            if ($activeArgumentRemoverRecipe->getValue() === null) {
-                unset($argumentNodes[$position]);
-            } elseif ($this->isArgumentValueMatch($argumentNodes[$position], $activeArgumentRemoverRecipe)) {
-                unset($argumentNodes[$position]);
+            if ($this->isArgumentValueMatch($node->args[$position], $match)) {
+                unset($node->args[$position]);
             }
         }
-
-        return $argumentNodes;
     }
 
     /**
-     * @param Arg|Param $argOrParamNode
+     * @param mixed[] $values
      */
-    private function isArgumentValueMatch($argOrParamNode, ArgumentRemoverRecipe $argumentRemoverRecipe): bool
+    private function isArgumentValueMatch(Arg $argNode, array $values): bool
     {
-        // only argument specific value can be removed
-        if (! $argOrParamNode instanceof Arg) {
-            return false;
-        }
+        $nodeValue = $this->constExprEvaluator->evaluateDirectly($argNode->value);
 
-        $valueNode = $argOrParamNode->value;
-
-        if ($valueNode instanceof ClassConstFetch) {
-            $valueNodeAsString = $valueNode->class->getAttribute(Attribute::RESOLVED_NAME)->toString()
-                . '::'
-                . (string) $valueNode->name;
-
-            if ($valueNodeAsString === $argumentRemoverRecipe->getValue()) {
+        foreach ($values as $value) {
+            if ($nodeValue === $value) {
                 return true;
             }
         }

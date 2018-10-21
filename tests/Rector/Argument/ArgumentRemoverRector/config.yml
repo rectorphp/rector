@@ -1,12 +1,15 @@
 services:
     Rector\Rector\Argument\ArgumentRemoverRector:
-        -
-            class: 'Rector\Tests\Rector\Argument\ArgumentRemoverRector\Source\Persister'
-            method: 'getSelectJoinColumnSQL'
-            position: 4
+        Rector\Tests\Rector\Argument\ArgumentRemoverRector\Source\Persister:
+            getSelectJoinColumnSQL:
+                # any value
+                 4: ~
 
-        -
-            class: 'Symfony\Component\Yaml\Yaml'
-            method: 'parse'
-            position: 1
-            value: 'Symfony\Component\Yaml\Yaml::PARSE_KEYS_AS_STRINGS'
+        Symfony\Component\Yaml\Yaml:
+            parse:
+                1:
+                    # only matching specific values
+                    - 'Symfony\Component\Yaml\Yaml::PARSE_KEYS_AS_STRINGS'
+                    - 'hey'
+                    - 55
+                    - 5.5

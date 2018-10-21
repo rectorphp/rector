@@ -72,20 +72,15 @@ parameters:
             - 'src/Rector/AbstractPHPUnitRector.php'
             - 'src/Rector/Class_/ParentClassToTraitsRector.php'
             # example in description
-            - 'src/Rector/Assign/PropertyAssignToMethodCallRector.php'
-            - 'src/Rector/Constant/ClassConstantReplacerRector.php'
-            - 'src/Rector/Property/PropertyNameReplacerRector.php'
             - 'src/Rector/Annotation/AnnotationReplacerRector.php'
-            - 'src/Rector/Argument/ArgumentAdderRector.php'
-            - 'src/Rector/Form/Helper/FormTypeStringToTypeProvider.php'
 
         # empty arguments passing
         PHP_CodeSniffer\Standards\PEAR\Sniffs\Functions\ValidDefaultValueSniff.NotAtEnd:
             - 'packages/PHPUnit/src/Rector/SpecificMethod/AssertTrueFalseToSpecificMethodRector.php'
 
         Symplify\CodingStandard\Sniffs\CleanCode\ForbiddenStaticFunctionSniff:
-            - 'src/Configuration/Rector/Guard/RecipeGuard.php'
-            - 'src/Configuration/Rector/*Recipe.php'
+            # required by Composer interface
+            - 'tests/Composer/AutoloadWrongCasesEventSubscriber.php'
 
         Symplify\CodingStandard\Fixer\Naming\PropertyNameMatchingTypeFixer:
             - 'packages/NodeTypeResolver/src/PHPStan/Scope/NodeScopeResolver.php'

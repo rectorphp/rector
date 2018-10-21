@@ -4,58 +4,62 @@ namespace Rector\Rector\Argument;
 
 use PhpParser\BuilderHelpers;
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Configuration\Rector\ArgumentAdderRecipe;
+use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
-final class ArgumentAdderRector extends AbstractArgumentRector
+final class ArgumentAdderRector extends AbstractRector
 {
     /**
-     * @var ArgumentAdderRecipe[]
+     * @var mixed[]
      */
-    private $recipes = [];
+    private $positionWithDefaultValueByMethodNamesByClassTypes = [];
 
     /**
-     * @param mixed[] $argumentChangesByMethodAndType
+     * @param mixed[] $positionWithDefaultValueByMethodNamesByClassTypes
      */
-    public function __construct(array $argumentChangesByMethodAndType)
+    public function __construct(array $positionWithDefaultValueByMethodNamesByClassTypes)
     {
-        foreach ($argumentChangesByMethodAndType as $configurationArray) {
-            $this->recipes[] = ArgumentAdderRecipe::createFromArray($configurationArray);
-        }
+        $this->positionWithDefaultValueByMethodNamesByClassTypes = $positionWithDefaultValueByMethodNamesByClassTypes;
     }
 
     public function getDefinition(): RectorDefinition
     {
+        $configuration = [
+            'SomeExampleClass' => [
+                'someMethod' => [
+                    0 => [
+                        'default_value' => 'true',
+                    ],
+                ],
+            ],
+        ];
+
         return new RectorDefinition(
             'This Rector adds new default arguments in calls of defined methods and class types.',
             [
                 new ConfiguredCodeSample(
                     <<<'CODE_SAMPLE'
-$someObject = new SomeClass;
+$someObject = new SomeExampleClass;
 $someObject->someMethod();
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
-$someObject = new SomeClass;
+$someObject = new SomeExampleClass;
 $someObject->someMethod(true);
 CODE_SAMPLE
                     ,
-                    [
-                        '$argumentChangesByMethodAndType' => [
-                            'class' => 'SomeClass',
-                            'method' => 'someMethod',
-                            'position' => 0,
-                            'default_value' => 'true',
-                        ],
-                    ]
+                    $configuration
                 ),
                 new ConfiguredCodeSample(
                     <<<'CODE_SAMPLE'
-class MyCustomClass extends SomeClass
+class MyCustomClass extends SomeExampleClass
 {
     public function someMethod()
     {
@@ -64,7 +68,7 @@ class MyCustomClass extends SomeClass
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
-class MyCustomClass extends SomeClass
+class MyCustomClass extends SomeExampleClass
 {
     public function someMethod($value = true)
     {
@@ -72,14 +76,7 @@ class MyCustomClass extends SomeClass
 }
 CODE_SAMPLE
                     ,
-                    [
-                        '$argumentChangesByMethodAndType' => [
-                            'class' => 'SomeClass',
-                            'method' => 'someMethod',
-                            'position' => 0,
-                            'default_value' => 'true',
-                        ],
-                    ]
+                    $configuration
                 ),
             ]
         );
@@ -98,48 +95,39 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $matchedRecipes = $this->matchArgumentChanges($node);
-        if (! $matchedRecipes) {
-            return null;
+        foreach ($this->positionWithDefaultValueByMethodNamesByClassTypes as $type => $positionWithDefaultValueByMethodNames) {
+            if (! $this->isType($node, $type)) {
+                continue;
+            }
+
+            foreach ($positionWithDefaultValueByMethodNames as $method => $positionWithDefaultValues) {
+                if (! $this->isName($node, $method)) {
+                    continue;
+                }
+
+                $this->processPositionWithDefaultValues($node, $positionWithDefaultValues);
+            }
         }
-
-        $argumentsOrParameters = $this->getNodeArgumentsOrParameters($node);
-        $argumentsOrParameters = $this->processArgumentNodes($argumentsOrParameters, $matchedRecipes);
-
-        $this->setNodeArgumentsOrParameters($node, $argumentsOrParameters);
 
         return $node;
     }
 
     /**
-     * @return ArgumentAdderRecipe[]
+     * @param ClassMethod|MethodCall|StaticCall $node
+     * @param mixed[] $positionWithDefaultValues
      */
-    private function matchArgumentChanges(Node $node): array
+    private function processPositionWithDefaultValues(Node $node, array $positionWithDefaultValues): void
     {
-        $argumentReplacerRecipes = [];
+        foreach ($positionWithDefaultValues as $position => $nameToValue) {
+            reset($nameToValue);
+            $name = key($nameToValue);
+            $value = $nameToValue[$name];
 
-        foreach ($this->recipes as $argumentReplacerRecipe) {
-            if ($this->isNodeToRecipeMatch($node, $argumentReplacerRecipe)) {
-                $argumentReplacerRecipes[] = $argumentReplacerRecipe;
+            if ($node instanceof ClassMethod) {
+                $node->params[$position] = new Param(new Variable($name), BuilderHelpers::normalizeValue($value));
+            } else {
+                $node->args[$position] = new Arg(BuilderHelpers::normalizeValue($value));
             }
         }
-
-        return $argumentReplacerRecipes;
-    }
-
-    /**
-     * @param mixed[] $argumentNodes
-     * @param ArgumentAdderRecipe[] $argumentAdderRecipes
-     * @return mixed[]
-     */
-    private function processArgumentNodes(array $argumentNodes, array $argumentAdderRecipes): array
-    {
-        foreach ($argumentAdderRecipes as $argumentReplacerRecipe) {
-            $position = $argumentReplacerRecipe->getPosition();
-
-            $argumentNodes[$position] = BuilderHelpers::normalizeValue($argumentReplacerRecipe->getDefaultValue());
-        }
-
-        return $argumentNodes;
     }
 }

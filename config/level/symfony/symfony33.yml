@@ -2,21 +2,17 @@ services:
     # dependency-injection
     Rector\Rector\Argument\ArgumentAdderRector:
         # added default value
-        -
-            class: 'Symfony\Component\DependencyInjection\ContainerBuilder'
-            method: 'compile'
-            position: 2
-            default_value: 0
-        -
-            class: 'Symfony\Component\DependencyInjection\ContainerBuilder'
-            method: 'addCompilerPass'
-            position: 2
-            default_value: 0
-        -
-            class: 'Symfony\Component\DependencyInjection\Compiler\ServiceReferenceGraph'
-            method: 'connect'
-            position: 6
-            default_value: false
+        Symfony\Component\DependencyInjection\ContainerBuilder:
+            compile:
+                2:
+                    __unknown__: 0
+            addCompilerPass:
+                2:
+                    priority: 0
+        Symfony\Component\DependencyInjection\Compiler\ServiceReferenceGraph:
+            connect:
+                6:
+                    weak: false
 
     Rector\Symfony\Rector\Console\ConsoleExceptionToErrorEventConstantRector: ~
 
@@ -41,5 +37,5 @@ services:
 
     Rector\Rector\MethodCall\MethodNameReplacerRector:
         # dependency-injection
-        'Symfony\Component\DependencyInjection\Container':
-            'isFrozen': 'isCompiled'
+        Symfony\Component\DependencyInjection\Container:
+            isFrozen: 'isCompiled'

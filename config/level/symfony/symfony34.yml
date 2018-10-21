@@ -9,8 +9,7 @@ services:
         ' !str': ' !!str'
 
     Rector\Rector\Argument\ArgumentRemoverRector:
-        -
-            class: 'Symfony\Component\Yaml\Yaml'
-            method: 'parse'
-            position: 2
-            value: 'Symfony\Component\Yaml\Yaml::PARSE_KEYS_AS_STRINGS'
+        Symfony\Component\Yaml\Yaml:
+            parse:
+                2:
+                    - 'Symfony\Component\Yaml\Yaml::PARSE_KEYS_AS_STRINGS'
