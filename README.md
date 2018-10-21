@@ -11,6 +11,10 @@ I mean, why do it manually if 80 % can Rector handle for you?
 Rector **instantly upgrades PHP & YAML code of your application**, with focus on open-source projects:
 
 <p align="center">
+    <a href="/config/level/php"><img src="/docs/images/php.png"></a>
+    <img src="/docs/images/space.png" width=20>
+    <a href="/config/level/cakephp"><img src="/docs/images/cakephp.png"></a>
+    <img src="/docs/images/space.png" width=20>
     <a href="/config/level/symfony"><img src="/docs/images/symfony.png"></a>
     <img src="/docs/images/space.png" width=20>
     <a href="/config/level/sylius"><img src="/docs/images/sylius.png"></a>
@@ -18,8 +22,6 @@ Rector **instantly upgrades PHP & YAML code of your application**, with focus on
     <a href="/config/level/phpunit"><img src="/docs/images/phpunit.jpg"></a>
     <img src="/docs/images/space.png" width=20>
     <a href="/config/level/twig"><img src="/docs/images/twig.png"></a>
-    <img src="/docs/images/space.png" width=20>
-    <a href="/config/level/cakephp"><img src="/docs/images/cakephp.png"></a>
     <img src="/docs/images/space.png" width=20>
     <a href="/config/level/silverstripe"><img src="/docs/images/silverstripe.jpg"></a>
 </p>
