@@ -96,7 +96,7 @@ CODE_SAMPLE
         $leftVariable = $ifCondition->left;
         $rightVariable = $ifCondition->right;
 
-        if (! $leftVariable instanceof Variable & ! $rightVariable instanceof Variable) {
+        if (! $leftVariable instanceof Variable && ! $rightVariable instanceof Variable) {
             return null;
         }
 
@@ -111,7 +111,10 @@ CODE_SAMPLE
         $this->returnNodeToRemove = $foreachNode->getAttribute(Attribute::NEXT_NODE);
         $this->removeNode($this->returnNodeToRemove);
 
-        $negativeReturn = $this->constFetchAnalyzer->isFalse($firstNodeInsideForeach->stmts[0]->expr);
+        /** @var Return_ $returnNode */
+        $returnNode = $firstNodeInsideForeach->stmts[0];
+
+        $negativeReturn = $this->constFetchAnalyzer->isFalse($returnNode->expr);
 
         return new Return_($negativeReturn ? new BooleanNot($inArrayFunctionCall) : $inArrayFunctionCall);
     }
@@ -124,13 +127,15 @@ CODE_SAMPLE
      */
     private function normalizeYodaComparison($leftValue, $rightValue, Foreach_ $foreachNode)
     {
+        /** @var Variable $foreachVariable */
+        $foreachVariable = $foreachNode->valueVar;
         if ($leftValue instanceof Variable) {
-            if ($leftValue->name === $foreachNode->valueVar->name) {
+            if ($leftValue->name === $foreachVariable->name) {
                 return $rightValue;
             }
         }
-        
-        if ($rightValue->name === $foreachNode->valueVar->name) {
+
+        if ($rightValue->name === $foreachVariable->name) {
             return $leftValue;
         }
     }
@@ -168,12 +173,12 @@ CODE_SAMPLE
         }
 
         $nextNode = $foreachNode->getAttribute(Attribute::NEXT_NODE);
-        if ($nextNode === null) {
+        if ($nextNode === null || ! $nextNode instanceof Return_) {
             return false;
         }
 
-        $nextNode = $nextNode->expr;
+        $returnExpression = $nextNode->expr;
 
-        return $nextNode !== null && $this->constFetchAnalyzer->isBool($nextNode);
+        return $returnExpression !== null && $this->constFetchAnalyzer->isBool($returnExpression);
     }
 }

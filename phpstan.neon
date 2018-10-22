@@ -54,7 +54,6 @@ parameters:
         - '#Parameter \#1 \$classReflection of method Rector\\NodeTypeResolver\\Reflection\\ClassReflectionTypesResolver::resolve\(\) expects PHPStan\\Reflection\\ClassReflection, PHPStan\\Reflection\\ClassReflection|null given#'
         - '#Cannot call method getAttribute\(\) on PhpParser\\Node\\Name\|null#'
         - '#Cannot call method getText\(\) on PhpParser\\Comment\\Doc\|null#'
-        - '#Parameter \#2 \$args of class PhpParser\\Node\\Expr\\FuncCall constructor expects array<PhpParser\\Node\\Arg>, array<int, PhpParser\\Node\\Expr> given.#' #1
 
         # false positive, has annotation type above
         - '#Parameter \#1 \$node of method Rector\\PHPUnit\\Rector\\Foreach_\\SimplifyForeachInstanceOfRector\:\:resolveVar\(\) expects PhpParser\\Node\\Expr\\MethodCall\|PhpParser\\Node\\Expr\\StaticCall, PhpParser\\Node given#'
