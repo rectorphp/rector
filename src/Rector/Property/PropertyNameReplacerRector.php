@@ -5,7 +5,6 @@ namespace Rector\Rector\Property;
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Identifier;
-use Rector\Builder\IdentifierRenamer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -19,25 +18,14 @@ final class PropertyNameReplacerRector extends AbstractRector
      *
      * @var string[][]
      */
-    private $perClassOldToNewProperties = [];
+    private $oldToNewPropertyByTypes = [];
 
     /**
-     * @var string[]
+     * @param string[][] $oldToNewPropertyByTypes
      */
-    private $activeTypes = [];
-
-    /**
-     * @var IdentifierRenamer
-     */
-    private $identifierRenamer;
-
-    /**
-     * @param string[][] $perClassOldToNewProperties
-     */
-    public function __construct(array $perClassOldToNewProperties, IdentifierRenamer $identifierRenamer)
+    public function __construct(array $oldToNewPropertyByTypes)
     {
-        $this->perClassOldToNewProperties = $perClassOldToNewProperties;
-        $this->identifierRenamer = $identifierRenamer;
+        $this->oldToNewPropertyByTypes = $oldToNewPropertyByTypes;
     }
 
     public function getDefinition(): RectorDefinition
@@ -47,7 +35,7 @@ final class PropertyNameReplacerRector extends AbstractRector
                 '$someObject->someOldProperty;',
                 '$someObject->someNewProperty;',
                 [
-                    '$perClassOldToNewProperties' => [
+                    '$oldToNewPropertyByTypes' => [
                         'SomeClass' => [
                             'someOldProperty' => 'someNewProperty',
                         ],
@@ -70,57 +58,20 @@ final class PropertyNameReplacerRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        $this->activeTypes = [];
-        $matchedTypes = $this->matchTypes($node, $this->getClasses());
-
-        if ($matchedTypes) {
-            $this->activeTypes = $matchedTypes;
-        }
-
-        $oldToNewProperties = $this->matchOldToNewProperties();
-
-        /** @var Identifier $identifierNode */
-        $identifierNode = $node->name;
-
-        // @see https://stackoverflow.com/a/4240019/1348344
-        $oldToNewProperties = array_change_key_case($oldToNewProperties);
-
-        $propertyName = strtolower($this->getName($identifierNode));
-
-        if (! isset($oldToNewProperties[$propertyName])) {
-            return null;
-        }
-
-        foreach ($oldToNewProperties as $oldProperty => $newProperty) {
-            if ($propertyName !== $oldProperty) {
+        foreach ($this->oldToNewPropertyByTypes as $type => $oldToNewProperties) {
+            if (! $this->isType($node, $type)) {
                 continue;
             }
 
-            $this->identifierRenamer->renameNode($node, $newProperty);
-        }
+            foreach ($oldToNewProperties as $oldProperty => $newProperty) {
+                if (strtolower($this->getName($node)) !== strtolower($oldProperty)) {
+                    continue;
+                }
 
-        return $node;
-    }
-
-    /**
-     * @return string[]
-     */
-    private function getClasses(): array
-    {
-        return array_keys($this->perClassOldToNewProperties);
-    }
-
-    /**
-     * @return string[]
-     */
-    private function matchOldToNewProperties(): array
-    {
-        foreach ($this->activeTypes as $activeType) {
-            if ($this->perClassOldToNewProperties[$activeType]) {
-                return $this->perClassOldToNewProperties[$activeType];
+                $node->name = new Identifier($newProperty);
             }
         }
 
-        return [];
+        return $node;
     }
 }
