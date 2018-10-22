@@ -66,7 +66,7 @@ final class NodeTypeResolver
         // complete parent types - parent classes, interfaces and traits
         foreach ($types as $i => $type) {
             // remove scalar types and other non-existing ones
-            if ($type === 'null') {
+            if ($type === 'null' || $type === null) {
                 unset($types[$i]);
                 continue;
             }

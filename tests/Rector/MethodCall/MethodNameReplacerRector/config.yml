@@ -1,8 +1,8 @@
 services:
     Rector\Rector\MethodCall\MethodNameReplacerRector:
-        'Rector\Tests\Rector\MethodCall\MethodNameReplacerRector\Source\AbstractType':
-              'setDefaultOptions': 'configureOptions'
-        'Nette\Utils\Html':
-              'add': 'addHtml'
-        'Rector\Tests\Rector\MethodCall\MethodNameReplacerRector\Source\FormMacros':
-              'renderFormBegin': ['Nette\Bridges\FormsLatte\Runtime', 'renderFormBegin']
+        Rector\Tests\Rector\MethodCall\MethodNameReplacerRector\Source\AbstractType:
+              setDefaultOptions: 'configureOptions'
+        Nette\Utils\Html:
+              add: 'addHtml'
+        Rector\Tests\Rector\MethodCall\MethodNameReplacerRector\Source\FormMacros:
+              renderFormBegin: ['Nette\Bridges\FormsLatte\Runtime', 'renderFormBegin']
