@@ -81,12 +81,12 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
     }
 
     /**
-     * @param Name|Identifier $nameOrIdentifierNode
+     * @param Name|Identifier $node
      */
-    public function refactor(Node $nameOrIdentifierNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        $name = $this->resolveNameFromNode($nameOrIdentifierNode);
-        if ($name === null) {
+        $name = $node->toString();
+        if (! $name) {
             return null;
         }
 
@@ -98,27 +98,27 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
             return null;
         }
 
-        $oldName = $this->resolveNameFromNode($nameOrIdentifierNode);
+        $oldName = $node->toString();
 
         $newNameParts = explode('_', $oldName);
-        $parentNode = $nameOrIdentifierNode->getAttribute(Attribute::PARENT_NODE);
+        $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
         $lastNewNamePart = $newNameParts[count($newNameParts) - 1];
 
-        if ($nameOrIdentifierNode instanceof Name) {
-            $nameOrIdentifierNode->parts = $newNameParts;
+        if ($node instanceof Name) {
+            $node->parts = $newNameParts;
 
-            return $nameOrIdentifierNode;
+            return $node;
         }
 
-        if ($nameOrIdentifierNode instanceof Identifier && $parentNode instanceof Class_) {
+        if ($node instanceof Identifier && $parentNode instanceof Class_) {
             $namespaceParts = $newNameParts;
             array_pop($namespaceParts);
 
             $this->newNamespace = implode('\\', $namespaceParts);
 
-            $nameOrIdentifierNode->name = $lastNewNamePart;
+            $node->name = $lastNewNamePart;
 
-            return $nameOrIdentifierNode;
+            return $node;
         }
 
         return null;
@@ -145,15 +145,6 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
         $this->newNamespace = null;
 
         return $nodes;
-    }
-
-    private function resolveNameFromNode(Node $node): ?string
-    {
-        if ($node instanceof Identifier || $node instanceof Name) {
-            return $node->toString();
-        }
-
-        return null;
     }
 
     private function isNamespaceMatch(string $name): bool

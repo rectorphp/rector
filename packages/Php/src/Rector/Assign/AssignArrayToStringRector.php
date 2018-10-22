@@ -173,7 +173,7 @@ CODE_SAMPLE
     private function processProperty(Node $propertyNode): bool
     {
         foreach ($this->emptyStringPropertyNodes as $emptyStringPropertyNode) {
-            if ((string) $emptyStringPropertyNode->name === (string) $propertyNode->name) {
+            if ($this->getName($emptyStringPropertyNode) === $this->getName($propertyNode)) {
                 $emptyStringPropertyNode->default = new Array_();
 
                 return true;

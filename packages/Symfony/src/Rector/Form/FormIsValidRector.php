@@ -5,7 +5,6 @@ namespace Rector\Symfony\Rector\Form;
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\Variable;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
@@ -82,9 +81,7 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var Variable $variableNode */
-        $variableNode = $node->var;
-        $variableName = (string) $variableNode->name;
+        $variableName = $this->getName($node->var);
 
         return new BooleanAnd(
             $this->methodCallNodeFactory->createWithVariableNameAndMethodName($variableName, 'isSubmitted'),

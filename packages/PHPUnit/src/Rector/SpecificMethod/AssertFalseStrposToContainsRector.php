@@ -3,6 +3,7 @@
 namespace Rector\PHPUnit\Rector\SpecificMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use Rector\Builder\IdentifierRenamer;
@@ -84,10 +85,14 @@ final class AssertFalseStrposToContainsRector extends AbstractPHPUnitRector
         $oldArguments = $methodCallNode->args;
 
         /** @var Identifier $oldArguments */
-        $strposArguments = $oldArguments[0]->value;
+        $strposFuncCallNode = $oldArguments[0]->value;
 
-        $firstArgument = $strposArguments->args[1];
-        $secondArgument = $strposArguments->args[0];
+        if (! $strposFuncCallNode instanceof FuncCall) {
+            return;
+        }
+
+        $firstArgument = $strposFuncCallNode->args[1];
+        $secondArgument = $strposFuncCallNode->args[0];
 
         unset($oldArguments[0]);
 

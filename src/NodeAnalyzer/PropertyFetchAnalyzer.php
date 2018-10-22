@@ -26,10 +26,16 @@ final class PropertyFetchAnalyzer
      */
     private $broker;
 
-    public function __construct(NodeTypeResolver $nodeTypeResolver, Broker $broker)
+    /**
+     * @var NameResolver
+     */
+    private $nameResolver;
+
+    public function __construct(NodeTypeResolver $nodeTypeResolver, Broker $broker, NameResolver $nameResolver)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->broker = $broker;
+        $this->nameResolver = $nameResolver;
     }
 
     public function isMagicOnType(Node $node, string $type): bool
@@ -43,7 +49,7 @@ final class PropertyFetchAnalyzer
             return false;
         }
 
-        return ! $this->hasPublicProperty($node, (string) $node->name);
+        return ! $this->hasPublicProperty($node, $this->nameResolver->resolve($node));
     }
 
     private function hasPublicProperty(PropertyFetch $node, string $propertyName): bool
@@ -54,6 +60,10 @@ final class PropertyFetchAnalyzer
         $propertyFetchType = $nodeScope->getType($node->var);
         if ($propertyFetchType instanceof ObjectType) {
             $propertyFetchType = $propertyFetchType->getClassName();
+        }
+
+        if (! is_string($propertyFetchType)) {
+            return false;
         }
 
         if (! $this->broker->hasClass($propertyFetchType)) {

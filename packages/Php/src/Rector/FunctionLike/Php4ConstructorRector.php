@@ -140,11 +140,11 @@ CODE_SAMPLE
             return false;
         }
 
-        if ((string) $node->var->name !== 'this') {
+        if (! $this->isName($node->var, 'this')) {
             return false;
         }
 
-        return (string) $node->name === '__construct';
+        return $this->isName($node, '__construct');
     }
 
     private function processClassMethodStatementsForParentConstructorCalls(ClassMethod $classMethodNode): void
@@ -186,7 +186,7 @@ CODE_SAMPLE
         }
 
         // it's not a parent PHP 4 constructor call
-        if (strtolower($parentClassName) !== strtolower((string) $node->name)) {
+        if (strtolower($parentClassName) !== strtolower($this->getName($node))) {
             return;
         }
 

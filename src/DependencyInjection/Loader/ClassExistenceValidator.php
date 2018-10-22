@@ -29,7 +29,7 @@ final class ClassExistenceValidator
         }
 
         foreach (array_keys($configuration[self::SERVICES_KEY]) as $class) {
-            if (empty($class)) {
+            if (empty($class) || ! is_string($class)) {
                 continue;
             }
 

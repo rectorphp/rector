@@ -54,6 +54,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        /** @var MethodCall|StaticCall|null $matchedNode */
         $matchedNode = $this->foreachAnalyzer->matchOnlyStmt(
             $node,
             function (Node $node, Foreach_ $foreachNode): ?Node {

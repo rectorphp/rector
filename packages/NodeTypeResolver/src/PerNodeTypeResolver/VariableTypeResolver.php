@@ -7,6 +7,7 @@ use PhpParser\Node\Expr\Variable;
 use PHPStan\Analyser\Scope;
 use PHPStan\TrinaryLogic;
 use PHPStan\Type\ThisType;
+use Rector\NodeAnalyzer\NameResolver;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
@@ -24,10 +25,19 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface
      */
     private $typeToStringResolver;
 
-    public function __construct(DocBlockAnalyzer $docBlockAnalyzer, TypeToStringResolver $typeToStringResolver)
-    {
+    /**
+     * @var NameResolver
+     */
+    private $nameResolver;
+
+    public function __construct(
+        DocBlockAnalyzer $docBlockAnalyzer,
+        TypeToStringResolver $typeToStringResolver,
+        NameResolver $nameResolver
+    ) {
         $this->docBlockAnalyzer = $docBlockAnalyzer;
         $this->typeToStringResolver = $typeToStringResolver;
+        $this->nameResolver = $nameResolver;
     }
 
     /**
@@ -46,7 +56,9 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface
     {
         /** @var Scope $nodeScope */
         $nodeScope = $variableNode->getAttribute(Attribute::SCOPE);
-        $variableName = (string) $variableNode->name;
+
+        /** @var string $variableName */
+        $variableName = $this->nameResolver->resolve($variableNode);
 
         if ($nodeScope->hasVariableType($variableName) === TrinaryLogic::createYes()) {
             $type = $nodeScope->getVariableType($variableName);

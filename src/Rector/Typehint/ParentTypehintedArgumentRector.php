@@ -164,7 +164,7 @@ CODE_SAMPLE
             /** @var Variable $variableNode */
             $variableNode = $param->var;
 
-            $parameterName = (string) $variableNode->name;
+            $parameterName = $this->getName($variableNode);
 
             if (! isset($parametersToTypehints[$parameterName])) {
                 continue;

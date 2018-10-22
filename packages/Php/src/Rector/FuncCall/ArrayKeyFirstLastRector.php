@@ -72,31 +72,36 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node->stmts === null) {
-            return null;
-        }
+        /** @var int $i */
+        foreach ((array) $node->stmts as $i => $stmt) {
+            if (! $stmt instanceof Expression) {
+                continue;
+            }
 
-        foreach ($node->stmts as $key => $stmt) {
             /** @var Expression $stmt */
             if (! $this->isFuncCallMatch($stmt->expr)) {
                 continue;
             }
 
-            if (! isset($node->stmts[$key + 1])) {
+            if (! isset($node->stmts[$i + 1])) {
                 continue;
             }
 
-            if (! $this->isAssignMatch($node->stmts[$key + 1]->expr)) {
+            $nextStmt = $node->stmts[$i + 1];
+            if (! $nextStmt instanceof Expression) {
                 continue;
             }
 
-            $funcCallNode = $stmt->expr;
+            if (! $this->isAssignMatch($nextStmt->expr)) {
+                continue;
+            }
 
             /** @var FuncCall $funcCallNode */
+            $funcCallNode = $stmt->expr;
             $currentFuncCallName = $this->getName($funcCallNode);
 
             /** @var Assign $assignNode */
-            $assignNode = $node->stmts[$key + 1]->expr;
+            $assignNode = $nextStmt->expr;
 
             /** @var FuncCall $assignFuncCallNode */
             $assignFuncCallNode = $assignNode->expr;
@@ -106,10 +111,10 @@ CODE_SAMPLE
             }
 
             // rename next method to new one
-            $assignNode->expr->name = new Name($this->previousToNewFunctions[$currentFuncCallName]);
+            $assignFuncCallNode->name = new Name($this->previousToNewFunctions[$currentFuncCallName]);
 
             // remove unused node
-            unset($node->stmts[$key]);
+            unset($node->stmts[$i]);
         }
 
         // reindex for printer

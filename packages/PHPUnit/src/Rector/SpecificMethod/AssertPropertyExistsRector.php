@@ -5,8 +5,10 @@ namespace Rector\PHPUnit\Rector\SpecificMethod;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Scalar\String_;
 use Rector\Builder\IdentifierRenamer;
 use Rector\Node\NodeFactory;
 use Rector\Rector\AbstractPHPUnitRector;
@@ -77,10 +79,6 @@ final class AssertPropertyExistsRector extends AbstractPHPUnitRector
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $node instanceof MethodCall) {
-            return null;
-        }
-
         if (! $this->isInTestClass($node)) {
             return null;
         }
@@ -96,28 +94,34 @@ final class AssertPropertyExistsRector extends AbstractPHPUnitRector
             return null;
         }
 
-        $oldArguments = $node->args;
-
         /** @var Identifier $oldArguments */
-        $propertyExistsMethodCall = $oldArguments[0]->value;
+        $propertyExistsMethodCall = $node->args[0]->value;
+        if (! $propertyExistsMethodCall instanceof FuncCall) {
+            return null;
+        }
 
-        /** @var MethodCall $propertyExistsMethodCall */
         [$firstArgument, $secondArgument] = $propertyExistsMethodCall->args;
 
         if ($firstArgument->value instanceof Variable) {
             $secondArg = new Variable($firstArgument->value->name);
             $map = $this->renameMethodsWithObjectMap;
-        } else {
-            $secondArg = $firstArgument->value->class->toString();
+        } elseif ($firstArgument->value instanceof New_) {
+            $secondArg = $this->getName($firstArgument->value->class);
             $map = $this->renameMethodsWithClassMap;
+        } else {
+            return null;
         }
 
-        unset($oldArguments[0]);
+        if (! $secondArgument->value instanceof String_) {
+            return null;
+        }
+
+        unset($node->args[0]);
 
         $node->args = array_merge($this->nodeFactory->createArgs([
             $secondArgument->value->value,
             $secondArg,
-        ]), $oldArguments);
+        ]), $node->args);
 
         $this->identifierRenamer->renameNodeWithMap($node, $map);
 
