@@ -3,3 +3,4 @@
 use Rector\Tests\Rector\MethodCall\MethodNameReplacerRector\Source\FormMacros;
 
 $result = FormMacros::renderFormBegin($someArgs);
+$result = FormMACROS::renderFormBEGIN($someArgs);
