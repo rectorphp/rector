@@ -35,8 +35,6 @@ use PhpParser\Node\Stmt\If_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
-use Rector\Builder\StatementGlue;
-use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeToStringResolver;
 use Rector\Rector\AbstractRector;
@@ -60,10 +58,6 @@ final class MergeIsCandidateRector extends AbstractRector
      * @var TypeToStringResolver
      */
     private $typeToStringResolver;
-    /**
-     * @var StatementGlue
-     */
-    private $statementGlue;
 
     /**
      * @var CallableNodeTraverser
@@ -103,7 +97,7 @@ final class MergeIsCandidateRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->isType($node, 'Rector\Rector\AbstractRector')) {
+        if (! $this->isType($node, 'Rector\Rector\AbstractRector')) {
             return null;
         }
 

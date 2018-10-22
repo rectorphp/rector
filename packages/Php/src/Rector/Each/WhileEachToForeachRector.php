@@ -112,6 +112,6 @@ CODE_SAMPLE
             return false;
         }
 
-        return $assignNode->expr instanceof FuncCall && (string) $assignNode->expr->name === 'each';
+        return $assignNode->expr instanceof FuncCall && $this->isName($assignNode->expr, 'each');
     }
 }

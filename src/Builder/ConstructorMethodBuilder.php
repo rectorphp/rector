@@ -103,7 +103,7 @@ final class ConstructorMethodBuilder
     private function hasMethodParameter(ClassMethod $classMethodNode, VariableInfo $variableInfo): bool
     {
         foreach ($classMethodNode->params as $constructorParameter) {
-            if ($constructorParameter->var->name === $variableInfo->getName()) {
+            if ($this->nameResolver->isName($constructorParameter->var, $variableInfo->getName())) {
                 return true;
             }
         }

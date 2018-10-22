@@ -13,7 +13,7 @@ use Rector\RectorDefinition\RectorDefinition;
 final class NormalToFluentRector extends AbstractRector
 {
     /**
-     * @var string[]
+     * @var string[][]
      */
     private $fluentMethodsByType = [];
 
@@ -23,7 +23,7 @@ final class NormalToFluentRector extends AbstractRector
     private $collectedMethodCalls = [];
 
     /**
-     * @param string[] $fluentMethodsByType
+     * @param string[][] $fluentMethodsByType
      */
     public function __construct(array $fluentMethodsByType)
     {

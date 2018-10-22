@@ -3,12 +3,10 @@
 namespace Rector\Php\Rector\FuncCall;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
-use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\Function_;
+use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -64,88 +62,41 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Function_::class, ClassMethod::class];
+        return [FuncCall::class];
     }
 
     /**
-     * @param Function_|ClassMethod $node
+     * @param FuncCall $node
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node->stmts === null) {
+        /** @var Expression|null $previousExpression */
+        $previousExpression = $node->getAttribute(Attribute::PREVIOUS_EXPRESSION);
+        if ($previousExpression === null) {
             return null;
         }
 
-        foreach ($node->stmts as $key => $stmt) {
-            /** @var Expression $stmt */
-            if (! $this->isFuncCallMatch($stmt->expr)) {
-                continue;
-            }
-
-            if (! isset($node->stmts[$key + 1])) {
-                continue;
-            }
-
-            if (! $this->isAssignMatch($node->stmts[$key + 1]->expr)) {
-                continue;
-            }
-
-            $funcCallNode = $stmt->expr;
-
-            /** @var FuncCall $funcCallNode */
-            $currentFuncCallName = $this->getName($funcCallNode);
-
-            /** @var Assign $assignNode */
-            $assignNode = $node->stmts[$key + 1]->expr;
-
-            /** @var FuncCall $assignFuncCallNode */
-            $assignFuncCallNode = $assignNode->expr;
-
-            if (! $this->areFuncCallNodesArgsEqual($funcCallNode, $assignFuncCallNode)) {
-                continue;
-            }
-
-            // rename next method to new one
-            $assignNode->expr->name = new Name($this->previousToNewFunctions[$currentFuncCallName]);
-
-            // remove unused node
-            unset($node->stmts[$key]);
+        $previousFuncCall = $previousExpression->expr;
+        if (! $previousFuncCall instanceof FuncCall) {
+            return null;
         }
 
-        // reindex for printer
-        $node->stmts = array_values($node->stmts);
+        if (! $this->isNames($previousFuncCall, array_keys($this->previousToNewFunctions))) {
+            return null;
+        }
+
+        if (! $this->isName($node, 'key')) {
+            return null;
+        }
+
+        if (! $this->areNodesEqual($previousFuncCall->args[0], $node->args[0])) {
+            return null;
+        }
+
+        $this->removeNode($previousFuncCall);
+
+        $node->name = new Name($this->previousToNewFunctions[$this->getName($previousFuncCall)]);
 
         return $node;
-    }
-
-    private function isFuncCallMatch(Node $node): bool
-    {
-        if (! $node instanceof FuncCall) {
-            return false;
-        }
-
-        return $this->isNames($node, array_keys($this->previousToNewFunctions));
-    }
-
-    private function isAssignMatch(Node $node): bool
-    {
-        if (! $node instanceof Assign) {
-            return false;
-        }
-
-        if (! $node->expr instanceof FuncCall) {
-            return false;
-        }
-
-        return $this->isName($node->expr, 'key');
-    }
-
-    private function areFuncCallNodesArgsEqual(FuncCall $firstFuncCallNode, FuncCall $secondFuncCallNode): bool
-    {
-        if (! isset($firstFuncCallNode->args[0]) || ! isset($secondFuncCallNode->args[0])) {
-            return false;
-        }
-
-        return $this->areNodesEqual($firstFuncCallNode->args[0], $secondFuncCallNode->args[0]);
     }
 }

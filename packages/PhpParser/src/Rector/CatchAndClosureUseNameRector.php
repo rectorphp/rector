@@ -69,7 +69,7 @@ final class CatchAndClosureUseNameRector extends AbstractRector
         $variableNode = $node->var;
 
         $node->var = $this->propertyFetchNodeFactory->createWithVariableNameAndPropertyName(
-            (string) $variableNode->name,
+            $this->getName($variableNode),
             'var'
         );
         $this->identifierRenamer->renameNode($node, 'name');

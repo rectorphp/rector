@@ -4,7 +4,6 @@ namespace Rector\Rector;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
-use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Builder\ExpressionAdder;
 use Rector\Builder\PropertyAdder;
@@ -17,6 +16,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     use ConstFetchAnalyzerTrait;
     use BetterStandardPrinterTrait;
     use ClassPropertyCollectorTrait;
+    use RemovingTrait;
 
     /**
      * @var ExpressionAdder
@@ -27,11 +27,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
      * @var PropertyAdder
      */
     private $propertyAdder;
-
-    /**
-     * @var Node[]
-     */
-    private $nodesToBeRemoved = [];
 
     /**
      * @required
@@ -60,23 +55,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         return null;
     }
 
-    public function removeNode(Node $node): void
-    {
-        $this->nodesToBeRemoved[] = $node;
-    }
-
-    /**
-     * @return bool|int|Node
-     */
-    public function leaveNode(Node $node)
-    {
-        if (in_array($node, $this->nodesToBeRemoved, true)) {
-            return NodeTraverser::REMOVE_NODE;
-        }
-
-        return $node;
-    }
-
     /**
      * @param Node[] $nodes
      * @return Node[]
@@ -84,7 +62,8 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     public function afterTraverse(array $nodes): array
     {
         $nodes = $this->expressionAdder->addExpressionsToNodes($nodes);
-        return $this->propertyAdder->addPropertiesToNodes($nodes);
+        $nodes = $this->propertyAdder->addPropertiesToNodes($nodes);
+        return $this->removeFromNodes($nodes);
     }
 
     protected function addNodeAfterNode(Expr $newNode, Node $positionNode): void

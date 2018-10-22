@@ -4,9 +4,13 @@ namespace Rector\NodeAnalyzer;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\Use_;
+use Rector\NodeTypeResolver\Node\Attribute;
 
 final class NameResolver
 {
@@ -32,6 +36,28 @@ final class NameResolver
 
             return $this->resolve($propertyNode->props[0]);
         };
+
+        $this->nameResolvers[Use_::class] = function (Use_ $useNode) {
+            if (! count($useNode->uses)) {
+                return null;
+            }
+
+            return $this->resolve($useNode->uses[0]);
+        };
+
+        $this->nameResolvers[Name::class] = function (Name $nameNode) {
+            $resolvedName = $nameNode->getAttribute(Attribute::RESOLVED_NAME);
+            if ($resolvedName instanceof FullyQualified) {
+                return $resolvedName->toString();
+            }
+
+            return $nameNode->toString();
+        };
+    }
+
+    public function isName(Node $node, string $name): bool
+    {
+        return $this->resolve($node) === $name;
     }
 
     public function resolve(Node $node): ?string

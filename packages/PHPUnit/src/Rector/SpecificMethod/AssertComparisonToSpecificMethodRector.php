@@ -134,6 +134,6 @@ final class AssertComparisonToSpecificMethodRector extends AbstractPHPUnitRector
     {
         return in_array(get_class($node), [Array_::class, ConstFetch::class], true)
               || is_subclass_of($node, Scalar::class)
-              || $node instanceof Variable && stripos($node->name, 'exp') === 0;
+              || $node instanceof Variable && stripos($this->getName($node), 'exp') === 0;
     }
 }

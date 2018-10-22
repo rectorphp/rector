@@ -2,6 +2,7 @@
 
 namespace Rector\Builder;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
@@ -38,6 +39,9 @@ final class IdentifierRenamer
         $this->nameResolver = $nameResolver;
     }
 
+    /**
+     * @param ClassConstFetch|MethodCall|PropertyFetch|StaticCall|ClassMethod $node
+     */
     public function renameNode(Node $node, string $newMethodName): void
     {
         $this->ensureNodeHasIdentifier($node);
@@ -47,6 +51,7 @@ final class IdentifierRenamer
     }
 
     /**
+     * @param ClassConstFetch|MethodCall|PropertyFetch|StaticCall|ClassMethod $node
      * @param string[] $renameMethodMap
      */
     public function renameNodeWithMap(Node $node, array $renameMethodMap): void
@@ -61,12 +66,16 @@ final class IdentifierRenamer
         $node->name = new Identifier($renameMethodMap[$oldNodeMethodName]);
     }
 
+    /**
+     * @param ClassConstFetch|MethodCall|PropertyFetch|StaticCall|ClassMethod $node
+     */
     public function removeSuffix(Node $node, string $suffixToRemove): void
     {
         $this->ensureNodeHasIdentifier($node);
 
-        /** @var ClassConstFetch|MethodCall|PropertyFetch|StaticCall|ClassMethod $node */
-        $node->name = new Identifier(preg_replace(sprintf('/%s$/', $suffixToRemove), '', $node->name));
+        $newName = Strings::replace($this->nameResolver->resolve($node), sprintf('#%s$#', $suffixToRemove));
+
+        $node->name = new Identifier($newName);
     }
 
     private function ensureNodeHasIdentifier(Node $node): void

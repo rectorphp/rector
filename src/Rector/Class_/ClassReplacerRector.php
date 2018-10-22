@@ -5,8 +5,6 @@ namespace Rector\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Stmt\Use_;
-use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -70,39 +68,16 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Name $nameNode
+     * @param Name $node
      */
-    public function refactor(Node $nameNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        $resolvedNameNode = $this->resolveNameNodeFromNode($nameNode);
-        if ($resolvedNameNode === null) {
+        $resolvedName = $this->getName($node);
+        $newName = $this->oldToNewClasses[$resolvedName] ?? null;
+        if (! $newName) {
             return null;
         }
 
-        $newName = $this->oldToNewClasses[$resolvedNameNode->toString()] ?? null;
-        if ($newName) {
-            return new FullyQualified($newName);
-        }
-
-        return null;
-    }
-
-    private function resolveNameNodeFromNode(Node $node): ?Name
-    {
-        if ($node instanceof Name) {
-            // resolved name has priority, as it is FQN
-            $resolvedName = $node->getAttribute(Attribute::RESOLVED_NAME);
-            if ($resolvedName instanceof FullyQualified) {
-                return $resolvedName;
-            }
-
-            return $node;
-        }
-
-        if ($node instanceof Use_) {
-            return $node->uses[0]->name;
-        }
-
-        return null;
+        return new FullyQualified($newName);
     }
 }

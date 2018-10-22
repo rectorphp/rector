@@ -62,33 +62,37 @@ final class MultiDirnameRector extends AbstractRector
         return $node;
     }
 
-    private function matchNestedDirnameFuncCall(Node $node): ?FuncCall
+    private function matchNestedDirnameFuncCall(FuncCall $funcCallNode): ?FuncCall
     {
-        if (! $this->isName($node, 'dirname')) {
+        if (! $this->isName($funcCallNode, 'dirname')) {
             return null;
         }
 
-        /** @var FuncCall $node */
-        if (count($node->args) >= 3) {
+        if (count($funcCallNode->args) >= 3) {
             return null;
         }
 
         // dirname($path, <LEVEL>);
-        if (count($node->args) === 2) {
-            if (! $node->args[1]->value instanceof LNumber) {
+        if (count($funcCallNode->args) === 2) {
+            if (! $funcCallNode->args[1]->value instanceof LNumber) {
                 return null;
             }
 
             /** @var LNumber $levelNumber */
-            $levelNumber = $node->args[1]->value;
+            $levelNumber = $funcCallNode->args[1]->value;
 
             $this->nestingLevel += $levelNumber->value;
         } else {
             ++$this->nestingLevel;
         }
 
-        if ($this->isName($node->args[0]->value, 'dirname')) {
-            return $node->args[0]->value;
+        $nestedFuncCallNode = $funcCallNode->args[0]->value;
+        if (! $nestedFuncCallNode instanceof FuncCall) {
+            return null;
+        }
+
+        if ($this->isName($nestedFuncCallNode, 'dirname')) {
+            return $nestedFuncCallNode;
         }
 
         return null;

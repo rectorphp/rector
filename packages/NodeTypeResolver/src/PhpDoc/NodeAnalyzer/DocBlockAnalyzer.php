@@ -187,7 +187,7 @@ final class DocBlockAnalyzer
     public function getTagByName(Node $node, string $name): PhpDocTagNode
     {
         if (! $this->hasTag($node, $name)) {
-            throw new MissingTagException('Tag "%s" was not found at "%s" node.', $name, get_class($node));
+            throw new MissingTagException(sprintf('Tag "%s" was not found at "%s" node.', $name, get_class($node)));
         }
 
         /** @var PhpDocTagNode[] $foundTags */

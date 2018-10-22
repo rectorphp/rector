@@ -94,7 +94,7 @@ CODE_SAMPLE
         }
 
         /** @var MethodCall $methodCallNode */
-        $argumentVariableName = $methodCallNode->args[1]->value->name;
+        $argumentVariableName = $this->getName($methodCallNode->args[1]->value);
 
         // is na exception variable
         if ($exceptionVariableNode->name !== $argumentVariableName) {
@@ -121,7 +121,7 @@ CODE_SAMPLE
             return;
         }
 
-        if (! $this->isName($secondArgument->var, (string) $exceptionVariable->name)) {
+        if (! $this->areNodesEqual($secondArgument->var, $exceptionVariable)) {
             return;
         }
 
@@ -151,7 +151,7 @@ CODE_SAMPLE
         }
 
         // looking for "$exception->getMessage()"
-        if (! $this->isName($secondArgument->var, $exceptionVariable->name)) {
+        if (! $this->areNodesEqual($secondArgument->var, $exceptionVariable)) {
             return;
         }
 
@@ -188,7 +188,7 @@ CODE_SAMPLE
         }
 
         // looking for "$exception->getMessage()"
-        if (! $this->isName($secondArgument->var, (string) $exceptionVariable->name)) {
+        if (! $this->isName($secondArgument->var, $this->getName($exceptionVariable))) {
             return;
         }
 

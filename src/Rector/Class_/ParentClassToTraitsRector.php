@@ -30,12 +30,12 @@ final class ParentClassToTraitsRector extends AbstractRector
     private $nodeFactory;
 
     /**
-     * @var string[]
+     * @var string[][]
      */
     private $parentClassToTraits = [];
 
     /**
-     * @param string[] $parentClassToTraits { parent class => [ traits ] }
+     * @param string[][] $parentClassToTraits { parent class => [ traits ] }
      */
     public function __construct(
         StatementGlue $statementGlue,
