@@ -21,7 +21,7 @@ final class FunctionReplaceRector extends AbstractRector
      */
     public function __construct(array $oldFunctionToNewFunction)
     {
-        $this->oldFunctionToNewFunction = array_change_key_case($oldFunctionToNewFunction);
+        $this->oldFunctionToNewFunction = $oldFunctionToNewFunction;
     }
 
     public function getDefinition(): RectorDefinition
@@ -52,14 +52,13 @@ final class FunctionReplaceRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        $functionName = strtolower($this->getName($node));
-        if (! isset($this->oldFunctionToNewFunction[$functionName])) {
-            return null;
+        foreach ($this->oldFunctionToNewFunction as $oldFunction => $newFunction) {
+            if (! $this->isNameInsensitive($node, $oldFunction)) {
+                continue;
+            }
+
+            $node->name = new FullyQualified($newFunction);
         }
-
-        $newFunctionName = $this->oldFunctionToNewFunction[$functionName];
-
-        $node->name = new FullyQualified($newFunctionName);
 
         return $node;
     }

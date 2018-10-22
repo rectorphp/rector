@@ -33,12 +33,12 @@ final class MethodNameReplacerRector extends AbstractRector
         return new RectorDefinition('Turns method names to new ones.', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
-$someObject = new SomeExample;
+$someObject = new SomeExampleClass;
 $someObject->oldMethod();
 CODE_SAMPLE
                 ,
                 <<<'CODE_SAMPLE'
-$someObject = new SomeExample;
+$someObject = new SomeExampleClass;
 $someObject->newMethod();
 CODE_SAMPLE
                 ,
@@ -79,6 +79,7 @@ CODE_SAMPLE
                 }
 
                 $node->name = $newMethod;
+                return $node;
             }
         }
 
