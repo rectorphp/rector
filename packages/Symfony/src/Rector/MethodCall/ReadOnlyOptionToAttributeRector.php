@@ -4,9 +4,9 @@ namespace Rector\Symfony\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
+use Rector\NodeAnalyzer\ArrayAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -18,9 +18,17 @@ final class ReadOnlyOptionToAttributeRector extends AbstractRector
      */
     private $formBuilderType;
 
-    public function __construct(string $formBuilderType = 'Symfony\Component\Form\FormBuilderInterface')
-    {
+    /**
+     * @var ArrayAnalyzer
+     */
+    private $arrayAnalyzer;
+
+    public function __construct(
+        ArrayAnalyzer $arrayAnalyzer,
+        string $formBuilderType = 'Symfony\Component\Form\FormBuilderInterface'
+    ) {
         $this->formBuilderType = $formBuilderType;
+        $this->arrayAnalyzer = $arrayAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -78,54 +86,16 @@ CODE_SAMPLE
             return null;
         }
 
-        $readonlyItem = $this->findReadonlyInOptions($optionsNode);
+        $readonlyItem = $this->arrayAnalyzer->findItemInInArrayByKeyAndUnset($optionsNode, 'read_only');
         if ($readonlyItem === null) {
             return null;
         }
 
-        $this->addReadonlyItemToOptions($optionsNode, $readonlyItem);
+        // rename string
+        $readonlyItem->key = new String_('readonly');
+
+        $this->arrayAnalyzer->addItemToArrayUnderKey($optionsNode, $readonlyItem, 'attr');
 
         return $node;
-    }
-
-    private function isKeyWithName(ArrayItem $arrayItemNode, string $name): bool
-    {
-        return $arrayItemNode->key instanceof String_ && $arrayItemNode->key->value === $name;
-    }
-
-    private function findReadonlyInOptions(Array_ $optionsArrayNode): ?ArrayItem
-    {
-        foreach ($optionsArrayNode->items as $key => $item) {
-            if (! $this->isKeyWithName($item, 'read_only')) {
-                continue;
-            }
-
-            // rename string
-            $item->key = new String_('readonly');
-
-            // remove + recount for the printer
-            unset($optionsArrayNode->items[$key]);
-            $optionsArrayNode->items = array_values($optionsArrayNode->items);
-
-            return $item;
-        }
-
-        return null;
-    }
-
-    private function addReadonlyItemToOptions(Array_ $optionsArrayNode, ArrayItem $readonlyArrayItem): void
-    {
-        foreach ($optionsArrayNode->items as $item) {
-            if ($this->isKeyWithName($item, 'attr')) {
-                if (! $item->value instanceof Array_) {
-                    continue;
-                }
-
-                $item->value->items[] = $readonlyArrayItem;
-                return;
-            }
-        }
-
-        $optionsArrayNode->items[] = new ArrayItem(new Array_([$readonlyArrayItem]), new String_('attr'));
     }
 }
