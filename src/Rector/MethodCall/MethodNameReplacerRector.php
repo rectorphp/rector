@@ -74,7 +74,7 @@ CODE_SAMPLE
             }
 
             foreach ($oldToNewMethods as $oldMethod => $newMethod) {
-                if (strtolower($this->getName($node)) !== strtolower($oldMethod)) {
+                if (! $this->isNameInsensitive($node, $oldMethod)) {
                     continue;
                 }
 

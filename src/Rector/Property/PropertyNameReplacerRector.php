@@ -64,7 +64,7 @@ final class PropertyNameReplacerRector extends AbstractRector
             }
 
             foreach ($oldToNewProperties as $oldProperty => $newProperty) {
-                if (strtolower($this->getName($node)) !== strtolower($oldProperty)) {
+                if (! $this->isNameInsensitive($node, $oldProperty)) {
                     continue;
                 }
 
