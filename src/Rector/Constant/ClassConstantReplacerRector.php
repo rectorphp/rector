@@ -34,9 +34,6 @@ final class ClassConstantReplacerRector extends AbstractRector
         $this->identifierRenamer = $identifierRenamer;
     }
 
-    /**
-     * @todo complete list with all possibilities
-     */
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Replaces defined class constants in their calls.', [
@@ -73,7 +70,7 @@ final class ClassConstantReplacerRector extends AbstractRector
             }
 
             foreach ($oldToNewConstants as $oldConstant => $newConstant) {
-                if (! $this->isName($node, $oldConstant)) {
+                if (! $this->isNameInsensitive($node, $oldConstant)) {
                     continue;
                 }
 

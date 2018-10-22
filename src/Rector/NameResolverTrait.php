@@ -29,6 +29,11 @@ trait NameResolverTrait
         return $this->getName($node) === $name;
     }
 
+    public function isNameInsensitive(Node $node, string $name): bool
+    {
+        return strtolower($this->getName($node)) === strtolower($name);
+    }
+
     /**
      * @param string[] $names
      */

@@ -9,6 +9,7 @@ class SomeClass
     public function subscribe()
     {
         return [
+            LocalFormEvents::PRE_SUBMIT,
             LocalFormEvents::PRE_SUBMIT
         ];
     }

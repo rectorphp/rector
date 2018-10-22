@@ -9,7 +9,8 @@ class SomeClass
     public function subscribe()
     {
         return [
-            LocalFormEvents::PRE_BIND
+            LocalFormEvents::PRE_BIND,
+            LocalFormEvents::PRE_Bind
         ];
     }
 }
