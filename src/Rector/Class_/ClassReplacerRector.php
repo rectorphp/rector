@@ -72,8 +72,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $resolvedName = $this->getName($node);
-        $newName = $this->oldToNewClasses[$resolvedName] ?? null;
+        $name = $this->getName($node);
+        if (! $name) {
+            return null;
+        }
+
+        $newName = $this->oldToNewClasses[$name] ?? null;
         if (! $newName) {
             return null;
         }

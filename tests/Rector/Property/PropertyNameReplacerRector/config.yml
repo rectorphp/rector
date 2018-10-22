@@ -1,4 +1,5 @@
 services:
     Rector\Rector\Property\PropertyNameReplacerRector:
-        'SomeClass':
-            'oldProperty': 'newProperty'
+        SomeClass:
+            oldProperty: 'newProperty'
+            anotherOldProperty: 'anotherNewProperty'

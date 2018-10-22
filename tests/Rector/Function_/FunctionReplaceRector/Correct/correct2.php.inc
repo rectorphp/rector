@@ -11,5 +11,7 @@ class SomeClass
             'parameters > directories_to_repositories',
             'monorepo-builder.yml'
         ));
+
+        $this->setName(\Safe\sprintf('One %s', 'two'));
     }
 }

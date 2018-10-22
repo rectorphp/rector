@@ -3,10 +3,7 @@
 namespace Rector\Rector\MethodCall;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
-use Rector\Builder\IdentifierRenamer;
-use Rector\NodeAnalyzer\MethodNameAnalyzer;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
@@ -21,34 +18,14 @@ final class MethodNameReplacerRector extends AbstractRector
      *
      * @var string[][]
      */
-    private $perClassOldToNewMethods = [];
+    private $oldToNewMethodsByClass = [];
 
     /**
-     * @var string[]
+     * @param string[][] $oldToNewMethodsByClass
      */
-    private $activeTypes = [];
-
-    /**
-     * @var MethodNameAnalyzer
-     */
-    private $methodNameAnalyzer;
-
-    /**
-     * @var IdentifierRenamer
-     */
-    private $identifierRenamer;
-
-    /**
-     * @param string[][] $perClassOldToNewMethods
-     */
-    public function __construct(
-        array $perClassOldToNewMethods,
-        MethodNameAnalyzer $methodNameAnalyzer,
-        IdentifierRenamer $identifierRenamer
-    ) {
-        $this->perClassOldToNewMethods = $perClassOldToNewMethods;
-        $this->methodNameAnalyzer = $methodNameAnalyzer;
-        $this->identifierRenamer = $identifierRenamer;
+    public function __construct(array $oldToNewMethodsByClass)
+    {
+        $this->oldToNewMethodsByClass = $oldToNewMethodsByClass;
     }
 
     public function getDefinition(): RectorDefinition
@@ -56,18 +33,18 @@ final class MethodNameReplacerRector extends AbstractRector
         return new RectorDefinition('Turns method names to new ones.', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
-$someObject = new SomeClass;
+$someObject = new SomeExampleClass;
 $someObject->oldMethod();
 CODE_SAMPLE
                 ,
                 <<<'CODE_SAMPLE'
-$someObject = new SomeClass;
+$someObject = new SomeExampleClass;
 $someObject->newMethod();
 CODE_SAMPLE
                 ,
                 [
                     '$perClassOldToNewMethods' => [
-                        'SomeClass' => [
+                        'SomeExampleClass' => [
                             'oldMethod' => 'newMethod',
                         ],
                     ],
@@ -81,126 +58,30 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Identifier::class, MethodCall::class];
+        return [Identifier::class];
     }
 
     /**
-     * @param Identifier|MethodCall $node
+     * @param Identifier $node
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node instanceof Identifier) {
-            return $this->processIdentifierNode($node);
-        }
+        $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
 
-        if ($node instanceof MethodCall) {
-            return $this->processMethodCall($node);
-        }
+        foreach ($this->oldToNewMethodsByClass as $type => $oldToNewMethods) {
+            if (! $this->isType($parentNode, $type)) {
+                continue;
+            }
 
-        return null;
-    }
+            foreach ($oldToNewMethods as $oldMethod => $newMethod) {
+                if (! $this->isNameInsensitive($node, $oldMethod)) {
+                    continue;
+                }
 
-    /**
-     * @return string[]
-     */
-    private function getClasses(): array
-    {
-        return array_keys($this->perClassOldToNewMethods);
-    }
-
-    /**
-     * @return string[]
-     */
-    private function matchOldToNewMethods(): array
-    {
-        foreach ($this->activeTypes as $activeType) {
-            if (isset($this->perClassOldToNewMethods[$activeType])) {
-                return $this->perClassOldToNewMethods[$activeType];
+                $node->name = $newMethod;
+                return $node;
             }
         }
-
-        return [];
-    }
-
-    /**
-     * @param string[] $types
-     */
-    private function isMethodName(Node $node, array $types): bool
-    {
-        // already covered by previous methods
-        if (! $node instanceof Identifier) {
-            return false;
-        }
-
-        $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
-        if ($parentNode instanceof MethodCall) {
-            return false;
-        }
-
-        if (! $this->methodNameAnalyzer->isOverrideOfTypes($node, $types)) {
-            return false;
-        }
-
-        /** @var Identifier $node */
-        $parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
-
-        /** @var Identifier $node */
-        if (! isset($this->perClassOldToNewMethods[$parentClassName][$node->name])) {
-            return false;
-        }
-
-        $this->activeTypes = [$parentClassName];
-
-        return true;
-    }
-
-    private function resolveIdentifier(Identifier $node): ?Identifier
-    {
-        $oldToNewMethods = $this->matchOldToNewMethods();
-
-        $methodName = $node->name;
-        if (! isset($oldToNewMethods[$methodName])) {
-            return null;
-        }
-
-        $node->name = $oldToNewMethods[$methodName];
-
-        return $node;
-    }
-
-    private function processIdentifierNode(Identifier $identifierNode): ?Identifier
-    {
-        $this->activeTypes = [];
-
-        $matchedTypes = $this->matchTypes($identifierNode, $this->getClasses());
-
-        if ($matchedTypes) {
-            $this->activeTypes = $matchedTypes;
-        }
-
-        if (! $this->isMethodName($identifierNode, $this->getClasses())) {
-            return null;
-        }
-
-        return $this->resolveIdentifier($identifierNode);
-    }
-
-    private function processMethodCall(MethodCall $node): ?MethodCall
-    {
-        $this->activeTypes = [];
-        $matchedTypes = $this->matchTypes($node, $this->getClasses());
-        if ($matchedTypes) {
-            $this->activeTypes = $matchedTypes;
-        }
-
-        $oldToNewMethods = $this->matchOldToNewMethods();
-
-        $currentMethodName = $this->getName($node);
-        if (! isset($oldToNewMethods[$currentMethodName])) {
-            return null;
-        }
-
-        $this->identifierRenamer->renameNode($node, $oldToNewMethods[$currentMethodName]);
 
         return $node;
     }

@@ -80,7 +80,7 @@ CODE_SAMPLE
     private function processIdentifier(Identifier $identifierNode): Identifier
     {
         foreach ($this->reservedKeywordsToReplacements as $reservedKeyword => $replacement) {
-            if (strtolower($identifierNode->name) === strtolower($reservedKeyword)) {
+            if ($this->isNameInsensitive($identifierNode, $reservedKeyword)) {
                 $identifierNode->name = $replacement;
             }
         }

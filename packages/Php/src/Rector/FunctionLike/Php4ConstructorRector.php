@@ -91,7 +91,7 @@ CODE_SAMPLE
         $this->processClassMethodStatementsForParentConstructorCalls($node);
 
         // not PSR-4 constructor
-        if (strtolower((string) $classNode->name) !== strtolower((string) $node->name)) {
+        if (! $this->isNameInsensitive($classNode, (string) $node->name)) {
             return null;
         }
 
@@ -186,7 +186,7 @@ CODE_SAMPLE
         }
 
         // it's not a parent PHP 4 constructor call
-        if (strtolower($parentClassName) !== strtolower($this->getName($node))) {
+        if (! $this->isNameInsensitive($node, $parentClassName)) {
             return;
         }
 

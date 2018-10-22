@@ -52,14 +52,13 @@ final class FunctionReplaceRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        $functionName = $this->getName($node);
-        if (! isset($this->oldFunctionToNewFunction[$functionName])) {
-            return null;
+        foreach ($this->oldFunctionToNewFunction as $oldFunction => $newFunction) {
+            if (! $this->isNameInsensitive($node, $oldFunction)) {
+                continue;
+            }
+
+            $node->name = new FullyQualified($newFunction);
         }
-
-        $newFunctionName = $this->oldFunctionToNewFunction[$functionName];
-
-        $node->name = new FullyQualified($newFunctionName);
 
         return $node;
     }

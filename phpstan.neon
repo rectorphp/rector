@@ -33,6 +33,7 @@ parameters:
         - '#Offset string does not exist on string#' # 1
         - '#Array \(array<array<PhpParser\\Node\\Stmt>>\) does not accept array<PhpParser\\Node\\Stmt|null>#'
         - '#Property Rector\\DependencyInjection\\Loader\\RectorServiceParametersShifter::\$serviceKeywords \(array<string>\) does not accept ReflectionProperty#'
+        - '#Strict comparison using === between string and null will always evaluate to false#'
 
         # nette container
         - '#Method Rector\\NodeTypeResolver\\DependencyInjection\\PHPStanServicesFactory::create(.*?)() should return (.*?) but returns object#'
