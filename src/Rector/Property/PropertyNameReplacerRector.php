@@ -82,7 +82,10 @@ final class PropertyNameReplacerRector extends AbstractRector
         /** @var Identifier $identifierNode */
         $identifierNode = $node->name;
 
-        $propertyName = $identifierNode->toString();
+        // @see https://stackoverflow.com/a/4240019/1348344
+        $oldToNewProperties = array_change_key_case($oldToNewProperties);
+
+        $propertyName = strtolower($this->getName($identifierNode));
 
         if (! isset($oldToNewProperties[$propertyName])) {
             return null;

@@ -2,3 +2,4 @@
 
 $someService = new SomeClass;
 $someService->oldProperty = 5;
+$someService->anotherOLDProperty = 5;
