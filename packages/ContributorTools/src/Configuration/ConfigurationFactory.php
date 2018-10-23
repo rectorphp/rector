@@ -6,11 +6,23 @@ use Nette\Loaders\RobotLoader;
 use Nette\Utils\Strings;
 use Rector\ContributorTools\Exception\ConfigurationException;
 use Rector\Exception\FileSystem\FileNotFoundException;
+use Symfony\Component\Finder\Finder;
+use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\Yaml\Yaml;
 use function Safe\sprintf;
 
 final class ConfigurationFactory
 {
+    /**
+     * @var string
+     */
+    private $levelsDirectory;
+
+    public function __construct()
+    {
+        $this->levelsDirectory = __DIR__ . '/../../../../config/level';
+    }
+
     public function createFromConfigFile(string $configFile): Configuration
     {
         $this->ensureConfigFileIsFound($configFile);
@@ -29,7 +41,8 @@ final class ConfigurationFactory
             $config['description'],
             $config['code_before'],
             $config['code_after'],
-            $config['source']
+            $config['source'],
+            $this->resolveLevelConfig($config['level'])
         );
     }
 
@@ -47,7 +60,17 @@ final class ConfigurationFactory
      */
     private function ensureConfigIsValid(array $config, string $configFile): void
     {
-        $requiredKeys = ['package', 'name', 'node_types', 'code_before', 'code_after', 'description', 'source'];
+        $requiredKeys = [
+            'package',
+            'name',
+            'node_types',
+            'code_before',
+            'code_after',
+            'description',
+            'source',
+            'level',
+        ];
+
         if (count(array_intersect(array_keys($config), $requiredKeys)) === count($requiredKeys)) {
             if (count($config['node_types']) < 1) {
                 throw new ConfigurationException(sprintf(
@@ -72,21 +95,14 @@ final class ConfigurationFactory
      */
     private function resolveFullyQualifiedNodeTypes(array $nodeTypes): array
     {
-        $robotLoader = new RobotLoader();
-        $robotLoader->addDirectory(__DIR__ . '/../../../../vendor/nikic/php-parser/lib/PhpParser/Node');
-        $robotLoader->setTempDirectory(sys_get_temp_dir() . '/_robotloader_nodes');
-        $robotLoader->rebuild();
-
-        $nodeClasses = array_keys($robotLoader->getIndexedClasses());
+        $nodeClasses = $this->getNodeClasses();
 
         $fqnNodeTypes = [];
         foreach ($nodeTypes as $nodeType) {
             foreach ($nodeClasses as $nodeClass) {
-                if (Strings::endsWith($nodeClass, '\\' . $nodeType)) {
+                if ($this->isNodeClassMatch($nodeClass, $nodeType)) {
                     $fqnNodeTypes[] = $nodeClass;
-                // in case of forgotten _
-                } elseif (Strings::endsWith($nodeClass, '\\' . $nodeType . '_')) {
-                    $fqnNodeTypes[] = $nodeClass;
+                    continue 2;
                 }
             }
         }
@@ -102,5 +118,44 @@ final class ConfigurationFactory
         $fqnNodeType = $fqnNodeTypes[0];
 
         return Strings::after($fqnNodeType, '\\', -1);
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getNodeClasses(): array
+    {
+        $robotLoader = new RobotLoader();
+        $robotLoader->addDirectory(__DIR__ . '/../../../../vendor/nikic/php-parser/lib/PhpParser/Node');
+        $robotLoader->setTempDirectory(sys_get_temp_dir() . '/_robotloader_nodes');
+        $robotLoader->rebuild();
+
+        return array_keys($robotLoader->getIndexedClasses());
+    }
+
+    private function isNodeClassMatch(String $nodeClass, String $nodeType): bool
+    {
+        if (Strings::endsWith($nodeClass, '\\' . $nodeType)) {
+            return true;
+        }
+
+        // in case of forgotten _
+        return Strings::endsWith($nodeClass, '\\' . $nodeType . '_');
+    }
+
+    private function resolveLevelConfig(string $level): ?string
+    {
+        $finder = Finder::create()->files()
+            ->in($this->levelsDirectory)
+            ->name('#.(yml|yaml)$#');
+
+        /** @var SplFileInfo $fileInfo */
+        foreach ($finder as $fileInfo) {
+            if ($fileInfo->getBasename() === $level) {
+                return $fileInfo->getRealPath();
+            }
+        }
+
+        return null;
     }
 }

@@ -12,6 +12,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Yaml\Yaml;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\PackageBuilder\FileSystem\FinderSanitizer;
@@ -97,6 +98,20 @@ final class CreateRectorCommand extends Command
 
             if (Strings::endsWith($destination, 'Test.php')) {
                 $this->testCasePath = dirname($destination);
+            }
+        }
+
+        if ($configuration->getLevel()) {
+            if (file_exists($configuration->getLevel())) {
+                $levelConfigContent = FileSystem::read($configuration->getLevel());
+                $levelConfigContent = trim($levelConfigContent) . sprintf(
+                    '%s%s: ~%s',
+                    PHP_EOL,
+                        Strings::indent($configuration->getName(), 8, ' '),
+                    PHP_EOL
+                );
+
+                FileSystem::write($configuration->getLevel(), $levelConfigContent);
             }
         }
 
