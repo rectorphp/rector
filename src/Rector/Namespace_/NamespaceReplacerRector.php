@@ -170,13 +170,8 @@ final class NamespaceReplacerRector extends AbstractRector
         $fullyQualifiedNode = $parentNode->class;
 
         $newClassName = $fullyQualifiedNode->toString();
-        foreach (array_keys($this->oldToNewNamespaces) as $oldNamespace) {
-            if ($newClassName === $oldNamespace) {
-                return true;
-            }
-        }
 
-        return false;
+        return array_key_exists($newClassName, $this->oldToNewNamespaces);
     }
 
     private function isPartialNamespace(Name $nameNode): bool

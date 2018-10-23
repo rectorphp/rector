@@ -128,12 +128,6 @@ CODE_SAMPLE
     {
         $nodeValue = $this->constExprEvaluator->evaluateDirectly($argNode->value);
 
-        foreach ($values as $value) {
-            if ($nodeValue === $value) {
-                return true;
-            }
-        }
-
-        return false;
+        return in_array($nodeValue, $values, true);
     }
 }
