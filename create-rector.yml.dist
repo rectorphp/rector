@@ -1,9 +1,10 @@
-package: 'CodeQuality'
-name: 'SimplifyMirrorAssignRector' # w/wo suffix
+package: "CodeQuality"
+name: "SimplifyMirrorAssignRector"
 node_types:
-    - 'Assign'
+    - "Assign" # put main node first
 
-description: 'Removes unneeded $a = $a assigns'
+description: "Removes unneeded $a = $a assigns"
 code_before: "$a = $a;"
 code_after: ""
 source: "" # e.g. link to RFC or headline in upgrade guide
+level: "" # e.g. symfony30.yml, target config to append this rector to
