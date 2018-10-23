@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Process\ProcessBuilderGetProcessRector;
+namespace Rector\Symfony\Tests\Rector\Process\ProcessBuilderGetProcessRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

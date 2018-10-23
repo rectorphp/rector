@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Form\FormIsValidRector;
+namespace Rector\Symfony\Tests\Rector\Form\FormIsValidRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

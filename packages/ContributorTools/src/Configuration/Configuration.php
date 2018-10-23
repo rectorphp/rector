@@ -49,7 +49,7 @@ final class Configuration
     /**
      * @var string|null
      */
-    private $level;
+    private $levelConfig;
 
     /**
      * @param string[] $nodeTypes
@@ -63,7 +63,7 @@ final class Configuration
         string $codeBefore,
         string $codeAfter,
         string $source,
-        ?string $level
+        ?string $levelConfig
     ) {
         $this->package = $package;
         $this->setName($name);
@@ -73,7 +73,7 @@ final class Configuration
         $this->codeAfter = $codeAfter;
         $this->description = $description;
         $this->source = $source;
-        $this->level = $level;
+        $this->levelConfig = $levelConfig;
     }
 
     public function getDescription(): string
@@ -119,6 +119,11 @@ final class Configuration
         return $this->source;
     }
 
+    public function getLevelConfig(): ?string
+    {
+        return $this->levelConfig;
+    }
+
     private function setName(string $name): void
     {
         if (! Strings::endsWith($name, 'Rector')) {
@@ -126,10 +131,5 @@ final class Configuration
         }
 
         $this->name = $name;
-    }
-
-    public function getLevel(): ?string
-    {
-        return $this->level;
     }
 }

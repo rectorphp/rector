@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Yaml\SessionStrictTrueByDefaultYamlRector;
+namespace Rector\Symfony\Tests\Rector\Yaml\SessionStrictTrueByDefaultYamlRector;
 
 use Iterator;
 use Rector\YamlRector\Tests\AbstractYamlRectorTest;

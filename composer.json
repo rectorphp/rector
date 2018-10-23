@@ -80,18 +80,10 @@
             "Rector\\FileSystemRector\\Tests\\": "packages/FileSystemRector/tests"
         },
         "classmap": [
-            "packages/CakePHP/tests",
-            "packages/Doctrine/tests",
-            "packages/FileSystemRector/tests",
-            "packages/NodeTypeResolver/tests",
-            "packages/PhpParser/tests",
-            "packages/PHPUnit/tests",
-            "packages/Sensio/tests",
-            "packages/Silverstripe/tests",
-            "packages/Sylius/tests",
-            "packages/Symfony/tests",
-            "packages/Twig/tests",
-            "packages/Utils/tests",
+            "packages/Symfony/tests/Rector/FrameworkBundle/AbstractToConstructorInjectionRectorSource",
+            "packages/Symfony/tests/Rector/FrameworkBundle/ContainerGetToConstructorInjectionRector/Source",
+            "packages/NodeTypeResolver/tests/PerNodeTypeResolver/ParamTypeResolver/Source",
+            "packages/NodeTypeResolver/tests/PerNodeTypeResolver/PropertyTypeResolver/Source",
             "tests/Source",
             "tests/Rector/Psr4/MultipleClassFileToPsr4ClassesRector/Source",
             "tests/Rector/Namespace_/PseudoNamespaceToNamespaceRector/Source"

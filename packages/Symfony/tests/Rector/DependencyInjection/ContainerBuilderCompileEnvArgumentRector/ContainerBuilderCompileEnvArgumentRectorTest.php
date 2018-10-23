@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\DependencyInjection\ContainerBuilderCompileEnvArgumentRector;
+namespace Rector\Symfony\Tests\Rector\DependencyInjection\ContainerBuilderCompileEnvArgumentRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

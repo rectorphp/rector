@@ -133,7 +133,7 @@ final class ConfigurationFactory
         return array_keys($robotLoader->getIndexedClasses());
     }
 
-    private function isNodeClassMatch(String $nodeClass, String $nodeType): bool
+    private function isNodeClassMatch(string $nodeClass, string $nodeType): bool
     {
         if (Strings::endsWith($nodeClass, '\\' . $nodeType)) {
             return true;
@@ -147,15 +147,16 @@ final class ConfigurationFactory
     {
         $finder = Finder::create()->files()
             ->in($this->levelsDirectory)
-            ->name('#.(yml|yaml)$#');
+            ->name(sprintf('#%s$#', $level));
 
-        /** @var SplFileInfo $fileInfo */
-        foreach ($finder as $fileInfo) {
-            if ($fileInfo->getBasename() === $level) {
-                return $fileInfo->getRealPath();
-            }
+        /** @var SplFileInfo[] $fileInfos */
+        $fileInfos = iterator_to_array($finder->getIterator());
+        if (! count($fileInfos)) {
+            return null;
         }
 
-        return null;
+        /** @var SplFileInfo $foundLevelConfigFileInfo */
+        $foundLevelConfigFileInfo = array_pop($fileInfos);
+        return $foundLevelConfigFileInfo->getRealPath();
     }
 }

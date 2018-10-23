@@ -6,13 +6,13 @@ use Nette\Utils\FileSystem;
 use Nette\Utils\Strings;
 use Rector\CodingStyle\AfterRectorCodingStyle;
 use Rector\Console\ConsoleStyle;
+use Rector\ContributorTools\Configuration\Configuration;
 use Rector\ContributorTools\Configuration\ConfigurationFactory;
 use Rector\ContributorTools\TemplateVariablesFactory;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\Finder;
-use Symfony\Component\Yaml\Yaml;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\PackageBuilder\FileSystem\FinderSanitizer;
@@ -27,6 +27,11 @@ final class CreateRectorCommand extends Command
      * @var string
      */
     private const TEMPLATES_DIRECTORY = __DIR__ . '/../../templates';
+
+    /**
+     * @var string
+     */
+    private const RECTOR_FQN_NAME_PATTERN = 'Rector\_Package_\Rector\_Category_\_Name_';
 
     /**
      * @var ConsoleStyle
@@ -101,19 +106,7 @@ final class CreateRectorCommand extends Command
             }
         }
 
-        if ($configuration->getLevel()) {
-            if (file_exists($configuration->getLevel())) {
-                $levelConfigContent = FileSystem::read($configuration->getLevel());
-                $levelConfigContent = trim($levelConfigContent) . sprintf(
-                    '%s%s: ~%s',
-                    PHP_EOL,
-                        Strings::indent($configuration->getName(), 8, ' '),
-                    PHP_EOL
-                );
-
-                FileSystem::write($configuration->getLevel(), $levelConfigContent);
-            }
-        }
+        $this->appendToLevelConfig($configuration, $templateVariables);
 
         $this->applyCodingStyle();
         $this->printSuccess($configuration->getName());
@@ -179,5 +172,37 @@ final class CreateRectorCommand extends Command
     private function resolveContent(SmartFileInfo $smartFileInfo, array $templateVariables): string
     {
         return $this->applyVariables($smartFileInfo->getContents(), $templateVariables);
+    }
+
+    /**
+     * @param string[] $templateVariables
+     */
+    private function appendToLevelConfig(Configuration $configuration, array $templateVariables): void
+    {
+        if (! $configuration->getLevelConfig()) {
+            return;
+        }
+
+        if (! file_exists($configuration->getLevelConfig())) {
+            return;
+        }
+
+        $rectorFqnName = $this->applyVariables(self::RECTOR_FQN_NAME_PATTERN, $templateVariables);
+
+        $levelConfigContent = FileSystem::read($configuration->getLevelConfig());
+
+        // already added
+        if (Strings::contains($levelConfigContent, $rectorFqnName)) {
+            return;
+        }
+
+        $levelConfigContent = trim($levelConfigContent) . sprintf(
+            '%s%s: ~%s',
+            PHP_EOL,
+            Strings::indent($rectorFqnName, 8, ' '),
+            PHP_EOL
+        );
+
+        FileSystem::write($configuration->getLevelConfig(), $levelConfigContent);
     }
 }

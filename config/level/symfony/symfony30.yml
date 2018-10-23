@@ -157,3 +157,4 @@ services:
 
         # swift mailer
         'Symfony\Bridge\Swiftmailer\DataCollector\MessageDataCollector': 'Symfony\Bundle\SwiftmailerBundle\DataCollector\MessageDataCollector'
+        Rector\Symfony\Rector\MethodCall\FormTypeInstanceToClassConstRector: ~

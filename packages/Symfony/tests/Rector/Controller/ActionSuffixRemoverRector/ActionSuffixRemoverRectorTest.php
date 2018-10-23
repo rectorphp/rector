@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Controller\ActionSuffixRemoverRector;
+namespace Rector\Symfony\Tests\Rector\Controller\ActionSuffixRemoverRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

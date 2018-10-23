@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Yaml\SpaceBetweenKeyAndValueYamlRector;
+namespace Rector\Symfony\Tests\Rector\Yaml\SpaceBetweenKeyAndValueYamlRector;
 
 use Iterator;
 use Rector\YamlRector\Tests\AbstractYamlRectorTest;
