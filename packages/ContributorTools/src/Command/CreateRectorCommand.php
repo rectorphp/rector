@@ -141,7 +141,7 @@ final class CreateRectorCommand extends Command
 
         $this->consoleStyle->success(sprintf(
             'Now make these tests green again:%svendor/bin/phpunit %s',
-            PHP_EOL,
+            PHP_EOL . PHP_EOL,
             $this->testCasePath
         ));
     }

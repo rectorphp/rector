@@ -909,7 +909,7 @@ each() function is deprecated, use foreach() instead.
 
 - class: `Rector\Php\Rector\FuncCall\TrailingCommaArgumentsRector`
 
-Adds trailing commas to function and methods calls 
+Adds trailing commas to function and methods calls
 
 ```diff
  calling(

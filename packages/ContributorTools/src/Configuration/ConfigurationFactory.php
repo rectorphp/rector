@@ -145,6 +145,10 @@ final class ConfigurationFactory
 
     private function resolveLevelConfig(string $level): ?string
     {
+        if (! $level) {
+            return null;
+        }
+
         $finder = Finder::create()->files()
             ->in($this->levelsDirectory)
             ->name(sprintf('#%s$#', $level));
