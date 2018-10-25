@@ -25,7 +25,6 @@
         "thecodingmachine/safe": "^0.1.4"
     },
     "require-dev": {
-        "humbug/php-scoper": "^0.9.2",
         "phpunit/phpunit": "^7.3",
         "symplify/changelog-linker": "^5.1.3",
         "symplify/monorepo-builder": "^5.1.3",
@@ -107,16 +106,11 @@
             "vendor/bin/changelog-linker dump-merges --in-categories",
             "vendor/bin/changelog-linker linkify"
         ],
-        "rector-prefixed": [
-            "bin/rector-prefixed/build-prefixed-rector.sh",
-            "bin/rector-prefixed/publish-to-github.sh"
-        ],
         "pre-autoload-dump": [
             "Rector\\Tests\\Composer\\AutoloadWrongCasesEventSubscriber::preAutoloadDump"
         ]
     },
     "scripts-descriptions": {
-        "rector-prefixed": "Builds new version of rector/rector-prefixed and pushes it to Github",
         "update-docs": "Regenerate descriptions of all Rectors to docs/AllRectorsOverview.md file",
         "changelog": "Generates new changelog for new merged PRs into CHANGELOG.md"
     },

@@ -23,6 +23,7 @@ script:
       composer check-cs
       composer phpstan
     fi
+
   # Rector demo run
   - |
     if [[ $RUN_RECTOR == true ]]; then
