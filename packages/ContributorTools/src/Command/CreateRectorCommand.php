@@ -162,6 +162,9 @@ final class CreateRectorCommand extends Command
     private function resolveDestination(SmartFileInfo $smartFileInfo, array $templateVariables): string
     {
         $destination = $smartFileInfo->getRelativeFilePathFromDirectory(self::TEMPLATES_DIRECTORY);
+        if (! Strings::match($destination, '#(wrong|correct)[\d+]*\.php\.inc#')) {
+            $destination = rtrim($destination, '.inc');
+        }
 
         return $this->applyVariables($destination, $templateVariables);
     }
