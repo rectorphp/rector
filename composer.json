@@ -26,7 +26,6 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^7.3",
-        "symplify/changelog-linker": "^5.1.3",
         "symplify/monorepo-builder": "^5.1.3",
         "symplify/phpstan-extensions": "^5.1.3",
         "thecodingmachine/phpstan-safe-rule": "^0.1.0",
@@ -102,17 +101,12 @@
         ],
         "phpstan": "vendor/bin/phpstan analyse packages src tests --level max",
         "update-docs": "bin/rector generate-rector-overview > docs/AllRectorsOverview.md",
-        "changelog": [
-            "vendor/bin/changelog-linker dump-merges --in-categories",
-            "vendor/bin/changelog-linker linkify"
-        ],
         "pre-autoload-dump": [
             "Rector\\Tests\\Composer\\AutoloadWrongCasesEventSubscriber::preAutoloadDump"
         ]
     },
     "scripts-descriptions": {
-        "update-docs": "Regenerate descriptions of all Rectors to docs/AllRectorsOverview.md file",
-        "changelog": "Generates new changelog for new merged PRs into CHANGELOG.md"
+        "update-docs": "Regenerate descriptions of all Rectors to docs/AllRectorsOverview.md file"
     },
     "bin": ["bin/rector"],
     "config": {
