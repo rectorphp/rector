@@ -141,7 +141,7 @@ final class CreateRectorCommand extends Command
 
         $this->consoleStyle->success(sprintf(
             'Now make these tests green again:%svendor/bin/phpunit %s',
-            PHP_EOL,
+            PHP_EOL . PHP_EOL,
             $this->testCasePath
         ));
     }
@@ -162,6 +162,9 @@ final class CreateRectorCommand extends Command
     private function resolveDestination(SmartFileInfo $smartFileInfo, array $templateVariables): string
     {
         $destination = $smartFileInfo->getRelativeFilePathFromDirectory(self::TEMPLATES_DIRECTORY);
+        if (! Strings::match($destination, '#(wrong|correct)[\d+]*\.php\.inc#')) {
+            $destination = rtrim($destination, '.inc');
+        }
 
         return $this->applyVariables($destination, $templateVariables);
     }
