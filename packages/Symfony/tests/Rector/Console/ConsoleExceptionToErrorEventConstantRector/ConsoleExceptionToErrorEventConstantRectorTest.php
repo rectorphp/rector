@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Console\ConsoleExceptionToErrorEventConstantRector;
+namespace Rector\Symfony\Tests\Rector\Console\ConsoleExceptionToErrorEventConstantRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

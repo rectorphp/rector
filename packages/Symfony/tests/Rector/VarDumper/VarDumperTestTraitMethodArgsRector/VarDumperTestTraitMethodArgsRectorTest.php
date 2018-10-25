@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\VarDumper\VarDumperTestTraitMethodArgsRector;
+namespace Rector\Symfony\Tests\Rector\VarDumper\VarDumperTestTraitMethodArgsRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\FrameworkBundle\GetToConstructorInjectionRector;
+namespace Rector\Symfony\Tests\Rector\FrameworkBundle\GetToConstructorInjectionRector;
 
 use Rector\Exception\Configuration\InvalidConfigurationException;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

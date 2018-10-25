@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Controller\AddFlashRector;
+namespace Rector\Symfony\Tests\Rector\Controller\AddFlashRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

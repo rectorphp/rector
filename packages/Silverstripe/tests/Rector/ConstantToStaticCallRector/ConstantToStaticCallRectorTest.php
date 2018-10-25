@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Silverstripe\Tests\ConstantToStaticCallRector;
+namespace Rector\Silverstripe\Tests\Rector\ConstantToStaticCallRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

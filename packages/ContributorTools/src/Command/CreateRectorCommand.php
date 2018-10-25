@@ -4,15 +4,11 @@ namespace Rector\ContributorTools\Command;
 
 use Nette\Utils\FileSystem;
 use Nette\Utils\Strings;
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
-use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Name\FullyQualified;
 use Rector\CodingStyle\AfterRectorCodingStyle;
 use Rector\Console\ConsoleStyle;
 use Rector\ContributorTools\Configuration\Configuration;
 use Rector\ContributorTools\Configuration\ConfigurationFactory;
-use Rector\Printer\BetterStandardPrinter;
+use Rector\ContributorTools\TemplateVariablesFactory;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -33,6 +29,11 @@ final class CreateRectorCommand extends Command
     private const TEMPLATES_DIRECTORY = __DIR__ . '/../../templates';
 
     /**
+     * @var string
+     */
+    private const RECTOR_FQN_NAME_PATTERN = 'Rector\_Package_\Rector\_Category_\_Name_';
+
+    /**
      * @var ConsoleStyle
      */
     private $consoleStyle;
@@ -41,11 +42,6 @@ final class CreateRectorCommand extends Command
      * @var ConfigurationFactory
      */
     private $configurationFactory;
-
-    /**
-     * @var BetterStandardPrinter
-     */
-    private $betterStandardPrinter;
 
     /**
      * @var FinderSanitizer
@@ -62,19 +58,29 @@ final class CreateRectorCommand extends Command
      */
     private $afterRectorCodingStyle;
 
+    /**
+     * @var TemplateVariablesFactory
+     */
+    private $templateVariablesFactory;
+
+    /**
+     * @var string
+     */
+    private $testCasePath;
+
     public function __construct(
         ConsoleStyle $consoleStyle,
         ConfigurationFactory $configurationFactory,
-        BetterStandardPrinter $betterStandardPrinter,
         FinderSanitizer $finderSanitizer,
-        AfterRectorCodingStyle $afterRectorCodingStyle
+        AfterRectorCodingStyle $afterRectorCodingStyle,
+        TemplateVariablesFactory $templateVariablesFactory
     ) {
         parent::__construct();
         $this->consoleStyle = $consoleStyle;
         $this->configurationFactory = $configurationFactory;
-        $this->betterStandardPrinter = $betterStandardPrinter;
         $this->finderSanitizer = $finderSanitizer;
         $this->afterRectorCodingStyle = $afterRectorCodingStyle;
+        $this->templateVariablesFactory = $templateVariablesFactory;
     }
 
     protected function configure(): void
@@ -86,91 +92,34 @@ final class CreateRectorCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $configuration = $this->configurationFactory->createFromConfigFile(getcwd() . '/create-rector.yml');
-        $data = $this->prepareData($configuration);
-
-        $testCasePath = null;
+        $templateVariables = $this->templateVariablesFactory->createFromConfiguration($configuration);
 
         foreach ($this->findTemplateFileInfos() as $smartFileInfo) {
-            $destination = $smartFileInfo->getRelativeFilePathFromDirectory(self::TEMPLATES_DIRECTORY);
-            $destination = $this->applyData($destination, $data);
-
-            $content = $this->applyData($smartFileInfo->getContents(), $data);
+            $destination = $this->resolveDestination($smartFileInfo, $templateVariables);
+            $content = $this->resolveContent($smartFileInfo, $templateVariables);
             FileSystem::write($destination, $content);
 
             $this->generatedFiles[] = $destination;
 
-            if (! $testCasePath && Strings::endsWith($destination, 'Test.php')) {
-                $testCasePath = dirname($destination);
+            if (Strings::endsWith($destination, 'Test.php')) {
+                $this->testCasePath = dirname($destination);
             }
         }
 
-        $this->applyCodingStyle();
+        $this->appendToLevelConfig($configuration, $templateVariables);
 
-        $this->printSuccess($configuration, $testCasePath);
+        $this->applyCodingStyle();
+        $this->printSuccess($configuration->getName());
 
         return ShellCode::SUCCESS;
     }
 
     /**
-     * @return mixed[]
+     * @param mixed[] $variables
      */
-    private function prepareData(Configuration $configuration): array
+    private function applyVariables(string $content, array $variables): string
     {
-        $data = [
-            '_Package_' => $configuration->getPackage(),
-            '_Category_' => $configuration->getCategory(),
-            '_Description_' => $configuration->getDescription(),
-            '_Name_' => $configuration->getName(),
-            '_CodeBefore_' => trim($configuration->getCodeBefore()) . PHP_EOL,
-            '_CodeBeforeExample_' => $this->prepareCodeForDefinition($configuration->getCodeBefore()),
-            '_CodeAfter_' => trim($configuration->getCodeAfter()) . PHP_EOL,
-            '_CodeAfterExample_' => $this->prepareCodeForDefinition($configuration->getCodeAfter()),
-            '_Source_' => $this->prepareSourceDocBlock($configuration->getSource()),
-        ];
-
-        $arrayNodes = [];
-        foreach ($configuration->getNodeTypes() as $nodeType) {
-            $arrayNodes[] = new ArrayItem(new ClassConstFetch(new FullyQualified($nodeType), 'class'));
-        }
-        $data['_NodeTypes_Php_'] = $this->betterStandardPrinter->prettyPrint([new Array_($arrayNodes)]);
-
-        $data['_NodeTypes_Doc_'] = '\\' . implode('|\\', $configuration->getNodeTypes());
-
-        return $data;
-    }
-
-    /**
-     * @param mixed[] $data
-     */
-    private function applyData(string $content, array $data): string
-    {
-        return str_replace(array_keys($data), array_values($data), $content);
-    }
-
-    private function prepareCodeForDefinition(string $code): string
-    {
-        if (Strings::contains($code, PHP_EOL)) {
-            // multi lines
-            return sprintf("<<<'CODE_SAMPLE'%s%sCODE_SAMPLE%s", PHP_EOL, $code, PHP_EOL);
-        }
-
-        // single line
-        return "'" . str_replace("'", '"', $code) . "'";
-    }
-
-    private function prepareSourceDocBlock(string $source): string
-    {
-        if (! $source) {
-            return $source;
-        }
-
-        $sourceDocBlock = <<<'CODE_SAMPLE'
-/**
- * @see %s
- */
-CODE_SAMPLE;
-
-        return sprintf($sourceDocBlock, $source);
+        return str_replace(array_keys($variables), array_values($variables), $content);
     }
 
     /**
@@ -184,16 +133,16 @@ CODE_SAMPLE;
         return $this->finderSanitizer->sanitize($finder);
     }
 
-    private function printSuccess(Configuration $configuration, string $testCasePath): void
+    private function printSuccess(string $name): void
     {
-        $this->consoleStyle->title(sprintf('New files generated for "%s"', $configuration->getName()));
+        $this->consoleStyle->title(sprintf('New files generated for "%s"', $name));
         sort($this->generatedFiles);
         $this->consoleStyle->listing($this->generatedFiles);
 
         $this->consoleStyle->success(sprintf(
             'Now make these tests green again:%svendor/bin/phpunit %s',
             PHP_EOL,
-            $testCasePath
+            $this->testCasePath
         ));
     }
 
@@ -205,5 +154,55 @@ CODE_SAMPLE;
         });
 
         $this->afterRectorCodingStyle->apply($generatedPhpFiles);
+    }
+
+    /**
+     * @param string[] $templateVariables
+     */
+    private function resolveDestination(SmartFileInfo $smartFileInfo, array $templateVariables): string
+    {
+        $destination = $smartFileInfo->getRelativeFilePathFromDirectory(self::TEMPLATES_DIRECTORY);
+
+        return $this->applyVariables($destination, $templateVariables);
+    }
+
+    /**
+     * @param string[] $templateVariables
+     */
+    private function resolveContent(SmartFileInfo $smartFileInfo, array $templateVariables): string
+    {
+        return $this->applyVariables($smartFileInfo->getContents(), $templateVariables);
+    }
+
+    /**
+     * @param string[] $templateVariables
+     */
+    private function appendToLevelConfig(Configuration $configuration, array $templateVariables): void
+    {
+        if (! $configuration->getLevelConfig()) {
+            return;
+        }
+
+        if (! file_exists($configuration->getLevelConfig())) {
+            return;
+        }
+
+        $rectorFqnName = $this->applyVariables(self::RECTOR_FQN_NAME_PATTERN, $templateVariables);
+
+        $levelConfigContent = FileSystem::read($configuration->getLevelConfig());
+
+        // already added
+        if (Strings::contains($levelConfigContent, $rectorFqnName)) {
+            return;
+        }
+
+        $levelConfigContent = trim($levelConfigContent) . sprintf(
+            '%s%s: ~%s',
+            PHP_EOL,
+            Strings::indent($rectorFqnName, 8, ' '),
+            PHP_EOL
+        );
+
+        FileSystem::write($configuration->getLevelConfig(), $levelConfigContent);
     }
 }

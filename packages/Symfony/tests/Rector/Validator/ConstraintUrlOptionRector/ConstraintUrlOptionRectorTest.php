@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Validator\ConstraintUrlOptionRector;
+namespace Rector\Symfony\Tests\Rector\Validator\ConstraintUrlOptionRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

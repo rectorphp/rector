@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\FrameworkBundle\ContainerGetToConstructorInjectionRector;
+namespace Rector\Symfony\Tests\Rector\FrameworkBundle\ContainerGetToConstructorInjectionRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

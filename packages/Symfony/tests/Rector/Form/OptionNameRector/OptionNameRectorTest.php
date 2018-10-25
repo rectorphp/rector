@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Form\OptionNameRector;
+namespace Rector\Symfony\Tests\Rector\Form\OptionNameRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Yaml\ParseFileRector;
+namespace Rector\Symfony\Tests\Rector\Yaml\ParseFileRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

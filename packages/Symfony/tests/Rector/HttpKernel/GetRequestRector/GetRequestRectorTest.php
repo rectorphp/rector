@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\HttpKernel\GetRequestRector;
+namespace Rector\Symfony\Tests\Rector\HttpKernel\GetRequestRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

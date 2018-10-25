@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Form\StringFormTypeToClassRector;
+namespace Rector\Symfony\Tests\Rector\Form\StringFormTypeToClassRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

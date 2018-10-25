@@ -26,6 +26,8 @@ final class AutoloadWrongCasesEventSubscriber
             self::$wrongDirectories = array_merge(self::$wrongDirectories, self::getWrongDirectoriesInPath($path));
         }
 
+        sort(self::$wrongDirectories);
+
         $package = $event->getComposer()->getPackage();
         $autoload = $package->getDevAutoload();
         $autoload['classmap'] = array_merge($autoload['classmap'] ?? [], self::$wrongDirectories);
@@ -40,7 +42,7 @@ final class AutoloadWrongCasesEventSubscriber
         $globResult = self::globRecursive($path, GLOB_ONLYDIR);
 
         return array_filter($globResult, function ($name) {
-            return strpos($name, '/Wrong');
+            return strpos($name, '/Wrong') && ! strpos($name, 'ContributorTools');
         });
     }
 
