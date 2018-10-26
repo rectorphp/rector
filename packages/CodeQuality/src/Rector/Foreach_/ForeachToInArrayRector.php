@@ -50,7 +50,7 @@ final class ForeachToInArrayRector extends AbstractRector
                 new CodeSample(
                     <<<'CODE_SAMPLE'
 foreach ($items as $item) {
-    if ($item === 'something') {
+    if ($item === "something") {
         return true;
     }
 }
@@ -58,7 +58,7 @@ foreach ($items as $item) {
 return false;
 CODE_SAMPLE
                     ,
-                    "in_array('something', \$items, true);"
+                    'in_array("something", $items, true);'
                 ),
             ]
         );
