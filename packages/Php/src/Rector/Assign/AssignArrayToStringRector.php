@@ -150,13 +150,8 @@ CODE_SAMPLE
             if ($this->print($node->var) !== $variableNodeContent) {
                 return false;
             }
-
             // we look for variable assign = string
-            if (! $this->isEmptyStringNode($node->expr)) {
-                return false;
-            }
-
-            return true;
+            return $this->isEmptyStringNode($node->expr);
         });
 
         if ($variableAssign instanceof Assign) {

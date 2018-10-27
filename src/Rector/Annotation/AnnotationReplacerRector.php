@@ -126,11 +126,7 @@ CODE_SAMPLE
 
         /** @var Node|null $parentNode */
         $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
-        if (! $parentNode) {
-            return true;
-        }
-
-        return false;
+        return ! $parentNode;
     }
 
     private function hasAnyAnnotation(Node $node): bool

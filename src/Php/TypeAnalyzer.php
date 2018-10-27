@@ -20,14 +20,9 @@ final class TypeAnalyzer
         if (! $this->isPhpReservedType($type)) {
             return false;
         }
-
         // callable and iterable are not property typehintable
         // @see https://wiki.php.net/rfc/typed_properties_v2#supported_types
-        if (in_array($type, ['callable', 'void'], true)) {
-            return false;
-        }
-
-        return true;
+        return ! in_array($type, ['callable', 'void'], true);
     }
 
     public function isPhpReservedType(string $type): bool

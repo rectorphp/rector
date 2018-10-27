@@ -127,12 +127,7 @@ final class EregToPregMatchRector extends AbstractRector
         if (Strings::contains($functionName, 'eregi')) {
             return true;
         }
-
-        if (Strings::contains($functionName, 'spliti')) {
-            return true;
-        }
-
-        return false;
+        return Strings::contains($functionName, 'spliti');
     }
 
     /**

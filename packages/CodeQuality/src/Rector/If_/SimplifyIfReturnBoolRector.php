@@ -96,12 +96,7 @@ CODE_SAMPLE
         if (! $nextNode instanceof Return_) {
             return true;
         }
-
-        if (! $this->isBool($nextNode->expr)) {
-            return true;
-        }
-
-        return false;
+        return ! $this->isBool($nextNode->expr);
     }
 
     private function processReturnTrue(If_ $ifNode, Return_ $nextReturnNode): Return_
