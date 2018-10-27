@@ -18,3 +18,8 @@ services:
     Rector\Rector\StaticCall\StaticCallToFunctionRector:
         'GuzzleHttp\Utils::setPath': 'GuzzleHttp\set_path'
         'GuzzleHttp\Pool::batch': 'GuzzleHttp\Pool\batch'
+
+    Rector\Guzzle\Rector\FuncCall\MessageAsArrayRector: ~
+    Rector\Rector\MethodCall\MethodNameReplacerRector:
+        GuzzleHttp\Message\MessageInterface:
+            getHeaderLines: 'getHeaderAsArray'

@@ -42,9 +42,9 @@ final class Configuration
     private $description;
 
     /**
-     * @var string
+     * @var string[]
      */
-    private $source;
+    private $source = [];
 
     /**
      * @var string|null
@@ -53,6 +53,7 @@ final class Configuration
 
     /**
      * @param string[] $nodeTypes
+     * @param string[] $source
      */
     public function __construct(
         string $package,
@@ -62,7 +63,7 @@ final class Configuration
         string $description,
         string $codeBefore,
         string $codeAfter,
-        string $source,
+        array $source,
         ?string $levelConfig
     ) {
         $this->package = $package;
@@ -114,7 +115,10 @@ final class Configuration
         return $this->codeAfter;
     }
 
-    public function getSource(): string
+    /**
+     * @return string[]
+     */
+    public function getSource(): array
     {
         return $this->source;
     }
