@@ -1,0 +1,3 @@
+services:
+    Rector\Guzzle\Rector\MethodCall\MessageAsArrayRector:
+        $messageType: 'Rector\Guzzle\Tests\Rector\MethodCall\MessageAsArrayRector\Source\MessageType'

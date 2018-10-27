@@ -57,19 +57,27 @@ final class TemplateVariablesFactory
         return "'" . str_replace("'", '"', $code) . "'";
     }
 
-    private function createSourceDocBlock(string $source): string
+    /**
+     * @param string[] $source
+     */
+    private function createSourceDocBlock(array $source): string
     {
         if (! $source) {
-            return $source;
+            return '';
         }
 
         $sourceDocBlock = <<<'CODE_SAMPLE'
 /**
- * @see %s
+%s
  */
 CODE_SAMPLE;
 
-        return sprintf($sourceDocBlock, $source);
+        $sourceAsString = '';
+        foreach ($source as $singleSource) {
+            $sourceAsString .= ' * @see ' . $singleSource . PHP_EOL;
+        }
+
+        return sprintf($sourceDocBlock, rtrim($sourceAsString));
     }
 
     private function createNodeTypePhp(Configuration $configuration): string

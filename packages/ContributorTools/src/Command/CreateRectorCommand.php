@@ -202,7 +202,7 @@ final class CreateRectorCommand extends Command
         $levelConfigContent = trim($levelConfigContent) . sprintf(
             '%s%s: ~%s',
             PHP_EOL,
-            Strings::indent($rectorFqnName, 8, ' '),
+            Strings::indent($rectorFqnName, 4, ' '),
             PHP_EOL
         );
 
