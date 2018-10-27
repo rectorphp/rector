@@ -106,7 +106,7 @@ CODE_SAMPLE
 
     private function processReturnTrue(If_ $ifNode, Return_ $nextReturnNode): Return_
     {
-        if ($ifNode->cond instanceof BooleanNot && $this->isFalse($nextReturnNode->expr)) {
+        if ($ifNode->cond instanceof BooleanNot && $this->isTrue($nextReturnNode->expr)) {
             return new Return_($ifNode->cond->expr);
         }
 
@@ -120,6 +120,10 @@ CODE_SAMPLE
         }
 
         if ($this->isTrue($nextReturnNode->expr)) {
+            if ($ifNode->cond instanceof BooleanNot) {
+                return new Return_($ifNode->cond->expr);
+            }
+
             return new Return_(new BooleanNot($ifNode->cond));
         }
 
