@@ -40,6 +40,8 @@ final class FormatPerservingPrinter
      */
     public function printToString(array $newStmts, array $oldStmts, array $oldTokens): string
     {
-        return $this->betterStandardPrinter->printFormatPreserving($newStmts, $oldStmts, $oldTokens);
+        $printedContent = $this->betterStandardPrinter->printFormatPreserving($newStmts, $oldStmts, $oldTokens);
+
+        return trim($printedContent) . PHP_EOL;
     }
 }

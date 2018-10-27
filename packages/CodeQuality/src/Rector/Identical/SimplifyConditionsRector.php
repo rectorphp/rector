@@ -117,11 +117,6 @@ final class SimplifyConditionsRector extends AbstractRector
         if ($binaryOpNode->left instanceof BinaryOp) {
             return true;
         }
-
-        if ($binaryOpNode->right instanceof BinaryOp) {
-            return true;
-        }
-
-        return false;
+        return $binaryOpNode->right instanceof BinaryOp;
     }
 }

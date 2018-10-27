@@ -60,12 +60,7 @@ final class PhpDocInfoFqnTypeDecorator
         if (! $phpDocNode instanceof IdentifierTypeNode) {
             return true;
         }
-
-        if (! $this->isClassyType($phpDocNode->name)) {
-            return true;
-        }
-
-        return false;
+        return ! $this->isClassyType($phpDocNode->name);
     }
 
     private function isClassyType(string $name): bool

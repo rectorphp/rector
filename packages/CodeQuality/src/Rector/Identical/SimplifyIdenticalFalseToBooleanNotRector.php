@@ -61,10 +61,6 @@ final class SimplifyIdenticalFalseToBooleanNotRector extends AbstractRector
 
     private function shouldSkip(Node $node): bool
     {
-        if ($node instanceof BinaryOp) {
-            return true;
-        }
-
-        return false;
+        return $node instanceof BinaryOp;
     }
 }
