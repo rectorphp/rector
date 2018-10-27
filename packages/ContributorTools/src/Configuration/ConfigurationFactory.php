@@ -41,7 +41,7 @@ final class ConfigurationFactory
             $config['description'],
             $config['code_before'],
             $config['code_after'],
-            $this->resolveSource($config['source']),
+            (array) $config['source'],
             $this->resolveLevelConfig($config['level'])
         );
     }
@@ -162,14 +162,5 @@ final class ConfigurationFactory
         /** @var SplFileInfo $foundLevelConfigFileInfo */
         $foundLevelConfigFileInfo = array_pop($fileInfos);
         return $foundLevelConfigFileInfo->getRealPath();
-    }
-
-    /**
-     * @param string|string[] $source
-     * @return string[]
-     */
-    private function resolveSource($source): array
-    {
-        return (array) $source;
     }
 }
