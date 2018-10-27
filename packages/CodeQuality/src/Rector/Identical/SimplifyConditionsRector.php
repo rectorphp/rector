@@ -4,15 +4,10 @@ namespace Rector\CodeQuality\Rector\Identical;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp;
-use PhpParser\Node\Expr\BinaryOp\Equal;
-use PhpParser\Node\Expr\BinaryOp\Greater;
-use PhpParser\Node\Expr\BinaryOp\GreaterOrEqual;
 use PhpParser\Node\Expr\BinaryOp\Identical;
-use PhpParser\Node\Expr\BinaryOp\NotEqual;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
-use PhpParser\Node\Expr\BinaryOp\Smaller;
-use PhpParser\Node\Expr\BinaryOp\SmallerOrEqual;
 use PhpParser\Node\Expr\BooleanNot;
+use Rector\NodeAnalyzer\AssignAndBinaryMap;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -20,18 +15,14 @@ use Rector\RectorDefinition\RectorDefinition;
 final class SimplifyConditionsRector extends AbstractRector
 {
     /**
-     * @var string[]
+     * @var AssignAndBinaryMap
      */
-    private $binaryOpClassesToInversedClasses = [
-        Identical::class => NotIdentical::class,
-        NotIdentical::class => Identical::class,
-        Equal::class => NotEqual::class,
-        NotEqual::class => Equal::class,
-        Greater::class => SmallerOrEqual::class,
-        Smaller::class => GreaterOrEqual::class,
-        GreaterOrEqual::class => Smaller::class,
-        SmallerOrEqual::class => Greater::class,
-    ];
+    private $assignAndBinaryMap;
+
+    public function __construct(AssignAndBinaryMap $assignAndBinaryMap)
+    {
+        $this->assignAndBinaryMap = $assignAndBinaryMap;
+    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -61,6 +52,8 @@ final class SimplifyConditionsRector extends AbstractRector
         if ($node instanceof Identical) {
             return $this->processIdenticalAndNotIdentical($node);
         }
+
+        return null;
     }
 
     private function processBooleanNot(BooleanNot $node): ?Node
@@ -97,16 +90,8 @@ final class SimplifyConditionsRector extends AbstractRector
 
     private function createInversedBooleanOp(BinaryOp $binaryOpNode): BinaryOp
     {
-        $binaryOpNodeClass = get_class($binaryOpNode);
-
-        // we can't invert that
-        if (! isset($this->binaryOpClassesToInversedClasses[$binaryOpNodeClass])) {
-            return $binaryOpNode;
-        }
-
-        $inversedBinaryOpNodeClass = $this->binaryOpClassesToInversedClasses[$binaryOpNodeClass];
-
-        return new $inversedBinaryOpNodeClass($binaryOpNode->left, $binaryOpNode->right);
+        $inversedBinaryClass = $this->assignAndBinaryMap->getInversed($binaryOpNode);
+        return new $inversedBinaryClass($binaryOpNode->left, $binaryOpNode->right);
     }
 
     /**

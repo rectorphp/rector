@@ -6,7 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignOp;
 use PhpParser\Node\Expr\BinaryOp;
-use Rector\NodeAnalyzer\AssignToBinaryMap;
+use Rector\NodeAnalyzer\AssignAndBinaryMap;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -14,13 +14,13 @@ use Rector\RectorDefinition\RectorDefinition;
 final class CombinedAssignRector extends AbstractRector
 {
     /**
-     * @var AssignToBinaryMap
+     * @var AssignAndBinaryMap
      */
-    private $assignToBinaryMap;
+    private $assignAndBinaryMap;
 
-    public function __construct(AssignToBinaryMap $assignToBinaryMap)
+    public function __construct(AssignAndBinaryMap $assignAndBinaryMap)
     {
-        $this->assignToBinaryMap = $assignToBinaryMap;
+        $this->assignAndBinaryMap = $assignAndBinaryMap;
     }
 
     public function getDefinition(): RectorDefinition
@@ -55,7 +55,7 @@ final class CombinedAssignRector extends AbstractRector
             return null;
         }
 
-        $assignClass = $this->assignToBinaryMap->getAlternative($binaryNode);
+        $assignClass = $this->assignAndBinaryMap->getAlternative($binaryNode);
         if ($assignClass === null) {
             return null;
         }

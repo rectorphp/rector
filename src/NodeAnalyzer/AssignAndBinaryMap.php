@@ -22,16 +22,38 @@ use PhpParser\Node\Expr\BinaryOp\BitwiseOr;
 use PhpParser\Node\Expr\BinaryOp\BitwiseXor;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\BinaryOp\Div;
+use PhpParser\Node\Expr\BinaryOp\Equal;
+use PhpParser\Node\Expr\BinaryOp\Greater;
+use PhpParser\Node\Expr\BinaryOp\GreaterOrEqual;
+use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\Minus;
 use PhpParser\Node\Expr\BinaryOp\Mod;
 use PhpParser\Node\Expr\BinaryOp\Mul;
+use PhpParser\Node\Expr\BinaryOp\NotEqual;
+use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BinaryOp\Plus;
 use PhpParser\Node\Expr\BinaryOp\Pow;
 use PhpParser\Node\Expr\BinaryOp\ShiftLeft;
 use PhpParser\Node\Expr\BinaryOp\ShiftRight;
+use PhpParser\Node\Expr\BinaryOp\Smaller;
+use PhpParser\Node\Expr\BinaryOp\SmallerOrEqual;
 
-final class AssignToBinaryMap
+final class AssignAndBinaryMap
 {
+    /**
+     * @var string[]
+     */
+    private $binaryOpToInverseClasses = [
+        Identical::class => NotIdentical::class,
+        NotIdentical::class => Identical::class,
+        Equal::class => NotEqual::class,
+        NotEqual::class => Equal::class,
+        Greater::class => SmallerOrEqual::class,
+        Smaller::class => GreaterOrEqual::class,
+        GreaterOrEqual::class => Smaller::class,
+        SmallerOrEqual::class => Greater::class,
+    ];
+
     /**
      * @var string[]
      */
@@ -73,5 +95,12 @@ final class AssignToBinaryMap
         }
 
         return null;
+    }
+
+    public function getInversed(BinaryOp $node): ?string
+    {
+        $nodeClass = get_class($node);
+
+        return $this->binaryOpToInverseClasses[$nodeClass] ?? null;
     }
 }

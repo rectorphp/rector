@@ -8,7 +8,7 @@ use PhpParser\Node\Expr\AssignOp;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
-use Rector\NodeAnalyzer\AssignToBinaryMap;
+use Rector\NodeAnalyzer\AssignAndBinaryMap;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -20,13 +20,13 @@ use Rector\RectorDefinition\RectorDefinition;
 final class SimplifyUselessVariableRector extends AbstractRector
 {
     /**
-     * @var AssignToBinaryMap
+     * @var AssignAndBinaryMap
      */
-    private $assignToBinaryMap;
+    private $assignAndBinaryMap;
 
-    public function __construct(AssignToBinaryMap $assignToBinaryMap)
+    public function __construct(AssignAndBinaryMap $assignAndBinaryMap)
     {
-        $this->assignToBinaryMap = $assignToBinaryMap;
+        $this->assignAndBinaryMap = $assignAndBinaryMap;
     }
 
     public function getDefinition(): RectorDefinition
@@ -81,7 +81,7 @@ CODE_SAMPLE
         }
 
         if ($previousNode instanceof AssignOp) {
-            $binaryClass = $this->assignToBinaryMap->getAlternative($previousNode);
+            $binaryClass = $this->assignAndBinaryMap->getAlternative($previousNode);
             if (! $binaryClass) {
                 return null;
             }
