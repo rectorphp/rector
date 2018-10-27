@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
+use PHPStan\Type\BooleanType;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
@@ -72,6 +73,19 @@ trait TypeAnalyzerTrait
         $nodeType = $nodeScope->getType($node);
 
         return $nodeType instanceof StringType;
+    }
+
+    public function isBoolType(Node $node): bool
+    {
+        if (! $node instanceof Expr) {
+            return false;
+        }
+
+        /** @var Scope $nodeScope */
+        $nodeScope = $node->getAttribute(Attribute::SCOPE);
+        $nodeType = $nodeScope->getType($node);
+
+        return $nodeType instanceof BooleanType;
     }
 
     public function isCountableType(Node $node): bool

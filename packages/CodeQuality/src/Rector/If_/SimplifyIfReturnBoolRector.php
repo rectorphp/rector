@@ -3,9 +3,11 @@
 namespace Rector\CodeQuality\Rector\If_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
+use PhpParser\Node\Expr\Cast\Bool_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\NodeTypeResolver\Node\Attribute;
@@ -102,24 +104,24 @@ CODE_SAMPLE
     private function processReturnTrue(If_ $ifNode, Return_ $nextReturnNode): Return_
     {
         if ($ifNode->cond instanceof BooleanNot && $this->isTrue($nextReturnNode->expr)) {
-            return new Return_($ifNode->cond->expr);
+            return new Return_($this->boolCastIfNeeded($ifNode->cond->expr));
         }
 
-        return new Return_($ifNode->cond);
+        return new Return_($this->boolCastIfNeeded($ifNode->cond));
     }
 
     private function processReturnFalse(If_ $ifNode, Return_ $nextReturnNode): ?Return_
     {
         if ($ifNode->cond instanceof Identical) {
-            return new Return_(new NotIdentical($ifNode->cond->left, $ifNode->cond->right));
+            return new Return_($this->boolCastIfNeeded(new NotIdentical($ifNode->cond->left, $ifNode->cond->right)));
         }
 
         if ($this->isTrue($nextReturnNode->expr)) {
             if ($ifNode->cond instanceof BooleanNot) {
-                return new Return_($ifNode->cond->expr);
+                return new Return_($this->boolCastIfNeeded($ifNode->cond->expr));
             }
 
-            return new Return_(new BooleanNot($ifNode->cond));
+            return new Return_($this->boolCastIfNeeded(new BooleanNot($ifNode->cond)));
         }
 
         return null;
@@ -132,5 +134,18 @@ CODE_SAMPLE
         }
 
         $newNode->setAttribute('comments', $oldNode->getComments());
+    }
+
+    private function boolCastIfNeeded(Expr $exprNode): Expr
+    {
+        if ($exprNode instanceof BooleanNot) {
+            return $exprNode;
+        }
+
+        if ($this->isBoolType($exprNode)) {
+            return $exprNode;
+        }
+
+        return new Bool_($exprNode);
     }
 }

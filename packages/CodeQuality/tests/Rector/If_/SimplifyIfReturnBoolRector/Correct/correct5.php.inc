@@ -1,3 +1,3 @@
 <?php
 
-return strpos($docToken->getContent(), "\n");
+return (bool) strpos($docToken->getContent(), "\n");

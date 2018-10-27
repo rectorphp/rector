@@ -5,3 +5,9 @@ if (! $parentNode) {
 }
 
 return false;
+
+if ($parentNode) {
+    return true;
+}
+
+return false;
