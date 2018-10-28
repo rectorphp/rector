@@ -136,8 +136,7 @@ final class RectorServiceParametersShifter
      */
     private function resolveArrayConstructorArgumentNames(string $serviceName): array
     {
-        $rectorReflectionClass = new ReflectionClass($serviceName);
-        $constructorMethodReflection = $rectorReflectionClass->getConstructor();
+        $constructorMethodReflection = (new ReflectionClass($serviceName))->getConstructor();
         if ($constructorMethodReflection === null) {
             return [];
         }

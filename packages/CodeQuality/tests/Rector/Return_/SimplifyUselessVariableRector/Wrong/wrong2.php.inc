@@ -27,7 +27,7 @@ function foo($foo) {
     }, $foo);
 }
 
-echo $used;
+return $used;
 
 function ($values) {
     $foo = '';
