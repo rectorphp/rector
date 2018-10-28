@@ -13,12 +13,12 @@ install:
   - composer update $COMPOSER_FLAGS
 
 before_script:
+  # disable xdebug
   - if [[ $COVERAGE == "" ]]; then phpenv config-rm xdebug.ini; fi
 
 script:
   - vendor/bin/phpunit
-  # disable xdebug
-  - phpenv config-rm xdebug.ini || return 0
+
   - |
     if [[ $STATIC_ANALYSIS == true ]]; then
       composer check-cs
