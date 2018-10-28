@@ -6,6 +6,5 @@ class EntityRepositoryClass
 {
     public function findBy()
     {
-
     }
 }

@@ -1,5 +1,5 @@
 parameters:
-    entity_repository_class: 'Doctrine\ORM\EntityRepository'
+    entity_repository_class: 'Rector\Tests\Rector\Architecture\DoctrineRepositoryAsService\Source\EntityRepositoryClass'
     entity_manager_class: 'Doctrine\ORM\EntityManager'
 
 services:
