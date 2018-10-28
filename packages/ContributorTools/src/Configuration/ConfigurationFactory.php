@@ -41,7 +41,7 @@ final class ConfigurationFactory
             $config['description'],
             $config['code_before'],
             $config['code_after'],
-            (array) $config['source'],
+            array_filter((array) $config['source']),
             $this->resolveLevelConfig($config['level'])
         );
     }

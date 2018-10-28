@@ -97,6 +97,7 @@ CODE_SAMPLE
 
         $methodName = $this->getName($node);
 
+        // @todo possibly use ClassCollector
         $entityClassReflection = $this->broker->getClass($this->entityRepositoryClass);
         if (! $entityClassReflection->hasMethod($methodName)) {
             return null;
