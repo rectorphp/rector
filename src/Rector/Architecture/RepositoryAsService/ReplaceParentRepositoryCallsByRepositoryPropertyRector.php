@@ -5,9 +5,7 @@ namespace Rector\Rector\Architecture\RepositoryAsService;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
-use PHPStan\Broker\Broker;
 use Rector\Node\PropertyFetchNodeFactory;
-use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -25,18 +23,27 @@ final class ReplaceParentRepositoryCallsByRepositoryPropertyRector extends Abstr
     private $entityRepositoryClass;
 
     /**
-     * @var Broker
+     * @var string[]
      */
-    private $broker;
+    private $entityRepositoryPublicMethods = [
+        'createQueryBuilder',
+        'createResultSetMappingBuilder',
+        'clear',
+        'find',
+        'findBy',
+        'findAll',
+        'findOneBy',
+        'count',
+        'getClassName',
+        'matching',
+    ];
 
     public function __construct(
         PropertyFetchNodeFactory $propertyFetchNodeFactory,
-        string $entityRepositoryClass,
-        Broker $broker
+        string $entityRepositoryClass = 'Doctrine\ORM\EntityRepository'
     ) {
         $this->propertyFetchNodeFactory = $propertyFetchNodeFactory;
         $this->entityRepositoryClass = $entityRepositoryClass;
-        $this->broker = $broker;
     }
 
     public function getDefinition(): RectorDefinition
@@ -90,22 +97,18 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        // of type...
         if (! $node->name instanceof Identifier) {
             return null;
         }
 
-        $methodName = $this->getName($node);
-
-        $entityClassReflection = $this->broker->getClass($this->entityRepositoryClass);
-        if (! $entityClassReflection->hasMethod($methodName)) {
+        if (! $this->isType($node->var, $this->entityRepositoryClass)) {
             return null;
         }
 
-        $methodReflection = $entityClassReflection->getMethod($methodName, $node->getAttribute(Attribute::SCOPE));
-        if (! $methodReflection->isPublic()) {
+        if (! $this->isNames($node, $this->entityRepositoryPublicMethods)) {
             return null;
         }
+
         $node->var = $this->propertyFetchNodeFactory->createLocalWithPropertyName('repository');
 
         return $node;

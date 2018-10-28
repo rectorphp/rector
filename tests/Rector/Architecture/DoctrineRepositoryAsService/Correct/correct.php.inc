@@ -5,7 +5,7 @@ namespace App\Repository;
 use App\Entity\Post;
 use Rector\Tests\Rector\Architecture\DoctrineRepositoryAsService\Source\EntityRepositoryClass;
 
-final class PostRepository
+final class FirstPostRepository
 {
     /**
      * @var \Rector\Tests\Rector\Architecture\DoctrineRepositoryAsService\Source\EntityRepositoryClass
@@ -13,7 +13,7 @@ final class PostRepository
     private $repository;
     public function __construct(\Rector\Tests\Rector\Architecture\DoctrineRepositoryAsService\Source\EntityManagerClass $entityManager)
     {
-        $this->repository = $entityManager->getRepository(\App\Entity\Post::class);
+        $this->repository = $entityManager->getRepository(\App\Entity\FirstPost::class);
     }
     /**
      * Our custom method
@@ -25,5 +25,11 @@ final class PostRepository
         return $this->repository->findBy([
             'author' => $authorId
         ]);
+    }
+
+    public function shouldSkip()
+    {
+        $anotherClass = new \stdClass();
+        $anotherClass->findBy();
     }
 }

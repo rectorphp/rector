@@ -104,15 +104,18 @@ CODE_SAMPLE
         if (! $this->isName($node, 'getRepository')) {
             return null;
         }
+
         $className = $node->getAttribute(Attribute::CLASS_NAME);
         if ($className === null) {
             return null;
         }
+
         /** @var MethodCall $methodCallNode */
         $methodCallNode = $node;
         if (count($methodCallNode->args) !== 1) {
             return null;
         }
+
         if ($methodCallNode->args[0]->value instanceof String_) {
             /** @var String_ $string */
             $string = $methodCallNode->args[0]->value;
@@ -122,9 +125,11 @@ CODE_SAMPLE
                 return null;
             }
         }
+
         if (Strings::endsWith($className, 'Repository')) {
             return null;
         }
+
         $repositoryFqn = $this->repositoryFqn($node);
 
         $this->addPropertyToClass(

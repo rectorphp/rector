@@ -5,7 +5,7 @@ namespace App\Repository;
 use App\Entity\Post;
 use Rector\Tests\Rector\Architecture\DoctrineRepositoryAsService\Source\EntityRepositoryClass;
 
-final class PostRepository extends EntityRepositoryClass
+final class FirstPostRepository extends EntityRepositoryClass
 {
     /**
      * Our custom method
@@ -17,5 +17,11 @@ final class PostRepository extends EntityRepositoryClass
         return $this->findBy([
             'author' => $authorId
         ]);
+    }
+
+    public function shouldSkip()
+    {
+        $anotherClass = new \stdClass();
+        $anotherClass->findBy();
     }
 }

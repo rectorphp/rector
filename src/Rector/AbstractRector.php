@@ -46,13 +46,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         if (! $this->isMatchingNodeType($nodeClass)) {
             return null;
         }
-
-        $newNode = $this->refactor($node);
-        if ($newNode !== null) {
-            return $newNode;
-        }
-
-        return null;
+        return $this->refactor($node);
     }
 
     /**

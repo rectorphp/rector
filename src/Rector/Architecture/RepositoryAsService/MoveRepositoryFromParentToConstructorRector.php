@@ -63,8 +63,8 @@ final class MoveRepositoryFromParentToConstructorRector extends AbstractRector
         NodeFactory $nodeFactory,
         DoctrineEntityAndRepositoryMapperInterface $doctrineEntityAndRepositoryMapper,
         BuilderFactory $builderFactory,
-        string $entityRepositoryClass,
-        string $entityManagerClass
+        string $entityRepositoryClass = 'Doctrine\ORM\EntityRepository',
+        string $entityManagerClass = 'Doctrine\ORM\EntityManager'
     ) {
         $this->propertyBuilder = $propertyBuilder;
         $this->constructorMethodBuilder = $constructorMethodBuilder;
