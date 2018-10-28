@@ -4,18 +4,19 @@ matrix:
   include:
     - php: 7.1
       env: STATIC_ANALYSIS=true RUN_RECTOR=true
-    #- php: 7.1
-    #  env: COMPOSER_FLAGS="--prefer-lowest"
+    - php: 7.1
+      env: COMPOSER_FLAGS="--prefer-lowest"
     - php: 7.2
+      env: COVERAGE=true
 
 install:
   - composer update $COMPOSER_FLAGS
 
 before_script:
-  - phpenv config-rm xdebug.ini
+  - if [[ $COVERAGE == "" ]]; then phpenv config-rm xdebug.ini; fi
 
 script:
-  - vendor/bin/phpunit $PHPUNIT_FLAGS
+  - vendor/bin/phpunit
   # disable xdebug
   - phpenv config-rm xdebug.ini || return 0
   - |
@@ -29,6 +30,15 @@ script:
     if [[ $RUN_RECTOR == true ]]; then
       bin/rector process src --level symfony40 --dry-run
       bin/rector generate-rector-overview >> rector-overview.md
+    fi
+
+after_script:
+  # Coverage
+  - |
+    if [[ $COVERAGE == true && $TRAVIS_BRANCH == "master" ]]; then
+      vendor/bin/phpunit --coverage-clover coverage.xml
+      wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.1.0/php-coveralls.phar
+      php php-coveralls.phar --verbose
     fi
 
 cache:
