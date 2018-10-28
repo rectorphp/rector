@@ -4,8 +4,8 @@ matrix:
   include:
     - php: 7.1
       env: STATIC_ANALYSIS=true RUN_RECTOR=true
-    #- php: 7.1
-    #  env: COMPOSER_FLAGS="--prefer-lowest"
+    - php: 7.1
+      env: COMPOSER_FLAGS="--prefer-lowest"
     - php: 7.2
 
 install:
