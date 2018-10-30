@@ -1,5 +1,5 @@
 services:
-    Rector\Php\Rector\While_\WhileEachToForeachRector: ~
+    Rector\Php\Rector\Each\WhileEachToForeachRector: ~
     Rector\Php\Rector\Each\ListEachRector: ~
     Rector\Php\Rector\Unset_\UnsetCastRector: ~
     Rector\Php\Rector\String_\BarewordStringRector: ~
