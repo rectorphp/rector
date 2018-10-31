@@ -4,6 +4,7 @@ namespace Rector\NodeAnalyzer;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Empty_;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
@@ -29,7 +30,7 @@ final class NameResolver
             return $this->resolve($classConstNode->consts[0]);
         };
 
-        $this->nameResolvers[Property::class] = function (Property $propertyNode) {
+        $this->nameResolvers[Property::class] = function (Property $propertyNode): ?string {
             if (! count($propertyNode->props)) {
                 return null;
             }
@@ -37,7 +38,7 @@ final class NameResolver
             return $this->resolve($propertyNode->props[0]);
         };
 
-        $this->nameResolvers[Use_::class] = function (Use_ $useNode) {
+        $this->nameResolvers[Use_::class] = function (Use_ $useNode): ?string {
             if (! count($useNode->uses)) {
                 return null;
             }
@@ -45,13 +46,17 @@ final class NameResolver
             return $this->resolve($useNode->uses[0]);
         };
 
-        $this->nameResolvers[Name::class] = function (Name $nameNode) {
+        $this->nameResolvers[Name::class] = function (Name $nameNode): string {
             $resolvedName = $nameNode->getAttribute(Attribute::RESOLVED_NAME);
             if ($resolvedName instanceof FullyQualified) {
                 return $resolvedName->toString();
             }
 
             return $nameNode->toString();
+        };
+
+        $this->nameResolvers[Empty_::class] = function (): string {
+            return 'empty';
         };
     }
 
