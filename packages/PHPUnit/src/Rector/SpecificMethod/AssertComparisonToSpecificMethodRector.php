@@ -6,6 +6,14 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\BinaryOp;
+use PhpParser\Node\Expr\BinaryOp\Equal;
+use PhpParser\Node\Expr\BinaryOp\Greater;
+use PhpParser\Node\Expr\BinaryOp\GreaterOrEqual;
+use PhpParser\Node\Expr\BinaryOp\Identical;
+use PhpParser\Node\Expr\BinaryOp\NotEqual;
+use PhpParser\Node\Expr\BinaryOp\NotIdentical;
+use PhpParser\Node\Expr\BinaryOp\Smaller;
+use PhpParser\Node\Expr\BinaryOp\SmallerOrEqual;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
@@ -18,23 +26,17 @@ use Rector\RectorDefinition\RectorDefinition;
 final class AssertComparisonToSpecificMethodRector extends AbstractPHPUnitRector
 {
     /**
-     * @var string|null
-     */
-    private $activeOpSignal;
-
-    /**
      * @var string[][]
      */
     private $defaultOldToNewMethods = [
-        '===' => ['assertSame', 'assertNotSame'],
-        '!==' => ['assertNotSame', 'assertSame'],
-        '==' => ['assertEquals', 'assertNotEquals'],
-        '!=' => ['assertNotEquals', 'assertEquals'],
-        '<>' => ['assertNotEquals', 'assertEquals'],
-        '>' => ['assertGreaterThan', 'assertLessThan'],
-        '<' => ['assertLessThan', 'assertGreaterThan'],
-        '>=' => ['assertGreaterThanOrEqual', 'assertLessThanOrEqual'],
-        '<=' => ['assertLessThanOrEqual', 'assertGreaterThanOrEqual'],
+        Identical::class => ['assertSame', 'assertNotSame'],
+        NotIdentical::class => ['assertNotSame', 'assertSame'],
+        Equal::class => ['assertEquals', 'assertNotEquals'],
+        NotEqual::class => ['assertNotEquals', 'assertEquals'],
+        Greater::class => ['assertGreaterThan', 'assertLessThan'],
+        Smaller::class => ['assertLessThan', 'assertGreaterThan'],
+        GreaterOrEqual::class => ['assertGreaterThanOrEqual', 'assertLessThanOrEqual'],
+        SmallerOrEqual::class => ['assertLessThanOrEqual', 'assertGreaterThanOrEqual'],
     ];
 
     /**
@@ -89,21 +91,14 @@ final class AssertComparisonToSpecificMethodRector extends AbstractPHPUnitRector
         if (! $firstArgumentValue instanceof BinaryOp) {
             return null;
         }
-        $opCallSignal = $firstArgumentValue->getOperatorSigil();
-        if (! isset($this->defaultOldToNewMethods[$opCallSignal])) {
-            return null;
-        }
-        $this->activeOpSignal = $opCallSignal;
 
-        $this->renameMethod($node);
-        $this->changeOrderArguments($node);
-
-        return $node;
+        return $this->processMethodCallWithBinaryOp($node, $firstArgumentValue);
     }
 
     public function changeOrderArguments(MethodCall $methodCallNode): void
     {
         $oldArguments = $methodCallNode->args;
+
         /** @var BinaryOp $expression */
         $expression = $oldArguments[0]->value;
 
@@ -120,14 +115,23 @@ final class AssertComparisonToSpecificMethodRector extends AbstractPHPUnitRector
         $methodCallNode->args = array_merge([$firstArgument, $secondArgument], $oldArguments);
     }
 
-    private function renameMethod(MethodCall $methodCallNode): void
+    private function processMethodCallWithBinaryOp(MethodCall $methodCallNode, BinaryOp $binaryOpNode): ?Node
     {
-        [$trueMethodName, $falseMethodName] = $this->defaultOldToNewMethods[$this->activeOpSignal];
+        $binaryOpClass = get_class($binaryOpNode);
 
+        if (! isset($this->defaultOldToNewMethods[$binaryOpClass])) {
+            return null;
+        }
+
+        [$trueMethodName, $falseMethodName] = $this->defaultOldToNewMethods[$binaryOpClass];
         $this->identifierRenamer->renameNodeWithMap($methodCallNode, [
             'assertTrue' => $trueMethodName,
             'assertFalse' => $falseMethodName,
         ]);
+
+        $this->changeOrderArguments($methodCallNode);
+
+        return $methodCallNode;
     }
 
     private function isConstantValue(Node $node): bool
