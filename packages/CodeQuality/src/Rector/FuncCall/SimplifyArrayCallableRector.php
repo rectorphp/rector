@@ -15,11 +15,6 @@ use Rector\RectorDefinition\RectorDefinition;
 final class SimplifyArrayCallableRector extends AbstractRector
 {
     /**
-     * @var string|null
-     */
-    private $activeFuncCallName;
-
-    /**
      * @var int[]
      */
     private $functionsWithCallableArgumentPosition = [
@@ -72,11 +67,13 @@ CODE_SAMPLE
 
             /** @var Closure $closureNode */
             $closureNode = $node->args[$callablePosition]->value;
-            if ($this->isUsefulClosure($closureNode)) {
-                return null;
+
+            $funcCallName = $this->matchUselessClosureFuncCallName($closureNode);
+            if (! $funcCallName) {
+                continue;
             }
 
-            $node->args[$callablePosition] = new Arg(new String_($this->activeFuncCallName));
+            $node->args[$callablePosition] = new Arg(new String_($funcCallName));
 
             return $node;
         }
@@ -84,24 +81,25 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function isUsefulClosure(Closure $closureNode): bool
+    private function matchUselessClosureFuncCallName(Closure $closureNode): ?string
     {
         // too complicated
         if (! $closureNode->stmts[0] instanceof Return_) {
-            return true;
+            return null;
         }
 
         /** @var Return_ $returnNode */
         $returnNode = $closureNode->stmts[0];
         if (! $returnNode->expr instanceof FuncCall) {
-            return true;
+            return null;
         }
 
         /** @var FuncCall $funcCallNode */
         $funcCallNode = $returnNode->expr;
+        if (! $this->areNodesEqual($closureNode->params, $returnNode->expr->args)) {
+            return null;
+        }
 
-        $this->activeFuncCallName = $this->getName($funcCallNode);
-
-        return ! $this->areNodesEqual($closureNode->params, $returnNode->expr->args);
+        return $this->getName($funcCallNode);
     }
 }
