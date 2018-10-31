@@ -55,11 +55,11 @@ final class CallUserMethodRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        $newName = $this->matchNewFunctionName($node);
-        if ($newName === null) {
+        if (! $this->isNames($node, array_keys($this->oldToNewFunctions))) {
             return null;
         }
 
+        $newName = $this->oldToNewFunctions[$this->getName($node)];
         $node->name = new Name($newName);
 
         $argNodes = $node->args;
@@ -71,11 +71,5 @@ final class CallUserMethodRector extends AbstractRector
         $node->args = array_values($node->args);
 
         return $node;
-    }
-
-    private function matchNewFunctionName(FuncCall $funcCallNode): ?string
-    {
-        $currentFunction = $this->getName($funcCallNode);
-        return $this->oldToNewFunctions[$currentFunction] ?? null;
     }
 }

@@ -158,7 +158,7 @@ final class MergeIsCandidateRector extends AbstractRector
                 continue;
             }
 
-            if ((string) $stmt->name === $name) {
+            if ($this->isName($stmt->name, $name)) {
                 return [$i, $stmt];
             }
         }
@@ -253,7 +253,7 @@ final class MergeIsCandidateRector extends AbstractRector
     private function renameNodeToParamNode(ClassMethod $classMethod, string $nodeName): void
     {
         $this->callbackNodeTraverser->traverseNodesWithCallable([$classMethod], function (Node $node) use ($nodeName): ?Node {
-            if (! $node instanceof Variable || $node->name !== 'node') {
+            if (! $node instanceof Variable || ! $this->isName($node, 'node')) {
                 return null;
             }
 
@@ -286,7 +286,7 @@ final class MergeIsCandidateRector extends AbstractRector
     private function removeReturnTrue(ClassMethod $classMethod): void
     {
         $this->callbackNodeTraverser->traverseNodesWithCallable([$classMethod], function (Node $node): ?Node {
-            if (! $node instanceof Return_ || ! $node->expr instanceof ConstFetch || (string) $node->expr->name !== 'true') {
+            if (! $node instanceof Return_ || ! $node->expr instanceof ConstFetch || ! $this->isTrue($node->expr)) {
                 return null;
             }
 

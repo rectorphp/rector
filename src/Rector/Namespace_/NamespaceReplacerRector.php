@@ -166,9 +166,8 @@ final class NamespaceReplacerRector extends AbstractRector
             return false;
         }
 
-        $nodeName = $nameNode->toString();
         if ($resolvedName instanceof FullyQualified) {
-            return $nodeName !== $resolvedName->toString();
+            return ! $this->isName($nameNode, $resolvedName->toString());
         }
 
         return false;
