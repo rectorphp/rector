@@ -177,18 +177,10 @@ CODE_SAMPLE
 
         if ($this->isNullableType) {
             // is default value "null"?
-            return $this->isContantWithValue($defaultValueNode, 'null');
+            return $this->isNull($defaultValueNode);
         }
 
         return $this->matchesDefaultValueToExpectedNodeTypes($propertyType, $defaultValueNode);
-    }
-
-    /**
-     * @param string[]|string $value
-     */
-    private function isContantWithValue(Node $node, $value): bool
-    {
-        return $node instanceof ConstFetch && in_array((string) $node->name, (array) $value, true);
     }
 
     private function matchesDefaultValueToExpectedNodeTypes(string $propertyType, Node $defaultValueNode): bool
@@ -198,8 +190,7 @@ CODE_SAMPLE
         foreach ($allowedDefaultNodeTypes as $allowedDefaultNodeType) {
             if (is_a($defaultValueNode, $allowedDefaultNodeType, true)) {
                 if ($propertyType === 'bool') {
-                    // make sure it's the right constant value
-                    return $this->isContantWithValue($defaultValueNode, ['true', 'false']);
+                    return $this->isBool($defaultValueNode);
                 }
 
                 return true;
