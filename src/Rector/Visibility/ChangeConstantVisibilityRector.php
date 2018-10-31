@@ -94,8 +94,7 @@ CODE_SAMPLE
                     continue;
                 }
 
-                $this->visibilityModifier->removeOriginalVisibilityFromFlags($node);
-                $this->visibilityModifier->addVisibilityFlag($node, $visibility);
+                $this->visibilityModifier->replaceVisibilityFlag($node, $visibility);
 
                 return $node;
             }

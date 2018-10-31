@@ -105,11 +105,9 @@ CODE_SAMPLE
         if (! isset($this->methodToVisibilityByClass[$nodeParentClassName][$methodName])) {
             return null;
         }
-        $this->visibilityModifier->removeOriginalVisibilityFromFlags($node);
 
         $newVisibility = $this->resolveNewVisibilityForNode($node, $methodName);
-
-        $this->visibilityModifier->addVisibilityFlag($node, $newVisibility);
+        $this->visibilityModifier->replaceVisibilityFlag($node, $newVisibility);
 
         return $node;
     }
