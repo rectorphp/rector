@@ -17,6 +17,11 @@ use Rector\RectorDefinition\RectorDefinition;
 final class ArgumentDefaultValueReplacerRector extends AbstractArgumentRector
 {
     /**
+     * @var mixed[]
+     */
+    private $replacesByMethodAndTypes = [];
+
+    /**
      * @var ConstExprEvaluator
      */
     private $constExprEvaluator;
@@ -25,11 +30,6 @@ final class ArgumentDefaultValueReplacerRector extends AbstractArgumentRector
      * @var NodeFactory
      */
     private $nodeFactory;
-
-    /**
-     * @var mixed[]
-     */
-    private $replacesByMethodAndTypes = [];
 
     /**
      * @param mixed[] $replacesByMethodAndTypes
@@ -131,19 +131,29 @@ CODE_SAMPLE
     }
 
     /**
-     * @param mixed $value
+     * @param MethodCall|StaticCall $node
+     * @param mixed[] $oldToNewValues
      */
-    private function normalizeValueToArgument($value): Arg
+    private function processArgs(Node $node, int $position, array $oldToNewValues): void
     {
-        // class constants → turn string to composite
-        if (Strings::contains($value, '::')) {
-            [$class, $constant] = explode('::', $value);
-            $classConstantFetchNode = $this->nodeFactory->createClassConstant($class, $constant);
+        $argValue = $this->resolveArgumentValue($node->args[$position]);
+        foreach ($oldToNewValues as $oldToNewValue) {
+            if (is_scalar($oldToNewValue['before']) && $argValue === $oldToNewValue['before']) {
+                $node->args[$position] = $this->normalizeValueToArgument($oldToNewValue['after']);
+            } elseif (is_array($oldToNewValue['before'])) {
+                $newArgs = $this->processArrayReplacement(
+                    $node->args,
+                    $position,
+                    $oldToNewValue['before'],
+                    $oldToNewValue['after']
+                );
 
-            return new Arg($classConstantFetchNode);
+                if ($newArgs) {
+                    $node->args = array_values($newArgs);
+                    break;
+                }
+            }
         }
-
-        return new Arg(BuilderHelpers::normalizeValue($value));
     }
 
     /**
@@ -162,6 +172,22 @@ CODE_SAMPLE
         }
 
         return $resolvedValue;
+    }
+
+    /**
+     * @param mixed $value
+     */
+    private function normalizeValueToArgument($value): Arg
+    {
+        // class constants → turn string to composite
+        if (Strings::contains($value, '::')) {
+            [$class, $constant] = explode('::', $value);
+            $classConstantFetchNode = $this->nodeFactory->createClassConstant($class, $constant);
+
+            return new Arg($classConstantFetchNode);
+        }
+
+        return new Arg(BuilderHelpers::normalizeValue($value));
     }
 
     /**
@@ -208,31 +234,5 @@ CODE_SAMPLE
         }
 
         return $argumentValues;
-    }
-
-    /**
-     * @param MethodCall|StaticCall $node
-     * @param mixed[] $oldToNewValues
-     */
-    private function processArgs(Node $node, int $position, array $oldToNewValues): void
-    {
-        $argValue = $this->resolveArgumentValue($node->args[$position]);
-        foreach ($oldToNewValues as $oldToNewValue) {
-            if (is_scalar($oldToNewValue['before']) && $argValue === $oldToNewValue['before']) {
-                $node->args[$position] = $this->normalizeValueToArgument($oldToNewValue['after']);
-            } elseif (is_array($oldToNewValue['before'])) {
-                $newArgs = $this->processArrayReplacement(
-                    $node->args,
-                    $position,
-                    $oldToNewValue['before'],
-                    $oldToNewValue['after']
-                );
-
-                if ($newArgs) {
-                    $node->args = array_values($newArgs);
-                    break;
-                }
-            }
-        }
     }
 }

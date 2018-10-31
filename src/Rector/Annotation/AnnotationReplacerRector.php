@@ -19,14 +19,14 @@ final class AnnotationReplacerRector extends AbstractPHPUnitRector
     private $classToAnnotationMap = [];
 
     /**
-     * @var DocBlockAnalyzer
-     */
-    private $docBlockAnalyzer;
-
-    /**
      * @var string[]
      */
     private $activeAnnotationMap = [];
+
+    /**
+     * @var DocBlockAnalyzer
+     */
+    private $docBlockAnalyzer;
 
     /**
      * @param string[][] $classToAnnotationMap

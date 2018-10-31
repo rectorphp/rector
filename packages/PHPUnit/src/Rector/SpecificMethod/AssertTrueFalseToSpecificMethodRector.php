@@ -17,6 +17,11 @@ use Rector\RectorDefinition\RectorDefinition;
 final class AssertTrueFalseToSpecificMethodRector extends AbstractPHPUnitRector
 {
     /**
+     * @var string|null
+     */
+    private $activeFuncCallName;
+
+    /**
      * @var string[][]|false[][]
      */
     private $defaultOldToNewMethods = [
@@ -48,11 +53,6 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractPHPUnitRector
      * @var NodeFactory
      */
     private $nodeFactory;
-
-    /**
-     * @var string|null
-     */
-    private $activeFuncCallName;
 
     /**
      * @param string[][] $activeMethods
@@ -119,6 +119,39 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractPHPUnitRector
         return $node;
     }
 
+    /**
+     * @param string[][]|false[][] $activeMethods
+     * @return string[][]|false[][]
+     */
+    private function filterActiveOldToNewMethods(array $activeMethods = []): array
+    {
+        if ($activeMethods) {
+            return array_filter($this->defaultOldToNewMethods, function (string $method) use ($activeMethods): bool {
+                return in_array($method, $activeMethods, true);
+            }, ARRAY_FILTER_USE_KEY);
+        }
+
+        return $this->defaultOldToNewMethods;
+    }
+
+    private function resolveFunctionName(Node $node): ?string
+    {
+        if ($node instanceof FuncCall
+            && $node->name instanceof Name
+        ) {
+            /** @var Name $nameNode */
+            $nameNode = $node->name;
+
+            return $nameNode->toString();
+        }
+
+        if ($node instanceof Empty_) {
+            return 'empty';
+        }
+
+        return null;
+    }
+
     private function renameMethod(MethodCall $methodCallNode): void
     {
         /** @var Identifier $identifierNode */
@@ -160,39 +193,6 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractPHPUnitRector
         if ($funcCallOrEmptyNode instanceof Empty_) {
             $methodCallNode->args[0] = $this->nodeFactory->createArg($funcCallOrEmptyNode->expr);
         }
-    }
-
-    private function resolveFunctionName(Node $node): ?string
-    {
-        if ($node instanceof FuncCall
-            && $node->name instanceof Name
-        ) {
-            /** @var Name $nameNode */
-            $nameNode = $node->name;
-
-            return $nameNode->toString();
-        }
-
-        if ($node instanceof Empty_) {
-            return 'empty';
-        }
-
-        return null;
-    }
-
-    /**
-     * @param string[][]|false[][] $activeMethods
-     * @return string[][]|false[][]
-     */
-    private function filterActiveOldToNewMethods(array $activeMethods = []): array
-    {
-        if ($activeMethods) {
-            return array_filter($this->defaultOldToNewMethods, function (string $method) use ($activeMethods): bool {
-                return in_array($method, $activeMethods, true);
-            }, ARRAY_FILTER_USE_KEY);
-        }
-
-        return $this->defaultOldToNewMethods;
     }
 
     /**

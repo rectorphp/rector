@@ -20,6 +20,11 @@ use Rector\RectorDefinition\RectorDefinition;
 final class ParentClassToTraitsRector extends AbstractRector
 {
     /**
+     * @var string[][]
+     */
+    private $parentClassToTraits = [];
+
+    /**
      * @var StatementGlue
      */
     private $statementGlue;
@@ -28,11 +33,6 @@ final class ParentClassToTraitsRector extends AbstractRector
      * @var NodeFactory
      */
     private $nodeFactory;
-
-    /**
-     * @var string[][]
-     */
-    private $parentClassToTraits = [];
 
     /**
      * @param string[][] $parentClassToTraits { parent class => [ traits ] }
@@ -110,16 +110,16 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function removeParentClass(Class_ $classNode): void
-    {
-        $classNode->extends = null;
-    }
-
     private function getClassNodeParentClassName(Class_ $classNode): string
     {
         /** @var FullyQualified $fullyQualifiedName */
         $fullyQualifiedName = $classNode->extends->getAttribute(Attribute::RESOLVED_NAME);
 
         return $fullyQualifiedName->toString();
+    }
+
+    private function removeParentClass(Class_ $classNode): void
+    {
+        $classNode->extends = null;
     }
 }

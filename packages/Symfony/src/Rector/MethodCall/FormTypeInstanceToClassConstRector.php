@@ -173,27 +173,6 @@ CODE_SAMPLE
 
     /**
      * @param Arg[] $argNodes
-     * @return Arg[]
-     */
-    private function resolveNamesToArgs(string $className, array $argNodes): array
-    {
-        $reflectionClass = new ReflectionClass($className);
-        $constructorReflectionMethod = $reflectionClass->getConstructor();
-
-        if (! $constructorReflectionMethod) {
-            return [];
-        }
-
-        $namesToArgs = [];
-        foreach ($constructorReflectionMethod->getParameters() as $parameterReflection) {
-            $namesToArgs[$parameterReflection->getName()] = $argNodes[$parameterReflection->getPosition()];
-        }
-
-        return $namesToArgs;
-    }
-
-    /**
-     * @param Arg[] $argNodes
      */
     private function moveArgumentsToOptions(
         MethodCall $methodCallNode,
@@ -244,28 +223,24 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Node[] $nodes
-     * @return Node[]
-     *
-     * $this->value = $value
-     * ↓
-     * $this->value = $options['value']
+     * @param Arg[] $argNodes
+     * @return Arg[]
      */
-    private function replaceParameterAssignWithOptionAssign(array $nodes, Param $param): array
+    private function resolveNamesToArgs(string $className, array $argNodes): array
     {
-        foreach ($nodes as $expression) {
-            if (! $expression instanceof Expression) {
-                continue;
-            }
+        $reflectionClass = new ReflectionClass($className);
+        $constructorReflectionMethod = $reflectionClass->getConstructor();
 
-            $node = $expression->expr;
-
-            if ($node instanceof Assign && $node->expr instanceof Variable) {
-                $node->expr = new ArrayDimFetch($param->var, new String_($this->getName($node->var)));
-            }
+        if (! $constructorReflectionMethod) {
+            return [];
         }
 
-        return $nodes;
+        $namesToArgs = [];
+        foreach ($constructorReflectionMethod->getParameters() as $parameterReflection) {
+            $namesToArgs[$parameterReflection->getName()] = $argNodes[$parameterReflection->getPosition()];
+        }
+
+        return $namesToArgs;
     }
 
     private function addBuildFormMethod(Class_ $classNode, ClassMethod $formTypeConstructorMethodNode): void
@@ -329,5 +304,30 @@ CODE_SAMPLE
             ->getNode();
 
         $classNode->stmts[] = $configureOptionsClassMethodNode;
+    }
+
+    /**
+     * @param Node[] $nodes
+     * @return Node[]
+     *
+     * $this->value = $value
+     * ↓
+     * $this->value = $options['value']
+     */
+    private function replaceParameterAssignWithOptionAssign(array $nodes, Param $param): array
+    {
+        foreach ($nodes as $expression) {
+            if (! $expression instanceof Expression) {
+                continue;
+            }
+
+            $node = $expression->expr;
+
+            if ($node instanceof Assign && $node->expr instanceof Variable) {
+                $node->expr = new ArrayDimFetch($param->var, new String_($this->getName($node->var)));
+            }
+        }
+
+        return $nodes;
     }
 }

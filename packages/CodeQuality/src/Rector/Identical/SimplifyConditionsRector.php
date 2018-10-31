@@ -88,12 +88,6 @@ final class SimplifyConditionsRector extends AbstractRector
         return $subBinaryOpNode;
     }
 
-    private function createInversedBooleanOp(BinaryOp $binaryOpNode): BinaryOp
-    {
-        $inversedBinaryClass = $this->assignAndBinaryMap->getInversed($binaryOpNode);
-        return new $inversedBinaryClass($binaryOpNode->left, $binaryOpNode->right);
-    }
-
     /**
      * Skip too nested binary || binary > binary combinations
      */
@@ -103,5 +97,11 @@ final class SimplifyConditionsRector extends AbstractRector
             return true;
         }
         return $binaryOpNode->right instanceof BinaryOp;
+    }
+
+    private function createInversedBooleanOp(BinaryOp $binaryOpNode): BinaryOp
+    {
+        $inversedBinaryClass = $this->assignAndBinaryMap->getInversed($binaryOpNode);
+        return new $inversedBinaryClass($binaryOpNode->left, $binaryOpNode->right);
     }
 }

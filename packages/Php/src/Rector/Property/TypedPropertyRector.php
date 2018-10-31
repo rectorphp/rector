@@ -27,9 +27,9 @@ final class TypedPropertyRector extends AbstractRector
     public const PHP74_PROPERTY_TYPE = 'php74_property_type';
 
     /**
-     * @var DocBlockAnalyzer
+     * @var bool
      */
-    private $docBlockAnalyzer;
+    private $isNullableType = false;
 
     /**
      * @var string[][]
@@ -44,14 +44,14 @@ final class TypedPropertyRector extends AbstractRector
     ];
 
     /**
+     * @var DocBlockAnalyzer
+     */
+    private $docBlockAnalyzer;
+
+    /**
      * @var TypeAnalyzer
      */
     private $typeAnalyzer;
-
-    /**
-     * @var bool
-     */
-    private $isNullableType = false;
 
     public function __construct(DocBlockAnalyzer $docBlockAnalyzer, TypeAnalyzer $typeAnalyzer)
     {
@@ -138,6 +138,32 @@ CODE_SAMPLE
         return $node;
     }
 
+    /**
+     * @param string[] $varTypes
+     */
+    private function getPropertyTypeWithoutNull(array $varTypes): string
+    {
+        if ($this->isNullableType) {
+            $nullTypePosition = array_search('null', $varTypes, true);
+            unset($varTypes[$nullTypePosition]);
+        }
+
+        return (string) array_pop($varTypes);
+    }
+
+    private function shortenLongType(string $type): string
+    {
+        if ($type === 'boolean') {
+            return 'bool';
+        }
+
+        if ($type === 'integer') {
+            return 'int';
+        }
+
+        return $type;
+    }
+
     private function matchesDocTypeAndDefaultValueType(string $propertyType, Property $propertyNode): bool
     {
         $defaultValueNode = $propertyNode->props[0]->default;
@@ -163,32 +189,6 @@ CODE_SAMPLE
     private function isContantWithValue(Node $node, $value): bool
     {
         return $node instanceof ConstFetch && in_array((string) $node->name, (array) $value, true);
-    }
-
-    /**
-     * @param string[] $varTypes
-     */
-    private function getPropertyTypeWithoutNull(array $varTypes): string
-    {
-        if ($this->isNullableType) {
-            $nullTypePosition = array_search('null', $varTypes, true);
-            unset($varTypes[$nullTypePosition]);
-        }
-
-        return (string) array_pop($varTypes);
-    }
-
-    private function shortenLongType(string $type): string
-    {
-        if ($type === 'boolean') {
-            return 'bool';
-        }
-
-        if ($type === 'integer') {
-            return 'int';
-        }
-
-        return $type;
     }
 
     private function matchesDefaultValueToExpectedNodeTypes(string $propertyType, Node $defaultValueNode): bool

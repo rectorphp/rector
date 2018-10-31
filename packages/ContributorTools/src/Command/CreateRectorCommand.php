@@ -34,6 +34,16 @@ final class CreateRectorCommand extends Command
     private const RECTOR_FQN_NAME_PATTERN = 'Rector\_Package_\Rector\_Category_\_Name_';
 
     /**
+     * @var string
+     */
+    private $testCasePath;
+
+    /**
+     * @var string[]
+     */
+    private $generatedFiles = [];
+
+    /**
      * @var ConsoleStyle
      */
     private $consoleStyle;
@@ -49,11 +59,6 @@ final class CreateRectorCommand extends Command
     private $finderSanitizer;
 
     /**
-     * @var string[]
-     */
-    private $generatedFiles = [];
-
-    /**
      * @var AfterRectorCodingStyle
      */
     private $afterRectorCodingStyle;
@@ -62,11 +67,6 @@ final class CreateRectorCommand extends Command
      * @var TemplateVariablesFactory
      */
     private $templateVariablesFactory;
-
-    /**
-     * @var string
-     */
-    private $testCasePath;
 
     public function __construct(
         ConsoleStyle $consoleStyle,
@@ -115,14 +115,6 @@ final class CreateRectorCommand extends Command
     }
 
     /**
-     * @param mixed[] $variables
-     */
-    private function applyVariables(string $content, array $variables): string
-    {
-        return str_replace(array_keys($variables), array_values($variables), $content);
-    }
-
-    /**
      * @return SmartFileInfo[]
      */
     private function findTemplateFileInfos(): array
@@ -131,29 +123,6 @@ final class CreateRectorCommand extends Command
             ->in(self::TEMPLATES_DIRECTORY);
 
         return $this->finderSanitizer->sanitize($finder);
-    }
-
-    private function printSuccess(string $name): void
-    {
-        $this->consoleStyle->title(sprintf('New files generated for "%s"', $name));
-        sort($this->generatedFiles);
-        $this->consoleStyle->listing($this->generatedFiles);
-
-        $this->consoleStyle->success(sprintf(
-            'Now make these tests green again:%svendor/bin/phpunit %s',
-            PHP_EOL . PHP_EOL,
-            $this->testCasePath
-        ));
-    }
-
-    private function applyCodingStyle(): void
-    {
-        // filter only .php files
-        $generatedPhpFiles = array_filter($this->generatedFiles, function (string $file) {
-            return Strings::endsWith($file, '.php');
-        });
-
-        $this->afterRectorCodingStyle->apply($generatedPhpFiles);
     }
 
     /**
@@ -207,5 +176,36 @@ final class CreateRectorCommand extends Command
         );
 
         FileSystem::write($configuration->getLevelConfig(), $levelConfigContent);
+    }
+
+    private function applyCodingStyle(): void
+    {
+        // filter only .php files
+        $generatedPhpFiles = array_filter($this->generatedFiles, function (string $file) {
+            return Strings::endsWith($file, '.php');
+        });
+
+        $this->afterRectorCodingStyle->apply($generatedPhpFiles);
+    }
+
+    private function printSuccess(string $name): void
+    {
+        $this->consoleStyle->title(sprintf('New files generated for "%s"', $name));
+        sort($this->generatedFiles);
+        $this->consoleStyle->listing($this->generatedFiles);
+
+        $this->consoleStyle->success(sprintf(
+            'Now make these tests green again:%svendor/bin/phpunit %s',
+            PHP_EOL . PHP_EOL,
+            $this->testCasePath
+        ));
+    }
+
+    /**
+     * @param mixed[] $variables
+     */
+    private function applyVariables(string $content, array $variables): string
+    {
+        return str_replace(array_keys($variables), array_values($variables), $content);
     }
 }

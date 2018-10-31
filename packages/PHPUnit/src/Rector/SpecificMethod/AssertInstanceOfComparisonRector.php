@@ -15,6 +15,14 @@ use Rector\RectorDefinition\RectorDefinition;
 final class AssertInstanceOfComparisonRector extends AbstractPHPUnitRector
 {
     /**
+     * @var string[]
+     */
+    private $renameMethodsMap = [
+        'assertTrue' => 'assertInstanceOf',
+        'assertFalse' => 'assertNotInstanceOf',
+    ];
+
+    /**
      * @var IdentifierRenamer
      */
     private $identifierRenamer;
@@ -23,14 +31,6 @@ final class AssertInstanceOfComparisonRector extends AbstractPHPUnitRector
      * @var BuilderFactory
      */
     private $builderFactory;
-
-    /**
-     * @var string[]
-     */
-    private $renameMethodsMap = [
-        'assertTrue' => 'assertInstanceOf',
-        'assertFalse' => 'assertNotInstanceOf',
-    ];
 
     public function __construct(IdentifierRenamer $identifierRenamer, BuilderFactory $builderFactory)
     {

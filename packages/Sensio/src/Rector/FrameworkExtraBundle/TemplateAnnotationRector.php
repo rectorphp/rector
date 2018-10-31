@@ -21,6 +21,11 @@ use Rector\Utils\BetterNodeFinder;
 final class TemplateAnnotationRector extends AbstractRector
 {
     /**
+     * @var int
+     */
+    private $version;
+
+    /**
      * @var DocBlockAnalyzer
      */
     private $docBlockAnalyzer;
@@ -44,11 +49,6 @@ final class TemplateAnnotationRector extends AbstractRector
      * @var TemplateGuesser
      */
     private $templateGuesser;
-
-    /**
-     * @var int
-     */
-    private $version;
 
     public function __construct(
         int $version,

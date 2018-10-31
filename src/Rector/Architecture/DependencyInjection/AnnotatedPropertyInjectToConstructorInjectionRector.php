@@ -21,14 +21,14 @@ use Rector\RectorDefinition\RectorDefinition;
 final class AnnotatedPropertyInjectToConstructorInjectionRector extends AbstractRector
 {
     /**
-     * @var DocBlockAnalyzer
-     */
-    private $docBlockAnalyzer;
-
-    /**
      * @var string
      */
     private $annotation;
+
+    /**
+     * @var DocBlockAnalyzer
+     */
+    private $docBlockAnalyzer;
 
     public function __construct(DocBlockAnalyzer $docBlockAnalyzer, string $annotation)
     {

@@ -33,6 +33,16 @@ use function Safe\sprintf;
 final class ProcessCommand extends Command
 {
     /**
+     * @var string[]
+     */
+    private $changedFiles = [];
+
+    /**
+     * @var FileDiff[]
+     */
+    private $fileDiffs = [];
+
+    /**
      * @var FileProcessor
      */
     private $fileProcessor;
@@ -61,16 +71,6 @@ final class ProcessCommand extends Command
      * @var DifferAndFormatter
      */
     private $differAndFormatter;
-
-    /**
-     * @var string[]
-     */
-    private $changedFiles = [];
-
-    /**
-     * @var FileDiff[]
-     */
-    private $fileDiffs = [];
 
     /**
      * @var AdditionalAutoloader

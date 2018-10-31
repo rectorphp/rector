@@ -122,14 +122,6 @@ final class EregToPregMatchRector extends AbstractRector
         $funcCallNode->args[0]->value = $concat;
     }
 
-    private function isCaseInsensitiveFunction(string $functionName): bool
-    {
-        if (Strings::contains($functionName, 'eregi')) {
-            return true;
-        }
-        return Strings::contains($functionName, 'spliti');
-    }
-
     /**
      * Equivalent of:
      * split(' ', 'hey Tom', 0);
@@ -166,5 +158,13 @@ final class EregToPregMatchRector extends AbstractRector
         $strlenFuncCall = new FuncCall(new Name('strlen'), [new Arg($arrayDimFetch)]);
 
         return new Ternary($funcCallNode, $strlenFuncCall, new ConstFetch(new Name('false')));
+    }
+
+    private function isCaseInsensitiveFunction(string $functionName): bool
+    {
+        if (Strings::contains($functionName, 'eregi')) {
+            return true;
+        }
+        return Strings::contains($functionName, 'spliti');
     }
 }

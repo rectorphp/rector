@@ -60,17 +60,6 @@ final class EregToPcreTransformer
         return $cache[$s] = '#' . $r . '#m';
     }
 
-    private function _ere2pcre_escape(string $c): string
-    {
-        if ($c === "\0") {
-            throw new InvalidEregException('a literal null byte in the regex');
-        } elseif (strpos('\^$.[]|()?*+{}-/', $c) !== false) {
-            return '\\' . $c;
-        }
-
-        return $c;
-    }
-
     /**
      * Recursively converts ERE into PCRE, starting at the position $i.
      *
@@ -240,5 +229,16 @@ final class EregToPcreTransformer
         }
 
         return [implode('|', $r), $i];
+    }
+
+    private function _ere2pcre_escape(string $c): string
+    {
+        if ($c === "\0") {
+            throw new InvalidEregException('a literal null byte in the regex');
+        } elseif (strpos('\^$.[]|()?*+{}-/', $c) !== false) {
+            return '\\' . $c;
+        }
+
+        return $c;
     }
 }

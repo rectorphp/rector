@@ -12,6 +12,11 @@ use function Safe\sprintf;
 final class ReplaceValueYamlRector implements YamlRectorInterface
 {
     /**
+     * @var int
+     */
+    private $replacePathsCount = 0;
+
+    /**
      * @var string[][]
      */
     private $oldToNewKeyByPaths = [];
@@ -20,11 +25,6 @@ final class ReplaceValueYamlRector implements YamlRectorInterface
      * @var PathResolver
      */
     private $pathResolver;
-
-    /**
-     * @var int
-     */
-    private $replacePathsCount = 0;
 
     /**
      * @param string[][] $oldToNewKeyByPaths

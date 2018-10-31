@@ -17,6 +17,11 @@ use Rector\Symfony\Rector\Form\Helper\FormTypeStringToTypeProvider;
 final class StringFormTypeToClassRector extends AbstractRector
 {
     /**
+     * @var string
+     */
+    private $formBuilderClass;
+
+    /**
      * @var NodeFactory
      */
     private $nodeFactory;
@@ -25,11 +30,6 @@ final class StringFormTypeToClassRector extends AbstractRector
      * @var FormTypeStringToTypeProvider
      */
     private $formTypeStringToTypeProvider;
-
-    /**
-     * @var string
-     */
-    private $formBuilderClass;
 
     public function __construct(
         NodeFactory $nodeFactory,

@@ -15,6 +15,11 @@ use Rector\RectorDefinition\RectorDefinition;
 final class GetParameterToConstructorInjectionRector extends AbstractRector
 {
     /**
+     * @var string
+     */
+    private $controllerClass;
+
+    /**
      * @var PropertyNaming
      */
     private $propertyNaming;
@@ -23,11 +28,6 @@ final class GetParameterToConstructorInjectionRector extends AbstractRector
      * @var PropertyFetchNodeFactory
      */
     private $propertyFetchNodeFactory;
-
-    /**
-     * @var string
-     */
-    private $controllerClass;
 
     public function __construct(
         PropertyNaming $propertyNaming,

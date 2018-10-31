@@ -140,21 +140,6 @@ CODE_SAMPLE
         return false;
     }
 
-    private function isArrayOfArrays(Node $node): bool
-    {
-        if (! $node instanceof Array_) {
-            return false;
-        }
-
-        foreach ($node->items as $arrayItem) {
-            if (! $arrayItem->value instanceof Array_) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     /**
      * @return Expression[]
      */
@@ -172,5 +157,20 @@ CODE_SAMPLE
         }
 
         return $yieldNodes;
+    }
+
+    private function isArrayOfArrays(Node $node): bool
+    {
+        if (! $node instanceof Array_) {
+            return false;
+        }
+
+        foreach ($node->items as $arrayItem) {
+            if (! $arrayItem->value instanceof Array_) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

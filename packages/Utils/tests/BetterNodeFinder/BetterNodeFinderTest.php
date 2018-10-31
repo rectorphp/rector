@@ -18,14 +18,14 @@ use function Safe\file_get_contents;
 final class BetterNodeFinderTest extends TestCase
 {
     /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
      * @var Node[]
      */
     private $nodes = [];
+
+    /**
+     * @var BetterNodeFinder
+     */
+    private $betterNodeFinder;
 
     protected function setUp(): void
     {

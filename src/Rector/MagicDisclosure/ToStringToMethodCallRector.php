@@ -14,14 +14,14 @@ use Rector\RectorDefinition\RectorDefinition;
 final class ToStringToMethodCallRector extends AbstractRector
 {
     /**
-     * @var string[][]
-     */
-    private $typeToMethodCalls = [];
-
-    /**
      * @var string
      */
     private $activeTransformation;
+
+    /**
+     * @var string[][]
+     */
+    private $typeToMethodCalls = [];
 
     /**
      * @var IdentifierRenamer

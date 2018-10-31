@@ -8,14 +8,14 @@ use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
 final class ErrorCollector
 {
     /**
-     * @var CurrentFileInfoProvider
-     */
-    private $currentFileInfoProvider;
-
-    /**
      * @var Error[]
      */
     private $errors = [];
+
+    /**
+     * @var CurrentFileInfoProvider
+     */
+    private $currentFileInfoProvider;
 
     public function __construct(CurrentFileInfoProvider $currentFileInfoProvider)
     {

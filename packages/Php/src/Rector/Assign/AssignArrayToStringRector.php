@@ -28,14 +28,14 @@ use Rector\Utils\NodeTraverser\CallableNodeTraverser;
 final class AssignArrayToStringRector extends AbstractRector
 {
     /**
-     * @var CallableNodeTraverser
-     */
-    private $callableNodeTraverser;
-
-    /**
      * @var PropertyProperty[]
      */
     private $emptyStringPropertyNodes = [];
+
+    /**
+     * @var CallableNodeTraverser
+     */
+    private $callableNodeTraverser;
 
     /**
      * @var BetterNodeFinder
@@ -124,9 +124,20 @@ CODE_SAMPLE
         });
     }
 
-    private function isEmptyStringNode(Node $node): bool
+    /**
+     * @param PropertyFetch|StaticPropertyFetch $propertyNode
+     */
+    private function processProperty(Node $propertyNode): bool
     {
-        return $node instanceof String_ && $node->value === '';
+        foreach ($this->emptyStringPropertyNodes as $emptyStringPropertyNode) {
+            if ($this->getName($emptyStringPropertyNode) === $this->getName($propertyNode)) {
+                $emptyStringPropertyNode->default = new Array_();
+
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -162,19 +173,8 @@ CODE_SAMPLE
         return false;
     }
 
-    /**
-     * @param PropertyFetch|StaticPropertyFetch $propertyNode
-     */
-    private function processProperty(Node $propertyNode): bool
+    private function isEmptyStringNode(Node $node): bool
     {
-        foreach ($this->emptyStringPropertyNodes as $emptyStringPropertyNode) {
-            if ($this->getName($emptyStringPropertyNode) === $this->getName($propertyNode)) {
-                $emptyStringPropertyNode->default = new Array_();
-
-                return true;
-            }
-        }
-
-        return false;
+        return $node instanceof String_ && $node->value === '';
     }
 }

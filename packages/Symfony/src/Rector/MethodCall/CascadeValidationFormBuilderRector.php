@@ -116,27 +116,6 @@ CODE_SAMPLE
         return ! $methodCallNode->args[1]->value instanceof Array_;
     }
 
-    private function addConstraintsOptionToFollowingAddMethodCalls(Node $node): void
-    {
-        $constraintsArrayItem = new ArrayItem(
-            new New_(new FullyQualified('Symfony\Component\Validator\Constraints\Valid')),
-            new String_('constraints')
-        );
-
-        $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
-        while ($parentNode instanceof MethodCall) {
-            if ($this->isName($parentNode, 'add')) {
-                /** @var Array_ $addOptionsArrayNode */
-                $addOptionsArrayNode = isset($parentNode->args[2]) ? $parentNode->args[2]->value : new Array_();
-                $addOptionsArrayNode->items[] = $constraintsArrayItem;
-
-                $parentNode->args[2] = new Arg($addOptionsArrayNode);
-            }
-
-            $parentNode = $parentNode->getAttribute(Attribute::PARENT_NODE);
-        }
-    }
-
     private function findAndRemoveCascadeValidationOption(MethodCall $methodCallNode, Array_ $optionsArrayNode): bool
     {
         foreach ($optionsArrayNode->items as $key => $arrayItem) {
@@ -162,5 +141,26 @@ CODE_SAMPLE
         }
 
         return false;
+    }
+
+    private function addConstraintsOptionToFollowingAddMethodCalls(Node $node): void
+    {
+        $constraintsArrayItem = new ArrayItem(
+            new New_(new FullyQualified('Symfony\Component\Validator\Constraints\Valid')),
+            new String_('constraints')
+        );
+
+        $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
+        while ($parentNode instanceof MethodCall) {
+            if ($this->isName($parentNode, 'add')) {
+                /** @var Array_ $addOptionsArrayNode */
+                $addOptionsArrayNode = isset($parentNode->args[2]) ? $parentNode->args[2]->value : new Array_();
+                $addOptionsArrayNode->items[] = $constraintsArrayItem;
+
+                $parentNode->args[2] = new Arg($addOptionsArrayNode);
+            }
+
+            $parentNode = $parentNode->getAttribute(Attribute::PARENT_NODE);
+        }
     }
 }

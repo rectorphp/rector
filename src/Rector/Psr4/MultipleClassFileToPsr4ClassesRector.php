@@ -161,38 +161,6 @@ CODE_SAMPLE
         }
     }
 
-    private function createClassFileDestination(Class_ $classNode, SmartFileInfo $smartFileInfo): string
-    {
-        $currentDirectory = dirname($smartFileInfo->getRealPath());
-
-        return $currentDirectory . DIRECTORY_SEPARATOR . (string) $classNode->name . '.php';
-    }
-
-    private function removeAllClassesFromNamespaceNode(Namespace_ $namespaceNode): void
-    {
-        foreach ($namespaceNode->stmts as $key => $namespaceStatement) {
-            if ($namespaceStatement instanceof Class_) {
-                unset($namespaceNode->stmts[$key]);
-            }
-        }
-    }
-
-    /**
-     * @param Node[] $nodes
-     * @return Node[]
-     */
-    private function removeAllOtherNamespaces(array $nodes, Namespace_ $namespaceNode): array
-    {
-        foreach ($nodes as $key => $stmt) {
-            if ($stmt instanceof Namespace_ && $stmt !== $namespaceNode) {
-                unset($nodes[$key]);
-            }
-        }
-
-        // reindex from 0, for the printer
-        return array_values($nodes);
-    }
-
     /**
      * @param Node[] $nodes
      * @param Namespace_[] $namespaceNodes
@@ -224,5 +192,37 @@ CODE_SAMPLE
         }
 
         return false;
+    }
+
+    /**
+     * @param Node[] $nodes
+     * @return Node[]
+     */
+    private function removeAllOtherNamespaces(array $nodes, Namespace_ $namespaceNode): array
+    {
+        foreach ($nodes as $key => $stmt) {
+            if ($stmt instanceof Namespace_ && $stmt !== $namespaceNode) {
+                unset($nodes[$key]);
+            }
+        }
+
+        // reindex from 0, for the printer
+        return array_values($nodes);
+    }
+
+    private function removeAllClassesFromNamespaceNode(Namespace_ $namespaceNode): void
+    {
+        foreach ($namespaceNode->stmts as $key => $namespaceStatement) {
+            if ($namespaceStatement instanceof Class_) {
+                unset($namespaceNode->stmts[$key]);
+            }
+        }
+    }
+
+    private function createClassFileDestination(Class_ $classNode, SmartFileInfo $smartFileInfo): string
+    {
+        $currentDirectory = dirname($smartFileInfo->getRealPath());
+
+        return $currentDirectory . DIRECTORY_SEPARATOR . (string) $classNode->name . '.php';
     }
 }

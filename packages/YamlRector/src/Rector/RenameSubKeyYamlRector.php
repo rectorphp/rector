@@ -12,6 +12,11 @@ use function Safe\sprintf;
 final class RenameSubKeyYamlRector implements YamlRectorInterface
 {
     /**
+     * @var int
+     */
+    private $replacePathsCount = 0;
+
+    /**
      * @var string[]
      */
     private $pathsToNewKeys = [];
@@ -20,11 +25,6 @@ final class RenameSubKeyYamlRector implements YamlRectorInterface
      * @var PathResolver
      */
     private $pathResolver;
-
-    /**
-     * @var int
-     */
-    private $replacePathsCount = 0;
 
     /**
      * @param string[] $pathsToNewKeys
@@ -53,6 +53,20 @@ final class RenameSubKeyYamlRector implements YamlRectorInterface
         }
 
         return implode(PHP_EOL, $contentMainKeyParts);
+    }
+
+    private function processSingleMainGroup(string $content): string
+    {
+        foreach ($this->pathsToNewKeys as $path => $newKey) {
+            $pathPattern = $this->createPatternFromPath($path);
+            $replacePattern = $this->createReplacePatternFromNewKey($newKey);
+
+            while (Strings::match($content, $pathPattern)) {
+                $content = Strings::replace($content, $pathPattern, $replacePattern, 1);
+            }
+        }
+
+        return $content;
     }
 
     private function createPatternFromPath(string $path): string
@@ -87,19 +101,5 @@ final class RenameSubKeyYamlRector implements YamlRectorInterface
         }
 
         return $replacePattern . $newKey . '$' . $this->replacePathsCount;
-    }
-
-    private function processSingleMainGroup(string $content): string
-    {
-        foreach ($this->pathsToNewKeys as $path => $newKey) {
-            $pathPattern = $this->createPatternFromPath($path);
-            $replacePattern = $this->createReplacePatternFromNewKey($newKey);
-
-            while (Strings::match($content, $pathPattern)) {
-                $content = Strings::replace($content, $pathPattern, $replacePattern, 1);
-            }
-        }
-
-        return $content;
     }
 }

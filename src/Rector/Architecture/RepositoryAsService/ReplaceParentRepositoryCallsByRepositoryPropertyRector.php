@@ -13,11 +13,6 @@ use Rector\RectorDefinition\RectorDefinition;
 final class ReplaceParentRepositoryCallsByRepositoryPropertyRector extends AbstractRector
 {
     /**
-     * @var PropertyFetchNodeFactory
-     */
-    private $propertyFetchNodeFactory;
-
-    /**
      * @var string
      */
     private $entityRepositoryClass;
@@ -37,6 +32,11 @@ final class ReplaceParentRepositoryCallsByRepositoryPropertyRector extends Abstr
         'getClassName',
         'matching',
     ];
+
+    /**
+     * @var PropertyFetchNodeFactory
+     */
+    private $propertyFetchNodeFactory;
 
     public function __construct(
         PropertyFetchNodeFactory $propertyFetchNodeFactory,

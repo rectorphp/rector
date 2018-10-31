@@ -14,6 +14,11 @@ use Rector\RectorDefinition\RectorDefinition;
 final class AssertSameBoolNullToSpecificMethodRector extends AbstractPHPUnitRector
 {
     /**
+     * @var string
+     */
+    private $constantName;
+
+    /**
      * @var string[][]
      */
     private $constValueToNewMethodNames = [
@@ -26,11 +31,6 @@ final class AssertSameBoolNullToSpecificMethodRector extends AbstractPHPUnitRect
      * @var IdentifierRenamer
      */
     private $identifierRenamer;
-
-    /**
-     * @var string
-     */
-    private $constantName;
 
     public function __construct(IdentifierRenamer $identifierRenamer)
     {

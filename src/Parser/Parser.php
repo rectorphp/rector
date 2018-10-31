@@ -10,14 +10,14 @@ use PhpParser\Parser as NikicParser;
 final class Parser
 {
     /**
-     * @var NikicParser
-     */
-    private $nikicParser;
-
-    /**
      * @var Stmt[][]
      */
     private $nodesByFile = [];
+
+    /**
+     * @var NikicParser
+     */
+    private $nikicParser;
 
     public function __construct(NikicParser $nikicParser)
     {

@@ -22,6 +22,11 @@ final class GetRequestRector extends AbstractRector
     private const REQUEST_CLASS = 'Symfony\Component\HttpFoundation\Request';
 
     /**
+     * @var string
+     */
+    private $requestVariableAndParamName;
+
+    /**
      * @var ControllerMethodAnalyzer
      */
     private $controllerMethodAnalyzer;
@@ -35,11 +40,6 @@ final class GetRequestRector extends AbstractRector
      * @var BetterNodeFinder
      */
     private $betterNodeFinder;
-
-    /**
-     * @var string
-     */
-    private $requestVariableAndParamName;
 
     public function __construct(
         ControllerMethodAnalyzer $controllerMethodAnalyzer,
@@ -115,6 +115,47 @@ CODE_SAMPLE
         return null;
     }
 
+    /**
+     * @param ClassMethod|MethodCall $node
+     */
+    private function resolveUniqueName(Node $node, string $name): string
+    {
+        if ($node instanceof ClassMethod) {
+            $candidates = $node->params;
+        } else {
+            $candidates = $node->args;
+        }
+
+        $candidateNames = [];
+        foreach ($candidates as $candidate) {
+            $candidateNames[] = $this->getName($candidate);
+        }
+
+        $bareName = $name;
+        $prefixes = ['main', 'default'];
+
+        while (in_array($name, $candidateNames, true)) {
+            $name = array_shift($prefixes) . ucfirst($bareName);
+        }
+
+        return $name;
+    }
+
+    private function isGetRequestInAction(Node $node): bool
+    {
+        if (! $node instanceof MethodCall) {
+            return false;
+        }
+
+        if (! $this->isName($node, 'getRequest') && ! $this->isGetMethodCallWithRequestParameters($node)) {
+            return false;
+        }
+
+        $methodNode = $node->getAttribute(Attribute::METHOD_NODE);
+
+        return $this->controllerMethodAnalyzer->isAction($methodNode);
+    }
+
     private function isActionWithGetRequestInBody(Node $node): bool
     {
         if (! $this->controllerMethodAnalyzer->isAction($node)) {
@@ -145,21 +186,6 @@ CODE_SAMPLE
         return false;
     }
 
-    private function isGetRequestInAction(Node $node): bool
-    {
-        if (! $node instanceof MethodCall) {
-            return false;
-        }
-
-        if (! $this->isName($node, 'getRequest') && ! $this->isGetMethodCallWithRequestParameters($node)) {
-            return false;
-        }
-
-        $methodNode = $node->getAttribute(Attribute::METHOD_NODE);
-
-        return $this->controllerMethodAnalyzer->isAction($methodNode);
-    }
-
     private function isGetMethodCallWithRequestParameters(MethodCall $methodCall): bool
     {
         if (! $this->isName($methodCall, 'get')) {
@@ -178,31 +204,5 @@ CODE_SAMPLE
         $stringValue = $methodCall->args[0]->value;
 
         return $stringValue->value === 'request';
-    }
-
-    /**
-     * @param ClassMethod|MethodCall $node
-     */
-    private function resolveUniqueName(Node $node, string $name): string
-    {
-        if ($node instanceof ClassMethod) {
-            $candidates = $node->params;
-        } else {
-            $candidates = $node->args;
-        }
-
-        $candidateNames = [];
-        foreach ($candidates as $candidate) {
-            $candidateNames[] = $this->getName($candidate);
-        }
-
-        $bareName = $name;
-        $prefixes = ['main', 'default'];
-
-        while (in_array($name, $candidateNames, true)) {
-            $name = array_shift($prefixes) . ucfirst($bareName);
-        }
-
-        return $name;
     }
 }

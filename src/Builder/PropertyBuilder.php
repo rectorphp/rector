@@ -51,6 +51,23 @@ final class PropertyBuilder
         $this->statementGlue->addAsFirstMethod($classNode, $propertyNode);
     }
 
+    private function doesPropertyAlreadyExist(Class_ $classNode, VariableInfo $variableInfo): bool
+    {
+        foreach ($classNode->stmts as $inClassNode) {
+            if (! $inClassNode instanceof PhpParserProperty) {
+                continue;
+            }
+
+            $classPropertyName = (string) $inClassNode->props[0]->name;
+
+            if ($classPropertyName === $variableInfo->getName()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private function buildPrivatePropertyNode(VariableInfo $variableInfo): PhpParserProperty
     {
         $docComment = $this->createDocWithVarAnnotation($variableInfo->getTypes());
@@ -69,23 +86,6 @@ final class PropertyBuilder
     {
         // @todo resolve with PhpDocInfo
         return new Doc(sprintf('/**%s * @var %s%s */', PHP_EOL, $this->implodeTypes($propertyTypes), PHP_EOL));
-    }
-
-    private function doesPropertyAlreadyExist(Class_ $classNode, VariableInfo $variableInfo): bool
-    {
-        foreach ($classNode->stmts as $inClassNode) {
-            if (! $inClassNode instanceof PhpParserProperty) {
-                continue;
-            }
-
-            $classPropertyName = (string) $inClassNode->props[0]->name;
-
-            if ($classPropertyName === $variableInfo->getName()) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     /**

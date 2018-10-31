@@ -13,9 +13,9 @@ use Rector\NodeTypeResolver\Node\Attribute;
 final class ClassAndMethodNodeVisitor extends NodeVisitorAbstract
 {
     /**
-     * @var ClassLike|null
+     * @var string|null
      */
-    private $classNode;
+    private $methodName;
 
     /**
      * @var string|null
@@ -23,9 +23,9 @@ final class ClassAndMethodNodeVisitor extends NodeVisitorAbstract
     private $className;
 
     /**
-     * @var string|null
+     * @var ClassLike|null
      */
-    private $methodName;
+    private $classNode;
 
     /**
      * @var ClassMethod|null
@@ -76,6 +76,17 @@ final class ClassAndMethodNodeVisitor extends NodeVisitorAbstract
         }
     }
 
+    private function processMethod(Node $node): void
+    {
+        if ($node instanceof ClassMethod) {
+            $this->methodNode = $node;
+            $this->methodName = (string) $node->name;
+        }
+
+        $node->setAttribute(Attribute::METHOD_NAME, $this->methodName);
+        $node->setAttribute(Attribute::METHOD_NODE, $this->methodNode);
+    }
+
     private function setParentClassName(Class_ $classNode, Node $node): void
     {
         if ($classNode->extends === null) {
@@ -88,16 +99,5 @@ final class ClassAndMethodNodeVisitor extends NodeVisitorAbstract
         }
 
         $node->setAttribute(Attribute::PARENT_CLASS_NAME, $parentClassResolvedName);
-    }
-
-    private function processMethod(Node $node): void
-    {
-        if ($node instanceof ClassMethod) {
-            $this->methodNode = $node;
-            $this->methodName = (string) $node->name;
-        }
-
-        $node->setAttribute(Attribute::METHOD_NAME, $this->methodName);
-        $node->setAttribute(Attribute::METHOD_NODE, $this->methodNode);
     }
 }

@@ -27,14 +27,14 @@ final class SimpleFunctionAndFilterRector extends AbstractRector
     private $twigExtensionClass;
 
     /**
-     * @var CallableNodeTraverser
-     */
-    private $callableNodeTraverser;
-
-    /**
      * @var string[]
      */
     private $oldToNewClasses = [];
+
+    /**
+     * @var CallableNodeTraverser
+     */
+    private $callableNodeTraverser;
 
     /**
      * @param string[] $oldToNewClasses

@@ -83,6 +83,53 @@ CODE_SAMPLE
         return $node;
     }
 
+    /**
+     * @return Expression[]|null
+     */
+    private function processTryCatch(TryCatch $tryCatchNode): ?array
+    {
+        if (count($tryCatchNode->catches) !== 1) {
+            return null;
+        }
+
+        $this->newExpressions = [];
+
+        $exceptionVariable = $tryCatchNode->catches[0]->var;
+
+        // we look for:
+        // - instance of $exceptionVariableName
+        // - assert same string to $exceptionVariableName->getMessage()
+        // - assert same string to $exceptionVariableName->getCode()
+        foreach ($tryCatchNode->catches[0]->stmts as $catchedStmt) {
+            // not a match
+            if (! $catchedStmt instanceof Expression) {
+                return null;
+            }
+
+            if (! $catchedStmt->expr instanceof MethodCall) {
+                continue;
+            }
+
+            $methodCallNode = $catchedStmt->expr;
+
+            $this->processAssertInstanceOf($methodCallNode, $exceptionVariable);
+            $this->processExceptionMessage($methodCallNode, $exceptionVariable);
+            $this->processExceptionCode($methodCallNode, $exceptionVariable);
+            $this->processExceptionMessageContains($methodCallNode, $exceptionVariable);
+        }
+
+        // return all statements
+        foreach ($tryCatchNode->stmts as $stmt) {
+            if (! $stmt instanceof Expression) {
+                return null;
+            }
+
+            $this->newExpressions[] = $stmt;
+        }
+
+        return $this->newExpressions;
+    }
+
     private function processAssertInstanceOf(MethodCall $methodCallNode, Variable $exceptionVariableNode): void
     {
         if (! $this->isName($methodCallNode->var, 'this')) {
@@ -135,6 +182,33 @@ CODE_SAMPLE
         );
     }
 
+    private function processExceptionCode(MethodCall $methodCallNode, Variable $exceptionVariable): void
+    {
+        if (! $this->isName($methodCallNode->var, 'this')) {
+            return;
+        }
+
+        if (! $this->isNames($methodCallNode, ['assertSame', 'assertEquals'])) {
+            return;
+        }
+
+        $secondArgument = $methodCallNode->args[1]->value;
+        if (! $secondArgument instanceof MethodCall) {
+            return;
+        }
+
+        // looking for "$exception->getMessage()"
+        if (! $this->isName($secondArgument->var, $this->getName($exceptionVariable))) {
+            return;
+        }
+
+        if (! $this->isName($secondArgument, 'getCode')) {
+            return;
+        }
+
+        $this->newExpressions[] = $this->renameMethodCallAndKeepFirstArgument($methodCallNode, 'expectExceptionCode');
+    }
+
     private function processExceptionMessageContains(MethodCall $methodCallNode, Variable $exceptionVariable): void
     {
         if (! $this->isName($methodCallNode->var, 'this')) {
@@ -170,80 +244,6 @@ CODE_SAMPLE
         }
 
         $this->newExpressions[] = $expression;
-    }
-
-    private function processExceptionCode(MethodCall $methodCallNode, Variable $exceptionVariable): void
-    {
-        if (! $this->isName($methodCallNode->var, 'this')) {
-            return;
-        }
-
-        if (! $this->isNames($methodCallNode, ['assertSame', 'assertEquals'])) {
-            return;
-        }
-
-        $secondArgument = $methodCallNode->args[1]->value;
-        if (! $secondArgument instanceof MethodCall) {
-            return;
-        }
-
-        // looking for "$exception->getMessage()"
-        if (! $this->isName($secondArgument->var, $this->getName($exceptionVariable))) {
-            return;
-        }
-
-        if (! $this->isName($secondArgument, 'getCode')) {
-            return;
-        }
-
-        $this->newExpressions[] = $this->renameMethodCallAndKeepFirstArgument($methodCallNode, 'expectExceptionCode');
-    }
-
-    /**
-     * @return Expression[]|null
-     */
-    private function processTryCatch(TryCatch $tryCatchNode): ?array
-    {
-        if (count($tryCatchNode->catches) !== 1) {
-            return null;
-        }
-
-        $this->newExpressions = [];
-
-        $exceptionVariable = $tryCatchNode->catches[0]->var;
-
-        // we look for:
-        // - instance of $exceptionVariableName
-        // - assert same string to $exceptionVariableName->getMessage()
-        // - assert same string to $exceptionVariableName->getCode()
-        foreach ($tryCatchNode->catches[0]->stmts as $catchedStmt) {
-            // not a match
-            if (! $catchedStmt instanceof Expression) {
-                return null;
-            }
-
-            if (! $catchedStmt->expr instanceof MethodCall) {
-                continue;
-            }
-
-            $methodCallNode = $catchedStmt->expr;
-
-            $this->processAssertInstanceOf($methodCallNode, $exceptionVariable);
-            $this->processExceptionMessage($methodCallNode, $exceptionVariable);
-            $this->processExceptionCode($methodCallNode, $exceptionVariable);
-            $this->processExceptionMessageContains($methodCallNode, $exceptionVariable);
-        }
-
-        // return all statements
-        foreach ($tryCatchNode->stmts as $stmt) {
-            if (! $stmt instanceof Expression) {
-                return null;
-            }
-
-            $this->newExpressions[] = $stmt;
-        }
-
-        return $this->newExpressions;
     }
 
     private function renameMethodCallAndKeepFirstArgument(MethodCall $methodCallNode, string $methodName): Expression
