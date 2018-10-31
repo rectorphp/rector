@@ -7,10 +7,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Stmt\Expression;
 use Rector\Node\MethodCallNodeFactory;
-use Rector\NodeAnalyzer\ExpressionAnalyzer;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
@@ -29,11 +26,6 @@ final class GetAndSetToMethodCallRector extends AbstractRector
     private $propertyFetchAnalyzer;
 
     /**
-     * @var ExpressionAnalyzer
-     */
-    private $expressionAnalyzer;
-
-    /**
      * @var MethodCallNodeFactory
      */
     private $methodCallNodeFactory;
@@ -46,12 +38,10 @@ final class GetAndSetToMethodCallRector extends AbstractRector
     public function __construct(
         array $typeToMethodCalls,
         PropertyFetchAnalyzer $propertyFetchAnalyzer,
-        MethodCallNodeFactory $methodCallNodeFactory,
-        ExpressionAnalyzer $expressionAnalyzer
+        MethodCallNodeFactory $methodCallNodeFactory
     ) {
         $this->typeToMethodCalls = $typeToMethodCalls;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
-        $this->expressionAnalyzer = $expressionAnalyzer;
         $this->methodCallNodeFactory = $methodCallNodeFactory;
     }
 
@@ -104,87 +94,100 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Expression::class];
+        return [Assign::class];
     }
 
     /**
-     * @param Expression $node
+     * @param Assign $node
      */
     public function refactor(Node $node): ?Node
     {
-        $activeTransformation = null;
-        $propertyFetchNode = $this->expressionAnalyzer->resolvePropertyFetch($node);
-        if ($propertyFetchNode === null) {
-            return null;
+        if ($node->expr instanceof PropertyFetch) {
+            return $this->processMagicGet($node);
         }
 
-        foreach ($this->typeToMethodCalls as $type => $transformation) {
-            if ($this->propertyFetchAnalyzer->isMagicOnType($propertyFetchNode, $type)) {
-                $activeTransformation = $transformation;
-                break;
-            }
+        if ($node->var instanceof PropertyFetch) {
+            return $this->processMagicSet($node);
         }
 
-        if ($activeTransformation === null) {
-            return null;
-        }
-
-        /** @var Assign $assignNode */
-        $assignNode = $node->expr;
-
-        if ($assignNode->expr instanceof PropertyFetch) {
-            /** @var PropertyFetch $propertyFetchNode */
-            $propertyFetchNode = $assignNode->expr;
-            $method = $activeTransformation['get'];
-            $assignNode->expr = $this->createMethodCallNodeFromPropertyFetchNode($propertyFetchNode, $method);
-
-            return $node;
-        }
-
-        /** @var Assign $assignNode */
-        $assignNode = $node->expr;
-        $method = $activeTransformation['set'];
-        $node->expr = $this->createMethodCallNodeFromAssignNode($assignNode, $method);
-
-        return $node;
+        return null;
     }
 
     private function createMethodCallNodeFromPropertyFetchNode(
         PropertyFetch $propertyFetchNode,
         string $method
     ): MethodCall {
-        /** @var Identifier $identifierNode */
-        $identifierNode = $propertyFetchNode->name;
-
-        $value = $identifierNode->toString();
-
         /** @var Variable $variableNode */
         $variableNode = $propertyFetchNode->var;
 
         return $this->methodCallNodeFactory->createWithVariableMethodNameAndArguments(
             $variableNode,
             $method,
-            [$value]
+            [$this->getName($propertyFetchNode)]
         );
     }
 
-    private function createMethodCallNodeFromAssignNode(Assign $assignNode, string $method): MethodCall
+    private function createMethodCallNodeFromAssignNode(
+        PropertyFetch $propertyFetchNode,
+        Node $node,
+        string $method
+    ): MethodCall {
+        /** @var Variable $variableNode */
+        $variableNode = $propertyFetchNode->var;
+
+        return $this->methodCallNodeFactory->createWithVariableMethodNameAndArguments(
+            $variableNode,
+            $method,
+            [$this->getName($propertyFetchNode), $node]
+        );
+    }
+
+    private function processMagicGet(Assign $assignNode): ?Node
+    {
+        /** @var PropertyFetch $propertyFetchNode */
+        $propertyFetchNode = $assignNode->expr;
+
+        foreach ($this->typeToMethodCalls as $type => $transformation) {
+            if (! $this->isType($propertyFetchNode, $type)) {
+                continue;
+            }
+
+            if (! $this->propertyFetchAnalyzer->isMagicOnType($propertyFetchNode, $type)) {
+                continue;
+            }
+
+            $assignNode->expr = $this->createMethodCallNodeFromPropertyFetchNode(
+                $propertyFetchNode,
+                $transformation['get']
+            );
+
+            return $assignNode;
+        }
+
+        return null;
+    }
+
+    private function processMagicSet(Assign $assignNode): ?Node
     {
         /** @var PropertyFetch $propertyFetchNode */
         $propertyFetchNode = $assignNode->var;
 
-        /** @var Identifier $identifierNode */
-        $identifierNode = $propertyFetchNode->name;
+        foreach ($this->typeToMethodCalls as $type => $transformation) {
+            if (! $this->isType($propertyFetchNode, $type)) {
+                continue;
+            }
 
-        $key = $identifierNode->toString();
+            if (! $this->propertyFetchAnalyzer->isMagicOnType($propertyFetchNode, $type)) {
+                continue;
+            }
 
-        /** @var Variable $variableNode */
-        $variableNode = $propertyFetchNode->var;
+            return $this->createMethodCallNodeFromAssignNode(
+                $propertyFetchNode,
+                $assignNode->expr,
+                $transformation['set']
+            );
+        }
 
-        return $this->methodCallNodeFactory->createWithVariableMethodNameAndArguments(
-            $variableNode,
-            $method,
-            [$key, $assignNode->expr]
-        );
+        return null;
     }
 }
