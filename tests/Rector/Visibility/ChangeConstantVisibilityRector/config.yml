@@ -1,6 +1,11 @@
 services:
     Rector\Rector\Visibility\ChangeConstantVisibilityRector:
-        'Rector\Tests\Rector\Visibility\ChangeConstantVisibilityRector\Source\ParentObject':
-            'TO_BE_PUBLIC_CONSTANT': 'public'
-            'TO_BE_PROTECTED_CONSTANT': 'protected'
-            'TO_BE_PRIVATE_CONSTANT': 'private'
+        Rector\Tests\Rector\Visibility\ChangeConstantVisibilityRector\Source\ParentObject:
+            TO_BE_PUBLIC_CONSTANT: 'public'
+            TO_BE_PROTECTED_CONSTANT: 'protected'
+            TO_BE_PRIVATE_CONSTANT: 'private'
+
+        Rector\Tests\Rector\Visibility\ChangePropertyVisibilityRector\Source\AnotherClassWithInvalidConstants:
+            TO_BE_PRIVATE_CONSTANT: 'private'
+
+

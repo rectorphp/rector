@@ -5,7 +5,6 @@ namespace Rector\Rector\Visibility;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassConst;
 use Rector\NodeModifier\VisibilityModifier;
-use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -85,33 +84,23 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        // doesn't have a parent class
-        if (! $node->hasAttribute(Attribute::PARENT_CLASS_NAME)) {
-            return null;
+        foreach ($this->constantToVisibilityByClass as $class => $constantsToVisibility) {
+            if (! $this->isType($node, $class)) {
+                continue;
+            }
+
+            foreach ($constantsToVisibility as $constant => $visibility) {
+                if (! $this->isName($node, $constant)) {
+                    continue;
+                }
+
+                $this->visibilityModifier->removeOriginalVisibilityFromFlags($node);
+                $this->visibilityModifier->addVisibilityFlag($node, $visibility);
+
+                return $node;
+            }
         }
 
-        $nodeParentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
-        if (! isset($this->constantToVisibilityByClass[$nodeParentClassName])) {
-            return null;
-        }
-
-        $constantName = $this->getName($node);
-        if (! isset($this->constantToVisibilityByClass[$nodeParentClassName][$constantName])) {
-            return null;
-        }
-        $this->visibilityModifier->removeOriginalVisibilityFromFlags($node);
-
-        $newVisibility = $this->resolveNewVisibilityForNode($node);
-        $this->visibilityModifier->addVisibilityFlag($node, $newVisibility);
-
-        return $node;
-    }
-
-    private function resolveNewVisibilityForNode(ClassConst $classConstantNode): string
-    {
-        $nodeParentClassName = $classConstantNode->getAttribute(Attribute::PARENT_CLASS_NAME);
-        $constantName = $this->getName($classConstantNode);
-
-        return $this->constantToVisibilityByClass[$nodeParentClassName][$constantName];
+        return null;
     }
 }
