@@ -6,6 +6,7 @@ use Countable;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
+use PhpParser\Node\Expr\Cast;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -129,6 +130,10 @@ trait TypeAnalyzerTrait
 
         if ($node instanceof ClassConstFetch) {
             return $this->nodeTypeResolver->resolve($node->class);
+        }
+
+        if ($node instanceof Cast) {
+            return $this->nodeTypeResolver->resolve($node->expr);
         }
 
         return $this->nodeTypeResolver->resolve($node);
