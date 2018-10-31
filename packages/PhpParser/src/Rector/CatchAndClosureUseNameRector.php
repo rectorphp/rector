@@ -5,7 +5,7 @@ namespace Rector\PhpParser\Rector;
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
-use Rector\Builder\IdentifierRenamer;
+use PhpParser\Node\Identifier;
 use Rector\Node\PropertyFetchNodeFactory;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
@@ -15,20 +15,12 @@ use Rector\RectorDefinition\RectorDefinition;
 final class CatchAndClosureUseNameRector extends AbstractRector
 {
     /**
-     * @var IdentifierRenamer
-     */
-    private $identifierRenamer;
-
-    /**
      * @var PropertyFetchNodeFactory
      */
     private $propertyFetchNodeFactory;
 
-    public function __construct(
-        IdentifierRenamer $identifierRenamer,
-        PropertyFetchNodeFactory $propertyFetchNodeFactory
-    ) {
-        $this->identifierRenamer = $identifierRenamer;
+    public function __construct(PropertyFetchNodeFactory $propertyFetchNodeFactory)
+    {
         $this->propertyFetchNodeFactory = $propertyFetchNodeFactory;
     }
 
@@ -72,7 +64,8 @@ final class CatchAndClosureUseNameRector extends AbstractRector
             $this->getName($variableNode),
             'var'
         );
-        $this->identifierRenamer->renameNode($node, 'name');
+
+        $node->name = new Identifier('name');
 
         return $node;
     }

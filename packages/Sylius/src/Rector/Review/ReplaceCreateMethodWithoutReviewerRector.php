@@ -4,23 +4,13 @@ namespace Rector\Sylius\Rector\Review;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
-use Rector\Builder\IdentifierRenamer;
+use PhpParser\Node\Identifier;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class ReplaceCreateMethodWithoutReviewerRector extends AbstractRector
 {
-    /**
-     * @var IdentifierRenamer
-     */
-    private $identifierRenamer;
-
-    public function __construct(IdentifierRenamer $identifierRenamer)
-    {
-        $this->identifierRenamer = $identifierRenamer;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -55,7 +45,7 @@ final class ReplaceCreateMethodWithoutReviewerRector extends AbstractRector
             return null;
         }
 
-        $this->identifierRenamer->renameNode($node, 'createForSubject');
+        $node->name = new Identifier('createForSubject');
 
         if (isset($node->args[1])) {
             $node->args = [array_shift($node->args)];

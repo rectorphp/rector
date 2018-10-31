@@ -4,23 +4,13 @@ namespace Rector\PhpParser\Rector;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
-use Rector\Builder\IdentifierRenamer;
+use PhpParser\Node\Identifier;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class ParamAndStaticVarNameRector extends AbstractRector
 {
-    /**
-     * @var IdentifierRenamer
-     */
-    private $identifierRenamer;
-
-    public function __construct(IdentifierRenamer $identifierRenamer)
-    {
-        $this->identifierRenamer = $identifierRenamer;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Turns old string `var` to `var->name` sub-variable in Node of PHP-Parser', [
@@ -50,7 +40,7 @@ final class ParamAndStaticVarNameRector extends AbstractRector
             return null;
         }
 
-        $this->identifierRenamer->renameNode($node, 'var');
+        $node->name = new Identifier('var');
 
         return new PropertyFetch($node, 'name');
     }
