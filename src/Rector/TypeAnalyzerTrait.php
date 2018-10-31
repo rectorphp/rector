@@ -5,6 +5,7 @@ namespace Rector\Rector;
 use Countable;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -118,7 +119,7 @@ trait TypeAnalyzerTrait
             return $this->nodeTypeResolver->resolve($node->getAttribute(Attribute::CLASS_NODE));
         }
 
-        if ($node instanceof MethodCall || $node instanceof PropertyFetch) {
+        if ($node instanceof MethodCall || $node instanceof PropertyFetch || $node instanceof ArrayDimFetch) {
             return $this->nodeTypeResolver->resolve($node->var);
         }
 
