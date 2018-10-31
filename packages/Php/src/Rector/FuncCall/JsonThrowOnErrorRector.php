@@ -69,13 +69,18 @@ CODE_SAMPLE
             }
 
             if ($i === $constantPosition) {
-                $node->args[$i] = new Arg(new ConstFetch(new Name('JSON_THROW_ON_ERROR')));
+                $node->args[$i] = new Arg($this->createConstFetch('JSON_THROW_ON_ERROR'));
             } else {
                 // fill in blanks
-                $node->args[$i] = new Arg(new ConstFetch(new Name('null')));
+                $node->args[$i] = new Arg($this->createConstFetch('null'));
             }
         }
 
         return $node;
+    }
+
+    private function createConstFetch(string $name): ConstFetch
+    {
+        return new ConstFetch(new Name($name));
     }
 }

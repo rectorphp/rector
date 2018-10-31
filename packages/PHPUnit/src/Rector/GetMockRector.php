@@ -4,23 +4,13 @@ namespace Rector\PHPUnit\Rector;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
-use Rector\Builder\IdentifierRenamer;
+use PhpParser\Node\Identifier;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class GetMockRector extends AbstractPHPUnitRector
 {
-    /**
-     * @var IdentifierRenamer
-     */
-    private $identifierRenamer;
-
-    public function __construct(IdentifierRenamer $identifierRenamer)
-    {
-        $this->identifierRenamer = $identifierRenamer;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Turns getMock*() methods to createMock()', [
@@ -57,7 +47,7 @@ final class GetMockRector extends AbstractPHPUnitRector
             return null;
         }
 
-        $this->identifierRenamer->renameNode($node, 'createMock');
+        $node->name = new Identifier('createMock');
 
         return $node;
     }

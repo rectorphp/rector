@@ -13,16 +13,16 @@ use Rector\RectorDefinition\RectorDefinition;
 final class StaticCallToFunctionRector extends AbstractRector
 {
     /**
-     * @var string[]
+     * @var string[][]
      */
-    private $staticCallToFunction = [];
+    private $staticCallToFunctionByType = [];
 
     /**
-     * @param string[] $staticCallToFunction
+     * @param string[][] $staticCallToFunctionByType
      */
-    public function __construct(array $staticCallToFunction)
+    public function __construct(array $staticCallToFunctionByType)
     {
-        $this->staticCallToFunction = $staticCallToFunction;
+        $this->staticCallToFunctionByType = $staticCallToFunctionByType;
     }
 
     public function getDefinition(): RectorDefinition
@@ -33,7 +33,9 @@ final class StaticCallToFunctionRector extends AbstractRector
                 'new_function("args");',
                 [
                     '$staticCallToFunction' => [
-                        'OldClass::oldMethod' => 'new_function',
+                        'OldClass' => [
+                            'oldMethod' => 'new_function',
+                        ],
                     ],
                 ]
             ),
@@ -53,21 +55,20 @@ final class StaticCallToFunctionRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        $staticCalls = array_keys($this->staticCallToFunction);
-        $activeStaticCall = null;
-        foreach ($staticCalls as $staticCall) {
-            [$class, $method] = explode('::', $staticCall);
-            if ($this->isType($node, $class) && $this->isName($node, $method)) {
-                $activeStaticCall = $staticCall;
+        foreach ($this->staticCallToFunctionByType as $type => $methodNamesToFunctions) {
+            if (! $this->isType($node, $type)) {
+                continue;
+            }
+
+            foreach ($methodNamesToFunctions as $methodName => $function) {
+                if (! $this->isName($node, $methodName)) {
+                    continue;
+                }
+
+                return new FuncCall(new FullyQualified($function), $node->args);
             }
         }
 
-        if (! isset($this->staticCallToFunction[$activeStaticCall])) {
-            return null;
-        }
-
-        $newFunctionName = $this->staticCallToFunction[$activeStaticCall];
-
-        return new FuncCall(new FullyQualified($newFunctionName), $node->args);
+        return null;
     }
 }

@@ -1,4 +1,3 @@
 services:
     Rector\Rector\MagicDisclosure\ToStringToMethodCallRector:
-        'Symfony\Component\Config\ConfigCache':
-            'toString': 'getPath'
+        Symfony\Component\Config\ConfigCache: 'getPath'

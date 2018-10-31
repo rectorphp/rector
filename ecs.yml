@@ -79,10 +79,6 @@ parameters:
             # example in description
             - 'src/Rector/Annotation/AnnotationReplacerRector.php'
 
-        # empty arguments passing
-        PHP_CodeSniffer\Standards\PEAR\Sniffs\Functions\ValidDefaultValueSniff.NotAtEnd:
-            - 'packages/PHPUnit/src/Rector/SpecificMethod/AssertTrueFalseToSpecificMethodRector.php'
-
         Symplify\CodingStandard\Sniffs\CleanCode\ForbiddenStaticFunctionSniff:
             # required by Composer interface
             - 'tests/Composer/AutoloadWrongCasesEventSubscriber.php'

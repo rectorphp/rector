@@ -4,7 +4,7 @@ namespace Rector\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
-use Rector\Builder\IdentifierRenamer;
+use PhpParser\Node\Identifier;
 use Rector\Node\NodeFactory;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
@@ -18,11 +18,6 @@ final class MethodCallToAnotherMethodCallWithArgumentsRector extends AbstractRec
     private $oldMethodsToNewMethodsWithArgsByType = [];
 
     /**
-     * @var IdentifierRenamer
-     */
-    private $identifierRenamer;
-
-    /**
      * @var NodeFactory
      */
     private $nodeFactory;
@@ -30,12 +25,8 @@ final class MethodCallToAnotherMethodCallWithArgumentsRector extends AbstractRec
     /**
      * @param mixed[][][] $oldMethodsToNewMethodsWithArgsByType
      */
-    public function __construct(
-        IdentifierRenamer $identifierRenamer,
-        NodeFactory $nodeFactory,
-        array $oldMethodsToNewMethodsWithArgsByType
-    ) {
-        $this->identifierRenamer = $identifierRenamer;
+    public function __construct(NodeFactory $nodeFactory, array $oldMethodsToNewMethodsWithArgsByType)
+    {
         $this->nodeFactory = $nodeFactory;
         $this->oldMethodsToNewMethodsWithArgsByType = $oldMethodsToNewMethodsWithArgsByType;
     }
@@ -86,7 +77,7 @@ CODE_SAMPLE
                     continue;
                 }
 
-                $this->identifierRenamer->renameNode($node, $newMethodsWithArgs[0]);
+                $node->name = new Identifier($newMethodsWithArgs[0]);
                 $node->args = $this->nodeFactory->createArgs($newMethodsWithArgs[1]);
 
                 return $node;

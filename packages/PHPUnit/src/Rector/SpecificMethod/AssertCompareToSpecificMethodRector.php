@@ -6,18 +6,12 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
-use Rector\Builder\IdentifierRenamer;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class AssertCompareToSpecificMethodRector extends AbstractPHPUnitRector
 {
-    /**
-     * @var string
-     */
-    private $activeFuncCallName;
-
     /**
      * @var string[][]|false[][]
      */
@@ -27,16 +21,6 @@ final class AssertCompareToSpecificMethodRector extends AbstractPHPUnitRector
         'gettype' => ['assertInternalType', 'assertNotInternalType'],
         'get_class' => ['assertInstanceOf', 'assertNotInstanceOf'],
     ];
-
-    /**
-     * @var IdentifierRenamer
-     */
-    private $identifierRenamer;
-
-    public function __construct(IdentifierRenamer $identifierRenamer)
-    {
-        $this->identifierRenamer = $identifierRenamer;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -85,39 +69,37 @@ final class AssertCompareToSpecificMethodRector extends AbstractPHPUnitRector
             return null;
         }
 
+        if (! isset($node->args[1])) {
+            return null;
+        }
+
         $secondArgumentValue = $node->args[1]->value;
         if (! $secondArgumentValue instanceof FuncCall) {
             return null;
         }
 
-        $resolvedFuncCallName = $this->getName($secondArgumentValue);
-        if ($resolvedFuncCallName === null) {
+        if (! $this->isNames($secondArgumentValue, array_keys($this->defaultOldToNewMethods))) {
             return null;
         }
 
-        $this->activeFuncCallName = $resolvedFuncCallName;
-        if (! isset($this->defaultOldToNewMethods[$this->activeFuncCallName])) {
-            return null;
-        }
-
-        $this->renameMethod($node);
+        $this->renameMethod($node, $this->getName($secondArgumentValue));
         $this->moveFunctionArgumentsUp($node);
 
         return $node;
     }
 
-    private function renameMethod(MethodCall $methodCallNode): void
+    private function renameMethod(MethodCall $methodCallNode, string $funcName): void
     {
         /** @var Identifier $identifierNode */
         $identifierNode = $methodCallNode->name;
         $oldMethodName = $identifierNode->toString();
 
-        [$trueMethodName, $falseMethodName] = $this->defaultOldToNewMethods[$this->activeFuncCallName];
+        [$trueMethodName, $falseMethodName] = $this->defaultOldToNewMethods[$funcName];
 
         if (in_array($oldMethodName, ['assertSame', 'assertEquals'], true) && $trueMethodName) {
-            $this->identifierRenamer->renameNode($methodCallNode, $trueMethodName);
+            $methodCallNode->name = new Identifier($trueMethodName);
         } elseif (in_array($oldMethodName, ['assertNotSame', 'assertNotEquals'], true) && $falseMethodName) {
-            $this->identifierRenamer->renameNode($methodCallNode, $falseMethodName);
+            $methodCallNode->name = new Identifier($falseMethodName);
         }
     }
 

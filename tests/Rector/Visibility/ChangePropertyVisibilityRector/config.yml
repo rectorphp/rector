@@ -1,7 +1,10 @@
 services:
     Rector\Rector\Visibility\ChangePropertyVisibilityRector:
-        'Rector\Tests\Rector\Visibility\ChangePropertyVisibilityRector\Source\ParentObject':
-            'toBePublicProperty': 'public'
-            'toBeProtectedProperty': 'protected'
-            'toBePrivateProperty': 'private'
-            'toBePublicStaticProperty': 'public'
+        Rector\Tests\Rector\Visibility\ChangePropertyVisibilityRector\Source\ParentObject:
+            toBePublicProperty: 'public'
+            toBeProtectedProperty: 'protected'
+            toBePrivateProperty: 'private'
+            toBePublicStaticProperty: 'public'
+
+        Rector\Tests\Rector\Visibility\ChangePropertyVisibilityRector\Wrong\NormalObject:
+            toBePublicStaticProperty: 'public'

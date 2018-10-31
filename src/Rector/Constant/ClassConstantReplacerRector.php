@@ -4,7 +4,7 @@ namespace Rector\Rector\Constant;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
-use Rector\Builder\IdentifierRenamer;
+use PhpParser\Node\Identifier;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -21,17 +21,11 @@ final class ClassConstantReplacerRector extends AbstractRector
     private $oldToNewConstantsByClass = [];
 
     /**
-     * @var IdentifierRenamer
-     */
-    private $identifierRenamer;
-
-    /**
      * @param string[][] $oldToNewConstantsByClass
      */
-    public function __construct(array $oldToNewConstantsByClass, IdentifierRenamer $identifierRenamer)
+    public function __construct(array $oldToNewConstantsByClass)
     {
         $this->oldToNewConstantsByClass = $oldToNewConstantsByClass;
-        $this->identifierRenamer = $identifierRenamer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -74,7 +68,8 @@ final class ClassConstantReplacerRector extends AbstractRector
                     continue;
                 }
 
-                $this->identifierRenamer->renameNode($node, $newConstant);
+                $node->name = new Identifier($newConstant);
+
                 return $node;
             }
         }

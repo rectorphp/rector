@@ -18,11 +18,20 @@ final class VisibilityModifier
     private $allowedNodeTypes = [ClassMethod::class, Property::class, ClassConst::class];
 
     /**
+     * @param ClassMethod|Property|ClassConst $node
+     */
+    public function replaceVisibilityFlag(Node $node, string $visibility): void
+    {
+        $this->removeOriginalVisibilityFromFlags($node);
+        $this->addVisibilityFlag($node, $visibility);
+    }
+
+    /**
      * This way "abstract", "static", "final" are kept
      *
      * @param ClassMethod|Property|ClassConst $node
      */
-    public function removeOriginalVisibilityFromFlags(Node $node): void
+    private function removeOriginalVisibilityFromFlags(Node $node): void
     {
         $this->ensureIsClassMethodOrProperty($node, __METHOD__);
 
@@ -42,7 +51,7 @@ final class VisibilityModifier
     /**
      * @param ClassMethod|Property|ClassConst $node
      */
-    public function addVisibilityFlag(Node $node, string $visibility): void
+    private function addVisibilityFlag(Node $node, string $visibility): void
     {
         $this->ensureIsClassMethodOrProperty($node, __METHOD__);
 

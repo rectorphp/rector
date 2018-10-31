@@ -144,7 +144,7 @@ CODE_SAMPLE
         $argumentVariableName = $this->getName($methodCallNode->args[1]->value);
 
         // is na exception variable
-        if ($exceptionVariableNode->name !== $argumentVariableName) {
+        if (! $this->isName($exceptionVariableNode, $argumentVariableName)) {
             return;
         }
 

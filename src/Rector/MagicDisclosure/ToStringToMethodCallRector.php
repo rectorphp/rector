@@ -5,7 +5,7 @@ namespace Rector\Rector\MagicDisclosure;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Cast\String_;
 use PhpParser\Node\Expr\MethodCall;
-use Rector\Builder\IdentifierRenamer;
+use PhpParser\Node\Identifier;
 use Rector\Node\MethodCallNodeFactory;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
@@ -14,19 +14,9 @@ use Rector\RectorDefinition\RectorDefinition;
 final class ToStringToMethodCallRector extends AbstractRector
 {
     /**
-     * @var string
+     * @var string[]
      */
-    private $activeTransformation;
-
-    /**
-     * @var string[][]
-     */
-    private $typeToMethodCalls = [];
-
-    /**
-     * @var IdentifierRenamer
-     */
-    private $identifierRenamer;
+    private $methodNamesByType = [];
 
     /**
      * @var MethodCallNodeFactory
@@ -36,15 +26,11 @@ final class ToStringToMethodCallRector extends AbstractRector
     /**
      * Type to method call()
      *
-     * @param string[][] $typeToMethodCalls
+     * @param string[] $methodNamesByType
      */
-    public function __construct(
-        array $typeToMethodCalls,
-        IdentifierRenamer $identifierRenamer,
-        MethodCallNodeFactory $methodCallNodeFactory
-    ) {
-        $this->typeToMethodCalls = $typeToMethodCalls;
-        $this->identifierRenamer = $identifierRenamer;
+    public function __construct(array $methodNamesByType, MethodCallNodeFactory $methodCallNodeFactory)
+    {
+        $this->methodNamesByType = $methodNamesByType;
         $this->methodCallNodeFactory = $methodCallNodeFactory;
     }
 
@@ -60,15 +46,13 @@ CODE_SAMPLE
                 ,
 <<<'CODE_SAMPLE'
 $someValue = new SomeObject;
-$result = $someValue->someMethod();
-$result = $someValue->someMethod();
+$result = $someValue->getPath();
+$result = $someValue->getPath();
 CODE_SAMPLE
                 ,
                 [
-                    '$typeToMethodCalls' => [
-                        'SomeObject' => [
-                            'toString' => 'getPath',
-                        ],
+                    '$methodNamesByType' => [
+                        'SomeObject' => 'getPath',
                     ],
                 ]
             ),
@@ -88,38 +72,16 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node instanceof String_ && $this->processStringCandidate($node)) {
-            return $this->methodCallNodeFactory->createWithVariableAndMethodName(
-                $node->expr,
-                $this->activeTransformation
-            );
+        if ($node instanceof String_) {
+            return $this->processStringNode($node);
         }
 
-        if ($node instanceof MethodCall && $this->processMethodCallCandidate($node)) {
-            $this->identifierRenamer->renameNode($node, $this->activeTransformation);
-        }
-
-        return $node;
+        return $this->processMethodCall($node);
     }
 
-    private function processStringCandidate(String_ $stringNode): bool
+    private function processMethodCall(MethodCall $methodCallNode): ?Node
     {
-        $nodeTypes = $this->getTypes($stringNode->expr);
-
-        foreach ($this->typeToMethodCalls as $type => $transformation) {
-            if (in_array($type, $nodeTypes, true)) {
-                $this->activeTransformation = $transformation['toString'];
-
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private function processMethodCallCandidate(MethodCall $methodCallNode): bool
-    {
-        foreach ($this->typeToMethodCalls as $type => $transformation) {
+        foreach ($this->methodNamesByType as $type => $methodName) {
             if (! $this->isType($methodCallNode, $type)) {
                 continue;
             }
@@ -128,11 +90,24 @@ CODE_SAMPLE
                 continue;
             }
 
-            $this->activeTransformation = $transformation['toString'];
+            $methodCallNode->name = new Identifier($methodName);
 
-            return true;
+            return $methodCallNode;
         }
 
-        return false;
+        return null;
+    }
+
+    private function processStringNode(String_ $stringNode): ?Node
+    {
+        foreach ($this->methodNamesByType as $type => $methodName) {
+            if (! $this->isType($stringNode, $type)) {
+                continue;
+            }
+
+            return $this->methodCallNodeFactory->createWithVariableAndMethodName($stringNode->expr, $methodName);
+        }
+
+        return null;
     }
 }

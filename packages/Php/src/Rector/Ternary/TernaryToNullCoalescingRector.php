@@ -6,7 +6,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
-use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\Ternary;
 use Rector\Rector\AbstractRector;
@@ -92,19 +91,10 @@ final class TernaryToNullCoalescingRector extends AbstractRector
 
     private function isNullMatch(Node $possibleNullNode, Node $firstNode, Node $secondNode): bool
     {
-        if (! $this->isNullConstant($possibleNullNode)) {
+        if (! $this->isNull($possibleNullNode)) {
             return false;
         }
 
         return $this->areNodesEqual($firstNode, $secondNode);
-    }
-
-    private function isNullConstant(Node $node): bool
-    {
-        if (! $node instanceof ConstFetch) {
-            return false;
-        }
-
-        return $node->name->toLowerString() === 'null';
     }
 }

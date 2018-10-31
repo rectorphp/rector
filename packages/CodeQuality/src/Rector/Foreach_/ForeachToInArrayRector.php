@@ -146,12 +146,12 @@ CODE_SAMPLE
         /** @var Variable $foreachVariable */
         $foreachVariable = $foreachNode->valueVar;
         if ($leftValue instanceof Variable) {
-            if ($leftValue->name === $foreachVariable->name) {
+            if ($this->areNodesEqual($leftValue, $foreachVariable)) {
                 return $rightValue;
             }
         }
 
-        if ($rightValue->name === $foreachVariable->name) {
+        if ($this->areNodesEqual($rightValue, $foreachVariable)) {
             return $leftValue;
         }
     }

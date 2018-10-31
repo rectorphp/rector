@@ -6,24 +6,15 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\LNumber;
-use Rector\Builder\IdentifierRenamer;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class AssertRegExpRector extends AbstractPHPUnitRector
 {
-    /**
-     * @var IdentifierRenamer
-     */
-    private $identifierRenamer;
-
-    public function __construct(IdentifierRenamer $identifierRenamer)
-    {
-        $this->identifierRenamer = $identifierRenamer;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -90,20 +81,22 @@ final class AssertRegExpRector extends AbstractPHPUnitRector
         if ($node instanceof ConstFetch) {
             return $this->isTrue($node) ? 1 : 0;
         }
+
+        throw new ShouldNotHappenException(__METHOD__);
     }
 
-    private function renameMethod(Node $methodCallNode, string $oldMethodName, int $oldCondition): void
+    private function renameMethod(MethodCall $methodCallNode, string $oldMethodName, int $oldCondition): void
     {
         if (in_array($oldMethodName, ['assertSame', 'assertEquals'], true) && $oldCondition === 1
             || in_array($oldMethodName, ['assertNotSame', 'assertNotEquals'], true) && $oldCondition === 0
         ) {
-            $this->identifierRenamer->renameNode($methodCallNode, 'assertRegExp');
+            $methodCallNode->name = new Identifier('assertRegExp');
         }
 
         if (in_array($oldMethodName, ['assertSame', 'assertEquals'], true) && $oldCondition === 0
             || in_array($oldMethodName, ['assertNotSame', 'assertNotEquals'], true) && $oldCondition === 1
         ) {
-            $this->identifierRenamer->renameNode($methodCallNode, 'assertNotRegExp');
+            $methodCallNode->name = new Identifier('assertNotRegExp');
         }
     }
 

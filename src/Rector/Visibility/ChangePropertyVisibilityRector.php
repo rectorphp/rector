@@ -13,7 +13,7 @@ use Rector\RectorDefinition\RectorDefinition;
 final class ChangePropertyVisibilityRector extends AbstractRector
 {
     /**
-     * @var string[] { class => [ property name => visibility ] }
+     * @var string[][] { class => [ property name => visibility ] }
      */
     private $propertyToVisibilityByClass = [];
 
@@ -23,7 +23,7 @@ final class ChangePropertyVisibilityRector extends AbstractRector
     private $visibilityModifier;
 
     /**
-     * @param string[] $propertyToVisibilityByClass
+     * @param string[][] $propertyToVisibilityByClass
      */
     public function __construct(array $propertyToVisibilityByClass, VisibilityModifier $visibilityModifier)
     {
@@ -84,36 +84,22 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        // doesn't have a parent class
-        if (! $node->hasAttribute(Attribute::PARENT_CLASS_NAME)) {
-            return null;
+        foreach ($this->propertyToVisibilityByClass as $type => $propertyToVisibility) {
+            if (! $this->isType($node->getAttribute(Attribute::CLASS_NODE), $type)) {
+                continue;
+            }
+
+            foreach ($propertyToVisibility as $property => $visibility) {
+                if (! $this->isName($node, $property)) {
+                    continue;
+                }
+
+                $this->visibilityModifier->replaceVisibilityFlag($node, $visibility);
+
+                return $node;
+            }
         }
 
-        $nodeParentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
-        if (! isset($this->propertyToVisibilityByClass[$nodeParentClassName])) {
-            return null;
-        }
-
-        $propertyName = $this->getName($node);
-        if (! isset($this->propertyToVisibilityByClass[$nodeParentClassName][$propertyName])) {
-            return null;
-        }
-        $this->visibilityModifier->removeOriginalVisibilityFromFlags($node);
-
-        $newVisibility = $this->resolveNewVisibilityForNode($node);
-        $this->visibilityModifier->addVisibilityFlag($node, $newVisibility);
-
-        return $node;
-    }
-
-    private function resolveNewVisibilityForNode(Property $propertyNode): string
-    {
-        /** @var string $nodeParentClassName */
-        $nodeParentClassName = $propertyNode->getAttribute(Attribute::PARENT_CLASS_NAME);
-
-        /** @var string $propertyName */
-        $propertyName = $this->getName($propertyNode);
-
-        return $this->propertyToVisibilityByClass[$nodeParentClassName][$propertyName];
+        return null;
     }
 }

@@ -4,10 +4,7 @@ namespace Rector\Rector\Constant;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
-use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -56,34 +53,20 @@ final class RenameClassConstantsUseToStringsRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        $className = $this->getClassNameFromClassConstFetch($node);
-
         foreach ($this->oldConstantsToNewValuesByType as $type => $oldConstantsToNewValues) {
-            if ($className !== $type) {
+            if (! $this->isType($node->class, $type)) {
                 continue;
             }
 
             foreach ($oldConstantsToNewValues as $oldConstant => $newValue) {
-                if ($this->isName($node, $oldConstant)) {
-                    return new String_($newValue);
+                if (! $this->isName($node, $oldConstant)) {
+                    continue;
                 }
+
+                return new String_($newValue);
             }
         }
 
         return $node;
-    }
-
-    private function getClassNameFromClassConstFetch(ClassConstFetch $classConstFetchNode): ?string
-    {
-        /** @var FullyQualified|null $fqnName */
-        $fqnName = $classConstFetchNode->class->getAttribute(Attribute::RESOLVED_NAME);
-
-        if ($fqnName === null && $classConstFetchNode->class instanceof Variable) {
-            return $this->getName($classConstFetchNode->class);
-        }
-
-        if ($fqnName !== null) {
-            return $fqnName->toString();
-        }
     }
 }

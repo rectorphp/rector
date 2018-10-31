@@ -68,6 +68,7 @@ CODE_SAMPLE
         if (! $this->controllerMethodAnalyzer->isAction($node)) {
             return null;
         }
+
         $this->identifierRenamer->removeSuffix($node, 'Action');
 
         return $node;

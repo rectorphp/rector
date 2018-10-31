@@ -1,3 +1,4 @@
 services:
     Rector\Rector\StaticCall\StaticCallToFunctionRector:
-        Rector\Tests\Rector\StaticCall\StaticCallToFunctionRector\Source\SomeOldStaticClass::render: 'view'
+        Rector\Tests\Rector\StaticCall\StaticCallToFunctionRector\Source\SomeOldStaticClass:
+            render: 'view'

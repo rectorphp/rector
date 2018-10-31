@@ -41,17 +41,6 @@ final class IdentifierRenamer
 
     /**
      * @param ClassConstFetch|MethodCall|PropertyFetch|StaticCall|ClassMethod $node
-     */
-    public function renameNode(Node $node, string $newMethodName): void
-    {
-        $this->ensureNodeHasIdentifier($node);
-
-        /** @var ClassConstFetch|MethodCall|PropertyFetch|StaticCall|ClassMethod $node */
-        $node->name = new Identifier($newMethodName);
-    }
-
-    /**
-     * @param ClassConstFetch|MethodCall|PropertyFetch|StaticCall|ClassMethod $node
      * @param string[] $renameMethodMap
      */
     public function renameNodeWithMap(Node $node, array $renameMethodMap): void

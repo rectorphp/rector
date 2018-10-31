@@ -96,27 +96,23 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $activeVariableInfo = null;
         if (! $this->isInControllerActionMethod($node)) {
             return null;
         }
 
         foreach ($this->variablesToPropertyFetchCollection->getVariableInfos() as $variableInfo) {
-            if ($node->name !== $variableInfo->getName()) {
+            if (! $this->isName($node, $variableInfo->getName())) {
                 continue;
             }
 
-            if ($this->isTypes($node, $variableInfo->getTypes())) {
-                $activeVariableInfo = $variableInfo;
-                break;
+            if (! $this->isTypes($node, $variableInfo->getTypes())) {
+                continue;
             }
+
+            return $this->propertyFetchNodeFactory->createLocalWithPropertyName($variableInfo->getName());
         }
 
-        if ($activeVariableInfo === null) {
-            return null;
-        }
-
-        return $this->propertyFetchNodeFactory->createLocalWithPropertyName($activeVariableInfo->getName());
+        return null;
     }
 
     private function isInControllerActionMethod(Node $node): bool
