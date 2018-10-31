@@ -34,6 +34,16 @@ final class CreateRectorCommand extends Command
     private const RECTOR_FQN_NAME_PATTERN = 'Rector\_Package_\Rector\_Category_\_Name_';
 
     /**
+     * @var string
+     */
+    private $testCasePath;
+
+    /**
+     * @var string[]
+     */
+    private $generatedFiles = [];
+
+    /**
      * @var ConsoleStyle
      */
     private $consoleStyle;
@@ -49,11 +59,6 @@ final class CreateRectorCommand extends Command
     private $finderSanitizer;
 
     /**
-     * @var string[]
-     */
-    private $generatedFiles = [];
-
-    /**
      * @var AfterRectorCodingStyle
      */
     private $afterRectorCodingStyle;
@@ -62,11 +67,6 @@ final class CreateRectorCommand extends Command
      * @var TemplateVariablesFactory
      */
     private $templateVariablesFactory;
-
-    /**
-     * @var string
-     */
-    private $testCasePath;
 
     public function __construct(
         ConsoleStyle $consoleStyle,

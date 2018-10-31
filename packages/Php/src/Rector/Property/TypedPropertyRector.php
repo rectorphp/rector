@@ -27,9 +27,9 @@ final class TypedPropertyRector extends AbstractRector
     public const PHP74_PROPERTY_TYPE = 'php74_property_type';
 
     /**
-     * @var DocBlockAnalyzer
+     * @var bool
      */
-    private $docBlockAnalyzer;
+    private $isNullableType = false;
 
     /**
      * @var string[][]
@@ -44,14 +44,14 @@ final class TypedPropertyRector extends AbstractRector
     ];
 
     /**
+     * @var DocBlockAnalyzer
+     */
+    private $docBlockAnalyzer;
+
+    /**
      * @var TypeAnalyzer
      */
     private $typeAnalyzer;
-
-    /**
-     * @var bool
-     */
-    private $isNullableType = false;
 
     public function __construct(DocBlockAnalyzer $docBlockAnalyzer, TypeAnalyzer $typeAnalyzer)
     {

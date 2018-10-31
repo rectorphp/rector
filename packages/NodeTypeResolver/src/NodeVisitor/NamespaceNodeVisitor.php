@@ -17,6 +17,11 @@ final class NamespaceNodeVisitor extends NodeVisitorAbstract
     private $namespaceName;
 
     /**
+     * @var Use_[]
+     */
+    private $useNodes = [];
+
+    /**
      * @var Namespace_|null
      */
     private $namespaceNode;
@@ -25,11 +30,6 @@ final class NamespaceNodeVisitor extends NodeVisitorAbstract
      * @var BetterNodeFinder
      */
     private $betterNodeFinder;
-
-    /**
-     * @var Use_[]
-     */
-    private $useNodes = [];
 
     public function __construct(BetterNodeFinder $betterNodeFinder)
     {

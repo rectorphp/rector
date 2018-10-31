@@ -23,6 +23,16 @@ use function Safe\sprintf;
 final class MoveRepositoryFromParentToConstructorRector extends AbstractRector
 {
     /**
+     * @var string
+     */
+    private $entityManagerClass;
+
+    /**
+     * @var string
+     */
+    private $entityRepositoryClass;
+
+    /**
      * @var PropertyBuilder
      */
     private $propertyBuilder;
@@ -46,16 +56,6 @@ final class MoveRepositoryFromParentToConstructorRector extends AbstractRector
      * @var BuilderFactory
      */
     private $builderFactory;
-
-    /**
-     * @var string
-     */
-    private $entityRepositoryClass;
-
-    /**
-     * @var string
-     */
-    private $entityManagerClass;
 
     public function __construct(
         PropertyBuilder $propertyBuilder,

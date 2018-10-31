@@ -13,14 +13,14 @@ use Rector\RectorDefinition\RectorDefinition;
 final class RedirectToRouteRector extends AbstractRector
 {
     /**
-     * @var MethodCallNodeFactory
-     */
-    private $methodCallNodeFactory;
-
-    /**
      * @var string
      */
     private $controllerClass;
+
+    /**
+     * @var MethodCallNodeFactory
+     */
+    private $methodCallNodeFactory;
 
     public function __construct(
         MethodCallNodeFactory $methodCallNodeFactory,

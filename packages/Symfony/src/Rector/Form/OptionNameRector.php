@@ -14,17 +14,17 @@ use Rector\RectorDefinition\RectorDefinition;
 final class OptionNameRector extends AbstractRector
 {
     /**
+     * @var string
+     */
+    private $formBuilderType;
+
+    /**
      * @var string[]
      */
     private $oldToNewOption = [
         'precision' => 'scale',
         'virtual' => 'inherit_data',
     ];
-
-    /**
-     * @var string
-     */
-    private $formBuilderType;
 
     public function __construct(string $formBuilderType = 'Symfony\Component\Form\FormBuilderInterface')
     {

@@ -15,17 +15,17 @@ use Rector\RectorDefinition\RectorDefinition;
 final class AssertNotOperatorRector extends AbstractPHPUnitRector
 {
     /**
-     * @var IdentifierRenamer
-     */
-    private $identifierRenamer;
-
-    /**
      * @var string[]
      */
     private $renameMethodsMap = [
         'assertTrue' => 'assertFalse',
         'assertFalse' => 'assertTrue',
     ];
+
+    /**
+     * @var IdentifierRenamer
+     */
+    private $identifierRenamer;
 
     public function __construct(IdentifierRenamer $identifierRenamer)
     {

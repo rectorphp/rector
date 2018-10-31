@@ -13,6 +13,11 @@ use Rector\RectorDefinition\RectorDefinition;
 final class MethodCallToAnotherMethodCallWithArgumentsRector extends AbstractRector
 {
     /**
+     * @var mixed[][][]
+     */
+    private $oldMethodsToNewMethodsWithArgsByType = [];
+
+    /**
      * @var IdentifierRenamer
      */
     private $identifierRenamer;
@@ -21,11 +26,6 @@ final class MethodCallToAnotherMethodCallWithArgumentsRector extends AbstractRec
      * @var NodeFactory
      */
     private $nodeFactory;
-
-    /**
-     * @var mixed[][][]
-     */
-    private $oldMethodsToNewMethodsWithArgsByType = [];
 
     /**
      * @param mixed[][][] $oldMethodsToNewMethodsWithArgsByType

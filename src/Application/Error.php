@@ -8,9 +8,9 @@ use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 final class Error
 {
     /**
-     * @var SmartFileInfo
+     * @var int|null
      */
-    private $fileInfo;
+    private $line;
 
     /**
      * @var string
@@ -18,9 +18,9 @@ final class Error
     private $message;
 
     /**
-     * @var int|null
+     * @var SmartFileInfo
      */
-    private $line;
+    private $fileInfo;
 
     /**
      * @var RectorInterface|null

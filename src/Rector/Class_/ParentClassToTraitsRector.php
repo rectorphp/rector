@@ -20,6 +20,11 @@ use Rector\RectorDefinition\RectorDefinition;
 final class ParentClassToTraitsRector extends AbstractRector
 {
     /**
+     * @var string[][]
+     */
+    private $parentClassToTraits = [];
+
+    /**
      * @var StatementGlue
      */
     private $statementGlue;
@@ -28,11 +33,6 @@ final class ParentClassToTraitsRector extends AbstractRector
      * @var NodeFactory
      */
     private $nodeFactory;
-
-    /**
-     * @var string[][]
-     */
-    private $parentClassToTraits = [];
 
     /**
      * @param string[][] $parentClassToTraits { parent class => [ traits ] }

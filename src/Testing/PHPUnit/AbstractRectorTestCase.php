@@ -15,6 +15,11 @@ use function Safe\sprintf;
 abstract class AbstractRectorTestCase extends TestCase
 {
     /**
+     * @var bool
+     */
+    protected $rebuildFreshContainer = false;
+
+    /**
      * @var FileProcessor
      */
     protected $fileProcessor;
@@ -30,19 +35,14 @@ abstract class AbstractRectorTestCase extends TestCase
     protected $parameterProvider;
 
     /**
-     * @var bool
+     * @var ContainerInterface[]
      */
-    protected $rebuildFreshContainer = false;
+    private static $containersPerConfig = [];
 
     /**
      * @var FileGuard
      */
     private $fileGuard;
-
-    /**
-     * @var ContainerInterface[]
-     */
-    private static $containersPerConfig = [];
 
     protected function setUp(): void
     {

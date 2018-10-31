@@ -12,6 +12,11 @@ use function Safe\sprintf;
 final class RenameSubKeyYamlRector implements YamlRectorInterface
 {
     /**
+     * @var int
+     */
+    private $replacePathsCount = 0;
+
+    /**
      * @var string[]
      */
     private $pathsToNewKeys = [];
@@ -20,11 +25,6 @@ final class RenameSubKeyYamlRector implements YamlRectorInterface
      * @var PathResolver
      */
     private $pathResolver;
-
-    /**
-     * @var int
-     */
-    private $replacePathsCount = 0;
 
     /**
      * @param string[] $pathsToNewKeys

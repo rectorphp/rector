@@ -14,14 +14,14 @@ use Rector\RectorDefinition\RectorDefinition;
 final class VarDumperTestTraitMethodArgsRector extends AbstractRector
 {
     /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
-
-    /**
      * @var string
      */
     private $traitName;
+
+    /**
+     * @var NodeFactory
+     */
+    private $nodeFactory;
 
     public function __construct(
         NodeFactory $nodeFactory,

@@ -14,6 +14,11 @@ use Rector\RectorDefinition\RectorDefinition;
 final class AssertCompareToSpecificMethodRector extends AbstractPHPUnitRector
 {
     /**
+     * @var string
+     */
+    private $activeFuncCallName;
+
+    /**
      * @var string[][]|false[][]
      */
     private $defaultOldToNewMethods = [
@@ -27,11 +32,6 @@ final class AssertCompareToSpecificMethodRector extends AbstractPHPUnitRector
      * @var IdentifierRenamer
      */
     private $identifierRenamer;
-
-    /**
-     * @var string
-     */
-    private $activeFuncCallName;
 
     public function __construct(IdentifierRenamer $identifierRenamer)
     {

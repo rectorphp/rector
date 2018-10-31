@@ -23,16 +23,16 @@ use function Safe\sprintf;
 final class IdentifierRenamer
 {
     /**
-     * @var NameResolver
-     */
-    private $nameResolver;
-
-    /**
      * @var string[]
      */
     private $nodeClassesWithIdentifier = [
         ClassConstFetch::class, MethodCall::class, PropertyFetch::class, StaticCall::class, ClassMethod::class,
     ];
+
+    /**
+     * @var NameResolver
+     */
+    private $nameResolver;
 
     public function __construct(NameResolver $nameResolver)
     {

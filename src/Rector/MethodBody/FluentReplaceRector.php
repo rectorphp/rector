@@ -12,14 +12,14 @@ use Rector\RectorDefinition\RectorDefinition;
 final class FluentReplaceRector extends AbstractRector
 {
     /**
-     * @var MethodCallNodeFactory
-     */
-    private $methodCallNodeFactory;
-
-    /**
      * @var string[]
      */
     private $classesToDefluent = [];
+
+    /**
+     * @var MethodCallNodeFactory
+     */
+    private $methodCallNodeFactory;
 
     /**
      * @param string[] $classesToDefluent

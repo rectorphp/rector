@@ -14,14 +14,14 @@ use Rector\RectorDefinition\RectorDefinition;
 final class PropertyAssignToMethodCallRector extends AbstractRector
 {
     /**
-     * @var MethodCallNodeFactory
-     */
-    private $methodCallNodeFactory;
-
-    /**
      * @var string[][]
      */
     private $oldPropertiesToNewMethodCallsByType = [];
+
+    /**
+     * @var MethodCallNodeFactory
+     */
+    private $methodCallNodeFactory;
 
     /**
      * @param string[][] $oldPropertiesToNewMethodCallsByType

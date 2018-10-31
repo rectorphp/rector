@@ -14,17 +14,17 @@ use Rector\RectorDefinition\RectorDefinition;
 final class CallUserMethodRector extends AbstractRector
 {
     /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
-
-    /**
      * @var string[]
      */
     private $oldToNewFunctions = [
         'call_user_method' => 'call_user_func',
         'call_user_method_array' => 'call_user_func_array',
     ];
+
+    /**
+     * @var NodeFactory
+     */
+    private $nodeFactory;
 
     public function __construct(NodeFactory $nodeFactory)
     {

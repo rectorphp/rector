@@ -13,9 +13,9 @@ use Rector\NodeTypeResolver\Node\Attribute;
 final class ClassAndMethodNodeVisitor extends NodeVisitorAbstract
 {
     /**
-     * @var ClassLike|null
+     * @var string|null
      */
-    private $classNode;
+    private $methodName;
 
     /**
      * @var string|null
@@ -23,9 +23,9 @@ final class ClassAndMethodNodeVisitor extends NodeVisitorAbstract
     private $className;
 
     /**
-     * @var string|null
+     * @var ClassLike|null
      */
-    private $methodName;
+    private $classNode;
 
     /**
      * @var ClassMethod|null

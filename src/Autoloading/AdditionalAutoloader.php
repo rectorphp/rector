@@ -15,24 +15,24 @@ use Symplify\PackageBuilder\FileSystem\FileSystem;
 final class AdditionalAutoloader
 {
     /**
-     * @var FileGuard
-     */
-    private $fileGuard;
-
-    /**
      * @var string[]
      */
     private $autoloadPaths = [];
 
     /**
-     * @var FilesystemTweaker
-     */
-    private $filesystemTweaker;
-
-    /**
      * @var string[]
      */
     private $excludePaths = [];
+
+    /**
+     * @var FileGuard
+     */
+    private $fileGuard;
+
+    /**
+     * @var FilesystemTweaker
+     */
+    private $filesystemTweaker;
 
     /**
      * @var FileSystem

@@ -14,6 +14,11 @@ use Rector\RectorDefinition\RectorDefinition;
 final class AddFlashRector extends AbstractRector
 {
     /**
+     * @var string
+     */
+    private $controllerClass;
+
+    /**
      * @var MethodCallNodeFactory
      */
     private $methodCallNodeFactory;
@@ -22,11 +27,6 @@ final class AddFlashRector extends AbstractRector
      * @var ChainMethodCallAnalyzer
      */
     private $chainMethodCallAnalyzer;
-
-    /**
-     * @var string
-     */
-    private $controllerClass;
 
     public function __construct(
         MethodCallNodeFactory $methodCallNodeFactory,

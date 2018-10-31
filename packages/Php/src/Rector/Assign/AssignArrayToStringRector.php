@@ -28,14 +28,14 @@ use Rector\Utils\NodeTraverser\CallableNodeTraverser;
 final class AssignArrayToStringRector extends AbstractRector
 {
     /**
-     * @var CallableNodeTraverser
-     */
-    private $callableNodeTraverser;
-
-    /**
      * @var PropertyProperty[]
      */
     private $emptyStringPropertyNodes = [];
+
+    /**
+     * @var CallableNodeTraverser
+     */
+    private $callableNodeTraverser;
 
     /**
      * @var BetterNodeFinder

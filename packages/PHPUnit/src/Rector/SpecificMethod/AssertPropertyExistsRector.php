@@ -18,16 +18,6 @@ use Rector\RectorDefinition\RectorDefinition;
 final class AssertPropertyExistsRector extends AbstractPHPUnitRector
 {
     /**
-     * @var IdentifierRenamer
-     */
-    private $identifierRenamer;
-
-    /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
-
-    /**
      * @var string[]
      */
     private $renameMethodsWithObjectMap = [
@@ -42,6 +32,16 @@ final class AssertPropertyExistsRector extends AbstractPHPUnitRector
         'assertTrue' => 'assertClassHasAttribute',
         'assertFalse' => 'assertClassNotHasAttribute',
     ];
+
+    /**
+     * @var IdentifierRenamer
+     */
+    private $identifierRenamer;
+
+    /**
+     * @var NodeFactory
+     */
+    private $nodeFactory;
 
     public function __construct(IdentifierRenamer $identifierRenamer, NodeFactory $nodeFactory)
     {

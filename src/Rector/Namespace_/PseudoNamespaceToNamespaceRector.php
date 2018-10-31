@@ -18,14 +18,19 @@ use Rector\RectorDefinition\RectorDefinition;
 final class PseudoNamespaceToNamespaceRector extends AbstractRector
 {
     /**
+     * @var string|null
+     */
+    private $newNamespace;
+
+    /**
      * @var string[]
      */
     private $pseudoNamespacePrefixes = [];
 
     /**
-     * @var string|null
+     * @var string[]
      */
-    private $newNamespace;
+    private $excludedClasses = [];
 
     /**
      * @var NodeFactory
@@ -36,11 +41,6 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
      * @var StatementGlue
      */
     private $statementGlue;
-
-    /**
-     * @var string[]
-     */
-    private $excludedClasses = [];
 
     /**
      * @param string[] $pseudoNamespacePrefixes

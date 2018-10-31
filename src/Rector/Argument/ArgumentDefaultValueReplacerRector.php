@@ -17,6 +17,11 @@ use Rector\RectorDefinition\RectorDefinition;
 final class ArgumentDefaultValueReplacerRector extends AbstractArgumentRector
 {
     /**
+     * @var mixed[]
+     */
+    private $replacesByMethodAndTypes = [];
+
+    /**
      * @var ConstExprEvaluator
      */
     private $constExprEvaluator;
@@ -25,11 +30,6 @@ final class ArgumentDefaultValueReplacerRector extends AbstractArgumentRector
      * @var NodeFactory
      */
     private $nodeFactory;
-
-    /**
-     * @var mixed[]
-     */
-    private $replacesByMethodAndTypes = [];
 
     /**
      * @param mixed[] $replacesByMethodAndTypes

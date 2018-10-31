@@ -14,14 +14,14 @@ use Rector\RectorDefinition\RectorDefinition;
 final class FormIsValidRector extends AbstractRector
 {
     /**
-     * @var MethodCallNodeFactory
-     */
-    private $methodCallNodeFactory;
-
-    /**
      * @var string
      */
     private $formClass;
+
+    /**
+     * @var MethodCallNodeFactory
+     */
+    private $methodCallNodeFactory;
 
     public function __construct(
         MethodCallNodeFactory $methodCallNodeFactory,

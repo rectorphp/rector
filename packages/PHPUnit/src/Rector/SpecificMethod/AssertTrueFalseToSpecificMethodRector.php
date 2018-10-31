@@ -17,6 +17,11 @@ use Rector\RectorDefinition\RectorDefinition;
 final class AssertTrueFalseToSpecificMethodRector extends AbstractPHPUnitRector
 {
     /**
+     * @var string|null
+     */
+    private $activeFuncCallName;
+
+    /**
      * @var string[][]|false[][]
      */
     private $defaultOldToNewMethods = [
@@ -48,11 +53,6 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractPHPUnitRector
      * @var NodeFactory
      */
     private $nodeFactory;
-
-    /**
-     * @var string|null
-     */
-    private $activeFuncCallName;
 
     /**
      * @param string[][] $activeMethods

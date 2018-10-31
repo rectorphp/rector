@@ -17,11 +17,6 @@ final class Configuration
     private $name;
 
     /**
-     * @var string[]
-     */
-    private $nodeTypes = [];
-
-    /**
      * @var string
      */
     private $category;
@@ -42,14 +37,19 @@ final class Configuration
     private $description;
 
     /**
-     * @var string[]
-     */
-    private $source = [];
-
-    /**
      * @var string|null
      */
     private $levelConfig;
+
+    /**
+     * @var string[]
+     */
+    private $nodeTypes = [];
+
+    /**
+     * @var string[]
+     */
+    private $source = [];
 
     /**
      * @param string[] $nodeTypes
