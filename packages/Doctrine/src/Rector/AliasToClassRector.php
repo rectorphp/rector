@@ -87,16 +87,6 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function isAlias(string $name): bool
-    {
-        return strpos($name, ':') !== false;
-    }
-
-    private function hasAlias(string $name): bool
-    {
-        return isset($this->aliasesToNamespaces[strtok($name, ':')]);
-    }
-
     private function isAliasWithConfiguredEntity(string $name): bool
     {
         return $this->isAlias($name) && $this->hasAlias($name);
@@ -107,5 +97,15 @@ CODE_SAMPLE
         [$namespaceAlias, $simpleClassName] = explode(':', $name, 2);
 
         return sprintf('%s\%s', $this->aliasesToNamespaces[$namespaceAlias], $simpleClassName);
+    }
+
+    private function isAlias(string $name): bool
+    {
+        return strpos($name, ':') !== false;
+    }
+
+    private function hasAlias(string $name): bool
+    {
+        return isset($this->aliasesToNamespaces[strtok($name, ':')]);
     }
 }

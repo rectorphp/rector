@@ -99,15 +99,6 @@ final class NamespaceReplacerRector extends AbstractRector
         return null;
     }
 
-    private function resolveNewNameFromNode(Node $node): string
-    {
-        $name = $this->resolveNameFromNode($node);
-
-        [$oldNamespace, $newNamespace] = $this->getNewNamespaceForOldOne($name);
-
-        return str_replace($oldNamespace, $newNamespace, $name);
-    }
-
     private function resolveNameFromNode(Node $node): string
     {
         if ($node instanceof Namespace_ && $node->name) {
@@ -137,21 +128,6 @@ final class NamespaceReplacerRector extends AbstractRector
     }
 
     /**
-     * @return string[]
-     */
-    private function getNewNamespaceForOldOne(string $namespace): array
-    {
-        /** @var string $oldNamespace */
-        foreach ($this->oldToNewNamespaces as $oldNamespace => $newNamespace) {
-            if (Strings::startsWith($namespace, $oldNamespace)) {
-                return [$oldNamespace, $newNamespace];
-            }
-        }
-
-        return [];
-    }
-
-    /**
      * Checks for "new \ClassNoNamespace;"
      * This should be skipped, not a namespace.
      */
@@ -172,6 +148,15 @@ final class NamespaceReplacerRector extends AbstractRector
         $newClassName = $fullyQualifiedNode->toString();
 
         return array_key_exists($newClassName, $this->oldToNewNamespaces);
+    }
+
+    private function resolveNewNameFromNode(Node $node): string
+    {
+        $name = $this->resolveNameFromNode($node);
+
+        [$oldNamespace, $newNamespace] = $this->getNewNamespaceForOldOne($name);
+
+        return str_replace($oldNamespace, $newNamespace, $name);
     }
 
     private function isPartialNamespace(Name $nameNode): bool
@@ -199,5 +184,20 @@ final class NamespaceReplacerRector extends AbstractRector
         $cutOffFromTheLeft = strlen($completeNewName) - strlen($nameNode->toString());
 
         return substr($completeNewName, $cutOffFromTheLeft);
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getNewNamespaceForOldOne(string $namespace): array
+    {
+        /** @var string $oldNamespace */
+        foreach ($this->oldToNewNamespaces as $oldNamespace => $newNamespace) {
+            if (Strings::startsWith($namespace, $oldNamespace)) {
+                return [$oldNamespace, $newNamespace];
+            }
+        }
+
+        return [];
     }
 }

@@ -76,6 +76,17 @@ final class ClassAndMethodNodeVisitor extends NodeVisitorAbstract
         }
     }
 
+    private function processMethod(Node $node): void
+    {
+        if ($node instanceof ClassMethod) {
+            $this->methodNode = $node;
+            $this->methodName = (string) $node->name;
+        }
+
+        $node->setAttribute(Attribute::METHOD_NAME, $this->methodName);
+        $node->setAttribute(Attribute::METHOD_NODE, $this->methodNode);
+    }
+
     private function setParentClassName(Class_ $classNode, Node $node): void
     {
         if ($classNode->extends === null) {
@@ -88,16 +99,5 @@ final class ClassAndMethodNodeVisitor extends NodeVisitorAbstract
         }
 
         $node->setAttribute(Attribute::PARENT_CLASS_NAME, $parentClassResolvedName);
-    }
-
-    private function processMethod(Node $node): void
-    {
-        if ($node instanceof ClassMethod) {
-            $this->methodNode = $node;
-            $this->methodName = (string) $node->name;
-        }
-
-        $node->setAttribute(Attribute::METHOD_NAME, $this->methodName);
-        $node->setAttribute(Attribute::METHOD_NODE, $this->methodNode);
     }
 }

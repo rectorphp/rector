@@ -120,6 +120,27 @@ final class ConfigurationFactory
         return Strings::after($fqnNodeType, '\\', -1);
     }
 
+    private function resolveLevelConfig(string $level): ?string
+    {
+        if (! $level) {
+            return null;
+        }
+
+        $finder = Finder::create()->files()
+            ->in($this->levelsDirectory)
+            ->name(sprintf('#%s$#', $level));
+
+        /** @var SplFileInfo[] $fileInfos */
+        $fileInfos = iterator_to_array($finder->getIterator());
+        if (! count($fileInfos)) {
+            return null;
+        }
+
+        /** @var SplFileInfo $foundLevelConfigFileInfo */
+        $foundLevelConfigFileInfo = array_pop($fileInfos);
+        return $foundLevelConfigFileInfo->getRealPath();
+    }
+
     /**
      * @return string[]
      */
@@ -141,26 +162,5 @@ final class ConfigurationFactory
 
         // in case of forgotten _
         return Strings::endsWith($nodeClass, '\\' . $nodeType . '_');
-    }
-
-    private function resolveLevelConfig(string $level): ?string
-    {
-        if (! $level) {
-            return null;
-        }
-
-        $finder = Finder::create()->files()
-            ->in($this->levelsDirectory)
-            ->name(sprintf('#%s$#', $level));
-
-        /** @var SplFileInfo[] $fileInfos */
-        $fileInfos = iterator_to_array($finder->getIterator());
-        if (! count($fileInfos)) {
-            return null;
-        }
-
-        /** @var SplFileInfo $foundLevelConfigFileInfo */
-        $foundLevelConfigFileInfo = array_pop($fileInfos);
-        return $foundLevelConfigFileInfo->getRealPath();
     }
 }

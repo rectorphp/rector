@@ -95,13 +95,26 @@ CODE_SAMPLE
         return new Assign($listNode->items[0]->value, $keyFuncCall);
     }
 
-    private function isListToEachAssign(Assign $assignNode): bool
+    private function shouldSkip(Assign $assignNode): bool
     {
-        if (! $assignNode->var instanceof List_) {
-            return false;
+        if (! $this->isListToEachAssign($assignNode)) {
+            return true;
         }
 
-        return $assignNode->expr instanceof FuncCall && $this->isName($assignNode->expr, 'each');
+        // assign should be top level, e.g. not in a while loop
+        if (! $assignNode->getAttribute(Attribute::PARENT_NODE) instanceof Expression) {
+            return true;
+        }
+
+        /** @var List_ $listNode */
+        $listNode = $assignNode->var;
+
+        if (count($listNode->items) !== 2) {
+            return true;
+        }
+
+        // empty list → cannot handle
+        return $listNode->items[0] === null && $listNode->items[1] === null;
     }
 
     /**
@@ -127,25 +140,12 @@ CODE_SAMPLE
         return $parentParentNode instanceof Do_;
     }
 
-    private function shouldSkip(Assign $assignNode): bool
+    private function isListToEachAssign(Assign $assignNode): bool
     {
-        if (! $this->isListToEachAssign($assignNode)) {
-            return true;
+        if (! $assignNode->var instanceof List_) {
+            return false;
         }
 
-        // assign should be top level, e.g. not in a while loop
-        if (! $assignNode->getAttribute(Attribute::PARENT_NODE) instanceof Expression) {
-            return true;
-        }
-
-        /** @var List_ $listNode */
-        $listNode = $assignNode->var;
-
-        if (count($listNode->items) !== 2) {
-            return true;
-        }
-
-        // empty list → cannot handle
-        return $listNode->items[0] === null && $listNode->items[1] === null;
+        return $assignNode->expr instanceof FuncCall && $this->isName($assignNode->expr, 'each');
     }
 }

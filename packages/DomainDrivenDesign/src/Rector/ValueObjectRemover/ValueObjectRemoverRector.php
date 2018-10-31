@@ -121,16 +121,6 @@ final class ValueObjectRemoverRector extends AbstractValueObjectRemoverRector
         return $propertyNode;
     }
 
-    private function refactorNullableType(NullableType $nullableTypeNode): NullableType
-    {
-        $newType = $this->matchNewType($nullableTypeNode->type);
-        if (! $newType) {
-            return $nullableTypeNode;
-        }
-
-        return new NullableType($newType);
-    }
-
     private function refactorName(Node $nameNode): ?Name
     {
         $newType = $this->matchNewType($nameNode);
@@ -139,5 +129,15 @@ final class ValueObjectRemoverRector extends AbstractValueObjectRemoverRector
         }
 
         return new Name($newType);
+    }
+
+    private function refactorNullableType(NullableType $nullableTypeNode): NullableType
+    {
+        $newType = $this->matchNewType($nullableTypeNode->type);
+        if (! $newType) {
+            return $nullableTypeNode;
+        }
+
+        return new NullableType($newType);
     }
 }

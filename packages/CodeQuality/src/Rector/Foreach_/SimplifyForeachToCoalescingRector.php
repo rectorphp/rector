@@ -91,6 +91,38 @@ CODE_SAMPLE
         return $this->processForeachNodeWithAssignInside($node, $returnOrAssignNode);
     }
 
+    /**
+     * @return Assign|Return_|null
+     */
+    private function matchReturnOrAssignNode(Foreach_ $foreachNode): ?Node
+    {
+        return $this->foreachAnalyzer->matchOnlyStmt($foreachNode, function (Node $node): ?Node {
+            if (! $node instanceof If_) {
+                return null;
+            }
+
+            if (! $node->cond instanceof Identical) {
+                return null;
+            }
+
+            if (count($node->stmts) !== 1) {
+                return null;
+            }
+
+            if ($node->stmts[0] instanceof Expression) {
+                $innerNode = $node->stmts[0]->expr;
+            } else {
+                $innerNode = $node->stmts[0];
+            }
+
+            if ($innerNode instanceof Assign || $innerNode instanceof Return_) {
+                return $innerNode;
+            }
+
+            return null;
+        });
+    }
+
     private function processForeachNodeWithReturnInside(Foreach_ $foreachNode, Return_ $returnNode): ?Node
     {
         if (! $this->areNodesEqual($foreachNode->valueVar, $returnNode->expr)) {
@@ -151,37 +183,5 @@ CODE_SAMPLE
         ), $checkedNode));
 
         return new Expression($assignNode);
-    }
-
-    /**
-     * @return Assign|Return_|null
-     */
-    private function matchReturnOrAssignNode(Foreach_ $foreachNode): ?Node
-    {
-        return $this->foreachAnalyzer->matchOnlyStmt($foreachNode, function (Node $node): ?Node {
-            if (! $node instanceof If_) {
-                return null;
-            }
-
-            if (! $node->cond instanceof Identical) {
-                return null;
-            }
-
-            if (count($node->stmts) !== 1) {
-                return null;
-            }
-
-            if ($node->stmts[0] instanceof Expression) {
-                $innerNode = $node->stmts[0]->expr;
-            } else {
-                $innerNode = $node->stmts[0];
-            }
-
-            if ($innerNode instanceof Assign || $innerNode instanceof Return_) {
-                return $innerNode;
-            }
-
-            return null;
-        });
     }
 }

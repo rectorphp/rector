@@ -96,18 +96,6 @@ final class RectorServiceParametersShifter
     }
 
     /**
-     * @param string|int|bool $key
-     */
-    private function isReservedKey($key): bool
-    {
-        if (! is_string($key)) {
-            return false;
-        }
-
-        return in_array($key, $this->serviceKeywords, true);
-    }
-
-    /**
      * @param mixed[] $serviceDefinition
      * @return mixed[]
      */
@@ -151,5 +139,17 @@ final class RectorServiceParametersShifter
         }
 
         return $arrayParameters;
+    }
+
+    /**
+     * @param string|int|bool $key
+     */
+    private function isReservedKey($key): bool
+    {
+        if (! is_string($key)) {
+            return false;
+        }
+
+        return in_array($key, $this->serviceKeywords, true);
     }
 }

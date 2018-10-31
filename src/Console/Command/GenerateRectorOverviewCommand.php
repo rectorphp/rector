@@ -72,68 +72,6 @@ final class GenerateRectorOverviewCommand extends Command
     }
 
     /**
-     * @return RectorInterface[]
-     */
-    private function getProjectsRectors(): array
-    {
-        return $this->getRectorsFromDirectory(
-            [__DIR__ . '/../../../packages'],
-            [__DIR__ . '/../../../packages/YamlRector']
-        );
-    }
-
-    /**
-     * @return RectorInterface[]
-     */
-    private function getGeneralRectors(): array
-    {
-        return $this->getRectorsFromDirectory([__DIR__ . '/../../../src'], [__DIR__ . '/../../../packages/YamlRector']);
-    }
-
-    private function printRector(RectorInterface $rector): void
-    {
-        $headline = $this->getRectorClassWithoutNamespace($rector);
-        $this->consoleStyle->writeln(sprintf('### `%s`', $headline));
-
-        $this->consoleStyle->newLine();
-        $this->consoleStyle->writeln(sprintf('- class: `%s`', get_class($rector)));
-
-        $rectorDefinition = $rector->getDefinition();
-        if ($rectorDefinition->getDescription()) {
-            $this->consoleStyle->newLine();
-            $this->consoleStyle->writeln($rectorDefinition->getDescription());
-        }
-
-        foreach ($rectorDefinition->getCodeSamples() as $codeSample) {
-            $this->consoleStyle->newLine();
-
-            if ($codeSample instanceof ConfiguredCodeSample) {
-                $configuration = [
-                    'services' => [
-                        get_class($rector) => $codeSample->getConfiguration(),
-                    ],
-                ];
-
-                $configuration = Yaml::dump($configuration, Yaml::DUMP_MULTI_LINE_LITERAL_BLOCK);
-
-                $this->printCodeWrapped($configuration, 'yaml');
-
-                $this->consoleStyle->newLine();
-                $this->consoleStyle->writeln('↓');
-                $this->consoleStyle->newLine();
-            }
-
-            $diff = $this->markdownDifferAndFormatter->bareDiffAndFormatWithoutColors(
-                $codeSample->getCodeBefore(),
-                $codeSample->getCodeAfter()
-            );
-            $this->printCodeWrapped($diff, 'diff');
-        }
-
-        $this->consoleStyle->newLine(1);
-    }
-
-    /**
      * @param RectorInterface[] $rectors
      * @return RectorInterface[][]
      */
@@ -149,6 +87,42 @@ final class GenerateRectorOverviewCommand extends Command
         ksort($rectorsByGroup);
 
         return $rectorsByGroup;
+    }
+
+    /**
+     * @return RectorInterface[]
+     */
+    private function getProjectsRectors(): array
+    {
+        return $this->getRectorsFromDirectory(
+            [__DIR__ . '/../../../packages'],
+            [__DIR__ . '/../../../packages/YamlRector']
+        );
+    }
+
+    /**
+     * @param RectorInterface[][] $rectorsByGroup
+     */
+    private function printRectorsByGroup(array $rectorsByGroup): void
+    {
+        $this->printGroupsMenu($rectorsByGroup);
+
+        foreach ($rectorsByGroup as $group => $rectors) {
+            $this->consoleStyle->writeln('## ' . $group);
+            $this->consoleStyle->newLine();
+
+            foreach ($rectors as $rector) {
+                $this->printRector($rector);
+            }
+        }
+    }
+
+    /**
+     * @return RectorInterface[]
+     */
+    private function getGeneralRectors(): array
+    {
+        return $this->getRectorsFromDirectory([__DIR__ . '/../../../src'], [__DIR__ . '/../../../packages/YamlRector']);
     }
 
     private function detectGroupFromRectorClass(string $rectorClass): string
@@ -179,29 +153,6 @@ final class GenerateRectorOverviewCommand extends Command
             'Failed to resolve group from Rector class. Implement a new one in %s',
             __METHOD__
         ));
-    }
-
-    /**
-     * @param RectorInterface[][] $rectorsByGroup
-     */
-    private function printGroupsMenu(array $rectorsByGroup): void
-    {
-        foreach (array_keys($rectorsByGroup) as $group) {
-            $escapedGroup = str_replace('\\', '', $group);
-            $escapedGroup = Strings::webalize($escapedGroup, '_');
-
-            $this->consoleStyle->writeln(sprintf('- [%s](#%s)', $group, $escapedGroup));
-        }
-
-        $this->consoleStyle->newLine();
-    }
-
-    private function getRectorClassWithoutNamespace(RectorInterface $rector): string
-    {
-        $rectorClass = get_class($rector);
-        $rectorClassParts = explode('\\', $rectorClass);
-
-        return $rectorClassParts[count($rectorClassParts) - 1];
     }
 
     /**
@@ -249,18 +200,67 @@ final class GenerateRectorOverviewCommand extends Command
     /**
      * @param RectorInterface[][] $rectorsByGroup
      */
-    private function printRectorsByGroup(array $rectorsByGroup): void
+    private function printGroupsMenu(array $rectorsByGroup): void
     {
-        $this->printGroupsMenu($rectorsByGroup);
+        foreach (array_keys($rectorsByGroup) as $group) {
+            $escapedGroup = str_replace('\\', '', $group);
+            $escapedGroup = Strings::webalize($escapedGroup, '_');
 
-        foreach ($rectorsByGroup as $group => $rectors) {
-            $this->consoleStyle->writeln('## ' . $group);
+            $this->consoleStyle->writeln(sprintf('- [%s](#%s)', $group, $escapedGroup));
+        }
+
+        $this->consoleStyle->newLine();
+    }
+
+    private function printRector(RectorInterface $rector): void
+    {
+        $headline = $this->getRectorClassWithoutNamespace($rector);
+        $this->consoleStyle->writeln(sprintf('### `%s`', $headline));
+
+        $this->consoleStyle->newLine();
+        $this->consoleStyle->writeln(sprintf('- class: `%s`', get_class($rector)));
+
+        $rectorDefinition = $rector->getDefinition();
+        if ($rectorDefinition->getDescription()) {
+            $this->consoleStyle->newLine();
+            $this->consoleStyle->writeln($rectorDefinition->getDescription());
+        }
+
+        foreach ($rectorDefinition->getCodeSamples() as $codeSample) {
             $this->consoleStyle->newLine();
 
-            foreach ($rectors as $rector) {
-                $this->printRector($rector);
+            if ($codeSample instanceof ConfiguredCodeSample) {
+                $configuration = [
+                    'services' => [
+                        get_class($rector) => $codeSample->getConfiguration(),
+                    ],
+                ];
+
+                $configuration = Yaml::dump($configuration, Yaml::DUMP_MULTI_LINE_LITERAL_BLOCK);
+
+                $this->printCodeWrapped($configuration, 'yaml');
+
+                $this->consoleStyle->newLine();
+                $this->consoleStyle->writeln('↓');
+                $this->consoleStyle->newLine();
             }
+
+            $diff = $this->markdownDifferAndFormatter->bareDiffAndFormatWithoutColors(
+                $codeSample->getCodeBefore(),
+                $codeSample->getCodeAfter()
+            );
+            $this->printCodeWrapped($diff, 'diff');
         }
+
+        $this->consoleStyle->newLine(1);
+    }
+
+    private function getRectorClassWithoutNamespace(RectorInterface $rector): string
+    {
+        $rectorClass = get_class($rector);
+        $rectorClassParts = explode('\\', $rectorClass);
+
+        return $rectorClassParts[count($rectorClassParts) - 1];
     }
 
     private function printCodeWrapped(string $content, string $format): void

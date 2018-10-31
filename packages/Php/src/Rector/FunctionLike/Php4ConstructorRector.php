@@ -114,6 +114,18 @@ CODE_SAMPLE
         return $node;
     }
 
+    private function processClassMethodStatementsForParentConstructorCalls(ClassMethod $classMethodNode): void
+    {
+        if (! is_iterable($classMethodNode->stmts)) {
+            return;
+        }
+
+        /** @var Expression $methodStmt */
+        foreach ($classMethodNode->stmts as $methodStmt) {
+            $this->processParentPhp4ConstructCall($methodStmt->expr);
+        }
+    }
+
     /**
      * @return string[]
      */
@@ -145,18 +157,6 @@ CODE_SAMPLE
         }
 
         return $this->isName($node, '__construct');
-    }
-
-    private function processClassMethodStatementsForParentConstructorCalls(ClassMethod $classMethodNode): void
-    {
-        if (! is_iterable($classMethodNode->stmts)) {
-            return;
-        }
-
-        /** @var Expression $methodStmt */
-        foreach ($classMethodNode->stmts as $methodStmt) {
-            $this->processParentPhp4ConstructCall($methodStmt->expr);
-        }
     }
 
     private function processParentPhp4ConstructCall(Node $node): void

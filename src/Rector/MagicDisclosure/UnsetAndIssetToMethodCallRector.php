@@ -124,6 +124,21 @@ final class UnsetAndIssetToMethodCallRector extends AbstractRector
         return $methodCall;
     }
 
+    private function matchArrayDimFetch(ArrayDimFetch $arrayDimFetchNode): bool
+    {
+        $varNodeTypes = $this->getTypes($arrayDimFetchNode->var);
+
+        foreach ($this->typeToMethodCalls as $type => $transformation) {
+            if (in_array($type, $varNodeTypes, true)) {
+                $this->activeTransformation = $transformation;
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /**
      * @param Isset_|Unset_ $issetOrUnsetNode
      */
@@ -138,20 +153,5 @@ final class UnsetAndIssetToMethodCallRector extends AbstractRector
         }
 
         return null;
-    }
-
-    private function matchArrayDimFetch(ArrayDimFetch $arrayDimFetchNode): bool
-    {
-        $varNodeTypes = $this->getTypes($arrayDimFetchNode->var);
-
-        foreach ($this->typeToMethodCalls as $type => $transformation) {
-            if (in_array($type, $varNodeTypes, true)) {
-                $this->activeTransformation = $transformation;
-
-                return true;
-            }
-        }
-
-        return false;
     }
 }

@@ -100,17 +100,6 @@ final class ConstructorMethodBuilder
         $classMethodNode->stmts[] = $propertyAssignNode;
     }
 
-    private function hasMethodParameter(ClassMethod $classMethodNode, VariableInfo $variableInfo): bool
-    {
-        foreach ($classMethodNode->params as $constructorParameter) {
-            if ($this->nameResolver->isName($constructorParameter->var, $variableInfo->getName())) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     private function completeParentConstructor(Class_ $classNode, ClassMethod $constructorClassMethodNode): void
     {
         $parentClassName = (string) $classNode->getAttribute(Attribute::PARENT_CLASS_NAME);
@@ -150,20 +139,6 @@ final class ConstructorMethodBuilder
         $constructorClassMethodNode->stmts[] = new Expression($parentConstructCallNode);
     }
 
-    /**
-     * @param Param[] $paramNodes
-     * @return Arg[]
-     */
-    private function convertParamNodesToArgNodes(array $paramNodes): array
-    {
-        $argNodes = [];
-        foreach ($paramNodes as $paramNode) {
-            $argNodes[] = new Arg($paramNode->var);
-        }
-
-        return $argNodes;
-    }
-
     private function completeChildConstructors(Class_ $classNode, ClassMethod $constructorClassMethod): void
     {
         $childClassNodes = $this->classNodeCollector->findChildrenOfClass($this->nameResolver->resolve($classNode));
@@ -196,6 +171,17 @@ final class ConstructorMethodBuilder
         }
     }
 
+    private function hasMethodParameter(ClassMethod $classMethodNode, VariableInfo $variableInfo): bool
+    {
+        foreach ($classMethodNode->params as $constructorParameter) {
+            if ($this->nameResolver->isName($constructorParameter->var, $variableInfo->getName())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private function findFirstParentConstructor(Class_ $classNode): ?ClassMethod
     {
         while ($classNode !== null) {
@@ -214,5 +200,19 @@ final class ConstructorMethodBuilder
         }
 
         return null;
+    }
+
+    /**
+     * @param Param[] $paramNodes
+     * @return Arg[]
+     */
+    private function convertParamNodesToArgNodes(array $paramNodes): array
+    {
+        $argNodes = [];
+        foreach ($paramNodes as $paramNode) {
+            $argNodes[] = new Arg($paramNode->var);
+        }
+
+        return $argNodes;
     }
 }

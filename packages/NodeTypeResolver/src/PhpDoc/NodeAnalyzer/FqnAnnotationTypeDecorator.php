@@ -34,16 +34,6 @@ final class FqnAnnotationTypeDecorator
         }
     }
 
-    private function resolveTagFqnName(Node $node, string $tagShortName): string
-    {
-        $className = $node->getAttribute(Attribute::CLASS_NAME);
-        if (! $className) {
-            return $tagShortName;
-        }
-
-        return Reflection::expandClassName($tagShortName, new ReflectionClass($className));
-    }
-
     private function joinWithValue(PhpDocTagNode $phpDocTagNode, string $tagShortName): string
     {
         $innerValue = (string) $phpDocTagNode->value;
@@ -58,5 +48,15 @@ final class FqnAnnotationTypeDecorator
         }
 
         return $tagShortName . $innerValue;
+    }
+
+    private function resolveTagFqnName(Node $node, string $tagShortName): string
+    {
+        $className = $node->getAttribute(Attribute::CLASS_NAME);
+        if (! $className) {
+            return $tagShortName;
+        }
+
+        return Reflection::expandClassName($tagShortName, new ReflectionClass($className));
     }
 }

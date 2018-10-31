@@ -55,6 +55,20 @@ final class RenameSubKeyYamlRector implements YamlRectorInterface
         return implode(PHP_EOL, $contentMainKeyParts);
     }
 
+    private function processSingleMainGroup(string $content): string
+    {
+        foreach ($this->pathsToNewKeys as $path => $newKey) {
+            $pathPattern = $this->createPatternFromPath($path);
+            $replacePattern = $this->createReplacePatternFromNewKey($newKey);
+
+            while (Strings::match($content, $pathPattern)) {
+                $content = Strings::replace($content, $pathPattern, $replacePattern, 1);
+            }
+        }
+
+        return $content;
+    }
+
     private function createPatternFromPath(string $path): string
     {
         $pathParts = $this->pathResolver->splitPathToParts($path);
@@ -87,19 +101,5 @@ final class RenameSubKeyYamlRector implements YamlRectorInterface
         }
 
         return $replacePattern . $newKey . '$' . $this->replacePathsCount;
-    }
-
-    private function processSingleMainGroup(string $content): string
-    {
-        foreach ($this->pathsToNewKeys as $path => $newKey) {
-            $pathPattern = $this->createPatternFromPath($path);
-            $replacePattern = $this->createReplacePatternFromNewKey($newKey);
-
-            while (Strings::match($content, $pathPattern)) {
-                $content = Strings::replace($content, $pathPattern, $replacePattern, 1);
-            }
-        }
-
-        return $content;
     }
 }

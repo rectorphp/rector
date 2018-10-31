@@ -81,19 +81,6 @@ final class AssertRegExpRector extends AbstractPHPUnitRector
         return $node;
     }
 
-    private function moveFunctionArgumentsUp(MethodCall $methodCallNode): void
-    {
-        $oldArguments = $methodCallNode->args;
-
-        /** @var FuncCall $pregMatchFunction */
-        $pregMatchFunction = $oldArguments[1]->value;
-        [$regex, $variable] = $pregMatchFunction->args;
-
-        unset($oldArguments[0], $oldArguments[1]);
-
-        $methodCallNode->args = array_merge([$regex, $variable], $oldArguments);
-    }
-
     private function resolveOldCondition(Node $node): int
     {
         if ($node instanceof LNumber) {
@@ -118,5 +105,18 @@ final class AssertRegExpRector extends AbstractPHPUnitRector
         ) {
             $this->identifierRenamer->renameNode($methodCallNode, 'assertNotRegExp');
         }
+    }
+
+    private function moveFunctionArgumentsUp(MethodCall $methodCallNode): void
+    {
+        $oldArguments = $methodCallNode->args;
+
+        /** @var FuncCall $pregMatchFunction */
+        $pregMatchFunction = $oldArguments[1]->value;
+        [$regex, $variable] = $pregMatchFunction->args;
+
+        unset($oldArguments[0], $oldArguments[1]);
+
+        $methodCallNode->args = array_merge([$regex, $variable], $oldArguments);
     }
 }

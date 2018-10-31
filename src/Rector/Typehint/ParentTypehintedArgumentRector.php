@@ -128,14 +128,6 @@ CODE_SAMPLE
     }
 
     /**
-     * @return string[]
-     */
-    private function getClasses(): array
-    {
-        return array_keys($this->typehintForArgumentByMethodAndClass);
-    }
-
-    /**
      * @param string[] $types
      */
     private function isTypeMatch(array $types): bool
@@ -180,5 +172,13 @@ CODE_SAMPLE
         }
 
         return $classMethodNode;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getClasses(): array
+    {
+        return array_keys($this->typehintForArgumentByMethodAndClass);
     }
 }

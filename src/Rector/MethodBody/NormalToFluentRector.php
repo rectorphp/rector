@@ -117,21 +117,6 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function matchMethodCall(MethodCall $methodCallNode): ?string
-    {
-        foreach ($this->fluentMethodsByType as $type => $methodNames) {
-            if (! $this->isType($methodCallNode, $type)) {
-                continue;
-            }
-
-            if ($this->isNames($methodCallNode, $methodNames)) {
-                return $type;
-            }
-        }
-
-        return null;
-    }
-
     private function isBothMethodCallMatch(Expression $firstStmt, Expression $secondStmt): bool
     {
         if (! $firstStmt->expr instanceof MethodCall) {
@@ -187,5 +172,20 @@ CODE_SAMPLE
                 $methodCallToAdd->args
             );
         }
+    }
+
+    private function matchMethodCall(MethodCall $methodCallNode): ?string
+    {
+        foreach ($this->fluentMethodsByType as $type => $methodNames) {
+            if (! $this->isType($methodCallNode, $type)) {
+                continue;
+            }
+
+            if ($this->isNames($methodCallNode, $methodNames)) {
+                return $type;
+            }
+        }
+
+        return null;
     }
 }

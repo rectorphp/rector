@@ -53,6 +53,7 @@ parameters:
     exclude_checkers:
         # run manually from time to time, not to bother user with it
         - 'Symplify\CodingStandard\Fixer\Order\PropertyOrderByComplexityFixer'
+        - 'Symplify\CodingStandard\Fixer\Order\PrivateMethodOrderByUseFixer'
 
     exclude_files:
         - '*tests/*Source/*.php'

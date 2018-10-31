@@ -110,16 +110,16 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function removeParentClass(Class_ $classNode): void
-    {
-        $classNode->extends = null;
-    }
-
     private function getClassNodeParentClassName(Class_ $classNode): string
     {
         /** @var FullyQualified $fullyQualifiedName */
         $fullyQualifiedName = $classNode->extends->getAttribute(Attribute::RESOLVED_NAME);
 
         return $fullyQualifiedName->toString();
+    }
+
+    private function removeParentClass(Class_ $classNode): void
+    {
+        $classNode->extends = null;
     }
 }

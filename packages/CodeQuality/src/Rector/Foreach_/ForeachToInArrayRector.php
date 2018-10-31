@@ -119,6 +119,22 @@ CODE_SAMPLE
         return new Return_($negativeReturn ? new BooleanNot($inArrayFunctionCall) : $inArrayFunctionCall);
     }
 
+    private function isAForeachCandidate(Foreach_ $foreachNode): bool
+    {
+        if (isset($foreachNode->keyVar)) {
+            return false;
+        }
+
+        $nextNode = $foreachNode->getAttribute(Attribute::NEXT_NODE);
+        if ($nextNode === null || ! $nextNode instanceof Return_) {
+            return false;
+        }
+
+        $returnExpression = $nextNode->expr;
+
+        return $returnExpression !== null && $this->constFetchAnalyzer->isBool($returnExpression);
+    }
+
     /**
      * @param mixed $leftValue
      * @param mixed $rightValue
@@ -140,6 +156,17 @@ CODE_SAMPLE
         }
     }
 
+    private function isIfBodyABoolReturnNode(If_ $firstNodeInsideForeach): bool
+    {
+        $ifStatment = $firstNodeInsideForeach->stmts[0];
+
+        if (! $ifStatment instanceof Return_) {
+            return false;
+        }
+
+        return $this->constFetchAnalyzer->isBool($ifStatment->expr);
+    }
+
     /**
      * @param mixed $condition
      * @param Identical|Equal $ifCondition
@@ -153,32 +180,5 @@ CODE_SAMPLE
         }
 
         return new FuncCall(new Name('in_array'), $arguments);
-    }
-
-    private function isIfBodyABoolReturnNode(If_ $firstNodeInsideForeach): bool
-    {
-        $ifStatment = $firstNodeInsideForeach->stmts[0];
-
-        if (! $ifStatment instanceof Return_) {
-            return false;
-        }
-
-        return $this->constFetchAnalyzer->isBool($ifStatment->expr);
-    }
-
-    private function isAForeachCandidate(Foreach_ $foreachNode): bool
-    {
-        if (isset($foreachNode->keyVar)) {
-            return false;
-        }
-
-        $nextNode = $foreachNode->getAttribute(Attribute::NEXT_NODE);
-        if ($nextNode === null || ! $nextNode instanceof Return_) {
-            return false;
-        }
-
-        $returnExpression = $nextNode->expr;
-
-        return $returnExpression !== null && $this->constFetchAnalyzer->isBool($returnExpression);
     }
 }
