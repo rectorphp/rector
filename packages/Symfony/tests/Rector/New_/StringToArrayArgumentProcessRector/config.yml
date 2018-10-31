@@ -1,0 +1,4 @@
+services:
+    Rector\Symfony\Rector\New_\StringToArrayArgumentProcessRector:
+        $processClass: 'Rector\Symfony\Tests\Rector\New_\StringToArrayArgumentProcessRector\Source\Process'
+        $processHelperClass: 'Rector\Symfony\Tests\Rector\New_\StringToArrayArgumentProcessRector\Source\ProcessHelper'

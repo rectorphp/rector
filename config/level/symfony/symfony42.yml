@@ -1,0 +1,3 @@
+services:
+    # https://symfony.com/blog/new-in-symfony-4-2-important-deprecations
+    Rector\Symfony\Rector\New_\StringToArrayArgumentProcessRector: ~

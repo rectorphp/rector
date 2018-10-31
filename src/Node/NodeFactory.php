@@ -119,6 +119,8 @@ final class NodeFactory
             } elseif ($item instanceof Identifier) {
                 $string = new String_($item->toString());
                 $arrayItems[] = new ArrayItem($string);
+            } elseif (is_scalar($item)) {
+                $arrayItems[] = new ArrayItem(BuilderHelpers::normalizeValue($item));
             } else {
                 throw new NotImplementedException(sprintf(
                     'Not implemented yet. Go to "%s()" and add check for "%s" node.',
