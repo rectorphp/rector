@@ -7,3 +7,7 @@ class SomeClass
         \Laravel\Templating\render('template', []);
     }
 }
+
+function a(callable $a) {
+    $a();
+}
