@@ -4,7 +4,6 @@ namespace Rector\Console\Command;
 
 use Nette\Loaders\RobotLoader;
 use Nette\Utils\Strings;
-use Rector\Console\ConsoleStyle;
 use Rector\Console\Shell;
 use Rector\ConsoleDiffer\MarkdownDifferAndFormatter;
 use Rector\Contract\Rector\RectorInterface;
@@ -14,6 +13,7 @@ use ReflectionClass;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Yaml\Yaml;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use function Safe\ksort;
@@ -22,20 +22,20 @@ use function Safe\sprintf;
 final class GenerateRectorOverviewCommand extends Command
 {
     /**
-     * @var ConsoleStyle
+     * @var SymfonyStyle
      */
-    private $consoleStyle;
+    private $symfonyStyle;
 
     /**
      * @var MarkdownDifferAndFormatter
      */
     private $markdownDifferAndFormatter;
 
-    public function __construct(ConsoleStyle $consoleStyle, MarkdownDifferAndFormatter $markdownDifferAndFormatter)
+    public function __construct(SymfonyStyle $symfonyStyle, MarkdownDifferAndFormatter $markdownDifferAndFormatter)
     {
         parent::__construct();
 
-        $this->consoleStyle = $consoleStyle;
+        $this->symfonyStyle = $symfonyStyle;
         $this->markdownDifferAndFormatter = $markdownDifferAndFormatter;
     }
 
@@ -47,23 +47,23 @@ final class GenerateRectorOverviewCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->consoleStyle->writeln('# All Rectors Overview');
-        $this->consoleStyle->newLine();
+        $this->symfonyStyle->writeln('# All Rectors Overview');
+        $this->symfonyStyle->newLine();
 
-        $this->consoleStyle->writeln('- [Projects](#projects)');
-        $this->consoleStyle->writeln('- [General](#general)');
-        $this->consoleStyle->newLine();
+        $this->symfonyStyle->writeln('- [Projects](#projects)');
+        $this->symfonyStyle->writeln('- [General](#general)');
+        $this->symfonyStyle->newLine();
 
-        $this->consoleStyle->writeln('## Projects');
-        $this->consoleStyle->newLine();
+        $this->symfonyStyle->writeln('## Projects');
+        $this->symfonyStyle->newLine();
 
         $rectorsByGroup = $this->groupRectors($this->getProjectsRectors());
         $this->printRectorsByGroup($rectorsByGroup);
 
-        $this->consoleStyle->writeln('---');
+        $this->symfonyStyle->writeln('---');
 
-        $this->consoleStyle->writeln('## General');
-        $this->consoleStyle->newLine();
+        $this->symfonyStyle->writeln('## General');
+        $this->symfonyStyle->newLine();
 
         $rectorsByGroup = $this->groupRectors($this->getGeneralRectors());
         $this->printRectorsByGroup($rectorsByGroup);
@@ -108,8 +108,8 @@ final class GenerateRectorOverviewCommand extends Command
         $this->printGroupsMenu($rectorsByGroup);
 
         foreach ($rectorsByGroup as $group => $rectors) {
-            $this->consoleStyle->writeln('## ' . $group);
-            $this->consoleStyle->newLine();
+            $this->symfonyStyle->writeln('## ' . $group);
+            $this->symfonyStyle->newLine();
 
             foreach ($rectors as $rector) {
                 $this->printRector($rector);
@@ -206,28 +206,28 @@ final class GenerateRectorOverviewCommand extends Command
             $escapedGroup = str_replace('\\', '', $group);
             $escapedGroup = Strings::webalize($escapedGroup, '_');
 
-            $this->consoleStyle->writeln(sprintf('- [%s](#%s)', $group, $escapedGroup));
+            $this->symfonyStyle->writeln(sprintf('- [%s](#%s)', $group, $escapedGroup));
         }
 
-        $this->consoleStyle->newLine();
+        $this->symfonyStyle->newLine();
     }
 
     private function printRector(RectorInterface $rector): void
     {
         $headline = $this->getRectorClassWithoutNamespace($rector);
-        $this->consoleStyle->writeln(sprintf('### `%s`', $headline));
+        $this->symfonyStyle->writeln(sprintf('### `%s`', $headline));
 
-        $this->consoleStyle->newLine();
-        $this->consoleStyle->writeln(sprintf('- class: `%s`', get_class($rector)));
+        $this->symfonyStyle->newLine();
+        $this->symfonyStyle->writeln(sprintf('- class: `%s`', get_class($rector)));
 
         $rectorDefinition = $rector->getDefinition();
         if ($rectorDefinition->getDescription()) {
-            $this->consoleStyle->newLine();
-            $this->consoleStyle->writeln($rectorDefinition->getDescription());
+            $this->symfonyStyle->newLine();
+            $this->symfonyStyle->writeln($rectorDefinition->getDescription());
         }
 
         foreach ($rectorDefinition->getCodeSamples() as $codeSample) {
-            $this->consoleStyle->newLine();
+            $this->symfonyStyle->newLine();
 
             if ($codeSample instanceof ConfiguredCodeSample) {
                 $configuration = [
@@ -240,9 +240,9 @@ final class GenerateRectorOverviewCommand extends Command
 
                 $this->printCodeWrapped($configuration, 'yaml');
 
-                $this->consoleStyle->newLine();
-                $this->consoleStyle->writeln('↓');
-                $this->consoleStyle->newLine();
+                $this->symfonyStyle->newLine();
+                $this->symfonyStyle->writeln('↓');
+                $this->symfonyStyle->newLine();
             }
 
             $diff = $this->markdownDifferAndFormatter->bareDiffAndFormatWithoutColors(
@@ -252,7 +252,7 @@ final class GenerateRectorOverviewCommand extends Command
             $this->printCodeWrapped($diff, 'diff');
         }
 
-        $this->consoleStyle->newLine(1);
+        $this->symfonyStyle->newLine(1);
     }
 
     private function getRectorClassWithoutNamespace(RectorInterface $rector): string
@@ -265,6 +265,6 @@ final class GenerateRectorOverviewCommand extends Command
 
     private function printCodeWrapped(string $content, string $format): void
     {
-        $this->consoleStyle->writeln(sprintf('```%s%s%s%s```', $format, PHP_EOL, rtrim($content), PHP_EOL));
+        $this->symfonyStyle->writeln(sprintf('```%s%s%s%s```', $format, PHP_EOL, rtrim($content), PHP_EOL));
     }
 }
