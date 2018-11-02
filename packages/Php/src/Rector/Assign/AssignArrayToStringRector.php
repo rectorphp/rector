@@ -146,19 +146,17 @@ CODE_SAMPLE
     private function processVariable(Assign $assignNode, Expr $variableNode): bool
     {
         if (! $this->isStringType($variableNode)) {
-            return false;
+            return true;
         }
 
-        $variableNodeContent = $this->print($variableNode);
-
         $variableAssign = $this->betterNodeFinder->findFirstPrevious($assignNode, function (Node $node) use (
-            $variableNodeContent
+            $variableNode
         ) {
             if (! $node instanceof Assign) {
                 return false;
             }
 
-            if ($this->print($node->var) !== $variableNodeContent) {
+            if (! $this->areNodesEqual($node->var, $variableNode)) {
                 return false;
             }
             // we look for variable assign = string
