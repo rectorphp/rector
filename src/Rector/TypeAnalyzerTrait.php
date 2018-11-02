@@ -14,13 +14,12 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
+use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
-use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use function Safe\class_implements;
 
 /**
  * This could be part of @see AbstractRector, but decopuling to trait
@@ -100,16 +99,12 @@ trait TypeAnalyzerTrait
         /** @var Scope $nodeScope */
         $nodeScope = $node->getAttribute(Attribute::SCOPE);
         $nodeType = $nodeScope->getType($node);
-        if ($nodeType instanceof ConstantArrayType) {
-            return true;
-        }
 
         if ($nodeType instanceof ObjectType) {
-            $className = $nodeType->getClassName();
-            return in_array(Countable::class, class_implements($className), true);
+            return is_a($nodeType->getClassName(), Countable::class, true);
         }
 
-        return false;
+        return $nodeType instanceof ArrayType;
     }
 
     /**
