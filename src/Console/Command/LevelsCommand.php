@@ -3,12 +3,12 @@
 namespace Rector\Console\Command;
 
 use Nette\Utils\Strings;
-use Rector\Console\ConsoleStyle;
 use Rector\Console\Shell;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Finder\Finder;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use function Safe\sort;
@@ -17,13 +17,13 @@ use function Safe\sprintf;
 final class LevelsCommand extends Command
 {
     /**
-     * @var ConsoleStyle
+     * @var SymfonyStyle
      */
-    private $consoleStyle;
+    private $symfonyStyle;
 
-    public function __construct(ConsoleStyle $consoleStyle)
+    public function __construct(SymfonyStyle $symfonyStyle)
     {
-        $this->consoleStyle = $consoleStyle;
+        $this->symfonyStyle = $symfonyStyle;
 
         parent::__construct();
     }
@@ -43,8 +43,8 @@ final class LevelsCommand extends Command
             $levels = $this->filterLevelsByName($input, $levels);
         }
 
-        $this->consoleStyle->title(sprintf('%d available levels:', count($levels)));
-        $this->consoleStyle->listing($levels);
+        $this->symfonyStyle->title(sprintf('%d available levels:', count($levels)));
+        $this->symfonyStyle->listing($levels);
 
         return Shell::CODE_SUCCESS;
     }

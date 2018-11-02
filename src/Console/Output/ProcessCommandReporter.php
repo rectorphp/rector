@@ -3,19 +3,19 @@
 namespace Rector\Console\Output;
 
 use Rector\Application\Error;
-use Rector\Console\ConsoleStyle;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\NodeTraverser\RectorNodeTraverser;
 use Rector\Reporting\FileDiff;
 use Rector\YamlRector\YamlFileProcessor;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use function Safe\sprintf;
 
 final class ProcessCommandReporter
 {
     /**
-     * @var ConsoleStyle
+     * @var SymfonyStyle
      */
-    private $consoleStyle;
+    private $symfonyStyle;
 
     /**
      * @var RectorNodeTraverser
@@ -29,10 +29,10 @@ final class ProcessCommandReporter
 
     public function __construct(
         RectorNodeTraverser $rectorNodeTraverser,
-        ConsoleStyle $consoleStyle,
+        SymfonyStyle $symfonyStyle,
         YamlFileProcessor $yamlFileProcessor
     ) {
-        $this->consoleStyle = $consoleStyle;
+        $this->symfonyStyle = $symfonyStyle;
         $this->rectorNodeTraverser = $rectorNodeTraverser;
         $this->yamlFileProcessor = $yamlFileProcessor;
     }
@@ -41,7 +41,7 @@ final class ProcessCommandReporter
     {
         $rectorCount = $this->rectorNodeTraverser->getRectorCount() + $this->yamlFileProcessor->getYamlRectorsCount();
 
-        $this->consoleStyle->title(sprintf('%d Loaded Rector%s', $rectorCount, $rectorCount === 1 ? '' : 's'));
+        $this->symfonyStyle->title(sprintf('%d Loaded Rector%s', $rectorCount, $rectorCount === 1 ? '' : 's'));
 
         $allRectors = array_merge(
             $this->rectorNodeTraverser->getRectors() + $this->yamlFileProcessor->getYamlRectors()
@@ -51,7 +51,7 @@ final class ProcessCommandReporter
             return get_class($rector);
         }, $allRectors);
 
-        $this->consoleStyle->listing($rectorClasses);
+        $this->symfonyStyle->listing($rectorClasses);
     }
 
     /**
@@ -63,10 +63,10 @@ final class ProcessCommandReporter
             return;
         }
 
-        $this->consoleStyle->title(
+        $this->symfonyStyle->title(
             sprintf('%d Changed file%s', count($changedFiles), count($changedFiles) === 1 ? '' : 's')
         );
-        $this->consoleStyle->listing($changedFiles);
+        $this->symfonyStyle->listing($changedFiles);
     }
 
     /**
@@ -78,16 +78,16 @@ final class ProcessCommandReporter
             return;
         }
 
-        $this->consoleStyle->title(
+        $this->symfonyStyle->title(
             sprintf('%d file%s with changes', count($fileDiffs), count($fileDiffs) === 1 ? '' : 's')
         );
 
         $i = 0;
         foreach ($fileDiffs as $fileDiff) {
-            $this->consoleStyle->writeln(sprintf('<options=bold>%d) %s</>', ++$i, $fileDiff->getFile()));
-            $this->consoleStyle->newLine();
-            $this->consoleStyle->writeln($fileDiff->getDiff());
-            $this->consoleStyle->newLine();
+            $this->symfonyStyle->writeln(sprintf('<options=bold>%d) %s</>', ++$i, $fileDiff->getFile()));
+            $this->symfonyStyle->newLine();
+            $this->symfonyStyle->writeln($fileDiff->getDiff());
+            $this->symfonyStyle->newLine();
         }
     }
 
@@ -108,7 +108,7 @@ final class ProcessCommandReporter
                 $message .= ' On line: ' . $error->getLine();
             }
 
-            $this->consoleStyle->error($message);
+            $this->symfonyStyle->error($message);
         }
     }
 }

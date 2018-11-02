@@ -5,13 +5,13 @@ namespace Rector\ContributorTools\Command;
 use Nette\Utils\FileSystem;
 use Nette\Utils\Strings;
 use Rector\CodingStyle\AfterRectorCodingStyle;
-use Rector\Console\ConsoleStyle;
 use Rector\ContributorTools\Configuration\Configuration;
 use Rector\ContributorTools\Configuration\ConfigurationFactory;
 use Rector\ContributorTools\TemplateVariablesFactory;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Finder\Finder;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\Console\ShellCode;
@@ -44,9 +44,9 @@ final class CreateRectorCommand extends Command
     private $generatedFiles = [];
 
     /**
-     * @var ConsoleStyle
+     * @var SymfonyStyle
      */
-    private $consoleStyle;
+    private $symfonyStyle;
 
     /**
      * @var ConfigurationFactory
@@ -69,14 +69,14 @@ final class CreateRectorCommand extends Command
     private $templateVariablesFactory;
 
     public function __construct(
-        ConsoleStyle $consoleStyle,
+        SymfonyStyle $symfonyStyle,
         ConfigurationFactory $configurationFactory,
         FinderSanitizer $finderSanitizer,
         AfterRectorCodingStyle $afterRectorCodingStyle,
         TemplateVariablesFactory $templateVariablesFactory
     ) {
         parent::__construct();
-        $this->consoleStyle = $consoleStyle;
+        $this->symfonyStyle = $symfonyStyle;
         $this->configurationFactory = $configurationFactory;
         $this->finderSanitizer = $finderSanitizer;
         $this->afterRectorCodingStyle = $afterRectorCodingStyle;
@@ -190,11 +190,11 @@ final class CreateRectorCommand extends Command
 
     private function printSuccess(string $name): void
     {
-        $this->consoleStyle->title(sprintf('New files generated for "%s"', $name));
+        $this->symfonyStyle->title(sprintf('New files generated for "%s"', $name));
         sort($this->generatedFiles);
-        $this->consoleStyle->listing($this->generatedFiles);
+        $this->symfonyStyle->listing($this->generatedFiles);
 
-        $this->consoleStyle->success(sprintf(
+        $this->symfonyStyle->success(sprintf(
             'Now make these tests green again:%svendor/bin/phpunit %s',
             PHP_EOL . PHP_EOL,
             $this->testCasePath

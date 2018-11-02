@@ -10,7 +10,6 @@ use Rector\Application\FileProcessor;
 use Rector\Autoloading\AdditionalAutoloader;
 use Rector\CodingStyle\AfterRectorCodingStyle;
 use Rector\Configuration\Option;
-use Rector\Console\ConsoleStyle;
 use Rector\Console\Output\ProcessCommandReporter;
 use Rector\Console\Shell;
 use Rector\ConsoleDiffer\DifferAndFormatter;
@@ -24,6 +23,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
@@ -48,9 +48,9 @@ final class ProcessCommand extends Command
     private $fileProcessor;
 
     /**
-     * @var ConsoleStyle
+     * @var SymfonyStyle
      */
-    private $consoleStyle;
+    private $symfonyStyle;
 
     /**
      * @var FilesFinder
@@ -104,7 +104,7 @@ final class ProcessCommand extends Command
 
     public function __construct(
         FileProcessor $fileProcessor,
-        ConsoleStyle $consoleStyle,
+        SymfonyStyle $symfonyStyle,
         FilesFinder $phpFilesFinder,
         ProcessCommandReporter $processCommandReporter,
         ParameterProvider $parameterProvider,
@@ -119,7 +119,7 @@ final class ProcessCommand extends Command
         parent::__construct();
 
         $this->fileProcessor = $fileProcessor;
-        $this->consoleStyle = $consoleStyle;
+        $this->symfonyStyle = $symfonyStyle;
         $this->filesFinder = $phpFilesFinder;
         $this->processCommandReporter = $processCommandReporter;
         $this->parameterProvider = $parameterProvider;
@@ -199,7 +199,7 @@ final class ProcessCommand extends Command
             $this->afterRectorCodingStyle->apply($source);
         }
 
-        $this->consoleStyle->success('Rector is done!');
+        $this->symfonyStyle->success('Rector is done!');
 
         return Shell::CODE_SUCCESS;
     }
@@ -210,15 +210,22 @@ final class ProcessCommand extends Command
     private function processFileInfos(array $fileInfos, bool $shouldHideAutoloadErrors): void
     {
         $totalFiles = count($fileInfos);
-        $this->consoleStyle->title(sprintf('Processing %d file%s', $totalFiles, $totalFiles === 1 ? '' : 's'));
-        $this->consoleStyle->progressStart($totalFiles);
+        $this->symfonyStyle->title(sprintf('Processing %d file%s', $totalFiles, $totalFiles === 1 ? '' : 's'));
+
+        if (! $this->symfonyStyle->isVerbose()) {
+            $this->symfonyStyle->progressStart($totalFiles);
+        }
 
         foreach ($fileInfos as $fileInfo) {
             $this->processFileInfo($fileInfo, $shouldHideAutoloadErrors);
-            $this->consoleStyle->progressAdvance();
+            if ($this->symfonyStyle->isVerbose()) {
+                $this->symfonyStyle->writeln($fileInfo->getRealPath());
+            } else {
+                $this->symfonyStyle->progressAdvance();
+            }
         }
 
-        $this->consoleStyle->newLine(2);
+        $this->symfonyStyle->newLine(2);
     }
 
     private function processFileInfo(SmartFileInfo $fileInfo, bool $shouldHideAutoloadErrors): void
