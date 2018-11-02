@@ -7,3 +7,7 @@ class SomeClass
         view('template', []);
     }
 }
+
+function a(callable $a) {
+    $a();
+}
