@@ -56,7 +56,7 @@ final class ConfigurationFactory
     }
 
     /**
-     * @param mixed[] $config
+     * @param mixed[][] $config
      */
     private function ensureConfigIsValid(array $config, string $configFile): void
     {

@@ -100,6 +100,10 @@ CODE_SAMPLE
             $node->name = new Identifier('__construct');
         }
 
+        if ($node->stmts === null) {
+            return null;
+        }
+
         if (count($node->stmts) === 1) {
             /** @var Expression $stmt */
             $stmt = $node->stmts[0];

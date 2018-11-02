@@ -14,8 +14,10 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
+use PHPStan\Type\Accessory\HasOffsetType;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
+use PHPStan\Type\IntersectionType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use Rector\NodeTypeResolver\Node\Attribute;
@@ -102,6 +104,18 @@ trait TypeAnalyzerTrait
 
         if ($nodeType instanceof ObjectType) {
             return is_a($nodeType->getClassName(), Countable::class, true);
+        }
+
+        if ($nodeType instanceof IntersectionType) {
+            foreach ($nodeType->getTypes() as $intersectionNodeType) {
+                if ($intersectionNodeType instanceof ArrayType || $intersectionNodeType instanceof HasOffsetType) {
+                    continue;
+                }
+
+                return false;
+            }
+
+            return true;
         }
 
         return $nodeType instanceof ArrayType;
