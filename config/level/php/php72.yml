@@ -2,7 +2,7 @@ services:
     Rector\Php\Rector\Each\WhileEachToForeachRector: ~
     Rector\Php\Rector\Each\ListEachRector: ~
     Rector\Php\Rector\Unset_\UnsetCastRector: ~
-    Rector\Php\Rector\String_\BarewordStringRector: ~
+    Rector\Php\Rector\ConstFetch\BarewordStringRector: ~
 
     Rector\Rector\Function_\FunctionReplaceRector:
         jpeg2wbmp: 'imagecreatefromjpeg' # and imagewbmp
