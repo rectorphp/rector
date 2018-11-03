@@ -7,7 +7,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Configuration\Rector\Architecture\DependencyInjection\VariablesToPropertyFetchCollection;
-use Rector\Node\PropertyFetchNodeFactory;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -20,17 +19,9 @@ final class ReplaceVariableByPropertyFetchRector extends AbstractRector
      */
     private $variablesToPropertyFetchCollection;
 
-    /**
-     * @var PropertyFetchNodeFactory
-     */
-    private $propertyFetchNodeFactory;
-
-    public function __construct(
-        VariablesToPropertyFetchCollection $variablesToPropertyFetchCollection,
-        PropertyFetchNodeFactory $propertyFetchNodeFactory
-    ) {
+    public function __construct(VariablesToPropertyFetchCollection $variablesToPropertyFetchCollection)
+    {
         $this->variablesToPropertyFetchCollection = $variablesToPropertyFetchCollection;
-        $this->propertyFetchNodeFactory = $propertyFetchNodeFactory;
     }
 
     public function getDefinition(): RectorDefinition
@@ -109,7 +100,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            return $this->propertyFetchNodeFactory->createLocalWithPropertyName($variableInfo->getName());
+            return $this->createPropertyFetch('this', $variableInfo->getName());
         }
 
         return null;

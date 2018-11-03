@@ -34,22 +34,13 @@ final class NodeFactory
     private $builderFactory;
 
     /**
-     * @var PropertyFetchNodeFactory
-     */
-    private $propertyFetchNodeFactory;
-
-    /**
      * @var TypeAnalyzer
      */
     private $typeAnalyzer;
 
-    public function __construct(
-        BuilderFactory $builderFactory,
-        PropertyFetchNodeFactory $propertyFetchNodeFactory,
-        TypeAnalyzer $typeAnalyzer
-    ) {
+    public function __construct(BuilderFactory $builderFactory, TypeAnalyzer $typeAnalyzer)
+    {
         $this->builderFactory = $builderFactory;
-        $this->propertyFetchNodeFactory = $propertyFetchNodeFactory;
         $this->typeAnalyzer = $typeAnalyzer;
     }
 
@@ -128,7 +119,7 @@ final class NodeFactory
 
     public function createPropertyAssignmentWithExpr(string $propertyName, Expr $rightExprNode): Expression
     {
-        $leftExprNode = $this->propertyFetchNodeFactory->createLocalWithPropertyName($propertyName);
+        $leftExprNode = $this->createPropertyFetch('this', $propertyName);
         $assign = new Assign($leftExprNode, $rightExprNode);
         return new Expression($assign);
     }
@@ -189,5 +180,17 @@ final class NodeFactory
         $variable->setAttribute(Attribute::PARENT_NODE, $methodCallNode);
 
         return $methodCallNode;
+    }
+
+    /**
+     * @param string|Expr $variable
+     */
+    public function createPropertyFetch($variable, string $property): PropertyFetch
+    {
+        if (is_string($variable)) {
+            $variable = new Variable($variable);
+        }
+
+        return $this->builderFactory->propertyFetch($variable, $property);
     }
 }

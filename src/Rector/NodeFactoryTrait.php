@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Expression;
@@ -111,5 +112,13 @@ trait NodeFactoryTrait
     protected function createMethodCall($variable, string $method, array $arguments = []): MethodCall
     {
         return $this->nodeFactory->createMethodCall($variable, $method, $arguments);
+    }
+
+    /**
+     * @param string|Expr $variable
+     */
+    protected function createPropertyFetch($variable, string $property): PropertyFetch
+    {
+        return $this->nodeFactory->createPropertyFetch($variable, $property);
     }
 }

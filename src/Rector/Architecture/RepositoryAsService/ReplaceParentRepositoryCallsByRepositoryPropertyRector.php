@@ -5,7 +5,6 @@ namespace Rector\Rector\Architecture\RepositoryAsService;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
-use Rector\Node\PropertyFetchNodeFactory;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -33,16 +32,8 @@ final class ReplaceParentRepositoryCallsByRepositoryPropertyRector extends Abstr
         'matching',
     ];
 
-    /**
-     * @var PropertyFetchNodeFactory
-     */
-    private $propertyFetchNodeFactory;
-
-    public function __construct(
-        PropertyFetchNodeFactory $propertyFetchNodeFactory,
-        string $entityRepositoryClass = 'Doctrine\ORM\EntityRepository'
-    ) {
-        $this->propertyFetchNodeFactory = $propertyFetchNodeFactory;
+    public function __construct(string $entityRepositoryClass = 'Doctrine\ORM\EntityRepository')
+    {
         $this->entityRepositoryClass = $entityRepositoryClass;
     }
 
@@ -109,7 +100,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $node->var = $this->propertyFetchNodeFactory->createLocalWithPropertyName('repository');
+        $node->var = $this->createPropertyFetch('this', 'repository');
 
         return $node;
     }
