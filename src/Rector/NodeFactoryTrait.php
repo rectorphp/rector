@@ -2,9 +2,12 @@
 
 namespace Rector\Rector;
 
+use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
+use Rector\Node\NodeFactory;
 
 /**
  * This could be part of @see AbstractRector, but decopuling to trait
@@ -12,6 +15,19 @@ use PhpParser\Node\Name;
  */
 trait NodeFactoryTrait
 {
+    /**
+     * @var NodeFactory
+     */
+    private $nodeFactory;
+
+    /**
+     * @required
+     */
+    public function autowireNodeFactoryTrait(NodeFactory $nodeFactory): void
+    {
+        $this->nodeFactory = $nodeFactory;
+    }
+
     protected function createNull(): ConstFetch
     {
         return new ConstFetch(new Name('null'));
@@ -25,6 +41,20 @@ trait NodeFactoryTrait
     protected function createTrue(): ConstFetch
     {
         return new ConstFetch(new Name('true'));
+    }
+
+    protected function createArg(Node $node): Arg
+    {
+        return $this->nodeFactory->createArg($node);
+    }
+
+    /**
+     * @param Node[] $nodes
+     * @return Arg[]
+     */
+    protected function createArgs(array $nodes): array
+    {
+        return $this->nodeFactory->createArgs($nodes);
     }
 
     /**
