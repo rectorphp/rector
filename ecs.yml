@@ -27,6 +27,7 @@ services:
 
     Symplify\CodingStandard\Sniffs\DependencyInjection\NoClassInstantiationSniff:
         extraAllowedClasses:
+            - 'PHPStan\Type\*'
             - 'PhpParser\Node\*'
             - 'Symplify\PackageBuilder\*'
             - 'PhpParser\Comment\Doc'

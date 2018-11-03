@@ -10,7 +10,6 @@ use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Variable;
@@ -186,7 +185,7 @@ CODE_SAMPLE
         // set default data in between
         if ($position + 1 !== $optionsPosition) {
             if (! isset($methodCallNode->args[$position + 1])) {
-                $methodCallNode->args[$position + 1] = new Arg(new ConstFetch(new Name('null')));
+                $methodCallNode->args[$position + 1] = new Arg($this->createNull());
             }
         }
 
@@ -291,11 +290,12 @@ CODE_SAMPLE
         $optionsDefaults = new Array_();
 
         foreach (array_keys($namesToArgs) as $optionName) {
-            $optionsDefaults->items[] = new ArrayItem(new ConstFetch(new Name('null')), new String_($optionName));
+            $optionsDefaults->items[] = new ArrayItem($this->createNull(), new String_($optionName));
         }
 
-        $setDefaultsMethodCall = new MethodCall($resolverParamNode->var, new Identifier('setDefaults'));
-        $setDefaultsMethodCall->args[] = new Arg($optionsDefaults);
+        $setDefaultsMethodCall = new MethodCall($resolverParamNode->var, new Identifier('setDefaults'), [
+            new Arg($optionsDefaults),
+        ]);
 
         $configureOptionsClassMethodNode = $this->builderFactory->method('configureOptions')
             ->makePublic()

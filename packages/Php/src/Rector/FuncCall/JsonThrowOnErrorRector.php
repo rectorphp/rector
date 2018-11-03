@@ -72,7 +72,7 @@ CODE_SAMPLE
                 $node->args[$i] = new Arg($this->createConstFetch('JSON_THROW_ON_ERROR'));
             } else {
                 // fill in blanks
-                $node->args[$i] = new Arg($this->createConstFetch('null'));
+                $node->args[$i] = new Arg($this->createNull());
             }
         }
 

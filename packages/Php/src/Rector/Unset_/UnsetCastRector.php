@@ -4,8 +4,6 @@ namespace Rector\Php\Rector\Unset_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Cast\Unset_;
-use PhpParser\Node\Expr\ConstFetch;
-use PhpParser\Node\Name;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -40,6 +38,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        return new ConstFetch(new Name('null'));
+        return $this->createNull();
     }
 }

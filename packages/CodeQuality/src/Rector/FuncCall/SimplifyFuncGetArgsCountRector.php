@@ -4,7 +4,6 @@ namespace Rector\CodeQuality\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Name;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -47,6 +46,6 @@ final class SimplifyFuncGetArgsCountRector extends AbstractRector
             return $node;
         }
 
-        return new FuncCall(new Name('func_num_args'));
+        return $this->createFunction('func_num_args');
     }
 }

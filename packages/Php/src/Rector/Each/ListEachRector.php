@@ -3,11 +3,9 @@
 namespace Rector\Php\Rector\Each;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\List_;
-use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Do_;
 use PhpParser\Node\Stmt\Expression;
 use Rector\NodeTypeResolver\Node\Attribute;
@@ -64,16 +62,16 @@ CODE_SAMPLE
 
         // only key: list($key, ) = each($values);
         if ($listNode->items[0] && $listNode->items[1] === null) {
-            $keyFuncCall = $this->createFuncCallWithNameAndArgs('key', $eachFuncCall->args);
+            $keyFuncCall = $this->createFunction('key', $eachFuncCall->args);
             return new Assign($listNode->items[0]->value, $keyFuncCall);
         }
 
         // only value: list(, $value) = each($values);
         if ($listNode->items[1] && $listNode->items[0] === null) {
-            $nextFuncCall = $this->createFuncCallWithNameAndArgs('next', $eachFuncCall->args);
+            $nextFuncCall = $this->createFunction('next', $eachFuncCall->args);
             $this->addNodeAfterNode($nextFuncCall, $node);
 
-            $currentFuncCall = $this->createFuncCallWithNameAndArgs('current', $eachFuncCall->args);
+            $currentFuncCall = $this->createFunction('current', $eachFuncCall->args);
             return new Assign($listNode->items[1]->value, $currentFuncCall);
         }
 
@@ -82,16 +80,16 @@ CODE_SAMPLE
         // $key = key($values);
         // $value = current($values);
         // next($values); - only inside a loop
-        $currentFuncCall = $this->createFuncCallWithNameAndArgs('current', $eachFuncCall->args);
+        $currentFuncCall = $this->createFunction('current', $eachFuncCall->args);
         $assignCurrentNode = new Assign($listNode->items[1]->value, $currentFuncCall);
         $this->addNodeAfterNode($assignCurrentNode, $node);
 
         if ($this->isInsideDoWhile($node)) {
-            $nextFuncCall = $this->createFuncCallWithNameAndArgs('next', $eachFuncCall->args);
+            $nextFuncCall = $this->createFunction('next', $eachFuncCall->args);
             $this->addNodeAfterNode($nextFuncCall, $node);
         }
 
-        $keyFuncCall = $this->createFuncCallWithNameAndArgs('key', $eachFuncCall->args);
+        $keyFuncCall = $this->createFunction('key', $eachFuncCall->args);
         return new Assign($listNode->items[0]->value, $keyFuncCall);
     }
 
@@ -115,14 +113,6 @@ CODE_SAMPLE
 
         // empty list → cannot handle
         return $listNode->items[0] === null && $listNode->items[1] === null;
-    }
-
-    /**
-     * @param Arg[] $args
-     */
-    private function createFuncCallWithNameAndArgs(string $name, array $args): FuncCall
-    {
-        return new FuncCall(new Name($name), $args);
     }
 
     /**

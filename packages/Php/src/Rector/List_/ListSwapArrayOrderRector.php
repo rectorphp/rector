@@ -3,13 +3,10 @@
 namespace Rector\Php\Rector\List_;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\List_;
-use PhpParser\Node\Name;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -61,7 +58,7 @@ final class ListSwapArrayOrderRector extends AbstractRector
         }
 
         // wrap with array_reverse, to reflect reverse assign order in left
-        $node->expr = new FuncCall(new Name('array_reverse'), [new Arg($node->expr)]);
+        $node->expr = $this->createFunction('array_reverse', [$node->expr]);
 
         return $node;
     }

@@ -8,7 +8,6 @@ use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\Ternary;
-use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\LNumber;
 use Rector\NodeTypeResolver\Node\Attribute;
@@ -73,7 +72,7 @@ CODE_SAMPLE
         }
 
         $conditionNode = new BooleanOr(
-            new FuncCall(new Name('is_array'), [new Arg($countedNode)]),
+            $this->createFunction('is_array', [new Arg($countedNode)]),
             new Instanceof_($countedNode, new FullyQualified('Countable'))
         );
 
