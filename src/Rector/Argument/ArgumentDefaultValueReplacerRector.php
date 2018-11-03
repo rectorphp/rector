@@ -10,7 +10,6 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Node\NodeFactory;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
@@ -27,20 +26,11 @@ final class ArgumentDefaultValueReplacerRector extends AbstractArgumentRector
     private $constExprEvaluator;
 
     /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
-
-    /**
      * @param mixed[] $replacesByMethodAndTypes
      */
-    public function __construct(
-        array $replacesByMethodAndTypes,
-        ConstExprEvaluator $constExprEvaluator,
-        NodeFactory $nodeFactory
-    ) {
+    public function __construct(array $replacesByMethodAndTypes, ConstExprEvaluator $constExprEvaluator)
+    {
         $this->constExprEvaluator = $constExprEvaluator;
-        $this->nodeFactory = $nodeFactory;
         $this->replacesByMethodAndTypes = $replacesByMethodAndTypes;
     }
 
@@ -182,7 +172,7 @@ CODE_SAMPLE
         // class constants → turn string to composite
         if (Strings::contains($value, '::')) {
             [$class, $constant] = explode('::', $value);
-            $classConstantFetchNode = $this->nodeFactory->createClassConstant($class, $constant);
+            $classConstantFetchNode = $this->createClassConstant($class, $constant);
 
             return new Arg($classConstantFetchNode);
         }

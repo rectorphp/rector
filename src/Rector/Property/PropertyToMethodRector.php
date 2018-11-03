@@ -8,7 +8,6 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use Rector\Node\MethodCallNodeFactory;
-use Rector\Node\NodeFactory;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -21,11 +20,6 @@ final class PropertyToMethodRector extends AbstractRector
     private $perClassPropertyToMethods = [];
 
     /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
-
-    /**
      * @var MethodCallNodeFactory
      */
     private $methodCallNodeFactory;
@@ -33,13 +27,9 @@ final class PropertyToMethodRector extends AbstractRector
     /**
      * @param string[][][] $perClassPropertyToMethods
      */
-    public function __construct(
-        array $perClassPropertyToMethods,
-        NodeFactory $nodeFactory,
-        MethodCallNodeFactory $methodCallNodeFactory
-    ) {
+    public function __construct(array $perClassPropertyToMethods, MethodCallNodeFactory $methodCallNodeFactory)
+    {
         $this->perClassPropertyToMethods = $perClassPropertyToMethods;
-        $this->nodeFactory = $nodeFactory;
         $this->methodCallNodeFactory = $methodCallNodeFactory;
     }
 
@@ -127,7 +117,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $args = $this->nodeFactory->createArgs([$assignNode->expr]);
+        $args = $this->createArgs([$assignNode->expr]);
 
         /** @var Variable $variable */
         $variable = $propertyFetchNode->var;
@@ -162,7 +152,7 @@ CODE_SAMPLE
         }
 
         if (is_array($newMethodMatch['get'])) {
-            $args = $this->nodeFactory->createArgs($newMethodMatch['get']['arguments']);
+            $args = $this->createArgs($newMethodMatch['get']['arguments']);
 
             $assignNode->expr = $this->methodCallNodeFactory->createWithVariableMethodNameAndArguments(
                 $propertyFetchNode->var,

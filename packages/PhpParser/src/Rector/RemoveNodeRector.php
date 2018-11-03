@@ -5,7 +5,6 @@ namespace Rector\PhpParser\Rector;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Stmt\Return_;
-use Rector\Node\NodeFactory;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -16,16 +15,6 @@ use Rector\RectorDefinition\RectorDefinition;
  */
 final class RemoveNodeRector extends AbstractRector
 {
-    /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
-
-    public function __construct(NodeFactory $nodeFactory)
-    {
-        $this->nodeFactory = $nodeFactory;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Turns integer return to remove node to constant in NodeVisitor of PHP-Parser', [
@@ -73,7 +62,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $node->expr = $this->nodeFactory->createClassConstant('PhpParser\NodeTraverser', 'REMOVE_NODE');
+        $node->expr = $this->createClassConstant('PhpParser\NodeTraverser', 'REMOVE_NODE');
 
         return $node;
     }

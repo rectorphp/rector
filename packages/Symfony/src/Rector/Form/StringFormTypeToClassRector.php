@@ -5,7 +5,6 @@ namespace Rector\Symfony\Rector\Form;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
-use Rector\Node\NodeFactory;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -22,21 +21,14 @@ final class StringFormTypeToClassRector extends AbstractRector
     private $formBuilderClass;
 
     /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
-
-    /**
      * @var FormTypeStringToTypeProvider
      */
     private $formTypeStringToTypeProvider;
 
     public function __construct(
-        NodeFactory $nodeFactory,
         FormTypeStringToTypeProvider $formTypeStringToTypeProvider,
         string $formBuilderClass = 'Symfony\Component\Form\FormBuilderInterface'
     ) {
-        $this->nodeFactory = $nodeFactory;
         $this->formBuilderClass = $formBuilderClass;
         $this->formTypeStringToTypeProvider = $formTypeStringToTypeProvider;
     }
@@ -104,7 +96,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $node->args[1]->value = $this->nodeFactory->createClassConstantReference($formClass);
+        $node->args[1]->value = $this->createClassConstantReference($formClass);
 
         return $node;
     }

@@ -33,7 +33,7 @@ final class MethodCallNodeFactory
      */
     public function createWithVariableNameAndMethodName(string $variableName, string $methodName): MethodCall
     {
-        $variableNode = $this->nodeFactory->createVariable($variableName);
+        $variableNode = new Variable($variableName);
 
         return $this->builderFactory->methodCall($variableNode, $methodName);
     }

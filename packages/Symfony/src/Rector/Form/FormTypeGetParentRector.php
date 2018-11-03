@@ -4,7 +4,6 @@ namespace Rector\Symfony\Rector\Form;
 
 use PhpParser\Node;
 use PhpParser\Node\Scalar\String_;
-use Rector\Node\NodeFactory;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -24,22 +23,15 @@ final class FormTypeGetParentRector extends AbstractRector
     private $abstractTypeExtensionClass;
 
     /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
-
-    /**
      * @var FormTypeStringToTypeProvider
      */
     private $formTypeStringToTypeProvider;
 
     public function __construct(
-        NodeFactory $nodeFactory,
         FormTypeStringToTypeProvider $formTypeStringToTypeProvider,
         string $abstractTypeClass = 'Symfony\Component\Form\AbstractType',
         string $abstractTypeExtensionClass = 'Symfony\Component\Form\AbstractTypeExtension'
     ) {
-        $this->nodeFactory = $nodeFactory;
         $this->formTypeStringToTypeProvider = $formTypeStringToTypeProvider;
         $this->abstractTypeClass = $abstractTypeClass;
         $this->abstractTypeExtensionClass = $abstractTypeExtensionClass;
@@ -86,7 +78,7 @@ final class FormTypeGetParentRector extends AbstractRector
             return null;
         }
 
-        return $this->nodeFactory->createClassConstantReference($formClass);
+        return $this->createClassConstantReference($formClass);
     }
 
     private function isParentTypeAndMethod(Node $node, string $type, string $method): bool

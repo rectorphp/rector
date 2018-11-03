@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Scalar\String_;
 use Rector\Builder\IdentifierRenamer;
-use Rector\Node\NodeFactory;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -21,15 +20,9 @@ final class AssertIssetToSpecificMethodRector extends AbstractPHPUnitRector
      */
     private $identifierRenamer;
 
-    /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
-
-    public function __construct(IdentifierRenamer $identifierRenamer, NodeFactory $nodeFactory)
+    public function __construct(IdentifierRenamer $identifierRenamer)
     {
         $this->identifierRenamer = $identifierRenamer;
-        $this->nodeFactory = $nodeFactory;
     }
 
     public function getDefinition(): RectorDefinition
@@ -101,7 +94,7 @@ final class AssertIssetToSpecificMethodRector extends AbstractPHPUnitRector
 
         unset($oldArgs[0]);
 
-        $node->args = array_merge($this->nodeFactory->createArgs([
+        $node->args = array_merge($this->createArgs([
             new String_($this->getName($propertyFetchNode)),
             $propertyFetchNode->var,
         ]), $oldArgs);
@@ -118,7 +111,7 @@ final class AssertIssetToSpecificMethodRector extends AbstractPHPUnitRector
 
         unset($oldArgs[0]);
 
-        $node->args = array_merge($this->nodeFactory->createArgs([
+        $node->args = array_merge($this->createArgs([
             $arrayDimFetchNode->dim,
             $arrayDimFetchNode->var,
         ]), $oldArgs);

@@ -4,7 +4,6 @@ namespace Rector\Node;
 
 use PhpParser\BuilderFactory;
 use PhpParser\BuilderHelpers;
-use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
@@ -19,8 +18,6 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\Namespace_;
-use PhpParser\Node\Stmt\TraitUse;
 use Rector\Builder\Class_\VariableInfo;
 use Rector\Exception\NotImplementedException;
 use Rector\NodeTypeResolver\Node\Attribute;
@@ -78,21 +75,11 @@ final class NodeFactory
     }
 
     /**
-     * Creates "use \SomeTrait;"
-     */
-    public function createTraitUse(string $traitName): TraitUse
-    {
-        $traitNameNode = new FullyQualified($traitName);
-
-        return new TraitUse([$traitNameNode]);
-    }
-
-    /**
      * Creates "['item', $variable]"
      *
-     * @param mixed|Node[] ...$items
+     * @param mixed[] $items
      */
-    public function createArray(...$items): Array_
+    public function createArray(array $items): Array_
     {
         $arrayItems = [];
 
@@ -154,22 +141,6 @@ final class NodeFactory
         return new Arg(BuilderHelpers::normalizeValue($argument));
     }
 
-    /**
-     * Creates:
-     * - namespace NamespaceName;
-     */
-    public function createNamespace(string $namespace): Namespace_
-    {
-        return new Namespace_(new Name($namespace));
-    }
-
-    public function createParam(string $name, string $type): Param
-    {
-        return $this->builderFactory->param($name)
-            ->setType(new FullyQualified($type))
-            ->getNode();
-    }
-
     public function createPublicMethod(string $name): ClassMethod
     {
         return $this->builderFactory->method($name)
@@ -186,11 +157,6 @@ final class NodeFactory
         }
 
         return $paramBuild->getNode();
-    }
-
-    public function createVariable(string $name): Variable
-    {
-        return $this->builderFactory->var($name);
     }
 
     public function createTypeName(string $name): Name

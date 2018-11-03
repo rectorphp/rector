@@ -8,7 +8,6 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Scalar\String_;
-use Rector\Node\NodeFactory;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -24,21 +23,14 @@ final class StringToArrayArgumentProcessRector extends AbstractRector
     private $processClass;
 
     /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
-
-    /**
      * @var string
      */
     private $processHelperClass;
 
     public function __construct(
-        NodeFactory $nodeFactory,
         string $processClass = 'Symfony\Component\Process\Process',
         string $processHelperClass = 'Symfony\Component\Console\Helper\ProcessHelper'
     ) {
-        $this->nodeFactory = $nodeFactory;
         $this->processClass = $processClass;
         $this->processHelperClass = $processHelperClass;
     }
@@ -103,7 +95,7 @@ CODE_SAMPLE
         }
 
         $parts = Strings::split($firstArgument->value, '# #');
-        $node->args[$argumentPosition]->value = $this->nodeFactory->createArray(...$parts);
+        $node->args[$argumentPosition]->value = $this->createArray($parts);
 
         return $node;
     }

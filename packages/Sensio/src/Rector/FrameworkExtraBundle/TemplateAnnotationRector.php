@@ -10,7 +10,6 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Node\MethodCallNodeFactory;
-use Rector\Node\NodeFactory;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -36,11 +35,6 @@ final class TemplateAnnotationRector extends AbstractRector
     private $methodCallNodeFactory;
 
     /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
-
-    /**
      * @var BetterNodeFinder
      */
     private $betterNodeFinder;
@@ -54,14 +48,12 @@ final class TemplateAnnotationRector extends AbstractRector
         int $version,
         DocBlockAnalyzer $docBlockAnalyzer,
         MethodCallNodeFactory $methodCallNodeFactory,
-        NodeFactory $nodeFactory,
         BetterNodeFinder $betterNodeFinder,
         TemplateGuesser $templateGuesser
     ) {
         $this->version = $version;
         $this->docBlockAnalyzer = $docBlockAnalyzer;
         $this->methodCallNodeFactory = $methodCallNodeFactory;
-        $this->nodeFactory = $nodeFactory;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->templateGuesser = $templateGuesser;
     }
@@ -142,7 +134,7 @@ CODE_SAMPLE
     {
         $arguments = [$this->resolveTemplateName($classMethodNode)];
         if (! $returnNode) {
-            return $this->nodeFactory->createArgs($arguments);
+            return $this->createArgs($arguments);
         }
 
         if ($returnNode->expr instanceof Array_ && count($returnNode->expr->items)) {
@@ -151,7 +143,7 @@ CODE_SAMPLE
 
         $arguments = array_merge($arguments, $this->resolveArgumentsFromMethodCall($returnNode));
 
-        return $this->nodeFactory->createArgs($arguments);
+        return $this->createArgs($arguments);
     }
 
     private function resolveTemplateName(ClassMethod $classMethodNode): string

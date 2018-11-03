@@ -4,9 +4,11 @@ namespace Rector\Symfony\Rector\HttpKernel;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Node\NodeFactory;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -32,22 +34,15 @@ final class GetRequestRector extends AbstractRector
     private $controllerMethodAnalyzer;
 
     /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
-
-    /**
      * @var BetterNodeFinder
      */
     private $betterNodeFinder;
 
     public function __construct(
         ControllerMethodAnalyzer $controllerMethodAnalyzer,
-        NodeFactory $nodeFactory,
         BetterNodeFinder $betterNodeFinder
     ) {
         $this->controllerMethodAnalyzer = $controllerMethodAnalyzer;
-        $this->nodeFactory = $nodeFactory;
         $this->betterNodeFinder = $betterNodeFinder;
     }
 
@@ -101,13 +96,13 @@ CODE_SAMPLE
         }
 
         if ($this->isGetRequestInAction($node)) {
-            return $this->nodeFactory->createVariable($this->requestVariableAndParamName);
+            return new Variable($this->requestVariableAndParamName);
         }
 
         if ($this->isActionWithGetRequestInBody($node)) {
-            $requestParam = $this->nodeFactory->createParam($this->requestVariableAndParamName, self::REQUEST_CLASS);
-
-            $node->params[] = $requestParam;
+            $node->params[] = new Param(new Variable($this->requestVariableAndParamName), null, new FullyQualified(
+                self::REQUEST_CLASS
+            ));
 
             return $node;
         }
