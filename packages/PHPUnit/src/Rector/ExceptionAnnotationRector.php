@@ -7,7 +7,6 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
@@ -31,18 +30,12 @@ final class ExceptionAnnotationRector extends AbstractPHPUnitRector
     ];
 
     /**
-     * @var MethodCallNodeFactory
-     */
-    private $methodCallNodeFactory;
-
-    /**
      * @var DocBlockAnalyzer
      */
     private $docBlockAnalyzer;
 
-    public function __construct(MethodCallNodeFactory $methodCallNodeFactory, DocBlockAnalyzer $docBlockAnalyzer)
+    public function __construct(DocBlockAnalyzer $docBlockAnalyzer)
     {
-        $this->methodCallNodeFactory = $methodCallNodeFactory;
         $this->docBlockAnalyzer = $docBlockAnalyzer;
     }
 
@@ -118,11 +111,7 @@ CODE_SAMPLE
         $annotationContent = (string) $phpDocTagNode->value;
         $annotationContent = ltrim($annotationContent, '\\'); // this is needed due to BuilderHelpers
 
-        $methodCall = $this->methodCallNodeFactory->createWithVariableNameMethodNameAndArguments(
-            'this',
-            $method,
-            [$annotationContent]
-        );
+        $methodCall = $this->createMethodCall('this', $method, [$annotationContent]);
 
         return new Expression($methodCall);
     }

@@ -5,7 +5,6 @@ namespace Rector\PhpParser\Rector;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
-use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -41,16 +40,6 @@ final class IdentifierRector extends AbstractRector
         'PhpParser\Node\Stmt\Trait_' => ['name'],
         'PhpParser\Node\Stmt\UseUse' => ['alias'],
     ];
-
-    /**
-     * @var MethodCallNodeFactory
-     */
-    private $methodCallNodeFactory;
-
-    public function __construct(MethodCallNodeFactory $methodCallNodeFactory)
-    {
-        $this->methodCallNodeFactory = $methodCallNodeFactory;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -100,7 +89,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            return $this->methodCallNodeFactory->createWithVariableAndMethodName($node, 'toString');
+            return $this->createMethodCall($node, 'toString');
         }
 
         return null;

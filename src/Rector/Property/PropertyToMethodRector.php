@@ -7,7 +7,6 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
-use Rector\Node\MethodCallNodeFactory;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -20,17 +19,11 @@ final class PropertyToMethodRector extends AbstractRector
     private $perClassPropertyToMethods = [];
 
     /**
-     * @var MethodCallNodeFactory
-     */
-    private $methodCallNodeFactory;
-
-    /**
      * @param string[][][] $perClassPropertyToMethods
      */
-    public function __construct(array $perClassPropertyToMethods, MethodCallNodeFactory $methodCallNodeFactory)
+    public function __construct(array $perClassPropertyToMethods)
     {
         $this->perClassPropertyToMethods = $perClassPropertyToMethods;
-        $this->methodCallNodeFactory = $methodCallNodeFactory;
     }
 
     public function getDefinition(): RectorDefinition
@@ -122,11 +115,7 @@ CODE_SAMPLE
         /** @var Variable $variable */
         $variable = $propertyFetchNode->var;
 
-        return $this->methodCallNodeFactory->createWithVariableMethodNameAndArguments(
-            $variable,
-            $newMethodMatch['set'],
-            $args
-        );
+        return $this->createMethodCall($variable, $newMethodMatch['set'], $args);
     }
 
     private function processGetter(Assign $assignNode): ?Node
@@ -141,10 +130,7 @@ CODE_SAMPLE
 
         // simple method name
         if (is_string($newMethodMatch['get'])) {
-            $assignNode->expr = $this->methodCallNodeFactory->createWithVariableAndMethodName(
-                $propertyFetchNode->var,
-                $newMethodMatch['get']
-            );
+            $assignNode->expr = $this->createMethodCall($propertyFetchNode->var, $newMethodMatch['get']);
 
             return $assignNode;
 
@@ -154,7 +140,7 @@ CODE_SAMPLE
         if (is_array($newMethodMatch['get'])) {
             $args = $this->createArgs($newMethodMatch['get']['arguments']);
 
-            $assignNode->expr = $this->methodCallNodeFactory->createWithVariableMethodNameAndArguments(
+            $assignNode->expr = $this->createMethodCall(
                 $propertyFetchNode->var,
                 $newMethodMatch['get']['method'],
                 $args

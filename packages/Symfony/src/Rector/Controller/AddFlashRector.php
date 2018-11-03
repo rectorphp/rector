@@ -4,7 +4,6 @@ namespace Rector\Symfony\Rector\Controller;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
-use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeAnalyzer\ChainMethodCallAnalyzer;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
@@ -19,21 +18,14 @@ final class AddFlashRector extends AbstractRector
     private $controllerClass;
 
     /**
-     * @var MethodCallNodeFactory
-     */
-    private $methodCallNodeFactory;
-
-    /**
      * @var ChainMethodCallAnalyzer
      */
     private $chainMethodCallAnalyzer;
 
     public function __construct(
-        MethodCallNodeFactory $methodCallNodeFactory,
         ChainMethodCallAnalyzer $chainMethodCallAnalyzer,
         string $controllerClass = 'Symfony\Bundle\FrameworkBundle\Controller\Controller'
     ) {
-        $this->methodCallNodeFactory = $methodCallNodeFactory;
         $this->chainMethodCallAnalyzer = $chainMethodCallAnalyzer;
         $this->controllerClass = $controllerClass;
     }
@@ -92,10 +84,6 @@ CODE_SAMPLE
             return null;
         }
 
-        return $this->methodCallNodeFactory->createWithVariableNameMethodNameAndArguments(
-            'this',
-            'addFlash',
-            $node->args
-        );
+        return $this->createMethodCall('this', 'addFlash', $node->args);
     }
 }

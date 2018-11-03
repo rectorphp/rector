@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
-use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -30,11 +29,6 @@ final class TemplateAnnotationRector extends AbstractRector
     private $docBlockAnalyzer;
 
     /**
-     * @var MethodCallNodeFactory
-     */
-    private $methodCallNodeFactory;
-
-    /**
      * @var BetterNodeFinder
      */
     private $betterNodeFinder;
@@ -47,13 +41,11 @@ final class TemplateAnnotationRector extends AbstractRector
     public function __construct(
         int $version,
         DocBlockAnalyzer $docBlockAnalyzer,
-        MethodCallNodeFactory $methodCallNodeFactory,
         BetterNodeFinder $betterNodeFinder,
         TemplateGuesser $templateGuesser
     ) {
         $this->version = $version;
         $this->docBlockAnalyzer = $docBlockAnalyzer;
-        $this->methodCallNodeFactory = $methodCallNodeFactory;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->templateGuesser = $templateGuesser;
     }
@@ -105,11 +97,7 @@ CODE_SAMPLE
 
         // create "$this->render('template.file.twig.html', ['key' => 'value']);" method call
         $renderArguments = $this->resolveRenderArguments($node, $returnNode);
-        $thisRenderMethodCall = $this->methodCallNodeFactory->createWithVariableNameMethodNameAndArguments(
-            'this',
-            'render',
-            $renderArguments
-        );
+        $thisRenderMethodCall = $this->createMethodCall('this', 'render', $renderArguments);
 
         if (! $returnNode) {
             // or add as last statement in the method

@@ -10,6 +10,8 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
@@ -166,5 +168,26 @@ final class NodeFactory
         }
 
         return new FullyQualified($name);
+    }
+
+    /**
+     * @param string|Expr $variable
+     * @param mixed[] $arguments
+     */
+    public function createMethodCall($variable, string $method, array $arguments): MethodCall
+    {
+        if (is_string($variable)) {
+            $variable = new Variable($variable);
+        }
+
+        if ($variable instanceof PropertyFetch) {
+            $variable = new PropertyFetch($variable->var, $variable->name);
+        }
+
+        $methodCallNode = $this->builderFactory->methodCall($variable, $method, $arguments);
+
+        $variable->setAttribute(Attribute::PARENT_NODE, $methodCallNode);
+
+        return $methodCallNode;
     }
 }

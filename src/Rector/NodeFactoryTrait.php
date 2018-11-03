@@ -2,6 +2,7 @@
 
 namespace Rector\Rector;
 
+use PhpParser\BuilderFactory;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
@@ -9,6 +10,8 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Node\NodeFactory;
@@ -22,14 +25,20 @@ trait NodeFactoryTrait
     /**
      * @var NodeFactory
      */
-    public $nodeFactory;
+    private $nodeFactory;
+
+    /**
+     * @var BuilderFactory
+     */
+    private $builderFactory;
 
     /**
      * @required
      */
-    public function autowireNodeFactoryTrait(NodeFactory $nodeFactory): void
+    public function autowireNodeFactoryTrait(NodeFactory $nodeFactory, BuilderFactory $builderFactory): void
     {
         $this->nodeFactory = $nodeFactory;
+        $this->builderFactory = $builderFactory;
     }
 
     public function createClassConstant(string $class, string $constant): ClassConstFetch
@@ -93,5 +102,14 @@ trait NodeFactoryTrait
     protected function createPropertyAssignmentWithExpr(string $propertyName, Expr $rightExprNode): Expression
     {
         return $this->nodeFactory->createPropertyAssignmentWithExpr($propertyName, $rightExprNode);
+    }
+
+    /**
+     * @param string|Expr $variable
+     * @param mixed[] $arguments
+     */
+    protected function createMethodCall($variable, string $method, array $arguments = []): MethodCall
+    {
+        return $this->nodeFactory->createMethodCall($variable, $method, $arguments);
     }
 }

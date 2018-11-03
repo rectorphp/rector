@@ -4,7 +4,6 @@ namespace Rector\Rector\MethodBody;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
-use Rector\Node\MethodCallNodeFactory;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -17,16 +16,10 @@ final class FluentReplaceRector extends AbstractRector
     private $classesToDefluent = [];
 
     /**
-     * @var MethodCallNodeFactory
-     */
-    private $methodCallNodeFactory;
-
-    /**
      * @param string[] $classesToDefluent
      */
-    public function __construct(array $classesToDefluent, MethodCallNodeFactory $methodCallNodeFactory)
+    public function __construct(array $classesToDefluent)
     {
-        $this->methodCallNodeFactory = $methodCallNodeFactory;
         $this->classesToDefluent = $classesToDefluent;
     }
 
@@ -86,10 +79,7 @@ CODE_SAMPLE
 
     private function decoupleMethodCall(MethodCall $outerMethodCallNode, MethodCall $innerMethodCallNode): void
     {
-        $nextMethodCallNode = $this->methodCallNodeFactory->createWithVariableAndMethodName(
-            $innerMethodCallNode->var,
-            $this->getName($outerMethodCallNode)
-        );
+        $nextMethodCallNode = $this->createMethodCall($innerMethodCallNode->var, $this->getName($outerMethodCallNode));
 
         $this->addNodeAfterNode($nextMethodCallNode, $innerMethodCallNode);
     }
