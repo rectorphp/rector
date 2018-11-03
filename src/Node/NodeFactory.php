@@ -77,20 +77,7 @@ final class NodeFactory
         $arrayItems = [];
 
         foreach ($items as $item) {
-            if ($item instanceof Variable) {
-                $arrayItems[] = new ArrayItem($item);
-            } elseif ($item instanceof Identifier) {
-                $string = new String_($item->toString());
-                $arrayItems[] = new ArrayItem($string);
-            } elseif (is_scalar($item)) {
-                $arrayItems[] = new ArrayItem(BuilderHelpers::normalizeValue($item));
-            } else {
-                throw new NotImplementedException(sprintf(
-                    'Not implemented yet. Go to "%s()" and add check for "%s" node.',
-                    __METHOD__,
-                    get_class($item)
-                ));
-            }
+            $arrayItems[] = $this->createArrayItem($item);
         }
 
         return new Array_($arrayItems);
@@ -112,7 +99,7 @@ final class NodeFactory
      */
     public function createPropertyAssignment(string $propertyName): Expression
     {
-        $variable = new Variable($propertyName, ['name' => $propertyName]);
+        $variable = new Variable($propertyName);
 
         return $this->createPropertyAssignmentWithExpr($propertyName, $variable);
     }
@@ -192,5 +179,30 @@ final class NodeFactory
         }
 
         return $this->builderFactory->propertyFetch($variable, $property);
+    }
+
+    /**
+     * @param mixed $item
+     */
+    private function createArrayItem($item): ArrayItem
+    {
+        if ($item instanceof Variable) {
+            return new ArrayItem($item);
+        }
+
+        if ($item instanceof Identifier) {
+            $string = new String_($item->toString());
+            return new ArrayItem($string);
+        }
+
+        if (is_scalar($item)) {
+            return new ArrayItem(BuilderHelpers::normalizeValue($item));
+        }
+
+        throw new NotImplementedException(sprintf(
+            'Not implemented yet. Go to "%s()" and add check for "%s" node.',
+            __METHOD__,
+            get_class($item)
+        ));
     }
 }
