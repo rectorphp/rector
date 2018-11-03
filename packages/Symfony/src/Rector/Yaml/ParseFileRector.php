@@ -5,9 +5,7 @@ namespace Rector\Symfony\Rector\Yaml;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Name;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\Constant\ConstantStringType;
 use Rector\NodeTypeResolver\Node\Attribute;
@@ -51,7 +49,7 @@ final class ParseFileRector extends AbstractRector
             return null;
         }
 
-        $fileGetContentsFunCallNode = new FuncCall(new Name('file_get_contents'), [$node->args[0]]);
+        $fileGetContentsFunCallNode = $this->createFunction('file_get_contents', [$node->args[0]]);
         $node->args[0] = new Arg($fileGetContentsFunCallNode);
 
         return $node;

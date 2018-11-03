@@ -8,7 +8,6 @@ use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
@@ -30,11 +29,6 @@ final class ForeachToInArrayRector extends AbstractRector
      * @var ConstFetchAnalyzer
      */
     private $constFetchAnalyzer;
-
-    /**
-     * @var Return_
-     */
-    private $returnNodeToRemove;
 
     public function __construct(NodeFactory $nodeFactory, ConstFetchAnalyzer $constFetchAnalyzer)
     {
@@ -108,8 +102,8 @@ CODE_SAMPLE
 
         $inArrayFunctionCall = $this->createInArrayFunction($condition, $ifCondition, $foreachNode);
 
-        $this->returnNodeToRemove = $foreachNode->getAttribute(Attribute::NEXT_NODE);
-        $this->removeNode($this->returnNodeToRemove);
+        $returnNodeToRemove = $foreachNode->getAttribute(Attribute::NEXT_NODE);
+        $this->removeNode($returnNodeToRemove);
 
         /** @var Return_ $returnNode */
         $returnNode = $firstNodeInsideForeach->stmts[0];
@@ -176,9 +170,9 @@ CODE_SAMPLE
         $arguments = $this->nodeFactory->createArgs([$condition, $foreachNode->expr]);
 
         if ($ifCondition instanceof Identical) {
-            $arguments[] = $this->nodeFactory->createArg($this->nodeFactory->createTrueConstant());
+            $arguments[] = $this->nodeFactory->createArg($this->createTrue());
         }
 
-        return new FuncCall(new Name('in_array'), $arguments);
+        return $this->createFunction('in_array', $arguments);
     }
 }

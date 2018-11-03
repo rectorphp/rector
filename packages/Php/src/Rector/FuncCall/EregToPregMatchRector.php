@@ -8,7 +8,6 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\Concat;
-use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
@@ -109,7 +108,7 @@ final class EregToPregMatchRector extends AbstractRector
 
     private function processVariablePattern(FuncCall $funcCallNode, Variable $patternNode, string $functionName): void
     {
-        $pregQuotePatternNode = new FuncCall(new Name('preg_quote'), [
+        $pregQuotePatternNode = $this->createFunction('preg_quote', [
             new Arg($patternNode),
             new Arg(new String_('#')),
         ]);
@@ -155,9 +154,9 @@ final class EregToPregMatchRector extends AbstractRector
     private function createTernaryWithStrlenOfFirstMatch(FuncCall $funcCallNode): Ternary
     {
         $arrayDimFetch = new ArrayDimFetch($funcCallNode->args[2]->value, new LNumber(0));
-        $strlenFuncCall = new FuncCall(new Name('strlen'), [new Arg($arrayDimFetch)]);
+        $strlenFuncCall = $this->createFunction('strlen', [$arrayDimFetch]);
 
-        return new Ternary($funcCallNode, $strlenFuncCall, new ConstFetch(new Name('false')));
+        return new Ternary($funcCallNode, $strlenFuncCall, $this->createFalse());
     }
 
     private function isCaseInsensitiveFunction(string $functionName): bool

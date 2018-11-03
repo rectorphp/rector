@@ -7,7 +7,6 @@ use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\List_;
-use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\While_;
 use Rector\Rector\AbstractRector;
@@ -85,7 +84,7 @@ CODE_SAMPLE
         $listNode = $assignNode->var;
 
         if (count($listNode->items) === 1) { // just one argument - the key
-            $foreachedExpr = new FuncCall(new Name('array_keys'), [$eachFuncCall->args[0]]);
+            $foreachedExpr = $this->createFunction('array_keys', [$eachFuncCall->args[0]]);
         } else {
             $foreachedExpr = $eachFuncCall->args[0]->value;
         }

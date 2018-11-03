@@ -11,7 +11,6 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
@@ -53,22 +52,6 @@ final class NodeFactory
         $this->builderFactory = $builderFactory;
         $this->propertyFetchNodeFactory = $propertyFetchNodeFactory;
         $this->typeAnalyzer = $typeAnalyzer;
-    }
-
-    /**
-     * Creates "null"
-     */
-    public function createNullConstant(): ConstFetch
-    {
-        return BuilderHelpers::normalizeValue(null);
-    }
-
-    /**
-     * Creates "true"
-     */
-    public function createTrueConstant(): ConstFetch
-    {
-        return BuilderHelpers::normalizeValue(true);
     }
 
     /**
@@ -168,9 +151,7 @@ final class NodeFactory
      */
     public function createArg($argument): Arg
     {
-        $value = BuilderHelpers::normalizeValue($argument);
-
-        return new Arg($value);
+        return new Arg(BuilderHelpers::normalizeValue($argument));
     }
 
     /**
@@ -179,8 +160,7 @@ final class NodeFactory
      */
     public function createNamespace(string $namespace): Namespace_
     {
-        return $this->builderFactory->namespace($namespace)
-            ->getNode();
+        return new Namespace_(new Name($namespace));
     }
 
     public function createParam(string $name, string $type): Param

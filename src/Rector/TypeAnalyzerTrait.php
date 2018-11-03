@@ -2,9 +2,7 @@
 
 namespace Rector\Rector;
 
-use Countable;
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Cast;
 use PhpParser\Node\Expr\ClassConstFetch;
@@ -13,14 +11,8 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Analyser\Scope;
-use PHPStan\Type\Accessory\HasOffsetType;
-use PHPStan\Type\ArrayType;
-use PHPStan\Type\BooleanType;
-use PHPStan\Type\IntersectionType;
-use PHPStan\Type\ObjectType;
-use PHPStan\Type\StringType;
 use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\NodeTypeAnalyzer;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
 /**
@@ -35,11 +27,24 @@ trait TypeAnalyzerTrait
     private $nodeTypeResolver;
 
     /**
+     * @var NodeTypeAnalyzer
+     */
+    private $nodeTypeAnalyzer;
+
+    /**
      * @required
      */
     public function setNodeTypeResolver(NodeTypeResolver $nodeTypeResolver): void
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
+    }
+
+    /**
+     * @required
+     */
+    public function setNodeTypeAnalyzer(NodeTypeAnalyzer $nodeTypeAnalyzer): void
+    {
+        $this->nodeTypeAnalyzer = $nodeTypeAnalyzer;
     }
 
     public function isType(Node $node, string $type): bool
@@ -68,57 +73,22 @@ trait TypeAnalyzerTrait
 
     public function isStringType(Node $node): bool
     {
-        if (! $node instanceof Expr) {
-            return false;
-        }
+        return $this->nodeTypeAnalyzer->isStringType($node);
+    }
 
-        /** @var Scope $nodeScope */
-        $nodeScope = $node->getAttribute(Attribute::SCOPE);
-        $nodeType = $nodeScope->getType($node);
-
-        return $nodeType instanceof StringType;
+    public function isNullableType(Node $node): bool
+    {
+        return $this->nodeTypeAnalyzer->isNullableType($node);
     }
 
     public function isBoolType(Node $node): bool
     {
-        if (! $node instanceof Expr) {
-            return false;
-        }
-
-        /** @var Scope $nodeScope */
-        $nodeScope = $node->getAttribute(Attribute::SCOPE);
-        $nodeType = $nodeScope->getType($node);
-
-        return $nodeType instanceof BooleanType;
+        return $this->nodeTypeAnalyzer->isBoolType($node);
     }
 
     public function isCountableType(Node $node): bool
     {
-        if (! $node instanceof Expr) {
-            return false;
-        }
-
-        /** @var Scope $nodeScope */
-        $nodeScope = $node->getAttribute(Attribute::SCOPE);
-        $nodeType = $nodeScope->getType($node);
-
-        if ($nodeType instanceof ObjectType) {
-            return is_a($nodeType->getClassName(), Countable::class, true);
-        }
-
-        if ($nodeType instanceof IntersectionType) {
-            foreach ($nodeType->getTypes() as $intersectionNodeType) {
-                if ($intersectionNodeType instanceof ArrayType || $intersectionNodeType instanceof HasOffsetType) {
-                    continue;
-                }
-
-                return false;
-            }
-
-            return true;
-        }
-
-        return $nodeType instanceof ArrayType;
+        return $this->nodeTypeAnalyzer->isCountableType($node);
     }
 
     /**
@@ -126,6 +96,7 @@ trait TypeAnalyzerTrait
      */
     public function getTypes(Node $node): array
     {
+        // @todo should be resolved by NodeTypeResolver internally
         if ($node instanceof ClassMethod || $node instanceof ClassConst) {
             return $this->nodeTypeResolver->resolve($node->getAttribute(Attribute::CLASS_NODE));
         }

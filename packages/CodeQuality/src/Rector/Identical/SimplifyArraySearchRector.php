@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Name;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -49,7 +48,7 @@ final class SimplifyArraySearchRector extends AbstractRector
 
         [$arraySearchFuncCallNode, $boolConstFetchNode] = $match;
 
-        $inArrayFuncCall = new FuncCall(new Name('in_array'), [
+        $inArrayFuncCall = $this->createFunction('in_array', [
             $arraySearchFuncCallNode->args[0],
             $arraySearchFuncCallNode->args[1],
         ]);

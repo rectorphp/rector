@@ -3,11 +3,8 @@
 namespace Rector\Php\Rector\List_;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\List_;
-use PhpParser\Node\Name;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -48,7 +45,7 @@ final class ListSplitStringRector extends AbstractRector
             return null;
         }
 
-        $node->expr = new FuncCall(new Name('str_split'), [new Arg($node->expr)]);
+        $node->expr = $this->createFunction('str_split', [$node->expr]);
 
         return $node;
     }
