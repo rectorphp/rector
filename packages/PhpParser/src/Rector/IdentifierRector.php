@@ -86,32 +86,23 @@ CODE_SAMPLE
             return null;
         }
 
-        $nodeTypes = $this->getTypes($node);
-        $properties = $this->matchTypeToProperties($nodeTypes);
-        if (! $this->isNames($node, $properties)) {
-            return null;
-        }
-
-        $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
-        if ($parentNode instanceof MethodCall) {
-            return null;
-        }
-
-        return $this->methodCallNodeFactory->createWithVariableAndMethodName($node, 'toString');
-    }
-
-    /**
-     * @param string[] $nodeTypes
-     * @return string[]
-     */
-    private function matchTypeToProperties(array $nodeTypes): array
-    {
-        foreach ($nodeTypes as $nodeType) {
-            if (isset($this->typeToPropertiesMap[$nodeType])) {
-                return $this->typeToPropertiesMap[$nodeType];
+        foreach ($this->typeToPropertiesMap as $type => $properties) {
+            if (! $this->isType($node, $type)) {
+                continue;
             }
+
+            if (! $this->isNames($node, $properties)) {
+                continue;
+            }
+
+            $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
+            if ($parentNode instanceof MethodCall) {
+                continue;
+            }
+
+            return $this->methodCallNodeFactory->createWithVariableAndMethodName($node, 'toString');
         }
 
-        return [];
+        return null;
     }
 }

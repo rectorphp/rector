@@ -4,13 +4,9 @@ namespace Rector\Rector\Typehint;
 
 use PhpParser\BuilderHelpers;
 use PhpParser\Node;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -97,51 +93,22 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        /** @var ClassLike $classNode */
-        $classNode = $node->getAttribute(Attribute::CLASS_NODE);
+        foreach ($this->typehintForArgumentByMethodAndClass as $type => $methodToArgumentToTypes) {
+            if (! $this->isType($node, $type)) {
+                continue;
+            }
 
-        $classNodeTypes = $this->getTypes($classNode);
-        if (! $this->isTypeMatch($classNodeTypes)) {
-            return null;
-        }
-
-        $classNodeTypes = $this->getTypes($node);
-
-        $matchingTypes = $this->getMatchingTypesForClassNode($classNodeTypes);
-
-        /** @var Identifier $identifierNode */
-        $identifierNode = $node->name;
-
-        $methodName = $identifierNode->toString();
-
-        foreach ($matchingTypes as $matchingType) {
-            $configuration = $this->typehintForArgumentByMethodAndClass[$matchingType];
-
-            foreach ($configuration as $method => $parametersToTypehints) {
-                if ($methodName === $method) {
-                    return $this->processClassMethodNodeWithTypehints($node, $parametersToTypehints);
+            foreach ($methodToArgumentToTypes as $method => $argumentToTypes) {
+                if (! $this->isName($node, $method)) {
+                    continue;
                 }
+
+                $this->processClassMethodNodeWithTypehints($node, $argumentToTypes);
+                continue 2;
             }
         }
 
-        return $node;
-    }
-
-    /**
-     * @param string[] $types
-     */
-    private function isTypeMatch(array $types): bool
-    {
-        return (bool) $this->getMatchingTypesForClassNode($types);
-    }
-
-    /**
-     * @param string[] $types
-     * @return string[]
-     */
-    private function getMatchingTypesForClassNode(array $types): array
-    {
-        return array_intersect($types, $this->getClasses());
+        return null;
     }
 
     /**
@@ -150,35 +117,20 @@ CODE_SAMPLE
     private function processClassMethodNodeWithTypehints(
         ClassMethod $classMethodNode,
         array $parametersToTypehints
-    ): ClassMethod {
+    ): void {
         /** @var Param $param */
         foreach ($classMethodNode->params as $param) {
-            /** @var Variable $variableNode */
-            $variableNode = $param->var;
+            foreach ($parametersToTypehints as $parameter => $typehint) {
+                if (! $this->isName($param, $parameter)) {
+                    continue;
+                }
 
-            $parameterName = $this->getName($variableNode);
-
-            if (! isset($parametersToTypehints[$parameterName])) {
-                continue;
-            }
-
-            $newTypehint = $parametersToTypehints[$parameterName];
-
-            if ($this->typeAnalyzer->isBuiltinType($newTypehint)) {
-                $param->type = BuilderHelpers::normalizeType($newTypehint);
-            } else {
-                $param->type = new FullyQualified($newTypehint);
+                if ($this->typeAnalyzer->isBuiltinType($typehint)) {
+                    $param->type = BuilderHelpers::normalizeType($typehint);
+                } else {
+                    $param->type = new FullyQualified($typehint);
+                }
             }
         }
-
-        return $classMethodNode;
-    }
-
-    /**
-     * @return string[]
-     */
-    private function getClasses(): array
-    {
-        return array_keys($this->typehintForArgumentByMethodAndClass);
     }
 }

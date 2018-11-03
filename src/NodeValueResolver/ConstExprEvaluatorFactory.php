@@ -12,13 +12,13 @@ final class ConstExprEvaluatorFactory
 {
     public function create(): ConstExprEvaluator
     {
-        $fallbackEvaluator = function (Expr $expr) {
+        return new ConstExprEvaluator(function (Expr $expr): ?string {
             if ($expr instanceof ClassConstFetch) {
                 return $this->resolveClassConstFetch($expr);
             }
-        };
 
-        return new ConstExprEvaluator($fallbackEvaluator);
+            return null;
+        });
     }
 
     private function resolveClassConstFetch(ClassConstFetch $classConstFetchNode): string
