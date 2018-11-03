@@ -10,7 +10,6 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
 use Rector\Builder\IdentifierRenamer;
-use Rector\Node\NodeFactory;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -38,15 +37,9 @@ final class AssertPropertyExistsRector extends AbstractPHPUnitRector
      */
     private $identifierRenamer;
 
-    /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
-
-    public function __construct(IdentifierRenamer $identifierRenamer, NodeFactory $nodeFactory)
+    public function __construct(IdentifierRenamer $identifierRenamer)
     {
         $this->identifierRenamer = $identifierRenamer;
-        $this->nodeFactory = $nodeFactory;
     }
 
     public function getDefinition(): RectorDefinition
@@ -118,10 +111,7 @@ final class AssertPropertyExistsRector extends AbstractPHPUnitRector
 
         unset($node->args[0]);
 
-        $node->args = array_merge($this->nodeFactory->createArgs([
-            $secondArgument->value->value,
-            $secondArg,
-        ]), $node->args);
+        $node->args = array_merge($this->createArgs([$secondArgument->value->value, $secondArg]), $node->args);
 
         $this->identifierRenamer->renameNodeWithMap($node, $map);
 

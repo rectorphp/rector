@@ -4,7 +4,6 @@ namespace Rector\PhpParser\Rector;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
-use Rector\Node\MethodCallNodeFactory;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -14,16 +13,6 @@ use Rector\RectorDefinition\RectorDefinition;
  */
 final class UseWithAliasRector extends AbstractRector
 {
-    /**
-     * @var MethodCallNodeFactory
-     */
-    private $methodCallNodeFactory;
-
-    public function __construct(MethodCallNodeFactory $methodCallNodeFactory)
-    {
-        $this->methodCallNodeFactory = $methodCallNodeFactory;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -56,11 +45,8 @@ final class UseWithAliasRector extends AbstractRector
             return null;
         }
 
-        $getAliasMethodCall = $this->methodCallNodeFactory->createWithVariableAndMethodName(
-            $node->var,
-            'getAlias'
-        );
+        $getAliasMethodCall = $this->createMethodCall($node->var, 'getAlias');
 
-        return $this->methodCallNodeFactory->createWithVariableAndMethodName($getAliasMethodCall, 'toString');
+        return $this->createMethodCall($getAliasMethodCall, 'toString');
     }
 }

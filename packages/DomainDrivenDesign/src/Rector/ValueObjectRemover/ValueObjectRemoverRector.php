@@ -73,7 +73,7 @@ final class ValueObjectRemoverRector extends AbstractValueObjectRemoverRector
             return $node->args[0];
         }
 
-        if ($node instanceof Property && $this->processPropertyCandidate($node)) {
+        if ($node instanceof Property && $this->isTypes($node, array_keys($this->valueObjectsToSimpleTypes))) {
             return $this->refactorProperty($node);
         }
 
@@ -99,16 +99,7 @@ final class ValueObjectRemoverRector extends AbstractValueObjectRemoverRector
             return false;
         }
 
-        $classNodeTypes = $this->nodeTypeResolver->resolve($newNode->class);
-
-        return (bool) array_intersect($classNodeTypes, $this->getValueObjects());
-    }
-
-    private function processPropertyCandidate(Property $propertyNode): bool
-    {
-        $propertyNodeTypes = $this->nodeTypeResolver->resolve($propertyNode);
-
-        return (bool) array_intersect($propertyNodeTypes, $this->getValueObjects());
+        return $this->isTypes($newNode->class, array_keys($this->valueObjectsToSimpleTypes));
     }
 
     private function refactorProperty(Property $propertyNode): Property

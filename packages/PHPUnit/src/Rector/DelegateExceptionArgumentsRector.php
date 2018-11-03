@@ -6,7 +6,6 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
-use Rector\Node\MethodCallNodeFactory;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -20,16 +19,6 @@ final class DelegateExceptionArgumentsRector extends AbstractPHPUnitRector
         'setExpectedException' => 'expectExceptionMessage',
         'setExpectedExceptionRegExp' => 'expectExceptionMessageRegExp',
     ];
-
-    /**
-     * @var MethodCallNodeFactory
-     */
-    private $methodCallNodeFactory;
-
-    public function __construct(MethodCallNodeFactory $methodCallNodeFactory)
-    {
-        $this->methodCallNodeFactory = $methodCallNodeFactory;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -91,11 +80,7 @@ CODE_SAMPLE
 
     private function addNewMethodCall(MethodCall $methodCallNode, string $methodName, Arg $argNode): void
     {
-        $expectExceptionMessageMethodCall = $this->methodCallNodeFactory->createWithVariableNameMethodNameAndArguments(
-            'this',
-            $methodName,
-            [$argNode]
-        );
+        $expectExceptionMessageMethodCall = $this->createMethodCall('this', $methodName, [$argNode]);
 
         $this->addNodeAfterNode($expectExceptionMessageMethodCall, $methodCallNode);
     }

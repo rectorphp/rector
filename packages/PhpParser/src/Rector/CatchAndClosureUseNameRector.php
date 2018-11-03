@@ -6,7 +6,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
-use Rector\Node\PropertyFetchNodeFactory;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -14,16 +13,6 @@ use Rector\RectorDefinition\RectorDefinition;
 
 final class CatchAndClosureUseNameRector extends AbstractRector
 {
-    /**
-     * @var PropertyFetchNodeFactory
-     */
-    private $propertyFetchNodeFactory;
-
-    public function __construct(PropertyFetchNodeFactory $propertyFetchNodeFactory)
-    {
-        $this->propertyFetchNodeFactory = $propertyFetchNodeFactory;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Turns `$catchNode->var` to its new `name` property in php-parser', [
@@ -60,11 +49,7 @@ final class CatchAndClosureUseNameRector extends AbstractRector
         /** @var Variable $variableNode */
         $variableNode = $node->var;
 
-        $node->var = $this->propertyFetchNodeFactory->createWithVariableNameAndPropertyName(
-            $this->getName($variableNode),
-            'var'
-        );
-
+        $node->var = $this->createPropertyFetch($this->getName($variableNode), 'var');
         $node->name = new Identifier('name');
 
         return $node;

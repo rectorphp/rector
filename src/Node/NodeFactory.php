@@ -4,13 +4,14 @@ namespace Rector\Node;
 
 use PhpParser\BuilderFactory;
 use PhpParser\BuilderHelpers;
-use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
@@ -19,8 +20,6 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\Namespace_;
-use PhpParser\Node\Stmt\TraitUse;
 use Rector\Builder\Class_\VariableInfo;
 use Rector\Exception\NotImplementedException;
 use Rector\NodeTypeResolver\Node\Attribute;
@@ -35,22 +34,13 @@ final class NodeFactory
     private $builderFactory;
 
     /**
-     * @var PropertyFetchNodeFactory
-     */
-    private $propertyFetchNodeFactory;
-
-    /**
      * @var TypeAnalyzer
      */
     private $typeAnalyzer;
 
-    public function __construct(
-        BuilderFactory $builderFactory,
-        PropertyFetchNodeFactory $propertyFetchNodeFactory,
-        TypeAnalyzer $typeAnalyzer
-    ) {
+    public function __construct(BuilderFactory $builderFactory, TypeAnalyzer $typeAnalyzer)
+    {
         $this->builderFactory = $builderFactory;
-        $this->propertyFetchNodeFactory = $propertyFetchNodeFactory;
         $this->typeAnalyzer = $typeAnalyzer;
     }
 
@@ -78,39 +68,16 @@ final class NodeFactory
     }
 
     /**
-     * Creates "use \SomeTrait;"
-     */
-    public function createTraitUse(string $traitName): TraitUse
-    {
-        $traitNameNode = new FullyQualified($traitName);
-
-        return new TraitUse([$traitNameNode]);
-    }
-
-    /**
      * Creates "['item', $variable]"
      *
-     * @param mixed|Node[] ...$items
+     * @param mixed[] $items
      */
-    public function createArray(...$items): Array_
+    public function createArray(array $items): Array_
     {
         $arrayItems = [];
 
         foreach ($items as $item) {
-            if ($item instanceof Variable) {
-                $arrayItems[] = new ArrayItem($item);
-            } elseif ($item instanceof Identifier) {
-                $string = new String_($item->toString());
-                $arrayItems[] = new ArrayItem($string);
-            } elseif (is_scalar($item)) {
-                $arrayItems[] = new ArrayItem(BuilderHelpers::normalizeValue($item));
-            } else {
-                throw new NotImplementedException(sprintf(
-                    'Not implemented yet. Go to "%s()" and add check for "%s" node.',
-                    __METHOD__,
-                    get_class($item)
-                ));
-            }
+            $arrayItems[] = $this->createArrayItem($item);
         }
 
         return new Array_($arrayItems);
@@ -132,14 +99,14 @@ final class NodeFactory
      */
     public function createPropertyAssignment(string $propertyName): Expression
     {
-        $variable = new Variable($propertyName, ['name' => $propertyName]);
+        $variable = new Variable($propertyName);
 
         return $this->createPropertyAssignmentWithExpr($propertyName, $variable);
     }
 
     public function createPropertyAssignmentWithExpr(string $propertyName, Expr $rightExprNode): Expression
     {
-        $leftExprNode = $this->propertyFetchNodeFactory->createLocalWithPropertyName($propertyName);
+        $leftExprNode = $this->createPropertyFetch('this', $propertyName);
         $assign = new Assign($leftExprNode, $rightExprNode);
         return new Expression($assign);
     }
@@ -152,22 +119,6 @@ final class NodeFactory
     public function createArg($argument): Arg
     {
         return new Arg(BuilderHelpers::normalizeValue($argument));
-    }
-
-    /**
-     * Creates:
-     * - namespace NamespaceName;
-     */
-    public function createNamespace(string $namespace): Namespace_
-    {
-        return new Namespace_(new Name($namespace));
-    }
-
-    public function createParam(string $name, string $type): Param
-    {
-        return $this->builderFactory->param($name)
-            ->setType(new FullyQualified($type))
-            ->getNode();
     }
 
     public function createPublicMethod(string $name): ClassMethod
@@ -188,11 +139,6 @@ final class NodeFactory
         return $paramBuild->getNode();
     }
 
-    public function createVariable(string $name): Variable
-    {
-        return $this->builderFactory->var($name);
-    }
-
     public function createTypeName(string $name): Name
     {
         if ($this->typeAnalyzer->isPhpReservedType($name)) {
@@ -200,5 +146,63 @@ final class NodeFactory
         }
 
         return new FullyQualified($name);
+    }
+
+    /**
+     * @param string|Expr $variable
+     * @param mixed[] $arguments
+     */
+    public function createMethodCall($variable, string $method, array $arguments): MethodCall
+    {
+        if (is_string($variable)) {
+            $variable = new Variable($variable);
+        }
+
+        if ($variable instanceof PropertyFetch) {
+            $variable = new PropertyFetch($variable->var, $variable->name);
+        }
+
+        $methodCallNode = $this->builderFactory->methodCall($variable, $method, $arguments);
+
+        $variable->setAttribute(Attribute::PARENT_NODE, $methodCallNode);
+
+        return $methodCallNode;
+    }
+
+    /**
+     * @param string|Expr $variable
+     */
+    public function createPropertyFetch($variable, string $property): PropertyFetch
+    {
+        if (is_string($variable)) {
+            $variable = new Variable($variable);
+        }
+
+        return $this->builderFactory->propertyFetch($variable, $property);
+    }
+
+    /**
+     * @param mixed $item
+     */
+    private function createArrayItem($item): ArrayItem
+    {
+        if ($item instanceof Variable) {
+            return new ArrayItem($item);
+        }
+
+        if ($item instanceof Identifier) {
+            $string = new String_($item->toString());
+            return new ArrayItem($string);
+        }
+
+        if (is_scalar($item)) {
+            return new ArrayItem(BuilderHelpers::normalizeValue($item));
+        }
+
+        throw new NotImplementedException(sprintf(
+            'Not implemented yet. Go to "%s()" and add check for "%s" node.',
+            __METHOD__,
+            get_class($item)
+        ));
     }
 }

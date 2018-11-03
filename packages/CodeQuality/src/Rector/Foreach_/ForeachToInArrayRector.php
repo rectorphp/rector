@@ -11,8 +11,6 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
-use Rector\Node\NodeFactory;
-use Rector\NodeAnalyzer\ConstFetchAnalyzer;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -20,22 +18,6 @@ use Rector\RectorDefinition\RectorDefinition;
 
 final class ForeachToInArrayRector extends AbstractRector
 {
-    /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
-
-    /**
-     * @var ConstFetchAnalyzer
-     */
-    private $constFetchAnalyzer;
-
-    public function __construct(NodeFactory $nodeFactory, ConstFetchAnalyzer $constFetchAnalyzer)
-    {
-        $this->nodeFactory = $nodeFactory;
-        $this->constFetchAnalyzer = $constFetchAnalyzer;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -108,7 +90,7 @@ CODE_SAMPLE
         /** @var Return_ $returnNode */
         $returnNode = $firstNodeInsideForeach->stmts[0];
 
-        $negativeReturn = $this->constFetchAnalyzer->isFalse($returnNode->expr);
+        $negativeReturn = $this->isFalse($returnNode->expr);
 
         return new Return_($negativeReturn ? new BooleanNot($inArrayFunctionCall) : $inArrayFunctionCall);
     }
@@ -126,7 +108,7 @@ CODE_SAMPLE
 
         $returnExpression = $nextNode->expr;
 
-        return $returnExpression !== null && $this->constFetchAnalyzer->isBool($returnExpression);
+        return $returnExpression !== null && $this->isBool($returnExpression);
     }
 
     /**
@@ -158,7 +140,7 @@ CODE_SAMPLE
             return false;
         }
 
-        return $this->constFetchAnalyzer->isBool($ifStatment->expr);
+        return $this->isBool($ifStatment->expr);
     }
 
     /**
@@ -167,10 +149,10 @@ CODE_SAMPLE
      */
     private function createInArrayFunction($condition, $ifCondition, Foreach_ $foreachNode): FuncCall
     {
-        $arguments = $this->nodeFactory->createArgs([$condition, $foreachNode->expr]);
+        $arguments = $this->createArgs([$condition, $foreachNode->expr]);
 
         if ($ifCondition instanceof Identical) {
-            $arguments[] = $this->nodeFactory->createArg($this->createTrue());
+            $arguments[] = $this->createArg($this->createTrue());
         }
 
         return $this->createFunction('in_array', $arguments);

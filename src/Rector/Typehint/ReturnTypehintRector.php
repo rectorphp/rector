@@ -6,10 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Php\TypeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
@@ -82,54 +79,21 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        /** @var ClassLike $classNode */
-        $classNode = $node->getAttribute(Attribute::CLASS_NODE);
-        $classNodeTypes = $this->getTypes($classNode);
-        if (! $classNodeTypes) {
-            return null;
-        }
-        if (! $this->isTypeMatch($classNodeTypes)) {
-            return null;
-        }
-        /** @var Class_ $node */
-        $classNode = $node->getAttribute(Attribute::CLASS_NODE);
-        $classNodeTypes = $this->getTypes($classNode);
+        foreach ($this->typehintForMethodByClass as $type => $methodsToTypehints) {
+            if (! $this->isType($node, $type)) {
+                continue;
+            }
 
-        $matchingTypes = $this->getMatchingTypesForClassNode($classNodeTypes);
-
-        /** @var Identifier $identifierNode */
-        $identifierNode = $node->name;
-
-        $methodName = $identifierNode->toString();
-
-        foreach ($matchingTypes as $matchingType) {
-            $configuration = $this->typehintForMethodByClass[$matchingType];
-
-            foreach ($configuration as $method => $methodReturnTypehint) {
-                if ($methodName === $method) {
-                    return $this->processClassMethodNodeWithTypehints($node, $methodReturnTypehint);
+            foreach ($methodsToTypehints as $method => $typehint) {
+                if (! $this->isName($node, $method)) {
+                    continue;
                 }
+
+                return $this->processClassMethodNodeWithTypehints($node, $typehint);
             }
         }
 
-        return $node;
-    }
-
-    /**
-     * @param string[] $types
-     */
-    private function isTypeMatch(array $types): bool
-    {
-        return (bool) $this->getMatchingTypesForClassNode($types);
-    }
-
-    /**
-     * @param string[] $types
-     * @return string[]
-     */
-    private function getMatchingTypesForClassNode(array $types): array
-    {
-        return array_intersect($types, $this->getClasses());
+        return null;
     }
 
     private function processClassMethodNodeWithTypehints(
@@ -147,7 +111,6 @@ CODE_SAMPLE
             return $classMethodNode;
         }
 
-        // @todo possibly decouple to smth like IdentifierRenamer?
         if ($this->typeAnalyzer->isPhpReservedType($newTypehint)) {
             $classMethodNode->returnType = new Identifier($newTypehint);
         } elseif ($this->typeAnalyzer->isNullableType($newTypehint)) {
@@ -157,13 +120,5 @@ CODE_SAMPLE
         }
 
         return $classMethodNode;
-    }
-
-    /**
-     * @return string[]
-     */
-    private function getClasses(): array
-    {
-        return array_keys($this->typehintForMethodByClass);
     }
 }

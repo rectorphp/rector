@@ -8,8 +8,8 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Namespace_;
 use Rector\Builder\StatementGlue;
-use Rector\Node\NodeFactory;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
@@ -33,11 +33,6 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
     private $excludedClasses = [];
 
     /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
-
-    /**
      * @var StatementGlue
      */
     private $statementGlue;
@@ -47,12 +42,10 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
      * @param string[] $excludedClasses
      */
     public function __construct(
-        NodeFactory $nodeFactory,
         StatementGlue $statementGlue,
         array $pseudoNamespacePrefixes,
         array $excludedClasses = []
     ) {
-        $this->nodeFactory = $nodeFactory;
         $this->statementGlue = $statementGlue;
         $this->pseudoNamespacePrefixes = $pseudoNamespacePrefixes;
         $this->excludedClasses = $excludedClasses;
@@ -131,7 +124,7 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
     public function afterTraverse(array $nodes): array
     {
         if ($this->newNamespace) {
-            $namespaceNode = $this->nodeFactory->createNamespace($this->newNamespace);
+            $namespaceNode = new Namespace_(new Name($this->newNamespace));
 
             foreach ($nodes as $key => $node) {
                 if ($node instanceof Class_) {

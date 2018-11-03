@@ -4,14 +4,8 @@ namespace Rector\Rector;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
-use PhpParser\Node\Expr\Cast;
-use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Stmt\ClassConst;
-use PhpParser\Node\Stmt\ClassMethod;
-use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\NodeTypeResolver\NodeTypeAnalyzer;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
@@ -34,16 +28,11 @@ trait TypeAnalyzerTrait
     /**
      * @required
      */
-    public function setNodeTypeResolver(NodeTypeResolver $nodeTypeResolver): void
-    {
+    public function autowireTypeAnalyzerDependencies(
+        NodeTypeResolver $nodeTypeResolver,
+        NodeTypeAnalyzer $nodeTypeAnalyzer
+    ): void {
         $this->nodeTypeResolver = $nodeTypeResolver;
-    }
-
-    /**
-     * @required
-     */
-    public function setNodeTypeAnalyzer(NodeTypeAnalyzer $nodeTypeAnalyzer): void
-    {
         $this->nodeTypeAnalyzer = $nodeTypeAnalyzer;
     }
 
@@ -97,20 +86,8 @@ trait TypeAnalyzerTrait
     public function getTypes(Node $node): array
     {
         // @todo should be resolved by NodeTypeResolver internally
-        if ($node instanceof ClassMethod || $node instanceof ClassConst) {
-            return $this->nodeTypeResolver->resolve($node->getAttribute(Attribute::CLASS_NODE));
-        }
-
         if ($node instanceof MethodCall || $node instanceof PropertyFetch || $node instanceof ArrayDimFetch) {
             return $this->nodeTypeResolver->resolve($node->var);
-        }
-
-        if ($node instanceof StaticCall || $node instanceof ClassConstFetch) {
-            return $this->nodeTypeResolver->resolve($node->class);
-        }
-
-        if ($node instanceof Cast) {
-            return $this->nodeTypeResolver->resolve($node->expr);
         }
 
         return $this->nodeTypeResolver->resolve($node);

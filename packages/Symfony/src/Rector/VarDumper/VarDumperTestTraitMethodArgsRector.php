@@ -6,7 +6,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
-use Rector\Node\NodeFactory;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -18,16 +17,8 @@ final class VarDumperTestTraitMethodArgsRector extends AbstractRector
      */
     private $traitName;
 
-    /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
-
-    public function __construct(
-        NodeFactory $nodeFactory,
-        string $traitName = 'Symfony\Component\VarDumper\Test\VarDumperTestTrait'
-    ) {
-        $this->nodeFactory = $nodeFactory;
+    public function __construct(string $traitName = 'Symfony\Component\VarDumper\Test\VarDumperTestTrait')
+    {
         $this->traitName = $traitName;
     }
 
@@ -75,7 +66,7 @@ final class VarDumperTestTraitMethodArgsRector extends AbstractRector
 
         if ($node->args[2]->value instanceof String_) {
             $node->args[3] = $node->args[2];
-            $node->args[2] = $this->nodeFactory->createArg($this->createNull());
+            $node->args[2] = $this->createArg($this->createNull());
 
             return $node;
         }

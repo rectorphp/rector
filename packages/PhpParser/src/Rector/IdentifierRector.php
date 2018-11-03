@@ -5,7 +5,6 @@ namespace Rector\PhpParser\Rector;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
-use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -42,16 +41,6 @@ final class IdentifierRector extends AbstractRector
         'PhpParser\Node\Stmt\UseUse' => ['alias'],
     ];
 
-    /**
-     * @var MethodCallNodeFactory
-     */
-    private $methodCallNodeFactory;
-
-    public function __construct(MethodCallNodeFactory $methodCallNodeFactory)
-    {
-        $this->methodCallNodeFactory = $methodCallNodeFactory;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Turns node string names to Identifier object in php-parser', [
@@ -86,32 +75,23 @@ CODE_SAMPLE
             return null;
         }
 
-        $nodeTypes = $this->getTypes($node);
-        $properties = $this->matchTypeToProperties($nodeTypes);
-        if (! $this->isNames($node, $properties)) {
-            return null;
-        }
-
-        $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
-        if ($parentNode instanceof MethodCall) {
-            return null;
-        }
-
-        return $this->methodCallNodeFactory->createWithVariableAndMethodName($node, 'toString');
-    }
-
-    /**
-     * @param string[] $nodeTypes
-     * @return string[]
-     */
-    private function matchTypeToProperties(array $nodeTypes): array
-    {
-        foreach ($nodeTypes as $nodeType) {
-            if (isset($this->typeToPropertiesMap[$nodeType])) {
-                return $this->typeToPropertiesMap[$nodeType];
+        foreach ($this->typeToPropertiesMap as $type => $properties) {
+            if (! $this->isType($node, $type)) {
+                continue;
             }
+
+            if (! $this->isNames($node, $properties)) {
+                continue;
+            }
+
+            $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
+            if ($parentNode instanceof MethodCall) {
+                continue;
+            }
+
+            return $this->createMethodCall($node, 'toString');
         }
 
-        return [];
+        return null;
     }
 }

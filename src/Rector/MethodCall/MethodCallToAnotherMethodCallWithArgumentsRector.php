@@ -5,7 +5,6 @@ namespace Rector\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
-use Rector\Node\NodeFactory;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -18,16 +17,10 @@ final class MethodCallToAnotherMethodCallWithArgumentsRector extends AbstractRec
     private $oldMethodsToNewMethodsWithArgsByType = [];
 
     /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
-
-    /**
      * @param mixed[][][] $oldMethodsToNewMethodsWithArgsByType
      */
-    public function __construct(NodeFactory $nodeFactory, array $oldMethodsToNewMethodsWithArgsByType)
+    public function __construct(array $oldMethodsToNewMethodsWithArgsByType)
     {
-        $this->nodeFactory = $nodeFactory;
         $this->oldMethodsToNewMethodsWithArgsByType = $oldMethodsToNewMethodsWithArgsByType;
     }
 
@@ -78,7 +71,7 @@ CODE_SAMPLE
                 }
 
                 $node->name = new Identifier($newMethodsWithArgs[0]);
-                $node->args = $this->nodeFactory->createArgs($newMethodsWithArgs[1]);
+                $node->args = $this->createArgs($newMethodsWithArgs[1]);
 
                 return $node;
             }

@@ -4,7 +4,12 @@ namespace Rector\NodeTypeResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Cast;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Stmt\ClassConst;
+use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Broker\Broker;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverAwareInterface;
@@ -58,6 +63,18 @@ final class NodeTypeResolver
      */
     public function resolve(Node $node): array
     {
+        if ($node instanceof ClassMethod || $node instanceof ClassConst) {
+            return $this->resolve($node->getAttribute(Attribute::CLASS_NODE));
+        }
+
+        if ($node instanceof StaticCall || $node instanceof ClassConstFetch) {
+            return $this->resolve($node->class);
+        }
+
+        if ($node instanceof Cast) {
+            return $this->resolve($node->expr);
+        }
+
         $types = $this->resolveFirstTypes($node);
         if ($types === []) {
             return $types;

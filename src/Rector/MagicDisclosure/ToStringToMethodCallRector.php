@@ -6,7 +6,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Cast\String_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
-use Rector\Node\MethodCallNodeFactory;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -19,19 +18,13 @@ final class ToStringToMethodCallRector extends AbstractRector
     private $methodNamesByType = [];
 
     /**
-     * @var MethodCallNodeFactory
-     */
-    private $methodCallNodeFactory;
-
-    /**
      * Type to method call()
      *
      * @param string[] $methodNamesByType
      */
-    public function __construct(array $methodNamesByType, MethodCallNodeFactory $methodCallNodeFactory)
+    public function __construct(array $methodNamesByType)
     {
         $this->methodNamesByType = $methodNamesByType;
-        $this->methodCallNodeFactory = $methodCallNodeFactory;
     }
 
     public function getDefinition(): RectorDefinition
@@ -105,7 +98,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            return $this->methodCallNodeFactory->createWithVariableAndMethodName($stringNode->expr, $methodName);
+            return $this->createMethodCall($stringNode->expr, $methodName);
         }
 
         return null;

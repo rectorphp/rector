@@ -5,10 +5,8 @@ namespace Rector\Rector\MagicDisclosure;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Isset_;
-use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Unset_;
-use Rector\Node\MethodCallNodeFactory;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -21,19 +19,13 @@ final class UnsetAndIssetToMethodCallRector extends AbstractRector
     private $typeToMethodCalls = [];
 
     /**
-     * @var MethodCallNodeFactory
-     */
-    private $methodCallNodeFactory;
-
-    /**
      * Type to method call()
      *
      * @param string[][] $typeToMethodCalls
      */
-    public function __construct(array $typeToMethodCalls, MethodCallNodeFactory $methodCallNodeFactory)
+    public function __construct(array $typeToMethodCalls)
     {
         $this->typeToMethodCalls = $typeToMethodCalls;
-        $this->methodCallNodeFactory = $methodCallNodeFactory;
     }
 
     public function getDefinition(): RectorDefinition
@@ -115,15 +107,6 @@ CODE_SAMPLE
         return null;
     }
 
-    private function createMethodCall(ArrayDimFetch $arrayDimFetchNode, string $method): MethodCall
-    {
-        return $this->methodCallNodeFactory->createWithVariableMethodNameAndArguments(
-            $arrayDimFetchNode->var,
-            $method,
-            [$arrayDimFetchNode->dim]
-        );
-    }
-
     /**
      * @param string[] $methodsNamesByType
      */
@@ -137,7 +120,11 @@ CODE_SAMPLE
                 return null;
             }
 
-            return $this->createMethodCall($arrayDimFetchNode, $methodsNamesByType['isset']);
+            return $this->createMethodCall(
+                $arrayDimFetchNode->var,
+                $methodsNamesByType['isset'],
+                [$arrayDimFetchNode->dim]
+            );
         }
 
         if ($node instanceof Unset_) {
@@ -145,7 +132,11 @@ CODE_SAMPLE
                 return null;
             }
 
-            $methodCall = $this->createMethodCall($arrayDimFetchNode, $methodsNamesByType['unset']);
+            $methodCall = $this->createMethodCall(
+                $arrayDimFetchNode->var,
+                $methodsNamesByType['unset'],
+                [$arrayDimFetchNode->dim]
+            );
             // wrap it, so add ";" in the end of line
             return new Expression($methodCall);
         }

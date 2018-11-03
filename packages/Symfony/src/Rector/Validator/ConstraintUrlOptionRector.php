@@ -5,7 +5,6 @@ namespace Rector\Symfony\Rector\Validator;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Scalar\String_;
-use Rector\Node\NodeFactory;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -20,16 +19,6 @@ final class ConstraintUrlOptionRector extends AbstractRector
      * @var string
      */
     private const URL_CONSTRAINT_CLASS = 'Symfony\Component\Validator\Constraints\Url';
-
-    /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
-
-    public function __construct(NodeFactory $nodeFactory)
-    {
-        $this->nodeFactory = $nodeFactory;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -67,6 +56,6 @@ final class ConstraintUrlOptionRector extends AbstractRector
             return null;
         }
 
-        return $this->nodeFactory->createClassConstant(self::URL_CONSTRAINT_CLASS, 'CHECK_DNS_TYPE_ANY');
+        return $this->createClassConstant(self::URL_CONSTRAINT_CLASS, 'CHECK_DNS_TYPE_ANY');
     }
 }

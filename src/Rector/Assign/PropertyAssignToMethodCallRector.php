@@ -6,7 +6,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
-use Rector\Node\MethodCallNodeFactory;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -19,18 +18,10 @@ final class PropertyAssignToMethodCallRector extends AbstractRector
     private $oldPropertiesToNewMethodCallsByType = [];
 
     /**
-     * @var MethodCallNodeFactory
-     */
-    private $methodCallNodeFactory;
-
-    /**
      * @param string[][] $oldPropertiesToNewMethodCallsByType
      */
-    public function __construct(
-        MethodCallNodeFactory $methodCallNodeFactory,
-        array $oldPropertiesToNewMethodCallsByType
-    ) {
-        $this->methodCallNodeFactory = $methodCallNodeFactory;
+    public function __construct(array $oldPropertiesToNewMethodCallsByType)
+    {
         $this->oldPropertiesToNewMethodCallsByType = $oldPropertiesToNewMethodCallsByType;
     }
 
@@ -92,11 +83,7 @@ CODE_SAMPLE
                     continue;
                 }
 
-                return $this->methodCallNodeFactory->createWithVariableMethodNameAndArguments(
-                    $propertyNode,
-                    $newMethodCall,
-                    [$node->expr]
-                );
+                return $this->createMethodCall($propertyNode, $newMethodCall, [$node->expr]);
             }
         }
 

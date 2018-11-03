@@ -4,7 +4,6 @@ namespace Rector\Symfony\Rector\DependencyInjection;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
-use Rector\Node\NodeFactory;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -12,13 +11,14 @@ use Rector\RectorDefinition\RectorDefinition;
 final class ContainerBuilderCompileEnvArgumentRector extends AbstractRector
 {
     /**
-     * @var NodeFactory
+     * @var string
      */
-    private $nodeFactory;
+    private $containerBuilderClass;
 
-    public function __construct(NodeFactory $nodeFactory)
-    {
-        $this->nodeFactory = $nodeFactory;
+    public function __construct(
+        string $containerBuilderClass = 'Symfony\Component\DependencyInjection\ContainerBuilder'
+    ) {
+        $this->containerBuilderClass = $containerBuilderClass;
     }
 
     public function getDefinition(): RectorDefinition
@@ -47,7 +47,7 @@ final class ContainerBuilderCompileEnvArgumentRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isType($node, 'Symfony\Component\DependencyInjection\ContainerBuilder')) {
+        if (! $this->isType($node, $this->containerBuilderClass)) {
             return null;
         }
 
@@ -59,7 +59,7 @@ final class ContainerBuilderCompileEnvArgumentRector extends AbstractRector
             return null;
         }
 
-        $node->args = $this->nodeFactory->createArgs([true]);
+        $node->args = $this->createArgs([$this->createTrue()]);
 
         return $node;
     }

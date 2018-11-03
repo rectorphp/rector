@@ -7,7 +7,6 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
-use Rector\Node\MethodCallNodeFactory;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
@@ -26,23 +25,14 @@ final class GetAndSetToMethodCallRector extends AbstractRector
     private $propertyFetchAnalyzer;
 
     /**
-     * @var MethodCallNodeFactory
-     */
-    private $methodCallNodeFactory;
-
-    /**
      * Type to method call()
      *
      * @param string[][] $typeToMethodCalls
      */
-    public function __construct(
-        array $typeToMethodCalls,
-        PropertyFetchAnalyzer $propertyFetchAnalyzer,
-        MethodCallNodeFactory $methodCallNodeFactory
-    ) {
+    public function __construct(array $typeToMethodCalls, PropertyFetchAnalyzer $propertyFetchAnalyzer)
+    {
         $this->typeToMethodCalls = $typeToMethodCalls;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
-        $this->methodCallNodeFactory = $methodCallNodeFactory;
     }
 
     public function getDefinition(): RectorDefinition
@@ -120,11 +110,7 @@ CODE_SAMPLE
         /** @var Variable $variableNode */
         $variableNode = $propertyFetchNode->var;
 
-        return $this->methodCallNodeFactory->createWithVariableMethodNameAndArguments(
-            $variableNode,
-            $method,
-            [$this->getName($propertyFetchNode)]
-        );
+        return $this->createMethodCall($variableNode, $method, [$this->getName($propertyFetchNode)]);
     }
 
     private function createMethodCallNodeFromAssignNode(
@@ -135,11 +121,7 @@ CODE_SAMPLE
         /** @var Variable $variableNode */
         $variableNode = $propertyFetchNode->var;
 
-        return $this->methodCallNodeFactory->createWithVariableMethodNameAndArguments(
-            $variableNode,
-            $method,
-            [$this->getName($propertyFetchNode), $node]
-        );
+        return $this->createMethodCall($variableNode, $method, [$this->getName($propertyFetchNode), $node]);
     }
 
     private function processMagicGet(Assign $assignNode): ?Node

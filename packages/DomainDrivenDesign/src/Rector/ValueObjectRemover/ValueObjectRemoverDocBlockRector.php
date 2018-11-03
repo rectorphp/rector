@@ -72,7 +72,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node instanceof Property && $this->isPropertyCandidate($node)) {
+        if ($node instanceof Property && $this->isTypes($node, array_keys($this->valueObjectsToSimpleTypes))) {
             $this->refactorProperty($node);
             return $node;
         }
@@ -88,13 +88,6 @@ CODE_SAMPLE
         }
 
         return null;
-    }
-
-    private function isPropertyCandidate(Property $propertyNode): bool
-    {
-        $propertyNodeTypes = $this->nodeTypeResolver->resolve($propertyNode);
-
-        return (bool) array_intersect($propertyNodeTypes, $this->getValueObjects());
     }
 
     private function refactorProperty(Property $propertyNode): void

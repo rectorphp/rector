@@ -12,7 +12,6 @@ use Rector\Bridge\Contract\DoctrineEntityAndRepositoryMapperInterface;
 use Rector\Exception\Bridge\RectorProviderException;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Naming\PropertyNaming;
-use Rector\Node\PropertyFetchNodeFactory;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -21,11 +20,6 @@ use function Safe\sprintf;
 
 final class ServiceLocatorToDIRector extends AbstractRector
 {
-    /**
-     * @var PropertyFetchNodeFactory
-     */
-    private $propertyFetchNodeFactory;
-
     /**
      * @var DoctrineEntityAndRepositoryMapperInterface
      */
@@ -37,11 +31,9 @@ final class ServiceLocatorToDIRector extends AbstractRector
     private $propertyNaming;
 
     public function __construct(
-        PropertyFetchNodeFactory $propertyFetchNodeFactory,
         DoctrineEntityAndRepositoryMapperInterface $doctrineEntityAndRepositoryMapper,
         PropertyNaming $propertyNaming
     ) {
-        $this->propertyFetchNodeFactory = $propertyFetchNodeFactory;
         $this->doctrineEntityAndRepositoryMapper = $doctrineEntityAndRepositoryMapper;
         $this->propertyNaming = $propertyNaming;
     }
@@ -138,9 +130,7 @@ CODE_SAMPLE
             $this->propertyNaming->fqnToVariableName($repositoryFqn)
         );
 
-        return $this->propertyFetchNodeFactory->createLocalWithPropertyName(
-            $this->propertyNaming->fqnToVariableName($repositoryFqn)
-        );
+        return $this->createPropertyFetch('this', $this->propertyNaming->fqnToVariableName($repositoryFqn));
     }
 
     private function repositoryFqn(MethodCall $methodCallNode): string

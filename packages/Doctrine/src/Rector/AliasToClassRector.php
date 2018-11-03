@@ -5,7 +5,6 @@ namespace Rector\Doctrine\Rector;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
-use Rector\Node\NodeFactory;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -19,17 +18,11 @@ final class AliasToClassRector extends AbstractRector
     private $aliasesToNamespaces = [];
 
     /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
-
-    /**
      * @param string[] $aliasesToNamespaces
      */
-    public function __construct(array $aliasesToNamespaces, NodeFactory $nodeFactory)
+    public function __construct(array $aliasesToNamespaces)
     {
         $this->aliasesToNamespaces = $aliasesToNamespaces;
-        $this->nodeFactory = $nodeFactory;
     }
 
     public function getDefinition(): RectorDefinition
@@ -80,7 +73,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $node->args[0]->value = $this->nodeFactory->createClassConstantReference(
+        $node->args[0]->value = $this->createClassConstantReference(
             $this->convertAliasToFqn($node->args[0]->value->value)
         );
 

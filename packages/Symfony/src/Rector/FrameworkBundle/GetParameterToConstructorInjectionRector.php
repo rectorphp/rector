@@ -6,7 +6,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\Naming\PropertyNaming;
-use Rector\Node\PropertyFetchNodeFactory;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -24,18 +23,11 @@ final class GetParameterToConstructorInjectionRector extends AbstractRector
      */
     private $propertyNaming;
 
-    /**
-     * @var PropertyFetchNodeFactory
-     */
-    private $propertyFetchNodeFactory;
-
     public function __construct(
         PropertyNaming $propertyNaming,
-        PropertyFetchNodeFactory $propertyFetchNodeFactory,
         string $controllerClass = 'Symfony\Bundle\FrameworkBundle\Controller\Controller'
     ) {
         $this->propertyNaming = $propertyNaming;
-        $this->propertyFetchNodeFactory = $propertyFetchNodeFactory;
         $this->controllerClass = $controllerClass;
     }
 
@@ -108,6 +100,6 @@ CODE_SAMPLE
             $propertyName
         );
 
-        return $this->propertyFetchNodeFactory->createLocalWithPropertyName($propertyName);
+        return $this->createPropertyFetch('this', $propertyName);
     }
 }

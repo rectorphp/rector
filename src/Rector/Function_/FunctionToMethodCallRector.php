@@ -6,7 +6,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
-use Rector\Node\MethodCallNodeFactory;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -19,17 +18,11 @@ final class FunctionToMethodCallRector extends AbstractRector
     private $functionToMethodCall = [];
 
     /**
-     * @var MethodCallNodeFactory
-     */
-    private $methodCallNodeFactory;
-
-    /**
      * @param string[] $functionToMethodCall e.g. ["view" => ["this", "render"]]
      */
-    public function __construct(array $functionToMethodCall, MethodCallNodeFactory $methodCallNodeFactory)
+    public function __construct(array $functionToMethodCall)
     {
         $this->functionToMethodCall = $functionToMethodCall;
-        $this->methodCallNodeFactory = $methodCallNodeFactory;
     }
 
     public function getDefinition(): RectorDefinition
@@ -74,13 +67,6 @@ final class FunctionToMethodCallRector extends AbstractRector
 
         [$variableName, $methodName] = $this->functionToMethodCall[$functionName];
 
-        $methodCallNode = $this->methodCallNodeFactory->createWithVariableNameAndMethodName(
-            $variableName,
-            $methodName
-        );
-
-        $methodCallNode->args = $node->args;
-
-        return $methodCallNode;
+        return $this->createMethodCall($variableName, $methodName, $node->args);
     }
 }

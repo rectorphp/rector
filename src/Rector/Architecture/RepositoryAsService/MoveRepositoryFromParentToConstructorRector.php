@@ -13,7 +13,6 @@ use Rector\Builder\Class_\VariableInfo;
 use Rector\Builder\ConstructorMethodBuilder;
 use Rector\Builder\PropertyBuilder;
 use Rector\Exception\Bridge\RectorProviderException;
-use Rector\Node\NodeFactory;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
@@ -43,11 +42,6 @@ final class MoveRepositoryFromParentToConstructorRector extends AbstractRector
     private $constructorMethodBuilder;
 
     /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
-
-    /**
      * @var DoctrineEntityAndRepositoryMapperInterface
      */
     private $doctrineEntityAndRepositoryMapper;
@@ -60,7 +54,6 @@ final class MoveRepositoryFromParentToConstructorRector extends AbstractRector
     public function __construct(
         PropertyBuilder $propertyBuilder,
         ConstructorMethodBuilder $constructorMethodBuilder,
-        NodeFactory $nodeFactory,
         DoctrineEntityAndRepositoryMapperInterface $doctrineEntityAndRepositoryMapper,
         BuilderFactory $builderFactory,
         string $entityRepositoryClass = 'Doctrine\ORM\EntityRepository',
@@ -68,7 +61,6 @@ final class MoveRepositoryFromParentToConstructorRector extends AbstractRector
     ) {
         $this->propertyBuilder = $propertyBuilder;
         $this->constructorMethodBuilder = $constructorMethodBuilder;
-        $this->nodeFactory = $nodeFactory;
         $this->doctrineEntityAndRepositoryMapper = $doctrineEntityAndRepositoryMapper;
         $this->builderFactory = $builderFactory;
         $this->entityRepositoryClass = $entityRepositoryClass;
@@ -177,7 +169,7 @@ CODE_SAMPLE
             ));
         }
 
-        $entityClassConstantReferenceNode = $this->nodeFactory->createClassConstantReference($entityClassName);
+        $entityClassConstantReferenceNode = $this->createClassConstantReference($entityClassName);
 
         $getRepositoryMethodCallNode = $this->builderFactory->methodCall(
             new Variable('entityManager'),
@@ -185,6 +177,6 @@ CODE_SAMPLE
             [$entityClassConstantReferenceNode]
         );
 
-        return $this->nodeFactory->createPropertyAssignmentWithExpr('repository', $getRepositoryMethodCallNode);
+        return $this->createPropertyAssignmentWithExpr('repository', $getRepositoryMethodCallNode);
     }
 }
