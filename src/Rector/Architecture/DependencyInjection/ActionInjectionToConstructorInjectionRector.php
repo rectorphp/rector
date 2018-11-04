@@ -9,8 +9,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Bridge\Contract\AnalyzedApplicationContainerInterface;
 use Rector\Configuration\Rector\Architecture\DependencyInjection\VariablesToPropertyFetchCollection;
-use Rector\PhpParser\Node\Builder\ConstructorMethodBuilder;
-use Rector\PhpParser\Node\Builder\PropertyBuilder;
 use Rector\PhpParser\Node\Builder\VariableInfo;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -18,16 +16,6 @@ use Rector\RectorDefinition\RectorDefinition;
 
 final class ActionInjectionToConstructorInjectionRector extends AbstractRector
 {
-    /**
-     * @var PropertyBuilder
-     */
-    private $propertyBuilder;
-
-    /**
-     * @var ConstructorMethodBuilder
-     */
-    private $constructorMethodBuilder;
-
     /**
      * @var VariablesToPropertyFetchCollection
      */
@@ -39,13 +27,9 @@ final class ActionInjectionToConstructorInjectionRector extends AbstractRector
     private $analyzedApplicationContainer;
 
     public function __construct(
-        PropertyBuilder $propertyBuilder,
-        ConstructorMethodBuilder $constructorMethodBuilder,
         VariablesToPropertyFetchCollection $variablesToPropertyFetchCollection,
         AnalyzedApplicationContainerInterface $analyzedApplicationContainer
     ) {
-        $this->propertyBuilder = $propertyBuilder;
-        $this->constructorMethodBuilder = $constructorMethodBuilder;
         $this->variablesToPropertyFetchCollection = $variablesToPropertyFetchCollection;
         $this->analyzedApplicationContainer = $analyzedApplicationContainer;
     }
@@ -122,7 +106,7 @@ CODE_SAMPLE
             $paramNodeTypes = $this->getTypes($paramNode);
 
             $variableInfo = new VariableInfo($this->getName($paramNode->var), $paramNodeTypes);
-            $this->addConstructorDependencyToClassNode($classNode, $variableInfo);
+            $this->addConstructorDependency($classNode, $variableInfo);
 
             // remove arguments
             unset($classMethodNode->params[$key]);
@@ -151,14 +135,5 @@ CODE_SAMPLE
 
         /** @var string $typehint */
         return $this->analyzedApplicationContainer->hasService($typehint);
-    }
-
-    private function addConstructorDependencyToClassNode(Class_ $classNode, VariableInfo $variableInfo): void
-    {
-        // add property
-        $this->propertyBuilder->addPropertyToClass($classNode, $variableInfo);
-
-        // pass via constructor
-        $this->constructorMethodBuilder->addSimplePropertyAssignToClass($classNode, $variableInfo);
     }
 }

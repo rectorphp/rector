@@ -7,34 +7,26 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\NodeVisitorAbstract;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\PhpParser\Node\Builder\ClassPropertyCollector;
-use Rector\PhpParser\Node\Builder\ConstructorMethodBuilder;
-use Rector\PhpParser\Node\Builder\PropertyBuilder;
+use Rector\PhpParser\Node\Maintainer\ClassDependencyMaintainer;
 
 final class ConstructorInjectionNodeVisitor extends NodeVisitorAbstract
 {
-    /**
-     * @var ConstructorMethodBuilder
-     */
-    private $constructorMethodBuilder;
-
-    /**
-     * @var PropertyBuilder
-     */
-    private $propertyBuilder;
-
     /**
      * @var ClassPropertyCollector
      */
     private $classPropertyCollector;
 
+    /**
+     * @var ClassDependencyMaintainer
+     */
+    private $classDependencyMaintainer;
+
     public function __construct(
-        ConstructorMethodBuilder $constructorMethodBuilder,
-        PropertyBuilder $propertyBuilder,
-        ClassPropertyCollector $classPropertyCollector
+        ClassPropertyCollector $classPropertyCollector,
+        ClassDependencyMaintainer $classDependencyMaintainer
     ) {
-        $this->constructorMethodBuilder = $constructorMethodBuilder;
-        $this->propertyBuilder = $propertyBuilder;
         $this->classPropertyCollector = $classPropertyCollector;
+        $this->classDependencyMaintainer = $classDependencyMaintainer;
     }
 
     public function enterNode(Node $node): ?Node
@@ -55,9 +47,8 @@ final class ConstructorInjectionNodeVisitor extends NodeVisitorAbstract
             return $classNode;
         }
 
-        foreach ($propertiesForClass as $property) {
-            $this->constructorMethodBuilder->addSimplePropertyAssignToClass($classNode, $property);
-            $this->propertyBuilder->addPropertyToClass($classNode, $property);
+        foreach ($propertiesForClass as $propertyInfo) {
+            $this->classDependencyMaintainer->addConstructorDependency($classNode, $propertyInfo);
         }
 
         return $classNode;
