@@ -54,7 +54,8 @@ script:
           cd laravel-dir
           ../rector-dir/vendor/bin/rector
 
-          ../rector-dir/vendor/bin/rector process src --level code-quality
+          # --hide-autoload-errors due to skipped dev deps and mixes tests in /src
+          ../rector-dir/vendor/bin/rector process src --level code-quality --hide-autoload-errors
       fi
 
 after_script:
