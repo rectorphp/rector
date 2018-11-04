@@ -10,6 +10,9 @@ matrix:
           env: COVERAGE=true
         - php: 7.2
           env: STANDALONE=true
+    allow_failures:
+        - php: 7.2
+          env: STANDALONE=true
 
 install:
     - composer update $COMPOSER_FLAGS
