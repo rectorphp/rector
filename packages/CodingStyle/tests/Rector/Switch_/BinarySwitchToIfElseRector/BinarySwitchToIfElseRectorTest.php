@@ -1,14 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace Rector\CodeQuality\Tests\Rector\Switch_\SimplifyBinarySwitchRector;
+namespace Rector\CodingStyle\Tests\Rector\Switch_\BinarySwitchToIfElseRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
- * @covers \Rector\CodeQuality\Rector\Switch_\SimplifyBinarySwitchRector
+ * @covers \Rector\CodingStyle\Rector\Switch_\BinarySwitchToIfElseRector
  */
-final class SimplifyBinarySwitchRectorTest extends AbstractRectorTestCase
+final class BinarySwitchToIfElseRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()

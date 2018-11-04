@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\CodeQuality\Rector\Switch_;
+namespace Rector\CodingStyle\Rector\Switch_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\Equal;
@@ -15,7 +15,7 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
-final class SimplifyBinarySwitchRector extends AbstractRector
+final class BinarySwitchToIfElseRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition
     {
