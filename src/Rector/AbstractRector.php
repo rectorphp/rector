@@ -5,9 +5,9 @@ namespace Rector\Rector;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\NodeVisitorAbstract;
-use Rector\Builder\ExpressionAdder;
-use Rector\Builder\PropertyAdder;
 use Rector\Contract\Rector\PhpRectorInterface;
+use Rector\PhpParser\Node\Builder\ExpressionAdder;
+use Rector\PhpParser\Node\Builder\PropertyAdder;
 
 abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorInterface
 {

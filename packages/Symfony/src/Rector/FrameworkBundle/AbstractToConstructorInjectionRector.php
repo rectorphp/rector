@@ -8,9 +8,9 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use Rector\Bridge\Contract\AnalyzedApplicationContainerInterface;
-use Rector\Builder\Class_\ClassPropertyCollector;
 use Rector\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\PhpParser\Node\Builder\ClassPropertyCollector;
 use Rector\Rector\AbstractRector;
 
 abstract class AbstractToConstructorInjectionRector extends AbstractRector

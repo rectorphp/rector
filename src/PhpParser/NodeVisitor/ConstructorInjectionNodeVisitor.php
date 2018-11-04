@@ -5,10 +5,10 @@ namespace Rector\PhpParser\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\NodeVisitorAbstract;
-use Rector\Builder\Class_\ClassPropertyCollector;
-use Rector\Builder\ConstructorMethodBuilder;
-use Rector\Builder\PropertyBuilder;
 use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\PhpParser\Node\Builder\ClassPropertyCollector;
+use Rector\PhpParser\Node\Builder\ConstructorMethodBuilder;
+use Rector\PhpParser\Node\Builder\PropertyBuilder;
 
 final class ConstructorInjectionNodeVisitor extends NodeVisitorAbstract
 {

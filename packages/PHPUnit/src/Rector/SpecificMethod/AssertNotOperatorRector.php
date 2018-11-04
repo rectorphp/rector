@@ -7,7 +7,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
-use Rector\Builder\IdentifierRenamer;
+use Rector\PhpParser\Node\Builder\IdentifierRenamer;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Builder;
+namespace Rector\PhpParser\Node\Builder;
 
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\StaticCall;
@@ -10,7 +10,6 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use Rector\Builder\Class_\VariableInfo;
 use Rector\NodeTypeResolver\Application\ClassNodeCollector;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\PhpParser\Node\NodeFactory;

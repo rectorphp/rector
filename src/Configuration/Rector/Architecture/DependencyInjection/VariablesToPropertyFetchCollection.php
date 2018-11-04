@@ -2,7 +2,7 @@
 
 namespace Rector\Configuration\Rector\Architecture\DependencyInjection;
 
-use Rector\Builder\Class_\VariableInfo;
+use Rector\PhpParser\Node\Builder\VariableInfo;
 
 final class VariablesToPropertyFetchCollection
 {

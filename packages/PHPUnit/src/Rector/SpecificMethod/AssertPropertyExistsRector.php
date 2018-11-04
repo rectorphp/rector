@@ -9,7 +9,7 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
-use Rector\Builder\IdentifierRenamer;
+use Rector\PhpParser\Node\Builder\IdentifierRenamer;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;

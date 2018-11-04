@@ -2,7 +2,7 @@
 
 namespace Rector\Rector;
 
-use Rector\Builder\Class_\ClassPropertyCollector;
+use Rector\PhpParser\Node\Builder\ClassPropertyCollector;
 
 /**
  * This could be part of @see AbstractRector, but decopuling to trait

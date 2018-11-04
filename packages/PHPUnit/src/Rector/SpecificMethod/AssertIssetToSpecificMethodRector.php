@@ -8,7 +8,7 @@ use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Scalar\String_;
-use Rector\Builder\IdentifierRenamer;
+use Rector\PhpParser\Node\Builder\IdentifierRenamer;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;

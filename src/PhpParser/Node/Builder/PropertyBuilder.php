@@ -1,12 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Builder;
+namespace Rector\PhpParser\Node\Builder;
 
 use PhpParser\BuilderFactory;
 use PhpParser\Comment\Doc;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property as PhpParserProperty;
-use Rector\Builder\Class_\VariableInfo;
 use Rector\Php\TypeAnalyzer;
 use function Safe\sprintf;
 

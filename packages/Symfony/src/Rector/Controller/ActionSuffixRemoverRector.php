@@ -4,7 +4,7 @@ namespace Rector\Symfony\Rector\Controller;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Builder\IdentifierRenamer;
+use Rector\PhpParser\Node\Builder\IdentifierRenamer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;

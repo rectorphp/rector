@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Builder\Class_;
+namespace Rector\PhpParser\Node\Builder;
 
 final class ClassPropertyCollector
 {

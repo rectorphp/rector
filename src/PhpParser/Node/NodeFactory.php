@@ -20,10 +20,10 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use Rector\Builder\Class_\VariableInfo;
 use Rector\Exception\NotImplementedException;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Php\TypeAnalyzer;
+use Rector\PhpParser\Node\Builder\VariableInfo;
 use function Safe\sprintf;
 
 final class NodeFactory
