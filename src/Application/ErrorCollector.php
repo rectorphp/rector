@@ -2,7 +2,6 @@
 
 namespace Rector\Application;
 
-use Rector\Contract\Rector\RectorInterface;
 use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
 
 final class ErrorCollector
@@ -35,8 +34,8 @@ final class ErrorCollector
         return $this->errors;
     }
 
-    public function addErrorWithRectorMessage(RectorInterface $rector, string $message): void
+    public function addErrorWithRectorMessage(string $rectorClass, string $message): void
     {
-        $this->errors[] = new Error($this->currentFileInfoProvider->getSmartFileInfo(), $message, null, $rector);
+        $this->errors[] = new Error($this->currentFileInfoProvider->getSmartFileInfo(), $message, null, $rectorClass);
     }
 }

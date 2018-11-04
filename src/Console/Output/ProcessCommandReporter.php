@@ -98,8 +98,9 @@ final class ProcessCommandReporter
     {
         foreach ($errors as $error) {
             $message = sprintf(
-                'Could not process "%s" file, due to: %s"%s".',
+                'Could not process "%s" file%s, due to: %s"%s".',
                 $error->getFileInfo()->getPathname(),
+                $error->getRectorClass() ? ' by "' . $error->getRectorClass() . '"' : '',
                 PHP_EOL,
                 $error->getMessage()
             );
