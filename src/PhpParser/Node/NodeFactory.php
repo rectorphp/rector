@@ -4,6 +4,7 @@ namespace Rector\PhpParser\Node;
 
 use PhpParser\BuilderFactory;
 use PhpParser\BuilderHelpers;
+use PhpParser\Comment\Doc;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
@@ -12,6 +13,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
@@ -20,10 +22,11 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use Rector\Builder\Class_\VariableInfo;
+use PhpParser\Node\Stmt\Property;
 use Rector\Exception\NotImplementedException;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Php\TypeAnalyzer;
+use Rector\PhpParser\Node\Builder\VariableInfo;
 use function Safe\sprintf;
 
 final class NodeFactory
@@ -131,12 +134,20 @@ final class NodeFactory
     public function createParamFromVariableInfo(VariableInfo $variableInfo): Param
     {
         $paramBuild = $this->builderFactory->param($variableInfo->getName());
-
-        foreach ($variableInfo->getTypes() as $type) {
-            $paramBuild->setType($this->createTypeName($type));
-        }
+        $paramBuild->setType($this->createTypeName($variableInfo->getType()));
 
         return $paramBuild->getNode();
+    }
+
+    public function createPrivatePropertyFromVariableInfo(VariableInfo $variableInfo): Property
+    {
+        $docComment = $this->createVarDoc($variableInfo->getType());
+
+        $propertyBuilder = $this->builderFactory->property($variableInfo->getName())
+            ->makePrivate()
+            ->setDocComment($docComment);
+
+        return $propertyBuilder->getNode();
     }
 
     public function createTypeName(string $name): Name
@@ -182,6 +193,24 @@ final class NodeFactory
     }
 
     /**
+     * @param Param[] $params
+     */
+    public function createParentConstructWithParams(array $params): StaticCall
+    {
+        return new StaticCall(
+            new Name('parent'),
+            new Identifier('__construct'),
+            $this->convertParamNodesToArgNodes($params)
+        );
+    }
+
+    private function createVarDoc(string $type): Doc
+    {
+        $type = $this->typeAnalyzer->isPhpReservedType($type) ? $type : '\\' . $type;
+        return new Doc(sprintf('/**%s * @var %s%s */', PHP_EOL, $type, PHP_EOL));
+    }
+
+    /**
      * @param mixed $item
      */
     private function createArrayItem($item): ArrayItem
@@ -204,5 +233,19 @@ final class NodeFactory
             __METHOD__,
             get_class($item)
         ));
+    }
+
+    /**
+     * @param Param[] $paramNodes
+     * @return Arg[]
+     */
+    private function convertParamNodesToArgNodes(array $paramNodes): array
+    {
+        $argNodes = [];
+        foreach ($paramNodes as $paramNode) {
+            $argNodes[] = new Arg($paramNode->var);
+        }
+
+        return $argNodes;
     }
 }

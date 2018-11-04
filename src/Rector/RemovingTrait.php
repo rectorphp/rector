@@ -28,16 +28,12 @@ trait RemovingTrait
     /**
      * @required
      */
-    public function setRemovedNodesCollector(RemovedNodesCollector $removedNodesCollector): void
-    {
+    public function setRemovingTraitDependencies(
+        RemovedNodesCollector $removedNodesCollector,
+        RemovingNodeVisitor $removingNodeVisitor
+    ): void {
         $this->removedNodesCollector = $removedNodesCollector;
-    }
 
-    /**
-     * @required
-     */
-    public function setRemovingNodeVisitor(RemovingNodeVisitor $removingNodeVisitor): void
-    {
         $this->removingNodeTraverser = new NodeTraverser();
         $this->removingNodeTraverser->addVisitor($removingNodeVisitor);
     }

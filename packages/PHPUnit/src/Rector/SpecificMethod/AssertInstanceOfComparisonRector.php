@@ -7,7 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\MethodCall;
-use Rector\Builder\IdentifierRenamer;
+use Rector\PhpParser\Node\Maintainer\IdentifierMaintainer;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -23,18 +23,18 @@ final class AssertInstanceOfComparisonRector extends AbstractPHPUnitRector
     ];
 
     /**
-     * @var IdentifierRenamer
+     * @var IdentifierMaintainer
      */
-    private $identifierRenamer;
+    private $IdentifierMaintainer;
 
     /**
      * @var BuilderFactory
      */
     private $builderFactory;
 
-    public function __construct(IdentifierRenamer $identifierRenamer, BuilderFactory $builderFactory)
+    public function __construct(IdentifierMaintainer $IdentifierMaintainer, BuilderFactory $builderFactory)
     {
-        $this->identifierRenamer = $identifierRenamer;
+        $this->IdentifierMaintainer = $IdentifierMaintainer;
         $this->builderFactory = $builderFactory;
     }
 
@@ -80,7 +80,7 @@ final class AssertInstanceOfComparisonRector extends AbstractPHPUnitRector
         if (! $firstArgumentValue instanceof Instanceof_) {
             return null;
         }
-        $this->identifierRenamer->renameNodeWithMap($node, $this->renameMethodsMap);
+        $this->IdentifierMaintainer->renameNodeWithMap($node, $this->renameMethodsMap);
         $this->changeOrderArguments($node);
 
         return $node;

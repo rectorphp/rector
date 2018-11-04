@@ -96,7 +96,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            if (! $this->isTypes($node, $variableInfo->getTypes())) {
+            if (! $this->isType($node, $variableInfo->getType())) {
                 continue;
             }
 

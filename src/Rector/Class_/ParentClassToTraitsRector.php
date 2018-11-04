@@ -6,7 +6,6 @@ use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\TraitUse;
-use Rector\Builder\StatementGlue;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
@@ -25,16 +24,10 @@ final class ParentClassToTraitsRector extends AbstractRector
     private $parentClassToTraits = [];
 
     /**
-     * @var StatementGlue
-     */
-    private $statementGlue;
-
-    /**
      * @param string[][] $parentClassToTraits { parent class => [ traits ] }
      */
-    public function __construct(StatementGlue $statementGlue, array $parentClassToTraits)
+    public function __construct(array $parentClassToTraits)
     {
-        $this->statementGlue = $statementGlue;
         $this->parentClassToTraits = $parentClassToTraits;
     }
 
@@ -93,7 +86,7 @@ CODE_SAMPLE
 
         foreach ($traitNames as $traitName) {
             $traitUseNode = new TraitUse([new FullyQualified($traitName)]);
-            $this->statementGlue->addAsFirstTrait($node, $traitUseNode);
+            $this->classMaintainer->addAsFirstTrait($node, $traitUseNode);
         }
 
         $this->removeParentClass($node);

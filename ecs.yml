@@ -73,7 +73,6 @@ parameters:
             - 'src/Rector/Constant/RenameClassConstantsUseToStringsRector.php'
             - '*/packages/NodeTypeResolver/**/PerNodeTypeResolver/**TypeResolver.php'
             - '*/packages/NodeTypeResolver/**/PerNodeTypeResolver/**TypeResolver/*Test.php'
-            - 'tests/PhpParser/Node/Maintainer/ClassLikeMaintainerTest.php'
             - 'tests/PhpParser/Node/ConstExprEvaluatorFactoryTest.php'
             - 'src/Rector/AbstractPHPUnitRector.php'
             - 'src/Rector/Class_/ParentClassToTraitsRector.php'

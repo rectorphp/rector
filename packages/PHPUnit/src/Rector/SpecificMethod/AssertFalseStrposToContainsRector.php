@@ -6,7 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
-use Rector\Builder\IdentifierRenamer;
+use Rector\PhpParser\Node\Maintainer\IdentifierMaintainer;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -22,13 +22,13 @@ final class AssertFalseStrposToContainsRector extends AbstractPHPUnitRector
     ];
 
     /**
-     * @var IdentifierRenamer
+     * @var IdentifierMaintainer
      */
-    private $identifierRenamer;
+    private $IdentifierMaintainer;
 
-    public function __construct(IdentifierRenamer $identifierRenamer)
+    public function __construct(IdentifierMaintainer $IdentifierMaintainer)
     {
-        $this->identifierRenamer = $identifierRenamer;
+        $this->IdentifierMaintainer = $IdentifierMaintainer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -74,7 +74,7 @@ final class AssertFalseStrposToContainsRector extends AbstractPHPUnitRector
             return null;
         }
 
-        $this->identifierRenamer->renameNodeWithMap($node, $this->renameMethodsMap);
+        $this->IdentifierMaintainer->renameNodeWithMap($node, $this->renameMethodsMap);
         $this->changeOrderArguments($node);
 
         return $node;

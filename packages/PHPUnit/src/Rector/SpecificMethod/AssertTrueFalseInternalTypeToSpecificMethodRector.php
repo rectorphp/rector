@@ -7,7 +7,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
-use Rector\Builder\IdentifierRenamer;
+use Rector\PhpParser\Node\Maintainer\IdentifierMaintainer;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -43,13 +43,13 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractPH
     ];
 
     /**
-     * @var IdentifierRenamer
+     * @var IdentifierMaintainer
      */
-    private $identifierRenamer;
+    private $IdentifierMaintainer;
 
-    public function __construct(IdentifierRenamer $identifierRenamer)
+    public function __construct(IdentifierMaintainer $IdentifierMaintainer)
     {
-        $this->identifierRenamer = $identifierRenamer;
+        $this->IdentifierMaintainer = $IdentifierMaintainer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -97,7 +97,7 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractPH
         if (! isset($this->oldFunctionsToTypes[$functionName])) {
             return null;
         }
-        $this->identifierRenamer->renameNodeWithMap($node, $this->renameMethodsMap);
+        $this->IdentifierMaintainer->renameNodeWithMap($node, $this->renameMethodsMap);
         $this->moveFunctionArgumentsUp($node);
 
         return $node;

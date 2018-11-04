@@ -9,7 +9,6 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
-use Rector\Builder\StatementGlue;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
@@ -33,20 +32,11 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
     private $excludedClasses = [];
 
     /**
-     * @var StatementGlue
-     */
-    private $statementGlue;
-
-    /**
      * @param string[] $pseudoNamespacePrefixes
      * @param string[] $excludedClasses
      */
-    public function __construct(
-        StatementGlue $statementGlue,
-        array $pseudoNamespacePrefixes,
-        array $excludedClasses = []
-    ) {
-        $this->statementGlue = $statementGlue;
+    public function __construct(array $pseudoNamespacePrefixes, array $excludedClasses = [])
+    {
         $this->pseudoNamespacePrefixes = $pseudoNamespacePrefixes;
         $this->excludedClasses = $excludedClasses;
     }
@@ -128,7 +118,7 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
 
             foreach ($nodes as $key => $node) {
                 if ($node instanceof Class_) {
-                    $nodes = $this->statementGlue->insertBeforeAndFollowWithNewline($nodes, $namespaceNode, $key);
+                    $nodes = $this->classMaintainer->insertBeforeAndFollowWithNewline($nodes, $namespaceNode, $key);
 
                     break;
                 }

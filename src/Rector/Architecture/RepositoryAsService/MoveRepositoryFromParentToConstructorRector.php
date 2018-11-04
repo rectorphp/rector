@@ -9,11 +9,9 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Bridge\Contract\DoctrineEntityAndRepositoryMapperInterface;
-use Rector\Builder\Class_\VariableInfo;
-use Rector\Builder\ConstructorMethodBuilder;
-use Rector\Builder\PropertyBuilder;
 use Rector\Exception\Bridge\RectorProviderException;
 use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\PhpParser\Node\Builder\VariableInfo;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -32,16 +30,6 @@ final class MoveRepositoryFromParentToConstructorRector extends AbstractRector
     private $entityRepositoryClass;
 
     /**
-     * @var PropertyBuilder
-     */
-    private $propertyBuilder;
-
-    /**
-     * @var ConstructorMethodBuilder
-     */
-    private $constructorMethodBuilder;
-
-    /**
      * @var DoctrineEntityAndRepositoryMapperInterface
      */
     private $doctrineEntityAndRepositoryMapper;
@@ -52,15 +40,11 @@ final class MoveRepositoryFromParentToConstructorRector extends AbstractRector
     private $builderFactory;
 
     public function __construct(
-        PropertyBuilder $propertyBuilder,
-        ConstructorMethodBuilder $constructorMethodBuilder,
         DoctrineEntityAndRepositoryMapperInterface $doctrineEntityAndRepositoryMapper,
         BuilderFactory $builderFactory,
         string $entityRepositoryClass = 'Doctrine\ORM\EntityRepository',
         string $entityManagerClass = 'Doctrine\ORM\EntityManager'
     ) {
-        $this->propertyBuilder = $propertyBuilder;
-        $this->constructorMethodBuilder = $constructorMethodBuilder;
         $this->doctrineEntityAndRepositoryMapper = $doctrineEntityAndRepositoryMapper;
         $this->builderFactory = $builderFactory;
         $this->entityRepositoryClass = $entityRepositoryClass;
@@ -139,13 +123,13 @@ CODE_SAMPLE
         $node->extends = null;
 
         // add $repository property
-        $propertyInfo = new VariableInfo('repository', [$this->entityRepositoryClass]);
-        $this->propertyBuilder->addPropertyToClass($node, $propertyInfo);
+        $propertyInfo = new VariableInfo('repository', $this->entityRepositoryClass);
+        $this->classMaintainer->addPropertyToClass($node, $propertyInfo);
 
         // add $entityManager and assign to constuctor
-        $this->constructorMethodBuilder->addConstructorDependency(
+        $this->classMaintainer->addConstructorDependencyWithCustomAssign(
             $node,
-            new VariableInfo('entityManager', [$this->entityManagerClass]),
+            new VariableInfo('entityManager', $this->entityManagerClass),
             $this->createRepositoryAssign($node)
         );
 
