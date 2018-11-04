@@ -1,14 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace Rector\CodeQuality\Tests\Rector\FuncCall\SimplifyArrayCallableRector;
+namespace Rector\CodingStyle\Tests\Rector\FuncCall\SimpleArrayCallableToStringRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
- * @covers \Rector\CodeQuality\Rector\FuncCall\SimplifyArrayCallableRector
+ * @covers \Rector\CodingStyle\Rector\FuncCall\SimpleArrayCallableToStringRector
  */
-final class SimplifyArrayCallableRectorTest extends AbstractRectorTestCase
+final class SimpleArrayCallableToStringRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()
