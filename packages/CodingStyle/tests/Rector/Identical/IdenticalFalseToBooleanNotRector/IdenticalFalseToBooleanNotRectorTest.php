@@ -1,14 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace Rector\CodeQuality\Tests\Rector\Identical\SimplifyIdenticalFalseToBooleanNotRector;
+namespace Rector\CodingStyle\Tests\Rector\Identical\IdenticalFalseToBooleanNotRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
- * @covers \Rector\CodeQuality\Rector\Identical\SimplifyIdenticalFalseToBooleanNotRector
+ * @covers \Rector\CodingStyle\Rector\Identical\IdenticalFalseToBooleanNotRector
  */
-final class SimplifyIdenticalFalseToBooleanNotRectorTest extends AbstractRectorTestCase
+final class IdenticalFalseToBooleanNotRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideWrongToFixedFiles()

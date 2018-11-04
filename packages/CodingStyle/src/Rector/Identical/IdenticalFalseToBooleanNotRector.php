@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\CodeQuality\Rector\Identical;
+namespace Rector\CodingStyle\Rector\Identical;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp;
@@ -10,7 +10,7 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
-final class SimplifyIdenticalFalseToBooleanNotRector extends AbstractRector
+final class IdenticalFalseToBooleanNotRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition
     {

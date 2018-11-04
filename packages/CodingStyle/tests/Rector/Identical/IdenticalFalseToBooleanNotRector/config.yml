@@ -1,0 +1,2 @@
+services:
+    Rector\CodingStyle\Rector\Identical\IdenticalFalseToBooleanNotRector: ~
