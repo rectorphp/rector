@@ -8,6 +8,8 @@ matrix:
       env: COMPOSER_FLAGS="--prefer-lowest"
     - php: 7.2
       env: COVERAGE=true
+    - php: 7.2
+      env: STANDALONE=true
 
 install:
   - composer update $COMPOSER_FLAGS
@@ -30,6 +32,29 @@ script:
     if [[ $RUN_RECTOR == true ]]; then
       bin/rector process src --level symfony40 --dry-run
       bin/rector generate-rector-overview >> rector-overview.md
+    fi
+
+  # Run standalone install in non-root package, ref https://github.com/rectorphp/rector/issues/732
+  - |
+    if [[ $STANDALONE == true ]]; then
+        # 1. install locally
+        mkdir test-paths
+        cd test-paths
+
+        mkdir rector-dir
+        composer require rector/rector -d rector-dir
+
+        mkdir laravel-dir
+        composer create-project laravel/framework laravel-dir
+        composer dump-autoload --no-dev -d laravel-dir
+
+        # 2. run an nother project
+        rector-dir/vendor/bin/rector
+
+        cd laravel-dir
+        ../rector-dir/vendor/bin/rector
+
+        ../rector-dir/vendor/bin/rector process src --level code-quality
     fi
 
 after_script:
