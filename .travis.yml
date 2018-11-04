@@ -1,74 +1,74 @@
 language: php
 
 matrix:
-  include:
-    - php: 7.1
-      env: STATIC_ANALYSIS=true RUN_RECTOR=true
-    - php: 7.1
-      env: COMPOSER_FLAGS="--prefer-lowest"
-    - php: 7.2
-      env: COVERAGE=true
-    - php: 7.2
-      env: STANDALONE=true
+    include:
+        - php: 7.1
+          env: STATIC_ANALYSIS=true RUN_RECTOR=true
+        - php: 7.1
+          env: COMPOSER_FLAGS="--prefer-lowest"
+        - php: 7.2
+          env: COVERAGE=true
+        - php: 7.2
+          env: STANDALONE=true
 
 install:
-  - composer update $COMPOSER_FLAGS
+    - composer update $COMPOSER_FLAGS
 
 before_script:
-  # disable xdebug
-  - if [[ $COVERAGE == "" ]]; then phpenv config-rm xdebug.ini; fi
+    # disable xdebug
+    - if [[ $COVERAGE == "" ]]; then phpenv config-rm xdebug.ini; fi
 
 script:
-  - vendor/bin/phpunit
+    - vendor/bin/phpunit
 
-  - |
-    if [[ $STATIC_ANALYSIS == true ]]; then
-      composer check-cs
-      composer phpstan
-    fi
+    - |
+      if [[ $STATIC_ANALYSIS == true ]]; then
+          composer check-cs
+          composer phpstan
+      fi
 
-  # Rector demo run
-  - |
-    if [[ $RUN_RECTOR == true ]]; then
-      bin/rector process src --level symfony40 --dry-run
-      bin/rector generate-rector-overview >> rector-overview.md
-    fi
+    # Rector demo run
+    - |
+      if [[ $RUN_RECTOR == true ]]; then
+          bin/rector process src --level symfony40 --dry-run
+          bin/rector generate-rector-overview >> rector-overview.md
+      fi
 
-  # Run standalone install in non-root package, ref https://github.com/rectorphp/rector/issues/732
-  - |
-    if [[ $STANDALONE == true ]]; then
-        # 1. install locally
-        mkdir test-paths
-        cd test-paths
+    # Run standalone install in non-root package, ref https://github.com/rectorphp/rector/issues/732
+    - |
+      if [[ $STANDALONE == true ]]; then
+          # 1. install locally
+          mkdir test-paths
+          cd test-paths
 
-        mkdir rector-dir
-        composer require rector/rector -d rector-dir
+          mkdir rector-dir
+          composer require rector/rector -d rector-dir
 
-        mkdir laravel-dir
-        composer create-project laravel/framework laravel-dir
-        composer dump-autoload --no-dev -d laravel-dir
+          mkdir laravel-dir
+          composer create-project laravel/framework laravel-dir
+          composer dump-autoload --no-dev -d laravel-dir
 
-        # 2. run an nother project
-        rector-dir/vendor/bin/rector
+          # 2. run an nother project
+          rector-dir/vendor/bin/rector
 
-        cd laravel-dir
-        ../rector-dir/vendor/bin/rector
+          cd laravel-dir
+          ../rector-dir/vendor/bin/rector
 
-        ../rector-dir/vendor/bin/rector process src --level code-quality
-    fi
+          ../rector-dir/vendor/bin/rector process src --level code-quality
+      fi
 
 after_script:
-  # Coverage
-  - |
-    if [[ $COVERAGE == true && $TRAVIS_BRANCH == "master" && $TRAVIS_PULL_REQUEST == "false" ]]; then
-      vendor/bin/phpunit --coverage-clover coverage.xml
-      wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.1.0/php-coveralls.phar
-      php php-coveralls.phar --verbose
-    fi
+    # Coverage
+    - |
+      if [[ $COVERAGE == true && $TRAVIS_BRANCH == "master" && $TRAVIS_PULL_REQUEST == "false" ]]; then
+          vendor/bin/phpunit --coverage-clover coverage.xml
+          wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.1.0/php-coveralls.phar
+          php php-coveralls.phar --verbose
+      fi
 
 cache:
-  directories:
-    - $HOME/.composer/cache
+    directories:
+        - $HOME/.composer/cache
 
 notifications:
-  email: false
+    email: false
