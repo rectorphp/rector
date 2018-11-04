@@ -61,6 +61,10 @@ CODE_SAMPLE
                 continue;
             }
 
+            if (! isset($node->args[$callablePosition])) {
+                continue;
+            }
+
             if (! $node->args[$callablePosition]->value instanceof Closure) {
                 continue;
             }
