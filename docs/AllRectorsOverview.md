@@ -146,17 +146,6 @@ Simplify `in_array` and `array_keys` functions combination into `array_key_exist
 +array_key_exists("key", $array);
 ```
 
-### `SimplifyEmptyArrayCheckRector`
-
-- class: `Rector\CodeQuality\Rector\FuncCall\SimplifyEmptyArrayCheckRector`
-
-Simplify `is_array` and `empty` functions combination into a simple identical check for an empty array
-
-```diff
--is_array($values) && empty($values)
-+$values === []
-```
-
 ### `SimplifyStrposLowerRector`
 
 - class: `Rector\CodeQuality\Rector\FuncCall\SimplifyStrposLowerRector`
