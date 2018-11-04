@@ -73,8 +73,8 @@ parameters:
             - 'src/Rector/Constant/RenameClassConstantsUseToStringsRector.php'
             - '*/packages/NodeTypeResolver/**/PerNodeTypeResolver/**TypeResolver.php'
             - '*/packages/NodeTypeResolver/**/PerNodeTypeResolver/**TypeResolver/*Test.php'
-            - 'tests/NodeAnalyzer/ClassLikeAnalyzerTest.php'
-            - 'tests/NodeValueResolver/ConstExprEvaluatorFactoryTest.php'
+            - 'tests/PhpParser/Node/Maintainer/ClassLikeMaintainerTest.php'
+            - 'tests/PhpParser/Node/ConstExprEvaluatorFactoryTest.php'
             - 'src/Rector/AbstractPHPUnitRector.php'
             - 'src/Rector/Class_/ParentClassToTraitsRector.php'
             # example in description
@@ -109,7 +109,7 @@ parameters:
 
         Symplify\CodingStandard\Sniffs\ControlStructure\SprintfOverContactSniff:
             # respects inherited pattern for better comparing
-            - 'src/Printer/BetterStandardPrinter.php'
+            - 'src/PhpParser/Printer/BetterStandardPrinter.php'
 
         PHP_CodeSniffer\Standards\Generic\Sniffs\CodeAnalysis\AssignmentInConditionSniff.FoundInWhileCondition: ~
 

@@ -5,9 +5,9 @@ services:
 
     # PhpParser - Parser
     PhpParser\Parser:
-        factory: ['@Rector\Parser\ParserFactory', 'create']
+        factory: ['@Rector\PhpParser\Parser\ParserFactory', 'create']
     PhpParser\Lexer:
-        factory: ['@Rector\Parser\LexerFactory', 'create']
+        factory: ['@Rector\PhpParser\Parser\LexerFactory', 'create']
 
     PhpParser\ParserFactory: ~
     PhpParser\BuilderFactory: ~
@@ -15,7 +15,7 @@ services:
 
     # value resolver
     PhpParser\ConstExprEvaluator:
-        factory: ['@Rector\NodeValueResolver\ConstExprEvaluatorFactory', 'create']
+        factory: ['@Rector\PhpParser\Node\ConstExprEvaluatorFactory', 'create']
 
     Symfony\Component\Filesystem\Filesystem: ~
 

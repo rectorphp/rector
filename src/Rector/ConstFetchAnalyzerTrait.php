@@ -3,7 +3,7 @@
 namespace Rector\Rector;
 
 use PhpParser\Node;
-use Rector\NodeAnalyzer\ConstFetchAnalyzer;
+use Rector\PhpParser\Node\Maintainer\ConstFetchMaintainer;
 
 /**
  * This could be part of @see AbstractRector, but decopuling to trait
@@ -12,35 +12,35 @@ use Rector\NodeAnalyzer\ConstFetchAnalyzer;
 trait ConstFetchAnalyzerTrait
 {
     /**
-     * @var ConstFetchAnalyzer
+     * @var ConstFetchMaintainer
      */
-    private $constFetchAnalyzer;
+    private $constFetchMaintainer;
 
     /**
      * @required
      */
-    public function setConstFetchAnalyzer(ConstFetchAnalyzer $constFetchAnalyzer): void
+    public function setConstFetchAnalyzer(ConstFetchMaintainer $constFetchMaintainer): void
     {
-        $this->constFetchAnalyzer = $constFetchAnalyzer;
+        $this->constFetchMaintainer = $constFetchMaintainer;
     }
 
     public function isFalse(Node $node): bool
     {
-        return $this->constFetchAnalyzer->isFalse($node);
+        return $this->constFetchMaintainer->isFalse($node);
     }
 
     public function isTrue(Node $node): bool
     {
-        return $this->constFetchAnalyzer->isTrue($node);
+        return $this->constFetchMaintainer->isTrue($node);
     }
 
     public function isBool(Node $node): bool
     {
-        return $this->constFetchAnalyzer->isBool($node);
+        return $this->constFetchMaintainer->isBool($node);
     }
 
     public function isNull(Node $node): bool
     {
-        return $this->constFetchAnalyzer->isNull($node);
+        return $this->constFetchMaintainer->isNull($node);
     }
 }

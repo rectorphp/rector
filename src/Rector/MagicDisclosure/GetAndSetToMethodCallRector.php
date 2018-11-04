@@ -7,7 +7,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
-use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
+use Rector\PhpParser\Node\Maintainer\PropertyFetchMaintainer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -20,19 +20,19 @@ final class GetAndSetToMethodCallRector extends AbstractRector
     private $typeToMethodCalls = [];
 
     /**
-     * @var PropertyFetchAnalyzer
+     * @var PropertyFetchMaintainer
      */
-    private $propertyFetchAnalyzer;
+    private $propertyFetchMaintainer;
 
     /**
      * Type to method call()
      *
      * @param string[][] $typeToMethodCalls
      */
-    public function __construct(array $typeToMethodCalls, PropertyFetchAnalyzer $propertyFetchAnalyzer)
+    public function __construct(array $typeToMethodCalls, PropertyFetchMaintainer $propertyFetchMaintainer)
     {
         $this->typeToMethodCalls = $typeToMethodCalls;
-        $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
+        $this->propertyFetchMaintainer = $propertyFetchMaintainer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -134,7 +134,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            if (! $this->propertyFetchAnalyzer->isMagicOnType($propertyFetchNode, $type)) {
+            if (! $this->propertyFetchMaintainer->isMagicOnType($propertyFetchNode, $type)) {
                 continue;
             }
 
@@ -159,7 +159,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            if (! $this->propertyFetchAnalyzer->isMagicOnType($propertyFetchNode, $type)) {
+            if (! $this->propertyFetchMaintainer->isMagicOnType($propertyFetchNode, $type)) {
                 continue;
             }
 

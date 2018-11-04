@@ -7,11 +7,11 @@ use PhpParser\Node\Expr\Variable;
 use PHPStan\Analyser\Scope;
 use PHPStan\TrinaryLogic;
 use PHPStan\Type\ThisType;
-use Rector\NodeAnalyzer\NameResolver;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeToStringResolver;
+use Rector\PhpParser\Node\Resolver\NameResolver;
 
 final class VariableTypeResolver implements PerNodeTypeResolverInterface
 {

@@ -11,8 +11,8 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
-use Rector\NodeAnalyzer\ForeachAnalyzer;
 use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\PhpParser\Node\Maintainer\ForeachMaintainer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -25,13 +25,13 @@ final class SimplifyForeachToCoalescingRector extends AbstractRector
     private $returnNode;
 
     /**
-     * @var ForeachAnalyzer
+     * @var ForeachMaintainer
      */
-    private $foreachAnalyzer;
+    private $foreachMaintainer;
 
-    public function __construct(ForeachAnalyzer $foreachAnalyzer)
+    public function __construct(ForeachMaintainer $foreachMaintainer)
     {
-        $this->foreachAnalyzer = $foreachAnalyzer;
+        $this->foreachMaintainer = $foreachMaintainer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -96,7 +96,7 @@ CODE_SAMPLE
      */
     private function matchReturnOrAssignNode(Foreach_ $foreachNode): ?Node
     {
-        return $this->foreachAnalyzer->matchOnlyStmt($foreachNode, function (Node $node): ?Node {
+        return $this->foreachMaintainer->matchOnlyStmt($foreachNode, function (Node $node): ?Node {
             if (! $node instanceof If_) {
                 return null;
             }

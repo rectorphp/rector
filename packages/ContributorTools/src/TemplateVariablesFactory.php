@@ -8,7 +8,7 @@ use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Name\FullyQualified;
 use Rector\ContributorTools\Configuration\Configuration;
-use Rector\Printer\BetterStandardPrinter;
+use Rector\PhpParser\Printer\BetterStandardPrinter;
 use function Safe\sprintf;
 
 final class TemplateVariablesFactory

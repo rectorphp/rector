@@ -12,10 +12,9 @@ use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Expression;
-use Rector\Node\NodeFactory;
+use Rector\PhpParser\Node\NodeFactory;
 
 /**
  * This could be part of @see AbstractRector, but decopuling to trait

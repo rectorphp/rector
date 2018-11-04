@@ -10,8 +10,8 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
-use Rector\NodeAnalyzer\ArrayAnalyzer;
 use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\PhpParser\Node\Maintainer\ArrayMaintainer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -22,13 +22,13 @@ use Rector\RectorDefinition\RectorDefinition;
 final class CascadeValidationFormBuilderRector extends AbstractRector
 {
     /**
-     * @var ArrayAnalyzer
+     * @var ArrayMaintainer
      */
-    private $arrayAnalyzer;
+    private $arrayMaintainer;
 
-    public function __construct(ArrayAnalyzer $arrayAnalyzer)
+    public function __construct(ArrayMaintainer $arrayMaintainer)
     {
-        $this->arrayAnalyzer = $arrayAnalyzer;
+        $this->arrayMaintainer = $arrayMaintainer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -119,7 +119,7 @@ CODE_SAMPLE
     private function findAndRemoveCascadeValidationOption(MethodCall $methodCallNode, Array_ $optionsArrayNode): bool
     {
         foreach ($optionsArrayNode->items as $key => $arrayItem) {
-            if (! $this->arrayAnalyzer->hasKeyName($arrayItem, 'cascade_validation')) {
+            if (! $this->arrayMaintainer->hasKeyName($arrayItem, 'cascade_validation')) {
                 continue;
             }
 

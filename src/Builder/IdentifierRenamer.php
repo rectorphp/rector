@@ -11,7 +11,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Exception\NodeChanger\NodeMissingIdentifierException;
-use Rector\NodeAnalyzer\NameResolver;
+use Rector\PhpParser\Node\Resolver\NameResolver;
 use function Safe\sprintf;
 
 /**

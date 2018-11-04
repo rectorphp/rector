@@ -3,7 +3,7 @@
 namespace Rector\Rector;
 
 use PhpParser\Node;
-use Rector\NodeAnalyzer\NameResolver;
+use Rector\PhpParser\Node\Resolver\NameResolver;
 
 /**
  * This could be part of @see AbstractRector, but decopuling to trait

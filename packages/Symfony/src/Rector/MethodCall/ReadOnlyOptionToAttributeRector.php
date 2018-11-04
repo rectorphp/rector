@@ -6,7 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
-use Rector\NodeAnalyzer\ArrayAnalyzer;
+use Rector\PhpParser\Node\Maintainer\ArrayMaintainer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -19,16 +19,16 @@ final class ReadOnlyOptionToAttributeRector extends AbstractRector
     private $formBuilderType;
 
     /**
-     * @var ArrayAnalyzer
+     * @var ArrayMaintainer
      */
-    private $arrayAnalyzer;
+    private $arrayMaintainer;
 
     public function __construct(
-        ArrayAnalyzer $arrayAnalyzer,
+        ArrayMaintainer $arrayMaintainer,
         string $formBuilderType = 'Symfony\Component\Form\FormBuilderInterface'
     ) {
         $this->formBuilderType = $formBuilderType;
-        $this->arrayAnalyzer = $arrayAnalyzer;
+        $this->arrayMaintainer = $arrayMaintainer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -86,7 +86,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $readonlyItem = $this->arrayAnalyzer->findItemInInArrayByKeyAndUnset($optionsNode, 'read_only');
+        $readonlyItem = $this->arrayMaintainer->findItemInInArrayByKeyAndUnset($optionsNode, 'read_only');
         if ($readonlyItem === null) {
             return null;
         }
@@ -94,7 +94,7 @@ CODE_SAMPLE
         // rename string
         $readonlyItem->key = new String_('readonly');
 
-        $this->arrayAnalyzer->addItemToArrayUnderKey($optionsNode, $readonlyItem, 'attr');
+        $this->arrayMaintainer->addItemToArrayUnderKey($optionsNode, $readonlyItem, 'attr');
 
         return $node;
     }

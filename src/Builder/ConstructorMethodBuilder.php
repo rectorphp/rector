@@ -11,10 +11,10 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Builder\Class_\VariableInfo;
-use Rector\Node\NodeFactory;
-use Rector\NodeAnalyzer\NameResolver;
 use Rector\NodeTypeResolver\Application\ClassNodeCollector;
 use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\PhpParser\Node\NodeFactory;
+use Rector\PhpParser\Node\Resolver\NameResolver;
 
 /**
  * Creates new constructor or adds new dependency to already existing one

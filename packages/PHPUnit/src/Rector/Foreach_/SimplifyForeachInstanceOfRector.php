@@ -9,7 +9,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
-use Rector\NodeAnalyzer\ForeachAnalyzer;
+use Rector\PhpParser\Node\Maintainer\ForeachMaintainer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -17,13 +17,13 @@ use Rector\RectorDefinition\RectorDefinition;
 final class SimplifyForeachInstanceOfRector extends AbstractRector
 {
     /**
-     * @var ForeachAnalyzer
+     * @var ForeachMaintainer
      */
-    private $foreachAnalyzer;
+    private $foreachMaintainer;
 
-    public function __construct(ForeachAnalyzer $foreachAnalyzer)
+    public function __construct(ForeachMaintainer $foreachMaintainer)
     {
-        $this->foreachAnalyzer = $foreachAnalyzer;
+        $this->foreachMaintainer = $foreachMaintainer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -55,7 +55,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         /** @var MethodCall|StaticCall|null $matchedNode */
-        $matchedNode = $this->foreachAnalyzer->matchOnlyStmt(
+        $matchedNode = $this->foreachMaintainer->matchOnlyStmt(
             $node,
             function (Node $node, Foreach_ $foreachNode): ?Node {
                 if (! $node instanceof MethodCall && ! $node instanceof StaticCall) {

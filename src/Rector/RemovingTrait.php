@@ -6,8 +6,8 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeTraverser;
 use Rector\NodeTypeResolver\Node\Attribute;
-use Rector\NodeVisitor\RemovedNodesCollector;
-use Rector\NodeVisitor\RemovingNodeVisitor;
+use Rector\PhpParser\NodeVisitor\RemovedNodesCollector;
+use Rector\PhpParser\NodeVisitor\RemovingNodeVisitor;
 
 /**
  * This could be part of @see AbstractRector, but decopuling to trait

@@ -73,7 +73,7 @@ parameters:
         - '#Parameter \#2 \$codeSamples of class Rector\\RectorDefinition\\RectorDefinition constructor expects array<Rector\\Contract\\RectorDefinition\\CodeSampleInterface>, array<int, stdClass> given#' # 1
 
         # invalid interface type resolution
-        - '#Method Rector\\NodeTraverser\\RectorNodeTraverser::getRectors\(\) should return array<Rector\\Contract\\Rector\\PhpRectorInterface> but returns array<PhpParser\\NodeVisitor>#' # 1
+        - '#Method Rector\\PhpParser\\NodeTraverser\\RectorNodeTraverser::getRectors\(\) should return array<Rector\\Contract\\Rector\\PhpRectorInterface> but returns array<PhpParser\\NodeVisitor>#' # 1
 
         # known values
         - '#Access to an undefined property PHPStan\\PhpDocParser\\Ast\\Node::\$name#' # 2
@@ -89,7 +89,7 @@ parameters:
         - '#In method (.*?) type is "array". Please provide a \@(param|return) annotation to further specify the type of the array. For instance: \@(param|return) int\[\]#'
 
         # not really needed, empty
-        - '#Rector\\NodeTraverser\\RectorNodeTraverser::__construct\(\) does not call parent constructor from PhpParser\\NodeTraverser#'
+        - '#Rector\\PhpParser\\NodeTraverser\\RectorNodeTraverser::__construct\(\) does not call parent constructor from PhpParser\\NodeTraverser#'
 
         # intentionally
         - '#In method "(.*?)", caught "Throwable" must be rethrown. Either catch a more specific exception or add a "throw" clause in the "catch" block to propagate the exception#'

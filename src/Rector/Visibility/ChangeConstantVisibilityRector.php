@@ -4,7 +4,7 @@ namespace Rector\Rector\Visibility;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassConst;
-use Rector\NodeModifier\VisibilityModifier;
+use Rector\PhpParser\Node\Maintainer\VisibilityMaintainer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -18,17 +18,17 @@ final class ChangeConstantVisibilityRector extends AbstractRector
     private $constantToVisibilityByClass = [];
 
     /**
-     * @var VisibilityModifier
+     * @var VisibilityMaintainer
      */
-    private $visibilityModifier;
+    private $VisibilityMaintainer;
 
     /**
      * @param string[][] $constantToVisibilityByClass
      */
-    public function __construct(array $constantToVisibilityByClass, VisibilityModifier $visibilityModifier)
+    public function __construct(array $constantToVisibilityByClass, VisibilityMaintainer $VisibilityMaintainer)
     {
         $this->constantToVisibilityByClass = $constantToVisibilityByClass;
-        $this->visibilityModifier = $visibilityModifier;
+        $this->VisibilityMaintainer = $VisibilityMaintainer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -94,7 +94,7 @@ CODE_SAMPLE
                     continue;
                 }
 
-                $this->visibilityModifier->replaceVisibilityFlag($node, $visibility);
+                $this->VisibilityMaintainer->replaceVisibilityFlag($node, $visibility);
 
                 return $node;
             }

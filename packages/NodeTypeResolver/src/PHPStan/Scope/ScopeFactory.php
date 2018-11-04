@@ -7,7 +7,7 @@ use PHPStan\Analyser\ScopeContext;
 use PHPStan\Analyser\ScopeFactory as PHPStanScopeFactory;
 use PHPStan\Analyser\TypeSpecifier;
 use PHPStan\Broker\Broker;
-use Rector\Printer\BetterStandardPrinter;
+use Rector\PhpParser\Printer\BetterStandardPrinter;
 
 final class ScopeFactory
 {

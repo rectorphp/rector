@@ -4,7 +4,7 @@ namespace Rector\Console\Output;
 
 use Rector\Application\Error;
 use Rector\Contract\Rector\RectorInterface;
-use Rector\NodeTraverser\RectorNodeTraverser;
+use Rector\PhpParser\NodeTraverser\RectorNodeTraverser;
 use Rector\Reporting\FileDiff;
 use Rector\YamlRector\YamlFileProcessor;
 use Symfony\Component\Console\Style\SymfonyStyle;

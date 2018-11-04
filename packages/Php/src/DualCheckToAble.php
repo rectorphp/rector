@@ -8,7 +8,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
-use Rector\NodeAnalyzer\NameResolver;
+use Rector\PhpParser\Node\Resolver\NameResolver;
 
 final class DualCheckToAble
 {

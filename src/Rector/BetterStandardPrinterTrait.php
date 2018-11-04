@@ -3,7 +3,7 @@
 namespace Rector\Rector;
 
 use PhpParser\Node;
-use Rector\Printer\BetterStandardPrinter;
+use Rector\PhpParser\Printer\BetterStandardPrinter;
 
 /**
  * This could be part of @see AbstractRector, but decopuling to trait

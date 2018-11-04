@@ -5,7 +5,7 @@ namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver;
 use PhpParser\Node;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\Parser\Parser;
+use Rector\PhpParser\Parser\Parser;
 use Rector\Tests\AbstractContainerAwareTestCase;
 use Rector\Utils\BetterNodeFinder;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;

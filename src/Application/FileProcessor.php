@@ -4,11 +4,11 @@ namespace Rector\Application;
 
 use PhpParser\Lexer;
 use PhpParser\Node;
-use Rector\NodeTraverser\RectorNodeTraverser;
 use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
-use Rector\Parser\Parser;
-use Rector\Printer\FormatPerservingPrinter;
+use Rector\PhpParser\NodeTraverser\RectorNodeTraverser;
+use Rector\PhpParser\Parser\Parser;
+use Rector\PhpParser\Printer\FormatPerservingPrinter;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
 final class FileProcessor

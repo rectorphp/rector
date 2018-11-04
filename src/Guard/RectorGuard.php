@@ -3,7 +3,7 @@
 namespace Rector\Guard;
 
 use Rector\Exception\NoRectorsLoadedException;
-use Rector\NodeTraverser\RectorNodeTraverser;
+use Rector\PhpParser\NodeTraverser\RectorNodeTraverser;
 use Rector\YamlRector\YamlFileProcessor;
 
 final class RectorGuard
