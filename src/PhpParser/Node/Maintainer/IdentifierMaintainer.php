@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\PhpParser\Node\Builder;
+namespace Rector\PhpParser\Node\Maintainer;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
@@ -20,7 +20,7 @@ use function Safe\sprintf;
  * -public function someMethod()
  * +public function newMethod()
  */
-final class IdentifierRenamer
+final class IdentifierMaintainer
 {
     /**
      * @var string[]
@@ -48,7 +48,7 @@ final class IdentifierRenamer
         $this->ensureNodeHasIdentifier($node);
 
         $oldNodeMethodName = $this->nameResolver->resolve($node);
-        if (! $oldNodeMethodName) {
+        if ($oldNodeMethodName === null) {
             return;
         }
 

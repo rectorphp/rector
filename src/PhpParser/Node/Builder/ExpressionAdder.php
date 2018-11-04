@@ -68,12 +68,7 @@ final class ExpressionAdder
             $positionExpressionNode = $positionNode;
         }
 
-        $expressionsToAdd = [$expressionToAdd];
-
-        if ($this->expressionsToAdd->contains($positionExpressionNode)) {
-            $expressionsToAdd = array_merge($this->expressionsToAdd[$positionExpressionNode], $expressionsToAdd);
-        }
-
+        $expressionsToAdd = array_merge($this->expressionsToAdd[$positionExpressionNode] ??[], [$expressionToAdd]);
         $this->expressionsToAdd->attach($positionExpressionNode, $expressionsToAdd);
     }
 

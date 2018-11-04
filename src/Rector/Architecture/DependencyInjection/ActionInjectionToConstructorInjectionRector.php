@@ -105,7 +105,7 @@ CODE_SAMPLE
 
             $paramNodeTypes = $this->getTypes($paramNode);
 
-            $variableInfo = new VariableInfo($this->getName($paramNode->var), $paramNodeTypes);
+            $variableInfo = new VariableInfo($this->getName($paramNode->var), $paramNodeTypes[0]);
             $this->addConstructorDependency($classNode, $variableInfo);
 
             // remove arguments

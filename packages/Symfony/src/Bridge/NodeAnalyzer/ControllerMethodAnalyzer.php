@@ -4,7 +4,6 @@ namespace Rector\Symfony\Bridge\NodeAnalyzer;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\NodeTypeResolver\Node\Attribute;
 
@@ -19,15 +18,12 @@ final class ControllerMethodAnalyzer
             return false;
         }
 
-        $parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
-
+        $parentClassName = (string) $node->getAttribute(Attribute::PARENT_CLASS_NAME);
         if (Strings::endsWith($parentClassName, 'Controller')) {
             return true;
         }
 
-        /** @var Identifier $identifierNode */
-        $identifierNode = $node->name;
-        if (Strings::endsWith($identifierNode->toString(), 'Action')) {
+        if (Strings::endsWith((string) $node->name, 'Action')) {
             return true;
         }
 

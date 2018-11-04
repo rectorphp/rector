@@ -118,11 +118,7 @@ CODE_SAMPLE
 
         $this->docBlockAnalyzer->removeTagFromNode($node, self::INJECT_ANNOTATION);
 
-        $this->addPropertyToClass(
-            (string) $node->getAttribute(Attribute::CLASS_NAME),
-            $type,
-            $this->getName($node)
-        );
+        $this->addPropertyToClass($node->getAttribute(Attribute::CLASS_NODE), $type, $this->getName($node));
 
         return $node;
     }

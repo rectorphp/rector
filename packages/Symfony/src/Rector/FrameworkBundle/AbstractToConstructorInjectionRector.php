@@ -10,7 +10,6 @@ use PhpParser\Node\Scalar\String_;
 use Rector\Bridge\Contract\AnalyzedApplicationContainerInterface;
 use Rector\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\Attribute;
-use Rector\PhpParser\Node\Builder\ClassPropertyCollector;
 use Rector\Rector\AbstractRector;
 
 abstract class AbstractToConstructorInjectionRector extends AbstractRector
@@ -19,11 +18,6 @@ abstract class AbstractToConstructorInjectionRector extends AbstractRector
      * @var PropertyNaming
      */
     protected $propertyNaming;
-
-    /**
-     * @var ClassPropertyCollector
-     */
-    protected $classPropertyCollector;
 
     /**
      * @var AnalyzedApplicationContainerInterface
@@ -35,11 +29,9 @@ abstract class AbstractToConstructorInjectionRector extends AbstractRector
      */
     public function setAbstractToConstructorInjectionRectorDependencies(
         PropertyNaming $propertyNaming,
-        ClassPropertyCollector $classPropertyCollector,
         AnalyzedApplicationContainerInterface $analyzedApplicationContainer
     ): void {
         $this->propertyNaming = $propertyNaming;
-        $this->classPropertyCollector = $classPropertyCollector;
         $this->analyzedApplicationContainer = $analyzedApplicationContainer;
     }
 
@@ -53,7 +45,7 @@ abstract class AbstractToConstructorInjectionRector extends AbstractRector
         $propertyName = $this->propertyNaming->fqnToVariableName($serviceType);
 
         $this->addPropertyToClass(
-            (string) $methodCallNode->getAttribute(Attribute::CLASS_NAME),
+            $methodCallNode->getAttribute(Attribute::CLASS_NODE),
             $serviceType,
             $propertyName
         );

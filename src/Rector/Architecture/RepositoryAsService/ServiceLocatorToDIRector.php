@@ -125,7 +125,7 @@ CODE_SAMPLE
         $repositoryFqn = $this->repositoryFqn($node);
 
         $this->addPropertyToClass(
-            (string) $node->getAttribute(Attribute::CLASS_NAME),
+            $node->getAttribute(Attribute::CLASS_NODE),
             $repositoryFqn,
             $this->propertyNaming->fqnToVariableName($repositoryFqn)
         );

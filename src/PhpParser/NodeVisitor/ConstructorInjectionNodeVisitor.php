@@ -5,28 +5,27 @@ namespace Rector\PhpParser\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\NodeVisitorAbstract;
-use Rector\NodeTypeResolver\Node\Attribute;
-use Rector\PhpParser\Node\Builder\ClassPropertyCollector;
-use Rector\PhpParser\Node\Maintainer\ClassDependencyMaintainer;
+use Rector\PhpParser\Node\Maintainer\ClassMaintainer;
+use Rector\PhpParser\Node\Maintainer\Storage\ClassWithPropertiesObjectStorage;
 
 final class ConstructorInjectionNodeVisitor extends NodeVisitorAbstract
 {
     /**
-     * @var ClassPropertyCollector
+     * @var ClassMaintainer
      */
-    private $classPropertyCollector;
+    private $classMaintainer;
 
     /**
-     * @var ClassDependencyMaintainer
+     * @var ClassWithPropertiesObjectStorage
      */
-    private $classDependencyMaintainer;
+    private $classWithPropertiesObjectStorage;
 
     public function __construct(
-        ClassPropertyCollector $classPropertyCollector,
-        ClassDependencyMaintainer $classDependencyMaintainer
+        ClassMaintainer $classMaintainer,
+        ClassWithPropertiesObjectStorage $classWithPropertiesObjectStorage
     ) {
-        $this->classPropertyCollector = $classPropertyCollector;
-        $this->classDependencyMaintainer = $classDependencyMaintainer;
+        $this->classMaintainer = $classMaintainer;
+        $this->classWithPropertiesObjectStorage = $classWithPropertiesObjectStorage;
     }
 
     public function enterNode(Node $node): ?Node
@@ -40,15 +39,9 @@ final class ConstructorInjectionNodeVisitor extends NodeVisitorAbstract
 
     private function processClassNode(Class_ $classNode): Class_
     {
-        $className = (string) $classNode->getAttribute(Attribute::CLASS_NAME);
-
-        $propertiesForClass = $this->classPropertyCollector->getPropertiesForClass($className);
-        if (! count($propertiesForClass)) {
-            return $classNode;
-        }
-
+        $propertiesForClass = $this->classWithPropertiesObjectStorage[$classNode] ?? [];
         foreach ($propertiesForClass as $propertyInfo) {
-            $this->classDependencyMaintainer->addConstructorDependency($classNode, $propertyInfo);
+            $this->classMaintainer->addConstructorDependency($classNode, $propertyInfo);
         }
 
         return $classNode;

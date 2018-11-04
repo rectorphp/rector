@@ -7,7 +7,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
-use Rector\PhpParser\Node\Builder\IdentifierRenamer;
+use Rector\PhpParser\Node\Maintainer\IdentifierMaintainer;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -23,13 +23,13 @@ final class AssertNotOperatorRector extends AbstractPHPUnitRector
     ];
 
     /**
-     * @var IdentifierRenamer
+     * @var IdentifierMaintainer
      */
-    private $identifierRenamer;
+    private $IdentifierMaintainer;
 
-    public function __construct(IdentifierRenamer $identifierRenamer)
+    public function __construct(IdentifierMaintainer $IdentifierMaintainer)
     {
-        $this->identifierRenamer = $identifierRenamer;
+        $this->IdentifierMaintainer = $IdentifierMaintainer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -69,7 +69,7 @@ final class AssertNotOperatorRector extends AbstractPHPUnitRector
             return null;
         }
 
-        $this->identifierRenamer->renameNodeWithMap($node, $this->renameMethodsMap);
+        $this->IdentifierMaintainer->renameNodeWithMap($node, $this->renameMethodsMap);
 
         $oldArguments = $node->args;
         /** @var BooleanNot $negation */

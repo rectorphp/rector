@@ -10,17 +10,14 @@ final class VariableInfo
     private $name;
 
     /**
-     * @var string[]
+     * @var string
      */
-    private $types = [];
+    private $type;
 
-    /**
-     * @param string[] $types
-     */
-    public function __construct(string $name, array $types)
+    public function __construct(string $name, string $type)
     {
         $this->name = $name;
-        $this->types = $types;
+        $this->type = $type;
     }
 
     public function getName(): string
@@ -28,11 +25,8 @@ final class VariableInfo
         return $this->name;
     }
 
-    /**
-     * @return string[]
-     */
-    public function getTypes(): array
+    public function getType(): string
     {
-        return $this->types;
+        return $this->type;
     }
 }

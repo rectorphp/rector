@@ -95,7 +95,7 @@ CODE_SAMPLE
         $propertyName = $this->propertyNaming->underscoreToName($parameterName);
 
         $this->addPropertyToClass(
-            (string) $node->getAttribute(Attribute::CLASS_NAME),
+            $node->getAttribute(Attribute::CLASS_NODE),
             'string', // @todo: resolve type from container provider? see parameter autowire compiler pass
             $propertyName
         );
