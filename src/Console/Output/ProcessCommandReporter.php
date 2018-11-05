@@ -37,23 +37,6 @@ final class ProcessCommandReporter
         $this->yamlFileProcessor = $yamlFileProcessor;
     }
 
-    public function reportLoadedRectors(): void
-    {
-        $rectorCount = $this->rectorNodeTraverser->getRectorCount() + $this->yamlFileProcessor->getYamlRectorsCount();
-
-        $this->symfonyStyle->title(sprintf('%d Loaded Rector%s', $rectorCount, $rectorCount === 1 ? '' : 's'));
-
-        $allRectors = array_merge(
-            $this->rectorNodeTraverser->getRectors() + $this->yamlFileProcessor->getYamlRectors()
-        );
-
-        $rectorClasses = array_map(function (RectorInterface $rector): string {
-            return get_class($rector);
-        }, $allRectors);
-
-        $this->symfonyStyle->listing($rectorClasses);
-    }
-
     /**
      * @param string[] $changedFiles
      */

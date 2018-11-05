@@ -184,8 +184,6 @@ final class ProcessCommand extends Command
 
         $this->additionalAutoloader->autoloadWithInputAndSource($input, $source);
 
-        $this->processCommandReporter->reportLoadedRectors();
-
         $this->processFileInfos($allFileInfos, (bool) $input->getOption(Option::HIDE_AUTOLOAD_ERRORS));
 
         $this->processCommandReporter->reportFileDiffs($this->fileDiffs);
