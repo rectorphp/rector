@@ -2,7 +2,6 @@
 
 namespace Rector\Application;
 
-use Rector\Contract\Rector\RectorInterface;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
 final class Error
@@ -23,20 +22,20 @@ final class Error
     private $fileInfo;
 
     /**
-     * @var RectorInterface|null
+     * @var string|null
      */
-    private $rector;
+    private $rectorClass;
 
     public function __construct(
         SmartFileInfo $smartFileInfo,
         string $message,
         ?int $line = null,
-        ?RectorInterface $rector = null
+        ?string $rectorClass = null
     ) {
         $this->fileInfo = $smartFileInfo;
         $this->message = $message;
         $this->line = $line;
-        $this->rector = $rector;
+        $this->rectorClass = $rectorClass;
     }
 
     public function getFileInfo(): SmartFileInfo
@@ -54,8 +53,8 @@ final class Error
         return $this->line;
     }
 
-    public function getRector(): ?RectorInterface
+    public function getRectorClass(): ?string
     {
-        return $this->rector;
+        return $this->rectorClass;
     }
 }

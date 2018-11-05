@@ -99,9 +99,13 @@ final class SimplifyConditionsRector extends AbstractRector
         return $binaryOpNode->right instanceof BinaryOp;
     }
 
-    private function createInversedBooleanOp(BinaryOp $binaryOpNode): BinaryOp
+    private function createInversedBooleanOp(BinaryOp $binaryOpNode): ?BinaryOp
     {
         $inversedBinaryClass = $this->assignAndBinaryMap->getInversed($binaryOpNode);
+        if ($inversedBinaryClass === null) {
+            return null;
+        }
+
         return new $inversedBinaryClass($binaryOpNode->left, $binaryOpNode->right);
     }
 }

@@ -3,10 +3,7 @@
 namespace Rector\Console\Output;
 
 use Rector\Application\Error;
-use Rector\Contract\Rector\RectorInterface;
-use Rector\PhpParser\NodeTraverser\RectorNodeTraverser;
 use Rector\Reporting\FileDiff;
-use Rector\YamlRector\YamlFileProcessor;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use function Safe\sprintf;
 
@@ -17,41 +14,9 @@ final class ProcessCommandReporter
      */
     private $symfonyStyle;
 
-    /**
-     * @var RectorNodeTraverser
-     */
-    private $rectorNodeTraverser;
-
-    /**
-     * @var YamlFileProcessor
-     */
-    private $yamlFileProcessor;
-
-    public function __construct(
-        RectorNodeTraverser $rectorNodeTraverser,
-        SymfonyStyle $symfonyStyle,
-        YamlFileProcessor $yamlFileProcessor
-    ) {
-        $this->symfonyStyle = $symfonyStyle;
-        $this->rectorNodeTraverser = $rectorNodeTraverser;
-        $this->yamlFileProcessor = $yamlFileProcessor;
-    }
-
-    public function reportLoadedRectors(): void
+    public function __construct(SymfonyStyle $symfonyStyle)
     {
-        $rectorCount = $this->rectorNodeTraverser->getRectorCount() + $this->yamlFileProcessor->getYamlRectorsCount();
-
-        $this->symfonyStyle->title(sprintf('%d Loaded Rector%s', $rectorCount, $rectorCount === 1 ? '' : 's'));
-
-        $allRectors = array_merge(
-            $this->rectorNodeTraverser->getRectors() + $this->yamlFileProcessor->getYamlRectors()
-        );
-
-        $rectorClasses = array_map(function (RectorInterface $rector): string {
-            return get_class($rector);
-        }, $allRectors);
-
-        $this->symfonyStyle->listing($rectorClasses);
+        $this->symfonyStyle = $symfonyStyle;
     }
 
     /**
@@ -88,6 +53,13 @@ final class ProcessCommandReporter
             $this->symfonyStyle->newLine();
             $this->symfonyStyle->writeln($fileDiff->getDiff());
             $this->symfonyStyle->newLine();
+
+            if ($fileDiff->getAppliedRectorClasses()) {
+                $this->symfonyStyle->writeln('Applied rectors:');
+                $this->symfonyStyle->newLine();
+                $this->symfonyStyle->listing($fileDiff->getAppliedRectorClasses());
+                $this->symfonyStyle->newLine();
+            }
         }
     }
 
@@ -98,8 +70,9 @@ final class ProcessCommandReporter
     {
         foreach ($errors as $error) {
             $message = sprintf(
-                'Could not process "%s" file, due to: %s"%s".',
+                'Could not process "%s" file%s, due to: %s"%s".',
                 $error->getFileInfo()->getPathname(),
+                $error->getRectorClass() ? ' by "' . $error->getRectorClass() . '"' : '',
                 PHP_EOL,
                 $error->getMessage()
             );

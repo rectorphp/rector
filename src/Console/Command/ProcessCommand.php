@@ -4,6 +4,7 @@ namespace Rector\Console\Command;
 
 use Nette\Utils\FileSystem;
 use PHPStan\AnalysedCodeException;
+use Rector\Application\AppliedRectorCollector;
 use Rector\Application\Error;
 use Rector\Application\ErrorCollector;
 use Rector\Application\FileProcessor;
@@ -13,6 +14,7 @@ use Rector\Configuration\Option;
 use Rector\Console\Output\ProcessCommandReporter;
 use Rector\Console\Shell;
 use Rector\ConsoleDiffer\DifferAndFormatter;
+use Rector\Contract\Rector\RectorInterface;
 use Rector\FileSystem\FilesFinder;
 use Rector\FileSystemRector\FileSystemFileProcessor;
 use Rector\Guard\RectorGuard;
@@ -102,6 +104,11 @@ final class ProcessCommand extends Command
      */
     private $afterRectorCodingStyle;
 
+    /**
+     * @var AppliedRectorCollector
+     */
+    private $appliedRectorCollector;
+
     public function __construct(
         FileProcessor $fileProcessor,
         SymfonyStyle $symfonyStyle,
@@ -114,7 +121,8 @@ final class ProcessCommand extends Command
         RectorGuard $rectorGuard,
         FileSystemFileProcessor $fileSystemFileProcessor,
         ErrorCollector $errorCollector,
-        AfterRectorCodingStyle $afterRectorCodingStyle
+        AfterRectorCodingStyle $afterRectorCodingStyle,
+        AppliedRectorCollector $appliedRectorCollector
     ) {
         parent::__construct();
 
@@ -130,6 +138,7 @@ final class ProcessCommand extends Command
         $this->fileSystemFileProcessor = $fileSystemFileProcessor;
         $this->errorCollector = $errorCollector;
         $this->afterRectorCodingStyle = $afterRectorCodingStyle;
+        $this->appliedRectorCollector = $appliedRectorCollector;
     }
 
     protected function configure(): void
@@ -183,8 +192,6 @@ final class ProcessCommand extends Command
 
         $this->additionalAutoloader->autoloadWithInputAndSource($input, $source);
 
-        $this->processCommandReporter->reportLoadedRectors();
-
         $this->processFileInfos($allFileInfos, (bool) $input->getOption(Option::HIDE_AUTOLOAD_ERRORS));
 
         $this->processCommandReporter->reportFileDiffs($this->fileDiffs);
@@ -210,8 +217,6 @@ final class ProcessCommand extends Command
     private function processFileInfos(array $fileInfos, bool $shouldHideAutoloadErrors): void
     {
         $totalFiles = count($fileInfos);
-        $this->symfonyStyle->title(sprintf('Processing %d file%s', $totalFiles, $totalFiles === 1 ? '' : 's'));
-
         if (! $this->symfonyStyle->isVerbose()) {
             $this->symfonyStyle->progressStart($totalFiles);
         }
@@ -231,13 +236,7 @@ final class ProcessCommand extends Command
     private function processFileInfo(SmartFileInfo $fileInfo, bool $shouldHideAutoloadErrors): void
     {
         try {
-            if ($fileInfo->getExtension() === 'php') {
-                $this->processFile($fileInfo);
-            } elseif (in_array($fileInfo->getExtension(), ['yml', 'yaml'], true)) {
-                $this->processYamlFile($fileInfo);
-            }
-
-            $this->fileSystemFileProcessor->processFileInfo($fileInfo);
+            $this->processAnyFile($fileInfo);
         } catch (AnalysedCodeException $analysedCodeException) {
             if ($shouldHideAutoloadErrors) {
                 return;
@@ -251,7 +250,16 @@ final class ProcessCommand extends Command
 
             $this->errorCollector->addError(new Error($fileInfo, $message));
         } catch (Throwable $throwable) {
-            $this->errorCollector->addError(new Error($fileInfo, $throwable->getMessage(), $throwable->getCode()));
+            if ($this->symfonyStyle->isVerbose()) {
+                throw $throwable;
+            }
+
+            $rectorClass = $this->matchRectorClass($throwable);
+            if ($rectorClass) {
+                $this->errorCollector->addErrorWithRectorMessage($rectorClass, $throwable->getMessage());
+            } else {
+                $this->errorCollector->addError(new Error($fileInfo, $throwable->getMessage(), $throwable->getCode()));
+            }
         }
     }
 
@@ -264,7 +272,8 @@ final class ProcessCommand extends Command
             if ($newContent !== $oldContent) {
                 $this->fileDiffs[] = new FileDiff(
                     $fileInfo->getPathname(),
-                    $this->differAndFormatter->diffAndFormat($oldContent, $newContent)
+                    $this->differAndFormatter->diffAndFormat($oldContent, $newContent),
+                    $this->appliedRectorCollector->getRectorClasses()
                 );
             }
         } else {
@@ -295,5 +304,31 @@ final class ProcessCommand extends Command
                 FileSystem::write($fileInfo->getPathname(), $newContent);
             }
         }
+    }
+
+    private function matchRectorClass(Throwable $throwable): ?string
+    {
+        if (! isset($throwable->getTrace()[0])) {
+            return null;
+        }
+
+        /** @var string $class */
+        $class = $throwable->getTrace()[0]['class'];
+        if (! is_a($class, RectorInterface::class, true)) {
+            return null;
+        }
+
+        return $class;
+    }
+
+    private function processAnyFile(SmartFileInfo $fileInfo): void
+    {
+        if ($fileInfo->getExtension() === 'php') {
+            $this->processFile($fileInfo);
+        } elseif (in_array($fileInfo->getExtension(), ['yml', 'yaml'], true)) {
+            $this->processYamlFile($fileInfo);
+        }
+
+        $this->fileSystemFileProcessor->processFileInfo($fileInfo);
     }
 }

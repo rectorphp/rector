@@ -29,9 +29,7 @@ if (strpos($docToken->getContent(), "\n") === false) {
 return false;
 CODE_SAMPLE
                 ,
-                <<<'CODE_SAMPLE'
-return strpos($docToken->getContent(), "\n") === false;
-CODE_SAMPLE
+                'return strpos($docToken->getContent(), "\n") === false;'
             ),
         ]);
     }
