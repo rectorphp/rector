@@ -4,6 +4,7 @@ namespace Rector\Console\Command;
 
 use Nette\Utils\FileSystem;
 use PHPStan\AnalysedCodeException;
+use Rector\Application\AppliedRectorCollector;
 use Rector\Application\Error;
 use Rector\Application\ErrorCollector;
 use Rector\Application\FileProcessor;
@@ -103,6 +104,11 @@ final class ProcessCommand extends Command
      */
     private $afterRectorCodingStyle;
 
+    /**
+     * @var AppliedRectorCollector
+     */
+    private $appliedRectorCollector;
+
     public function __construct(
         FileProcessor $fileProcessor,
         SymfonyStyle $symfonyStyle,
@@ -115,7 +121,8 @@ final class ProcessCommand extends Command
         RectorGuard $rectorGuard,
         FileSystemFileProcessor $fileSystemFileProcessor,
         ErrorCollector $errorCollector,
-        AfterRectorCodingStyle $afterRectorCodingStyle
+        AfterRectorCodingStyle $afterRectorCodingStyle,
+        AppliedRectorCollector $appliedRectorCollector
     ) {
         parent::__construct();
 
@@ -131,6 +138,7 @@ final class ProcessCommand extends Command
         $this->fileSystemFileProcessor = $fileSystemFileProcessor;
         $this->errorCollector = $errorCollector;
         $this->afterRectorCodingStyle = $afterRectorCodingStyle;
+        $this->appliedRectorCollector = $appliedRectorCollector;
     }
 
     protected function configure(): void
@@ -264,7 +272,8 @@ final class ProcessCommand extends Command
             if ($newContent !== $oldContent) {
                 $this->fileDiffs[] = new FileDiff(
                     $fileInfo->getPathname(),
-                    $this->differAndFormatter->diffAndFormat($oldContent, $newContent)
+                    $this->differAndFormatter->diffAndFormat($oldContent, $newContent),
+                    $this->appliedRectorCollector->getRectorClasses()
                 );
             }
         } else {

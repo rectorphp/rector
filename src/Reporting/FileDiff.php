@@ -14,10 +14,19 @@ final class FileDiff
      */
     private $file;
 
-    public function __construct(string $file, string $diff)
+    /**
+     * @var string[]
+     */
+    private $appliedRectorClasses = [];
+
+    /**
+     * @param string[] $appliedRectorClasses
+     */
+    public function __construct(string $file, string $diff, array $appliedRectorClasses = [])
     {
         $this->file = $file;
         $this->diff = $diff;
+        $this->appliedRectorClasses = array_unique($appliedRectorClasses);
     }
 
     public function getDiff(): string
@@ -28,5 +37,13 @@ final class FileDiff
     public function getFile(): string
     {
         return $this->file;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getAppliedRectorClasses(): array
+    {
+        return $this->appliedRectorClasses;
     }
 }

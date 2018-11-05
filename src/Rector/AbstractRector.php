@@ -5,6 +5,7 @@ namespace Rector\Rector;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\NodeVisitorAbstract;
+use Rector\Application\AppliedRectorCollector;
 use Rector\Contract\Rector\PhpRectorInterface;
 use Rector\PhpParser\Node\Builder\ExpressionAdder;
 use Rector\PhpParser\Node\Builder\PropertyAdder;
@@ -30,12 +31,30 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     private $propertyAdder;
 
     /**
+     * @var AppliedRectorCollector
+     */
+    private $appliedRectorCollector;
+
+    /**
      * @required
      */
-    public function setAbstractRectorDependencies(PropertyAdder $propertyAdder, ExpressionAdder $expressionAdder): void
-    {
+    public function setAbstractRectorDependencies(
+        PropertyAdder $propertyAdder,
+        ExpressionAdder $expressionAdder,
+        AppliedRectorCollector $appliedRectorCollector
+    ): void {
         $this->propertyAdder = $propertyAdder;
         $this->expressionAdder = $expressionAdder;
+        $this->appliedRectorCollector = $appliedRectorCollector;
+    }
+
+    /**
+     * @param Node[] $nodes
+     * @return array|Node[]|null
+     */
+    public function beforeTraverse(array $nodes)
+    {
+        $this->appliedRectorCollector->reset();
     }
 
     /**
@@ -47,7 +66,19 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         if (! $this->isMatchingNodeType($nodeClass)) {
             return null;
         }
-        return $this->refactor($node);
+
+        $originalNode = $node;
+        $node = $this->refactor($node);
+        if ($node === null) {
+            return null;
+        }
+
+        // changed!
+        if ($originalNode !== $node) {
+            $this->appliedRectorCollector->addRectorClass(static::class);
+        }
+
+        return $node;
     }
 
     /**
@@ -58,6 +89,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     {
         $nodes = $this->expressionAdder->addExpressionsToNodes($nodes);
         $nodes = $this->propertyAdder->addPropertiesToNodes($nodes);
+
         return $this->removeFromNodes($nodes);
     }
 

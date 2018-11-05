@@ -3,10 +3,7 @@
 namespace Rector\Console\Output;
 
 use Rector\Application\Error;
-use Rector\Contract\Rector\RectorInterface;
-use Rector\PhpParser\NodeTraverser\RectorNodeTraverser;
 use Rector\Reporting\FileDiff;
-use Rector\YamlRector\YamlFileProcessor;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use function Safe\sprintf;
 
@@ -17,24 +14,9 @@ final class ProcessCommandReporter
      */
     private $symfonyStyle;
 
-    /**
-     * @var RectorNodeTraverser
-     */
-    private $rectorNodeTraverser;
-
-    /**
-     * @var YamlFileProcessor
-     */
-    private $yamlFileProcessor;
-
-    public function __construct(
-        RectorNodeTraverser $rectorNodeTraverser,
-        SymfonyStyle $symfonyStyle,
-        YamlFileProcessor $yamlFileProcessor
-    ) {
+    public function __construct(SymfonyStyle $symfonyStyle)
+    {
         $this->symfonyStyle = $symfonyStyle;
-        $this->rectorNodeTraverser = $rectorNodeTraverser;
-        $this->yamlFileProcessor = $yamlFileProcessor;
     }
 
     /**
@@ -71,6 +53,13 @@ final class ProcessCommandReporter
             $this->symfonyStyle->newLine();
             $this->symfonyStyle->writeln($fileDiff->getDiff());
             $this->symfonyStyle->newLine();
+
+            if ($fileDiff->getAppliedRectorClasses()) {
+                $this->symfonyStyle->writeln('Applied rectors:');
+                $this->symfonyStyle->newLine();
+                $this->symfonyStyle->listing($fileDiff->getAppliedRectorClasses());
+                $this->symfonyStyle->newLine();
+            }
         }
     }
 
