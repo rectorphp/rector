@@ -244,6 +244,10 @@ final class ProcessCommand extends Command
 
             $this->errorCollector->addError(new Error($fileInfo, $message));
         } catch (Throwable $throwable) {
+            if ($this->symfonyStyle->isVerbose()) {
+                throw $throwable;
+            }
+
             $rectorClass = $this->matchRectorClass($throwable);
             if ($rectorClass) {
                 $this->errorCollector->addErrorWithRectorMessage($rectorClass, $throwable->getMessage());
