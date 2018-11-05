@@ -60,26 +60,23 @@ final class SimplifyEmptyArrayCheckRector extends AbstractRector
         return new NotIdentical($variable, new Array_());
     }
 
-    /**
-     * @param mixed $node
-     */
-    public function isNoneOfPreferableNodes($node): bool
+    public function isNoneOfPreferableNodes(Node $node): bool
     {
         return ! $this->isName($node, 'is_array') && ! $node instanceof Empty_ && ! $node instanceof BooleanNot;
     }
 
-    /**
-     * @param mixed $leftValue
-     * @param mixed $rightValue
-     */
-    private function isPreferableCheck($leftValue, $rightValue): bool
+    private function isPreferableCheck(Node $firstNode, Node $secondNode): bool
     {
-        if ($this->isNoneOfPreferableNodes($leftValue) || $this->isNoneOfPreferableNodes($rightValue)) {
+        if ($this->isNoneOfPreferableNodes($firstNode) || $this->isNoneOfPreferableNodes($secondNode)) {
             return false;
         }
 
         // special case
-        if ($leftValue instanceof BooleanNot && $rightValue instanceof BooleanNot) {
+        if ($firstNode instanceof BooleanNot && $secondNode instanceof BooleanNot) {
+            return false;
+        }
+
+        if ($firstNode instanceof Empty_ && $secondNode instanceof Empty_) {
             return false;
         }
 

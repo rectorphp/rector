@@ -2,6 +2,7 @@
 
 namespace Rector\CodeQuality\Rector\Foreach_;
 
+use PhpParser\Comment;
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\Equal;
 use PhpParser\Node\Expr\BinaryOp\Identical;
@@ -15,9 +16,25 @@ use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Rector\Utils\NodeTraverser\CallableNodeTraverser;
 
 final class ForeachToInArrayRector extends AbstractRector
 {
+    /**
+     * @var Comment[]
+     */
+    private $comments = [];
+
+    /**
+     * @var CallableNodeTraverser
+     */
+    private $callableNodeTraverser;
+
+    public function __construct(CallableNodeTraverser $callableNodeTraverser)
+    {
+        $this->callableNodeTraverser = $callableNodeTraverser;
+    }
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -49,22 +66,20 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Foreach_ $foreachNode
+     * @param Foreach_ $node
      */
-    public function refactor(Node $foreachNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        if (! $this->isAForeachCandidate($foreachNode)) {
+        if (! $this->isAForeachCandidate($node)) {
             return null;
         }
 
-        $firstNodeInsideForeach = $foreachNode->stmts[0];
-
+        $firstNodeInsideForeach = $node->stmts[0];
         if (! $firstNodeInsideForeach instanceof If_) {
             return null;
         }
 
         $ifCondition = $firstNodeInsideForeach->cond;
-
         if (! $ifCondition instanceof Identical && ! $ifCondition instanceof Equal) {
             return null;
         }
@@ -76,28 +91,36 @@ CODE_SAMPLE
             return null;
         }
 
-        $condition = $this->normalizeYodaComparison($leftVariable, $rightVariable, $foreachNode);
+        $condition = $this->normalizeYodaComparison($leftVariable, $rightVariable, $node);
 
         if (! $this->isIfBodyABoolReturnNode($firstNodeInsideForeach)) {
             return null;
         }
 
-        $inArrayFunctionCall = $this->createInArrayFunction($condition, $ifCondition, $foreachNode);
+        $inArrayFunctionCall = $this->createInArrayFunction($condition, $ifCondition, $node);
 
-        $returnNodeToRemove = $foreachNode->getAttribute(Attribute::NEXT_NODE);
+        $returnNodeToRemove = $node->getAttribute(Attribute::NEXT_NODE);
         $this->removeNode($returnNodeToRemove);
 
         /** @var Return_ $returnNode */
         $returnNode = $firstNodeInsideForeach->stmts[0];
 
-        $negativeReturn = $this->isFalse($returnNode->expr);
+        $returnNode = new Return_($this->isFalse($returnNode->expr) ? new BooleanNot(
+            $inArrayFunctionCall
+        ) : $inArrayFunctionCall);
 
-        return new Return_($negativeReturn ? new BooleanNot($inArrayFunctionCall) : $inArrayFunctionCall);
+        $this->combineCommentsToNode($node, $returnNode);
+
+        return $returnNode;
     }
 
     private function isAForeachCandidate(Foreach_ $foreachNode): bool
     {
         if (isset($foreachNode->keyVar)) {
+            return false;
+        }
+
+        if (count($foreachNode->stmts) > 1) {
             return false;
         }
 
@@ -135,7 +158,6 @@ CODE_SAMPLE
     private function isIfBodyABoolReturnNode(If_ $firstNodeInsideForeach): bool
     {
         $ifStatment = $firstNodeInsideForeach->stmts[0];
-
         if (! $ifStatment instanceof Return_) {
             return false;
         }
@@ -156,5 +178,25 @@ CODE_SAMPLE
         }
 
         return $this->createFunction('in_array', $arguments);
+    }
+    
+    private function combineCommentsToNode(Node $originalNode, Node $newNode): void
+    {
+        $this->callableNodeTraverser->traverseNodesWithCallable([$originalNode], function (Node $node): void {
+            if ($node->hasAttribute('comments')) {
+                $this->comments = array_merge($this->comments, $node->getComments());
+            }
+        });
+
+        if ($this->comments === []) {
+            return;
+        }
+
+        $commentContent = '';
+        foreach ($this->comments as $comment) {
+            $commentContent .= $comment->getText() . PHP_EOL;
+        }
+
+        $newNode->setAttribute('comments', [new Comment($commentContent)]);
     }
 }

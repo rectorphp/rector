@@ -29,6 +29,7 @@ services:
         extraAllowedClasses:
             - 'PHPStan\Type\*'
             - 'PhpParser\Node\*'
+            - 'PhpParser\Comment'
             - 'Symplify\PackageBuilder\*'
             - 'PhpParser\Comment\Doc'
             - 'PhpParser\NodeTraverser'

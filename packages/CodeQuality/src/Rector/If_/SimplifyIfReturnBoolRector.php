@@ -79,6 +79,10 @@ CODE_SAMPLE
             return true;
         }
 
+        if (count($ifNode->elseifs) > 0) {
+            return true;
+        }
+
         $ifInnerNode = $ifNode->stmts[0];
         if (! $ifInnerNode instanceof Return_) {
             return true;
