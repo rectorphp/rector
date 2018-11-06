@@ -91,7 +91,8 @@ final class FilesFinder
             ->in($absoluteDirectories)
             ->name($suffixesPattern)
             ->exclude(['examples', 'Examples', 'stubs', 'Stubs', 'fixtures', 'Fixtures', 'polyfill', 'Polyfill'])
-            ->notName('*polyfill*');
+            ->notName('*polyfill*')
+            ->sortByName();
 
         $this->addFilterWithExcludedPaths($finder);
 

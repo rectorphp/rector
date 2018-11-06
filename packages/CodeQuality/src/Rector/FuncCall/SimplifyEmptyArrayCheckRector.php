@@ -10,12 +10,23 @@ use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Empty_;
 use PhpParser\Node\Expr\FuncCall;
+use Rector\PhpParser\Node\Maintainer\BinaryOpMaintainer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class SimplifyEmptyArrayCheckRector extends AbstractRector
 {
+    /**
+     * @var BinaryOpMaintainer
+     */
+    private $binaryOpMaintainer;
+
+    public function __construct(BinaryOpMaintainer $binaryOpMaintainer)
+    {
+        $this->binaryOpMaintainer = $binaryOpMaintainer;
+    }
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -33,53 +44,39 @@ final class SimplifyEmptyArrayCheckRector extends AbstractRector
     }
 
     /**
-     * @param BooleanAnd $booleanAndNode
+     * @param BooleanAnd $node
      */
-    public function refactor(Node $booleanAndNode): ?Node
+    public function refactor(Node $node): ?Node
     {
-        $leftValue = $booleanAndNode->left;
-        $rightValue = $booleanAndNode->right;
-        if (! $this->isPreferableCheck($leftValue, $rightValue)) {
+        $matchedNodes = $this->binaryOpMaintainer->matchFirstAndSecondConditionNode(
+            $node,
+            // is_array(...)
+            function (Node $node) {
+                return $node instanceof FuncCall && $this->isName($node, 'is_array');
+            },
+            // empty(...) or !empty(...)
+            function (Node $node) {
+                if ($node instanceof Empty_) {
+                    return true;
+                }
+
+                return $node instanceof BooleanNot && $node->expr instanceof Empty_;
+            }
+        );
+
+        if ($matchedNodes === null) {
             return null;
         }
 
-        if (! $rightValue instanceof BooleanNot && ! $leftValue instanceof BooleanNot) {
-            /** @var FuncCall $variable */
-            $variable = $leftValue instanceof Empty_ ? $leftValue->expr : $rightValue->expr;
+        /** @var Empty_|NotIdentical $emptyOrNotIdenticalNode */
+        [, $emptyOrNotIdenticalNode] = $matchedNodes;
 
-            return new Identical($variable, new Array_());
+        if ($emptyOrNotIdenticalNode instanceof Empty_) {
+            return new Identical($emptyOrNotIdenticalNode->expr, new Array_());
         }
 
-        $booleanNotExpr = $rightValue instanceof BooleanNot ? $rightValue->expr : $leftValue->expr;
-        if (! $this->isName($booleanNotExpr, 'is_array') && ! $booleanNotExpr instanceof Empty_) {
-            return null;
-        }
-
-        $variable = $booleanNotExpr->expr ?? $booleanNotExpr;
-
-        return new NotIdentical($variable, new Array_());
-    }
-
-    public function isNoneOfPreferableNodes(Node $node): bool
-    {
-        return ! $this->isName($node, 'is_array') && ! $node instanceof Empty_ && ! $node instanceof BooleanNot;
-    }
-
-    private function isPreferableCheck(Node $firstNode, Node $secondNode): bool
-    {
-        if ($this->isNoneOfPreferableNodes($firstNode) || $this->isNoneOfPreferableNodes($secondNode)) {
-            return false;
-        }
-
-        // special case
-        if ($firstNode instanceof BooleanNot && $secondNode instanceof BooleanNot) {
-            return false;
-        }
-
-        if ($firstNode instanceof Empty_ && $secondNode instanceof Empty_) {
-            return false;
-        }
-
-        return true;
+        /** @var Empty_ $emptyNode */
+        $emptyNode = $emptyOrNotIdenticalNode->expr;
+        return new NotIdentical($emptyNode->expr, new Array_());
     }
 }
