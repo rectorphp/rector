@@ -179,7 +179,7 @@ CODE_SAMPLE
 
         return $this->createFunction('in_array', $arguments);
     }
-    
+
     private function combineCommentsToNode(Node $originalNode, Node $newNode): void
     {
         $this->callableNodeTraverser->traverseNodesWithCallable([$originalNode], function (Node $node): void {
