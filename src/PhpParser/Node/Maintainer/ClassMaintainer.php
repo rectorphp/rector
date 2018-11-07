@@ -10,9 +10,9 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\TraitUse;
-use Rector\PhpParser\Node\Builder\VariableInfo;
 use Rector\PhpParser\Node\NodeFactory;
 use Rector\PhpParser\Node\Resolver\NameResolver;
+use Rector\PhpParser\Node\VariableInfo;
 
 final class ClassMaintainer
 {

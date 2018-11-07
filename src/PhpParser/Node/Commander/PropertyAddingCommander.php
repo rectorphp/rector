@@ -8,8 +8,8 @@ use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Contract\PhpParser\Node\CommanderInterface;
-use Rector\PhpParser\Node\Builder\VariableInfo;
 use Rector\PhpParser\Node\Maintainer\ClassMaintainer;
+use Rector\PhpParser\Node\VariableInfo;
 
 /**
  * Adds new properties to class and to constructor

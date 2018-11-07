@@ -5,9 +5,9 @@ namespace Rector\Rector;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\Class_;
-use Rector\PhpParser\Node\Builder\VariableInfo;
 use Rector\PhpParser\Node\Commander\NodeAddingCommander;
 use Rector\PhpParser\Node\Commander\PropertyAddingCommander;
+use Rector\PhpParser\Node\VariableInfo;
 
 /**
  * This could be part of @see AbstractRector, but decopuling to trait

@@ -25,7 +25,6 @@ use PhpParser\Node\Stmt\Property;
 use Rector\Exception\NotImplementedException;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Php\TypeAnalyzer;
-use Rector\PhpParser\Node\Builder\VariableInfo;
 use function Safe\sprintf;
 
 final class NodeFactory

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\PhpParser\Node\Builder;
+namespace Rector\PhpParser\Node;
 
 final class VariableInfo
 {
