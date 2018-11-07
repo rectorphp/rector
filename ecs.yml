@@ -105,6 +105,7 @@ parameters:
             - 'src/Rector/AbstractRector.php'
             - 'packages/Php/src/Rector/Unset_/UnsetCastRector.php'
             - 'packages/Php/src/Rector/ConstFetch/BarewordStringRector.php'
+            - 'packages/CodeQuality/src/Rector/Foreach_/ForeachToInArrayRector.php'
             # array type check
             - 'src/RectorDefinition/RectorDefinition.php'
 
