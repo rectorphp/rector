@@ -2,7 +2,7 @@
 
 namespace Rector\PhpParser\Node\Maintainer;
 
-use PhpParser\Node\Param;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -123,7 +123,7 @@ final class ClassMaintainer
     public function addConstructorDependencyWithCustomAssign(
         Class_ $classNode,
         VariableInfo $variableInfo,
-        Expression $assignNode
+        Assign $assignNode
     ): void {
         $constructorMethod = $classNode->getMethod('__construct');
         /** @var ClassMethod $constructorMethod */
@@ -205,14 +205,14 @@ final class ClassMaintainer
     private function addParameterAndAssignToMethod(
         ClassMethod $classMethodNode,
         VariableInfo $variableInfo,
-        Expression $propertyAssignNode
+        Assign $propertyAssignNode
     ): void {
         if ($this->hasMethodParameter($classMethodNode, $variableInfo)) {
             return;
         }
 
         $classMethodNode->params[] = $this->nodeFactory->createParamFromVariableInfo($variableInfo);
-        $classMethodNode->stmts[] = $propertyAssignNode;
+        $classMethodNode->stmts[] = new Expression($propertyAssignNode);
     }
 
     private function hasMethodParameter(ClassMethod $classMethodNode, VariableInfo $variableInfo): bool

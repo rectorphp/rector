@@ -21,7 +21,6 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
 use Rector\Exception\NotImplementedException;
 use Rector\NodeTypeResolver\Node\Attribute;
@@ -100,18 +99,18 @@ final class NodeFactory
     /**
      * Creates $this->property = $property;
      */
-    public function createPropertyAssignment(string $propertyName): Expression
+    public function createPropertyAssignment(string $propertyName): Assign
     {
         $variable = new Variable($propertyName);
 
         return $this->createPropertyAssignmentWithExpr($propertyName, $variable);
     }
 
-    public function createPropertyAssignmentWithExpr(string $propertyName, Expr $rightExprNode): Expression
+    public function createPropertyAssignmentWithExpr(string $propertyName, Expr $rightExprNode): Assign
     {
         $leftExprNode = $this->createPropertyFetch('this', $propertyName);
-        $assign = new Assign($leftExprNode, $rightExprNode);
-        return new Expression($assign);
+
+        return new Assign($leftExprNode, $rightExprNode);
     }
 
     /**

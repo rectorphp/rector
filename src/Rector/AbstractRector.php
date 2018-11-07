@@ -4,6 +4,8 @@ namespace Rector\Rector;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Application\AppliedRectorCollector;
 use Rector\Contract\Rector\PhpRectorInterface;
@@ -76,6 +78,10 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         // changed!
         if ($originalNode !== $node) {
             $this->appliedRectorCollector->addRectorClass(static::class);
+        }
+
+        if ($originalNode instanceof Stmt && $node instanceof Expr) {
+            return new Expression($node);
         }
 
         return $node;

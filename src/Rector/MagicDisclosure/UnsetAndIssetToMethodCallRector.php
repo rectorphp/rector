@@ -5,7 +5,6 @@ namespace Rector\Rector\MagicDisclosure;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Isset_;
-use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Unset_;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
@@ -132,13 +131,13 @@ CODE_SAMPLE
                 return null;
             }
 
-            $methodCall = $this->createMethodCall(
+            return $this->createMethodCall(
                 $arrayDimFetchNode->var,
                 $methodsNamesByType['unset'],
                 [$arrayDimFetchNode->dim]
             );
-            // wrap it, so add ";" in the end of line
-            return new Expression($methodCall);
         }
+
+        return null;
     }
 }

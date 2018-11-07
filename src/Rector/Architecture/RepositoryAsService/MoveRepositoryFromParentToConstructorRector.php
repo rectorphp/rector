@@ -5,9 +5,9 @@ namespace Rector\Rector\Architecture\RepositoryAsService;
 use Nette\Utils\Strings;
 use PhpParser\BuilderFactory;
 use PhpParser\Node;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\Expression;
 use Rector\Bridge\Contract\DoctrineEntityAndRepositoryMapperInterface;
 use Rector\Exception\Bridge\RectorProviderException;
 use Rector\NodeTypeResolver\Node\Attribute;
@@ -140,7 +140,7 @@ CODE_SAMPLE
      * Creates:
      * "$this->repository = $entityManager->getRepository()"
      */
-    private function createRepositoryAssign(Class_ $classNode): Expression
+    private function createRepositoryAssign(Class_ $classNode): Assign
     {
         $repositoryClassName = (string) $classNode->getAttribute(Attribute::CLASS_NAME);
         $entityClassName = $this->doctrineEntityAndRepositoryMapper->mapRepositoryToEntity($repositoryClassName);
