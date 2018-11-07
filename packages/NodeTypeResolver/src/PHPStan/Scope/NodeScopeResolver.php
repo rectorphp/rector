@@ -5,10 +5,12 @@ namespace Rector\NodeTypeResolver\PHPStan\Scope;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Interface_;
+use PhpParser\NodeTraverser;
 use PHPStan\Analyser\NodeScopeResolver as PHPStanNodeScopeResolver;
 use PHPStan\Analyser\Scope;
 use PHPStan\Broker\Broker;
 use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\RemoveDeepChainMethodCallNodeVisitor;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 
 /**
@@ -32,14 +34,21 @@ final class NodeScopeResolver
      */
     private $broker;
 
+    /**
+     * @var RemoveDeepChainMethodCallNodeVisitor
+     */
+    private $removeDeepChainMethodCallNodeVisitor;
+
     public function __construct(
         ScopeFactory $scopeFactory,
         PHPStanNodeScopeResolver $phpStanNodeScopeResolver,
-        Broker $broker
+        Broker $broker,
+        RemoveDeepChainMethodCallNodeVisitor $removeDeepChainMethodCallNodeVisitor
     ) {
         $this->scopeFactory = $scopeFactory;
         $this->phpStanNodeScopeResolver = $phpStanNodeScopeResolver;
         $this->broker = $broker;
+        $this->removeDeepChainMethodCallNodeVisitor = $removeDeepChainMethodCallNodeVisitor;
     }
 
     /**
@@ -48,8 +57,11 @@ final class NodeScopeResolver
      */
     public function processNodes(array $nodes, string $filePath): array
     {
+        $this->removeDeepChainMethodCallNodes($nodes);
+
         $this->phpStanNodeScopeResolver->setAnalysedFiles([$filePath]);
 
+        // skip chain method calls, performance issue: https://github.com/phpstan/phpstan/issues/254
         $this->phpStanNodeScopeResolver->processNodes(
             $nodes,
             $this->scopeFactory->createFromFile($filePath),
@@ -87,5 +99,15 @@ final class NodeScopeResolver
         }
 
         return $scope;
+    }
+
+    /**
+     * @param Node[] $nodes
+     */
+    private function removeDeepChainMethodCallNodes(array $nodes): void
+    {
+        $nodeTraverser = new NodeTraverser();
+        $nodeTraverser->addVisitor($this->removeDeepChainMethodCallNodeVisitor);
+        $nodeTraverser->traverse($nodes);
     }
 }

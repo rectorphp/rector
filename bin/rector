@@ -1,6 +1,7 @@
 #!/usr/bin/env php
 <?php declare(strict_types=1);
 
+use Composer\XdebugHandler\XdebugHandler;
 use Psr\Container\ContainerInterface;
 use Rector\Console\Application;
 use Symplify\PackageBuilder\Console\ThrowableRenderer;
@@ -10,6 +11,10 @@ gc_disable();
 
 // Require Composer autoload.php
 require_once __DIR__ . '/bootstrap.php';
+
+$xdebug = new XdebugHandler('rector', '--ansi');
+$xdebug->check();
+unset($xdebug);
 
 try {
     /** @var ContainerInterface $container */

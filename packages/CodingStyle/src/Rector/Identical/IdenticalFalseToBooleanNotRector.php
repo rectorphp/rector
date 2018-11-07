@@ -3,15 +3,27 @@
 namespace Rector\CodingStyle\Rector\Identical;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BooleanNot;
+use Rector\PhpParser\Node\Maintainer\BinaryOpMaintainer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class IdenticalFalseToBooleanNotRector extends AbstractRector
 {
+    /**
+     * @var BinaryOpMaintainer
+     */
+    private $binaryOpMaintainer;
+
+    public function __construct(BinaryOpMaintainer $binaryOpMaintainer)
+    {
+        $this->binaryOpMaintainer = $binaryOpMaintainer;
+    }
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Changes === false to negate !', [
@@ -32,35 +44,27 @@ final class IdenticalFalseToBooleanNotRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->isFalse($node->right)) {
-            $comparedNode = $node->left;
-            $shouldUnwrap = $node->left instanceof BooleanNot;
-        } elseif ($this->isFalse($node->left)) {
-            $comparedNode = $node->right;
-            $shouldUnwrap = $node->right instanceof BooleanNot;
-        } else {
-            return null;
-        }
-
-        if ($shouldUnwrap) {
-            /** @var BooleanNot $comparedNode */
-            $comparedNode = $comparedNode->expr;
-            if ($this->shouldSkip($comparedNode)) {
-                return null;
+        $matchedNodes = $this->binaryOpMaintainer->matchFirstAndSecondConditionNode(
+            $node,
+            function (Node $node) {
+                return ! $node instanceof BinaryOp;
+            },
+            function (Node $node) {
+                return $this->isFalse($node);
             }
+        );
 
-            return $comparedNode;
+        if ($matchedNodes === null) {
+            return null;
         }
 
-        if ($this->shouldSkip($comparedNode)) {
-            return null;
+        /** @var Expr $comparedNode */
+        [$comparedNode, ] = $matchedNodes;
+
+        if ($comparedNode instanceof BooleanNot) {
+            return $comparedNode->expr;
         }
 
         return new BooleanNot($comparedNode);
-    }
-
-    private function shouldSkip(Node $node): bool
-    {
-        return $node instanceof BinaryOp;
     }
 }

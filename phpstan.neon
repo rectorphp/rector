@@ -35,13 +35,16 @@ parameters:
         - '#Array \(array<array<PhpParser\\Node\\Stmt>>\) does not accept array<PhpParser\\Node\\Stmt|null>#'
         - '#Property Rector\\DependencyInjection\\Loader\\RectorServiceParametersShifter::\$serviceKeywords \(array<string>\) does not accept ReflectionProperty#'
         - '#Strict comparison using === between string and null will always evaluate to false#'
+        # false positive
+        - '#Access to an undefined property PhpParser\\Node::\$expr#'
 
         # nette container
         - '#Method Rector\\NodeTypeResolver\\DependencyInjection\\PHPStanServicesFactory::create(.*?)() should return (.*?) but returns object#'
 
-        # false postive - type is set by annotatoin above
+        # false postive - type is set by annotation above
         - '#Method Rector\\Php\\Rector\\TryCatch\\MultiExceptionCatchRector\:\:collectCatchKeysByContent\(\) should return array<array<int\>\> but returns array<string, array<int, int\|string\>\>#'
         - '#Method Rector\\NodeTypeResolver\\PhpDoc\\NodeAnalyzer\\DocBlockAnalyzer::getTagByName\(\) should return PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagNode but returns PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagNode\|null#'
+        - '#Parameter \#1 \$expr of class PhpParser\\Node\\Expr\\BooleanNot constructor expects PhpParser\\Node\\Expr, PhpParser\\Node given#'
 
         # irelevant
         - '#Call to function in_array\(\) with arguments string, (.*?) and true will always evaluate to false#'
