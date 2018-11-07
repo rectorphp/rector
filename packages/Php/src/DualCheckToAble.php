@@ -46,9 +46,10 @@ final class DualCheckToAble
             return null;
         }
 
+        /** @var Instanceof_ $instanceOfNode */
+        /** @var FuncCall $funcCallNode */
         [$instanceOfNode, $funcCallNode] = $matchedNodes;
 
-        /** @var Instanceof_ $instanceOfNode */
         if ((string) $instanceOfNode->class !== $type) {
             return null;
         }

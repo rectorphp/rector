@@ -57,11 +57,7 @@ final class SimplifyConditionsRector extends AbstractRector
             return $this->processBooleanNot($node);
         }
 
-        if ($node instanceof Identical) {
-            return $this->processIdenticalAndNotIdentical($node);
-        }
-
-        return null;
+        return $this->processIdenticalAndNotIdentical($node);
     }
 
     private function processBooleanNot(BooleanNot $node): ?Node
