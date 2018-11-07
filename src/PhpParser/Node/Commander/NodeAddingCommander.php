@@ -7,7 +7,9 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeTraverser;
+use PhpParser\NodeVisitor;
 use PhpParser\NodeVisitorAbstract;
+use Rector\Contract\PhpParser\Node\CommanderInterface;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Utils\BetterNodeFinder;
 
@@ -22,7 +24,7 @@ use Rector\Utils\BetterNodeFinder;
  * - $this->someCall();
  * - $value = this->someNewCall(); // added expression
  */
-final class NodeAddingCommander
+final class NodeAddingCommander implements CommanderInterface
 {
     /**
      * @var BetterNodeFinder
@@ -57,7 +59,40 @@ final class NodeAddingCommander
         }
 
         $nodeTraverser = new NodeTraverser();
-        $nodeTraverser->addVisitor(new class($this->nodesToAdd) extends NodeVisitorAbstract {
+        $nodeTraverser->addVisitor($this->createNodeVisitor());
+
+        // new nodes to remove are always per traverse
+        $this->nodesToAdd = [];
+
+        return $nodeTraverser->traverse($nodes);
+    }
+
+    private function resolveNearestExpressionPosition(Node $node): string
+    {
+        if ($node instanceof Expression) {
+            return spl_object_hash($node);
+        }
+
+        /** @var Expression|null $foundNode */
+        $foundNode = $this->betterNodeFinder->findFirstAncestorInstanceOf($node, Expression::class);
+        if ($foundNode === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        return spl_object_hash($foundNode);
+    }
+
+    /**
+     * @param Expr|Stmt $node
+     */
+    private function wrapToExpression(Node $node): Stmt
+    {
+        return $node instanceof Stmt ? $node : new Expression($node);
+    }
+
+    private function createNodeVisitor(): NodeVisitor
+    {
+        return new class($this->nodesToAdd) extends NodeVisitorAbstract {
             /**
              * @var Stmt[][]
              */
@@ -88,34 +123,6 @@ final class NodeAddingCommander
 
                 return $nodes;
             }
-        });
-
-        // new nodes to remove are always per traverse
-        $this->nodesToAdd = [];
-
-        return $nodeTraverser->traverse($nodes);
-    }
-
-    private function resolveNearestExpressionPosition(Node $node): string
-    {
-        if ($node instanceof Expression) {
-            return spl_object_hash($node);
-        }
-
-        /** @var Expression|null $foundNode */
-        $foundNode = $this->betterNodeFinder->findFirstAncestorInstanceOf($node, Expression::class);
-        if ($foundNode === null) {
-            throw new ShouldNotHappenException();
-        }
-
-        return spl_object_hash($foundNode);
-    }
-
-    /**
-     * @param Expr|Stmt $node
-     */
-    private function wrapToExpression(Node $node): Stmt
-    {
-        return $node instanceof Stmt ? $node : new Expression($node);
+        };
     }
 }

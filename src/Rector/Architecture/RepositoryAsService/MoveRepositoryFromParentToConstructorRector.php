@@ -12,6 +12,7 @@ use Rector\Bridge\Contract\DoctrineEntityAndRepositoryMapperInterface;
 use Rector\Exception\Bridge\RectorProviderException;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\PhpParser\Node\Builder\VariableInfo;
+use Rector\PhpParser\Node\Maintainer\ClassMaintainer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -39,9 +40,15 @@ final class MoveRepositoryFromParentToConstructorRector extends AbstractRector
      */
     private $builderFactory;
 
+    /**
+     * @var ClassMaintainer
+     */
+    private $classMaintainer;
+
     public function __construct(
         DoctrineEntityAndRepositoryMapperInterface $doctrineEntityAndRepositoryMapper,
         BuilderFactory $builderFactory,
+        ClassMaintainer $classMaintainer,
         string $entityRepositoryClass = 'Doctrine\ORM\EntityRepository',
         string $entityManagerClass = 'Doctrine\ORM\EntityManager'
     ) {
@@ -49,6 +56,7 @@ final class MoveRepositoryFromParentToConstructorRector extends AbstractRector
         $this->builderFactory = $builderFactory;
         $this->entityRepositoryClass = $entityRepositoryClass;
         $this->entityManagerClass = $entityManagerClass;
+        $this->classMaintainer = $classMaintainer;
     }
 
     public function getDefinition(): RectorDefinition

@@ -9,7 +9,6 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Application\AppliedRectorCollector;
 use Rector\Contract\Rector\PhpRectorInterface;
-use Rector\PhpParser\Node\Builder\PropertyAdder;
 
 abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorInterface
 {
@@ -20,12 +19,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     use NodeRemovingTrait;
     use NodeAddingTrait;
     use NodeFactoryTrait;
-    use ClassMaintainerTrait;
-
-    /**
-     * @var PropertyAdder
-     */
-    private $propertyAdder;
 
     /**
      * @var AppliedRectorCollector
@@ -35,11 +28,8 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     /**
      * @required
      */
-    public function setAbstractRectorDependencies(
-        PropertyAdder $propertyAdder,
-        AppliedRectorCollector $appliedRectorCollector
-    ): void {
-        $this->propertyAdder = $propertyAdder;
+    public function setAbstractRectorDependencies(AppliedRectorCollector $appliedRectorCollector): void
+    {
         $this->appliedRectorCollector = $appliedRectorCollector;
     }
 
@@ -79,7 +69,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     {
         $nodes = $this->nodeAddingCommander->traverseNodes($nodes);
 
-        $nodes = $this->propertyAdder->addPropertiesToNodes($nodes);
+        $nodes = $this->propertyAddingCommander->traverseNodes($nodes);
 
         return $this->nodeRemovingCommander->traverseNodes($nodes);
     }

@@ -4,7 +4,10 @@ namespace Rector\Rector;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Stmt\Class_;
+use Rector\PhpParser\Node\Builder\VariableInfo;
 use Rector\PhpParser\Node\Commander\NodeAddingCommander;
+use Rector\PhpParser\Node\Commander\PropertyAddingCommander;
 
 /**
  * This could be part of @see AbstractRector, but decopuling to trait
@@ -18,15 +21,29 @@ trait NodeAddingTrait
     private $nodeAddingCommander;
 
     /**
+     * @var PropertyAddingCommander
+     */
+    private $propertyAddingCommander;
+
+    /**
      * @required
      */
-    public function setNodeAddingCommander(NodeAddingCommander $nodeAddingCommander): void
-    {
+    public function setNodeAddingDependencies(
+        NodeAddingCommander $nodeAddingCommander,
+        PropertyAddingCommander $propertyAddingCommander
+    ): void {
         $this->nodeAddingCommander = $nodeAddingCommander;
+        $this->propertyAddingCommander = $propertyAddingCommander;
     }
 
     protected function addNodeAfterNode(Expr $node, Node $positionNode): void
     {
         $this->nodeAddingCommander->addNodeAfterNode($node, $positionNode);
+    }
+
+    protected function addPropertyToClass(Class_ $classNode, string $propertyType, string $propertyName): void
+    {
+        $variableInfo = new VariableInfo($propertyName, $propertyType);
+        $this->propertyAddingCommander->addPropertyToClass($variableInfo, $classNode);
     }
 }

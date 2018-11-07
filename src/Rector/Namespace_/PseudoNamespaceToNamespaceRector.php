@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\PhpParser\Node\Maintainer\ClassMaintainer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -32,11 +33,20 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
     private $excludedClasses = [];
 
     /**
+     * @var ClassMaintainer
+     */
+    private $classMaintainer;
+
+    /**
      * @param string[] $pseudoNamespacePrefixes
      * @param string[] $excludedClasses
      */
-    public function __construct(array $pseudoNamespacePrefixes, array $excludedClasses = [])
-    {
+    public function __construct(
+        ClassMaintainer $classMaintainer,
+        array $pseudoNamespacePrefixes,
+        array $excludedClasses = []
+    ) {
+        $this->classMaintainer = $classMaintainer;
         $this->pseudoNamespacePrefixes = $pseudoNamespacePrefixes;
         $this->excludedClasses = $excludedClasses;
     }

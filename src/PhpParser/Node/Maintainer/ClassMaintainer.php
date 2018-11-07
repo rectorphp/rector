@@ -11,17 +11,11 @@ use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\TraitUse;
 use Rector\PhpParser\Node\Builder\VariableInfo;
-use Rector\PhpParser\Node\Maintainer\Storage\ClassWithPropertiesObjectStorage;
 use Rector\PhpParser\Node\NodeFactory;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 
 final class ClassMaintainer
 {
-    /**
-     * @var ClassWithPropertiesObjectStorage
-     */
-    private $classWithPropertiesObjectStorage;
-
     /**
      * @var NameResolver
      */
@@ -40,10 +34,8 @@ final class ClassMaintainer
     public function __construct(
         NameResolver $nameResolver,
         NodeFactory $nodeFactory,
-        ClassWithPropertiesObjectStorage $classWithPropertiesObjectStorage,
         ChildAndParentClassMaintainer $childAndParentClassMaintainer
     ) {
-        $this->classWithPropertiesObjectStorage = $classWithPropertiesObjectStorage;
         $this->nodeFactory = $nodeFactory;
         $this->nameResolver = $nameResolver;
         $this->childAndParentClassMaintainer = $childAndParentClassMaintainer;
@@ -51,9 +43,6 @@ final class ClassMaintainer
 
     public function addConstructorDependency(Class_ $classNode, VariableInfo $variableInfo): void
     {
-        $newVariableInfos = array_merge($this->classWithPropertiesObjectStorage[$classNode] ?? [], [$variableInfo]);
-        $this->classWithPropertiesObjectStorage[$classNode] = $newVariableInfos;
-
         // add property
         // @todo should be factory
         $this->addPropertyToClass($classNode, $variableInfo);
@@ -106,7 +95,7 @@ final class ClassMaintainer
 
     public function addPropertyToClass(Class_ $classNode, VariableInfo $variableInfo): void
     {
-        if ($this->hasClassProperty($classNode, $variableInfo)) {
+        if ($this->hasClassProperty($classNode, $variableInfo->getName())) {
             return;
         }
 
@@ -187,14 +176,14 @@ final class ClassMaintainer
         $classNode->stmts[] = $node;
     }
 
-    private function hasClassProperty(Class_ $classNode, VariableInfo $variableInfo): bool
+    private function hasClassProperty(Class_ $classNode, string $name): bool
     {
         foreach ($classNode->stmts as $inClassNode) {
             if (! $inClassNode instanceof Property) {
                 continue;
             }
 
-            if ($this->nameResolver->isName($inClassNode, $variableInfo->getName())) {
+            if ($this->nameResolver->isName($inClassNode, $name)) {
                 return true;
             }
         }

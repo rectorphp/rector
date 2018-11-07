@@ -6,10 +6,12 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeTraverser;
+use PhpParser\NodeVisitor;
 use PhpParser\NodeVisitorAbstract;
+use Rector\Contract\PhpParser\Node\CommanderInterface;
 use Rector\NodeTypeResolver\Node\Attribute;
 
-final class NodeRemovingCommander
+final class NodeRemovingCommander implements CommanderInterface
 {
     /**
      * @var Stmt[]
@@ -38,7 +40,17 @@ final class NodeRemovingCommander
         }
 
         $nodeTraverser = new NodeTraverser();
-        $nodeTraverser->addVisitor(new class($this->nodesToRemove) extends NodeVisitorAbstract {
+        $nodeTraverser->addVisitor($this->createNodeVisitor());
+
+        // new nodes to remove are always per traverse
+        $this->nodesToRemove = [];
+
+        return $nodeTraverser->traverse($nodes);
+    }
+
+    private function createNodeVisitor(): NodeVisitor
+    {
+        return new class($this->nodesToRemove) extends NodeVisitorAbstract {
             /**
              * @var Stmt[]
              */
@@ -66,11 +78,6 @@ final class NodeRemovingCommander
 
                 return $node;
             }
-        });
-
-        // new nodes to remove are always per traverse
-        $this->nodesToRemove = [];
-
-        return $nodeTraverser->traverse($nodes);
+        };
     }
 }
