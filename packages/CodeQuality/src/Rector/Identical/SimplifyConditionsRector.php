@@ -4,6 +4,7 @@ namespace Rector\CodeQuality\Rector\Identical;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp;
+use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
@@ -93,6 +94,10 @@ final class SimplifyConditionsRector extends AbstractRector
      */
     private function shouldSkip(BinaryOp $binaryOpNode): bool
     {
+        if ($binaryOpNode instanceof BooleanOr) {
+            return true;
+        }
+
         if ($binaryOpNode->left instanceof BinaryOp) {
             return true;
         }

@@ -78,7 +78,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->shouldSkipForeach($node)) {
+        if ($this->shouldSkipForeach($node)) {
             return null;
         }
 
@@ -124,6 +124,7 @@ CODE_SAMPLE
             return null;
         }
 
+        // cannot be "return true;" + "return true;"
         if ($this->areNodesEqual($returnNode, $returnNodeToRemove)) {
             return null;
         }
@@ -142,25 +143,29 @@ CODE_SAMPLE
     private function shouldSkipForeach(Foreach_ $foreachNode): bool
     {
         if (isset($foreachNode->keyVar)) {
-            return false;
+            return true;
         }
 
         if (count($foreachNode->stmts) > 1) {
-            return false;
+            return true;
         }
 
         $nextNode = $foreachNode->getAttribute(Attribute::NEXT_NODE);
         if ($nextNode === null || ! $nextNode instanceof Return_) {
-            return false;
+            return true;
         }
 
         $returnExpression = $nextNode->expr;
 
-        if ($returnExpression !== null && $this->isBool($returnExpression)) {
+        if ($returnExpression === null) {
             return true;
         }
 
-        return $foreachNode->stmts[0] instanceof If_;
+        if (! $this->isBool($returnExpression)) {
+            return true;
+        }
+
+        return ! $foreachNode->stmts[0] instanceof If_;
     }
 
     private function isIfBodyABoolReturnNode(If_ $firstNodeInsideForeach): bool

@@ -2,6 +2,7 @@
 
 namespace Rector\CodeQuality\Rector\If_;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Identical;
@@ -61,16 +62,18 @@ CODE_SAMPLE
             $newReturnNode = $this->processReturnTrue($node, $nextNode);
         } elseif ($this->isFalse($ifInnerNode->expr)) {
             $newReturnNode = $this->processReturnFalse($node, $nextNode);
+        } else {
+            return null;
         }
 
-        if (isset($newReturnNode) && $newReturnNode !== null) {
-            $this->keepComments($node, $newReturnNode);
-            $this->removeNode($nextNode);
-
-            return $newReturnNode;
+        if ($newReturnNode === null) {
+            return null;
         }
 
-        return null;
+        $this->keepComments($node, $newReturnNode);
+        $this->removeNode($nextNode);
+
+        return $newReturnNode;
     }
 
     private function shouldSkip(If_ $ifNode): bool
@@ -100,6 +103,12 @@ CODE_SAMPLE
         if (! $nextNode instanceof Return_) {
             return true;
         }
+
+        // negate + negate → skip for now
+        if ($this->isFalse($ifInnerNode->expr) && Strings::contains($this->print($ifNode->cond), '!=')) {
+            return true;
+        }
+
         return ! $this->isBool($nextNode->expr);
     }
 
