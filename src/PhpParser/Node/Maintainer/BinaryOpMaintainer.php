@@ -16,19 +16,13 @@ final class BinaryOpMaintainer
     public function matchFirstAndSecondConditionNode(
         BinaryOp $binaryOp,
         callable $firstCondition,
-        ?callable $secondCondition = null
+        callable $secondCondition
     ): ?array {
-        if ($secondCondition === null) {
-            $secondCondition = function (Node $node) {
-                return $node;
-            };
-        }
-
-        if ($firstCondition($binaryOp->left) && $secondCondition($binaryOp->right)) {
+        if ($firstCondition($binaryOp->left, $binaryOp->right) && $secondCondition($binaryOp->right, $binaryOp->left)) {
             return [$binaryOp->left, $binaryOp->right];
         }
 
-        if ($firstCondition($binaryOp->right) && $secondCondition($binaryOp->left)) {
+        if ($firstCondition($binaryOp->right, $binaryOp->left) && $secondCondition($binaryOp->left, $binaryOp->right)) {
             return [$binaryOp->right, $binaryOp->left];
         }
 
