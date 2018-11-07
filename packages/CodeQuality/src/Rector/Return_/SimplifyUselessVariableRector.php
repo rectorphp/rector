@@ -82,7 +82,7 @@ CODE_SAMPLE
 
         if ($previousNode instanceof AssignOp) {
             $binaryClass = $this->assignAndBinaryMap->getAlternative($previousNode);
-            if (! $binaryClass) {
+            if ($binaryClass === null) {
                 return null;
             }
 
