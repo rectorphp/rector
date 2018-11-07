@@ -135,7 +135,7 @@ CODE_SAMPLE
 
             // collect error
             $this->errorCollector->addErrorWithRectorMessage(
-                static::class,
+                self::class,
                 sprintf('Service "%s" was not found in DI Container of your Symfony App.', $serviceName)
             );
         }
