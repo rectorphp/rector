@@ -78,7 +78,6 @@ CODE_SAMPLE
 
         /** @var FuncCall $eachFuncCall */
         $eachFuncCall = $assignNode->expr;
-        $eachFuncCall->args[0];
 
         /** @var List_ $listNode */
         $listNode = $assignNode->var;

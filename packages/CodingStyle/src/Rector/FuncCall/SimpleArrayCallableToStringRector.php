@@ -82,7 +82,7 @@ CODE_SAMPLE
             return $node;
         }
 
-        return $node;
+        return null;
     }
 
     private function matchUselessClosureFuncCallName(Closure $closureNode): ?string

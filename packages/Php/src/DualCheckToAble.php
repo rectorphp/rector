@@ -3,7 +3,6 @@
 namespace Rector\Php;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Instanceof_;
@@ -79,9 +78,6 @@ final class DualCheckToAble
             return null;
         }
 
-        $funcCallNode = new FuncCall(new Name($newMethodName));
-        $funcCallNode->args[0] = new Arg($firstVarNode);
-
-        return $funcCallNode;
+        return new FuncCall(new Name($newMethodName), [$firstVarNode]);
     }
 }
