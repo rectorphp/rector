@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
 use Rector\PhpParser\Node\AssignAndBinaryMap;
+use Rector\PhpParser\Node\Maintainer\BinaryOpMaintainer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -20,9 +21,15 @@ final class SimplifyConditionsRector extends AbstractRector
      */
     private $assignAndBinaryMap;
 
-    public function __construct(AssignAndBinaryMap $assignAndBinaryMap)
+    /**
+     * @var BinaryOpMaintainer
+     */
+    private $binaryOpMaintainer;
+
+    public function __construct(AssignAndBinaryMap $assignAndBinaryMap, BinaryOpMaintainer $binaryOpMaintainer)
     {
         $this->assignAndBinaryMap = $assignAndBinaryMap;
+        $this->binaryOpMaintainer = $binaryOpMaintainer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -72,17 +79,23 @@ final class SimplifyConditionsRector extends AbstractRector
 
     private function processIdenticalAndNotIdentical(BinaryOp $node): ?Node
     {
-        if ($node->left instanceof Identical || $node->left instanceof NotIdentical) {
-            $subBinaryOpNode = $node->left;
-            $shouldInverse = $this->isFalse($node->right);
-        } elseif ($node->right instanceof Identical || $node->right instanceof NotIdentical) {
-            $subBinaryOpNode = $node->right;
-            $shouldInverse = $this->isFalse($node->left);
-        } else {
-            return null;
+        $matchedNodes = $this->binaryOpMaintainer->matchFirstAndSecondConditionNode(
+            $node,
+            function (Node $node) {
+                return $node instanceof Identical || $node  instanceof NotIdentical;
+            },
+            function (Node $node) {
+                return $node;
+            }
+        );
+
+        if ($matchedNodes === null) {
+            return $matchedNodes;
         }
 
-        if ($shouldInverse) {
+        /** @var Identical|NotIdentical $subBinaryOpNode */
+        [$subBinaryOpNode, $otherNode] = $matchedNodes;
+        if ($this->isFalse($otherNode)) {
             return $this->createInversedBooleanOp($subBinaryOpNode);
         }
 

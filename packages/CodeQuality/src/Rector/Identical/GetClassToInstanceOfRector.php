@@ -11,12 +11,23 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
+use Rector\PhpParser\Node\Maintainer\BinaryOpMaintainer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class GetClassToInstanceOfRector extends AbstractRector
 {
+    /**
+     * @var BinaryOpMaintainer
+     */
+    private $binaryOpMaintainer;
+
+    public function __construct(BinaryOpMaintainer $binaryOpMaintainer)
+    {
+        $this->binaryOpMaintainer = $binaryOpMaintainer;
+    }
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -43,21 +54,26 @@ final class GetClassToInstanceOfRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->isClassReference($node->left) && $this->isGetClassFuncCallNode($node->right)) {
-            /** @var FuncCall $funcCallNode */
-            $funcCallNode = $node->right;
-            $varNode = $funcCallNode->args[0]->value;
+        $matchedNodes = $this->binaryOpMaintainer->matchFirstAndSecondConditionNode(
+            $node,
+            function (Node $node) {
+                return $this->isClassReference($node);
+            },
+            function (Node $node) {
+                return $this->isGetClassFuncCallNode($node);
+            }
+        );
 
-            $className = $this->matchClassName($node->left);
-        } elseif ($this->isClassReference($node->right) && $this->isGetClassFuncCallNode($node->left)) {
-            /** @var FuncCall $funcCallNode */
-            $funcCallNode = $node->left;
-            $varNode = $funcCallNode->args[0]->value;
-
-            $className = $this->matchClassName($node->right);
-        } else {
+        if ($matchedNodes === null) {
             return null;
         }
+
+        /** @var ClassConstFetch $classReferenceNode */
+        /** @var FuncCall $funcCallNode */
+        [$classReferenceNode, $funcCallNode] = $matchedNodes;
+
+        $varNode = $funcCallNode->args[0]->value;
+        $className = $this->matchClassName($classReferenceNode);
 
         $instanceOfNode = new Instanceof_($varNode, new FullyQualified($className));
         if ($node instanceof NotIdentical) {
