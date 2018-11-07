@@ -9,7 +9,7 @@ use Rector\PhpParser\Node\Commander\NodeRemovingCommander;
  * This could be part of @see AbstractRector, but decopuling to trait
  * makes clear what code has 1 purpose.
  */
-trait RemovingTrait
+trait NodeRemovingTrait
 {
     /**
      * @var NodeRemovingCommander
@@ -27,14 +27,5 @@ trait RemovingTrait
     protected function removeNode(Node $node): void
     {
         $this->nodeRemovingCommander->addNode($node);
-    }
-
-    /**
-     * @param Node[] $nodes
-     * @return Node[]
-     */
-    protected function removeFromNodes(array $nodes): array
-    {
-        return $this->nodeRemovingCommander->traverseNodes($nodes);
     }
 }

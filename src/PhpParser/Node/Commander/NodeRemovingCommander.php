@@ -23,6 +23,7 @@ final class NodeRemovingCommander
             $node = $node->getAttribute(Attribute::PARENT_NODE);
         }
 
+        /** @var Stmt $node */
         $this->nodesToRemove[] = $node;
     }
 
@@ -44,7 +45,7 @@ final class NodeRemovingCommander
             private $nodesToRemove = [];
 
             /**
-             * @param Stmt[]
+             * @param Stmt[] $nodesToRemove
              */
             public function __construct(array $nodesToRemove)
             {

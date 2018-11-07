@@ -9,7 +9,6 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Application\AppliedRectorCollector;
 use Rector\Contract\Rector\PhpRectorInterface;
-use Rector\PhpParser\Node\Builder\ExpressionAdder;
 use Rector\PhpParser\Node\Builder\PropertyAdder;
 
 abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorInterface
@@ -18,14 +17,10 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     use NameResolverTrait;
     use ConstFetchAnalyzerTrait;
     use BetterStandardPrinterTrait;
-    use RemovingTrait;
+    use NodeRemovingTrait;
+    use NodeAddingTrait;
     use NodeFactoryTrait;
     use ClassMaintainerTrait;
-
-    /**
-     * @var ExpressionAdder
-     */
-    private $expressionAdder;
 
     /**
      * @var PropertyAdder
@@ -42,21 +37,10 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
      */
     public function setAbstractRectorDependencies(
         PropertyAdder $propertyAdder,
-        ExpressionAdder $expressionAdder,
         AppliedRectorCollector $appliedRectorCollector
     ): void {
         $this->propertyAdder = $propertyAdder;
-        $this->expressionAdder = $expressionAdder;
         $this->appliedRectorCollector = $appliedRectorCollector;
-    }
-
-    /**
-     * @param Node[] $nodes
-     * @return array|Node[]|null
-     */
-    public function beforeTraverse(array $nodes)
-    {
-        $this->appliedRectorCollector->reset();
     }
 
     /**
@@ -93,15 +77,11 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
      */
     public function afterTraverse(array $nodes): array
     {
-        $nodes = $this->expressionAdder->addExpressionsToNodes($nodes);
+        $nodes = $this->nodeAddingCommander->traverseNodes($nodes);
+
         $nodes = $this->propertyAdder->addPropertiesToNodes($nodes);
 
-        return $this->removeFromNodes($nodes);
-    }
-
-    protected function addNodeAfterNode(Expr $newNode, Node $positionNode): void
-    {
-        $this->expressionAdder->addNodeAfterNode($newNode, $positionNode);
+        return $this->nodeRemovingCommander->traverseNodes($nodes);
     }
 
     private function isMatchingNodeType(string $nodeClass): bool
