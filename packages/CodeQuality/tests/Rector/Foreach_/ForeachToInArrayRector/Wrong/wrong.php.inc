@@ -98,4 +98,15 @@ final class MyClass
 
         return;
     }
+
+    public function alwaysTrue() : bool
+    {
+        foreach ($items as $item) {
+            if ($something === $item) {
+                return true;
+            }
+        }
+
+        return true;
+    }
 }
