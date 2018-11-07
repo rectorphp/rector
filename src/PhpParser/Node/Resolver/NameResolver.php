@@ -18,11 +18,11 @@ final class NameResolver
     /**
      * @var callable[]
      */
-    private $nameResolvers = [];
+    private $nameResolversPerNode = [];
 
     public function __construct()
     {
-        $this->nameResolvers[ClassConst::class] = function (ClassConst $classConstNode) {
+        $this->nameResolversPerNode[ClassConst::class] = function (ClassConst $classConstNode) {
             if (! count($classConstNode->consts)) {
                 return null;
             }
@@ -30,7 +30,7 @@ final class NameResolver
             return $this->resolve($classConstNode->consts[0]);
         };
 
-        $this->nameResolvers[Property::class] = function (Property $propertyNode): ?string {
+        $this->nameResolversPerNode[Property::class] = function (Property $propertyNode): ?string {
             if (! count($propertyNode->props)) {
                 return null;
             }
@@ -38,7 +38,7 @@ final class NameResolver
             return $this->resolve($propertyNode->props[0]);
         };
 
-        $this->nameResolvers[Use_::class] = function (Use_ $useNode): ?string {
+        $this->nameResolversPerNode[Use_::class] = function (Use_ $useNode): ?string {
             if (! count($useNode->uses)) {
                 return null;
             }
@@ -46,7 +46,11 @@ final class NameResolver
             return $this->resolve($useNode->uses[0]);
         };
 
-        $this->nameResolvers[Name::class] = function (Name $nameNode): string {
+        $this->nameResolversPerNode[Param::class] = function (Param $paramNode): ?string {
+            return $this->resolve($paramNode->var);
+        };
+
+        $this->nameResolversPerNode[Name::class] = function (Name $nameNode): string {
             $resolvedName = $nameNode->getAttribute(Attribute::RESOLVED_NAME);
             if ($resolvedName instanceof FullyQualified) {
                 return $resolvedName->toString();
@@ -55,7 +59,7 @@ final class NameResolver
             return $nameNode->toString();
         };
 
-        $this->nameResolvers[Empty_::class] = function (): string {
+        $this->nameResolversPerNode[Empty_::class] = function (): string {
             return 'empty';
         };
     }
@@ -67,14 +71,10 @@ final class NameResolver
 
     public function resolve(Node $node): ?string
     {
-        foreach ($this->nameResolvers as $type => $nameResolver) {
+        foreach ($this->nameResolversPerNode as $type => $nameResolver) {
             if (is_a($node, $type, true)) {
                 return $nameResolver($node);
             }
-        }
-
-        if ($node instanceof Param) {
-            return $this->resolve($node->var);
         }
 
         if (! property_exists($node, 'name')) {

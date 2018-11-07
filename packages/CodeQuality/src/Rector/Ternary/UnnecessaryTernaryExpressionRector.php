@@ -5,37 +5,24 @@ namespace Rector\CodeQuality\Rector\Ternary;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp;
-use PhpParser\Node\Expr\BinaryOp\Equal;
-use PhpParser\Node\Expr\BinaryOp\Greater;
-use PhpParser\Node\Expr\BinaryOp\GreaterOrEqual;
-use PhpParser\Node\Expr\BinaryOp\Identical;
-use PhpParser\Node\Expr\BinaryOp\NotEqual;
-use PhpParser\Node\Expr\BinaryOp\NotIdentical;
-use PhpParser\Node\Expr\BinaryOp\Smaller;
-use PhpParser\Node\Expr\BinaryOp\SmallerOrEqual;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\Ternary;
-use Rector\Exception\NotImplementedException;
+use Rector\PhpParser\Node\AssignAndBinaryMap;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
-use function Safe\sprintf;
 
 final class UnnecessaryTernaryExpressionRector extends AbstractRector
 {
     /**
-     * @var string[]
+     * @var AssignAndBinaryMap
      */
-    private $inverseOperandMap = [
-        Identical::class => NotIdentical::class,
-        NotIdentical::class => Identical::class,
-        Equal::class => NotEqual::class,
-        NotEqual::class => Equal::class,
-        Greater::class => Smaller::class,
-        Smaller::class => Greater::class,
-        GreaterOrEqual::class => SmallerOrEqual::class,
-        SmallerOrEqual::class => GreaterOrEqual::class,
-    ];
+    private $assignAndBinaryMap;
+
+    public function __construct(AssignAndBinaryMap $assignAndBinaryMap)
+    {
+        $this->assignAndBinaryMap = $assignAndBinaryMap;
+    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -86,27 +73,11 @@ final class UnnecessaryTernaryExpressionRector extends AbstractRector
             return $binaryOperation;
         }
 
-        return $this->inverseBinaryOperation($binaryOperation);
-    }
-
-    private function inverseBinaryOperation(BinaryOp $operation): BinaryOp
-    {
-        $this->ensureBinaryOperationIsSupported($operation);
-
-        $binaryOpClassName = $this->inverseOperandMap[get_class($operation)];
-        return new $binaryOpClassName($operation->left, $operation->right);
-    }
-
-    private function ensureBinaryOperationIsSupported(BinaryOp $operation): void
-    {
-        if (isset($this->inverseOperandMap[get_class($operation)])) {
-            return;
+        $inversedBinaryClass = $this->assignAndBinaryMap->getInversed($binaryOperation);
+        if ($inversedBinaryClass === null) {
+            return null;
         }
 
-        throw new NotImplementedException(sprintf(
-            '"%s" type is not implemented yet. Add it in %s',
-            get_class($operation),
-            __METHOD__
-        ));
+        return new $inversedBinaryClass($binaryOperation->left, $binaryOperation->right);
     }
 }

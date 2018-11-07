@@ -20,8 +20,6 @@ use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\BitwiseAnd;
 use PhpParser\Node\Expr\BinaryOp\BitwiseOr;
 use PhpParser\Node\Expr\BinaryOp\BitwiseXor;
-use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
-use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\BinaryOp\Div;
 use PhpParser\Node\Expr\BinaryOp\Equal;
@@ -46,7 +44,6 @@ final class AssignAndBinaryMap
      * @var string[]
      */
     private $binaryOpToInverseClasses = [
-        BooleanOr::class => BooleanAnd::class,
         Identical::class => NotIdentical::class,
         NotIdentical::class => Identical::class,
         Equal::class => NotEqual::class,

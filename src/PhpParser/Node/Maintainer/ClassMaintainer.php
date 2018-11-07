@@ -2,7 +2,7 @@
 
 namespace Rector\PhpParser\Node\Maintainer;
 
-use PhpParser\Node\Param;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -10,18 +10,12 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\TraitUse;
-use Rector\PhpParser\Node\Builder\VariableInfo;
-use Rector\PhpParser\Node\Maintainer\Storage\ClassWithPropertiesObjectStorage;
 use Rector\PhpParser\Node\NodeFactory;
 use Rector\PhpParser\Node\Resolver\NameResolver;
+use Rector\PhpParser\Node\VariableInfo;
 
 final class ClassMaintainer
 {
-    /**
-     * @var ClassWithPropertiesObjectStorage
-     */
-    private $classWithPropertiesObjectStorage;
-
     /**
      * @var NameResolver
      */
@@ -40,10 +34,8 @@ final class ClassMaintainer
     public function __construct(
         NameResolver $nameResolver,
         NodeFactory $nodeFactory,
-        ClassWithPropertiesObjectStorage $classWithPropertiesObjectStorage,
         ChildAndParentClassMaintainer $childAndParentClassMaintainer
     ) {
-        $this->classWithPropertiesObjectStorage = $classWithPropertiesObjectStorage;
         $this->nodeFactory = $nodeFactory;
         $this->nameResolver = $nameResolver;
         $this->childAndParentClassMaintainer = $childAndParentClassMaintainer;
@@ -51,9 +43,6 @@ final class ClassMaintainer
 
     public function addConstructorDependency(Class_ $classNode, VariableInfo $variableInfo): void
     {
-        $newVariableInfos = array_merge($this->classWithPropertiesObjectStorage[$classNode] ?? [], [$variableInfo]);
-        $this->classWithPropertiesObjectStorage[$classNode] = $newVariableInfos;
-
         // add property
         // @todo should be factory
         $this->addPropertyToClass($classNode, $variableInfo);
@@ -106,7 +95,7 @@ final class ClassMaintainer
 
     public function addPropertyToClass(Class_ $classNode, VariableInfo $variableInfo): void
     {
-        if ($this->hasClassProperty($classNode, $variableInfo)) {
+        if ($this->hasClassProperty($classNode, $variableInfo->getName())) {
             return;
         }
 
@@ -123,7 +112,7 @@ final class ClassMaintainer
     public function addConstructorDependencyWithCustomAssign(
         Class_ $classNode,
         VariableInfo $variableInfo,
-        Expression $assignNode
+        Assign $assignNode
     ): void {
         $constructorMethod = $classNode->getMethod('__construct');
         /** @var ClassMethod $constructorMethod */
@@ -187,14 +176,14 @@ final class ClassMaintainer
         $classNode->stmts[] = $node;
     }
 
-    private function hasClassProperty(Class_ $classNode, VariableInfo $variableInfo): bool
+    private function hasClassProperty(Class_ $classNode, string $name): bool
     {
         foreach ($classNode->stmts as $inClassNode) {
             if (! $inClassNode instanceof Property) {
                 continue;
             }
 
-            if ($this->nameResolver->isName($inClassNode, $variableInfo->getName())) {
+            if ($this->nameResolver->isName($inClassNode, $name)) {
                 return true;
             }
         }
@@ -205,14 +194,14 @@ final class ClassMaintainer
     private function addParameterAndAssignToMethod(
         ClassMethod $classMethodNode,
         VariableInfo $variableInfo,
-        Expression $propertyAssignNode
+        Assign $propertyAssignNode
     ): void {
         if ($this->hasMethodParameter($classMethodNode, $variableInfo)) {
             return;
         }
 
         $classMethodNode->params[] = $this->nodeFactory->createParamFromVariableInfo($variableInfo);
-        $classMethodNode->stmts[] = $propertyAssignNode;
+        $classMethodNode->stmts[] = new Expression($propertyAssignNode);
     }
 
     private function hasMethodParameter(ClassMethod $classMethodNode, VariableInfo $variableInfo): bool

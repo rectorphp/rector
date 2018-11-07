@@ -4,11 +4,11 @@ namespace Rector\Rector;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Application\AppliedRectorCollector;
 use Rector\Contract\Rector\PhpRectorInterface;
-use Rector\PhpParser\Node\Builder\ExpressionAdder;
-use Rector\PhpParser\Node\Builder\PropertyAdder;
 
 abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorInterface
 {
@@ -16,19 +16,9 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     use NameResolverTrait;
     use ConstFetchAnalyzerTrait;
     use BetterStandardPrinterTrait;
-    use RemovingTrait;
+    use NodeRemovingTrait;
+    use NodeAddingTrait;
     use NodeFactoryTrait;
-    use ClassMaintainerTrait;
-
-    /**
-     * @var ExpressionAdder
-     */
-    private $expressionAdder;
-
-    /**
-     * @var PropertyAdder
-     */
-    private $propertyAdder;
 
     /**
      * @var AppliedRectorCollector
@@ -38,23 +28,9 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     /**
      * @required
      */
-    public function setAbstractRectorDependencies(
-        PropertyAdder $propertyAdder,
-        ExpressionAdder $expressionAdder,
-        AppliedRectorCollector $appliedRectorCollector
-    ): void {
-        $this->propertyAdder = $propertyAdder;
-        $this->expressionAdder = $expressionAdder;
-        $this->appliedRectorCollector = $appliedRectorCollector;
-    }
-
-    /**
-     * @param Node[] $nodes
-     * @return array|Node[]|null
-     */
-    public function beforeTraverse(array $nodes)
+    public function setAbstractRectorDependencies(AppliedRectorCollector $appliedRectorCollector): void
     {
-        $this->appliedRectorCollector->reset();
+        $this->appliedRectorCollector = $appliedRectorCollector;
     }
 
     /**
@@ -78,6 +54,10 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
             $this->appliedRectorCollector->addRectorClass(static::class);
         }
 
+        if ($originalNode instanceof Stmt && $node instanceof Expr) {
+            return new Expression($node);
+        }
+
         return $node;
     }
 
@@ -87,15 +67,11 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
      */
     public function afterTraverse(array $nodes): array
     {
-        $nodes = $this->expressionAdder->addExpressionsToNodes($nodes);
-        $nodes = $this->propertyAdder->addPropertiesToNodes($nodes);
+        $nodes = $this->nodeAddingCommander->traverseNodes($nodes);
 
-        return $this->removeFromNodes($nodes);
-    }
+        $nodes = $this->propertyAddingCommander->traverseNodes($nodes);
 
-    protected function addNodeAfterNode(Expr $newNode, Node $positionNode): void
-    {
-        $this->expressionAdder->addNodeAfterNode($newNode, $positionNode);
+        return $this->nodeRemovingCommander->traverseNodes($nodes);
     }
 
     private function isMatchingNodeType(string $nodeClass): bool

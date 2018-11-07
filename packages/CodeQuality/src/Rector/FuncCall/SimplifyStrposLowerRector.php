@@ -52,7 +52,6 @@ final class SimplifyStrposLowerRector extends AbstractRector
 
         // pop 1 level up
         $node->args[0] = $innerFuncCall->args[0];
-
         $node->name = new Name('stripos');
 
         return $node;

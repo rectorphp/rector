@@ -177,11 +177,9 @@ CODE_SAMPLE
             return null;
         }
 
-        $assignNode = new Assign($checkedNode, new Coalesce(new ArrayDimFetch(
+        return new Assign($checkedNode, new Coalesce(new ArrayDimFetch(
             $foreachNode->expr,
             $foreachNode->valueVar
         ), $checkedNode));
-
-        return new Expression($assignNode);
     }
 }

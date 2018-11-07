@@ -7,13 +7,13 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Name;
-use PhpParser\Node\Stmt\Expression;
 use Rector\PhpParser\Node\NodeFactory;
 
 /**
@@ -99,7 +99,7 @@ trait NodeFactoryTrait
         return $this->nodeFactory->createClassConstantReference($class);
     }
 
-    protected function createPropertyAssignmentWithExpr(string $propertyName, Expr $rightExprNode): Expression
+    protected function createPropertyAssignmentWithExpr(string $propertyName, Expr $rightExprNode): Assign
     {
         return $this->nodeFactory->createPropertyAssignmentWithExpr($propertyName, $rightExprNode);
     }

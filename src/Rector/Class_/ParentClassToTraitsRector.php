@@ -7,6 +7,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\TraitUse;
 use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\PhpParser\Node\Maintainer\ClassMaintainer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -24,11 +25,17 @@ final class ParentClassToTraitsRector extends AbstractRector
     private $parentClassToTraits = [];
 
     /**
+     * @var ClassMaintainer
+     */
+    private $classMaintainer;
+
+    /**
      * @param string[][] $parentClassToTraits { parent class => [ traits ] }
      */
-    public function __construct(array $parentClassToTraits)
+    public function __construct(array $parentClassToTraits, ClassMaintainer $classMaintainer)
     {
         $this->parentClassToTraits = $parentClassToTraits;
+        $this->classMaintainer = $classMaintainer;
     }
 
     public function getDefinition(): RectorDefinition

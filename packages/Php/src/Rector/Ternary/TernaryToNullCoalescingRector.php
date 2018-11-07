@@ -39,10 +39,7 @@ final class TernaryToNullCoalescingRector extends AbstractRector
     public function refactor(Node $node): ?Node
     {
         if ($node->cond instanceof Isset_) {
-            $coalesceNode = $this->processTernaryWithIsset($node);
-            if ($coalesceNode) {
-                return $coalesceNode;
-            }
+            return $this->processTernaryWithIsset($node);
         }
 
         if ($node->cond instanceof Identical) {
@@ -56,29 +53,26 @@ final class TernaryToNullCoalescingRector extends AbstractRector
 
         /** @var Identical|NotIdentical $ternaryCompareNode */
         $ternaryCompareNode = $node->cond;
-
-        if ($this->isNullMatch($ternaryCompareNode->left, $ternaryCompareNode->right, $checkedNode)) {
+        if ($this->isNullMatch($ternaryCompareNode->left, $ternaryCompareNode->right, $checkedNode) ||
+            $this->isNullMatch($ternaryCompareNode->right, $ternaryCompareNode->left, $checkedNode)
+        ) {
             return new Coalesce($checkedNode, $fallbackNode);
         }
 
-        if ($this->isNullMatch($ternaryCompareNode->right, $ternaryCompareNode->left, $checkedNode)) {
-            return new Coalesce($checkedNode, $fallbackNode);
-        }
-
-        return $node;
+        return null;
     }
 
     private function processTernaryWithIsset(Ternary $ternaryNode): ?Coalesce
     {
+        if ($ternaryNode->if === null) {
+            return null;
+        }
+
         /** @var Isset_ $issetNode */
         $issetNode = $ternaryNode->cond;
 
         // none or multiple isset values cannot be handled here
         if (! isset($issetNode->vars[0]) || count($issetNode->vars) > 1) {
-            return null;
-        }
-
-        if ($ternaryNode->if === null) {
             return null;
         }
 

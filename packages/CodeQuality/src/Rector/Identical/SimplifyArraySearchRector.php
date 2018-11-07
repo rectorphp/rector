@@ -9,12 +9,23 @@ use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
+use Rector\PhpParser\Node\Maintainer\BinaryOpMaintainer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class SimplifyArraySearchRector extends AbstractRector
 {
+    /**
+     * @var BinaryOpMaintainer
+     */
+    private $binaryOpMaintainer;
+
+    public function __construct(BinaryOpMaintainer $binaryOpMaintainer)
+    {
+        $this->binaryOpMaintainer = $binaryOpMaintainer;
+    }
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -41,12 +52,23 @@ final class SimplifyArraySearchRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        $match = $this->matchArraySearchFuncCallAndBoolConstFetch($node);
-        if ($match === null) {
+        $matchedNodes = $this->binaryOpMaintainer->matchFirstAndSecondConditionNode(
+            $node,
+            function (Node $node) {
+                return $node instanceof FuncCall && $this->isName($node, 'array_search');
+            },
+            function (Node $node) {
+                return $this->isBool($node);
+            }
+        );
+
+        if ($matchedNodes === null) {
             return null;
         }
 
-        [$arraySearchFuncCallNode, $boolConstFetchNode] = $match;
+        /** @var FuncCall $arraySearchFuncCallNode */
+        /** @var ConstFetch $boolConstFetchNode */
+        [$arraySearchFuncCallNode, $boolConstFetchNode] = $matchedNodes;
 
         $inArrayFuncCall = $this->createFunction('in_array', [
             $arraySearchFuncCallNode->args[0],
@@ -58,28 +80,6 @@ final class SimplifyArraySearchRector extends AbstractRector
         }
 
         return $inArrayFuncCall;
-    }
-
-    /**
-     * @return ConstFetch[]|FuncCall[]
-     */
-    private function matchArraySearchFuncCallAndBoolConstFetch(BinaryOp $binaryOpNode): ?array
-    {
-        if ($this->isName($binaryOpNode->left, 'array_search') &&
-            $this->isBool($binaryOpNode->right)
-        ) {
-            $arraySearchFuncCallNode = $binaryOpNode->left;
-            $boolConstFetchNode = $binaryOpNode->right;
-        } elseif ($this->isBool($binaryOpNode->left) &&
-            $this->isName($binaryOpNode->right, 'array_search')
-        ) {
-            $arraySearchFuncCallNode = $binaryOpNode->right;
-            $boolConstFetchNode = $binaryOpNode->left;
-        } else {
-            return null;
-        }
-
-        return [$arraySearchFuncCallNode, $boolConstFetchNode];
     }
 
     private function resolveIsNot(BinaryOp $node, ConstFetch $boolConstFetchNode): bool

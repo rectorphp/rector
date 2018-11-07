@@ -2,12 +2,14 @@
 
 namespace Rector\Php;
 
+use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
+use Rector\PhpParser\Node\Maintainer\BinaryOpMaintainer;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 
 final class DualCheckToAble
@@ -17,21 +19,37 @@ final class DualCheckToAble
      */
     private $nameResolver;
 
-    public function __construct(NameResolver $nameResolver)
+    /**
+     * @var BinaryOpMaintainer
+     */
+    private $binaryOpMaintainer;
+
+    public function __construct(NameResolver $nameResolver, BinaryOpMaintainer $binaryOpMaintainer)
     {
         $this->nameResolver = $nameResolver;
+        $this->binaryOpMaintainer = $binaryOpMaintainer;
     }
 
     public function processBooleanOr(BooleanOr $booleanOrNode, string $type, string $newMethodName): ?FuncCall
     {
-        $split = $this->splitToInstanceOfAndFuncCall($booleanOrNode);
-        if ($split === null) {
+        $matchedNodes = $this->binaryOpMaintainer->matchFirstAndSecondConditionNode(
+            $booleanOrNode,
+            function (Node $node) {
+                return $node instanceof Instanceof_;
+            },
+            function (Node $node) {
+                return $node instanceof FuncCall;
+            }
+        );
+
+        if ($matchedNodes === null) {
             return null;
         }
 
-        [$instanceOfNode, $funcCallNode] = $split;
-
         /** @var Instanceof_ $instanceOfNode */
+        /** @var FuncCall $funcCallNode */
+        [$instanceOfNode, $funcCallNode] = $matchedNodes;
+
         if ((string) $instanceOfNode->class !== $type) {
             return null;
         }
@@ -61,25 +79,6 @@ final class DualCheckToAble
             return null;
         }
 
-        $funcCallNode = new FuncCall(new Name($newMethodName));
-        $funcCallNode->args[0] = new Arg($firstVarNode);
-
-        return $funcCallNode;
-    }
-
-    /**
-     * @return Instanceof_[]|FuncCall[]
-     */
-    private function splitToInstanceOfAndFuncCall(BooleanOr $booleanOrNode): ?array
-    {
-        if ($booleanOrNode->left instanceof Instanceof_ && $booleanOrNode->right instanceof FuncCall) {
-            return [$booleanOrNode->left, $booleanOrNode->right];
-        }
-
-        if ($booleanOrNode->right instanceof Instanceof_ && $booleanOrNode->left instanceof FuncCall) {
-            return [$booleanOrNode->right, $booleanOrNode->left];
-        }
-
-        return null;
+        return new FuncCall(new Name($newMethodName), [new Arg($firstVarNode)]);
     }
 }

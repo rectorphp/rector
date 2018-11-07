@@ -16,7 +16,7 @@ final class MyClass
 
     public function unnecessaryTernaryExpressionInverted(): bool
     {
-        return $foo <= $bar;
+        return $foo < $bar;
     }
 
     public function ternaryExpressionInsideClosure(): bool
