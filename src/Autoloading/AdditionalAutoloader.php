@@ -5,7 +5,7 @@ namespace Rector\Autoloading;
 use Nette\Loaders\RobotLoader;
 use Rector\Configuration\Option;
 use Rector\FileSystem\FileGuard;
-use Rector\Utils\FilesystemTweaker;
+use Rector\FileSystem\FilesystemTweaker;
 use Symfony\Component\Console\Input\InputInterface;
 use Symplify\PackageBuilder\FileSystem\FileSystem;
 

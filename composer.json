@@ -54,7 +54,6 @@
             "Rector\\Twig\\": "packages/Twig/src",
             "Rector\\PhpParser\\": "packages/PhpParser/src",
             "Rector\\Doctrine\\": "packages/Doctrine/src",
-            "Rector\\Utils\\": "packages/Utils/src",
             "Rector\\YamlRector\\": "packages/YamlRector/src",
             "Rector\\FileSystemRector\\": "packages/FileSystemRector/src"
         }
@@ -76,7 +75,6 @@
             "Rector\\Sylius\\Tests\\": "packages/Sylius/tests",
             "Rector\\PHPUnit\\Tests\\": "packages/PHPUnit/tests",
             "Rector\\PhpParser\\Tests\\": "packages/PhpParser/tests",
-            "Rector\\Utils\\Tests\\": "packages/Utils/tests",
             "Rector\\Twig\\Tests\\": "packages/Twig/tests",
             "Rector\\Doctrine\\Tests\\": "packages/Doctrine/tests",
             "Rector\\YamlRector\\Tests\\": "packages/YamlRector/tests",

@@ -11,7 +11,7 @@ use PhpParser\NodeVisitor;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Contract\PhpParser\Node\CommanderInterface;
 use Rector\Exception\ShouldNotHappenException;
-use Rector\Utils\BetterNodeFinder;
+use Rector\PhpParser\Node\BetterNodeFinder;
 
 /**
  * This class collects all to-be-added expresssions (= 1 line in code)

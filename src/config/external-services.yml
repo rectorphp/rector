@@ -13,6 +13,8 @@ services:
     PhpParser\BuilderFactory: ~
     PhpParser\NodeVisitor\CloningVisitor:
 
+    PhpParser\NodeFinder: ~
+
     # value resolver
     PhpParser\ConstExprEvaluator:
         factory: ['@Rector\PhpParser\Node\ConstExprEvaluatorFactory', 'create']

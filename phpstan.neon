@@ -69,6 +69,7 @@ parameters:
         - '#Method Rector\\CodeQuality\\Rector\\Foreach_\\SimplifyForeachToCoalescingRector\:\:matchReturnOrAssignNode\(\) should return PhpParser\\Node\\Expr\\Assign\|PhpParser\\Node\\Stmt\\Return_\|null but returns PhpParser\\Node\|null#'
         - '#Access to an undefined property PhpParser\\Node::\$(\w+)#'
         - '#Parameter \#2 \$boolConstFetchNode of method Rector\\CodeQuality\\Rector\\Identical\\SimplifyArraySearchRector::resolveIsNot\(\) expects PhpParser\\Node\\Expr\\ConstFetch, PhpParser\\Node given#'
+        - '#Method Rector\\PhpParser\\Node\\BetterNodeFinder::findFirstAncestorInstanceOf\(\) should return PhpParser\\Node\|null but returns object#'
 
         # false positive, resolved in previous method
         - '#Parameter (.*?) of method Rector\\PhpParser\\Node\\Maintainer\\IdentifierMaintainer\:\:(.*?)\(\) expects PhpParser\\Node\\Expr\\ClassConstFetch\|PhpParser\\Node\\Expr\\MethodCall\|PhpParser\\Node\\Expr\\PropertyFetch\|PhpParser\\Node\\Expr\\StaticCall\|PhpParser\\Node\\Stmt\\ClassMethod, PhpParser\\Node given#'

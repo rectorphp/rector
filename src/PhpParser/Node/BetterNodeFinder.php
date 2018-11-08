@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Utils;
+namespace Rector\PhpParser\Node;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Expression;

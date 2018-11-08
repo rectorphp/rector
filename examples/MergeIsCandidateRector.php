@@ -40,7 +40,7 @@ use Rector\NodeTypeResolver\PHPStan\Type\TypeToStringResolver;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
-use Rector\Utils\NodeTraverser\CallableNodeTraverser;
+use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 
 final class MergeIsCandidateRector extends AbstractRector
 {

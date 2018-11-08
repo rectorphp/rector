@@ -13,11 +13,11 @@ use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\PropertyProperty;
+use Rector\PhpParser\Node\BetterNodeFinder;
+use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
-use Rector\Utils\BetterNodeFinder;
-use Rector\Utils\NodeTraverser\CallableNodeTraverser;
 
 /**
  * This depends on the context. We need more real app datas.

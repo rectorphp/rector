@@ -12,10 +12,10 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
-use Rector\Utils\BetterNodeFinder;
 
 /**
  * @see https://wiki.php.net/rfc/remove_php4_constructors

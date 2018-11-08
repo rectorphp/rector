@@ -17,4 +17,4 @@ services:
     Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer: ~
     Rector\PhpParser\Printer\BetterStandardPrinter: ~
     Rector\FileSystem\FilesFinder: ~
-    Rector\Utils\BetterNodeFinder: ~
+    Rector\PhpParser\Node\BetterNodeFinder: ~

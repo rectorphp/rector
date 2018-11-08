@@ -11,10 +11,10 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
-use Rector\Utils\NodeTraverser\CallableNodeTraverser;
 
 /**
  * Covers https://twig.symfony.com/doc/1.x/deprecated.html#function

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Utils\Tests\BetterNodeFinder;
+namespace Rector\Tests\PhpParser\Node\BetterNodeFinder;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
@@ -12,7 +12,7 @@ use PhpParser\NodeTraverser;
 use PhpParser\ParserFactory;
 use PHPUnit\Framework\TestCase;
 use Rector\NodeTypeResolver\NodeVisitor\ParentAndNextNodeVisitor;
-use Rector\Utils\BetterNodeFinder;
+use Rector\PhpParser\Node\BetterNodeFinder;
 use function Safe\file_get_contents;
 
 final class BetterNodeFinderTest extends TestCase

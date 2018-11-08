@@ -10,11 +10,11 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
+use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 use Rector\Sensio\Helper\TemplateGuesser;
-use Rector\Utils\BetterNodeFinder;
 
 final class TemplateAnnotationRector extends AbstractRector
 {

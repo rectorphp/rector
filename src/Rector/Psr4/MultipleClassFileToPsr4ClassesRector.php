@@ -8,11 +8,11 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\FileSystemRector\Contract\FileSystemRectorInterface;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
+use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Parser\Parser;
 use Rector\PhpParser\Printer\FormatPerservingPrinter;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
-use Rector\Utils\BetterNodeFinder;
 use Symfony\Component\Filesystem\Filesystem;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
