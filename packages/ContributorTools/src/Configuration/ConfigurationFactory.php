@@ -128,7 +128,7 @@ final class ConfigurationFactory
 
         $finder = Finder::create()->files()
             ->in($this->levelsDirectory)
-            ->name(sprintf('#%s$#', $level));
+            ->name(sprintf('#%s(\.yml)?$#', $level));
 
         /** @var SplFileInfo[] $fileInfos */
         $fileInfos = iterator_to_array($finder->getIterator());

@@ -4,6 +4,7 @@ namespace Rector\CodeQuality\Rector\Stmt;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
+use PhpParser\Node\Expr\Cast;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Expression;
@@ -35,7 +36,7 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Variable::class, PropertyFetch::class, ArrayDimFetch::class];
+        return [Variable::class, PropertyFetch::class, ArrayDimFetch::class, Cast::class];
     }
 
     /**
