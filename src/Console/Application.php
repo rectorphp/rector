@@ -6,7 +6,9 @@ use Jean85\PrettyVersions;
 use Symfony\Component\Console\Application as SymfonyApplication;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputDefinition;
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
 use function Safe\getcwd;
 
 final class Application extends SymfonyApplication
@@ -24,6 +26,16 @@ final class Application extends SymfonyApplication
         parent::__construct(self::NAME, PrettyVersions::getVersion('rector/rector')->getPrettyVersion());
 
         $this->addCommands($commands);
+    }
+
+    public function doRun(InputInterface $input, OutputInterface $output): int
+    {
+        if ($this->isVersionPrintedElsewhere($input) === false) {
+            // always print name version to more debug info
+            $output->writeln($this->getLongVersion() . PHP_EOL);
+        }
+
+        return parent::doRun($input, $output);
     }
 
     protected function getDefaultInputDefinition(): InputDefinition
@@ -68,5 +80,10 @@ final class Application extends SymfonyApplication
             InputOption::VALUE_NONE,
             'Enable debug verbosity'
         ));
+    }
+
+    private function isVersionPrintedElsewhere(InputInterface $input): bool
+    {
+        return $input->hasParameterOption('--version') !== false || $input->getFirstArgument() === null;
     }
 }
