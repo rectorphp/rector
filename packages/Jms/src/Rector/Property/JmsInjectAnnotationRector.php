@@ -157,7 +157,7 @@ CODE_SAMPLE
             return $match['serviceName'];
         }
 
-        $match = Strings::match($injectTagContent, '#(\'|")%(?<prameterName>[\w\._-]+)%(\'|")#');
+        $match = Strings::match($injectTagContent, '#(\'|")%(?<parameterName>[\w\._-]+)%(\'|")#');
         // it's parameter, we don't resolve that here
         if (isset($match['parameterName'])) {
             return null;
