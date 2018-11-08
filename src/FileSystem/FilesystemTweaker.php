@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Utils;
+namespace Rector\FileSystem;
 
 use Nette\Utils\Strings;
 use Rector\Exception\FileSystem\DirectoryNotFoundException;

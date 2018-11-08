@@ -15,10 +15,10 @@ use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\PhpParser\Node\Maintainer\BinaryOpMaintainer;
+use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
-use Rector\Utils\NodeTraverser\CallableNodeTraverser;
 
 final class ForeachToInArrayRector extends AbstractRector
 {

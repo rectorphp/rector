@@ -7,7 +7,7 @@ use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\NodeVisitorAbstract;
 use Rector\NodeTypeResolver\Node\Attribute;
-use Rector\Utils\BetterNodeFinder;
+use Rector\PhpParser\Node\BetterNodeFinder;
 
 final class NamespaceNodeVisitor extends NodeVisitorAbstract
 {

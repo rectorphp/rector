@@ -7,7 +7,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
-use Rector\Utils\BetterNodeFinder;
+use Rector\PhpParser\Node\BetterNodeFinder;
 
 /**
  * Skips performance trap in PHPStan: https://github.com/phpstan/phpstan/issues/254

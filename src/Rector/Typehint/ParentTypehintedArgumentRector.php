@@ -7,10 +7,10 @@ use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Php\TypeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
-use Rector\Utils\Php\TypeAnalyzer;
 
 final class ParentTypehintedArgumentRector extends AbstractRector
 {
@@ -125,7 +125,7 @@ CODE_SAMPLE
                     continue;
                 }
 
-                if ($this->typeAnalyzer->isBuiltinType($typehint)) {
+                if ($this->typeAnalyzer->isPhpReservedType($typehint)) {
                     $param->type = BuilderHelpers::normalizeType($typehint);
                 } else {
                     $param->type = new FullyQualified($typehint);

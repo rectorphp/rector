@@ -6,8 +6,8 @@ use PhpParser\Node;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\NamespaceAnalyzer;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\NamespaceAnalyzer as RectorNamespaceAnalyzer;
+use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
-use Rector\Utils\BetterNodeFinder;
 
 abstract class AbstractValueObjectRemoverRector extends AbstractRector
 {

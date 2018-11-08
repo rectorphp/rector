@@ -3,7 +3,6 @@
 namespace Rector\FileSystem;
 
 use Nette\Utils\Strings;
-use Rector\Utils\FilesystemTweaker;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 use Symplify\PackageBuilder\FileSystem\FinderSanitizer;
