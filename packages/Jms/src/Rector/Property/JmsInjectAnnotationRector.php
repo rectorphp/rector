@@ -154,13 +154,13 @@ CODE_SAMPLE
     private function resolveServiceName(PhpDocTagNode $phpDocTagNode, Node $node): ?string
     {
         $injectTagContent = (string) $phpDocTagNode->value;
-        $match = Strings::match($injectTagContent, '#(\'|")(?<serviceName>[\w\._-]+)(\'|")#');
+        $match = Strings::match($injectTagContent, '#(\'|")(?<serviceName>.*?)(\'|")#');
 
         if ($match['serviceName']) {
             return $match['serviceName'];
         }
 
-        $match = Strings::match($injectTagContent, '#(\'|")%(?<parameterName>[\w\._-]+)%(\'|")#');
+        $match = Strings::match($injectTagContent, '#(\'|")%(?<parameterName>.*?)%(\'|")#');
         // it's parameter, we don't resolve that here
         if (isset($match['parameterName'])) {
             return null;
