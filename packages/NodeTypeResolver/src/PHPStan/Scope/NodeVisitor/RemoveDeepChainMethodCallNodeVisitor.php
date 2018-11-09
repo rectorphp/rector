@@ -5,6 +5,7 @@ namespace Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Nop;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 use Rector\PhpParser\Node\BetterNodeFinder;
@@ -61,7 +62,10 @@ final class RemoveDeepChainMethodCallNodeVisitor extends NodeVisitorAbstract
     public function leaveNode(Node $node)
     {
         if ($node === $this->nodeToRemove) {
-            return NodeTraverser::REMOVE_NODE;
+            // keep any node, so we don't remove it permanently
+            $nopNode = new Nop();
+            $nopNode->setAttributes($node->getAttributes());
+            return $nopNode;
         }
 
         return $node;
