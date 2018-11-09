@@ -10,6 +10,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use function Safe\getcwd;
+use function Safe\realpath;
 
 final class Application extends SymfonyApplication
 {
@@ -30,9 +31,22 @@ final class Application extends SymfonyApplication
 
     public function doRun(InputInterface $input, OutputInterface $output): int
     {
+        $shouldFollowByNewline = false;
+
         if ($this->isVersionPrintedElsewhere($input) === false) {
             // always print name version to more debug info
-            $output->writeln($this->getLongVersion() . PHP_EOL);
+            $output->writeln($this->getLongVersion());
+            $shouldFollowByNewline = true;
+        }
+
+        $configPath = $this->getConfigPath($input);
+        if (file_exists($configPath)) {
+            $output->writeln('Config file: ' . realpath($configPath));
+            $shouldFollowByNewline = true;
+        }
+
+        if ($shouldFollowByNewline) {
+            $output->write(PHP_EOL);
         }
 
         return parent::doRun($input, $output);
@@ -63,27 +77,41 @@ final class Application extends SymfonyApplication
             'config',
             'c',
             InputOption::VALUE_REQUIRED,
-            'Path to config file.',
-            getcwd() . '/rector.yml'
+            'Path to config file',
+            $this->getDefaultConfigPath()
         ));
 
         $inputDefinition->addOption(new InputOption(
             'level',
             'l',
             InputOption::VALUE_REQUIRED,
-            'Finds config by shortcut name.'
+            'Finds config by shortcut name'
         ));
 
         $inputDefinition->addOption(new InputOption(
             '--debug',
             null,
             InputOption::VALUE_NONE,
-            'Enable debug verbosity'
+            'Enable debug verbosity (-vvv)'
         ));
     }
 
     private function isVersionPrintedElsewhere(InputInterface $input): bool
     {
         return $input->hasParameterOption('--version') !== false || $input->getFirstArgument() === null;
+    }
+
+    private function getConfigPath(InputInterface $input): string
+    {
+        if ($input->getParameterOption('--config')) {
+            return $input->getParameterOption('--config');
+        }
+
+        return $this->getDefaultConfigPath();
+    }
+
+    private function getDefaultConfigPath(): string
+    {
+        return getcwd() . '/rector.yml';
     }
 }
