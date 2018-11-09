@@ -27,5 +27,8 @@ trait NodeRemovingTrait
     protected function removeNode(Node $node): void
     {
         $this->nodeRemovingCommander->addNode($node);
+
+        $this->appliedRectorCollector->addRectorClass(static::class);
     }
 }
+q

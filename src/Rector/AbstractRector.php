@@ -67,11 +67,20 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
      */
     public function afterTraverse(array $nodes): array
     {
-        $nodes = $this->nodeAddingCommander->traverseNodes($nodes);
+        // @todo foreach, array autowire on Required in CommanderInterface[]
+        if ($this->nodeAddingCommander->isActive()) {
+            $nodes = $this->nodeAddingCommander->traverseNodes($nodes);
+        }
 
-        $nodes = $this->propertyAddingCommander->traverseNodes($nodes);
+        if ($this->propertyAddingCommander->isActive()) {
+            $nodes = $this->propertyAddingCommander->traverseNodes($nodes);
+        }
 
-        return $this->nodeRemovingCommander->traverseNodes($nodes);
+        if ($this->nodeRemovingCommander->isActive()) {
+            $nodes = $this->nodeRemovingCommander->traverseNodes($nodes);
+        }
+
+        return $nodes;
     }
 
     private function isMatchingNodeType(string $nodeClass): bool

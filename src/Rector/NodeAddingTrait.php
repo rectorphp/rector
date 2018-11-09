@@ -39,11 +39,15 @@ trait NodeAddingTrait
     protected function addNodeAfterNode(Expr $node, Node $positionNode): void
     {
         $this->nodeAddingCommander->addNodeAfterNode($node, $positionNode);
+
+        $this->appliedRectorCollector->addRectorClass(static::class);
     }
 
     protected function addPropertyToClass(Class_ $classNode, string $propertyType, string $propertyName): void
     {
         $variableInfo = new VariableInfo($propertyName, $propertyType);
         $this->propertyAddingCommander->addPropertyToClass($variableInfo, $classNode);
+
+        $this->appliedRectorCollector->addRectorClass(static::class);
     }
 }
