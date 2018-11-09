@@ -4,6 +4,7 @@ namespace Rector\PhpParser\Node\Maintainer;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp;
+use Rector\Exception\ShouldNotHappenException;
 
 final class BinaryOpMaintainer
 {
@@ -20,6 +21,9 @@ final class BinaryOpMaintainer
         $firstCondition,
         $secondCondition
     ): ?array {
+        $this->validateCondition($firstCondition);
+        $this->validateCondition($secondCondition);
+
         $firstCondition = $this->normalizeCondition($firstCondition);
         $secondCondition = $this->normalizeCondition($secondCondition);
 
@@ -46,5 +50,21 @@ final class BinaryOpMaintainer
         return function (Node $node) use ($condition) {
             return is_a($node, $condition, true);
         };
+    }
+
+    /**
+     * @param mixed $firstCondition
+     */
+    private function validateCondition($firstCondition): void
+    {
+        if (is_callable($firstCondition)) {
+            return;
+        }
+
+        if (is_a($firstCondition, Node::class, true)) {
+            return;
+        }
+
+        throw new ShouldNotHappenException();
     }
 }
