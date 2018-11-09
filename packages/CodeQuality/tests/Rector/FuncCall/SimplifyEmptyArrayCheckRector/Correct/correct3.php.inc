@@ -22,4 +22,4 @@ class SomeClass
 }
 
 $objects = [];
-echo is_array($objects) && is_array($objects);
+is_array($objects) && is_array($objects);

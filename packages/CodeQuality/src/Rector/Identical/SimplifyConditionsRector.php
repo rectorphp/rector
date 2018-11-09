@@ -80,9 +80,7 @@ final class SimplifyConditionsRector extends AbstractRector
             function (Node $node) {
                 return $node instanceof Identical || $node  instanceof NotIdentical;
             },
-            function (Node $node) {
-                return $node;
-            }
+            Node::class
         );
 
         if ($matchedNodes === null) {
