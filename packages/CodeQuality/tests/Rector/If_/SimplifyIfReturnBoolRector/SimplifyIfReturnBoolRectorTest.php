@@ -29,6 +29,7 @@ final class SimplifyIfReturnBoolRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Wrong/wrong7.php.inc', __DIR__ . '/Correct/correct7.php.inc'];
         yield [__DIR__ . '/Wrong/wrong8.php.inc', __DIR__ . '/Correct/correct8.php.inc'];
         yield [__DIR__ . '/Wrong/wrong9.php.inc', __DIR__ . '/Correct/correct9.php.inc'];
+        yield [__DIR__ . '/Wrong/wrong10.php.inc', __DIR__ . '/Correct/correct10.php.inc'];
     }
 
     protected function provideConfig(): string

@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Rector\CodeQuality\Tests\Rector\FuncCall\SimplifyEmptyArrayCheckRector;
+namespace Rector\CodeQuality\Tests\Rector\BooleanAnd\SimplifyEmptyArrayCheckRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
- * @covers \Rector\CodeQuality\Rector\FuncCall\SimplifyEmptyArrayCheckRector
+ * @covers \Rector\CodeQuality\Rector\BooleanAnd\SimplifyEmptyArrayCheckRector
  */
 final class SimplifyEmptyArrayCheckRectorTest extends AbstractRectorTestCase
 {

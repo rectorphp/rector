@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\CodeQuality\Rector\FuncCall;
+namespace Rector\CodeQuality\Rector\BooleanAnd;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;

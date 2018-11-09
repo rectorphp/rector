@@ -49,7 +49,7 @@ final class NodeTypeAnalyzer
             return false;
         }
 
-        return $nodeType->accepts(new NullType(), true)->yes();
+        return $nodeType->isSuperTypeOf(new NullType())->yes();
     }
 
     public function isBoolType(Node $node): bool
