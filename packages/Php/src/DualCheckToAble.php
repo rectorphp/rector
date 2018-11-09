@@ -2,7 +2,6 @@
 
 namespace Rector\Php;
 
-use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PhpParser\Node\Expr\FuncCall;
@@ -34,12 +33,8 @@ final class DualCheckToAble
     {
         $matchedNodes = $this->binaryOpMaintainer->matchFirstAndSecondConditionNode(
             $booleanOrNode,
-            function (Node $node) {
-                return $node instanceof Instanceof_;
-            },
-            function (Node $node) {
-                return $node instanceof FuncCall;
-            }
+            Instanceof_::class,
+            FuncCall::class
         );
 
         if ($matchedNodes === null) {

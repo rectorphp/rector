@@ -94,9 +94,7 @@ CODE_SAMPLE
 
         $matchedNodes = $this->binaryOpMaintainer->matchFirstAndSecondConditionNode(
             $ifCondition,
-            function (Node $node) {
-                return $node instanceof Variable;
-            },
+            Variable::class,
             function (Node $node, Node $otherNode) use ($foreachValueNode) {
                 return $this->areNodesEqual($otherNode, $foreachValueNode);
             }
