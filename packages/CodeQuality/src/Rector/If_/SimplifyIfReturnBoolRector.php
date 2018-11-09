@@ -115,27 +115,29 @@ CODE_SAMPLE
     private function processReturnTrue(If_ $ifNode, Return_ $nextReturnNode): Return_
     {
         if ($ifNode->cond instanceof BooleanNot && $this->isTrue($nextReturnNode->expr)) {
-            return new Return_($this->boolCastIfNeeded($ifNode->cond->expr));
+            return new Return_($this->boolCastOrNullCompareIfNeeded($ifNode->cond->expr));
         }
 
-        return new Return_($this->boolCastIfNeeded($ifNode->cond));
+        return new Return_($this->boolCastOrNullCompareIfNeeded($ifNode->cond));
     }
 
     private function processReturnFalse(If_ $ifNode, Return_ $nextReturnNode): ?Return_
     {
         if ($ifNode->cond instanceof Identical) {
-            return new Return_($this->boolCastIfNeeded(new NotIdentical($ifNode->cond->left, $ifNode->cond->right)));
+            return new Return_($this->boolCastOrNullCompareIfNeeded(
+                new NotIdentical($ifNode->cond->left, $ifNode->cond->right)
+            ));
         }
 
-        if ($this->isTrue($nextReturnNode->expr)) {
-            if ($ifNode->cond instanceof BooleanNot) {
-                return new Return_($this->boolCastIfNeeded($ifNode->cond->expr));
-            }
-
-            return new Return_($this->boolCastIfNeeded(new BooleanNot($ifNode->cond)));
+        if (! $this->isTrue($nextReturnNode->expr)) {
+            return null;
         }
 
-        return null;
+        if ($ifNode->cond instanceof BooleanNot) {
+            return new Return_($this->boolCastOrNullCompareIfNeeded($ifNode->cond->expr));
+        }
+
+        return new Return_($this->boolCastOrNullCompareIfNeeded(new BooleanNot($ifNode->cond)));
     }
 
     private function keepComments(Node $oldNode, Node $newNode): void
@@ -147,8 +149,12 @@ CODE_SAMPLE
         $newNode->setAttribute('comments', $oldNode->getComments());
     }
 
-    private function boolCastIfNeeded(Expr $exprNode): Expr
+    private function boolCastOrNullCompareIfNeeded(Expr $exprNode): Expr
     {
+        if ($this->isNullableType($exprNode)) {
+            return new NotIdentical($exprNode, $this->createNull());
+        }
+
         if ($exprNode instanceof BooleanNot) {
             return $exprNode;
         }
