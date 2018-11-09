@@ -49,6 +49,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($node->getComments()) {
+            return null;
+        }
+
         $this->removeNode($node);
 
         return null;
