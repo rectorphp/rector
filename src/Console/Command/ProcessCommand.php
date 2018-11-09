@@ -152,27 +152,27 @@ final class ProcessCommand extends Command
         );
         $this->addOption(
             Option::OPTION_DRY_RUN,
-            null,
+            'd',
             InputOption::VALUE_NONE,
             'See diff of changes, do not save them to files.'
         );
         $this->addOption(
             Option::OPTION_AUTOLOAD_FILE,
-            null,
+            'a',
             InputOption::VALUE_REQUIRED,
             'File with extra autoload'
         );
 
         $this->addOption(
             Option::OPTION_WITH_STYLE,
-            null,
+            'w',
             InputOption::VALUE_NONE,
             'Apply basic coding style afterwards to make code look nicer'
         );
 
         $this->addOption(
             Option::HIDE_AUTOLOAD_ERRORS,
-            null,
+            'e',
             InputOption::VALUE_NONE,
             'Hide autoload errors for the moment.'
         );
