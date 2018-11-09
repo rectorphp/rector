@@ -77,9 +77,7 @@ final class FileProcessor
 
         [$newStmts, $oldStmts, $oldTokens] = $this->parseAndTraverseFileInfoToNodes($smartFileInfo);
 
-        $printedContent = $this->formatPerservingPrinter->printToString($newStmts, $oldStmts, $oldTokens);
-
-        return trim($printedContent) . PHP_EOL;
+        return $this->formatPerservingPrinter->printToString($newStmts, $oldStmts, $oldTokens);
     }
 
     /**
