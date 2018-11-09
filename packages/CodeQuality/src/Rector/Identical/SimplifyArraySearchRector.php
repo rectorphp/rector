@@ -38,10 +38,7 @@ final class SimplifyArraySearchRector extends AbstractRector
                     'array_search("searching", $array) !== false;',
                     'in_array("searching", $array, true);'
                 ),
-                new CodeSample(
-                    'array_search("searching", $array) != false;',
-                    'in_array("searching", $array);'
-                ),
+                new CodeSample('array_search("searching", $array) != false;', 'in_array("searching", $array);'),
             ]
         );
     }
