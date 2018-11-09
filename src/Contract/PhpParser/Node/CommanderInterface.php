@@ -6,6 +6,8 @@ use PhpParser\Node;
 
 interface CommanderInterface
 {
+    public function isActive(): bool;
+
     /**
      * @param Node[] $nodes
      * @return Node[]

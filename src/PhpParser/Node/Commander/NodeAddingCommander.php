@@ -54,10 +54,6 @@ final class NodeAddingCommander implements CommanderInterface
      */
     public function traverseNodes(array $nodes): array
     {
-        if ($this->nodesToAdd === []) {
-            return $nodes;
-        }
-
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor($this->createNodeVisitor());
 
@@ -124,5 +120,10 @@ final class NodeAddingCommander implements CommanderInterface
                 return $nodes;
             }
         };
+    }
+
+    public function isActive(): bool
+    {
+        return count($this->nodesToAdd) > 0;
     }
 }

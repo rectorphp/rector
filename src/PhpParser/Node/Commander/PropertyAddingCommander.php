@@ -42,10 +42,6 @@ final class PropertyAddingCommander implements CommanderInterface
      */
     public function traverseNodes(array $nodes): array
     {
-        if ($this->propertiesByClass === []) {
-            return $nodes;
-        }
-
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor($this->createNodeVisitor());
 
@@ -96,5 +92,10 @@ final class PropertyAddingCommander implements CommanderInterface
                 return $classNode;
             }
         };
+    }
+
+    public function isActive(): bool
+    {
+        return count($this->propertiesByClass) > 0;
     }
 }

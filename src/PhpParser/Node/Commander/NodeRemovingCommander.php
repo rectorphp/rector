@@ -35,10 +35,6 @@ final class NodeRemovingCommander implements CommanderInterface
      */
     public function traverseNodes(array $nodes): array
     {
-        if ($this->nodesToRemove === []) {
-            return $nodes;
-        }
-
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor($this->createNodeVisitor());
 
@@ -79,5 +75,10 @@ final class NodeRemovingCommander implements CommanderInterface
                 return $node;
             }
         };
+    }
+
+    public function isActive(): bool
+    {
+        return count($this->nodesToRemove) > 0;
     }
 }
