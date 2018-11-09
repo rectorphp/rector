@@ -3,8 +3,11 @@
 namespace Rector\CodeQuality\Rector\Identical;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\BinaryOp;
+use PhpParser\Node\Expr\BinaryOp\Equal;
 use PhpParser\Node\Expr\BinaryOp\Identical;
+use PhpParser\Node\Expr\BinaryOp\NotEqual;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\ConstFetch;
@@ -35,6 +38,10 @@ final class SimplifyArraySearchRector extends AbstractRector
                     'array_search("searching", $array) !== false;',
                     'in_array("searching", $array, true);'
                 ),
+                new CodeSample(
+                    'array_search("searching", $array) != false;',
+                    'in_array("searching", $array);'
+                ),
             ]
         );
     }
@@ -44,11 +51,11 @@ final class SimplifyArraySearchRector extends AbstractRector
      */
     public function getNodeTypes(): array
     {
-        return [Identical::class, NotIdentical::class];
+        return [Identical::class, NotIdentical::class, Equal::class, NotEqual::class];
     }
 
     /**
-     * @param NotIdentical $node
+     * @param Identical|NotIdentical|Equal|NotIdentical $node
      */
     public function refactor(Node $node): ?Node
     {
@@ -75,6 +82,10 @@ final class SimplifyArraySearchRector extends AbstractRector
             $arraySearchFuncCallNode->args[1],
         ]);
 
+        if ($this->shouldBeStrict($node)) {
+            $inArrayFuncCall->args[2] = new Arg($this->createTrue());
+        }
+
         if ($this->resolveIsNot($node, $boolConstFetchNode)) {
             return new BooleanNot($inArrayFuncCall);
         }
@@ -84,10 +95,15 @@ final class SimplifyArraySearchRector extends AbstractRector
 
     private function resolveIsNot(BinaryOp $node, ConstFetch $boolConstFetchNode): bool
     {
-        if ($node instanceof Identical) {
+        if ($node instanceof Identical || $node instanceof Equal) {
             return $this->isFalse($boolConstFetchNode);
         }
 
         return $this->isTrue($boolConstFetchNode);
+    }
+
+    private function shouldBeStrict(BinaryOp $binaryOpNode): bool
+    {
+        return $binaryOpNode instanceof Identical || $binaryOpNode instanceof NotIdentical;
     }
 }
