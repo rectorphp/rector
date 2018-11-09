@@ -42,7 +42,7 @@ Rector **instantly upgrades PHP & YAML code of your application**, with focus on
 - Change visibility of constant, property or method
 - And much more...
 
-...just **look at overview of [all available Rectors](/docs/AllRectorsOverview.md)** with before/after diffs and configuration examples. It's all you really need to use build your own sets.
+...**look at overview of [all available Rectors](/docs/AllRectorsOverview.md)** with before/after diffs and configuration examples. You can use them to build your own sets.
 
 ## Install
 
@@ -68,11 +68,11 @@ Or make use of `rector.yml` config:
 # rector.yml
 parameters:
     autoload_paths:
-        - '%kernel.project_dir%/vendor/squizlabs/php_codesniffer/autoload.php'
-        - '%kernel.project_dir%/vendor/project-without-composer'
+        - 'vendor/squizlabs/php_codesniffer/autoload.php'
+        - 'vendor/project-without-composer'
 ```
 
-You can also **exclude files or directories** - use regex or [fnmatch](http://php.net/manual/en/function.fnmatch.php):
+You can also **exclude files or directories** (with regex or [fnmatch](http://php.net/manual/en/function.fnmatch.php)):
 
 ```yaml
 # rector.yml
@@ -81,78 +81,57 @@ parameters:
         - '*/src/*/Tests/*'
 ```
 
-## How to Reconstruct your Code
+## Running Rector
 
 ### A. Prepared Sets
 
-Featured open-source projects have **prepared sets**. You'll find them in [`/config/level`](/config/level).
+Featured open-source projects have **prepared sets**. You'll find them in [`/config/level`](/config/level) or by calling:
 
-Do you need to upgrade to **Symfony 4.0**, for example?
+```bash
+vendor/bin/rector levels
+```
 
-1. Run rector on your `/src` directory:
+Let's say you pick `symfony40` level and you want to upgrade your `/src` directory:
 
-    ```bash
-    vendor/bin/rector process src --level symfony40
-    ```
+```bash
+# show known changes to Symfony 4.0
+vendor/bin/rector process src --level symfony40 --dry-run
+```
 
-    Which is a shortcut for using complete path with `--config` option:
+```bash
+# apply known changes to Symfony 4.0
+vendor/bin/rector process src --level symfony40
+```
 
-    ```bash
-    vendor/bin/rector process src --config vendor/rector/rector/src/config/level/symfony/symfony40.yml
-    ```
+Tip: To process just specific subdirectories, you can use [fnmatch](http://php.net/manual/en/function.fnmatch.php) pattern:
 
-    You can also use your **own config file**:
-
-    ```bash
-    vendor/bin/rector process src --config your-own-config.yml
-    ```
-
-2. Do you want to see the preview of changes first?
-
-    Use the `--dry-run` option:
-
-    ```bash
-    vendor/bin/rector process src --level symfony33 --dry-run
-    ```
-
-3. To process just specific subdirectories, you can use [fnmatch](http://php.net/manual/en/function.fnmatch.php) pattern with `*`:
-
-   ```bash
-   vendor/bin/rector process "src/Symfony/Component/*/Tests" --level phpunit60 --dry-run
-   ```
-
-4. What levels are on the board?
-
-    ```bash
-    vendor/bin/rector levels
-    ```
+```bash
+vendor/bin/rector process "src/Symfony/Component/*/Tests" --level phpunit60 --dry-run
+```
 
 ### B. Custom Sets
 
 1. Create `rector.yml` with desired Rectors:
 
-    ```yml
+    ```yaml
     services:
-        Rector\Nette\Rector\Application\InjectPropertyRector: ~
+        Rector\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector:
+            $annotation: "inject"
     ```
 
-2. Try Rector on your `/src` directory:
+2. Run on your `/src` directory:
 
     ```bash
     vendor/bin/rector process src --dry-run
-    ```
-
-3. Apply the changes if you like them:
-
-    ```bash
+    # apply
     vendor/bin/rector process src
     ```
 
 ## How to Apply Coding Standards?
 
-Rector uses [EasyCodingStandard](https://github.com/Symplify/EasyCodingStandard) to improve the code style of changed files, like import namespaces, make 1 empty line between class elements etc.
+AST that Rector uses doesn't deal with coding standards very well, so it's better to let coding standard tools do that. Your project doesn't have one? Rector ships with [EasyCodingStandard](https://github.com/Symplify/EasyCodingStandard) set that covers namespaces import, 1 empty line between class elements etc.
 
-It's always better to use own project's prepared set, but if you don't have the option yet, just use `--with-style` option to handle these basic cases:
+Just use `--with-style` option to handle these basic cases:
 
 ```bash
 vendor/bin/rector process src --with-style
@@ -160,9 +139,9 @@ vendor/bin/rector process src --with-style
 
 ## More Detailed Documentation
 
+- **[All Rectors Overview](/docs/AllRectorsOverview.md)**
 - [How Rector Works?](/docs/HowItWorks.md)
 - [How to Create Own Rector](/docs/HowToCreateOwnRector.md)
-- [Service Name to Type Provider](/docs/ServiceNameToTypeProvider.md)
 
 ## How to Contribute
 
