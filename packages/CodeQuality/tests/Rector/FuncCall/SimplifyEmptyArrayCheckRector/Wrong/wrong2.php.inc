@@ -8,3 +8,5 @@ $completelyInvalid = ! $value instanceof Foo && ! $value instanceof Bar;
 if (empty($this->orders) && empty($this->unionOrders)) {
     throw new RuntimeException('You must specify an orderBy clause when using this function.');
 }
+
+echo is_array($objects) && is_array($objects);

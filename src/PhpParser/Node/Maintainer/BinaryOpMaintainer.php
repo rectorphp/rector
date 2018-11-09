@@ -11,13 +11,18 @@ final class BinaryOpMaintainer
      * Tries to match left or right parts (xor),
      * returns null or match on first condition and then second condition. No matter what the origin order is.
      *
+     * @param callable|string $firstCondition callable or Node to instanceof
+     * @param callable|string $secondCondition callable or Node to instanceof
      * @return Node[]|null
      */
     public function matchFirstAndSecondConditionNode(
         BinaryOp $binaryOp,
-        callable $firstCondition,
-        callable $secondCondition
+        $firstCondition,
+        $secondCondition
     ): ?array {
+        $firstCondition = $this->normalizeCondition($firstCondition);
+        $secondCondition = $this->normalizeCondition($secondCondition);
+
         if ($firstCondition($binaryOp->left, $binaryOp->right) && $secondCondition($binaryOp->right, $binaryOp->left)) {
             return [$binaryOp->left, $binaryOp->right];
         }
@@ -27,5 +32,19 @@ final class BinaryOpMaintainer
         }
 
         return null;
+    }
+
+    /**
+     * @param callable|string $condition
+     */
+    private function normalizeCondition($condition): callable
+    {
+        if (is_callable($condition)) {
+            return $condition;
+        }
+
+        return function (Node $node) use ($condition) {
+            return is_a($node, $condition, true);
+        };
     }
 }
