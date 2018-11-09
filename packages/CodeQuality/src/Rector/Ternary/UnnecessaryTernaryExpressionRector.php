@@ -5,7 +5,6 @@ namespace Rector\CodeQuality\Rector\Ternary;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp;
-use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\Ternary;
 use Rector\PhpParser\Node\AssignAndBinaryMap;
 use Rector\Rector\AbstractRector;
@@ -58,7 +57,7 @@ final class UnnecessaryTernaryExpressionRector extends AbstractRector
 
         $ifExpression = $ternaryExpression->if;
         $elseExpression = $ternaryExpression->else;
-        if (! $ifExpression instanceof ConstFetch || ! $elseExpression instanceof ConstFetch) {
+        if (! $this->isBool($ifExpression) || ! $this->isBool($elseExpression)) {
             return null;
         }
 
