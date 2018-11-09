@@ -96,6 +96,10 @@ final class BetterStandardPrinter extends Standard
         return parent::pExpr_Array($node);
     }
 
+    /**
+     * Allows PHP 7.3 trailing comma in multiline args
+     * @see printArgs() bellow
+     */
     protected function pExpr_FuncCall(FuncCall $node): string
     {
         return $this->pCallLhs($node->name) . '(' . $this->printArgs($node) . ')';
@@ -103,8 +107,12 @@ final class BetterStandardPrinter extends Standard
 
     protected function pExpr_MethodCall(MethodCall $node): string
     {
-        return $this->pDereferenceLhs($node->var) . '->' . $this->pObjectProperty($node->name)
-            . '(' . $this->printArgs($node) . ')';
+        return $this->pDereferenceLhs($node->var)
+            . '->'
+            . $this->pObjectProperty($node->name)
+            . '('
+            . $this->printArgs($node)
+            . ')';
     }
 
     protected function pExpr_StaticCall(StaticCall $node): string
