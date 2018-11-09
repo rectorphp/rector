@@ -112,8 +112,9 @@ CODE_SAMPLE
 
     /**
      * @param Node[] $nodes
+     * @return Node[]|null
      */
-    public function beforeTraverse(array $nodes): void
+    public function beforeTraverse(array $nodes): ?array
     {
         // collect all known "{anything} = '';" assigns
 
@@ -122,6 +123,8 @@ CODE_SAMPLE
                 $this->emptyStringPropertyNodes[] = $node;
             }
         });
+
+        return $nodes;
     }
 
     /**

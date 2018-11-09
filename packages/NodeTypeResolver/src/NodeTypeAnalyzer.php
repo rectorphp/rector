@@ -20,12 +20,12 @@ final class NodeTypeAnalyzer
 {
     public function isStringType(Node $node): bool
     {
-        if (! $node instanceof Expr) {
+        /** @var Scope|null $nodeScope */
+        $nodeScope = $node->getAttribute(Attribute::SCOPE);
+        if (! $node instanceof Expr || $nodeScope === null) {
             return false;
         }
 
-        /** @var Scope $nodeScope */
-        $nodeScope = $node->getAttribute(Attribute::SCOPE);
         $nodeType = $nodeScope->getType($node);
 
         return $nodeType instanceof StringType;
@@ -36,12 +36,13 @@ final class NodeTypeAnalyzer
      */
     public function isNullableType(Node $node): bool
     {
-        if (! $node instanceof Expr) {
+        /** @var Scope|null $nodeScope */
+        $nodeScope = $node->getAttribute(Attribute::SCOPE);
+        if (! $node instanceof Expr || $nodeScope === null) {
             return false;
         }
 
-        /** @var Scope $nodeScope */
-        $nodeScope = $node->getAttribute(Attribute::SCOPE);
+        /** @var Expr $node */
         $nodeType = $nodeScope->getType($node);
 
         if (! $nodeType instanceof UnionType) {
@@ -53,12 +54,13 @@ final class NodeTypeAnalyzer
 
     public function isBoolType(Node $node): bool
     {
-        if (! $node instanceof Expr) {
+        /** @var Scope|null $nodeScope */
+        $nodeScope = $node->getAttribute(Attribute::SCOPE);
+        if (! $node instanceof Expr || $nodeScope === null) {
             return false;
         }
 
-        /** @var Scope $nodeScope */
-        $nodeScope = $node->getAttribute(Attribute::SCOPE);
+        /** @var Expr $node */
         $nodeType = $nodeScope->getType($node);
 
         return $nodeType instanceof BooleanType;
@@ -66,12 +68,12 @@ final class NodeTypeAnalyzer
 
     public function isCountableType(Node $node): bool
     {
-        if (! $node instanceof Expr) {
+        /** @var Scope|null $nodeScope */
+        $nodeScope = $node->getAttribute(Attribute::SCOPE);
+        if (! $node instanceof Expr || $nodeScope === null) {
             return false;
         }
 
-        /** @var Scope $nodeScope */
-        $nodeScope = $node->getAttribute(Attribute::SCOPE);
         $nodeType = $nodeScope->getType($node);
 
         if ($nodeType instanceof ObjectType) {
