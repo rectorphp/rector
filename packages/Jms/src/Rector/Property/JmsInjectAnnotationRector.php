@@ -3,10 +3,10 @@
 namespace Rector\Jms\Rector\Property;
 
 use Nette\Utils\Strings;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use Rector\Application\Error;
 use Rector\Application\ErrorCollector;
 use Rector\Bridge\Contract\AnalyzedApplicationContainerInterface;
 use Rector\NodeTypeResolver\Node\Attribute;
@@ -117,6 +117,9 @@ CODE_SAMPLE
         }
 
         $this->docBlockAnalyzer->removeTagFromNode($node, self::INJECT_ANNOTATION);
+
+        // set to private
+        $node->flags = Class_::MODIFIER_PRIVATE;
 
         $this->addPropertyToClass($node->getAttribute(Attribute::CLASS_NODE), $type, $this->getName($node));
 
