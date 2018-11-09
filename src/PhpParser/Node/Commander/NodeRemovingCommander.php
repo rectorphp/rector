@@ -44,6 +44,11 @@ final class NodeRemovingCommander implements CommanderInterface
         return $nodeTraverser->traverse($nodes);
     }
 
+    public function isActive(): bool
+    {
+        return count($this->nodesToRemove) > 0;
+    }
+
     private function createNodeVisitor(): NodeVisitor
     {
         return new class($this->nodesToRemove) extends NodeVisitorAbstract {
@@ -75,10 +80,5 @@ final class NodeRemovingCommander implements CommanderInterface
                 return $node;
             }
         };
-    }
-
-    public function isActive(): bool
-    {
-        return count($this->nodesToRemove) > 0;
     }
 }

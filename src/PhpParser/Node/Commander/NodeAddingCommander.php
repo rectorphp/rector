@@ -63,6 +63,11 @@ final class NodeAddingCommander implements CommanderInterface
         return $nodeTraverser->traverse($nodes);
     }
 
+    public function isActive(): bool
+    {
+        return count($this->nodesToAdd) > 0;
+    }
+
     private function resolveNearestExpressionPosition(Node $node): string
     {
         if ($node instanceof Expression) {
@@ -120,10 +125,5 @@ final class NodeAddingCommander implements CommanderInterface
                 return $nodes;
             }
         };
-    }
-
-    public function isActive(): bool
-    {
-        return count($this->nodesToAdd) > 0;
     }
 }

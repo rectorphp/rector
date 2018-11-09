@@ -31,4 +31,3 @@ trait NodeRemovingTrait
         $this->appliedRectorCollector->addRectorClass(static::class);
     }
 }
-q

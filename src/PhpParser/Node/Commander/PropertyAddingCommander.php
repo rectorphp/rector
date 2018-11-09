@@ -51,6 +51,11 @@ final class PropertyAddingCommander implements CommanderInterface
         return $nodeTraverser->traverse($nodes);
     }
 
+    public function isActive(): bool
+    {
+        return count($this->propertiesByClass) > 0;
+    }
+
     private function createNodeVisitor(): NodeVisitor
     {
         return new class($this->classMaintainer, $this->propertiesByClass) extends NodeVisitorAbstract {
@@ -92,10 +97,5 @@ final class PropertyAddingCommander implements CommanderInterface
                 return $classNode;
             }
         };
-    }
-
-    public function isActive(): bool
-    {
-        return count($this->propertiesByClass) > 0;
     }
 }
