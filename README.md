@@ -94,12 +94,12 @@ vendor/bin/rector levels
 Let's say you pick `symfony40` level and you want to upgrade your `/src` directory:
 
 ```bash
-# show known changes to Symfony 4.0
+# show known changes in Symfony 4.0
 vendor/bin/rector process src --level symfony40 --dry-run
 ```
 
 ```bash
-# apply known changes to Symfony 4.0
+# apply
 vendor/bin/rector process src --level symfony40
 ```
 

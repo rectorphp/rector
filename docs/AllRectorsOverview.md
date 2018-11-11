@@ -1186,7 +1186,7 @@ Changes rand, srand and getrandmax by new md_* alternatives.
 
 - class: `Rector\Php\Rector\FuncCall\TrailingCommaArgumentsRector`
 
-Adds trailing commas to function and methods calls 
+Adds trailing commas to function and methods calls
 
 ```diff
  calling(
