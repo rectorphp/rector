@@ -69,10 +69,8 @@ class MyClass extends FrameworkClass
 CODE_SAMPLE
                 ,
                 [
-                    '$methodToVisibilityByClass' => [
-                        'FrameworkClass' => [
-                            'someMethod' => 'protected',
-                        ],
+                    'FrameworkClass' => [
+                        'someMethod' => 'protected',
                     ],
                 ]
             )]

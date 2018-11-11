@@ -44,9 +44,7 @@ $result = $someValue->getPath();
 CODE_SAMPLE
                 ,
                 [
-                    '$methodNamesByType' => [
-                        'SomeObject' => 'getPath',
-                    ],
+                    'SomeObject' => 'getPath',
                 ]
             ),
         ]);

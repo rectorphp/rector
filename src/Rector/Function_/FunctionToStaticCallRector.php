@@ -33,9 +33,7 @@ final class FunctionToStaticCallRector extends AbstractRector
                 'view("...", []);',
                 'SomeClass::render("...", []);',
                 [
-                    '$functionToStaticCall' => [
-                        'view' => ['SomeStaticClass', 'render'],
-                    ],
+                    'view' => ['SomeStaticClass', 'render'],
                 ]
             ),
         ]);

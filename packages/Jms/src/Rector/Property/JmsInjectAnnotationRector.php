@@ -54,7 +54,7 @@ final class JmsInjectAnnotationRector extends AbstractRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
-            'Changes properties with @JMS\DiExtraBundle\Annotation\Inject to constructor injection',
+            'Changes properties with `@JMS\DiExtraBundle\Annotation\Inject` to constructor injection',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'

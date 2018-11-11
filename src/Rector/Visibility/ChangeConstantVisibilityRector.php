@@ -8,7 +8,6 @@ use Rector\PhpParser\Node\Maintainer\VisibilityMaintainer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
-use Rector\Tests\Rector\Visibility\ChangeConstantVisibilityRector\Source\ParentObject;
 
 final class ChangeConstantVisibilityRector extends AbstractRector
 {
@@ -61,10 +60,8 @@ class MyClass extends FrameworkClass
 CODE_SAMPLE
                 ,
                 [
-                    ParentObject::class => [
-                        '$constantToVisibilityByClass' => [
-                            'SOME_CONSTANT' => 'protected',
-                        ],
+                    'ParentObject' => [
+                        'SOME_CONSTANT' => 'protected',
                     ],
                 ]
             )]

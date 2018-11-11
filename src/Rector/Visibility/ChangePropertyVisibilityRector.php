@@ -61,10 +61,8 @@ class MyClass extends FrameworkClass
 CODE_SAMPLE
                 ,
                 [
-                    '$propertyToVisibilityByClass' => [
-                        'FrameworkClass' => [
-                            'someProperty' => 'protected',
-                        ],
+                    'FrameworkClass' => [
+                        'someProperty' => 'protected',
                     ],
                 ]
             )]

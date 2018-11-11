@@ -68,10 +68,8 @@ class SomeTest extends PHPUnit\Framework\TestCase
 CODE_SAMPLE
                     ,
                     [
-                        '$classToAnnotationMap' => [
-                            'PHPUnit\Framework\TestCase' => [
-                                'test' => 'scenario',
-                            ],
+                        'PHPUnit\Framework\TestCase' => [
+                            'test' => 'scenario',
                         ],
                     ]
                 ),

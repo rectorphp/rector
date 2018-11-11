@@ -56,9 +56,7 @@ class SomeClass
 CODE_SAMPLE
                 ,
                 [
-                    '$parentClassToTraits' => [
-                        'Nette\Object' => ['Nette\SmartObject'],
-                    ],
+                    'Nette\Object' => ['Nette\SmartObject'],
                 ]
             ),
         ]);

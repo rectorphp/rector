@@ -42,10 +42,8 @@ $container->hasService("someKey");
 CODE_SAMPLE
                 ,
                 [
-                    '$typeToMethodCalls' => [
-                        'SomeContainer' => [
-                            'isset' => 'hasService',
-                        ],
+                    'SomeContainer' => [
+                        'isset' => 'hasService',
                     ],
                 ]
             ),
@@ -61,12 +59,8 @@ $container->removeService("someKey");
 CODE_SAMPLE
                 ,
                 [
-                    [
-                        '$typeToMethodCalls' => [
-                            'SomeContainer' => [
-                                'unset' => 'removeService',
-                            ],
-                        ],
+                    'SomeContainer' => [
+                        'unset' => 'removeService',
                     ],
                 ]
             ),

@@ -39,9 +39,7 @@ $someClass->someFunction();
 $someClass->otherFunction();
 CODE_SAMPLE
                 ,
-                [
-                    '$classesToDefluent' => ['SomeExampleClass'],
-                ]
+                [['SomeExampleClass']]
             ),
         ]);
     }

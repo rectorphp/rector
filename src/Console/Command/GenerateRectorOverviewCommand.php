@@ -252,7 +252,9 @@ final class GenerateRectorOverviewCommand extends Command
             $this->printCodeWrapped($diff, 'diff');
         }
 
-        $this->symfonyStyle->newLine(1);
+        $this->symfonyStyle->newLine();
+        $this->symfonyStyle->writeln('<br>');
+        $this->symfonyStyle->newLine();
     }
 
     private function getRectorClassWithoutNamespace(RectorInterface $rector): string

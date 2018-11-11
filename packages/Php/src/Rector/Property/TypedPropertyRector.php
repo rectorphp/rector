@@ -62,7 +62,7 @@ final class TypedPropertyRector extends AbstractRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
-            'Changes property @var annotations from annotation to type.',
+            'Changes property `@var` annotations from annotation to type.',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'

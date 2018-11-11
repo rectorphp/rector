@@ -31,9 +31,7 @@ final class FunctionReplaceRector extends AbstractRector
                 'view("...", []);',
                 'Laravel\Templating\render("...", []);',
                 [
-                    '$functionToStaticCall' => [
-                        'view' => 'Laravel\Templating\render',
-                    ],
+                    'view' => 'Laravel\Templating\render',
                 ]
             ),
         ]);

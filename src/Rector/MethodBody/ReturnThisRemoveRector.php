@@ -65,9 +65,7 @@ class SomeClass
 }
 CODE_SAMPLE
                 ,
-                [
-                    '$classesToDefluent' => ['SomeExampleClass'],
-                ]
+                [['SomeExampleClass']]
             ),
         ]);
     }

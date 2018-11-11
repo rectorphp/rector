@@ -43,10 +43,8 @@ $someObject->newMethod();
 CODE_SAMPLE
                 ,
                 [
-                    '$perClassOldToNewMethods' => [
-                        'SomeExampleClass' => [
-                            'oldMethod' => 'newMethod',
-                        ],
+                    'SomeExampleClass' => [
+                        'oldMethod' => 'newMethod',
                     ],
                 ]
             ),
