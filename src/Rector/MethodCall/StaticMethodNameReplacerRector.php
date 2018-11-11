@@ -32,10 +32,8 @@ final class StaticMethodNameReplacerRector extends AbstractRector
                 'SomeClass::oldStaticMethod();',
                 'AnotherExampleClass::newStaticMethod();',
                 [
-                    '$oldToNewMethodByClasses' => [
-                        'SomeClass' => [
-                            'oldMethod' => ['AnotherExampleClass', 'newStaticMethod'],
-                        ],
+                    'SomeClass' => [
+                        'oldMethod' => ['AnotherExampleClass', 'newStaticMethod'],
                     ],
                 ]
             ),

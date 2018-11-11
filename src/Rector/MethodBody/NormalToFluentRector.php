@@ -47,9 +47,7 @@ $someObject->someFunction()
 CODE_SAMPLE
                 ,
                 [
-                    '$fluentMethodsByType' => [
-                        'SomeClass' => ['someFunction', 'otherFunction'],
-                    ],
+                    'SomeClass' => ['someFunction', 'otherFunction'],
                 ]
             ),
         ]);

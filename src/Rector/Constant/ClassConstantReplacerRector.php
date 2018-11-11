@@ -35,10 +35,8 @@ final class ClassConstantReplacerRector extends AbstractRector
                 '$value = SomeClass::OLD_CONSTANT;',
                 '$value = SomeClass::NEW_CONSTANT;',
                 [
-                    '$oldToNewConstantsByClass' => [
-                        'SomeClass' => [
-                            'OLD_CONSTANT' => 'NEW_CONSTANT',
-                        ],
+                    'SomeClass' => [
+                        'OLD_CONSTANT' => 'NEW_CONSTANT',
                     ],
                 ]
             ),

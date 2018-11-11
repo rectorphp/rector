@@ -51,14 +51,12 @@ $someObject->someMethod(false);'
 CODE_SAMPLE
                     ,
                     [
-                        '$argumentChangesByMethodAndType' => [
-                            'SomeExampleClass' => [
-                                'someMethod' => [
-                                    0 => [
-                                        [
-                                            'before' => 'SomeClass::OLD_CONSTANT',
-                                            'after' => 'false',
-                                        ],
+                        'SomeExampleClass' => [
+                            'someMethod' => [
+                                0 => [
+                                    [
+                                        'before' => 'SomeClass::OLD_CONSTANT',
+                                        'after' => 'false',
                                     ],
                                 ],
                             ],

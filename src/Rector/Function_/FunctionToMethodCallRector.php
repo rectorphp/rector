@@ -32,9 +32,7 @@ final class FunctionToMethodCallRector extends AbstractRector
                 'view("...", []);',
                 '$this->render("...", []);',
                 [
-                    '$functionToMethodCall' => [
-                        'view' => ['this', 'render'],
-                    ],
+                    'view' => ['this', 'render'],
                 ]
             ),
         ]);

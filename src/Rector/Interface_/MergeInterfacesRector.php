@@ -47,9 +47,7 @@ class SomeClass implements SomeInterface
 CODE_SAMPLE
                 ,
                 [
-                    '$oldToNewInterfaces' => [
-                        'SomeOldInterface' => 'SomeInterface',
-                    ],
+                    'SomeOldInterface' => 'SomeInterface',
                 ]
             ),
         ]);

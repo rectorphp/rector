@@ -50,10 +50,8 @@ $container->setService("someService", $someService);
 CODE_SAMPLE
                 ,
                 [
-                    '$typeToMethodCalls' => [
-                        'SomeContainer' => [
-                            'set' => 'addService',
-                        ],
+                    'SomeContainer' => [
+                        'set' => 'addService',
                     ],
                 ]
             ),

@@ -68,11 +68,9 @@ class SomeClass implements SomeInterface
 CODE_SAMPLE
                 ,
                 [
-                    '$typehintForArgumentByMethodAndClass' => [
-                        'SomeInterface' => [
-                            'read' => [
-                                '$content' => 'string',
-                            ],
+                    'SomeInterface' => [
+                        'read' => [
+                            '$content' => 'string',
                         ],
                     ],
                 ]

@@ -53,7 +53,7 @@ final class TemplateAnnotationRector extends AbstractRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
-            'Turns @Template annotation to explicit method call in Controller of FrameworkExtraBundle in Symfony',
+            'Turns `@Template` annotation to explicit method call in Controller of FrameworkExtraBundle in Symfony',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'

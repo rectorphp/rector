@@ -51,9 +51,7 @@ function (SomeNewClass $someOldClass): SomeNewClass
 CODE_SAMPLE
                 ,
                 [
-                    '$oldToNewClasses' => [
-                        'SomeOldClass' => 'SomeNewClass',
-                    ],
+                    'SomeOldClass' => 'SomeNewClass',
                 ]
             ),
         ]);
