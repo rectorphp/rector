@@ -30,6 +30,7 @@ final class SomeKernelClass extends Kernel
         $containerBuilder->setAlias(SomeTranslatorInterface::class, 'translator.data_collector');
 
         $containerBuilder->register('entity.manager', SomeEntityManager::class);
+        $containerBuilder->setAlias(SomeEntityManager::class, 'entity.manager');
     }
 
     public function getCacheDir()
