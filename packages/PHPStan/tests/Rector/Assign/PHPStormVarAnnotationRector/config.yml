@@ -1,0 +1,2 @@
+services:
+    Rector\PHPStan\Rector\Assign\PHPStormVarAnnotationRector: ~

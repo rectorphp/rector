@@ -3,8 +3,8 @@
 namespace Rector\Jms\Rector\Property;
 
 use Nette\Utils\Strings;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use Rector\Application\ErrorCollector;

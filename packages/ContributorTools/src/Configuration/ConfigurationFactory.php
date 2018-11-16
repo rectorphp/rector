@@ -4,6 +4,7 @@ namespace Rector\ContributorTools\Configuration;
 
 use Nette\Loaders\RobotLoader;
 use Nette\Utils\Strings;
+use PhpParser\Node;
 use Rector\ContributorTools\Exception\ConfigurationException;
 use Rector\Exception\FileSystem\FileNotFoundException;
 use Symfony\Component\Finder\Finder;
@@ -99,6 +100,11 @@ final class ConfigurationFactory
 
         $fqnNodeTypes = [];
         foreach ($nodeTypes as $nodeType) {
+            if ($nodeType === 'Node') {
+                $fqnNodeTypes[] = Node::class;
+                continue;
+            }
+
             foreach ($nodeClasses as $nodeClass) {
                 if ($this->isNodeClassMatch($nodeClass, $nodeType)) {
                     $fqnNodeTypes[] = $nodeClass;
