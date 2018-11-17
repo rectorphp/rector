@@ -1,2 +1,3 @@
 services:
     Rector\PHPStan\Rector\Cast\RecastingRemovalRector: ~
+    Rector\PHPStan\Rector\Node\PHPStormVarAnnotationRector: ~
