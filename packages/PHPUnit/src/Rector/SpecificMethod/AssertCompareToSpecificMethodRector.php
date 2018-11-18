@@ -18,6 +18,7 @@ final class AssertCompareToSpecificMethodRector extends AbstractPHPUnitRector
     private $defaultOldToNewMethods = [
         'count' => ['assertCount', 'assertNotCount'],
         'sizeof' => ['assertCount', 'assertNotCount'],
+        'iterator_count' => ['assertCount', 'assertNotCount'],
         'gettype' => ['assertInternalType', 'assertNotInternalType'],
         'get_class' => ['assertInstanceOf', 'assertNotInstanceOf'],
     ];
