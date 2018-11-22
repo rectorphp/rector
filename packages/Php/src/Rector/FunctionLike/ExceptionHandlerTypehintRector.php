@@ -5,6 +5,7 @@ namespace Rector\Php\Rector\FunctionLike;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use Rector\Rector\AbstractRector;
@@ -56,7 +57,9 @@ CODE_SAMPLE
 
         $paramNode = $node->params[0];
         // handle only Exception typehint
-        if ((string) $paramNode->type !== 'Exception') {
+        $isNullable = $paramNode->type instanceof NullableType;
+        $actualType = $isNullable ? (string) $paramNode->type->type : (string) $paramNode->type;
+        if ($actualType !== 'Exception') {
             return null;
         }
 
@@ -65,7 +68,11 @@ CODE_SAMPLE
             return null;
         }
 
-        $paramNode->type = new FullyQualified('Throwable');
+        if (! $isNullable) {
+            $paramNode->type = new FullyQualified('Throwable');
+        } else {
+            $paramNode->type->type = new FullyQualified('Throwable');
+        }
 
         return $node;
     }

@@ -18,9 +18,22 @@ final class ExceptionHandlerTypehintRectorTest extends AbstractRectorTestCase
         $this->doTestFileMatchesExpectedContent($wrong, $fixed);
     }
 
+    /**
+     * @dataProvider provideNullableWrongToFixedFiles()
+     */
+    public function testNullableType(string $wrong, string $fixed): void
+    {
+        $this->doTestFileMatchesExpectedContent($wrong, $fixed);
+    }
+
     public function provideWrongToFixedFiles(): Iterator
     {
         yield [__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc'];
+    }
+
+    public function provideNullableWrongToFixedFiles(): Iterator
+    {
+        yield [__DIR__ . '/Wrong/wrong_nullable.php.inc', __DIR__ . '/Correct/correct_nullable.php.inc'];
     }
 
     protected function provideConfig(): string
