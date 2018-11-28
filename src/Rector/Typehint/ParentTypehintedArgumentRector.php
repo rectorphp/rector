@@ -2,12 +2,10 @@
 
 namespace Rector\Rector\Typehint;
 
-use PhpParser\BuilderHelpers;
 use PhpParser\Node;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Php\TypeAnalyzer;
+use Rector\NodeTypeResolver\Php\ParamTypeInfo;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -26,17 +24,11 @@ final class ParentTypehintedArgumentRector extends AbstractRector
     private $typehintForArgumentByMethodAndClass = [];
 
     /**
-     * @var TypeAnalyzer
-     */
-    private $typeAnalyzer;
-
-    /**
      * @param mixed[] $typehintForArgumentByMethodAndClass
      */
-    public function __construct(array $typehintForArgumentByMethodAndClass, TypeAnalyzer $typeAnalyzer)
+    public function __construct(array $typehintForArgumentByMethodAndClass)
     {
         $this->typehintForArgumentByMethodAndClass = $typehintForArgumentByMethodAndClass;
-        $this->typeAnalyzer = $typeAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -110,24 +102,21 @@ CODE_SAMPLE
     }
 
     /**
-     * @param string[] $parametersToTypehints
+     * @param string[] $parametersToTypes
      */
     private function processClassMethodNodeWithTypehints(
         ClassMethod $classMethodNode,
-        array $parametersToTypehints
+        array $parametersToTypes
     ): void {
         /** @var Param $param */
         foreach ($classMethodNode->params as $param) {
-            foreach ($parametersToTypehints as $parameter => $typehint) {
+            foreach ($parametersToTypes as $parameter => $type) {
                 if (! $this->isName($param, $parameter)) {
                     continue;
                 }
 
-                if ($this->typeAnalyzer->isPhpReservedType($typehint)) {
-                    $param->type = BuilderHelpers::normalizeType($typehint);
-                } else {
-                    $param->type = new FullyQualified($typehint);
-                }
+                $paramTypeInfo = new ParamTypeInfo($parameter, [$type]);
+                $param->type = $paramTypeInfo->getFqnTypeNode();
             }
         }
     }

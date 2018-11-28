@@ -21,7 +21,7 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use Rector\NodeTypeResolver\Application\ClassNodeCollector;
+use Rector\NodeTypeResolver\Application\ClassLikeNodeCollector;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -51,9 +51,9 @@ final class FormTypeInstanceToClassConstRector extends AbstractRector
     private $formType;
 
     /**
-     * @var ClassNodeCollector
+     * @var ClassLikeNodeCollector
      */
-    private $classNodeCollector;
+    private $classLikeNodeCollector;
 
     /**
      * @var BuilderFactory
@@ -61,13 +61,13 @@ final class FormTypeInstanceToClassConstRector extends AbstractRector
     private $builderFactory;
 
     public function __construct(
-        ClassNodeCollector $classNodeCollector,
+        ClassLikeNodeCollector $classLikeNodeCollector,
         BuilderFactory $builderFactory,
         string $controllerClass = 'Symfony\Bundle\FrameworkBundle\Controller\Controller',
         string $formBuilderType = 'Symfony\Component\Form\FormBuilderInterface',
         string $formType = 'Symfony\Component\Form\FormInterface'
     ) {
-        $this->classNodeCollector = $classNodeCollector;
+        $this->classLikeNodeCollector = $classLikeNodeCollector;
         $this->controllerClass = $controllerClass;
         $this->formBuilderType = $formBuilderType;
         $this->formType = $formType;
@@ -199,7 +199,7 @@ CODE_SAMPLE
             $methodCallNode->args[$optionsPosition] = new Arg($optionsArrayNode);
         }
 
-        $formTypeClassNode = $this->classNodeCollector->findClass($className);
+        $formTypeClassNode = $this->classLikeNodeCollector->findClass($className);
         if ($formTypeClassNode === null) {
             return null;
         }

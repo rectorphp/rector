@@ -143,12 +143,12 @@ CODE_SAMPLE
             );
         }
 
-        $varTypes = $this->docBlockAnalyzer->getVarTypes($node);
-        if (count($varTypes)) {
-            return array_shift($varTypes);
+        $varTypeInfo = $this->docBlockAnalyzer->getVarTypeInfo($node);
+        if ($varTypeInfo === null) {
+            return null;
         }
 
-        return null;
+        return $varTypeInfo->getFqnType();
     }
 
     private function resolveServiceName(PhpDocTagNode $phpDocTagNode, Node $node): ?string

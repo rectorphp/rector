@@ -3,11 +3,8 @@
 namespace Rector\Rector\Typehint;
 
 use PhpParser\Node;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Php\TypeAnalyzer;
+use Rector\NodeTypeResolver\Php\ReturnTypeInfo;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -24,17 +21,11 @@ final class ReturnTypehintRector extends AbstractRector
     private $typehintForMethodByClass = [];
 
     /**
-     * @var TypeAnalyzer
-     */
-    private $typeAnalyzer;
-
-    /**
      * @param mixed[] $typehintForMethodByClass
      */
-    public function __construct(array $typehintForMethodByClass, TypeAnalyzer $typeAnalyzer)
+    public function __construct(array $typehintForMethodByClass)
     {
         $this->typehintForMethodByClass = $typehintForMethodByClass;
-        $this->typeAnalyzer = $typeAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -98,25 +89,19 @@ CODE_SAMPLE
 
     private function processClassMethodNodeWithTypehints(
         ClassMethod $classMethodNode,
-        string $newTypehint
-    ): ClassMethod {
-        // already set
-        if ($classMethodNode->returnType && $classMethodNode->returnType->name === $newTypehint) {
-            return $classMethodNode;
+        string $newType
+    ): ?ClassMethod {
+        // already set → no change
+        if ($classMethodNode->returnType && $classMethodNode->returnType->name === $newType) {
+            return null;
         }
 
-        // remote it
-        if ($newTypehint === '') {
+        // remove it
+        if ($newType === '') {
             $classMethodNode->returnType = null;
-            return $classMethodNode;
-        }
-
-        if ($this->typeAnalyzer->isPhpReservedType($newTypehint)) {
-            $classMethodNode->returnType = new Identifier($newTypehint);
-        } elseif ($this->typeAnalyzer->isNullableType($newTypehint)) {
-            $classMethodNode->returnType = new NullableType('\\' . ltrim($newTypehint, '?'));
         } else {
-            $classMethodNode->returnType = new FullyQualified($newTypehint);
+            $returnTypeInfo = new ReturnTypeInfo([$newType]);
+            $classMethodNode->returnType = $returnTypeInfo->getFqnTypeNode();
         }
 
         return $classMethodNode;

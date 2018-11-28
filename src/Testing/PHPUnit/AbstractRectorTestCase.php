@@ -6,6 +6,7 @@ use PHPStan\AnalysedCodeException;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Rector\Application\FileProcessor;
+use Rector\Configuration\Option;
 use Rector\DependencyInjection\ContainerFactory;
 use Rector\FileSystem\FileGuard;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
@@ -63,26 +64,31 @@ abstract class AbstractRectorTestCase extends TestCase
         $this->parameterProvider = $this->container->get(ParameterProvider::class);
     }
 
-    protected function doTestFileMatchesExpectedContent(string $file, string $reconstructedFile): void
+    protected function doTestFileMatchesExpectedContent(string $originalFile, string $expectedFile): void
     {
-        $this->fileGuard->ensureFileExists($reconstructedFile, static::class);
+        $this->fileGuard->ensureFileExists($expectedFile, static::class);
 
-        $this->parameterProvider->changeParameter('source', [$file]);
+        $this->parameterProvider->changeParameter(Option::SOURCE, [$originalFile]);
 
         try {
-            $reconstructedFileContent = $this->fileProcessor->processFileToString(new SmartFileInfo($file));
+            $reconstructedFileContent = $this->fileProcessor->processFileToString(new SmartFileInfo($originalFile));
             $reconstructedFileContent = $this->normalizeEndNewline($reconstructedFileContent);
         } catch (AnalysedCodeException $analysedCodeException) {
             // change message to include responsible file
-            $message = sprintf('Analyze error in "%s" file:%s%s', $file, PHP_EOL, $analysedCodeException->getMessage());
+            $message = sprintf(
+                'Analyze error in "%s" file:%s%s',
+                $originalFile,
+                PHP_EOL,
+                $analysedCodeException->getMessage()
+            );
             $exceptionClass = get_class($analysedCodeException);
             throw new $exceptionClass($message);
         }
 
         $this->assertStringEqualsFile(
-            $reconstructedFile,
+            $expectedFile,
             $reconstructedFileContent,
-            sprintf('Original file "%s" did not match the result.', $file)
+            sprintf('Original file "%s" did not match the result.', $originalFile)
         );
     }
 

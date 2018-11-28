@@ -6,26 +6,12 @@ use Nette\Utils\Strings;
 
 final class TypeAnalyzer
 {
-    public function isPropertyTypeHintableType(string $type): bool
+    public function isNullableType(string $type): bool
     {
-        if (empty($type)) {
-            return false;
-        }
-
-        // first letter is upper, probably class type
-        if (ctype_upper($type[0])) {
-            return true;
-        }
-
-        if (! $this->isPhpReservedType($type)) {
-            return false;
-        }
-        // callable and iterable are not property typehintable
-        // @see https://wiki.php.net/rfc/typed_properties_v2#supported_types
-        return ! in_array($type, ['callable', 'void'], true);
+        return Strings::startsWith($type, '?');
     }
 
-    public function isPhpReservedType(string $type): bool
+    public static function isPhpReservedType(string $type): bool
     {
         return in_array(
             $type,
@@ -48,8 +34,33 @@ final class TypeAnalyzer
         );
     }
 
-    public function isNullableType(string $type): bool
+    public static function normalizeType(string $type): string
     {
-        return Strings::startsWith($type, '?');
+        // reduction needed for typehint
+        if (Strings::endsWith($type, '[]')) {
+            return 'array';
+        }
+
+        if ($type === 'boolean') {
+            return 'bool';
+        }
+
+        if ($type === 'double') {
+            return 'float';
+        }
+
+        if ($type === 'integer') {
+            return 'int';
+        }
+
+        if ($type === 'callback') {
+            return 'callable';
+        }
+
+        if (Strings::match($type, '#array<(.*?)>#')) {
+            return 'array';
+        }
+
+        return $type;
     }
 }

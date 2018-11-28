@@ -72,6 +72,11 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface
         }
 
         // get from annotation
-        return $this->docBlockAnalyzer->getVarTypes($variableNode);
+        $varTypeInfo = $this->docBlockAnalyzer->getVarTypeInfo($variableNode);
+        if ($varTypeInfo === null) {
+            return [];
+        }
+
+        return [$varTypeInfo->getFqnType()];
     }
 }

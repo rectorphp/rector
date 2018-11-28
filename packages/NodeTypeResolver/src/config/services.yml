@@ -11,7 +11,7 @@ services:
 
     Rector\NodeTypeResolver\:
         resource: '../'
-        exclude: '../{Contract}'
+        exclude: '../{Contract,Php/*Info.php}'
 
     Rector\Php\TypeAnalyzer: ~
     Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer: ~

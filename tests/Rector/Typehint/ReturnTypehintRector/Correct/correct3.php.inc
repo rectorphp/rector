@@ -4,7 +4,7 @@ namespace SomeNamespace;
 
 class SomeClass
 {
-    public function nullable() : ?\SomeType
+    public function nullable(): ?\SomeType
     {
     }
 }

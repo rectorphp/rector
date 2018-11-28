@@ -51,16 +51,6 @@ CODE_SAMPLE;
         $this->assertSame($expectedDoc, $node->getDocComment()->getText());
     }
 
-    public function testGetAnnotationFromNode(): void
-    {
-        $node = $this->createNodeWithDoc('
-           * @var int
-           * @deprecated This is deprecated
-        ');
-
-        $this->assertSame(['int'], $this->docBlockAnalyzer->getVarTypes($node));
-    }
-
     private function createNodeWithDoc(string $doc): String_
     {
         $node = new String_('string');
