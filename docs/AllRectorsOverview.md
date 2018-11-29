@@ -1294,8 +1294,8 @@ Adds JSON_THROW_ON_ERROR to json_encode() and json_decode() to throw JsonExcepti
 ```diff
 -json_encode($content);
 -json_decode($json);
-+json_encode($content, JSON_THROW_ON_ERROR
-+json_decode($json, null, null, JSON_THROW_ON_ERROR););
++json_encode($content, JSON_THROW_ON_ERROR);
++json_decode($json, null, null, JSON_THROW_ON_ERROR);
 ```
 
 <br>
