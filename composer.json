@@ -21,12 +21,13 @@
         "symfony/finder": "^3.4|^4.1",
         "symfony/process": "^3.4|^4.1",
         "symplify/better-phpdoc-parser": "^5.2",
-        "symplify/easy-coding-standard": "^5.2",
         "symplify/package-builder": "^5.2",
         "thecodingmachine/safe": "^0.1.6"
     },
     "require-dev": {
         "phpunit/phpunit": "^7.4",
+        "ocramius/package-versions": "^1.3",
+        "symplify/easy-coding-standard": "^5.2",
         "symplify/monorepo-builder": "^5.2",
         "symplify/phpstan-extensions": "^5.2",
         "thecodingmachine/phpstan-safe-rule": "^0.1.0",
@@ -91,6 +92,9 @@
             "tests/Rector/Psr4/MultipleClassFileToPsr4ClassesRector/Source",
             "tests/Rector/Namespace_/PseudoNamespaceToNamespaceRector/Source"
         ]
+    },
+    "suggest": {
+        "symplify/easy-coding-standard": "Required to enable '--with-style' option. Use in case you don't have PHP_CodeSniffer or PHP-CS-Fixer yet."
     },
     "scripts": {
         "complete-check": [
