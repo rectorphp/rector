@@ -47,6 +47,10 @@ final class AfterRectorCodingStyle
             return;
         }
 
-        throw new InvalidConfigurationException(sprintf('ECS bin file not found in "%s"', self::ECS_BIN_PATH));
+        throw new InvalidConfigurationException(sprintf(
+            'To active "--with-style" you need EasyCodingStandard.%sRun "composer require symplify/easy-coding-standard --dev" to get it.%sYou can also remove "--with-style" and run PHP_CodeSniffer or PHP-CS-Fixer on changed code instead.',
+            PHP_EOL,
+            PHP_EOL
+        ));
     }
 }
