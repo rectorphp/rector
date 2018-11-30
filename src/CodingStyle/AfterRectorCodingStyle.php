@@ -26,12 +26,14 @@ final class AfterRectorCodingStyle
     {
         $this->validate();
 
-        $command = sprintf(
-            '%s check %s --config %s --fix',
+        $command = [
             self::ECS_BIN_PATH,
+            'check',
             implode(' ', $source),
-            self::ECS_AFTER_RECTOR_CONFIG
-        );
+            '--config',
+            self::ECS_AFTER_RECTOR_CONFIG,
+            '--fix',
+        ];
 
         $process = new Process($command);
         $process->run();
