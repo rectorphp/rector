@@ -4,9 +4,7 @@ services:
 
     # ref. https://github.com/sebastianbergmann/phpunit/compare/5.7.9...6.0.0
     Rector\Rector\Namespace_\PseudoNamespaceToNamespaceRector:
-        $pseudoNamespacePrefixes:
-            - 'PHPUnit_'
-        $excludedClasses:
+        PHPUnit_:
             # exclude this class, since it has no namespaced replacement
             - 'PHPUnit_Framework_MockObject_MockObject'
 

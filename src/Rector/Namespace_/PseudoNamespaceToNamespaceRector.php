@@ -2,13 +2,13 @@
 
 namespace Rector\Rector\Namespace_;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\PhpParser\Node\Maintainer\ClassMaintainer;
 use Rector\Rector\AbstractRector;
@@ -23,14 +23,9 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
     private $newNamespace;
 
     /**
-     * @var string[]
+     * @var string[][]|null[]
      */
-    private $pseudoNamespacePrefixes = [];
-
-    /**
-     * @var string[]
-     */
-    private $excludedClasses = [];
+    private $namespacePrefixWithExcludedClasses = [];
 
     /**
      * @var ClassMaintainer
@@ -38,28 +33,37 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
     private $classMaintainer;
 
     /**
-     * @param string[] $pseudoNamespacePrefixes
-     * @param string[] $excludedClasses
+     * @param string[][]|null[] $namespacePrefixesWithExcludedClasses
      */
-    public function __construct(
-        ClassMaintainer $classMaintainer,
-        array $pseudoNamespacePrefixes,
-        array $excludedClasses = []
-    ) {
+    public function __construct(ClassMaintainer $classMaintainer, array $namespacePrefixesWithExcludedClasses)
+    {
         $this->classMaintainer = $classMaintainer;
-        $this->pseudoNamespacePrefixes = $pseudoNamespacePrefixes;
-        $this->excludedClasses = $excludedClasses;
+        $this->namespacePrefixWithExcludedClasses = $namespacePrefixesWithExcludedClasses;
     }
 
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Replaces defined Pseudo_Namespaces by Namespace\Ones.', [
             new ConfiguredCodeSample(
-                '$someService = Some_Object;',
-                '$someService = Some\Object;',
+                '$someService = new Some_Object;',
+                '$someService = new Some\Object;',
                 [
-                    '$pseudoNamespacePrefixes' => ['Some_'],
-                    '$excludedClasses' => [],
+                    ['Some_' => []],
+                ]
+            ),
+            new ConfiguredCodeSample(
+<<<'CODE_SAMPLE'
+$someService = new Some_Object;
+$someClassToKeep = new Some_Class_To_Keep;
+CODE_SAMPLE
+                ,
+<<<'CODE_SAMPLE'
+$someService = new Some\Object;
+$someClassToKeep = new Some_Class_To_Keep;
+CODE_SAMPLE
+                ,
+                [
+                    ['Some_' => ['Some_Class_To_Keep']],
                 ]
             ),
         ]);
@@ -78,40 +82,27 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        $name = $node->toString();
-        if (! $name) {
+        // no name → skip
+        if (! $node->toString()) {
             return null;
         }
 
-        if (in_array($name, $this->excludedClasses, true)) {
-            return null;
-        }
+        foreach ($this->namespacePrefixWithExcludedClasses as $namespacePrefix => $excludedClasses) {
+            if (! $this->nameStartsWith($node, $namespacePrefix)) {
+                continue;
+            }
 
-        if (! $this->isNamespaceMatch($name)) {
-            return null;
-        }
+            if (is_array($excludedClasses) && $this->isNames($node, $excludedClasses)) {
+                return null;
+            }
 
-        $oldName = $node->toString();
+            if ($node instanceof Name) {
+                return $this->processName($node);
+            }
 
-        $newNameParts = explode('_', $oldName);
-        $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
-        $lastNewNamePart = $newNameParts[count($newNameParts) - 1];
-
-        if ($node instanceof Name) {
-            $node->parts = $newNameParts;
-
-            return $node;
-        }
-
-        if ($node instanceof Identifier && $parentNode instanceof Class_) {
-            $namespaceParts = $newNameParts;
-            array_pop($namespaceParts);
-
-            $this->newNamespace = implode('\\', $namespaceParts);
-
-            $node->name = $lastNewNamePart;
-
-            return $node;
+            if ($node instanceof Identifier) {
+                return $this->processIdentifier($node);
+            }
         }
 
         return null;
@@ -123,15 +114,16 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
      */
     public function afterTraverse(array $nodes): array
     {
-        if ($this->newNamespace) {
-            $namespaceNode = new Namespace_(new Name($this->newNamespace));
+        if ($this->newNamespace === null) {
+            return $nodes;
+        }
 
-            foreach ($nodes as $key => $node) {
-                if ($node instanceof Class_) {
-                    $nodes = $this->classMaintainer->insertBeforeAndFollowWithNewline($nodes, $namespaceNode, $key);
+        $namespaceNode = new Namespace_(new Name($this->newNamespace));
+        foreach ($nodes as $key => $node) {
+            if ($node instanceof Class_) {
+                $nodes = $this->classMaintainer->insertBeforeAndFollowWithNewline($nodes, $namespaceNode, $key);
 
-                    break;
-                }
+                break;
             }
         }
 
@@ -140,14 +132,35 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
         return $nodes;
     }
 
-    private function isNamespaceMatch(string $name): bool
+    private function processName(Name $nameNode): Name
     {
-        foreach ($this->pseudoNamespacePrefixes as $pseudoNamespacePrefix) {
-            if (Strings::startsWith($name, $pseudoNamespacePrefix)) {
-                return true;
-            }
+        $nameNode->parts = explode('_', $this->getName($nameNode));
+
+        return $nameNode;
+    }
+
+    private function processIdentifier(Identifier $identifierNode): ?Identifier
+    {
+        $parentNode = $identifierNode->getAttribute(Attribute::PARENT_NODE);
+        if (! $parentNode instanceof Class_) {
+            return null;
         }
 
-        return false;
+        $newNameParts = explode('_', $this->getName($identifierNode));
+        $lastNewNamePart = $newNameParts[count($newNameParts) - 1];
+
+        $namespaceParts = $newNameParts;
+        array_pop($namespaceParts);
+
+        $newNamespace = implode('\\', $namespaceParts);
+        if ($this->newNamespace !== null && $this->newNamespace !== $newNamespace) {
+            throw new ShouldNotHappenException('There woulde are 2 different namespaces in one file');
+        }
+
+        $this->newNamespace = $newNamespace;
+
+        $identifierNode->name = $lastNewNamePart;
+
+        return $identifierNode;
     }
 }

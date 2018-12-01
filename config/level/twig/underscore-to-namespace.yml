@@ -154,4 +154,4 @@ services:
         'Twig_Extensions_Node_Trans': 'Twig\Extensions\Node\TransNode'
 
     Rector\Rector\Namespace_\PseudoNamespaceToNamespaceRector:
-        - 'Twig_'
+        Twig_: ~
