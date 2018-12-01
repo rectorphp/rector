@@ -1,6 +1,7 @@
 services:
     Rector\Rector\Namespace_\PseudoNamespaceToNamespaceRector:
-        $pseudoNamespacePrefixes:
-            - 'PHPUnit_'
-        $excludedClasses:
+        PHPUnit_:
+            # excluded classes
             - 'PHPUnit_Framework_MockObject_MockObject'
+        ChangeMe_:
+            - 'KeepMe_'
