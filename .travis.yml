@@ -22,6 +22,8 @@ install:
 before_script:
     # disable xdebug
     - if [[ $COVERAGE == "" ]]; then phpenv config-rm xdebug.ini || echo "xdebug not available"; fi
+    # report inline scripts fails
+    - set -e
 
 script:
     - vendor/bin/phpunit

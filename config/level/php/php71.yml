@@ -6,3 +6,5 @@ services:
     Rector\Php\Rector\TryCatch\MultiExceptionCatchRector: ~
     Rector\Php\Rector\Assign\AssignArrayToStringRector: ~
     Rector\Php\Rector\FuncCall\CountOnNullRector: ~
+    Rector\Php\Rector\FunctionLike\ParamScalarTypehintRector: ~
+    Rector\Php\Rector\FunctionLike\ReturnScalarTypehintRector: ~

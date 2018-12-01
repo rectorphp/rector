@@ -4,7 +4,7 @@ namespace SomeNamespace;
 
 class SomeClass
 {
-    public function resolve() : \SomeType
+    public function resolve(): \SomeType
     {
     }
 }

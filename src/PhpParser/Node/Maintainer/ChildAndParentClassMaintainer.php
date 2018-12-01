@@ -5,7 +5,7 @@ namespace Rector\PhpParser\Node\Maintainer;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use Rector\NodeTypeResolver\Application\ClassNodeCollector;
+use Rector\NodeTypeResolver\Application\ClassLikeNodeCollector;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\PhpParser\Node\NodeFactory;
 use Rector\PhpParser\Node\Resolver\NameResolver;
@@ -13,9 +13,9 @@ use Rector\PhpParser\Node\Resolver\NameResolver;
 final class ChildAndParentClassMaintainer
 {
     /**
-     * @var ClassNodeCollector
+     * @var ClassLikeNodeCollector
      */
-    private $classNodeCollector;
+    private $classLikeNodeCollector;
 
     /**
      * @var NodeFactory
@@ -28,11 +28,11 @@ final class ChildAndParentClassMaintainer
     private $nameResolver;
 
     public function __construct(
-        ClassNodeCollector $classNodeCollector,
+        ClassLikeNodeCollector $classLikeNodeCollector,
         NodeFactory $nodeFactory,
         NameResolver $nameResolver
     ) {
-        $this->classNodeCollector = $classNodeCollector;
+        $this->classLikeNodeCollector = $classLikeNodeCollector;
         $this->nodeFactory = $nodeFactory;
         $this->nameResolver = $nameResolver;
     }
@@ -45,7 +45,7 @@ final class ChildAndParentClassMaintainer
         }
 
         // not in analyzed scope, nothing we can do
-        $parentClassNode = $this->classNodeCollector->findClass($parentClassName);
+        $parentClassNode = $this->classLikeNodeCollector->findClass($parentClassName);
         if (! $parentClassNode) {
             return;
         }
@@ -74,7 +74,7 @@ final class ChildAndParentClassMaintainer
 
     public function completeChildConstructors(Class_ $classNode, ClassMethod $constructorClassMethod): void
     {
-        $childClassNodes = $this->classNodeCollector->findChildrenOfClass($this->nameResolver->resolve($classNode));
+        $childClassNodes = $this->classLikeNodeCollector->findChildrenOfClass($this->nameResolver->resolve($classNode));
 
         foreach ($childClassNodes as $childClassNode) {
             if (! $childClassNode->getMethod('__construct')) {
@@ -115,7 +115,7 @@ final class ChildAndParentClassMaintainer
                 return null;
             }
 
-            $classNode = $this->classNodeCollector->findClass($parentClassName);
+            $classNode = $this->classLikeNodeCollector->findClass($parentClassName);
         }
 
         return null;

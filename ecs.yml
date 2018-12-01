@@ -77,12 +77,17 @@ parameters:
             - 'tests/PhpParser/Node/ConstExprEvaluatorFactoryTest.php'
             - 'src/Rector/AbstractPHPUnitRector.php'
             - 'src/Rector/Class_/ParentClassToTraitsRector.php'
+            # required for exact string match with "\"
+            - 'packages/NodeTypeResolver/src/Php/AbstractTypeInfo.php'
             # example in description
             - 'src/Rector/Annotation/AnnotationReplacerRector.php'
 
         Symplify\CodingStandard\Sniffs\CleanCode\ForbiddenStaticFunctionSniff:
             # required by Composer interface
             - 'tests/Composer/AutoloadWrongCasesEventSubscriber.php'
+            - 'src/Php/TypeAnalyzer.php'
+            # exclusive static config for type support
+            - 'src/Php/PhpTypeSupport.php'
 
         Symplify\CodingStandard\Fixer\Naming\PropertyNameMatchingTypeFixer:
             - 'packages/NodeTypeResolver/src/PHPStan/Scope/NodeScopeResolver.php'
@@ -96,6 +101,8 @@ parameters:
             - 'src/Rector/MethodBody/NormalToFluentRector.php'
             # copied 3rd party logic
             - 'packages/Php/src/EregToPcreTransformer.php'
+            # dev
+            - 'packages/Php/src/Rector/FunctionLike/*ScalarTypehintRector.php'
 
         SlevomatCodingStandard\Sniffs\Functions\UnusedParameterSniff.UnusedParameter:
             # enforced by interface
@@ -117,6 +124,7 @@ parameters:
         SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff.MissingParameterTypeHint:
             # 3rd party parent code
             - 'src/DependencyInjection/Loader/TolerantRectorYamlFileLoader.php'
+            - 'src/PhpParser/Printer/BetterStandardPrinter.php'
 
         Symplify\CodingStandard\Sniffs\Debug\CommentedOutCodeSniff.Found:
             # notes

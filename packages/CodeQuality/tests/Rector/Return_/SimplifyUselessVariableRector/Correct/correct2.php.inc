@@ -1,5 +1,7 @@
 <?php
 
+namespace Rector\CodeQuality\Tests\Rector\Return_\SimplifyUselessVariableRector\Wrong;
+
 class NoError
 {
     private $noError = 'noError';

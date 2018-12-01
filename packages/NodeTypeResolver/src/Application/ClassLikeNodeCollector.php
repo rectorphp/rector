@@ -3,14 +3,20 @@
 namespace Rector\NodeTypeResolver\Application;
 
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Interface_;
 use Rector\NodeTypeResolver\Node\Attribute;
 
-final class ClassNodeCollector
+final class ClassLikeNodeCollector
 {
     /**
      * @var Class_[]
      */
     private $classes = [];
+
+    /**
+     * @var Interface_[]
+     */
+    private $interfaces = [];
 
     public function addClass(string $name, Class_ $classNode): void
     {
@@ -20,6 +26,16 @@ final class ClassNodeCollector
     public function findClass(string $name): ?Class_
     {
         return $this->classes[$name] ?? null;
+    }
+
+    public function addInterface(string $name, Interface_ $interfaceNode): void
+    {
+        $this->interfaces[$name] = $interfaceNode;
+    }
+
+    public function findInterface(string $name): ?Interface_
+    {
+        return $this->interfaces[$name] ?? null;
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver;
 
 use PhpParser\Node;
+use Rector\Configuration\Option;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpParser\Node\BetterNodeFinder;
@@ -64,7 +65,7 @@ abstract class AbstractNodeTypeResolverTest extends AbstractContainerAwareTestCa
     {
         $smartFileInfo = new SmartFileInfo($file);
 
-        $this->parameterProvider->changeParameter('source', [$file]);
+        $this->parameterProvider->changeParameter(Option::SOURCE, [$file]);
 
         $nodes = $this->parser->parseFile($smartFileInfo->getRealPath());
 

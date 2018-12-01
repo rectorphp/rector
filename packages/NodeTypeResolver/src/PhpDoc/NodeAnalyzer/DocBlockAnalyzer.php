@@ -5,13 +5,18 @@ namespace Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer;
 use Nette\Utils\Strings;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Exception\MissingTagException;
+use Rector\NodeTypeResolver\Php\ParamTypeInfo;
+use Rector\NodeTypeResolver\Php\ReturnTypeInfo;
+use Rector\NodeTypeResolver\Php\VarTypeInfo;
 use Symplify\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Symplify\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Symplify\BetterPhpDocParser\PhpDocParser\TypeNodeToStringsConvertor;
 use Symplify\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 use function Safe\sprintf;
 
@@ -37,16 +42,23 @@ final class DocBlockAnalyzer
      */
     private $fqnAnnotationTypeDecorator;
 
+    /**
+     * @var TypeNodeToStringsConvertor
+     */
+    private $typeNodeToStringsConvertor;
+
     public function __construct(
         PhpDocInfoFactory $phpDocInfoFactory,
         PhpDocInfoPrinter $phpDocInfoPrinter,
         PhpDocInfoFqnTypeDecorator $phpDocInfoFqnTypeDecorator,
-        FqnAnnotationTypeDecorator $fqnAnnotationTypeDecorator
+        FqnAnnotationTypeDecorator $fqnAnnotationTypeDecorator,
+        TypeNodeToStringsConvertor $typeNodeToStringsConvertor
     ) {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->phpDocInfoPrinter = $phpDocInfoPrinter;
         $this->phpDocInfoFqnTypeDecorator = $phpDocInfoFqnTypeDecorator;
         $this->fqnAnnotationTypeDecorator = $fqnAnnotationTypeDecorator;
+        $this->typeNodeToStringsConvertor = $typeNodeToStringsConvertor;
     }
 
     public function hasTag(Node $node, string $name): bool
@@ -123,32 +135,57 @@ final class DocBlockAnalyzer
         $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
     }
 
-    /**
-     * @return string[]
-     */
-    public function getVarTypes(Node $node): array
+    public function getReturnTypeInfo(Node $node): ?ReturnTypeInfo
     {
         if ($node->getDocComment() === null) {
-            return [];
+            return null;
         }
 
-        $phpDocInfo = $this->createPhpDocInfoWithFqnTypesFromNode($node);
+        $types = $this->createPhpDocInfoFromNode($node)->getReturnTypes();
+        if ($types === []) {
+            return null;
+        }
 
-        return $phpDocInfo->getVarTypes();
+        $fqnTypes = $this->createPhpDocInfoWithFqnTypesFromNode($node)->getReturnTypes();
+
+        return new ReturnTypeInfo($types, $fqnTypes);
     }
 
     /**
-     * @return string[]
+     * With "name" as key
+     *
+     * @return ParamTypeInfo[]
      */
-    public function getNonFqnVarTypes(Node $node): array
+    public function getParamTypeInfos(Node $node): array
     {
         if ($node->getDocComment() === null) {
             return [];
         }
 
         $phpDocInfo = $this->createPhpDocInfoFromNode($node);
+        $types = $phpDocInfo->getParamTagValues();
+        if ($types === []) {
+            return [];
+        }
 
-        return $phpDocInfo->getVarTypes();
+        $this->fqnAnnotationTypeDecorator->decorate($phpDocInfo, $node);
+        $fqnTypes = $phpDocInfo->getParamTagValues();
+
+        $paramTypeInfos = [];
+        /** @var ParamTagValueNode $paramTagValueNode */
+        foreach ($types as $i => $paramTagValueNode) {
+            $fqnParamTagValueNode = $fqnTypes[$i];
+
+            $paramTypeInfo = new ParamTypeInfo(
+                $paramTagValueNode->parameterName,
+                $this->typeNodeToStringsConvertor->convert($paramTagValueNode->type),
+                $this->typeNodeToStringsConvertor->convert($fqnParamTagValueNode->type)
+            );
+
+            $paramTypeInfos[$paramTypeInfo->getName()] = $paramTypeInfo;
+        }
+
+        return $paramTypeInfos;
     }
 
     /**
@@ -193,6 +230,24 @@ final class DocBlockAnalyzer
         /** @var PhpDocTagNode[] $foundTags */
         $foundTags = $this->getTagsByName($node, $name);
         return array_shift($foundTags);
+    }
+
+    public function getVarTypeInfo(Node $node): ?VarTypeInfo
+    {
+        if ($node->getDocComment() === null) {
+            return null;
+        }
+
+        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
+        $types = $phpDocInfo->getVarTypes();
+        if ($types === []) {
+            return null;
+        }
+
+        $this->phpDocInfoFqnTypeDecorator->decorate($phpDocInfo, $node);
+        $fqnTypes = $phpDocInfo->getVarTypes();
+
+        return new VarTypeInfo($types, $fqnTypes);
     }
 
     private function updateNodeWithPhpDocInfo(Node $node, PhpDocInfo $phpDocInfo): void

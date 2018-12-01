@@ -1,0 +1,7 @@
+parameters:
+    # PHP 7.2 "object" type hint
+    enable_object_type: true
+
+services:
+    Rector\Php\Rector\FunctionLike\ParamScalarTypehintRector: ~
+    Rector\Php\Rector\FunctionLike\ReturnScalarTypehintRector: ~

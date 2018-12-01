@@ -1,3 +1,7 @@
+parameters:
+    # PHP 7.2 "object" type hint
+    enable_object_type: true
+
 services:
     Rector\Php\Rector\Each\WhileEachToForeachRector: ~
     Rector\Php\Rector\Each\ListEachRector: ~
@@ -9,3 +13,6 @@ services:
         png2wbmp: 'imagecreatefrompng' # or imagewbmp
         gmp_random: 'gmp_random_bits' # or gmp_random_range
         read_exif_data: 'exif_read_data'
+
+    Rector\Php\Rector\FunctionLike\ParamScalarTypehintRector: ~
+    Rector\Php\Rector\FunctionLike\ReturnScalarTypehintRector: ~
