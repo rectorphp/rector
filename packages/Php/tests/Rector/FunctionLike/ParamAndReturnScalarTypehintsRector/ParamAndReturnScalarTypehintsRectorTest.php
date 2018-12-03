@@ -4,7 +4,6 @@ namespace Rector\Php\Tests\Rector\FunctionLike\ParamAndReturnScalarTypehintsRect
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Testing\PHPUnit\IntegrationRectorTestCaseTrait;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
 /**
@@ -13,8 +12,6 @@ use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
  */
 final class ParamAndReturnScalarTypehintsRectorTest extends AbstractRectorTestCase
 {
-    use IntegrationRectorTestCaseTrait;
-
     /**
      * @dataProvider provideIntegrationFiles()
      */
