@@ -11,7 +11,7 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 final class ExceptionHandlerTypehintRectorTest extends AbstractRectorTestCase
 {
     /**
-     * @dataProvider provideWrongToFixedFiles()
+     * @dataProvider provideFiles()
      */
     public function test(string $wrong, string $fixed): void
     {
@@ -19,19 +19,19 @@ final class ExceptionHandlerTypehintRectorTest extends AbstractRectorTestCase
     }
 
     /**
-     * @dataProvider provideNullableWrongToFixedFiles()
+     * @dataProvider provideNullableFiles()
      */
     public function testNullableType(string $wrong, string $fixed): void
     {
         $this->doTestFileMatchesExpectedContent($wrong, $fixed);
     }
 
-    public function provideWrongToFixedFiles(): Iterator
+    public function provideFiles(): Iterator
     {
         yield [__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc'];
     }
 
-    public function provideNullableWrongToFixedFiles(): Iterator
+    public function provideNullableFiles(): Iterator
     {
         yield [__DIR__ . '/Wrong/wrong_nullable.php.inc', __DIR__ . '/Correct/correct_nullable.php.inc'];
     }

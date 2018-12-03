@@ -18,14 +18,14 @@ final class TemplateAnnotationVersion5RectorTest extends AbstractRectorTestCase
     }
 
     /**
-     * @dataProvider provideWrongToFixedFiles()
+     * @dataProvider provideFiles()
      */
     public function test(string $wrong, string $fixed): void
     {
         $this->doTestFileMatchesExpectedContent($wrong, $fixed);
     }
 
-    public function provideWrongToFixedFiles(): Iterator
+    public function provideFiles(): Iterator
     {
         yield [__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/Version5/correct.php.inc'];
         yield [__DIR__ . '/Wrong/wrong2.php.inc', __DIR__ . '/Correct/Version5/correct2.php.inc'];

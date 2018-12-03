@@ -16,14 +16,14 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 final class EachRectorTest extends AbstractRectorTestCase
 {
     /**
-     * @dataProvider provideWrongToFixedFiles()
+     * @dataProvider provideFiles()
      */
     public function test(string $wrong, string $fixed): void
     {
         $this->doTestFileMatchesExpectedContent($wrong, $fixed);
     }
 
-    public function provideWrongToFixedFiles(): Iterator
+    public function provideFiles(): Iterator
     {
         // while → foreach
         yield [__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc'];

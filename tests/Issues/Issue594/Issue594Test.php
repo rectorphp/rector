@@ -8,14 +8,14 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 final class Issue594Test extends AbstractRectorTestCase
 {
     /**
-     * @dataProvider provideWrongToFixedFiles()
+     * @dataProvider provideFiles()
      */
     public function test(string $wrong, string $fixed): void
     {
         $this->doTestFileMatchesExpectedContent($wrong, $fixed);
     }
 
-    public function provideWrongToFixedFiles(): Iterator
+    public function provideFiles(): Iterator
     {
         yield [__DIR__ . '/Wrong/wrong594.php', __DIR__ . '/Correct/correct594.php'];
     }

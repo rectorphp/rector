@@ -11,14 +11,14 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 final class ReservedObjectRectorTest extends AbstractRectorTestCase
 {
     /**
-     * @dataProvider provideWrongToFixedFiles()
+     * @dataProvider provideFiles()
      */
     public function test(string $wrong, string $fixed): void
     {
         $this->doTestFileMatchesExpectedContent($wrong, $fixed);
     }
 
-    public function provideWrongToFixedFiles(): Iterator
+    public function provideFiles(): Iterator
     {
         // it needs to have different name, since in PHP 7.1 it already reserved
         yield [__DIR__ . '/Wrong/ReservedObject.php', __DIR__ . '/Correct/correct.php.inc'];

@@ -11,14 +11,14 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 final class AssignArrayToStringRectorTest extends AbstractRectorTestCase
 {
     /**
-     * @dataProvider provideWrongToFixedFiles()
+     * @dataProvider provideFiles()
      */
     public function test(string $wrong, string $fixed): void
     {
         $this->doTestFileMatchesExpectedContent($wrong, $fixed);
     }
 
-    public function provideWrongToFixedFiles(): Iterator
+    public function provideFiles(): Iterator
     {
         // https://www.drupal.org/files/issues/adaptivetheme-php_string_cast_array-2832900-1.patch
         yield [__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc'];
