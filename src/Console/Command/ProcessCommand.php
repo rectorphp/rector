@@ -208,6 +208,10 @@ final class ProcessCommand extends Command
 
         $this->symfonyStyle->success('Rector is done!');
 
+        if ($this->parameterProvider->provideParameter(Option::OPTION_DRY_RUN) && count($this->fileDiffs)) {
+            return Shell::CODE_ERROR;
+        }
+
         return Shell::CODE_SUCCESS;
     }
 
