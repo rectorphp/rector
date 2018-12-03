@@ -2,9 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\FunctionLike\ParamAndReturnScalarTypehintsRector;
 
-use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
 /**
  * @covers \Rector\Php\Rector\FunctionLike\ParamScalarTypehintRector
@@ -12,15 +10,7 @@ use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
  */
 final class ParamAndReturnScalarTypehintsRectorTest extends AbstractRectorTestCase
 {
-    /**
-     * @dataProvider provideIntegrationFiles()
-     */
-    public function test(string $wrong, string $fixed): void
-    {
-        $this->doTestFileMatchesExpectedContent($wrong, $fixed);
-    }
-
-    public function provideIntegrationFiles(): Iterator
+    public function test(): void
     {
         $integrationFiles = [
             __DIR__ . '/Integration/undesired.php.inc',
@@ -85,9 +75,7 @@ final class ParamAndReturnScalarTypehintsRectorTest extends AbstractRectorTestCa
             __DIR__ . '/Integration/dunglas/type_aliases_and_whitelisting.php.inc',
         ];
 
-        foreach ($integrationFiles as $integrationFile) {
-            yield $this->splitContentToOriginalFileAndExpectedFile(new SmartFileInfo($integrationFile));
-        }
+        $this->doTestFiles($integrationFiles);
     }
 
     protected function provideConfig(): string

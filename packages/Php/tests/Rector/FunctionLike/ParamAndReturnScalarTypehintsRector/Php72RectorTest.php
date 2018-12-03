@@ -2,9 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\FunctionLike\ParamAndReturnScalarTypehintsRector;
 
-use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
 /**
  * @covers \Rector\Php\Rector\FunctionLike\ParamScalarTypehintRector
@@ -12,24 +10,12 @@ use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
  */
 final class Php72RectorTest extends AbstractRectorTestCase
 {
-    /**
-     * @dataProvider provideIntegrationFiles()
-     */
-    public function test(string $wrong, string $fixed): void
+    public function test(): void
     {
-        $this->doTestFileMatchesExpectedContent($wrong, $fixed);
-    }
-
-    public function provideIntegrationFiles(): Iterator
-    {
-        $integrationFiles = [
+        $this->doTestFiles([
             __DIR__ . '/Integration/nikic/object_php72.php.inc',
             __DIR__ . '/Integration/php-cs-fixer-param/php72_object.php.inc',
-        ];
-
-        foreach ($integrationFiles as $integrationFile) {
-            yield $this->splitContentToOriginalFileAndExpectedFile(new SmartFileInfo($integrationFile));
-        }
+        ]);
     }
 
     protected function provideConfig(): string
