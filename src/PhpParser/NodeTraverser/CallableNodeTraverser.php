@@ -23,17 +23,16 @@ final class CallableNodeTraverser
 
     private function createNodeVisitor(callable $callable): NodeVisitor
     {
-        return new class($callable) extends NodeVisitorAbstract {
+        return new class($callable) extends NodeVisitorAbstract
+        {
             /**
              * @var callable
              */
             private $callable;
-
             public function __construct(callable $callable)
             {
                 $this->callable = $callable;
             }
-
             /**
              * @return int|Node|null
              */
