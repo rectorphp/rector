@@ -51,12 +51,12 @@ final class NodeRemovingCommander implements CommanderInterface
 
     private function createNodeVisitor(): NodeVisitor
     {
-        return new class($this->nodesToRemove) extends NodeVisitorAbstract
-        {
+        return new class($this->nodesToRemove) extends NodeVisitorAbstract {
             /**
              * @var Stmt[]
              */
             private $nodesToRemove = [];
+
             /**
              * @param Stmt[] $nodesToRemove
              */
@@ -64,6 +64,7 @@ final class NodeRemovingCommander implements CommanderInterface
             {
                 $this->nodesToRemove = $nodesToRemove;
             }
+
             /**
              * @return int|Node|Node[]|null
              */

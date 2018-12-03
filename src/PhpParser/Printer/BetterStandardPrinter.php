@@ -149,7 +149,11 @@ final class BetterStandardPrinter extends Standard
             if ($node->class->name instanceof Identifier) {
                 $className = $node->class->name->toString();
                 if (Strings::startsWith($className, 'AnonymousClass')) {
-                    $node->setAttribute(Attribute::ORIGINAL_NODE, null);
+                    /** @var Class_ $originalNode */
+                    $originalNode = $node->class->getAttribute(Attribute::ORIGINAL_NODE);
+                    $originalNode->name = null;
+
+                    $node->class->setAttribute(Attribute::ORIGINAL_NODE, $originalNode);
                     $node->class->name = null;
                 }
             }

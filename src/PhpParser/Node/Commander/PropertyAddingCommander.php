@@ -58,16 +58,17 @@ final class PropertyAddingCommander implements CommanderInterface
 
     private function createNodeVisitor(): NodeVisitor
     {
-        return new class($this->classMaintainer, $this->propertiesByClass) extends NodeVisitorAbstract
-        {
+        return new class($this->classMaintainer, $this->propertiesByClass) extends NodeVisitorAbstract {
             /**
              * @var ClassMaintainer
              */
             private $classMaintainer;
+
             /**
              * @var VariableInfo[][]
              */
             private $propertiesByClass = [];
+
             /**
              * @param VariableInfo[][] $propertiesByClass
              */
@@ -76,6 +77,7 @@ final class PropertyAddingCommander implements CommanderInterface
                 $this->classMaintainer = $classMaintainer;
                 $this->propertiesByClass = $propertiesByClass;
             }
+
             public function enterNode(Node $node): ?Node
             {
                 if (! $node instanceof Class_ || $node->isAnonymous()) {
@@ -84,6 +86,7 @@ final class PropertyAddingCommander implements CommanderInterface
 
                 return $this->processClassNode($node);
             }
+
             private function processClassNode(Class_ $classNode): Class_
             {
                 $variableInfos = $this->propertiesByClass[spl_object_hash($classNode)] ?? [];

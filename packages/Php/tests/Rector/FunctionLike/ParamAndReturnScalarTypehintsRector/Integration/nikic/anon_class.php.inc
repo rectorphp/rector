@@ -13,8 +13,7 @@ new class {
 
 namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Integration\AnonClass;
 
-new class
-{
+new class {
     /** @param int $a */
     public function test(int $a) {}
 };

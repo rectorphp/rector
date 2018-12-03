@@ -93,12 +93,12 @@ final class NodeAddingCommander implements CommanderInterface
 
     private function createNodeVisitor(): NodeVisitor
     {
-        return new class($this->nodesToAdd) extends NodeVisitorAbstract
-        {
+        return new class($this->nodesToAdd) extends NodeVisitorAbstract {
             /**
              * @var Stmt[][]
              */
             private $nodesToAdd = [];
+
             /**
              * @param Stmt[][] $nodesToAdd
              */
@@ -106,6 +106,7 @@ final class NodeAddingCommander implements CommanderInterface
             {
                 $this->nodesToAdd = $nodesToAdd;
             }
+
             /**
              * @return Node[]|Node|null
              */
