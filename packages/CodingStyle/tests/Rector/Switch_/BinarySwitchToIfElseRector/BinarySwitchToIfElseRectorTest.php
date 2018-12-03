@@ -2,29 +2,18 @@
 
 namespace Rector\CodingStyle\Tests\Rector\Switch_\BinarySwitchToIfElseRector;
 
-use Iterator;
+use Rector\CodingStyle\Rector\Switch_\BinarySwitchToIfElseRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-/**
- * @covers \Rector\CodingStyle\Rector\Switch_\BinarySwitchToIfElseRector
- */
 final class BinarySwitchToIfElseRectorTest extends AbstractRectorTestCase
 {
-    /**
-     * @dataProvider provideFiles()
-     */
-    public function test(string $wrong, string $fixed): void
+    public function test(): void
     {
-        $this->doTestFileMatchesExpectedContent($wrong, $fixed);
+        $this->doTestFiles([[__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc']]);
     }
 
-    public function provideFiles(): Iterator
+    public function getRectorClass(): string
     {
-        yield [__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc'];
-    }
-
-    protected function provideConfig(): string
-    {
-        return __DIR__ . '/config.yml';
+        return BinarySwitchToIfElseRector::class;
     }
 }

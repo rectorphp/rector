@@ -27,6 +27,9 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\Yaml\Yaml;
 
+/**
+ * Writing: 30 minutes
+ */
 final class SimplifyTestsRector extends AbstractRector
 {
     /**
@@ -91,7 +94,6 @@ final class SimplifyTestsRector extends AbstractRector
         if (! isset($classMethodsByName['provideConfig'])) {
             return null;
         }
-
 
         $stmts = $classMethodsByName['provideConfig']->stmts;
         $configPath = null;

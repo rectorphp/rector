@@ -3,21 +3,11 @@
 namespace Rector\Php\Tests\Rector\FunctionLike\ExceptionHandlerTypehintRector;
 
 use Iterator;
+use Rector\Php\Rector\FunctionLike\ExceptionHandlerTypehintRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-/**
- * @covers \Rector\Php\Rector\FunctionLike\ExceptionHandlerTypehintRector
- */
 final class ExceptionHandlerTypehintRectorTest extends AbstractRectorTestCase
 {
-    /**
-     * @dataProvider provideFiles()
-     */
-    public function test(string $wrong, string $fixed): void
-    {
-        $this->doTestFileMatchesExpectedContent($wrong, $fixed);
-    }
-
     /**
      * @dataProvider provideNullableFiles()
      */
@@ -26,9 +16,9 @@ final class ExceptionHandlerTypehintRectorTest extends AbstractRectorTestCase
         $this->doTestFileMatchesExpectedContent($wrong, $fixed);
     }
 
-    public function provideFiles(): Iterator
+    public function test(): void
     {
-        yield [__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc'];
+        $this->doTestFiles([[__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc']]);
     }
 
     public function provideNullableFiles(): Iterator
@@ -36,8 +26,8 @@ final class ExceptionHandlerTypehintRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Wrong/wrong_nullable.php.inc', __DIR__ . '/Correct/correct_nullable.php.inc'];
     }
 
-    protected function provideConfig(): string
+    public function getRectorClass(): string
     {
-        return __DIR__ . '/config.yml';
+        return ExceptionHandlerTypehintRector::class;
     }
 }

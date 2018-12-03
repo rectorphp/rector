@@ -1,2 +1,0 @@
-services:
-    Rector\Sylius\Rector\Review\ReplaceCreateMethodWithoutReviewerRector: ~

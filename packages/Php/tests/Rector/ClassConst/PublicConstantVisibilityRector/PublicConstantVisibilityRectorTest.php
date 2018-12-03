@@ -2,29 +2,18 @@
 
 namespace Rector\Php\Tests\Rector\ClassConst\PublicConstantVisibilityRector;
 
-use Iterator;
+use Rector\Php\Rector\ClassConst\PublicConstantVisibilityRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-/**
- * @covers \Rector\Php\Rector\ClassConst\PublicConstantVisibilityRector
- */
 final class PublicConstantVisibilityRectorTest extends AbstractRectorTestCase
 {
-    /**
-     * @dataProvider provideFiles()
-     */
-    public function test(string $wrong, string $fixed): void
+    public function test(): void
     {
-        $this->doTestFileMatchesExpectedContent($wrong, $fixed);
+        $this->doTestFiles([[__DIR__ . '/Wrong/SomeClass.php', __DIR__ . '/Correct/correct.php.inc']]);
     }
 
-    public function provideFiles(): Iterator
+    public function getRectorClass(): string
     {
-        yield [__DIR__ . '/Wrong/SomeClass.php', __DIR__ . '/Correct/correct.php.inc'];
-    }
-
-    protected function provideConfig(): string
-    {
-        return __DIR__ . '/config.yml';
+        return PublicConstantVisibilityRector::class;
     }
 }

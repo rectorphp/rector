@@ -2,31 +2,21 @@
 
 namespace Rector\Php\Tests\Rector\FuncCall\CallUserMethodRector;
 
-use Iterator;
+use Rector\Php\Rector\FuncCall\CallUserMethodRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
- * @covers \Rector\Php\Rector\FuncCall\CallUserMethodRector
- *
  * @see https://www.mail-archive.com/php-dev@lists.php.net/msg11576.html
  */
 final class CallUserMethodRectorTest extends AbstractRectorTestCase
 {
-    /**
-     * @dataProvider provideFiles()
-     */
-    public function test(string $wrong, string $fixed): void
+    public function test(): void
     {
-        $this->doTestFileMatchesExpectedContent($wrong, $fixed);
+        $this->doTestFiles([[__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc']]);
     }
 
-    public function provideFiles(): Iterator
+    public function getRectorClass(): string
     {
-        yield [__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc'];
-    }
-
-    protected function provideConfig(): string
-    {
-        return __DIR__ . '/config.yml';
+        return CallUserMethodRector::class;
     }
 }

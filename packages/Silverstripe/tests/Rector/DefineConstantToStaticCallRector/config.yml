@@ -1,3 +1,0 @@
-services:
-    Rector\Silverstripe\Rector\DefineConstantToStaticCallRector: ~
-

@@ -2,30 +2,23 @@
 
 namespace Rector\Sylius\Tests\Rector\Review;
 
-use Iterator;
+use Rector\Sylius\Rector\Review\ReplaceCreateMethodWithoutReviewerRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-/**
- * @covers \Rector\Sylius\Rector\Review\ReplaceCreateMethodWithoutReviewerRector
- */
 final class ReplaceCreateMethodWithoutReviewerRectorTest extends AbstractRectorTestCase
 {
-    /**
-     * @dataProvider provideFiles()
-     */
-    public function test(string $wrong, string $fixed): void
+    public function test(): void
     {
-        $this->doTestFileMatchesExpectedContent($wrong, $fixed);
+        $this->doTestFiles(
+            [[__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc'], [
+                __DIR__ . '/Wrong/wrong2.php.inc',
+                __DIR__ . '/Correct/correct.php.inc',
+            ]]
+        );
     }
 
-    public function provideFiles(): Iterator
+    public function getRectorClass(): string
     {
-        yield [__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc'];
-        yield [__DIR__ . '/Wrong/wrong2.php.inc', __DIR__ . '/Correct/correct.php.inc'];
-    }
-
-    protected function provideConfig(): string
-    {
-        return __DIR__ . '/config.yml';
+        return ReplaceCreateMethodWithoutReviewerRector::class;
     }
 }

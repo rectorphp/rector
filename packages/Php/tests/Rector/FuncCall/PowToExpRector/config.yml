@@ -1,2 +1,0 @@
-services:
-    Rector\Php\Rector\FuncCall\PowToExpRector: ~

@@ -2,7 +2,7 @@
 
 namespace Rector\Silverstripe\Tests\Rector\DefineConstantToStaticCallRector;
 
-use Iterator;
+use Rector\Silverstripe\Rector\DefineConstantToStaticCallRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
@@ -10,21 +10,13 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
  */
 final class DefineConstantToStaticCallRectorTest extends AbstractRectorTestCase
 {
-    /**
-     * @dataProvider provideFiles()
-     */
-    public function test(string $wrong, string $fixed): void
+    public function test(): void
     {
-        $this->doTestFileMatchesExpectedContent($wrong, $fixed);
+        $this->doTestFiles([[__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc']]);
     }
 
-    public function provideFiles(): Iterator
+    public function getRectorClass(): string
     {
-        yield [__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc'];
-    }
-
-    protected function provideConfig(): string
-    {
-        return __DIR__ . '/config.yml';
+        return DefineConstantToStaticCallRector::class;
     }
 }
