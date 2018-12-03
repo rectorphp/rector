@@ -10,13 +10,6 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
  */
 final class GetToConstructorInjectionRectorTest extends AbstractRectorTestCase
 {
-    protected function setUp(): void
-    {
-        $this->rebuildFreshContainer = true;
-
-        parent::setUp();
-    }
-
     /**
      * @dataProvider provideFiles()
      */
