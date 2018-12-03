@@ -1,6 +1,6 @@
-<?php declare(strict_types=1);
+<?php
 
-namespace Rector\Php\Tests\Rector\FuncCall\CountOnNullRector\Wrong;
+namespace Rector\Php\Tests\Rector\FuncCall\CountOnNullRector\Integration;
 
 use Rector\Php\Tests\Rector\FuncCall\CountOnNullRector\Source\CountableClass;
 use stdClass;

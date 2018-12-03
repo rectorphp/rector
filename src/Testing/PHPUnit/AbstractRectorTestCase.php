@@ -15,6 +15,8 @@ use function Safe\sprintf;
 
 abstract class AbstractRectorTestCase extends TestCase
 {
+    use IntegrationRectorTestCaseTrait;
+
     /**
      * @var bool
      */
@@ -51,14 +53,7 @@ abstract class AbstractRectorTestCase extends TestCase
         $this->fileGuard = new FileGuard();
         $this->fileGuard->ensureFileExists($configFile, static::class);
 
-        $key = md5_file($configFile);
-
-        if (isset(self::$containersPerConfig[$key]) && ! $this->rebuildFreshContainer) {
-            $this->container = self::$containersPerConfig[$key];
-        } else {
-            $this->container = (new ContainerFactory())->createWithConfigFiles([$configFile]);
-            self::$containersPerConfig[$key] = $this->container;
-        }
+        $this->createContainer($configFile);
 
         $this->fileProcessor = $this->container->get(FileProcessor::class);
         $this->parameterProvider = $this->container->get(ParameterProvider::class);
@@ -97,5 +92,17 @@ abstract class AbstractRectorTestCase extends TestCase
     private function normalizeEndNewline(string $content): string
     {
         return trim($content) . PHP_EOL;
+    }
+
+    private function createContainer(string $configFile): void
+    {
+        $key = md5_file($configFile);
+
+        if (isset(self::$containersPerConfig[$key]) && ! $this->rebuildFreshContainer) {
+            $this->container = self::$containersPerConfig[$key];
+        } else {
+            $this->container = (new ContainerFactory())->createWithConfigFiles([$configFile]);
+            self::$containersPerConfig[$key] = $this->container;
+        }
     }
 }

@@ -19,6 +19,20 @@ trait IntegrationRectorTestCaseTrait
     private $splitLine = '#-----\n#';
 
     /**
+     * @param string[] $files
+     */
+    protected function doTestFiles(array $files): void
+    {
+        // @todo suppert boths plit and unsplit
+
+        foreach ($files as $file) {
+            $smartFileInfo = new SmartFileInfo($file);
+            [$originalContent, $changedContent] = $this->splitContentToOriginalFileAndExpectedFile($smartFileInfo);
+            $this->doTestFileMatchesExpectedContent($originalContent, $changedContent);
+        }
+    }
+
+    /**
      * @return string[]
      */
     protected function splitContentToOriginalFileAndExpectedFile(SmartFileInfo $smartFileInfo): array
