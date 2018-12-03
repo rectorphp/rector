@@ -5,14 +5,11 @@ namespace Rector\Silverstripe\Tests\Rector\DefineConstantToStaticCallRector;
 use Rector\Silverstripe\Rector\DefineConstantToStaticCallRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-/**
- * @see \Rector\Silverstripe\Rector\DefineConstantToStaticCallRector
- */
 final class DefineConstantToStaticCallRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
     {
-        $this->doTestFiles([[__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc']]);
+        $this->doTestFiles([__DIR__ . '/Wrong/wrong.php.inc']);
     }
 
     public function getRectorClass(): string

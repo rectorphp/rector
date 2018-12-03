@@ -9,7 +9,7 @@ final class Issue594Test extends AbstractRectorTestCase
 {
     public function test(): void
     {
-        $this->doTestFiles([[__DIR__ . '/Wrong/wrong594.php', __DIR__ . '/Correct/correct594.php']]);
+        $this->doTestFiles([__DIR__ . '/Wrong/wrong594.php']);
     }
 
     public function getRectorClass(): string

@@ -2,7 +2,9 @@
 
 namespace Rector\CodeQuality\Tests\Rector\Return_\SimplifyUselessVariableRector\Wrong;
 
-$fixerConfigurationResolver = new FixerConfigurationResolver($fixerOptions);
+function simplifyUselessVariable3()
+{
+    $fixerConfigurationResolver = new FixerConfigurationResolver($fixerOptions);
 
 
 
@@ -10,9 +12,24 @@ $fixerConfigurationResolver = new FixerConfigurationResolver($fixerOptions);
 
 
 
-// keep
+    // keep
 
 
 
 
-return $fixerConfigurationResolver;
+    return $fixerConfigurationResolver;
+}
+
+?>
+-----
+<?php
+
+namespace Rector\CodeQuality\Tests\Rector\Return_\SimplifyUselessVariableRector\Wrong;
+
+function simplifyUselessVariable3()
+{
+    // keep
+    return new FixerConfigurationResolver($fixerOptions);
+}
+
+?>

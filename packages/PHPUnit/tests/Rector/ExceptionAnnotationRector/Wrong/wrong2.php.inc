@@ -1,6 +1,8 @@
 <?php
 
-final class MyTest extends \PHPUnit_Framework_TestCase
+namespace Rector\PHPUnit\Tests\Rector\ExceptionAnnotationRector\Wrong;
+
+final class MyTest2 extends \PHPUnit_Framework_TestCase
 {
     /**
      * @expectedException \Phpml\Exception\InvalidArgumentException
@@ -13,3 +15,23 @@ final class MyTest extends \PHPUnit_Framework_TestCase
         // extra line
     }
 }
+
+?>
+-----
+<?php
+
+namespace Rector\PHPUnit\Tests\Rector\ExceptionAnnotationRector\Wrong;
+
+final class MyTest2 extends \PHPUnit_Framework_TestCase
+{
+    public function testThrowExceptionWhenOperatorIsInvalid(): void
+    {
+        $this->expectException('Phpml\Exception\InvalidArgumentException');
+        $this->expectExceptionMessage('Invalid operator "~=" provided');
+        Comparison::compare(1, 1, '~=');
+
+        // extra line
+    }
+}
+
+?>

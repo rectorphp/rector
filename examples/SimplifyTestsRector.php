@@ -15,20 +15,21 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
-use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
+use Rector\PhpParser\Node\Maintainer\ClassMaintainer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\Yaml\Yaml;
 
 /**
  * Writing: 30 minutes
+ *
+ * @see https://github.com/rectorphp/rector/pull/807
+ * @see https://github.com/rectorphp/rector/pull/807/commits/7c6a8be85eaa91bad545a9131f7d9bff6805a6b1
  */
 final class SimplifyTestsRector extends AbstractRector
 {
@@ -46,20 +47,26 @@ final class SimplifyTestsRector extends AbstractRector
      * @var BuilderFactory
      */
     private $builderFactory;
+    /**
+     * @var ClassMaintainer
+     */
+    private $classMaintainer;
 
     public function __construct(
         ConstExprEvaluator $constExprEvaluator,
         DocBlockAnalyzer $docBlockAnalyzer,
-        BuilderFactory $builderFactory
+        BuilderFactory $builderFactory,
+        ClassMaintainer $classMaintainer
     ) {
         $this->constExprEvaluator = $constExprEvaluator;
         $this->docBlockAnalyzer = $docBlockAnalyzer;
         $this->builderFactory = $builderFactory;
+        $this->classMaintainer = $classMaintainer;
     }
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Simplify tests - see PR #@todo', [new CodeSample('', '')]);
+        return new RectorDefinition('Simplify tests', [new CodeSample('', '')]);
     }
 
     /**
@@ -83,7 +90,7 @@ final class SimplifyTestsRector extends AbstractRector
             return null;
         }
 
-        $classMethodsByName = $this->getClassMethodByName($node);
+        $classMethodsByName = $this->classMaintainer->getMethodsByName($node);
         if (isset($classMethodsByName['test']) && empty($classMethodsByName['test']->params)) {
             // test()... method without any params, no provider → skip
             return null;
@@ -98,9 +105,7 @@ final class SimplifyTestsRector extends AbstractRector
         $stmts = $classMethodsByName['provideConfig']->stmts;
         $configPath = null;
         if ($stmts[0] instanceof Return_) {
-            /** @var SplFileInfo $fileInfo */
-            $fileInfo = $node->getAttribute(Attribute::FILE_INFO);
-            $configPath = $fileInfo->getPath() . $this->constExprEvaluator->evaluateDirectly($stmts[0]->expr);
+            $configPath = $this->constExprEvaluator->evaluateDirectly($stmts[0]->expr);
 
             $rectorClass = $this->matchSingleServiceWithoutConfigInFile($configPath);
         }
@@ -161,23 +166,6 @@ final class SimplifyTestsRector extends AbstractRector
         }
 
         return $node;
-    }
-
-    /**
-     * @return ClassMethod[]
-     */
-    private function getClassMethodByName(Class_ $classNode): array
-    {
-        $classMethodsByName = [];
-        foreach ($classNode->stmts as $stmt) {
-            if (! $stmt instanceof ClassMethod) {
-                continue;
-            }
-
-            $classMethodsByName[$this->getName($stmt)] = $stmt;
-        }
-
-        return $classMethodsByName;
     }
 
     private function matchSingleServiceWithoutConfigInFile(string $configPath): ?string

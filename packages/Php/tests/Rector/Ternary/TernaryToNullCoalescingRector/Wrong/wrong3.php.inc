@@ -1,5 +1,21 @@
-<?php declare(strict_types=1);
+<?php
 
-$f = $g === null ? 'g' : $g;
+function ternaryToNullCoalescing3()
+{
+    $f = $g === null ? 'g' : $g;
 
-$ff = null === $gg ? 'gg' : $gg;
+    $ff = null === $gg ? 'gg' : $gg;
+}
+
+?>
+-----
+<?php
+
+function ternaryToNullCoalescing3()
+{
+    $f = $g ?? 'g';
+
+    $ff = $gg ?? 'gg';
+}
+
+?>

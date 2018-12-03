@@ -63,7 +63,7 @@ final class BarewordStringRector extends AbstractRector
 
         // this duplicates the way composer handles it
         // @see https://github.com/composer/composer/issues/6232
-        require $fileInfo->getRealPath();
+        require_once $fileInfo->getRealPath();
 
         // restore
         set_error_handler($previousErrorHandler);

@@ -1,5 +1,7 @@
 <?php
 
+namespace Rector\PHPUnit\Tests\Rector\ExceptionAnnotationRector\Wrong;
+
 final class MyTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -11,3 +13,20 @@ final class MyTest extends \PHPUnit_Framework_TestCase
 
     }
 }
+
+?>
+-----
+<?php
+
+namespace Rector\PHPUnit\Tests\Rector\ExceptionAnnotationRector\Wrong;
+
+final class MyTest extends \PHPUnit_Framework_TestCase
+{
+    public function test()
+    {
+        $this->expectException('FooException');
+        // some code
+    }
+}
+
+?>

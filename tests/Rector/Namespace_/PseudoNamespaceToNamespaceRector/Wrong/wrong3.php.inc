@@ -1,5 +1,16 @@
-<?php declare(strict_types=1);
+<?php
 
 class PHPUnit_TestCase
+{
+}
+
+?>
+-----
+<?php
+
+
+namespace PHPUnit;
+
+class TestCase
 {
 }

@@ -1,22 +1,49 @@
 <?php
 
-if (strpos($docToken->getContent(), "\n") === false) {
-    return true;
+use PhpCsFixer\Tokenizer\Token;
+
+function simplifyIfReturnBool()
+{
+    $docToken = new Token([]);
+    if (strpos($docToken->getContent(), "\n") === false) {
+        return true;
+    }
+
+    return false;
+
+
+    if (strpos($docToken->getContent(), "\n") !== false) {
+        return true;
+    }
+
+    return false;
+
+
+    if (strpos($docToken->getContent(), "\n") !== false) {
+        return true;
+    }
+
+    return 5;
 }
 
-return false;
+?>
+-----
+<?php
+
+use PhpCsFixer\Tokenizer\Token;
+
+function simplifyIfReturnBool()
+{
+    $docToken = new Token([]);
+    return strpos($docToken->getContent(), "\n") === false;
+    return strpos($docToken->getContent(), "\n") !== false;
 
 
+    if (strpos($docToken->getContent(), "\n") !== false) {
+        return true;
+    }
 
-if (strpos($docToken->getContent(), "\n") !== false) {
-    return true;
+    return 5;
 }
 
-return false;
-
-
-if (strpos($docToken->getContent(), "\n") !== false) {
-    return true;
-}
-
-return 5;
+?>

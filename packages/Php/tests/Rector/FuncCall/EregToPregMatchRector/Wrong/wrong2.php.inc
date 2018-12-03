@@ -1,5 +1,25 @@
-<?php declare(strict_types=1);
+<?php
 
-ereg_replace('hi', '\\1', 'hi, she said');
+namespace Rector\Php\Tests\Rector\FuncCall\EregToPregMatchRector\Wrong;
 
-eregi_replace('hi', '\\1', 'hi, she said');
+function eregToPregMatch2()
+{
+    ereg_replace('hi', '\\1', 'hi, she said');
+
+    eregi_replace('hi', '\\1', 'hi, she said');
+}
+
+?>
+-----
+<?php
+
+namespace Rector\Php\Tests\Rector\FuncCall\EregToPregMatchRector\Wrong;
+
+function eregToPregMatch2()
+{
+    preg_replace('#hi#m', '\\1', 'hi, she said');
+
+    preg_replace('#hi#mi', '\\1', 'hi, she said');
+}
+
+?>

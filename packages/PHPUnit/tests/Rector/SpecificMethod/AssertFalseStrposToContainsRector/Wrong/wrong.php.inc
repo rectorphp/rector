@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+namespace Rector\PHPUnit\Tests\Rector\SpecificMethod\AssertFalseStrposToContainsRector\Wrong;
 
 final class MyTest extends \PHPUnit\Framework\TestCase
 {
@@ -8,3 +10,20 @@ final class MyTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse(stripos($node, 'foo'), 'message');
     }
 }
+
+?>
+-----
+<?php
+
+namespace Rector\PHPUnit\Tests\Rector\SpecificMethod\AssertFalseStrposToContainsRector\Wrong;
+
+final class MyTest extends \PHPUnit\Framework\TestCase
+{
+    public function test()
+    {
+        $this->assertContains('foo', $node);
+        $this->assertNotContains('foo', $node, 'message');
+    }
+}
+
+?>

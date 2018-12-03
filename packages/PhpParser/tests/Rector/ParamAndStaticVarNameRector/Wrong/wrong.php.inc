@@ -1,4 +1,19 @@
-<?php declare (strict_types=1);
+<?php
 
-$paramNode = new PhpParser\Node\Param;
-$paramName = $paramNode->name;
+function paramAndStaticVarName()
+{
+    $paramNode = new PhpParser\Node\Param;
+    $paramName = $paramNode->name;
+}
+
+?>
+-----
+<?php
+
+function paramAndStaticVarName()
+{
+    $paramNode = new PhpParser\Node\Param;
+    $paramName = $paramNode->var->name;
+}
+
+?>

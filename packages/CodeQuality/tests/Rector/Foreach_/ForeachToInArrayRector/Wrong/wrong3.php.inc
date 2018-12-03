@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 namespace Rector\CodeQuality\Tests\Rector\Foreach_\ForeachToInArrayRector\Wrong;
 
@@ -16,3 +16,20 @@ class SomeClass
         return false;
     }
 }
+
+?>
+-----
+<?php
+
+namespace Rector\CodeQuality\Tests\Rector\Foreach_\ForeachToInArrayRector\Wrong;
+
+class SomeClass
+{
+    public function foreachWithElseNullable()
+    {
+        // some comment
+        return in_array('something', $items);
+    }
+}
+
+?>

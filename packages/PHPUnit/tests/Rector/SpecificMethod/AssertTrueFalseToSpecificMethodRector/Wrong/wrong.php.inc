@@ -1,6 +1,6 @@
-<?php declare(strict_types=1);
+<?php
 
-namespace Tests\AssertTrueFalseToSpecificMethodRector;
+namespace Rector\PHPUnit\Tests\Rector\SpecificMethod\AssertTrueFalseToSpecificMethodRector\Wrong;
 
 abstract class Testing extends \PHPUnit\Framework\TestCase
 {
@@ -25,3 +25,35 @@ final class MyTest extends Testing
         $this->assertFalse(is_a($anything, Foo::class, true), 'argument');
     }
 }
+
+?>
+-----
+<?php
+
+namespace Rector\PHPUnit\Tests\Rector\SpecificMethod\AssertTrueFalseToSpecificMethodRector\Wrong;
+
+abstract class Testing extends \PHPUnit\Framework\TestCase
+{
+}
+
+final class MyTest extends Testing
+{
+    public function test()
+    {
+        $this->assertArrayHasKey('...', ['...'], 'argument');
+        $this->assertContains('...', ['...'], 'argument');
+        $this->assertNotIsReadable('...');
+        $this->assertEmpty('...');
+        $this->assertFileNotExists('...');
+        $this->assertDirectoryExists('...');
+        $this->assertFinite('...');
+        $this->assertNan('...');
+        $this->assertNotNull('...');
+        $this->assertIsWritable('...');
+        $this->assertNotContains('...', ['...'], 'argument');
+        $this->assertInstanceOf('Foo', $anything, 'argument');
+        $this->assertNotInstanceOf(Foo::class, $anything, 'argument');
+    }
+}
+
+?>

@@ -1,3 +1,21 @@
-<?php declare(strict_types=1);
+<?php
 
-$direction = $directions[$attribute] === SORT_DESC ? SORT_ASC : SORT_DESC;
+namespace Rector\CodeQuality\Tests\Rector\Ternary\UnnecessaryTernaryExpressionRector\Wrong;
+
+function unnecessaryTernaryExpression()
+{
+    $direction = $directions[$attribute] === SORT_DESC ? SORT_ASC : SORT_DESC;
+}
+
+?>
+-----
+<?php
+
+namespace Rector\CodeQuality\Tests\Rector\Ternary\UnnecessaryTernaryExpressionRector\Wrong;
+
+function unnecessaryTernaryExpression()
+{
+    $direction = $directions[$attribute] === SORT_DESC ? SORT_ASC : SORT_DESC;
+}
+
+?>

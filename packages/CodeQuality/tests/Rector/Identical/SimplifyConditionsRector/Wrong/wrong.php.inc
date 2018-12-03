@@ -1,15 +1,47 @@
-<?php declare(strict_types=1);
+<?php
 
-if (! ($foo !== 'bar')) {
-} elseif (! ($foo != 'bug')) {
+function simplifyConditions()
+{
+    $foo = 'start';
+    if (!($foo !== 'bar')) {
+    } elseif (!($foo != 'bug')) {
+    }
+
+    function foo($bar)
+    {
+        return !($bar > 0);
+    }
+
+    $baz = !($foo === 'baz');
+
+    function bar($foo)
+    {
+        return !($foo >= 0);
+    }
 }
 
-function foo ($bar) {
-    return ! ($bar > 0);
+?>
+-----
+<?php
+
+function simplifyConditions()
+{
+    $foo = 'start';
+    if ($foo === 'bar') {
+    } elseif ($foo == 'bug') {
+    }
+
+    function foo($bar)
+    {
+        return $bar <= 0;
+    }
+
+    $baz = $foo !== 'baz';
+
+    function bar($foo)
+    {
+        return $foo < 0;
+    }
 }
 
-$baz = ! ($foo === 'baz');
-
-function bar ($foo) {
-    return ! ($foo >= 0);
-}
+?>

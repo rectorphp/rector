@@ -1,9 +1,29 @@
-<?php declare(strict_types=1);
+<?php
 
-if ($a === '-' && ! $start && ! ($i < $l && $s[$i] === ']')) {
-    echo 'maybe';
+function simplifyConditions3()
+{
+    if ($a === '-' && !$start && !($i < $l && $s[$i] === ']')) {
+        echo 'maybe';
+    }
+
+    if (!($orderItem instanceof OrderTransport || $orderItem instanceof OrderPayment)) {
+        $itemsWithoutTransportAndPayment[] = $orderItem;
+    }
 }
 
-if (!($orderItem instanceof OrderTransport || $orderItem instanceof OrderPayment)) {
-    $itemsWithoutTransportAndPayment[] = $orderItem;
+?>
+-----
+<?php
+
+function simplifyConditions3()
+{
+    if ($a === '-' && !$start && !($i < $l && $s[$i] === ']')) {
+        echo 'maybe';
+    }
+
+    if (!($orderItem instanceof OrderTransport || $orderItem instanceof OrderPayment)) {
+        $itemsWithoutTransportAndPayment[] = $orderItem;
+    }
 }
+
+?>

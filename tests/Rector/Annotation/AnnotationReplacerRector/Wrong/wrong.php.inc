@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+namespace Rector\Tests\Rector\Annotation\AnnotationReplacerRector\Wrong;
 
 final class MyTest extends \PHPUnit\Framework\TestCase
 {
@@ -9,3 +11,21 @@ final class MyTest extends \PHPUnit\Framework\TestCase
     {
     }
 }
+
+?>
+-----
+<?php
+
+namespace Rector\Tests\Rector\Annotation\AnnotationReplacerRector\Wrong;
+
+final class MyTest extends \PHPUnit\Framework\TestCase
+{
+    /**
+     * @test
+     */
+    public function test()
+    {
+    }
+}
+
+?>

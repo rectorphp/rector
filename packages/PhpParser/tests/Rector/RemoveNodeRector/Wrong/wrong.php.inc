@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+namespace Rector\PhpParser\Tests\Rector\RemoveNodeRector\Wrong;
 
 class SomeVisitor extends \PhpParser\NodeVisitorAbstract
 {
@@ -7,3 +9,19 @@ class SomeVisitor extends \PhpParser\NodeVisitorAbstract
         return false;
     }
 }
+
+?>
+-----
+<?php
+
+namespace Rector\PhpParser\Tests\Rector\RemoveNodeRector\Wrong;
+
+class SomeVisitor extends \PhpParser\NodeVisitorAbstract
+{
+    public function leaveNode(\PhpParser\Node $node)
+    {
+        return \PhpParser\NodeTraverser::REMOVE_NODE;
+    }
+}
+
+?>

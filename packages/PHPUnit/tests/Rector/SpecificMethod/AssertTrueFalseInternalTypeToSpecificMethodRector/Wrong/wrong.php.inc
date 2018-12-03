@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+namespace Rector\PHPUnit\Tests\Rector\SpecificMethod\AssertTrueFalseInternalTypeToSpecificMethodRector\Wrong;
 
 final class MyTest extends \PHPUnit\Framework\TestCase
 {
@@ -14,3 +16,26 @@ final class MyTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse(is_null($something), 'second argument');
     }
 }
+
+?>
+-----
+<?php
+
+namespace Rector\PHPUnit\Tests\Rector\SpecificMethod\AssertTrueFalseInternalTypeToSpecificMethodRector\Wrong;
+
+final class MyTest extends \PHPUnit\Framework\TestCase
+{
+    public function test()
+    {
+        $this->assertInternalType('string', $something);
+        $this->assertNotInternalType('array', $something);
+
+        $this->assertInternalType('integer', $something, 'third argument');
+        $this->assertNotInternalType('bool', $something, 'third argument');
+
+        $this->assertTrue(is_file($something));
+        $this->assertFalse(is_null($something), 'second argument');
+    }
+}
+
+?>

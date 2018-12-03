@@ -1,21 +1,61 @@
-<?php declare(strict_types=1);
+<?php
 
-rand();
+namespace Rector\Php\Tests\Rector\FuncCall\RandomFunctionRector\Wrong;
 
-srand($a);
+function randomFunction()
+{
+    rand();
 
-$a = &srand($a);
+    srand($a);
 
-/* foo */ srand /** bar */ ($a);
+    $a = &srand($a);
 
-a(getrandmax ());
+    /* foo */
+    srand/** bar */
+    ($a);
 
-a(rand());
+    a(getrandmax());
 
-a(srand());
+    a(rand());
 
-rand($d, rand($a,$b));
+    a(srand());
 
-rand($a, \Other\Scope\mt_rand($a));
+    rand($d, rand($a, $b));
 
-$a = rand(1,2) + mt_rand(3,4);
+    rand($a, \Other\Scope\mt_rand($a));
+
+    $a = rand(1, 2) + mt_rand(3, 4);
+}
+
+?>
+-----
+<?php
+
+namespace Rector\Php\Tests\Rector\FuncCall\RandomFunctionRector\Wrong;
+
+function randomFunction()
+{
+    random_int(0, mt_getrandmax());
+
+    mt_srand($a);
+
+    $a = &mt_srand($a);
+
+    /* foo */
+    mt_srand/** bar */
+    ($a);
+
+    a(mt_getrandmax());
+
+    a(random_int(0, mt_getrandmax()));
+
+    a(mt_srand());
+
+    random_int($d, random_int($a, $b));
+
+    random_int($a, \Other\Scope\mt_rand($a));
+
+    $a = random_int(1, 2) + random_int(3, 4);
+}
+
+?>

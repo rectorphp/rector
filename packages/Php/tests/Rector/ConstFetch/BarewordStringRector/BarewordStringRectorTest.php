@@ -9,7 +9,8 @@ final class BarewordStringRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
     {
-        $this->doTestFiles([[__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc']]);
+        $this->autoloadTestFixture = false;
+        $this->doTestFiles([__DIR__ . '/Wrong/wrong.php.inc']);
     }
 
     public function getRectorClass(): string

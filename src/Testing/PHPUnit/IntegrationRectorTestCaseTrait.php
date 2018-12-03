@@ -59,7 +59,9 @@ trait IntegrationRectorTestCaseTrait
         FileSystem::write($expectedFile, $expectedContent);
 
         // file needs to be autoload PHPStan analyze
-        include_once $originalFile;
+        if ($this->autoloadTestFixture) {
+            require_once $originalFile;
+        }
 
         return [$originalFile, $expectedFile];
     }

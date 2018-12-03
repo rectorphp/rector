@@ -1,6 +1,8 @@
 <?php
 
-final class MyTest extends \PHPUnit_Framework_TestCase
+namespace Rector\PHPUnit\Tests\Rector\ExceptionAnnotationRector\Wrong;
+
+final class MyTest3 extends \PHPUnit_Framework_TestCase
 {
     /**
      * @expectedException \Exception
@@ -9,3 +11,19 @@ final class MyTest extends \PHPUnit_Framework_TestCase
     {
     }
 }
+
+?>
+-----
+<?php
+
+namespace Rector\PHPUnit\Tests\Rector\ExceptionAnnotationRector\Wrong;
+
+final class MyTest3 extends \PHPUnit_Framework_TestCase
+{
+    public function testThrowExceptionWhenOperatorIsInvalid() : void
+    {
+        $this->expectException('Exception');
+    }
+}
+
+?>

@@ -21,6 +21,11 @@ abstract class AbstractRectorTestCase extends TestCase
     use IntegrationRectorTestCaseTrait;
 
     /**
+     * @var bool
+     */
+    protected $autoloadTestFixture = true;
+
+    /**
      * @var FileProcessor
      */
     protected $fileProcessor;

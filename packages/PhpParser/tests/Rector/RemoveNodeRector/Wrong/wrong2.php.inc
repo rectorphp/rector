@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
+
+namespace Rector\PhpParser\Tests\Rector\RemoveNodeRector\Wrong;
 
 use PhpParser\Node;
 
-class SomeVisitor implements \PhpParser\NodeVisitor
+class SomeVisitor2 implements \PhpParser\NodeVisitor
 {
     public function leaveNode(\PhpParser\Node $node)
     {
@@ -21,3 +23,33 @@ class SomeVisitor implements \PhpParser\NodeVisitor
     {
     }
 }
+
+?>
+-----
+<?php
+
+namespace Rector\PhpParser\Tests\Rector\RemoveNodeRector\Wrong;
+
+use PhpParser\Node;
+
+class SomeVisitor2 implements \PhpParser\NodeVisitor
+{
+    public function leaveNode(\PhpParser\Node $node)
+    {
+        return \PhpParser\NodeTraverser::REMOVE_NODE;
+    }
+
+    public function beforeTraverse(array $nodes)
+    {
+    }
+
+    public function enterNode(Node $node)
+    {
+    }
+
+    public function afterTraverse(array $nodes)
+    {
+    }
+}
+
+?>

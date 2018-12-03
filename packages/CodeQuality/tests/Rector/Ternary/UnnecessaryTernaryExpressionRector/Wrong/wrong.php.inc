@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+namespace Rector\CodeQuality\Tests\Rector\Ternary\UnnecessaryTernaryExpressionRector\Wrong;
 
 final class MyClass
 {
@@ -40,3 +42,50 @@ final class MyClass
         return $foo === '' ? null : $foo;
     }
 }
+
+?>
+-----
+<?php
+
+namespace Rector\CodeQuality\Tests\Rector\Ternary\UnnecessaryTernaryExpressionRector\Wrong;
+
+final class MyClass
+{
+    public function unnecessaryTernary(): bool
+    {
+        return $foo === $bar;
+    }
+
+    public function unnecessaryTernaryExpression(): bool
+    {
+        $return =  $foo === $bar;
+
+        return $return;
+    }
+
+    public function unnecessaryTernaryExpressionInverted(): bool
+    {
+        return $foo < $bar;
+    }
+
+    public function ternaryExpressionInsideClosure(): bool
+    {
+        $result = function (): bool {
+            return $foo === 2;
+        };
+
+        return $result;
+    }
+
+    public function necessaryTernaryExpression(): bool
+    {
+        return $foo ?: $bar;
+    }
+
+    public function falsePositiveTernaryExpression(): string
+    {
+        return $foo === '' ? null : $foo;
+    }
+}
+
+?>

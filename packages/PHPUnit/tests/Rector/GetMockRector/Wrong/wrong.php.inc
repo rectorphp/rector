@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+namespace Rector\PHPUnit\Tests\Rector\GetMockRector\Wrong;
 
 final class MyTest extends \PHPUnit\Framework\TestCase
 {
@@ -10,3 +12,22 @@ final class MyTest extends \PHPUnit\Framework\TestCase
             ->getMock();
     }
 }
+
+?>
+-----
+<?php
+
+namespace Rector\PHPUnit\Tests\Rector\GetMockRector\Wrong;
+
+final class MyTest extends \PHPUnit\Framework\TestCase
+{
+    public function test()
+    {
+        $firstMock = $this->createMock('SomeClass');
+
+        $secondMock = $this->buildMock()
+            ->getMock();
+    }
+}
+
+?>

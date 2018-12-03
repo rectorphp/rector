@@ -9,3 +9,6 @@ class AnyClass
         $request->getSession()->getFlashBag()->add('success', 'message');
     }
 }
+
+?>
+-----

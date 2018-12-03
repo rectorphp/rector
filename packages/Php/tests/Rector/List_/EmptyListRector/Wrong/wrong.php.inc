@@ -1,8 +1,37 @@
-<?php declare(strict_types=1);
+<?php
 
-$values = [];
-list() = $values;
+namespace Rector\Php\Tests\Rector\List_\EmptyListRector\Wrong;
 
-list(,,) = $a;
+class EmptyList
+{
+    private function run()
+    {
+        $values = [];
+        list() = $values;
 
-list($x, list(), $y) = $a;
+        list(, ,) = $a;
+
+        list($x, list(), $y) = $a;
+    }
+}
+
+?>
+-----
+<?php
+
+namespace Rector\Php\Tests\Rector\List_\EmptyListRector\Wrong;
+
+class EmptyList
+{
+    private function run()
+    {
+        $values = [];
+        list($unusedGenerated) = $values;
+
+        list($unusedGenerated, ,) = $a;
+
+        list($x, list($unusedGenerated), $y) = $a;
+    }
+}
+
+?>

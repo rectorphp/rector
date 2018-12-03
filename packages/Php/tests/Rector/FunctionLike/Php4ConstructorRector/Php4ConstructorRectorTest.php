@@ -13,15 +13,13 @@ final class Php4ConstructorRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
     {
-        $this->doTestFiles(
-            [[__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc'], [
-                __DIR__ . '/Wrong/InNamespacePhp4ConstructorClass.php',
-                __DIR__ . '/Correct/correct2.php.inc',
-            ], [__DIR__ . '/Wrong/DelegatingPhp4ConstructorClass.php', __DIR__ . '/Correct/correct3.php.inc'], [
-                __DIR__ . '/Wrong/DelegatingPhp4ConstructorClassAgain.php',
-                __DIR__ . '/Correct/correct4.php.inc',
-            ], [__DIR__ . '/Wrong/wrong5.php.inc', __DIR__ . '/Correct/correct5.php.inc']]
-        );
+        $this->doTestFiles([
+            __DIR__ . '/Wrong/wrong.php.inc',
+            __DIR__ . '/Wrong/in_namespace.php.inc',
+            __DIR__ . '/Wrong/delegating.php.inc',
+            __DIR__ . '/Wrong/delegating_2.php.inc',
+            __DIR__ . '/Wrong/wrong5.php.inc',
+        ]);
     }
 
     public function getRectorClass(): string

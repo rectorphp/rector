@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+namespace Rector\PHPUnit\Tests\Rector\SpecificMethod\AssertRegExpRector\Wrong;
 
 final class MyTest extends \PHPUnit\Framework\TestCase
 {
@@ -10,3 +12,22 @@ final class MyTest extends \PHPUnit\Framework\TestCase
         $this->assertNotSame(0, preg_match('/^Message for ".*"\.$/', $string), $message);
     }
 }
+
+?>
+-----
+<?php
+
+namespace Rector\PHPUnit\Tests\Rector\SpecificMethod\AssertRegExpRector\Wrong;
+
+final class MyTest extends \PHPUnit\Framework\TestCase
+{
+    public function test()
+    {
+        $this->assertRegExp('/^Message for ".*"\.$/', $string, $message);
+        $this->assertNotRegExp('/^Message for ".*"\.$/', $string, $message);
+        $this->assertNotRegExp('/^Message for ".*"\.$/', $string, $message);
+        $this->assertRegExp('/^Message for ".*"\.$/', $string, $message);
+    }
+}
+
+?>

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+namespace Rector\PHPUnit\Tests\Rector\SpecificMethod\AssertSameBoolNullToSpecificMethodRector\Wrong;
 
 final class MyTest extends \PHPUnit\Framework\TestCase
 {
@@ -8,3 +10,20 @@ final class MyTest extends \PHPUnit\Framework\TestCase
         $this->assertNotSame(false, 'something', 'message');
     }
 }
+
+?>
+-----
+<?php
+
+namespace Rector\PHPUnit\Tests\Rector\SpecificMethod\AssertSameBoolNullToSpecificMethodRector\Wrong;
+
+final class MyTest extends \PHPUnit\Framework\TestCase
+{
+    public function test()
+    {
+        $this->assertNull('something');
+        $this->assertNotFalse('something', 'message');
+    }
+}
+
+?>
