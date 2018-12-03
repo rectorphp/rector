@@ -5,6 +5,9 @@ namespace Rector\Tests\Issues\Issue594;
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
+/**
+ * @covers \Rector\Symfony\Rector\HttpKernel\GetRequestRector
+ */
 final class Issue594Test extends AbstractRectorTestCase
 {
     /**

@@ -29,18 +29,17 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Return_;
-use PhpParser\Node\Stmt\If_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
-use Rector\NodeTypeResolver\PHPStan\Type\TypeToStringResolver;
+use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
-use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 
 final class MergeIsCandidateRector extends AbstractRector
 {
@@ -55,25 +54,18 @@ final class MergeIsCandidateRector extends AbstractRector
     private $docBlockAnalyzer;
 
     /**
-     * @var TypeToStringResolver
-     */
-    private $typeToStringResolver;
-
-    /**
      * @var CallableNodeTraverser
      */
-    private $callbackNodeTraverser;
+    private $callableNodeTraverser;
 
     public function __construct(
         BuilderFactory $builderFactory,
         DocBlockAnalyzer $docBlockAnalyzer,
-        TypeToStringResolver $typeToStringResolver,
-        CallableNodeTraverser $callbackNodeTraverser
+        CallableNodeTraverser $callableNodeTraverser
     ) {
         $this->builderFactory = $builderFactory;
         $this->docBlockAnalyzer = $docBlockAnalyzer;
-        $this->typeToStringResolver = $typeToStringResolver;
-        $this->callbackNodeTraverser = $callbackNodeTraverser;
+        $this->callableNodeTraverser = $callableNodeTraverser;
     }
 
     public function getDefinition(): RectorDefinition
@@ -97,7 +89,7 @@ final class MergeIsCandidateRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isType($node, 'Rector\Rector\AbstractRector')) {
+        if (! $this->isType($node, AbstractRector::class)) {
             return null;
         }
 
@@ -179,10 +171,8 @@ final class MergeIsCandidateRector extends AbstractRector
             }
         } elseif ($paramTagValueNode->type instanceof IdentifierTypeNode) {
             $types[] = $paramTagValueNode->type->name;
-        } else {
-            dump($paramTagValueNode->type);
-            // todo: resolve
         }
+        // todo: resolve
 
         return $types;
     }
@@ -198,11 +188,10 @@ final class MergeIsCandidateRector extends AbstractRector
                 $classConstFetchNode = $this->createClassConstFetchFromClassName($paramType);
                 $nodeToBeReturned->items[] = new ArrayItem($classConstFetchNode);
             }
-
         } elseif (count($paramTypes) === 1) {
             $nodeToBeReturned->items[] = $this->createClassConstFetchFromClassName($paramTypes[0]);
         } else { // fallback to basic node
-            $nodeToBeReturned->items[] = $this->createClassConstFetchFromClassName('PhpParser\\Node');
+            $nodeToBeReturned->items[] = $this->createClassConstFetchFromClassName(Node::class);
         }
 
         return $this->builderFactory->method('getNodeTypes')
@@ -237,7 +226,7 @@ final class MergeIsCandidateRector extends AbstractRector
 
     private function replaceReturnFalseWithReturnNull(ClassMethod $classMethod): void
     {
-        $this->callbackNodeTraverser->traverseNodesWithCallable([$classMethod], function (Node $node): ?Node {
+        $this->callableNodeTraverser->traverseNodesWithCallable([$classMethod], function (Node $node): ?Node {
             if (! $node instanceof Return_ || ! $node->expr instanceof ConstFetch) {
                 return null;
             }
@@ -252,7 +241,9 @@ final class MergeIsCandidateRector extends AbstractRector
 
     private function renameNodeToParamNode(ClassMethod $classMethod, string $nodeName): void
     {
-        $this->callbackNodeTraverser->traverseNodesWithCallable([$classMethod], function (Node $node) use ($nodeName): ?Node {
+        $this->callableNodeTraverser->traverseNodesWithCallable([$classMethod], function (Node $node) use (
+            $nodeName
+        ): ?Node {
             if (! $node instanceof Variable || ! $this->isName($node, 'node')) {
                 return null;
             }
@@ -265,7 +256,7 @@ final class MergeIsCandidateRector extends AbstractRector
 
     private function replaceLastReturnWithIf(ClassMethod $classMethod): void
     {
-        $this->callbackNodeTraverser->traverseNodesWithCallable([$classMethod], function (Node $node): ?Node {
+        $this->callableNodeTraverser->traverseNodesWithCallable([$classMethod], function (Node $node): ?Node {
             if (! $node instanceof Return_) {
                 return null;
             }
@@ -274,18 +265,16 @@ final class MergeIsCandidateRector extends AbstractRector
                 return null;
             }
 
-            $identicalCondition = new Identical($node->expr,  new ConstFetch(new Name('false')));
+            $identicalCondition = new Identical($node->expr, new ConstFetch(new Name('false')));
             return new If_($identicalCondition, [
-                'stmts' => [
-                    new Return_(new ConstFetch(new Name('null')))
-                ]
+                'stmts' => [new Return_(new ConstFetch(new Name('null')))],
             ]);
         });
     }
 
     private function removeReturnTrue(ClassMethod $classMethod): void
     {
-        $this->callbackNodeTraverser->traverseNodesWithCallable([$classMethod], function (Node $node): ?Node {
+        $this->callableNodeTraverser->traverseNodesWithCallable([$classMethod], function (Node $node): ?Node {
             if (! $node instanceof Return_ || ! $node->expr instanceof ConstFetch || ! $this->isTrue($node->expr)) {
                 return null;
             }
