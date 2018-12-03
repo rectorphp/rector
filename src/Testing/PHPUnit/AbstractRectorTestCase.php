@@ -2,6 +2,8 @@
 
 namespace Rector\Testing\PHPUnit;
 
+use Nette\Utils\FileSystem;
+use Nette\Utils\Strings;
 use PHPStan\AnalysedCodeException;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
@@ -9,6 +11,7 @@ use Rector\Application\FileProcessor;
 use Rector\Configuration\Option;
 use Rector\DependencyInjection\ContainerFactory;
 use Rector\FileSystem\FileGuard;
+use Symfony\Component\Yaml\Yaml;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use function Safe\sprintf;
@@ -82,7 +85,33 @@ abstract class AbstractRectorTestCase extends TestCase
         );
     }
 
-    abstract protected function provideConfig(): string;
+    protected function provideConfig(): string
+    {
+        if ($this->getRectorClass()) { // use local if not overloaded
+            $yamlContent = Yaml::dump(['services' => [
+                $this->getRectorClass() => null,
+            ]], Yaml::DUMP_OBJECT_AS_MAP);
+
+            $hash = Strings::substring(md5($this->getRectorClass()), 0, 5);
+            $configFileTempPath = sprintf(sys_get_temp_dir() . '/rector_temp_tests/config_%s.yaml', $hash);
+
+            // cache for 2nd run, similar to original config one
+            if (file_exists($configFileTempPath)) {
+                return $configFileTempPath;
+            }
+
+            FileSystem::write($configFileTempPath, $yamlContent);
+
+            return $configFileTempPath;
+        }
+
+        // to be implemented
+    }
+
+    protected function getRectorClass(): string
+    {
+        // to be implemented
+    }
 
     private function normalizeEndNewline(string $content): string
     {

@@ -2,11 +2,9 @@
 
 namespace Rector\Php\Tests\Rector\FuncCall\CountOnNullRector;
 
+use Rector\Php\Rector\FuncCall\CountOnNullRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-/**
- * @covers \Rector\Php\Rector\FuncCall\CountOnNullRector
- */
 final class CountOnNullRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
@@ -20,8 +18,8 @@ final class CountOnNullRectorTest extends AbstractRectorTestCase
         ]);
     }
 
-    protected function provideConfig(): string
+    protected function getRectorClass(): string
     {
-        return __DIR__ . '/config.yml';
+        return CountOnNullRector::class;
     }
 }

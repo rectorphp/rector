@@ -19,16 +19,22 @@ trait IntegrationRectorTestCaseTrait
     private $splitLine = '#-----\n#';
 
     /**
-     * @param string[] $files
+     * @param string[]|string[][] $files
      */
     protected function doTestFiles(array $files): void
     {
-        // @todo suppert boths plit and unsplit
-
-        foreach ($files as $file) {
-            $smartFileInfo = new SmartFileInfo($file);
-            [$originalContent, $changedContent] = $this->splitContentToOriginalFileAndExpectedFile($smartFileInfo);
-            $this->doTestFileMatchesExpectedContent($originalContent, $changedContent);
+        // 1. original to changed content
+        if (is_array($files[0])) {
+            foreach ($files as $file) {
+                $this->doTestFileMatchesExpectedContent($file[0], $file[1]);
+            }
+            // 2. integration single file
+        } else {
+            foreach ($files as $file) {
+                $smartFileInfo = new SmartFileInfo($file);
+                [$originalContent, $changedContent] = $this->splitContentToOriginalFileAndExpectedFile($smartFileInfo);
+                $this->doTestFileMatchesExpectedContent($originalContent, $changedContent);
+            }
         }
     }
 
