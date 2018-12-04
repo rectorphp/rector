@@ -1,7 +1,0 @@
-services:
-    Rector\Rector\Visibility\ChangeMethodVisibilityRector:
-        'Rector\Tests\Rector\Visibility\ChangeMethodVisibilityRector\Source\ParentObject':
-            'toBePublicMethod': 'public'
-            'toBeProtectedMethod': 'protected'
-            'toBePrivateMethod': 'private'
-            'toBePublicStaticMethod': 'public'

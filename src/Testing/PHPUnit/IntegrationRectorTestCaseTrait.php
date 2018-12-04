@@ -24,13 +24,12 @@ trait IntegrationRectorTestCaseTrait
     protected function doTestFiles(array $files): void
     {
         // 1. original to changed content
-        if (is_array($files[0])) {
-            foreach ($files as $file) {
+        foreach ($files as $file) {
+            // 1. original to changed content
+            if (is_array($file)) {
                 $this->doTestFileMatchesExpectedContent($file[0], $file[1]);
-            }
             // 2. integration single file
-        } else {
-            foreach ($files as $file) {
+            } else {
                 $smartFileInfo = new SmartFileInfo($file);
                 [$originalContent, $changedContent] = $this->splitContentToOriginalFileAndExpectedFile($smartFileInfo);
                 $this->doTestFileMatchesExpectedContent($originalContent, $changedContent);

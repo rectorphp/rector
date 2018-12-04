@@ -2,11 +2,13 @@
 
 namespace Rector\Tests\Rector\Class_\ParentClassToTraitsRector;
 
+use Rector\Rector\Class_\ParentClassToTraitsRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Tests\Rector\Class_\ParentClassToTraitsRector\Source\AnotherParentObject;
+use Rector\Tests\Rector\Class_\ParentClassToTraitsRector\Source\ParentObject;
+use Rector\Tests\Rector\Class_\ParentClassToTraitsRector\Source\SecondTrait;
+use Rector\Tests\Rector\Class_\ParentClassToTraitsRector\Source\SomeTrait;
 
-/**
- * @covers \Rector\Rector\Class_\ParentClassToTraitsRector
- */
 final class ParentClassToTraitsRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
@@ -20,8 +22,19 @@ final class ParentClassToTraitsRectorTest extends AbstractRectorTestCase
         ]);
     }
 
-    protected function provideConfig(): string
+    protected function getRectorClass(): string
     {
-        return __DIR__ . '/config.yml';
+        return ParentClassToTraitsRector::class;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    protected function getRectorConfiguration(): array
+    {
+        return [
+            ParentObject::class => [SomeTrait::class],
+            AnotherParentObject::class => [SomeTrait::class, SecondTrait::class],
+        ];
     }
 }

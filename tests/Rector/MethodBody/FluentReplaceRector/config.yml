@@ -1,6 +1,0 @@
-parameters:
-    classes_to_defluent:
-        - 'Rector\Tests\Rector\MethodBody\FluentReplaceRector\Source\FluentInterfaceClass'
-
-services:
-    Rector\Rector\MethodBody\FluentReplaceRector: ~

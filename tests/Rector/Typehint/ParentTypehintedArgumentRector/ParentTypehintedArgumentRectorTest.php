@@ -2,11 +2,11 @@
 
 namespace Rector\Tests\Rector\Typehint\ParentTypehintedArgumentRector;
 
+use Rector\Rector\Typehint\ParentTypehintedArgumentRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Tests\Rector\Typehint\ParentTypehintedArgumentRector\Source\ClassMetadataFactory;
+use Rector\Tests\Rector\Typehint\ParentTypehintedArgumentRector\Source\ParserInterface;
 
-/**
- * @covers \Rector\Rector\Typehint\ParentTypehintedArgumentRector
- */
 final class ParentTypehintedArgumentRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
@@ -16,8 +16,19 @@ final class ParentTypehintedArgumentRectorTest extends AbstractRectorTestCase
         );
     }
 
-    protected function provideConfig(): string
+    protected function getRectorClass(): string
     {
-        return __DIR__ . '/config.yml';
+        return ParentTypehintedArgumentRector::class;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    protected function getRectorConfiguration(): array
+    {
+        return [
+            ParserInterface::class => ['parse' => ['code' => 'string']],
+            ClassMetadataFactory::class => ['setEntityManager' => ['em' => 'Doctrine\ORM\EntityManagerInterface']],
+        ];
     }
 }

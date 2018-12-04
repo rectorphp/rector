@@ -2,11 +2,11 @@
 
 namespace Rector\Symfony\Tests\Rector\Form\FormTypeGetParentRector;
 
+use Rector\Symfony\Rector\Form\FormTypeGetParentRector;
+use Rector\Symfony\Tests\Rector\Form\FormTypeGetParentRector\Source\AbstractType;
+use Rector\Symfony\Tests\Rector\Form\FormTypeGetParentRector\Source\AbstractTypeExtension;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-/**
- * @covers \Rector\Symfony\Rector\Form\FormTypeGetParentRector
- */
 final class FormTypeGetParentRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
@@ -14,8 +14,19 @@ final class FormTypeGetParentRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Wrong/wrong2.php.inc']);
     }
 
-    protected function provideConfig(): string
+    protected function getRectorClass(): string
     {
-        return __DIR__ . '/config.yml';
+        return FormTypeGetParentRector::class;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    protected function getRectorConfiguration(): array
+    {
+        return [
+            '$abstractTypeClass' => AbstractType::class,
+            '$abstractTypeExtensionClass' => AbstractTypeExtension::class,
+        ];
     }
 }

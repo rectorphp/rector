@@ -20,7 +20,7 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 /**
  * 15 minutes to write
  */
-final class JoinTestAndProvideFilesRector extends AbstractRector
+final class ProvideConfigRector extends AbstractRector
 {
     /**
      * @var ClassMaintainer

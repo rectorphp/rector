@@ -2,11 +2,10 @@
 
 namespace Rector\Tests\Rector\Visibility\ChangeMethodVisibilityRector;
 
+use Rector\Rector\Visibility\ChangeMethodVisibilityRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Tests\Rector\Visibility\ChangeMethodVisibilityRector\Source\ParentObject;
 
-/**
- * @covers \Rector\Rector\Visibility\ChangeMethodVisibilityRector
- */
 final class ChangeMethodVisibilityRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
@@ -14,8 +13,21 @@ final class ChangeMethodVisibilityRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Wrong/wrong2.php.inc']);
     }
 
-    protected function provideConfig(): string
+    protected function getRectorClass(): string
     {
-        return __DIR__ . '/config.yml';
+        return ChangeMethodVisibilityRector::class;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    protected function getRectorConfiguration(): array
+    {
+        return [ParentObject::class => [
+            'toBePublicMethod' => 'public',
+            'toBeProtectedMethod' => 'protected',
+            'toBePrivateMethod' => 'private',
+            'toBePublicStaticMethod' => 'public',
+        ]];
     }
 }

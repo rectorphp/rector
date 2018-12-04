@@ -2,11 +2,9 @@
 
 namespace Rector\Tests\Rector\Namespace_\NamespaceReplacerRector;
 
+use Rector\Rector\Namespace_\NamespaceReplacerRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-/**
- * @covers \Rector\Rector\Namespace_\NamespaceReplacerRector
- */
 final class NamespaceReplacerRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
@@ -20,8 +18,21 @@ final class NamespaceReplacerRectorTest extends AbstractRectorTestCase
         ]);
     }
 
-    protected function provideConfig(): string
+    protected function getRectorClass(): string
     {
-        return __DIR__ . '/config.yml';
+        return NamespaceReplacerRector::class;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    protected function getRectorConfiguration(): array
+    {
+        return [
+            'OldNamespace' => 'NewNamespace',
+            'OldNamespaceWith\OldSplitNamespace' => 'NewNamespaceWith\NewSplitNamespace',
+            'Old\Long\AnyNamespace' => 'Short\AnyNamespace',
+            'PHPUnit_Framework_' => 'PHPUnit\Framework\\',
+        ];
     }
 }

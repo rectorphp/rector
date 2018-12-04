@@ -2,11 +2,9 @@
 
 namespace Rector\Php\Tests\Rector\Name\ReservedObjectRector;
 
+use Rector\Php\Rector\Name\ReservedObjectRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-/**
- * @covers \Rector\Php\Rector\Name\ReservedObjectRector
- */
 final class ReservedObjectRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
@@ -14,8 +12,16 @@ final class ReservedObjectRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Wrong/ReservedObject.php']);
     }
 
-    protected function provideConfig(): string
+    protected function getRectorClass(): string
     {
-        return __DIR__ . '/config.yml';
+        return ReservedObjectRector::class;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    protected function getRectorConfiguration(): array
+    {
+        return ['ReservedObject' => 'SmartObject'];
     }
 }

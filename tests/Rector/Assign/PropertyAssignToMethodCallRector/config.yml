@@ -1,6 +1,0 @@
-services:
-    Rector\Rector\Assign\PropertyAssignToMethodCallRector:
-        Rector\Tests\Rector\Assign\PropertyAssignToMethodCallRector\Source\ChoiceControl:
-            checkAllowedValues: 'checkDefaultValue'
-        Rector\Tests\Rector\Assign\PropertyAssignToMethodCallRector\Source\MultiChoiceControl:
-            checkAllowedValues: 'checkDefaultValue'

@@ -2,11 +2,10 @@
 
 namespace Rector\Tests\Rector\MagicDisclosure\ToStringToMethodCallRector;
 
+use Rector\Rector\MagicDisclosure\ToStringToMethodCallRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Symfony\Component\Config\ConfigCache;
 
-/**
- * @covers \Rector\Rector\MagicDisclosure\ToStringToMethodCallRector
- */
 final class ToStringToMethodCallRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
@@ -14,8 +13,16 @@ final class ToStringToMethodCallRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Wrong/wrong.php.inc']);
     }
 
-    protected function provideConfig(): string
+    protected function getRectorClass(): string
     {
-        return __DIR__ . '/config.yml';
+        return ToStringToMethodCallRector::class;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    protected function getRectorConfiguration(): array
+    {
+        return [ConfigCache::class => 'getPath'];
     }
 }

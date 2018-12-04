@@ -1,3 +1,0 @@
-services:
-    Rector\Symfony\Rector\MethodCall\ReadOnlyOptionToAttributeRector:
-        $formBuilderType: 'Rector\Symfony\Tests\Rector\MethodCall\ReadOnlyOptionToAttributeRector\Source\FormBuilder'

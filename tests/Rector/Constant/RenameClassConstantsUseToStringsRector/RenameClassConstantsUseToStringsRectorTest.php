@@ -2,11 +2,10 @@
 
 namespace Rector\Tests\Rector\Constant\RenameClassConstantsUseToStringsRector;
 
+use Nette\Configurator;
+use Rector\Rector\Constant\RenameClassConstantsUseToStringsRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-/**
- * @covers \Rector\Rector\Constant\RenameClassConstantsUseToStringsRector
- */
 final class RenameClassConstantsUseToStringsRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
@@ -14,8 +13,19 @@ final class RenameClassConstantsUseToStringsRectorTest extends AbstractRectorTes
         $this->doTestFiles([__DIR__ . '/Wrong/wrong.php.inc']);
     }
 
-    protected function provideConfig(): string
+    protected function getRectorClass(): string
     {
-        return __DIR__ . '/config.yml';
+        return RenameClassConstantsUseToStringsRector::class;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    protected function getRectorConfiguration(): array
+    {
+        return [Configurator::class => [
+            'DEVELOPMENT' => 'development',
+            'PRODUCTION' => 'production',
+        ]];
     }
 }

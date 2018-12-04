@@ -2,11 +2,9 @@
 
 namespace Rector\Tests\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector;
 
+use Rector\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-/**
- * @covers \Rector\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector
- */
 final class AnnotatedPropertyInjectToConstructorInjectionRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
@@ -27,8 +25,16 @@ final class AnnotatedPropertyInjectToConstructorInjectionRectorTest extends Abst
         );
     }
 
-    protected function provideConfig(): string
+    protected function getRectorClass(): string
     {
-        return __DIR__ . '/config.yml';
+        return AnnotatedPropertyInjectToConstructorInjectionRector::class;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    protected function getRectorConfiguration(): array
+    {
+        return ['$annotation' => 'inject'];
     }
 }

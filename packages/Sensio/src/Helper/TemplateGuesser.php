@@ -44,7 +44,7 @@ final class TemplateGuesser
         $controller = Strings::match($class, '/(?<controller>[A-Za-z0-9]*)Controller$/')['controller'] ?? '';
 
         // indexAction => index
-        $action = Strings::match($method, '/(?<method>[A-Za-z]*)Action$/')['method'] ?? '';
+        $action = Strings::match($method, '#(?<method>[\w]*)Action$#')['method'] ?? '';
 
         return sprintf('%s:%s:%s.html.twig', $bundle, $controller, $action);
     }
@@ -54,7 +54,7 @@ final class TemplateGuesser
      */
     private function resolveForVersion5(string $namespace, string $class, string $method): string
     {
-        $bundle = Strings::match($namespace, '/(?<bundle>[A-Za-z]*Bundle)/')['bundle'] ?? '';
+        $bundle = Strings::match($namespace, '#(?<bundle>[\w]*Bundle)#')['bundle'] ?? '';
         $bundle = Strings::replace($bundle, '#Bundle$#');
         $bundle = $bundle ? '@' . $bundle . '/' : '';
 

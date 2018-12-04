@@ -5,7 +5,6 @@ namespace Rector\Autoloading;
 use Nette\Loaders\RobotLoader;
 use Rector\Configuration\Option;
 use Rector\FileSystem\FileGuard;
-use Rector\FileSystem\FilesystemTweaker;
 use Symfony\Component\Console\Input\InputInterface;
 use Symplify\PackageBuilder\FileSystem\FileSystem;
 
@@ -30,11 +29,6 @@ final class AdditionalAutoloader
     private $fileGuard;
 
     /**
-     * @var FilesystemTweaker
-     */
-    private $filesystemTweaker;
-
-    /**
      * @var FileSystem
      */
     private $fileSystem;
@@ -45,13 +39,11 @@ final class AdditionalAutoloader
      */
     public function __construct(
         FileGuard $fileGuard,
-        FilesystemTweaker $filesystemTweaker,
         FileSystem $fileSystem,
         array $autoloadPaths,
         array $excludePaths
     ) {
         $this->fileGuard = $fileGuard;
-        $this->filesystemTweaker = $filesystemTweaker;
         $this->fileSystem = $fileSystem;
         $this->autoloadPaths = $autoloadPaths;
         $this->excludePaths = $excludePaths;
@@ -68,13 +60,10 @@ final class AdditionalAutoloader
         $this->autoloadDirectories($autoloadDirectories);
         $this->autoloadFiles($autoloadFiles);
 
-        [$files, $directories] = $this->filesystemTweaker->splitSourceToDirectoriesAndFiles($source);
-        $this->autoloadFiles($files);
+        // the scanned file needs to be autoloaded
+        [$files, ] = $this->fileSystem->separateFilesAndDirectories($source);
 
-        $absoluteDirectories = $this->filesystemTweaker->resolveDirectoriesWithFnmatch($directories);
-        if (count($absoluteDirectories)) {
-            $this->autoloadDirectories($absoluteDirectories);
-        }
+        $this->autoloadFiles($files);
     }
 
     private function autoloadFileFromInput(InputInterface $input): void

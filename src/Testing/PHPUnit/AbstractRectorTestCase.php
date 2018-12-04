@@ -3,6 +3,7 @@
 namespace Rector\Testing\PHPUnit;
 
 use Nette\Utils\FileSystem;
+use Nette\Utils\Json;
 use Nette\Utils\Strings;
 use PHPStan\AnalysedCodeException;
 use PHPUnit\Framework\TestCase;
@@ -93,10 +94,14 @@ abstract class AbstractRectorTestCase extends TestCase
     {
         if ($this->getRectorClass()) { // use local if not overloaded
             $yamlContent = Yaml::dump(['services' => [
-                $this->getRectorClass() => null,
+                $this->getRectorClass() => $this->getRectorConfiguration() ?: null,
             ]], Yaml::DUMP_OBJECT_AS_MAP);
 
-            $hash = Strings::substring(md5($this->getRectorClass()), 0, 5);
+            $hash = Strings::substring(
+                md5($this->getRectorClass() . Json::encode($this->getRectorConfiguration())),
+                0,
+                10
+            );
             $configFileTempPath = sprintf(sys_get_temp_dir() . '/rector_temp_tests/config_%s.yaml', $hash);
 
             // cache for 2nd run, similar to original config one
@@ -115,6 +120,15 @@ abstract class AbstractRectorTestCase extends TestCase
     protected function getRectorClass(): string
     {
         // to be implemented
+    }
+
+    /**
+     * @return mixed[]
+     */
+    protected function getRectorConfiguration(): ?array
+    {
+        // to be implemented
+        return null;
     }
 
     private function createContainer(string $configFile): void

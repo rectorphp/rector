@@ -5,9 +5,6 @@ namespace Rector\YamlRector\Tests\Rector\ReplaceStringYamlRector;
 use Iterator;
 use Rector\YamlRector\Tests\AbstractYamlRectorTest;
 
-/**
- * @covers \Rector\YamlRector\Rector\ReplaceStringYamlRector
- */
 final class ReplaceStringYamlRectorTest extends AbstractYamlRectorTest
 {
     /**

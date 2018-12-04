@@ -2,11 +2,9 @@
 
 namespace Rector\Tests\Rector\Typehint\ReturnTypehintRector;
 
+use Rector\Rector\Typehint\ReturnTypehintRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-/**
- * @see \Rector\Rector\Typehint\ReturnTypehintRector
- */
 final class ReturnTypehintRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
@@ -14,8 +12,21 @@ final class ReturnTypehintRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Wrong/wrong.php.inc']);
     }
 
-    protected function provideConfig(): string
+    protected function getRectorClass(): string
     {
-        return __DIR__ . '/config.yml';
+        return ReturnTypehintRector::class;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    protected function getRectorConfiguration(): array
+    {
+        return ['Rector\Tests\Rector\Typehint\ReturnTypehintRector\Wrong\SomeClass' => [
+            'parse' => 'array',
+            'resolve' => 'SomeType',
+            'nullable' => '?SomeType',
+            'clear' => '',
+        ]];
     }
 }

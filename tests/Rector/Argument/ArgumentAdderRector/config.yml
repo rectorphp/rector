@@ -1,9 +1,0 @@
-services:
-    Rector\Rector\Argument\ArgumentAdderRector:
-        Rector\Tests\Rector\Argument\ArgumentAdderRector\Source\ContainerBuilder:
-            compile:
-                0:
-                    isCompiled: false
-            addCompilerPass:
-                2:
-                    priority: 0

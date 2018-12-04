@@ -8,9 +8,6 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symfony\Component\HttpKernel\Kernel;
 use function Safe\sprintf;
 
-/**
- * @covers \Rector\Symfony\Rector\FrameworkBundle\GetToConstructorInjectionRector
- */
 final class ThirdInvalidConfigurationConstructorInjectionRectorTest extends AbstractRectorTestCase
 {
     public function test(): void

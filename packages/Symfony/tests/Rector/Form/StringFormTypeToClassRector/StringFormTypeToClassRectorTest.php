@@ -2,11 +2,10 @@
 
 namespace Rector\Symfony\Tests\Rector\Form\StringFormTypeToClassRector;
 
+use Rector\Symfony\Rector\Form\StringFormTypeToClassRector;
+use Rector\Symfony\Tests\Rector\Form\StringFormTypeToClassRector\Source\FormBuilder;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-/**
- * @covers \Rector\Symfony\Rector\Form\StringFormTypeToClassRector
- */
 final class StringFormTypeToClassRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
@@ -14,8 +13,16 @@ final class StringFormTypeToClassRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Wrong/wrong2.php.inc']);
     }
 
-    protected function provideConfig(): string
+    protected function getRectorClass(): string
     {
-        return __DIR__ . '/config.yml';
+        return StringFormTypeToClassRector::class;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    protected function getRectorConfiguration(): array
+    {
+        return ['$formBuilderClass' => FormBuilder::class];
     }
 }

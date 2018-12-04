@@ -1,6 +1,0 @@
-services:
-    Rector\Rector\MethodBody\NormalToFluentRector:
-        Rector\Tests\Rector\MethodBody\NormalToFluentRector\Source\FluentInterfaceClass:
-            - 'someFunction'
-            - 'otherFunction'
-            - 'joinThisAsWell'

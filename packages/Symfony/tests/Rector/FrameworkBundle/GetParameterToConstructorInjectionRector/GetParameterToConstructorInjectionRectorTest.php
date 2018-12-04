@@ -2,11 +2,10 @@
 
 namespace Rector\Symfony\Tests\Rector\FrameworkBundle\GetParameterToConstructorInjectionRector;
 
+use Rector\Symfony\Rector\FrameworkBundle\GetParameterToConstructorInjectionRector;
+use Rector\Symfony\Tests\Rector\Source\SymfonyController;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-/**
- * @covers \Rector\Symfony\Rector\FrameworkBundle\GetParameterToConstructorInjectionRector
- */
 final class GetParameterToConstructorInjectionRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
@@ -14,8 +13,16 @@ final class GetParameterToConstructorInjectionRectorTest extends AbstractRectorT
         $this->doTestFiles([__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Wrong/wrong2.php.inc']);
     }
 
-    protected function provideConfig(): string
+    protected function getRectorClass(): string
     {
-        return __DIR__ . '/config.yml';
+        return GetParameterToConstructorInjectionRector::class;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    protected function getRectorConfiguration(): array
+    {
+        return ['$controllerClass' => SymfonyController::class];
     }
 }

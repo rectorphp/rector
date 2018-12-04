@@ -92,6 +92,7 @@ CODE_SAMPLE
         if (! $this->docBlockAnalyzer->hasTag($node, 'Template')) {
             return null;
         }
+
         /** @var Return_|null $returnNode */
         $returnNode = $this->betterNodeFinder->findLastInstanceOf((array) $node->stmts, Return_::class);
 

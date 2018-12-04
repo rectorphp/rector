@@ -1,4 +1,0 @@
-services:
-    Rector\Rector\Function_\FunctionToStaticCallRector:
-        'view': ['SomeStaticClass', 'render']
-        'SomeNamespaced\view': ['AnotherStaticClass', 'render']

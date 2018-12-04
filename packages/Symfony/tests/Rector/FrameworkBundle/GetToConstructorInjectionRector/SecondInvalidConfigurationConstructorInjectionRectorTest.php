@@ -6,9 +6,6 @@ use Rector\Exception\Configuration\InvalidConfigurationException;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use function Safe\sprintf;
 
-/**
- * @covers \Rector\Symfony\Rector\FrameworkBundle\GetToConstructorInjectionRector
- */
 final class SecondInvalidConfigurationConstructorInjectionRectorTest extends AbstractRectorTestCase
 {
     public function test(): void

@@ -1,3 +1,0 @@
-services:
-    Rector\Symfony\Rector\VarDumper\VarDumperTestTraitMethodArgsRector:
-        $traitName: 'Rector\Symfony\Tests\Rector\VarDumper\VarDumperTestTraitMethodArgsRector\Source\VarDumperTrait'

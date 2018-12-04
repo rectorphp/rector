@@ -1,3 +1,0 @@
-services:
-    Rector\Doctrine\Rector\AliasToClassRector:
-        'App': 'App\Entity'

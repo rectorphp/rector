@@ -2,11 +2,10 @@
 
 namespace Rector\Symfony\Tests\Rector\MethodCall\ReadOnlyOptionToAttributeRector;
 
+use Rector\Symfony\Rector\MethodCall\ReadOnlyOptionToAttributeRector;
+use Rector\Symfony\Tests\Rector\MethodCall\ReadOnlyOptionToAttributeRector\Source\FormBuilder;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-/**
- * @covers \Rector\Symfony\Rector\MethodCall\ReadOnlyOptionToAttributeRector
- */
 final class ReadOnlyOptionToAttributeRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
@@ -14,8 +13,16 @@ final class ReadOnlyOptionToAttributeRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Wrong/wrong2.php.inc']);
     }
 
-    protected function provideConfig(): string
+    protected function getRectorClass(): string
     {
-        return __DIR__ . '/config.yml';
+        return ReadOnlyOptionToAttributeRector::class;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    protected function getRectorConfiguration(): array
+    {
+        return ['$formBuilderType' => FormBuilder::class];
     }
 }

@@ -4,9 +4,6 @@ namespace Rector\Tests\Rector\MethodBody\ReturnThisRemoveRector;
 
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-/**
- * @see \Rector\Rector\MethodBody\ReturnThisRemoveRector
- */
 final class ReturnThisRemoveRectorTest extends AbstractRectorTestCase
 {
     public function test(): void

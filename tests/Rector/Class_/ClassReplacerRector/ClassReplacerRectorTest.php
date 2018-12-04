@@ -2,10 +2,15 @@
 
 namespace Rector\Tests\Rector\Class_\ClassReplacerRector;
 
+use PhpParser\Builder;
+use Rector\Rector\Class_\ClassReplacerRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Tests\Rector\Class_\ClassReplacerRector\Source\NewClass;
+use Rector\Tests\Rector\Class_\ClassReplacerRector\Source\OldClass;
+use Rector\Tests\Rector\Class_\ClassReplacerRector\Source\OldClassWithTypo;
 
 /**
- * @covers \Rector\Rector\Class_\ClassReplacerRector
+ * @see https://stackoverflow.com/a/35355700/1348344
  */
 final class ClassReplacerRectorTest extends AbstractRectorTestCase
 {
@@ -16,8 +21,20 @@ final class ClassReplacerRectorTest extends AbstractRectorTestCase
         );
     }
 
-    protected function provideConfig(): string
+    protected function getRectorClass(): string
     {
-        return __DIR__ . '/config.yml';
+        return ClassReplacerRector::class;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    protected function getRectorConfiguration(): array
+    {
+        return [
+            OldClass::class => NewClass::class,
+            'PhpParser\BuilderAbstract' => Builder::class,
+            OldClassWithTypo::class => 'SomeNamespace\NewClassWithoutTypo',
+        ];
     }
 }

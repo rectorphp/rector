@@ -2,11 +2,10 @@
 
 namespace Rector\Guzzle\Tests\Rector\MethodCall\MessageAsArrayRector;
 
+use Rector\Guzzle\Rector\MethodCall\MessageAsArrayRector;
+use Rector\Guzzle\Tests\Rector\MethodCall\MessageAsArrayRector\Source\MessageType;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-/**
- * @covers \Rector\Guzzle\Rector\MethodCall\MessageAsArrayRector
- */
 final class MessageAsArrayRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
@@ -14,8 +13,16 @@ final class MessageAsArrayRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Wrong/wrong.php.inc']);
     }
 
-    protected function provideConfig(): string
+    protected function getRectorClass(): string
     {
-        return __DIR__ . '/config.yml';
+        return MessageAsArrayRector::class;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    protected function getRectorConfiguration(): array
+    {
+        return ['$messageType' => MessageType::class];
     }
 }

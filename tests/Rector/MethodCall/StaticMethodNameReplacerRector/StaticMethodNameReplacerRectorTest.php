@@ -2,11 +2,11 @@
 
 namespace Rector\Tests\Rector\MethodCall\StaticMethodNameReplacerRector;
 
+use Nette\Utils\Html;
+use Rector\Rector\MethodCall\StaticMethodNameReplacerRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Tests\Rector\MethodCall\MethodNameReplacerRector\Source\FormMacros;
 
-/**
- * @covers \Rector\Rector\MethodCall\StaticMethodNameReplacerRector
- */
 final class StaticMethodNameReplacerRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
@@ -14,8 +14,19 @@ final class StaticMethodNameReplacerRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Wrong/wrong2.php.inc']);
     }
 
-    protected function provideConfig(): string
+    protected function getRectorClass(): string
     {
-        return __DIR__ . '/config.yml';
+        return StaticMethodNameReplacerRector::class;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    protected function getRectorConfiguration(): array
+    {
+        return [
+            Html::class => ['add' => 'addHtml'],
+            FormMacros::class => ['renderFormBegin' => ['Nette\Bridges\FormsLatte\Runtime', 'renderFormBegin']],
+        ];
     }
 }

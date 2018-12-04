@@ -1,3 +1,0 @@
-services:
-    Rector\DomainDrivenDesign\Rector\ValueObjectRemover\ValueObjectRemoverRector:
-        'Rector\DomainDrivenDesign\Tests\Rector\ValueObjectRemoverRector\Source\SomeValueObject': 'string'

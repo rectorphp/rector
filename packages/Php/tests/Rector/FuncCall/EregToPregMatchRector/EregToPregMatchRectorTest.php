@@ -5,9 +5,6 @@ namespace Rector\Php\Tests\Rector\FuncCall\EregToPregMatchRector;
 use Rector\Php\Rector\FuncCall\EregToPregMatchRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-/**
- * @see https://stackoverflow.com/a/35355700/1348344
- */
 final class EregToPregMatchRectorTest extends AbstractRectorTestCase
 {
     public function test(): void

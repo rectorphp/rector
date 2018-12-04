@@ -1,31 +1,21 @@
 <?php
 
-namespace SomeNamespace;
+namespace Rector\Tests\Rector\Class_\ClassReplacerRector;
 
-class MyCustomValidatorTest extends OldClass
+class MyCustomValidatorTest extends \Rector\Tests\Rector\Class_\ClassReplacerRector\Source\OldClass
 {
     // ...
-}
-
-class OldClass
-{
-
 }
 
 ?>
 -----
 <?php
 
-namespace SomeNamespace;
+namespace Rector\Tests\Rector\Class_\ClassReplacerRector;
 
 class MyCustomValidatorTest extends \Rector\Tests\Rector\Class_\ClassReplacerRector\Source\NewClass
 {
     // ...
-}
-
-class OldClass
-{
-
 }
 
 ?>

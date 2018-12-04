@@ -2,11 +2,10 @@
 
 namespace Rector\Tests\Rector\MethodBody\NormalToFluentRector;
 
+use Rector\Rector\MethodBody\NormalToFluentRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Tests\Rector\MethodBody\NormalToFluentRector\Source\FluentInterfaceClass;
 
-/**
- * @see \Rector\Rector\MethodBody\NormalToFluentRector
- */
 final class NormalToFluentRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
@@ -19,8 +18,16 @@ final class NormalToFluentRectorTest extends AbstractRectorTestCase
         ]);
     }
 
-    protected function provideConfig(): string
+    protected function getRectorClass(): string
     {
-        return __DIR__ . '/config.yml';
+        return NormalToFluentRector::class;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    protected function getRectorConfiguration(): array
+    {
+        return [FluentInterfaceClass::class => ['someFunction', 'otherFunction', 'joinThisAsWell']];
     }
 }

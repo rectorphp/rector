@@ -1,3 +1,0 @@
-services:
-    Rector\Symfony\Rector\FrameworkBundle\GetToConstructorInjectionRector:
-        - 'Rector\Symfony\Tests\Rector\Source\SymfonyController'

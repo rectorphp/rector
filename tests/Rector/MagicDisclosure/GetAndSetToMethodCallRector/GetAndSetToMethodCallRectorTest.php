@@ -2,11 +2,10 @@
 
 namespace Rector\Tests\Rector\MagicDisclosure\GetAndSetToMethodCallRector;
 
+use Rector\Rector\MagicDisclosure\GetAndSetToMethodCallRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Tests\Rector\MagicDisclosure\GetAndSetToMethodCallRector\Source\SomeContainer;
 
-/**
- * @covers \Rector\Rector\MagicDisclosure\GetAndSetToMethodCallRector
- */
 final class GetAndSetToMethodCallRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
@@ -14,8 +13,19 @@ final class GetAndSetToMethodCallRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Wrong/wrong2.php.inc']);
     }
 
-    protected function provideConfig(): string
+    protected function getRectorClass(): string
     {
-        return __DIR__ . '/config.yml';
+        return GetAndSetToMethodCallRector::class;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    protected function getRectorConfiguration(): array
+    {
+        return [SomeContainer::class => [
+            'get' => 'getService',
+            'set' => 'addService',
+        ]];
     }
 }

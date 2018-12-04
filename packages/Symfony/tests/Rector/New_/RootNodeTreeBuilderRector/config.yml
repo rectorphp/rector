@@ -1,3 +1,0 @@
-services:
-    Rector\Symfony\Rector\New_\RootNodeTreeBuilderRector:
-        $treeBuilderClass: 'Rector\Symfony\Tests\Rector\New_\RootNodeTreeBuilderRector\Source\TreeBuilder'
