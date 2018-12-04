@@ -2,11 +2,10 @@
 
 namespace Rector\Tests\Rector\Visibility\ChangeConstantVisibilityRector;
 
+use Rector\Rector\Visibility\ChangeConstantVisibilityRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Tests\Rector\Visibility\ChangeConstantVisibilityRector\Source\ParentObject;
 
-/**
- * @covers \Rector\Rector\Visibility\ChangeConstantVisibilityRector
- */
 final class ChangeConstantVisibilityRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
@@ -14,8 +13,23 @@ final class ChangeConstantVisibilityRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Wrong/wrong2.php.inc']);
     }
 
-    protected function provideConfig(): string
+    protected function getRectorClass(): string
     {
-        return __DIR__ . '/config.yml';
+        return ChangeConstantVisibilityRector::class;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    protected function getRectorConfiguration(): array
+    {
+        return [
+            ParentObject::class => [
+                'TO_BE_PUBLIC_CONSTANT' => 'public',
+                'TO_BE_PROTECTED_CONSTANT' => 'protected',
+                'TO_BE_PRIVATE_CONSTANT' => 'private',
+            ],
+            'Rector\Tests\Rector\Visibility\ChangePropertyVisibilityRector\Source\AnotherClassWithInvalidConstants' => ['TO_BE_PRIVATE_CONSTANT' => 'private'],
+        ];
     }
 }

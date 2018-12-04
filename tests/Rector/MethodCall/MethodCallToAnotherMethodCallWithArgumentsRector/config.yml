@@ -1,4 +1,0 @@
-services:
-    Rector\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector:
-        Rector\Tests\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector\Source\NetteServiceDefinition:
-            setInject: ['addTag', ['inject']]

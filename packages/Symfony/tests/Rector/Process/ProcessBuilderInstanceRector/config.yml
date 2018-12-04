@@ -1,3 +1,0 @@
-services:
-    Rector\Symfony\Rector\Process\ProcessBuilderInstanceRector:
-        $processBuilderClass: 'Rector\Symfony\Tests\Rector\Process\ProcessBuilderInstanceRector\Source\ProcessBuilder'

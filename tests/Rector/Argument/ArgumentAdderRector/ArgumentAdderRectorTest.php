@@ -2,11 +2,10 @@
 
 namespace Rector\Tests\Rector\Argument\ArgumentAdderRector;
 
+use Rector\Rector\Argument\ArgumentAdderRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Tests\Rector\Argument\ArgumentAdderRector\Source\ContainerBuilder;
 
-/**
- * @see \Rector\Rector\Argument\ArgumentAdderRector
- */
 final class ArgumentAdderRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
@@ -15,8 +14,19 @@ final class ArgumentAdderRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Wrong/wrong2.php.inc', __DIR__ . '/Wrong/wrong3.php.inc', ]);
     }
 
-    protected function provideConfig(): string
+    protected function getRectorClass(): string
     {
-        return __DIR__ . '/config.yml';
+        return ArgumentAdderRector::class;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    protected function getRectorConfiguration(): array
+    {
+        return [ContainerBuilder::class => [
+            'compile' => [['isCompiled' => false]],
+            'addCompilerPass' => [2 => ['priority' => 0]],
+        ]];
     }
 }

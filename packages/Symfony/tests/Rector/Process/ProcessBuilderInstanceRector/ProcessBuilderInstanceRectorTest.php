@@ -2,11 +2,10 @@
 
 namespace Rector\Symfony\Tests\Rector\Process\ProcessBuilderInstanceRector;
 
+use Rector\Symfony\Rector\Process\ProcessBuilderInstanceRector;
+use Rector\Symfony\Tests\Rector\Process\ProcessBuilderInstanceRector\Source\ProcessBuilder;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-/**
- * @covers \Rector\Symfony\Rector\Process\ProcessBuilderInstanceRector
- */
 final class ProcessBuilderInstanceRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
@@ -14,8 +13,16 @@ final class ProcessBuilderInstanceRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Wrong/wrong.php.inc']);
     }
 
-    protected function provideConfig(): string
+    protected function getRectorClass(): string
     {
-        return __DIR__ . '/config.yml';
+        return ProcessBuilderInstanceRector::class;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    protected function getRectorConfiguration(): array
+    {
+        return ['$processBuilderClass' => ProcessBuilder::class];
     }
 }

@@ -2,11 +2,12 @@
 
 namespace Rector\Tests\Rector\MethodCall\MethodNameReplacerRector;
 
+use Nette\Utils\Html;
+use Rector\Rector\MethodCall\MethodNameReplacerRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Tests\Rector\MethodCall\MethodNameReplacerRector\Source\AbstractType;
+use Rector\Tests\Rector\MethodCall\MethodNameReplacerRector\Source\FormMacros;
 
-/**
- * @covers \Rector\Rector\MethodCall\MethodNameReplacerRector
- */
 final class MethodNameReplacerRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
@@ -22,8 +23,20 @@ final class MethodNameReplacerRectorTest extends AbstractRectorTestCase
         ]);
     }
 
-    protected function provideConfig(): string
+    protected function getRectorClass(): string
     {
-        return __DIR__ . '/config.yml';
+        return MethodNameReplacerRector::class;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    protected function getRectorConfiguration(): array
+    {
+        return [
+            AbstractType::class => ['setDefaultOptions' => 'configureOptions'],
+            Html::class => ['add' => 'addHtml'],
+            FormMacros::class => ['renderFormBegin' => ['Nette\Bridges\FormsLatte\Runtime', 'renderFormBegin']],
+        ];
     }
 }

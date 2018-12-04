@@ -7,9 +7,6 @@ use Rector\FileSystemRector\Tests\AbstractFileSystemRectorTest;
 use Symfony\Component\Filesystem\Filesystem;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
-/**
- * @see \Rector\Rector\Psr4\MultipleClassFileToPsr4ClassesRector
- */
 final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractFileSystemRectorTest
 {
     protected function tearDown(): void

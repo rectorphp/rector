@@ -2,11 +2,10 @@
 
 namespace Rector\Symfony\Tests\Rector\Controller\RedirectToRouteRector;
 
+use Rector\Symfony\Rector\Controller\RedirectToRouteRector;
+use Rector\Symfony\Tests\Rector\Source\SymfonyController;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-/**
- * @covers \Rector\Symfony\Rector\Controller\RedirectToRouteRector
- */
 final class RedirectToRouteRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
@@ -18,8 +17,16 @@ final class RedirectToRouteRectorTest extends AbstractRectorTestCase
         ]);
     }
 
-    protected function provideConfig(): string
+    protected function getRectorClass(): string
     {
-        return __DIR__ . '/config.yml';
+        return RedirectToRouteRector::class;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    protected function getRectorConfiguration(): array
+    {
+        return ['$controllerClass' => SymfonyController::class];
     }
 }

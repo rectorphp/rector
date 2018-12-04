@@ -2,11 +2,10 @@
 
 namespace Rector\Tests\Rector\Visibility\ChangePropertyVisibilityRector;
 
+use Rector\Rector\Visibility\ChangePropertyVisibilityRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Tests\Rector\Visibility\ChangePropertyVisibilityRector\Source\ParentObject;
 
-/**
- * @covers \Rector\Rector\Visibility\ChangePropertyVisibilityRector
- */
 final class ChangePropertyVisibilityRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
@@ -16,8 +15,24 @@ final class ChangePropertyVisibilityRectorTest extends AbstractRectorTestCase
         );
     }
 
-    protected function provideConfig(): string
+    protected function getRectorClass(): string
     {
-        return __DIR__ . '/config.yml';
+        return ChangePropertyVisibilityRector::class;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    protected function getRectorConfiguration(): array
+    {
+        return [
+            ParentObject::class => [
+                'toBePublicProperty' => 'public',
+                'toBeProtectedProperty' => 'protected',
+                'toBePrivateProperty' => 'private',
+                'toBePublicStaticProperty' => 'public',
+            ],
+            'Rector\Tests\Rector\Visibility\ChangePropertyVisibilityRector\Wrong\NormalObject' => ['toBePublicStaticProperty' => 'public'],
+        ];
     }
 }

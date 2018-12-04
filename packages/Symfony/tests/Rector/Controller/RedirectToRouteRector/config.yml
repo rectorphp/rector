@@ -1,3 +1,0 @@
-services:
-    Rector\Symfony\Rector\Controller\RedirectToRouteRector:
-        $controllerClass: 'Rector\Symfony\Tests\Rector\Source\SymfonyController'

@@ -2,11 +2,9 @@
 
 namespace Rector\Tests\Rector\Function_\FunctionToStaticCallRector;
 
+use Rector\Rector\Function_\FunctionToStaticCallRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-/**
- * @see \Rector\Rector\Function_\FunctionToStaticCallRector
- */
 final class FunctionToStaticCallRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
@@ -14,8 +12,19 @@ final class FunctionToStaticCallRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Wrong/wrong2.php.inc']);
     }
 
-    protected function provideConfig(): string
+    protected function getRectorClass(): string
     {
-        return __DIR__ . '/config.yml';
+        return FunctionToStaticCallRector::class;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    protected function getRectorConfiguration(): array
+    {
+        return [
+            'view' => ['SomeStaticClass', 'render'],
+            'SomeNamespaced\view' => ['AnotherStaticClass', 'render'],
+        ];
     }
 }

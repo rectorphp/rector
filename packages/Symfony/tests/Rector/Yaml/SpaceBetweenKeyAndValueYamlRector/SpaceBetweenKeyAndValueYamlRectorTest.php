@@ -5,9 +5,6 @@ namespace Rector\Symfony\Tests\Rector\Yaml\SpaceBetweenKeyAndValueYamlRector;
 use Iterator;
 use Rector\YamlRector\Tests\AbstractYamlRectorTest;
 
-/**
- * @covers \Rector\Symfony\Rector\Yaml\SpaceBetweenKeyAndValueYamlRector
- */
 final class SpaceBetweenKeyAndValueYamlRectorTest extends AbstractYamlRectorTest
 {
     /**

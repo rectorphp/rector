@@ -4,9 +4,6 @@ namespace Rector\Jms\Tests\Rector\Property\JmsInjectAnnotationRector;
 
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-/**
- * @covers \Rector\Jms\Rector\Property\JmsInjectAnnotationRector
- */
 final class JmsInjectAnnotationRectorTest extends AbstractRectorTestCase
 {
     public function test(): void

@@ -2,11 +2,10 @@
 
 namespace Rector\Tests\Rector\Property\PropertyToMethodRector;
 
+use Rector\Rector\Property\PropertyToMethodRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Tests\Rector\Property\PropertyToMethodRector\Source\Translator;
 
-/**
- * @see \Rector\Rector\Property\PropertyToMethodRector
- */
 final class PropertyToMethodRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
@@ -14,8 +13,25 @@ final class PropertyToMethodRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Wrong/wrong2.php.inc']);
     }
 
-    protected function provideConfig(): string
+    protected function getRectorClass(): string
     {
-        return __DIR__ . '/config.yml';
+        return PropertyToMethodRector::class;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    protected function getRectorConfiguration(): array
+    {
+        return [
+            Translator::class => ['locale' => [
+                'get' => 'getLocale',
+                'set' => 'setLocale',
+            ]],
+            'Rector\Tests\Rector\Property\PropertyToMethodRector\Wrong\SomeClassWithParameters' => ['parameter' => ['get' => [
+                'method' => 'getConfig',
+                'arguments' => ['parameter'],
+            ]]],
+        ];
     }
 }

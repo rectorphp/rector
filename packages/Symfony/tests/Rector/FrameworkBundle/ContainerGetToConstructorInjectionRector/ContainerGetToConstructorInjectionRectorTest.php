@@ -4,9 +4,6 @@ namespace Rector\Symfony\Tests\Rector\FrameworkBundle\ContainerGetToConstructorI
 
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-/**
- * @covers \Rector\Symfony\Rector\FrameworkBundle\ContainerGetToConstructorInjectionRector
- */
 final class ContainerGetToConstructorInjectionRectorTest extends AbstractRectorTestCase
 {
     public function test(): void

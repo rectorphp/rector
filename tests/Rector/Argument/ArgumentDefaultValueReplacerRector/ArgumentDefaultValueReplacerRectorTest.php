@@ -2,11 +2,11 @@
 
 namespace Rector\Tests\Rector\Argument\ArgumentDefaultValueReplacerRector;
 
+use Rector\Rector\Argument\ArgumentDefaultValueReplacerRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\Yaml\Yaml;
 
-/**
- * @covers \Rector\Rector\Argument\ArgumentDefaultValueReplacerRector
- */
 final class ArgumentDefaultValueReplacerRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
@@ -18,8 +18,49 @@ final class ArgumentDefaultValueReplacerRectorTest extends AbstractRectorTestCas
         ]);
     }
 
-    protected function provideConfig(): string
+    protected function getRectorClass(): string
     {
-        return __DIR__ . '/config.yml';
+        return ArgumentDefaultValueReplacerRector::class;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    protected function getRectorConfiguration(): array
+    {
+        return [
+            Definition::class => [
+                'setScope' => [
+                    [
+                        [
+                            'before' => 'Symfony\Component\DependencyInjection\ContainerBuilder::SCOPE_PROTOTYPE',
+                            'after' => false,
+                        ],
+                    ],
+                ],
+            ],
+            Yaml::class => [
+                'parse' => [1 => [[
+                    'before' => ['false', 'false', 'true'],
+                    'after' => 'Symfony\Component\Yaml\Yaml::PARSE_OBJECT_FOR_MAP',
+                ], [
+                    'before' => ['false', 'true'],
+                    'after' => 'Symfony\Component\Yaml\Yaml::PARSE_OBJECT',
+                ], [
+                    'before' => 'false',
+                    'after' => 0,
+                ], [
+                    'before' => 'true',
+                    'after' => 'Symfony\Component\Yaml\Yaml::PARSE_EXCEPTION_ON_INVALID_TYPE',
+                ]]],
+                'dump' => [3 => [[
+                    'before' => ['false', 'true'],
+                    'after' => 'Symfony\Component\Yaml\Yaml::DUMP_OBJECT',
+                ], [
+                    'before' => 'true',
+                    'after' => 'Symfony\Component\Yaml\Yaml::DUMP_EXCEPTION_ON_INVALID_TYPE',
+                ]]],
+            ],
+        ];
     }
 }

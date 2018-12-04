@@ -2,11 +2,10 @@
 
 namespace Rector\Tests\Rector\Constant\ClassConstantReplacerRector;
 
+use Rector\Rector\Constant\ClassConstantReplacerRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Tests\Rector\Constant\ClassConstantReplacerRector\Source\LocalFormEvents;
 
-/**
- * @see \Rector\Rector\Constant\ClassConstantReplacerRector
- */
 final class ClassConstantReplacerRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
@@ -14,8 +13,20 @@ final class ClassConstantReplacerRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Wrong/wrong.php.inc']);
     }
 
-    protected function provideConfig(): string
+    protected function getRectorClass(): string
     {
-        return __DIR__ . '/config.yml';
+        return ClassConstantReplacerRector::class;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    protected function getRectorConfiguration(): array
+    {
+        return [LocalFormEvents::class => [
+            'PRE_BIND' => 'PRE_SUBMIT',
+            'BIND' => 'SUBMIT',
+            'POST_BIND' => 'POST_SUBMIT',
+        ]];
     }
 }

@@ -1,6 +1,0 @@
-services:
-    Rector\Rector\MethodCall\StaticMethodNameReplacerRector:
-        'Nette\Utils\Html':
-            add: 'addHtml'
-        'Rector\Tests\Rector\MethodCall\MethodNameReplacerRector\Source\FormMacros':
-            renderFormBegin: ['Nette\Bridges\FormsLatte\Runtime', 'renderFormBegin']

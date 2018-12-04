@@ -16,6 +16,8 @@ final class AutoloadWrongCasesEventSubscriber
      */
     public static function preAutoloadDump(Event $event): void
     {
+        return;
+
         $paths = [
             __DIR__ . '/../../tests/Rector/*',
             __DIR__ . '/../../tests/Issues/*',

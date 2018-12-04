@@ -2,11 +2,11 @@
 
 namespace Rector\Tests\Rector\Assign\PropertyAssignToMethodCallRector;
 
+use Rector\Rector\Assign\PropertyAssignToMethodCallRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Tests\Rector\Assign\PropertyAssignToMethodCallRector\Source\ChoiceControl;
+use Rector\Tests\Rector\Assign\PropertyAssignToMethodCallRector\Source\MultiChoiceControl;
 
-/**
- * @covers \Rector\Rector\Assign\PropertyAssignToMethodCallRector
- */
 final class PropertyAssignToMethodCallRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
@@ -14,8 +14,19 @@ final class PropertyAssignToMethodCallRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Wrong/wrong2.php.inc']);
     }
 
-    protected function provideConfig(): string
+    protected function getRectorClass(): string
     {
-        return __DIR__ . '/config.yml';
+        return PropertyAssignToMethodCallRector::class;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    protected function getRectorConfiguration(): array
+    {
+        return [
+            ChoiceControl::class => ['checkAllowedValues' => 'checkDefaultValue'],
+            MultiChoiceControl::class => ['checkAllowedValues' => 'checkDefaultValue'],
+        ];
     }
 }

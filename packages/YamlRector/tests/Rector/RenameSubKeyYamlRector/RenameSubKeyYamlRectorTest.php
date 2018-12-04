@@ -5,9 +5,6 @@ namespace Rector\YamlRector\Tests\Rector\RenameSubKeyYamlRector;
 use Iterator;
 use Rector\YamlRector\Tests\AbstractYamlRectorTest;
 
-/**
- * @covers \Rector\YamlRector\Rector\RenameSubKeyYamlRector
- */
 final class RenameSubKeyYamlRectorTest extends AbstractYamlRectorTest
 {
     /**

@@ -2,6 +2,7 @@
 
 namespace Rector\Doctrine\Tests\Rector\AliasToClassRector;
 
+use Rector\Doctrine\Rector\AliasToClassRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class AliasToClassRectorTest extends AbstractRectorTestCase
@@ -11,8 +12,16 @@ final class AliasToClassRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Wrong/wrong.php.inc']);
     }
 
-    protected function provideConfig(): string
+    protected function getRectorClass(): string
     {
-        return __DIR__ . '/config.yml';
+        return AliasToClassRector::class;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    protected function getRectorConfiguration(): array
+    {
+        return ['App' => 'App\Entity'];
     }
 }

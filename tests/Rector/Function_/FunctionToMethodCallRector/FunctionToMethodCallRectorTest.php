@@ -2,11 +2,9 @@
 
 namespace Rector\Tests\Rector\Function_\FunctionToMethodCallRector;
 
+use Rector\Rector\Function_\FunctionToMethodCallRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-/**
- * @see \Rector\Rector\Function_\FunctionToMethodCallRector
- */
 final class FunctionToMethodCallRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
@@ -14,8 +12,16 @@ final class FunctionToMethodCallRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Wrong/wrong.php.inc']);
     }
 
-    protected function provideConfig(): string
+    protected function getRectorClass(): string
     {
-        return __DIR__ . '/config.yml';
+        return FunctionToMethodCallRector::class;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    protected function getRectorConfiguration(): array
+    {
+        return ['view' => ['this', 'render']];
     }
 }

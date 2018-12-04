@@ -2,11 +2,10 @@
 
 namespace Rector\Symfony\Tests\Rector\Form\FormIsValidRector;
 
+use Rector\Symfony\Rector\Form\FormIsValidRector;
+use Rector\Symfony\Tests\Rector\Form\FormIsValidRector\Source\Form;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-/**
- * @covers \Rector\Symfony\Rector\Form\FormIsValidRector
- */
 final class FormIsValidRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
@@ -14,8 +13,16 @@ final class FormIsValidRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Wrong/wrong.php.inc']);
     }
 
-    protected function provideConfig(): string
+    protected function getRectorClass(): string
     {
-        return __DIR__ . '/config.yml';
+        return FormIsValidRector::class;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    protected function getRectorConfiguration(): array
+    {
+        return ['$formClass' => Form::class];
     }
 }

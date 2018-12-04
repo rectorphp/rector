@@ -2,11 +2,9 @@
 
 namespace Rector\Sensio\Tests\Rector\FrameworkExtraBundle\TemplateAnnotationRector;
 
+use Rector\Sensio\Rector\FrameworkExtraBundle\TemplateAnnotationRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-/**
- * @covers \Rector\Sensio\Rector\FrameworkExtraBundle\TemplateAnnotationRector
- */
 final class TemplateAnnotationVersion3RectorTest extends AbstractRectorTestCase
 {
     public function test(): void
@@ -19,8 +17,16 @@ final class TemplateAnnotationVersion3RectorTest extends AbstractRectorTestCase
         ]);
     }
 
-    protected function provideConfig(): string
+    protected function getRectorClass(): string
     {
-        return __DIR__ . '/config-version3.yml';
+        return TemplateAnnotationRector::class;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    protected function getRectorConfiguration(): array
+    {
+        return ['$version' => 3];
     }
 }

@@ -97,7 +97,11 @@ abstract class AbstractRectorTestCase extends TestCase
                 $this->getRectorClass() => $this->getRectorConfiguration() ?: null,
             ]], Yaml::DUMP_OBJECT_AS_MAP);
 
-            $hash = Strings::substring(md5($this->getRectorClass() . Json::encode($this->getRectorConfiguration())), 0, 10);
+            $hash = Strings::substring(
+                md5($this->getRectorClass() . Json::encode($this->getRectorConfiguration())),
+                0,
+                10
+            );
             $configFileTempPath = sprintf(sys_get_temp_dir() . '/rector_temp_tests/config_%s.yaml', $hash);
 
             // cache for 2nd run, similar to original config one

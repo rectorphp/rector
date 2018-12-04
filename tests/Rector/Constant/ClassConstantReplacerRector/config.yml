@@ -1,6 +1,0 @@
-services:
-    Rector\Rector\Constant\ClassConstantReplacerRector:
-        Rector\Tests\Rector\Constant\ClassConstantReplacerRector\Source\LocalFormEvents:
-            'PRE_BIND': 'PRE_SUBMIT'
-            'BIND': 'SUBMIT'
-            'POST_BIND': 'POST_SUBMIT'

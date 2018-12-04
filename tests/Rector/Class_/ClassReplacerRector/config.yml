@@ -1,5 +1,0 @@
-services:
-    Rector\Rector\Class_\ClassReplacerRector:
-        'SomeNamespace\OldClass': 'Rector\Tests\Rector\Class_\ClassReplacerRector\Source\NewClass'
-        'PhpParser\BuilderAbstract': 'PhpParser\Builder'
-        Rector\Tests\Rector\Class_\ClassReplacerRector\Source\OldClassWithTypo: 'SomeNamespace\NewClassWithoutTypo'

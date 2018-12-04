@@ -3,11 +3,10 @@
 namespace Rector\Symfony\Tests\Rector\FrameworkBundle\GetToConstructorInjectionRector;
 
 use Rector\Exception\Configuration\InvalidConfigurationException;
+use Rector\Symfony\Rector\FrameworkBundle\GetToConstructorInjectionRector;
+use Rector\Symfony\Tests\Rector\Source\SymfonyController;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-/**
- * @covers \Rector\Symfony\Rector\FrameworkBundle\GetToConstructorInjectionRector
- */
 final class InvalidConfigurationConstructorInjectionRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
@@ -20,8 +19,16 @@ final class InvalidConfigurationConstructorInjectionRectorTest extends AbstractR
         $this->doTestFiles([__DIR__ . '/Wrong/wrong.php.inc']);
     }
 
-    protected function provideConfig(): string
+    protected function getRectorClass(): string
     {
-        return __DIR__ . '/invalid-config.yml';
+        return GetToConstructorInjectionRector::class;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    protected function getRectorConfiguration(): array
+    {
+        return [SymfonyController::class];
     }
 }

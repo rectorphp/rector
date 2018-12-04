@@ -1,4 +1,0 @@
-services:
-    Rector\Rector\StaticCall\StaticCallToFunctionRector:
-        Rector\Tests\Rector\StaticCall\StaticCallToFunctionRector\Source\SomeOldStaticClass:
-            render: 'view'

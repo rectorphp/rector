@@ -1,5 +1,0 @@
-services:
-    Rector\Rector\Property\PropertyNameReplacerRector:
-        SomeClass:
-            oldProperty: 'newProperty'
-            anotherOldProperty: 'anotherNewProperty'

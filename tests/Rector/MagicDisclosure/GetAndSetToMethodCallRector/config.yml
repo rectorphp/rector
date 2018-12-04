@@ -1,5 +1,0 @@
-services:
-    Rector\Rector\MagicDisclosure\GetAndSetToMethodCallRector:
-        'Rector\Tests\Rector\MagicDisclosure\GetAndSetToMethodCallRector\Source\SomeContainer':
-            'get': 'getService'
-            'set': 'addService'

@@ -2,11 +2,10 @@
 
 namespace Rector\Tests\Rector\Annotation\AnnotationReplacerRector;
 
+use PHPUnit\Framework\TestCase;
+use Rector\Rector\Annotation\AnnotationReplacerRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-/**
- * @see \Rector\Rector\Annotation\AnnotationReplacerRector
- */
 final class ScenarioToTestAnnotationRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
@@ -14,8 +13,16 @@ final class ScenarioToTestAnnotationRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Wrong/wrong.php.inc']);
     }
 
-    protected function provideConfig(): string
+    protected function getRectorClass(): string
     {
-        return __DIR__ . '/config.yml';
+        return AnnotationReplacerRector::class;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    protected function getRectorConfiguration(): array
+    {
+        return [TestCase::class => ['scenario' => 'test']];
     }
 }

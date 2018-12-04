@@ -1,3 +1,0 @@
-services:
-    Rector\Rector\Interface_\MergeInterfacesRector:
-        'Rector\Tests\Rector\Interface_\MergeInterfacesRector\Source\SomeOldInterface': 'Rector\Tests\Rector\Interface_\MergeInterfacesRector\Source\SomeInterface'

@@ -1,3 +1,0 @@
-services:
-    Rector\Symfony\Rector\Form\OptionNameRector:
-        - 'Rector\Symfony\Tests\Rector\Form\OptionNameRector\Source\FormBuilder'

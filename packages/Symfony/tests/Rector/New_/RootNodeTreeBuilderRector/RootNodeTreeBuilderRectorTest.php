@@ -2,11 +2,10 @@
 
 namespace Rector\Symfony\Tests\Rector\New_\RootNodeTreeBuilderRector;
 
+use Rector\Symfony\Rector\New_\RootNodeTreeBuilderRector;
+use Rector\Symfony\Tests\Rector\New_\RootNodeTreeBuilderRector\Source\TreeBuilder;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-/**
- * @covers \Rector\Symfony\Rector\New_\RootNodeTreeBuilderRector
- */
 final class RootNodeTreeBuilderRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
@@ -14,8 +13,16 @@ final class RootNodeTreeBuilderRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Wrong/wrong2.php.inc']);
     }
 
-    protected function provideConfig(): string
+    protected function getRectorClass(): string
     {
-        return __DIR__ . '/config.yml';
+        return RootNodeTreeBuilderRector::class;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    protected function getRectorConfiguration(): array
+    {
+        return ['$treeBuilderClass' => TreeBuilder::class];
     }
 }

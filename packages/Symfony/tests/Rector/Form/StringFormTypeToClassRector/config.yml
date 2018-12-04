@@ -1,3 +1,0 @@
-services:
-    Rector\Symfony\Rector\Form\StringFormTypeToClassRector:
-        $formBuilderClass: 'Rector\Symfony\Tests\Rector\Form\StringFormTypeToClassRector\Source\FormBuilder'

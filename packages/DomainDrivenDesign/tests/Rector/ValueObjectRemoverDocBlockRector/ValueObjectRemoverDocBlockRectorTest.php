@@ -2,11 +2,10 @@
 
 namespace Rector\DomainDrivenDesign\Tests\Rector\ValueObjectRemoverDocBlockRector;
 
+use Rector\DomainDrivenDesign\Rector\ValueObjectRemover\ValueObjectRemoverDocBlockRector;
+use Rector\DomainDrivenDesign\Tests\Rector\ValueObjectRemoverDocBlockRector\Source\SomeValueObject;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-/**
- * @covers \Rector\DomainDrivenDesign\Rector\ValueObjectRemover\ValueObjectRemoverDocBlockRector
- */
 final class ValueObjectRemoverDocBlockRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
@@ -16,8 +15,16 @@ final class ValueObjectRemoverDocBlockRectorTest extends AbstractRectorTestCase
         );
     }
 
-    protected function provideConfig(): string
+    protected function getRectorClass(): string
     {
-        return __DIR__ . '/config.yml';
+        return ValueObjectRemoverDocBlockRector::class;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    protected function getRectorConfiguration(): array
+    {
+        return [SomeValueObject::class => 'string'];
     }
 }

@@ -1,5 +1,0 @@
-services:
-    Rector\Rector\Constant\RenameClassConstantsUseToStringsRector:
-        Nette\Configurator:
-            'DEVELOPMENT': 'development'
-            'PRODUCTION': 'production'

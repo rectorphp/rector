@@ -1,5 +1,0 @@
-services:
-    Rector\Symfony\Rector\MethodCall\FormTypeInstanceToClassConstRector:
-        $controllerClass: 'Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Source\ControllerClass'
-        $formBuilderType: 'Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Source\FormBuilder'
-        $formType: 'Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Source\FormType'

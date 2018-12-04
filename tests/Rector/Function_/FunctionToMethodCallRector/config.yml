@@ -1,3 +1,0 @@
-services:
-    Rector\Rector\Function_\FunctionToMethodCallRector:
-        'view': ['this', 'render']

@@ -2,11 +2,9 @@
 
 namespace Rector\Tests\Rector\Property\PropertyNameReplacerRector;
 
+use Rector\Rector\Property\PropertyNameReplacerRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-/**
- * @covers \Rector\Rector\Property\PropertyNameReplacerRector
- */
 final class PropertyNameReplacerRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
@@ -14,8 +12,19 @@ final class PropertyNameReplacerRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Wrong/wrong.php.inc']);
     }
 
-    protected function provideConfig(): string
+    protected function getRectorClass(): string
     {
-        return __DIR__ . '/config.yml';
+        return PropertyNameReplacerRector::class;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    protected function getRectorConfiguration(): array
+    {
+        return ['SomeClass' => [
+            'oldProperty' => 'newProperty',
+            'anotherOldProperty' => 'anotherNewProperty',
+        ]];
     }
 }
