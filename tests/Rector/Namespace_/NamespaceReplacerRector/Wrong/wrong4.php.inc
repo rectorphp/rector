@@ -1,9 +1,23 @@
-<?php declare(strict_types=1);
+<?php
 
-class SomeClass
+class SomeClass4
 {
     public function someClass()
     {
         return new \PHPUnit_Framework_Something;
     }
 }
+
+?>
+-----
+<?php
+
+class SomeClass4
+{
+    public function someClass()
+    {
+        return new \PHPUnit\Framework\Something;
+    }
+}
+
+?>

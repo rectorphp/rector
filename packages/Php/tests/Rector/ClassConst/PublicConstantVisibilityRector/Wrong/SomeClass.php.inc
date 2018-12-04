@@ -12,7 +12,7 @@ final class SomeClass
 }
 
 ?>
-    -----
+-----
 <?php
 
 namespace Rector\Php\Tests\Rector\ClassConst\PublicConstantVisibilityRector\Wrong;

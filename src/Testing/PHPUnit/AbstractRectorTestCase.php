@@ -70,7 +70,6 @@ abstract class AbstractRectorTestCase extends TestCase
 
         try {
             $reconstructedFileContent = $this->fileProcessor->processFileToString(new SmartFileInfo($originalFile));
-            $reconstructedFileContent = $this->normalizeEndNewline($reconstructedFileContent);
         } catch (AnalysedCodeException $analysedCodeException) {
             // change message to include responsible file
             $message = sprintf(
@@ -116,11 +115,6 @@ abstract class AbstractRectorTestCase extends TestCase
     protected function getRectorClass(): string
     {
         // to be implemented
-    }
-
-    private function normalizeEndNewline(string $content): string
-    {
-        return trim($content) . PHP_EOL;
     }
 
     private function createContainer(string $configFile): void

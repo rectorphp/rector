@@ -1,10 +1,31 @@
-<?php declare (strict_types=1);
+<?php
 
 namespace SomeNamespace;
 
 use Rector\Symfony\Tests\Rector\Process\ProcessBuilderGetProcessRector\Source\ProcessBuilder;
 
-$builder = new ProcessBuilder([]);
-$process = $builder->getProcess();
+function processBuilderGetProcess()
+{
+    $builder = new ProcessBuilder([]);
+    $process = $builder->getProcess();
 
-$commandLine = $builder->getProcess()->getCommandLine();
+    $commandLine = $builder->getProcess()->getCommandLine();
+}
+
+?>
+-----
+<?php
+
+namespace SomeNamespace;
+
+use Rector\Symfony\Tests\Rector\Process\ProcessBuilderGetProcessRector\Source\ProcessBuilder;
+
+function processBuilderGetProcess()
+{
+    $builder = new ProcessBuilder([]);
+    $process = $builder;
+
+    $commandLine = $builder->getCommandLine();
+}
+
+?>

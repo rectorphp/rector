@@ -2,22 +2,13 @@
 
 namespace Rector\Doctrine\Tests\Rector\AliasToClassRector;
 
-use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class AliasToClassRectorTest extends AbstractRectorTestCase
 {
-    /**
-     * @dataProvider provideFiles()
-     */
-    public function test(string $wrong, string $fixed): void
+    public function test(): void
     {
-        $this->doTestFileMatchesExpectedContent($wrong, $fixed);
-    }
-
-    public function provideFiles(): Iterator
-    {
-        yield [__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc'];
+        $this->doTestFiles([__DIR__ . '/Wrong/wrong.php.inc']);
     }
 
     protected function provideConfig(): string

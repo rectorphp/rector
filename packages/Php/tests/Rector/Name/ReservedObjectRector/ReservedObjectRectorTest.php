@@ -2,7 +2,6 @@
 
 namespace Rector\Php\Tests\Rector\Name\ReservedObjectRector;
 
-use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
@@ -10,18 +9,9 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
  */
 final class ReservedObjectRectorTest extends AbstractRectorTestCase
 {
-    /**
-     * @dataProvider provideFiles()
-     */
-    public function test(string $wrong, string $fixed): void
+    public function test(): void
     {
-        $this->doTestFileMatchesExpectedContent($wrong, $fixed);
-    }
-
-    public function provideFiles(): Iterator
-    {
-        // it needs to have different name, since in PHP 7.1 it already reserved
-        yield [__DIR__ . '/Wrong/ReservedObject.php', __DIR__ . '/Correct/correct.php.inc'];
+        $this->doTestFiles([__DIR__ . '/Wrong/ReservedObject.php']);
     }
 
     protected function provideConfig(): string

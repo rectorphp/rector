@@ -1,4 +1,4 @@
-<?php declare (strict_types=1);
+<?php
 
 namespace Rector\Tests\RectorOrder;
 
@@ -14,3 +14,24 @@ class SomeTest extends TestCase
         $this->assertTrue(strpos($headers['Authorization'][0], 'oauth_body_hash') !== false);
     }
 }
+
+?>
+-----
+<?php
+
+namespace Rector\Tests\RectorOrder;
+
+use PHPUnit\Framework\TestCase;
+
+class SomeTest extends TestCase
+{
+    public function test()
+    {
+        $this->assertContains('f', 'foo');
+        $this->assertContains('f', 'foo');
+
+        $this->assertContains('oauth_body_hash', $headers['Authorization'][0]);
+    }
+}
+
+?>

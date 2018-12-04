@@ -1,8 +1,10 @@
-<?php declare (strict_types=1);
+<?php
+
+namespace Rector\Tests\Rector\Assign\PropertyAssignToMethodCallRector\Wrong;
 
 use Rector\Tests\Rector\Assign\PropertyAssignToMethodCallRector\Source\ChoiceControl;
 
-class SomePresenter
+class Some2Presenter
 {
     public function createForm()
     {
@@ -10,3 +12,22 @@ class SomePresenter
         $control->checkAllowedValues = false;
     }
 }
+
+?>
+-----
+<?php
+
+namespace Rector\Tests\Rector\Assign\PropertyAssignToMethodCallRector\Wrong;
+
+use Rector\Tests\Rector\Assign\PropertyAssignToMethodCallRector\Source\ChoiceControl;
+
+class Some2Presenter
+{
+    public function createForm()
+    {
+        $control = new ChoiceControl();
+        $control->checkDefaultValue(false);
+    }
+}
+
+?>

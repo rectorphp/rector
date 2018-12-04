@@ -1,8 +1,29 @@
-<?php declare(strict_types=1);
+<?php
 
-$flat = book_get_flat_menu($book_link);
-$curr = NULL;
-do {
-    $prev = $curr;
-    list($key, $curr) = each($flat);
-} while ($key && $key != $book_link['mlid']);
+function each3()
+{
+    $flat = book_get_flat_menu($book_link);
+    $curr = NULL;
+    do {
+        $prev = $curr;
+        list($key, $curr) = each($flat);
+    } while ($key && $key != $book_link['mlid']);
+}
+
+?>
+-----
+<?php
+
+function each3()
+{
+    $flat = book_get_flat_menu($book_link);
+    $curr = NULL;
+    do {
+        $prev = $curr;
+        $key = key($flat);
+        $curr = current($flat);
+        next($flat);
+    } while ($key && $key != $book_link['mlid']);
+}
+
+?>

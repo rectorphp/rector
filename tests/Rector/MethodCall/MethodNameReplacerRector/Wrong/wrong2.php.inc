@@ -1,5 +1,21 @@
-<?php declare (strict_types=1);
+<?php
 
-$html = new \Nette\Utils\Html();
-$html->add('someContent');
-$html->{$value}();
+function methodNameReplacer()
+{
+    $html = new \Nette\Utils\Html();
+    $html->add('someContent');
+    $html->{$value}();
+}
+
+?>
+-----
+<?php
+
+function methodNameReplacer()
+{
+    $html = new \Nette\Utils\Html();
+    $html->addHtml('someContent');
+    $html->{$value}();
+}
+
+?>

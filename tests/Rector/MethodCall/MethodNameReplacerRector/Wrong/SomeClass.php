@@ -1,10 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 
 namespace Rector\Tests\Rector\MethodCall\MethodNameReplacerRector\Wrong;
 
 use Nette\Utils\Html;
 
-final class SomeClass
+final class SomeClass7
 {
     public function createHtml(): void
     {
@@ -13,3 +13,23 @@ final class SomeClass
         $anotherHtml->add('someContent');
     }
 }
+
+?>
+-----
+<?php
+
+namespace Rector\Tests\Rector\MethodCall\MethodNameReplacerRector\Wrong;
+
+use Nette\Utils\Html;
+
+final class SomeClass7
+{
+    public function createHtml(): void
+    {
+        $html = new Html();
+        $anotherHtml = $html;
+        $anotherHtml->addHtml('someContent');
+    }
+}
+
+?>

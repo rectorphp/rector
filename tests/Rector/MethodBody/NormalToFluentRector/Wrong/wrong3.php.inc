@@ -4,7 +4,7 @@ namespace Rector\Tests\Rector\MethodBody\NormalToFluentRector;
 
 use Rector\Tests\Rector\MethodBody\NormalToFluentRector\Source\FluentInterfaceClass;
 
-class ActionClass
+class ActionClass3
 {
     public function someFunction()
     {
@@ -14,3 +14,23 @@ class ActionClass
         $valueObject->keepAsItIs();
     }
 }
+
+?>
+-----
+<?php
+
+namespace Rector\Tests\Rector\MethodBody\NormalToFluentRector;
+
+use Rector\Tests\Rector\MethodBody\NormalToFluentRector\Source\FluentInterfaceClass;
+
+class ActionClass3
+{
+    public function someFunction()
+    {
+        $valueObject = new FluentInterfaceClass();
+        $valueObject->someFunction()->otherFunction();
+        $valueObject->keepAsItIs();
+    }
+}
+
+?>

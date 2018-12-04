@@ -1,9 +1,31 @@
-<?php declare(strict_types=1);
+<?php
 
 namespace Rector\Tests\Rector\Argument\ArgumentDefaultValueReplacerRector\Wrong;
 
 use Symfony\Component\Yaml\Yaml;
 
-Yaml::parse('...', true);
+function argumentDefaultValue2()
+{
+    Yaml::parse('...', true);
+    Yaml::parse('...', false);
+    Yaml::parse('...', false, true);
+    Yaml::parse('...', false, false, true);
+}
 
-Yaml::parse('...', false);
+?>
+-----
+<?php
+
+namespace Rector\Tests\Rector\Argument\ArgumentDefaultValueReplacerRector\Wrong;
+
+use Symfony\Component\Yaml\Yaml;
+
+function argumentDefaultValue2()
+{
+    Yaml::parse('...', \Symfony\Component\Yaml\Yaml::PARSE_EXCEPTION_ON_INVALID_TYPE);
+    Yaml::parse('...', 0);
+    Yaml::parse('...', \Symfony\Component\Yaml\Yaml::PARSE_OBJECT);
+    Yaml::parse('...', \Symfony\Component\Yaml\Yaml::PARSE_OBJECT_FOR_MAP);
+}
+
+?>

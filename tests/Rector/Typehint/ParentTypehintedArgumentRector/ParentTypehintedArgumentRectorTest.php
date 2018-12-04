@@ -2,7 +2,6 @@
 
 namespace Rector\Tests\Rector\Typehint\ParentTypehintedArgumentRector;
 
-use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
@@ -10,18 +9,11 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
  */
 final class ParentTypehintedArgumentRectorTest extends AbstractRectorTestCase
 {
-    /**
-     * @dataProvider provideFiles()
-     */
-    public function test(string $wrong, string $fixed): void
+    public function test(): void
     {
-        $this->doTestFileMatchesExpectedContent($wrong, $fixed);
-    }
-
-    public function provideFiles(): Iterator
-    {
-        yield [__DIR__ . '/Wrong/SomeClassImplementingParserInterface.php', __DIR__ . '/Correct/correct.php.inc'];
-        yield [__DIR__ . '/Wrong/MyMetadataFactory.php', __DIR__ . '/Correct/correct2.php.inc'];
+        $this->doTestFiles(
+            [__DIR__ . '/Wrong/SomeClassImplementingParserInterface.php', __DIR__ . '/Wrong/MyMetadataFactory.php']
+        );
     }
 
     protected function provideConfig(): string
