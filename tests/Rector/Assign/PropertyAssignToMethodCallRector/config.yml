@@ -4,4 +4,3 @@ services:
             checkAllowedValues: 'checkDefaultValue'
         Rector\Tests\Rector\Assign\PropertyAssignToMethodCallRector\Source\MultiChoiceControl:
             checkAllowedValues: 'checkDefaultValue'
-

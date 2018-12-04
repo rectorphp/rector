@@ -47,6 +47,7 @@ final class SimplifyTestsRector extends AbstractRector
      * @var BuilderFactory
      */
     private $builderFactory;
+
     /**
      * @var ClassMaintainer
      */

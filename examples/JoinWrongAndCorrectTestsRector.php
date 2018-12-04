@@ -64,7 +64,7 @@ final class JoinWrongAndCorrectTestsRector extends AbstractRector
         }
 
         $classMethodsByName = $this->classMaintainer->getMethodsByName($node);
-        if (! isset($classMethodsByName['test']) || !isset($classMethodsByName['getRectorClass'])) {
+        if (! isset($classMethodsByName['test']) || ! isset($classMethodsByName['getRectorClass'])) {
             return null;
         }
 
@@ -75,11 +75,11 @@ final class JoinWrongAndCorrectTestsRector extends AbstractRector
                 continue;
             }
 
-            if (!$stmt->expr instanceof MethodCall) {
+            if (! $stmt->expr instanceof MethodCall) {
                 continue;
             }
 
-            if (!$this->isName($stmt->expr, 'doTestFiles')) {
+            if (! $this->isName($stmt->expr, 'doTestFiles')) {
                 continue;
             }
 
@@ -87,7 +87,7 @@ final class JoinWrongAndCorrectTestsRector extends AbstractRector
 
             if ($filesArrayNode instanceof Array_) {
                 foreach ($filesArrayNode->items as $i => $item) {
-                    if ( ! $item->value instanceof Array_) {
+                    if (! $item->value instanceof Array_) {
                         continue;
                     }
 
@@ -107,10 +107,14 @@ final class JoinWrongAndCorrectTestsRector extends AbstractRector
                     $correctFileContent = FileSystem::read($correctFilePath);
 
                     // save integration content
-                    $integrationFileContent = $wrongFileContent . PHP_EOL .'?>' . PHP_EOL . '-----' . PHP_EOL . $correctFileContent . PHP_EOL . '?>';
+                    $integrationFileContent = $wrongFileContent . PHP_EOL . '?>' . PHP_EOL . '-----' . PHP_EOL . $correctFileContent . PHP_EOL . '?>';
 
                     // remove strict types, can be only once in the file
-                    $integrationFileContent = Strings::replace($integrationFileContent, '#((\s+)?declare(\s+)?\(strict_types=1\);)#', '');
+                    $integrationFileContent = Strings::replace(
+                        $integrationFileContent,
+                        '#((\s+)?declare(\s+)?\(strict_types=1\);)#',
+                        ''
+                    );
 
                     FileSystem::write($wrongFilePath, $integrationFileContent);
                     // remove old file
