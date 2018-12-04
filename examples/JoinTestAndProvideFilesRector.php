@@ -22,7 +22,6 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
  */
 final class JoinTestAndProvideFilesRector extends AbstractRector
 {
-
     /**
      * @var ClassMaintainer
      */
@@ -33,10 +32,8 @@ final class JoinTestAndProvideFilesRector extends AbstractRector
      */
     private $docBlockAnalyzer;
 
-    public function __construct(
-        ClassMaintainer $classMaintainer,
-        DocBlockAnalyzer $docBlockAnalyzer
-    ) {
+    public function __construct(ClassMaintainer $classMaintainer, DocBlockAnalyzer $docBlockAnalyzer)
+    {
         $this->classMaintainer = $classMaintainer;
         $this->docBlockAnalyzer = $docBlockAnalyzer;
     }
