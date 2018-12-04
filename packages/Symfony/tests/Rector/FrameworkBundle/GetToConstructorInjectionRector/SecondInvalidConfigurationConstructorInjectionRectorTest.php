@@ -21,7 +21,7 @@ final class SecondInvalidConfigurationConstructorInjectionRectorTest extends Abs
             'kernel_class'
         ));
 
-        $this->doTestFileMatchesExpectedContent(__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc');
+        $this->doTestFiles([__DIR__ . '/Wrong/wrong.php.inc']);
     }
 
     protected function provideConfig(): string

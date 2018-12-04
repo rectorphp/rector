@@ -12,10 +12,7 @@ final class ParentTypehintedArgumentRectorTest extends AbstractRectorTestCase
     public function test(): void
     {
         $this->doTestFiles(
-            [[__DIR__ . '/Wrong/SomeClassImplementingParserInterface.php', __DIR__ . '/Correct/correct.php.inc'], [
-                __DIR__ . '/Wrong/MyMetadataFactory.php',
-                __DIR__ . '/Correct/correct2.php.inc',
-            ]]
+            [__DIR__ . '/Wrong/SomeClassImplementingParserInterface.php', __DIR__ . '/Wrong/MyMetadataFactory.php']
         );
     }
 

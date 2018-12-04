@@ -6,17 +6,13 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
  * @covers \Rector\Rector\Architecture\DependencyInjection\ActionInjectionToConstructorInjectionRector
+ * @covers \Rector\Rector\Architecture\DependencyInjection\ReplaceVariableByPropertyFetchRector
  */
 final class ActionInjectionToConstructorInjectionRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
     {
-        $this->doTestFiles(
-            [[__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc'], [
-                __DIR__ . '/Wrong/wrong2.php.inc',
-                __DIR__ . '/Correct/correct2.php.inc',
-            ]]
-        );
+        $this->doTestFiles([__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Wrong/wrong2.php.inc']);
     }
 
     protected function provideConfig(): string

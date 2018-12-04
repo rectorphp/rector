@@ -1,7 +1,25 @@
-<?php declare(strict_types=1);
+<?php
 
-$configCache = new \Symfony\Component\Config\ConfigCache('...');
+function toStringToMethodCall()
+{
+    $configCache = new \Symfony\Component\Config\ConfigCache('...');
 
-$stringValue = (string) $configCache;
+    $stringValue = (string)$configCache;
 
-$stringValue = $configCache->__toString();
+    $stringValue = $configCache->__toString();
+}
+
+?>
+-----
+<?php
+
+function toStringToMethodCall()
+{
+    $configCache = new \Symfony\Component\Config\ConfigCache('...');
+
+    $stringValue = $configCache->getPath();
+
+    $stringValue = $configCache->getPath();
+}
+
+?>

@@ -11,7 +11,7 @@ final class ReservedObjectRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
     {
-        $this->doTestFiles([[__DIR__ . '/Wrong/ReservedObject.php', __DIR__ . '/Correct/correct.php.inc']]);
+        $this->doTestFiles([__DIR__ . '/Wrong/ReservedObject.php']);
     }
 
     protected function provideConfig(): string

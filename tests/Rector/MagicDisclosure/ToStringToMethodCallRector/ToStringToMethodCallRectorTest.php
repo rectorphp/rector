@@ -11,7 +11,7 @@ final class ToStringToMethodCallRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
     {
-        $this->doTestFiles([[__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc']]);
+        $this->doTestFiles([__DIR__ . '/Wrong/wrong.php.inc']);
     }
 
     protected function provideConfig(): string

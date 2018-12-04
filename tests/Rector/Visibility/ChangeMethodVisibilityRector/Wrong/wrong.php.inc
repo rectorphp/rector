@@ -1,4 +1,4 @@
-<?php declare (strict_types=1);
+<?php
 
 use Rector\Tests\Rector\Visibility\ChangeMethodVisibilityRector\Source\ParentObject;
 
@@ -14,3 +14,24 @@ class ClassThatInherits extends ParentObject
 
     }
 }
+
+?>
+-----
+<?php
+
+use Rector\Tests\Rector\Visibility\ChangeMethodVisibilityRector\Source\ParentObject;
+
+class ClassThatInherits extends ParentObject
+{
+    public function toBePublicMethod() {
+
+    }
+    protected function toBeProtectedMethod() {
+
+    }
+    private function toBePrivateMethod() {
+
+    }
+}
+
+?>

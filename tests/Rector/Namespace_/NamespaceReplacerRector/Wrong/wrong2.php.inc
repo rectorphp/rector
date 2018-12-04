@@ -1,12 +1,29 @@
-<?php declare(strict_types=1);
+<?php
 
 namespace OldNamespace\SubNamespace;
 
 use OldNamespace;
 
-class SomeClass
+class SomeClass2
 {
     public function someClass(OldNamespace\SubNamespace $argument)
     {
     }
 }
+
+?>
+-----
+<?php
+
+namespace NewNamespace\SubNamespace;
+
+use NewNamespace;
+
+class SomeClass2
+{
+    public function someClass(\NewNamespace\SubNamespace $argument)
+    {
+    }
+}
+
+?>

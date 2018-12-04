@@ -11,7 +11,7 @@ final class ChangeConstantVisibilityRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
     {
-        $this->doTestFiles([[__DIR__ . '/Wrong/wrong2.php.inc', __DIR__ . '/Correct/correct2.php.inc']]);
+        $this->doTestFiles([__DIR__ . '/Wrong/wrong2.php.inc']);
     }
 
     protected function provideConfig(): string

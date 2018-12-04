@@ -64,7 +64,7 @@ final class JoinWrongAndCorrectTestsRector extends AbstractRector
         }
 
         $classMethodsByName = $this->classMaintainer->getMethodsByName($node);
-        if (! isset($classMethodsByName['test']) || ! isset($classMethodsByName['getRectorClass'])) {
+        if (! isset($classMethodsByName['test'])) {
             return null;
         }
 
@@ -107,7 +107,7 @@ final class JoinWrongAndCorrectTestsRector extends AbstractRector
                     $correctFileContent = FileSystem::read($correctFilePath);
 
                     // save integration content
-                    $integrationFileContent = $wrongFileContent . PHP_EOL . '?>' . PHP_EOL . '-----' . PHP_EOL . $correctFileContent . PHP_EOL . '?>';
+                    $integrationFileContent = $wrongFileContent . PHP_EOL . '?>' . PHP_EOL . '-----' . PHP_EOL . $correctFileContent . PHP_EOL . '?>' . PHP_EOL;
 
                     // remove strict types, can be only once in the file
                     $integrationFileContent = Strings::replace(

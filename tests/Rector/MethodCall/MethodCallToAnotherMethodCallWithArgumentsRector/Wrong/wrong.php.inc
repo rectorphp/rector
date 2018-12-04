@@ -1,4 +1,4 @@
-<?php declare (strict_types=1);
+<?php
 
 use Rector\Tests\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector\Source\NetteServiceDefinition;
 
@@ -10,3 +10,20 @@ class SomeNetteExtension
         $definition->setInject();
     }
 }
+
+?>
+-----
+<?php
+
+use Rector\Tests\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector\Source\NetteServiceDefinition;
+
+class SomeNetteExtension
+{
+    public function loadConfiguration()
+    {
+        $definition = new NetteServiceDefinition();
+        $definition->addTag('inject');
+    }
+}
+
+?>

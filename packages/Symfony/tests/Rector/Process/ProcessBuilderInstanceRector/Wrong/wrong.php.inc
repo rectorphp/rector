@@ -1,7 +1,25 @@
-<?php declare (strict_types=1);
+<?php
 
 namespace SomeNamespace;
 
 use Rector\Symfony\Tests\Rector\Process\ProcessBuilderInstanceRector\Source\ProcessBuilder;
 
-$process = ProcessBuilder::create('something')->getProcess();
+function processBuilderInstance()
+{
+    $process = ProcessBuilder::create('something')->getProcess();
+}
+
+?>
+-----
+<?php
+
+namespace SomeNamespace;
+
+use Rector\Symfony\Tests\Rector\Process\ProcessBuilderInstanceRector\Source\ProcessBuilder;
+
+function processBuilderInstance()
+{
+    $process = (new ProcessBuilder('something'))->getProcess();
+}
+
+?>

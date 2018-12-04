@@ -1,14 +1,39 @@
-<?php declare(strict_types=1);
+<?php
 
-while (list($module) = each($module_list)) {
+function each1()
+{
+    while (list($module) = each($module_list)) {
+    }
+
+    while (list($key, $callback) = each($callbacks)) {
+        // comment
+    }
+
+    $module_list = ['a', 'b'];
+
+    while (list($module) = each($module_list)) {
+        echo $module;
+    }
 }
 
-while (list($key, $callback) = each($callbacks)) {
-    // comment
+?>
+-----
+<?php
+
+function each1()
+{
+    foreach (array_keys($module_list) as $module) {
+    }
+
+    foreach ($callbacks as $key => $callback) {
+        // comment
+    }
+
+    $module_list = ['a', 'b'];
+
+    foreach (array_keys($module_list) as $module) {
+        echo $module;
+    }
 }
 
-$module_list = ['a', 'b'];
-
-while (list($module) = each($module_list)) {
-    echo $module;
-}
+?>

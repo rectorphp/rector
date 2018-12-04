@@ -1,11 +1,11 @@
-<?php declare(strict_types=1);
+<?php
 
 namespace  Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector\Wrong;
 
 use Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector\Source\TwigExtension;
 use Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector\Source\TwigFilterMethod;
 
-final class SomeExtension extends TwigExtension
+final class SomeExtension2 extends TwigExtension
 {
     public function getFilters()
     {
@@ -14,3 +14,24 @@ final class SomeExtension extends TwigExtension
         ];
     }
 }
+
+?>
+-----
+<?php
+
+namespace  Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector\Wrong;
+
+use Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector\Source\TwigExtension;
+use Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector\Source\TwigFilterMethod;
+
+final class SomeExtension2 extends TwigExtension
+{
+    public function getFilters()
+    {
+        return [
+            new \Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector\Source\TwigSimpleFilter('is_mobile', [$this, 'isMobile']),
+        ];
+    }
+}
+
+?>

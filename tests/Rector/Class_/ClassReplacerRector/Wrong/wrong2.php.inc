@@ -1,4 +1,4 @@
-<?php declare (strict_types=1);
+<?php
 
 namespace SomeNamespace;
 
@@ -11,3 +11,21 @@ class OldClass
 {
 
 }
+
+?>
+-----
+<?php
+
+namespace SomeNamespace;
+
+class MyCustomValidatorTest extends \Rector\Tests\Rector\Class_\ClassReplacerRector\Source\NewClass
+{
+    // ...
+}
+
+class OldClass
+{
+
+}
+
+?>

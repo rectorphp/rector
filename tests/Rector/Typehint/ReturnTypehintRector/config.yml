@@ -1,6 +1,6 @@
 services:
     Rector\Rector\Typehint\ReturnTypehintRector:
-        'SomeNamespace\SomeClass':
+        Rector\Tests\Rector\Typehint\ReturnTypehintRector\Wrong\SomeClass:
             'parse': 'array'
             'resolve': 'SomeType'
             'nullable': '?SomeType'

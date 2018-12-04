@@ -1,4 +1,4 @@
-<?php declare (strict_types=1);
+<?php
 
 namespace SomeNamespace;
 
@@ -11,3 +11,21 @@ class MyClass extends OldClassWithTypO
         $oldClassWithTypo = new OldClassWithTYPO;
     }
 }
+
+?>
+-----
+<?php
+
+namespace SomeNamespace;
+
+use \SomeNamespace\NewClassWithoutTypo;
+
+class MyClass extends \SomeNamespace\NewClassWithoutTypo
+{
+    public function run(): \SomeNamespace\NewClassWithoutTypo
+    {
+        $oldClassWithTypo = new \SomeNamespace\NewClassWithoutTypo;
+    }
+}
+
+?>

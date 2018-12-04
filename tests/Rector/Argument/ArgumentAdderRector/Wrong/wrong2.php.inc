@@ -1,10 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 
 namespace Rector\Tests\Rector\Argument\ArgumentAdderRector\Wrong;
 
 use Rector\Tests\Rector\Argument\ArgumentAdderRector\Source\ContainerBuilder;
 
-class SomeClass
+class SomeClass2
 {
     public function create()
     {
@@ -12,3 +12,22 @@ class SomeClass
         $containerBuilder->addCompilerPass('pass', 'type');
     }
 }
+
+?>
+-----
+<?php
+
+namespace Rector\Tests\Rector\Argument\ArgumentAdderRector\Wrong;
+
+use Rector\Tests\Rector\Argument\ArgumentAdderRector\Source\ContainerBuilder;
+
+class SomeClass2
+{
+    public function create()
+    {
+        $containerBuilder = new ContainerBuilder();
+        $containerBuilder->addCompilerPass('pass', 'type', 0);
+    }
+}
+
+?>
