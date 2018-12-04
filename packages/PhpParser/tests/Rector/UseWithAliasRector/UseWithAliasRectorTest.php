@@ -2,29 +2,18 @@
 
 namespace Rector\PhpParser\Tests\Rector\UseWithAliasRector;
 
-use Iterator;
+use Rector\PhpParser\Rector\UseWithAliasRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-/**
- * @covers \Rector\PhpParser\Rector\UseWithAliasRector
- */
 final class UseWithAliasRectorTest extends AbstractRectorTestCase
 {
-    /**
-     * @dataProvider provideWrongToFixedFiles()
-     */
-    public function test(string $wrong, string $fixed): void
+    public function test(): void
     {
-        $this->doTestFileMatchesExpectedContent($wrong, $fixed);
+        $this->doTestFiles([__DIR__ . '/Wrong/wrong.php.inc']);
     }
 
-    public function provideWrongToFixedFiles(): Iterator
+    public function getRectorClass(): string
     {
-        yield [__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc'];
-    }
-
-    protected function provideConfig(): string
-    {
-        return __DIR__ . '/config.yml';
+        return UseWithAliasRector::class;
     }
 }

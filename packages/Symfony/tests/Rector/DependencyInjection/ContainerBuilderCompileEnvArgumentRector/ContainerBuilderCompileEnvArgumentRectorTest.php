@@ -2,29 +2,18 @@
 
 namespace Rector\Symfony\Tests\Rector\DependencyInjection\ContainerBuilderCompileEnvArgumentRector;
 
-use Iterator;
+use Rector\Symfony\Rector\DependencyInjection\ContainerBuilderCompileEnvArgumentRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-/**
- * @covers \Rector\Symfony\Rector\DependencyInjection\ContainerBuilderCompileEnvArgumentRector
- */
 final class ContainerBuilderCompileEnvArgumentRectorTest extends AbstractRectorTestCase
 {
-    /**
-     * @dataProvider provideWrongToFixedFiles()
-     */
-    public function test(string $wrong, string $fixed): void
+    public function test(): void
     {
-        $this->doTestFileMatchesExpectedContent($wrong, $fixed);
+        $this->doTestFiles([__DIR__ . '/Wrong/wrong.php.inc']);
     }
 
-    public function provideWrongToFixedFiles(): Iterator
+    public function getRectorClass(): string
     {
-        yield [__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc'];
-    }
-
-    protected function provideConfig(): string
-    {
-        return __DIR__ . '/config.yml';
+        return ContainerBuilderCompileEnvArgumentRector::class;
     }
 }

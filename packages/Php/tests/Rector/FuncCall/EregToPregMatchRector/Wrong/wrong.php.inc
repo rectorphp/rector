@@ -1,8 +1,31 @@
-<?php declare(strict_types=1);
+<?php
 
-ereg('hi', 'hi, she said');
+namespace Rector\Php\Tests\Rector\FuncCall\EregToPregMatchRector\Wrong;
 
-eregi('hi', 'hi, she said');
+function eregToPregMatch()
+{
+    ereg('hi', 'hi, she said');
 
-$pattern = 'hi';
-ereg($pattern,  'hi, she said');
+    eregi('hi', 'hi, she said');
+
+    $pattern = 'hi';
+    ereg($pattern, 'hi, she said');
+}
+
+?>
+-----
+<?php
+
+namespace Rector\Php\Tests\Rector\FuncCall\EregToPregMatchRector\Wrong;
+
+function eregToPregMatch()
+{
+    preg_match('#hi#m', 'hi, she said');
+
+    preg_match('#hi#mi', 'hi, she said');
+
+    $pattern = 'hi';
+    preg_match('#' . preg_quote($pattern, '#') . '#m', 'hi, she said');
+}
+
+?>

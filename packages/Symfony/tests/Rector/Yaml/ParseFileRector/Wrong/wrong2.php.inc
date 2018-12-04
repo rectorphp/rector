@@ -1,6 +1,23 @@
-<?php declare(strict_types=1);
+<?php
 
 use Symfony\Component\Yaml\Yaml;
 
-$someFile = __DIR__ . '/someFile.yaml';
-$parsedFile = Yaml::parse($someFile);
+function parseFileRector2()
+{
+    $someFile = __DIR__ . '/someFile.yaml';
+    $parsedFile = Yaml::parse($someFile);
+}
+
+?>
+-----
+<?php
+
+use Symfony\Component\Yaml\Yaml;
+
+function parseFileRector2()
+{
+    $someFile = __DIR__ . '/someFile.yaml';
+    $parsedFile = Yaml::parse(file_get_contents($someFile));
+}
+
+?>

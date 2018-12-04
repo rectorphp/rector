@@ -2,30 +2,18 @@
 
 namespace Rector\PHPUnit\Tests\Rector\SpecificMethod\AssertPropertyExistsRector;
 
-use Iterator;
+use Rector\PHPUnit\Rector\SpecificMethod\AssertPropertyExistsRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-/**
- * @covers \Rector\PHPUnit\Rector\SpecificMethod\AssertPropertyExistsRector
- */
 final class AssertPropertyExistsRectorTest extends AbstractRectorTestCase
 {
-    /**
-     * @dataProvider provideWrongToFixedFiles()
-     */
-    public function test(string $wrong, string $fixed): void
+    public function test(): void
     {
-        $this->doTestFileMatchesExpectedContent($wrong, $fixed);
+        $this->doTestFiles([__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Wrong/wrong2.php.inc']);
     }
 
-    public function provideWrongToFixedFiles(): Iterator
+    public function getRectorClass(): string
     {
-        yield [__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc'];
-        yield [__DIR__ . '/Wrong/wrong2.php.inc', __DIR__ . '/Correct/correct2.php.inc'];
-    }
-
-    protected function provideConfig(): string
-    {
-        return __DIR__ . '/config.yml';
+        return AssertPropertyExistsRector::class;
     }
 }

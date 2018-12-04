@@ -11,14 +11,14 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 final class ParentTypehintedArgumentRectorTest extends AbstractRectorTestCase
 {
     /**
-     * @dataProvider provideWrongToFixedFiles()
+     * @dataProvider provideFiles()
      */
     public function test(string $wrong, string $fixed): void
     {
         $this->doTestFileMatchesExpectedContent($wrong, $fixed);
     }
 
-    public function provideWrongToFixedFiles(): Iterator
+    public function provideFiles(): Iterator
     {
         yield [__DIR__ . '/Wrong/SomeClassImplementingParserInterface.php', __DIR__ . '/Correct/correct.php.inc'];
         yield [__DIR__ . '/Wrong/MyMetadataFactory.php', __DIR__ . '/Correct/correct2.php.inc'];

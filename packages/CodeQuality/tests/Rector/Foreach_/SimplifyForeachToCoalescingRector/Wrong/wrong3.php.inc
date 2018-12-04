@@ -8,3 +8,14 @@ foreach ($values as $key => $value) {
         $newValue = $value;
     }
 }
+
+?>
+-----
+<?php
+
+$newValue = null;
+$values = [];
+
+$newValue = $values[$value] ?? $newValue;
+
+?>

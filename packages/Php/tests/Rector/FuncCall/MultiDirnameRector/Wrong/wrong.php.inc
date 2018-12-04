@@ -1,15 +1,41 @@
-<?php declare(strict_types=1);
+<?php
 
-dirname(dirname($path));
+function multiDirname()
+{
+    dirname(dirname($path));
 
-new dirname(dirname(dirname($path)));
+    new dirname(dirname(dirname($path)));
 
 
 // untouched
-dirname(dirname($path, $level));
+    dirname(dirname($path, $level));
 
-dirname("foo/".dirname($path));
+    dirname("foo/" . dirname($path));
 
-dirname(dirname($path).$foo);
+    dirname(dirname($path) . $foo);
 
-foo\dirname(dirname($path));
+    foo\dirname(dirname($path));
+}
+
+?>
+-----
+<?php
+
+function multiDirname()
+{
+    dirname($path, 2);
+
+    new dirname(dirname($path, 2));
+
+
+// untouched
+    dirname(dirname($path, $level));
+
+    dirname("foo/" . dirname($path));
+
+    dirname(dirname($path) . $foo);
+
+    foo\dirname(dirname($path));
+}
+
+?>

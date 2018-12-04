@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 namespace Rector\Php\Tests\Rector\Assign\AssignArrayToStringRector\Wrong;
 

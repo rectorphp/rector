@@ -1,2 +1,0 @@
-services:
-    Rector\CodingStyle\Rector\Switch_\BinarySwitchToIfElseRector: ~

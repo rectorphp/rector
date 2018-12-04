@@ -6,13 +6,24 @@ use PhpParser\ConstExprEvaluator;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Scalar\MagicConst\Dir;
 use Rector\NodeTypeResolver\Node\Attribute;
+use Symfony\Component\Finder\SplFileInfo;
 
 final class ConstExprEvaluatorFactory
 {
     public function create(): ConstExprEvaluator
     {
         return new ConstExprEvaluator(function (Expr $expr): ?string {
+            // resolve "__DIR__"
+            if ($expr instanceof Dir) {
+                /** @var SplFileInfo $fileInfo */
+                $fileInfo = $expr->getAttribute(Attribute::FILE_INFO);
+
+                return $fileInfo->getPath();
+            }
+
+            // resolve "SomeClass::SOME_CONST"
             if ($expr instanceof ClassConstFetch) {
                 return $this->resolveClassConstFetch($expr);
             }

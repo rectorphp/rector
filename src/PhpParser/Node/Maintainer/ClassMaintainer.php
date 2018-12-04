@@ -132,6 +132,21 @@ final class ClassMaintainer
         $this->childAndParentClassMaintainer->completeChildConstructors($classNode, $constructorMethod);
     }
 
+    /**
+     * @return ClassMethod[]
+     */
+    public function getMethodsByName(Class_ $classNode): array
+    {
+        $methodsByName = [];
+        foreach ($classNode->stmts as $stmt) {
+            if ($stmt instanceof ClassMethod) {
+                $methodsByName[(string) $stmt->name] = $stmt;
+            }
+        }
+
+        return $methodsByName;
+    }
+
     private function tryInsertBeforeFirstMethod(Class_ $classNode, Stmt $node): bool
     {
         foreach ($classNode->stmts as $key => $classElementNode) {

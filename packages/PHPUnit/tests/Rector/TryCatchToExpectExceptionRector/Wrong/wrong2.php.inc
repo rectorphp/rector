@@ -1,6 +1,8 @@
-<?php declare(strict_types=1);
+<?php
 
-final class MyTest extends \PHPUnit\Framework\TestCase
+namespace Rector\PHPUnit\Tests\Rector\TryCatchToExpectExceptionRector\Wrong;
+
+final class MyTest2 extends \PHPUnit\Framework\TestCase
 {
     public function test()
     {
@@ -14,3 +16,23 @@ final class MyTest extends \PHPUnit\Framework\TestCase
         }
     }
 }
+
+?>
+-----
+<?php
+
+namespace Rector\PHPUnit\Tests\Rector\TryCatchToExpectExceptionRector\Wrong;
+
+final class MyTest2 extends \PHPUnit\Framework\TestCase
+{
+    public function test()
+    {
+        $this->expectExceptionCode(1000);
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('There was an error executing the following script');
+        $someService->run();
+        $someService->moreCalls();
+    }
+}
+
+?>

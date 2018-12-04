@@ -1,3 +1,17 @@
-<?php declare(strict_types=1);
+<?php
 
-is_array($foo) || $foo instanceof Countable;
+function isCountable()
+{
+    is_array($foo) || $foo instanceof Countable;
+}
+
+?>
+-----
+<?php
+
+function isCountable()
+{
+    is_countable($foo);
+}
+
+?>

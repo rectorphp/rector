@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+namespace Rector\PHPUnit\Tests\Rector\SpecificMethod\AssertNotOperatorRector\Wrong;
 
 final class MyTest extends \PHPUnit\Framework\TestCase
 {
@@ -9,3 +11,21 @@ final class MyTest extends \PHPUnit\Framework\TestCase
         self::assertTrue(! $something);
     }
 }
+
+?>
+-----
+<?php
+
+namespace Rector\PHPUnit\Tests\Rector\SpecificMethod\AssertNotOperatorRector\Wrong;
+
+final class MyTest extends \PHPUnit\Framework\TestCase
+{
+    public function test()
+    {
+        $this->assertTrue($something === false);
+        $this->assertFalse($something);
+        self::assertFalse($something);
+    }
+}
+
+?>

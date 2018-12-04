@@ -1,6 +1,8 @@
-<?php declare(strict_types=1);
+<?php
 
-final class MyTest extends \PHPUnit\Framework\TestCase
+namespace Rector\PHPUnit\Tests\Rector\SpecificMethod\AssertPropertyExistsRector\Wrong;
+
+final class MyTest2 extends \PHPUnit\Framework\TestCase
 {
     public function test()
     {
@@ -8,3 +10,20 @@ final class MyTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse(property_exists($response, 'property'));
     }
 }
+
+?>
+-----
+<?php
+
+namespace Rector\PHPUnit\Tests\Rector\SpecificMethod\AssertPropertyExistsRector\Wrong;
+
+final class MyTest2 extends \PHPUnit\Framework\TestCase
+{
+    public function test()
+    {
+        $response = new \Namespaced\Response();
+        $this->assertObjectNotHasAttribute('property', $response);
+    }
+}
+
+?>

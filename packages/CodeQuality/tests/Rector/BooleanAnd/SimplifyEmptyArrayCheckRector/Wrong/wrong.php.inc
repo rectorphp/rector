@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 final class MyClass
 {
@@ -17,3 +17,27 @@ final class MyClass
         return is_array($values) && empty(array_filter($values));
     }
 }
+
+?>
+-----
+<?php
+
+final class MyClass
+{
+    public function isEmptyArray($values): bool
+    {
+        return $values === [];
+    }
+
+    public function isEmptyArray2($values): bool
+    {
+        return $values === [];
+    }
+
+    public function functionCallInsideEmpty($values): bool
+    {
+        return array_filter($values) === [];
+    }
+}
+
+?>

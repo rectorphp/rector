@@ -19,6 +19,26 @@ trait IntegrationRectorTestCaseTrait
     private $splitLine = '#-----\n#';
 
     /**
+     * @param string[]|string[][] $files
+     */
+    protected function doTestFiles(array $files): void
+    {
+        // 1. original to changed content
+        if (is_array($files[0])) {
+            foreach ($files as $file) {
+                $this->doTestFileMatchesExpectedContent($file[0], $file[1]);
+            }
+            // 2. integration single file
+        } else {
+            foreach ($files as $file) {
+                $smartFileInfo = new SmartFileInfo($file);
+                [$originalContent, $changedContent] = $this->splitContentToOriginalFileAndExpectedFile($smartFileInfo);
+                $this->doTestFileMatchesExpectedContent($originalContent, $changedContent);
+            }
+        }
+    }
+
+    /**
      * @return string[]
      */
     protected function splitContentToOriginalFileAndExpectedFile(SmartFileInfo $smartFileInfo): array
@@ -39,7 +59,9 @@ trait IntegrationRectorTestCaseTrait
         FileSystem::write($expectedFile, $expectedContent);
 
         // file needs to be autoload PHPStan analyze
-        include_once $originalFile;
+        if ($this->autoloadTestFixture) {
+            require_once $originalFile;
+        }
 
         return [$originalFile, $expectedFile];
     }

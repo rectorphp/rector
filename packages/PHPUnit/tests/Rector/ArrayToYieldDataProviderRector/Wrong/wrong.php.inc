@@ -1,6 +1,6 @@
-<?php declare(strict_types=1);
+<?php
 
-namespace App\Tests;
+namespace Rector\PHPUnit\Tests\Rector\ArrayToYieldDataProviderRector\Wrong;
 
 use PHPUnit\Framework\TestCase;
 
@@ -16,3 +16,21 @@ final class MyTestCsae extends TestCase
         ];
     }
 }
+
+?>
+-----
+<?php
+
+namespace Rector\PHPUnit\Tests\Rector\ArrayToYieldDataProviderRector\Wrong;
+
+use PHPUnit\Framework\TestCase;
+
+final class MyTestCsae extends TestCase
+{
+    public function provideData(): \Iterator
+    {
+        yield ['item'];
+    }
+}
+
+?>

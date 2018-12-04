@@ -2,34 +2,23 @@
 
 namespace Rector\CodeQuality\Tests\Rector\Assign\CombinedAssignRector;
 
-use Iterator;
+use Rector\CodeQuality\Rector\Assign\CombinedAssignRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
- * @covers \Rector\CodeQuality\Rector\Assign\CombinedAssignRector
- *
  * Some tests used from:
  * - https://github.com/doctrine/coding-standard/pull/83/files
  * - https://github.com/slevomat/coding-standard/blob/master/tests/Sniffs/Operators/data/requireCombinedAssignmentOperatorErrors.php
  */
 final class CombinedAssignRectorTest extends AbstractRectorTestCase
 {
-    /**
-     * @dataProvider provideWrongToFixedFiles()
-     */
-    public function test(string $wrong, string $fixed): void
+    public function test(): void
     {
-        $this->doTestFileMatchesExpectedContent($wrong, $fixed);
+        $this->doTestFiles([__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Wrong/wrong2.php.inc']);
     }
 
-    public function provideWrongToFixedFiles(): Iterator
+    protected function getRectorClass(): string
     {
-        yield [__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc'];
-        yield [__DIR__ . '/Wrong/wrong2.php.inc', __DIR__ . '/Correct/correct2.php.inc'];
-    }
-
-    protected function provideConfig(): string
-    {
-        return __DIR__ . '/config.yml';
+        return CombinedAssignRector::class;
     }
 }

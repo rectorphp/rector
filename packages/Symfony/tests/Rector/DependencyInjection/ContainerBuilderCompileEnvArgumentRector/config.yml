@@ -1,2 +1,0 @@
-services:
-    Rector\Symfony\Rector\DependencyInjection\ContainerBuilderCompileEnvArgumentRector: ~

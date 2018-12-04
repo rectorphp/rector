@@ -2,35 +2,24 @@
 
 namespace Rector\Php\Tests\Rector\FuncCall\CountOnNullRector;
 
-use Iterator;
+use Rector\Php\Rector\FuncCall\CountOnNullRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-/**
- * @covers \Rector\Php\Rector\FuncCall\CountOnNullRector
- */
 final class CountOnNullRectorTest extends AbstractRectorTestCase
 {
-    /**
-     * @dataProvider provideWrongToFixedFiles()
-     */
-    public function test(string $wrong, string $fixed): void
+    public function test(): void
     {
-        $this->doTestFileMatchesExpectedContent($wrong, $fixed);
+        $this->doTestFiles([
+            __DIR__ . '/Integration/array_countable_class.php.inc',
+            __DIR__ . '/Integration/countable_annotated_params.php.inc',
+            __DIR__ . '/Integration/false_true_class.php.inc',
+            __DIR__ . '/Integration/on_null.php.inc',
+            __DIR__ . '/Integration/property.php.inc',
+        ]);
     }
 
-    public function provideWrongToFixedFiles(): Iterator
+    protected function getRectorClass(): string
     {
-        yield [__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc'];
-        yield [__DIR__ . '/Wrong/wrong2.php.inc', __DIR__ . '/Correct/correct2.php.inc'];
-        yield [__DIR__ . '/Wrong/wrong3.php.inc', __DIR__ . '/Correct/correct3.php.inc'];
-        yield [__DIR__ . '/Wrong/wrong4.php.inc', __DIR__ . '/Correct/correct4.php.inc'];
-        yield [__DIR__ . '/Wrong/wrong5.php.inc', __DIR__ . '/Correct/correct5.php.inc'];
-        yield [__DIR__ . '/Wrong/wrong6.php.inc', __DIR__ . '/Correct/correct6.php.inc'];
-        yield [__DIR__ . '/Wrong/wrong7.php.inc', __DIR__ . '/Correct/correct7.php.inc'];
-    }
-
-    protected function provideConfig(): string
-    {
-        return __DIR__ . '/config.yml';
+        return CountOnNullRector::class;
     }
 }

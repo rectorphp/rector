@@ -1,6 +1,6 @@
 services:
     Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector:
-        'Rector\CakePHP\Tests\Rector\MethodCall\ModalToGetSetRector\Source\SomeModelType':
+        Rector\CakePHP\Tests\Rector\MethodCall\ModalToGetSetRector\Source\SomeModelType:
             config:
                 get: 'getConfig'
                 minimal_argument_count: 2

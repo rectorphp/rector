@@ -2,29 +2,18 @@
 
 namespace Rector\Php\Tests\Rector\List_\ListSplitStringRector;
 
-use Iterator;
+use Rector\Php\Rector\List_\ListSplitStringRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-/**
- * @covers \Rector\Php\Rector\List_\ListSplitStringRector
- */
 final class ListSplitStringRectorTest extends AbstractRectorTestCase
 {
-    /**
-     * @dataProvider provideWrongToFixedFiles()
-     */
-    public function test(string $wrong, string $fixed): void
+    public function test(): void
     {
-        $this->doTestFileMatchesExpectedContent($wrong, $fixed);
+        $this->doTestFiles([__DIR__ . '/Wrong/wrong.php.inc']);
     }
 
-    public function provideWrongToFixedFiles(): Iterator
+    public function getRectorClass(): string
     {
-        yield [__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc'];
-    }
-
-    protected function provideConfig(): string
-    {
-        return __DIR__ . '/config.yml';
+        return ListSplitStringRector::class;
     }
 }
