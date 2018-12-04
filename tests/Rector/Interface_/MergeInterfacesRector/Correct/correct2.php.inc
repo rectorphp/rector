@@ -1,8 +1,10 @@
 <?php declare(strict_types=1);
 
+namespace Rector\Tests\Rector\Interface_\MergeInterfacesRector\Wrong;
+
 use Rector\Tests\Rector\Interface_\MergeInterfacesRector\Source\SomeOldInterface;
 
-class SomeClass implements Rector\Tests\Rector\Interface_\MergeInterfacesRector\Source\SomeInterface
+class SomeClass2 implements Rector\Tests\Rector\Interface_\MergeInterfacesRector\Source\SomeInterface
 {
 
 }
