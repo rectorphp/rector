@@ -2,7 +2,6 @@
 
 namespace Rector\Sensio\Tests\Rector\FrameworkExtraBundle\TemplateAnnotationRector;
 
-use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
@@ -10,24 +9,23 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
  */
 final class TemplateAnnotationVersion3RectorTest extends AbstractRectorTestCase
 {
-    /**
-     * @dataProvider provideFiles()
-     */
-    public function test(string $wrong, string $fixed): void
+    public function test(): void
     {
-        $this->doTestFileMatchesExpectedContent($wrong, $fixed);
-    }
-
-    public function provideFiles(): Iterator
-    {
-        yield [__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/Version3/correct.php.inc'];
-        yield [__DIR__ . '/Wrong/wrong2.php.inc', __DIR__ . '/Correct/Version3/correct2.php.inc'];
-        yield [__DIR__ . '/Wrong/wrong3.php.inc', __DIR__ . '/Correct/Version3/correct3.php.inc'];
-        yield [__DIR__ . '/Wrong/wrong4.php.inc', __DIR__ . '/Correct/Version3/correct4.php.inc'];
-        yield [__DIR__ . '/Wrong/wrong5.php.inc', __DIR__ . '/Correct/Version3/correct5.php.inc'];
-        yield [__DIR__ . '/Wrong/wrong6.php.inc', __DIR__ . '/Correct/Version3/correct6.php.inc'];
-        yield [__DIR__ . '/Wrong/wrong7.php.inc', __DIR__ . '/Correct/Version3/correct7.php.inc'];
-        yield [__DIR__ . '/Wrong/wrong8.php.inc', __DIR__ . '/Correct/Version3/correct8.php.inc'];
+        $this->doTestFiles(
+            [[__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/Version3/correct.php.inc'], [
+                __DIR__ . '/Wrong/wrong2.php.inc',
+                __DIR__ . '/Correct/Version3/correct2.php.inc',
+            ], [
+                __DIR__ . '/Wrong/wrong3.php.inc',
+                __DIR__ . '/Correct/Version3/correct3.php.inc',
+            ], [__DIR__ . '/Wrong/wrong4.php.inc', __DIR__ . '/Correct/Version3/correct4.php.inc'], [
+                __DIR__ . '/Wrong/wrong5.php.inc',
+                __DIR__ . '/Correct/Version3/correct5.php.inc',
+            ], [__DIR__ . '/Wrong/wrong6.php.inc', __DIR__ . '/Correct/Version3/correct6.php.inc'], [
+                __DIR__ . '/Wrong/wrong7.php.inc',
+                __DIR__ . '/Correct/Version3/correct7.php.inc',
+            ], [__DIR__ . '/Wrong/wrong8.php.inc', __DIR__ . '/Correct/Version3/correct8.php.inc']]
+        );
     }
 
     protected function provideConfig(): string
