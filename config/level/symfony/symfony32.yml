@@ -1,9 +1,4 @@
 services:
-    # yaml
-    # covers https://github.com/symfony/symfony/blob/3.4/UPGRADE-3.2.md#yaml
-    # https://github.com/symfony/symfony/pull/19504
-    Rector\Symfony\Rector\Yaml\SpaceBetweenKeyAndValueYamlRector: ~
-
     # dependency-injection
     Rector\Rector\Argument\ArgumentAdderRector:
         Symfony\Component\DependencyInjection\ContainerBuilder:

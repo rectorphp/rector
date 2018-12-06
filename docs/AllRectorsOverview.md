@@ -24,6 +24,7 @@
 - [DomainDrivenDesign\ValueObjectRemover](#domaindrivendesignvalueobjectremover)
 - [Guzzle\MethodCall](#guzzlemethodcall)
 - [Jms\Property](#jmsproperty)
+- [PHPStan\Assign](#phpstanassign)
 - [PHPStan\Cast](#phpstancast)
 - [PHPUnit](#phpunit)
 - [PHPUnit\Foreach_](#phpunitforeach_)
@@ -594,6 +595,23 @@ Changes properties with `@JMS\DiExtraBundle\Annotation\Inject` to constructor in
 +        $this->entityManager = entityManager;
 +    }
  }
+```
+
+<br>
+
+## PHPStan\Assign
+
+### `PHPStormVarAnnotationRector`
+
+- class: `Rector\PHPStan\Rector\Assign\PHPStormVarAnnotationRector`
+
+Change various @var annotation formats to one PHPStorm understands
+
+```diff
+-$config = 5;
+-/** @var \Shopsys\FrameworkBundle\Model\Product\Filter\ProductFilterConfig $config */
++/** @var \Shopsys\FrameworkBundle\Model\Product\Filter\ProductFilterConfig $config */
++$config = 5;
 ```
 
 <br>
@@ -1294,8 +1312,8 @@ Adds JSON_THROW_ON_ERROR to json_encode() and json_decode() to throw JsonExcepti
 ```diff
 -json_encode($content);
 -json_decode($json);
-+json_encode($content, JSON_THROW_ON_ERROR);
-+json_decode($json, null, null, JSON_THROW_ON_ERROR);
++json_encode($content, JSON_THROW_ON_ERROR
++json_decode($json, null, null, JSON_THROW_ON_ERROR););
 ```
 
 <br>
@@ -1342,6 +1360,46 @@ Changes property `@var` annotations from annotation to type.
 
 <br>
 
+### `ParamScalarTypehintRector`
+
+- class: `Rector\Php\Rector\FunctionLike\ParamScalarTypehintRector`
+
+Change @param types to scalar typehints if not a BC-break
+
+```diff
+ <?php
+
+ class ParentClass
+ {
+     /**
+      * @param int $number
+      */
+     public function keep($number)
+     {
+     }
+ }
+
+ final class ChildClass extends ParentClass
+ {
+     /**
+      * @param int $number
+      */
+     public function keep($number)
+     {
+     }
+
+     /**
+      * @param int $number
+      */
+-    public function change($number)
++    public function change(int $number)
+     {
+     }
+ }
+```
+
+<br>
+
 ### `Php4ConstructorRector`
 
 - class: `Rector\Php\Rector\FunctionLike\Php4ConstructorRector`
@@ -1353,6 +1411,29 @@ Changes PHP 4 style constructor to __construct.
  {
 -    public function SomeClass()
 +    public function __construct()
+     {
+     }
+ }
+```
+
+<br>
+
+### `ReturnScalarTypehintRector`
+
+- class: `Rector\Php\Rector\FunctionLike\ReturnScalarTypehintRector`
+
+Change @return types to scalar typehints if not a BC-break
+
+```diff
+ <?php
+
+ class SomeClass
+ {
+     /**
+      * @return int
+      */
+-    public function getCount()
++    public function getCount(): int
      {
      }
  }
@@ -2005,32 +2086,6 @@ Adds new `$format` argument in `VarDumperTestTrait->assertDumpEquals()` in Valid
 <br>
 
 ## Symfony\Yaml
-
-### `SpaceBetweenKeyAndValueYamlRector`
-
-- class: `Rector\Symfony\Rector\Yaml\SpaceBetweenKeyAndValueYamlRector`
-
-Mappings with a colon (:) that is not followed by a whitespace will get one
-
-```diff
--key:value
-+key: value
-```
-
-<br>
-
-### `SessionStrictTrueByDefaultYamlRector`
-
-- class: `Rector\Symfony\Rector\Yaml\SessionStrictTrueByDefaultYamlRector`
-
-session > use_strict_mode is true by default and can be removed
-
-```diff
--session > use_strict_mode: true
-+session:
-```
-
-<br>
 
 ### `ParseFileRector`
 
@@ -2861,16 +2916,31 @@ Replaces defined Pseudo_Namespaces by Namespace\Ones.
 ```yaml
 services:
     Rector\Rector\Namespace_\PseudoNamespaceToNamespaceRector:
-        $pseudoNamespacePrefixes:
-            - Some_
-        $excludedClasses: {  }
+        -
+            Some_: {  }
 ```
 
 ↓
 
 ```diff
--$someService = Some_Object;
-+$someService = Some\Object;
+-$someService = new Some_Object;
++$someService = new Some\Object;
+```
+
+```yaml
+services:
+    Rector\Rector\Namespace_\PseudoNamespaceToNamespaceRector:
+        -
+            Some_:
+                - Some_Class_To_Keep
+```
+
+↓
+
+```diff
+-$someService = new Some_Object;
++$someService = new Some\Object;
+ $someClassToKeep = new Some_Class_To_Keep;
 ```
 
 <br>

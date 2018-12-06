@@ -1,7 +1,0 @@
-security:
-    # ...
-    firewalls:
-        default:
-            # ...
-            anonymous:
-                old_key: "%secret%"

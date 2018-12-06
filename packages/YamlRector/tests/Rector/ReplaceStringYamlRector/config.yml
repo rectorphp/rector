@@ -1,4 +1,0 @@
-services:
-    Rector\YamlRector\Rector\ReplaceStringYamlRector:
-        ' !!php/object': ' !php/object'
-        ' !php/object:': ' !php/object '

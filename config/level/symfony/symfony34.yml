@@ -1,13 +1,4 @@
 services:
-    # yaml
-    # covers https://github.com/symfony/symfony/pull/24523
-    Rector\Symfony\Rector\Yaml\SessionStrictTrueByDefaultYamlRector: ~
-
-    Rector\YamlRector\Rector\ReplaceStringYamlRector:
-        ' !php/object:': ' !php/object '
-        ' !php/const:': ' !php/const '
-        ' !str': ' !!str'
-
     Rector\Rector\Argument\ArgumentRemoverRector:
         Symfony\Component\Yaml\Yaml:
             parse:
