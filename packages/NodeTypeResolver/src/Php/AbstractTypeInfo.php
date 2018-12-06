@@ -153,6 +153,11 @@ abstract class AbstractTypeInfo
                 continue;
             }
 
+            if ($type === '$this') {
+                $types[$i] = 'self';
+                continue;
+            }
+
             if ($type === 'object' && PhpTypeSupport::isTypeSupported('object') === false) {
                 unset($types[$i]);
                 continue;
