@@ -79,7 +79,7 @@ trait NodeFactoryTrait
     }
 
     /**
-     * @param Node[] $nodes
+     * @param Node[]|mixed[] $nodes
      */
     protected function createArray(array $nodes): Array_
     {
