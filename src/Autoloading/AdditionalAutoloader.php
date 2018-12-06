@@ -61,7 +61,14 @@ final class AdditionalAutoloader
         $this->autoloadFiles($autoloadFiles);
 
         // the scanned file needs to be autoloaded
-        [$files, ] = $this->fileSystem->separateFilesAndDirectories($source);
+        [$files, $directories] = $this->fileSystem->separateFilesAndDirectories($source);
+
+        foreach ($directories as $directory) {
+            // load project autoload
+            if (file_exists($directory . '/vendor/autoload.php')) {
+                require_once $directory . '/vendor/autoload.php';
+            }
+        }
 
         $this->autoloadFiles($files);
     }
