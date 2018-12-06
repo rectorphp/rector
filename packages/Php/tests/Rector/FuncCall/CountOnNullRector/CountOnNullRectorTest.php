@@ -10,12 +10,12 @@ final class CountOnNullRectorTest extends AbstractRectorTestCase
     public function test(): void
     {
         $this->doTestFiles([
-            __DIR__ . '/Integration/array_countable_class.php.inc',
-            __DIR__ . '/Integration/countable_annotated_params.php.inc',
-            __DIR__ . '/Integration/false_true_class.php.inc',
-            __DIR__ . '/Integration/on_null.php.inc',
-            __DIR__ . '/Integration/property.php.inc',
-            __DIR__ . '/Integration/preg_match_array.php.inc',
+            __DIR__ . '/Fixture/array_countable_class.php.inc',
+            __DIR__ . '/Fixture/countable_annotated_params.php.inc',
+            __DIR__ . '/Fixture/false_true_class.php.inc',
+            __DIR__ . '/Fixture/on_null.php.inc',
+            __DIR__ . '/Fixture/property.php.inc',
+            __DIR__ . '/Fixture/preg_match_array.php.inc',
         ]);
     }
 

@@ -13,7 +13,7 @@ final class DoctrineRepositoryAsServiceTest extends AbstractRectorTestCase
 {
     public function test(): void
     {
-        $this->doTestFiles([__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Wrong/PostController.php']);
+        $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc', __DIR__ . '/Fixture/PostController.php']);
     }
 
     protected function provideConfig(): string

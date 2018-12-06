@@ -57,8 +57,7 @@ parameters:
     exclude_files:
         - '*tests/*Source/*.php'
         # tests files
-        - '*tests/*/Wrong/*'
-        - '*tests/*/Correct/*'
+        - '*tests/*/Fixture/*'
         - '*tests/*/Expected/*'
         - '*packages/ContributorTools/templates/*'
 

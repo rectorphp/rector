@@ -10,12 +10,12 @@ final class TypedPropertyRectorTest extends AbstractRectorTestCase
     public function test(): void
     {
         $this->doTestFiles([
-            __DIR__ . '/Wrong/ClassWithProperty.php.inc',
-            __DIR__ . '/Wrong/ClassWithClassProperty.php.inc',
-            __DIR__ . '/Wrong/ClassWithNullableProperty.php.inc',
-            __DIR__ . '/Wrong/ClassWithStaticProperty.php.inc',
-            __DIR__ . '/Wrong/DefaultValues.php.inc',
-            __DIR__ . '/Wrong/MatchTypes.php.inc',
+            __DIR__ . '/Fixture/ClassWithProperty.php.inc',
+            __DIR__ . '/Fixture/ClassWithClassProperty.php.inc',
+            __DIR__ . '/Fixture/ClassWithNullableProperty.php.inc',
+            __DIR__ . '/Fixture/ClassWithStaticProperty.php.inc',
+            __DIR__ . '/Fixture/DefaultValues.php.inc',
+            __DIR__ . '/Fixture/MatchTypes.php.inc',
         ]);
     }
 

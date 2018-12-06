@@ -44,7 +44,7 @@ final class AutoloadWrongCasesEventSubscriber
         $globResult = self::globRecursive($path, GLOB_ONLYDIR);
 
         return array_filter($globResult, function ($name) {
-            return strpos($name, '/Wrong') && ! strpos($name, 'ContributorTools');
+            return strpos($name, '/Fixture') && ! strpos($name, 'ContributorTools');
         });
     }
 

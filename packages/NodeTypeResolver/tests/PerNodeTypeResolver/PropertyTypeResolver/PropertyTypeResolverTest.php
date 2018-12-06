@@ -31,6 +31,6 @@ final class PropertyTypeResolverTest extends AbstractNodeTypeResolverTest
         yield [__DIR__ . '/Source/ClassWithProperties.php', 1, [ClassThatExtendsHtml::class, Html::class]];
 
         // mimics failing test from DomainDrivenDesign set
-        yield [__DIR__ . '/Source/wrong.php', 0, [SomeChildOfValueObject::class, SomeValueObject::class]];
+        yield [__DIR__ . '/Source/fixture.php', 0, [SomeChildOfValueObject::class, SomeValueObject::class]];
     }
 }

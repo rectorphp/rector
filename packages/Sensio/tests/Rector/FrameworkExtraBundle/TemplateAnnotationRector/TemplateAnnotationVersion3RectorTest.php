@@ -10,10 +10,10 @@ final class TemplateAnnotationVersion3RectorTest extends AbstractRectorTestCase
     public function test(): void
     {
         $this->doTestFiles([
-            __DIR__ . '/Correct/Version3/correct.php.inc',
-            __DIR__ . '/Correct/Version3/correct2.php.inc',
-            __DIR__ . '/Correct/Version3/correct3.php.inc',
-            __DIR__ . '/Correct/Version3/correct4.php.inc',
+            __DIR__ . '/Fixture/Version3/fixture.php.inc',
+            __DIR__ . '/Fixture/Version3/fixture2.php.inc',
+            __DIR__ . '/Fixture/Version3/fixture3.php.inc',
+            __DIR__ . '/Fixture/Version3/fixture4.php.inc',
         ]);
     }
 
