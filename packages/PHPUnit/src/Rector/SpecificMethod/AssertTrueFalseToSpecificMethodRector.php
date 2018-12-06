@@ -62,7 +62,7 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractPHPUnitRector
             return null;
         }
 
-        if (! $this->isNames($node, ['assertTrue', 'assertFalse'])) {
+        if (! $this->isNames($node, ['assertTrue', 'assertFalse', 'assertNotTrue', 'assertNotFalse'])) {
             return null;
         }
 
@@ -89,10 +89,16 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractPHPUnitRector
 
         [$trueMethodName, $falseMethodName] = $this->oldToNewMethods[$funcName];
 
-        if ($oldMethodName === 'assertTrue' && $trueMethodName) {
-            $methodCallNode->name = new Identifier($trueMethodName);
-        } elseif ($oldMethodName === 'assertFalse' && $falseMethodName) {
-            $methodCallNode->name = new Identifier($falseMethodName);
+        if ($trueMethodName) {
+            if (in_array($oldMethodName, ['assertTrue', 'assertNotFalse'], true)) {
+                $methodCallNode->name = new Identifier($trueMethodName);
+            }
+        }
+
+        if ($falseMethodName) {
+            if (in_array($oldMethodName, ['assertFalse', 'assertNotTrue'], true)) {
+                $methodCallNode->name = new Identifier($falseMethodName);
+            }
         }
     }
 
