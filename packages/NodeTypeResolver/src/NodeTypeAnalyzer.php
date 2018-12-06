@@ -5,19 +5,41 @@ namespace Rector\NodeTypeResolver;
 use Countable;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Stmt\Expression;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\Accessory\HasOffsetType;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\IntersectionType;
+use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
+use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\PhpParser\Node\Resolver\NameResolver;
+use Rector\PhpParser\Printer\BetterStandardPrinter;
 
 final class NodeTypeAnalyzer
 {
+    /**
+     * @var BetterStandardPrinter
+     */
+    private $betterStandardPrinter;
+
+    /**
+     * @var NameResolver
+     */
+    private $nameResolver;
+
+    public function __construct(BetterStandardPrinter $betterStandardPrinter, NameResolver $nameResolver)
+    {
+        $this->betterStandardPrinter = $betterStandardPrinter;
+        $this->nameResolver = $nameResolver;
+    }
+
     public function isStringType(Node $node): bool
     {
         /** @var Scope|null $nodeScope */
@@ -75,6 +97,7 @@ final class NodeTypeAnalyzer
         }
 
         $nodeType = $nodeScope->getType($node);
+        $nodeType = $this->correctPregMatchType($node, $nodeType);
 
         if ($nodeType instanceof ObjectType) {
             return is_a($nodeType->getClassName(), Countable::class, true);
@@ -93,5 +116,44 @@ final class NodeTypeAnalyzer
         }
 
         return $nodeType instanceof ArrayType;
+    }
+
+    /**
+     * Special case for "preg_match(), preg_match_all()" - with 3rd argument
+     * @covers https://github.com/rectorphp/rector/issues/786
+     */
+    private function correctPregMatchType(Node $node, Type $originalType): Type
+    {
+        /** @var Expression|null $previousExpression */
+        $previousExpression = $node->getAttribute(Attribute::CURRENT_EXPRESSION);
+        if ($previousExpression === null) {
+            return $originalType;
+        }
+
+        if (! $previousExpression->expr instanceof FuncCall) {
+            return $originalType;
+        }
+
+        $funcCallNode = $previousExpression->expr;
+        if (! $this->nameResolver->isNames($funcCallNode, ['preg_match', 'preg_match_all'])) {
+            return $originalType;
+        }
+
+        if (! isset($funcCallNode->args[2])) {
+            return $originalType;
+        }
+
+        // are the same variables
+        if ($this->betterStandardPrinter->prettyPrint(
+            [$funcCallNode->args[2]->value]
+        ) !== $this->betterStandardPrinter->prettyPrint([$node])) {
+            return $originalType;
+        }
+
+        if ($originalType instanceof ArrayType) {
+            return $originalType;
+        }
+
+        return new ArrayType(new MixedType(), new MixedType());
     }
 }

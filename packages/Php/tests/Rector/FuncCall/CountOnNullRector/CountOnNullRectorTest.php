@@ -15,6 +15,7 @@ final class CountOnNullRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Integration/false_true_class.php.inc',
             __DIR__ . '/Integration/on_null.php.inc',
             __DIR__ . '/Integration/property.php.inc',
+            __DIR__ . '/Integration/preg_match_array.php.inc',
         ]);
     }
 
