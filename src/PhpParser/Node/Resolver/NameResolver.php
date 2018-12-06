@@ -69,6 +69,14 @@ final class NameResolver
         return $this->resolve($node) === $name;
     }
 
+    /**
+     * @param string[] $names
+     */
+    public function isNames(Node $node, array $names): bool
+    {
+        return in_array($this->resolve($node), $names, true);
+    }
+
     public function resolve(Node $node): ?string
     {
         foreach ($this->nameResolversPerNode as $type => $nameResolver) {

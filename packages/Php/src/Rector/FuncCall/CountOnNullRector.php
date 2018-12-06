@@ -66,7 +66,6 @@ CODE_SAMPLE
         }
 
         $countedNode = $node->args[0]->value;
-
         if ($this->isCountableType($countedNode)) {
             return null;
         }
