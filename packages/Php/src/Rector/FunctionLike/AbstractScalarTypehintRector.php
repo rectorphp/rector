@@ -97,7 +97,7 @@ abstract class AbstractScalarTypehintRector extends AbstractRector
         /** @var Class_ $classNode */
         $classNode = $classMethodNode->getAttribute(Attribute::CLASS_NODE);
 
-        $interfaceNames = $this->getClassNodeInterfaceNames($classNode);
+        $interfaceNames = $this->getClassLikeNodeParentInterfaceNames($classNode);
         foreach ($interfaceNames as $interfaceName) {
             $interface = $this->classLikeNodeCollector->findInterface($interfaceName);
             if ($interface) {
@@ -181,13 +181,23 @@ abstract class AbstractScalarTypehintRector extends AbstractRector
     }
 
     /**
+     * @param Class_|Interface_ $classLikeNode
      * @return string[]
      */
-    private function getClassNodeInterfaceNames(Class_ $classNode): array
+    private function getClassLikeNodeParentInterfaceNames(ClassLike $classLikeNode): array
     {
         $interfaces = [];
-        foreach ($classNode->implements as $implementNode) {
-            $interfaces[] = $this->getName($implementNode);
+
+        if ($classLikeNode instanceof Class_) {
+            foreach ($classLikeNode->implements as $implementNode) {
+                $interfaces[] = $this->getName($implementNode);
+            }
+        }
+
+        if ($classLikeNode instanceof Interface_) {
+            foreach ($classLikeNode->extends as $extendNode) {
+                $interfaces[] = $this->getName($extendNode);
+            }
         }
 
         return $interfaces;
