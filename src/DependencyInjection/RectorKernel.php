@@ -5,7 +5,6 @@ namespace Rector\DependencyInjection;
 use Rector\Contract\Rector\PhpRectorInterface;
 use Rector\DependencyInjection\Loader\TolerantRectorYamlFileLoader;
 use Rector\FileSystemRector\Contract\FileSystemRectorInterface;
-use Rector\YamlRector\Contract\YamlRectorInterface;
 use Symfony\Component\Config\Loader\DelegatingLoader;
 use Symfony\Component\Config\Loader\GlobFileLoader;
 use Symfony\Component\Config\Loader\LoaderInterface;
@@ -64,7 +63,6 @@ final class RectorKernel extends Kernel
         // autowire Rectors by default (mainly for 3rd party code)
         $containerBuilder->addCompilerPass(new AutowireInterfacesCompilerPass([
             PhpRectorInterface::class,
-            YamlRectorInterface::class,
             FileSystemRectorInterface::class,
         ]));
 

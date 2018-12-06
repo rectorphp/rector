@@ -94,10 +94,7 @@ final class GenerateRectorOverviewCommand extends Command
      */
     private function getProjectsRectors(): array
     {
-        return $this->getRectorsFromDirectory(
-            [__DIR__ . '/../../../packages'],
-            [__DIR__ . '/../../../packages/YamlRector']
-        );
+        return $this->getRectorsFromDirectory([__DIR__ . '/../../../packages']);
     }
 
     /**
@@ -122,7 +119,7 @@ final class GenerateRectorOverviewCommand extends Command
      */
     private function getGeneralRectors(): array
     {
-        return $this->getRectorsFromDirectory([__DIR__ . '/../../../src'], [__DIR__ . '/../../../packages/YamlRector']);
+        return $this->getRectorsFromDirectory([__DIR__ . '/../../../src']);
     }
 
     private function detectGroupFromRectorClass(string $rectorClass): string
@@ -132,11 +129,6 @@ final class GenerateRectorOverviewCommand extends Command
         // basic Rectors
         if (Strings::startsWith($rectorClass, 'Rector\Rector\\')) {
             return $rectorClassParts[count($rectorClassParts) - 2];
-        }
-
-        // Yaml
-        if (Strings::startsWith($rectorClass, 'Rector\YamlRector\\')) {
-            return 'Yaml';
         }
 
         // Rector/<PackageGroup>/Rector/SomeRector

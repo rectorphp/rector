@@ -1,9 +1,0 @@
-security:
-    # ...
-    firewalls:
-        default:
-            # ...
-            anonymous:
-                new_key: "%secret%"
-            remember_me:
-                new_key: "%secret%"

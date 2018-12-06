@@ -4,7 +4,6 @@ namespace Rector\Guard;
 
 use Rector\Exception\NoRectorsLoadedException;
 use Rector\PhpParser\NodeTraverser\RectorNodeTraverser;
-use Rector\YamlRector\YamlFileProcessor;
 
 final class RectorGuard
 {
@@ -13,20 +12,14 @@ final class RectorGuard
      */
     private $rectorNodeTraverser;
 
-    /**
-     * @var YamlFileProcessor
-     */
-    private $yamlFileProcessor;
-
-    public function __construct(RectorNodeTraverser $rectorNodeTraverser, YamlFileProcessor $yamlFileProcessor)
+    public function __construct(RectorNodeTraverser $rectorNodeTraverser)
     {
         $this->rectorNodeTraverser = $rectorNodeTraverser;
-        $this->yamlFileProcessor = $yamlFileProcessor;
     }
 
     public function ensureSomeRectorsAreRegistered(): void
     {
-        if ($this->rectorNodeTraverser->getRectorCount() || $this->yamlFileProcessor->getYamlRectorsCount()) {
+        if ($this->rectorNodeTraverser->getRectorCount()) {
             return;
         }
 

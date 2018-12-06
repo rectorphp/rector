@@ -2,7 +2,6 @@
 
 namespace Rector\Console\Command;
 
-use Nette\Utils\FileSystem;
 use PHPStan\AnalysedCodeException;
 use Rector\Application\AppliedRectorCollector;
 use Rector\Application\Error;
@@ -19,7 +18,6 @@ use Rector\FileSystem\FilesFinder;
 use Rector\FileSystemRector\FileSystemFileProcessor;
 use Rector\Guard\RectorGuard;
 use Rector\Reporting\FileDiff;
-use Rector\YamlRector\YamlFileProcessor;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -80,11 +78,6 @@ final class ProcessCommand extends Command
     private $additionalAutoloader;
 
     /**
-     * @var YamlFileProcessor
-     */
-    private $yamlFileProcessor;
-
-    /**
      * @var RectorGuard
      */
     private $rectorGuard;
@@ -117,7 +110,6 @@ final class ProcessCommand extends Command
         ParameterProvider $parameterProvider,
         DifferAndFormatter $differAndFormatter,
         AdditionalAutoloader $additionalAutoloader,
-        YamlFileProcessor $yamlFileProcessor,
         RectorGuard $rectorGuard,
         FileSystemFileProcessor $fileSystemFileProcessor,
         ErrorCollector $errorCollector,
@@ -133,7 +125,6 @@ final class ProcessCommand extends Command
         $this->parameterProvider = $parameterProvider;
         $this->differAndFormatter = $differAndFormatter;
         $this->additionalAutoloader = $additionalAutoloader;
-        $this->yamlFileProcessor = $yamlFileProcessor;
         $this->rectorGuard = $rectorGuard;
         $this->fileSystemFileProcessor = $fileSystemFileProcessor;
         $this->errorCollector = $errorCollector;
@@ -288,28 +279,6 @@ final class ProcessCommand extends Command
         }
     }
 
-    private function processYamlFile(SmartFileInfo $fileInfo): void
-    {
-        $oldContent = $fileInfo->getContents();
-
-        if ($this->parameterProvider->provideParameter(Option::OPTION_DRY_RUN)) {
-            $newContent = $this->yamlFileProcessor->processFileInfo($fileInfo);
-            if ($newContent !== $oldContent) {
-                $this->fileDiffs[] = new FileDiff(
-                    $fileInfo->getPathname(),
-                    $this->differAndFormatter->diffAndFormat($oldContent, $newContent)
-                );
-            }
-        } else {
-            $newContent = $this->yamlFileProcessor->processFileInfo($fileInfo);
-            if ($newContent !== $oldContent) {
-                $this->changedFiles[] = $fileInfo->getPathname();
-
-                FileSystem::write($fileInfo->getPathname(), $newContent);
-            }
-        }
-    }
-
     private function matchRectorClass(Throwable $throwable): ?string
     {
         if (! isset($throwable->getTrace()[0])) {
@@ -329,8 +298,6 @@ final class ProcessCommand extends Command
     {
         if ($fileInfo->getExtension() === 'php') {
             $this->processFile($fileInfo);
-        } elseif (in_array($fileInfo->getExtension(), ['yml', 'yaml'], true)) {
-            $this->processYamlFile($fileInfo);
         }
 
         $this->fileSystemFileProcessor->processFileInfo($fileInfo);

@@ -21,9 +21,6 @@ services:
                 - 'getDefinition'
                 - 'getNodeTypes'
                 - 'refactor'
-            Rector\YamlRector\Contract\YamlRectorInterface:
-                - 'getDefinition'
-                - 'refactor'
 
     Symplify\CodingStandard\Sniffs\DependencyInjection\NoClassInstantiationSniff:
         extraAllowedClasses:
