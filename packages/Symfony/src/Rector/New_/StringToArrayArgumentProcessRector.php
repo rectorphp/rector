@@ -2,15 +2,21 @@
 
 namespace Rector\Symfony\Rector\New_;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\BinaryOp\Concat;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Scalar\String_;
+use Rector\PhpParser\Node\BetterNodeFinder;
+use Rector\PhpParser\NodeTransformer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Rector\Util\RectorStrings;
 
 /**
  * @see https://github.com/symfony/symfony/pull/27821/files
@@ -27,10 +33,24 @@ final class StringToArrayArgumentProcessRector extends AbstractRector
      */
     private $processHelperClass;
 
+    /**
+     * @var BetterNodeFinder
+     */
+    private $betterNodeFinder;
+
+    /**
+     * @var NodeTransformer
+     */
+    private $nodeTransformer;
+
     public function __construct(
+        BetterNodeFinder $betterNodeFinder,
+        NodeTransformer $nodeTransformer,
         string $processClass = 'Symfony\Component\Process\Process',
         string $processHelperClass = 'Symfony\Component\Console\Helper\ProcessHelper'
     ) {
+        $this->betterNodeFinder = $betterNodeFinder;
+        $this->nodeTransformer = $nodeTransformer;
         $this->processClass = $processClass;
         $this->processHelperClass = $processHelperClass;
     }
@@ -90,13 +110,61 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $firstArgument instanceof String_) {
-            return null;
+        if ($firstArgument instanceof String_) {
+            $parts = RectorStrings::splitCommandToItems($firstArgument->value);
+            $node->args[$argumentPosition]->value = $this->createArray($parts);
         }
 
-        $parts = Strings::split($firstArgument->value, '# #');
-        $node->args[$argumentPosition]->value = $this->createArray($parts);
+        // type analyzer
+        if ($this->isStringType($firstArgument)) {
+            $this->processStringType($node, $argumentPosition, $firstArgument);
+        }
 
         return $node;
+    }
+
+    private function findPreviousNodeAssign(Node $node, Node $firstArgument): ?Assign
+    {
+        return $this->betterNodeFinder->findFirstPrevious($node, function (Node $checkedNode) use ($firstArgument) {
+            if (! $checkedNode instanceof Assign) {
+                return null;
+            }
+
+            if (! $this->areNodesEqual($checkedNode->var, $firstArgument)) {
+                return null;
+            }
+
+            // @todo check out of scope assign, e.g. in previous method
+
+            return $checkedNode;
+        });
+    }
+
+    /**
+     * @param New_|MethodCall $node
+     */
+    private function processStringType(Node $node, int $argumentPosition, Node $firstArgument): void
+    {
+        if ($firstArgument instanceof Concat) {
+            $arrayNode = $this->nodeTransformer->transformConcatToStringArray($firstArgument);
+            if ($arrayNode) {
+                $node->args[$argumentPosition] = new Arg($arrayNode);
+            }
+        }
+
+        /** @var Assign|null $createdNode */
+        $createdNode = $this->findPreviousNodeAssign($node, $firstArgument);
+        if ($createdNode === null) {
+            return;
+        }
+
+        if (! $createdNode->expr instanceof FuncCall || ! $this->isName($createdNode->expr, 'sprintf')) {
+            return;
+        }
+
+        $arrayNode = $this->nodeTransformer->transformSprintfToArray($createdNode->expr);
+        if ($arrayNode) {
+            $createdNode->expr = $arrayNode;
+        }
     }
 }

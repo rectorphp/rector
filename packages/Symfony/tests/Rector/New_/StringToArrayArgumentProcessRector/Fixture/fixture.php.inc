@@ -1,10 +1,19 @@
 <?php
 
+namespace Rector\Symfony\Tests\Rector\New_\StringToArrayArgumentProcessRector\Fixture;
+
 use Rector\Symfony\Tests\Rector\New_\StringToArrayArgumentProcessRector\Source\Process;
 
 function stringToArgumentArray()
 {
     $process = new Process('ls -l');
+    $process = new Process('ls  -l');
+
+    $commitHash = 'abc';
+    $process = new Process('sleep ' . (5 / 1000));
+    $process = new Process('git describe --contains ' . $commitHash);
+    $process = new Process($commitHash . 'git describe --contains');
+    $process = new Process($commitHash . 'git describe --contains' . $commitHash);
 
     $process = new Process(['ls', '-l']);
 
@@ -16,11 +25,20 @@ function stringToArgumentArray()
 -----
 <?php
 
+namespace Rector\Symfony\Tests\Rector\New_\StringToArrayArgumentProcessRector\Fixture;
+
 use Rector\Symfony\Tests\Rector\New_\StringToArrayArgumentProcessRector\Source\Process;
 
 function stringToArgumentArray()
 {
     $process = new Process(['ls', '-l']);
+    $process = new Process(['ls', '-l']);
+
+    $commitHash = 'abc';
+    $process = new Process(['sleep', 5 / 1000]);
+    $process = new Process(['git', 'describe', '--contains', $commitHash]);
+    $process = new Process([$commitHash, 'git', 'describe', '--contains']);
+    $process = new Process([$commitHash, 'git', 'describe', '--contains', $commitHash]);
 
     $process = new Process(['ls', '-l']);
 
