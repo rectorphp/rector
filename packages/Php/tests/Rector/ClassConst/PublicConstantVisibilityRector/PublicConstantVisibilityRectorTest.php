@@ -9,7 +9,7 @@ final class PublicConstantVisibilityRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
     {
-        $this->doTestFiles([__DIR__ . '/Wrong/SomeClass.php.inc']);
+        $this->doTestFiles([__DIR__ . '/Fixture/SomeClass.php.inc']);
     }
 
     public function getRectorClass(): string

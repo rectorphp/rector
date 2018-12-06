@@ -11,7 +11,7 @@ final class RectorOrderTest extends AbstractRectorTestCase
 {
     public function test(): void
     {
-        $this->doTestFiles([__DIR__ . '/Wrong/wrong.php.inc']);
+        $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc']);
     }
 
     protected function provideConfig(): string

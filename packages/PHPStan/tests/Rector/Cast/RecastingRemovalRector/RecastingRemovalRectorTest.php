@@ -9,7 +9,7 @@ final class RecastingRemovalRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
     {
-        $this->doTestFiles([__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Wrong/wrong2.php.inc']);
+        $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc', __DIR__ . '/Fixture/fixture2.php.inc']);
     }
 
     public function getRectorClass(): string

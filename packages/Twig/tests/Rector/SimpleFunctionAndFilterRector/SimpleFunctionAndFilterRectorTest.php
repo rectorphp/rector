@@ -15,9 +15,9 @@ final class SimpleFunctionAndFilterRectorTest extends AbstractRectorTestCase
     public function test(): void
     {
         $this->doTestFiles([
-            __DIR__ . '/Wrong/wrong.php.inc',
-            __DIR__ . '/Wrong/wrong2.php.inc',
-            __DIR__ . '/Wrong/wrong3.php.inc',
+            __DIR__ . '/Fixture/fixture.php.inc',
+            __DIR__ . '/Fixture/fixture2.php.inc',
+            __DIR__ . '/Fixture/fixture3.php.inc',
         ]);
     }
 

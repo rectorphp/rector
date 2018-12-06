@@ -2,29 +2,19 @@
 
 namespace Rector\_Package_\Tests\Rector\_Category_\_Name_;
 
-use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-/**
- * @covers \Rector\_Package_\Rector\_Category_\_Name_
- */
 final class _Name_Test extends AbstractRectorTestCase
 {
-    /**
-     * @dataProvider provideFiles()
-     */
-    public function test(string $wrong, string $fixed): void
+    public function test(): void
     {
-        $this->doTestFileMatchesExpectedContent($wrong, $fixed);
+        $this->doTestFiles([
+            __DIR__ . '/Fixture/fixture.php.inc'
+        ]);
     }
 
-    public function provideFiles(): Iterator
+    protected function getRectorClass(): string
     {
-        yield [__DIR__ . '/Wrong/wrong.php.inc', __DIR__ . '/Correct/correct.php.inc'];
-    }
-
-    protected function provideConfig(): string
-    {
-        return __DIR__ . '/config.yml';
+        return \Rector\_Package_\Rector\_Category_\_Name_::class;
     }
 }

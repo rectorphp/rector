@@ -9,7 +9,7 @@ final class GetRequestRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
     {
-        $this->doTestFiles([__DIR__ . '/Wrong/wrong2.php.inc']);
+        $this->doTestFiles([__DIR__ . '/Fixture/fixture2.php.inc']);
     }
 
     public function getRectorClass(): string

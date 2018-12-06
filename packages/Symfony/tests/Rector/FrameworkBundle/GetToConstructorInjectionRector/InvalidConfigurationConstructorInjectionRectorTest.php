@@ -16,7 +16,7 @@ final class InvalidConfigurationConstructorInjectionRectorTest extends AbstractR
             'Make sure "kernel_class" parameters is set in rector.yml in "parameters:" section'
         );
 
-        $this->doTestFiles([__DIR__ . '/Wrong/wrong.php.inc']);
+        $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc']);
     }
 
     protected function getRectorClass(): string

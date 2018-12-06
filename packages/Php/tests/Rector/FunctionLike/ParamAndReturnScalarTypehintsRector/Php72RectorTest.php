@@ -13,8 +13,8 @@ final class Php72RectorTest extends AbstractRectorTestCase
     public function test(): void
     {
         $this->doTestFiles([
-            __DIR__ . '/Integration/nikic/object_php72.php.inc',
-            __DIR__ . '/Integration/php-cs-fixer-param/php72_object.php.inc',
+            __DIR__ . '/Fixture/nikic/object_php72.php.inc',
+            __DIR__ . '/Fixture/php-cs-fixer-param/php72_object.php.inc',
         ]);
     }
 

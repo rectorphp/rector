@@ -14,8 +14,7 @@ parameters:
         - '*packages/BetterReflection/tests/Reflector/NotLoadedSource/SomeClass.php'
         - 'packages/NodeTypeResolver/tests/PerNodeTypeResolver/VariableTypeResolver/Source/NewClass.php'
         # tests files
-        - '*tests/**/Wrong/*'
-        - '*tests/**/Correct/*'
+        - '*tests/**/Fixture/*'
         - '*tests/**/Source/*'
         # intetionally original
         - 'packages/Php/src/EregToPcreTransformer.php'

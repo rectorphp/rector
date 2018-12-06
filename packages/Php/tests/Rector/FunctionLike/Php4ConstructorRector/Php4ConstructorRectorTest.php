@@ -14,11 +14,11 @@ final class Php4ConstructorRectorTest extends AbstractRectorTestCase
     public function test(): void
     {
         $this->doTestFiles([
-            __DIR__ . '/Wrong/wrong.php.inc',
-            __DIR__ . '/Wrong/in_namespace.php.inc',
-            __DIR__ . '/Wrong/delegating.php.inc',
-            __DIR__ . '/Wrong/delegating_2.php.inc',
-            __DIR__ . '/Wrong/wrong5.php.inc',
+            __DIR__ . '/Fixture/fixture.php.inc',
+            __DIR__ . '/Fixture/in_namespace.php.inc',
+            __DIR__ . '/Fixture/delegating.php.inc',
+            __DIR__ . '/Fixture/delegating_2.php.inc',
+            __DIR__ . '/Fixture/fixture5.php.inc',
         ]);
     }
 
