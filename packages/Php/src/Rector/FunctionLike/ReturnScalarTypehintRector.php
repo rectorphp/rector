@@ -5,7 +5,6 @@ namespace Rector\Php\Rector\FunctionLike;
 use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use Rector\NodeTypeResolver\Node\Attribute;
@@ -102,18 +101,14 @@ CODE_SAMPLE
             /** @var string $className */
             $className = $node->getAttribute(Attribute::CLASS_NAME);
 
-            /** @var Class_[] $childrenClasses */
-            $childrenClasses = array_merge(
-                $this->classLikeNodeCollector->findChildrenOfClass($className),
-                $this->classLikeNodeCollector->findImplementersOfInterface($className)
-            );
+            $childrenClassLikes = $this->classLikeNodeCollector->findClassesAndInterfacesByType($className);
 
             /** @var string $methodName */
             $methodName = $node->getAttribute(Attribute::METHOD_NAME);
 
             // update their methods as well
-            foreach ($childrenClasses as $childrenClass) {
-                $childrenClassMethod = $childrenClass->getMethod($methodName);
+            foreach ($childrenClassLikes as $childrenClassLike) {
+                $childrenClassMethod = $childrenClassLike->getMethod($methodName);
                 if ($childrenClassMethod === null) {
                     continue;
                 }

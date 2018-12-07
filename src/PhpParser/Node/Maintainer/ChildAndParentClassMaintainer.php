@@ -74,7 +74,8 @@ final class ChildAndParentClassMaintainer
 
     public function completeChildConstructors(Class_ $classNode, ClassMethod $constructorClassMethod): void
     {
-        $childClassNodes = $this->classLikeNodeCollector->findChildrenOfClass($this->nameResolver->resolve($classNode));
+        $className = $this->nameResolver->resolve($classNode);
+        $childClassNodes = $this->classLikeNodeCollector->findChildrenOfClass($className);
 
         foreach ($childClassNodes as $childClassNode) {
             if (! $childClassNode->getMethod('__construct')) {

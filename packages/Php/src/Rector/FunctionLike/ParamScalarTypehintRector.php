@@ -136,16 +136,18 @@ CODE_SAMPLE
 
             // inherit typehint to all children
             if ($node instanceof ClassMethod) {
+
                 /** @var string $className */
                 $className = $node->getAttribute(Attribute::CLASS_NAME);
-                $childrenClasses = $this->classLikeNodeCollector->findChildrenOfClass($className);
+
+                $childrenClassLikes = $this->classLikeNodeCollector->findClassesAndInterfacesByType($className);
 
                 /** @var string $methodName */
                 $methodName = $node->getAttribute(Attribute::METHOD_NAME);
 
                 // update their methods as well
-                foreach ($childrenClasses as $childrenClass) {
-                    $childrenClassMethod = $childrenClass->getMethod($methodName);
+                foreach ($childrenClassLikes as $childrenClassLike) {
+                    $childrenClassMethod = $childrenClassLike->getMethod($methodName);
                     if ($childrenClassMethod) {
                         if (! isset($childrenClassMethod->params[$i])) {
                             continue;
