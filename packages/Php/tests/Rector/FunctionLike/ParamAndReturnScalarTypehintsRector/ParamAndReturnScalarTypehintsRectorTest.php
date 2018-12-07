@@ -20,7 +20,6 @@ final class ParamAndReturnScalarTypehintsRectorTest extends AbstractRectorTestCa
             __DIR__ . '/Fixture/external_scope.php.inc',
             __DIR__ . '/Fixture/local_and_external_scope.php.inc',
             __DIR__ . '/Fixture/local_scope_with_parent_interface.php.inc',
-            __DIR__ . '/Fixture/local_scope_with_parent_interface2.php.inc',
             __DIR__ . '/Fixture/local_scope_with_parent_class.php.inc',
             __DIR__ . '/Fixture/local_scope_with_parent_class2.php.inc',
             __DIR__ . '/Fixture/complex_array.php.inc',

@@ -65,16 +65,16 @@ final class NameResolver
             return 'empty';
         };
 
-        $this->nameResolversPerNode[Class_::class] = function (Class_ $classNode): string {
-            if ($classNode->namespacedName) {
+        $this->nameResolversPerNode[Class_::class] = function (Class_ $classNode): ?string {
+            if (isset($classNode->namespacedName)) {
                 return $classNode->namespacedName->toString();
             }
 
             return $this->resolve($classNode->name);
         };
 
-        $this->nameResolversPerNode[Interface_::class] = function (Interface_ $interfaceNode): string {
-            if ($interfaceNode->namespacedName) {
+        $this->nameResolversPerNode[Interface_::class] = function (Interface_ $interfaceNode): ?string {
+            if (isset($interfaceNode->namespacedName)) {
                 return $interfaceNode->namespacedName->toString();
             }
 
