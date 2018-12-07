@@ -5,6 +5,7 @@ namespace Rector\Php\Rector\FunctionLike;
 use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use Rector\NodeTypeResolver\Node\Attribute;
@@ -99,7 +100,12 @@ CODE_SAMPLE
         if ($node instanceof ClassMethod) {
             /** @var string $className */
             $className = $node->getAttribute(Attribute::CLASS_NAME);
-            $childrenClasses = $this->classLikeNodeCollector->findChildrenOfClass($className);
+
+            /** @var Class_[] $childrenClasses */
+            $childrenClasses = array_merge(
+                $this->classLikeNodeCollector->findChildrenOfClass($className),
+                $this->classLikeNodeCollector->findImplementersOfInterface($className)
+            );
 
             /** @var string $methodName */
             $methodName = $node->getAttribute(Attribute::METHOD_NAME);
@@ -107,25 +113,27 @@ CODE_SAMPLE
             // update their methods as well
             foreach ($childrenClasses as $childrenClass) {
                 $childrenClassMethod = $childrenClass->getMethod($methodName);
-                if ($childrenClassMethod) {
-                    if ($childrenClassMethod->returnType !== null) {
-                        continue;
-                    }
-
-                    if ($returnTypeInfo->getTypeNode() instanceof NullableType) {
-                        $childrenClassMethod->returnType = $returnTypeInfo->getTypeNode();
-                    } elseif ($returnTypeInfo->getTypeNode()->toString() === 'self') {
-                        $childrenClassMethod->returnType = new FullyQualified($className);
-                    } elseif ($returnTypeInfo->getTypeNode()->toString() === 'parent') {
-                        $parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
-                        $childrenClassMethod->returnType = new FullyQualified($parentClassName);
-                    } else {
-                        $childrenClassMethod->returnType = $returnTypeInfo->getTypeNode();
-                    }
-
-                    // let the method now it was changed now
-                    $childrenClassMethod->returnType->setAttribute(self::HAS_NEW_INHERITED_TYPE, true);
+                if ($childrenClassMethod === null) {
+                    continue;
                 }
+
+                if ($childrenClassMethod->returnType !== null) {
+                    continue;
+                }
+
+                if ($returnTypeInfo->getTypeNode() instanceof NullableType) {
+                    $childrenClassMethod->returnType = $returnTypeInfo->getTypeNode();
+                } elseif ($returnTypeInfo->getTypeNode()->toString() === 'self') {
+                    $childrenClassMethod->returnType = new FullyQualified($className);
+                } elseif ($returnTypeInfo->getTypeNode()->toString() === 'parent') {
+                    $parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
+                    $childrenClassMethod->returnType = new FullyQualified($parentClassName);
+                } else {
+                    $childrenClassMethod->returnType = $returnTypeInfo->getTypeNode();
+                }
+
+                // let the method now it was changed now
+                $childrenClassMethod->returnType->setAttribute(self::HAS_NEW_INHERITED_TYPE, true);
             }
         }
 

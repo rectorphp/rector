@@ -58,4 +58,25 @@ final class ClassLikeNodeCollector
 
         return $childrenClasses;
     }
+
+    /**
+     * @return Interface_[]
+     */
+    public function findImplementersOfInterface(string $interfaceName): array
+    {
+        $implementerInterfaces = [];
+        foreach ($this->interfaces as $interfaceNode) {
+            if (! is_a($interfaceNode->getAttribute(Attribute::CLASS_NAME), $interfaceName, true)) {
+                continue;
+            }
+
+            if ($interfaceNode->getAttribute(Attribute::CLASS_NAME) === $interfaceName) {
+                continue;
+            }
+
+            $implementerInterfaces[] = $interfaceNode;
+        }
+
+        return $implementerInterfaces;
+    }
 }

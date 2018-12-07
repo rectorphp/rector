@@ -8,7 +8,9 @@ use PhpParser\Node\Expr\Empty_;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
+use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Use_;
 use Rector\NodeTypeResolver\Node\Attribute;
@@ -61,6 +63,22 @@ final class NameResolver
 
         $this->nameResolversPerNode[Empty_::class] = function (): string {
             return 'empty';
+        };
+
+        $this->nameResolversPerNode[Class_::class] = function (Class_ $classNode): string {
+            if ($classNode->namespacedName) {
+                return $classNode->namespacedName->toString();
+            }
+
+            return $this->resolve($classNode->name);
+        };
+
+        $this->nameResolversPerNode[Interface_::class] = function (Interface_ $interfaceNode): string {
+            if ($interfaceNode->namespacedName) {
+                return $interfaceNode->namespacedName->toString();
+            }
+
+            return $this->resolve($interfaceNode->name);
         };
     }
 

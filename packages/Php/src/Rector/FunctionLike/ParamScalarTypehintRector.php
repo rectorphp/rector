@@ -119,14 +119,13 @@ CODE_SAMPLE
                 continue;
             }
 
-            if ($node instanceof ClassMethod && $this->isChangeVendorLockedIn($node)) {
+            if ($node instanceof ClassMethod && $this->isChangeVendorLockedIn($node, $i)) {
                 continue;
             }
 
             if ($hasNewType) {
                 // should override - is it subtype?
                 $possibleOverrideNewReturnType = $paramTagInfo->getTypeNode();
-
                 if ($this->isSubtypeOf($possibleOverrideNewReturnType, $paramNode->type)) {
                     // allow override
                     $paramNode->type = $paramTagInfo->getTypeNode();

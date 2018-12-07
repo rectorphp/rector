@@ -263,7 +263,7 @@ abstract class AbstractTypeInfo
             return strtolower($type);
         }
 
-        if (strtolower($type) === ['$this']) {
+        if (strtolower($type) === '$this') {
             return strtolower($type);
         }
 

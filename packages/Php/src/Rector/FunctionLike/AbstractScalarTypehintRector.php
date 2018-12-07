@@ -21,6 +21,8 @@ use Rector\Rector\AbstractRector;
  * @see https://github.com/nikic/TypeUtil
  * @see https://github.com/nette/type-fixer
  * @see https://github.com/FriendsOfPHP/PHP-CS-Fixer/issues/3258
+ *
+ * @todo add known PHPStan scope type if possible
  */
 abstract class AbstractScalarTypehintRector extends AbstractRector
 {
@@ -60,7 +62,7 @@ abstract class AbstractScalarTypehintRector extends AbstractRector
         return [Function_::class, ClassMethod::class];
     }
 
-    protected function isChangeVendorLockedIn(ClassMethod $classMethodNode): bool
+    protected function isChangeVendorLockedIn(ClassMethod $classMethodNode, int $paramPosition): bool
     {
         if ($this->hasParentClassOrImplementsInterface($classMethodNode) === false) {
             return false;
@@ -79,6 +81,11 @@ abstract class AbstractScalarTypehintRector extends AbstractRector
                 // @todo validate type is conflicting
                 // parent class method in local scope → it's ok
                 if ($parentMethodNode) {
+                    // parent method has no type → we cannot change it here
+                    if (isset($parentMethodNode->params[$paramPosition]) && $parentMethodNode->params[$paramPosition]->type === null) {
+                        return true;
+                    }
+
                     return false;
                 }
 
