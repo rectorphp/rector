@@ -5,9 +5,11 @@ namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRecto
 class ThisClass
 {
     /**
+     * @param $this $param
+     * @param null|$this $param2
      * @return $this
      */
-    function someFunction()
+    function someFunction($param, $param2)
     {
     }
 }
@@ -21,9 +23,11 @@ namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRecto
 class ThisClass
 {
     /**
+     * @param $this $param
+     * @param null|$this $param2
      * @return $this
      */
-    function someFunction(): self
+    function someFunction(self $param, ?self $param2): self
     {
     }
 }

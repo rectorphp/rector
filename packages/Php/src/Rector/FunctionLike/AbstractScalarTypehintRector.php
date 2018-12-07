@@ -196,7 +196,6 @@ abstract class AbstractScalarTypehintRector extends AbstractRector
             return null;
         }
 
-        // @todo add test for ?self
         if ($nakedType->toString() === 'self') {
             $className = $node->getAttribute(Attribute::CLASS_NAME);
             $type = new FullyQualified($className);
@@ -204,7 +203,6 @@ abstract class AbstractScalarTypehintRector extends AbstractRector
             return $returnTypeInfo->isNullable() ? new NullableType($type) : $type;
         }
 
-        // @todo add test for ?parent
         if ($nakedType->toString() === 'parent') {
             $parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
             $type = new FullyQualified($parentClassName);
