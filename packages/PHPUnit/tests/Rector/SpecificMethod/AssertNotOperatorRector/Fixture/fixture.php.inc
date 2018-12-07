@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\PHPUnit\Tests\Rector\SpecificMethod\AssertNotOperatorRector\Wrong;
+namespace Rector\PHPUnit\Tests\Rector\SpecificMethod\AssertNotOperatorRector\Fixture;
 
 final class MyTest extends \PHPUnit\Framework\TestCase
 {
@@ -16,7 +16,7 @@ final class MyTest extends \PHPUnit\Framework\TestCase
 -----
 <?php
 
-namespace Rector\PHPUnit\Tests\Rector\SpecificMethod\AssertNotOperatorRector\Wrong;
+namespace Rector\PHPUnit\Tests\Rector\SpecificMethod\AssertNotOperatorRector\Fixture;
 
 final class MyTest extends \PHPUnit\Framework\TestCase
 {

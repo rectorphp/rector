@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\PhpParser\Tests\Rector\UseWithAliasRector\Wrong;
+namespace Rector\PhpParser\Tests\Rector\UseWithAliasRector\Fixture;
 
 use PhpParser\Node\Stmt\UseUse;
 
@@ -15,7 +15,7 @@ function useWithAlias()
 -----
 <?php
 
-namespace Rector\PhpParser\Tests\Rector\UseWithAliasRector\Wrong;
+namespace Rector\PhpParser\Tests\Rector\UseWithAliasRector\Fixture;
 
 use PhpParser\Node\Stmt\UseUse;
 

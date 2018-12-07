@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\PhpParser\Tests\Rector\RemoveNodeRector\Wrong;
+namespace Rector\PhpParser\Tests\Rector\RemoveNodeRector\Fixture;
 
 class SomeVisitor extends \PhpParser\NodeVisitorAbstract
 {
@@ -14,7 +14,7 @@ class SomeVisitor extends \PhpParser\NodeVisitorAbstract
 -----
 <?php
 
-namespace Rector\PhpParser\Tests\Rector\RemoveNodeRector\Wrong;
+namespace Rector\PhpParser\Tests\Rector\RemoveNodeRector\Fixture;
 
 class SomeVisitor extends \PhpParser\NodeVisitorAbstract
 {

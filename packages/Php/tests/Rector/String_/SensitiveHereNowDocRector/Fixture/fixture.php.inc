@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php\Tests\Rector\String_\SensitiveHereNowDocRector\Wrong;
+namespace Rector\Php\Tests\Rector\String_\SensitiveHereNowDocRector\Fixture;
 
 function sensitiveHereNowDoc()
 {
@@ -24,7 +24,7 @@ END;
 -----
 <?php
 
-namespace Rector\Php\Tests\Rector\String_\SensitiveHereNowDocRector\Wrong;
+namespace Rector\Php\Tests\Rector\String_\SensitiveHereNowDocRector\Fixture;
 
 function sensitiveHereNowDoc()
 {

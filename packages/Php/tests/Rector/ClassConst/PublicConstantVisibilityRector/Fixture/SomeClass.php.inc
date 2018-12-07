@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php\Tests\Rector\ClassConst\PublicConstantVisibilityRector\Wrong;
+namespace Rector\Php\Tests\Rector\ClassConst\PublicConstantVisibilityRector\Fixture;
 
 final class SomeClass
 {
@@ -15,7 +15,7 @@ final class SomeClass
 -----
 <?php
 
-namespace Rector\Php\Tests\Rector\ClassConst\PublicConstantVisibilityRector\Wrong;
+namespace Rector\Php\Tests\Rector\ClassConst\PublicConstantVisibilityRector\Fixture;
 
 final class SomeClass
 {

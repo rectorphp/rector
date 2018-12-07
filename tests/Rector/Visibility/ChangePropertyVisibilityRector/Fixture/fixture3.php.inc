@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Rector\Visibility\ChangePropertyVisibilityRector\Wrong;
+namespace Rector\Tests\Rector\Visibility\ChangePropertyVisibilityRector\Fixture;
 
 class NormalObject
 {
@@ -11,7 +11,7 @@ class NormalObject
 -----
 <?php
 
-namespace Rector\Tests\Rector\Visibility\ChangePropertyVisibilityRector\Wrong;
+namespace Rector\Tests\Rector\Visibility\ChangePropertyVisibilityRector\Fixture;
 
 class NormalObject
 {

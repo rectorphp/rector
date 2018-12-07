@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\If_\SimplifyIfReturnBoolRetor\Wrong;
+namespace Rector\CodeQuality\Tests\Rector\If_\SimplifyIfReturnBoolRetor\Fixture;
 
 trait ValidatesAttributes
 {
@@ -37,7 +37,7 @@ trait ValidatesAttributes
 -----
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\If_\SimplifyIfReturnBoolRetor\Wrong;
+namespace Rector\CodeQuality\Tests\Rector\If_\SimplifyIfReturnBoolRetor\Fixture;
 
 trait ValidatesAttributes
 {

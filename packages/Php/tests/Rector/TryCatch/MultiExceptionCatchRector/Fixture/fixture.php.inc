@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php\Tests\Rector\TryCatch\MultiExceptionCatchRector\Wrong;
+namespace Rector\Php\Tests\Rector\TryCatch\MultiExceptionCatchRector\Fixture;
 
 function multiExceptionCatch()
 {
@@ -37,7 +37,7 @@ function multiExceptionCatch()
 -----
 <?php
 
-namespace Rector\Php\Tests\Rector\TryCatch\MultiExceptionCatchRector\Wrong;
+namespace Rector\Php\Tests\Rector\TryCatch\MultiExceptionCatchRector\Fixture;
 
 function multiExceptionCatch()
 {

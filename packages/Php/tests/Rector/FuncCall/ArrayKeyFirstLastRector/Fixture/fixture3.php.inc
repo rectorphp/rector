@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php\Tests\Rector\FuncCall\ArrayKeyFirstLastRector\Wrong;
+namespace Rector\Php\Tests\Rector\FuncCall\ArrayKeyFirstLastRector\Fixture;
 
 function someFunction3()
 {
@@ -17,7 +17,7 @@ function someFunction3()
 -----
 <?php
 
-namespace Rector\Php\Tests\Rector\FuncCall\ArrayKeyFirstLastRector\Wrong;
+namespace Rector\Php\Tests\Rector\FuncCall\ArrayKeyFirstLastRector\Fixture;
 
 function someFunction3()
 {

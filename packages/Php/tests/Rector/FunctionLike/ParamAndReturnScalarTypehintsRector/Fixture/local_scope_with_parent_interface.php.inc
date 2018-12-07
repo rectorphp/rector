@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php\Tests\Rector\FunctionLike\ParamAndReturnScalarTypehintsRector\Wrong;
+namespace Rector\Php\Tests\Rector\FunctionLike\ParamAndReturnScalarTypehintsRector\Fixture;
 
 interface SniffInterface
 {
@@ -24,7 +24,7 @@ final class CoolSniffWithLocalinterface implements SniffInterface
 -----
 <?php
 
-namespace Rector\Php\Tests\Rector\FunctionLike\ParamAndReturnScalarTypehintsRector\Wrong;
+namespace Rector\Php\Tests\Rector\FunctionLike\ParamAndReturnScalarTypehintsRector\Fixture;
 
 interface SniffInterface
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php\Tests\Rector\Property\TypedPropertyRector\Wrong;
+namespace Rector\Php\Tests\Rector\Property\TypedPropertyRector\Fixture;
 
 final class DefaultValues
 {
@@ -79,7 +79,7 @@ final class DefaultValues
 -----
 <?php
 
-namespace Rector\Php\Tests\Rector\Property\TypedPropertyRector\Wrong;
+namespace Rector\Php\Tests\Rector\Property\TypedPropertyRector\Fixture;
 
 final class DefaultValues
 {

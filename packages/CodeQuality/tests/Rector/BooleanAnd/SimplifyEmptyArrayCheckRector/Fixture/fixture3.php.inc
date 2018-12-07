@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\FuncCall\SimplifyEmptyArrayCheckRector\Wrong;
+namespace Rector\CodeQuality\Tests\Rector\FuncCall\SimplifyEmptyArrayCheckRector\Fixture;
 
 class SomeClass
 {
@@ -31,7 +31,7 @@ function simplifyEmptyCheck2()
 -----
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\FuncCall\SimplifyEmptyArrayCheckRector\Wrong;
+namespace Rector\CodeQuality\Tests\Rector\FuncCall\SimplifyEmptyArrayCheckRector\Fixture;
 
 class SomeClass
 {

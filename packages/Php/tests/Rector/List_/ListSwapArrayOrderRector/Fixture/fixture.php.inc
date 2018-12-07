@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php\Tests\Rector\List_\ListSwapArrayOrderRector\Wrong;
+namespace Rector\Php\Tests\Rector\List_\ListSwapArrayOrderRector\Fixture;
 
 function listSwapArrayOrder()
 {
@@ -15,7 +15,7 @@ function listSwapArrayOrder()
 -----
 <?php
 
-namespace Rector\Php\Tests\Rector\List_\ListSwapArrayOrderRector\Wrong;
+namespace Rector\Php\Tests\Rector\List_\ListSwapArrayOrderRector\Fixture;
 
 function listSwapArrayOrder()
 {

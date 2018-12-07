@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\CombinedAssignRector\Wrong;
+namespace Rector\CodeQuality\Tests\Rector\CombinedAssignRector\Fixture;
 
 class Whatever
 {
@@ -28,7 +28,7 @@ class Whatever
 -----
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\CombinedAssignRector\Wrong;
+namespace Rector\CodeQuality\Tests\Rector\CombinedAssignRector\Fixture;
 
 class Whatever
 {

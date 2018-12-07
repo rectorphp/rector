@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\Stmt\DeadCodeRemovingRector\Wrong;
+namespace Rector\CodeQuality\Tests\Rector\Stmt\DeadCodeRemovingRector\Fixture;
 
 class SomeClass
 {
@@ -38,7 +38,7 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\Stmt\DeadCodeRemovingRector\Wrong;
+namespace Rector\CodeQuality\Tests\Rector\Stmt\DeadCodeRemovingRector\Fixture;
 
 class SomeClass
 {

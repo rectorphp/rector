@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php\Tests\Rector\Assign\AssignArrayToStringRector\Wrong;
+namespace Rector\Php\Tests\Rector\Assign\AssignArrayToStringRector\Fixture;
 
 class WithSomeInMethodExpressions
 {
@@ -19,7 +19,7 @@ class WithSomeInMethodExpressions
 -----
 <?php
 
-namespace Rector\Php\Tests\Rector\Assign\AssignArrayToStringRector\Wrong;
+namespace Rector\Php\Tests\Rector\Assign\AssignArrayToStringRector\Fixture;
 
 class WithSomeInMethodExpressions
 {

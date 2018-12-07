@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\Form\OptionNameRector\Wrong;
+namespace Rector\Symfony\Tests\Form\OptionNameRector\Fixture;
 
 use Rector\Symfony\Tests\Rector\Form\OptionNameRector\Source\AbstractType;
 use Rector\Symfony\Tests\Rector\Form\OptionNameRector\Source\FormBuilder;
@@ -31,7 +31,7 @@ class RegistrationFormType extends AbstractType
 -----
 <?php
 
-namespace Rector\Symfony\Tests\Form\OptionNameRector\Wrong;
+namespace Rector\Symfony\Tests\Form\OptionNameRector\Fixture;
 
 use Rector\Symfony\Tests\Rector\Form\OptionNameRector\Source\AbstractType;
 use Rector\Symfony\Tests\Rector\Form\OptionNameRector\Source\FormBuilder;

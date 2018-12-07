@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php\Tests\Rector\Assign\AssignArrayToStringRector\Wrong;
+namespace Rector\Php\Tests\Rector\Assign\AssignArrayToStringRector\Fixture;
 
 class WithSomeInMethodPropertySetDefaultAbove
 {
@@ -17,7 +17,7 @@ class WithSomeInMethodPropertySetDefaultAbove
 -----
 <?php
 
-namespace Rector\Php\Tests\Rector\Assign\AssignArrayToStringRector\Wrong;
+namespace Rector\Php\Tests\Rector\Assign\AssignArrayToStringRector\Fixture;
 
 class WithSomeInMethodPropertySetDefaultAbove
 {

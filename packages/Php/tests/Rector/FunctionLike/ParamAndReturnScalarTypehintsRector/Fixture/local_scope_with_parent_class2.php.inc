@@ -1,6 +1,6 @@
 <?php // https://github.com/rectorphp/rector/issues/812
 
-namespace Rector\Php\Tests\Rector\FunctionLike\ParamAndReturnScalarTypehintsRector\Wrong;
+namespace Rector\Php\Tests\Rector\FunctionLike\ParamAndReturnScalarTypehintsRector\Fixture;
 
 final class CreditNoteRefGenerator extends AbstractAccountingRefGenerator
 {

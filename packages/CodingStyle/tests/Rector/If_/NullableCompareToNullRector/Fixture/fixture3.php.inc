@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\If_\NullableCompareToNullRector\Wrong;
+namespace Rector\CodingStyle\Tests\Rector\If_\NullableCompareToNullRector\Fixture;
 
 use stdClass;
 
@@ -25,7 +25,7 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\If_\NullableCompareToNullRector\Wrong;
+namespace Rector\CodingStyle\Tests\Rector\If_\NullableCompareToNullRector\Fixture;
 
 use stdClass;
 

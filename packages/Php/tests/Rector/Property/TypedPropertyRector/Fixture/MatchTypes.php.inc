@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php\Tests\Rector\Property\TypedPropertyRector\Wrong;
+namespace Rector\Php\Tests\Rector\Property\TypedPropertyRector\Fixture;
 
 final class MatchTypes
 {
@@ -59,7 +59,7 @@ final class MatchTypes
 -----
 <?php
 
-namespace Rector\Php\Tests\Rector\Property\TypedPropertyRector\Wrong;
+namespace Rector\Php\Tests\Rector\Property\TypedPropertyRector\Fixture;
 
 final class MatchTypes
 {

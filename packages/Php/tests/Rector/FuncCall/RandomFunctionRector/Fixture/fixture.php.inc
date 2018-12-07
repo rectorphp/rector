@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php\Tests\Rector\FuncCall\RandomFunctionRector\Wrong;
+namespace Rector\Php\Tests\Rector\FuncCall\RandomFunctionRector\Fixture;
 
 function randomFunction()
 {
@@ -31,7 +31,7 @@ function randomFunction()
 -----
 <?php
 
-namespace Rector\Php\Tests\Rector\FuncCall\RandomFunctionRector\Wrong;
+namespace Rector\Php\Tests\Rector\FuncCall\RandomFunctionRector\Fixture;
 
 function randomFunction()
 {

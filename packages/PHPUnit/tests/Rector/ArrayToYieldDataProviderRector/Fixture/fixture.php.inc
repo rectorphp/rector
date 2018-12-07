@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\PHPUnit\Tests\Rector\ArrayToYieldDataProviderRector\Wrong;
+namespace Rector\PHPUnit\Tests\Rector\ArrayToYieldDataProviderRector\Fixture;
 
 use PHPUnit\Framework\TestCase;
 
@@ -21,7 +21,7 @@ final class MyTestCsae extends TestCase
 -----
 <?php
 
-namespace Rector\PHPUnit\Tests\Rector\ArrayToYieldDataProviderRector\Wrong;
+namespace Rector\PHPUnit\Tests\Rector\ArrayToYieldDataProviderRector\Fixture;
 
 use PHPUnit\Framework\TestCase;
 

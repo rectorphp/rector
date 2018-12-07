@@ -36,7 +36,7 @@ final class ChangePropertyVisibilityRectorTest extends AbstractRectorTestCase
                 'toBePrivateProperty' => 'private',
                 'toBePublicStaticProperty' => 'public',
             ],
-            'Rector\Tests\Rector\Visibility\ChangePropertyVisibilityRector\Wrong\NormalObject' => ['toBePublicStaticProperty' => 'public'],
+            'Rector\Tests\Rector\Visibility\ChangePropertyVisibilityRector\Fixture\NormalObject' => ['toBePublicStaticProperty' => 'public'],
         ];
     }
 }

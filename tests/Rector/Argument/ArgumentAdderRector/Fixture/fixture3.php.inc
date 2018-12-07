@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Rector\Argument\ArgumentAdderRector\Wrong;
+namespace Rector\Tests\Rector\Argument\ArgumentAdderRector\Fixture;
 
 use Rector\Tests\Rector\Argument\ArgumentAdderRector\Source\ContainerBuilder;
 
@@ -15,7 +15,7 @@ class CustomContainerBuilder extends ContainerBuilder
 -----
 <?php
 
-namespace Rector\Tests\Rector\Argument\ArgumentAdderRector\Wrong;
+namespace Rector\Tests\Rector\Argument\ArgumentAdderRector\Fixture;
 
 use Rector\Tests\Rector\Argument\ArgumentAdderRector\Source\ContainerBuilder;
 

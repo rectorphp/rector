@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php\Tests\Rector\Property\TypedPropertyRector\Wrong;
+namespace Rector\Php\Tests\Rector\Property\TypedPropertyRector\Fixture;
 
 use Rector\Php\Tests\Rector\Property\TypedPropertyRector\Source\AnotherClass;
 
@@ -21,7 +21,7 @@ final class ClassWithNullableProperty
 -----
 <?php
 
-namespace Rector\Php\Tests\Rector\Property\TypedPropertyRector\Wrong;
+namespace Rector\Php\Tests\Rector\Property\TypedPropertyRector\Fixture;
 
 use Rector\Php\Tests\Rector\Property\TypedPropertyRector\Source\AnotherClass;
 

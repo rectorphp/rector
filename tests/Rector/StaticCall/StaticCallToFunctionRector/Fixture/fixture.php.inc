@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Rector\StaticCall\StaticCallToFunctionRector\Wrong;
+namespace Rector\Tests\Rector\StaticCall\StaticCallToFunctionRector\Fixture;
 
 use Rector\Tests\Rector\StaticCall\StaticCallToFunctionRector\Source\SomeOldStaticClass;
 
@@ -16,7 +16,7 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\Tests\Rector\StaticCall\StaticCallToFunctionRector\Wrong;
+namespace Rector\Tests\Rector\StaticCall\StaticCallToFunctionRector\Fixture;
 
 use Rector\Tests\Rector\StaticCall\StaticCallToFunctionRector\Source\SomeOldStaticClass;
 

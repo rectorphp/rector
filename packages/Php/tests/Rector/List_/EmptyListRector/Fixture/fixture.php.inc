@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php\Tests\Rector\List_\EmptyListRector\Wrong;
+namespace Rector\Php\Tests\Rector\List_\EmptyListRector\Fixture;
 
 class EmptyList
 {
@@ -19,7 +19,7 @@ class EmptyList
 -----
 <?php
 
-namespace Rector\Php\Tests\Rector\List_\EmptyListRector\Wrong;
+namespace Rector\Php\Tests\Rector\List_\EmptyListRector\Fixture;
 
 class EmptyList
 {

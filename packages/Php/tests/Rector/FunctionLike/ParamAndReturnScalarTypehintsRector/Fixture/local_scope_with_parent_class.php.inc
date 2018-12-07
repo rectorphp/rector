@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php\Tests\Rector\FunctionLike\ParamAndReturnScalarTypehintsRector\Wrong;
+namespace Rector\Php\Tests\Rector\FunctionLike\ParamAndReturnScalarTypehintsRector\Fixture;
 
 final class LocalChildClass extends AbstractLocalParentClass
 {
@@ -33,7 +33,7 @@ abstract class AbstractLocalParentClass
 -----
 <?php
 
-namespace Rector\Php\Tests\Rector\FunctionLike\ParamAndReturnScalarTypehintsRector\Wrong;
+namespace Rector\Php\Tests\Rector\FunctionLike\ParamAndReturnScalarTypehintsRector\Fixture;
 
 final class LocalChildClass extends AbstractLocalParentClass
 {

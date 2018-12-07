@@ -1,6 +1,6 @@
 <?php declare (strict_types=1);
 
-namespace Rector\Symfony\Tests\Rector\HttpKernel\GetRequestRector\Wrong;
+namespace Rector\Symfony\Tests\Rector\HttpKernel\GetRequestRector\Fixture;
 
 use Rector\Symfony\Tests\Rector\Source\SymfonyController;
 

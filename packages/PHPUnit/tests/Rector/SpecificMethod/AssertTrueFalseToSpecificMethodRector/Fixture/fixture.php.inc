@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\PHPUnit\Tests\Rector\SpecificMethod\AssertTrueFalseToSpecificMethodRector\Wrong;
+namespace Rector\PHPUnit\Tests\Rector\SpecificMethod\AssertTrueFalseToSpecificMethodRector\Fixture;
 
 abstract class Testing extends \PHPUnit\Framework\TestCase
 {
@@ -30,7 +30,7 @@ final class MyTest extends Testing
 -----
 <?php
 
-namespace Rector\PHPUnit\Tests\Rector\SpecificMethod\AssertTrueFalseToSpecificMethodRector\Wrong;
+namespace Rector\PHPUnit\Tests\Rector\SpecificMethod\AssertTrueFalseToSpecificMethodRector\Fixture;
 
 abstract class Testing extends \PHPUnit\Framework\TestCase
 {

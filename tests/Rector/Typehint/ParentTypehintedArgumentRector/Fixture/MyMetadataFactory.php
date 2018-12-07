@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Rector\Typehint\ParentTypehintedArgumentRector\Wrong;
+namespace Rector\Tests\Rector\Typehint\ParentTypehintedArgumentRector\Fixture;
 
 use Rector\Tests\Rector\Typehint\ParentTypehintedArgumentRector\Source\ClassMetadataFactory;
 
@@ -16,7 +16,7 @@ class MyMetadataFactory extends ClassMetadataFactory
 -----
 <?php
 
-namespace Rector\Tests\Rector\Typehint\ParentTypehintedArgumentRector\Wrong;
+namespace Rector\Tests\Rector\Typehint\ParentTypehintedArgumentRector\Fixture;
 
 use Rector\Tests\Rector\Typehint\ParentTypehintedArgumentRector\Source\ClassMetadataFactory;
 
