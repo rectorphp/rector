@@ -29,7 +29,6 @@ parameters:
         - '#(.*?)\(\) should return Psr\\Container\\ContainerInterface but returns Symfony\\Component\\DependencyInjection\\ContainerInterface\|null#'
 
         # false positives
-        - '#In method "Rector\\Rector\\AbstractRector::(.*?)", parameter \$(.*?) has no type-hint and no \@param annotation#'
         - '#Offset string does not exist on string#' # 1
         - '#Array \(array<array<PhpParser\\Node\\Stmt>>\) does not accept array<PhpParser\\Node\\Stmt|null>#'
         - '#Property Rector\\DependencyInjection\\Loader\\RectorServiceParametersShifter::\$serviceKeywords \(array<string>\) does not accept ReflectionProperty#'
@@ -62,9 +61,6 @@ parameters:
         - '#Cannot call method getText\(\) on PhpParser\\Comment\\Doc\|null#'
 
         # false positive, has annotation type above
-        - '#Parameter \#1 \$node of method Rector\\PHPUnit\\Rector\\Foreach_\\SimplifyForeachInstanceOfRector\:\:resolveVar\(\) expects PhpParser\\Node\\Expr\\MethodCall\|PhpParser\\Node\\Expr\\StaticCall, PhpParser\\Node given#'
-#        - '#Access to an undefined property PhpParser\\Node::\$name#' # 11
-        - '#Access to an undefined property PhpParser\\Node\\Expr::\$expr#'
         - '#Method Rector\\CodeQuality\\Rector\\Foreach_\\SimplifyForeachToCoalescingRector\:\:matchReturnOrAssignNode\(\) should return PhpParser\\Node\\Expr\\Assign\|PhpParser\\Node\\Stmt\\Return_\|null but returns PhpParser\\Node\|null#'
         - '#Access to an undefined property PhpParser\\Node::\$(\w+)#'
         - '#Parameter \#2 \$boolConstFetchNode of method Rector\\CodeQuality\\Rector\\Identical\\SimplifyArraySearchRector::resolveIsNot\(\) expects PhpParser\\Node\\Expr\\ConstFetch, PhpParser\\Node given#'
@@ -72,9 +68,6 @@ parameters:
 
         # false positive, resolved in previous method
         - '#Parameter (.*?) of method Rector\\PhpParser\\Node\\Maintainer\\IdentifierMaintainer\:\:(.*?)\(\) expects PhpParser\\Node\\Expr\\ClassConstFetch\|PhpParser\\Node\\Expr\\MethodCall\|PhpParser\\Node\\Expr\\PropertyFetch\|PhpParser\\Node\\Expr\\StaticCall\|PhpParser\\Node\\Stmt\\ClassMethod, PhpParser\\Node given#'
-
-        # object storages
-        - '#ObjectStorage#'
 
         # subtype
         - '#Property PhpParser\\Node\\Param::\$type \(PhpParser\\Node\\Name|PhpParser\\Node\\NullableType\|string\|null\) does not accept PhpParser\\Node\\Identifier|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType#' # 3
@@ -92,19 +85,13 @@ parameters:
         - '#Method Rector\\Symfony\\Rector\\New_\\StringToArrayArgumentProcessRector::findPreviousNodeAssign\(\) should return PhpParser\\Node\\Expr\\Assign\|null but returns PhpParser\\Node\|null#'
 
         # use of 3rd party factory that returns general type
-        - '#Method Rector\\Node\\NodeFactory::(.*?)\(\) should return PhpParser\\Node\\(.*?) but returns PhpParser\\Node(.*?)#' # 1
-        - '#Method Rector\\Utils\\BetterNodeFinder::findFirstAncestorInstanceOf\(\) should return PhpParser\\Node\|null but returns object#' # 1
         - '#Property Rector\\NodeTypeResolver\\NodeVisitor\\NamespaceNodeVisitor::\$useNodes \(array<PhpParser\\Node\\Stmt\\Use_>\) does not accept array<PhpParser\\Node>#' # 1
 
         # ...variadic false positive
-        - '#In method "Rector\\Node\\NodeFactory::createArray", parameter \$items can be type-hinted to "array"#'
         - '#In method (.*?) type is "array". Please provide a \@(param|return) annotation to further specify the type of the array. For instance: \@(param|return) int\[\]#'
 
         # not really needed, empty
         - '#Rector\\PhpParser\\NodeTraverser\\RectorNodeTraverser::__construct\(\) does not call parent constructor from PhpParser\\NodeTraverser#'
-
-        # intentionally
-        - '#In method "(.*?)", caught "Throwable" must be rethrown. Either catch a more specific exception or add a "throw" clause in the "catch" block to propagate the exception#'
 
 services:
     -
