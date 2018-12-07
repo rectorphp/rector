@@ -187,7 +187,6 @@ final class ProcessCommand extends Command
         $this->processFileInfos($phpFileInfos, (bool) $input->getOption(Option::HIDE_AUTOLOAD_ERRORS));
 
         $this->processCommandReporter->reportFileDiffs($this->fileDiffs);
-        $this->processCommandReporter->reportChangedFiles(array_keys($this->fileDiffs));
 
         if ($this->errorCollector->getErrors()) {
             $this->processCommandReporter->reportErrors($this->errorCollector->getErrors());

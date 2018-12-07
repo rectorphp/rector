@@ -6,7 +6,6 @@ use Rector\Application\Error;
 use Rector\Reporting\FileDiff;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use function Safe\ksort;
-use function Safe\sort;
 use function Safe\sprintf;
 
 final class ProcessCommandReporter
@@ -19,23 +18,6 @@ final class ProcessCommandReporter
     public function __construct(SymfonyStyle $symfonyStyle)
     {
         $this->symfonyStyle = $symfonyStyle;
-    }
-
-    /**
-     * @param string[] $changedFiles
-     */
-    public function reportChangedFiles(array $changedFiles): void
-    {
-        if (count($changedFiles) <= 0) {
-            return;
-        }
-
-        sort($changedFiles);
-
-        $this->symfonyStyle->title(
-            sprintf('%d Changed file%s', count($changedFiles), count($changedFiles) === 1 ? '' : 's')
-        );
-        $this->symfonyStyle->listing($changedFiles);
     }
 
     /**
