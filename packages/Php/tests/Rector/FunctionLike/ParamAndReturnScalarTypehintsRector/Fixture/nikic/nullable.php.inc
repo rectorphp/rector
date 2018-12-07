@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Integration\Nikic\Nullable;
+namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Fixture\Nikic\Nullable;
 
 /** @return Foo|null */
 function test() {}
@@ -15,7 +15,7 @@ function test2($a, $b = null) {}
 -----
 <?php
 
-namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Integration\Nikic\Nullable;
+namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Fixture\Nikic\Nullable;
 
 /** @return Foo|null */
 function test(): ?Foo {}

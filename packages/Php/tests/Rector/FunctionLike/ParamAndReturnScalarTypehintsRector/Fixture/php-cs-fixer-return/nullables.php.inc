@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Integration\PhpCsFixerReturn\Nullables;
+namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Fixture\PhpCsFixerReturn\Nullables;
 
 /** @return null|Bar */ function my_foo() {}
 /** @return Bar|null */ function my_foo2() {}
@@ -11,7 +11,7 @@ namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRecto
 -----
 <?php
 
-namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Integration\PhpCsFixerReturn\Nullables;
+namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Fixture\PhpCsFixerReturn\Nullables;
 
 /** @return null|Bar */ function my_foo(): ?Bar {}
 /** @return Bar|null */ function my_foo2(): ?Bar {}

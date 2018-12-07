@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Integration\PhpCsFixerParam\Nullable;
+namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Fixture\PhpCsFixerParam\Nullable;
 
 /** @param null|bool $foo */ function my_foo($foo) {}
 /** @param null|Foo $foo */ function my_foo2($foo) {}
@@ -12,7 +12,7 @@ namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRecto
 -----
 <?php
 
-namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Integration\PhpCsFixerParam\Nullable;
+namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Fixture\PhpCsFixerParam\Nullable;
 
 /** @param null|bool $foo */ function my_foo(?bool $foo) {}
 /** @param null|Foo $foo */ function my_foo2(?Foo $foo) {}

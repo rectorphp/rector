@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Integration\SelfInheritance;
+namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Fixture\SelfInheritance;
 
 class P {}
 
@@ -22,7 +22,7 @@ class B extends A {
 -----
 <?php
 
-namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Integration\SelfInheritance;
+namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Fixture\SelfInheritance;
 
 class P {}
 
@@ -35,9 +35,9 @@ class A extends P {
 }
 
 class B extends A {
-    public function foo(): \Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Integration\SelfInheritance\A {}
+    public function foo(): \Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Fixture\SelfInheritance\A {}
 
-    public function bar(): \Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Integration\SelfInheritance\P {}
+    public function bar(): \Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Fixture\SelfInheritance\P {}
 }
 
 ?>

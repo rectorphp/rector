@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Integration\PhpCsFixerParam\Number;
+namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Fixture\PhpCsFixerParam\Number;
 
 /** @param float $bar */ function my_foo($bar) {}
 
@@ -10,7 +10,7 @@ namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRecto
 -----
 <?php
 
-namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Integration\PhpCsFixerParam\Number;
+namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Fixture\PhpCsFixerParam\Number;
 
 /** @param float $bar */ function my_foo(float $bar) {}
 

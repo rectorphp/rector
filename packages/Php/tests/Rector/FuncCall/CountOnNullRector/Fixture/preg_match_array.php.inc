@@ -1,6 +1,6 @@
 <?php // @covers https://github.com/rectorphp/rector/issues/786
 
-namespace Rector\Php\Tests\Rector\FuncCall\CountOnNullRector\Integration;
+namespace Rector\Php\Tests\Rector\FuncCall\CountOnNullRector\Fixture;
 
 function pregMatchArray()
 {

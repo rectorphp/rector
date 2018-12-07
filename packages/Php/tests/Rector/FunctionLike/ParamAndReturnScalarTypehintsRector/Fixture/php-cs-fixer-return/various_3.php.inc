@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Integration\PhpCsFixerReturn\Various3;
+namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Fixture\PhpCsFixerReturn\Various3;
 
 /** @return void */ function my_foo() {}
 /** @return iterable */ function my_foo2() {}
@@ -13,7 +13,7 @@ namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRecto
 -----
 <?php
 
-namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Integration\PhpCsFixerReturn\Various3;
+namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Fixture\PhpCsFixerReturn\Various3;
 
 /** @return void */ function my_foo(): void {}
 /** @return iterable */ function my_foo2(): iterable {}

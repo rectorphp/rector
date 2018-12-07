@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Integration\PhpCsFixerParam\TypehintAlreadyDefinedWithWrongPhpdocTypehint;
+namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Fixture\PhpCsFixerParam\TypehintAlreadyDefinedWithWrongPhpdocTypehint;
 
 /**
  * @param string $bar
@@ -15,7 +15,7 @@ function my_foo($bar, $baz, $tab) {}
 -----
 <?php
 
-namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Integration\PhpCsFixerParam\TypehintAlreadyDefinedWithWrongPhpdocTypehint;
+namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Fixture\PhpCsFixerParam\TypehintAlreadyDefinedWithWrongPhpdocTypehint;
 
 /**
  * @param string $bar

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php\Tests\Rector\FunctionLike\ParamAndReturnScalarTypehintsRector\Integration\ComplextArray;
+namespace Rector\Php\Tests\Rector\FunctionLike\ParamAndReturnScalarTypehintsRector\Fixture\ComplextArray;
 
 /**
  * @param null|Foo[] $one
@@ -32,7 +32,7 @@ function someFunction3()
 -----
 <?php
 
-namespace Rector\Php\Tests\Rector\FunctionLike\ParamAndReturnScalarTypehintsRector\Integration\ComplextArray;
+namespace Rector\Php\Tests\Rector\FunctionLike\ParamAndReturnScalarTypehintsRector\Fixture\ComplextArray;
 
 /**
  * @param null|Foo[] $one
