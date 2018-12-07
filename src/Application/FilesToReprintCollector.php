@@ -11,7 +11,7 @@ final class FilesToReprintCollector
      */
     private $fileInfos = [];
 
-    public function addFileInfoWithNewTokens(SmartFileInfo $smartFileInfo): void
+    public function addFileInfo(SmartFileInfo $smartFileInfo): void
     {
         $this->fileInfos[$smartFileInfo->getRealPath()] = $smartFileInfo;
     }

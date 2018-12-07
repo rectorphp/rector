@@ -8,6 +8,7 @@ use PhpParser\Node\Stmt\Function_;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
 final class ParamScalarTypehintRector extends AbstractScalarTypehintRector
 {
@@ -136,7 +137,6 @@ CODE_SAMPLE
 
             // inherit typehint to all children
             if ($node instanceof ClassMethod) {
-
                 /** @var string $className */
                 $className = $node->getAttribute(Attribute::CLASS_NAME);
 
@@ -154,12 +154,19 @@ CODE_SAMPLE
                         }
 
                         $childrenClassMethodParam = $childrenClassMethod->params[$i];
-
-                        if ($childrenClassMethodParam->type === null) {
-                            $childrenClassMethodParam->type = $paramTagInfo->getTypeNode();
-                            // let the method know it was changed now
-                            $childrenClassMethodParam->type->setAttribute(self::HAS_NEW_INHERITED_TYPE, true);
+                        if ($childrenClassMethodParam->type !== null) {
+                            continue;
                         }
+
+                        $childrenClassMethodParam->type = $paramTagInfo->getTypeNode();
+                        // let the method know it was changed now
+                        $childrenClassMethodParam->type->setAttribute(self::HAS_NEW_INHERITED_TYPE, true);
+
+                        // reprint the file
+                        /** @var SmartFileInfo $fileInfo */
+                        $fileInfo = $childrenClassMethod->getAttribute(Attribute::FILE_INFO);
+
+                        $this->filesToReprintCollector->addFileInfo($fileInfo);
                     }
                 }
             }
