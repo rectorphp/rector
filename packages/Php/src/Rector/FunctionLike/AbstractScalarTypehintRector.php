@@ -4,7 +4,9 @@ namespace Rector\Php\Rector\FunctionLike;
 
 use PhpParser\Node;
 use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -13,6 +15,7 @@ use PhpParser\Node\Stmt\Interface_;
 use Rector\Application\FilesToReprintCollector;
 use Rector\NodeTypeResolver\Application\ClassLikeNodeCollector;
 use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Php\AbstractTypeInfo;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\Php\PhpTypeSupport;
 use Rector\Rector\AbstractRector;
@@ -174,6 +177,50 @@ abstract class AbstractScalarTypehintRector extends AbstractRector
         return false;
     }
 
+    /**
+     * @param ClassMethod|Param $childClassMethodOrParam
+     * @return Name|NullableType|null
+     */
+    protected function resolveChildType(
+        AbstractTypeInfo $returnTypeInfo,
+        Node $node,
+        Node $childClassMethodOrParam
+    ): ?Node {
+        if ($returnTypeInfo->getTypeNode() instanceof NullableType) {
+            $nakedType = $returnTypeInfo->getTypeNode()->type;
+        } else {
+            $nakedType = $returnTypeInfo->getTypeNode();
+        }
+
+        if ($nakedType === null) {
+            return null;
+        }
+
+        // @todo add test for ?self
+        if ($nakedType->toString() === 'self') {
+            $className = $node->getAttribute(Attribute::CLASS_NAME);
+            $type = new FullyQualified($className);
+
+            return $returnTypeInfo->isNullable() ? new NullableType($type) : $type;
+        }
+
+        // @todo add test for ?parent
+        if ($nakedType->toString() === 'parent') {
+            $parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
+            $type = new FullyQualified($parentClassName);
+
+            return $returnTypeInfo->isNullable() ? new NullableType($type) : $type;
+        }
+
+        // is namespace the same? use short name
+        if ($this->haveSameNamespace($node, $childClassMethodOrParam)) {
+            return $returnTypeInfo->getTypeNode();
+        }
+
+        // are namespaces different? → FQN name
+        return $returnTypeInfo->getFqnTypeNode();
+    }
+
     private function hasParentClassOrImplementsInterface(ClassMethod $classMethodNode): bool
     {
         /** @var ClassLike|null $classNode */
@@ -193,6 +240,12 @@ abstract class AbstractScalarTypehintRector extends AbstractRector
         }
 
         return false;
+    }
+
+    private function haveSameNamespace(Node $firstNode, Node $secondNode): bool
+    {
+        return $firstNode->getAttribute(Attribute::NAMESPACE_NAME)
+            === $secondNode->getAttribute(Attribute::NAMESPACE_NAME);
     }
 
     /**

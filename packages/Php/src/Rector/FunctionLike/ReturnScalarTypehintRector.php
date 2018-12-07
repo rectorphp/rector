@@ -3,8 +3,6 @@
 namespace Rector\Php\Rector\FunctionLike;
 
 use PhpParser\Node;
-use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use Rector\NodeTypeResolver\Node\Attribute;
@@ -107,33 +105,25 @@ CODE_SAMPLE
             $methodName = $node->getAttribute(Attribute::METHOD_NAME);
 
             // update their methods as well
-            foreach ($childrenClassLikes as $childrenClassLike) {
-                $childrenClassMethod = $childrenClassLike->getMethod($methodName);
-                if ($childrenClassMethod === null) {
+            foreach ($childrenClassLikes as $childClassLike) {
+                $childClassMethod = $childClassLike->getMethod($methodName);
+                if ($childClassMethod === null) {
                     continue;
                 }
 
-                if ($childrenClassMethod->returnType !== null) {
+                // already has a type
+                if ($childClassMethod->returnType !== null) {
                     continue;
                 }
 
-                if ($returnTypeInfo->getTypeNode() instanceof NullableType) {
-                    $childrenClassMethod->returnType = $returnTypeInfo->getTypeNode();
-                } elseif ($returnTypeInfo->getTypeNode()->toString() === 'self') {
-                    $childrenClassMethod->returnType = new FullyQualified($className);
-                } elseif ($returnTypeInfo->getTypeNode()->toString() === 'parent') {
-                    $parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
-                    $childrenClassMethod->returnType = new FullyQualified($parentClassName);
-                } else {
-                    $childrenClassMethod->returnType = $returnTypeInfo->getTypeNode();
-                }
+                $childClassMethod->returnType = $this->resolveChildType($returnTypeInfo, $node, $childClassMethod);
 
                 // let the method now it was changed now
-                $childrenClassMethod->returnType->setAttribute(self::HAS_NEW_INHERITED_TYPE, true);
+                $childClassMethod->returnType->setAttribute(self::HAS_NEW_INHERITED_TYPE, true);
 
                 // reprint the file
                 /** @var SmartFileInfo $fileInfo */
-                $fileInfo = $childrenClassMethod->getAttribute(Attribute::FILE_INFO);
+                $fileInfo = $childClassMethod->getAttribute(Attribute::FILE_INFO);
 
                 $this->filesToReprintCollector->addFileInfo($fileInfo);
             }

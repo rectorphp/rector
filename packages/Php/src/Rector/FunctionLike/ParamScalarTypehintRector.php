@@ -146,25 +146,26 @@ CODE_SAMPLE
                 $methodName = $node->getAttribute(Attribute::METHOD_NAME);
 
                 // update their methods as well
-                foreach ($childrenClassLikes as $childrenClassLike) {
-                    $childrenClassMethod = $childrenClassLike->getMethod($methodName);
-                    if ($childrenClassMethod) {
-                        if (! isset($childrenClassMethod->params[$i])) {
+                foreach ($childrenClassLikes as $childClassLike) {
+                    $childClassMethod = $childClassLike->getMethod($methodName);
+                    if ($childClassMethod) {
+                        if (! isset($childClassMethod->params[$i])) {
                             continue;
                         }
 
-                        $childrenClassMethodParam = $childrenClassMethod->params[$i];
-                        if ($childrenClassMethodParam->type !== null) {
+                        $childClassMethodParam = $childClassMethod->params[$i];
+                        if ($childClassMethodParam->type !== null) {
                             continue;
                         }
 
-                        $childrenClassMethodParam->type = $paramTagInfo->getTypeNode();
+                        $childClassMethodParam->type = $this->resolveChildType($paramTagInfo, $node, $paramNode);
+
                         // let the method know it was changed now
-                        $childrenClassMethodParam->type->setAttribute(self::HAS_NEW_INHERITED_TYPE, true);
+                        $childClassMethodParam->type->setAttribute(self::HAS_NEW_INHERITED_TYPE, true);
 
                         // reprint the file
                         /** @var SmartFileInfo $fileInfo */
-                        $fileInfo = $childrenClassMethod->getAttribute(Attribute::FILE_INFO);
+                        $fileInfo = $childClassMethod->getAttribute(Attribute::FILE_INFO);
 
                         $this->filesToReprintCollector->addFileInfo($fileInfo);
                     }
