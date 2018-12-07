@@ -24,6 +24,6 @@ final class AppliedRectorCollector
      */
     public function getRectorClasses(): array
     {
-        return $this->rectorClasses;
+        return array_unique($this->rectorClasses);
     }
 }
