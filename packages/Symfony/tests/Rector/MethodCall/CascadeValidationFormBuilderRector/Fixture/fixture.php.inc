@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\MethodCall\CascadeValidationFormBuilderRector\Wrong;
+namespace Rector\Symfony\Tests\Rector\MethodCall\CascadeValidationFormBuilderRector\Fixture;
 
 class SomeController
 {
@@ -28,7 +28,7 @@ class SomeController
 -----
 <?php
 
-namespace Rector\Symfony\Tests\Rector\MethodCall\CascadeValidationFormBuilderRector\Wrong;
+namespace Rector\Symfony\Tests\Rector\MethodCall\CascadeValidationFormBuilderRector\Fixture;
 
 class SomeController
 {

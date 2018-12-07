@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Rector\MethodCall\MethodNameReplacerRector\Wrong;
+namespace Rector\Tests\Rector\MethodCall\MethodNameReplacerRector\Fixture;
 
 use Nette\Utils\Html;
 
@@ -17,7 +17,7 @@ class SomeClass4
 -----
 <?php
 
-namespace Rector\Tests\Rector\MethodCall\MethodNameReplacerRector\Wrong;
+namespace Rector\Tests\Rector\MethodCall\MethodNameReplacerRector\Fixture;
 
 use Nette\Utils\Html;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Integration\PhpCsFixerReturn\Skip;
+namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Fixture\PhpCsFixerReturn\Skip;
 
 /** @return resource */
 function my_foo() {}

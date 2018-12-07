@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\HttpKernel\GetRequestRector\Wrong;
+namespace Rector\Symfony\Tests\Rector\HttpKernel\GetRequestRector\Fixture;
 
 use Rector\Symfony\Tests\Rector\Source\SymfonyController;
 use Symfony\TestCase\Request;
@@ -17,7 +17,7 @@ class ClassWithParameterPresent extends SymfonyController
 -----
 <?php
 
-namespace Rector\Symfony\Tests\Rector\HttpKernel\GetRequestRector\Wrong;
+namespace Rector\Symfony\Tests\Rector\HttpKernel\GetRequestRector\Fixture;
 
 use Rector\Symfony\Tests\Rector\Source\SymfonyController;
 use Symfony\TestCase\Request;

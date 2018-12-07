@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php\Tests\Rector\FuncCall\EregToPregMatchRector\Wrong;
+namespace Rector\Php\Tests\Rector\FuncCall\EregToPregMatchRector\Fixture;
 
 function eregToPregMatch4()
 {
@@ -15,7 +15,7 @@ function eregToPregMatch4()
 -----
 <?php
 
-namespace Rector\Php\Tests\Rector\FuncCall\EregToPregMatchRector\Wrong;
+namespace Rector\Php\Tests\Rector\FuncCall\EregToPregMatchRector\Fixture;
 
 function eregToPregMatch4()
 {

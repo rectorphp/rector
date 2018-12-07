@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\Controller\AddFlashRector\Wrong;
+namespace Rector\Symfony\Tests\Rector\Controller\AddFlashRector\Fixture;
 
 use Symfony\Component\HttpFoundation\Request;
 
@@ -16,7 +16,7 @@ class AnyClass2
 -----
 <?php
 
-namespace Rector\Symfony\Tests\Rector\Controller\AddFlashRector\Wrong;
+namespace Rector\Symfony\Tests\Rector\Controller\AddFlashRector\Fixture;
 
 use Symfony\Component\HttpFoundation\Request;
 

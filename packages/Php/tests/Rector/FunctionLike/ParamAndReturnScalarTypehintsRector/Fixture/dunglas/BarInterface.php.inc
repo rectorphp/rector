@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Integration\Dunglas;
+namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Fixture\Dunglas;
 
 interface BarInterface
 {
@@ -16,7 +16,7 @@ interface BarInterface
 -----
 <?php
 
-namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Integration\Dunglas;
+namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Fixture\Dunglas;
 
 interface BarInterface
 {

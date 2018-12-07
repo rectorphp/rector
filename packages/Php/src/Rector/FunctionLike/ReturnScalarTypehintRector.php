@@ -3,13 +3,12 @@
 namespace Rector\Php\Rector\FunctionLike;
 
 use PhpParser\Node;
-use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
 final class ReturnScalarTypehintRector extends AbstractScalarTypehintRector
 {
@@ -99,33 +98,34 @@ CODE_SAMPLE
         if ($node instanceof ClassMethod) {
             /** @var string $className */
             $className = $node->getAttribute(Attribute::CLASS_NAME);
-            $childrenClasses = $this->classLikeNodeCollector->findChildrenOfClass($className);
+
+            $childrenClassLikes = $this->classLikeNodeCollector->findClassesAndInterfacesByType($className);
 
             /** @var string $methodName */
             $methodName = $node->getAttribute(Attribute::METHOD_NAME);
 
             // update their methods as well
-            foreach ($childrenClasses as $childrenClass) {
-                $childrenClassMethod = $childrenClass->getMethod($methodName);
-                if ($childrenClassMethod) {
-                    if ($childrenClassMethod->returnType !== null) {
-                        continue;
-                    }
-
-                    if ($returnTypeInfo->getTypeNode() instanceof NullableType) {
-                        $childrenClassMethod->returnType = $returnTypeInfo->getTypeNode();
-                    } elseif ($returnTypeInfo->getTypeNode()->toString() === 'self') {
-                        $childrenClassMethod->returnType = new FullyQualified($className);
-                    } elseif ($returnTypeInfo->getTypeNode()->toString() === 'parent') {
-                        $parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
-                        $childrenClassMethod->returnType = new FullyQualified($parentClassName);
-                    } else {
-                        $childrenClassMethod->returnType = $returnTypeInfo->getTypeNode();
-                    }
-
-                    // let the method now it was changed now
-                    $childrenClassMethod->returnType->setAttribute(self::HAS_NEW_INHERITED_TYPE, true);
+            foreach ($childrenClassLikes as $childClassLike) {
+                $childClassMethod = $childClassLike->getMethod($methodName);
+                if ($childClassMethod === null) {
+                    continue;
                 }
+
+                // already has a type
+                if ($childClassMethod->returnType !== null) {
+                    continue;
+                }
+
+                $childClassMethod->returnType = $this->resolveChildType($returnTypeInfo, $node, $childClassMethod);
+
+                // let the method now it was changed now
+                $childClassMethod->returnType->setAttribute(self::HAS_NEW_INHERITED_TYPE, true);
+
+                // reprint the file
+                /** @var SmartFileInfo $fileInfo */
+                $fileInfo = $childClassMethod->getAttribute(Attribute::FILE_INFO);
+
+                $this->filesToReprintCollector->addFileInfo($fileInfo);
             }
         }
 

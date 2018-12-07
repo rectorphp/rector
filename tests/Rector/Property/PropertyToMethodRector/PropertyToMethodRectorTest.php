@@ -28,7 +28,7 @@ final class PropertyToMethodRectorTest extends AbstractRectorTestCase
                 'get' => 'getLocale',
                 'set' => 'setLocale',
             ]],
-            'Rector\Tests\Rector\Property\PropertyToMethodRector\Wrong\SomeClassWithParameters' => ['parameter' => ['get' => [
+            'Rector\Tests\Rector\Property\PropertyToMethodRector\Fixture\SomeClassWithParameters' => ['parameter' => ['get' => [
                 'method' => 'getConfig',
                 'arguments' => ['parameter'],
             ]]],

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\Console\ConsoleExceptionToErrorEventConstantRector\Wrong;
+namespace Rector\Symfony\Tests\Rector\Console\ConsoleExceptionToErrorEventConstantRector\Fixture;
 
 final class SomeSubscriber
 {
@@ -17,7 +17,7 @@ final class SomeSubscriber
 -----
 <?php
 
-namespace Rector\Symfony\Tests\Rector\Console\ConsoleExceptionToErrorEventConstantRector\Wrong;
+namespace Rector\Symfony\Tests\Rector\Console\ConsoleExceptionToErrorEventConstantRector\Fixture;
 
 final class SomeSubscriber
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\PHPUnit\Tests\Rector\DelegateExceptionArgumentsRector\Wrong;
+namespace Rector\PHPUnit\Tests\Rector\DelegateExceptionArgumentsRector\Fixture;
 
 final class MyTest extends \PHPUnit\Framework\TestCase
 {
@@ -15,7 +15,7 @@ final class MyTest extends \PHPUnit\Framework\TestCase
 -----
 <?php
 
-namespace Rector\PHPUnit\Tests\Rector\DelegateExceptionArgumentsRector\Wrong;
+namespace Rector\PHPUnit\Tests\Rector\DelegateExceptionArgumentsRector\Fixture;
 
 final class MyTest extends \PHPUnit\Framework\TestCase
 {

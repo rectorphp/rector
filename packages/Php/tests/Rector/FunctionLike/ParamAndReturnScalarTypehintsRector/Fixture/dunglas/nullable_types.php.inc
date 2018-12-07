@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Integration\Dunglas\NullableTypes;
+namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Fixture\Dunglas\NullableTypes;
 
 /**
  * Must be converted.
@@ -80,7 +80,7 @@ function foobat(int $a = null)
 -----
 <?php
 
-namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Integration\Dunglas\NullableTypes;
+namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Fixture\Dunglas\NullableTypes;
 
 /**
  * Must be converted.

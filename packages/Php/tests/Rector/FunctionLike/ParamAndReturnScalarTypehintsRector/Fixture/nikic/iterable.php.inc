@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Integration\Iterable;
+namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Fixture\Iterable;
 
 class A {
     /** @return iterable */
@@ -20,7 +20,7 @@ function test2($a) {}
 -----
 <?php
 
-namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Integration\Iterable;
+namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Fixture\Iterable;
 
 class A {
     /** @return iterable */

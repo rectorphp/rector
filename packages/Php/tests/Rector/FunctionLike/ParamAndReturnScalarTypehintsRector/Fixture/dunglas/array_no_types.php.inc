@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Integration\Dunglas;
+namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Fixture\Dunglas;
 
 # Typed arrays get simply converted to array
 /**
@@ -16,7 +16,7 @@ function array_no_types($ints, $strings, $someClasses) {
 -----
 <?php
 
-namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Integration\Dunglas;
+namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Fixture\Dunglas;
 
 # Typed arrays get simply converted to array
 /**

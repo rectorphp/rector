@@ -43,6 +43,11 @@ final class FileProcessor
      */
     private $currentFileInfoProvider;
 
+    /**
+     * @var mixed[][]
+     */
+    private $tokensByFilePath = [];
+
     public function __construct(
         FormatPerservingPrinter $formatPerservingPrinter,
         Parser $parser,
@@ -65,6 +70,17 @@ final class FileProcessor
 
         [$newStmts, $oldStmts, $oldTokens] = $this->parseAndTraverseFileInfoToNodes($smartFileInfo);
 
+        // store tokens by absolute path, so we don't have to print them right now
+        $this->tokensByFilePath[$smartFileInfo->getRealPath()] = [$newStmts, $oldStmts, $oldTokens];
+
+        return $this->formatPerservingPrinter->printToFile($smartFileInfo, $newStmts, $oldStmts, $oldTokens);
+    }
+
+    public function reprintFile(SmartFileInfo $smartFileInfo): string
+    {
+        // restore tokens
+        [$newStmts, $oldStmts, $oldTokens] = $this->tokensByFilePath[$smartFileInfo->getRealPath()];
+
         return $this->formatPerservingPrinter->printToFile($smartFileInfo, $newStmts, $oldStmts, $oldTokens);
     }
 
@@ -76,6 +92,20 @@ final class FileProcessor
         $this->currentFileInfoProvider->setCurrentFileInfo($smartFileInfo);
 
         [$newStmts, $oldStmts, $oldTokens] = $this->parseAndTraverseFileInfoToNodes($smartFileInfo);
+
+        // store tokens by absolute path, so we don't have to print them right now
+        $this->tokensByFilePath[$smartFileInfo->getRealPath()] = [$newStmts, $oldStmts, $oldTokens];
+
+        return $this->formatPerservingPrinter->printToString($newStmts, $oldStmts, $oldTokens);
+    }
+
+    /**
+     * See https://github.com/nikic/PHP-Parser/issues/344#issuecomment-298162516.
+     */
+    public function reprintToString(SmartFileInfo $smartFileInfo): string
+    {
+        // restore tokens
+        [$newStmts, $oldStmts, $oldTokens] = $this->tokensByFilePath[$smartFileInfo->getRealPath()];
 
         return $this->formatPerservingPrinter->printToString($newStmts, $oldStmts, $oldTokens);
     }

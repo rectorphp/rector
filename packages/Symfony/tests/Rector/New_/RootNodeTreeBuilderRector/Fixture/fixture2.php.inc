@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\New_\RootNodeTreeBuilderRector\Wrong;
+namespace Rector\Symfony\Tests\Rector\New_\RootNodeTreeBuilderRector\Fixture;
 
 use Rector\Symfony\Tests\Rector\New_\RootNodeTreeBuilderRector\Source\TreeBuilder;
 
@@ -17,7 +17,7 @@ class SomeConfiguration2
 -----
 <?php
 
-namespace Rector\Symfony\Tests\Rector\New_\RootNodeTreeBuilderRector\Wrong;
+namespace Rector\Symfony\Tests\Rector\New_\RootNodeTreeBuilderRector\Fixture;
 
 use Rector\Symfony\Tests\Rector\New_\RootNodeTreeBuilderRector\Source\TreeBuilder;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Rector\MethodCall\MethodNameReplacerRector\Wrong;
+namespace Rector\Tests\Rector\MethodCall\MethodNameReplacerRector\Fixture;
 
 class SomeClass
 {
@@ -15,7 +15,7 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\Tests\Rector\MethodCall\MethodNameReplacerRector\Wrong;
+namespace Rector\Tests\Rector\MethodCall\MethodNameReplacerRector\Fixture;
 
 class SomeClass
 {

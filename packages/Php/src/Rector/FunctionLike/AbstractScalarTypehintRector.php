@@ -4,14 +4,18 @@ namespace Rector\Php\Rector\FunctionLike;
 
 use PhpParser\Node;
 use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Interface_;
+use Rector\Application\FilesToReprintCollector;
 use Rector\NodeTypeResolver\Application\ClassLikeNodeCollector;
 use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Php\AbstractTypeInfo;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\Php\PhpTypeSupport;
 use Rector\Rector\AbstractRector;
@@ -21,6 +25,8 @@ use Rector\Rector\AbstractRector;
  * @see https://github.com/nikic/TypeUtil
  * @see https://github.com/nette/type-fixer
  * @see https://github.com/FriendsOfPHP/PHP-CS-Fixer/issues/3258
+ *
+ * @todo add known PHPStan scope type if possible
  */
 abstract class AbstractScalarTypehintRector extends AbstractRector
 {
@@ -39,9 +45,15 @@ abstract class AbstractScalarTypehintRector extends AbstractRector
      */
     protected $classLikeNodeCollector;
 
+    /**
+     * @var FilesToReprintCollector
+     */
+    protected $filesToReprintCollector;
+
     public function __construct(
         DocBlockAnalyzer $docBlockAnalyzer,
         ClassLikeNodeCollector $classLikeNodeCollector,
+        FilesToReprintCollector $filesToReprintCollector,
         bool $enableObjectType = false
     ) {
         $this->docBlockAnalyzer = $docBlockAnalyzer;
@@ -50,6 +62,7 @@ abstract class AbstractScalarTypehintRector extends AbstractRector
         if ($enableObjectType) {
             PhpTypeSupport::enableType('object');
         }
+        $this->filesToReprintCollector = $filesToReprintCollector;
     }
 
     /**
@@ -60,7 +73,7 @@ abstract class AbstractScalarTypehintRector extends AbstractRector
         return [Function_::class, ClassMethod::class];
     }
 
-    protected function isChangeVendorLockedIn(ClassMethod $classMethodNode): bool
+    protected function isChangeVendorLockedIn(ClassMethod $classMethodNode, int $paramPosition): bool
     {
         if ($this->hasParentClassOrImplementsInterface($classMethodNode) === false) {
             return false;
@@ -79,6 +92,11 @@ abstract class AbstractScalarTypehintRector extends AbstractRector
                 // @todo validate type is conflicting
                 // parent class method in local scope → it's ok
                 if ($parentMethodNode) {
+                    // parent method has no type → we cannot change it here
+                    if (isset($parentMethodNode->params[$paramPosition]) && $parentMethodNode->params[$paramPosition]->type === null) {
+                        return true;
+                    }
+
                     return false;
                 }
 
@@ -97,7 +115,7 @@ abstract class AbstractScalarTypehintRector extends AbstractRector
         /** @var Class_ $classNode */
         $classNode = $classMethodNode->getAttribute(Attribute::CLASS_NODE);
 
-        $interfaceNames = $this->getClassNodeInterfaceNames($classNode);
+        $interfaceNames = $this->getClassLikeNodeParentInterfaceNames($classNode);
         foreach ($interfaceNames as $interfaceName) {
             $interface = $this->classLikeNodeCollector->findInterface($interfaceName);
             if ($interface) {
@@ -159,6 +177,50 @@ abstract class AbstractScalarTypehintRector extends AbstractRector
         return false;
     }
 
+    /**
+     * @param ClassMethod|Param $childClassMethodOrParam
+     * @return Name|NullableType|null
+     */
+    protected function resolveChildType(
+        AbstractTypeInfo $returnTypeInfo,
+        Node $node,
+        Node $childClassMethodOrParam
+    ): ?Node {
+        if ($returnTypeInfo->getTypeNode() instanceof NullableType) {
+            $nakedType = $returnTypeInfo->getTypeNode()->type;
+        } else {
+            $nakedType = $returnTypeInfo->getTypeNode();
+        }
+
+        if ($nakedType === null) {
+            return null;
+        }
+
+        // @todo add test for ?self
+        if ($nakedType->toString() === 'self') {
+            $className = $node->getAttribute(Attribute::CLASS_NAME);
+            $type = new FullyQualified($className);
+
+            return $returnTypeInfo->isNullable() ? new NullableType($type) : $type;
+        }
+
+        // @todo add test for ?parent
+        if ($nakedType->toString() === 'parent') {
+            $parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
+            $type = new FullyQualified($parentClassName);
+
+            return $returnTypeInfo->isNullable() ? new NullableType($type) : $type;
+        }
+
+        // is namespace the same? use short name
+        if ($this->haveSameNamespace($node, $childClassMethodOrParam)) {
+            return $returnTypeInfo->getTypeNode();
+        }
+
+        // are namespaces different? → FQN name
+        return $returnTypeInfo->getFqnTypeNode();
+    }
+
     private function hasParentClassOrImplementsInterface(ClassMethod $classMethodNode): bool
     {
         /** @var ClassLike|null $classNode */
@@ -180,14 +242,30 @@ abstract class AbstractScalarTypehintRector extends AbstractRector
         return false;
     }
 
+    private function haveSameNamespace(Node $firstNode, Node $secondNode): bool
+    {
+        return $firstNode->getAttribute(Attribute::NAMESPACE_NAME)
+            === $secondNode->getAttribute(Attribute::NAMESPACE_NAME);
+    }
+
     /**
+     * @param Class_|Interface_ $classLikeNode
      * @return string[]
      */
-    private function getClassNodeInterfaceNames(Class_ $classNode): array
+    private function getClassLikeNodeParentInterfaceNames(ClassLike $classLikeNode): array
     {
         $interfaces = [];
-        foreach ($classNode->implements as $implementNode) {
-            $interfaces[] = $this->getName($implementNode);
+
+        if ($classLikeNode instanceof Class_) {
+            foreach ($classLikeNode->implements as $implementNode) {
+                $interfaces[] = $this->getName($implementNode);
+            }
+        }
+
+        if ($classLikeNode instanceof Interface_) {
+            foreach ($classLikeNode->extends as $extendNode) {
+                $interfaces[] = $this->getName($extendNode);
+            }
         }
 
         return $interfaces;

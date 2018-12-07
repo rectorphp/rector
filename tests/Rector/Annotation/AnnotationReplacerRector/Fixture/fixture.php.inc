@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Rector\Annotation\AnnotationReplacerRector\Wrong;
+namespace Rector\Tests\Rector\Annotation\AnnotationReplacerRector\Fixture;
 
 final class MyTest extends \PHPUnit\Framework\TestCase
 {
@@ -16,7 +16,7 @@ final class MyTest extends \PHPUnit\Framework\TestCase
 -----
 <?php
 
-namespace Rector\Tests\Rector\Annotation\AnnotationReplacerRector\Wrong;
+namespace Rector\Tests\Rector\Annotation\AnnotationReplacerRector\Fixture;
 
 final class MyTest extends \PHPUnit\Framework\TestCase
 {

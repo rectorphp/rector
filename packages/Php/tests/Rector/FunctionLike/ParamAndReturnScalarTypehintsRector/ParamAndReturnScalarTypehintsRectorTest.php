@@ -13,12 +13,15 @@ final class ParamAndReturnScalarTypehintsRectorTest extends AbstractRectorTestCa
     public function test(): void
     {
         $integrationFiles = [
+            __DIR__ . '/Fixture/this.php.inc',
+            __DIR__ . '/Fixture/false.php.inc',
             __DIR__ . '/Fixture/undesired.php.inc',
             __DIR__ . '/Fixture/aliased.php.inc',
             __DIR__ . '/Fixture/external_scope.php.inc',
             __DIR__ . '/Fixture/local_and_external_scope.php.inc',
             __DIR__ . '/Fixture/local_scope_with_parent_interface.php.inc',
             __DIR__ . '/Fixture/local_scope_with_parent_class.php.inc',
+            __DIR__ . '/Fixture/local_scope_with_parent_class2.php.inc',
             __DIR__ . '/Fixture/complex_array.php.inc',
             // php cs fixer param set - - https://github.com/FriendsOfPHP/PHP-CS-Fixer/blob/4a47b6df0bf718b49269fa9920b3723d802332dc/tests/Fixer/FunctionNotation/PhpdocToParamTypeFixerTest.php
             __DIR__ . '/Fixture/php-cs-fixer-param/array_native_type.php.inc',

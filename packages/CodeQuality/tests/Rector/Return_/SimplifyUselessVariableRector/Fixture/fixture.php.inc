@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\Return_\SimplifyUselessVariableRector\Wrong;
+namespace Rector\CodeQuality\Tests\Rector\Return_\SimplifyUselessVariableRector\Fixture;
 
 function () {
     $a = true;
@@ -107,7 +107,7 @@ function () {
 -----
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\Return_\SimplifyUselessVariableRector\Wrong;
+namespace Rector\CodeQuality\Tests\Rector\Return_\SimplifyUselessVariableRector\Fixture;
 
 function () {
     return true;

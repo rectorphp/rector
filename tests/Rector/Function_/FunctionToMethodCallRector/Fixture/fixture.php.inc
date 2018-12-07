@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Rector\Function_\FunctionToMethodCallRector\Wrong;
+namespace Rector\Tests\Rector\Function_\FunctionToMethodCallRector\Fixture;
 
 use function view;
 
@@ -17,7 +17,7 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\Tests\Rector\Function_\FunctionToMethodCallRector\Wrong;
+namespace Rector\Tests\Rector\Function_\FunctionToMethodCallRector\Fixture;
 
 use function view;
 

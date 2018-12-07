@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Sylius\Tests\Rector\Review\Wrong;
+namespace Rector\Sylius\Tests\Rector\Review\Fixture;
 
 class SomeClass
 {
@@ -19,7 +19,7 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\Sylius\Tests\Rector\Review\Wrong;
+namespace Rector\Sylius\Tests\Rector\Review\Fixture;
 
 class SomeClass
 {

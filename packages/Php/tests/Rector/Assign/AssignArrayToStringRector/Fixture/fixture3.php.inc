@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php\Tests\Rector\Assign\AssignArrayToStringRector\Wrong;
+namespace Rector\Php\Tests\Rector\Assign\AssignArrayToStringRector\Fixture;
 
 class WithSomeStaticString2
 {
@@ -20,7 +20,7 @@ class WithSomeStaticString2
 -----
 <?php
 
-namespace Rector\Php\Tests\Rector\Assign\AssignArrayToStringRector\Wrong;
+namespace Rector\Php\Tests\Rector\Assign\AssignArrayToStringRector\Fixture;
 
 class WithSomeStaticString2
 {

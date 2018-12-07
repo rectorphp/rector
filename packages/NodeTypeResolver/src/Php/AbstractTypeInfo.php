@@ -136,10 +136,8 @@ abstract class AbstractTypeInfo
 
         foreach ($types as $i => $type) {
             // convert: ?Type => Type, null
-            if (Strings::startsWith($type, '?')) {
-                $type = ltrim($type, '?');
-                $this->isNullable = true;
-            }
+            $type = $this->normalizeNullable($type);
+            $type = $this->normalizeCasing($type);
 
             if ($type === 'null') {
                 unset($types[$i]);
@@ -150,6 +148,16 @@ abstract class AbstractTypeInfo
             // remove
             if (in_array($type, ['static', 'mixed'], true)) {
                 unset($types[$i]);
+                continue;
+            }
+
+            if (in_array($type, ['true', 'false'], true)) {
+                $types[$i] = 'bool';
+                continue;
+            }
+
+            if ($type === '$this') {
+                $types[$i] = 'self';
                 continue;
             }
 
@@ -238,5 +246,27 @@ abstract class AbstractTypeInfo
         sort($arraySubtypeGroup);
 
         return $types === $arraySubtypeGroup;
+    }
+
+    private function normalizeNullable(string $type): string
+    {
+        if (Strings::startsWith($type, '?')) {
+            $type = ltrim($type, '?');
+            $this->isNullable = true;
+        }
+        return $type;
+    }
+
+    private function normalizeCasing(string $type): string
+    {
+        if (TypeAnalyzer::isPhpReservedType($type)) {
+            return strtolower($type);
+        }
+
+        if (strtolower($type) === '$this') {
+            return strtolower($type);
+        }
+
+        return $type;
     }
 }

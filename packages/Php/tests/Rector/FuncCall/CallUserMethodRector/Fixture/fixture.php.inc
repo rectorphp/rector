@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php\Tests\Rector\FuncCall\CallUserMethodRector\Wrong;
+namespace Rector\Php\Tests\Rector\FuncCall\CallUserMethodRector\Fixture;
 
 function callUserMethod()
 {
@@ -16,7 +16,7 @@ function callUserMethod()
 -----
 <?php
 
-namespace Rector\Php\Tests\Rector\FuncCall\CallUserMethodRector\Wrong;
+namespace Rector\Php\Tests\Rector\FuncCall\CallUserMethodRector\Fixture;
 
 function callUserMethod()
 {

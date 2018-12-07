@@ -5,13 +5,12 @@ namespace Rector\Testing\PHPUnit;
 use Nette\Utils\FileSystem;
 use Nette\Utils\Json;
 use Nette\Utils\Strings;
-use PHPStan\AnalysedCodeException;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Rector\Application\FileProcessor;
 use Rector\Configuration\Option;
 use Rector\DependencyInjection\ContainerFactory;
-use Rector\FileSystem\FileGuard;
+use Rector\Exception\ShouldNotHappenException;
 use Symfony\Component\Yaml\Yaml;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
@@ -19,12 +18,10 @@ use function Safe\sprintf;
 
 abstract class AbstractRectorTestCase extends TestCase
 {
-    use IntegrationRectorTestCaseTrait;
-
     /**
-     * @var bool
+     * @var string
      */
-    protected $autoloadTestFixture = true;
+    private const SPLIT_LINE = '#-----\n#';
 
     /**
      * @var FileProcessor
@@ -42,20 +39,26 @@ abstract class AbstractRectorTestCase extends TestCase
     protected $parameterProvider;
 
     /**
+     * @var bool
+     */
+    private $autoloadTestFixture = true;
+
+    /**
      * @var ContainerInterface[]
      */
     private static $containersPerConfig = [];
 
-    /**
-     * @var FileGuard
-     */
-    private $fileGuard;
-
     protected function setUp(): void
     {
         $configFile = $this->provideConfig();
-        $this->fileGuard = new FileGuard();
-        $this->fileGuard->ensureFileExists($configFile, static::class);
+
+        if (! file_exists($configFile)) {
+            throw new ShouldNotHappenException(sprintf(
+                'Config "%s" for test "%s" was not found',
+                $configFile,
+                static::class
+            ));
+        }
 
         $this->createContainer($configFile);
 
@@ -63,31 +66,13 @@ abstract class AbstractRectorTestCase extends TestCase
         $this->parameterProvider = $this->container->get(ParameterProvider::class);
     }
 
-    protected function doTestFileMatchesExpectedContent(string $originalFile, string $expectedFile): void
+    /**
+     * @param mixed[] $files
+     */
+    public function doTestFilesWithoutAutoload(array $files): void
     {
-        $this->fileGuard->ensureFileExists($expectedFile, static::class);
-
-        $this->parameterProvider->changeParameter(Option::SOURCE, [$originalFile]);
-
-        try {
-            $reconstructedFileContent = $this->fileProcessor->processFileToString(new SmartFileInfo($originalFile));
-        } catch (AnalysedCodeException $analysedCodeException) {
-            // change message to include responsible file
-            $message = sprintf(
-                'Analyze error in "%s" file:%s%s',
-                $originalFile,
-                PHP_EOL,
-                $analysedCodeException->getMessage()
-            );
-            $exceptionClass = get_class($analysedCodeException);
-            throw new $exceptionClass($message);
-        }
-
-        $this->assertStringEqualsFile(
-            $expectedFile,
-            $reconstructedFileContent,
-            sprintf('Original file "%s" did not match the result.', $originalFile)
-        );
+        $this->autoloadTestFixture = false;
+        $this->doTestFiles($files);
     }
 
     protected function provideConfig(): string
@@ -131,6 +116,21 @@ abstract class AbstractRectorTestCase extends TestCase
         return null;
     }
 
+    /**
+     * @param string[] $files
+     */
+    protected function doTestFiles(array $files): void
+    {
+        // 1. original to changed content
+        foreach ($files as $file) {
+            $smartFileInfo = new SmartFileInfo($file);
+            [$originalContent, $changedContent] = $this->splitContentToOriginalFileAndExpectedFile($smartFileInfo);
+            $this->doTestFileMatchesExpectedContent($originalContent, $changedContent);
+        }
+
+        $this->autoloadTestFixture = true;
+    }
+
     private function createContainer(string $configFile): void
     {
         $key = md5_file($configFile);
@@ -141,5 +141,54 @@ abstract class AbstractRectorTestCase extends TestCase
             $this->container = (new ContainerFactory())->createWithConfigFiles([$configFile]);
             self::$containersPerConfig[$key] = $this->container;
         }
+    }
+
+    /**
+     * @return string[]
+     */
+    private function splitContentToOriginalFileAndExpectedFile(SmartFileInfo $smartFileInfo): array
+    {
+        if (Strings::match($smartFileInfo->getContents(), self::SPLIT_LINE)) {
+            // original → expected
+            [$originalContent, $expectedContent] = Strings::split($smartFileInfo->getContents(), self::SPLIT_LINE);
+        } else {
+            // no changes
+            $originalContent = $smartFileInfo->getContents();
+            $expectedContent = $originalContent;
+        }
+
+        $originalFile = $this->createTemporaryPathWithPrefix($smartFileInfo, 'original');
+        $expectedFile = $this->createTemporaryPathWithPrefix($smartFileInfo, 'expected');
+
+        FileSystem::write($originalFile, $originalContent);
+        FileSystem::write($expectedFile, $expectedContent);
+
+        // file needs to be autoload PHPStan analyze
+        if ($this->autoloadTestFixture) {
+            require_once $originalFile;
+        }
+
+        return [$originalFile, $expectedFile];
+    }
+
+    private function createTemporaryPathWithPrefix(SmartFileInfo $smartFileInfo, string $prefix): string
+    {
+        $hash = Strings::substring(md5($smartFileInfo->getPathname()), 0, 5);
+
+        return sprintf(
+            sys_get_temp_dir() . '/rector_temp_tests/%s_%s_%s',
+            $prefix,
+            $hash,
+            $smartFileInfo->getBasename('.inc')
+        );
+    }
+
+    private function doTestFileMatchesExpectedContent(string $originalFile, string $expectedFile): void
+    {
+        $this->parameterProvider->changeParameter(Option::SOURCE, [$originalFile]);
+
+        $changedContent = $this->fileProcessor->processFileToString(new SmartFileInfo($originalFile));
+
+        $this->assertStringEqualsFile($expectedFile, $changedContent);
     }
 }

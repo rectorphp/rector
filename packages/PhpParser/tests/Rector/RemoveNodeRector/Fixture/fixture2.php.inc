@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\PhpParser\Tests\Rector\RemoveNodeRector\Wrong;
+namespace Rector\PhpParser\Tests\Rector\RemoveNodeRector\Fixture;
 
 use PhpParser\Node;
 
@@ -28,7 +28,7 @@ class SomeVisitor2 implements \PhpParser\NodeVisitor
 -----
 <?php
 
-namespace Rector\PhpParser\Tests\Rector\RemoveNodeRector\Wrong;
+namespace Rector\PhpParser\Tests\Rector\RemoveNodeRector\Fixture;
 
 use PhpParser\Node;
 

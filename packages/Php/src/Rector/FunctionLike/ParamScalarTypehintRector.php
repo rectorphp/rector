@@ -8,6 +8,7 @@ use PhpParser\Node\Stmt\Function_;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
 final class ParamScalarTypehintRector extends AbstractScalarTypehintRector
 {
@@ -119,14 +120,13 @@ CODE_SAMPLE
                 continue;
             }
 
-            if ($node instanceof ClassMethod && $this->isChangeVendorLockedIn($node)) {
+            if ($node instanceof ClassMethod && $this->isChangeVendorLockedIn($node, $i)) {
                 continue;
             }
 
             if ($hasNewType) {
                 // should override - is it subtype?
                 $possibleOverrideNewReturnType = $paramTagInfo->getTypeNode();
-
                 if ($this->isSubtypeOf($possibleOverrideNewReturnType, $paramNode->type)) {
                     // allow override
                     $paramNode->type = $paramTagInfo->getTypeNode();
@@ -139,26 +139,35 @@ CODE_SAMPLE
             if ($node instanceof ClassMethod) {
                 /** @var string $className */
                 $className = $node->getAttribute(Attribute::CLASS_NAME);
-                $childrenClasses = $this->classLikeNodeCollector->findChildrenOfClass($className);
+
+                $childrenClassLikes = $this->classLikeNodeCollector->findClassesAndInterfacesByType($className);
 
                 /** @var string $methodName */
                 $methodName = $node->getAttribute(Attribute::METHOD_NAME);
 
                 // update their methods as well
-                foreach ($childrenClasses as $childrenClass) {
-                    $childrenClassMethod = $childrenClass->getMethod($methodName);
-                    if ($childrenClassMethod) {
-                        if (! isset($childrenClassMethod->params[$i])) {
+                foreach ($childrenClassLikes as $childClassLike) {
+                    $childClassMethod = $childClassLike->getMethod($methodName);
+                    if ($childClassMethod) {
+                        if (! isset($childClassMethod->params[$i])) {
                             continue;
                         }
 
-                        $childrenClassMethodParam = $childrenClassMethod->params[$i];
-
-                        if ($childrenClassMethodParam->type === null) {
-                            $childrenClassMethodParam->type = $paramTagInfo->getTypeNode();
-                            // let the method know it was changed now
-                            $childrenClassMethodParam->type->setAttribute(self::HAS_NEW_INHERITED_TYPE, true);
+                        $childClassMethodParam = $childClassMethod->params[$i];
+                        if ($childClassMethodParam->type !== null) {
+                            continue;
                         }
+
+                        $childClassMethodParam->type = $this->resolveChildType($paramTagInfo, $node, $paramNode);
+
+                        // let the method know it was changed now
+                        $childClassMethodParam->type->setAttribute(self::HAS_NEW_INHERITED_TYPE, true);
+
+                        // reprint the file
+                        /** @var SmartFileInfo $fileInfo */
+                        $fileInfo = $childClassMethod->getAttribute(Attribute::FILE_INFO);
+
+                        $this->filesToReprintCollector->addFileInfo($fileInfo);
                     }
                 }
             }

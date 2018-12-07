@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\PhpParser\Tests\Rector\SetLineRector\Wrong;
+namespace Rector\PhpParser\Tests\Rector\SetLineRector\Fixture;
 
 use PhpParser\Node\Scalar\String_;
 
@@ -14,7 +14,7 @@ function setLine()
 -----
 <?php
 
-namespace Rector\PhpParser\Tests\Rector\SetLineRector\Wrong;
+namespace Rector\PhpParser\Tests\Rector\SetLineRector\Fixture;
 
 use PhpParser\Node\Scalar\String_;
 

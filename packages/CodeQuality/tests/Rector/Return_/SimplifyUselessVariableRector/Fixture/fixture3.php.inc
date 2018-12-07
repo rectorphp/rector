@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\Return_\SimplifyUselessVariableRector\Wrong;
+namespace Rector\CodeQuality\Tests\Rector\Return_\SimplifyUselessVariableRector\Fixture;
 
 function simplifyUselessVariable3()
 {
@@ -24,7 +24,7 @@ function simplifyUselessVariable3()
 -----
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\Return_\SimplifyUselessVariableRector\Wrong;
+namespace Rector\CodeQuality\Tests\Rector\Return_\SimplifyUselessVariableRector\Fixture;
 
 function simplifyUselessVariable3()
 {

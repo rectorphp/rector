@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Rector\Typehint\ParentTypehintedArgumentRector\Wrong;
+namespace Rector\Tests\Rector\Typehint\ParentTypehintedArgumentRector\Fixture;
 
 use Rector\Tests\Rector\Typehint\ParentTypehintedArgumentRector\Source\ParserInterface;
 
@@ -15,7 +15,7 @@ class SomeClassImplementingParserInterface implements ParserInterface
 -----
 <?php
 
-namespace Rector\Tests\Rector\Typehint\ParentTypehintedArgumentRector\Wrong;
+namespace Rector\Tests\Rector\Typehint\ParentTypehintedArgumentRector\Fixture;
 
 use Rector\Tests\Rector\Typehint\ParentTypehintedArgumentRector\Source\ParserInterface;
 

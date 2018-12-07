@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Rector\Typehint\ReturnTypehintRector\Wrong;
+namespace Rector\Tests\Rector\Typehint\ReturnTypehintRector\Fixture;
 
 class SomeClass
 {
@@ -25,7 +25,7 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\Tests\Rector\Typehint\ReturnTypehintRector\Wrong;
+namespace Rector\Tests\Rector\Typehint\ReturnTypehintRector\Fixture;
 
 class SomeClass
 {

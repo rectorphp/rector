@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php\Tests\Rector\ConstFetch\BarewordStringRector\Wrong;
+namespace Rector\Php\Tests\Rector\ConstFetch\BarewordStringRector\Fixture;
 
 const THIS_EXISTS = 'yes';
 
@@ -17,7 +17,7 @@ is_bool(THIS_EXISTS);
 -----
 <?php
 
-namespace Rector\Php\Tests\Rector\ConstFetch\BarewordStringRector\Wrong;
+namespace Rector\Php\Tests\Rector\ConstFetch\BarewordStringRector\Fixture;
 
 const THIS_EXISTS = 'yes';
 

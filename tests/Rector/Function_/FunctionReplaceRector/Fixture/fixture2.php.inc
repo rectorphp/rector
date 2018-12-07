@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Rector\Function_\FunctionReplaceRector\Wrong;
+namespace Rector\Tests\Rector\Function_\FunctionReplaceRector\Fixture;
 
 class SomeClass
 {
@@ -20,7 +20,7 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\Tests\Rector\Function_\FunctionReplaceRector\Wrong;
+namespace Rector\Tests\Rector\Function_\FunctionReplaceRector\Fixture;
 
 class SomeClass
 {

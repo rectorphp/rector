@@ -14,7 +14,7 @@ final class TypeAnalyzer
     public static function isPhpReservedType(string $type): bool
     {
         return in_array(
-            $type,
+            strtolower($type),
             [
                 'string',
                 'bool',

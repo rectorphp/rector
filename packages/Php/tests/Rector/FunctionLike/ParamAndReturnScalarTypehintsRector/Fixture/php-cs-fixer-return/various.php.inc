@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Integration\PhpCsFixerReturn\Various;
+namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Fixture\PhpCsFixerReturn\Various;
 
 /** @return Bar */ function my_foo() {}
 /** @return My\Bar */ function my_foo2() {}
@@ -12,7 +12,7 @@ interface Foo { /** @return Bar */ function my_foo4(); }
 -----
 <?php
 
-namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Integration\PhpCsFixerReturn\Various;
+namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRector\Fixture\PhpCsFixerReturn\Various;
 
 /** @return Bar */ function my_foo(): Bar {}
 /** @return My\Bar */ function my_foo2(): My\Bar {}

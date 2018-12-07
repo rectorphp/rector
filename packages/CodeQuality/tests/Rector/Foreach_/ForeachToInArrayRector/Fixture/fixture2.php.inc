@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\Foreach_\ForeachToInArrayRector\Wrong;
+namespace Rector\CodeQuality\Tests\Rector\Foreach_\ForeachToInArrayRector\Fixture;
 
 $patterns = [];
 foreach ($patterns as $pattern) {
@@ -28,7 +28,7 @@ return false;
 -----
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\Foreach_\ForeachToInArrayRector\Wrong;
+namespace Rector\CodeQuality\Tests\Rector\Foreach_\ForeachToInArrayRector\Fixture;
 
 $patterns = [];
 foreach ($patterns as $pattern) {

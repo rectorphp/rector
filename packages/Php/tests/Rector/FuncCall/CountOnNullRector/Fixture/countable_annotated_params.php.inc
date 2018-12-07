@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php\Tests\Rector\FuncCall\CountOnNullRector\Integration;
+namespace Rector\Php\Tests\Rector\FuncCall\CountOnNullRector\Fixture;
 
 function a(array $a = [])
 {

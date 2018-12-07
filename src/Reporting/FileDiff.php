@@ -26,7 +26,7 @@ final class FileDiff
     {
         $this->file = $file;
         $this->diff = $diff;
-        $this->appliedRectorClasses = array_unique($appliedRectorClasses);
+        $this->appliedRectorClasses = $appliedRectorClasses;
     }
 
     public function getDiff(): string

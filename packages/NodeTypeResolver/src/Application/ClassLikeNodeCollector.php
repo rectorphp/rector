@@ -39,6 +39,14 @@ final class ClassLikeNodeCollector
     }
 
     /**
+     * @return Class_[]|Interface_[]
+     */
+    public function findClassesAndInterfacesByType(string $type): array
+    {
+        return array_merge($this->findChildrenOfClass($type), $this->findImplementersOfInterface($type));
+    }
+
+    /**
      * @return Class_[]
      */
     public function findChildrenOfClass(string $class): array
@@ -57,5 +65,26 @@ final class ClassLikeNodeCollector
         }
 
         return $childrenClasses;
+    }
+
+    /**
+     * @return Interface_[]
+     */
+    public function findImplementersOfInterface(string $interface): array
+    {
+        $implementerInterfaces = [];
+        foreach ($this->interfaces as $interfaceNode) {
+            if (! is_a($interfaceNode->getAttribute(Attribute::CLASS_NAME), $interface, true)) {
+                continue;
+            }
+
+            if ($interfaceNode->getAttribute(Attribute::CLASS_NAME) === $interface) {
+                continue;
+            }
+
+            $implementerInterfaces[] = $interfaceNode;
+        }
+
+        return $implementerInterfaces;
     }
 }

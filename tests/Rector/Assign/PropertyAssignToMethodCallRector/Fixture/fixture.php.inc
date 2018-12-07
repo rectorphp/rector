@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Rector\Assign\PropertyAssignToMethodCallRector\Wrong;
+namespace Rector\Tests\Rector\Assign\PropertyAssignToMethodCallRector\Fixture;
 
 use Rector\Tests\Rector\Assign\PropertyAssignToMethodCallRector\Source\MultiChoiceControl;
 
@@ -17,7 +17,7 @@ class SomePresenter
 -----
 <?php
 
-namespace Rector\Tests\Rector\Assign\PropertyAssignToMethodCallRector\Wrong;
+namespace Rector\Tests\Rector\Assign\PropertyAssignToMethodCallRector\Fixture;
 
 use Rector\Tests\Rector\Assign\PropertyAssignToMethodCallRector\Source\MultiChoiceControl;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php\Tests\Rector\FunctionLike\ParamAndReturnScalarTypehintsRector\Wrong;
+namespace Rector\Php\Tests\Rector\FunctionLike\ParamAndReturnScalarTypehintsRector\Fixture;
 
 use Rector\Php\Tests\Rector\FunctionLike\ParamAndReturnScalarTypehintsRector\Source\SniffInterface;
 

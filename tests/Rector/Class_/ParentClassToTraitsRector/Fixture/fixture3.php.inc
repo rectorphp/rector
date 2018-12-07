@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Rector\Class_\ParentClassToTraitsRector\Wrong;
+namespace Rector\Tests\Rector\Class_\ParentClassToTraitsRector\Fixture;
 
 use Rector;
 
@@ -13,7 +13,7 @@ class ClassWithExternalConstant3 extends Rector\Tests\Rector\Class_\ParentClassT
 -----
 <?php
 
-namespace Rector\Tests\Rector\Class_\ParentClassToTraitsRector\Wrong;
+namespace Rector\Tests\Rector\Class_\ParentClassToTraitsRector\Fixture;
 
 use Rector;
 

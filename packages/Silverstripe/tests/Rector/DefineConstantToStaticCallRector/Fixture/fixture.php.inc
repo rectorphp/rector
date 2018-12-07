@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Silverstripe\Tests\Rector\DefineConstantToStaticCallRector\Wrong;
+namespace Rector\Silverstripe\Tests\Rector\DefineConstantToStaticCallRector\Fixture;
 
 function defineConstantToStaticCall()
 {
@@ -13,7 +13,7 @@ function defineConstantToStaticCall()
 -----
 <?php
 
-namespace Rector\Silverstripe\Tests\Rector\DefineConstantToStaticCallRector\Wrong;
+namespace Rector\Silverstripe\Tests\Rector\DefineConstantToStaticCallRector\Fixture;
 
 function defineConstantToStaticCall()
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\If_\SimplifyIfReturnBoolRector\Wrong;
+namespace Rector\CodeQuality\Tests\Rector\If_\SimplifyIfReturnBoolRector\Fixture;
 
 class AnyClass
 {
@@ -22,7 +22,7 @@ class AnyClass
 -----
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\If_\SimplifyIfReturnBoolRector\Wrong;
+namespace Rector\CodeQuality\Tests\Rector\If_\SimplifyIfReturnBoolRector\Fixture;
 
 class AnyClass
 {

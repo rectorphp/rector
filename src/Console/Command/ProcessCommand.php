@@ -7,6 +7,7 @@ use Rector\Application\AppliedRectorCollector;
 use Rector\Application\Error;
 use Rector\Application\ErrorCollector;
 use Rector\Application\FileProcessor;
+use Rector\Application\FilesToReprintCollector;
 use Rector\Autoloading\AdditionalAutoloader;
 use Rector\CodingStyle\AfterRectorCodingStyle;
 use Rector\Configuration\Option;
@@ -32,11 +33,6 @@ use function Safe\sprintf;
 
 final class ProcessCommand extends Command
 {
-    /**
-     * @var string[]
-     */
-    private $changedFiles = [];
-
     /**
      * @var FileDiff[]
      */
@@ -102,6 +98,11 @@ final class ProcessCommand extends Command
      */
     private $appliedRectorCollector;
 
+    /**
+     * @var FilesToReprintCollector
+     */
+    private $filesToReprintCollector;
+
     public function __construct(
         FileProcessor $fileProcessor,
         SymfonyStyle $symfonyStyle,
@@ -114,7 +115,8 @@ final class ProcessCommand extends Command
         FileSystemFileProcessor $fileSystemFileProcessor,
         ErrorCollector $errorCollector,
         AfterRectorCodingStyle $afterRectorCodingStyle,
-        AppliedRectorCollector $appliedRectorCollector
+        AppliedRectorCollector $appliedRectorCollector,
+        FilesToReprintCollector $filesToReprintCollector
     ) {
         parent::__construct();
 
@@ -130,6 +132,7 @@ final class ProcessCommand extends Command
         $this->errorCollector = $errorCollector;
         $this->afterRectorCodingStyle = $afterRectorCodingStyle;
         $this->appliedRectorCollector = $appliedRectorCollector;
+        $this->filesToReprintCollector = $filesToReprintCollector;
     }
 
     protected function configure(): void
@@ -178,15 +181,13 @@ final class ProcessCommand extends Command
         $this->parameterProvider->changeParameter(Option::OPTION_DRY_RUN, $input->getOption(Option::OPTION_DRY_RUN));
 
         $phpFileInfos = $this->filesFinder->findInDirectoriesAndFiles($source, ['php']);
-        $yamlFileInfos = $this->filesFinder->findInDirectoriesAndFiles($source, ['yml', 'yaml']);
-        $allFileInfos = $phpFileInfos + $yamlFileInfos;
 
         $this->additionalAutoloader->autoloadWithInputAndSource($input, $source);
 
-        $this->processFileInfos($allFileInfos, (bool) $input->getOption(Option::HIDE_AUTOLOAD_ERRORS));
+        $this->processFileInfos($phpFileInfos, (bool) $input->getOption(Option::HIDE_AUTOLOAD_ERRORS));
 
         $this->processCommandReporter->reportFileDiffs($this->fileDiffs);
-        $this->processCommandReporter->reportChangedFiles($this->changedFiles);
+        $this->processCommandReporter->reportChangedFiles(array_keys($this->fileDiffs));
 
         if ($this->errorCollector->getErrors()) {
             $this->processCommandReporter->reportErrors($this->errorCollector->getErrors());
@@ -231,7 +232,8 @@ final class ProcessCommand extends Command
     private function processFileInfo(SmartFileInfo $fileInfo, bool $shouldHideAutoloadErrors): void
     {
         try {
-            $this->processAnyFile($fileInfo);
+            $this->processFile($fileInfo);
+            $this->fileSystemFileProcessor->processFileInfo($fileInfo);
         } catch (AnalysedCodeException $analysedCodeException) {
             if ($shouldHideAutoloadErrors) {
                 return;
@@ -264,19 +266,24 @@ final class ProcessCommand extends Command
 
         if ($this->parameterProvider->provideParameter(Option::OPTION_DRY_RUN)) {
             $newContent = $this->fileProcessor->processFileToString($fileInfo);
-            if ($newContent !== $oldContent) {
-                $this->fileDiffs[] = new FileDiff(
-                    $fileInfo->getPathname(),
-                    $this->differAndFormatter->diffAndFormat($oldContent, $newContent),
-                    $this->appliedRectorCollector->getRectorClasses()
-                );
+
+            foreach ($this->filesToReprintCollector->getFileInfos() as $fileInfoToReprint) {
+                $reprintedOldContent = $fileInfoToReprint->getContents();
+                $reprintedNewContent = $this->fileProcessor->reprintToString($fileInfoToReprint);
+                $this->recordFileDiff($fileInfoToReprint, $reprintedNewContent, $reprintedOldContent);
             }
         } else {
             $newContent = $this->fileProcessor->processFile($fileInfo);
-            if ($newContent !== $oldContent) {
-                $this->changedFiles[] = $fileInfo->getPathname();
+
+            foreach ($this->filesToReprintCollector->getFileInfos() as $fileInfoToReprint) {
+                $reprintedOldContent = $fileInfoToReprint->getContents();
+                $reprintedNewContent = $this->fileProcessor->reprintFile($fileInfoToReprint);
+                $this->recordFileDiff($fileInfoToReprint, $reprintedNewContent, $reprintedOldContent);
             }
         }
+
+        $this->recordFileDiff($fileInfo, $newContent, $oldContent);
+        $this->filesToReprintCollector->reset();
     }
 
     private function matchRectorClass(Throwable $throwable): ?string
@@ -294,12 +301,17 @@ final class ProcessCommand extends Command
         return $class;
     }
 
-    private function processAnyFile(SmartFileInfo $fileInfo): void
+    private function recordFileDiff(SmartFileInfo $fileInfo, string $newContent, string $oldContent): void
     {
-        if ($fileInfo->getExtension() === 'php') {
-            $this->processFile($fileInfo);
+        if ($newContent === $oldContent) {
+            return;
         }
 
-        $this->fileSystemFileProcessor->processFileInfo($fileInfo);
+        // always keep the most recent diff
+        $this->fileDiffs[$fileInfo->getRealPath()] = new FileDiff(
+            $fileInfo->getRealPath(),
+            $this->differAndFormatter->diffAndFormat($oldContent, $newContent),
+            $this->appliedRectorCollector->getRectorClasses()
+        );
     }
 }
