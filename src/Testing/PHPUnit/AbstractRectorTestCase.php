@@ -173,7 +173,7 @@ abstract class AbstractRectorTestCase extends TestCase
 
     private function createTemporaryPathWithPrefix(SmartFileInfo $smartFileInfo, string $prefix): string
     {
-        $hash = Strings::substring(md5($smartFileInfo->getPathname()), 0, 5);
+        $hash = Strings::substring(md5($smartFileInfo->getRealPath()), 0, 5);
 
         return sprintf(
             sys_get_temp_dir() . '/rector_temp_tests/%s_%s_%s',
@@ -187,7 +187,12 @@ abstract class AbstractRectorTestCase extends TestCase
     {
         $this->parameterProvider->changeParameter(Option::SOURCE, [$originalFile]);
 
-        $changedContent = $this->fileProcessor->processFileToString(new SmartFileInfo($originalFile));
+        $smartFileInfo = new SmartFileInfo($originalFile);
+
+        // life-cycle trio :)
+        $this->fileProcessor->parseFileInfoToLocalCache($smartFileInfo);
+        $this->fileProcessor->refactor($smartFileInfo);
+        $changedContent = $this->fileProcessor->printToString($smartFileInfo);
 
         $this->assertStringEqualsFile($expectedFile, $changedContent);
     }

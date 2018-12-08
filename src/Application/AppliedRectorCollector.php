@@ -2,28 +2,29 @@
 
 namespace Rector\Application;
 
+use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
+
 final class AppliedRectorCollector
 {
     /**
-     * @var string[]
+     * @var string[][]
      */
-    private $rectorClasses = [];
+    private $rectorClassesByFile = [];
 
-    public function addRectorClass(string $rectorClass): void
+    public function addRectorClass(string $rectorClass, SmartFileInfo $smartFileInfo): void
     {
-        $this->rectorClasses[] = $rectorClass;
-    }
-
-    public function reset(): void
-    {
-        $this->rectorClasses = [];
+        $this->rectorClassesByFile[$smartFileInfo->getRealPath()][] = $rectorClass;
     }
 
     /**
      * @return string[]
      */
-    public function getRectorClasses(): array
+    public function getRectorClasses(SmartFileInfo $smartFileInfo): array
     {
-        return array_unique($this->rectorClasses);
+        if ($this->rectorClassesByFile[$smartFileInfo->getRealPath()]) {
+            return array_unique($this->rectorClassesByFile[$smartFileInfo->getRealPath()]);
+        }
+
+        return [];
     }
 }

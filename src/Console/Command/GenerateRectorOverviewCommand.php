@@ -7,6 +7,7 @@ use Nette\Utils\Strings;
 use Rector\Console\Shell;
 use Rector\ConsoleDiffer\MarkdownDifferAndFormatter;
 use Rector\Contract\Rector\RectorInterface;
+use Rector\Error\ExceptionCorrector;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use ReflectionClass;
@@ -169,6 +170,11 @@ final class GenerateRectorOverviewCommand extends Command
 
         $rectors = [];
         foreach (array_keys($robotLoader->getIndexedClasses()) as $class) {
+            // special case, because robot loader is case insensitive
+            if ($class === ExceptionCorrector::class) {
+                continue;
+            }
+
             $reflectionClass = new ReflectionClass($class);
             if ($reflectionClass->isAbstract()) {
                 continue;

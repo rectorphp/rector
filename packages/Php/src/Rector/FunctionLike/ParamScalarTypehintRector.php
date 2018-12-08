@@ -8,7 +8,6 @@ use PhpParser\Node\Stmt\Function_;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
-use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
 final class ParamScalarTypehintRector extends AbstractScalarTypehintRector
 {
@@ -148,27 +147,25 @@ CODE_SAMPLE
                 // update their methods as well
                 foreach ($childrenClassLikes as $childClassLike) {
                     $childClassMethod = $childClassLike->getMethod($methodName);
-                    if ($childClassMethod) {
-                        if (! isset($childClassMethod->params[$i])) {
-                            continue;
-                        }
-
-                        $childClassMethodParam = $childClassMethod->params[$i];
-                        if ($childClassMethodParam->type !== null) {
-                            continue;
-                        }
-
-                        $childClassMethodParam->type = $this->resolveChildType($paramTagInfo, $node, $paramNode);
-
-                        // let the method know it was changed now
-                        $childClassMethodParam->type->setAttribute(self::HAS_NEW_INHERITED_TYPE, true);
-
-                        // reprint the file
-                        /** @var SmartFileInfo $fileInfo */
-                        $fileInfo = $childClassMethod->getAttribute(Attribute::FILE_INFO);
-
-                        $this->filesToReprintCollector->addFileInfo($fileInfo);
+                    if ($childClassMethod === null) {
+                        continue;
                     }
+
+                    if (! isset($childClassMethod->params[$i])) {
+                        continue;
+                    }
+
+                    $childClassMethodParam = $childClassMethod->params[$i];
+                    if ($childClassMethodParam->type !== null) {
+                        continue;
+                    }
+
+                    $childClassMethodParam->type = $this->resolveChildType($paramTagInfo, $node, $paramNode);
+
+                    // let the method know it was changed now
+                    $childClassMethodParam->type->setAttribute(self::HAS_NEW_INHERITED_TYPE, true);
+
+                    $this->notifyNodeChangeFileInfo($childClassMethodParam);
                 }
             }
         }

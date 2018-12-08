@@ -50,7 +50,7 @@ parameters:
         - '#Call to function in_array\(\) with arguments string, (.*?) and true will always evaluate to false#'
 
         # known values
-#        - '#Call to an undefined method PhpParser\\Node\\Expr|PhpParser\\Node\\Name|PhpParser\\Node\\Stmt\\Class_::toString\(\)#'
+        - '#Property Rector\\Configuration\\Configuration::\$source \(array<string>\) does not accept array<bool\|string>#'
         - '#Method Rector\\ContributorTools\\Configuration\\ConfigurationFactory::resolveCategoryFromFqnNodeTypes\(\) should return string but returns string\|false#'
         - '#Array \(array<PhpParser\\Node\\Expr\\MethodCall>\) does not accept PhpParser\\Node\\Expr#'
         - '#Cannot access property \$expr on PhpParser\\Node\\Stmt\|null#'
@@ -59,6 +59,9 @@ parameters:
         - '#Parameter \#1 \$classReflection of method Rector\\NodeTypeResolver\\Reflection\\ClassReflectionTypesResolver::resolve\(\) expects PHPStan\\Reflection\\ClassReflection, PHPStan\\Reflection\\ClassReflection|null given#'
         - '#Cannot call method getAttribute\(\) on PhpParser\\Node\\Name\|null#'
         - '#Cannot call method getText\(\) on PhpParser\\Comment\\Doc\|null#'
+
+        # buggy
+        - '#Array \(array<Symplify\\PackageBuilder\\FileSystem\\SmartFileInfo>\) does not accept array<string, Symplify\\PackageBuilder\\FileSystem\\SmartFileInfo>#'
 
         # false positive, has annotation type above
         - '#Method Rector\\CodeQuality\\Rector\\Foreach_\\SimplifyForeachToCoalescingRector\:\:matchReturnOrAssignNode\(\) should return PhpParser\\Node\\Expr\\Assign\|PhpParser\\Node\\Stmt\\Return_\|null but returns PhpParser\\Node\|null#'

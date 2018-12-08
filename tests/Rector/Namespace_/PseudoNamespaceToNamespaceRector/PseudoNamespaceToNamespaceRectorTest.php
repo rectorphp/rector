@@ -2,7 +2,6 @@
 
 namespace Rector\Tests\Rector\Namespace_\PseudoNamespaceToNamespaceRector;
 
-use PHPUnit_Framework_MockObject_MockObject;
 use Rector\Rector\Namespace_\PseudoNamespaceToNamespaceRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -30,7 +29,8 @@ final class PseudoNamespaceToNamespaceRectorTest extends AbstractRectorTestCase
     protected function getRectorConfiguration(): array
     {
         return [
-            'PHPUnit_' => [PHPUnit_Framework_MockObject_MockObject::class],
+            // namespace prefix => excluded classes
+            'PHPUnit_' => ['PHPUnit_Framework_MockObject_MockObject'],
             'ChangeMe_' => ['KeepMe_'],
         ];
     }

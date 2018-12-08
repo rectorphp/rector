@@ -2,23 +2,16 @@
 
 namespace Rector\Console\Command;
 
-use PHPStan\AnalysedCodeException;
-use Rector\Application\AppliedRectorCollector;
-use Rector\Application\Error;
-use Rector\Application\ErrorCollector;
-use Rector\Application\FileProcessor;
-use Rector\Application\FilesToReprintCollector;
+use Rector\Application\ErrorAndDiffCollector;
+use Rector\Application\RectorApplication;
 use Rector\Autoloading\AdditionalAutoloader;
 use Rector\CodingStyle\AfterRectorCodingStyle;
+use Rector\Configuration\Configuration;
 use Rector\Configuration\Option;
 use Rector\Console\Output\ProcessCommandReporter;
 use Rector\Console\Shell;
-use Rector\ConsoleDiffer\DifferAndFormatter;
-use Rector\Contract\Rector\RectorInterface;
 use Rector\FileSystem\FilesFinder;
-use Rector\FileSystemRector\FileSystemFileProcessor;
 use Rector\Guard\RectorGuard;
-use Rector\Reporting\FileDiff;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -26,23 +19,9 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
-use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
-use Symplify\PackageBuilder\Parameter\ParameterProvider;
-use Throwable;
-use function Safe\sprintf;
 
 final class ProcessCommand extends Command
 {
-    /**
-     * @var FileDiff[]
-     */
-    private $fileDiffs = [];
-
-    /**
-     * @var FileProcessor
-     */
-    private $fileProcessor;
-
     /**
      * @var SymfonyStyle
      */
@@ -59,16 +38,6 @@ final class ProcessCommand extends Command
     private $processCommandReporter;
 
     /**
-     * @var ParameterProvider
-     */
-    private $parameterProvider;
-
-    /**
-     * @var DifferAndFormatter
-     */
-    private $differAndFormatter;
-
-    /**
      * @var AdditionalAutoloader
      */
     private $additionalAutoloader;
@@ -79,14 +48,9 @@ final class ProcessCommand extends Command
     private $rectorGuard;
 
     /**
-     * @var FileSystemFileProcessor
+     * @var ErrorAndDiffCollector
      */
-    private $fileSystemFileProcessor;
-
-    /**
-     * @var ErrorCollector
-     */
-    private $errorCollector;
+    private $errorAndDiffCollector;
 
     /**
      * @var AfterRectorCodingStyle
@@ -94,45 +58,37 @@ final class ProcessCommand extends Command
     private $afterRectorCodingStyle;
 
     /**
-     * @var AppliedRectorCollector
+     * @var Configuration
      */
-    private $appliedRectorCollector;
+    private $configuration;
 
     /**
-     * @var FilesToReprintCollector
+     * @var RectorApplication
      */
-    private $filesToReprintCollector;
+    private $rectorApplication;
 
     public function __construct(
-        FileProcessor $fileProcessor,
         SymfonyStyle $symfonyStyle,
         FilesFinder $phpFilesFinder,
         ProcessCommandReporter $processCommandReporter,
-        ParameterProvider $parameterProvider,
-        DifferAndFormatter $differAndFormatter,
         AdditionalAutoloader $additionalAutoloader,
         RectorGuard $rectorGuard,
-        FileSystemFileProcessor $fileSystemFileProcessor,
-        ErrorCollector $errorCollector,
+        ErrorAndDiffCollector $errorAndDiffCollector,
         AfterRectorCodingStyle $afterRectorCodingStyle,
-        AppliedRectorCollector $appliedRectorCollector,
-        FilesToReprintCollector $filesToReprintCollector
+        Configuration $configuration,
+        RectorApplication $rectorApplication
     ) {
         parent::__construct();
 
-        $this->fileProcessor = $fileProcessor;
         $this->symfonyStyle = $symfonyStyle;
         $this->filesFinder = $phpFilesFinder;
         $this->processCommandReporter = $processCommandReporter;
-        $this->parameterProvider = $parameterProvider;
-        $this->differAndFormatter = $differAndFormatter;
         $this->additionalAutoloader = $additionalAutoloader;
         $this->rectorGuard = $rectorGuard;
-        $this->fileSystemFileProcessor = $fileSystemFileProcessor;
-        $this->errorCollector = $errorCollector;
+        $this->errorAndDiffCollector = $errorAndDiffCollector;
         $this->afterRectorCodingStyle = $afterRectorCodingStyle;
-        $this->appliedRectorCollector = $appliedRectorCollector;
-        $this->filesToReprintCollector = $filesToReprintCollector;
+        $this->configuration = $configuration;
+        $this->rectorApplication = $rectorApplication;
     }
 
     protected function configure(): void
@@ -177,141 +133,32 @@ final class ProcessCommand extends Command
         $this->rectorGuard->ensureSomeRectorsAreRegistered();
 
         $source = $input->getArgument(Option::SOURCE);
-        $this->parameterProvider->changeParameter(Option::SOURCE, $source);
-        $this->parameterProvider->changeParameter(Option::OPTION_DRY_RUN, $input->getOption(Option::OPTION_DRY_RUN));
+
+        $this->configuration->resolveFromInput($input);
 
         $phpFileInfos = $this->filesFinder->findInDirectoriesAndFiles($source, ['php']);
 
         $this->additionalAutoloader->autoloadWithInputAndSource($input, $source);
 
-        $this->processFileInfos($phpFileInfos, (bool) $input->getOption(Option::HIDE_AUTOLOAD_ERRORS));
+        $this->rectorApplication->runOnFileInfos($phpFileInfos);
 
-        $this->processCommandReporter->reportFileDiffs($this->fileDiffs);
-        $this->processCommandReporter->reportChangedFiles(array_keys($this->fileDiffs));
+        $this->processCommandReporter->reportFileDiffs($this->errorAndDiffCollector->getFileDiffs());
 
-        if ($this->errorCollector->getErrors()) {
-            $this->processCommandReporter->reportErrors($this->errorCollector->getErrors());
+        if ($this->errorAndDiffCollector->getErrors()) {
+            $this->processCommandReporter->reportErrors($this->errorAndDiffCollector->getErrors());
             return Shell::CODE_ERROR;
         }
 
-        if ($input->getOption(Option::OPTION_WITH_STYLE)) {
+        if ($this->configuration->isWithStyle()) {
             $this->afterRectorCodingStyle->apply($source);
         }
 
         $this->symfonyStyle->success('Rector is done!');
 
-        if ($this->parameterProvider->provideParameter(Option::OPTION_DRY_RUN) && count($this->fileDiffs)) {
+        if ($this->configuration->isDryRun() && count($this->errorAndDiffCollector->getFileDiffs())) {
             return Shell::CODE_ERROR;
         }
 
         return Shell::CODE_SUCCESS;
-    }
-
-    /**
-     * @param SmartFileInfo[] $fileInfos
-     */
-    private function processFileInfos(array $fileInfos, bool $shouldHideAutoloadErrors): void
-    {
-        $totalFiles = count($fileInfos);
-        if (! $this->symfonyStyle->isVerbose()) {
-            $this->symfonyStyle->progressStart($totalFiles);
-        }
-
-        foreach ($fileInfos as $fileInfo) {
-            $this->processFileInfo($fileInfo, $shouldHideAutoloadErrors);
-            if ($this->symfonyStyle->isVerbose()) {
-                $this->symfonyStyle->writeln($fileInfo->getRealPath());
-            } else {
-                $this->symfonyStyle->progressAdvance();
-            }
-        }
-
-        $this->symfonyStyle->newLine(2);
-    }
-
-    private function processFileInfo(SmartFileInfo $fileInfo, bool $shouldHideAutoloadErrors): void
-    {
-        try {
-            $this->processFile($fileInfo);
-            $this->fileSystemFileProcessor->processFileInfo($fileInfo);
-        } catch (AnalysedCodeException $analysedCodeException) {
-            if ($shouldHideAutoloadErrors) {
-                return;
-            }
-
-            $message = sprintf(
-                'Analyze error: "%s". Try to include your files in "parameters > autoload_paths".%sSee https://github.com/rectorphp/rector#extra-autoloading',
-                $analysedCodeException->getMessage(),
-                PHP_EOL
-            );
-
-            $this->errorCollector->addError(new Error($fileInfo, $message));
-        } catch (Throwable $throwable) {
-            if ($this->symfonyStyle->isVerbose()) {
-                throw $throwable;
-            }
-
-            $rectorClass = $this->matchRectorClass($throwable);
-            if ($rectorClass) {
-                $this->errorCollector->addErrorWithRectorMessage($rectorClass, $throwable->getMessage());
-            } else {
-                $this->errorCollector->addError(new Error($fileInfo, $throwable->getMessage(), $throwable->getCode()));
-            }
-        }
-    }
-
-    private function processFile(SmartFileInfo $fileInfo): void
-    {
-        $oldContent = $fileInfo->getContents();
-
-        if ($this->parameterProvider->provideParameter(Option::OPTION_DRY_RUN)) {
-            $newContent = $this->fileProcessor->processFileToString($fileInfo);
-
-            foreach ($this->filesToReprintCollector->getFileInfos() as $fileInfoToReprint) {
-                $reprintedOldContent = $fileInfoToReprint->getContents();
-                $reprintedNewContent = $this->fileProcessor->reprintToString($fileInfoToReprint);
-                $this->recordFileDiff($fileInfoToReprint, $reprintedNewContent, $reprintedOldContent);
-            }
-        } else {
-            $newContent = $this->fileProcessor->processFile($fileInfo);
-
-            foreach ($this->filesToReprintCollector->getFileInfos() as $fileInfoToReprint) {
-                $reprintedOldContent = $fileInfoToReprint->getContents();
-                $reprintedNewContent = $this->fileProcessor->reprintFile($fileInfoToReprint);
-                $this->recordFileDiff($fileInfoToReprint, $reprintedNewContent, $reprintedOldContent);
-            }
-        }
-
-        $this->recordFileDiff($fileInfo, $newContent, $oldContent);
-        $this->filesToReprintCollector->reset();
-    }
-
-    private function matchRectorClass(Throwable $throwable): ?string
-    {
-        if (! isset($throwable->getTrace()[0])) {
-            return null;
-        }
-
-        /** @var string $class */
-        $class = $throwable->getTrace()[0]['class'];
-        if (! is_a($class, RectorInterface::class, true)) {
-            return null;
-        }
-
-        return $class;
-    }
-
-    private function recordFileDiff(SmartFileInfo $fileInfo, string $newContent, string $oldContent): void
-    {
-        if ($newContent === $oldContent) {
-            return;
-        }
-
-        // always keep the most recent diff
-        $this->fileDiffs[$fileInfo->getRealPath()] = new FileDiff(
-            $fileInfo->getRealPath(),
-            $this->differAndFormatter->diffAndFormat($oldContent, $newContent),
-            $this->appliedRectorCollector->getRectorClasses()
-        );
     }
 }

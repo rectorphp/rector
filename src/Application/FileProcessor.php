@@ -64,8 +64,13 @@ final class FileProcessor
         $this->currentFileInfoProvider = $currentFileInfoProvider;
     }
 
-    public function processFile(SmartFileInfo $smartFileInfo): string
+    public function parseFileInfoToLocalCache(SmartFileInfo $smartFileInfo): void
     {
+        if (isset($this->tokensByFilePath[$smartFileInfo->getRealPath()])) {
+            // already parsed
+            return;
+        }
+
         $this->currentFileInfoProvider->setCurrentFileInfo($smartFileInfo);
 
         [$newStmts, $oldStmts, $oldTokens] = $this->parseAndTraverseFileInfoToNodes($smartFileInfo);
@@ -73,41 +78,31 @@ final class FileProcessor
         // store tokens by absolute path, so we don't have to print them right now
         $this->tokensByFilePath[$smartFileInfo->getRealPath()] = [$newStmts, $oldStmts, $oldTokens];
 
-        return $this->formatPerservingPrinter->printToFile($smartFileInfo, $newStmts, $oldStmts, $oldTokens);
+        // @todo use filesystem cache to save parsing?
     }
 
-    public function reprintFile(SmartFileInfo $smartFileInfo): string
+    public function printToFile(SmartFileInfo $smartFileInfo): string
     {
-        // restore tokens
         [$newStmts, $oldStmts, $oldTokens] = $this->tokensByFilePath[$smartFileInfo->getRealPath()];
-
         return $this->formatPerservingPrinter->printToFile($smartFileInfo, $newStmts, $oldStmts, $oldTokens);
     }
 
     /**
      * See https://github.com/nikic/PHP-Parser/issues/344#issuecomment-298162516.
      */
-    public function processFileToString(SmartFileInfo $smartFileInfo): string
+    public function printToString(SmartFileInfo $smartFileInfo): string
     {
-        $this->currentFileInfoProvider->setCurrentFileInfo($smartFileInfo);
+        [$newStmts, $oldStmts, $oldTokens] = $this->tokensByFilePath[$smartFileInfo->getRealPath()];
+        return $this->formatPerservingPrinter->printToString($newStmts, $oldStmts, $oldTokens);
+    }
 
-        [$newStmts, $oldStmts, $oldTokens] = $this->parseAndTraverseFileInfoToNodes($smartFileInfo);
+    public function refactor(SmartFileInfo $smartFileInfo): void
+    {
+        [$newStmts, $oldStmts, $oldTokens] = $this->tokensByFilePath[$smartFileInfo->getRealPath()];
+        $newStmts = $this->rectorNodeTraverser->traverse($newStmts);
 
-        // store tokens by absolute path, so we don't have to print them right now
+        // this is needed for new tokens added in "afterTraverse()"
         $this->tokensByFilePath[$smartFileInfo->getRealPath()] = [$newStmts, $oldStmts, $oldTokens];
-
-        return $this->formatPerservingPrinter->printToString($newStmts, $oldStmts, $oldTokens);
-    }
-
-    /**
-     * See https://github.com/nikic/PHP-Parser/issues/344#issuecomment-298162516.
-     */
-    public function reprintToString(SmartFileInfo $smartFileInfo): string
-    {
-        // restore tokens
-        [$newStmts, $oldStmts, $oldTokens] = $this->tokensByFilePath[$smartFileInfo->getRealPath()];
-
-        return $this->formatPerservingPrinter->printToString($newStmts, $oldStmts, $oldTokens);
     }
 
     /**
@@ -122,7 +117,6 @@ final class FileProcessor
             $oldStmts,
             $smartFileInfo->getRealPath()
         );
-        $newStmts = $this->rectorNodeTraverser->traverse($newStmts);
 
         return [$newStmts, $oldStmts, $oldTokens];
     }

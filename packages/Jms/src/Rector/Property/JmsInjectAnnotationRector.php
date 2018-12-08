@@ -7,13 +7,14 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use Rector\Application\ErrorCollector;
+use Rector\Application\ErrorAndDiffCollector;
 use Rector\Bridge\Contract\AnalyzedApplicationContainerInterface;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 use function Safe\sprintf;
 
 /**
@@ -37,18 +38,18 @@ final class JmsInjectAnnotationRector extends AbstractRector
     private $analyzedApplicationContainer;
 
     /**
-     * @var ErrorCollector
+     * @var ErrorAndDiffCollector
      */
-    private $errorCollector;
+    private $errorAndDiffCollector;
 
     public function __construct(
         DocBlockAnalyzer $docBlockAnalyzer,
         AnalyzedApplicationContainerInterface $analyzedApplicationContainer,
-        ErrorCollector $errorCollector
+        ErrorAndDiffCollector $errorAndDiffCollector
     ) {
         $this->docBlockAnalyzer = $docBlockAnalyzer;
         $this->analyzedApplicationContainer = $analyzedApplicationContainer;
-        $this->errorCollector = $errorCollector;
+        $this->errorAndDiffCollector = $errorAndDiffCollector;
     }
 
     public function getDefinition(): RectorDefinition
@@ -137,9 +138,14 @@ CODE_SAMPLE
             }
 
             // collect error
-            $this->errorCollector->addErrorWithRectorMessage(
+
+            /** @var SmartFileInfo $fileInfo */
+            $fileInfo = $node->getAttribute(Attribute::FILE_INFO);
+
+            $this->errorAndDiffCollector->addErrorWithRectorClassMessageAndFileInfo(
                 self::class,
-                sprintf('Service "%s" was not found in DI Container of your Symfony App.', $serviceName)
+                sprintf('Service "%s" was not found in DI Container of your Symfony App.', $serviceName),
+                $fileInfo
             );
         }
 
