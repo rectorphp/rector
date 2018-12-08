@@ -33,7 +33,7 @@ final class Configuration
     public function resolveFromInput(InputInterface $input): void
     {
         $this->isDryRun = (bool) $input->getOption(Option::OPTION_DRY_RUN);
-        $this->source = (array) $input->getOption(Option::SOURCE);
+        $this->source = (array) $input->getArgument(Option::SOURCE);
         $this->hideAutoloadErrors = (bool) $input->getOption(Option::HIDE_AUTOLOAD_ERRORS);
         $this->withStyle = (bool) $input->getOption(Option::OPTION_WITH_STYLE);
     }

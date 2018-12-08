@@ -2,7 +2,7 @@
 
 namespace Rector\Console\Command;
 
-use Rector\Application\ErrorCollector;
+use Rector\Application\ErrorAndDiffCollector;
 use Rector\Application\RectorApplication;
 use Rector\Autoloading\AdditionalAutoloader;
 use Rector\CodingStyle\AfterRectorCodingStyle;
@@ -12,7 +12,6 @@ use Rector\Console\Output\ProcessCommandReporter;
 use Rector\Console\Shell;
 use Rector\FileSystem\FilesFinder;
 use Rector\Guard\RectorGuard;
-use Rector\Reporting\FileDiff;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -23,11 +22,6 @@ use Symplify\PackageBuilder\Console\Command\CommandNaming;
 
 final class ProcessCommand extends Command
 {
-    /**
-     * @var FileDiff[]
-     */
-    private $fileDiffs = [];
-
     /**
      * @var SymfonyStyle
      */
@@ -54,9 +48,9 @@ final class ProcessCommand extends Command
     private $rectorGuard;
 
     /**
-     * @var ErrorCollector
+     * @var ErrorAndDiffCollector
      */
-    private $errorCollector;
+    private $errorAndDiffCollector;
 
     /**
      * @var AfterRectorCodingStyle
@@ -79,7 +73,7 @@ final class ProcessCommand extends Command
         ProcessCommandReporter $processCommandReporter,
         AdditionalAutoloader $additionalAutoloader,
         RectorGuard $rectorGuard,
-        ErrorCollector $errorCollector,
+        ErrorAndDiffCollector $errorAndDiffCollector,
         AfterRectorCodingStyle $afterRectorCodingStyle,
         Configuration $configuration,
         RectorApplication $rectorApplication
@@ -91,7 +85,7 @@ final class ProcessCommand extends Command
         $this->processCommandReporter = $processCommandReporter;
         $this->additionalAutoloader = $additionalAutoloader;
         $this->rectorGuard = $rectorGuard;
-        $this->errorCollector = $errorCollector;
+        $this->errorAndDiffCollector = $errorAndDiffCollector;
         $this->afterRectorCodingStyle = $afterRectorCodingStyle;
         $this->configuration = $configuration;
         $this->rectorApplication = $rectorApplication;
@@ -149,12 +143,10 @@ final class ProcessCommand extends Command
 
         $this->rectorApplication->runOnFileInfos($phpFileInfos);
 
-        //        $this->processFileInfos($phpFileInfos);
+        $this->processCommandReporter->reportFileDiffs($this->errorAndDiffCollector->getFileDiffs());
 
-        $this->processCommandReporter->reportFileDiffs($this->fileDiffs);
-
-        if ($this->errorCollector->getErrors()) {
-            $this->processCommandReporter->reportErrors($this->errorCollector->getErrors());
+        if ($this->errorAndDiffCollector->getErrors()) {
+            $this->processCommandReporter->reportErrors($this->errorAndDiffCollector->getErrors());
             return Shell::CODE_ERROR;
         }
 
@@ -164,7 +156,7 @@ final class ProcessCommand extends Command
 
         $this->symfonyStyle->success('Rector is done!');
 
-        if ($this->configuration->isDryRun() && count($this->fileDiffs)) {
+        if ($this->configuration->isDryRun() && count($this->errorAndDiffCollector->getFileDiffs())) {
             return Shell::CODE_ERROR;
         }
 
