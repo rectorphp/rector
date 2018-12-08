@@ -97,9 +97,7 @@ final class RectorApplication
                 return;
             }
 
-            $message = $this->exceptionCorrector->getAutoloadExceptionMessageAndAddLocation($analysedCodeException);
-
-            $this->errorAndDiffCollector->addError(new Error($fileInfo, $message));
+            $this->errorAndDiffCollector->addAutoloadError($analysedCodeException, $fileInfo);
         } catch (Throwable $throwable) {
             if ($this->symfonyStyle->isVerbose()) {
                 throw $throwable;

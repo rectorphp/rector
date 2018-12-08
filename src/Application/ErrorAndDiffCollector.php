@@ -2,7 +2,9 @@
 
 namespace Rector\Application;
 
+use PHPStan\AnalysedCodeException;
 use Rector\ConsoleDiffer\DifferAndFormatter;
+use Rector\Error\ExceptionCorrector;
 use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
 use Rector\Reporting\FileDiff;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
@@ -34,14 +36,21 @@ final class ErrorAndDiffCollector
      */
     private $appliedRectorCollector;
 
+    /**
+     * @var ExceptionCorrector
+     */
+    private $exceptionCorrector;
+
     public function __construct(
         CurrentFileInfoProvider $currentFileInfoProvider,
         DifferAndFormatter $differAndFormatter,
-        AppliedRectorCollector $appliedRectorCollector
+        AppliedRectorCollector $appliedRectorCollector,
+        ExceptionCorrector $exceptionCorrector
     ) {
         $this->currentFileInfoProvider = $currentFileInfoProvider;
         $this->differAndFormatter = $differAndFormatter;
         $this->appliedRectorCollector = $appliedRectorCollector;
+        $this->exceptionCorrector = $exceptionCorrector;
     }
 
     public function addError(Error $error): void
@@ -82,5 +91,12 @@ final class ErrorAndDiffCollector
     public function getFileDiffs(): array
     {
         return $this->fileDiffs;
+    }
+
+    public function addAutoloadError(AnalysedCodeException $analysedCodeException, SmartFileInfo $fileInfo): void
+    {
+        $message = $this->exceptionCorrector->getAutoloadExceptionMessageAndAddLocation($analysedCodeException);
+
+        $this->addError(new Error($fileInfo, $message));
     }
 }
