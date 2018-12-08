@@ -51,7 +51,7 @@ trait NodeCommandersTrait
     {
         $this->nodeAddingCommander->addNodeAfterNode($node, $positionNode);
 
-        $this->appliedRectorCollector->addRectorClass(static::class);
+        $this->notifyNodeChangeFileInfo($positionNode);
     }
 
     protected function addPropertyToClass(Class_ $classNode, string $propertyType, string $propertyName): void
@@ -59,13 +59,13 @@ trait NodeCommandersTrait
         $variableInfo = new VariableInfo($propertyName, $propertyType);
         $this->propertyAddingCommander->addPropertyToClass($variableInfo, $classNode);
 
-        $this->appliedRectorCollector->addRectorClass(static::class);
+        $this->notifyNodeChangeFileInfo($classNode);
     }
 
     protected function removeNode(Node $node): void
     {
         $this->nodeRemovingCommander->addNode($node);
 
-        $this->appliedRectorCollector->addRectorClass(static::class);
+        $this->notifyNodeChangeFileInfo($node);
     }
 }

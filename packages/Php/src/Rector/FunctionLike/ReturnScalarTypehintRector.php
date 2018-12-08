@@ -119,6 +119,8 @@ CODE_SAMPLE
 
                 // let the method now it was changed now
                 $childClassMethod->returnType->setAttribute(self::HAS_NEW_INHERITED_TYPE, true);
+
+                $this->notifyNodeChangeFileInfo($childClassMethod);
             }
         }
 

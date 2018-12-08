@@ -9,6 +9,10 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Application\AppliedRectorCollector;
 use Rector\Contract\Rector\PhpRectorInterface;
+use Rector\Exception\ShouldNotHappenException;
+use Rector\NodeTypeResolver\Node\Attribute;
+use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
+use function Safe\sprintf;
 
 abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorInterface
 {
@@ -33,17 +37,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     }
 
     /**
-     * @param Node[] $nodes
-     * @return Node[]|null
-     */
-    public function beforeTraverse(array $nodes): ?array
-    {
-        $this->appliedRectorCollector->reset();
-
-        return parent::beforeTraverse($nodes);
-    }
-
-    /**
      * @return int|Node|null
      */
     final public function enterNode(Node $node)
@@ -60,7 +53,12 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
         // changed!
         if ($originalNode !== $node) {
-            $this->appliedRectorCollector->addRectorClass(static::class);
+            // transfer attributes that are needed further
+            if ($node->getAttribute(Attribute::FILE_INFO) === null) {
+                $node->setAttribute(Attribute::FILE_INFO, $originalNode->getAttribute(Attribute::FILE_INFO));
+            }
+
+            $this->notifyNodeChangeFileInfo($node);
         }
 
         if ($originalNode instanceof Stmt && $node instanceof Expr) {
@@ -90,6 +88,22 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         }
 
         return $nodes;
+    }
+
+    protected function notifyNodeChangeFileInfo(Node $node): void
+    {
+        /** @var SmartFileInfo|null $fileInfo */
+        $fileInfo = $node->getAttribute(Attribute::FILE_INFO);
+        if ($fileInfo === null) {
+            throw new ShouldNotHappenException(sprintf(
+                'Node is missing "%s" attribute.%sYou probably created a new node and forgot to move attributes of old one in "%s".',
+                Attribute::FILE_INFO,
+                PHP_EOL,
+                static::class
+            ));
+        }
+
+        $this->appliedRectorCollector->addRectorClass(static::class, $fileInfo);
     }
 
     private function isMatchingNodeType(string $nodeClass): bool

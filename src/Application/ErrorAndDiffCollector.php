@@ -59,17 +59,13 @@ final class ErrorAndDiffCollector
         return $this->errors;
     }
 
-    public function addFileDiff(
-        SmartFileInfo $smartFileInfo,
-        string $newContent,
-        string $oldContent,
-        ?string $rectorClass = null
-    ): void {
+    public function addFileDiff(SmartFileInfo $smartFileInfo, string $newContent, string $oldContent): void
+    {
         if ($newContent === $oldContent) {
             return;
         }
 
-        $appliedRectors = $this->appliedRectorCollector->getRectorClasses() ?: $rectorClass ? [$rectorClass] : [];
+        $appliedRectors = $this->appliedRectorCollector->getRectorClasses($smartFileInfo);
 
         // always keep the most recent diff
         $this->fileDiffs[$smartFileInfo->getRealPath()] = new FileDiff(
