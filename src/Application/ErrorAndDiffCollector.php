@@ -8,6 +8,7 @@ use Rector\Error\ExceptionCorrector;
 use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
 use Rector\Reporting\FileDiff;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
+use Throwable;
 
 final class ErrorAndDiffCollector
 {
@@ -104,5 +105,15 @@ final class ErrorAndDiffCollector
         $message = $this->exceptionCorrector->getAutoloadExceptionMessageAndAddLocation($analysedCodeException);
 
         $this->addError(new Error($fileInfo, $message));
+    }
+
+    public function addThrowableWithFileInfo(Throwable $throwable, SmartFileInfo $fileInfo): void
+    {
+        $rectorClass = $this->exceptionCorrector->matchRectorClass($throwable);
+        if ($rectorClass) {
+            $this->addErrorWithRectorMessage($rectorClass, $throwable->getMessage());
+        } else {
+            $this->addError(new Error($fileInfo, $throwable->getMessage(), $throwable->getCode()));
+        }
     }
 }

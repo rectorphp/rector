@@ -4,7 +4,6 @@ namespace Rector\Application;
 
 use PHPStan\AnalysedCodeException;
 use Rector\Configuration\Configuration;
-use Rector\Error\ExceptionCorrector;
 use Rector\FileSystemRector\FileSystemFileProcessor;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
@@ -32,11 +31,6 @@ final class RectorApplication
     private $fileSystemFileProcessor;
 
     /**
-     * @var ExceptionCorrector
-     */
-    private $exceptionCorrector;
-
-    /**
      * @var ErrorAndDiffCollector
      */
     private $errorAndDiffCollector;
@@ -51,27 +45,18 @@ final class RectorApplication
      */
     private $fileProcessor;
 
-    /**
-     * @var FilesToReprintCollector
-     */
-    private $filesToReprintCollector;
-
     public function __construct(
         SymfonyStyle $symfonyStyle,
         FileSystemFileProcessor $fileSystemFileProcessor,
-        ExceptionCorrector $exceptionCorrector,
         ErrorAndDiffCollector $errorAndDiffCollector,
         Configuration $configuration,
-        FileProcessor $fileProcessor,
-        FilesToReprintCollector $filesToReprintCollector
+        FileProcessor $fileProcessor
     ) {
         $this->symfonyStyle = $symfonyStyle;
         $this->fileSystemFileProcessor = $fileSystemFileProcessor;
-        $this->exceptionCorrector = $exceptionCorrector;
         $this->errorAndDiffCollector = $errorAndDiffCollector;
         $this->configuration = $configuration;
         $this->fileProcessor = $fileProcessor;
-        $this->filesToReprintCollector = $filesToReprintCollector;
     }
 
     /**
@@ -80,10 +65,25 @@ final class RectorApplication
     public function runOnFileInfos(array $fileInfos): void
     {
         $totalFiles = count($fileInfos);
+
         if (! $this->symfonyStyle->isVerbose()) {
-            $this->symfonyStyle->progressStart($totalFiles);
+            // why 3? one for each cycle, so user sees some activity all the time
+            $this->symfonyStyle->progressStart($totalFiles * 3);
         }
 
+        // 1. parse files to nodes
+        foreach ($fileInfos as $fileInfo) {
+            $this->advance();
+            $this->fileProcessor->parseFileInfoToLocalCache($fileInfo);
+        }
+
+        // 2. change nodes with Rectors
+        foreach ($fileInfos as $fileInfo) {
+            $this->advance();
+            $this->fileProcessor->refactor($fileInfo);
+        }
+
+        // 3. print to file or string
         foreach ($fileInfos as $fileInfo) {
             $this->processFileInfo($fileInfo);
             if ($this->symfonyStyle->isVerbose()) {
@@ -99,7 +99,16 @@ final class RectorApplication
     private function processFileInfo(SmartFileInfo $fileInfo): void
     {
         try {
-            $this->processFile($fileInfo);
+            $oldContent = $fileInfo->getContents();
+
+            if ($this->configuration->isDryRun()) {
+                $newContent = $this->fileProcessor->printToString($fileInfo);
+            } else {
+                $newContent = $this->fileProcessor->printToFile($fileInfo);
+            }
+
+            $this->errorAndDiffCollector->addFileDiff($fileInfo, $newContent, $oldContent);
+
             $this->fileSystemFileProcessor->processFileInfo($fileInfo);
         } catch (AnalysedCodeException $analysedCodeException) {
             if ($this->configuration->shouldHideAutoloadErrors()) {
@@ -112,56 +121,14 @@ final class RectorApplication
                 throw $throwable;
             }
 
-            $rectorClass = $this->exceptionCorrector->matchRectorClass($throwable);
-            if ($rectorClass) {
-                $this->errorAndDiffCollector->addErrorWithRectorMessage($rectorClass, $throwable->getMessage());
-            } else {
-                $this->errorAndDiffCollector->addError(
-                    new Error($fileInfo, $throwable->getMessage(), $throwable->getCode())
-                );
-            }
+            $this->errorAndDiffCollector->addThrowableWithFileInfo($throwable, $fileInfo);
         }
     }
 
-    private function processFile(SmartFileInfo $fileInfo): void
+    private function advance(): void
     {
-        $oldContent = $fileInfo->getContents();
-
-        if ($this->configuration->isDryRun()) {
-            $newContent = $this->fileProcessor->processFileToString($fileInfo);
-
-            /** @var string $rectorClass */
-            foreach ($this->filesToReprintCollector->getFileInfosAndRectorClasses() as $rectorClassToFileInfo) {
-                [$rectorClass, $fileInfoToReprint] = $rectorClassToFileInfo;
-
-                $reprintedOldContent = $fileInfoToReprint->getContents();
-                $reprintedNewContent = $this->fileProcessor->reprintToString($fileInfoToReprint);
-                $this->errorAndDiffCollector->addFileDiff(
-                    $fileInfoToReprint,
-                    $reprintedNewContent,
-                    $reprintedOldContent,
-                    $rectorClass
-                );
-            }
-        } else {
-            $newContent = $this->fileProcessor->processFile($fileInfo);
-
-            /** @var string $rectorClass */
-            foreach ($this->filesToReprintCollector->getFileInfosAndRectorClasses() as $rectorClassToFileInfo) {
-                [$rectorClass, $fileInfoToReprint] = $rectorClassToFileInfo;
-
-                $reprintedOldContent = $fileInfoToReprint->getContents();
-                $reprintedNewContent = $this->fileProcessor->reprintFile($fileInfoToReprint);
-                $this->errorAndDiffCollector->addFileDiff(
-                    $fileInfoToReprint,
-                    $reprintedNewContent,
-                    $reprintedOldContent,
-                    $rectorClass
-                );
-            }
+        if ($this->symfonyStyle->isVerbose() === false) {
+            $this->symfonyStyle->progressAdvance();
         }
-
-        $this->errorAndDiffCollector->addFileDiff($fileInfo, $newContent, $oldContent);
-        $this->filesToReprintCollector->reset();
     }
 }

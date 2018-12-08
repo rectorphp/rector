@@ -12,7 +12,6 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Interface_;
-use Rector\Application\FilesToReprintCollector;
 use Rector\NodeTypeResolver\Application\ClassLikeNodeCollector;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\NodeTypeResolver\Php\AbstractTypeInfo;
@@ -45,15 +44,9 @@ abstract class AbstractScalarTypehintRector extends AbstractRector
      */
     protected $classLikeNodeCollector;
 
-    /**
-     * @var FilesToReprintCollector
-     */
-    protected $filesToReprintCollector;
-
     public function __construct(
         DocBlockAnalyzer $docBlockAnalyzer,
         ClassLikeNodeCollector $classLikeNodeCollector,
-        FilesToReprintCollector $filesToReprintCollector,
         bool $enableObjectType = false
     ) {
         $this->docBlockAnalyzer = $docBlockAnalyzer;
@@ -62,7 +55,6 @@ abstract class AbstractScalarTypehintRector extends AbstractRector
         if ($enableObjectType) {
             PhpTypeSupport::enableType('object');
         }
-        $this->filesToReprintCollector = $filesToReprintCollector;
     }
 
     /**
