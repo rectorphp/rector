@@ -1,3 +1,19 @@
 services:
-    Rector\CodeQuality\Rector\:
-        resource: '../../../packages/CodeQuality/src/Rector'
+    Rector\CodeQuality\Rector\Assign\CombinedAssignRector: ~
+    Rector\CodeQuality\Rector\BinaryOp\SimplifyDeMorganBinaryRector: ~
+    Rector\CodeQuality\Rector\BooleanAnd\SimplifyEmptyArrayCheckRector: ~
+    Rector\CodeQuality\Rector\Expression\SimplifyMirrorAssignRector: ~
+    Rector\CodeQuality\Rector\Foreach_\ForeachToInArrayRector: ~
+    Rector\CodeQuality\Rector\Foreach_\SimplifyForeachToCoalescingRector: ~
+    Rector\CodeQuality\Rector\FuncCall\InArrayAndArrayKeysToArrayKeyExistsRector: ~
+    Rector\CodeQuality\Rector\FuncCall\SimplifyFuncGetArgsCountRector: ~
+    Rector\CodeQuality\Rector\FuncCall\SimplifyInArrayValuesRector: ~
+    Rector\CodeQuality\Rector\FuncCall\SimplifyStrposLowerRector: ~
+    Rector\CodeQuality\Rector\Identical\GetClassToInstanceOfRector: ~
+    Rector\CodeQuality\Rector\Identical\SimplifyArraySearchRector: ~
+    Rector\CodeQuality\Rector\Identical\SimplifyConditionsRector: ~
+    Rector\CodeQuality\Rector\If_\SimplifyIfNotNullReturnRector: ~
+    Rector\CodeQuality\Rector\If_\SimplifyIfReturnBoolRector: ~
+    Rector\CodeQuality\Rector\Return_\SimplifyUselessVariableRector: ~
+    Rector\CodeQuality\Rector\Stmt\DeadCodeRemovingRector: ~
+    Rector\CodeQuality\Rector\Ternary\UnnecessaryTernaryExpressionRector: ~
