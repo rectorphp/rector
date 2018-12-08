@@ -1,6 +1,7 @@
 {
     "name": "rector/rector",
-    "description": "Upgrade your application with CLI without any deprecations knowledge.",
+    "description": "Instant upgrade and refactoring of your PHP code",
+    "keywords": ["instant upgrades", "instant refactoring", "ast", "automated refactoring"],
     "license": "MIT",
     "require": {
         "php": "^7.1",
@@ -9,22 +10,22 @@
         "nette/robot-loader": "^3.1",
         "nette/utils": "^2.5",
         "nikic/php-parser": "^4.1",
-        "phpstan/phpstan": "^0.10.5",
+        "phpstan/phpstan": "^0.10.6",
         "sebastian/diff": "^3.0",
         "symfony/console": "^3.4|^4.1",
         "symfony/dependency-injection": "^3.4|^4.1",
         "symfony/finder": "^3.4|^4.1",
         "symfony/process": "^3.4|^4.1",
-        "symplify/better-phpdoc-parser": "^5.2.13",
-        "symplify/package-builder": "^5.2.13",
+        "symplify/better-phpdoc-parser": "^5.2.15",
+        "symplify/package-builder": "^5.2.15",
         "thecodingmachine/safe": "^0.1.6"
     },
     "require-dev": {
-        "phpunit/phpunit": "^7.4",
+        "phpunit/phpunit": "^7.5",
         "ocramius/package-versions": "^1.3",
-        "symplify/easy-coding-standard": "^5.2.13",
-        "symplify/monorepo-builder": "^5.2.13",
-        "symplify/phpstan-extensions": "^5.2.13",
+        "symplify/easy-coding-standard": "^5.2.15",
+        "symplify/monorepo-builder": "^5.2.15",
+        "symplify/phpstan-extensions": "^5.2.15",
         "thecodingmachine/phpstan-safe-rule": "^0.1.0",
         "thecodingmachine/phpstan-strict-rules": "^0.10.7",
         "tracy/tracy": "^2.5"
