@@ -3,8 +3,12 @@
 namespace Rector\NodeTypeResolver\Application;
 
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
+use PhpParser\Node\Stmt\Trait_;
+use PhpParser\Node\Stmt\TraitUse;
 use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\PhpParser\Node\Resolver\NameResolver;
 
 final class ClassLikeNodeCollector
 {
@@ -17,6 +21,21 @@ final class ClassLikeNodeCollector
      * @var Interface_[]
      */
     private $interfaces = [];
+
+    /**
+     * @var Trait_[]
+     */
+    private $traits = [];
+
+    /**
+     * @var NameResolver
+     */
+    private $nameResolver;
+
+    public function __construct(NameResolver $nameResolver)
+    {
+        $this->nameResolver = $nameResolver;
+    }
 
     public function addClass(string $name, Class_ $classNode): void
     {
@@ -33,9 +52,19 @@ final class ClassLikeNodeCollector
         $this->interfaces[$name] = $interfaceNode;
     }
 
+    public function addTrait(string $name, Trait_ $traitNode): void
+    {
+        $this->traits[$name] = $traitNode;
+    }
+
     public function findInterface(string $name): ?Interface_
     {
         return $this->interfaces[$name] ?? null;
+    }
+
+    public function findTrait(string $name): ?Trait_
+    {
+        return $this->traits[$name] ?? null;
     }
 
     /**
@@ -86,5 +115,26 @@ final class ClassLikeNodeCollector
         }
 
         return $implementerInterfaces;
+    }
+
+    /**
+     * @return Trait_[]
+     */
+    public function findUsedTraitsInClass(ClassLike $classLikeNode): array
+    {
+        $traits = [];
+
+        foreach ($classLikeNode->stmts as $stmt) {
+            if (! $stmt instanceof TraitUse) {
+                continue;
+            }
+
+            foreach ($stmt->traits as $trait) {
+                $traitName = $this->nameResolver->resolve($trait);
+                $traits[] = $this->findTrait($traitName);
+            }
+        }
+
+        return $traits;
     }
 }
