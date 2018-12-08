@@ -5,7 +5,6 @@ namespace Rector\Application;
 use PHPStan\AnalysedCodeException;
 use Rector\ConsoleDiffer\DifferAndFormatter;
 use Rector\Error\ExceptionCorrector;
-use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
 use Rector\Reporting\FileDiff;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 use Throwable;
@@ -16,11 +15,6 @@ final class ErrorAndDiffCollector
      * @var Error[]
      */
     private $errors = [];
-
-    /**
-     * @var CurrentFileInfoProvider
-     */
-    private $currentFileInfoProvider;
 
     /**
      * @var FileDiff[]
@@ -43,12 +37,10 @@ final class ErrorAndDiffCollector
     private $exceptionCorrector;
 
     public function __construct(
-        CurrentFileInfoProvider $currentFileInfoProvider,
         DifferAndFormatter $differAndFormatter,
         AppliedRectorCollector $appliedRectorCollector,
         ExceptionCorrector $exceptionCorrector
     ) {
-        $this->currentFileInfoProvider = $currentFileInfoProvider;
         $this->differAndFormatter = $differAndFormatter;
         $this->appliedRectorCollector = $appliedRectorCollector;
         $this->exceptionCorrector = $exceptionCorrector;
@@ -65,11 +57,6 @@ final class ErrorAndDiffCollector
     public function getErrors(): array
     {
         return $this->errors;
-    }
-
-    public function addErrorWithRectorMessage(string $rectorClass, string $message): void
-    {
-        $this->errors[] = new Error($this->currentFileInfoProvider->getSmartFileInfo(), $message, null, $rectorClass);
     }
 
     public function addFileDiff(
@@ -107,11 +94,19 @@ final class ErrorAndDiffCollector
         $this->addError(new Error($fileInfo, $message));
     }
 
+    public function addErrorWithRectorClassMessageAndFileInfo(
+        string $rectorClass,
+        string $message,
+        SmartFileInfo $smartFileInfo
+    ): void {
+        $this->errors[] = new Error($smartFileInfo, $message, null, $rectorClass);
+    }
+
     public function addThrowableWithFileInfo(Throwable $throwable, SmartFileInfo $fileInfo): void
     {
         $rectorClass = $this->exceptionCorrector->matchRectorClass($throwable);
         if ($rectorClass) {
-            $this->addErrorWithRectorMessage($rectorClass, $throwable->getMessage());
+            $this->addErrorWithRectorClassMessageAndFileInfo($rectorClass, $throwable->getMessage(), $fileInfo);
         } else {
             $this->addError(new Error($fileInfo, $throwable->getMessage(), $throwable->getCode()));
         }

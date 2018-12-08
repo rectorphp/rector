@@ -8,9 +8,6 @@ parameters:
     reportUnmatchedIgnoredErrors: false
 
     excludes_analyse:
-        # many temp changes
-        - src/Application/RectorApplication.php
-
         # test files
         - '*packages/NodeTypeResolver/tests/Source/AnotherClass.php'
         - '*tests/Rector/MethodCall/MethodNameReplacerRector/**/SomeClass.php'

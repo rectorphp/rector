@@ -134,7 +134,6 @@ final class ProcessCommand extends Command
 
         $source = $input->getArgument(Option::SOURCE);
 
-        // will replace parameter provider in object + method style
         $this->configuration->resolveFromInput($input);
 
         $phpFileInfos = $this->filesFinder->findInDirectoriesAndFiles($source, ['php']);

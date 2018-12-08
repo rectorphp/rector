@@ -14,6 +14,7 @@ use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 use function Safe\sprintf;
 
 /**
@@ -137,9 +138,14 @@ CODE_SAMPLE
             }
 
             // collect error
-            $this->errorAndDiffCollector->addErrorWithRectorMessage(
+
+            /** @var SmartFileInfo $fileInfo */
+            $fileInfo = $node->getAttribute(Attribute::FILE_INFO);
+
+            $this->errorAndDiffCollector->addErrorWithRectorClassMessageAndFileInfo(
                 self::class,
-                sprintf('Service "%s" was not found in DI Container of your Symfony App.', $serviceName)
+                sprintf('Service "%s" was not found in DI Container of your Symfony App.', $serviceName),
+                $fileInfo
             );
         }
 
