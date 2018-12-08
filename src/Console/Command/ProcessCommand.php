@@ -10,6 +10,7 @@ use Rector\Application\FileProcessor;
 use Rector\Application\FilesToReprintCollector;
 use Rector\Autoloading\AdditionalAutoloader;
 use Rector\CodingStyle\AfterRectorCodingStyle;
+use Rector\Configuration\Configuration;
 use Rector\Configuration\Option;
 use Rector\Console\Output\ProcessCommandReporter;
 use Rector\Console\Shell;
@@ -27,7 +28,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
-use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Throwable;
 use function Safe\sprintf;
 
@@ -57,11 +57,6 @@ final class ProcessCommand extends Command
      * @var ProcessCommandReporter
      */
     private $processCommandReporter;
-
-    /**
-     * @var ParameterProvider
-     */
-    private $parameterProvider;
 
     /**
      * @var DifferAndFormatter
@@ -103,12 +98,16 @@ final class ProcessCommand extends Command
      */
     private $filesToReprintCollector;
 
+    /**
+     * @var Configuration
+     */
+    private $configuration;
+
     public function __construct(
         FileProcessor $fileProcessor,
         SymfonyStyle $symfonyStyle,
         FilesFinder $phpFilesFinder,
         ProcessCommandReporter $processCommandReporter,
-        ParameterProvider $parameterProvider,
         DifferAndFormatter $differAndFormatter,
         AdditionalAutoloader $additionalAutoloader,
         RectorGuard $rectorGuard,
@@ -116,7 +115,8 @@ final class ProcessCommand extends Command
         ErrorCollector $errorCollector,
         AfterRectorCodingStyle $afterRectorCodingStyle,
         AppliedRectorCollector $appliedRectorCollector,
-        FilesToReprintCollector $filesToReprintCollector
+        FilesToReprintCollector $filesToReprintCollector,
+        Configuration $configuration
     ) {
         parent::__construct();
 
@@ -124,7 +124,6 @@ final class ProcessCommand extends Command
         $this->symfonyStyle = $symfonyStyle;
         $this->filesFinder = $phpFilesFinder;
         $this->processCommandReporter = $processCommandReporter;
-        $this->parameterProvider = $parameterProvider;
         $this->differAndFormatter = $differAndFormatter;
         $this->additionalAutoloader = $additionalAutoloader;
         $this->rectorGuard = $rectorGuard;
@@ -133,6 +132,7 @@ final class ProcessCommand extends Command
         $this->afterRectorCodingStyle = $afterRectorCodingStyle;
         $this->appliedRectorCollector = $appliedRectorCollector;
         $this->filesToReprintCollector = $filesToReprintCollector;
+        $this->configuration = $configuration;
     }
 
     protected function configure(): void
@@ -177,14 +177,15 @@ final class ProcessCommand extends Command
         $this->rectorGuard->ensureSomeRectorsAreRegistered();
 
         $source = $input->getArgument(Option::SOURCE);
-        $this->parameterProvider->changeParameter(Option::SOURCE, $source);
-        $this->parameterProvider->changeParameter(Option::OPTION_DRY_RUN, $input->getOption(Option::OPTION_DRY_RUN));
+
+        // will replace parameter provider in object + method style
+        $this->configuration->resolveFromInput($input);
 
         $phpFileInfos = $this->filesFinder->findInDirectoriesAndFiles($source, ['php']);
 
         $this->additionalAutoloader->autoloadWithInputAndSource($input, $source);
 
-        $this->processFileInfos($phpFileInfos, (bool) $input->getOption(Option::HIDE_AUTOLOAD_ERRORS));
+        $this->processFileInfos($phpFileInfos);
 
         $this->processCommandReporter->reportFileDiffs($this->fileDiffs);
 
@@ -193,13 +194,13 @@ final class ProcessCommand extends Command
             return Shell::CODE_ERROR;
         }
 
-        if ($input->getOption(Option::OPTION_WITH_STYLE)) {
+        if ($this->configuration->isWithStyle()) {
             $this->afterRectorCodingStyle->apply($source);
         }
 
         $this->symfonyStyle->success('Rector is done!');
 
-        if ($this->parameterProvider->provideParameter(Option::OPTION_DRY_RUN) && count($this->fileDiffs)) {
+        if ($this->configuration->isDryRun() && count($this->fileDiffs)) {
             return Shell::CODE_ERROR;
         }
 
@@ -209,7 +210,7 @@ final class ProcessCommand extends Command
     /**
      * @param SmartFileInfo[] $fileInfos
      */
-    private function processFileInfos(array $fileInfos, bool $shouldHideAutoloadErrors): void
+    private function processFileInfos(array $fileInfos): void
     {
         $totalFiles = count($fileInfos);
         if (! $this->symfonyStyle->isVerbose()) {
@@ -217,7 +218,7 @@ final class ProcessCommand extends Command
         }
 
         foreach ($fileInfos as $fileInfo) {
-            $this->processFileInfo($fileInfo, $shouldHideAutoloadErrors);
+            $this->processFileInfo($fileInfo);
             if ($this->symfonyStyle->isVerbose()) {
                 $this->symfonyStyle->writeln($fileInfo->getRealPath());
             } else {
@@ -228,18 +229,18 @@ final class ProcessCommand extends Command
         $this->symfonyStyle->newLine(2);
     }
 
-    private function processFileInfo(SmartFileInfo $fileInfo, bool $shouldHideAutoloadErrors): void
+    private function processFileInfo(SmartFileInfo $fileInfo): void
     {
         try {
             $this->processFile($fileInfo);
             $this->fileSystemFileProcessor->processFileInfo($fileInfo);
         } catch (AnalysedCodeException $analysedCodeException) {
-            if ($shouldHideAutoloadErrors) {
+            if ($this->configuration->shouldHideAutoloadErrors()) {
                 return;
             }
 
             $message = sprintf(
-                'Analyze error: "%s". Try to include your files in "parameters > autoload_paths".%sSee https://github.com/rectorphp/rector#extra-autoloading',
+                'Analyze error: "%s". Include your files in "parameters > autoload_paths".%sSee https://github.com/rectorphp/rector#extra-autoloading',
                 $analysedCodeException->getMessage(),
                 PHP_EOL
             );
@@ -263,7 +264,7 @@ final class ProcessCommand extends Command
     {
         $oldContent = $fileInfo->getContents();
 
-        if ($this->parameterProvider->provideParameter(Option::OPTION_DRY_RUN)) {
+        if ($this->configuration->isDryRun()) {
             $newContent = $this->fileProcessor->processFileToString($fileInfo);
 
             foreach ($this->filesToReprintCollector->getFileInfos() as $fileInfoToReprint) {
