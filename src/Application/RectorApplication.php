@@ -10,6 +10,15 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 use Throwable;
 
+/**
+ * Rector cycle has 3 steps:
+ *
+ * 1. parse all files to nodes
+ *
+ * 2. run Rectors on all files and their nodes
+ *
+ * 3. print changed content to file or to string diff with "--dry-run"
+ */
 final class RectorApplication
 {
     /**
