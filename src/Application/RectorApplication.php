@@ -121,25 +121,33 @@ final class RectorApplication
         if ($this->configuration->isDryRun()) {
             $newContent = $this->fileProcessor->processFileToString($fileInfo);
 
-            foreach ($this->filesToReprintCollector->getFileInfos() as $fileInfoToReprint) {
+            /** @var string $rectorClass */
+            foreach ($this->filesToReprintCollector->getFileInfosAndRectorClasses() as $rectorClassToFileInfo) {
+                [$rectorClass, $fileInfoToReprint] = $rectorClassToFileInfo;
+
                 $reprintedOldContent = $fileInfoToReprint->getContents();
                 $reprintedNewContent = $this->fileProcessor->reprintToString($fileInfoToReprint);
                 $this->errorAndDiffCollector->addFileDiff(
                     $fileInfoToReprint,
                     $reprintedNewContent,
-                    $reprintedOldContent
+                    $reprintedOldContent,
+                    $rectorClass
                 );
             }
         } else {
             $newContent = $this->fileProcessor->processFile($fileInfo);
 
-            foreach ($this->filesToReprintCollector->getFileInfos() as $fileInfoToReprint) {
+            /** @var string $rectorClass */
+            foreach ($this->filesToReprintCollector->getFileInfosAndRectorClasses() as $rectorClassToFileInfo) {
+                [$rectorClass, $fileInfoToReprint] = $rectorClassToFileInfo;
+
                 $reprintedOldContent = $fileInfoToReprint->getContents();
                 $reprintedNewContent = $this->fileProcessor->reprintFile($fileInfoToReprint);
                 $this->errorAndDiffCollector->addFileDiff(
                     $fileInfoToReprint,
                     $reprintedNewContent,
-                    $reprintedOldContent
+                    $reprintedOldContent,
+                    $rectorClass
                 );
             }
         }

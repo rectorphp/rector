@@ -7,25 +7,25 @@ use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 final class FilesToReprintCollector
 {
     /**
-     * @var SmartFileInfo[]
+     * @var SmartFileInfo[]|string[]
      */
-    private $fileInfos = [];
+    private $items = [];
 
-    public function addFileInfo(SmartFileInfo $smartFileInfo): void
+    public function addFileInfoAndRectorClass(SmartFileInfo $smartFileInfo, string $rectorClass): void
     {
-        $this->fileInfos[$smartFileInfo->getRealPath()] = $smartFileInfo;
+        $this->items[$smartFileInfo->getRealPath()] = [$rectorClass, $smartFileInfo];
     }
 
     /**
-     * @return SmartFileInfo[]
+     * @return SmartFileInfo[]|string[]
      */
-    public function getFileInfos(): array
+    public function getFileInfosAndRectorClasses(): array
     {
-        return $this->fileInfos;
+        return $this->items;
     }
 
     public function reset(): void
     {
-        $this->fileInfos = [];
+        $this->items = [];
     }
 }

@@ -125,7 +125,7 @@ CODE_SAMPLE
                 /** @var SmartFileInfo $fileInfo */
                 $fileInfo = $childClassMethod->getAttribute(Attribute::FILE_INFO);
 
-                $this->filesToReprintCollector->addFileInfo($fileInfo);
+                $this->filesToReprintCollector->addFileInfoAndRectorClass($fileInfo, self::class);
             }
         }
 

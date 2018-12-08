@@ -8,6 +8,9 @@ parameters:
     reportUnmatchedIgnoredErrors: false
 
     excludes_analyse:
+        # many temp changes
+        - src/Application/RectorApplication.php
+
         # test files
         - '*packages/NodeTypeResolver/tests/Source/AnotherClass.php'
         - '*tests/Rector/MethodCall/MethodNameReplacerRector/**/SomeClass.php'
@@ -59,6 +62,9 @@ parameters:
         - '#Parameter \#1 \$classReflection of method Rector\\NodeTypeResolver\\Reflection\\ClassReflectionTypesResolver::resolve\(\) expects PHPStan\\Reflection\\ClassReflection, PHPStan\\Reflection\\ClassReflection|null given#'
         - '#Cannot call method getAttribute\(\) on PhpParser\\Node\\Name\|null#'
         - '#Cannot call method getText\(\) on PhpParser\\Comment\\Doc\|null#'
+
+        # buggy
+        - '#Array \(array<Symplify\\PackageBuilder\\FileSystem\\SmartFileInfo>\) does not accept array<string, Symplify\\PackageBuilder\\FileSystem\\SmartFileInfo>#'
 
         # false positive, has annotation type above
         - '#Method Rector\\CodeQuality\\Rector\\Foreach_\\SimplifyForeachToCoalescingRector\:\:matchReturnOrAssignNode\(\) should return PhpParser\\Node\\Expr\\Assign\|PhpParser\\Node\\Stmt\\Return_\|null but returns PhpParser\\Node\|null#'
