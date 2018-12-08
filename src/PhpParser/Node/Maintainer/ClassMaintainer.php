@@ -147,6 +147,25 @@ final class ClassMaintainer
         return $methodsByName;
     }
 
+    /**
+     * @return string[]
+     */
+    public function getUsedTraits(Class_ $classNode): array
+    {
+        $usedTraits = [];
+        foreach ($classNode->stmts as $stmt) {
+            if (! $stmt instanceof TraitUse) {
+                continue;
+            }
+
+            foreach ($stmt->traits as $trait) {
+                $usedTraits[] = $this->nameResolver->resolve($trait);
+            }
+        }
+
+        return $usedTraits;
+    }
+
     private function tryInsertBeforeFirstMethod(Class_ $classNode, Stmt $node): bool
     {
         foreach ($classNode->stmts as $key => $classElementNode) {

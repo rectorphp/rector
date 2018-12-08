@@ -3,9 +3,12 @@
 namespace Rector\Php\Rector\FunctionLike;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Php\ParamTypeInfo;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
@@ -96,7 +99,7 @@ CODE_SAMPLE
             return null;
         }
 
-        foreach ($node->params as $i => $paramNode) {
+        foreach ($node->params as $position => $paramNode) {
             // already set → skip
             $hasNewType = false;
             if ($paramNode->type) {
@@ -113,63 +116,83 @@ CODE_SAMPLE
                 continue;
             }
 
-            $paramTagInfo = $paramTagInfos[$paramNodeName];
+            $paramTypeInfo = $paramTagInfos[$paramNodeName];
 
-            if ($paramTagInfo->isTypehintAble() === false) {
+            if ($paramTypeInfo->isTypehintAble() === false) {
                 continue;
             }
 
-            if ($node instanceof ClassMethod && $this->isChangeVendorLockedIn($node, $i)) {
+            if ($node instanceof ClassMethod && $this->isChangeVendorLockedIn($node, $position)) {
                 continue;
             }
 
             if ($hasNewType) {
                 // should override - is it subtype?
-                $possibleOverrideNewReturnType = $paramTagInfo->getTypeNode();
+                $possibleOverrideNewReturnType = $paramTypeInfo->getTypeNode();
                 if ($this->isSubtypeOf($possibleOverrideNewReturnType, $paramNode->type)) {
                     // allow override
-                    $paramNode->type = $paramTagInfo->getTypeNode();
+                    $paramNode->type = $paramTypeInfo->getTypeNode();
                 }
             } else {
-                $paramNode->type = $paramTagInfo->getTypeNode();
+                $paramNode->type = $paramTypeInfo->getTypeNode();
             }
+
+            /** @var string $methodName */
+            $methodName = $node->getAttribute(Attribute::METHOD_NAME);
+
+            /** @var string $className */
+            $className = $node->getAttribute(Attribute::CLASS_NAME);
 
             // inherit typehint to all children
             if ($node instanceof ClassMethod) {
-                /** @var string $className */
-                $className = $node->getAttribute(Attribute::CLASS_NAME);
-
                 $childrenClassLikes = $this->classLikeNodeCollector->findClassesAndInterfacesByType($className);
-
-                /** @var string $methodName */
-                $methodName = $node->getAttribute(Attribute::METHOD_NAME);
 
                 // update their methods as well
                 foreach ($childrenClassLikes as $childClassLike) {
-                    $childClassMethod = $childClassLike->getMethod($methodName);
-                    if ($childClassMethod === null) {
-                        continue;
+                    if ($childClassLike instanceof Class_) {
+                        $usedTraits = $this->classLikeNodeCollector->findUsedTraitsInClass($childClassLike);
+
+                        foreach ($usedTraits as $trait) {
+                            $this->addParamTypeToMethod($trait, $methodName, $position, $node, $paramTypeInfo);
+                        }
                     }
 
-                    if (! isset($childClassMethod->params[$i])) {
-                        continue;
-                    }
-
-                    $childClassMethodParam = $childClassMethod->params[$i];
-                    if ($childClassMethodParam->type !== null) {
-                        continue;
-                    }
-
-                    $childClassMethodParam->type = $this->resolveChildType($paramTagInfo, $node, $paramNode);
-
-                    // let the method know it was changed now
-                    $childClassMethodParam->type->setAttribute(self::HAS_NEW_INHERITED_TYPE, true);
-
-                    $this->notifyNodeChangeFileInfo($childClassMethodParam);
+                    $this->addParamTypeToMethod($childClassLike, $methodName, $position, $node, $paramTypeInfo);
                 }
             }
         }
 
         return $node;
+    }
+
+    private function addParamTypeToMethod(
+        ClassLike $classLikeNode,
+        string $methodName,
+        int $position,
+        Node $node,
+        ParamTypeInfo $paramTypeInfo
+    ): void {
+        $classMethod = $classLikeNode->getMethod($methodName);
+        if ($classMethod === null) {
+            return;
+        }
+
+        if (! isset($classMethod->params[$position])) {
+            return;
+        }
+
+        $paramNode = $classMethod->params[$position];
+
+        // already has a type
+        if ($paramNode->type !== null) {
+            return;
+        }
+
+        $paramNode->type = $this->resolveChildType($paramTypeInfo, $node, $classMethod);
+
+        // let the method know it was changed now
+        $paramNode->type->setAttribute(self::HAS_NEW_INHERITED_TYPE, true);
+
+        $this->notifyNodeChangeFileInfo($paramNode);
     }
 }

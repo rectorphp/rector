@@ -13,6 +13,7 @@ final class ParamAndReturnScalarTypehintsRectorTest extends AbstractRectorTestCa
     public function test(): void
     {
         $integrationFiles = [
+            __DIR__ . '/Fixture/trait_interface.php.inc',
             __DIR__ . '/Fixture/this.php.inc',
             __DIR__ . '/Fixture/false.php.inc',
             __DIR__ . '/Fixture/undesired.php.inc',

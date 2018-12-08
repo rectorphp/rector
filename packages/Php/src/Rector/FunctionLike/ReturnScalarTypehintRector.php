@@ -3,9 +3,12 @@
 namespace Rector\Php\Rector\FunctionLike;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Php\ReturnTypeInfo;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
@@ -93,37 +96,53 @@ CODE_SAMPLE
             $node->returnType = $returnTypeInfo->getTypeNode();
         }
 
+        /** @var string $className */
+        $className = $node->getAttribute(Attribute::CLASS_NAME);
+
+        /** @var string $methodName */
+        $methodName = $node->getAttribute(Attribute::METHOD_NAME);
+
         // inherit typehint to all children
         if ($node instanceof ClassMethod) {
-            /** @var string $className */
-            $className = $node->getAttribute(Attribute::CLASS_NAME);
-
             $childrenClassLikes = $this->classLikeNodeCollector->findClassesAndInterfacesByType($className);
-
-            /** @var string $methodName */
-            $methodName = $node->getAttribute(Attribute::METHOD_NAME);
 
             // update their methods as well
             foreach ($childrenClassLikes as $childClassLike) {
-                $childClassMethod = $childClassLike->getMethod($methodName);
-                if ($childClassMethod === null) {
-                    continue;
+                if ($childClassLike instanceof Class_) {
+                    $usedTraits = $this->classLikeNodeCollector->findUsedTraitsInClass($childClassLike);
+                    foreach ($usedTraits as $trait) {
+                        $this->addReturnTypeToMethod($trait, $methodName, $node, $returnTypeInfo);
+                    }
                 }
 
-                // already has a type
-                if ($childClassMethod->returnType !== null) {
-                    continue;
-                }
-
-                $childClassMethod->returnType = $this->resolveChildType($returnTypeInfo, $node, $childClassMethod);
-
-                // let the method now it was changed now
-                $childClassMethod->returnType->setAttribute(self::HAS_NEW_INHERITED_TYPE, true);
-
-                $this->notifyNodeChangeFileInfo($childClassMethod);
+                $this->addReturnTypeToMethod($childClassLike, $methodName, $node, $returnTypeInfo);
             }
         }
 
         return $node;
+    }
+
+    private function addReturnTypeToMethod(
+        ClassLike $classLikeNode,
+        string $methodName,
+        Node $node,
+        ReturnTypeInfo $returnTypeInfo
+    ): void {
+        $classMethod = $classLikeNode->getMethod($methodName);
+        if ($classMethod === null) {
+            return;
+        }
+
+        // already has a type
+        if ($classMethod->returnType !== null) {
+            return;
+        }
+
+        $classMethod->returnType = $this->resolveChildType($returnTypeInfo, $node, $classMethod);
+
+        // let the method now it was changed now
+        $classMethod->returnType->setAttribute(self::HAS_NEW_INHERITED_TYPE, true);
+
+        $this->notifyNodeChangeFileInfo($classMethod);
     }
 }
