@@ -15,7 +15,7 @@ use Rector\Configuration\Option;
 use Rector\Console\Output\ProcessCommandReporter;
 use Rector\Console\Shell;
 use Rector\ConsoleDiffer\DifferAndFormatter;
-use Rector\Contract\Rector\RectorInterface;
+use Rector\Error\ExceptionCorrector;
 use Rector\FileSystem\FilesFinder;
 use Rector\FileSystemRector\FileSystemFileProcessor;
 use Rector\Guard\RectorGuard;
@@ -29,7 +29,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 use Throwable;
-use function Safe\sprintf;
 
 final class ProcessCommand extends Command
 {
@@ -103,6 +102,11 @@ final class ProcessCommand extends Command
      */
     private $configuration;
 
+    /**
+     * @var ExceptionCorrector
+     */
+    private $exceptionCorrector;
+
     public function __construct(
         FileProcessor $fileProcessor,
         SymfonyStyle $symfonyStyle,
@@ -116,7 +120,8 @@ final class ProcessCommand extends Command
         AfterRectorCodingStyle $afterRectorCodingStyle,
         AppliedRectorCollector $appliedRectorCollector,
         FilesToReprintCollector $filesToReprintCollector,
-        Configuration $configuration
+        Configuration $configuration,
+        ExceptionCorrector $exceptionCorrector
     ) {
         parent::__construct();
 
@@ -133,6 +138,7 @@ final class ProcessCommand extends Command
         $this->appliedRectorCollector = $appliedRectorCollector;
         $this->filesToReprintCollector = $filesToReprintCollector;
         $this->configuration = $configuration;
+        $this->exceptionCorrector = $exceptionCorrector;
     }
 
     protected function configure(): void
@@ -239,11 +245,7 @@ final class ProcessCommand extends Command
                 return;
             }
 
-            $message = sprintf(
-                'Analyze error: "%s". Include your files in "parameters > autoload_paths".%sSee https://github.com/rectorphp/rector#extra-autoloading',
-                $analysedCodeException->getMessage(),
-                PHP_EOL
-            );
+            $message = $this->exceptionCorrector->getAutoloadExceptionMessageAndAddLocation($analysedCodeException);
 
             $this->errorCollector->addError(new Error($fileInfo, $message));
         } catch (Throwable $throwable) {
@@ -251,7 +253,7 @@ final class ProcessCommand extends Command
                 throw $throwable;
             }
 
-            $rectorClass = $this->matchRectorClass($throwable);
+            $rectorClass = $this->exceptionCorrector->matchRectorClass($throwable);
             if ($rectorClass) {
                 $this->errorCollector->addErrorWithRectorMessage($rectorClass, $throwable->getMessage());
             } else {
@@ -284,21 +286,6 @@ final class ProcessCommand extends Command
 
         $this->recordFileDiff($fileInfo, $newContent, $oldContent);
         $this->filesToReprintCollector->reset();
-    }
-
-    private function matchRectorClass(Throwable $throwable): ?string
-    {
-        if (! isset($throwable->getTrace()[0])) {
-            return null;
-        }
-
-        /** @var string $class */
-        $class = $throwable->getTrace()[0]['class'];
-        if (! is_a($class, RectorInterface::class, true)) {
-            return null;
-        }
-
-        return $class;
     }
 
     private function recordFileDiff(SmartFileInfo $fileInfo, string $newContent, string $oldContent): void
