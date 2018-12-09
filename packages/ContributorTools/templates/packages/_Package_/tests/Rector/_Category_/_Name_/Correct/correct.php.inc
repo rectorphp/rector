@@ -1,3 +1,0 @@
-<?php
-
-_CodeAfter_
