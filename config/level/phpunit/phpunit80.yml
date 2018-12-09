@@ -1,0 +1,3 @@
+services:
+    Rector\PHPUnit\Rector\MethodCall\SpecificAssertContainsRector: ~
+    Rector\PHPUnit\Rector\MethodCall\SpecificAssertInternalTypeRector: ~

@@ -26,7 +26,10 @@ final class AfterRectorCodingStyle
     {
         $this->validate();
 
-        $command = [self::ECS_BIN_PATH, 'check', '--config', self::ECS_AFTER_RECTOR_CONFIG, '--fix'] + $source;
+        $command = array_merge(
+            [self::ECS_BIN_PATH, 'check', '--config', self::ECS_AFTER_RECTOR_CONFIG, '--fix'],
+            $source
+        );
 
         $process = new Process($command);
         $process->run();
