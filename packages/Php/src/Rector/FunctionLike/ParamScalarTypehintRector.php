@@ -100,6 +100,11 @@ CODE_SAMPLE
         }
 
         foreach ($node->params as $position => $paramNode) {
+            // skip variadics
+            if ($paramNode->variadic) {
+                continue;
+            }
+
             // already set → skip
             $hasNewType = false;
             if ($paramNode->type) {

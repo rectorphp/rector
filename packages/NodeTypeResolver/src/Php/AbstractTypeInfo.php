@@ -146,8 +146,9 @@ abstract class AbstractTypeInfo
             }
 
             // remove
-            if (in_array($type, ['static', 'mixed'], true)) {
+            if (in_array($type, ['mixed', 'static'], true)) {
                 unset($types[$i]);
+                $this->hasRemovedTypes = true;
                 continue;
             }
 
@@ -162,6 +163,7 @@ abstract class AbstractTypeInfo
             }
 
             if ($type === 'object' && PhpTypeSupport::isTypeSupported('object') === false) {
+                $this->hasRemovedTypes = true;
                 unset($types[$i]);
                 continue;
             }
