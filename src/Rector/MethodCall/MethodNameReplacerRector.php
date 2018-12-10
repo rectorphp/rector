@@ -3,7 +3,10 @@
 namespace Rector\Rector\MethodCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Stmt\ClassMethod;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
@@ -65,6 +68,9 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
+        if (! $this->isInstanceOf($parentNode, [MethodCall::class, StaticCall::class, ClassMethod::class])) {
+            return null;
+        }
 
         foreach ($this->oldToNewMethodsByClass as $type => $oldToNewMethods) {
             if (! $this->isType($parentNode, $type)) {
@@ -82,5 +88,19 @@ CODE_SAMPLE
         }
 
         return $node;
+    }
+
+    /**
+     * @param string[] $nodeClasses
+     */
+    private function isInstanceOf(Node $node, array $nodeClasses): bool
+    {
+        foreach ($nodeClasses as $nodeClass) {
+            if (is_a($node, $nodeClass, true)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
