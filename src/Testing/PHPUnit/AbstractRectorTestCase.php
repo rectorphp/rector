@@ -125,7 +125,7 @@ abstract class AbstractRectorTestCase extends TestCase
         foreach ($files as $file) {
             $smartFileInfo = new SmartFileInfo($file);
             [$originalContent, $changedContent] = $this->splitContentToOriginalFileAndExpectedFile($smartFileInfo);
-            $this->doTestFileMatchesExpectedContent($originalContent, $changedContent);
+            $this->doTestFileMatchesExpectedContent($originalContent, $changedContent, $smartFileInfo->getRealPath());
         }
 
         $this->autoloadTestFixture = true;
@@ -183,8 +183,11 @@ abstract class AbstractRectorTestCase extends TestCase
         );
     }
 
-    private function doTestFileMatchesExpectedContent(string $originalFile, string $expectedFile): void
-    {
+    private function doTestFileMatchesExpectedContent(
+        string $originalFile,
+        string $expectedFile,
+        string $fixtureFile
+    ): void {
         $this->parameterProvider->changeParameter(Option::SOURCE, [$originalFile]);
 
         $smartFileInfo = new SmartFileInfo($originalFile);
@@ -194,6 +197,6 @@ abstract class AbstractRectorTestCase extends TestCase
         $this->fileProcessor->refactor($smartFileInfo);
         $changedContent = $this->fileProcessor->printToString($smartFileInfo);
 
-        $this->assertStringEqualsFile($expectedFile, $changedContent);
+        $this->assertStringEqualsFile($expectedFile, $changedContent, 'Caused by ' . $fixtureFile);
     }
 }
