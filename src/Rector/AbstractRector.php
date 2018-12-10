@@ -11,6 +11,7 @@ use Rector\Application\AppliedRectorCollector;
 use Rector\Contract\Rector\PhpRectorInterface;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\Attribute;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 use function Safe\sprintf;
 
@@ -29,11 +30,19 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     private $appliedRectorCollector;
 
     /**
+     * @var SymfonyStyle
+     */
+    private $symfonyStyle;
+
+    /**
      * @required
      */
-    public function setAbstractRectorDependencies(AppliedRectorCollector $appliedRectorCollector): void
-    {
+    public function setAbstractRectorDependencies(
+        AppliedRectorCollector $appliedRectorCollector,
+        SymfonyStyle $symfonyStyle
+    ): void {
         $this->appliedRectorCollector = $appliedRectorCollector;
+        $this->symfonyStyle = $symfonyStyle;
     }
 
     /**
@@ -43,6 +52,11 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     {
         if (! $this->isMatchingNodeType(get_class($node))) {
             return null;
+        }
+
+        // show current Rector class on --debug
+        if ($this->symfonyStyle->isDebug()) {
+            $this->symfonyStyle->writeln(static::class);
         }
 
         $originalNode = $node;
