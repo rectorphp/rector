@@ -80,7 +80,7 @@ final class RectorApplication
         // 2. change nodes with Rectors
         foreach ($fileInfos as $fileInfo) {
             $this->advance();
-            $this->fileProcessor->refactor($fileInfo);
+            $this->refactorFileInfo($fileInfo);
         }
 
         // 3. print to file or string
@@ -98,18 +98,30 @@ final class RectorApplication
 
     private function processFileInfo(SmartFileInfo $fileInfo): void
     {
+        $oldContent = $fileInfo->getContents();
+
+        if ($this->configuration->isDryRun()) {
+            $newContent = $this->fileProcessor->printToString($fileInfo);
+        } else {
+            $newContent = $this->fileProcessor->printToFile($fileInfo);
+        }
+
+        $this->errorAndDiffCollector->addFileDiff($fileInfo, $newContent, $oldContent);
+
+        $this->fileSystemFileProcessor->processFileInfo($fileInfo);
+    }
+
+    private function advance(): void
+    {
+        if ($this->symfonyStyle->isVerbose() === false) {
+            $this->symfonyStyle->progressAdvance();
+        }
+    }
+
+    private function refactorFileInfo(SmartFileInfo $fileInfo): void
+    {
         try {
-            $oldContent = $fileInfo->getContents();
-
-            if ($this->configuration->isDryRun()) {
-                $newContent = $this->fileProcessor->printToString($fileInfo);
-            } else {
-                $newContent = $this->fileProcessor->printToFile($fileInfo);
-            }
-
-            $this->errorAndDiffCollector->addFileDiff($fileInfo, $newContent, $oldContent);
-
-            $this->fileSystemFileProcessor->processFileInfo($fileInfo);
+            $this->fileProcessor->refactor($fileInfo);
         } catch (AnalysedCodeException $analysedCodeException) {
             if ($this->configuration->shouldHideAutoloadErrors()) {
                 return;
@@ -122,13 +134,6 @@ final class RectorApplication
             }
 
             $this->errorAndDiffCollector->addThrowableWithFileInfo($throwable, $fileInfo);
-        }
-    }
-
-    private function advance(): void
-    {
-        if ($this->symfonyStyle->isVerbose() === false) {
-            $this->symfonyStyle->progressAdvance();
         }
     }
 }
