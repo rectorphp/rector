@@ -49,7 +49,7 @@ function someFunction(?array $one, ?array $two, array $three, array $four, array
 /**
  * @return real
  */
-function someFunction2()
+function someFunction2(): float
 {
 }
 
