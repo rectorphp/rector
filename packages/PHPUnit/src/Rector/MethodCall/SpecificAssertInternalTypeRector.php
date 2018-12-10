@@ -7,6 +7,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
+use Rector\Php\TypeAnalyzer;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -94,7 +95,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $type = $typeNode->value;
+        $type = TypeAnalyzer::normalizeType($typeNode->value);
         if (! isset($this->typeToMethod[$type])) {
             return null;
         }

@@ -1,2 +1,0 @@
-services:
-    Rector\CodeQuality\Rector\Assign\CombinedAssignRector: ~
