@@ -50,7 +50,7 @@ final class TemplateVariablesFactory
     {
         if (Strings::contains($code, PHP_EOL)) {
             // multi lines
-            return sprintf("<<<'CODE_SAMPLE'%s%sCODE_SAMPLE%s", PHP_EOL, $code, PHP_EOL);
+            return sprintf("<<<'CODE_SAMPLE'%s%s%sCODE_SAMPLE%s", PHP_EOL, $code, PHP_EOL, PHP_EOL);
         }
 
         // single line

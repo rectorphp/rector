@@ -139,6 +139,12 @@ final class ConfigurationFactory
         /** @var SplFileInfo[] $fileInfos */
         $fileInfos = iterator_to_array($finder->getIterator());
         if (! count($fileInfos)) {
+            // assume new one is created
+            $match = Strings::match($level, '#(?<name>[a-zA-Z_-]+])#');
+            if (isset($match['name'])) {
+                return $this->levelsDirectory . '/' . $match['name'] . '/' . $level;
+            }
+
             return null;
         }
 

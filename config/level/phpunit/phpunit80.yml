@@ -1,0 +1,8 @@
+services:
+    Rector\PHPUnit\Rector\MethodCall\SpecificAssertContainsRector: ~
+    Rector\PHPUnit\Rector\MethodCall\SpecificAssertInternalTypeRector: ~
+
+    Rector\Rector\Class_\ClassReplacerRector:
+        # https://github.com/sebastianbergmann/phpunit/issues/3123
+        'PHPUnit_Framework_MockObject_MockObject': 'PHPUnit\Framework\MockObject\MockObject'
+    Rector\PHPUnit\Rector\MethodCall\AssertEqualsParameterToSpecificMethodsTypeRector: ~

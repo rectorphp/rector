@@ -45,7 +45,7 @@ final class TypeAnalyzer
             return 'bool';
         }
 
-        if ($type === 'double') {
+        if (in_array($type, ['double', 'real'], true)) {
             return 'float';
         }
 

@@ -32,6 +32,6 @@ namespace Rector\Php\Tests\Rector\ClassMethod\ParamAndReturnScalarTypehintsRecto
  * @param unknown $unknown
  * @param Class $class
  */
-function aliases(int $integer, bool $boolean, $real, float $double, callable $callback, $void, $mixed, $unkown, Class $class) {
+function aliases(int $integer, bool $boolean, float $real, float $double, callable $callback, $void, $mixed, $unkown, Class $class) {
 }
 ?>
