@@ -1,4 +1,8 @@
 services:
+    Rector\Rector\Class_\ClassReplacerRector:
+        # https://github.com/symfony/symfony/commit/a7e319d9e1316e2e18843f8ce15b67a8693e5bf9
+        Symfony\Bundle\FrameworkBundle\Controller\Controller: 'Symfony\Bundle\FrameworkBundle\Controller\AbstractController'
+
     # https://symfony.com/blog/new-in-symfony-4-2-important-deprecations
     Rector\Symfony\Rector\New_\StringToArrayArgumentProcessRector: ~
     Rector\Symfony\Rector\New_\RootNodeTreeBuilderRector: ~
