@@ -6,3 +6,16 @@ services:
     # https://symfony.com/blog/new-in-symfony-4-2-important-deprecations
     Rector\Symfony\Rector\New_\StringToArrayArgumentProcessRector: ~
     Rector\Symfony\Rector\New_\RootNodeTreeBuilderRector: ~
+
+    Rector\Rector\MethodCall\MethodNameReplacerRector:
+        # https://github.com/symfony/symfony/commit/463f986c28a497571967e37c1314e9911f1ef6ba
+        Symfony\Component\Console\Helper\TableStyle:
+            setHorizontalBorderChar: 'setHorizontalBorderChars'
+            setVerticalBorderChar: 'setVerticalBorderChars'
+            # special case to "getVerticalBorderChar" → "getBorderChars()[3]"
+            getVerticalBorderChar:
+                name: 'getBorderChars'
+                array_key: 3
+            getHorizontalBorderChar:
+                name: 'getBorderChars'
+                array_key: 2

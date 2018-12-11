@@ -2,12 +2,13 @@
 
 namespace Rector\Rector\MethodCall;
 
+use PhpParser\BuilderHelpers;
 use PhpParser\Node;
+use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -19,12 +20,12 @@ final class MethodNameReplacerRector extends AbstractRector
      *     oldMethod => newMethod
      * ]
      *
-     * @var string[][]
+     * @var string[][]|mixed[][][]
      */
     private $oldToNewMethodsByClass = [];
 
     /**
-     * @param string[][] $oldToNewMethodsByClass
+     * @param string[][]|mixed[][][] $oldToNewMethodsByClass
      */
     public function __construct(array $oldToNewMethodsByClass)
     {
@@ -59,21 +60,16 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Identifier::class];
+        return [MethodCall::class, StaticCall::class, ClassMethod::class];
     }
 
     /**
-     * @param Identifier $node
+     * @param MethodCall|StaticCall|ClassMethod $node
      */
     public function refactor(Node $node): ?Node
     {
-        $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
-        if (! $this->isInstanceOf($parentNode, [MethodCall::class, StaticCall::class, ClassMethod::class])) {
-            return null;
-        }
-
         foreach ($this->oldToNewMethodsByClass as $type => $oldToNewMethods) {
-            if (! $this->isType($parentNode, $type)) {
+            if (! $this->isType($node, $type)) {
                 continue;
             }
 
@@ -82,25 +78,35 @@ CODE_SAMPLE
                     continue;
                 }
 
-                $node->name = $newMethod;
-                return $node;
+                $node = $this->process($node, $newMethod);
+                if ($node !== null) {
+                    return $node;
+                }
             }
         }
 
-        return $node;
+        return null;
     }
 
     /**
-     * @param string[] $nodeClasses
+     * @param MethodCall|StaticCall|ClassMethod $node
+     * @param string|mixed[] $newMethod
      */
-    private function isInstanceOf(Node $node, array $nodeClasses): bool
+    private function process(Node $node, $newMethod): ?Node
     {
-        foreach ($nodeClasses as $nodeClass) {
-            if (is_a($node, $nodeClass, true)) {
-                return true;
-            }
+        if (is_string($newMethod)) {
+            $node->name = new Identifier($newMethod);
+
+            return $node;
         }
 
-        return false;
+        // special case for array dim fetch
+        if (! $node instanceof ClassMethod) {
+            $node->name = new Identifier($newMethod['name']);
+
+            return new ArrayDimFetch($node, BuilderHelpers::normalizeValue($newMethod['array_key']));
+        }
+
+        return null;
     }
 }

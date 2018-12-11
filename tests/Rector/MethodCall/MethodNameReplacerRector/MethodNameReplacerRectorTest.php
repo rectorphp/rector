@@ -34,9 +34,19 @@ final class MethodNameReplacerRectorTest extends AbstractRectorTestCase
     protected function getRectorConfiguration(): array
     {
         return [
-            AbstractType::class => ['setDefaultOptions' => 'configureOptions'],
-            Html::class => ['add' => 'addHtml'],
-            FormMacros::class => ['renderFormBegin' => ['Nette\Bridges\FormsLatte\Runtime', 'renderFormBegin']],
+            AbstractType::class => [
+                'setDefaultOptions' => 'configureOptions',
+            ],
+            Html::class => [
+                'add' => 'addHtml',
+                'addToArray' => [
+                    'name' => 'addHtmlArray',
+                    'array_key' => 'hi',
+                ],
+            ],
+            FormMacros::class => [
+                'renderFormBegin' => ['Nette\Bridges\FormsLatte\Runtime', 'renderFormBegin'],
+            ],
         ];
     }
 }
