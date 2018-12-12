@@ -5,6 +5,7 @@
 /vendor
 /build
 composer.lock
+.idea/
 
 /demo
 rector-symfony.yml
