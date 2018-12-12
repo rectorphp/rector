@@ -20,15 +20,15 @@ final class ChangeMethodVisibilityRector extends AbstractRector
     /**
      * @var VisibilityMaintainer
      */
-    private $VisibilityMaintainer;
+    private $visibilityMaintainer;
 
     /**
      * @param string[] $methodToVisibilityByClass
      */
-    public function __construct(array $methodToVisibilityByClass, VisibilityMaintainer $VisibilityMaintainer)
+    public function __construct(array $methodToVisibilityByClass, VisibilityMaintainer $visibilityMaintainer)
     {
         $this->methodToVisibilityByClass = $methodToVisibilityByClass;
-        $this->VisibilityMaintainer = $VisibilityMaintainer;
+        $this->visibilityMaintainer = $visibilityMaintainer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -105,7 +105,7 @@ CODE_SAMPLE
         }
 
         $newVisibility = $this->resolveNewVisibilityForNode($node, $methodName);
-        $this->VisibilityMaintainer->replaceVisibilityFlag($node, $newVisibility);
+        $this->visibilityMaintainer->replaceVisibilityFlag($node, $newVisibility);
 
         return $node;
     }
