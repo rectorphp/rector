@@ -1,4 +1,96 @@
 services:
+    Rector\Rector\Class_\ClassReplacerRector:
+        # https://github.com/symfony/symfony/commit/a7e319d9e1316e2e18843f8ce15b67a8693e5bf9
+        Symfony\Bundle\FrameworkBundle\Controller\Controller: 'Symfony\Bundle\FrameworkBundle\Controller\AbstractController'
+        # https://github.com/symfony/symfony/commit/744bf0e7ac3ecf240d0bf055cc58f881bb0b3ec0
+        Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand: 'Symfony\Component\Console\Command\Command'
+        Symfony\Component\Translation\TranslatorInterface: 'Symfony\Contracts\Translation\TranslatorInterface'
+
     # https://symfony.com/blog/new-in-symfony-4-2-important-deprecations
     Rector\Symfony\Rector\New_\StringToArrayArgumentProcessRector: ~
     Rector\Symfony\Rector\New_\RootNodeTreeBuilderRector: ~
+
+    Rector\Rector\Argument\ArgumentAdderRector:
+        # https://github.com/symfony/symfony/commit/fa2063efe43109aea093d6fbfc12d675dba82146
+        # https://github.com/symfony/symfony/commit/e3aa90f852f69040be19da3d8729cdf02d238ec7
+        Symfony\Component\BrowserKit\Client:
+            submit:
+                2:
+                    # $serverParameters
+                    default_value: []
+
+        # https://github.com/symfony/symfony/commit/f634afdb6f573e4af8d89aaa605e0c7d4058676d
+        Symfony\Component\DomCrawler\Crawler:
+            children:
+                0:
+                    # $selector
+                    default_value: null
+
+        Symfony\Component\Finder\Finder:
+            sortByName:
+                0:
+                    # $useNaturalSort
+                    default_vlaue: false
+
+        Symfony\Bridge\Monolog\Processor\DebugProcessor:
+            getLogs:
+                0:
+                    # $request
+                    default_value: null
+            countErrors:
+                0:
+                    # $request
+                    default_value: null
+
+        Symfony\Bridge\Monolog\Logger:
+            getLogs:
+                0:
+                    # $request
+                    default_value: null
+            countErrors:
+                0:
+                    # $request
+                    default_value: null
+
+        Symfony\Component\Serializer\Normalizer:
+            handleCircularReference:
+                1:
+                    # $format
+                    default_value: null
+                2:
+                    # $context
+                    default_value: []
+
+    Rector\Rector\MethodCall\MethodNameReplacerRector:
+        Symfony\Component\Cache\CacheItem:
+            getPreviousTags: 'getMetadata'
+        Symfony\Component\Form\AbstractTypeExtension:
+            getExtendedType: 'getExtendedTypes'
+
+    Rector\Rector\Typehint\ReturnTypehintRector:
+        Symfony\Component\Form\AbstractTypeExtension:
+            getExtendedTypes: 'iterable'
+
+    Rector\Rector\Visibility\ChangeMethodVisibilityRector:
+        Symfony\Component\Form\AbstractTypeExtension:
+            getExtendedTypes: 'static'
+
+    Rector\Rector\ClassMethod\WrapReturnRector:
+        Symfony\Component\Form\AbstractTypeExtension:
+            getExtendedTypes: 'array'
+
+    Rector\Rector\Argument\ArgumentDefaultValueReplacerRector:
+        # https://github.com/symfony/symfony/commit/9493cfd5f2366dab19bbdde0d0291d0575454567
+        Symfony\Component\HttpFoundation\Cookie:
+            $secure:
+                'false': null
+            $samesite:
+                'null': 'lax'
+
+    Rector\Rector\Argument\ArgumentRemoverRector:
+        # https://github.com/symfony/symfony/commit/f5c355e1ba399a1b3512367647d902148bdaf09f
+        Symfony\Component\HttpKernel\DataCollector\ConfigDataCollector:
+            __construct:
+                0: ~
+                1: ~
+

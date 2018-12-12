@@ -10,10 +10,11 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
-final class ArgumentDefaultValueReplacerRector extends AbstractArgumentRector
+final class ArgumentDefaultValueReplacerRector extends AbstractRector
 {
     /**
      * @var mixed[]

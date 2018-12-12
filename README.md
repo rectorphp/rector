@@ -167,4 +167,4 @@ We would be happy to merge your feature then.
 With this command, you can process your project with rector from docker:
 ```bash
 docker run -v $(pwd):/project rector:latest
-``` 
+```

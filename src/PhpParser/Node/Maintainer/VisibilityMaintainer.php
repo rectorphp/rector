@@ -22,7 +22,10 @@ final class VisibilityMaintainer
      */
     public function replaceVisibilityFlag(Node $node, string $visibility): void
     {
-        $this->removeOriginalVisibilityFromFlags($node);
+        if ($visibility !== 'static') {
+            $this->removeOriginalVisibilityFromFlags($node);
+        }
+
         $this->addVisibilityFlag($node, $visibility);
     }
 
@@ -65,6 +68,10 @@ final class VisibilityMaintainer
 
         if ($visibility === 'private') {
             $node->flags |= Class_::MODIFIER_PRIVATE;
+        }
+
+        if ($visibility === 'static') {
+            $node->flags |= Class_::MODIFIER_STATIC;
         }
     }
 
