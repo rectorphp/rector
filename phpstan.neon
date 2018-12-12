@@ -6,6 +6,7 @@ includes:
 parameters:
     # to allow intalling with various phsptan versions without reporting old errors here
     reportUnmatchedIgnoredErrors: false
+    level: 7
 
     excludes_analyse:
         # test files
