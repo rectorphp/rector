@@ -64,20 +64,20 @@ services:
     Rector\Rector\MethodCall\MethodNameReplacerRector:
         Symfony\Component\Cache\CacheItem:
             getPreviousTags: 'getMetadata'
-
-        # todo use: "Symfony\Component\Form\AbstractTypeExtension"
-        Rector\Symfony\Tests\Rector\Form\FormTypeGetParentRector\Source\AbstractTypeExtension:
+        Symfony\Component\Form\AbstractTypeExtension:
             getExtendedType: 'getExtendedTypes'
 
     Rector\Rector\Typehint\ReturnTypehintRector:
-        # todo use: "Symfony\Component\Form\AbstractTypeExtension"
-        Rector\Symfony\Tests\Rector\Form\FormTypeGetParentRector\Source\AbstractTypeExtension:
+        Symfony\Component\Form\AbstractTypeExtension:
             getExtendedTypes: 'iterable'
 
     Rector\Rector\Visibility\ChangeMethodVisibilityRector:
-        # todo use: "Symfony\Component\Form\AbstractTypeExtension"
-        Rector\Symfony\Tests\Rector\Form\FormTypeGetParentRector\Source\AbstractTypeExtension:
+        Symfony\Component\Form\AbstractTypeExtension:
             getExtendedTypes: 'static'
+
+    Rector\Rector\ClassMethod\WrapReturnRector:
+        Symfony\Component\Form\AbstractTypeExtension:
+            getExtendedTypes: 'array'
 
     Rector\Rector\Argument\ArgumentDefaultValueReplacerRector:
         # https://github.com/symfony/symfony/commit/9493cfd5f2366dab19bbdde0d0291d0575454567

@@ -73,7 +73,6 @@ final class VisibilityMaintainer
         if ($visibility === 'static') {
             $node->flags |= Class_::MODIFIER_STATIC;
         }
-
     }
 
     private function ensureIsClassMethodOrProperty(Node $node, string $location): void
