@@ -6,6 +6,7 @@ final class MyClass
 {
     public function unnecessaryTernary(): bool
     {
+        $baz = $foo === $bar ? true : false;
         return $foo === $bar ? true : false;
     }
 
@@ -53,6 +54,7 @@ final class MyClass
 {
     public function unnecessaryTernary(): bool
     {
+        $baz = $foo === $bar;
         return $foo === $bar;
     }
 
