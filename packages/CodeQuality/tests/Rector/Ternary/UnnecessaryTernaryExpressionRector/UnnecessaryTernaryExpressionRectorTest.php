@@ -13,6 +13,7 @@ final class UnnecessaryTernaryExpressionRectorTest extends AbstractRectorTestCas
             __DIR__ . '/Fixture/fixture.php.inc',
             __DIR__ . '/Fixture/fixture2.php.inc',
             __DIR__ . '/Fixture/fixture3.php.inc',
+            __DIR__ . '/Fixture/fixture4.php.inc',
         ]);
     }
 
