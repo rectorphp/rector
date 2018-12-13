@@ -30,6 +30,9 @@ parameters:
         - '#(.*?)\(\) should return Psr\\Container\\ContainerInterface but returns Symfony\\Component\\DependencyInjection\\ContainerInterface\|null#'
 
         # false positives
+        - '#Instanceof between PhpParser\\Node\\Expr\\FuncCall and PhpParser\\Node\\Expr\\Assign will always evaluate to false#'
+        - '#Result of && is always false#'
+
         - '#Offset string does not exist on string#' # 1
         - '#Array \(array<array<PhpParser\\Node\\Stmt>>\) does not accept array<PhpParser\\Node\\Stmt|null>#'
         - '#Property Rector\\DependencyInjection\\Loader\\RectorServiceParametersShifter::\$serviceKeywords \(array<string>\) does not accept ReflectionProperty#'
@@ -46,6 +49,7 @@ parameters:
         - '#Method Rector\\NodeTypeResolver\\PhpDoc\\NodeAnalyzer\\DocBlockAnalyzer::getTagByName\(\) should return PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagNode but returns PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagNode\|null#'
         - '#Parameter \#1 \$expr of class PhpParser\\Node\\Expr\\BooleanNot constructor expects PhpParser\\Node\\Expr, PhpParser\\Node given#'
         - '#Parameter \#1 \$binaryOpNode of method Rector\\CodeQuality\\Rector\\Identical\\SimplifyConditionsRector::createInversedBooleanOp\(\) expects PhpParser\\Node\\Expr\\BinaryOp, PhpParser\\Node given#'
+        - '#Parameter \#1 \$node of method Rector\\PhpParser\\Node\\Commander\\NodeAddingCommander::wrapToExpression\(\) expects PhpParser\\Node\\Expr\|PhpParser\\Node\\Stmt, PhpParser\\Node given#'
 
         # irelevant
         - '#Call to function in_array\(\) with arguments string, (.*?) and true will always evaluate to false#'
