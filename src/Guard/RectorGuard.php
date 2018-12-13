@@ -4,6 +4,7 @@ namespace Rector\Guard;
 
 use Rector\Exception\NoRectorsLoadedException;
 use Rector\PhpParser\NodeTraverser\RectorNodeTraverser;
+use function Safe\sprintf;
 
 final class RectorGuard
 {
@@ -23,9 +24,11 @@ final class RectorGuard
             return;
         }
 
-        throw new NoRectorsLoadedException(
-            'No rectors were found. Registers them in rector.yml config to "services:" '
-            . 'section, load them via "--config <file>.yml" or "--level <level>" CLI options.'
-        );
+        throw new NoRectorsLoadedException(sprintf(
+            'We need some rectors to run:%s* register them in rector.yml under "services:"%s* use "--level <level>"%s* or "--config <file>.yml"',
+            PHP_EOL,
+            PHP_EOL,
+            PHP_EOL
+        ));
     }
 }
