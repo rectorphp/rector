@@ -8,8 +8,23 @@ services:
             cc: 'creditCard'
         Cake\Filesystem\Folder:
             normalizePath: 'correctSlashFor'
+        Cake\Http\Client\Response:
+            body: 'getStringBody'
+        Cake\Core\Plugin:
+            unload: 'clear'
 
     Rector\Rector\Property\PropertyToMethodRector:
+        Cake\Http\Client\Response:
+            body:
+                get: 'getStringBody'
+            json:
+                get: 'getJson'
+            xml:
+                get: 'getXml'
+            cookies:
+                get: 'getCookies'
+            code:
+                get: 'getStatusCode'
         Cake\View\View:
             request:
                 get: 'getRequest'
