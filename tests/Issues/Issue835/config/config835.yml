@@ -1,0 +1,3 @@
+imports:
+    # same as "--level cakephp34"
+    - { resource: "../../../../config/level/cakephp/cakephp34.yml" }
