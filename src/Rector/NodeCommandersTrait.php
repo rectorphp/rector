@@ -3,7 +3,6 @@
 namespace Rector\Rector;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Application\AppliedRectorCollector;
 use Rector\PhpParser\Node\Commander\NodeAddingCommander;
@@ -47,7 +46,7 @@ trait NodeCommandersTrait
         $this->propertyAddingCommander = $propertyAddingCommander;
     }
 
-    protected function addNodeAfterNode(Expr $node, Node $positionNode): void
+    protected function addNodeAfterNode(Node $node, Node $positionNode): void
     {
         $this->nodeAddingCommander->addNodeAfterNode($node, $positionNode);
 

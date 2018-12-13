@@ -41,7 +41,7 @@ final class NodeAddingCommander implements CommanderInterface
         $this->betterNodeFinder = $betterNodeFinder;
     }
 
-    public function addNodeAfterNode(Expr $node, Node $positionNode): void
+    public function addNodeAfterNode(Node $node, Node $positionNode): void
     {
         $position = $this->resolveNearestExpressionPosition($positionNode);
 
