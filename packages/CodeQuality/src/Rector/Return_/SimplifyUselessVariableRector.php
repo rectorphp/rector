@@ -114,6 +114,29 @@ CODE_SAMPLE
         }
 
         // is the same variable
-        return ! $this->areNodesEqual($previousNode->var, $variableNode);
+        if (! $this->areNodesEqual($previousNode->var, $variableNode)) {
+            return true;
+        }
+
+        if ($this->isPreviousExpressionVisuallySimilar($previousExpression, $previousNode)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param AssignOp|Assign $previousNode
+     */
+    private function isPreviousExpressionVisuallySimilar(Expression $previousExpression, Node $previousNode): bool
+    {
+        $prePreviousExpression = $previousExpression->getAttribute(Attribute::PREVIOUS_EXPRESSION);
+        if ($prePreviousExpression instanceof Expression && $prePreviousExpression->expr instanceof AssignOp) {
+            if ($this->areNodesEqual($prePreviousExpression->expr->var, $previousNode->var)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

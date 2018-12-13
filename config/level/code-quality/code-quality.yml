@@ -1,6 +1,6 @@
 services:
     Rector\CodeQuality\Rector\Assign\CombinedAssignRector: ~
-    Rector\CodeQuality\Rector\BinaryOp\SimplifyDeMorganBinaryRector: ~
+    # Rector\CodeQuality\Rector\BinaryOp\SimplifyDeMorganBinaryRector: ~
     Rector\CodeQuality\Rector\BooleanAnd\SimplifyEmptyArrayCheckRector: ~
     Rector\CodeQuality\Rector\Expression\SimplifyMirrorAssignRector: ~
     Rector\CodeQuality\Rector\Foreach_\ForeachToInArrayRector: ~
