@@ -28,7 +28,7 @@ final class ReturnTypehintRectorTest extends AbstractRectorTestCase
                 'resolve' => 'SomeType',
                 'nullable' => '?SomeType',
                 'clear' => '',
-            ]
+            ],
         ];
     }
 }

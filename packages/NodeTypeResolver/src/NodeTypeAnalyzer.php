@@ -53,6 +53,20 @@ final class NodeTypeAnalyzer
         return $nodeType instanceof StringType;
     }
 
+    public function isNullType(Node $node): bool
+    {
+        /** @var Scope|null $nodeScope */
+        $nodeScope = $node->getAttribute(Attribute::SCOPE);
+        if (! $node instanceof Expr || $nodeScope === null) {
+            return false;
+        }
+
+        /** @var Expr $node */
+        $nodeType = $nodeScope->getType($node);
+
+        return $nodeType instanceof NullType;
+    }
+
     /**
      * e.g. string|null, ObjectNull|null
      */

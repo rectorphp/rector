@@ -70,6 +70,11 @@ trait TypeAnalyzerTrait
         return $this->nodeTypeAnalyzer->isNullableType($node);
     }
 
+    public function isNullType(Node $node): bool
+    {
+        return $this->nodeTypeAnalyzer->isNullType($node);
+    }
+
     public function isBoolType(Node $node): bool
     {
         return $this->nodeTypeAnalyzer->isBoolType($node);

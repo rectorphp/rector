@@ -67,10 +67,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
         // changed!
         if ($originalNode !== $node) {
-            // transfer attributes that are needed further
-            if ($node->getAttribute(Attribute::FILE_INFO) === null) {
-                $node->setAttribute(Attribute::FILE_INFO, $originalNode->getAttribute(Attribute::FILE_INFO));
-            }
+            $this->keepFileInfoAttribute($node, $originalNode);
 
             $this->notifyNodeChangeFileInfo($node);
         }
@@ -129,5 +126,21 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         }
 
         return false;
+    }
+
+    private function keepFileInfoAttribute(Node $node, Node $originalNode): void
+    {
+        if ($node->getAttribute(Attribute::FILE_INFO) instanceof SmartFileInfo) {
+            return;
+        }
+
+        // transfer attributes that are needed further
+        if ($originalNode->getAttribute(Attribute::FILE_INFO) !== null) {
+            $node->setAttribute(Attribute::FILE_INFO, $originalNode->getAttribute(Attribute::FILE_INFO));
+        } elseif ($originalNode->getAttribute(Attribute::PARENT_NODE)) {
+            /** @var Node $parentOriginalNode */
+            $parentOriginalNode = $originalNode->getAttribute(Attribute::PARENT_NODE);
+            $node->setAttribute(Attribute::FILE_INFO, $parentOriginalNode->getAttribute(Attribute::FILE_INFO));
+        }
     }
 }
