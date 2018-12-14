@@ -21,13 +21,14 @@
 - [CodingStyle\If_](#codingstyleif_)
 - [CodingStyle\Switch_](#codingstyleswitch_)
 - [Doctrine](#doctrine)
-- [DomainDrivenDesign\ValueObjectRemover](#domaindrivendesignvalueobjectremover)
+- [DomainDrivenDesign\ObjectToScalar](#domaindrivendesignobjecttoscalar)
 - [Guzzle\MethodCall](#guzzlemethodcall)
 - [Jms\Property](#jmsproperty)
 - [PHPStan\Assign](#phpstanassign)
 - [PHPStan\Cast](#phpstancast)
 - [PHPUnit](#phpunit)
 - [PHPUnit\Foreach_](#phpunitforeach_)
+- [PHPUnit\MethodCall](#phpunitmethodcall)
 - [PHPUnit\SpecificMethod](#phpunitspecificmethod)
 - [PhpParser](#phpparser)
 - [Php\Assign](#phpassign)
@@ -449,17 +450,17 @@ Replaces doctrine alias with class.
 
 <br>
 
-## DomainDrivenDesign\ValueObjectRemover
+## DomainDrivenDesign\ObjectToScalar
 
-### `ValueObjectRemoverDocBlockRector`
+### `ObjectToScalarDocBlockRector`
 
-- class: `Rector\DomainDrivenDesign\Rector\ValueObjectRemover\ValueObjectRemoverDocBlockRector`
+- class: `Rector\DomainDrivenDesign\Rector\ObjectToScalar\ObjectToScalarDocBlockRector`
 
 Turns defined value object to simple types in doc blocks
 
 ```yaml
 services:
-    Rector\DomainDrivenDesign\Rector\ValueObjectRemover\ValueObjectRemoverDocBlockRector:
+    Rector\DomainDrivenDesign\Rector\ObjectToScalar\ObjectToScalarDocBlockRector:
         $valueObjectsToSimpleTypes:
             ValueObject: string
 ```
@@ -472,18 +473,7 @@ services:
 + * @var string|null
   */
  private $name;
-```
 
-```yaml
-services:
-    Rector\DomainDrivenDesign\Rector\ValueObjectRemover\ValueObjectRemoverDocBlockRector:
-        $valueObjectsToSimpleTypes:
-            ValueObject: string
-```
-
-↓
-
-```diff
 -/** @var ValueObject|null */
 +/** @var string|null */
  $name;
@@ -491,15 +481,15 @@ services:
 
 <br>
 
-### `ValueObjectRemoverRector`
+### `ObjectToScalarRector`
 
-- class: `Rector\DomainDrivenDesign\Rector\ValueObjectRemover\ValueObjectRemoverRector`
+- class: `Rector\DomainDrivenDesign\Rector\ObjectToScalar\ObjectToScalarRector`
 
 Remove values objects and use directly the value.
 
 ```yaml
 services:
-    Rector\DomainDrivenDesign\Rector\ValueObjectRemover\ValueObjectRemoverRector:
+    Rector\DomainDrivenDesign\Rector\ObjectToScalar\ObjectToScalarRector:
         $valueObjectsToSimpleTypes:
             ValueObject: string
 ```
@@ -509,48 +499,10 @@ services:
 ```diff
 -$name = new ValueObject("name");
 +$name = "name";
-```
 
-```yaml
-services:
-    Rector\DomainDrivenDesign\Rector\ValueObjectRemover\ValueObjectRemoverRector:
-        $valueObjectsToSimpleTypes:
-            ValueObject: string
-```
-
-↓
-
-```diff
--function someFunction(ValueObject $name) { }
-+function someFunction(string $name) { }
-```
-
-```yaml
-services:
-    Rector\DomainDrivenDesign\Rector\ValueObjectRemover\ValueObjectRemoverRector:
-        $valueObjectsToSimpleTypes:
-            ValueObject: string
-```
-
-↓
-
-```diff
--function someFunction(): ValueObject { }
-+function someFunction(): string { }
-```
-
-```yaml
-services:
-    Rector\DomainDrivenDesign\Rector\ValueObjectRemover\ValueObjectRemoverRector:
-        $valueObjectsToSimpleTypes:
-            ValueObject: string
-```
-
-↓
-
-```diff
--function someFunction(): ?ValueObject { }
-+function someFunction(): ?string { }
+-function someFunction(ValueObject $name): ?ValueObject {
++function someFunction(string $name): ?string {
+ }
 ```
 
 <br>
@@ -747,6 +699,86 @@ Simplify unnecessary foreach check of instances
 -    $this->assertInstanceOf(\SplFileInfo::class, $foo);
 -}
 +$this->assertContainsOnlyInstancesOf(\SplFileInfo::class, $foos);
+```
+
+<br>
+
+## PHPUnit\MethodCall
+
+### `AssertEqualsParameterToSpecificMethodsTypeRector`
+
+- class: `Rector\PHPUnit\Rector\MethodCall\AssertEqualsParameterToSpecificMethodsTypeRector`
+
+Change assertEquals()/assertNotEquals() method parameters to new specific alternatives
+
+```diff
+ final class SomeTest extends \PHPUnit\Framework\TestCase
+ {
+     public function test()
+     {
+         $value = 'value';
+-        $this->assertEquals('string', $value, 'message', 5.0);
++        $this->assertEqualsWithDelta('string', $value, 5.0, 'message');
+
+-        $this->assertEquals('string', $value, 'message', 0.0, 20);
++        $this->assertEquals('string', $value, 'message', 0.0);
+
+-        $this->assertEquals('string', $value, 'message', 0.0, 10, true);
++        $this->assertEqualsCanonicalizing('string', $value, 'message');
+
+-        $this->assertEquals('string', $value, 'message', 0.0, 10, false, true);
++        $this->assertEqualsIgnoringCase('string', $value, 'message');
+     }
+ }
+```
+
+<br>
+
+### `SpecificAssertContainsRector`
+
+- class: `Rector\PHPUnit\Rector\MethodCall\SpecificAssertContainsRector`
+
+Change assertContains()/assertNotContains() method to new string and iterable alternatives
+
+```diff
+ <?php
+
+ final class SomeTest extends \PHPUnit\Framework\TestCase
+ {
+     public function test()
+     {
+-        $this->assertContains('foo', 'foo bar');
+-        $this->assertNotContains('foo', 'foo bar');
+-        $this->assertContains('foo', ['foo', 'bar']);
+-        $this->assertNotContains('foo', ['foo', 'bar']);
++        $this->assertStringContains('foo', 'foo bar');
++        $this->assertStringNotContains('foo', 'foo bar');
++        $this->assertIterableContains('foo', ['foo', 'bar']);
++        $this->assertIterableNotContains('foo', ['foo', 'bar']);
+     }
+ }
+```
+
+<br>
+
+### `SpecificAssertInternalTypeRector`
+
+- class: `Rector\PHPUnit\Rector\MethodCall\SpecificAssertInternalTypeRector`
+
+Change assertInternalType()/assertNotInternalType() method to new specific alternatives
+
+```diff
+ final class SomeTest extends \PHPUnit\Framework\TestCase
+ {
+     public function test()
+     {
+         $value = 'value';
+-        $this->assertInternalType('string', $value);
+-        $this->assertNotInternalType('array', $value);
++        $this->assertIsString($value);
++        $this->assertIsNotArray($value);
+     }
+ }
 ```
 
 <br>
@@ -1071,6 +1103,21 @@ String cannot be turned into array by assignment anymore
 
 <br>
 
+### `MysqlAssignToMysqliRector`
+
+- class: `Rector\Php\Rector\Assign\MysqlAssignToMysqliRector`
+
+Converts more complex mysql functions to mysqli
+
+```diff
+-$data = mysql_db_name($result, $row);
++mysqli_data_seek($result, $row);
++$fetch = mysql_fetch_row($result);
++$data = $fetch[0];
+```
+
+<br>
+
 ## Php\BinaryOp
 
 ### `IsCountableRector`
@@ -1259,6 +1306,19 @@ Makes needles explicit strings
  $needle = 5;
 -$fivePosition = strpos('725', $needle);
 +$fivePosition = strpos('725', (string) $needle);
+```
+
+<br>
+
+### `MysqlFuncCallToMysqliRector`
+
+- class: `Rector\Php\Rector\FuncCall\MysqlFuncCallToMysqliRector`
+
+Converts more complex mysql functions to mysqli
+
+```diff
+-mysql_drop_db($database);
++mysqli_query('DROP DATABASE ' . $database);
 ```
 
 <br>
@@ -2138,6 +2198,7 @@ Changes Twig_Function_Method to Twig_SimpleFunction calls in TwigExtension.
 - [Annotation](#annotation)
 - [Argument](#argument)
 - [Assign](#assign)
+- [ClassMethod](#classmethod)
 - [Class_](#class_)
 - [Constant](#constant)
 - [DependencyInjection](#dependencyinjection)
@@ -2311,6 +2372,27 @@ services:
 -$someObject->oldProperty = false;
 +$someObject = new SomeClass;
 +$someObject->newMethodCall(false);
+```
+
+<br>
+
+## ClassMethod
+
+### `WrapReturnRector`
+
+- class: `Rector\Rector\ClassMethod\WrapReturnRector`
+
+Wrap return value of specificx method
+
+```diff
+ final class SomeClass
+ {
+     public function getItem()
+     {
+-        return 1;
++        return [1];
+     }
+ }
 ```
 
 <br>
