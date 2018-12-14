@@ -3,6 +3,8 @@
 function unsetCast()
 {
     $value = (unset)$value;
+
+    (unset) strlen('hi');
 }
 
 ?>
@@ -12,6 +14,8 @@ function unsetCast()
 function unsetCast()
 {
     $value = null;
+
+    null;
 }
 
 ?>
