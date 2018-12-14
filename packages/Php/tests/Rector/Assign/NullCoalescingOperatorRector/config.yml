@@ -1,3 +1,2 @@
 services:
-    Rector\Php\Rector\Property\TypedPropertyRector: ~
     Rector\Php\Rector\Assign\NullCoalescingOperatorRector: ~

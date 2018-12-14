@@ -24,13 +24,12 @@ final class IsObjectOnIncompleteClassRector extends AbstractRector
 $incompleteObject = new __PHP_Incomplete_Class;
 $isObject = is_object($incompleteObject);
 CODE_SAMPLE
-,
+                ,
                 <<<'CODE_SAMPLE'
 $incompleteObject = new __PHP_Incomplete_Class;
 $isObject = ! is_object($incompleteObject);
 CODE_SAMPLE
-
-            )
+            ),
         ]);
     }
 
@@ -64,13 +63,12 @@ CODE_SAMPLE
         $node->setAttribute(Attribute::PARENT_NODE, $booleanNotNode);
 
         return $booleanNotNode;
-
     }
 
     private function shouldSkip(FuncCall $funcCallNode): bool
     {
         $parentNode = $funcCallNode->getAttribute(Attribute::PARENT_NODE);
-        if (!$parentNode instanceof BooleanNot) {
+        if (! $parentNode instanceof BooleanNot) {
             return false;
         }
 

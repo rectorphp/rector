@@ -6,6 +6,7 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
@@ -93,6 +94,18 @@ final class BetterStandardPrinter extends Standard
             ($type ? $type . ' ' : '') .
             $this->pCommaSeparated($node->props) .
             ';';
+    }
+
+    /**
+     * Print ??= since PHP 7.4
+     */
+    protected function pExpr_BinaryOp_Coalesce(Coalesce $node): string
+    {
+        if (! $node->getAttribute('null_coalesce')) {
+            return parent::pExpr_BinaryOp_Coalesce($node);
+        }
+
+        return $this->pInfixOp(Coalesce::class, $node->left, ' ??= ', $node->right);
     }
 
     /**
