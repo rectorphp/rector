@@ -6,12 +6,11 @@ use Iterator;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
+use Rector\PhpParser\NodeTransformer;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -23,9 +22,15 @@ final class ArrayToYieldDataProviderRector extends AbstractPHPUnitRector
      */
     private $docBlockAnalyzer;
 
-    public function __construct(DocBlockAnalyzer $docBlockAnalyzer)
+    /**
+     * @var NodeTransformer
+     */
+    private $nodeTransformer;
+
+    public function __construct(DocBlockAnalyzer $docBlockAnalyzer, NodeTransformer $nodeTransformer)
     {
         $this->docBlockAnalyzer = $docBlockAnalyzer;
+        $this->nodeTransformer = $nodeTransformer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -73,7 +78,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isInProvideMethod($node)) {
+        if (! $this->isDataProviderMethod($node)) {
             return null;
         }
 
@@ -96,7 +101,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $yieldNodes = $this->turnArrayToYieldNodes($stmt->expr);
+            $yieldNodes = $this->nodeTransformer->transformArrayToYields($stmt->expr);
 
             unset($node->stmts[$key]);
         }
@@ -109,13 +114,13 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function isInProvideMethod(ClassMethod $classMethodNode): bool
+    private function isDataProviderMethod(ClassMethod $classMethodNode): bool
     {
         if (! $classMethodNode->isPublic()) {
             return false;
         }
 
-        return (bool) Strings::match($classMethodNode->name, '#^(provide|dataProvider)*#');
+        return (bool) Strings::match($this->getName($classMethodNode), '#^(provide|dataProvider)*#');
     }
 
     private function hasClassMethodReturnArrayOfArrays(ClassMethod $classMethodNode): bool
@@ -138,25 +143,6 @@ CODE_SAMPLE
         }
 
         return false;
-    }
-
-    /**
-     * @return Expression[]
-     */
-    private function turnArrayToYieldNodes(Array_ $arrayNode): array
-    {
-        $yieldNodes = [];
-
-        foreach ($arrayNode->items as $arrayItem) {
-            $expressionNode = new Expression(new Yield_($arrayItem->value));
-            if ($arrayItem->getComments()) {
-                $expressionNode->setAttribute('comments', $arrayItem->getComments());
-            }
-
-            $yieldNodes[] = $expressionNode;
-        }
-
-        return $yieldNodes;
     }
 
     private function isArrayOfArrays(Node $node): bool
