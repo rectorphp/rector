@@ -7,7 +7,7 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class WrapReturnRector extends AbstractRector
@@ -27,8 +27,8 @@ final class WrapReturnRector extends AbstractRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Wrap return value of specificx method', [
-            new CodeSample(
+        return new RectorDefinition('Wrap return value of specific method', [
+            new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 final class SomeClass
 {
@@ -48,6 +48,12 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
+                ,
+                [
+                    'SomeClass' => [
+                        'getItem' => 'array',
+                    ],
+                ]
             ),
         ]);
     }

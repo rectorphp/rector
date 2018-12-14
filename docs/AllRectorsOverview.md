@@ -2382,7 +2382,16 @@ services:
 
 - class: `Rector\Rector\ClassMethod\WrapReturnRector`
 
-Wrap return value of specificx method
+Wrap return value of specific method
+
+```yaml
+services:
+    Rector\Rector\ClassMethod\WrapReturnRector:
+        SomeClass:
+            getItem: array
+```
+
+↓
 
 ```diff
  final class SomeClass
