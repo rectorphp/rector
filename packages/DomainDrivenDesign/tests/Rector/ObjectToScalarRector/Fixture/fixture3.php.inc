@@ -2,7 +2,7 @@
 
 namespace SomeNamespace;
 
-use Rector\DomainDrivenDesign\Tests\Rector\ValueObjectRemoverRector\Source\SomeValueObject;
+use Rector\DomainDrivenDesign\Tests\Rector\ObjectToScalarRector\Source\SomeValueObject;
 
 class ThirdActionClass
 {
@@ -20,7 +20,7 @@ class ThirdActionClass
 
 namespace SomeNamespace;
 
-use Rector\DomainDrivenDesign\Tests\Rector\ValueObjectRemoverRector\Source\SomeValueObject;
+use Rector\DomainDrivenDesign\Tests\Rector\ObjectToScalarRector\Source\SomeValueObject;
 
 class ThirdActionClass
 {

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\DomainDrivenDesign\Rector\ValueObjectRemover;
+namespace Rector\DomainDrivenDesign\Rector\ObjectToScalar;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
@@ -13,7 +13,7 @@ use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
-final class ValueObjectRemoverDocBlockRector extends AbstractValueObjectRemoverRector
+final class ObjectToScalarDocBlockRector extends AbstractObjectToScalarRector
 {
     public function getDefinition(): RectorDefinition
     {
@@ -24,6 +24,9 @@ final class ValueObjectRemoverDocBlockRector extends AbstractValueObjectRemoverR
  * @var ValueObject|null
  */
 private $name;
+
+/** @var ValueObject|null */
+$name;
 CODE_SAMPLE
                 ,
                 <<<'CODE_SAMPLE'
@@ -31,21 +34,7 @@ CODE_SAMPLE
  * @var string|null
  */
 private $name;
-CODE_SAMPLE
-                ,
-                [
-                    '$valueObjectsToSimpleTypes' => [
-                        'ValueObject' => 'string',
-                    ],
-                ]
-            ),
-            new ConfiguredCodeSample(
-                <<<'CODE_SAMPLE'
-/** @var ValueObject|null */
-$name;
-CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+
 /** @var string|null */
 $name;
 CODE_SAMPLE

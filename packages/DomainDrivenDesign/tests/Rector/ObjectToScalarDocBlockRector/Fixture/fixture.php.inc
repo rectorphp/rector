@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\DomainDrivenDesign\Tests\Rector\ValueObjectRemoverDocBlockRector\Fixture;
+namespace Rector\DomainDrivenDesign\Tests\Rector\ObjectToScalarDocBlockRector\Fixture;
 
-use Rector\DomainDrivenDesign\Tests\Rector\ValueObjectRemoverDocBlockRector\Source\SomeChildOfValueObject;
+use Rector\DomainDrivenDesign\Tests\Rector\ObjectToScalarDocBlockRector\Source\SomeChildOfValueObject;
 
 class FirstActionClass
 {
@@ -23,9 +23,9 @@ class FirstActionClass
 -----
 <?php
 
-namespace Rector\DomainDrivenDesign\Tests\Rector\ValueObjectRemoverDocBlockRector\Fixture;
+namespace Rector\DomainDrivenDesign\Tests\Rector\ObjectToScalarDocBlockRector\Fixture;
 
-use Rector\DomainDrivenDesign\Tests\Rector\ValueObjectRemoverDocBlockRector\Source\SomeChildOfValueObject;
+use Rector\DomainDrivenDesign\Tests\Rector\ObjectToScalarDocBlockRector\Source\SomeChildOfValueObject;
 
 class FirstActionClass
 {

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\DomainDrivenDesign\Rector\ValueObjectRemover;
+namespace Rector\DomainDrivenDesign\Rector\ObjectToScalar;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
@@ -12,41 +12,26 @@ use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
-final class ValueObjectRemoverRector extends AbstractValueObjectRemoverRector
+final class ObjectToScalarRector extends AbstractObjectToScalarRector
 {
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Remove values objects and use directly the value.', [
             new ConfiguredCodeSample(
-                '$name = new ValueObject("name");',
-                '$name = "name";',
-                [
-                    '$valueObjectsToSimpleTypes' => [
-                        'ValueObject' => 'string',
-                    ],
-                ]
-            ),
-            new ConfiguredCodeSample(
-                'function someFunction(ValueObject $name) { }',
-                'function someFunction(string $name) { }',
-                [
-                    '$valueObjectsToSimpleTypes' => [
-                        'ValueObject' => 'string',
-                    ],
-                ]
-            ),
-            new ConfiguredCodeSample(
-                'function someFunction(): ValueObject { }',
-                'function someFunction(): string { }',
-                [
-                    '$valueObjectsToSimpleTypes' => [
-                        'ValueObject' => 'string',
-                    ],
-                ]
-            ),
-            new ConfiguredCodeSample(
-                'function someFunction(): ?ValueObject { }',
-                'function someFunction(): ?string { }',
+<<<'CODE_SAMPLE'
+$name = new ValueObject("name");
+
+function someFunction(ValueObject $name): ?ValueObject {
+}
+CODE_SAMPLE
+                ,
+<<<'CODE_SAMPLE'
+$name = "name";
+
+function someFunction(string $name): ?string {
+}
+CODE_SAMPLE
+                ,
                 [
                     '$valueObjectsToSimpleTypes' => [
                         'ValueObject' => 'string',

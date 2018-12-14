@@ -1,15 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace Rector\DomainDrivenDesign\Rector\ValueObjectRemover;
+namespace Rector\DomainDrivenDesign\Rector\ObjectToScalar;
 
 use PhpParser\Node;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\NamespaceAnalyzer;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\NamespaceAnalyzer as RectorNamespaceAnalyzer;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
 
-abstract class AbstractValueObjectRemoverRector extends AbstractRector
+abstract class AbstractObjectToScalarRector extends AbstractRector
 {
     /**
      * @var string[]
@@ -38,12 +37,12 @@ abstract class AbstractValueObjectRemoverRector extends AbstractRector
         array $valueObjectsToSimpleTypes,
         DocBlockAnalyzer $docBlockAnalyzer,
         BetterNodeFinder $betterNodeFinder,
-        RectorNamespaceAnalyzer $rectorNamespaceAnalyzer
+        NamespaceAnalyzer $namespaceAnalyzer
     ) {
         $this->valueObjectsToSimpleTypes = $valueObjectsToSimpleTypes;
         $this->docBlockAnalyzer = $docBlockAnalyzer;
         $this->betterNodeFinder = $betterNodeFinder;
-        $this->namespaceAnalyzer = $rectorNamespaceAnalyzer;
+        $this->namespaceAnalyzer = $namespaceAnalyzer;
     }
 
     protected function matchNewType(Node $node): ?string

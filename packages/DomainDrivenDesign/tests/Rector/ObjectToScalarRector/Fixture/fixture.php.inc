@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\DomainDrivenDesign\Tests\Rector\ValueObjectRemoverRector;
+namespace Rector\DomainDrivenDesign\Tests\Rector\ObjectToScalarRector;
 
-use Rector\DomainDrivenDesign\Tests\Rector\ValueObjectRemoverRector\Source\SomeChildOfValueObject;
+use Rector\DomainDrivenDesign\Tests\Rector\ObjectToScalarRector\Source\SomeChildOfValueObject;
 
 class ActionClass
 {
@@ -23,9 +23,9 @@ class ActionClass
 -----
 <?php
 
-namespace Rector\DomainDrivenDesign\Tests\Rector\ValueObjectRemoverRector;
+namespace Rector\DomainDrivenDesign\Tests\Rector\ObjectToScalarRector;
 
-use Rector\DomainDrivenDesign\Tests\Rector\ValueObjectRemoverRector\Source\SomeChildOfValueObject;
+use Rector\DomainDrivenDesign\Tests\Rector\ObjectToScalarRector\Source\SomeChildOfValueObject;
 
 class ActionClass
 {
