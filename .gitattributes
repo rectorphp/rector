@@ -22,4 +22,4 @@ ecs.yml export-ignore
 phpstan.neon export-ignore
 phpunit.xml export-ignore
 create-rector.yml.dist export-ignore
-
+rector.yml export-ignore
