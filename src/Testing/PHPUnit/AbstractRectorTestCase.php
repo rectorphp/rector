@@ -78,10 +78,6 @@ abstract class AbstractRectorTestCase extends TestCase
     protected function provideConfig(): string
     {
         if ($this->getRectorClass()) { // use local if not overloaded
-            $yamlContent = Yaml::dump(['services' => [
-                $this->getRectorClass() => $this->getRectorConfiguration() ?: null,
-            ]], Yaml::DUMP_OBJECT_AS_MAP);
-
             $hash = Strings::substring(
                 md5($this->getRectorClass() . Json::encode($this->getRectorConfiguration())),
                 0,
@@ -93,6 +89,10 @@ abstract class AbstractRectorTestCase extends TestCase
             if (file_exists($configFileTempPath)) {
                 return $configFileTempPath;
             }
+
+            $yamlContent = Yaml::dump(['services' => [
+                $this->getRectorClass() => $this->getRectorConfiguration() ?: null,
+            ]], Yaml::DUMP_OBJECT_AS_MAP);
 
             FileSystem::write($configFileTempPath, $yamlContent);
 
@@ -124,8 +124,8 @@ abstract class AbstractRectorTestCase extends TestCase
         // 1. original to changed content
         foreach ($files as $file) {
             $smartFileInfo = new SmartFileInfo($file);
-            [$originalContent, $changedContent] = $this->splitContentToOriginalFileAndExpectedFile($smartFileInfo);
-            $this->doTestFileMatchesExpectedContent($originalContent, $changedContent, $smartFileInfo->getRealPath());
+            [$originalFile, $changedFile] = $this->splitContentToOriginalFileAndExpectedFile($smartFileInfo);
+            $this->doTestFileMatchesExpectedContent($originalFile, $changedFile, $smartFileInfo->getRealPath());
         }
 
         $this->autoloadTestFixture = true;
