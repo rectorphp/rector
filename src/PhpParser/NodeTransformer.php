@@ -6,9 +6,12 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Expression;
 
 final class NodeTransformer
 {
@@ -40,6 +43,46 @@ final class NodeTransformer
         }
 
         return new Array_($messageParts);
+    }
+
+    /**
+     * @param Yield_[]|Expression[] $yieldNodes
+     */
+    public function transformYieldsToArray(array $yieldNodes): Array_
+    {
+        $arrayItems = [];
+        foreach ($yieldNodes as $yieldNode) {
+            if ($yieldNode instanceof Expression) {
+                $yieldNode = $yieldNode->expr;
+            }
+
+            if (! $yieldNode instanceof Yield_) {
+                continue;
+            }
+
+            $arrayItems[] = new ArrayItem($yieldNode->value, $yieldNode->key);
+        }
+
+        return new Array_($arrayItems);
+    }
+
+    /**
+     * @return Expression[]
+     */
+    public function transformArrayToYields(Array_ $arrayNode): array
+    {
+        $yieldNodes = [];
+
+        foreach ($arrayNode->items as $arrayItem) {
+            $expressionNode = new Expression(new Yield_($arrayItem->value, $arrayItem->key));
+            if ($arrayItem->getComments()) {
+                $expressionNode->setAttribute('comments', $arrayItem->getComments());
+            }
+
+            $yieldNodes[] = $expressionNode;
+        }
+
+        return $yieldNodes;
     }
 
     public function transformConcatToStringArray(Concat $concatNode): ?Array_
