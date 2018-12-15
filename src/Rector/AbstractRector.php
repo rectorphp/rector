@@ -2,6 +2,7 @@
 
 namespace Rector\Rector;
 
+use PhpParser\ConstExprEvaluator;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt;
@@ -35,14 +36,21 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     private $symfonyStyle;
 
     /**
+     * @var ConstExprEvaluator
+     */
+    private $constExprEvaluator;
+
+    /**
      * @required
      */
     public function setAbstractRectorDependencies(
         AppliedRectorCollector $appliedRectorCollector,
-        SymfonyStyle $symfonyStyle
+        SymfonyStyle $symfonyStyle,
+        ConstExprEvaluator $constExprEvaluator
     ): void {
         $this->appliedRectorCollector = $appliedRectorCollector;
         $this->symfonyStyle = $symfonyStyle;
+        $this->constExprEvaluator = $constExprEvaluator;
     }
 
     /**
@@ -99,6 +107,30 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         }
 
         return $nodes;
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function getValue(Node $node)
+    {
+        if (! $node instanceof Expr) {
+            return null;
+        }
+        return $this->constExprEvaluator->evaluateSilently($node);
+    }
+
+    /**
+     * @param mixed $expectedValue
+     */
+    protected function isValue(Node $node, $expectedValue): bool
+    {
+        $nodeValue = $this->getValue($node);
+        if ($nodeValue === null) {
+            return false;
+        }
+
+        return $nodeValue === $expectedValue;
     }
 
     protected function notifyNodeChangeFileInfo(Node $node): void
