@@ -6,9 +6,9 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Function_;
-use PhpParser\Parser;
+use PhpParser\Node\FunctionLike;
+use Rector\Exception\ShouldNotHappenException;
+use Rector\NodeTypeResolver\Application\FunctionLikeNodeCollector;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
@@ -30,14 +30,16 @@ final class RemoveExtraParametersRector extends AbstractRector
     private $betterNodeFinder;
 
     /**
-     * @var Parser
+     * @var FunctionLikeNodeCollector
      */
-    private $parser;
+    private $functionLikeNodeCollector;
 
-    public function __construct(BetterNodeFinder $betterNodeFinder, Parser $parser)
-    {
+    public function __construct(
+        BetterNodeFinder $betterNodeFinder,
+        FunctionLikeNodeCollector $functionLikeNodeCollector
+    ) {
         $this->betterNodeFinder = $betterNodeFinder;
-        $this->parser = $parser;
+        $this->functionLikeNodeCollector = $functionLikeNodeCollector;
     }
 
     public function getDefinition(): RectorDefinition
@@ -91,12 +93,18 @@ final class RemoveExtraParametersRector extends AbstractRector
             return new ReflectionFunction($this->getName($node));
         }
 
-        $className = $node->getAttribute(Attribute::CLASS_NAME);
+        $nodeTypes = $this->getTypes($node);
+        if (!isset($nodeTypes[0])) {
+            throw new ShouldNotHappenException();
+        }
+
+        $className = $nodeTypes[0];
+
         return new ReflectionMethod($className, $this->getName($node));
     }
 
     /**
-     * @param FuncCall|MethodCall|StaticCall $node
+     * @param ReflectionMethod|ReflectionFunction $reflectionFunctionAbstract
      */
     private function isVariadic(ReflectionFunctionAbstract $reflectionFunctionAbstract): bool
     {
@@ -105,29 +113,31 @@ final class RemoveExtraParametersRector extends AbstractRector
             return true;
         }
 
-        // external function/method
-        $nodes = $this->parser->parse(file_get_contents($reflectionFunctionAbstract->getFileName()));
-
-        $removeFunctionLikeNode = $this->betterNodeFinder->find($nodes, function (Node $node) use ($reflectionFunctionAbstract) {
-            if ($reflectionFunctionAbstract instanceof ReflectionFunction) {
-                if ($node instanceof Function_) {
-                    if ($this->isName($node, $reflectionFunctionAbstract->getName())) {
-                        return true;
-                    }
-                }
-            } else {
-                if ($node instanceof ClassMethod) {
-                    if ($this->isName($node, $reflectionFunctionAbstract->getName())) {
-                        return true;
-                    }
-                }
+        if ($reflectionFunctionAbstract instanceof ReflectionFunction) {
+            $functionNode = $this->functionLikeNodeCollector->findFunction($reflectionFunctionAbstract->getName());
+            if ($functionNode === null) {
+                return false;
             }
 
-            return null;
-        });
+            return $this->hasFunctionLikeVariadicFuncCall($functionNode);
+        }
 
-        // detect from "func_*_arg(s)" calls in the body
-        return (bool) $this->betterNodeFinder->findFirst($removeFunctionLikeNode, function (Node $node) {
+        $classMethodNode = $this->functionLikeNodeCollector->findMethod(
+            $reflectionFunctionAbstract->getName(),
+            $reflectionFunctionAbstract->getDeclaringClass()->getName()
+        );
+        if ($classMethodNode === null) {
+            return false;
+        }
+
+        return $this->hasFunctionLikeVariadicFuncCall($classMethodNode);
+
+        // @todo external function/method; $reflectionFunctionAbstract->getFileName() === false
+    }
+
+    private function hasFunctionLikeVariadicFuncCall(FunctionLike $functionLikeNode): bool
+    {
+        return (bool) $this->betterNodeFinder->findFirst($functionLikeNode, function (Node $node) {
             if (! $node instanceof FuncCall) {
                 return null;
             }

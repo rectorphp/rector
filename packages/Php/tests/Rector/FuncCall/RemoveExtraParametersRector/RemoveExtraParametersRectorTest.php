@@ -10,10 +10,10 @@ final class RemoveExtraParametersRectorTest extends AbstractRectorTestCase
     public function test(): void
     {
         $this->doTestFiles([
-            //            __DIR__ . '/Fixture/fixture.php.inc',
+            __DIR__ . '/Fixture/fixture.php.inc',
             __DIR__ . '/Fixture/func_get_all.php.inc',
-            //            __DIR__ . '/Fixture/methods.php.inc',
-            //            __DIR__ . '/Fixture/static_calls.php.inc',
+            __DIR__ . '/Fixture/methods.php.inc',
+            __DIR__ . '/Fixture/static_calls.php.inc',
         ]);
     }
 
