@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
@@ -56,6 +57,14 @@ final class BetterStandardPrinter extends Standard
     protected function pSingleQuotedString(string $string): string
     {
         return '\'' . preg_replace("/'|\\\\(?=[\\\\']|$)/", '\\\\$0', $string) . '\'';
+    }
+
+    /**
+     * Add space after "use ("
+     */
+    protected function pExpr_Closure(Closure $node): string
+    {
+        return Strings::replace(parent::pExpr_Closure($node), '#( use)\(#', '$1 (');
     }
 
     /**

@@ -93,7 +93,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
      */
     public function afterTraverse(array $nodes): array
     {
-        // @todo foreach, array autowire on Required in CommanderInterface[]
         if ($this->nodeAddingCommander->isActive()) {
             $nodes = $this->nodeAddingCommander->traverseNodes($nodes);
         }

@@ -9,7 +9,14 @@ final class CreateFunctionToAnonymousFunctionRectorTest extends AbstractRectorTe
 {
     public function test(): void
     {
-        $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc']);
+        $this->doTestFiles([
+            __DIR__ . '/Fixture/fixture.php.inc',
+            __DIR__ . '/Fixture/concat.php.inc',
+            __DIR__ . '/Fixture/reference.php.inc',
+            __DIR__ . '/Fixture/stackoverflow.php.inc',
+            __DIR__ . '/Fixture/drupal.php.inc',
+            __DIR__ . '/Fixture/php_net.php.inc',
+        ]);
     }
 
     protected function getRectorClass(): string

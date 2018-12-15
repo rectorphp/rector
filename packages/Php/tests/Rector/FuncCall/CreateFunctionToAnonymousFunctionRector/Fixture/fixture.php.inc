@@ -1,5 +1,7 @@
 <?php
 
+namespace Rector\Php\Tests\Rector\FuncCall\CreateFunctionToAnonymousFunctionRector\Fixture;
+
 class ClassWithCreateFunction
 {
     public function run()
@@ -8,12 +10,30 @@ class ClassWithCreateFunction
 
         $delimiter = '___';
         $callback = create_function('$matches', "return '$delimiter' . strtolower(\$matches[1]);");
+
+        $callback = create_function( '$caps', "return '$delimiter';" );
+
+        add_action(
+            'widgets_init',
+            create_function(
+                '',
+                'return register_widget( "WordAds_Sidebar_Widget" );'
+            )
+        );
+
+        $all_ids = array_map( create_function( '$o', 'return $o->ID;' ), $posts);
+
+        $missing = create_function( '$m', 'return $m->type === \'post\';');
+
+        create_function('$caps', "return '$caps';");
     }
 }
 
 ?>
 -----
 <?php
+
+namespace Rector\Php\Tests\Rector\FuncCall\CreateFunctionToAnonymousFunctionRector\Fixture;
 
 class ClassWithCreateFunction
 {
@@ -24,8 +44,31 @@ class ClassWithCreateFunction
         };
 
         $delimiter = '___';
-        $callback = function ($matches) use($delimiter) {
+        $callback = function ($matches) use ($delimiter) {
             return $delimiter . strtolower($matches[1]);
+        };
+
+        $callback = function ($caps) use ($delimiter) {
+            return $delimiter;
+        };
+
+        add_action(
+            'widgets_init',
+            function () {
+                return register_widget("WordAds_Sidebar_Widget");
+            }
+        );
+
+        $all_ids = array_map( function ($o) {
+            return $o->ID;
+        }, $posts);
+
+        $missing = function ($m) {
+            return $m->type === 'post';
+        };
+
+        function ($caps) {
+            return $caps;
         };
     }
 }

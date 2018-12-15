@@ -4,10 +4,15 @@ namespace Rector\Php\Rector\FuncCall;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\ClosureUse;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\Encapsed;
 use PhpParser\Node\Scalar\String_;
@@ -89,12 +94,12 @@ CODE_SAMPLE
         }
 
         /** @var Variable[] $parameters */
-        $parameters = $this->parseStringToNodes($node->args[0]->value);
-        $body = $this->parseStringToNodes($node->args[1]->value);
-
+        $parameters = $this->parseStringToParameters($node->args[0]->value);
+        $body = $this->parseStringToBody($node->args[1]->value);
         $useVariables = $this->resolveUseVariables($body, $parameters);
 
         $anonymousFunctionNode = new Closure();
+
         foreach ($parameters as $parameter) {
             /** @var Variable $parameter */
             $anonymousFunctionNode->params[] = new Param($parameter);
@@ -112,41 +117,34 @@ CODE_SAMPLE
     }
 
     /**
-     * @param string|String_|Node $content
-     * @return Node[]|Variable[]|Stmt[]
+     * @param String_|Expr $content
+     * @return Stmt[]
      */
-    private function parseStringToNodes($content): array
+    private function parseStringToBody(Node $content): array
     {
-        if ($content instanceof String_) {
-            $content = $content->value;
+        if (! $content instanceof String_ && ! $content instanceof Encapsed && ! $content instanceof Concat) {
+            // special case of code elsewhere
+            return [$this->createEval($content)];
         }
 
-        if ($content instanceof Encapsed) {
-            // remove "
-            $content = trim($this->print($content), '""');
-            // use \$ → $
-            $content = Strings::replace($content, '#\\\\\$#', '$');
-            // use \'{$...}\' → $...
-            $content = Strings::replace($content, '#\'{(\$.*?)}\'#', '$1');
-        }
+        $content = $this->stringify($content);
+        $content = Strings::endsWith($content, ';') ? $content : $content . ';';
 
-        if (! is_string($content)) {
-            throw new ShouldNotHappenException();
-        }
+        return (array) $this->parser->parse('<?php ' . $content);
+    }
 
-        $wrappedCode = '<?php ' . $content . (Strings::endsWith($content, ';') ? '' : ';');
+    /**
+     * @return Param[]
+     */
+    private function parseStringToParameters(Expr $expr): array
+    {
+        $content = $this->stringify($expr);
 
-        $nodes = $this->parser->parse($wrappedCode);
-        if (count($nodes) === 1) {
-            if ($nodes[0] instanceof Expression) {
-                return [$nodes[0]->expr];
-            }
+        $content = '<?php $value = function(' . $content . ') {};';
 
-            return [$nodes[0]];
-        }
+        $nodes = $this->parser->parse($content);
 
-        // @todo implement
-        throw new ShouldNotHappenException();
+        return $nodes[0]->expr->expr->params;
     }
 
     /**
@@ -163,15 +161,62 @@ CODE_SAMPLE
 
         /** @var Variable[] $variableNodes */
         $variableNodes = $this->betterNodeFinder->findInstanceOf($nodes, Variable::class);
-        foreach ($variableNodes as $i => $variableNode) {
-            if (! in_array($this->getName($variableNode), $paramNames, true)) {
+
+        $filteredVariables = [];
+        foreach ($variableNodes as $variableNode) {
+            // "$this" is allowed
+            if ($this->isName($variableNode, 'this')) {
                 continue;
             }
 
-            unset($variableNodes[$i]);
+            if (in_array($this->getName($variableNode), $paramNames, true)) {
+                continue;
+            }
+
+            $filteredVariables[$this->getName($variableNode)] = $variableNode;
         }
 
         // re-index
-        return array_values($variableNodes);
+        return array_values($filteredVariables);
+    }
+
+    /**
+     * @param string|Node $content
+     */
+    private function stringify($content): string
+    {
+        if (is_string($content)) {
+            return $content;
+        }
+
+        if ($content instanceof String_) {
+            return $content->value;
+        }
+
+        if ($content instanceof Encapsed) {
+            // remove "
+            $content = trim($this->print($content), '""');
+            // use \$ → $
+            $content = Strings::replace($content, '#\\\\\$#', '$');
+            // use \'{$...}\' → $...
+            return Strings::replace($content, '#\'{(\$.*?)}\'#', '$1');
+        }
+
+        if ($content instanceof Concat) {
+            return $this->stringify($content->left) . $this->stringify($content->right);
+        }
+
+        if ($content instanceof Variable || $content instanceof PropertyFetch) {
+            return $this->print($content);
+        }
+
+        throw new ShouldNotHappenException(get_class($content) . ' ' . __METHOD__);
+    }
+
+    private function createEval(Expr $node): Expression
+    {
+        $evalFuncCall = new FuncCall(new Name('eval'), [new Arg($node)]);
+
+        return new Expression($evalFuncCall);
     }
 }
