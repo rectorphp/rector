@@ -94,6 +94,6 @@ CODE_SAMPLE
     {
         $currentOptionName = $stringKeyNode->value;
 
-        $stringKeyNode->value = $this->oldToNewOption[$newOption] ?? $stringKeyNode->value;
+        $stringKeyNode->value = $this->oldToNewOption[$currentOptionName] ?? $stringKeyNode->value;
     }
 }

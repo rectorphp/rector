@@ -36,6 +36,8 @@ parameters:
         - '#Strict comparison using === between string and null will always evaluate to false#'
         # false positive
         - '#Access to an undefined property PhpParser\\Node::\$expr#'
+        # subtype
+        - '#Parameter \#1 \$reflectionFunctionAbstract of method Rector\\Php\\Rector\\FuncCall\\RemoveExtraParametersRector::isVariadic\(\) expects ReflectionFunction\|ReflectionMethod, ReflectionFunctionAbstract given#'
 
         # nette container
         - '#Method Rector\\NodeTypeResolver\\DependencyInjection\\PHPStanServicesFactory::create(.*?)() should return (.*?) but returns object#'

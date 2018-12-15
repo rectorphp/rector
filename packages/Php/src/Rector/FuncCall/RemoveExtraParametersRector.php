@@ -7,9 +7,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\FunctionLike;
-use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Application\FunctionLikeNodeCollector;
-use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -90,6 +88,9 @@ final class RemoveExtraParametersRector extends AbstractRector
         return $node;
     }
 
+    /**
+     * @return ReflectionFunction|ReflectionMethod
+     */
     private function resolveReflectionFunctionLike(Node $node): ?ReflectionFunctionAbstract
     {
         if ($node instanceof FuncCall) {
@@ -104,7 +105,7 @@ final class RemoveExtraParametersRector extends AbstractRector
         $nodeTypes = $this->getTypes($node);
 
         // unable to resolve
-        if (!isset($nodeTypes[0])) {
+        if (! isset($nodeTypes[0])) {
             return null;
         }
 

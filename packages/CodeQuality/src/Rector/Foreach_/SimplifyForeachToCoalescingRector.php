@@ -68,6 +68,8 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        $this->returnNode = null;
+
         if (! $node->keyVar) {
             return null;
         }
@@ -171,15 +173,16 @@ CODE_SAMPLE
 
         if ($this->areNodesEqual($identicalNode->left, $foreachNode->keyVar)) {
             $checkedNode = $assignNode->var;
+            $keyNode = $identicalNode->right;
         } elseif ($this->areNodesEqual($identicalNode->right, $foreachNode->keyVar)) {
             $checkedNode = $assignNode->var;
+            $keyNode = $identicalNode->left;
         } else {
             return null;
         }
 
-        return new Assign($checkedNode, new Coalesce(new ArrayDimFetch(
-            $foreachNode->expr,
-            $foreachNode->valueVar
-        ), $checkedNode));
+        $arrayDimFetchNode = new ArrayDimFetch($foreachNode->expr, $keyNode);
+
+        return new Assign($checkedNode, new Coalesce($arrayDimFetchNode, $checkedNode));
     }
 }
