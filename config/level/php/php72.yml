@@ -19,3 +19,4 @@ services:
     Rector\Php\Rector\FunctionLike\ReturnScalarTypehintRector: ~
     Rector\Php\Rector\FuncCall\GetClassOnNullRector: ~
     Rector\Php\Rector\FuncCall\IsObjectOnIncompleteClassRector: ~
+    Rector\Php\Rector\FuncCall\ParseStrWithResultArgumentRector: ~
