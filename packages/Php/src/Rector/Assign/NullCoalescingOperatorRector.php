@@ -22,13 +22,12 @@ final class NullCoalescingOperatorRector extends AbstractRector
 $array = [];
 $array['user_id'] = $array['user_id'] ?? 'value';
 CODE_SAMPLE
-,
+                ,
                 <<<'CODE_SAMPLE'
 $array = [];
 $array['user_id'] ??= 'value';
 CODE_SAMPLE
-
-            )
+            ),
         ]);
     }
 

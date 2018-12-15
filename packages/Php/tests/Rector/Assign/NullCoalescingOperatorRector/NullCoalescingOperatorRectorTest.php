@@ -9,9 +9,7 @@ final class NullCoalescingOperatorRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
     {
-        $this->doTestFiles([
-            __DIR__ . '/Fixture/fixture.php.inc'
-        ]);
+        $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc']);
     }
 
     protected function getRectorClass(): string
