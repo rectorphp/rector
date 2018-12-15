@@ -4,7 +4,6 @@ namespace Rector\Examples;
 
 use PhpParser\BuilderFactory;
 use PhpParser\BuilderHelpers;
-use PhpParser\ConstExprEvaluator;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Name\FullyQualified;
@@ -25,19 +24,13 @@ final class ConfiguredProvideConfigRector extends AbstractRector
     private $classMaintainer;
 
     /**
-     * @var ConstExprEvaluator
-     */
-    private $constExprEvaluator;
-
-    /**
      * @var BuilderFactory
      */
     private $builderFactory;
 
-    public function __construct(ClassMaintainer $classMaintainer, ConstExprEvaluator $constExprEvaluator, BuilderFactory $builderFactory)
+    public function __construct(ClassMaintainer $classMaintainer, BuilderFactory $builderFactory)
     {
         $this->classMaintainer = $classMaintainer;
-        $this->constExprEvaluator = $constExprEvaluator;
         $this->builderFactory = $builderFactory;
     }
 
@@ -79,7 +72,7 @@ final class ConfiguredProvideConfigRector extends AbstractRector
             /** @var Return_ $returnNode */
             $returnNode = $provideConfigMethod->stmts[0];
 
-            $configPath = $this->constExprEvaluator->evaluateDirectly($returnNode->expr);
+            $configPath = $this->getValue($returnNode->expr);
             $yaml = Yaml::parseFile($configPath);
 
             $resolved = $this->resolveClassToConfigurationFromConfig($yaml);

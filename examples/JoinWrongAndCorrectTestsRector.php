@@ -4,7 +4,6 @@ namespace Rector\Examples;
 
 use Nette\Utils\FileSystem;
 use Nette\Utils\Strings;
-use PhpParser\ConstExprEvaluator;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
@@ -22,18 +21,12 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 final class JoinWrongAndCorrectTestsRector extends AbstractRector
 {
     /**
-     * @var ConstExprEvaluator
-     */
-    private $constExprEvaluator;
-
-    /**
      * @var ClassMaintainer
      */
     private $classMaintainer;
 
-    public function __construct(ConstExprEvaluator $constExprEvaluator, ClassMaintainer $classMaintainer)
+    public function __construct(ClassMaintainer $classMaintainer)
     {
-        $this->constExprEvaluator = $constExprEvaluator;
         $this->classMaintainer = $classMaintainer;
     }
 
@@ -98,8 +91,8 @@ final class JoinWrongAndCorrectTestsRector extends AbstractRector
                     // from array to string
                     $filesArrayNode->items[$i] = $item->value->items[0];
 
-                    $wrongFilePath = $this->constExprEvaluator->evaluateSilently($item->value->items[0]->value);
-                    $correctFilePath = $this->constExprEvaluator->evaluateSilently($item->value->items[1]->value);
+                    $wrongFilePath = $this->getValue($item->value->items[0]->value);
+                    $correctFilePath = $this->getValue($item->value->items[1]->value);
 
                     // remove node
 

@@ -133,6 +133,23 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         return $nodeValue === $expectedValue;
     }
 
+    /**
+     * @param Node[] $nodes
+     * @param mixed[] $expectedValues
+     */
+    protected function areValues(array $nodes, array $expectedValues): bool
+    {
+        foreach ($nodes as $i => $node) {
+            if ($this->isValue($node, $expectedValues[$i])) {
+                continue;
+            }
+
+            return false;
+        }
+
+        return true;
+    }
+
     protected function notifyNodeChangeFileInfo(Node $node): void
     {
         /** @var SmartFileInfo|null $fileInfo */

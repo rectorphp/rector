@@ -2,9 +2,7 @@
 
 namespace Rector\PHPUnit\Rector\MethodCall;
 
-use PhpParser\ConstExprEvaluator;
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
@@ -17,16 +15,6 @@ use Rector\RectorDefinition\RectorDefinition;
  */
 final class AssertEqualsParameterToSpecificMethodsTypeRector extends AbstractPHPUnitRector
 {
-    /**
-     * @var ConstExprEvaluator
-     */
-    private $constExprEvaluator;
-
-    public function __construct(ConstExprEvaluator $constExprEvaluator)
-    {
-        $this->constExprEvaluator = $constExprEvaluator;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -110,14 +98,6 @@ CODE_SAMPLE
         $node->args = array_values($node->args);
 
         return $node;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getValue(Expr $node)
-    {
-        return $this->constExprEvaluator->evaluateSilently($node);
     }
 
     private function processAssertEqualsIgnoringCase(MethodCall $methodCallNode): void

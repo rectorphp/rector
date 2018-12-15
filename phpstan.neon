@@ -51,6 +51,8 @@ parameters:
         - '#Call to function in_array\(\) with arguments string, (.*?) and true will always evaluate to false#'
 
         # known values
+        - '#Access to an undefined property PhpParser\\Node\\Expr::\$left#'
+        - '#Access to an undefined property PhpParser\\Node\\Expr::\$right#'
         - '#Method Rector\\ContributorTools\\Configuration\\ConfigurationFactory::resolveCategoryFromFqnNodeTypes\(\) should return string but returns string\|false#'
         - '#Array \(array<PhpParser\\Node\\Expr\\MethodCall>\) does not accept PhpParser\\Node\\Expr#'
         - '#Cannot access property \$expr on PhpParser\\Node\\Stmt\|null#'
