@@ -26,12 +26,7 @@ final class VarTypeInfo extends AbstractTypeInfo
         if (ctype_upper($type[0])) {
             return true;
         }
-
-        if (! TypeAnalyzer::isPhpReservedType($type)) {
-            return false;
-        }
-
-        return true;
+        return TypeAnalyzer::isPhpReservedType($type);
     }
 
     public function getType(): ?string

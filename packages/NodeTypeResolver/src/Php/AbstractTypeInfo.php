@@ -230,12 +230,7 @@ abstract class AbstractTypeInfo
     private function isArraySubtype(array $types): bool
     {
         $arraySubtypeGroup = ['array', 'iterable'];
-
-        if ($this->areArraysEqual($types, $arraySubtypeGroup)) {
-            return true;
-        }
-
-        return false;
+        return $this->areArraysEqual($types, $arraySubtypeGroup);
     }
 
     /**

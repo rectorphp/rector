@@ -117,12 +117,7 @@ CODE_SAMPLE
         if (! $this->areNodesEqual($previousNode->var, $variableNode)) {
             return true;
         }
-
-        if ($this->isPreviousExpressionVisuallySimilar($previousExpression, $previousNode)) {
-            return true;
-        }
-
-        return false;
+        return $this->isPreviousExpressionVisuallySimilar($previousExpression, $previousNode);
     }
 
     /**

@@ -94,10 +94,6 @@ CODE_SAMPLE
     {
         $currentOptionName = $stringKeyNode->value;
 
-        foreach ($this->oldToNewOption as $oldOption => $newOption) {
-            if ($currentOptionName === $oldOption) {
-                $stringKeyNode->value = $newOption;
-            }
-        }
+        $stringKeyNode->value = $this->oldToNewOption[$newOption] ?? $stringKeyNode->value;
     }
 }

@@ -67,9 +67,12 @@ final class RemoveExtraParametersRector extends AbstractRector
         }
 
         $reflectionFunctionLike = $this->resolveReflectionFunctionLike($node);
+        if ($reflectionFunctionLike === null) {
+            return null;
+        }
 
         // can be any number of arguments → nothing to limit here
-        if ($this->isVariadic($reflectionFunctionLike, $node)) {
+        if ($this->isVariadic($reflectionFunctionLike)) {
             return null;
         }
 
@@ -87,20 +90,30 @@ final class RemoveExtraParametersRector extends AbstractRector
         return $node;
     }
 
-    private function resolveReflectionFunctionLike(Node $node): ReflectionFunctionAbstract
+    private function resolveReflectionFunctionLike(Node $node): ?ReflectionFunctionAbstract
     {
         if ($node instanceof FuncCall) {
-            return new ReflectionFunction($this->getName($node));
+            $functionName = $this->getName($node);
+            if ($functionName === null) {
+                return null;
+            }
+
+            return new ReflectionFunction($functionName);
         }
 
         $nodeTypes = $this->getTypes($node);
+
+        // unable to resolve
         if (!isset($nodeTypes[0])) {
-            throw new ShouldNotHappenException();
+            return null;
         }
 
-        $className = $nodeTypes[0];
+        $methodName = $this->getName($node);
+        if ($methodName === null) {
+            return null;
+        }
 
-        return new ReflectionMethod($className, $this->getName($node));
+        return new ReflectionMethod($nodeTypes[0], $methodName);
     }
 
     /**

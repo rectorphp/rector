@@ -113,12 +113,7 @@ CODE_SAMPLE
         if ($this->isIdenticalToNotNull($funcCallNode, $parentNode)) {
             return true;
         }
-
-        if ($this->isNotIdenticalToNull($funcCallNode, $parentNode)) {
-            return true;
-        }
-
-        return false;
+        return $this->isNotIdenticalToNull($funcCallNode, $parentNode);
     }
 
     /**

@@ -68,10 +68,6 @@ CODE_SAMPLE
     private function shouldSkip(FuncCall $funcCallNode): bool
     {
         $parentNode = $funcCallNode->getAttribute(Attribute::PARENT_NODE);
-        if (! $parentNode instanceof BooleanNot) {
-            return false;
-        }
-
-        return true;
+        return $parentNode instanceof BooleanNot;
     }
 }

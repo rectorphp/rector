@@ -26,9 +26,8 @@ final class FunctionLikeNodeCollectorNodeVisitor extends NodeVisitorAbstract
      */
     public function enterNode(Node $node)
     {
-        $name = (string) $node->getAttribute(Attribute::CLASS_NAME);
-
         if ($node instanceof ClassMethod) {
+            $name = (string) $node->getAttribute(Attribute::CLASS_NAME);
             $this->functionLikeNodeCollector->addMethod($node, $name);
         }
 

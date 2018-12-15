@@ -80,13 +80,8 @@ CODE_SAMPLE
         if (! $this->areNodesEqual($ternaryNode->cond->left, $nestedTernary->cond->left)) {
             return true;
         }
-
         // $a X $b ? . : ($a X $b ? . : .)
-        if (! $this->areNodesEqual($ternaryNode->cond->right, $nestedTernary->cond->right)) {
-            return true;
-        }
-
-        return false;
+        return ! $this->areNodesEqual($ternaryNode->cond->right, $nestedTernary->cond->right);
     }
 
     /**
