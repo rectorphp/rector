@@ -20,3 +20,4 @@ services:
     Rector\Php\Rector\FuncCall\GetClassOnNullRector: ~
     Rector\Php\Rector\FuncCall\IsObjectOnIncompleteClassRector: ~
     Rector\Php\Rector\FuncCall\ParseStrWithResultArgumentRector: ~
+    Rector\Php\Rector\FuncCall\StringsAssertNakedRector: ~
