@@ -51,7 +51,9 @@ final class RegexDashEscapeRector extends AbstractRector
     private $staticMethodsWithPatternsToArgumentPosition = [
         'Nette\Utils\Strings' => [
             'match' => 1,
+            'matchAll' => 1,
             'replace' => 1,
+            'split' => 1,
         ],
     ];
 
@@ -100,36 +102,15 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function escapeDashInPattern(Expr $value): Expr
+    private function processFuncCall(FuncCall $funcCallNode): void
     {
-        if ($value instanceof String_) {
-            $stringValue = $value->value;
-
-            if (! Strings::match($stringValue, self::PATTERN_DASH_NOT_AROUND_BRACKETS)) {
-                return $value;
+        foreach ($this->functionsWithPatternsToArgumentPosition as $functionName => $argumentPosition) {
+            if (! $this->isName($funcCallNode, $functionName)) {
+                return;
             }
 
-            $value->value = Strings::replace($stringValue, self::PATTERN_DASH_NOT_AROUND_BRACKETS, '\-');
-            // helped needed to skip re-escaping regular expression
-            $value->setAttribute('is_regular_pattern', true);
+            $this->processArgumentPosition($funcCallNode, $argumentPosition);
         }
-
-        // @todo constants
-        // @todo properties above
-
-        return $value;
-    }
-
-    /**
-     * @param StaticCall|FuncCall $node
-     */
-    private function processArgumentPosition(Node $node, int $argumentPosition): void
-    {
-        if (! $this->isStringType($node->args[$argumentPosition]->value)) {
-            return;
-        }
-
-        $node->args[$argumentPosition]->value = $this->escapeDashInPattern($node->args[$argumentPosition]->value);
     }
 
     private function processStaticCall(StaticCall $staticCallNode): void
@@ -149,14 +130,35 @@ CODE_SAMPLE
         }
     }
 
-    private function processFuncCall(FuncCall $funcCallNode): void
+    /**
+     * @param StaticCall|FuncCall $node
+     */
+    private function processArgumentPosition(Node $node, int $argumentPosition): void
     {
-        foreach ($this->functionsWithPatternsToArgumentPosition as $functionName => $argumentPosition) {
-            if (! $this->isName($funcCallNode, $functionName)) {
-                return;
+        if (! $this->isStringType($node->args[$argumentPosition]->value)) {
+            return;
+        }
+
+        $node->args[$argumentPosition]->value = $this->escapeDashInPattern($node->args[$argumentPosition]->value);
+    }
+
+    private function escapeDashInPattern(Expr $value): Expr
+    {
+        if ($value instanceof String_) {
+            $stringValue = $value->value;
+
+            if (! Strings::match($stringValue, self::PATTERN_DASH_NOT_AROUND_BRACKETS)) {
+                return $value;
             }
 
-            $this->processArgumentPosition($funcCallNode, $argumentPosition);
+            $value->value = Strings::replace($stringValue, self::PATTERN_DASH_NOT_AROUND_BRACKETS, '\-');
+            // helped needed to skip re-escaping regular expression
+            $value->setAttribute('is_regular_pattern', true);
         }
+
+        // @todo constants
+        // @todo properties above
+
+        return $value;
     }
 }

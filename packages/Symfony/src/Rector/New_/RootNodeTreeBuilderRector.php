@@ -19,14 +19,14 @@ use Rector\RectorDefinition\RectorDefinition;
 final class RootNodeTreeBuilderRector extends AbstractRector
 {
     /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
      * @var string
      */
     private $treeBuilderClass;
+
+    /**
+     * @var BetterNodeFinder
+     */
+    private $betterNodeFinder;
 
     public function __construct(
         BetterNodeFinder $betterNodeFinder,

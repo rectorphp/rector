@@ -17,14 +17,14 @@ use Rector\PhpParser\Node\VariableInfo;
 final class PropertyAddingCommander implements CommanderInterface
 {
     /**
-     * @var ClassMaintainer
-     */
-    private $classMaintainer;
-
-    /**
      * @var VariableInfo[][]
      */
     private $propertiesByClass = [];
+
+    /**
+     * @var ClassMaintainer
+     */
+    private $classMaintainer;
 
     public function __construct(ClassMaintainer $classMaintainer)
     {
@@ -60,14 +60,14 @@ final class PropertyAddingCommander implements CommanderInterface
     {
         return new class($this->classMaintainer, $this->propertiesByClass) extends NodeVisitorAbstract {
             /**
-             * @var ClassMaintainer
-             */
-            private $classMaintainer;
-
-            /**
              * @var VariableInfo[][]
              */
             private $propertiesByClass = [];
+
+            /**
+             * @var ClassMaintainer
+             */
+            private $classMaintainer;
 
             /**
              * @param VariableInfo[][] $propertiesByClass

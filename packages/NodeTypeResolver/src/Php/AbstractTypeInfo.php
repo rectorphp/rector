@@ -15,6 +15,16 @@ use function Safe\sort;
 abstract class AbstractTypeInfo
 {
     /**
+     * @var bool
+     */
+    protected $isNullable = false;
+
+    /**
+     * @var bool
+     */
+    protected $hasRemovedTypes = false;
+
+    /**
      * @var string[]
      */
     protected $types = [];
@@ -25,19 +35,9 @@ abstract class AbstractTypeInfo
     protected $typesToRemove = [];
 
     /**
-     * @var bool
-     */
-    protected $isNullable = false;
-
-    /**
      * @var string[]
      */
     protected $fqnTypes = [];
-
-    /**
-     * @var bool
-     */
-    protected $hasRemovedTypes = false;
 
     /**
      * @var string[]
@@ -184,24 +184,33 @@ abstract class AbstractTypeInfo
 
     /**
      * @param string[] $types
-     * @return string[]
      */
-    private function squashTraversableAndArrayToIterable(array $types): array
+    private function isArraySubtype(array $types): bool
     {
-        // Traversable | array = iterable
-        if (count(array_intersect($this->iterableUnionTypes, $types)) !== 2) {
-            return $types;
+        $arraySubtypeGroup = ['array', 'iterable'];
+        return $this->areArraysEqual($types, $arraySubtypeGroup);
+    }
+
+    private function normalizeNullable(string $type): string
+    {
+        if (Strings::startsWith($type, '?')) {
+            $type = ltrim($type, '?');
+            $this->isNullable = true;
+        }
+        return $type;
+    }
+
+    private function normalizeCasing(string $type): string
+    {
+        if (TypeAnalyzer::isPhpReservedType($type)) {
+            return strtolower($type);
         }
 
-        foreach ($types as $i => $type) {
-            if (in_array($type, $this->iterableUnionTypes, true)) {
-                unset($types[$i]);
-            }
+        if (strtolower($type) === '$this') {
+            return strtolower($type);
         }
 
-        $types[] = 'iterable';
-
-        return $types;
+        return $type;
     }
 
     /**
@@ -226,11 +235,24 @@ abstract class AbstractTypeInfo
 
     /**
      * @param string[] $types
+     * @return string[]
      */
-    private function isArraySubtype(array $types): bool
+    private function squashTraversableAndArrayToIterable(array $types): array
     {
-        $arraySubtypeGroup = ['array', 'iterable'];
-        return $this->areArraysEqual($types, $arraySubtypeGroup);
+        // Traversable | array = iterable
+        if (count(array_intersect($this->iterableUnionTypes, $types)) !== 2) {
+            return $types;
+        }
+
+        foreach ($types as $i => $type) {
+            if (in_array($type, $this->iterableUnionTypes, true)) {
+                unset($types[$i]);
+            }
+        }
+
+        $types[] = 'iterable';
+
+        return $types;
     }
 
     /**
@@ -243,27 +265,5 @@ abstract class AbstractTypeInfo
         sort($arraySubtypeGroup);
 
         return $types === $arraySubtypeGroup;
-    }
-
-    private function normalizeNullable(string $type): string
-    {
-        if (Strings::startsWith($type, '?')) {
-            $type = ltrim($type, '?');
-            $this->isNullable = true;
-        }
-        return $type;
-    }
-
-    private function normalizeCasing(string $type): string
-    {
-        if (TypeAnalyzer::isPhpReservedType($type)) {
-            return strtolower($type);
-        }
-
-        if (strtolower($type) === '$this') {
-            return strtolower($type);
-        }
-
-        return $type;
     }
 }

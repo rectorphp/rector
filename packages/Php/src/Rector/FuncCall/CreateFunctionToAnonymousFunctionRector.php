@@ -117,6 +117,20 @@ CODE_SAMPLE
     }
 
     /**
+     * @return Param[]
+     */
+    private function parseStringToParameters(Expr $expr): array
+    {
+        $content = $this->stringify($expr);
+
+        $content = '<?php $value = function(' . $content . ') {};';
+
+        $nodes = $this->parser->parse($content);
+
+        return $nodes[0]->expr->expr->params;
+    }
+
+    /**
      * @param String_|Expr $content
      * @return Stmt[]
      */
@@ -131,20 +145,6 @@ CODE_SAMPLE
         $content = Strings::endsWith($content, ';') ? $content : $content . ';';
 
         return (array) $this->parser->parse('<?php ' . $content);
-    }
-
-    /**
-     * @return Param[]
-     */
-    private function parseStringToParameters(Expr $expr): array
-    {
-        $content = $this->stringify($expr);
-
-        $content = '<?php $value = function(' . $content . ') {};';
-
-        $nodes = $this->parser->parse($content);
-
-        return $nodes[0]->expr->expr->params;
     }
 
     /**

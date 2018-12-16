@@ -6,6 +6,11 @@ function regexDashEscapeRector()
     preg_match("#[-\w()]#", 'some text'); // ok
     preg_match("#[\w-()]#", 'some text'); // NOPE!
     preg_match("#[\w(-)]#", 'some text'); // ok
+
+    preg_match('#[\w()-]#', 'some text'); // ok
+    preg_match('#[-\w()]#', 'some text'); // ok
+    preg_match('#[\w-()]#', 'some text'); // NOPE!
+    preg_match('#[\w(-)]#', 'some text'); // ok
 }
 
 ?>
@@ -18,6 +23,11 @@ function regexDashEscapeRector()
     preg_match("#[-\w()]#", 'some text'); // ok
     preg_match("#[\w\-()]#", 'some text'); // NOPE!
     preg_match("#[\w(-)]#", 'some text'); // ok
+
+    preg_match('#[\w()-]#', 'some text'); // ok
+    preg_match('#[-\w()]#', 'some text'); // ok
+    preg_match('#[\w\-()]#', 'some text'); // NOPE!
+    preg_match('#[\w(-)]#', 'some text'); // ok
 }
 
 ?>

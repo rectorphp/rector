@@ -14,6 +14,11 @@ use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 final class FileProcessor
 {
     /**
+     * @var mixed[][]
+     */
+    private $tokensByFilePath = [];
+
+    /**
      * @var FormatPerservingPrinter
      */
     private $formatPerservingPrinter;
@@ -42,11 +47,6 @@ final class FileProcessor
      * @var CurrentFileInfoProvider
      */
     private $currentFileInfoProvider;
-
-    /**
-     * @var mixed[][]
-     */
-    private $tokensByFilePath = [];
 
     public function __construct(
         FormatPerservingPrinter $formatPerservingPrinter,

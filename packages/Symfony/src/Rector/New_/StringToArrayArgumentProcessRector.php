@@ -123,23 +123,6 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function findPreviousNodeAssign(Node $node, Node $firstArgument): ?Assign
-    {
-        return $this->betterNodeFinder->findFirstPrevious($node, function (Node $checkedNode) use ($firstArgument) {
-            if (! $checkedNode instanceof Assign) {
-                return null;
-            }
-
-            if (! $this->areNodesEqual($checkedNode->var, $firstArgument)) {
-                return null;
-            }
-
-            // @todo check out of scope assign, e.g. in previous method
-
-            return $checkedNode;
-        });
-    }
-
     /**
      * @param New_|MethodCall $node
      */
@@ -166,5 +149,22 @@ CODE_SAMPLE
         if ($arrayNode) {
             $createdNode->expr = $arrayNode;
         }
+    }
+
+    private function findPreviousNodeAssign(Node $node, Node $firstArgument): ?Assign
+    {
+        return $this->betterNodeFinder->findFirstPrevious($node, function (Node $checkedNode) use ($firstArgument) {
+            if (! $checkedNode instanceof Assign) {
+                return null;
+            }
+
+            if (! $this->areNodesEqual($checkedNode->var, $firstArgument)) {
+                return null;
+            }
+
+            // @todo check out of scope assign, e.g. in previous method
+
+            return $checkedNode;
+        });
     }
 }

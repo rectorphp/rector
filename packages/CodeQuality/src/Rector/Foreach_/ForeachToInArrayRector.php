@@ -166,6 +166,12 @@ CODE_SAMPLE
         return ! $foreachNode->stmts[0] instanceof If_;
     }
 
+    private function shouldSkipIf(If_ $ifNode): bool
+    {
+        $ifCondition = $ifNode->cond;
+        return ! $ifCondition instanceof Identical && ! $ifCondition instanceof Equal;
+    }
+
     private function isIfBodyABoolReturnNode(If_ $firstNodeInsideForeach): bool
     {
         $ifStatment = $firstNodeInsideForeach->stmts[0];
@@ -211,11 +217,5 @@ CODE_SAMPLE
         }
 
         $newNode->setAttribute('comments', [new Comment($commentContent)]);
-    }
-
-    private function shouldSkipIf(If_ $ifNode): bool
-    {
-        $ifCondition = $ifNode->cond;
-        return ! $ifCondition instanceof Identical && ! $ifCondition instanceof Equal;
     }
 }

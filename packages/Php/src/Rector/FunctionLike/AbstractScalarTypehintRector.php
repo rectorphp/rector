@@ -223,12 +223,6 @@ abstract class AbstractScalarTypehintRector extends AbstractRector
         return false;
     }
 
-    private function haveSameNamespace(Node $firstNode, Node $secondNode): bool
-    {
-        return $firstNode->getAttribute(Attribute::NAMESPACE_NAME)
-            === $secondNode->getAttribute(Attribute::NAMESPACE_NAME);
-    }
-
     /**
      * @param Class_|Interface_ $classLikeNode
      * @return string[]
@@ -250,5 +244,11 @@ abstract class AbstractScalarTypehintRector extends AbstractRector
         }
 
         return $interfaces;
+    }
+
+    private function haveSameNamespace(Node $firstNode, Node $secondNode): bool
+    {
+        return $firstNode->getAttribute(Attribute::NAMESPACE_NAME)
+            === $secondNode->getAttribute(Attribute::NAMESPACE_NAME);
     }
 }

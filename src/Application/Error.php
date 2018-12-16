@@ -17,14 +17,14 @@ final class Error
     private $message;
 
     /**
-     * @var SmartFileInfo
-     */
-    private $fileInfo;
-
-    /**
      * @var string|null
      */
     private $rectorClass;
+
+    /**
+     * @var SmartFileInfo
+     */
+    private $fileInfo;
 
     public function __construct(
         SmartFileInfo $smartFileInfo,

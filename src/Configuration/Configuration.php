@@ -12,12 +12,6 @@ final class Configuration
     private $isDryRun = false;
 
     /**
-     * Files and directories to by analysed
-     * @var string[]
-     */
-    private $source = [];
-
-    /**
      * @var bool
      */
     private $hideAutoloadErrors = false;
@@ -26,6 +20,12 @@ final class Configuration
      * @var bool
      */
     private $withStyle = false;
+
+    /**
+     * Files and directories to by analysed
+     * @var string[]
+     */
+    private $source = [];
 
     /**
      * Needs to run in the start of the life cycle, since the rest of workflow uses it.

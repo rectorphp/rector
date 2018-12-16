@@ -69,6 +69,20 @@ final class Application extends SymfonyApplication
         return $defaultInputDefinition;
     }
 
+    private function isVersionPrintedElsewhere(InputInterface $input): bool
+    {
+        return $input->hasParameterOption('--version') !== false || $input->getFirstArgument() === null;
+    }
+
+    private function getConfigPath(InputInterface $input): string
+    {
+        if ($input->getParameterOption('--config')) {
+            return $input->getParameterOption('--config');
+        }
+
+        return $this->getDefaultConfigPath();
+    }
+
     private function removeUnusedOptions(InputDefinition $inputDefinition): void
     {
         $options = $inputDefinition->getOptions();
@@ -101,20 +115,6 @@ final class Application extends SymfonyApplication
             InputOption::VALUE_NONE,
             'Enable debug verbosity (-vvv)'
         ));
-    }
-
-    private function isVersionPrintedElsewhere(InputInterface $input): bool
-    {
-        return $input->hasParameterOption('--version') !== false || $input->getFirstArgument() === null;
-    }
-
-    private function getConfigPath(InputInterface $input): string
-    {
-        if ($input->getParameterOption('--config')) {
-            return $input->getParameterOption('--config');
-        }
-
-        return $this->getDefaultConfigPath();
     }
 
     private function getDefaultConfigPath(): string

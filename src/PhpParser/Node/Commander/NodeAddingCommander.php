@@ -27,14 +27,14 @@ use Rector\PhpParser\Node\BetterNodeFinder;
 final class NodeAddingCommander implements CommanderInterface
 {
     /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
      * @var Stmt[][]
      */
     private $nodesToAdd = [];
+
+    /**
+     * @var BetterNodeFinder
+     */
+    private $betterNodeFinder;
 
     public function __construct(BetterNodeFinder $betterNodeFinder)
     {

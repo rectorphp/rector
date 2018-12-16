@@ -70,6 +70,19 @@ CODE_SAMPLE
         return $this->processMethodCall($node);
     }
 
+    private function processStringNode(String_ $stringNode): ?Node
+    {
+        foreach ($this->methodNamesByType as $type => $methodName) {
+            if (! $this->isType($stringNode, $type)) {
+                continue;
+            }
+
+            return $this->createMethodCall($stringNode->expr, $methodName);
+        }
+
+        return null;
+    }
+
     private function processMethodCall(MethodCall $methodCallNode): ?Node
     {
         foreach ($this->methodNamesByType as $type => $methodName) {
@@ -84,19 +97,6 @@ CODE_SAMPLE
             $methodCallNode->name = new Identifier($methodName);
 
             return $methodCallNode;
-        }
-
-        return null;
-    }
-
-    private function processStringNode(String_ $stringNode): ?Node
-    {
-        foreach ($this->methodNamesByType as $type => $methodName) {
-            if (! $this->isType($stringNode, $type)) {
-                continue;
-            }
-
-            return $this->createMethodCall($stringNode->expr, $methodName);
         }
 
         return null;

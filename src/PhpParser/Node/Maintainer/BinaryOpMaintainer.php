@@ -39,20 +39,6 @@ final class BinaryOpMaintainer
     }
 
     /**
-     * @param callable|string $condition
-     */
-    private function normalizeCondition($condition): callable
-    {
-        if (is_callable($condition)) {
-            return $condition;
-        }
-
-        return function (Node $node) use ($condition) {
-            return is_a($node, $condition, true);
-        };
-    }
-
-    /**
      * @param mixed $firstCondition
      */
     private function validateCondition($firstCondition): void
@@ -66,5 +52,19 @@ final class BinaryOpMaintainer
         }
 
         throw new ShouldNotHappenException();
+    }
+
+    /**
+     * @param callable|string $condition
+     */
+    private function normalizeCondition($condition): callable
+    {
+        if (is_callable($condition)) {
+            return $condition;
+        }
+
+        return function (Node $node) use ($condition) {
+            return is_a($node, $condition, true);
+        };
     }
 }

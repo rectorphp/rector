@@ -96,21 +96,6 @@ final class RectorApplication
         $this->symfonyStyle->newLine(2);
     }
 
-    private function processFileInfo(SmartFileInfo $fileInfo): void
-    {
-        $oldContent = $fileInfo->getContents();
-
-        if ($this->configuration->isDryRun()) {
-            $newContent = $this->fileProcessor->printToString($fileInfo);
-        } else {
-            $newContent = $this->fileProcessor->printToFile($fileInfo);
-        }
-
-        $this->errorAndDiffCollector->addFileDiff($fileInfo, $newContent, $oldContent);
-
-        $this->fileSystemFileProcessor->processFileInfo($fileInfo);
-    }
-
     private function advance(): void
     {
         if ($this->symfonyStyle->isVerbose() === false) {
@@ -135,5 +120,20 @@ final class RectorApplication
 
             $this->errorAndDiffCollector->addThrowableWithFileInfo($throwable, $fileInfo);
         }
+    }
+
+    private function processFileInfo(SmartFileInfo $fileInfo): void
+    {
+        $oldContent = $fileInfo->getContents();
+
+        if ($this->configuration->isDryRun()) {
+            $newContent = $this->fileProcessor->printToString($fileInfo);
+        } else {
+            $newContent = $this->fileProcessor->printToFile($fileInfo);
+        }
+
+        $this->errorAndDiffCollector->addFileDiff($fileInfo, $newContent, $oldContent);
+
+        $this->fileSystemFileProcessor->processFileInfo($fileInfo);
     }
 }

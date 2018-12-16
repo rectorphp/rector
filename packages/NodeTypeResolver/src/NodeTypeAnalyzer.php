@@ -96,6 +96,17 @@ final class NodeTypeAnalyzer
         return $nodeType instanceof ArrayType;
     }
 
+    private function getNodeType(Node $node): ?Type
+    {
+        /** @var Scope|null $nodeScope */
+        $nodeScope = $node->getAttribute(Attribute::SCOPE);
+        if (! $node instanceof Expr || $nodeScope === null) {
+            return null;
+        }
+
+        return $nodeScope->getType($node);
+    }
+
     /**
      * Special case for "preg_match(), preg_match_all()" - with 3rd argument
      * @covers https://github.com/rectorphp/rector/issues/786
@@ -133,16 +144,5 @@ final class NodeTypeAnalyzer
         }
 
         return new ArrayType(new MixedType(), new MixedType());
-    }
-
-    private function getNodeType(Node $node): ?Type
-    {
-        /** @var Scope|null $nodeScope */
-        $nodeScope = $node->getAttribute(Attribute::SCOPE);
-        if (! $node instanceof Expr || $nodeScope === null) {
-            return null;
-        }
-
-        return $nodeScope->getType($node);
     }
 }

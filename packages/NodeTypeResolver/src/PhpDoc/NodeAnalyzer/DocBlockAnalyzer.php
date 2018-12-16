@@ -250,6 +250,20 @@ final class DocBlockAnalyzer
         return new VarTypeInfo($types, $fqnTypes);
     }
 
+    private function createPhpDocInfoWithFqnTypesFromNode(Node $node): PhpDocInfo
+    {
+        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
+
+        $this->phpDocInfoFqnTypeDecorator->decorate($phpDocInfo, $node);
+
+        return $phpDocInfo;
+    }
+
+    private function isNamespaced(string $name): bool
+    {
+        return Strings::contains($name, '\\');
+    }
+
     private function updateNodeWithPhpDocInfo(Node $node, PhpDocInfo $phpDocInfo): void
     {
         // skip if has no doc comment
@@ -277,19 +291,5 @@ final class DocBlockAnalyzer
         }
 
         return $this->phpDocInfoFactory->createFrom($node->getDocComment()->getText());
-    }
-
-    private function createPhpDocInfoWithFqnTypesFromNode(Node $node): PhpDocInfo
-    {
-        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
-
-        $this->phpDocInfoFqnTypeDecorator->decorate($phpDocInfo, $node);
-
-        return $phpDocInfo;
-    }
-
-    private function isNamespaced(string $name): bool
-    {
-        return Strings::contains($name, '\\');
     }
 }
