@@ -202,12 +202,6 @@ final class NodeFactory
         );
     }
 
-    private function createVarDoc(string $type): Doc
-    {
-        $type = $this->typeAnalyzer->isPhpReservedType($type) ? $type : '\\' . $type;
-        return new Doc(sprintf('/**%s * @var %s%s */', PHP_EOL, $type, PHP_EOL));
-    }
-
     /**
      * @param mixed $item
      */
@@ -231,6 +225,12 @@ final class NodeFactory
             __METHOD__,
             get_class($item)
         ));
+    }
+
+    private function createVarDoc(string $type): Doc
+    {
+        $type = $this->typeAnalyzer->isPhpReservedType($type) ? $type : '\\' . $type;
+        return new Doc(sprintf('/**%s * @var %s%s */', PHP_EOL, $type, PHP_EOL));
     }
 
     /**

@@ -171,18 +171,6 @@ abstract class AbstractRectorTestCase extends TestCase
         return [$originalFile, $expectedFile];
     }
 
-    private function createTemporaryPathWithPrefix(SmartFileInfo $smartFileInfo, string $prefix): string
-    {
-        $hash = Strings::substring(md5($smartFileInfo->getRealPath()), 0, 5);
-
-        return sprintf(
-            sys_get_temp_dir() . '/rector_temp_tests/%s_%s_%s',
-            $prefix,
-            $hash,
-            $smartFileInfo->getBasename('.inc')
-        );
-    }
-
     private function doTestFileMatchesExpectedContent(
         string $originalFile,
         string $expectedFile,
@@ -198,5 +186,17 @@ abstract class AbstractRectorTestCase extends TestCase
         $changedContent = $this->fileProcessor->printToString($smartFileInfo);
 
         $this->assertStringEqualsFile($expectedFile, $changedContent, 'Caused by ' . $fixtureFile);
+    }
+
+    private function createTemporaryPathWithPrefix(SmartFileInfo $smartFileInfo, string $prefix): string
+    {
+        $hash = Strings::substring(md5($smartFileInfo->getRealPath()), 0, 5);
+
+        return sprintf(
+            sys_get_temp_dir() . '/rector_temp_tests/%s_%s_%s',
+            $prefix,
+            $hash,
+            $smartFileInfo->getBasename('.inc')
+        );
     }
 }

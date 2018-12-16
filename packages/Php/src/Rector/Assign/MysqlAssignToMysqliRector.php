@@ -92,6 +92,18 @@ CODE_SAMPLE
         return $this->processFieldToFieldDirect($node, $funcCallNode);
     }
 
+    private function processMysqlTableName(Assign $assignNode, FuncCall $funcCall): FuncCall
+    {
+        $funcCall->name = new Name('mysqli_data_seek');
+
+        $newFuncCall = new FuncCall(new Name('mysql_fetch_array'), [$funcCall->args[0]]);
+        $newAssignNode = new Assign($assignNode->var, new ArrayDimFetch($newFuncCall, new LNumber(0)));
+
+        $this->addNodeAfterNode($newAssignNode, $assignNode);
+
+        return $funcCall;
+    }
+
     private function processMysqlDbName(Assign $assignNode, FuncCall $funcCallNode): FuncCall
     {
         $funcCallNode->name = new Name('mysqli_data_seek');
@@ -141,18 +153,6 @@ CODE_SAMPLE
         $this->addNodeAfterNode($forNode, $assignNode->getAttribute(Attribute::PREVIOUS_EXPRESSION));
 
         return $assignNode;
-    }
-
-    private function processMysqlTableName(Assign $assignNode, FuncCall $funcCall): FuncCall
-    {
-        $funcCall->name = new Name('mysqli_data_seek');
-
-        $newFuncCall = new FuncCall(new Name('mysql_fetch_array'), [$funcCall->args[0]]);
-        $newAssignNode = new Assign($assignNode->var, new ArrayDimFetch($newFuncCall, new LNumber(0)));
-
-        $this->addNodeAfterNode($newAssignNode, $assignNode);
-
-        return $funcCall;
     }
 
     private function processFieldToFieldDirect(Assign $assignNode, FuncCall $funcCallNode): ?Assign

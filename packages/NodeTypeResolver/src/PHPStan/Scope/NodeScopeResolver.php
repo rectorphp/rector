@@ -80,6 +80,16 @@ final class NodeScopeResolver
     }
 
     /**
+     * @param Node[] $nodes
+     */
+    private function removeDeepChainMethodCallNodes(array $nodes): void
+    {
+        $nodeTraverser = new NodeTraverser();
+        $nodeTraverser->addVisitor($this->removeDeepChainMethodCallNodeVisitor);
+        $nodeTraverser->traverse($nodes);
+    }
+
+    /**
      * @param Class_|Interface_ $classOrInterfaceNode
      */
     private function resolveClassOrInterfaceNode(Node $classOrInterfaceNode, Scope $scope): Scope
@@ -99,15 +109,5 @@ final class NodeScopeResolver
         }
 
         return $scope;
-    }
-
-    /**
-     * @param Node[] $nodes
-     */
-    private function removeDeepChainMethodCallNodes(array $nodes): void
-    {
-        $nodeTraverser = new NodeTraverser();
-        $nodeTraverser->addVisitor($this->removeDeepChainMethodCallNodeVisitor);
-        $nodeTraverser->traverse($nodes);
     }
 }

@@ -37,8 +37,9 @@ final class ClassLikeNodeCollector
         $this->nameResolver = $nameResolver;
     }
 
-    public function addClass(string $name, Class_ $classNode): void
+    public function addClass(Class_ $classNode): void
     {
+        $name = (string) $classNode->getAttribute(Attribute::CLASS_NAME);
         $this->classes[$name] = $classNode;
     }
 
@@ -47,13 +48,15 @@ final class ClassLikeNodeCollector
         return $this->classes[$name] ?? null;
     }
 
-    public function addInterface(string $name, Interface_ $interfaceNode): void
+    public function addInterface(Interface_ $interfaceNode): void
     {
+        $name = (string) $interfaceNode->getAttribute(Attribute::CLASS_NAME);
         $this->interfaces[$name] = $interfaceNode;
     }
 
-    public function addTrait(string $name, Trait_ $traitNode): void
+    public function addTrait(Trait_ $traitNode): void
     {
+        $name = (string) $traitNode->getAttribute(Attribute::CLASS_NAME);
         $this->traits[$name] = $traitNode;
     }
 

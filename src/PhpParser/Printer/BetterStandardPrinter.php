@@ -15,6 +15,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
@@ -182,6 +183,19 @@ final class BetterStandardPrinter extends Standard
         }
 
         return parent::p($node, $parentFormatPreserved);
+    }
+
+    /**
+     * Fixes escaping of regular patterns
+     */
+    protected function pScalar_String(String_ $node): string
+    {
+        $kind = $node->getAttribute('kind', String_::KIND_SINGLE_QUOTED);
+        if ($kind === String_::KIND_DOUBLE_QUOTED && $node->getAttribute('is_regular_pattern')) {
+            return '"' . $node->value . '"';
+        }
+
+        return parent::pScalar_String($node);
     }
 
     /**

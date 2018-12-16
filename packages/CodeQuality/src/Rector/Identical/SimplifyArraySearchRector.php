@@ -90,6 +90,11 @@ final class SimplifyArraySearchRector extends AbstractRector
         return $inArrayFuncCall;
     }
 
+    private function shouldBeStrict(BinaryOp $binaryOpNode): bool
+    {
+        return $binaryOpNode instanceof Identical || $binaryOpNode instanceof NotIdentical;
+    }
+
     private function resolveIsNot(BinaryOp $node, ConstFetch $boolConstFetchNode): bool
     {
         if ($node instanceof Identical || $node instanceof Equal) {
@@ -97,10 +102,5 @@ final class SimplifyArraySearchRector extends AbstractRector
         }
 
         return $this->isTrue($boolConstFetchNode);
-    }
-
-    private function shouldBeStrict(BinaryOp $binaryOpNode): bool
-    {
-        return $binaryOpNode instanceof Identical || $binaryOpNode instanceof NotIdentical;
     }
 }

@@ -101,27 +101,6 @@ CODE_SAMPLE
         return null;
     }
 
-    private function createMethodCallNodeFromPropertyFetchNode(
-        PropertyFetch $propertyFetchNode,
-        string $method
-    ): MethodCall {
-        /** @var Variable $variableNode */
-        $variableNode = $propertyFetchNode->var;
-
-        return $this->createMethodCall($variableNode, $method, [$this->getName($propertyFetchNode)]);
-    }
-
-    private function createMethodCallNodeFromAssignNode(
-        PropertyFetch $propertyFetchNode,
-        Node $node,
-        string $method
-    ): MethodCall {
-        /** @var Variable $variableNode */
-        $variableNode = $propertyFetchNode->var;
-
-        return $this->createMethodCall($variableNode, $method, [$this->getName($propertyFetchNode), $node]);
-    }
-
     private function processMagicGet(Assign $assignNode): ?Node
     {
         /** @var PropertyFetch $propertyFetchNode */
@@ -169,5 +148,26 @@ CODE_SAMPLE
         }
 
         return null;
+    }
+
+    private function createMethodCallNodeFromPropertyFetchNode(
+        PropertyFetch $propertyFetchNode,
+        string $method
+    ): MethodCall {
+        /** @var Variable $variableNode */
+        $variableNode = $propertyFetchNode->var;
+
+        return $this->createMethodCall($variableNode, $method, [$this->getName($propertyFetchNode)]);
+    }
+
+    private function createMethodCallNodeFromAssignNode(
+        PropertyFetch $propertyFetchNode,
+        Node $node,
+        string $method
+    ): MethodCall {
+        /** @var Variable $variableNode */
+        $variableNode = $propertyFetchNode->var;
+
+        return $this->createMethodCall($variableNode, $method, [$this->getName($propertyFetchNode), $node]);
     }
 }

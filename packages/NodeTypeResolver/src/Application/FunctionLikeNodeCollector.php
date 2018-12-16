@@ -4,6 +4,7 @@ namespace Rector\NodeTypeResolver\Application;
 
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
+use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 
 final class FunctionLikeNodeCollector
@@ -28,9 +29,11 @@ final class FunctionLikeNodeCollector
         $this->nameResolver = $nameResolver;
     }
 
-    public function addMethod(ClassMethod $classMethodNode, string $className): void
+    public function addMethod(ClassMethod $classMethodNode): void
     {
+        $className = (string) $classMethodNode->getAttribute(Attribute::CLASS_NAME);
         $methodName = $this->nameResolver->resolve($classMethodNode);
+
         $this->methodsByType[$className][$methodName] = $classMethodNode;
     }
 

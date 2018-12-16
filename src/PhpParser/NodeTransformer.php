@@ -111,6 +111,26 @@ final class NodeTransformer
     }
 
     /**
+     * @return string[]
+     */
+    private function splitBySpace(string $value): array
+    {
+        $value = str_getcsv($value, ' ');
+
+        return array_filter($value);
+    }
+
+    /**
+     * @return mixed[]
+     */
+    private function transformConcatToItems(Concat $concatNode): array
+    {
+        $arrayItems = $this->transformConcatItemToArrayItems($concatNode->left);
+
+        return array_merge($arrayItems, $this->transformConcatItemToArrayItems($concatNode->right));
+    }
+
+    /**
      * @return Node[]|string[]
      */
     private function transformConcatItemToArrayItems(Expr $node): array
@@ -132,25 +152,5 @@ final class NodeTransformer
         }
 
         return $arrayItems;
-    }
-
-    /**
-     * @return mixed[]
-     */
-    private function transformConcatToItems(Concat $concatNode): array
-    {
-        $arrayItems = $this->transformConcatItemToArrayItems($concatNode->left);
-
-        return array_merge($arrayItems, $this->transformConcatItemToArrayItems($concatNode->right));
-    }
-
-    /**
-     * @return string[]
-     */
-    private function splitBySpace(string $value): array
-    {
-        $value = str_getcsv($value, ' ');
-
-        return array_filter($value);
     }
 }

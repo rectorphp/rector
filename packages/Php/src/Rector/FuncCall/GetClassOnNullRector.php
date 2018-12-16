@@ -117,30 +117,6 @@ CODE_SAMPLE
     }
 
     /**
-     * E.g. "$value !== null ? get_class($value)"
-     */
-    private function isNotIdenticalToNull(FuncCall $funcCallNode, Ternary $ternaryNode): bool
-    {
-        if (! $ternaryNode->cond instanceof NotIdentical) {
-            return false;
-        }
-
-        if ($this->areNodesEqual($ternaryNode->cond->left, $funcCallNode->args[0]->value)) {
-            if ($this->isNull($ternaryNode->cond->right)) {
-                return true;
-            }
-        }
-
-        if ($this->areNodesEqual($ternaryNode->cond->right, $funcCallNode->args[0]->value)) {
-            if ($this->isNull($ternaryNode->cond->left)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
      * E.g. "$value === [!null] ? get_class($value)"
      */
     private function isIdenticalToNotNull(FuncCall $funcCallNode, Ternary $ternaryNode): bool
@@ -157,6 +133,30 @@ CODE_SAMPLE
 
         if ($this->areNodesEqual($ternaryNode->cond->right, $funcCallNode->args[0]->value)) {
             if (! $this->isNull($ternaryNode->cond->left)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * E.g. "$value !== null ? get_class($value)"
+     */
+    private function isNotIdenticalToNull(FuncCall $funcCallNode, Ternary $ternaryNode): bool
+    {
+        if (! $ternaryNode->cond instanceof NotIdentical) {
+            return false;
+        }
+
+        if ($this->areNodesEqual($ternaryNode->cond->left, $funcCallNode->args[0]->value)) {
+            if ($this->isNull($ternaryNode->cond->right)) {
+                return true;
+            }
+        }
+
+        if ($this->areNodesEqual($ternaryNode->cond->right, $funcCallNode->args[0]->value)) {
+            if ($this->isNull($ternaryNode->cond->left)) {
                 return true;
             }
         }
