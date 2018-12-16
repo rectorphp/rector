@@ -5,6 +5,8 @@ namespace Rector\CodeQuality\Rector\Ternary;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp;
+use PhpParser\Node\Expr\BooleanNot;
+use PhpParser\Node\Expr\Cast\Bool_;
 use PhpParser\Node\Expr\Ternary;
 use Rector\PhpParser\Node\AssignAndBinaryMap;
 use Rector\Rector\AbstractRector;
@@ -50,15 +52,15 @@ final class UnnecessaryTernaryExpressionRector extends AbstractRector
             return null;
         }
 
-        $condition = $ternaryExpression->cond;
-        if (! $condition instanceof BinaryOp) {
-            return null;
-        }
-
         $ifExpression = $ternaryExpression->if;
         $elseExpression = $ternaryExpression->else;
         if (! $this->isBool($ifExpression) || ! $this->isBool($elseExpression)) {
             return null;
+        }
+
+        $condition = $ternaryExpression->cond;
+        if (! $condition instanceof BinaryOp) {
+            return $this->processNonBinaryCondition($ifExpression, $elseExpression, $condition);
         }
 
         if ($this->isNull($ifExpression) || $this->isNull($elseExpression)) {
@@ -78,5 +80,26 @@ final class UnnecessaryTernaryExpressionRector extends AbstractRector
         }
 
         return new $inversedBinaryClass($binaryOperation->left, $binaryOperation->right);
+    }
+
+    private function processNonBinaryCondition(?Expr $ifExpression, Expr $elseExpression, Expr $condition): ?Node
+    {
+        if ($this->isTrue($ifExpression) && $this->isFalse($elseExpression)) {
+            if ($this->isBoolType($condition)) {
+                return $condition;
+            }
+
+            return new Bool_($condition);
+        }
+
+        if ($this->isFalse($ifExpression) && $this->isTrue($elseExpression)) {
+            if ($this->isBoolType($condition)) {
+                return new BooleanNot($condition);
+            }
+
+            return new BooleanNot(new Bool_($condition));
+        }
+
+        return null;
     }
 }
