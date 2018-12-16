@@ -2,15 +2,14 @@
 
 function regexDashEscapeRector()
 {
-    preg_match("#[\w()-]#", 'some text'); // ok
-    preg_match("#[-\w()]#", 'some text'); // ok
-    preg_match("#[\w-()]#", 'some text'); // NOPE!
-    preg_match("#[\w(-)]#", 'some text'); // ok
+    // keep
+    preg_match("#[\s()-]#", 'some text');
+    preg_match("#[-\W()]#", 'some text');
 
-    preg_match('#[\w()-]#', 'some text'); // ok
-    preg_match('#[-\w()]#', 'some text'); // ok
-    preg_match('#[\w-()]#', 'some text'); // NOPE!
-    preg_match('#[\w(-)]#', 'some text'); // ok
+    // change
+    preg_match("#[\w-()]#", 'some text');
+    preg_match("#[\W-()]#", 'some text');
+    preg_match('#[\w-()]#', 'some text');
 }
 
 ?>
@@ -19,15 +18,14 @@ function regexDashEscapeRector()
 
 function regexDashEscapeRector()
 {
-    preg_match("#[\w()-]#", 'some text'); // ok
-    preg_match("#[-\w()]#", 'some text'); // ok
-    preg_match("#[\w\-()]#", 'some text'); // NOPE!
-    preg_match("#[\w(-)]#", 'some text'); // ok
+    // keep
+    preg_match("#[\s()-]#", 'some text');
+    preg_match("#[-\W()]#", 'some text');
 
-    preg_match('#[\w()-]#', 'some text'); // ok
-    preg_match('#[-\w()]#', 'some text'); // ok
-    preg_match('#[\w\-()]#', 'some text'); // NOPE!
-    preg_match('#[\w(-)]#', 'some text'); // ok
+    // change
+    preg_match("#[\w\-()]#", 'some text');
+    preg_match("#[\W\-()]#", 'some text');
+    preg_match('#[\w\-()]#', 'some text');
 }
 
 ?>

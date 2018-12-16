@@ -24,22 +24,15 @@ use Rector\RectorDefinition\RectorDefinition;
 final class RegexDashEscapeRector extends AbstractRector
 {
     /**
-     * Matches:
-     * [\w-\d]
-     *
-     * Skips:
-     * [-
-     * [\-
-     * a-z
-     * A-Z
-     * 0-9
-     * (-
-     * -]
-     * -)
      * @var string
-     * @see https://regex101.com/r/6zvPjH/1/
      */
-    private const PATTERN_DASH_NOT_AROUND_BRACKETS = '#(?<!\[|\(|A|a|0|\\\\)-(?!\]|\)|A|a|0)#';
+    private const LEFT_HAND_UNESCAPED_DASH_PATTERN = '#(\\\\(w|s|d))-(?!\])#i';
+
+    /**
+     * @var string
+     * @see https://regex101.com/r/TBVme9/1
+     */
+    private const RIGHT_HAND_UNESCAPED_DASH_PATTERN = '#(?<!\[)-\\\\(w|s|d)#i';
 
     /**
      * @var int[]
@@ -87,17 +80,11 @@ final class RegexDashEscapeRector extends AbstractRector
         return new RectorDefinition('Escape - in some cases', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
-preg_match("#[\w()-]#", 'some text'); // ok
-preg_match("#[-\w()]#", 'some text'); // ok
-preg_match("#[\w-()]#", 'some text'); // NOPE!
-preg_match("#[\w(-)]#", 'some text'); // ok
+preg_match("#[\w-()]#", 'some text');
 CODE_SAMPLE
                 ,
                 <<<'CODE_SAMPLE'
-preg_match("#[\w()-]#", 'some text'); // ok
-preg_match("#[-\w()]#", 'some text'); // ok
-preg_match("#[\w\-()]#", 'some text'); // NOPE!
-preg_match("#[\w(-)]#", 'some text'); // ok
+preg_match("#[\w\-()]#", 'some text');
 CODE_SAMPLE
             ),
         ]);
@@ -209,13 +196,18 @@ CODE_SAMPLE
     {
         $stringValue = $stringNode->value;
 
-        if (! Strings::match($stringValue, self::PATTERN_DASH_NOT_AROUND_BRACKETS)) {
+        if (Strings::match($stringValue, self::LEFT_HAND_UNESCAPED_DASH_PATTERN)) {
+            $stringNode->value = Strings::replace($stringValue, self::LEFT_HAND_UNESCAPED_DASH_PATTERN, '$1\-');
+            // helped needed to skip re-escaping regular expression
+            $stringNode->setAttribute('is_regular_pattern', true);
             return;
         }
 
-        $stringNode->value = Strings::replace($stringValue, self::PATTERN_DASH_NOT_AROUND_BRACKETS, '\-');
-        // helped needed to skip re-escaping regular expression
-        $stringNode->setAttribute('is_regular_pattern', true);
+        if (Strings::match($stringValue, self::RIGHT_HAND_UNESCAPED_DASH_PATTERN)) {
+            $stringNode->value = Strings::replace($stringValue, self::RIGHT_HAND_UNESCAPED_DASH_PATTERN, '\-$2');
+            // helped needed to skip re-escaping regular expression
+            $stringNode->setAttribute('is_regular_pattern', true);
+        }
     }
 
     private function processClassConstFetch(Expr $expr): void
