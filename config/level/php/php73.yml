@@ -3,7 +3,7 @@ services:
     Rector\Php\Rector\FuncCall\ArrayKeyFirstLastRector: ~
     Rector\Php\Rector\FuncCall\SensitiveDefineRector: ~
     Rector\Php\Rector\ConstFetch\SensitiveConstantNameRector: ~
-    Rector\Php\Rector\String\SensitiveHereNowDocRector: ~
+    Rector\Php\Rector\String_\SensitiveHereNowDocRector: ~
 
     Rector\Rector\Function_\FunctionReplaceRector:
         image2wbmp: 'imagewbmp'
@@ -24,3 +24,4 @@ services:
     Rector\Php\Rector\FuncCall\StringifyStrNeedlesRector: ~
     Rector\Php\Rector\FuncCall\JsonThrowOnErrorRector: ~
     Rector\Php\Rector\FuncCall\TrailingCommaArgumentsRector: ~
+    Rector\Php\Rector\FuncCall\RegexDashEscapeRector: ~
