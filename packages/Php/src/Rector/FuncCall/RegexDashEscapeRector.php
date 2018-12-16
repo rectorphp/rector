@@ -5,9 +5,13 @@ namespace Rector\Php\Rector\FuncCall;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
+use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -19,18 +23,21 @@ final class RegexDashEscapeRector extends AbstractRector
 {
     /**
      * Matches:
-     * [a-z
      * [\w-\d]
      *
      * Skips:
      * [-
+     * [\-
+     * a-z
+     * A-Z
+     * 0-9
      * (-
      * -]
      * -)
      * @var string
      * @see https://regex101.com/r/6zvPjH/1/
      */
-    private const PATTERN_DASH_NOT_AROUND_BRACKETS = '#(?<!\[|\()-(?!\]|\))#';
+    private const PATTERN_DASH_NOT_AROUND_BRACKETS = '#(?<!\[|\(|A|a|0|\\\\)-(?!\]|\)|A|a|0)#';
 
     /**
      * @var int[]
@@ -56,6 +63,16 @@ final class RegexDashEscapeRector extends AbstractRector
             'split' => 1,
         ],
     ];
+
+    /**
+     * @var BetterNodeFinder
+     */
+    private $betterNodeFinder;
+
+    public function __construct(BetterNodeFinder $betterNodeFinder)
+    {
+        $this->betterNodeFinder = $betterNodeFinder;
+    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -135,30 +152,63 @@ CODE_SAMPLE
      */
     private function processArgumentPosition(Node $node, int $argumentPosition): void
     {
-        if (! $this->isStringType($node->args[$argumentPosition]->value)) {
+        $valueNode = $node->args[$argumentPosition]->value;
+        if (! $this->isStringyType($valueNode)) {
             return;
         }
 
-        $node->args[$argumentPosition]->value = $this->escapeDashInPattern($node->args[$argumentPosition]->value);
+        $this->escapeDashInPattern($valueNode);
     }
 
-    private function escapeDashInPattern(Expr $value): Expr
+    private function escapeDashInPattern(Expr $expr): void
     {
-        if ($value instanceof String_) {
-            $stringValue = $value->value;
+        // pattern can be defined in property or contant above
+        if ($expr instanceof Variable) {
+            $assignNodes = $this->findAssigners($expr);
 
-            if (! Strings::match($stringValue, self::PATTERN_DASH_NOT_AROUND_BRACKETS)) {
-                return $value;
+            foreach ($assignNodes as $assignNode) {
+                if ($assignNode->expr instanceof String_) {
+                    $this->escapeStringNode($assignNode->expr);
+                }
             }
-
-            $value->value = Strings::replace($stringValue, self::PATTERN_DASH_NOT_AROUND_BRACKETS, '\-');
-            // helped needed to skip re-escaping regular expression
-            $value->setAttribute('is_regular_pattern', true);
         }
 
-        // @todo constants
-        // @todo properties above
+        if ($expr instanceof String_) {
+            $this->escapeStringNode($expr);
+        }
+    }
 
-        return $value;
+    /**
+     * @return Assign[]
+     */
+    private function findAssigners(Node $variableNode): array
+    {
+        $methodNode = $variableNode->getAttribute(Attribute::METHOD_NODE);
+
+        /** @var Assign[] $assignNode */
+        return $this->betterNodeFinder->find([$methodNode], function (Node $node) use ($variableNode) {
+            if (! $node instanceof Assign) {
+                return null;
+            }
+
+            if (! $this->areNodesEqual($node->var, $variableNode)) {
+                return null;
+            }
+
+            return $node;
+        });
+    }
+
+    private function escapeStringNode(String_ $stringNode): void
+    {
+        $stringValue = $stringNode->value;
+
+        if (! Strings::match($stringValue, self::PATTERN_DASH_NOT_AROUND_BRACKETS)) {
+            return;
+        }
+
+        $stringNode->value = Strings::replace($stringValue, self::PATTERN_DASH_NOT_AROUND_BRACKETS, '\-');
+        // helped needed to skip re-escaping regular expression
+        $stringNode->setAttribute('is_regular_pattern', true);
     }
 }

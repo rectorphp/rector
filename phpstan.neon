@@ -43,6 +43,7 @@ parameters:
         - '#Method Rector\\NodeTypeResolver\\DependencyInjection\\PHPStanServicesFactory::create(.*?)() should return (.*?) but returns object#'
 
         # false postive - type is set by annotation above
+        - '#Method Rector\\Php\\Rector\\FuncCall\\RegexDashEscapeRector::findAssigners\(\) should return array<PhpParser\\Node\\Expr\\Assign> but returns array<PhpParser\\Node>#'
         - '#Array \(array<PhpParser\\Node\\Stmt>\) does not accept PhpParser\\Node#'
         - '#Method Rector\\Php\\Rector\\TryCatch\\MultiExceptionCatchRector\:\:collectCatchKeysByContent\(\) should return array<array<int\>\> but returns array<string, array<int, int\|string\>\>#'
         - '#Method Rector\\NodeTypeResolver\\PhpDoc\\NodeAnalyzer\\DocBlockAnalyzer::getTagByName\(\) should return PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagNode but returns PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagNode\|null#'

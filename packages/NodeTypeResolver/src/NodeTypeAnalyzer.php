@@ -11,6 +11,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Type\Accessory\HasOffsetType;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
+use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\IntersectionType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
@@ -43,6 +44,26 @@ final class NodeTypeAnalyzer
     public function isStringType(Node $node): bool
     {
         return $this->getNodeType($node) instanceof StringType;
+    }
+
+    public function isStringyType(Node $node): bool
+    {
+        $nodeType = $this->getNodeType($node);
+        if ($nodeType instanceof StringType || $nodeType instanceof ConstantStringType) {
+            return true;
+        }
+
+        if ($nodeType instanceof UnionType) {
+            foreach ($nodeType->getTypes() as $singleType) {
+                if (! $singleType instanceof StringType && ! $singleType instanceof ConstantStringType) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     public function isNullType(Node $node): bool

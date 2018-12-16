@@ -36,7 +36,7 @@ trait TypeAnalyzerTrait
         $this->nodeTypeAnalyzer = $nodeTypeAnalyzer;
     }
 
-    public function isType(Node $node, string $type): bool
+    protected function isType(Node $node, string $type): bool
     {
         $nodeTypes = $this->getTypes($node);
         return in_array($type, $nodeTypes, true);
@@ -45,7 +45,7 @@ trait TypeAnalyzerTrait
     /**
      * @param string[] $types
      */
-    public function isTypes(Node $node, array $types): bool
+    protected function isTypes(Node $node, array $types): bool
     {
         $nodeTypes = $this->getTypes($node);
         return (bool) array_intersect($types, $nodeTypes);
@@ -55,32 +55,37 @@ trait TypeAnalyzerTrait
      * @param string[] $types
      * @return string[]
      */
-    public function matchTypes(Node $node, array $types): array
+    protected function matchTypes(Node $node, array $types): array
     {
         return $this->isTypes($node, $types) ? $this->getTypes($node) : [];
     }
 
-    public function isStringType(Node $node): bool
+    protected function isStringType(Node $node): bool
     {
         return $this->nodeTypeAnalyzer->isStringType($node);
     }
 
-    public function isNullableType(Node $node): bool
+    protected function isStringyType(Node $node): bool
+    {
+        return $this->nodeTypeAnalyzer->isStringyType($node);
+    }
+
+    protected function isNullableType(Node $node): bool
     {
         return $this->nodeTypeAnalyzer->isNullableType($node);
     }
 
-    public function isNullType(Node $node): bool
+    protected function isNullType(Node $node): bool
     {
         return $this->nodeTypeAnalyzer->isNullType($node);
     }
 
-    public function isBoolType(Node $node): bool
+    protected function isBoolType(Node $node): bool
     {
         return $this->nodeTypeAnalyzer->isBoolType($node);
     }
 
-    public function isCountableType(Node $node): bool
+    protected function isCountableType(Node $node): bool
     {
         return $this->nodeTypeAnalyzer->isCountableType($node);
     }
@@ -88,7 +93,7 @@ trait TypeAnalyzerTrait
     /**
      * @return string[]
      */
-    public function getTypes(Node $node): array
+    protected function getTypes(Node $node): array
     {
         // @todo should be resolved by NodeTypeResolver internally
         if ($node instanceof MethodCall || $node instanceof PropertyFetch || $node instanceof ArrayDimFetch) {
