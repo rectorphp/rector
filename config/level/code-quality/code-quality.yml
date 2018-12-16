@@ -17,3 +17,5 @@ services:
     Rector\CodeQuality\Rector\Return_\SimplifyUselessVariableRector: ~
     Rector\CodeQuality\Rector\Stmt\DeadCodeRemovingRector: ~
     Rector\CodeQuality\Rector\Ternary\UnnecessaryTernaryExpressionRector: ~
+
+    Rector\Php\Rector\FuncCall\RemoveExtraParametersRector: ~

@@ -117,12 +117,7 @@ CODE_SAMPLE
             if (! $this->isName($node, 'root')) {
                 return false;
             }
-
-            if (! isset($node->args[0])) {
-                return false;
-            }
-
-            return true;
+            return isset($node->args[0]);
         });
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Rector\Rector;
 
+use PhpParser\ConstExprEvaluator;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt;
@@ -35,14 +36,21 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     private $symfonyStyle;
 
     /**
+     * @var ConstExprEvaluator
+     */
+    private $constExprEvaluator;
+
+    /**
      * @required
      */
     public function setAbstractRectorDependencies(
         AppliedRectorCollector $appliedRectorCollector,
-        SymfonyStyle $symfonyStyle
+        SymfonyStyle $symfonyStyle,
+        ConstExprEvaluator $constExprEvaluator
     ): void {
         $this->appliedRectorCollector = $appliedRectorCollector;
         $this->symfonyStyle = $symfonyStyle;
+        $this->constExprEvaluator = $constExprEvaluator;
     }
 
     /**
@@ -67,10 +75,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
         // changed!
         if ($originalNode !== $node) {
-            // transfer attributes that are needed further
-            if ($node->getAttribute(Attribute::FILE_INFO) === null) {
-                $node->setAttribute(Attribute::FILE_INFO, $originalNode->getAttribute(Attribute::FILE_INFO));
-            }
+            $this->keepFileInfoAttribute($node, $originalNode);
 
             $this->notifyNodeChangeFileInfo($node);
         }
@@ -88,7 +93,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
      */
     public function afterTraverse(array $nodes): array
     {
-        // @todo foreach, array autowire on Required in CommanderInterface[]
         if ($this->nodeAddingCommander->isActive()) {
             $nodes = $this->nodeAddingCommander->traverseNodes($nodes);
         }
@@ -102,6 +106,47 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         }
 
         return $nodes;
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function getValue(Node $node)
+    {
+        if (! $node instanceof Expr) {
+            return null;
+        }
+        return $this->constExprEvaluator->evaluateSilently($node);
+    }
+
+    /**
+     * @param mixed $expectedValue
+     */
+    protected function isValue(Node $node, $expectedValue): bool
+    {
+        $nodeValue = $this->getValue($node);
+        if ($nodeValue === null) {
+            return false;
+        }
+
+        return $nodeValue === $expectedValue;
+    }
+
+    /**
+     * @param Node[] $nodes
+     * @param mixed[] $expectedValues
+     */
+    protected function areValues(array $nodes, array $expectedValues): bool
+    {
+        foreach ($nodes as $i => $node) {
+            if ($this->isValue($node, $expectedValues[$i])) {
+                continue;
+            }
+
+            return false;
+        }
+
+        return true;
     }
 
     protected function notifyNodeChangeFileInfo(Node $node): void
@@ -129,5 +174,20 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         }
 
         return false;
+    }
+
+    private function keepFileInfoAttribute(Node $node, Node $originalNode): void
+    {
+        if ($node->getAttribute(Attribute::FILE_INFO) instanceof SmartFileInfo) {
+            return;
+        }
+
+        if ($originalNode->getAttribute(Attribute::FILE_INFO) !== null) {
+            $node->setAttribute(Attribute::FILE_INFO, $originalNode->getAttribute(Attribute::FILE_INFO));
+        } elseif ($originalNode->getAttribute(Attribute::PARENT_NODE)) {
+            /** @var Node $parentOriginalNode */
+            $parentOriginalNode = $originalNode->getAttribute(Attribute::PARENT_NODE);
+            $node->setAttribute(Attribute::FILE_INFO, $parentOriginalNode->getAttribute(Attribute::FILE_INFO));
+        }
     }
 }

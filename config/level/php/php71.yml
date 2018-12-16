@@ -8,3 +8,4 @@ services:
     Rector\Php\Rector\FuncCall\CountOnNullRector: ~
     Rector\Php\Rector\FunctionLike\ParamScalarTypehintRector: ~
     Rector\Php\Rector\FunctionLike\ReturnScalarTypehintRector: ~
+    Rector\Php\Rector\FuncCall\RemoveExtraParametersRector: ~

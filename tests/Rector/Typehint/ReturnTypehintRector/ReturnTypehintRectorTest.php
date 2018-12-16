@@ -22,11 +22,13 @@ final class ReturnTypehintRectorTest extends AbstractRectorTestCase
      */
     protected function getRectorConfiguration(): array
     {
-        return ['Rector\Tests\Rector\Typehint\ReturnTypehintRector\Fixture\SomeClass' => [
-            'parse' => 'array',
-            'resolve' => 'SomeType',
-            'nullable' => '?SomeType',
-            'clear' => '',
-        ]];
+        return [
+            'Rector\Tests\Rector\Typehint\ReturnTypehintRector\Fixture\SomeClass' => [
+                'parse' => 'array',
+                'resolve' => 'SomeType',
+                'nullable' => '?SomeType',
+                'clear' => '',
+            ],
+        ];
     }
 }

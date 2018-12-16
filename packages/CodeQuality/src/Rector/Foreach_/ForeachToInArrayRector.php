@@ -216,10 +216,6 @@ CODE_SAMPLE
     private function shouldSkipIf(If_ $ifNode): bool
     {
         $ifCondition = $ifNode->cond;
-        if (! $ifCondition instanceof Identical && ! $ifCondition instanceof Equal) {
-            return true;
-        }
-
-        return false;
+        return ! $ifCondition instanceof Identical && ! $ifCondition instanceof Equal;
     }
 }

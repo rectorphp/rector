@@ -6,6 +6,8 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\BinaryOp\Coalesce;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
@@ -58,6 +60,14 @@ final class BetterStandardPrinter extends Standard
     }
 
     /**
+     * Add space after "use ("
+     */
+    protected function pExpr_Closure(Closure $node): string
+    {
+        return Strings::replace(parent::pExpr_Closure($node), '#( use)\(#', '$1 (');
+    }
+
+    /**
      * Do not add "()" on Expressions
      * @see https://github.com/rectorphp/rector/pull/401#discussion_r181487199
      */
@@ -93,6 +103,18 @@ final class BetterStandardPrinter extends Standard
             ($type ? $type . ' ' : '') .
             $this->pCommaSeparated($node->props) .
             ';';
+    }
+
+    /**
+     * Print ??= since PHP 7.4
+     */
+    protected function pExpr_BinaryOp_Coalesce(Coalesce $node): string
+    {
+        if (! $node->getAttribute('null_coalesce')) {
+            return parent::pExpr_BinaryOp_Coalesce($node);
+        }
+
+        return $this->pInfixOp(Coalesce::class, $node->left, ' ??= ', $node->right);
     }
 
     /**

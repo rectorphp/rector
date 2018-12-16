@@ -2,7 +2,6 @@
 
 namespace Rector\Rector\Argument;
 
-use PhpParser\ConstExprEvaluator;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
@@ -20,17 +19,11 @@ final class ArgumentRemoverRector extends AbstractRector
     private $positionsByMethodNameByClassType = [];
 
     /**
-     * @var ConstExprEvaluator
-     */
-    private $constExprEvaluator;
-
-    /**
      * @param mixed[] $positionsByMethodNameByClassType
      */
-    public function __construct(array $positionsByMethodNameByClassType, ConstExprEvaluator $constExprEvaluator)
+    public function __construct(array $positionsByMethodNameByClassType)
     {
         $this->positionsByMethodNameByClassType = $positionsByMethodNameByClassType;
-        $this->constExprEvaluator = $constExprEvaluator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -126,7 +119,7 @@ CODE_SAMPLE
      */
     private function isArgumentValueMatch(Arg $argNode, array $values): bool
     {
-        $nodeValue = $this->constExprEvaluator->evaluateDirectly($argNode->value);
+        $nodeValue = $this->getValue($argNode->value);
 
         return in_array($nodeValue, $values, true);
     }

@@ -4,7 +4,6 @@ namespace Rector\Rector\Argument;
 
 use Nette\Utils\Strings;
 use PhpParser\BuilderHelpers;
-use PhpParser\ConstExprEvaluator;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
@@ -22,16 +21,10 @@ final class ArgumentDefaultValueReplacerRector extends AbstractRector
     private $replacesByMethodAndTypes = [];
 
     /**
-     * @var ConstExprEvaluator
-     */
-    private $constExprEvaluator;
-
-    /**
      * @param mixed[] $replacesByMethodAndTypes
      */
-    public function __construct(array $replacesByMethodAndTypes, ConstExprEvaluator $constExprEvaluator)
+    public function __construct(array $replacesByMethodAndTypes)
     {
-        $this->constExprEvaluator = $constExprEvaluator;
         $this->replacesByMethodAndTypes = $replacesByMethodAndTypes;
     }
 
@@ -150,7 +143,7 @@ CODE_SAMPLE
      */
     private function resolveArgumentValue(Arg $argNode)
     {
-        $resolvedValue = $this->constExprEvaluator->evaluateDirectly($argNode->value);
+        $resolvedValue = $this->getValue($argNode->value);
 
         if ($resolvedValue === true) {
             return 'true';

@@ -85,11 +85,7 @@ abstract class AbstractScalarTypehintRector extends AbstractRector
                 // parent class method in local scope → it's ok
                 if ($parentMethodNode) {
                     // parent method has no type → we cannot change it here
-                    if (isset($parentMethodNode->params[$paramPosition]) && $parentMethodNode->params[$paramPosition]->type === null) {
-                        return true;
-                    }
-
-                    return false;
+                    return isset($parentMethodNode->params[$paramPosition]) && $parentMethodNode->params[$paramPosition]->type === null;
                 }
 
                 // if not, look for it's parent parent - @todo recursion
@@ -161,12 +157,7 @@ abstract class AbstractScalarTypehintRector extends AbstractRector
         if ($type === $possibleSubtype) {
             return true;
         }
-
-        if (ctype_upper($possibleSubtype[0]) && $type === 'object') {
-            return true;
-        }
-
-        return false;
+        return ctype_upper($possibleSubtype[0]) && $type === 'object';
     }
 
     /**

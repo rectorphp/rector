@@ -2,17 +2,14 @@
 
 namespace Rector\Php\Tests\Rector\List_\EmptyListRector\Fixture;
 
-class EmptyList
+function emptyList()
 {
-    private function run()
-    {
-        $values = [];
-        list() = $values;
+    $values = [];
+    list() = $values;
 
-        list(, ,) = $a;
+    list(, ,) = $a;
 
-        list($x, list(), $y) = $a;
-    }
+    list($x, list(), $y) = $a;
 }
 
 ?>
@@ -21,17 +18,14 @@ class EmptyList
 
 namespace Rector\Php\Tests\Rector\List_\EmptyListRector\Fixture;
 
-class EmptyList
+function emptyList()
 {
-    private function run()
-    {
-        $values = [];
-        list($unusedGenerated) = $values;
+    $values = [];
+    list($unusedGenerated) = $values;
 
-        list($unusedGenerated, ,) = $a;
+    list($unusedGenerated, , ) = $a;
 
-        list($x, list($unusedGenerated), $y) = $a;
-    }
+    list($x, list($unusedGenerated), $y) = $a;
 }
 
 ?>

@@ -11,8 +11,14 @@ services:
     Rector\Rector\Function_\FunctionReplaceRector:
         jpeg2wbmp: 'imagecreatefromjpeg' # and imagewbmp
         png2wbmp: 'imagecreatefrompng' # or imagewbmp
+        # http://php.net/manual/en/migration72.deprecated.php#migration72.deprecated.gmp_random-function
         gmp_random: 'gmp_random_bits' # or gmp_random_range
         read_exif_data: 'exif_read_data'
 
     Rector\Php\Rector\FunctionLike\ParamScalarTypehintRector: ~
     Rector\Php\Rector\FunctionLike\ReturnScalarTypehintRector: ~
+    Rector\Php\Rector\FuncCall\GetClassOnNullRector: ~
+    Rector\Php\Rector\FuncCall\IsObjectOnIncompleteClassRector: ~
+    Rector\Php\Rector\FuncCall\ParseStrWithResultArgumentRector: ~
+    Rector\Php\Rector\FuncCall\StringsAssertNakedRector: ~
+    Rector\Php\Rector\FuncCall\CreateFunctionToAnonymousFunctionRector: ~

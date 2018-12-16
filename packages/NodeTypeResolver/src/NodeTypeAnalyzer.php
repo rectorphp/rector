@@ -42,15 +42,12 @@ final class NodeTypeAnalyzer
 
     public function isStringType(Node $node): bool
     {
-        /** @var Scope|null $nodeScope */
-        $nodeScope = $node->getAttribute(Attribute::SCOPE);
-        if (! $node instanceof Expr || $nodeScope === null) {
-            return false;
-        }
+        return $this->getNodeType($node) instanceof StringType;
+    }
 
-        $nodeType = $nodeScope->getType($node);
-
-        return $nodeType instanceof StringType;
+    public function isNullType(Node $node): bool
+    {
+        return $this->getNodeType($node) instanceof NullType;
     }
 
     /**
@@ -58,15 +55,7 @@ final class NodeTypeAnalyzer
      */
     public function isNullableType(Node $node): bool
     {
-        /** @var Scope|null $nodeScope */
-        $nodeScope = $node->getAttribute(Attribute::SCOPE);
-        if (! $node instanceof Expr || $nodeScope === null) {
-            return false;
-        }
-
-        /** @var Expr $node */
-        $nodeType = $nodeScope->getType($node);
-
+        $nodeType = $this->getNodeType($node);
         if (! $nodeType instanceof UnionType) {
             return false;
         }
@@ -76,27 +65,16 @@ final class NodeTypeAnalyzer
 
     public function isBoolType(Node $node): bool
     {
-        /** @var Scope|null $nodeScope */
-        $nodeScope = $node->getAttribute(Attribute::SCOPE);
-        if (! $node instanceof Expr || $nodeScope === null) {
-            return false;
-        }
-
-        /** @var Expr $node */
-        $nodeType = $nodeScope->getType($node);
-
-        return $nodeType instanceof BooleanType;
+        return $this->getNodeType($node) instanceof BooleanType;
     }
 
     public function isCountableType(Node $node): bool
     {
-        /** @var Scope|null $nodeScope */
-        $nodeScope = $node->getAttribute(Attribute::SCOPE);
-        if (! $node instanceof Expr || $nodeScope === null) {
+        $nodeType = $this->getNodeType($node);
+        if ($nodeType === null) {
             return false;
         }
 
-        $nodeType = $nodeScope->getType($node);
         $nodeType = $this->correctPregMatchType($node, $nodeType);
 
         if ($nodeType instanceof ObjectType) {
@@ -155,5 +133,16 @@ final class NodeTypeAnalyzer
         }
 
         return new ArrayType(new MixedType(), new MixedType());
+    }
+
+    private function getNodeType(Node $node): ?Type
+    {
+        /** @var Scope|null $nodeScope */
+        $nodeScope = $node->getAttribute(Attribute::SCOPE);
+        if (! $node instanceof Expr || $nodeScope === null) {
+            return null;
+        }
+
+        return $nodeScope->getType($node);
     }
 }

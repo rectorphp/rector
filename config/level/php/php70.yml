@@ -15,3 +15,5 @@ services:
 
     Rector\Php\Rector\FuncCall\CallUserMethodRector : ~
     Rector\Php\Rector\FuncCall\EregToPregMatchRector: ~
+    Rector\Php\Rector\Switch_\ReduceMultipleDefaultSwitchRector: ~
+    Rector\Php\Rector\Ternary\TernaryToSpaceshipRector: ~

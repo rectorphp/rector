@@ -10,6 +10,7 @@ use Rector\NodeTypeResolver\NodeVisitor\ClassAndMethodNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\ClassLikeNodeCollectorNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\ExpressionNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\FileInfoNodeVisitor;
+use Rector\NodeTypeResolver\NodeVisitor\FunctionLikeNodeCollectorNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\NamespaceNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\ParentAndNextNodeVisitor;
 use Rector\NodeTypeResolver\PHPStan\Scope\NodeScopeResolver;
@@ -56,6 +57,11 @@ final class NodeScopeAndMetadataDecorator
      */
     private $classLikeNodeCollectorNodeVisitor;
 
+    /**
+     * @var FunctionLikeNodeCollectorNodeVisitor
+     */
+    private $functionLikeNodeCollectorNodeVisitor;
+
     public function __construct(
         NodeScopeResolver $nodeScopeResolver,
         ParentAndNextNodeVisitor $parentAndNextNodeVisitor,
@@ -64,7 +70,8 @@ final class NodeScopeAndMetadataDecorator
         NamespaceNodeVisitor $namespaceNodeVisitor,
         ExpressionNodeVisitor $expressionNodeVisitor,
         FileInfoNodeVisitor $fileInfoNodeVisitor,
-        ClassLikeNodeCollectorNodeVisitor $classLikeNodeCollectorNodeVisitor
+        ClassLikeNodeCollectorNodeVisitor $classLikeNodeCollectorNodeVisitor,
+        FunctionLikeNodeCollectorNodeVisitor $functionLikeNodeCollectorNodeVisitor
     ) {
         $this->nodeScopeResolver = $nodeScopeResolver;
         $this->parentAndNextNodeVisitor = $parentAndNextNodeVisitor;
@@ -74,6 +81,7 @@ final class NodeScopeAndMetadataDecorator
         $this->expressionNodeVisitor = $expressionNodeVisitor;
         $this->fileInfoNodeVisitor = $fileInfoNodeVisitor;
         $this->classLikeNodeCollectorNodeVisitor = $classLikeNodeCollectorNodeVisitor;
+        $this->functionLikeNodeCollectorNodeVisitor = $functionLikeNodeCollectorNodeVisitor;
     }
 
     /**
@@ -104,6 +112,7 @@ final class NodeScopeAndMetadataDecorator
         $nodeTraverser->addVisitor($this->expressionNodeVisitor);
         $nodeTraverser->addVisitor($this->fileInfoNodeVisitor);
         $nodeTraverser->addVisitor($this->classLikeNodeCollectorNodeVisitor);
+        $nodeTraverser->addVisitor($this->functionLikeNodeCollectorNodeVisitor);
 
         return $nodeTraverser->traverse($nodes);
     }
