@@ -14,6 +14,7 @@ final class RegexDashEscapeRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Fixture/method_call.php.inc',
             __DIR__ . '/Fixture/variable.php.inc',
             __DIR__ . '/Fixture/multiple_variables.php.inc',
+            __DIR__ . '/Fixture/const.php.inc',
         ]);
     }
 

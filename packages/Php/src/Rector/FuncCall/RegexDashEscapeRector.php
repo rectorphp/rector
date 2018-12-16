@@ -6,10 +6,12 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
+use Rector\NodeTypeResolver\Application\ConstantNodeCollector;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
@@ -69,9 +71,15 @@ final class RegexDashEscapeRector extends AbstractRector
      */
     private $betterNodeFinder;
 
-    public function __construct(BetterNodeFinder $betterNodeFinder)
+    /**
+     * @var ConstantNodeCollector
+     */
+    private $constantNodeCollector;
+
+    public function __construct(BetterNodeFinder $betterNodeFinder, ConstantNodeCollector $constantNodeCollector)
     {
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->constantNodeCollector = $constantNodeCollector;
     }
 
     public function getDefinition(): RectorDefinition
@@ -162,15 +170,13 @@ CODE_SAMPLE
 
     private function escapeDashInPattern(Expr $expr): void
     {
+        if ($expr instanceof ClassConstFetch) {
+            $this->processClassConstFetch($expr);
+        }
+
         // pattern can be defined in property or contant above
         if ($expr instanceof Variable) {
-            $assignNodes = $this->findAssigners($expr);
-
-            foreach ($assignNodes as $assignNode) {
-                if ($assignNode->expr instanceof String_) {
-                    $this->escapeStringNode($assignNode->expr);
-                }
-            }
+            $this->processVariable($expr);
         }
 
         if ($expr instanceof String_) {
@@ -210,5 +216,31 @@ CODE_SAMPLE
         $stringNode->value = Strings::replace($stringValue, self::PATTERN_DASH_NOT_AROUND_BRACKETS, '\-');
         // helped needed to skip re-escaping regular expression
         $stringNode->setAttribute('is_regular_pattern', true);
+    }
+
+    private function processClassConstFetch(Expr $expr): void
+    {
+        $className = (string) $expr->getAttribute(Attribute::CLASS_NAME);
+        $constantName = $this->getName($expr);
+
+        $classConstNode = $this->constantNodeCollector->findConstant($constantName, $className);
+        if ($classConstNode) {
+            if ($classConstNode->consts[0]->value instanceof String_) {
+                /** @var String_ $stringNode */
+                $stringNode = $classConstNode->consts[0]->value;
+                $this->escapeStringNode($stringNode);
+            }
+        }
+    }
+
+    private function processVariable(Expr $expr): void
+    {
+        $assignNodes = $this->findAssigners($expr);
+
+        foreach ($assignNodes as $assignNode) {
+            if ($assignNode->expr instanceof String_) {
+                $this->escapeStringNode($assignNode->expr);
+            }
+        }
     }
 }

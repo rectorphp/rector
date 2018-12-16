@@ -7,11 +7,10 @@ use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\CloningVisitor;
 use PhpParser\NodeVisitor\NameResolver;
 use Rector\NodeTypeResolver\NodeVisitor\ClassAndMethodNodeVisitor;
-use Rector\NodeTypeResolver\NodeVisitor\ClassLikeNodeCollectorNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\ExpressionNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\FileInfoNodeVisitor;
-use Rector\NodeTypeResolver\NodeVisitor\FunctionLikeNodeCollectorNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\NamespaceNodeVisitor;
+use Rector\NodeTypeResolver\NodeVisitor\NodeCollectorNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\ParentAndNextNodeVisitor;
 use Rector\NodeTypeResolver\PHPStan\Scope\NodeScopeResolver;
 
@@ -53,14 +52,9 @@ final class NodeScopeAndMetadataDecorator
     private $fileInfoNodeVisitor;
 
     /**
-     * @var ClassLikeNodeCollectorNodeVisitor
+     * @var NodeCollectorNodeVisitor
      */
-    private $classLikeNodeCollectorNodeVisitor;
-
-    /**
-     * @var FunctionLikeNodeCollectorNodeVisitor
-     */
-    private $functionLikeNodeCollectorNodeVisitor;
+    private $nodeCollectorNodeVisitor;
 
     public function __construct(
         NodeScopeResolver $nodeScopeResolver,
@@ -70,8 +64,7 @@ final class NodeScopeAndMetadataDecorator
         NamespaceNodeVisitor $namespaceNodeVisitor,
         ExpressionNodeVisitor $expressionNodeVisitor,
         FileInfoNodeVisitor $fileInfoNodeVisitor,
-        ClassLikeNodeCollectorNodeVisitor $classLikeNodeCollectorNodeVisitor,
-        FunctionLikeNodeCollectorNodeVisitor $functionLikeNodeCollectorNodeVisitor
+        NodeCollectorNodeVisitor $nodeCollectorNodeVisitor
     ) {
         $this->nodeScopeResolver = $nodeScopeResolver;
         $this->parentAndNextNodeVisitor = $parentAndNextNodeVisitor;
@@ -80,8 +73,7 @@ final class NodeScopeAndMetadataDecorator
         $this->namespaceNodeVisitor = $namespaceNodeVisitor;
         $this->expressionNodeVisitor = $expressionNodeVisitor;
         $this->fileInfoNodeVisitor = $fileInfoNodeVisitor;
-        $this->classLikeNodeCollectorNodeVisitor = $classLikeNodeCollectorNodeVisitor;
-        $this->functionLikeNodeCollectorNodeVisitor = $functionLikeNodeCollectorNodeVisitor;
+        $this->nodeCollectorNodeVisitor = $nodeCollectorNodeVisitor;
     }
 
     /**
@@ -111,8 +103,7 @@ final class NodeScopeAndMetadataDecorator
         $nodeTraverser->addVisitor($this->namespaceNodeVisitor);
         $nodeTraverser->addVisitor($this->expressionNodeVisitor);
         $nodeTraverser->addVisitor($this->fileInfoNodeVisitor);
-        $nodeTraverser->addVisitor($this->classLikeNodeCollectorNodeVisitor);
-        $nodeTraverser->addVisitor($this->functionLikeNodeCollectorNodeVisitor);
+        $nodeTraverser->addVisitor($this->nodeCollectorNodeVisitor);
 
         return $nodeTraverser->traverse($nodes);
     }
