@@ -70,11 +70,7 @@ CODE_SAMPLE
             return $this->processIdentifier($node);
         }
 
-        if ($node instanceof Name) {
-            return $this->processName($node);
-        }
-
-        return $node;
+        return $this->processName($node);
     }
 
     private function processIdentifier(Identifier $identifierNode): Identifier

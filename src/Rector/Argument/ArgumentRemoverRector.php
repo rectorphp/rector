@@ -97,7 +97,7 @@ CODE_SAMPLE
         if ($match === null) {
             if ($node instanceof MethodCall || $node instanceof StaticCall) {
                 unset($node->args[$position]);
-            } elseif ($node instanceof ClassMethod) {
+            } else {
                 unset($node->params[$position]);
             }
         }

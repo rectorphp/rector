@@ -86,7 +86,7 @@ parameters:
             - 'src/Php/TypeAnalyzer.php'
             # exclusive static config for type support
             - 'src/Php/PhpTypeSupport.php'
-            - 'src/Util/RectorStrings.php'
+            - 'src/Util/*.php'
 
         Symplify\CodingStandard\Fixer\Naming\PropertyNameMatchingTypeFixer:
             - 'packages/NodeTypeResolver/src/PHPStan/Scope/NodeScopeResolver.php'

@@ -100,9 +100,7 @@ CODE_SAMPLE
                 return $this->processName($node);
             }
 
-            if ($node instanceof Identifier) {
-                return $this->processIdentifier($node);
-            }
+            return $this->processIdentifier($node);
         }
 
         return null;
