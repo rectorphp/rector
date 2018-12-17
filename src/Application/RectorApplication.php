@@ -2,6 +2,7 @@
 
 namespace Rector\Application;
 
+use Nette\Utils\FileSystem;
 use PHPStan\AnalysedCodeException;
 use Rector\Configuration\Configuration;
 use Rector\FileSystemRector\FileSystemFileProcessor;
@@ -45,18 +46,25 @@ final class RectorApplication
      */
     private $fileProcessor;
 
+    /**
+     * @var RemovedFilesCollector
+     */
+    private $removedFilesCollector;
+
     public function __construct(
         SymfonyStyle $symfonyStyle,
         FileSystemFileProcessor $fileSystemFileProcessor,
         ErrorAndDiffCollector $errorAndDiffCollector,
         Configuration $configuration,
-        FileProcessor $fileProcessor
+        FileProcessor $fileProcessor,
+        RemovedFilesCollector $removedFilesCollector
     ) {
         $this->symfonyStyle = $symfonyStyle;
         $this->fileSystemFileProcessor = $fileSystemFileProcessor;
         $this->errorAndDiffCollector = $errorAndDiffCollector;
         $this->configuration = $configuration;
         $this->fileProcessor = $fileProcessor;
+        $this->removedFilesCollector = $removedFilesCollector;
     }
 
     /**
@@ -124,16 +132,22 @@ final class RectorApplication
 
     private function processFileInfo(SmartFileInfo $fileInfo): void
     {
-        $oldContent = $fileInfo->getContents();
-
-        if ($this->configuration->isDryRun()) {
-            $newContent = $this->fileProcessor->printToString($fileInfo);
+        if ($this->removedFilesCollector->hasFile($fileInfo)) {
+            if (! $this->configuration->isDryRun()) {
+                FileSystem::delete($fileInfo->getRealPath());
+            }
         } else {
-            $newContent = $this->fileProcessor->printToFile($fileInfo);
+            $oldContent = $fileInfo->getContents();
+
+            if ($this->configuration->isDryRun()) {
+                $newContent = $this->fileProcessor->printToString($fileInfo);
+            } else {
+                $newContent = $this->fileProcessor->printToFile($fileInfo);
+            }
+
+            $this->errorAndDiffCollector->addFileDiff($fileInfo, $newContent, $oldContent);
+
+            $this->fileSystemFileProcessor->processFileInfo($fileInfo);
         }
-
-        $this->errorAndDiffCollector->addFileDiff($fileInfo, $newContent, $oldContent);
-
-        $this->fileSystemFileProcessor->processFileInfo($fileInfo);
     }
 }

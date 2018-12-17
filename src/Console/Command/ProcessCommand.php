@@ -144,6 +144,8 @@ final class ProcessCommand extends Command
 
         $this->processCommandReporter->reportFileDiffs($this->errorAndDiffCollector->getFileDiffs());
 
+        $this->processCommandReporter->reportRemovedFiles();
+
         if ($this->errorAndDiffCollector->getErrors()) {
             $this->processCommandReporter->reportErrors($this->errorAndDiffCollector->getErrors());
             return Shell::CODE_ERROR;

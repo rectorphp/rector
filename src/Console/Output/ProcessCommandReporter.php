@@ -3,8 +3,11 @@
 namespace Rector\Console\Output;
 
 use Rector\Application\Error;
+use Rector\Application\RemovedFilesCollector;
+use Rector\Configuration\Configuration;
 use Rector\Reporting\FileDiff;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use function Safe\getcwd;
 use function Safe\ksort;
 use function Safe\sprintf;
 
@@ -15,9 +18,24 @@ final class ProcessCommandReporter
      */
     private $symfonyStyle;
 
-    public function __construct(SymfonyStyle $symfonyStyle)
-    {
+    /**
+     * @var RemovedFilesCollector
+     */
+    private $removedFilesCollector;
+
+    /**
+     * @var Configuration
+     */
+    private $configuration;
+
+    public function __construct(
+        SymfonyStyle $symfonyStyle,
+        RemovedFilesCollector $removedFilesCollector,
+        Configuration $configuration
+    ) {
         $this->symfonyStyle = $symfonyStyle;
+        $this->removedFilesCollector = $removedFilesCollector;
+        $this->configuration = $configuration;
     }
 
     /**
@@ -71,6 +89,19 @@ final class ProcessCommandReporter
             }
 
             $this->symfonyStyle->error($message);
+        }
+    }
+
+    public function reportRemovedFiles(): void
+    {
+        foreach ($this->removedFilesCollector->getFiles() as $smartFileInfo) {
+            $filePath = $smartFileInfo->getRelativeFilePathFromDirectory(getcwd());
+
+            if ($this->configuration->isDryRun()) {
+                $this->symfonyStyle->warning(sprintf('File "%s" will be removed', $filePath));
+            } else {
+                $this->symfonyStyle->warning(sprintf('File "%s" was be removed', $filePath));
+            }
         }
     }
 }
