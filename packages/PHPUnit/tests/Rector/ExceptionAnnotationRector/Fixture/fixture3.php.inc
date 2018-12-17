@@ -20,7 +20,7 @@ namespace Rector\PHPUnit\Tests\Rector\ExceptionAnnotationRector\Fixture;
 
 final class MyTest3 extends \PHPUnit_Framework_TestCase
 {
-    public function testThrowExceptionWhenOperatorIsInvalid() : void
+    public function testThrowExceptionWhenOperatorIsInvalid(): void
     {
         $this->expectException('Exception');
     }

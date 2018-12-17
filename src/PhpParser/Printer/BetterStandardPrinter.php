@@ -17,6 +17,7 @@ use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\PrettyPrinter\Standard;
@@ -196,6 +197,20 @@ final class BetterStandardPrinter extends Standard
         }
 
         return parent::pScalar_String($node);
+    }
+
+    /**
+     * "...$params) : ReturnType"
+     * ↓
+     * "...$params): ReturnType"
+     */
+    protected function pStmt_ClassMethod(ClassMethod $node): string
+    {
+        return $this->pModifiers($node->flags)
+            . 'function ' . ($node->byRef ? '&' : '') . $node->name
+            . '(' . $this->pCommaSeparated($node->params) . ')'
+            . ($node->returnType !== null ? ': ' . $this->p($node->returnType) : '')
+            . ($node->stmts !== null ? $this->nl . '{' . $this->pStmts($node->stmts) . $this->nl . '}' : ';');
     }
 
     /**
