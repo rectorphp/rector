@@ -11,9 +11,10 @@ final class ParentTypehintedArgumentRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
     {
-        $this->doTestFiles(
-            [__DIR__ . '/Fixture/SomeClassImplementingParserInterface.php', __DIR__ . '/Fixture/MyMetadataFactory.php']
-        );
+        $this->doTestFiles([
+            __DIR__ . '/Fixture/SomeClassImplementingParserInterface.php',
+            __DIR__ . '/Fixture/MyMetadataFactory.php',
+        ]);
     }
 
     protected function getRectorClass(): string
