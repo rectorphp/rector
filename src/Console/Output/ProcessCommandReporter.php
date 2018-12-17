@@ -7,7 +7,6 @@ use Rector\Application\RemovedFilesCollector;
 use Rector\Configuration\Configuration;
 use Rector\Reporting\FileDiff;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use function Safe\getcwd;
 use function Safe\ksort;
 use function Safe\sprintf;
 
@@ -95,12 +94,10 @@ final class ProcessCommandReporter
     public function reportRemovedFiles(): void
     {
         foreach ($this->removedFilesCollector->getFiles() as $smartFileInfo) {
-            $filePath = $smartFileInfo->getRelativeFilePathFromDirectory(getcwd());
-
             if ($this->configuration->isDryRun()) {
-                $this->symfonyStyle->warning(sprintf('File "%s" will be removed', $filePath));
+                $this->symfonyStyle->warning(sprintf('File "%s" will be removed', $smartFileInfo->getRealPath()));
             } else {
-                $this->symfonyStyle->warning(sprintf('File "%s" was be removed', $filePath));
+                $this->symfonyStyle->warning(sprintf('File "%s" was be removed', $smartFileInfo->getRealPath()));
             }
         }
     }
