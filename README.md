@@ -166,5 +166,5 @@ We would be happy to merge your feature then.
 ## Run rector in docker
 With this command, you can process your project with rector from docker:
 ```bash
-docker run -v $(pwd):/project rector:latest
+docker run -v $(pwd):/project rector/rector:latest
 ```
