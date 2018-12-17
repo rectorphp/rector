@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Application\AppliedRectorCollector;
+use Rector\Application\RemovedFilesCollector;
 use Rector\Contract\Rector\PhpRectorInterface;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\Attribute;
@@ -41,16 +42,23 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     private $constExprEvaluator;
 
     /**
+     * @var RemovedFilesCollector
+     */
+    private $removedFilesCollector;
+
+    /**
      * @required
      */
     public function setAbstractRectorDependencies(
         AppliedRectorCollector $appliedRectorCollector,
         SymfonyStyle $symfonyStyle,
-        ConstExprEvaluator $constExprEvaluator
+        ConstExprEvaluator $constExprEvaluator,
+        RemovedFilesCollector $removedFilesCollector
     ): void {
         $this->appliedRectorCollector = $appliedRectorCollector;
         $this->symfonyStyle = $symfonyStyle;
         $this->constExprEvaluator = $constExprEvaluator;
+        $this->removedFilesCollector = $removedFilesCollector;
     }
 
     /**
@@ -108,32 +116,29 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         return $nodes;
     }
 
+    protected function removeFile(SmartFileInfo $smartFileInfo): void
+    {
+        $this->removedFilesCollector->addFile($smartFileInfo);
+    }
+
     /**
      * @return mixed
      */
-    protected function getValue(Node $node)
+    protected function getValue(Expr $node)
     {
-        if (! $node instanceof Expr) {
-            return null;
-        }
         return $this->constExprEvaluator->evaluateSilently($node);
     }
 
     /**
      * @param mixed $expectedValue
      */
-    protected function isValue(Node $node, $expectedValue): bool
+    protected function isValue(Expr $node, $expectedValue): bool
     {
-        $nodeValue = $this->getValue($node);
-        if ($nodeValue === null) {
-            return false;
-        }
-
-        return $nodeValue === $expectedValue;
+        return $this->getValue($node) === $expectedValue;
     }
 
     /**
-     * @param Node[] $nodes
+     * @param Expr[] $nodes
      * @param mixed[] $expectedValues
      */
     protected function areValues(array $nodes, array $expectedValues): bool
