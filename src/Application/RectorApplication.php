@@ -51,6 +51,11 @@ final class RectorApplication
      */
     private $removedFilesCollector;
 
+    /**
+     * @var SmartFileInfo[]
+     */
+    private $notParsedFiles = [];
+
     public function __construct(
         SymfonyStyle $symfonyStyle,
         FileSystemFileProcessor $fileSystemFileProcessor,
@@ -90,7 +95,9 @@ final class RectorApplication
         // 2. change nodes with Rectors
         foreach ($fileInfos as $fileInfo) {
             $this->advance();
-            $this->refactorFileInfo($fileInfo);
+            $this->tryCatchWrapper($fileInfo, function (SmartFileInfo $smartFileInfo): void {
+                $this->fileProcessor->refactor($smartFileInfo);
+            });
         }
 
         // 3. print to file or string
@@ -115,21 +122,21 @@ final class RectorApplication
         }
     }
 
-    private function refactorFileInfo(SmartFileInfo $fileInfo): void
-    {
-        $this->tryCatchWrapper($fileInfo, function (SmartFileInfo $smartFileInfo): void {
-            $this->fileProcessor->refactor($smartFileInfo);
-        });
-    }
-
     private function tryCatchWrapper(SmartFileInfo $smartFileInfo, callable $callback): void
     {
         try {
+            if (in_array($smartFileInfo, $this->notParsedFiles, true)) {
+                // we cannot process this file
+                return;
+            }
+
             $callback($smartFileInfo);
         } catch (AnalysedCodeException $analysedCodeException) {
             if ($this->configuration->shouldHideAutoloadErrors()) {
                 return;
             }
+
+            $this->notParsedFiles[] = $smartFileInfo;
 
             $this->errorAndDiffCollector->addAutoloadError($analysedCodeException, $smartFileInfo);
         } catch (Throwable $throwable) {
