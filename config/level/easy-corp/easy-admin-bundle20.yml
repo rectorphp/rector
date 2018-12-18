@@ -1,0 +1,9 @@
+# https://github.com/EasyCorp/EasyAdminBundle/blob/master/UPGRADE-2.0.md
+services:
+    # first replace ->get("...") by constructor injection in every child of "EasyCorp\Bundle\EasyAdminBundle\AdminController"
+    Rector\Symfony\Rector\FrameworkBundle\GetToConstructorInjectionRector:
+        EasyCorp\Bundle\EasyAdminBundle\AdminController: ~
+
+    # then rename the "EasyCorp\Bundle\EasyAdminBundle\AdminController" class
+    Rector\Rector\Class_\ClassReplacerRector:
+        EasyCorp\Bundle\EasyAdminBundle\AdminController: 'EasyCorp\Bundle\EasyAdminBundle\EasyAdminController'
