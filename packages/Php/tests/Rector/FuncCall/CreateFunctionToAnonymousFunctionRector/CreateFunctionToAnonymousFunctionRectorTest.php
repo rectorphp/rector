@@ -16,6 +16,7 @@ final class CreateFunctionToAnonymousFunctionRectorTest extends AbstractRectorTe
             __DIR__ . '/Fixture/stackoverflow.php.inc',
             __DIR__ . '/Fixture/drupal.php.inc',
             __DIR__ . '/Fixture/php_net.php.inc',
+            __DIR__ . '/Fixture/wordpress.php.inc',
         ]);
     }
 
