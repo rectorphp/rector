@@ -82,7 +82,9 @@ final class RectorApplication
         // 1. parse files to nodes
         foreach ($fileInfos as $fileInfo) {
             $this->advance();
-            $this->fileProcessor->parseFileInfoToLocalCache($fileInfo);
+            $this->tryCatchWrapper($fileInfo, function (SmartFileInfo $smartFileInfo): void {
+                $this->fileProcessor->parseFileInfoToLocalCache($smartFileInfo);
+            });
         }
 
         // 2. change nodes with Rectors
@@ -93,12 +95,14 @@ final class RectorApplication
 
         // 3. print to file or string
         foreach ($fileInfos as $fileInfo) {
-            $this->processFileInfo($fileInfo);
-            if ($this->symfonyStyle->isVerbose()) {
-                $this->symfonyStyle->writeln($fileInfo->getRealPath());
-            } else {
-                $this->symfonyStyle->progressAdvance();
-            }
+            $this->tryCatchWrapper($fileInfo, function (SmartFileInfo $smartFileInfo): void {
+                $this->processFileInfo($smartFileInfo);
+                if ($this->symfonyStyle->isVerbose()) {
+                    $this->symfonyStyle->writeln($smartFileInfo->getRealPath());
+                } else {
+                    $this->symfonyStyle->progressAdvance();
+                }
+            });
         }
 
         $this->symfonyStyle->newLine(2);
@@ -113,20 +117,27 @@ final class RectorApplication
 
     private function refactorFileInfo(SmartFileInfo $fileInfo): void
     {
+        $this->tryCatchWrapper($fileInfo, function (SmartFileInfo $smartFileInfo): void {
+            $this->fileProcessor->refactor($smartFileInfo);
+        });
+    }
+
+    private function tryCatchWrapper(SmartFileInfo $smartFileInfo, callable $callback): void
+    {
         try {
-            $this->fileProcessor->refactor($fileInfo);
+            $callback($smartFileInfo);
         } catch (AnalysedCodeException $analysedCodeException) {
             if ($this->configuration->shouldHideAutoloadErrors()) {
                 return;
             }
 
-            $this->errorAndDiffCollector->addAutoloadError($analysedCodeException, $fileInfo);
+            $this->errorAndDiffCollector->addAutoloadError($analysedCodeException, $smartFileInfo);
         } catch (Throwable $throwable) {
             if ($this->symfonyStyle->isVerbose()) {
                 throw $throwable;
             }
 
-            $this->errorAndDiffCollector->addThrowableWithFileInfo($throwable, $fileInfo);
+            $this->errorAndDiffCollector->addThrowableWithFileInfo($throwable, $smartFileInfo);
         }
     }
 
