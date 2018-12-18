@@ -51,6 +51,11 @@ final class RectorApplication
      */
     private $removedFilesCollector;
 
+    /**
+     * @var SmartFileInfo[]
+     */
+    private $notParsedFiles = [];
+
     public function __construct(
         SymfonyStyle $symfonyStyle,
         FileSystemFileProcessor $fileSystemFileProcessor,
@@ -82,23 +87,29 @@ final class RectorApplication
         // 1. parse files to nodes
         foreach ($fileInfos as $fileInfo) {
             $this->advance();
-            $this->fileProcessor->parseFileInfoToLocalCache($fileInfo);
+            $this->tryCatchWrapper($fileInfo, function (SmartFileInfo $smartFileInfo): void {
+                $this->fileProcessor->parseFileInfoToLocalCache($smartFileInfo);
+            });
         }
 
         // 2. change nodes with Rectors
         foreach ($fileInfos as $fileInfo) {
             $this->advance();
-            $this->refactorFileInfo($fileInfo);
+            $this->tryCatchWrapper($fileInfo, function (SmartFileInfo $smartFileInfo): void {
+                $this->fileProcessor->refactor($smartFileInfo);
+            });
         }
 
         // 3. print to file or string
         foreach ($fileInfos as $fileInfo) {
-            $this->processFileInfo($fileInfo);
-            if ($this->symfonyStyle->isVerbose()) {
-                $this->symfonyStyle->writeln($fileInfo->getRealPath());
-            } else {
-                $this->symfonyStyle->progressAdvance();
-            }
+            $this->tryCatchWrapper($fileInfo, function (SmartFileInfo $smartFileInfo): void {
+                $this->processFileInfo($smartFileInfo);
+                if ($this->symfonyStyle->isVerbose()) {
+                    $this->symfonyStyle->writeln($smartFileInfo->getRealPath());
+                } else {
+                    $this->symfonyStyle->progressAdvance();
+                }
+            });
         }
 
         $this->symfonyStyle->newLine(2);
@@ -111,22 +122,29 @@ final class RectorApplication
         }
     }
 
-    private function refactorFileInfo(SmartFileInfo $fileInfo): void
+    private function tryCatchWrapper(SmartFileInfo $smartFileInfo, callable $callback): void
     {
         try {
-            $this->fileProcessor->refactor($fileInfo);
+            if (in_array($smartFileInfo, $this->notParsedFiles, true)) {
+                // we cannot process this file
+                return;
+            }
+
+            $callback($smartFileInfo);
         } catch (AnalysedCodeException $analysedCodeException) {
             if ($this->configuration->shouldHideAutoloadErrors()) {
                 return;
             }
 
-            $this->errorAndDiffCollector->addAutoloadError($analysedCodeException, $fileInfo);
+            $this->notParsedFiles[] = $smartFileInfo;
+
+            $this->errorAndDiffCollector->addAutoloadError($analysedCodeException, $smartFileInfo);
         } catch (Throwable $throwable) {
             if ($this->symfonyStyle->isVerbose()) {
                 throw $throwable;
             }
 
-            $this->errorAndDiffCollector->addThrowableWithFileInfo($throwable, $fileInfo);
+            $this->errorAndDiffCollector->addThrowableWithFileInfo($throwable, $smartFileInfo);
         }
     }
 
