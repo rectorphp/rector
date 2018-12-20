@@ -97,7 +97,8 @@ final class ProcessCommandReporter
             if ($this->configuration->isDryRun()) {
                 $this->symfonyStyle->warning(sprintf('File "%s" will be removed', $smartFileInfo->getRealPath()));
             } else {
-                $this->symfonyStyle->warning(sprintf('File "%s" was be removed', $smartFileInfo->getRealPath()));
+                // removed file has no real path anymore
+                $this->symfonyStyle->warning(sprintf('File "%s" was be removed', $smartFileInfo->getPathname()));
             }
         }
     }
