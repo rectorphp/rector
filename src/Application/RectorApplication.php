@@ -86,7 +86,6 @@ final class RectorApplication
 
         // 1. parse files to nodes
         foreach ($fileInfos as $fileInfo) {
-            $this->advance();
             $this->tryCatchWrapper($fileInfo, function (SmartFileInfo $smartFileInfo): void {
                 $this->fileProcessor->parseFileInfoToLocalCache($smartFileInfo);
             });
@@ -94,7 +93,6 @@ final class RectorApplication
 
         // 2. change nodes with Rectors
         foreach ($fileInfos as $fileInfo) {
-            $this->advance();
             $this->tryCatchWrapper($fileInfo, function (SmartFileInfo $smartFileInfo): void {
                 $this->fileProcessor->refactor($smartFileInfo);
             });
@@ -104,26 +102,25 @@ final class RectorApplication
         foreach ($fileInfos as $fileInfo) {
             $this->tryCatchWrapper($fileInfo, function (SmartFileInfo $smartFileInfo): void {
                 $this->processFileInfo($smartFileInfo);
-                if ($this->symfonyStyle->isVerbose()) {
-                    $this->symfonyStyle->writeln($smartFileInfo->getRealPath());
-                } else {
-                    $this->symfonyStyle->progressAdvance();
-                }
             });
         }
 
         $this->symfonyStyle->newLine(2);
     }
 
-    private function advance(): void
+    private function advance(SmartFileInfo $smartFileInfo): void
     {
-        if ($this->symfonyStyle->isVerbose() === false) {
+        if ($this->symfonyStyle->isVerbose()) {
+            $this->symfonyStyle->writeln($smartFileInfo->getRealPath());
+        } else {
             $this->symfonyStyle->progressAdvance();
         }
     }
 
     private function tryCatchWrapper(SmartFileInfo $smartFileInfo, callable $callback): void
     {
+        $this->advance($smartFileInfo);
+
         try {
             if (in_array($smartFileInfo, $this->notParsedFiles, true)) {
                 // we cannot process this file
