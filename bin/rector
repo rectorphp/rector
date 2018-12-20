@@ -6,6 +6,8 @@ use Psr\Container\ContainerInterface;
 use Rector\Console\Application;
 use Symplify\PackageBuilder\Console\ThrowableRenderer;
 
+@ini_set('memory_limit', '-1'); // @ intentionally: continue anyway
+
 // Performance boost
 gc_disable();
 
