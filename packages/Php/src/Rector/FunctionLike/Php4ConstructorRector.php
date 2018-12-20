@@ -171,9 +171,13 @@ CODE_SAMPLE
         return $this->isName($node, '__construct');
     }
 
-    private function processParentPhp4ConstructCall(StaticCall $node): void
+    private function processParentPhp4ConstructCall(Node $node): void
     {
         $parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
+
+        if (! $node instanceof StaticCall) {
+            return;
+        }
 
         // no parent class
         if (! is_string($parentClassName)) {

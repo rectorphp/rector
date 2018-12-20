@@ -19,6 +19,7 @@ final class Php4ConstructorRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Fixture/delegating.php.inc',
             __DIR__ . '/Fixture/delegating_2.php.inc',
             __DIR__ . '/Fixture/fixture5.php.inc',
+            __DIR__ . '/Fixture/non_expression.php.inc',
         ]);
     }
 
