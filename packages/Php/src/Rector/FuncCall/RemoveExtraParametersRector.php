@@ -114,6 +114,10 @@ final class RemoveExtraParametersRector extends AbstractRector
             return null;
         }
 
+        if (! method_exists($nodeTypes[0], $methodName)) {
+            return null;
+        }
+
         return new ReflectionMethod($nodeTypes[0], $methodName);
     }
 
