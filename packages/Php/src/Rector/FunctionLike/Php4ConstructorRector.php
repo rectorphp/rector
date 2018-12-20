@@ -126,6 +126,10 @@ CODE_SAMPLE
 
         /** @var Expression $methodStmt */
         foreach ($classMethodNode->stmts as $methodStmt) {
+            if (! $methodStmt->expr instanceof StaticCall) {
+                continue;
+            }
+
             $this->processParentPhp4ConstructCall($methodStmt->expr);
         }
     }
@@ -163,16 +167,12 @@ CODE_SAMPLE
         return $this->isName($node, '__construct');
     }
 
-    private function processParentPhp4ConstructCall(Node $node): void
+    private function processParentPhp4ConstructCall(StaticCall $node): void
     {
         $parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
 
         // no parent class
         if (! is_string($parentClassName)) {
-            return;
-        }
-
-        if (! $node instanceof StaticCall) {
             return;
         }
 
