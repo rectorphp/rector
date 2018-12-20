@@ -34,10 +34,18 @@ trait BetterStandardPrinterTrait
     }
 
     /**
-     * @param Node|Node[] $node
+     * @param Node|Node[]|null $node
      */
     public function print($node): string
     {
-        return $this->betterStandardPrinter->prettyPrint(is_array($node) ? $node : [$node]);
+        if ($node === null) {
+            $node = [];
+        }
+
+        if (! is_array($node)) {
+            $node = [$node];
+        }
+
+        return $this->betterStandardPrinter->prettyPrint($node);
     }
 }
