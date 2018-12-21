@@ -11,7 +11,6 @@ use Rector\Error\ExceptionCorrector;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use ReflectionClass;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -20,7 +19,7 @@ use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use function Safe\ksort;
 use function Safe\sprintf;
 
-final class GenerateRectorOverviewCommand extends Command
+final class GenerateRectorOverviewCommand extends AbstractCommand
 {
     /**
      * @var SymfonyStyle
