@@ -46,7 +46,7 @@ final class AfterRectorCodingStyle
         }
 
         throw new InvalidConfigurationException(sprintf(
-            'To active "--with-style" you need EasyCodingStandard.%sRun "composer require symplify/easy-coding-standard --dev" to get it.%sYou can also remove "--with-style" and run PHP_CodeSniffer or PHP-CS-Fixer on changed code instead.',
+            'To activate "--with-style" you need EasyCodingStandard.%sRun "composer require symplify/easy-coding-standard --dev" to get it.%sYou can also remove "--with-style" and run PHP_CodeSniffer or PHP-CS-Fixer on changed code instead.',
             PHP_EOL,
             PHP_EOL
         ));
