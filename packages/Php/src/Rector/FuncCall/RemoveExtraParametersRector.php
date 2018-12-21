@@ -99,6 +99,10 @@ final class RemoveExtraParametersRector extends AbstractRector
                 return null;
             }
 
+            if (! function_exists($functionName)) {
+                return null;
+            }
+
             return new ReflectionFunction($functionName);
         }
 
