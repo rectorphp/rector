@@ -29,7 +29,6 @@ parameters:
         - '#Method Rector\\Symfony\\Bridge\\DefaultAnalyzedSymfonyApplicationContainer::getContainer\(\) should return Symfony\\Component\\DependencyInjection\\ContainerBuilder but returns Symfony\\Component\\DependencyInjection\\Container#' # 1
         - '#(.*?)\(\) should return Psr\\Container\\ContainerInterface but returns Symfony\\Component\\DependencyInjection\\ContainerInterface\|null#'
 
-        - '#Property PhpParser\\Node\\Expr\\Closure::\$stmts \(array<PhpParser\\Node\\Stmt>\) does not accept array<PhpParser\\Node>#'
         - '#Offset string does not exist on string#' # 1
         - '#Array \(array<array<PhpParser\\Node\\Stmt>>\) does not accept array<PhpParser\\Node\\Stmt|null>#'
         - '#Property Rector\\DependencyInjection\\Loader\\RectorServiceParametersShifter::\$serviceKeywords \(array<string>\) does not accept ReflectionProperty#'
@@ -37,7 +36,7 @@ parameters:
         # false positive
         - '#Access to an undefined property PhpParser\\Node::\$expr#'
         # subtype
-        - '#Parameter \#1 \$reflectionFunctionAbstract of method Rector\\Php\\Rector\\FuncCall\\RemoveExtraParametersRector::isVariadic\(\) expects ReflectionFunction\|ReflectionMethod, ReflectionFunctionAbstract given#'
+        - '#(.*?) expects ReflectionFunction\|ReflectionMethod, ReflectionFunctionAbstract given#'
 
         # nette container
         - '#Method Rector\\NodeTypeResolver\\DependencyInjection\\PHPStanServicesFactory::create(.*?)() should return (.*?) but returns object#'
@@ -50,7 +49,6 @@ parameters:
         - '#Parameter \#1 \$expr of class PhpParser\\Node\\Expr\\BooleanNot constructor expects PhpParser\\Node\\Expr, PhpParser\\Node given#'
         - '#Parameter \#1 \$binaryOpNode of method Rector\\CodeQuality\\Rector\\Identical\\SimplifyConditionsRector::createInversedBooleanOp\(\) expects PhpParser\\Node\\Expr\\BinaryOp, PhpParser\\Node given#'
         - '#Parameter \#1 \$node of method Rector\\PhpParser\\Node\\Commander\\NodeAddingCommander::wrapToExpression\(\) expects PhpParser\\Node\\Expr\|PhpParser\\Node\\Stmt, PhpParser\\Node given#'
-        - '#In method "Rector\\Rector\\AbstractRector::print", parameter \$node has no type-hint and no \@param annotation(.*?)#'
 
         # irelevant
         - '#Call to function in_array\(\) with arguments string, (.*?) and true will always evaluate to false#'
@@ -68,7 +66,6 @@ parameters:
         - '#Cannot call method getText\(\) on PhpParser\\Comment\\Doc\|null#'
 
         # false positive, has annotation type above
-        - '#Parameter \#1 \$var of class PhpParser\\Node\\Param constructor expects PhpParser\\Node\\Expr\\Error|PhpParser\\Node\\Expr\\Variable, PhpParser\\Node given#'
         - '#Method Rector\\CodeQuality\\Rector\\Foreach_\\SimplifyForeachToCoalescingRector\:\:matchReturnOrAssignNode\(\) should return PhpParser\\Node\\Expr\\Assign\|PhpParser\\Node\\Stmt\\Return_\|null but returns PhpParser\\Node\|null#'
         - '#Access to an undefined property PhpParser\\Node::\$(\w+)#'
         - '#Parameter \#2 \$boolConstFetchNode of method Rector\\CodeQuality\\Rector\\Identical\\SimplifyArraySearchRector::resolveIsNot\(\) expects PhpParser\\Node\\Expr\\ConstFetch, PhpParser\\Node given#'
