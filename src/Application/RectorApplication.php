@@ -77,11 +77,14 @@ final class RectorApplication
      */
     public function runOnFileInfos(array $fileInfos): void
     {
-        $totalFiles = count($fileInfos);
+        $fileCount = count($fileInfos);
+        if ($fileCount === 0) {
+            return;
+        }
 
         if (! $this->symfonyStyle->isVerbose()) {
             // why 3? one for each cycle, so user sees some activity all the time
-            $this->symfonyStyle->progressStart($totalFiles * 3);
+            $this->symfonyStyle->progressStart($fileCount * 3);
         }
 
         // 1. parse files to nodes
