@@ -92,7 +92,7 @@ final class Application extends SymfonyApplication
     {
         $options = $inputDefinition->getOptions();
 
-        unset($options['quiet'], $options['version'], $options['no-interaction']);
+        unset($options['quiet'], $options['no-interaction']);
 
         $inputDefinition->setOptions($options);
     }
@@ -115,7 +115,7 @@ final class Application extends SymfonyApplication
         ));
 
         $inputDefinition->addOption(new InputOption(
-            '--debug',
+            'debug',
             null,
             InputOption::VALUE_NONE,
             'Enable debug verbosity (-vvv)'
