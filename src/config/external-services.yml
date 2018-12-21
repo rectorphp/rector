@@ -38,4 +38,5 @@ services:
             exclude_paths:
                 - '#(ex(c)?lude|ignore)((d)?_(path(s)?|dir(s)?|file(s)?))?#'
             autoload_paths:
+                # https://regex101.com/r/aXEZYk/1
                 - '#(autoload|include|bootstrap)((ed)?_(path(s)?|dir(s)?|file(s)?))?#'
