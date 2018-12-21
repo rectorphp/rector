@@ -4,6 +4,7 @@ namespace Rector\Console;
 
 use Jean85\PrettyVersions;
 use Rector\Console\Command\GenerateRectorOverviewCommand;
+use Rector\Console\Command\ProcessCommand;
 use Rector\ContributorTools\Command\CreateRectorCommand;
 use Symfony\Component\Console\Application as SymfonyApplication;
 use Symfony\Component\Console\Command\Command;
@@ -31,6 +32,8 @@ final class Application extends SymfonyApplication
 
         $commands = $this->filterCommandsByScope($commands);
         $this->addCommands($commands);
+
+        $this->setDefaultCommand(CommandNaming::classToName(ProcessCommand::class));
     }
 
     public function doRun(InputInterface $input, OutputInterface $output): int
