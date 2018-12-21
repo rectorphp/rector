@@ -11,6 +11,7 @@ use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use function Safe\getcwd;
 use function Safe\realpath;
@@ -31,6 +32,14 @@ final class Application extends SymfonyApplication
 
         $commands = $this->filterCommandsByScope($commands);
         $this->addCommands($commands);
+    }
+
+    /**
+     * @required
+     */
+    public function setDispatcher(EventDispatcherInterface $eventDispatcher): void
+    {
+        parent::setDispatcher($eventDispatcher);
     }
 
     public function doRun(InputInterface $input, OutputInterface $output): int
@@ -135,12 +144,14 @@ final class Application extends SymfonyApplication
             return $commands;
         }
 
-        return array_filter($commands, function (Command $command): bool {
-            return in_array(
+        $filteredCommands = array_filter($commands, function (Command $command): bool {
+            return ! in_array(
                 get_class($command),
                 [CreateRectorCommand::class, GenerateRectorOverviewCommand::class],
                 true
             );
         });
+
+        return array_values($filteredCommands);
     }
 }

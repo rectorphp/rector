@@ -32,7 +32,6 @@ services:
     Symplify\PackageBuilder\Reflection\PrivatesCaller: ~
 
     # see https://github.com/symplify/packagebuilder#prevent-parameter-typos
-    Symfony\Component\EventDispatcher\EventDispatcher: ~
     Symplify\PackageBuilder\EventSubscriber\ParameterTypoProofreaderEventSubscriber: ~
     Symplify\PackageBuilder\Parameter\ParameterTypoProofreader:
         $correctToTypos:

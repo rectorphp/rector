@@ -17,7 +17,6 @@ use Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutoBindParametersC
 use Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPass;
 use Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutowireInterfacesCompilerPass;
 use Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutowireSinglyImplementedCompilerPass;
-use Symplify\PackageBuilder\DependencyInjection\CompilerPass\ConfigurableCollectorCompilerPass;
 use Symplify\PackageBuilder\HttpKernel\SimpleKernelTrait;
 
 final class RectorKernel extends Kernel
@@ -53,9 +52,6 @@ final class RectorKernel extends Kernel
 
     protected function build(ContainerBuilder $containerBuilder): void
     {
-        // collect all Rector services to its runners
-        $containerBuilder->addCompilerPass(new ConfigurableCollectorCompilerPass());
-
         // for defaults
         $containerBuilder->addCompilerPass(new AutowireSinglyImplementedCompilerPass());
         $containerBuilder->addCompilerPass(new AutowireArrayParameterCompilerPass());
