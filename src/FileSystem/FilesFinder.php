@@ -131,6 +131,7 @@ final class FilesFinder
                     return false;
                 }
 
+                $excludePath = $this->normalizeForFnmatch($excludePath);
                 if (fnmatch($excludePath, $splFileInfo->getRealPath())) {
                     return false;
                 }
@@ -138,5 +139,24 @@ final class FilesFinder
 
             return true;
         });
+    }
+
+    /**
+     * "value*" → "*value*"
+     * "*value" → "*value*"
+     */
+    private function normalizeForFnmatch(string $path): string
+    {
+        // ends with *
+        if (Strings::match($path, '#^[^*](.*?)\*$#')) {
+            return '*' . $path;
+        }
+
+        // starts with *
+        if (Strings::match($path, '#^\*(.*?)[^*]$#')) {
+            return $path . '*';
+        }
+
+        return $path;
     }
 }
