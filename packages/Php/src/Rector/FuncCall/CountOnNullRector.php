@@ -5,6 +5,7 @@ namespace Rector\Php\Rector\FuncCall;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;
+use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\Ternary;
@@ -20,6 +21,11 @@ use Rector\RectorDefinition\RectorDefinition;
  */
 final class CountOnNullRector extends AbstractRector
 {
+    /**
+     * @var string
+     */
+    private const ALREADY_CHANGED_ON_COUNT = 'already_changed_on_count';
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -56,6 +62,11 @@ CODE_SAMPLE
         }
 
         // check if it has some condition before already, if so, probably it's already handled
+
+        if ($node->getAttribute(self::ALREADY_CHANGED_ON_COUNT)) {
+            return null;
+        }
+
         $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
         if ($parentNode instanceof Ternary) {
             return null;
@@ -70,15 +81,22 @@ CODE_SAMPLE
             return null;
         }
 
-        $conditionNode = new BooleanOr(
-            $this->createFunction('is_array', [new Arg($countedNode)]),
-            new Instanceof_($countedNode, new FullyQualified('Countable'))
-        );
+        if ($this->isNullType($countedNode)) {
+            $identicalNode = new Identical($countedNode, $this->createNull());
+            $node->setAttribute(self::ALREADY_CHANGED_ON_COUNT, true);
 
-        $ternaryNode = new Ternary($conditionNode, $node, new LNumber(0));
+            $ternaryNode = new Ternary($identicalNode, new LNumber(0), $node);
+        } else {
+            $conditionNode = new BooleanOr(
+                $this->createFunction('is_array', [new Arg($countedNode)]),
+                new Instanceof_($countedNode, new FullyQualified('Countable'))
+            );
 
-        // needed to prevent infinity loop re-resolution
-        $node->setAttribute(Attribute::PARENT_NODE, $ternaryNode);
+            $ternaryNode = new Ternary($conditionNode, $node, new LNumber(0));
+        }
+
+        // prevent infinity loop re-resolution
+        $node->setAttribute(self::ALREADY_CHANGED_ON_COUNT, true);
 
         return $ternaryNode;
     }

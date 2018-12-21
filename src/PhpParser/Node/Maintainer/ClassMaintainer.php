@@ -166,6 +166,19 @@ final class ClassMaintainer
         return $usedTraits;
     }
 
+    public function getProperty(Class_ $class, string $name): ?Property
+    {
+        foreach ($class->stmts as $stmt) {
+            if ($stmt instanceof Property) {
+                if ((string) $stmt->props[0]->name === $name) {
+                    return $stmt;
+                }
+            }
+        }
+
+        return null;
+    }
+
     private function tryInsertBeforeFirstMethod(Class_ $classNode, Stmt $node): bool
     {
         foreach ($classNode->stmts as $key => $classElementNode) {
