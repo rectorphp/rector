@@ -4,6 +4,7 @@ namespace Rector\Console;
 
 use Jean85\PrettyVersions;
 use Rector\Console\Command\GenerateRectorOverviewCommand;
+use Rector\ContributorTools\Command\CreateRectorCommand;
 use Symfony\Component\Console\Application as SymfonyApplication;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputDefinition;
@@ -28,6 +29,7 @@ final class Application extends SymfonyApplication
     {
         parent::__construct(self::NAME, PrettyVersions::getVersion('rector/rector')->getPrettyVersion());
 
+        $commands = $this->filterCommandsByScope($commands);
         $this->addCommands($commands);
     }
 
@@ -120,5 +122,25 @@ final class Application extends SymfonyApplication
     private function getDefaultConfigPath(): string
     {
         return getcwd() . '/rector.yml';
+    }
+
+    /**
+     * @param Command[] $commands
+     * @return Command[]
+     */
+    private function filterCommandsByScope(array $commands): array
+    {
+        // nothing to filter
+        if (file_exists(getcwd() . '/bin/rector')) {
+            return $commands;
+        }
+
+        return array_filter($commands, function (Command $command): bool {
+            return in_array(
+                get_class($command),
+                [CreateRectorCommand::class, GenerateRectorOverviewCommand::class],
+                true
+            );
+        });
     }
 }
