@@ -12,7 +12,6 @@ use Rector\Console\Output\ProcessCommandReporter;
 use Rector\Console\Shell;
 use Rector\FileSystem\FilesFinder;
 use Rector\Guard\RectorGuard;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -20,7 +19,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 
-final class ProcessCommand extends Command
+final class ProcessCommand extends AbstractCommand
 {
     /**
      * @var SymfonyStyle

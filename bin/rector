@@ -22,6 +22,7 @@ try {
     /** @var ContainerInterface $container */
     $container = require_once __DIR__ . '/container.php';
 
+    /** @var Application $application */
     $application = $container->get(Application::class);
     exit($application->run());
 } catch (Throwable $throwable) {

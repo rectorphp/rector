@@ -4,7 +4,6 @@ namespace Rector\Console\Command;
 
 use Nette\Utils\Strings;
 use Rector\Console\Shell;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -14,7 +13,7 @@ use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use function Safe\sort;
 use function Safe\sprintf;
 
-final class LevelsCommand extends Command
+final class LevelsCommand extends AbstractCommand
 {
     /**
      * @var SymfonyStyle
