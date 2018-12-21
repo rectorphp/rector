@@ -13,6 +13,15 @@ final class ParamAndReturnScalarTypehintsRectorTest extends AbstractRectorTestCa
     public function test(): void
     {
         $integrationFiles = [
+            // static types
+            __DIR__ . '/Fixture/code_over_doc_priority.php.inc',
+            __DIR__ . '/Fixture/known_static.php.inc',
+            __DIR__ . '/Fixture/known_static_method.php.inc',
+            __DIR__ . '/Fixture/known_static_object.php.inc',
+            __DIR__ . '/Fixture/known_static_object_parent.php.inc',
+            // various
+            __DIR__ . '/Fixture/known_static_nullable.php.inc',
+            __DIR__ . '/Fixture/known_float.php.inc',
             __DIR__ . '/Fixture/variadic.php.inc',
             __DIR__ . '/Fixture/mixed.php.inc',
             __DIR__ . '/Fixture/trait_interface.php.inc',

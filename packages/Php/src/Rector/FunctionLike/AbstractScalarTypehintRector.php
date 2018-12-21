@@ -17,6 +17,7 @@ use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\NodeTypeResolver\Php\AbstractTypeInfo;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\Php\PhpTypeSupport;
+use Rector\PhpParser\Node\Maintainer\FunctionLikeMaintainer;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -24,8 +25,6 @@ use Rector\Rector\AbstractRector;
  * @see https://github.com/nikic/TypeUtil
  * @see https://github.com/nette/type-fixer
  * @see https://github.com/FriendsOfPHP/PHP-CS-Fixer/issues/3258
- *
- * @todo add known PHPStan scope type if possible
  */
 abstract class AbstractScalarTypehintRector extends AbstractRector
 {
@@ -44,13 +43,20 @@ abstract class AbstractScalarTypehintRector extends AbstractRector
      */
     protected $classLikeNodeCollector;
 
+    /**
+     * @var FunctionLikeMaintainer
+     */
+    protected $functionLikeMaintainer;
+
     public function __construct(
         DocBlockAnalyzer $docBlockAnalyzer,
         ClassLikeNodeCollector $classLikeNodeCollector,
+        FunctionLikeMaintainer $functionLikeMaintainer,
         bool $enableObjectType = false
     ) {
         $this->docBlockAnalyzer = $docBlockAnalyzer;
         $this->classLikeNodeCollector = $classLikeNodeCollector;
+        $this->functionLikeMaintainer = $functionLikeMaintainer;
 
         if ($enableObjectType) {
             PhpTypeSupport::enableType('object');
@@ -157,6 +163,7 @@ abstract class AbstractScalarTypehintRector extends AbstractRector
         if ($type === $possibleSubtype) {
             return true;
         }
+
         return ctype_upper($possibleSubtype[0]) && $type === 'object';
     }
 

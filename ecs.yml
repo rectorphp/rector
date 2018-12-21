@@ -25,19 +25,18 @@ services:
     Symplify\CodingStandard\Sniffs\DependencyInjection\NoClassInstantiationSniff:
         extraAllowedClasses:
             - 'PHPStan\Type\*'
-            - 'PhpParser\Node\*'
-            - 'PhpParser\Comment'
-            - 'Symplify\PackageBuilder\*'
-            - 'PhpParser\Comment\Doc'
-            - 'PhpParser\NodeTraverser'
-            - 'Rector\DeprecationExtractor\Deprecation\*'
-            - 'Rector\Reporting\FileDiff'
-            - 'Rector\RectorDefinition\*'
             - 'PHPStan\Analyser\Scope'
             - 'PhpParser\NodeVisitor\NameResolver'
+            - 'PhpParser\Node\*'
+            - 'PhpParser\Comment'
+            - 'PhpParser\Comment\Doc'
+            - 'PhpParser\NodeTraverser'
+            - 'Rector\Reporting\FileDiff'
+            - 'Rector\RectorDefinition\*'
             - 'Rector\Application\Error'
             - 'Rector\DependencyInjection\Loader\*'
-            - 'Symfony\Component\Console\Input\StringInput'
+            - 'Symplify\PackageBuilder\*'
+            - 'Symfony\Component\Console\Input\*Input'
 
     Symplify\CodingStandard\Fixer\Naming\PropertyNameMatchingTypeFixer:
         extra_skipped_classes:

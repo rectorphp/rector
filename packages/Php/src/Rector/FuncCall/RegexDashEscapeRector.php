@@ -171,45 +171,6 @@ CODE_SAMPLE
         }
     }
 
-    /**
-     * @return Assign[]
-     */
-    private function findAssigners(Node $variableNode): array
-    {
-        $methodNode = $variableNode->getAttribute(Attribute::METHOD_NODE);
-
-        /** @var Assign[] $assignNode */
-        return $this->betterNodeFinder->find([$methodNode], function (Node $node) use ($variableNode) {
-            if (! $node instanceof Assign) {
-                return null;
-            }
-
-            if (! $this->areNodesEqual($node->var, $variableNode)) {
-                return null;
-            }
-
-            return $node;
-        });
-    }
-
-    private function escapeStringNode(String_ $stringNode): void
-    {
-        $stringValue = $stringNode->value;
-
-        if (Strings::match($stringValue, self::LEFT_HAND_UNESCAPED_DASH_PATTERN)) {
-            $stringNode->value = Strings::replace($stringValue, self::LEFT_HAND_UNESCAPED_DASH_PATTERN, '$1\-');
-            // helped needed to skip re-escaping regular expression
-            $stringNode->setAttribute('is_regular_pattern', true);
-            return;
-        }
-
-        if (Strings::match($stringValue, self::RIGHT_HAND_UNESCAPED_DASH_PATTERN)) {
-            $stringNode->value = Strings::replace($stringValue, self::RIGHT_HAND_UNESCAPED_DASH_PATTERN, '\-$2');
-            // helped needed to skip re-escaping regular expression
-            $stringNode->setAttribute('is_regular_pattern', true);
-        }
-    }
-
     private function processClassConstFetch(Expr $expr): void
     {
         $className = (string) $expr->getAttribute(Attribute::CLASS_NAME);
@@ -234,5 +195,44 @@ CODE_SAMPLE
                 $this->escapeStringNode($assignNode->expr);
             }
         }
+    }
+
+    private function escapeStringNode(String_ $stringNode): void
+    {
+        $stringValue = $stringNode->value;
+
+        if (Strings::match($stringValue, self::LEFT_HAND_UNESCAPED_DASH_PATTERN)) {
+            $stringNode->value = Strings::replace($stringValue, self::LEFT_HAND_UNESCAPED_DASH_PATTERN, '$1\-');
+            // helped needed to skip re-escaping regular expression
+            $stringNode->setAttribute('is_regular_pattern', true);
+            return;
+        }
+
+        if (Strings::match($stringValue, self::RIGHT_HAND_UNESCAPED_DASH_PATTERN)) {
+            $stringNode->value = Strings::replace($stringValue, self::RIGHT_HAND_UNESCAPED_DASH_PATTERN, '\-$2');
+            // helped needed to skip re-escaping regular expression
+            $stringNode->setAttribute('is_regular_pattern', true);
+        }
+    }
+
+    /**
+     * @return Assign[]
+     */
+    private function findAssigners(Node $variableNode): array
+    {
+        $methodNode = $variableNode->getAttribute(Attribute::METHOD_NODE);
+
+        /** @var Assign[] $assignNode */
+        return $this->betterNodeFinder->find([$methodNode], function (Node $node) use ($variableNode) {
+            if (! $node instanceof Assign) {
+                return null;
+            }
+
+            if (! $this->areNodesEqual($node->var, $variableNode)) {
+                return null;
+            }
+
+            return $node;
+        });
     }
 }

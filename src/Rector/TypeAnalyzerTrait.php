@@ -6,6 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
+use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\NodeTypeAnalyzer;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
@@ -70,6 +71,11 @@ trait TypeAnalyzerTrait
         return $this->nodeTypeAnalyzer->isStringyType($node);
     }
 
+    protected function getStaticType(Node $node): ?Type
+    {
+        return $this->nodeTypeAnalyzer->getNodeStaticType($node);
+    }
+
     protected function isNullableType(Node $node): bool
     {
         return $this->nodeTypeAnalyzer->isNullableType($node);
@@ -88,6 +94,11 @@ trait TypeAnalyzerTrait
     protected function isCountableType(Node $node): bool
     {
         return $this->nodeTypeAnalyzer->isCountableType($node);
+    }
+
+    protected function isArrayType(Node $node): bool
+    {
+        return $this->nodeTypeAnalyzer->isArrayType($node);
     }
 
     /**

@@ -22,6 +22,11 @@ use Throwable;
 final class RectorApplication
 {
     /**
+     * @var SmartFileInfo[]
+     */
+    private $notParsedFiles = [];
+
+    /**
      * @var SymfonyStyle
      */
     private $symfonyStyle;
@@ -50,11 +55,6 @@ final class RectorApplication
      * @var RemovedFilesCollector
      */
     private $removedFilesCollector;
-
-    /**
-     * @var SmartFileInfo[]
-     */
-    private $notParsedFiles = [];
 
     public function __construct(
         SymfonyStyle $symfonyStyle,
@@ -111,15 +111,6 @@ final class RectorApplication
         $this->symfonyStyle->newLine(2);
     }
 
-    private function advance(SmartFileInfo $smartFileInfo): void
-    {
-        if ($this->symfonyStyle->isVerbose()) {
-            $this->symfonyStyle->writeln($smartFileInfo->getRealPath());
-        } else {
-            $this->symfonyStyle->progressAdvance();
-        }
-    }
-
     private function tryCatchWrapper(SmartFileInfo $smartFileInfo, callable $callback): void
     {
         $this->advance($smartFileInfo);
@@ -166,6 +157,15 @@ final class RectorApplication
             $this->errorAndDiffCollector->addFileDiff($fileInfo, $newContent, $oldContent);
 
             $this->fileSystemFileProcessor->processFileInfo($fileInfo);
+        }
+    }
+
+    private function advance(SmartFileInfo $smartFileInfo): void
+    {
+        if ($this->symfonyStyle->isVerbose()) {
+            $this->symfonyStyle->writeln($smartFileInfo->getRealPath());
+        } else {
+            $this->symfonyStyle->progressAdvance();
         }
     }
 }
