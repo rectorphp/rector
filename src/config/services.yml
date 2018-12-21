@@ -12,3 +12,5 @@ services:
 
     Symfony\Component\Console\Application:
         alias: 'Rector\Console\Application'
+
+    Symfony\Component\Console\Descriptor\TextDescriptor: ~
