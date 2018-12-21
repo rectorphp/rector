@@ -5,7 +5,10 @@ namespace Rector\NodeTypeResolver;
 use Countable;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Expression;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\Accessory\HasOffsetType;
@@ -20,6 +23,7 @@ use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\PhpParser\Node\Maintainer\ClassMaintainer;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\PhpParser\Printer\BetterStandardPrinter;
 
@@ -35,10 +39,19 @@ final class NodeTypeAnalyzer
      */
     private $nameResolver;
 
-    public function __construct(BetterStandardPrinter $betterStandardPrinter, NameResolver $nameResolver)
-    {
+    /**
+     * @var ClassMaintainer
+     */
+    private $classMaintainer;
+
+    public function __construct(
+        BetterStandardPrinter $betterStandardPrinter,
+        NameResolver $nameResolver,
+        ClassMaintainer $classMaintainer
+    ) {
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nameResolver = $nameResolver;
+        $this->classMaintainer = $classMaintainer;
     }
 
     public function isStringType(Node $node): bool
@@ -97,21 +110,22 @@ final class NodeTypeAnalyzer
         }
 
         $nodeType = $this->correctPregMatchType($node, $nodeType);
-
         if ($nodeType instanceof ObjectType) {
             return is_a($nodeType->getClassName(), Countable::class, true);
         }
 
-        if ($nodeType instanceof IntersectionType) {
-            foreach ($nodeType->getTypes() as $intersectionNodeType) {
-                if ($intersectionNodeType instanceof ArrayType || $intersectionNodeType instanceof HasOffsetType) {
-                    continue;
-                }
+        if ($this->isIntersectionArrayType($nodeType)) {
+            return true;
+        }
 
+        if ($nodeType instanceof MixedType) {
+            if ($nodeType->isExplicitMixed()) {
                 return false;
             }
 
-            return true;
+            if ($this->isPropertyFetchWithArrayDefault($node)) {
+                return true;
+            }
         }
 
         return $nodeType instanceof ArrayType;
@@ -165,5 +179,44 @@ final class NodeTypeAnalyzer
         }
 
         return new ArrayType(new MixedType(), new MixedType());
+    }
+
+    /**
+     * phpstan bug workaround - https://phpstan.org/r/0443f283-244c-42b8-8373-85e7deb3504c
+     */
+    private function isPropertyFetchWithArrayDefault(Node $node): bool
+    {
+        if (! $node instanceof PropertyFetch) {
+            return false;
+        }
+
+        /** @var Class_ $classNode */
+        $classNode = $node->getAttribute(Attribute::CLASS_NODE);
+
+        $propertyName = $this->nameResolver->resolve($node->name);
+        $propertyNode = $this->classMaintainer->getProperty($classNode, $propertyName);
+
+        if ($propertyNode === null) {
+            return false;
+        }
+
+        return $propertyNode->props[0]->default instanceof Array_;
+    }
+
+    private function isIntersectionArrayType(Type $nodeType): bool
+    {
+        if (! $nodeType instanceof IntersectionType) {
+            return false;
+        }
+
+        foreach ($nodeType->getTypes() as $intersectionNodeType) {
+            if ($intersectionNodeType instanceof ArrayType || $intersectionNodeType instanceof HasOffsetType) {
+                continue;
+            }
+
+            return false;
+        }
+
+        return true;
     }
 }

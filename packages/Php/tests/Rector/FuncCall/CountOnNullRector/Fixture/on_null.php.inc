@@ -1,8 +1,7 @@
 <?php
 
-function countables()
+function countables($values)
 {
-    $values = null;
     $valueCount = is_array($values) || $values instanceof Countable ? count($values) : 0;
     $valueCount = count($values);
 
@@ -15,9 +14,8 @@ function countables()
 -----
 <?php
 
-function countables()
+function countables($values)
 {
-    $values = null;
     $valueCount = is_array($values) || $values instanceof Countable ? count($values) : 0;
     $valueCount = is_array($values) || $values instanceof \Countable ? count($values) : 0;
 

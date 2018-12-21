@@ -14,8 +14,9 @@ final class CountOnNullRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Fixture/countable_annotated_params.php.inc',
             __DIR__ . '/Fixture/false_true_class.php.inc',
             __DIR__ . '/Fixture/on_null.php.inc',
-            __DIR__ . '/Fixture/property.php.inc',
+            __DIR__ . '/Fixture/external_property.php.inc',
             __DIR__ . '/Fixture/preg_match_array.php.inc',
+            __DIR__ . '/Fixture/local_property.php.inc',
         ]);
     }
 
