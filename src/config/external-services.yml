@@ -37,15 +37,6 @@ services:
     Symplify\PackageBuilder\Parameter\ParameterTypoProofreader:
         $correctToTypos:
             exclude_paths:
-                - '#exclude(d)?_(path(s)?|dir(s)?|file(s)?)#'
-                - 'ignore_paths'
-                - 'exlude_paths'
+                - '#(ex(c)?lude|ignore)((d)?_(path(s)?|dir(s)?|file(s)?))?#'
             autoload_paths:
-                - '#autoload(d)?_(path(s)?|dir(s)?|file(s)?)#'
-                - 'include_file'
-                - 'include_files'
-                - 'include_file'
-                - 'include_dir'
-                - 'bootstrap'
-                - 'bootstrap_file'
-                - 'bootstrap_files'
+                - '#(autoload|include|bootstrap)((ed)?_(path(s)?|dir(s)?|file(s)?))?#'
