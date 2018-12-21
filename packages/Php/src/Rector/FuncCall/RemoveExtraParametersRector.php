@@ -6,9 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\FunctionLike;
-use Rector\NodeTypeResolver\Application\FunctionLikeNodeCollector;
-use Rector\PhpParser\Node\BetterNodeFinder;
+use Rector\PhpParser\Node\Maintainer\CallMaintainer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -23,21 +21,13 @@ use ReflectionMethod;
 final class RemoveExtraParametersRector extends AbstractRector
 {
     /**
-     * @var BetterNodeFinder
+     * @var CallMaintainer
      */
-    private $betterNodeFinder;
+    private $callMaintainer;
 
-    /**
-     * @var FunctionLikeNodeCollector
-     */
-    private $functionLikeNodeCollector;
-
-    public function __construct(
-        BetterNodeFinder $betterNodeFinder,
-        FunctionLikeNodeCollector $functionLikeNodeCollector
-    ) {
-        $this->betterNodeFinder = $betterNodeFinder;
-        $this->functionLikeNodeCollector = $functionLikeNodeCollector;
+    public function __construct(CallMaintainer $callMaintainer)
+    {
+        $this->callMaintainer = $callMaintainer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -70,7 +60,7 @@ final class RemoveExtraParametersRector extends AbstractRector
         }
 
         // can be any number of arguments → nothing to limit here
-        if ($this->isVariadic($reflectionFunctionLike)) {
+        if ($this->callMaintainer->isVariadic($reflectionFunctionLike, $node)) {
             return null;
         }
 
@@ -78,7 +68,7 @@ final class RemoveExtraParametersRector extends AbstractRector
             return null;
         }
 
-        for ($i = $reflectionFunctionLike->getNumberOfParameters(); $i < count($node->args); $i++) {
+        for ($i = $reflectionFunctionLike->getNumberOfParameters(); $i <= count($node->args); $i++) {
             unset($node->args[$i]);
         }
 
@@ -123,52 +113,5 @@ final class RemoveExtraParametersRector extends AbstractRector
         }
 
         return new ReflectionMethod($nodeTypes[0], $methodName);
-    }
-
-    /**
-     * @param ReflectionMethod|ReflectionFunction $reflectionFunctionAbstract
-     */
-    private function isVariadic(ReflectionFunctionAbstract $reflectionFunctionAbstract): bool
-    {
-        // detects from ... in parameters
-        if ($reflectionFunctionAbstract->isVariadic()) {
-            return true;
-        }
-
-        if ($reflectionFunctionAbstract instanceof ReflectionFunction) {
-            $functionNode = $this->functionLikeNodeCollector->findFunction($reflectionFunctionAbstract->getName());
-            if ($functionNode === null) {
-                return false;
-            }
-
-            return $this->hasFunctionLikeVariadicFuncCall($functionNode);
-        }
-
-        $classMethodNode = $this->functionLikeNodeCollector->findMethod(
-            $reflectionFunctionAbstract->getName(),
-            $reflectionFunctionAbstract->getDeclaringClass()->getName()
-        );
-        if ($classMethodNode === null) {
-            return false;
-        }
-
-        return $this->hasFunctionLikeVariadicFuncCall($classMethodNode);
-
-        // @todo external function/method; $reflectionFunctionAbstract->getFileName() === false
-    }
-
-    private function hasFunctionLikeVariadicFuncCall(FunctionLike $functionLikeNode): bool
-    {
-        return (bool) $this->betterNodeFinder->findFirst($functionLikeNode, function (Node $node) {
-            if (! $node instanceof FuncCall) {
-                return null;
-            }
-
-            if ($this->isNames($node, ['func_get_args', 'func_get_arg', 'func_num_args'])) {
-                return true;
-            }
-
-            return null;
-        });
     }
 }
