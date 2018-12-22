@@ -107,8 +107,6 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->docBlockAnalyzer->removeTagFromNode($node, 'var');
-
         $node->setAttribute(self::PHP74_PROPERTY_TYPE, $varTypeInfo->getTypeNode());
 
         // invoke the print, because only attribute has changed

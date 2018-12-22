@@ -22,6 +22,9 @@ use Rector\Php\Tests\Rector\Property\TypedPropertyRector\Source\AnotherClass;
 
 final class ClassWithStaticProperty
 {
+    /**
+     * @var iterable
+     */
     private static iterable $iterable;
 }
 

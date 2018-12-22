@@ -44,6 +44,9 @@ namespace Rector\Php\Tests\Rector\Property\TypedPropertyRector\Fixture;
 
 final class ClassWithProperty
 {
+    /**
+     * @var int
+     */
     private int $count;
 
     /**
@@ -52,6 +55,7 @@ final class ClassWithProperty
     private $multiCount;
 
     /**
+     * @var bool
      * another comment
      */
     private bool $isTrue = false;

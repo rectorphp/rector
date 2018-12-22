@@ -88,6 +88,9 @@ final class DefaultValues
      */
     private $name = 'not_a_bool';
 
+    /**
+     * @var bool
+     */
     private bool $isItRealName = false;
 
     /**
@@ -110,10 +113,19 @@ final class DefaultValues
      */
     private $itemsB = null;
 
+    /**
+     * @var array|null
+     */
     private ?array $nullableItems = null;
 
+    /**
+     * @var float
+     */
     private float $a = 42.42;
 
+    /**
+     * @var float
+     */
     private float $b = 42;
 
     /**
@@ -126,10 +138,19 @@ final class DefaultValues
      */
     private $e = 42.42;
 
+    /**
+     * @var int
+     */
     private int $f = 42;
 
+    /**
+     * @var array
+     */
     private array $g = [1, 2, 3];
 
+    /**
+     * @var iterable
+     */
     private iterable $h = [1, 2, 3];
 }
 
