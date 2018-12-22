@@ -18,6 +18,7 @@
 - [CodeQuality\Return_](#codequalityreturn_)
 - [CodeQuality\Stmt](#codequalitystmt)
 - [CodeQuality\Ternary](#codequalityternary)
+- [CodingStyle\ClassConst](#codingstyleclassconst)
 - [CodingStyle\FuncCall](#codingstylefunccall)
 - [CodingStyle\Identical](#codingstyleidentical)
 - [CodingStyle\If_](#codingstyleif_)
@@ -407,6 +408,26 @@ Remove unnecessary ternary expressions.
 ```diff
 -$foo === $bar ? true : false;
 +$foo === $bar;
+```
+
+<br>
+
+## CodingStyle\ClassConst
+
+### `CompleteVarDocTypeConstantRector`
+
+- class: `Rector\CodingStyle\Rector\ClassConst\CompleteVarDocTypeConstantRector`
+
+Complete constant `@var` annotations for missing one, yet known.
+
+```diff
+ final class SomeClass
+ {
++    /**
++     * @var int
++     */
+     private const NUMBER = 5;
+ }
 ```
 
 <br>
@@ -1361,7 +1382,7 @@ Null is no more allowed in get_class()
 
 - class: `Rector\Php\Rector\FuncCall\TrailingCommaArgumentsRector`
 
-Adds trailing commas to function and methods calls 
+Adds trailing commas to function and methods calls
 
 ```diff
  calling(
@@ -1743,6 +1764,29 @@ Changes reserved "Object" name to "<Smart>Object" where <Smart> can be configure
 <br>
 
 ## Php\Property
+
+### `CompleteVarDocTypePropertyRector`
+
+- class: `Rector\Php\Rector\Property\CompleteVarDocTypePropertyRector`
+
+Complete property `@var` annotations for missing one, yet known.
+
+```diff
+ final class SomeClass
+ {
++    /**
++     * @var EventDispatcher
++     */
+     private $eventDispatcher;
+
+     public function __construct(EventDispatcher $eventDispatcher)
+     {
+         $this->eventDispatcher = $eventDispatcher;
+     }
+ }
+```
+
+<br>
 
 ### `TypedPropertyRector`
 
