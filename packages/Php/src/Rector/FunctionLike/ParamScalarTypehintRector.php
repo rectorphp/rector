@@ -142,29 +142,7 @@ CODE_SAMPLE
                 $paramNode->type = $paramTypeInfo->getTypeNode();
             }
 
-            /** @var string $methodName */
-            $methodName = $node->getAttribute(Attribute::METHOD_NAME);
-
-            /** @var string $className */
-            $className = $node->getAttribute(Attribute::CLASS_NAME);
-
-            // inherit typehint to all children
-            if ($node instanceof ClassMethod) {
-                $childrenClassLikes = $this->classLikeNodeCollector->findClassesAndInterfacesByType($className);
-
-                // update their methods as well
-                foreach ($childrenClassLikes as $childClassLike) {
-                    if ($childClassLike instanceof Class_) {
-                        $usedTraits = $this->classLikeNodeCollector->findUsedTraitsInClass($childClassLike);
-
-                        foreach ($usedTraits as $trait) {
-                            $this->addParamTypeToMethod($trait, $methodName, $position, $node, $paramTypeInfo);
-                        }
-                    }
-
-                    $this->addParamTypeToMethod($childClassLike, $methodName, $position, $node, $paramTypeInfo);
-                }
-            }
+            $this->populateChildren($node, $position, $paramTypeInfo);
         }
 
         return $node;
@@ -199,5 +177,36 @@ CODE_SAMPLE
         $paramNode->type->setAttribute(self::HAS_NEW_INHERITED_TYPE, true);
 
         $this->notifyNodeChangeFileInfo($paramNode);
+    }
+
+    /**
+     * Add typehint to all children
+     */
+    private function populateChildren(Node $node, int $position, ParamTypeInfo $paramTypeInfo): void
+    {
+        if (! $node instanceof ClassMethod) {
+            return;
+        }
+
+        /** @var string $methodName */
+        $methodName = $this->getName($node);
+
+        /** @var string $className */
+        $className = $node->getAttribute(Attribute::CLASS_NAME);
+
+        $childrenClassLikes = $this->classLikeNodeCollector->findClassesAndInterfacesByType($className);
+
+        // update their methods as well
+        foreach ($childrenClassLikes as $childClassLike) {
+            if ($childClassLike instanceof Class_) {
+                $usedTraits = $this->classLikeNodeCollector->findUsedTraitsInClass($childClassLike);
+
+                foreach ($usedTraits as $trait) {
+                    $this->addParamTypeToMethod($trait, $methodName, $position, $node, $paramTypeInfo);
+                }
+            }
+
+            $this->addParamTypeToMethod($childClassLike, $methodName, $position, $node, $paramTypeInfo);
+        }
     }
 }

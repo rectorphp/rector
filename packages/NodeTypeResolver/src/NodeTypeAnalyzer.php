@@ -14,7 +14,6 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Type\Accessory\HasOffsetType;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
-use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\IntersectionType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
@@ -44,31 +43,38 @@ final class NodeTypeAnalyzer
      */
     private $classMaintainer;
 
+    /**
+     * @var StaticTypeToStringResolver
+     */
+    private $staticTypeToStringResolver;
+
     public function __construct(
         BetterStandardPrinter $betterStandardPrinter,
         NameResolver $nameResolver,
-        ClassMaintainer $classMaintainer
+        ClassMaintainer $classMaintainer,
+        StaticTypeToStringResolver $staticTypeToStringResolver
     ) {
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nameResolver = $nameResolver;
         $this->classMaintainer = $classMaintainer;
+        $this->staticTypeToStringResolver = $staticTypeToStringResolver;
     }
 
     public function isStringType(Node $node): bool
     {
-        return $this->getNodeType($node) instanceof StringType;
+        return $this->getNodeStaticType($node) instanceof StringType;
     }
 
     public function isStringyType(Node $node): bool
     {
-        $nodeType = $this->getNodeType($node);
-        if ($nodeType instanceof StringType || $nodeType instanceof ConstantStringType) {
+        $nodeType = $this->getNodeStaticType($node);
+        if ($nodeType instanceof StringType) {
             return true;
         }
 
         if ($nodeType instanceof UnionType) {
             foreach ($nodeType->getTypes() as $singleType) {
-                if (! $singleType instanceof StringType && ! $singleType instanceof ConstantStringType) {
+                if (! $singleType instanceof StringType) {
                     return false;
                 }
             }
@@ -81,7 +87,7 @@ final class NodeTypeAnalyzer
 
     public function isNullType(Node $node): bool
     {
-        return $this->getNodeType($node) instanceof NullType;
+        return $this->getNodeStaticType($node) instanceof NullType;
     }
 
     /**
@@ -89,7 +95,7 @@ final class NodeTypeAnalyzer
      */
     public function isNullableType(Node $node): bool
     {
-        $nodeType = $this->getNodeType($node);
+        $nodeType = $this->getNodeStaticType($node);
         if (! $nodeType instanceof UnionType) {
             return false;
         }
@@ -99,12 +105,12 @@ final class NodeTypeAnalyzer
 
     public function isBoolType(Node $node): bool
     {
-        return $this->getNodeType($node) instanceof BooleanType;
+        return $this->getNodeStaticType($node) instanceof BooleanType;
     }
 
     public function isCountableType(Node $node): bool
     {
-        $nodeType = $this->getNodeType($node);
+        $nodeType = $this->getNodeStaticType($node);
         if ($nodeType === null) {
             return false;
         }
@@ -114,12 +120,23 @@ final class NodeTypeAnalyzer
             return is_a($nodeType->getClassName(), Countable::class, true);
         }
 
-        if ($this->isIntersectionArrayType($nodeType)) {
+        return $this->isArrayType($node);
+    }
+
+    public function isArrayType(Node $node): bool
+    {
+        $nodeStaticType = $this->getNodeStaticType($node);
+        if ($nodeStaticType === null) {
+            return false;
+        }
+
+        $nodeStaticType = $this->correctPregMatchType($node, $nodeStaticType);
+        if ($this->isIntersectionArrayType($nodeStaticType)) {
             return true;
         }
 
-        if ($nodeType instanceof MixedType) {
-            if ($nodeType->isExplicitMixed()) {
+        if ($nodeStaticType instanceof MixedType) {
+            if ($nodeStaticType->isExplicitMixed()) {
                 return false;
             }
 
@@ -128,10 +145,10 @@ final class NodeTypeAnalyzer
             }
         }
 
-        return $nodeType instanceof ArrayType;
+        return $nodeStaticType instanceof ArrayType;
     }
 
-    private function getNodeType(Node $node): ?Type
+    public function getNodeStaticType(Node $node): ?Type
     {
         /** @var Scope|null $nodeScope */
         $nodeScope = $node->getAttribute(Attribute::SCOPE);
@@ -140,6 +157,24 @@ final class NodeTypeAnalyzer
         }
 
         return $nodeScope->getType($node);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function resolveSingleTypeToStrings(Node $node): array
+    {
+        if ($this->isArrayType($node)) {
+            return ['array'];
+        }
+
+        if ($this->isStringyType($node)) {
+            return ['string'];
+        }
+
+        $nodeStaticType = $this->getNodeStaticType($node);
+
+        return $this->staticTypeToStringResolver->resolve($nodeStaticType);
     }
 
     /**
@@ -181,6 +216,23 @@ final class NodeTypeAnalyzer
         return new ArrayType(new MixedType(), new MixedType());
     }
 
+    private function isIntersectionArrayType(Type $nodeType): bool
+    {
+        if (! $nodeType instanceof IntersectionType) {
+            return false;
+        }
+
+        foreach ($nodeType->getTypes() as $intersectionNodeType) {
+            if ($intersectionNodeType instanceof ArrayType || $intersectionNodeType instanceof HasOffsetType) {
+                continue;
+            }
+
+            return false;
+        }
+
+        return true;
+    }
+
     /**
      * phpstan bug workaround - https://phpstan.org/r/0443f283-244c-42b8-8373-85e7deb3504c
      */
@@ -201,22 +253,5 @@ final class NodeTypeAnalyzer
         }
 
         return $propertyNode->props[0]->default instanceof Array_;
-    }
-
-    private function isIntersectionArrayType(Type $nodeType): bool
-    {
-        if (! $nodeType instanceof IntersectionType) {
-            return false;
-        }
-
-        foreach ($nodeType->getTypes() as $intersectionNodeType) {
-            if ($intersectionNodeType instanceof ArrayType || $intersectionNodeType instanceof HasOffsetType) {
-                continue;
-            }
-
-            return false;
-        }
-
-        return true;
     }
 }

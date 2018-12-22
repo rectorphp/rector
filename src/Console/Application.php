@@ -80,6 +80,28 @@ final class Application extends SymfonyApplication
         return $defaultInputDefinition;
     }
 
+    /**
+     * @param Command[] $commands
+     * @return Command[]
+     */
+    private function filterCommandsByScope(array $commands): array
+    {
+        // nothing to filter
+        if (file_exists(getcwd() . '/bin/rector')) {
+            return $commands;
+        }
+
+        $filteredCommands = array_filter($commands, function (Command $command): bool {
+            return ! in_array(
+                get_class($command),
+                [CreateRectorCommand::class, GenerateRectorOverviewCommand::class],
+                true
+            );
+        });
+
+        return array_values($filteredCommands);
+    }
+
     private function isVersionPrintedElsewhere(InputInterface $input): bool
     {
         return $input->hasParameterOption('--version') !== false || $input->getFirstArgument() === null;
@@ -131,27 +153,5 @@ final class Application extends SymfonyApplication
     private function getDefaultConfigPath(): string
     {
         return getcwd() . '/rector.yml';
-    }
-
-    /**
-     * @param Command[] $commands
-     * @return Command[]
-     */
-    private function filterCommandsByScope(array $commands): array
-    {
-        // nothing to filter
-        if (file_exists(getcwd() . '/bin/rector')) {
-            return $commands;
-        }
-
-        $filteredCommands = array_filter($commands, function (Command $command): bool {
-            return ! in_array(
-                get_class($command),
-                [CreateRectorCommand::class, GenerateRectorOverviewCommand::class],
-                true
-            );
-        });
-
-        return array_values($filteredCommands);
     }
 }

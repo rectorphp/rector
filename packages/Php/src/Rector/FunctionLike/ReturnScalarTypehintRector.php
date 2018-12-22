@@ -3,6 +3,7 @@
 namespace Rector\Php\Rector\FunctionLike;
 
 use PhpParser\Node;
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -68,7 +69,7 @@ CODE_SAMPLE
             }
         }
 
-        $returnTypeInfo = $this->docBlockAnalyzer->getReturnTypeInfo($node);
+        $returnTypeInfo = $this->resolveReturnType($node);
         if ($returnTypeInfo === null) {
             return null;
         }
@@ -96,30 +97,29 @@ CODE_SAMPLE
             $node->returnType = $returnTypeInfo->getTypeNode();
         }
 
-        /** @var string $className */
-        $className = $node->getAttribute(Attribute::CLASS_NAME);
-
-        /** @var string $methodName */
-        $methodName = $node->getAttribute(Attribute::METHOD_NAME);
-
-        // inherit typehint to all children
-        if ($node instanceof ClassMethod) {
-            $childrenClassLikes = $this->classLikeNodeCollector->findClassesAndInterfacesByType($className);
-
-            // update their methods as well
-            foreach ($childrenClassLikes as $childClassLike) {
-                if ($childClassLike instanceof Class_) {
-                    $usedTraits = $this->classLikeNodeCollector->findUsedTraitsInClass($childClassLike);
-                    foreach ($usedTraits as $trait) {
-                        $this->addReturnTypeToMethod($trait, $methodName, $node, $returnTypeInfo);
-                    }
-                }
-
-                $this->addReturnTypeToMethod($childClassLike, $methodName, $node, $returnTypeInfo);
-            }
-        }
+        $this->populateChildren($node, $returnTypeInfo);
 
         return $node;
+    }
+
+    /**
+     * @param ClassMethod|Function_ $node
+     */
+    private function resolveReturnType(FunctionLike $node): ?ReturnTypeInfo
+    {
+        $docReturnTypeInfo = $this->docBlockAnalyzer->getReturnTypeInfo($node);
+        $codeReturnTypeInfo = $this->functionLikeMaintainer->resolveStaticReturnTypeInfo($node);
+
+        // code has priority over docblock
+        if ($docReturnTypeInfo === null) {
+            return $codeReturnTypeInfo;
+        }
+
+        if ($codeReturnTypeInfo && $codeReturnTypeInfo->getTypeNode()) {
+            return $codeReturnTypeInfo;
+        }
+
+        return $docReturnTypeInfo;
     }
 
     private function addReturnTypeToMethod(
@@ -144,5 +144,37 @@ CODE_SAMPLE
         $classMethod->returnType->setAttribute(self::HAS_NEW_INHERITED_TYPE, true);
 
         $this->notifyNodeChangeFileInfo($classMethod);
+    }
+
+    /**
+     * Add typehint to all children
+     */
+    private function populateChildren(Node $node, ReturnTypeInfo $returnTypeInfo): void
+    {
+        if (! $node instanceof ClassMethod) {
+            return;
+        }
+
+        /** @var string $methodName */
+        $methodName = $this->getName($node);
+
+        /** @var string $className */
+        $className = $node->getAttribute(Attribute::CLASS_NAME);
+
+        $childrenClassLikes = $this->classLikeNodeCollector->findClassesAndInterfacesByType($className);
+
+        // update their methods as well
+        foreach ($childrenClassLikes as $childClassLike) {
+            if (! $childClassLike instanceof Class_) {
+                continue;
+            }
+
+            $usedTraits = $this->classLikeNodeCollector->findUsedTraitsInClass($childClassLike);
+            foreach ($usedTraits as $trait) {
+                $this->addReturnTypeToMethod($trait, $methodName, $node, $returnTypeInfo);
+            }
+
+            $this->addReturnTypeToMethod($childClassLike, $methodName, $node, $returnTypeInfo);
+        }
     }
 }
