@@ -1,3 +1,0 @@
-services:
-    Rector\Php\Rector\FunctionLike\ParamScalarTypehintRector: ~
-    Rector\Php\Rector\FunctionLike\ReturnScalarTypehintRector: ~

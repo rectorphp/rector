@@ -7,12 +7,14 @@
 
 - [CakePHP\MethodCall](#cakephpmethodcall)
 - [CodeQuality\Assign](#codequalityassign)
+- [CodeQuality\BinaryOp](#codequalitybinaryop)
 - [CodeQuality\BooleanAnd](#codequalitybooleanand)
 - [CodeQuality\Expression](#codequalityexpression)
 - [CodeQuality\Foreach_](#codequalityforeach_)
 - [CodeQuality\FuncCall](#codequalityfunccall)
 - [CodeQuality\Identical](#codequalityidentical)
 - [CodeQuality\If_](#codequalityif_)
+- [CodeQuality\LogicalOr](#codequalitylogicalor)
 - [CodeQuality\Return_](#codequalityreturn_)
 - [CodeQuality\Stmt](#codequalitystmt)
 - [CodeQuality\Ternary](#codequalityternary)
@@ -42,6 +44,7 @@
 - [Php\Name](#phpname)
 - [Php\Property](#phpproperty)
 - [Php\String_](#phpstring_)
+- [Php\Switch_](#phpswitch_)
 - [Php\Ternary](#phpternary)
 - [Php\TryCatch](#phptrycatch)
 - [Php\Unset_](#phpunset_)
@@ -97,6 +100,25 @@ Simplify $value = $value + 5; assignments to shorter ones
 ```diff
 -$value = $value + 5;
 +$value += 5;
+```
+
+<br>
+
+## CodeQuality\BinaryOp
+
+### `SimplifyDeMorganBinaryRector`
+
+- class: `Rector\CodeQuality\Rector\BinaryOp\SimplifyDeMorganBinaryRector`
+
+Simplify negated conditions with de Morgan theorem
+
+```diff
+ <?php
+
+ $a = 5;
+ $b = 10;
+-$result = !($a > 20 || $b <= 50);
++$result = $a <= 20 && $b > 50;
 ```
 
 <br>
@@ -307,6 +329,23 @@ Shortens if return false/true to direct return
 
 <br>
 
+## CodeQuality\LogicalOr
+
+### `LogicalOrToBooleanOrRector`
+
+- class: `Rector\CodeQuality\Rector\LogicalOr\LogicalOrToBooleanOrRector`
+
+Change OR to || with more common understanding
+
+```diff
+-if ($f = false or true) {
++if (($f = false) || true) {
+     return $f;
+ }
+```
+
+<br>
+
 ## CodeQuality\Return_
 
 ### `SimplifyUselessVariableRector`
@@ -342,6 +381,22 @@ Removes dead code that is nowhere run
 <br>
 
 ## CodeQuality\Ternary
+
+### `TernaryToElvisRector`
+
+- class: `Rector\CodeQuality\Rector\Ternary\TernaryToElvisRector`
+
+Use ?: instead of ?, where useful
+
+```diff
+ function elvis()
+ {
+-    $value = $a ? $a : false;
++    $value = $a ?: false;
+ }
+```
+
+<br>
 
 ### `UnnecessaryTernaryExpressionRector`
 
@@ -1103,6 +1158,20 @@ String cannot be turned into array by assignment anymore
 
 <br>
 
+### `NullCoalescingOperatorRector`
+
+- class: `Rector\Php\Rector\Assign\NullCoalescingOperatorRector`
+
+Use null coalescing operator ??=
+
+```diff
+ $array = [];
+-$array['user_id'] = $array['user_id'] ?? 'value';
++$array['user_id'] ??= 'value';
+```
+
+<br>
+
 ### `MysqlAssignToMysqliRector`
 
 - class: `Rector\Php\Rector\Assign\MysqlAssignToMysqliRector`
@@ -1234,6 +1303,27 @@ each() function is deprecated, use foreach() instead.
 
 ## Php\FuncCall
 
+### `CreateFunctionToAnonymousFunctionRector`
+
+- class: `Rector\Php\Rector\FuncCall\CreateFunctionToAnonymousFunctionRector`
+
+Use anonymous functions instead of deprecated create_function()
+
+```diff
+ class ClassWithCreateFunction
+ {
+     public function run()
+     {
+-        $callable = create_function('$matches', "return '$delimiter' . strtolower(\$matches[1]);");
++        $callable = function($matches) use ($delimiter) {
++            return $delimiter . strtolower($matches[1]);
++        };
+     }
+ }
+```
+
+<br>
+
 ### `RandomFunctionRector`
 
 - class: `Rector\Php\Rector\FuncCall\RandomFunctionRector`
@@ -1243,6 +1333,26 @@ Changes rand, srand and getrandmax by new md_* alternatives.
 ```diff
 -rand();
 +mt_rand();
+```
+
+<br>
+
+### `GetClassOnNullRector`
+
+- class: `Rector\Php\Rector\FuncCall\GetClassOnNullRector`
+
+Null is no more allowed in get_class()
+
+```diff
+ final class SomeClass
+ {
+     public function getItem()
+     {
+         $value = null;
+-        return get_class($value);
++        return $value !== null ? get_class($value) : self::class;
+     }
+ }
 ```
 
 <br>
@@ -1310,6 +1420,66 @@ Makes needles explicit strings
 
 <br>
 
+### `StringsAssertNakedRector`
+
+- class: `Rector\Php\Rector\FuncCall\StringsAssertNakedRector`
+
+String asserts must be passed directly to assert()
+
+```diff
+ function nakedAssert()
+ {
+-    assert('true === true');
+-    assert("true === true");
++    assert(true === true);
++    assert(true === true);
+ }
+```
+
+<br>
+
+### `ParseStrWithResultArgumentRector`
+
+- class: `Rector\Php\Rector\FuncCall\ParseStrWithResultArgumentRector`
+
+Use $result argument in parse_str() function
+
+```diff
+-parse_str($this->query);
+-$data = get_defined_vars();
++parse_str($this->query, $result);
++$data = $result;
+```
+
+<br>
+
+### `IsObjectOnIncompleteClassRector`
+
+- class: `Rector\Php\Rector\FuncCall\IsObjectOnIncompleteClassRector`
+
+Incomplete class returns inverted bool on is_object()
+
+```diff
+ $incompleteObject = new __PHP_Incomplete_Class;
+-$isObject = is_object($incompleteObject);
++$isObject = ! is_object($incompleteObject);
+```
+
+<br>
+
+### `RemoveExtraParametersRector`
+
+- class: `Rector\Php\Rector\FuncCall\RemoveExtraParametersRector`
+
+Remove extra parameters
+
+```diff
+-strlen("asdf", 1);
++strlen("asdf");
+```
+
+<br>
+
 ### `MysqlFuncCallToMysqliRector`
 
 - class: `Rector\Php\Rector\FuncCall\MysqlFuncCallToMysqliRector`
@@ -1346,6 +1516,19 @@ Changes case insensitive constants to sensitive ones.
 ```diff
 -define('FOO', 42, true);
 +define('FOO', 42);
+```
+
+<br>
+
+### `RegexDashEscapeRector`
+
+- class: `Rector\Php\Rector\FuncCall\RegexDashEscapeRector`
+
+Escape - in some cases
+
+```diff
+-preg_match("#[\w-()]#", 'some text');
++preg_match("#[\w\-()]#", 'some text');
 ```
 
 <br>
@@ -1420,9 +1603,32 @@ Changes property `@var` annotations from annotation to type.
 
 <br>
 
-### `ParamScalarTypehintRector`
+### `ReturnTypeDeclarationRector`
 
-- class: `Rector\Php\Rector\FunctionLike\ParamScalarTypehintRector`
+- class: `Rector\Php\Rector\FunctionLike\ReturnTypeDeclarationRector`
+
+Change @return types to scalar typehints if not a BC-break
+
+```diff
+ <?php
+
+ class SomeClass
+ {
+     /**
+      * @return int
+      */
+-    public function getCount()
++    public function getCount(): int
+     {
+     }
+ }
+```
+
+<br>
+
+### `ParamTypeDeclarationRector`
+
+- class: `Rector\Php\Rector\FunctionLike\ParamTypeDeclarationRector`
 
 Change @param types to scalar typehints if not a BC-break
 
@@ -1471,29 +1677,6 @@ Changes PHP 4 style constructor to __construct.
  {
 -    public function SomeClass()
 +    public function __construct()
-     {
-     }
- }
-```
-
-<br>
-
-### `ReturnScalarTypehintRector`
-
-- class: `Rector\Php\Rector\FunctionLike\ReturnScalarTypehintRector`
-
-Change @return types to scalar typehints if not a BC-break
-
-```diff
- <?php
-
- class SomeClass
- {
-     /**
-      * @return int
-      */
--    public function getCount()
-+    public function getCount(): int
      {
      }
  }
@@ -1598,7 +1781,43 @@ Changes heredoc/nowdoc that contains closing word to safe wrapper name
 
 <br>
 
+## Php\Switch_
+
+### `ReduceMultipleDefaultSwitchRector`
+
+- class: `Rector\Php\Rector\Switch_\ReduceMultipleDefaultSwitchRector`
+
+Remove first default switch, that is ignored
+
+```diff
+ switch ($expr) {
+     default:
+-         echo "Hello World";
+-
+-    default:
+          echo "Goodbye Moon!";
+          break;
+ }
+```
+
+<br>
+
 ## Php\Ternary
+
+### `TernaryToSpaceshipRector`
+
+- class: `Rector\Php\Rector\Ternary\TernaryToSpaceshipRector`
+
+Use <=> spaceship instead of ternary with same effect
+
+```diff
+ function order_func($a, $b) {
+-    return ($a < $b) ? -1 : (($a > $b) ? 1 : 0);
++    return $a <=> $b;
+ }
+```
+
+<br>
 
 ### `TernaryToNullCoalescingRector`
 
