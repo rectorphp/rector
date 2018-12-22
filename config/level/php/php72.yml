@@ -15,8 +15,8 @@ services:
         gmp_random: 'gmp_random_bits' # or gmp_random_range
         read_exif_data: 'exif_read_data'
 
-    Rector\Php\Rector\FunctionLike\ParamScalarTypehintRector: ~
-    Rector\Php\Rector\FunctionLike\ReturnScalarTypehintRector: ~
+    Rector\Php\Rector\FunctionLike\ParamTypeDeclarationRector: ~
+    Rector\Php\Rector\FunctionLike\ReturnTypeDeclarationRector: ~
     Rector\Php\Rector\FuncCall\GetClassOnNullRector: ~
     Rector\Php\Rector\FuncCall\IsObjectOnIncompleteClassRector: ~
     Rector\Php\Rector\FuncCall\ParseStrWithResultArgumentRector: ~
