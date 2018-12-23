@@ -34,6 +34,14 @@ final class VarTypeInfo extends AbstractTypeInfo
         return $this->types[0] ?? null;
     }
 
+    /**
+     * @return string[]
+     */
+    public function getTypes(): array
+    {
+        return $this->types;
+    }
+
     public function getFqnType(): ?string
     {
         return $this->fqnTypes[0] ?? null;

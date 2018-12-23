@@ -2,6 +2,7 @@
 
 namespace Rector\NodeTypeResolver;
 
+use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\CallableType;
 use PHPStan\Type\ClosureType;
@@ -44,12 +45,11 @@ final class StaticTypeToStringResolver
         }
 
         if ($staticType instanceof UnionType) {
-            $types = [];
-            foreach ($staticType->getTypes() as $singleStaticType) {
-                $types = array_merge($types, $this->resolve($singleStaticType));
-            }
+            return $this->resolveUnionType($staticType);
+        }
 
-            return $types;
+        if ($staticType instanceof ArrayType) {
+            return $this->resolveArrayType($staticType);
         }
 
         if ($staticType instanceof ObjectType) {
@@ -58,5 +58,31 @@ final class StaticTypeToStringResolver
         }
 
         return [];
+    }
+
+    /**
+     * @return string[]
+     */
+    private function resolveUnionType(UnionType $unionType): array
+    {
+        $types = [];
+        foreach ($unionType->getTypes() as $singleStaticType) {
+            $types = array_merge($types, $this->resolve($singleStaticType));
+        }
+
+        return $types;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function resolveArrayType(ArrayType $arrayType): array
+    {
+        $types = $this->resolve($arrayType->getItemType());
+        foreach ($types as $key => $type) {
+            $types[$key] = $type . '[]';
+        }
+
+        return $types;
     }
 }

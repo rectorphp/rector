@@ -34,11 +34,13 @@ final class TypeAnalyzer
         );
     }
 
-    public static function normalizeType(string $type): string
+    public static function normalizeType(string $type, bool $allowTypedArrays = false): string
     {
         // reduction needed for typehint
-        if (Strings::endsWith($type, '[]')) {
-            return 'array';
+        if ($allowTypedArrays === false) {
+            if (Strings::endsWith($type, '[]')) {
+                return 'array';
+            }
         }
 
         if ($type === 'boolean') {
