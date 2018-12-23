@@ -112,7 +112,8 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->docBlockAnalyzer->addVarTag($node, $varTypeInfo->getType());
+        $varType = implode('|', $varTypeInfo->getTypes());
+        $this->docBlockAnalyzer->addVarTag($node, $varType);
 
         $node->setAttribute(Attribute::ORIGINAL_NODE, null);
 
