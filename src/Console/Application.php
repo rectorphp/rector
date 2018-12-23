@@ -3,8 +3,7 @@
 namespace Rector\Console;
 
 use Jean85\PrettyVersions;
-use Rector\Console\Command\GenerateRectorOverviewCommand;
-use Rector\ContributorTools\Command\CreateRectorCommand;
+use Rector\ContributorTools\Exception\Command\ContributorCommandInterface;
 use Symfony\Component\Console\Application as SymfonyApplication;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputDefinition;
@@ -12,7 +11,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use function Safe\getcwd;
 use function Safe\realpath;
 
@@ -47,7 +45,7 @@ final class Application extends SymfonyApplication
         $shouldFollowByNewline = false;
 
         // skip in this case, since generate content must be clear from meta-info
-        if ($input->getFirstArgument() === CommandNaming::classToName(GenerateRectorOverviewCommand::class)) {
+        if (is_a($input->getFirstArgument(), ContributorCommandInterface::class, true)) {
             return parent::doRun($input, $output);
         }
 
@@ -92,11 +90,7 @@ final class Application extends SymfonyApplication
         }
 
         $filteredCommands = array_filter($commands, function (Command $command): bool {
-            return ! in_array(
-                get_class($command),
-                [CreateRectorCommand::class, GenerateRectorOverviewCommand::class],
-                true
-            );
+            return ! $command instanceof ContributorCommandInterface;
         });
 
         return array_values($filteredCommands);

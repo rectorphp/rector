@@ -8,7 +8,7 @@ use Rector\Console\Command\AbstractCommand;
 use Rector\Console\Shell;
 use Rector\ConsoleDiffer\MarkdownDifferAndFormatter;
 use Rector\Contract\Rector\RectorInterface;
-use Rector\ContributorTools\Exception\Command\MaintainerCommandInterface;
+use Rector\ContributorTools\Exception\Command\ContributorCommandInterface;
 use Rector\Error\ExceptionCorrector;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\RectorDefinition\ConfiguredCodeSample;
@@ -21,7 +21,7 @@ use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use function Safe\ksort;
 use function Safe\sprintf;
 
-final class GenerateDocsCommand extends AbstractCommand implements MaintainerCommandInterface
+final class GenerateDocsCommand extends AbstractCommand implements ContributorCommandInterface
 {
     /**
      * @var SymfonyStyle

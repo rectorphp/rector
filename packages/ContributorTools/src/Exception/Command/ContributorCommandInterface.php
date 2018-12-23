@@ -2,7 +2,6 @@
 
 namespace Rector\ContributorTools\Exception\Command;
 
-interface MaintainerCommandInterface
+interface ContributorCommandInterface
 {
-
 }

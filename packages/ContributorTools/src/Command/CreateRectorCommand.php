@@ -7,7 +7,7 @@ use Nette\Utils\Strings;
 use Rector\CodingStyle\AfterRectorCodingStyle;
 use Rector\ContributorTools\Configuration\Configuration;
 use Rector\ContributorTools\Configuration\ConfigurationFactory;
-use Rector\ContributorTools\Exception\Command\MaintainerCommandInterface;
+use Rector\ContributorTools\Exception\Command\ContributorCommandInterface;
 use Rector\ContributorTools\TemplateVariablesFactory;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -22,7 +22,7 @@ use function Safe\getcwd;
 use function Safe\sort;
 use function Safe\sprintf;
 
-final class CreateRectorCommand extends Command implements MaintainerCommandInterface
+final class CreateRectorCommand extends Command implements ContributorCommandInterface
 {
     /**
      * @var string
