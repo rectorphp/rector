@@ -38,7 +38,7 @@ script:
     - |
       if [[ $RUN_RECTOR == true ]]; then
           bin/rector process src --level symfony40 --dry-run
-          bin/rector generate-rector-overview >> rector-overview.md
+          bin/rector docs >> rector-overview.md
       fi
 
     # Run standalone install in non-root package, ref https://github.com/rectorphp/rector/issues/732
