@@ -209,13 +209,20 @@ final class DocBlockAnalyzer
 
     public function addVarTag(Node $node, string $type): void
     {
-        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
-        $phpDocNode = $phpDocInfo->getPhpDocNode();
+        // there might be no phpdoc at all
+        if ($node->getDocComment()) {
+            $phpDocInfo = $this->createPhpDocInfoFromNode($node);
+            $phpDocNode = $phpDocInfo->getPhpDocNode();
 
-        $varTagValueNode = new VarTagValueNode(new IdentifierTypeNode('\\' . $type), '', '');
-        $phpDocNode->children[] = new PhpDocTagNode('@var', $varTagValueNode);
+            $varTagValueNode = new VarTagValueNode(new IdentifierTypeNode('\\' . $type), '', '');
+            $phpDocNode->children[] = new PhpDocTagNode('@var', $varTagValueNode);
 
-        $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
+            $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
+        } else {
+            // create completely new docblock
+            $varDocComment = sprintf("/**\n * @var %s\n */", $type);
+            $node->setDocComment(new Doc($varDocComment));
+        }
     }
 
     /**

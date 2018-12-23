@@ -29,6 +29,7 @@ final class FunctionLikeMaintainer
     }
 
     /**
+     * @todo extract
      * Based on static analysis of code, looking for return types
      * @param ClassMethod|Function_ $node
      */

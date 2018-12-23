@@ -1,0 +1,6 @@
+services:
+    Rector\CodingStyle\Rector\If_\NullableCompareToNullRector: ~
+    Rector\CodingStyle\Rector\ClassConst\CompleteVarDocTypeConstantRector: ~
+    Rector\CodingStyle\Rector\FuncCall\SimpleArrayCallableToStringRector: ~
+    Rector\CodingStyle\Rector\Identical\IdenticalFalseToBooleanNotRector: ~
+    Rector\CodingStyle\Rector\Switch_\BinarySwitchToIfElseRector: ~

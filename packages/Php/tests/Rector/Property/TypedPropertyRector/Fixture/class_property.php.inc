@@ -4,17 +4,12 @@ namespace Rector\Php\Tests\Rector\Property\TypedPropertyRector\Fixture;
 
 use Rector\Php\Tests\Rector\Property\TypedPropertyRector\Source\AnotherClass;
 
-final class ClassWithNullableProperty
+final class ClassWithClassProperty
 {
     /**
-     * @var AnotherClass|null
+     * @var AnotherClass
      */
-    private $anotherClass = null;
-
-    /**
-     * @var null|AnotherClass
-     */
-    private $yetAnotherClass;
+    private $anotherClass;
 }
 
 ?>
@@ -25,11 +20,12 @@ namespace Rector\Php\Tests\Rector\Property\TypedPropertyRector\Fixture;
 
 use Rector\Php\Tests\Rector\Property\TypedPropertyRector\Source\AnotherClass;
 
-final class ClassWithNullableProperty
+final class ClassWithClassProperty
 {
-    private ?AnotherClass $anotherClass = null;
-
-    private ?AnotherClass $yetAnotherClass;
+    /**
+     * @var AnotherClass
+     */
+    private AnotherClass $anotherClass;
 }
 
 ?>
