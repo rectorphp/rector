@@ -28,15 +28,6 @@ class KnownStatic
         return [];
     }
 
-    public function getMoreWhatever()
-    {
-        if (true) {
-            return false;
-        }
-
-        return [];
-    }
-
     public function getCallable()
     {
         return function () {
@@ -71,15 +62,6 @@ class KnownStatic
     {
         if (true) {
             return [];
-        }
-
-        return [];
-    }
-
-    public function getMoreWhatever()
-    {
-        if (true) {
-            return false;
         }
 
         return [];

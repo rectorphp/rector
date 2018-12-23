@@ -108,11 +108,12 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($varTypeInfo->getType() === null) {
+        if ($varTypeInfo->getDocTypes() === []) {
             return null;
         }
 
-        $varType = implode('|', $varTypeInfo->getTypes());
+        $varType = implode('|', $varTypeInfo->getDocTypes());
+
         $this->docBlockAnalyzer->addVarTag($node, $varType);
 
         $node->setAttribute(Attribute::ORIGINAL_NODE, null);
@@ -161,6 +162,6 @@ CODE_SAMPLE
 
         $types = array_filter($types);
 
-        return new VarTypeInfo($types);
+        return new VarTypeInfo($types, $types, true);
     }
 }

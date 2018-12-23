@@ -20,11 +20,6 @@ abstract class AbstractTypeInfo
     protected $isNullable = false;
 
     /**
-     * @var bool
-     */
-    protected $hasRemovedTypes = false;
-
-    /**
      * @var string[]
      */
     protected $types = [];
@@ -45,19 +40,24 @@ abstract class AbstractTypeInfo
     private $iterableUnionTypes = [Traversable::class, '\Traversable', 'array'];
 
     /**
+     * @var string[]
+     */
+    private $removedTypes = [];
+
+    /**
      * @param string[] $types
      * @param string[] $fqnTypes
      */
-    public function __construct(array $types, array $fqnTypes = [])
+    public function __construct(array $types, array $fqnTypes = [], bool $allowTypedArrays = false)
     {
-        $this->types = $this->analyzeAndNormalizeTypes($types);
+        $this->types = $this->analyzeAndNormalizeTypes($types, $allowTypedArrays);
 
         // fallback
         if ($fqnTypes === []) {
             $fqnTypes = $types;
         }
 
-        $this->fqnTypes = $this->analyzeAndNormalizeTypes($fqnTypes);
+        $this->fqnTypes = $this->analyzeAndNormalizeTypes($fqnTypes, $allowTypedArrays);
     }
 
     public function isNullable(): bool
@@ -79,7 +79,6 @@ abstract class AbstractTypeInfo
     public function getTypeNode(bool $forceFqn = false)
     {
         $types = $forceFqn ? $this->fqnTypes : $this->types;
-
         if (! $this->isTypehintAble()) {
             return null;
         }
@@ -108,7 +107,7 @@ abstract class AbstractTypeInfo
      */
     public function isTypehintAble(): bool
     {
-        if ($this->hasRemovedTypes) {
+        if ($this->hasRemovedTypes()) {
             return false;
         }
 
@@ -121,6 +120,16 @@ abstract class AbstractTypeInfo
         return $typeCount === 1;
     }
 
+    /**
+     * @return string[]
+     */
+    public function getDocTypes(): array
+    {
+        $allTypes = array_merge($this->types, $this->removedTypes);
+
+        return array_filter(array_unique($allTypes));
+    }
+
     protected function normalizeName(string $name): string
     {
         return ltrim($name, '$');
@@ -130,7 +139,7 @@ abstract class AbstractTypeInfo
      * @param string|string[] $types
      * @return string[]
      */
-    protected function analyzeAndNormalizeTypes($types): array
+    private function analyzeAndNormalizeTypes($types, bool $allowTypedArrays = false): array
     {
         $types = (array) $types;
 
@@ -148,7 +157,7 @@ abstract class AbstractTypeInfo
             // remove
             if (in_array($type, ['mixed', 'static'], true)) {
                 unset($types[$i]);
-                $this->hasRemovedTypes = true;
+                $this->removedTypes[] = $type;
                 continue;
             }
 
@@ -163,12 +172,12 @@ abstract class AbstractTypeInfo
             }
 
             if ($type === 'object' && PhpTypeSupport::isTypeSupported('object') === false) {
-                $this->hasRemovedTypes = true;
+                $this->removedTypes[] = $type;
                 unset($types[$i]);
                 continue;
             }
 
-            $types[$i] = TypeAnalyzer::normalizeType($type);
+            $types[$i] = TypeAnalyzer::normalizeType($type, $allowTypedArrays);
         }
 
         // remove undesired types
@@ -225,7 +234,7 @@ abstract class AbstractTypeInfo
 
         foreach ($types as $i => $type) {
             if (in_array($type, $this->typesToRemove, true)) {
-                $this->hasRemovedTypes = true;
+                $this->removedTypes[] = $type;
                 unset($types[$i]);
             }
         }
@@ -265,5 +274,10 @@ abstract class AbstractTypeInfo
         sort($arraySubtypeGroup);
 
         return $types === $arraySubtypeGroup;
+    }
+
+    private function hasRemovedTypes(): bool
+    {
+        return count($this->removedTypes) > 1;
     }
 }

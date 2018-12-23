@@ -28,7 +28,7 @@ final class DefaultValue
      */
     private $maybe = false;
     /**
-     * @var array
+     * @var mixed[]
      */
     private $dreams = [];
     /**

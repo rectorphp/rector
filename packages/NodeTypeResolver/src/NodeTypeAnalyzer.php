@@ -165,6 +165,18 @@ final class NodeTypeAnalyzer
     public function resolveSingleTypeToStrings(Node $node): array
     {
         if ($this->isArrayType($node)) {
+            $arrayType = $this->getNodeStaticType($node);
+            if ($arrayType instanceof ArrayType) {
+                $itemTypes = $this->staticTypeToStringResolver->resolve($arrayType->getItemType());
+                foreach ($itemTypes as $key => $itemType) {
+                    $itemTypes[$key] = $itemType . '[]';
+                }
+
+                if (count($itemTypes)) {
+                    return [implode('|', $itemTypes)];
+                }
+            }
+
             return ['array'];
         }
 

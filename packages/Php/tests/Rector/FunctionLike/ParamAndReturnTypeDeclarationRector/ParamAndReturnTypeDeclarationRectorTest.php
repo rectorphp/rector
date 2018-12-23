@@ -16,6 +16,7 @@ final class ParamAndReturnTypeDeclarationRectorTest extends AbstractRectorTestCa
             // static types
             __DIR__ . '/Fixture/code_over_doc_priority.php.inc',
             __DIR__ . '/Fixture/known_static.php.inc',
+            __DIR__ . '/Fixture/known_static_conflicts.php.inc',
             __DIR__ . '/Fixture/known_static_method.php.inc',
             __DIR__ . '/Fixture/known_static_object.php.inc',
             __DIR__ . '/Fixture/known_static_object_parent.php.inc',
