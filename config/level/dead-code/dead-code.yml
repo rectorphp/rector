@@ -1,0 +1,3 @@
+services:
+    Rector\DeadCode\Rector\Stmt\RemoveDeadStmtRector: ~
+    Rector\DeadCode\Rector\Array_\RemoveDuplicatedArrayKeyRector: ~
