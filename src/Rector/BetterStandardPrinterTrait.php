@@ -47,7 +47,7 @@ trait BetterStandardPrinterTrait
      */
     protected function areNodesEqual($firstNode, $secondNode): bool
     {
-        return $this->print($firstNode) === $this->print($secondNode);
+        return $this->betterStandardPrinter->areNodesEqual($firstNode, $secondNode);
     }
 
     /**

@@ -31,7 +31,7 @@ final class ClassMethodMaintainer
     public function isParameterUsedMethod(Param $param, ClassMethod $classMethod): bool
     {
         return (bool) $this->betterNodeFinder->findFirst($classMethod->stmts, function (Node $node) use ($param) {
-            return $this->betterStandardPrinter->print($node) === $this->betterStandardPrinter->print($param->var);
+            return $this->betterStandardPrinter->areNodesEqual($node, $param->var);
         });
     }
 
