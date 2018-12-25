@@ -5,6 +5,7 @@ services:
     Rector\Php\Rector\ConstFetch\SensitiveConstantNameRector: ~
     Rector\Php\Rector\String_\SensitiveHereNowDocRector: ~
 
+    # https://wiki.php.net/rfc/deprecations_php_7_3
     Rector\Rector\Function_\FunctionReplaceRector:
         image2wbmp: 'imagewbmp'
         mbregex_encoding: 'mb_regex_encoding'
