@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Rector\CodeQuality\Tests\Rector\Stmt\DeadCodeRemovingRector;
+namespace Rector\DeadCode\Tests\Rector\Stmt\RemoveDeadStmtRector;
 
-use Rector\CodeQuality\Rector\Stmt\DeadCodeRemovingRector;
+use Rector\DeadCode\Rector\Stmt\RemoveDeadStmtRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class DeadCodeRemovingRectorTest extends AbstractRectorTestCase
+final class RemoveDeadStmtRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
     {
@@ -14,6 +14,6 @@ final class DeadCodeRemovingRectorTest extends AbstractRectorTestCase
 
     public function getRectorClass(): string
     {
-        return DeadCodeRemovingRector::class;
+        return RemoveDeadStmtRector::class;
     }
 }
