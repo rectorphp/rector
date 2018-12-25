@@ -96,7 +96,7 @@ final class GenerateDocsCommand extends AbstractCommand implements ContributorCo
      */
     private function getProjectsRectors(): array
     {
-        return $this->getRectorsFromDirectory([__DIR__ . '/../../../packages']);
+        return $this->getRectorsFromDirectory([__DIR__ . '/../../../../packages']);
     }
 
     /**
@@ -121,7 +121,7 @@ final class GenerateDocsCommand extends AbstractCommand implements ContributorCo
      */
     private function getGeneralRectors(): array
     {
-        return $this->getRectorsFromDirectory([__DIR__ . '/../../../src']);
+        return $this->getRectorsFromDirectory([__DIR__ . '/../../../../src']);
     }
 
     private function detectGroupFromRectorClass(string $rectorClass): string
