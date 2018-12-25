@@ -122,7 +122,6 @@ CODE_SAMPLE
     }
 
     /**
-     * @todo extract
      * Based on static analysis of code, looking for property assigns
      */
     private function resolveStaticVarTypeInfo(Property $propertyNode): ?VarTypeInfo

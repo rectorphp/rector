@@ -13,21 +13,50 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
+use Rector\Collector\CallableCollectorPopulator;
 
 final class StaticTypeToStringResolver
 {
     /**
-     * @var string[]
+     * @var callable[]
      */
-    private $typeClassToTypeHint = [
-        CallableType::class => 'callable',
-        ClosureType::class => 'callable',
-        IntegerType::class => 'int',
-        FloatType::class => 'float',
-        BooleanType::class => 'bool',
-        StringType::class => 'string',
-        NullType::class => 'null',
-    ];
+    private $resolversByArgumentType = [];
+
+    public function __construct(CallableCollectorPopulator $callableCollectorPopulator)
+    {
+        $resolvers = [
+            IntegerType::class => ['int'],
+            ClosureType::class => ['callable'],
+            CallableType::class => ['callable'],
+            FloatType::class => ['float'],
+            BooleanType::class => ['bool'],
+            StringType::class => ['string'],
+            NullType::class => ['null'],
+            // more complex callables
+            function (ArrayType $arrayType): array {
+                $types = $this->resolve($arrayType->getItemType());
+                foreach ($types as $key => $type) {
+                    $types[$key] = $type . '[]';
+                }
+
+                return $types;
+            },
+            function (UnionType $unionType): array {
+                $types = [];
+                foreach ($unionType->getTypes() as $singleStaticType) {
+                    $types = array_merge($types, $this->resolve($singleStaticType));
+                }
+
+                return $types;
+            },
+            function (ObjectType $objectType): array {
+                // the must be absolute, since we have no other way to check absolute/local path
+                return ['\\' . $objectType->getClassName()];
+            },
+        ];
+
+        $this->resolversByArgumentType = $callableCollectorPopulator->populate($resolvers);
+    }
 
     /**
      * @return string[]
@@ -38,51 +67,12 @@ final class StaticTypeToStringResolver
             return [];
         }
 
-        foreach ($this->typeClassToTypeHint as $typeClass => $typeHint) {
-            if (is_a($staticType, $typeClass, true)) {
-                return [$typeHint];
+        foreach ($this->resolversByArgumentType as $type => $resolverCallable) {
+            if (is_a($staticType, $type, true)) {
+                return $resolverCallable($staticType);
             }
         }
 
-        if ($staticType instanceof UnionType) {
-            return $this->resolveUnionType($staticType);
-        }
-
-        if ($staticType instanceof ArrayType) {
-            return $this->resolveArrayType($staticType);
-        }
-
-        if ($staticType instanceof ObjectType) {
-            // the must be absolute, since we have no other way to check absolute/local path
-            return ['\\' . $staticType->getClassName()];
-        }
-
         return [];
-    }
-
-    /**
-     * @return string[]
-     */
-    private function resolveUnionType(UnionType $unionType): array
-    {
-        $types = [];
-        foreach ($unionType->getTypes() as $singleStaticType) {
-            $types = array_merge($types, $this->resolve($singleStaticType));
-        }
-
-        return $types;
-    }
-
-    /**
-     * @return string[]
-     */
-    private function resolveArrayType(ArrayType $arrayType): array
-    {
-        $types = $this->resolve($arrayType->getItemType());
-        foreach ($types as $key => $type) {
-            $types[$key] = $type . '[]';
-        }
-
-        return $types;
     }
 }

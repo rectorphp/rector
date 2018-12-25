@@ -1,12 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Console\Command;
+namespace Rector\ContributorTools\Command;
 
 use Nette\Loaders\RobotLoader;
 use Nette\Utils\Strings;
+use Rector\Console\Command\AbstractCommand;
 use Rector\Console\Shell;
 use Rector\ConsoleDiffer\MarkdownDifferAndFormatter;
 use Rector\Contract\Rector\RectorInterface;
+use Rector\ContributorTools\Exception\Command\ContributorCommandInterface;
 use Rector\Error\ExceptionCorrector;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\RectorDefinition\ConfiguredCodeSample;
@@ -19,7 +21,7 @@ use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use function Safe\ksort;
 use function Safe\sprintf;
 
-final class GenerateRectorOverviewCommand extends AbstractCommand
+final class GenerateDocsCommand extends AbstractCommand implements ContributorCommandInterface
 {
     /**
      * @var SymfonyStyle
@@ -94,7 +96,7 @@ final class GenerateRectorOverviewCommand extends AbstractCommand
      */
     private function getProjectsRectors(): array
     {
-        return $this->getRectorsFromDirectory([__DIR__ . '/../../../packages']);
+        return $this->getRectorsFromDirectory([__DIR__ . '/../../../../packages']);
     }
 
     /**
@@ -119,7 +121,7 @@ final class GenerateRectorOverviewCommand extends AbstractCommand
      */
     private function getGeneralRectors(): array
     {
-        return $this->getRectorsFromDirectory([__DIR__ . '/../../../src']);
+        return $this->getRectorsFromDirectory([__DIR__ . '/../../../../src']);
     }
 
     private function detectGroupFromRectorClass(string $rectorClass): string

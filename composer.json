@@ -103,9 +103,8 @@
             "vendor/bin/ecs check bin packages src tests --fix",
             "bin/clean_trailing_spaces.sh"
         ],
-        "docs": "@update-docs",
         "phpstan": "vendor/bin/phpstan analyse packages src tests",
-        "update-docs": "bin/rector generate-rector-overview > docs/AllRectorsOverview.md",
+        "docs": "bin/rector generate-docs > docs/AllRectorsOverview.md",
         "pre-autoload-dump": [
             "Rector\\Tests\\Composer\\AutoloadWrongCasesEventSubscriber::preAutoloadDump"
         ]

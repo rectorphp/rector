@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Use_;
+use Rector\Collector\CallableCollectorPopulator;
 use Rector\NodeTypeResolver\Node\Attribute;
 
 final class NameResolver
@@ -22,64 +23,60 @@ final class NameResolver
      */
     private $nameResolversPerNode = [];
 
-    public function __construct()
+    public function __construct(CallableCollectorPopulator $callableCollectorPopulator)
     {
-        $this->nameResolversPerNode[ClassConst::class] = function (ClassConst $classConstNode) {
-            if (! count($classConstNode->consts)) {
-                return null;
-            }
+        $resolvers = [
+            Empty_::class => 'empty',
+            // more complex
+            function (ClassConst $classConstNode): ?string {
+                if (! count($classConstNode->consts)) {
+                    return null;
+                }
 
-            return $this->resolve($classConstNode->consts[0]);
-        };
+                return $this->resolve($classConstNode->consts[0]);
+            },
+            function (Property $propertyNode): ?string {
+                if (! count($propertyNode->props)) {
+                    return null;
+                }
 
-        $this->nameResolversPerNode[Property::class] = function (Property $propertyNode): ?string {
-            if (! count($propertyNode->props)) {
-                return null;
-            }
+                return $this->resolve($propertyNode->props[0]);
+            },
+            function (Use_ $useNode): ?string {
+                if (! count($useNode->uses)) {
+                    return null;
+                }
 
-            return $this->resolve($propertyNode->props[0]);
-        };
+                return $this->resolve($useNode->uses[0]);
+            },
+            function (Param $paramNode): ?string {
+                return $this->resolve($paramNode->var);
+            },
+            function (Name $nameNode): string {
+                $resolvedName = $nameNode->getAttribute(Attribute::RESOLVED_NAME);
+                if ($resolvedName instanceof FullyQualified) {
+                    return $resolvedName->toString();
+                }
 
-        $this->nameResolversPerNode[Use_::class] = function (Use_ $useNode): ?string {
-            if (! count($useNode->uses)) {
-                return null;
-            }
+                return $nameNode->toString();
+            },
+            function (Class_ $classNode): ?string {
+                if (isset($classNode->namespacedName)) {
+                    return $classNode->namespacedName->toString();
+                }
 
-            return $this->resolve($useNode->uses[0]);
-        };
+                return $this->resolve($classNode->name);
+            },
+            function (Interface_ $interfaceNode): ?string {
+                if (isset($interfaceNode->namespacedName)) {
+                    return $interfaceNode->namespacedName->toString();
+                }
 
-        $this->nameResolversPerNode[Param::class] = function (Param $paramNode): ?string {
-            return $this->resolve($paramNode->var);
-        };
+                return $this->resolve($interfaceNode->name);
+            },
+        ];
 
-        $this->nameResolversPerNode[Name::class] = function (Name $nameNode): string {
-            $resolvedName = $nameNode->getAttribute(Attribute::RESOLVED_NAME);
-            if ($resolvedName instanceof FullyQualified) {
-                return $resolvedName->toString();
-            }
-
-            return $nameNode->toString();
-        };
-
-        $this->nameResolversPerNode[Empty_::class] = function (): string {
-            return 'empty';
-        };
-
-        $this->nameResolversPerNode[Class_::class] = function (Class_ $classNode): ?string {
-            if (isset($classNode->namespacedName)) {
-                return $classNode->namespacedName->toString();
-            }
-
-            return $this->resolve($classNode->name);
-        };
-
-        $this->nameResolversPerNode[Interface_::class] = function (Interface_ $interfaceNode): ?string {
-            if (isset($interfaceNode->namespacedName)) {
-                return $interfaceNode->namespacedName->toString();
-            }
-
-            return $this->resolve($interfaceNode->name);
-        };
+        $this->nameResolversPerNode = $callableCollectorPopulator->populate($resolvers);
     }
 
     public function isName(Node $node, string $name): bool

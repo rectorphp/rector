@@ -52,6 +52,7 @@ parameters:
 
         # irelevant
         - '#Call to function in_array\(\) with arguments string, (.*?) and true will always evaluate to false#'
+        - '#Parameter \#1 \$name of class ReflectionFunction constructor expects Closure\|string, callable given#'
 
         # known values
         - '#Access to an undefined property PhpParser\\Node\\Expr::\$left#'
@@ -70,6 +71,7 @@ parameters:
         - '#Access to an undefined property PhpParser\\Node::\$(\w+)#'
         - '#Parameter \#2 \$boolConstFetchNode of method Rector\\CodeQuality\\Rector\\Identical\\SimplifyArraySearchRector::resolveIsNot\(\) expects PhpParser\\Node\\Expr\\ConstFetch, PhpParser\\Node given#'
         - '#Method Rector\\PhpParser\\Node\\BetterNodeFinder::findFirstAncestorInstanceOf\(\) should return PhpParser\\Node\|null but returns object#'
+        - '#Parameter \#1 \$callables of method Rector\\Collector\\CallableCollectorPopulator::populate\(\) expects array<callable\|string>, (.*?) given#'
 
         # false positive, resolved in previous method
         - '#Parameter (.*?) of method Rector\\PhpParser\\Node\\Maintainer\\IdentifierMaintainer\:\:(.*?)\(\) expects PhpParser\\Node\\Expr\\ClassConstFetch\|PhpParser\\Node\\Expr\\MethodCall\|PhpParser\\Node\\Expr\\PropertyFetch\|PhpParser\\Node\\Expr\\StaticCall\|PhpParser\\Node\\Stmt\\ClassMethod, PhpParser\\Node given#'
