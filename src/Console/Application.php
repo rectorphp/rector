@@ -3,6 +3,7 @@
 namespace Rector\Console;
 
 use Jean85\PrettyVersions;
+use Rector\ContributorTools\Command\GenerateDocsCommand;
 use Rector\ContributorTools\Exception\Command\ContributorCommandInterface;
 use Symfony\Component\Console\Application as SymfonyApplication;
 use Symfony\Component\Console\Command\Command;
@@ -11,6 +12,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use function Safe\getcwd;
 use function Safe\realpath;
 
@@ -45,7 +47,7 @@ final class Application extends SymfonyApplication
         $shouldFollowByNewline = false;
 
         // skip in this case, since generate content must be clear from meta-info
-        if (is_a($input->getFirstArgument(), ContributorCommandInterface::class, true)) {
+        if ($input->getFirstArgument() === CommandNaming::classToName(GenerateDocsCommand::class)) {
             return parent::doRun($input, $output);
         }
 

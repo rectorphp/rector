@@ -1,6 +1,3 @@
-Rector dev-types-known@d74c0d2
-Config file: /var/www/rector/rector.yml
-
 # All Rectors Overview
 
 - [Projects](#projects)
@@ -1510,7 +1507,7 @@ Null is no more allowed in get_class()
 
 - class: `Rector\Php\Rector\FuncCall\TrailingCommaArgumentsRector`
 
-Adds trailing commas to function and methods calls 
+Adds trailing commas to function and methods calls
 
 ```diff
  calling(
