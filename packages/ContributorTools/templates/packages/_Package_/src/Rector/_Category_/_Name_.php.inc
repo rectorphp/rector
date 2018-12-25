@@ -6,7 +6,6 @@ use PhpParser\Node;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
-
 _Source_
 final class _Name_ extends AbstractRector
 {

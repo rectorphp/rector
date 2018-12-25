@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\CodeQuality\Rector\Stmt;
+namespace Rector\DeadCode\Rector\Stmt;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
@@ -13,11 +13,11 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
-final class DeadCodeRemovingRector extends AbstractRector
+final class RemoveDeadStmtRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Removes dead code that is nowhere run', [
+        return new RectorDefinition('Removes dead code statements', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 $value = 5;

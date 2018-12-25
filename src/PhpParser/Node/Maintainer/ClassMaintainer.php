@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\TraitUse;
 use Rector\PhpParser\Node\NodeFactory;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\PhpParser\Node\VariableInfo;
+use function Safe\class_implements;
 
 final class ClassMaintainer
 {
@@ -177,6 +178,29 @@ final class ClassMaintainer
         }
 
         return null;
+    }
+
+    public function hasParentMethodOrInterface(string $class, string $method): bool
+    {
+        if (! class_exists($class)) {
+            return false;
+        }
+
+        $parentClass = $class;
+        while ($parentClass = get_parent_class($parentClass)) {
+            if (method_exists($parentClass, $method)) {
+                return true;
+            }
+        }
+
+        $implementedInterfaces = class_implements($class);
+        foreach ($implementedInterfaces as $implementedInterface) {
+            if (method_exists($implementedInterface, $method)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function tryInsertBeforeFirstMethod(Class_ $classNode, Stmt $node): bool

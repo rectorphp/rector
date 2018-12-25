@@ -20,3 +20,4 @@ services:
     Rector\Php\Rector\FuncCall\RemoveExtraParametersRector: ~
     Rector\CodeQuality\Rector\LogicalOr\LogicalOrToBooleanOrRector: ~
     Rector\CodeQuality\Rector\BinaryOp\SimplifyDeMorganBinaryRector: ~
+    Rector\CodeQuality\Rector\Ternary\SimplifyTautologyTernaryRector: ~
