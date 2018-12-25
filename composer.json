@@ -32,52 +32,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Rector\\": "src",
-            "Rector\\ContributorTools\\": "packages/ContributorTools/src",
-            "Rector\\ConsoleDiffer\\": "packages/ConsoleDiffer/src",
-            "Rector\\CodingStyle\\": "packages/CodingStyle/src",
-            "Rector\\DeadCode\\": "packages/DeadCode/src",
-            "Rector\\Guzzle\\": "packages/Guzzle/src",
-            "Rector\\CodeQuality\\": "packages/CodeQuality/src",
-            "Rector\\DomainDrivenDesign\\": "packages/DomainDrivenDesign/src",
-            "Rector\\NodeTypeResolver\\": "packages/NodeTypeResolver/src",
-            "Rector\\Symfony\\": "packages/Symfony/src",
-            "Rector\\CakePHP\\": "packages/CakePHP/src",
-            "Rector\\Php\\": "packages/Php/src",
-            "Rector\\Jms\\": "packages/Jms/src",
-            "Rector\\Silverstripe\\": "packages/Silverstripe/src",
-            "Rector\\Sensio\\": "packages/Sensio/src",
-            "Rector\\Sylius\\": "packages/Sylius/src",
-            "Rector\\PHPStan\\": "packages/PHPStan/src",
-            "Rector\\PHPUnit\\": "packages/PHPUnit/src",
-            "Rector\\Twig\\": "packages/Twig/src",
-            "Rector\\PhpParser\\": "packages/PhpParser/src",
-            "Rector\\Doctrine\\": "packages/Doctrine/src",
-            "Rector\\FileSystemRector\\": "packages/FileSystemRector/src"
+            "Rector\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Rector\\Tests\\": "tests",
-            "Rector\\NodeTypeResolver\\Tests\\": "packages/NodeTypeResolver/tests",
-            "Rector\\CakePHP\\Tests\\": "packages/CakePHP/tests",
-            "Rector\\CodeQuality\\Tests\\": "packages/CodeQuality/tests",
-            "Rector\\DeadCode\\Tests\\": "packages/DeadCode/tests",
-            "Rector\\CodingStyle\\Tests\\": "packages/CodingStyle/tests",
-            "Rector\\DomainDrivenDesign\\Tests\\": "packages/DomainDrivenDesign/tests",
-            "Rector\\Guzzle\\Tests\\": "packages/Guzzle/tests",
-            "Rector\\Php\\Tests\\": "packages/Php/tests",
-            "Rector\\Jms\\Tests\\": "packages/Jms/tests",
-            "Rector\\Symfony\\Tests\\": "packages/Symfony/tests",
-            "Rector\\Silverstripe\\Tests\\": "packages/Silverstripe/tests",
-            "Rector\\Sensio\\Tests\\": "packages/Sensio/tests",
-            "Rector\\Sylius\\Tests\\": "packages/Sylius/tests",
-            "Rector\\PHPStan\\Tests\\": "packages/PHPStan/tests",
-            "Rector\\PHPUnit\\Tests\\": "packages/PHPUnit/tests",
-            "Rector\\PhpParser\\Tests\\": "packages/PhpParser/tests",
-            "Rector\\Twig\\Tests\\": "packages/Twig/tests",
-            "Rector\\Doctrine\\Tests\\": "packages/Doctrine/tests",
-            "Rector\\FileSystemRector\\Tests\\": "packages/FileSystemRector/tests"
+            "Rector\\Tests\\": "tests"
         },
         "classmap": [
             "examples",
@@ -106,7 +66,8 @@
             "bin/clean_trailing_spaces.sh"
         ],
         "phpstan": "vendor/bin/phpstan analyse packages src tests",
-        "docs": "bin/rector generate-docs > docs/AllRectorsOverview.md"
+        "docs": "bin/rector generate-docs > docs/AllRectorsOverview.md",
+        "pre-autoload-dump": "Rector\\Composer\\MonorepoAutoloadEventSubscriber::preAutoloadDump"
     },
     "scripts-descriptions": {
         "update-docs": "Regenerate descriptions of all Rectors to docs/AllRectorsOverview.md file"
