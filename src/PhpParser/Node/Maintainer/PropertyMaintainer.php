@@ -74,6 +74,6 @@ final class PropertyMaintainer
 
     private function printNode(Node $firstNode): string
     {
-        return $this->betterStandardPrinter->prettyPrint([$firstNode]);
+        return $this->betterStandardPrinter->print($firstNode);
     }
 }

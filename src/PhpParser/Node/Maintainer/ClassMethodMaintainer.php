@@ -2,12 +2,39 @@
 
 namespace Rector\PhpParser\Node\Maintainer;
 
+use PhpParser\Node;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\PhpParser\Node\BetterNodeFinder;
+use Rector\PhpParser\Printer\BetterStandardPrinter;
 use function Safe\class_implements;
 
 final class ClassMethodMaintainer
 {
+    /**
+     * @var BetterNodeFinder
+     */
+    private $betterNodeFinder;
+
+    /**
+     * @var BetterStandardPrinter
+     */
+    private $betterStandardPrinter;
+
+    public function __construct(BetterNodeFinder $betterNodeFinder, BetterStandardPrinter $betterStandardPrinter)
+    {
+        $this->betterNodeFinder = $betterNodeFinder;
+        $this->betterStandardPrinter = $betterStandardPrinter;
+    }
+
+    public function isParameterUsedMethod(Param $param, ClassMethod $classMethod): bool
+    {
+        return (bool) $this->betterNodeFinder->findFirst($classMethod->stmts, function (Node $node) use ($param) {
+            return $this->betterStandardPrinter->print($node) === $this->betterStandardPrinter->print($param->var);
+        });
+    }
+
     public function hasParentMethodOrInterfaceMethod(ClassMethod $classMethod): bool
     {
         $class = $classMethod->getAttribute(Attribute::CLASS_NAME);

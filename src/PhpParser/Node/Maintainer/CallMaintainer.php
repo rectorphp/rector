@@ -150,7 +150,7 @@ final class CallMaintainer
             return false;
         }
 
-        $printedFunction = $this->betterStandardPrinter->prettyPrint($externalFunctionNode->stmts);
+        $printedFunction = $this->betterStandardPrinter->print($externalFunctionNode->stmts);
 
         return (bool) Strings::match($printedFunction, '#\b(' . implode('|', self::VARIADIC_FUNCTION_NAMES) . ')\b#');
     }
