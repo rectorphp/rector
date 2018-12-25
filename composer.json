@@ -106,10 +106,7 @@
             "bin/clean_trailing_spaces.sh"
         ],
         "phpstan": "vendor/bin/phpstan analyse packages src tests",
-        "docs": "bin/rector generate-docs > docs/AllRectorsOverview.md",
-        "pre-autoload-dump": [
-            "Rector\\Tests\\Composer\\AutoloadWrongCasesEventSubscriber::preAutoloadDump"
-        ]
+        "docs": "bin/rector generate-docs > docs/AllRectorsOverview.md"
     },
     "scripts-descriptions": {
         "update-docs": "Regenerate descriptions of all Rectors to docs/AllRectorsOverview.md file"
