@@ -1,3 +1,6 @@
+Rector dev-types-known@d74c0d2
+Config file: /var/www/rector/rector.yml
+
 # All Rectors Overview
 
 - [Projects](#projects)
@@ -16,13 +19,19 @@
 - [CodeQuality\If_](#codequalityif_)
 - [CodeQuality\LogicalOr](#codequalitylogicalor)
 - [CodeQuality\Return_](#codequalityreturn_)
-- [CodeQuality\Stmt](#codequalitystmt)
 - [CodeQuality\Ternary](#codequalityternary)
 - [CodingStyle\ClassConst](#codingstyleclassconst)
 - [CodingStyle\FuncCall](#codingstylefunccall)
 - [CodingStyle\Identical](#codingstyleidentical)
 - [CodingStyle\If_](#codingstyleif_)
 - [CodingStyle\Switch_](#codingstyleswitch_)
+- [DeadCode\Array_](#deadcodearray_)
+- [DeadCode\Assign](#deadcodeassign)
+- [DeadCode\ClassMethod](#deadcodeclassmethod)
+- [DeadCode\Foreach_](#deadcodeforeach_)
+- [DeadCode\Property](#deadcodeproperty)
+- [DeadCode\StaticCall](#deadcodestaticcall)
+- [DeadCode\Stmt](#deadcodestmt)
 - [Doctrine](#doctrine)
 - [DomainDrivenDesign\ObjectToScalar](#domaindrivendesignobjecttoscalar)
 - [Guzzle\MethodCall](#guzzlemethodcall)
@@ -365,22 +374,6 @@ Removes useless variable assigns
 
 <br>
 
-## CodeQuality\Stmt
-
-### `DeadCodeRemovingRector`
-
-- class: `Rector\CodeQuality\Rector\Stmt\DeadCodeRemovingRector`
-
-Removes dead code that is nowhere run
-
-```diff
--$value = 5;
--$value;
-+$value = 5;
-```
-
-<br>
-
 ## CodeQuality\Ternary
 
 ### `TernaryToElvisRector`
@@ -395,6 +388,19 @@ Use ?: instead of ?, where useful
 -    $value = $a ? $a : false;
 +    $value = $a ?: false;
  }
+```
+
+<br>
+
+### `SimplifyTautologyTernaryRector`
+
+- class: `Rector\CodeQuality\Rector\Ternary\SimplifyTautologyTernaryRector`
+
+Simplify tautology ternary to value
+
+```diff
+-$value = ($fullyQualifiedTypeHint !== $typeHint) ? $fullyQualifiedTypeHint : $typeHint;
++$value = $fullyQualifiedTypeHint;
 ```
 
 <br>
@@ -506,6 +512,128 @@ Changes switch with 2 options to if-else
 +} else {
 +    $result = 'not ok';
  }
+```
+
+<br>
+
+## DeadCode\Array_
+
+### `RemoveDuplicatedArrayKeyRector`
+
+- class: `Rector\DeadCode\Rector\Array_\RemoveDuplicatedArrayKeyRector`
+
+Remove duplicated key in defined arrays.
+
+```diff
+ $item = [
+     1 => 'A',
+-    1 => 'A'
+ ];
+```
+
+<br>
+
+## DeadCode\Assign
+
+### `RemoveDoubleAssignRector`
+
+- class: `Rector\DeadCode\Rector\Assign\RemoveDoubleAssignRector`
+
+Simplify useless double assigns
+
+```diff
+-$value = 1;
+ $value = 1;
+```
+
+<br>
+
+## DeadCode\ClassMethod
+
+### `RemoveEmptyClassMethodRector`
+
+- class: `Rector\DeadCode\Rector\ClassMethod\RemoveEmptyClassMethodRector`
+
+Remove empty method calls not required by parents
+
+```diff
+ class OrphanClass
+ {
+-    public function __construct()
+-    {
+-    }
+ }
+```
+
+<br>
+
+## DeadCode\Foreach_
+
+### `RemoveUnusedForeachKeyRector`
+
+- class: `Rector\DeadCode\Rector\Foreach_\RemoveUnusedForeachKeyRector`
+
+Remove unused key in foreach
+
+```diff
+ $items = [];
+-foreach ($items as $key => $value) {
++foreach ($items as $value) {
+     $result = $value;
+ }
+```
+
+<br>
+
+## DeadCode\Property
+
+### `RemoveUnusedPrivatePropertyRector`
+
+- class: `Rector\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector`
+
+Remove unused private properties
+
+```diff
+ class SomeClass
+ {
+-    private $property;
+ }
+```
+
+<br>
+
+## DeadCode\StaticCall
+
+### `RemoveParentCallWithoutParentRector`
+
+- class: `Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector`
+
+Remove unused parent call with no parent class
+
+```diff
+ class OrphanClass
+ {
+     public function __construct()
+     {
+-         parent::__construct();
+     }
+ }
+```
+
+<br>
+
+## DeadCode\Stmt
+
+### `RemoveDeadStmtRector`
+
+- class: `Rector\DeadCode\Rector\Stmt\RemoveDeadStmtRector`
+
+Removes dead code statements
+
+```diff
+-$value = 5;
+-$value;
++$value = 5;
 ```
 
 <br>
@@ -1382,7 +1510,7 @@ Null is no more allowed in get_class()
 
 - class: `Rector\Php\Rector\FuncCall\TrailingCommaArgumentsRector`
 
-Adds trailing commas to function and methods calls
+Adds trailing commas to function and methods calls 
 
 ```diff
  calling(
