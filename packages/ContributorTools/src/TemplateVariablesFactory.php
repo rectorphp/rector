@@ -87,6 +87,6 @@ CODE_SAMPLE;
             $arrayNodes[] = new ArrayItem(new ClassConstFetch(new FullyQualified($nodeType), 'class'));
         }
 
-        return $this->betterStandardPrinter->prettyPrint([new Array_($arrayNodes)]);
+        return $this->betterStandardPrinter->print(new Array_($arrayNodes));
     }
 }

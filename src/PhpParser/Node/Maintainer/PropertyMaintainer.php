@@ -49,7 +49,7 @@ final class PropertyMaintainer
 
         return $this->betterNodeFinder->find($classNode, function (Node $node) use ($propertyNode) {
             // itself
-            if ($this->areNodesEqual($node, $propertyNode)) {
+            if ($this->betterStandardPrinter->areNodesEqual($node, $propertyNode)) {
                 return null;
             }
 
@@ -65,15 +65,5 @@ final class PropertyMaintainer
 
             return $node;
         });
-    }
-
-    private function areNodesEqual(Node $firstNode, Node $secondNode): bool
-    {
-        return $this->printNode($firstNode) === $this->printNode($secondNode);
-    }
-
-    private function printNode(Node $firstNode): string
-    {
-        return $this->betterStandardPrinter->prettyPrint([$firstNode]);
     }
 }

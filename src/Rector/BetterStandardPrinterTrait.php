@@ -38,15 +38,7 @@ trait BetterStandardPrinterTrait
      */
     public function print($node): string
     {
-        if ($node === null) {
-            $node = [];
-        }
-
-        if (! is_array($node)) {
-            $node = [$node];
-        }
-
-        return $this->betterStandardPrinter->prettyPrint($node);
+        return $this->betterStandardPrinter->print($node);
     }
 
     /**
@@ -55,7 +47,7 @@ trait BetterStandardPrinterTrait
      */
     protected function areNodesEqual($firstNode, $secondNode): bool
     {
-        return $this->print($firstNode) === $this->print($secondNode);
+        return $this->betterStandardPrinter->areNodesEqual($firstNode, $secondNode);
     }
 
     /**

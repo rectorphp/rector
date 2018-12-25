@@ -25,7 +25,7 @@ final class BetterStandardPrinterTest extends AbstractContainerAwareTestCase
      */
     public function testDoubleSlashEscaping(string $content, string $expectedOutput): void
     {
-        $printed = $this->betterStandardPrinter->prettyPrint([new String_($content)]);
+        $printed = $this->betterStandardPrinter->print(new String_($content));
         $this->assertSame($expectedOutput, $printed);
     }
 
@@ -38,10 +38,10 @@ final class BetterStandardPrinterTest extends AbstractContainerAwareTestCase
 
     public function testYield(): void
     {
-        $printed = $this->betterStandardPrinter->prettyPrint([new Yield_(new String_('value'))]);
+        $printed = $this->betterStandardPrinter->print(new Yield_(new String_('value')));
         $this->assertSame("yield 'value'", $printed);
 
-        $printed = $this->betterStandardPrinter->prettyPrint([new Yield_()]);
+        $printed = $this->betterStandardPrinter->print(new Yield_());
         $this->assertSame('yield', $printed);
     }
 }

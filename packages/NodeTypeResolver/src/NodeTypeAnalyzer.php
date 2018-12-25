@@ -215,9 +215,7 @@ final class NodeTypeAnalyzer
         }
 
         // are the same variables
-        if ($this->betterStandardPrinter->prettyPrint(
-            [$funcCallNode->args[2]->value]
-        ) !== $this->betterStandardPrinter->prettyPrint([$node])) {
+        if (! $this->betterStandardPrinter->areNodesEqual($funcCallNode->args[2]->value, $node)) {
             return $originalType;
         }
 

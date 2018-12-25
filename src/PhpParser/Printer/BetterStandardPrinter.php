@@ -48,6 +48,31 @@ final class BetterStandardPrinter extends Standard
     }
 
     /**
+     * @param Node|Node[]|null $node
+     */
+    public function print($node): string
+    {
+        if ($node === null) {
+            $node = [];
+        }
+
+        if (! is_array($node)) {
+            $node = [$node];
+        }
+
+        return $this->prettyPrint($node);
+    }
+
+    /**
+     * @param Node|Node[] $firstNode
+     * @param Node|Node[] $secondNode
+     */
+    public function areNodesEqual($firstNode, $secondNode): bool
+    {
+        return $this->print($firstNode) === $this->print($secondNode);
+    }
+
+    /**
      * Do not preslash all slashes (parent behavior), but only those:
      *
      * - followed by "\"
