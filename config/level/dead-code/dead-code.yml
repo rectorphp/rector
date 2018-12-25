@@ -3,3 +3,4 @@ services:
     Rector\DeadCode\Rector\Array_\RemoveDuplicatedArrayKeyRector: ~
     Rector\DeadCode\Rector\Foreach_\RemoveUnusedForeachKeyRector: ~
     Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector: ~
+    Rector\DeadCode\Rector\ClassMethod\RemoveEmptyClassMethodRector: ~

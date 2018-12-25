@@ -4,7 +4,6 @@ namespace Rector\ContributorTools\Command;
 
 use Nette\Utils\FileSystem;
 use Nette\Utils\Strings;
-use Rector\CodingStyle\AfterRectorCodingStyle;
 use Rector\ContributorTools\Configuration\Configuration;
 use Rector\ContributorTools\Configuration\ConfigurationFactory;
 use Rector\ContributorTools\Exception\Command\ContributorCommandInterface;
