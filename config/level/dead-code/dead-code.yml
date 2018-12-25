@@ -4,3 +4,4 @@ services:
     Rector\DeadCode\Rector\Foreach_\RemoveUnusedForeachKeyRector: ~
     Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector: ~
     Rector\DeadCode\Rector\ClassMethod\RemoveEmptyClassMethodRector: ~
+    Rector\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector: ~
