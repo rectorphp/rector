@@ -60,11 +60,6 @@ final class CreateRectorCommand extends Command implements ContributorCommandInt
     private $finderSanitizer;
 
     /**
-     * @var AfterRectorCodingStyle
-     */
-    private $afterRectorCodingStyle;
-
-    /**
      * @var TemplateVariablesFactory
      */
     private $templateVariablesFactory;
@@ -73,14 +68,12 @@ final class CreateRectorCommand extends Command implements ContributorCommandInt
         SymfonyStyle $symfonyStyle,
         ConfigurationFactory $configurationFactory,
         FinderSanitizer $finderSanitizer,
-        AfterRectorCodingStyle $afterRectorCodingStyle,
         TemplateVariablesFactory $templateVariablesFactory
     ) {
         parent::__construct();
         $this->symfonyStyle = $symfonyStyle;
         $this->configurationFactory = $configurationFactory;
         $this->finderSanitizer = $finderSanitizer;
-        $this->afterRectorCodingStyle = $afterRectorCodingStyle;
         $this->templateVariablesFactory = $templateVariablesFactory;
     }
 
@@ -109,7 +102,6 @@ final class CreateRectorCommand extends Command implements ContributorCommandInt
 
         $this->appendToLevelConfig($configuration, $templateVariables);
 
-        $this->applyCodingStyle();
         $this->printSuccess($configuration->getName());
 
         return ShellCode::SUCCESS;
@@ -177,16 +169,6 @@ final class CreateRectorCommand extends Command implements ContributorCommandInt
         );
 
         FileSystem::write($configuration->getLevelConfig(), $levelConfigContent);
-    }
-
-    private function applyCodingStyle(): void
-    {
-        // filter only .php files
-        $generatedPhpFiles = array_filter($this->generatedFiles, function (string $file) {
-            return Strings::endsWith($file, '.php');
-        });
-
-        $this->afterRectorCodingStyle->apply($generatedPhpFiles);
     }
 
     private function printSuccess(string $name): void
