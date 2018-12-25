@@ -3,6 +3,7 @@
 namespace Rector\Rector;
 
 use PhpParser\Node;
+use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Printer\BetterStandardPrinter;
 
 /**
@@ -17,20 +18,19 @@ trait BetterStandardPrinterTrait
     private $betterStandardPrinter;
 
     /**
-     * @required
+     * @var BetterNodeFinder
      */
-    public function setCallAnalyzer(BetterStandardPrinter $betterStandardPrinter): void
-    {
-        $this->betterStandardPrinter = $betterStandardPrinter;
-    }
+    private $betterNodeFinder;
 
     /**
-     * @param Node|Node[] $firstNode
-     * @param Node|Node[] $secondNode
+     * @required
      */
-    public function areNodesEqual($firstNode, $secondNode): bool
-    {
-        return $this->print($firstNode) === $this->print($secondNode);
+    public function autowireBetterStandardPrinter(
+        BetterStandardPrinter $betterStandardPrinter,
+        BetterNodeFinder $betterNodeFinder
+    ): void {
+        $this->betterStandardPrinter = $betterStandardPrinter;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
 
     /**
@@ -47,5 +47,24 @@ trait BetterStandardPrinterTrait
         }
 
         return $this->betterStandardPrinter->prettyPrint($node);
+    }
+
+    /**
+     * @param Node|Node[] $firstNode
+     * @param Node|Node[] $secondNode
+     */
+    protected function areNodesEqual($firstNode, $secondNode): bool
+    {
+        return $this->print($firstNode) === $this->print($secondNode);
+    }
+
+    /**
+     * @param Node|Node[] $nodes
+     */
+    protected function isNodeUsedIn(Node $seekedNode, $nodes): bool
+    {
+        return (bool) $this->betterNodeFinder->findFirst($nodes, function (Node $node) use ($seekedNode) {
+            return $this->areNodesEqual($node, $seekedNode);
+        });
     }
 }
