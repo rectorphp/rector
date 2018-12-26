@@ -9,8 +9,6 @@ parameters:
     level: 7
 
     excludes_analyse:
-        # static file missing autoload
-        - 'src/Composer/MonorepoAutoloadEventSubscriber.php'
         # test files
         - '*packages/NodeTypeResolver/tests/Source/AnotherClass.php'
         - '*tests/Rector/MethodCall/MethodNameReplacerRector/**/SomeClass.php'
