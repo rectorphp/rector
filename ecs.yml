@@ -81,7 +81,6 @@ parameters:
 
         Symplify\CodingStandard\Sniffs\CleanCode\ForbiddenStaticFunctionSniff:
             # required by Composer interface
-            - 'src/Composer/*.php'
             - 'src/Php/TypeAnalyzer.php'
             # exclusive static config for type support
             - 'src/Php/PhpTypeSupport.php'
