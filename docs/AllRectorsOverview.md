@@ -1404,7 +1404,7 @@ Changes unquoted non-existing constants to strings
 
 ```diff
 -var_dump(VAR);
-+var("VAR");
++var_dump("VAR");
 ```
 
 <br>
