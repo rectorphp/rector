@@ -6,6 +6,8 @@
 use Nette\Utils\FileSystem;
 use Nette\Utils\Json;
 use Nette\Utils\Strings;
+use PhpCsFixer\Finder;
+use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\Process\Process;
 use Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
 
@@ -70,9 +72,24 @@ function resolveNewFiles(): array
 
     $gitStatusOutput = $process->getOutput();
 
+    var_dump($gitStatusOutput);
+
     $files = [];
-    foreach (Strings::matchAll($gitStatusOutput, '#\?\? ([\w\/]+)#m') as $match) {
-        $files[] = getcwd() . '/' . $match[1];
+    foreach (Strings::matchAll($gitStatusOutput, '#\?\? ([\w\/\.]+)#m') as $match) {
+        $directoryOrFile = getcwd() . '/' . $match[1];
+        if (file_exists($directoryOrFile) && is_file($directoryOrFile)) {
+            $files[] = $directoryOrFile;
+        } else {
+            $finder = (Finder::create())
+                ->files()
+                ->in($directoryOrFile)
+                ->name('*.php');
+
+            foreach ($finder as $phpFile) {
+                /** @var SplFileInfo[] $phpFile */
+                $files[] = $phpFile->getRealPath();
+            }
+        }
     }
 
     return $files;
