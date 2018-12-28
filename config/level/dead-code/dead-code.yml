@@ -7,3 +7,4 @@ services:
     Rector\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector: ~
     Rector\DeadCode\Rector\Assign\RemoveDoubleAssignRector: ~
     Rector\DeadCode\Rector\ClassMethod\RemoveUnusedParameterRector: ~
+    Rector\DeadCode\Rector\Expression\SimplifyMirrorAssignRector: ~

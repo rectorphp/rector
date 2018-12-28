@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\CodeQuality\Rector\Expression;
+namespace Rector\DeadCode\Rector\Expression;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;

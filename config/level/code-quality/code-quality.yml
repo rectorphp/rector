@@ -1,7 +1,6 @@
 services:
     Rector\CodeQuality\Rector\Assign\CombinedAssignRector: ~
     Rector\CodeQuality\Rector\BooleanAnd\SimplifyEmptyArrayCheckRector: ~
-    Rector\CodeQuality\Rector\Expression\SimplifyMirrorAssignRector: ~
     Rector\CodeQuality\Rector\Foreach_\ForeachToInArrayRector: ~
     Rector\CodeQuality\Rector\Foreach_\SimplifyForeachToCoalescingRector: ~
     Rector\CodeQuality\Rector\FuncCall\InArrayAndArrayKeysToArrayKeyExistsRector: ~
@@ -14,7 +13,6 @@ services:
     Rector\CodeQuality\Rector\If_\SimplifyIfNotNullReturnRector: ~
     Rector\CodeQuality\Rector\If_\SimplifyIfReturnBoolRector: ~
     Rector\CodeQuality\Rector\Return_\SimplifyUselessVariableRector: ~
-    Rector\CodeQuality\Rector\Stmt\DeadCodeRemovingRector: ~
     Rector\CodeQuality\Rector\Ternary\UnnecessaryTernaryExpressionRector: ~
 
     Rector\Php\Rector\FuncCall\RemoveExtraParametersRector: ~
