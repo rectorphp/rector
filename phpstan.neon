@@ -9,6 +9,7 @@ parameters:
     level: 7
 
     excludes_analyse:
+        - "utils/phpstan/generate-paths.php"
         # test files
         - '*packages/NodeTypeResolver/tests/Source/AnotherClass.php'
         - '*tests/Rector/MethodCall/MethodNameReplacerRector/**/SomeClass.php'

@@ -13,3 +13,5 @@ rector-symfony.yml
 
 # often customized locally - example on Github is just fine
 create-rector.yml
+phpstan-dependencies.json
+phpstan-paths.txt

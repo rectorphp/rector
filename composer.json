@@ -100,7 +100,11 @@
             "vendor/bin/ecs check bin packages src tests --fix",
             "bin/clean_trailing_spaces.sh"
         ],
-        "phpstan": "vendor/bin/phpstan analyse packages src tests",
+        "phpstan-ci": "vendor/bin/phpstan analyse packages src tests",
+        "phpstan": [
+            "php utils/phpstan/generate-paths.php",
+            "vendor/bin/phpstan analyse --paths-file phpstan-paths.txt"
+        ],
         "docs": "bin/rector generate-docs > docs/AllRectorsOverview.md"
     },
     "scripts-descriptions": {
