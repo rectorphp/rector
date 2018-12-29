@@ -27,19 +27,21 @@ final class ModalToGetSetRectorTest extends AbstractRectorTestCase
      */
     protected function getRectorConfiguration(): array
     {
-        return [SomeModelType::class => [
-            'config' => [
-                'get' => 'getConfig',
-                'minimal_argument_count' => 2,
-                'first_argument_type_to_set' => 'array',
+        return [
+            SomeModelType::class => [
+                'config' => [
+                    'get' => 'getConfig',
+                    'minimal_argument_count' => 2,
+                    'first_argument_type_to_set' => 'array',
+                ],
+                'customMethod' => [
+                    'get' => 'customMethodGetName',
+                    'set' => 'customMethodSetName',
+                    'minimal_argument_count' => 2,
+                    'first_argument_type_to_set' => 'array',
+                ],
+                'method' => null,
             ],
-            'customMethod' => [
-                'get' => 'customMethodGetName',
-                'set' => 'customMethodSetName',
-                'minimal_argument_count' => 2,
-                'first_argument_type_to_set' => 'array',
-            ],
-            'method' => null,
-        ]];
+        ];
     }
 }
