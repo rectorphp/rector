@@ -7,9 +7,25 @@ node_types:
 description: "Removes unneeded $a = $a assigns"
 code_before: |
     <?php
-    $a = $a;
+
+    class SomeClass
+    {
+        public function run()
+        {
+            $a = $a;
+        }
+    }
+
 code_after: |
     <?php
+
+    class SomeClass
+    {
+        public function run()
+        {
+        }
+    }
+
 source: # e.g. link to RFC or headline in upgrade guide, 1 or more in the list
     - ""
 level: "" # e.g. symfony30.yml, target config to append this rector to
