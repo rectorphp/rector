@@ -9,3 +9,4 @@ services:
         apache_request_headers: 'getallheaders'
         hebrevc: ['nl2br', 'hebrev']
     Rector\Php\Rector\FuncCall\ArrayKeyExistsOnPropertyRector: ~
+    Rector\Php\Rector\FuncCall\FilterVarToAddSlashesRector: ~

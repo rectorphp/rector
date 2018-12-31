@@ -5,37 +5,28 @@ namespace Rector\Php\Rector\FuncCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
-use PHPStan\Type\ObjectType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://wiki.php.net/rfc/deprecations_php_7_4 (not confirmed yet)
- * @see https://3v4l.org/69mpd
+ * @see https://3v4l.org/9rLjE
  */
-final class ArrayKeyExistsOnPropertyRector extends AbstractRector
+final class FilterVarToAddSlashesRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Change array_key_exists() on property to property_exists()', [
+        return new RectorDefinition('Change filter_var() with slash escaping to addslashes()', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
-class SomeClass {
-     public $value;
-}
-$someClass = new SomeClass;
-
-array_key_exists('value', $someClass);
+$var= "Satya's here!";
+filter_var($var, FILTER_SANITIZE_MAGIC_QUOTES);
 CODE_SAMPLE
                 ,
                 <<<'CODE_SAMPLE'
-class SomeClass {
-     public $value;
-}
-$someClass = new SomeClass;
-
-property_exists($someClass, 'value');
+$var= "Satya's here!";
+addslashes($var);
 CODE_SAMPLE
             ),
         ]);
@@ -54,16 +45,20 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isName($node, 'array_key_exists')) {
+        if (! $this->isName($node, 'filter_var')) {
             return null;
         }
 
-        if (! $this->getStaticType($node->args[1]->value) instanceof ObjectType) {
+        if (! isset($node->args[1])) {
             return null;
         }
 
-        $node->name = new Name('property_exists');
-        $node->args = array_reverse($node->args);
+        if (! $this->isName($node->args[1]->value, 'FILTER_SANITIZE_MAGIC_QUOTES')) {
+            return null;
+        }
+
+        $node->name = new Name('addslashes');
+        unset($node->args[1]);
 
         return $node;
     }
