@@ -3,6 +3,7 @@
 namespace Rector\Rector\Function_;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name\FullyQualified;
 use Rector\Rector\AbstractRector;
@@ -55,9 +56,37 @@ final class FunctionReplaceRector extends AbstractRector
                 continue;
             }
 
+            // rename of function into wrap function
+            // e.g. one($arg) → three(two($agr));
+            if (is_array($newFunction)) {
+                return $this->wrapFuncCalls($node, $newFunction);
+            }
+
             $node->name = new FullyQualified($newFunction);
         }
 
         return $node;
+    }
+
+    /**
+     * @param string[] $newFunctions
+     */
+    private function wrapFuncCalls(FuncCall $funcCallNode, array $newFunctions): FuncCall
+    {
+        $previousNode = null;
+        $newFunctions = array_reverse($newFunctions);
+
+        foreach ($newFunctions as $wrapFunction) {
+            if ($previousNode === null) {
+                $arguments = $funcCallNode->args;
+            } else {
+                $arguments = [new Arg($previousNode)];
+            }
+
+            $funcCallNode = new FuncCall(new FullyQualified($wrapFunction), $arguments);
+            $previousNode = $funcCallNode;
+        }
+
+        return $funcCallNode;
     }
 }

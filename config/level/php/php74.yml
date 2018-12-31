@@ -1,3 +1,10 @@
 services:
     Rector\Php\Rector\Property\TypedPropertyRector: ~
     Rector\Php\Rector\Assign\NullCoalescingOperatorRector: ~
+
+    Rector\Rector\Function_\FunctionReplaceRector:
+        # https://wiki.php.net/rfc/deprecations_php_7_4#the_real_type
+        is_float: 'is_real'
+        # https://wiki.php.net/rfc/deprecations_php_7_4#apache_request_headers_function
+        apache_request_headers: 'getallheaders'
+        hebrevc: ['nl2br', 'hebrev']
