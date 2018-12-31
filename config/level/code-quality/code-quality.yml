@@ -20,3 +20,4 @@ services:
     Rector\CodeQuality\Rector\BinaryOp\SimplifyDeMorganBinaryRector: ~
     Rector\CodeQuality\Rector\Ternary\SimplifyTautologyTernaryRector: ~
     Rector\CodeQuality\Rector\Foreach_\SimplifyForeachToArrayFilterRector: ~
+    Rector\CodeQuality\Rector\FuncCall\SingleInArrayToCompareRector: ~
