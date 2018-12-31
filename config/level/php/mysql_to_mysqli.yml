@@ -1,6 +1,9 @@
 # https://stackoverflow.com/a/1390625/1348344
 # https://github.com/philip/MySQLConverterTool/blob/master/Converter.php
 services:
+    Rector\Php\Rector\Assign\MysqlAssignToMysqliRector: ~
+    Rector\Php\Rector\FuncCall\MysqlFuncCallToMysqliRector: ~
+
     Rector\Rector\Function_\FunctionReplaceRector:
         mysql_affected_rows: 'mysqli_affected_rows'
         mysql_close: 'mysqli_close'

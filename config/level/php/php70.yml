@@ -18,3 +18,5 @@ services:
     Rector\Php\Rector\Switch_\ReduceMultipleDefaultSwitchRector: ~
     Rector\Php\Rector\Ternary\TernaryToSpaceshipRector: ~
     Rector\Php\Rector\If_\IfToSpaceshipRector: ~
+    Rector\Php\Rector\StaticCall\StaticCallOnNonStaticToInstanceCallRector: ~
+    Rector\Php\Rector\MethodCall\ThisCallOnStaticMethodToStaticCallRector: ~
