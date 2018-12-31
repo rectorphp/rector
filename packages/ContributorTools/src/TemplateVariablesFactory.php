@@ -84,7 +84,8 @@ CODE_SAMPLE;
     {
         $arrayNodes = [];
         foreach ($configuration->getNodeTypes() as $nodeType) {
-            $arrayNodes[] = new ArrayItem(new ClassConstFetch(new FullyQualified($nodeType), 'class'));
+            $classConstFetchNode = new ClassConstFetch(new FullyQualified($nodeType), 'class');
+            $arrayNodes[] = new ArrayItem($classConstFetchNode);
         }
 
         return $this->betterStandardPrinter->print(new Array_($arrayNodes));

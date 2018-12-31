@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\Rector\Function_\FunctionReplaceRector\Fixture;
 
-class SomeClass
+class CaseSensitive
 {
     protected function configure(): void
     {
@@ -22,7 +22,7 @@ class SomeClass
 
 namespace Rector\Tests\Rector\Function_\FunctionReplaceRector\Fixture;
 
-class SomeClass
+class CaseSensitive
 {
     protected function configure(): void
     {

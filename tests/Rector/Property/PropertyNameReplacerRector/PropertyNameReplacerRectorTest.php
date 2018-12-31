@@ -4,6 +4,7 @@ namespace Rector\Tests\Rector\Property\PropertyNameReplacerRector;
 
 use Rector\Rector\Property\PropertyNameReplacerRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Tests\Rector\Property\PropertyNameReplacerRector\Source\ClassWithProperties;
 
 final class PropertyNameReplacerRectorTest extends AbstractRectorTestCase
 {
@@ -22,9 +23,11 @@ final class PropertyNameReplacerRectorTest extends AbstractRectorTestCase
      */
     protected function getRectorConfiguration(): array
     {
-        return ['SomeClass' => [
-            'oldProperty' => 'newProperty',
-            'anotherOldProperty' => 'anotherNewProperty',
-        ]];
+        return [
+            ClassWithProperties::class => [
+                'oldProperty' => 'newProperty',
+                'anotherOldProperty' => 'anotherNewProperty',
+            ],
+        ];
     }
 }

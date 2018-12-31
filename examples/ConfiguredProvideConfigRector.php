@@ -82,7 +82,7 @@ final class ConfiguredProvideConfigRector extends AbstractRector
 
             [$class, $configuration] = $resolved;
 
-            $returnNode = new Return_(new ClassConstFetch(new FullyQualified($class), 'class'));
+            $returnNode = new Return_($this->createClassConstant($class, 'class'));
             $node->stmts[] = $this->builderFactory->method('getRectorClass')
                 ->makeProtected()
                 ->setReturnType('string')

@@ -185,13 +185,13 @@ final class MergeIsCandidateRector extends AbstractRector
 
         if (count($paramTypes) > 1) {
             foreach ($paramTypes as $paramType) {
-                $classConstFetchNode = $this->createClassConstFetchFromClassName($paramType);
+                $classConstFetchNode = $this->createClassConstant($paramType, 'class');
                 $nodeToBeReturned->items[] = new ArrayItem($classConstFetchNode);
             }
         } elseif (count($paramTypes) === 1) {
-            $nodeToBeReturned->items[] = $this->createClassConstFetchFromClassName($paramTypes[0]);
+            $nodeToBeReturned->items[] = $this->createClassConstant($paramTypes[0], 'class');
         } else { // fallback to basic node
-            $nodeToBeReturned->items[] = $this->createClassConstFetchFromClassName(Node::class);
+            $nodeToBeReturned->items[] = $this->createClassConstant(Node::class, 'class');
         }
 
         return $this->builderFactory->method('getNodeTypes')
@@ -217,11 +217,6 @@ final class MergeIsCandidateRector extends AbstractRector
         $paramTagValueNode = $paramNode->value;
 
         return $this->resolveParamTagValueNodeToStrings($paramTagValueNode);
-    }
-
-    private function createClassConstFetchFromClassName(string $className): ClassConstFetch
-    {
-        return new ClassConstFetch(new FullyQualified($className), 'class');
     }
 
     private function replaceReturnFalseWithReturnNull(ClassMethod $classMethod): void

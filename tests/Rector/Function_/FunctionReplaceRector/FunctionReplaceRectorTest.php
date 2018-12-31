@@ -9,7 +9,11 @@ final class FunctionReplaceRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
     {
-        $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc', __DIR__ . '/Fixture/fixture2.php.inc']);
+        $this->doTestFiles([
+            __DIR__ . '/Fixture/fixture.php.inc',
+            __DIR__ . '/Fixture/fixture2.php.inc',
+            __DIR__ . '/Fixture/double_function.php.inc',
+        ]);
     }
 
     protected function getRectorClass(): string
@@ -25,6 +29,7 @@ final class FunctionReplaceRectorTest extends AbstractRectorTestCase
         return [
             'view' => 'Laravel\Templating\render',
             'sprintf' => 'Safe\sprintf',
+            'hebrevc' => ['nl2br', 'hebrev'],
         ];
     }
 }
