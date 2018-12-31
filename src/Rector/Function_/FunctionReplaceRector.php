@@ -13,12 +13,12 @@ use Rector\RectorDefinition\RectorDefinition;
 final class FunctionReplaceRector extends AbstractRector
 {
     /**
-     * @var string[]
+     * @var string[]|string[][]
      */
     private $oldFunctionToNewFunction = [];
 
     /**
-     * @param string[] $oldFunctionToNewFunction
+     * @param string[]|string[][] $oldFunctionToNewFunction
      */
     public function __construct(array $oldFunctionToNewFunction)
     {

@@ -13,3 +13,4 @@ services:
     Rector\Php\Rector\StaticCall\ExportToReflectionFunctionRector: ~
     Rector\Php\Rector\ConstFetch\ClassConstantToSelfClassRector: ~
     Rector\Php\Rector\FuncCall\GetCalledClassToStaticClassRector: ~
+    Rector\Php\Rector\FuncCall\MbStrrposEncodingArgumentPositionRector: ~
