@@ -8,3 +8,4 @@ services:
         # https://wiki.php.net/rfc/deprecations_php_7_4#apache_request_headers_function
         apache_request_headers: 'getallheaders'
         hebrevc: ['nl2br', 'hebrev']
+    Rector\Php\Rector\FuncCall\ArrayKeyExistsOnPropertyRector: ~
