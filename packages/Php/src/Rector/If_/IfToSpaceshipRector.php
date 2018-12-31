@@ -25,27 +25,47 @@ use Rector\RectorDefinition\RectorDefinition;
 final class IfToSpaceshipRector extends AbstractRector
 {
     /**
+<<<<<<< HEAD
      * @var int|null
+=======
+     * @var int
+>>>>>>> [PHP 7.3] Add IfToSpaceshipRector
      */
     private $onEqual;
 
     /**
+<<<<<<< HEAD
      * @var int|null
+=======
+     * @var int
+>>>>>>> [PHP 7.3] Add IfToSpaceshipRector
      */
     private $onSmaller;
 
     /**
+<<<<<<< HEAD
      * @var int|null
+=======
+     * @var int
+>>>>>>> [PHP 7.3] Add IfToSpaceshipRector
      */
     private $onGreater;
 
     /**
+<<<<<<< HEAD
      * @var Expr|null
+=======
+     * @var Expr
+>>>>>>> [PHP 7.3] Add IfToSpaceshipRector
      */
     private $firstValue;
 
     /**
+<<<<<<< HEAD
      * @var Expr|null
+=======
+     * @var Expr
+>>>>>>> [PHP 7.3] Add IfToSpaceshipRector
      */
     private $secondValue;
 
