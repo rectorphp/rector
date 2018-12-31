@@ -101,6 +101,7 @@ parameters:
             # dev
             - 'packages/Php/src/Rector/FunctionLike/*TypeDeclarationRector.php'
             - 'examples/*'
+            - 'packages/Php/src/Rector/If_/IfToSpaceshipRector.php'
 
         SlevomatCodingStandard\Sniffs\Functions\UnusedParameterSniff.UnusedParameter:
             # enforced by interface
