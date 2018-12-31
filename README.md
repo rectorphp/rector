@@ -50,9 +50,10 @@ Rector **instantly upgrades and instantly refactors PHP code of your application
 composer require rector/rector --dev
 ```
 
-**Do you have conflicts on `composer require`?**
+**Do you have conflicts on `composer require` or on run?**
 
-Install [prefixed version](https://github.com/rectorphp/rector-prefixed) with isolated dependencies.
+- use [Docker image](#run-rector-in-docker) or
+- install [prefixed version](https://github.com/rectorphp/rector-prefixed) with isolated dependencies (currently [looking for maintainer](https://github.com/rectorphp/prefixer/issues/1))
 
 ### Extra Autoloading
 
@@ -163,8 +164,10 @@ Just follow 3 rules:
 
 We would be happy to merge your feature then.
 
-## Run rector in docker
+## Run Rector in Docker
+
 With this command, you can process your project with rector from docker:
+
 ```bash
 docker run -v $(pwd):/project rector/rector:latest
 ```

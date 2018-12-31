@@ -47,8 +47,10 @@
 - [Php\Each](#phpeach)
 - [Php\FuncCall](#phpfunccall)
 - [Php\FunctionLike](#phpfunctionlike)
+- [Php\If_](#phpif_)
 - [Php\List_](#phplist_)
 - [Php\MagicConstClass](#phpmagicconstclass)
+- [Php\MethodCall](#phpmethodcall)
 - [Php\Name](#phpname)
 - [Php\Property](#phpproperty)
 - [Php\StaticCall](#phpstaticcall)
@@ -1488,7 +1490,7 @@ Changes unquoted non-existing constants to strings
 
 ```diff
 -var_dump(VAR);
-+var("VAR");
++var_dump("VAR");
 ```
 
 <br>
@@ -1605,7 +1607,7 @@ Null is no more allowed in get_class()
 
 - class: `Rector\Php\Rector\FuncCall\TrailingCommaArgumentsRector`
 
-Adds trailing commas to function and methods calls
+Adds trailing commas to function and methods calls 
 
 ```diff
  calling(
@@ -1983,6 +1985,33 @@ Changes PHP 4 style constructor to __construct.
 
 <br>
 
+## Php\If_
+
+### `IfToSpaceshipRector`
+
+- class: `Rector\Php\Rector\If_\IfToSpaceshipRector`
+
+Changes if/else to spaceship <=> where useful
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+         usort($languages, function ($a, $b) {
+-            if ($a[0] === $b[0]) {
+-                return 0;
+-            }
+-
+-            return ($a[0] < $b[0]) ? 1 : -1;
++            return $b[0] <=> $a[0];
+         });
+     }
+ }
+```
+
+<br>
+
 ## Php\List_
 
 ### `ListSplitStringRector`
@@ -2040,6 +2069,58 @@ Change __CLASS__ to self::class
 -       var_dump(__CLASS__);
 +       var_dump(self::class);
     }
+ }
+```
+
+<br>
+
+## Php\MethodCall
+
+### `ThisCallOnStaticMethodToStaticCallRector`
+
+- class: `Rector\Php\Rector\MethodCall\ThisCallOnStaticMethodToStaticCallRector`
+
+Changes $this->call() to static method to static call
+
+```diff
+ class SomeClass
+ {
+     public static function run()
+     {
+-        $this->eat();
++        self::eat();
+     }
+
+     public static function eat()
+     {
+     }
+ }
+```
+
+<br>
+
+### `PreferThisOrSelfMethodCallRector`
+
+- class: `Rector\Php\Rector\MethodCall\PreferThisOrSelfMethodCallRector`
+
+Changes $this->... to self:: or vise versa for specific types
+
+```yaml
+services:
+    Rector\Php\Rector\MethodCall\PreferThisOrSelfMethodCallRector:
+        PHPUnit\TestCase: self
+```
+
+↓
+
+```diff
+ class SomeClass extends PHPUnit\TestCase
+ {
+     public function run()
+     {
+-        $this->assertThis();
++        self::assertThis();
+     }
  }
 ```
 
@@ -2107,6 +2188,32 @@ Changes property `@var` annotations from annotation to type.
 <br>
 
 ## Php\StaticCall
+
+### `StaticCallOnNonStaticToInstanceCallRector`
+
+- class: `Rector\Php\Rector\StaticCall\StaticCallOnNonStaticToInstanceCallRector`
+
+Changes static call to instance call, where not useful
+
+```diff
+ class Something
+ {
+     public function doWork()
+     {
+     }
+ }
+
+ class Another
+ {
+     public function run()
+     {
+-        return Something::doWork();
++        return (new Something)->doWork();
+     }
+ }
+```
+
+<br>
 
 ### `ExportToReflectionFunctionRector`
 
