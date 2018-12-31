@@ -10,7 +10,7 @@ I mean, why do it manually if 80 % can Rector handle for you?
 
 ![Rector-showcase](docs/images/rector-showcase.gif)
 
-Rector **instantly upgrades PHP & YAML code of your application**, with focus on open-source projects:
+Rector **instantly upgrades and instantly refactors PHP code of your application**. It covers many open-source projects and PHP changes itself:
 
 <br>
 
