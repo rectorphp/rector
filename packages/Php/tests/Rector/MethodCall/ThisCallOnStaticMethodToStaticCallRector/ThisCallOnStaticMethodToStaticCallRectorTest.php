@@ -9,10 +9,7 @@ final class ThisCallOnStaticMethodToStaticCallRectorTest extends AbstractRectorT
 {
     public function test(): void
     {
-        $this->doTestFiles([
-            __DIR__ . '/Fixture/fixture.php.inc',
-            __DIR__ . '/Fixture/another_call.php.inc',
-        ]);
+        $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc', __DIR__ . '/Fixture/another_call.php.inc']);
     }
 
     protected function getRectorClass(): string

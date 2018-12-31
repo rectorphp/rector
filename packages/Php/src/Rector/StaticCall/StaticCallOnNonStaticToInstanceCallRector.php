@@ -7,6 +7,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use Rector\NodeTypeResolver\Application\FunctionLikeNodeCollector;
+use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -15,6 +16,7 @@ use ReflectionClass;
 /**
  * @see https://thephp.cc/news/2017/07/dont-call-instance-methods-statically
  * @see https://3v4l.org/tQ32f
+ * @see https://3v4l.org/jB9jn
  * @see https://stackoverflow.com/a/19694064/1348344
  */
 final class StaticCallOnNonStaticToInstanceCallRector extends AbstractRector
@@ -87,7 +89,16 @@ CODE_SAMPLE
             $this->getName($node),
             $this->getName($node->class)
         );
+
         if ($isStaticMethod) {
+            return null;
+        }
+
+        if ($this->isNames($node->class, ['self', 'parent', 'static'])) {
+            return null;
+        }
+
+        if ($this->getName($node->class) === $node->getAttribute(Attribute::PARENT_CLASS_NAME)) {
             return null;
         }
 

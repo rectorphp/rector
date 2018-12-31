@@ -9,7 +9,11 @@ final class StaticCallOnNonStaticToInstanceCallRectorTest extends AbstractRector
 {
     public function test(): void
     {
-        $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc', __DIR__ . '/Fixture/with_constructor.php.inc']);
+        $this->doTestFiles([
+            __DIR__ . '/Fixture/fixture.php.inc',
+            __DIR__ . '/Fixture/with_constructor.php.inc',
+            __DIR__ . '/Fixture/keep.php.inc',
+        ]);
     }
 
     protected function getRectorClass(): string
