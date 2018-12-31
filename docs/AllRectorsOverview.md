@@ -1048,6 +1048,30 @@ Change assertContains()/assertNotContains() method to new string and iterable al
 
 <br>
 
+### `UseSpecificWillMethodRector`
+
+- class: `Rector\PHPUnit\Rector\MethodCall\UseSpecificWillMethodRector`
+
+Changes ->will($this->xxx()) to one specific method
+
+```diff
+ class SomeClass extends PHPUnit\Framework\TestCase
+ {
+     public function test()
+     {
+         $translator = $this->getMockBuilder('Symfony\Component\Translation\TranslatorInterface')->getMock();
+         $translator->expects($this->any())
+             ->method('trans')
+-            ->with($this->equalTo('old max {{ max }}!'))
+-            ->will($this->returnValue('translated max {{ max }}!'));
++            ->with('old max {{ max }}!')
++            ->willReturnValue('translated max {{ max }}!');
+     }
+ }
+```
+
+<br>
+
 ### `SpecificAssertInternalTypeRector`
 
 - class: `Rector\PHPUnit\Rector\MethodCall\SpecificAssertInternalTypeRector`
