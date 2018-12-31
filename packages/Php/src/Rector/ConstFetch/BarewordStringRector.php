@@ -27,7 +27,7 @@ final class BarewordStringRector extends AbstractRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Changes unquoted non-existing constants to strings', [
-            new CodeSample('var_dump(VAR);', 'var("VAR");'),
+            new CodeSample('var_dump(VAR);', 'var_dump("VAR");'),
         ]);
     }
 

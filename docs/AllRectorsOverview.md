@@ -9,7 +9,6 @@
 - [CodeQuality\Assign](#codequalityassign)
 - [CodeQuality\BinaryOp](#codequalitybinaryop)
 - [CodeQuality\BooleanAnd](#codequalitybooleanand)
-- [CodeQuality\Expression](#codequalityexpression)
 - [CodeQuality\Foreach_](#codequalityforeach_)
 - [CodeQuality\FuncCall](#codequalityfunccall)
 - [CodeQuality\Identical](#codequalityidentical)
@@ -25,6 +24,7 @@
 - [DeadCode\Array_](#deadcodearray_)
 - [DeadCode\Assign](#deadcodeassign)
 - [DeadCode\ClassMethod](#deadcodeclassmethod)
+- [DeadCode\Expression](#deadcodeexpression)
 - [DeadCode\Foreach_](#deadcodeforeach_)
 - [DeadCode\Property](#deadcodeproperty)
 - [DeadCode\StaticCall](#deadcodestaticcall)
@@ -48,8 +48,10 @@
 - [Php\FuncCall](#phpfunccall)
 - [Php\FunctionLike](#phpfunctionlike)
 - [Php\List_](#phplist_)
+- [Php\MagicConstClass](#phpmagicconstclass)
 - [Php\Name](#phpname)
 - [Php\Property](#phpproperty)
+- [Php\StaticCall](#phpstaticcall)
 - [Php\String_](#phpstring_)
 - [Php\Switch_](#phpswitch_)
 - [Php\Ternary](#phpternary)
@@ -145,20 +147,6 @@ Simplify `is_array` and `empty` functions combination into a simple identical ch
 
 <br>
 
-## CodeQuality\Expression
-
-### `SimplifyMirrorAssignRector`
-
-- class: `Rector\CodeQuality\Rector\Expression\SimplifyMirrorAssignRector`
-
-Removes unneeded $a = $a assigns
-
-```diff
--$a = $a;
-```
-
-<br>
-
 ## CodeQuality\Foreach_
 
 ### `ForeachToInArrayRector`
@@ -176,6 +164,25 @@ Simplify `foreach` loops into `in_array` when possible
 -
 -return false;
 +in_array("something", $items, true);
+```
+
+<br>
+
+### `SimplifyForeachToArrayFilterRector`
+
+- class: `Rector\CodeQuality\Rector\Foreach_\SimplifyForeachToArrayFilterRector`
+
+Simplify foreach with function filtering to array filter
+
+```diff
+-$directories = [];
+ $possibleDirectories = [];
+-foreach ($possibleDirectories as $possibleDirectory) {
+-    if (file_exists($possibleDirectory)) {
+-        $directories[] = $possibleDirectory;
+-    }
+-}
++$directories = array_filter($possibleDirectories, 'file_exists');
 ```
 
 <br>
@@ -236,6 +243,27 @@ Simplify count of func_get_args() to fun_num_args()
 ```diff
 -count(func_get_args());
 +func_num_args();
+```
+
+<br>
+
+### `SingleInArrayToCompareRector`
+
+- class: `Rector\CodeQuality\Rector\FuncCall\SingleInArrayToCompareRector`
+
+Changes in_array() with single element to ===
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        if (in_array(strtolower($type), ['$this'], true)) {
++        if (strtolower($type) === '$this') {
+             return strtolower($type);
+         }
+     }
+ }
 ```
 
 <br>
@@ -315,6 +343,29 @@ Changes redundant null check to instant return
 -
 -return null;
 +return $newNode;
+```
+
+<br>
+
+### `SimplifyIfElseToTernaryRector`
+
+- class: `Rector\CodeQuality\Rector\If_\SimplifyIfElseToTernaryRector`
+
+Changes if/else for same value as assign to ternary
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        if (empty($value)) {
+-            $this->arrayBuilt[][$key] = true;
+-        } else {
+-            $this->arrayBuilt[][$key] = $value;
+-        }
++        $this->arrayBuilt[][$key] = empty($value) ? true : $value;
+     }
+ }
 ```
 
 <br>
@@ -560,6 +611,39 @@ Remove empty method calls not required by parents
 -    {
 -    }
  }
+```
+
+<br>
+
+### `RemoveUnusedParameterRector`
+
+- class: `Rector\DeadCode\Rector\ClassMethod\RemoveUnusedParameterRector`
+
+Remove unused parameter, if not required by interface or parent class
+
+```diff
+ class SomeClass
+ {
+-    public function __construct($value, $value2)
++    public function __construct($value)
+     {
+          $this->value = $value;
+     }
+ }
+```
+
+<br>
+
+## DeadCode\Expression
+
+### `SimplifyMirrorAssignRector`
+
+- class: `Rector\DeadCode\Rector\Expression\SimplifyMirrorAssignRector`
+
+Removes unneeded $a = $a assigns
+
+```diff
+-$a = $a;
 ```
 
 <br>
@@ -1404,7 +1488,7 @@ Changes unquoted non-existing constants to strings
 
 ```diff
 -var_dump(VAR);
-+var_dump("VAR");
++var("VAR");
 ```
 
 <br>
@@ -1483,6 +1567,20 @@ Changes rand, srand and getrandmax by new md_* alternatives.
 
 <br>
 
+### `FilterVarToAddSlashesRector`
+
+- class: `Rector\Php\Rector\FuncCall\FilterVarToAddSlashesRector`
+
+Change filter_var() with slash escaping to addslashes()
+
+```diff
+ $var= "Satya's here!";
+-filter_var($var, FILTER_SANITIZE_MAGIC_QUOTES);
++addslashes($var);
+```
+
+<br>
+
 ### `GetClassOnNullRector`
 
 - class: `Rector\Php\Rector\FuncCall\GetClassOnNullRector`
@@ -1515,6 +1613,24 @@ Adds trailing commas to function and methods calls
 -    $two
 +    $two,
  );
+```
+
+<br>
+
+### `ArrayKeyExistsOnPropertyRector`
+
+- class: `Rector\Php\Rector\FuncCall\ArrayKeyExistsOnPropertyRector`
+
+Change array_key_exists() on property to property_exists()
+
+```diff
+ class SomeClass {
+      public $value;
+ }
+ $someClass = new SomeClass;
+
+-array_key_exists('value', $someClass);
++property_exists($someClass, 'value');
 ```
 
 <br>
@@ -1626,6 +1742,30 @@ Remove extra parameters
 
 <br>
 
+### `GetCalledClassToStaticClassRector`
+
+- class: `Rector\Php\Rector\FuncCall\GetCalledClassToStaticClassRector`
+
+Change __CLASS__ to self::class
+
+```diff
+ class SomeClass
+-{
+-   public function callOnMe()
+-   {
+-       var_dump( get_called_class());
+-   }
+-}
++    {
++       public function callOnMe()
++       {
++           var_dump( static::class);
++       }
++    }
+```
+
+<br>
+
 ### `MysqlFuncCallToMysqliRector`
 
 - class: `Rector\Php\Rector\FuncCall\MysqlFuncCallToMysqliRector`
@@ -1716,6 +1856,19 @@ Changes ereg*() to preg*() calls
 ```diff
 -ereg("hi")
 +preg_match("#hi#");
+```
+
+<br>
+
+### `MbStrrposEncodingArgumentPositionRector`
+
+- class: `Rector\Php\Rector\FuncCall\MbStrrposEncodingArgumentPositionRector`
+
+Change mb_strrpos() encoding argument position
+
+```diff
+-mb_strrpos($text, "abc", "UTF-8");
++mb_strrpos($text, "abc", 0, "UTF-8");
 ```
 
 <br>
@@ -1871,6 +2024,27 @@ list() assigns variables in reverse order - relevant in array assign
 
 <br>
 
+## Php\MagicConstClass
+
+### `ClassConstantToSelfClassRector`
+
+- class: `Rector\Php\Rector\MagicConstClass\ClassConstantToSelfClassRector`
+
+Change __CLASS__ to self::class
+
+```diff
+ class SomeClass
+ {
+    public function callOnMe()
+    {
+-       var_dump(__CLASS__);
++       var_dump(self::class);
+    }
+ }
+```
+
+<br>
+
 ## Php\Name
 
 ### `ReservedObjectRector`
@@ -1928,6 +2102,23 @@ Changes property `@var` annotations from annotation to type.
 -    private count;
 +    private int count;
  }
+```
+
+<br>
+
+## Php\StaticCall
+
+### `ExportToReflectionFunctionRector`
+
+- class: `Rector\Php\Rector\StaticCall\ExportToReflectionFunctionRector`
+
+Change export() to ReflectionFunction alternatives
+
+```diff
+-$reflectionFunction = ReflectionFunction::export('foo');
+-$reflectionFunctionAsString = ReflectionFunction::export('foo', true);
++$reflectionFunction = new ReflectionFunction('foo');
++$reflectionFunctionAsString = (string) new ReflectionFunction('foo');
 ```
 
 <br>
