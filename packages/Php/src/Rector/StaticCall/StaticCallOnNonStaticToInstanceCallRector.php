@@ -83,7 +83,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $isStaticMethod = $this->functionLikeNodeCollector->isStaticMethod($this->getName($node), $this->getName($node->class));
+        $isStaticMethod = $this->functionLikeNodeCollector->isStaticMethod(
+            $this->getName($node),
+            $this->getName($node->class)
+        );
         if ($isStaticMethod) {
             return null;
         }
@@ -106,7 +109,6 @@ CODE_SAMPLE
 
         if ($classConstructorReflection === null) {
             return false;
-
         }
 
         // required parameters in constructor, nothing we can do

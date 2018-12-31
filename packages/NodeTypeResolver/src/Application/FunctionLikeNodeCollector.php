@@ -56,7 +56,7 @@ final class FunctionLikeNodeCollector
     public function isStaticMethod(string $methodName, string $className): bool
     {
         $methodNode = $this->findMethod($methodName, $className);
-        if ($methodNode === null ) {
+        if ($methodNode === null) {
             return false;
         }
 
