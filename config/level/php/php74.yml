@@ -12,3 +12,4 @@ services:
     Rector\Php\Rector\FuncCall\FilterVarToAddSlashesRector: ~
     Rector\Php\Rector\StaticCall\ExportToReflectionFunctionRector: ~
     Rector\Php\Rector\ConstFetch\ClassConstantToSelfClassRector: ~
+    Rector\Php\Rector\FuncCall\GetCalledClassToStaticClassRector: ~

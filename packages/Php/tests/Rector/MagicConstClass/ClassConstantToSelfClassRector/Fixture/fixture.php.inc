@@ -4,10 +4,10 @@ namespace Rector\Php\Tests\Rector\ConstFetch\ClassConstantToSelfClassRector\Fixt
 
 class SomeClass
 {
-   public function callOnMe()
-   {
-       var_dump(__CLASS__);
-   }
+    public function callOnMe()
+    {
+        var_dump(__CLASS__);
+    }
 }
 
 ?>
@@ -18,10 +18,10 @@ namespace Rector\Php\Tests\Rector\ConstFetch\ClassConstantToSelfClassRector\Fixt
 
 class SomeClass
 {
-   public function callOnMe()
-   {
-       var_dump(self::class);
-   }
+    public function callOnMe()
+    {
+        var_dump(self::class);
+    }
 }
 
 ?>
