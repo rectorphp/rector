@@ -78,9 +78,11 @@ final class SimplifyConditionsRector extends AbstractRector
         $matchedNodes = $this->binaryOpMaintainer->matchFirstAndSecondConditionNode(
             $node,
             function (Node $node) {
-                return $node instanceof Identical || $node  instanceof NotIdentical;
+                return $node instanceof Identical || $node instanceof NotIdentical;
             },
-            Node::class
+            function (Node $node) {
+                return $this->isBool($node);
+            }
         );
 
         if ($matchedNodes === null) {
