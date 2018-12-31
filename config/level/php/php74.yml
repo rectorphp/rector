@@ -11,3 +11,4 @@ services:
     Rector\Php\Rector\FuncCall\ArrayKeyExistsOnPropertyRector: ~
     Rector\Php\Rector\FuncCall\FilterVarToAddSlashesRector: ~
     Rector\Php\Rector\StaticCall\ExportToReflectionFunctionRector: ~
+    Rector\Php\Rector\ConstFetch\ClassConstantToSelfClassRector: ~
