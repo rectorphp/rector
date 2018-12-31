@@ -21,3 +21,4 @@ services:
     Rector\CodeQuality\Rector\Ternary\SimplifyTautologyTernaryRector: ~
     Rector\CodeQuality\Rector\Foreach_\SimplifyForeachToArrayFilterRector: ~
     Rector\CodeQuality\Rector\FuncCall\SingleInArrayToCompareRector: ~
+    Rector\CodeQuality\Rector\If_\SimplifyIfElseToTernaryRector: ~
