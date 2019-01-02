@@ -4,3 +4,5 @@ services:
     Rector\CodingStyle\Rector\FuncCall\SimpleArrayCallableToStringRector: ~
     Rector\CodingStyle\Rector\Identical\IdenticalFalseToBooleanNotRector: ~
     Rector\CodingStyle\Rector\Switch_\BinarySwitchToIfElseRector: ~
+    Rector\CodingStyle\Rector\FuncCall\ConsistentImplodeRector: ~
+    Rector\CodingStyle\Rector\FuncCall\SetTypeToCastRector: ~
