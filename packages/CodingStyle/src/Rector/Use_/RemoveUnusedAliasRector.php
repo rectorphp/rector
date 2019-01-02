@@ -89,7 +89,7 @@ CODE_SAMPLE
 
             // only alis name is used → use last name directly
             if (isset($usedNameNodes[$aliasName])) {
-                $this->renameNameNode($usedNameNodes, $aliasName, $lastName);
+                $this->renameNameNode($usedNameNodes[$aliasName], $lastName);
                 $use->alias = null;
             }
         }
@@ -98,7 +98,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @return Name[][]|Node[][]
+     * @return Node[][][]
      */
     private function resolveUsedNameNodes(Node $parentNode): array
     {
@@ -122,10 +122,10 @@ CODE_SAMPLE
                     continue;
                 }
 
-                $usedNameNodes[$originalName->toString()][] = [
-                    $nameNode,
-                    $nameNode->getAttribute(Attribute::PARENT_NODE),
-                ];
+                /** @var Node $parentNode */
+                $parentNode = $nameNode->getAttribute(Attribute::PARENT_NODE);
+
+                $usedNameNodes[$originalName->toString()][] = [$nameNode, $parentNode];
             }
         }
 
@@ -133,11 +133,11 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Name[][]|Node[][] $usedNameNodes
+     * @param Node[][] $usedNameNodes
      */
-    private function renameNameNode(array $usedNameNodes, string $aliasName, string $lastName): void
+    private function renameNameNode(array $usedNameNodes, string $lastName): void
     {
-        foreach ($usedNameNodes[$aliasName] as [$usedName, $parentNode]) {
+        foreach ($usedNameNodes as [$usedName, $parentNode]) {
             foreach ($this->getObjectPublicPropertyNames($parentNode) as $parentNodePropertyName) {
                 if ($parentNode->{$parentNodePropertyName} !== $usedName) {
                     continue;
