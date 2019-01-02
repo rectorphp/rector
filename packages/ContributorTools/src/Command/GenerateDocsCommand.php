@@ -13,13 +13,13 @@ use Rector\Error\ExceptionCorrector;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use ReflectionClass;
+use function Safe\ksort;
+use function Safe\sprintf;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Yaml\Yaml;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
-use function Safe\ksort;
-use function Safe\sprintf;
 
 final class GenerateDocsCommand extends AbstractCommand implements ContributorCommandInterface
 {

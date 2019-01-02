@@ -23,8 +23,8 @@ use PhpParser\Node\Stmt\Property;
 use PhpParser\PrettyPrinter\Standard;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Php\Rector\Property\TypedPropertyRector;
-use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 use function Safe\sprintf;
+use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 
 final class BetterStandardPrinter extends Standard
 {

@@ -3,8 +3,8 @@
 namespace Rector\ConsoleDiffer\Console\Formatter;
 
 use Nette\Utils\Strings;
-use Symfony\Component\Console\Formatter\OutputFormatter;
 use function Safe\sprintf;
+use Symfony\Component\Console\Formatter\OutputFormatter;
 
 /**
  * Most is copy-pasted from https://github.com/FriendsOfPHP/PHP-CS-Fixer/blob/master/src/Differ/DiffConsoleFormatter.php

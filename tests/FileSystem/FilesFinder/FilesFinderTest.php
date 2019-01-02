@@ -5,8 +5,8 @@ namespace Rector\Tests\FileSystem\FilesFinder;
 use Iterator;
 use Rector\FileSystem\FilesFinder;
 use Rector\Tests\AbstractContainerAwareTestCase;
-use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 use function Safe\sort;
+use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
 final class FilesFinderTest extends AbstractContainerAwareTestCase
 {

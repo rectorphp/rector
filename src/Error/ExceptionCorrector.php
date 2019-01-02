@@ -4,8 +4,8 @@ namespace Rector\Error;
 
 use PHPStan\AnalysedCodeException;
 use Rector\Contract\Rector\RectorInterface;
-use Throwable;
 use function Safe\sprintf;
+use Throwable;
 
 final class ExceptionCorrector
 {
