@@ -10,8 +10,8 @@ use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
-use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 use function Safe\sprintf;
+use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
 /**
  * @see https://wiki.php.net/rfc/deprecate-bareword-strings

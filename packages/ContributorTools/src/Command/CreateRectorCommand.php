@@ -8,6 +8,9 @@ use Rector\ContributorTools\Configuration\Configuration;
 use Rector\ContributorTools\Configuration\ConfigurationFactory;
 use Rector\ContributorTools\Exception\Command\ContributorCommandInterface;
 use Rector\ContributorTools\TemplateVariablesFactory;
+use function Safe\getcwd;
+use function Safe\sort;
+use function Safe\sprintf;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -17,9 +20,6 @@ use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\PackageBuilder\FileSystem\FinderSanitizer;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
-use function Safe\getcwd;
-use function Safe\sort;
-use function Safe\sprintf;
 
 final class CreateRectorCommand extends Command implements ContributorCommandInterface
 {

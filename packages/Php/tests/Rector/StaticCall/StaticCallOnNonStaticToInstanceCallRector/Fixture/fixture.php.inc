@@ -13,7 +13,7 @@ class Another
 {
     public function run()
     {
-        return Something::doWork();
+        return Something::doWork(1);
     }
 }
 
@@ -34,7 +34,7 @@ class Another
 {
     public function run()
     {
-        return (new Something())->doWork();
+        return (new Something())->doWork(1);
     }
 }
 

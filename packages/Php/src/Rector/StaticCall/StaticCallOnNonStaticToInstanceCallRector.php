@@ -108,7 +108,7 @@ CODE_SAMPLE
 
         $newNode = new New_($node->class);
 
-        return new MethodCall($newNode, $node->name);
+        return new MethodCall($newNode, $node->name, $node->args);
     }
 
     private function hasClassConstructorWithRequiredParameters(StaticCall $staticCallNode): bool

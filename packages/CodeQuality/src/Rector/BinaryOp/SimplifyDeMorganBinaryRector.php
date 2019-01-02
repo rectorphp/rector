@@ -79,6 +79,10 @@ CODE_SAMPLE
             $inversedNode = BooleanAnd::class;
         }
 
+        if ($inversedNode === null) {
+            return null;
+        }
+
         return new $inversedNode($this->inverseNode($node->expr->left), $this->inverseNode($node->expr->right));
     }
 

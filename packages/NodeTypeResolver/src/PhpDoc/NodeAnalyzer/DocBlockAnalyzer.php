@@ -14,11 +14,11 @@ use Rector\NodeTypeResolver\Exception\MissingTagException;
 use Rector\NodeTypeResolver\Php\ParamTypeInfo;
 use Rector\NodeTypeResolver\Php\ReturnTypeInfo;
 use Rector\NodeTypeResolver\Php\VarTypeInfo;
+use function Safe\sprintf;
 use Symplify\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Symplify\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Symplify\BetterPhpDocParser\PhpDocParser\TypeNodeToStringsConvertor;
 use Symplify\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
-use function Safe\sprintf;
 
 final class DocBlockAnalyzer
 {
