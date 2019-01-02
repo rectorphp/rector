@@ -15,6 +15,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Scalar\EncapsedStringPart;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -54,6 +55,10 @@ final class BetterStandardPrinter extends Standard
     {
         if ($node === null) {
             $node = [];
+        }
+
+        if ($node instanceof EncapsedStringPart) {
+            return 'UNABLE_TO_PRINT_ENCAPSED_STRING';
         }
 
         if (! is_array($node)) {
