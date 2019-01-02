@@ -4,6 +4,7 @@ namespace Rector\PhpParser\Node\Maintainer;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Stmt\Property;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\PhpParser\Node\BetterNodeFinder;
@@ -53,8 +54,8 @@ final class PropertyMaintainer
                 return null;
             }
 
-            // property
-            if (! $node instanceof PropertyFetch) {
+            // property + static fetch
+            if (! $node instanceof PropertyFetch && ! $node instanceof StaticPropertyFetch) {
                 return null;
             }
 
