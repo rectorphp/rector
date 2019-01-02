@@ -6,3 +6,4 @@ services:
     Rector\CodingStyle\Rector\Switch_\BinarySwitchToIfElseRector: ~
     Rector\CodingStyle\Rector\FuncCall\ConsistentImplodeRector: ~
     Rector\CodingStyle\Rector\FuncCall\SetTypeToCastRector: ~
+    Rector\CodingStyle\Rector\Use_\RemoveUnusedAliasRector: ~

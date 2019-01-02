@@ -83,14 +83,17 @@ final class NodeScopeAndMetadataDecorator
     public function decorateNodesFromFile(array $nodes, string $filePath): array
     {
         $nodeTraverser = new NodeTraverser();
-        // specially rewrite nodes for PHPStan
-        $nodeTraverser->addVisitor(new NameResolver());
+        $nodeTraverser->addVisitor(new NameResolver(null, [
+            'preserveOriginalNames' => true,
+            'replaceNodes' => true, // required by PHPStan
+        ]));
         $nodes = $nodeTraverser->traverse($nodes);
 
         $nodes = $this->nodeScopeResolver->processNodes($nodes, $filePath);
 
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor(new NameResolver(null, [
+            'preserveOriginalNames' => true,
             // this option would override old non-fqn-namespaced nodes otherwise, so it needs to be disabled
             'replaceNodes' => false,
         ]));
