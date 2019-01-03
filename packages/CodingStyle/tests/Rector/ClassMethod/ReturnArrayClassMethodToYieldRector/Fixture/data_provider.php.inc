@@ -32,12 +32,12 @@ use Rector\CodingStyle\Tests\Rector\ClassMethod\ReturnArrayClassMethodToYieldRec
 
 class DataProvider extends ParentTestCase
 {
-    public static function provideData()
+    public static function provideData(): \Iterator
     {
         yield ['<?php implode("", $foo, );', '<?php implode($foo, "", );'];
     }
 
-    public static function dataProvider()
+    public static function dataProvider(): \Iterator
     {
         yield ['<?php implode(\'\', $foo, );', '<?php implode($foo, );'];
         yield ['<?php implode(\'\', $foo, );', '<?php implode($foo, );'];

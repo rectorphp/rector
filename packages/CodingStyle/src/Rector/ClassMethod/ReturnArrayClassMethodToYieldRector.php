@@ -2,11 +2,14 @@
 
 namespace Rector\CodingStyle\Rector\ClassMethod;
 
+use Iterator;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\PhpParser\NodeTransformer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
@@ -29,12 +32,21 @@ final class ReturnArrayClassMethodToYieldRector extends AbstractRector
     private $nodeTransformer;
 
     /**
+     * @var DocBlockAnalyzer
+     */
+    private $docBlockAnalyzer;
+
+    /**
      * @param string[][] $methodsByType
      */
-    public function __construct(array $methodsByType, NodeTransformer $nodeTransformer)
-    {
+    public function __construct(
+        array $methodsByType,
+        NodeTransformer $nodeTransformer,
+        DocBlockAnalyzer $docBlockAnalyzer
+    ) {
         $this->methodsByType = $methodsByType;
         $this->nodeTransformer = $nodeTransformer;
+        $this->docBlockAnalyzer = $docBlockAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -99,6 +111,12 @@ CODE_SAMPLE
                 $yieldNodes = $this->nodeTransformer->transformArrayToYields($arrayNode);
                 // remove whole return node
                 $this->removeNode($arrayNode->getAttribute(Attribute::PARENT_NODE));
+
+                // remove doc block
+                $this->docBlockAnalyzer->removeTagFromNode($node, 'return');
+
+                // change return typehint
+                $node->returnType = new FullyQualified(Iterator::class);
 
                 $node->stmts = array_merge($node->stmts, $yieldNodes);
             }

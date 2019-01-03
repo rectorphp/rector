@@ -22,7 +22,7 @@ use Rector\CodingStyle\Tests\Rector\ClassMethod\ReturnArrayClassMethodToYieldRec
 
 class SomeEventSubscriber implements EventSubscriberInterface
 {
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): \Iterator
     {
         yield 'event' => 'callback';
     }
