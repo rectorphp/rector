@@ -3,10 +3,10 @@
 namespace Rector\CodingStyle\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\Yield_;
+use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
+use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\PhpParser\NodeTransformer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
@@ -16,7 +16,7 @@ use Rector\RectorDefinition\RectorDefinition;
  * @see https://medium.com/tech-tajawal/use-memory-gently-with-yield-in-php-7e62e2480b8d
  * @see https://3v4l.org/5PJid
  */
-final class YieldClassMethodToArrayClassMethodRector extends AbstractRector
+final class ReturnArrayClassMethodToYieldRector extends AbstractRector
 {
     /**
      * @var string[][]
@@ -53,12 +53,12 @@ CODE_SAMPLE
                 ,
                 <<<'CODE_SAMPLE'
 class SomeEventSubscriber implements EventSubscriberInterface
+{
+    public static function getSubscribedEvents()
     {
-        public static function getSubscribedEvents()
-        {
-            return ['event' => 'callback'];
-        }
+        return ['event' => 'callback'];
     }
+}
 CODE_SAMPLE
                 ,
                 [
@@ -91,43 +91,36 @@ CODE_SAMPLE
                     continue;
                 }
 
-                $yieldNodes = $this->collectYieldNodesFromClassMethod($node);
-                if ($yieldNodes === []) {
+                $arrayNode = $this->collectReturnArrayNodesFromClassMethod($node);
+                if ($arrayNode === null) {
                     continue;
                 }
 
-                $arrayNode = $this->nodeTransformer->transformYieldsToArray($yieldNodes);
-                $this->removeNodes($yieldNodes);
+                $yieldNodes = $this->nodeTransformer->transformArrayToYields($arrayNode);
+                // remove whole return node
+                $this->removeNode($arrayNode->getAttribute(Attribute::PARENT_NODE));
 
-                $returnExpression = new Return_($arrayNode);
-                $node->stmts = array_merge($node->stmts, [$returnExpression]);
+                $node->stmts = array_merge($node->stmts, $yieldNodes);
             }
         }
 
         return $node;
     }
 
-    /**
-     * @return Yield_[]
-     */
-    private function collectYieldNodesFromClassMethod(ClassMethod $classMethodNode): array
+    private function collectReturnArrayNodesFromClassMethod(ClassMethod $classMethodNode): ?Array_
     {
-        $yieldNodes = [];
-
         if ($classMethodNode->stmts === null) {
-            return [];
+            return null;
         }
 
         foreach ($classMethodNode->stmts as $statement) {
-            if (! $statement instanceof Expression) {
-                continue;
-            }
-
-            if ($statement->expr instanceof Yield_) {
-                $yieldNodes[] = $statement->expr;
+            if ($statement instanceof Return_) {
+                if ($statement->expr instanceof Array_) {
+                    return $statement->expr;
+                }
             }
         }
 
-        return $yieldNodes;
+        return null;
     }
 }

@@ -1,2 +1,5 @@
 services:
     Rector\PHPUnit\Rector\ArrayToYieldDataProviderRector: ~
+
+    Rector\CodingStyle\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector:
+

@@ -10,3 +10,4 @@ services:
 
     # requires configuration
     # Rector\CodingStyle\Rector\ClassMethod\YieldClassMethodToArrayClassMethodRector: ~
+    # Rector\CodingStyle\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector: ~

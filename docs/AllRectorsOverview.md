@@ -17,10 +17,12 @@
 - [CodeQuality\Return_](#codequalityreturn_)
 - [CodeQuality\Ternary](#codequalityternary)
 - [CodingStyle\ClassConst](#codingstyleclassconst)
+- [CodingStyle\ClassMethod](#codingstyleclassmethod)
 - [CodingStyle\FuncCall](#codingstylefunccall)
 - [CodingStyle\Identical](#codingstyleidentical)
 - [CodingStyle\If_](#codingstyleif_)
 - [CodingStyle\Switch_](#codingstyleswitch_)
+- [CodingStyle\Use_](#codingstyleuse_)
 - [DeadCode\Array_](#deadcodearray_)
 - [DeadCode\Assign](#deadcodeassign)
 - [DeadCode\ClassMethod](#deadcodeclassmethod)
@@ -488,7 +490,115 @@ Complete constant `@var` annotations for missing one, yet known.
 
 <br>
 
+## CodingStyle\ClassMethod
+
+### `ReturnArrayClassMethodToYieldRector`
+
+- class: `Rector\CodingStyle\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector`
+
+Turns yield return to array return in specific type and method
+
+```yaml
+services:
+    Rector\CodingStyle\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector:
+        EventSubscriberInterface:
+            - getSubscribedEvents
+```
+
+↓
+
+```diff
+ class SomeEventSubscriber implements EventSubscriberInterface
+ {
+     public static function getSubscribedEvents()
+     {
+-        yeild 'event' => 'callback';
++        return ['event' => 'callback'];
+     }
+ }
+```
+
+<br>
+
+### `YieldClassMethodToArrayClassMethodRector`
+
+- class: `Rector\CodingStyle\Rector\ClassMethod\YieldClassMethodToArrayClassMethodRector`
+
+Turns yield return to array return in specific type and method
+
+```yaml
+services:
+    Rector\CodingStyle\Rector\ClassMethod\YieldClassMethodToArrayClassMethodRector:
+        EventSubscriberInterface:
+            - getSubscribedEvents
+```
+
+↓
+
+```diff
+ class SomeEventSubscriber implements EventSubscriberInterface
+-{
+-    public static function getSubscribedEvents()
+     {
+-        yeild 'event' => 'callback';
+-    }
+-}
++        public static function getSubscribedEvents()
++        {
++            return ['event' => 'callback'];
++        }
++    }
+```
+
+<br>
+
 ## CodingStyle\FuncCall
+
+### `SetTypeToCastRector`
+
+- class: `Rector\CodingStyle\Rector\FuncCall\SetTypeToCastRector`
+
+Changes settype() to (type) where possible
+
+```diff
+ class SomeClass
+ {
+-    public function run($foo)
++    public function run(array $items)
+     {
+-        settype($foo, 'string');
++        $foo = (string) $foo;
+
+-        return settype($foo, 'integer');
++        return (int) $foo;
+     }
+ }
+```
+
+<br>
+
+### `ConsistentImplodeRector`
+
+- class: `Rector\CodingStyle\Rector\FuncCall\ConsistentImplodeRector`
+
+Changes various implode forms to consistent one
+
+```diff
+ class SomeClass
+ {
+     public function run(array $items)
+     {
+-        $itemsAsStrings = implode($items);
+-        $itemsAsStrings = implode($items, '|');
++        $itemsAsStrings = implode('', $items);
++        $itemsAsStrings = implode('|', $items);
+
+         $itemsAsStrings = implode('|', $items);
+     }
+ }
+```
+
+<br>
 
 ### `SimpleArrayCallableToStringRector`
 
@@ -561,6 +671,26 @@ Changes switch with 2 options to if-else
 +    $result = 'ok;
 +} else {
 +    $result = 'not ok';
+ }
+```
+
+<br>
+
+## CodingStyle\Use_
+
+### `RemoveUnusedAliasRector`
+
+- class: `Rector\CodingStyle\Rector\Use_\RemoveUnusedAliasRector`
+
+Removes unused use aliases
+
+```diff
+-use Symfony\Kernel as BaseKernel;
++use Symfony\Kernel;
+
+-class SomeClass extends BaseKernel
++class SomeClass extends Kernel
+ {
  }
 ```
 
@@ -1631,7 +1761,7 @@ Null is no more allowed in get_class()
 
 - class: `Rector\Php\Rector\FuncCall\TrailingCommaArgumentsRector`
 
-Adds trailing commas to function and methods calls
+Adds trailing commas to function and methods calls 
 
 ```diff
  calling(
