@@ -4,9 +4,9 @@ namespace Rector\CodingStyle\Tests\Rector\ClassMethod\YieldClassMethodToArrayCla
 
 use Rector\CodingStyle\Tests\Rector\ClassMethod\YieldClassMethodToArrayClassMethodRector\Source\EventSubscriberInterface;
 
-class SomeEventSubscriber implements EventSubscriberInterface
+class TypeDeclaration implements EventSubscriberInterface
 {
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): \Iterator
     {
         yield 'event' => 'callback';
     }
@@ -20,7 +20,7 @@ namespace Rector\CodingStyle\Tests\Rector\ClassMethod\YieldClassMethodToArrayCla
 
 use Rector\CodingStyle\Tests\Rector\ClassMethod\YieldClassMethodToArrayClassMethodRector\Source\EventSubscriberInterface;
 
-class SomeEventSubscriber implements EventSubscriberInterface
+class TypeDeclaration implements EventSubscriberInterface
 {
     public static function getSubscribedEvents(): array
     {

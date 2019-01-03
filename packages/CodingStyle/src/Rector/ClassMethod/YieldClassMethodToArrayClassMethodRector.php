@@ -4,6 +4,7 @@ namespace Rector\CodingStyle\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Yield_;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
@@ -98,6 +99,8 @@ CODE_SAMPLE
 
                 $arrayNode = $this->nodeTransformer->transformYieldsToArray($yieldNodes);
                 $this->removeNodes($yieldNodes);
+
+                $node->returnType = new Identifier('array');
 
                 $returnExpression = new Return_($arrayNode);
                 $node->stmts = array_merge($node->stmts, [$returnExpression]);
