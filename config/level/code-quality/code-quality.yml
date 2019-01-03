@@ -22,3 +22,4 @@ services:
     Rector\CodeQuality\Rector\Foreach_\SimplifyForeachToArrayFilterRector: ~
     Rector\CodeQuality\Rector\FuncCall\SingleInArrayToCompareRector: ~
     Rector\CodeQuality\Rector\If_\SimplifyIfElseToTernaryRector: ~
+    Rector\CodeQuality\Rector\Concat\JoinStringConcatRector: ~
