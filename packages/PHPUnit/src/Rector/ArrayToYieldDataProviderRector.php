@@ -3,7 +3,6 @@
 namespace Rector\PHPUnit\Rector;
 
 use Iterator;
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Name\FullyQualified;
@@ -120,7 +119,7 @@ CODE_SAMPLE
             return false;
         }
 
-        return (bool) Strings::match($this->getName($classMethodNode), '#^(provide|dataProvider)*#');
+        return $this->isName($classMethodNode, '#^(provide|dataProvider)*#');
     }
 
     private function hasClassMethodReturnArrayOfArrays(ClassMethod $classMethodNode): bool
