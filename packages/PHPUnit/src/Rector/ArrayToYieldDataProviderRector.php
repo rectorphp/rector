@@ -9,6 +9,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
+use Rector\PhpParser\Node\Maintainer\ClassMethodMaintainer;
 use Rector\PhpParser\NodeTransformer;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
@@ -26,10 +27,19 @@ final class ArrayToYieldDataProviderRector extends AbstractPHPUnitRector
      */
     private $nodeTransformer;
 
-    public function __construct(DocBlockAnalyzer $docBlockAnalyzer, NodeTransformer $nodeTransformer)
-    {
+    /**
+     * @var ClassMethodMaintainer
+     */
+    private $classMethodMaintainer;
+
+    public function __construct(
+        DocBlockAnalyzer $docBlockAnalyzer,
+        NodeTransformer $nodeTransformer,
+        ClassMethodMaintainer $classMethodMaintainer
+    ) {
         $this->docBlockAnalyzer = $docBlockAnalyzer;
         $this->nodeTransformer = $nodeTransformer;
+        $this->classMethodMaintainer = $classMethodMaintainer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -81,7 +91,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->hasClassMethodReturnArrayOfArrays($node)) {
+        if (! $this->classMethodMaintainer->hasReturnArrayOfArrays($node)) {
             return null;
         }
 
@@ -120,42 +130,5 @@ CODE_SAMPLE
         }
 
         return $this->isName($classMethodNode, '#^(provide|dataProvider)*#');
-    }
-
-    private function hasClassMethodReturnArrayOfArrays(ClassMethod $classMethodNode): bool
-    {
-        $statements = $classMethodNode->stmts;
-        if (! $statements) {
-            return false;
-        }
-
-        foreach ($statements as $statement) {
-            if (! $statement instanceof Return_) {
-                continue;
-            }
-
-            if (! $statement->expr instanceof Array_) {
-                return false;
-            }
-
-            return $this->isArrayOfArrays($statement->expr);
-        }
-
-        return false;
-    }
-
-    private function isArrayOfArrays(Node $node): bool
-    {
-        if (! $node instanceof Array_) {
-            return false;
-        }
-
-        foreach ($node->items as $arrayItem) {
-            if (! $arrayItem->value instanceof Array_) {
-                return false;
-            }
-        }
-
-        return true;
     }
 }

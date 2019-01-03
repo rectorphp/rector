@@ -3,8 +3,10 @@
 namespace Rector\PhpParser\Node\Maintainer;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Return_;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Printer\BetterStandardPrinter;
@@ -59,5 +61,42 @@ final class ClassMethodMaintainer
         }
 
         return false;
+    }
+
+    public function hasReturnArrayOfArrays(ClassMethod $classMethodNode): bool
+    {
+        $statements = $classMethodNode->stmts;
+        if (! $statements) {
+            return false;
+        }
+
+        foreach ($statements as $statement) {
+            if (! $statement instanceof Return_) {
+                continue;
+            }
+
+            if (! $statement->expr instanceof Array_) {
+                return false;
+            }
+
+            return $this->isArrayOfArrays($statement->expr);
+        }
+
+        return false;
+    }
+
+    private function isArrayOfArrays(Node $node): bool
+    {
+        if (! $node instanceof Array_) {
+            return false;
+        }
+
+        foreach ($node->items as $arrayItem) {
+            if (! $arrayItem->value instanceof Array_) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

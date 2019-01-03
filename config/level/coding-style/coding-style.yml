@@ -7,3 +7,6 @@ services:
     Rector\CodingStyle\Rector\FuncCall\ConsistentImplodeRector: ~
     Rector\CodingStyle\Rector\FuncCall\SetTypeToCastRector: ~
     Rector\CodingStyle\Rector\Use_\RemoveUnusedAliasRector: ~
+
+    # requires configuration
+    # Rector\CodingStyle\Rector\ClassMethod\YieldClassMethodToArrayClassMethodRector: ~
