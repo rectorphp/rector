@@ -47,19 +47,19 @@ class SomeEventSubscriber implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
-        yeild 'event' => 'callback';
+        yield 'event' => 'callback';
     }
 }
 CODE_SAMPLE
                 ,
                 <<<'CODE_SAMPLE'
 class SomeEventSubscriber implements EventSubscriberInterface
+{
+    public static function getSubscribedEvents()
     {
-        public static function getSubscribedEvents()
-        {
-            return ['event' => 'callback'];
-        }
+        return ['event' => 'callback'];
     }
+}
 CODE_SAMPLE
                 ,
                 [

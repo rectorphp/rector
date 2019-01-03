@@ -58,7 +58,7 @@ class SomeEventSubscriber implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
-        yeild 'event' => 'callback';
+        yield 'event' => 'callback';
     }
 }
 CODE_SAMPLE

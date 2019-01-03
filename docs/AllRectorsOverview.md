@@ -9,6 +9,7 @@
 - [CodeQuality\Assign](#codequalityassign)
 - [CodeQuality\BinaryOp](#codequalitybinaryop)
 - [CodeQuality\BooleanAnd](#codequalitybooleanand)
+- [CodeQuality\Concat](#codequalityconcat)
 - [CodeQuality\Foreach_](#codequalityforeach_)
 - [CodeQuality\FuncCall](#codequalityfunccall)
 - [CodeQuality\Identical](#codequalityidentical)
@@ -147,6 +148,27 @@ Simplify `is_array` and `empty` functions combination into a simple identical ch
 ```diff
 -is_array($values) && empty($values)
 +$values === []
+```
+
+<br>
+
+## CodeQuality\Concat
+
+### `JoinStringConcatRector`
+
+- class: `Rector\CodeQuality\Rector\Concat\JoinStringConcatRector`
+
+Joins concat of 2 strings
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        $name = 'Hi' . ' Tom';
++        $name = 'Hi Tom';
+     }
+ }
 ```
 
 <br>
@@ -512,7 +534,7 @@ services:
  {
      public static function getSubscribedEvents()
      {
--        yeild 'event' => 'callback';
+-        yield 'event' => 'callback';
 +        return ['event' => 'callback'];
      }
  }
@@ -537,17 +559,13 @@ services:
 
 ```diff
  class SomeEventSubscriber implements EventSubscriberInterface
--{
--    public static function getSubscribedEvents()
+ {
+     public static function getSubscribedEvents()
      {
--        yeild 'event' => 'callback';
--    }
--}
-+        public static function getSubscribedEvents()
-+        {
-+            return ['event' => 'callback'];
-+        }
-+    }
+-        yield 'event' => 'callback';
++        return ['event' => 'callback'];
+     }
+ }
 ```
 
 <br>
@@ -1039,28 +1057,6 @@ Takes `setExpectedException()` 2nd and next arguments to own methods in PHPUnit.
 +$this->setExpectedException(Exception::class);
 +$this->expectExceptionMessage("Message");
 +$this->expectExceptionCode("CODE");
-```
-
-<br>
-
-### `ArrayToYieldDataProviderRector`
-
-- class: `Rector\PHPUnit\Rector\ArrayToYieldDataProviderRector`
-
-Turns method data providers in PHPUnit from arrays to yield
-
-```diff
- /**
-- * @return mixed[]
-  */
--public function provide(): array
-+public function provide(): Iterator
- {
--    return [
--        ['item']
--    ]
-+    yield ['item'];
- }
 ```
 
 <br>
