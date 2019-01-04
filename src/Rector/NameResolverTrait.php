@@ -2,7 +2,6 @@
 
 namespace Rector\Rector;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 
@@ -27,12 +26,7 @@ trait NameResolverTrait
 
     public function isName(Node $node, string $name): bool
     {
-        return $this->getName($node) === $name;
-    }
-
-    public function nameStartsWith(Node $node, string $name): bool
-    {
-        return Strings::startsWith($this->getName($node), $name);
+        return $this->nameResolver->isName($node, $name);
     }
 
     public function isNameInsensitive(Node $node, string $name): bool

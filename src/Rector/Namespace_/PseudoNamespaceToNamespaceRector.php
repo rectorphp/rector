@@ -88,7 +88,7 @@ CODE_SAMPLE
         }
 
         foreach ($this->namespacePrefixWithExcludedClasses as $namespacePrefix => $excludedClasses) {
-            if (! $this->nameStartsWith($node, $namespacePrefix)) {
+            if (! $this->isName($node, '#^' . $namespacePrefix . '*#')) {
                 continue;
             }
 

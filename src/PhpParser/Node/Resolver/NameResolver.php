@@ -2,6 +2,7 @@
 
 namespace Rector\PhpParser\Node\Resolver;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Empty_;
@@ -81,7 +82,14 @@ final class NameResolver
 
     public function isName(Node $node, string $name): bool
     {
-        return $this->resolve($node) === $name;
+        $resolvedName = $this->resolve($node);
+
+        // is probably regex pattern
+        if (($name[0] === $name[strlen($name) - 1]) && ! ctype_alpha($name[0])) {
+            return (bool) Strings::match($resolvedName, $name);
+        }
+
+        return $resolvedName === $name;
     }
 
     /**

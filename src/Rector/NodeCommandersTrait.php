@@ -67,4 +67,14 @@ trait NodeCommandersTrait
 
         $this->notifyNodeChangeFileInfo($node);
     }
+
+    /**
+     * @param Node[] $nodes
+     */
+    protected function removeNodes(array $nodes): void
+    {
+        foreach ($nodes as $node) {
+            $this->removeNode($node);
+        }
+    }
 }

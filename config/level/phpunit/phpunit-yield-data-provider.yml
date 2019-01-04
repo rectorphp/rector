@@ -1,2 +1,4 @@
 services:
-    Rector\PHPUnit\Rector\ArrayToYieldDataProviderRector: ~
+    Rector\CodingStyle\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector:
+        PHPUnit\Framework\TestCase:
+            - '#(provide|dataProvider)*#'

@@ -9,6 +9,7 @@
 - [CodeQuality\Assign](#codequalityassign)
 - [CodeQuality\BinaryOp](#codequalitybinaryop)
 - [CodeQuality\BooleanAnd](#codequalitybooleanand)
+- [CodeQuality\Concat](#codequalityconcat)
 - [CodeQuality\Foreach_](#codequalityforeach_)
 - [CodeQuality\FuncCall](#codequalityfunccall)
 - [CodeQuality\Identical](#codequalityidentical)
@@ -17,10 +18,12 @@
 - [CodeQuality\Return_](#codequalityreturn_)
 - [CodeQuality\Ternary](#codequalityternary)
 - [CodingStyle\ClassConst](#codingstyleclassconst)
+- [CodingStyle\ClassMethod](#codingstyleclassmethod)
 - [CodingStyle\FuncCall](#codingstylefunccall)
 - [CodingStyle\Identical](#codingstyleidentical)
 - [CodingStyle\If_](#codingstyleif_)
 - [CodingStyle\Switch_](#codingstyleswitch_)
+- [CodingStyle\Use_](#codingstyleuse_)
 - [DeadCode\Array_](#deadcodearray_)
 - [DeadCode\Assign](#deadcodeassign)
 - [DeadCode\ClassMethod](#deadcodeclassmethod)
@@ -145,6 +148,27 @@ Simplify `is_array` and `empty` functions combination into a simple identical ch
 ```diff
 -is_array($values) && empty($values)
 +$values === []
+```
+
+<br>
+
+## CodeQuality\Concat
+
+### `JoinStringConcatRector`
+
+- class: `Rector\CodeQuality\Rector\Concat\JoinStringConcatRector`
+
+Joins concat of 2 strings
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        $name = 'Hi' . ' Tom';
++        $name = 'Hi Tom';
+     }
+ }
 ```
 
 <br>
@@ -488,7 +512,111 @@ Complete constant `@var` annotations for missing one, yet known.
 
 <br>
 
+## CodingStyle\ClassMethod
+
+### `ReturnArrayClassMethodToYieldRector`
+
+- class: `Rector\CodingStyle\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector`
+
+Turns yield return to array return in specific type and method
+
+```yaml
+services:
+    Rector\CodingStyle\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector:
+        EventSubscriberInterface:
+            - getSubscribedEvents
+```
+
+↓
+
+```diff
+ class SomeEventSubscriber implements EventSubscriberInterface
+ {
+     public static function getSubscribedEvents()
+     {
+-        yield 'event' => 'callback';
++        return ['event' => 'callback'];
+     }
+ }
+```
+
+<br>
+
+### `YieldClassMethodToArrayClassMethodRector`
+
+- class: `Rector\CodingStyle\Rector\ClassMethod\YieldClassMethodToArrayClassMethodRector`
+
+Turns yield return to array return in specific type and method
+
+```yaml
+services:
+    Rector\CodingStyle\Rector\ClassMethod\YieldClassMethodToArrayClassMethodRector:
+        EventSubscriberInterface:
+            - getSubscribedEvents
+```
+
+↓
+
+```diff
+ class SomeEventSubscriber implements EventSubscriberInterface
+ {
+     public static function getSubscribedEvents()
+     {
+-        yield 'event' => 'callback';
++        return ['event' => 'callback'];
+     }
+ }
+```
+
+<br>
+
 ## CodingStyle\FuncCall
+
+### `SetTypeToCastRector`
+
+- class: `Rector\CodingStyle\Rector\FuncCall\SetTypeToCastRector`
+
+Changes settype() to (type) where possible
+
+```diff
+ class SomeClass
+ {
+-    public function run($foo)
++    public function run(array $items)
+     {
+-        settype($foo, 'string');
++        $foo = (string) $foo;
+
+-        return settype($foo, 'integer');
++        return (int) $foo;
+     }
+ }
+```
+
+<br>
+
+### `ConsistentImplodeRector`
+
+- class: `Rector\CodingStyle\Rector\FuncCall\ConsistentImplodeRector`
+
+Changes various implode forms to consistent one
+
+```diff
+ class SomeClass
+ {
+     public function run(array $items)
+     {
+-        $itemsAsStrings = implode($items);
+-        $itemsAsStrings = implode($items, '|');
++        $itemsAsStrings = implode('', $items);
++        $itemsAsStrings = implode('|', $items);
+
+         $itemsAsStrings = implode('|', $items);
+     }
+ }
+```
+
+<br>
 
 ### `SimpleArrayCallableToStringRector`
 
@@ -561,6 +689,26 @@ Changes switch with 2 options to if-else
 +    $result = 'ok;
 +} else {
 +    $result = 'not ok';
+ }
+```
+
+<br>
+
+## CodingStyle\Use_
+
+### `RemoveUnusedAliasRector`
+
+- class: `Rector\CodingStyle\Rector\Use_\RemoveUnusedAliasRector`
+
+Removes unused use aliases
+
+```diff
+-use Symfony\Kernel as BaseKernel;
++use Symfony\Kernel;
+
+-class SomeClass extends BaseKernel
++class SomeClass extends Kernel
+ {
  }
 ```
 
@@ -909,28 +1057,6 @@ Takes `setExpectedException()` 2nd and next arguments to own methods in PHPUnit.
 +$this->setExpectedException(Exception::class);
 +$this->expectExceptionMessage("Message");
 +$this->expectExceptionCode("CODE");
-```
-
-<br>
-
-### `ArrayToYieldDataProviderRector`
-
-- class: `Rector\PHPUnit\Rector\ArrayToYieldDataProviderRector`
-
-Turns method data providers in PHPUnit from arrays to yield
-
-```diff
- /**
-- * @return mixed[]
-  */
--public function provide(): array
-+public function provide(): Iterator
- {
--    return [
--        ['item']
--    ]
-+    yield ['item'];
- }
 ```
 
 <br>
