@@ -22,9 +22,11 @@ final class ReturnTypeDeclarationRector extends AbstractTypeDeclarationRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Change @return types and type from static analysis to type declarations if not a BC-break', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RectorDefinition(
+            'Change @return types and type from static analysis to type declarations if not a BC-break',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 <?php
 
 class SomeClass
@@ -37,8 +39,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 <?php
 
 class SomeClass
@@ -51,8 +53,9 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+            ]
+        );
     }
 
     /**

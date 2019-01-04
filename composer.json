@@ -18,7 +18,7 @@
         "symfony/process": "^3.4|^4.1",
         "symplify/better-phpdoc-parser": "^5.2.15",
         "symplify/package-builder": "^5.2.15",
-        "thecodingmachine/safe": "^0.1.6"
+        "thecodingmachine/safe": "^0.1.9"
     },
     "require-dev": {
         "ocramius/package-versions": "^1.3",
