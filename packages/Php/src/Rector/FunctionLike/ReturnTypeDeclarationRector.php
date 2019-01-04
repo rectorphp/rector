@@ -22,7 +22,7 @@ final class ReturnTypeDeclarationRector extends AbstractTypeDeclarationRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Change @return types to scalar typehints if not a BC-break', [
+        return new RectorDefinition('Change @return types and type from static analysis to type declarations if not a BC-break', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 <?php

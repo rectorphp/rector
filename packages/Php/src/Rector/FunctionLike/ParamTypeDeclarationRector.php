@@ -16,7 +16,7 @@ final class ParamTypeDeclarationRector extends AbstractTypeDeclarationRector
 {
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Change @param types to scalar typehints if not a BC-break', [
+        return new RectorDefinition('Change @param types to type declarations if not a BC-break', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 <?php
