@@ -41,8 +41,8 @@ final class BetterStandardPrinter extends Standard
 
         // print return type double colon right after the bracket "function(): string"
         $this->initializeInsertionMap();
-        $this->insertionMap['Stmt_ClassMethod->returnType'] = [')', ': ', null];
-        $this->insertionMap['Stmt_Function->returnType'] = [')', ': ', null];
+        $this->insertionMap['Stmt_ClassMethod->returnType'] = [')', false, ': ', null];
+        $this->insertionMap['Stmt_Function->returnType'] = [')', false, ': ', null];
     }
 
     /**
