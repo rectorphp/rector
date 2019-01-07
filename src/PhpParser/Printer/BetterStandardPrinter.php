@@ -19,10 +19,8 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\Property;
 use PhpParser\PrettyPrinter\Standard;
 use Rector\NodeTypeResolver\Node\Attribute;
-use Rector\Php\Rector\Property\TypedPropertyRector;
 use function Safe\sprintf;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 
@@ -118,22 +116,6 @@ final class BetterStandardPrinter extends Standard
             $this->p($node->value),
             $shouldAddBrackets ? ')' : ''
         );
-    }
-
-    /**
-     * Print property with PHP 7.4 type
-     */
-    protected function pStmt_Property(Property $node): string
-    {
-        $type = $node->getAttribute(TypedPropertyRector::PHP74_PROPERTY_TYPE);
-        if ($type instanceof Node) {
-            $type = $this->p($type);
-        }
-
-        return $node->flags === 0 ? 'var ' : $this->pModifiers($node->flags) .
-            ($type ? $type . ' ' : '') .
-            $this->pCommaSeparated($node->props) .
-            ';';
     }
 
     /**
