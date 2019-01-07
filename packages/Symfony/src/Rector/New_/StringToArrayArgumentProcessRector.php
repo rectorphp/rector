@@ -110,11 +110,6 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($firstArgument instanceof String_) {
-            $parts = RectorStrings::splitCommandToItems($firstArgument->value);
-            $node->args[$argumentPosition]->value = $this->createArray($parts);
-        }
-
         // type analyzer
         if ($this->isStringType($firstArgument)) {
             $this->processStringType($node, $argumentPosition, $firstArgument);
@@ -133,22 +128,21 @@ CODE_SAMPLE
             if ($arrayNode) {
                 $node->args[$argumentPosition] = new Arg($arrayNode);
             }
-        }
 
-        /** @var Assign|null $createdNode */
-        $createdNode = $this->findPreviousNodeAssign($node, $firstArgument);
-        if ($createdNode === null) {
             return;
         }
 
-        if (! $createdNode->expr instanceof FuncCall || ! $this->isName($createdNode->expr, 'sprintf')) {
-            return;
+        if ($firstArgument instanceof FuncCall && $this->isName($firstArgument, 'sprintf')) {
+            $arrayNode = $this->nodeTransformer->transformSprintfToArray($firstArgument);
+            if ($arrayNode) {
+                $node->args[$argumentPosition]->value = $arrayNode;
+            }
+        } elseif ($firstArgument instanceof String_) {
+            $parts = RectorStrings::splitCommandToItems($firstArgument->value);
+            $node->args[$argumentPosition]->value = $this->createArray($parts);
         }
 
-        $arrayNode = $this->nodeTransformer->transformSprintfToArray($createdNode->expr);
-        if ($arrayNode) {
-            $createdNode->expr = $arrayNode;
-        }
+        $this->processPreviousAssign($node, $firstArgument);
     }
 
     private function findPreviousNodeAssign(Node $node, Node $firstArgument): ?Assign
@@ -166,5 +160,21 @@ CODE_SAMPLE
 
             return $checkedNode;
         });
+    }
+
+    private function processPreviousAssign(Node $node, Node $firstArgument): void
+    {
+        /** @var Assign|null $createdNode */
+        $createdNode = $this->findPreviousNodeAssign($node, $firstArgument);
+
+        if ($createdNode instanceof Assign && $createdNode->expr instanceof FuncCall && $this->isName(
+            $createdNode->expr,
+            'sprintf'
+        )) {
+            $arrayNode = $this->nodeTransformer->transformSprintfToArray($createdNode->expr);
+            if ($arrayNode) {
+                $createdNode->expr = $arrayNode;
+            }
+        }
     }
 }
