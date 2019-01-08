@@ -140,6 +140,10 @@ final class BetterStandardPrinter extends Standard
         return $this->pCallLhs($node->name) . '(' . $this->printArgs($node) . ')';
     }
 
+    /**
+     * Allows PHP 7.3 trailing comma in multiline args
+     * @see printArgs() bellow
+     */
     protected function pExpr_MethodCall(MethodCall $node): string
     {
         return $this->pDereferenceLhs($node->var)
@@ -150,6 +154,10 @@ final class BetterStandardPrinter extends Standard
             . ')';
     }
 
+    /**
+     * Allows PHP 7.3 trailing comma in multiline args
+     * @see printArgs() bellow
+     */
     protected function pExpr_StaticCall(StaticCall $node): string
     {
         return $this->pDereferenceLhs($node->class) . '::'
@@ -159,30 +167,6 @@ final class BetterStandardPrinter extends Standard
                     : '{' . $this->p($node->name) . '}')
                 : $node->name)
             . '(' . $this->printArgs($node) . ')';
-    }
-
-    /**
-     * Workaround to https://github.com/nikic/PHP-Parser/issues/554
-     *
-     * @param bool $parentFormatPreserved Whether parent node has preserved formatting
-     */
-    protected function p(Node $node, $parentFormatPreserved = false): string
-    {
-        if ($node instanceof New_ && $node->class instanceof Class_) {
-            if ($node->class->name instanceof Identifier) {
-                $className = $node->class->name->toString();
-                if (Strings::startsWith($className, 'AnonymousClass')) {
-                    /** @var Class_ $originalNode */
-                    $originalNode = $node->class->getAttribute(Attribute::ORIGINAL_NODE);
-                    $originalNode->name = null;
-
-                    $node->class->setAttribute(Attribute::ORIGINAL_NODE, $originalNode);
-                    $node->class->name = null;
-                }
-            }
-        }
-
-        return parent::p($node, $parentFormatPreserved);
     }
 
     /**
