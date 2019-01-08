@@ -1540,20 +1540,6 @@ String cannot be turned into array by assignment anymore
 
 <br>
 
-### `NullCoalescingOperatorRector`
-
-- class: `Rector\Php\Rector\Assign\NullCoalescingOperatorRector`
-
-Use null coalescing operator ??=
-
-```diff
- $array = [];
--$array['user_id'] = $array['user_id'] ?? 'value';
-+$array['user_id'] ??= 'value';
-```
-
-<br>
-
 ### `MysqlAssignToMysqliRector`
 
 - class: `Rector\Php\Rector\Assign\MysqlAssignToMysqliRector`
@@ -2058,7 +2044,7 @@ Changes property `@var` annotations from annotation to type.
 
 - class: `Rector\Php\Rector\FunctionLike\ReturnTypeDeclarationRector`
 
-Change @return types to scalar typehints if not a BC-break
+Change @return types and type from static analysis to type declarations if not a BC-break
 
 ```diff
  <?php
@@ -2081,7 +2067,7 @@ Change @return types to scalar typehints if not a BC-break
 
 - class: `Rector\Php\Rector\FunctionLike\ParamTypeDeclarationRector`
 
-Change @param types to scalar typehints if not a BC-break
+Change @param types to type declarations if not a BC-break
 
 ```diff
  <?php
