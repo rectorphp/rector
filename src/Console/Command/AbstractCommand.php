@@ -30,8 +30,8 @@ abstract class AbstractCommand extends Command
         // show help on arguments fail
         try {
             return parent::run($input, $output);
-        } catch (RuntimeException $throwable) {
-            if (Strings::match($throwable->getMessage(), '#Not enough arguments#')) {
+        } catch (RuntimeException $runtimeException) {
+            if (Strings::match($runtimeException->getMessage(), '#Not enough arguments#')) {
                 // sometimes there is "command" argument, not really needed on fail of chosen command and missing argument
                 $arguments = $this->getDefinition()->getArguments();
                 if (isset($arguments['command'])) {
@@ -45,7 +45,7 @@ abstract class AbstractCommand extends Command
                 return ShellCode::SUCCESS;
             }
 
-            throw $throwable;
+            throw $runtimeException;
         }
     }
 

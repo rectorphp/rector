@@ -38,10 +38,10 @@ final class TemplateGuesser
     {
         // AppBundle\SomeNamespace\ => AppBundle
         // App\OtherBundle\SomeNamespace\ => OtherBundle
-        $bundle = Strings::match($namespace, '/(?<bundle>[A-Za-z]*Bundle)/')['bundle'] ?? '';
+        $bundle = Strings::match($namespace, '#(?<bundle>[A-Za-z]*Bundle)#')['bundle'] ?? '';
 
         // SomeSuper\ControllerClass => ControllerClass
-        $controller = Strings::match($class, '/(?<controller>[A-Za-z0-9]*)Controller$/')['controller'] ?? '';
+        $controller = Strings::match($class, '#(?<controller>[A-Za-z0-9]*)Controller$#')['controller'] ?? '';
 
         // indexAction => index
         $action = Strings::match($method, '#(?<method>[\w]*)Action$#')['method'] ?? '';

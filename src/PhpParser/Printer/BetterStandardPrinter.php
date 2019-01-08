@@ -88,7 +88,7 @@ final class BetterStandardPrinter extends Standard
      */
     protected function pSingleQuotedString(string $string): string
     {
-        return '\'' . preg_replace("/'|\\\\(?=[\\\\']|$)/", '\\\\$0', $string) . '\'';
+        return '\'' . preg_replace('#'|\\\\(?=[\\\\']|$)#', '\\\\$0', $string) . '\'';
     }
 
     /**
