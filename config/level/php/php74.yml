@@ -13,3 +13,4 @@ services:
     Rector\Php\Rector\MagicConstClass\ClassConstantToSelfClassRector: ~
     Rector\Php\Rector\FuncCall\GetCalledClassToStaticClassRector: ~
     Rector\Php\Rector\FuncCall\MbStrrposEncodingArgumentPositionRector: ~
+    Rector\Php\Rector\Double\RealToFloatTypeCastRector: ~

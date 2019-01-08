@@ -62,6 +62,9 @@ parameters:
         - '*packages/ContributorTools/templates/*'
 
     skip:
+        PhpCsFixer\Fixer\Phpdoc\PhpdocTypesFixer:
+            - 'packages/Php/src/Rector/Double/RealToFloatTypeCastRector.php'
+
         Symplify\CodingStandard\Fixer\Php\ClassStringToClassConstantFixer:
             # classes might not exist
             - 'bin/bootstrap.php'
