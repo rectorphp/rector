@@ -49,6 +49,11 @@ final class NodeRemovingCommander implements CommanderInterface
         return count($this->nodesToRemove) > 0;
     }
 
+    public function isNodeRemoved(Node $node): bool
+    {
+        return in_array($node, $this->nodesToRemove, true);
+    }
+
     private function createNodeVisitor(): NodeVisitor
     {
         return new class($this->nodesToRemove) extends NodeVisitorAbstract {

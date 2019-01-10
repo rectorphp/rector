@@ -2,7 +2,7 @@
 
 namespace Rector\PhpParser\Node\Maintainer;
 
-use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Stmt\If_;
@@ -36,7 +36,7 @@ final class IfMaintainer
      *     return $value;
      * }
      */
-    public function matchIfNotNullReturnValue(If_ $ifNode): ?Node
+    public function matchIfNotNullReturnValue(If_ $ifNode): ?Expr
     {
         if (count($ifNode->stmts) !== 1) {
             return null;
@@ -67,7 +67,7 @@ final class IfMaintainer
      *     return 53;
      * }
      */
-    public function matchIfValueReturnValue(If_ $ifNode): ?Node
+    public function matchIfValueReturnValue(If_ $ifNode): ?Expr
     {
         if (count($ifNode->stmts) !== 1) {
             return null;
@@ -96,17 +96,17 @@ final class IfMaintainer
         return null;
     }
 
-    private function matchComparedAndReturnedNode(NotIdentical $notIdenticalNode, Return_ $returnNode): ?Node
+    private function matchComparedAndReturnedNode(NotIdentical $notIdenticalNode, Return_ $returnNode): ?Expr
     {
         if ($this->betterStandardPrinter->areNodesEqual($notIdenticalNode->left, $returnNode->expr)) {
             if ($this->constFetchMaintainer->isNull($notIdenticalNode->right)) {
-                return $notIdenticalNode->right;
+                return $notIdenticalNode->left;
             }
         }
 
         if ($this->betterStandardPrinter->areNodesEqual($notIdenticalNode->right, $returnNode->expr)) {
             if ($this->constFetchMaintainer->isNull($notIdenticalNode->left)) {
-                return $notIdenticalNode->left;
+                return $notIdenticalNode->right;
             }
         }
 

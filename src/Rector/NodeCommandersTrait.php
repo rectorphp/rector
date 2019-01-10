@@ -68,6 +68,11 @@ trait NodeCommandersTrait
         $this->notifyNodeChangeFileInfo($node);
     }
 
+    protected function isNodeRemoved(Node $node): bool
+    {
+        return $this->nodeRemovingCommander->isNodeRemoved($node);
+    }
+
     /**
      * @param Node[] $nodes
      */
