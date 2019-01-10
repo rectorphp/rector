@@ -39,13 +39,11 @@ final class DiffConsoleFormatter
     {
         return sprintf($template, implode(PHP_EOL, array_map(function ($string) {
             // make "+" lines green
+            $string = Strings::replace($string, '#^(\+.*)#', '<fg=green>$1</fg=green>');
             // make "-" lines red
+            $string = Strings::replace($string, '#^(\-.*)#', '<fg=red>$1</fg=red>');
             // make "@ note" lines cyan
-            $string = preg_replace(
-                ['/^(\+.*)/', '/^(\-.*)/', '/^(@.*)/'],
-                ['<fg=green>\1</fg=green>', '<fg=red>\1</fg=red>', '<fg=cyan>\1</fg=cyan>'],
-                $string
-            );
+            $string = Strings::replace($string, '#^(@.*)#', '<fg=cyan>$1</fg=green>');
 
             if ($string === ' ') {
                 $string = rtrim($string);

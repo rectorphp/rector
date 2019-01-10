@@ -75,6 +75,11 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
             $this->symfonyStyle->writeln(static::class);
         }
 
+        // already removed
+        if ($this->isNodeRemoved($node)) {
+            return null;
+        }
+
         $originalNode = $node;
         $node = $this->refactor($node);
         if ($node === null) {
