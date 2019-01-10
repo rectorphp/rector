@@ -36,7 +36,7 @@ final class MarkdownDifferAndFormatter
      */
     private function removeTrailingWhitespaces(string $diff): string
     {
-        $diff = preg_replace('#( ){1,}\n#', PHP_EOL, $diff);
+        $diff = Strings::replace($diff, '#( ){1,}\n#', PHP_EOL);
 
         return rtrim($diff);
     }
