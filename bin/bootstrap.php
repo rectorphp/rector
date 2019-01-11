@@ -32,13 +32,13 @@ if (file_exists($composer_json_path)) {
     $composer_settings = json_decode($contents, true);
     if (!is_array($composer_settings)) {
         fwrite(STDERR, "Failed to load '$composer_json_path'\n");
-        return 1;
+        exit(1);
     }
 
     $vendor_path = $composer_settings['config']['vendor-dir'] ?? $cwd . '/vendor';
     if (!is_dir($vendor_path)) {
         fwrite(STDERR, "Please check if 'composer.phar install' was run already (expected to find '$vendor_path')\n");
-        return 1;
+        exit(1);
     }
 
     /** @noinspection PhpIncludeInspection */
