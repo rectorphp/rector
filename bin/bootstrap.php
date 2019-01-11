@@ -5,13 +5,13 @@ function includeProjectsAutoload(string $composerJsonPath, string $cwd): void
     $contents = file_get_contents($composerJsonPath);
 
     $composerSettings = json_decode($contents, true);
-    if (!is_array($composerSettings)) {
+    if (! is_array($composerSettings)) {
         fwrite(STDERR, "Failed to load '${composerJsonPath}'\n");
         exit(1);
     }
 
     $vendorPath = $composerSettings['config']['vendor-dir'] ?? $cwd . '/vendor';
-    if (!is_dir($vendorPath)) {
+    if (! is_dir($vendorPath)) {
         fwrite(STDERR, "Please check if 'composer.phar install' was run already (expected to find '${vendorPath}')\n");
         exit(1);
     }
