@@ -14,6 +14,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Type\Accessory\HasOffsetType;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
+use PHPStan\Type\IntegerType;
 use PHPStan\Type\IntersectionType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
@@ -63,6 +64,11 @@ final class NodeTypeAnalyzer
     public function isStringType(Node $node): bool
     {
         return $this->getNodeStaticType($node) instanceof StringType;
+    }
+
+    public function isIntType(Node $node): bool
+    {
+        return $this->getNodeStaticType($node) instanceof IntegerType;
     }
 
     public function isStringyType(Node $node): bool
