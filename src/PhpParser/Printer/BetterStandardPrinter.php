@@ -9,20 +9,15 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Expr\Yield_;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\EncapsedStringPart;
 use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\Property;
 use PhpParser\PrettyPrinter\Standard;
 use Rector\NodeTypeResolver\Node\Attribute;
-use Rector\Php\Rector\Property\TypedPropertyRector;
 use function Safe\sprintf;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 
@@ -43,8 +38,8 @@ final class BetterStandardPrinter extends Standard
 
         // print return type double colon right after the bracket "function(): string"
         $this->initializeInsertionMap();
-        $this->insertionMap['Stmt_ClassMethod->returnType'] = [')', ': ', null];
-        $this->insertionMap['Stmt_Function->returnType'] = [')', ': ', null];
+        $this->insertionMap['Stmt_ClassMethod->returnType'] = [')', false, ': ', null];
+        $this->insertionMap['Stmt_Function->returnType'] = [')', false, ': ', null];
     }
 
     /**
@@ -121,22 +116,6 @@ final class BetterStandardPrinter extends Standard
     }
 
     /**
-     * Print property with PHP 7.4 type
-     */
-    protected function pStmt_Property(Property $node): string
-    {
-        $type = $node->getAttribute(TypedPropertyRector::PHP74_PROPERTY_TYPE);
-        if ($type instanceof Node) {
-            $type = $this->p($type);
-        }
-
-        return $node->flags === 0 ? 'var ' : $this->pModifiers($node->flags) .
-            ($type ? $type . ' ' : '') .
-            $this->pCommaSeparated($node->props) .
-            ';';
-    }
-
-    /**
      * Print arrays in short [] by default,
      * to prevent manual explicit array shortening.
      */
@@ -158,6 +137,10 @@ final class BetterStandardPrinter extends Standard
         return $this->pCallLhs($node->name) . '(' . $this->printArgs($node) . ')';
     }
 
+    /**
+     * Allows PHP 7.3 trailing comma in multiline args
+     * @see printArgs() bellow
+     */
     protected function pExpr_MethodCall(MethodCall $node): string
     {
         return $this->pDereferenceLhs($node->var)
@@ -168,6 +151,10 @@ final class BetterStandardPrinter extends Standard
             . ')';
     }
 
+    /**
+     * Allows PHP 7.3 trailing comma in multiline args
+     * @see printArgs() bellow
+     */
     protected function pExpr_StaticCall(StaticCall $node): string
     {
         return $this->pDereferenceLhs($node->class) . '::'
@@ -177,30 +164,6 @@ final class BetterStandardPrinter extends Standard
                     : '{' . $this->p($node->name) . '}')
                 : $node->name)
             . '(' . $this->printArgs($node) . ')';
-    }
-
-    /**
-     * Workaround to https://github.com/nikic/PHP-Parser/issues/554
-     *
-     * @param bool $parentFormatPreserved Whether parent node has preserved formatting
-     */
-    protected function p(Node $node, $parentFormatPreserved = false): string
-    {
-        if ($node instanceof New_ && $node->class instanceof Class_) {
-            if ($node->class->name instanceof Identifier) {
-                $className = $node->class->name->toString();
-                if (Strings::startsWith($className, 'AnonymousClass')) {
-                    /** @var Class_ $originalNode */
-                    $originalNode = $node->class->getAttribute(Attribute::ORIGINAL_NODE);
-                    $originalNode->name = null;
-
-                    $node->class->setAttribute(Attribute::ORIGINAL_NODE, $originalNode);
-                    $node->class->name = null;
-                }
-            }
-        }
-
-        return parent::p($node, $parentFormatPreserved);
     }
 
     /**

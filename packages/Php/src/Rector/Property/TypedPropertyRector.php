@@ -24,11 +24,6 @@ use Rector\RectorDefinition\RectorDefinition;
 final class TypedPropertyRector extends AbstractRector
 {
     /**
-     * @var string
-     */
-    public const PHP74_PROPERTY_TYPE = 'php74_property_type';
-
-    /**
      * @var string[][]
      */
     private $typeNameToAllowedDefaultNodeType = [
@@ -107,7 +102,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $node->setAttribute(self::PHP74_PROPERTY_TYPE, $varTypeInfo->getTypeNode());
+        $node->type = $varTypeInfo->getTypeNode();
 
         // invoke the print, because only attribute has changed
         $node->setAttribute(Attribute::ORIGINAL_NODE, null);
