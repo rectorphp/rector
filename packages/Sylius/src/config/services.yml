@@ -1,8 +1,0 @@
-services:
-    _defaults:
-        public: true
-        autowire: true
-
-    Rector\Sylius\:
-        resource: '../'
-        exclude: '../{Rector/**/*Rector.php}'

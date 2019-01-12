@@ -1,8 +1,0 @@
-services:
-    _defaults:
-        public: true
-        autowire: true
-
-    Rector\Doctrine\:
-        resource: '../'
-        exclude: '../{Rector/**/*Rector.php}'

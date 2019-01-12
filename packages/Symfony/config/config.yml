@@ -4,5 +4,5 @@ services:
         autowire: true
 
     Rector\Symfony\:
-        resource: '../'
-        exclude: '../{Rector/**/*Rector.php}'
+        resource: '../src/'
+        exclude: '../src/{Rector/**/*Rector.php}'

@@ -3,6 +3,15 @@ services:
         public: true
         autowire: true
 
+    Rector\ConsoleDiffer\:
+        resource: '../src'
+
+    Rector\ConsoleDiffer\DifferAndFormatter:
+        $differ: '@differ'
+
+    Rector\ConsoleDiffer\MarkdownDifferAndFormatter:
+        $markdownDiffer: '@markdownDiffer'
+
     # differ
     diffOutputBuilder:
         class: SebastianBergmann\Diff\Output\StrictUnifiedDiffOutputBuilder

@@ -1,6 +1,0 @@
-imports:
-    - { resource: 'services.yml' }
-    # A. in main repository
-    - { resource: '../../../../vendor/symplify/better-phpdoc-parser/config/config.yml', ignore_errors: true }
-    # B. installed as dependency
-    - { resource: '../../../../../../symplify/better-phpdoc-parser/config/config.yml', ignore_errors: true }

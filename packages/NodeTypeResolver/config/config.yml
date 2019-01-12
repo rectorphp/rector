@@ -1,0 +1,36 @@
+imports:
+    # A. in main repository
+    - { resource: '../../../vendor/symplify/better-phpdoc-parser/config/config.yml', ignore_errors: true }
+    # B. installed as dependency
+    - { resource: '../../../../../symplify/better-phpdoc-parser/config/config.yml', ignore_errors: true }
+
+parameters:
+    exclude_paths: [] # for FilesFinder
+
+services:
+    _defaults:
+        public: true
+        autowire: true
+
+    Rector\NodeTypeResolver\:
+        resource: '../src'
+        exclude: '../src/{Contract,Php/*Info.php}'
+
+    Rector\Php\TypeAnalyzer: ~
+    Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer: ~
+    Rector\PhpParser\Printer\BetterStandardPrinter: ~
+    Rector\FileSystem\FilesFinder: ~
+    Rector\PhpParser\Node\BetterNodeFinder: ~
+
+    # PHPStan
+    PHPStan\Broker\Broker:
+        factory: ['@Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory', 'createBroker']
+
+    PHPStan\Analyser\NodeScopeResolver:
+        factory: ['@Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory', 'createNodeScopeResolver']
+
+    PHPStan\Analyser\TypeSpecifier:
+        factory: ['@Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory', 'createTypeSpecifier']
+
+    PHPStan\Analyser\ScopeFactory:
+        factory: ['@Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory', 'createScopeFactory']
