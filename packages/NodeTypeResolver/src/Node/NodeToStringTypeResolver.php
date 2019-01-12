@@ -41,6 +41,10 @@ final class NodeToStringTypeResolver
             return 'float';
         }
 
+        if ($this->nodeTypeAnalyzer->isIntType($node)) {
+            return 'int';
+        }
+
         if ($this->nodeTypeAnalyzer->isStringType($node)) {
             return 'string';
         }

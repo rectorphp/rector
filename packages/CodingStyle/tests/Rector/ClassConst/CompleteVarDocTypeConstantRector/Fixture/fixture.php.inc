@@ -5,6 +5,7 @@ namespace Rector\CodingStyle\Tests\Rector\ClassConst\CompleteVarDocTypeConstantR
 final class SomeClass
 {
     private const NUMBER = 5;
+    private const NUMBER_NEGATIVE = -5;
     const STRING = 'name';
     const ITEMs = [[self::STRING]];
 
@@ -23,6 +24,10 @@ final class SomeClass
      * @var int
      */
     private const NUMBER = 5;
+    /**
+     * @var int
+     */
+    private const NUMBER_NEGATIVE = -5;
     /**
      * @var string
      */
