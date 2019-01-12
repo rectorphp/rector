@@ -1,7 +1,0 @@
-services:
-    _defaults:
-        public: true
-        autowire: true
-
-    Rector\FileSystemRector\:
-        resource: '../src'

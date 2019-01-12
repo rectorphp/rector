@@ -3,6 +3,6 @@ services:
         public: true
         autowire: true
 
-    Rector\Php\:
-        resource: '../src'
+    Rector\Sensio\:
+        resource: '../src/'
         exclude: '../src/{Rector/**/*Rector.php}'
