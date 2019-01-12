@@ -25,6 +25,9 @@ parameters:
         - 'tests/Composer/AutoloadWrongCasesEventSubscriber.php'
 
     ignoreErrors:
+        # false positive
+        - '#PHPDoc tag \@param for parameter \$node with type float is incompatible with native type PhpParser\\Node#'
+
         # missuse of interface and class
         - '#Parameter \#1 (.*?) expects Symfony\\Component\\DependencyInjection\\ContainerBuilder, Symfony\\Component\\DependencyInjection\\ContainerInterface given#' # 2
         - '#Method Rector\\Symfony\\Bridge\\DefaultAnalyzedSymfonyApplicationContainer::getContainer\(\) should return Symfony\\Component\\DependencyInjection\\ContainerBuilder but returns Symfony\\Component\\DependencyInjection\\Container#' # 1
