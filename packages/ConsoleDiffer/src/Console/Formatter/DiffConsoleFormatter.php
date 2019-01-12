@@ -43,7 +43,7 @@ final class DiffConsoleFormatter
             // make "-" lines red
             $string = Strings::replace($string, '#^(\-.*)#', '<fg=red>$1</fg=red>');
             // make "@ note" lines cyan
-            $string = Strings::replace($string, '#^(@.*)#', '<fg=cyan>$1</fg=green>');
+            $string = Strings::replace($string, '#^(@.*)#', '<fg=cyan>$1</fg=cyan>');
 
             if ($string === ' ') {
                 $string = rtrim($string);
