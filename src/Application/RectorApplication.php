@@ -151,7 +151,16 @@ final class RectorApplication
             if ($this->configuration->isDryRun()) {
                 $newContent = $this->fileProcessor->printToString($fileInfo);
             } else {
-                $newContent = $this->fileProcessor->printToFile($fileInfo);
+                // detect broken php after the "refactoring"
+                $parser = (new \PhpParser\ParserFactory())->create(\PhpParser\ParserFactory::PREFER_PHP7);
+                try {
+                    $parser->parse($this->fileProcessor->printToString($fileInfo));
+
+                    $newContent = $this->fileProcessor->printToFile($fileInfo);
+                } catch (\PhpParser\Error $error) {
+                    fwrite(STDERR, "Parse error: " . $error->getMessage() . "\n");
+                    $newContent = $this->fileProcessor->printToString($fileInfo);
+                }
             }
 
             $this->errorAndDiffCollector->addFileDiff($fileInfo, $newContent, $oldContent);
