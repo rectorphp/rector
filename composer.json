@@ -106,6 +106,9 @@
             "php utils/phpstan/generate-paths.php",
             "vendor/bin/phpstan analyse --paths-file phpstan-paths.txt"
         ],
+        "phpstan-async": [
+            "vendor/bin/phpstan analyse packages & vendor/bin/phpstan analyse src"
+        ],
         "docs": "bin/rector generate-docs > docs/AllRectorsOverview.md"
     },
     "scripts-descriptions": {
