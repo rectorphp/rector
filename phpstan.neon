@@ -5,7 +5,7 @@ includes:
 
 parameters:
     # to allow intalling with various phsptan versions without reporting old errors here
-#    reportUnmatchedIgnoredErrors: false
+    reportUnmatchedIgnoredErrors: false
     level: 7
 
     excludes_analyse:
@@ -29,16 +29,13 @@ parameters:
         - '#PHPDoc tag \@param for parameter \$node with type float is incompatible with native type PhpParser\\Node#'
 
         # missuse of interface and class
-        - '#Parameter \#1 (.*?) expects Symfony\\Component\\DependencyInjection\\ContainerBuilder, Symfony\\Component\\DependencyInjection\\ContainerInterface given#' # 2
-        - '#Method Rector\\Symfony\\Bridge\\DefaultAnalyzedSymfonyApplicationContainer::getContainer\(\) should return Symfony\\Component\\DependencyInjection\\ContainerBuilder but returns Symfony\\Component\\DependencyInjection\\Container#' # 1
+        - '#Parameter \#1 (.*?) expects Symfony\\Component\\DependencyInjection\\ContainerBuilder, Symfony\\Component\\DependencyInjection\\ContainerInterface given#'
+        - '#Method Rector\\Symfony\\Bridge\\DefaultAnalyzedSymfonyApplicationContainer::getContainer\(\) should return Symfony\\Component\\DependencyInjection\\ContainerBuilder but returns Symfony\\Component\\DependencyInjection\\Container#'
         - '#(.*?)\(\) should return Psr\\Container\\ContainerInterface but returns Symfony\\Component\\DependencyInjection\\ContainerInterface\|null#'
 
-        - '#Offset string does not exist on string#' # 1
-#        - '#Array \(array<array<PhpParser\\Node\\Stmt>>\) does not accept array<PhpParser\\Node\\Stmt\|null>#'
+        - '#Offset string does not exist on string#'
         - '#Property Rector\\DependencyInjection\\Loader\\RectorServiceParametersShifter::\$serviceKeywords \(array<string>\) does not accept ReflectionProperty#'
         - '#Strict comparison using === between string and null will always evaluate to false#'
-        # false positive
-        - '#Access to an undefined property PhpParser\\Node::\$expr#'
         # subtype
         - '#(.*?) expects ReflectionFunction\|ReflectionMethod, ReflectionFunctionAbstract given#'
 
@@ -65,9 +62,7 @@ parameters:
         - '#Array \(array<PhpParser\\Node\\Expr\\MethodCall>\) does not accept PhpParser\\Node\\Expr#'
         - '#Cannot access property \$expr on PhpParser\\Node\\Stmt\|null#'
         - '#Access to an undefined property PhpParser\\Node\\Expr\\MethodCall\|PhpParser\\Node\\Stmt\\ClassMethod::\$params#'
-        - '#Cannot call method getName\(\) on PHPStan\\Reflection\\ClassReflection\|null#' # 1
-
-#        - '#Parameter \#1 \$classReflection of method Rector\\NodeTypeResolver\\Reflection\\ClassReflectionTypesResolver::resolve\(\) expects PHPStan\\Reflection\\ClassReflection, PHPStan\\Reflection\\ClassReflection\|null given#'
+        - '#Cannot call method getName\(\) on PHPStan\\Reflection\\ClassReflection\|null#'
 
         - '#Cannot call method getAttribute\(\) on PhpParser\\Node\\Name\|null#'
         - '#Cannot call method getText\(\) on PhpParser\\Comment\\Doc\|null#'
@@ -83,24 +78,20 @@ parameters:
         # false positive, resolved in previous method
         - '#Parameter (.*?) of method Rector\\PhpParser\\Node\\Maintainer\\IdentifierMaintainer\:\:(.*?)\(\) expects PhpParser\\Node\\Expr\\ClassConstFetch\|PhpParser\\Node\\Expr\\MethodCall\|PhpParser\\Node\\Expr\\PropertyFetch\|PhpParser\\Node\\Expr\\StaticCall\|PhpParser\\Node\\Stmt\\ClassMethod, PhpParser\\Node given#'
 
-        # subtype
-#        - '#Property PhpParser\\Node\\Param::\$type \(PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|string\|null\) does not accept PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType#' # 3
-#        - '#Parameter \#2 \$ifCondition of method Rector\\CodeQuality\\Rector\\Foreach_\\ForeachToInArrayRector::createInArrayFunction() expects PhpParser\\Node\\Expr\\BinaryOp\\Equal\|PhpParser\\Node\\Expr\\BinaryOp\\Identical, PhpParser\\Node\\Expr\\BinaryOp given#'
-
         # intentionally incorrect - part of the test
-        - '#Parameter \#2 \$codeSamples of class Rector\\RectorDefinition\\RectorDefinition constructor expects array<Rector\\Contract\\RectorDefinition\\CodeSampleInterface>, array<int, stdClass> given#' # 1
+        - '#Parameter \#2 \$codeSamples of class Rector\\RectorDefinition\\RectorDefinition constructor expects array<Rector\\Contract\\RectorDefinition\\CodeSampleInterface>, array<int, stdClass> given#'
 
         # invalid interface type resolution
-        - '#Method Rector\\PhpParser\\NodeTraverser\\RectorNodeTraverser::getRectors\(\) should return array<Rector\\Contract\\Rector\\PhpRectorInterface> but returns array<PhpParser\\NodeVisitor>#' # 1
+        - '#Method Rector\\PhpParser\\NodeTraverser\\RectorNodeTraverser::getRectors\(\) should return array<Rector\\Contract\\Rector\\PhpRectorInterface> but returns array<PhpParser\\NodeVisitor>#'
 
         # known values
         - '#Parameter \#1 \$stack of function array_shift expects array, array<PhpParser\\Node\|null>\|PhpParser\\Node\|null given#'
-        - '#Access to an undefined property PHPStan\\PhpDocParser\\Ast\\Node::\$name#' # 2
+        - '#Access to an undefined property PHPStan\\PhpDocParser\\Ast\\Node::\$name#'
         - '#Cannot access property \$value on PhpParser\\Node\\Expr\\ArrayItem\|null#'
         - '#Method Rector\\Symfony\\Rector\\New_\\StringToArrayArgumentProcessRector::findPreviousNodeAssign\(\) should return PhpParser\\Node\\Expr\\Assign\|null but returns PhpParser\\Node\|null#'
 
         # use of 3rd party factory that returns general type
-        - '#Property Rector\\NodeTypeResolver\\NodeVisitor\\NamespaceNodeVisitor::\$useNodes \(array<PhpParser\\Node\\Stmt\\Use_>\) does not accept array<PhpParser\\Node>#' # 1
+        - '#Property Rector\\NodeTypeResolver\\NodeVisitor\\NamespaceNodeVisitor::\$useNodes \(array<PhpParser\\Node\\Stmt\\Use_>\) does not accept array<PhpParser\\Node>#'
 
         # ...variadic false positive
         - '#In method (.*?) type is "array". Please provide a \@(param|return) annotation to further specify the type of the array. For instance: \@(param|return) int\[\]#'
@@ -111,7 +102,6 @@ parameters:
         # known values
         - '#Parameter \#(1|2) \$(left|right) of class PhpParser\\Node\\Expr\\BinaryOp\\Coalesce constructor expects PhpParser\\Node\\Expr, PhpParser\\Node\\Expr\|null given#'
         - '#Strict comparison using === between PhpParser\\Node\\Expr and null will always evaluate to false#'
-#        - '#In method "Rector\\Rector\\AbstractRector::areNodesEqual", parameter \$(firstNode|secondNode) has no type-hint and no \@param annotation. More info: http:\/\/bit\.ly\/usetypehint#'
         - '#Cannot cast array<string>\|string\|null to string#'
 
 services:
