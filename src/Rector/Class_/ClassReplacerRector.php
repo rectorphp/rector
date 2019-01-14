@@ -6,6 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Stmt\Class_;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
@@ -82,13 +83,43 @@ CODE_SAMPLE
             return null;
         }
 
-        // ensure new is not with interface
-        if ($node->getAttribute(Attribute::PARENT_NODE) instanceof New_) {
-            if (interface_exists($newName)) {
-                return null;
-            }
+        if ($this->isClassToInterfaceValidChange($node, $newName)) {
+            return null;
         }
 
         return new FullyQualified($newName);
+    }
+
+    /**
+     * Checks validity:
+     *
+     * - extends SomeClass
+     * - extends SomeInterface
+     *
+     * - new SomeClass
+     * - new SomeInterface
+     *
+     * - implements SomeInterface
+     * - implements SomeClass
+     */
+    private function isClassToInterfaceValidChange(Node $node, string $newName): bool
+    {
+        // ensure new is not with interface
+        $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
+        if ($parentNode instanceof New_ && interface_exists($newName)) {
+            return false;
+        }
+
+        if ($parentNode instanceof Class_) {
+            if ($parentNode->extends === $node && interface_exists($newName)) {
+                return false;
+            }
+
+            if (in_array($node, $parentNode->implements, true) && class_exists($newName)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
