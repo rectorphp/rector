@@ -3,8 +3,10 @@
 namespace Rector\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
+use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -78,6 +80,13 @@ CODE_SAMPLE
         $newName = $this->oldToNewClasses[$name] ?? null;
         if (! $newName) {
             return null;
+        }
+
+        // ensure new is not with interface
+        if ($node->getAttribute(Attribute::PARENT_NODE) instanceof New_) {
+            if (interface_exists($newName)) {
+                return null;
+            }
         }
 
         return new FullyQualified($newName);
