@@ -66,7 +66,9 @@ parameters:
         - '#Cannot access property \$expr on PhpParser\\Node\\Stmt\|null#'
         - '#Access to an undefined property PhpParser\\Node\\Expr\\MethodCall\|PhpParser\\Node\\Stmt\\ClassMethod::\$params#'
         - '#Cannot call method getName\(\) on PHPStan\\Reflection\\ClassReflection\|null#' # 1
-        - '#Parameter \#1 \$classReflection of method Rector\\NodeTypeResolver\\Reflection\\ClassReflectionTypesResolver::resolve\(\) expects PHPStan\\Reflection\\ClassReflection, PHPStan\\Reflection\\ClassReflection|null given#'
+
+        - '#Parameter \#1 \$classReflection of method Rector\\NodeTypeResolver\\Reflection\\ClassReflectionTypesResolver::resolve\(\) expects PHPStan\\Reflection\\ClassReflection, PHPStan\\Reflection\\ClassReflection\|null given#'
+
         - '#Cannot call method getAttribute\(\) on PhpParser\\Node\\Name\|null#'
         - '#Cannot call method getText\(\) on PhpParser\\Comment\\Doc\|null#'
         - '#Method Rector\\PhpParser\\Node\\Maintainer\\PropertyMaintainer::getAllPropertyFetch\(\) should return array<PhpParser\\Node\\Expr\\PropertyFetch> but returns array<PhpParser\\Node>#'

@@ -11,6 +11,12 @@ class A {
     {
 
     }
+
+    public function runnaways($value)
+    {
+        $name = 'hi' . $value;
+        self::$name();
+    }
 }
 
 class B extends A {

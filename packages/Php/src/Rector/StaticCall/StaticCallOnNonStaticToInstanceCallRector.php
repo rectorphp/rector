@@ -85,10 +85,17 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $isStaticMethod = $this->functionLikeNodeCollector->isStaticMethod(
-            $this->getName($node),
-            $this->getName($node->class)
-        );
+        $methodName = $this->getName($node);
+        if ($methodName === null) {
+            return null;
+        }
+
+        $className = $this->getName($node->class);
+        if ($className === null) {
+            return null;
+        }
+
+        $isStaticMethod = $this->functionLikeNodeCollector->isStaticMethod($methodName, $className);
 
         if ($isStaticMethod) {
             return null;
