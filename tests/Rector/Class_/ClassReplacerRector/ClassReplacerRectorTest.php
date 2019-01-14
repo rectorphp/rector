@@ -21,6 +21,7 @@ final class ClassReplacerRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Fixture/fixture2.php.inc',
             __DIR__ . '/Fixture/fixture3.php.inc',
             __DIR__ . '/Fixture/class_to_interface.php.inc',
+            __DIR__ . '/Fixture/interface_to_class.php.inc',
         ]);
     }
 
@@ -39,6 +40,7 @@ final class ClassReplacerRectorTest extends AbstractRectorTestCase
             'PhpParser\BuilderAbstract' => Builder::class,
             OldClassWithTypo::class => 'SomeNamespace\NewClassWithoutTypo',
             'DateTime' => 'DateTimeInterface',
+            'Countable' => 'stdClass',
         ];
     }
 }
