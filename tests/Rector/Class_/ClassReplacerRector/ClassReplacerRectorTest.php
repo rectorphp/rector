@@ -2,10 +2,10 @@
 
 namespace Rector\Tests\Rector\Class_\ClassReplacerRector;
 
-use PhpParser\Builder;
 use Rector\Rector\Class_\ClassReplacerRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Tests\Rector\Class_\ClassReplacerRector\Source\NewClass;
+use Rector\Tests\Rector\Class_\ClassReplacerRector\Source\NewClassWithoutTypo;
 use Rector\Tests\Rector\Class_\ClassReplacerRector\Source\OldClass;
 use Rector\Tests\Rector\Class_\ClassReplacerRector\Source\OldClassWithTypo;
 
@@ -17,11 +17,10 @@ final class ClassReplacerRectorTest extends AbstractRectorTestCase
     public function test(): void
     {
         $this->doTestFiles([
-            __DIR__ . '/Fixture/fixture.php.inc',
-            __DIR__ . '/Fixture/fixture2.php.inc',
-            __DIR__ . '/Fixture/fixture3.php.inc',
+            __DIR__ . '/Fixture/class_to_new.php.inc',
             __DIR__ . '/Fixture/class_to_interface.php.inc',
             __DIR__ . '/Fixture/interface_to_class.php.inc',
+            __DIR__ . '/Fixture/name_insensitive.php.inc',
         ]);
     }
 
@@ -37,8 +36,7 @@ final class ClassReplacerRectorTest extends AbstractRectorTestCase
     {
         return [
             OldClass::class => NewClass::class,
-            'PhpParser\BuilderAbstract' => Builder::class,
-            OldClassWithTypo::class => 'SomeNamespace\NewClassWithoutTypo',
+            OldClassWithTypo::class => NewClassWithoutTypo::class,
             'DateTime' => 'DateTimeInterface',
             'Countable' => 'stdClass',
         ];
