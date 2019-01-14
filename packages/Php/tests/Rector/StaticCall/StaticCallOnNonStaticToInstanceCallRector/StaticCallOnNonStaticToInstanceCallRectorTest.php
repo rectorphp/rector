@@ -13,6 +13,7 @@ final class StaticCallOnNonStaticToInstanceCallRectorTest extends AbstractRector
             __DIR__ . '/Fixture/fixture.php.inc',
             __DIR__ . '/Fixture/with_constructor.php.inc',
             __DIR__ . '/Fixture/keep.php.inc',
+            __DIR__ . '/Fixture/keep_parent_static.php.inc',
         ]);
     }
 

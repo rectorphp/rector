@@ -50,7 +50,18 @@ final class FunctionLikeNodeCollector
 
     public function findMethod(string $methodName, string $className): ?ClassMethod
     {
-        return $this->methodsByType[$className][$methodName] ?? null;
+        if (isset($this->methodsByType[$className][$methodName])) {
+            return $this->methodsByType[$className][$methodName];
+        }
+
+        $parentClass = $className;
+        while ($parentClass = get_parent_class($parentClass)) {
+            if (isset($this->methodsByType[$parentClass][$methodName])) {
+                return $this->methodsByType[$parentClass][$methodName];
+            }
+        }
+
+        return null;
     }
 
     public function isStaticMethod(string $methodName, string $className): bool
