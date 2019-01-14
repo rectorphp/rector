@@ -264,7 +264,7 @@ CODE_SAMPLE
             // raw copy stmts from ctor @todo improve
             ->addStmts(
                 $this->replaceParameterAssignWithOptionAssign(
-                    $formTypeConstructorMethodNode->stmts,
+                    (array) $formTypeConstructorMethodNode->stmts,
                     $optionsParamNode
                 )
             )
@@ -322,9 +322,17 @@ CODE_SAMPLE
             }
 
             $node = $expression->expr;
+            if (! $node instanceof Assign) {
+                continue;
+            }
 
-            if ($node instanceof Assign && $node->expr instanceof Variable) {
-                $node->expr = new ArrayDimFetch($param->var, new String_($this->getName($node->var)));
+            $variableName = $this->getName($node->var);
+            if ($variableName === null) {
+                continue;
+            }
+
+            if ($node->expr instanceof Variable) {
+                $node->expr = new ArrayDimFetch($param->var, new String_($variableName));
             }
         }
 

@@ -78,11 +78,13 @@ CODE_SAMPLE
             return null;
         }
 
-        $ternaryNode = new Ternary(
-            $node->cond,
-            $this->resolveOnlyStmtAssignExpr($node->stmts),
-            $this->resolveOnlyStmtAssignExpr($node->else->stmts)
-        );
+        $ternaryIf = $this->resolveOnlyStmtAssignExpr($node->stmts);
+        $ternaryElse = $this->resolveOnlyStmtAssignExpr($node->else->stmts);
+        if ($ternaryElse === null) {
+            return null;
+        }
+
+        $ternaryNode = new Ternary($node->cond, $ternaryIf, $ternaryElse);
 
         return new Assign($ifAssignVar, $ternaryNode);
     }

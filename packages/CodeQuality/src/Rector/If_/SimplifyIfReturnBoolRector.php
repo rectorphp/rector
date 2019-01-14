@@ -58,9 +58,12 @@ CODE_SAMPLE
         /** @var Return_ $nextNode */
         $nextNode = $node->getAttribute(Attribute::NEXT_NODE);
 
-        if ($this->isTrue($ifInnerNode->expr)) {
+        /** @var Node $innerIfInnerNode */
+        $innerIfInnerNode = $ifInnerNode->expr;
+
+        if ($this->isTrue($innerIfInnerNode)) {
             $newReturnNode = $this->processReturnTrue($node, $nextNode);
-        } elseif ($this->isFalse($ifInnerNode->expr)) {
+        } elseif ($this->isFalse($innerIfInnerNode)) {
             $newReturnNode = $this->processReturnFalse($node, $nextNode);
         } else {
             return null;
@@ -100,7 +103,7 @@ CODE_SAMPLE
         }
 
         $nextNode = $ifNode->getAttribute(Attribute::NEXT_NODE);
-        if (! $nextNode instanceof Return_) {
+        if (! $nextNode instanceof Return_ || $nextNode->expr === null) {
             return true;
         }
 
@@ -114,7 +117,9 @@ CODE_SAMPLE
 
     private function processReturnTrue(If_ $ifNode, Return_ $nextReturnNode): Return_
     {
-        if ($ifNode->cond instanceof BooleanNot && $this->isTrue($nextReturnNode->expr)) {
+        if ($ifNode->cond instanceof BooleanNot && $nextReturnNode->expr !== null && $this->isTrue(
+            $nextReturnNode->expr
+        )) {
             return new Return_($this->boolCastOrNullCompareIfNeeded($ifNode->cond->expr));
         }
 
@@ -127,6 +132,10 @@ CODE_SAMPLE
             return new Return_($this->boolCastOrNullCompareIfNeeded(
                 new NotIdentical($ifNode->cond->left, $ifNode->cond->right)
             ));
+        }
+
+        if ($nextReturnNode->expr === null) {
+            return null;
         }
 
         if (! $this->isTrue($nextReturnNode->expr)) {
@@ -142,7 +151,7 @@ CODE_SAMPLE
 
     private function keepComments(Node $oldNode, Node $newNode): void
     {
-        if ($oldNode->getDocComment()) {
+        if ($oldNode->getDocComment() !== null) {
             $newNode->setDocComment($oldNode->getDocComment());
         }
 

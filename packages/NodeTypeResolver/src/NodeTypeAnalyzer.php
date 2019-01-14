@@ -262,6 +262,10 @@ final class NodeTypeAnalyzer
         $classNode = $node->getAttribute(Attribute::CLASS_NODE);
 
         $propertyName = $this->nameResolver->resolve($node->name);
+        if ($propertyName === null) {
+            return false;
+        }
+
         $propertyNode = $this->classMaintainer->getProperty($classNode, $propertyName);
 
         if ($propertyNode === null) {

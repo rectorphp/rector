@@ -143,13 +143,13 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     }
 
     /**
-     * @param Expr[] $nodes
+     * @param Expr[]|null[] $nodes
      * @param mixed[] $expectedValues
      */
     protected function areValues(array $nodes, array $expectedValues): bool
     {
         foreach ($nodes as $i => $node) {
-            if ($this->isValue($node, $expectedValues[$i])) {
+            if ($node !== null && $this->isValue($node, $expectedValues[$i])) {
                 continue;
             }
 

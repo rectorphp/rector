@@ -65,12 +65,19 @@ final class NameResolver
                 if (isset($classNode->namespacedName)) {
                     return $classNode->namespacedName->toString();
                 }
+                if ($classNode->name === null) {
+                    return null;
+                }
 
                 return $this->resolve($classNode->name);
             },
             function (Interface_ $interfaceNode): ?string {
                 if (isset($interfaceNode->namespacedName)) {
                     return $interfaceNode->namespacedName->toString();
+                }
+
+                if ($interfaceNode->name === null) {
+                    return null;
                 }
 
                 return $this->resolve($interfaceNode->name);
@@ -83,6 +90,10 @@ final class NameResolver
     public function isName(Node $node, string $name): bool
     {
         $resolvedName = $this->resolve($node);
+
+        if (! isset($name[0])) {
+            return false;
+        }
 
         // is probably regex pattern
         if (($name[0] === $name[strlen($name) - 1]) && ! ctype_alpha($name[0])) {

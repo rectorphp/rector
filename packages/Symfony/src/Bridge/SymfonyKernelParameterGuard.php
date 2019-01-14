@@ -11,21 +11,16 @@ final class SymfonyKernelParameterGuard
 {
     public function ensureKernelClassIsValid(?string $kernelClass): void
     {
-        $this->ensureHasValue($kernelClass);
-        $this->ensureKernelClassExists($kernelClass);
-        $this->ensureIsKernelInstance($kernelClass);
-    }
-
-    private function ensureHasValue(?string $kernelClass): void
-    {
-        if ($kernelClass) {
-            return;
+        // ensure value is not null nor empty
+        if ($kernelClass === null || $kernelClass === '') {
+            throw new InvalidConfigurationException(sprintf(
+                'Make sure "%s" parameters is set in rector.yml in "parameters:" section',
+                Option::KERNEL_CLASS_PARAMETER
+            ));
         }
 
-        throw new InvalidConfigurationException(sprintf(
-            'Make sure "%s" parameters is set in rector.yml in "parameters:" section',
-            Option::KERNEL_CLASS_PARAMETER
-        ));
+        $this->ensureKernelClassExists($kernelClass);
+        $this->ensureIsKernelInstance($kernelClass);
     }
 
     private function ensureKernelClassExists(string $kernelClass): void

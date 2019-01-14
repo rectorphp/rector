@@ -3,6 +3,7 @@
 namespace Rector\PhpParser\Node;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeFinder;
 use Rector\NodeTypeResolver\Node\Attribute;
@@ -36,7 +37,7 @@ final class BetterNodeFinder
     }
 
     /**
-     * @param Node|Node[] $nodes
+     * @param Node|Node[]|Stmt[] $nodes
      * @return Node[]
      */
     public function findInstanceOf($nodes, string $type): array

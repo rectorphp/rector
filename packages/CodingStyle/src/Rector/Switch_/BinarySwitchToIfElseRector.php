@@ -62,6 +62,9 @@ CODE_SAMPLE
 
         /** @var Case_ $firstCase */
         $firstCase = array_shift($node->cases);
+        if ($firstCase->cond === null) {
+            return null;
+        }
 
         $ifNode = new If_(new Equal($node->cond, $firstCase->cond));
         $ifNode->stmts = $this->removeBreakNodes($firstCase->stmts);

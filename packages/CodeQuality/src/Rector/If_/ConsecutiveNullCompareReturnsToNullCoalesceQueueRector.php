@@ -121,6 +121,10 @@ CODE_SAMPLE
             return false;
         }
 
+        if ($node->expr === null) {
+            return false;
+        }
+
         return $this->isNull($node->expr);
     }
 

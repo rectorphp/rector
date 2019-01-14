@@ -175,6 +175,9 @@ CODE_SAMPLE
     {
         $className = (string) $expr->getAttribute(Attribute::CLASS_NAME);
         $constantName = $this->getName($expr);
+        if ($constantName === null) {
+            return;
+        }
 
         $classConstNode = $this->constantNodeCollector->findConstant($constantName, $className);
         if ($classConstNode) {

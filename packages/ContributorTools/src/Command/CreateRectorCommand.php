@@ -143,7 +143,7 @@ final class CreateRectorCommand extends Command implements ContributorCommandInt
      */
     private function appendToLevelConfig(Configuration $configuration, array $templateVariables): void
     {
-        if (! $configuration->getLevelConfig()) {
+        if ($configuration->getLevelConfig() === null) {
             return;
         }
 

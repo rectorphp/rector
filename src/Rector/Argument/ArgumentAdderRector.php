@@ -121,6 +121,10 @@ CODE_SAMPLE
         foreach ($positionWithDefaultValues as $position => $nameToValue) {
             reset($nameToValue);
             $name = key($nameToValue);
+            if ($name === null || is_int($name)) {
+                continue;
+            }
+
             $value = $nameToValue[$name];
 
             if ($node instanceof ClassMethod) {

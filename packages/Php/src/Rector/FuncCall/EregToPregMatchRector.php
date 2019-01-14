@@ -71,6 +71,9 @@ final class EregToPregMatchRector extends AbstractRector
     public function refactor(Node $node): ?Node
     {
         $functionName = $this->getName($node);
+        if ($functionName === null) {
+            return null;
+        }
 
         if (! isset($this->oldNamesToNewOnes[$functionName])) {
             return null;

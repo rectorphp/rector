@@ -160,7 +160,10 @@ final class ClassMaintainer
             }
 
             foreach ($stmt->traits as $trait) {
-                $usedTraits[] = $this->nameResolver->resolve($trait);
+                $traitName = $this->nameResolver->resolve($trait);
+                if ($traitName !== null) {
+                    $usedTraits[] = $traitName;
+                }
             }
         }
 
@@ -170,10 +173,12 @@ final class ClassMaintainer
     public function getProperty(Class_ $class, string $name): ?Property
     {
         foreach ($class->stmts as $stmt) {
-            if ($stmt instanceof Property) {
-                if ((string) $stmt->props[0]->name === $name) {
-                    return $stmt;
-                }
+            if (! $stmt instanceof Property) {
+                continue;
+            }
+
+            if ($this->nameResolver->isName($stmt->props[0], $name)) {
+                return $stmt;
             }
         }
 

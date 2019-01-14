@@ -36,10 +36,14 @@ final class FunctionLikeMaintainer
     public function resolveStaticReturnTypeInfo(Node $node): ?ReturnTypeInfo
     {
         /** @var Return_[] $returnNodes */
-        $returnNodes = $this->betterNodeFinder->findInstanceOf($node->stmts, Return_::class);
+        $returnNodes = $this->betterNodeFinder->findInstanceOf((array) $node->stmts, Return_::class);
 
         $types = [];
         foreach ($returnNodes as $returnNode) {
+            if ($returnNode->expr === null) {
+                continue;
+            }
+
             $types = array_merge($types, $this->nodeTypeAnalyzer->resolveSingleTypeToStrings($returnNode->expr));
         }
 

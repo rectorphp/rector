@@ -36,6 +36,9 @@ final class ConstantToStaticCallRector extends AbstractRector
     public function refactor(Node $node): ?Node
     {
         $constantName = $this->getName($node);
+        if ($constantName === null) {
+            return null;
+        }
 
         if (! Strings::startsWith($constantName, 'SS_')) {
             return null;

@@ -101,6 +101,10 @@ CODE_SAMPLE
 
         if ($node->cond instanceof Equal || $node->cond instanceof Identical) {
             if ($node->stmts[0] instanceof Return_) {
+                if ($node->stmts[0]->expr === null) {
+                    return null;
+                }
+
                 $this->onEqual = $this->getValue($node->stmts[0]->expr);
             }
         } else {
@@ -153,6 +157,10 @@ CODE_SAMPLE
 
     private function areVariablesEqual(BinaryOp $node, ?Expr $firstValue, ?Expr $secondValue): bool
     {
+        if ($firstValue === null || $secondValue === null) {
+            return false;
+        }
+
         if ($this->areNodesEqual($node->left, $firstValue) && $this->areNodesEqual($node->right, $secondValue)) {
             return true;
         }
@@ -180,13 +188,19 @@ CODE_SAMPLE
             $this->firstValue = $ternaryNode->cond->left;
             $this->secondValue = $ternaryNode->cond->right;
 
-            $this->onSmaller = $this->getValue($ternaryNode->if);
+            if ($ternaryNode->if !== null) {
+                $this->onSmaller = $this->getValue($ternaryNode->if);
+            }
+
             $this->onGreater = $this->getValue($ternaryNode->else);
         } elseif ($ternaryNode->cond instanceof Greater) {
             $this->firstValue = $ternaryNode->cond->right;
             $this->secondValue = $ternaryNode->cond->left;
 
-            $this->onGreater = $this->getValue($ternaryNode->if);
+            if ($ternaryNode->if !== null) {
+                $this->onGreater = $this->getValue($ternaryNode->if);
+            }
+
             $this->onSmaller = $this->getValue($ternaryNode->else);
         }
     }

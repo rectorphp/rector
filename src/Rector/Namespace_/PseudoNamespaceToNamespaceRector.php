@@ -132,7 +132,11 @@ CODE_SAMPLE
 
     private function processName(Name $nameNode): Name
     {
-        $nameNode->parts = explode('_', $this->getName($nameNode));
+        $name = $this->getName($nameNode);
+
+        if ($name !== null) {
+            $nameNode->parts = explode('_', $name);
+        }
 
         return $nameNode;
     }
@@ -144,7 +148,12 @@ CODE_SAMPLE
             return null;
         }
 
-        $newNameParts = explode('_', $this->getName($identifierNode));
+        $name = $this->getName($identifierNode);
+        if ($name === null) {
+            return null;
+        }
+
+        $newNameParts = explode('_', $name);
         $lastNewNamePart = $newNameParts[count($newNameParts) - 1];
 
         $namespaceParts = $newNameParts;

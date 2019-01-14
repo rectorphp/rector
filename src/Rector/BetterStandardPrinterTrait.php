@@ -42,8 +42,8 @@ trait BetterStandardPrinterTrait
     }
 
     /**
-     * @param Node|Node[] $firstNode
-     * @param Node|Node[] $secondNode
+     * @param Node|Node[]|null $firstNode
+     * @param Node|Node[]|null $secondNode
      */
     protected function areNodesEqual($firstNode, $secondNode): bool
     {

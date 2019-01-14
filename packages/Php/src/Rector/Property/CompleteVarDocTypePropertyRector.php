@@ -137,6 +137,9 @@ CODE_SAMPLE
         $classNode = $propertyNode->getAttribute(Attribute::CLASS_NODE);
 
         $propertyName = $this->getName($propertyNode);
+        if ($propertyName === null) {
+            return null;
+        }
 
         /** @var Assign[] $propertyAssignNodes */
         $propertyAssignNodes = $this->betterNodeFinder->find([$classNode], function (Node $node) use (

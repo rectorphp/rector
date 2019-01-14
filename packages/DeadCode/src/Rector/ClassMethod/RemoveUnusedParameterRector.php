@@ -80,7 +80,12 @@ CODE_SAMPLE
 
         /** @var string $class */
         $class = $node->getAttribute(Attribute::CLASS_NAME);
-        if ($this->classMaintainer->hasParentMethodOrInterface($class, $this->getName($node))) {
+        $methodName = $this->getName($node);
+        if ($methodName === null) {
+            return null;
+        }
+
+        if ($this->classMaintainer->hasParentMethodOrInterface($class, $methodName)) {
             return null;
         }
 

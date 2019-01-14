@@ -61,6 +61,10 @@ final class AssertRegExpRector extends AbstractPHPUnitRector
         }
 
         $oldMethodName = $this->getName($node);
+        if ($oldMethodName === null) {
+            return null;
+        }
+
         $oldCondition = null;
 
         $oldFirstArgument = $node->args[0]->value;

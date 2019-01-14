@@ -74,6 +74,9 @@ final class GetClassToInstanceOfRector extends AbstractRector
 
         $varNode = $funcCallNode->args[0]->value;
         $className = $this->matchClassName($classReferenceNode);
+        if ($className === null) {
+            return null;
+        }
 
         $instanceOfNode = new Instanceof_($varNode, new FullyQualified($className));
         if ($node instanceof NotIdentical) {

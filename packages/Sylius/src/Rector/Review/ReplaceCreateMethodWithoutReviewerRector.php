@@ -3,6 +3,7 @@
 namespace Rector\Sylius\Rector\Review;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use Rector\Rector\AbstractRector;
@@ -48,7 +49,9 @@ final class ReplaceCreateMethodWithoutReviewerRector extends AbstractRector
         $node->name = new Identifier('createForSubject');
 
         if (isset($node->args[1])) {
-            $node->args = [array_shift($node->args)];
+            /** @var Arg $previousArg */
+            $previousArg = array_shift($node->args);
+            $node->args = [$previousArg];
         }
 
         return $node;

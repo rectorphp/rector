@@ -77,7 +77,12 @@ CODE_SAMPLE
 
     private function decoupleMethodCall(MethodCall $outerMethodCallNode, MethodCall $innerMethodCallNode): void
     {
-        $nextMethodCallNode = $this->createMethodCall($innerMethodCallNode->var, $this->getName($outerMethodCallNode));
+        $outerMethodName = $this->getName($outerMethodCallNode);
+        if ($outerMethodName === null) {
+            return;
+        }
+
+        $nextMethodCallNode = $this->createMethodCall($innerMethodCallNode->var, $outerMethodName);
 
         $this->addNodeAfterNode($nextMethodCallNode, $innerMethodCallNode);
     }

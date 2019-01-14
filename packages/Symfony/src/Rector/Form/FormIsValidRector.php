@@ -73,6 +73,9 @@ CODE_SAMPLE
         }
 
         $variableName = $this->getName($node->var);
+        if ($variableName === null) {
+            return null;
+        }
 
         return new BooleanAnd(
             $this->createMethodCall($variableName, 'isSubmitted'),

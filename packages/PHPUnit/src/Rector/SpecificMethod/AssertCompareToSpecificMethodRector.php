@@ -79,11 +79,16 @@ final class AssertCompareToSpecificMethodRector extends AbstractPHPUnitRector
             return null;
         }
 
-        if (! $this->isNames($secondArgumentValue, array_keys($this->defaultOldToNewMethods))) {
+        $name = $this->getName($secondArgumentValue);
+        if ($name === null) {
             return null;
         }
 
-        $this->renameMethod($node, $this->getName($secondArgumentValue));
+        if (! isset($this->defaultOldToNewMethods[$name])) {
+            return null;
+        }
+
+        $this->renameMethod($node, $name);
         $this->moveFunctionArgumentsUp($node);
 
         return $node;

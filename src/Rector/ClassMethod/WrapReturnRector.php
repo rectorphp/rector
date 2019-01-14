@@ -4,6 +4,7 @@ namespace Rector\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Rector\AbstractRector;
@@ -99,9 +100,9 @@ CODE_SAMPLE
         }
 
         foreach ($classMethodNode->stmts as $i => $stmt) {
-            if ($stmt instanceof Return_) {
+            if ($stmt instanceof Return_ && $stmt->expr !== null) {
                 if ($type === 'array') {
-                    $stmt->expr = new Array_([$stmt->expr]);
+                    $stmt->expr = new Array_([new ArrayItem($stmt->expr)]);
                 }
 
                 $classMethodNode->stmts[$i] = $stmt;

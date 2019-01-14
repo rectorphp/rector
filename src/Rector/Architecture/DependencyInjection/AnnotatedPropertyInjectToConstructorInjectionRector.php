@@ -107,6 +107,9 @@ CODE_SAMPLE
         $classNode = $propertyNode->getAttribute(Attribute::CLASS_NODE);
         $mainPropertyType = $this->getTypes($propertyNode)[0];
         $propertyName = $this->getName($propertyNode);
+        if ($propertyName === null) {
+            return;
+        }
 
         $this->addPropertyToClass($classNode, $mainPropertyType, $propertyName);
     }

@@ -50,7 +50,12 @@ final class PropertyFetchMaintainer
             return false;
         }
 
-        return ! $this->hasPublicProperty($node, $this->nameResolver->resolve($node));
+        $nodeName = $this->nameResolver->resolve($node);
+        if ($nodeName === null) {
+            return false;
+        }
+
+        return ! $this->hasPublicProperty($node, $nodeName);
     }
 
     private function hasPublicProperty(PropertyFetch $node, string $propertyName): bool

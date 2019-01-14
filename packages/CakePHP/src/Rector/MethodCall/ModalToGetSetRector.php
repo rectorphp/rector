@@ -101,6 +101,10 @@ CODE_SAMPLE
             }
 
             $currentMethodName = $this->getName($methodCallNode);
+            if ($currentMethodName === null) {
+                continue;
+            }
+
             $config = $methodNamesToGetAndSetNames[$currentMethodName];
 
             // default

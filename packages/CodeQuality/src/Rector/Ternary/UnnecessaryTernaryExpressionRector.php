@@ -53,6 +53,10 @@ final class UnnecessaryTernaryExpressionRector extends AbstractRector
         }
 
         $ifExpression = $ternaryExpression->if;
+        if ($ifExpression === null) {
+            return null;
+        }
+
         $elseExpression = $ternaryExpression->else;
         if (! $this->isBool($ifExpression) || ! $this->isBool($elseExpression)) {
             return null;
@@ -82,7 +86,7 @@ final class UnnecessaryTernaryExpressionRector extends AbstractRector
         return new $inversedBinaryClass($binaryOperation->left, $binaryOperation->right);
     }
 
-    private function processNonBinaryCondition(?Expr $ifExpression, Expr $elseExpression, Expr $condition): ?Node
+    private function processNonBinaryCondition(Expr $ifExpression, Expr $elseExpression, Expr $condition): ?Node
     {
         if ($this->isTrue($ifExpression) && $this->isFalse($elseExpression)) {
             if ($this->isBoolType($condition)) {

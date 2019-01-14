@@ -29,6 +29,11 @@ trait NameResolverTrait
         return $this->nameResolver->isName($node, $name);
     }
 
+    public function areNamesEqual(Node $firstNode, Node $secondNode): bool
+    {
+        return $this->getName($firstNode) === $this->getName($secondNode);
+    }
+
     public function isNameInsensitive(Node $node, string $name): bool
     {
         return strtolower((string) $this->getName($node)) === strtolower($name);

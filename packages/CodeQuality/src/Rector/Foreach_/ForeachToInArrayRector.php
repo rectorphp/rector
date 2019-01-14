@@ -4,6 +4,7 @@ namespace Rector\CodeQuality\Rector\Foreach_;
 
 use PhpParser\Comment;
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\Equal;
 use PhpParser\Node\Expr\BinaryOp\Identical;
@@ -88,18 +89,11 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var BinaryOp $ifCondition */
+        /** @var Identical|Equal $ifCondition */
         $ifCondition = $firstNodeInsideForeach->cond;
         $foreachValueNode = $node->valueVar;
 
-        $matchedNodes = $this->binaryOpMaintainer->matchFirstAndSecondConditionNode(
-            $ifCondition,
-            Variable::class,
-            function (Node $node, Node $otherNode) use ($foreachValueNode) {
-                return $this->areNodesEqual($otherNode, $foreachValueNode);
-            }
-        );
-
+        $matchedNodes = $this->matchNodes($ifCondition, $foreachValueNode);
         if ($matchedNodes === null) {
             return null;
         }
@@ -117,8 +111,15 @@ CODE_SAMPLE
 
         /** @var Return_ $returnNode */
         $returnNode = $firstNodeInsideForeach->stmts[0];
+        if ($returnNodeToRemove->expr === null) {
+            return null;
+        }
 
         if (! $this->isBool($returnNodeToRemove->expr)) {
+            return null;
+        }
+
+        if ($returnNode->expr === null) {
             return null;
         }
 
@@ -179,6 +180,10 @@ CODE_SAMPLE
             return false;
         }
 
+        if ($ifStatment->expr === null) {
+            return false;
+        }
+
         return $this->isBool($ifStatment->expr);
     }
 
@@ -217,5 +222,19 @@ CODE_SAMPLE
         }
 
         $newNode->setAttribute('comments', [new Comment($commentContent)]);
+    }
+
+    /**
+     * @return Node[]|null
+     */
+    private function matchNodes(BinaryOp $ifCondition, Expr $foreachValueNode): ?array
+    {
+        return $this->binaryOpMaintainer->matchFirstAndSecondConditionNode(
+            $ifCondition,
+            Variable::class,
+            function (Node $node, Node $otherNode) use ($foreachValueNode) {
+                return $this->areNodesEqual($otherNode, $foreachValueNode);
+            }
+        );
     }
 }
