@@ -63,8 +63,8 @@ final class BetterStandardPrinter extends Standard
     }
 
     /**
-     * @param Node|Node[] $firstNode
-     * @param Node|Node[] $secondNode
+     * @param Node|Node[]|null $firstNode
+     * @param Node|Node[]|null $secondNode
      */
     public function areNodesEqual($firstNode, $secondNode): bool
     {

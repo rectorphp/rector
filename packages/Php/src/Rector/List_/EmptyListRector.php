@@ -3,6 +3,7 @@
 namespace Rector\Php\Rector\List_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\List_;
 use PhpParser\Node\Expr\Variable;
 use Rector\Rector\AbstractRector;
@@ -41,7 +42,7 @@ final class EmptyListRector extends AbstractRector
             }
         }
 
-        $node->items[0] = new Variable('unusedGenerated');
+        $node->items[0] = new ArrayItem(new Variable('unusedGenerated'));
 
         return $node;
     }

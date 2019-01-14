@@ -75,7 +75,12 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractPHPUnitRector
             return null;
         }
 
-        $this->renameMethod($node, $this->getName($firstArgumentValue));
+        $name = $this->getName($firstArgumentValue);
+        if ($name === null) {
+            return null;
+        }
+
+        $this->renameMethod($node, $name);
         $this->moveFunctionArgumentsUp($node);
 
         return $node;
@@ -114,6 +119,10 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractPHPUnitRector
         $funcCallOrEmptyNode = $methodCallNode->args[0]->value;
         if ($funcCallOrEmptyNode instanceof FuncCall) {
             $funcCallOrEmptyNodeName = $this->getName($funcCallOrEmptyNode);
+            if ($funcCallOrEmptyNodeName === null) {
+                return;
+            }
+
             $funcCallOrEmptyNodeArgs = $funcCallOrEmptyNode->args;
             $oldArguments = $methodCallNode->args;
             unset($oldArguments[0]);

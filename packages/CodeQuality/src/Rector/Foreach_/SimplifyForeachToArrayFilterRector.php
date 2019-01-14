@@ -91,13 +91,12 @@ CODE_SAMPLE
             return null;
         }
 
-        $functionNameNode = new String_($this->getName($funcCallNode));
-        $arrayFilterFuncCall = new FuncCall(new Name('array_filter'), [
-            new Arg($node->expr),
-            new Arg($functionNameNode),
-        ]);
+        $name = $this->getName($funcCallNode);
+        if ($name === null) {
+            return null;
+        }
 
-        return new Assign($onlyNodeInIf->var->var, $arrayFilterFuncCall);
+        return $this->createAssignNode($node, $name, $onlyNodeInIf->var);
     }
 
     private function shouldSkip(Foreach_ $foreachNode): bool
@@ -117,5 +116,16 @@ CODE_SAMPLE
         }
 
         return false;
+    }
+
+    private function createAssignNode(Foreach_ $foreachNode, string $name, ArrayDimFetch $arrayDimFetchNode): Assign
+    {
+        $functionNameNode = new String_($name);
+        $arrayFilterFuncCall = new FuncCall(new Name('array_filter'), [
+            new Arg($foreachNode->expr),
+            new Arg($functionNameNode),
+        ]);
+
+        return new Assign($arrayDimFetchNode->var, $arrayFilterFuncCall);
     }
 }

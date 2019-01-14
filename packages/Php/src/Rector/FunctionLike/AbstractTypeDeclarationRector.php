@@ -3,6 +3,7 @@
 namespace Rector\Php\Rector\FunctionLike;
 
 use PhpParser\Node;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
@@ -78,6 +79,9 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
         }
 
         $methodName = $this->getName($classMethodNode);
+        if ($methodName === null) {
+            return false;
+        }
         // @todo extract to some "inherited parent method" service
 
         /** @var string|null $parentClassName */
@@ -131,15 +135,12 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
     }
 
     /**
-     * @param Name|NullableType $possibleSubtype
-     * @param Name|NullableType $type
+     * @param Name|NullableType|Identifier $possibleSubtype
+     * @param Name|NullableType|Identifier $type
      */
     protected function isSubtypeOf(Node $possibleSubtype, Node $type): bool
     {
-        $isNullable = $type instanceof NullableType;
-        if ($isNullable) {
-            $type = $type->type;
-        }
+        $type = $type instanceof NullableType ? $type->type : $type;
 
         if ($possibleSubtype instanceof NullableType) {
             $possibleSubtype = $possibleSubtype->type;
@@ -169,7 +170,7 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
 
     /**
      * @param ClassMethod|Param $childClassMethodOrParam
-     * @return Name|NullableType|null
+     * @return Name|NullableType|Identifier|null
      */
     protected function resolveChildType(
         AbstractTypeInfo $returnTypeInfo,
@@ -240,13 +241,23 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
 
         if ($classLikeNode instanceof Class_) {
             foreach ($classLikeNode->implements as $implementNode) {
-                $interfaces[] = $this->getName($implementNode);
+                $interfaceName = $this->getName($implementNode);
+                if ($interfaceName === null) {
+                    continue;
+                }
+
+                $interfaces[] = $interfaceName;
             }
         }
 
         if ($classLikeNode instanceof Interface_) {
             foreach ($classLikeNode->extends as $extendNode) {
-                $interfaces[] = $this->getName($extendNode);
+                $interfaceName = $this->getName($extendNode);
+                if ($interfaceName === null) {
+                    continue;
+                }
+
+                $interfaces[] = $interfaceName;
             }
         }
 

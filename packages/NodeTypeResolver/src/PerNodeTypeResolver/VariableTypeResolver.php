@@ -77,6 +77,11 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface
             return [];
         }
 
-        return [$varTypeInfo->getFqnType()];
+        $varType = $varTypeInfo->getFqnType();
+        if ($varType === null) {
+            return [];
+        }
+
+        return [$varType];
     }
 }

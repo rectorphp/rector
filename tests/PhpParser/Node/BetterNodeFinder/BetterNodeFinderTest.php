@@ -61,6 +61,9 @@ final class BetterNodeFinderTest extends TestCase
     {
         $phpParser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
         $nodes = $phpParser->parse(file_get_contents($filePath));
+        if ($nodes === null) {
+            return [];
+        }
 
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor(new ParentAndNextNodeVisitor());

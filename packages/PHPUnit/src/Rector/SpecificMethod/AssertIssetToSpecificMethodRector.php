@@ -18,11 +18,11 @@ final class AssertIssetToSpecificMethodRector extends AbstractPHPUnitRector
     /**
      * @var IdentifierMaintainer
      */
-    private $IdentifierMaintainer;
+    private $identifierMaintainer;
 
     public function __construct(IdentifierMaintainer $IdentifierMaintainer)
     {
-        $this->IdentifierMaintainer = $IdentifierMaintainer;
+        $this->identifierMaintainer = $IdentifierMaintainer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -85,24 +85,25 @@ final class AssertIssetToSpecificMethodRector extends AbstractPHPUnitRector
 
     private function refactorPropertyFetchNode(MethodCall $node, PropertyFetch $propertyFetchNode): void
     {
-        $this->IdentifierMaintainer->renameNodeWithMap($node, [
+        $name = $this->getName($propertyFetchNode);
+        if ($name === null) {
+            return;
+        }
+
+        $this->identifierMaintainer->renameNodeWithMap($node, [
             'assertTrue' => 'assertObjectHasAttribute',
             'assertFalse' => 'assertObjectNotHasAttribute',
         ]);
 
         $oldArgs = $node->args;
-
         unset($oldArgs[0]);
 
-        $node->args = array_merge($this->createArgs([
-            new String_($this->getName($propertyFetchNode)),
-            $propertyFetchNode->var,
-        ]), $oldArgs);
+        $node->args = array_merge($this->createArgs([new String_($name), $propertyFetchNode->var]), $oldArgs);
     }
 
     private function refactorArrayDimFetchNode(MethodCall $node, ArrayDimFetch $arrayDimFetchNode): void
     {
-        $this->IdentifierMaintainer->renameNodeWithMap($node, [
+        $this->identifierMaintainer->renameNodeWithMap($node, [
             'assertTrue' => 'assertArrayHasKey',
             'assertFalse' => 'assertArrayNotHasKey',
         ]);

@@ -104,21 +104,29 @@ CODE_SAMPLE
             }
 
             $paramNodeTypes = $this->getTypes($paramNode);
-            $this->addPropertyToClass($classNode, $paramNodeTypes[0], $this->getName($paramNode->var));
+            $paramName = $this->getName($paramNode->var);
+            if ($paramName === null) {
+                continue;
+            }
+
+            $this->addPropertyToClass($classNode, $paramNodeTypes[0], $paramName);
 
             // remove arguments
             unset($classMethodNode->params[$key]);
 
-            $variableInfo = new VariableInfo($this->getName($paramNode->var), $paramNodeTypes[0]);
+            $variableInfo = new VariableInfo($paramName, $paramNodeTypes[0]);
             $this->variablesToPropertyFetchCollection->addVariableInfo($variableInfo);
         }
     }
 
     private function isActionInjectedParamNode(Param $paramNode): bool
     {
-        $typehint = (string) $paramNode->type;
+        if ($paramNode->type === null) {
+            return false;
+        }
 
-        if (empty($typehint)) {
+        $typehint = $this->getName($paramNode->type);
+        if ($typehint === null) {
             return false;
         }
 

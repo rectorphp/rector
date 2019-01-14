@@ -42,11 +42,11 @@ final class AssertComparisonToSpecificMethodRector extends AbstractPHPUnitRector
     /**
      * @var IdentifierMaintainer
      */
-    private $IdentifierMaintainer;
+    private $identifierMaintainer;
 
-    public function __construct(IdentifierMaintainer $IdentifierMaintainer)
+    public function __construct(IdentifierMaintainer $identifierMaintainer)
     {
-        $this->IdentifierMaintainer = $IdentifierMaintainer;
+        $this->identifierMaintainer = $identifierMaintainer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -124,7 +124,7 @@ final class AssertComparisonToSpecificMethodRector extends AbstractPHPUnitRector
         }
 
         [$trueMethodName, $falseMethodName] = $this->defaultOldToNewMethods[$binaryOpClass];
-        $this->IdentifierMaintainer->renameNodeWithMap($methodCallNode, [
+        $this->identifierMaintainer->renameNodeWithMap($methodCallNode, [
             'assertTrue' => $trueMethodName,
             'assertFalse' => $falseMethodName,
         ]);
@@ -138,6 +138,6 @@ final class AssertComparisonToSpecificMethodRector extends AbstractPHPUnitRector
     {
         return in_array(get_class($node), [Array_::class, ConstFetch::class], true)
               || is_subclass_of($node, Scalar::class)
-              || $node instanceof Variable && stripos($this->getName($node), 'exp') === 0;
+              || $node instanceof Variable && stripos((string) $this->getName($node), 'exp') === 0;
     }
 }

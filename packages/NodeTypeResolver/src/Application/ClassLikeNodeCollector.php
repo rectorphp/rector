@@ -134,8 +134,12 @@ final class ClassLikeNodeCollector
 
             foreach ($stmt->traits as $trait) {
                 $traitName = $this->nameResolver->resolve($trait);
+                if ($traitName === null) {
+                    continue;
+                }
+
                 $foundTrait = $this->findTrait($traitName);
-                if ($foundTrait) {
+                if ($foundTrait !== null) {
                     $traits[] = $foundTrait;
                 }
             }

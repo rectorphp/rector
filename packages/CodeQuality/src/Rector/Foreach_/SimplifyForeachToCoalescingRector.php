@@ -154,7 +154,7 @@ CODE_SAMPLE
         $coalesceNode = new Coalesce(new ArrayDimFetch(
             $foreachNode->expr,
             $checkedNode
-        ), $this->returnNode ? $this->returnNode->expr : $checkedNode);
+        ), $this->returnNode && $this->returnNode->expr !== null ? $this->returnNode->expr : $checkedNode);
 
         if ($this->returnNode) {
             return new Return_($coalesceNode);

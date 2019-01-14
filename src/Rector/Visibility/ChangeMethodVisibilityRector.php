@@ -100,6 +100,10 @@ CODE_SAMPLE
             return null;
         }
         $methodName = $this->getName($node);
+        if ($methodName === null) {
+            return null;
+        }
+
         if (! isset($this->methodToVisibilityByClass[$nodeParentClassName][$methodName])) {
             return null;
         }

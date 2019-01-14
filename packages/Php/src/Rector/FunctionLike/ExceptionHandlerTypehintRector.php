@@ -56,9 +56,14 @@ CODE_SAMPLE
         }
 
         $paramNode = $node->params[0];
+        if ($paramNode->type === null) {
+            return null;
+        }
+
         // handle only Exception typehint
-        $isNullable = $paramNode->type instanceof NullableType;
-        $actualType = $isNullable ? (string) $paramNode->type->type : (string) $paramNode->type;
+        $actualType = $paramNode->type instanceof NullableType ? $this->getName(
+            $paramNode->type->type
+        ) : $this->getName($paramNode->type);
         if ($actualType !== 'Exception') {
             return null;
         }
@@ -68,7 +73,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $isNullable) {
+        if (! $paramNode->type instanceof NullableType) {
             $paramNode->type = new FullyQualified('Throwable');
         } else {
             $paramNode->type->type = new FullyQualified('Throwable');

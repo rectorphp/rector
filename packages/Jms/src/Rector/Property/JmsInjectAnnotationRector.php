@@ -113,6 +113,11 @@ CODE_SAMPLE
             return null;
         }
 
+        $name = $this->getName($node);
+        if ($name === null) {
+            return null;
+        }
+
         if (! $this->docBlockAnalyzer->hasTag($node, 'var')) {
             $this->docBlockAnalyzer->addVarTag($node, $type);
         }
@@ -122,7 +127,7 @@ CODE_SAMPLE
         // set to private
         $node->flags = Class_::MODIFIER_PRIVATE;
 
-        $this->addPropertyToClass($node->getAttribute(Attribute::CLASS_NODE), $type, $this->getName($node));
+        $this->addPropertyToClass($node->getAttribute(Attribute::CLASS_NODE), $type, $name);
 
         return $node;
     }

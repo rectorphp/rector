@@ -30,12 +30,17 @@ final class NodeTransformer
             return null;
         }
 
+        if ($arrayItems === []) {
+            return null;
+        }
+
         $message = $stringArgument->value;
         $messageParts = $this->splitBySpace($message);
 
         foreach ($messageParts as $key => $messagePart) {
             // is mask
             if (Strings::match($messagePart, '#^%\w$#')) {
+                /** @var Node[] $arrayItems */
                 $messageParts[$key] = array_shift($arrayItems);
             } else {
                 $messageParts[$key] = new String_($messagePart);
@@ -57,6 +62,10 @@ final class NodeTransformer
             }
 
             if (! $yieldNode instanceof Yield_) {
+                continue;
+            }
+
+            if ($yieldNode->value === null) {
                 continue;
             }
 
@@ -93,7 +102,7 @@ final class NodeTransformer
     }
 
     /**
-     * @return Node[]|null[]
+     * @return Node[][]|null[][]|Node[]|null[]
      */
     private function splitMessageAndArgs(FuncCall $sprintfFuncCall): array
     {

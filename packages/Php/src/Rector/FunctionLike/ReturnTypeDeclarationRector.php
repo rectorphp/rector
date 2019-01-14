@@ -92,9 +92,15 @@ CODE_SAMPLE
             // should override - is it subtype?
             $possibleOverrideNewReturnType = $returnTypeInfo->getTypeNode();
 
-            if ($this->isSubtypeOf($possibleOverrideNewReturnType, $node->returnType)) {
-                // allow override
-                $node->returnType = $returnTypeInfo->getTypeNode();
+            if ($possibleOverrideNewReturnType !== null) {
+                if ($node->returnType) {
+                    if ($this->isSubtypeOf($possibleOverrideNewReturnType, $node->returnType)) {
+                        // allow override
+                        $node->returnType = $returnTypeInfo->getTypeNode();
+                    }
+                } else {
+                    $node->returnType = $returnTypeInfo->getTypeNode();
+                }
             }
         } else {
             $node->returnType = $returnTypeInfo->getTypeNode();
@@ -141,7 +147,17 @@ CODE_SAMPLE
             return;
         }
 
-        $classMethod->returnType = $this->resolveChildType($returnTypeInfo, $node, $classMethod);
+        $resolvedChildType = $this->resolveChildType($returnTypeInfo, $node, $classMethod);
+        if ($resolvedChildType === null) {
+            return;
+        }
+
+        $resolvedChildType = $this->resolveChildType($returnTypeInfo, $node, $classMethod);
+        if ($resolvedChildType === null) {
+            return;
+        }
+
+        $classMethod->returnType = $resolvedChildType;
 
         // let the method now it was changed now
         $classMethod->returnType->setAttribute(self::HAS_NEW_INHERITED_TYPE, true);

@@ -134,9 +134,15 @@ CODE_SAMPLE
             if ($hasNewType) {
                 // should override - is it subtype?
                 $possibleOverrideNewReturnType = $paramTypeInfo->getTypeNode();
-                if ($this->isSubtypeOf($possibleOverrideNewReturnType, $paramNode->type)) {
-                    // allow override
-                    $paramNode->type = $paramTypeInfo->getTypeNode();
+                if ($possibleOverrideNewReturnType !== null) {
+                    if ($paramNode->type !== null) {
+                        if ($this->isSubtypeOf($possibleOverrideNewReturnType, $paramNode->type)) {
+                            // allow override
+                            $paramNode->type = $paramTypeInfo->getTypeNode();
+                        }
+                    } else {
+                        $paramNode->type = $paramTypeInfo->getTypeNode();
+                    }
                 }
             } else {
                 $paramNode->type = $paramTypeInfo->getTypeNode();
@@ -171,7 +177,12 @@ CODE_SAMPLE
             return;
         }
 
-        $paramNode->type = $this->resolveChildType($paramTypeInfo, $node, $classMethod);
+        $resolvedChildType = $this->resolveChildType($paramTypeInfo, $node, $classMethod);
+        if ($resolvedChildType === null) {
+            return;
+        }
+
+        $paramNode->type = $resolvedChildType;
 
         // let the method know it was changed now
         $paramNode->type->setAttribute(self::HAS_NEW_INHERITED_TYPE, true);

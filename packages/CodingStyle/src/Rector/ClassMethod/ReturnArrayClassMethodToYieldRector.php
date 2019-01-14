@@ -118,7 +118,7 @@ CODE_SAMPLE
                 // change return typehint
                 $node->returnType = new FullyQualified(Iterator::class);
 
-                $node->stmts = array_merge($node->stmts, $yieldNodes);
+                $node->stmts = array_merge((array) $node->stmts, $yieldNodes);
             }
         }
 

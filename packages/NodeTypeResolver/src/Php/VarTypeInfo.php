@@ -21,11 +21,15 @@ final class VarTypeInfo extends AbstractTypeInfo
         }
 
         $type = $this->getType();
+        if ($type === null) {
+            return false;
+        }
 
         // first letter is upper, probably class type
         if (ctype_upper($type[0])) {
             return true;
         }
+
         return TypeAnalyzer::isPhpReservedType($type);
     }
 

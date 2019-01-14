@@ -113,6 +113,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if ($node->expr === null) {
+            return null;
+        }
+
         $classNode = $node->getAttribute(Attribute::CLASS_NODE);
         if (! $this->isTypes($classNode, [$this->twigExtensionClass])) {
             return null;

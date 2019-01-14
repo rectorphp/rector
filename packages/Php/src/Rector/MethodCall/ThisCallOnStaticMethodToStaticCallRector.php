@@ -81,12 +81,22 @@ CODE_SAMPLE
 
         /** @var string $className */
         $className = $node->getAttribute(Attribute::CLASS_NAME);
-        $isStaticMethod = $this->functionLikeNodeCollector->isStaticMethod($this->getName($node), $className);
 
+        $methodName = $this->getName($node);
+        if ($methodName === null) {
+            return null;
+        }
+
+        $isStaticMethod = $this->functionLikeNodeCollector->isStaticMethod($methodName, $className);
         if (! $isStaticMethod) {
             return null;
         }
 
-        return new StaticCall(new Name('self'), $this->getName($node));
+        $methodName = $this->getName($node);
+        if ($methodName === null) {
+            return null;
+        }
+
+        return new StaticCall(new Name('self'), $methodName);
     }
 }

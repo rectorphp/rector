@@ -51,6 +51,10 @@ final class TernaryToNullCoalescingRector extends AbstractRector
             return null;
         }
 
+        if ($checkedNode === null || $fallbackNode === null) {
+            return null;
+        }
+
         /** @var Identical|NotIdentical $ternaryCompareNode */
         $ternaryCompareNode = $node->cond;
         if ($this->isNullMatch($ternaryCompareNode->left, $ternaryCompareNode->right, $checkedNode) ||

@@ -78,9 +78,9 @@ CODE_SAMPLE
                     continue;
                 }
 
-                $node = $this->process($node, $newMethod);
-                if ($node !== null) {
-                    return $node;
+                $newNode = $this->process($node, $newMethod);
+                if ($newNode !== null) {
+                    return $newNode;
                 }
             }
         }

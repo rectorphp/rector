@@ -131,7 +131,7 @@ final class ProcessCommand extends AbstractCommand
     {
         $this->rectorGuard->ensureSomeRectorsAreRegistered();
 
-        $source = $input->getArgument(Option::SOURCE);
+        $source = (string) $input->getArgument(Option::SOURCE);
 
         $this->configuration->resolveFromInput($input);
 

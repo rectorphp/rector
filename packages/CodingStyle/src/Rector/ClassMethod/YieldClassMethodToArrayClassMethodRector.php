@@ -103,7 +103,7 @@ CODE_SAMPLE
                 $node->returnType = new Identifier('array');
 
                 $returnExpression = new Return_($arrayNode);
-                $node->stmts = array_merge($node->stmts, [$returnExpression]);
+                $node->stmts = array_merge((array) $node->stmts, [$returnExpression]);
             }
         }
 

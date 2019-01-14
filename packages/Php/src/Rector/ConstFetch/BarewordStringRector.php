@@ -66,7 +66,9 @@ final class BarewordStringRector extends AbstractRector
         require_once $fileInfo->getRealPath();
 
         // restore
-        set_error_handler($previousErrorHandler);
+        if (is_callable($previousErrorHandler)) {
+            set_error_handler($previousErrorHandler);
+        }
 
         if (! in_array($constantName, $this->undefinedConstants, true)) {
             return null;

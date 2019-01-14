@@ -92,7 +92,7 @@ CODE_SAMPLE
         string $newType
     ): ?ClassMethod {
         // already set → no change
-        if ($classMethodNode->returnType && $classMethodNode->returnType->name === $newType) {
+        if ($classMethodNode->returnType && $this->isName($classMethodNode->returnType, $newType)) {
             return null;
         }
 
