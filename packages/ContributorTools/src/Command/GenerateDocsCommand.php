@@ -44,7 +44,7 @@ final class GenerateDocsCommand extends AbstractCommand implements ContributorCo
     protected function configure(): void
     {
         $this->setName(CommandNaming::classToName(self::class));
-        $this->setDescription('Generates markdown documentation of all Rectors.');
+        $this->setDescription('Generates markdown documentation of all Rectors');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

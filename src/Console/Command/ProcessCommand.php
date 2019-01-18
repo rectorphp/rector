@@ -93,7 +93,7 @@ final class ProcessCommand extends AbstractCommand
     protected function configure(): void
     {
         $this->setName(CommandNaming::classToName(self::class));
-        $this->setDescription('Reconstruct set of your code.');
+        $this->setDescription('Upgrade or refactor source code with provided rectors');
         $this->addArgument(
             Option::SOURCE,
             InputArgument::REQUIRED | InputArgument::IS_ARRAY,
