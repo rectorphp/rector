@@ -30,7 +30,7 @@ final class LevelsCommand extends AbstractCommand
     protected function configure(): void
     {
         $this->setName(CommandNaming::classToName(self::class));
-        $this->setDescription('List available levels.');
+        $this->setDescription('List available levels');
         $this->addArgument('name', InputArgument::OPTIONAL, 'Filter levels by provded name');
     }
 

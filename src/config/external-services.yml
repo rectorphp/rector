@@ -35,8 +35,31 @@ services:
     Symplify\PackageBuilder\EventSubscriber\ParameterTypoProofreaderEventSubscriber: ~
     Symplify\PackageBuilder\Parameter\ParameterTypoProofreader:
         $correctToTypos:
+            # keep "exclude_" explicit, to get typos to the correct key
             exclude_paths:
-                - '#(ex(c)?lude|ignore)((d)?_(path(s)?|dir(s)?|file(s)?))?#'
+                - 'exclude_path'
+                - 'exclude_dir'
+                - 'exclude_dirs'
+                - 'exclude_file'
+                - 'exclude_files'
+                - 'ignore_path'
+                - 'ignore_paths'
+                - 'ignore_dir'
+                - 'ignore_dirs'
+                - 'ignore_file'
+                - 'ignore_files'
+                - 'skip_path'
+                - 'skip_paths'
+                - 'skip_dir'
+                - 'skip_dirs'
+                - 'skip_file'
+                - 'skip_files'
+            exclude_rectors:
+                - 'exclude_rector'
+                - 'excluded_rector'
+                - 'excluded_rectors'
+                - 'skip_rector'
+                - 'skip_rectors'
             autoload_paths:
                 # https://regex101.com/r/aXEZYk/1
                 - '#(autoload|include|bootstrap)((ed)?_(path(s)?|dir(s)?|file(s)?))?#'

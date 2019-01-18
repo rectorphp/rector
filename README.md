@@ -73,6 +73,8 @@ parameters:
         - 'vendor/project-without-composer'
 ```
 
+## Exclude Paths and Rectors
+
 You can also **exclude files or directories** (with regex or [fnmatch](http://php.net/manual/en/function.fnmatch.php)):
 
 ```yaml
@@ -80,6 +82,15 @@ You can also **exclude files or directories** (with regex or [fnmatch](http://ph
 parameters:
     exclude_paths:
         - '*/src/*/Tests/*'
+```
+
+Do you want to use whole set, except that one rule? Exclude it:
+
+```yaml
+# rector.yml
+parameters:
+    exclude_rectors:
+        - 'Rector\CodeQuality\Rector\If_\SimplifyIfReturnBoolRector'
 ```
 
 ## Running Rector
