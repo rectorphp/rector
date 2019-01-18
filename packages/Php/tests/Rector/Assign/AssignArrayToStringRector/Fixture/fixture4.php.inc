@@ -17,9 +17,9 @@ class WithSomeInMethod
     {
         $array = [1, 2, 3];
 
-        $someString = '';
+        $c = '';
         foreach ($array as $item) {
-            $someString[] = $item;
+            $c[] = $item;
         }
     }
 }
@@ -45,9 +45,9 @@ class WithSomeInMethod
     {
         $array = [1, 2, 3];
 
-        $someString = [];
+        $c = [];
         foreach ($array as $item) {
-            $someString[] = $item;
+            $c[] = $item;
         }
     }
 }

@@ -13,7 +13,7 @@ use Rector\RectorDefinition\RectorDefinition;
 final class ChangeMethodVisibilityRector extends AbstractRector
 {
     /**
-     * @var string[] { class => [ method name => visibility ] }
+     * @var string[][] { class => [ method name => visibility ] }
      */
     private $methodToVisibilityByClass = [];
 
@@ -23,7 +23,7 @@ final class ChangeMethodVisibilityRector extends AbstractRector
     private $visibilityMaintainer;
 
     /**
-     * @param string[] $methodToVisibilityByClass
+     * @param string[][] $methodToVisibilityByClass
      */
     public function __construct(array $methodToVisibilityByClass, VisibilityMaintainer $visibilityMaintainer)
     {

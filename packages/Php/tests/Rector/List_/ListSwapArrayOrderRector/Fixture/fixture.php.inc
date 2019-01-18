@@ -2,13 +2,12 @@
 
 namespace Rector\Php\Tests\Rector\List_\ListSwapArrayOrderRector\Fixture;
 
-function listSwapArrayOrder()
+class ListSwapArrayOrder
 {
-    list($a[], $a[]) = [1, 2];
-
-    list($a[], $b[]) = [1, 2];
-
-    list($a, $b, $c) = [1, 2, 3];
+    public function a()
+    {
+        list($a[], $a[]) = [1, 2];
+    }
 }
 
 ?>
@@ -17,13 +16,12 @@ function listSwapArrayOrder()
 
 namespace Rector\Php\Tests\Rector\List_\ListSwapArrayOrderRector\Fixture;
 
-function listSwapArrayOrder()
+class ListSwapArrayOrder
 {
-    list($a[], $a[]) = array_reverse([1, 2]);
-
-    list($a[], $b[]) = [1, 2];
-
-    list($a, $b, $c) = [1, 2, 3];
+    public function a()
+    {
+        list($a[], $a[]) = array_reverse([1, 2]);
+    }
 }
 
 ?>
