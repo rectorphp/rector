@@ -3,6 +3,7 @@
 namespace Rector\DependencyInjection;
 
 use Rector\Contract\Rector\PhpRectorInterface;
+use Rector\DependencyInjection\CompilerPass\RemoveExcludedRectorsCompilerPass;
 use Rector\DependencyInjection\Loader\TolerantRectorYamlFileLoader;
 use Rector\FileSystemRector\Contract\FileSystemRectorInterface;
 use Symfony\Component\Config\Loader\DelegatingLoader;
@@ -52,6 +53,8 @@ final class RectorKernel extends Kernel
 
     protected function build(ContainerBuilder $containerBuilder): void
     {
+        $containerBuilder->addCompilerPass(new RemoveExcludedRectorsCompilerPass());
+
         // for defaults
         $containerBuilder->addCompilerPass(new AutowireSinglyImplementedCompilerPass());
         $containerBuilder->addCompilerPass(new AutowireArrayParameterCompilerPass());

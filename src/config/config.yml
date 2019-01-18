@@ -1,10 +1,9 @@
 imports:
-    - { resource: '../../packages/**/src/config/config.yml' }
-    # new config location
     - { resource: '../../packages/**/config/config.yml' }
     - { resource: 'services.yml' }
     - { resource: 'external-services.yml' }
 
 parameters:
     exclude_paths: []
+    exclude_rectors: []
     autoload_paths: []
