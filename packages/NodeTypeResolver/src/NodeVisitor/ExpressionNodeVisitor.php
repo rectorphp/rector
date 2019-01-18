@@ -21,11 +21,14 @@ final class ExpressionNodeVisitor extends NodeVisitorAbstract
 
     /**
      * @param Node[] $nodes
+     * @return Node[]|null
      */
-    public function beforeTraverse(array $nodes): void
+    public function beforeTraverse(array $nodes): ?array
     {
         $this->currentExpression = null;
         $this->previousExpression = null;
+
+        return null;
     }
 
     /**

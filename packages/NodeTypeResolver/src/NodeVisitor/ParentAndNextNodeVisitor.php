@@ -23,14 +23,20 @@ final class ParentAndNextNodeVisitor extends NodeVisitorAbstract
 
     /**
      * @param Node[] $nodes
+     * @return Node[]|null
      */
-    public function afterTraverse(array $nodes): void
+    public function afterTraverse(array $nodes): ?array
     {
         $this->stack = [];
         $this->prev = null;
+
+        return null;
     }
 
-    public function enterNode(Node $node): void
+    /**
+     * @return int|Node|null
+     */
+    public function enterNode(Node $node)
     {
         if (! empty($this->stack)) {
             $node->setAttribute(Attribute::PARENT_NODE, $this->stack[count($this->stack) - 1]);
@@ -44,11 +50,18 @@ final class ParentAndNextNodeVisitor extends NodeVisitorAbstract
         }
 
         $this->stack[] = $node;
+
+        return null;
     }
 
-    public function leaveNode(Node $node): void
+    /**
+     * @return Node[]|int|Node|null
+     */
+    public function leaveNode(Node $node)
     {
         $this->prev = $node;
         array_pop($this->stack);
+
+        return null;
     }
 }

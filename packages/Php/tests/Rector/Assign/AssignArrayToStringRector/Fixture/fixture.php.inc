@@ -10,6 +10,8 @@ function assignArrayToString()
     $string2[] = 1;
 
     $string3 = $string;
+    $string = '';
+    $string3 = $string;
     $string3[] = 1;
 }
 
@@ -26,6 +28,8 @@ function assignArrayToString()
     $someRubishInBetween = 1;
     $string2[] = 1;
 
+    $string3 = $string;
+    $string = '';
     $string3 = $string;
     $string3 = (array) $string3;
     $string3[] = 1;

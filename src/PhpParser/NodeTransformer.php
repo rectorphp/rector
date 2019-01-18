@@ -24,6 +24,7 @@ final class NodeTransformer
      */
     public function transformSprintfToArray(FuncCall $sprintfFuncCall): ?Array_
     {
+        /** @var Node[] $arrayItems */
         [$arrayItems, $stringArgument] = $this->splitMessageAndArgs($sprintfFuncCall);
         if (! $stringArgument instanceof String_) {
             // we need to know "%x" parts → nothing we can do

@@ -20,7 +20,7 @@ final class PHPStanServicesFactory
     public function __construct()
     {
         $this->container = (new ContainerFactory(getcwd()))
-            ->create(sys_get_temp_dir(), []);
+            ->create(sys_get_temp_dir(), [], []);
     }
 
     public function createBroker(): Broker

@@ -13,6 +13,12 @@ use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\PropertyProperty;
+use PHPStan\Type\ArrayType;
+use PHPStan\Type\Constant\ConstantStringType;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\StringType;
+use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Rector\AbstractRector;
@@ -148,7 +154,9 @@ CODE_SAMPLE
      */
     private function processVariable(Assign $assignNode, Expr $variableNode): bool
     {
-        if (! $this->isStringType($variableNode)) {
+        $variableStaticType = $this->getStaticType($variableNode);
+
+        if ($this->shouldSkipVariable($variableStaticType)) {
             return true;
         }
 
@@ -177,5 +185,23 @@ CODE_SAMPLE
     private function isEmptyStringNode(Node $node): bool
     {
         return $node instanceof String_ && $node->value === '';
+    }
+
+    private function shouldSkipVariable(?Type $staticType): bool
+    {
+        if ($staticType instanceof UnionType) {
+            if ($staticType->isSuperTypeOf(new ArrayType(new MixedType(), new MixedType()))->yes() &&
+                $staticType->isSuperTypeOf(new ConstantStringType(''))->yes()) {
+                return false;
+            }
+
+            return true;
+        }
+
+        if ($staticType instanceof StringType) {
+            return false;
+        }
+
+        return true;
     }
 }

@@ -127,6 +127,7 @@ CODE_SAMPLE
                 continue;
             }
 
+            $position = (int) $position;
             if ($node instanceof ClassMethod && $this->isChangeVendorLockedIn($node, $position)) {
                 continue;
             }
