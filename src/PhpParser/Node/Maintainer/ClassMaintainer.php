@@ -237,6 +237,9 @@ final class ClassMaintainer
         return false;
     }
 
+    /**
+     * @param string[] ...$types
+     */
     private function addStatementToClassBeforeTypes(Class_ $classNode, Stmt $node, string ...$types): void
     {
         foreach ($types as $type) {

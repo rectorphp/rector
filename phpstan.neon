@@ -1,8 +1,7 @@
 includes:
      - 'vendor/symplify/phpstan-extensions/config/config.neon'
-#      return after compatibility with phpstan 0.11
-#     - 'vendor/thecodingmachine/phpstan-strict-rules/phpstan-strict-rules.neon'
-#     - 'vendor/thecodingmachine/phpstan-safe-rule/phpstan-safe-rule.neon'
+     - 'vendor/thecodingmachine/phpstan-strict-rules/phpstan-strict-rules.neon'
+     - 'vendor/thecodingmachine/phpstan-safe-rule/phpstan-safe-rule.neon'
 
 parameters:
     # to allow intalling with various phsptan versions without reporting old errors here
