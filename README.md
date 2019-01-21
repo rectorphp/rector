@@ -180,5 +180,21 @@ We would be happy to merge your feature then.
 With this command, you can process your project with rector from docker:
 
 ```bash
-docker run -v $(pwd):/project rector/rector:latest
+docker run --rm -v $PWD:/app rector/rector [arguments for Rector]
 ```
+Example:
+```bash
+docker run --rm -v $PWD:/app rector/rector process /app --config=/app/rector.yml --dry-run
+```
+
+### Tip for running Rector in Docker with alias
+It is recommended to use the alias to access Rector via shortcut. To use simply `rector` everywhere on CLI add this line to your ~/.zshrc, ~/.bashrc or ~/.profile:
+```bash
+alias rector='docker run --rm -v $PWD:/app rector/rector'
+```
+
+With alias it allows you to use rector like this:
+```bash
+rector process /app --config=/app/rector.yml --dry-run
+```
+
