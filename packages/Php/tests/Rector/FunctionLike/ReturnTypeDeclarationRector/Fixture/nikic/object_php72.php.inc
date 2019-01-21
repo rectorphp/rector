@@ -4,11 +4,15 @@ namespace Rector\Php\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixtur
 
 class A {
     /** @return object */
-    public function getObject() {}
+    public function getObject($value) {
+        return $value;
+    }
 }
 class B extends A {
     /** @return Foo */
-    public function getObject() {}
+    public function getObject($value) {
+        return $value;
+    }
 }
 ?>
 -----
@@ -18,10 +22,14 @@ namespace Rector\Php\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixtur
 
 class A {
     /** @return object */
-    public function getObject(): object {}
+    public function getObject($value): object {
+        return $value;
+    }
 }
 class B extends A {
     /** @return Foo */
-    public function getObject(): Foo {}
+    public function getObject($value): Foo {
+        return $value;
+    }
 }
 ?>

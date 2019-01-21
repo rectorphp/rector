@@ -5,15 +5,16 @@ namespace Rector\Php\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixtur
 class Child extends Foo implements BarInterface
 {
     use BazTrait;
-    public function test($a)
+    public function test($a, $b)
     {
-        parent::test($a);
+        return parent::test($a, $b);
     }
     /**
      * {@inheritdoc}
      */
-    public function baz(array $a, $b)
+    public function baz(array $a, $b, $c)
     {
+        return $c;
     }
 }
 
@@ -21,14 +22,17 @@ class Foo
 {
     public function bar($foo)
     {
+        return $foo;
     }
     /**
      * @param float $a
      */
-    public function test($a)
+    public function test($a, $b)
     {
         $closure = function ($a, $c) {
         };
+
+        return $b;
     }
 }
 
@@ -39,8 +43,9 @@ trait BazTrait
      *
      * @return \DateTime
      */
-    protected function inTrait($a)
+    protected function inTrait($a, $b)
     {
+        return $b;
     }
 }
 
@@ -52,7 +57,7 @@ interface BarInterface
      *
      * @return float
      */
-    public function baz(array $a, $b);
+    public function baz(array $a, $b, $c);
 }
 ?>
 -----
@@ -63,15 +68,16 @@ namespace Rector\Php\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixtur
 class Child extends Foo implements BarInterface
 {
     use BazTrait;
-    public function test($a)
+    public function test($a, $b)
     {
-        parent::test($a);
+        return parent::test($a, $b);
     }
     /**
      * {@inheritdoc}
      */
-    public function baz(array $a, $b): float
+    public function baz(array $a, $b, $c): float
     {
+        return $c;
     }
 }
 
@@ -79,14 +85,17 @@ class Foo
 {
     public function bar($foo)
     {
+        return $foo;
     }
     /**
      * @param float $a
      */
-    public function test($a)
+    public function test($a, $b)
     {
         $closure = function ($a, $c) {
         };
+
+        return $b;
     }
 }
 
@@ -97,8 +106,9 @@ trait BazTrait
      *
      * @return \DateTime
      */
-    protected function inTrait($a): \DateTime
+    protected function inTrait($a, $b): \DateTime
     {
+        return $b;
     }
 }
 
@@ -110,6 +120,6 @@ interface BarInterface
      *
      * @return float
      */
-    public function baz(array $a, $b): float;
+    public function baz(array $a, $b, $c): float;
 }
 ?>

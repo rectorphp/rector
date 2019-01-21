@@ -33,6 +33,10 @@ class KnownStatic
         return function () {
         };
     }
+
+    public function nothing()
+    {
+    }
 }
 
 ?>
@@ -71,6 +75,10 @@ class KnownStatic
     {
         return function () {
         };
+    }
+
+    public function nothing(): void
+    {
     }
 }
 
