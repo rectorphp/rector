@@ -2,10 +2,12 @@
 
 namespace Rector\NodeTypeResolver\Application;
 
+use Nette\Utils\Strings;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\PhpParser\Node\Resolver\NameResolver;
+use ReflectionClass;
 
 final class FunctionLikeNodeCollector
 {
@@ -67,10 +69,22 @@ final class FunctionLikeNodeCollector
     public function isStaticMethod(string $methodName, string $className): bool
     {
         $methodNode = $this->findMethod($methodName, $className);
-        if ($methodNode === null) {
-            return false;
+        if ($methodNode) {
+            return $methodNode->isStatic();
         }
 
-        return $methodNode->isStatic();
+        // could be static in doc type magic
+        // @see https://regex101.com/r/tlvfTB/1
+        if (class_exists($className) || trait_exists($className)) {
+            $reflectionClass = new ReflectionClass($className);
+            if (Strings::match(
+                (string) $reflectionClass->getDocComment(),
+                '#@method\s*static\s*(.*?)\b' . $methodName . '\b#'
+            )) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
