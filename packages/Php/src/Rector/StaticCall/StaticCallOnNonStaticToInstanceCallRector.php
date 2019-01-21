@@ -96,7 +96,6 @@ CODE_SAMPLE
         }
 
         $isStaticMethod = $this->functionLikeNodeCollector->isStaticMethod($methodName, $className);
-
         if ($isStaticMethod) {
             return null;
         }
