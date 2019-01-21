@@ -61,6 +61,9 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
 
         if ($enableObjectType) {
             PhpTypeSupport::enableType('object');
+        } else {
+            // needed for multiple calls with different config
+            PhpTypeSupport::disableType('object');
         }
     }
 

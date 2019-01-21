@@ -23,4 +23,9 @@ final class PhpTypeSupport
     {
         return in_array($name, self::$types, true);
     }
+
+    public static function disableType(string $name): void
+    {
+        self::$types = array_diff(self::$types, [$name]);
+    }
 }
