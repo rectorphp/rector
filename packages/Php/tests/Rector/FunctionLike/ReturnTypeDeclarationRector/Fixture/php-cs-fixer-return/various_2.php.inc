@@ -1,23 +1,47 @@
 <?php
 
-namespace Rector\Php\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture\PhpCsFixerReturn\Various2;
+namespace Rector\Php\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture\PhpCsFixerReturn\Various3;
 
-/** @return Bar */ function my_foo() {}
-/** @return My\Bar */ function my_foo2() {}
-/** @return \My\Bar */ function my_foo3() {}
-interface Foo { /** @return Bar */ function my_foo4(); }
-/** @return void */ function my_foo5() {}
+/** @return void */ function my_foo() {
+}
+/** @return iterable */ function my_foo2($value) {
+    return $value;
+}
+/** @return object */ function my_foo3($value) {
+    return $value;
+}
+/** @return int */ function my_foo4($value) {
+    return $value;
+}
+/** @return array */ function my_foo5($value) {
+    return $value;
+}
+/** @return callable */ function my_foo6($value) {
+    return $value;
+}
 
 ?>
 -----
 <?php
 
-namespace Rector\Php\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture\PhpCsFixerReturn\Various2;
+namespace Rector\Php\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture\PhpCsFixerReturn\Various3;
 
-/** @return Bar */ function my_foo(): Bar {}
-/** @return My\Bar */ function my_foo2(): My\Bar {}
-/** @return \My\Bar */ function my_foo3(): \My\Bar {}
-interface Foo { /** @return Bar */ function my_foo4(): Bar; }
-/** @return void */ function my_foo5(): void {}
+/** @return void */ function my_foo(): void {
+}
+/** @return iterable */ function my_foo2($value): iterable {
+    return $value;
+}
+/** @return object */ function my_foo3($value) {
+    return $value;
+}
+/** @return int */ function my_foo4($value): int {
+    return $value;
+}
+/** @return array */ function my_foo5($value): array {
+    return $value;
+}
+/** @return callable */ function my_foo6($value): callable {
+    return $value;
+}
 
 ?>

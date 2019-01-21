@@ -63,6 +63,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        // skip excluded methods
+        if ($node instanceof ClassMethod && $this->isNames($node, $this->excludeClassMethodNames)) {
+            return null;
+        }
+
         // already set → skip
         $hasNewType = false;
         if ($node->returnType) {
@@ -77,17 +82,21 @@ CODE_SAMPLE
             return null;
         }
 
+        // this could be void
         if ($returnTypeInfo->getTypeNode() === null) {
-            return null;
-        }
+            if ($returnTypeInfo->getTypeCount() !== 0) {
+                return null;
+            }
 
-        // skip excluded methods
-        if ($node instanceof ClassMethod && $this->isNames($node, $this->excludeClassMethodNames)) {
-            return null;
+            // use
+            $returnTypeInfo = $this->functionLikeMaintainer->resolveStaticReturnTypeInfo($node);
+
+            if ($returnTypeInfo === null) {
+                return null;
+            }
         }
 
         // @todo is it violation?
-
         if ($hasNewType) {
             // should override - is it subtype?
             $possibleOverrideNewReturnType = $returnTypeInfo->getTypeNode();

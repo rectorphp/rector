@@ -9,6 +9,7 @@ trait BazTrait
      */
     protected function inTrait($a)
     {
+        return $a;
     }
 }
 ?>
@@ -24,6 +25,7 @@ trait BazTrait
      */
     protected function inTrait($a): \DateTime
     {
+        return $a;
     }
 }
 ?>

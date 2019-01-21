@@ -3,11 +3,19 @@
 namespace Rector\Php\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture\PhpCsFixerReturn\SelfStatic;
 
 class Foo {
-    /** @return self */ function my_foo() {}
+    /** @return self */
+    function my_foo($value)
+    {
+        return $value;
+    }
 }
 
 class Foo2 {
-    /** @return static */ function my_foo() {}
+    /** @return static */
+    function my_foo($value)
+    {
+        return $value;
+    }
 }
 
 ?>
@@ -17,11 +25,19 @@ class Foo2 {
 namespace Rector\Php\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture\PhpCsFixerReturn\SelfStatic;
 
 class Foo {
-    /** @return self */ function my_foo(): self {}
+    /** @return self */
+    function my_foo($value): self
+    {
+        return $value;
+    }
 }
 
 class Foo2 {
-    /** @return static */ function my_foo() {}
+    /** @return static */
+    function my_foo($value)
+    {
+        return $value;
+    }
 }
 
 ?>

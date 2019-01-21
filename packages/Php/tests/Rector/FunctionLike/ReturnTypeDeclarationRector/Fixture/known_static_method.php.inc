@@ -14,30 +14,30 @@ class KnownStaticMethod
         $this->anotherClass = $anotherClass;
     }
 
-    public function getMoreWhatever()
+    public function getMoreWhatever($value)
     {
-        return $this->anotherClass->getAnotherMethod();
+        return $this->anotherClass->getAnotherMethod($value);
     }
 
-    public function getMoreWhateverDoc()
+    public function getMoreWhateverDoc($value)
     {
-        return $this->anotherClass->getAnotherMethodDoc();
+        return $this->anotherClass->getAnotherMethodDoc($value);
     }
 }
 
 class AnotherClass
 {
-    public function getAnotherMethod(): int
+    public function getAnotherMethod($value): int
     {
-
+        return $value;
     }
 
     /**
      * @return false|true
      */
-    public function getAnotherMethodDoc()
+    public function getAnotherMethodDoc($value)
     {
-
+        return $value;
     }
 }
 
@@ -59,30 +59,30 @@ class KnownStaticMethod
         $this->anotherClass = $anotherClass;
     }
 
-    public function getMoreWhatever(): int
+    public function getMoreWhatever($value): int
     {
-        return $this->anotherClass->getAnotherMethod();
+        return $this->anotherClass->getAnotherMethod($value);
     }
 
-    public function getMoreWhateverDoc(): bool
+    public function getMoreWhateverDoc($value): bool
     {
-        return $this->anotherClass->getAnotherMethodDoc();
+        return $this->anotherClass->getAnotherMethodDoc($value);
     }
 }
 
 class AnotherClass
 {
-    public function getAnotherMethod(): int
+    public function getAnotherMethod($value): int
     {
-
+        return $value;
     }
 
     /**
      * @return false|true
      */
-    public function getAnotherMethodDoc(): bool
+    public function getAnotherMethodDoc($value): bool
     {
-
+        return $value;
     }
 }
 

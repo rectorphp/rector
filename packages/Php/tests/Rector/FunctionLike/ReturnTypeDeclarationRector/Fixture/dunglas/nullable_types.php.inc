@@ -5,22 +5,17 @@ namespace Rector\Php\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixtur
 /**
  * @return string|null
  */
-function foo()
+function foo($value)
 {
+    return $value;
 }
 
 /**
  * @return bool[]|null
  */
-function bazbaz()
+function bazbaz($value)
 {
-}
-
-/**
- * @param int|null $a
- */
-function foobat(int $a = null)
-{
+    return $value;
 }
 
 ?>
@@ -32,22 +27,17 @@ namespace Rector\Php\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixtur
 /**
  * @return string|null
  */
-function foo(): ?string
+function foo($value): ?string
 {
+    return $value;
 }
 
 /**
  * @return bool[]|null
  */
-function bazbaz(): ?array
+function bazbaz($value): ?array
 {
-}
-
-/**
- * @param int|null $a
- */
-function foobat(int $a = null)
-{
+    return $value;
 }
 
 ?>

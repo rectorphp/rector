@@ -4,11 +4,15 @@ namespace Rector\Php\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixtur
 
 class A {
     /** @return iterable */
-    public function getIterable() {}
+    public function getIterable($value) {
+        return $value;
+    }
 }
 class B extends A {
     /** @return array */
-    public function getIterable() {}
+    public function getIterable($value) {
+        return $value;
+    }
 }
 
 ?>
@@ -19,11 +23,15 @@ namespace Rector\Php\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixtur
 
 class A {
     /** @return iterable */
-    public function getIterable(): iterable {}
+    public function getIterable($value): iterable {
+        return $value;
+    }
 }
 class B extends A {
     /** @return array */
-    public function getIterable(): array {}
+    public function getIterable($value): array {
+        return $value;
+    }
 }
 
 ?>

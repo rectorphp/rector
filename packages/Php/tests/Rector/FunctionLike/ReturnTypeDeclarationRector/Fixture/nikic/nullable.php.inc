@@ -3,7 +3,9 @@
 namespace Rector\Php\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture\Nikic\Nullable;
 
 /** @return Foo|null */
-function test() {}
+function test($value) {
+    return $value;
+}
 
 ?>
 -----
@@ -12,6 +14,8 @@ function test() {}
 namespace Rector\Php\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture\Nikic\Nullable;
 
 /** @return Foo|null */
-function test(): ?Foo {}
+function test($value): ?Foo {
+    return $value;
+}
 
 ?>

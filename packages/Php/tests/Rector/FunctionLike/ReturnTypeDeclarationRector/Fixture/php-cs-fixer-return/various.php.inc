@@ -2,11 +2,21 @@
 
 namespace Rector\Php\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture\PhpCsFixerReturn\Various;
 
-/** @return Bar */ function my_foo() {}
-/** @return My\Bar */ function my_foo2() {}
-/** @return \My\Bar */ function my_foo3() {}
-interface Foo { /** @return Bar */ function my_foo4(); }
-/** @return void */ function my_foo5() {}
+/** @return Bar */ function my_foo($value) {
+    return $value;
+}
+/** @return My\Bar */ function my_foo2($value) {
+    return $value;
+}
+/** @return \My\Bar */ function my_foo3($value) {
+    return $value;
+}
+interface Foo {
+    /** @return Bar */
+    function my_foo4($value);
+}
+/** @return void */ function my_foo5() {
+}
 
 ?>
 -----
@@ -14,10 +24,20 @@ interface Foo { /** @return Bar */ function my_foo4(); }
 
 namespace Rector\Php\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture\PhpCsFixerReturn\Various;
 
-/** @return Bar */ function my_foo(): Bar {}
-/** @return My\Bar */ function my_foo2(): My\Bar {}
-/** @return \My\Bar */ function my_foo3(): \My\Bar {}
-interface Foo { /** @return Bar */ function my_foo4(): Bar; }
-/** @return void */ function my_foo5(): void {}
+/** @return Bar */ function my_foo($value): Bar {
+    return $value;
+}
+/** @return My\Bar */ function my_foo2($value): My\Bar {
+    return $value;
+}
+/** @return \My\Bar */ function my_foo3($value): \My\Bar {
+    return $value;
+}
+interface Foo {
+    /** @return Bar */
+    function my_foo4($value): Bar;
+}
+/** @return void */ function my_foo5(): void {
+}
 
 ?>

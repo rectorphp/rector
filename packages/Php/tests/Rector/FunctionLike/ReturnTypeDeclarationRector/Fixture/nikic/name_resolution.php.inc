@@ -6,22 +6,34 @@ use ABC\Baz;
 use ABC\{XYZ};
 
 /** @return \Bar */
-function test1() {}
+function test1($value) {
+    return $value;
+}
 
 /** @return Bar */
-function test2() {}
+function test2($value) {
+    return $value;
+}
 
 /** @return Bar\Baz */
-function test3() {}
+function test3($value) {
+    return $value;
+}
 
 /** @return Baz */
-function test4() {}
+function test4($value) {
+    return $value;
+}
 
 /** @return Baz\Foo */
-function test5() {}
+function test5($value) {
+    return $value;
+}
 
 /** @return XYZ */
-function test6() {}
+function test6($value) {
+    return $value;
+}
 
 ?>
 -----
@@ -33,21 +45,33 @@ use ABC\Baz;
 use ABC\{XYZ};
 
 /** @return \Bar */
-function test1(): \Bar {}
+function test1($value): \Bar {
+    return $value;
+}
 
 /** @return Bar */
-function test2(): Bar {}
+function test2($value): Bar {
+    return $value;
+}
 
 /** @return Bar\Baz */
-function test3(): Bar\Baz {}
+function test3($value): Bar\Baz {
+    return $value;
+}
 
 /** @return Baz */
-function test4(): Baz {}
+function test4($value): Baz {
+    return $value;
+}
 
 /** @return Baz\Foo */
-function test5(): Baz\Foo {}
+function test5($value): Baz\Foo {
+    return $value;
+}
 
 /** @return XYZ */
-function test6(): XYZ {}
+function test6($value): XYZ {
+    return $value;
+}
 
 ?>
