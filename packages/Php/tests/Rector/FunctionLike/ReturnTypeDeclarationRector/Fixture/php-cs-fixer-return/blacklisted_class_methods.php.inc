@@ -13,7 +13,10 @@ class Foo
 }
 
 /** @return Bar */
-function __construct() {}
+function __construct($value) {
+    return $value;
+}
+
 ?>
 -----
 <?php
@@ -31,5 +34,8 @@ class Foo
 }
 
 /** @return Bar */
-function __construct(): Bar {}
+function __construct($value): Bar {
+    return $value;
+}
+
 ?>

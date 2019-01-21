@@ -73,6 +73,11 @@ abstract class AbstractTypeInfo
         return $this->getTypeNode(true);
     }
 
+    public function getTypeCount(): int
+    {
+        return count($this->types);
+    }
+
     /**
      * @return Name|NullableType|Identifier|null
      */

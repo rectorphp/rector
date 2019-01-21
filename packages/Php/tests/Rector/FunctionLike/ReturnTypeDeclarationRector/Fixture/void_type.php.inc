@@ -2,14 +2,13 @@
 
 namespace Rector\Php\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture;
 
-class ThisClass
+class VoidType
 {
     /**
-     * @return $this
+     * @return false
      */
-    function someFunction($param, $param2)
+    function someFunction()
     {
-        return $param;
     }
 }
 
@@ -19,14 +18,13 @@ class ThisClass
 
 namespace Rector\Php\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture;
 
-class ThisClass
+class VoidType
 {
     /**
-     * @return $this
+     * @return false
      */
-    function someFunction($param, $param2): self
+    function someFunction(): void
     {
-        return $param;
     }
 }
 

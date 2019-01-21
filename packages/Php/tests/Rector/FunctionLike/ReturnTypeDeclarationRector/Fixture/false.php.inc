@@ -7,8 +7,9 @@ class BoolClass
     /**
      * @return false
      */
-    function someFunction()
+    function someFunction($value)
     {
+        return $value;
     }
 }
 
@@ -23,8 +24,9 @@ class BoolClass
     /**
      * @return false
      */
-    function someFunction(): bool
+    function someFunction($value): bool
     {
+        return $value;
     }
 }
 

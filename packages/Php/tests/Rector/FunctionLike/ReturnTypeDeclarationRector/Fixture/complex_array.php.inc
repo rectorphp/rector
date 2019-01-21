@@ -5,22 +5,25 @@ namespace Rector\Php\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector\Fixtu
 /**
  * @return Foo[][]
  */
-function someFunction()
+function someFunction($value)
 {
+    return $value;
 }
 
 /**
  * @return real
  */
-function someFunction2()
+function someFunction2($value)
 {
+    return $value;
 }
 
 /**
  * @return Foo[]|iterable
  */
-function someFunction3()
+function someFunction3($value)
 {
+    return $value;
 }
 
 ?>
@@ -32,22 +35,25 @@ namespace Rector\Php\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector\Fixtu
 /**
  * @return Foo[][]
  */
-function someFunction(): array
+function someFunction($value): array
 {
+    return $value;
 }
 
 /**
  * @return real
  */
-function someFunction2(): float
+function someFunction2($value): float
 {
+    return $value;
 }
 
 /**
  * @return Foo[]|iterable
  */
-function someFunction3(): array
+function someFunction3($value): array
 {
+    return $value;
 }
 
 ?>
