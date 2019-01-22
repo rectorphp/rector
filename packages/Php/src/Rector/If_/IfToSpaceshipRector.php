@@ -155,23 +155,6 @@ CODE_SAMPLE
         return new Return_($spaceshipNode);
     }
 
-    private function areVariablesEqual(BinaryOp $node, ?Expr $firstValue, ?Expr $secondValue): bool
-    {
-        if ($firstValue === null || $secondValue === null) {
-            return false;
-        }
-
-        if ($this->areNodesEqual($node->left, $firstValue) && $this->areNodesEqual($node->right, $secondValue)) {
-            return true;
-        }
-
-        if ($this->areNodesEqual($node->right, $firstValue) && $this->areNodesEqual($node->left, $secondValue)) {
-            return true;
-        }
-
-        return false;
-    }
-
     private function reset(): void
     {
         $this->onEqual = null;
@@ -203,5 +186,22 @@ CODE_SAMPLE
 
             $this->onSmaller = $this->getValue($ternaryNode->else);
         }
+    }
+
+    private function areVariablesEqual(BinaryOp $node, ?Expr $firstValue, ?Expr $secondValue): bool
+    {
+        if ($firstValue === null || $secondValue === null) {
+            return false;
+        }
+
+        if ($this->areNodesEqual($node->left, $firstValue) && $this->areNodesEqual($node->right, $secondValue)) {
+            return true;
+        }
+
+        if ($this->areNodesEqual($node->right, $firstValue) && $this->areNodesEqual($node->left, $secondValue)) {
+            return true;
+        }
+
+        return false;
     }
 }

@@ -145,6 +145,22 @@ CODE_SAMPLE
         $this->processPreviousAssign($node, $firstArgument);
     }
 
+    private function processPreviousAssign(Node $node, Node $firstArgument): void
+    {
+        /** @var Assign|null $createdNode */
+        $createdNode = $this->findPreviousNodeAssign($node, $firstArgument);
+
+        if ($createdNode instanceof Assign && $createdNode->expr instanceof FuncCall && $this->isName(
+            $createdNode->expr,
+            'sprintf'
+        )) {
+            $arrayNode = $this->nodeTransformer->transformSprintfToArray($createdNode->expr);
+            if ($arrayNode) {
+                $createdNode->expr = $arrayNode;
+            }
+        }
+    }
+
     private function findPreviousNodeAssign(Node $node, Node $firstArgument): ?Assign
     {
         return $this->betterNodeFinder->findFirstPrevious($node, function (Node $checkedNode) use ($firstArgument) {
@@ -160,21 +176,5 @@ CODE_SAMPLE
 
             return $checkedNode;
         });
-    }
-
-    private function processPreviousAssign(Node $node, Node $firstArgument): void
-    {
-        /** @var Assign|null $createdNode */
-        $createdNode = $this->findPreviousNodeAssign($node, $firstArgument);
-
-        if ($createdNode instanceof Assign && $createdNode->expr instanceof FuncCall && $this->isName(
-            $createdNode->expr,
-            'sprintf'
-        )) {
-            $arrayNode = $this->nodeTransformer->transformSprintfToArray($createdNode->expr);
-            if ($arrayNode) {
-                $createdNode->expr = $arrayNode;
-            }
-        }
     }
 }

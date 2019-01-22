@@ -16,7 +16,6 @@ use PhpParser\Node\Scalar\EncapsedStringPart;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\PrettyPrinter\Standard;
 use Rector\NodeTypeResolver\Node\Attribute;
 use function Safe\sprintf;
@@ -70,6 +69,27 @@ final class BetterStandardPrinter extends Standard
     public function areNodesEqual($firstNode, $secondNode): bool
     {
         return $this->print($firstNode) === $this->print($secondNode);
+    }
+
+    /**
+     * @param mixed[] $nodes
+     * @param mixed[] $origNodes
+     * @param int|null $fixup
+     * @param string|null $insertStr
+     */
+    public function pArray(
+        array $nodes,
+        array $origNodes,
+        int &$pos,
+        int $indentAdjustment,
+        string $subNodeName,
+        $fixup,
+        $insertStr
+    ): ?string {
+        // reindex positions for printer
+        $nodes = array_values($nodes);
+
+        return parent::pArray($nodes, $origNodes, $pos, $indentAdjustment, $subNodeName, $fixup, $insertStr);
     }
 
     /**
@@ -192,27 +212,6 @@ final class BetterStandardPrinter extends Standard
             . '(' . $this->pCommaSeparated($node->params) . ')'
             . ($node->returnType !== null ? ': ' . $this->p($node->returnType) : '')
             . ($node->stmts !== null ? $this->nl . '{' . $this->pStmts($node->stmts) . $this->nl . '}' : ';');
-    }
-
-    /**
-     * @param mixed[] $nodes
-     * @param mixed[] $origNodes
-     * @param int|null $fixup
-     * @param string|null $insertStr
-     */
-    public function pArray(
-        array $nodes,
-        array $origNodes,
-        int &$pos,
-        int $indentAdjustment,
-        string $subNodeName,
-        $fixup,
-        $insertStr
-    ): ?string {
-        // reindex positions for printer
-        $nodes = array_values($nodes);
-
-        return parent::pArray($nodes, $origNodes, $pos, $indentAdjustment, $subNodeName, $fixup, $insertStr);
     }
 
     /**

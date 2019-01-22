@@ -100,6 +100,24 @@ CODE_SAMPLE
     }
 
     /**
+     * @param mixed $preference
+     */
+    private function ensurePreferceIsValid($preference): void
+    {
+        $allowedPreferences = [self::PREFER_THIS, self::PREFER_SELF];
+        if (in_array($preference, $allowedPreferences, true)) {
+            return;
+        }
+
+        throw new InvalidRectorConfigurationException(sprintf(
+            'Preference configuration "%s" for "%s" is not valid. Use one of "%s"',
+            $preference,
+            self::class,
+            implode('", "', $allowedPreferences)
+        ));
+    }
+
+    /**
      * @param MethodCall|StaticCall $node
      */
     private function processToSelf(Node $node): ?StaticCall
@@ -129,23 +147,5 @@ CODE_SAMPLE
         }
 
         return new MethodCall(new Variable('this'), $node->name);
-    }
-
-    /**
-     * @param mixed $preference
-     */
-    private function ensurePreferceIsValid($preference): void
-    {
-        $allowedPreferences = [self::PREFER_THIS, self::PREFER_SELF];
-        if (in_array($preference, $allowedPreferences, true)) {
-            return;
-        }
-
-        throw new InvalidRectorConfigurationException(sprintf(
-            'Preference configuration "%s" for "%s" is not valid. Use one of "%s"',
-            $preference,
-            self::class,
-            implode('", "', $allowedPreferences)
-        ));
     }
 }
