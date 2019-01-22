@@ -72,9 +72,6 @@ final class RemoveExtraParametersRector extends AbstractRector
             unset($node->args[$i]);
         }
 
-        // re-index for printer
-        $node->args = array_values($node->args);
-
         return $node;
     }
 

@@ -196,6 +196,11 @@ abstract class AbstractTypeInfo
         return array_values($types);
     }
 
+    private function hasRemovedTypes(): bool
+    {
+        return count($this->removedTypes) > 1;
+    }
+
     /**
      * @param string[] $types
      */
@@ -279,10 +284,5 @@ abstract class AbstractTypeInfo
         sort($arraySubtypeGroup);
 
         return $types === $arraySubtypeGroup;
-    }
-
-    private function hasRemovedTypes(): bool
-    {
-        return count($this->removedTypes) > 1;
     }
 }

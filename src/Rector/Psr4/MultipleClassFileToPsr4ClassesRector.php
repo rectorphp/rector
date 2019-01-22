@@ -144,9 +144,6 @@ CODE_SAMPLE
                     $this->removeAllClassesFromNamespaceNode($newStmt);
                     $newStmt->stmts[] = $classNode;
 
-                    // reindex from 0, for the printer
-                    $newStmt->stmts = array_values($newStmt->stmts);
-
                     $fileDestination = $this->createClassFileDestination($classNode, $smartFileInfo);
 
                     $fileContent = $this->formatPerservingPrinter->printToString(
@@ -206,8 +203,7 @@ CODE_SAMPLE
             }
         }
 
-        // reindex from 0, for the printer
-        return array_values($nodes);
+        return $nodes;
     }
 
     private function removeAllClassesFromNamespaceNode(Namespace_ $namespaceNode): void

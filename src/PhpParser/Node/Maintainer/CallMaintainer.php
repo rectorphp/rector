@@ -109,11 +109,6 @@ final class CallMaintainer
         });
     }
 
-    private function resolveMotherType(Node $callNode): string
-    {
-        return $callNode instanceof FuncCall ? Function_::class : ClassMethod::class;
-    }
-
     /**
      * @param StaticCall|FuncCall|MethodCall $callNode
      */
@@ -153,5 +148,10 @@ final class CallMaintainer
         $printedFunction = $this->betterStandardPrinter->print($externalFunctionNode->stmts);
 
         return (bool) Strings::match($printedFunction, '#\b(' . implode('|', self::VARIADIC_FUNCTION_NAMES) . ')\b#');
+    }
+
+    private function resolveMotherType(Node $callNode): string
+    {
+        return $callNode instanceof FuncCall ? Function_::class : ClassMethod::class;
     }
 }

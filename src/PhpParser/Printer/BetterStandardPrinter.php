@@ -72,6 +72,27 @@ final class BetterStandardPrinter extends Standard
     }
 
     /**
+     * @param mixed[] $nodes
+     * @param mixed[] $origNodes
+     * @param int|null $fixup
+     * @param string|null $insertStr
+     */
+    public function pArray(
+        array $nodes,
+        array $origNodes,
+        int &$pos,
+        int $indentAdjustment,
+        string $subNodeName,
+        $fixup,
+        $insertStr
+    ): ?string {
+        // reindex positions for printer
+        $nodes = array_values($nodes);
+
+        return parent::pArray($nodes, $origNodes, $pos, $indentAdjustment, $subNodeName, $fixup, $insertStr);
+    }
+
+    /**
      * Do not preslash all slashes (parent behavior), but only those:
      *
      * - followed by "\"

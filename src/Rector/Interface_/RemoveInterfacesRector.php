@@ -67,8 +67,6 @@ CODE_SAMPLE
             }
         }
 
-        $node->implements = array_values($node->implements);
-
         return $node;
     }
 }

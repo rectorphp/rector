@@ -76,9 +76,6 @@ CODE_SAMPLE
             }
         }
 
-        // reindex from 0 for printer
-        $node->catches = array_values($node->catches);
-
         return $node;
     }
 

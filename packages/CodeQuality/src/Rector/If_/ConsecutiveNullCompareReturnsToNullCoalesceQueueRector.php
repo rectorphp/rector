@@ -16,9 +16,9 @@ use Rector\RectorDefinition\RectorDefinition;
 final class ConsecutiveNullCompareReturnsToNullCoalesceQueueRector extends AbstractRector
 {
     /**
-     * @var IfMaintainer
+     * @var Node[]
      */
-    private $ifMaintainer;
+    private $nodesToRemove = [];
 
     /**
      * @var Expr[]
@@ -26,9 +26,9 @@ final class ConsecutiveNullCompareReturnsToNullCoalesceQueueRector extends Abstr
     private $coalescingNodes = [];
 
     /**
-     * @var Node[]
+     * @var IfMaintainer
      */
-    private $nodesToRemove = [];
+    private $ifMaintainer;
 
     public function __construct(IfMaintainer $ifMaintainer)
     {
@@ -115,6 +115,12 @@ CODE_SAMPLE
         return $this->createReturnCoalesceNode($this->coalescingNodes);
     }
 
+    private function reset(): void
+    {
+        $this->coalescingNodes = [];
+        $this->nodesToRemove = [];
+    }
+
     private function isReturnNull(Node $node): bool
     {
         if (! $node instanceof Return_) {
@@ -140,11 +146,5 @@ CODE_SAMPLE
         }
 
         return new Return_($coalesceNode);
-    }
-
-    private function reset(): void
-    {
-        $this->coalescingNodes = [];
-        $this->nodesToRemove = [];
     }
 }

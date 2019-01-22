@@ -140,6 +140,38 @@ CODE_SAMPLE
         return $docReturnTypeInfo;
     }
 
+    /**
+     * Add typehint to all children
+     */
+    private function populateChildren(Node $node, ReturnTypeInfo $returnTypeInfo): void
+    {
+        if (! $node instanceof ClassMethod) {
+            return;
+        }
+
+        /** @var string $methodName */
+        $methodName = $this->getName($node);
+
+        /** @var string $className */
+        $className = $node->getAttribute(Attribute::CLASS_NAME);
+
+        $childrenClassLikes = $this->classLikeNodeCollector->findClassesAndInterfacesByType($className);
+
+        // update their methods as well
+        foreach ($childrenClassLikes as $childClassLike) {
+            if (! $childClassLike instanceof Class_) {
+                continue;
+            }
+
+            $usedTraits = $this->classLikeNodeCollector->findUsedTraitsInClass($childClassLike);
+            foreach ($usedTraits as $trait) {
+                $this->addReturnTypeToMethod($trait, $methodName, $node, $returnTypeInfo);
+            }
+
+            $this->addReturnTypeToMethod($childClassLike, $methodName, $node, $returnTypeInfo);
+        }
+    }
+
     private function addReturnTypeToMethod(
         ClassLike $classLikeNode,
         string $methodName,
@@ -172,37 +204,5 @@ CODE_SAMPLE
         $classMethod->returnType->setAttribute(self::HAS_NEW_INHERITED_TYPE, true);
 
         $this->notifyNodeChangeFileInfo($classMethod);
-    }
-
-    /**
-     * Add typehint to all children
-     */
-    private function populateChildren(Node $node, ReturnTypeInfo $returnTypeInfo): void
-    {
-        if (! $node instanceof ClassMethod) {
-            return;
-        }
-
-        /** @var string $methodName */
-        $methodName = $this->getName($node);
-
-        /** @var string $className */
-        $className = $node->getAttribute(Attribute::CLASS_NAME);
-
-        $childrenClassLikes = $this->classLikeNodeCollector->findClassesAndInterfacesByType($className);
-
-        // update their methods as well
-        foreach ($childrenClassLikes as $childClassLike) {
-            if (! $childClassLike instanceof Class_) {
-                continue;
-            }
-
-            $usedTraits = $this->classLikeNodeCollector->findUsedTraitsInClass($childClassLike);
-            foreach ($usedTraits as $trait) {
-                $this->addReturnTypeToMethod($trait, $methodName, $node, $returnTypeInfo);
-            }
-
-            $this->addReturnTypeToMethod($childClassLike, $methodName, $node, $returnTypeInfo);
-        }
     }
 }

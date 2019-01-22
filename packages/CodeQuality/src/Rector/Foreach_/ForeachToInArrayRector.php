@@ -173,6 +173,20 @@ CODE_SAMPLE
         return ! $ifCondition instanceof Identical && ! $ifCondition instanceof Equal;
     }
 
+    /**
+     * @return Node[]|null
+     */
+    private function matchNodes(BinaryOp $ifCondition, Expr $foreachValueNode): ?array
+    {
+        return $this->binaryOpMaintainer->matchFirstAndSecondConditionNode(
+            $ifCondition,
+            Variable::class,
+            function (Node $node, Node $otherNode) use ($foreachValueNode) {
+                return $this->areNodesEqual($otherNode, $foreachValueNode);
+            }
+        );
+    }
+
     private function isIfBodyABoolReturnNode(If_ $firstNodeInsideForeach): bool
     {
         $ifStatment = $firstNodeInsideForeach->stmts[0];
@@ -222,19 +236,5 @@ CODE_SAMPLE
         }
 
         $newNode->setAttribute('comments', [new Comment($commentContent)]);
-    }
-
-    /**
-     * @return Node[]|null
-     */
-    private function matchNodes(BinaryOp $ifCondition, Expr $foreachValueNode): ?array
-    {
-        return $this->binaryOpMaintainer->matchFirstAndSecondConditionNode(
-            $ifCondition,
-            Variable::class,
-            function (Node $node, Node $otherNode) use ($foreachValueNode) {
-                return $this->areNodesEqual($otherNode, $foreachValueNode);
-            }
-        );
     }
 }
