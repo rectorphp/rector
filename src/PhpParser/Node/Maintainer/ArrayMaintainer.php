@@ -33,7 +33,6 @@ final class ArrayMaintainer
 
             // remove + recount for the printer
             unset($arrayNode->items[$i]);
-            $arrayNode->items = array_values($arrayNode->items);
 
             return $item;
         }

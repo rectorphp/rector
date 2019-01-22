@@ -95,8 +95,6 @@ CODE_SAMPLE
         // 4. refactor $delta to "assertEqualsWithDelta()"
         $this->processAssertEqualsWithDelta($node);
 
-        $node->args = array_values($node->args);
-
         return $node;
     }
 

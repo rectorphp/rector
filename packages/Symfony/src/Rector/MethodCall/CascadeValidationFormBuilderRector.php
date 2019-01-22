@@ -132,9 +132,6 @@ CODE_SAMPLE
             // remove empty array
             if (count($optionsArrayNode->items) === 0) {
                 unset($methodCallNode->args[1]);
-            } else {
-                // recount indexes for printer
-                $optionsArrayNode->items = array_values($optionsArrayNode->items);
             }
 
             return true;

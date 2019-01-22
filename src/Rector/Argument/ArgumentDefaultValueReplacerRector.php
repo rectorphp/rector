@@ -131,7 +131,7 @@ CODE_SAMPLE
                 );
 
                 if ($newArgs) {
-                    $node->args = array_values($newArgs);
+                    $node->args = $newArgs;
                     break;
                 }
             }

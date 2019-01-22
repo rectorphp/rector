@@ -109,9 +109,6 @@ CODE_SAMPLE
             $this->collectedMethodCalls[$i - 1] = $prevStmt->expr;
         }
 
-        // recount keys from 0, for needs of printer
-        $node->stmts = array_values($node->stmts);
-
         return $node;
     }
 

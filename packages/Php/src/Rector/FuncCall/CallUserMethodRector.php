@@ -55,9 +55,6 @@ final class CallUserMethodRector extends AbstractRector
         $node->args[0] = $this->createArg([$argNodes[1]->value, $argNodes[0]->value]);
         unset($node->args[1]);
 
-        // reindex from 0
-        $node->args = array_values($node->args);
-
         return $node;
     }
 }

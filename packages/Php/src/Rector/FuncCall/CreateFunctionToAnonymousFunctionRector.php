@@ -176,8 +176,7 @@ CODE_SAMPLE
             $filteredVariables[$this->getName($variableNode)] = $variableNode;
         }
 
-        // re-index
-        return array_values($filteredVariables);
+        return $filteredVariables;
     }
 
     /**
