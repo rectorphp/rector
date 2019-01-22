@@ -137,10 +137,11 @@ CODE_SAMPLE
     {
         $entityFqnOrAlias = $this->entityFqnOrAlias($methodCallNode);
 
-        $repositoryClassName = $this->doctrineEntityAndRepositoryMapper->mapEntityToRepository($entityFqnOrAlias);
-
-        if ($repositoryClassName !== null) {
-            return $repositoryClassName;
+        if ($entityFqnOrAlias !== null) {
+            $repositoryClassName = $this->doctrineEntityAndRepositoryMapper->mapEntityToRepository($entityFqnOrAlias);
+            if ($repositoryClassName !== null) {
+                return $repositoryClassName;
+            }
         }
 
         throw new RectorProviderException(sprintf(
@@ -150,7 +151,7 @@ CODE_SAMPLE
         ));
     }
 
-    private function entityFqnOrAlias(MethodCall $methodCallNode): string
+    private function entityFqnOrAlias(MethodCall $methodCallNode): ?string
     {
         $repositoryArgument = $methodCallNode->args[0]->value;
 
@@ -159,7 +160,7 @@ CODE_SAMPLE
         }
 
         if ($repositoryArgument instanceof ClassConstFetch && $repositoryArgument->class instanceof Name) {
-            return $repositoryArgument->class->getAttribute(Attribute::RESOLVED_NAME)->toString();
+            return $this->getName($repositoryArgument->class);
         }
 
         throw new ShouldNotHappenException('Unable to resolve repository argument');

@@ -6,7 +6,6 @@ use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\TraitUse;
-use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\PhpParser\Node\Maintainer\ClassMaintainer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
@@ -79,7 +78,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $nodeParentClassName = $this->getClassNodeParentClassName($node);
+        $nodeParentClassName = $this->getName($node->extends);
         if (! isset($this->parentClassToTraits[$nodeParentClassName])) {
             return null;
         }
@@ -97,14 +96,6 @@ CODE_SAMPLE
         $this->removeParentClass($node);
 
         return $node;
-    }
-
-    private function getClassNodeParentClassName(Class_ $classNode): string
-    {
-        /** @var FullyQualified $fullyQualifiedName */
-        $fullyQualifiedName = $classNode->extends->getAttribute(Attribute::RESOLVED_NAME);
-
-        return $fullyQualifiedName->toString();
     }
 
     private function removeParentClass(Class_ $classNode): void

@@ -5,7 +5,6 @@ namespace Rector\Rector\Interface_;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
-use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -88,12 +87,7 @@ CODE_SAMPLE
     {
         $alreadyAddedNames = [];
         foreach ($classNode->implements as $key => $name) {
-            if ($name->hasAttribute(Attribute::RESOLVED_NAME)) {
-                $fqnName = (string) $name->getAttribute(Attribute::RESOLVED_NAME);
-            } else {
-                $fqnName = $name->toString();
-            }
-
+            $fqnName = $this->getName($name);
             if (in_array($fqnName, $alreadyAddedNames, true)) {
                 unset($classNode->implements[$key]);
                 continue;

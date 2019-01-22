@@ -74,7 +74,7 @@ abstract class AbstractToConstructorInjectionRector extends AbstractRector
         }
 
         if ($argument->class instanceof Name) {
-            return $argument->class->getAttribute(Attribute::RESOLVED_NAME)->toString();
+            return $this->getName($argument->class);
         }
 
         return null;
