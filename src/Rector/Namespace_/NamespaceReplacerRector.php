@@ -61,7 +61,11 @@ final class NamespaceReplacerRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        $name = $this->resolveNameFromNode($node);
+        $name = $this->getName($node);
+        if ($name === null) {
+            return null;
+        }
+
         if (! $this->isNamespaceToChange($name)) {
             return null;
         }
@@ -71,14 +75,14 @@ final class NamespaceReplacerRector extends AbstractRector
         }
 
         if ($node instanceof Namespace_) {
-            $newName = $this->resolveNewNameFromNode($node);
+            $newName = $this->resolveNewNameFromNode($name);
             $node->name = new Name($newName);
 
             return $node;
         }
 
         if ($node instanceof Use_) {
-            $newName = $this->resolveNewNameFromNode($node);
+            $newName = $this->resolveNewNameFromNode($name);
             $node->uses[0]->name = new Name($newName);
 
             return $node;
@@ -87,35 +91,16 @@ final class NamespaceReplacerRector extends AbstractRector
         if ($this->isPartialNamespace($node)) {
             $newName = $this->resolvePartialNewName($node);
         } else {
-            $newName = $this->resolveNewNameFromNode($node);
+            $newName = $this->resolveNewNameFromNode($name);
+        }
+
+        if ($newName === null) {
+            return null;
         }
 
         $node->parts = explode('\\', $newName);
 
         return $node;
-    }
-
-    private function resolveNameFromNode(Node $node): string
-    {
-        if ($node instanceof Namespace_ && $node->name) {
-            return $node->name->toString();
-        }
-
-        if ($node instanceof Use_) {
-            return $node->uses[0]->name->toString();
-        }
-
-        if ($node instanceof Name) {
-            /** @var FullyQualified|null $resolveName */
-            $resolveName = $node->getAttribute(Attribute::RESOLVED_NAME);
-            if ($resolveName) {
-                return $resolveName->toString();
-            }
-
-            return $node->toString();
-        }
-
-        return '';
     }
 
     private function isNamespaceToChange(string $namespace): bool
@@ -146,10 +131,8 @@ final class NamespaceReplacerRector extends AbstractRector
         return array_key_exists($newClassName, $this->oldToNewNamespaces);
     }
 
-    private function resolveNewNameFromNode(Node $node): string
+    private function resolveNewNameFromNode(string $name): string
     {
-        $name = $this->resolveNameFromNode($node);
-
         [$oldNamespace, $newNamespace] = $this->getNewNamespaceForOldOne($name);
 
         return str_replace($oldNamespace, $newNamespace, $name);
@@ -169,11 +152,14 @@ final class NamespaceReplacerRector extends AbstractRector
         return false;
     }
 
-    private function resolvePartialNewName(Name $nameNode): string
+    private function resolvePartialNewName(Name $nameNode): ?string
     {
-        /** @var FullyQualified $resolvedName */
-        $resolvedName = $nameNode->getAttribute(Attribute::RESOLVED_NAME);
-        $completeNewName = $this->resolveNewNameFromNode($resolvedName);
+        $name = $this->getName($nameNode);
+        if ($name === null) {
+            return null;
+        }
+
+        $completeNewName = $this->resolveNewNameFromNode($name);
 
         // first dummy implementation - improve
         $cutOffFromTheLeft = strlen($completeNewName) - strlen($nameNode->toString());
