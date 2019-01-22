@@ -71,11 +71,12 @@ CODE_SAMPLE
         }
 
         foreach ($node->implements as $key => $implement) {
-            $interface = (string) $implement->getAttribute(Attribute::RESOLVED_NAME);
-
-            if (array_key_exists($interface, $this->oldToNewInterfaces)) {
-                $node->implements[$key] = new Name($this->oldToNewInterfaces[$interface]);
+            if (! $this->isNames($implement, array_keys($this->oldToNewInterfaces))) {
+                continue;
             }
+
+            $interface = $this->getName($implement);
+            $node->implements[$key] = new Name($this->oldToNewInterfaces[$interface]);
         }
 
         $this->makeImplementsUnique($node);
