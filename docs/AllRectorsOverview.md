@@ -47,6 +47,7 @@
 - [Php\BinaryOp](#phpbinaryop)
 - [Php\ClassConst](#phpclassconst)
 - [Php\ConstFetch](#phpconstfetch)
+- [Php\Double](#phpdouble)
 - [Php\Each](#phpeach)
 - [Php\FuncCall](#phpfunccall)
 - [Php\FunctionLike](#phpfunctionlike)
@@ -409,6 +410,33 @@ Shortens if return false/true to direct return
 -
 -return false;
 +return strpos($docToken->getContent(), "\n") === false;
+```
+
+<br>
+
+### `ConsecutiveNullCompareReturnsToNullCoalesceQueueRector`
+
+- class: `Rector\CodeQuality\Rector\If_\ConsecutiveNullCompareReturnsToNullCoalesceQueueRector`
+
+Change multiple null compares to ?? queue
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        if (null !== $this->orderItem) {
+-            return $this->orderItem;
+-        }
+-
+-        if (null !== $this->orderItemUnit) {
+-            return $this->orderItemUnit;
+-        }
+-
+-        return null;
++        return $this->orderItem ?? $this->orderItemUnit;
+     }
+ }
 ```
 
 <br>
@@ -1540,6 +1568,20 @@ String cannot be turned into array by assignment anymore
 
 <br>
 
+### `NullCoalescingOperatorRector`
+
+- class: `Rector\Php\Rector\Assign\NullCoalescingOperatorRector`
+
+Use null coalescing operator ??=
+
+```diff
+ $array = [];
+-$array['user_id'] = $array['user_id'] ?? 'value';
++$array['user_id'] ??= 'value';
+```
+
+<br>
+
 ### `MysqlAssignToMysqliRector`
 
 - class: `Rector\Php\Rector\Assign\MysqlAssignToMysqliRector`
@@ -1627,6 +1669,29 @@ Changes unquoted non-existing constants to strings
 ```diff
 -var_dump(VAR);
 +var_dump("VAR");
+```
+
+<br>
+
+## Php\Double
+
+### `RealToFloatTypeCastRector`
+
+- class: `Rector\Php\Rector\Double\RealToFloatTypeCastRector`
+
+Change deprecated (real) to (float)
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        $number = (real) 5;
++        $number = (float) 5;
+         $number = (float) 5;
+         $number = (double) 5;
+     }
+ }
 ```
 
 <br>
@@ -1743,7 +1808,7 @@ Null is no more allowed in get_class()
 
 - class: `Rector\Php\Rector\FuncCall\TrailingCommaArgumentsRector`
 
-Adds trailing commas to function and methods calls
+Adds trailing commas to function and methods calls 
 
 ```diff
  calling(
@@ -3493,6 +3558,29 @@ services:
 <br>
 
 ## Interface_
+
+### `RemoveInterfacesRector`
+
+- class: `Rector\Rector\Interface_\RemoveInterfacesRector`
+
+Removes interfaces usage from class.
+
+```yaml
+services:
+    Rector\Rector\Interface_\RemoveInterfacesRector:
+        - SomeInterface
+```
+
+↓
+
+```diff
+-class SomeClass implements SomeInterface
++class SomeClass
+ {
+ }
+```
+
+<br>
 
 ### `MergeInterfacesRector`
 
