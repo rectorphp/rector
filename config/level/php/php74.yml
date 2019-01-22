@@ -14,3 +14,4 @@ services:
     Rector\Php\Rector\FuncCall\GetCalledClassToStaticClassRector: ~
     Rector\Php\Rector\FuncCall\MbStrrposEncodingArgumentPositionRector: ~
     Rector\Php\Rector\Double\RealToFloatTypeCastRector: ~
+    Rector\Php\Rector\Assign\NullCoalescingOperatorRector: ~
