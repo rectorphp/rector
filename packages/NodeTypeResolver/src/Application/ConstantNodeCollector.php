@@ -2,7 +2,6 @@
 
 namespace Rector\NodeTypeResolver\Application;
 
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\Attribute;

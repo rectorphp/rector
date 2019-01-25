@@ -97,12 +97,12 @@
     },
     "scripts": {
         "complete-check": ["@check-cs", "phpunit", "@phpstan", "@update-docs"],
-        "check-cs": "vendor/bin/ecs check bin packages src tests",
+        "check-cs": "vendor/bin/ecs check bin packages src tests utils",
         "fix-cs": [
-            "vendor/bin/ecs check bin packages src tests --fix",
+            "vendor/bin/ecs check bin packages src tests utils --fix",
             "bin/clean_trailing_spaces.sh"
         ],
-        "phpstan-ci": "vendor/bin/phpstan analyse packages src tests",
+        "phpstan-ci": "vendor/bin/phpstan analyse packages src tests utils",
         "phpstan": [
             "php utils/phpstan/generate-paths.php",
             "vendor/bin/phpstan analyse --paths-file phpstan-paths.txt"

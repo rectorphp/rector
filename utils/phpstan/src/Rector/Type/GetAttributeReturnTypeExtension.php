@@ -6,9 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
@@ -24,15 +22,13 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
-use Rector\Php\PhpTypeSupport;
-use Rector\Php\TypeAnalyzer;
 use Rector\PHPStanExtensions\Utils\ValueResolver;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
 final class GetAttributeReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
     /**
-     * @var string[]
+     * @var string[]|string[][]
      */
     private $argumentKeyToReturnType = [
         'Rector\NodeTypeResolver\Node\Attribute::FILE_INFO' => SmartFileInfo::class,
@@ -54,6 +50,7 @@ final class GetAttributeReturnTypeExtension implements DynamicMethodReturnTypeEx
         'Rector\NodeTypeResolver\Node\Attribute::CLASS_NAME' => 'string',
         'Rector\NodeTypeResolver\Node\Attribute::METHOD_NAME' => 'string',
     ];
+
     /**
      * @var ValueResolver
      */
@@ -74,8 +71,11 @@ final class GetAttributeReturnTypeExtension implements DynamicMethodReturnTypeEx
         return $methodReflection->getName() === 'getAttribute';
     }
 
-    public function getTypeFromMethodCall(MethodReflection $methodReflection, MethodCall $methodCall, Scope $scope): Type
-    {
+    public function getTypeFromMethodCall(
+        MethodReflection $methodReflection,
+        MethodCall $methodCall,
+        Scope $scope
+    ): Type {
         $returnType = ParametersAcceptorSelector::selectSingle($methodReflection->getVariants())->getReturnType();
 
         $argumentValue = $this->resolveArgumentValue($methodCall->args[0]->value);
@@ -87,17 +87,21 @@ final class GetAttributeReturnTypeExtension implements DynamicMethodReturnTypeEx
             return $returnType;
         }
 
-        $returnType = $this->argumentKeyToReturnType[$argumentValue];
-        if ($returnType === 'string') {
+        $knownReturnType = $this->argumentKeyToReturnType[$argumentValue];
+        if ($knownReturnType === 'string') {
             return new UnionType([new StringType(), new NullType()]);
         }
 
-        if (is_array($returnType) && count($returnType) === 1) {
-            $arrayType = new ArrayType(new IntegerType(), new ObjectType($returnType[0]));
+        if (is_array($knownReturnType) && count($knownReturnType) === 1) {
+            $arrayType = new ArrayType(new IntegerType(), new ObjectType($knownReturnType[0]));
             return new UnionType([$arrayType, new NullType()]);
         }
 
-        return new UnionType([new ObjectType($returnType), new NullType()]);
+        if (is_string($knownReturnType)) {
+            return new UnionType([new ObjectType($knownReturnType), new NullType()]);
+        }
+
+        return $returnType;
     }
 
     private function resolveArgumentValue(Expr $node): ?string

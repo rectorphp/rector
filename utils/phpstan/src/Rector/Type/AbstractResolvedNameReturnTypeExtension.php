@@ -11,7 +11,6 @@ use PhpParser\Node\Stmt\Const_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\PropertyProperty;
-use PhpParser\Node\Stmt\Static_;
 use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
@@ -46,12 +45,15 @@ abstract class AbstractResolvedNameReturnTypeExtension implements DynamicMethodR
         Name::class,
     ];
 
-    public function getTypeFromMethodCall(MethodReflection $methodReflection, MethodCall $methodCall, Scope $scope): Type
-    {
+    public function getTypeFromMethodCall(
+        MethodReflection $methodReflection,
+        MethodCall $methodCall,
+        Scope $scope
+    ): Type {
         $returnType = ParametersAcceptorSelector::selectSingle($methodReflection->getVariants())->getReturnType();
 
         $argumentValueType = $scope->getType($methodCall->args[0]->value);
-        if ( ! $argumentValueType instanceof ObjectType) {
+        if (! $argumentValueType instanceof ObjectType) {
             return $returnType;
         }
 

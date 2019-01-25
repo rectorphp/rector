@@ -14,20 +14,9 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\PhpParser\Node\BetterNodeFinder;
-use Rector\PHPStanExtensions\Utils\ValueResolver;
 
 final class BetterNodeFinderReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
-    /**
-     * @var ValueResolver
-     */
-    private $valueResolver;
-
-    public function __construct(ValueResolver $valueResolver)
-    {
-        $this->valueResolver = $valueResolver;
-    }
-
     public function getClass(): string
     {
         return BetterNodeFinder::class;
@@ -38,8 +27,11 @@ final class BetterNodeFinderReturnTypeExtension implements DynamicMethodReturnTy
         return $methodReflection->getName() === 'findInstanceOf';
     }
 
-    public function getTypeFromMethodCall(MethodReflection $methodReflection, MethodCall $methodCall, Scope $scope): Type
-    {
+    public function getTypeFromMethodCall(
+        MethodReflection $methodReflection,
+        MethodCall $methodCall,
+        Scope $scope
+    ): Type {
         $returnType = ParametersAcceptorSelector::selectSingle($methodReflection->getVariants())->getReturnType();
 
         $secondArgumentNode = $methodCall->args[1]->value;
