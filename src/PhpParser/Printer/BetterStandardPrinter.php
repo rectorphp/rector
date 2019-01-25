@@ -4,14 +4,9 @@ namespace Rector\PhpParser\Printer;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Expr\Closure;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\Scalar\EncapsedStringPart;
 use PhpParser\Node\Scalar\String_;
@@ -20,22 +15,15 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\PrettyPrinter\Standard;
 use Rector\NodeTypeResolver\Node\Attribute;
 use function Safe\sprintf;
-use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 
 final class BetterStandardPrinter extends Standard
 {
     /**
-     * @var PrivatesCaller
-     */
-    private $privatesCaller;
-
-    /**
      * @param mixed[] $options
      */
-    public function __construct(PrivatesCaller $privatesCaller, array $options = [])
+    public function __construct(array $options = [])
     {
         parent::__construct($options);
-        $this->privatesCaller = $privatesCaller;
 
         // print return type double colon right after the bracket "function(): string"
         $this->initializeInsertionMap();
@@ -151,44 +139,6 @@ final class BetterStandardPrinter extends Standard
     }
 
     /**
-     * Allows PHP 7.3 trailing comma in multiline args
-     * @see printArgs() bellow
-     */
-    protected function pExpr_FuncCall(FuncCall $node): string
-    {
-        return $this->pCallLhs($node->name) . '(' . $this->printArgs($node) . ')';
-    }
-
-    /**
-     * Allows PHP 7.3 trailing comma in multiline args
-     * @see printArgs() bellow
-     */
-    protected function pExpr_MethodCall(MethodCall $node): string
-    {
-        return $this->pDereferenceLhs($node->var)
-            . '->'
-            . $this->pObjectProperty($node->name)
-            . '('
-            . $this->printArgs($node)
-            . ')';
-    }
-
-    /**
-     * Allows PHP 7.3 trailing comma in multiline args
-     * @see printArgs() bellow
-     */
-    protected function pExpr_StaticCall(StaticCall $node): string
-    {
-        return $this->pDereferenceLhs($node->class) . '::'
-            . ($node->name instanceof Expr
-                ? ($node->name instanceof Variable
-                    ? $this->p($node->name)
-                    : '{' . $this->p($node->name) . '}')
-                : $node->name)
-            . '(' . $this->printArgs($node) . ')';
-    }
-
-    /**
      * Fixes escaping of regular patterns
      */
     protected function pScalar_String(String_ $node): string
@@ -225,20 +175,5 @@ final class BetterStandardPrinter extends Standard
         }
 
         return $this->pInfixOp(Coalesce::class, $node->left, ' ??= ', $node->right);
-    }
-
-    /**
-     * Allows PHP 7.3 trailing comma in multiline args
-     *
-     * @param FuncCall|MethodCall|StaticCall $node
-     */
-    private function printArgs(Node $node): string
-    {
-        return $this->privatesCaller->callPrivateMethod(
-            $this,
-            'pMaybeMultiline',
-            $node->args,
-            $node->getAttribute('trailingComma', false)
-        );
     }
 }
