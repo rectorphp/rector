@@ -6,7 +6,6 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt\Expression;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Rector\AbstractRector;
@@ -64,17 +63,19 @@ CODE_SAMPLE
             return null;
         }
 
-        if (isset($node->args[1])) {
-            return null;
-        }
-
         $resultVariable = new Variable('result');
         $node->args[1] = new Arg($resultVariable);
 
-        /** @var Expression $expression */
         $expression = $node->getAttribute(Attribute::CURRENT_EXPRESSION);
+        if ($expression === null) {
+            return null;
+        }
+
         // @todo maybe solve in generic way as attribute?
         $nextExpression = $expression->getAttribute(Attribute::NEXT_NODE);
+        if ($nextExpression === null) {
+            return null;
+        }
 
         $this->callableNodeTraverser->traverseNodesWithCallable([$nextExpression], function (Node $node) use (
             $resultVariable

@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\PhpParser\NodeTransformer;
@@ -108,17 +109,7 @@ CODE_SAMPLE
                     continue;
                 }
 
-                $yieldNodes = $this->nodeTransformer->transformArrayToYields($arrayNode);
-                // remove whole return node
-                $this->removeNode($arrayNode->getAttribute(Attribute::PARENT_NODE));
-
-                // remove doc block
-                $this->docBlockAnalyzer->removeTagFromNode($node, 'return');
-
-                // change return typehint
-                $node->returnType = new FullyQualified(Iterator::class);
-
-                $node->stmts = array_merge((array) $node->stmts, $yieldNodes);
+                $this->transformArrayToYieldsOnMethodNode($node, $arrayNode);
             }
         }
 
@@ -140,5 +131,26 @@ CODE_SAMPLE
         }
 
         return null;
+    }
+
+    private function transformArrayToYieldsOnMethodNode(ClassMethod $classMethod, Array_ $arrayNode): void
+    {
+        $yieldNodes = $this->nodeTransformer->transformArrayToYields($arrayNode);
+
+        // remove whole return node
+        $parentNode = $arrayNode->getAttribute(Attribute::PARENT_NODE);
+        if ($parentNode === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        $this->removeNode($parentNode);
+
+        // remove doc block
+        $this->docBlockAnalyzer->removeTagFromNode($classMethod, 'return');
+
+        // change return typehint
+        $classMethod->returnType = new FullyQualified(Iterator::class);
+
+        $classMethod->stmts = array_merge((array) $classMethod->stmts, $yieldNodes);
     }
 }

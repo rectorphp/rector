@@ -22,9 +22,7 @@ final class BetterNodeFinder
 
     public function findFirstAncestorInstanceOf(Node $node, string $type): ?Node
     {
-        /** @var Node|null $currentNode */
         $currentNode = $node->getAttribute(Attribute::PARENT_NODE);
-
         while ($currentNode !== null) {
             if ($currentNode instanceof $type) {
                 return $currentNode;
@@ -86,6 +84,9 @@ final class BetterNodeFinder
     public function findFirstPrevious(Node $node, callable $filter): ?Node
     {
         $node = $node instanceof Expression ? $node : $node->getAttribute(Attribute::CURRENT_EXPRESSION);
+        if ($node === null) {
+            return null;
+        }
 
         $foundNode = $this->findFirst([$node], $filter);
         // we found what we need

@@ -101,9 +101,15 @@ CODE_SAMPLE
 
     private function getRootMethodCallNode(Node $node): ?Node
     {
-        /** @var Node $node */
         $expression = $node->getAttribute(Attribute::CURRENT_EXPRESSION);
+        if ($expression === null) {
+            return null;
+        }
+
         $nextExpression = $expression->getAttribute(Attribute::NEXT_NODE);
+        if ($nextExpression === null) {
+            return null;
+        }
 
         return $this->betterNodeFinder->findFirst([$nextExpression], function (Node $node) {
             if (! $node instanceof MethodCall) {

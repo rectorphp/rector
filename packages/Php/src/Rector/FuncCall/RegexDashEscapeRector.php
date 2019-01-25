@@ -224,6 +224,9 @@ CODE_SAMPLE
     private function findAssigners(Node $variableNode): array
     {
         $methodNode = $variableNode->getAttribute(Attribute::METHOD_NODE);
+        if ($methodNode === null) {
+            return [];
+        }
 
         /** @var Assign[] $assignNode */
         return $this->betterNodeFinder->find([$methodNode], function (Node $node) use ($variableNode) {

@@ -121,6 +121,10 @@ CODE_SAMPLE
             $node = $exprNode->getAttribute(Attribute::PARENT_NODE);
         }
 
+        if ($node === null) {
+            return;
+        }
+
         $this->docBlockAnalyzer->changeType($node, $oldType, $newType);
     }
 

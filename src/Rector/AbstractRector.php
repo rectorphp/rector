@@ -161,7 +161,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
     protected function notifyNodeChangeFileInfo(Node $node): void
     {
-        /** @var SmartFileInfo|null $fileInfo */
         $fileInfo = $node->getAttribute(Attribute::FILE_INFO);
         if ($fileInfo === null) {
             throw new ShouldNotHappenException(sprintf(

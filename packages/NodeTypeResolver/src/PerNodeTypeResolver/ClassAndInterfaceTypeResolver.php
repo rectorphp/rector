@@ -7,6 +7,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Interface_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\NodeTypeResolver\Reflection\ClassReflectionTypesResolver;
@@ -37,8 +38,10 @@ final class ClassAndInterfaceTypeResolver implements PerNodeTypeResolverInterfac
      */
     public function resolve(Node $node): array
     {
-        /** @var Scope $nodeScope */
         $nodeScope = $node->getAttribute(Attribute::SCOPE);
+        if ($nodeScope === null) {
+            throw new ShouldNotHappenException();
+        }
 
         /** @var ClassReflection $classReflection */
         $classReflection = $nodeScope->getClassReflection();

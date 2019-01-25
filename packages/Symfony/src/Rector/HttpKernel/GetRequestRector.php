@@ -147,6 +147,9 @@ CODE_SAMPLE
         }
 
         $methodNode = $node->getAttribute(Attribute::METHOD_NODE);
+        if ($methodNode === null) {
+            return false;
+        }
 
         return $this->controllerMethodAnalyzer->isAction($methodNode);
     }

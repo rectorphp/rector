@@ -148,6 +148,7 @@ CODE_SAMPLE
         );
 
         $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
+
         while ($parentNode instanceof MethodCall) {
             if ($this->isName($parentNode, 'add')) {
                 /** @var Array_ $addOptionsArrayNode */

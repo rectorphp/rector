@@ -42,17 +42,21 @@ final class ClassMethodMaintainer
     public function hasParentMethodOrInterfaceMethod(ClassMethod $classMethod): bool
     {
         $class = $classMethod->getAttribute(Attribute::CLASS_NAME);
+        if ($class === null) {
+            return false;
+        }
+
         $method = $classMethod->getAttribute(Attribute::METHOD_NAME);
+        if ($method === null) {
+            return false;
+        }
 
         if (! class_exists($class)) {
             return false;
         }
 
-        $parentClass = $class;
-        while ($parentClass = get_parent_class($parentClass)) {
-            if (method_exists($parentClass, $method)) {
-                return true;
-            }
+        if ($this->isMethodInParent($class, $method)) {
+            return true;
         }
 
         $implementedInterfaces = class_implements($class);
@@ -82,6 +86,19 @@ final class ClassMethodMaintainer
             }
 
             return $this->isArrayOfArrays($statement->expr);
+        }
+
+        return false;
+    }
+
+    private function isMethodInParent(string $class, string $method): bool
+    {
+        $parentClass = $class;
+
+        while ($parentClass = get_parent_class($parentClass)) {
+            if (method_exists($parentClass, $method)) {
+                return true;
+            }
         }
 
         return false;

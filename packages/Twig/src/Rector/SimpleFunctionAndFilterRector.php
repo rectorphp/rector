@@ -118,6 +118,10 @@ CODE_SAMPLE
         }
 
         $classNode = $node->getAttribute(Attribute::CLASS_NODE);
+        if ($classNode === null) {
+            return null;
+        }
+
         if (! $this->isTypes($classNode, [$this->twigExtensionClass])) {
             return null;
         }

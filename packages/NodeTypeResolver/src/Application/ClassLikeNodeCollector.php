@@ -7,6 +7,7 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
 use PhpParser\Node\Stmt\TraitUse;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 
@@ -39,7 +40,11 @@ final class ClassLikeNodeCollector
 
     public function addClass(Class_ $classNode): void
     {
-        $name = (string) $classNode->getAttribute(Attribute::CLASS_NAME);
+        $name = $classNode->getAttribute(Attribute::CLASS_NAME);
+        if ($name === null) {
+            throw new ShouldNotHappenException();
+        }
+
         $this->classes[$name] = $classNode;
     }
 
@@ -50,13 +55,21 @@ final class ClassLikeNodeCollector
 
     public function addInterface(Interface_ $interfaceNode): void
     {
-        $name = (string) $interfaceNode->getAttribute(Attribute::CLASS_NAME);
+        $name = $interfaceNode->getAttribute(Attribute::CLASS_NAME);
+        if ($name === null) {
+            throw new ShouldNotHappenException();
+        }
+
         $this->interfaces[$name] = $interfaceNode;
     }
 
     public function addTrait(Trait_ $traitNode): void
     {
-        $name = (string) $traitNode->getAttribute(Attribute::CLASS_NAME);
+        $name = $traitNode->getAttribute(Attribute::CLASS_NAME);
+        if ($name === null) {
+            throw new ShouldNotHappenException();
+        }
+
         $this->traits[$name] = $traitNode;
     }
 
@@ -85,11 +98,16 @@ final class ClassLikeNodeCollector
     {
         $childrenClasses = [];
         foreach ($this->classes as $classNode) {
-            if (! is_a($classNode->getAttribute(Attribute::CLASS_NAME), $class, true)) {
+            $className = $classNode->getAttribute(Attribute::CLASS_NAME);
+            if ($className === null) {
+                return [];
+            }
+
+            if (! is_a($className, $class, true)) {
                 continue;
             }
 
-            if ($classNode->getAttribute(Attribute::CLASS_NAME) === $class) {
+            if ($className === $class) {
                 continue;
             }
 
@@ -106,11 +124,16 @@ final class ClassLikeNodeCollector
     {
         $implementerInterfaces = [];
         foreach ($this->interfaces as $interfaceNode) {
-            if (! is_a($interfaceNode->getAttribute(Attribute::CLASS_NAME), $interface, true)) {
+            $className = $interfaceNode->getAttribute(Attribute::CLASS_NAME);
+            if ($className === null) {
+                return [];
+            }
+
+            if (! is_a($className, $interface, true)) {
                 continue;
             }
 
-            if ($interfaceNode->getAttribute(Attribute::CLASS_NAME) === $interface) {
+            if ($className === $interface) {
                 continue;
             }
 

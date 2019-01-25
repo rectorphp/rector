@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Interface_;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Application\ClassLikeNodeCollector;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\NodeTypeResolver\Php\AbstractTypeInfo;
@@ -113,8 +114,10 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
             }
         }
 
-        /** @var Class_ $classNode */
         $classNode = $classMethodNode->getAttribute(Attribute::CLASS_NODE);
+        if (($classNode instanceof Class_ || $classNode instanceof Interface_) === false) {
+            return false;
+        }
 
         $interfaceNames = $this->getClassLikeNodeParentInterfaceNames($classNode);
         foreach ($interfaceNames as $interfaceName) {
@@ -192,6 +195,10 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
 
         if ($nakedType->toString() === 'self') {
             $className = $node->getAttribute(Attribute::CLASS_NAME);
+            if ($className === null) {
+                throw new ShouldNotHappenException();
+            }
+
             $type = new FullyQualified($className);
 
             return $returnTypeInfo->isNullable() ? new NullableType($type) : $type;
@@ -199,6 +206,10 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
 
         if ($nakedType->toString() === 'parent') {
             $parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
+            if ($parentClassName === null) {
+                throw new ShouldNotHappenException();
+            }
+
             $type = new FullyQualified($parentClassName);
 
             return $returnTypeInfo->isNullable() ? new NullableType($type) : $type;
@@ -215,7 +226,6 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
 
     private function hasParentClassOrImplementsInterface(ClassMethod $classMethodNode): bool
     {
-        /** @var ClassLike|null $classNode */
         $classNode = $classMethodNode->getAttribute(Attribute::CLASS_NODE);
         if ($classNode === null) {
             return false;

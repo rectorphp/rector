@@ -47,6 +47,9 @@ final class PropertyMaintainer
     public function getAllPropertyFetch(Property $propertyNode): array
     {
         $classNode = $propertyNode->getAttribute(Attribute::CLASS_NODE);
+        if ($classNode === null) {
+            return [];
+        }
 
         return $this->betterNodeFinder->find($classNode, function (Node $node) use ($propertyNode) {
             // itself
