@@ -5,7 +5,7 @@ includes:
 
 parameters:
     # to allow intalling with various phsptan versions without reporting old errors here
-    reportUnmatchedIgnoredErrors: false
+#    reportUnmatchedIgnoredErrors: false
     level: 7
 
     excludes_analyse:
@@ -63,7 +63,6 @@ parameters:
         - '#Access to an undefined property PhpParser\\Node\\Expr\\MethodCall\|PhpParser\\Node\\Stmt\\ClassMethod::\$params#'
         - '#Cannot call method getName\(\) on PHPStan\\Reflection\\ClassReflection\|null#'
 
-        - '#Cannot call method getAttribute\(\) on PhpParser\\Node\\Name\|null#'
         - '#Cannot call method getText\(\) on PhpParser\\Comment\\Doc\|null#'
         - '#Method Rector\\PhpParser\\Node\\Maintainer\\PropertyMaintainer::getAllPropertyFetch\(\) should return array<PhpParser\\Node\\Expr\\PropertyFetch> but returns array<PhpParser\\Node>#'
 
@@ -101,8 +100,10 @@ parameters:
         - '#Strict comparison using === between PhpParser\\Node\\Expr and null will always evaluate to false#'
         - '#Cannot cast array<string>\|string\|null to string#'
 
+        # false positive on anonymous classes
+        - '#http\:\/\/bit\.ly\/typehintarray#'
+
 services:
-    -
-        class: Symplify\PHPStanExtensions\Type\SplFileInfoTolerantDynamicMethodReturnTypeExtension
-        tags:
-            - phpstan.broker.dynamicMethodReturnTypeExtension
+    - { class: Symplify\PHPStanExtensions\Type\SplFileInfoTolerantDynamicMethodReturnTypeExtension, tags: [phpstan.broker.dynamicMethodReturnTypeExtension] }
+    # $node->geAttribute($1) => Type|null by $1
+    - { class: Rector\PHPStanExtensions\Rector\Type\GetAttributeReturnTypeExtension, tags: [phpstan.broker.dynamicMethodReturnTypeExtension] }
