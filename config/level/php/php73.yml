@@ -24,5 +24,4 @@ services:
 
     Rector\Php\Rector\FuncCall\StringifyStrNeedlesRector: ~
     Rector\Php\Rector\FuncCall\JsonThrowOnErrorRector: ~
-    Rector\Php\Rector\FuncCall\TrailingCommaArgumentsRector: ~
     Rector\Php\Rector\FuncCall\RegexDashEscapeRector: ~
