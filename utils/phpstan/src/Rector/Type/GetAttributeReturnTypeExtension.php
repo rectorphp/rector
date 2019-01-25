@@ -26,6 +26,7 @@ use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\Php\PhpTypeSupport;
 use Rector\Php\TypeAnalyzer;
+use Rector\PHPStanExtensions\Utils\ValueResolver;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
 final class GetAttributeReturnTypeExtension implements DynamicMethodReturnTypeExtension
@@ -53,6 +54,15 @@ final class GetAttributeReturnTypeExtension implements DynamicMethodReturnTypeEx
         'Rector\NodeTypeResolver\Node\Attribute::CLASS_NAME' => 'string',
         'Rector\NodeTypeResolver\Node\Attribute::METHOD_NAME' => 'string',
     ];
+    /**
+     * @var ValueResolver
+     */
+    private $valueResolver;
+
+    public function __construct(ValueResolver $valueResolver)
+    {
+        $this->valueResolver = $valueResolver;
+    }
 
     public function getClass(): string
     {
@@ -92,22 +102,10 @@ final class GetAttributeReturnTypeExtension implements DynamicMethodReturnTypeEx
 
     private function resolveArgumentValue(Expr $node): ?string
     {
-        $value = null;
-
         if ($node instanceof ClassConstFetch) {
-            if ($node->class instanceof Name) {
-                $value = $node->class->toString();
-            } else {
-                return null;
-            }
-
-            if ($node->name instanceof Identifier) {
-                $value .= '::' . $node->name->toString();
-            } else {
-                return null;
-            }
+            return $this->valueResolver->resolveClassConstFetch($node);
         }
 
-        return $value;
+        return null;
     }
 }

@@ -7,7 +7,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Configuration\Rector\Architecture\DependencyInjection\VariablesToPropertyFetchCollection;
-use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -107,11 +106,12 @@ CODE_SAMPLE
         return null;
     }
 
-    private function isInControllerActionMethod(Node $node): bool
+    private function isInControllerActionMethod(Variable $node): bool
     {
         $className = $node->getAttribute(Attribute::CLASS_NAME);
+
         if ($className === null) {
-            throw new ShouldNotHappenException();
+            return false;
         }
 
         if (! Strings::endsWith($className, 'Controller')) {
