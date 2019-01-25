@@ -79,8 +79,10 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var Class_ $classNode */
         $classNode = $node->getAttribute(Attribute::CLASS_NODE);
+        if (! $classNode instanceof Class_) {
+            return null;
+        }
 
         // anonymous class → skip
         if ($classNode->name === null || $node->isAbstract() || $node->isStatic()) {
@@ -148,7 +150,7 @@ CODE_SAMPLE
         /** @var ClassMethod[] $classMethodNodes */
         $classMethodNodes = $this->betterNodeFinder->findInstanceOf($classNode->stmts, ClassMethod::class);
         foreach ($classMethodNodes as $classMethodNode) {
-            $classMethodNames[] = (string) $classMethodNode->name;
+            $classMethodNames[] = $this->getName($classMethodNode);
         }
 
         return $classMethodNames;

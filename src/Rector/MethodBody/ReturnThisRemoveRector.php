@@ -4,8 +4,8 @@ namespace Rector\Rector\MethodBody;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\Rector\AbstractRector;
@@ -97,8 +97,11 @@ CODE_SAMPLE
 
         $this->removeNode($node);
 
-        /** @var ClassMethod $methodNode */
         $methodNode = $node->getAttribute(Attribute::METHOD_NODE);
+        if ($methodNode === null) {
+            throw new ShouldNotHappenException();
+        }
+
         $this->docBlockAnalyzer->removeTagFromNode($methodNode, 'return');
 
         return null;

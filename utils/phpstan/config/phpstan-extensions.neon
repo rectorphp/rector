@@ -1,0 +1,9 @@
+services:
+    - { class: Symplify\PHPStanExtensions\Type\SplFileInfoTolerantDynamicMethodReturnTypeExtension, tags: [phpstan.broker.dynamicMethodReturnTypeExtension] }
+    # $node->geAttribute($1) => Type|null by $1
+    - { class: Rector\PHPStanExtensions\Rector\Type\GetAttributeReturnTypeExtension, tags: [phpstan.broker.dynamicMethodReturnTypeExtension] }
+
+    # $nameResolver->resolve() => in some cases always string
+    - { class: Rector\PHPStanExtensions\Rector\Type\NameResolverReturnTypeExtension, tags: [phpstan.broker.dynamicMethodReturnTypeExtension] }
+    # $nameResolverTrait->getName() => in some cases always string
+    - { class: Rector\PHPStanExtensions\Rector\Type\NameResolverTraitReturnTypeExtension, tags: [phpstan.broker.dynamicMethodReturnTypeExtension] }

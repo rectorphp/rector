@@ -7,7 +7,6 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\RectorDefinition\ConfiguredCodeSample;
@@ -130,8 +129,10 @@ CODE_SAMPLE
 
     private function processParamNode(NullableType $nullableTypeNode, Param $paramNode, string $newType): void
     {
-        /** @var ClassMethod $classMethodNode */
         $classMethodNode = $paramNode->getAttribute(Attribute::PARENT_NODE);
+        if ($classMethodNode === null) {
+            return;
+        }
 
         $oldType = $this->namespaceAnalyzer->resolveTypeToFullyQualified(
             (string) $nullableTypeNode->type,

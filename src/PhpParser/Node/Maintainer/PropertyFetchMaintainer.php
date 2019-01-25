@@ -7,6 +7,7 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PHPStan\Analyser\Scope;
 use PHPStan\Broker\Broker;
 use PHPStan\Type\ObjectType;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpParser\Node\Resolver\NameResolver;
@@ -60,8 +61,10 @@ final class PropertyFetchMaintainer
 
     private function hasPublicProperty(PropertyFetch $node, string $propertyName): bool
     {
-        /** @var Scope $nodeScope */
         $nodeScope = $node->getAttribute(Attribute::SCOPE);
+        if ($nodeScope === null) {
+            throw new ShouldNotHappenException();
+        }
 
         $propertyFetchType = $nodeScope->getType($node->var);
         if ($propertyFetchType instanceof ObjectType) {

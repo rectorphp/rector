@@ -109,12 +109,8 @@ CODE_SAMPLE
             return;
         }
 
-        $mainPropertyType = $this->getTypes($propertyNode)[0];
+        $mainPropertyType = $this->getTypes($propertyNode)[0] ?? 'mixed';
         $propertyName = $this->getName($propertyNode);
-        if ($propertyName === null) {
-            return;
-        }
-
         $this->addPropertyToClass($classNode, $mainPropertyType, $propertyName);
     }
 }

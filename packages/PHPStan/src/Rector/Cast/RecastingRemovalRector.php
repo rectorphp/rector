@@ -3,7 +3,6 @@
 namespace Rector\PHPStan\Rector\Cast;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Cast;
 use PhpParser\Node\Expr\Cast\Array_;
 use PhpParser\Node\Expr\Cast\Bool_;
@@ -11,15 +10,12 @@ use PhpParser\Node\Expr\Cast\Double;
 use PhpParser\Node\Expr\Cast\Int_;
 use PhpParser\Node\Expr\Cast\Object_;
 use PhpParser\Node\Expr\Cast\String_;
-use PHPStan\Analyser\Scope;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
-use PHPStan\Type\Type;
-use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -79,21 +75,16 @@ CODE_SAMPLE
             return null;
         }
 
-        $nodeType = $this->getNodeType($node->expr);
-        $sameNodeType = $this->castClassToNodeType[$nodeClass];
+        $nodeType = $this->getStaticType($node->expr);
+        if ($nodeType === null) {
+            return null;
+        }
 
+        $sameNodeType = $this->castClassToNodeType[$nodeClass];
         if (! is_a($nodeType, $sameNodeType, true)) {
             return null;
         }
 
         return $node->expr;
-    }
-
-    private function getNodeType(Expr $node): Type
-    {
-        /** @var Scope $nodeScope */
-        $nodeScope = $node->getAttribute(Attribute::SCOPE);
-
-        return $nodeScope->getType($node);
     }
 }

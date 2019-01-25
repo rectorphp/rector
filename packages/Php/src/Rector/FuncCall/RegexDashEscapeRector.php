@@ -173,7 +173,11 @@ CODE_SAMPLE
 
     private function processClassConstFetch(Expr $expr): void
     {
-        $className = (string) $expr->getAttribute(Attribute::CLASS_NAME);
+        $className = $expr->getAttribute(Attribute::CLASS_NAME);
+        if (! is_string($className)) {
+            return;
+        }
+
         $constantName = $this->getName($expr);
         if ($constantName === null) {
             return;

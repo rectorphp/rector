@@ -104,12 +104,11 @@ CODE_SAMPLE
             }
 
             $paramNodeTypes = $this->getTypes($paramNode);
-            $paramName = $this->getName($paramNode->var);
-            if ($paramName === null) {
-                continue;
-            }
+            $paramNodeType = $paramNodeTypes[0] ?? 'mixed';
 
-            $this->addPropertyToClass($classNode, $paramNodeTypes[0], $paramName);
+            /** @var string $paramName */
+            $paramName = $this->getName($paramNode->var);
+            $this->addPropertyToClass($classNode, $paramNodeType, $paramName);
 
             // remove arguments
             unset($classMethodNode->params[$key]);

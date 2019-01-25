@@ -104,7 +104,9 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->getName($node->class) === $node->getAttribute(Attribute::PARENT_CLASS_NAME)) {
+        $className = $this->getName($node->class);
+        $parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
+        if ($className === $parentClassName) {
             return null;
         }
 

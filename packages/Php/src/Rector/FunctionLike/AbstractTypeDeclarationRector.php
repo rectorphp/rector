@@ -83,9 +83,7 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
         }
 
         $methodName = $this->getName($classMethodNode);
-        if ($methodName === null) {
-            return false;
-        }
+
         // @todo extract to some "inherited parent method" service
 
         /** @var string|null $parentClassName */

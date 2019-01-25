@@ -123,8 +123,11 @@ CODE_SAMPLE
                     continue;
                 }
 
-                /** @var Node $parentNode */
                 $parentNode = $nameNode->getAttribute(Attribute::PARENT_NODE);
+                if ($parentNode === null) {
+                    continue;
+                }
+
                 $usedNameNodes[$originalName->toString()][] = [$nameNode, $parentNode];
             }
         }

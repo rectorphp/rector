@@ -1,4 +1,5 @@
 includes:
+     - 'utils/phpstan/config/phpstan-extensions.neon'
      - 'vendor/symplify/phpstan-extensions/config/config.neon'
      - 'vendor/thecodingmachine/phpstan-strict-rules/phpstan-strict-rules.neon'
      - 'vendor/thecodingmachine/phpstan-safe-rule/phpstan-safe-rule.neon'
@@ -70,7 +71,6 @@ parameters:
         - '#Method Rector\\CodeQuality\\Rector\\Foreach_\\SimplifyForeachToCoalescingRector\:\:matchReturnOrAssignNode\(\) should return PhpParser\\Node\\Expr\\Assign\|PhpParser\\Node\\Stmt\\Return_\|null but returns PhpParser\\Node\|null#'
         - '#Access to an undefined property PhpParser\\Node::\$(\w+)#'
         - '#Parameter \#2 \$boolConstFetchNode of method Rector\\CodeQuality\\Rector\\Identical\\SimplifyArraySearchRector::resolveIsNot\(\) expects PhpParser\\Node\\Expr\\ConstFetch, PhpParser\\Node given#'
-        - '#Method Rector\\PhpParser\\Node\\BetterNodeFinder::findFirstAncestorInstanceOf\(\) should return PhpParser\\Node\|null but returns object#'
 
         # false positive, resolved in previous method
         - '#Parameter (.*?) of method Rector\\PhpParser\\Node\\Maintainer\\IdentifierMaintainer\:\:(.*?)\(\) expects PhpParser\\Node\\Expr\\ClassConstFetch\|PhpParser\\Node\\Expr\\MethodCall\|PhpParser\\Node\\Expr\\PropertyFetch\|PhpParser\\Node\\Expr\\StaticCall\|PhpParser\\Node\\Stmt\\ClassMethod, PhpParser\\Node given#'
@@ -98,12 +98,3 @@ parameters:
         # known values
         - '#Parameter \#(1|2) \$(left|right) of class PhpParser\\Node\\Expr\\BinaryOp\\Coalesce constructor expects PhpParser\\Node\\Expr, PhpParser\\Node\\Expr\|null given#'
         - '#Strict comparison using === between PhpParser\\Node\\Expr and null will always evaluate to false#'
-        - '#Cannot cast array<string>\|string\|null to string#'
-
-        # false positive on anonymous classes
-        - '#http\:\/\/bit\.ly\/typehintarray#'
-
-services:
-    - { class: Symplify\PHPStanExtensions\Type\SplFileInfoTolerantDynamicMethodReturnTypeExtension, tags: [phpstan.broker.dynamicMethodReturnTypeExtension] }
-    # $node->geAttribute($1) => Type|null by $1
-    - { class: Rector\PHPStanExtensions\Rector\Type\GetAttributeReturnTypeExtension, tags: [phpstan.broker.dynamicMethodReturnTypeExtension] }
