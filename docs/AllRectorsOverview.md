@@ -1804,22 +1804,6 @@ Null is no more allowed in get_class()
 
 <br>
 
-### `TrailingCommaArgumentsRector`
-
-- class: `Rector\Php\Rector\FuncCall\TrailingCommaArgumentsRector`
-
-Adds trailing commas to function and methods calls
-
-```diff
- calling(
-     $one,
--    $two
-+    $two,
- );
-```
-
-<br>
-
 ### `ArrayKeyExistsOnPropertyRector`
 
 - class: `Rector\Php\Rector\FuncCall\ArrayKeyExistsOnPropertyRector`
@@ -3089,6 +3073,7 @@ Changes Twig_Function_Method to Twig_SimpleFunction calls in TwigExtension.
 - [Class_](#class_)
 - [Constant](#constant)
 - [DependencyInjection](#dependencyinjection)
+- [Factory](#factory)
 - [Function_](#function_)
 - [Interface_](#interface_)
 - [MagicDisclosure](#magicdisclosure)
@@ -3483,6 +3468,41 @@ Turns action injection in Controllers to constructor injection
 +    {
 +        $products = $this->productRepository->fetchAll();
      }
+ }
+```
+
+<br>
+
+## Factory
+
+### `NewObjectToFactoryCreateRector`
+
+- class: `Rector\Rector\Architecture\Factory\NewObjectToFactoryCreateRector`
+
+Replaces creating object instances with "new" keyword with factory method.
+
+```yaml
+services:
+    Rector\Rector\Architecture\Factory\NewObjectToFactoryCreateRector:
+        MyClass:
+            class: MyClassFactory
+            method: create
+```
+
+↓
+
+```diff
+ class SomeClass
+ {
++	/**
++	 * @var \MyClassFactory
++	 */
++	private $myClassFactory;
++
+ 	public function example() {
+-		new MyClass($argument);
++		$this->myClassFactory->create($argument);
+ 	}
  }
 ```
 
