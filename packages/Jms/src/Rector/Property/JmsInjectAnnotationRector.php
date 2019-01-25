@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use Rector\Application\ErrorAndDiffCollector;
 use Rector\Bridge\Contract\AnalyzedApplicationContainerInterface;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\Rector\AbstractRector;
@@ -127,7 +128,12 @@ CODE_SAMPLE
         // set to private
         $node->flags = Class_::MODIFIER_PRIVATE;
 
-        $this->addPropertyToClass($node->getAttribute(Attribute::CLASS_NODE), $type, $name);
+        $classNode = $node->getAttribute(Attribute::CLASS_NODE);
+        if (! $classNode instanceof Class_) {
+            throw new ShouldNotHappenException();
+        }
+
+        $this->addPropertyToClass($classNode, $type, $name);
 
         return $node;
     }

@@ -159,7 +159,6 @@ CODE_SAMPLE
             $paramNames[] = $this->getName($paramNode);
         }
 
-        /** @var Variable[] $variableNodes */
         $variableNodes = $this->betterNodeFinder->findInstanceOf($nodes, Variable::class);
 
         $filteredVariables = [];
@@ -169,11 +168,12 @@ CODE_SAMPLE
                 continue;
             }
 
-            if (in_array($this->getName($variableNode), $paramNames, true)) {
+            $variableName = $this->getName($variableNode);
+            if (in_array($variableName, $paramNames, true)) {
                 continue;
             }
 
-            $filteredVariables[$this->getName($variableNode)] = $variableNode;
+            $filteredVariables[$variableName] = $variableNode;
         }
 
         return $filteredVariables;

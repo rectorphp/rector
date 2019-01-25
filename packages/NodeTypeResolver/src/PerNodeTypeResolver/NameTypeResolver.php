@@ -25,13 +25,23 @@ final class NameTypeResolver implements PerNodeTypeResolverInterface
     public function resolve(Node $nameNode): array
     {
         if ($nameNode->toString() === 'parent') {
-            return [$nameNode->getAttribute(Attribute::PARENT_CLASS_NAME)];
+            $parentClassName = $nameNode->getAttribute(Attribute::PARENT_CLASS_NAME);
+            if ($parentClassName === null) {
+                return [];
+            }
+
+            return [$parentClassName];
         }
 
-        return [$this->resolveFullyQualifiedName($nameNode, $nameNode->toString())];
+        $fullyQualifiedName = $this->resolveFullyQualifiedName($nameNode, $nameNode->toString());
+        if ($fullyQualifiedName === null) {
+            return [];
+        }
+
+        return [$fullyQualifiedName];
     }
 
-    private function resolveFullyQualifiedName(Node $nameNode, string $name): string
+    private function resolveFullyQualifiedName(Node $nameNode, string $name): ?string
     {
         if (in_array($name, ['self', 'static', 'this'], true)) {
             return $nameNode->getAttribute(Attribute::CLASS_NAME);

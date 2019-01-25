@@ -7,7 +7,9 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Class_;
 use Rector\Bridge\Contract\AnalyzedApplicationContainerInterface;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
@@ -43,12 +45,12 @@ abstract class AbstractToConstructorInjectionRector extends AbstractRector
         }
 
         $propertyName = $this->propertyNaming->fqnToVariableName($serviceType);
+        $classNode = $methodCallNode->getAttribute(Attribute::CLASS_NODE);
+        if (! $classNode instanceof Class_) {
+            throw new ShouldNotHappenException();
+        }
 
-        $this->addPropertyToClass(
-            $methodCallNode->getAttribute(Attribute::CLASS_NODE),
-            $serviceType,
-            $propertyName
-        );
+        $this->addPropertyToClass($classNode, $serviceType, $propertyName);
 
         return $this->createPropertyFetch('this', $propertyName);
     }

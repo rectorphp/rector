@@ -106,9 +106,15 @@ CODE_SAMPLE
         return null;
     }
 
-    private function isInControllerActionMethod(Node $node): bool
+    private function isInControllerActionMethod(Variable $node): bool
     {
-        if (! Strings::endsWith((string) $node->getAttribute(Attribute::CLASS_NAME), 'Controller')) {
+        $className = $node->getAttribute(Attribute::CLASS_NAME);
+
+        if ($className === null) {
+            return false;
+        }
+
+        if (! Strings::endsWith($className, 'Controller')) {
             return false;
         }
 

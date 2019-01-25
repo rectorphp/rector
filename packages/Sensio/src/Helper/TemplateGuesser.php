@@ -6,15 +6,37 @@ use Nette\Utils\Strings;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\PhpParser\Node\Resolver\NameResolver;
 use function Safe\sprintf;
 
 final class TemplateGuesser
 {
+    /**
+     * @var NameResolver
+     */
+    private $nameResolver;
+
+    public function __construct(NameResolver $nameResolver)
+    {
+        $this->nameResolver = $nameResolver;
+    }
+
     public function resolveFromClassMethodNode(ClassMethod $classMethodNode, int $version = 5): string
     {
-        $namespace = (string) $classMethodNode->getAttribute(Attribute::NAMESPACE_NAME);
-        $class = (string) $classMethodNode->getAttribute(Attribute::CLASS_NAME);
-        $method = (string) $classMethodNode->name;
+        $namespace = $classMethodNode->getAttribute(Attribute::NAMESPACE_NAME);
+        if (! is_string($namespace)) {
+            throw new ShouldNotHappenException();
+        }
+
+        $class = $classMethodNode->getAttribute(Attribute::CLASS_NAME);
+        if (! is_string($class)) {
+            throw new ShouldNotHappenException();
+        }
+
+        $method = $this->nameResolver->resolve($classMethodNode);
+        if ($method === null) {
+            throw new ShouldNotHappenException();
+        }
 
         if ($version === 3) {
             return $this->resolveForVersion3($namespace, $class, $method);

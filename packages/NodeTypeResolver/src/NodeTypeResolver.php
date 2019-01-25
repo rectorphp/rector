@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Broker\Broker;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverAwareInterface;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\Attribute;
@@ -64,7 +65,7 @@ final class NodeTypeResolver
     public function resolve(Node $node): array
     {
         if ($node instanceof ClassMethod || $node instanceof ClassConst) {
-            return $this->resolve($node->getAttribute(Attribute::CLASS_NODE));
+            return $this->resolveClassNode($node);
         }
 
         if ($node instanceof StaticCall || $node instanceof ClassConstFetch) {
@@ -104,6 +105,20 @@ final class NodeTypeResolver
         if ($perNodeTypeResolver instanceof NodeTypeResolverAwareInterface) {
             $perNodeTypeResolver->setNodeTypeResolver($this);
         }
+    }
+
+    /**
+     * @param ClassConst|ClassMethod $node
+     * @return string[]
+     */
+    private function resolveClassNode(Node $node): array
+    {
+        $classNode = $node->getAttribute(Attribute::CLASS_NODE);
+        if ($classNode === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        return $this->resolve($classNode);
     }
 
     /**

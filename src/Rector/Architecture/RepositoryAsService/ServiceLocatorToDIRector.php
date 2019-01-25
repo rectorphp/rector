@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Class_;
 use Rector\Bridge\Contract\DoctrineEntityAndRepositoryMapperInterface;
 use Rector\Exception\Bridge\RectorProviderException;
 use Rector\Exception\ShouldNotHappenException;
@@ -123,9 +124,13 @@ CODE_SAMPLE
         }
 
         $repositoryFqn = $this->repositoryFqn($node);
+        $classNode = $node->getAttribute(Attribute::CLASS_NODE);
+        if (! $classNode instanceof Class_) {
+            return null;
+        }
 
         $this->addPropertyToClass(
-            $node->getAttribute(Attribute::CLASS_NODE),
+            $classNode,
             $repositoryFqn,
             $this->propertyNaming->fqnToVariableName($repositoryFqn)
         );

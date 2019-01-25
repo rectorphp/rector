@@ -30,6 +30,7 @@ final class Attribute
     public const CLASS_NAME = 'className';
 
     /**
+     * @todo split Class node, interface node and trait node, to be compatible with other SpecificNode|null, values
      * @var string
      */
     public const CLASS_NODE = 'classNode';

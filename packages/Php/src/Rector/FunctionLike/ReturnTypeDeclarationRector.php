@@ -8,6 +8,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\NodeTypeResolver\Php\ReturnTypeInfo;
 use Rector\RectorDefinition\CodeSample;
@@ -149,11 +150,15 @@ CODE_SAMPLE
             return;
         }
 
-        /** @var string $methodName */
         $methodName = $this->getName($node);
+        if ($methodName === null) {
+            throw new ShouldNotHappenException();
+        }
 
-        /** @var string $className */
         $className = $node->getAttribute(Attribute::CLASS_NAME);
+        if (! is_string($className)) {
+            throw new ShouldNotHappenException();
+        }
 
         $childrenClassLikes = $this->classLikeNodeCollector->findClassesAndInterfacesByType($className);
 

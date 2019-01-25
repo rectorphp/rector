@@ -12,7 +12,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\NodeTypeResolver\Node\Attribute;
-use Rector\PhpParser\Node\BetterNodeFinder;
+use Rector\PhpParser\Node\Maintainer\ClassMaintainer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -23,13 +23,13 @@ use Rector\RectorDefinition\RectorDefinition;
 final class Php4ConstructorRector extends AbstractRector
 {
     /**
-     * @var BetterNodeFinder
+     * @var ClassMaintainer
      */
-    private $betterNodeFinder;
+    private $classMaintainer;
 
-    public function __construct(BetterNodeFinder $betterNodeFinder)
+    public function __construct(ClassMaintainer $classMaintainer)
     {
-        $this->betterNodeFinder = $betterNodeFinder;
+        $this->classMaintainer = $classMaintainer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -73,17 +73,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $namespace = $node->getAttribute(Attribute::NAMESPACE_NAME);
-        // catch only classes without namespace
-        if ($namespace) {
+        if ($this->shouldSkip($node)) {
             return null;
         }
 
-        /** @var Class_ $classNode */
         $classNode = $node->getAttribute(Attribute::CLASS_NODE);
-
-        // anonymous class → skip
-        if ($classNode->name === null || $node->isAbstract() || $node->isStatic()) {
+        if (! $classNode instanceof Class_) {
             return null;
         }
 
@@ -91,12 +86,12 @@ CODE_SAMPLE
         $this->processClassMethodStatementsForParentConstructorCalls($node);
 
         // not PSR-4 constructor
-        if (! $this->isNameInsensitive($classNode, (string) $node->name)) {
+        if (! $this->isNameInsensitive($classNode, $this->getName($node))) {
             return null;
         }
 
         // does it already have a __construct method?
-        if (! in_array('__construct', $this->getClassMethodNames($classNode), true)) {
+        if (! $this->classMaintainer->hasClassMethod($classNode, '__construct')) {
             $node->name = new Identifier('__construct');
         }
 
@@ -118,6 +113,26 @@ CODE_SAMPLE
         return $node;
     }
 
+    private function shouldSkip(ClassMethod $classMethod): bool
+    {
+        $namespace = $classMethod->getAttribute(Attribute::NAMESPACE_NAME);
+        // catch only classes without namespace
+        if ($namespace !== null) {
+            return true;
+        }
+
+        if ($classMethod->isAbstract() || $classMethod->isStatic()) {
+            return true;
+        }
+
+        $classNode = $classMethod->getAttribute(Attribute::CLASS_NODE);
+        if ($classNode instanceof Class_ && $classNode->name === null) {
+            return true;
+        }
+
+        return false;
+    }
+
     private function processClassMethodStatementsForParentConstructorCalls(ClassMethod $classMethodNode): void
     {
         if (! is_iterable($classMethodNode->stmts)) {
@@ -136,22 +151,6 @@ CODE_SAMPLE
 
             $this->processParentPhp4ConstructCall($methodStmt);
         }
-    }
-
-    /**
-     * @return string[]
-     */
-    private function getClassMethodNames(Class_ $classNode): array
-    {
-        $classMethodNames = [];
-
-        /** @var ClassMethod[] $classMethodNodes */
-        $classMethodNodes = $this->betterNodeFinder->findInstanceOf($classNode->stmts, ClassMethod::class);
-        foreach ($classMethodNodes as $classMethodNode) {
-            $classMethodNames[] = (string) $classMethodNode->name;
-        }
-
-        return $classMethodNames;
     }
 
     private function isThisConstructCall(Node $node): bool
@@ -189,16 +188,16 @@ CODE_SAMPLE
         }
 
         // rename ParentClass
-        if ((string) $node->class === $parentClassName) {
+        if ($this->isName($node->class, $parentClassName)) {
             $node->class = new Name('parent');
         }
 
-        if ((string) $node->class !== 'parent') {
+        if ($this->isName($node->class, 'parent') === false) {
             return;
         }
 
         // it's not a parent PHP 4 constructor call
-        if (! $this->isNameInsensitive($node, $parentClassName)) {
+        if ($this->isNameInsensitive($node, $parentClassName) === false) {
             return;
         }
 

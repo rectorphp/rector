@@ -24,7 +24,12 @@ final class NamespaceAnalyzer
 
     public function resolveTypeToFullyQualified(string $type, Node $node): string
     {
-        $useStatementMatch = $this->matchUseStatements($type, (array) $node->getAttribute(Attribute::USE_NODES));
+        $useNodes = $node->getAttribute(Attribute::USE_NODES);
+        if ($useNodes === null) {
+            $useNodes = [];
+        }
+
+        $useStatementMatch = $this->matchUseStatements($type, $useNodes);
         if ($useStatementMatch) {
             return $useStatementMatch;
         }

@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\TraitUse;
+use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Node\NodeFactory;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\PhpParser\Node\VariableInfo;
@@ -32,14 +33,21 @@ final class ClassMaintainer
      */
     private $childAndParentClassMaintainer;
 
+    /**
+     * @var BetterNodeFinder
+     */
+    private $betterNodeFinder;
+
     public function __construct(
         NameResolver $nameResolver,
         NodeFactory $nodeFactory,
-        ChildAndParentClassMaintainer $childAndParentClassMaintainer
+        ChildAndParentClassMaintainer $childAndParentClassMaintainer,
+        BetterNodeFinder $betterNodeFinder
     ) {
         $this->nodeFactory = $nodeFactory;
         $this->nameResolver = $nameResolver;
         $this->childAndParentClassMaintainer = $childAndParentClassMaintainer;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
 
     public function addConstructorDependency(Class_ $classNode, VariableInfo $variableInfo): void
@@ -208,6 +216,13 @@ final class ClassMaintainer
         return false;
     }
 
+    public function hasClassMethod(Class_ $classNode, string $methodName): bool
+    {
+        $methodNames = $this->getClassMethodNames($classNode);
+
+        return in_array($methodName, $methodNames, true);
+    }
+
     private function tryInsertBeforeFirstMethod(Class_ $classNode, Stmt $node): bool
     {
         foreach ($classNode->stmts as $key => $classElementNode) {
@@ -281,6 +296,21 @@ final class ClassMaintainer
 
         $classMethodNode->params[] = $this->nodeFactory->createParamFromVariableInfo($variableInfo);
         $classMethodNode->stmts[] = new Expression($propertyAssignNode);
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getClassMethodNames(Class_ $classNode): array
+    {
+        $classMethodNames = [];
+
+        $classMethodNodes = $this->betterNodeFinder->findInstanceOf($classNode->stmts, ClassMethod::class);
+        foreach ($classMethodNodes as $classMethodNode) {
+            $classMethodNames[] = $this->nameResolver->resolve($classMethodNode);
+        }
+
+        return $classMethodNames;
     }
 
     private function hasMethodParameter(ClassMethod $classMethodNode, VariableInfo $variableInfo): bool

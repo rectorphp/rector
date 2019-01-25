@@ -70,7 +70,8 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $node->getAttribute(Attribute::CLASS_NODE) instanceof Class_) {
+        $classNode = $node->getAttribute(Attribute::CLASS_NODE);
+        if (! $classNode instanceof Class_) {
             return null;
         }
 
@@ -78,13 +79,12 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var string $class */
-        $class = $node->getAttribute(Attribute::CLASS_NAME);
-        $methodName = $this->getName($node);
-        if ($methodName === null) {
+        $class = $this->getName($classNode);
+        if ($class === null) {
             return null;
         }
 
+        $methodName = $this->getName($node);
         if ($this->classMaintainer->hasParentMethodOrInterface($class, $methodName)) {
             return null;
         }

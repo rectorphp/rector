@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 // experimental, phpstan 0.10.7
 // @todo refactor to classes later, if proven working
@@ -72,15 +72,13 @@ function resolveNewFiles(): array
 
     $gitStatusOutput = $process->getOutput();
 
-    var_dump($gitStatusOutput);
-
     $files = [];
     foreach (Strings::matchAll($gitStatusOutput, '#\?\? ([\w\/\.]+)#m') as $match) {
         $directoryOrFile = getcwd() . '/' . $match[1];
         if (file_exists($directoryOrFile) && is_file($directoryOrFile)) {
             $files[] = $directoryOrFile;
         } else {
-            $finder = (Finder::create())
+            $finder = Finder::create()
                 ->files()
                 ->in($directoryOrFile)
                 ->name('*.php');

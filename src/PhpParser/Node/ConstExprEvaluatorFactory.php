@@ -7,8 +7,9 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\MagicConst\Dir;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\Attribute;
-use Symfony\Component\Finder\SplFileInfo;
+use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
 final class ConstExprEvaluatorFactory
 {
@@ -17,8 +18,10 @@ final class ConstExprEvaluatorFactory
         return new ConstExprEvaluator(function (Expr $expr): ?string {
             // resolve "__DIR__"
             if ($expr instanceof Dir) {
-                /** @var SplFileInfo $fileInfo */
                 $fileInfo = $expr->getAttribute(Attribute::FILE_INFO);
+                if (! $fileInfo instanceof SmartFileInfo) {
+                    throw new ShouldNotHappenException();
+                }
 
                 return $fileInfo->getPath();
             }
@@ -34,13 +37,16 @@ final class ConstExprEvaluatorFactory
 
     private function resolveClassConstFetch(ClassConstFetch $classConstFetchNode): string
     {
-        $class = $classConstFetchNode->class->getAttribute(Attribute::RESOLVED_NAME)->toString();
+        $class = $classConstFetchNode->class->getAttribute(Attribute::RESOLVED_NAME);
+        if ($class === null) {
+            return '';
+        }
 
         /** @var Identifier $identifierNode */
         $identifierNode = $classConstFetchNode->name;
 
         $constant = $identifierNode->toString();
 
-        return $class . '::' . $constant;
+        return $class->toString() . '::' . $constant;
     }
 }

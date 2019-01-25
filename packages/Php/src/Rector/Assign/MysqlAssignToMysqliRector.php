@@ -14,6 +14,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\For_;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -150,7 +151,12 @@ CODE_SAMPLE
             'stmts' => [new Expression($funcCallNode)],
         ]);
 
-        $this->addNodeAfterNode($forNode, $assignNode->getAttribute(Attribute::PREVIOUS_EXPRESSION));
+        $previousExpression = $assignNode->getAttribute(Attribute::PREVIOUS_EXPRESSION);
+        if ($previousExpression === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        $this->addNodeAfterNode($forNode, $previousExpression);
 
         return $assignNode;
     }

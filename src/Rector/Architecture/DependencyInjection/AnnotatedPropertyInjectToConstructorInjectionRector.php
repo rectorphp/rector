@@ -105,12 +105,12 @@ CODE_SAMPLE
     private function addPropertyToCollector(Property $propertyNode): void
     {
         $classNode = $propertyNode->getAttribute(Attribute::CLASS_NODE);
-        $mainPropertyType = $this->getTypes($propertyNode)[0];
-        $propertyName = $this->getName($propertyNode);
-        if ($propertyName === null) {
+        if (! $classNode instanceof Class_) {
             return;
         }
 
+        $mainPropertyType = $this->getTypes($propertyNode)[0] ?? 'mixed';
+        $propertyName = $this->getName($propertyNode);
         $this->addPropertyToClass($classNode, $mainPropertyType, $propertyName);
     }
 }

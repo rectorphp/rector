@@ -79,8 +79,10 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var string $className */
         $className = $node->getAttribute(Attribute::CLASS_NAME);
+        if (! is_string($className)) {
+            return null;
+        }
 
         $methodName = $this->getName($node);
         if ($methodName === null) {

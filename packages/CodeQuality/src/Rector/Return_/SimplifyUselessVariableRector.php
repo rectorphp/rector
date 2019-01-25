@@ -66,9 +66,13 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var AssignOp|Assign $previousNode */
-        $previousNode = $node->getAttribute(Attribute::PREVIOUS_NODE)->expr;
+        $previousNode = $node->getAttribute(Attribute::PREVIOUS_NODE);
+        if (! $previousNode instanceof Expression) {
+            return null;
+        }
 
+        /** @var AssignOp|Assign $previousNode */
+        $previousNode = $previousNode->expr;
         $previousVariableNode = $previousNode->var;
 
         // has some comment

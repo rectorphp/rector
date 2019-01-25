@@ -122,7 +122,6 @@ CODE_SAMPLE
             $smartFileInfo->getRealPath()
         );
 
-        /** @var Namespace_[] $namespaceNodes */
         $namespaceNodes = $this->betterNodeFinder->findInstanceOf($newStmts, Namespace_::class);
 
         if ($this->shouldSkip($smartFileInfo, $newStmts, $namespaceNodes)) {

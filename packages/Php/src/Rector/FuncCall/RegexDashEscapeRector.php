@@ -173,7 +173,11 @@ CODE_SAMPLE
 
     private function processClassConstFetch(Expr $expr): void
     {
-        $className = (string) $expr->getAttribute(Attribute::CLASS_NAME);
+        $className = $expr->getAttribute(Attribute::CLASS_NAME);
+        if (! is_string($className)) {
+            return;
+        }
+
         $constantName = $this->getName($expr);
         if ($constantName === null) {
             return;
@@ -224,6 +228,9 @@ CODE_SAMPLE
     private function findAssigners(Node $variableNode): array
     {
         $methodNode = $variableNode->getAttribute(Attribute::METHOD_NODE);
+        if ($methodNode === null) {
+            return [];
+        }
 
         /** @var Assign[] $assignNode */
         return $this->betterNodeFinder->find([$methodNode], function (Node $node) use ($variableNode) {

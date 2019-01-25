@@ -2,7 +2,6 @@
 
 namespace Rector\Tests\Rector\Annotation\AnnotationReplacerRector;
 
-use PHPUnit\Framework\TestCase;
 use Rector\Rector\Annotation\AnnotationReplacerRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -23,6 +22,8 @@ final class ScenarioToTestAnnotationRectorTest extends AbstractRectorTestCase
      */
     protected function getRectorConfiguration(): array
     {
-        return [TestCase::class => ['scenario' => 'test']];
+        return [
+            'PHPUnit\Framework\TestCase' => ['scenario' => 'test'],
+        ];
     }
 }

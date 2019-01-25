@@ -5,6 +5,7 @@ namespace Rector\Symfony\Rector\FrameworkBundle;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Class_;
 use Rector\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
@@ -94,8 +95,13 @@ CODE_SAMPLE
         $parameterName = $stringArgument->value;
         $propertyName = $this->propertyNaming->underscoreToName($parameterName);
 
+        $classNode = $node->getAttribute(Attribute::CLASS_NODE);
+        if (! $classNode instanceof Class_) {
+            return null;
+        }
+
         $this->addPropertyToClass(
-            $node->getAttribute(Attribute::CLASS_NODE),
+            $classNode,
             'string', // @todo: resolve type from container provider? see parameter autowire compiler pass
             $propertyName
         );

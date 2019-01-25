@@ -8,6 +8,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\NodeVisitor\NameResolver;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
@@ -62,8 +63,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
-        $usedNameNodes = $this->resolveUsedNameNodes($parentNode);
+        $usedNameNodes = $this->resolveUsedNameNodes($node);
         if ($usedNameNodes === []) {
             return null;
         }
@@ -100,19 +100,20 @@ CODE_SAMPLE
     /**
      * @return Node[][][]
      */
-    private function resolveUsedNameNodes(Node $parentNode): array
+    private function resolveUsedNameNodes(Use_ $node): array
     {
+        $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
+        if ($parentNode === null) {
+            throw new ShouldNotHappenException();
+        }
+
         $usedNameNodes = [];
 
         // assumption for namespaced content
         if ($parentNode instanceof Namespace_) {
             /** @var Name[] $namedNodes */
             $namedNodes = $this->betterNodeFinder->find($parentNode, function (Node $node) {
-                if ($node instanceof Name) {
-                    return true;
-                }
-
-                return false;
+                return $node instanceof Name;
             });
 
             foreach ($namedNodes as $nameNode) {
@@ -122,8 +123,10 @@ CODE_SAMPLE
                     continue;
                 }
 
-                /** @var Node $parentNode */
                 $parentNode = $nameNode->getAttribute(Attribute::PARENT_NODE);
+                if ($parentNode === null) {
+                    continue;
+                }
 
                 $usedNameNodes[$originalName->toString()][] = [$nameNode, $parentNode];
             }

@@ -3,6 +3,7 @@
 namespace Rector\NodeTypeResolver\Application;
 
 use PhpParser\Node\Stmt\ClassConst;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 
@@ -25,7 +26,11 @@ final class ConstantNodeCollector
 
     public function addConstant(ClassConst $classConst): void
     {
-        $className = (string) $classConst->getAttribute(Attribute::CLASS_NAME);
+        $className = $classConst->getAttribute(Attribute::CLASS_NAME);
+        if ($className === null) {
+            throw new ShouldNotHappenException();
+        }
+
         $constantName = $this->nameResolver->resolve($classConst);
 
         $this->constantsByType[$className][$constantName] = $classConst;

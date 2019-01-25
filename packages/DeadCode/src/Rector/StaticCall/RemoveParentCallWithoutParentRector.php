@@ -70,9 +70,12 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->classMethodMaintainer->hasParentMethodOrInterfaceMethod(
-            $node->getAttribute(Attribute::METHOD_NODE)
-        )) {
+        $methodNode = $node->getAttribute(Attribute::METHOD_NODE);
+        if ($methodNode === null) {
+            return null;
+        }
+
+        if ($this->classMethodMaintainer->hasParentMethodOrInterfaceMethod($methodNode)) {
             return null;
         }
 

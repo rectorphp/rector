@@ -7,7 +7,6 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Stmt\Expression;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -42,7 +41,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        /** @var Expression|null $previousExpression */
         $previousExpression = $node->getAttribute(Attribute::PREVIOUS_EXPRESSION);
         if ($previousExpression === null) {
             return null;

@@ -7,8 +7,8 @@ use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Nop;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -49,10 +49,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        /** @var Expression $expression */
         $expression = $node->getAttribute(Attribute::CURRENT_EXPRESSION);
+        if ($expression === null) {
+            throw new ShouldNotHappenException();
+        }
 
-        /** @var Node|null $nextNode */
         $nextNode = $expression->getAttribute(Attribute::NEXT_NODE);
         if ($nextNode === null) {
             return null;

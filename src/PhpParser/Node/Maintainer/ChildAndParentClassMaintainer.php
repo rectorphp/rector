@@ -39,8 +39,9 @@ final class ChildAndParentClassMaintainer
 
     public function completeParentConstructor(Class_ $classNode, ClassMethod $constructorClassMethodNode): void
     {
-        $parentClassName = (string) $classNode->getAttribute(Attribute::PARENT_CLASS_NAME);
-        if (! $parentClassName) {
+        /** @var string|null $parentClassName */
+        $parentClassName = $classNode->getAttribute(Attribute::PARENT_CLASS_NAME);
+        if ($parentClassName === null) {
             return;
         }
 
@@ -114,9 +115,9 @@ final class ChildAndParentClassMaintainer
                 return $constructMethodNode;
             }
 
-            /** @var string $parentClassName */
+            /** @var string|null $parentClassName */
             $parentClassName = $classNode->getAttribute(Attribute::PARENT_CLASS_NAME);
-            if (! $parentClassName) {
+            if ($parentClassName === null) {
                 return null;
             }
 

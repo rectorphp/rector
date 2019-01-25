@@ -7,6 +7,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\NodeTypeResolver\Node\NodeToStringTypeResolver;
 use Rector\NodeTypeResolver\NodeTypeAnalyzer;
@@ -133,8 +134,10 @@ CODE_SAMPLE
             $types[] = $this->nodeToStringTypeResolver->resolver($propertyDefault);
         }
 
-        /** @var Class_ $classNode */
         $classNode = $propertyNode->getAttribute(Attribute::CLASS_NODE);
+        if (! $classNode instanceof Class_) {
+            throw new ShouldNotHappenException();
+        }
 
         $propertyName = $this->getName($propertyNode);
         if ($propertyName === null) {
@@ -145,11 +148,9 @@ CODE_SAMPLE
         $propertyAssignNodes = $this->betterNodeFinder->find([$classNode], function (Node $node) use (
             $propertyName
         ): bool {
-            if ($node instanceof Assign) {
-                if ($node->var instanceof PropertyFetch) {
-                    // is property match
-                    return $this->isName($node->var, $propertyName);
-                }
+            if ($node instanceof Assign && $node->var instanceof PropertyFetch) {
+                // is property match
+                return $this->isName($node->var, $propertyName);
             }
 
             return false;
