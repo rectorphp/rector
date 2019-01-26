@@ -5,6 +5,7 @@ namespace Rector\CodingStyle\Rector\Use_;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\NodeVisitor\NameResolver;
@@ -87,7 +88,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            // only alis name is used → use last name directly
+            // only alias name is used → use last name directly
             if (isset($usedNameNodes[$aliasName])) {
                 $this->renameNameNode($usedNameNodes[$aliasName], $lastName);
                 $use->alias = null;
@@ -103,32 +104,42 @@ CODE_SAMPLE
     private function resolveUsedNameNodes(Use_ $node): array
     {
         $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
-        if ($parentNode === null) {
-            throw new ShouldNotHappenException();
+        if ($parentNode === null) { // no namespace
+            $nextNode = $node->getAttribute(Attribute::NEXT_NODE);
+            if ($nextNode === null) {
+                throw new ShouldNotHappenException();
+            }
         }
+
+        $groupNode = $nextNode ?? $parentNode;
 
         $usedNameNodes = [];
 
-        // assumption for namespaced content
-        if ($parentNode instanceof Namespace_) {
-            /** @var Name[] $namedNodes */
-            $namedNodes = $this->betterNodeFinder->find($parentNode, function (Node $node) {
-                return $node instanceof Name;
-            });
+        /** @var Name[] $namedNodes */
+        $namedNodes = $this->betterNodeFinder->findInstanceOf($groupNode, Name::class);
 
-            foreach ($namedNodes as $nameNode) {
-                /** node name before becoming FQN - attribute from @see NameResolver */
-                $originalName = $nameNode->getAttribute('originalName');
-                if (! $originalName instanceof Name) {
-                    continue;
-                }
+        foreach ($namedNodes as $nameNode) {
+            /** node name before becoming FQN - attribute from @see NameResolver */
+            $originalName = $nameNode->getAttribute('originalName');
+            if (! $originalName instanceof Name) {
+                continue;
+            }
 
-                $parentNode = $nameNode->getAttribute(Attribute::PARENT_NODE);
-                if ($parentNode === null) {
-                    continue;
-                }
+            $parentNode = $nameNode->getAttribute(Attribute::PARENT_NODE);
+            if ($parentNode === null) {
+                continue;
+            }
 
-                $usedNameNodes[$originalName->toString()][] = [$nameNode, $parentNode];
+            $usedNameNodes[$originalName->toString()][] = [$nameNode, $parentNode];
+        }
+
+        /** @var ClassLike[] $classLikeNodes */
+        $classLikeNodes = $this->betterNodeFinder->findInstanceOf($parentNode, ClassLike::class);
+
+        foreach ($classLikeNodes as $classLikeNode) {
+            if ($classLikeNode->name) {
+                $name = $this->getName($classLikeNode->name);
+                $usedNameNodes[$name] = [$classLikeNode->name, $parentNode];
             }
         }
 
