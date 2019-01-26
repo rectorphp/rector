@@ -42,6 +42,12 @@ final class RectorKernel extends Kernel
         parent::__construct('cli_' . $configFilesHash, true);
     }
 
+    public function getCacheDir(): string
+    {
+        // manually configured, so it can be replaced in phar
+        return sys_get_temp_dir() . '/_rector';
+    }
+
     public function registerContainerConfiguration(LoaderInterface $loader): void
     {
         $loader->load(__DIR__ . '/../config/config.yml');
