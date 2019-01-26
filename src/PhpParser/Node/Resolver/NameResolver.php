@@ -6,6 +6,8 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Empty_;
+use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
@@ -126,6 +128,14 @@ final class NameResolver
         // unable to resolve
         if ($node->name instanceof Expr) {
             return null;
+        }
+
+        if ($node instanceof Variable) {
+            $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
+            // is $variable::method(), unable to resolve $variable->class name
+            if ($parentNode instanceof StaticCall) {
+                return null;
+            }
         }
 
         return (string) $node->name;
