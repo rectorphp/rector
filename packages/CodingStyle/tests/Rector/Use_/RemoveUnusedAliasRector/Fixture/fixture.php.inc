@@ -2,11 +2,13 @@
 
 namespace Rector\CodingStyle\Tests\Rector\Use_\RemoveUnusedAliasRector\Fixture;
 
+use Rector\CodingStyle\Tests\Rector\Use_\RemoveUnusedAliasRector\Source\AbstractInterface as BaseInterface;
 use Rector\CodingStyle\Tests\Rector\Use_\RemoveUnusedAliasRector\Source\AbstractKernel as BaseKernel;
 
-class SomeClass extends BaseKernel
+
+class SomeClass extends BaseKernel implements BaseInterface
 {
-    public function run(BaseKernel $baseKernel)
+    public function run(BaseKernel $baseKernel): BaseInterface
     {
         $anotherBaseKernel = new BaseKernel();
     }
@@ -18,11 +20,13 @@ class SomeClass extends BaseKernel
 
 namespace Rector\CodingStyle\Tests\Rector\Use_\RemoveUnusedAliasRector\Fixture;
 
+use Rector\CodingStyle\Tests\Rector\Use_\RemoveUnusedAliasRector\Source\AbstractInterface;
 use Rector\CodingStyle\Tests\Rector\Use_\RemoveUnusedAliasRector\Source\AbstractKernel;
 
-class SomeClass extends AbstractKernel
+
+class SomeClass extends AbstractKernel implements AbstractInterface
 {
-    public function run(AbstractKernel $baseKernel)
+    public function run(AbstractKernel $baseKernel): AbstractInterface
     {
         $anotherBaseKernel = new AbstractKernel();
     }
