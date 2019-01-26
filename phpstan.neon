@@ -28,6 +28,8 @@ parameters:
     ignoreErrors:
         # false positive
         - '#PHPDoc tag \@param for parameter \$node with type float is incompatible with native type PhpParser\\Node#'
+        - '#Method Rector\\CodingStyle\\Rector\\Use_\\RemoveUnusedAliasRector::resolveUsedClassNames\(\) should return array<array<array<PhpParser\\Node>>> but returns array<string, array<int, array<int, PhpParser\\Node\\Identifier\|PhpParser\\Node\\Stmt\\ClassLike\|null>>>#'
+        - '#Result of && is always true#'
 
         # missuse of interface and class
         - '#Parameter \#1 (.*?) expects Symfony\\Component\\DependencyInjection\\ContainerBuilder, Symfony\\Component\\DependencyInjection\\ContainerInterface given#'
