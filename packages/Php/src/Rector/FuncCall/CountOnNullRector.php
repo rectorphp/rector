@@ -62,7 +62,6 @@ CODE_SAMPLE
         }
 
         // check if it has some condition before already, if so, probably it's already handled
-
         if ($node->getAttribute(self::ALREADY_CHANGED_ON_COUNT)) {
             return null;
         }
