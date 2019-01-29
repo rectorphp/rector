@@ -1,8 +1,6 @@
 services:
     - Rector\PHPStanExtensions\Utils\ValueResolver
 
-    - { class: Symplify\PHPStanExtensions\Type\SplFileInfoTolerantDynamicMethodReturnTypeExtension, tags: [phpstan.broker.dynamicMethodReturnTypeExtension] }
-
     # $node->geAttribute($1) => Type|null by $1
     - { class: Rector\PHPStanExtensions\Rector\Type\GetAttributeReturnTypeExtension, tags: [phpstan.broker.dynamicMethodReturnTypeExtension] }
 
