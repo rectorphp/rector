@@ -6,6 +6,8 @@ use Nette\Utils\Strings;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
@@ -80,6 +82,19 @@ final class DocBlockAnalyzer
         }
 
         return $phpDocInfo->hasTag($name);
+    }
+
+    public function addTag(Node $node, PhpDocChildNode $phpDocChildNode): void
+    {
+        if ($node->getDocComment()) {
+            $phpDocInfo = $this->createPhpDocInfoFromNode($node);
+            $phpDocNode = $phpDocInfo->getPhpDocNode();
+        } else {
+            $phpDocNode = new PhpDocNode([]);
+        }
+
+        $phpDocNode->children[] = $phpDocChildNode;
+        $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
     }
 
     public function removeParamTagByName(Node $node, string $name): void
@@ -271,6 +286,18 @@ final class DocBlockAnalyzer
         return Strings::contains($name, '\\');
     }
 
+    private function createPhpDocInfoFromNode(Node $node): PhpDocInfo
+    {
+        if ($node->getDocComment() === null) {
+            throw new ShouldNotHappenException(sprintf(
+                'Node must have a comment. Check `$node->getDocComment() !== null` before passing it to %s',
+                __METHOD__
+            ));
+        }
+
+        return $this->phpDocInfoFactory->createFrom($node->getDocComment()->getText());
+    }
+
     private function updateNodeWithPhpDocInfo(Node $node, PhpDocInfo $phpDocInfo): void
     {
         // skip if has no doc comment
@@ -286,17 +313,5 @@ final class DocBlockAnalyzer
 
         // no comments, null
         $node->setAttribute('comments', null);
-    }
-
-    private function createPhpDocInfoFromNode(Node $node): PhpDocInfo
-    {
-        if ($node->getDocComment() === null) {
-            throw new ShouldNotHappenException(sprintf(
-                'Node must have a comment. Check `$node->getDocComment() !== null` before passing it to %s',
-                __METHOD__
-            ));
-        }
-
-        return $this->phpDocInfoFactory->createFrom($node->getDocComment()->getText());
     }
 }
