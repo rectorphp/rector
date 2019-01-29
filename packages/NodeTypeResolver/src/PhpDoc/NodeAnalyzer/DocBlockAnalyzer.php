@@ -17,7 +17,7 @@ use Rector\NodeTypeResolver\Php\VarTypeInfo;
 use function Safe\sprintf;
 use Symplify\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Symplify\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Symplify\BetterPhpDocParser\PhpDocParser\TypeNodeToStringsConvertor;
+use Symplify\BetterPhpDocParser\PhpDocParser\TypeNodeToStringsConverter;
 use Symplify\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 
 final class DocBlockAnalyzer
@@ -43,22 +43,22 @@ final class DocBlockAnalyzer
     private $fqnAnnotationTypeDecorator;
 
     /**
-     * @var TypeNodeToStringsConvertor
+     * @var TypeNodeToStringsConverter
      */
-    private $typeNodeToStringsConvertor;
+    private $typeNodeToStringsConverter;
 
     public function __construct(
         PhpDocInfoFactory $phpDocInfoFactory,
         PhpDocInfoPrinter $phpDocInfoPrinter,
         PhpDocInfoFqnTypeDecorator $phpDocInfoFqnTypeDecorator,
         FqnAnnotationTypeDecorator $fqnAnnotationTypeDecorator,
-        TypeNodeToStringsConvertor $typeNodeToStringsConvertor
+        TypeNodeToStringsConverter $typeNodeToStringsConverter
     ) {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->phpDocInfoPrinter = $phpDocInfoPrinter;
         $this->phpDocInfoFqnTypeDecorator = $phpDocInfoFqnTypeDecorator;
         $this->fqnAnnotationTypeDecorator = $fqnAnnotationTypeDecorator;
-        $this->typeNodeToStringsConvertor = $typeNodeToStringsConvertor;
+        $this->typeNodeToStringsConverter = $typeNodeToStringsConverter;
     }
 
     public function hasTag(Node $node, string $name): bool
@@ -178,8 +178,8 @@ final class DocBlockAnalyzer
 
             $paramTypeInfo = new ParamTypeInfo(
                 $paramTagValueNode->parameterName,
-                $this->typeNodeToStringsConvertor->convert($paramTagValueNode->type),
-                $this->typeNodeToStringsConvertor->convert($fqnParamTagValueNode->type)
+                $this->typeNodeToStringsConverter->convert($paramTagValueNode->type),
+                $this->typeNodeToStringsConverter->convert($fqnParamTagValueNode->type)
             );
 
             $paramTypeInfos[$paramTypeInfo->getName()] = $paramTypeInfo;
