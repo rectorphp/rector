@@ -1,5 +1,5 @@
 services:
-    - Rector\PHPStanExtensions\Utils\ValueResolver
+    - Rector\PHPStanExtensions\Utils\PHPStanValueResolver
 
     # $node->geAttribute($1) => Type|null by $1
     - { class: Rector\PHPStanExtensions\Rector\Type\GetAttributeReturnTypeExtension, tags: [phpstan.broker.dynamicMethodReturnTypeExtension] }

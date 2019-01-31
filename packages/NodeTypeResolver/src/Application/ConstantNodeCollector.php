@@ -7,6 +7,7 @@ use PhpParser\Node\Stmt\ClassConst;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\PhpParser\Node\Resolver\NameResolver;
+use function Safe\sprintf;
 
 final class ConstantNodeCollector
 {
@@ -40,7 +41,7 @@ final class ConstantNodeCollector
     public function findConstant(string $constantName, string $className): ?ClassConst
     {
         if (Strings::contains($constantName, '\\')) {
-            throw new ShouldNotHappenException(\Safe\sprintf('Switched arguments in "%s"', __METHOD__));
+            throw new ShouldNotHappenException(sprintf('Switched arguments in "%s"', __METHOD__));
         }
 
         return $this->constantsByType[$className][$constantName] ?? null;

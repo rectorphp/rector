@@ -26,6 +26,7 @@ parameters:
 
     ignoreErrors:
         # false positive
+        - '#Call to function method_exists\(\) with string and (.*?) will always evaluate to false#'
         - '#PHPDoc tag \@param for parameter \$node with type float is incompatible with native type PhpParser\\Node#'
         - '#Result of && is always true#'
 

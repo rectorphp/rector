@@ -1,39 +1,56 @@
 <?php declare(strict_types=1);
 
-namespace Rector\PhpParser\Node;
+namespace Rector\PhpParser\Node\Value;
 
 use PhpParser\ConstExprEvaluator;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Scalar\MagicConst\Dir;
-use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Scalar\MagicConst\File;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Application\ConstantNodeCollector;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
-final class ConstExprEvaluatorFactory
+final class ValueResolver
 {
-    /**
-     * @var ConstantNodeCollector
-     */
-    private $constantNodeCollector;
-
     /**
      * @var NameResolver
      */
     private $nameResolver;
 
-    public function __construct(ConstantNodeCollector $constantNodeCollector, NameResolver $nameResolver)
+    /**
+     * @var ConstExprEvaluator
+     */
+    private $constExprEvaluator;
+
+    /**
+     * @var ConstantNodeCollector
+     */
+    private $constantNodeCollector;
+
+    public function __construct(NameResolver $nameResolver, ConstantNodeCollector $constantNodeCollector)
     {
-        $this->constantNodeCollector = $constantNodeCollector;
         $this->nameResolver = $nameResolver;
+        $this->constantNodeCollector = $constantNodeCollector;
     }
 
-    public function create(): ConstExprEvaluator
+    /**
+     * @return mixed|null
+     */
+    public function resolve(Expr $node)
     {
-        return new ConstExprEvaluator(function (Expr $expr): ?string {
+        return $this->getConstExprEvaluator()->evaluateDirectly($node);
+    }
+
+    private function getConstExprEvaluator(): ConstExprEvaluator
+    {
+        if ($this->constExprEvaluator !== null) {
+            return $this->constExprEvaluator;
+        }
+
+        $this->constExprEvaluator = new ConstExprEvaluator(function (Expr $expr): ?string {
             // resolve "__DIR__"
             if ($expr instanceof Dir) {
                 $fileInfo = $expr->getAttribute(Attribute::FILE_INFO);
@@ -44,6 +61,15 @@ final class ConstExprEvaluatorFactory
                 return $fileInfo->getPath();
             }
 
+            if ($expr instanceof File) {
+                $fileInfo = $expr->getAttribute(Attribute::FILE_INFO);
+                if (! $fileInfo instanceof SmartFileInfo) {
+                    throw new ShouldNotHappenException();
+                }
+
+                return $fileInfo->getPathname();
+            }
+
             // resolve "SomeClass::SOME_CONST"
             if ($expr instanceof ClassConstFetch) {
                 return $this->resolveClassConstFetch($expr);
@@ -51,12 +77,22 @@ final class ConstExprEvaluatorFactory
 
             return null;
         });
+
+        return $this->constExprEvaluator;
     }
 
     private function resolveClassConstFetch(ClassConstFetch $classConstFetchNode): string
     {
         $class = $this->nameResolver->resolve($classConstFetchNode->class);
         $constant = $this->nameResolver->resolve($classConstFetchNode->name);
+
+        if ($class === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        if ($constant === null) {
+            throw new ShouldNotHappenException();
+        }
 
         if ($class === 'self') {
             $class = (string) $classConstFetchNode->class->getAttribute(Attribute::CLASS_NAME);
@@ -73,14 +109,6 @@ final class ConstExprEvaluatorFactory
             return $class . '::' . $constant;
         }
 
-        $constNodeValue = ($classConstNode->consts[0]->value);
-
-        // @todo recurse - use service instead of factory 3rd party
-        if ($constNodeValue instanceof String_) {
-            return $constNodeValue->value;
-        }
-
-        // @todo
-        throw new ShouldNotHappenException('Wip in ' . __METHOD__);
+        return $this->constExprEvaluator->evaluateDirectly($classConstNode->consts[0]->value);
     }
 }

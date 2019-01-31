@@ -6,7 +6,7 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 
-final class ValueResolver
+final class PHPStanValueResolver
 {
     public function resolveClassConstFetch(ClassConstFetch $classConstFetch): ?string
     {

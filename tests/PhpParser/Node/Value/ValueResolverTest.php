@@ -1,26 +1,23 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\PhpParser\Node;
+namespace Rector\Tests\PhpParser\Node\Value;
 
 use PhpParser\BuilderFactory;
-use PhpParser\ConstExprEvaluator;
-use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
-use PHPUnit\Framework\TestCase;
 use Rector\NodeTypeResolver\Node\Attribute;
-use Rector\PhpParser\Node\ConstExprEvaluatorFactory;
+use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Tests\AbstractContainerAwareTestCase;
 
-final class ConstExprEvaluatorFactoryTest extends AbstractContainerAwareTestCase
+final class ValueResolverTest extends AbstractContainerAwareTestCase
 {
     /**
-     * @var ConstExprEvaluator
+     * @var ValueResolver
      */
-    private $constExprEvaluator;
+    private $valueResolver;
 
     protected function setUp(): void
     {
-        $this->constExprEvaluator = $this->container->get(ConstExprEvaluator::class);
+        $this->valueResolver = $this->container->get(ValueResolver::class);
     }
 
     public function test(): void
@@ -30,7 +27,7 @@ final class ConstExprEvaluatorFactoryTest extends AbstractContainerAwareTestCase
 
         $this->assertSame(
             'SomeClassResolveName::SOME_CONSTANT',
-            $this->constExprEvaluator->evaluateDirectly($classConstFetchNode)
+            $this->valueResolver->resolve($classConstFetchNode)
         );
     }
 }

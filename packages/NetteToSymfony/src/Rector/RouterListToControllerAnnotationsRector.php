@@ -12,8 +12,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\NetteToSymfony\Annotation\RouteTagValueNode;
 use Rector\NetteToSymfony\Route\RouteInfo;
 use Rector\NodeTypeResolver\Application\ClassLikeNodeCollector;
-use Rector\NodeTypeResolver\Application\ConstantNodeCollector;
-use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Node\Maintainer\ClassMaintainer;
@@ -23,6 +21,9 @@ use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 use ReflectionMethod;
 
+/**
+ * @see https://doc.nette.org/en/2.4/routing
+ */
 final class RouterListToControllerAnnotationsRector extends AbstractRector
 {
     /**
@@ -65,18 +66,12 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
      */
     private $docBlockAnalyzer;
 
-    /**
-     * @var ConstantNodeCollector
-     */
-    private $constantNodeCollector;
-
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
         FunctionLikeMaintainer $functionLikeMaintainer,
         ClassLikeNodeCollector $classLikeNodeCollector,
         ClassMaintainer $classMaintainer,
         DocBlockAnalyzer $docBlockAnalyzer,
-        ConstantNodeCollector $constantNodeCollector,
         string $routeListClass = 'Nette\Application\Routers\RouteList',
         string $routerClass = 'Nette\Application\IRouter',
         string $routeAnnotationClass = 'Symfony\Component\Routing\Annotation\Route'
@@ -89,7 +84,6 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
         $this->classMaintainer = $classMaintainer;
         $this->docBlockAnalyzer = $docBlockAnalyzer;
         $this->routeAnnotationClass = $routeAnnotationClass;
-        $this->constantNodeCollector = $constantNodeCollector;
     }
 
     public function getDefinition(): RectorDefinition
@@ -161,6 +155,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if ($node->stmts === null || $node->stmts === []) {
+            return null;
+        }
+
         if ($node->returnType !== null) {
             if (! $this->isType($node->returnType, $this->routeListClass)) {
                 return null;
@@ -204,7 +202,14 @@ CODE_SAMPLE
 
             if ($node->expr instanceof StaticCall) {
                 $className = $this->getName($node->expr->class);
+                if ($className === null) {
+                    return false;
+                }
+
                 $methodName = $this->getName($node->expr->name);
+                if ($methodName === null) {
+                    return false;
+                }
 
                 // @todo decouple - resolve method return type
                 if (! method_exists($className, $methodName)) {
@@ -313,17 +318,20 @@ CODE_SAMPLE
             if ($this->isName($pathArgument->class, 'self')) {
                 if (! $this->isName($pathArgument->name, 'class')) {
                     // get constant value
-                    /** @var string $className */
-                    $className = $pathArgument->class->getAttribute(Attribute::CLASS_NAME);
-                    $constantName = $this->getName($pathArgument->name);
-
                     $routePath = $this->getValue($pathArgument);
+                } else {
+                    return null;
                 }
             } else {
                 return null;
             }
         } else {
             $routePath = $this->getValue($pathArgument);
+        }
+
+        // route path is needed
+        if ($routePath === null) {
+            return null;
         }
 
         if ($expr->args[1]->value instanceof ClassConstFetch) {
@@ -333,6 +341,10 @@ CODE_SAMPLE
             // SomePresenter::class
             if ($this->isName($controllerMethodNode->name, 'class')) {
                 $presenterClass = $this->getName($controllerMethodNode->class);
+                if ($presenterClass === null) {
+                    return null;
+                }
+
                 if (class_exists($presenterClass) === false) {
                     return null;
                 }
