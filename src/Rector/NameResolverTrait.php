@@ -40,6 +40,20 @@ trait NameResolverTrait
     }
 
     /**
+     * @param string[] $map
+     */
+    public function matchNameInsensitiveInMap(Node $node, array $map): ?string
+    {
+        foreach ($map as $nameToMatch => $return) {
+            if ($this->isNameInsensitive($node, $nameToMatch)) {
+                return $return;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * @param string[] $names
      */
     public function isNames(Node $node, array $names): bool

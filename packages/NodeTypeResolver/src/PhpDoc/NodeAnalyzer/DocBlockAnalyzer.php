@@ -100,6 +100,7 @@ final class DocBlockAnalyzer
         if ($node->getDocComment()) {
             $phpDocInfo = $this->createPhpDocInfoFromNode($node);
             $phpDocNode = $phpDocInfo->getPhpDocNode();
+            $phpDocNode->children[] = $phpDocChildNode;
             $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
         } else {
             $phpDocNode = new PhpDocNode([$phpDocChildNode]);

@@ -5,11 +5,13 @@ namespace Rector\Tests\PhpParser\Node;
 use PhpParser\BuilderFactory;
 use PhpParser\ConstExprEvaluator;
 use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PHPUnit\Framework\TestCase;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\PhpParser\Node\ConstExprEvaluatorFactory;
+use Rector\Tests\AbstractContainerAwareTestCase;
 
-final class ConstExprEvaluatorFactoryTest extends TestCase
+final class ConstExprEvaluatorFactoryTest extends AbstractContainerAwareTestCase
 {
     /**
      * @var ConstExprEvaluator
@@ -18,13 +20,13 @@ final class ConstExprEvaluatorFactoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->constExprEvaluator = (new ConstExprEvaluatorFactory())->create();
+        $this->constExprEvaluator = $this->container->get(ConstExprEvaluator::class);
     }
 
     public function test(): void
     {
         $classConstFetchNode = (new BuilderFactory())->classConstFetch('SomeClass', 'SOME_CONSTANT');
-        $classConstFetchNode->class->setAttribute(Attribute::RESOLVED_NAME, new Name('SomeClassResolveName'));
+        $classConstFetchNode->class->setAttribute(Attribute::RESOLVED_NAME, new FullyQualified('SomeClassResolveName'));
 
         $this->assertSame(
             'SomeClassResolveName::SOME_CONSTANT',

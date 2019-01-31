@@ -2,6 +2,7 @@
 
 namespace Rector\NodeTypeResolver\Application;
 
+use Nette\Utils\Strings;
 use PhpParser\Node\Stmt\ClassConst;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\Attribute;
@@ -38,6 +39,10 @@ final class ConstantNodeCollector
 
     public function findConstant(string $constantName, string $className): ?ClassConst
     {
+        if (Strings::contains($constantName, '\\')) {
+            throw new ShouldNotHappenException(\Safe\sprintf('Switched arguments in "%s"', __METHOD__));
+        }
+
         return $this->constantsByType[$className][$constantName] ?? null;
     }
 }
