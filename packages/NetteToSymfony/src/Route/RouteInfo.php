@@ -27,18 +27,18 @@ final class RouteInfo
     /**
      * @var string[]
      */
-    private $methods = [];
+    private $httpMethods = [];
 
     /**
-     * @param string[] $methods
+     * @param string[] $httpMethods
      */
-    public function __construct(string $class, string $method, string $path, ?string $name = null, array $methods = [])
+    public function __construct(string $class, string $method, string $path, ?string $name = null, array $httpMethods = [])
     {
         $this->class = $class;
         $this->method = $method;
         $this->path = $path;
         $this->name = $name;
-        $this->methods = $methods;
+        $this->httpMethods = $httpMethods;
     }
 
     public function getClass(): string
@@ -64,8 +64,8 @@ final class RouteInfo
     /**
      * @return string[]
      */
-    public function getMethods(): array
+    public function getHttpMethods(): array
     {
-        return $this->methods;
+        return $this->httpMethods;
     }
 }
