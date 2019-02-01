@@ -23,7 +23,7 @@ use ReflectionMethod;
 
 /**
  * @see https://doc.nette.org/en/2.4/routing
- * @see https://symfony.com/doc/current/routing/requirements.html
+ * @see https://symfony.com/doc/current/routing.html
  */
 final class RouterListToControllerAnnotationsRector extends AbstractRector
 {
