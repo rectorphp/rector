@@ -4,7 +4,7 @@ namespace Rector\NetteToSymfony\Tests\Rector\MethodCall\RouterListToControllerAn
 
 final class Route
 {
-    public function __construct(string $path, string $presenterClass)
+    public function __construct(string $path, string $target)
     {
     }
 }

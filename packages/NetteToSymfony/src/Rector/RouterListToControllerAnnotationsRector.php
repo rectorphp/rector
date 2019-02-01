@@ -2,13 +2,16 @@
 
 namespace Rector\NetteToSymfony\Rector;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Type\ArrayType;
 use Rector\NetteToSymfony\Annotation\RouteTagValueNode;
 use Rector\NetteToSymfony\Route\RouteInfo;
 use Rector\NodeTypeResolver\Application\ClassLikeNodeCollector;
@@ -160,24 +163,13 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($node->returnType !== null) {
-            if (! $this->isType($node->returnType, $this->routeListClass)) {
-                return null;
-            }
-        } else {
-            $staticReturnType = $this->functionLikeMaintainer->resolveStaticReturnTypeInfo($node);
-            if ($staticReturnType === null) {
-                return null;
-            }
+        $nodeReturnType = $this->resolveClassMethodReturnType($node);
+        if ($nodeReturnType === []) {
+            return null;
+        }
 
-            $getFqnTypeNode = $staticReturnType->getFqnTypeNode();
-            if ($getFqnTypeNode === null) {
-                return null;
-            }
-
-            if ($this->isName($getFqnTypeNode, $this->routeListClass)) {
-                return null;
-            }
+        if (! in_array($this->routeListClass, $nodeReturnType, true)) {
+            return null;
         }
 
         // ok
@@ -190,10 +182,6 @@ CODE_SAMPLE
 
             // $routeList[] =
             if (! $node->var instanceof ArrayDimFetch) {
-                return false;
-            }
-
-            if (! $this->isType($node->var->var, $this->routeListClass)) {
                 return false;
             }
 
@@ -335,7 +323,8 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($expr->args[1]->value instanceof ClassConstFetch) {
+        $targetNode = $expr->args[1]->value;
+        if ($targetNode instanceof ClassConstFetch) {
             /** @var ClassConstFetch $controllerMethodNode */
             $controllerMethodNode = $expr->args[1]->value;
 
@@ -361,6 +350,71 @@ CODE_SAMPLE
             // @todo method specific route
         }
 
+        if ($targetNode instanceof String_) {
+            $targetValue = $targetNode->value;
+            if (! Strings::contains($targetValue, ':')) {
+                return null;
+            }
+
+            [$controller, $method] = explode(':', $targetValue);
+
+            // detect class by controller name?
+            // foreach all instance and try to match a name $controller . 'Presenter/Controller'
+
+            $classNode = $this->classLikeNodeCollector->findByShortName($controller . 'Presenter');
+            if ($classNode === null) {
+                $classNode = $this->classLikeNodeCollector->findByShortName($controller . 'Controller');
+            }
+
+            // unable to find here
+            if ($classNode === null) {
+                return null;
+            }
+
+            $controllerClass = $this->getName($classNode);
+
+            $methodName = null;
+            if (method_exists($controllerClass, 'render' . ucfirst($method))) {
+                $methodName = 'render' . ucfirst($method);
+            } elseif (method_exists($controllerClass, 'action' . ucfirst($method))) {
+                $methodName = 'action' . ucfirst($method);
+            }
+
+            if ($methodName === null) {
+                return null;
+            }
+
+            return new RouteInfo($controllerClass, $methodName, $routePath, null, []);
+        }
+
         return null;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function resolveClassMethodReturnType(ClassMethod $classMethodNode): array
+    {
+        if ($classMethodNode->returnType !== null) {
+            return $this->getTypes($classMethodNode->returnType);
+        }
+
+
+        $staticReturnType = $this->functionLikeMaintainer->resolveStaticReturnTypeInfo($classMethodNode);
+        if ($staticReturnType === null) {
+            return [];
+        }
+
+        $getFqnTypeNode = $staticReturnType->getFqnTypeNode();
+        if ($getFqnTypeNode === null) {
+            return [];
+        }
+
+        $fqnTypeName = $this->getName($getFqnTypeNode);
+        if ($fqnTypeName === null) {
+            return [];
+        }
+
+        return [$fqnTypeName];
     }
 }
