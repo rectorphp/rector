@@ -23,6 +23,7 @@ use ReflectionMethod;
 
 /**
  * @see https://doc.nette.org/en/2.4/routing
+ * @see https://symfony.com/doc/current/routing/requirements.html
  */
 final class RouterListToControllerAnnotationsRector extends AbstractRector
 {
@@ -262,7 +263,7 @@ CODE_SAMPLE
                 $this->routeAnnotationClass,
                 $routeInfo->getPath(),
                 null,
-                $routeInfo->getMethods()
+                $routeInfo->getHttpMethods()
             );
             $this->docBlockAnalyzer->addTag($classMethod, $phpDocTagNode);
         }
