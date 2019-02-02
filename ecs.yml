@@ -58,8 +58,8 @@ parameters:
 
     skip:
         # run manually from time to time, not to bother user with it
-        # Symplify\CodingStandard\Fixer\Order\PropertyOrderByComplexityFixer: ~
-        # Symplify\CodingStandard\Fixer\Order\PrivateMethodOrderByUseFixer: ~
+        Symplify\CodingStandard\Fixer\Order\PropertyOrderByComplexityFixer: ~
+        Symplify\CodingStandard\Fixer\Order\PrivateMethodOrderByUseFixer: ~
 
         PhpCsFixer\Fixer\Phpdoc\PhpdocTypesFixer:
             - 'packages/Php/src/Rector/Double/RealToFloatTypeCastRector.php'
