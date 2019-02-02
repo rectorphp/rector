@@ -3,7 +3,6 @@
 namespace Rector\NetteToSymfony\Annotation;
 
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
-use function Safe\sprintf;
 
 final class RouteTagValueNode implements PhpDocChildNode
 {
