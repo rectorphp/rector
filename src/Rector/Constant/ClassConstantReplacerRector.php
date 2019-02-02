@@ -2,9 +2,11 @@
 
 namespace Rector\Rector\Constant;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Name\FullyQualified;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -32,13 +34,20 @@ final class ClassConstantReplacerRector extends AbstractRector
     {
         return new RectorDefinition('Replaces defined class constants in their calls.', [
             new ConfiguredCodeSample(
-                '$value = SomeClass::OLD_CONSTANT;',
-                '$value = SomeClass::NEW_CONSTANT;',
-                [
-                    'SomeClass' => [
-                        'OLD_CONSTANT' => 'NEW_CONSTANT',
-                    ],
-                ]
+                <<<'CODE_SAMPLE'
+$value = SomeClass::OLD_CONSTANT;
+$value = SomeClass::OTHER_OLD_CONSTANT;
+CODE_SAMPLE
+                ,
+                <<<'CODE_SAMPLE'
+$value = SomeClass::NEW_CONSTANT;
+$value = DifferentClass::NEW_CONSTANT;
+CODE_SAMPLE
+                ,
+                ['SomeClass' => [
+                    'OLD_CONSTANT' => 'NEW_CONSTANT',
+                    'OTHER_OLD_CONSTANT' => 'DifferentClass::NEW_CONSTANT',
+                ]]
             ),
         ]);
     }
@@ -66,6 +75,10 @@ final class ClassConstantReplacerRector extends AbstractRector
                     continue;
                 }
 
+                if (Strings::contains($newConstant, '::')) {
+                    return $this->createClassConstantFetchNodeFromDoubleColonFormat($newConstant);
+                }
+
                 $node->name = new Identifier($newConstant);
 
                 return $node;
@@ -73,5 +86,12 @@ final class ClassConstantReplacerRector extends AbstractRector
         }
 
         return $node;
+    }
+
+    private function createClassConstantFetchNodeFromDoubleColonFormat(string $constant): ClassConstFetch
+    {
+        [$constantClass, $constantName] = explode('::', $constant);
+
+        return new ClassConstFetch(new FullyQualified($constantClass), new Identifier($constantName));
     }
 }
