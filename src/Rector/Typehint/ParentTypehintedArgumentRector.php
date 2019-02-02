@@ -111,6 +111,8 @@ CODE_SAMPLE
         /** @var Param $param */
         foreach ($classMethodNode->params as $param) {
             foreach ($parametersToTypes as $parameter => $type) {
+                $parameter = ltrim($parameter, '$');
+
                 if (! $this->isName($param, $parameter)) {
                     continue;
                 }
