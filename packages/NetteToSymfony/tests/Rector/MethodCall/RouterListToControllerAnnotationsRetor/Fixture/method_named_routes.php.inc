@@ -51,14 +51,14 @@ final class MethodNamedRoutesRouterFactory
 final class MethodNamedRoutesSomePresenter
 {
     /**
-     * @Symfony\Component\Routing\Annotation\Route(path="hi")
+     * @\Symfony\Component\Routing\Annotation\Route(path="hi")
      */
     public function actionFirst()
     {
     }
 
     /**
-     * @Symfony\Component\Routing\Annotation\Route(path="hello")
+     * @\Symfony\Component\Routing\Annotation\Route(path="hello")
      */
     public function actionSecond()
     {

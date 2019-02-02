@@ -40,7 +40,7 @@ final class RouteTagValueNode implements PhpDocChildNode
 
     public function __toString(): string
     {
-        $string = sprintf('@%s(', $this->routeClass);
+        $string = sprintf('@\\%s(', $this->routeClass);
 
         $string .= sprintf('path="%s"', $this->path);
         if ($this->name) {

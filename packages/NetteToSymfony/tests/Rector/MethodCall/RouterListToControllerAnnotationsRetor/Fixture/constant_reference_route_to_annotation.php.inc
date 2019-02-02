@@ -51,7 +51,7 @@ final class ConstantReferenceRouterFactory
 final class ConstantReferenceSomePresenter
 {
     /**
-     * @Symfony\Component\Routing\Annotation\Route(path="/some-path", methods={"GET"})
+     * @\Symfony\Component\Routing\Annotation\Route(path="/some-path", methods={"GET"})
      */
     public function run()
     {

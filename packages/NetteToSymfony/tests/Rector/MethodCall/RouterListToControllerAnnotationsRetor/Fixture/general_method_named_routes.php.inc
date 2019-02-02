@@ -41,7 +41,6 @@ final class GeneralMethodNamedRoutesRouterFactory
     public function create(): RouteList
     {
         $routeList = new RouteList();
-        $routeList[] = new Route('<presenter>/<action>', 'Homepage:default');
 
         return $routeList;
     }
@@ -50,14 +49,14 @@ final class GeneralMethodNamedRoutesRouterFactory
 final class GeneralMethodNamedRoutesSomePresenter
 {
     /**
-     * @Symfony\Component\Routing\Annotation\Route(path="general-method-named-routes-some/first")
+     * @\Symfony\Component\Routing\Annotation\Route(path="general-method-named-routes-some/first")
      */
     public function actionFirst()
     {
     }
 
     /**
-     * @Symfony\Component\Routing\Annotation\Route(path="general-method-named-routes-some/second")
+     * @\Symfony\Component\Routing\Annotation\Route(path="general-method-named-routes-some/second")
      */
     public function actionSecond()
     {

@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\NetteToSymfony\Annotation\RouteTagValueNode;
 use Rector\NetteToSymfony\Route\RouteInfo;
@@ -19,6 +20,7 @@ use Rector\PhpParser\Node\Maintainer\ClassMethodMaintainer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Rector\Util\RectorStrings;
 use ReflectionMethod;
 
 /**
@@ -275,36 +277,22 @@ CODE_SAMPLE
 
         foreach ($presenterClassNodes as $presenterClassNode) {
             foreach ((array) $presenterClassNode->stmts as $classStmt) {
-                if (! $classStmt instanceof ClassMethod) {
+                if ($this->shouldSkipClassStmt($classStmt)) {
                     continue;
                 }
 
-                // not an action method
-                if (! $classStmt->isPublic()) {
-                    continue;
-                }
+                /** @var ClassMethod $classStmt */
+                $path = $this->resolvePathFromClassAndMethodNodes($presenterClassNode, $classStmt);
+                $phpDocTagNode = new RouteTagValueNode($this->routeAnnotationClass, $path);
 
-                if (! $this->matchName($classStmt, '#^(render|action)#')) {
-                    continue;
-                }
-
-                // already has Route tag
-                if ($this->docBlockAnalyzer->hasTag($classStmt, $this->routerClass)) {
-                    continue;
-                }
-
-                $presenterName = $this->getName($presenterClassNode);
-                $shortPresenterName = Strings::after($presenterName, '\\', -1);
-                die;
-
-                dump($this->getName($classStmt));
-                die;
+                $this->docBlockAnalyzer->addTag($classStmt, $phpDocTagNode);
             }
         }
-
-        die;
     }
 
+    /**
+     * @todo allow extension with custom resolvers
+     */
     private function isRouteStaticCallMatch(StaticCall $node): bool
     {
         $className = $this->getName($node->class);
@@ -331,5 +319,37 @@ CODE_SAMPLE
         }
 
         return false;
+    }
+
+    private function shouldSkipClassStmt(Node $node): bool
+    {
+        if (! $node instanceof ClassMethod) {
+            return true;
+        }
+
+        // not an action method
+        if (! $node->isPublic()) {
+            return true;
+        }
+
+        if (! $this->matchName($node, '#^(render|action)#')) {
+            return true;
+        }
+
+        // already has Route tag
+        return $this->docBlockAnalyzer->hasTag($node, $this->routeAnnotationClass);
+    }
+
+    private function resolvePathFromClassAndMethodNodes(Class_ $classNode, ClassMethod $classMethodNode): string
+    {
+        $presenterName = $this->getName($classNode);
+        $presenterPart = Strings::after($presenterName, '\\', -1);
+        $presenterPart = Strings::substring($presenterPart, 0, -Strings::length('Presenter'));
+        $presenterPart = RectorStrings::camelCaseToDashes($presenterPart);
+
+        $match = Strings::match($this->getName($classMethodNode), '#^(action|render)(?<short_action_name>.*?$)#sm');
+        $actionPart = lcfirst($match['short_action_name']);
+
+        return $presenterPart . '/' . $actionPart;
     }
 }

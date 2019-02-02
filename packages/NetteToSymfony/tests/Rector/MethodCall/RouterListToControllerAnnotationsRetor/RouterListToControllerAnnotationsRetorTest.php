@@ -12,10 +12,10 @@ final class RouterListToControllerAnnotationsRetorTest extends AbstractRectorTes
     public function test(): void
     {
         $this->doTestFiles([
-            //                        __DIR__ . '/Fixture/new_route_to_annotation.php.inc',
-            //                        __DIR__ . '/Fixture/static_route_to_annotation.php.inc',
-            //                        __DIR__ . '/Fixture/constant_reference_route_to_annotation.php.inc',
-            //                        __DIR__ . '/Fixture/method_named_routes.php.inc',
+            __DIR__ . '/Fixture/new_route_to_annotation.php.inc',
+            __DIR__ . '/Fixture/static_route_to_annotation.php.inc',
+            __DIR__ . '/Fixture/constant_reference_route_to_annotation.php.inc',
+            __DIR__ . '/Fixture/method_named_routes.php.inc',
             __DIR__ . '/Fixture/general_method_named_routes.php.inc',
         ]);
     }

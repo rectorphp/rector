@@ -47,7 +47,7 @@ final class StaticRouterFactory
 final class StaticSomePresenter
 {
     /**
-     * @Symfony\Component\Routing\Annotation\Route(path="some-path", methods={"GET"})
+     * @\Symfony\Component\Routing\Annotation\Route(path="some-path", methods={"GET"})
      */
     public function run()
     {

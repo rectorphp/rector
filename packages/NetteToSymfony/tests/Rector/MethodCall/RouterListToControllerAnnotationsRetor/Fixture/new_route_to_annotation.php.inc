@@ -47,7 +47,7 @@ final class NewRouterFactory
 final class NewSomePresenter
 {
     /**
-     * @Symfony\Component\Routing\Annotation\Route(path="some-path")
+     * @\Symfony\Component\Routing\Annotation\Route(path="some-path")
      */
     public function run()
     {
