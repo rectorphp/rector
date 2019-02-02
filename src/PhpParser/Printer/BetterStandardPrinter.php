@@ -14,7 +14,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\PrettyPrinter\Standard;
 use Rector\NodeTypeResolver\Node\Attribute;
-use function Safe\sprintf;
 
 final class BetterStandardPrinter extends Standard
 {

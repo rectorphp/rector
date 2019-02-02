@@ -13,7 +13,6 @@ use Rector\Application\RemovedFilesCollector;
 use Rector\Contract\Rector\PhpRectorInterface;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\Attribute;
-use function Safe\sprintf;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 

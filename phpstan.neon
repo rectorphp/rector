@@ -2,7 +2,6 @@ includes:
      - 'utils/phpstan/config/phpstan-extensions.neon'
      - 'vendor/symplify/phpstan-extensions/config/config.neon'
      - 'vendor/thecodingmachine/phpstan-strict-rules/phpstan-strict-rules.neon'
-     - 'vendor/thecodingmachine/phpstan-safe-rule/phpstan-safe-rule.neon'
 
 parameters:
     # to allow intalling with various phsptan versions without reporting old errors here
@@ -100,3 +99,12 @@ parameters:
         # known values
         - '#Parameter \#(1|2) \$(left|right) of class PhpParser\\Node\\Expr\\BinaryOp\\Coalesce constructor expects PhpParser\\Node\\Expr, PhpParser\\Node\\Expr\|null given#'
         - '#Strict comparison using === between PhpParser\\Node\\Expr and null will always evaluate to false#'
+
+        # temp
+        - '#Parameter \#1 \$currentWorkingDirectory of class PHPStan\\DependencyInjection\\ContainerFactory constructor expects string, string\|false given#'
+
+        # known values
+        - '#Parameter \#1 \$code of method PhpParser\\Parser\:\:parse\(\) expects string, string\|false given#'
+
+        # console argument/option
+        - '#Cannot cast array<string\>\|string\|null to string#'

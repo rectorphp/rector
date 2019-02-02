@@ -4,7 +4,6 @@ namespace Rector\Bridge\Doctrine;
 
 use Nette\Utils\Strings;
 use Rector\Bridge\Contract\DoctrineEntityAndRepositoryMapperInterface;
-use function Safe\substr;
 
 final class DefaultDoctrineEntityAndRepositoryMapper implements DoctrineEntityAndRepositoryMapperInterface
 {

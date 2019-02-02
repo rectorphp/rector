@@ -3,7 +3,6 @@
 namespace Rector\Exception\Application;
 
 use Exception;
-use function Safe\sprintf;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 use Throwable;
 

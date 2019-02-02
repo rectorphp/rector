@@ -9,7 +9,6 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
 use Rector\Php\PhpTypeSupport;
 use Rector\Php\TypeAnalyzer;
-use function Safe\sort;
 use Traversable;
 
 abstract class AbstractTypeInfo

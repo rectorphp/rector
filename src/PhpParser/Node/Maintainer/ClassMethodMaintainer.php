@@ -10,7 +10,6 @@ use PhpParser\Node\Stmt\Return_;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Printer\BetterStandardPrinter;
-use function Safe\class_implements;
 
 final class ClassMethodMaintainer
 {

@@ -16,7 +16,6 @@ use Rector\PhpParser\Node\VariableInfo;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
-use function Safe\sprintf;
 
 final class MoveRepositoryFromParentToConstructorRector extends AbstractRector
 {

@@ -5,7 +5,6 @@ namespace Rector\Symfony\Tests\Rector\FrameworkBundle\GetToConstructorInjectionR
 use Rector\Exception\Configuration\InvalidConfigurationException;
 use Rector\Symfony\Tests\FrameworkBundle\AbstractToConstructorInjectionRectorSource\SomeNonKernelClass;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use function Safe\sprintf;
 use Symfony\Component\HttpKernel\Kernel;
 
 final class ThirdInvalidConfigurationConstructorInjectionRectorTest extends AbstractRectorTestCase

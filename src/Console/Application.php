@@ -5,8 +5,6 @@ namespace Rector\Console;
 use Jean85\PrettyVersions;
 use Rector\ContributorTools\Command\GenerateDocsCommand;
 use Rector\ContributorTools\Exception\Command\ContributorCommandInterface;
-use function Safe\getcwd;
-use function Safe\realpath;
 use Symfony\Component\Console\Application as SymfonyApplication;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputDefinition;

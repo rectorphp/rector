@@ -11,7 +11,6 @@ use Rector\Exception\Rector\InvalidRectorConfigurationException;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
-use function Safe\sprintf;
 
 final class PreferThisOrSelfMethodCallRector extends AbstractRector
 {

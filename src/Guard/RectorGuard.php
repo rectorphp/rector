@@ -4,7 +4,6 @@ namespace Rector\Guard;
 
 use Rector\Exception\NoRectorsLoadedException;
 use Rector\PhpParser\NodeTraverser\RectorNodeTraverser;
-use function Safe\sprintf;
 
 final class RectorGuard
 {
