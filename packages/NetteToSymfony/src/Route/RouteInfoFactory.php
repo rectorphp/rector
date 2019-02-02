@@ -122,10 +122,6 @@ final class RouteInfoFactory
                 if (method_exists($presenterClass, 'run')) {
                     return new RouteInfo($presenterClass, 'run', $routePath, null, $methods);
                 }
-
-                if (method_exists($presenterClass, '__invoke')) {
-                    return new RouteInfo($presenterClass, '__invoke', $routePath, null, $methods);
-                }
             }
             // @todo method specific route
         }
@@ -152,6 +148,9 @@ final class RouteInfoFactory
             }
 
             $controllerClass = $this->nameResolver->resolve($classNode);
+            if ($controllerClass === null) {
+                return null;
+            }
 
             $methodName = null;
             if (method_exists($controllerClass, 'render' . ucfirst($method))) {

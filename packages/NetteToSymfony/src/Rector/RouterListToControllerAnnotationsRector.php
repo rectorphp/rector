@@ -180,19 +180,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $routeInfos = [];
-
-        // collect annotations and target controllers
-        foreach ($assignNodes as $assignNode) {
-            $routeNameToControllerMethod = $this->routeInfoFactory->createFromNode($assignNode->expr);
-            if ($routeNameToControllerMethod === null) {
-                continue;
-            }
-
-            $routeInfos[] = $routeNameToControllerMethod;
-
-            $this->removeNode($assignNode);
-        }
+        $routeInfos = $this->createRouteInfosFromAssignNodes($assignNodes);
 
         /** @var RouteInfo $routeInfo */
         foreach ($routeInfos as $routeInfo) {
@@ -210,6 +198,9 @@ CODE_SAMPLE
 
             $this->docBlockAnalyzer->addTag($classMethod, $phpDocTagNode);
         }
+
+        // remove routes
+        $this->removeNodes($assignNodes);
 
         return null;
     }
@@ -261,6 +252,27 @@ CODE_SAMPLE
 
             return false;
         });
+    }
+
+    /**
+     * @param Assign[] $assignNodes
+     * @return RouteInfo[]
+     */
+    private function createRouteInfosFromAssignNodes(array $assignNodes): array
+    {
+        $routeInfos = [];
+
+        // collect annotations and target controllers
+        foreach ($assignNodes as $assignNode) {
+            $routeNameToControllerMethod = $this->routeInfoFactory->createFromNode($assignNode->expr);
+            if ($routeNameToControllerMethod === null) {
+                continue;
+            }
+
+            $routeInfos[] = $routeNameToControllerMethod;
+        }
+
+        return $routeInfos;
     }
 
     private function resolveControllerClassMethod(RouteInfo $routeInfo): ?ClassMethod
