@@ -84,10 +84,15 @@ CODE_SAMPLE
                 continue;
             }
 
-            /** @var Class_ $classNode */
-            $classNode = $node->getAttribute(Attribute::CLASS_NODE);
             $factoryClass = $factoryInfo['class'];
             $factoryMethod = $factoryInfo['method'];
+
+            if ($node->getAttribute(Attribute::CLASS_NAME) === $factoryClass) {
+                continue;
+            }
+
+            /** @var Class_ $classNode */
+            $classNode = $node->getAttribute(Attribute::CLASS_NODE);
             $propertyName = $this->getExistingFactoryPropertyName($classNode, $factoryClass);
 
             if ($propertyName === null) {
