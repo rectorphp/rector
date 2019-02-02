@@ -226,28 +226,8 @@ CODE_SAMPLE
             }
 
             if ($node->expr instanceof StaticCall) {
-                $className = $this->getName($node->expr->class);
-                if ($className === null) {
-                    return false;
-                }
-
-                $methodName = $this->getName($node->expr->name);
-                if ($methodName === null) {
-                    return false;
-                }
-
-                // @todo decouple - resolve method return type
-                if (! method_exists($className, $methodName)) {
-                    return false;
-                }
-
-                $methodReflection = new ReflectionMethod($className, $methodName);
-                if ($methodReflection->getReturnType()) {
-                    $staticCallReturnType = (string) $methodReflection->getReturnType();
-                    if (is_a($staticCallReturnType, $this->routerClass, true)) {
-                        return true;
-                    }
-                }
+                // for custom static route factories
+                return $this->isRouteStaticCallMatch($node->expr);
             }
 
             return false;
@@ -283,5 +263,33 @@ CODE_SAMPLE
         }
 
         return $this->classMaintainer->getMethodByName($classNode, $routeInfo->getMethod());
+    }
+
+    private function isRouteStaticCallMatch(StaticCall $node): bool
+    {
+        $className = $this->getName($node->class);
+        if ($className === null) {
+            return false;
+        }
+
+        $methodName = $this->getName($node->name);
+        if ($methodName === null) {
+            return false;
+        }
+
+        // @todo decouple - resolve method return type
+        if (! method_exists($className, $methodName)) {
+            return false;
+        }
+
+        $methodReflection = new ReflectionMethod($className, $methodName);
+        if ($methodReflection->getReturnType()) {
+            $staticCallReturnType = (string) $methodReflection->getReturnType();
+            if (is_a($staticCallReturnType, $this->routerClass, true)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

@@ -43,7 +43,6 @@ final class MethodNamedRoutesRouterFactory
     public function create(): RouteList
     {
         $routeList = new RouteList();
-        $routeList[] = new Route('<presenter>/<action>', 'Homepage:default');
 
         return $routeList;
     }

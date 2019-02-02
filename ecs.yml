@@ -105,6 +105,8 @@ parameters:
             - 'src/PhpParser/Node/Resolver/NameResolver.php'
             - 'src/Rector/MethodBody/NormalToFluentRector.php'
             - 'packages/CodingStyle/src/Rector/Use_/RemoveUnusedAliasRector.php'
+            - 'packages/NetteToSymfony/src/Route/RouteInfoFactory.php'
+
             # copied 3rd party logic
             - 'packages/Php/src/EregToPcreTransformer.php'
             # dev

@@ -51,23 +51,14 @@ final class ValueResolver
         }
 
         $this->constExprEvaluator = new ConstExprEvaluator(function (Expr $expr): ?string {
-            // resolve "__DIR__"
             if ($expr instanceof Dir) {
-                $fileInfo = $expr->getAttribute(Attribute::FILE_INFO);
-                if (! $fileInfo instanceof SmartFileInfo) {
-                    throw new ShouldNotHappenException();
-                }
-
-                return $fileInfo->getPath();
+                // __DIR__
+                return $this->resolveDirConstant($expr);
             }
 
             if ($expr instanceof File) {
-                $fileInfo = $expr->getAttribute(Attribute::FILE_INFO);
-                if (! $fileInfo instanceof SmartFileInfo) {
-                    throw new ShouldNotHappenException();
-                }
-
-                return $fileInfo->getPathname();
+                // __FILE__
+                return $this->resolveFileConstant($expr);
             }
 
             // resolve "SomeClass::SOME_CONST"
@@ -79,6 +70,26 @@ final class ValueResolver
         });
 
         return $this->constExprEvaluator;
+    }
+
+    private function resolveDirConstant(Dir $dirNode): string
+    {
+        $fileInfo = $dirNode->getAttribute(Attribute::FILE_INFO);
+        if (! $fileInfo instanceof SmartFileInfo) {
+            throw new ShouldNotHappenException();
+        }
+
+        return $fileInfo->getPath();
+    }
+
+    private function resolveFileConstant(File $fileNode): string
+    {
+        $fileInfo = $fileNode->getAttribute(Attribute::FILE_INFO);
+        if (! $fileInfo instanceof SmartFileInfo) {
+            throw new ShouldNotHappenException();
+        }
+
+        return $fileInfo->getPathname();
     }
 
     private function resolveClassConstFetch(ClassConstFetch $classConstFetchNode): string
