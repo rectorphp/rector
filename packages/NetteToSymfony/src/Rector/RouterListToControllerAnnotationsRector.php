@@ -14,7 +14,7 @@ use Rector\NodeTypeResolver\Application\ClassLikeNodeCollector;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Node\Maintainer\ClassMaintainer;
-use Rector\PhpParser\Node\Maintainer\FunctionLikeMaintainer;
+use Rector\PhpParser\Node\Maintainer\ClassMethodMaintainer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -47,11 +47,6 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
     private $betterNodeFinder;
 
     /**
-     * @var FunctionLikeMaintainer
-     */
-    private $functionLikeMaintainer;
-
-    /**
      * @var ClassLikeNodeCollector
      */
     private $classLikeNodeCollector;
@@ -71,11 +66,16 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
      */
     private $routeInfoFactory;
 
+    /**
+     * @var ClassMethodMaintainer
+     */
+    private $classMethodMaintainer;
+
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
-        FunctionLikeMaintainer $functionLikeMaintainer,
         ClassLikeNodeCollector $classLikeNodeCollector,
         ClassMaintainer $classMaintainer,
+        ClassMethodMaintainer $classMethodMaintainer,
         DocBlockAnalyzer $docBlockAnalyzer,
         RouteInfoFactory $routeInfoFactory,
         string $routeListClass = 'Nette\Application\Routers\RouteList',
@@ -85,12 +85,12 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
         $this->routeListClass = $routeListClass;
         $this->routerClass = $routerClass;
         $this->betterNodeFinder = $betterNodeFinder;
-        $this->functionLikeMaintainer = $functionLikeMaintainer;
         $this->classLikeNodeCollector = $classLikeNodeCollector;
         $this->classMaintainer = $classMaintainer;
         $this->docBlockAnalyzer = $docBlockAnalyzer;
         $this->routeAnnotationClass = $routeAnnotationClass;
         $this->routeInfoFactory = $routeInfoFactory;
+        $this->classMethodMaintainer = $classMethodMaintainer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -162,23 +162,65 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node->stmts === null || $node->stmts === []) {
+        if (empty($node->stmts)) {
             return null;
         }
 
-        $nodeReturnType = $this->resolveClassMethodReturnType($node);
-        if ($nodeReturnType === []) {
+        $nodeReturnTypes = $this->classMethodMaintainer->resolveReturnType($node);
+        if ($nodeReturnTypes === []) {
             return null;
         }
 
-        if (! in_array($this->routeListClass, $nodeReturnType, true)) {
+        if (! in_array($this->routeListClass, $nodeReturnTypes, true)) {
             return null;
         }
 
-        // ok
+        $assignNodes = $this->resolveAssignRouteNodes($node);
+        if ($assignNodes === []) {
+            return null;
+        }
 
+        $routeInfos = [];
+
+        // collect annotations and target controllers
+        foreach ($assignNodes as $assignNode) {
+            $routeNameToControllerMethod = $this->routeInfoFactory->createFromNode($assignNode->expr);
+            if ($routeNameToControllerMethod === null) {
+                continue;
+            }
+
+            $routeInfos[] = $routeNameToControllerMethod;
+
+            $this->removeNode($assignNode);
+        }
+
+        /** @var RouteInfo $routeInfo */
+        foreach ($routeInfos as $routeInfo) {
+            $classMethod = $this->resolveControllerClassMethod($routeInfo);
+            if ($classMethod === null) {
+                continue;
+            }
+
+            $phpDocTagNode = new RouteTagValueNode(
+                $this->routeAnnotationClass,
+                $routeInfo->getPath(),
+                null,
+                $routeInfo->getHttpMethods()
+            );
+
+            $this->docBlockAnalyzer->addTag($classMethod, $phpDocTagNode);
+        }
+
+        return null;
+    }
+
+    /**
+     * @return Assign[]
+     */
+    private function resolveAssignRouteNodes(ClassMethod $node): array
+    {
         // look for <...>[] = IRoute<Type>
-        $assignNodes = $this->betterNodeFinder->find($node->stmts, function (Node $node) {
+        return $this->betterNodeFinder->find($node->stmts, function (Node $node) {
             if (! $node instanceof Assign) {
                 return false;
             }
@@ -219,73 +261,15 @@ CODE_SAMPLE
 
             return false;
         });
+    }
 
-        if ($assignNodes === []) {
+    private function resolveControllerClassMethod(RouteInfo $routeInfo): ?ClassMethod
+    {
+        $classNode = $this->classLikeNodeCollector->findClass($routeInfo->getClass());
+        if ($classNode === null) {
             return null;
         }
 
-        $routeNamesToControllerMethods = [];
-
-        // collect annotations and target controllers
-        foreach ($assignNodes as $assignNode) {
-            $routeNameToControllerMethod = $this->routeInfoFactory->createFromNode($assignNode->expr);
-            if ($routeNameToControllerMethod === null) {
-                continue;
-            }
-
-            $routeNamesToControllerMethods[] = $routeNameToControllerMethod;
-
-            $this->removeNode($assignNode);
-        }
-
-        /** @var RouteInfo $routeInfo */
-        foreach ($routeNamesToControllerMethods as $routeInfo) {
-            $classNode = $this->classLikeNodeCollector->findClass($routeInfo->getClass());
-            if ($classNode === null) {
-                continue;
-            }
-
-            $classMethod = $this->classMaintainer->getMethodByName($classNode, $routeInfo->getMethod());
-            if ($classMethod === null) {
-                continue;
-            }
-
-            $phpDocTagNode = new RouteTagValueNode(
-                $this->routeAnnotationClass,
-                $routeInfo->getPath(),
-                null,
-                $routeInfo->getHttpMethods()
-            );
-            $this->docBlockAnalyzer->addTag($classMethod, $phpDocTagNode);
-        }
-
-        return null;
-    }
-
-    /**
-     * @return string[]
-     */
-    private function resolveClassMethodReturnType(ClassMethod $classMethodNode): array
-    {
-        if ($classMethodNode->returnType !== null) {
-            return $this->getTypes($classMethodNode->returnType);
-        }
-
-        $staticReturnType = $this->functionLikeMaintainer->resolveStaticReturnTypeInfo($classMethodNode);
-        if ($staticReturnType === null) {
-            return [];
-        }
-
-        $getFqnTypeNode = $staticReturnType->getFqnTypeNode();
-        if ($getFqnTypeNode === null) {
-            return [];
-        }
-
-        $fqnTypeName = $this->getName($getFqnTypeNode);
-        if ($fqnTypeName === null) {
-            return [];
-        }
-
-        return [$fqnTypeName];
+        return $this->classMaintainer->getMethodByName($classNode, $routeInfo->getMethod());
     }
 }
