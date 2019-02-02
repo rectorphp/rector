@@ -4,7 +4,6 @@
 use Composer\XdebugHandler\XdebugHandler;
 use Psr\Container\ContainerInterface;
 use Rector\Console\Application;
-use Symplify\PackageBuilder\Console\ThrowableRenderer;
 
 @ini_set('memory_limit', '-1'); // @ intentionally: continue anyway
 
@@ -18,14 +17,8 @@ $xdebug = new XdebugHandler('rector', '--ansi');
 $xdebug->check();
 unset($xdebug);
 
-try {
-    /** @var ContainerInterface $container */
-    $container = require_once __DIR__ . '/container.php';
+/** @var ContainerInterface $container */
+$container = require_once __DIR__ . '/container.php';
 
-    /** @var Application $application */
-    $application = $container->get(Application::class);
-    exit($application->run());
-} catch (Throwable $throwable) {
-    (new ThrowableRenderer())->render($throwable);
-    exit($throwable->getCode());
-}
+$application = $container->get(Application::class);
+exit($application->run());

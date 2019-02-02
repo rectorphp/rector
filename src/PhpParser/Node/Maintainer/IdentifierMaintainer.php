@@ -12,7 +12,6 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Exception\NodeChanger\NodeMissingIdentifierException;
 use Rector\PhpParser\Node\Resolver\NameResolver;
-use function Safe\sprintf;
 
 /**
  * This class renames node identifier, e.g. ClassMethod rename:

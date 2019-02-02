@@ -14,7 +14,6 @@ use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Node\NodeFactory;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\PhpParser\Node\VariableInfo;
-use function Safe\class_implements;
 
 final class ClassMaintainer
 {

@@ -11,8 +11,6 @@ use Rector\Application\FileProcessor;
 use Rector\Configuration\Option;
 use Rector\DependencyInjection\ContainerFactory;
 use Rector\Exception\ShouldNotHappenException;
-use function Safe\md5_file;
-use function Safe\sprintf;
 use Symfony\Component\Yaml\Yaml;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;

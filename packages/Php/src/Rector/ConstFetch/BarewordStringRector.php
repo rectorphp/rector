@@ -11,7 +11,6 @@ use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
-use function Safe\sprintf;
 
 /**
  * @see https://wiki.php.net/rfc/deprecate-bareword-strings

@@ -3,7 +3,6 @@
 namespace Rector\CodingStyle;
 
 use Rector\Exception\Configuration\InvalidConfigurationException;
-use function Safe\sprintf;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 

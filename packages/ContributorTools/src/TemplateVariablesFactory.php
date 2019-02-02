@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Name\FullyQualified;
 use Rector\ContributorTools\Configuration\Configuration;
 use Rector\PhpParser\Printer\BetterStandardPrinter;
-use function Safe\sprintf;
 
 final class TemplateVariablesFactory
 {

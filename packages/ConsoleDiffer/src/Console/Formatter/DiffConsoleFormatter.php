@@ -3,7 +3,6 @@
 namespace Rector\ConsoleDiffer\Console\Formatter;
 
 use Nette\Utils\Strings;
-use function Safe\sprintf;
 use Symfony\Component\Console\Formatter\OutputFormatter;
 
 /**

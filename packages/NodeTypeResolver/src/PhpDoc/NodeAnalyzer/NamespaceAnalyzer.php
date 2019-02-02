@@ -8,7 +8,6 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Use_;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Php\TypeAnalyzer;
-use function Safe\sprintf;
 
 final class NamespaceAnalyzer
 {

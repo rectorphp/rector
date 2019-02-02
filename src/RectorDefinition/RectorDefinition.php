@@ -4,7 +4,6 @@ namespace Rector\RectorDefinition;
 
 use Rector\Contract\RectorDefinition\CodeSampleInterface;
 use Rector\Exception\RectorDefinition\CodeSamplesMissingException;
-use function Safe\sprintf;
 
 final class RectorDefinition
 {

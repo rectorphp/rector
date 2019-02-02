@@ -13,8 +13,6 @@ use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
-use function Safe\krsort;
-use function Safe\substr;
 
 final class NamespaceReplacerRector extends AbstractRector
 {
@@ -162,9 +160,9 @@ final class NamespaceReplacerRector extends AbstractRector
         $completeNewName = $this->resolveNewNameFromNode($name);
 
         // first dummy implementation - improve
-        $cutOffFromTheLeft = strlen($completeNewName) - strlen($nameNode->toString());
+        $cutOffFromTheLeft = Strings::length($completeNewName) - Strings::length($nameNode->toString());
 
-        return substr($completeNewName, $cutOffFromTheLeft);
+        return Strings::substring($completeNewName, $cutOffFromTheLeft);
     }
 
     /**

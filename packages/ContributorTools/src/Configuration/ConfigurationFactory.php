@@ -7,7 +7,6 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use Rector\ContributorTools\Exception\ConfigurationException;
 use Rector\Exception\FileSystem\FileNotFoundException;
-use function Safe\sprintf;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\Yaml\Yaml;

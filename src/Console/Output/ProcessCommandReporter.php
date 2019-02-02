@@ -6,8 +6,6 @@ use Rector\Application\Error;
 use Rector\Application\RemovedFilesCollector;
 use Rector\Configuration\Configuration;
 use Rector\Reporting\FileDiff;
-use function Safe\ksort;
-use function Safe\sprintf;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 final class ProcessCommandReporter

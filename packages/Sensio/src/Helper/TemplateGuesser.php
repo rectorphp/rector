@@ -7,7 +7,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\PhpParser\Node\Resolver\NameResolver;
-use function Safe\sprintf;
 
 final class TemplateGuesser
 {

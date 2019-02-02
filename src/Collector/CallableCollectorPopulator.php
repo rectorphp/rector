@@ -5,7 +5,6 @@ namespace Rector\Collector;
 use Closure;
 use Rector\Exception\DependencyInjection\CallableCollectorException;
 use ReflectionFunction;
-use function Safe\sprintf;
 
 final class CallableCollectorPopulator
 {

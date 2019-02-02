@@ -4,14 +4,13 @@ namespace Rector\Bridge\Doctrine;
 
 use Nette\Utils\Strings;
 use Rector\Bridge\Contract\DoctrineEntityAndRepositoryMapperInterface;
-use function Safe\substr;
 
 final class DefaultDoctrineEntityAndRepositoryMapper implements DoctrineEntityAndRepositoryMapperInterface
 {
     public function mapRepositoryToEntity(string $repository): ?string
     {
         // "SomeRepository" => "Some"
-        $withoutSuffix = substr($repository, 0, - strlen('Repository'));
+        $withoutSuffix = Strings::substring($repository, 0, - strlen('Repository'));
 
         // "App\Repository\Some" => "App\Entity\Some"
         return Strings::replace($withoutSuffix, '#Repository#', 'Entity');

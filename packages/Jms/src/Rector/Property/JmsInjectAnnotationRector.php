@@ -15,7 +15,6 @@ use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
-use function Safe\sprintf;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
 /**

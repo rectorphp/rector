@@ -16,18 +16,16 @@
         "symfony/dependency-injection": "^3.4|^4.2",
         "symfony/finder": "^3.4|^4.2",
         "symfony/process": "^3.4|^4.2",
-        "symplify/better-phpdoc-parser": "^5.4",
-        "symplify/package-builder": "^5.4",
-        "thecodingmachine/safe": "^0.1.11"
+        "symplify/better-phpdoc-parser": "^5.4.2",
+        "symplify/package-builder": "^5.4.2"
     },
     "require-dev": {
         "ocramius/package-versions": "^1.3",
         "phpunit/phpunit": "^7.5",
-        "symplify/easy-coding-standard": "^5.4",
+        "symplify/easy-coding-standard": "^5.4.2",
         "friendsofphp/php-cs-fixer": "^2.14",
-        "symplify/monorepo-builder": "^5.4",
-        "symplify/phpstan-extensions": "^5.4",
-        "thecodingmachine/phpstan-safe-rule": "^0.1.1",
+        "symplify/monorepo-builder": "^5.4.2",
+        "symplify/phpstan-extensions": "^5.4.2",
         "thecodingmachine/phpstan-strict-rules": "^0.11.0",
         "tracy/tracy": "^2.5"
     },

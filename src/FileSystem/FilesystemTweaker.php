@@ -4,8 +4,6 @@ namespace Rector\FileSystem;
 
 use Nette\Utils\Strings;
 use Rector\Exception\FileSystem\DirectoryNotFoundException;
-use function Safe\glob;
-use function Safe\sprintf;
 
 final class FilesystemTweaker
 {

@@ -4,8 +4,6 @@ namespace Rector\Console\Command;
 
 use Nette\Utils\Strings;
 use Rector\Console\Shell;
-use function Safe\sort;
-use function Safe\sprintf;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -72,7 +70,7 @@ final class LevelsCommand extends AbstractCommand
      */
     private function filterLevelsByName(InputInterface $input, array $levels): array
     {
-        $name = $input->getArgument('name');
+        $name = (string) $input->getArgument('name');
 
         return array_filter($levels, function (string $level) use ($name): bool {
             return (bool) Strings::match($level, sprintf('#%s#', $name));

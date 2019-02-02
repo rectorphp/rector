@@ -4,7 +4,6 @@ namespace Rector\Symfony\Bridge;
 
 use Rector\Configuration\Option;
 use Rector\Exception\Configuration\InvalidConfigurationException;
-use function Safe\sprintf;
 use Symfony\Component\HttpKernel\Kernel;
 
 final class SymfonyKernelParameterGuard
