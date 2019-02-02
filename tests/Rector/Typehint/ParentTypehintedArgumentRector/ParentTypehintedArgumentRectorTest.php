@@ -29,7 +29,7 @@ final class ParentTypehintedArgumentRectorTest extends AbstractRectorTestCase
     {
         return [
             ParserInterface::class => ['parse' => ['code' => 'string']],
-            ClassMetadataFactory::class => ['setEntityManager' => ['em' => 'Doctrine\ORM\EntityManagerInterface']],
+            ClassMetadataFactory::class => ['setEntityManager' => ['$em' => 'Doctrine\ORM\EntityManagerInterface']],
         ];
     }
 }
