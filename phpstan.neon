@@ -6,7 +6,7 @@ includes:
 parameters:
     # to allow intalling with various phsptan versions without reporting old errors here
     reportUnmatchedIgnoredErrors: false
-    level: 7
+    level: max
 
     excludes_analyse:
         - "utils/phpstan/generate-paths.php"
@@ -27,13 +27,11 @@ parameters:
     ignoreErrors:
         # false positive
         - '#PHPDoc tag \@param for parameter \$node with type float is incompatible with native type PhpParser\\Node#'
-        - '#Method Rector\\CodingStyle\\Rector\\Use_\\RemoveUnusedAliasRector::resolveUsedClassNames\(\) should return array<array<array<PhpParser\\Node>>> but returns array<string, array<int, array<int, PhpParser\\Node\\Identifier\|PhpParser\\Node\\Stmt\\ClassLike\|null>>>#'
         - '#Result of && is always true#'
 
         # missuse of interface and class
         - '#Parameter \#1 (.*?) expects Symfony\\Component\\DependencyInjection\\ContainerBuilder, Symfony\\Component\\DependencyInjection\\ContainerInterface given#'
         - '#Method Rector\\Symfony\\Bridge\\DefaultAnalyzedSymfonyApplicationContainer::getContainer\(\) should return Symfony\\Component\\DependencyInjection\\ContainerBuilder but returns Symfony\\Component\\DependencyInjection\\Container#'
-        - '#(.*?)\(\) should return Psr\\Container\\ContainerInterface but returns Symfony\\Component\\DependencyInjection\\ContainerInterface\|null#'
 
         - '#Property Rector\\DependencyInjection\\Loader\\RectorServiceParametersShifter::\$serviceKeywords \(array<string>\) does not accept ReflectionProperty#'
         - '#Strict comparison using === between string and null will always evaluate to false#'
@@ -89,9 +87,6 @@ parameters:
         - '#Access to an undefined property PHPStan\\PhpDocParser\\Ast\\Node::\$name#'
         - '#Cannot access property \$value on PhpParser\\Node\\Expr\\ArrayItem\|null#'
         - '#Method Rector\\Symfony\\Rector\\New_\\StringToArrayArgumentProcessRector::findPreviousNodeAssign\(\) should return PhpParser\\Node\\Expr\\Assign\|null but returns PhpParser\\Node\|null#'
-
-        # use of 3rd party factory that returns general type
-        - '#Property Rector\\NodeTypeResolver\\NodeVisitor\\NamespaceNodeVisitor::\$useNodes \(array<PhpParser\\Node\\Stmt\\Use_>\) does not accept array<PhpParser\\Node>#'
 
         # not really needed, empty
         - '#Rector\\PhpParser\\NodeTraverser\\RectorNodeTraverser::__construct\(\) does not call parent constructor from PhpParser\\NodeTraverser#'
