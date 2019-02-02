@@ -2,6 +2,7 @@
 
 namespace Rector\NetteToSymfony\Rector;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
@@ -199,6 +200,9 @@ CODE_SAMPLE
             $this->docBlockAnalyzer->addTag($classMethod, $phpDocTagNode);
         }
 
+        // complete all other non-explicit methods, from "<presenter>/<action>"
+        $this->completeImplicitRoutes();
+
         // remove routes
         $this->removeNodes($assignNodes);
 
@@ -263,6 +267,42 @@ CODE_SAMPLE
         }
 
         return $this->classMaintainer->getMethodByName($classNode, $routeInfo->getMethod());
+    }
+
+    private function completeImplicitRoutes(): void
+    {
+        $presenterClassNodes = $this->classLikeNodeCollector->findClassesBySuffix('Presenter');
+
+        foreach ($presenterClassNodes as $presenterClassNode) {
+            foreach ((array) $presenterClassNode->stmts as $classStmt) {
+                if (! $classStmt instanceof ClassMethod) {
+                    continue;
+                }
+
+                // not an action method
+                if (! $classStmt->isPublic()) {
+                    continue;
+                }
+
+                if (! $this->matchName($classStmt, '#^(render|action)#')) {
+                    continue;
+                }
+
+                // already has Route tag
+                if ($this->docBlockAnalyzer->hasTag($classStmt, $this->routerClass)) {
+                    continue;
+                }
+
+                $presenterName = $this->getName($presenterClassNode);
+                $shortPresenterName = Strings::after($presenterName, '\\', -1);
+                die;
+
+                dump($this->getName($classStmt));
+                die;
+            }
+        }
+
+        die;
     }
 
     private function isRouteStaticCallMatch(StaticCall $node): bool
