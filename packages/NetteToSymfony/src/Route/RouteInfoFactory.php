@@ -82,21 +82,7 @@ final class RouteInfoFactory
     private function createRouteInfoFromArgs(Node $expr, array $methods = []): ?RouteInfo
     {
         $pathArgument = $expr->args[0]->value;
-
-        if ($pathArgument instanceof ClassConstFetch) {
-            if ($this->nameResolver->isName($pathArgument->class, 'self')) {
-                if (! $this->nameResolver->isName($pathArgument->name, 'class')) {
-                    // get constant value
-                    $routePath = $this->valueResolver->resolve($pathArgument);
-                } else {
-                    return null;
-                }
-            } else {
-                return null;
-            }
-        } else {
-            $routePath = $this->valueResolver->resolve($pathArgument);
-        }
+        $routePath = $this->valueResolver->resolve($pathArgument);
 
         // route path is needed
         if ($routePath === null || ! is_string($routePath)) {
