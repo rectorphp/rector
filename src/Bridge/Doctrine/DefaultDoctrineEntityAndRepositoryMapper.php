@@ -10,7 +10,7 @@ final class DefaultDoctrineEntityAndRepositoryMapper implements DoctrineEntityAn
     public function mapRepositoryToEntity(string $repository): ?string
     {
         // "SomeRepository" => "Some"
-        $withoutSuffix = substr($repository, 0, - strlen('Repository'));
+        $withoutSuffix = Strings::substring($repository, 0, - strlen('Repository'));
 
         // "App\Repository\Some" => "App\Entity\Some"
         return Strings::replace($withoutSuffix, '#Repository#', 'Entity');
