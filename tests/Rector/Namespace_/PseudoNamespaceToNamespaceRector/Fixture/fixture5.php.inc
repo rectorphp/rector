@@ -3,13 +3,14 @@
 namespace ChangeMe_ToNamespaced;
 
 use PHPUnit_TestCase;
+use Rector\Tests\Rector\Namespace_\PseudoNamespaceToNamespaceRector\Source\Keep_This;
 
 class SomeTestCase
 {
     /**
      * @return \ChangeMe_AnotherNamespace
      */
-    public function someMethod(): \Keep_ThisThough
+    public function someMethod(): Keep_This
     {
         if ($this instanceof PHPUnit_TestCase) {
             return true;
@@ -24,13 +25,14 @@ class SomeTestCase
 namespace ChangeMe\ToNamespaced;
 
 use PHPUnit\TestCase;
+use Rector\Tests\Rector\Namespace_\PseudoNamespaceToNamespaceRector\Source\Keep_This;
 
 class SomeTestCase
 {
     /**
      * @return \ChangeMe_AnotherNamespace
      */
-    public function someMethod(): \Keep_ThisThough
+    public function someMethod(): Keep_This
     {
         if ($this instanceof \PHPUnit\TestCase) {
             return true;

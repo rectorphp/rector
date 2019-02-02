@@ -2,6 +2,7 @@
 
 namespace Rector\NodeTypeResolver\Application;
 
+use Nette\Utils\Strings;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
@@ -169,5 +170,34 @@ final class ClassLikeNodeCollector
         }
 
         return $traits;
+    }
+
+    public function findByShortName(string $shortName): ?Class_
+    {
+        foreach ($this->classes as $className => $classNode) {
+            if (Strings::endsWith($className, '\\' . $shortName)) {
+                return $classNode;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @return Class_[]
+     */
+    public function findClassesBySuffix(string $suffix): array
+    {
+        $classNodes = [];
+
+        foreach ($this->classes as $className => $classNode) {
+            if (! Strings::endsWith($className, $suffix)) {
+                continue;
+            }
+
+            $classNodes[] = $classNode;
+        }
+
+        return $classNodes;
     }
 }

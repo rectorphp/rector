@@ -2,7 +2,6 @@
 
 namespace Rector\Rector;
 
-use PhpParser\ConstExprEvaluator;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt;
@@ -13,6 +12,7 @@ use Rector\Application\RemovedFilesCollector;
 use Rector\Contract\Rector\PhpRectorInterface;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\PhpParser\Node\Value\ValueResolver;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
@@ -36,14 +36,14 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     private $symfonyStyle;
 
     /**
-     * @var ConstExprEvaluator
-     */
-    private $constExprEvaluator;
-
-    /**
      * @var RemovedFilesCollector
      */
     private $removedFilesCollector;
+
+    /**
+     * @var ValueResolver
+     */
+    private $valueResolver;
 
     /**
      * @required
@@ -51,12 +51,12 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     public function setAbstractRectorDependencies(
         AppliedRectorCollector $appliedRectorCollector,
         SymfonyStyle $symfonyStyle,
-        ConstExprEvaluator $constExprEvaluator,
+        ValueResolver $valueResolver,
         RemovedFilesCollector $removedFilesCollector
     ): void {
         $this->appliedRectorCollector = $appliedRectorCollector;
         $this->symfonyStyle = $symfonyStyle;
-        $this->constExprEvaluator = $constExprEvaluator;
+        $this->valueResolver = $valueResolver;
         $this->removedFilesCollector = $removedFilesCollector;
     }
 
@@ -130,7 +130,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
      */
     protected function getValue(Expr $node)
     {
-        return $this->constExprEvaluator->evaluateSilently($node);
+        return $this->valueResolver->resolve($node);
     }
 
     /**

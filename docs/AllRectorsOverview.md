@@ -36,6 +36,7 @@
 - [DomainDrivenDesign\ObjectToScalar](#domaindrivendesignobjecttoscalar)
 - [Guzzle\MethodCall](#guzzlemethodcall)
 - [Jms\Property](#jmsproperty)
+- [NetteToSymfony](#nettetosymfony)
 - [PHPStan\Assign](#phpstanassign)
 - [PHPStan\Cast](#phpstancast)
 - [PHPUnit](#phpunit)
@@ -1009,6 +1010,41 @@ Changes properties with `@JMS\DiExtraBundle\Annotation\Inject` to constructor in
 +    {
 +        $this->entityManager = entityManager;
 +    }
+ }
+```
+
+<br>
+
+## NetteToSymfony
+
+### `RouterListToControllerAnnotationsRector`
+
+- class: `Rector\NetteToSymfony\Rector\RouterListToControllerAnnotationsRector`
+
+Change new Route() from RouteFactory to @Route annotation above controller method
+
+```diff
+ final class RouterFactory
+ {
+     public function create(): RouteList
+     {
+         $routeList = new RouteList();
++
++        // case of single action controller, usually get() or __invoke() method
+         $routeList[] = new Route('some-path', SomePresenter::class);
+
+         return $routeList;
+     }
+ }
+
+ final class SomePresenter
+ {
++    /**
++     * @Symfony\Component\Routing\Annotation\Route(path="some-path")
++     */
+     public function run()
+     {
+     }
  }
 ```
 

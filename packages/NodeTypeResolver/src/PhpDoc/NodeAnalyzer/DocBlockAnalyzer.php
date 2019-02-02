@@ -68,8 +68,16 @@ final class DocBlockAnalyzer
             return false;
         }
 
+        // normalize tag name
+        $name = ltrim($name, '@');
+
         // simple check
-        if (Strings::contains($node->getDocComment()->getText(), '@' . $name)) {
+        if (Strings::contains($node->getDocComment()->getText(), '@' . ltrim($name, '@'))) {
+            return true;
+        }
+
+        // fqn class annotation
+        if (Strings::contains($node->getDocComment()->getText(), '@\\' . ltrim($name, '@'))) {
             return true;
         }
 
@@ -100,6 +108,7 @@ final class DocBlockAnalyzer
         if ($node->getDocComment()) {
             $phpDocInfo = $this->createPhpDocInfoFromNode($node);
             $phpDocNode = $phpDocInfo->getPhpDocNode();
+            $phpDocNode->children[] = $phpDocChildNode;
             $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
         } else {
             $phpDocNode = new PhpDocNode([$phpDocChildNode]);

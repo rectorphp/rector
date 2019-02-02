@@ -77,7 +77,6 @@ parameters:
             - '*/packages/NodeTypeResolver/**/PerNodeTypeResolver/**TypeResolver.php'
             - '*/packages/NodeTypeResolver/**/PerNodeTypeResolver/**TypeResolver/*Test.php'
             - '*RectorTest.php'
-            - 'tests/PhpParser/Node/ConstExprEvaluatorFactoryTest.php'
             - 'src/Rector/AbstractPHPUnitRector.php'
             - 'src/Rector/Class_/ParentClassToTraitsRector.php'
             # required for exact string match with "\"
@@ -106,6 +105,8 @@ parameters:
             - 'src/PhpParser/Node/Resolver/NameResolver.php'
             - 'src/Rector/MethodBody/NormalToFluentRector.php'
             - 'packages/CodingStyle/src/Rector/Use_/RemoveUnusedAliasRector.php'
+            - 'packages/NetteToSymfony/src/Route/RouteInfoFactory.php'
+
             # copied 3rd party logic
             - 'packages/Php/src/EregToPcreTransformer.php'
             # dev
@@ -140,3 +141,7 @@ parameters:
         Symplify\CodingStandard\Sniffs\Debug\CommentedOutCodeSniff.Found:
             # notes
             - 'packages/Php/src/Rector/Each/ListEachRector.php'
+
+        Symplify\CodingStandard\Sniffs\DependencyInjection\NoClassInstantiationSniff:
+            # 3rd party api
+            - 'src/PhpParser/Node/Value/ValueResolver.php'

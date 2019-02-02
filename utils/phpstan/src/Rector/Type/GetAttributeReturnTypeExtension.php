@@ -22,7 +22,7 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
-use Rector\PHPStanExtensions\Utils\ValueResolver;
+use Rector\PHPStanExtensions\Utils\PHPStanValueResolver;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
 final class GetAttributeReturnTypeExtension implements DynamicMethodReturnTypeExtension
@@ -52,13 +52,13 @@ final class GetAttributeReturnTypeExtension implements DynamicMethodReturnTypeEx
     ];
 
     /**
-     * @var ValueResolver
+     * @var PHPStanValueResolver
      */
-    private $valueResolver;
+    private $phpStanValueResolver;
 
-    public function __construct(ValueResolver $valueResolver)
+    public function __construct(PHPStanValueResolver $phpStanValueResolver)
     {
-        $this->valueResolver = $valueResolver;
+        $this->phpStanValueResolver = $phpStanValueResolver;
     }
 
     public function getClass(): string
@@ -107,7 +107,7 @@ final class GetAttributeReturnTypeExtension implements DynamicMethodReturnTypeEx
     private function resolveArgumentValue(Expr $node): ?string
     {
         if ($node instanceof ClassConstFetch) {
-            return $this->valueResolver->resolveClassConstFetch($node);
+            return $this->phpStanValueResolver->resolveClassConstFetch($node);
         }
 
         return null;

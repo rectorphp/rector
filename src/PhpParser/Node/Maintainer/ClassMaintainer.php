@@ -222,6 +222,21 @@ final class ClassMaintainer
         return in_array($methodName, $methodNames, true);
     }
 
+    public function getMethodByName(Class_ $classNode, string $methodName): ?ClassMethod
+    {
+        foreach ($classNode->stmts as $stmt) {
+            if (! $stmt instanceof ClassMethod) {
+                continue;
+            }
+
+            if ($this->nameResolver->isName($stmt, $methodName)) {
+                return $stmt;
+            }
+        }
+
+        return null;
+    }
+
     private function tryInsertBeforeFirstMethod(Class_ $classNode, Stmt $node): bool
     {
         foreach ($classNode->stmts as $key => $classElementNode) {

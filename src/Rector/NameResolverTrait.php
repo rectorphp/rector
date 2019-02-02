@@ -2,6 +2,7 @@
 
 namespace Rector\Rector;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 
@@ -34,9 +35,22 @@ trait NameResolverTrait
         return $this->getName($firstNode) === $this->getName($secondNode);
     }
 
+    public function matchName(Node $node, string $pattern): bool
+    {
+        return (bool) Strings::match($this->getName($node), $pattern);
+    }
+
     public function isNameInsensitive(Node $node, string $name): bool
     {
-        return strtolower((string) $this->getName($node)) === strtolower($name);
+        return $this->nameResolver->isNameInsensitive($node, $name);
+    }
+
+    /**
+     * @param string[] $map
+     */
+    public function matchNameInsensitiveInMap(Node $node, array $map): ?string
+    {
+        return $this->nameResolver->matchNameInsensitiveInMap($node, $map);
     }
 
     /**

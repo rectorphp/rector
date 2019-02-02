@@ -16,9 +16,6 @@ services:
     PhpParser\NodeFinder: ~
 
     # value resolver
-    PhpParser\ConstExprEvaluator:
-        factory: ['@Rector\PhpParser\Node\ConstExprEvaluatorFactory', 'create']
-
     Symfony\Component\Filesystem\Filesystem: ~
 
     # Symfony\Console

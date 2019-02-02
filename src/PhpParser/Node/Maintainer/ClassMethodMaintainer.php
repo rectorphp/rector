@@ -8,7 +8,9 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpParser\Node\BetterNodeFinder;
+use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\PhpParser\Printer\BetterStandardPrinter;
 
 final class ClassMethodMaintainer
@@ -23,10 +25,33 @@ final class ClassMethodMaintainer
      */
     private $betterStandardPrinter;
 
-    public function __construct(BetterNodeFinder $betterNodeFinder, BetterStandardPrinter $betterStandardPrinter)
-    {
+    /**
+     * @var NodeTypeResolver
+     */
+    private $nodeTypeResolver;
+
+    /**
+     * @var FunctionLikeMaintainer
+     */
+    private $functionLikeMaintainer;
+
+    /**
+     * @var NameResolver
+     */
+    private $nameResolver;
+
+    public function __construct(
+        BetterNodeFinder $betterNodeFinder,
+        BetterStandardPrinter $betterStandardPrinter,
+        NodeTypeResolver $nodeTypeResolver,
+        FunctionLikeMaintainer $functionLikeMaintainer,
+        NameResolver $nameResolver
+    ) {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->betterStandardPrinter = $betterStandardPrinter;
+        $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->functionLikeMaintainer = $functionLikeMaintainer;
+        $this->nameResolver = $nameResolver;
     }
 
     public function isParameterUsedMethod(Param $param, ClassMethod $classMethod): bool
@@ -41,12 +66,12 @@ final class ClassMethodMaintainer
     public function hasParentMethodOrInterfaceMethod(ClassMethod $classMethod): bool
     {
         $class = $classMethod->getAttribute(Attribute::CLASS_NAME);
-        if ($class === null) {
+        if (is_string($class) === false) {
             return false;
         }
 
         $method = $classMethod->getAttribute(Attribute::METHOD_NAME);
-        if ($method === null) {
+        if (is_string($method) === false) {
             return false;
         }
 
@@ -88,6 +113,33 @@ final class ClassMethodMaintainer
         }
 
         return false;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function resolveReturnType(ClassMethod $classMethodNode): array
+    {
+        if ($classMethodNode->returnType !== null) {
+            return $this->nodeTypeResolver->resolve($classMethodNode->returnType);
+        }
+
+        $staticReturnType = $this->functionLikeMaintainer->resolveStaticReturnTypeInfo($classMethodNode);
+        if ($staticReturnType === null) {
+            return [];
+        }
+
+        $getFqnTypeNode = $staticReturnType->getFqnTypeNode();
+        if ($getFqnTypeNode === null) {
+            return [];
+        }
+
+        $fqnTypeName = $this->nameResolver->resolve($getFqnTypeNode);
+        if ($fqnTypeName === null) {
+            return [];
+        }
+
+        return [$fqnTypeName];
     }
 
     private function isMethodInParent(string $class, string $method): bool
