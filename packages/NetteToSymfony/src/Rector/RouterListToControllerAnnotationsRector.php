@@ -2,18 +2,14 @@
 
 namespace Rector\NetteToSymfony\Rector;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Type\ArrayType;
 use Rector\NetteToSymfony\Annotation\RouteTagValueNode;
 use Rector\NetteToSymfony\Route\RouteInfo;
+use Rector\NetteToSymfony\Route\RouteInfoFactory;
 use Rector\NodeTypeResolver\Application\ClassLikeNodeCollector;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\PhpParser\Node\BetterNodeFinder;
@@ -70,12 +66,18 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
      */
     private $docBlockAnalyzer;
 
+    /**
+     * @var RouteInfoFactory
+     */
+    private $routeInfoFactory;
+
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
         FunctionLikeMaintainer $functionLikeMaintainer,
         ClassLikeNodeCollector $classLikeNodeCollector,
         ClassMaintainer $classMaintainer,
         DocBlockAnalyzer $docBlockAnalyzer,
+        RouteInfoFactory $routeInfoFactory,
         string $routeListClass = 'Nette\Application\Routers\RouteList',
         string $routerClass = 'Nette\Application\IRouter',
         string $routeAnnotationClass = 'Symfony\Component\Routing\Annotation\Route'
@@ -88,6 +90,7 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
         $this->classMaintainer = $classMaintainer;
         $this->docBlockAnalyzer = $docBlockAnalyzer;
         $this->routeAnnotationClass = $routeAnnotationClass;
+        $this->routeInfoFactory = $routeInfoFactory;
     }
 
     public function getDefinition(): RectorDefinition
@@ -225,7 +228,7 @@ CODE_SAMPLE
 
         // collect annotations and target controllers
         foreach ($assignNodes as $assignNode) {
-            $routeNameToControllerMethod = $this->resolveRouteNameToControllerMethod($assignNode->expr);
+            $routeNameToControllerMethod = $this->routeInfoFactory->createFromNode($assignNode->expr);
             if ($routeNameToControllerMethod === null) {
                 continue;
             }
@@ -259,137 +262,6 @@ CODE_SAMPLE
         return null;
     }
 
-    private function resolveRouteNameToControllerMethod(Node $expr): ?RouteInfo
-    {
-        if ($expr instanceof New_) {
-            if (! isset($expr->args[0]) || ! isset($expr->args[1])) {
-                return null;
-            }
-
-            return $this->createRouteInfoFromArgs($expr);
-        }
-
-        // Route::create()
-        if ($expr instanceof StaticCall) {
-            if (! isset($expr->args[0]) || ! isset($expr->args[1])) {
-                return null;
-            }
-
-            $method = $this->matchNameInsensitiveInMap($expr, [
-                'get' => 'GET',
-                'head' => 'HEAD',
-                'post' => 'POST',
-                'put' => 'PUT',
-                'patch' => 'PATCH',
-                'delete' => 'DELETE',
-            ]);
-
-            $methods = [];
-            if ($method !== null) {
-                $methods[] = $method;
-            }
-
-            return $this->createRouteInfoFromArgs($expr, $methods);
-        }
-
-        return null;
-    }
-
-    /**
-     * @param New_|StaticCall $expr
-     * @param string[] $methods
-     */
-    private function createRouteInfoFromArgs(Node $expr, array $methods = []): ?RouteInfo
-    {
-        $pathArgument = $expr->args[0]->value;
-
-        if ($pathArgument instanceof ClassConstFetch) {
-            if ($this->isName($pathArgument->class, 'self')) {
-                if (! $this->isName($pathArgument->name, 'class')) {
-                    // get constant value
-                    $routePath = $this->getValue($pathArgument);
-                } else {
-                    return null;
-                }
-            } else {
-                return null;
-            }
-        } else {
-            $routePath = $this->getValue($pathArgument);
-        }
-
-        // route path is needed
-        if ($routePath === null) {
-            return null;
-        }
-
-        $targetNode = $expr->args[1]->value;
-        if ($targetNode instanceof ClassConstFetch) {
-            /** @var ClassConstFetch $controllerMethodNode */
-            $controllerMethodNode = $expr->args[1]->value;
-
-            // SomePresenter::class
-            if ($this->isName($controllerMethodNode->name, 'class')) {
-                $presenterClass = $this->getName($controllerMethodNode->class);
-                if ($presenterClass === null) {
-                    return null;
-                }
-
-                if (class_exists($presenterClass) === false) {
-                    return null;
-                }
-
-                if (method_exists($presenterClass, 'run')) {
-                    return new RouteInfo($presenterClass, 'run', $routePath, null, $methods);
-                }
-
-                if (method_exists($presenterClass, '__invoke')) {
-                    return new RouteInfo($presenterClass, '__invoke', $routePath, null, $methods);
-                }
-            }
-            // @todo method specific route
-        }
-
-        if ($targetNode instanceof String_) {
-            $targetValue = $targetNode->value;
-            if (! Strings::contains($targetValue, ':')) {
-                return null;
-            }
-
-            [$controller, $method] = explode(':', $targetValue);
-
-            // detect class by controller name?
-            // foreach all instance and try to match a name $controller . 'Presenter/Controller'
-
-            $classNode = $this->classLikeNodeCollector->findByShortName($controller . 'Presenter');
-            if ($classNode === null) {
-                $classNode = $this->classLikeNodeCollector->findByShortName($controller . 'Controller');
-            }
-
-            // unable to find here
-            if ($classNode === null) {
-                return null;
-            }
-
-            $controllerClass = $this->getName($classNode);
-
-            $methodName = null;
-            if (method_exists($controllerClass, 'render' . ucfirst($method))) {
-                $methodName = 'render' . ucfirst($method);
-            } elseif (method_exists($controllerClass, 'action' . ucfirst($method))) {
-                $methodName = 'action' . ucfirst($method);
-            }
-
-            if ($methodName === null) {
-                return null;
-            }
-
-            return new RouteInfo($controllerClass, $methodName, $routePath, null, []);
-        }
-
-        return null;
-    }
-
     /**
      * @return string[]
      */
@@ -398,7 +270,6 @@ CODE_SAMPLE
         if ($classMethodNode->returnType !== null) {
             return $this->getTypes($classMethodNode->returnType);
         }
-
 
         $staticReturnType = $this->functionLikeMaintainer->resolveStaticReturnTypeInfo($classMethodNode);
         if ($staticReturnType === null) {

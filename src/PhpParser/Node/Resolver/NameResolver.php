@@ -89,6 +89,25 @@ final class NameResolver
         $this->nameResolversPerNode = $callableCollectorPopulator->populate($resolvers);
     }
 
+    /**
+     * @param string[] $map
+     */
+    public function matchNameInsensitiveInMap(Node $node, array $map): ?string
+    {
+        foreach ($map as $nameToMatch => $return) {
+            if ($this->isNameInsensitive($node, $nameToMatch)) {
+                return $return;
+            }
+        }
+
+        return null;
+    }
+
+    public function isNameInsensitive(Node $node, string $name): bool
+    {
+        return strtolower((string) $this->resolve($node)) === strtolower($name);
+    }
+
     public function isName(Node $node, string $name): bool
     {
         $resolvedName = $this->resolve($node);

@@ -32,8 +32,13 @@ final class RouteInfo
     /**
      * @param string[] $httpMethods
      */
-    public function __construct(string $class, string $method, string $path, ?string $name = null, array $httpMethods = [])
-    {
+    public function __construct(
+        string $class,
+        string $method,
+        string $path,
+        ?string $name = null,
+        array $httpMethods = []
+    ) {
         $this->class = $class;
         $this->method = $method;
         $this->path = $path;

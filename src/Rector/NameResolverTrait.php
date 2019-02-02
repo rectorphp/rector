@@ -36,7 +36,7 @@ trait NameResolverTrait
 
     public function isNameInsensitive(Node $node, string $name): bool
     {
-        return strtolower((string) $this->getName($node)) === strtolower($name);
+        return $this->nameResolver->isNameInsensitive($node, $name);
     }
 
     /**
@@ -44,13 +44,7 @@ trait NameResolverTrait
      */
     public function matchNameInsensitiveInMap(Node $node, array $map): ?string
     {
-        foreach ($map as $nameToMatch => $return) {
-            if ($this->isNameInsensitive($node, $nameToMatch)) {
-                return $return;
-            }
-        }
-
-        return null;
+        return $this->nameResolver->matchNameInsensitiveInMap($node, $map);
     }
 
     /**

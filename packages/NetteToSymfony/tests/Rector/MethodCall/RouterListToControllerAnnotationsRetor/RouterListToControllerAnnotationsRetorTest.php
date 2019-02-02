@@ -16,6 +16,7 @@ final class RouterListToControllerAnnotationsRetorTest extends AbstractRectorTes
             __DIR__ . '/Fixture/static_route_to_annotation.php.inc',
             __DIR__ . '/Fixture/constant_reference_route_to_annotation.php.inc',
             __DIR__ . '/Fixture/method_named_routes.php.inc',
+            //            __DIR__ . '/Fixture/general_method_named_routes.php.inc',
         ]);
     }
 
