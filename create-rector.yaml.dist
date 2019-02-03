@@ -28,4 +28,4 @@ code_after: |
 
 source: # e.g. link to RFC or headline in upgrade guide, 1 or more in the list
     - ""
-level: "" # e.g. symfony30.yml, target config to append this rector to
+level: "" # e.g. symfony30.yaml, target config to append this rector to

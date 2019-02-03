@@ -4,7 +4,7 @@
 
 ## 1. Finds all files and Load Configured Rectors
 
-- The application finds files in source you provide and registeres Rectors - from `--level`, `--config` or local `rector.yml`
+- The application finds files in source you provide and registeres Rectors - from `--level`, `--config` or local `rector.yaml`
 - Then it iterates all found files and applies relevant Rectors to them.
 - *Rector* in this context is 1 single class that modifies 1 thing, e.g. changes class name
 
@@ -59,7 +59,7 @@ E.g. in this case, first will be changed `@expectedException` annotation to meth
  then a method `setExpectedException` to `expectedException`.
 
 ```yaml
-# rector.yml
+# rector.yaml
 services:
     Rector\PHPUnit\Rector\ExceptionAnnotationRector: ~
 

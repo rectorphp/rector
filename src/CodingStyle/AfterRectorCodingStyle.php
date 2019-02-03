@@ -16,7 +16,7 @@ final class AfterRectorCodingStyle
     /**
      * @var string
      */
-    private const ECS_AFTER_RECTOR_CONFIG = __DIR__ . '/../../ecs-after-rector.yml';
+    private const ECS_AFTER_RECTOR_CONFIG = __DIR__ . '/../../ecs-after-rector.yaml';
 
     /**
      * @param string[] $source

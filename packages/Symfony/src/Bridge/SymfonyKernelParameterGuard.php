@@ -13,7 +13,7 @@ final class SymfonyKernelParameterGuard
         // ensure value is not null nor empty
         if ($kernelClass === null || $kernelClass === '') {
             throw new InvalidConfigurationException(sprintf(
-                'Make sure "%s" parameters is set in rector.yml in "parameters:" section',
+                'Make sure "%s" parameters is set in rector.yaml in "parameters:" section',
                 Option::KERNEL_CLASS_PARAMETER
             ));
         }

@@ -13,6 +13,6 @@ final class NewObjectToFactoryCreateRectorTest extends AbstractRectorTestCase
 
     protected function provideConfig(): string
     {
-        return __DIR__ . '/config.yml';
+        return __DIR__ . '/config.yaml';
     }
 }

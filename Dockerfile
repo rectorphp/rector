@@ -12,6 +12,6 @@ WORKDIR /rector
 COPY . /rector
 COPY --from=composer /app .
 
-CMD ["bin/rector", "process", "/project", "--dry-run", "--config", "/project/rector.yml"]
+CMD ["bin/rector", "process", "/project", "--dry-run", "--config", "/project/rector.yaml"]
 
 # TODO: dev with xdebug extension for local development

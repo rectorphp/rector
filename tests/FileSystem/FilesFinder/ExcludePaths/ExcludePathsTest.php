@@ -22,6 +22,6 @@ final class ExcludePathsTest extends AbstractConfigurableContainerAwareTestCase
 
     protected function provideConfig(): string
     {
-        return __DIR__ . '/config/config-with-excluded-paths.yml';
+        return __DIR__ . '/config/config-with-excluded-paths.yaml';
     }
 }

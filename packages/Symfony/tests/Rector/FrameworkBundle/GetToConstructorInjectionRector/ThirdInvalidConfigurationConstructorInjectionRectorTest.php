@@ -26,6 +26,6 @@ final class ThirdInvalidConfigurationConstructorInjectionRectorTest extends Abst
 
     protected function provideConfig(): string
     {
-        return __DIR__ . '/invalid-config-3.yml';
+        return __DIR__ . '/invalid-config-3.yaml';
     }
 }

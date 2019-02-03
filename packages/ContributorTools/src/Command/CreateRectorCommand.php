@@ -81,7 +81,7 @@ final class CreateRectorCommand extends Command implements ContributorCommandInt
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $configuration = $this->configurationFactory->createFromConfigFile(getcwd() . '/create-rector.yml');
+        $configuration = $this->configurationFactory->createFromConfigFile(getcwd() . '/create-rector.yaml');
         $templateVariables = $this->templateVariablesFactory->createFromConfiguration($configuration);
 
         foreach ($this->findTemplateFileInfos() as $smartFileInfo) {

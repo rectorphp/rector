@@ -1,0 +1,8 @@
+imports:
+    - { resource: '../packages/**/config/config.yaml' }
+    - { resource: 'services.yaml' }
+
+parameters:
+    exclude_paths: []
+    exclude_rectors: []
+    autoload_paths: []

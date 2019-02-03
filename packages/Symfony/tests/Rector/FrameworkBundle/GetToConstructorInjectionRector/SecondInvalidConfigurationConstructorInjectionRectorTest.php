@@ -22,6 +22,6 @@ final class SecondInvalidConfigurationConstructorInjectionRectorTest extends Abs
 
     protected function provideConfig(): string
     {
-        return __DIR__ . '/invalid-config-2.yml';
+        return __DIR__ . '/invalid-config-2.yaml';
     }
 }

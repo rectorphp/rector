@@ -63,10 +63,10 @@ Rector relies on project and autoloading of its classes. To specify own autoload
 vendor/bin/rector process ../project --autoload-file ../project/vendor/autoload.php
 ```
 
-Or make use of `rector.yml` config:
+Or make use of `rector.yaml` config:
 
 ```yaml
-# rector.yml
+# rector.yaml
 parameters:
     autoload_paths:
         - 'vendor/squizlabs/php_codesniffer/autoload.php'
@@ -78,7 +78,7 @@ parameters:
 You can also **exclude files or directories** (with regex or [fnmatch](http://php.net/manual/en/function.fnmatch.php)):
 
 ```yaml
-# rector.yml
+# rector.yaml
 parameters:
     exclude_paths:
         - '*/src/*/Tests/*'
@@ -87,7 +87,7 @@ parameters:
 Do you want to use whole set, except that one rule? Exclude it:
 
 ```yaml
-# rector.yml
+# rector.yaml
 parameters:
     exclude_rectors:
         - 'Rector\CodeQuality\Rector\If_\SimplifyIfReturnBoolRector'
@@ -123,7 +123,7 @@ vendor/bin/rector process "src/Symfony/Component/*/Tests" --level phpunit60 --dr
 
 ### B. Custom Sets
 
-1. Create `rector.yml` with desired Rectors:
+1. Create `rector.yaml` with desired Rectors:
 
     ```yaml
     services:

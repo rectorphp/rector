@@ -16,6 +16,6 @@ final class Php72RectorTest extends AbstractRectorTestCase
 
     protected function provideConfig(): string
     {
-        return __DIR__ . '/config_php72.yml';
+        return __DIR__ . '/config_php72.yaml';
     }
 }

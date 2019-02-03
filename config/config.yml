@@ -1,8 +1,0 @@
-imports:
-    - { resource: '../packages/**/config/config.yml' }
-    - { resource: 'services.yml' }
-
-parameters:
-    exclude_paths: []
-    exclude_rectors: []
-    autoload_paths: []
