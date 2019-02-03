@@ -6,3 +6,13 @@ services:
         # https://github.com/sebastianbergmann/phpunit/issues/3123
         'PHPUnit_Framework_MockObject_MockObject': 'PHPUnit\Framework\MockObject\MockObject'
     Rector\PHPUnit\Rector\MethodCall\AssertEqualsParameterToSpecificMethodsTypeRector: ~
+
+    Rector\Rector\Typehint\ReturnTypehintRector:
+        PHPUnit\Framework\TestCase:
+            setUpBeforeClass: 'void'
+            setUp: 'void'
+            assertPreConditions: 'void'
+            assertPostConditions: 'void'
+            tearDown: 'void'
+            tearDownAfterClass: 'void'
+            onNotSuccessfulTest: 'void'
