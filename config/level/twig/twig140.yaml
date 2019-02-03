@@ -1,3 +1,3 @@
 imports:
     # underscore naming to namespaced classes changes
-    - { resource: 'underscore-to-namespace.yml' }
+    - { resource: 'underscore-to-namespace.yaml' }

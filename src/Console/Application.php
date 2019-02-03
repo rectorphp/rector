@@ -146,6 +146,6 @@ final class Application extends SymfonyApplication
 
     private function getDefaultConfigPath(): string
     {
-        return getcwd() . '/rector.yml';
+        return getcwd() . '/rector.yaml';
     }
 }

@@ -1,5 +1,5 @@
 services:
     Rector\Rector\Architecture\Factory\NewObjectToFactoryCreateRector:
         Rector\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Source\MyClass:
-            class: Rector\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Source\MyClassFactory
-            method: create
+            class: 'Rector\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Source\MyClassFactory'
+            method: 'create'

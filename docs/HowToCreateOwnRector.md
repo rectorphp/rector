@@ -97,7 +97,7 @@ final class MyFirstRector extends AbstractRector
 }
 ```
 
-## 3. Register it `rector.yml`
+## 3. Register it `rector.yaml`
 
 ```diff
  services:
@@ -113,10 +113,10 @@ vendor/bin/rector process src --dry-run
 vendor/bin/rector process src
 ```
 
-If you use `rector.yml` from another directory or another name, set it with `--config` option:
+If you use `rector.yaml` from another directory or another name, set it with `--config` option:
 
 ```bash
-vendor/bin/rector process src --config ../custom-rector.yml
+vendor/bin/rector process src --config ../custom-rector.yaml
 ```
 
 That's it!

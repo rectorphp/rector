@@ -17,7 +17,7 @@ final class EregToPcreTransformer
     private $pcreDelimiter;
 
     /**
-     * Change this via services configuratoin in rector.yml if you need it
+     * Change this via services configuratoin in rector.yaml if you need it
      * Single type is chosen to prevent every regular with different delimiter.
      */
     public function __construct(string $pcreDelimiter = '#')

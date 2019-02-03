@@ -21,5 +21,5 @@ LICENSE export-ignore
 ecs.yml export-ignore
 phpstan.neon export-ignore
 phpunit.xml export-ignore
-create-rector.yml.dist export-ignore
-rector.yml export-ignore
+create-rector.yaml.dist export-ignore
+rector.yaml export-ignore

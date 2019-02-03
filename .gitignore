@@ -1,4 +1,4 @@
-/rector.yml
+/rector.yaml
 /temp
 !/temp/.gitkeep
 /example
@@ -8,10 +8,10 @@ composer.lock
 .idea/
 
 /demo
-rector-symfony.yml
+
 .phpunit.result.cache
 
 # often customized locally - example on Github is just fine
-create-rector.yml
+create-rector.yaml
 phpstan-dependencies.json
 phpstan-paths.txt
