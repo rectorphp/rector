@@ -1,23 +1,15 @@
 <?php declare(strict_types=1);
 
-namespace Rector\ContributorTools\Command;
+namespace Rector\ContributorTools\OutputFormatter;
 
 use Nette\Utils\Strings;
-use Rector\Console\Command\AbstractCommand;
-use Rector\Console\Shell;
 use Rector\ConsoleDiffer\MarkdownDifferAndFormatter;
 use Rector\Contract\Rector\RectorInterface;
-use Rector\ContributorTools\Exception\Command\ContributorCommandInterface;
-use Rector\ContributorTools\Finder\RectorsFinder;
+use Rector\ContributorTools\Contract\OutputFormatterInterface;
 use Rector\Exception\ShouldNotHappenException;
-use Rector\RectorDefinition\ConfiguredCodeSample;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Yaml\Yaml;
-use Symplify\PackageBuilder\Console\Command\CommandNaming;
 
-final class GenerateDocsCommand extends AbstractCommand implements ContributorCommandInterface
+final class MarkdownOutputFormatter implements OutputFormatterInterface
 {
     /**
      * @var SymfonyStyle
@@ -29,30 +21,22 @@ final class GenerateDocsCommand extends AbstractCommand implements ContributorCo
      */
     private $markdownDifferAndFormatter;
 
-    /**
-     * @var RectorsFinder
-     */
-    private $rectorsFinder;
-
-    public function __construct(
-        SymfonyStyle $symfonyStyle,
-        MarkdownDifferAndFormatter $markdownDifferAndFormatter,
-        RectorsFinder $rectorsFinder
-    ) {
-        parent::__construct();
-
+    public function __construct(SymfonyStyle $symfonyStyle, MarkdownDifferAndFormatter $markdownDifferAndFormatter)
+    {
         $this->symfonyStyle = $symfonyStyle;
         $this->markdownDifferAndFormatter = $markdownDifferAndFormatter;
-        $this->rectorsFinder = $rectorsFinder;
     }
 
-    protected function configure(): void
+    public function getName(): string
     {
-        $this->setName(CommandNaming::classToName(self::class));
-        $this->setDescription('Generates markdown documentation of all Rectors');
+        return 'markdown';
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
+    /**
+     * @param RectorInterface[] $genericRectors
+     * @param RectorInterface[] $packageRectors
+     */
+    public function format(array $genericRectors, array $packageRectors): void
     {
         $this->symfonyStyle->writeln('# All Rectors Overview');
         $this->symfonyStyle->newLine();
@@ -64,8 +48,7 @@ final class GenerateDocsCommand extends AbstractCommand implements ContributorCo
         $this->symfonyStyle->writeln('## Projects');
         $this->symfonyStyle->newLine();
 
-        $packageRectors = $this->rectorsFinder->findInDirectory(__DIR__ . '/../../../../packages');
-        $rectorsByGroup = $this->groupRectors($packageRectors);
+        $rectorsByGroup = $this->groupRectorsByCategory($packageRectors);
         $this->printRectorsByGroup($rectorsByGroup);
 
         $this->symfonyStyle->writeln('---');
@@ -73,29 +56,8 @@ final class GenerateDocsCommand extends AbstractCommand implements ContributorCo
         $this->symfonyStyle->writeln('## General');
         $this->symfonyStyle->newLine();
 
-        $generalRectors = $this->rectorsFinder->findInDirectory(__DIR__ . '/../../../../src');
-        $rectorsByGroup = $this->groupRectors($generalRectors);
+        $rectorsByGroup = $this->groupRectorsByCategory($genericRectors);
         $this->printRectorsByGroup($rectorsByGroup);
-
-        return Shell::CODE_SUCCESS;
-    }
-
-    /**
-     * @param RectorInterface[] $rectors
-     * @return RectorInterface[][]
-     */
-    private function groupRectors(array $rectors): array
-    {
-        $rectorsByGroup = [];
-        foreach ($rectors as $rector) {
-            $rectorGroup = $this->detectGroupFromRectorClass(get_class($rector));
-            $rectorsByGroup[$rectorGroup][] = $rector;
-        }
-
-        // sort groups by name to make them more readable
-        ksort($rectorsByGroup);
-
-        return $rectorsByGroup;
     }
 
     /**
@@ -113,46 +75,6 @@ final class GenerateDocsCommand extends AbstractCommand implements ContributorCo
                 $this->printRector($rector);
             }
         }
-    }
-
-    private function detectGroupFromRectorClass(string $rectorClass): string
-    {
-        $rectorClassParts = explode('\\', $rectorClass);
-
-        // basic Rectors
-        if (Strings::startsWith($rectorClass, 'Rector\Rector\\')) {
-            return $rectorClassParts[count($rectorClassParts) - 2];
-        }
-
-        // Rector/<PackageGroup>/Rector/SomeRector
-        if (count($rectorClassParts) === 4) {
-            return $rectorClassParts[1];
-        }
-
-        // Rector/<PackageGroup>/Rector/<PackageSubGroup>/SomeRector
-        if (count($rectorClassParts) === 5) {
-            return $rectorClassParts[1] . '\\' . $rectorClassParts[3];
-        }
-
-        throw new ShouldNotHappenException(sprintf(
-            'Failed to resolve group from Rector class. Implement a new one in %s',
-            __METHOD__
-        ));
-    }
-
-    /**
-     * @param RectorInterface[][] $rectorsByGroup
-     */
-    private function printGroupsMenu(array $rectorsByGroup): void
-    {
-        foreach (array_keys($rectorsByGroup) as $group) {
-            $escapedGroup = str_replace('\\', '', $group);
-            $escapedGroup = Strings::webalize($escapedGroup, '_');
-
-            $this->symfonyStyle->writeln(sprintf('- [%s](#%s)', $group, $escapedGroup));
-        }
-
-        $this->symfonyStyle->newLine();
     }
 
     private function printRector(RectorInterface $rector): void
@@ -211,5 +133,63 @@ final class GenerateDocsCommand extends AbstractCommand implements ContributorCo
     private function printCodeWrapped(string $content, string $format): void
     {
         $this->symfonyStyle->writeln(sprintf('```%s%s%s%s```', $format, PHP_EOL, rtrim($content), PHP_EOL));
+    }
+
+    /**
+     * @param RectorInterface[][] $rectorsByGroup
+     */
+    private function printGroupsMenu(array $rectorsByGroup): void
+    {
+        foreach (array_keys($rectorsByGroup) as $group) {
+            $escapedGroup = str_replace('\\', '', $group);
+            $escapedGroup = Strings::webalize($escapedGroup, '_');
+
+            $this->symfonyStyle->writeln(sprintf('- [%s](#%s)', $group, $escapedGroup));
+        }
+
+        $this->symfonyStyle->newLine();
+    }
+
+    /**
+     * @param RectorInterface[] $rectors
+     * @return RectorInterface[][]
+     */
+    private function groupRectorsByCategory(array $rectors): array
+    {
+        $rectorsByGroup = [];
+        foreach ($rectors as $rector) {
+            $rectorCategory = $this->resolveCategoryFromRectorClass(get_class($rector));
+            $rectorsByGroup[$rectorCategory][] = $rector;
+        }
+
+        // sort groups by name to make them more readable
+        ksort($rectorsByGroup);
+
+        return $rectorsByGroup;
+    }
+
+    private function resolveCategoryFromRectorClass(string $rectorClass): string
+    {
+        $rectorClassParts = explode('\\', $rectorClass);
+
+        // basic Rectors
+        if (Strings::startsWith($rectorClass, 'Rector\Rector\\')) {
+            return $rectorClassParts[count($rectorClassParts) - 2];
+        }
+
+        // Rector/<PackageGroup>/Rector/SomeRector
+        if (count($rectorClassParts) === 4) {
+            return $rectorClassParts[1];
+        }
+
+        // Rector/<PackageGroup>/Rector/<PackageSubGroup>/SomeRector
+        if (count($rectorClassParts) === 5) {
+            return $rectorClassParts[1] . '\\' . $rectorClassParts[3];
+        }
+
+        throw new ShouldNotHappenException(sprintf(
+            'Failed to resolve group from Rector class. Implement a new one in %s',
+            __METHOD__
+        ));
     }
 }

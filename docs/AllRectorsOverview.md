@@ -3408,13 +3408,16 @@ services:
     Rector\Rector\Constant\ClassConstantReplacerRector:
         SomeClass:
             OLD_CONSTANT: NEW_CONSTANT
+            OTHER_OLD_CONSTANT: 'DifferentClass::NEW_CONSTANT'
 ```
 
 ↓
 
 ```diff
 -$value = SomeClass::OLD_CONSTANT;
+-$value = SomeClass::OTHER_OLD_CONSTANT;
 +$value = SomeClass::NEW_CONSTANT;
++$value = DifferentClass::NEW_CONSTANT;
 ```
 
 <br>
@@ -4233,9 +4236,8 @@ Changes defined return typehint of method and class.
 ```yaml
 services:
     Rector\Rector\Typehint\ReturnTypehintRector:
-        $typehintForMethodByClass:
-            SomeClass:
-                getData: array
+        SomeClass:
+            getData: array
 ```
 
 ↓
