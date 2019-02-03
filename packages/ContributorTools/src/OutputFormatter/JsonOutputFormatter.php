@@ -8,6 +8,8 @@ use Nette\Utils\Strings;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\ContributorTools\Contract\OutputFormatterInterface;
 use Rector\ContributorTools\RectorMetadataResolver;
+use Rector\RectorDefinition\ConfiguredCodeSample;
+use Rector\RectorDefinition\RectorDefinition;
 
 final class JsonOutputFormatter implements OutputFormatterInterface
 {
@@ -82,5 +84,38 @@ final class JsonOutputFormatter implements OutputFormatterInterface
         }
 
         return array_values(array_unique($tags));
+    }
+
+    /**
+     * @return mixed[]
+     */
+    private function resolveCodeSamples(RectorDefinition $rectorDefinition): array
+    {
+        $codeSamplesData = [];
+        foreach ($rectorDefinition->getCodeSamples() as $codeSample) {
+            $codeSampleData = [
+                'before' => $codeSample->getCodeBefore(),
+                'after' => $codeSample->getCodeAfter(),
+            ];
+
+            if ($codeSample instanceof ConfiguredCodeSample) {
+                $codeSampleData['configuration'] = $codeSample->getConfiguration();
+            }
+
+            $codeSamplesData[] = $codeSampleData;
+        }
+
+        return $codeSamplesData;
+    }
+
+    private function resolveIsConfigurable(RectorDefinition $rectorDefinition): bool
+    {
+        foreach ($rectorDefinition->getCodeSamples() as $codeSample) {
+            if ($codeSample instanceof ConfiguredCodeSample) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

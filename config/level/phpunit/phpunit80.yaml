@@ -7,7 +7,7 @@ services:
         'PHPUnit_Framework_MockObject_MockObject': 'PHPUnit\Framework\MockObject\MockObject'
     Rector\PHPUnit\Rector\MethodCall\AssertEqualsParameterToSpecificMethodsTypeRector: ~
 
-    Rector\Rector\Typehint\ReturnTypehintRector:
+    Rector\Rector\ClassMethod\AddReturnTypeDeclarationRector:
         PHPUnit\Framework\TestCase:
             setUpBeforeClass: 'void'
             setUp: 'void'

@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Typehint\ReturnTypehintRector;
+namespace Rector\Tests\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 
-use Rector\Rector\Typehint\ReturnTypehintRector;
+use Rector\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class ReturnTypehintRectorTest extends AbstractRectorTestCase
+final class AddReturnTypeDeclarationRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
     {
@@ -14,7 +14,7 @@ final class ReturnTypehintRectorTest extends AbstractRectorTestCase
 
     protected function getRectorClass(): string
     {
-        return ReturnTypehintRector::class;
+        return AddReturnTypeDeclarationRector::class;
     }
 
     /**
@@ -23,7 +23,7 @@ final class ReturnTypehintRectorTest extends AbstractRectorTestCase
     protected function getRectorConfiguration(): array
     {
         return [
-            'Rector\Tests\Rector\Typehint\ReturnTypehintRector\Fixture\SomeClass' => [
+            'Rector\Tests\Rector\Typehint\AddReturnTypeDeclarationRector\Fixture\SomeClass' => [
                 'parse' => 'array',
                 'resolve' => 'SomeType',
                 'nullable' => '?SomeType',

@@ -3042,6 +3042,31 @@ services:
 
 <br>
 
+### `AddReturnTypeDeclarationRector`
+
+- class: `Rector\Rector\ClassMethod\AddReturnTypeDeclarationRector`
+
+Changes defined return typehint of method and class.
+
+```yaml
+services:
+    Rector\Rector\ClassMethod\AddReturnTypeDeclarationRector:
+        SomeClass:
+            getData: array
+```
+
+↓
+
+```diff
+ class SomeClass
+ {
+-    public getData();
++    public getData(): array;
+ }
+```
+
+<br>
+
 ### `MethodCallToAnotherMethodCallWithArgumentsRector`
 
 - class: `Rector\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector`
@@ -3311,31 +3336,6 @@ services:
  $container = new SomeContainer;
 -unset($container["someKey"]);
 +$container->removeService("someKey");
-```
-
-<br>
-
-### `ReturnTypehintRector`
-
-- class: `Rector\Rector\Typehint\ReturnTypehintRector`
-
-Changes defined return typehint of method and class.
-
-```yaml
-services:
-    Rector\Rector\Typehint\ReturnTypehintRector:
-        SomeClass:
-            getData: array
-```
-
-↓
-
-```diff
- class SomeClass
- {
--    public getData();
-+    public getData(): array;
- }
 ```
 
 <br>
