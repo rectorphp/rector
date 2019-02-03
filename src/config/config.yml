@@ -1,7 +1,6 @@
 imports:
     - { resource: '../../packages/**/config/config.yml' }
     - { resource: 'services.yml' }
-    - { resource: 'external-services.yml' }
 
 parameters:
     exclude_paths: []
