@@ -4,8 +4,8 @@ namespace Rector\ContributorTools\Command;
 
 use Rector\Console\Command\AbstractCommand;
 use Rector\Console\Shell;
+use Rector\ContributorTools\Contract\OutputFormatterInterface;
 use Rector\ContributorTools\Finder\RectorsFinder;
-use Rector\ContributorTools\OutputFormatter\MarkdownOutputFormatter;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -19,22 +19,25 @@ final class DumpRectorsCommand extends AbstractCommand
     private $rectorsFinder;
 
     /**
-     * @var MarkdownOutputFormatter
+     * @var OutputFormatterInterface[]
      */
-    private $markdownOutputFormatter;
+    private $outputFormatters = [];
 
-    public function __construct(RectorsFinder $rectorsFinder, MarkdownOutputFormatter $markdownOutputFormatter)
+    /**
+     * @param OutputFormatterInterface[] $outputFormatters
+     */
+    public function __construct(RectorsFinder $rectorsFinder, array $outputFormatters)
     {
         parent::__construct();
 
         $this->rectorsFinder = $rectorsFinder;
-        $this->markdownOutputFormatter = $markdownOutputFormatter;
+        $this->outputFormatters = $outputFormatters;
     }
 
     protected function configure(): void
     {
         $this->setName(CommandNaming::classToName(self::class));
-        $this->setDescription('Generates markdown documentation of all Rectors');
+        $this->setDescription('Dump overview of all Rectors in desired format');
         $this->addOption(
             'output-format',
             'o',
@@ -49,8 +52,13 @@ final class DumpRectorsCommand extends AbstractCommand
         $packageRectors = $this->rectorsFinder->findInDirectory(__DIR__ . '/../../../../packages');
         $generalRectors = $this->rectorsFinder->findInDirectory(__DIR__ . '/../../../../src');
 
-        // default
-        $this->markdownOutputFormatter->format($packageRectors, $generalRectors);
+        foreach ($this->outputFormatters as $outputFormatter) {
+            if ($outputFormatter->getName() !== $input->getOption('output-format')) {
+                continue;
+            }
+
+            $outputFormatter->format($generalRectors, $packageRectors);
+        }
 
         return Shell::CODE_SUCCESS;
     }

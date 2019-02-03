@@ -109,7 +109,7 @@
         "phpstan-async": [
             "vendor/bin/phpstan analyse packages & vendor/bin/phpstan analyse src"
         ],
-        "docs": "bin/rector generate-docs > docs/AllRectorsOverview.md"
+        "docs": "bin/rector dump-rectors --output-format markdown  > docs/AllRectorsOverview.md"
     },
     "scripts-descriptions": {
         "update-docs": "Regenerate descriptions of all Rectors to docs/AllRectorsOverview.md file"

@@ -3,7 +3,7 @@
 namespace Rector\Console;
 
 use Jean85\PrettyVersions;
-use Rector\ContributorTools\Command\GenerateDocsCommand;
+use Rector\ContributorTools\Command\DumpRectorsCommand;
 use Rector\ContributorTools\Exception\Command\ContributorCommandInterface;
 use Symfony\Component\Console\Application as SymfonyApplication;
 use Symfony\Component\Console\Command\Command;
@@ -45,7 +45,7 @@ final class Application extends SymfonyApplication
         $shouldFollowByNewline = false;
 
         // skip in this case, since generate content must be clear from meta-info
-        if ($input->getFirstArgument() === CommandNaming::classToName(GenerateDocsCommand::class)) {
+        if ($input->getFirstArgument() === CommandNaming::classToName(DumpRectorsCommand::class)) {
             return parent::doRun($input, $output);
         }
 

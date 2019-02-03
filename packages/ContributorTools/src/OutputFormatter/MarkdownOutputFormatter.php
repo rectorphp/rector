@@ -5,9 +5,12 @@ namespace Rector\ContributorTools\OutputFormatter;
 use Nette\Utils\Strings;
 use Rector\ConsoleDiffer\MarkdownDifferAndFormatter;
 use Rector\Contract\Rector\RectorInterface;
+use Rector\Contract\RectorDefinition\CodeSampleInterface;
 use Rector\ContributorTools\Contract\OutputFormatterInterface;
 use Rector\Exception\ShouldNotHappenException;
+use Rector\RectorDefinition\ConfiguredCodeSample;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Yaml\Yaml;
 
 final class MarkdownOutputFormatter implements OutputFormatterInterface
 {
@@ -94,27 +97,8 @@ final class MarkdownOutputFormatter implements OutputFormatterInterface
         foreach ($rectorDefinition->getCodeSamples() as $codeSample) {
             $this->symfonyStyle->newLine();
 
-            if ($codeSample instanceof ConfiguredCodeSample) {
-                $configuration = [
-                    'services' => [
-                        get_class($rector) => $codeSample->getConfiguration(),
-                    ],
-                ];
-
-                $configuration = Yaml::dump($configuration, Yaml::DUMP_MULTI_LINE_LITERAL_BLOCK);
-
-                $this->printCodeWrapped($configuration, 'yaml');
-
-                $this->symfonyStyle->newLine();
-                $this->symfonyStyle->writeln('↓');
-                $this->symfonyStyle->newLine();
-            }
-
-            $diff = $this->markdownDifferAndFormatter->bareDiffAndFormatWithoutColors(
-                $codeSample->getCodeBefore(),
-                $codeSample->getCodeAfter()
-            );
-            $this->printCodeWrapped($diff, 'diff');
+            $this->printConfiguration($rector, $codeSample);
+            $this->printCodeSample($codeSample);
         }
 
         $this->symfonyStyle->newLine();
@@ -191,5 +175,35 @@ final class MarkdownOutputFormatter implements OutputFormatterInterface
             'Failed to resolve group from Rector class. Implement a new one in %s',
             __METHOD__
         ));
+    }
+
+    private function printConfiguration(RectorInterface $rector, CodeSampleInterface $codeSample): void
+    {
+        if (! $codeSample instanceof ConfiguredCodeSample) {
+            return;
+        }
+
+        $configuration = [
+            'services' => [
+                get_class($rector) => $codeSample->getConfiguration(),
+            ],
+        ];
+        $configuration = Yaml::dump($configuration, Yaml::DUMP_MULTI_LINE_LITERAL_BLOCK);
+
+        $this->printCodeWrapped($configuration, 'yaml');
+
+        $this->symfonyStyle->newLine();
+        $this->symfonyStyle->writeln('↓');
+        $this->symfonyStyle->newLine();
+    }
+
+    private function printCodeSample(CodeSampleInterface $codeSample): void
+    {
+        $diff = $this->markdownDifferAndFormatter->bareDiffAndFormatWithoutColors(
+            $codeSample->getCodeBefore(),
+            $codeSample->getCodeAfter()
+        );
+
+        $this->printCodeWrapped($diff, 'diff');
     }
 }
