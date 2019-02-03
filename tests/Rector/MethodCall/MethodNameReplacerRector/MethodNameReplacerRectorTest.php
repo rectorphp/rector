@@ -20,6 +20,7 @@ final class MethodNameReplacerRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Fixture/fixture5.php.inc',
             __DIR__ . '/Fixture/fixture6.php.inc',
             __DIR__ . '/Fixture/SomeClass.php',
+            __DIR__ . '/Fixture/nette_to_symfony_presenter.php.inc',
         ]);
     }
 
@@ -46,6 +47,9 @@ final class MethodNameReplacerRectorTest extends AbstractRectorTestCase
             ],
             FormMacros::class => [
                 'renderFormBegin' => ['Nette\Bridges\FormsLatte\Runtime', 'renderFormBegin'],
+            ],
+            '*Presenter' => [
+                'run' => '__invoke',
             ],
         ];
     }

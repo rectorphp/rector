@@ -2,6 +2,7 @@
 
 namespace Rector\Rector;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\MethodCall;
@@ -40,6 +41,18 @@ trait TypeAnalyzerTrait
     protected function isType(Node $node, string $type): bool
     {
         $nodeTypes = $this->getTypes($node);
+
+        // fnmatch support
+        if (Strings::contains($type, '*')) {
+            foreach ($nodeTypes as $nodeType) {
+                if (fnmatch($type, $nodeType)) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         return in_array($type, $nodeTypes, true);
     }
 
