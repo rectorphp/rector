@@ -2,17 +2,15 @@
 
 namespace Rector\ContributorTools\Command;
 
-use Nette\Loaders\RobotLoader;
 use Nette\Utils\Strings;
 use Rector\Console\Command\AbstractCommand;
 use Rector\Console\Shell;
 use Rector\ConsoleDiffer\MarkdownDifferAndFormatter;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\ContributorTools\Exception\Command\ContributorCommandInterface;
-use Rector\Error\ExceptionCorrector;
+use Rector\ContributorTools\Finder\RectorsFinder;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\RectorDefinition\ConfiguredCodeSample;
-use ReflectionClass;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -31,12 +29,21 @@ final class GenerateDocsCommand extends AbstractCommand implements ContributorCo
      */
     private $markdownDifferAndFormatter;
 
-    public function __construct(SymfonyStyle $symfonyStyle, MarkdownDifferAndFormatter $markdownDifferAndFormatter)
-    {
+    /**
+     * @var RectorsFinder
+     */
+    private $rectorsFinder;
+
+    public function __construct(
+        SymfonyStyle $symfonyStyle,
+        MarkdownDifferAndFormatter $markdownDifferAndFormatter,
+        RectorsFinder $rectorsFinder
+    ) {
         parent::__construct();
 
         $this->symfonyStyle = $symfonyStyle;
         $this->markdownDifferAndFormatter = $markdownDifferAndFormatter;
+        $this->rectorsFinder = $rectorsFinder;
     }
 
     protected function configure(): void
@@ -57,7 +64,8 @@ final class GenerateDocsCommand extends AbstractCommand implements ContributorCo
         $this->symfonyStyle->writeln('## Projects');
         $this->symfonyStyle->newLine();
 
-        $rectorsByGroup = $this->groupRectors($this->getProjectsRectors());
+        $packageRectors = $this->rectorsFinder->findInDirectory(__DIR__ . '/../../../../packages');
+        $rectorsByGroup = $this->groupRectors($packageRectors);
         $this->printRectorsByGroup($rectorsByGroup);
 
         $this->symfonyStyle->writeln('---');
@@ -65,7 +73,8 @@ final class GenerateDocsCommand extends AbstractCommand implements ContributorCo
         $this->symfonyStyle->writeln('## General');
         $this->symfonyStyle->newLine();
 
-        $rectorsByGroup = $this->groupRectors($this->getGeneralRectors());
+        $generalRectors = $this->rectorsFinder->findInDirectory(__DIR__ . '/../../../../src');
+        $rectorsByGroup = $this->groupRectors($generalRectors);
         $this->printRectorsByGroup($rectorsByGroup);
 
         return Shell::CODE_SUCCESS;
@@ -90,14 +99,6 @@ final class GenerateDocsCommand extends AbstractCommand implements ContributorCo
     }
 
     /**
-     * @return RectorInterface[]
-     */
-    private function getProjectsRectors(): array
-    {
-        return $this->getRectorsFromDirectory([__DIR__ . '/../../../../packages']);
-    }
-
-    /**
      * @param RectorInterface[][] $rectorsByGroup
      */
     private function printRectorsByGroup(array $rectorsByGroup): void
@@ -112,14 +113,6 @@ final class GenerateDocsCommand extends AbstractCommand implements ContributorCo
                 $this->printRector($rector);
             }
         }
-    }
-
-    /**
-     * @return RectorInterface[]
-     */
-    private function getGeneralRectors(): array
-    {
-        return $this->getRectorsFromDirectory([__DIR__ . '/../../../../src']);
     }
 
     private function detectGroupFromRectorClass(string $rectorClass): string
@@ -145,53 +138,6 @@ final class GenerateDocsCommand extends AbstractCommand implements ContributorCo
             'Failed to resolve group from Rector class. Implement a new one in %s',
             __METHOD__
         ));
-    }
-
-    /**
-     * @param string[] $directories
-     * @param string[] $directoriesToExclude
-     * @return RectorInterface[]
-     */
-    private function getRectorsFromDirectory(array $directories, array $directoriesToExclude = []): array
-    {
-        $robotLoader = new RobotLoader();
-
-        foreach ($directories as $directory) {
-            $robotLoader->addDirectory($directory);
-        }
-        foreach ($directoriesToExclude as $directoryToExclude) {
-            $robotLoader->excludeDirectory($directoryToExclude);
-        }
-
-        $robotLoader->setTempDirectory(sys_get_temp_dir() . '/_rector_finder');
-        $robotLoader->acceptFiles = ['*Rector.php'];
-        $robotLoader->rebuild();
-
-        $rectors = [];
-        foreach (array_keys($robotLoader->getIndexedClasses()) as $class) {
-            // special case, because robot loader is case insensitive
-            if ($class === ExceptionCorrector::class) {
-                continue;
-            }
-
-            $reflectionClass = new ReflectionClass($class);
-            if ($reflectionClass->isAbstract()) {
-                continue;
-            }
-
-            $rector = $reflectionClass->newInstanceWithoutConstructor();
-            if (! $rector instanceof RectorInterface) {
-                throw new ShouldNotHappenException(sprintf(
-                    '"%s" found something that looks like Rector but does not implements "%s" interface.',
-                    __METHOD__,
-                    RectorInterface::class
-                ));
-            }
-
-            $rectors[] = $rector;
-        }
-
-        return $rectors;
     }
 
     /**
