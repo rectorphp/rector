@@ -4,6 +4,7 @@ namespace Rector\Tests\Rector\Constant\ClassConstantReplacerRector;
 
 use Rector\Rector\Constant\ClassConstantReplacerRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Tests\Rector\Constant\ClassConstantReplacerRector\Source\DifferentClass;
 use Rector\Tests\Rector\Constant\ClassConstantReplacerRector\Source\LocalFormEvents;
 
 final class ClassConstantReplacerRectorTest extends AbstractRectorTestCase
@@ -27,6 +28,7 @@ final class ClassConstantReplacerRectorTest extends AbstractRectorTestCase
             'PRE_BIND' => 'PRE_SUBMIT',
             'BIND' => 'SUBMIT',
             'POST_BIND' => 'POST_SUBMIT',
+            'OLD_CONSTANT' => DifferentClass::class . '::NEW_CONSTANT',
         ]];
     }
 }

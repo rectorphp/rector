@@ -10,7 +10,8 @@ class SomeClass
     {
         return [
             LocalFormEvents::PRE_BIND,
-            LocalFormEvents::PRE_Bind
+            LocalFormEvents::PRE_Bind,
+            LocalFormEvents::OLD_CONSTANT,
         ];
     }
 }
@@ -29,7 +30,8 @@ class SomeClass
     {
         return [
             LocalFormEvents::PRE_SUBMIT,
-            LocalFormEvents::PRE_SUBMIT
+            LocalFormEvents::PRE_SUBMIT,
+            \Rector\Tests\Rector\Constant\ClassConstantReplacerRector\Source\DifferentClass::NEW_CONSTANT,
         ];
     }
 }
