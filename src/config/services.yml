@@ -24,10 +24,6 @@ services:
     # value resolver
     Symfony\Component\Filesystem\Filesystem: ~
 
-    # Symfony\Console
-    Symfony\Component\Console\Style\SymfonyStyle:
-        factory: ['@Rector\Console\Style\SymfonyStyleFactory', 'create']
-
     Symplify\PackageBuilder\FileSystem\FileSystem: ~
     Symplify\PackageBuilder\FileSystem\FinderSanitizer: ~
 
