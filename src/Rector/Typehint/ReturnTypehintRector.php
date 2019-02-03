@@ -47,10 +47,8 @@ class SomeClass
 CODE_SAMPLE
                 ,
                 [
-                    '$typehintForMethodByClass' => [
-                        'SomeClass' => [
-                            'getData' => 'array',
-                        ],
+                    'SomeClass' => [
+                        'getData' => 'array',
                     ],
                 ]
             ),
