@@ -16,6 +16,7 @@ final class TypedPropertyRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Fixture/static_property.php.inc',
             __DIR__ . '/Fixture/default_values.php.inc',
             __DIR__ . '/Fixture/match_types.php.inc',
+            __DIR__ . '/Fixture/static_analysis_based.php.inc',
         ]);
     }
 

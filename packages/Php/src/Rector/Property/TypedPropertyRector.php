@@ -10,7 +10,7 @@ use PhpParser\Node\Scalar\DNumber;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Property;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\ComplexNodeTypeResolver;
 use Rector\NodeTypeResolver\Php\VarTypeInfo;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\Php\PhpTypeSupport;
@@ -40,12 +40,18 @@ final class TypedPropertyRector extends AbstractRector
      */
     private $docBlockAnalyzer;
 
-    public function __construct(DocBlockAnalyzer $docBlockAnalyzer)
+    /**
+     * @var ComplexNodeTypeResolver
+     */
+    private $complexNodeTypeResolver;
+
+    public function __construct(DocBlockAnalyzer $docBlockAnalyzer, ComplexNodeTypeResolver $complexNodeTypeResolver)
     {
         $this->docBlockAnalyzer = $docBlockAnalyzer;
 
         // PHP 7.4 already knows "object"
         PhpTypeSupport::enableType('object');
+        $this->complexNodeTypeResolver = $complexNodeTypeResolver;
     }
 
     public function getDefinition(): RectorDefinition
@@ -88,26 +94,32 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if ($node->type !== null) {
+            return null;
+        }
+
+        $varTypeInfos = [];
         // non FQN, so they are 1:1 to possible imported doc type
-        $varTypeInfo = $this->docBlockAnalyzer->getVarTypeInfo($node);
-        if ($varTypeInfo === null) {
-            return null;
+        $varTypeInfos[] = $this->docBlockAnalyzer->getVarTypeInfo($node);
+        $varTypeInfos[] = $this->complexNodeTypeResolver->resolvePropertyTypeInfo($node);
+
+        foreach ($varTypeInfos as $varTypeInfo) {
+            if ($varTypeInfo === null) {
+                continue;
+            }
+
+            if ($varTypeInfo->isTypehintAble() === false) {
+                continue;
+            }
+
+            if ($this->matchesDocTypeAndDefaultValueType($varTypeInfo, $node)) {
+                $node->type = $varTypeInfo->getTypeNode();
+
+                return $node;
+            }
         }
 
-        if ($varTypeInfo->isTypehintAble() === false) {
-            return null;
-        }
-
-        if (! $this->matchesDocTypeAndDefaultValueType($varTypeInfo, $node)) {
-            return null;
-        }
-
-        $node->type = $varTypeInfo->getTypeNode();
-
-        // invoke the print, because only attribute has changed
-        $node->setAttribute(Attribute::ORIGINAL_NODE, null);
-
-        return $node;
+        return null;
     }
 
     private function matchesDocTypeAndDefaultValueType(VarTypeInfo $varTypeInfo, Property $propertyNode): bool
