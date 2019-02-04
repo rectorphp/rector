@@ -4,12 +4,13 @@ namespace Rector\Tests\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 
 use Rector\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Tests\Rector\ClassMethod\AddReturnTypeDeclarationRector\Source\PHPUnitTestCase;
 
 final class AddReturnTypeDeclarationRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
     {
-        $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc']);
+        $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc', __DIR__ . '/Fixture/extended_parent.php.inc']);
     }
 
     protected function getRectorClass(): string
@@ -28,6 +29,9 @@ final class AddReturnTypeDeclarationRectorTest extends AbstractRectorTestCase
                 'resolve' => 'SomeType',
                 'nullable' => '?SomeType',
                 'clear' => '',
+            ],
+            PHPUnitTestCase::class => [
+                'tearDown' => 'void',
             ],
         ];
     }
