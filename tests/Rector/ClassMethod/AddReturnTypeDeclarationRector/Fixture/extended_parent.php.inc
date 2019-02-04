@@ -1,20 +1,23 @@
 <?php
 
-namespace Rector\Tests\Rector\Typehint\AddReturnTypeDeclarationRector\Fixture;
+namespace {
+    use Rector\Tests\Rector\ClassMethod\AddReturnTypeDeclarationRector\Source\PHPUnitTestCase;
 
-use Rector\Tests\Rector\ClassMethod\AddReturnTypeDeclarationRector\Source\PHPUnitTestCase;
-
-abstract class AbstractTestCase extends PHPUnitTestCase
-{
-    public function tearDown()
+    abstract class Abstract_Test_Case extends PHPUnitTestCase
     {
+        protected function tearDown()
+        {
+        }
     }
 }
 
-final class FinalTestCase extends AbstractTestCase
+namespace Rector\Tests\Rector\Typehint\AddReturnTypeDeclarationRector\Fixture
 {
-    public function tearDown()
+    final class FinalTestCase extends \Abstract_Test_Case
     {
+        public function tearDown()
+        {
+        }
     }
 }
 
@@ -22,21 +25,24 @@ final class FinalTestCase extends AbstractTestCase
 -----
 <?php
 
-namespace Rector\Tests\Rector\Typehint\AddReturnTypeDeclarationRector\Fixture;
+namespace {
+    use Rector\Tests\Rector\ClassMethod\AddReturnTypeDeclarationRector\Source\PHPUnitTestCase;
 
-use Rector\Tests\Rector\ClassMethod\AddReturnTypeDeclarationRector\Source\PHPUnitTestCase;
-
-abstract class AbstractTestCase extends PHPUnitTestCase
-{
-    public function tearDown(): void
+    abstract class Abstract_Test_Case extends PHPUnitTestCase
     {
+        protected function tearDown(): void
+        {
+        }
     }
 }
 
-final class FinalTestCase extends AbstractTestCase
+namespace Rector\Tests\Rector\Typehint\AddReturnTypeDeclarationRector\Fixture
 {
-    public function tearDown(): void
+    final class FinalTestCase extends \Abstract_Test_Case
     {
+        public function tearDown(): void
+        {
+        }
     }
 }
 
