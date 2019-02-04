@@ -7,8 +7,6 @@
 composer.lock
 .idea/
 
-/demo
-
 .phpunit.result.cache
 
 # often customized locally - example on Github is just fine
