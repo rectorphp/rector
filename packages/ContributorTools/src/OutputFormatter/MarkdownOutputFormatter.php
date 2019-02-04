@@ -7,7 +7,7 @@ use Rector\ConsoleDiffer\MarkdownDifferAndFormatter;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\Contract\RectorDefinition\CodeSampleInterface;
 use Rector\ContributorTools\Contract\OutputFormatterInterface;
-use Rector\Exception\ShouldNotHappenException;
+use Rector\ContributorTools\RectorMetadataResolver;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Yaml\Yaml;
@@ -24,10 +24,19 @@ final class MarkdownOutputFormatter implements OutputFormatterInterface
      */
     private $markdownDifferAndFormatter;
 
-    public function __construct(SymfonyStyle $symfonyStyle, MarkdownDifferAndFormatter $markdownDifferAndFormatter)
-    {
+    /**
+     * @var RectorMetadataResolver
+     */
+    private $rectorMetadataResolver;
+
+    public function __construct(
+        SymfonyStyle $symfonyStyle,
+        MarkdownDifferAndFormatter $markdownDifferAndFormatter,
+        RectorMetadataResolver $rectorMetadataResolver
+    ) {
         $this->symfonyStyle = $symfonyStyle;
         $this->markdownDifferAndFormatter = $markdownDifferAndFormatter;
+        $this->rectorMetadataResolver = $rectorMetadataResolver;
     }
 
     public function getName(): string
@@ -41,7 +50,9 @@ final class MarkdownOutputFormatter implements OutputFormatterInterface
      */
     public function format(array $genericRectors, array $packageRectors): void
     {
-        $this->symfonyStyle->writeln('# All Rectors Overview');
+        $totalRectorCount = count($genericRectors) + count($packageRectors);
+
+        $this->symfonyStyle->writeln(sprintf('# All %d Rectors Overview', $totalRectorCount));
         $this->symfonyStyle->newLine();
 
         $this->symfonyStyle->writeln('- [Projects](#projects)');
@@ -51,26 +62,25 @@ final class MarkdownOutputFormatter implements OutputFormatterInterface
         $this->symfonyStyle->writeln('## Projects');
         $this->symfonyStyle->newLine();
 
-        $rectorsByGroup = $this->groupRectorsByCategory($packageRectors);
-        $this->printRectorsByGroup($rectorsByGroup);
+        $this->printRectors($packageRectors);
 
         $this->symfonyStyle->writeln('---');
 
         $this->symfonyStyle->writeln('## General');
         $this->symfonyStyle->newLine();
 
-        $rectorsByGroup = $this->groupRectorsByCategory($genericRectors);
-        $this->printRectorsByGroup($rectorsByGroup);
+        $this->printRectors($genericRectors);
     }
 
     /**
-     * @param RectorInterface[][] $rectorsByGroup
+     * @param RectorInterface[] $rectors
      */
-    private function printRectorsByGroup(array $rectorsByGroup): void
+    private function printRectors(array $rectors): void
     {
-        $this->printGroupsMenu($rectorsByGroup);
+        $groupedRectors = $this->groupRectorsByPackage($rectors);
+        $this->printGroupsMenu($groupedRectors);
 
-        foreach ($rectorsByGroup as $group => $rectors) {
+        foreach ($groupedRectors as $group => $rectors) {
             $this->symfonyStyle->writeln('## ' . $group);
             $this->symfonyStyle->newLine();
 
@@ -138,43 +148,18 @@ final class MarkdownOutputFormatter implements OutputFormatterInterface
      * @param RectorInterface[] $rectors
      * @return RectorInterface[][]
      */
-    private function groupRectorsByCategory(array $rectors): array
+    private function groupRectorsByPackage(array $rectors): array
     {
-        $rectorsByGroup = [];
+        $rectorsByPackage = [];
         foreach ($rectors as $rector) {
-            $rectorCategory = $this->resolveCategoryFromRectorClass(get_class($rector));
-            $rectorsByGroup[$rectorCategory][] = $rector;
+            $package = $this->rectorMetadataResolver->resolvePackageFromRectorClass(get_class($rector));
+            $rectorsByPackage[$package][] = $rector;
         }
 
         // sort groups by name to make them more readable
-        ksort($rectorsByGroup);
+        ksort($rectorsByPackage);
 
-        return $rectorsByGroup;
-    }
-
-    private function resolveCategoryFromRectorClass(string $rectorClass): string
-    {
-        $rectorClassParts = explode('\\', $rectorClass);
-
-        // basic Rectors
-        if (Strings::startsWith($rectorClass, 'Rector\Rector\\')) {
-            return $rectorClassParts[count($rectorClassParts) - 2];
-        }
-
-        // Rector/<PackageGroup>/Rector/SomeRector
-        if (count($rectorClassParts) === 4) {
-            return $rectorClassParts[1];
-        }
-
-        // Rector/<PackageGroup>/Rector/<PackageSubGroup>/SomeRector
-        if (count($rectorClassParts) === 5) {
-            return $rectorClassParts[1] . '\\' . $rectorClassParts[3];
-        }
-
-        throw new ShouldNotHappenException(sprintf(
-            'Failed to resolve group from Rector class. Implement a new one in %s',
-            __METHOD__
-        ));
+        return $rectorsByPackage;
     }
 
     private function printConfiguration(RectorInterface $rector, CodeSampleInterface $codeSample): void

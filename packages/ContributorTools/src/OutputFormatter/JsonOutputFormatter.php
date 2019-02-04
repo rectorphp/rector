@@ -7,11 +7,22 @@ use Nette\Utils\Json;
 use Nette\Utils\Strings;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\ContributorTools\Contract\OutputFormatterInterface;
+use Rector\ContributorTools\RectorMetadataResolver;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class JsonOutputFormatter implements OutputFormatterInterface
 {
+    /**
+     * @var RectorMetadataResolver
+     */
+    private $rectorMetadataResolver;
+
+    public function __construct(RectorMetadataResolver $rectorMetadataResolver)
+    {
+        $this->rectorMetadataResolver = $rectorMetadataResolver;
+    }
+
     public function getName(): string
     {
         return 'json';
@@ -32,9 +43,10 @@ final class JsonOutputFormatter implements OutputFormatterInterface
 
             $rectorData[] = [
                 'class' => get_class($rector),
+                'package' => $this->rectorMetadataResolver->resolvePackageFromRectorClass(get_class($rector)),
                 'tags' => $this->createTagsFromClass(get_class($rector)),
                 'description' => $rectorConfiguration->getDescription(),
-                'code_samples' => $this->prepareCodeSamples($rectorConfiguration),
+                'code_samples' => $this->resolveCodeSamples($rectorConfiguration),
                 'is_configurable' => $this->resolveIsConfigurable($rectorConfiguration),
             ];
         }
@@ -77,7 +89,7 @@ final class JsonOutputFormatter implements OutputFormatterInterface
     /**
      * @return mixed[]
      */
-    private function prepareCodeSamples(RectorDefinition $rectorDefinition): array
+    private function resolveCodeSamples(RectorDefinition $rectorDefinition): array
     {
         $codeSamplesData = [];
         foreach ($rectorDefinition->getCodeSamples() as $codeSample) {
