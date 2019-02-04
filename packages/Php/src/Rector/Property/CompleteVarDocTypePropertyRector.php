@@ -3,17 +3,10 @@
 namespace Rector\Php\Rector\Property;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
-use Rector\Exception\ShouldNotHappenException;
+use Rector\NodeTypeResolver\ComplexNodeTypeResolver;
 use Rector\NodeTypeResolver\Node\Attribute;
-use Rector\NodeTypeResolver\Node\NodeToStringTypeResolver;
-use Rector\NodeTypeResolver\NodeTypeAnalyzer;
-use Rector\NodeTypeResolver\Php\VarTypeInfo;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
-use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -26,30 +19,14 @@ final class CompleteVarDocTypePropertyRector extends AbstractRector
     private $docBlockAnalyzer;
 
     /**
-     * @var BetterNodeFinder
+     * @var ComplexNodeTypeResolver
      */
-    private $betterNodeFinder;
+    private $complexNodeTypeResolver;
 
-    /**
-     * @var NodeTypeAnalyzer
-     */
-    private $nodeTypeAnalyzer;
-
-    /**
-     * @var NodeToStringTypeResolver
-     */
-    private $nodeToStringTypeResolver;
-
-    public function __construct(
-        DocBlockAnalyzer $docBlockAnalyzer,
-        BetterNodeFinder $betterNodeFinder,
-        NodeTypeAnalyzer $nodeTypeAnalyzer,
-        NodeToStringTypeResolver $nodeToStringTypeResolver
-    ) {
+    public function __construct(DocBlockAnalyzer $docBlockAnalyzer, ComplexNodeTypeResolver $complexNodeTypeResolver)
+    {
         $this->docBlockAnalyzer = $docBlockAnalyzer;
-        $this->betterNodeFinder = $betterNodeFinder;
-        $this->nodeTypeAnalyzer = $nodeTypeAnalyzer;
-        $this->nodeToStringTypeResolver = $nodeToStringTypeResolver;
+        $this->complexNodeTypeResolver = $complexNodeTypeResolver;
     }
 
     public function getDefinition(): RectorDefinition
@@ -104,7 +81,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $varTypeInfo = $this->resolveStaticVarTypeInfo($node);
+        $varTypeInfo = $this->complexNodeTypeResolver->resolvePropertyTypeInfo($node);
         if ($varTypeInfo === null) {
             return null;
         }
@@ -120,51 +97,5 @@ CODE_SAMPLE
         $node->setAttribute(Attribute::ORIGINAL_NODE, null);
 
         return $node;
-    }
-
-    /**
-     * Based on static analysis of code, looking for property assigns
-     */
-    private function resolveStaticVarTypeInfo(Property $propertyNode): ?VarTypeInfo
-    {
-        $types = [];
-
-        $propertyDefault = $propertyNode->props[0]->default;
-        if ($propertyDefault) {
-            $types[] = $this->nodeToStringTypeResolver->resolver($propertyDefault);
-        }
-
-        $classNode = $propertyNode->getAttribute(Attribute::CLASS_NODE);
-        if (! $classNode instanceof Class_) {
-            throw new ShouldNotHappenException();
-        }
-
-        $propertyName = $this->getName($propertyNode);
-        if ($propertyName === null) {
-            return null;
-        }
-
-        /** @var Assign[] $propertyAssignNodes */
-        $propertyAssignNodes = $this->betterNodeFinder->find([$classNode], function (Node $node) use (
-            $propertyName
-        ): bool {
-            if ($node instanceof Assign && $node->var instanceof PropertyFetch) {
-                // is property match
-                return $this->isName($node->var, $propertyName);
-            }
-
-            return false;
-        });
-
-        foreach ($propertyAssignNodes as $propertyAssignNode) {
-            $types = array_merge(
-                $types,
-                $this->nodeTypeAnalyzer->resolveSingleTypeToStrings($propertyAssignNode->expr)
-            );
-        }
-
-        $types = array_filter($types);
-
-        return new VarTypeInfo($types, $types, true);
     }
 }

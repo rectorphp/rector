@@ -86,7 +86,7 @@ final class DefaultValues
     /**
      * @var bool
      */
-    private $name = 'not_a_bool';
+    private string $name = 'not_a_bool';
 
     /**
      * @var bool
@@ -101,7 +101,7 @@ final class DefaultValues
     /**
      * @var string
      */
-    private $size = false;
+    private bool $size = false;
 
     /**
      * @var array
@@ -131,12 +131,12 @@ final class DefaultValues
     /**
      * @var float
      */
-    private $c = 'hey';
+    private string $c = 'hey';
 
     /**
      * @var int
      */
-    private $e = 42.42;
+    private float $e = 42.42;
 
     /**
      * @var int
