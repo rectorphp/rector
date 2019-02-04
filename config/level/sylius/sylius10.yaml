@@ -32,7 +32,7 @@ services:
                 2:
                     __unknown__: false
 
-    Rector\Rector\Typehint\ReturnTypehintRector:
+    Rector\Rector\ClassMethod\AddReturnTypeDeclarationRector:
         Sylius\Component\Order\Model\OrderInterface:
             getAdjustmentsRecursively:
                 'array': 'Doctrine\Common\Collections\Collection'

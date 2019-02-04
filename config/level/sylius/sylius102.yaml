@@ -1,6 +1,6 @@
 # source: https://github.com/Sylius/Sylius/blob/master/UPGRADE-1.0.md#upgrade-from-101-to-102
 
 services:
-    Rector\Rector\Typehint\ReturnTypehintRector:
+    Rector\Rector\ClassMethod\AddReturnTypeDeclarationRector:
         Sylius\Bundle\AdminApiBundle\Model\ClientManager:
             findClientByPublicId: '?Sylius\Bundle\AdminApiBundle\Model\ClientInterface'

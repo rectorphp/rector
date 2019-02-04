@@ -1,6 +1,6 @@
 # source: https://github.com/Sylius/Sylius/blob/master/UPGRADE-1.0.md#upgrade-from-108-to-109
 
 services:
-    Rector\Rector\Typehint\ReturnTypehintRector:
+    Rector\Rector\ClassMethod\AddReturnTypeDeclarationRector:
         Sylius\Bundle\CoreBundle\Templating\Helper\VariantResolverHelper:
             resolveVariant: '?Sylius\Component\Product\Model\ProductVariantInterface'

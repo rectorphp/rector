@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Rector\Typehint;
+namespace Rector\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -9,7 +9,7 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
-final class ReturnTypehintRector extends AbstractRector
+final class AddReturnTypeDeclarationRector extends AbstractRector
 {
     /**
      * class => [
