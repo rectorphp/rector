@@ -11,7 +11,6 @@ use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Property;
 use Rector\NodeTypeResolver\ComplexNodeTypeResolver;
-use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\NodeTypeResolver\Php\VarTypeInfo;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\Php\PhpTypeSupport;
@@ -115,9 +114,6 @@ CODE_SAMPLE
 
             if ($this->matchesDocTypeAndDefaultValueType($varTypeInfo, $node)) {
                 $node->type = $varTypeInfo->getTypeNode();
-
-                // invoke the print, because only attribute has changed
-                $node->setAttribute(Attribute::ORIGINAL_NODE, null);
 
                 return $node;
             }
