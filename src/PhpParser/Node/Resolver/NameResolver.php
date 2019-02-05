@@ -5,6 +5,7 @@ namespace Rector\PhpParser\Node\Resolver;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\Empty_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
@@ -83,6 +84,16 @@ final class NameResolver
                 }
 
                 return $this->resolve($interfaceNode->name);
+            },
+            function (ClassConstFetch $classConstFetch): ?string {
+                $class = $this->resolve($classConstFetch->class);
+                $name = $this->resolve($classConstFetch->name);
+
+                if ($class === null || $name === null) {
+                    return null;
+                }
+
+                return $class . '::' . $name;
             },
         ];
 
