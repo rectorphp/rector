@@ -59,7 +59,7 @@ final class RenameClassConstantsUseToStringsRector extends AbstractRector
             }
 
             foreach ($oldConstantsToNewValues as $oldConstant => $newValue) {
-                if (! $this->isName($node, $oldConstant)) {
+                if (! $this->isName($node->name, $oldConstant)) {
                     continue;
                 }
 

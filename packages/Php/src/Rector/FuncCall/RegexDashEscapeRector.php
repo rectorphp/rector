@@ -171,14 +171,14 @@ CODE_SAMPLE
         }
     }
 
-    private function processClassConstFetch(Expr $expr): void
+    private function processClassConstFetch(ClassConstFetch $classConstFetchNode): void
     {
-        $className = $expr->getAttribute(Attribute::CLASS_NAME);
+        $className = $classConstFetchNode->getAttribute(Attribute::CLASS_NAME);
         if (! is_string($className)) {
             return;
         }
 
-        $constantName = $this->getName($expr);
+        $constantName = $this->getName($classConstFetchNode->name);
         if ($constantName === null) {
             return;
         }
