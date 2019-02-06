@@ -3,15 +3,15 @@
 namespace App\Repository;
 
 use App\Entity\Post;
-use Doctrine\ORM\EntityRepository;
+use Rector\Doctrine\Tests\Rector\AliasToClassRector\Source\DoctrineEntityManager;
 
 final class PostRepository
 {
     /**
-     * @var \Doctrine\ORM\EntityRepository
+     * @var DoctrineEntityManager
      */
     private $repository;
-    public function __construct(\Doctrine\ORM\EntityManager $entityManager)
+    public function __construct(DoctrineEntityManager $entityManager)
     {
         $this->repository = $entityManager->getRepository('App:Post');
     }
@@ -24,15 +24,15 @@ final class PostRepository
 namespace App\Repository;
 
 use App\Entity\Post;
-use Doctrine\ORM\EntityRepository;
+use Rector\Doctrine\Tests\Rector\AliasToClassRector\Source\DoctrineEntityManager;
 
 final class PostRepository
 {
     /**
-     * @var \Doctrine\ORM\EntityRepository
+     * @var DoctrineEntityManager
      */
     private $repository;
-    public function __construct(\Doctrine\ORM\EntityManager $entityManager)
+    public function __construct(DoctrineEntityManager $entityManager)
     {
         $this->repository = $entityManager->getRepository(\App\Entity\Post::class);
     }

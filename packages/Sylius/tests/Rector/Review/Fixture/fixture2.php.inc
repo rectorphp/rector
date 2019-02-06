@@ -2,10 +2,12 @@
 
 namespace Rector\Sylius\Tests\Rector\Review\Fixture;
 
+use Rector\Sylius\Tests\Rector\Review\Source\ReviewFactoryInterface;
+
 class SomeClass2
 {
     /**
-     * @var \Sylius\Component\Review\Factory\ReviewFactoryInterface
+     * @var ReviewFactoryInterface
      */
     private $reviewFactory;
 
@@ -21,10 +23,12 @@ class SomeClass2
 
 namespace Rector\Sylius\Tests\Rector\Review\Fixture;
 
+use Rector\Sylius\Tests\Rector\Review\Source\ReviewFactoryInterface;
+
 class SomeClass2
 {
     /**
-     * @var \Sylius\Component\Review\Factory\ReviewFactoryInterface
+     * @var ReviewFactoryInterface
      */
     private $reviewFactory;
 

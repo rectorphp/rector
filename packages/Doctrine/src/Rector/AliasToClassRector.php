@@ -17,11 +17,19 @@ final class AliasToClassRector extends AbstractRector
     private $aliasesToNamespaces = [];
 
     /**
+     * @var string
+     */
+    private $entityManagerClass;
+
+    /**
      * @param string[] $aliasesToNamespaces
      */
-    public function __construct(array $aliasesToNamespaces)
-    {
+    public function __construct(
+        array $aliasesToNamespaces,
+        string $entityManagerClass = 'Doctrine\ORM\EntityManagerInterface'
+    ) {
         $this->aliasesToNamespaces = $aliasesToNamespaces;
+        $this->entityManagerClass = $entityManagerClass;
     }
 
     public function getDefinition(): RectorDefinition
@@ -54,6 +62,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $this->isType($node, $this->entityManagerClass)) {
+            return null;
+        }
+
         if (! $this->isName($node, 'getRepository')) {
             return null;
         }

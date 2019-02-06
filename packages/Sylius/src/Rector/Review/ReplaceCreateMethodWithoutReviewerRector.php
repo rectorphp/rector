@@ -12,6 +12,17 @@ use Rector\RectorDefinition\RectorDefinition;
 
 final class ReplaceCreateMethodWithoutReviewerRector extends AbstractRector
 {
+    /**
+     * @var string
+     */
+    private $reviewFactoryInterface;
+
+    public function __construct(
+        string $reviewFactoryInterface = 'Sylius\Component\Review\Factory\ReviewFactoryInterface'
+    ) {
+        $this->reviewFactoryInterface = $reviewFactoryInterface;
+    }
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -38,6 +49,10 @@ final class ReplaceCreateMethodWithoutReviewerRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $this->isType($node, $this->reviewFactoryInterface)) {
+            return null;
+        }
+
         if (! $this->isName($node, 'createForSubjectWithReviewer')) {
             return null;
         }
