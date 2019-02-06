@@ -1,7 +1,7 @@
 # Rector - Upgrade your Legacy App to Modern Codebase
 
 Rector is a **rec**onstruc**tor** tool - it does **instant upgrades** and **instant refactoring** of your code.
-I mean, why do it manually if 80 % can Rector handle for you?
+Why doing it manually if 80% Rector can handle for you?
 
 [![Build Status](https://img.shields.io/travis/rectorphp/rector/master.svg?style=flat-square)](https://travis-ci.org/rectorphp/rector)
 [![Coverage Status](https://img.shields.io/coveralls/rectorphp/rector/master.svg?style=flat-square)](https://coveralls.io/github/rectorphp/rector?branch=master)
