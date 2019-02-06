@@ -6,9 +6,14 @@ use Rector\NetteToSymfony\Tests\Rector\MethodCall\FromRequestGetParameterToAttri
 
 final class SomeController
 {
-    public static function someAction(NetteRequest $request)
+    public function someAction(NetteRequest $request)
     {
         $value = $request->getParameter('abz');
+    }
+
+    public function anotherAction(NetteRequest $appRequest)
+    {
+        $value = $appRequest->getParameter('abz');
     }
 }
 
@@ -22,9 +27,14 @@ use Rector\NetteToSymfony\Tests\Rector\MethodCall\FromRequestGetParameterToAttri
 
 final class SomeController
 {
-    public static function someAction(NetteRequest $request)
+    public function someAction(NetteRequest $request)
     {
         $value = $request->attributes->get('abz');
+    }
+
+    public function anotherAction(NetteRequest $appRequest)
+    {
+        $value = $appRequest->attributes->get('abz');
     }
 }
 
