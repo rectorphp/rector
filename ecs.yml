@@ -137,6 +137,7 @@ parameters:
             # 3rd party parent code
             - 'src/DependencyInjection/Loader/TolerantRectorYamlFileLoader.php'
             - 'src/PhpParser/Printer/BetterStandardPrinter.php'
+            - 'tests/AbstractContainerAwareTestCase.php'
 
         Symplify\CodingStandard\Sniffs\Debug\CommentedOutCodeSniff.Found:
             # notes
