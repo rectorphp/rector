@@ -12,7 +12,6 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://github.com/sebastianbergmann/phpunit/blob/master/ChangeLog-8.0.md
- * @see https://github.com/sebastianbergmann/phpunit/commit/1c17ac33af234045ff27ba92433be8d9e5884c0a
  */
 final class SpecificAssertContainsRector extends AbstractPHPUnitRector
 {
@@ -21,12 +20,8 @@ final class SpecificAssertContainsRector extends AbstractPHPUnitRector
      */
     private $oldMethodsNamesToNewNames = [
         'string' => [
-            'assertContains' => 'assertStringContains',
-            'assertNotContains' => 'assertStringNotContains',
-        ],
-        'iterable' => [
-            'assertContains' => 'assertIterableContains',
-            'assertNotContains' => 'assertIterableNotContains',
+            'assertContains' => 'assertStringContainsString',
+            'assertNotContains' => 'assertStringNotContainsString',
         ],
     ];
 
