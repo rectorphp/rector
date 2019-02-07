@@ -23,6 +23,8 @@ final class OptionNameRectorTest extends AbstractRectorTestCase
      */
     protected function getRectorConfiguration(): array
     {
-        return [FormBuilder::class];
+        return [
+            '$formBuilderType' => FormBuilder::class
+        ];
     }
 }

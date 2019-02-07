@@ -28,9 +28,6 @@ final class NewObjectToFactoryCreateRector extends AbstractRector
      */
     public function __construct(array $objectToFactoryMethod)
     {
-        dump($objectToFactoryMethod);
-        die;
-
         $this->objectToFactoryMethod = $objectToFactoryMethod;
     }
 
@@ -65,7 +62,7 @@ CODE_SAMPLE
                     'MyClass' => [
                         'class' => 'MyClassFactory',
                         'method' => 'create',
-                    ]
+                    ],
                 ]
             ),
         ]);

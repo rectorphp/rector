@@ -2,11 +2,9 @@
 
 namespace Rector\DependencyInjection;
 
-use Rector\Contract\Rector\PhpRectorInterface;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\DependencyInjection\CompilerPass\RemoveExcludedRectorsCompilerPass;
 use Rector\DependencyInjection\Loader\TolerantRectorYamlFileLoader;
-use Rector\FileSystemRector\Contract\FileSystemRectorInterface;
 use Symfony\Component\Config\Loader\DelegatingLoader;
 use Symfony\Component\Config\Loader\GlobFileLoader;
 use Symfony\Component\Config\Loader\LoaderInterface;

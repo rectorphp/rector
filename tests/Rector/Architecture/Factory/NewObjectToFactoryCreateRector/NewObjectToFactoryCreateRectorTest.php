@@ -28,7 +28,7 @@ final class NewObjectToFactoryCreateRectorTest extends AbstractRectorTestCase
             MyClass::class => [
                 'class' => MyClassFactory::class,
                 'method' => 'create',
-            ]
+            ],
         ];
     }
 }

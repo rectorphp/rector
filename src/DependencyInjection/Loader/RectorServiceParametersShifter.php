@@ -3,8 +3,10 @@
 namespace Rector\DependencyInjection\Loader;
 
 use Nette\Utils\Strings;
+use Rector\Exception\Configuration\InvalidConfigurationException;
 use ReflectionClass;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * Before:
@@ -74,7 +76,12 @@ final class RectorServiceParametersShifter
 
             // we can autowire exclusively 1 parameter only
             if (count($arrayParameterNames) !== 1) {
-                continue;
+                throw new InvalidConfigurationException(sprintf(
+                    'There must be array argument in "%s" constructor or explicit $argument name in configuration:%s%s',
+                    $serviceName,
+                    PHP_EOL . PHP_EOL,
+                    Yaml::dump($serviceDefinition, Yaml::DUMP_OBJECT_AS_MAP)
+                ));
             }
 
             $serviceDefinition['arguments']['$' . $arrayParameterNames[0]] = $nonReservedNonVariables;
