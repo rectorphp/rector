@@ -47,6 +47,11 @@ abstract class AbstractRectorTestCase extends TestCase
      */
     private static $containersPerConfig = [];
 
+    public function __construct(?string $name = null, array $data = [], string $dataName = '')
+    {
+        parent::__construct($name, $data, $dataName);
+    }
+
     protected function setUp(): void
     {
         $configFile = $this->provideConfig();

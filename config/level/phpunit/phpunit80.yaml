@@ -1,4 +1,10 @@
 services:
+    # https://github.com/rectorphp/rector/issues/1024
+    Rector\Rector\Typehint\ParentTypehintedArgumentRector:
+        PHPUnit\Framework\TestCase:
+            __construct:
+                dataName: '' # no type
+
     Rector\PHPUnit\Rector\MethodCall\SpecificAssertContainsRector: ~
     Rector\PHPUnit\Rector\MethodCall\SpecificAssertInternalTypeRector: ~
 

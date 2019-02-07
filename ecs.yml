@@ -146,3 +146,7 @@ parameters:
         Symplify\CodingStandard\Sniffs\DependencyInjection\NoClassInstantiationSniff:
             # 3rd party api
             - 'src/PhpParser/Node/Value/ValueResolver.php'
+
+        SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff:
+        MissingTraversableParameterTypeHintSpecification:
+            - 'src/Testing/PHPUnit/AbstractRectorTestCase.php'

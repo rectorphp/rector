@@ -5,6 +5,7 @@ namespace Rector\Rector\Typehint;
 use PhpParser\Node;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\NodeTypeResolver\Php\ParamTypeInfo;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
@@ -84,7 +85,8 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         foreach ($this->typehintForArgumentByMethodAndClass as $type => $methodToArgumentToTypes) {
-            if (! $this->isType($node, $type)) {
+            $classNode = $node->getAttribute(Attribute::CLASS_NODE);
+            if (! $this->isType($classNode, $type)) {
                 continue;
             }
 
@@ -117,8 +119,12 @@ CODE_SAMPLE
                     continue;
                 }
 
-                $paramTypeInfo = new ParamTypeInfo($parameter, [$type]);
-                $param->type = $paramTypeInfo->getFqnTypeNode();
+                if ($type === '') { // remove type
+                    $param->type = null;
+                } else {
+                    $paramTypeInfo = new ParamTypeInfo($parameter, [$type]);
+                    $param->type = $paramTypeInfo->getFqnTypeNode();
+                }
             }
         }
     }
