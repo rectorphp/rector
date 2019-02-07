@@ -149,11 +149,138 @@ Just use `--with-style` option to handle these basic cases:
 vendor/bin/rector process src --with-style
 ```
 
+## 4 Steps to Create Own Rector
+
+First, make sure it's not covered by [any existing Rectors yet](/docs/AllRectorsOverview.md).
+
+Let's say we want to **change method calls from `set*` to `change*`**.
+
+```diff
+ $user = new User();
+-$user->setPassword('123456');
++$user->changePassword('123456');
+```
+
+### 1. Create New Rector
+
+Create class that extends [`Rector\Rector\AbstractRector`](/src/Rector/AbstractRector.php). It has useful methods like checking node type and name. Just run `$this->` and let PHPStorm show you all possible methods.
+
+```php
+<?php declare(strict_types=1);
+
+namespace App\Rector;
+
+use PhpParser\Node;
+use Rector\Rector\AbstractRector;
+use Rector\RectorDefinition\RectorDefinition;
+
+final class MyFirstRector extends AbstractRector
+{
+    public function getDefinition(): RectorDefinition
+    {
+        // what does this do?
+        // minimalistic before/after sample - to explain in code
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
+    {
+        // what node types we look for?
+        // String_? FuncCall? ...
+        // pick any node from https://github.com/nikic/PHP-Parser/tree/master/lib/PhpParser/Node
+        return [];
+    }
+
+    public function refactor(Node $node): ?Node
+    {
+        // what will happen with the node?
+        // common work flow:
+        // - should skip? → return null;
+        // - modify it? → do it, then return $node;
+        // - remove/add nodes elsewhere? → do it, then return null;
+    }
+}
+```
+
+### 2. Implement Methods
+
+```php
+<?php declare(strict_types=1);
+
+namespace App\Rector;
+
+use Nette\Utils\Strings;
+use PhpParser\Node;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Expr\MethodCall;
+use Rector\Rector\AbstractRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
+
+final class MyFirstRector extends AbstractRector
+{
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('Add "_" to private method calls that start with "internal"', [
+            new CodeSample('$this->internalMethod();', '$this->_internalMethod();')
+        ]);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
+    {
+        return [MethodCall::class];
+    }
+
+    /**
+     * @param MethodCall $node - we can add "MethodCall" type here, because only this node is in "getNodeTypes()"
+     */
+    public function refactor(Node $node): ?Node
+    {
+        // we only care about "internal*" method names
+        $methodCallName = $this->getName($node);
+
+        if (! Strings::startsWith($methodCallName, 'set')) {
+            return null;
+        }
+
+        $newMethodCallName = Strings::replace($methodCallName, '#^set#', 'change');
+
+        $node->name = new Identifier($newMethodCallName);
+
+        return $node;
+    }
+}
+```
+
+### 3. Register it
+
+```yaml
+# rector.yaml
+services:
+    App\Rector\MyFirstRector: ~
+```
+
+### 4. Let Rector Refactor Your Code
+
+```bash
+# see the diff first
+vendor/bin/rector process src --dry-run
+
+# if it's ok, apply
+vendor/bin/rector process src
+```
+
+That's it!
+
 ## More Detailed Documentation
 
 - **[All Rectors Overview](/docs/AllRectorsOverview.md)**
 - [How Rector Works?](/docs/HowItWorks.md)
-- [How to Create Own Rector](/docs/HowToCreateOwnRector.md)
 
 ## How to Contribute
 
