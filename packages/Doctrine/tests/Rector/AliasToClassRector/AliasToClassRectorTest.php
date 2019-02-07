@@ -3,6 +3,7 @@
 namespace Rector\Doctrine\Tests\Rector\AliasToClassRector;
 
 use Rector\Doctrine\Rector\AliasToClassRector;
+use Rector\Doctrine\Tests\Rector\AliasToClassRector\Source\DoctrineEntityManager;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class AliasToClassRectorTest extends AbstractRectorTestCase
@@ -22,6 +23,11 @@ final class AliasToClassRectorTest extends AbstractRectorTestCase
      */
     protected function getRectorConfiguration(): array
     {
-        return ['App' => 'App\Entity'];
+        return [
+            '$aliasesToNamespaces' => [
+                'App' => 'App\Entity',
+            ],
+            '$entityManagerClass' => DoctrineEntityManager::class,
+        ];
     }
 }

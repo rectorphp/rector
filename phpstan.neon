@@ -108,3 +108,4 @@ parameters:
 
         - '#Parameter \#1 \$nodes of method Rector\\PhpParser\\Node\\BetterNodeFinder\:\:find\(\) expects array<PhpParser\\Node\>\|PhpParser\\Node, array<PhpParser\\Node\\Stmt\>\|null given#'
         - '#Method Rector\\NetteToSymfony\\Rector\\RouterListToControllerAnnotationsRector\:\:resolveAssignRouteNodes\(\) should return array<PhpParser\\Node\\Expr\\Assign\> but returns array<PhpParser\\Node\>#'
+        - '#PHPDoc tag @param for parameter \$data with type mixed is not subtype of native type array#'

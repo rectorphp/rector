@@ -8,7 +8,7 @@ function simplifyIfReturnBool8()
         return false;
     } elseif ((is_array($value) || $value instanceof Countable) && count($value) < 1) {
         return false;
-    } elseif ($value instanceof File) {
+    } elseif ($value instanceof stdClass) {
         return (string)$value->getPath() !== '';
     }
 
@@ -33,7 +33,7 @@ function simplifyIfReturnBool8()
         return false;
     } elseif ((is_array($value) || $value instanceof Countable) && count($value) < 1) {
         return false;
-    } elseif ($value instanceof File) {
+    } elseif ($value instanceof stdClass) {
         return (string)$value->getPath() !== '';
     }
 
