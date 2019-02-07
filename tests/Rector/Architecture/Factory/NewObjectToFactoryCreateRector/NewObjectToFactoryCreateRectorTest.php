@@ -2,7 +2,10 @@
 
 namespace Rector\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector;
 
+use Rector\Rector\Architecture\Factory\NewObjectToFactoryCreateRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Source\MyClass;
+use Rector\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Source\MyClassFactory;
 
 final class NewObjectToFactoryCreateRectorTest extends AbstractRectorTestCase
 {
@@ -11,8 +14,21 @@ final class NewObjectToFactoryCreateRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc', __DIR__ . '/Fixture/fixture2.php.inc']);
     }
 
-    protected function provideConfig(): string
+    protected function getRectorClass(): string
     {
-        return __DIR__ . '/config.yaml';
+        return NewObjectToFactoryCreateRector::class;
+    }
+
+    /**
+     * @return mixed[]|null
+     */
+    protected function getRectorConfiguration(): ?array
+    {
+        return [
+            MyClass::class => [
+                'class' => MyClassFactory::class,
+                'method' => 'create',
+            ]
+        ];
     }
 }

@@ -3,6 +3,7 @@
 namespace Rector\DependencyInjection;
 
 use Rector\Contract\Rector\PhpRectorInterface;
+use Rector\Contract\Rector\RectorInterface;
 use Rector\DependencyInjection\CompilerPass\RemoveExcludedRectorsCompilerPass;
 use Rector\DependencyInjection\Loader\TolerantRectorYamlFileLoader;
 use Rector\FileSystemRector\Contract\FileSystemRectorInterface;
@@ -62,16 +63,12 @@ final class RectorKernel extends Kernel
     {
         $containerBuilder->addCompilerPass(new RemoveExcludedRectorsCompilerPass());
 
-        // for defaults
         $containerBuilder->addCompilerPass(new AutoReturnFactoryCompilerPass());
         $containerBuilder->addCompilerPass(new AutowireSinglyImplementedCompilerPass());
         $containerBuilder->addCompilerPass(new AutowireArrayParameterCompilerPass());
 
         // autowire Rectors by default (mainly for 3rd party code)
-        $containerBuilder->addCompilerPass(new AutowireInterfacesCompilerPass([
-            PhpRectorInterface::class,
-            FileSystemRectorInterface::class,
-        ]));
+        $containerBuilder->addCompilerPass(new AutowireInterfacesCompilerPass([RectorInterface::class]));
 
         $containerBuilder->addCompilerPass(new AutoBindParametersCompilerPass());
     }
