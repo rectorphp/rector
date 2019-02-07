@@ -45,7 +45,7 @@ trait TypeAnalyzerTrait
         // fnmatch support
         if (Strings::contains($type, '*')) {
             foreach ($nodeTypes as $nodeType) {
-                if (fnmatch($type, $nodeType)) {
+                if (fnmatch($type, $nodeType, FNM_NOESCAPE)) {
                     return true;
                 }
             }
