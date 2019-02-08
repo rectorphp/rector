@@ -27,7 +27,7 @@ if (is_file($projectAutoload)) {
     require $projectAutoload;
 }
 
-if (class_exists('Rector\DependencyInjection\RectorKernel')) {
+if (class_exists('Rector\HttpKernel\RectorKernel')) {
     return;
 }
 
