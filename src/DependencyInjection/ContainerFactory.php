@@ -3,6 +3,7 @@
 namespace Rector\DependencyInjection;
 
 use Psr\Container\ContainerInterface;
+use Rector\HttpKernel\RectorKernel;
 
 final class ContainerFactory
 {

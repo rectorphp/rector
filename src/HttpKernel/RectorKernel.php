@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\DependencyInjection;
+namespace Rector\HttpKernel;
 
 use Rector\Contract\Rector\RectorInterface;
 use Rector\DependencyInjection\CompilerPass\RemoveExcludedRectorsCompilerPass;
