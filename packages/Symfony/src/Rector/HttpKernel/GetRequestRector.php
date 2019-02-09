@@ -115,11 +115,7 @@ CODE_SAMPLE
      */
     private function resolveUniqueName(Node $node, string $name): string
     {
-        if ($node instanceof ClassMethod) {
-            $candidates = $node->params;
-        } else {
-            $candidates = $node->args;
-        }
+        $candidates = $node instanceof ClassMethod ? $node->params : $node->args;
 
         $candidateNames = [];
         foreach ($candidates as $candidate) {

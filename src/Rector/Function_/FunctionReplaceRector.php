@@ -77,11 +77,7 @@ final class FunctionReplaceRector extends AbstractRector
         $newFunctions = array_reverse($newFunctions);
 
         foreach ($newFunctions as $wrapFunction) {
-            if ($previousNode === null) {
-                $arguments = $funcCallNode->args;
-            } else {
-                $arguments = [new Arg($previousNode)];
-            }
+            $arguments = $previousNode === null ? $funcCallNode->args : [new Arg($previousNode)];
 
             $funcCallNode = new FuncCall(new FullyQualified($wrapFunction), $arguments);
             $previousNode = $funcCallNode;

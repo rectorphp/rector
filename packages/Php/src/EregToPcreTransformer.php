@@ -101,7 +101,7 @@ final class EregToPcreTransformer
                         $i + 1 < $l && strpos('.=:', $s[$i + 1]) !== false) {
                         $ii = strpos($s, ']', $i);
                         if ($ii === false) {
-                            throw new InvalidEregException('"[" does not have a matching ' . '"]"');
+                            throw new InvalidEregException('"[" does not have a matching "]"');
                         }
                         $ccls = substr($s, $i + 1, $ii - ($i + 1));
                         $cclsmap = [
@@ -120,8 +120,7 @@ final class EregToPcreTransformer
                         ];
                         if (! isset($cclsmap[$ccls])) {
                             throw new InvalidEregException(
-                                'an invalid or unsupported ' .
-                                'character class [' . $ccls . ']'
+                                'an invalid or unsupported character class [' . $ccls . ']'
                             );
                         }
                         $cls .= $cclsmap[$ccls];
@@ -130,8 +129,7 @@ final class EregToPcreTransformer
                         $a = $s[$i++];
                         if ($a === '-' && ! $start && ! ($i < $l && $s[$i] === ']')) {
                             throw new InvalidEregException(
-                                '"-" is invalid for the start ' .
-                                'character in the brackets'
+                                '"-" is invalid for the start character in the brackets'
                             );
                         }
                         if ($i < $l && $s[$i] === '-') {

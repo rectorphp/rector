@@ -111,11 +111,7 @@ CODE_SAMPLE
                 return null;
             }
 
-            if ($node->stmts[0] instanceof Expression) {
-                $innerNode = $node->stmts[0]->expr;
-            } else {
-                $innerNode = $node->stmts[0];
-            }
+            $innerNode = $node->stmts[0] instanceof Expression ? $node->stmts[0]->expr : $node->stmts[0];
 
             if ($innerNode instanceof Assign || $innerNode instanceof Return_) {
                 return $innerNode;

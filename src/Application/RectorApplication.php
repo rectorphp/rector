@@ -148,11 +148,9 @@ final class RectorApplication
         } else {
             $oldContent = $fileInfo->getContents();
 
-            if ($this->configuration->isDryRun()) {
-                $newContent = $this->fileProcessor->printToString($fileInfo);
-            } else {
-                $newContent = $this->fileProcessor->printToFile($fileInfo);
-            }
+            $newContent = $this->configuration->isDryRun() ? $this->fileProcessor->printToString(
+                $fileInfo
+            ) : $this->fileProcessor->printToFile($fileInfo);
 
             $this->errorAndDiffCollector->addFileDiff($fileInfo, $newContent, $oldContent);
 
