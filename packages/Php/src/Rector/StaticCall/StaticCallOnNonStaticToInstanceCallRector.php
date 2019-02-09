@@ -8,6 +8,8 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use Rector\NodeTypeResolver\Application\FunctionLikeNodeCollector;
 use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\PhpParser\Node\Maintainer\ClassMethodMaintainer;
+use Rector\PhpParser\Node\Maintainer\VisibilityMaintainer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -26,9 +28,24 @@ final class StaticCallOnNonStaticToInstanceCallRector extends AbstractRector
      */
     private $functionLikeNodeCollector;
 
-    public function __construct(FunctionLikeNodeCollector $functionLikeNodeCollector)
-    {
+    /**
+     * @var VisibilityMaintainer
+     */
+    private $visibilityMaintainer;
+
+    /**
+     * @var ClassMethodMaintainer
+     */
+    private $classMethodMaintainer;
+
+    public function __construct(
+        FunctionLikeNodeCollector $functionLikeNodeCollector,
+        VisibilityMaintainer $visibilityMaintainer,
+        ClassMethodMaintainer $classMethodMaintainer
+    ) {
         $this->functionLikeNodeCollector = $functionLikeNodeCollector;
+        $this->visibilityMaintainer = $visibilityMaintainer;
+        $this->classMethodMaintainer = $classMethodMaintainer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -86,12 +103,8 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $methodName = $this->getName($node);
-        if ($methodName === null) {
-            return null;
-        }
-
         $className = $this->getName($node->class);
-        if ($className === null) {
+        if ($methodName === null || $className === null) {
             return null;
         }
 
@@ -110,16 +123,33 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->hasClassConstructorWithRequiredParameters($node)) {
+        if ($className === null) {
             return null;
         }
 
-        $newNode = new New_($node->class);
+        if ($this->isInstantiable($node)) {
+            $newNode = new New_($node->class);
 
-        return new MethodCall($newNode, $node->name, $node->args);
+            return new MethodCall($newNode, $node->name, $node->args);
+        }
+
+        // can we add static to method?
+
+        $classMethodNode = $this->functionLikeNodeCollector->findMethod($methodName, $className);
+        if ($classMethodNode === null) {
+            return null;
+        }
+
+        if ($this->classMethodMaintainer->isStaticClassMethod($classMethodNode)) {
+            return null;
+        }
+
+        $this->visibilityMaintainer->makeStatic($classMethodNode);
+
+        return null;
     }
 
-    private function hasClassConstructorWithRequiredParameters(StaticCall $staticCallNode): bool
+    private function isInstantiable(StaticCall $staticCallNode): bool
     {
         $className = $this->getName($staticCallNode->class);
 
@@ -127,10 +157,14 @@ CODE_SAMPLE
         $classConstructorReflection = $reflectionClass->getConstructor();
 
         if ($classConstructorReflection === null) {
+            return true;
+        }
+
+        if ($classConstructorReflection->isPublic() === false) {
             return false;
         }
 
         // required parameters in constructor, nothing we can do
-        return (bool) $classConstructorReflection->getNumberOfRequiredParameters();
+        return ! (bool) $classConstructorReflection->getNumberOfRequiredParameters();
     }
 }

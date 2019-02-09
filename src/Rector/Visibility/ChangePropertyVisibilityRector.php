@@ -20,7 +20,7 @@ final class ChangePropertyVisibilityRector extends AbstractRector
     /**
      * @var VisibilityMaintainer
      */
-    private $VisibilityMaintainer;
+    private $visibilityMaintainer;
 
     /**
      * @param string[][] $propertyToVisibilityByClass
@@ -28,7 +28,7 @@ final class ChangePropertyVisibilityRector extends AbstractRector
     public function __construct(array $propertyToVisibilityByClass, VisibilityMaintainer $VisibilityMaintainer)
     {
         $this->propertyToVisibilityByClass = $propertyToVisibilityByClass;
-        $this->VisibilityMaintainer = $VisibilityMaintainer;
+        $this->visibilityMaintainer = $VisibilityMaintainer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -97,7 +97,7 @@ CODE_SAMPLE
                     continue;
                 }
 
-                $this->VisibilityMaintainer->replaceVisibilityFlag($node, $visibility);
+                $this->visibilityMaintainer->replaceVisibilityFlag($node, $visibility);
 
                 return $node;
             }
