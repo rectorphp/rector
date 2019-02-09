@@ -92,7 +92,11 @@ final class CreateRectorCommand extends Command implements ContributorCommandInt
 
             if ($configuration->getPackage() === 'Rector') {
                 $content = Strings::replace($content, '#Rector\\\\Rector\\\\#ms', 'Rector\\');
-                $content = Strings::replace($content, '#use Rector\\\\AbstractRector;#', 'use Rector\\Rector\\AbstractRector;');
+                $content = Strings::replace(
+                    $content,
+                    '#use Rector\\\\AbstractRector;#',
+                    'use Rector\\Rector\\AbstractRector;'
+                );
             }
 
             FileSystem::write($destination, $content);
@@ -125,8 +129,11 @@ final class CreateRectorCommand extends Command implements ContributorCommandInt
     /**
      * @param string[] $templateVariables
      */
-    private function resolveDestination(SmartFileInfo $smartFileInfo, array $templateVariables, Configuration $configuration): string
-    {
+    private function resolveDestination(
+        SmartFileInfo $smartFileInfo,
+        array $templateVariables,
+        Configuration $configuration
+    ): string {
         $destination = $smartFileInfo->getRelativeFilePathFromDirectory(self::TEMPLATES_DIRECTORY);
 
         // normalize core package
