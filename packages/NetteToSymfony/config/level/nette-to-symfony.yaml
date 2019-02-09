@@ -25,6 +25,14 @@ services:
         # IPresenter::run() -> IPresenter->__invoke
         Nette\Application\IPresenter:
             run: __invoke
+        Nette\DI\Container:
+            getByType: get
+
+        # load configs
+        Nette\Configurator:
+            addConfig: load
+        Symfony\Component\Config\Loader\LoaderInterface:
+            addConfig: load
 
     Rector\Rector\Interface_\RemoveInterfacesRector:
         # Removes "implements IPresenter"
@@ -92,3 +100,12 @@ services:
             S508_LOOP_DETECTED: Symfony\Component\HttpFoundation\Response::HTTP_LOOP_DETECTED
             S510_NOT_EXTENDED: Symfony\Component\HttpFoundation\Response::HTTP_NOT_EXTENDED
             S511_NETWORK_AUTHENTICATION_REQUIRED: Symfony\Component\HttpFoundation\Response::HTTP_NETWORK_AUTHENTICATION_REQUIRED
+
+        Nette\Http\*Request:
+            GET: Symfony\Component\HttpFoundation\Request::METHOD_GET
+            POST: Symfony\Component\HttpFoundation\Request::METHOD_POST
+            HEAD: Symfony\Component\HttpFoundation\Request::METHOD_HEAD
+            PUT: Symfony\Component\HttpFoundation\Request::METHOD_PUT
+            DELETE: Symfony\Component\HttpFoundation\Request::METHOD_DELETE
+            PATCH: Symfony\Component\HttpFoundation\Request::METHOD_PATCH
+            OPTIONS: Symfony\Component\HttpFoundation\Request::METHOD_OPTIONS
