@@ -2,6 +2,7 @@
 
 namespace Rector\NetteToSymfony\Rector\ClassMethod;
 
+use Composer\Script\Event;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
@@ -10,6 +11,9 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
+use Rector\NetteToSymfony\Event\EventInfo;
+use Rector\NetteToSymfony\Event\EventInfosFactory;
+use Rector\NodeTypeResolver\Application\FunctionLikeNodeCollector;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
@@ -19,97 +23,34 @@ use Rector\RectorDefinition\RectorDefinition;
 /**
  * @see https://github.com/contributte/event-dispatcher-extra/blob/master/.docs/README.md#bridge-wrench
  * @see https://symfony.com/doc/current/reference/events.html
+ * @see https://symfony.com/doc/current/components/http_kernel.html#creating-an-event-listener
+ * @see https://github.com/symfony/symfony/blob/master/src/Symfony/Component/HttpKernel/KernelEvents.php
  */
 final class RenameEventNamesInEventSubscriberRector extends AbstractRector
 {
     /**
-     * @var string[][]
+     * @var EventInfo[]
      */
-    private $netteStringNamesToSymfonyClassConstMap = [
-        'nette.application.startup' => ['Symfony\Component\HttpKernel\KernelEvents', 'REQUEST'],
-        'nette.application.shutdown' => ['Symfony\Component\HttpKernel\KernelEvents', 'TERMINATE'],
-        'nette.application.request' => ['Symfony\Component\HttpKernel\KernelEvents', 'REQUEST'],
-        'nette.application.presenter' => ['Symfony\Component\HttpKernel\KernelEvents', 'CONTROLLER'],
-        'nette.application.presenter.startup' => ['Symfony\Component\HttpKernel\KernelEvents', 'CONTROLLER'],
-        'nette.application.presenter.shutdown' => ['Symfony\Component\HttpKernel\KernelEvents', 'CONTROLLER'],
-        'nette.application.response' => ['Symfony\Component\HttpKernel\KernelEvents', 'RESPONSE'],
-        'nette.application.error' => ['Symfony\Component\HttpKernel\KernelEvents', 'EXCEPTION'],
-    ];
-
-    /**
-     * @var string[][]
-     */
-    private $netteClassConstToSymfonyClassConstMap = [
-        'Contributte\Events\Extra\Event\Application\StartupEvent::NAME' => [
-            'Symfony\Component\HttpKernel\KernelEvents',
-            'REQUEST',
-        ],
-        'Contributte\Events\Extra\Event\Application\PresenterShutdownEvent::NAME' => [
-            'Symfony\Component\HttpKernel\KernelEvents',
-            'TERMINATE',
-        ],
-        'Contributte\Events\Extra\Event\Application\RequestEvent::NAME' => [
-            'Symfony\Component\HttpKernel\KernelEvents',
-            'REQUEST',
-        ],
-        'Contributte\Events\Extra\Event\Application\PresenterEvent::NAME' => [
-            'Symfony\Component\HttpKernel\KernelEvents',
-            'CONTROLLER',
-        ],
-        'Contributte\Events\Extra\Event\Application\PresenterStartupEvent::NAME' => [
-            'Symfony\Component\HttpKernel\KernelEvents',
-            'CONTROLLER',
-        ],
-        'Contributte\Events\Extra\Event\Application\ResponseEvent::NAME' => [
-            'Symfony\Component\HttpKernel\KernelEvents',
-            'RESPONSE',
-        ],
-        'Contributte\Events\Extra\Event\Application\ErrorEvent::NAME' => [
-            'Symfony\Component\HttpKernel\KernelEvents',
-            'EXCEPTION',
-        ],
-        'Contributte\Events\Extra\Event\Application\ApplicationEvents::ON_STARTUP' => [
-            'Symfony\Component\HttpKernel\KernelEvents',
-            'REQUEST',
-        ],
-        'Contributte\Events\Extra\Event\Application\ApplicationEvents::ON_SHUTDOWN' => [
-            'Symfony\Component\HttpKernel\KernelEvents',
-            'TERMINATE',
-        ],
-        'Contributte\Events\Extra\Event\Application\ApplicationEvents::ON_REQUEST' => [
-            'Symfony\Component\HttpKernel\KernelEvents',
-            'REQUEST',
-        ],
-        'Contributte\Events\Extra\Event\Application\ApplicationEvents::ON_PRESENTER' => [
-            'Symfony\Component\HttpKernel\KernelEvents',
-            'CONTROLLER',
-        ],
-        'Contributte\Events\Extra\Event\Application\ApplicationEvents::ON_PRESENTER_STARTUP' => [
-            'Symfony\Component\HttpKernel\KernelEvents',
-            'CONTROLLER',
-        ],
-        'Contributte\Events\Extra\Event\Application\ApplicationEvents::ON_PRESENTER_SHUTDOWN' => [
-            'Symfony\Component\HttpKernel\KernelEvents',
-            'CONTROLLER',
-        ],
-        'Contributte\Events\Extra\Event\Application\ApplicationEvents::ON_RESPONSE' => [
-            'Symfony\Component\HttpKernel\KernelEvents',
-            'RESPONSE',
-        ],
-        'Contributte\Events\Extra\Event\Application\ApplicationEvents::ON_ERROR' => [
-            'Symfony\Component\HttpKernel\KernelEvents',
-            'EXCEPTION',
-        ],
-    ];
+    private $symfonyClassConstWithAliases = [];
 
     /**
      * @var BetterNodeFinder
      */
     private $betterNodeFinder;
 
-    public function __construct(BetterNodeFinder $betterNodeFinder)
-    {
+    /**
+     * @var FunctionLikeNodeCollector
+     */
+    private $functionLikeNodeCollector;
+
+    public function __construct(
+        BetterNodeFinder $betterNodeFinder,
+        EventInfosFactory $eventInfosFactory,
+        FunctionLikeNodeCollector $functionLikeNodeCollector
+    ) {
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->symfonyClassConstWithAliases = $eventInfosFactory->create();
+        $this->functionLikeNodeCollector = $functionLikeNodeCollector;
     }
 
     public function getDefinition(): RectorDefinition
@@ -191,45 +132,86 @@ CODE_SAMPLE
         }
 
         foreach ($returnNode->expr->items as $arrayItem) {
-            $this->renameStringKeys($arrayItem);
-            $this->renameClassConstKeys($arrayItem);
-        }
-    }
-
-    private function renameStringKeys(ArrayItem $arrayItem): void
-    {
-        if (! $arrayItem->key instanceof String_) {
-            return;
-        }
-
-        foreach ($this->netteStringNamesToSymfonyClassConstMap as $netteStringName => $symfonyClassConst) {
-            if (! $this->isValue($arrayItem->key, $netteStringName)) {
-                return;
+            $eventInfo = $this->matchStringKeys($arrayItem);
+            if ($eventInfo === null) {
+                $eventInfo = $this->matchClassConstKeys($arrayItem);
             }
 
-            $arrayItem->key = new ClassConstFetch(new FullyQualified(
-                $symfonyClassConst[0]
-            ), $symfonyClassConst[1]);
-
-            return;
-        }
-    }
-
-    private function renameClassConstKeys(ArrayItem $arrayItem): void
-    {
-        if (! $arrayItem->key instanceof ClassConstFetch) {
-            return;
-        }
-
-        foreach ($this->netteClassConstToSymfonyClassConstMap as $netteClassConst => $symfonyClassConst) {
-            $classConstFetchNode = $arrayItem->key;
-            if (! $this->isName($classConstFetchNode, $netteClassConst)) {
+            if ($eventInfo === null) {
                 continue;
             }
 
             $arrayItem->key = new ClassConstFetch(new FullyQualified(
-                $symfonyClassConst[0]
-            ), $symfonyClassConst[1]);
+                $eventInfo->getClass()
+            ), $eventInfo->getConstant());
+
+            // method name
+            $className = (string) $returnNode->getAttribute(Attribute::CLASS_NAME);
+            $methodName = (string) $this->getValue($arrayItem->value);
+            $this->processMethodArgument($className, $methodName, $eventInfo);
         }
+    }
+
+    private function matchStringKeys(ArrayItem $arrayItem): ?EventInfo
+    {
+        if (! $arrayItem->key instanceof String_) {
+            return null;
+        }
+
+        foreach ($this->symfonyClassConstWithAliases as $symfonyClassConst) {
+            foreach ($symfonyClassConst->getOldStringAliases() as $netteStringName) {
+                if ($this->isValue($arrayItem->key, $netteStringName)) {
+                    return $symfonyClassConst;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private function matchClassConstKeys(ArrayItem $arrayItem): ?EventInfo
+    {
+        if (! $arrayItem->key instanceof ClassConstFetch) {
+            return null;
+        }
+
+        foreach ($this->symfonyClassConstWithAliases as $symfonyClassConst) {
+            $isMatch = $this->resolveClassConstAliasMatch($arrayItem, $symfonyClassConst);
+            if ($isMatch) {
+                return $symfonyClassConst;
+            }
+        }
+
+        return null;
+    }
+
+    private function resolveClassConstAliasMatch(ArrayItem $arrayItem, EventInfo $eventInfo): bool
+    {
+        foreach ($eventInfo->getOldClassConstAlaises() as $netteClassConst) {
+            $classConstFetchNode = $arrayItem->key;
+            if ($classConstFetchNode === null) {
+                continue;
+            }
+
+            if ($this->isName($classConstFetchNode, $netteClassConst)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function processMethodArgument(string $class, string $method, EventInfo $eventInfo): void
+    {
+        $classMethodNode = $this->functionLikeNodeCollector->findMethod($method, $class);
+        if ($classMethodNode === null) {
+            return;
+        }
+
+        if (count((array) $classMethodNode->params) !== 1) {
+            return;
+        }
+
+        $classMethodNode->params[0]->type = new FullyQualified($eventInfo->getEventClass());
     }
 }
