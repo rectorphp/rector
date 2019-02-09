@@ -95,14 +95,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            foreach ($methodToArgumentToTypes as $method => $argumentToTypes) {
-                if (! $this->isName($node, $method)) {
-                    continue;
-                }
-
-                $this->processClassMethodNodeWithTypehints($node, $argumentToTypes);
-                continue 2;
-            }
+            $this->processArgumentToTypes($node, $methodToArgumentToTypes);
         }
 
         return null;
@@ -131,6 +124,21 @@ CODE_SAMPLE
                     $param->type = $paramTypeInfo->getFqnTypeNode();
                 }
             }
+        }
+    }
+
+    /**
+     * @param string[][] $methodToArgumentToTypes
+     */
+    private function processArgumentToTypes(ClassMethod $classMethodNode, array $methodToArgumentToTypes): void
+    {
+        foreach ($methodToArgumentToTypes as $method => $argumentToTypes) {
+            if (! $this->isName($classMethodNode, $method)) {
+                continue;
+            }
+
+            $this->processClassMethodNodeWithTypehints($classMethodNode, $argumentToTypes);
+            return;
         }
     }
 }

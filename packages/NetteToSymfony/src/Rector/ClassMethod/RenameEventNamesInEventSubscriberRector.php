@@ -10,7 +10,6 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
-use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
@@ -160,7 +159,7 @@ CODE_SAMPLE
         $classNode = $node->getAttribute(Attribute::CLASS_NODE);
 
         if ($classNode === null) {
-            throw new ShouldNotHappenException();
+            return null;
         }
 
         if (! $this->isType($classNode, 'Symfony\Component\EventDispatcher\EventSubscriberInterface')) {
