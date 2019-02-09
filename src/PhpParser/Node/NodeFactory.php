@@ -49,11 +49,9 @@ final class NodeFactory
      */
     public function createClassConstant(string $className, string $constantName): ClassConstFetch
     {
-        if (in_array($className, ['static', 'parent', 'self'], true)) {
-            $classNameNode = new Name($className);
-        } else {
-            $classNameNode = new FullyQualified($className);
-        }
+        $classNameNode = in_array($className, ['static', 'parent', 'self'], true) ? new Name(
+            $className
+        ) : new FullyQualified($className);
 
         $classConstFetchNode = $this->builderFactory->classConstFetch($classNameNode, $constantName);
         $classConstFetchNode->class->setAttribute(Attribute::RESOLVED_NAME, $classNameNode);

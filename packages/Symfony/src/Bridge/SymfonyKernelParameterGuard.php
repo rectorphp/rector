@@ -29,8 +29,7 @@ final class SymfonyKernelParameterGuard
         }
 
         throw new InvalidConfigurationException(sprintf(
-            'Kernel class "%s" provided in "parameters > %s" is not autoloadable. ' .
-            'Make sure composer.json of your application is valid and rector is loading "vendor/autoload.php" of your application.',
+            'Kernel class "%s" provided in "parameters > %s" is not autoloadable. Make sure composer.json of your application is valid and rector is loading "vendor/autoload.php" of your application.',
             $kernelClass,
             Option::KERNEL_CLASS_PARAMETER
         ));

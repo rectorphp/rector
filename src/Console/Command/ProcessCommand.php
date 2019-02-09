@@ -155,8 +155,9 @@ final class ProcessCommand extends AbstractCommand
         }
 
         $this->symfonyStyle->success(sprintf(
-            'Rector is done! %d changed files', count($this->errorAndDiffCollector->getFileDiffs()))
-        );
+            'Rector is done! %d changed files',
+            count($this->errorAndDiffCollector->getFileDiffs())
+        ));
 
         if ($this->configuration->isDryRun() && count($this->errorAndDiffCollector->getFileDiffs())) {
             return Shell::CODE_ERROR;

@@ -120,7 +120,12 @@ final class CallMaintainer
             return false;
         }
 
-        $externalFileContent = $this->parser->parseFile($reflectionFunctionAbstract->getFileName());
+        $filePath = $reflectionFunctionAbstract->getFileName();
+        if (file_exists($filePath) === false) {
+            return true;
+        }
+
+        $externalFileContent = $this->parser->parseFile($filePath);
         $requiredExternalType = $this->resolveMotherType($callNode);
         $functionName = $reflectionFunctionAbstract->getName();
 

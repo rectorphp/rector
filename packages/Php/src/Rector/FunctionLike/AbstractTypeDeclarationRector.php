@@ -181,11 +181,7 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
         Node $node,
         Node $childClassMethodOrParam
     ): ?Node {
-        if ($returnTypeInfo->getTypeNode() instanceof NullableType) {
-            $nakedType = $returnTypeInfo->getTypeNode()->type;
-        } else {
-            $nakedType = $returnTypeInfo->getTypeNode();
-        }
+        $nakedType = $returnTypeInfo->getTypeNode() instanceof NullableType ? $returnTypeInfo->getTypeNode()->type : $returnTypeInfo->getTypeNode();
 
         if ($nakedType === null) {
             return null;

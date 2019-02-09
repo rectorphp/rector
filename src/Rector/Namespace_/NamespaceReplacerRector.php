@@ -86,11 +86,9 @@ final class NamespaceReplacerRector extends AbstractRector
             return $node;
         }
 
-        if ($this->isPartialNamespace($node)) {
-            $newName = $this->resolvePartialNewName($node);
-        } else {
-            $newName = $this->resolveNewNameFromNode($name);
-        }
+        $newName = $this->isPartialNamespace($node) ? $this->resolvePartialNewName(
+            $node
+        ) : $this->resolveNewNameFromNode($name);
 
         if ($newName === null) {
             return null;
