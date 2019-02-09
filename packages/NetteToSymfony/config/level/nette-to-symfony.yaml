@@ -1,7 +1,5 @@
 services:
-    _defaults:
-        public: true
-        autowire: true
-
-    Rector\NetteToSymfony\:
-        resource: '../../src'
+    Rector\NetteToSymfony\Rector\ClassMethod\RenameEventNamesInEventSubscriberRector: ~
+    Rector\NetteToSymfony\Rector\MethodCall\FromHttpRequestGetHeaderToHeadersGetRector: ~
+    Rector\NetteToSymfony\Rector\MethodCall\FromRequestGetParameterToAttributesGetRector: ~
+    Rector\NetteToSymfony\Rector\ClassMethod\RouterListToControllerAnnotationsRector: ~

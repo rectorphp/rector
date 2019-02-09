@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Rector\NetteToSymfony\Tests\Rector\MethodCall\RouterListToControllerAnnotationsRetor;
+namespace Rector\NetteToSymfony\Tests\Rector\ClassMethod\RouterListToControllerAnnotationsRetor;
 
-use Rector\NetteToSymfony\Rector\RouterListToControllerAnnotationsRector;
-use Rector\NetteToSymfony\Tests\Rector\MethodCall\RouterListToControllerAnnotationsRetor\Source\Route;
-use Rector\NetteToSymfony\Tests\Rector\MethodCall\RouterListToControllerAnnotationsRetor\Source\RouteList;
+use Rector\NetteToSymfony\Rector\ClassMethod\RouterListToControllerAnnotationsRector;
+use Rector\NetteToSymfony\Tests\Rector\ClassMethod\RouterListToControllerAnnotationsRetor\Source\Route;
+use Rector\NetteToSymfony\Tests\Rector\ClassMethod\RouterListToControllerAnnotationsRetor\Source\RouteList;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RouterListToControllerAnnotationsRetorTest extends AbstractRectorTestCase
