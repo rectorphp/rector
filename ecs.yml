@@ -83,6 +83,7 @@ parameters:
             - 'packages/NodeTypeResolver/src/Php/AbstractTypeInfo.php'
             # example in description
             - 'src/Rector/Annotation/AnnotationReplacerRector.php'
+            - 'packages/NetteToSymfony/src/Event/EventInfosFactory.php'
 
         Symplify\CodingStandard\Sniffs\CleanCode\ForbiddenStaticFunctionSniff:
             # required by Composer interface
