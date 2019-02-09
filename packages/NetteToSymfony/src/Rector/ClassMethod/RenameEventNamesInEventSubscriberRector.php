@@ -40,29 +40,70 @@ final class RenameEventNamesInEventSubscriberRector extends AbstractRector
      * @var string[][]
      */
     private $netteClassConstToSymfonyClassConstMap = [
-        'Contributte\Events\Extra\Event\Application::NAME' => ['Symfony\Component\HttpKernel\KernelEvents', 'REQUEST'],
-        'Contributte\Events\Extra\Event\ShutdownEvent::NAME' => [
+        'Contributte\Events\Extra\Event\Application\StartupEvent::NAME' => [
+            'Symfony\Component\HttpKernel\KernelEvents',
+            'REQUEST',
+        ],
+        'Contributte\Events\Extra\Event\Application\PresenterShutdownEvent::NAME' => [
             'Symfony\Component\HttpKernel\KernelEvents',
             'TERMINATE',
         ],
-        'Contributte\Events\Extra\Event\RequestEvent::NAME' => ['Symfony\Component\HttpKernel\KernelEvents', 'REQUEST'],
-        'Contributte\Events\Extra\Event\PresenterEvent::NAME' => [
+        'Contributte\Events\Extra\Event\Application\RequestEvent::NAME' => [
+            'Symfony\Component\HttpKernel\KernelEvents',
+            'REQUEST',
+        ],
+        'Contributte\Events\Extra\Event\Application\PresenterEvent::NAME' => [
             'Symfony\Component\HttpKernel\KernelEvents',
             'CONTROLLER',
         ],
-        'Contributte\Events\Extra\Event\PresenterStartupEvent::NAME' => [
+        'Contributte\Events\Extra\Event\Application\PresenterStartupEvent::NAME' => [
             'Symfony\Component\HttpKernel\KernelEvents',
             'CONTROLLER',
         ],
-        'Contributte\Events\Extra\Event\PresenterShutdownEvent::NAME' => [
+        'Contributte\Events\Extra\Event\Application\PresenterShutdownEvent::NAME' => [
             'Symfony\Component\HttpKernel\KernelEvents',
             'CONTROLLER',
         ],
-        'Contributte\Events\Extra\Event\ResponseEvent::NAME' => [
+        'Contributte\Events\Extra\Event\Application\ResponseEvent::NAME' => [
             'Symfony\Component\HttpKernel\KernelEvents',
             'RESPONSE',
         ],
-        'Contributte\Events\Extra\Event\ErrorEvent::NAME' => ['Symfony\Component\HttpKernel\KernelEvents', 'EXCEPTION'],
+        'Contributte\Events\Extra\Event\Application\ErrorEvent::NAME' => [
+            'Symfony\Component\HttpKernel\KernelEvents',
+            'EXCEPTION',
+        ],
+        'Contributte\Events\Extra\Event\Application\ApplicationEvents::ON_STARTUP' => [
+            'Symfony\Component\HttpKernel\KernelEvents',
+            'REQUEST',
+        ],
+        'Contributte\Events\Extra\Event\Application\ApplicationEvents::ON_SHUTDOWN' => [
+            'Symfony\Component\HttpKernel\KernelEvents',
+            'TERMINATE',
+        ],
+        'Contributte\Events\Extra\Event\Application\ApplicationEvents::ON_REQUEST' => [
+            'Symfony\Component\HttpKernel\KernelEvents',
+            'REQUEST',
+        ],
+        'Contributte\Events\Extra\Event\Application\ApplicationEvents::ON_PRESENTER' => [
+            'Symfony\Component\HttpKernel\KernelEvents',
+            'CONTROLLER',
+        ],
+        'Contributte\Events\Extra\Event\Application\ApplicationEvents::ON_PRESENTER_STARTUP' => [
+            'Symfony\Component\HttpKernel\KernelEvents',
+            'CONTROLLER',
+        ],
+        'Contributte\Events\Extra\Event\Application\ApplicationEvents::ON_PRESENTER_SHUTDOWN' => [
+            'Symfony\Component\HttpKernel\KernelEvents',
+            'CONTROLLER',
+        ],
+        'Contributte\Events\Extra\Event\Application\ApplicationEvents::ON_RESPONSE' => [
+            'Symfony\Component\HttpKernel\KernelEvents',
+            'RESPONSE',
+        ],
+        'Contributte\Events\Extra\Event\Application\ApplicationEvents::ON_ERROR' => [
+            'Symfony\Component\HttpKernel\KernelEvents',
+            'EXCEPTION',
+        ],
     ];
 
     /**

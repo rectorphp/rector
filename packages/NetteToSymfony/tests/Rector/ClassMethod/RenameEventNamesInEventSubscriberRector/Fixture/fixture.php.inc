@@ -3,7 +3,7 @@
 namespace Rector\NetteToSymfony\Tests\Rector\ClassMethod\RenameEventNamesInEventSubscriberRector\Fixture;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Contributte\Events\Extra\Event\PresenterStartupEvent;
+use Contributte\Events\Extra\Event\Application\PresenterStartupEvent;
 
 final class SomeClass implements EventSubscriberInterface
 {
@@ -11,7 +11,7 @@ final class SomeClass implements EventSubscriberInterface
     {
         return [
             'nette.application.startup' => 'someMethod',
-            \Contributte\Events\Extra\Event\Application::NAME => 'someMethod',
+            \Contributte\Events\Extra\Event\Application\StartupEvent::NAME => 'someMethod',
             PresenterStartupEvent::NAME => 'someMethod',
         ];
     }
@@ -24,7 +24,7 @@ final class SomeClass implements EventSubscriberInterface
 namespace Rector\NetteToSymfony\Tests\Rector\ClassMethod\RenameEventNamesInEventSubscriberRector\Fixture;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Contributte\Events\Extra\Event\PresenterStartupEvent;
+use Contributte\Events\Extra\Event\Application\PresenterStartupEvent;
 
 final class SomeClass implements EventSubscriberInterface
 {
