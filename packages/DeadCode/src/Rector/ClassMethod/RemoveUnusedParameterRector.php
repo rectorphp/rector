@@ -3,6 +3,7 @@
 namespace Rector\DeadCode\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\NodeTypeResolver\Node\Attribute;
@@ -89,21 +90,36 @@ CODE_SAMPLE
             return null;
         }
 
+        $unusedParameters = $this->resolveUnusedParameters($node);
+        if ($unusedParameters === []) {
+            return null;
+        }
+
+        $this->removeNodes($unusedParameters);
+
+        return $node;
+    }
+
+    /**
+     * @return Param[]
+     */
+    private function resolveUnusedParameters(ClassMethod $classMethodNode): array
+    {
         $unusedParameters = [];
-        foreach ($node->params as $i => $param) {
-            if ($this->classMethodMaintainer->isParameterUsedMethod($param, $node)) {
-                // reset to keep order of removed arguments
-                $unusedParameters = [];
+
+        foreach ((array) $classMethodNode->params as $i => $param) {
+            if ($this->classMethodMaintainer->isParameterUsedMethod($param, $classMethodNode)) {
+                // reset to keep order of removed arguments, if not construtctor - probably autowired
+                if (! $this->isName($classMethodNode, '__construct')) {
+                    $unusedParameters = [];
+                }
+
                 continue;
             }
 
             $unusedParameters[$i] = $param;
         }
 
-        foreach ($unusedParameters as $unusedParameter) {
-            $this->removeNode($unusedParameter);
-        }
-
-        return $node;
+        return $unusedParameters;
     }
 }

@@ -4,7 +4,7 @@ namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedParameterRector\F
 
 class Order
 {
-    public function __construct($value, $value2, $value3, $value4)
+    public function aloha($value, $value2, $value3, $value4)
     {
         $result = $value + $value3;
     }
@@ -18,7 +18,7 @@ namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedParameterRector\F
 
 class Order
 {
-    public function __construct($value, $value2, $value3)
+    public function aloha($value, $value2, $value3)
     {
         $result = $value + $value3;
     }
