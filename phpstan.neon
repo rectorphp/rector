@@ -110,3 +110,5 @@ parameters:
         - '#Method Rector\\NetteToSymfony\\Rector\\RouterListToControllerAnnotationsRector\:\:resolveAssignRouteNodes\(\) should return array<PhpParser\\Node\\Expr\\Assign\> but returns array<PhpParser\\Node\>#'
         - '#PHPDoc tag @param for parameter \$data with type mixed is not subtype of native type array#'
         - '#class\@anonymous#'
+        - '#Parameter \#2 \$classMethodNode of method Rector\\NetteToSymfony\\Rector\\ClassMethod\\RouterListToControllerAnnotationsRector\:\:resolvePathFromClassAndMethodNodes\(\) expects PhpParser\\Node\\Stmt\\ClassMethod, PhpParser\\Node\\Stmt given#'
+        - '#Method Rector\\NetteToSymfony\\Rector\\ClassMethod\\RouterListToControllerAnnotationsRector\:\:resolveAssignRouteNodes\(\) should return array<PhpParser\\Node\\Expr\\Assign\> but returns array<PhpParser\\Node\>#'

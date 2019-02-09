@@ -19,8 +19,18 @@ final class VisibilityMaintainer
     /**
      * @param ClassMethod|Property|ClassConst $node
      */
+    public function makeStatic(Node $node): void
+    {
+        $this->addVisibilityFlag($node, 'static');
+    }
+
+    /**
+     * @param ClassMethod|Property|ClassConst $node
+     */
     public function replaceVisibilityFlag(Node $node, string $visibility): void
     {
+        $visibility = strtolower($visibility);
+
         if ($visibility !== 'static') {
             $this->removeOriginalVisibilityFromFlags($node);
         }

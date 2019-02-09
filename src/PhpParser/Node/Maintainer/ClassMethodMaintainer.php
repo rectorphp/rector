@@ -4,6 +4,7 @@ namespace Rector\PhpParser\Node\Maintainer;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
@@ -140,6 +141,20 @@ final class ClassMethodMaintainer
         }
 
         return [$fqnTypeName];
+    }
+
+    /**
+     * Is method actually static, or has some $this-> calls?
+     */
+    public function isStaticClassMethod(ClassMethod $classMethodNode): bool
+    {
+        return (bool) $this->betterNodeFinder->findFirst((array) $classMethodNode->stmts, function (Node $node) {
+            if (! $node instanceof Variable) {
+                return false;
+            }
+
+            return $this->nameResolver->isName($node, 'this');
+        });
     }
 
     private function isMethodInParent(string $class, string $method): bool
