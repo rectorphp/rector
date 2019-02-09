@@ -86,9 +86,11 @@ CODE_SAMPLE
             return null;
         }
 
-        $type = $this->isStringType($node->args[1]->value) ? 'string' : 'iterable';
+        if ($this->isStringType($node->args[1]->value) === false) {
+            return null;
+        }
 
-        $node->name = new Identifier($this->oldMethodsNamesToNewNames[$type][$this->getName($node)]);
+        $node->name = new Identifier($this->oldMethodsNamesToNewNames['string'][$this->getName($node)]);
 
         return $node;
     }
