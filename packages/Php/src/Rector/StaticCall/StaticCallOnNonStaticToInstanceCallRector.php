@@ -6,7 +6,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Stmt\ClassMethod;
 use Rector\NodeTypeResolver\Application\FunctionLikeNodeCollector;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\PhpParser\Node\Maintainer\ClassMethodMaintainer;
