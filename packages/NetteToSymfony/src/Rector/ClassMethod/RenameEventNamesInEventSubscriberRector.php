@@ -10,6 +10,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
@@ -57,10 +58,6 @@ final class RenameEventNamesInEventSubscriberRector extends AbstractRector
             'CONTROLLER',
         ],
         'Contributte\Events\Extra\Event\Application\PresenterStartupEvent::NAME' => [
-            'Symfony\Component\HttpKernel\KernelEvents',
-            'CONTROLLER',
-        ],
-        'Contributte\Events\Extra\Event\Application\PresenterShutdownEvent::NAME' => [
             'Symfony\Component\HttpKernel\KernelEvents',
             'CONTROLLER',
         ],
@@ -161,8 +158,9 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $classNode = $node->getAttribute(Attribute::CLASS_NODE);
+
         if ($classNode === null) {
-            return null;
+            throw new ShouldNotHappenException();
         }
 
         if (! $this->isType($classNode, 'Symfony\Component\EventDispatcher\EventSubscriberInterface')) {
