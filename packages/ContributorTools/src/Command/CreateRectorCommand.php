@@ -85,8 +85,16 @@ final class CreateRectorCommand extends Command implements ContributorCommandInt
         $templateVariables = $this->templateVariablesFactory->createFromConfiguration($configuration);
 
         foreach ($this->findTemplateFileInfos() as $smartFileInfo) {
-            $destination = $this->resolveDestination($smartFileInfo, $templateVariables);
+            $destination = $this->resolveDestination($smartFileInfo, $templateVariables, $configuration);
+
+            // @todo for core package
             $content = $this->resolveContent($smartFileInfo, $templateVariables);
+
+            if ($configuration->getPackage() === 'Rector') {
+                $content = Strings::replace($content, '#Rector\\\\Rector\\\\#ms', 'Rector\\');
+                $content = Strings::replace($content, '#use Rector\\\\AbstractRector;#', 'use Rector\\Rector\\AbstractRector;');
+            }
+
             FileSystem::write($destination, $content);
 
             $this->generatedFiles[] = $destination;
@@ -117,9 +125,16 @@ final class CreateRectorCommand extends Command implements ContributorCommandInt
     /**
      * @param string[] $templateVariables
      */
-    private function resolveDestination(SmartFileInfo $smartFileInfo, array $templateVariables): string
+    private function resolveDestination(SmartFileInfo $smartFileInfo, array $templateVariables, Configuration $configuration): string
     {
         $destination = $smartFileInfo->getRelativeFilePathFromDirectory(self::TEMPLATES_DIRECTORY);
+
+        // normalize core package
+        if ($configuration->getPackage() === 'Rector') {
+            $destination = Strings::replace($destination, '#packages\/_Package_/tests/Rector#', 'tests/Rector');
+            $destination = Strings::replace($destination, '#packages\/_Package_/src/Rector#', 'src/Rector');
+        }
+
         if (! Strings::match($destination, '#fixture[\d+]*\.php\.inc#')) {
             $destination = rtrim($destination, '.inc');
         }
