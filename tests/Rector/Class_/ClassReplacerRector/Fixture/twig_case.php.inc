@@ -4,8 +4,9 @@ namespace Rector\Tests\Rector\Class_\ClassReplacerRector\Fixture;
 
 use Manual_Twig_Filter;
 use Manual\Twig\TwigFilter;
+use Rector\Tests\Rector\Class_\ClassReplacerRector\Source\AbstractManualExtension;
 
-final class ShortUrlExtension
+final class ShortUrlExtension extends AbstractManualExtension
 {
     /**
      * @return Manual_Twig_Filter[]
@@ -26,8 +27,9 @@ namespace Rector\Tests\Rector\Class_\ClassReplacerRector\Fixture;
 
 use Manual_Twig_Filter;
 use Manual\Twig\TwigFilter;
+use Rector\Tests\Rector\Class_\ClassReplacerRector\Source\AbstractManualExtension;
 
-final class ShortUrlExtension
+final class ShortUrlExtension extends AbstractManualExtension
 {
     /**
      * @return Manual_Twig_Filter[]

@@ -6,6 +6,7 @@ use Manual\Twig\TwigFilter;
 use Manual_Twig_Filter;
 use Rector\Rector\Class_\ClassReplacerRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Tests\Rector\Class_\ClassReplacerRector\Source\AbstractManualExtension;
 use Rector\Tests\Rector\Class_\ClassReplacerRector\Source\NewClass;
 use Rector\Tests\Rector\Class_\ClassReplacerRector\Source\NewClassWithoutTypo;
 use Rector\Tests\Rector\Class_\ClassReplacerRector\Source\OldClass;
@@ -43,6 +44,7 @@ final class ClassReplacerRectorTest extends AbstractRectorTestCase
             'DateTime' => 'DateTimeInterface',
             'Countable' => 'stdClass',
             Manual_Twig_Filter::class => TwigFilter::class,
+            'Twig_AbstractManualExtension' => AbstractManualExtension::class,
         ];
     }
 }
