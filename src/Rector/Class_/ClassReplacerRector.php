@@ -125,7 +125,11 @@ CODE_SAMPLE
 
     private function isValidUseImportChange(string $newName, UseUse $useUseNode): bool
     {
+        /** @var Node\Stmt\Use_[]|null $useNodes */
         $useNodes = $useUseNode->getAttribute(Attribute::USE_NODES);
+        if ($useNodes === null) {
+            return true;
+        }
 
         foreach ($useNodes as $useNode) {
             if ($this->isName($useNode, $newName)) {
