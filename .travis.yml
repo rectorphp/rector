@@ -30,7 +30,7 @@ script:
     - |
       if [[ $STATIC_ANALYSIS == true ]]; then
           composer check-cs
-          composer phpstan-ci
+          composer phpstan
       fi
 
     # Rector demo run

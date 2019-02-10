@@ -102,13 +102,7 @@
             "vendor/bin/ecs check bin packages src tests utils --fix",
             "bin/clean_trailing_spaces.sh"
         ],
-        "phpstan-ci": "vendor/bin/phpstan analyse packages src tests utils",
-        "phpstan": [
-            "vendor/bin/phpstan analyse packages src tests --error-format symplify"
-        ],
-        "phpstan-async": [
-            "vendor/bin/phpstan analyse packages & vendor/bin/phpstan analyse src"
-        ],
+        "phpstan": "vendor/bin/phpstan analyse packages src tests --error-format symplify",
         "docs": "bin/rector dump-rectors --output-format markdown  > docs/AllRectorsOverview.md"
     },
     "scripts-descriptions": {
