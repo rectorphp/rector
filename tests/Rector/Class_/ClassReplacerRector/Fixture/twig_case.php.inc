@@ -32,7 +32,7 @@ use Rector\Tests\Rector\Class_\ClassReplacerRector\Source\AbstractManualExtensio
 final class ShortUrlExtension extends AbstractManualExtension
 {
     /**
-     * @return Manual_Twig_Filter[]
+     * @return \Manual\Twig\TwigFilter[]
      */
     public function getFilters(): array
     {

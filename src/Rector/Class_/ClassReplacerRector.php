@@ -7,8 +7,11 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -21,11 +24,17 @@ final class ClassReplacerRector extends AbstractRector
     private $oldToNewClasses = [];
 
     /**
+     * @var DocBlockAnalyzer
+     */
+    private $docBlockAnalyzer;
+
+    /**
      * @param string[] $oldToNewClasses
      */
-    public function __construct(array $oldToNewClasses)
+    public function __construct(array $oldToNewClasses, DocBlockAnalyzer $docBlockAnalyzer)
     {
         $this->oldToNewClasses = $oldToNewClasses;
+        $this->docBlockAnalyzer = $docBlockAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -66,29 +75,37 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Name::class];
+        return [Name::class, ClassMethod::class];
     }
 
     /**
-     * @param Name $node
+     * @param Name|ClassMethod $node
      */
     public function refactor(Node $node): ?Node
     {
-        $name = $this->getName($node);
-        if (! $name) {
-            return null;
+        if ($node instanceof Name) {
+            $name = $this->getName($node);
+            if (! $name) {
+                return null;
+            }
+
+            $newName = $this->oldToNewClasses[$name] ?? null;
+            if (! $newName) {
+                return null;
+            }
+
+            if ($this->isClassToInterfaceValidChange($node, $newName) === false) {
+                return null;
+            }
+
+            return new FullyQualified($newName);
         }
 
-        $newName = $this->oldToNewClasses[$name] ?? null;
-        if (! $newName) {
-            return null;
+        foreach ($this->oldToNewClasses as $oldType => $newType) {
+            $this->docBlockAnalyzer->changeType($node, $oldType, $newType);
         }
 
-        if ($this->isClassToInterfaceValidChange($node, $newName) === false) {
-            return null;
-        }
-
-        return new FullyQualified($newName);
+        return $node;
     }
 
     /**
@@ -125,7 +142,7 @@ CODE_SAMPLE
 
     private function isValidUseImportChange(string $newName, UseUse $useUseNode): bool
     {
-        /** @var Node\Stmt\Use_[]|null $useNodes */
+        /** @var Use_[]|null $useNodes */
         $useNodes = $useUseNode->getAttribute(Attribute::USE_NODES);
         if ($useNodes === null) {
             return true;

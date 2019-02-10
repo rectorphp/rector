@@ -67,7 +67,7 @@ services:
         Symfony\Component\Form\AbstractTypeExtension:
             getExtendedType: 'getExtendedTypes'
 
-    Rector\Php\Rector\FunctionLike\ReturnTypeDeclarationRector:
+    Rector\Rector\ClassMethod\AddReturnTypeDeclarationRector:
         Symfony\Component\Form\AbstractTypeExtension:
             getExtendedTypes: 'iterable'
 
