@@ -25,8 +25,14 @@ class AddStaticToMethodTest2
     }
 }
 
-AddStaticToMethodTest::method();
-AddStaticToMethodTest2::method();
+class ClassWrapToPreventCodeRun
+{
+    public function run()
+    {
+        AddStaticToMethodTest::method();
+        AddStaticToMethodTest2::method();
+    }
+}
 
 ?>
 -----
@@ -57,7 +63,13 @@ class AddStaticToMethodTest2
     }
 }
 
-AddStaticToMethodTest::method();
-AddStaticToMethodTest2::method();
+class ClassWrapToPreventCodeRun
+{
+    public function run()
+    {
+        AddStaticToMethodTest::method();
+        AddStaticToMethodTest2::method();
+    }
+}
 
 ?>
