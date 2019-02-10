@@ -7,6 +7,7 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\UseUse;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
@@ -111,13 +112,39 @@ CODE_SAMPLE
         }
 
         if ($parentNode instanceof Class_) {
-            if ($parentNode->extends === $node && interface_exists($newName)) {
-                return false;
-            }
+            return $this->isValidClassNameChange($node, $newName, $parentNode);
+        }
 
-            if (in_array($node, $parentNode->implements, true) && class_exists($newName)) {
+        // prevent to change to import, that already exists
+        if ($parentNode instanceof UseUse) {
+            return $this->isValidUseImportChange($newName, $parentNode);
+        }
+
+        return true;
+    }
+
+    private function isValidUseImportChange(string $newName, UseUse $useUseNode): bool
+    {
+        $useNodes = $useUseNode->getAttribute(Attribute::USE_NODES);
+
+        foreach ($useNodes as $useNode) {
+            if ($this->isName($useNode, $newName)) {
+                // name already exists
                 return false;
             }
+        }
+
+        return true;
+    }
+
+    private function isValidClassNameChange(Node $node, string $newName, Class_ $classNode): bool
+    {
+        if ($classNode->extends === $node && interface_exists($newName)) {
+            return false;
+        }
+
+        if (in_array($node, $classNode->implements, true) && class_exists($newName)) {
+            return false;
         }
 
         return true;

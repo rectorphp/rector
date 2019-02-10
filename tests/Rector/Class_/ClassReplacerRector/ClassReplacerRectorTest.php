@@ -2,6 +2,8 @@
 
 namespace Rector\Tests\Rector\Class_\ClassReplacerRector;
 
+use Manual\Twig\TwigFilter;
+use Manual_Twig_Filter;
 use Rector\Rector\Class_\ClassReplacerRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Tests\Rector\Class_\ClassReplacerRector\Source\NewClass;
@@ -21,6 +23,7 @@ final class ClassReplacerRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Fixture/class_to_interface.php.inc',
             __DIR__ . '/Fixture/interface_to_class.php.inc',
             __DIR__ . '/Fixture/name_insensitive.php.inc',
+            __DIR__ . '/Fixture/twig_case.php.inc',
         ]);
     }
 
@@ -39,6 +42,7 @@ final class ClassReplacerRectorTest extends AbstractRectorTestCase
             OldClassWithTypo::class => NewClassWithoutTypo::class,
             'DateTime' => 'DateTimeInterface',
             'Countable' => 'stdClass',
+            Manual_Twig_Filter::class => TwigFilter::class,
         ];
     }
 }
