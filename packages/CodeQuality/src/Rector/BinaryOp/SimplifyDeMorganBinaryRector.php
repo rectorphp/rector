@@ -75,11 +75,20 @@ CODE_SAMPLE
         }
 
         $inversedNode = $this->assignAndBinaryMap->getInversed($node->expr);
-        if ($inversedNode === null && $node->expr instanceof BooleanOr) {
-            $inversedNode = BooleanAnd::class;
+        if ($inversedNode === null) {
+            if ($node->expr instanceof BooleanOr) {
+                $inversedNode = BooleanAnd::class;
+            } else {
+                return null;
+            }
         }
 
-        if ($inversedNode === null) {
+        // no nesting
+        if ($node->expr->left instanceof BooleanOr) {
+            return null;
+        }
+
+        if ($node->expr->right instanceof BooleanOr) {
             return null;
         }
 

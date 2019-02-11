@@ -3,7 +3,6 @@
 namespace Rector\RectorDefinition;
 
 use Rector\Contract\RectorDefinition\CodeSampleInterface;
-use Rector\Exception\RectorDefinition\CodeSamplesMissingException;
 
 final class RectorDefinition
 {
@@ -20,7 +19,7 @@ final class RectorDefinition
     /**
      * @param CodeSampleInterface[] $codeSamples
      */
-    public function __construct(string $description, array $codeSamples)
+    public function __construct(string $description, array $codeSamples = [])
     {
         $this->ensureCodeSamplesAreValid($codeSamples);
 
