@@ -9,11 +9,26 @@ use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Property;
 use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\CurrentNodeProvider;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class ObjectToScalarDocBlockRector extends AbstractObjectToScalarRector
 {
+    /**
+     * @var CurrentNodeProvider
+     */
+    private $currentNodeProvider;
+
+    /**
+     * @param string[] $valueObjectsToSimpleTypes
+     */
+    public function __construct(array $valueObjectsToSimpleTypes, CurrentNodeProvider $currentNodeProvider)
+    {
+        $this->currentNodeProvider = $currentNodeProvider;
+        parent::__construct($valueObjectsToSimpleTypes);
+    }
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Turns defined value object to simple types in doc blocks', [
@@ -107,7 +122,6 @@ CODE_SAMPLE
     private function refactorVariableNode(Variable $variableNode): void
     {
         $match = $this->matchOriginAndNewType($variableNode);
-
         if (! $match) {
             return;
         }
@@ -134,10 +148,9 @@ CODE_SAMPLE
             return;
         }
 
-        $oldType = $this->namespaceAnalyzer->resolveTypeToFullyQualified(
-            (string) $nullableTypeNode->type,
-            $nullableTypeNode
-        );
+        $this->currentNodeProvider->setNode($nullableTypeNode);
+
+        $oldType = $this->namespaceAnalyzer->resolveTypeToFullyQualified((string) $nullableTypeNode->type);
 
         $this->docBlockAnalyzer->changeType($classMethodNode, $oldType, $newType);
     }

@@ -4,9 +4,9 @@ namespace Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer;
 
 use Nette\Utils\Strings;
 
-use PhpParser\Node;
 use PhpParser\Node\Stmt\Use_;
 use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\CurrentNodeProvider;
 use Rector\Php\TypeAnalyzer;
 
 final class NamespaceAnalyzer
@@ -16,13 +16,21 @@ final class NamespaceAnalyzer
      */
     private $typeAnalyzer;
 
-    public function __construct(TypeAnalyzer $typeAnalyzer)
+    /**
+     * @var CurrentNodeProvider
+     */
+    private $currentNodeProvider;
+
+    public function __construct(TypeAnalyzer $typeAnalyzer, CurrentNodeProvider $currentNodeProvider)
     {
         $this->typeAnalyzer = $typeAnalyzer;
+        $this->currentNodeProvider = $currentNodeProvider;
     }
 
-    public function resolveTypeToFullyQualified(string $type, Node $node): string
+    public function resolveTypeToFullyQualified(string $type): string
     {
+        $node = $this->currentNodeProvider->getNode();
+
         $useNodes = $node->getAttribute(Attribute::USE_NODES);
         if ($useNodes === null) {
             $useNodes = [];

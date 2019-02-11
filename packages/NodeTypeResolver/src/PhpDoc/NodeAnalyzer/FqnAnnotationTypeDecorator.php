@@ -7,17 +7,31 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\CurrentNodeProvider;
 use ReflectionClass;
-use Symplify\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Symplify\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwarePhpDocNode;
+use Symplify\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
+use Symplify\BetterPhpDocParser\Contract\PhpDocNodeDecoratorInterface;
 
-final class FqnAnnotationTypeDecorator
+/**
+ * Changes @Inject name to @Full\Namespace\Inject
+ */
+final class FqnAnnotationTypeDecorator implements PhpDocNodeDecoratorInterface
 {
-    public function decorate(PhpDocInfo $phpDocInfo, Node $node): void
-    {
-        $phpDocNode = $phpDocInfo->getPhpDocNode();
+    /**
+     * @var CurrentNodeProvider
+     */
+    private $currentNodeProvider;
 
-        foreach ($phpDocNode->children as $phpDocChildNode) {
-            if (! $phpDocChildNode instanceof PhpDocTagNode) {
+    public function __construct(CurrentNodeProvider $currentNodeProvider)
+    {
+        $this->currentNodeProvider = $currentNodeProvider;
+    }
+
+    public function decorate(AttributeAwarePhpDocNode $attributeAwarePhpDocNode): AttributeAwarePhpDocNode
+    {
+        foreach ($attributeAwarePhpDocNode->children as $phpDocChildNode) {
+            if (! $phpDocChildNode instanceof AttributeAwarePhpDocTagNode) {
                 continue;
             }
 
@@ -29,9 +43,12 @@ final class FqnAnnotationTypeDecorator
             }
 
             $tagShortName = $this->joinWithValue($phpDocChildNode, $tagShortName);
-            $tagFqnName = $this->resolveTagFqnName($node, $tagShortName);
-            $phpDocChildNode->name = '@' . $tagFqnName;
+            $tagFqnName = $this->resolveTagFqnName($this->currentNodeProvider->getNode(), $tagShortName);
+
+            $phpDocChildNode->setAttribute('annotation_class', $tagFqnName);
         }
+
+        return $attributeAwarePhpDocNode;
     }
 
     private function joinWithValue(PhpDocTagNode $phpDocTagNode, string $tagShortName): string
@@ -56,6 +73,8 @@ final class FqnAnnotationTypeDecorator
         if (! $className) {
             return $tagShortName;
         }
+
+        // @todo use Use[] nodes?
 
         return Reflection::expandClassName($tagShortName, new ReflectionClass($className));
     }

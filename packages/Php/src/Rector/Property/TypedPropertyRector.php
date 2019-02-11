@@ -103,11 +103,10 @@ CODE_SAMPLE
         $varTypeInfos[] = $this->docBlockAnalyzer->getVarTypeInfo($node);
         $varTypeInfos[] = $this->complexNodeTypeResolver->resolvePropertyTypeInfo($node);
 
-        foreach ($varTypeInfos as $varTypeInfo) {
-            if ($varTypeInfo === null) {
-                continue;
-            }
+        $varTypeInfos = array_filter($varTypeInfos);
 
+        foreach ($varTypeInfos as $varTypeInfo) {
+            /** @var VarTypeInfo $varTypeInfo */
             if ($varTypeInfo->isTypehintAble() === false) {
                 continue;
             }

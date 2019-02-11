@@ -3,6 +3,7 @@
     "description": "Instant upgrade and refactoring of your PHP code",
     "keywords": ["instant upgrades", "instant refactoring", "ast", "automated refactoring"],
     "license": "MIT",
+    "bin": ["bin/rector"],
     "require": {
         "php": "^7.1",
         "composer/xdebug-handler": "^1.3",
@@ -16,16 +17,16 @@
         "symfony/dependency-injection": "^3.4|^4.2",
         "symfony/finder": "^3.4|^4.2",
         "symfony/process": "^3.4|^4.2",
-        "symplify/better-phpdoc-parser": "^5.4.3",
-        "symplify/package-builder": "^5.4.3"
+        "symplify/better-phpdoc-parser": "^5.5",
+        "symplify/package-builder": "^5.5"
     },
     "require-dev": {
         "ocramius/package-versions": "^1.3",
         "phpunit/phpunit": "^7.5|^8.0",
-        "symplify/easy-coding-standard": "^5.4.3",
+        "symplify/easy-coding-standard": "^5.5",
         "friendsofphp/php-cs-fixer": "^2.14",
-        "symplify/monorepo-builder": "^5.4.3",
-        "symplify/phpstan-extensions": "^5.4.3",
+        "symplify/monorepo-builder": "^5.5",
+        "symplify/phpstan-extensions": "^5.5",
         "thecodingmachine/phpstan-strict-rules": "^0.11.0",
         "tracy/tracy": "^2.5"
     },
@@ -108,8 +109,9 @@
     "scripts-descriptions": {
         "update-docs": "Regenerate descriptions of all Rectors to docs/AllRectorsOverview.md file"
     },
-    "bin": ["bin/rector"],
     "config": {
         "sort-packages": true
-    }
+    },
+    "prefer-stable": true,
+    "minimum-stability": "dev"
 }

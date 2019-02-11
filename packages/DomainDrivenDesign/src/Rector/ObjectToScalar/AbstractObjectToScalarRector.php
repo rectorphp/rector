@@ -33,13 +33,19 @@ abstract class AbstractObjectToScalarRector extends AbstractRector
     /**
      * @param string[] $valueObjectsToSimpleTypes
      */
-    public function __construct(
-        array $valueObjectsToSimpleTypes,
+    public function __construct(array $valueObjectsToSimpleTypes)
+    {
+        $this->valueObjectsToSimpleTypes = $valueObjectsToSimpleTypes;
+    }
+
+    /**
+     * @required
+     */
+    public function setAbstractObjectToScalarRectorDependencies(
         DocBlockAnalyzer $docBlockAnalyzer,
         BetterNodeFinder $betterNodeFinder,
         NamespaceAnalyzer $namespaceAnalyzer
-    ) {
-        $this->valueObjectsToSimpleTypes = $valueObjectsToSimpleTypes;
+    ): void {
         $this->docBlockAnalyzer = $docBlockAnalyzer;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->namespaceAnalyzer = $namespaceAnalyzer;

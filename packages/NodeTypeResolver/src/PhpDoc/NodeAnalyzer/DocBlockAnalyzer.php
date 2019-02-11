@@ -5,20 +5,23 @@ namespace Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer;
 use Nette\Utils\Strings;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
-use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
-use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Exception\MissingTagException;
+use Rector\NodeTypeResolver\Node\CurrentNodeProvider;
 use Rector\NodeTypeResolver\Php\ParamTypeInfo;
 use Rector\NodeTypeResolver\Php\ReturnTypeInfo;
 use Rector\NodeTypeResolver\Php\VarTypeInfo;
+use Symplify\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareParamTagValueNode;
+use Symplify\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
+use Symplify\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareVarTagValueNode;
+use Symplify\BetterPhpDocParser\Attributes\Ast\PhpDoc\Type\AttributeAwareIdentifierTypeNode;
+use Symplify\BetterPhpDocParser\Attributes\Attribute\Attribute;
 use Symplify\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Symplify\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Symplify\BetterPhpDocParser\PhpDocParser\TypeNodeToStringsConverter;
+use Symplify\BetterPhpDocParser\PhpDocModifier;
 use Symplify\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 
 final class DocBlockAnalyzer
@@ -34,32 +37,25 @@ final class DocBlockAnalyzer
     private $phpDocInfoPrinter;
 
     /**
-     * @var PhpDocInfoFqnTypeDecorator
+     * @var PhpDocModifier
      */
-    private $phpDocInfoFqnTypeDecorator;
+    private $phpDocModifier;
 
     /**
-     * @var FqnAnnotationTypeDecorator
+     * @var CurrentNodeProvider
      */
-    private $fqnAnnotationTypeDecorator;
-
-    /**
-     * @var TypeNodeToStringsConverter
-     */
-    private $typeNodeToStringsConverter;
+    private $currentNodeProvider;
 
     public function __construct(
         PhpDocInfoFactory $phpDocInfoFactory,
         PhpDocInfoPrinter $phpDocInfoPrinter,
-        PhpDocInfoFqnTypeDecorator $phpDocInfoFqnTypeDecorator,
-        FqnAnnotationTypeDecorator $fqnAnnotationTypeDecorator,
-        TypeNodeToStringsConverter $typeNodeToStringsConverter
+        PhpDocModifier $phpDocModifier,
+        CurrentNodeProvider $currentNodeProvider
     ) {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->phpDocInfoPrinter = $phpDocInfoPrinter;
-        $this->phpDocInfoFqnTypeDecorator = $phpDocInfoFqnTypeDecorator;
-        $this->fqnAnnotationTypeDecorator = $fqnAnnotationTypeDecorator;
-        $this->typeNodeToStringsConverter = $typeNodeToStringsConverter;
+        $this->phpDocModifier = $phpDocModifier;
+        $this->currentNodeProvider = $currentNodeProvider;
     }
 
     public function hasTag(Node $node, string $name): bool
@@ -68,25 +64,14 @@ final class DocBlockAnalyzer
             return false;
         }
 
-        // normalize tag name
-        $name = ltrim($name, '@');
-
         // simple check
-        if (Strings::contains($node->getDocComment()->getText(), '@' . ltrim($name, '@'))) {
-            return true;
-        }
-
-        // fqn class annotation
-        if (Strings::contains($node->getDocComment()->getText(), '@\\' . ltrim($name, '@'))) {
+        $pattern = '#@(\\\\)?' . preg_quote(ltrim($name, '@')) . '#';
+        if (Strings::match($node->getDocComment()->getText(), $pattern)) {
             return true;
         }
 
         // advanced check, e.g. for "Namespaced\Annotations\DI"
-        $phpDocInfo = $this->createPhpDocInfoWithFqnTypesFromNode($node);
-
-        if ($this->isNamespaced($name)) {
-            $this->fqnAnnotationTypeDecorator->decorate($phpDocInfo, $node);
-        }
+        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
 
         return $phpDocInfo->hasTag($name);
     }
@@ -97,8 +82,8 @@ final class DocBlockAnalyzer
             return;
         }
 
-        $phpDocInfo = $this->createPhpDocInfoWithFqnTypesFromNode($node);
-        $phpDocInfo->removeParamTagByParameter($name);
+        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
+        $this->phpDocModifier->removeParamTagByParameter($phpDocInfo, $name);
 
         $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
     }
@@ -124,11 +109,7 @@ final class DocBlockAnalyzer
 
         $phpDocInfo = $this->createPhpDocInfoFromNode($node);
 
-        if ($this->isNamespaced($name)) {
-            $this->fqnAnnotationTypeDecorator->decorate($phpDocInfo, $node);
-        }
-
-        $phpDocInfo->removeTagByName($name);
+        $this->phpDocModifier->removeTagByName($phpDocInfo, $name);
         $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
     }
 
@@ -138,9 +119,9 @@ final class DocBlockAnalyzer
             return;
         }
 
-        $phpDocInfo = $this->createPhpDocInfoWithFqnTypesFromNode($node);
+        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
 
-        $phpDocInfo->replacePhpDocTypeByAnother($oldType, $newType);
+        $this->phpDocModifier->replacePhpDocTypeByAnother($phpDocInfo->getPhpDocNode(), $oldType, $newType);
 
         $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
     }
@@ -152,7 +133,7 @@ final class DocBlockAnalyzer
         }
 
         $phpDocInfo = $this->createPhpDocInfoFromNode($node);
-        $phpDocInfo->replaceTagByAnother($oldAnnotation, $newAnnotation);
+        $this->phpDocModifier->replaceTagByAnother($phpDocInfo->getPhpDocNode(), $oldAnnotation, $newAnnotation);
 
         $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
     }
@@ -163,12 +144,13 @@ final class DocBlockAnalyzer
             return null;
         }
 
-        $types = $this->createPhpDocInfoFromNode($node)->getReturnTypes();
+        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
+        $types = $phpDocInfo->getShortReturnTypes();
         if ($types === []) {
             return null;
         }
 
-        $fqnTypes = $this->createPhpDocInfoWithFqnTypesFromNode($node)->getReturnTypes();
+        $fqnTypes = $phpDocInfo->getReturnTypes();
 
         return new ReturnTypeInfo($types, $fqnTypes);
     }
@@ -190,18 +172,20 @@ final class DocBlockAnalyzer
             return [];
         }
 
-        $this->fqnAnnotationTypeDecorator->decorate($phpDocInfo, $node);
+//        $this->fqnAnnotationTypeDecorator->decorate($phpDocInfo, $node);
+
         $fqnTypes = $phpDocInfo->getParamTagValues();
 
         $paramTypeInfos = [];
-        /** @var ParamTagValueNode $paramTagValueNode */
+        /** @var AttributeAwareParamTagValueNode $paramTagValueNode */
         foreach ($types as $i => $paramTagValueNode) {
             $fqnParamTagValueNode = $fqnTypes[$i];
 
             $paramTypeInfo = new ParamTypeInfo(
                 $paramTagValueNode->parameterName,
-                $this->typeNodeToStringsConverter->convert($paramTagValueNode->type),
-                $this->typeNodeToStringsConverter->convert($fqnParamTagValueNode->type)
+                $paramTagValueNode->getAttribute(Attribute::TYPE_AS_ARRAY),
+                // @todo FQN_TYPE_AS_ARRAY param
+                $fqnParamTagValueNode->getAttribute(Attribute::TYPE_AS_ARRAY)
             );
 
             $paramTypeInfos[$paramTypeInfo->getName()] = $paramTypeInfo;
@@ -220,11 +204,7 @@ final class DocBlockAnalyzer
             return [];
         }
 
-        $phpDocInfo = $this->createPhpDocInfoWithFqnTypesFromNode($node);
-
-        if ($this->isNamespaced($name)) {
-            $this->fqnAnnotationTypeDecorator->decorate($phpDocInfo, $node);
-        }
+        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
 
         return $phpDocInfo->getTagsByName($name);
     }
@@ -236,8 +216,10 @@ final class DocBlockAnalyzer
             $phpDocInfo = $this->createPhpDocInfoFromNode($node);
             $phpDocNode = $phpDocInfo->getPhpDocNode();
 
-            $varTagValueNode = new VarTagValueNode(new IdentifierTypeNode('\\' . $type), '', '');
-            $phpDocNode->children[] = new PhpDocTagNode('@var', $varTagValueNode);
+            $varTagValueNode = new AttributeAwareVarTagValueNode(new AttributeAwareIdentifierTypeNode(
+                '\\' . $type
+            ), '', '');
+            $phpDocNode->children[] = new AttributeAwarePhpDocTagNode('@var', $varTagValueNode);
 
             $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
         } else {
@@ -268,29 +250,14 @@ final class DocBlockAnalyzer
         }
 
         $phpDocInfo = $this->createPhpDocInfoFromNode($node);
-        $types = $phpDocInfo->getVarTypes();
+        $types = $phpDocInfo->getShortVarTypes();
         if ($types === []) {
             return null;
         }
 
-        $this->phpDocInfoFqnTypeDecorator->decorate($phpDocInfo, $node);
         $fqnTypes = $phpDocInfo->getVarTypes();
 
         return new VarTypeInfo($types, $fqnTypes);
-    }
-
-    private function createPhpDocInfoWithFqnTypesFromNode(Node $node): PhpDocInfo
-    {
-        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
-
-        $this->phpDocInfoFqnTypeDecorator->decorate($phpDocInfo, $node);
-
-        return $phpDocInfo;
-    }
-
-    private function isNamespaced(string $name): bool
-    {
-        return Strings::contains($name, '\\');
     }
 
     private function updateNodeWithPhpDocInfo(Node $node, PhpDocInfo $phpDocInfo): void
@@ -318,6 +285,8 @@ final class DocBlockAnalyzer
                 __METHOD__
             ));
         }
+
+        $this->currentNodeProvider->setNode($node);
 
         return $this->phpDocInfoFactory->createFrom($node->getDocComment()->getText());
     }

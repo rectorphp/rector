@@ -112,6 +112,7 @@ parameters:
         - '#class\@anonymous#'
         - '#Parameter \#2 \$classMethodNode of method Rector\\NetteToSymfony\\Rector\\ClassMethod\\RouterListToControllerAnnotationsRector\:\:resolvePathFromClassAndMethodNodes\(\) expects PhpParser\\Node\\Stmt\\ClassMethod, PhpParser\\Node\\Stmt given#'
         - '#Method Rector\\NetteToSymfony\\Rector\\ClassMethod\\RouterListToControllerAnnotationsRector\:\:resolveAssignRouteNodes\(\) should return array<PhpParser\\Node\\Expr\\Assign\> but returns array<PhpParser\\Node\>#'
+        - '#Access to an undefined property Symplify\\BetterPhpDocParser\\Attributes\\Contract\\Ast\\AttributeAwareNodeInterface\:\:\$type#'
 
         # part of test
         - '#Class Manual\\Twig\\TwigFilter not found#'
