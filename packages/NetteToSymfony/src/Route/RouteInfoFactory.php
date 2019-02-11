@@ -89,6 +89,8 @@ final class RouteInfoFactory
             return null;
         }
 
+        $routePath = $this->normalizeArgumentWrappers($routePath);
+
         $targetNode = $expr->args[1]->value;
         if ($targetNode instanceof ClassConstFetch) {
             /** @var ClassConstFetch $controllerMethodNode */
@@ -153,5 +155,10 @@ final class RouteInfoFactory
         }
 
         return null;
+    }
+
+    private function normalizeArgumentWrappers(string $routePath): string
+    {
+        return str_replace(['<', '>'], ['{', '}'], $routePath);
     }
 }

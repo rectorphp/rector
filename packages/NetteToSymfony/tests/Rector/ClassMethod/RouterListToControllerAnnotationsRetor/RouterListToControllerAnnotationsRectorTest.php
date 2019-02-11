@@ -7,7 +7,7 @@ use Rector\NetteToSymfony\Tests\Rector\ClassMethod\RouterListToControllerAnnotat
 use Rector\NetteToSymfony\Tests\Rector\ClassMethod\RouterListToControllerAnnotationsRetor\Source\RouteList;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class RouterListToControllerAnnotationsRetorTest extends AbstractRectorTestCase
+final class RouterListToControllerAnnotationsRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
     {
@@ -17,6 +17,7 @@ final class RouterListToControllerAnnotationsRetorTest extends AbstractRectorTes
             __DIR__ . '/Fixture/constant_reference_route_to_annotation.php.inc',
             __DIR__ . '/Fixture/method_named_routes.php.inc',
             __DIR__ . '/Fixture/general_method_named_routes.php.inc',
+            __DIR__ . '/Fixture/with_parameter.php.inc',
         ]);
     }
 
