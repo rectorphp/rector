@@ -87,8 +87,9 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
         // changed!
         if ($originalNode !== $node) {
-            $this->keepFileInfoAttribute($node, $originalNode);
+            $this->mirrorAttributes($originalNode, $node);
 
+            $this->keepFileInfoAttribute($node, $originalNode);
             $this->notifyNodeChangeFileInfo($node);
         }
 
@@ -196,6 +197,30 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
             /** @var Node $parentOriginalNode */
             $parentOriginalNode = $originalNode->getAttribute(Attribute::PARENT_NODE);
             $node->setAttribute(Attribute::FILE_INFO, $parentOriginalNode->getAttribute(Attribute::FILE_INFO));
+        }
+    }
+
+    private function mirrorAttributes(Node $oldNode, Node $newNode): void
+    {
+        $attributesToMirror = [
+            Attribute::CLASS_NODE,
+            Attribute::CLASS_NAME,
+            Attribute::FILE_INFO,
+            Attribute::METHOD_NODE,
+            Attribute::USE_NODES,
+            Attribute::SCOPE,
+            Attribute::METHOD_NAME,
+            Attribute::NAMESPACE_NAME,
+            Attribute::NAMESPACE_NODE,
+            Attribute::RESOLVED_NAME,
+        ];
+
+        foreach ($oldNode->getAttributes() as $attributeName => $oldNodeAttributeValue) {
+            if (! in_array($attributeName, $attributesToMirror, true)) {
+                continue;
+            }
+
+            $newNode->setAttribute($attributeName, $oldNodeAttributeValue);
         }
     }
 }
