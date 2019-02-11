@@ -20,7 +20,7 @@ final class EventInfosFactory
             ],
             'Symfony\Component\HttpKernel\KernelEvents',
             'REQUEST',
-            'Symfony\Component\HttpKernel\Event\GetResponseEvent',
+            'Symfony\Component\HttpKernel\Event\GetResponseEvent'
         );
 
         $eventInfos[] = new EventInfo(
@@ -59,7 +59,7 @@ final class EventInfosFactory
             ],
             'Symfony\Component\HttpKernel\KernelEvents',
             'CONTROLLER',
-            'Symfony\Component\HttpKernel\Event\FilterControllerEvent',
+            'Symfony\Component\HttpKernel\Event\FilterControllerEvent'
         );
 
         $eventInfos[] = new EventInfo(
