@@ -3,7 +3,6 @@
 namespace Rector\RectorDefinition;
 
 use Rector\Contract\RectorDefinition\CodeSampleInterface;
-use Rector\Exception\RectorDefinition\CodeSamplesMissingException;
 
 final class RectorDefinition
 {
@@ -20,7 +19,7 @@ final class RectorDefinition
     /**
      * @param CodeSampleInterface[] $codeSamples
      */
-    public function __construct(string $description, array $codeSamples)
+    public function __construct(string $description, array $codeSamples = [])
     {
         $this->ensureCodeSamplesAreValid($codeSamples);
 
@@ -42,8 +41,6 @@ final class RectorDefinition
     }
 
     /**
-     * At least 1 sample is required, so both author and reader have the same knowledge.
-     *
      * @param CodeSampleInterface[] $codeSamples
      */
     private function ensureCodeSamplesAreValid(array $codeSamples): void
@@ -51,15 +48,5 @@ final class RectorDefinition
         array_walk($codeSamples, function (CodeSampleInterface $codeSample): void {
             // array type check
         });
-
-        if (count($codeSamples)) {
-            return;
-        }
-
-        throw new CodeSamplesMissingException(sprintf(
-            'At least 1 code sample is required for the "%s" class 2nd argument, so docs and examples can be generated. %d given',
-            self::class,
-            count($codeSamples)
-        ));
     }
 }
