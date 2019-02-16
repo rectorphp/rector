@@ -33,9 +33,13 @@ services:
 
     Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector:
         Cake\Core\InstanceConfigTrait:
-            config: ~
+            config:
+                minimal_argument_count: 2
+                first_argument_type_to_set: array
         Cake\Core\StaticConfigTrait:
-            config: ~
+            config:
+                minimal_argument_count: 2
+                first_argument_type_to_set: array
             dsnClassMap: ~
         Cake\Console\ConsoleOptionParser:
             command: ~
