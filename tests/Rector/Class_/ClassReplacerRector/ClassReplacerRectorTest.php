@@ -25,6 +25,7 @@ final class ClassReplacerRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Fixture/interface_to_class.php.inc',
             __DIR__ . '/Fixture/name_insensitive.php.inc',
             __DIR__ . '/Fixture/twig_case.php.inc',
+            __DIR__ . '/Fixture/keep_return_tag.php.inc',
         ]);
     }
 

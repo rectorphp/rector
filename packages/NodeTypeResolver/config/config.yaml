@@ -4,9 +4,6 @@ imports:
     # B. installed as dependency
     - { resource: '../../../../../symplify/better-phpdoc-parser/config/config.yml', ignore_errors: true }
 
-parameters:
-    exclude_paths: [] # for FilesFinder
-
 services:
     _defaults:
         public: true
@@ -17,9 +14,8 @@ services:
         exclude: '../src/{Contract,Php/*Info.php}'
 
     Rector\Php\TypeAnalyzer: ~
-    Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer: ~
-    Rector\PhpParser\Printer\BetterStandardPrinter: ~
     Rector\FileSystem\FilesFinder: ~
+    Rector\PhpParser\Printer\BetterStandardPrinter: ~
     Rector\PhpParser\Node\BetterNodeFinder: ~
 
     # PHPStan

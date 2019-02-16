@@ -4,6 +4,7 @@ namespace Rector\NodeTypeResolver\Tests\PhpDoc\NodeAnalyzer;
 
 use PhpParser\Comment\Doc;
 use PhpParser\Node\Scalar\String_;
+use Rector\NodeTypeResolver\Node\CurrentNodeProvider;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
 use Rector\Tests\AbstractContainerAwareTestCase;
 
@@ -14,14 +15,21 @@ final class DocBlockAnalyzerTest extends AbstractContainerAwareTestCase
      */
     private $docBlockAnalyzer;
 
+    /**
+     * @var CurrentNodeProvider
+     */
+    private $currentNodeProvider;
+
     protected function setUp(): void
     {
         $this->docBlockAnalyzer = $this->container->get(DocBlockAnalyzer::class);
+        $this->currentNodeProvider = $this->container->get(CurrentNodeProvider::class);
     }
 
     public function testHasAnnotation(): void
     {
         $node = $this->createNodeWithDoc('@param ParamType $paramName');
+        $this->currentNodeProvider->setNode($node);
 
         $this->assertTrue($this->docBlockAnalyzer->hasTag($node, 'param'));
         $this->assertFalse($this->docBlockAnalyzer->hasTag($node, 'var'));
@@ -30,6 +38,8 @@ final class DocBlockAnalyzerTest extends AbstractContainerAwareTestCase
     public function testRemoveAnnotationFromNode(): void
     {
         $node = $this->createNodeWithDoc('@param ParamType $paramName');
+        $this->currentNodeProvider->setNode($node);
+
         $this->assertNotSame('', $node->getDocComment()->getText());
 
         $this->docBlockAnalyzer->removeTagFromNode($node, 'param');
@@ -40,6 +50,8 @@ final class DocBlockAnalyzerTest extends AbstractContainerAwareTestCase
  * @param AnotherValue $anotherValue
 CODE_SAMPLE;
         $node = $this->createNodeWithDoc($initDoc);
+        $this->currentNodeProvider->setNode($node);
+
         $this->docBlockAnalyzer->removeParamTagByName($node, 'paramName');
 
         $expectedDoc = <<<'CODE_SAMPLE'
@@ -53,6 +65,8 @@ CODE_SAMPLE;
     private function createNodeWithDoc(string $doc): String_
     {
         $node = new String_('string');
+        $this->currentNodeProvider->setNode($node);
+
         $node->setDocComment(new Doc(sprintf('/**%s%s%s */', PHP_EOL, $doc, PHP_EOL)));
 
         return $node;

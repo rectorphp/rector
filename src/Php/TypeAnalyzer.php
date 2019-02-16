@@ -29,6 +29,7 @@ final class TypeAnalyzer
                 'int',
                 'self',
                 'parent',
+                'callable',
                 'void',
             ],
             true
