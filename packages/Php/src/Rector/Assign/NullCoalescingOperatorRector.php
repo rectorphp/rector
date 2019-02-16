@@ -4,6 +4,7 @@ namespace Rector\Php\Rector\Assign;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\AssignOp\Coalesce as AssignCoalesce;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -52,9 +53,6 @@ CODE_SAMPLE
             return null;
         }
 
-        $coalesceNode = new Coalesce($node->var, $node->expr->right);
-        $coalesceNode->setAttribute('null_coalesce', true);
-
-        return $coalesceNode;
+        return new AssignCoalesce($node->var, $node->expr->right);
     }
 }

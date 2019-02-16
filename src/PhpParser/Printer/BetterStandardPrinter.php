@@ -5,7 +5,6 @@ namespace Rector\PhpParser\Printer;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\Scalar\EncapsedStringPart;
@@ -162,17 +161,5 @@ final class BetterStandardPrinter extends Standard
             . '(' . $this->pCommaSeparated($node->params) . ')'
             . ($node->returnType !== null ? ': ' . $this->p($node->returnType) : '')
             . ($node->stmts !== null ? $this->nl . '{' . $this->pStmts($node->stmts) . $this->nl . '}' : ';');
-    }
-
-    /**
-     * Print ??= since PHP 7.4
-     */
-    protected function pExpr_BinaryOp_Coalesce(Coalesce $node): string
-    {
-        if (! $node->getAttribute('null_coalesce')) {
-            return parent::pExpr_BinaryOp_Coalesce($node);
-        }
-
-        return $this->pInfixOp(Coalesce::class, $node->left, ' ??= ', $node->right);
     }
 }
