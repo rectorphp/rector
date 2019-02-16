@@ -11,9 +11,8 @@ services:
 
     Rector\NodeTypeResolver\:
         resource: '../src'
-        exclude: '../src/{Contract,Php/*Info.php,PHPStan/PhpDocParser/Ast/Type/*}'
+        exclude: '../src/{Contract,Php/*Info.php}'
 
-#    Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer: ~
     Rector\Php\TypeAnalyzer: ~
     Rector\FileSystem\FilesFinder: ~
     Rector\PhpParser\Printer\BetterStandardPrinter: ~

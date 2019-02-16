@@ -172,8 +172,6 @@ final class DocBlockAnalyzer
             return [];
         }
 
-//        $this->fqnAnnotationTypeDecorator->decorate($phpDocInfo, $node);
-
         $fqnTypes = $phpDocInfo->getParamTagValues();
 
         $paramTypeInfos = [];
@@ -184,7 +182,6 @@ final class DocBlockAnalyzer
             $paramTypeInfo = new ParamTypeInfo(
                 $paramTagValueNode->parameterName,
                 $paramTagValueNode->getAttribute(Attribute::TYPE_AS_ARRAY),
-                // @todo FQN_TYPE_AS_ARRAY param
                 $fqnParamTagValueNode->getAttribute(Attribute::TYPE_AS_ARRAY)
             );
 
