@@ -7,6 +7,8 @@ final class Ternary
     public function run(int $item)
     {
         return $item ? 1 : 0;
+
+        return $item ?: 0;
     }
 }
 
@@ -21,6 +23,8 @@ final class Ternary
     public function run(int $item)
     {
         return $item !== 0 ? 1 : 0;
+
+        return $item ?: 0;
     }
 }
 

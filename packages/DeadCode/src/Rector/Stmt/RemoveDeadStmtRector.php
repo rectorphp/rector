@@ -49,7 +49,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($node->getComments()) {
+        if ($node->getComments() !== []) {
             return null;
         }
 

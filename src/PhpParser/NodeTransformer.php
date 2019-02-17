@@ -85,7 +85,7 @@ final class NodeTransformer
 
         foreach ($arrayNode->items as $arrayItem) {
             $expressionNode = new Expression(new Yield_($arrayItem->value, $arrayItem->key));
-            if ($arrayItem->getComments()) {
+            if ($arrayItem->getComments() !== []) {
                 $expressionNode->setAttribute('comments', $arrayItem->getComments());
             }
 
@@ -156,7 +156,7 @@ final class NodeTransformer
         $arrayItems = [];
         $parts = $this->splitBySpace($node->value);
         foreach ($parts as $part) {
-            if (trim($part)) {
+            if (trim($part) !== '') {
                 $arrayItems[] = new String_($part);
             }
         }

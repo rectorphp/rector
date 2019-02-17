@@ -46,7 +46,7 @@ final class RouteTagValueNode implements PhpDocChildNode
             $string .= sprintf(', name="%s"', $this->name);
         }
 
-        if ($this->methods) {
+        if ($this->methods !== []) {
             $string .= sprintf(', methods={"%s"}', implode('", "', $this->methods));
         }
 

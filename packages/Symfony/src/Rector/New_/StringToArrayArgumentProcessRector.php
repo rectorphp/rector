@@ -125,7 +125,7 @@ CODE_SAMPLE
     {
         if ($firstArgument instanceof Concat) {
             $arrayNode = $this->nodeTransformer->transformConcatToStringArray($firstArgument);
-            if ($arrayNode) {
+            if ($arrayNode !== null) {
                 $node->args[$argumentPosition] = new Arg($arrayNode);
             }
 
@@ -134,7 +134,7 @@ CODE_SAMPLE
 
         if ($firstArgument instanceof FuncCall && $this->isName($firstArgument, 'sprintf')) {
             $arrayNode = $this->nodeTransformer->transformSprintfToArray($firstArgument);
-            if ($arrayNode) {
+            if ($arrayNode !== null) {
                 $node->args[$argumentPosition]->value = $arrayNode;
             }
         } elseif ($firstArgument instanceof String_) {
@@ -155,7 +155,7 @@ CODE_SAMPLE
             'sprintf'
         )) {
             $arrayNode = $this->nodeTransformer->transformSprintfToArray($createdNode->expr);
-            if ($arrayNode) {
+            if ($arrayNode !== null) {
                 $createdNode->expr = $arrayNode;
             }
         }

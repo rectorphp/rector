@@ -184,7 +184,7 @@ CODE_SAMPLE
         }
 
         $classConstNode = $this->constantNodeCollector->findConstant($constantName, $className);
-        if ($classConstNode) {
+        if ($classConstNode !== null) {
             if ($classConstNode->consts[0]->value instanceof String_) {
                 /** @var String_ $stringNode */
                 $stringNode = $classConstNode->consts[0]->value;

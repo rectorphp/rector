@@ -185,7 +185,7 @@ final class NodeTypeAnalyzer
                     $itemTypes[$key] = $itemType . '[]';
                 }
 
-                if (count($itemTypes)) {
+                if (count($itemTypes) > 0) {
                     return [implode('|', $itemTypes)];
                 }
             }

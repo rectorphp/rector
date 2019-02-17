@@ -311,7 +311,7 @@ CODE_SAMPLE
         }
 
         $methodReflection = new ReflectionMethod($className, $methodName);
-        if ($methodReflection->getReturnType()) {
+        if ($methodReflection->getReturnType() !== null) {
             $staticCallReturnType = (string) $methodReflection->getReturnType();
             if (is_a($staticCallReturnType, $this->routerClass, true)) {
                 return true;

@@ -67,10 +67,15 @@ CODE_SAMPLE
     }
 
     /**
-     * @param If_|ElseIf_ $node
+     * @param If_|ElseIf_|Ternary $node
      */
     public function refactor(Node $node): ?Node
     {
+        // skip short ternary
+        if ($node instanceof Ternary && $node->if === null) {
+            return null;
+        }
+
         if ($node->cond instanceof BooleanNot) {
             $conditionNode = $node->cond->expr;
             $isNegated = true;
@@ -124,7 +129,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @return Smaller|Greater
+     * @return Identical|Greater
      */
     private function resolveCount(bool $isNegated, Expr $conditionNode): BinaryOp
     {

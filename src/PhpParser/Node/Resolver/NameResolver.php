@@ -33,21 +33,21 @@ final class NameResolver
             Empty_::class => 'empty',
             // more complex
             function (ClassConst $classConstNode): ?string {
-                if (! count($classConstNode->consts)) {
+                if (count($classConstNode->consts) === 0) {
                     return null;
                 }
 
                 return $this->resolve($classConstNode->consts[0]);
             },
             function (Property $propertyNode): ?string {
-                if (! count($propertyNode->props)) {
+                if (count($propertyNode->props) === 0) {
                     return null;
                 }
 
                 return $this->resolve($propertyNode->props[0]);
             },
             function (Use_ $useNode): ?string {
-                if (! count($useNode->uses)) {
+                if (count($useNode->uses) === 0) {
                     return null;
                 }
 

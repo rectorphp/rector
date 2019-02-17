@@ -96,11 +96,11 @@ CODE_SAMPLE
 
     private function getDocContent(Node $node): string
     {
-        if ($node->getDocComment()) {
+        if ($node->getDocComment() !== null) {
             return $node->getDocComment()->getText();
         }
 
-        if ($node->getComments()) {
+        if ($node->getComments() !== []) {
             $docContent = '';
             foreach ($node->getComments() as $comment) {
                 $docContent .= $comment->getText();

@@ -56,7 +56,7 @@ final class ComplexNodeTypeResolver
         $types = [];
 
         $propertyDefault = $propertyNode->props[0]->default;
-        if ($propertyDefault) {
+        if ($propertyDefault !== null) {
             $types[] = $this->nodeToStringTypeResolver->resolver($propertyDefault);
         }
 

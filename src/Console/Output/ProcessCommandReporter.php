@@ -58,7 +58,7 @@ final class ProcessCommandReporter
             $this->symfonyStyle->writeln($fileDiff->getDiff());
             $this->symfonyStyle->newLine();
 
-            if ($fileDiff->getAppliedRectorClasses()) {
+            if ($fileDiff->getAppliedRectorClasses() !== []) {
                 $this->symfonyStyle->writeln('Applied rectors:');
                 $this->symfonyStyle->newLine();
                 $this->symfonyStyle->listing($fileDiff->getAppliedRectorClasses());

@@ -99,7 +99,7 @@ final class MarkdownOutputFormatter implements OutputFormatterInterface
         $this->symfonyStyle->writeln(sprintf('- class: `%s`', get_class($rector)));
 
         $rectorDefinition = $rector->getDefinition();
-        if ($rectorDefinition->getDescription()) {
+        if ($rectorDefinition->getDescription() !== '') {
             $this->symfonyStyle->newLine();
             $this->symfonyStyle->writeln($rectorDefinition->getDescription());
         }

@@ -90,7 +90,7 @@ final class DocBlockAnalyzer
 
     public function addTag(Node $node, PhpDocChildNode $phpDocChildNode): void
     {
-        if ($node->getDocComment()) {
+        if ($node->getDocComment() !== null) {
             $phpDocInfo = $this->createPhpDocInfoFromNode($node);
             $phpDocNode = $phpDocInfo->getPhpDocNode();
             $phpDocNode->children[] = $phpDocChildNode;
@@ -209,7 +209,7 @@ final class DocBlockAnalyzer
     public function addVarTag(Node $node, string $type): void
     {
         // there might be no phpdoc at all
-        if ($node->getDocComment()) {
+        if ($node->getDocComment() !== null) {
             $phpDocInfo = $this->createPhpDocInfoFromNode($node);
             $phpDocNode = $phpDocInfo->getPhpDocNode();
 
@@ -265,7 +265,7 @@ final class DocBlockAnalyzer
         }
 
         $phpDoc = $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo);
-        if ($phpDoc) {
+        if ($phpDoc !== '') {
             $node->setDocComment(new Doc($phpDoc));
             return;
         }

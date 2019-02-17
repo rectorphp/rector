@@ -100,7 +100,7 @@ CODE_SAMPLE
         $renderArguments = $this->resolveRenderArguments($node, $returnNode);
         $thisRenderMethodCall = $this->createMethodCall('this', 'render', $renderArguments);
 
-        if (! $returnNode) {
+        if ($returnNode === null) {
             // or add as last statement in the method
             $node->stmts[] = new Return_($thisRenderMethodCall);
         }
@@ -122,7 +122,7 @@ CODE_SAMPLE
     private function resolveRenderArguments(ClassMethod $classMethodNode, ?Return_ $returnNode): array
     {
         $arguments = [$this->resolveTemplateName($classMethodNode)];
-        if (! $returnNode) {
+        if ($returnNode === null) {
             return $this->createArgs($arguments);
         }
 

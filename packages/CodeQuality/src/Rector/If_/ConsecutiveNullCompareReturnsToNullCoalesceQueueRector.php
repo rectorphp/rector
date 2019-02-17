@@ -89,7 +89,7 @@ CODE_SAMPLE
         while ($currentNode !== null) {
             if ($currentNode instanceof If_) {
                 $comparedNode = $this->ifMaintainer->matchIfNotNullReturnValue($currentNode);
-                if ($comparedNode) {
+                if ($comparedNode !== null) {
                     $this->coalescingNodes[] = $comparedNode;
                     $this->nodesToRemove[] = $currentNode;
 

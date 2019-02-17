@@ -152,7 +152,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (count($newNode->args)) {
+        if (count($newNode->args) > 0) {
             $methodCallNode = $this->moveArgumentsToOptions(
                 $methodCallNode,
                 $position,
@@ -230,7 +230,7 @@ CODE_SAMPLE
         $reflectionClass = new ReflectionClass($className);
         $constructorReflectionMethod = $reflectionClass->getConstructor();
 
-        if (! $constructorReflectionMethod) {
+        if ($constructorReflectionMethod === null) {
             return [];
         }
 
@@ -244,7 +244,7 @@ CODE_SAMPLE
 
     private function addBuildFormMethod(Class_ $classNode, ClassMethod $formTypeConstructorMethodNode): void
     {
-        if ($classNode->getMethod('buildForm')) {
+        if ($classNode->getMethod('buildForm') !== null) {
             // @todo
             return;
         }
@@ -278,7 +278,7 @@ CODE_SAMPLE
      */
     private function addConfigureOptionsMethod(Class_ $classNode, array $namesToArgs): void
     {
-        if ($classNode->getMethod('configureOptions')) {
+        if ($classNode->getMethod('configureOptions') !== null) {
             // @todo
             return;
         }
