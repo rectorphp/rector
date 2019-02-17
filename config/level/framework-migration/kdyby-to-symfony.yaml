@@ -1,0 +1,11 @@
+services:
+    Rector\Rector\Class_\ClassReplacerRector:
+        # Kdyby → Symfony
+        Kdyby\Translation\Translator: Symfony\Component\Translation\Translator
+
+    Rector\Rector\MethodCall\MethodNameReplacerRector:
+        # Kdyby → Symfony
+        Symfony\Component\Translation\Translator:
+            translate: trans
+    # Kdyby → Symfony
+    Rector\NetteToSymfony\Rector\MethodCall\WrapTransParameterNameRector: ~
