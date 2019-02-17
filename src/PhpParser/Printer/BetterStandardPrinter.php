@@ -42,6 +42,12 @@ final class BetterStandardPrinter extends Standard
             return 'UNABLE_TO_PRINT_ENCAPSED_STRING';
         }
 
+        // remove comments, for value compare
+        if ($node instanceof Node) {
+            $node = clone $node;
+            $node->setAttribute('comments', null);
+        }
+
         if (! is_array($node)) {
             $node = [$node];
         }

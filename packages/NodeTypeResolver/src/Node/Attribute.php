@@ -95,4 +95,9 @@ final class Attribute
      * @var string
      */
     public const FILE_INFO = 'fileInfo';
+
+    /**
+     * @var string
+     */
+    public const START_TOKEN_POSITION = 'startTokenPos';
 }

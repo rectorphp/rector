@@ -143,6 +143,7 @@ parameters:
         Symplify\CodingStandard\Sniffs\Debug\CommentedOutCodeSniff.Found:
             # notes
             - 'packages/Php/src/Rector/Each/ListEachRector.php'
+            - 'packages/DeadCode/src/Rector/ClassMethod/RemoveOverriddenValuesRector.php'
 
         Symplify\CodingStandard\Sniffs\DependencyInjection\NoClassInstantiationSniff:
             # 3rd party api

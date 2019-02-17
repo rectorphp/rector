@@ -65,8 +65,6 @@ final class AssertRegExpRector extends AbstractPHPUnitRector
             return null;
         }
 
-        $oldCondition = null;
-
         $oldFirstArgument = $node->args[0]->value;
         $oldCondition = $this->resolveOldCondition($oldFirstArgument);
 
