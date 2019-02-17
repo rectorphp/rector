@@ -92,7 +92,7 @@ final class CallMaintainer
             $reflectionFunctionAbstract->getDeclaringClass()->getName()
         );
 
-        if ($classMethodNode) {
+        if ($classMethodNode !== null) {
             return $this->containsFuncGetArgsFuncCall($classMethodNode);
         }
         return $this->isExternalScopeVariadic($reflectionFunctionAbstract, $callNode);

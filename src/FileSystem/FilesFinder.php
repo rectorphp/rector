@@ -82,12 +82,12 @@ final class FilesFinder
      */
     private function findInDirectories(array $directories, array $suffixes): array
     {
-        if (! count($directories)) {
+        if (count($directories) === 0) {
             return [];
         }
 
         $absoluteDirectories = $this->filesystemTweaker->resolveDirectoriesWithFnmatch($directories);
-        if (! $absoluteDirectories) {
+        if ($absoluteDirectories === []) {
             return [];
         }
 
@@ -120,7 +120,7 @@ final class FilesFinder
 
     private function addFilterWithExcludedPaths(Finder $finder): void
     {
-        if (! $this->excludePaths) {
+        if ($this->excludePaths === []) {
             return;
         }
 

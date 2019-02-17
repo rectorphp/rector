@@ -155,7 +155,7 @@ CODE_SAMPLE
     private function processArrayItem(ArrayItem $node, array $newNodeTypes): ?Node
     {
         $matchedOldClasses = array_intersect(array_keys($this->oldToNewClasses), $newNodeTypes);
-        if (! $matchedOldClasses) {
+        if ($matchedOldClasses === []) {
             return null;
         }
 

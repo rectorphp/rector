@@ -15,6 +15,7 @@ use PHPStan\Type\Accessory\HasOffsetType;
 use PHPStan\Type\Accessory\NonEmptyArrayType;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
+use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\IntersectionType;
 use PHPStan\Type\MixedType;
@@ -70,6 +71,11 @@ final class NodeTypeAnalyzer
     public function isIntType(Node $node): bool
     {
         return $this->getNodeStaticType($node) instanceof IntegerType;
+    }
+
+    public function isFloatType(Node $node): bool
+    {
+        return $this->getNodeStaticType($node) instanceof FloatType;
     }
 
     public function isStringyType(Node $node): bool
@@ -179,7 +185,7 @@ final class NodeTypeAnalyzer
                     $itemTypes[$key] = $itemType . '[]';
                 }
 
-                if (count($itemTypes)) {
+                if (count($itemTypes) > 0) {
                     return [implode('|', $itemTypes)];
                 }
             }
@@ -194,6 +200,30 @@ final class NodeTypeAnalyzer
         $nodeStaticType = $this->getNodeStaticType($node);
 
         return $this->staticTypeToStringResolver->resolve($nodeStaticType);
+    }
+
+    public function isNullableObjectType(Node $node): bool
+    {
+        $nodeType = $this->getNodeStaticType($node);
+        if (! $nodeType instanceof UnionType) {
+            return false;
+        }
+
+        if ($nodeType->isSuperTypeOf(new NullType())->no()) {
+            return false;
+        }
+
+        if (count($nodeType->getTypes()) !== 2) {
+            return false;
+        }
+
+        foreach ($nodeType->getTypes() as $subtype) {
+            if ($subtype instanceof ObjectType) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

@@ -91,7 +91,7 @@ CODE_SAMPLE
                 }
 
                 $newNode = $this->processArrayDimFetchNode($node, $arrayDimFetchNode, $transformation);
-                if ($newNode) {
+                if ($newNode !== null) {
                     return $newNode;
                 }
             }

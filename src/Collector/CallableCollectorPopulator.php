@@ -74,7 +74,7 @@ final class CallableCollectorPopulator
 
     private function ensureParameterHasType(string $type): void
     {
-        if ($type) {
+        if ($type !== '') {
             return;
         }
 

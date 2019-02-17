@@ -95,7 +95,7 @@ CODE_SAMPLE
         ]);
 
         // is key included? add it to foreach
-        if (count($listNode->items)) {
+        if (count($listNode->items) > 0) {
             /** @var ArrayItem $keyItem */
             $keyItem = array_pop($listNode->items);
             $foreachNode->keyVar = $keyItem->value;

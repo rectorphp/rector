@@ -77,7 +77,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $varTypeInfo = $this->docBlockAnalyzer->getVarTypeInfo($node);
-        if ($varTypeInfo) {
+        if ($varTypeInfo !== null) {
             return null;
         }
 

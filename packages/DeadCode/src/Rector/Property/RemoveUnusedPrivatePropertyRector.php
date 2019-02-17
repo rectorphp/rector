@@ -74,7 +74,7 @@ CODE_SAMPLE
 
         $uselessAssigns = $this->resolveUselessAssignNode($propertyFetches);
 
-        if (count($uselessAssigns)) {
+        if (count($uselessAssigns) > 0) {
             $this->removeNode($node);
             foreach ($uselessAssigns as $uselessAssign) {
                 $this->removeNode($uselessAssign);

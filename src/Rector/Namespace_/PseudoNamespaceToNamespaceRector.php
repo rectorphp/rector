@@ -83,7 +83,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         // no name → skip
-        if (! $node->toString()) {
+        if ($node->toString() === '') {
             return null;
         }
 

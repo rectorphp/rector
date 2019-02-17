@@ -91,11 +91,11 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
 
         if ($parentClassName !== null) {
             $parentClassNode = $this->classLikeNodeCollector->findClass($parentClassName);
-            if ($parentClassNode) {
+            if ($parentClassNode !== null) {
                 $parentMethodNode = $parentClassNode->getMethod($methodName);
                 // @todo validate type is conflicting
                 // parent class method in local scope → it's ok
-                if ($parentMethodNode) {
+                if ($parentMethodNode !== null) {
                     // parent method has no type → we cannot change it here
                     return isset($parentMethodNode->params[$paramPosition]) && $parentMethodNode->params[$paramPosition]->type === null;
                 }
@@ -120,10 +120,10 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
         $interfaceNames = $this->getClassLikeNodeParentInterfaceNames($classNode);
         foreach ($interfaceNames as $interfaceName) {
             $interface = $this->classLikeNodeCollector->findInterface($interfaceName);
-            if ($interface) {
+            if ($interface !== null) {
                 // parent class method in local scope → it's ok
                 // @todo validate type is conflicting
-                if ($interface->getMethod($methodName)) {
+                if ($interface->getMethod($methodName) !== null) {
                     return false;
                 }
             }

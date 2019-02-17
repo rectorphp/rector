@@ -105,7 +105,7 @@ CODE_SAMPLE
             $anonymousFunctionNode->params[] = new Param($parameter);
         }
 
-        if ($body) {
+        if ($body !== []) {
             $anonymousFunctionNode->stmts = $body;
         }
 

@@ -57,7 +57,7 @@ final class BetterNodeFinder
     public function findLastInstanceOf($nodes, string $type): ?Node
     {
         $foundInstances = $this->nodeFinder->findInstanceOf($nodes, $type);
-        if (! $foundInstances) {
+        if ($foundInstances === []) {
             return null;
         }
 
@@ -90,7 +90,7 @@ final class BetterNodeFinder
 
         $foundNode = $this->findFirst([$node], $filter);
         // we found what we need
-        if ($foundNode) {
+        if ($foundNode !== null) {
             return $foundNode;
         }
 

@@ -124,7 +124,7 @@ final class ClassMaintainer
     ): void {
         $constructorMethod = $classNode->getMethod('__construct');
         /** @var ClassMethod $constructorMethod */
-        if ($constructorMethod) {
+        if ($constructorMethod !== null) {
             $this->addParameterAndAssignToMethod($constructorMethod, $variableInfo, $assignNode);
             return;
         }

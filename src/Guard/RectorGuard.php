@@ -19,7 +19,7 @@ final class RectorGuard
 
     public function ensureSomeRectorsAreRegistered(): void
     {
-        if ($this->rectorNodeTraverser->getRectorCount()) {
+        if ($this->rectorNodeTraverser->getRectorCount() !== 0) {
             return;
         }
 

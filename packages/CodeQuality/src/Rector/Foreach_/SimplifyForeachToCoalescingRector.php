@@ -70,7 +70,7 @@ CODE_SAMPLE
     {
         $this->returnNode = null;
 
-        if (! $node->keyVar) {
+        if ($node->keyVar === null) {
             return null;
         }
 
@@ -152,7 +152,7 @@ CODE_SAMPLE
             $checkedNode
         ), $this->returnNode && $this->returnNode->expr !== null ? $this->returnNode->expr : $checkedNode);
 
-        if ($this->returnNode) {
+        if ($this->returnNode !== null) {
             return new Return_($coalesceNode);
         }
 

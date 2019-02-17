@@ -58,7 +58,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $comparedNode = $this->ifMaintainer->matchIfNotNullReturnValue($node);
-        if ($comparedNode) {
+        if ($comparedNode !== null) {
             $insideIfNode = $node->stmts[0];
 
             $nextNode = $node->getAttribute(Attribute::NEXT_NODE);
@@ -75,7 +75,7 @@ CODE_SAMPLE
         }
 
         $comparedNode = $this->ifMaintainer->matchIfValueReturnValue($node);
-        if ($comparedNode) {
+        if ($comparedNode !== null) {
             $nextNode = $node->getAttribute(Attribute::NEXT_NODE);
             if (! $nextNode instanceof Return_) {
                 return null;

@@ -68,7 +68,7 @@ final class RectorServiceParametersShifter
             $nonReservedNonVariables = $this->resolveRectorConfiguration($serviceDefinition);
 
             // nothing to change
-            if (! count($nonReservedNonVariables)) {
+            if (count($nonReservedNonVariables) === 0) {
                 continue;
             }
 

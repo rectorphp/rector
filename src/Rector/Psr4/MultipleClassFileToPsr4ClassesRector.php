@@ -164,7 +164,7 @@ CODE_SAMPLE
     private function shouldSkip(SmartFileInfo $smartFileInfo, array $nodes, array $namespaceNodes): bool
     {
         // process only namespaced file
-        if (! $namespaceNodes) {
+        if ($namespaceNodes === []) {
             return true;
         }
 
@@ -176,7 +176,7 @@ CODE_SAMPLE
         });
 
         // only process file with multiple classes || class with non PSR-4 format
-        if (! $nonAnonymousClassNodes) {
+        if ($nonAnonymousClassNodes === []) {
             return true;
         }
 

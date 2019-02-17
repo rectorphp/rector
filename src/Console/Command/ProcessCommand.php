@@ -145,7 +145,7 @@ final class ProcessCommand extends AbstractCommand
 
         $this->processCommandReporter->reportRemovedFiles();
 
-        if ($this->errorAndDiffCollector->getErrors()) {
+        if ($this->errorAndDiffCollector->getErrors() !== []) {
             $this->processCommandReporter->reportErrors($this->errorAndDiffCollector->getErrors());
             return Shell::CODE_ERROR;
         }

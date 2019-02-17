@@ -77,7 +77,7 @@ final class TemplateGuesser
     {
         $bundle = Strings::match($namespace, '#(?<bundle>[\w]*Bundle)#')['bundle'] ?? '';
         $bundle = Strings::replace($bundle, '#Bundle$#');
-        $bundle = $bundle ? '@' . $bundle . '/' : '';
+        $bundle = $bundle !== '' ? '@' . $bundle . '/' : '';
 
         $controller = $this->resolveControllerVersion5($class);
         $action = Strings::replace($method, '#Action$#');
@@ -96,6 +96,6 @@ final class TemplateGuesser
         $controller = strtolower($controller);
         $controller = str_replace('\\', '/', $controller);
 
-        return $controller ? $controller . '/' : '';
+        return $controller !== '' ? $controller . '/' : '';
     }
 }

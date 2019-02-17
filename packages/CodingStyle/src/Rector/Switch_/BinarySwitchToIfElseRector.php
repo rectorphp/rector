@@ -77,7 +77,7 @@ CODE_SAMPLE
             return $ifNode;
         }
 
-        if ($secondCase->cond) {
+        if ($secondCase->cond !== null) {
             // has condition
             $equalNode = new Equal($node->cond, $secondCase->cond);
             $ifNode->elseifs[] = new ElseIf_($equalNode, $this->removeBreakNodes($secondCase->stmts));

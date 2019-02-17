@@ -111,7 +111,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($node->else) {
+        if ($node->else !== null) {
             if (count($node->else->stmts) !== 1) {
                 return null;
             }

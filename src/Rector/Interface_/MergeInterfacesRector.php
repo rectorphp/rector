@@ -65,7 +65,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $node->implements) {
+        if ($node->implements === []) {
             return null;
         }
 

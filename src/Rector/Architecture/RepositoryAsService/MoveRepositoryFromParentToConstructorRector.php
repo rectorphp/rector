@@ -112,7 +112,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $node->extends) {
+        if ($node->extends === null) {
             return null;
         }
 

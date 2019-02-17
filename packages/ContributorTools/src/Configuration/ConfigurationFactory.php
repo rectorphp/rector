@@ -127,7 +127,7 @@ final class ConfigurationFactory
 
     private function resolveLevelConfig(string $level): ?string
     {
-        if (! $level) {
+        if ($level === '') {
             return null;
         }
 
@@ -137,7 +137,7 @@ final class ConfigurationFactory
 
         /** @var SplFileInfo[] $fileInfos */
         $fileInfos = iterator_to_array($finder->getIterator());
-        if (! count($fileInfos)) {
+        if (count($fileInfos) === 0) {
             // assume new one is created
             $match = Strings::match($level, '#(?<name>[a-zA-Z_-]+])#');
             if (isset($match['name'])) {

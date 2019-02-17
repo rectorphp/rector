@@ -47,7 +47,7 @@ final class ChildAndParentClassMaintainer
 
         // not in analyzed scope, nothing we can do
         $parentClassNode = $this->classLikeNodeCollector->findClass($parentClassName);
-        if (! $parentClassNode) {
+        if ($parentClassNode === null) {
             return;
         }
 
@@ -57,7 +57,7 @@ final class ChildAndParentClassMaintainer
             return;
         }
 
-        if (! $firstParentConstructMethodNode->params) {
+        if ($firstParentConstructMethodNode->params === []) {
             return;
         }
 
@@ -83,7 +83,7 @@ final class ChildAndParentClassMaintainer
         $childClassNodes = $this->classLikeNodeCollector->findChildrenOfClass($className);
 
         foreach ($childClassNodes as $childClassNode) {
-            if (! $childClassNode->getMethod('__construct')) {
+            if ($childClassNode->getMethod('__construct') === null) {
                 continue;
             }
 
@@ -111,7 +111,7 @@ final class ChildAndParentClassMaintainer
     {
         while ($classNode !== null) {
             $constructMethodNode = $classNode->getMethod('__construct');
-            if ($constructMethodNode) {
+            if ($constructMethodNode !== null) {
                 return $constructMethodNode;
             }
 

@@ -81,7 +81,7 @@ abstract class AbstractRectorTestCase extends TestCase
 
     protected function provideConfig(): string
     {
-        if ($this->getRectorClass()) { // use local if not overloaded
+        if ($this->getRectorClass() !== '') { // use local if not overloaded
             $hash = Strings::substring(
                 md5($this->getRectorClass() . Json::encode($this->getRectorConfiguration())),
                 0,

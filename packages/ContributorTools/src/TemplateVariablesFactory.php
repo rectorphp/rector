@@ -61,7 +61,7 @@ final class TemplateVariablesFactory
      */
     private function createSourceDocBlock(array $source): string
     {
-        if (! $source) {
+        if ($source === []) {
             return '';
         }
 
