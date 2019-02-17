@@ -84,6 +84,16 @@ trait TypeAnalyzerTrait
         return $this->nodeTypeAnalyzer->isStringyType($node);
     }
 
+    protected function isIntegerType(Node $node): bool
+    {
+        return $this->nodeTypeAnalyzer->isIntType($node);
+    }
+
+    protected function isFloatType(Node $node): bool
+    {
+        return $this->nodeTypeAnalyzer->isFloatType($node);
+    }
+
     protected function getStaticType(Node $node): ?Type
     {
         return $this->nodeTypeAnalyzer->getNodeStaticType($node);
@@ -92,6 +102,11 @@ trait TypeAnalyzerTrait
     protected function isNullableType(Node $node): bool
     {
         return $this->nodeTypeAnalyzer->isNullableType($node);
+    }
+
+    protected function isNullableObjectType(Node $node): bool
+    {
+        return $this->nodeTypeAnalyzer->isNullableObjectType($node);
     }
 
     protected function isNullType(Node $node): bool
