@@ -14,6 +14,8 @@ services:
         Nette\Application\Request: Symfony\Component\HttpFoundation\Request
         Nette\Http\Request: Symfony\Component\HttpFoundation\Request
         Nette\Http\IRequest: Symfony\Component\HttpFoundation\Request
+        # Kdyby → Symfony
+        Kdyby\Translation\Translator: Symfony\Component\Translation\Translator
 
         # extends Nette\Application\UI\Presenter -> extends Symfony\Bundle\FrameworkBundle\Controller\AbstractController
         Nette\Application\UI\Presenter: Symfony\Bundle\FrameworkBundle\Controller\AbstractController
@@ -27,6 +29,9 @@ services:
             run: __invoke
         Nette\DI\Container:
             getByType: get
+        # Kdyby → Symfony
+        Symfony\Component\Translation\Translator:
+            translate: trans
 
         # load configs
         Nette\Configurator:
@@ -109,3 +114,6 @@ services:
             DELETE: Symfony\Component\HttpFoundation\Request::METHOD_DELETE
             PATCH: Symfony\Component\HttpFoundation\Request::METHOD_PATCH
             OPTIONS: Symfony\Component\HttpFoundation\Request::METHOD_OPTIONS
+
+    # Kdyby → Symfony
+    Rector\NetteToSymfony\Rector\MethodCall\WrapTransParameterNameRector: ~
