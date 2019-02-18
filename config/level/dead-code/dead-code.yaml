@@ -9,3 +9,4 @@ services:
     Rector\DeadCode\Rector\ClassMethod\RemoveUnusedParameterRector: ~
     Rector\DeadCode\Rector\Expression\SimplifyMirrorAssignRector: ~
     Rector\DeadCode\Rector\ClassMethod\RemoveOverriddenValuesRector: ~
+    Rector\DeadCode\Rector\ClassConst\RemoveUnusedPrivateConstantRector: ~

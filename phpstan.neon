@@ -110,7 +110,7 @@ parameters:
         - '#Cannot access property \$stmts on PhpParser\\Node\\Stmt\\Else_\|null#'
 
         # node finder
-        - '#Method Rector\\DeadCode\\Rector\\ClassMethod\\RemoveOverriddenValuesRector\:\:(resolveUsedVariables|resolveAssignedVariables)\(\) should return array<PhpParser\\Node\\Expr\\Variable\> but returns array<PhpParser\\Node\>#'
+        - '#Method Rector\\(.*?) should return array<PhpParser\\Node\\(.*?)> but returns array<PhpParser\\Node\>#'
 
         # known values
         - '#Parameter \#2 \$variableName of class Rector\\DeadCode\\Rector\\ClassMethod\\Data\\VariableNodeUseInfo constructor expects string, string\|null given#'
