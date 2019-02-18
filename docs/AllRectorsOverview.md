@@ -1,4 +1,4 @@
-# All 203 Rectors Overview
+# All 211 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -269,6 +269,27 @@ Changes redundant null check to instant return
 
 <br>
 
+### `ExplicitBoolCompareRector`
+
+- class: `Rector\CodeQuality\Rector\If_\ExplicitBoolCompareRector`
+
+Make if conditions more explicit
+
+```diff
+ final class SomeController
+ {
+     public function run($items)
+     {
+-        if (!count($items)) {
++        if (count($items) < 0) {
+             return 'no items';
+         }
+     }
+ }
+```
+
+<br>
+
 ### `SimplifyIfElseToTernaryRector`
 
 - class: `Rector\CodeQuality\Rector\If_\SimplifyIfElseToTernaryRector`
@@ -305,6 +326,29 @@ Shortens if return false/true to direct return
 -
 -return false;
 +return strpos($docToken->getContent(), "\n") === false;
+```
+
+<br>
+
+### `SimplifyIfIssetToNullCoalescingRector`
+
+- class: `Rector\CodeQuality\Rector\If_\SimplifyIfIssetToNullCoalescingRector`
+
+Simplify binary if to null coalesce
+
+```diff
+ final class SomeController
+ {
+     public function run($possibleStatieYamlFile)
+     {
+-        if (isset($possibleStatieYamlFile['import'])) {
+-            $possibleStatieYamlFile['import'] = array_merge($possibleStatieYamlFile['import'], $filesToImport);
+-        } else {
+-            $possibleStatieYamlFile['import'] = $filesToImport;
+-        }
++        $possibleStatieYamlFile['import'] = array_merge($possibleStatieYamlFile['import'] ?? [], $filesToImport);
+     }
+ }
 ```
 
 <br>
@@ -754,6 +798,26 @@ Remove unused parameter, if not required by interface or parent class
 
 <br>
 
+### `RemoveOverriddenValuesRector`
+
+- class: `Rector\DeadCode\Rector\ClassMethod\RemoveOverriddenValuesRector`
+
+Remove initial assigns of overridden values
+
+```diff
+ final class SomeController
+ {
+     public function run()
+     {
+-         $directories = [];
+          $possibleDirectories = [];
+          $directories = array_filter($possibleDirectories, 'file_exists');
+     }
+ }
+```
+
+<br>
+
 ### `RemoveUnusedPrivatePropertyRector`
 
 - class: `Rector\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector`
@@ -916,7 +980,7 @@ Changes properties with `@JMS\DiExtraBundle\Annotation\Inject` to constructor in
 
 ### `RouterListToControllerAnnotationsRector`
 
-- class: `Rector\NetteToSymfony\Rector\RouterListToControllerAnnotationsRector`
+- class: `Rector\NetteToSymfony\Rector\ClassMethod\RouterListToControllerAnnotationsRector`
 
 Change new Route() from RouteFactory to @Route annotation above controller method
 
@@ -941,6 +1005,94 @@ Change new Route() from RouteFactory to @Route annotation above controller metho
 +     */
      public function run()
      {
+     }
+ }
+```
+
+<br>
+
+### `RenameEventNamesInEventSubscriberRector`
+
+- class: `Rector\NetteToSymfony\Rector\ClassMethod\RenameEventNamesInEventSubscriberRector`
+
+Changes event names from Nette ones to Symfony ones
+
+```diff
+ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+
+ final class SomeClass implements EventSubscriberInterface
+ {
+     public static function getSubscribedEvents()
+     {
+-        return ['nette.application' => 'someMethod'];
++        return [\SymfonyEvents::KERNEL => 'someMethod'];
+     }
+ }
+```
+
+<br>
+
+### `FromRequestGetParameterToAttributesGetRector`
+
+- class: `Rector\NetteToSymfony\Rector\MethodCall\FromRequestGetParameterToAttributesGetRector`
+
+Changes "getParameter()" to "attributes->get()" from Nette to Symfony
+
+```diff
+ use Nette\Request;
+
+ final class SomeController
+ {
+     public static function someAction(Request $request)
+     {
+-        $value = $request->getParameter('abz');
++        $value = $request->attribute->get('abz');
+     }
+ }
+```
+
+<br>
+
+### `FromHttpRequestGetHeaderToHeadersGetRector`
+
+- class: `Rector\NetteToSymfony\Rector\MethodCall\FromHttpRequestGetHeaderToHeadersGetRector`
+
+Changes getHeader() to $request->headers->get()
+
+```diff
+ use Nette\Request;
+
+ final class SomeController
+ {
+     public static function someAction(Request $request)
+     {
+-        $header = $this->httpRequest->getHeader('x');
++        $header = $request->headers->get('x');
+     }
+ }
+```
+
+<br>
+
+### `WrapTransParameterNameRector`
+
+- class: `Rector\NetteToSymfony\Rector\MethodCall\WrapTransParameterNameRector`
+
+Adds %% to placeholder name of trans() method if missing
+
+```diff
+ use Symfony\Component\Translation\Translator;
+
+ final class SomeController
+ {
+     public function run()
+     {
+         $translator = new Translator('');
+         $translated = $translator->trans(
+             'Hello %name%',
+-            ['name' => $name]
++            ['%name%' => $name]
+         );
      }
  }
 ```
@@ -3366,6 +3518,35 @@ services:
  {
 -    public read($content);
 +    public read(string $content);
+ }
+```
+
+<br>
+
+### `StringToClassConstantRector`
+
+- class: `Rector\Rector\String_\StringToClassConstantRector`
+
+Changes strings to specific constants
+
+```yaml
+services:
+    Rector\Rector\String_\StringToClassConstantRector:
+        compiler.post_dump:
+            - Yet\AnotherClass
+            - CONSTANT
+```
+
+↓
+
+```diff
+ final class SomeSubscriber
+ {
+     public static function getSubscribedEvents()
+     {
+-        return ['compiler.post_dump' => 'compile'];
++        return [\Yet\AnotherClass::CONSTANT => 'compile'];
+     }
  }
 ```
 
