@@ -29,7 +29,6 @@ parameters:
         - '#Call to function method_exists\(\) with string and (.*?) will always evaluate to false#'
         - '#PHPDoc tag \@param for parameter \$node with type float is incompatible with native type PhpParser\\Node#'
         - '#Result of && is always true#'
-        - '#Parameter \#2 \$classMethodNode of method Rector\\NetteToSymfony\\Rector\\RouterListToControllerAnnotationsRector\:\:resolvePathFromClassAndMethodNodes\(\) expects PhpParser\\Node\\Stmt\\ClassMethod, PhpParser\\Node\\Stmt given#'
 
         # missuse of interface and class
         - '#Parameter \#1 (.*?) expects Symfony\\Component\\DependencyInjection\\ContainerBuilder, Symfony\\Component\\DependencyInjection\\ContainerInterface given#'
@@ -86,7 +85,6 @@ parameters:
         # known values
         - '#Parameter \#1 \$stack of function array_shift expects array, \(array<PhpParser\\Node\|null>\)\|PhpParser\\Node\|null given#'
 
-        - '#Access to an undefined property PHPStan\\PhpDocParser\\Ast\\Node::\$name#'
         - '#Cannot access property \$value on PhpParser\\Node\\Expr\\ArrayItem\|null#'
         - '#Method Rector\\Symfony\\Rector\\New_\\StringToArrayArgumentProcessRector::findPreviousNodeAssign\(\) should return PhpParser\\Node\\Expr\\Assign\|null but returns PhpParser\\Node\|null#'
 
@@ -97,9 +95,6 @@ parameters:
         - '#Parameter \#(1|2) \$(left|right) of class PhpParser\\Node\\Expr\\BinaryOp\\Coalesce constructor expects PhpParser\\Node\\Expr, PhpParser\\Node\\Expr\|null given#'
         - '#Strict comparison using === between PhpParser\\Node\\Expr and null will always evaluate to false#'
 
-        # temp
-        - '#Parameter \#1 \$currentWorkingDirectory of class PHPStan\\DependencyInjection\\ContainerFactory constructor expects string, string\|false given#'
-
         # known values
         - '#Parameter \#1 \$code of method PhpParser\\Parser\:\:parse\(\) expects string, string\|false given#'
 
@@ -107,14 +102,20 @@ parameters:
         - '#Cannot cast array<string\>\|string\|null to string#'
 
         - '#Parameter \#1 \$nodes of method Rector\\PhpParser\\Node\\BetterNodeFinder\:\:find\(\) expects array<PhpParser\\Node\>\|PhpParser\\Node, array<PhpParser\\Node\\Stmt\>\|null given#'
-        - '#Method Rector\\NetteToSymfony\\Rector\\RouterListToControllerAnnotationsRector\:\:resolveAssignRouteNodes\(\) should return array<PhpParser\\Node\\Expr\\Assign\> but returns array<PhpParser\\Node\>#'
-        - '#PHPDoc tag @param for parameter \$data with type mixed is not subtype of native type array#'
-        - '#class\@anonymous#'
-        - '#Parameter \#2 \$classMethodNode of method Rector\\NetteToSymfony\\Rector\\ClassMethod\\RouterListToControllerAnnotationsRector\:\:resolvePathFromClassAndMethodNodes\(\) expects PhpParser\\Node\\Stmt\\ClassMethod, PhpParser\\Node\\Stmt given#'
         - '#Method Rector\\NetteToSymfony\\Rector\\ClassMethod\\RouterListToControllerAnnotationsRector\:\:resolveAssignRouteNodes\(\) should return array<PhpParser\\Node\\Expr\\Assign\> but returns array<PhpParser\\Node\>#'
+        - '#PHPDoc tag @param for parameter \$data with type mixed is not subtype of native type array#'
+        - '#Parameter \#2 \$classMethodNode of method Rector\\NetteToSymfony\\Rector\\ClassMethod\\RouterListToControllerAnnotationsRector\:\:resolvePathFromClassAndMethodNodes\(\) expects PhpParser\\Node\\Stmt\\ClassMethod, PhpParser\\Node\\Stmt given#'
         - '#Access to an undefined property Symplify\\BetterPhpDocParser\\Attributes\\Contract\\Ast\\AttributeAwareNodeInterface\:\:\$type#'
         - '#Access to an undefined property PhpParser\\Node\\Stmt\:\:\$expr#'
         - '#Cannot access property \$stmts on PhpParser\\Node\\Stmt\\Else_\|null#'
+
+        # node finder
+        - '#Method Rector\\DeadCode\\Rector\\ClassMethod\\RemoveOverriddenValuesRector\:\:(resolveUsedVariables|resolveAssignedVariables)\(\) should return array<PhpParser\\Node\\Expr\\Variable\> but returns array<PhpParser\\Node\>#'
+
+        # known values
+        - '#Parameter \#2 \$variableName of class Rector\\DeadCode\\Rector\\ClassMethod\\Data\\VariableNodeUseInfo constructor expects string, string\|null given#'
+        - '#Cannot call method getParentNode\(\) on Rector\\DeadCode\\Rector\\ClassMethod\\Data\\VariableNodeUseInfo\|null#'
+        - '#In method "Rector\\Rector\\AbstractRector\:\:isNodeEqual", parameter \$availableNodes type is "array"\. Please provide a @param annotation to further specify the type of the array\. For instance\: @param int\[\] \$availableNodes\. More info\: http\://bit\.ly/typehintarray#'
 
         # part of test
         - '#Class Manual\\Twig\\TwigFilter not found#'

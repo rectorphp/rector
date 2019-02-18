@@ -8,3 +8,4 @@ services:
     Rector\DeadCode\Rector\Assign\RemoveDoubleAssignRector: ~
     Rector\DeadCode\Rector\ClassMethod\RemoveUnusedParameterRector: ~
     Rector\DeadCode\Rector\Expression\SimplifyMirrorAssignRector: ~
+    Rector\DeadCode\Rector\ClassMethod\RemoveOverriddenValuesRector: ~

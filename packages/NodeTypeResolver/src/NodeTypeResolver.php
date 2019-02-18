@@ -143,8 +143,6 @@ final class NodeTypeResolver
         }
 
         // PHPStan
-        /** @var Scope $nodeScope */
-        $nodeScope = $node->getAttribute(Attribute::SCOPE);
         $type = $nodeScope->getType($node);
 
         $typesInStrings = $this->typeToStringResolver->resolve($type);

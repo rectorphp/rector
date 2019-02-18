@@ -51,6 +51,28 @@ trait BetterStandardPrinterTrait
     }
 
     /**
+     * @param Node[] $availableNodes
+     */
+    protected function isNodeEqual(Node $singleNode, array $availableNodes): bool
+    {
+        // remove comments, only content is relevant
+        $singleNode = clone $singleNode;
+        $singleNode->setAttribute('comments', null);
+
+        foreach ($availableNodes as $availableNode) {
+            // remove comments, only content is relevant
+            $availableNode = clone $availableNode;
+            $availableNode->setAttribute('comments', null);
+
+            if ($this->areNodesEqual($singleNode, $availableNode)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * @param Node|Node[] $nodes
      */
     protected function isNodeUsedIn(Node $seekedNode, $nodes): bool
