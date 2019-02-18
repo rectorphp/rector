@@ -2,6 +2,7 @@
 
 namespace Rector\NodeTypeResolver\NodeVisitor;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
@@ -46,7 +47,7 @@ final class NodeCollectorNodeVisitor extends NodeVisitorAbstract
      */
     public function enterNode(Node $node)
     {
-        if ($node instanceof Class_ && $node->isAnonymous() === false) {
+        if ($node instanceof Class_ && $this->isClassAnonymous($node) === false) {
             $this->classLikeNodeCollector->addClass($node);
             return;
         }
@@ -75,5 +76,19 @@ final class NodeCollectorNodeVisitor extends NodeVisitorAbstract
             $this->functionLikeNodeCollector->addFunction($node);
             return;
         }
+    }
+
+    private function isClassAnonymous(Class_ $classNode): bool
+    {
+        if ($classNode->isAnonymous()) {
+            return true;
+        }
+
+        if ($classNode->name === null) {
+            return false;
+        }
+
+        // PHPStan polution
+        return Strings::startsWith($classNode->name->toString(), 'AnonymousClass');
     }
 }

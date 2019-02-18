@@ -2,6 +2,7 @@
 
 namespace Rector\NodeTypeResolver\NodeVisitor;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
@@ -51,7 +52,7 @@ final class ClassAndMethodNodeVisitor extends NodeVisitorAbstract
      */
     public function enterNode(Node $node)
     {
-        if ($node instanceof Class_ && $node->isAnonymous()) {
+        if ($node instanceof Class_ && $this->isClassAnonymous($node)) {
             return null;
         }
 
@@ -99,5 +100,19 @@ final class ClassAndMethodNodeVisitor extends NodeVisitorAbstract
         }
 
         $node->setAttribute(Attribute::PARENT_CLASS_NAME, $parentClassResolvedName);
+    }
+
+    private function isClassAnonymous(Class_ $classNode): bool
+    {
+        if ($classNode->isAnonymous()) {
+            return true;
+        }
+
+        if ($classNode->name === null) {
+            return false;
+        }
+
+        // PHPStan polution
+        return Strings::startsWith($classNode->name->toString(), 'AnonymousClass');
     }
 }

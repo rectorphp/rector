@@ -75,6 +75,6 @@ CODE_SAMPLE
             $this->removeNode($node);
         }
 
-        return null;
+        return $node;
     }
 }

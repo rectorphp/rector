@@ -169,6 +169,10 @@ CODE_SAMPLE
 
         /** @var string $className */
         $className = $node->getAttribute(Attribute::CLASS_NAME);
+        // anonymous class
+        if ($className === null) {
+            return;
+        }
 
         $childrenClassLikes = $this->classLikeNodeCollector->findClassesAndInterfacesByType($className);
 
