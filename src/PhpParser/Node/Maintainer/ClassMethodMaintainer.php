@@ -4,6 +4,8 @@ namespace Rector\PhpParser\Node\Maintainer;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -154,6 +156,39 @@ final class ClassMethodMaintainer
             }
 
             return $this->nameResolver->isName($node, 'this');
+        });
+    }
+
+    /**
+     * @return MethodCall[]
+     */
+    public function getAllClassMethodCall(ClassMethod $classMethodNode): array
+    {
+        $classNode = $classMethodNode->getAttribute(Attribute::CLASS_NODE);
+        if ($classNode === null) {
+            return [];
+        }
+
+        return $this->betterNodeFinder->find($classNode, function (Node $node) use ($classMethodNode) {
+            // itself
+            if ($this->betterStandardPrinter->areNodesEqual($node, $classMethodNode)) {
+                return false;
+            }
+
+            // is it the name match?
+            if ($this->nameResolver->resolve($node) !== $this->nameResolver->resolve($classMethodNode)) {
+                return false;
+            }
+
+            if ($node instanceof MethodCall && $this->nameResolver->isName($node->var, 'this')) {
+                return true;
+            }
+
+            if ($node instanceof StaticCall && $this->nameResolver->isNames($node->class, ['self', 'static'])) {
+                return true;
+            }
+
+            return false;
         });
     }
 

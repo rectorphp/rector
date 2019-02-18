@@ -9,7 +9,10 @@ final class RemoveUnusedPrivateConstantRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
     {
-        $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc']);
+        $this->doTestFiles([
+            __DIR__ . '/Fixture/fixture.php.inc',
+            __DIR__ . '/Fixture/keep_constant.php.inc',
+        ]);
     }
 
     protected function getRectorClass(): string

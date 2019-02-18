@@ -59,7 +59,7 @@ final class ClassConstMaintainer
             }
 
             // is it the name match?
-            if ($this->nameResolver->resolve($node) !== $this->nameResolver->resolve($classConstNode)) {
+            if ($this->nameResolver->resolve($node) !== 'self::' . $this->nameResolver->resolve($classConstNode)) {
                 return false;
             }
 
