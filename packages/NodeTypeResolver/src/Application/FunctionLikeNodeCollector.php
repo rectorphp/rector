@@ -5,7 +5,6 @@ namespace Rector\NodeTypeResolver\Application;
 use Nette\Utils\Strings;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
-use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 use ReflectionClass;
@@ -35,8 +34,8 @@ final class FunctionLikeNodeCollector
     public function addMethod(ClassMethod $classMethodNode): void
     {
         $className = $classMethodNode->getAttribute(Attribute::CLASS_NAME);
-        if ($className === null) {
-            throw new ShouldNotHappenException();
+        if ($className === null) { // anonymous
+            return;
         }
 
         $methodName = $this->nameResolver->resolve($classMethodNode);

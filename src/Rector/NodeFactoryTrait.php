@@ -2,7 +2,6 @@
 
 namespace Rector\Rector;
 
-use PhpParser\BuilderFactory;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
@@ -28,17 +27,11 @@ trait NodeFactoryTrait
     private $nodeFactory;
 
     /**
-     * @var BuilderFactory
-     */
-    private $builderFactory;
-
-    /**
      * @required
      */
-    public function autowireNodeFactoryTrait(NodeFactory $nodeFactory, BuilderFactory $builderFactory): void
+    public function autowireNodeFactoryTrait(NodeFactory $nodeFactory): void
     {
         $this->nodeFactory = $nodeFactory;
-        $this->builderFactory = $builderFactory;
     }
 
     public function createClassConstant(string $class, string $constant): ClassConstFetch
