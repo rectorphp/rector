@@ -20,3 +20,7 @@ services:
     Rector\Php\Rector\If_\IfToSpaceshipRector: ~
     Rector\Php\Rector\StaticCall\StaticCallOnNonStaticToInstanceCallRector: ~
     Rector\Php\Rector\MethodCall\ThisCallOnStaticMethodToStaticCallRector: ~
+
+    Rector\Rector\Function_\FunctionReplaceRector:
+        # https://3v4l.org/1s1St
+        mktime: 'time'
