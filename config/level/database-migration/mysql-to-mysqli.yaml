@@ -4,6 +4,7 @@
 services:
     Rector\MysqlToMysqli\Rector\Assign\MysqlAssignToMysqliRector: ~
     Rector\MysqlToMysqli\Rector\FuncCall\MysqlFuncCallToMysqliRector: ~
+    Rector\MysqlToMysqli\Rector\FuncCall\MysqlPConnectToMysqliConnectRector: ~
 
     Rector\Rector\Function_\FunctionReplaceRector:
         mysql_affected_rows: 'mysqli_affected_rows'

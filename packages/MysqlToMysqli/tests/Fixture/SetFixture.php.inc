@@ -20,7 +20,7 @@ final class SetFixture
 {
     public function run()
     {
-        mysql_pconnect('p:one', 'two', 'three');
+        mysqli_connect('p:one', 'two', 'three');
     }
 }
 

@@ -8,9 +8,7 @@ final class SetTest extends AbstractRectorTestCase
 {
     public function test(): void
     {
-        $this->doTestFiles([
-            __DIR__ . '/Fixture/SetFixture.php.inc',
-        ]);
+        $this->doTestFiles([__DIR__ . '/Fixture/SetFixture.php.inc']);
     }
 
     protected function provideConfig(): string
