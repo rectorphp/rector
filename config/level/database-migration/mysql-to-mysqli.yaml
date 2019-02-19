@@ -12,7 +12,7 @@ services:
         mysql_select_db: [1, 0]
         mysql_set_charset: [1, 0]
         mysql_query: [1, 0]
-        # @todo
+        mysql_fetch_row: [1, 0]
 
     Rector\Rector\Function_\FunctionReplaceRector:
         mysql_affected_rows: 'mysqli_affected_rows'
