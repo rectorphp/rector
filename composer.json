@@ -52,6 +52,7 @@
             "Rector\\PHPStan\\": "packages/PHPStan/src",
             "Rector\\PHPUnit\\": "packages/PHPUnit/src",
             "Rector\\Twig\\": "packages/Twig/src",
+            "Rector\\MysqlToMysqli\\": "packages/MysqlToMysqli/src",
             "Rector\\PhpParser\\": "packages/PhpParser/src",
             "Rector\\Doctrine\\": "packages/Doctrine/src",
             "Rector\\FileSystemRector\\": "packages/FileSystemRector/src"
@@ -79,6 +80,7 @@
             "Rector\\PHPUnit\\Tests\\": "packages/PHPUnit/tests",
             "Rector\\PhpParser\\Tests\\": "packages/PhpParser/tests",
             "Rector\\Twig\\Tests\\": "packages/Twig/tests",
+            "Rector\\MysqlToMysqli\\Tests\\": "packages/MysqlToMysqli/tests",
             "Rector\\Doctrine\\Tests\\": "packages/Doctrine/tests",
             "Rector\\FileSystemRector\\Tests\\": "packages/FileSystemRector/tests"
         },

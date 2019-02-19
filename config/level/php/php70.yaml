@@ -1,5 +1,5 @@
 imports:
-    - { resource: "mysql_to_mysqli.yaml" }
+    - { resource: "../database-migration/mysql-to-mysqli.yaml" }
 
 services:
     Rector\Php\Rector\FunctionLike\Php4ConstructorRector: ~
@@ -20,3 +20,7 @@ services:
     Rector\Php\Rector\If_\IfToSpaceshipRector: ~
     Rector\Php\Rector\StaticCall\StaticCallOnNonStaticToInstanceCallRector: ~
     Rector\Php\Rector\MethodCall\ThisCallOnStaticMethodToStaticCallRector: ~
+
+    Rector\Rector\Function_\FunctionReplaceRector:
+        # https://3v4l.org/1s1St
+        mktime: 'time'
