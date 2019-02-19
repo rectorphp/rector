@@ -2,9 +2,11 @@
 
 namespace Rector\Rector\Function_;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
@@ -62,7 +64,11 @@ final class FunctionReplaceRector extends AbstractRector
                 return $this->wrapFuncCalls($node, $newFunction);
             }
 
-            $node->name = new FullyQualified($newFunction);
+            if (Strings::contains($newFunction, '\\')) {
+                $node->name = new FullyQualified($newFunction);
+            } else {
+                $node->name = new Name($newFunction);
+            }
         }
 
         return $node;

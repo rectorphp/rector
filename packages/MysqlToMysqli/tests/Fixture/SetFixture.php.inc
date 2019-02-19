@@ -6,7 +6,9 @@ final class SetFixture
 {
     public function run()
     {
-        mysql_pconnect('one', 'two', 'three');
+        $connection = mysql_pconnect('one', 'two', 'three');
+
+        mysql_select_db('db_name', $connection);
     }
 }
 
@@ -20,7 +22,9 @@ final class SetFixture
 {
     public function run()
     {
-        mysqli_connect('p:one', 'two', 'three');
+        $connection = mysqli_connect('p:one', 'two', 'three');
+
+        mysqli_select_db($connection, 'db_name');
     }
 }
 
