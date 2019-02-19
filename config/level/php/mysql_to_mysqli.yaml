@@ -1,5 +1,6 @@
 # https://stackoverflow.com/a/1390625/1348344
 # https://github.com/philip/MySQLConverterTool/blob/master/Converter.php
+# https://www.phpclasses.org/blog/package/9199/post/3-Smoothly-Migrate-your-PHP-Code-using-the-Old-MySQL-extension-to-MySQLi.html
 services:
     Rector\Php\Rector\Assign\MysqlAssignToMysqliRector: ~
     Rector\Php\Rector\FuncCall\MysqlFuncCallToMysqliRector: ~
@@ -37,3 +38,17 @@ services:
         mysql_numrows: 'mysqli_num_rows'
         mysql_list_processes: 'mysqli_thread_id'
         mysql_num_fields: 'mysqli_field_count'
+
+#    Rector\Rector\Function_\SwapArgumentsRector:
+
+    # http://php.net/manual/en/mysql.constants.php ↓
+    # http://php.net/manual/en/mysqli.constants.php
+    Rector\Php\Rector\ConstFetch\ConstantReplacerRector:
+        MYSQL_ASSOC: 'MYSQLI_ASSOC'
+        MYSQL_NUM: 'MYSQLI_NUM'
+        MYSQL_BOTH: 'MYSQLI_BOTH'
+        MYSQL_CLIENT_COMPRESS: 'MYSQLI_CLIENT_COMPRESS'
+        MYSQL_CLIENT_IGNORE_SPACE: 'MYSQLI_CLIENT_IGNORE_SPACE'
+        MYSQL_CLIENT_INTERACTIVE: 'MYSQLI_CLIENT_INTERACTIVE'
+        MYSQL_CLIENT_SSL: 'MYSQLI_CLIENT_SSL'
+        MYSQL_PRIMARY_KEY_FLAG: 'MYSQLI_PRI_KEY_FLAG'
