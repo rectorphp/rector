@@ -6,6 +6,14 @@ services:
     Rector\MysqlToMysqli\Rector\FuncCall\MysqlFuncCallToMysqliRector: ~
     Rector\MysqlToMysqli\Rector\FuncCall\MysqlPConnectToMysqliConnectRector: ~
 
+    # first swap arguments, then rename
+    Rector\Php\Rector\FuncCall\SwapFuncCallArgumentsRector:
+        mysql_real_escape_string: [1, 0]
+        mysql_select_db: [1, 0]
+        mysql_set_charset: [1, 0]
+        mysql_query: [1, 0]
+        # @todo
+
     Rector\Rector\Function_\FunctionReplaceRector:
         mysql_affected_rows: 'mysqli_affected_rows'
         mysql_close: 'mysqli_close'
@@ -40,8 +48,6 @@ services:
         mysql_list_processes: 'mysqli_thread_id'
         mysql_num_fields: 'mysqli_field_count'
         mysql_connect: 'mysqli_connect'
-
-#    Rector\Rector\Function_\SwapArgumentsRector:
 
     # http://php.net/manual/en/mysql.constants.php ↓
     # http://php.net/manual/en/mysqli.constants.php
