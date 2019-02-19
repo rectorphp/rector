@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Php\Rector\FuncCall;
+namespace Rector\MysqlToMysqli\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;

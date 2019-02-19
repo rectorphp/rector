@@ -1,5 +1,5 @@
 imports:
-    - { resource: "mysql_to_mysqli.yaml" }
+    - { resource: "../database-migration/mysql-to-mysqli.yaml" }
 
 services:
     Rector\Php\Rector\FunctionLike\Php4ConstructorRector: ~

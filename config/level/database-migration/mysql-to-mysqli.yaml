@@ -2,8 +2,8 @@
 # https://github.com/philip/MySQLConverterTool/blob/master/Converter.php
 # https://www.phpclasses.org/blog/package/9199/post/3-Smoothly-Migrate-your-PHP-Code-using-the-Old-MySQL-extension-to-MySQLi.html
 services:
-    Rector\Php\Rector\Assign\MysqlAssignToMysqliRector: ~
-    Rector\Php\Rector\FuncCall\MysqlFuncCallToMysqliRector: ~
+    Rector\MysqlToMysqli\Rector\Assign\MysqlAssignToMysqliRector: ~
+    Rector\MysqlToMysqli\Rector\FuncCall\MysqlFuncCallToMysqliRector: ~
 
     Rector\Rector\Function_\FunctionReplaceRector:
         mysql_affected_rows: 'mysqli_affected_rows'
@@ -38,6 +38,7 @@ services:
         mysql_numrows: 'mysqli_num_rows'
         mysql_list_processes: 'mysqli_thread_id'
         mysql_num_fields: 'mysqli_field_count'
+        mysql_connect: 'mysqli_connect'
 
 #    Rector\Rector\Function_\SwapArgumentsRector:
 

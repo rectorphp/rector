@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Php\Tests\Rector\Assign\MysqlAssignToMysqliRector;
+namespace Rector\MysqlToMysqli\Tests\Rector\Assign\MysqlAssignToMysqliRector;
 
-use Rector\Php\Rector\Assign\MysqlAssignToMysqliRector;
+use Rector\MysqlToMysqli\Rector\Assign\MysqlAssignToMysqliRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class MysqlAssignToMysqliRectorTest extends AbstractRectorTestCase
