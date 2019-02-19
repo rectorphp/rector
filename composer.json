@@ -80,7 +80,7 @@
             "Rector\\PHPUnit\\Tests\\": "packages/PHPUnit/tests",
             "Rector\\PhpParser\\Tests\\": "packages/PhpParser/tests",
             "Rector\\Twig\\Tests\\": "packages/Twig/tests",
-            "Rector\\MysqlToMysqli\\tests\\": "packages/MysqlToMysqli/tests",
+            "Rector\\MysqlToMysqli\\Tests\\": "packages/MysqlToMysqli/tests",
             "Rector\\Doctrine\\Tests\\": "packages/Doctrine/tests",
             "Rector\\FileSystemRector\\Tests\\": "packages/FileSystemRector/tests"
         },
