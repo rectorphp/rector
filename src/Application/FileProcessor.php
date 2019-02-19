@@ -75,6 +75,11 @@ final class FileProcessor
 
         [$newStmts, $oldStmts, $oldTokens] = $this->parseAndTraverseFileInfoToNodes($smartFileInfo);
 
+        // spagetti @todo
+        if ($newStmts === null) {
+            return;
+        }
+
         // store tokens by absolute path, so we don't have to print them right now
         $this->tokensByFilePath[$smartFileInfo->getRealPath()] = [$newStmts, $oldStmts, $oldTokens];
 
@@ -83,6 +88,10 @@ final class FileProcessor
 
     public function printToFile(SmartFileInfo $smartFileInfo): string
     {
+        if (!isset($this->tokensByFilePath[$smartFileInfo->getRealPath()])) {
+            return $smartFileInfo->getContents();
+        }
+
         [$newStmts, $oldStmts, $oldTokens] = $this->tokensByFilePath[$smartFileInfo->getRealPath()];
         return $this->formatPerservingPrinter->printToFile($smartFileInfo, $newStmts, $oldStmts, $oldTokens);
     }
@@ -92,12 +101,20 @@ final class FileProcessor
      */
     public function printToString(SmartFileInfo $smartFileInfo): string
     {
+        if (!isset($this->tokensByFilePath[$smartFileInfo->getRealPath()])) {
+            return $smartFileInfo->getContents();
+        }
+
         [$newStmts, $oldStmts, $oldTokens] = $this->tokensByFilePath[$smartFileInfo->getRealPath()];
         return $this->formatPerservingPrinter->printToString($newStmts, $oldStmts, $oldTokens);
     }
 
     public function refactor(SmartFileInfo $smartFileInfo): void
     {
+        if (!isset($this->tokensByFilePath[$smartFileInfo->getRealPath()])) {
+            return;
+        }
+
         [$newStmts, $oldStmts, $oldTokens] = $this->tokensByFilePath[$smartFileInfo->getRealPath()];
         $newStmts = $this->rectorNodeTraverser->traverse($newStmts);
 
