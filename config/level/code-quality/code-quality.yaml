@@ -26,3 +26,5 @@ services:
     Rector\CodeQuality\Rector\If_\ConsecutiveNullCompareReturnsToNullCoalesceQueueRector: ~
     Rector\CodeQuality\Rector\If_\SimplifyIfIssetToNullCoalescingRector: ~
     Rector\CodeQuality\Rector\If_\ExplicitBoolCompareRector: ~
+    Rector\CodeQuality\Rector\FuncCall\CommonNotEqualRector: ~
+    Rector\CodeQuality\Rector\NotEqual\CommonNotEqualRector: ~
