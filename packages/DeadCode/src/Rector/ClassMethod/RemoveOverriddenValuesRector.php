@@ -5,6 +5,7 @@ namespace Rector\DeadCode\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PHPStan\Analyser\Scope;
@@ -62,7 +63,7 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [ClassMethod::class];
+        return [FunctionLike::class];
     }
 
     /**
@@ -92,9 +93,9 @@ CODE_SAMPLE
     /**
      * @return Variable[]
      */
-    private function resolveAssignedVariables(ClassMethod $classMethodNode): array
+    private function resolveAssignedVariables(FunctionLike $functionLikeNode): array
     {
-        return $this->betterNodeFinder->find($classMethodNode, function (Node $node) {
+        return $this->betterNodeFinder->find($functionLikeNode, function (Node $node) {
             if (! $node->getAttribute(Attribute::PARENT_NODE) instanceof Assign) {
                 return false;
             }
@@ -172,7 +173,7 @@ CODE_SAMPLE
     private function collectNodesByTypeAndPosition(
         array $assignedVariables,
         array $assignedVariablesUse,
-        ClassMethod $classMethodNode
+        FunctionLike $functionLikeNode
     ): array {
         $nodesByTypeAndPosition = [];
 
@@ -185,7 +186,7 @@ CODE_SAMPLE
 
             /** @var Assign $assignNode */
             $assignNode = $assignedVariable->getAttribute(Attribute::PARENT_NODE);
-            $nestingHash = $this->resolveNestingHashFromClassMethod($classMethodNode, $assignNode);
+            $nestingHash = $this->resolveNestingHashFromClassMethod($functionLikeNode, $assignNode);
 
             $nodesByTypeAndPosition[] = new VariableNodeUseInfo(
                 $startTokenPos,
@@ -291,7 +292,7 @@ CODE_SAMPLE
         return ! $isVariableAssigned;
     }
 
-    private function resolveNestingHashFromClassMethod(ClassMethod $classMethodNode, Assign $assignNode): string
+    private function resolveNestingHashFromClassMethod(FunctionLike $functionLikeNode, Assign $assignNode): string
     {
         $nestingHash = '_';
         $parentNode = $assignNode;
@@ -301,7 +302,7 @@ CODE_SAMPLE
             }
 
             $nestingHash .= spl_object_hash($parentNode);
-            if ($classMethodNode === $parentNode) {
+            if ($functionLikeNode === $parentNode) {
                 return $nestingHash;
             }
         }
