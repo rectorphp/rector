@@ -88,7 +88,7 @@ final class FileProcessor
 
     public function printToFile(SmartFileInfo $smartFileInfo): string
     {
-        if (!isset($this->tokensByFilePath[$smartFileInfo->getRealPath()])) {
+        if (! isset($this->tokensByFilePath[$smartFileInfo->getRealPath()])) {
             return $smartFileInfo->getContents();
         }
 
@@ -101,7 +101,7 @@ final class FileProcessor
      */
     public function printToString(SmartFileInfo $smartFileInfo): string
     {
-        if (!isset($this->tokensByFilePath[$smartFileInfo->getRealPath()])) {
+        if (! isset($this->tokensByFilePath[$smartFileInfo->getRealPath()])) {
             return $smartFileInfo->getContents();
         }
 
@@ -111,7 +111,7 @@ final class FileProcessor
 
     public function refactor(SmartFileInfo $smartFileInfo): void
     {
-        if (!isset($this->tokensByFilePath[$smartFileInfo->getRealPath()])) {
+        if (! isset($this->tokensByFilePath[$smartFileInfo->getRealPath()])) {
             return;
         }
 
