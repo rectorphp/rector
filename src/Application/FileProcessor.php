@@ -4,6 +4,7 @@ namespace Rector\Application;
 
 use PhpParser\Lexer;
 use PhpParser\Node;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 use Rector\PhpParser\NodeTraverser\RectorNodeTraverser;
@@ -74,6 +75,13 @@ final class FileProcessor
         $this->currentFileInfoProvider->setCurrentFileInfo($smartFileInfo);
 
         [$newStmts, $oldStmts, $oldTokens] = $this->parseAndTraverseFileInfoToNodes($smartFileInfo);
+
+        if ($newStmts === null) {
+            throw new ShouldNotHappenException(sprintf(
+                'Parsing of file "%s" went wrong. Might be caused by inlinced html. Does it have full "<?php" openings? Try re-run with --debug option to find out more.',
+                $smartFileInfo->getRealPath()
+            ));
+        }
 
         // store tokens by absolute path, so we don't have to print them right now
         $this->tokensByFilePath[$smartFileInfo->getRealPath()] = [$newStmts, $oldStmts, $oldTokens];
