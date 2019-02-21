@@ -118,6 +118,10 @@ CODE_SAMPLE
         }
 
         $currentConstantName = (string) $node->name;
+        
+        if (\defined($currentConstantName)) {
+        	return null;
+        }
 
         // is uppercase, all good
         if ($currentConstantName === strtoupper($currentConstantName)) {
