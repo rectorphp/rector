@@ -112,23 +112,29 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        // is system constant?
-        if (in_array(strtoupper((string) $node->name), $this->phpReservedConstants, true)) {
+        $constantName = $this->getName($node);
+        if ($constantName === null) {
             return null;
         }
 
-        $currentConstantName = (string) $node->name;
-        
-        if (\defined($currentConstantName)) {
-        	return null;
+        $uppercasedConstantName = strtoupper($constantName);
+
+        // is system constant?
+        if (in_array($uppercasedConstantName, $this->phpReservedConstants, true)) {
+            return null;
+        }
+
+        // constant is defined in current lower/upper case
+        if (defined($constantName)) {
+            return null;
         }
 
         // is uppercase, all good
-        if ($currentConstantName === strtoupper($currentConstantName)) {
+        if ($constantName === $uppercasedConstantName) {
             return null;
         }
 
-        $node->name = new FullyQualified(strtoupper($currentConstantName));
+        $node->name = new FullyQualified($uppercasedConstantName);
 
         return $node;
     }
