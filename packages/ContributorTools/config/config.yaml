@@ -5,4 +5,4 @@ services:
 
     Rector\ContributorTools\:
         resource: '../src'
-        exclude: '../src/{Exception,Configuration/Configuration.php}'
+        exclude: '../src/{Exception,Configuration/Configuration.php,Node/*Info.php}'

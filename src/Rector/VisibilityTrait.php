@@ -2,10 +2,10 @@
 
 namespace Rector\Rector;
 
-use PhpParser\Builder\Property;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Property;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\PhpParser\Node\Maintainer\VisibilityMaintainer;
 

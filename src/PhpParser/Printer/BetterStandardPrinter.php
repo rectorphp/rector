@@ -96,7 +96,7 @@ final class BetterStandardPrinter extends Standard
      */
     protected function pSingleQuotedString(string $string): string
     {
-        return '\'' . Strings::replace($string, "#'|\\\\(?=[\\\\']|$)#", '\\\\$0') . '\'';
+        return "'" . Strings::replace($string, "#'|\\\\(?=[\\\\']|$)#", '\\\\$0') . "'";
     }
 
     /**

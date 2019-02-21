@@ -2,10 +2,10 @@
 
 namespace Rector\ContributorTools\Configuration;
 
-use Nette\Loaders\RobotLoader;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use Rector\ContributorTools\Exception\ConfigurationException;
+use Rector\ContributorTools\Node\NodeClassProvider;
 use Rector\Exception\FileSystem\FileNotFoundException;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
@@ -18,9 +18,15 @@ final class ConfigurationFactory
      */
     private $levelsDirectory;
 
-    public function __construct()
+    /**
+     * @var NodeClassProvider
+     */
+    private $nodeClassProvider;
+
+    public function __construct(NodeClassProvider $nodeClassProvider)
     {
         $this->levelsDirectory = __DIR__ . '/../../../../config/level';
+        $this->nodeClassProvider = $nodeClassProvider;
     }
 
     public function createFromConfigFile(string $configFile): Configuration
@@ -95,7 +101,7 @@ final class ConfigurationFactory
      */
     private function resolveFullyQualifiedNodeTypes(array $nodeTypes): array
     {
-        $nodeClasses = $this->getNodeClasses();
+        $nodeClasses = $this->nodeClassProvider->getNodeClasses();
 
         $fqnNodeTypes = [];
         foreach ($nodeTypes as $nodeType) {
@@ -150,19 +156,6 @@ final class ConfigurationFactory
         /** @var SplFileInfo $foundLevelConfigFileInfo */
         $foundLevelConfigFileInfo = array_pop($fileInfos);
         return $foundLevelConfigFileInfo->getRealPath();
-    }
-
-    /**
-     * @return string[]
-     */
-    private function getNodeClasses(): array
-    {
-        $robotLoader = new RobotLoader();
-        $robotLoader->addDirectory(__DIR__ . '/../../../../vendor/nikic/php-parser/lib/PhpParser/Node');
-        $robotLoader->setTempDirectory(sys_get_temp_dir() . '/_robotloader_nodes');
-        $robotLoader->rebuild();
-
-        return array_keys($robotLoader->getIndexedClasses());
     }
 
     private function isNodeClassMatch(string $nodeClass, string $nodeType): bool
