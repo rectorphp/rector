@@ -13,7 +13,7 @@ services:
             - 'SomeClass' # from PHPUnit
 
     Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
-        maxCognitiveComplexity: 9
+        max_cognitive_complexity: 9
 
     Symplify\CodingStandard\Fixer\Order\MethodOrderByTypeFixer:
         method_order_by_type:
@@ -23,7 +23,7 @@ services:
                 - 'refactor'
 
     Symplify\CodingStandard\Sniffs\DependencyInjection\NoClassInstantiationSniff:
-        extraAllowedClasses:
+        extra_allowed_classes:
             - 'PHPStan\Type\*'
             - 'PHPStan\Analyser\Scope'
             - 'PhpParser\NodeVisitor\NameResolver'
@@ -44,7 +44,7 @@ services:
             - 'PhpParser\Node'
 
     Symplify\CodingStandard\Sniffs\Naming\ClassNameSuffixByParentSniff:
-        extraParentTypesToSuffixes:
+        extra_parent_types_to_suffixes:
             - 'Rector'
             - 'NodeVisitorAbstract'
 
@@ -101,12 +101,10 @@ parameters:
 
         Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
             # tough logic
-            - 'packages/CodeQuality/src/Rector/Foreach_/ForeachToInArrayRector.php'
-            - 'packages/CodeQuality/src/Rector/Foreach_/SimplifyForeachToArrayFilterRector.php'
-            - 'src/PhpParser/Node/Resolver/NameResolver.php'
-            - 'src/Rector/MethodBody/NormalToFluentRector.php'
             - 'packages/CodingStyle/src/Rector/Use_/RemoveUnusedAliasRector.php'
             - 'packages/NetteToSymfony/src/Route/RouteInfoFactory.php'
+            - 'src/PhpParser/Node/Resolver/NameResolver.php'
+            - 'src/Rector/MethodBody/NormalToFluentRector.php'
 
             # copied 3rd party logic
             - 'packages/Php/src/EregToPcreTransformer.php'
