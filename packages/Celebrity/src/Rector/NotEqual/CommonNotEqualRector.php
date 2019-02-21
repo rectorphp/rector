@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\CodeQuality\Rector\NotEqual;
+namespace Rector\Celebrity\Rector\NotEqual;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\NotEqual;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\NotEqual\CommonNotEqualRector\Fixture;
+namespace Rector\Celebrity\Tests\Rector\NotEqual\CommonNotEqualRector\Fixture;
 
 final class SomeClass
 {
@@ -14,7 +14,7 @@ final class SomeClass
 -----
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\NotEqual\CommonNotEqualRector\Fixture;
+namespace Rector\Celebrity\Tests\Rector\NotEqual\CommonNotEqualRector\Fixture;
 
 final class SomeClass
 {
