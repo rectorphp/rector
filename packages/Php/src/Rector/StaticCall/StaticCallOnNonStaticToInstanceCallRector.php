@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\StaticCall;
 use Rector\NodeTypeResolver\Application\FunctionLikeNodeCollector;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\PhpParser\Node\Maintainer\ClassMethodMaintainer;
-use Rector\PhpParser\Node\Maintainer\VisibilityMaintainer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -29,22 +28,15 @@ final class StaticCallOnNonStaticToInstanceCallRector extends AbstractRector
     private $functionLikeNodeCollector;
 
     /**
-     * @var VisibilityMaintainer
-     */
-    private $visibilityMaintainer;
-
-    /**
      * @var ClassMethodMaintainer
      */
     private $classMethodMaintainer;
 
     public function __construct(
         FunctionLikeNodeCollector $functionLikeNodeCollector,
-        VisibilityMaintainer $visibilityMaintainer,
         ClassMethodMaintainer $classMethodMaintainer
     ) {
         $this->functionLikeNodeCollector = $functionLikeNodeCollector;
-        $this->visibilityMaintainer = $visibilityMaintainer;
         $this->classMethodMaintainer = $classMethodMaintainer;
     }
 
@@ -144,7 +136,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->visibilityMaintainer->makeStatic($classMethodNode);
+        $this->makeStatic($classMethodNode);
 
         return null;
     }
