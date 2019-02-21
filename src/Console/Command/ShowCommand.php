@@ -4,9 +4,12 @@ namespace Rector\Console\Command;
 
 use Rector\Console\Shell;
 use Rector\Contract\Rector\RectorInterface;
+use Rector\Php\TypeAnalyzer;
+use ReflectionClass;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Yaml\Yaml;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 
 final class ShowCommand extends AbstractCommand
@@ -35,18 +38,64 @@ final class ShowCommand extends AbstractCommand
     protected function configure(): void
     {
         $this->setName(CommandNaming::classToName(self::class));
-        $this->setDescription('Show loaded Rectors');
+        $this->setDescription('Show loaded Rectors with their configuration');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $rectorClasses = array_map(function (RectorInterface $rector) {
-            return get_class($rector);
-        }, $this->rectors);
+        sort($this->rectors);
 
-        $this->symfonyStyle->listing($rectorClasses);
-        $this->symfonyStyle->success(sprintf('%d loaded Rectors', count($rectorClasses)));
+        foreach ($this->rectors as $rector) {
+            $this->symfonyStyle->writeln(' * ' . get_class($rector));
+            $configuration = $this->resolveConfiguration($rector);
+            if ($configuration === []) {
+                continue;
+            }
+
+            $configurationYamlContent = Yaml::dump($configuration, 10, 4, Yaml::DUMP_MULTI_LINE_LITERAL_BLOCK);
+
+            $lines = explode(PHP_EOL, $configurationYamlContent);
+            $indentedContent = '      ' . implode(PHP_EOL . '      ', $lines);
+
+            $this->symfonyStyle->writeln($indentedContent);
+        }
+
+        $this->symfonyStyle->success(sprintf('%d loaded Rectors', count($this->rectors)));
 
         return Shell::CODE_SUCCESS;
+    }
+
+    /**
+     * Resolve configuration by convention
+     * @return mixed[]
+     */
+    private function resolveConfiguration(RectorInterface $rector): array
+    {
+        $rectorReflection = new ReflectionClass($rector);
+
+        $constructorReflection = $rectorReflection->getConstructor();
+        if ($constructorReflection === null) {
+            return [];
+        }
+
+        $configuration = [];
+        foreach ($constructorReflection->getParameters() as $reflectionParameter) {
+            $parameterType = (string) $reflectionParameter->getType();
+            if (! TypeAnalyzer::isPhpReservedType($parameterType)) {
+                continue;
+            }
+
+            if (! $rectorReflection->hasProperty($reflectionParameter->getName())) {
+                continue;
+            }
+
+            $propertyReflection = $rectorReflection->getProperty($reflectionParameter->getName());
+            $propertyReflection->setAccessible(true);
+
+            $configurationValue = $propertyReflection->getValue($rector);
+            $configuration[$reflectionParameter->getName()] = $configurationValue;
+        }
+
+        return $configuration;
     }
 }
