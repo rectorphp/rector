@@ -44,6 +44,8 @@ final class ShowCommand extends AbstractCommand
             return get_class($rector);
         }, $this->rectors);
 
+        sort($rectorClasses);
+
         $this->symfonyStyle->listing($rectorClasses);
         $this->symfonyStyle->success(sprintf('%d loaded Rectors', count($rectorClasses)));
 
