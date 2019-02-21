@@ -122,7 +122,7 @@ parameters:
             - 'packages/Php/src/Rector/ConstFetch/BarewordStringRector.php'
             - 'packages/CodeQuality/src/Rector/Foreach_/ForeachToInArrayRector.php'
             - 'packages/Php/src/Rector/MagicConstClass/ClassConstantToSelfClassRector.php'
-            - 'utils/phpstan/src/Rector/Type/*TypeExtension.php'
+            - 'utils/PHPStanExtensions/src/Rector/Type/*TypeExtension.php'
             # array type check
             - 'src/RectorDefinition/RectorDefinition.php'
 

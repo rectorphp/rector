@@ -60,7 +60,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Rector\\PHPStanExtensions\\": "utils/phpstan/src",
+            "Rector\\PHPStanExtensions\\": "utils/PHPStanExtensions/src",
             "Rector\\Tests\\": "tests",
             "Rector\\NodeTypeResolver\\Tests\\": "packages/NodeTypeResolver/tests",
             "Rector\\CakePHP\\Tests\\": "packages/CakePHP/tests",

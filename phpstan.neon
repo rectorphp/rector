@@ -1,5 +1,5 @@
 includes:
-     - 'utils/phpstan/config/phpstan-extensions.neon'
+     - 'utils/PHPStanExtensions/config/phpstan-extensions.neon'
      - 'vendor/symplify/phpstan-extensions/config/config.neon'
      - 'vendor/thecodingmachine/phpstan-strict-rules/phpstan-strict-rules.neon'
 
