@@ -12,12 +12,14 @@ use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Broker\Broker;
+use PHPStan\Type\ObjectType;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverAwareInterface;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeToStringResolver;
 use Rector\NodeTypeResolver\Reflection\ClassReflectionTypesResolver;
+use Rector\PhpParser\Node\Resolver\NameResolver;
 
 final class NodeTypeResolver
 {
@@ -42,12 +44,18 @@ final class NodeTypeResolver
     private $classReflectionTypesResolver;
 
     /**
+     * @var NameResolver
+     */
+    private $nameResolver;
+
+    /**
      * @param PerNodeTypeResolverInterface[] $perNodeTypeResolvers
      */
     public function __construct(
         TypeToStringResolver $typeToStringResolver,
         Broker $broker,
         ClassReflectionTypesResolver $classReflectionTypesResolver,
+        NameResolver $nameResolver,
         array $perNodeTypeResolvers
     ) {
         $this->typeToStringResolver = $typeToStringResolver;
@@ -57,6 +65,7 @@ final class NodeTypeResolver
         foreach ($perNodeTypeResolvers as $perNodeTypeResolver) {
             $this->addPerNodeTypeResolver($perNodeTypeResolver);
         }
+        $this->nameResolver = $nameResolver;
     }
 
     /**
@@ -68,7 +77,11 @@ final class NodeTypeResolver
             return $this->resolveClassNode($node);
         }
 
-        if ($node instanceof StaticCall || $node instanceof ClassConstFetch) {
+        if ($node instanceof StaticCall) {
+            return $this->resolveStaticCall($node);
+        }
+
+        if ($node instanceof ClassConstFetch) {
             return $this->resolve($node->class);
         }
 
@@ -153,5 +166,34 @@ final class NodeTypeResolver
         }
 
         return $typesInStrings;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function resolveStaticCall(StaticCall $staticCall): array
+    {
+        $classTypes = $this->resolve($staticCall->class);
+        $methodName = $this->nameResolver->resolve($staticCall->name);
+
+        // fallback
+        if (! is_string($methodName)) {
+            return $this->resolve($staticCall->class);
+        }
+
+        foreach ($classTypes as $classType) {
+            if (! method_exists($classType, $methodName)) {
+                continue;
+            }
+
+            /** @var Scope $nodeScope */
+            $nodeScope = $staticCall->getAttribute(Attribute::SCOPE);
+            $type = $nodeScope->getType($staticCall);
+            if ($type instanceof ObjectType) {
+                return [$type->getClassName()];
+            }
+        }
+
+        return $this->resolve($staticCall->class);
     }
 }

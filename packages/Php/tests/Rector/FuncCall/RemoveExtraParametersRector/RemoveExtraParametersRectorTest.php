@@ -16,6 +16,7 @@ final class RemoveExtraParametersRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Fixture/methods.php.inc',
             __DIR__ . '/Fixture/static_calls.php.inc',
             __DIR__ . '/Fixture/external_scope.php.inc',
+            __DIR__ . '/Fixture/static_call_parent.php.inc',
         ]);
     }
 

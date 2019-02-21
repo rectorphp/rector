@@ -13,7 +13,7 @@ services:
             - 'SomeClass' # from PHPUnit
 
     Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
-        maxCognitiveComplexity: 8
+        maxCognitiveComplexity: 9
 
     Symplify\CodingStandard\Fixer\Order\MethodOrderByTypeFixer:
         method_order_by_type:
