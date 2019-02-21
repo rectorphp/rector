@@ -5,7 +5,6 @@ namespace Rector\Rector\Visibility;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\NodeTypeResolver\Node\Attribute;
-use Rector\PhpParser\Node\Maintainer\VisibilityMaintainer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -18,17 +17,11 @@ final class ChangeMethodVisibilityRector extends AbstractRector
     private $methodToVisibilityByClass = [];
 
     /**
-     * @var VisibilityMaintainer
-     */
-    private $visibilityMaintainer;
-
-    /**
      * @param string[][] $methodToVisibilityByClass
      */
-    public function __construct(array $methodToVisibilityByClass, VisibilityMaintainer $visibilityMaintainer)
+    public function __construct(array $methodToVisibilityByClass)
     {
         $this->methodToVisibilityByClass = $methodToVisibilityByClass;
-        $this->visibilityMaintainer = $visibilityMaintainer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -108,16 +101,11 @@ CODE_SAMPLE
             return null;
         }
 
-        $newVisibility = $this->resolveNewVisibilityForNode($node, $methodName);
-        $this->visibilityMaintainer->replaceVisibilityFlag($node, $newVisibility);
+        $nodeParentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
+        $visibility = $this->methodToVisibilityByClass[$nodeParentClassName][$methodName];
+
+        $this->changeNodeVisibility($node, $visibility);
 
         return $node;
-    }
-
-    private function resolveNewVisibilityForNode(ClassMethod $classMethodNode, string $methodName): string
-    {
-        $nodeParentClassName = $classMethodNode->getAttribute(Attribute::PARENT_CLASS_NAME);
-
-        return $this->methodToVisibilityByClass[$nodeParentClassName][$methodName];
     }
 }

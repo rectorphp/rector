@@ -120,3 +120,5 @@ parameters:
         # part of test
         - '#Class Manual\\Twig\\TwigFilter not found#'
         - '#Class Manual_Twig_Filter not found#'
+
+        - '#Parameter \#1 \$node of method Rector\\PhpParser\\Node\\Maintainer\\VisibilityMaintainer\:\:(.*?)\(\) expects PhpParser\\Node\\Stmt\\ClassConst\|PhpParser\\Node\\Stmt\\ClassMethod\|PhpParser\\Node\\Stmt\\Property, PhpParser\\Node given#'

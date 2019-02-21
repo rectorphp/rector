@@ -5,7 +5,6 @@ namespace Rector\Rector\Visibility;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
 use Rector\NodeTypeResolver\Node\Attribute;
-use Rector\PhpParser\Node\Maintainer\VisibilityMaintainer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -18,17 +17,11 @@ final class ChangePropertyVisibilityRector extends AbstractRector
     private $propertyToVisibilityByClass = [];
 
     /**
-     * @var VisibilityMaintainer
-     */
-    private $visibilityMaintainer;
-
-    /**
      * @param string[][] $propertyToVisibilityByClass
      */
-    public function __construct(array $propertyToVisibilityByClass, VisibilityMaintainer $VisibilityMaintainer)
+    public function __construct(array $propertyToVisibilityByClass)
     {
         $this->propertyToVisibilityByClass = $propertyToVisibilityByClass;
-        $this->visibilityMaintainer = $VisibilityMaintainer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -97,7 +90,7 @@ CODE_SAMPLE
                     continue;
                 }
 
-                $this->visibilityMaintainer->replaceVisibilityFlag($node, $visibility);
+                $this->changeNodeVisibility($node, $visibility);
 
                 return $node;
             }
