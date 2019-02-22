@@ -3,6 +3,7 @@
 namespace Rector\Console;
 
 use Jean85\PrettyVersions;
+use Rector\ContributorTools\Command\DumpNodesCommand;
 use Rector\ContributorTools\Command\DumpRectorsCommand;
 use Rector\ContributorTools\Exception\Command\ContributorCommandInterface;
 use Symfony\Component\Console\Application as SymfonyApplication;
@@ -45,7 +46,11 @@ final class Application extends SymfonyApplication
         $shouldFollowByNewline = false;
 
         // skip in this case, since generate content must be clear from meta-info
-        if ($input->getFirstArgument() === CommandNaming::classToName(DumpRectorsCommand::class)) {
+        $dumpCommands = [
+            CommandNaming::classToName(DumpRectorsCommand::class),
+            CommandNaming::classToName(DumpNodesCommand::class),
+        ];
+        if (in_array($input->getFirstArgument(), $dumpCommands, true)) {
             return parent::doRun($input, $output);
         }
 

@@ -107,7 +107,10 @@
             "bin/clean_trailing_spaces.sh"
         ],
         "phpstan": "vendor/bin/phpstan analyse packages src tests --error-format symplify",
-        "docs": "bin/rector dump-rectors --output-format markdown  > docs/AllRectorsOverview.md"
+        "docs": [
+            "bin/rector dump-rectors -o markdown > docs/AllRectorsOverview.md",
+            "bin/rector dump-nodes -o markdown > docs/NodesOverview.md"
+        ]
     },
     "scripts-descriptions": {
         "update-docs": "Regenerate descriptions of all Rectors to docs/AllRectorsOverview.md file"

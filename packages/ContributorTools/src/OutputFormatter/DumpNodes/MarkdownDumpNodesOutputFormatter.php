@@ -39,11 +39,13 @@ final class MarkdownDumpNodesOutputFormatter implements DumpNodesOutputFormatter
             $this->symfonyStyle->newLine();
 
             foreach ($nodeInfos as $nodeInfo) {
-                $this->symfonyStyle->writeln(sprintf('### `%s`', $nodeInfo->getClass()));
+                $this->symfonyStyle->writeln(sprintf('#### `%s`', $nodeInfo->getClass()));
                 $this->symfonyStyle->newLine();
                 $this->symfonyStyle->writeln(
                     sprintf('```php%s%s%s```', PHP_EOL, $nodeInfo->getPrintedContent(), PHP_EOL)
                 );
+
+                $this->symfonyStyle->writeln('<br>');
                 $this->symfonyStyle->newLine();
             }
         }
