@@ -4,15 +4,16 @@ namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver;
 
 use PhpParser\Node;
 use Rector\Configuration\Option;
+use Rector\HttpKernel\RectorKernel;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Parser\Parser;
-use Rector\Tests\AbstractContainerAwareTestCase;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
+use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 
-abstract class AbstractNodeTypeResolverTest extends AbstractContainerAwareTestCase
+abstract class AbstractNodeTypeResolverTest extends AbstractKernelTestCase
 {
     /**
      * @var NodeTypeResolver
@@ -41,11 +42,13 @@ abstract class AbstractNodeTypeResolverTest extends AbstractContainerAwareTestCa
 
     protected function setUp(): void
     {
-        $this->betterNodeFinder = $this->container->get(BetterNodeFinder::class);
-        $this->parameterProvider = $this->container->get(ParameterProvider::class);
-        $this->nodeTypeResolver = $this->container->get(NodeTypeResolver::class);
-        $this->parser = $this->container->get(Parser::class);
-        $this->nodeScopeAndMetadataDecorator = $this->container->get(NodeScopeAndMetadataDecorator::class);
+        $this->bootKernel(RectorKernel::class);
+
+        $this->betterNodeFinder = self::$container->get(BetterNodeFinder::class);
+        $this->parameterProvider = self::$container->get(ParameterProvider::class);
+        $this->nodeTypeResolver = self::$container->get(NodeTypeResolver::class);
+        $this->parser = self::$container->get(Parser::class);
+        $this->nodeScopeAndMetadataDecorator = self::$container->get(NodeScopeAndMetadataDecorator::class);
     }
 
     /**

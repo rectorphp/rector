@@ -9,6 +9,8 @@ parameters:
     level: max
 
     excludes_analyse:
+        # complex printer
+        - "packages/ContributorTools/src/Command/DumpNodesCommand.php"
         - "utils/phpstan/generate-paths.php"
         # test files
         - '*packages/NodeTypeResolver/tests/Source/AnotherClass.php'

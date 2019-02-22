@@ -1,17 +1,17 @@
 <?php declare(strict_types=1);
 
-namespace Rector\ContributorTools\OutputFormatter;
+namespace Rector\ContributorTools\OutputFormatter\DumpRectors;
 
 use Nette\Utils\DateTime;
 use Nette\Utils\Json;
 use Nette\Utils\Strings;
 use Rector\Contract\Rector\RectorInterface;
-use Rector\ContributorTools\Contract\OutputFormatterInterface;
+use Rector\ContributorTools\Contract\OutputFormatter\DumpRectorsOutputFormatterInterface;
 use Rector\ContributorTools\RectorMetadataResolver;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
-final class JsonOutputFormatter implements OutputFormatterInterface
+final class JsonDumpRectorsOutputFormatter implements DumpRectorsOutputFormatterInterface
 {
     /**
      * @var RectorMetadataResolver

@@ -1,4 +1,4 @@
-# All 211 Rectors Overview
+# All 223 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -13,6 +13,7 @@
 - [DomainDrivenDesign](#domaindrivendesign)
 - [Guzzle](#guzzle)
 - [Jms](#jms)
+- [MysqlToMysqli](#mysqltomysqli)
 - [NetteToSymfony](#nettetosymfony)
 - [PHPStan](#phpstan)
 - [PHPUnit](#phpunit)
@@ -59,6 +60,27 @@ Simplify $value = $value + 5; assignments to shorter ones
 ```diff
 -$value = $value + 5;
 +$value += 5;
+```
+
+<br>
+
+### `UseIdenticalOverEqualWithSameTypeRector`
+
+- class: `Rector\CodeQuality\Rector\Equal\UseIdenticalOverEqualWithSameTypeRector`
+
+Use ===/!== over ==/!=, it values have the same type
+
+```diff
+ class SomeClass
+ {
+     public function run(int $firstValue, int $secondValue)
+     {
+-         $isSame = $firstValue == $secondValue;
+-         $isDiffernt = $firstValue != $secondValue;
++         $isSame = $firstValue === $secondValue;
++         $isDiffernt = $firstValue !== $secondValue;
+     }
+ }
 ```
 
 <br>
@@ -488,6 +510,25 @@ Joins concat of 2 strings
 
 <br>
 
+### `CommonNotEqualRector`
+
+- class: `Rector\CodeQuality\Rector\NotEqual\CommonNotEqualRector`
+
+Use common != instead of less known <> with same meaning
+
+```diff
+ final class SomeClass
+ {
+     public function run($one, $two)
+     {
+-        return $one <> $two;
++        return $one != $two;
+     }
+ }
+```
+
+<br>
+
 ## CodingStyle
 
 ### `ReturnArrayClassMethodToYieldRector`
@@ -798,6 +839,29 @@ Remove unused parameter, if not required by interface or parent class
 
 <br>
 
+### `RemoveUnusedPrivateMethodRector`
+
+- class: `Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPrivateMethodRector`
+
+Remove unused private method
+
+```diff
+ final class SomeController
+ {
+     public function run()
+     {
+         return 5;
+     }
+-
+-    private function skip()
+-    {
+-        return 10;
+-    }
+ }
+```
+
+<br>
+
 ### `RemoveOverriddenValuesRector`
 
 - class: `Rector\DeadCode\Rector\ClassMethod\RemoveOverriddenValuesRector`
@@ -843,6 +907,44 @@ Removes dead code statements
 -$value = 5;
 -$value;
 +$value = 5;
+```
+
+<br>
+
+### `RemoveUnusedPrivateConstantRector`
+
+- class: `Rector\DeadCode\Rector\ClassConst\RemoveUnusedPrivateConstantRector`
+
+Remove unused private constant
+
+```diff
+ final class SomeController
+ {
+-    private const SOME_CONSTANT = 5;
+     public function run()
+     {
+         return 5;
+     }
+ }
+```
+
+<br>
+
+### `RemoveCodeAfterReturnRector`
+
+- class: `Rector\DeadCode\Rector\FunctionLike\RemoveCodeAfterReturnRector`
+
+Remove dead code after return statement
+
+```diff
+ class SomeClass
+ {
+     public function run(int $a)
+     {
+          return $a;
+-         $a++;
+     }
+ }
 ```
 
 <br>
@@ -971,6 +1073,55 @@ Changes properties with `@JMS\DiExtraBundle\Annotation\Inject` to constructor in
 +    {
 +        $this->entityManager = entityManager;
 +    }
+ }
+```
+
+<br>
+
+## MysqlToMysqli
+
+### `MysqlAssignToMysqliRector`
+
+- class: `Rector\MysqlToMysqli\Rector\Assign\MysqlAssignToMysqliRector`
+
+Converts more complex mysql functions to mysqli
+
+```diff
+-$data = mysql_db_name($result, $row);
++mysqli_data_seek($result, $row);
++$fetch = mysql_fetch_row($result);
++$data = $fetch[0];
+```
+
+<br>
+
+### `MysqlFuncCallToMysqliRector`
+
+- class: `Rector\MysqlToMysqli\Rector\FuncCall\MysqlFuncCallToMysqliRector`
+
+Converts more complex mysql functions to mysqli
+
+```diff
+-mysql_drop_db($database);
++mysqli_query('DROP DATABASE ' . $database);
+```
+
+<br>
+
+### `MysqlPConnectToMysqliConnectRector`
+
+- class: `Rector\MysqlToMysqli\Rector\FuncCall\MysqlPConnectToMysqliConnectRector`
+
+Replace mysql_pconnect() with mysqli_connect() with host p: prefix
+
+```diff
+ final class SomeClass
+ {
+     public function run($host, $username, $password)
+     {
+-        return mysql_pconnect($host, $username, $password);
++        return mysqli_connect('p:' . $host, $username, $password);
+     }
  }
 ```
 
@@ -1776,6 +1927,25 @@ Changes unquoted non-existing constants to strings
 
 <br>
 
+### `ConstantReplacerRector`
+
+- class: `Rector\Php\Rector\ConstFetch\ConstantReplacerRector`
+
+Replace constant by new ones
+
+```diff
+ final class SomeClass
+ {
+     public function run()
+     {
+-        return MYSQL_ASSOC;
++        return MYSQLI_ASSOC;
+     }
+ }
+```
+
+<br>
+
 ### `MultiExceptionCatchRector`
 
 - class: `Rector\Php\Rector\TryCatch\MultiExceptionCatchRector`
@@ -1832,6 +2002,22 @@ Changes property `@var` annotations from annotation to type.
 -     */
 -    private count;
 +    private int count;
+ }
+```
+
+<br>
+
+### `VarToPublicPropertyRector`
+
+- class: `Rector\Php\Rector\Property\VarToPublicPropertyRector`
+
+Remove unused private method
+
+```diff
+ final class SomeController
+ {
+-    var $name = 'Tom';
++    public $name = 'Tom';
  }
 ```
 
@@ -2043,6 +2229,25 @@ Use $result argument in parse_str() function
 
 <br>
 
+### `RemoveReferenceFromCallRector`
+
+- class: `Rector\Php\Rector\FuncCall\RemoveReferenceFromCallRector`
+
+Remove & from function and method calls
+
+```diff
+ final class SomeClass
+ {
+     public function run($one)
+     {
+-        return strlen(&$one);
++        return strlen($one);
+     }
+ }
+```
+
+<br>
+
 ### `IsObjectOnIncompleteClassRector`
 
 - class: `Rector\Php\Rector\FuncCall\IsObjectOnIncompleteClassRector`
@@ -2090,19 +2295,6 @@ Change __CLASS__ to self::class
 +           var_dump( static::class);
 +       }
 +    }
-```
-
-<br>
-
-### `MysqlFuncCallToMysqliRector`
-
-- class: `Rector\Php\Rector\FuncCall\MysqlFuncCallToMysqliRector`
-
-Converts more complex mysql functions to mysqli
-
-```diff
--mysql_drop_db($database);
-+mysqli_query('DROP DATABASE ' . $database);
 ```
 
 <br>
@@ -2171,6 +2363,25 @@ Adds JSON_THROW_ON_ERROR to json_encode() and json_decode() to throw JsonExcepti
 -json_decode($json);
 +json_encode($content, JSON_THROW_ON_ERROR
 +json_decode($json, null, null, JSON_THROW_ON_ERROR););
+```
+
+<br>
+
+### `SwapFuncCallArgumentsRector`
+
+- class: `Rector\Php\Rector\FuncCall\SwapFuncCallArgumentsRector`
+
+Swap arguments in function calls
+
+```diff
+ final class SomeClass
+ {
+     public function run($one, $two)
+     {
+-        return some_function($one, $two);
++        return some_function($two, $one);
+     }
+ }
 ```
 
 <br>
@@ -2465,6 +2676,29 @@ Remove first default switch, that is ignored
 -    default:
           echo "Goodbye Moon!";
           break;
+ }
+```
+
+<br>
+
+### `ContinueToBreakInSwitchRector`
+
+- class: `Rector\Php\Rector\Switch_\ContinueToBreakInSwitchRector`
+
+Use break instead of continue in switch statements
+
+```diff
+ function some_run($value)
+ {
+     switch ($value) {
+         case 1:
+             echo 'Hi';
+-            continue;
++            break;
+         case 2:
+             echo 'Hello';
+             break;
+     }
  }
 ```
 

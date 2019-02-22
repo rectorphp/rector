@@ -5,7 +5,7 @@ services:
 
     Rector\:
         resource: '../src'
-        exclude: '../src/{Node/Attribute.php,Rector/**/*Rector.php,Reporting/FileDiff.php,Testing,RectorDefinition,PhpParser/Node/*Info.php,Exception/*,DependencyInjection/CompilerPass/*,DependencyInjection/Loader/*,Application/Error.php}'
+        exclude: '../src/{Node/Attribute.php,Rector/**/*Rector.php,Reporting/FileDiff.php,Testing,RectorDefinition,PhpParser/Node/*Info.php,Exception/*,DependencyInjection/CompilerPass/*,DependencyInjection/Loader/*,Application/Error.php,HttpKernel/RectorKernel.php}'
 
     # extra services
     Rector\Symfony\Rector\Form\Helper\FormTypeStringToTypeProvider: ~

@@ -3,9 +3,10 @@
 namespace Rector\Tests\FileSystem\FilesFinder\ExcludePaths;
 
 use Rector\FileSystem\FilesFinder;
-use Rector\Tests\AbstractConfigurableContainerAwareTestCase;
+use Rector\HttpKernel\RectorKernel;
+use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 
-final class ExcludePathsTest extends AbstractConfigurableContainerAwareTestCase
+final class ExcludePathsTest extends AbstractKernelTestCase
 {
     /**
      * @var FilesFinder
@@ -14,14 +15,11 @@ final class ExcludePathsTest extends AbstractConfigurableContainerAwareTestCase
 
     public function testShouldFail(): void
     {
-        $this->filesFinder = $this->container->get(FilesFinder::class);
+        $this->bootKernelWithConfigs(RectorKernel::class, [__DIR__ . '/config/config-with-excluded-paths.yaml']);
+
+        $this->filesFinder = self::$container->get(FilesFinder::class);
         $splFileInfos = $this->filesFinder->findInDirectoriesAndFiles([__DIR__ . '/Source'], ['php']);
 
         $this->assertCount(1, $splFileInfos);
-    }
-
-    protected function provideConfig(): string
-    {
-        return __DIR__ . '/config/config-with-excluded-paths.yaml';
     }
 }

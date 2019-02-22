@@ -3,12 +3,25 @@
 namespace Rector\Tests\Rector\Psr4\MultipleClassFileToPsr4ClassesRector;
 
 use Iterator;
-use Rector\FileSystemRector\Tests\AbstractFileSystemRectorTest;
+use Rector\FileSystemRector\FileSystemFileProcessor;
+use Rector\HttpKernel\RectorKernel;
 use Symfony\Component\Filesystem\Filesystem;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
+use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 
-final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractFileSystemRectorTest
+final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractKernelTestCase
 {
+    /**
+     * @var FileSystemFileProcessor
+     */
+    private $fileSystemFileProcessor;
+
+    protected function setUp(): void
+    {
+        $this->bootKernelWithConfigs(RectorKernel::class, [__DIR__ . '/config.yaml']);
+        $this->fileSystemFileProcessor = self::$container->get(FileSystemFileProcessor::class);
+    }
+
     protected function tearDown(): void
     {
         if (! $this->getProvidedData()) {
@@ -26,7 +39,7 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractFileSystemR
      */
     public function test(string $file, array $expectedExceptions): void
     {
-        $this->doTestFile($file);
+        $this->fileSystemFileProcessor->processFileInfo(new SmartFileInfo($file));
 
         foreach ($expectedExceptions as $expectedExceptionLocation => $expectedFormat) {
             $this->assertFileExists($expectedExceptionLocation);
@@ -68,12 +81,7 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractFileSystemR
     {
         $originalFileContent = (new SmartFileInfo(__DIR__ . '/Source/ReadyException.php'))->getContents();
 
-        $this->doTestFile(__DIR__ . '/Source/ReadyException.php');
+        $this->fileSystemFileProcessor->processFileInfo(new SmartFileInfo(__DIR__ . '/Source/ReadyException.php'));
         $this->assertStringEqualsFile(__DIR__ . '/Source/ReadyException.php', $originalFileContent);
-    }
-
-    protected function provideConfig(): string
-    {
-        return __DIR__ . '/config.yaml';
     }
 }

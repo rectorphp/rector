@@ -4,11 +4,12 @@ namespace Rector\Tests\PhpParser\Node\Value;
 
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Name\FullyQualified;
+use Rector\HttpKernel\RectorKernel;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\PhpParser\Node\Value\ValueResolver;
-use Rector\Tests\AbstractContainerAwareTestCase;
+use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 
-final class ValueResolverTest extends AbstractContainerAwareTestCase
+final class ValueResolverTest extends AbstractKernelTestCase
 {
     /**
      * @var ValueResolver
@@ -17,7 +18,8 @@ final class ValueResolverTest extends AbstractContainerAwareTestCase
 
     protected function setUp(): void
     {
-        $this->valueResolver = $this->container->get(ValueResolver::class);
+        $this->bootKernel(RectorKernel::class);
+        $this->valueResolver = self::$container->get(ValueResolver::class);
     }
 
     public function test(): void

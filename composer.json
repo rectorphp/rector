@@ -33,7 +33,6 @@
     "autoload": {
         "psr-4": {
             "Rector\\": "src",
-            "Rector\\ContributorTools\\": "packages/ContributorTools/src",
             "Rector\\ConsoleDiffer\\": "packages/ConsoleDiffer/src",
             "Rector\\CodingStyle\\": "packages/CodingStyle/src",
             "Rector\\DeadCode\\": "packages/DeadCode/src",
@@ -55,12 +54,12 @@
             "Rector\\MysqlToMysqli\\": "packages/MysqlToMysqli/src",
             "Rector\\PhpParser\\": "packages/PhpParser/src",
             "Rector\\Doctrine\\": "packages/Doctrine/src",
-            "Rector\\FileSystemRector\\": "packages/FileSystemRector/src"
+            "Rector\\FileSystemRector\\": "packages/FileSystemRector/src",
+            "Rector\\ContributorTools\\": "packages/ContributorTools/src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Rector\\PHPStanExtensions\\": "utils/PHPStanExtensions/src",
             "Rector\\Tests\\": "tests",
             "Rector\\NodeTypeResolver\\Tests\\": "packages/NodeTypeResolver/tests",
             "Rector\\CakePHP\\Tests\\": "packages/CakePHP/tests",
@@ -82,7 +81,9 @@
             "Rector\\Twig\\Tests\\": "packages/Twig/tests",
             "Rector\\MysqlToMysqli\\Tests\\": "packages/MysqlToMysqli/tests",
             "Rector\\Doctrine\\Tests\\": "packages/Doctrine/tests",
-            "Rector\\FileSystemRector\\Tests\\": "packages/FileSystemRector/tests"
+            "Rector\\FileSystemRector\\Tests\\": "packages/FileSystemRector/tests",
+            "Rector\\PHPStanExtensions\\": "utils/PHPStanExtensions/src"
+
         },
         "classmap": [
             "examples",
@@ -106,7 +107,10 @@
             "bin/clean_trailing_spaces.sh"
         ],
         "phpstan": "vendor/bin/phpstan analyse packages src tests --error-format symplify",
-        "docs": "bin/rector dump-rectors --output-format markdown  > docs/AllRectorsOverview.md"
+        "docs": [
+            "bin/rector dump-rectors -o markdown > docs/AllRectorsOverview.md",
+            "bin/rector dump-nodes -o markdown > docs/NodesOverview.md"
+        ]
     },
     "scripts-descriptions": {
         "update-docs": "Regenerate descriptions of all Rectors to docs/AllRectorsOverview.md file"

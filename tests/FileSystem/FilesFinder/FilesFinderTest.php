@@ -4,10 +4,11 @@ namespace Rector\Tests\FileSystem\FilesFinder;
 
 use Iterator;
 use Rector\FileSystem\FilesFinder;
-use Rector\Tests\AbstractContainerAwareTestCase;
+use Rector\HttpKernel\RectorKernel;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
+use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 
-final class FilesFinderTest extends AbstractContainerAwareTestCase
+final class FilesFinderTest extends AbstractKernelTestCase
 {
     /**
      * @var FilesFinder
@@ -16,7 +17,8 @@ final class FilesFinderTest extends AbstractContainerAwareTestCase
 
     protected function setUp(): void
     {
-        $this->filesFinder = $this->container->get(FilesFinder::class);
+        $this->bootKernel(RectorKernel::class);
+        $this->filesFinder = self::$container->get(FilesFinder::class);
     }
 
     /**

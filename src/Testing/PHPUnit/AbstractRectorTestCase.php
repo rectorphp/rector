@@ -5,17 +5,16 @@ namespace Rector\Testing\PHPUnit;
 use Nette\Utils\FileSystem;
 use Nette\Utils\Json;
 use Nette\Utils\Strings;
-use PHPUnit\Framework\TestCase;
-use Psr\Container\ContainerInterface;
 use Rector\Application\FileProcessor;
 use Rector\Configuration\Option;
-use Rector\DependencyInjection\ContainerFactory;
 use Rector\Exception\ShouldNotHappenException;
+use Rector\HttpKernel\RectorKernel;
 use Symfony\Component\Yaml\Yaml;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
+use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 
-abstract class AbstractRectorTestCase extends TestCase
+abstract class AbstractRectorTestCase extends AbstractKernelTestCase
 {
     /**
      * @var string
@@ -28,11 +27,6 @@ abstract class AbstractRectorTestCase extends TestCase
     protected $fileProcessor;
 
     /**
-     * @var ContainerInterface
-     */
-    protected $container;
-
-    /**
      * @var ParameterProvider
      */
     protected $parameterProvider;
@@ -41,16 +35,6 @@ abstract class AbstractRectorTestCase extends TestCase
      * @var bool
      */
     private $autoloadTestFixture = true;
-
-    /**
-     * @var ContainerInterface[]
-     */
-    private static $containersPerConfig = [];
-
-    public function __construct(?string $name = null, array $data = [], string $dataName = '')
-    {
-        parent::__construct($name, $data, $dataName);
-    }
 
     protected function setUp(): void
     {
@@ -64,10 +48,10 @@ abstract class AbstractRectorTestCase extends TestCase
             ));
         }
 
-        $this->createContainer($configFile);
+        $this->bootKernelWithConfigs(RectorKernel::class, [$configFile]);
 
-        $this->fileProcessor = $this->container->get(FileProcessor::class);
-        $this->parameterProvider = $this->container->get(ParameterProvider::class);
+        $this->fileProcessor = static::$container->get(FileProcessor::class);
+        $this->parameterProvider = static::$container->get(ParameterProvider::class);
     }
 
     /**
@@ -94,9 +78,11 @@ abstract class AbstractRectorTestCase extends TestCase
                 return $configFileTempPath;
             }
 
-            $yamlContent = Yaml::dump(['services' => [
-                $this->getRectorClass() => $this->getRectorConfiguration() ?: null,
-            ]], Yaml::DUMP_OBJECT_AS_MAP);
+            $yamlContent = Yaml::dump([
+                'services' => [
+                    $this->getRectorClass() => $this->getRectorConfiguration() ?: null,
+                ],
+            ], Yaml::DUMP_OBJECT_AS_MAP);
 
             FileSystem::write($configFileTempPath, $yamlContent);
 
@@ -133,18 +119,6 @@ abstract class AbstractRectorTestCase extends TestCase
         }
 
         $this->autoloadTestFixture = true;
-    }
-
-    private function createContainer(string $configFile): void
-    {
-        $key = md5_file($configFile);
-
-        if (isset(self::$containersPerConfig[$key])) {
-            $this->container = self::$containersPerConfig[$key];
-        } else {
-            $this->container = (new ContainerFactory())->createWithConfigFiles([$configFile]);
-            self::$containersPerConfig[$key] = $this->container;
-        }
     }
 
     /**

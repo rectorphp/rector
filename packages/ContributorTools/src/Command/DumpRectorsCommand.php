@@ -4,7 +4,7 @@ namespace Rector\ContributorTools\Command;
 
 use Rector\Console\Command\AbstractCommand;
 use Rector\Console\Shell;
-use Rector\ContributorTools\Contract\OutputFormatterInterface;
+use Rector\ContributorTools\Contract\OutputFormatter\DumpRectorsOutputFormatterInterface;
 use Rector\ContributorTools\Finder\RectorsFinder;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -19,25 +19,25 @@ final class DumpRectorsCommand extends AbstractCommand
     private $rectorsFinder;
 
     /**
-     * @var OutputFormatterInterface[]
+     * @var DumpRectorsOutputFormatterInterface[]
      */
-    private $outputFormatters = [];
+    private $dumpRectorsOutputFormatterInterfaces = [];
 
     /**
-     * @param OutputFormatterInterface[] $outputFormatters
+     * @param DumpRectorsOutputFormatterInterface[] $dumpRectorsOutputFormatterInterfaces
      */
-    public function __construct(RectorsFinder $rectorsFinder, array $outputFormatters)
+    public function __construct(RectorsFinder $rectorsFinder, array $dumpRectorsOutputFormatterInterfaces)
     {
         parent::__construct();
 
         $this->rectorsFinder = $rectorsFinder;
-        $this->outputFormatters = $outputFormatters;
+        $this->dumpRectorsOutputFormatterInterfaces = $dumpRectorsOutputFormatterInterfaces;
     }
 
     protected function configure(): void
     {
         $this->setName(CommandNaming::classToName(self::class));
-        $this->setDescription('Dump overview of all Rectors in desired format');
+        $this->setDescription('Dump overview of all Rectors');
         $this->addOption(
             'output-format',
             'o',
@@ -52,7 +52,7 @@ final class DumpRectorsCommand extends AbstractCommand
         $packageRectors = $this->rectorsFinder->findInDirectory(__DIR__ . '/../../../../packages');
         $generalRectors = $this->rectorsFinder->findInDirectory(__DIR__ . '/../../../../src');
 
-        foreach ($this->outputFormatters as $outputFormatter) {
+        foreach ($this->dumpRectorsOutputFormatterInterfaces as $outputFormatter) {
             if ($outputFormatter->getName() !== $input->getOption('output-format')) {
                 continue;
             }

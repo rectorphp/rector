@@ -6,8 +6,6 @@ imports:
     - { resource: 'vendor/symplify/easy-coding-standard/config/clean-code.yml' }
 
 services:
-    SlevomatCodingStandard\Sniffs\Functions\UnusedParameterSniff: ~
-
     Symplify\CodingStandard\Fixer\Php\ClassStringToClassConstantFixer:
         allow_classes:
             - 'SomeClass' # from PHPUnit
@@ -54,7 +52,7 @@ parameters:
         # tests files
         - '*tests/*/Fixture/*'
         - '*tests/*/Expected/*'
-        - '*packages/ContributorTools/templates/*'
+        - '*utils/ContributorTools/templates/*'
 
     skip:
         # run manually from time to time, not to bother user with it
@@ -101,10 +99,11 @@ parameters:
 
         Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
             # tough logic
-            - 'packages/CodingStyle/src/Rector/Use_/RemoveUnusedAliasRector.php'
-            - 'packages/NetteToSymfony/src/Route/RouteInfoFactory.php'
             - 'src/PhpParser/Node/Resolver/NameResolver.php'
             - 'src/Rector/MethodBody/NormalToFluentRector.php'
+            - 'packages/CodingStyle/src/Rector/Use_/RemoveUnusedAliasRector.php'
+            - 'packages/NetteToSymfony/src/Route/RouteInfoFactory.php'
+            - 'packages/ContributorTools/src/Command/DumpNodesCommand.php'
 
             # copied 3rd party logic
             - 'packages/Php/src/EregToPcreTransformer.php'
@@ -112,19 +111,6 @@ parameters:
             - 'packages/Php/src/Rector/FunctionLike/*TypeDeclarationRector.php'
             - 'examples/*'
             - 'packages/Php/src/Rector/If_/IfToSpaceshipRector.php'
-
-        SlevomatCodingStandard\Sniffs\Functions\UnusedParameterSniff.UnusedParameter:
-            # enforced by interface
-            - '*Command.php'
-            - '*NodeVisitor.php'
-            - '*CompilerPass.php'
-            - 'packages/Php/src/Rector/Unset_/UnsetCastRector.php'
-            - 'packages/Php/src/Rector/ConstFetch/BarewordStringRector.php'
-            - 'packages/CodeQuality/src/Rector/Foreach_/ForeachToInArrayRector.php'
-            - 'packages/Php/src/Rector/MagicConstClass/ClassConstantToSelfClassRector.php'
-            - 'utils/PHPStanExtensions/src/Rector/Type/*TypeExtension.php'
-            # array type check
-            - 'src/RectorDefinition/RectorDefinition.php'
 
         Symplify\CodingStandard\Sniffs\ControlStructure\SprintfOverContactSniff:
             # respects inherited pattern for better comparing
@@ -147,6 +133,5 @@ parameters:
             # 3rd party api
             - 'src/PhpParser/Node/Value/ValueResolver.php'
 
-        SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff:
-        MissingTraversableParameterTypeHintSpecification:
-            - 'src/Testing/PHPUnit/AbstractRectorTestCase.php'
+#        SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff.MissingTraversableParameterTypeHintSpecification:
+#            - 'src/Testing/PHPUnit/AbstractRectorTestCase.php'
