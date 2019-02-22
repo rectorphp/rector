@@ -11,36 +11,22 @@ use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\Config\Loader\LoaderResolver;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\Config\FileLocator;
 use Symfony\Component\HttpKernel\Kernel;
+use Symplify\PackageBuilder\Contract\HttpKernel\ExtraConfigAwareKernelInterface;
 use Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutoBindParametersCompilerPass;
 use Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutoReturnFactoryCompilerPass;
 use Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPass;
 use Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutowireInterfacesCompilerPass;
 use Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutowireSinglyImplementedCompilerPass;
-use Symplify\PackageBuilder\HttpKernel\SimpleKernelTrait;
 
-final class RectorKernel extends Kernel
+final class RectorKernel extends Kernel implements ExtraConfigAwareKernelInterface
 {
-    use SimpleKernelTrait;
-
     /**
      * @var string[]
      */
-    private $extraConfigFiles = [];
-
-    /**
-     * @param string[] $configFiles
-     */
-    public function __construct(array $configFiles = [])
-    {
-        $this->extraConfigFiles = $configFiles;
-
-        $configFilesHash = md5(serialize($configFiles));
-
-        // debug: require to invalidate container on service files change
-        parent::__construct('cli_' . $configFilesHash, true);
-    }
+    private $configs = [];
 
     public function getCacheDir(): string
     {
@@ -52,9 +38,25 @@ final class RectorKernel extends Kernel
     {
         $loader->load(__DIR__ . '/../../config/config.yaml');
 
-        foreach ($this->extraConfigFiles as $extraConfigFile) {
-            $loader->load($extraConfigFile);
+        foreach ($this->configs as $config) {
+            $loader->load($config);
         }
+    }
+
+    /**
+     * @param string[] $configs
+     */
+    public function setConfigs(array $configs): void
+    {
+        $this->configs = $configs;
+    }
+
+    /**
+     * @return BundleInterface[]
+     */
+    public function registerBundles(): iterable
+    {
+        return [];
     }
 
     protected function build(ContainerBuilder $containerBuilder): void

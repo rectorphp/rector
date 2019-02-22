@@ -5,10 +5,11 @@ namespace Rector\Tests\PhpParser\Printer;
 use Iterator;
 use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\Scalar\String_;
+use Rector\HttpKernel\RectorKernel;
 use Rector\PhpParser\Printer\BetterStandardPrinter;
-use Rector\Tests\AbstractContainerAwareTestCase;
+use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 
-final class BetterStandardPrinterTest extends AbstractContainerAwareTestCase
+final class BetterStandardPrinterTest extends AbstractKernelTestCase
 {
     /**
      * @var BetterStandardPrinter
@@ -17,7 +18,8 @@ final class BetterStandardPrinterTest extends AbstractContainerAwareTestCase
 
     protected function setUp(): void
     {
-        $this->betterStandardPrinter = $this->container->get(BetterStandardPrinter::class);
+        $this->bootKernel(RectorKernel::class);
+        $this->betterStandardPrinter = self::$container->get(BetterStandardPrinter::class);
     }
 
     /**

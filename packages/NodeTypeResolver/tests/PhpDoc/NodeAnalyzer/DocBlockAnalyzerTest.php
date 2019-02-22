@@ -4,11 +4,12 @@ namespace Rector\NodeTypeResolver\Tests\PhpDoc\NodeAnalyzer;
 
 use PhpParser\Comment\Doc;
 use PhpParser\Node\Scalar\String_;
+use Rector\HttpKernel\RectorKernel;
 use Rector\NodeTypeResolver\Node\CurrentNodeProvider;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
-use Rector\Tests\AbstractContainerAwareTestCase;
+use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 
-final class DocBlockAnalyzerTest extends AbstractContainerAwareTestCase
+final class DocBlockAnalyzerTest extends AbstractKernelTestCase
 {
     /**
      * @var DocBlockAnalyzer
@@ -22,8 +23,10 @@ final class DocBlockAnalyzerTest extends AbstractContainerAwareTestCase
 
     protected function setUp(): void
     {
-        $this->docBlockAnalyzer = $this->container->get(DocBlockAnalyzer::class);
-        $this->currentNodeProvider = $this->container->get(CurrentNodeProvider::class);
+        $this->bootKernel(RectorKernel::class);
+
+        $this->docBlockAnalyzer = self::$container->get(DocBlockAnalyzer::class);
+        $this->currentNodeProvider = self::$container->get(CurrentNodeProvider::class);
     }
 
     public function testHasAnnotation(): void
