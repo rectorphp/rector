@@ -152,7 +152,7 @@ final class DumpNodesCommand extends AbstractCommand
             'output-format',
             'o',
             InputOption::VALUE_REQUIRED,
-            'Output format for Nodes [json, console]',
+            'Output format for Nodes [json, console, markdown]',
             'console'
         );
     }
