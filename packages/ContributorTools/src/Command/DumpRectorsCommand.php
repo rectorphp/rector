@@ -37,7 +37,7 @@ final class DumpRectorsCommand extends AbstractCommand
     protected function configure(): void
     {
         $this->setName(CommandNaming::classToName(self::class));
-        $this->setDescription('Dump overview of all Rectors in desired format');
+        $this->setDescription('Dump overview of all Rectors');
         $this->addOption(
             'output-format',
             'o',

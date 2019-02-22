@@ -93,6 +93,7 @@ use PhpParser\Node\Stmt\While_;
 use PhpParser\Node\VarLikeIdentifier;
 use Rector\Console\Command\AbstractCommand;
 use Rector\Console\Shell;
+use Rector\ContributorTools\Contract\OutputFormatter\DumpNodesOutputFormatterInterface;
 use Rector\ContributorTools\Node\NodeClassProvider;
 use Rector\ContributorTools\Node\NodeInfo;
 use Rector\ContributorTools\Node\NodeInfoResult;
@@ -100,8 +101,8 @@ use Rector\Exception\ShouldNotHappenException;
 use Rector\PhpParser\Printer\BetterStandardPrinter;
 use ReflectionClass;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 
 final class DumpNodesCommand extends AbstractCommand
@@ -117,25 +118,28 @@ final class DumpNodesCommand extends AbstractCommand
     private $nodeClassProvider;
 
     /**
-     * @var SymfonyStyle
-     */
-    private $symfonyStyle;
-
-    /**
      * @var NodeInfoResult
      */
     private $nodeInfoResult;
 
+    /**
+     * @var DumpNodesOutputFormatterInterface[]
+     */
+    private $outputFormatters = [];
+
+    /**
+     * @param DumpNodesOutputFormatterInterface[] $outputFormatters
+     */
     public function __construct(
         BetterStandardPrinter $betterStandardPrinter,
         NodeClassProvider $nodeClassProvider,
-        SymfonyStyle $symfonyStyle,
-        NodeInfoResult $nodeInfoResult
+        NodeInfoResult $nodeInfoResult,
+        array $outputFormatters
     ) {
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nodeClassProvider = $nodeClassProvider;
-        $this->symfonyStyle = $symfonyStyle;
         $this->nodeInfoResult = $nodeInfoResult;
+        $this->outputFormatters = $outputFormatters;
 
         parent::__construct();
     }
@@ -144,6 +148,13 @@ final class DumpNodesCommand extends AbstractCommand
     {
         $this->setName(CommandNaming::classToName(self::class));
         $this->setDescription('Dump overview of all Nodes');
+        $this->addOption(
+            'output-format',
+            'o',
+            InputOption::VALUE_REQUIRED,
+            'Output format for Nodes [json, console]',
+            'console'
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -383,6 +394,7 @@ final class DumpNodesCommand extends AbstractCommand
                 }
 
                 $category = $this->resolveCategoryByNodeClass($nodeClass);
+
                 $this->nodeInfoResult->addNodeInfo($category, new NodeInfo(
                     $nodeClass,
                     $this->betterStandardPrinter->print($node),
@@ -394,33 +406,15 @@ final class DumpNodesCommand extends AbstractCommand
             }
         }
 
-        $this->printInfoTable($this->nodeInfoResult);
+        foreach ($this->outputFormatters as $outputFormatter) {
+            if ($outputFormatter->getName() !== $input->getOption('output-format')) {
+                continue;
+            }
+
+            $outputFormatter->format($this->nodeInfoResult);
+        }
 
         return Shell::CODE_SUCCESS;
-    }
-
-    private function printInfoTable(NodeInfoResult $nodeInfoResult): void
-    {
-        foreach ($nodeInfoResult as $category => $nodeInfos) {
-            if (class_exists($category)) {
-                $this->symfonyStyle->title(sprintf(' Children of "%s"', $category));
-            } else {
-                $this->symfonyStyle->title(' ' . $category);
-            }
-
-            $tableData = [];
-            foreach ($nodeInfos as $nodeInfo) {
-                $tableData[] = [
-                    /** @var NodeInfo $nodeInfo */
-                    $nodeInfo->getClass(),
-                    $nodeInfo->getPrintedContent(),
-                    $nodeInfo->hasRequiredArguments() ? 'yes' : 'no',
-                ];
-            }
-
-            $this->symfonyStyle->table(['Node class', 'Content', 'Needs Args'], $tableData);
-            $this->symfonyStyle->newLine();
-        }
     }
 
     private function resolveCategoryByNodeClass(string $nodeClass): string
