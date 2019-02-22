@@ -140,10 +140,10 @@ CODE_SAMPLE
         return true;
     }
 
-    private function isValidUseImportChange(string $newName, UseUse $useUseNode): bool
+    private function isValidUseImportChange(string $newName, UseUse $useUse): bool
     {
         /** @var Use_[]|null $useNodes */
-        $useNodes = $useUseNode->getAttribute(Attribute::USE_NODES);
+        $useNodes = $useUse->getAttribute(Attribute::USE_NODES);
         if ($useNodes === null) {
             return true;
         }

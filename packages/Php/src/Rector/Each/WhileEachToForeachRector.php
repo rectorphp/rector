@@ -104,12 +104,12 @@ CODE_SAMPLE
         return $foreachNode;
     }
 
-    private function isListToEachAssign(Assign $assignNode): bool
+    private function isListToEachAssign(Assign $assign): bool
     {
-        if (! $assignNode->var instanceof List_) {
+        if (! $assign->var instanceof List_) {
             return false;
         }
 
-        return $assignNode->expr instanceof FuncCall && $this->isName($assignNode->expr, 'each');
+        return $assign->expr instanceof FuncCall && $this->isName($assign->expr, 'each');
     }
 }

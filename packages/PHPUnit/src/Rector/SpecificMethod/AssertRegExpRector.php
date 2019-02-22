@@ -87,24 +87,24 @@ final class AssertRegExpRector extends AbstractPHPUnitRector
         throw new ShouldNotHappenException(__METHOD__);
     }
 
-    private function renameMethod(MethodCall $methodCallNode, string $oldMethodName, int $oldCondition): void
+    private function renameMethod(MethodCall $methodCall, string $oldMethodName, int $oldCondition): void
     {
         if (in_array($oldMethodName, ['assertSame', 'assertEquals'], true) && $oldCondition === 1
             || in_array($oldMethodName, ['assertNotSame', 'assertNotEquals'], true) && $oldCondition === 0
         ) {
-            $methodCallNode->name = new Identifier('assertRegExp');
+            $methodCall->name = new Identifier('assertRegExp');
         }
 
         if (in_array($oldMethodName, ['assertSame', 'assertEquals'], true) && $oldCondition === 0
             || in_array($oldMethodName, ['assertNotSame', 'assertNotEquals'], true) && $oldCondition === 1
         ) {
-            $methodCallNode->name = new Identifier('assertNotRegExp');
+            $methodCall->name = new Identifier('assertNotRegExp');
         }
     }
 
-    private function moveFunctionArgumentsUp(MethodCall $methodCallNode): void
+    private function moveFunctionArgumentsUp(MethodCall $methodCall): void
     {
-        $oldArguments = $methodCallNode->args;
+        $oldArguments = $methodCall->args;
 
         /** @var FuncCall $pregMatchFunction */
         $pregMatchFunction = $oldArguments[1]->value;
@@ -112,6 +112,6 @@ final class AssertRegExpRector extends AbstractPHPUnitRector
 
         unset($oldArguments[0], $oldArguments[1]);
 
-        $methodCallNode->args = array_merge([$regex, $variable], $oldArguments);
+        $methodCall->args = array_merge([$regex, $variable], $oldArguments);
     }
 }

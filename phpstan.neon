@@ -122,3 +122,7 @@ parameters:
         - '#Class Manual_Twig_Filter not found#'
 
         - '#Parameter \#1 \$node of method Rector\\PhpParser\\Node\\Maintainer\\VisibilityMaintainer\:\:(.*?)\(\) expects PhpParser\\Node\\Stmt\\ClassConst\|PhpParser\\Node\\Stmt\\ClassMethod\|PhpParser\\Node\\Stmt\\Property, PhpParser\\Node given#'
+        - '#PHPDoc tag @param for parameter \$node with type PhpParser\\Builder\\Property\|PhpParser\\Node\\Stmt\\ClassConst\|PhpParser\\Node\\Stmt\\ClassMethod is not subtype of native type PhpParser\\Node#'
+        - '#Parameter \#2 \$constFetch of method Rector\\CodeQuality\\Rector\\Identical\\SimplifyArraySearchRector\:\:resolveIsNot\(\) expects PhpParser\\Node\\Expr\\ConstFetch, PhpParser\\Node given#'
+        - '#Parameter \#1 \$binaryOp of method Rector\\CodeQuality\\Rector\\Identical\\SimplifyConditionsRector\:\:createInversedBooleanOp\(\) expects PhpParser\\Node\\Expr\\BinaryOp, PhpParser\\Node given#'
+        - '#Parameter \#2 \$classMethod of method Rector\\NetteToSymfony\\Rector\\ClassMethod\\RouterListToControllerAnnotationsRector\:\:resolvePathFromClassAndMethodNodes\(\) expects PhpParser\\Node\\Stmt\\ClassMethod, PhpParser\\Node\\Stmt given#'

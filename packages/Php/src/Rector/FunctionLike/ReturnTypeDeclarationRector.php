@@ -122,12 +122,12 @@ CODE_SAMPLE
     }
 
     /**
-     * @param ClassMethod|Function_ $node
+     * @param ClassMethod|Function_ $functionLike
      */
-    private function resolveReturnType(FunctionLike $node): ?ReturnTypeInfo
+    private function resolveReturnType(FunctionLike $functionLike): ?ReturnTypeInfo
     {
-        $docReturnTypeInfo = $this->docBlockAnalyzer->getReturnTypeInfo($node);
-        $codeReturnTypeInfo = $this->functionLikeMaintainer->resolveStaticReturnTypeInfo($node);
+        $docReturnTypeInfo = $this->docBlockAnalyzer->getReturnTypeInfo($functionLike);
+        $codeReturnTypeInfo = $this->functionLikeMaintainer->resolveStaticReturnTypeInfo($functionLike);
 
         // code has priority over docblock
         if ($docReturnTypeInfo === null) {
@@ -178,12 +178,12 @@ CODE_SAMPLE
     }
 
     private function addReturnTypeToMethod(
-        ClassLike $classLikeNode,
+        ClassLike $classLike,
         string $methodName,
         Node $node,
         ReturnTypeInfo $returnTypeInfo
     ): void {
-        $classMethod = $classLikeNode->getMethod($methodName);
+        $classMethod = $classLike->getMethod($methodName);
         if ($classMethod === null) {
             return;
         }

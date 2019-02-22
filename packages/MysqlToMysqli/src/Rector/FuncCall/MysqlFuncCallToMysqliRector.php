@@ -73,20 +73,20 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function processMysqlDropDb(FuncCall $funcCallNode): FuncCall
+    private function processMysqlDropDb(FuncCall $funcCall): FuncCall
     {
-        $funcCallNode->name = new Name('mysqli_query');
-        $funcCallNode->args[0]->value = $this->joinStringWithNode('DROP DATABASE', $funcCallNode->args[0]->value);
+        $funcCall->name = new Name('mysqli_query');
+        $funcCall->args[0]->value = $this->joinStringWithNode('DROP DATABASE', $funcCall->args[0]->value);
 
-        return $funcCallNode;
+        return $funcCall;
     }
 
-    private function joinStringWithNode(string $string, Expr $node): Expr
+    private function joinStringWithNode(string $string, Expr $expr): Expr
     {
-        if ($node instanceof String_) {
-            return new String_($string . ' ' . $node->value);
+        if ($expr instanceof String_) {
+            return new String_($string . ' ' . $expr->value);
         }
 
-        return new Concat(new String_($string . ' '), $node);
+        return new Concat(new String_($string . ' '), $expr);
     }
 }

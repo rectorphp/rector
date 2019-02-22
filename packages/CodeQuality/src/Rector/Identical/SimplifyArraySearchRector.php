@@ -70,37 +70,37 @@ final class SimplifyArraySearchRector extends AbstractRector
             return null;
         }
 
-        /** @var FuncCall $arraySearchFuncCallNode */
-        /** @var ConstFetch $boolConstFetchNode */
-        [$arraySearchFuncCallNode, $boolConstFetchNode] = $matchedNodes;
+        /** @var FuncCall $arraySearchFuncCall */
+        /** @var ConstFetch $boolConstFetch */
+        [$arraySearchFuncCall, $boolConstFetch] = $matchedNodes;
 
         $inArrayFuncCall = $this->createFunction('in_array', [
-            $arraySearchFuncCallNode->args[0],
-            $arraySearchFuncCallNode->args[1],
+            $arraySearchFuncCall->args[0],
+            $arraySearchFuncCall->args[1],
         ]);
 
         if ($this->shouldBeStrict($node)) {
             $inArrayFuncCall->args[2] = new Arg($this->createTrue());
         }
 
-        if ($this->resolveIsNot($node, $boolConstFetchNode)) {
+        if ($this->resolveIsNot($node, $boolConstFetch)) {
             return new BooleanNot($inArrayFuncCall);
         }
 
         return $inArrayFuncCall;
     }
 
-    private function shouldBeStrict(BinaryOp $binaryOpNode): bool
+    private function shouldBeStrict(BinaryOp $binaryOp): bool
     {
-        return $binaryOpNode instanceof Identical || $binaryOpNode instanceof NotIdentical;
+        return $binaryOp instanceof Identical || $binaryOp instanceof NotIdentical;
     }
 
-    private function resolveIsNot(BinaryOp $node, ConstFetch $boolConstFetchNode): bool
+    private function resolveIsNot(BinaryOp $binaryOp, ConstFetch $constFetch): bool
     {
-        if ($node instanceof Identical || $node instanceof Equal) {
-            return $this->isFalse($boolConstFetchNode);
+        if ($binaryOp instanceof Identical || $binaryOp instanceof Equal) {
+            return $this->isFalse($constFetch);
         }
 
-        return $this->isTrue($boolConstFetchNode);
+        return $this->isTrue($constFetch);
     }
 }

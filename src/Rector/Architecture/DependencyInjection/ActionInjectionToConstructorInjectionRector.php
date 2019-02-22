@@ -96,9 +96,9 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function processClassMethod(Class_ $classNode, ClassMethod $classMethodNode): void
+    private function processClassMethod(Class_ $classNode, ClassMethod $classMethod): void
     {
-        foreach ($classMethodNode->params as $key => $paramNode) {
+        foreach ($classMethod->params as $key => $paramNode) {
             if (! $this->isActionInjectedParamNode($paramNode)) {
                 continue;
             }
@@ -111,25 +111,25 @@ CODE_SAMPLE
             $this->addPropertyToClass($classNode, $paramNodeType, $paramName);
 
             // remove arguments
-            unset($classMethodNode->params[$key]);
+            unset($classMethod->params[$key]);
 
             $variableInfo = new VariableInfo($paramName, $paramNodeTypes[0]);
             $this->variablesToPropertyFetchCollection->addVariableInfo($variableInfo);
         }
     }
 
-    private function isActionInjectedParamNode(Param $paramNode): bool
+    private function isActionInjectedParamNode(Param $param): bool
     {
-        if ($paramNode->type === null) {
+        if ($param->type === null) {
             return false;
         }
 
-        $typehint = $this->getName($paramNode->type);
+        $typehint = $this->getName($param->type);
         if ($typehint === null) {
             return false;
         }
 
-        $typehint = $this->getTypes($paramNode)[0] ?? null;
+        $typehint = $this->getTypes($param)[0] ?? null;
         if ($typehint === null) {
             return false;
         }

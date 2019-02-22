@@ -96,9 +96,9 @@ final class ClassMethodMaintainer
         return false;
     }
 
-    public function hasReturnArrayOfArrays(ClassMethod $classMethodNode): bool
+    public function hasReturnArrayOfArrays(ClassMethod $classMethod): bool
     {
-        $statements = $classMethodNode->stmts;
+        $statements = $classMethod->stmts;
         if (! $statements) {
             return false;
         }
@@ -121,13 +121,13 @@ final class ClassMethodMaintainer
     /**
      * @return string[]
      */
-    public function resolveReturnType(ClassMethod $classMethodNode): array
+    public function resolveReturnType(ClassMethod $classMethod): array
     {
-        if ($classMethodNode->returnType !== null) {
-            return $this->nodeTypeResolver->resolve($classMethodNode->returnType);
+        if ($classMethod->returnType !== null) {
+            return $this->nodeTypeResolver->resolve($classMethod->returnType);
         }
 
-        $staticReturnType = $this->functionLikeMaintainer->resolveStaticReturnTypeInfo($classMethodNode);
+        $staticReturnType = $this->functionLikeMaintainer->resolveStaticReturnTypeInfo($classMethod);
         if ($staticReturnType === null) {
             return [];
         }
@@ -148,9 +148,9 @@ final class ClassMethodMaintainer
     /**
      * Is method actually static, or has some $this-> calls?
      */
-    public function isStaticClassMethod(ClassMethod $classMethodNode): bool
+    public function isStaticClassMethod(ClassMethod $classMethod): bool
     {
-        return (bool) $this->betterNodeFinder->findFirst((array) $classMethodNode->stmts, function (Node $node) {
+        return (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (Node $node) {
             if (! $node instanceof Variable) {
                 return false;
             }
@@ -162,21 +162,21 @@ final class ClassMethodMaintainer
     /**
      * @return MethodCall[]
      */
-    public function getAllClassMethodCall(ClassMethod $classMethodNode): array
+    public function getAllClassMethodCall(ClassMethod $classMethod): array
     {
-        $classNode = $classMethodNode->getAttribute(Attribute::CLASS_NODE);
+        $classNode = $classMethod->getAttribute(Attribute::CLASS_NODE);
         if ($classNode === null) {
             return [];
         }
 
-        return $this->betterNodeFinder->find($classNode, function (Node $node) use ($classMethodNode) {
+        return $this->betterNodeFinder->find($classNode, function (Node $node) use ($classMethod) {
             // itself
-            if ($this->betterStandardPrinter->areNodesEqual($node, $classMethodNode)) {
+            if ($this->betterStandardPrinter->areNodesEqual($node, $classMethod)) {
                 return false;
             }
 
             // is it the name match?
-            if ($this->nameResolver->resolve($node) !== $this->nameResolver->resolve($classMethodNode)) {
+            if ($this->nameResolver->resolve($node) !== $this->nameResolver->resolve($classMethod)) {
                 return false;
             }
 

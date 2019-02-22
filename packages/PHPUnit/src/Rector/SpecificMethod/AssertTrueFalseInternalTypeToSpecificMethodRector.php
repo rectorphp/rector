@@ -103,18 +103,18 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractPH
         return $node;
     }
 
-    private function moveFunctionArgumentsUp(MethodCall $methodCallNode): void
+    private function moveFunctionArgumentsUp(MethodCall $methodCall): void
     {
         /** @var FuncCall $isFunctionNode */
-        $isFunctionNode = $methodCallNode->args[0]->value;
+        $isFunctionNode = $methodCall->args[0]->value;
 
         $argument = $isFunctionNode->args[0];
         $isFunctionName = $this->getName($isFunctionNode);
 
-        $oldArguments = $methodCallNode->args;
+        $oldArguments = $methodCall->args;
         unset($oldArguments[0]);
 
-        $methodCallNode->args = array_merge([
+        $methodCall->args = array_merge([
             new Arg(new String_($this->oldFunctionsToTypes[$isFunctionName])),
             $argument,
         ], $oldArguments);

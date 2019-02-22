@@ -41,7 +41,7 @@ services:
     Symplify\CodingStandard\Fixer\Naming\PropertyNameMatchingTypeFixer:
         extra_skipped_classes:
             - 'PhpParser\PrettyPrinter\Standard'
-            - 'PhpParser\Node'
+#            - 'PhpParser\Node'
 
     Symplify\CodingStandard\Sniffs\Naming\ClassNameSuffixByParentSniff:
         extra_parent_types_to_suffixes:

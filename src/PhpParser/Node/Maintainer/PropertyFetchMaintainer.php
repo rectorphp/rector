@@ -59,14 +59,14 @@ final class PropertyFetchMaintainer
         return ! $this->hasPublicProperty($node, $nodeName);
     }
 
-    private function hasPublicProperty(PropertyFetch $node, string $propertyName): bool
+    private function hasPublicProperty(PropertyFetch $propertyFetch, string $propertyName): bool
     {
-        $nodeScope = $node->getAttribute(Attribute::SCOPE);
+        $nodeScope = $propertyFetch->getAttribute(Attribute::SCOPE);
         if ($nodeScope === null) {
             throw new ShouldNotHappenException();
         }
 
-        $propertyFetchType = $nodeScope->getType($node->var);
+        $propertyFetchType = $nodeScope->getType($propertyFetch->var);
         if ($propertyFetchType instanceof ObjectType) {
             $propertyFetchType = $propertyFetchType->getClassName();
         }

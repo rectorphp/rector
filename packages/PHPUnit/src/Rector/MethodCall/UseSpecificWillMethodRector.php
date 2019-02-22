@@ -94,33 +94,33 @@ CODE_SAMPLE
         return null;
     }
 
-    private function processWithCall(MethodCall $methodCallNode): ?MethodCall
+    private function processWithCall(MethodCall $methodCall): ?MethodCall
     {
-        foreach ($methodCallNode->args as $i => $argNode) {
+        foreach ($methodCall->args as $i => $argNode) {
             if ($argNode->value instanceof MethodCall && $this->isName($argNode->value, 'equalTo')) {
-                $methodCallNode->args[$i] = $argNode->value->args[0];
+                $methodCall->args[$i] = $argNode->value->args[0];
             }
         }
 
-        return $methodCallNode;
+        return $methodCall;
     }
 
-    private function processWillCall(MethodCall $methodCallNode): ?MethodCall
+    private function processWillCall(MethodCall $methodCall): ?MethodCall
     {
-        if (! $methodCallNode->args[0]->value instanceof MethodCall) {
+        if (! $methodCall->args[0]->value instanceof MethodCall) {
             return null;
         }
 
-        $nestedMethodCall = $methodCallNode->args[0]->value;
+        $nestedMethodCall = $methodCall->args[0]->value;
 
         foreach ($this->nestedMethodToRenameMap as $oldMethodName => $newParentMethodName) {
             if ($this->isNameInsensitive($nestedMethodCall, $oldMethodName)) {
-                $methodCallNode->name = new Identifier($newParentMethodName);
+                $methodCall->name = new Identifier($newParentMethodName);
 
                 // move args up
-                $methodCallNode->args = $nestedMethodCall->args;
+                $methodCall->args = $nestedMethodCall->args;
 
-                return $methodCallNode;
+                return $methodCall;
             }
         }
 

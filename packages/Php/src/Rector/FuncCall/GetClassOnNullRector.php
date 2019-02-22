@@ -103,36 +103,36 @@ CODE_SAMPLE
         return $ternaryNode;
     }
 
-    private function shouldSkip(FuncCall $funcCallNode): bool
+    private function shouldSkip(FuncCall $funcCall): bool
     {
-        $parentNode = $funcCallNode->getAttribute(Attribute::PARENT_NODE);
+        $parentNode = $funcCall->getAttribute(Attribute::PARENT_NODE);
         if (! $parentNode instanceof Ternary) {
             return false;
         }
 
-        if ($this->isIdenticalToNotNull($funcCallNode, $parentNode)) {
+        if ($this->isIdenticalToNotNull($funcCall, $parentNode)) {
             return true;
         }
-        return $this->isNotIdenticalToNull($funcCallNode, $parentNode);
+        return $this->isNotIdenticalToNull($funcCall, $parentNode);
     }
 
     /**
      * E.g. "$value === [!null] ? get_class($value)"
      */
-    private function isIdenticalToNotNull(FuncCall $funcCallNode, Ternary $ternaryNode): bool
+    private function isIdenticalToNotNull(FuncCall $funcCall, Ternary $ternary): bool
     {
-        if (! $ternaryNode->cond instanceof Identical) {
+        if (! $ternary->cond instanceof Identical) {
             return false;
         }
 
-        if ($this->areNodesEqual($ternaryNode->cond->left, $funcCallNode->args[0]->value)) {
-            if (! $this->isNull($ternaryNode->cond->right)) {
+        if ($this->areNodesEqual($ternary->cond->left, $funcCall->args[0]->value)) {
+            if (! $this->isNull($ternary->cond->right)) {
                 return true;
             }
         }
 
-        if ($this->areNodesEqual($ternaryNode->cond->right, $funcCallNode->args[0]->value)) {
-            if (! $this->isNull($ternaryNode->cond->left)) {
+        if ($this->areNodesEqual($ternary->cond->right, $funcCall->args[0]->value)) {
+            if (! $this->isNull($ternary->cond->left)) {
                 return true;
             }
         }
@@ -143,20 +143,20 @@ CODE_SAMPLE
     /**
      * E.g. "$value !== null ? get_class($value)"
      */
-    private function isNotIdenticalToNull(FuncCall $funcCallNode, Ternary $ternaryNode): bool
+    private function isNotIdenticalToNull(FuncCall $funcCall, Ternary $ternary): bool
     {
-        if (! $ternaryNode->cond instanceof NotIdentical) {
+        if (! $ternary->cond instanceof NotIdentical) {
             return false;
         }
 
-        if ($this->areNodesEqual($ternaryNode->cond->left, $funcCallNode->args[0]->value)) {
-            if ($this->isNull($ternaryNode->cond->right)) {
+        if ($this->areNodesEqual($ternary->cond->left, $funcCall->args[0]->value)) {
+            if ($this->isNull($ternary->cond->right)) {
                 return true;
             }
         }
 
-        if ($this->areNodesEqual($ternaryNode->cond->right, $funcCallNode->args[0]->value)) {
-            if ($this->isNull($ternaryNode->cond->left)) {
+        if ($this->areNodesEqual($ternary->cond->right, $funcCall->args[0]->value)) {
+            if ($this->isNull($ternary->cond->left)) {
                 return true;
             }
         }

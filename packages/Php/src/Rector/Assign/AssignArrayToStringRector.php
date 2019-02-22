@@ -150,24 +150,22 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Variable|PropertyFetch|StaticPropertyFetch|Expr $variableNode
+     * @param Variable|PropertyFetch|StaticPropertyFetch|Expr $expr
      */
-    private function processVariable(Assign $assignNode, Expr $variableNode): bool
+    private function processVariable(Assign $assign, Expr $expr): bool
     {
-        $variableStaticType = $this->getStaticType($variableNode);
+        $variableStaticType = $this->getStaticType($expr);
 
         if ($this->shouldSkipVariable($variableStaticType)) {
             return true;
         }
 
-        $variableAssign = $this->betterNodeFinder->findFirstPrevious($assignNode, function (Node $node) use (
-            $variableNode
-        ) {
+        $variableAssign = $this->betterNodeFinder->findFirstPrevious($assign, function (Node $node) use ($expr) {
             if (! $node instanceof Assign) {
                 return false;
             }
 
-            if (! $this->areNodesEqual($node->var, $variableNode)) {
+            if (! $this->areNodesEqual($node->var, $expr)) {
                 return false;
             }
             // we look for variable assign = string

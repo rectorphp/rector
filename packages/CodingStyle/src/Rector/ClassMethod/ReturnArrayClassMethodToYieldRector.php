@@ -116,13 +116,13 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function collectReturnArrayNodesFromClassMethod(ClassMethod $classMethodNode): ?Array_
+    private function collectReturnArrayNodesFromClassMethod(ClassMethod $classMethod): ?Array_
     {
-        if ($classMethodNode->stmts === null) {
+        if ($classMethod->stmts === null) {
             return null;
         }
 
-        foreach ($classMethodNode->stmts as $statement) {
+        foreach ($classMethod->stmts as $statement) {
             if ($statement instanceof Return_) {
                 if ($statement->expr instanceof Array_) {
                     return $statement->expr;

@@ -103,14 +103,14 @@ CODE_SAMPLE
     /**
      * @return Param[]
      */
-    private function resolveUnusedParameters(ClassMethod $classMethodNode): array
+    private function resolveUnusedParameters(ClassMethod $classMethod): array
     {
         $unusedParameters = [];
 
-        foreach ((array) $classMethodNode->params as $i => $param) {
-            if ($this->classMethodMaintainer->isParameterUsedMethod($param, $classMethodNode)) {
+        foreach ((array) $classMethod->params as $i => $param) {
+            if ($this->classMethodMaintainer->isParameterUsedMethod($param, $classMethod)) {
                 // reset to keep order of removed arguments, if not construtctor - probably autowired
-                if (! $this->isName($classMethodNode, '__construct')) {
+                if (! $this->isName($classMethod, '__construct')) {
                     $unusedParameters = [];
                 }
 

@@ -141,9 +141,9 @@ CODE_SAMPLE
         return null;
     }
 
-    private function isInstantiable(StaticCall $staticCallNode): bool
+    private function isInstantiable(StaticCall $staticCall): bool
     {
-        $className = $this->getName($staticCallNode->class);
+        $className = $this->getName($staticCall->class);
 
         $reflectionClass = new ReflectionClass($className);
         $classConstructorReflection = $reflectionClass->getConstructor();

@@ -91,9 +91,9 @@ CODE_SAMPLE
 
         /** @var Identical|Equal $ifCondition */
         $ifCondition = $firstNodeInsideForeach->cond;
-        $foreachValueNode = $node->valueVar;
+        $foreachValueVar = $node->valueVar;
 
-        $matchedNodes = $this->matchNodes($ifCondition, $foreachValueNode);
+        $matchedNodes = $this->matchNodes($ifCondition, $foreachValueVar);
         if ($matchedNodes === null) {
             return null;
         }
@@ -106,37 +106,37 @@ CODE_SAMPLE
 
         $inArrayFunctionCall = $this->createInArrayFunction($comparedNode, $ifCondition, $node);
 
-        /** @var Return_ $returnNodeToRemove */
-        $returnNodeToRemove = $node->getAttribute(Attribute::NEXT_NODE);
+        /** @var Return_ $returnToRemove */
+        $returnToRemove = $node->getAttribute(Attribute::NEXT_NODE);
 
-        /** @var Return_ $returnNode */
-        $returnNode = $firstNodeInsideForeach->stmts[0];
-        if ($returnNodeToRemove->expr === null) {
+        /** @var Return_ $return */
+        $return = $firstNodeInsideForeach->stmts[0];
+        if ($returnToRemove->expr === null) {
             return null;
         }
 
-        if (! $this->isBool($returnNodeToRemove->expr)) {
+        if (! $this->isBool($returnToRemove->expr)) {
             return null;
         }
 
-        if ($returnNode->expr === null) {
+        if ($return->expr === null) {
             return null;
         }
 
         // cannot be "return true;" + "return true;"
-        if ($this->areNodesEqual($returnNode, $returnNodeToRemove)) {
+        if ($this->areNodesEqual($return, $returnToRemove)) {
             return null;
         }
 
-        $this->removeNode($returnNodeToRemove);
+        $this->removeNode($returnToRemove);
 
-        $returnNode = new Return_($this->isFalse($returnNode->expr) ? new BooleanNot(
+        $return = new Return_($this->isFalse($return->expr) ? new BooleanNot(
             $inArrayFunctionCall
         ) : $inArrayFunctionCall);
 
-        $this->combineCommentsToNode($node, $returnNode);
+        $this->combineCommentsToNode($node, $return);
 
-        return $returnNode;
+        return $return;
     }
 
     private function shouldSkipForeach(Foreach_ $foreachNode): bool
@@ -176,13 +176,13 @@ CODE_SAMPLE
     /**
      * @return Node[]|null
      */
-    private function matchNodes(BinaryOp $ifCondition, Expr $foreachValueNode): ?array
+    private function matchNodes(BinaryOp $binaryOp, Expr $expr): ?array
     {
         return $this->binaryOpMaintainer->matchFirstAndSecondConditionNode(
-            $ifCondition,
+            $binaryOp,
             Variable::class,
-            function (Node $node, Node $otherNode) use ($foreachValueNode) {
-                return $this->areNodesEqual($otherNode, $foreachValueNode);
+            function (Node $node, Node $otherNode) use ($expr) {
+                return $this->areNodesEqual($otherNode, $expr);
             }
         );
     }
@@ -202,13 +202,13 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Identical|Equal $ifCondition
+     * @param Identical|Equal $binaryOp
      */
-    private function createInArrayFunction(Node $condition, BinaryOp $ifCondition, Foreach_ $foreachNode): FuncCall
+    private function createInArrayFunction(Node $node, BinaryOp $binaryOp, Foreach_ $foreachNode): FuncCall
     {
-        $arguments = $this->createArgs([$condition, $foreachNode->expr]);
+        $arguments = $this->createArgs([$node, $foreachNode->expr]);
 
-        if ($ifCondition instanceof Identical) {
+        if ($binaryOp instanceof Identical) {
             $arguments[] = $this->createArg($this->createTrue());
         }
 

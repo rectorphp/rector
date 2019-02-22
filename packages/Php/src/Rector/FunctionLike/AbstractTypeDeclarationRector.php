@@ -76,18 +76,18 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
         return [Function_::class, ClassMethod::class];
     }
 
-    protected function isChangeVendorLockedIn(ClassMethod $classMethodNode, int $paramPosition): bool
+    protected function isChangeVendorLockedIn(ClassMethod $classMethod, int $paramPosition): bool
     {
-        if ($this->hasParentClassOrImplementsInterface($classMethodNode) === false) {
+        if ($this->hasParentClassOrImplementsInterface($classMethod) === false) {
             return false;
         }
 
-        $methodName = $this->getName($classMethodNode);
+        $methodName = $this->getName($classMethod);
 
         // @todo extract to some "inherited parent method" service
 
         /** @var string|null $parentClassName */
-        $parentClassName = $classMethodNode->getAttribute(Attribute::PARENT_CLASS_NAME);
+        $parentClassName = $classMethod->getAttribute(Attribute::PARENT_CLASS_NAME);
 
         if ($parentClassName !== null) {
             $parentClassNode = $this->classLikeNodeCollector->findClass($parentClassName);
@@ -112,7 +112,7 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
             }
         }
 
-        $classNode = $classMethodNode->getAttribute(Attribute::CLASS_NODE);
+        $classNode = $classMethod->getAttribute(Attribute::CLASS_NODE);
         if (($classNode instanceof Class_ || $classNode instanceof Interface_) === false) {
             return false;
         }
@@ -218,9 +218,9 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
         return $returnTypeInfo->getFqnTypeNode();
     }
 
-    private function hasParentClassOrImplementsInterface(ClassMethod $classMethodNode): bool
+    private function hasParentClassOrImplementsInterface(ClassMethod $classMethod): bool
     {
-        $classNode = $classMethodNode->getAttribute(Attribute::CLASS_NODE);
+        $classNode = $classMethod->getAttribute(Attribute::CLASS_NODE);
         if ($classNode === null) {
             return false;
         }
@@ -239,15 +239,15 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
     }
 
     /**
-     * @param Class_|Interface_ $classLikeNode
+     * @param Class_|Interface_ $classLike
      * @return string[]
      */
-    private function getClassLikeNodeParentInterfaceNames(ClassLike $classLikeNode): array
+    private function getClassLikeNodeParentInterfaceNames(ClassLike $classLike): array
     {
         $interfaces = [];
 
-        if ($classLikeNode instanceof Class_) {
-            foreach ($classLikeNode->implements as $implementNode) {
+        if ($classLike instanceof Class_) {
+            foreach ($classLike->implements as $implementNode) {
                 $interfaceName = $this->getName($implementNode);
                 if ($interfaceName === null) {
                     continue;
@@ -257,8 +257,8 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
             }
         }
 
-        if ($classLikeNode instanceof Interface_) {
-            foreach ($classLikeNode->extends as $extendNode) {
+        if ($classLike instanceof Interface_) {
+            foreach ($classLike->extends as $extendNode) {
                 $interfaceName = $this->getName($extendNode);
                 if ($interfaceName === null) {
                     continue;

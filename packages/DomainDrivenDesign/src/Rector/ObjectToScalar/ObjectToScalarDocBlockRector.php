@@ -93,43 +93,43 @@ CODE_SAMPLE
         return null;
     }
 
-    private function refactorProperty(Property $propertyNode): void
+    private function refactorProperty(Property $property): void
     {
-        $match = $this->matchOriginAndNewType($propertyNode);
+        $match = $this->matchOriginAndNewType($property);
         if ($match === null) {
             return;
         }
 
         [$oldType, $newType] = $match;
 
-        $this->docBlockAnalyzer->changeType($propertyNode, $oldType, $newType);
+        $this->docBlockAnalyzer->changeType($property, $oldType, $newType);
     }
 
-    private function refactorNullableType(NullableType $nullableTypeNode): void
+    private function refactorNullableType(NullableType $nullableType): void
     {
-        $newType = $this->matchNewType($nullableTypeNode->type);
+        $newType = $this->matchNewType($nullableType->type);
         if ($newType === null) {
             return;
         }
 
         // in method parameter update docs as well
-        $parentNode = $nullableTypeNode->getAttribute(Attribute::PARENT_NODE);
+        $parentNode = $nullableType->getAttribute(Attribute::PARENT_NODE);
         if ($parentNode instanceof Param) {
-            $this->processParamNode($nullableTypeNode, $parentNode, $newType);
+            $this->processParamNode($nullableType, $parentNode, $newType);
         }
     }
 
-    private function refactorVariableNode(Variable $variableNode): void
+    private function refactorVariableNode(Variable $variable): void
     {
-        $match = $this->matchOriginAndNewType($variableNode);
+        $match = $this->matchOriginAndNewType($variable);
         if (! $match) {
             return;
         }
 
         [$oldType, $newType] = $match;
 
-        $exprNode = $this->betterNodeFinder->findFirstAncestorInstanceOf($variableNode, Expr::class);
-        $node = $variableNode;
+        $exprNode = $this->betterNodeFinder->findFirstAncestorInstanceOf($variable, Expr::class);
+        $node = $variable;
         if ($exprNode && $exprNode->getAttribute(Attribute::PARENT_NODE)) {
             $node = $exprNode->getAttribute(Attribute::PARENT_NODE);
         }
@@ -141,16 +141,16 @@ CODE_SAMPLE
         $this->docBlockAnalyzer->changeType($node, $oldType, $newType);
     }
 
-    private function processParamNode(NullableType $nullableTypeNode, Param $paramNode, string $newType): void
+    private function processParamNode(NullableType $nullableType, Param $param, string $newType): void
     {
-        $classMethodNode = $paramNode->getAttribute(Attribute::PARENT_NODE);
+        $classMethodNode = $param->getAttribute(Attribute::PARENT_NODE);
         if ($classMethodNode === null) {
             return;
         }
 
-        $this->currentNodeProvider->setNode($nullableTypeNode);
+        $this->currentNodeProvider->setNode($nullableType);
 
-        $oldType = $this->namespaceAnalyzer->resolveTypeToFullyQualified((string) $nullableTypeNode->type);
+        $oldType = $this->namespaceAnalyzer->resolveTypeToFullyQualified((string) $nullableType->type);
 
         $this->docBlockAnalyzer->changeType($classMethodNode, $oldType, $newType);
     }

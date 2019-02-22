@@ -102,9 +102,9 @@ final class BetterStandardPrinter extends Standard
     /**
      * Add space after "use ("
      */
-    protected function pExpr_Closure(Closure $node): string
+    protected function pExpr_Closure(Closure $closure): string
     {
-        return Strings::replace(parent::pExpr_Closure($node), '#( use)\(#', '$1 (');
+        return Strings::replace(parent::pExpr_Closure($closure), '#( use)\(#', '$1 (');
     }
 
     /**
@@ -160,12 +160,14 @@ final class BetterStandardPrinter extends Standard
      * ↓
      * "...$params): ReturnType"
      */
-    protected function pStmt_ClassMethod(ClassMethod $node): string
+    protected function pStmt_ClassMethod(ClassMethod $classMethod): string
     {
-        return $this->pModifiers($node->flags)
-            . 'function ' . ($node->byRef ? '&' : '') . $node->name
-            . '(' . $this->pCommaSeparated($node->params) . ')'
-            . ($node->returnType !== null ? ': ' . $this->p($node->returnType) : '')
-            . ($node->stmts !== null ? $this->nl . '{' . $this->pStmts($node->stmts) . $this->nl . '}' : ';');
+        return $this->pModifiers($classMethod->flags)
+            . 'function ' . ($classMethod->byRef ? '&' : '') . $classMethod->name
+            . '(' . $this->pCommaSeparated($classMethod->params) . ')'
+            . ($classMethod->returnType !== null ? ': ' . $this->p($classMethod->returnType) : '')
+            . ($classMethod->stmts !== null ? $this->nl . '{' . $this->pStmts(
+                $classMethod->stmts
+            ) . $this->nl . '}' : ';');
     }
 }

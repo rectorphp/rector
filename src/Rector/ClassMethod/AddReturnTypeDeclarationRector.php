@@ -85,23 +85,21 @@ CODE_SAMPLE
         return null;
     }
 
-    private function processClassMethodNodeWithTypehints(
-        ClassMethod $classMethodNode,
-        string $newType
-    ): ?ClassMethod {
+    private function processClassMethodNodeWithTypehints(ClassMethod $classMethod, string $newType): ?ClassMethod
+    {
         // already set → no change
-        if ($classMethodNode->returnType && $this->isName($classMethodNode->returnType, $newType)) {
+        if ($classMethod->returnType && $this->isName($classMethod->returnType, $newType)) {
             return null;
         }
 
         // remove it
         if ($newType === '') {
-            $classMethodNode->returnType = null;
+            $classMethod->returnType = null;
         } else {
             $returnTypeInfo = new ReturnTypeInfo([$newType]);
-            $classMethodNode->returnType = $returnTypeInfo->getFqnTypeNode();
+            $classMethod->returnType = $returnTypeInfo->getFqnTypeNode();
         }
 
-        return $classMethodNode;
+        return $classMethod;
     }
 }

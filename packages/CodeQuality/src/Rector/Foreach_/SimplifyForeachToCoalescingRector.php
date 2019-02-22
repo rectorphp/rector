@@ -159,7 +159,7 @@ CODE_SAMPLE
         return null;
     }
 
-    private function processForeachNodeWithAssignInside(Foreach_ $foreachNode, Assign $assignNode): ?Node
+    private function processForeachNodeWithAssignInside(Foreach_ $foreachNode, Assign $assign): ?Node
     {
         /** @var If_ $ifNode */
         $ifNode = $foreachNode->stmts[0];
@@ -168,10 +168,10 @@ CODE_SAMPLE
         $identicalNode = $ifNode->cond;
 
         if ($this->areNodesEqual($identicalNode->left, $foreachNode->keyVar)) {
-            $checkedNode = $assignNode->var;
+            $checkedNode = $assign->var;
             $keyNode = $identicalNode->right;
         } elseif ($this->areNodesEqual($identicalNode->right, $foreachNode->keyVar)) {
-            $checkedNode = $assignNode->var;
+            $checkedNode = $assign->var;
             $keyNode = $identicalNode->left;
         } else {
             return null;

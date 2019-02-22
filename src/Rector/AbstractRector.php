@@ -130,17 +130,17 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     /**
      * @return mixed
      */
-    protected function getValue(Expr $node)
+    protected function getValue(Expr $expr)
     {
-        return $this->valueResolver->resolve($node);
+        return $this->valueResolver->resolve($expr);
     }
 
     /**
      * @param mixed $expectedValue
      */
-    protected function isValue(Expr $node, $expectedValue): bool
+    protected function isValue(Expr $expr, $expectedValue): bool
     {
-        return $this->getValue($node) === $expectedValue;
+        return $this->getValue($expr) === $expectedValue;
     }
 
     /**

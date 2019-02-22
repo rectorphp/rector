@@ -134,18 +134,18 @@ CODE_SAMPLE
         return null;
     }
 
-    private function processNewInstance(MethodCall $methodCallNode, int $position, int $optionsPosition): ?Node
+    private function processNewInstance(MethodCall $methodCall, int $position, int $optionsPosition): ?Node
     {
-        if (! isset($methodCallNode->args[$position])) {
+        if (! isset($methodCall->args[$position])) {
             return null;
         }
 
-        if (! $methodCallNode->args[$position]->value instanceof New_) {
+        if (! $methodCall->args[$position]->value instanceof New_) {
             return null;
         }
 
         /** @var New_ $newNode */
-        $newNode = $methodCallNode->args[$position]->value;
+        $newNode = $methodCall->args[$position]->value;
 
         // we can only process direct name
         if (! $newNode->class instanceof Name) {
@@ -153,28 +153,28 @@ CODE_SAMPLE
         }
 
         if (count($newNode->args) > 0) {
-            $methodCallNode = $this->moveArgumentsToOptions(
-                $methodCallNode,
+            $methodCall = $this->moveArgumentsToOptions(
+                $methodCall,
                 $position,
                 $optionsPosition,
                 $newNode->class->toString(),
                 $newNode->args
             );
-            if ($methodCallNode === null) {
+            if ($methodCall === null) {
                 return null;
             }
         }
 
-        $methodCallNode->args[$position]->value = new ClassConstFetch($newNode->class, 'class');
+        $methodCall->args[$position]->value = new ClassConstFetch($newNode->class, 'class');
 
-        return $methodCallNode;
+        return $methodCall;
     }
 
     /**
      * @param Arg[] $argNodes
      */
     private function moveArgumentsToOptions(
-        MethodCall $methodCallNode,
+        MethodCall $methodCall,
         int $position,
         int $optionsPosition,
         string $className,
@@ -184,19 +184,19 @@ CODE_SAMPLE
 
         // set default data in between
         if ($position + 1 !== $optionsPosition) {
-            if (! isset($methodCallNode->args[$position + 1])) {
-                $methodCallNode->args[$position + 1] = new Arg($this->createNull());
+            if (! isset($methodCall->args[$position + 1])) {
+                $methodCall->args[$position + 1] = new Arg($this->createNull());
             }
         }
 
         // @todo extend current options - array analyzer
-        if (! isset($methodCallNode->args[$optionsPosition])) {
+        if (! isset($methodCall->args[$optionsPosition])) {
             $optionsArrayNode = new Array_();
             foreach ($namesToArgs as $name => $arg) {
                 $optionsArrayNode->items[] = new ArrayItem($arg->value, new String_($name));
             }
 
-            $methodCallNode->args[$optionsPosition] = new Arg($optionsArrayNode);
+            $methodCall->args[$optionsPosition] = new Arg($optionsArrayNode);
         }
 
         $formTypeClassNode = $this->classLikeNodeCollector->findClass($className);
@@ -218,7 +218,7 @@ CODE_SAMPLE
         // remove ctor
         $this->removeNode($formTypeConstructorMethodNode);
 
-        return $methodCallNode;
+        return $methodCall;
     }
 
     /**
@@ -242,7 +242,7 @@ CODE_SAMPLE
         return $namesToArgs;
     }
 
-    private function addBuildFormMethod(Class_ $classNode, ClassMethod $formTypeConstructorMethodNode): void
+    private function addBuildFormMethod(Class_ $classNode, ClassMethod $classMethod): void
     {
         if ($classNode->getMethod('buildForm') !== null) {
             // @todo
@@ -263,10 +263,7 @@ CODE_SAMPLE
             ->addParam($optionsParamNode)
             // raw copy stmts from ctor @todo improve
             ->addStmts(
-                $this->replaceParameterAssignWithOptionAssign(
-                    (array) $formTypeConstructorMethodNode->stmts,
-                    $optionsParamNode
-                )
+                $this->replaceParameterAssignWithOptionAssign((array) $classMethod->stmts, $optionsParamNode)
             )
             ->getNode();
 

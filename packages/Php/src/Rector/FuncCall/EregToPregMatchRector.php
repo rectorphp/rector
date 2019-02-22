@@ -101,18 +101,18 @@ final class EregToPregMatchRector extends AbstractRector
         return $node;
     }
 
-    private function processStringPattern(FuncCall $funcCallNode, String_ $patternNode, string $functionName): void
+    private function processStringPattern(FuncCall $funcCall, String_ $patternNode, string $functionName): void
     {
         $pattern = $patternNode->value;
         $pattern = $this->eregToPcreTransformer->transform($pattern, $this->isCaseInsensitiveFunction($functionName));
 
-        $funcCallNode->args[0]->value = new String_($pattern);
+        $funcCall->args[0]->value = new String_($pattern);
     }
 
-    private function processVariablePattern(FuncCall $funcCallNode, Variable $patternNode, string $functionName): void
+    private function processVariablePattern(FuncCall $funcCall, Variable $variable, string $functionName): void
     {
         $pregQuotePatternNode = $this->createFunction('preg_quote', [
-            new Arg($patternNode),
+            new Arg($variable),
             new Arg(new String_('#')),
         ]);
 
@@ -121,7 +121,7 @@ final class EregToPregMatchRector extends AbstractRector
         $endDelimiter = $this->isCaseInsensitiveFunction($functionName) ? '#mi' : '#m';
         $concat = new Concat($startConcat, new String_($endDelimiter));
 
-        $funcCallNode->args[0]->value = $concat;
+        $funcCall->args[0]->value = $concat;
     }
 
     /**
@@ -130,23 +130,23 @@ final class EregToPregMatchRector extends AbstractRector
      * ↓
      * preg_split('# #', 'hey Tom', 1);
      */
-    private function processSplitLimitArgument(FuncCall $funcCallNode, string $functionName): void
+    private function processSplitLimitArgument(FuncCall $funcCall, string $functionName): void
     {
         if (! Strings::startsWith($functionName, 'split')) {
             return;
         }
 
         // 3rd argument - $limit, 0 → 1
-        if (! isset($funcCallNode->args[2])) {
+        if (! isset($funcCall->args[2])) {
             return;
         }
 
-        if (! $funcCallNode->args[2]->value instanceof LNumber) {
+        if (! $funcCall->args[2]->value instanceof LNumber) {
             return;
         }
 
         /** @var LNumber $limitNumberNode */
-        $limitNumberNode = $funcCallNode->args[2]->value;
+        $limitNumberNode = $funcCall->args[2]->value;
         if ($limitNumberNode->value !== 0) {
             return;
         }
@@ -154,12 +154,12 @@ final class EregToPregMatchRector extends AbstractRector
         $limitNumberNode->value = 1;
     }
 
-    private function createTernaryWithStrlenOfFirstMatch(FuncCall $funcCallNode): Ternary
+    private function createTernaryWithStrlenOfFirstMatch(FuncCall $funcCall): Ternary
     {
-        $arrayDimFetch = new ArrayDimFetch($funcCallNode->args[2]->value, new LNumber(0));
+        $arrayDimFetch = new ArrayDimFetch($funcCall->args[2]->value, new LNumber(0));
         $strlenFuncCall = $this->createFunction('strlen', [$arrayDimFetch]);
 
-        return new Ternary($funcCallNode, $strlenFuncCall, $this->createFalse());
+        return new Ternary($funcCall, $strlenFuncCall, $this->createFalse());
     }
 
     private function isCaseInsensitiveFunction(string $functionName): bool

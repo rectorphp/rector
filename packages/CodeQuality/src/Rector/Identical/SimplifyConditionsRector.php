@@ -60,28 +60,28 @@ final class SimplifyConditionsRector extends AbstractRector
         return $this->processIdenticalAndNotIdentical($node);
     }
 
-    private function processBooleanNot(BooleanNot $node): ?Node
+    private function processBooleanNot(BooleanNot $booleanNot): ?Node
     {
-        if (! $node->expr instanceof BinaryOp) {
+        if (! $booleanNot->expr instanceof BinaryOp) {
             return null;
         }
 
-        if ($this->shouldSkip($node->expr)) {
+        if ($this->shouldSkip($booleanNot->expr)) {
             return null;
         }
 
-        return $this->createInversedBooleanOp($node->expr);
+        return $this->createInversedBooleanOp($booleanNot->expr);
     }
 
-    private function processIdenticalAndNotIdentical(BinaryOp $node): ?Node
+    private function processIdenticalAndNotIdentical(BinaryOp $binaryOp): ?Node
     {
         $matchedNodes = $this->binaryOpMaintainer->matchFirstAndSecondConditionNode(
-            $node,
-            function (Node $node) {
-                return $node instanceof Identical || $node instanceof NotIdentical;
+            $binaryOp,
+            function (Node $binaryOp) {
+                return $binaryOp instanceof Identical || $binaryOp instanceof NotIdentical;
             },
-            function (Node $node) {
-                return $this->isBool($node);
+            function (Node $binaryOp) {
+                return $this->isBool($binaryOp);
             }
         );
 
@@ -89,37 +89,37 @@ final class SimplifyConditionsRector extends AbstractRector
             return $matchedNodes;
         }
 
-        /** @var Identical|NotIdentical $subBinaryOpNode */
-        [$subBinaryOpNode, $otherNode] = $matchedNodes;
+        /** @var Identical|NotIdentical $subBinaryOp */
+        [$subBinaryOp, $otherNode] = $matchedNodes;
         if ($this->isFalse($otherNode)) {
-            return $this->createInversedBooleanOp($subBinaryOpNode);
+            return $this->createInversedBooleanOp($subBinaryOp);
         }
 
-        return $subBinaryOpNode;
+        return $subBinaryOp;
     }
 
     /**
      * Skip too nested binary || binary > binary combinations
      */
-    private function shouldSkip(BinaryOp $binaryOpNode): bool
+    private function shouldSkip(BinaryOp $binaryOp): bool
     {
-        if ($binaryOpNode instanceof BooleanOr) {
+        if ($binaryOp instanceof BooleanOr) {
             return true;
         }
 
-        if ($binaryOpNode->left instanceof BinaryOp) {
+        if ($binaryOp->left instanceof BinaryOp) {
             return true;
         }
-        return $binaryOpNode->right instanceof BinaryOp;
+        return $binaryOp->right instanceof BinaryOp;
     }
 
-    private function createInversedBooleanOp(BinaryOp $binaryOpNode): ?BinaryOp
+    private function createInversedBooleanOp(BinaryOp $binaryOp): ?BinaryOp
     {
-        $inversedBinaryClass = $this->assignAndBinaryMap->getInversed($binaryOpNode);
+        $inversedBinaryClass = $this->assignAndBinaryMap->getInversed($binaryOp);
         if ($inversedBinaryClass === null) {
             return null;
         }
 
-        return new $inversedBinaryClass($binaryOpNode->left, $binaryOpNode->right);
+        return new $inversedBinaryClass($binaryOp->left, $binaryOp->right);
     }
 }

@@ -87,14 +87,14 @@ CODE_SAMPLE
         return $this->isTypes($newNode->class, array_keys($this->valueObjectsToSimpleTypes));
     }
 
-    private function refactorProperty(Property $propertyNode): Property
+    private function refactorProperty(Property $property): Property
     {
-        $newType = $this->matchNewType($propertyNode);
+        $newType = $this->matchNewType($property);
         if ($newType === null) {
-            return $propertyNode;
+            return $property;
         }
 
-        return $propertyNode;
+        return $property;
     }
 
     private function refactorName(Node $nameNode): ?Name
@@ -107,11 +107,11 @@ CODE_SAMPLE
         return new Name($newType);
     }
 
-    private function refactorNullableType(NullableType $nullableTypeNode): NullableType
+    private function refactorNullableType(NullableType $nullableType): NullableType
     {
-        $newType = $this->matchNewType($nullableTypeNode->type);
+        $newType = $this->matchNewType($nullableType->type);
         if (! $newType) {
-            return $nullableTypeNode;
+            return $nullableType;
         }
 
         return new NullableType($newType);

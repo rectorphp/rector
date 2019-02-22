@@ -73,34 +73,34 @@ CODE_SAMPLE
         return $this->processName($node);
     }
 
-    private function processIdentifier(Identifier $identifierNode): Identifier
+    private function processIdentifier(Identifier $identifier): Identifier
     {
         foreach ($this->reservedKeywordsToReplacements as $reservedKeyword => $replacement) {
-            if ($this->isNameInsensitive($identifierNode, $reservedKeyword)) {
-                $identifierNode->name = $replacement;
+            if ($this->isNameInsensitive($identifier, $reservedKeyword)) {
+                $identifier->name = $replacement;
             }
         }
 
-        return $identifierNode;
+        return $identifier;
     }
 
-    private function processName(Name $nameNode): Name
+    private function processName(Name $name): Name
     {
         // we look for "extends <Name>"
-        $parentNode = $nameNode->getAttribute(Attribute::PARENT_NODE);
+        $parentNode = $name->getAttribute(Attribute::PARENT_NODE);
         // "Object" can part of namespace name
         if ($parentNode instanceof Namespace_) {
-            return $nameNode;
+            return $name;
         }
 
         // process lass part
         foreach ($this->reservedKeywordsToReplacements as $reservedKeyword => $replacement) {
-            if (strtolower($nameNode->getLast()) === strtolower($reservedKeyword)) {
-                $nameNode->parts[count($nameNode->parts) - 1] = $replacement;
-                $nameNode->setAttribute(Attribute::ORIGINAL_NODE, null);
+            if (strtolower($name->getLast()) === strtolower($reservedKeyword)) {
+                $name->parts[count($name->parts) - 1] = $replacement;
+                $name->setAttribute(Attribute::ORIGINAL_NODE, null);
             }
         }
 
-        return $nameNode;
+        return $name;
     }
 }

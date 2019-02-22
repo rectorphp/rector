@@ -158,20 +158,20 @@ CODE_SAMPLE
         $newNode->setAttribute('comments', $oldNode->getComments());
     }
 
-    private function boolCastOrNullCompareIfNeeded(Expr $exprNode): Expr
+    private function boolCastOrNullCompareIfNeeded(Expr $expr): Expr
     {
-        if ($this->isNullableType($exprNode)) {
-            return new NotIdentical($exprNode, $this->createNull());
+        if ($this->isNullableType($expr)) {
+            return new NotIdentical($expr, $this->createNull());
         }
 
-        if ($exprNode instanceof BooleanNot) {
-            return $exprNode;
+        if ($expr instanceof BooleanNot) {
+            return $expr;
         }
 
-        if ($this->isBoolType($exprNode)) {
-            return $exprNode;
+        if ($this->isBoolType($expr)) {
+            return $expr;
         }
 
-        return new Bool_($exprNode);
+        return new Bool_($expr);
     }
 }

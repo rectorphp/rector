@@ -104,12 +104,10 @@ CODE_SAMPLE
     /**
      * @param string[] $parametersToTypes
      */
-    private function processClassMethodNodeWithTypehints(
-        ClassMethod $classMethodNode,
-        array $parametersToTypes
-    ): void {
+    private function processClassMethodNodeWithTypehints(ClassMethod $classMethod, array $parametersToTypes): void
+    {
         /** @var Param $param */
-        foreach ($classMethodNode->params as $param) {
+        foreach ($classMethod->params as $param) {
             foreach ($parametersToTypes as $parameter => $type) {
                 $parameter = ltrim($parameter, '$');
 
@@ -130,14 +128,14 @@ CODE_SAMPLE
     /**
      * @param string[][] $methodToArgumentToTypes
      */
-    private function processArgumentToTypes(ClassMethod $classMethodNode, array $methodToArgumentToTypes): void
+    private function processArgumentToTypes(ClassMethod $classMethod, array $methodToArgumentToTypes): void
     {
         foreach ($methodToArgumentToTypes as $method => $argumentToTypes) {
-            if (! $this->isName($classMethodNode, $method)) {
+            if (! $this->isName($classMethod, $method)) {
                 continue;
             }
 
-            $this->processClassMethodNodeWithTypehints($classMethodNode, $argumentToTypes);
+            $this->processClassMethodNodeWithTypehints($classMethod, $argumentToTypes);
             return;
         }
     }

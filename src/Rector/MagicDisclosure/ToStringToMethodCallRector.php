@@ -83,20 +83,20 @@ CODE_SAMPLE
         return null;
     }
 
-    private function processMethodCall(MethodCall $methodCallNode): ?Node
+    private function processMethodCall(MethodCall $methodCall): ?Node
     {
         foreach ($this->methodNamesByType as $type => $methodName) {
-            if (! $this->isType($methodCallNode, $type)) {
+            if (! $this->isType($methodCall, $type)) {
                 continue;
             }
 
-            if (! $this->isName($methodCallNode, '__toString')) {
+            if (! $this->isName($methodCall, '__toString')) {
                 continue;
             }
 
-            $methodCallNode->name = new Identifier($methodName);
+            $methodCall->name = new Identifier($methodName);
 
-            return $methodCallNode;
+            return $methodCall;
         }
 
         return null;

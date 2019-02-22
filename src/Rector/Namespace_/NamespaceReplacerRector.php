@@ -134,31 +134,31 @@ final class NamespaceReplacerRector extends AbstractRector
         return str_replace($oldNamespace, $newNamespace, $name);
     }
 
-    private function isPartialNamespace(Name $nameNode): bool
+    private function isPartialNamespace(Name $name): bool
     {
-        $resolvedName = $nameNode->getAttribute(Attribute::RESOLVED_NAME);
+        $resolvedName = $name->getAttribute(Attribute::RESOLVED_NAME);
         if ($resolvedName === null) {
             return false;
         }
 
         if ($resolvedName instanceof FullyQualified) {
-            return ! $this->isName($nameNode, $resolvedName->toString());
+            return ! $this->isName($name, $resolvedName->toString());
         }
 
         return false;
     }
 
-    private function resolvePartialNewName(Name $nameNode): ?string
+    private function resolvePartialNewName(Name $name): ?string
     {
-        $name = $this->getName($nameNode);
-        if ($name === null) {
+        $nodeName = $this->getName($name);
+        if ($nodeName === null) {
             return null;
         }
 
-        $completeNewName = $this->resolveNewNameFromNode($name);
+        $completeNewName = $this->resolveNewNameFromNode($nodeName);
 
         // first dummy implementation - improve
-        $cutOffFromTheLeft = Strings::length($completeNewName) - Strings::length($nameNode->toString());
+        $cutOffFromTheLeft = Strings::length($completeNewName) - Strings::length($name->toString());
 
         return Strings::substring($completeNewName, $cutOffFromTheLeft);
     }

@@ -51,21 +51,21 @@ final class ComplexNodeTypeResolver
     /**
      * Based on static analysis of code, looking for property assigns
      */
-    public function resolvePropertyTypeInfo(Property $propertyNode): ?VarTypeInfo
+    public function resolvePropertyTypeInfo(Property $property): ?VarTypeInfo
     {
         $types = [];
 
-        $propertyDefault = $propertyNode->props[0]->default;
+        $propertyDefault = $property->props[0]->default;
         if ($propertyDefault !== null) {
             $types[] = $this->nodeToStringTypeResolver->resolver($propertyDefault);
         }
 
-        $classNode = $propertyNode->getAttribute(Attribute::CLASS_NODE);
+        $classNode = $property->getAttribute(Attribute::CLASS_NODE);
         if (! $classNode instanceof Class_) {
             throw new ShouldNotHappenException();
         }
 
-        $propertyName = $this->nameResolver->resolve($propertyNode);
+        $propertyName = $this->nameResolver->resolve($property);
         if ($propertyName === null) {
             return null;
         }

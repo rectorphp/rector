@@ -93,9 +93,9 @@ CODE_SAMPLE
     /**
      * @return Variable[]
      */
-    private function resolveAssignedVariables(FunctionLike $functionLikeNode): array
+    private function resolveAssignedVariables(FunctionLike $functionLike): array
     {
-        return $this->betterNodeFinder->find($functionLikeNode, function (Node $node) {
+        return $this->betterNodeFinder->find($functionLike, function (Node $node) {
             if (! $node->getAttribute(Attribute::PARENT_NODE) instanceof Assign) {
                 return false;
             }
@@ -173,7 +173,7 @@ CODE_SAMPLE
     private function collectNodesByTypeAndPosition(
         array $assignedVariables,
         array $assignedVariablesUse,
-        FunctionLike $functionLikeNode
+        FunctionLike $functionLike
     ): array {
         $nodesByTypeAndPosition = [];
 
@@ -186,7 +186,7 @@ CODE_SAMPLE
 
             /** @var Assign $assignNode */
             $assignNode = $assignedVariable->getAttribute(Attribute::PARENT_NODE);
-            $nestingHash = $this->resolveNestingHashFromClassMethod($functionLikeNode, $assignNode);
+            $nestingHash = $this->resolveNestingHashFromClassMethod($functionLike, $assignNode);
 
             $nodesByTypeAndPosition[] = new VariableNodeUseInfo(
                 $startTokenPos,
@@ -292,17 +292,17 @@ CODE_SAMPLE
         return ! $isVariableAssigned;
     }
 
-    private function resolveNestingHashFromClassMethod(FunctionLike $functionLikeNode, Assign $assignNode): string
+    private function resolveNestingHashFromClassMethod(FunctionLike $functionLike, Assign $assign): string
     {
         $nestingHash = '_';
-        $parentNode = $assignNode;
+        $parentNode = $assign;
         while ($parentNode = $parentNode->getAttribute(Attribute::PARENT_NODE)) {
             if ($parentNode instanceof Expression) {
                 continue;
             }
 
             $nestingHash .= spl_object_hash($parentNode);
-            if ($functionLikeNode === $parentNode) {
+            if ($functionLike === $parentNode) {
                 return $nestingHash;
             }
         }

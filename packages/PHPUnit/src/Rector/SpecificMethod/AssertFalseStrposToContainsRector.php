@@ -80,9 +80,9 @@ final class AssertFalseStrposToContainsRector extends AbstractPHPUnitRector
         return $node;
     }
 
-    public function changeOrderArguments(MethodCall $methodCallNode): void
+    public function changeOrderArguments(MethodCall $methodCall): void
     {
-        $oldArguments = $methodCallNode->args;
+        $oldArguments = $methodCall->args;
 
         /** @var Identifier $oldArguments */
         $strposFuncCallNode = $oldArguments[0]->value;
@@ -96,6 +96,6 @@ final class AssertFalseStrposToContainsRector extends AbstractPHPUnitRector
 
         unset($oldArguments[0]);
 
-        $methodCallNode->args = array_merge([$firstArgument, $secondArgument], $oldArguments);
+        $methodCall->args = array_merge([$firstArgument, $secondArgument], $oldArguments);
     }
 }

@@ -94,28 +94,28 @@ final class AssertCompareToSpecificMethodRector extends AbstractPHPUnitRector
         return $node;
     }
 
-    private function renameMethod(MethodCall $methodCallNode, string $funcName): void
+    private function renameMethod(MethodCall $methodCall, string $funcName): void
     {
         /** @var Identifier $identifierNode */
-        $identifierNode = $methodCallNode->name;
+        $identifierNode = $methodCall->name;
         $oldMethodName = $identifierNode->toString();
 
         [$trueMethodName, $falseMethodName] = $this->defaultOldToNewMethods[$funcName];
 
         if (in_array($oldMethodName, ['assertSame', 'assertEquals'], true) && $trueMethodName) {
-            $methodCallNode->name = new Identifier($trueMethodName);
+            $methodCall->name = new Identifier($trueMethodName);
         } elseif (in_array($oldMethodName, ['assertNotSame', 'assertNotEquals'], true) && $falseMethodName) {
-            $methodCallNode->name = new Identifier($falseMethodName);
+            $methodCall->name = new Identifier($falseMethodName);
         }
     }
 
     /**
      * Handles custom error messages to not be overwrite by function with multiple args.
      */
-    private function moveFunctionArgumentsUp(MethodCall $methodCallNode): void
+    private function moveFunctionArgumentsUp(MethodCall $methodCall): void
     {
         /** @var FuncCall $secondArgument */
-        $secondArgument = $methodCallNode->args[1]->value;
-        $methodCallNode->args[1] = $secondArgument->args[0];
+        $secondArgument = $methodCall->args[1]->value;
+        $methodCall->args[1] = $secondArgument->args[0];
     }
 }

@@ -96,17 +96,17 @@ final class IfMaintainer
         return null;
     }
 
-    private function matchComparedAndReturnedNode(NotIdentical $notIdenticalNode, Return_ $returnNode): ?Expr
+    private function matchComparedAndReturnedNode(NotIdentical $notIdentical, Return_ $returnNode): ?Expr
     {
-        if ($this->betterStandardPrinter->areNodesEqual($notIdenticalNode->left, $returnNode->expr)) {
-            if ($this->constFetchMaintainer->isNull($notIdenticalNode->right)) {
-                return $notIdenticalNode->left;
+        if ($this->betterStandardPrinter->areNodesEqual($notIdentical->left, $returnNode->expr)) {
+            if ($this->constFetchMaintainer->isNull($notIdentical->right)) {
+                return $notIdentical->left;
             }
         }
 
-        if ($this->betterStandardPrinter->areNodesEqual($notIdenticalNode->right, $returnNode->expr)) {
-            if ($this->constFetchMaintainer->isNull($notIdenticalNode->left)) {
-                return $notIdenticalNode->right;
+        if ($this->betterStandardPrinter->areNodesEqual($notIdentical->right, $returnNode->expr)) {
+            if ($this->constFetchMaintainer->isNull($notIdentical->left)) {
+                return $notIdentical->right;
             }
         }
 

@@ -78,10 +78,10 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function addNewMethodCall(MethodCall $methodCallNode, string $methodName, Arg $argNode): void
+    private function addNewMethodCall(MethodCall $methodCall, string $methodName, Arg $arg): void
     {
-        $expectExceptionMessageMethodCall = $this->createMethodCall('this', $methodName, [$argNode]);
+        $expectExceptionMessageMethodCall = $this->createMethodCall('this', $methodName, [$arg]);
 
-        $this->addNodeAfterNode($expectExceptionMessageMethodCall, $methodCallNode);
+        $this->addNodeAfterNode($expectExceptionMessageMethodCall, $methodCall);
     }
 }

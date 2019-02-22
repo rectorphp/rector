@@ -137,9 +137,9 @@ CODE_SAMPLE
         return $this->createPropertyFetch('this', $this->propertyNaming->fqnToVariableName($repositoryFqn));
     }
 
-    private function repositoryFqn(MethodCall $methodCallNode): string
+    private function repositoryFqn(MethodCall $methodCall): string
     {
-        $entityFqnOrAlias = $this->entityFqnOrAlias($methodCallNode);
+        $entityFqnOrAlias = $this->entityFqnOrAlias($methodCall);
 
         if ($entityFqnOrAlias !== null) {
             $repositoryClassName = $this->doctrineEntityAndRepositoryMapper->mapEntityToRepository($entityFqnOrAlias);
@@ -155,9 +155,9 @@ CODE_SAMPLE
         ));
     }
 
-    private function entityFqnOrAlias(MethodCall $methodCallNode): ?string
+    private function entityFqnOrAlias(MethodCall $methodCall): ?string
     {
-        $repositoryArgument = $methodCallNode->args[0]->value;
+        $repositoryArgument = $methodCall->args[0]->value;
 
         if ($repositoryArgument instanceof String_) {
             return $repositoryArgument->value;
