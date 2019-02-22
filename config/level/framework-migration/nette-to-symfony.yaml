@@ -28,6 +28,7 @@ services:
         # IPresenter::run() -> IPresenter->__invoke
         Nette\Application\IPresenter:
             run: __invoke
+
         Nette\DI\Container:
             getByType: get
 
