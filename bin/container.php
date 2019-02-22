@@ -20,7 +20,9 @@ $configFiles = array_filter($configFiles);
 
 // 3. Build DI container
 
-$rectorKernel = new RectorKernel('prod', InputDetector::isDebug());
+// to override the configs without clearing cache
+$environment = 'prod' . random_int(1, 10000000);
+$rectorKernel = new RectorKernel($environment, InputDetector::isDebug());
 if ($configFiles) {
     $rectorKernel->setConfigs($configFiles);
 }

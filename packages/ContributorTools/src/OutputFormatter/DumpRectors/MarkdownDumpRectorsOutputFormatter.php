@@ -1,18 +1,18 @@
 <?php declare(strict_types=1);
 
-namespace Rector\ContributorTools\OutputFormatter;
+namespace Rector\ContributorTools\OutputFormatter\DumpRectors;
 
 use Nette\Utils\Strings;
 use Rector\ConsoleDiffer\MarkdownDifferAndFormatter;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\Contract\RectorDefinition\CodeSampleInterface;
-use Rector\ContributorTools\Contract\OutputFormatterInterface;
+use Rector\ContributorTools\Contract\OutputFormatter\DumpRectorsOutputFormatterInterface;
 use Rector\ContributorTools\RectorMetadataResolver;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Yaml\Yaml;
 
-final class MarkdownOutputFormatter implements OutputFormatterInterface
+final class MarkdownDumpRectorsOutputFormatter implements DumpRectorsOutputFormatterInterface
 {
     /**
      * @var SymfonyStyle

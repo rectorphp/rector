@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Rector\ContributorTools\Contract;
+namespace Rector\ContributorTools\Contract\OutputFormatter;
 
 use Rector\Contract\Rector\RectorInterface;
 
-interface OutputFormatterInterface
+interface DumpRectorsOutputFormatterInterface
 {
     public function getName(): string;
 
