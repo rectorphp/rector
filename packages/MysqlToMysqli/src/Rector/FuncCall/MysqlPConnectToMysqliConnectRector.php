@@ -68,12 +68,12 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function joinStringWithNode(string $string, Expr $node): Expr
+    private function joinStringWithNode(string $string, Expr $expr): Expr
     {
-        if ($node instanceof String_) {
-            return new String_($string . $node->value);
+        if ($expr instanceof String_) {
+            return new String_($string . $expr->value);
         }
 
-        return new Concat(new String_($string), $node);
+        return new Concat(new String_($string), $expr);
     }
 }

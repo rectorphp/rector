@@ -82,10 +82,10 @@ CODE_SAMPLE
     /**
      * @return int[][]
      */
-    private function collectCatchKeysByContent(TryCatch $tryCatchNode): array
+    private function collectCatchKeysByContent(TryCatch $tryCatch): array
     {
         $catchKeysByContent = [];
-        foreach ($tryCatchNode->catches as $key => $catch) {
+        foreach ($tryCatch->catches as $key => $catch) {
             $catchContent = $this->print($catch->stmts);
             /** @var int $key */
             $catchKeysByContent[$catchContent][] = $key;
@@ -98,12 +98,12 @@ CODE_SAMPLE
      * @param int[] $keys
      * @return Name[]
      */
-    private function collectTypesFromCatchedByIds(TryCatch $tryCatchNode, array $keys): array
+    private function collectTypesFromCatchedByIds(TryCatch $tryCatch, array $keys): array
     {
         $collectedTypes = [];
 
         foreach ($keys as $key) {
-            $collectedTypes = array_merge($collectedTypes, $tryCatchNode->catches[$key]->types);
+            $collectedTypes = array_merge($collectedTypes, $tryCatch->catches[$key]->types);
         }
 
         return $collectedTypes;

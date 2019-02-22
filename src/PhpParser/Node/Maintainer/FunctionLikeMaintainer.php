@@ -32,16 +32,16 @@ final class FunctionLikeMaintainer
 
     /**
      * Based on static analysis of code, looking for return types
-     * @param ClassMethod|Function_ $functionLikeNode
+     * @param ClassMethod|Function_ $functionLike
      */
-    public function resolveStaticReturnTypeInfo(FunctionLike $functionLikeNode): ?ReturnTypeInfo
+    public function resolveStaticReturnTypeInfo(FunctionLike $functionLike): ?ReturnTypeInfo
     {
-        if ($this->shouldSkip($functionLikeNode)) {
+        if ($this->shouldSkip($functionLike)) {
             return null;
         }
 
         /** @var Return_[] $returnNodes */
-        $returnNodes = $this->betterNodeFinder->findInstanceOf((array) $functionLikeNode->stmts, Return_::class);
+        $returnNodes = $this->betterNodeFinder->findInstanceOf((array) $functionLike->stmts, Return_::class);
 
         $isVoid = true;
 
@@ -64,19 +64,19 @@ final class FunctionLikeMaintainer
         return new ReturnTypeInfo($types);
     }
 
-    private function shouldSkip(FunctionLike $functionLikeNode): bool
+    private function shouldSkip(FunctionLike $functionLike): bool
     {
-        if (! $functionLikeNode instanceof ClassMethod) {
+        if (! $functionLike instanceof ClassMethod) {
             return false;
         }
 
-        $classNode = $functionLikeNode->getAttribute(Attribute::CLASS_NODE);
+        $classNode = $functionLike->getAttribute(Attribute::CLASS_NODE);
         // only class or trait method body can be analyzed for returns
         if ($classNode instanceof Interface_) {
             return true;
         }
 
         // only methods that are not abstract can be analyzed for returns
-        return $functionLikeNode->isAbstract();
+        return $functionLike->isAbstract();
     }
 }

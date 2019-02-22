@@ -37,15 +37,15 @@ abstract class AbstractToConstructorInjectionRector extends AbstractRector
         $this->analyzedApplicationContainer = $analyzedApplicationContainer;
     }
 
-    protected function processMethodCallNode(MethodCall $methodCallNode): ?Node
+    protected function processMethodCallNode(MethodCall $methodCall): ?Node
     {
-        $serviceType = $this->getServiceTypeFromMethodCallArgument($methodCallNode);
+        $serviceType = $this->getServiceTypeFromMethodCallArgument($methodCall);
         if ($serviceType === null) {
             return null;
         }
 
         $propertyName = $this->propertyNaming->fqnToVariableName($serviceType);
-        $classNode = $methodCallNode->getAttribute(Attribute::CLASS_NODE);
+        $classNode = $methodCall->getAttribute(Attribute::CLASS_NODE);
         if (! $classNode instanceof Class_) {
             throw new ShouldNotHappenException();
         }

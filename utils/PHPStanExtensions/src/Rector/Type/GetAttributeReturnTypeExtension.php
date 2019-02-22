@@ -104,10 +104,10 @@ final class GetAttributeReturnTypeExtension implements DynamicMethodReturnTypeEx
         return $returnType;
     }
 
-    private function resolveArgumentValue(Expr $node): ?string
+    private function resolveArgumentValue(Expr $expr): ?string
     {
-        if ($node instanceof ClassConstFetch) {
-            return $this->phpStanValueResolver->resolveClassConstFetch($node);
+        if ($expr instanceof ClassConstFetch) {
+            return $this->phpStanValueResolver->resolveClassConstFetch($expr);
         }
 
         return null;

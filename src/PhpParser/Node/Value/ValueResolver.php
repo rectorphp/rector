@@ -39,9 +39,9 @@ final class ValueResolver
     /**
      * @return mixed|null
      */
-    public function resolve(Expr $node)
+    public function resolve(Expr $expr)
     {
-        return $this->getConstExprEvaluator()->evaluateDirectly($node);
+        return $this->getConstExprEvaluator()->evaluateDirectly($expr);
     }
 
     private function getConstExprEvaluator(): ConstExprEvaluator
@@ -72,9 +72,9 @@ final class ValueResolver
         return $this->constExprEvaluator;
     }
 
-    private function resolveDirConstant(Dir $dirNode): string
+    private function resolveDirConstant(Dir $dir): string
     {
-        $fileInfo = $dirNode->getAttribute(Attribute::FILE_INFO);
+        $fileInfo = $dir->getAttribute(Attribute::FILE_INFO);
         if (! $fileInfo instanceof SmartFileInfo) {
             throw new ShouldNotHappenException();
         }
@@ -82,9 +82,9 @@ final class ValueResolver
         return $fileInfo->getPath();
     }
 
-    private function resolveFileConstant(File $fileNode): string
+    private function resolveFileConstant(File $file): string
     {
-        $fileInfo = $fileNode->getAttribute(Attribute::FILE_INFO);
+        $fileInfo = $file->getAttribute(Attribute::FILE_INFO);
         if (! $fileInfo instanceof SmartFileInfo) {
             throw new ShouldNotHappenException();
         }
@@ -92,10 +92,10 @@ final class ValueResolver
         return $fileInfo->getPathname();
     }
 
-    private function resolveClassConstFetch(ClassConstFetch $classConstFetchNode): string
+    private function resolveClassConstFetch(ClassConstFetch $classConstFetch): string
     {
-        $class = $this->nameResolver->resolve($classConstFetchNode->class);
-        $constant = $this->nameResolver->resolve($classConstFetchNode->name);
+        $class = $this->nameResolver->resolve($classConstFetch->class);
+        $constant = $this->nameResolver->resolve($classConstFetch->name);
 
         if ($class === null) {
             throw new ShouldNotHappenException();
@@ -106,7 +106,7 @@ final class ValueResolver
         }
 
         if ($class === 'self') {
-            $class = (string) $classConstFetchNode->class->getAttribute(Attribute::CLASS_NAME);
+            $class = (string) $classConstFetch->class->getAttribute(Attribute::CLASS_NAME);
         }
 
         if ($constant === 'class') {

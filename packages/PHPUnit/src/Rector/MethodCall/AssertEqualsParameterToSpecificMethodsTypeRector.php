@@ -98,51 +98,51 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function processAssertEqualsIgnoringCase(MethodCall $methodCallNode): void
+    private function processAssertEqualsIgnoringCase(MethodCall $methodCall): void
     {
-        if (isset($methodCallNode->args[6])) {
-            if ($this->isTrue($methodCallNode->args[6]->value)) {
-                $methodCall = new MethodCall($methodCallNode->var, 'assertEqualsIgnoringCase');
-                $methodCall->args[0] = $methodCallNode->args[0];
-                $methodCall->args[1] = $methodCallNode->args[1];
-                $methodCall->args[2] = $methodCallNode->args[2];
-                $this->addNodeAfterNode($methodCall, $methodCallNode);
+        if (isset($methodCall->args[6])) {
+            if ($this->isTrue($methodCall->args[6]->value)) {
+                $newMethodCall = new MethodCall($methodCall->var, 'assertEqualsIgnoringCase');
+                $newMethodCall->args[0] = $methodCall->args[0];
+                $newMethodCall->args[1] = $methodCall->args[1];
+                $newMethodCall->args[2] = $methodCall->args[2];
+                $this->addNodeAfterNode($newMethodCall, $methodCall);
             }
 
-            unset($methodCallNode->args[6]);
+            unset($methodCall->args[6]);
         }
     }
 
-    private function processAssertEqualsCanonicalizing(MethodCall $methodCallNode): void
+    private function processAssertEqualsCanonicalizing(MethodCall $methodCall): void
     {
-        if (isset($methodCallNode->args[5])) {
+        if (isset($methodCall->args[5])) {
             // add new node only in case of non-default value
-            if ($this->isTrue($methodCallNode->args[5]->value)) {
-                $methodCall = new MethodCall($methodCallNode->var, 'assertEqualsCanonicalizing');
-                $methodCall->args[0] = $methodCallNode->args[0];
-                $methodCall->args[1] = $methodCallNode->args[1];
-                $methodCall->args[2] = $methodCallNode->args[2];
-                $this->addNodeAfterNode($methodCall, $methodCallNode);
+            if ($this->isTrue($methodCall->args[5]->value)) {
+                $newMethodCall = new MethodCall($methodCall->var, 'assertEqualsCanonicalizing');
+                $newMethodCall->args[0] = $methodCall->args[0];
+                $newMethodCall->args[1] = $methodCall->args[1];
+                $newMethodCall->args[2] = $methodCall->args[2];
+                $this->addNodeAfterNode($newMethodCall, $methodCall);
             }
 
-            unset($methodCallNode->args[5]);
+            unset($methodCall->args[5]);
         }
     }
 
-    private function processAssertEqualsWithDelta(MethodCall $methodCallNode): void
+    private function processAssertEqualsWithDelta(MethodCall $methodCall): void
     {
-        if (isset($methodCallNode->args[3])) {
+        if (isset($methodCall->args[3])) {
             // add new node only in case of non-default value
-            if ($this->getValue($methodCallNode->args[3]->value) !== 0.0) {
-                $methodCall = new MethodCall($methodCallNode->var, 'assertEqualsWithDelta');
-                $methodCall->args[0] = $methodCallNode->args[0];
-                $methodCall->args[1] = $methodCallNode->args[1];
-                $methodCall->args[2] = $methodCallNode->args[3];
-                $methodCall->args[3] = $methodCallNode->args[2];
-                $this->addNodeAfterNode($methodCall, $methodCallNode);
+            if ($this->getValue($methodCall->args[3]->value) !== 0.0) {
+                $newMethodCall = new MethodCall($methodCall->var, 'assertEqualsWithDelta');
+                $newMethodCall->args[0] = $methodCall->args[0];
+                $newMethodCall->args[1] = $methodCall->args[1];
+                $newMethodCall->args[2] = $methodCall->args[3];
+                $newMethodCall->args[3] = $methodCall->args[2];
+                $this->addNodeAfterNode($newMethodCall, $methodCall);
             }
 
-            unset($methodCallNode->args[3]);
+            unset($methodCall->args[3]);
         }
     }
 }

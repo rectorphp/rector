@@ -121,9 +121,9 @@ CODE_SAMPLE
         return null;
     }
 
-    private function matchesDocTypeAndDefaultValueType(VarTypeInfo $varTypeInfo, Property $propertyNode): bool
+    private function matchesDocTypeAndDefaultValueType(VarTypeInfo $varTypeInfo, Property $property): bool
     {
-        $defaultValueNode = $propertyNode->props[0]->default;
+        $defaultValueNode = $property->props[0]->default;
         if ($defaultValueNode === null) {
             return true;
         }
@@ -148,12 +148,12 @@ CODE_SAMPLE
     private function matchesDefaultValueToExpectedNodeTypes(
         VarTypeInfo $varTypeInfo,
         array $allowedDefaultNodeTypes,
-        Expr $defaultValueNode
+        Expr $expr
     ): bool {
         foreach ($allowedDefaultNodeTypes as $allowedDefaultNodeType) {
-            if (is_a($defaultValueNode, $allowedDefaultNodeType, true)) {
+            if (is_a($expr, $allowedDefaultNodeType, true)) {
                 if ($varTypeInfo->getType() === 'bool') {
-                    return $this->isBool($defaultValueNode);
+                    return $this->isBool($expr);
                 }
 
                 return true;

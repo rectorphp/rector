@@ -118,7 +118,7 @@ CODE_SAMPLE
         return false;
     }
 
-    private function createAssignNode(Foreach_ $foreachNode, string $name, ArrayDimFetch $arrayDimFetchNode): Assign
+    private function createAssignNode(Foreach_ $foreachNode, string $name, ArrayDimFetch $arrayDimFetch): Assign
     {
         $functionNameNode = new String_($name);
         $arrayFilterFuncCall = new FuncCall(new Name('array_filter'), [
@@ -126,6 +126,6 @@ CODE_SAMPLE
             new Arg($functionNameNode),
         ]);
 
-        return new Assign($arrayDimFetchNode->var, $arrayFilterFuncCall);
+        return new Assign($arrayDimFetch->var, $arrayFilterFuncCall);
     }
 }

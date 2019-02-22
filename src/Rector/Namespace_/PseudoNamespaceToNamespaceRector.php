@@ -130,25 +130,25 @@ CODE_SAMPLE
         return $nodes;
     }
 
-    private function processName(Name $nameNode): Name
+    private function processName(Name $name): Name
     {
-        $name = $this->getName($nameNode);
+        $nodeName = $this->getName($name);
 
-        if ($name !== null) {
-            $nameNode->parts = explode('_', $name);
+        if ($nodeName !== null) {
+            $name->parts = explode('_', $nodeName);
         }
 
-        return $nameNode;
+        return $name;
     }
 
-    private function processIdentifier(Identifier $identifierNode): ?Identifier
+    private function processIdentifier(Identifier $identifier): ?Identifier
     {
-        $parentNode = $identifierNode->getAttribute(Attribute::PARENT_NODE);
+        $parentNode = $identifier->getAttribute(Attribute::PARENT_NODE);
         if (! $parentNode instanceof Class_) {
             return null;
         }
 
-        $name = $this->getName($identifierNode);
+        $name = $this->getName($identifier);
         if ($name === null) {
             return null;
         }
@@ -166,8 +166,8 @@ CODE_SAMPLE
 
         $this->newNamespace = $newNamespace;
 
-        $identifierNode->name = $lastNewNamePart;
+        $identifier->name = $lastNewNamePart;
 
-        return $identifierNode;
+        return $identifier;
     }
 }

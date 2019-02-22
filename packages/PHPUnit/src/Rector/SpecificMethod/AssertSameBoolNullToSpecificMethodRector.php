@@ -84,21 +84,21 @@ final class AssertSameBoolNullToSpecificMethodRector extends AbstractPHPUnitRect
         return $node;
     }
 
-    private function renameMethod(MethodCall $methodCallNode): void
+    private function renameMethod(MethodCall $methodCall): void
     {
         [$sameMethodName, $notSameMethodName] = $this->constValueToNewMethodNames[$this->constantName];
 
-        $this->IdentifierMaintainer->renameNodeWithMap($methodCallNode, [
+        $this->IdentifierMaintainer->renameNodeWithMap($methodCall, [
             'assertSame' => $sameMethodName,
             'assertNotSame' => $notSameMethodName,
         ]);
     }
 
-    private function moveArguments(MethodCall $methodCallNode): void
+    private function moveArguments(MethodCall $methodCall): void
     {
-        $methodArguments = $methodCallNode->args;
+        $methodArguments = $methodCall->args;
         array_shift($methodArguments);
 
-        $methodCallNode->args = $methodArguments;
+        $methodCall->args = $methodArguments;
     }
 }

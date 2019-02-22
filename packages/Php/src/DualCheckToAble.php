@@ -29,10 +29,10 @@ final class DualCheckToAble
         $this->binaryOpMaintainer = $binaryOpMaintainer;
     }
 
-    public function processBooleanOr(BooleanOr $booleanOrNode, string $type, string $newMethodName): ?FuncCall
+    public function processBooleanOr(BooleanOr $booleanOr, string $type, string $newMethodName): ?FuncCall
     {
         $matchedNodes = $this->binaryOpMaintainer->matchFirstAndSecondConditionNode(
-            $booleanOrNode,
+            $booleanOr,
             Instanceof_::class,
             FuncCall::class
         );

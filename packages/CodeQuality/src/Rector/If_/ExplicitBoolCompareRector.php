@@ -98,31 +98,31 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function resolveNewConditionNode(Expr $conditionNode, bool $isNegated): ?BinaryOp
+    private function resolveNewConditionNode(Expr $expr, bool $isNegated): ?BinaryOp
     {
         // various cases
-        if ($conditionNode instanceof FuncCall && $this->isName($conditionNode, 'count')) {
-            return $this->resolveCount($isNegated, $conditionNode);
+        if ($expr instanceof FuncCall && $this->isName($expr, 'count')) {
+            return $this->resolveCount($isNegated, $expr);
         }
 
-        if ($this->isArrayType($conditionNode)) {
-            return $this->resolveArray($isNegated, $conditionNode);
+        if ($this->isArrayType($expr)) {
+            return $this->resolveArray($isNegated, $expr);
         }
 
-        if ($this->isStringyType($conditionNode)) {
-            return $this->resolveString($isNegated, $conditionNode);
+        if ($this->isStringyType($expr)) {
+            return $this->resolveString($isNegated, $expr);
         }
 
-        if ($this->isIntegerType($conditionNode)) {
-            return $this->resolveInteger($isNegated, $conditionNode);
+        if ($this->isIntegerType($expr)) {
+            return $this->resolveInteger($isNegated, $expr);
         }
 
-        if ($this->isFloatType($conditionNode)) {
-            return $this->resolveFloat($isNegated, $conditionNode);
+        if ($this->isFloatType($expr)) {
+            return $this->resolveFloat($isNegated, $expr);
         }
 
-        if ($this->isNullableObjectType($conditionNode)) {
-            return $this->resolveNullable($isNegated, $conditionNode);
+        if ($this->isNullableObjectType($expr)) {
+            return $this->resolveNullable($isNegated, $expr);
         }
 
         return null;
@@ -131,84 +131,84 @@ CODE_SAMPLE
     /**
      * @return Identical|Greater
      */
-    private function resolveCount(bool $isNegated, Expr $conditionNode): BinaryOp
+    private function resolveCount(bool $isNegated, Expr $expr): BinaryOp
     {
         $valueNode = new LNumber(0);
 
         // compare === 0, assumption
         if ($isNegated) {
-            return new Identical($conditionNode, $valueNode);
+            return new Identical($expr, $valueNode);
         }
 
-        return new Greater($conditionNode, $valueNode);
+        return new Greater($expr, $valueNode);
     }
 
     /**
      * @return Identical|NotIdentical
      */
-    private function resolveArray(bool $isNegated, Expr $conditionNode): BinaryOp
+    private function resolveArray(bool $isNegated, Expr $expr): BinaryOp
     {
         $valueNode = new Array_([]);
 
         // compare === []
         if ($isNegated) {
-            return new Identical($conditionNode, $valueNode);
+            return new Identical($expr, $valueNode);
         }
 
-        return new NotIdentical($conditionNode, $valueNode);
+        return new NotIdentical($expr, $valueNode);
     }
 
     /**
      * @return Identical|NotIdentical
      */
-    private function resolveString(bool $isNegated, Expr $conditionNode): BinaryOp
+    private function resolveString(bool $isNegated, Expr $expr): BinaryOp
     {
         $valueNode = new String_('');
 
         // compare === ''
         if ($isNegated) {
-            return new Identical($conditionNode, $valueNode);
+            return new Identical($expr, $valueNode);
         }
 
-        return new NotIdentical($conditionNode, $valueNode);
+        return new NotIdentical($expr, $valueNode);
     }
 
     /**
      * @return Identical|NotIdentical
      */
-    private function resolveInteger(bool $isNegated, Expr $conditionNode): BinaryOp
+    private function resolveInteger(bool $isNegated, Expr $expr): BinaryOp
     {
         $valueNode = new LNumber(0);
 
         if ($isNegated) {
-            return new Identical($conditionNode, $valueNode);
+            return new Identical($expr, $valueNode);
         }
 
-        return new NotIdentical($conditionNode, $valueNode);
+        return new NotIdentical($expr, $valueNode);
     }
 
-    private function resolveFloat(bool $isNegated, Expr $conditionNode): BinaryOp
+    private function resolveFloat(bool $isNegated, Expr $expr): BinaryOp
     {
         $valueNode = new DNumber(0.0);
 
         if ($isNegated) {
-            return new Identical($conditionNode, $valueNode);
+            return new Identical($expr, $valueNode);
         }
 
-        return new NotIdentical($conditionNode, $valueNode);
+        return new NotIdentical($expr, $valueNode);
     }
 
     /**
      * @return Identical|NotIdentical
      */
-    private function resolveNullable(bool $isNegated, Expr $conditionNode): BinaryOp
+    private function resolveNullable(bool $isNegated, Expr $expr): BinaryOp
     {
         $valueNode = $this->createNull();
 
         if ($isNegated) {
-            return new Identical($conditionNode, $valueNode);
+            return new Identical($expr, $valueNode);
         }
 
-        return new NotIdentical($conditionNode, $valueNode);
+        return new NotIdentical($expr, $valueNode);
     }
 }

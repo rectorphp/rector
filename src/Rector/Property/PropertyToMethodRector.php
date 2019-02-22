@@ -100,17 +100,17 @@ CODE_SAMPLE
         return null;
     }
 
-    private function processSetter(Assign $assignNode): ?Node
+    private function processSetter(Assign $assign): ?Node
     {
         /** @var PropertyFetch $propertyFetchNode */
-        $propertyFetchNode = $assignNode->var;
+        $propertyFetchNode = $assign->var;
 
         $newMethodMatch = $this->matchPropertyFetchCandidate($propertyFetchNode);
         if ($newMethodMatch === null) {
             return null;
         }
 
-        $args = $this->createArgs([$assignNode->expr]);
+        $args = $this->createArgs([$assign->expr]);
 
         /** @var Variable $variable */
         $variable = $propertyFetchNode->var;
@@ -118,10 +118,10 @@ CODE_SAMPLE
         return $this->createMethodCall($variable, $newMethodMatch['set'], $args);
     }
 
-    private function processGetter(Assign $assignNode): ?Node
+    private function processGetter(Assign $assign): ?Node
     {
         /** @var PropertyFetch $propertyFetchNode */
-        $propertyFetchNode = $assignNode->expr;
+        $propertyFetchNode = $assign->expr;
 
         $newMethodMatch = $this->matchPropertyFetchCandidate($propertyFetchNode);
         if ($newMethodMatch === null) {
@@ -130,9 +130,9 @@ CODE_SAMPLE
 
         // simple method name
         if (is_string($newMethodMatch['get'])) {
-            $assignNode->expr = $this->createMethodCall($propertyFetchNode->var, $newMethodMatch['get']);
+            $assign->expr = $this->createMethodCall($propertyFetchNode->var, $newMethodMatch['get']);
 
-            return $assignNode;
+            return $assign;
 
             // method with argument
         }
@@ -140,36 +140,36 @@ CODE_SAMPLE
         if (is_array($newMethodMatch['get'])) {
             $args = $this->createArgs($newMethodMatch['get']['arguments']);
 
-            $assignNode->expr = $this->createMethodCall(
+            $assign->expr = $this->createMethodCall(
                 $propertyFetchNode->var,
                 $newMethodMatch['get']['method'],
                 $args
             );
 
-            return $assignNode;
+            return $assign;
         }
 
-        return $assignNode;
+        return $assign;
     }
 
     /**
      * @return mixed[]|null
      */
-    private function matchPropertyFetchCandidate(PropertyFetch $propertyFetchNode): ?array
+    private function matchPropertyFetchCandidate(PropertyFetch $propertyFetch): ?array
     {
         foreach ($this->perClassPropertyToMethods as $type => $propertyToMethods) {
             $properties = array_keys($propertyToMethods);
 
-            if (! $this->isType($propertyFetchNode, $type)) {
+            if (! $this->isType($propertyFetch, $type)) {
                 continue;
             }
 
-            if (! $this->isNames($propertyFetchNode, $properties)) {
+            if (! $this->isNames($propertyFetch, $properties)) {
                 continue;
             }
 
             /** @var Identifier $identifierNode */
-            $identifierNode = $propertyFetchNode->name;
+            $identifierNode = $propertyFetch->name;
 
             return $propertyToMethods[$identifierNode->toString()]; //[$type];
         }

@@ -85,22 +85,22 @@ CODE_SAMPLE
         return null;
     }
 
-    private function matchUselessClosureFuncCallName(Closure $closureNode): ?string
+    private function matchUselessClosureFuncCallName(Closure $closure): ?string
     {
         // too complicated
-        if (! $closureNode->stmts[0] instanceof Return_) {
+        if (! $closure->stmts[0] instanceof Return_) {
             return null;
         }
 
         /** @var Return_ $returnNode */
-        $returnNode = $closureNode->stmts[0];
+        $returnNode = $closure->stmts[0];
         if (! $returnNode->expr instanceof FuncCall) {
             return null;
         }
 
         /** @var FuncCall $funcCallNode */
         $funcCallNode = $returnNode->expr;
-        if (! $this->areNodesEqual($closureNode->params, $returnNode->expr->args)) {
+        if (! $this->areNodesEqual($closure->params, $returnNode->expr->args)) {
             return null;
         }
 

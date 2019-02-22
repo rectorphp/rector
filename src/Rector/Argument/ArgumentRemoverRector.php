@@ -117,9 +117,9 @@ CODE_SAMPLE
     /**
      * @param mixed[] $values
      */
-    private function isArgumentValueMatch(Arg $argNode, array $values): bool
+    private function isArgumentValueMatch(Arg $arg, array $values): bool
     {
-        $nodeValue = $this->getValue($argNode->value);
+        $nodeValue = $this->getValue($arg->value);
 
         return in_array($nodeValue, $values, true);
     }

@@ -93,54 +93,54 @@ CODE_SAMPLE
         return $this->processFieldToFieldDirect($node, $funcCallNode);
     }
 
-    private function processMysqlTableName(Assign $assignNode, FuncCall $funcCall): FuncCall
+    private function processMysqlTableName(Assign $assign, FuncCall $funcCall): FuncCall
     {
         $funcCall->name = new Name('mysqli_data_seek');
 
         $newFuncCall = new FuncCall(new Name('mysql_fetch_array'), [$funcCall->args[0]]);
-        $newAssignNode = new Assign($assignNode->var, new ArrayDimFetch($newFuncCall, new LNumber(0)));
+        $newAssignNode = new Assign($assign->var, new ArrayDimFetch($newFuncCall, new LNumber(0)));
 
-        $this->addNodeAfterNode($newAssignNode, $assignNode);
+        $this->addNodeAfterNode($newAssignNode, $assign);
 
         return $funcCall;
     }
 
-    private function processMysqlDbName(Assign $assignNode, FuncCall $funcCallNode): FuncCall
+    private function processMysqlDbName(Assign $assign, FuncCall $funcCall): FuncCall
     {
-        $funcCallNode->name = new Name('mysqli_data_seek');
+        $funcCall->name = new Name('mysqli_data_seek');
 
-        $mysqlFetchRowFuncCall = new FuncCall(new Name('mysql_fetch_row'), [$funcCallNode->args[0]]);
+        $mysqlFetchRowFuncCall = new FuncCall(new Name('mysql_fetch_row'), [$funcCall->args[0]]);
         $fetchVariable = new Variable('fetch');
         $newAssignNode = new Assign($fetchVariable, $mysqlFetchRowFuncCall);
-        $this->addNodeAfterNode($newAssignNode, $assignNode);
+        $this->addNodeAfterNode($newAssignNode, $assign);
 
-        $newAssignNode = new Assign($assignNode->var, new ArrayDimFetch($fetchVariable, new LNumber(0)));
-        $this->addNodeAfterNode($newAssignNode, $assignNode);
+        $newAssignNode = new Assign($assign->var, new ArrayDimFetch($fetchVariable, new LNumber(0)));
+        $this->addNodeAfterNode($newAssignNode, $assign);
 
-        return $funcCallNode;
+        return $funcCall;
     }
 
-    private function processMysqliSelectDb(Assign $assignNode, FuncCall $funcCallNode): FuncCall
+    private function processMysqliSelectDb(Assign $assign, FuncCall $funcCall): FuncCall
     {
-        $funcCallNode->name = new Name('mysqli_select_db');
+        $funcCall->name = new Name('mysqli_select_db');
 
-        $newAssignNode = new Assign($assignNode->var, new FuncCall(new Name('mysqli_query'), [$funcCallNode->args[1]]));
-        $this->addNodeAfterNode($newAssignNode, $assignNode);
+        $newAssignNode = new Assign($assign->var, new FuncCall(new Name('mysqli_query'), [$funcCall->args[1]]));
+        $this->addNodeAfterNode($newAssignNode, $assign);
 
-        unset($funcCallNode->args[1]);
+        unset($funcCall->args[1]);
 
-        return $funcCallNode;
+        return $funcCall;
     }
 
-    private function processMysqlFetchField(Assign $assignNode, FuncCall $funcCallNode): Assign
+    private function processMysqlFetchField(Assign $assign, FuncCall $funcCall): Assign
     {
-        $funcCallNode->name = new Name('mysqli_fetch_field');
+        $funcCall->name = new Name('mysqli_fetch_field');
 
-        if (! isset($funcCallNode->args[1])) {
-            return $assignNode;
+        if (! isset($funcCall->args[1])) {
+            return $assign;
         }
 
-        unset($funcCallNode->args[1]);
+        unset($funcCall->args[1]);
 
         // add for
         $xVar = new Variable('x');
@@ -148,31 +148,31 @@ CODE_SAMPLE
             'init' => [new Assign($xVar, new LNumber(0))],
             'cond' => [new Smaller($xVar, new LNumber(5))],
             'loop' => [new PostInc($xVar)],
-            'stmts' => [new Expression($funcCallNode)],
+            'stmts' => [new Expression($funcCall)],
         ]);
 
-        $previousExpression = $assignNode->getAttribute(Attribute::PREVIOUS_EXPRESSION);
+        $previousExpression = $assign->getAttribute(Attribute::PREVIOUS_EXPRESSION);
         if ($previousExpression === null) {
             throw new ShouldNotHappenException();
         }
 
         $this->addNodeAfterNode($forNode, $previousExpression);
 
-        return $assignNode;
+        return $assign;
     }
 
-    private function processFieldToFieldDirect(Assign $assignNode, FuncCall $funcCallNode): ?Assign
+    private function processFieldToFieldDirect(Assign $assign, FuncCall $funcCall): ?Assign
     {
         foreach ($this->fieldToFieldDirect as $funcName => $property) {
-            if ($this->isName($funcCallNode, $funcName)) {
-                if ($funcCallNode->getAttribute(Attribute::PARENT_NODE) instanceof PropertyFetch) {
+            if ($this->isName($funcCall, $funcName)) {
+                if ($funcCall->getAttribute(Attribute::PARENT_NODE) instanceof PropertyFetch) {
                     continue;
                 }
 
-                $funcCallNode->name = new Name('mysqli_fetch_field_direct');
-                $assignNode->expr = new PropertyFetch($funcCallNode, $property);
+                $funcCall->name = new Name('mysqli_fetch_field_direct');
+                $assign->expr = new PropertyFetch($funcCall, $property);
 
-                return $assignNode;
+                return $assign;
             }
         }
 

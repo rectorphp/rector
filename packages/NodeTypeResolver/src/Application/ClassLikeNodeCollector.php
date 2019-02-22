@@ -147,11 +147,11 @@ final class ClassLikeNodeCollector
     /**
      * @return Trait_[]
      */
-    public function findUsedTraitsInClass(ClassLike $classLikeNode): array
+    public function findUsedTraitsInClass(ClassLike $classLike): array
     {
         $traits = [];
 
-        foreach ($classLikeNode->stmts as $stmt) {
+        foreach ($classLike->stmts as $stmt) {
             if (! $stmt instanceof TraitUse) {
                 continue;
             }

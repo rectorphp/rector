@@ -77,18 +77,18 @@ final class FunctionReplaceRector extends AbstractRector
     /**
      * @param string[] $newFunctions
      */
-    private function wrapFuncCalls(FuncCall $funcCallNode, array $newFunctions): FuncCall
+    private function wrapFuncCalls(FuncCall $funcCall, array $newFunctions): FuncCall
     {
         $previousNode = null;
         $newFunctions = array_reverse($newFunctions);
 
         foreach ($newFunctions as $wrapFunction) {
-            $arguments = $previousNode === null ? $funcCallNode->args : [new Arg($previousNode)];
+            $arguments = $previousNode === null ? $funcCall->args : [new Arg($previousNode)];
 
-            $funcCallNode = new FuncCall(new FullyQualified($wrapFunction), $arguments);
-            $previousNode = $funcCallNode;
+            $funcCall = new FuncCall(new FullyQualified($wrapFunction), $arguments);
+            $previousNode = $funcCall;
         }
 
-        return $funcCallNode;
+        return $funcCall;
     }
 }

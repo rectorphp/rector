@@ -113,15 +113,15 @@ CODE_SAMPLE
     /**
      * @return Yield_[]
      */
-    private function collectYieldNodesFromClassMethod(ClassMethod $classMethodNode): array
+    private function collectYieldNodesFromClassMethod(ClassMethod $classMethod): array
     {
         $yieldNodes = [];
 
-        if ($classMethodNode->stmts === null) {
+        if ($classMethod->stmts === null) {
             return [];
         }
 
-        foreach ($classMethodNode->stmts as $statement) {
+        foreach ($classMethod->stmts as $statement) {
             if (! $statement instanceof Expression) {
                 continue;
             }

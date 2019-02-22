@@ -95,9 +95,9 @@ final class AssertComparisonToSpecificMethodRector extends AbstractPHPUnitRector
         return $this->processMethodCallWithBinaryOp($node, $firstArgumentValue);
     }
 
-    public function changeOrderArguments(MethodCall $methodCallNode): void
+    public function changeOrderArguments(MethodCall $methodCall): void
     {
-        $oldArguments = $methodCallNode->args;
+        $oldArguments = $methodCall->args;
 
         /** @var BinaryOp $expression */
         $expression = $oldArguments[0]->value;
@@ -112,26 +112,26 @@ final class AssertComparisonToSpecificMethodRector extends AbstractPHPUnitRector
 
         unset($oldArguments[0]);
 
-        $methodCallNode->args = array_merge([$firstArgument, $secondArgument], $oldArguments);
+        $methodCall->args = array_merge([$firstArgument, $secondArgument], $oldArguments);
     }
 
-    private function processMethodCallWithBinaryOp(MethodCall $methodCallNode, BinaryOp $binaryOpNode): ?Node
+    private function processMethodCallWithBinaryOp(MethodCall $methodCall, BinaryOp $binaryOp): ?Node
     {
-        $binaryOpClass = get_class($binaryOpNode);
+        $binaryOpClass = get_class($binaryOp);
 
         if (! isset($this->defaultOldToNewMethods[$binaryOpClass])) {
             return null;
         }
 
         [$trueMethodName, $falseMethodName] = $this->defaultOldToNewMethods[$binaryOpClass];
-        $this->identifierMaintainer->renameNodeWithMap($methodCallNode, [
+        $this->identifierMaintainer->renameNodeWithMap($methodCall, [
             'assertTrue' => $trueMethodName,
             'assertFalse' => $falseMethodName,
         ]);
 
-        $this->changeOrderArguments($methodCallNode);
+        $this->changeOrderArguments($methodCall);
 
-        return $methodCallNode;
+        return $methodCall;
     }
 
     private function isConstantValue(Node $node): bool

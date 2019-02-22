@@ -31,16 +31,16 @@ final class FunctionLikeNodeCollector
         $this->nameResolver = $nameResolver;
     }
 
-    public function addMethod(ClassMethod $classMethodNode): void
+    public function addMethod(ClassMethod $classMethod): void
     {
-        $className = $classMethodNode->getAttribute(Attribute::CLASS_NAME);
+        $className = $classMethod->getAttribute(Attribute::CLASS_NAME);
         if ($className === null) { // anonymous
             return;
         }
 
-        $methodName = $this->nameResolver->resolve($classMethodNode);
+        $methodName = $this->nameResolver->resolve($classMethod);
 
-        $this->methodsByType[$className][$methodName] = $classMethodNode;
+        $this->methodsByType[$className][$methodName] = $classMethod;
     }
 
     public function addFunction(Function_ $functionNode): void

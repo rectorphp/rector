@@ -191,13 +191,13 @@ CODE_SAMPLE
     }
 
     private function addParamTypeToMethod(
-        ClassLike $classLikeNode,
+        ClassLike $classLike,
         string $methodName,
         int $position,
         Node $node,
         ParamTypeInfo $paramTypeInfo
     ): void {
-        $classMethod = $classLikeNode->getMethod($methodName);
+        $classMethod = $classLike->getMethod($methodName);
         if ($classMethod === null) {
             return;
         }

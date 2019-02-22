@@ -60,33 +60,33 @@ final class ClassMaintainer
     }
 
     /**
-     * @param ClassMethod|Property|ClassMethod $node
+     * @param ClassMethod|Property|ClassMethod $stmt
      */
-    public function addAsFirstMethod(Class_ $classNode, Stmt $node): void
+    public function addAsFirstMethod(Class_ $class, Stmt $stmt): void
     {
-        if ($this->tryInsertBeforeFirstMethod($classNode, $node)) {
+        if ($this->tryInsertBeforeFirstMethod($class, $stmt)) {
             return;
         }
 
-        if ($this->tryInsertAfterLastProperty($classNode, $node)) {
+        if ($this->tryInsertAfterLastProperty($class, $stmt)) {
             return;
         }
 
-        $classNode->stmts[] = $node;
+        $class->stmts[] = $stmt;
     }
 
-    public function addAsFirstTrait(Class_ $classNode, Stmt $node): void
+    public function addAsFirstTrait(Class_ $class, Stmt $stmt): void
     {
-        $this->addStatementToClassBeforeTypes($classNode, $node, TraitUse::class, Property::class);
+        $this->addStatementToClassBeforeTypes($class, $stmt, TraitUse::class, Property::class);
     }
 
     /**
      * @param Stmt[] $nodes
      * @return Stmt[] $nodes
      */
-    public function insertBeforeAndFollowWithNewline(array $nodes, Stmt $node, int $key): array
+    public function insertBeforeAndFollowWithNewline(array $nodes, Stmt $stmt, int $key): array
     {
-        $nodes = $this->insertBefore($nodes, $node, $key);
+        $nodes = $this->insertBefore($nodes, $stmt, $key);
         return $this->insertBefore($nodes, new Nop(), $key);
     }
 
@@ -94,9 +94,9 @@ final class ClassMaintainer
      * @param Stmt[] $nodes
      * @return Stmt[] $nodes
      */
-    public function insertBefore(array $nodes, Stmt $node, int $key): array
+    public function insertBefore(array $nodes, Stmt $stmt, int $key): array
     {
-        array_splice($nodes, $key, 0, [$node]);
+        array_splice($nodes, $key, 0, [$stmt]);
 
         return $nodes;
     }
@@ -120,12 +120,12 @@ final class ClassMaintainer
     public function addConstructorDependencyWithCustomAssign(
         Class_ $classNode,
         VariableInfo $variableInfo,
-        Assign $assignNode
+        Assign $assign
     ): void {
         $constructorMethod = $classNode->getMethod('__construct');
         /** @var ClassMethod $constructorMethod */
         if ($constructorMethod !== null) {
-            $this->addParameterAndAssignToMethod($constructorMethod, $variableInfo, $assignNode);
+            $this->addParameterAndAssignToMethod($constructorMethod, $variableInfo, $assign);
             return;
         }
 
@@ -133,7 +133,7 @@ final class ClassMaintainer
 
         $this->childAndParentClassMaintainer->completeParentConstructor($classNode, $constructorMethod);
 
-        $this->addParameterAndAssignToMethod($constructorMethod, $variableInfo, $assignNode);
+        $this->addParameterAndAssignToMethod($constructorMethod, $variableInfo, $assign);
 
         $this->addAsFirstMethod($classNode, $constructorMethod);
 
@@ -237,11 +237,11 @@ final class ClassMaintainer
         return null;
     }
 
-    private function tryInsertBeforeFirstMethod(Class_ $classNode, Stmt $node): bool
+    private function tryInsertBeforeFirstMethod(Class_ $classNode, Stmt $stmt): bool
     {
         foreach ($classNode->stmts as $key => $classElementNode) {
             if ($classElementNode instanceof ClassMethod) {
-                $classNode->stmts = $this->insertBefore($classNode->stmts, $node, $key);
+                $classNode->stmts = $this->insertBefore($classNode->stmts, $stmt, $key);
 
                 return true;
             }
@@ -250,12 +250,12 @@ final class ClassMaintainer
         return false;
     }
 
-    private function tryInsertAfterLastProperty(Class_ $classNode, Stmt $node): bool
+    private function tryInsertAfterLastProperty(Class_ $classNode, Stmt $stmt): bool
     {
         $previousElement = null;
         foreach ($classNode->stmts as $key => $classElementNode) {
             if ($previousElement instanceof Property && ! $classElementNode instanceof Property) {
-                $classNode->stmts = $this->insertBefore($classNode->stmts, $node, $key);
+                $classNode->stmts = $this->insertBefore($classNode->stmts, $stmt, $key);
 
                 return true;
             }
@@ -269,19 +269,19 @@ final class ClassMaintainer
     /**
      * @param string[] ...$types
      */
-    private function addStatementToClassBeforeTypes(Class_ $classNode, Stmt $node, string ...$types): void
+    private function addStatementToClassBeforeTypes(Class_ $classNode, Stmt $stmt, string ...$types): void
     {
         foreach ($types as $type) {
             foreach ($classNode->stmts as $key => $classElementNode) {
                 if ($classElementNode instanceof $type) {
-                    $classNode->stmts = $this->insertBefore($classNode->stmts, $node, $key);
+                    $classNode->stmts = $this->insertBefore($classNode->stmts, $stmt, $key);
 
                     return;
                 }
             }
         }
 
-        $classNode->stmts[] = $node;
+        $classNode->stmts[] = $stmt;
     }
 
     private function hasClassProperty(Class_ $classNode, string $name): bool
@@ -300,16 +300,16 @@ final class ClassMaintainer
     }
 
     private function addParameterAndAssignToMethod(
-        ClassMethod $classMethodNode,
+        ClassMethod $classMethod,
         VariableInfo $variableInfo,
-        Assign $propertyAssignNode
+        Assign $assign
     ): void {
-        if ($this->hasMethodParameter($classMethodNode, $variableInfo)) {
+        if ($this->hasMethodParameter($classMethod, $variableInfo)) {
             return;
         }
 
-        $classMethodNode->params[] = $this->nodeFactory->createParamFromVariableInfo($variableInfo);
-        $classMethodNode->stmts[] = new Expression($propertyAssignNode);
+        $classMethod->params[] = $this->nodeFactory->createParamFromVariableInfo($variableInfo);
+        $classMethod->stmts[] = new Expression($assign);
     }
 
     /**
@@ -327,9 +327,9 @@ final class ClassMaintainer
         return $classMethodNames;
     }
 
-    private function hasMethodParameter(ClassMethod $classMethodNode, VariableInfo $variableInfo): bool
+    private function hasMethodParameter(ClassMethod $classMethod, VariableInfo $variableInfo): bool
     {
-        foreach ($classMethodNode->params as $constructorParameter) {
+        foreach ($classMethod->params as $constructorParameter) {
             if ($this->nameResolver->isName($constructorParameter->var, $variableInfo->getName())) {
                 return true;
             }

@@ -106,9 +106,9 @@ CODE_SAMPLE
         return null;
     }
 
-    private function isInControllerActionMethod(Variable $node): bool
+    private function isInControllerActionMethod(Variable $variable): bool
     {
-        $className = $node->getAttribute(Attribute::CLASS_NAME);
+        $className = $variable->getAttribute(Attribute::CLASS_NAME);
 
         if ($className === null) {
             return false;
@@ -119,7 +119,7 @@ CODE_SAMPLE
         }
 
         /** @var ClassMethod|null $methodNode */
-        $methodNode = $node->getAttribute(Attribute::METHOD_NODE);
+        $methodNode = $variable->getAttribute(Attribute::METHOD_NODE);
         if ($methodNode === null) {
             return false;
         }

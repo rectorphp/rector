@@ -84,16 +84,16 @@ final class StaticMethodNameReplacerRector extends AbstractRector
     /**
      * @param string|string[] $newMethod
      */
-    private function rename(StaticCall $staticCallNode, $newMethod): StaticCall
+    private function rename(StaticCall $staticCall, $newMethod): StaticCall
     {
         if (is_array($newMethod)) {
             [$newClass, $newMethod] = $newMethod;
-            $staticCallNode->class = new Name($newClass);
-            $staticCallNode->name = new Identifier($newMethod);
+            $staticCall->class = new Name($newClass);
+            $staticCall->name = new Identifier($newMethod);
         } else {
-            $staticCallNode->name = new Identifier($newMethod);
+            $staticCall->name = new Identifier($newMethod);
         }
 
-        return $staticCallNode;
+        return $staticCall;
     }
 }

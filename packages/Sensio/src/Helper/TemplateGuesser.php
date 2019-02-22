@@ -20,19 +20,19 @@ final class TemplateGuesser
         $this->nameResolver = $nameResolver;
     }
 
-    public function resolveFromClassMethodNode(ClassMethod $classMethodNode, int $version = 5): string
+    public function resolveFromClassMethodNode(ClassMethod $classMethod, int $version = 5): string
     {
-        $namespace = $classMethodNode->getAttribute(Attribute::NAMESPACE_NAME);
+        $namespace = $classMethod->getAttribute(Attribute::NAMESPACE_NAME);
         if (! is_string($namespace)) {
             throw new ShouldNotHappenException();
         }
 
-        $class = $classMethodNode->getAttribute(Attribute::CLASS_NAME);
+        $class = $classMethod->getAttribute(Attribute::CLASS_NAME);
         if (! is_string($class)) {
             throw new ShouldNotHappenException();
         }
 
-        $method = $this->nameResolver->resolve($classMethodNode);
+        $method = $this->nameResolver->resolve($classMethod);
         if ($method === null) {
             throw new ShouldNotHappenException();
         }

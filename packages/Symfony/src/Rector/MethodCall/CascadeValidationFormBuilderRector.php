@@ -103,20 +103,20 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function shouldSkip(MethodCall $methodCallNode): bool
+    private function shouldSkip(MethodCall $methodCall): bool
     {
-        if (! $this->isName($methodCallNode, 'createFormBuilder')) {
+        if (! $this->isName($methodCall, 'createFormBuilder')) {
             return true;
         }
 
-        if (! isset($methodCallNode->args[1])) {
+        if (! isset($methodCall->args[1])) {
             return true;
         }
 
-        return ! $methodCallNode->args[1]->value instanceof Array_;
+        return ! $methodCall->args[1]->value instanceof Array_;
     }
 
-    private function findAndRemoveCascadeValidationOption(MethodCall $methodCallNode, Array_ $optionsArrayNode): bool
+    private function findAndRemoveCascadeValidationOption(MethodCall $methodCall, Array_ $optionsArrayNode): bool
     {
         foreach ($optionsArrayNode->items as $key => $arrayItem) {
             if (! $this->arrayMaintainer->hasKeyName($arrayItem, 'cascade_validation')) {
@@ -131,7 +131,7 @@ CODE_SAMPLE
 
             // remove empty array
             if (count($optionsArrayNode->items) === 0) {
-                unset($methodCallNode->args[1]);
+                unset($methodCall->args[1]);
             }
 
             return true;

@@ -131,20 +131,20 @@ CODE_SAMPLE
     }
 
     /**
-     * @param String_|Expr $content
+     * @param String_|Expr $node
      * @return Stmt[]
      */
-    private function parseStringToBody(Node $content): array
+    private function parseStringToBody(Node $node): array
     {
-        if (! $content instanceof String_ && ! $content instanceof Encapsed && ! $content instanceof Concat) {
+        if (! $node instanceof String_ && ! $node instanceof Encapsed && ! $node instanceof Concat) {
             // special case of code elsewhere
-            return [$this->createEval($content)];
+            return [$this->createEval($node)];
         }
 
-        $content = $this->stringify($content);
-        $content = Strings::endsWith($content, ';') ? $content : $content . ';';
+        $node = $this->stringify($node);
+        $node = Strings::endsWith($node, ';') ? $node : $node . ';';
 
-        return (array) $this->parser->parse('<?php ' . $content);
+        return (array) $this->parser->parse('<?php ' . $node);
     }
 
     /**
@@ -212,9 +212,9 @@ CODE_SAMPLE
         throw new ShouldNotHappenException(get_class($content) . ' ' . __METHOD__);
     }
 
-    private function createEval(Expr $node): Expression
+    private function createEval(Expr $expr): Expression
     {
-        $evalFuncCall = new FuncCall(new Name('eval'), [new Arg($node)]);
+        $evalFuncCall = new FuncCall(new Name('eval'), [new Arg($expr)]);
 
         return new Expression($evalFuncCall);
     }

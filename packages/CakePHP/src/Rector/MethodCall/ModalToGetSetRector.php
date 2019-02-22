@@ -87,20 +87,20 @@ CODE_SAMPLE
     /**
      * @return string[]
      */
-    private function matchTypeAndMethodName(MethodCall $methodCallNode): ?array
+    private function matchTypeAndMethodName(MethodCall $methodCall): ?array
     {
         foreach ($this->methodNamesByTypes as $type => $methodNamesToGetAndSetNames) {
             /** @var string[] $methodNames */
             $methodNames = array_keys($methodNamesToGetAndSetNames);
-            if (! $this->isType($methodCallNode, $type)) {
+            if (! $this->isType($methodCall, $type)) {
                 continue;
             }
 
-            if (! $this->isNames($methodCallNode, $methodNames)) {
+            if (! $this->isNames($methodCall, $methodNames)) {
                 continue;
             }
 
-            $currentMethodName = $this->getName($methodCallNode);
+            $currentMethodName = $this->getName($methodCall);
             if ($currentMethodName === null) {
                 continue;
             }
@@ -123,13 +123,13 @@ CODE_SAMPLE
     /**
      * @param mixed[] $config
      */
-    private function resolveNewMethodNameByCondition(MethodCall $methodCallNode, array $config): string
+    private function resolveNewMethodNameByCondition(MethodCall $methodCall, array $config): string
     {
-        if (count($methodCallNode->args) >= $config['minimal_argument_count']) {
+        if (count($methodCall->args) >= $config['minimal_argument_count']) {
             return $config['set'];
         }
 
-        if (! isset($methodCallNode->args[0])) {
+        if (! isset($methodCall->args[0])) {
             return $config['get'];
         }
 
@@ -139,7 +139,7 @@ CODE_SAMPLE
         }
 
         $argumentType = $config['first_argument_type_to_set'];
-        $argumentValue = $methodCallNode->args[0]->value;
+        $argumentValue = $methodCall->args[0]->value;
 
         if ($argumentType === 'array' && $argumentValue instanceof Array_) {
             return $config['set'];

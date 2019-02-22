@@ -92,9 +92,9 @@ trait NodeFactoryTrait
         return $this->nodeFactory->createClassConstantReference($class);
     }
 
-    protected function createPropertyAssignmentWithExpr(string $propertyName, Expr $rightExprNode): Assign
+    protected function createPropertyAssignmentWithExpr(string $propertyName, Expr $expr): Assign
     {
-        return $this->nodeFactory->createPropertyAssignmentWithExpr($propertyName, $rightExprNode);
+        return $this->nodeFactory->createPropertyAssignmentWithExpr($propertyName, $expr);
     }
 
     /**

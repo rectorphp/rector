@@ -40,8 +40,8 @@ final class ArrayMaintainer
         return null;
     }
 
-    public function hasKeyName(ArrayItem $arrayItemNode, string $name): bool
+    public function hasKeyName(ArrayItem $arrayItem, string $name): bool
     {
-        return $arrayItemNode->key instanceof String_ && $arrayItemNode->key->value === $name;
+        return $arrayItem->key instanceof String_ && $arrayItem->key->value === $name;
     }
 }

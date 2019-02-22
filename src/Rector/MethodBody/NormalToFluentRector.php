@@ -136,7 +136,7 @@ CODE_SAMPLE
         return $firstMethodCallMatch === $secondMethodCallMatch;
     }
 
-    private function fluentizeCollectedMethodCalls(ClassMethod $classMethodNode): void
+    private function fluentizeCollectedMethodCalls(ClassMethod $classMethod): void
     {
         $i = 0;
         $fluentMethodCallIndex = null;
@@ -148,14 +148,14 @@ CODE_SAMPLE
             } else {
                 $methodCallsToAdd[] = $methodCall;
                 // next method calls, unset them
-                unset($classMethodNode->stmts[$statementIndex]);
+                unset($classMethod->stmts[$statementIndex]);
             }
 
             ++$i;
         }
 
         /** @var MethodCall $fluentMethodCall */
-        $fluentMethodCall = $classMethodNode->stmts[$fluentMethodCallIndex]->expr;
+        $fluentMethodCall = $classMethod->stmts[$fluentMethodCallIndex]->expr;
 
         // they are added in reversed direction
         $methodCallsToAdd = array_reverse($methodCallsToAdd);
@@ -169,14 +169,14 @@ CODE_SAMPLE
         }
     }
 
-    private function matchMethodCall(MethodCall $methodCallNode): ?string
+    private function matchMethodCall(MethodCall $methodCall): ?string
     {
         foreach ($this->fluentMethodsByType as $type => $methodNames) {
-            if (! $this->isType($methodCallNode, $type)) {
+            if (! $this->isType($methodCall, $type)) {
                 continue;
             }
 
-            if ($this->isNames($methodCallNode, $methodNames)) {
+            if ($this->isNames($methodCall, $methodNames)) {
                 return $type;
             }
         }

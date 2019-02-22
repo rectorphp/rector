@@ -141,9 +141,9 @@ CODE_SAMPLE
     /**
      * @return mixed
      */
-    private function resolveArgumentValue(Arg $argNode)
+    private function resolveArgumentValue(Arg $arg)
     {
-        $resolvedValue = $this->getValue($argNode->value);
+        $resolvedValue = $this->getValue($arg->value);
 
         if ($resolvedValue === true) {
             return 'true';

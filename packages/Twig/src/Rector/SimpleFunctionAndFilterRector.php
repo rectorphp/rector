@@ -152,7 +152,7 @@ CODE_SAMPLE
     /**
      * @param string[] $newNodeTypes
      */
-    private function processArrayItem(ArrayItem $node, array $newNodeTypes): ?Node
+    private function processArrayItem(ArrayItem $arrayItem, array $newNodeTypes): ?Node
     {
         $matchedOldClasses = array_intersect(array_keys($this->oldToNewClasses), $newNodeTypes);
         if ($matchedOldClasses === []) {
@@ -162,25 +162,25 @@ CODE_SAMPLE
         $matchedOldClass = array_pop($matchedOldClasses);
         $matchedNewClass = $this->oldToNewClasses[$matchedOldClass];
 
-        if (! $node->key instanceof String_) {
+        if (! $arrayItem->key instanceof String_) {
             return null;
         }
 
-        if (! $node->value instanceof New_) {
+        if (! $arrayItem->value instanceof New_) {
             return null;
         }
 
         // match!
-        $filterName = $node->key->value;
+        $filterName = $arrayItem->key->value;
 
-        $node->key = null;
-        $node->value->class = new FullyQualified($matchedNewClass);
+        $arrayItem->key = null;
+        $arrayItem->value->class = new FullyQualified($matchedNewClass);
 
-        $oldArguments = $node->value->args;
+        $oldArguments = $arrayItem->value->args;
 
         if ($oldArguments[0]->value instanceof Array_) {
             // already array, just shift it
-            $node->value->args = array_merge([new Arg(new String_($filterName))], $oldArguments);
+            $arrayItem->value->args = array_merge([new Arg(new String_($filterName))], $oldArguments);
         } else {
             // not array yet, wrap to one
             $arrayItems = [];
@@ -188,10 +188,10 @@ CODE_SAMPLE
                 $arrayItems[] = new ArrayItem($oldArgument->value);
             }
 
-            $node->value->args[0] = new Arg(new String_($filterName));
-            $node->value->args[1] = new Arg(new Array_($arrayItems));
+            $arrayItem->value->args[0] = new Arg(new String_($filterName));
+            $arrayItem->value->args[1] = new Arg(new Array_($arrayItems));
         }
 
-        return $node;
+        return $arrayItem;
     }
 }

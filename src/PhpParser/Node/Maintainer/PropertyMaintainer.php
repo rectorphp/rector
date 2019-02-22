@@ -44,16 +44,16 @@ final class PropertyMaintainer
     /**
      * @return PropertyFetch[]
      */
-    public function getAllPropertyFetch(Property $propertyNode): array
+    public function getAllPropertyFetch(Property $property): array
     {
-        $classNode = $propertyNode->getAttribute(Attribute::CLASS_NODE);
+        $classNode = $property->getAttribute(Attribute::CLASS_NODE);
         if ($classNode === null) {
             return [];
         }
 
-        return $this->betterNodeFinder->find($classNode, function (Node $node) use ($propertyNode) {
+        return $this->betterNodeFinder->find($classNode, function (Node $node) use ($property) {
             // itself
-            if ($this->betterStandardPrinter->areNodesEqual($node, $propertyNode)) {
+            if ($this->betterStandardPrinter->areNodesEqual($node, $property)) {
                 return null;
             }
 
@@ -63,7 +63,7 @@ final class PropertyMaintainer
             }
 
             // is it the name match?
-            if ($this->nameResolver->resolve($node) !== $this->nameResolver->resolve($propertyNode)) {
+            if ($this->nameResolver->resolve($node) !== $this->nameResolver->resolve($property)) {
                 return null;
             }
 

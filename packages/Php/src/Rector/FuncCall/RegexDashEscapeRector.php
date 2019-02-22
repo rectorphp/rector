@@ -114,30 +114,30 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function processFuncCall(FuncCall $funcCallNode): void
+    private function processFuncCall(FuncCall $funcCall): void
     {
         foreach ($this->functionsWithPatternsToArgumentPosition as $functionName => $argumentPosition) {
-            if (! $this->isName($funcCallNode, $functionName)) {
+            if (! $this->isName($funcCall, $functionName)) {
                 return;
             }
 
-            $this->processArgumentPosition($funcCallNode, $argumentPosition);
+            $this->processArgumentPosition($funcCall, $argumentPosition);
         }
     }
 
-    private function processStaticCall(StaticCall $staticCallNode): void
+    private function processStaticCall(StaticCall $staticCall): void
     {
         foreach ($this->staticMethodsWithPatternsToArgumentPosition as $type => $methodNamesToArgumentPosition) {
-            if (! $this->isType($staticCallNode, $type)) {
+            if (! $this->isType($staticCall, $type)) {
                 continue;
             }
 
             foreach ($methodNamesToArgumentPosition as $methodName => $argumentPosition) {
-                if (! $this->isName($staticCallNode, $methodName)) {
+                if (! $this->isName($staticCall, $methodName)) {
                     continue;
                 }
 
-                $this->processArgumentPosition($staticCallNode, $argumentPosition);
+                $this->processArgumentPosition($staticCall, $argumentPosition);
             }
         }
     }
@@ -171,14 +171,14 @@ CODE_SAMPLE
         }
     }
 
-    private function processClassConstFetch(ClassConstFetch $classConstFetchNode): void
+    private function processClassConstFetch(ClassConstFetch $classConstFetch): void
     {
-        $className = $classConstFetchNode->getAttribute(Attribute::CLASS_NAME);
+        $className = $classConstFetch->getAttribute(Attribute::CLASS_NAME);
         if (! is_string($className)) {
             return;
         }
 
-        $constantName = $this->getName($classConstFetchNode->name);
+        $constantName = $this->getName($classConstFetch->name);
         if ($constantName === null) {
             return;
         }

@@ -57,24 +57,24 @@ CODE_SAMPLE
     /**
      * @return Concat|String_
      */
-    private function joinConcatIfStrings(Concat $node): Node
+    private function joinConcatIfStrings(Concat $concat): Node
     {
-        if ($node->left instanceof Concat) {
-            $node->left = $this->joinConcatIfStrings($node->left);
+        if ($concat->left instanceof Concat) {
+            $concat->left = $this->joinConcatIfStrings($concat->left);
         }
 
-        if ($node->right instanceof Concat) {
-            $node->right = $this->joinConcatIfStrings($node->right);
+        if ($concat->right instanceof Concat) {
+            $concat->right = $this->joinConcatIfStrings($concat->right);
         }
 
-        if (! $node->left instanceof String_) {
-            return $node;
+        if (! $concat->left instanceof String_) {
+            return $concat;
         }
 
-        if (! $node->right instanceof String_) {
-            return $node;
+        if (! $concat->right instanceof String_) {
+            return $concat;
         }
 
-        return new String_($node->left->value . $node->right->value);
+        return new String_($concat->left->value . $concat->right->value);
     }
 }

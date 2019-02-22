@@ -95,19 +95,19 @@ CODE_SAMPLE
         return new $inversedNode($this->inverseNode($node->expr->left), $this->inverseNode($node->expr->right));
     }
 
-    private function inverseNode(Expr $node): Node
+    private function inverseNode(Expr $expr): Node
     {
-        if ($node instanceof BinaryOp) {
-            $inversedBinaryOp = $this->assignAndBinaryMap->getInversed($node);
+        if ($expr instanceof BinaryOp) {
+            $inversedBinaryOp = $this->assignAndBinaryMap->getInversed($expr);
             if ($inversedBinaryOp) {
-                return new $inversedBinaryOp($node->left, $node->right);
+                return new $inversedBinaryOp($expr->left, $expr->right);
             }
         }
 
-        if ($node instanceof BooleanNot) {
-            return $node->expr;
+        if ($expr instanceof BooleanNot) {
+            return $expr->expr;
         }
 
-        return new BooleanNot($node);
+        return new BooleanNot($expr);
     }
 }

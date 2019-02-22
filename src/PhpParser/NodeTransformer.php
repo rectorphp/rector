@@ -95,9 +95,9 @@ final class NodeTransformer
         return $yieldNodes;
     }
 
-    public function transformConcatToStringArray(Concat $concatNode): ?Array_
+    public function transformConcatToStringArray(Concat $concat): ?Array_
     {
-        $arrayItems = $this->transformConcatToItems($concatNode);
+        $arrayItems = $this->transformConcatToItems($concat);
 
         return new Array_($arrayItems);
     }
@@ -133,28 +133,28 @@ final class NodeTransformer
     /**
      * @return mixed[]
      */
-    private function transformConcatToItems(Concat $concatNode): array
+    private function transformConcatToItems(Concat $concat): array
     {
-        $arrayItems = $this->transformConcatItemToArrayItems($concatNode->left);
+        $arrayItems = $this->transformConcatItemToArrayItems($concat->left);
 
-        return array_merge($arrayItems, $this->transformConcatItemToArrayItems($concatNode->right));
+        return array_merge($arrayItems, $this->transformConcatItemToArrayItems($concat->right));
     }
 
     /**
      * @return Node[]|string[]
      */
-    private function transformConcatItemToArrayItems(Expr $node): array
+    private function transformConcatItemToArrayItems(Expr $expr): array
     {
-        if ($node instanceof Concat) {
-            return $this->transformConcatToItems($node);
+        if ($expr instanceof Concat) {
+            return $this->transformConcatToItems($expr);
         }
 
-        if (! $node instanceof String_) {
-            return [$node];
+        if (! $expr instanceof String_) {
+            return [$expr];
         }
 
         $arrayItems = [];
-        $parts = $this->splitBySpace($node->value);
+        $parts = $this->splitBySpace($expr->value);
         foreach ($parts as $part) {
             if (trim($part) !== '') {
                 $arrayItems[] = new String_($part);

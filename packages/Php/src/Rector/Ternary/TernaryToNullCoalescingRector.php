@@ -66,22 +66,22 @@ final class TernaryToNullCoalescingRector extends AbstractRector
         return null;
     }
 
-    private function processTernaryWithIsset(Ternary $ternaryNode): ?Coalesce
+    private function processTernaryWithIsset(Ternary $ternary): ?Coalesce
     {
-        if ($ternaryNode->if === null) {
+        if ($ternary->if === null) {
             return null;
         }
 
         /** @var Isset_ $issetNode */
-        $issetNode = $ternaryNode->cond;
+        $issetNode = $ternary->cond;
 
         // none or multiple isset values cannot be handled here
         if (! isset($issetNode->vars[0]) || count($issetNode->vars) > 1) {
             return null;
         }
 
-        if ($this->areNodesEqual($ternaryNode->if, $issetNode->vars[0])) {
-            return new Coalesce($ternaryNode->if, $ternaryNode->else);
+        if ($this->areNodesEqual($ternary->if, $issetNode->vars[0])) {
+            return new Coalesce($ternary->if, $ternary->else);
         }
 
         return null;

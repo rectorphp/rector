@@ -214,26 +214,26 @@ CODE_SAMPLE
     /**
      * @return Assign[]
      */
-    private function resolveAssignRouteNodes(ClassMethod $node): array
+    private function resolveAssignRouteNodes(ClassMethod $classMethod): array
     {
         // look for <...>[] = IRoute<Type>
-        return $this->betterNodeFinder->find($node->stmts, function (Node $node) {
-            if (! $node instanceof Assign) {
+        return $this->betterNodeFinder->find($classMethod->stmts, function (Node $classMethod) {
+            if (! $classMethod instanceof Assign) {
                 return false;
             }
 
             // $routeList[] =
-            if (! $node->var instanceof ArrayDimFetch) {
+            if (! $classMethod->var instanceof ArrayDimFetch) {
                 return false;
             }
 
-            if ($this->isType($node->expr, $this->routerClass)) {
+            if ($this->isType($classMethod->expr, $this->routerClass)) {
                 return true;
             }
 
-            if ($node->expr instanceof StaticCall) {
+            if ($classMethod->expr instanceof StaticCall) {
                 // for custom static route factories
-                return $this->isRouteStaticCallMatch($node->expr);
+                return $this->isRouteStaticCallMatch($classMethod->expr);
             }
 
             return false;
@@ -273,16 +273,16 @@ CODE_SAMPLE
 
     private function completeImplicitRoutes(): void
     {
-        $presenterClassNodes = $this->classLikeNodeCollector->findClassesBySuffix('Presenter');
+        $presenterClasses = $this->classLikeNodeCollector->findClassesBySuffix('Presenter');
 
-        foreach ($presenterClassNodes as $presenterClassNode) {
-            foreach ((array) $presenterClassNode->stmts as $classStmt) {
+        foreach ($presenterClasses as $presenterClass) {
+            foreach ((array) $presenterClass->stmts as $classStmt) {
                 if ($this->shouldSkipClassStmt($classStmt)) {
                     continue;
                 }
 
                 /** @var ClassMethod $classStmt */
-                $path = $this->resolvePathFromClassAndMethodNodes($presenterClassNode, $classStmt);
+                $path = $this->resolvePathFromClassAndMethodNodes($presenterClass, $classStmt);
                 $phpDocTagNode = new RouteTagValueNode($this->routeAnnotationClass, $path);
 
                 $this->docBlockAnalyzer->addTag($classStmt, $phpDocTagNode);
@@ -293,14 +293,14 @@ CODE_SAMPLE
     /**
      * @todo allow extension with custom resolvers
      */
-    private function isRouteStaticCallMatch(StaticCall $node): bool
+    private function isRouteStaticCallMatch(StaticCall $staticCall): bool
     {
-        $className = $this->getName($node->class);
+        $className = $this->getName($staticCall->class);
         if ($className === null) {
             return false;
         }
 
-        $methodName = $this->getName($node->name);
+        $methodName = $this->getName($staticCall->name);
         if ($methodName === null) {
             return false;
         }
@@ -340,14 +340,14 @@ CODE_SAMPLE
         return $this->docBlockAnalyzer->hasTag($node, $this->routeAnnotationClass);
     }
 
-    private function resolvePathFromClassAndMethodNodes(Class_ $classNode, ClassMethod $classMethodNode): string
+    private function resolvePathFromClassAndMethodNodes(Class_ $classNode, ClassMethod $classMethod): string
     {
         $presenterName = $this->getName($classNode);
         $presenterPart = Strings::after($presenterName, '\\', -1);
         $presenterPart = Strings::substring($presenterPart, 0, -Strings::length('Presenter'));
         $presenterPart = RectorStrings::camelCaseToDashes($presenterPart);
 
-        $match = Strings::match($this->getName($classMethodNode), '#^(action|render)(?<short_action_name>.*?$)#sm');
+        $match = Strings::match($this->getName($classMethod), '#^(action|render)(?<short_action_name>.*?$)#sm');
         $actionPart = lcfirst($match['short_action_name']);
 
         return $presenterPart . '/' . $actionPart;

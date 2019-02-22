@@ -105,7 +105,7 @@ CODE_SAMPLE
      */
     private function processArrayDimFetchNode(
         Node $node,
-        ArrayDimFetch $arrayDimFetchNode,
+        ArrayDimFetch $arrayDimFetch,
         array $methodsNamesByType
     ): ?Node {
         if ($node instanceof Isset_) {
@@ -114,9 +114,9 @@ CODE_SAMPLE
             }
 
             return $this->createMethodCall(
-                $arrayDimFetchNode->var,
+                $arrayDimFetch->var,
                 $methodsNamesByType['isset'],
-                [$arrayDimFetchNode->dim]
+                [$arrayDimFetch->dim]
             );
         }
 
@@ -126,9 +126,9 @@ CODE_SAMPLE
             }
 
             return $this->createMethodCall(
-                $arrayDimFetchNode->var,
+                $arrayDimFetch->var,
                 $methodsNamesByType['unset'],
-                [$arrayDimFetchNode->dim]
+                [$arrayDimFetch->dim]
             );
         }
 

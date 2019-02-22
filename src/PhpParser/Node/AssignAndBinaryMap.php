@@ -97,9 +97,9 @@ final class AssignAndBinaryMap
         return null;
     }
 
-    public function getInversed(BinaryOp $node): ?string
+    public function getInversed(BinaryOp $binaryOp): ?string
     {
-        $nodeClass = get_class($node);
+        $nodeClass = get_class($binaryOp);
 
         return $this->binaryOpToInverseClasses[$nodeClass] ?? null;
     }

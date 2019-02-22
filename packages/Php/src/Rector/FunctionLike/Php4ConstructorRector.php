@@ -133,14 +133,14 @@ CODE_SAMPLE
         return false;
     }
 
-    private function processClassMethodStatementsForParentConstructorCalls(ClassMethod $classMethodNode): void
+    private function processClassMethodStatementsForParentConstructorCalls(ClassMethod $classMethod): void
     {
-        if (! is_iterable($classMethodNode->stmts)) {
+        if (! is_iterable($classMethod->stmts)) {
             return;
         }
 
         /** @var Expression $methodStmt */
-        foreach ($classMethodNode->stmts as $methodStmt) {
+        foreach ($classMethod->stmts as $methodStmt) {
             if ($methodStmt instanceof Expression) {
                 $methodStmt = $methodStmt->expr;
             }

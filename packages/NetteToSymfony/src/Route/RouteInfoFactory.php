@@ -39,23 +39,23 @@ final class RouteInfoFactory
         $this->classLikeNodeCollector = $classLikeNodeCollector;
     }
 
-    public function createFromNode(Node $expr): ?RouteInfo
+    public function createFromNode(Node $node): ?RouteInfo
     {
-        if ($expr instanceof New_) {
-            if (! isset($expr->args[0]) || ! isset($expr->args[1])) {
+        if ($node instanceof New_) {
+            if (! isset($node->args[0]) || ! isset($node->args[1])) {
                 return null;
             }
 
-            return $this->createRouteInfoFromArgs($expr);
+            return $this->createRouteInfoFromArgs($node);
         }
 
         // Route::create()
-        if ($expr instanceof StaticCall) {
-            if (! isset($expr->args[0]) || ! isset($expr->args[1])) {
+        if ($node instanceof StaticCall) {
+            if (! isset($node->args[0]) || ! isset($node->args[1])) {
                 return null;
             }
 
-            $method = $this->nameResolver->matchNameInsensitiveInMap($expr, [
+            $method = $this->nameResolver->matchNameInsensitiveInMap($node, [
                 'get' => 'GET',
                 'head' => 'HEAD',
                 'post' => 'POST',
@@ -69,19 +69,19 @@ final class RouteInfoFactory
                 $methods[] = $method;
             }
 
-            return $this->createRouteInfoFromArgs($expr, $methods);
+            return $this->createRouteInfoFromArgs($node, $methods);
         }
 
         return null;
     }
 
     /**
-     * @param New_|StaticCall $expr
+     * @param New_|StaticCall $node
      * @param string[] $methods
      */
-    private function createRouteInfoFromArgs(Node $expr, array $methods = []): ?RouteInfo
+    private function createRouteInfoFromArgs(Node $node, array $methods = []): ?RouteInfo
     {
-        $pathArgument = $expr->args[0]->value;
+        $pathArgument = $node->args[0]->value;
         $routePath = $this->valueResolver->resolve($pathArgument);
 
         // route path is needed
@@ -91,10 +91,10 @@ final class RouteInfoFactory
 
         $routePath = $this->normalizeArgumentWrappers($routePath);
 
-        $targetNode = $expr->args[1]->value;
+        $targetNode = $node->args[1]->value;
         if ($targetNode instanceof ClassConstFetch) {
             /** @var ClassConstFetch $controllerMethodNode */
-            $controllerMethodNode = $expr->args[1]->value;
+            $controllerMethodNode = $node->args[1]->value;
 
             // SomePresenter::class
             if ($this->nameResolver->isName($controllerMethodNode->name, 'class')) {

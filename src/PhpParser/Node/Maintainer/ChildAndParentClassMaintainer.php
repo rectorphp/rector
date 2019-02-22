@@ -37,7 +37,7 @@ final class ChildAndParentClassMaintainer
         $this->nameResolver = $nameResolver;
     }
 
-    public function completeParentConstructor(Class_ $classNode, ClassMethod $constructorClassMethodNode): void
+    public function completeParentConstructor(Class_ $classNode, ClassMethod $classMethod): void
     {
         /** @var string|null $parentClassName */
         $parentClassName = $classNode->getAttribute(Attribute::PARENT_CLASS_NAME);
@@ -62,15 +62,12 @@ final class ChildAndParentClassMaintainer
         }
 
         // replicate parent parameters
-        $constructorClassMethodNode->params = array_merge(
-            $firstParentConstructMethodNode->params,
-            $constructorClassMethodNode->params
-        );
+        $classMethod->params = array_merge($firstParentConstructMethodNode->params, $classMethod->params);
 
         $parentConstructCallNode = $this->nodeFactory->createParentConstructWithParams(
             $firstParentConstructMethodNode->params
         );
-        $constructorClassMethodNode->stmts[] = new Expression($parentConstructCallNode);
+        $classMethod->stmts[] = new Expression($parentConstructCallNode);
     }
 
     public function completeChildConstructors(Class_ $classNode, ClassMethod $constructorClassMethod): void

@@ -86,9 +86,9 @@ final class AssertInstanceOfComparisonRector extends AbstractPHPUnitRector
         return $node;
     }
 
-    public function changeOrderArguments(MethodCall $methodCallNode): void
+    public function changeOrderArguments(MethodCall $methodCall): void
     {
-        $oldArguments = $methodCallNode->args;
+        $oldArguments = $methodCall->args;
         /** @var Instanceof_ $comparison */
         $comparison = $oldArguments[0]->value;
 
@@ -97,7 +97,7 @@ final class AssertInstanceOfComparisonRector extends AbstractPHPUnitRector
 
         unset($oldArguments[0]);
 
-        $methodCallNode->args = array_merge([
+        $methodCall->args = array_merge([
             new Arg($this->builderFactory->classConstFetch($class, 'class')),
             new Arg($argument),
         ], $oldArguments);

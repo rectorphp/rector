@@ -93,19 +93,19 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function wrap(ClassMethod $classMethodNode, string $type): void
+    private function wrap(ClassMethod $classMethod, string $type): void
     {
-        if (! is_iterable($classMethodNode->stmts)) {
+        if (! is_iterable($classMethod->stmts)) {
             return;
         }
 
-        foreach ($classMethodNode->stmts as $i => $stmt) {
+        foreach ($classMethod->stmts as $i => $stmt) {
             if ($stmt instanceof Return_ && $stmt->expr !== null) {
                 if ($type === 'array') {
                     $stmt->expr = new Array_([new ArrayItem($stmt->expr)]);
                 }
 
-                $classMethodNode->stmts[$i] = $stmt;
+                $classMethod->stmts[$i] = $stmt;
             }
         }
     }

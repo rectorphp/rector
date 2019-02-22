@@ -40,16 +40,16 @@ final class ClassConstMaintainer
     /**
      * @return ClassConst[]
      */
-    public function getAllClassConstFetch(ClassConst $classConstNode): array
+    public function getAllClassConstFetch(ClassConst $classConst): array
     {
-        $classNode = $classConstNode->getAttribute(Attribute::CLASS_NODE);
+        $classNode = $classConst->getAttribute(Attribute::CLASS_NODE);
         if ($classNode === null) {
             return [];
         }
 
-        return $this->betterNodeFinder->find($classNode, function (Node $node) use ($classConstNode) {
+        return $this->betterNodeFinder->find($classNode, function (Node $node) use ($classConst) {
             // itself
-            if ($this->betterStandardPrinter->areNodesEqual($node, $classConstNode)) {
+            if ($this->betterStandardPrinter->areNodesEqual($node, $classConst)) {
                 return false;
             }
 
@@ -59,7 +59,7 @@ final class ClassConstMaintainer
             }
 
             // is it the name match?
-            if ($this->nameResolver->resolve($node) !== 'self::' . $this->nameResolver->resolve($classConstNode)) {
+            if ($this->nameResolver->resolve($node) !== 'self::' . $this->nameResolver->resolve($classConst)) {
                 return false;
             }
 

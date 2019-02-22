@@ -102,15 +102,15 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function addPropertyToCollector(Property $propertyNode): void
+    private function addPropertyToCollector(Property $property): void
     {
-        $classNode = $propertyNode->getAttribute(Attribute::CLASS_NODE);
+        $classNode = $property->getAttribute(Attribute::CLASS_NODE);
         if (! $classNode instanceof Class_) {
             return;
         }
 
-        $mainPropertyType = $this->getTypes($propertyNode)[0] ?? 'mixed';
-        $propertyName = $this->getName($propertyNode);
+        $mainPropertyType = $this->getTypes($property)[0] ?? 'mixed';
+        $propertyName = $this->getName($property);
         $this->addPropertyToClass($classNode, $mainPropertyType, $propertyName);
     }
 }

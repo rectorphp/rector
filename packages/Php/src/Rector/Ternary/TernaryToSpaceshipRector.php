@@ -64,24 +64,24 @@ CODE_SAMPLE
         return $this->processGreaterThanTernary($node, $nestedTernary);
     }
 
-    private function shouldSkip(Ternary $ternaryNode): bool
+    private function shouldSkip(Ternary $ternary): bool
     {
-        if (! $ternaryNode->cond instanceof BinaryOp) {
+        if (! $ternary->cond instanceof BinaryOp) {
             return true;
         }
 
-        if (! $ternaryNode->else instanceof Ternary) {
+        if (! $ternary->else instanceof Ternary) {
             return true;
         }
 
-        $nestedTernary = $ternaryNode->else;
+        $nestedTernary = $ternary->else;
 
         // $a X $b ? . : ($a X $b ? . : .)
-        if (! $this->areNodesEqual($ternaryNode->cond->left, $nestedTernary->cond->left)) {
+        if (! $this->areNodesEqual($ternary->cond->left, $nestedTernary->cond->left)) {
             return true;
         }
         // $a X $b ? . : ($a X $b ? . : .)
-        return ! $this->areNodesEqual($ternaryNode->cond->right, $nestedTernary->cond->right);
+        return ! $this->areNodesEqual($ternary->cond->right, $nestedTernary->cond->right);
     }
 
     /**

@@ -165,40 +165,46 @@ CODE_SAMPLE
         $this->secondValue = null;
     }
 
-    private function processTernary(Ternary $ternaryNode): void
+    private function processTernary(Ternary $ternary): void
     {
-        if ($ternaryNode->cond instanceof Smaller) {
-            $this->firstValue = $ternaryNode->cond->left;
-            $this->secondValue = $ternaryNode->cond->right;
+        if ($ternary->cond instanceof Smaller) {
+            $this->firstValue = $ternary->cond->left;
+            $this->secondValue = $ternary->cond->right;
 
-            if ($ternaryNode->if !== null) {
-                $this->onSmaller = $this->getValue($ternaryNode->if);
+            if ($ternary->if !== null) {
+                $this->onSmaller = $this->getValue($ternary->if);
             }
 
-            $this->onGreater = $this->getValue($ternaryNode->else);
-        } elseif ($ternaryNode->cond instanceof Greater) {
-            $this->firstValue = $ternaryNode->cond->right;
-            $this->secondValue = $ternaryNode->cond->left;
+            $this->onGreater = $this->getValue($ternary->else);
+        } elseif ($ternary->cond instanceof Greater) {
+            $this->firstValue = $ternary->cond->right;
+            $this->secondValue = $ternary->cond->left;
 
-            if ($ternaryNode->if !== null) {
-                $this->onGreater = $this->getValue($ternaryNode->if);
+            if ($ternary->if !== null) {
+                $this->onGreater = $this->getValue($ternary->if);
             }
 
-            $this->onSmaller = $this->getValue($ternaryNode->else);
+            $this->onSmaller = $this->getValue($ternary->else);
         }
     }
 
-    private function areVariablesEqual(BinaryOp $node, ?Expr $firstValue, ?Expr $secondValue): bool
+    private function areVariablesEqual(BinaryOp $binaryOp, ?Expr $firstValue, ?Expr $secondValue): bool
     {
         if ($firstValue === null || $secondValue === null) {
             return false;
         }
 
-        if ($this->areNodesEqual($node->left, $firstValue) && $this->areNodesEqual($node->right, $secondValue)) {
+        if ($this->areNodesEqual($binaryOp->left, $firstValue) && $this->areNodesEqual(
+            $binaryOp->right,
+            $secondValue
+        )) {
             return true;
         }
 
-        if ($this->areNodesEqual($node->right, $firstValue) && $this->areNodesEqual($node->left, $secondValue)) {
+        if ($this->areNodesEqual($binaryOp->right, $firstValue) && $this->areNodesEqual(
+            $binaryOp->left,
+            $secondValue
+        )) {
             return true;
         }
 

@@ -119,9 +119,9 @@ CODE_SAMPLE
     /**
      * @return Arg[]
      */
-    private function resolveRenderArguments(ClassMethod $classMethodNode, ?Return_ $returnNode): array
+    private function resolveRenderArguments(ClassMethod $classMethod, ?Return_ $returnNode): array
     {
-        $arguments = [$this->resolveTemplateName($classMethodNode)];
+        $arguments = [$this->resolveTemplateName($classMethod)];
         if ($returnNode === null) {
             return $this->createArgs($arguments);
         }
@@ -135,9 +135,9 @@ CODE_SAMPLE
         return $this->createArgs($arguments);
     }
 
-    private function resolveTemplateName(ClassMethod $classMethodNode): string
+    private function resolveTemplateName(ClassMethod $classMethod): string
     {
-        $templateTag = $this->docBlockAnalyzer->getTagByName($classMethodNode, 'Template');
+        $templateTag = $this->docBlockAnalyzer->getTagByName($classMethod, 'Template');
         $content = (string) $templateTag;
 
         $annotationContent = Strings::match($content, '#\(("|\')(?<filename>.*?)("|\')\)#');
@@ -145,7 +145,7 @@ CODE_SAMPLE
             return $annotationContent['filename'];
         }
 
-        return $this->templateGuesser->resolveFromClassMethodNode($classMethodNode, $this->version);
+        return $this->templateGuesser->resolveFromClassMethodNode($classMethod, $this->version);
     }
 
     /**
