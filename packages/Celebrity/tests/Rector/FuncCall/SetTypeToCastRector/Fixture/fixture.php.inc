@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\FuncCall\SetTypeToCastRector\Fixture;
+namespace Rector\Celebrity\Tests\Rector\FuncCall\SetTypeToCastRector\Fixture;
 
 class SomeClass
 {
@@ -27,7 +27,7 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\FuncCall\SetTypeToCastRector\Fixture;
+namespace Rector\Celebrity\Tests\Rector\FuncCall\SetTypeToCastRector\Fixture;
 
 class SomeClass
 {

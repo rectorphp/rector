@@ -1,0 +1,13 @@
+services:
+    # <> → !=
+    Rector\Celebrity\Rector\NotEqual\CommonNotEqualRector: ~
+
+    Rector\Rector\Function_\FunctionReplaceRector:
+        split: 'explode'
+        join: 'implode'
+
+    # settype($value, 'int') → (int) $value
+    Rector\Celebrity\Rector\FuncCall\SetTypeToCastRector: ~
+
+    # class { var $value; } → class { public $value; }
+    Rector\Php\Rector\Property\VarToPublicPropertyRector: ~

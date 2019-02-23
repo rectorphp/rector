@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\CodingStyle\Rector\FuncCall;
+namespace Rector\Celebrity\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;

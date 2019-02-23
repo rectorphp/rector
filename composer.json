@@ -33,6 +33,7 @@
     "autoload": {
         "psr-4": {
             "Rector\\": "src",
+            "Rector\\Celebrity\\": "packages/Celebrity/src",
             "Rector\\ConsoleDiffer\\": "packages/ConsoleDiffer/src",
             "Rector\\CodingStyle\\": "packages/CodingStyle/src",
             "Rector\\DeadCode\\": "packages/DeadCode/src",
@@ -60,6 +61,7 @@
     },
     "autoload-dev": {
         "psr-4": {
+            "Rector\\Celebrity\\Tests\\": "packages/Celebrity/tests",
             "Rector\\Tests\\": "tests",
             "Rector\\NodeTypeResolver\\Tests\\": "packages/NodeTypeResolver/tests",
             "Rector\\CakePHP\\Tests\\": "packages/CakePHP/tests",
@@ -81,9 +83,7 @@
             "Rector\\Twig\\Tests\\": "packages/Twig/tests",
             "Rector\\MysqlToMysqli\\Tests\\": "packages/MysqlToMysqli/tests",
             "Rector\\Doctrine\\Tests\\": "packages/Doctrine/tests",
-            "Rector\\FileSystemRector\\Tests\\": "packages/FileSystemRector/tests",
             "Rector\\PHPStanExtensions\\": "utils/PHPStanExtensions/src"
-
         },
         "classmap": [
             "examples",

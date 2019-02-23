@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Rector\CodingStyle\Tests\Rector\FuncCall\ConsistentImplodeRector;
+namespace Rector\Celebrity\Tests\Rector\NotEqual\CommonNotEqualRector;
 
-use Rector\CodingStyle\Rector\FuncCall\ConsistentImplodeRector;
+use Rector\Celebrity\Rector\NotEqual\CommonNotEqualRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class ConsistentImplodeRectorTest extends AbstractRectorTestCase
+final class CommonNotEqualRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
     {
@@ -14,6 +14,6 @@ final class ConsistentImplodeRectorTest extends AbstractRectorTestCase
 
     protected function getRectorClass(): string
     {
-        return ConsistentImplodeRector::class;
+        return CommonNotEqualRector::class;
     }
 }

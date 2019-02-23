@@ -1,6 +1,6 @@
 # run "bin/rector create" to create a new Rector + tests from this config
-package: "CodeQuality"
-name: "SimplifyMirrorAssignRector"
+package: "Celebrity"
+name: "SplitToExplodeRector"
 node_types:
     - "Assign" # put main node first
 

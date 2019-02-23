@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\FuncCall\ConsistentImplodeRector\Fixture;
+namespace Rector\Celebrity\Tests\Rector\FuncCall\ConsistentImplodeRector\Fixture;
 
 class SomeClass
 {
@@ -17,7 +17,7 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\FuncCall\ConsistentImplodeRector\Fixture;
+namespace Rector\Celebrity\Tests\Rector\FuncCall\ConsistentImplodeRector\Fixture;
 
 class SomeClass
 {
