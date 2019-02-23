@@ -1,0 +1,7 @@
+services:
+    # <> → !=
+    Rector\Celebrity\Rector\NotEqual\CommonNotEqualRector: ~
+
+    Rector\Rector\Function_\FunctionReplaceRector:
+        split: 'explode'
+        join: 'implode'
