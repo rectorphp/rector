@@ -11,3 +11,6 @@ services:
 
     # class { var $value; } → class { public $value; }
     Rector\Php\Rector\Property\VarToPublicPropertyRector: ~
+
+    #  false or true → false || true
+    Rector\Celebrity\Rector\LogicalOr\LogicalOrToBooleanOrRector: ~

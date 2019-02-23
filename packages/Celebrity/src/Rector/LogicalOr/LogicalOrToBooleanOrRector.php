@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\CodeQuality\Rector\LogicalOr;
+namespace Rector\Celebrity\Rector\LogicalOr;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;
