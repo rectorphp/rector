@@ -64,6 +64,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $this->isAtLeastPhpVersion('7.0')) {
+            return null;
+        }
+
         // skip excluded methods
         if ($node instanceof ClassMethod && $this->isNames($node, $this->excludeClassMethodNames)) {
             return null;

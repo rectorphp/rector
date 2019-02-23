@@ -2,6 +2,8 @@
 
 namespace Rector\NodeTypeResolver\Php;
 
+use Rector\Php\TypeAnalyzer;
+
 final class ParamTypeInfo extends AbstractTypeInfo
 {
     /**
@@ -18,11 +20,11 @@ final class ParamTypeInfo extends AbstractTypeInfo
      * @param string[] $types
      * @param string[] $fqnTypes
      */
-    public function __construct(string $name, array $types, array $fqnTypes = [])
+    public function __construct(string $name, TypeAnalyzer $typeAnalyzer, array $types, array $fqnTypes = [])
     {
         $this->name = $this->normalizeName($name);
 
-        parent::__construct($types, $fqnTypes);
+        parent::__construct($types, $typeAnalyzer, $fqnTypes);
     }
 
     public function getName(): string

@@ -68,6 +68,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $this->isAtLeastPhpVersion('7.0')) {
+            return null;
+        }
+
         $this->returnNode = null;
 
         if ($node->keyVar === null) {

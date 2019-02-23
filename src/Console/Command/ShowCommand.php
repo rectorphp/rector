@@ -25,14 +25,20 @@ final class ShowCommand extends AbstractCommand
     private $rectors = [];
 
     /**
+     * @var TypeAnalyzer
+     */
+    private $typeAnalyzer;
+
+    /**
      * @param RectorInterface[] $rectors
      */
-    public function __construct(SymfonyStyle $symfonyStyle, array $rectors)
+    public function __construct(SymfonyStyle $symfonyStyle, array $rectors, TypeAnalyzer $typeAnalyzer)
     {
         $this->symfonyStyle = $symfonyStyle;
         $this->rectors = $rectors;
 
         parent::__construct();
+        $this->typeAnalyzer = $typeAnalyzer;
     }
 
     protected function configure(): void
@@ -81,7 +87,7 @@ final class ShowCommand extends AbstractCommand
         $configuration = [];
         foreach ($constructorReflection->getParameters() as $reflectionParameter) {
             $parameterType = (string) $reflectionParameter->getType();
-            if (! TypeAnalyzer::isPhpReservedType($parameterType)) {
+            if (! $this->typeAnalyzer->isPhpReservedType($parameterType)) {
                 continue;
             }
 

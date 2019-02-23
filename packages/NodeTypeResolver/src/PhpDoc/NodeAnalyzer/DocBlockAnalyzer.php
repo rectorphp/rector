@@ -14,6 +14,7 @@ use Rector\NodeTypeResolver\Node\CurrentNodeProvider;
 use Rector\NodeTypeResolver\Php\ParamTypeInfo;
 use Rector\NodeTypeResolver\Php\ReturnTypeInfo;
 use Rector\NodeTypeResolver\Php\VarTypeInfo;
+use Rector\Php\TypeAnalyzer;
 use Symplify\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareParamTagValueNode;
 use Symplify\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
 use Symplify\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareVarTagValueNode;
@@ -46,16 +47,23 @@ final class DocBlockAnalyzer
      */
     private $currentNodeProvider;
 
+    /**
+     * @var TypeAnalyzer
+     */
+    private $typeAnalyzer;
+
     public function __construct(
         PhpDocInfoFactory $phpDocInfoFactory,
         PhpDocInfoPrinter $phpDocInfoPrinter,
         PhpDocModifier $phpDocModifier,
-        CurrentNodeProvider $currentNodeProvider
+        CurrentNodeProvider $currentNodeProvider,
+        TypeAnalyzer $typeAnalyzer
     ) {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->phpDocInfoPrinter = $phpDocInfoPrinter;
         $this->phpDocModifier = $phpDocModifier;
         $this->currentNodeProvider = $currentNodeProvider;
+        $this->typeAnalyzer = $typeAnalyzer;
     }
 
     public function hasTag(Node $node, string $name): bool
@@ -152,7 +160,7 @@ final class DocBlockAnalyzer
 
         $fqnTypes = $phpDocInfo->getReturnTypes();
 
-        return new ReturnTypeInfo($types, $fqnTypes);
+        return new ReturnTypeInfo($types, $this->typeAnalyzer, $fqnTypes);
     }
 
     /**
@@ -181,6 +189,7 @@ final class DocBlockAnalyzer
 
             $paramTypeInfo = new ParamTypeInfo(
                 $paramTagValueNode->parameterName,
+                $this->typeAnalyzer,
                 $paramTagValueNode->getAttribute(Attribute::TYPE_AS_ARRAY),
                 $fqnParamTagValueNode->getAttribute(Attribute::TYPE_AS_ARRAY)
             );
@@ -254,7 +263,7 @@ final class DocBlockAnalyzer
 
         $fqnTypes = $phpDocInfo->getVarTypes();
 
-        return new VarTypeInfo($types, $fqnTypes);
+        return new VarTypeInfo($types, $this->typeAnalyzer, $fqnTypes);
     }
 
     private function updateNodeWithPhpDocInfo(Node $node, PhpDocInfo $phpDocInfo): void

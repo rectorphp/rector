@@ -88,6 +88,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $this->isAtLeastPhpVersion('7.0')) {
+            return null;
+        }
+
         if (empty($node->params)) {
             return null;
         }

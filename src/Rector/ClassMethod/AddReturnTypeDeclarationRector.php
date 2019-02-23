@@ -5,6 +5,7 @@ namespace Rector\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\NodeTypeResolver\Php\ReturnTypeInfo;
+use Rector\Php\TypeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -21,11 +22,17 @@ final class AddReturnTypeDeclarationRector extends AbstractRector
     private $typehintForMethodByClass = [];
 
     /**
+     * @var TypeAnalyzer
+     */
+    private $typeAnalyzer;
+
+    /**
      * @param mixed[] $typehintForMethodByClass
      */
-    public function __construct(array $typehintForMethodByClass)
+    public function __construct(array $typehintForMethodByClass, TypeAnalyzer $typeAnalyzer)
     {
         $this->typehintForMethodByClass = $typehintForMethodByClass;
+        $this->typeAnalyzer = $typeAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -96,7 +103,7 @@ CODE_SAMPLE
         if ($newType === '') {
             $classMethod->returnType = null;
         } else {
-            $returnTypeInfo = new ReturnTypeInfo([$newType]);
+            $returnTypeInfo = new ReturnTypeInfo([$newType], $this->typeAnalyzer);
             $classMethod->returnType = $returnTypeInfo->getFqnTypeNode();
         }
 

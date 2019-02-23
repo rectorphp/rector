@@ -35,6 +35,16 @@ final class SpecificAssertInternalTypeRector extends AbstractPHPUnitRector
         'iterable' => ['assertIsIterable', 'assertIsNotIterable'],
     ];
 
+    /**
+     * @var TypeAnalyzer
+     */
+    private $typeAnalyzer;
+
+    public function __construct(TypeAnalyzer $typeAnalyzer)
+    {
+        $this->typeAnalyzer = $typeAnalyzer;
+    }
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -95,7 +105,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $type = TypeAnalyzer::normalizeType($typeNode->value);
+        $type = $this->typeAnalyzer->normalizeType($typeNode->value);
         if (! isset($this->typeToMethod[$type])) {
             return null;
         }

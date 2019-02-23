@@ -38,6 +38,10 @@ final class TernaryToNullCoalescingRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $this->isAtLeastPhpVersion('7.0')) {
+            return null;
+        }
+
         if ($node->cond instanceof Isset_) {
             return $this->processTernaryWithIsset($node);
         }
