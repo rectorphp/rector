@@ -8,3 +8,6 @@ services:
 
     # settype($value, 'int') → (int) $value
     Rector\Celebrity\Rector\FuncCall\SetTypeToCastRector: ~
+
+    # class { var $value; } → class { public $value; }
+    Rector\Php\Rector\Property\VarToPublicPropertyRector: ~
