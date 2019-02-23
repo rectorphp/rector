@@ -40,7 +40,7 @@ class Wordpress
             return "{$k}=\"{$v}\"";
         };
 
-        $this->map_xmlns_func = function ($p, $n) use ($xd) {
+        $this->map_xmlns_func = function ($p, $n) {
             $xd = "xmlns";
             if (strlen($n[0]) > 0) {
                 $xd .= ":{$n[0]}";

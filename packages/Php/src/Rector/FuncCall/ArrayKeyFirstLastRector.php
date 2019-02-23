@@ -5,7 +5,9 @@ namespace Rector\Php\Rector\FuncCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\Expression;
 use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -25,6 +27,16 @@ final class ArrayKeyFirstLastRector extends AbstractRector
         'reset' => 'array_key_first',
         'end' => 'array_key_last',
     ];
+
+    /**
+     * @var BetterNodeFinder
+     */
+    private $betterNodeFinder;
+
+    public function __construct(BetterNodeFinder $betterNodeFinder)
+    {
+        $this->betterNodeFinder = $betterNodeFinder;
+    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -69,32 +81,52 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $previousExpression = $node->getAttribute(Attribute::PREVIOUS_EXPRESSION);
-        if ($previousExpression === null) {
+        if (! $this->isNames($node, ['reset', 'end'])) {
             return null;
         }
 
-        $previousFuncCall = $previousExpression->expr;
-        if (! $previousFuncCall instanceof FuncCall) {
+        $nextExpression = $this->getNextExpression($node);
+        if ($nextExpression === null) {
             return null;
         }
 
-        if (! $this->isNames($previousFuncCall, array_keys($this->previousToNewFunctions))) {
+        $resetOrEndFuncCall = $node;
+
+        /** @var FuncCall|null $keyFuncCall */
+        $keyFuncCall = $this->betterNodeFinder->findFirst($nextExpression, function (Node $node) use (
+            $resetOrEndFuncCall
+        ) {
+            if (! $node instanceof FuncCall) {
+                return false;
+            }
+
+            if (! $this->isName($node, 'key')) {
+                return false;
+            }
+
+            return $this->areNodesEqual($resetOrEndFuncCall->args[0], $node->args[0]);
+        });
+
+        if ($keyFuncCall === null) {
             return null;
         }
 
-        if (! $this->isName($node, 'key')) {
-            return null;
-        }
+        $newName = $this->previousToNewFunctions[$this->getName($node)];
+        $keyFuncCall->name = new Name($newName);
 
-        if (! $this->areNodesEqual($previousFuncCall->args[0], $node->args[0])) {
-            return null;
-        }
-
-        $this->removeNode($previousFuncCall);
-
-        $node->name = new Name($this->previousToNewFunctions[$this->getName($previousFuncCall)]);
+        $this->removeNode($node);
 
         return $node;
+    }
+
+    private function getNextExpression(Node $node): ?Node
+    {
+        /** @var Expression|null $currentExpression */
+        $currentExpression = $node->getAttribute(Attribute::CURRENT_EXPRESSION);
+        if ($currentExpression === null) {
+            return null;
+        }
+
+        return $currentExpression->getAttribute(Attribute::NEXT_NODE);
     }
 }

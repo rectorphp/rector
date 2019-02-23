@@ -2,15 +2,14 @@
 
 namespace Rector\Php\Rector\FuncCall;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\ClosureUse;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
@@ -18,9 +17,9 @@ use PhpParser\Node\Scalar\Encapsed;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
-use PhpParser\Parser;
-use Rector\Exception\ShouldNotHappenException;
+use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\PhpParser\Node\BetterNodeFinder;
+use Rector\PhpParser\Parser\InlineCodeParser;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -32,19 +31,19 @@ use Rector\RectorDefinition\RectorDefinition;
 final class CreateFunctionToAnonymousFunctionRector extends AbstractRector
 {
     /**
-     * @var Parser
-     */
-    private $parser;
-
-    /**
      * @var BetterNodeFinder
      */
     private $betterNodeFinder;
 
-    public function __construct(Parser $parser, BetterNodeFinder $betterNodeFinder)
+    /**
+     * @var InlineCodeParser
+     */
+    private $inlineCodeParser;
+
+    public function __construct(BetterNodeFinder $betterNodeFinder, InlineCodeParser $inlineCodeParser)
     {
-        $this->parser = $parser;
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->inlineCodeParser = $inlineCodeParser;
     }
 
     public function getDefinition(): RectorDefinition
@@ -121,11 +120,10 @@ CODE_SAMPLE
      */
     private function parseStringToParameters(Expr $expr): array
     {
-        $content = $this->stringify($expr);
-
+        $content = $this->inlineCodeParser->stringify($expr);
         $content = '<?php $value = function(' . $content . ') {};';
 
-        $nodes = $this->parser->parse($content);
+        $nodes = $this->inlineCodeParser->parse($content);
 
         return $nodes[0]->expr->expr->params;
     }
@@ -141,10 +139,9 @@ CODE_SAMPLE
             return [$this->createEval($node)];
         }
 
-        $node = $this->stringify($node);
-        $node = Strings::endsWith($node, ';') ? $node : $node . ';';
+        $node = $this->inlineCodeParser->stringify($node);
 
-        return (array) $this->parser->parse('<?php ' . $node);
+        return $this->inlineCodeParser->parse($node);
     }
 
     /**
@@ -162,6 +159,7 @@ CODE_SAMPLE
         $variableNodes = $this->betterNodeFinder->findInstanceOf($nodes, Variable::class);
 
         $filteredVariables = [];
+        $alreadyAssignedVariables = [];
         foreach ($variableNodes as $variableNode) {
             // "$this" is allowed
             if ($this->isName($variableNode, 'this')) {
@@ -169,7 +167,19 @@ CODE_SAMPLE
             }
 
             $variableName = $this->getName($variableNode);
+            if ($variableName === null) {
+                continue;
+            }
+
             if (in_array($variableName, $paramNames, true)) {
+                continue;
+            }
+
+            if ($variableNode->getAttribute(Attribute::PARENT_NODE) instanceof Assign) {
+                $alreadyAssignedVariables[] = $variableName;
+            }
+
+            if ($this->isNames($variableNode, $alreadyAssignedVariables)) {
                 continue;
             }
 
@@ -177,39 +187,6 @@ CODE_SAMPLE
         }
 
         return $filteredVariables;
-    }
-
-    /**
-     * @param string|Node $content
-     */
-    private function stringify($content): string
-    {
-        if (is_string($content)) {
-            return $content;
-        }
-
-        if ($content instanceof String_) {
-            return $content->value;
-        }
-
-        if ($content instanceof Encapsed) {
-            // remove "
-            $content = trim($this->print($content), '""');
-            // use \$ → $
-            $content = Strings::replace($content, '#\\\\\$#', '$');
-            // use \'{$...}\' → $...
-            return Strings::replace($content, '#\'{(\$.*?)}\'#', '$1');
-        }
-
-        if ($content instanceof Concat) {
-            return $this->stringify($content->left) . $this->stringify($content->right);
-        }
-
-        if ($content instanceof Variable || $content instanceof PropertyFetch) {
-            return $this->print($content);
-        }
-
-        throw new ShouldNotHappenException(get_class($content) . ' ' . __METHOD__);
     }
 
     private function createEval(Expr $expr): Expression
