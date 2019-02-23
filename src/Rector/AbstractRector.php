@@ -81,6 +81,8 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         }
 
         $originalNode = $node;
+        $originalComment = $node->getComments();
+        $originalDocComment = $node->getDocComment();
         $node = $this->refactor($node);
         if ($node === null) {
             return null;
@@ -91,6 +93,9 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
             $this->mirrorAttributes($originalNode, $node);
 
             $this->keepFileInfoAttribute($node, $originalNode);
+            $this->notifyNodeChangeFileInfo($node);
+        // doc block has changed
+        } elseif ($node->getComments() !== $originalComment || $node->getDocComment() !== $originalDocComment) {
             $this->notifyNodeChangeFileInfo($node);
         }
 
