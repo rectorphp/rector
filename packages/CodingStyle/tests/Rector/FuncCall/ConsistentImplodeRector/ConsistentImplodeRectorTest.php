@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Celebrity\Tests\Rector\FuncCall\ConsistentImplodeRector;
+namespace Rector\CodingStyle\Tests\Rector\FuncCall\ConsistentImplodeRector;
 
-use Rector\Celebrity\Rector\FuncCall\ConsistentImplodeRector;
+use Rector\CodingStyle\Rector\FuncCall\ConsistentImplodeRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ConsistentImplodeRectorTest extends AbstractRectorTestCase
