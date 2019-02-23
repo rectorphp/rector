@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Rector\CodingStyle\Tests\Rector\FuncCall\SetTypeToCastRector;
+namespace Rector\Celebrity\Tests\Rector\FuncCall\SetTypeToCastRector;
 
-use Rector\CodingStyle\Rector\FuncCall\SetTypeToCastRector;
+use Rector\Celebrity\Rector\FuncCall\SetTypeToCastRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class SetTypeToCastRectorTest extends AbstractRectorTestCase

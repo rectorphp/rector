@@ -5,3 +5,6 @@ services:
     Rector\Rector\Function_\FunctionReplaceRector:
         split: 'explode'
         join: 'implode'
+
+    # settype($value, 'int') → (int) $value
+    Rector\Celebrity\Rector\FuncCall\SetTypeToCastRector: ~
