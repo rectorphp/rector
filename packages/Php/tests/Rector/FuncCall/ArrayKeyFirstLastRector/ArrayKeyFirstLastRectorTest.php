@@ -10,9 +10,9 @@ final class ArrayKeyFirstLastRectorTest extends AbstractRectorTestCase
     public function test(): void
     {
         $this->doTestFiles([
-            __DIR__ . '/Fixture/fixture.php.inc',
-            __DIR__ . '/Fixture/fixture2.php.inc',
-            __DIR__ . '/Fixture/fixture3.php.inc',
+            __DIR__ . '/Fixture/array_key_first.php.inc',
+            __DIR__ . '/Fixture/array_key_last.php.inc',
+            __DIR__ . '/Fixture/both.php.inc',
         ]);
     }
 
