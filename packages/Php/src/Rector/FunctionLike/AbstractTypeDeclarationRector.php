@@ -18,7 +18,6 @@ use Rector\NodeTypeResolver\Application\ClassLikeNodeCollector;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\NodeTypeResolver\Php\AbstractTypeInfo;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
-use Rector\Php\PhpTypeSupport;
 use Rector\PhpParser\Node\Maintainer\FunctionLikeMaintainer;
 use Rector\Rector\AbstractRector;
 
@@ -53,19 +52,11 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
     public function __construct(
         DocBlockAnalyzer $docBlockAnalyzer,
         ClassLikeNodeCollector $classLikeNodeCollector,
-        FunctionLikeMaintainer $functionLikeMaintainer,
-        bool $enableObjectType = false
+        FunctionLikeMaintainer $functionLikeMaintainer
     ) {
         $this->docBlockAnalyzer = $docBlockAnalyzer;
         $this->classLikeNodeCollector = $classLikeNodeCollector;
         $this->functionLikeMaintainer = $functionLikeMaintainer;
-
-        if ($enableObjectType) {
-            PhpTypeSupport::enableType('object');
-        } else {
-            // needed for multiple calls with different config
-            PhpTypeSupport::disableType('object');
-        }
     }
 
     /**

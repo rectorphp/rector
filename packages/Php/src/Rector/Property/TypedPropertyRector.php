@@ -13,7 +13,6 @@ use PhpParser\Node\Stmt\Property;
 use Rector\NodeTypeResolver\ComplexNodeTypeResolver;
 use Rector\NodeTypeResolver\Php\VarTypeInfo;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
-use Rector\Php\PhpTypeSupport;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -45,12 +44,11 @@ final class TypedPropertyRector extends AbstractRector
      */
     private $complexNodeTypeResolver;
 
-    public function __construct(DocBlockAnalyzer $docBlockAnalyzer, ComplexNodeTypeResolver $complexNodeTypeResolver)
-    {
+    public function __construct(
+        DocBlockAnalyzer $docBlockAnalyzer,
+        ComplexNodeTypeResolver $complexNodeTypeResolver
+    ) {
         $this->docBlockAnalyzer = $docBlockAnalyzer;
-
-        // PHP 7.4 already knows "object"
-        PhpTypeSupport::enableType('object');
         $this->complexNodeTypeResolver = $complexNodeTypeResolver;
     }
 
@@ -94,6 +92,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $this->isAtLeastPhpVersion('7.4')) {
+            return null;
+        }
+
         if ($node->type !== null) {
             return null;
         }

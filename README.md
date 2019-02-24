@@ -93,6 +93,13 @@ parameters:
         - 'Rector\CodeQuality\Rector\If_\SimplifyIfReturnBoolRector'
 ```
 
+By default Rector uses language features of your PHP version. If you you want to use different PHP version than your system, put it in config:
+
+```yaml
+parameters:
+    php_version_features: '7.2' # your version 7.3
+```
+
 ## Running Rector
 
 ### A. Prepared Sets

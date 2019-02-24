@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\Return_;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\NodeTypeResolver\NodeTypeAnalyzer;
 use Rector\NodeTypeResolver\Php\ReturnTypeInfo;
+use Rector\Php\TypeAnalyzer;
 use Rector\PhpParser\Node\BetterNodeFinder;
 
 final class FunctionLikeMaintainer
@@ -24,10 +25,19 @@ final class FunctionLikeMaintainer
      */
     private $nodeTypeAnalyzer;
 
-    public function __construct(BetterNodeFinder $betterNodeFinder, NodeTypeAnalyzer $nodeTypeAnalyzer)
-    {
+    /**
+     * @var TypeAnalyzer
+     */
+    private $typeAnalyzer;
+
+    public function __construct(
+        BetterNodeFinder $betterNodeFinder,
+        NodeTypeAnalyzer $nodeTypeAnalyzer,
+        TypeAnalyzer $typeAnalyzer
+    ) {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeTypeAnalyzer = $nodeTypeAnalyzer;
+        $this->typeAnalyzer = $typeAnalyzer;
     }
 
     /**
@@ -56,12 +66,12 @@ final class FunctionLikeMaintainer
         }
 
         if ($isVoid) {
-            return new ReturnTypeInfo(['void']);
+            return new ReturnTypeInfo(['void'], $this->typeAnalyzer);
         }
 
         $types = array_filter($types);
 
-        return new ReturnTypeInfo($types);
+        return new ReturnTypeInfo($types, $this->typeAnalyzer);
     }
 
     private function shouldSkip(FunctionLike $functionLike): bool

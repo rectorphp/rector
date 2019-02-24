@@ -84,10 +84,6 @@ parameters:
             - 'packages/NetteToSymfony/src/Event/EventInfosFactory.php'
 
         Symplify\CodingStandard\Sniffs\CleanCode\ForbiddenStaticFunctionSniff:
-            # required by Composer interface
-            - 'src/Php/TypeAnalyzer.php'
-            # exclusive static config for type support
-            - 'src/Php/PhpTypeSupport.php'
             - 'src/Util/*.php'
 
         Symplify\CodingStandard\Fixer\Naming\PropertyNameMatchingTypeFixer:

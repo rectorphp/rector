@@ -7,7 +7,6 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
-use Rector\Php\PhpTypeSupport;
 use Rector\Php\TypeAnalyzer;
 use Traversable;
 
@@ -34,6 +33,11 @@ abstract class AbstractTypeInfo
     protected $fqnTypes = [];
 
     /**
+     * @var TypeAnalyzer
+     */
+    protected $typeAnalyzer;
+
+    /**
      * @var string[]
      */
     private $iterableUnionTypes = [Traversable::class, '\Traversable', 'array'];
@@ -47,8 +51,13 @@ abstract class AbstractTypeInfo
      * @param string[] $types
      * @param string[] $fqnTypes
      */
-    public function __construct(array $types, array $fqnTypes = [], bool $allowTypedArrays = false)
-    {
+    public function __construct(
+        array $types,
+        TypeAnalyzer $typeAnalyzer,
+        array $fqnTypes = [],
+        bool $allowTypedArrays = false
+    ) {
+        $this->typeAnalyzer = $typeAnalyzer;
         $this->types = $this->analyzeAndNormalizeTypes($types, $allowTypedArrays);
 
         // fallback
@@ -89,7 +98,7 @@ abstract class AbstractTypeInfo
 
         $type = $types[0];
 
-        if (TypeAnalyzer::isPhpReservedType($type)) {
+        if ($this->typeAnalyzer->isPhpReservedType($type)) {
             if ($this->isNullable) {
                 return new NullableType($type);
             }
@@ -175,13 +184,13 @@ abstract class AbstractTypeInfo
                 continue;
             }
 
-            if ($type === 'object' && PhpTypeSupport::isTypeSupported('object') === false) {
+            if ($type === 'object' && $this->typeAnalyzer->isPhpSupported('object') === false) {
                 $this->removedTypes[] = $type;
                 unset($types[$i]);
                 continue;
             }
 
-            $types[$i] = TypeAnalyzer::normalizeType($type, $allowTypedArrays);
+            $types[$i] = $this->typeAnalyzer->normalizeType($type, $allowTypedArrays);
         }
 
         // remove undesired types
@@ -220,7 +229,7 @@ abstract class AbstractTypeInfo
 
     private function normalizeCasing(string $type): string
     {
-        if (TypeAnalyzer::isPhpReservedType($type)) {
+        if ($this->typeAnalyzer->isPhpReservedType($type)) {
             return strtolower($type);
         }
 

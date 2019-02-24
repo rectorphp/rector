@@ -8,3 +8,4 @@ parameters:
     exclude_paths: []
     exclude_rectors: []
     autoload_paths: []
+    php_version_features: ~ # what PHP version should be used for features, local PHP version is used by default

@@ -8,6 +8,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\NodeTypeResolver\Php\ParamTypeInfo;
+use Rector\Php\TypeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -26,11 +27,17 @@ final class ParentTypehintedArgumentRector extends AbstractRector
     private $typehintForArgumentByMethodAndClass = [];
 
     /**
+     * @var TypeAnalyzer
+     */
+    private $typeAnalyzer;
+
+    /**
      * @param mixed[] $typehintForArgumentByMethodAndClass
      */
-    public function __construct(array $typehintForArgumentByMethodAndClass)
+    public function __construct(array $typehintForArgumentByMethodAndClass, TypeAnalyzer $typeAnalyzer)
     {
         $this->typehintForArgumentByMethodAndClass = $typehintForArgumentByMethodAndClass;
+        $this->typeAnalyzer = $typeAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -118,7 +125,7 @@ CODE_SAMPLE
                 if ($type === '') { // remove type
                     $param->type = null;
                 } else {
-                    $paramTypeInfo = new ParamTypeInfo($parameter, [$type]);
+                    $paramTypeInfo = new ParamTypeInfo($parameter, $this->typeAnalyzer, [$type]);
                     $param->type = $paramTypeInfo->getFqnTypeNode();
                 }
             }

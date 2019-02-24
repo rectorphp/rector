@@ -31,7 +31,7 @@ namespace Rector\Php\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixtur
 /** @return iterable */ function my_foo2($value): iterable {
     return $value;
 }
-/** @return object */ function my_foo3($value) {
+/** @return object */ function my_foo3($value): object {
     return $value;
 }
 /** @return int */ function my_foo4($value): int {

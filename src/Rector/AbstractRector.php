@@ -12,6 +12,7 @@ use Rector\Application\RemovedFilesCollector;
 use Rector\Contract\Rector\PhpRectorInterface;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\Php\PhpVersionProvider;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
@@ -47,18 +48,25 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     private $valueResolver;
 
     /**
+     * @var PhpVersionProvider
+     */
+    private $phpVersionProvider;
+
+    /**
      * @required
      */
     public function setAbstractRectorDependencies(
         AppliedRectorCollector $appliedRectorCollector,
         SymfonyStyle $symfonyStyle,
         ValueResolver $valueResolver,
-        RemovedFilesCollector $removedFilesCollector
+        RemovedFilesCollector $removedFilesCollector,
+        PhpVersionProvider $phpVersionProvider
     ): void {
         $this->appliedRectorCollector = $appliedRectorCollector;
         $this->symfonyStyle = $symfonyStyle;
         $this->valueResolver = $valueResolver;
         $this->removedFilesCollector = $removedFilesCollector;
+        $this->phpVersionProvider = $phpVersionProvider;
     }
 
     /**
@@ -178,6 +186,11 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         }
 
         $this->appliedRectorCollector->addRectorClass(static::class, $fileInfo);
+    }
+
+    protected function isAtLeastPhpVersion(string $version): bool
+    {
+        return $this->phpVersionProvider->isAtLeast($version);
     }
 
     private function isMatchingNodeType(string $nodeClass): bool

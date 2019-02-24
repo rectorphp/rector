@@ -45,6 +45,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $this->isAtLeastPhpVersion('7.4')) {
+            return null;
+        }
+
         if (! $node->expr instanceof Coalesce) {
             return null;
         }

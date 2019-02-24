@@ -6,37 +6,47 @@ use Nette\Utils\Strings;
 
 final class TypeAnalyzer
 {
+    /**
+     * @var string[]
+     */
+    private $phpSupportedTypes = [
+        'string',
+        'bool',
+        'int',
+        'null',
+        'array',
+        'false',
+        'true',
+        'mixed',
+        'iterable',
+        'float',
+        'self',
+        'parent',
+        'callable',
+        'void',
+    ];
+
+    public function __construct(PhpVersionProvider $phpVersionProvider)
+    {
+        if ($phpVersionProvider->isAtLeast('7.2')) {
+            $this->phpSupportedTypes[] = 'object';
+        }
+    }
+
     public function isNullableType(string $type): bool
     {
         return Strings::startsWith($type, '?');
     }
 
-    public static function isPhpReservedType(string $type): bool
+    public function isPhpReservedType(string $type): bool
     {
-        return in_array(
-            strtolower($type),
-            [
-                'string',
-                'bool',
-                'null',
-                'false',
-                'true',
-                'mixed',
-                'object',
-                'iterable',
-                'array',
-                'float',
-                'int',
-                'self',
-                'parent',
-                'callable',
-                'void',
-            ],
-            true
-        );
+        $type = strtolower($type);
+        $extraTypes = ['object'];
+
+        return in_array($type, array_merge($this->phpSupportedTypes, $extraTypes), true);
     }
 
-    public static function normalizeType(string $type, bool $allowTypedArrays = false): string
+    public function normalizeType(string $type, bool $allowTypedArrays = false): string
     {
         // reduction needed for typehint
         if ($allowTypedArrays === false) {
@@ -45,26 +55,31 @@ final class TypeAnalyzer
             }
         }
 
-        if ($type === 'boolean') {
+        if (strtolower($type) === 'boolean') {
             return 'bool';
         }
 
-        if (in_array($type, ['double', 'real'], true)) {
+        if (in_array(strtolower($type), ['double', 'real'], true)) {
             return 'float';
         }
 
-        if ($type === 'integer') {
+        if (strtolower($type) === 'integer') {
             return 'int';
         }
 
-        if ($type === 'callback') {
+        if (strtolower($type) === 'callback') {
             return 'callable';
         }
 
-        if (Strings::match($type, '#array<(.*?)>#')) {
+        if (Strings::match(strtolower($type), '#array<(.*?)>#')) {
             return 'array';
         }
 
         return $type;
+    }
+
+    public function isPhpSupported(string $type): bool
+    {
+        return in_array($type, $this->phpSupportedTypes, true);
     }
 }

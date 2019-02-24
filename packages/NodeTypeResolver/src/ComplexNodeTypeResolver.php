@@ -11,6 +11,7 @@ use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\NodeTypeResolver\Node\NodeToStringTypeResolver;
 use Rector\NodeTypeResolver\Php\VarTypeInfo;
+use Rector\Php\TypeAnalyzer;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 
@@ -36,16 +37,23 @@ final class ComplexNodeTypeResolver
      */
     private $nodeTypeAnalyzer;
 
+    /**
+     * @var TypeAnalyzer
+     */
+    private $typeAnalyzer;
+
     public function __construct(
         NodeToStringTypeResolver $nodeToStringTypeResolver,
         NameResolver $nameResolver,
         BetterNodeFinder $betterNodeFinder,
-        NodeTypeAnalyzer $nodeTypeAnalyzer
+        NodeTypeAnalyzer $nodeTypeAnalyzer,
+        TypeAnalyzer $typeAnalyzer
     ) {
         $this->nodeToStringTypeResolver = $nodeToStringTypeResolver;
         $this->nameResolver = $nameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeTypeAnalyzer = $nodeTypeAnalyzer;
+        $this->typeAnalyzer = $typeAnalyzer;
     }
 
     /**
@@ -91,6 +99,6 @@ final class ComplexNodeTypeResolver
 
         $types = array_filter($types);
 
-        return new VarTypeInfo($types, $types, true);
+        return new VarTypeInfo($types, $this->typeAnalyzer, $types, true);
     }
 }

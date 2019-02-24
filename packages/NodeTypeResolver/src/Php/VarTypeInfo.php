@@ -2,8 +2,6 @@
 
 namespace Rector\NodeTypeResolver\Php;
 
-use Rector\Php\TypeAnalyzer;
-
 final class VarTypeInfo extends AbstractTypeInfo
 {
     /**
@@ -30,7 +28,7 @@ final class VarTypeInfo extends AbstractTypeInfo
             return true;
         }
 
-        return TypeAnalyzer::isPhpReservedType($type);
+        return $this->typeAnalyzer->isPhpSupported($type);
     }
 
     public function getType(): ?string

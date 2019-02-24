@@ -81,6 +81,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $this->isAtLeastPhpVersion('5.3')) {
+            return null;
+        }
+
         if (! $this->isNames($node, ['reset', 'end'])) {
             return null;
         }

@@ -22,7 +22,7 @@ namespace Rector\Php\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixtur
 
 class A {
     /** @return object */
-    public function getObject($value) {
+    public function getObject($value): object {
         return $value;
     }
 }
