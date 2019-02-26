@@ -22,3 +22,4 @@ services:
     Rector\Php\Rector\FuncCall\ParseStrWithResultArgumentRector: ~
     Rector\Php\Rector\FuncCall\StringsAssertNakedRector: ~
     Rector\Php\Rector\FuncCall\CreateFunctionToAnonymousFunctionRector: ~
+    Rector\Php\Rector\FuncCall\StringifyDefineRector: ~
