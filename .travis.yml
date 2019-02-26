@@ -7,7 +7,7 @@ matrix:
         - php: 7.1
           env: COMPOSER_FLAGS="--prefer-lowest"
         - php: 7.2
-          env: COVERAGE=true
+          env: COVERAGE=true PHPUNIT_FLAGS="--coverage-clover coverage.xml"
         - php: 7.2
           env: STANDALONE=true
         - php: 7.3
@@ -25,7 +25,7 @@ before_script:
     - set -e
 
 script:
-    - vendor/bin/phpunit
+    - vendor/bin/phpunit $PHPUNIT_FLAGS
 
     - |
       if [[ $STATIC_ANALYSIS == true ]]; then
@@ -68,7 +68,6 @@ after_script:
     # Coverage
     - |
       if [[ $COVERAGE == true && $TRAVIS_BRANCH == "master" && $TRAVIS_PULL_REQUEST == "false" ]]; then
-          vendor/bin/phpunit --coverage-clover coverage.xml
           wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.1.0/php-coveralls.phar
           php php-coveralls.phar --verbose
       fi
