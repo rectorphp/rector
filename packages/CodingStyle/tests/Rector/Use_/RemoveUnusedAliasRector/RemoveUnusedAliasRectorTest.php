@@ -21,6 +21,7 @@ final class RemoveUnusedAliasRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Fixture/unneeded_trait_name.php.inc',
             # interfaces
             __DIR__ . '/Fixture/interace_extending.php.inc',
+            __DIR__ . '/Fixture/doc_block.php.inc',
         ]);
     }
 

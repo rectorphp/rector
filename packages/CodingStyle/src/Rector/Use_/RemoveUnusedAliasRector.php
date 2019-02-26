@@ -2,6 +2,7 @@
 
 namespace Rector\CodingStyle\Rector\Use_;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Identifier;
@@ -18,6 +19,7 @@ use PhpParser\NodeVisitor\NameResolver;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\PhpParser\Node\BetterNodeFinder;
+use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -30,13 +32,24 @@ final class RemoveUnusedAliasRector extends AbstractRector
     private $resolvedNodeNames = [];
 
     /**
+     * @var string[]
+     */
+    private $resolvedDocPossibleAliases = [];
+
+    /**
      * @var BetterNodeFinder
      */
     private $betterNodeFinder;
 
-    public function __construct(BetterNodeFinder $betterNodeFinder)
+    /**
+     * @var CallableNodeTraverser
+     */
+    private $callableNodeTraverser;
+
+    public function __construct(BetterNodeFinder $betterNodeFinder, CallableNodeTraverser $callableNodeTraverser)
     {
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->callableNodeTraverser = $callableNodeTraverser;
     }
 
     public function getDefinition(): RectorDefinition
@@ -94,6 +107,11 @@ CODE_SAMPLE
                 continue;
             }
 
+            // part of some @Doc annotation
+            if (in_array($aliasName, $this->resolvedDocPossibleAliases, true)) {
+                continue;
+            }
+
             // only last name is used → no need for alias
             if (isset($this->resolvedNodeNames[$lastName])) {
                 $use->alias = null;
@@ -114,9 +132,10 @@ CODE_SAMPLE
     {
         $searchNode = $this->resolveSearchNode($node);
 
-        $this->resolvedUsedNames($searchNode);
+        $this->resolveUsedNames($searchNode);
         $this->resolveUsedClassNames($searchNode);
-        $this->resolvedTraitUseNames($searchNode);
+        $this->resolveTraitUseNames($searchNode);
+        $this->resolveDocPossibleAliases($searchNode);
     }
 
     /**
@@ -215,7 +234,7 @@ CODE_SAMPLE
         throw new ShouldNotHappenException();
     }
 
-    private function resolvedUsedNames(Node $searchNode): void
+    private function resolveUsedNames(Node $searchNode): void
     {
         /** @var Name[] $namedNodes */
         $namedNodes = $this->betterNodeFinder->findInstanceOf($searchNode, Name::class);
@@ -251,7 +270,7 @@ CODE_SAMPLE
         }
     }
 
-    private function resolvedTraitUseNames(Node $searchNode): void
+    private function resolveTraitUseNames(Node $searchNode): void
     {
         /** @var Identifier[] $identifierNodes */
         $identifierNodes = $this->betterNodeFinder->findInstanceOf($searchNode, Identifier::class);
@@ -264,5 +283,19 @@ CODE_SAMPLE
 
             $this->resolvedNodeNames[$identifierNode->name][] = [$identifierNode, $parentNode];
         }
+    }
+
+    private function resolveDocPossibleAliases(Node $searchNode): void
+    {
+        $this->callableNodeTraverser->traverseNodesWithCallable([$searchNode], function (Node $node): void {
+            if ($node->getDocComment() === null) {
+                return;
+            }
+
+            $matches = Strings::matchAll($node->getDocComment()->getText(), '#\@(?<possible_alias>.*?)\\\\#s');
+            foreach ($matches as $match) {
+                $this->resolvedDocPossibleAliases[] = $match['possible_alias'];
+            }
+        });
     }
 }
