@@ -6,7 +6,6 @@ use Nette\Utils\Strings;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Exception\MissingTagException;
@@ -16,6 +15,7 @@ use Rector\NodeTypeResolver\Php\ReturnTypeInfo;
 use Rector\NodeTypeResolver\Php\VarTypeInfo;
 use Rector\Php\TypeAnalyzer;
 use Symplify\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareParamTagValueNode;
+use Symplify\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwarePhpDocNode;
 use Symplify\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
 use Symplify\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareVarTagValueNode;
 use Symplify\BetterPhpDocParser\Attributes\Ast\PhpDoc\Type\AttributeAwareIdentifierTypeNode;
@@ -104,7 +104,7 @@ final class DocBlockManipulator
             $phpDocNode->children[] = $phpDocChildNode;
             $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
         } else {
-            $phpDocNode = new PhpDocNode([$phpDocChildNode]);
+            $phpDocNode = new AttributeAwarePhpDocNode([$phpDocChildNode]);
             $node->setDocComment(new Doc($phpDocNode->__toString()));
         }
     }
