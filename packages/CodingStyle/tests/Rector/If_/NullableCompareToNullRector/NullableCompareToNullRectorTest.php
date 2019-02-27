@@ -13,6 +13,7 @@ final class NullableCompareToNullRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Fixture/fixture.php.inc',
             __DIR__ . '/Fixture/fixture2.php.inc',
             __DIR__ . '/Fixture/fixture3.php.inc',
+            __DIR__ . '/Fixture/nullable_scalars.php.inc',
         ]);
     }
 

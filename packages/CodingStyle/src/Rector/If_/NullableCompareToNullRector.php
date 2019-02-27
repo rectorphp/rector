@@ -7,6 +7,15 @@ use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Stmt\If_;
+use PHPStan\Type\ArrayType;
+use PHPStan\Type\FloatType;
+use PHPStan\Type\IntegerType;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\NullType;
+use PHPStan\Type\Php\IsNumericFunctionTypeSpecifyingExtension;
+use PHPStan\Type\StringType;
+use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -54,18 +63,56 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->isNullableType($node->cond)) {
-            $node->cond = new NotIdentical($node->cond, $this->createNull());
-
-            return $node;
-        }
-
-        if ($node->cond instanceof BooleanNot && $this->isNullableType($node->cond->expr)) {
+        if ($node->cond instanceof BooleanNot && $this->isNullableNonScalarType($node->cond->expr)) {
             $node->cond = new Identical($node->cond->expr, $this->createNull());
 
             return $node;
         }
 
+        if ($this->isNullableNonScalarType($node->cond)) {
+            $node->cond = new NotIdentical($node->cond, $this->createNull());
+
+            return $node;
+        }
+
         return null;
+    }
+
+    private function isNullableNonScalarType(Node $node): bool
+    {
+        $staticType = $this->getStaticType($node);
+        if ($staticType === null) {
+            return false;
+        }
+
+        if ($staticType instanceof UnionType) {
+            // is non-nullable?
+            if ($staticType->isSuperTypeOf(new NullType())->no()) {
+                return false;
+            }
+
+            // is array?
+            if ($staticType->isSuperTypeOf(new ArrayType(new MixedType(), new MixedType()))->yes()) {
+                return false;
+            }
+
+            // is string?
+            if ($staticType->isSuperTypeOf(new StringType())->yes()) {
+                return false;
+            }
+
+            // is number?
+            if ($staticType->isSuperTypeOf(new IntegerType())->yes()) {
+                return false;
+            }
+
+            if ($staticType->isSuperTypeOf(new FloatType())->yes()) {
+                return false;
+            }
+
+            return true;
+        }
+
+        return false;
     }
 }
