@@ -12,3 +12,4 @@ services:
     Rector\DeadCode\Rector\ClassConst\RemoveUnusedPrivateConstantRector: ~
     Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPrivateMethodRector: ~
     Rector\DeadCode\Rector\FunctionLike\RemoveCodeAfterReturnRector: ~
+    Rector\DeadCode\Rector\ClassMethod\RemoveDeadConstructorRector: ~
