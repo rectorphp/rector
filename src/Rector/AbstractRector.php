@@ -88,7 +88,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
             return null;
         }
 
-        $originalNode = $node;
+        $originalNode = clone $node;
         $originalComment = $node->getComments();
         $originalDocComment = $node->getDocComment();
         $node = $this->refactor($node);
