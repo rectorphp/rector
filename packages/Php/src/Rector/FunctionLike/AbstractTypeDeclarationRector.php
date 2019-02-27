@@ -69,7 +69,7 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
 
     protected function isChangeVendorLockedIn(ClassMethod $classMethod, int $paramPosition): bool
     {
-        if ($this->hasParentClassOrImplementsInterface($classMethod) === false) {
+        if (! $this->hasParentClassOrImplementsInterface($classMethod)) {
             return false;
         }
 

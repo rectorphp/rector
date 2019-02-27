@@ -111,9 +111,9 @@ CODE_SAMPLE
 
             // already set → skip
             $hasNewType = false;
-            if ($paramNode->type) {
+            if ($paramNode->type !== null) {
                 $hasNewType = $paramNode->type->getAttribute(self::HAS_NEW_INHERITED_TYPE, false);
-                if ($hasNewType === false) {
+                if (! $hasNewType) {
                     continue;
                 }
             }
@@ -127,7 +127,7 @@ CODE_SAMPLE
 
             $paramTypeInfo = $paramTagInfos[$paramNodeName];
 
-            if ($paramTypeInfo->isTypehintAble() === false) {
+            if (! $paramTypeInfo->isTypehintAble()) {
                 continue;
             }
 

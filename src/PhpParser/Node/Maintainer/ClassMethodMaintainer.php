@@ -69,12 +69,12 @@ final class ClassMethodMaintainer
     public function hasParentMethodOrInterfaceMethod(ClassMethod $classMethod): bool
     {
         $class = $classMethod->getAttribute(Attribute::CLASS_NAME);
-        if (is_string($class) === false) {
+        if (! is_string($class)) {
             return false;
         }
 
         $method = $classMethod->getAttribute(Attribute::METHOD_NAME);
-        if (is_string($method) === false) {
+        if (! is_string($method)) {
             return false;
         }
 

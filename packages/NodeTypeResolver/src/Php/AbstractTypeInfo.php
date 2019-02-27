@@ -184,7 +184,7 @@ abstract class AbstractTypeInfo
                 continue;
             }
 
-            if ($type === 'object' && $this->typeAnalyzer->isPhpSupported('object') === false) {
+            if ($type === 'object' && ! $this->typeAnalyzer->isPhpSupported('object')) {
                 $this->removedTypes[] = $type;
                 unset($types[$i]);
                 continue;

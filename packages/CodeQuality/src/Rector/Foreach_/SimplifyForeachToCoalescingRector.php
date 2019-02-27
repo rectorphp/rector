@@ -80,7 +80,7 @@ CODE_SAMPLE
 
         /** @var Return_|Assign|null $returnOrAssignNode */
         $returnOrAssignNode = $this->matchReturnOrAssignNode($node);
-        if (! $returnOrAssignNode) {
+        if ($returnOrAssignNode === null) {
             return null;
         }
 

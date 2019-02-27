@@ -134,11 +134,11 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($this->hasOnlyStatementAssign($ifNode) === false) {
+        if (! $this->hasOnlyStatementAssign($ifNode)) {
             return true;
         }
 
-        if ($this->hasOnlyStatementAssign($ifNode->else) === false) {
+        if (! $this->hasOnlyStatementAssign($ifNode->else)) {
             return true;
         }
 

@@ -74,7 +74,7 @@ final class InlineCodeParser
             // use \$ → $
             $content = Strings::replace($content, '#\\\\\$#', '$');
             // use \'{$...}\' → $...
-            return Strings::replace($content, '#\'{(\$.*?)}\'#', '$1');
+            return Strings::replace($content, "#'{(\\\$.*?)}'#", '$1');
         }
 
         if ($content instanceof Concat) {

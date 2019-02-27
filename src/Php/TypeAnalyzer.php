@@ -49,7 +49,7 @@ final class TypeAnalyzer
     public function normalizeType(string $type, bool $allowTypedArrays = false): string
     {
         // reduction needed for typehint
-        if ($allowTypedArrays === false) {
+        if (! $allowTypedArrays) {
             if (Strings::endsWith($type, '[]')) {
                 return 'array';
             }

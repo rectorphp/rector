@@ -94,7 +94,7 @@ CODE_SAMPLE
                 return null;
             }
 
-            if ($this->isClassToInterfaceValidChange($node, $newName) === false) {
+            if (! $this->isClassToInterfaceValidChange($node, $newName)) {
                 return null;
             }
 

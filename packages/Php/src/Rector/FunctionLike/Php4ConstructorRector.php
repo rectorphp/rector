@@ -192,12 +192,12 @@ CODE_SAMPLE
             $node->class = new Name('parent');
         }
 
-        if ($this->isName($node->class, 'parent') === false) {
+        if (! $this->isName($node->class, 'parent')) {
             return;
         }
 
         // it's not a parent PHP 4 constructor call
-        if ($this->isNameInsensitive($node, $parentClassName) === false) {
+        if (! $this->isNameInsensitive($node, $parentClassName)) {
             return;
         }
 

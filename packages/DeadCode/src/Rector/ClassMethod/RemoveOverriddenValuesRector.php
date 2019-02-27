@@ -234,7 +234,7 @@ CODE_SAMPLE
             $previousNode = null;
 
             foreach ($nodesByTypeAndPosition as $nodeByTypeAndPosition) {
-                if ($nodeByTypeAndPosition->isName($assignedVariableName) === false) {
+                if (! $nodeByTypeAndPosition->isName($assignedVariableName)) {
                     continue;
                 }
 
@@ -261,9 +261,9 @@ CODE_SAMPLE
             return false;
         }
 
-        if ($previousNode->isType(VariableNodeUseInfo::TYPE_ASSIGN) === false || $nodeByTypeAndPosition->isType(
+        if (! $previousNode->isType(VariableNodeUseInfo::TYPE_ASSIGN) || ! $nodeByTypeAndPosition->isType(
             VariableNodeUseInfo::TYPE_ASSIGN
-        ) === false) {
+        )) {
             return false;
         }
 

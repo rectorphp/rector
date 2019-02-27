@@ -74,7 +74,7 @@ final class FqnNamePhpDocNodeDecorator implements PhpDocNodeDecoratorInterface
         $this->nodeTraverser->traverseWithCallable(
             $attributeAwarePhpDocNode,
             function (AttributeAwareNodeInterface $attributeAwarePhpDocNode) {
-                if ($this->isTypeAwareNode($attributeAwarePhpDocNode) === false) {
+                if (! $this->isTypeAwareNode($attributeAwarePhpDocNode)) {
                     return $attributeAwarePhpDocNode;
                 }
 
