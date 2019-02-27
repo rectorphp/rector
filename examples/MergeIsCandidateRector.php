@@ -35,7 +35,7 @@ use PhpParser\Node\Stmt\Return_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
+use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -49,9 +49,9 @@ final class MergeIsCandidateRector extends AbstractRector
     private $builderFactory;
 
     /**
-     * @var DocBlockAnalyzer
+     * @var DocBlockManipulator
      */
-    private $docBlockAnalyzer;
+    private $docBlockManipulator;
 
     /**
      * @var CallableNodeTraverser
@@ -60,11 +60,11 @@ final class MergeIsCandidateRector extends AbstractRector
 
     public function __construct(
         BuilderFactory $builderFactory,
-        DocBlockAnalyzer $docBlockAnalyzer,
+        DocBlockManipulator $docBlockManipulator,
         CallableNodeTraverser $callableNodeTraverser
     ) {
         $this->builderFactory = $builderFactory;
-        $this->docBlockAnalyzer = $docBlockAnalyzer;
+        $this->docBlockManipulator = $docBlockManipulator;
         $this->callableNodeTraverser = $callableNodeTraverser;
     }
 
@@ -207,11 +207,11 @@ final class MergeIsCandidateRector extends AbstractRector
     private function resolveSingleParamTypesFromClassMethod(ClassMethod $classMethod): array
     {
         // add getNodeType() by $refactorClassMethod "@param" doc type
-        if (! $this->docBlockAnalyzer->hasTag($classMethod, 'param')) {
+        if (! $this->docBlockManipulator->hasTag($classMethod, 'param')) {
             return [];
         }
 
-        $paramNode = $this->docBlockAnalyzer->getTagByName($classMethod, 'param');
+        $paramNode = $this->docBlockManipulator->getTagByName($classMethod, 'param');
 
         /** @var ParamTagValueNode $paramTagValueNode */
         $paramTagValueNode = $paramNode->value;

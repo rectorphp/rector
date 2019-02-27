@@ -11,7 +11,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
-use Rector\PhpParser\Node\Maintainer\BinaryOpMaintainer;
+use Rector\PhpParser\Node\Manipulator\BinaryOpManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -19,13 +19,13 @@ use Rector\RectorDefinition\RectorDefinition;
 final class GetClassToInstanceOfRector extends AbstractRector
 {
     /**
-     * @var BinaryOpMaintainer
+     * @var BinaryOpManipulator
      */
-    private $binaryOpMaintainer;
+    private $binaryOpManipulator;
 
-    public function __construct(BinaryOpMaintainer $binaryOpMaintainer)
+    public function __construct(BinaryOpManipulator $binaryOpManipulator)
     {
-        $this->binaryOpMaintainer = $binaryOpMaintainer;
+        $this->binaryOpManipulator = $binaryOpManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -54,7 +54,7 @@ final class GetClassToInstanceOfRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        $matchedNodes = $this->binaryOpMaintainer->matchFirstAndSecondConditionNode(
+        $matchedNodes = $this->binaryOpManipulator->matchFirstAndSecondConditionNode(
             $node,
             function (Node $node) {
                 return $this->isClassReference($node);

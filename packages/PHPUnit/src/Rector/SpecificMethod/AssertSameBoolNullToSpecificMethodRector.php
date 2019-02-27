@@ -6,7 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
-use Rector\PhpParser\Node\Maintainer\IdentifierMaintainer;
+use Rector\PhpParser\Node\Manipulator\IdentifierManipulator;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -28,13 +28,13 @@ final class AssertSameBoolNullToSpecificMethodRector extends AbstractPHPUnitRect
     ];
 
     /**
-     * @var IdentifierMaintainer
+     * @var IdentifierManipulator
      */
-    private $IdentifierMaintainer;
+    private $identifierManipulator;
 
-    public function __construct(IdentifierMaintainer $IdentifierMaintainer)
+    public function __construct(IdentifierManipulator $identifierManipulator)
     {
-        $this->IdentifierMaintainer = $IdentifierMaintainer;
+        $this->identifierManipulator = $identifierManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -88,7 +88,7 @@ final class AssertSameBoolNullToSpecificMethodRector extends AbstractPHPUnitRect
     {
         [$sameMethodName, $notSameMethodName] = $this->constValueToNewMethodNames[$this->constantName];
 
-        $this->IdentifierMaintainer->renameNodeWithMap($methodCall, [
+        $this->identifierManipulator->renameNodeWithMap($methodCall, [
             'assertSame' => $sameMethodName,
             'assertNotSame' => $notSameMethodName,
         ]);

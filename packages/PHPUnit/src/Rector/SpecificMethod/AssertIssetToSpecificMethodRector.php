@@ -8,7 +8,7 @@ use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Scalar\String_;
-use Rector\PhpParser\Node\Maintainer\IdentifierMaintainer;
+use Rector\PhpParser\Node\Manipulator\IdentifierManipulator;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -16,13 +16,13 @@ use Rector\RectorDefinition\RectorDefinition;
 final class AssertIssetToSpecificMethodRector extends AbstractPHPUnitRector
 {
     /**
-     * @var IdentifierMaintainer
+     * @var IdentifierManipulator
      */
-    private $identifierMaintainer;
+    private $identifierManipulator;
 
-    public function __construct(IdentifierMaintainer $IdentifierMaintainer)
+    public function __construct(IdentifierManipulator $identifierManipulator)
     {
-        $this->identifierMaintainer = $IdentifierMaintainer;
+        $this->identifierManipulator = $identifierManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -90,7 +90,7 @@ final class AssertIssetToSpecificMethodRector extends AbstractPHPUnitRector
             return;
         }
 
-        $this->identifierMaintainer->renameNodeWithMap($methodCall, [
+        $this->identifierManipulator->renameNodeWithMap($methodCall, [
             'assertTrue' => 'assertObjectHasAttribute',
             'assertFalse' => 'assertObjectNotHasAttribute',
         ]);
@@ -103,7 +103,7 @@ final class AssertIssetToSpecificMethodRector extends AbstractPHPUnitRector
 
     private function refactorArrayDimFetchNode(MethodCall $methodCall, ArrayDimFetch $arrayDimFetch): void
     {
-        $this->identifierMaintainer->renameNodeWithMap($methodCall, [
+        $this->identifierManipulator->renameNodeWithMap($methodCall, [
             'assertTrue' => 'assertArrayHasKey',
             'assertFalse' => 'assertArrayNotHasKey',
         ]);

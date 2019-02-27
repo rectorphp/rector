@@ -8,7 +8,7 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use Rector\NodeTypeResolver\Application\FunctionLikeNodeCollector;
 use Rector\NodeTypeResolver\Node\Attribute;
-use Rector\PhpParser\Node\Maintainer\ClassMethodMaintainer;
+use Rector\PhpParser\Node\Manipulator\ClassMethodManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -28,16 +28,16 @@ final class StaticCallOnNonStaticToInstanceCallRector extends AbstractRector
     private $functionLikeNodeCollector;
 
     /**
-     * @var ClassMethodMaintainer
+     * @var ClassMethodManipulator
      */
-    private $classMethodMaintainer;
+    private $classMethodManipulator;
 
     public function __construct(
         FunctionLikeNodeCollector $functionLikeNodeCollector,
-        ClassMethodMaintainer $classMethodMaintainer
+        ClassMethodManipulator $classMethodManipulator
     ) {
         $this->functionLikeNodeCollector = $functionLikeNodeCollector;
-        $this->classMethodMaintainer = $classMethodMaintainer;
+        $this->classMethodManipulator = $classMethodManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -132,7 +132,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->classMethodMaintainer->isStaticClassMethod($classMethodNode)) {
+        if ($this->classMethodManipulator->isStaticClassMethod($classMethodNode)) {
             return null;
         }
 

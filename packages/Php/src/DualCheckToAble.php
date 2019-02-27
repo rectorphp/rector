@@ -8,7 +8,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
-use Rector\PhpParser\Node\Maintainer\BinaryOpMaintainer;
+use Rector\PhpParser\Node\Manipulator\BinaryOpManipulator;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 
 final class DualCheckToAble
@@ -19,19 +19,19 @@ final class DualCheckToAble
     private $nameResolver;
 
     /**
-     * @var BinaryOpMaintainer
+     * @var BinaryOpManipulator
      */
-    private $binaryOpMaintainer;
+    private $binaryOpManipulator;
 
-    public function __construct(NameResolver $nameResolver, BinaryOpMaintainer $binaryOpMaintainer)
+    public function __construct(NameResolver $nameResolver, BinaryOpManipulator $binaryOpManipulator)
     {
         $this->nameResolver = $nameResolver;
-        $this->binaryOpMaintainer = $binaryOpMaintainer;
+        $this->binaryOpManipulator = $binaryOpManipulator;
     }
 
     public function processBooleanOr(BooleanOr $booleanOr, string $type, string $newMethodName): ?FuncCall
     {
-        $matchedNodes = $this->binaryOpMaintainer->matchFirstAndSecondConditionNode(
+        $matchedNodes = $this->binaryOpManipulator->matchFirstAndSecondConditionNode(
             $booleanOr,
             Instanceof_::class,
             FuncCall::class

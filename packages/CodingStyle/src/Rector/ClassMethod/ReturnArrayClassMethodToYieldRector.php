@@ -10,7 +10,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\Attribute;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
+use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\PhpParser\NodeTransformer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
@@ -33,9 +33,9 @@ final class ReturnArrayClassMethodToYieldRector extends AbstractRector
     private $nodeTransformer;
 
     /**
-     * @var DocBlockAnalyzer
+     * @var DocBlockManipulator
      */
-    private $docBlockAnalyzer;
+    private $docBlockManipulator;
 
     /**
      * @param string[][] $methodsByType
@@ -43,11 +43,11 @@ final class ReturnArrayClassMethodToYieldRector extends AbstractRector
     public function __construct(
         array $methodsByType,
         NodeTransformer $nodeTransformer,
-        DocBlockAnalyzer $docBlockAnalyzer
+        DocBlockManipulator $docBlockManipulator
     ) {
         $this->methodsByType = $methodsByType;
         $this->nodeTransformer = $nodeTransformer;
-        $this->docBlockAnalyzer = $docBlockAnalyzer;
+        $this->docBlockManipulator = $docBlockManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -146,7 +146,7 @@ CODE_SAMPLE
         $this->removeNode($parentNode);
 
         // remove doc block
-        $this->docBlockAnalyzer->removeTagFromNode($classMethod, 'return');
+        $this->docBlockManipulator->removeTagFromNode($classMethod, 'return');
 
         // change return typehint
         $classMethod->returnType = new FullyQualified(Iterator::class);

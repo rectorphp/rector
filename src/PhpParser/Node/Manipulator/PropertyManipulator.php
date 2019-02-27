@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\PhpParser\Node\Maintainer;
+namespace Rector\PhpParser\Node\Manipulator;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -14,7 +14,7 @@ use Rector\PhpParser\Printer\BetterStandardPrinter;
 /**
  * "private $property"
  */
-final class PropertyMaintainer
+final class PropertyManipulator
 {
     /**
      * @var BetterNodeFinder

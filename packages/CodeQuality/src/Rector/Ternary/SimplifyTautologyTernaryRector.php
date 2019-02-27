@@ -6,7 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\Ternary;
-use Rector\PhpParser\Node\Maintainer\BinaryOpMaintainer;
+use Rector\PhpParser\Node\Manipulator\BinaryOpManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -14,13 +14,13 @@ use Rector\RectorDefinition\RectorDefinition;
 final class SimplifyTautologyTernaryRector extends AbstractRector
 {
     /**
-     * @var BinaryOpMaintainer
+     * @var BinaryOpManipulator
      */
-    private $binaryOpMaintainer;
+    private $binaryOpManipulator;
 
-    public function __construct(BinaryOpMaintainer $binaryOpMaintainer)
+    public function __construct(BinaryOpManipulator $binaryOpManipulator)
     {
-        $this->binaryOpMaintainer = $binaryOpMaintainer;
+        $this->binaryOpManipulator = $binaryOpManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -50,7 +50,7 @@ final class SimplifyTautologyTernaryRector extends AbstractRector
             return null;
         }
 
-        $isMatch = $this->binaryOpMaintainer->matchFirstAndSecondConditionNode(
+        $isMatch = $this->binaryOpManipulator->matchFirstAndSecondConditionNode(
             $node->cond,
             function (Node $leftNode) use ($node) {
                 return $this->areNodesEqual($leftNode, $node->if);

@@ -9,7 +9,7 @@ use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
 use Rector\PhpParser\Node\AssignAndBinaryMap;
-use Rector\PhpParser\Node\Maintainer\BinaryOpMaintainer;
+use Rector\PhpParser\Node\Manipulator\BinaryOpManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -22,14 +22,14 @@ final class SimplifyConditionsRector extends AbstractRector
     private $assignAndBinaryMap;
 
     /**
-     * @var BinaryOpMaintainer
+     * @var BinaryOpManipulator
      */
-    private $binaryOpMaintainer;
+    private $binaryOpManipulator;
 
-    public function __construct(AssignAndBinaryMap $assignAndBinaryMap, BinaryOpMaintainer $binaryOpMaintainer)
+    public function __construct(AssignAndBinaryMap $assignAndBinaryMap, BinaryOpManipulator $binaryOpManipulator)
     {
         $this->assignAndBinaryMap = $assignAndBinaryMap;
-        $this->binaryOpMaintainer = $binaryOpMaintainer;
+        $this->binaryOpManipulator = $binaryOpManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -75,7 +75,7 @@ final class SimplifyConditionsRector extends AbstractRector
 
     private function processIdenticalAndNotIdentical(BinaryOp $binaryOp): ?Node
     {
-        $matchedNodes = $this->binaryOpMaintainer->matchFirstAndSecondConditionNode(
+        $matchedNodes = $this->binaryOpManipulator->matchFirstAndSecondConditionNode(
             $binaryOp,
             function (Node $binaryOp) {
                 return $binaryOp instanceof Identical || $binaryOp instanceof NotIdentical;

@@ -12,7 +12,7 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Property;
 use Rector\NodeTypeResolver\ComplexNodeTypeResolver;
 use Rector\NodeTypeResolver\Php\VarTypeInfo;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
+use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -35,9 +35,9 @@ final class TypedPropertyRector extends AbstractRector
     ];
 
     /**
-     * @var DocBlockAnalyzer
+     * @var DocBlockManipulator
      */
-    private $docBlockAnalyzer;
+    private $docBlockManipulator;
 
     /**
      * @var ComplexNodeTypeResolver
@@ -45,10 +45,10 @@ final class TypedPropertyRector extends AbstractRector
     private $complexNodeTypeResolver;
 
     public function __construct(
-        DocBlockAnalyzer $docBlockAnalyzer,
+        DocBlockManipulator $docBlockManipulator,
         ComplexNodeTypeResolver $complexNodeTypeResolver
     ) {
-        $this->docBlockAnalyzer = $docBlockAnalyzer;
+        $this->docBlockManipulator = $docBlockManipulator;
         $this->complexNodeTypeResolver = $complexNodeTypeResolver;
     }
 
@@ -102,7 +102,7 @@ CODE_SAMPLE
 
         $varTypeInfos = [];
         // non FQN, so they are 1:1 to possible imported doc type
-        $varTypeInfos[] = $this->docBlockAnalyzer->getVarTypeInfo($node);
+        $varTypeInfos[] = $this->docBlockManipulator->getVarTypeInfo($node);
         $varTypeInfos[] = $this->complexNodeTypeResolver->resolvePropertyTypeInfo($node);
 
         $varTypeInfos = array_filter($varTypeInfos);

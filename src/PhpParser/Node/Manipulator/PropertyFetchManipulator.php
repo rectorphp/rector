@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\PhpParser\Node\Maintainer;
+namespace Rector\PhpParser\Node\Manipulator;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -16,7 +16,7 @@ use Rector\PhpParser\Node\Resolver\NameResolver;
  * Read-only utils for PropertyFetch Node:
  * "$this->property"
  */
-final class PropertyFetchMaintainer
+final class PropertyFetchManipulator
 {
     /**
      * @var NodeTypeResolver

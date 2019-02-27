@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\PhpParser\Node\Maintainer;
+namespace Rector\PhpParser\Node\Manipulator;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
@@ -21,7 +21,7 @@ use ReflectionMethod;
 /**
  * Functions, static and method calls
  */
-final class CallMaintainer
+final class CallManipulator
 {
     /**
      * @var string[]

@@ -11,7 +11,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use Rector\NodeTypeResolver\Node\Attribute;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
+use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -24,17 +24,17 @@ final class ClassReplacerRector extends AbstractRector
     private $oldToNewClasses = [];
 
     /**
-     * @var DocBlockAnalyzer
+     * @var DocBlockManipulator
      */
-    private $docBlockAnalyzer;
+    private $docBlockManipulator;
 
     /**
      * @param string[] $oldToNewClasses
      */
-    public function __construct(array $oldToNewClasses, DocBlockAnalyzer $docBlockAnalyzer)
+    public function __construct(array $oldToNewClasses, DocBlockManipulator $docBlockManipulator)
     {
         $this->oldToNewClasses = $oldToNewClasses;
-        $this->docBlockAnalyzer = $docBlockAnalyzer;
+        $this->docBlockManipulator = $docBlockManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -102,7 +102,7 @@ CODE_SAMPLE
         }
 
         foreach ($this->oldToNewClasses as $oldType => $newType) {
-            $this->docBlockAnalyzer->changeType($node, $oldType, $newType);
+            $this->docBlockManipulator->changeType($node, $oldType, $newType);
         }
 
         return $node;

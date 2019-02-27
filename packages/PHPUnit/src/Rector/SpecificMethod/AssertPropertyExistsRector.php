@@ -9,7 +9,7 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
-use Rector\PhpParser\Node\Maintainer\IdentifierMaintainer;
+use Rector\PhpParser\Node\Manipulator\IdentifierManipulator;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -33,13 +33,13 @@ final class AssertPropertyExistsRector extends AbstractPHPUnitRector
     ];
 
     /**
-     * @var IdentifierMaintainer
+     * @var IdentifierManipulator
      */
-    private $IdentifierMaintainer;
+    private $identifierManipulator;
 
-    public function __construct(IdentifierMaintainer $IdentifierMaintainer)
+    public function __construct(IdentifierManipulator $identifierManipulator)
     {
-        $this->IdentifierMaintainer = $IdentifierMaintainer;
+        $this->identifierManipulator = $identifierManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -113,7 +113,7 @@ final class AssertPropertyExistsRector extends AbstractPHPUnitRector
 
         $node->args = array_merge($this->createArgs([$secondArgument->value->value, $secondArg]), $node->args);
 
-        $this->IdentifierMaintainer->renameNodeWithMap($node, $map);
+        $this->identifierManipulator->renameNodeWithMap($node, $map);
 
         return $node;
     }

@@ -4,7 +4,7 @@ namespace Rector\DeadCode\Rector\ClassConst;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassConst;
-use Rector\PhpParser\Node\Maintainer\ClassConstMaintainer;
+use Rector\PhpParser\Node\Manipulator\ClassConstManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -12,13 +12,13 @@ use Rector\RectorDefinition\RectorDefinition;
 final class RemoveUnusedPrivateConstantRector extends AbstractRector
 {
     /**
-     * @var ClassConstMaintainer
+     * @var ClassConstManipulator
      */
-    private $classConstMaintainer;
+    private $classConstManipulator;
 
-    public function __construct(ClassConstMaintainer $classConstMaintainer)
+    public function __construct(ClassConstManipulator $classConstManipulator)
     {
-        $this->classConstMaintainer = $classConstMaintainer;
+        $this->classConstManipulator = $classConstManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -70,7 +70,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $classConstFetches = $this->classConstMaintainer->getAllClassConstFetch($node);
+        $classConstFetches = $this->classConstManipulator->getAllClassConstFetch($node);
 
         // never used
         if ($classConstFetches === []) {

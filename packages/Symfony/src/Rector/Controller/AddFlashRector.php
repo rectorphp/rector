@@ -5,7 +5,7 @@ namespace Rector\Symfony\Rector\Controller;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\NodeTypeResolver\Node\Attribute;
-use Rector\PhpParser\Node\Maintainer\ChainMethodCallMaintainer;
+use Rector\PhpParser\Node\Manipulator\ChainMethodCallManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -18,15 +18,15 @@ final class AddFlashRector extends AbstractRector
     private $controllerClass;
 
     /**
-     * @var ChainMethodCallMaintainer
+     * @var ChainMethodCallManipulator
      */
-    private $chainMethodCallMaintainer;
+    private $chainMethodCallManipulator;
 
     public function __construct(
-        ChainMethodCallMaintainer $chainMethodCallMaintainer,
+        ChainMethodCallManipulator $chainMethodCallManipulator,
         string $controllerClass = 'Symfony\Bundle\FrameworkBundle\Controller\Controller'
     ) {
-        $this->chainMethodCallMaintainer = $chainMethodCallMaintainer;
+        $this->chainMethodCallManipulator = $chainMethodCallManipulator;
         $this->controllerClass = $controllerClass;
     }
 
@@ -75,7 +75,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->chainMethodCallMaintainer->isTypeAndChainCalls(
+        if (! $this->chainMethodCallManipulator->isTypeAndChainCalls(
             $node,
             'Symfony\Component\HttpFoundation\Request',
             ['getSession', 'getFlashBag', 'add']

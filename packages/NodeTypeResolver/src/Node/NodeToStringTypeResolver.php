@@ -7,7 +7,7 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Scalar\DNumber;
 use PhpParser\Node\Scalar\LNumber;
 use Rector\NodeTypeResolver\NodeTypeAnalyzer;
-use Rector\PhpParser\Node\Maintainer\ConstFetchMaintainer;
+use Rector\PhpParser\Node\Manipulator\ConstFetchManipulator;
 
 final class NodeToStringTypeResolver
 {
@@ -17,14 +17,14 @@ final class NodeToStringTypeResolver
     private $nodeTypeAnalyzer;
 
     /**
-     * @var ConstFetchMaintainer
+     * @var ConstFetchManipulator
      */
-    private $constFetchMaintainer;
+    private $constFetchManipulator;
 
-    public function __construct(NodeTypeAnalyzer $nodeTypeAnalyzer, ConstFetchMaintainer $constFetchMaintainer)
+    public function __construct(NodeTypeAnalyzer $nodeTypeAnalyzer, ConstFetchManipulator $constFetchManipulator)
     {
         $this->nodeTypeAnalyzer = $nodeTypeAnalyzer;
-        $this->constFetchMaintainer = $constFetchMaintainer;
+        $this->constFetchManipulator = $constFetchManipulator;
     }
 
     public function resolver(Node $node): string
@@ -49,7 +49,7 @@ final class NodeToStringTypeResolver
             return 'string';
         }
 
-        if ($this->constFetchMaintainer->isBool($node)) {
+        if ($this->constFetchManipulator->isBool($node)) {
             return 'bool';
         }
 

@@ -25,7 +25,7 @@ use Symplify\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Symplify\BetterPhpDocParser\PhpDocModifier;
 use Symplify\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 
-final class DocBlockAnalyzer
+final class DocBlockManipulator
 {
     /**
      * @var PhpDocInfoFactory

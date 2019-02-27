@@ -10,7 +10,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\Attribute;
-use Rector\PhpParser\Node\Maintainer\ClassMaintainer;
+use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -28,16 +28,16 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
     private $namespacePrefixWithExcludedClasses = [];
 
     /**
-     * @var ClassMaintainer
+     * @var ClassManipulator
      */
-    private $classMaintainer;
+    private $classManipulator;
 
     /**
      * @param string[][]|null[] $namespacePrefixesWithExcludedClasses
      */
-    public function __construct(ClassMaintainer $classMaintainer, array $namespacePrefixesWithExcludedClasses)
+    public function __construct(ClassManipulator $classManipulator, array $namespacePrefixesWithExcludedClasses)
     {
-        $this->classMaintainer = $classMaintainer;
+        $this->classManipulator = $classManipulator;
         $this->namespacePrefixWithExcludedClasses = $namespacePrefixesWithExcludedClasses;
     }
 
@@ -119,7 +119,7 @@ CODE_SAMPLE
         $namespaceNode = new Namespace_(new Name($this->newNamespace));
         foreach ($nodes as $key => $node) {
             if ($node instanceof Class_) {
-                $nodes = $this->classMaintainer->insertBeforeAndFollowWithNewline($nodes, $namespaceNode, $key);
+                $nodes = $this->classManipulator->insertBeforeAndFollowWithNewline($nodes, $namespaceNode, $key);
 
                 break;
             }

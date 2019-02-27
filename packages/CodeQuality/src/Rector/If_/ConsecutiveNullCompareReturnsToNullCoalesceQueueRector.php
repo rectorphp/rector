@@ -8,7 +8,7 @@ use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\NodeTypeResolver\Node\Attribute;
-use Rector\PhpParser\Node\Maintainer\IfMaintainer;
+use Rector\PhpParser\Node\Manipulator\IfManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -26,13 +26,13 @@ final class ConsecutiveNullCompareReturnsToNullCoalesceQueueRector extends Abstr
     private $coalescingNodes = [];
 
     /**
-     * @var IfMaintainer
+     * @var IfManipulator
      */
-    private $ifMaintainer;
+    private $ifManipulator;
 
-    public function __construct(IfMaintainer $ifMaintainer)
+    public function __construct(IfManipulator $ifManipulator)
     {
-        $this->ifMaintainer = $ifMaintainer;
+        $this->ifManipulator = $ifManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -92,7 +92,7 @@ CODE_SAMPLE
         $currentNode = $node;
         while ($currentNode !== null) {
             if ($currentNode instanceof If_) {
-                $comparedNode = $this->ifMaintainer->matchIfNotNullReturnValue($currentNode);
+                $comparedNode = $this->ifManipulator->matchIfNotNullReturnValue($currentNode);
                 if ($comparedNode !== null) {
                     $this->coalescingNodes[] = $comparedNode;
                     $this->nodesToRemove[] = $currentNode;

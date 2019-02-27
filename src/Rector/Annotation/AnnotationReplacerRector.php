@@ -7,7 +7,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\Attribute;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
+use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -25,16 +25,16 @@ final class AnnotationReplacerRector extends AbstractPHPUnitRector
     private $activeAnnotationMap = [];
 
     /**
-     * @var DocBlockAnalyzer
+     * @var DocBlockManipulator
      */
-    private $docBlockAnalyzer;
+    private $docBlockManipulator;
 
     /**
      * @param string[][] $classToAnnotationMap
      */
-    public function __construct(array $classToAnnotationMap, DocBlockAnalyzer $docBlockAnalyzer)
+    public function __construct(array $classToAnnotationMap, DocBlockManipulator $docBlockManipulator)
     {
-        $this->docBlockAnalyzer = $docBlockAnalyzer;
+        $this->docBlockManipulator = $docBlockManipulator;
         $this->classToAnnotationMap = $classToAnnotationMap;
     }
 
@@ -114,7 +114,7 @@ CODE_SAMPLE
         }
 
         foreach ($this->activeAnnotationMap as $oldAnnotation => $newAnnotation) {
-            $this->docBlockAnalyzer->replaceAnnotationInNode($node, $oldAnnotation, $newAnnotation);
+            $this->docBlockManipulator->replaceAnnotationInNode($node, $oldAnnotation, $newAnnotation);
         }
 
         return $node;
@@ -132,7 +132,7 @@ CODE_SAMPLE
     private function hasAnyAnnotation(Node $node): bool
     {
         foreach (array_keys($this->activeAnnotationMap) as $oldAnnotation) {
-            if ($this->docBlockAnalyzer->hasTag($node, $oldAnnotation)) {
+            if ($this->docBlockManipulator->hasTag($node, $oldAnnotation)) {
                 return true;
             }
         }

@@ -13,10 +13,10 @@ use Rector\NetteToSymfony\Annotation\SymfonyRoutePhpDocTagNode;
 use Rector\NetteToSymfony\Route\RouteInfo;
 use Rector\NetteToSymfony\Route\RouteInfoFactory;
 use Rector\NodeTypeResolver\Application\ClassLikeNodeCollector;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
+use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\PhpParser\Node\BetterNodeFinder;
-use Rector\PhpParser\Node\Maintainer\ClassMaintainer;
-use Rector\PhpParser\Node\Maintainer\ClassMethodMaintainer;
+use Rector\PhpParser\Node\Manipulator\ClassManipulator;
+use Rector\PhpParser\Node\Manipulator\ClassMethodManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -55,14 +55,14 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
     private $classLikeNodeCollector;
 
     /**
-     * @var ClassMaintainer
+     * @var ClassManipulator
      */
-    private $classMaintainer;
+    private $classManipulator;
 
     /**
-     * @var DocBlockAnalyzer
+     * @var DocBlockManipulator
      */
-    private $docBlockAnalyzer;
+    private $docBlockManipulator;
 
     /**
      * @var RouteInfoFactory
@@ -70,16 +70,16 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
     private $routeInfoFactory;
 
     /**
-     * @var ClassMethodMaintainer
+     * @var ClassMethodManipulator
      */
-    private $classMethodMaintainer;
+    private $classMethodManipulator;
 
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
         ClassLikeNodeCollector $classLikeNodeCollector,
-        ClassMaintainer $classMaintainer,
-        ClassMethodMaintainer $classMethodMaintainer,
-        DocBlockAnalyzer $docBlockAnalyzer,
+        ClassManipulator $classManipulator,
+        ClassMethodManipulator $classMethodManipulator,
+        DocBlockManipulator $docBlockManipulator,
         RouteInfoFactory $routeInfoFactory,
         string $routeListClass = 'Nette\Application\Routers\RouteList',
         string $routerClass = 'Nette\Application\IRouter',
@@ -89,11 +89,11 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
         $this->routerClass = $routerClass;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->classLikeNodeCollector = $classLikeNodeCollector;
-        $this->classMaintainer = $classMaintainer;
-        $this->docBlockAnalyzer = $docBlockAnalyzer;
+        $this->classManipulator = $classManipulator;
+        $this->docBlockManipulator = $docBlockManipulator;
         $this->routeAnnotationClass = $routeAnnotationClass;
         $this->routeInfoFactory = $routeInfoFactory;
-        $this->classMethodMaintainer = $classMethodMaintainer;
+        $this->classMethodManipulator = $classMethodManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -169,7 +169,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $nodeReturnTypes = $this->classMethodMaintainer->resolveReturnType($node);
+        $nodeReturnTypes = $this->classMethodManipulator->resolveReturnType($node);
         if ($nodeReturnTypes === []) {
             return null;
         }
@@ -199,7 +199,7 @@ CODE_SAMPLE
                 $routeInfo->getHttpMethods()
             );
 
-            $this->docBlockAnalyzer->addTag($classMethod, $phpDocTagNode);
+            $this->docBlockManipulator->addTag($classMethod, $phpDocTagNode);
         }
 
         // complete all other non-explicit methods, from "<presenter>/<action>"
@@ -268,7 +268,7 @@ CODE_SAMPLE
             return null;
         }
 
-        return $this->classMaintainer->getMethodByName($classNode, $routeInfo->getMethod());
+        return $this->classManipulator->getMethodByName($classNode, $routeInfo->getMethod());
     }
 
     private function completeImplicitRoutes(): void
@@ -285,7 +285,7 @@ CODE_SAMPLE
                 $path = $this->resolvePathFromClassAndMethodNodes($presenterClass, $classStmt);
                 $phpDocTagNode = new SymfonyRoutePhpDocTagNode($this->routeAnnotationClass, $path);
 
-                $this->docBlockAnalyzer->addTag($classStmt, $phpDocTagNode);
+                $this->docBlockManipulator->addTag($classStmt, $phpDocTagNode);
             }
         }
     }
@@ -337,7 +337,7 @@ CODE_SAMPLE
         }
 
         // already has Route tag
-        return $this->docBlockAnalyzer->hasTag($node, $this->routeAnnotationClass);
+        return $this->docBlockManipulator->hasTag($node, $this->routeAnnotationClass);
     }
 
     private function resolvePathFromClassAndMethodNodes(Class_ $classNode, ClassMethod $classMethod): string

@@ -11,7 +11,7 @@ use PhpParser\Node\Stmt\Class_;
 use Rector\Bridge\Contract\DoctrineEntityAndRepositoryMapperInterface;
 use Rector\Exception\Bridge\RectorProviderException;
 use Rector\NodeTypeResolver\Node\Attribute;
-use Rector\PhpParser\Node\Maintainer\ClassMaintainer;
+use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\PhpParser\Node\VariableInfo;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
@@ -40,14 +40,14 @@ final class MoveRepositoryFromParentToConstructorRector extends AbstractRector
     private $builderFactory;
 
     /**
-     * @var ClassMaintainer
+     * @var ClassManipulator
      */
-    private $classMaintainer;
+    private $classManipulator;
 
     public function __construct(
         DoctrineEntityAndRepositoryMapperInterface $doctrineEntityAndRepositoryMapper,
         BuilderFactory $builderFactory,
-        ClassMaintainer $classMaintainer,
+        ClassManipulator $classManipulator,
         string $entityRepositoryClass = 'Doctrine\ORM\EntityRepository',
         string $entityManagerClass = 'Doctrine\ORM\EntityManager'
     ) {
@@ -55,7 +55,7 @@ final class MoveRepositoryFromParentToConstructorRector extends AbstractRector
         $this->builderFactory = $builderFactory;
         $this->entityRepositoryClass = $entityRepositoryClass;
         $this->entityManagerClass = $entityManagerClass;
-        $this->classMaintainer = $classMaintainer;
+        $this->classManipulator = $classManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -131,10 +131,10 @@ CODE_SAMPLE
 
         // add $repository property
         $propertyInfo = new VariableInfo('repository', $this->entityRepositoryClass);
-        $this->classMaintainer->addPropertyToClass($node, $propertyInfo);
+        $this->classManipulator->addPropertyToClass($node, $propertyInfo);
 
         // add $entityManager and assign to constuctor
-        $this->classMaintainer->addConstructorDependencyWithCustomAssign(
+        $this->classManipulator->addConstructorDependencyWithCustomAssign(
             $node,
             new VariableInfo('entityManager', $this->entityManagerClass),
             $this->createRepositoryAssign($node)

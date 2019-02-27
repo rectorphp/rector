@@ -15,7 +15,7 @@ use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\NodeTypeResolver\Node\Attribute;
-use Rector\PhpParser\Node\Maintainer\BinaryOpMaintainer;
+use Rector\PhpParser\Node\Manipulator\BinaryOpManipulator;
 use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -34,14 +34,14 @@ final class ForeachToInArrayRector extends AbstractRector
     private $callableNodeTraverser;
 
     /**
-     * @var BinaryOpMaintainer
+     * @var BinaryOpManipulator
      */
-    private $binaryOpMaintainer;
+    private $binaryOpManipulator;
 
-    public function __construct(CallableNodeTraverser $callableNodeTraverser, BinaryOpMaintainer $binaryOpMaintainer)
+    public function __construct(CallableNodeTraverser $callableNodeTraverser, BinaryOpManipulator $binaryOpManipulator)
     {
         $this->callableNodeTraverser = $callableNodeTraverser;
-        $this->binaryOpMaintainer = $binaryOpMaintainer;
+        $this->binaryOpManipulator = $binaryOpManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -178,7 +178,7 @@ CODE_SAMPLE
      */
     private function matchNodes(BinaryOp $binaryOp, Expr $expr): ?array
     {
-        return $this->binaryOpMaintainer->matchFirstAndSecondConditionNode(
+        return $this->binaryOpManipulator->matchFirstAndSecondConditionNode(
             $binaryOp,
             Variable::class,
             function (Node $node, Node $otherNode) use ($expr) {
@@ -216,7 +216,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @todo decouple to CommentAttributeMaintainer service
+     * @todo decouple to CommentAttributeManipulator service
      */
     private function combineCommentsToNode(Node $originalNode, Node $newNode): void
     {

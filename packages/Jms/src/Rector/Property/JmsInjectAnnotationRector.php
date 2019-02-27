@@ -11,7 +11,7 @@ use Rector\Application\ErrorAndDiffCollector;
 use Rector\Bridge\Contract\AnalyzedApplicationContainerInterface;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\Attribute;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
+use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -28,9 +28,9 @@ final class JmsInjectAnnotationRector extends AbstractRector
     private const INJECT_ANNOTATION = 'JMS\DiExtraBundle\Annotation\Inject';
 
     /**
-     * @var DocBlockAnalyzer
+     * @var DocBlockManipulator
      */
-    private $docBlockAnalyzer;
+    private $docBlockManipulator;
 
     /**
      * @var AnalyzedApplicationContainerInterface
@@ -43,11 +43,11 @@ final class JmsInjectAnnotationRector extends AbstractRector
     private $errorAndDiffCollector;
 
     public function __construct(
-        DocBlockAnalyzer $docBlockAnalyzer,
+        DocBlockManipulator $docBlockManipulator,
         AnalyzedApplicationContainerInterface $analyzedApplicationContainer,
         ErrorAndDiffCollector $errorAndDiffCollector
     ) {
-        $this->docBlockAnalyzer = $docBlockAnalyzer;
+        $this->docBlockManipulator = $docBlockManipulator;
         $this->analyzedApplicationContainer = $analyzedApplicationContainer;
         $this->errorAndDiffCollector = $errorAndDiffCollector;
     }
@@ -104,7 +104,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->docBlockAnalyzer->hasTag($node, self::INJECT_ANNOTATION)) {
+        if (! $this->docBlockManipulator->hasTag($node, self::INJECT_ANNOTATION)) {
             return null;
         }
 
@@ -118,11 +118,11 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->docBlockAnalyzer->hasTag($node, 'var')) {
-            $this->docBlockAnalyzer->addVarTag($node, $type);
+        if (! $this->docBlockManipulator->hasTag($node, 'var')) {
+            $this->docBlockManipulator->addVarTag($node, $type);
         }
 
-        $this->docBlockAnalyzer->removeTagFromNode($node, self::INJECT_ANNOTATION);
+        $this->docBlockManipulator->removeTagFromNode($node, self::INJECT_ANNOTATION);
 
         // set to private
         $node->flags = Class_::MODIFIER_PRIVATE;
@@ -139,7 +139,7 @@ CODE_SAMPLE
 
     private function resolveType(Node $node): ?string
     {
-        $injectTagNode = $this->docBlockAnalyzer->getTagByName($node, self::INJECT_ANNOTATION);
+        $injectTagNode = $this->docBlockManipulator->getTagByName($node, self::INJECT_ANNOTATION);
 
         $serviceName = $this->resolveServiceName($injectTagNode, $node);
         if ($serviceName) {
@@ -159,7 +159,7 @@ CODE_SAMPLE
             );
         }
 
-        $varTypeInfo = $this->docBlockAnalyzer->getVarTypeInfo($node);
+        $varTypeInfo = $this->docBlockManipulator->getVarTypeInfo($node);
         if ($varTypeInfo === null) {
             return null;
         }

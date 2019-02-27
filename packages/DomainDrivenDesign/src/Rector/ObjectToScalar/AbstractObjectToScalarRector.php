@@ -3,7 +3,7 @@
 namespace Rector\DomainDrivenDesign\Rector\ObjectToScalar;
 
 use PhpParser\Node;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
+use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\NamespaceAnalyzer;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
@@ -16,9 +16,9 @@ abstract class AbstractObjectToScalarRector extends AbstractRector
     protected $valueObjectsToSimpleTypes = [];
 
     /**
-     * @var DocBlockAnalyzer
+     * @var DocBlockManipulator
      */
-    protected $docBlockAnalyzer;
+    protected $docBlockManipulator;
 
     /**
      * @var BetterNodeFinder
@@ -42,11 +42,11 @@ abstract class AbstractObjectToScalarRector extends AbstractRector
      * @required
      */
     public function setAbstractObjectToScalarRectorDependencies(
-        DocBlockAnalyzer $docBlockAnalyzer,
+        DocBlockManipulator $docBlockManipulator,
         BetterNodeFinder $betterNodeFinder,
         NamespaceAnalyzer $namespaceAnalyzer
     ): void {
-        $this->docBlockAnalyzer = $docBlockAnalyzer;
+        $this->docBlockManipulator = $docBlockManipulator;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->namespaceAnalyzer = $namespaceAnalyzer;
     }

@@ -9,7 +9,7 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
+use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -24,9 +24,9 @@ final class TemplateAnnotationRector extends AbstractRector
     private $version;
 
     /**
-     * @var DocBlockAnalyzer
+     * @var DocBlockManipulator
      */
-    private $docBlockAnalyzer;
+    private $docBlockManipulator;
 
     /**
      * @var BetterNodeFinder
@@ -40,12 +40,12 @@ final class TemplateAnnotationRector extends AbstractRector
 
     public function __construct(
         int $version,
-        DocBlockAnalyzer $docBlockAnalyzer,
+        DocBlockManipulator $docBlockManipulator,
         BetterNodeFinder $betterNodeFinder,
         TemplateGuesser $templateGuesser
     ) {
         $this->version = $version;
-        $this->docBlockAnalyzer = $docBlockAnalyzer;
+        $this->docBlockManipulator = $docBlockManipulator;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->templateGuesser = $templateGuesser;
     }
@@ -89,7 +89,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->docBlockAnalyzer->hasTag($node, 'Template')) {
+        if (! $this->docBlockManipulator->hasTag($node, 'Template')) {
             return null;
         }
 
@@ -111,7 +111,7 @@ CODE_SAMPLE
         }
 
         // remove annotation
-        $this->docBlockAnalyzer->removeTagFromNode($node, 'Template');
+        $this->docBlockManipulator->removeTagFromNode($node, 'Template');
 
         return $node;
     }
@@ -137,7 +137,7 @@ CODE_SAMPLE
 
     private function resolveTemplateName(ClassMethod $classMethod): string
     {
-        $templateTag = $this->docBlockAnalyzer->getTagByName($classMethod, 'Template');
+        $templateTag = $this->docBlockManipulator->getTagByName($classMethod, 'Template');
         $content = (string) $templateTag;
 
         $annotationContent = Strings::match($content, '#\(("|\')(?<filename>.*?)("|\')\)#');

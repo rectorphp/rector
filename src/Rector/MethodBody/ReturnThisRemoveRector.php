@@ -7,7 +7,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\Attribute;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
+use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -20,17 +20,17 @@ final class ReturnThisRemoveRector extends AbstractRector
     private $classesToDefluent = [];
 
     /**
-     * @var DocBlockAnalyzer
+     * @var DocBlockManipulator
      */
-    private $docBlockAnalyzer;
+    private $docBlockManipulator;
 
     /**
      * @param string[] $classesToDefluent
      */
-    public function __construct(array $classesToDefluent, DocBlockAnalyzer $docBlockAnalyzer)
+    public function __construct(array $classesToDefluent, DocBlockManipulator $docBlockManipulator)
     {
         $this->classesToDefluent = $classesToDefluent;
-        $this->docBlockAnalyzer = $docBlockAnalyzer;
+        $this->docBlockManipulator = $docBlockManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -102,7 +102,7 @@ CODE_SAMPLE
             throw new ShouldNotHappenException();
         }
 
-        $this->docBlockAnalyzer->removeTagFromNode($methodNode, 'return');
+        $this->docBlockManipulator->removeTagFromNode($methodNode, 'return');
 
         return null;
     }
