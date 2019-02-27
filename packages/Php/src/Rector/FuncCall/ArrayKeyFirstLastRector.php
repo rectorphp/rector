@@ -81,7 +81,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isAtLeastPhpVersion('5.3')) {
+        if (! $this->isAtLeastPhpVersion('7.3')) {
             return null;
         }
 
