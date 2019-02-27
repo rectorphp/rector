@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\PhpParser\Node\Maintainer;
+namespace Rector\PhpParser\Node\Manipulator;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
@@ -10,7 +10,7 @@ use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\PhpParser\Printer\BetterStandardPrinter;
 
-final class ClassConstMaintainer
+final class ClassConstManipulator
 {
     /**
      * @var NameResolver

@@ -12,7 +12,7 @@ use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
-use Rector\PhpParser\Node\Maintainer\BinaryOpMaintainer;
+use Rector\PhpParser\Node\Manipulator\BinaryOpManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -20,13 +20,13 @@ use Rector\RectorDefinition\RectorDefinition;
 final class SimplifyArraySearchRector extends AbstractRector
 {
     /**
-     * @var BinaryOpMaintainer
+     * @var BinaryOpManipulator
      */
-    private $binaryOpMaintainer;
+    private $binaryOpManipulator;
 
-    public function __construct(BinaryOpMaintainer $binaryOpMaintainer)
+    public function __construct(BinaryOpManipulator $binaryOpManipulator)
     {
-        $this->binaryOpMaintainer = $binaryOpMaintainer;
+        $this->binaryOpManipulator = $binaryOpManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -56,7 +56,7 @@ final class SimplifyArraySearchRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        $matchedNodes = $this->binaryOpMaintainer->matchFirstAndSecondConditionNode(
+        $matchedNodes = $this->binaryOpManipulator->matchFirstAndSecondConditionNode(
             $node,
             function (Node $node) {
                 return $node instanceof FuncCall && $this->isName($node, 'array_search');

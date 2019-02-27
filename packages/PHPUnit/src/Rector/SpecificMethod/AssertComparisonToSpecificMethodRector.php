@@ -18,7 +18,7 @@ use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar;
-use Rector\PhpParser\Node\Maintainer\IdentifierMaintainer;
+use Rector\PhpParser\Node\Manipulator\IdentifierManipulator;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -40,13 +40,13 @@ final class AssertComparisonToSpecificMethodRector extends AbstractPHPUnitRector
     ];
 
     /**
-     * @var IdentifierMaintainer
+     * @var IdentifierManipulator
      */
-    private $identifierMaintainer;
+    private $identifierManipulator;
 
-    public function __construct(IdentifierMaintainer $identifierMaintainer)
+    public function __construct(IdentifierManipulator $identifierManipulator)
     {
-        $this->identifierMaintainer = $identifierMaintainer;
+        $this->identifierManipulator = $identifierManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -124,7 +124,7 @@ final class AssertComparisonToSpecificMethodRector extends AbstractPHPUnitRector
         }
 
         [$trueMethodName, $falseMethodName] = $this->defaultOldToNewMethods[$binaryOpClass];
-        $this->identifierMaintainer->renameNodeWithMap($methodCall, [
+        $this->identifierManipulator->renameNodeWithMap($methodCall, [
             'assertTrue' => $trueMethodName,
             'assertFalse' => $falseMethodName,
         ]);

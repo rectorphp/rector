@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\PhpParser\Node\Maintainer;
+namespace Rector\PhpParser\Node\Manipulator;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ConstFetch;
@@ -9,7 +9,7 @@ use PhpParser\Node\Expr\ConstFetch;
  * Read-only utils for ClassConstAnalyzer Node:
  * "false, true..."
  */
-final class ConstFetchMaintainer
+final class ConstFetchManipulator
 {
     public function isBool(Node $node): bool
     {

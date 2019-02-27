@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\PhpParser\Node\Maintainer;
+namespace Rector\PhpParser\Node\Manipulator;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
@@ -9,7 +9,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\Exception\InvalidNodeTypeException;
 
-final class VisibilityMaintainer
+final class VisibilityManipulator
 {
     /**
      * @var string[]

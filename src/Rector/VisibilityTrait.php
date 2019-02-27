@@ -7,7 +7,7 @@ use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\Exception\ShouldNotHappenException;
-use Rector\PhpParser\Node\Maintainer\VisibilityMaintainer;
+use Rector\PhpParser\Node\Manipulator\VisibilityManipulator;
 
 /**
  * This could be part of @see AbstractRector, but decopuling to trait
@@ -16,16 +16,16 @@ use Rector\PhpParser\Node\Maintainer\VisibilityMaintainer;
 trait VisibilityTrait
 {
     /**
-     * @var VisibilityMaintainer
+     * @var VisibilityManipulator
      */
-    private $visibilityMaintainer;
+    private $visibilityManipulator;
 
     /**
      * @required
      */
-    public function autowireVisbilityTrait(VisibilityMaintainer $visibilityMaintainer): void
+    public function autowireVisbilityTrait(VisibilityManipulator $visibilityManipulator): void
     {
-        $this->visibilityMaintainer = $visibilityMaintainer;
+        $this->visibilityManipulator = $visibilityManipulator;
     }
 
     /**
@@ -56,7 +56,7 @@ trait VisibilityTrait
      */
     public function makePublic(Node $node): void
     {
-        $this->visibilityMaintainer->replaceVisibilityFlag($node, 'public');
+        $this->visibilityManipulator->replaceVisibilityFlag($node, 'public');
     }
 
     /**
@@ -64,7 +64,7 @@ trait VisibilityTrait
      */
     public function makeProtected(Node $node): void
     {
-        $this->visibilityMaintainer->replaceVisibilityFlag($node, 'protected');
+        $this->visibilityManipulator->replaceVisibilityFlag($node, 'protected');
     }
 
     /**
@@ -72,7 +72,7 @@ trait VisibilityTrait
      */
     public function makePrivate(Node $node): void
     {
-        $this->visibilityMaintainer->replaceVisibilityFlag($node, 'private');
+        $this->visibilityManipulator->replaceVisibilityFlag($node, 'private');
     }
 
     /**
@@ -80,6 +80,6 @@ trait VisibilityTrait
      */
     public function makeStatic(Node $node): void
     {
-        $this->visibilityMaintainer->makeStatic($node);
+        $this->visibilityManipulator->makeStatic($node);
     }
 }

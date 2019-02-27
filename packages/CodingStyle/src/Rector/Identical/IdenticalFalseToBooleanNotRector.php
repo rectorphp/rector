@@ -11,7 +11,7 @@ use PHPStan\Type\Constant\ConstantBooleanType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
-use Rector\PhpParser\Node\Maintainer\BinaryOpMaintainer;
+use Rector\PhpParser\Node\Manipulator\BinaryOpManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -19,13 +19,13 @@ use Rector\RectorDefinition\RectorDefinition;
 final class IdenticalFalseToBooleanNotRector extends AbstractRector
 {
     /**
-     * @var BinaryOpMaintainer
+     * @var BinaryOpManipulator
      */
-    private $binaryOpMaintainer;
+    private $binaryOpManipulator;
 
-    public function __construct(BinaryOpMaintainer $binaryOpMaintainer)
+    public function __construct(BinaryOpManipulator $binaryOpManipulator)
     {
-        $this->binaryOpMaintainer = $binaryOpMaintainer;
+        $this->binaryOpManipulator = $binaryOpManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -48,7 +48,7 @@ final class IdenticalFalseToBooleanNotRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        $matchedNodes = $this->binaryOpMaintainer->matchFirstAndSecondConditionNode(
+        $matchedNodes = $this->binaryOpManipulator->matchFirstAndSecondConditionNode(
             $node,
             function (Node $node) {
                 return ! $node instanceof BinaryOp;

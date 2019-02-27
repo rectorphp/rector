@@ -6,7 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\NodeTypeResolver\Node\Attribute;
-use Rector\PhpParser\Node\Maintainer\IfMaintainer;
+use Rector\PhpParser\Node\Manipulator\IfManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -14,13 +14,13 @@ use Rector\RectorDefinition\RectorDefinition;
 final class SimplifyIfNotNullReturnRector extends AbstractRector
 {
     /**
-     * @var IfMaintainer
+     * @var IfManipulator
      */
-    private $ifMaintainer;
+    private $ifManipulator;
 
-    public function __construct(IfMaintainer $ifMaintainer)
+    public function __construct(IfManipulator $ifManipulator)
     {
-        $this->ifMaintainer = $ifMaintainer;
+        $this->ifManipulator = $ifManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -57,7 +57,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $comparedNode = $this->ifMaintainer->matchIfNotNullReturnValue($node);
+        $comparedNode = $this->ifManipulator->matchIfNotNullReturnValue($node);
         if ($comparedNode !== null) {
             $insideIfNode = $node->stmts[0];
 
@@ -74,7 +74,7 @@ CODE_SAMPLE
             return $insideIfNode;
         }
 
-        $comparedNode = $this->ifMaintainer->matchIfValueReturnValue($node);
+        $comparedNode = $this->ifManipulator->matchIfValueReturnValue($node);
         if ($comparedNode !== null) {
             $nextNode = $node->getAttribute(Attribute::NEXT_NODE);
             if (! $nextNode instanceof Return_) {

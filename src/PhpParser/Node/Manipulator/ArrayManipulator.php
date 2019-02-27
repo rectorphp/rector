@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Rector\PhpParser\Node\Maintainer;
+namespace Rector\PhpParser\Node\Manipulator;
 
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Scalar\String_;
 
-final class ArrayMaintainer
+final class ArrayManipulator
 {
     public function addItemToArrayUnderKey(Array_ $arrayNode, ArrayItem $newArrayItem, string $key): void
     {

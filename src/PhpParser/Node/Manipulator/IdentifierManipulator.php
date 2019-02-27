@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\PhpParser\Node\Maintainer;
+namespace Rector\PhpParser\Node\Manipulator;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
@@ -19,7 +19,7 @@ use Rector\PhpParser\Node\Resolver\NameResolver;
  * -public function someMethod()
  * +public function newMethod()
  */
-final class IdentifierMaintainer
+final class IdentifierManipulator
 {
     /**
      * @var string[]

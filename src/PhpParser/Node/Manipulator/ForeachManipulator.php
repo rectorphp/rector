@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Rector\PhpParser\Node\Maintainer;
+namespace Rector\PhpParser\Node\Manipulator;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
 
-final class ForeachMaintainer
+final class ForeachManipulator
 {
     public function matchOnlyStmt(Foreach_ $foreachNode, callable $callable): ?Node
     {

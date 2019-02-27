@@ -94,7 +94,7 @@ CODE_SAMPLE
             }
 
             // use
-            $returnTypeInfo = $this->functionLikeMaintainer->resolveStaticReturnTypeInfo($node);
+            $returnTypeInfo = $this->functionLikeManipulator->resolveStaticReturnTypeInfo($node);
 
             if ($returnTypeInfo === null) {
                 return null;
@@ -130,8 +130,8 @@ CODE_SAMPLE
      */
     private function resolveReturnType(FunctionLike $functionLike): ?ReturnTypeInfo
     {
-        $docReturnTypeInfo = $this->docBlockAnalyzer->getReturnTypeInfo($functionLike);
-        $codeReturnTypeInfo = $this->functionLikeMaintainer->resolveStaticReturnTypeInfo($functionLike);
+        $docReturnTypeInfo = $this->docBlockManipulator->getReturnTypeInfo($functionLike);
+        $codeReturnTypeInfo = $this->functionLikeManipulator->resolveStaticReturnTypeInfo($functionLike);
 
         // code has priority over docblock
         if ($docReturnTypeInfo === null) {

@@ -96,7 +96,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $paramTagInfos = $this->docBlockAnalyzer->getParamTypeInfos($node);
+        $paramTagInfos = $this->docBlockManipulator->getParamTypeInfos($node);
 
         // no tags, nothing to complete here
         if ($paramTagInfos === []) {

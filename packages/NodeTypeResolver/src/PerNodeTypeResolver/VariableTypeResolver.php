@@ -10,16 +10,16 @@ use PHPStan\Type\ThisType;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\Attribute;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
+use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeToStringResolver;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 
 final class VariableTypeResolver implements PerNodeTypeResolverInterface
 {
     /**
-     * @var DocBlockAnalyzer
+     * @var DocBlockManipulator
      */
-    private $docBlockAnalyzer;
+    private $docBlockManipulator;
 
     /**
      * @var TypeToStringResolver
@@ -32,11 +32,11 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface
     private $nameResolver;
 
     public function __construct(
-        DocBlockAnalyzer $docBlockAnalyzer,
+        DocBlockManipulator $docBlockManipulator,
         TypeToStringResolver $typeToStringResolver,
         NameResolver $nameResolver
     ) {
-        $this->docBlockAnalyzer = $docBlockAnalyzer;
+        $this->docBlockManipulator = $docBlockManipulator;
         $this->typeToStringResolver = $typeToStringResolver;
         $this->nameResolver = $nameResolver;
     }
@@ -77,7 +77,7 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface
         }
 
         // get from annotation
-        $varTypeInfo = $this->docBlockAnalyzer->getVarTypeInfo($variableNode);
+        $varTypeInfo = $this->docBlockManipulator->getVarTypeInfo($variableNode);
         if ($varTypeInfo === null) {
             return [];
         }

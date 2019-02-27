@@ -5,7 +5,7 @@ namespace Rector\DeadCode\Rector\StaticCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\StaticCall;
 use Rector\NodeTypeResolver\Node\Attribute;
-use Rector\PhpParser\Node\Maintainer\ClassMethodMaintainer;
+use Rector\PhpParser\Node\Manipulator\ClassMethodManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -13,13 +13,13 @@ use Rector\RectorDefinition\RectorDefinition;
 final class RemoveParentCallWithoutParentRector extends AbstractRector
 {
     /**
-     * @var ClassMethodMaintainer
+     * @var ClassMethodManipulator
      */
-    private $classMethodMaintainer;
+    private $classMethodManipulator;
 
-    public function __construct(ClassMethodMaintainer $classMethodMaintainer)
+    public function __construct(ClassMethodManipulator $classMethodManipulator)
     {
-        $this->classMethodMaintainer = $classMethodMaintainer;
+        $this->classMethodManipulator = $classMethodManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -75,7 +75,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->classMethodMaintainer->hasParentMethodOrInterfaceMethod($methodNode)) {
+        if ($this->classMethodManipulator->hasParentMethodOrInterfaceMethod($methodNode)) {
             return null;
         }
 

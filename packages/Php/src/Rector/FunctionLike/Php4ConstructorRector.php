@@ -12,7 +12,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\NodeTypeResolver\Node\Attribute;
-use Rector\PhpParser\Node\Maintainer\ClassMaintainer;
+use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -23,13 +23,13 @@ use Rector\RectorDefinition\RectorDefinition;
 final class Php4ConstructorRector extends AbstractRector
 {
     /**
-     * @var ClassMaintainer
+     * @var ClassManipulator
      */
-    private $classMaintainer;
+    private $classManipulator;
 
-    public function __construct(ClassMaintainer $classMaintainer)
+    public function __construct(ClassManipulator $classManipulator)
     {
-        $this->classMaintainer = $classMaintainer;
+        $this->classManipulator = $classManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -91,7 +91,7 @@ CODE_SAMPLE
         }
 
         // does it already have a __construct method?
-        if (! $this->classMaintainer->hasClassMethod($classNode, '__construct')) {
+        if (! $this->classManipulator->hasClassMethod($classNode, '__construct')) {
             $node->name = new Identifier('__construct');
         }
 

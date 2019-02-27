@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Rector\PhpParser\Node\Maintainer;
+namespace Rector\PhpParser\Node\Manipulator;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp;
 use Rector\Exception\ShouldNotHappenException;
 
-final class BinaryOpMaintainer
+final class BinaryOpManipulator
 {
     /**
      * Tries to match left or right parts (xor),

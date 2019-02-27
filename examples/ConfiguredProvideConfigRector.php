@@ -7,7 +7,7 @@ use PhpParser\BuilderHelpers;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Return_;
-use Rector\PhpParser\Node\Maintainer\ClassMaintainer;
+use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -17,18 +17,18 @@ use Symfony\Component\Yaml\Yaml;
 final class ConfiguredProvideConfigRector extends AbstractRector
 {
     /**
-     * @var ClassMaintainer
+     * @var ClassManipulator
      */
-    private $classMaintainer;
+    private $classManipulator;
 
     /**
      * @var BuilderFactory
      */
     private $builderFactory;
 
-    public function __construct(ClassMaintainer $classMaintainer, BuilderFactory $builderFactory)
+    public function __construct(ClassManipulator $classManipulator, BuilderFactory $builderFactory)
     {
-        $this->classMaintainer = $classMaintainer;
+        $this->classManipulator = $classManipulator;
         $this->builderFactory = $builderFactory;
     }
 
@@ -54,7 +54,7 @@ final class ConfiguredProvideConfigRector extends AbstractRector
             return null;
         }
 
-        $classMethodsByName = $this->classMaintainer->getMethodsByName($node);
+        $classMethodsByName = $this->classManipulator->getMethodsByName($node);
         if (! isset($classMethodsByName['provideConfig'])) {
             return null;
         }

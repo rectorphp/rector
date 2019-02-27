@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\PhpParser\Node\Maintainer;
+namespace Rector\PhpParser\Node\Manipulator;
 
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -13,7 +13,7 @@ use Rector\NodeTypeResolver\Php\ReturnTypeInfo;
 use Rector\Php\TypeAnalyzer;
 use Rector\PhpParser\Node\BetterNodeFinder;
 
-final class FunctionLikeMaintainer
+final class FunctionLikeManipulator
 {
     /**
      * @var BetterNodeFinder

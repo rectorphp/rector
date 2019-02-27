@@ -7,8 +7,8 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\NodeTypeResolver\Node\Attribute;
-use Rector\PhpParser\Node\Maintainer\ClassMaintainer;
-use Rector\PhpParser\Node\Maintainer\ClassMethodMaintainer;
+use Rector\PhpParser\Node\Manipulator\ClassManipulator;
+use Rector\PhpParser\Node\Manipulator\ClassMethodManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -16,19 +16,19 @@ use Rector\RectorDefinition\RectorDefinition;
 final class RemoveUnusedParameterRector extends AbstractRector
 {
     /**
-     * @var ClassMaintainer
+     * @var ClassManipulator
      */
-    private $classMaintainer;
+    private $classManipulator;
 
     /**
-     * @var ClassMethodMaintainer
+     * @var ClassMethodManipulator
      */
-    private $classMethodMaintainer;
+    private $classMethodManipulator;
 
-    public function __construct(ClassMaintainer $classMaintainer, ClassMethodMaintainer $classMethodMaintainer)
+    public function __construct(ClassManipulator $classManipulator, ClassMethodManipulator $classMethodManipulator)
     {
-        $this->classMaintainer = $classMaintainer;
-        $this->classMethodMaintainer = $classMethodMaintainer;
+        $this->classManipulator = $classManipulator;
+        $this->classMethodManipulator = $classMethodManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -86,7 +86,7 @@ CODE_SAMPLE
         }
 
         $methodName = $this->getName($node);
-        if ($this->classMaintainer->hasParentMethodOrInterface($class, $methodName)) {
+        if ($this->classManipulator->hasParentMethodOrInterface($class, $methodName)) {
             return null;
         }
 
@@ -108,7 +108,7 @@ CODE_SAMPLE
         $unusedParameters = [];
 
         foreach ((array) $classMethod->params as $i => $param) {
-            if ($this->classMethodMaintainer->isParameterUsedMethod($param, $classMethod)) {
+            if ($this->classMethodManipulator->isParameterUsedMethod($param, $classMethod)) {
                 // reset to keep order of removed arguments, if not construtctor - probably autowired
                 if (! $this->isName($classMethod, '__construct')) {
                     $unusedParameters = [];

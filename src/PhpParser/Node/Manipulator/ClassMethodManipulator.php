@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\PhpParser\Node\Maintainer;
+namespace Rector\PhpParser\Node\Manipulator;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
@@ -16,7 +16,7 @@ use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\PhpParser\Printer\BetterStandardPrinter;
 
-final class ClassMethodMaintainer
+final class ClassMethodManipulator
 {
     /**
      * @var BetterNodeFinder
@@ -34,9 +34,9 @@ final class ClassMethodMaintainer
     private $nodeTypeResolver;
 
     /**
-     * @var FunctionLikeMaintainer
+     * @var FunctionLikeManipulator
      */
-    private $functionLikeMaintainer;
+    private $functionLikeManipulator;
 
     /**
      * @var NameResolver
@@ -47,13 +47,13 @@ final class ClassMethodMaintainer
         BetterNodeFinder $betterNodeFinder,
         BetterStandardPrinter $betterStandardPrinter,
         NodeTypeResolver $nodeTypeResolver,
-        FunctionLikeMaintainer $functionLikeMaintainer,
+        FunctionLikeManipulator $functionLikeManipulator,
         NameResolver $nameResolver
     ) {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->functionLikeMaintainer = $functionLikeMaintainer;
+        $this->functionLikeManipulator = $functionLikeManipulator;
         $this->nameResolver = $nameResolver;
     }
 
@@ -127,7 +127,7 @@ final class ClassMethodMaintainer
             return $this->nodeTypeResolver->resolve($classMethod->returnType);
         }
 
-        $staticReturnType = $this->functionLikeMaintainer->resolveStaticReturnTypeInfo($classMethod);
+        $staticReturnType = $this->functionLikeManipulator->resolveStaticReturnTypeInfo($classMethod);
         if ($staticReturnType === null) {
             return [];
         }

@@ -8,7 +8,7 @@ use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Contract\PhpParser\Node\CommanderInterface;
-use Rector\PhpParser\Node\Maintainer\ClassMaintainer;
+use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\PhpParser\Node\VariableInfo;
 
 /**
@@ -22,13 +22,13 @@ final class PropertyAddingCommander implements CommanderInterface
     private $propertiesByClass = [];
 
     /**
-     * @var ClassMaintainer
+     * @var ClassManipulator
      */
-    private $classMaintainer;
+    private $classManipulator;
 
-    public function __construct(ClassMaintainer $classMaintainer)
+    public function __construct(ClassManipulator $classManipulator)
     {
-        $this->classMaintainer = $classMaintainer;
+        $this->classManipulator = $classManipulator;
     }
 
     public function addPropertyToClass(VariableInfo $variableInfo, Class_ $classNode): void
@@ -58,23 +58,23 @@ final class PropertyAddingCommander implements CommanderInterface
 
     private function createNodeVisitor(): NodeVisitor
     {
-        return new class($this->classMaintainer, $this->propertiesByClass) extends NodeVisitorAbstract {
+        return new class($this->classManipulator, $this->propertiesByClass) extends NodeVisitorAbstract {
             /**
              * @var VariableInfo[][]
              */
             private $propertiesByClass = [];
 
             /**
-             * @var ClassMaintainer
+             * @var ClassManipulator
              */
-            private $classMaintainer;
+            private $classManipulator;
 
             /**
              * @param VariableInfo[][] $propertiesByClass
              */
-            public function __construct(ClassMaintainer $classMaintainer, array $propertiesByClass)
+            public function __construct(ClassManipulator $classManipulator, array $propertiesByClass)
             {
-                $this->classMaintainer = $classMaintainer;
+                $this->classManipulator = $classManipulator;
                 $this->propertiesByClass = $propertiesByClass;
             }
 
@@ -91,7 +91,7 @@ final class PropertyAddingCommander implements CommanderInterface
             {
                 $variableInfos = $this->propertiesByClass[spl_object_hash($classNode)] ?? [];
                 foreach ($variableInfos as $propertyInfo) {
-                    $this->classMaintainer->addConstructorDependency($classNode, $propertyInfo);
+                    $this->classManipulator->addConstructorDependency($classNode, $propertyInfo);
                 }
 
                 return $classNode;

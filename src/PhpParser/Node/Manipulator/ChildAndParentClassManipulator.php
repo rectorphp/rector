@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\PhpParser\Node\Maintainer;
+namespace Rector\PhpParser\Node\Manipulator;
 
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -10,7 +10,7 @@ use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\PhpParser\Node\NodeFactory;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 
-final class ChildAndParentClassMaintainer
+final class ChildAndParentClassManipulator
 {
     /**
      * @var ClassLikeNodeCollector

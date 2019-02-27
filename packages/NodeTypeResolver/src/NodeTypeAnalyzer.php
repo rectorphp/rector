@@ -25,7 +25,7 @@ use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\NodeTypeResolver\Node\Attribute;
-use Rector\PhpParser\Node\Maintainer\ClassMaintainer;
+use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\PhpParser\Printer\BetterStandardPrinter;
 
@@ -42,9 +42,9 @@ final class NodeTypeAnalyzer
     private $nameResolver;
 
     /**
-     * @var ClassMaintainer
+     * @var ClassManipulator
      */
-    private $classMaintainer;
+    private $classManipulator;
 
     /**
      * @var StaticTypeToStringResolver
@@ -54,12 +54,12 @@ final class NodeTypeAnalyzer
     public function __construct(
         BetterStandardPrinter $betterStandardPrinter,
         NameResolver $nameResolver,
-        ClassMaintainer $classMaintainer,
+        ClassManipulator $classManipulator,
         StaticTypeToStringResolver $staticTypeToStringResolver
     ) {
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nameResolver = $nameResolver;
-        $this->classMaintainer = $classMaintainer;
+        $this->classManipulator = $classManipulator;
         $this->staticTypeToStringResolver = $staticTypeToStringResolver;
     }
 
@@ -297,12 +297,12 @@ final class NodeTypeAnalyzer
             return false;
         }
 
-        $propertyNode = $this->classMaintainer->getProperty($classNode, $propertyName);
+        $propertyPropertyNode = $this->classManipulator->getProperty($classNode, $propertyName);
 
-        if ($propertyNode === null) {
+        if ($propertyPropertyNode === null) {
             return false;
         }
 
-        return $propertyNode->props[0]->default instanceof Array_;
+        return $propertyPropertyNode->default instanceof Array_;
     }
 }

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\PhpParser\Node\Maintainer;
+namespace Rector\PhpParser\Node\Manipulator;
 
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Stmt;
@@ -9,13 +9,14 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\PropertyProperty;
 use PhpParser\Node\Stmt\TraitUse;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Node\NodeFactory;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\PhpParser\Node\VariableInfo;
 
-final class ClassMaintainer
+final class ClassManipulator
 {
     /**
      * @var NameResolver
@@ -28,9 +29,9 @@ final class ClassMaintainer
     private $nodeFactory;
 
     /**
-     * @var ChildAndParentClassMaintainer
+     * @var ChildAndParentClassManipulator
      */
-    private $childAndParentClassMaintainer;
+    private $childAndParentClassManipulator;
 
     /**
      * @var BetterNodeFinder
@@ -40,12 +41,12 @@ final class ClassMaintainer
     public function __construct(
         NameResolver $nameResolver,
         NodeFactory $nodeFactory,
-        ChildAndParentClassMaintainer $childAndParentClassMaintainer,
+        ChildAndParentClassManipulator $childAndParentClassManipulator,
         BetterNodeFinder $betterNodeFinder
     ) {
         $this->nodeFactory = $nodeFactory;
         $this->nameResolver = $nameResolver;
-        $this->childAndParentClassMaintainer = $childAndParentClassMaintainer;
+        $this->childAndParentClassManipulator = $childAndParentClassManipulator;
         $this->betterNodeFinder = $betterNodeFinder;
     }
 
@@ -131,13 +132,13 @@ final class ClassMaintainer
 
         $constructorMethod = $this->nodeFactory->createPublicMethod('__construct');
 
-        $this->childAndParentClassMaintainer->completeParentConstructor($classNode, $constructorMethod);
+        $this->childAndParentClassManipulator->completeParentConstructor($classNode, $constructorMethod);
 
         $this->addParameterAndAssignToMethod($constructorMethod, $variableInfo, $assign);
 
         $this->addAsFirstMethod($classNode, $constructorMethod);
 
-        $this->childAndParentClassMaintainer->completeChildConstructors($classNode, $constructorMethod);
+        $this->childAndParentClassManipulator->completeChildConstructors($classNode, $constructorMethod);
     }
 
     /**
@@ -177,15 +178,17 @@ final class ClassMaintainer
         return $usedTraits;
     }
 
-    public function getProperty(Class_ $class, string $name): ?Property
+    public function getProperty(Class_ $class, string $name): ?PropertyProperty
     {
         foreach ($class->stmts as $stmt) {
             if (! $stmt instanceof Property) {
                 continue;
             }
 
-            if ($this->nameResolver->isName($stmt->props[0], $name)) {
-                return $stmt;
+            foreach ($stmt->props as $propertyProperty) {
+                if ($this->nameResolver->isName($propertyProperty, $name)) {
+                    return $propertyProperty;
+                }
             }
         }
 

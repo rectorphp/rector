@@ -6,7 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\TraitUse;
-use Rector\PhpParser\Node\Maintainer\ClassMaintainer;
+use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -24,17 +24,17 @@ final class ParentClassToTraitsRector extends AbstractRector
     private $parentClassToTraits = [];
 
     /**
-     * @var ClassMaintainer
+     * @var ClassManipulator
      */
-    private $classMaintainer;
+    private $classManipulator;
 
     /**
      * @param string[][] $parentClassToTraits { parent class => [ traits ] }
      */
-    public function __construct(array $parentClassToTraits, ClassMaintainer $classMaintainer)
+    public function __construct(array $parentClassToTraits, ClassManipulator $classManipulator)
     {
         $this->parentClassToTraits = $parentClassToTraits;
-        $this->classMaintainer = $classMaintainer;
+        $this->classManipulator = $classManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -90,7 +90,7 @@ CODE_SAMPLE
 
         foreach ($traitNames as $traitName) {
             $traitUseNode = new TraitUse([new FullyQualified($traitName)]);
-            $this->classMaintainer->addAsFirstTrait($node, $traitUseNode);
+            $this->classManipulator->addAsFirstTrait($node, $traitUseNode);
         }
 
         $this->removeParentClass($node);

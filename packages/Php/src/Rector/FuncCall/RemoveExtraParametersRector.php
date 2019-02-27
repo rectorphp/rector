@@ -6,7 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
-use Rector\PhpParser\Node\Maintainer\CallMaintainer;
+use Rector\PhpParser\Node\Manipulator\CallManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -21,13 +21,13 @@ use ReflectionMethod;
 final class RemoveExtraParametersRector extends AbstractRector
 {
     /**
-     * @var CallMaintainer
+     * @var CallManipulator
      */
-    private $callMaintainer;
+    private $callManipulator;
 
-    public function __construct(CallMaintainer $callMaintainer)
+    public function __construct(CallManipulator $callManipulator)
     {
-        $this->callMaintainer = $callMaintainer;
+        $this->callManipulator = $callManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -60,7 +60,7 @@ final class RemoveExtraParametersRector extends AbstractRector
         }
 
         // can be any number of arguments → nothing to limit here
-        if ($this->callMaintainer->isVariadic($reflectionFunctionLike, $node)) {
+        if ($this->callManipulator->isVariadic($reflectionFunctionLike, $node)) {
             return null;
         }
 

@@ -6,7 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
 use Rector\NodeTypeResolver\ComplexNodeTypeResolver;
 use Rector\NodeTypeResolver\Node\Attribute;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
+use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -14,18 +14,20 @@ use Rector\RectorDefinition\RectorDefinition;
 final class CompleteVarDocTypePropertyRector extends AbstractRector
 {
     /**
-     * @var DocBlockAnalyzer
+     * @var DocBlockManipulator
      */
-    private $docBlockAnalyzer;
+    private $docBlockManipulator;
 
     /**
      * @var ComplexNodeTypeResolver
      */
     private $complexNodeTypeResolver;
 
-    public function __construct(DocBlockAnalyzer $docBlockAnalyzer, ComplexNodeTypeResolver $complexNodeTypeResolver)
-    {
-        $this->docBlockAnalyzer = $docBlockAnalyzer;
+    public function __construct(
+        DocBlockManipulator $docBlockManipulator,
+        ComplexNodeTypeResolver $complexNodeTypeResolver
+    ) {
+        $this->docBlockManipulator = $docBlockManipulator;
         $this->complexNodeTypeResolver = $complexNodeTypeResolver;
     }
 
@@ -76,7 +78,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $varTypeInfo = $this->docBlockAnalyzer->getVarTypeInfo($node);
+        $varTypeInfo = $this->docBlockManipulator->getVarTypeInfo($node);
         if ($varTypeInfo !== null) {
             return null;
         }
@@ -92,7 +94,7 @@ CODE_SAMPLE
 
         $varType = implode('|', $varTypeInfo->getDocTypes());
 
-        $this->docBlockAnalyzer->addVarTag($node, $varType);
+        $this->docBlockManipulator->addVarTag($node, $varType);
 
         $node->setAttribute(Attribute::ORIGINAL_NODE, null);
 

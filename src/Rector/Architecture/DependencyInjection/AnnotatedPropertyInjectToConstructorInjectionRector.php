@@ -6,7 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use Rector\NodeTypeResolver\Node\Attribute;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
+use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -26,13 +26,13 @@ final class AnnotatedPropertyInjectToConstructorInjectionRector extends Abstract
     private $annotation;
 
     /**
-     * @var DocBlockAnalyzer
+     * @var DocBlockManipulator
      */
-    private $docBlockAnalyzer;
+    private $docBlockManipulator;
 
-    public function __construct(DocBlockAnalyzer $docBlockAnalyzer, string $annotation)
+    public function __construct(DocBlockManipulator $docBlockManipulator, string $annotation)
     {
-        $this->docBlockAnalyzer = $docBlockAnalyzer;
+        $this->docBlockManipulator = $docBlockManipulator;
         $this->annotation = $annotation;
     }
 
@@ -83,16 +83,16 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->docBlockAnalyzer->hasTag($node, $this->annotation)) {
+        if (! $this->docBlockManipulator->hasTag($node, $this->annotation)) {
             return null;
         }
 
         // it needs @var tag as well, to get the type
-        if (! $this->docBlockAnalyzer->hasTag($node, 'var')) {
+        if (! $this->docBlockManipulator->hasTag($node, 'var')) {
             return null;
         }
 
-        $this->docBlockAnalyzer->removeTagFromNode($node, $this->annotation);
+        $this->docBlockManipulator->removeTagFromNode($node, $this->annotation);
 
         // set to private
         $node->flags = Class_::MODIFIER_PRIVATE;

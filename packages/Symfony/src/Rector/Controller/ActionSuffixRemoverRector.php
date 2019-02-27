@@ -4,7 +4,7 @@ namespace Rector\Symfony\Rector\Controller;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\PhpParser\Node\Maintainer\IdentifierMaintainer;
+use Rector\PhpParser\Node\Manipulator\IdentifierManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -18,16 +18,16 @@ final class ActionSuffixRemoverRector extends AbstractRector
     private $controllerMethodAnalyzer;
 
     /**
-     * @var IdentifierMaintainer
+     * @var IdentifierManipulator
      */
-    private $IdentifierMaintainer;
+    private $identifierManipulator;
 
     public function __construct(
         ControllerMethodAnalyzer $controllerMethodAnalyzer,
-        IdentifierMaintainer $IdentifierMaintainer
+        IdentifierManipulator $identifierManipulator
     ) {
         $this->controllerMethodAnalyzer = $controllerMethodAnalyzer;
-        $this->IdentifierMaintainer = $IdentifierMaintainer;
+        $this->identifierManipulator = $identifierManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -69,7 +69,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->IdentifierMaintainer->removeSuffix($node, 'Action');
+        $this->identifierManipulator->removeSuffix($node, 'Action');
 
         return $node;
     }

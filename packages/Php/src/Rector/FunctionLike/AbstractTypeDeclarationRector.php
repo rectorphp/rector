@@ -17,8 +17,8 @@ use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Application\ClassLikeNodeCollector;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\NodeTypeResolver\Php\AbstractTypeInfo;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
-use Rector\PhpParser\Node\Maintainer\FunctionLikeMaintainer;
+use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
+use Rector\PhpParser\Node\Manipulator\FunctionLikeManipulator;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -35,9 +35,9 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
     protected const HAS_NEW_INHERITED_TYPE = 'has_new_inherited_return_type';
 
     /**
-     * @var DocBlockAnalyzer
+     * @var DocBlockManipulator
      */
-    protected $docBlockAnalyzer;
+    protected $docBlockManipulator;
 
     /**
      * @var ClassLikeNodeCollector
@@ -45,18 +45,18 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
     protected $classLikeNodeCollector;
 
     /**
-     * @var FunctionLikeMaintainer
+     * @var FunctionLikeManipulator
      */
-    protected $functionLikeMaintainer;
+    protected $functionLikeManipulator;
 
     public function __construct(
-        DocBlockAnalyzer $docBlockAnalyzer,
+        DocBlockManipulator $docBlockManipulator,
         ClassLikeNodeCollector $classLikeNodeCollector,
-        FunctionLikeMaintainer $functionLikeMaintainer
+        FunctionLikeManipulator $functionLikeManipulator
     ) {
-        $this->docBlockAnalyzer = $docBlockAnalyzer;
+        $this->docBlockManipulator = $docBlockManipulator;
         $this->classLikeNodeCollector = $classLikeNodeCollector;
-        $this->functionLikeMaintainer = $functionLikeMaintainer;
+        $this->functionLikeManipulator = $functionLikeManipulator;
     }
 
     /**

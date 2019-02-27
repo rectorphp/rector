@@ -6,15 +6,15 @@ use PhpParser\Comment\Doc;
 use PhpParser\Node\Scalar\String_;
 use Rector\HttpKernel\RectorKernel;
 use Rector\NodeTypeResolver\Node\CurrentNodeProvider;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
+use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 
-final class DocBlockAnalyzerTest extends AbstractKernelTestCase
+final class DocBlockManipulatorTest extends AbstractKernelTestCase
 {
     /**
-     * @var DocBlockAnalyzer
+     * @var DocBlockManipulator
      */
-    private $docBlockAnalyzer;
+    private $docBlockManipulator;
 
     /**
      * @var CurrentNodeProvider
@@ -25,7 +25,7 @@ final class DocBlockAnalyzerTest extends AbstractKernelTestCase
     {
         $this->bootKernel(RectorKernel::class);
 
-        $this->docBlockAnalyzer = self::$container->get(DocBlockAnalyzer::class);
+        $this->docBlockManipulator = self::$container->get(DocBlockManipulator::class);
         $this->currentNodeProvider = self::$container->get(CurrentNodeProvider::class);
     }
 
@@ -34,8 +34,8 @@ final class DocBlockAnalyzerTest extends AbstractKernelTestCase
         $node = $this->createNodeWithDoc('@param ParamType $paramName');
         $this->currentNodeProvider->setNode($node);
 
-        $this->assertTrue($this->docBlockAnalyzer->hasTag($node, 'param'));
-        $this->assertFalse($this->docBlockAnalyzer->hasTag($node, 'var'));
+        $this->assertTrue($this->docBlockManipulator->hasTag($node, 'param'));
+        $this->assertFalse($this->docBlockManipulator->hasTag($node, 'var'));
     }
 
     public function testRemoveAnnotationFromNode(): void
@@ -45,7 +45,7 @@ final class DocBlockAnalyzerTest extends AbstractKernelTestCase
 
         $this->assertNotSame('', $node->getDocComment()->getText());
 
-        $this->docBlockAnalyzer->removeTagFromNode($node, 'param');
+        $this->docBlockManipulator->removeTagFromNode($node, 'param');
         $this->assertNull($node->getDocComment());
 
         $initDoc = <<<'CODE_SAMPLE'
@@ -55,7 +55,7 @@ CODE_SAMPLE;
         $node = $this->createNodeWithDoc($initDoc);
         $this->currentNodeProvider->setNode($node);
 
-        $this->docBlockAnalyzer->removeParamTagByName($node, 'paramName');
+        $this->docBlockManipulator->removeParamTagByName($node, 'paramName');
 
         $expectedDoc = <<<'CODE_SAMPLE'
 /**

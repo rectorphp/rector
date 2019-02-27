@@ -5,7 +5,7 @@ namespace Rector\CodingStyle\Rector\ClassConst;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassConst;
 use Rector\NodeTypeResolver\Node\NodeToStringTypeResolver;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockAnalyzer;
+use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -13,18 +13,20 @@ use Rector\RectorDefinition\RectorDefinition;
 final class CompleteVarDocTypeConstantRector extends AbstractRector
 {
     /**
-     * @var DocBlockAnalyzer
+     * @var DocBlockManipulator
      */
-    private $docBlockAnalyzer;
+    private $docBlockManipulator;
 
     /**
      * @var NodeToStringTypeResolver
      */
     private $nodeToStringTypeResolver;
 
-    public function __construct(DocBlockAnalyzer $docBlockAnalyzer, NodeToStringTypeResolver $nodeToStringTypeResolver)
-    {
-        $this->docBlockAnalyzer = $docBlockAnalyzer;
+    public function __construct(
+        DocBlockManipulator $docBlockManipulator,
+        NodeToStringTypeResolver $nodeToStringTypeResolver
+    ) {
+        $this->docBlockManipulator = $docBlockManipulator;
         $this->nodeToStringTypeResolver = $nodeToStringTypeResolver;
     }
 
@@ -65,7 +67,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->docBlockAnalyzer->hasTag($node, 'var')) {
+        if ($this->docBlockManipulator->hasTag($node, 'var')) {
             return null;
         }
 
@@ -79,7 +81,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->docBlockAnalyzer->addVarTag($node, $knownType);
+        $this->docBlockManipulator->addVarTag($node, $knownType);
 
         return $node;
     }

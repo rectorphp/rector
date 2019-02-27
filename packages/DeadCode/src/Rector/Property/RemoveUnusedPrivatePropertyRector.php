@@ -7,7 +7,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\Property;
 use Rector\NodeTypeResolver\Node\Attribute;
-use Rector\PhpParser\Node\Maintainer\PropertyMaintainer;
+use Rector\PhpParser\Node\Manipulator\PropertyManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -15,13 +15,13 @@ use Rector\RectorDefinition\RectorDefinition;
 final class RemoveUnusedPrivatePropertyRector extends AbstractRector
 {
     /**
-     * @var PropertyMaintainer
+     * @var PropertyManipulator
      */
-    private $propertyMaintainer;
+    private $propertyManipulator;
 
-    public function __construct(PropertyMaintainer $propertyMaintainer)
+    public function __construct(PropertyManipulator $propertyManipulator)
     {
-        $this->propertyMaintainer = $propertyMaintainer;
+        $this->propertyManipulator = $propertyManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -65,7 +65,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $propertyFetches = $this->propertyMaintainer->getAllPropertyFetch($node);
+        $propertyFetches = $this->propertyManipulator->getAllPropertyFetch($node);
 
         // never used
         if ($propertyFetches === []) {

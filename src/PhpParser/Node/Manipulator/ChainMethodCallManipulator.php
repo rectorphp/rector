@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\PhpParser\Node\Maintainer;
+namespace Rector\PhpParser\Node\Manipulator;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
@@ -11,7 +11,7 @@ use Rector\PhpParser\Node\Resolver\NameResolver;
  * Read-only utils for chain of MethodCall Node:
  * "$this->methodCall()->chainedMethodCall()"
  */
-final class ChainMethodCallMaintainer
+final class ChainMethodCallManipulator
 {
     /**
      * @var NodeTypeResolver
