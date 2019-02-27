@@ -69,7 +69,7 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
 
     protected function isChangeVendorLockedIn(ClassMethod $classMethod, int $paramPosition): bool
     {
-        if ($this->hasParentClassOrImplementsInterface($classMethod) === false) {
+        if (! $this->hasParentClassOrImplementsInterface($classMethod)) {
             return false;
         }
 
@@ -104,7 +104,7 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
         }
 
         $classNode = $classMethod->getAttribute(Attribute::CLASS_NODE);
-        if (($classNode instanceof Class_ || $classNode instanceof Interface_) === false) {
+        if (! ($classNode instanceof Class_ || $classNode instanceof Interface_)) {
             return false;
         }
 

@@ -109,7 +109,7 @@ CODE_SAMPLE
 
         foreach ($varTypeInfos as $varTypeInfo) {
             /** @var VarTypeInfo $varTypeInfo */
-            if ($varTypeInfo->isTypehintAble() === false) {
+            if (! $varTypeInfo->isTypehintAble()) {
                 continue;
             }
 

@@ -54,7 +54,7 @@ final class Application extends SymfonyApplication
             return parent::doRun($input, $output);
         }
 
-        if ($this->isVersionPrintedElsewhere($input) === false) {
+        if (! $this->isVersionPrintedElsewhere($input)) {
             // always print name version to more debug info
             $output->writeln($this->getLongVersion());
             $shouldFollowByNewline = true;
@@ -103,7 +103,7 @@ final class Application extends SymfonyApplication
 
     private function isVersionPrintedElsewhere(InputInterface $input): bool
     {
-        return $input->hasParameterOption('--version') !== false || $input->getFirstArgument() === null;
+        return $input->hasParameterOption('--version') || $input->getFirstArgument() === null;
     }
 
     private function getConfigPath(InputInterface $input): string

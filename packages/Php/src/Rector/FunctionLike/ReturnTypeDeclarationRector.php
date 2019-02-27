@@ -75,9 +75,9 @@ CODE_SAMPLE
 
         // already set → skip
         $hasNewType = false;
-        if ($node->returnType) {
+        if ($node->returnType !== null) {
             $hasNewType = $node->returnType->getAttribute(self::HAS_NEW_INHERITED_TYPE, false);
-            if ($hasNewType === false) {
+            if (! $hasNewType) {
                 return null;
             }
         }
@@ -107,7 +107,7 @@ CODE_SAMPLE
             $possibleOverrideNewReturnType = $returnTypeInfo->getTypeNode();
 
             if ($possibleOverrideNewReturnType !== null) {
-                if ($node->returnType) {
+                if ($node->returnType !== null) {
                     if ($this->isSubtypeOf($possibleOverrideNewReturnType, $node->returnType)) {
                         // allow override
                         $node->returnType = $returnTypeInfo->getTypeNode();

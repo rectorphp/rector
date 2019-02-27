@@ -72,7 +72,7 @@ CODE_SAMPLE
         /** @var Scope|null $nodeScope */
         $nodeScope = $node->getAttribute(Attribute::SCOPE);
         if ($nodeScope instanceof Scope) {
-            if ($nodeScope->isInClass() === false) {
+            if (! $nodeScope->isInClass()) {
                 return null;
             }
         }

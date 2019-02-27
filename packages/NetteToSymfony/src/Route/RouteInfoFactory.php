@@ -103,7 +103,7 @@ final class RouteInfoFactory
                     return null;
                 }
 
-                if (class_exists($presenterClass) === false) {
+                if (! class_exists($presenterClass)) {
                     return null;
                 }
 

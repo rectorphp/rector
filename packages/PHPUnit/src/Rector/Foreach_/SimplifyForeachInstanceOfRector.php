@@ -73,7 +73,7 @@ CODE_SAMPLE
             }
         );
 
-        if (! $matchedNode) {
+        if ($matchedNode === null) {
             return null;
         }
 

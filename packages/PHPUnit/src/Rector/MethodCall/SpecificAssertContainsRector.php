@@ -86,7 +86,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->isStringType($node->args[1]->value) === false) {
+        if (! $this->isStringType($node->args[1]->value)) {
             return null;
         }
 

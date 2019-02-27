@@ -188,18 +188,9 @@ CODE_SAMPLE
     private function shouldSkipVariable(?Type $staticType): bool
     {
         if ($staticType instanceof UnionType) {
-            if ($staticType->isSuperTypeOf(new ArrayType(new MixedType(), new MixedType()))->yes() &&
-                $staticType->isSuperTypeOf(new ConstantStringType(''))->yes()) {
-                return false;
-            }
-
-            return true;
+            return ! ($staticType->isSuperTypeOf(new ArrayType(new MixedType(), new MixedType()))->yes() &&
+                $staticType->isSuperTypeOf(new ConstantStringType(''))->yes());
         }
-
-        if ($staticType instanceof StringType) {
-            return false;
-        }
-
-        return true;
+        return ! $staticType instanceof StringType;
     }
 }

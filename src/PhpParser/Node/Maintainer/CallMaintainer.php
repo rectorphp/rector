@@ -116,12 +116,13 @@ final class CallMaintainer
         ReflectionFunctionAbstract $reflectionFunctionAbstract,
         Node $callNode
     ): bool {
-        if ($reflectionFunctionAbstract->getFileName() === false) {
+        if (! $reflectionFunctionAbstract->getFileName()) {
             return false;
         }
 
+        /** @var string $filePath */
         $filePath = $reflectionFunctionAbstract->getFileName();
-        if (file_exists($filePath) === false) {
+        if (! file_exists($filePath)) {
             return true;
         }
 

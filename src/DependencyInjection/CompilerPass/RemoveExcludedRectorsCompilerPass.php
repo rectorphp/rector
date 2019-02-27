@@ -15,7 +15,7 @@ final class RemoveExcludedRectorsCompilerPass implements CompilerPassInterface
     public function process(ContainerBuilder $containerBuilder): void
     {
         $parameterBag = $containerBuilder->getParameterBag();
-        if ($parameterBag->has(self::EXCLUDE_RECTORS_KEY) === false) {
+        if (! $parameterBag->has(self::EXCLUDE_RECTORS_KEY)) {
             return;
         }
 

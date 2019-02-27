@@ -152,7 +152,7 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($classConstructorReflection->isPublic() === false) {
+        if (! $classConstructorReflection->isPublic()) {
             return false;
         }
 

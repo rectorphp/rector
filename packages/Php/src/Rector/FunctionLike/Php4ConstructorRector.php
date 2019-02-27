@@ -126,11 +126,7 @@ CODE_SAMPLE
         }
 
         $classNode = $classMethod->getAttribute(Attribute::CLASS_NODE);
-        if ($classNode instanceof Class_ && $classNode->name === null) {
-            return true;
-        }
-
-        return false;
+        return $classNode instanceof Class_ && $classNode->name === null;
     }
 
     private function processClassMethodStatementsForParentConstructorCalls(ClassMethod $classMethod): void
@@ -192,12 +188,12 @@ CODE_SAMPLE
             $node->class = new Name('parent');
         }
 
-        if ($this->isName($node->class, 'parent') === false) {
+        if (! $this->isName($node->class, 'parent')) {
             return;
         }
 
         // it's not a parent PHP 4 constructor call
-        if ($this->isNameInsensitive($node, $parentClassName) === false) {
+        if (! $this->isNameInsensitive($node, $parentClassName)) {
             return;
         }
 

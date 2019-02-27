@@ -39,13 +39,9 @@ final class NodeTransformer
         $messageParts = $this->splitBySpace($message);
 
         foreach ($messageParts as $key => $messagePart) {
-            // is mask
-            if (Strings::match($messagePart, '#^%\w$#')) {
-                /** @var Node[] $arrayItems */
-                $messageParts[$key] = array_shift($arrayItems);
-            } else {
-                $messageParts[$key] = new String_($messagePart);
-            }
+            $messageParts[$key] = Strings::match($messagePart, '#^%\w$#') ? array_shift($arrayItems) : new String_(
+                $messagePart
+            );
         }
 
         return new Array_($messageParts);

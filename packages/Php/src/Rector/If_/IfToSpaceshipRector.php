@@ -200,14 +200,9 @@ CODE_SAMPLE
         )) {
             return true;
         }
-
-        if ($this->areNodesEqual($binaryOp->right, $firstValue) && $this->areNodesEqual(
+        return $this->areNodesEqual($binaryOp->right, $firstValue) && $this->areNodesEqual(
             $binaryOp->left,
             $secondValue
-        )) {
-            return true;
-        }
-
-        return false;
+        );
     }
 }

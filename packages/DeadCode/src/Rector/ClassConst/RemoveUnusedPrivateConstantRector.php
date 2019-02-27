@@ -62,7 +62,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node->isPrivate() === false) {
+        if (! $node->isPrivate()) {
             return null;
         }
 

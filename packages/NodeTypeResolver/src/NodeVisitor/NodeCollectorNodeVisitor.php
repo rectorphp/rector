@@ -47,7 +47,7 @@ final class NodeCollectorNodeVisitor extends NodeVisitorAbstract
      */
     public function enterNode(Node $node)
     {
-        if ($node instanceof Class_ && $this->isClassAnonymous($node) === false) {
+        if ($node instanceof Class_ && ! $this->isClassAnonymous($node)) {
             $this->classLikeNodeCollector->addClass($node);
             return;
         }

@@ -82,11 +82,10 @@ CODE_SAMPLE
         /** @var List_ $listNode */
         $listNode = $assignNode->var;
 
-        if (count($listNode->items) === 1) { // just one argument - the key
-            $foreachedExpr = $this->createFunction('array_keys', [$eachFuncCall->args[0]]);
-        } else {
-            $foreachedExpr = $eachFuncCall->args[0]->value;
-        }
+        $foreachedExpr = count($listNode->items) === 1 ? $this->createFunction(
+            'array_keys',
+            [$eachFuncCall->args[0]]
+        ) : $eachFuncCall->args[0]->value;
 
         /** @var ArrayItem $valueItem */
         $valueItem = array_pop($listNode->items);

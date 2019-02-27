@@ -134,22 +134,17 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($this->hasOnlyStatementAssign($ifNode) === false) {
+        if (! $this->hasOnlyStatementAssign($ifNode)) {
             return true;
         }
 
-        if ($this->hasOnlyStatementAssign($ifNode->else) === false) {
+        if (! $this->hasOnlyStatementAssign($ifNode->else)) {
             return true;
         }
 
         if (! $this->areNodesEqual($ifNode->cond->vars[0], $ifNode->stmts[0]->expr->var)) {
             return true;
         }
-
-        if (! $this->areNodesEqual($ifNode->cond->vars[0], $ifNode->else->stmts[0]->expr->var)) {
-            return true;
-        }
-
-        return false;
+        return ! $this->areNodesEqual($ifNode->cond->vars[0], $ifNode->else->stmts[0]->expr->var);
     }
 }
