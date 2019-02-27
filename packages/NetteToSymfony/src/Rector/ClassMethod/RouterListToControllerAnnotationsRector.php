@@ -9,7 +9,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\NetteToSymfony\Annotation\RouteTagValueNode;
+use Rector\NetteToSymfony\Annotation\SymfonyRoutePhpDocTagNode;
 use Rector\NetteToSymfony\Route\RouteInfo;
 use Rector\NetteToSymfony\Route\RouteInfoFactory;
 use Rector\NodeTypeResolver\Application\ClassLikeNodeCollector;
@@ -192,7 +192,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $phpDocTagNode = new RouteTagValueNode(
+            $phpDocTagNode = new SymfonyRoutePhpDocTagNode(
                 $this->routeAnnotationClass,
                 $routeInfo->getPath(),
                 null,
@@ -283,7 +283,7 @@ CODE_SAMPLE
 
                 /** @var ClassMethod $classStmt */
                 $path = $this->resolvePathFromClassAndMethodNodes($presenterClass, $classStmt);
-                $phpDocTagNode = new RouteTagValueNode($this->routeAnnotationClass, $path);
+                $phpDocTagNode = new SymfonyRoutePhpDocTagNode($this->routeAnnotationClass, $path);
 
                 $this->docBlockAnalyzer->addTag($classStmt, $phpDocTagNode);
             }
