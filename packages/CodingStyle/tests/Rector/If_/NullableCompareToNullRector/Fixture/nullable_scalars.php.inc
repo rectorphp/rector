@@ -25,4 +25,18 @@ class NullableScalars
             return 'non-empty string';
         }
     }
+
+    /**
+     * @param null|object[] $arrayOrNull
+     */
+    public function runArrayWithObjects(?array $arrayOrNull)
+    {
+        if (! $arrayOrNull) {
+            return 'no item or null';
+        }
+
+        if ($arrayOrNull) {
+            return 'non-empty array';
+        }
+    }
 }

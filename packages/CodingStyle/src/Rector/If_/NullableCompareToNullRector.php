@@ -10,11 +10,8 @@ use PhpParser\Node\Stmt\If_;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
-use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
-use PHPStan\Type\Php\IsNumericFunctionTypeSpecifyingExtension;
 use PHPStan\Type\StringType;
-use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -85,34 +82,36 @@ CODE_SAMPLE
             return false;
         }
 
-        if ($staticType instanceof UnionType) {
-            // is non-nullable?
-            if ($staticType->isSuperTypeOf(new NullType())->no()) {
-                return false;
-            }
-
-            // is array?
-            if ($staticType->isSuperTypeOf(new ArrayType(new MixedType(), new MixedType()))->yes()) {
-                return false;
-            }
-
-            // is string?
-            if ($staticType->isSuperTypeOf(new StringType())->yes()) {
-                return false;
-            }
-
-            // is number?
-            if ($staticType->isSuperTypeOf(new IntegerType())->yes()) {
-                return false;
-            }
-
-            if ($staticType->isSuperTypeOf(new FloatType())->yes()) {
-                return false;
-            }
-
-            return true;
+        if (! $staticType instanceof UnionType) {
+            return false;
         }
 
-        return false;
+        // is non-nullable?
+        if ($staticType->isSuperTypeOf(new NullType())->no()) {
+            return false;
+        }
+
+        // is array?
+        foreach ($staticType->getTypes() as $subType) {
+            if ($subType instanceof ArrayType) {
+                return false;
+            }
+        }
+
+        // is string?
+        if ($staticType->isSuperTypeOf(new StringType())->yes()) {
+            return false;
+        }
+
+        // is number?
+        if ($staticType->isSuperTypeOf(new IntegerType())->yes()) {
+            return false;
+        }
+
+        if ($staticType->isSuperTypeOf(new FloatType())->yes()) {
+            return false;
+        }
+
+        return true;
     }
 }
