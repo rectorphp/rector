@@ -100,4 +100,10 @@ final class Attribute
      * @var string
      */
     public const START_TOKEN_POSITION = 'startTokenPos';
+
+    /**
+     * @var string
+     * Use often in php-parser
+     */
+    public const KIND = 'kind';
 }
