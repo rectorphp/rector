@@ -225,7 +225,7 @@ final class ClassManipulator
         return in_array($methodName, $methodNames, true);
     }
 
-    public function getMethodByName(Class_ $classNode, string $methodName): ?ClassMethod
+    public function getMethod(Class_ $classNode, string $methodName): ?ClassMethod
     {
         foreach ($classNode->stmts as $stmt) {
             if (! $stmt instanceof ClassMethod) {

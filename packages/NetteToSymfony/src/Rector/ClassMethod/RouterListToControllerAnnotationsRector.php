@@ -268,7 +268,7 @@ CODE_SAMPLE
             return null;
         }
 
-        return $this->classManipulator->getMethodByName($classNode, $routeInfo->getMethod());
+        return $this->classManipulator->getMethod($classNode, $routeInfo->getMethod());
     }
 
     private function completeImplicitRoutes(): void
