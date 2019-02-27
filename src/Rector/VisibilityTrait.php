@@ -82,4 +82,12 @@ trait VisibilityTrait
     {
         $this->visibilityManipulator->makeStatic($node);
     }
+
+    /**
+     * @param ClassMethod|Property $node
+     */
+    public function makeNonStatic(Node $node): void
+    {
+        $this->visibilityManipulator->makeNonStatic($node);
+    }
 }

@@ -1,21 +1,30 @@
 services:
+    # Doctrine
+    Rector\NetteToSymfony\Rector\Class_\KdybyEventDoctrineSubscriberToDoctrineSubscriberRector: ~
+
+    # Event Subscriber
     Rector\Rector\Visibility\ChangeMethodVisibilityRector:
         Kdyby\Events\Subscriber:
             getSubscribedEvents: 'static'
 
     Rector\Rector\MethodCall\MethodNameReplacerRector:
-        # Kdyby → Symfony
+        # Translations
         Kdyby\Translation\Translator:
             translate: 'trans'
+        # RabbitMQ
         Kdyby\RabbitMq\IConsumer:
             process: 'execute'
 
     Rector\Rector\Class_\ClassReplacerRector:
-        # Kdyby → Symfony
+        # RabbitMQ
         Kdyby\RabbitMq\IConsumer: 'OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface'
         Kdyby\RabbitMq\IProducer: 'OldSound\RabbitMqBundle\RabbitMq\ProducerInterface'
+        # Monolog
         Kdyby\Monolog\Logger: 'Psr\Log\LoggerInterface'
+        # Events
         Kdyby\Events\Subscriber: 'Symfony\Component\EventDispatcher\EventSubscriberInterface'
+        # Translation
         Kdyby\Translation\Translator: 'Symfony\Contracts\Translation\TranslatorInterface'
 
+    # Translation
     Rector\NetteToSymfony\Rector\MethodCall\WrapTransParameterNameRector: ~

@@ -158,6 +158,10 @@ final class NodeFactory
         return new FullyQualified($name);
     }
 
+    public function createPublic(): void
+    {
+    }
+
     /**
      * @param string|Expr $variable
      * @param mixed[] $arguments
