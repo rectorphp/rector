@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Rector\CodingStyle\Tests\Rector\String_\SymplifyQuoteEscapeRector;
+namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveDeadConstructorRector;
 
-use Rector\CodingStyle\Rector\String_\SymplifyQuoteEscapeRector;
+use Rector\DeadCode\Rector\ClassMethod\RemoveDeadConstructorRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class SymplifyQuoteEscapeRectorTest extends AbstractRectorTestCase
+final class RemoveDeadConstructorRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
     {
@@ -14,6 +14,6 @@ final class SymplifyQuoteEscapeRectorTest extends AbstractRectorTestCase
 
     protected function getRectorClass(): string
     {
-        return SymplifyQuoteEscapeRector::class;
+        return RemoveDeadConstructorRector::class;
     }
 }
