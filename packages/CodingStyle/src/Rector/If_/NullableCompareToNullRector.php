@@ -107,11 +107,6 @@ CODE_SAMPLE
         if ($staticType->isSuperTypeOf(new IntegerType())->yes()) {
             return false;
         }
-
-        if ($staticType->isSuperTypeOf(new FloatType())->yes()) {
-            return false;
-        }
-
-        return true;
+        return ! $staticType->isSuperTypeOf(new FloatType())->yes();
     }
 }

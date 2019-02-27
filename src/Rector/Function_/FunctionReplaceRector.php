@@ -64,11 +64,9 @@ final class FunctionReplaceRector extends AbstractRector
                 return $this->wrapFuncCalls($node, $newFunction);
             }
 
-            if (Strings::contains($newFunction, '\\')) {
-                $node->name = new FullyQualified($newFunction);
-            } else {
-                $node->name = new Name($newFunction);
-            }
+            $node->name = Strings::contains($newFunction, '\\') ? new FullyQualified($newFunction) : new Name(
+                $newFunction
+            );
         }
 
         return $node;

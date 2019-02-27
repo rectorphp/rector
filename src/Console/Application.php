@@ -103,7 +103,7 @@ final class Application extends SymfonyApplication
 
     private function isVersionPrintedElsewhere(InputInterface $input): bool
     {
-        return $input->hasParameterOption('--version') !== false || $input->getFirstArgument() === null;
+        return $input->hasParameterOption('--version') || $input->getFirstArgument() === null;
     }
 
     private function getConfigPath(InputInterface $input): string

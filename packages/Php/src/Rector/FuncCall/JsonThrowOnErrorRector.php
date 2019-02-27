@@ -68,12 +68,9 @@ CODE_SAMPLE
                 continue;
             }
 
-            if ($i === $constantPosition) {
-                $node->args[$i] = new Arg($this->createConstFetch('JSON_THROW_ON_ERROR'));
-            } else {
-                // fill in blanks
-                $node->args[$i] = new Arg($this->createNull());
-            }
+            $node->args[$i] = $i === $constantPosition ? new Arg($this->createConstFetch(
+                'JSON_THROW_ON_ERROR'
+            )) : new Arg($this->createNull());
         }
 
         return $node;

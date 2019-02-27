@@ -145,11 +145,6 @@ CODE_SAMPLE
         if (! $this->areNodesEqual($ifNode->cond->vars[0], $ifNode->stmts[0]->expr->var)) {
             return true;
         }
-
-        if (! $this->areNodesEqual($ifNode->cond->vars[0], $ifNode->else->stmts[0]->expr->var)) {
-            return true;
-        }
-
-        return false;
+        return ! $this->areNodesEqual($ifNode->cond->vars[0], $ifNode->else->stmts[0]->expr->var);
     }
 }

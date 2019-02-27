@@ -111,11 +111,7 @@ CODE_SAMPLE
 
         /** @var If_ $ifNode */
         $ifNode = $foreachNode->stmts[0];
-        if (! $ifNode->cond instanceof FuncCall) {
-            return true;
-        }
-
-        return false;
+        return ! $ifNode->cond instanceof FuncCall;
     }
 
     private function createAssignNode(Foreach_ $foreachNode, string $name, ArrayDimFetch $arrayDimFetch): Assign

@@ -110,13 +110,8 @@ CODE_SAMPLE
             if ($assignNode->var !== $node) {
                 return false;
             }
-
             // simple variable only
-            if (is_string($node->name)) {
-                return true;
-            }
-
-            return false;
+            return is_string($node->name);
         });
     }
 
@@ -282,11 +277,7 @@ CODE_SAMPLE
         $isVariableAssigned = (bool) $this->betterNodeFinder->findFirst($assignNode->expr, function (Node $node) use (
             $nodeByTypeAndPosition
         ) {
-            if ($this->areNodesEqual($node, $nodeByTypeAndPosition->getVariableNode())) {
-                return true;
-            }
-
-            return false;
+            return $this->areNodesEqual($node, $nodeByTypeAndPosition->getVariableNode());
         });
 
         return ! $isVariableAssigned;

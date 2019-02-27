@@ -163,11 +163,6 @@ CODE_SAMPLE
         if ($classNode->extends === $node && interface_exists($newName)) {
             return false;
         }
-
-        if (in_array($node, $classNode->implements, true) && class_exists($newName)) {
-            return false;
-        }
-
-        return true;
+        return ! (in_array($node, $classNode->implements, true) && class_exists($newName));
     }
 }

@@ -126,11 +126,7 @@ CODE_SAMPLE
         }
 
         $classNode = $classMethod->getAttribute(Attribute::CLASS_NODE);
-        if ($classNode instanceof Class_ && $classNode->name === null) {
-            return true;
-        }
-
-        return false;
+        return $classNode instanceof Class_ && $classNode->name === null;
     }
 
     private function processClassMethodStatementsForParentConstructorCalls(ClassMethod $classMethod): void

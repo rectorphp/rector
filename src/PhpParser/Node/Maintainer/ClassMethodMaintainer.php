@@ -183,12 +183,7 @@ final class ClassMethodMaintainer
             if ($node instanceof MethodCall && $this->nameResolver->isName($node->var, 'this')) {
                 return true;
             }
-
-            if ($node instanceof StaticCall && $this->nameResolver->isNames($node->class, ['self', 'static'])) {
-                return true;
-            }
-
-            return false;
+            return $node instanceof StaticCall && $this->nameResolver->isNames($node->class, ['self', 'static']);
         });
     }
 
