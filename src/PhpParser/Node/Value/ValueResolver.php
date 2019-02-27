@@ -2,7 +2,6 @@
 
 namespace Rector\PhpParser\Node\Value;
 
-use PhpParser\ConstExprEvaluationException;
 use PhpParser\ConstExprEvaluator;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
@@ -95,8 +94,6 @@ final class ValueResolver
 
     /**
      * @return mixed
-     * @throws ShouldNotHappenException
-     * @throws ConstExprEvaluationException
      */
     private function resolveClassConstFetch(ClassConstFetch $classConstFetch)
     {
