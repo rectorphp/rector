@@ -22,10 +22,10 @@
     "require-dev": {
         "ocramius/package-versions": "^1.3",
         "phpunit/phpunit": "^7.5|^8.0",
-        "symplify/easy-coding-standard": "^5.4.6",
+        "symplify/easy-coding-standard": "^5.5",
         "friendsofphp/php-cs-fixer": "^2.14",
-        "symplify/monorepo-builder": "^5.4.6",
-        "symplify/phpstan-extensions": "^5.4.6",
+        "symplify/monorepo-builder": "^5.5",
+        "symplify/phpstan-extensions": "^5.5",
         "thecodingmachine/phpstan-strict-rules": "^0.11.0",
         "tracy/tracy": "^2.5"
     },
@@ -118,5 +118,7 @@
     },
     "config": {
         "sort-packages": true
-    }
+    },
+    "prefer-stable": true,
+    "minimum-stability": "dev"
 }

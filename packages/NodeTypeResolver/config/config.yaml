@@ -11,6 +11,7 @@ services:
     Rector\FileSystem\FilesFinder: ~
     Rector\PhpParser\Printer\BetterStandardPrinter: ~
     Rector\PhpParser\Node\BetterNodeFinder: ~
+    Symplify\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory: ~
 
     # PHPStan
     PHPStan\Broker\Broker:

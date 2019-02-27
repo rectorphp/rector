@@ -23,6 +23,20 @@ use Rector\NodeTypeResolver\Php\ParamTypeInfo;
 use Rector\NodeTypeResolver\Php\ReturnTypeInfo;
 use Rector\NodeTypeResolver\Php\VarTypeInfo;
 use Rector\Php\TypeAnalyzer;
+<<<<<<< HEAD
+=======
+use Symplify\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
+use Symplify\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareParamTagValueNode;
+use Symplify\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwarePhpDocNode;
+use Symplify\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
+use Symplify\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareVarTagValueNode;
+use Symplify\BetterPhpDocParser\Attributes\Ast\PhpDoc\Type\AttributeAwareIdentifierTypeNode;
+use Symplify\BetterPhpDocParser\Attributes\Attribute\Attribute;
+use Symplify\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Symplify\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Symplify\BetterPhpDocParser\PhpDocModifier;
+use Symplify\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
+>>>>>>> create attribute aware for user
 
 final class DocBlockManipulator
 {
@@ -46,16 +60,28 @@ final class DocBlockManipulator
      */
     private $typeAnalyzer;
 
+    /**
+     * @var AttributeAwareNodeFactory
+     */
+    private $attributeAwareNodeFactory;
+
     public function __construct(
         PhpDocInfoFactory $phpDocInfoFactory,
         PhpDocInfoPrinter $phpDocInfoPrinter,
         PhpDocModifier $phpDocModifier,
+<<<<<<< HEAD
         TypeAnalyzer $typeAnalyzer
+=======
+        CurrentNodeProvider $currentNodeProvider,
+        TypeAnalyzer $typeAnalyzer,
+        AttributeAwareNodeFactory $attributeAwareNodeFactory
+>>>>>>> create attribute aware for user
     ) {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->phpDocInfoPrinter = $phpDocInfoPrinter;
         $this->phpDocModifier = $phpDocModifier;
         $this->typeAnalyzer = $typeAnalyzer;
+        $this->attributeAwareNodeFactory = $attributeAwareNodeFactory;
     }
 
     public function hasTag(Node $node, string $name): bool
@@ -90,6 +116,8 @@ final class DocBlockManipulator
 
     public function addTag(Node $node, PhpDocChildNode $phpDocChildNode): void
     {
+        $phpDocChildNode = $this->attributeAwareNodeFactory->createFromChildNode($phpDocChildNode);
+
         if ($node->getDocComment() !== null) {
             $phpDocInfo = $this->createPhpDocInfoFromNode($node);
             $phpDocNode = $phpDocInfo->getPhpDocNode();
@@ -217,6 +245,7 @@ final class DocBlockManipulator
             $varTagValueNode = new AttributeAwareVarTagValueNode(new AttributeAwareIdentifierTypeNode(
                 '\\' . $type
             ), '', '');
+
             $phpDocNode->children[] = new AttributeAwarePhpDocTagNode('@var', $varTagValueNode);
 
             $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
