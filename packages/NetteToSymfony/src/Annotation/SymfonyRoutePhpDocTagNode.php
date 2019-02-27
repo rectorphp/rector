@@ -3,18 +3,23 @@
 namespace Rector\NetteToSymfony\Annotation;
 
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
+use Symplify\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
+use Symplify\BetterPhpDocParser\Attributes\Contract\Ast\AttributeAwareNodeInterface;
 
-final class RouteTagValueNode implements PhpDocChildNode
+final class SymfonyRoutePhpDocTagNode extends PhpDocTagNode implements PhpDocChildNode, AttributeAwareNodeInterface
 {
-    /**
-     * @var string
-     */
-    private $path;
+    use AttributeTrait;
 
     /**
      * @var string|null
      */
-    private $name;
+    public $name;
+
+    /**
+     * @var string
+     */
+    private $path;
 
     /**
      * @var string

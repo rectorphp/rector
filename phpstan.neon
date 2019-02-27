@@ -128,3 +128,5 @@ parameters:
         - '#Parameter \#2 \$constFetch of method Rector\\CodeQuality\\Rector\\Identical\\SimplifyArraySearchRector\:\:resolveIsNot\(\) expects PhpParser\\Node\\Expr\\ConstFetch, PhpParser\\Node given#'
         - '#Parameter \#1 \$binaryOp of method Rector\\CodeQuality\\Rector\\Identical\\SimplifyConditionsRector\:\:createInversedBooleanOp\(\) expects PhpParser\\Node\\Expr\\BinaryOp, PhpParser\\Node given#'
         - '#Parameter \#2 \$classMethod of method Rector\\NetteToSymfony\\Rector\\ClassMethod\\RouterListToControllerAnnotationsRector\:\:resolvePathFromClassAndMethodNodes\(\) expects PhpParser\\Node\\Stmt\\ClassMethod, PhpParser\\Node\\Stmt given#'
+
+        - '#Rector\\NetteToSymfony\\Annotation\\SymfonyRoutePhpDocTagNode\:\:__construct\(\) does not call parent constructor from PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagNode#'
