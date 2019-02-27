@@ -10,7 +10,6 @@ use PhpParser\NodeVisitorAbstract;
 use Rector\Application\AppliedRectorCollector;
 use Rector\Application\RemovedFilesCollector;
 use Rector\Contract\Rector\PhpRectorInterface;
-use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Php\PhpVersionProvider;
 use Rector\PhpParser\Node\Value\ValueResolver;
@@ -88,7 +87,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
             return null;
         }
 
-        $originalNode = $node;
+        $originalNode = clone $node;
         $originalComment = $node->getComments();
         $originalDocComment = $node->getDocComment();
         $node = $this->refactor($node);
@@ -99,7 +98,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         // changed!
         if ($originalNode !== $node) {
             $this->mirrorAttributes($originalNode, $node);
-
             $this->keepFileInfoAttribute($node, $originalNode);
             $this->notifyNodeChangeFileInfo($node);
         // doc block has changed
@@ -177,12 +175,9 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     {
         $fileInfo = $node->getAttribute(Attribute::FILE_INFO);
         if ($fileInfo === null) {
-            throw new ShouldNotHappenException(sprintf(
-                'Node is missing "%s" attribute.%sYou probably created a new node and forgot to move attributes of old one in "%s".',
-                Attribute::FILE_INFO,
-                PHP_EOL,
-                static::class
-            ));
+            // this file was changed before and this is a sub-new node
+            // array Traverse to all new nodes would have to be used, but it's not worth the performance
+            return;
         }
 
         $this->appliedRectorCollector->addRectorClass(static::class, $fileInfo);
