@@ -50,7 +50,7 @@ final class ValueResolver
             return $this->constExprEvaluator;
         }
 
-        $this->constExprEvaluator = new ConstExprEvaluator(function (Expr $expr): ?string {
+        $this->constExprEvaluator = new ConstExprEvaluator(function (Expr $expr) {
             if ($expr instanceof Dir) {
                 // __DIR__
                 return $this->resolveDirConstant($expr);
@@ -92,7 +92,14 @@ final class ValueResolver
         return $fileInfo->getPathname();
     }
 
-    private function resolveClassConstFetch(ClassConstFetch $classConstFetch): string
+    /**
+     * @param ClassConstFetch $classConstFetch
+     *
+     * @return mixed
+     * @throws ShouldNotHappenException
+     * @throws \PhpParser\ConstExprEvaluationException
+     */
+    private function resolveClassConstFetch(ClassConstFetch $classConstFetch)
     {
         $class = $this->nameResolver->resolve($classConstFetch->class);
         $constant = $this->nameResolver->resolve($classConstFetch->name);
