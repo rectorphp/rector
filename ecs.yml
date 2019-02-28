@@ -85,6 +85,7 @@ parameters:
 
         Symplify\CodingStandard\Sniffs\CleanCode\ForbiddenStaticFunctionSniff:
             - 'src/Util/*.php'
+            - 'packages/BetterPhpDocParser/src/Annotation/AnnotationNaming.php'
 
         Symplify\CodingStandard\Fixer\Naming\PropertyNameMatchingTypeFixer:
             - 'packages/NodeTypeResolver/src/PHPStan/Scope/NodeScopeResolver.php'
@@ -101,6 +102,7 @@ parameters:
             - 'packages/NetteToSymfony/src/Route/RouteInfoFactory.php'
             - 'packages/ContributorTools/src/Command/DumpNodesCommand.php'
             - 'packages/CodeQuality/src/Rector/Identical/SimplifyBoolIdenticalTrueRector.php'
+            - 'packages/BetterPhpDocParser/src/Attributes/Ast/AttributeAwareNodeFactory.php'
 
             # copied 3rd party logic
             - 'packages/Php/src/EregToPcreTransformer.php'

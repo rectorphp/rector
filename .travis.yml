@@ -21,6 +21,8 @@ install:
 before_script:
     # disable xdebug
     - if [[ $COVERAGE == "" ]]; then phpenv config-rm xdebug.ini || echo "xdebug not available"; fi
+    # increase memory for tests
+    - echo "memory_limit=2048M" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
     # report inline scripts fails
     - set -e
 

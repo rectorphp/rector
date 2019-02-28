@@ -1,0 +1,6 @@
+/**
+ * @param SomeType
+ *
+ *
+ * @return SomeType
+ */

@@ -1,0 +1,4 @@
+/**
+ * @param \PHP\Filter $phpFilter
+ * @return \PHP\Filter|null
+ */

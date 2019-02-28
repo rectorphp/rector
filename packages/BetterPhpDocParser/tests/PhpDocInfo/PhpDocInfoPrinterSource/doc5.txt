@@ -1,0 +1,10 @@
+/**
+ * @param something $value
+ *
+ * @return bool
+ *
+ * @throw that
+ * @throw this too
+ *
+ * @drop this
+ */

@@ -4,8 +4,8 @@ namespace Rector\NetteToSymfony\Annotation;
 
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use Symplify\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
-use Symplify\BetterPhpDocParser\Attributes\Contract\Ast\AttributeAwareNodeInterface;
+use Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
+use Rector\BetterPhpDocParser\Attributes\Contract\Ast\AttributeAwareNodeInterface;
 
 final class SymfonyRoutePhpDocTagNode extends PhpDocTagNode implements PhpDocChildNode, AttributeAwareNodeInterface
 {

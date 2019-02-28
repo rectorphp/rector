@@ -2,24 +2,25 @@
 
 namespace Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer;
 
+use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use Symplify\BetterPhpDocParser\Ast\NodeTraverser;
-use Symplify\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareParamTagValueNode;
-use Symplify\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwarePhpDocNode;
-use Symplify\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareReturnTagValueNode;
-use Symplify\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareThrowsTagValueNode;
-use Symplify\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareVarTagValueNode;
-use Symplify\BetterPhpDocParser\Attributes\Ast\PhpDoc\Type\AttributeAwareArrayTypeNode;
-use Symplify\BetterPhpDocParser\Attributes\Ast\PhpDoc\Type\AttributeAwareGenericTypeNode;
-use Symplify\BetterPhpDocParser\Attributes\Ast\PhpDoc\Type\AttributeAwareIdentifierTypeNode;
-use Symplify\BetterPhpDocParser\Attributes\Ast\PhpDoc\Type\AttributeAwareIntersectionTypeNode;
-use Symplify\BetterPhpDocParser\Attributes\Ast\PhpDoc\Type\AttributeAwareThisTypeNode;
-use Symplify\BetterPhpDocParser\Attributes\Ast\PhpDoc\Type\AttributeAwareUnionTypeNode;
-use Symplify\BetterPhpDocParser\Attributes\Attribute\Attribute;
-use Symplify\BetterPhpDocParser\Attributes\Attribute\Attribute as PhpDocAttribute;
-use Symplify\BetterPhpDocParser\Attributes\Contract\Ast\AttributeAwareNodeInterface;
-use Symplify\BetterPhpDocParser\Contract\PhpDocNodeDecoratorInterface;
+use Rector\BetterPhpDocParser\Ast\NodeTraverser;
+use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareParamTagValueNode;
+use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwarePhpDocNode;
+use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareReturnTagValueNode;
+use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareThrowsTagValueNode;
+use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareVarTagValueNode;
+use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\Type\AttributeAwareArrayTypeNode;
+use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\Type\AttributeAwareGenericTypeNode;
+use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\Type\AttributeAwareIdentifierTypeNode;
+use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\Type\AttributeAwareIntersectionTypeNode;
+use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\Type\AttributeAwareThisTypeNode;
+use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\Type\AttributeAwareUnionTypeNode;
+use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
+use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute as PhpDocAttribute;
+use Rector\BetterPhpDocParser\Attributes\Contract\Ast\AttributeAwareNodeInterface;
+use Rector\BetterPhpDocParser\Contract\PhpDocNodeDecoratorInterface;
 
 final class FqnNamePhpDocNodeDecorator implements PhpDocNodeDecoratorInterface
 {
@@ -49,11 +50,11 @@ final class FqnNamePhpDocNodeDecorator implements PhpDocNodeDecoratorInterface
         $this->nodeTraverser = $nodeTraverser;
     }
 
-    public function decorate(AttributeAwarePhpDocNode $attributeAwarePhpDocNode): AttributeAwarePhpDocNode
+    public function decorate(AttributeAwarePhpDocNode $attributeAwarePhpDocNode, Node $node): AttributeAwarePhpDocNode
     {
         $this->nodeTraverser->traverseWithCallable(
             $attributeAwarePhpDocNode,
-            function (AttributeAwareNodeInterface $attributeAwarePhpDocNode) {
+            function (AttributeAwareNodeInterface $attributeAwarePhpDocNode) use ($node) {
                 if (! $attributeAwarePhpDocNode instanceof IdentifierTypeNode) {
                     return $attributeAwarePhpDocNode;
                 }
@@ -62,7 +63,10 @@ final class FqnNamePhpDocNodeDecorator implements PhpDocNodeDecoratorInterface
                     return $attributeAwarePhpDocNode;
                 }
 
-                $fqnName = $this->namespaceAnalyzer->resolveTypeToFullyQualified($attributeAwarePhpDocNode->name);
+                $fqnName = $this->namespaceAnalyzer->resolveTypeToFullyQualified(
+                    $attributeAwarePhpDocNode->name,
+                    $node
+                );
 
                 $attributeAwarePhpDocNode->setAttribute(self::RESOLVED_NAME, $fqnName);
 
