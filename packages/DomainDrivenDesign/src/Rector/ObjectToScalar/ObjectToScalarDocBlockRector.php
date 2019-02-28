@@ -9,23 +9,16 @@ use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Property;
 use Rector\NodeTypeResolver\Node\Attribute;
-use Rector\NodeTypeResolver\Node\CurrentNodeProvider;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class ObjectToScalarDocBlockRector extends AbstractObjectToScalarRector
 {
     /**
-     * @var CurrentNodeProvider
-     */
-    private $currentNodeProvider;
-
-    /**
      * @param string[] $valueObjectsToSimpleTypes
      */
-    public function __construct(array $valueObjectsToSimpleTypes, CurrentNodeProvider $currentNodeProvider)
+    public function __construct(array $valueObjectsToSimpleTypes)
     {
-        $this->currentNodeProvider = $currentNodeProvider;
         parent::__construct($valueObjectsToSimpleTypes);
     }
 
@@ -148,9 +141,7 @@ CODE_SAMPLE
             return;
         }
 
-        $this->currentNodeProvider->setNode($nullableType);
-
-        $oldType = $this->namespaceAnalyzer->resolveTypeToFullyQualified((string) $nullableType->type);
+        $oldType = $this->namespaceAnalyzer->resolveTypeToFullyQualified((string) $nullableType->type, $nullableType);
 
         $this->docBlockManipulator->changeType($classMethodNode, $oldType, $newType);
     }

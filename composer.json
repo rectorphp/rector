@@ -17,7 +17,6 @@
         "symfony/dependency-injection": "^3.4|^4.2",
         "symfony/finder": "^3.4|^4.2",
         "symfony/process": "^3.4|^4.2",
-        "symplify/better-phpdoc-parser": "^5.4.6",
         "symplify/package-builder": "^5.4.6"
     },
     "require-dev": {
@@ -34,6 +33,7 @@
         "psr-4": {
             "Rector\\": "src",
             "Rector\\Celebrity\\": "packages/Celebrity/src",
+            "Rector\\BetterPhpDocParser\\": "packages/BetterPhpDocParser/src",
             "Rector\\ConsoleDiffer\\": "packages/ConsoleDiffer/src",
             "Rector\\CodingStyle\\": "packages/CodingStyle/src",
             "Rector\\DeadCode\\": "packages/DeadCode/src",
@@ -63,6 +63,7 @@
         "psr-4": {
             "Rector\\Celebrity\\Tests\\": "packages/Celebrity/tests",
             "Rector\\Tests\\": "tests",
+            "Rector\\BetterPhpDocParser\\Tests\\": "packages/BetterPhpDocParser/tests",
             "Rector\\NodeTypeResolver\\Tests\\": "packages/NodeTypeResolver/tests",
             "Rector\\CakePHP\\Tests\\": "packages/CakePHP/tests",
             "Rector\\CodeQuality\\Tests\\": "packages/CodeQuality/tests",

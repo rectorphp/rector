@@ -6,29 +6,18 @@ use Nette\Utils\Reflection;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
+use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwarePhpDocNode;
+use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
+use Rector\BetterPhpDocParser\Contract\PhpDocNodeDecoratorInterface;
 use Rector\NodeTypeResolver\Node\Attribute;
-use Rector\NodeTypeResolver\Node\CurrentNodeProvider;
 use ReflectionClass;
-use Symplify\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwarePhpDocNode;
-use Symplify\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
-use Symplify\BetterPhpDocParser\Contract\PhpDocNodeDecoratorInterface;
 
 /**
  * Changes @Inject name to @Full\Namespace\Inject
  */
 final class FqnAnnotationTypeDecorator implements PhpDocNodeDecoratorInterface
 {
-    /**
-     * @var CurrentNodeProvider
-     */
-    private $currentNodeProvider;
-
-    public function __construct(CurrentNodeProvider $currentNodeProvider)
-    {
-        $this->currentNodeProvider = $currentNodeProvider;
-    }
-
-    public function decorate(AttributeAwarePhpDocNode $attributeAwarePhpDocNode): AttributeAwarePhpDocNode
+    public function decorate(AttributeAwarePhpDocNode $attributeAwarePhpDocNode, Node $node): AttributeAwarePhpDocNode
     {
         foreach ($attributeAwarePhpDocNode->children as $phpDocChildNode) {
             if (! $phpDocChildNode instanceof AttributeAwarePhpDocTagNode) {
@@ -43,7 +32,7 @@ final class FqnAnnotationTypeDecorator implements PhpDocNodeDecoratorInterface
             }
 
             $tagShortName = $this->joinWithValue($phpDocChildNode, $tagShortName);
-            $tagFqnName = $this->resolveTagFqnName($this->currentNodeProvider->getNode(), $tagShortName);
+            $tagFqnName = $this->resolveTagFqnName($node, $tagShortName);
 
             $phpDocChildNode->setAttribute('annotation_class', $tagFqnName);
         }

@@ -1,0 +1,16 @@
+services:
+    _defaults:
+        autowire: true
+        public: true
+
+    Rector\BetterPhpDocParser\:
+        resource: '../src'
+        exclude: '../src/{HttpKernel,Data,*/*Info.php,*Info.php,Attributes/Ast/PhpDoc/*}'
+
+    PHPStan\PhpDocParser\Lexer\Lexer: ~
+    PHPStan\PhpDocParser\Parser\TypeParser: ~
+    PHPStan\PhpDocParser\Parser\ConstExprParser: ~
+    Symplify\PackageBuilder\Php\TypeAnalyzer: ~
+
+    PHPStan\PhpDocParser\Parser\PhpDocParser:
+        alias: 'Rector\BetterPhpDocParser\PhpDocParser\BetterPhpDocParser'

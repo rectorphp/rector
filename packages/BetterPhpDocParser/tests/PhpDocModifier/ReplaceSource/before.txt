@@ -1,0 +1,6 @@
+/**
+ * @param PHP_Filter[] $phpFilters
+ * @param PHP_Filter[]|null $phpFilters2
+ * @param PHP_Filter|null $phpFilters3
+ * @param \PHP_Filter|null $phpFilters4
+ */

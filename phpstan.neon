@@ -130,3 +130,12 @@ parameters:
         - '#Parameter \#2 \$classMethod of method Rector\\NetteToSymfony\\Rector\\ClassMethod\\RouterListToControllerAnnotationsRector\:\:resolvePathFromClassAndMethodNodes\(\) expects PhpParser\\Node\\Stmt\\ClassMethod, PhpParser\\Node\\Stmt given#'
 
         - '#Rector\\NetteToSymfony\\Annotation\\SymfonyRoutePhpDocTagNode\:\:__construct\(\) does not call parent constructor from PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagNode#'
+
+        - '#Access to an undefined property Rector\\BetterPhpDocParser\\Attributes\\Contract\\Ast\\AttributeAwareNodeInterface\:\:\$type#'
+
+        - '#PHPDoc tag @return with type PHPStan\\PhpDocParser\\Ast\\Type\\TypeNode\|Symplify\\BetterPhpDocParser\\Attributes\\Contract\\Ast\\AttributeAwareNodeInterface is not subtype of native type PHPStan\\PhpDocParser\\Ast\\Type\\TypeNode\|null#'
+        - '#(.*?)(AttributeAwareNodeInterface|AttributeAware(.*?)TagValueNode)(.*?)#'
+
+        - '#Call to an undefined method PHPStan\\PhpDocParser\\Ast\\PhpDoc\\(.*?)\:\:getAttribute\(\)#'
+        - '#Access to an undefined property PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagValueNode\:\:\$type#'
+        - '#Parameter \#1 \$children of class PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocNode constructor expects array<PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocChildNode\>, array<int, PHPStan\\PhpDocParser\\Ast\\Node\> given#'

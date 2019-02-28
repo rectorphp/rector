@@ -7,23 +7,22 @@ use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
+use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareParamTagValueNode;
+use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwarePhpDocNode;
+use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
+use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareVarTagValueNode;
+use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\Type\AttributeAwareIdentifierTypeNode;
+use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\BetterPhpDocParser\PhpDocModifier;
+use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Exception\MissingTagException;
-use Rector\NodeTypeResolver\Node\CurrentNodeProvider;
 use Rector\NodeTypeResolver\Php\ParamTypeInfo;
 use Rector\NodeTypeResolver\Php\ReturnTypeInfo;
 use Rector\NodeTypeResolver\Php\VarTypeInfo;
 use Rector\Php\TypeAnalyzer;
-use Symplify\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareParamTagValueNode;
-use Symplify\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwarePhpDocNode;
-use Symplify\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
-use Symplify\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareVarTagValueNode;
-use Symplify\BetterPhpDocParser\Attributes\Ast\PhpDoc\Type\AttributeAwareIdentifierTypeNode;
-use Symplify\BetterPhpDocParser\Attributes\Attribute\Attribute;
-use Symplify\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Symplify\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Symplify\BetterPhpDocParser\PhpDocModifier;
-use Symplify\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 
 final class DocBlockManipulator
 {
@@ -43,11 +42,6 @@ final class DocBlockManipulator
     private $phpDocModifier;
 
     /**
-     * @var CurrentNodeProvider
-     */
-    private $currentNodeProvider;
-
-    /**
      * @var TypeAnalyzer
      */
     private $typeAnalyzer;
@@ -56,13 +50,11 @@ final class DocBlockManipulator
         PhpDocInfoFactory $phpDocInfoFactory,
         PhpDocInfoPrinter $phpDocInfoPrinter,
         PhpDocModifier $phpDocModifier,
-        CurrentNodeProvider $currentNodeProvider,
         TypeAnalyzer $typeAnalyzer
     ) {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->phpDocInfoPrinter = $phpDocInfoPrinter;
         $this->phpDocModifier = $phpDocModifier;
-        $this->currentNodeProvider = $currentNodeProvider;
         $this->typeAnalyzer = $typeAnalyzer;
     }
 
@@ -129,7 +121,7 @@ final class DocBlockManipulator
 
         $phpDocInfo = $this->createPhpDocInfoFromNode($node);
 
-        $this->phpDocModifier->replacePhpDocTypeByAnother($phpDocInfo->getPhpDocNode(), $oldType, $newType);
+        $this->phpDocModifier->replacePhpDocTypeByAnother($phpDocInfo->getPhpDocNode(), $oldType, $newType, $node);
 
         $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
     }
@@ -292,8 +284,6 @@ final class DocBlockManipulator
             ));
         }
 
-        $this->currentNodeProvider->setNode($node);
-
-        return $this->phpDocInfoFactory->createFrom($node->getDocComment()->getText());
+        return $this->phpDocInfoFactory->createFromNode($node);
     }
 }
