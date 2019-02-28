@@ -67,6 +67,8 @@ parameters:
         Symplify\CodingStandard\Sniffs\CleanCode\ForbiddenReferenceSniff:
             # 3rd party contract
             - 'src/PhpParser/Printer/BetterStandardPrinter.php'
+            # pragmatic prefer over complex long "clean" code
+            - 'packages/Spaghetti/src/Rector/ExtractPhpFromSpaghettiRector.php'
 
         Symplify\CodingStandard\Fixer\Php\ClassStringToClassConstantFixer:
             # classes might not exist
@@ -108,6 +110,7 @@ parameters:
             - 'packages/BetterPhpDocParser/src/Attributes/Ast/AttributeAwareNodeFactory.php'
             - 'packages/Laravel/src/Rector/FuncCall/HelperFunctionToConstructorInjectionRector.php'
             - 'packages/PhpSpecToPHPUnit/src/Rector/Class_/PhpSpecClassToPHPUnitClassRector.php'
+            - 'packages/Spaghetti/src/Rector/*.php'
 
             # copied 3rd party logic
             - 'packages/Php/src/EregToPcreTransformer.php'

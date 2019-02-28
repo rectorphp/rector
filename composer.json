@@ -60,7 +60,8 @@
             "Rector\\Laravel\\": "packages/Laravel/src",
             "Rector\\PhpSpecToPHPUnit\\": "packages/PhpSpecToPHPUnit/src",
             "Rector\\Shopware\\": "packages/Shopware/src",
-            "Rector\\NetteTesterToPHPUnit\\": "packages/NetteTesterToPHPUnit/src"
+            "Rector\\NetteTesterToPHPUnit\\": "packages/NetteTesterToPHPUnit/src",
+            "Rector\\Spaghetti\\": "packages/Spaghetti/src"
         }
     },
     "autoload-dev": {
@@ -92,7 +93,8 @@
             "Rector\\PhpSpecToPHPUnit\\Tests\\": "packages/PhpSpecToPHPUnit/tests",
             "Rector\\PHPStanExtensions\\": "utils/PHPStanExtensions/src",
             "Rector\\Shopware\\Tests\\": "packages/Shopware/tests",
-            "Rector\\NetteTesterToPHPUnit\\Tests\\": "packages/NetteTesterToPHPUnit/tests"
+            "Rector\\NetteTesterToPHPUnit\\Tests\\": "packages/NetteTesterToPHPUnit/tests",
+            "Rector\\Spaghetti\\Tests\\": "packages/Spaghetti/tests"
         },
         "classmap": [
             "packages/Symfony/tests/Rector/FrameworkBundle/AbstractToConstructorInjectionRectorSource",

@@ -15,7 +15,6 @@ use Rector\NetteToSymfony\Event\EventInfo;
 use Rector\NetteToSymfony\Event\EventInfosFactory;
 use Rector\NodeTypeResolver\Application\FunctionLikeNodeCollector;
 use Rector\NodeTypeResolver\Node\Attribute;
-use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -34,21 +33,14 @@ final class RenameEventNamesInEventSubscriberRector extends AbstractRector
     private $symfonyClassConstWithAliases = [];
 
     /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
      * @var FunctionLikeNodeCollector
      */
     private $functionLikeNodeCollector;
 
     public function __construct(
-        BetterNodeFinder $betterNodeFinder,
         EventInfosFactory $eventInfosFactory,
         FunctionLikeNodeCollector $functionLikeNodeCollector
     ) {
-        $this->betterNodeFinder = $betterNodeFinder;
         $this->symfonyClassConstWithAliases = $eventInfosFactory->create();
         $this->functionLikeNodeCollector = $functionLikeNodeCollector;
     }

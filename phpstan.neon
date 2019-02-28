@@ -17,6 +17,7 @@ parameters:
         - '*tests/Rector/MethodCall/RenameMethodRector/**/SomeClass.php'
         - '*packages/BetterReflection/tests/Reflector/NotLoadedSource/SomeClass.php'
         - 'packages/NodeTypeResolver/tests/PerNodeTypeResolver/VariableTypeResolver/Source/NewClass.php'
+        - '*packages/Spaghetti/tests/Rector/ExtractPhpFromSpaghettiRector/Expected/*'
         # tests files
         - '*tests/**/Fixture/*'
         - '*tests/**/Source/*'
@@ -135,3 +136,12 @@ parameters:
 
         - '#Parameter \#2 \$classMethod of method Rector\\NetteToSymfony\\Rector\\ClassMethod\\RouterListToControllerAnnotationsRector\:\:resolvePathFromClassAndMethodNodes\(\) expects PhpParser\\Node\\Stmt\\ClassMethod, PhpParser\\Node\\Stmt given#'
         - '#Parameter \#2 \$constFetch of method Rector\\CodeQuality\\Rector\\Identical\\SimplifyArraySearchRector\:\:resolveIsNot\(\) expects PhpParser\\Node\\Expr\\ConstFetch, PhpParser\\Node given#'
+        - '#Parameter \#3 \$prependNodes of method Rector\\Spaghetti\\Rector\\ExtractPhpFromSpaghettiRector\:\:createControllerClass\(\) expects array<PhpParser\\Node\\Stmt\>, array<int, PhpParser\\Node\> given#'
+
+        # trait false positive
+        - '#Call to an undefined method Rector\\FileSystemRector\\Rector\\AbstractFileSystemRector\:\:(.*?)\(\)#'
+        - '#In method "Rector\\Rector\\AbstractRector\:\:removeNodesFromNodes(.*?)#'
+        - '#In method "Rector\\FileSystemRector\\Rector\\AbstractFileSystemRector\:\:removeNodesFromNodes(.*?)#'
+        - '#In method "Rector\\FileSystemRector\\Rector\\AbstractFileSystemRector\:\:notifyNodeChangeFileInfo", parameter \$source has no type\-hint and no @param annotation\. More info\: http\://bit\.ly/usetypehint#'
+        - '#In method "Rector\\Rector\\AbstractRector\:\:notifyNodeChangeFileInfo", parameter \$source has no type\-hint and no @param annotation\. More info\: http\://bit\.ly/usetypehint#'
+

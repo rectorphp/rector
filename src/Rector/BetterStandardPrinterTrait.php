@@ -13,14 +13,14 @@ use Rector\PhpParser\Printer\BetterStandardPrinter;
 trait BetterStandardPrinterTrait
 {
     /**
-     * @var BetterStandardPrinter
-     */
-    private $betterStandardPrinter;
-
-    /**
      * @var BetterNodeFinder
      */
-    private $betterNodeFinder;
+    protected $betterNodeFinder;
+
+    /**
+     * @var BetterStandardPrinter
+     */
+    protected $betterStandardPrinter;
 
     /**
      * @required

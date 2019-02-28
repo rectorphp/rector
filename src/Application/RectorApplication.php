@@ -153,7 +153,6 @@ final class RectorApplication
             ) : $this->fileProcessor->printToFile($fileInfo);
 
             $this->errorAndDiffCollector->addFileDiff($fileInfo, $newContent, $oldContent);
-
             $this->fileSystemFileProcessor->processFileInfo($fileInfo);
         }
     }

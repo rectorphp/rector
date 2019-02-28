@@ -10,7 +10,6 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\NodeTypeResolver\Node\Attribute;
-use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -33,17 +32,9 @@ final class GetRequestRector extends AbstractRector
      */
     private $controllerMethodAnalyzer;
 
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    public function __construct(
-        ControllerMethodAnalyzer $controllerMethodAnalyzer,
-        BetterNodeFinder $betterNodeFinder
-    ) {
+    public function __construct(ControllerMethodAnalyzer $controllerMethodAnalyzer)
+    {
         $this->controllerMethodAnalyzer = $controllerMethodAnalyzer;
-        $this->betterNodeFinder = $betterNodeFinder;
     }
 
     public function getDefinition(): RectorDefinition

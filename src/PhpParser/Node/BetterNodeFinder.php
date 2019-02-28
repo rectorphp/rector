@@ -44,6 +44,14 @@ final class BetterNodeFinder
     }
 
     /**
+     * @param Node|Node[]|Stmt[] $nodes
+     */
+    public function containsInstanceOf($nodes, string $type): bool
+    {
+        return (bool) $this->nodeFinder->findInstanceOf($nodes, $type);
+    }
+
+    /**
      * @param Node|Node[] $nodes
      */
     public function findFirstInstanceOf($nodes, string $type): ?Node
@@ -71,6 +79,14 @@ final class BetterNodeFinder
     public function find($nodes, callable $filter): array
     {
         return $this->nodeFinder->find($nodes, $filter);
+    }
+
+    /**
+     * @param Node|Node[] $nodes
+     */
+    public function contains($nodes, callable $filter): bool
+    {
+        return (bool) $this->findFirst($nodes, $filter);
     }
 
     /**

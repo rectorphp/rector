@@ -8,11 +8,24 @@ use Rector\FileSystemRector\Contract\FileSystemRectorInterface;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 use Rector\PhpParser\Parser\Parser;
 use Rector\PhpParser\Printer\FormatPerservingPrinter;
+use Rector\Rector\AbstractRectorTrait;
 use Symfony\Component\Filesystem\Filesystem;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
 abstract class AbstractFileSystemRector implements FileSystemRectorInterface
 {
+    use AbstractRectorTrait;
+
+    /**
+     * @var Filesystem
+     */
+    protected $filesystem;
+
+    /**
+     * @var FormatPerservingPrinter
+     */
+    protected $formatPerservingPrinter;
+
     /**
      * @var Parser
      */
@@ -24,19 +37,9 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
     private $lexer;
 
     /**
-     * @var FormatPerservingPrinter
-     */
-    private $formatPerservingPrinter;
-
-    /**
      * @var NodeScopeAndMetadataDecorator
      */
     private $nodeScopeAndMetadataDecorator;
-
-    /**
-     * @var Filesystem
-     */
-    private $filesystem;
 
     /**
      * @var Node[]
@@ -67,6 +70,7 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
     {
         $oldStmts = $this->parser->parseFile($smartFileInfo->getRealPath());
         $this->oldStmts = $oldStmts;
+
         // needed for format preserving
         return $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile(
             $oldStmts,
@@ -77,13 +81,17 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
     /**
      * @param Node[] $nodes
      */
+    protected function printNodesToString(array $nodes): string
+    {
+        return $this->formatPerservingPrinter->printToString($nodes, $this->oldStmts, $this->lexer->getTokens());
+    }
+
+    /**
+     * @param Node[] $nodes
+     */
     protected function printNodesToFilePath(array $nodes, string $fileDestination): void
     {
-        $fileContent = $this->formatPerservingPrinter->printToString(
-            $nodes,
-            $this->oldStmts,
-            $this->lexer->getTokens()
-        );
+        $fileContent = $this->printNodesToString($nodes);
         $this->filesystem->dumpFile($fileDestination, $fileContent);
     }
 }

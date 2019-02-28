@@ -61,6 +61,20 @@ trait NodeCommandersTrait
         $this->notifyNodeChangeFileInfo($classNode);
     }
 
+    /**
+     * @param Node[] $nodesToRemove
+     * @param Node[] $nodes
+     * @return Node[]
+     */
+    protected function removeNodesFromNodes(array $nodesToRemove, array $nodes): array
+    {
+        foreach ($nodesToRemove as $nodeToRemove) {
+            $this->nodeRemovingCommander->addNode($nodeToRemove);
+        }
+
+        return $this->nodeRemovingCommander->traverseNodes($nodes);
+    }
+
     protected function removeNode(Node $node): void
     {
         $this->nodeRemovingCommander->addNode($node);
