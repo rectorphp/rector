@@ -7,6 +7,7 @@ use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
+use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareParamTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwarePhpDocNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
@@ -45,17 +46,23 @@ final class DocBlockManipulator
      * @var TypeAnalyzer
      */
     private $typeAnalyzer;
+    /**
+     * @var AttributeAwareNodeFactory
+     */
+    private $attributeAwareNodeFactory;
 
     public function __construct(
         PhpDocInfoFactory $phpDocInfoFactory,
         PhpDocInfoPrinter $phpDocInfoPrinter,
         PhpDocModifier $phpDocModifier,
-        TypeAnalyzer $typeAnalyzer
+        TypeAnalyzer $typeAnalyzer,
+        AttributeAwareNodeFactory $attributeAwareNodeFactory
     ) {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->phpDocInfoPrinter = $phpDocInfoPrinter;
         $this->phpDocModifier = $phpDocModifier;
         $this->typeAnalyzer = $typeAnalyzer;
+        $this->attributeAwareNodeFactory = $attributeAwareNodeFactory;
     }
 
     public function hasTag(Node $node, string $name): bool
@@ -90,6 +97,8 @@ final class DocBlockManipulator
 
     public function addTag(Node $node, PhpDocChildNode $phpDocChildNode): void
     {
+        $phpDocChildNode = $this->attributeAwareNodeFactory->createFromNode($phpDocChildNode);
+
         if ($node->getDocComment() !== null) {
             $phpDocInfo = $this->createPhpDocInfoFromNode($node);
             $phpDocNode = $phpDocInfo->getPhpDocNode();
