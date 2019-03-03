@@ -39,7 +39,6 @@ services:
     Symplify\CodingStandard\Fixer\Naming\PropertyNameMatchingTypeFixer:
         extra_skipped_classes:
             - 'PhpParser\PrettyPrinter\Standard'
-#            - 'PhpParser\Node'
 
     Symplify\CodingStandard\Sniffs\Naming\ClassNameSuffixByParentSniff:
         extra_parent_types_to_suffixes:
@@ -48,14 +47,14 @@ services:
 
 parameters:
     exclude_files:
-        - '*tests/*Source/*.php'
+        - '*tests/**Source/*.php'
         # tests files
         - '*tests/*/Fixture/*'
         - '*tests/*/Expected/*'
         - '*utils/ContributorTools/templates/*'
 
     skip:
-        # run manually from time to time, not to bother user with it
+        # run manually from time to time - performance demanding + not to bother user with it
         Symplify\CodingStandard\Fixer\Order\PropertyOrderByComplexityFixer: ~
         Symplify\CodingStandard\Fixer\Order\PrivateMethodOrderByUseFixer: ~
 
@@ -131,6 +130,3 @@ parameters:
         Symplify\CodingStandard\Sniffs\DependencyInjection\NoClassInstantiationSniff:
             # 3rd party api
             - 'src/PhpParser/Node/Value/ValueResolver.php'
-
-#        SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff.MissingTraversableParameterTypeHintSpecification:
-#            - 'src/Testing/PHPUnit/AbstractRectorTestCase.php'

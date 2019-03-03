@@ -46,3 +46,4 @@ services:
         str_start: ['Illuminate\Support\Str', 'start']
         studly_case: ['Illuminate\Support\Str', 'studly']
         title_case: ['Illuminate\Support\Str', 'title']
+    Rector\Laravel\Rector\StaticCall\MinutesToSecondsInCacheRector: ~
