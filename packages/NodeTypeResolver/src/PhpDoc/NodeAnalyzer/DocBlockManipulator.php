@@ -46,6 +46,7 @@ final class DocBlockManipulator
      * @var TypeAnalyzer
      */
     private $typeAnalyzer;
+
     /**
      * @var AttributeAwareNodeFactory
      */

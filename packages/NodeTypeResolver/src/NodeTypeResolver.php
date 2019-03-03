@@ -102,7 +102,9 @@ final class NodeTypeResolver
                 continue;
             }
 
-            $types += $this->classReflectionTypesResolver->resolve($this->broker->getClass($type));
+            if (class_exists($type)) {
+                $types += $this->classReflectionTypesResolver->resolve($this->broker->getClass($type));
+            }
         }
 
         return $types;
