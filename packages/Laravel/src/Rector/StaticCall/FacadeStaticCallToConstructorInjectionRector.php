@@ -69,7 +69,7 @@ final class FacadeStaticCallToConstructorInjectionRector extends AbstractRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Move Illuminate\Support\Facades\Response static calls to constructor injection', [
+        return new RectorDefinition('Move Illuminate\Support\Facades\* static calls to constructor injection', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 use Illuminate\Support\Facades\Response;
