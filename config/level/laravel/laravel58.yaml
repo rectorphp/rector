@@ -1,4 +1,15 @@
 services:
+    Rector\Laravel\Rector\StaticCall\MinutesToSecondsInCacheRector: ~
+
+    Rector\Rector\ClassMethod\AddReturnTypeDeclarationRector:
+        Illuminate\Contracts\Cache\Repository:
+            put: 'bool'
+            forever: 'bool'
+        Illuminate\Contracts\Cache\Store:
+            put: 'bool'
+            putMany: 'bool'
+            forever: 'bool'
+
     # https://laravel-news.com/laravel-5-8-deprecates-string-and-array-helpers
     # https://github.com/laravel/framework/pull/26898
     Rector\Rector\Function_\FunctionToStaticCallRector:
@@ -46,4 +57,4 @@ services:
         str_start: ['Illuminate\Support\Str', 'start']
         studly_case: ['Illuminate\Support\Str', 'studly']
         title_case: ['Illuminate\Support\Str', 'title']
-    Rector\Laravel\Rector\StaticCall\MinutesToSecondsInCacheRector: ~
+
