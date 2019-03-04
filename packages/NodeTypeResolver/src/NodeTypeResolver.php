@@ -2,11 +2,14 @@
 
 namespace Rector\NodeTypeResolver;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Cast;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -66,6 +69,37 @@ final class NodeTypeResolver
             $this->addPerNodeTypeResolver($perNodeTypeResolver);
         }
         $this->nameResolver = $nameResolver;
+    }
+
+    public function isType(Node $node, string $type): bool
+    {
+        $nodeTypes = $this->getTypes($node);
+
+        // fnmatch support
+        if (Strings::contains($type, '*')) {
+            foreach ($nodeTypes as $nodeType) {
+                if (fnmatch($type, $nodeType, FNM_NOESCAPE)) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        return in_array($type, $nodeTypes, true);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getTypes(Node $node): array
+    {
+        // @todo should be resolved by NodeTypeResolver internally
+        if ($node instanceof MethodCall || $node instanceof PropertyFetch || $node instanceof ArrayDimFetch) {
+            return $this->resolve($node->var);
+        }
+
+        return $this->resolve($node);
     }
 
     /**

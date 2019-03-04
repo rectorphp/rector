@@ -7,11 +7,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
-use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Exception\ShouldNotHappenException;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\PhpParser\Node\Manipulator\ClassMethodManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -28,12 +24,20 @@ final class FromHttpRequestGetHeaderToHeadersGetRector extends AbstractRector
     private $netteHttpRequestClass;
 
     /**
+     * @var ClassMethodManipulator
+     */
+    private $classMethodManipulator;
+
+    /**
      * @var string
      */
     private $symfonyRequestClass = 'Symfony\Component\HttpFoundation\Request';
 
-    public function __construct(string $netteHttpRequestClass = 'Nette\Http\Request')
-    {
+    public function __construct(
+        ClassMethodManipulator $classMethodManipulator,
+        string $netteHttpRequestClass = 'Nette\Http\Request'
+    ) {
+        $this->classMethodManipulator = $classMethodManipulator;
         $this->netteHttpRequestClass = $netteHttpRequestClass;
     }
 
@@ -89,7 +93,11 @@ CODE_SAMPLE
             return null;
         }
 
-        $requestName = $this->completeRequestParameterIfMissingAndGetRequestName($node);
+        $requestName = $this->classMethodManipulator->addMethodParameterIfMissing(
+            $node,
+            $this->symfonyRequestClass,
+            ['request', 'symfonyRequest']
+        );
 
         $requestVariableNode = new Variable($requestName);
         $headersPropertyFetch = new PropertyFetch($requestVariableNode, 'headers');
@@ -98,32 +106,5 @@ CODE_SAMPLE
         $node->name = new Identifier('get');
 
         return $node;
-    }
-
-    private function completeRequestParameterIfMissingAndGetRequestName(Node $node): string
-    {
-        $classMethodNode = $node->getAttribute(Attribute::METHOD_NODE);
-        if (! $classMethodNode instanceof ClassMethod) {
-            throw new ShouldNotHappenException();
-        }
-
-        foreach ($classMethodNode->params as $paramNode) {
-            if ($this->isType($paramNode, $this->symfonyRequestClass)) {
-                return $this->getName($paramNode);
-            }
-        }
-
-        $requestName = 'request';
-        foreach ($classMethodNode->params as $paramNode) {
-            if ($this->isName($paramNode, 'request')) {
-                $requestName = 'symfonyRequest';
-            }
-        }
-
-        $classMethodNode->params[] = new Param(new Variable($requestName), null, new FullyQualified(
-            $this->symfonyRequestClass
-        ));
-
-        return $requestName;
     }
 }
