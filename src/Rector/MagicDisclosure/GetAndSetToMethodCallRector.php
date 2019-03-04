@@ -82,21 +82,28 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Assign::class];
+        return [Assign::class, Node\Stmt\If_::class];
     }
 
     /**
-     * @param Assign $node
+     * @param Assign|Node\Stmt\If_ $node
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node->expr instanceof PropertyFetch) {
-            return $this->processMagicGet($node);
+        if ($node instanceof Assign) {
+            if ($node->expr instanceof PropertyFetch) {
+                return $this->processMagicGet($node);
+            }
+
+            if ($node->var instanceof PropertyFetch) {
+                return $this->processMagicSet($node);
+            }
         }
 
-        if ($node->var instanceof PropertyFetch) {
-            return $this->processMagicSet($node);
+        if ($node instanceof Node\Stmt\If_ && $node->cond instanceof PropertyFetch) {
+            return $this->processMagicGetOnIf($node);
         }
+
 
         return null;
     }
@@ -145,6 +152,31 @@ CODE_SAMPLE
                 $assign->expr,
                 $transformation['set']
             );
+        }
+
+        return null;
+    }
+
+    private function processMagicGetOnIf(Node\Stmt\If_ $if): ?Node
+    {
+        /** @var PropertyFetch $propertyFetchNode */
+        $propertyFetchNode = $if->cond;
+
+        foreach ($this->typeToMethodCalls as $type => $transformation) {
+            if (! $this->isType($propertyFetchNode, $type)) {
+                continue;
+            }
+
+            if (! $this->propertyFetchManipulator->isMagicOnType($propertyFetchNode, $type)) {
+                continue;
+            }
+
+            $if->cond = $this->createMethodCallNodeFromPropertyFetchNode(
+                $propertyFetchNode,
+                $transformation['get']
+            );
+
+            return $if;
         }
 
         return null;
