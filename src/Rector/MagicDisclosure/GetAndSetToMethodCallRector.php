@@ -111,6 +111,10 @@ CODE_SAMPLE
                 continue;
             }
 
+            if ($this->propertyFetchManipulator->isPropertyToSelf($propertyFetchNode)) {
+                continue;
+            }
+
             if (! $this->propertyFetchManipulator->isMagicOnType($propertyFetchNode, $type)) {
                 continue;
             }
@@ -133,6 +137,10 @@ CODE_SAMPLE
 
         foreach ($this->typeToMethodCalls as $type => $transformation) {
             if (! $this->isType($propertyFetchNode, $type)) {
+                continue;
+            }
+
+            if ($this->propertyFetchManipulator->isPropertyToSelf($propertyFetchNode)) {
                 continue;
             }
 

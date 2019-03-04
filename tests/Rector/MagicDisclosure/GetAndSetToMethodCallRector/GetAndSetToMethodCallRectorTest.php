@@ -10,7 +10,7 @@ final class GetAndSetToMethodCallRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
     {
-        $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc', __DIR__ . '/Fixture/fixture2.php.inc']);
+        $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc', __DIR__ . '/Fixture/fixture2.php.inc', __DIR__ . '/Fixture/fixture3.php.inc']);
     }
 
     protected function getRectorClass(): string
@@ -23,9 +23,15 @@ final class GetAndSetToMethodCallRectorTest extends AbstractRectorTestCase
      */
     protected function getRectorConfiguration(): array
     {
-        return [SomeContainer::class => [
-            'get' => 'getService',
-            'set' => 'addService',
-        ]];
+        return [
+            SomeContainer::class => [
+                'get' => 'getService',
+                'set' => 'addService',
+            ],
+            'Enlight_View_Default' => [
+                'get' => 'getService',
+                'set' => 'addService',
+            ]
+        ];
     }
 }
