@@ -33,6 +33,7 @@ final class SpecificAssertInternalTypeRector extends AbstractPHPUnitRector
         'scalar' => ['assertIsScalar', 'assertIsNotScalar'],
         'callable' => ['assertIsCallable', 'assertIsNotCallable'],
         'iterable' => ['assertIsIterable', 'assertIsNotIterable'],
+        'null' => ['assertNull', 'assertNotNull'],
     ];
 
     /**
