@@ -21,19 +21,24 @@ final class MinutesToSecondsInCacheRector extends AbstractRector
     /**
      * @var int[][]
      */
-    private $typesToMethods = [
-        'Illuminate\Support\Facades\Cache' => [
-            'put' => 2, // time argument position
-            'add' => 2,
-        ],
-        'Illuminate\Contracts\Cache\Store' => [
-            'put' => 2,
-            'putMany' => 1,
-        ],
-        'Illuminate\Cache\DynamoDbStore' => [
-            'add' => 2,
-        ],
-    ];
+    private $typesToMethods = [];
+
+    public function __construct(string $storeClass = 'Illuminate\Contracts\Cache\Store')
+    {
+        $this->typesToMethods = [
+            'Illuminate\Support\Facades\Cache' => [
+                'put' => 2, // time argument position
+                'add' => 2,
+            ],
+            $storeClass => [
+                'put' => 2,
+                'putMany' => 1,
+            ],
+            'Illuminate\Cache\DynamoDbStore' => [
+                'add' => 2,
+            ],
+        ];
+    }
 
     public function getDefinition(): RectorDefinition
     {
