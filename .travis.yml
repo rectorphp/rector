@@ -6,12 +6,15 @@ matrix:
           env: STATIC_ANALYSIS=true RUN_RECTOR=true
         - php: 7.1
           env: COMPOSER_FLAGS="--prefer-lowest"
-        - php: 7.2
-          env: COVERAGE=true
+        - php: 7.1
+          env: CODING_STANDARD=true
         - php: 7.2
           env: STANDALONE=true
         - php: 7.3
+          env: COVERAGE=true
     allow_failures:
+        - php: 7.1
+          env: CODING_STANDARD=true
         - php: 7.2
           env: STANDALONE=true
 
@@ -29,11 +32,8 @@ before_script:
 script:
     - vendor/bin/phpunit
 
-    - |
-      if [[ $STATIC_ANALYSIS == true ]]; then
-          composer check-cs
-          composer phpstan
-      fi
+    - if [[ $STATIC_ANALYSIS == true ]]; then composer phpstan; fi
+    - if [[ $CODING_STANDARD == true ]]; then composer check-cs; fi
 
     # Rector demo run
     - |
